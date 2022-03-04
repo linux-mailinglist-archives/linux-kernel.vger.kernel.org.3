@@ -2,76 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACB64CCE1F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D064CCE26
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236967AbiCDGwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S229529AbiCDG6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234866AbiCDGwR (ORCPT
+        with ESMTP id S236816AbiCDG6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:52:17 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343F118E3D5
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 22:51:29 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id bk29so11211559wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 22:51:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GRZSImiH7Wss3a2faHehvfqVy9T4SH0ZG+g8SuIj5A8=;
-        b=UEhxPLytUhCPSOLtYfNjeMJ73Nqs2iCDCinLvHxtTcSLdJjlxzqasuly8aOshP5MtA
-         xGy4DQMC+agAgL/KaYLVBb/8UskiPw/kD4OOCQANXau9vPkV8KZYlen+UsJYFNHnLuG+
-         PpTOxiqLmznpwpaeKe77vgcIexcXpsbqOsPH4B3PFUAHrJAD+RvY4uAFJpODYoNnGYBK
-         UFPJ4bSISo01fbWTKujxv1R5aQp7UWFbPc71n/m5tWowcK1Aegt8PJZa3upIcgRHVK+p
-         RhDrBnofYOEtGUh163Tw0luqESH0j1Yq5lnma5PDFLpZRICuJWlRO2Kwccurs+JX2i2E
-         dXjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GRZSImiH7Wss3a2faHehvfqVy9T4SH0ZG+g8SuIj5A8=;
-        b=Ij0txTmOZYQtiDorri7Y638EIOYg8F9NUGzziMBZWU49vEQBjZZtwhlJqfgpyPX5i9
-         FT5/sovv58426QIlib2W1iLCu8V1rNrOC087zNwxSznIxRAkAEWe6fW32ZwOBzLQYNR9
-         fHzpEwq0sDBPuQdUqhq29GE7cr2pTfgV7AFAq55G1BcO2yMNUgdayrG2VDQO3Uc8Ig0b
-         NR85YROZ+3s+Z6aww5xYgNw1F9JpIX6yGx0j99vflOoW3anyqwfAtktbJaL8YQqhuRwL
-         wAEuRadF7uapo4r8MyOLFD4etDXaSLf8GH30bZRUBZSSHhV3/z4MScXuyZiCAP/19FDQ
-         rAkg==
-X-Gm-Message-State: AOAM532KKsOGLCCE61n1cgsJDma2sg+qOjHMtKsTbQrVeQLt4wecTRsZ
-        RJ5R60sIpJQrSu1zvifIk7CXes0UF6FCap07chWing==
-X-Google-Smtp-Source: ABdhPJxiVAtU1A7z1i59IHCoGvemYK4OIg1qA96J/v4q3pxraY3oW56Zz4BtnLSZ2OAKjPIQoPXo/xJwv+/P/w68Q8k=
-X-Received: by 2002:adf:fd0a:0:b0:1f0:25fd:4082 with SMTP id
- e10-20020adffd0a000000b001f025fd4082mr8680894wrr.501.1646376687561; Thu, 03
- Mar 2022 22:51:27 -0800 (PST)
+        Fri, 4 Mar 2022 01:58:00 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2068.outbound.protection.outlook.com [40.107.92.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E596918E3C8;
+        Thu,  3 Mar 2022 22:57:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U7ZnyLGCtLHPCs/I0qsjxytYYTlkyh7wB2j1DJPXRDP1VOzylVoYIT3ZnslpgYZ+eIF/aGrQY/r8SWkcf6w1YD10T2oRNv7cAmzu0q65QG1p8NvH3ARwXHGYoQf7wfAdnNOPTx3xpODCyCg8wK0g8DEPEkL4Zd7CBfJN9T06fiCbxwGLqL+9A0Qf53EZLTxCZrd8ZefuNIQ13cb+hCZAOmUwVfX5L3PGgQutzTogZRUa2RPPzZmwAhn3TFtQyFJMhRGQ973yGzgKmYPbwf3E0KBs88ieT0DWzZKPcjuj9p9RYHoR6ybLK9GbKHRSMY0ybio9ymND/ME/CIJecixv9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h8j3gXNxmFvcW2Zn+LWDh3nBmuIVvKKh0+DK915vi5Q=;
+ b=U80N9n64Edt/AX4e5un72nZOywrdJaC80ogKB1qY+v8cuzRRLC7bLjqjcOOBY0XW6PECNySqKf6XLaZzFBKUuGucasvhaxsfpMJeqfRRs+lxQpyxcGs1CRhnuYtrJelyaLTKhpq8lNNjzj0z1UoefbRXGXAM7kG/oZZnEqLt7oNxT9ardGXDbmXxQvLcIAteLbLdV6uveRTlqzrGxsvByXi5t0OI4kpflLVP9tGg0856fQ8IE+wlgOT6oTm+/HjztPQlu7AmgwEbfgi+8Eaog4RILlP3GM+eF2L17UhB2xFMcQ8dLwaBQurH4A6Q2ce0YoY/y/XSoP9/4hGqBD3big==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h8j3gXNxmFvcW2Zn+LWDh3nBmuIVvKKh0+DK915vi5Q=;
+ b=DaAvv+WkegjQHzMejXVJOcwmu9TT+Hqp5NpMKdbhNJb2/qEycRrBupiuxmvR4gCe5g1yqlz6778epbTPfSO2dIDkcY2JCrDQGXwlEhh+w8T4axCpO2DVOXDSEcxGeaFk/QFkfmO3Ip6YMjSDuUFN0IL6zyJlcQG+rZGiqer0eh4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ SN1PR12MB2384.namprd12.prod.outlook.com (2603:10b6:802:25::25) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.17; Fri, 4 Mar 2022 06:57:00 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8d40:da47:7312:64b8]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8d40:da47:7312:64b8%6]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
+ 06:57:00 +0000
+Date:   Fri, 4 Mar 2022 14:56:36 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
+Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "dsmythies@telus.net" <dsmythies@telus.net>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "todd.e.brandt@linux.intel.com" <todd.e.brandt@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Subject: Re: [PATCH V2 4/4] Documentation: amd-pstate: add tracer tool
+ introduction
+Message-ID: <YiG4JL+g/E1yNjDI@amd.com>
+References: <20220304060724.314582-1-Jinzhou.Su@amd.com>
+ <20220304060724.314582-5-Jinzhou.Su@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304060724.314582-5-Jinzhou.Su@amd.com>
+X-ClientProxiedBy: SG2PR01CA0142.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:8f::22) To DM5PR12MB2504.namprd12.prod.outlook.com
+ (2603:10b6:4:b5::19)
 MIME-Version: 1.0
-References: <20220303090643.241747-1-davidgow@google.com> <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
-In-Reply-To: <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 4 Mar 2022 14:51:16 +0800
-Message-ID: <CABVgOSkQPNK59vvhAMFM_5jWF-hNPZXdou8UC31RM0TEXT-=Fg@mail.gmail.com>
-Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kbuild@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        llvm@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a6863805d95ef127"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 211bf136-2aff-42bd-0ad9-08d9fdac2e47
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2384:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB2384CCD5DD4D46C2836342AAEC059@SN1PR12MB2384.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Rh8DKYI5h0Y1Ta2PA1UZ4cPlrCT5fRR91nFXmjXOj9GejJdrBOh29Pfglj7dzaeqV8lzxR4hBys1ScOh1/yr6qKxUq6y4IUp00O81YcizmJspUlg1iETVD4mMJuU3gx0H5RkFL3NJ3VEWGTFd8VST3LpDCcQpQqSCfJJf5iyAifLAi/IQi2aY1Hoe0iST7srMUSQ+288/a3JxJd5RuGhari5R3U5ljYM/B6FsyLQUkh/RnxxnHMt0ymbT1kqFAsHaeoSPRIo2LQs4wEb1amsMIA0zxG8PUTaR4fSRjX/SQfjeW241PR9zsgOLsKawO5Uhi7kjHR/kPwLI/VKSoQvk5lbWCsIcpPrjkpocvZbdBPpxscirOv+ZnDxlGOLIvrZFXpVQ8lXk31ngsLoTb6AoqAazYDcDBMjoZ/clIg+uh6Whweovshv+yDAOjE8A8tRRARmMMoCANquMQgnD1sd4IJyWXr3syOa1gL+e4b+DFI2MEXgxSr+9zkyc+nqbKDQq2aJr36+pzMs//QfOZBYZfh10l/fSRmgUwVZczWyUY4lPoYZ8Nqo7aXwA6tF+hWCb9Yl9+l84z5verA2Q4BYBJTsJolUvRqCpPu0jeiYV2K76Afq8t8FGfpHz8bJlSfTuBKLy00GgL0MO+b2geHs3A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6636002)(66946007)(86362001)(6486002)(2906002)(8676002)(6862004)(66556008)(66476007)(4326008)(83380400001)(5660300002)(316002)(54906003)(36756003)(37006003)(8936002)(508600001)(38100700002)(6506007)(6512007)(6666004)(2616005)(186003)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D94NYfI+8bDqIvw6Cl/mIcH7i+dpnQ13nydzqAjeNbh7reEm9gtLUkdeNPZz?=
+ =?us-ascii?Q?UsyGhsL+RFVafZXxoYhZi1fE0Wxv1/1T3gG6oBcBJSbyqn6IJYkK+rPq+We3?=
+ =?us-ascii?Q?2dzgu7KpGX1AixRCv+NFh44mZWXVCtq6np3c6z5KNwhUAhcLJDLrf5h8zSLl?=
+ =?us-ascii?Q?IB169wiI3Zvz0EBAuet4AWE2qFHnqWR4aYVxjGs3zTF5hUzudd7j89Njh7k8?=
+ =?us-ascii?Q?816lnVmRsIUwavTNIb13/pn/ivT4MqufwFpwg5GFC6JK4MGfLCa0Uk4WfYfZ?=
+ =?us-ascii?Q?+J+pIOs8v5urLhCvEIJYXSl2QQkiP1zuVERhfSzQYxTEMRgMT0pkAxqWlnXR?=
+ =?us-ascii?Q?mrgC+x93vJ66OsJd8hUHyXllqgZLO9X+b7BJD9Rl20XkMjepaUUHg+Ubns76?=
+ =?us-ascii?Q?J41mpgOoNeqswLNwpqJrHzvsHyz+FmeAbSahDZUBXXr7OFnyhiJytRqi9zeS?=
+ =?us-ascii?Q?ftkDlJzFYPH2SgysmFwDwxPD5C8EYiq1pZk5D9c24QWK/B0OXHcI8W3PLrwk?=
+ =?us-ascii?Q?OlKS7dn3cj4qOtCx2yHe2iphtHBxvg3VXf2S/+flqWaWm/vboiPdEcG1A1V9?=
+ =?us-ascii?Q?fQSlHxxncywX2hzsdVGpa+bFGCdfhBHN5l/E0rl639Ky0hczyDn6OYW4+61T?=
+ =?us-ascii?Q?+n7/l9RVNgf5HZLW6I0xCrFfJujqEqe53Fy5QiZNIo8Wq2p7huMLZuRgYMUM?=
+ =?us-ascii?Q?6GDdVqnMuyPV7ORbdIh7NH8ylDPm74SdMAjHAW0d+N9Jbq85aOciihuqyo1b?=
+ =?us-ascii?Q?4axnY2hkaW0f9ig4CpBXGPHOOXrcHyebXOgFTg8GnADDEsHCTWkXWGGamSKy?=
+ =?us-ascii?Q?G+u4y79V5pRXaaHPH0TgedynQTeu5GAUPQhq42Y5ts4i/FUQk6QP9zxlcIN0?=
+ =?us-ascii?Q?505XWVPCYNqC2nCMxjoS44tKJR0pHmI2vIBXmMhYvkzj3ovXAqVEC0zGEpjs?=
+ =?us-ascii?Q?pawXGsBa4RV+5k+aMjHpbJQV+weWk19+gXvhh6s9DEJZUeJn7xDYru2Utjob?=
+ =?us-ascii?Q?3wrVAib3mvhrFrswMKyF1+wiEMhegW2ZVP2RfFIzzFBDhEP6O6KuOznUZP4G?=
+ =?us-ascii?Q?wU1Ehp4We3K3qwIan/tR74x2fQ9a7tDa/W0XxMtZWS3+2xVKGnc109rsyVA+?=
+ =?us-ascii?Q?ANTcUZp3D4gXIUx0vboe9iaTcdRjQtGHXGiDd/gmV8G0ETVzod5EPZZa/RvL?=
+ =?us-ascii?Q?uVGPPTLUDtbNnhiah9QrlAs+ckxlxR/sEl6WATyvWUMnpzkPpVcnwqkmCqSm?=
+ =?us-ascii?Q?SHnfaffgr86JzoLbpY5pi/Mt2KFzVh7Ztf/e8aWvBsUDkf6ZANeq2xcnbJPf?=
+ =?us-ascii?Q?EfNB22s5/Ybd4HlJW2aLDEdn+dS58ooSAqVg7Dp0FJ4RoQHIMW5RyVj4E+OV?=
+ =?us-ascii?Q?N0tduD98if8uwRCHLsnMgyXSfm3x08esW6B5hae6MMt9QhZgvKZHJSj6FAXk?=
+ =?us-ascii?Q?cDyzDsLJ1UmSmv+NXb1QqIP3D07TwQXL9ZJtPmbT1Sd5CF5iFfldcvh36jNV?=
+ =?us-ascii?Q?ABQinfHOOJivk5rNgd0r8S8zqspDE6sXyRXIhkNRlZsgjYo06cQAQL/JeKGD?=
+ =?us-ascii?Q?Z6fLRbVYey1aH7jh+Q0oMcsYfY1WdxERlkVLE9GfWzNODgLYaRQ3fYzMvj4f?=
+ =?us-ascii?Q?fOiADOgA4yyhIPEdALRm63Q=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 211bf136-2aff-42bd-0ad9-08d9fdac2e47
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:57:00.5370
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pZ8rsO+h64OnCM8QuJSk7AG+ggNbGAiJTsyD2OVVd0DSLB0sGkqga62cyDT4TSdgYztzBjD6HPdfGQKjXgtQcA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2384
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,165 +126,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a6863805d95ef127
-Content-Type: text/plain; charset="UTF-8"
+On Fri, Mar 04, 2022 at 02:07:24PM +0800, Su, Jinzhou (Joe) wrote:
+> Add amd pstate tracer tool introduction
+> 
+> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
+> ---
+>  Documentation/admin-guide/pm/amd-pstate.rst | 26 +++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+> index 2f066df4ee9c..17dd7396e8fc 100644
+> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+> @@ -369,6 +369,32 @@ governor (for the policies it is attached to), or by the ``CPUFreq`` core (for t
+>  policies with other scaling governors).
+>  
+>  
+> +Tracer Tool
+> +-------------
+> +
+> +``amd_pstate_tracer.py`` can record and parse amd-pstate trace log, then
 
-On Fri, Mar 4, 2022 at 1:30 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi David,
->
-> On Thu, Mar 03, 2022 at 05:06:42PM +0800, David Gow wrote:
-> > The things built with USER_CFLAGS don't seem to recognise it as a
-> > compiler option, and print a warning:
-> > clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
-> >
-> > Fixes: 744814d2fa ("um: Allow builds with Clang")
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > ---
-> >
-> > This warning shows up after merging:
-> > https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
-> >
-> > I'm not 100% sure why this is necessary, but it does seem to work. All
-> > the attempts to get rid of -mno-global-merge entirely have been met with
-> > skepticism, but I'm guessing that it's not a problem for just the UML
-> > "user" files, as they shouldn't(?) interact too much with modules.
->
-> Thank you for the patch! I think it is correct, as this flag only works
-> for AArch64 and ARM, as it is only used in Clang::AddAArch64TargetArgs()
-> and Clang::AddARMTargetArgs() in clang/lib/Driver/ToolChains/Clang.cpp,
-> which are obviously never called with UML. I am not sure why we do not
-> see warning during regular kernel builds, maybe something about how UML
-> objects are compiled exposes this?
+amd-pstate -> ``amd-pstate``
 
-Yeah: this only seems to show up with UML source compiled as "user"
-files (i.e., talking to the host system). Most of the kernel source
-doesn't show the warning because -Qunused-arguments is set somewhere,
-probably in KBUILD_CPPFLAGS, which doesn't filter down into
-USER_CFLAGS:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile?id=7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3#n784
+> +generate performance plots. This utility can be used to debug and tune the
+> +performance of the amd-pstate driver. The tracer tool needs to import intel
 
-Is this flag supposed to only work on ARM/AArch64, or is it just
-currently not implemented anywhere else. If it's actually
-ARM-specific, then moving it to the arch/arm{,64} makefile as in Kees'
-patch definitely makes more sense. If it's going to show up on other
-architectures at some point anyway, maybe something like this makes
-sense.
+amd-pstate -> ``amd-pstate``
 
->
-> Regardless, I would definitely like to clean up this instance of the
-> warning because I would like to make this warning a hard error so that
-> we do not get cryptic cc-option failures:
->
-> https://github.com/ClangBuiltLinux/linux/issues/1587
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> One small comment below.
->
-> >  arch/um/Makefile | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/arch/um/Makefile b/arch/um/Makefile
-> > index f2fe63bfd819..320b09cd513c 100644
-> > --- a/arch/um/Makefile
-> > +++ b/arch/um/Makefile
-> > @@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
-> >               -D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
-> >               -idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
-> >
-> > +ifdef CONFIG_CC_IS_CLANG
->
-> Is this ifdef needed?
->
-No: it works fine without the ifdef: I just wanted to limit the damage
-I could do playing with things I didn't fully understand. :-)
+> +pstate tracer.
+> +
+> +Tracer tool located in linux/tools/power/x86/amd_pstate_tracer. It can be
 
-> > +USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
-> > +endif
-> > +
-> >  #This will adjust *FLAGS accordingly to the platform.
-> >  include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
-> >
+linux/tools/power/x86/amd_pstate_tracer -> ``linux/tools/power/x86/amd_pstate_tracer``
 
-Cheers,
--- David
-
---000000000000a6863805d95ef127
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCo
-gZZNfyHC7gt32VURB7bs1waIRwAVDcFVg+WAp+4WPzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAzMDQwNjUxMjdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAT4EZ9MXnq6fg9Dha0yqy
-ueRk6qFYjNDrL33X/dy8jrP2j4Z+SCgRWnxM73PN4kGbQUksGTqkOl3uBJ5gF96+DHphqLQJFCxZ
-8I+MMkY9XQ1hK6sxugoNxwDXGsBbXFBuRYCKAUIeDM2wel2nj/foSO8kf+O5wbzIx5gBXJa4SdWu
-JAVKmSJtjlspiPZOKvtsWPM2EyetLWOf29VX+fT2LHHn2sO/zCqmrtrgn306Zl629PMDBVG+j//k
-mPZHPc9hijjliTjp5MvzCtqH5eAX/kT4MfE85F3tJM2fPJ/+Iq0f8reHT/TdCS59CGEYg++SZunD
-qfwkhyGcsIj0Ha9zDg==
---000000000000a6863805d95ef127--
+> +used in two ways. If trace file is available, then directly parse the file
+> +with command ::
+> +
+> + ./amd_pstate_trace.py [-c cpus] -t <trace_file> -n <test_name>
+> +
+> +Or generate trace file with root privilege, then parse and plot with command ::
+> +
+> + sudo ./amd_pstate_trace.py [-c cpus] -n <test_name> -i <interval> [-m kbytes]
+> +
+> +The test result can be found in ``results/test_name``. Following is the example
+> +about part of the output. ::
+> +
+> + common_cpu  common_secs  common_usecs  min_perf  des_perf  max_perf  freq    mperf   apef    tsc       load   duration_ms  sample_num  elapsed_time  common_comm
+> + CPU_005     712          116384        39        49        166       0.7565  9645075 2214891 38431470  25.1   11.646       469         2.496         kworker/5:0-40
+> + CPU_006     712          116408        39        49        166       0.6769  8950227 1839034 37192089  24.06  11.272       470         2.496         kworker/6:0-1264
+> +
+> +
+>  Reference
+>  ===========
+>  
+> -- 
+> 2.27.0
+> 

@@ -2,110 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91034CD860
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95B44CD865
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240532AbiCDP4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
+        id S240033AbiCDP5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234098AbiCDP4b (ORCPT
+        with ESMTP id S235619AbiCDP5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:56:31 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84BF1BD04D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:55:42 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id i11so14920407lfu.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 07:55:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=+e6DxsGRSH2mhsXI7GeLvIZXX1m4MD4Ab6z6xzst2ho=;
-        b=cQmN4vglxTabDg7a6n33BOXnhcnyKD1WMlTxaTWiaspcPdjwkiI+djzZpZImPFVja/
-         JCPzZ5hgjTl2i9NHQWdzzkkSeSmgiHUr65ANmnoFhDA9L1T2l7WPP7tMFrm9Rd5TMa8Q
-         Q7r1J5okm8TQdp2Ycf5Q3o1ztT4jXUHtETNV2cqGG7I0Cy4i1OXeklUAJ8a1ZS+YJv7r
-         VHNdE6Pg+y+PSSLmLk0BycOsNwo5EJf6+9taZFjpcB3SfeDF8K2S5PgdZsHqbsCFBNG/
-         +w3IQdnbiS9ujOVI3D/rwxPcSiRJGWgr8s5ykp36lZg31lrPHukfRzY1wrt+3h6hpWzK
-         /R3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=+e6DxsGRSH2mhsXI7GeLvIZXX1m4MD4Ab6z6xzst2ho=;
-        b=dHq+1Rf7bJhckpEbMXXcCvDnt/hKjvX9w29gfMg8/THKG7/f+3iZr92e1oajuCkIAc
-         VDVrem8YRk3oPlVPP3UT/UpCR2sXYjVXRInxk+1jtxvmiBZ4wM5vdntEaWeL5Fo8Rw04
-         OJwFH8AkH2l03Ly+pvXtRh+aEKLrofGG9KyPcLviNJUQIN3In1RsCKHgUavZthfriWGs
-         xl9uTeXkyp6ajjO0C5iikDuJVH8cZFUFB6sjSGyaUpXv84CN16kTKDF1j68l/1HL7VG5
-         +xAMylU4jVA0cypQheDYfshuS4G77wff3vWFT84fEzaSMxJUMgIx+UMLy1ICwSX0XxEy
-         9HZQ==
-X-Gm-Message-State: AOAM531pZ5oPwVUA99g2UGVXspSod8tdQFwaConFmXYyCHtyvB7snv6B
-        YSU+W3U7WJzUfMe6U0oYMYW9WkwgSccsUdT7YQU=
-X-Google-Smtp-Source: ABdhPJxYrKdTMvIvJjLNlVlqXd18b6idtbEq5pMQ6kZE1vUCSG5a5NNEyzr3pkBI55qtplR2y5056YobJk2UAPbQjcA=
-X-Received: by 2002:a05:6512:33d5:b0:446:41b9:7256 with SMTP id
- d21-20020a05651233d500b0044641b97256mr4472420lfg.659.1646409338778; Fri, 04
- Mar 2022 07:55:38 -0800 (PST)
+        Fri, 4 Mar 2022 10:57:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5051C6EF0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:56:59 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A1FF61F385;
+        Fri,  4 Mar 2022 15:56:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646409418; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bGT8Ow4NIxBkj0yHGqhgln0GynFbynwDxe/+jElokrM=;
+        b=inuxdLvIghYVTeB3ztgSE0TSH7BdmBLA6EGRlhiiA8Znrxnf/S5cGvhDvH8g9qQGZ8k+jh
+        /ffikZgPj7eJviIXTeG4YPqc2qOeJj1XDB7XGiBGy7P+6mxQzydAPNqoYHHPiiBWTUrIG6
+        Xd7hQiBFyGkQyKEKLkGdukmekl5y814=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 68013A3B83;
+        Fri,  4 Mar 2022 15:56:58 +0000 (UTC)
+Date:   Fri, 4 Mar 2022 16:56:55 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v1 03/13] printk: use percpu flag instead of
+ cpu_online()
+Message-ID: <YiI2x6K5IhsADEmK@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-4-john.ogness@linutronix.de>
+ <YgaJZtY+EH9JIGyo@alley>
+ <YgoGNmYER8xni34K@google.com>
+ <YguCuFYeZ52mkr4r@alley>
+ <87zgm8h1tt.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Sender: jenniferoscar85@gmail.com
-Received: by 2002:ab3:7546:0:0:0:0:0 with HTTP; Fri, 4 Mar 2022 07:55:38 -0800 (PST)
-From:   Aisha Al-Qaddafi <aisha.gdaff21@gmail.com>
-Date:   Fri, 4 Mar 2022 07:55:38 -0800
-X-Google-Sender-Auth: gTjQpU_QLjqvQW_xXtlP_XogGew
-Message-ID: <CADQEMHTBe2_71wvrekVbndz=vhDRFRMwdPGQeCdYKoY+vzKepQ@mail.gmail.com>
-Subject: Your Urgent Reply Will Be Appreciated
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MONEY_FRAUD_5,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:134 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jenniferoscar85[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aisha.gdaff21[at]gmail.com]
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.6 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zgm8h1tt.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future. I am willing to negotiate investment/business
-profit sharing ratio
-with you base on the future investment earning profits.
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about the investment
-funds.
+On Wed 2022-03-02 15:27:50, John Ogness wrote:
+> I have taken some time to investigate the percpu implementation so that
+> I could provide clear answers here.
+> 
+> On 2022-02-15, Petr Mladek <pmladek@suse.com> wrote:
+> > I am not 100% sure. But it seems that static per-CPU variables might
+> > actually be used since the boot.
+> 
+> You are correct, but until per-cpu areas are setup, they all point to
+> CPU0. Normally that is not a problem since usually code is using
+> this_cpu_ptr() (which will always be the CPU0 in early boot), rather
+> than specifying foreign CPUs with per_cpu_ptr().
+> 
+> > Most likely, only dynamically allocated per-cpu variables have to wait
+> > until the per-cpu areas are initialized.
+> 
+> It is also important to wait if data will be stored that is no longer
+> valid after per-cpu areas are setup. setup_per_cpu_areas() copies the
+> static CPU0 per-cpu value to all the newly setup per-cpu areas.
+> 
+> This is actually the cause for the mystery [0] of failing irq_work when
+> printk_deferred was added with commit
+> 15341b1dd409749fa5625e4b632013b6ba81609b ("char/random: silence a
+> lockdep splat with printk()".
+
+Just for record, the right commit ID in the mainline is
+1b710b1b10eff9d466. It used printk_deferred() in _warn_unseeded_randomness():
+
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1687,8 +1687,9 @@ static void _warn_unseeded_randomness(const char *func_name, void *caller,
+ 	print_once = true;
+ #endif
+ 	if (__ratelimit(&unseeded_warning))
+-		pr_notice("random: %s called from %pS with crng_init=%d\n",
+-			  func_name, caller, crng_init);
++		printk_deferred(KERN_NOTICE "random: %s called from %pS "
++				"with crng_init=%d\n", func_name, caller,
++				crng_init);
+ }
+ 
+ /*
+
+
+
+> By avoiding queueing irq_work before setup_per_cpu_areas(), we correctly
+> avoided this problem. (I considered sending a patch so that
+> irq_work_claim() will fail if a global @percpu_complete is not yet
+> set.
+
+That is a great TODO :-)
+
+> But for now, our set_percpu_data_ready() solution is at least good
+> enough for the printk subsystem.)
+
+Yes but it is most likely not needed for CON_ANYTIME consoles,
+see below.
+
+> > We should probably revisit the code and remove the fallback to
+> > normal static variables.
+> 
+> Definitely. Now it is clear that @printk_count and @printk_count_nmi do
+> not need early variants.
+
+Note the ordering:
+
+asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+{
+[...]
+	early_security_init();
+[...]
+	setup_per_cpu_areas();
+[...]
+	parse_early_param();
+	after_dashes = parse_args("Booting kernel",
+
+
+My guess is that _warn_unseeded_randomness() was called from a code
+before early_security_init(). It was bad because per-CPU variables
+were not ready yet.
+
+The early consoles are enabled by parse_early_param(). It happens
+after setup_per_cpu_areas(). It means that all console drivers
+should be on the safe side.
+
+Best Regards,
+Petr

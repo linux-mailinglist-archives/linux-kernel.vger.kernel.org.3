@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826404CDA0E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FBF4CDA1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241097AbiCDRVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S241063AbiCDRVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241024AbiCDRUn (ORCPT
+        with ESMTP id S241040AbiCDRUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:20:43 -0500
+        Fri, 4 Mar 2022 12:20:49 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 633F51B0C7D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:19:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B4591C7EA0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:19:54 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B1561478;
-        Fri,  4 Mar 2022 09:19:51 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2C421424;
+        Fri,  4 Mar 2022 09:19:53 -0800 (PST)
 Received: from e121896.arm.com (unknown [10.57.42.166])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 862A13F73D;
-        Fri,  4 Mar 2022 09:19:49 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3BC4E3F73D;
+        Fri,  4 Mar 2022 09:19:52 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
         mike.leach@linaro.org, anshuman.khandual@arm.com
@@ -28,9 +28,9 @@ Cc:     mathieu.poirier@linaro.org, leo.yan@linaro.com,
         James Clark <james.clark@arm.com>,
         Leo Yan <leo.yan@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 11/15] coresight: etm4x: Cleanup TRCACATRn register accesses
-Date:   Fri,  4 Mar 2022 17:19:08 +0000
-Message-Id: <20220304171913.2292458-12-james.clark@arm.com>
+Subject: [PATCH v3 12/15] coresight: etm4x: Cleanup TRCSSCCRn and TRCSSCSRn register accesses
+Date:   Fri,  4 Mar 2022 17:19:09 +0000
+Message-Id: <20220304171913.2292458-13-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20220304171913.2292458-1-james.clark@arm.com>
 References: <20220304171913.2292458-1-james.clark@arm.com>
@@ -52,172 +52,64 @@ allows for grepping for fields by name rather than using magic numbers.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- .../coresight/coresight-etm4x-sysfs.c         | 42 +++++++++----------
- drivers/hwtracing/coresight/coresight-etm4x.h | 14 +++++--
- 2 files changed, 31 insertions(+), 25 deletions(-)
+ drivers/hwtracing/coresight/coresight-etm4x-core.c  | 2 +-
+ drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 6 +++---
+ drivers/hwtracing/coresight/coresight-etm4x.h       | 4 ++++
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index 88353f8ba414..87299e99dabb 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -443,7 +443,7 @@ static int etm4_enable_hw(struct etmv4_drvdata *drvdata)
+ 	for (i = 0; i < drvdata->nr_ss_cmp; i++) {
+ 		/* always clear status bit on restart if using single-shot */
+ 		if (config->ss_ctrl[i] || config->ss_pe_cmp[i])
+-			config->ss_status[i] &= ~BIT(31);
++			config->ss_status[i] &= ~TRCSSCSRn_STATUS;
+ 		etm4x_relaxed_write32(csa, config->ss_ctrl[i], TRCSSCCRn(i));
+ 		etm4x_relaxed_write32(csa, config->ss_status[i], TRCSSCSRn(i));
+ 		if (etm4x_sspcicrn_present(drvdata, i))
 diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-index b3b1b92909cc..29188b1a4646 100644
+index 29188b1a4646..7dd7636fc2a7 100644
 --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
 +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-@@ -22,7 +22,7 @@ static int etm4_set_mode_exclude(struct etmv4_drvdata *drvdata, bool exclude)
- 	 * TRCACATRn.TYPE bit[1:0]: type of comparison
- 	 * the trace unit performs
- 	 */
--	if (BMVAL(config->addr_acc[idx], 0, 1) == ETM_INSTR_ADDR) {
-+	if (FIELD_GET(TRCACATRn_TYPE_MASK, config->addr_acc[idx]) == TRCACATRn_TYPE_ADDR) {
- 		if (idx % 2 != 0)
- 			return -EINVAL;
- 
-@@ -863,11 +863,11 @@ static ssize_t addr_instdatatype_show(struct device *dev,
+@@ -1792,9 +1792,9 @@ static ssize_t sshot_ctrl_store(struct device *dev,
  
  	spin_lock(&drvdata->spinlock);
- 	idx = config->addr_idx;
--	val = BMVAL(config->addr_acc[idx], 0, 1);
-+	val = FIELD_GET(TRCACATRn_TYPE_MASK, config->addr_acc[idx]);
- 	len = scnprintf(buf, PAGE_SIZE, "%s\n",
--			val == ETM_INSTR_ADDR ? "instr" :
--			(val == ETM_DATA_LOAD_ADDR ? "data_load" :
--			(val == ETM_DATA_STORE_ADDR ? "data_store" :
-+			val == TRCACATRn_TYPE_ADDR ? "instr" :
-+			(val == TRCACATRn_TYPE_DATA_LOAD_ADDR ? "data_load" :
-+			(val == TRCACATRn_TYPE_DATA_STORE_ADDR ? "data_store" :
- 			"data_load_store")));
- 	spin_unlock(&drvdata->spinlock);
- 	return len;
-@@ -891,7 +891,7 @@ static ssize_t addr_instdatatype_store(struct device *dev,
- 	idx = config->addr_idx;
- 	if (!strcmp(str, "instr"))
- 		/* TYPE, bits[1:0] */
--		config->addr_acc[idx] &= ~(BIT(0) | BIT(1));
-+		config->addr_acc[idx] &= ~TRCACATRn_TYPE_MASK;
- 
- 	spin_unlock(&drvdata->spinlock);
- 	return size;
-@@ -1149,7 +1149,7 @@ static ssize_t addr_ctxtype_show(struct device *dev,
- 	spin_lock(&drvdata->spinlock);
- 	idx = config->addr_idx;
- 	/* CONTEXTTYPE, bits[3:2] */
--	val = BMVAL(config->addr_acc[idx], 2, 3);
-+	val = FIELD_GET(TRCACATRn_CONTEXTTYPE_MASK, config->addr_acc[idx]);
- 	len = scnprintf(buf, PAGE_SIZE, "%s\n", val == ETM_CTX_NONE ? "none" :
- 			(val == ETM_CTX_CTXID ? "ctxid" :
- 			(val == ETM_CTX_VMID ? "vmid" : "all")));
-@@ -1175,18 +1175,18 @@ static ssize_t addr_ctxtype_store(struct device *dev,
- 	idx = config->addr_idx;
- 	if (!strcmp(str, "none"))
- 		/* start by clearing context type bits */
--		config->addr_acc[idx] &= ~(BIT(2) | BIT(3));
-+		config->addr_acc[idx] &= ~TRCACATRn_CONTEXTTYPE_MASK;
- 	else if (!strcmp(str, "ctxid")) {
- 		/* 0b01 The trace unit performs a Context ID */
- 		if (drvdata->numcidc) {
--			config->addr_acc[idx] |= BIT(2);
--			config->addr_acc[idx] &= ~BIT(3);
-+			config->addr_acc[idx] |= TRCACATRn_CONTEXTTYPE_CTXID;
-+			config->addr_acc[idx] &= ~TRCACATRn_CONTEXTTYPE_VMID;
- 		}
- 	} else if (!strcmp(str, "vmid")) {
- 		/* 0b10 The trace unit performs a VMID */
- 		if (drvdata->numvmidc) {
--			config->addr_acc[idx] &= ~BIT(2);
--			config->addr_acc[idx] |= BIT(3);
-+			config->addr_acc[idx] &= ~TRCACATRn_CONTEXTTYPE_CTXID;
-+			config->addr_acc[idx] |= TRCACATRn_CONTEXTTYPE_VMID;
- 		}
- 	} else if (!strcmp(str, "all")) {
- 		/*
-@@ -1194,9 +1194,9 @@ static ssize_t addr_ctxtype_store(struct device *dev,
- 		 * comparison and a VMID
- 		 */
- 		if (drvdata->numcidc)
--			config->addr_acc[idx] |= BIT(2);
-+			config->addr_acc[idx] |= TRCACATRn_CONTEXTTYPE_CTXID;
- 		if (drvdata->numvmidc)
--			config->addr_acc[idx] |= BIT(3);
-+			config->addr_acc[idx] |= TRCACATRn_CONTEXTTYPE_VMID;
- 	}
- 	spin_unlock(&drvdata->spinlock);
- 	return size;
-@@ -1215,7 +1215,7 @@ static ssize_t addr_context_show(struct device *dev,
- 	spin_lock(&drvdata->spinlock);
- 	idx = config->addr_idx;
- 	/* context ID comparator bits[6:4] */
--	val = BMVAL(config->addr_acc[idx], 4, 6);
-+	val = FIELD_GET(TRCACATRn_CONTEXT_MASK, config->addr_acc[idx]);
- 	spin_unlock(&drvdata->spinlock);
- 	return scnprintf(buf, PAGE_SIZE, "%#lx\n", val);
- }
-@@ -1240,8 +1240,8 @@ static ssize_t addr_context_store(struct device *dev,
- 	spin_lock(&drvdata->spinlock);
- 	idx = config->addr_idx;
- 	/* clear context ID comparator bits[6:4] */
--	config->addr_acc[idx] &= ~(BIT(4) | BIT(5) | BIT(6));
--	config->addr_acc[idx] |= (val << 4);
-+	config->addr_acc[idx] &= ~TRCACATRn_CONTEXT_MASK;
-+	config->addr_acc[idx] |= val << __bf_shf(TRCACATRn_CONTEXT_MASK);
+ 	idx = config->ss_idx;
+-	config->ss_ctrl[idx] = val & GENMASK(24, 0);
++	config->ss_ctrl[idx] = FIELD_PREP(TRCSSCCRn_SAC_ARC_RST_MASK, val);
+ 	/* must clear bit 31 in related status register on programming */
+-	config->ss_status[idx] &= ~BIT(31);
++	config->ss_status[idx] &= ~TRCSSCSRn_STATUS;
  	spin_unlock(&drvdata->spinlock);
  	return size;
  }
-@@ -1258,7 +1258,7 @@ static ssize_t addr_exlevel_s_ns_show(struct device *dev,
- 
- 	spin_lock(&drvdata->spinlock);
- 	idx = config->addr_idx;
--	val = BMVAL(config->addr_acc[idx], 8, 14);
-+	val = FIELD_GET(TRCACATRn_EXLEVEL_MASK, config->addr_acc[idx]);
- 	spin_unlock(&drvdata->spinlock);
- 	return scnprintf(buf, PAGE_SIZE, "%#lx\n", val);
- }
-@@ -1275,14 +1275,14 @@ static ssize_t addr_exlevel_s_ns_store(struct device *dev,
- 	if (kstrtoul(buf, 0, &val))
- 		return -EINVAL;
- 
--	if (val & ~((GENMASK(14, 8) >> 8)))
-+	if (val & ~(TRCACATRn_EXLEVEL_MASK >> __bf_shf(TRCACATRn_EXLEVEL_MASK)))
- 		return -EINVAL;
- 
- 	spin_lock(&drvdata->spinlock);
- 	idx = config->addr_idx;
- 	/* clear Exlevel_ns & Exlevel_s bits[14:12, 11:8], bit[15] is res0 */
--	config->addr_acc[idx] &= ~(GENMASK(14, 8));
--	config->addr_acc[idx] |= (val << 8);
-+	config->addr_acc[idx] &= ~TRCACATRn_EXLEVEL_MASK;
-+	config->addr_acc[idx] |= val << __bf_shf(TRCACATRn_EXLEVEL_MASK);
+@@ -1844,7 +1844,7 @@ static ssize_t sshot_pe_ctrl_store(struct device *dev,
+ 	idx = config->ss_idx;
+ 	config->ss_pe_cmp[idx] = val & GENMASK(7, 0);
+ 	/* must clear bit 31 in related status register on programming */
+-	config->ss_status[idx] &= ~BIT(31);
++	config->ss_status[idx] &= ~TRCSSCSRn_STATUS;
  	spin_unlock(&drvdata->spinlock);
  	return size;
  }
 diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-index 9cacc38b1890..802ddbe2eecd 100644
+index 802ddbe2eecd..b4217eaab450 100644
 --- a/drivers/hwtracing/coresight/coresight-etm4x.h
 +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-@@ -208,6 +208,12 @@
- #define TRCVICTLR_EXLEVEL_S_MASK		GENMASK(19, 16)
- #define TRCVICTLR_EXLEVEL_NS_MASK		GENMASK(22, 20)
- 
-+#define TRCACATRn_TYPE_MASK			GENMASK(1, 0)
-+#define TRCACATRn_CONTEXTTYPE_MASK		GENMASK(3, 2)
-+#define TRCACATRn_CONTEXTTYPE_CTXID		BIT(2)
-+#define TRCACATRn_CONTEXTTYPE_VMID		BIT(3)
-+#define TRCACATRn_CONTEXT_MASK			GENMASK(6, 4)
-+#define TRCACATRn_EXLEVEL_MASK			GENMASK(14, 8)
+@@ -214,6 +214,10 @@
+ #define TRCACATRn_CONTEXTTYPE_VMID		BIT(3)
+ #define TRCACATRn_CONTEXT_MASK			GENMASK(6, 4)
+ #define TRCACATRn_EXLEVEL_MASK			GENMASK(14, 8)
++
++#define TRCSSCSRn_STATUS			BIT(31)
++#define TRCSSCCRn_SAC_ARC_RST_MASK		GENMASK(24, 0)
++
  /*
   * System instructions to access ETM registers.
   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-@@ -1050,10 +1056,10 @@ struct etmv4_drvdata {
- 
- /* Address comparator access types */
- enum etm_addr_acctype {
--	ETM_INSTR_ADDR,
--	ETM_DATA_LOAD_ADDR,
--	ETM_DATA_STORE_ADDR,
--	ETM_DATA_LOAD_STORE_ADDR,
-+	TRCACATRn_TYPE_ADDR,
-+	TRCACATRn_TYPE_DATA_LOAD_ADDR,
-+	TRCACATRn_TYPE_DATA_STORE_ADDR,
-+	TRCACATRn_TYPE_DATA_LOAD_STORE_ADDR,
- };
- 
- /* Address comparator context types */
 -- 
 2.28.0
 

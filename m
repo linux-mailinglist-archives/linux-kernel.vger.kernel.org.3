@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F7E4CD66C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058B04CD66E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239241AbiCDOaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S235875AbiCDOa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239889AbiCDOaK (ORCPT
+        with ESMTP id S239842AbiCDOaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:30:10 -0500
+        Fri, 4 Mar 2022 09:30:15 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0321BBF41;
-        Fri,  4 Mar 2022 06:29:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BCF1BB71D;
+        Fri,  4 Mar 2022 06:29:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646404161; x=1677940161;
+  t=1646404168; x=1677940168;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WwJlGF2U4JLMsEwUtCwxY/YCgq4lqd75LmiAV/2FZ24=;
-  b=16iZFnekYme/CkJdPi4YEgzV9pCC0n+zzv/bx8HWeofigZK4lEjKiuyo
-   JHVxkP7wad+aC+NF5LSJLGDexyn/AZiVr4gof+H/WeK3YsHUKur5HnA0H
-   fg2Zz7G1JkTFduXxsna7rJxC71hdFT6YTIhKMVJ0gtDPnWw/j0eunSVHq
-   uG5FH0QQaDteX/nu9IfSkDucci/DT4w/qNNMkUjjqlkrhCHQjC5KJqpVx
-   IRHyFfDNSPl5rIXHtKyMRjEQQuIMk7zrNXNPB1fgjLfn5ziQl1JxoBo7f
-   LOw8K00RcV4Z5SiWi+vdvUD8/eFOUzuW4kkAduTGaw8iXyWInM6aQ2cqn
-   Q==;
+  bh=ItwHa2LGg6vVjt4JwnVSxcBCS+3q6NmheNIr1H3INP4=;
+  b=hV2BKkhr9GrRbQVc/uqhv0QZmLEEzMSZ3R2nwbCqbUwCXdsbikcgQAGY
+   /uxvzGl7qnrD7g22UhJYSv52ZdQGV3FKAKJsRxHQcgEKs/o20eFvPU8vF
+   WoFpbbB0/rk07JNHToIXdBxqr9JkUJ1xVkXDnqzS9XLyZNX1HS3FKn8uK
+   5LiuINcbONXzZtw5cc4tEKaVbcV/2u1WkXuXmCADSyXEeXTcDA7j+7cVr
+   I9ajLb7rrnlS2pBLPyLT3hahBQpANijaWXPNCQj22OIOJpD3IA4jjnqcn
+   WJYI3aqHVgiu5GcbNgRZjsqCNhCfCf998upgVHssX9pxpf7jXbCfbuYzy
+   g==;
 X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
-   d="scan'208";a="164546135"
+   d="scan'208";a="155275847"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:29:20 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:29:26 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 07:29:19 -0700
+ 15.1.2375.17; Fri, 4 Mar 2022 07:29:24 -0700
 Received: from ROB-ULT-M68701.amer.actel.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 4 Mar 2022 07:29:16 -0700
+ 15.1.2375.17 via Frontend Transport; Fri, 4 Mar 2022 07:29:22 -0700
 From:   Sergiu Moga <sergiu.moga@microchip.com>
 To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski@canonical.com>,
@@ -47,9 +47,9 @@ CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH v3 4/5] dt-bindings: rtc: at91: Use macros for the IRQ type
-Date:   Fri, 4 Mar 2022 16:27:45 +0200
-Message-ID: <20220304142746.121947-5-sergiu.moga@microchip.com>
+Subject: [PATCH v3 5/5] dt-bindings: rtc: at91: Add SAMA7G5 compatible strings list
+Date:   Fri, 4 Mar 2022 16:27:46 +0200
+Message-ID: <20220304142746.121947-6-sergiu.moga@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220304142746.121947-1-sergiu.moga@microchip.com>
 References: <20220304142746.121947-1-sergiu.moga@microchip.com>
@@ -66,32 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prefer using macros for the IRQ type of the example node's
-interrupt property.
+Add compatible strings list for SAMA7G5.
 
 Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-index af25cc275356..d2452067bfe4 100644
+index d2452067bfe4..e5c3c384e172 100644
 --- a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
 +++ b/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-@@ -54,10 +54,12 @@ unevaluatedProperties: false
+@@ -21,6 +21,10 @@ properties:
+       - items:
+           - const: microchip,sam9x60-rtt
+           - const: atmel,at91sam9260-rtt
++      - items:
++          - const: microchip,sama7g5-rtt
++          - const: microchip,sam9x60-rtt
++          - const: atmel,at91sam9260-rtt
  
- examples:
-   - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-     rtc@fffffd20 {
-         compatible = "atmel,at91sam9260-rtt";
-         reg = <0xfffffd20 0x10>;
--        interrupts = <1 4 7>;
-+        interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
-         clocks = <&clk32k>;
-         atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-     };
+   reg:
+     maxItems: 1
 -- 
 2.25.1
 

@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91AC4CD9CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F04D4CD9CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240033AbiCDRLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S240887AbiCDRLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbiCDRLK (ORCPT
+        with ESMTP id S240870AbiCDRLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:11:10 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CE91CBA97;
-        Fri,  4 Mar 2022 09:10:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=WbFFgJ3TOElNmD+ADc11e8q9EbVb53G89PRSG/O0iSU=; b=HABnBLdjCuVOVOvY7g92QYd3LH
-        wL06Bw1jB1JQ0fhcGnX9IeNAMOKhbYyKMn74p8qAX1S9CnfsPzk8tWDPTR1RwhmdoHcn3zabgqNIS
-        kZIbAumkfljep8Cw1F2aHRJd/q1z4FV+86aIq/QhJ4uTFO6hJWDhT5FplV7UQ2EFf37eIjz9/yfRK
-        dwLUdLUtlOamhoIx/CZJMOi3+TI3nCfdH6qqP8bAAD8oZ6YYwZ4X6JuvmisnBDPMqk5VU5e3uJRju
-        7XWGaHiJOEssEykkqemoPAI7vu+tTUJEjdokwmJPf3vHSS6yEpdOd66k/NiJrCQJULU6WGlo941Wl
-        8SRcBXzg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nQBRP-00CoTk-7I; Fri, 04 Mar 2022 17:10:07 +0000
-Message-ID: <e1a5f3ad-c33d-46f1-48c6-9c6b377ea211@infradead.org>
-Date:   Fri, 4 Mar 2022 09:10:02 -0800
+        Fri, 4 Mar 2022 12:11:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2581CD9D6;
+        Fri,  4 Mar 2022 09:10:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33402B827EA;
+        Fri,  4 Mar 2022 17:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F16C1C340E9;
+        Fri,  4 Mar 2022 17:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646413849;
+        bh=Ds1CUkU7UJjiWAdE0+xZMgQsZmoxCwPqtCIMS0NNp5A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EA7yu/IROGfdSgKyOrBu8bT76eexmYri8ZSVbgz1qHTtzt1RI+qQdCks6wtlyl3eW
+         4XWB3HCTp6HtkpAAFNwdzQFn60forLUNs1zvg+mdX4mTJFCV9fKz03gGy3lgRHmrsZ
+         DNKBc28pZVlNB9VBlpkpVozlz75RUsvq+YXASqYajSkHNEv8c1BXroYR9QRz+0b6B9
+         Ss1SYTBV4zI9Xolb5L+Yl+HuevD4rfjGKHOKtehMtBNWH9hKbjkxqHGOlLf5GrvGVK
+         oSPmW8nEIyt0j1fVH15vsJShel4+aqY4NkDb4PpnaFKwAJ2qAYn7Ur9qMjr8jEg4us
+         qbX0wXDKvNj+A==
+Received: by mail-ed1-f50.google.com with SMTP id q17so11607608edd.4;
+        Fri, 04 Mar 2022 09:10:48 -0800 (PST)
+X-Gm-Message-State: AOAM533fofffIpN/fp+iKoMny2wK8/ThsGaGKWbVvZnu310+u70mbHqN
+        XEdJadZ7nGqlI5bV6Dxpl+SZ81fqAO1M9H4m2A==
+X-Google-Smtp-Source: ABdhPJyv33ipIntcHpbv1qfxGMnwrXmM5pCVhZvYqYuBcIOtqTdc2+oPX0xtMXbyCVPXlf8ixI0YtHesErJAvOBNjaY=
+X-Received: by 2002:aa7:d147:0:b0:415:c68c:f8d6 with SMTP id
+ r7-20020aa7d147000000b00415c68cf8d6mr12008248edo.67.1646413847174; Fri, 04
+ Mar 2022 09:10:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: mmotm 2022-03-03-21-24 uploaded
- [drivers/platform/x86/x86-android-tablets.ko]
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org
-References: <20220304052444.C157EC340E9@smtp.kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220304052444.C157EC340E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <6d26f16646294836b87611f4dc5fe763@huawei.com>
+In-Reply-To: <6d26f16646294836b87611f4dc5fe763@huawei.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 4 Mar 2022 11:10:33 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKKj5znW1z7Oyk03O1qLVADUNRC5GthoVcM37HajHnxBA@mail.gmail.com>
+Message-ID: <CAL_JsqKKj5znW1z7Oyk03O1qLVADUNRC5GthoVcM37HajHnxBA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: dwc: solve returning success but actually failed
+To:     "Zhangjiantao(Kirin,Nanjing)" <water.zhangjiantao@huawei.com>
+Cc:     "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
+        "gustavo.pimentel@synopsys.com" <gustavo.pimentel@synopsys.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Caiyadong <caiyadong@huawei.com>,
+        guhengsheng <guhengsheng@hisilicon.com>,
+        "zhangjianrong (E)" <zhangjianrong5@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,30 +70,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On Fri, Mar 4, 2022 at 6:06 AM Zhangjiantao(Kirin,Nanjing)
+<water.zhangjiantao@huawei.com> wrote:
+>
 
-On 3/3/22 21:24, Andrew Morton wrote:
-> The mm-of-the-moment snapshot 2022-03-03-21-24 has been uploaded to
-> 
->    https://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
+For the subject, something like: 'PCI: dwc: Fix setting error return
+on MSI DMA mapping failure'
 
-on i386:
-when CONFIG_SPI is not set/enabled:
+> When dma_mapping_error returns error because of no enough memory available, dw_pcie_host_init will return success, which will mislead the callers.
 
-ERROR: modpost: "spi_bus_type" [drivers/platform/x86/x86-android-tablets.ko] undefined!
+Wrap lines at 72 char.
 
--- 
-~Randy
+>
+
+Add a Fixes tag with whatever commit introduced the problem.
+
+> Signed-off-by: zhangjianrong <zhangjianrong5@huawei.com>
+> Signed-off-by: zhangjiantao <water.zhangjiantao@huawei.com>
+
+Author and S-o-b names should match.
+
+>
+> ---
+>   drivers/pci/controller/dwc/pcie-designware-host.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c
+> b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index f4755f3a03be..ac691d733848 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -393,6 +393,7 @@ int dw_pcie_host_init(struct pcie_port *pp)
+>               if (dma_mapping_error(pci->dev, pp->msi_data)) {
+>                   dev_err(pci->dev, "Failed to map MSI data\n");
+>                   pp->msi_data = 0;
+> +                ret = -1;
+
+Use an errno value. ENOMEM seems to be common, but I also see EIO and
+EFAULT used.
+
+Rob

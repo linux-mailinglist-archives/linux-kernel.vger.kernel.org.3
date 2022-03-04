@@ -2,197 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A9B4CDFB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B6F4CDFBE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiCDVW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 16:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S229798AbiCDVY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 16:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiCDVW5 (ORCPT
+        with ESMTP id S229498AbiCDVY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 16:22:57 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B824ECC1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:22:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646428928; x=1677964928;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FBq4YMXkDCMDlmkSi28XJCFzFJEgkEgL4Rj6jX5JxjY=;
-  b=SibayvhT5WA8vBIqwj05Dqx4fqvzny6FbH4cTAFTx6xv4qXIO6+VRamL
-   Gtjzu6ofzaY/sSk/O5+q6qY7G1w36JjE65xiE9cKBsZ69h3JGI67wszp7
-   naSWEtB4mq2FpUGQh3J2v6Ibn7xnaaedAmXesGBqCpwITDY0fMeyseflL
-   /ST7i6oc6oSJJSI8pzvCGv/89t6d1lIWsWMWFwRBrFavyPuwbgd3DSwZD
-   HSVBDnSujy35opZgOtA1+Hl7ys8d2aOuTvxFERQF0Y0Bg0cbioWb4vvPL
-   qW6zNTewJlhsG+ACrmIngWirht0gjzDRa5eHCzOYSsGDGi3WxMLkf9jP0
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="234673224"
-X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
-   d="scan'208";a="234673224"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 13:22:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
-   d="scan'208";a="536412656"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.151])
-  by orsmga007.jf.intel.com with SMTP; 04 Mar 2022 13:22:02 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Fri, 04 Mar 2022 23:22:01 +0200
-Date:   Fri, 4 Mar 2022 23:22:01 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     trix@redhat.com
-Cc:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, nathan@kernel.org,
-        ndesaulniers@google.com, matthew.d.roper@intel.com,
-        lucas.demarchi@intel.com, airlied@redhat.com, imre.deak@intel.com,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/i915: rework the error handling in *_dpll_params
-Message-ID: <YiKC+Zb2pHxQOLpO@intel.com>
-References: <20220304210355.608898-1-trix@redhat.com>
- <YiKAmhXEye0fpAyF@intel.com>
+        Fri, 4 Mar 2022 16:24:26 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837235E143
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:23:37 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id hw13so19882018ejc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 13:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oig8fhLNyVNunrNPMCm55EjpGrpFgGoOxxBNe6hX29Q=;
+        b=fMaD3ywH8iy0Z2twtGF0BWxNTmtA6vvgiUdlUCWiZFnv0u1vqqQHU7G/S8GF8aTtdO
+         r4rjCbFzNXHYjkw+nYPoY126hOKWZXwU/QIdQBB1IpPnRxrrmxgmzSec9n9HDr3X9V/u
+         3Kp0VrWTis8L6MGfAc+BnD60vksV8m+m05LwkISoW0wIOwEX3Xjz2cc3d0B7ez4e/q99
+         rDG0EFdraH20cLIj0cittLQ4fjiLPfgN0Ebelf4qhQf/phvShysDxILdNs0BFDBt5NlU
+         qEEo/PZVeYzWroMJVnPm5aDeCcTm85g2AdNNEAxOV3QLpGEoGc9wbvPVcOY3KDWYLX8w
+         zGmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oig8fhLNyVNunrNPMCm55EjpGrpFgGoOxxBNe6hX29Q=;
+        b=rISpz2mfDn27+LGtpJKc5iduaHdzNRN5V5XOijAveza9x7ahel3IJTEDMR1ATZ3ANW
+         7euN+MkaiqPMEpTzBHjMOjX0s/9BjqJ9xqLB1ucqCI7eeA9izgC7kRkOcVZ13XWJLPIK
+         Yw93PuQvv8TjDqli29SW4eouO+4dxguUi/nMD+pb1298FBGn01EaVIv8+kjtsHozP6As
+         k4et4tAhShvThXD/1cyN5Hr47FoitMo+Kd+kvmN2Bj58DbqUW/OT2/G4znNOjevm63tt
+         9SKBoSDYgbdvmxetCUHF5ih6s2lmOeNHqV7XR2o9YMhB+rAmR4GRAohi13ci3wu8O88S
+         FWIg==
+X-Gm-Message-State: AOAM531nD6JSF9k8CeKee6gSoksWGhhrbCO/DE308kQYhcOK7Nu3AMV1
+        TR7fxrdgyY2KVuch5FrUhBE=
+X-Google-Smtp-Source: ABdhPJx1mj58ZJXedZ+imCgau9OHpp1s8A2U+fVVz7OtXF2X982LGH/8Dj+YK6jyDK2a15GCao6q/g==
+X-Received: by 2002:a17:906:1ec3:b0:6cf:d118:59e2 with SMTP id m3-20020a1709061ec300b006cfd11859e2mr529524ejj.767.1646429015877;
+        Fri, 04 Mar 2022 13:23:35 -0800 (PST)
+Received: from reza-pc.. (73-241-201-31.ftth.glasoperator.nl. [31.201.241.73])
+        by smtp.googlemail.com with ESMTPSA id a9-20020a1709066d4900b006da888c3ef0sm2147396ejt.108.2022.03.04.13.23.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 13:23:35 -0800 (PST)
+From:   Reza Jahanbakhshi <reza.jahanbakhshi@gmail.com>
+Cc:     reza.jahanbakhshi@gmail.com, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Johannes Schickel <lordhoto@gmail.com>,
+        Timo Gurr <timo.gurr@gmail.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: usb-audio: add mapping for new Corsair Virtuoso SE
+Date:   Fri,  4 Mar 2022 22:23:02 +0100
+Message-Id: <20220304212303.195949-1-reza.jahanbakhshi@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YiKAmhXEye0fpAyF@intel.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 11:11:54PM +0200, Ville Syrjälä wrote:
-> On Fri, Mar 04, 2022 at 01:03:55PM -0800, trix@redhat.com wrote:
-> > From: Tom Rix <trix@redhat.com>
-> > 
-> > Clang static analysis reports this issue
-> > intel_dpll.c:472:31: warning: The left operand of '-'
-> >   is a garbage value [core.UndefinedBinaryOperatorResult]
-> >   this_err = abs(clock.dot - target);
-> >                  ~~~~~~~~~ ^
-> > 
-> > In a loop clock.dot is set on successful call to
-> > i9xx_calc_dpll_params().  If the call fails, the later
-> > *is_valid() will use the previous loop's clock.dot.
-> 
-> I don't think this can happen. intel_pll_is_valid() validates
-> all the dividers first and bails out if they are junk.
+New device id for Corsair Virtuoso SE RGB Wireless that currently is not
+in the mixer_map. This entry in the mixer_map is necessary in order to
+label its mixer appropriately and allow userspace to pick the correct
+volume controls. For instance, my own Corsair Virtuoso SE RGB Wireless
+headset has this new ID and consequently, the sidetone and volume are not
+ working correctly without this change.
+> sudo lsusb -v | grep -i corsair
+Bus 007 Device 011: ID 1b1c:0a40 Corsair CORSAIR VIRTUOSO SE Wireless Gam
+  idVendor           0x1b1c Corsair
+  iManufacturer           1 Corsair
+  iProduct                2 CORSAIR VIRTUOSO SE Wireless Gaming Headset
 
-Hmm. That said, there is actually a case to be made for fully
-initializing the struct, and even removing the WARN. If the
-BIOS (or whatever was doing stuff before i915 takes over)
-has misprogrammed the DPLL then we could potentially have
-garbage dividers on our hands, and during readout we'd just
-blindly call *_calc_dpll_params() on them.
+Signed-off-by: Reza Jahanbakhshi <reza.jahanbakhshi@gmail.com>
+---
+ sound/usb/mixer_maps.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-So I'm thinking something along the lines of
- clock->vco = <divisor> ? DIV_ROUND_CLOSEST(...) : 0;
- clock->dot = <divisor> ? DIV_ROUND_CLOSEST(...) : 0;
-might be what we should do here.
-
-To make it a bit less ugly a small helper function might
-be in order. intel_pll_div() perhaps?
-
-> 
-> > 
-> > The *_dpll_params functions return an arithmetic statement
-> > with the clock.dot as the variable.  Change the error handler
-> > to set clock.dot to 0 and jump to the return statement.
-> > 
-> > Fixes: dccbea3b0704 ("drm/i915: calculate the port clock rate along with other PLL params")
-> > Signed-off-by: Tom Rix <trix@redhat.com>
-> > ---
-> >  drivers/gpu/drm/i915/display/intel_dpll.c | 32 ++++++++++++++---------
-> >  1 file changed, 20 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/display/intel_dpll.c b/drivers/gpu/drm/i915/display/intel_dpll.c
-> > index 0ae37fdbf2a5b..ba7cada704288 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_dpll.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_dpll.c
-> > @@ -309,11 +309,13 @@ int pnv_calc_dpll_params(int refclk, struct dpll *clock)
-> >  {
-> >  	clock->m = clock->m2 + 2;
-> >  	clock->p = clock->p1 * clock->p2;
-> > -	if (WARN_ON(clock->n == 0 || clock->p == 0))
-> > -		return 0;
-> > +	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-> > +		clock->dot = 0;
-> > +		goto end;
-> > +	}
-> >  	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n);
-> >  	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
-> > -
-> > +end:
-> >  	return clock->dot;
-> >  }
-> >  
-> > @@ -326,11 +328,13 @@ int i9xx_calc_dpll_params(int refclk, struct dpll *clock)
-> >  {
-> >  	clock->m = i9xx_dpll_compute_m(clock);
-> >  	clock->p = clock->p1 * clock->p2;
-> > -	if (WARN_ON(clock->n + 2 == 0 || clock->p == 0))
-> > -		return 0;
-> > +	if (WARN_ON(clock->n + 2 == 0 || clock->p == 0)) {
-> > +		clock->dot = 0;
-> > +		goto end;
-> > +	}
-> >  	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n + 2);
-> >  	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
-> > -
-> > +end:
-> >  	return clock->dot;
-> >  }
-> >  
-> > @@ -338,11 +342,13 @@ int vlv_calc_dpll_params(int refclk, struct dpll *clock)
-> >  {
-> >  	clock->m = clock->m1 * clock->m2;
-> >  	clock->p = clock->p1 * clock->p2;
-> > -	if (WARN_ON(clock->n == 0 || clock->p == 0))
-> > -		return 0;
-> > +	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-> > +		clock->dot = 0;
-> > +		goto end;
-> > +	}
-> >  	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n);
-> >  	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
-> > -
-> > +end:
-> >  	return clock->dot / 5;
-> >  }
-> >  
-> > @@ -350,12 +356,14 @@ int chv_calc_dpll_params(int refclk, struct dpll *clock)
-> >  {
-> >  	clock->m = clock->m1 * clock->m2;
-> >  	clock->p = clock->p1 * clock->p2;
-> > -	if (WARN_ON(clock->n == 0 || clock->p == 0))
-> > -		return 0;
-> > +	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-> > +		clock->dot = 0;
-> > +		goto end;
-> > +	}
-> >  	clock->vco = DIV_ROUND_CLOSEST_ULL(mul_u32_u32(refclk, clock->m),
-> >  					   clock->n << 22);
-> >  	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
-> > -
-> > +end:
-> >  	return clock->dot / 5;
-> >  }
-> >  
-> > -- 
-> > 2.26.3
-> 
-> -- 
-> Ville Syrjälä
-> Intel
-
+diff --git a/sound/usb/mixer_maps.c b/sound/usb/mixer_maps.c
+index 96991ddf5055..64f5544d0a0a 100644
+--- a/sound/usb/mixer_maps.c
++++ b/sound/usb/mixer_maps.c
+@@ -542,6 +542,16 @@ static const struct usbmix_ctl_map usbmix_ctl_maps[] = {
+ 		.id = USB_ID(0x05a7, 0x40fa),
+ 		.map = bose_soundlink_map,
+ 	},
++	{
++		/* Corsair Virtuoso SE Latest (wired mode) */
++		.id = USB_ID(0x1b1c, 0x0a3f),
++		.map = corsair_virtuoso_map,
++	},
++	{
++		/* Corsair Virtuoso SE Latest (wireless mode) */
++		.id = USB_ID(0x1b1c, 0x0a40),
++		.map = corsair_virtuoso_map,
++	},
+ 	{
+ 		/* Corsair Virtuoso SE (wired mode) */
+ 		.id = USB_ID(0x1b1c, 0x0a3d),
 -- 
-Ville Syrjälä
-Intel
+2.35.1
+

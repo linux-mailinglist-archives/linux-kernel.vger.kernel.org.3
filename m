@@ -2,358 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2658C4CD271
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456564CD274
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235184AbiCDKcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 05:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
+        id S235292AbiCDKfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 05:35:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiCDKcb (ORCPT
+        with ESMTP id S230023AbiCDKfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 05:32:31 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8450416BFAC;
-        Fri,  4 Mar 2022 02:31:43 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 5C74A1F46518
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646389902;
-        bh=+Q25/NgNVE68oIuS3bZoss/fJ3ewI6fEylYzejB/9ds=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cTl18Lgrip5Dv9ssmao9SIBcXHb9e6McbV97dfYnRK9v5KeOpOYrEewLzcZmbL+u1
-         dpaQ7t0LlNigs987LCZNAdKpwK6mmRpRWLXt/AlatiUhDsfBfy6NZYtbdY3y3L9f7T
-         OV1/9cyDnGaMI85XdZ5W7o6SplMb3VcmSRqov2UrRMBZj7LhsLZNyYiXlRBlYcSvTX
-         45FuczS/BFZbkVwRupeeIyu1zsT1FkCA//t1aLrw07xgrXREKZHuYVh5ifLpp5IIV4
-         YD0R13ux/Rc4fBCESmfzwLwdPdK7DzLZDimv+6JUTcERfiu0CiavetH72LBZ6Jctsa
-         zVyOoavf161ww==
-Message-ID: <300114e2-6794-db3c-a51c-3f900b6476f9@collabora.com>
-Date:   Fri, 4 Mar 2022 11:31:38 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v21 2/3] Input: mt6779-keypad - Add MediaTek keypad driver
-Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
+        Fri, 4 Mar 2022 05:35:10 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3938BEA37B;
+        Fri,  4 Mar 2022 02:34:21 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EC2BB24000F;
+        Fri,  4 Mar 2022 10:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646390060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aNxUJLIkcAu5DHgHCNnuDLsWx+04q7o2jFfhBc9Lcq8=;
+        b=W3hX5IkhRjMN2I7T3YD5kysnHYhoCl+5oUSLrR8HO2gIP9DRCxE59s+eBV4p2ntZU5PcSh
+        ryM2zKLBLvUFMFmPja/Bpju67RgCbG9ROAo/74aV22Y7Q9pi4/Nltmx4yWNsKms6VEQGVP
+        okj6DayDEa5l4Cq984TsjYMxnVD9gjL00l0FYNCUT9GrHiVlakudp84CgNXV1dfxNOlFpH
+        YMPlEPxASlSjuf0qlOwuG6Rzi3x/fgzn1O9Jd3cTtv9gIT1l+4NtIlLdbOncgWFSs9OBix
+        feKtV8QkIM36icmNqYwEOovTXRyh/v5eivSYrx8T7Wtk3KpLfA+daCI5V1SlKw==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Fengping Yu <fengping.yu@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220303154302.252041-1-mkorpershoek@baylibre.com>
- <20220303154302.252041-3-mkorpershoek@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220303154302.252041-3-mkorpershoek@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [PATCH] dt-bindings: net: mscc,vsc7514-switch: convert txt bindings to yaml
+Date:   Fri,  4 Mar 2022 11:32:25 +0100
+Message-Id: <20220304103225.111428-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/03/22 16:43, Mattijs Korpershoek ha scritto:
-> From: "fengping.yu" <fengping.yu@mediatek.com>
-> 
-> This patch adds matrix keypad support for Mediatek SoCs.
-> 
-> Signed-off-by: fengping.yu <fengping.yu@mediatek.com>
-> Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Convert existing txt bindings to yaml format.
 
-Hello Mattijs,
-thanks for the patch!
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+ .../bindings/net/mscc,vsc7514-switch.yaml     | 191 ++++++++++++++++++
+ .../devicetree/bindings/net/mscc-ocelot.txt   |  83 --------
+ 2 files changed, 191 insertions(+), 83 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/mscc-ocelot.txt
 
-However, to make it perfect, there's something to improve....
-
-> ---
->   drivers/input/keyboard/Kconfig         |  12 ++
->   drivers/input/keyboard/Makefile        |   1 +
->   drivers/input/keyboard/mt6779-keypad.c | 215 +++++++++++++++++++++++++
->   3 files changed, 228 insertions(+)
->   create mode 100644 drivers/input/keyboard/mt6779-keypad.c
-> 
-> diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-> index 0c607da9ee10..03a9530f620e 100644
-> --- a/drivers/input/keyboard/Kconfig
-> +++ b/drivers/input/keyboard/Kconfig
-> @@ -779,6 +779,18 @@ config KEYBOARD_BCM
->   	  To compile this driver as a module, choose M here: the
->   	  module will be called bcm-keypad.
->   
-> +config KEYBOARD_MT6779
-> +	tristate "MediaTek Keypad Support"
-> +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	select REGMAP_MMIO
-> +	select INPUT_MATRIXKMAP
-> +	help
-> +	  Say Y here if you want to use the keypad on MediaTek SoCs.
-> +	  If unsure, say N.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called mt6779-keypad.
-> +
->   config KEYBOARD_MTK_PMIC
->   	tristate "MediaTek PMIC keys support"
->   	depends on MFD_MT6397
-> diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
-> index e3c8648f834e..721936e90290 100644
-> --- a/drivers/input/keyboard/Makefile
-> +++ b/drivers/input/keyboard/Makefile
-> @@ -44,6 +44,7 @@ obj-$(CONFIG_KEYBOARD_MATRIX)		+= matrix_keypad.o
->   obj-$(CONFIG_KEYBOARD_MAX7359)		+= max7359_keypad.o
->   obj-$(CONFIG_KEYBOARD_MCS)		+= mcs_touchkey.o
->   obj-$(CONFIG_KEYBOARD_MPR121)		+= mpr121_touchkey.o
-> +obj-$(CONFIG_KEYBOARD_MT6779)		+= mt6779-keypad.o
->   obj-$(CONFIG_KEYBOARD_MTK_PMIC) 	+= mtk-pmic-keys.o
->   obj-$(CONFIG_KEYBOARD_NEWTON)		+= newtonkbd.o
->   obj-$(CONFIG_KEYBOARD_NOMADIK)		+= nomadik-ske-keypad.o
-> diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
-> new file mode 100644
-> index 000000000000..b207acdd1e2a
-> --- /dev/null
-> +++ b/drivers/input/keyboard/mt6779-keypad.c
-> @@ -0,0 +1,215 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 MediaTek Inc.
-> + * Author Fengping Yu <fengping.yu@mediatek.com>
-> + */
-> +#include <linux/bitops.h>
-> +#include <linux/clk.h>
-> +#include <linux/input/matrix_keypad.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/property.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define MTK_KPD_NAME		"mt6779-keypad"
-> +#define MTK_KPD_MEM		0x0004
-> +#define MTK_KPD_DEBOUNCE	0x0018
-> +#define MTK_KPD_DEBOUNCE_MASK	GENMASK(13, 0)
-> +#define MTK_KPD_DEBOUNCE_MAX_MS	256
-> +#define MTK_KPD_NUM_MEMS	5
-> +#define MTK_KPD_NUM_BITS	136	/* 4*32+8 MEM5 only use 8 BITS */
-> +
-> +struct mt6779_keypad {
-> +	struct regmap *regmap;
-> +	struct input_dev *input_dev;
-> +	struct clk *clk;
-> +	void __iomem *base;
-> +	u32 n_rows;
-> +	u32 n_cols;
-> +	DECLARE_BITMAP(keymap_state, MTK_KPD_NUM_BITS);
-> +};
-> +
-> +static const struct regmap_config mt6779_keypad_regmap_cfg = {
-> +	.reg_bits = 32,
-> +	.val_bits = 32,
-> +	.reg_stride = sizeof(u32),
-> +	.max_register = 36,
-
-Are you sure that you can't use .fast_io = true?
-
-Another version for the same question:
-Are you sure that you need to lock with a mutex here, and not with a spinlock?
-
-Since you're performing reads over a MMIO, I think that there's a very good
-chance that you can use fast_io.
-
-> +};
-> +
-> +static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
-> +{
-> +	struct mt6779_keypad *keypad = dev_id;
-> +	unsigned short *keycode = keypad->input_dev->keycode;
-> +	DECLARE_BITMAP(new_state, MTK_KPD_NUM_BITS);
-> +	DECLARE_BITMAP(change, MTK_KPD_NUM_BITS);
-> +	int bit_nr;
-> +	int pressed;
-> +	unsigned short code;
-> +	int row, col;
-> +	int row_shift = get_count_order(keypad->n_cols);
-> +
-> +	regmap_bulk_read(keypad->regmap, MTK_KPD_MEM,
-> +			 new_state, MTK_KPD_NUM_MEMS);
-> +
-> +	bitmap_xor(change, new_state, keypad->keymap_state, MTK_KPD_NUM_BITS);
-> +
-> +	for_each_set_bit(bit_nr, change, MTK_KPD_NUM_BITS) {
-> +	/* For 32bits register, only bits [15:0] use to indicate key status */
-> +		if (bit_nr % 32 >= 16)
-> +			continue;
-> +
-> +		/* 1: not pressed, 0: pressed */
-> +		pressed = !test_bit(bit_nr, new_state);
-> +		dev_dbg(&keypad->input_dev->dev, "%s",
-> +			pressed ? "pressed" : "released");
-> +
-> +		row = bit_nr / 32;
-> +		col = bit_nr % 32;
-> +
-> +		code = keycode[MATRIX_SCAN_CODE(row, col, row_shift)];
-> +
-> +		input_report_key(keypad->input_dev, code, pressed);
-> +		input_sync(keypad->input_dev);
-> +
-> +		dev_dbg(&keypad->input_dev->dev,
-> +			"report Linux keycode = %d\n", code);
-> +	}
-> +
-> +	bitmap_copy(keypad->keymap_state, new_state, MTK_KPD_NUM_BITS);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void mt6779_keypad_clk_disable(void *data)
-> +{
-> +	clk_disable_unprepare(data);
-> +}
-> +
-> +static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
-> +{
-> +	struct mt6779_keypad *keypad;
-> +	unsigned int irq;
-> +	u32 debounce;
-> +	bool wakeup;
-> +	int error;
-> +
-> +	keypad = devm_kzalloc(&pdev->dev, sizeof(*keypad), GFP_KERNEL);
-> +	if (!keypad)
-> +		return -ENOMEM;
-> +
-> +	keypad->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(keypad->base))
-> +		return PTR_ERR(keypad->base);
-> +
-> +	keypad->regmap = devm_regmap_init_mmio(&pdev->dev,
-> +					       keypad->base,
-> +					       &mt6779_keypad_regmap_cfg);
-
-Please use dev_err_probe() to simplify error handling in probe functions: you've
-done a great job with adding a devm action for the error cases, avoiding gotos to
-get out cleanly.. it would be a pity to not finish this to perfection.
-
-I'll give you two examples for this, so that you'll be all set.
-
-	if (IS_ERR(keypad->regmap))
-		return dev_err_probe(&pdev->dev, PTR_ERR(keypad->regmap),
-				     "regmap init failed\n");
-
-P.S.: No need for %pe here, as dev_err_probe prints the error number for you!
-
-> +	if (IS_ERR(keypad->regmap)) {
-> +		dev_err(&pdev->dev,
-> +			"regmap init failed:%pe\n", keypad->regmap);
-> +		return PTR_ERR(keypad->regmap);
-> +	}
-> +
-> +	bitmap_fill(keypad->keymap_state, MTK_KPD_NUM_BITS);
-> +
-> +	keypad->input_dev = devm_input_allocate_device(&pdev->dev);
-
-	if (!keypad->input_dev)
-		return dev_err_probe(&pdev->dev, -ENOMEM,
-				     "Cannot allocate input device\n");
-
-> +	if (!keypad->input_dev) {
-> +		dev_err(&pdev->dev, "Failed to allocate input dev\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	keypad->input_dev->name = MTK_KPD_NAME;
-> +	keypad->input_dev->id.bustype = BUS_HOST;
-> +
-> +	error = matrix_keypad_parse_properties(&pdev->dev, &keypad->n_rows,
-> +					       &keypad->n_cols);
-> +	if (error) {
-> +		dev_err(&pdev->dev, "Failed to parse keypad params\n");
-> +		return error;
-> +	}
-> +
-> +	if (device_property_read_u32(&pdev->dev, "debounce-delay-ms",
-> +				     &debounce))
-> +		debounce = 16;
-> +
-> +	if (debounce > MTK_KPD_DEBOUNCE_MAX_MS) {
-> +		dev_err(&pdev->dev, "Debounce time exceeds the maximum allowed time %dms\n",
-> +			MTK_KPD_DEBOUNCE_MAX_MS);
-> +		return -EINVAL;
-> +	}
-> +
-> +	wakeup = device_property_read_bool(&pdev->dev, "wakeup-source");
-> +
-> +	dev_dbg(&pdev->dev, "n_row=%d n_col=%d debounce=%d\n",
-> +		keypad->n_rows, keypad->n_cols, debounce);
-> +
-> +	error = matrix_keypad_build_keymap(NULL, NULL,
-> +					   keypad->n_rows,
-> +					   keypad->n_cols,
-> +					   NULL,
-> +					   keypad->input_dev);
-> +	if (error) {
-> +		dev_err(&pdev->dev, "Failed to build keymap\n");
-> +		return error;
-> +	}
-> +
-> +	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
-> +		     (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
-> +
-> +	keypad->clk = devm_clk_get(&pdev->dev, "kpd");
-> +	if (IS_ERR(keypad->clk))
-> +		return PTR_ERR(keypad->clk);
-> +
-> +	error = clk_prepare_enable(keypad->clk);
-> +	if (error) {
-> +		dev_err(&pdev->dev, "cannot prepare/enable keypad clock\n");
-> +		return error;
-> +	}
-> +
-> +	error = devm_add_action_or_reset(&pdev->dev, mt6779_keypad_clk_disable, keypad->clk);
-> +	if (error)
-> +		return error;
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +
-> +	error = devm_request_threaded_irq(&pdev->dev, irq, NULL, mt6779_keypad_irq_handler,
-> +					  IRQF_ONESHOT, MTK_KPD_NAME, keypad);
-> +	if (error) {
-> +		dev_err(&pdev->dev, "Failed to request IRQ#%d:%d\n", irq, error);
-> +		return error;
-> +	}
-> +
-> +	error = input_register_device(keypad->input_dev);
-> +	if (error) {
-> +		dev_err(&pdev->dev, "Failed to register device\n");
-> +		return error;
-> +	}
-> +
-> +	error =  device_init_wakeup(&pdev->dev, wakeup);
-
-Whoops! Two spaces here! Please fix this typo.
-
-P.S.: Please add my email to the Cc's when you'll send the next version, so that
-       I will be able to timely give you a R-b tag.
-
-Cheers,
-Angelo
-
+diff --git a/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+new file mode 100644
+index 000000000000..ee0a504bdb24
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+@@ -0,0 +1,191 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/mscc,vsc7514-switch.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip VSC7514 Ethernet switch controller
++
++maintainers:
++  - Vladimir Oltean <vladimir.oltean@nxp.com>
++  - Claudiu Manoil <claudiu.manoil@nxp.com>
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++
++description: |
++  Bindings for the Microchip VSC7514 switch driver
++
++  The VSC7514 switch driver handles up to 11 ports and can inject/extract
++  packets using CPU. Additionally, PTP is supported as well as FDMA for faster
++  packet extraction/injection.
++
++properties:
++  $nodename:
++    pattern: "^switch@[0-9a-f]+$"
++
++  compatible:
++    const: mscc,vsc7514-switch
++
++  reg:
++    items:
++      - description: system target
++      - description: rewriter target
++      - description: qs target
++      - description: PTP target
++      - description: Port0 target
++      - description: Port1 target
++      - description: Port2 target
++      - description: Port3 target
++      - description: Port4 target
++      - description: Port5 target
++      - description: Port6 target
++      - description: Port7 target
++      - description: Port8 target
++      - description: Port9 target
++      - description: Port10 target
++      - description: QSystem target
++      - description: Analyzer target
++      - description: S0 target
++      - description: S1 target
++      - description: S2 target
++      - description: fdma target
++
++  reg-names:
++    items:
++      - const: sys
++      - const: rew
++      - const: qs
++      - const: ptp
++      - const: port0
++      - const: port1
++      - const: port2
++      - const: port3
++      - const: port4
++      - const: port5
++      - const: port6
++      - const: port7
++      - const: port8
++      - const: port9
++      - const: port10
++      - const: qsys
++      - const: ana
++      - const: s0
++      - const: s1
++      - const: s2
++      - const: fdma
++
++  interrupts:
++    minItems: 1
++    items:
++      - description: PTP ready
++      - description: register based extraction
++      - description: frame dma based extraction
++
++  interrupt-names:
++    minItems: 1
++    items:
++      - const: ptp_rdy
++      - const: xtr
++      - const: fdma
++
++  ethernet-ports:
++    type: object
++
++    properties:
++      '#address-cells':
++        const: 1
++      '#size-cells':
++        const: 0
++
++    additionalProperties: false
++
++    patternProperties:
++      "^port@[0-9a-f]+$":
++        type: object
++        description: Ethernet ports handled by the switch
++
++        $ref: ethernet-controller.yaml#
++
++        unevaluatedProperties: false
++
++        properties:
++          reg:
++            description: Switch port number
++
++          phy-handle: true
++
++          phy-mode: true
++
++          fixed-link: true
++
++          mac-address: true
++
++        required:
++          - reg
++          - phy-mode
++
++        oneOf:
++          - required:
++              - phy-handle
++          - required:
++              - fixed-link
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - interrupt-names
++  - ethernet-ports
++
++additionalProperties: false
++
++examples:
++  - |
++    switch@1010000 {
++      compatible = "mscc,vsc7514-switch";
++      reg = <0x1010000 0x10000>,
++            <0x1030000 0x10000>,
++            <0x1080000 0x100>,
++            <0x10e0000 0x10000>,
++            <0x11e0000 0x100>,
++            <0x11f0000 0x100>,
++            <0x1200000 0x100>,
++            <0x1210000 0x100>,
++            <0x1220000 0x100>,
++            <0x1230000 0x100>,
++            <0x1240000 0x100>,
++            <0x1250000 0x100>,
++            <0x1260000 0x100>,
++            <0x1270000 0x100>,
++            <0x1280000 0x100>,
++            <0x1800000 0x80000>,
++            <0x1880000 0x10000>,
++            <0x1040000 0x10000>,
++            <0x1050000 0x10000>,
++            <0x1060000 0x10000>,
++            <0x1a0 0x1c4>;
++      reg-names = "sys", "rew", "qs", "ptp", "port0", "port1",
++            "port2", "port3", "port4", "port5", "port6",
++            "port7", "port8", "port9", "port10", "qsys",
++            "ana", "s0", "s1", "s2", "fdma";
++      interrupts = <18 21 16>;
++      interrupt-names = "ptp_rdy", "xtr", "fdma";
++
++      ethernet-ports {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        port0: port@0 {
++          reg = <0>;
++          phy-handle = <&phy0>;
++          phy-mode = "internal";
++        };
++        port1: port@1 {
++          reg = <1>;
++          phy-handle = <&phy1>;
++          phy-mode = "internal";
++        };
++      };
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/net/mscc-ocelot.txt b/Documentation/devicetree/bindings/net/mscc-ocelot.txt
+deleted file mode 100644
+index 3b6290b45ce5..000000000000
+--- a/Documentation/devicetree/bindings/net/mscc-ocelot.txt
++++ /dev/null
+@@ -1,83 +0,0 @@
+-Microsemi Ocelot network Switch
+-===============================
+-
+-The Microsemi Ocelot network switch can be found on Microsemi SoCs (VSC7513,
+-VSC7514)
+-
+-Required properties:
+-- compatible: Should be "mscc,vsc7514-switch"
+-- reg: Must contain an (offset, length) pair of the register set for each
+-  entry in reg-names.
+-- reg-names: Must include the following entries:
+-  - "sys"
+-  - "rew"
+-  - "qs"
+-  - "ptp" (optional due to backward compatibility)
+-  - "qsys"
+-  - "ana"
+-  - "portX" with X from 0 to the number of last port index available on that
+-    switch
+-- interrupts: Should contain the switch interrupts for frame extraction,
+-  frame injection and PTP ready.
+-- interrupt-names: should contain the interrupt names: "xtr", "inj". Can contain
+-  "ptp_rdy" which is optional due to backward compatibility.
+-- ethernet-ports: A container for child nodes representing switch ports.
+-
+-The ethernet-ports container has the following properties
+-
+-Required properties:
+-
+-- #address-cells: Must be 1
+-- #size-cells: Must be 0
+-
+-Each port node must have the following mandatory properties:
+-- reg: Describes the port address in the switch
+-
+-Port nodes may also contain the following optional standardised
+-properties, described in binding documents:
+-
+-- phy-handle: Phandle to a PHY on an MDIO bus. See
+-  Documentation/devicetree/bindings/net/ethernet.txt for details.
+-
+-Example:
+-
+-	switch@1010000 {
+-		compatible = "mscc,vsc7514-switch";
+-		reg = <0x1010000 0x10000>,
+-		      <0x1030000 0x10000>,
+-		      <0x1080000 0x100>,
+-		      <0x10e0000 0x10000>,
+-		      <0x11e0000 0x100>,
+-		      <0x11f0000 0x100>,
+-		      <0x1200000 0x100>,
+-		      <0x1210000 0x100>,
+-		      <0x1220000 0x100>,
+-		      <0x1230000 0x100>,
+-		      <0x1240000 0x100>,
+-		      <0x1250000 0x100>,
+-		      <0x1260000 0x100>,
+-		      <0x1270000 0x100>,
+-		      <0x1280000 0x100>,
+-		      <0x1800000 0x80000>,
+-		      <0x1880000 0x10000>;
+-		reg-names = "sys", "rew", "qs", "ptp", "port0", "port1",
+-			    "port2", "port3", "port4", "port5", "port6",
+-			    "port7", "port8", "port9", "port10", "qsys",
+-			    "ana";
+-		interrupts = <18 21 22>;
+-		interrupt-names = "ptp_rdy", "xtr", "inj";
+-
+-		ethernet-ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			port0: port@0 {
+-				reg = <0>;
+-				phy-handle = <&phy0>;
+-			};
+-			port1: port@1 {
+-				reg = <1>;
+-				phy-handle = <&phy1>;
+-			};
+-		};
+-	};
+-- 
+2.34.1
 

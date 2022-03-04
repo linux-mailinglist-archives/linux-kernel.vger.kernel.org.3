@@ -2,179 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA844CDF8E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713A14CDF84
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiCDVFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 16:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
+        id S229861AbiCDVFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 16:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiCDVE5 (ORCPT
+        with ESMTP id S229739AbiCDVFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 16:04:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC73555BC3
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:04:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646427847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aB6Kk4CiP7ma9Bi5vpnU1x/1xVJ2+zGmFV9PkjhVvyE=;
-        b=bcw+a2fHoOHI4KmNCTmO4SszGG+dXszhRzPFyiAX7WhR/y7qQzdILqkDcTPvLCCpGwfR6Z
-        4SHDAWZfYXQmTxEtnL9MUBVXD0W+qe/au1t+Y3B2OwOmPeEoeI0paEK0Vbg4CL0L4Feqa9
-        qUUWS+T5Z66VRT4Rdn323jAfgPD7kOw=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-511-xkjudbt_NtCqBEMv2Rfo5g-1; Fri, 04 Mar 2022 16:04:06 -0500
-X-MC-Unique: xkjudbt_NtCqBEMv2Rfo5g-1
-Received: by mail-qk1-f197.google.com with SMTP id 199-20020a3703d0000000b005f17c5b0356so6528359qkd.16
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 13:04:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aB6Kk4CiP7ma9Bi5vpnU1x/1xVJ2+zGmFV9PkjhVvyE=;
-        b=aLsuVMx7lWSLpaF7ppmzcXJzDKNyS9/JLnAHDHSEKwh2niMWxTCWDt1FiCuH1gSJZl
-         Q/h24d6nRwOcseS/wF6uXBbxul/WcXlxp7VyQkSZJ29/6Cpn0Wh5W9gSZSVWtP+9gMQM
-         M/8COz2+1W6r+NjVrmQgi/c3XFCzxgivR4VEmcfcXzSKBrAqwwBAkJxDakrh8mad1fB6
-         A7CRNoBlLjnmKeDiEJnl5M+2k5Gup+pC+cr/0m/WIhb3gY7w1qjc6pkbKXxMVapiUm0x
-         NLf3UKvUH36CYKHjkD2cFtMYcVIjLL6TiyxOoznJIIEG+MNp6brVUNkBsSIp19YftFCI
-         36vg==
-X-Gm-Message-State: AOAM533GGgiDg0VqOOKr0lk5fMYkhS4uDF1AmM/PqI7292cOMXOcpHYi
-        Ys7fkPty3xpzfb1/ESk5I+tVqO8S6dWuRwdhV6CHdA1cP4mEq1Ej8OdkXuPHy8FuhDSpb2jTEa/
-        u7y0JTHsReYfAw1Gor/46nkwS
-X-Received: by 2002:ac8:7d0d:0:b0:2e0:4e16:d3e3 with SMTP id g13-20020ac87d0d000000b002e04e16d3e3mr596099qtb.140.1646427845910;
-        Fri, 04 Mar 2022 13:04:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzl8+Ou2jNdvl2lw+bUe6/hKRdnkUMPqvw52WVW8CnKDZfAXFw9zzSyaFkAoX7LqTGuVUhhjg==
-X-Received: by 2002:ac8:7d0d:0:b0:2e0:4e16:d3e3 with SMTP id g13-20020ac87d0d000000b002e04e16d3e3mr596051qtb.140.1646427845459;
-        Fri, 04 Mar 2022 13:04:05 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id d15-20020a05622a15cf00b002de711a190bsm4066708qty.71.2022.03.04.13.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 13:04:05 -0800 (PST)
-From:   trix@redhat.com
-To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, nathan@kernel.org,
-        ndesaulniers@google.com, ville.syrjala@linux.intel.com,
-        matthew.d.roper@intel.com, lucas.demarchi@intel.com,
-        airlied@redhat.com, imre.deak@intel.com
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/i915: rework the error handling in *_dpll_params
-Date:   Fri,  4 Mar 2022 13:03:55 -0800
-Message-Id: <20220304210355.608898-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Fri, 4 Mar 2022 16:05:18 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7C96D84B;
+        Fri,  4 Mar 2022 13:04:30 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 94E571F461A5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646427869;
+        bh=YOZ8JLvEQYTHjKznkmoE7VKBmT4Bdl/APrB275SRStk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mLRdE/UicDXyXKNxfshVz50hn0bPo1ub/cJQ9dg4uactFRFMtqb/CQBjcfj3Ega+k
+         r2ZmrIIaMdd0pCXC9C6ZOGxzkki+s/IcycIfLSaPF0e7jCkUUVlOScjGC+rtR1vTtU
+         WF5hTcQ4eX1QH+GzvWluTEd/+u8RyPE7c5zRi2oIpvgHNXlhQOgfUjGxFGMJS7iV+R
+         gj5nrIs9tlZrfkMjmQrPNcLZF6mxLSvpk7r47yb5Y4AobdivHxI7/g+m0fFhcd8lXf
+         xjSWtuMZWDKYQK9BK7ioEXASog29CBAL0p29QTY/ySLVuBBT5q3nC5VQKgxxFvxv/N
+         ofzeLiG+uxSVQ==
+Received: by mercury (Postfix, from userid 1000)
+        id F2F511060602; Fri,  4 Mar 2022 22:04:27 +0100 (CET)
+Date:   Fri, 4 Mar 2022 22:04:27 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Yihao Han <hanyihao@vivo.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@vivo.com
+Subject: Re: [PATCH] power: supply: axp20x_usb_power: fix
+ platform_get_irq.cocci warnings
+Message-ID: <20220304210427.mjocn3kdk26u5u7y@mercury.elektranox.org>
+References: <20220302023451.5040-1-hanyihao@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7vo6g6q2c56odmp3"
+Content-Disposition: inline
+In-Reply-To: <20220302023451.5040-1-hanyihao@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
 
-Clang static analysis reports this issue
-intel_dpll.c:472:31: warning: The left operand of '-'
-  is a garbage value [core.UndefinedBinaryOperatorResult]
-  this_err = abs(clock.dot - target);
-                 ~~~~~~~~~ ^
+--7vo6g6q2c56odmp3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In a loop clock.dot is set on successful call to
-i9xx_calc_dpll_params().  If the call fails, the later
-*is_valid() will use the previous loop's clock.dot.
+Hi,
 
-The *_dpll_params functions return an arithmetic statement
-with the clock.dot as the variable.  Change the error handler
-to set clock.dot to 0 and jump to the return statement.
+On Tue, Mar 01, 2022 at 06:34:51PM -0800, Yihao Han wrote:
+> Remove dev_err() messages after platform_get_irq*() failures.
+> platform_get_irq() already prints an error.
+>=20
+> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+>=20
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> ---
 
-Fixes: dccbea3b0704 ("drm/i915: calculate the port clock rate along with other PLL params")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/i915/display/intel_dpll.c | 32 ++++++++++++++---------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+Thanks, queued (slightly modified to remove the now useless {}).
 
-diff --git a/drivers/gpu/drm/i915/display/intel_dpll.c b/drivers/gpu/drm/i915/display/intel_dpll.c
-index 0ae37fdbf2a5b..ba7cada704288 100644
---- a/drivers/gpu/drm/i915/display/intel_dpll.c
-+++ b/drivers/gpu/drm/i915/display/intel_dpll.c
-@@ -309,11 +309,13 @@ int pnv_calc_dpll_params(int refclk, struct dpll *clock)
- {
- 	clock->m = clock->m2 + 2;
- 	clock->p = clock->p1 * clock->p2;
--	if (WARN_ON(clock->n == 0 || clock->p == 0))
--		return 0;
-+	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-+		clock->dot = 0;
-+		goto end;
-+	}
- 	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n);
- 	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
--
-+end:
- 	return clock->dot;
- }
- 
-@@ -326,11 +328,13 @@ int i9xx_calc_dpll_params(int refclk, struct dpll *clock)
- {
- 	clock->m = i9xx_dpll_compute_m(clock);
- 	clock->p = clock->p1 * clock->p2;
--	if (WARN_ON(clock->n + 2 == 0 || clock->p == 0))
--		return 0;
-+	if (WARN_ON(clock->n + 2 == 0 || clock->p == 0)) {
-+		clock->dot = 0;
-+		goto end;
-+	}
- 	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n + 2);
- 	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
--
-+end:
- 	return clock->dot;
- }
- 
-@@ -338,11 +342,13 @@ int vlv_calc_dpll_params(int refclk, struct dpll *clock)
- {
- 	clock->m = clock->m1 * clock->m2;
- 	clock->p = clock->p1 * clock->p2;
--	if (WARN_ON(clock->n == 0 || clock->p == 0))
--		return 0;
-+	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-+		clock->dot = 0;
-+		goto end;
-+	}
- 	clock->vco = DIV_ROUND_CLOSEST(refclk * clock->m, clock->n);
- 	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
--
-+end:
- 	return clock->dot / 5;
- }
- 
-@@ -350,12 +356,14 @@ int chv_calc_dpll_params(int refclk, struct dpll *clock)
- {
- 	clock->m = clock->m1 * clock->m2;
- 	clock->p = clock->p1 * clock->p2;
--	if (WARN_ON(clock->n == 0 || clock->p == 0))
--		return 0;
-+	if (WARN_ON(clock->n == 0 || clock->p == 0)) {
-+		clock->dot = 0;
-+		goto end;
-+	}
- 	clock->vco = DIV_ROUND_CLOSEST_ULL(mul_u32_u32(refclk, clock->m),
- 					   clock->n << 22);
- 	clock->dot = DIV_ROUND_CLOSEST(clock->vco, clock->p);
--
-+end:
- 	return clock->dot / 5;
- }
- 
--- 
-2.26.3
+-- Sebastian
 
+>  drivers/power/supply/axp20x_usb_power.c | 2 --
+>  1 file changed, 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supp=
+ly/axp20x_usb_power.c
+> index a1d110f7ddce..75170fe79cbf 100644
+> --- a/drivers/power/supply/axp20x_usb_power.c
+> +++ b/drivers/power/supply/axp20x_usb_power.c
+> @@ -638,8 +638,6 @@ static int axp20x_usb_power_probe(struct platform_dev=
+ice *pdev)
+>  	for (i =3D 0; i < axp_data->num_irq_names; i++) {
+>  		irq =3D platform_get_irq_byname(pdev, axp_data->irq_names[i]);
+>  		if (irq < 0) {
+> -			dev_err(&pdev->dev, "No IRQ for %s: %d\n",
+> -				axp_data->irq_names[i], irq);
+>  			return irq;
+>  		}
+>  		power->irqs[i] =3D regmap_irq_get_virq(axp20x->regmap_irqc, irq);
+> --=20
+> 2.17.1
+>=20
+
+--7vo6g6q2c56odmp3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIiftsACgkQ2O7X88g7
++pow8BAAnmIFHFIZxmxPvm/fmOAtvjEkKa80AtasHkaIcsT7uDiD0mr/w4wsb3Ul
+sDQ4IMEVXaOK7OAddGzIO573405ZFdWskkiRTn7gBZd7tOJKe0iirOqwgZezjf/C
+b0m9JTkeclZsDMNlKwIfRBTrEsrJcjJLPHEn0UDVDbDcUdMQ5z+eN2QRvZJ2CITF
+4DwqMzqnvF0YJhGZequ5DPfeK3frgJU3ByqhOhRFrD32qRhy4YlyGx6mM195MODc
+UjVIkT3miVFY6RnpwbHZkcBbLZQDazrUilTp6FCjV5ZpwxX6pit8ZVO+SxAPjg/k
+TXUuMck81nkaGnIt4r76bouqGq0HC2X62CISr/o8S17tx3pOwhu6VRIbPWv5hP9j
+/kHmI70IZVYu0UxYLBEGxEkefxSChgZ6Ur7ewqFulDsT3Q8hSKm9MBHUfiBk+wJj
+JiGwwSCCSAG87F6t6aoahqxrYVEOxCvTUmbYrP8OomevmFxbRb//f/hrIS0JvI46
+SFudcWMuRTCDEs35Bn0Y9qVBrc1FEXN8vR9Mthp77mti14KVMjumMSWfmk0DA4j5
+fuCmZI9l5zbuvgIDsGyf8B04ChNZ61UX90isJSGovtZDGFFIkqUQUMB7CRjfFRuz
+q1YTTLr9LK0PG6kcdTYaGBoYQ+fmkhF9rkduop1iDiytd1dXw04=
+=VD+D
+-----END PGP SIGNATURE-----
+
+--7vo6g6q2c56odmp3--

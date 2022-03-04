@@ -2,279 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4305C4CD86F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC404CD885
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240557AbiCDQDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S240570AbiCDQEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbiCDQD2 (ORCPT
+        with ESMTP id S240566AbiCDQEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:03:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D963FD27
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:02:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 355B961CEC
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC7AC340E9;
-        Fri,  4 Mar 2022 16:02:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646409759;
-        bh=R0wWJGVSsUpQ4e18zVEQa0M8Z8kg2E8dY0qIuMOEXLE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=BxyBBZhG0q2SyFAY1h1acwfuKudS6hnP4OPaFoXIQXCtvZWgYBT+PKZV6Tex3Fwyt
-         CrVZ8y5fofq5rodKMjMWwj7q39bn+YCaB6MZETjPx8BCBR/cD4BvuPg01DzMyYjV2T
-         e4puK2lV+eYLuZLctpUwwRc2SrDJdFel4AoUVMtpaIHWYMiAhmFdwrodX+sgWTVLrD
-         6cPOu9Ysoa9gCWKyOg0kznLEsexeWmNhe6KiruHJtJXHCChB+Z3QccmHMFYQoKot42
-         QCf8gMi5OYHj5X58Hu+ljBWbYh5D63cf0swYpJcn9Jz6lIhz198YhoL73FT+PvpoC4
-         XAd0zQeViOsSw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2F3485C04FD; Fri,  4 Mar 2022 08:02:39 -0800 (PST)
-Date:   Fri, 4 Mar 2022 08:02:39 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
+        Fri, 4 Mar 2022 11:04:51 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2080.outbound.protection.outlook.com [40.107.101.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3868C1AEEF1;
+        Fri,  4 Mar 2022 08:04:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DjRVYbfNoBYgYAq4WdatKjoF3ff0wIKSBDp2/M3DD1bN+IJhyaArhX8XhdvkuSsODt89TpZ6CcxjJfwxa5MjcCXvRMRi6d6uN1JBCEHdzmItd2jX9mImeLPBEOxdrYjgfu44RJNh4wU881xgUGCH5ulOk730oGvPNtV+P3dHDqxbzcEPgLgqSciEMIQsV3A04LNg7KFR+NpB0URdTrdt4WE56YHGcPHzwRhYhVjXRYPJocRt47YEWmNar/ZV2sDcGIdrO+FCpzCaLIVaei9sDn2P6DJ8aDHhJ1jxAT22atjhfVLLMJ8C8coaWzQ9fRrULbw3YsfIRzph/jSJmkr5vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pda2RsavOPzP0lYnhthpUbqIVnlRaGfUdtE9C+7+jek=;
+ b=CEZWtoce4yTL+CZQQ4LadxLKndQ2Y2tfXhvu6YT0gINCM9wHqh77aHYE2dktkFO1WTr2FtSTMo/j+n66YqQUVzkYo21dRErYMpt+DaHe2Gul1UApXcCDuTEvQ9snRQkY3+bi9Yiai7p6lHusZQ1iJkRzOsG60kCzkq7GTokjQL2FBncqB/fp/e4hGSm8s/o4ebo/FinbGJjcMiiz95rxLf9ux9+kAtAQwbm8MKBOVn2R0ZbediNLNJ1pQuBAzpVRglZrSMCUlgL/9/5qwPn2tzNl+k0MW3y3ivlXwCyoQd3D0ycB1F72E42v/+/WcGmLbdMnkP3o4he0dprY4LSvqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pda2RsavOPzP0lYnhthpUbqIVnlRaGfUdtE9C+7+jek=;
+ b=4vdj487xEg3mqRAqb1sW07ml14fDCCHgNDKsGEu3BIxI1medxu+akvaFlxJTTyaBKfHE7K+F+nGllJtfgs7PM2cUGeFyjajrFUXsPnzdbNaIsAcUWz3Y3y6P/+/agHfbzhvSVV9EKxgINOOsnFsiceeS7tS1+BgiD2zLvs1TirI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
+ by DM6PR12MB4481.namprd12.prod.outlook.com (2603:10b6:5:2af::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
+ 2022 16:04:01 +0000
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::88ec:de2:30df:d4de]) by SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::88ec:de2:30df:d4de%7]) with mapi id 15.20.5038.015; Fri, 4 Mar 2022
+ 16:04:01 +0000
+Message-ID: <0241967f-b2e6-7db4-7e54-be665e12ebb6@amd.com>
+Date:   Fri, 4 Mar 2022 10:03:52 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Cc:     brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [patch v3] mm: lru_cache_disable: replace work queue
- synchronization with synchronize_rcu
-Message-ID: <20220304160239.GL4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YhUI1wUtV8yguijO@fuller.cnet>
- <YhUKRzEKxMvlGQ5n@fuller.cnet>
- <20220303170323.82d8424d214fcb3a32155952@linux-foundation.org>
- <20220304014930.GJ4285@paulmck-ThinkPad-P17-Gen-1>
- <YiIrfgak8GKu19/7@fuller.cnet>
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v11 44/45] virt: sevguest: Add support to get extended
+ report
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+References: <20220224165625.2175020-1-brijesh.singh@amd.com>
+ <20220224165625.2175020-45-brijesh.singh@amd.com>
+ <YiDegxDviQ81VH0H@nazgul.tnic> <7c562d34-27cd-6e63-a0fb-35b13104d41f@amd.com>
+ <YiIc7aliqChnWThP@nazgul.tnic> <c3918fcc-3132-23d0-b256-29afdda2d6d9@amd.com>
+ <YiI1+Qk2KaWt+uPu@nazgul.tnic>
+From:   Brijesh Singh <brijesh.singh@amd.com>
+In-Reply-To: <YiI1+Qk2KaWt+uPu@nazgul.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0259.namprd03.prod.outlook.com
+ (2603:10b6:610:e5::24) To SN6PR12MB2718.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiIrfgak8GKu19/7@fuller.cnet>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f16845fe-6902-4717-ee3f-08d9fdf898d5
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4481:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4481C0E1C49C7A5180981873E5059@DM6PR12MB4481.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lp+NcaWZL5dG63T2XwO6atY6Ep+ta4al7cfVo3B5Jp0y1HZPJNx3tw7KcN9VfW2MSQkNx4WTbXDqDJ8Rh5EsuTYUR5Wvpc7ujpb5H2nEzceXGlMzq1ycuf7L94iXCa+Qe3/UAmsaHrcfyVW7X++Af2ZAIIT0+a6ILIAId4+mODX7oU0ecxsJwcvGcgXTCwxGcFSCjwnypbVcXguV/CT6hg7fDYhRVuholsu/soQjqIaJ7JjaR4QQ6d828soszQB2ocRiGhtp+ZLuXlwCK5FoF59lTiUi4mqGxfsHOJADfEuubIa6suxTX7WWDfY8l2TkRt9JrBv9zSn21L8MBXgI2NULiSjwm2ZasNdNwzxuRXF5EacpeKpT5+mzved9nYShPO7VhCqlsxY05D+9pX3EzzOhjKZNAeDaN0Tsv3dkFpbI3CBh1oNeZv0UX1WbbxL1WJBgSDy+d+T59QK12xcqeKTGxWuQXZI+ft/xHcq2CQOv5+VIt0ulG6yDQI4SO/18yKy390uvbg/sZG3WWueD+pf+IgVzSBnog4D4Fi00AmQ0ru3fnUn2xkpP9LvBwuRmqQDdEOd6zqnaR3KDXARWswtiqvbvD/RnXXKVw7WyON65HYpTC9esV7NIBHdJaXn1dCDFbkseSXG8zWhYb8AgY55gUyNlL6ddz31PULp9EZ7/y5uluPehTtmgI5brfFt6EyoAJRZFJLRfTJPtQLXw7vU5RSANNdF6HauvI44v1+BuVuXEzxaYhpTeBM2V/ETi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(26005)(5660300002)(7416002)(7406005)(8936002)(508600001)(54906003)(6486002)(6916009)(6512007)(53546011)(6506007)(38100700002)(4744005)(86362001)(4326008)(66556008)(8676002)(2616005)(66476007)(31696002)(66946007)(6666004)(316002)(31686004)(2906002)(36756003)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWRoYSt0VmQrbXprOVF0MzdZQ0NxdnZEVXJxbUlVS0E1Vmo2WWN3QUNoL3Jy?=
+ =?utf-8?B?eXVvVjNyY2p5OEJMV3dZMTArWTF0SndRU3pablZTWStWeE4zVXhTREFCSXJZ?=
+ =?utf-8?B?RnVmSjB6UmszNllRYzQvNkRXS2MrSFNXdmJ1V1Z0L0FpOWg1NFR0UWdrQnNR?=
+ =?utf-8?B?UG1OLzBBQ0Rkd1kxMVptR3VNakpUZW9QOWlncWh5WmVWWDZobGVvZC96ZHhk?=
+ =?utf-8?B?K2RkQUFzU2ZFaGYxcUF1N0F3dHh5c05EblplS01zZFArOG4yWFNZeUZrcnEr?=
+ =?utf-8?B?R0VpMVo1WkVuZHUvSFM1VUcrbEtkNkhKQndoYU82YjhFN0E5dkZ5bkkydVkw?=
+ =?utf-8?B?aDZRNm1IUEw3R2xUM2wvOTlEK1VHbEFIQ3RjbkdOUVFSTmpSM3k0WXE4MjQ3?=
+ =?utf-8?B?VXRUY3hhY2lEYXVFQkRhaFFhb0t4ZnkybEJsakY5YTlUNEJsZUdJeTAyMnd6?=
+ =?utf-8?B?TzFwaURnZmNmNThiL2J0WTVtYVpsMk9rV0JJRmg3K2kxMUhYcTcvaXpIeVBN?=
+ =?utf-8?B?TXNIVjI1OXNiUUtrQUlRYlRPR2lpWFp3dFFkOXVCek5XWUVUWEFkSFJTa3Bj?=
+ =?utf-8?B?WTFNN3l0OUxDc3M5blhzVzQxaStMRXZ1SHZJeDd3QWRHR1dMYnljd05tVlVH?=
+ =?utf-8?B?RCtYVzZmMFJFemVHRE4vd1QvdEtjWkEyRUE5djVhcGRVT3ViTzJOV3dlYUsx?=
+ =?utf-8?B?NkNYRWJyZnJiNVYrNlIxMGV1RW9Pa2dhL09tR2pMTWdsbzFkRVJDWVZzQk9D?=
+ =?utf-8?B?d1RkbFNzTmp1ZUNHZUh5OCt3SVBZNUNDWCtwQWQ2U0Y2Y1JzVUlRVnpJSDg3?=
+ =?utf-8?B?YnRoUGtEeHdITzB4ZnB1Y1dXRDBPN2I1bTZzUDB0WkVxdnBlV29tbVdKbWFM?=
+ =?utf-8?B?b3ZBd0p3ajVCTGJhMmk5dmdQZUhFNS9wTkRTbGdBQU9hWG5Rd3JqSXBTRExY?=
+ =?utf-8?B?RmJpQkZDa1YwcFF3TFpHV0dxWkdUY2dRUWgxbkYrZm40RFM4UjV6SmlGak40?=
+ =?utf-8?B?OHN2b1dUUjlTMGlSa2djUGFxanhsSndyWnFlakJJUklBS0p6cjlDdlNNbTFF?=
+ =?utf-8?B?dm85b2FZMlIrNGphZmhGa3hYOE1jOHdscnUxUjRnV2FhbTlyd0RTVTg4Y0Rw?=
+ =?utf-8?B?c0oxaDk0SnJRYWJLd3lHaEZUVlJCaVFESGNERDF6UmZ4UmRCVitxUFlNbHB2?=
+ =?utf-8?B?RnlNdGt0LzlWTk1pWi80SVRrMHM3ZGtrckNiUXdXbS9kWWxmT0w1d1paZ0cx?=
+ =?utf-8?B?Tm5LSkZ4dXhIb09hbFI2NDNBeHFtSVBsREdsRVgyT0F2bXRGYUl6bHpEL2x0?=
+ =?utf-8?B?alZJYUJtVWl3ekdBcDdHTU4zdzM5RFAvL2F3ajBmcjdmWXhYNTZHTG14aTlB?=
+ =?utf-8?B?alYrbXcraGlxczVQcU9lVmFlRFowYzV5cEpVN0pNTjJMSDVyaXU5VGh4MGpV?=
+ =?utf-8?B?R3E4OU1pbXROUk5QM3hsRjVHSnBoaytvZ2hJb2hLZTd5dzNrK2RwVXhYdEVz?=
+ =?utf-8?B?TjB2cGpGV29ONDVFMXdNTWhmNEQ0Z3VRaXBHSnhjRkh6VW1mTGlZSFgyYktn?=
+ =?utf-8?B?dXdqdXVqY1NxUVd0SXhZZ3FMdUNCMzNYc3pMdDd1S3pqa01WNGMzYWNHY3I4?=
+ =?utf-8?B?MTNRUUtzMTR2bGR2WHdqcDFNRlcxa2c1cU1ZOVFlMEs3UktDMmVjeWNFWnNL?=
+ =?utf-8?B?Q0ZTK3hRSCtOZ2k0RmdYQUpsUVkzQk5lUHlKRnc2dVVkNzhsMlF3VWF1d1dC?=
+ =?utf-8?B?TUY0TGVVa2NQYmVGQTBrNldRWUFWV2hkVDdvaXhXcUowZ05kK2Q0em1GTVZi?=
+ =?utf-8?B?cjROdkwwcVI5RHJKTUhIOEV5REFjem1qV0tiVDdzcWFOWmVZZGV3M1NhQjU3?=
+ =?utf-8?B?a1hhRGNIdjlaTHdlTTBMd1lRbGpKZ3BDN0ZheS9QTGowSGZ4SVVDT3I2aUo4?=
+ =?utf-8?B?NHVKSVNrcHZhaXRxeEx6NmRPUmo4aWZwV2hOd2Rha0Z0UXlpMktQR3laV1lW?=
+ =?utf-8?B?ZThqYytBVHVYQkZDQkJrRzR3Zm5iWDQvSjBvN21haC9RNGJBNWpQUUtGQ09j?=
+ =?utf-8?B?SmQvdjc2MXZFSlRyU1ZkWGtseFZCTnZkdmlxUWdJR2UybDR1Wlo1bHlYTHZl?=
+ =?utf-8?B?UnZiWkxkQWFKSmpLOWowc1V6ekdpbng2OHdsUUZiT0pKbXBKWE1EY1R3bnFa?=
+ =?utf-8?Q?gepwxMCVVZnDLa11bpAVExE=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f16845fe-6902-4717-ee3f-08d9fdf898d5
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 16:04:00.9696
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NGgwAGY3JtCF0cgRBIBrWptBQwA5FAFBsi9sW1qcPpKLXiSBJCgv1selONGS2R/TIr6M2U0pw2xOP7yG3BSnMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4481
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 12:08:46PM -0300, Marcelo Tosatti wrote:
-> On Thu, Mar 03, 2022 at 05:49:30PM -0800, Paul E. McKenney wrote:
-> > On Thu, Mar 03, 2022 at 05:03:23PM -0800, Andrew Morton wrote:
-> > > (Question for paulmck below, please)
-> > > 
-> > > On Tue, 22 Feb 2022 13:07:35 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> > > 
-> > > > 
-> > > > On systems that run FIFO:1 applications that busy loop 
-> > > > on isolated CPUs, executing tasks on such CPUs under
-> > > > lower priority is undesired (since that will either
-> > > > hang the system, or cause longer interruption to the
-> > > > FIFO task due to execution of lower priority task 
-> > > > with very small sched slices).
-> > > > 
-> > > > Commit d479960e44f27e0e52ba31b21740b703c538027c ("mm: disable LRU 
-> > > > pagevec during the migration temporarily") relies on 
-> > > > queueing work items on all online CPUs to ensure visibility
-> > > > of lru_disable_count.
-> > > > 
-> > > > However, its possible to use synchronize_rcu which will provide the same
-> > > > guarantees (see comment this patch modifies on lru_cache_disable).
-> > > > 
-> > > > Fixes:
-> > > > 
-> > > > [ 1873.243925] INFO: task kworker/u160:0:9 blocked for more than 622 seconds.
-> > > > [ 1873.243927]       Tainted: G          I      --------- ---  5.14.0-31.rt21.31.el9.x86_64 #1
-> > > > [ 1873.243929] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > > > [ 1873.243929] task:kworker/u160:0  state:D stack:    0 pid:    9 ppid:     2 flags:0x00004000
-> > > > [ 1873.243932] Workqueue: cpuset_migrate_mm cpuset_migrate_mm_workfn
-> > > > [ 1873.243936] Call Trace:
-> > > > [ 1873.243938]  __schedule+0x21b/0x5b0
-> > > > [ 1873.243941]  schedule+0x43/0xe0
-> > > > [ 1873.243943]  schedule_timeout+0x14d/0x190
-> > > > [ 1873.243946]  ? resched_curr+0x20/0xe0
-> > > > [ 1873.243953]  ? __prepare_to_swait+0x4b/0x70
-> > > > [ 1873.243958]  wait_for_completion+0x84/0xe0
-> > > > [ 1873.243962]  __flush_work.isra.0+0x146/0x200
-> > > > [ 1873.243966]  ? flush_workqueue_prep_pwqs+0x130/0x130
-> > > > [ 1873.243971]  __lru_add_drain_all+0x158/0x1f0
-> > > > [ 1873.243978]  do_migrate_pages+0x3d/0x2d0
-> > > > [ 1873.243985]  ? pick_next_task_fair+0x39/0x3b0
-> > > > [ 1873.243989]  ? put_prev_task_fair+0x1e/0x30
-> > > > [ 1873.243992]  ? pick_next_task+0xb30/0xbd0
-> > > > [ 1873.243995]  ? __tick_nohz_task_switch+0x1e/0x70
-> > > > [ 1873.244000]  ? raw_spin_rq_unlock+0x18/0x60
-> > > > [ 1873.244002]  ? finish_task_switch.isra.0+0xc1/0x2d0
-> > > > [ 1873.244005]  ? __switch_to+0x12f/0x510
-> > > > [ 1873.244013]  cpuset_migrate_mm_workfn+0x22/0x40
-> > > > [ 1873.244016]  process_one_work+0x1e0/0x410
-> > > > [ 1873.244019]  worker_thread+0x50/0x3b0
-> > > > [ 1873.244022]  ? process_one_work+0x410/0x410
-> > > > [ 1873.244024]  kthread+0x173/0x190
-> > > > [ 1873.244027]  ? set_kthread_struct+0x40/0x40
-> > > > [ 1873.244031]  ret_from_fork+0x1f/0x30
-> > > > 
-> > > > ...
-> > > >
-> > > > --- a/mm/swap.c
-> > > > +++ b/mm/swap.c
-> > > > @@ -831,8 +831,7 @@ inline void __lru_add_drain_all(bool force_all_cpus)
-> > > >  	for_each_online_cpu(cpu) {
-> > > >  		struct work_struct *work = &per_cpu(lru_add_drain_work, cpu);
-> > > >  
-> > > > -		if (force_all_cpus ||
-> > > > -		    pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
-> > > > +		if (pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
-> > > >  		    data_race(pagevec_count(&per_cpu(lru_rotate.pvec, cpu))) ||
-> > > >  		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate_file, cpu)) ||
-> > > >  		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate, cpu)) ||
-> > > 
-> > > This change appears to be "don't queue work on CPUs which don't have
-> > > any work to do".  Correct?  This isn't changelogged?
-> 
-> Its replaced by synchronize_rcu, and its mentioned in the changelog:
-> 
-> "However, its possible to use synchronize_rcu which will provide the same
->  guarantees (see comment this patch modifies on lru_cache_disable)."
-> 
-> Will resend -v4 with a more verbose changelog.
-> 
-> 
-> > > > @@ -876,14 +875,19 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
-> > > >  void lru_cache_disable(void)
-> > > >  {
-> > > >  	atomic_inc(&lru_disable_count);
-> > > > +	synchronize_rcu();
-> > > >  #ifdef CONFIG_SMP
-> > > >  	/*
-> > > > -	 * lru_add_drain_all in the force mode will schedule draining on
-> > > > -	 * all online CPUs so any calls of lru_cache_disabled wrapped by
-> > > > -	 * local_lock or preemption disabled would be ordered by that.
-> > > > -	 * The atomic operation doesn't need to have stronger ordering
-> > > > -	 * requirements because that is enforced by the scheduling
-> > > > -	 * guarantees.
-> > > > +	 * synchronize_rcu() waits for preemption disabled
-> > > > +	 * and RCU read side critical sections.
-> > > > +	 * For the users of lru_disable_count:
-> > > > +	 *
-> > > > +	 * preempt_disable, local_irq_disable  [bh_lru_lock()]
-> > > > +	 * rcu_read_lock		       [rt_spin_lock CONFIG_PREEMPT_RT]
-> > > > +	 * preempt_disable		       [local_lock !CONFIG_PREEMPT_RT]
-> > > > +	 *
-> > > > +	 * so any calls of lru_cache_disabled wrapped by local_lock or
-> > > > +	 * preemption disabled would be ordered by that.
-> > > >  	 */
-> > > >  	__lru_add_drain_all(true);
-> > > >  #else
-> > > 
-> > > Does this also work with CONFIG_TINY_RCU?
-> > > 
-> > > This seems abusive of synchronize_rcu().  None of this code uses RCU,
-> > > but it so happens that synchronize_rcu() happily provides the desired
-> > > effects.  Changes in RCU's happy side-effects might break this. 
-> > > Perhaps a formal API function which does whatever-you-want-it-to-do
-> > > would be better.
-> > 
-> > I don't claim to understand the full lru_cache_disable() use case, but
-> > since v5.1 synchronize_rcu() is guaranteed to wait on preempt_disable()
-> > regions of code.  In contrast, back in the old days, you had to use
-> > synchronize_sched() to wait on preempt_disable() regions, even in
-> > CONFIG_PREEMPT=y kernels.  So if the comment is accurate, it is OK.
-> 
-> OK, will add an additional comment regarding v5.1.
 
-And if someone does need to backport to a kernel version with old-style
-limited synchronize_rcu() semantics, you can do this:
+On 3/4/22 9:53 AM, Borislav Petkov wrote:
+> On Fri, Mar 04, 2022 at 09:39:16AM -0600, Brijesh Singh wrote:
+>> Depending on which ioctl user want to use for querying the attestation
+>> report, she need to look at the SNP/GHCB specification for more details.
+>> The blob contains header that application need to parse to get to the
+>> actual certificate. The header is defined in the spec. From kernel
+>> driver point-of-view, all these are opaque data.
+> ... and the ioctl text needs to point to the spec so that the user knows
+> where to find everything needed. Or how do you expect people to know how
+> to use those ioctls?
 
-	synchronize_rcu_mult(call_rcu_mult, call_rcu_sched);
+I did added a text in Documentation/virt/coco/sevguest.rst (section 2.3)
+that user need to look the GHCB spec for further detail.
 
-This will wait concurrently for an RCU and and RCU-sched grace period.
-
-If you want the full-up semantics, you can do this to wait on all
-three flavors, also including RCU-bh:
-
-	synchronize_rcu_mult(call_rcu_mult, call_rcu_sched, call_rcu_bh);
-
-> > Just be careful what you backport past v5.1...
-> > 
-> > > And...  I really don't understand the fix.  What is it about
-> > > synchronize_rcu() which guarantees that a work function which is queued
-> > > on CPU N will now get executed even if CPU N is spinning in SCHED_FIFO
-> > > userspace?
-> > 
-> > I don't understand this part, either.
-> 
-> 
-> All CPUs should see lru_disable_count (and therefore not add pages
-> to per-CPU LRU pvecs, otherwise the page migration bug fixed
-> by d479960e44f27e0e52ba31b21740b703c538027c can occur.
-> 
-> To do this, the commit above ("mm: disable LRU 
-> pagevec during the migration temporarily") relies on 
-> queueing work items on all online CPUs to ensure visibility
-> of lru_disable_count:
-> 
->  */
-> +void lru_cache_disable(void)
-> +{
-> +       atomic_inc(&lru_disable_count);
-> +#ifdef CONFIG_SMP
-> +       /*
-> +        * lru_add_drain_all in the force mode will schedule draining on
-> +        * all online CPUs so any calls of lru_cache_disabled wrapped by
-> +        * local_lock or preemption disabled would be ordered by that.
-> +        * The atomic operation doesn't need to have stronger ordering
-> +        * requirements because that is enforeced by the scheduling
-> +        * guarantees.
-> +        */
-> +       __lru_add_drain_all(true);
-> +#else
-> 
-> 
-> CPU-0					CPU-1
-> 
-> 					
-> 					local_lock(&lru_pvecs.lock);
->                 			pvec = this_cpu_ptr(&lru_pvecs.lru_deactivate_file);
-> 					add page to per-CPU LRU pvec
-> 					if atomic_read(lru_disable_count) != 0
-> 						flush per-CPU LRU pvec
-> atomic_inc(lru_disable_count)
-> 
-> 					local_unlock(&lru_pvec.lock)
-> lru_add_drain_all(force_all_cpus=true)
-> 
-> However queueing the work items disturbs isolated CPUs. To avoid it, its
-> possible to use synchronize_rcu instead:
-> 
-> CPU-0                                   CPU-1
-> 
-> 
->                                         local_lock(&lru_pvecs.lock);
->                                         pvec = this_cpu_ptr(&lru_pvecs.lru_deactivate_file);
->                                         add page to per-CPU LRU pvec
->                                         if atomic_read(lru_disable_count) != 0
->                                                 flush per-CPU LRU pvec
-> atomic_inc(lru_disable_count)
-> 
->                                         local_unlock(&lru_pvec.lock)
-> synchronize_rcu()
-> 
-> Which will wait for all preemption (or IRQ disabled) sections to
-> complete, therefore ensuring visibilily of lru_disable_count.
-
-OK, that does sound plausible.  (But please note that I am not familiar
-with that code.)
-
-							Thanx, Paul

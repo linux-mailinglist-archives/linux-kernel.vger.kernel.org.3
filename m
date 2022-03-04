@@ -2,177 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60A34CD32C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0524CD333
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239230AbiCDLPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S239247AbiCDLQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239127AbiCDLOz (ORCPT
+        with ESMTP id S235970AbiCDLQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:14:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5191B0BD7;
-        Fri,  4 Mar 2022 03:14:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 4 Mar 2022 06:16:12 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AA21B0BC5;
+        Fri,  4 Mar 2022 03:15:23 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7918361D00;
-        Fri,  4 Mar 2022 11:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7958DC340E9;
-        Fri,  4 Mar 2022 11:14:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646392446;
-        bh=oMRkrgkieQqbJLozH2f1WWABMteAvIgUeoZgr4XZLG4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ik9/iqlkSYV+ppGVcBuwu2APgDACKwcHntHw+Hu2Xr2jfUIu91CbsiGhv5jpiECni
-         a9ovy2jThDcrU31vb3KB6PNgCDbjxn7wJSUL91b4PsewrN4+rSSjwpeYjmoA689kh4
-         iDM6CtEhfpShSDPSpPc8OIhQniSoJ0vCl0gEMEfWWqbowcPyp/OV9D5KAOaqrN4GF7
-         NkaSTJNMWNW1q7JiBxw6Y8agL6pJATIClarAY+MMxefSgKrrjMeZe0bTtYVrgIPW8i
-         BgnfCclXxDPDHqmIImbnZl+viTCZzSUfh9tCE21gQuO0asP18iC8AbQv7azba/hjRh
-         5NjtEiNztu8Xw==
-Message-ID: <1c5aa5552850dc90bdeb5f8bc0e4f5dd3270a382.camel@kernel.org>
-Subject: Re: [PATCH 06/11] ceph: remove reliance on bdi congestion
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
-        Wu Fengguang <fengguang.wu@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 04 Mar 2022 06:14:03 -0500
-In-Reply-To: <164636204663.29369.1845040729675190216@noble.neil.brown.name>
-References: <164549971112.9187.16871723439770288255.stgit@noble.brown>
-        , <164549983739.9187.14895675781408171186.stgit@noble.brown>
-        , <ccc81eb5c23f933137c5da8d5050540cc54e58f0.camel@kernel.org>
-        , <164568131640.25116.884631856219777713@noble.neil.brown.name>
-        , <e8ec98a9c4fab9b7aa099001f09ff9b11f0c3f96.camel@kernel.org>
-         <164636204663.29369.1845040729675190216@noble.neil.brown.name>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 792F622175;
+        Fri,  4 Mar 2022 12:15:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1646392521;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lm7m072d8v8Dzfgsy93FLf7sDvnn63P9eUXC4Q6AMDU=;
+        b=mYkOpi6cDhwSgu99agkQZmaGJHGRqn9esPKOl4dD52+um9BRg2dp+l+MOCXPqnkOHKhWPB
+        12wlrfCqxuxxI+PmnkCsAcuzOgI37MduyVDQm0AwQ1AOjc6/blF6NKVREoNS4hAxKAgXO7
+        A61aWNGDHZgx3XXbLAMgNVgyou3k3Vg=
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Fri, 04 Mar 2022 12:15:21 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Claudiu.Beznea@microchip.com
+Cc:     Kavyasree.Kotagiri@microchip.com, Nicolas.Ferre@microchip.com,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com, alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v1 6/6] ARM: dts: lan966x: add basic Kontron KSwitch D10
+ support
+In-Reply-To: <b4aca5f1-38c0-8197-6914-0a39b7755180@microchip.com>
+References: <20220303160323.3316317-1-michael@walle.cc>
+ <20220303160323.3316317-7-michael@walle.cc>
+ <b4aca5f1-38c0-8197-6914-0a39b7755180@microchip.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <900be5239b96cd77493fbcfbe220989f@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 13:47 +1100, NeilBrown wrote:
-> On Thu, 24 Feb 2022, Jeff Layton wrote:
-> > On Thu, 2022-02-24 at 16:41 +1100, NeilBrown wrote:
-> > > On Thu, 24 Feb 2022, Jeff Layton wrote:
-> > > > On Tue, 2022-02-22 at 14:17 +1100, NeilBrown wrote:
-> > > > > The bdi congestion tracking in not widely used and will be removed.
-> > > > > 
-> > > > > CEPHfs is one of a small number of filesystems that uses it, setting
-> > > > > just the async (write) congestion flags at what it determines are
-> > > > > appropriate times.
-> > > > > 
-> > > > > The only remaining effect of the async flag is to cause (some)
-> > > > > WB_SYNC_NONE writes to be skipped.
-> > > > > 
-> > > > > So instead of setting the flag, set an internal flag and change:
-> > > > >  - .writepages to do nothing if WB_SYNC_NONE and the flag is set
-> > > > >  - .writepage to return AOP_WRITEPAGE_ACTIVATE if WB_SYNC_NONE
-> > > > >     and the flag is set.
-> > > > > 
-> > > > > The writepages change causes a behavioural change in that pageout() can
-> > > > > now return PAGE_ACTIVATE instead of PAGE_KEEP, so SetPageActive() will
-> > > > > be called on the page which (I think) wil further delay the next attempt
-> > > > > at writeout.  This might be a good thing.
-> > > > > 
-> > > > > Signed-off-by: NeilBrown <neilb@suse.de>
-> > > > 
-> > > > Maybe. I have to wonder whether all of this is really useful.
-> > > > 
-> > > > When things are congested we'll avoid trying to issue new writeback
-> > > > requests. Note that we don't prevent new pages from being dirtied here -
-> > > > - only their being written back.
-> > > > 
-> > > > This also doesn't do anything in the DIO or sync_write cases, so if we
-> > > > lose caps or are doing DIO, we'll just keep churning out "unlimited"
-> > > > writes in those cases anyway.
-> > > 
-> > > I think the point of congestion tracking is to differentiate between
-> > > sync and async IO.  Or maybe "required" and "optional".
-> > > Eventually the "optional" IO will become required, but if we can delay
-> > > it until a time when there is less "required" io, then maybe we can
-> > > improve perceived latency.
-> > > 
-> > > "optional" IO here is write-back and read-ahead.  If the load of
-> > > "required" IO is bursty, and if we can shuffle that optional stuff into
-> > > the quiet periods, we might win.
-> > > 
-> > 
-> > In that case, maybe we should be counting in-flight reads too and deny
-> > readahead when the count crosses some threshold? It seems a bit silly to
-> > only look at writes when it comes to "congestion".
+Am 2022-03-04 09:31, schrieb Claudiu.Beznea@microchip.com:
+> On 03.03.2022 18:03, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the content is safe
+>> 
+>> Add basic support for the Kontron KSwitch D10 MMT 6G-2GS which
+>> features 6 Gigabit copper ports and two SFP cages. For now the
+>> following is working:
+>>  - Kernel console
+>>  - SFP cages I2C bus and mux
+>>  - SPI
+>>  - SGPIO
+>>  - Watchdog
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>>  arch/arm/boot/dts/Makefile                    |   3 +-
+>>  ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 159 
+>> ++++++++++++++++++
+>>  2 files changed, 161 insertions(+), 1 deletion(-)
+>>  create mode 100644 
+>> arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>> 
+>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+>> index 085c43649d44..86dd0f9804ee 100644
+>> --- a/arch/arm/boot/dts/Makefile
+>> +++ b/arch/arm/boot/dts/Makefile
+>> @@ -739,7 +739,8 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
+>>         imx7ulp-com.dtb \
+>>         imx7ulp-evk.dtb
+>>  dtb-$(CONFIG_SOC_LAN966) += \
+>> -       lan966x-pcb8291.dtb
+>> +       lan966x-pcb8291.dtb \
+>> +       lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+>>  dtb-$(CONFIG_SOC_LS1021A) += \
+>>         ls1021a-moxa-uc-8410a.dtb \
+>>         ls1021a-qds.dtb \
+>> diff --git 
+>> a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts 
+>> b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>> new file mode 100644
+>> index 000000000000..958678dec7ad
+>> --- /dev/null
+>> +++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>> @@ -0,0 +1,159 @@
+>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>> +/*
+>> + * Device Tree file for the Kontron KSwitch D10 MMT 6G-2GS
+>> + */
+>> +
+>> +/dts-v1/;
+>> +#include "lan966x.dtsi"
+>> +
+>> +/ {
+>> +       model = "Kontron KSwitch D10 MMT 6G-2GS";
+>> +       compatible = "kontron,kswitch-d10-mmt-6g-2gs", 
+>> "kontron,s1921",
+>> +                    "microchip,lan9668", "microchip,lan966";
+>> +
+>> +       aliases {
+>> +               serial0 = &usart0;
+>> +       };
+>> +
+>> +       chosen {
+>> +               stdout-path = "serial0:115200n8";
+>> +       };
+>> +
+>> +       gpio-restart {
+>> +               compatible = "gpio-restart";
+>> +               gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
+>> +               priority = <200>;
+>> +       };
+>> +
+>> +       i2cmux {
+>> +               compatible = "i2c-mux-gpio";
+>> +               #address-cells = <1>;
+>> +               #size-cells = <0>;
+>> +               mux-gpios = <&sgpio_out 3 2 GPIO_ACTIVE_HIGH>,
+>> +                           <&sgpio_out 3 3 GPIO_ACTIVE_HIGH>;
+>> +               i2c-parent = <&i2c4>;
+>> +
+>> +               i2c4_0: i2c@1 {
+>> +                       reg = <1>;
+>> +                       #address-cells = <1>;
+>> +                       #size-cells = <0>;
+>> +               };
+>> +
+>> +               i2c4_1: i2c@2 {
+>> +                       reg = <2>;
+>> +                       #address-cells = <1>;
+>> +                       #size-cells = <0>;
+>> +               };
+>> +       };
+>> +
+>> +       sfp0: sfp0 {
+>> +               compatible = "sff,sfp";
+>> +               i2c-bus = <&i2c4_0>;
+>> +               los-gpios = <&sgpio_in 1 0 GPIO_ACTIVE_HIGH>;
+>> +               mod-def0-gpios = <&sgpio_in 1 1 GPIO_ACTIVE_LOW>;
+>> +               maximum-power-milliwatt = <2500>;
+>> +               tx-disable-gpios = <&sgpio_out 3 0 GPIO_ACTIVE_LOW>;
+>> +               tx-fault-gpios = <&sgpio_in 0 2 GPIO_ACTIVE_HIGH>;
+>> +               rate-select0-gpios = <&sgpio_out 2 0 
+>> GPIO_ACTIVE_HIGH>;
+>> +               rate-select1-gpios = <&sgpio_out 2 1 
+>> GPIO_ACTIVE_HIGH>;
+>> +       };
+>> +
+>> +       sfp1: sfp1 {
+>> +               compatible = "sff,sfp";
+>> +               i2c-bus = <&i2c4_1>;
+>> +               los-gpios = <&sgpio_in 1 2 GPIO_ACTIVE_HIGH>;
+>> +               mod-def0-gpios = <&sgpio_in 1 3 GPIO_ACTIVE_LOW>;
+>> +               maximum-power-milliwatt = <2500>;
+>> +               tx-disable-gpios = <&sgpio_out 3 1 GPIO_ACTIVE_LOW>;
+>> +               tx-fault-gpios = <&sgpio_in 0 3 GPIO_ACTIVE_HIGH>;
+>> +               rate-select0-gpios = <&sgpio_out 2 2 
+>> GPIO_ACTIVE_HIGH>;
+>> +               rate-select1-gpios = <&sgpio_out 2 3 
+>> GPIO_ACTIVE_HIGH>;
+>> +       };
+>> +};
+>> +
+>> +&flx0 {
+>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+>> +       status = "okay";
+>> +};
+>> +
+>> +&flx3 {
+>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
+>> +       status = "okay";
+>> +};
+>> +
+>> +&flx4 {
+>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+>> +       status = "okay";
+>> +};
 > 
-> I agree that seems a bit silly.
+> Although there is 1:1 mapping b/w ids of flexcoms and the embedded 
+> blocks
+> (flxX has usartX, i2cX, spiX) and there is nothing wrong with the 
+> approach
+> here I found a bit hard to follow if the correspondent embedded block
+> (i2c, spi, usart) is enabled or not.
+
+I know and I had the same feeling, but I don't want to have the
+subnodes (matched by name) in these nodes.  I.e. I want to avoid
+something like:
+
+&flx4 {
+        atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+        status = "okay";
+
+        i2c@600 {
+               pinctrl-0 = <&fc4_b_pins>;
+               pinctrl-names = "default";
+               status = "okay";
+        };
+};
+
+If someone renames the subnode in the dtsi, it might easily be
+overlooked in the board files. Having the handle will raise an
+error.
+
+And because the node references should be sorted alphabetically
+it will be cluttered around in the file. You could rename the
+references to flx4_i2c though. But I don't know it its worth
+the efforts. Let me know what you think.
+
+-michael
+
 > 
-> > 
-> > > Whether this is a real need is an important question that I don't have an
-> > > answer for.  And whether it is better to leave delayed requests in the
-> > > page cache, or in the low-level queue with sync requests able to
-> > > over-take them - I don't know.  If you have multiple low-level queue as
-> > > you say you can with ceph, then lower might be better.
-> > > 
-> > > The block layer has REQ_RAHEAD ..  maybe those request get should get a
-> > > lower priority ... though I don't think they do.
-> > > NFS has a 3 level priority queue, with write-back going at a lower
-> > > priority ... I think... for NFSv3 at least.
-> > > 
-> > > Sometimes I suspect that as all our transports have become faster, we
-> > > have been able to ignore the extra latency caused by poor scheduling of
-> > > optional requests.  But at other times when my recently upgraded desktop
-> > > is struggling to view a web page while compiling a kernel ...  I wonder
-> > > if maybe we don't have the balance right any more.
-> > > 
-> > > So maybe you are right - maybe we can rip all this stuff out.
-> > > 
-> > 
-> > I lean more toward just removing it. The existing implementation seems a
-> > bit half-baked with the gaps in what's being counted. Granted, the
-> > default congestion threshold is pretty high with modern memory sizes, so
-> > it probably doesn't come into play much in practice, but removing it
-> > would reduce some complexity in the client.
-> 
-> I'd love to have some test that could reliably generate congestion and
-> measure latencies for other IO.  Without that, it is mostly guess work.
-> So I cannot argue against your proposal, and do agree that removing the
-> code would reduce complexity.  I have no idea what the costs might be -
-> if any.  Hence my focus was on not changing behaviour.
-> 
-
-Fair enough -- caution is warranted.
-
-I think the thing to do here is to take your patch for now, and then we
-can look at just removing all of this stuff at some point in the future.
-That would also give us a fallback that doesn't require the old
-congestion infrastructure if it turns out that it is needed.
-
-I'm assuming this is going in via Andrew's tree, but let us know if
-you'd like us to take any of these in via the ceph tree.
-
-Thanks,
--- 
-Jeff Layton <jlayton@kernel.org>
+>> +
+>> +&gpio {
+>> +       usart0_pins: usart0-pins {
+>> +               /* RXD, TXD */
+>> +               pins = "GPIO_25", "GPIO_26";
+>> +               function = "fc0_b";
+>> +       };
+>> +
+>> +       sgpio_a_pins: sgpio-a-pins {
+>> +               /* SCK, D0, D1, LD */
+>> +               pins = "GPIO_32", "GPIO_33", "GPIO_34";
+>> +               function = "sgpio_a";
+>> +       };
+>> +
+>> +       sgpio_b_pins: sgpio-b-pins {
+>> +               /* SCK, D0, D1, LD */
+>> +               pins = "GPIO_64";
+>> +               function = "sgpio_b";
+>> +       };
+>> +
+>> +       fc3_b_pins: fc3-b-spi-pins {
+>> +               /* SCK, MISO, MOSI */
+>> +               pins = "GPIO_51", "GPIO_52", "GPIO_53";
+>> +               function = "fc3_b";
+>> +       };
+>> +
+>> +       fc4_b_pins: fc4-b-i2c-pins {
+>> +               /* RXD, TXD */
+>> +               pins = "GPIO_57", "GPIO_58";
+>> +               function = "fc4_b";
+>> +       };
+>> +};
+>> +
+>> +&i2c4 {
+>> +       pinctrl-0 = <&fc4_b_pins>;
+>> +       pinctrl-names = "default";
+>> +       status = "okay";
+>> +};
+>> +
+>> +&usart0 {
+>> +       pinctrl-0 = <&usart0_pins>;
+>> +       pinctrl-names = "default";
+>> +       status = "okay";
+>> +};
+>> +
+>> +&sgpio {
+>> +       pinctrl-0 = <&sgpio_a_pins>, <&sgpio_b_pins>;
+>> +       pinctrl-names = "default";
+>> +       bus-frequency = <8000000>;
+>> +       /* arbitrary range because all GPIOs are in software mode */
+>> +       microchip,sgpio-port-ranges = <0 11>;
+>> +       status = "okay";
+>> +};
+>> +
+>> +&sgpio_in {
+>> +       ngpios = <128>;
+>> +};
+>> +
+>> +&sgpio_out {
+>> +       ngpios = <128>;
+>> +};
+>> +
+>> +&spi3 {
+>> +       pinctrl-0 = <&fc3_b_pins>;
+>> +       pinctrl-names = "default";
+>> +       cs-gpios = <&gpio 46 GPIO_ACTIVE_LOW>;
+>> +       status = "okay";
+>> +};
+>> +
+>> +&watchdog {
+>> +       status = "okay";
+>> +};
+>> --
+>> 2.30.2
+>> 

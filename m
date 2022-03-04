@@ -2,105 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3904CD0DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1C74CD0DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbiCDJKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S236618AbiCDJKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiCDJKh (ORCPT
+        with ESMTP id S236607AbiCDJKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:10:37 -0500
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4959D14D268;
-        Fri,  4 Mar 2022 01:09:50 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id j7so3299200uap.5;
-        Fri, 04 Mar 2022 01:09:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2wwmuMoWRvfCtBBLu/hFltTlPEmL6J5ImpGm3gFZ0ZU=;
-        b=hMcYxNurzCwZUxIZtZ5BS/vI+Fp1QCr2yfxdmQHWl5Sk14kPb2wrmnp/OSpwWB/2OA
-         Kp8vqxQ54+Zpyg8NaKixXkObvxDRqZ5hIGxKoUYbKlFMRAVzvWUrag/1rS43C/viKOER
-         kTjp870Bs0rAr4mJBUtE295bmu9RXi/+w3yQc82W5stJMoBAX2da75FthwuAcJlvCWoM
-         Ywehz7qN5pvofORgO6yMbW8eP+C0UGZJVTf47bZJWbKuBuHERL61Jdwlt8AxaqiZYpbP
-         uJ4htuyY7BzFwZlp3kCBhTdMONGzMk9I3COrpAWmJl5vRqk69AirnEMSju5jpa7JxxPQ
-         nvvQ==
-X-Gm-Message-State: AOAM531AA788NFMdzYTmOaN1Mg2r+bNFsitIKFj8CghYFof384jv7gKf
-        rFov72dR4kI6MqeMhKAcmah2oyQBlXv/Sg==
-X-Google-Smtp-Source: ABdhPJyiYSV/AfTujndsARMI806rKvOJUXDD2WYXjy/Tt8EaUNxroeTuh1wNo4ulx2f+YuSPmxIRtQ==
-X-Received: by 2002:ab0:154e:0:b0:345:ecb3:3a9c with SMTP id p14-20020ab0154e000000b00345ecb33a9cmr15460364uae.106.1646384989351;
-        Fri, 04 Mar 2022 01:09:49 -0800 (PST)
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
-        by smtp.gmail.com with ESMTPSA id k4-20020a1fa104000000b00336fb22af69sm16443vke.15.2022.03.04.01.09.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 01:09:49 -0800 (PST)
-Received: by mail-vk1-f175.google.com with SMTP id k9so4057123vki.4;
-        Fri, 04 Mar 2022 01:09:48 -0800 (PST)
-X-Received: by 2002:a05:6122:130d:b0:333:33a4:52a9 with SMTP id
- e13-20020a056122130d00b0033333a452a9mr11085816vkp.33.1646384988811; Fri, 04
- Mar 2022 01:09:48 -0800 (PST)
+        Fri, 4 Mar 2022 04:10:47 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F549150426;
+        Fri,  4 Mar 2022 01:09:57 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 3718C1F463BA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646384996;
+        bh=CcMBV0l5kr7q1bweV1wcu+vTnCpRH0j1xl0S1wsETtg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GP3Rqx4BysrGeC3OgIgoS8mmJ79Jx/get+EPxdvRz+sxXIL3zKMYdXtNhs/IyKBfa
+         IEoUGqwEOuTeX1zhvs0c9R6Ts4h16EBjlAG5IN22qIqkSk8PqBZobCEvSS4C//gd+n
+         XQzfL5K8fYBFeAyYdm4jcX9VmFpvFBn9pZN8rqhi21zsMn4r8T49kJszP9ITmaktSR
+         RG82DC9HeRK/6cFuUEDMsTzkiDxTCTHGDvwboB0XYQudrqo5rwdY9AK0QHbzmbB8yp
+         2n/uzvuSf3H9G8ZOCGw+LQLAspdBPE29YY9sjGtqzf64idsd5P6E1pjz1tDyVvTbKg
+         hcb2yUiPR/bLw==
+Message-ID: <2bdbe214-7add-f529-db8f-d0e998a540e5@collabora.com>
+Date:   Fri, 4 Mar 2022 10:09:53 +0100
 MIME-Version: 1.0
-References: <20220301190400.1644150-1-robh@kernel.org>
-In-Reply-To: <20220301190400.1644150-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 4 Mar 2022 10:09:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXqsvQy_6+6w8DVCtqNiFERPV29xd3HRqtyz9RY3KXOYw@mail.gmail.com>
-Message-ID: <CAMuHMdXqsvQy_6+6w8DVCtqNiFERPV29xd3HRqtyz9RY3KXOYw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: clock: renesas: Make example 'clocks' parsable
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v15 00/12] Add Mediatek Soc DRM (vdosys0) support for
+ mt8195
+Content-Language: en-US
+To:     Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        singo.chang@mediatek.com, Fabien Parent <fparent@baylibre.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "roy-cw.yeh" <roy-cw.yeh@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+        devicetree@vger.kernel.org, Moudy Ho <moudy.ho@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, nancy.lin@mediatek.com,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+References: <20220126071932.32615-1-jason-jh.lin@mediatek.com>
+ <CAL_Jsq+6k5EqouAO2Xm=GpBz3Pi-wfB-ixGwfyC+Y+qOrjUFTg@mail.gmail.com>
+ <c103927d7dbc3217431c83dc22a44c656c561228.camel@mediatek.com>
+ <28098efc-1de1-b540-b1a3-bf7a92af9511@collabora.com>
+ <c19b14ab9a8879fc50d8bcc87745da48491be373.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <c19b14ab9a8879fc50d8bcc87745da48491be373.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Il 04/03/22 06:26, Jason-JH Lin ha scritto:
+> Hi Angelo,
+> 
+> Because linux-next has applied these patches:
+> 
+> [v15,04/12] dt-bindings: display: mediatek: dsc: add yaml for mt8195
+> SoC binding
+> [v15,05/12] dt-bindings: display: mediatek: merge: add additional prop
+> for mt8195
+> [v15,06/12] dt-bindings: display: mediatek: add mt8195 SoC binding for
+> vdosys0
+> [v15,03/12] dt-bindings: display: mediatek: disp: split each block to
+> individual yaml
+> 
+> 
+> I'll rebase on the latest linux-next, and then send 1 path + 1 series:
+> [1] a fix up patch for all dt-schema error in each display dt-bindings
+> (If Rob wants me to split this patch into separate patches for each
+> file, then I'll resend it.)
+> [2] a series of remaining patches of this series
+> 
+> 
+> I would appreciate it if you would take the time to send [1] for me.
+> If you can help me to send [1], please let me know.
+> Thank you very much ;-)
+> 
+> 
 
-On Tue, Mar 1, 2022 at 8:04 PM Rob Herring <robh@kernel.org> wrote:
-> 'clocks' in the example is not parsable with the 0 phandle value
-> because the number of #clock-cells is unknown in the previous entry.
-> Solve this by adding the clock provider node. Only 'cpg_clocks' is
-> needed as the examples are built with fixups which can be used to
-> identify phandles.
->
-> This is in preparation to support schema validation on .dtb files.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+I will send fixes for [1] later today.
 
-Thanks for your patch!
+Cheers,
+Angelo
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Regards,
+> Jason-JH.Lin
+> 
+> On Thu, 2022-03-03 at 10:31 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 03/03/22 05:25, Jason-JH Lin ha scritto:
+>>> Hi Rob,
+>>>
+>>> Thanks for the reviews.
+>>>
+>>> On Wed, 2022-03-02 at 17:50 -0600, Rob Herring wrote:
+>>>> On Wed, Jan 26, 2022 at 1:19 AM jason-jh.lin <
+>>>> jason-jh.lin@mediatek.com> wrote:
+>>>>>
+>>>
+>>> [snip]
+>>>
+>>
+>> Hello Rob, Jason-JH,
+>>
+>> I have just crafted a patch that fixes everything mentioned here,
+>> if it's easier like this, I can either send it for the maintainer(s)
+>> to apply on top, or squash in Jason-JH's original patch.
+>>
+>> If you'd like to get my patch, though, I have one question:
+>> this is touching literally all of the YAML files that Jason-JH is
+>> introducing, so, should I send this as one patch per file (which
+>> would be
+>> something around 16 patches) or is just one fixing them all fine?
+>>
+>> Cheers,
+>> Angelo
+>>
+>> _______________________________________________
+>> Linux-mediatek mailing list
+>> Linux-mediatek@lists.infradead.org
+>>
+> https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!3tXE3T-t6I2GMILAOHpkTXhrLHwFAQtmhGqTBtKSY2SLWM2qBBMULlM17TtG6VwNR5yn$
+>>   
 
-Do you want me to queue this in renesas-clk-for-v5.19, or do you
-want to take it yourself, together with the validation patches?
-Please let me know.
 
-In the latter case:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0D74CD73B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 266FB4CD72C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240154AbiCDPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        id S240127AbiCDPIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240128AbiCDPJH (ORCPT
+        with ESMTP id S240066AbiCDPI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:09:07 -0500
+        Fri, 4 Mar 2022 10:08:29 -0500
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF09BE0AD6;
-        Fri,  4 Mar 2022 07:08:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5C53FDB0;
+        Fri,  4 Mar 2022 07:07:38 -0800 (PST)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2248TInB019088;
-        Fri, 4 Mar 2022 09:07:25 -0600
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2244w2hF013723;
+        Fri, 4 Mar 2022 09:07:26 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=o/svsH3mKdQh2w7l93HqT3MWcfDGsdP0tpIyvmUqC4M=;
- b=nthAdfW/pHfh/griJOYc4x7Zctg2Xl04KxrLrkfbMFeuQCkMKwxp8Plpu3rkXnPjvYOo
- 9jSlhZUf9i2XNVF1Ya26Zup0qXM0y+gEIaFQcJeSWEBF2KoWGI+OvaTTgmSWIAEbAWcb
- sON3CPUbHcVj1CNlgs+Re+h1aKICOkxn6znnNuHIninxScyna7rH4L7sUO3Vh75JI1Gc
- iKhKPFmymlJ+Euh82t63J69T8kI6ql0OgLtFVNa7h4MxLCCSj7chNvtwJYNKKCUBnjUr
- ZcyWUmtQJ5vKb31J5YplxwnUMad1eU+xxpEL4iU6JBUfPrkGduxgxvVeWvpsCjl73li2 rg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ek4j3h413-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=j+aRd3p3l8MH2yYipEWQW5VKVEv+0k9D+Y84o7OTai0=;
+ b=b56gBAJoMnwaxBybF08I3OvG6i6PFV26Io0zooU7l90DumQtTZHrtebVoondv7Po1e9c
+ 49K36yNoK2n3XA/UTB9BaNS5CvfeWXPJPsNnGCJZen+Gbfr5HpEBXSu+xh6nJTvJd9uA
+ 6rhsuwpJQtqQITmS9bIw+ze8B0us5KsI3Q3N2vQJq42ErxtqynvLHLIJEp0guehaxdDo
+ ZKY76AgEd76UjMGiPFaHAc0DRsx/2Xk8jkdJhBWho7m401T/YurJvwM6mNRuZAP1sH+x
+ EBCr/CjAMbKFCDipRGwDiHjeRtvqtI+o2X99BjZm612SVLM2oWw/wiSrujHw7JJO0Xhn wQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ek4j3h414-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
         Fri, 04 Mar 2022 09:07:25 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 4 Mar
- 2022 15:07:23 +0000
+ 2022 15:07:24 +0000
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Fri, 4 Mar 2022 15:07:23 +0000
+ Transport; Fri, 4 Mar 2022 15:07:24 +0000
 Received: from aryzen.ad.cirrus.com (unknown [198.61.65.198])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 52417B06;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A8C7D7C;
         Fri,  4 Mar 2022 15:07:23 +0000 (UTC)
 From:   Lucas Tanure <tanureal@opensource.cirrus.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -48,16 +48,19 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: [PATCH v2 00/20] Support external boost at CS35l41 ASoC driver
-Date:   Fri, 4 Mar 2022 15:07:01 +0000
-Message-ID: <20220304150721.3802-1-tanureal@opensource.cirrus.com>
+        David Rhodes <drhodes@opensource.cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Subject: [PATCH v2 01/20] ASoC: cs35l41: Fix GPIO2 configuration
+Date:   Fri, 4 Mar 2022 15:07:02 +0000
+Message-ID: <20220304150721.3802-2-tanureal@opensource.cirrus.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220304150721.3802-1-tanureal@opensource.cirrus.com>
+References: <20220304150721.3802-1-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: ehVGpwv1bl5E8i1YZkXmXSNJ6dLE_oD6
-X-Proofpoint-ORIG-GUID: ehVGpwv1bl5E8i1YZkXmXSNJ6dLE_oD6
+X-Proofpoint-GUID: ABmFhauVmGBe644gF1lDSn0je8X6Zu3Y
+X-Proofpoint-ORIG-GUID: ABmFhauVmGBe644gF1lDSn0je8X6Zu3Y
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -68,57 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the support for CS35L41 external boost to its shared library
-for ASoC use.
-This move resulted in cs35l41_hda_reg_sequence being removed,
-and its steps were broken down into regmap writes or functions
-from the library. And hardware configuration struct was unified
-for its use in the shared lib.
-While at it, some minor bugs were found and fixed it.
+From: David Rhodes <drhodes@opensource.cirrus.com>
 
-v2 changelog:
- - Instead of removing the log, playback actions will log the last regmap access.
- - Documentation patch with the correct subject line and fixed bug reported by Rob Herring on the
- provided example.
+Fix GPIO2 polarity and direction configuration
 
-Previous versions:
- v1: https://lkml.org/lkml/2022/3/3/759
+Fixes: fe1024d50477b ("ASoC: cs35l41: Combine adjacent register writes")
+Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ sound/soc/codecs/cs35l41.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-David Rhodes (2):
-  ASoC: cs35l41: Fix GPIO2 configuration
-  ASoC: cs35l41: Document CS35l41 External Boost
-
-Lucas Tanure (18):
-  ASoC: cs35l41: Fix max number of TX channels
-  ASoC: cs35l41: Fix DSP mbox start command and global enable order
-  ASoC: cs35l41: Remove unnecessary param
-  sound: cs35l41: Unify hardware configuration
-  sound: cs35l41: Check hw_config before using it
-  sound: cs35l41: Move cs35l41_gpio_config to shared lib
-  hda: cs35l41: Fix I2S params comments
-  hda: cs35l41: Always configure the DAI
-  hda: cs35l41: Add Boost type flag
-  hda: cs35l41: Put the device into safe mode for external boost
-  hda: cs35l41: Mute the device before shutdown
-  sound: cs35l41: Enable Internal Boost in shared lib
-  hda: cs35l41: Move boost config to initialization code
-  hda: cs35l41: Remove cs35l41_hda_reg_sequence struct
-  hda: cs35l41: Reorganize log for playback actions
-  hda: cs35l41: Handle all external boost setups the same way
-  hda: cs35l41: Move external boost handling to lib for ASoC use
-  ASoC: cs35l41: Support external boost
-
- .../bindings/sound/cirrus,cs35l41.yaml        |  44 ++-
- include/sound/cs35l41.h                       |  53 +++-
- sound/pci/hda/cs35l41_hda.c                   | 295 ++++++------------
- sound/pci/hda/cs35l41_hda.h                   |  27 +-
- sound/soc/codecs/cs35l41-i2c.c                |   4 +-
- sound/soc/codecs/cs35l41-lib.c                | 190 ++++++++++-
- sound/soc/codecs/cs35l41-spi.c                |   4 +-
- sound/soc/codecs/cs35l41.c                    | 174 +++++------
- sound/soc/codecs/cs35l41.h                    |   5 +-
- 9 files changed, 440 insertions(+), 356 deletions(-)
-
+diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
+index 77a017694645..90c91b00288b 100644
+--- a/sound/soc/codecs/cs35l41.c
++++ b/sound/soc/codecs/cs35l41.c
+@@ -1035,8 +1035,8 @@ static int cs35l41_irq_gpio_config(struct cs35l41_private *cs35l41)
+ 
+ 	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO2_CTRL1,
+ 			   CS35L41_GPIO_POL_MASK | CS35L41_GPIO_DIR_MASK,
+-			   irq_gpio_cfg1->irq_pol_inv << CS35L41_GPIO_POL_SHIFT |
+-			   !irq_gpio_cfg1->irq_out_en << CS35L41_GPIO_DIR_SHIFT);
++			   irq_gpio_cfg2->irq_pol_inv << CS35L41_GPIO_POL_SHIFT |
++			   !irq_gpio_cfg2->irq_out_en << CS35L41_GPIO_DIR_SHIFT);
+ 
+ 	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+ 			   CS35L41_GPIO1_CTRL_MASK | CS35L41_GPIO2_CTRL_MASK,
 -- 
 2.35.1
 

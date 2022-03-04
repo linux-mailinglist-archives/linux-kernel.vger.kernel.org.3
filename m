@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745EA4CDC6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20BB4CDC77
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241671AbiCDS2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:28:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S241684AbiCDSaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241639AbiCDS2j (ORCPT
+        with ESMTP id S241685AbiCDS37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:28:39 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36224DF46;
-        Fri,  4 Mar 2022 10:27:50 -0800 (PST)
+        Fri, 4 Mar 2022 13:29:59 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6D3A41B7;
+        Fri,  4 Mar 2022 10:29:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646418470; x=1677954470;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DWG7yBjX/SsVDq1FNBzX1eDw1t6YL3NhhuMKSucJuqU=;
-  b=O4vH4eOHEJQ7lchSM0g0Gr3Fu9772Hi3MWYOc8quI/8yJRWiqvfRB7W0
-   nxk7/fl7yKWKa3S+WkqfQQqcOBUtOtibh2v5CrVUBFcmji2QCiSmWqllW
-   9wrlz1ue5RSQaPQr2hmY+ver7/ZOby0cydtIqLmVUaDY+68BCdJw63v8G
-   AnBtEbaF1ZXgk5t7zcKwMg031MtZbAs9SCrKyg2cvpTXdAPpadO+hXkX4
-   pLS0dtmjI3z3s/9RgSOKf+KXfWX/jbUJX/Pz6SO5QS91n5LenRVKjlrVw
-   PoiSIY8E2KS0CM6FkzfbFwkrfYNRXQZD/KMs9X5uUgfsOr5UfXLH9lDTf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="253969031"
+  t=1646418551; x=1677954551;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=T1cJyOMT/4MKGohYN7debDUVB+ANZyP5BQoa2vWx+2Y=;
+  b=WmMjbRwWZnnL8eX0KxSotT3fKM09kVEuFkZlCRNeLdYCdvPKrddNNznb
+   WTs8Cg96aOB3/mKl2yil9RCDgjWboeVRGpD4veO3Xumtf5bnFLcKXpf4V
+   fLUmKAiiAzTA9nTQFDgjtU2m9QrgeE4QzXMeWRjDfVYC0H/wASaevWxyl
+   gaylwgnPo+PUm0VWwm23tS2wQ99+nHXnLDj4rniI4fdplVtcv0hyW1mGR
+   9yo3KWjHLUjE6l6zRGsUINeWWBzuVLoHenGOmzYcSA/nnxzfEivWL3q17
+   CDuYsYENUHQHzGWb4lQS5NgBLZjRiecHwOwxfQ0hqHzRkn6jT0A3T9JMn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="314751355"
 X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="253969031"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 10:27:50 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="314751355"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 10:29:10 -0800
 X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="552317837"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga008.jf.intel.com with ESMTP; 04 Mar 2022 10:27:46 -0800
-Message-ID: <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
-Date:   Fri, 4 Mar 2022 20:27:45 +0200
+   d="scan'208";a="710419091"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 10:29:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nQCf8-00BKb2-UB;
+        Fri, 04 Mar 2022 20:28:22 +0200
+Date:   Fri, 4 Mar 2022 20:28:22 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v4 3/3] iio: temperature: ltc2983: Make use of device
+ properties
+Message-ID: <YiJaRoIVSU8fIly3@smile.fi.intel.com>
+References: <20220304180257.80298-1-andriy.shevchenko@linux.intel.com>
+ <20220304180257.80298-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
- a perf event clock
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>
-References: <20220214110914.268126-1-adrian.hunter@intel.com>
- <20220214110914.268126-4-adrian.hunter@intel.com>
- <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220304180257.80298-3-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/03/2022 15:41, Peter Zijlstra wrote:
-> On Mon, Feb 14, 2022 at 01:09:06PM +0200, Adrian Hunter wrote:
->> Currently, when Intel PT is used within a VM guest, it is not possible to
->> make use of TSC because perf clock is subject to paravirtualization.
+On Fri, Mar 04, 2022 at 08:02:57PM +0200, Andy Shevchenko wrote:
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
 > 
-> Yeah, so how much of that still makes sense, or ever did? AFAIK the
-> whole pv_clock thing is utter crazy. Should we not fix that instead?
+> The conversion slightly changes the logic behind property reading for
+> the configuration values. Original code allocates just as much memory
+> as needed. Then for each separate 32- or 64-bit value it reads it from
+> the property and converts to a raw one which will be fed to the sensor.
+> In the new code we allocate the amount of memory needed to retrieve all
+> values at once from the property and then convert them as required.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Tested-by: Nuno Sá <nuno.sa@analog.com>
+> ---
+> v4: added checks for error pointer (Nuno), added Tb tag (Nuno)
+> v3: no changes
 
-Presumably pv_clock must work with different host operating systems.
-Similarly, KVM must work with different guest operating systems.
-Perhaps I'm wrong, but I imagine re-engineering time virtualization
-might be a pretty big deal,  far exceeding the scope of these patches.
+Forgot to add, that this patch should work without fwnode fix.
+To test fwnode fix, the part of the NULLifying ref should be
+(temporary) dropped.
 
-While it is not something that I really need, it is also not obvious
-that the virtualization people would see any benefit.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-My primary goal is to be able to make a trace covering the host and
-(Linux) guests.  Intel PT can do that.  It can trace straight through
-VM-Entries/Exits, politely noting them on the way past.  Perf tools
-already supports decoding that, but only for tracing the kernel because
-it needs more information (so-called side-band events) to decode guest
-user space.  The simplest way to get that is to run perf inside the
-guests to capture the side-band events, and then inject them into the
-host perf.data file during post processing.  That, however, requires a
-clock that works for both host and guests.  TSC is suitable because
-KVM largely leaves it alone, except for VMX TSC Offset and Scaling,
-but that has to be dealt with anyway because it also affects the
-Intel PT trace.
+

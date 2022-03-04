@@ -2,191 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796784CCC51
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9AE4CCC52
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiCDDfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 22:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        id S237633AbiCDDg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 22:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiCDDfg (ORCPT
+        with ESMTP id S235245AbiCDDgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 22:35:36 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB5EBB8D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:34:49 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id q17so9135656edd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 19:34:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=WcXHhklBNGyAi1Fm2zsLjVuAug9s+ql0EDjZsbPKYAI=;
-        b=E1FpFJLB7abJxZed1WCMQcULZn9hQTMbGxiNPi0CCVnGiIdUpD+xXROcHfApd0/lhy
-         Fj8d3Tr13RwSsb2kdxmdA2eb2hZRt4zK1ql7T4hz1+YKU36UXfm141BQ8dAfNWF9unc+
-         XzFCDq2JChZ6YhsZxAz4pOLc8l6nuIuu4cjDXLs4EOuoK9lhb+ayiN1eBrOaUNLwohVq
-         QMbQKbEMuHG87cggJq/oVgE8YdyOPZZga7JQMPOs2dCT4KD10W9joDxIKV6BQMpwJPXs
-         8IcXc+FPkt5hzKMTw5xGyka1VDAoxaBX2m8/m7Ikqstkdd+fN1mjXZ5WG7aMkNLfO7qF
-         OCSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=WcXHhklBNGyAi1Fm2zsLjVuAug9s+ql0EDjZsbPKYAI=;
-        b=55vLftKA3RgOFpKaBmnft6LXPZu/E3Esf83H9WjQGf1FTuMNyEbhIXGrSXVGkn2je4
-         ATAgOnQtu2kBlQs8gFPhEmJR9b32/WDI/wnbDQXRkneGGx12j2VjkxEQMZK1fAtD/CYA
-         WNIGbPwKaNgsPuo/iFDMzA8nkJCxvGNhd5KVP/FqfybCH0+jrpXi3IWU9mc0+90ZnpRl
-         +0mfozjc5OL0/6L2Y7d3WV1Vpf6SefxmYFXCp9SS+VE6gkc0z2cFbfpYZyVTF9rv4Eum
-         5sgeRj/OWnfrSh/WI2sEFsF6Xv90fBdff559DnpfkInvIrvmiK9Eqdt9b96z9Ibubp9V
-         KfDg==
-X-Gm-Message-State: AOAM533tUh6jIaDTqP/d7KzKfD0e4Ez4aBckupb7aOVgUrkkAL6eQgl9
-        vd6oZOPv7680kY7E59RC3sBebhNLS0GX1SmMxCo=
-X-Google-Smtp-Source: ABdhPJyXRTi7eberRDwVlKzM1WsiDZWyFjob4oE6YkzfUlvwNJGcVLVLAZaRhQfnUp4HRm6+9FZDwJgMnGvbfsNN/+s=
-X-Received: by 2002:a05:6402:f0b:b0:415:ec3c:68aa with SMTP id
- i11-20020a0564020f0b00b00415ec3c68aamr4186570eda.86.1646364887656; Thu, 03
- Mar 2022 19:34:47 -0800 (PST)
+        Thu, 3 Mar 2022 22:36:23 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432D811B5CC;
+        Thu,  3 Mar 2022 19:35:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=a2JRiPymeaevTl2okq3HY2SPEajWajmTc73gK4oUt4s=; b=mE5NHe6dOwMMWMMOI/r9EQPC9W
+        71OGhoXbzejqd/1x54WIMz7mjhmvQvbLIM4XfWq8PgdUK82NMb7E4jafTgdcx1jEBqaskPwY9YTWT
+        9vt0J7SAsH0H1NLlBylUnkFEOTgsW1Y2U8SxWoUcJffuIEQ5GVt5dxiWKVOOPc5kmW1q0MdUPXNSf
+        LtekS7MCDQhDl1O4yCl91xu2RLj2kunUjXEpXBXhRvdXnt6I0+vvtVGJxMjGCM5lo3mUv/AJtxy8l
+        OFQEu7RZNjvtrGEAp81rHRDWjSJeb57EaQ5MktxTZbTuSfVm34LjfGggJmvJWk/3YemxWULAbCS+d
+        457UJG4w==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nPyj6-008Qqe-OE; Fri, 04 Mar 2022 03:35:32 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Angelo Dureghello <angelo@sysam.it>,
+        Greg Ungerer <gerg@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, uclinux-dev@uclinux.org
+Subject: [PATCH] m68k: tweak coldfire/device.c for COMPILE_TEST
+Date:   Thu,  3 Mar 2022 19:35:31 -0800
+Message-Id: <20220304033531.28667-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 4 Mar 2022 13:34:36 +1000
-Message-ID: <CAPM=9txdUAqhJOhz+09qtFLJNOThDMNQxLu6kV-v6o1bopXhNA@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.17-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+When CONFIG_MCF_EDMA is set (due to COMPILE_TEST, not due to
+CONFIG_M5441x), coldfire/device.c has compile errors due to
+missing MCFEDMA_* symbols. In the .config file that was provided,
+CONFIG_M5206=y, not CONFIG_M5441x, so <asm/m5441xsim.h> is not
+included in coldfire/device.c.
 
-Things are quieting down as expected, just a small set of fixes, i915,
-exynos, amdgpu, vrr, bridge and hdlcd. Nothing scary at all.
+Only build the MCF_EDMA code in coldfire/device.c if both MCF_EDMA
+and M5441x are enabled.
 
-Dave.
+Fixes these build errors:
 
-drm-fixes-2022-03-04:
-drm fixes for 5.17-rc7
+../arch/m68k/coldfire/device.c:512:35: error: 'MCFEDMA_BASE' undeclared here (not in a function); did you mean 'MCFDMA_BASE1'?
+  512 |                 .start          = MCFEDMA_BASE,
+../arch/m68k/coldfire/device.c:513:50: error: 'MCFEDMA_SIZE' undeclared here (not in a function)
+  513 |                 .end            = MCFEDMA_BASE + MCFEDMA_SIZE - 1,
+../arch/m68k/coldfire/device.c:517:35: error: 'MCFEDMA_IRQ_INTR0' undeclared here (not in a function)
+  517 |                 .start          = MCFEDMA_IRQ_INTR0,
+../arch/m68k/coldfire/device.c:523:35: error: 'MCFEDMA_IRQ_INTR16' undeclared here (not in a function)
+  523 |                 .start          = MCFEDMA_IRQ_INTR16,
+../arch/m68k/coldfire/device.c:529:35: error: 'MCFEDMA_IRQ_INTR56' undeclared here (not in a function)
+  529 |                 .start          = MCFEDMA_IRQ_INTR56,
+../arch/m68k/coldfire/device.c:535:35: error: 'MCFEDMA_IRQ_ERR' undeclared here (not in a function)
+  535 |                 .start          = MCFEDMA_IRQ_ERR,
 
-i915:
-- Fix GuC SLPC unset command
-- Fix misidentification of some Apple MacBook Pro laptops as Jasper Lake.
+Fixes: d7e9d01ac292 ("m68k: add ColdFire mcf5441x eDMA platform support")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: lore.kernel.org/r/202203030252.P752DK46-lkp@intel.com
+Cc: Angelo Dureghello <angelo@sysam.it>
+Cc: Greg Ungerer <gerg@kernel.org>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: uclinux-dev@uclinux.org
+---
+ arch/m68k/coldfire/device.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-amdgpu:
-- Suspend regression fix
-
-exynos:
-- irq handling fixes.
-- Fix two regressions to TE-gpio handling.
-
-arm/hdlcd:
-- Select DRM_GEM_CMEA_HELPER for HDLCD
-
-bridge:
-- ti-sn65dsi86: Properly undo autosuspend
-
-vrr:
-- Fix potential NULL-pointer deref
-The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3=
-:
-
-  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-03-04
-
-for you to fetch changes up to 8fdb19679722a02fe21642d39710c701d2ed567a:
-
-  Merge tag 'drm-misc-fixes-2022-03-03' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-03-04
-13:04:11 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.17-rc7
-
-i915:
-- Fix GuC SLPC unset command
-- Fix misidentification of some Apple MacBook Pro laptops as Jasper Lake.
-
-amdgpu:
-- Suspend regression fix
-
-exynos:
-- irq handling fixes.
-- Fix two regressions to TE-gpio handling.
-
-arm/hdlcd:
-- Select DRM_GEM_CMEA_HELPER for HDLCD
-
-bridge:
-- ti-sn65dsi86: Properly undo autosuspend
-
-vrr:
-- Fix potential NULL-pointer deref
-
-----------------------------------------------------------------
-Carsten Haitzler (1):
-      drm/arm: arm hdlcd select DRM_GEM_CMA_HELPER
-
-Dave Airlie (4):
-      Merge tag 'exynos-drm-fixes-v5.17-rc6' of
-git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos into
-drm-fixes
-      Merge tag 'drm-intel-fixes-2022-03-03' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'amd-drm-fixes-5.17-2022-03-02' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-misc-fixes-2022-03-03' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-
-Douglas Anderson (1):
-      drm/bridge: ti-sn65dsi86: Properly undo autosuspend
-
-Lad Prabhakar (5):
-      drm/exynos/exynos7_drm_decon: Use platform_get_irq_byname() to
-get the interrupt
-      drm/exynos: mixer: Use platform_get_irq() to get the interrupt
-      drm/exynos/exynos_drm_fimd: Use platform_get_irq_byname() to get
-the interrupt
-      drm/exynos/fimc: Use platform_get_irq() to get the interrupt
-      drm/exynos: gsc: Use platform_get_irq() to get the interrupt
-
-Manasi Navare (1):
-      drm/vrr: Set VRR capable prop only if it is attached to connector
-
-Marek Szyprowski (2):
-      drm/exynos: Don't fail if no TE-gpio is defined for DSI driver
-      drm/exynos: Search for TE-gpio in DSI panel's node
-
-Qiang Yu (1):
-      drm/amdgpu: fix suspend/resume hang regression
-
-Ville Syrj=C3=A4l=C3=A4 (1):
-      drm/i915: s/JSP2/ICP2/ PCH
-
-Vinay Belgaumkar (1):
-      drm/i915/guc/slpc: Correct the param count for unset param
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c      |  3 ++-
- drivers/gpu/drm/arm/Kconfig                 |  1 +
- drivers/gpu/drm/bridge/ti-sn65dsi86.c       |  5 +++--
- drivers/gpu/drm/drm_connector.c             |  3 +++
- drivers/gpu/drm/exynos/exynos7_drm_decon.c  | 12 +++---------
- drivers/gpu/drm/exynos/exynos_drm_dsi.c     |  6 ++++--
- drivers/gpu/drm/exynos/exynos_drm_fimc.c    | 13 +++++--------
- drivers/gpu/drm/exynos/exynos_drm_fimd.c    | 13 ++++---------
- drivers/gpu/drm/exynos/exynos_drm_gsc.c     | 10 +++-------
- drivers/gpu/drm/exynos/exynos_mixer.c       | 14 ++++++--------
- drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c |  2 +-
- drivers/gpu/drm/i915/intel_pch.c            |  2 +-
- drivers/gpu/drm/i915/intel_pch.h            |  2 +-
- 13 files changed, 37 insertions(+), 49 deletions(-)
+--- linux-next-20220303.orig/arch/m68k/coldfire/device.c
++++ linux-next-20220303/arch/m68k/coldfire/device.c
+@@ -480,7 +480,7 @@ static struct platform_device mcf_i2c5 =
+ #endif /* MCFI2C_BASE5 */
+ #endif /* IS_ENABLED(CONFIG_I2C_IMX) */
+ 
+-#if IS_ENABLED(CONFIG_MCF_EDMA)
++#if IS_ENABLED(CONFIG_MCF_EDMA) && IS_ENABLED(CONFIG_M5441x)
+ 
+ static const struct dma_slave_map mcf_edma_map[] = {
+ 	{ "dreq0", "rx-tx", MCF_EDMA_FILTER_PARAM(0) },
+@@ -552,7 +552,7 @@ static struct platform_device mcf_edma =
+ 		.platform_data = &mcf_edma_data,
+ 	}
+ };
+-#endif /* IS_ENABLED(CONFIG_MCF_EDMA) */
++#endif /* IS_ENABLED(CONFIG_MCF_EDMA) && IS_ENABLED(CONFIG_M5441x) */
+ 
+ #ifdef MCFSDHC_BASE
+ static struct mcf_esdhc_platform_data mcf_esdhc_data = {
+@@ -651,7 +651,7 @@ static struct platform_device *mcf_devic
+ 	&mcf_i2c5,
+ #endif
+ #endif
+-#if IS_ENABLED(CONFIG_MCF_EDMA)
++#if IS_ENABLED(CONFIG_MCF_EDMA) && IS_ENABLED(CONFIG_M5441x)
+ 	&mcf_edma,
+ #endif
+ #ifdef MCFSDHC_BASE

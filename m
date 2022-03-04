@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BB24CD07B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB49C4CD07C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234999AbiCDIwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S234966AbiCDIwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbiCDIwO (ORCPT
+        with ESMTP id S232134AbiCDIwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:52:14 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F318519DEA7;
-        Fri,  4 Mar 2022 00:51:26 -0800 (PST)
+        Fri, 4 Mar 2022 03:52:35 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42E19DEB2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:51:48 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A4C8E21136;
-        Fri,  4 Mar 2022 08:51:25 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4D1851F384;
+        Fri,  4 Mar 2022 08:51:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646383885; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1646383907; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=slqWuDwOoH/Q5XlOhkioyiGZ0ilW0OBu5hUs4LHxwxA=;
-        b=CJjoqG1Kh563odELWTDZkXLiqEDm+WjyISHd5xwzsNAhGqqw/VajH3xLlE9tlJxkcLbASy
-        ReDQ5Jayk8E+eQfPurL4RYjuWWXJm+lEhQPdHFVW96qv4olsmKsHXsbbP38hziUezy3BCc
-        HiCbWHBhoIqdWwJ5myzr10lydClipoY=
+        bh=ZODsXE6ddBfzoieQYI7aVrk0E2hJEr5ZTnIuJ9WILSs=;
+        b=taZZt/tDabNCtLvv9DOn+enqzNczyiV9Az3YvWCKoEMkbc0sQsyCMY46uftmA52yEM2OGS
+        0ICQxUBb3S/XcCh8UBPl7PperVRb9qiIWX4xI78/qKZh4E6M49w2qzxfqbvqfd9bUYtYQb
+        5bg7l/mdfqqiY7fbhPYbAwm1RVKk0lg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646383885;
+        s=susede2_ed25519; t=1646383907;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=slqWuDwOoH/Q5XlOhkioyiGZ0ilW0OBu5hUs4LHxwxA=;
-        b=nGdOjxJiB8ElSvqgH5B1ZDOIKsxBc3K6YbRTDuh+qkY2fD/s98hl908MXPlc1WKYs2oj1s
-        X7HLpiTPpHQZntCA==
+        bh=ZODsXE6ddBfzoieQYI7aVrk0E2hJEr5ZTnIuJ9WILSs=;
+        b=jdPn+QcJR6h79AZCQwxl+xXp0afdG3jW8ShgOmG+rfv9jWX4vkXlkA48MpFrNi9QAD3CwH
+        WmNEKTzpYoq6OqBw==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 877EAA3B83;
-        Fri,  4 Mar 2022 08:51:25 +0000 (UTC)
-Date:   Fri, 04 Mar 2022 09:51:25 +0100
-Message-ID: <s5hsfryrtgy.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 3CDD6A3B8C;
+        Fri,  4 Mar 2022 08:51:47 +0000 (UTC)
+Date:   Fri, 04 Mar 2022 09:51:47 +0100
+Message-ID: <s5hr17irtgc.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ALSA: echoaudio: remove redundant assignment to variable bytes
-In-Reply-To: <20220302170728.1094633-1-colin.i.king@gmail.com>
-References: <20220302170728.1094633-1-colin.i.king@gmail.com>
+To:     xkernel.wang@foxmail.com
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: lola: add a check for the return of vmalloc()
+In-Reply-To: <tencent_4221FC4089F6DF01C48F192E5784038BA205@qq.com>
+References: <tencent_4221FC4089F6DF01C48F192E5784038BA205@qq.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -62,19 +61,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Mar 2022 18:07:28 +0100,
-Colin Ian King wrote:
+On Fri, 04 Mar 2022 09:38:20 +0100,
+xkernel.wang@foxmail.com wrote:
 > 
-> The variable bytes is being assigned a value that is never read, it
-> is being re-assigned inside a following if block. The assignment is
-> redundant and can be removed.
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
 > 
-> Cleans up clang scan build warning:
-> sound/pci/echoaudio/midi.c:211:9: warning: Although the value stored
-> to 'bytes' is used in the enclosing expression, the value is never
-> actually read from 'bytes' [deadcode.DeadStores]
+> vmalloc() is a memory allocation function which can return NULL when
+> some internal memory errors happen. So it is better to check the return
+> of it to catch the error in time.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 
 Thanks, applied.
 

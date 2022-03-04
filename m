@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4109D4CDC5B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A284CDC62
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241636AbiCDS0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S241655AbiCDS1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241607AbiCDS0j (ORCPT
+        with ESMTP id S234502AbiCDS1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:26:39 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1421A1C6662
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:25:50 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8586721136;
-        Fri,  4 Mar 2022 18:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646418348; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dse1Yo6t0Vcy29L3lT+MHYqucbHXPrkGk6t6/xDwVp4=;
-        b=Y8vufeV8mA7aSKloGeOJAQT/uREGmDg1LuWaTXvY1m1UA2NcrxhbZMCf1Xxc7YPwOmFFWO
-        GONrlMTrMWtwqeuD2wkXcvRNSDAf6NR/pip60hffJ3fX9JH7HmDL4Jbsi28IkBKqvyVvVb
-        +QYo5rcN0JMBsLjw7bI5OEnbQuLUrco=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646418348;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dse1Yo6t0Vcy29L3lT+MHYqucbHXPrkGk6t6/xDwVp4=;
-        b=yU8i9GvkB4jJuIKk0+o5iu1iuKVT7ULGY/9ZLGeJX5ZTo+c39lGFnOUQl29Xde4VB+ODEo
-        fsBGb7IZXkSemADQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 515F913B70;
-        Fri,  4 Mar 2022 18:25:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8iLnEaxZImI9AgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 04 Mar 2022 18:25:48 +0000
-Message-ID: <74269fcd-60ef-5308-3aaf-e8944e37d1b0@suse.cz>
-Date:   Fri, 4 Mar 2022 19:25:47 +0100
+        Fri, 4 Mar 2022 13:27:14 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D818C1C666B;
+        Fri,  4 Mar 2022 10:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646418386; x=1677954386;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+jdzbR3flYYEH/bLSuzRzaIbwXXnCNewgaIgwzeUhWU=;
+  b=DrGYNveW8plsTOumioNhyVIDarS7ubuT/7z0taqtXPPA873s0OeXdRup
+   J4c5C0xvceI6Hn7WvTO7ikQdBshHePS4raTve4Qgw1opCNz2gluVgruqF
+   9Jogr4VUwtSAV7Y3lP136G0oKoUA89vtAFhQwGDNyRrrTCjNf/vso5HfP
+   XcIjFQDC9QAVtz4C4H42LjQygniGqp1ReR0N0ibUKj8+um0x0rrD29dGL
+   8peUWNvKkvbtlKigvwYu6ErrEgLENyVIgcTNTgVIIYf1yKSE6Jbj5jNIs
+   v6qcpDJPRd49jLjZNnUemG+dM3zW4sbRPv9ViLa1ySqefvjDP1SWrXOS5
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="164571070"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 11:26:26 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 11:26:26 -0700
+Received: from rob-ult-m19940.amer.actel.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 4 Mar 2022 11:26:23 -0700
+From:   Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+To:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Subject: [PATCH] clk: at91: sama7g5: fix parents of PDMCs' GCLK
+Date:   Fri, 4 Mar 2022 20:26:16 +0200
+Message-ID: <20220304182616.1920392-1-codrin.ciubotariu@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2 2/5] mm/sl[au]b: unify __ksize()
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org
-References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
- <20220304063427.372145-3-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220304063427.372145-3-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 07:34, Hyeonggon Yoo wrote:
-> Now that SLAB passes large requests to page allocator like SLUB,
-> Unify __ksize(). Only SLOB need to implement own version of __ksize()
-> because it stores size in object header for kmalloc objects.
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Audio PLL can be used as parent by the GCLKs of PDMCs.
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Fixes: cb783bbbcf54 ("clk: at91: sama7g5: add clock support for sama7g5")
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+---
+ drivers/clk/at91/sama7g5.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-As discussed, we can be more specific about the !folio_test_slab() case, but
-that can be done on top.
+diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
+index e43458673afb..9a213ba9e58b 100644
+--- a/drivers/clk/at91/sama7g5.c
++++ b/drivers/clk/at91/sama7g5.c
+@@ -699,16 +699,16 @@ static const struct {
+ 	{ .n  = "pdmc0_gclk",
+ 	  .id = 68,
+ 	  .r = { .max = 50000000  },
+-	  .pp = { "syspll_divpmcck", "baudpll_divpmcck", },
+-	  .pp_mux_table = { 5, 8, },
++	  .pp = { "syspll_divpmcck", "audiopll_divpmcck", },
++	  .pp_mux_table = { 5, 9, },
+ 	  .pp_count = 2,
+ 	  .pp_chg_id = INT_MIN, },
+ 
+ 	{ .n  = "pdmc1_gclk",
+ 	  .id = 69,
+ 	  .r = { .max = 50000000, },
+-	  .pp = { "syspll_divpmcck", "baudpll_divpmcck", },
+-	  .pp_mux_table = { 5, 8, },
++	  .pp = { "syspll_divpmcck", "audiopll_divpmcck", },
++	  .pp_mux_table = { 5, 9, },
+ 	  .pp_count = 2,
+ 	  .pp_chg_id = INT_MIN, },
+ 
+-- 
+2.32.0
+

@@ -2,203 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E1E4CCC02
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D83B44CCC06
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237768AbiCDCwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 21:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S237794AbiCDC5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 21:57:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbiCDCwH (ORCPT
+        with ESMTP id S237780AbiCDC5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 21:52:07 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF40E7AC8;
-        Thu,  3 Mar 2022 18:51:21 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id mv5-20020a17090b198500b001bf2a039831so180700pjb.5;
-        Thu, 03 Mar 2022 18:51:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=owY1s88VHqFIqmWlN/4fq6tMIh7jqxjAFgGkmfxykCc=;
-        b=be6F6DUnBVqm6V8lf6rJEZlRStZRBrvf/NOPkoEFbfXxUE3/hQ6TPD10pbNkQro36n
-         X7XWV7VX7RwlfhlghkxS6z4KqHuuY6n0xSK59EAzGhcks76Rg7ENd/tmaL+ivQxo6q6q
-         ck/39o8bSNRHz6V1//cnQYt9KvTBcQP4LFOST9HXS6FRW1HMZ2cn1rf+8v0JbDm2J6D5
-         31dag7spo5VRAo6cPZIsMJM0lFhYVVp6oYxAAXmAOUw2lBTQacPvVqmzt//+4pxDRIDO
-         hmEjg+t8xH7tRnRUjjr9UNmNassjZplIQ892Svbf0c1+cOv+Rs0PpGaRI4rqRnG94XkE
-         Tb1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=owY1s88VHqFIqmWlN/4fq6tMIh7jqxjAFgGkmfxykCc=;
-        b=WxSHBqRCazYOH0jjpI7oROSmthG+tW1ZG29Oc0aeS8gRqVyy/ws6JDkK6cbLVx6BxW
-         P3c2PHju2Vc6WMGIB/rFoGFNBE508BfTqun7KVO1ZcYiHPWoNzj4CeCxhDeloMedFMIg
-         ia9YzpF7ONGV1hkU/GvgwrQFi0h3hsssbX6FkexcZdW6d3XAYNzypVTf/D0GXppjJx9K
-         dFflOWj8b9+GgvcXIxxDLvasRjeI0EdsByyxL8/dR2gVbR7APrPKVBk0/tmFfGJ4DxTD
-         yMNBCQwuzMy6ahhqsOvfp5MUZmUklXOa2RqqNM/XtT/sYwKkKh11zYlpww9ZnWwl3Y0p
-         Iq7Q==
-X-Gm-Message-State: AOAM532DOBK++rGVh3Iy8Fmxf6VObGXbP8Lij/uGSDTmtec9dGYS/aXb
-        WZzUuAhNhMXn12EU6PE77BA=
-X-Google-Smtp-Source: ABdhPJzFlaLTCsMtGn2cwRd0MGGVF6lbESQ/hRdBkkUekh8Das9Mmy1uSMMmXl5QuWqGAAT+m8xkgQ==
-X-Received: by 2002:a17:90b:1bca:b0:1bf:1a17:beda with SMTP id oa10-20020a17090b1bca00b001bf1a17bedamr4491359pjb.215.1646362280440;
-        Thu, 03 Mar 2022 18:51:20 -0800 (PST)
-Received: from ubuntu.huawei.com ([119.3.119.19])
-        by smtp.googlemail.com with ESMTPSA id w5-20020a056a0014c500b004f3a5535431sm4143781pfu.4.2022.03.03.18.51.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 18:51:19 -0800 (PST)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org, jakobkoschel@gmail.com,
-        jannh@google.com, keescook@chromium.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org, xiam0nd.tong@gmail.com
-Subject: Re: [PATCH 2/6] list: add new MACROs to make iterator invisiable outside the loop
-Date:   Fri,  4 Mar 2022 10:51:09 +0800
-Message-Id: <20220304025109.15501-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAHk-=whJX52b1jNsmzXeVr6Z898R=9rBcSYx2oLt69XKDbqhOg@mail.gmail.com>
-References: <CAHk-=whJX52b1jNsmzXeVr6Z898R=9rBcSYx2oLt69XKDbqhOg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 3 Mar 2022 21:57:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7955117EDA5;
+        Thu,  3 Mar 2022 18:56:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3B2061A17;
+        Fri,  4 Mar 2022 02:56:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDF1C004E1;
+        Fri,  4 Mar 2022 02:56:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646362576;
+        bh=y0CcN02R3T02b5agluklpjI6uCWpnLOSvkKm4FPOpSY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X7eBQkP+8LchNO/JFYYZz2XARwJmbfakWuNO4ramysZ7pbQDS7naHvjO/SGV0diQF
+         vO260L8DCctc1y/jEoNHuTYyJwRKytaX0Db636rD7MhVAuwam7yW4gwq/PRiZTo10K
+         j5E1R420rfqBl8bBitZKsqmt0t5+Rfrvo3elj5P/Y2gCOsY0cBQz/8f8MFbTzdWYEK
+         cmXyKz2h4HC+tf02gx5u7maKVPEe7P2BxFnc4WQcG6nAsXb6Q9GOPzLPUv15fEtl6j
+         mKzjO4Kn6nKe29T9agb9PLvb8sLQEZybNExfYZ6OZfIodV0esLQphYZKdM4nlsRjpY
+         vRTXXMmlMNDPw==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH v2] x86/sgx: Do not limit EAUG'd pages by pre-initialization policy
+Date:   Fri,  4 Mar 2022 04:55:30 +0200
+Message-Id: <20220304025530.346238-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First of all, thank you very much for your patient reply and valuable
-comments. This is a great inspiration to me.
+Pre-initialization policy is meant for EADD'd pages because they are
+part of the enclave identity. It's a good practice to not let touch the
+permissions after initialization, and does provide guarantees to e.g.
+LSM's about the enclave.
 
-> On Mon, Feb 28, 2022 at 11:59 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
-> >
-> > +#define list_for_each_entry_inside(pos, type, head, member)            \
-> 
-> So as mentioned in another thread, I actually tried exactly this.
-> 
-> And it was horrendous.
-> 
-> It's _technically_ probably a very nice solution, but
+For EAUG'd pages it should be sufficient to let mmap(), mprotect() and
+SGX opcodes to control the permissions. Thus effectively disable
+pre-initialization policy by setting vm_max_prot_bits to RWX.
 
-Yes, I always think it is a perfect solution _technically_, since you
-first proposed in the thread of Jakob's first subject.
+Finally, remove vm_run_prot_bits. For EADD'd pages the roof is where
+it was during construction, for EAUG'd we don't simply care. This
+hard to keep in-sync variable adds only a layer of complexity and
+nothing else.
 
-> 
->  - it means that the already *good* cases are the ones that are
-> penalized by having to change
+Cc: Reinette Chatre <reinette.chatre@intel.com>
+Cc: Nathaniel McCallum <nathaniel@profian.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v2:
+Remove vm_run_prot_bits.
+---
+ arch/x86/kernel/cpu/sgx/encl.c  | 17 +++++------------
+ arch/x86/kernel/cpu/sgx/encl.h  |  1 -
+ arch/x86/kernel/cpu/sgx/ioctl.c | 33 ++++-----------------------------
+ 3 files changed, 9 insertions(+), 42 deletions(-)
 
-Yes, but it also kills potential risks that one day somebody mistakely
-uses iterator after the loop in this already *good* cases, as it removed
-the original declare of pos and any use-after-loop will be catched by
-compiler.
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index 5fe7189eac9d..c350fb987a11 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -200,15 +200,8 @@ static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
+ 	encl_page->desc = addr;
+ 	encl_page->encl = encl;
+ 
+-	/*
+-	 * Adding a regular page that is architecturally allowed to only
+-	 * be created with RW permissions.
+-	 * TBD: Interface with user space policy to support max permissions
+-	 * of RWX.
+-	 */
+-	prot = PROT_READ | PROT_WRITE;
+-	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
+-	encl_page->vm_max_prot_bits = encl_page->vm_run_prot_bits;
++	prot = PROT_READ | PROT_WRITE | PROT_EXEC;
++	encl_page->vm_max_prot_bits = calc_vm_prot_bits(prot, 0);
+ 
+ 	epc_page = sgx_alloc_epc_page(encl_page, true);
+ 	if (IS_ERR(epc_page)) {
+@@ -338,7 +331,7 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
+ 	 * exceed the VMA permissions.
+ 	 */
+ 	vm_prot_bits = vma->vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
+-	page_prot_bits = entry->vm_run_prot_bits & vm_prot_bits;
++	page_prot_bits = entry->vm_max_prot_bits & vm_prot_bits;
+ 	/*
+ 	 * Add VM_SHARED so that PTE is made writable right away if VMA
+ 	 * and EPCM are writable (no COW in SGX).
+@@ -391,7 +384,7 @@ static vm_fault_t sgx_vma_pfn_mkwrite(struct vm_fault *vmf)
+ 		goto out;
+ 	}
+ 
+-	if (!(entry->vm_run_prot_bits & VM_WRITE))
++	if (!(entry->vm_max_prot_bits & VM_WRITE))
+ 		ret = VM_FAULT_SIGBUS;
+ 
+ out:
+@@ -459,7 +452,7 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
+ 	mutex_lock(&encl->lock);
+ 	xas_lock(&xas);
+ 	xas_for_each(&xas, page, PFN_DOWN(end - 1)) {
+-		if (~page->vm_run_prot_bits & vm_prot_bits) {
++		if (~page->vm_max_prot_bits & vm_prot_bits) {
+ 			ret = -EACCES;
+ 			break;
+ 		}
+diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
+index 1b6ce1da7c92..241e302e7a72 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.h
++++ b/arch/x86/kernel/cpu/sgx/encl.h
+@@ -28,7 +28,6 @@
+ struct sgx_encl_page {
+ 	unsigned long desc;
+ 	unsigned long vm_max_prot_bits:8;
+-	unsigned long vm_run_prot_bits:8;
+ 	enum sgx_page_type type:16;
+ 	struct sgx_epc_page *epc_page;
+ 	struct sgx_encl *encl;
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index d8c3c07badb3..9ce13a962483 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -198,12 +198,6 @@ static struct sgx_encl_page *sgx_encl_page_alloc(struct sgx_encl *encl,
+ 	/* Calculate maximum of the VM flags for the page. */
+ 	encl_page->vm_max_prot_bits = calc_vm_prot_bits(prot, 0);
+ 
+-	/*
+-	 * At time of allocation, the runtime protection bits are the same
+-	 * as the maximum protection bits.
+-	 */
+-	encl_page->vm_run_prot_bits = encl_page->vm_max_prot_bits;
+-
+ 	return encl_page;
+ }
+ 
+@@ -764,12 +758,6 @@ static long sgx_enclave_relax_perm(struct sgx_encl *encl,
+ 			goto out_unlock;
+ 		}
+ 
+-		/*
+-		 * Change runtime protection before zapping PTEs to ensure
+-		 * any new #PF uses new permissions.
+-		 */
+-		entry->vm_run_prot_bits = vm_prot;
+-
+ 		mutex_unlock(&encl->lock);
+ 		/*
+ 		 * Do not keep encl->lock because of dependency on
+@@ -946,9 +934,9 @@ static long sgx_enclave_restrict_perm(struct sgx_encl *encl,
+ 				      struct sgx_enclave_restrict_perm *modp,
+ 				      u64 secinfo_perm)
+ {
+-	unsigned long vm_prot, run_prot_restore;
+ 	struct sgx_encl_page *entry;
+ 	struct sgx_secinfo secinfo;
++	unsigned long vm_prot;
+ 	unsigned long addr;
+ 	unsigned long c;
+ 	void *epc_virt;
+@@ -1002,14 +990,6 @@ static long sgx_enclave_restrict_perm(struct sgx_encl *encl,
+ 			goto out_unlock;
+ 		}
+ 
+-		/*
+-		 * Change runtime protection before zapping PTEs to ensure
+-		 * any new #PF uses new permissions. EPCM permissions (if
+-		 * needed) not changed yet.
+-		 */
+-		run_prot_restore = entry->vm_run_prot_bits;
+-		entry->vm_run_prot_bits = vm_prot;
+-
+ 		mutex_unlock(&encl->lock);
+ 		/*
+ 		 * Do not keep encl->lock because of dependency on
+@@ -1033,12 +1013,12 @@ static long sgx_enclave_restrict_perm(struct sgx_encl *encl,
+ 			pr_err_once("EMODPR encountered exception %d\n",
+ 				    ENCLS_TRAPNR(ret));
+ 			ret = -EFAULT;
+-			goto out_prot_restore;
++			goto out_reclaim;
+ 		}
+ 		if (encls_failed(ret)) {
+ 			modp->result = ret;
+ 			ret = -EFAULT;
+-			goto out_prot_restore;
++			goto out_reclaim;
+ 		}
+ 
+ 		ret = sgx_enclave_etrack(encl);
+@@ -1054,8 +1034,6 @@ static long sgx_enclave_restrict_perm(struct sgx_encl *encl,
+ 	ret = 0;
+ 	goto out;
+ 
+-out_prot_restore:
+-	entry->vm_run_prot_bits = run_prot_restore;
+ out_reclaim:
+ 	sgx_mark_page_reclaimable(entry->epc_page);
+ out_unlock:
+@@ -1136,7 +1114,7 @@ static long sgx_enclave_modt(struct sgx_encl *encl,
+ 			     struct sgx_enclave_modt *modt,
+ 			     enum sgx_page_type page_type)
+ {
+-	unsigned long max_prot_restore, run_prot_restore;
++	unsigned long max_prot_restore;
+ 	struct sgx_encl_page *entry;
+ 	struct sgx_secinfo secinfo;
+ 	unsigned long prot;
+@@ -1182,7 +1160,6 @@ static long sgx_enclave_modt(struct sgx_encl *encl,
+ 		}
+ 
+ 		max_prot_restore = entry->vm_max_prot_bits;
+-		run_prot_restore = entry->vm_run_prot_bits;
+ 
+ 		/*
+ 		 * Once a regular page becomes a TCS page it cannot be
+@@ -1200,7 +1177,6 @@ static long sgx_enclave_modt(struct sgx_encl *encl,
+ 			}
+ 			prot = PROT_READ | PROT_WRITE;
+ 			entry->vm_max_prot_bits = calc_vm_prot_bits(prot, 0);
+-			entry->vm_run_prot_bits = entry->vm_max_prot_bits;
+ 
+ 			/*
+ 			 * Prevent page from being reclaimed while mutex
+@@ -1262,7 +1238,6 @@ static long sgx_enclave_modt(struct sgx_encl *encl,
+ 
+ out_entry_changed:
+ 	entry->vm_max_prot_bits = max_prot_restore;
+-	entry->vm_run_prot_bits = run_prot_restore;
+ out_unlock:
+ 	mutex_unlock(&encl->lock);
+ out:
+-- 
+2.35.1
 
-> 
->  - the syntax of the thing becomes absolutely nasty
-> 
-> which means that _practially_ it's exactly the wrong thing to do.
-> 
-> Just as an example, this is a random current "good user" in kernel/exit.c:
-> 
-> -       list_for_each_entry_safe(p, n, dead, ptrace_entry) {
-> +       list_for_each_entry_safe_inside(p, n, struct task_struct,
-> dead, ptrace_entry) {
-> 
-> and while some of the effects are nice (no need to declare p/n ahead
-> of time), just look at how nasty that line is.
-> 
-> Basically every single use will result in an over-long line. The above
-> example has minimal indentation, almost minimal variable names (to the
-> point of not being very descriptive at all), and one of the most basic
-> kernel structure types. And it still ended up 87 columns wide.
-> 
->  And no, the answer to that is not "do it on multiple lines then".
-> That is just even worse.
-
-Two avoid multiple lines,  there are some mitigations:
-1. use a shorter macro name: (add 2 chars)
-list_for_each_entry_i instead of list_for_each_entry_inside
-
-2. using a shorter type passing to the macro: (add 3 chars)
-+ #define t struct sram_bank_info
-- list_for_each_entry(pos, head, member) {
-+ list_for_each_entry_i(pos, t, head, member) {
-
-3. restore all name back to list_for_each_entry after everything is done:
-   (minus 2 chars)
-Although we need replace all the use of list_for_each_entry* (15000+)
-with list_for_each_entry*_i, the work can be done gradually rather
-than all at once. We can incrementally replace these callers until
-all these in the kernel are completely updated with *_i* one. At
-that time, we can just remove the implements of origin macros and rename
-the *_i* macro back to the origin name just in one single patch.
-
-4. As you mentioned, the "safe" version of list_for_each_entry do not
-   need "n" argument anymore with the help of -std=gnu11. (minus 3 chars)
-
-Thus, after all mitigations applied, the "safe" version adds *no* chars to
-columns wide, and other version adds 3 chars totally, which is acceptable
-to me.
-
-> 
-> So I really think this is a major step in the wrong direction.
-
-Maybe yes or maybe no.
-Before the list_for_each_entry_inside way, I have tried something like
-"typeof(pos) pos" way as and before you proposed in the thread of Jakob's
-second subject, to avoid any changes to callers of the macros. But it also
-has potential problems. see my previous reply to you here:
-https://lore.kernel.org/lkml/20220302093106.8402-1-xiam0nd.tong@gmail.com/
-
-> 
-> We should strive for the *bad* cases to have to do extra work, and
-> even there we should really strive for legibility.
-
-Indeed, there are many "multiple lines" problems in the current kernel
-code, for example (drivers/dma/iop-adma.c):
-				list_for_each_entry_from(grp_iter,
-					&iop_chan->chain, chain_node) {
-
-> 
-> Now, I think that "safe" version in particular can be simplified:
-> there's no reason to give the "n" variable a name. Now that we can
-> (with -stc=gnu11) just declare our own variables in the for-loop, the
-> need for that externally visible 'next' declaration just goes away.
-> 
-> So three of those 87 columns are pointless and should be removed. The
-> macro can just internally decare 'n' like it always wanted (but
-> couldn't do due to legacy C language syntax restrictions).
-
-Great, this does reduce three chars. and i will look into other versions.
-
-> 
-> But even with that fixed, it's still a very cumbersome line.
-
-With other mitigations mentioned above, the addition to line will be
-acceptable.
-
-> 
-> Note how the old syntax was "only" 60 characters - long but still
-> quite legible (and would have space for two more levels of indentation
-> without even hitting 80 characters). And that was _despute_ having to
-> have that 'n' declaration.
-> 
-> And yes, the old syntax does require that
-> 
->         struct task_struct *p, *n;
-> 
-> line to declare the types, but that really is not a huge burden, and
-> is not complicated. It's just another "variables of the right type"
-> line (and as mentioned, the 'n' part has always been a C syntax
-> annoyance).
-
-Yes, that really is not a huge burden, so is the mitigation 2 mentioned
-above which defining a shorter type passing to the macro, to shorten the 
-new line.
-
-> 
->               Linus
-
---
-Xiaomeng Tong

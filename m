@@ -2,121 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706AA4CD2A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 844BC4CD29B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237300AbiCDKlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 05:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
+        id S237441AbiCDKmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 05:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237255AbiCDKlx (ORCPT
+        with ESMTP id S237358AbiCDKmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 05:41:53 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01C71AAA41
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:41:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646390465; x=1677926465;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=Q7+TLjNIU40NPY2C+vhlvjZ/shVdRHNRaRKTRCZzFMU=;
-  b=YtwfQhRNOs22BnpvBf1BIXxovbSCS//wOnEUJEl3o/uB64E8rjZ412t8
-   VwU3AXpTawNK4MtXdi0YBDPzIbg6Zc7xNqZEUQF2d6tcS5bKnYsbrQhWf
-   OewpJZAS0Z+uKGgvMyfzYuUHntzjaFdrRxpuEF1kaQdnIHMxjq59obtgh
-   H4bOfZoBQxG40W9IvZbuVs7ytm5ng8envkrG1rtn2X/hd3oNgnUnnY9DS
-   yi/Q4an+uOE6dTJ8B6uFqHSlCpzj4aKashalBV+tpaQyxlZBlvlQYci4N
-   obEDy64sOc9imAgY0FV9K+Ak1WEyA1e/SSa+bv5VFom2PEa7SLdoTkiDU
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,154,1643698800"; 
-   d="scan'208";a="150852049"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 03:41:04 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 03:41:04 -0700
-Received: from [10.12.72.98] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 4 Mar 2022 03:41:03 -0700
-Message-ID: <0ba7bb11-eaa1-91fc-9c5a-fa2393da5a55@microchip.com>
-Date:   Fri, 4 Mar 2022 11:41:02 +0100
+        Fri, 4 Mar 2022 05:42:09 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D1A1AAFD7
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:41:22 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id b22-20020a6b6716000000b0064070ce7b49so5278897ioc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 02:41:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=6SuusqU261l0YZRBubHgkzmZFekkg3laoBBQucPRrgA=;
+        b=Embc3b3kK/sY4WCB7ab8gXePy8i/BIN75gK6T4EFoxTZOLSR+JGJapD3pp3L6iUWNc
+         QM/zgqivzUmJu06KQ3bdIKBKhUBmETGBR171Q4LtYnlIZf/V5CHHT6PjItHYLJhzfkKE
+         dFuhpvMZ8bIww//+ZDSCk1PSEtzwLTjrKTQzq1nD4Vm71hPF50JGWHQXK+YP77/oiAXR
+         3hfuSIdKD2XtcRr4R2ZH269Hh4kEC4EMyKZKCOcA7sC23SHQjGhnTx9P/7U+zLhZ55ZI
+         jgxRrBuPqke3vdd3MVgAbGs6Bpped/p2YXGPFdtGDpuChRMD8VVgUWqPRni8jKbDmR+v
+         295w==
+X-Gm-Message-State: AOAM533xMJZCiFUpvJe2x66HSQuL3TdK43nwsyvCoBBer8KLmMDZ1X/x
+        ihojK5Cx0h8DTl8Gdo82KA7gK1REY50HCIty/Neu2uw/sMKY
+X-Google-Smtp-Source: ABdhPJwKCMl3GU2i9vbnDTeANVWYScaZeMCV2tSwF1TW5fUve4h9UUDcIrdH6VmCvdsJafXL55JBIVWVo0pCWJHPquGCcHchQG9J
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ARM: dts: at91: sam9x60ek: modify vdd_1v5 regulator to
- vdd_1v15
-Content-Language: en-US
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Mihai Sain <mihai.sain@microchip.com>
-References: <20220302160235.28336-1-nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220302160235.28336-1-nicolas.ferre@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:178f:b0:2c4:b692:a8ec with SMTP id
+ y15-20020a056e02178f00b002c4b692a8ecmr13307761ilu.296.1646390481472; Fri, 04
+ Mar 2022 02:41:21 -0800 (PST)
+Date:   Fri, 04 Mar 2022 02:41:21 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cf53e605d96227cd@google.com>
+Subject: [syzbot] linux-next boot error: WARNING: suspicious RCU usage in cpuacct_charge
+From:   syzbot <syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        brauner@kernel.org, cgroups@vger.kernel.org, daniel@iogearbox.net,
+        hannes@cmpxchg.org, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, lizefan.x@bytedance.com,
+        netdev@vger.kernel.org, sfr@canb.auug.org.au,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        tj@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2022 at 17:02, nicolas.ferre@microchip.com wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> From: Mihai Sain <mihai.sain@microchip.com>
-> 
-> This regulator is powering the vddcore pins from MPU.
-> Its real value on the board and in the MPU datasheet is 1.15V.
-> 
-> Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
-> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Hello,
 
-Added to a new DT PR for 5.18.
-Best regards,
-   Nicolas
+syzbot found the following issue on:
 
-> ---
->   arch/arm/boot/dts/at91-sam9x60ek.dts | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-> index b1068cca4228..7719ea3d4933 100644
-> --- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-> +++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-> @@ -48,11 +48,11 @@ vdd_1v8: fixed-regulator-vdd_1v8@0 {
->                          status = "okay";
->                  };
-> 
-> -               vdd_1v5: fixed-regulator-vdd_1v5@1 {
-> +               vdd_1v15: fixed-regulator-vdd_1v15@1 {
->                          compatible = "regulator-fixed";
-> -                       regulator-name = "VDD_1V5";
-> -                       regulator-min-microvolt = <1500000>;
-> -                       regulator-max-microvolt = <1500000>;
-> +                       regulator-name = "VDD_1V15";
-> +                       regulator-min-microvolt = <1150000>;
-> +                       regulator-max-microvolt = <1150000>;
->                          regulator-always-on;
->                          status = "okay";
->                  };
-> --
-> 2.32.0
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+HEAD commit:    6d284ba80c0c Add linux-next specific files for 20220304
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15c283d1700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=26714bde6b3ad08b
+dashboard link: https://syzkaller.appspot.com/bug?extid=16e3f2c77e7c5a0113f9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com
 
 
--- 
-Nicolas Ferre
+=============================
+WARNING: suspicious RCU usage
+5.17.0-rc6-next-20220304-syzkaller #0 Not tainted
+-----------------------------
+include/linux/cgroup.h:494 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 1, debug_locks = 1
+2 locks held by kthreadd/2:
+ #0: ffff8881401726e0 (&p->pi_lock){....}-{2:2}, at: task_rq_lock+0x63/0x360 kernel/sched/core.c:578
+ #1: ffff8880b9c39f98 (&rq->__lock){-...}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:478
+
+stack backtrace:
+CPU: 0 PID: 2 Comm: kthreadd Not tainted 5.17.0-rc6-next-20220304-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ task_css include/linux/cgroup.h:494 [inline]
+ task_ca kernel/sched/cpuacct.c:40 [inline]
+ cpuacct_charge+0x2af/0x3c0 kernel/sched/cpuacct.c:342
+ cgroup_account_cputime include/linux/cgroup.h:792 [inline]
+ update_curr+0x37b/0x830 kernel/sched/fair.c:907
+ dequeue_entity+0x23/0xfd0 kernel/sched/fair.c:4422
+ dequeue_task_fair+0x238/0xea0 kernel/sched/fair.c:5771
+ dequeue_task kernel/sched/core.c:2019 [inline]
+ __do_set_cpus_allowed+0x186/0x960 kernel/sched/core.c:2508
+ __set_cpus_allowed_ptr_locked+0x2ba/0x4e0 kernel/sched/core.c:2841
+ __set_cpus_allowed_ptr kernel/sched/core.c:2874 [inline]
+ set_cpus_allowed_ptr+0x78/0xa0 kernel/sched/core.c:2879
+ kthreadd+0x44/0x750 kernel/kthread.c:724
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+=============================
+WARNING: suspicious RCU usage
+5.17.0-rc6-next-20220304-syzkaller #0 Not tainted
+-----------------------------
+include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 1, debug_locks = 1
+2 locks held by kthreadd/2:
+ #0: ffff8881401726e0 (&p->pi_lock){....}-{2:2}, at: task_rq_lock+0x63/0x360 kernel/sched/core.c:578
+ #1: ffff8880b9c39f98 (&rq->__lock){-...}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:478
+
+stack backtrace:
+CPU: 0 PID: 2 Comm: kthreadd Not tainted 5.17.0-rc6-next-20220304-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ task_css_set include/linux/cgroup.h:481 [inline]
+ task_dfl_cgroup include/linux/cgroup.h:550 [inline]
+ cgroup_account_cputime include/linux/cgroup.h:794 [inline]
+ update_curr+0x671/0x830 kernel/sched/fair.c:907
+ dequeue_entity+0x23/0xfd0 kernel/sched/fair.c:4422
+ dequeue_task_fair+0x238/0xea0 kernel/sched/fair.c:5771
+ dequeue_task kernel/sched/core.c:2019 [inline]
+ __do_set_cpus_allowed+0x186/0x960 kernel/sched/core.c:2508
+ __set_cpus_allowed_ptr_locked+0x2ba/0x4e0 kernel/sched/core.c:2841
+ __set_cpus_allowed_ptr kernel/sched/core.c:2874 [inline]
+ set_cpus_allowed_ptr+0x78/0xa0 kernel/sched/core.c:2879
+ kthreadd+0x44/0x750 kernel/kthread.c:724
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

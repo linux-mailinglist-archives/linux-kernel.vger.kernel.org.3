@@ -2,51 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0E34CD570
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C104CD572
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbiCDNsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S235016AbiCDNtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiCDNsl (ORCPT
+        with ESMTP id S229472AbiCDNtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:48:41 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE035B890;
-        Fri,  4 Mar 2022 05:47:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=yUfWjX3h8CMnaiUpvCJtN8WVKzX4/Iy7kNdpr2Dj4L0=; b=hCJ6g8iobtGAt7/ncSptnHELQS
-        zHMPqNTfCpH6vXUOB0yHhwmczFsgRSrExG+znU0KFY137mkYrMNxLC1ACUutekXxG24EI4rcbBTO0
-        m7Vm7LsgkJXyCzITwB9ezWMTQ0eeykMTSfbowaROAqO31Xjz8V1YQwyR4F4NiHCQ3KJk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nQ8Hc-009EkS-PE; Fri, 04 Mar 2022 14:47:48 +0100
-Date:   Fri, 4 Mar 2022 14:47:48 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Miller <davem@davemloft.net>
-Cc:     Divya.Koppera@microchip.com, netdev@vger.kernel.org,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, kuba@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        richardcochran@gmail.com, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, madhuri.sripada@microchip.com,
-        manohar.puri@microchip.com
-Subject: Re: [PATCH net-next 0/3] Add support for 1588 in LAN8814
-Message-ID: <YiIYhDzOiRnLbzQy@lunn.ch>
-References: <20220304093418.31645-1-Divya.Koppera@microchip.com>
- <164639821168.27302.1826304809342359025.git-patchwork-notify@kernel.org>
- <YiIO7lAMCkHhd11L@lunn.ch>
- <20220304.132121.856864783082151547.davem@davemloft.net>
+        Fri, 4 Mar 2022 08:49:41 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5298663BD9
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 05:48:53 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id u3so16952895ybh.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 05:48:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dxkq6fSmSidI5jxQNF6F1Isey3naDKJl+wbEQVSsuM4=;
+        b=YkmvT2pYJSwLyqzxe7ZiuTgqTHehcij3OgfSQMM1G9wKC+pGj+nepQnxvLkJD3xQbe
+         GwRpzcXG3WQeIjAoaLcRTIw8psD18ZufUgk9tX5LH2aIAQuNR0Cahu4/McJ8wd6gZzvi
+         luZDPBLLHlJnleHkPPudXkxeVQHWd0AC3onqha/ThPA5u8Kkh/J8/GgbbiPu7y/IkQCD
+         SvEngsty4bE46BGPqb3wW85zP0D+WOf83towpFjc7pAVb0Zri9B0Vy50CFtpkwgVhhTi
+         V+J0mQ0Uxj8DwCYfay7aW3eGcsiLKNEuNAKmnBtxXIiBo6RkPNSF3yk9DURTmdy12gIx
+         b8Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dxkq6fSmSidI5jxQNF6F1Isey3naDKJl+wbEQVSsuM4=;
+        b=6SQyHuJ3uvi6uCAlAoqOq6VQpWSIfdbbmfCft1fxbJR6wrTsm2W2gTEe/mtz7n2Tsu
+         kG5VBnnnfJhm0UlflmFTHppFCwinfilsjJD/T9q7UFP9Rpft8ShvdlnC/598CHU3+AZq
+         IYnf3gDKjNmQyYTdDWIChQI20qnodz9qvtvIMME7Ww2fgiWnhIsHfbAk0Zrs1PvJRcNp
+         X8d5waFj/4CHzNxaN2UX9o6jhw9BknYUz01PlwIk7DDqUyN0PiSctoWib2/IE77oSQCv
+         jFV2x7RDe5eBBOh/MvqXb1di6AIvhQox/09ktFt3HvDnzvwHXzRD+NRlYXwUheub/yFK
+         b4/g==
+X-Gm-Message-State: AOAM5326lTwssWvPTfLczFIaGu9fXijUb9ElRb37lT0balRjCerTbzT5
+        xsL0Jg14nhjCnPZlE8Tau08/ClazzBSZi0NneAno4g==
+X-Google-Smtp-Source: ABdhPJxKuAiqNr7UyPfzts+HCa+Uluo7ia6UGSm/CWm+KUhmQlIvDFPwusld7YQhjESeDq8Q2ncG3s8yTNqILxMlLFA=
+X-Received: by 2002:a25:3d47:0:b0:624:7b42:9f0f with SMTP id
+ k68-20020a253d47000000b006247b429f0fmr38966576yba.254.1646401732585; Fri, 04
+ Mar 2022 05:48:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304.132121.856864783082151547.davem@davemloft.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+References: <20220304093409.25829-1-linmiaohe@huawei.com> <20220304093409.25829-2-linmiaohe@huawei.com>
+In-Reply-To: <20220304093409.25829-2-linmiaohe@huawei.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Fri, 4 Mar 2022 21:48:05 +0800
+Message-ID: <CAMZfGtWH5_tbQwiw0P=e2OuEuMX0BusDevN5WyOTzEC5_cVhtw@mail.gmail.com>
+Subject: Re: [PATCH 01/16] mm/migration: remove unneeded local variable mapping_locked
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Huang Ying <ying.huang@intel.com>, Zi Yan <ziy@nvidia.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        ave.hansen@linux.intel.com, o451686892@gmail.com,
+        Mina Almasry <almasrymina@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, Michal Hocko <mhocko@suse.com>,
+        riel@redhat.com, Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,35 +79,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 01:21:21PM +0000, David Miller wrote:
-> From: Andrew Lunn <andrew@lunn.ch>
-> Date: Fri, 4 Mar 2022 14:06:54 +0100
-> 
-> > On Fri, Mar 04, 2022 at 12:50:11PM +0000, patchwork-bot+netdevbpf@kernel.org wrote:
-> >> Hello:
-> >> 
-> >> This series was applied to netdev/net-next.git (master)
-> >> by David S. Miller <davem@davemloft.net>:
-> > 
-> > Hi David
-> > 
-> > Why was this merged?
-> 
-> Sorry, it seemed satraightforward to me, and I try to get the backlog under 40 patches before
-> I hand over to Jakub for the day.
-> 
-> If you want to review, reply to the thread immediately saying so, don't wait until you haver time for the
-> full review.
+On Fri, Mar 4, 2022 at 5:35 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> When mapping_locked is true, TTU_RMAP_LOCKED is always set to ttu. We can
+> check ttu instead so mapping_locked can be removed. And ttu is either 0
+> or TTU_RMAP_LOCKED now. Change '|=' to '=' to reflect this.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-This patchset was on the list for less than 5 hours before it got
-merged. I tend to sleep for 8 to 10 hours. Making it impossible for me
-to react any faster. At an absolute minimum, you need to wait 12
-hours, if you expect anybody to have a fair chance of being able to
-say, hold on, i want to comment on this patchset.
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-I also don't like the metric of 40 patches backlog. Is the size of
-backlog more important than the quality of the patches? Don't we care
-about the quality of the code any more? Don't we care about getting
-code reviewed any more?
-
-     Andrew
+Thanks.

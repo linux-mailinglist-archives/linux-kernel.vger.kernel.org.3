@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0929D4CD804
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0A04CD806
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240427AbiCDPhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
+        id S240448AbiCDPhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240391AbiCDPhI (ORCPT
+        with ESMTP id S240394AbiCDPhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:37:08 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EEA1C60E2;
-        Fri,  4 Mar 2022 07:36:20 -0800 (PST)
+        Fri, 4 Mar 2022 10:37:09 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FC31C60F0;
+        Fri,  4 Mar 2022 07:36:21 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id CD1D1223F0;
-        Fri,  4 Mar 2022 16:36:18 +0100 (CET)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 26619223F6;
+        Fri,  4 Mar 2022 16:36:19 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1646408178;
+        t=1646408179;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lKIFBjmmiLVpbQeUcyktL1KPVgUZRlv2ySWuv2vM0eg=;
-        b=azp2WsZwsOmopx5TPc+GxV1BQGs2pBaZmu4Hux0ZxNUKJ3eebLR3aZMZL6LAIFiIL12r8A
-        6KhPZ45BIdfDZH9UVE/iAWfiW9tKQXU1ZMk5oz+SXL9OaosT/44nyWHUfwz/+d2WN3HmOq
-        Inrn4kwGUQ1xuJQZmYpmAjYyM95C34k=
+        bh=xMCJ+lU+MWE4vqOFR8IKh9GXlrMyHGvoO37Jb4co/D8=;
+        b=OfvQnuzFi9WBj10hhC1dYjn6edDlZmbWNp1hPMCBq0EfGLqIxvexrSBrYzsr1n/dzqRiHM
+        iTUFmIZSWH25/f8xp/K04SZIExeSeJG8ywnKVhSphJxoeghwKPIKYrJwRwOJOL2YfBG7py
+        9YHkt2aXBcmpEdKki994k/4/m9fivwM=
 From:   Michael Walle <michael@walle.cc>
 To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>
@@ -42,9 +42,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 4/7] ARM: dts: lan966x: add all flexcom usart nodes
-Date:   Fri,  4 Mar 2022 16:35:45 +0100
-Message-Id: <20220304153548.3364480-5-michael@walle.cc>
+Subject: [PATCH v2 5/7] ARM: dts: lan966x: add flexcom SPI nodes
+Date:   Fri,  4 Mar 2022 16:35:46 +0100
+Message-Id: <20220304153548.3364480-6-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220304153548.3364480-1-michael@walle.cc>
 References: <20220304153548.3364480-1-michael@walle.cc>
@@ -60,96 +60,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add all the remaining usart nodes for the flexcom block. Although the
-DMA channels are specified, DMA is not enabled by default because break
-detection doesn't work with DMA.
-
-Keep the nodes disabled by default.
+Add all the SPI nodes for the flexcom IP block. Keep them
+disabled by default.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- arch/arm/boot/dts/lan966x.dtsi | 52 ++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ arch/arm/boot/dts/lan966x.dtsi | 75 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
 diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index 230de3bdd5f1..d7eacb0144f5 100644
+index d7eacb0144f5..a61d394ad04d 100644
 --- a/arch/arm/boot/dts/lan966x.dtsi
 +++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -92,6 +92,19 @@ flx0: flexcom@e0040000 {
- 			#size-cells = <1>;
- 			ranges = <0x0 0xe0040000 0x800>;
- 			status = "disabled";
+@@ -105,6 +105,21 @@ usart0: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
 +
-+			usart0: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
++			spi0: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
 +				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
 +				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
 +				       <&dma0 AT91_XDMAC_DT_PERID(2)>;
 +				dma-names = "tx", "rx";
 +				clocks = <&nic_clk>;
-+				clock-names = "usart";
++				clock-names = "spi_clk";
 +				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
 +				status = "disabled";
 +			};
  		};
  
  		flx1: flexcom@e0044000 {
-@@ -102,6 +115,19 @@ flx1: flexcom@e0044000 {
- 			#size-cells = <1>;
- 			ranges = <0x0 0xe0044000 0x800>;
- 			status = "disabled";
+@@ -128,6 +143,21 @@ usart1: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
 +
-+			usart1: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
++			spi1: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
 +				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
 +				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
 +				       <&dma0 AT91_XDMAC_DT_PERID(4)>;
 +				dma-names = "tx", "rx";
 +				clocks = <&nic_clk>;
-+				clock-names = "usart";
++				clock-names = "spi_clk";
 +				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
 +				status = "disabled";
 +			};
  		};
  
  		trng: rng@e0048000 {
-@@ -129,6 +155,19 @@ flx2: flexcom@e0060000 {
- 			#size-cells = <1>;
- 			ranges = <0x0 0xe0060000 0x800>;
- 			status = "disabled";
+@@ -168,6 +198,21 @@ usart2: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
 +
-+			usart2: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
++			spi2: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
 +				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
 +				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
 +				       <&dma0 AT91_XDMAC_DT_PERID(6)>;
 +				dma-names = "tx", "rx";
 +				clocks = <&nic_clk>;
-+				clock-names = "usart";
++				clock-names = "spi_clk";
 +				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
 +				status = "disabled";
 +			};
  		};
  
  		flx3: flexcom@e0064000 {
-@@ -181,6 +220,19 @@ flx4: flexcom@e0070000 {
- 			#size-cells = <1>;
- 			ranges = <0x0 0xe0070000 0x800>;
- 			status = "disabled";
+@@ -191,6 +236,21 @@ usart3: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
 +
-+			usart4: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
++			spi3: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
++				       <&dma0 AT91_XDMAC_DT_PERID(8)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		dma0: dma-controller@e0068000 {
+@@ -233,6 +293,21 @@ usart4: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi4: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
 +				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
 +				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
 +				       <&dma0 AT91_XDMAC_DT_PERID(10)>;
 +				dma-names = "tx", "rx";
 +				clocks = <&nic_clk>;
-+				clock-names = "usart";
++				clock-names = "spi_clk";
 +				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
 +				status = "disabled";
 +			};
  		};

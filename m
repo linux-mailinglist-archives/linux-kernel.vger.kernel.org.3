@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2488E4CCFD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0503F4CCFDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbiCDIYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S233276AbiCDIYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:24:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiCDIYa (ORCPT
+        with ESMTP id S229862AbiCDIYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:24:30 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB9E188A39
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:23:43 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 094943F043
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:23:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646382222;
-        bh=ZiYRxpOW7H2aZXVGftBTBKxNVAmOlSnEmG+mhO4BaDY=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=NwAAcEmuSDzo7Nv6REGPbQgtWeW745+OtrP48TsAt3KT0uamFeO0eX/5cpc6yQnH1
-         0M4cc8fp+C9f+M0mPkYYhmRnmFCzSCUrc/QEd4Oq5WTjKI4vdcfhBo2kjs8hUpFnvJ
-         YVfwtWJxtoV4ovMW902EW1ZocWhkA2hog/pZplpLdrKUFZvAnE358ufSv4GFxwrB1Q
-         +yFnAe1g+WXy8wOxk5LHiJt5Ce47sShqXbFM41zVKd57iRFdE3Cs+gNrHDrGwIxG1d
-         s2pzaLkupSs4G/p82mvN/ATYElYUy5BVsUI/YlvYN8iXr16wN5nmVaamEciAn3wf6W
-         zCy3Ng1kfEOqw==
-Received: by mail-ed1-f72.google.com with SMTP id h17-20020a05640250d100b004133863d836so4254813edb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:23:42 -0800 (PST)
+        Fri, 4 Mar 2022 03:24:36 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B31D18A7AF
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:23:49 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so7351962pjl.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:23:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=N+axBdq9gIf7Sm45r2wp0IbGpMCe8j9pbsmbjijGtEs=;
+        b=f0829CVHzlWItVcZBqryJZuX5e70twUX9KzKUD6tLvj+/lFCRe2gezWAbn4XvkN9gW
+         RX9D927IMO5VWmFw/dT2JzOJF4XFZlkvooVVVwck1QjBq+qIetDHaHeBMru7r02HxVAo
+         v0TQUsT4E+NMM0bFygzW0RBla5Iu3Zt0/QmNtQcAv8Snx4xBINawzNKpqJU/rLNsldvd
+         n4hf8eypUH+SNXZIj2hTmqFnmRusfnthhxwGrPyXfsfeCfyxwV/3AWSUxQ30lWdo4qQo
+         AL1caR8IHWqwPxaONOiBkZxJPFMTAKv4E2ec5Qprect3vZDulpo0alU7hRDVUWjqhyJc
+         /R1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZiYRxpOW7H2aZXVGftBTBKxNVAmOlSnEmG+mhO4BaDY=;
-        b=u5HIsYudHRUwTBg4r18aNXIEKRopR5PM+kKujkgtWHpcspa9vDLok8m7EB81PpaGBq
-         ER3CaHIDUBlIpgaUXFL3OLr+8sV9aYf+a44wkgkl9kEw9CkubLXUHPran7+cDuAh15Gs
-         OqladYLG8sieTkK1BjlvY7S53n14eY6IZQcjQul4EqxWFLSW1DZFlNvkftVK6j8z7WO6
-         R3eliXSeKYUMeK8//icvq/KP/0AAfoLqtkYbbxo5rtppqecIOZx2VqkKMYCbaX6XhN90
-         dyGUva5PzYAWpOUuwoNJjxd7p7oV7j0ks9hPmM3cH2q5T2aLCIzH2kdAn+qDO/8uRSc3
-         woew==
-X-Gm-Message-State: AOAM530Jg6OoMvIy7KUSAFtyDHlYRoOuJcOP+1d5xIOWcsjQ02E1DCP7
-        PwVGwyLAI9W7j71/IEzNRZC7KT06E0w12D20rCPSGW+AWX1hdmMoJ+2/zDdrwVG4LxED34KXpK4
-        L0U1FfIn9qGp83nyvQtqI4AAjcT2OGJTg/XOVTGia4w==
-X-Received: by 2002:a05:6402:1747:b0:415:ee04:47e1 with SMTP id v7-20020a056402174700b00415ee0447e1mr4319835edx.229.1646382221559;
-        Fri, 04 Mar 2022 00:23:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJymNu+F3GhI0EoxAO1JnqYf8iYX7ONBqok5BdmaWvsgdXQ/lTtlN2VBlZGOa8cXV9X27tyBAA==
-X-Received: by 2002:a05:6402:1747:b0:415:ee04:47e1 with SMTP id v7-20020a056402174700b00415ee0447e1mr4319821edx.229.1646382221393;
-        Fri, 04 Mar 2022 00:23:41 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id g2-20020aa7c842000000b0041314b98872sm1786256edt.22.2022.03.04.00.23.40
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=N+axBdq9gIf7Sm45r2wp0IbGpMCe8j9pbsmbjijGtEs=;
+        b=MKJYdIXD7AZIXTFhmDjj6cabjc+zN27CTGf3by+QN/Ao2emIRIrHPmiABXnTI7joM5
+         vYiLmP3ObgMvfHwI+ywnxCvs4hk7JSBjihh1HEV4RQpHJSS7+NljE8UKKI0bqIPvQ2uO
+         iZUQUPzoxz7UGdhlVXCuqx7Ss5HQ+XauAo3CBwURk6vZNRKlBvQ1zdgmD7wARKGbqFVF
+         g2+EEEY3aS1Haiz+5u7V0ZUD4URSaXMcJH5Yg+srihAjEH9MzDqiHepCEz6hfyCAqO2Q
+         e+0MKgMTCC2NqNUIbw0sujKdvfRVLDSHln3i5caO+q7kgPrMvqM4JKzR3L6jee84iQSm
+         qrCA==
+X-Gm-Message-State: AOAM532vRIyK+mq9a2xgvxBLBETPM6VKm1qVhkPyKCqmlFDlWiEwwC/g
+        F2u2tqCkgqqbIGCqU76taE5RBQ==
+X-Google-Smtp-Source: ABdhPJy8J5ilB+dFny6fOUlfNEKYRdwad4gzPC5QyQ9vdQkTY78rBNDkNRO6BhI/UBTXUl5qRfmbuA==
+X-Received: by 2002:a17:90b:4f4e:b0:1bf:887:9352 with SMTP id pj14-20020a17090b4f4e00b001bf08879352mr9410324pjb.199.1646382229105;
+        Fri, 04 Mar 2022 00:23:49 -0800 (PST)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090aa38600b001bce781ce03sm4105189pjp.18.2022.03.04.00.23.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 00:23:40 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] memory: emif: remove unneeded ENOMEM error messages
-Date:   Fri,  4 Mar 2022 09:23:39 +0100
-Message-Id: <20220304082339.230938-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 04 Mar 2022 00:23:48 -0800 (PST)
+Date:   Fri, 4 Mar 2022 16:23:42 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] irqchip: Add Qualcomm MPM controller driver
+Message-ID: <20220304082342.GO269879@dragon>
+References: <20220301062414.2987591-1-shawn.guo@linaro.org>
+ <20220301062414.2987591-3-shawn.guo@linaro.org>
+ <87ee3m2aed.wl-maz@kernel.org>
+ <20220302084028.GL269879@dragon>
+ <877d9c3b2u.wl-maz@kernel.org>
+ <20220302133441.GM269879@dragon>
+ <875yow31a0.wl-maz@kernel.org>
+ <20220303040229.GN269879@dragon>
+ <87fsnytagc.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fsnytagc.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,58 +82,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Memory subsystem already prints message about failed memory
-allocation, there is no need to do it in the drivers.
+On Fri, Mar 04, 2022 at 07:59:15AM +0000, Marc Zyngier wrote:
+> On Thu, 03 Mar 2022 04:02:29 +0000,
+> Shawn Guo <shawn.guo@linaro.org> wrote:
+> > 
+> > On Wed, Mar 02, 2022 at 01:57:27PM +0000, Marc Zyngier wrote:
+> > > This code actually makes me ask more questions. Why is it programming
+> > > 2 'pins' for each IRQ?
+> > 
+> > The mapping between MPM pin and GIC IRQ is not strictly 1-1.  There are
+> > some rare case that up to 2 MPM pins map to a single GIC IRQ, for
+> > example the last two in QC2290 'qcom,mpm-pin-map' below.
+> > 
+> > 	qcom,mpm-pin-map = <2 275>,     /* tsens0_tsens_upper_lower_int */
+> > 			   <5 296>,     /* lpass_irq_out_sdc */
+> > 			   <12 422>,    /* b3_lfps_rxterm_irq */
+> > 			   <24 79>,     /* bi_px_lpi_1_aoss_mx */
+> > 			   <86 183>,    /* mpm_wake,spmi_m */
+> > 			   <90 260>,    /* eud_p0_dpse_int_mx */
+> > 			   <91 260>;    /* eud_p0_dmse_int_mx */
+> > 
+> > 
+> > The downstream uses a DT bindings that specifies GIC hwirq number in
+> > client device nodes.  In that case, d->hwirq in the driver is GIC IRQ
+> > number, and the driver will need to query mapping table, find out the
+> > possible 2 MPM pins, and set them up.
+> > 
+> > The patches I'm posting here use a different bindings that specifies MPM
+> > pin instead in client device nodes.  Thus the driver can simply get the
+> > MPM pin from d->hwirq, so that the whole look-up procedure can be saved.
+> 
+> It still remains that there is no 1:1 mapping between input and
+> output, which is the rule #1 to be able to use a hierarchical setup.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/memory/emif.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+For direction of MPM pin -> GIC interrupt, it's a 1:1 mapping, i.e. for
+given MPM pin, there is only one GIC interrupt.  And that's the
+mapping MPM driver relies on.  For GIC interrupt -> MPM pin, it's not
+a strict 1:1 mapping.  For given GIC interrupt, there could be up to 2
+MPM pin mapped to it.  MPM driver doesn't use this direction of mapping
+though.
 
-diff --git a/drivers/memory/emif.c b/drivers/memory/emif.c
-index 762d0c0f0716..c7ebdabcc7f2 100644
---- a/drivers/memory/emif.c
-+++ b/drivers/memory/emif.c
-@@ -1025,10 +1025,8 @@ static struct emif_data *__init_or_module get_device_details(
- 	temp	= devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
- 	dev_info = devm_kzalloc(dev, sizeof(*dev_info), GFP_KERNEL);
- 
--	if (!emif || !pd || !dev_info) {
--		dev_err(dev, "%s:%d: allocation error\n", __func__, __LINE__);
-+	if (!emif || !pd || !dev_info)
- 		goto error;
--	}
- 
- 	memcpy(temp, pd, sizeof(*pd));
- 	pd = temp;
-@@ -1067,9 +1065,6 @@ static struct emif_data *__init_or_module get_device_details(
- 		temp = devm_kzalloc(dev, sizeof(*cust_cfgs), GFP_KERNEL);
- 		if (temp)
- 			memcpy(temp, cust_cfgs, sizeof(*cust_cfgs));
--		else
--			dev_warn(dev, "%s:%d: allocation error\n", __func__,
--				__LINE__);
- 		pd->custom_configs = temp;
- 	}
- 
-@@ -1084,8 +1079,6 @@ static struct emif_data *__init_or_module get_device_details(
- 			memcpy(temp, pd->timings, size);
- 			pd->timings = temp;
- 		} else {
--			dev_warn(dev, "%s:%d: allocation error\n", __func__,
--				__LINE__);
- 			get_default_timings(emif);
- 		}
- 	} else {
-@@ -1098,8 +1091,6 @@ static struct emif_data *__init_or_module get_device_details(
- 			memcpy(temp, pd->min_tck, sizeof(*pd->min_tck));
- 			pd->min_tck = temp;
- 		} else {
--			dev_warn(dev, "%s:%d: allocation error\n", __func__,
--				__LINE__);
- 			pd->min_tck = &lpddr2_jedec_min_tck;
- 		}
- 	} else {
--- 
-2.32.0
+> 
+> /me puzzled.
+> 
+> >
+> > > 
+> > > > 
+> > > > It seems MPM_REG_POLARITY is only meant for level interrupts, since edge
+> > > > interrupts already have separate registers for rising and falling.
+> > > 
+> > > Then level interrupts must clear both the edge registers at all times.
+> > 
+> > The downstream logic already covers that, right?  The edge register bits
+> > will be cleared as long as 'flowtype' is not EDGE.
+> 
+> I am talking about *your* code, not the Qualcomm stuff.
 
+OK. If you do not see anything wrong on the vendor code logic, I plan to
+replace my broken code with it.
+
+Shawn

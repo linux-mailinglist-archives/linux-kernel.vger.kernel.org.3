@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEDE4CD8A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0660E4CD8A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240343AbiCDQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
+        id S240524AbiCDQL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiCDQLX (ORCPT
+        with ESMTP id S240466AbiCDQL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:11:23 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E779E1B0C75
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:10:35 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id j10-20020a17090a7e8a00b001bbef243093so7615829pjl.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 08:10:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=7g/ezXRkUePVHzxAmU7TrSdmaet2aJR4hjHRm264YDA=;
-        b=mJQPI1UesYIFKVN6p6er/YNCnb2xSe79Zwvcfc/PHObkfznrFxErekv9iFoCnRdGwp
-         r+1riJYsF6PkSj9m6fJmZhfnVXYiebeX3keLZNX+zNJQYlfbJtVqi2JCSUzeVNUaUl1m
-         CXymFTXegyXeWTeZYn+pu/Ew9C3z7hYd9mR5piitqdaUJ6FMEFxVrHn9xzwqDjF7UxSs
-         pe642OAUGcQoh7hYdrUouCLeY07VZKND/nRWrKSz6qakGmynWsYDPhfbWxhsFxIf3FYu
-         AbjtnCKYMfDK7yoA5M/kR3iAeD1+vGBXueStALl+0KC9J/1kpTvaO7OvLSviBlco783r
-         yeXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=7g/ezXRkUePVHzxAmU7TrSdmaet2aJR4hjHRm264YDA=;
-        b=8IpdR+DGqFxZDOZAjTVOYedRgOQi9OGmLXOkOSBcNDn7hVIZRb7j35qZIYxH3Ejczf
-         H/8YjAUi94jeJPiZXue6T/Ox0HTOz6iwsQkPjzyTKSRihr3A5jYAmUVL7+OeyFyGI17e
-         AGpNaW4zg30CxAAUCTR5JIgz87F2F8x1hF2b/HdldVNA6Jh8EZAiG3rGVm17NCrwOr8b
-         ddaWNei3FtKZq1bu4ULpcDRTApR1NwJKM+WH0RnyOb56XnMMT8NsfC+JkPf3XjV/TTO6
-         zwr/krXIA/fGyooPF5tondArcd56uPcyog9QTL1fsXygoabkndMNgyXXWMsbyW6w5v1j
-         aKTA==
-X-Gm-Message-State: AOAM532/KTbOSMnZPeQzwc3bftcRpzyEZO+QrmaXcpN1ZPNmH1CMkPN8
-        C5YnW6itu/rGiVQVuwImmaon0KPjld0=
-X-Google-Smtp-Source: ABdhPJxb81xCCsYdx8G4+8O3wneI79w3fn9sUPWii8tb85zALFJlG7WfTwEihyej9GeXDNGBWeF68KdwK5c=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:9a79:ce7a:f894:68d2])
- (user=pgonda job=sendgmr) by 2002:a05:6a00:1aca:b0:4e1:a2b6:5b9 with SMTP id
- f10-20020a056a001aca00b004e1a2b605b9mr43761413pfv.4.1646410235407; Fri, 04
- Mar 2022 08:10:35 -0800 (PST)
-Date:   Fri,  4 Mar 2022 08:10:32 -0800
-Message-Id: <20220304161032.2270688-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH V2] KVM: SVM: Fix kvm_cache_regs.h inclusions for is_guest_mode()
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Mar 2022 11:11:26 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2020B1C7EA0;
+        Fri,  4 Mar 2022 08:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=uo0ZltVxD3vA31XmjhxcoENqFiRC1PTPgbxse0EESEM=; b=3XV1oFX+rKFFK7fHEO1bVDwQrT
+        rUMGMRPzMfz1G8v9F7TmeqEh+659jiXuAShypiJCN9fNNPy38sa7+q26rbvkeS6DfwfsCxU/ndGbB
+        aeb79iGm8b7lAgqtMeurEBOzI3dtOzavHeaF5tESegTcaryBr+tgA3o9ZOonE6eQKguuPd8aRBZxa
+        dNelLTbslmu0+1x1kIg2P/G2jI/ZZBnQsIPVzeGmhVYXcv9fjMlDRo3rX+GSBrvCO61Qla7K5FcR9
+        XKWDoLYGgTg4q1JEIHuB1o8NhziybJuxgUAC+r/zLQdCUWlRyYX8Mc3sqjI4eVatG6ZjlOCil8NzZ
+        RLmmKElg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nQAVp-00Avgl-GM; Fri, 04 Mar 2022 16:10:37 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v2] mips: DEC: honor CONFIG_MIPS_FP_SUPPORT=n
+Date:   Fri,  4 Mar 2022 08:10:36 -0800
+Message-Id: <20220304161036.16008-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include kvm_cache_regs.h to pick up the definition of is_guest_mode(),
-which is referenced by nested_svm_virtualize_tpr() in svm.h. Remove
-include from svm_onhpyerv.c which was done only because of lack of
-include in svm.h.
+Include the DECstation interrupt handler in opting out of
+FPU support.
 
-Fixes: 883b0a91f41ab ("KVM: SVM: Move Nested SVM Implementation to nested.c")
+Fixes a linker error:
 
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Peter Gonda <pgonda@google.com>
+mips-linux-ld: arch/mips/dec/int-handler.o: in function `fpu':
+(.text+0x148): undefined reference to `handle_fpe_int'
+
+Fixes: 183b40f992c8 ("MIPS: Allow FP support to be disabled")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: linux-mips@vger.kernel.org
 ---
-Just compile tested.
----
- arch/x86/kvm/svm/svm.h          | 2 ++
- arch/x86/kvm/svm/svm_onhyperv.c | 1 -
- 2 files changed, 2 insertions(+), 1 deletion(-)
+v2: add another ifdef block in int-handler.S; (Maciej)
+    add an ifdef block in dec/setup.c; (Maciej)
 
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index e45b5645d5e0..396d60e36b82 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -22,6 +22,8 @@
- #include <asm/svm.h>
- #include <asm/sev-common.h>
- 
-+#include "kvm_cache_regs.h"
-+
- #define __sme_page_pa(x) __sme_set(page_to_pfn(x) << PAGE_SHIFT)
- 
- #define	IOPM_SIZE PAGE_SIZE * 3
-diff --git a/arch/x86/kvm/svm/svm_onhyperv.c b/arch/x86/kvm/svm/svm_onhyperv.c
-index 98aa981c04ec..8cdc62c74a96 100644
---- a/arch/x86/kvm/svm/svm_onhyperv.c
-+++ b/arch/x86/kvm/svm/svm_onhyperv.c
-@@ -4,7 +4,6 @@
-  */
- 
- #include <linux/kvm_host.h>
--#include "kvm_cache_regs.h"
- 
- #include <asm/mshyperv.h>
- 
--- 
-2.35.1.574.g5d30c73bfb-goog
+ arch/mips/dec/int-handler.S |    6 +++---
+ arch/mips/dec/setup.c       |    2 ++
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
+--- linux-next-20220303.orig/arch/mips/dec/int-handler.S
++++ linux-next-20220303/arch/mips/dec/int-handler.S
+@@ -131,7 +131,7 @@
+ 		 */
+ 		mfc0	t0,CP0_CAUSE		# get pending interrupts
+ 		mfc0	t1,CP0_STATUS
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ 		lw	t2,cpu_fpu_mask
+ #endif
+ 		andi	t0,ST0_IM		# CAUSE.CE may be non-zero!
+@@ -139,7 +139,7 @@
+ 
+ 		beqz	t0,spurious
+ 
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ 		 and	t2,t0
+ 		bnez	t2,fpu			# handle FPU immediately
+ #endif
+@@ -280,7 +280,7 @@ handle_it:
+ 		j	dec_irq_dispatch
+ 		 nop
+ 
+-#ifdef CONFIG_32BIT
++#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+ fpu:
+ 		lw	t0,fpu_kstat_irq
+ 		nop
+--- linux-next-20220303.orig/arch/mips/dec/setup.c
++++ linux-next-20220303/arch/mips/dec/setup.c
+@@ -746,6 +746,7 @@ void __init arch_init_irq(void)
+ 		dec_interrupt[DEC_IRQ_HALT] = -1;
+ 
+ 	/* Register board interrupts: FPU and cascade. */
++#if defined(CONFIG_MIPS_FP_SUPPORT)
+ 	if (dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
+ 		struct irq_desc *desc_fpu;
+ 		int irq_fpu;
+@@ -757,6 +758,7 @@ void __init arch_init_irq(void)
+ 		desc_fpu = irq_to_desc(irq_fpu);
+ 		fpu_kstat_irq = this_cpu_ptr(desc_fpu->kstat_irqs);
+ 	}
++#endif
+ 	if (dec_interrupt[DEC_IRQ_CASCADE] >= 0) {
+ 		if (request_irq(dec_interrupt[DEC_IRQ_CASCADE], no_action,
+ 				IRQF_NO_THREAD, "cascade", NULL))

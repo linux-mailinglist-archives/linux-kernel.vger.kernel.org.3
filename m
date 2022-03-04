@@ -2,52 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5944CCB6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF124CCB6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 02:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237605AbiCDBql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 20:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S236436AbiCDBuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 20:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbiCDBqk (ORCPT
+        with ESMTP id S232793AbiCDBuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 20:46:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D1070CDA;
-        Thu,  3 Mar 2022 17:45:54 -0800 (PST)
+        Thu, 3 Mar 2022 20:50:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9963D113AC4
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 17:49:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D09BCB826EA;
-        Fri,  4 Mar 2022 01:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D5EEC004E1;
-        Fri,  4 Mar 2022 01:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1646358351;
-        bh=0aPOpaQ2BPQ0jRueWi+QUNcFY1xrd96ui2PZawQzDXg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PaM2OBojj30OBaAOBgfA7eyGSq0Fee0QhbijRiGxS3VpiLTyB8BGMkGACtw83x9S3
-         GoYuQZqYWhG+5LWcRrcWdFZ1z6P6ASBFgbDDUrwyRdRfQfDw3SRCmVlKllsKTLGR9C
-         HHeWUPxJiJV/jZV4gX3ywHErFvLXPc814GJpt5WI=
-Date:   Thu, 3 Mar 2022 17:45:50 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        kernel test robot <lkp@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH] lib/Kconfig.debug: add ARCH dependency for
- FUNCTION_ALIGN option
-Message-Id: <20220303174550.4baa4d6d228320f09807c987@linux-foundation.org>
-In-Reply-To: <20220303082048.16558-1-feng.tang@intel.com>
-References: <20220303082048.16558-1-feng.tang@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F05D861919
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 01:49:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6992C004E1;
+        Fri,  4 Mar 2022 01:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646358571;
+        bh=U1b317/wpcSgTU7Qr1li/gOaprCbUdBb29db2JJVOyM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=L9yD5otWB5qDhe2cbNJm2JTJ0aI5ueAn5Wspes/inr35LmG+7sZi/k5NsVlwKrIlc
+         0ljAK2m1NlLHfctSQABTBaFnHphwph0wPoBnDEZeXjENbf2nSuZwjiLT/33oWwC8M2
+         9eE0jdRCs7V8Txnz3CHDZ2UUpch6jY5V/EgJUTRlNBLGtLQcpbFQgvjieqsd4KsyCB
+         5VVoKdNvbH/m9b+l2JYYaa56GWRHiwTZ9u3nrewo+kmtclEJ1lIqa+88gAVG4y6EZj
+         B1v6z4GNYYZrRjES6vN/5OQGsOyWqkpGQ6HYWcrKKUbeey6FK2G9iO2cxTKO7FsBGG
+         xdQKxfid9ABzQ==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: fix to do sanity check on curseg->alloc_type
+Date:   Fri,  4 Mar 2022 09:49:13 +0800
+Message-Id: <20220304014913.3966369-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,27 +52,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  3 Mar 2022 16:20:48 +0800 Feng Tang <feng.tang@intel.com> wrote:
+As Wenqing Liu reported in bugzilla:
 
-> 0Day robots reported there is compiling issue for 'csky' ARCH
-> when CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED is enabled [1]:
-> 
-> ...
->
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -401,8 +401,8 @@ config SECTION_MISMATCH_WARN_ONLY
->  	  If unsure, say Y.
->  
->  config DEBUG_FORCE_FUNCTION_ALIGN_64B
-> -	bool "Force all function address 64B aligned" if EXPERT
-> -	depends on PPC || ARM || X86
+https://bugzilla.kernel.org/show_bug.cgi?id=215657
 
-I cannot find a kernel which contains the above line?
+- Overview
+UBSAN: array-index-out-of-bounds in fs/f2fs/segment.c:3460:2 when mount and operate a corrupted image
 
-> +	bool "Force all function address 64B aligned"
-> +	depends on EXPERT && (X86_64 || ARM64 || PPC32 || PPC64 || ARC)
->  	help
->  	  There are cases that a commit from one domain changes the function
->  	  address alignment of other domains, and cause magic performance
+- Reproduce
+tested on kernel 5.17-rc4, 5.17-rc6
+
+1. mkdir test_crash
+2. cd test_crash
+3. unzip tmp2.zip
+4. mkdir mnt
+5. ./single_test.sh f2fs 2
+
+- Kernel dump
+[   46.434454] loop0: detected capacity change from 0 to 131072
+[   46.529839] F2FS-fs (loop0): Mounted with checkpoint version = 7548c2d9
+[   46.738319] ================================================================================
+[   46.738412] UBSAN: array-index-out-of-bounds in fs/f2fs/segment.c:3460:2
+[   46.738475] index 231 is out of range for type 'unsigned int [2]'
+[   46.738539] CPU: 2 PID: 939 Comm: umount Not tainted 5.17.0-rc6 #1
+[   46.738547] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+[   46.738551] Call Trace:
+[   46.738556]  <TASK>
+[   46.738563]  dump_stack_lvl+0x47/0x5c
+[   46.738581]  ubsan_epilogue+0x5/0x50
+[   46.738592]  __ubsan_handle_out_of_bounds+0x68/0x80
+[   46.738604]  f2fs_allocate_data_block+0xdff/0xe60 [f2fs]
+[   46.738819]  do_write_page+0xef/0x210 [f2fs]
+[   46.738934]  f2fs_do_write_node_page+0x3f/0x80 [f2fs]
+[   46.739038]  __write_node_page+0x2b7/0x920 [f2fs]
+[   46.739162]  f2fs_sync_node_pages+0x943/0xb00 [f2fs]
+[   46.739293]  f2fs_write_checkpoint+0x7bb/0x1030 [f2fs]
+[   46.739405]  kill_f2fs_super+0x125/0x150 [f2fs]
+[   46.739507]  deactivate_locked_super+0x60/0xc0
+[   46.739517]  deactivate_super+0x70/0xb0
+[   46.739524]  cleanup_mnt+0x11a/0x200
+[   46.739532]  __cleanup_mnt+0x16/0x20
+[   46.739538]  task_work_run+0x67/0xa0
+[   46.739547]  exit_to_user_mode_prepare+0x18c/0x1a0
+[   46.739559]  syscall_exit_to_user_mode+0x26/0x40
+[   46.739568]  do_syscall_64+0x46/0xb0
+[   46.739584]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The root cause is we missed to do sanity check on curseg->alloc_type,
+result in out-of-bound accessing on sbi->block_count[] array, fix it.
+
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/segment.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 56211e201d51..012524db7437 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -4793,6 +4793,13 @@ static int sanity_check_curseg(struct f2fs_sb_info *sbi)
+ 
+ 		sanity_check_seg_type(sbi, curseg->seg_type);
+ 
++		if (curseg->alloc_type != LFS && curseg->alloc_type != SSR) {
++			f2fs_err(sbi,
++				 "Current segment has invalid alloc_type:%d",
++				 curseg->alloc_type);
++			return -EFSCORRUPTED;
++		}
++
+ 		if (f2fs_test_bit(blkofs, se->cur_valid_map))
+ 			goto out;
+ 
+-- 
+2.25.1
 

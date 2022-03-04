@@ -2,216 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF944CD080
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 512604CD08D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiCDIxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S235288AbiCDI5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:57:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235081AbiCDIxP (ORCPT
+        with ESMTP id S229789AbiCDI5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:53:15 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E27719E03C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:52:24 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id 5so10998346lfz.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:52:24 -0800 (PST)
+        Fri, 4 Mar 2022 03:57:36 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0482619E0A0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:56:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JVS7H4RjB5XseP/Xjap3fzMX0Z4jiKkznceF9UGo7Zs=;
-        b=BC9k+77wH7iWvQo4xoNDRfhzbdUBsksudCgI5FMkYhI6yPGZsN5yG/cANwi/w3qP/P
-         iHbEtuCTyne3zPZkM6BsdZYRudql0R2D1VkE0665hJT3Col8QNxjrKQs4Dt/O2lJT0bR
-         bwyAPjoWWnKwpenXrZvwTRR5vdofYEb98Dj8Sq/eMrQ3xhtPdnHqBaMmXDxuOiRFLxrF
-         yhaiQXv8M0A/AUqQfGc2zc54Mf9yNyg/TgDPxC72NwsANh94bSgeQBX8lZSeUPgDfAB5
-         d6BPJpPT9rfW2XLl5E3qyeIVOdTuFgK6liM7anWH+pjz83wRo7YKloFvi3oD3ASnP3Ju
-         BvOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JVS7H4RjB5XseP/Xjap3fzMX0Z4jiKkznceF9UGo7Zs=;
-        b=Xs4AWISJU46GC/0yEFRxL0sUiz/P8YlRaoWZfsz5KYVn0jiTh7vaEVbY9kpZ63W9OC
-         Kmt5nB5HR+PBt5RAkXsHFUWhJP1QJmiA8r+Zd3DSmDHxjrAZSGXNeztfs1uSQRKBI112
-         7RZtDvAvxwJ2yOdrvBpRT+PsKfJK5+ARsaZcQPMwJu94JEKMKDblvnhh6jZVPNFmx62D
-         FGwpDHGvio4WJ25omKLRYCPa7jwUvU7dZuc/DXmnphQIpFHqlXYOSo4EVjDpAg6nC2Dk
-         tFiyI+I4AXsEiDKyeNIGA3c3RMCyBCM7B2VeDgP9l04mXqlzwze4eePtg9kr8Vw5nrY5
-         ARDw==
-X-Gm-Message-State: AOAM532xr36KnkiaVnAsN0iSlfgWxjG5i0LMvirl08rPAYG7P/aJzcnv
-        uqD0hIcwr8/VhZZPkqLkKLZ1dMJzbFQJABHJZBOTyA==
-X-Google-Smtp-Source: ABdhPJziXGuvZzENri3frf+wrhfF9pwsHIxWKUsgNiKEGNqwpEsa/j3uYsWTAYwfR2t/w1cQqzDdrE/DKG99LbtagsU=
-X-Received: by 2002:a05:6512:2387:b0:43d:165:b5d1 with SMTP id
- c7-20020a056512238700b0043d0165b5d1mr23767900lfv.510.1646383942830; Fri, 04
- Mar 2022 00:52:22 -0800 (PST)
+        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=2sHraFkP3T
+        Sen0AL6X1rpeJpXgCuHZWyQHp0W57ycVI=; b=YfRz9mCSHWwDzwh8NEvvSrMIo5
+        85LxpyJe7zzjIQ5iwv66J6aXc4ReCwqOPqLuXbR6cUp2afP2cnDltjlipBxJs1oj
+        gIKnyhhmouFfP082alCF0IEMp18ffum5Suu5KdAau2kaVT8RdB2rVfKAtGbi1pJS
+        xBvkLwutjRqUswywg=
+Received: from localhost.localdomain (unknown [10.222.153.253])
+        by app1 (Coremail) with SMTP id XAUFCgA3P8MU1CFi0kgqDA--.64905S4;
+        Fri, 04 Mar 2022 16:55:58 +0800 (CST)
+From:   Xin Xiong <xiongx18@fudan.edu.cn>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+Subject: [PATCH v4] mtd: rawnand: atmel: fix refcount issue in atmel_nand_controller_init
+Date:   Fri,  4 Mar 2022 16:53:32 +0800
+Message-Id: <20220304085330.3610-1-xiongx18@fudan.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CANXhq0p-Jv2HMNu9NaG=03yudanoqV6MH=LhiCspHbj5nTn+GQ@mail.gmail.com>
- <mhng-956767d2-f9fc-4d96-8a05-f7a618e3a16b@palmer-ri-x1c9>
-In-Reply-To: <mhng-956767d2-f9fc-4d96-8a05-f7a618e3a16b@palmer-ri-x1c9>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Fri, 4 Mar 2022 16:52:11 +0800
-Message-ID: <CANXhq0o6=z0e18MGgTvVhWMP8pabV29pdJe-n=ey-p50krGZ8w@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] dmaengine: sf-pdma: Get number of channel by
- device tree
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Vinod <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: XAUFCgA3P8MU1CFi0kgqDA--.64905S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47ZF4DGrW7uF4rZw47urg_yoW8try5pF
+        WUtFW3ZayUtFs3ZFnFkayxuF1rZ3WkJFyUG39Fqa4xZ3ZxXa4jkryYqry0vFy8CFyfuF17
+        ZF42q3W8CF1YkFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl
+        6s0DM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+        YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1YiiDUUUUU==
+X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAg8PEFKp2kD5HAAAsW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 4:43 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Tue, 15 Feb 2022 22:52:14 PST (-0800), zong.li@sifive.com wrote:
-> > On Tue, Feb 15, 2022 at 8:06 PM Vinod Koul <vkoul@kernel.org> wrote:
-> >>
-> >> On 07-02-22, 14:30, Zong Li wrote:
-> >> > It currently assumes that there are always four channels, it would
-> >> > cause the error if there is actually less than four channels. Change
-> >> > that by getting number of channel from device tree.
-> >> >
-> >> > For backwards-compatibility, it uses the default value (i.e. 4) when
-> >> > there is no 'dma-channels' information in dts.
-> >> >
-> >> > Signed-off-by: Zong Li <zong.li@sifive.com>
-> >> > ---
-> >> >  drivers/dma/sf-pdma/sf-pdma.c | 21 ++++++++++++++-------
-> >> >  drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
-> >> >  2 files changed, 16 insertions(+), 13 deletions(-)
-> >> >
-> >> > diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
-> >> > index f12606aeff87..2ae10b61dfa1 100644
-> >> > --- a/drivers/dma/sf-pdma/sf-pdma.c
-> >> > +++ b/drivers/dma/sf-pdma/sf-pdma.c
-> >> > @@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
-> >> >  static int sf_pdma_probe(struct platform_device *pdev)
-> >> >  {
-> >> >       struct sf_pdma *pdma;
-> >> > -     struct sf_pdma_chan *chan;
-> >> >       struct resource *res;
-> >> > -     int len, chans;
-> >> >       int ret;
-> >> >       const enum dma_slave_buswidth widths =
-> >> >               DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-> >> > @@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
-> >> >               DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
-> >> >               DMA_SLAVE_BUSWIDTH_64_BYTES;
-> >> >
-> >> > -     chans = PDMA_NR_CH;
-> >> > -     len = sizeof(*pdma) + sizeof(*chan) * chans;
-> >> > -     pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-> >> > +     pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
-> >> >       if (!pdma)
-> >> >               return -ENOMEM;
-> >> >
-> >> > -     pdma->n_chans = chans;
-> >> > +     ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-> >> > +                                &pdma->n_chans);
-> >> > +     if (ret) {
-> >> > +             dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-> >>
-> >> This is useful for only debug i think, so dev_dbg perhaps
-> >>
-> >
-> > Thanks for your suggestion, let me change it in the next version.
->
-> Not sure if I'm missing something, but I don't see a v6.  I'm going to
-> assume that one will be sent, but the suggested changes look minor
-> enough so
->
+The reference counting issue happens in several error handling paths
+on a refcounted object "nc->dmac". In these paths, the function simply
+returns the error code, forgetting to balance the reference count of
+"nc->dmac", increased earlier by dma_request_channel(), which may
+cause refcount leaks.
 
-I have been sending the v6 patchset, thank you for the review.
+Fix it by decrementing the refcount of specific object in those error
+paths.
 
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> LMK if you guys were expecting this to go in via the RISC-V tree,
-> otherwise I'll assume this aimed at the dmaengine tree.  Probably best to keep
-> all three together, so feel free to take the DTS updates as well -- having some
-> shared tag never hurts, but the DTs don't move that much so any conflicts
-> should be straight-forward to just fix at merge time.
->
+Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
+Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+---
+V3 -> V4: Removed useless condition check
+V2 -> V3: Removed redundant lines
+V1 -> V2: Rewrited the error handling block
+---
+ drivers/mtd/nand/raw/atmel/nand-controller.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-Yes, if the v6 version is good enough and you could pick them into
-RISC-V tree, I'd appreciate that. Thanks!
+diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
+index f3276ee9e4fe..ddd93bc38ea6 100644
+--- a/drivers/mtd/nand/raw/atmel/nand-controller.c
++++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
+@@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
+ 	nc->mck = of_clk_get(dev->parent->of_node, 0);
+ 	if (IS_ERR(nc->mck)) {
+ 		dev_err(dev, "Failed to retrieve MCK clk\n");
+-		return PTR_ERR(nc->mck);
++		ret = PTR_ERR(nc->mck);
++		goto out_release_dma;
+ 	}
+ 
+ 	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
+ 	if (!np) {
+ 		dev_err(dev, "Missing or invalid atmel,smc property\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto out_release_dma;
+ 	}
+ 
+ 	nc->smc = syscon_node_to_regmap(np);
+@@ -2074,10 +2076,16 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
+ 	if (IS_ERR(nc->smc)) {
+ 		ret = PTR_ERR(nc->smc);
+ 		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
+-		return ret;
++		goto out_release_dma;
+ 	}
+ 
+ 	return 0;
++
++out_release_dma:
++	if (nc->dmac)
++		dma_release_channel(nc->dmac);
++
++	return ret;
+ }
+ 
+ static int
+-- 
+2.25.1
 
-> Thanks!
->
-> >> > +             pdma->n_chans = PDMA_MAX_NR_CH;
-> >> > +     }
-> >> > +
-> >> > +     if (pdma->n_chans > PDMA_MAX_NR_CH) {
-> >> > +             dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
-> >> > +             return -EINVAL;
-> >> > +     }
-> >> >
-> >> >       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> >> >       pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-> >> > @@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
-> >> >       struct sf_pdma_chan *ch;
-> >> >       int i;
-> >> >
-> >> > -     for (i = 0; i < PDMA_NR_CH; i++) {
-> >> > +     for (i = 0; i < pdma->n_chans; i++) {
-> >> >               ch = &pdma->chans[i];
-> >> >
-> >> >               devm_free_irq(&pdev->dev, ch->txirq, ch);
-> >> > @@ -574,6 +580,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
-> >> >
-> >> >  static const struct of_device_id sf_pdma_dt_ids[] = {
-> >> >       { .compatible = "sifive,fu540-c000-pdma" },
-> >> > +     { .compatible = "sifive,pdma0" },
-> >> >       {},
-> >> >  };
-> >> >  MODULE_DEVICE_TABLE(of, sf_pdma_dt_ids);
-> >> > diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-> >> > index 0c20167b097d..8127d792f639 100644
-> >> > --- a/drivers/dma/sf-pdma/sf-pdma.h
-> >> > +++ b/drivers/dma/sf-pdma/sf-pdma.h
-> >> > @@ -22,11 +22,7 @@
-> >> >  #include "../dmaengine.h"
-> >> >  #include "../virt-dma.h"
-> >> >
-> >> > -#define PDMA_NR_CH                                   4
-> >> > -
-> >> > -#if (PDMA_NR_CH != 4)
-> >> > -#error "Please define PDMA_NR_CH to 4"
-> >> > -#endif
-> >> > +#define PDMA_MAX_NR_CH                                       4
-> >> >
-> >> >  #define PDMA_BASE_ADDR                                       0x3000000
-> >> >  #define PDMA_CHAN_OFFSET                             0x1000
-> >> > @@ -118,7 +114,7 @@ struct sf_pdma {
-> >> >       void __iomem            *membase;
-> >> >       void __iomem            *mappedbase;
-> >> >       u32                     n_chans;
-> >> > -     struct sf_pdma_chan     chans[PDMA_NR_CH];
-> >> > +     struct sf_pdma_chan     chans[PDMA_MAX_NR_CH];
-> >>
-> >> why waste memory allocating max, we know number of channels in probe,
-> >> why not allocate runtime?
-> >>
-> >
-> > I kept it there because I'd like to do minimum change in this patch
-> > set. You're right, let me change it in the next version.
-> >
-> >> --
-> >> ~Vinod

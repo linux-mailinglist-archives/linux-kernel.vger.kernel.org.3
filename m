@@ -2,170 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEDE4CCC3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C0F4CCC4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 04:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237850AbiCDDYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 22:24:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
+        id S236573AbiCDD3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 22:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiCDDYg (ORCPT
+        with ESMTP id S232208AbiCDD33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 22:24:36 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E5015695E;
-        Thu,  3 Mar 2022 19:23:49 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2240ivIS013852;
-        Fri, 4 Mar 2022 03:23:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=avQQJ1BZA+nTe6OBN63QdRiSbCQVf5zhg395wL00ARQ=;
- b=uvw5MXMWsiGVOwNj5+zwPJYfwZMUirqmKg+YKgjVu+h9FA36ctxGm+V9hSy90yWLb2gg
- AmAdjHdn96rnmYA074aJBbEEV6od5tiRDXPVIu1a2XvAmoPInVjaiGc8cKSALFRIjoBc
- TAckp/kmFrjJIs8Uu4h6ShpHf98SKuaeuZNLNF7unzKaS5fAR/riRk2DmsPNfmPf8oOw
- EwuYHE6S3/5VNEIhiEpAYe0oOrazhoywLSn6+dVvJnMy/AhoPwK4HX6IpAm69bppi8Cu
- P7YuDL7+AbFfkOk/8CbLCc60erA9MzJMFlnLg8g+2aQooD7ho3rztLwAkc3dKnngvkJG Tg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ek4hv8n5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Mar 2022 03:23:41 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2243FRqb053135;
-        Fri, 4 Mar 2022 03:23:40 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2102.outbound.protection.outlook.com [104.47.55.102])
-        by userp3020.oracle.com with ESMTP id 3ek4jg10j9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Mar 2022 03:23:39 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G/W7hzBiyf5KxvWIB+H4DhP4oT4QWTTR7DlaGhUGuHzfuF7XptqRzLmws3AHto3OMO0lrSGMa8D5z2lRwlyRqOMsESCNcoao+O7g18hGw4Ut0BpY0O+gNGy1LngJ1IFK2IbQtYFR2e9Vq2TWkp+01Ds1r8rGHBZPIjhx0WNqZPLEWyVsuQj3ydodZ1HZHaKWTuETI6+Tx9/dchBbxQ+zwolcOM+hb8CGXRKFWKIYwXaC9C1LpSmc9c1lrIBItcwsUwuw+vTxDZnfNtGlSJy0tB9blhwUtfvya/89AAXZ51+m29tf+Kq+/QQQSLBK3E5yVbzEFElmr9cL218SexOK5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=avQQJ1BZA+nTe6OBN63QdRiSbCQVf5zhg395wL00ARQ=;
- b=kLBZ2eLqBoHYTs6l6NH590e19NlxxqgIJ19PDOL3uD03IXMiDEOGIZlb100KLenSStZBIIhVFU7WunYeSGwF9BmEEfj72/65TuZRRfXz+3BO/RoLBQf4Sc8qHRh5r/4yeRZlDjZX+PVNdnqijVtm1R1/dhsG98/da05ZkUW/nWzzWiie4nQIGPR1NdR+nYWv8PvsF84wnQdN/Nl1UJyxVhbSMt+v5X4qtOP7BJgnGwt1feelTR1sYwPD3fu0SYG/wdSuyhay1kSRPGsXCncvLm8g1HHGn4LjCylYAo6JLz92V8T3pByJNrJXv+7qJQo+DL8UE03q0T1OU5fTrfcTig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=avQQJ1BZA+nTe6OBN63QdRiSbCQVf5zhg395wL00ARQ=;
- b=oe3OpuPkrGH0DtPkSWFrbHSO1GuRvnFgyWcNt5iiVksAkIucn0GCt/zWnuGXQq/c7obVceNJ8NLKv/MFCMgtmBbmlI1a6dz1Rf+uSce9Uychrcn8SEiAQmhk5vOKUOmN+yYDtHAwdUER6128d2IacIFvTgZWKxIeKmlF6ZRjlhc=
-Received: from PH0PR10MB5706.namprd10.prod.outlook.com (2603:10b6:510:148::10)
- by BN7PR10MB2563.namprd10.prod.outlook.com (2603:10b6:406:c3::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
- 2022 03:23:37 +0000
-Received: from PH0PR10MB5706.namprd10.prod.outlook.com
- ([fe80::d469:7ab:8ae2:1e6f]) by PH0PR10MB5706.namprd10.prod.outlook.com
- ([fe80::d469:7ab:8ae2:1e6f%6]) with mapi id 15.20.5038.015; Fri, 4 Mar 2022
- 03:23:37 +0000
-Message-ID: <52f97b9f-804b-3d06-9f59-28607a622d13@oracle.com>
-Date:   Fri, 4 Mar 2022 11:23:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [syzbot] KASAN: use-after-free Read in btrfs_scan_one_device (2)
-Content-Language: en-US
-To:     syzbot <syzbot+82650a4e0ed38f218363@syzkaller.appspotmail.com>,
-        dsterba@suse.com, hdanton@sina.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000bece8f05d95afc28@google.com>
-From:   Anand Jain <anand.jain@oracle.com>
-In-Reply-To: <000000000000bece8f05d95afc28@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR04CA0204.apcprd04.prod.outlook.com
- (2603:1096:4:187::16) To PH0PR10MB5706.namprd10.prod.outlook.com
- (2603:10b6:510:148::10)
+        Thu, 3 Mar 2022 22:29:29 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A667485F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 19:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646364522; x=1677900522;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qhqM0wTLtPPZL2LBIfN1EQS8DLyl5brGVgQ13YNGIIA=;
+  b=Ukm9Wn5kVgtviI8dm9eJTjTT50fz9zScetCDpARBLbLl3r3/QrH75UbZ
+   v+X+zIkmdCrECxutwyfW3zo3eBImTwhW5uAF4U2v42F2ItwgjlxiS/CE9
+   +jDRdYR4K3rQmf5xra/7xoj1p5u2593ewwCVskid/sr1hW4TT59F4gpk9
+   v2jobxqWJ5UZk+Flsv7qrZ0Oayz3hc8orFgVzdEXT0xkVHhtDUJvejQrv
+   8JCE9r9+byz/fM7SAImbAj/gHGV6Q9EwfjC+GLuay0ofEy5Fz4zHtWZNC
+   I8fT1W9j2hxN6oFlEr2GnB8h18NxCTKWN1JU6paDuni37g9elw5Oz7oe6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="317108689"
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="317108689"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 19:28:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
+   d="scan'208";a="508847819"
+Received: from lkp-server01.sh.intel.com (HELO ccb16ba0ecc3) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 Mar 2022 19:28:39 -0800
+Received: from kbuild by ccb16ba0ecc3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPycR-0001EM-2W; Fri, 04 Mar 2022 03:28:39 +0000
+Date:   Fri, 4 Mar 2022 11:28:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/deprecated/android-4.14-p-release
+ 137/6167] security/commoncap.c:75:5: sparse: sparse: symbol '__cap_capable'
+ was not declared. Should it be static?
+Message-ID: <202203041153.II8SFndk-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8c11a4bc-4f2a-45d4-5367-08d9fd8e5ede
-X-MS-TrafficTypeDiagnostic: BN7PR10MB2563:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR10MB2563F24A446A96578BC8E758E5059@BN7PR10MB2563.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O6totZ0QnckhQuH3332v9Hu6xFXJXbLEVROP8qAOZn6M10d9j0faS/XGGcYvEa7a6zz2Prrk6dITnnVFthYruLNpSy5XRuQrz3WCuK7/mhqFT4IBU8qSfvD6g0HdJQ41j3KPdl9kZhcF68wKlSm1b7xOrAtkXFtBK7T0fX68w6cB8YWQcEj4AtP5F6HbNMgBHbDbMdwIuprXpY/C98yChtBnp4T6esLF5PCvLza5DxUKX23cvtNbF2srYIc/38bPRWqy1Y2k5U/0qKcBmN6GAlRlteKorfvVXh9JKSvjbzvVisCVbFbgpFV4HdlrUCc/BudCgtbGH0Q9fxsXdiOH+6NpicX2Km6iDqZfbrSEp/F26yZxO6P98fCAqGty8784W2+r6QP80M1BlQMJ0IIv2lrU6hNoRes5NQgeWCvrnp6t8WnMECdr7Hq5658q8PzJKOcTWG78UwsKmKKvf5kaXRFa9UH96xBHSrdHMVAy9Qkudba8i0CiNoLlJ44Tw8zddTzfYKMW31T9YjgC8wKYQoDcNE8Z/EAxAF9EXJngBfdOUBjA0wi7Ft7CXt/G4Igh8uMK0CmbyJo7i/UjuBDKaMzc0xWvzc2PlX7krujaBHYuv9siMUA69npjVgsbQQyvGss+Z0T9kfFjffF0fXF6uOYRb4ILMFQRv3IdNDzv4THX+FfGXGdPH/C5N8aO51knbJw2w8ngLfTt3wc0TaTc6n3vlNp8FW5fWcX+AXkcH1QARKmoxd9k9hh22kHr3fHo0kwwnmneBFsITDTCn/TNG1aJla3D0jJdTJXcEFQ68zoCh3rSsovZL/PZog5tm6E1wa0caaVBfHo/fABNLETFKy4SeDfmQixFrZi7FOHsH0HIz5V/sEPNvqlxZMKhfS3U
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5706.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(31696002)(8676002)(6666004)(38100700002)(6512007)(316002)(86362001)(6506007)(66946007)(66556008)(66476007)(4744005)(966005)(6486002)(5660300002)(508600001)(8936002)(26005)(186003)(36756003)(31686004)(2616005)(44832011)(99710200001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RUtMSzVkZ0QzUFpyei9xekRKT2hMK1k0RitJTndPVEVOeWVHdDdRRUFpc2M0?=
- =?utf-8?B?bWJ4YmlqQVVjMjZ4TmdLb242MllYbE4yVU4vZ3Y1cCtkaXRSWEJURkRQSWxB?=
- =?utf-8?B?VVQ0UHpldUVYdDVtckJLb3pYMDVmNVR1dG9SWlUyNmc4TVA3QVQ0ajdpQlpx?=
- =?utf-8?B?cWpDS3d2WmJVRldZMlh2WFhjYk9UamF5ZTJMRkNkMTVzZWppNzEwanl6dFZS?=
- =?utf-8?B?Z0xVbUE5S21XeUE0OStueWVKdGova1BxSDJabUVEdjRJSzBGS1hnZDdBVnNu?=
- =?utf-8?B?cmtiQzVUNXhTR3pwbmxRdE1pd25BSFF2aVJLSkpUNy9jQTBoNTRaMzRUVnBi?=
- =?utf-8?B?a3oxdmQyWFpsbWhIblNWUGhZUVlCVEhRRGZWSUoxczJCOEZXN29wUkMwUzhu?=
- =?utf-8?B?VWVaTmhiSUJZRWorclVSVjlZQkhUcFp4OUxRTWZtZEdCVXE4ZjZMQmdRUFRT?=
- =?utf-8?B?U1JwQm05UzVjd202U1VFZ1hZQko1WDBNWGo3Zkt4TG9Rb1pWNTNBTDVqYTBS?=
- =?utf-8?B?RG9qdEJkR2prZ0o3QTF2ckhWUGkzZEdCcHhRYnB0N3pJYnE5VFNJMkc5NHdj?=
- =?utf-8?B?OG12Sy9mbUdHNjdNdVBnRjJ0czllS3V3MmQ2LzBDUnozNEZLTkFEZXNIM1NH?=
- =?utf-8?B?MDBmUHptSXQwNm42ODY1cGc0VG1NR1cwVkJUelV2NEplenYvUzlTMmFiRDdU?=
- =?utf-8?B?TG0vM1IycE1LMWhlanBlUGVJd0RZRnhBcEJuNkV4ZDhMTHVTazlhYXFzRFhn?=
- =?utf-8?B?enNjRlNlL3oveE5qODNuSXFGZVFpLzZBMExRYlA4cXpKREZEVWJtbkpNUjNS?=
- =?utf-8?B?MG5mZkp5bGNLdDIxYUZYV2lVcWl0VkZlUld1Ym5UQlY3UW9uWDhkMUVSbVg5?=
- =?utf-8?B?UGdzcGR4eWtwY0tsaklpamhtR3RwZFRnWVUrLzZ0ZExTckZ0S1VCV1FrOTRS?=
- =?utf-8?B?ZXZnSkhFVStkbTZqdHRjNlJGdkVtV01IWWIvckpaakVTc1dMbnV3M2diM1JL?=
- =?utf-8?B?cC9zSStvdjEvR2ZIZk5iQk5mQThTblg5NFdLNFlQbUEzMGgvUnFxSGJXNnk0?=
- =?utf-8?B?SDFXS1JJU2c1MkNFQXhZcHEwMUxyeVVudXBaWGhOVjlhZjIrbUVqZUo0MjZy?=
- =?utf-8?B?eGI0bjl0Nm9PWS9yUkVsK0VCWVE0U0o3Ulp6Vy9QR09aeUg5cWRld2tpL2Ri?=
- =?utf-8?B?cjQzdzhLNU9IS2JURGtZM3EzMmxPYU44cVZuV3NtZ01Sa3pnS0UwT2JsSGFp?=
- =?utf-8?B?MGpDaWVnWkc3MFBwOCtzdVpOOGtNb1ZZc0ppVThhRFdCU2pWeDMxYlZhdmFZ?=
- =?utf-8?B?OVkxUmpVUEtwUlBCWFA3WEhOb3BwNEtZU3pGV0xhc2JZTWF3WFJGRXhSTW01?=
- =?utf-8?B?dEZrYWhUSWRuMjluV2tnTEFTWE5JbElMMEtMQ3NvNStYWWprTG9HMEdEQVcv?=
- =?utf-8?B?cS9Iayt3SlNWMHloSGVtbFdtYWMxeldTKzlUZzJTbmo1UFI5MXZGWW1yUEFj?=
- =?utf-8?B?TjVyR3h3Ni8wUEJYN3lYMTM1bWowVDE2NjM4U3RLTkZ0dW9tZDJRUWpjcHdw?=
- =?utf-8?B?ZUFqVUdCNEp2Ny83a0Nic0RWSHprZ1hZR05ocWR1S2pJUHNjaE1nR21MTi9m?=
- =?utf-8?B?Zys4Y1AxK1pYdEpQenNOTFZjZXdyRjFxVWR4RXRTUmE5d3g5SndPS2lNeG5E?=
- =?utf-8?B?dGtRbXB6RDI4U2pFV2RaWGhlZmFTRi8xbCtQZjNhK1NEY2E4R0RpM1N1NHNp?=
- =?utf-8?B?SGU4OG1rdUtRVDY1UFBqZXAxRm40RnZnbElPNHhPdTZLS0NWcWR5QUEyLzNT?=
- =?utf-8?B?dHhZdlVLT213bDVvaGNJL2hyV21LeEk3SXJwRVVjMlh0NCtSR1VrdWZpaHBk?=
- =?utf-8?B?aC9EN05obFhDUGFGQlNJSlNLeWxKSHlLOUQ0MHFqbnNlS3VmWXJacEcyamRj?=
- =?utf-8?B?dFRaNHpEaTVYOVFESHl3OGc0amNuYnVKSWV6Y0VPajREYzA0UWM1a1RheDFZ?=
- =?utf-8?B?S0w0MnVMZFVaYmc4RFBRdE1CTUFiUStMZC80MDI2NzlTd1hZY09lM2ZRY2ps?=
- =?utf-8?B?Yy9lQlIrT0pQNjhFUTJnL2dNeEtQWU53SzNmcHdNTmUzZFN6WXplM09XTXcv?=
- =?utf-8?B?MGxDVm1yUjRvQkRncVF2eXljWkxnRVo5dEVNQ0lrdmtEQ3BseU9jUG52RVIz?=
- =?utf-8?Q?t0/LPWlqSDMLTNIvzDD/ILo=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c11a4bc-4f2a-45d4-5367-08d9fd8e5ede
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5706.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 03:23:37.2821
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MhonpKqeSz1AW/msiMk9cdFt9d5vQhYqH+kkrsOmMoxT1ngmbn/XEpRbJGylLUjsbBDuT7jBJCcnuYV9ihOJhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR10MB2563
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10275 signatures=686983
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- adultscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203040013
-X-Proofpoint-GUID: e1w2phpbxLmX9pNg7GVqLq6U9D2yqVbd
-X-Proofpoint-ORIG-GUID: e1w2phpbxLmX9pNg7GVqLq6U9D2yqVbd
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/deprecated/android-4.14-p-release
+head:   0ca5d5ac9152d01b3494fb2efb5390319eb9904a
+commit: 2b02b4ab89b9cba5aec936046d8538962c5142fc [137/6167] ANDROID: net: paranoid: commoncap: Begin to warn users of implicit PARANOID_NETWORK capability grants
+config: i386-randconfig-s001-20211101 (https://download.01.org/0day-ci/archive/20220304/202203041153.II8SFndk-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/2b02b4ab89b9cba5aec936046d8538962c5142fc
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/deprecated/android-4.14-p-release
+        git checkout 2b02b4ab89b9cba5aec936046d8538962c5142fc
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
 
-::
-> Tested on:
-> 
-> commit:         2293be58 Merge tag 'trace-v5.17-rc4' of git://git.kern..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-::
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=133011f1700000
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-There is no commit id in the patch. The patch diff doesn't match any
-changes in the current misc-next?
+sparse warnings: (new ones prefixed by >>)
+>> security/commoncap.c:75:5: sparse: sparse: symbol '__cap_capable' was not declared. Should it be static?
+   security/commoncap.c:474:31: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] magic @@     got int @@
+   security/commoncap.c:474:31: sparse:     expected restricted __le32 [usertype] magic
+   security/commoncap.c:474:31: sparse:     got int
+   security/commoncap.c:475:33: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] nsmagic @@     got unsigned int [usertype] @@
+   security/commoncap.c:475:33: sparse:     expected restricted __le32 [usertype] nsmagic
+   security/commoncap.c:475:33: sparse:     got unsigned int [usertype]
+   security/commoncap.c:476:29: sparse: sparse: restricted __le32 degrades to integer
+   security/commoncap.c:477:39: sparse: sparse: invalid assignment: |=
+   security/commoncap.c:477:39: sparse:    left side has type restricted __le32
+   security/commoncap.c:477:39: sparse:    right side has type int
+   security/commoncap.c:479:42: sparse: sparse: cast from restricted __le32
+   security/commoncap.c:1226:41: sparse: sparse: dubious: !x | y
+   security/commoncap.c:1307:27: sparse: sparse: symbol 'capability_hooks' was not declared. Should it be static?
+   security/commoncap.c:75:5: warning: no previous declaration for '__cap_capable' [-Wmissing-declarations]
+    int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
+        ^~~~~~~~~~~~~
+   In file included from include/linux/capability.h:16:0,
+                    from security/commoncap.c:10:
+   security/commoncap.c: In function 'cap_prctl_drop':
+   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:1112:7: note: in expansion of macro 'cap_valid'
+     if (!cap_valid(cap))
+          ^~~~~~~~~
+   security/commoncap.c: In function 'cap_task_prctl':
+   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:1142:8: note: in expansion of macro 'cap_valid'
+      if (!cap_valid(arg2))
+           ^~~~~~~~~
+   include/uapi/linux/capability.h:372:27: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+    #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+                              ^
+   security/commoncap.c:1226:10: note: in expansion of macro 'cap_valid'
+      if (((!cap_valid(arg3)) | arg4 | arg5))
+             ^~~~~~~~~
 
-Thanks, Anand
+vim +/__cap_capable +75 security/commoncap.c
+
+    59	
+    60	/**
+    61	 * __cap_capable - Determine whether a task has a particular effective capability
+    62	 * @cred: The credentials to use
+    63	 * @ns:  The user namespace in which we need the capability
+    64	 * @cap: The capability to check for
+    65	 * @audit: Whether to write an audit message or not
+    66	 *
+    67	 * Determine whether the nominated task has the specified capability amongst
+    68	 * its effective set, returning 0 if it does, -ve if it does not.
+    69	 *
+    70	 * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
+    71	 * and has_capability() functions.  That is, it has the reverse semantics:
+    72	 * cap_has_capability() returns 0 when a task has a capability, but the
+    73	 * kernel's capable() and has_capability() returns 1 for this case.
+    74	 */
+  > 75	int __cap_capable(const struct cred *cred, struct user_namespace *targ_ns,
+    76			int cap, int audit)
+    77	{
+    78		struct user_namespace *ns = targ_ns;
+    79	
+    80		/* See if cred has the capability in the target user namespace
+    81		 * by examining the target user namespace and all of the target
+    82		 * user namespace's parents.
+    83		 */
+    84		for (;;) {
+    85			/* Do we have the necessary capabilities? */
+    86			if (ns == cred->user_ns)
+    87				return cap_raised(cred->cap_effective, cap) ? 0 : -EPERM;
+    88	
+    89			/*
+    90			 * If we're already at a lower level than we're looking for,
+    91			 * we're done searching.
+    92			 */
+    93			if (ns->level <= cred->user_ns->level)
+    94				return -EPERM;
+    95	
+    96			/* 
+    97			 * The owner of the user namespace in the parent of the
+    98			 * user namespace has all caps.
+    99			 */
+   100			if ((ns->parent == cred->user_ns) && uid_eq(ns->owner, cred->euid))
+   101				return 0;
+   102	
+   103			/*
+   104			 * If you have a capability in a parent user ns, then you have
+   105			 * it over all children user namespaces as well.
+   106			 */
+   107			ns = ns->parent;
+   108		}
+   109	
+   110		/* We never get here */
+   111	}
+   112	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

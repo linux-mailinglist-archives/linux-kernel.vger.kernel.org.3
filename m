@@ -2,130 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1AF4CD30A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6F04CD318
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238707AbiCDLIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
+        id S236618AbiCDLM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238939AbiCDLHu (ORCPT
+        with ESMTP id S234098AbiCDLMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:07:50 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754501B018C;
-        Fri,  4 Mar 2022 03:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646392019; x=1677928019;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dgOjENX6l9BVZn567uS9ZeSd/FqmZZeUVUNHkZSQekg=;
-  b=O0gNE6uF8V9gLp9SEdaqX/lN5lAZSRDuw+OzGxBN3vhBBwNtcyTJEQkP
-   1QQ3TQh0hUy554jhbal64pJrvkjhhgR0+aplAHUyi4Df9PFvRLp0SYLM3
-   c4fT2qkizWx0gqTm5XIvTia0P39BWH6Pq40FOr9ogIMpP//XST4+qN4tn
-   bNGZF5yWT0/LGh6SOGJ0c7r0yK5Brw6QqdIwi0emjrOvZINwcm/JUQC8M
-   dtFeRIn5cerkEJQU+bZCcTFSmylyvYAgYZFnREl+Qgch1FJmK0K61SHHx
-   N/BUyhSkvyH6V/95hBZXSTqjlKRasB6edfZ/b3Qi2ROe1YX2egAJObonm
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
-   d="scan'208";a="148088280"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 04:06:58 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 04:06:57 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 4 Mar 2022 04:06:54 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <casper.casan@gmail.com>,
-        <richardcochran@gmail.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 9/9] net: sparx5: Implement get_ts_info
-Date:   Fri, 4 Mar 2022 12:09:00 +0100
-Message-ID: <20220304110900.3199904-10-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220304110900.3199904-1-horatiu.vultur@microchip.com>
-References: <20220304110900.3199904-1-horatiu.vultur@microchip.com>
+        Fri, 4 Mar 2022 06:12:54 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C33184B42
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:12:06 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nQ5qW-0000S2-O5; Fri, 04 Mar 2022 12:11:40 +0100
+Message-ID: <f9e46b61-37e5-a280-edb0-27f8e81a8680@pengutronix.de>
+Date:   Fri, 4 Mar 2022 12:11:32 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
+Content-Language: en-US
+To:     Tokunori Ikegami <ikegami.t@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
+        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Brian Norris <computersforpeace@gmail.com>,
+        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
+        cyrille.pitchen@wedev4u.fr,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linuxppc-dev@lists.ozlabs.org
+References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
+ <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
+ <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
+ <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
+ <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
+ <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
+ <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
+ <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
+ <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
+ <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement the function get_ts_info in ethtool_ops which is needed to get
-the HW capabilities for timestamping.
+Hello Tokunori-san,
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../microchip/sparx5/sparx5_ethtool.c         | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+On 20.02.22 13:22, Tokunori Ikegami wrote:
+> Hi Ahmad-san,
+> 
+> Could you please try the version 2 patch attached for the error case?
+> This version is to check the DQ true data 0xFF by chip_good().
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c b/drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c
-index 10b866e9f726..6b0febcb7fa9 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c
-@@ -1183,6 +1183,39 @@ static void sparx5_config_port_stats(struct sparx5 *sparx5, int portno)
- 		 sparx5, ANA_AC_PORT_STAT_CFG(portno, SPX5_PORT_POLICER_DROPS));
- }
- 
-+static int sparx5_get_ts_info(struct net_device *dev,
-+			      struct ethtool_ts_info *info)
-+{
-+	struct sparx5_port *port = netdev_priv(dev);
-+	struct sparx5 *sparx5 = port->sparx5;
-+	struct sparx5_phc *phc;
-+
-+	if (!sparx5->ptp)
-+		return ethtool_op_get_ts_info(dev, info);
-+
-+	phc = &sparx5->phc[SPARX5_PHC_PORT];
-+
-+	info->phc_index = phc->clock ? ptp_clock_index(phc->clock) : -1;
-+	if (info->phc_index == -1) {
-+		info->so_timestamping |= SOF_TIMESTAMPING_TX_SOFTWARE |
-+					 SOF_TIMESTAMPING_RX_SOFTWARE |
-+					 SOF_TIMESTAMPING_SOFTWARE;
-+		return 0;
-+	}
-+	info->so_timestamping |= SOF_TIMESTAMPING_TX_SOFTWARE |
-+				 SOF_TIMESTAMPING_RX_SOFTWARE |
-+				 SOF_TIMESTAMPING_SOFTWARE |
-+				 SOF_TIMESTAMPING_TX_HARDWARE |
-+				 SOF_TIMESTAMPING_RX_HARDWARE |
-+				 SOF_TIMESTAMPING_RAW_HARDWARE;
-+	info->tx_types = BIT(HWTSTAMP_TX_OFF) | BIT(HWTSTAMP_TX_ON) |
-+			 BIT(HWTSTAMP_TX_ONESTEP_SYNC);
-+	info->rx_filters = BIT(HWTSTAMP_FILTER_NONE) |
-+			   BIT(HWTSTAMP_FILTER_ALL);
-+
-+	return 0;
-+}
-+
- const struct ethtool_ops sparx5_ethtool_ops = {
- 	.get_sset_count         = sparx5_get_sset_count,
- 	.get_strings            = sparx5_get_sset_strings,
-@@ -1194,6 +1227,7 @@ const struct ethtool_ops sparx5_ethtool_ops = {
- 	.get_eth_mac_stats      = sparx5_get_eth_mac_stats,
- 	.get_eth_ctrl_stats     = sparx5_get_eth_mac_ctrl_stats,
- 	.get_rmon_stats         = sparx5_get_eth_rmon_stats,
-+	.get_ts_info            = sparx5_get_ts_info,
- };
- 
- int sparx_stats_init(struct sparx5 *sparx5)
+I had a similar patch locally as well at first. I just tested yours
+and I can't reproduce the issue.
+
+> But I am not sure if this works or not since the error is possible to be caused by Hi-Z 0xff on floating bus or etc.
+
+That it works for me could be because of Hi-Z 0xff, which is why
+decided against it.
+
+>>>>> What seems to work for me is checking if chip_good or chip_ready
+>>>>> and map_word is equal to 0xFF. I can't justify why this is ok though.
+>>>>> (Worst case bus is floating at this point of time and Hi-Z is read
+>>>>> as 0xff on CPU data lines...)
+>>>> Sorry I am not sure about this.
+>>>> I thought the chip_ready() itself is correct as implemented as the data sheet in the past.
+>>>> But it did not work correctly so changed to use chip_good() instead as it is also correct.
+>>> What exactly in the datasheet makes you believe chip_good is not appropriate?
+>> I just mentioned about the actual issue behaviors as not worked chip_good() on S29GL964N and not worked chip_ready() on MX29GL512FHT2I-11G before etc.
+>> Anyway let me recheck the data sheet details as just checked it again quickly but needed more investigation to understand.
+> 
+> As far as I checked still both chip_good() and chip_ready() seem correct but still the root cause is unknown.
+> If as you mentioned the issue was cased by the DQ true data 0xFF I am not sure why the read work without any error after the write operation.
+> Also if the error was caused by the Hi-Z 0xff on floating bus as mentioned I am not sure why the read work without any error after the write operation with chip_ready().
+> Sorry anyway the root cause is also unknown when the write operation was changed to use chip_good() instead of chip_ready().
+
+I've be ok with v1 then. Restores working behavior for me and shouldn't break others.
+
+Cheers and thanks again,
+Ahmad
+
+> 
+> Regards,
+> Ikegami
+> 
+>>
+>> Regards,
+>> Ikegami
+>>
+>>>
+>>> Cheers,
+>>> Ahmad
+>>>
+>>>
+
+
 -- 
-2.33.0
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

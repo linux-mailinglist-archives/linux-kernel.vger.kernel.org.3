@@ -2,232 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337244CD394
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B893B4CD39C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239639AbiCDLgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
+        id S239646AbiCDLjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:39:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235309AbiCDLgq (ORCPT
+        with ESMTP id S233285AbiCDLjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:36:46 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CE71B1279;
-        Fri,  4 Mar 2022 03:35:58 -0800 (PST)
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K95Nw2qWpz67nFV;
-        Fri,  4 Mar 2022 19:34:40 +0800 (CST)
-Received: from lhreml713-chm.china.huawei.com (10.201.108.64) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 4 Mar 2022 12:35:56 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml713-chm.china.huawei.com (10.201.108.64) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 4 Mar 2022 11:35:55 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Fri, 4 Mar 2022 11:35:55 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     "Wangzhou (B)" <wangzhou1@hisilicon.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        Xu Zaibo <xuzaibo@huawei.com>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "Jonathan Cameron" <jonathan.cameron@huawei.com>
-Subject: RE: [PATCH v8 3/9] hisi_acc_qm: Move VF PCI device IDs to common
- header
-Thread-Topic: [PATCH v8 3/9] hisi_acc_qm: Move VF PCI device IDs to common
- header
-Thread-Index: AQHYL1K65T0xdQtNbkGb+oampkIrK6yu93mAgAAhk5A=
-Date:   Fri, 4 Mar 2022 11:35:55 +0000
-Message-ID: <7825c26f18d441acb046fe6aaade8926@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
- <20220303230131.2103-4-shameerali.kolothum.thodi@huawei.com>
- <e0ccebeb-b5ff-5bb7-87c9-c453eb71fa3f@hisilicon.com>
-In-Reply-To: <e0ccebeb-b5ff-5bb7-87c9-c453eb71fa3f@hisilicon.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.88.247]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 4 Mar 2022 06:39:08 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3386E6D877;
+        Fri,  4 Mar 2022 03:38:20 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id r7so9217603iot.3;
+        Fri, 04 Mar 2022 03:38:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=DM1hTxrVh4GrRxbketJ/67WdJj/lOSURdt2K7/OOIkc=;
+        b=dDsdExwN7hC7FzKtXUucsuYtizt3pN8nl8EVWNcGMmxgLp5/XYvBH1LGdPh/7XFp9q
+         s6Zm7CCfN5WhfNjMbme2yhyjiwobCgF3LDgx+EHAEHCv0/2HuP6Ea4gokTsuO9PjJnjM
+         fHseFJ61YaFlCJFPn5yXjoyUkRasyG82CBO5qrwPwV71/LyKVWB//rsnG/eiTuueQlUf
+         lcCS6hGfmfs5PmfrlsNdLD+JZQsXk529/l0zODQFefKizjEDUFk+tNhTjidbSukNo6G9
+         +o1CqPFxy6/cBdqyypEbwizKF6+2t2j5D7GJIcF7DkhuJtgvrheDQp7axUiRpcnVNAyt
+         W37g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=DM1hTxrVh4GrRxbketJ/67WdJj/lOSURdt2K7/OOIkc=;
+        b=aWjmZF+IumR1bSeqoafTwStArV1SJEDb4mpgjR3utmGX9xDK53Z947gwNzLkxcZ59S
+         7n8SlKB3FFU00LNHfSR53k7/IeMFZ06077O2PZbrvIfRnPI5nbHfrGSdVr5bZuXedXrP
+         kb51dNG2NITccksiL65SpjiElczlYTCutUpfLkfCnyoFlTC3RmSqcUOpgYdeGnfFgTyy
+         sY4fuFXTEhAIZT3D4WXbO56N1PrL4RrgGarcT9zyRKoS8APxEoNSC8Ocv3XH9NTKBE6e
+         je60u+irihgzNrAfEd1zmsfps1/XcY8kr3jNGydWY2JDb7rDhPIRp1O/Vofz+Ipc2tID
+         uBrg==
+X-Gm-Message-State: AOAM533ZCjXpNI7NAYSTa49M0kxWWrjKRrlzMNvlcVwHVgPiM2we3GyI
+        DyyJfdxRV+xFekd5EHMSg5VzKLIhF4qHP4mLEFo=
+X-Google-Smtp-Source: ABdhPJyU9vZkK11SqZUotM4WGZQEskNb2DBR1t7w32FUPFwZlOckjTTyuWrE4U1LvxbkVxveDsz4hn2qesmqv+hvs+4=
+X-Received: by 2002:a02:a793:0:b0:311:c031:ea76 with SMTP id
+ e19-20020a02a793000000b00311c031ea76mr33048183jaj.80.1646393899546; Fri, 04
+ Mar 2022 03:38:19 -0800 (PST)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220301145233.3689119-1-arnd@kernel.org>
+In-Reply-To: <20220301145233.3689119-1-arnd@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 4 Mar 2022 12:37:43 +0100
+Message-ID: <CA+icZUX_J3O=cPXNOxaE_TcYJfSQCiZ_0HUqSF5Lm_DwPTFGug@mail.gmail.com>
+Subject: Re: [PATCH 1/3] [v3] Kbuild: move to -std=gnu11
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WytaYWlib10NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBXYW5nemhv
-dSAoQikNCj4gU2VudDogMDQgTWFyY2ggMjAyMiAwOTozNQ0KPiBUbzogU2hhbWVlcmFsaSBLb2xv
-dGh1bSBUaG9kaSA8c2hhbWVlcmFsaS5rb2xvdGh1bS50aG9kaUBodWF3ZWkuY29tPjsNCj4ga3Zt
-QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgt
-Y3J5cHRvQHZnZXIua2VybmVsLm9yZw0KPiBDYzogbGludXgtcGNpQHZnZXIua2VybmVsLm9yZzsg
-YWxleC53aWxsaWFtc29uQHJlZGhhdC5jb207IGpnZ0BudmlkaWEuY29tOw0KPiBjb2h1Y2tAcmVk
-aGF0LmNvbTsgbWd1cnRvdm95QG52aWRpYS5jb207IHlpc2hhaWhAbnZpZGlhLmNvbTsgTGludXhh
-cm0NCj4gPGxpbnV4YXJtQGh1YXdlaS5jb20+OyBsaXVsb25nZmFuZyA8bGl1bG9uZ2ZhbmdAaHVh
-d2VpLmNvbT47IFplbmd0YW8gKEIpDQo+IDxwcmltZS56ZW5nQGhpc2lsaWNvbi5jb20+OyBKb25h
-dGhhbiBDYW1lcm9uDQo+IDxqb25hdGhhbi5jYW1lcm9uQGh1YXdlaS5jb20+DQo+IFN1YmplY3Q6
-IFJlOiBbUEFUQ0ggdjggMy85XSBoaXNpX2FjY19xbTogTW92ZSBWRiBQQ0kgZGV2aWNlIElEcyB0
-byBjb21tb24NCj4gaGVhZGVyDQo+IA0KPiA+IE1vdmUgdGhlIFBDSSBEZXZpY2UgSURzIG9mIEhp
-U2lsaWNvbiBBQ0MgVkYgZGV2aWNlcyB0byBhIGNvbW1vbiBoZWFkZT4NCj4gYW5kIGFsc28gdXNl
-IGEgdW5pZm9ybSBuYW1pbmcgY29udmVudGlvbi4NCj4gPg0KPiA+IFRoaXMgd2lsbCBiZSB1c2Vm
-dWwgd2hlbiB3ZSBpbnRyb2R1Y2UgdGhlIHZmaW8gUENJIEhpU2lsaWNvbiBBQ0MgbGl2ZQ0KPiA+
-IG1pZ3JhdGlvbiBkcml2ZXIgaW4gc3Vic2VxdWVudCBwYXRjaGVzLg0KPiA+DQo+ID4gU2lnbmVk
-LW9mZi1ieTogU2hhbWVlciBLb2xvdGh1bQ0KPiA8c2hhbWVlcmFsaS5rb2xvdGh1bS50aG9kaUBo
-dWF3ZWkuY29tPg0KPiANCj4gQWNrZWQtYnk6IFpob3UgV2FuZyA8d2FuZ3pob3UxQGhpc2lsaWNv
-bi5jb20+DQoNClRoYW5rcy4gQWRkZWQgWmFpYm8gZm9yIGhwcmUvc2VjIHBhcnRzLg0KDQo+ID4g
-LS0tDQo+ID4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9ocHJlL2hwcmVfbWFpbi5jIHwgMTMg
-KysrKysrLS0tLS0tLQ0KPiA+ICBkcml2ZXJzL2NyeXB0by9oaXNpbGljb24vc2VjMi9zZWNfbWFp
-bi5jICB8IDE1ICsrKysrKystLS0tLS0tLQ0KPiA+ICBkcml2ZXJzL2NyeXB0by9oaXNpbGljb24v
-emlwL3ppcF9tYWluLmMgICB8IDExICsrKysrLS0tLS0tDQo+ID4gIGluY2x1ZGUvbGludXgvcGNp
-X2lkcy5oICAgICAgICAgICAgICAgICAgIHwgIDMgKysrDQo+ID4gIDQgZmlsZXMgY2hhbmdlZCwg
-MjEgaW5zZXJ0aW9ucygrKSwgMjEgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9jcnlwdG8vaGlzaWxpY29uL2hwcmUvaHByZV9tYWluLmMNCj4gYi9kcml2ZXJzL2Ny
-eXB0by9oaXNpbGljb24vaHByZS9ocHJlX21haW4uYw0KPiA+IGluZGV4IGViZmFiM2UxNDQ5OS4u
-MzU4OWQ4ODc5YjVlIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9o
-cHJlL2hwcmVfbWFpbi5jDQo+ID4gKysrIGIvZHJpdmVycy9jcnlwdG8vaGlzaWxpY29uL2hwcmUv
-aHByZV9tYWluLmMNCj4gPiBAQCAtNjgsOCArNjgsNyBAQA0KPiA+ICAjZGVmaW5lIEhQUkVfUkVH
-X1JEX0lOVFZSTF9VUwkJMTANCj4gPiAgI2RlZmluZSBIUFJFX1JFR19SRF9UTU9VVF9VUwkJMTAw
-MA0KPiA+ICAjZGVmaW5lIEhQUkVfREJHRlNfVkFMX01BWF9MRU4JCTIwDQo+ID4gLSNkZWZpbmUg
-SFBSRV9QQ0lfREVWSUNFX0lECQkweGEyNTgNCj4gPiAtI2RlZmluZSBIUFJFX1BDSV9WRl9ERVZJ
-Q0VfSUQJCTB4YTI1OQ0KPiA+ICsjZGVmaW5lIFBDSV9ERVZJQ0VfSURfSFVBV0VJX0hQUkVfUEYJ
-MHhhMjU4DQo+ID4gICNkZWZpbmUgSFBSRV9RTV9VU1JfQ0ZHX01BU0sJCUdFTk1BU0soMzEsIDEp
-DQo+ID4gICNkZWZpbmUgSFBSRV9RTV9BWElfQ0ZHX01BU0sJCUdFTk1BU0soMTUsIDApDQo+ID4g
-ICNkZWZpbmUgSFBSRV9RTV9WRkdfQVhfTUFTSwkJR0VOTUFTSyg3LCAwKQ0KPiA+IEBAIC0xMTEs
-OCArMTEwLDggQEANCj4gPiAgc3RhdGljIGNvbnN0IGNoYXIgaHByZV9uYW1lW10gPSAiaGlzaV9o
-cHJlIjsNCj4gPiAgc3RhdGljIHN0cnVjdCBkZW50cnkgKmhwcmVfZGVidWdmc19yb290Ow0KPiA+
-ICBzdGF0aWMgY29uc3Qgc3RydWN0IHBjaV9kZXZpY2VfaWQgaHByZV9kZXZfaWRzW10gPSB7DQo+
-ID4gLQl7IFBDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9IVUFXRUksIEhQUkVfUENJX0RFVklDRV9J
-RCkgfSwNCj4gPiAtCXsgUENJX0RFVklDRShQQ0lfVkVORE9SX0lEX0hVQVdFSSwgSFBSRV9QQ0lf
-VkZfREVWSUNFX0lEKSB9LA0KPiA+ICsJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURfSFVBV0VJ
-LA0KPiBQQ0lfREVWSUNFX0lEX0hVQVdFSV9IUFJFX1BGKSB9LA0KPiA+ICsJeyBQQ0lfREVWSUNF
-KFBDSV9WRU5ET1JfSURfSFVBV0VJLA0KPiBQQ0lfREVWSUNFX0lEX0hVQVdFSV9IUFJFX1ZGKSB9
-LA0KPiA+ICAJeyAwLCB9DQo+ID4gIH07DQo+ID4NCj4gPiBAQCAtMjQyLDcgKzI0MSw3IEBAIE1P
-RFVMRV9QQVJNX0RFU0ModWFjY2VfbW9kZSwNCj4gVUFDQ0VfTU9ERV9ERVNDKTsNCj4gPg0KPiA+
-ICBzdGF0aWMgaW50IHBmX3FfbnVtX3NldChjb25zdCBjaGFyICp2YWwsIGNvbnN0IHN0cnVjdCBr
-ZXJuZWxfcGFyYW0gKmtwKQ0KPiA+ICB7DQo+ID4gLQlyZXR1cm4gcV9udW1fc2V0KHZhbCwga3As
-IEhQUkVfUENJX0RFVklDRV9JRCk7DQo+ID4gKwlyZXR1cm4gcV9udW1fc2V0KHZhbCwga3AsIFBD
-SV9ERVZJQ0VfSURfSFVBV0VJX0hQUkVfUEYpOw0KPiA+ICB9DQo+ID4NCj4gPiAgc3RhdGljIGNv
-bnN0IHN0cnVjdCBrZXJuZWxfcGFyYW1fb3BzIGhwcmVfcGZfcV9udW1fb3BzID0gew0KPiA+IEBA
-IC05MjEsNyArOTIwLDcgQEAgc3RhdGljIGludCBocHJlX2RlYnVnZnNfaW5pdChzdHJ1Y3QgaGlz
-aV9xbSAqcW0pDQo+ID4gIAlxbS0+ZGVidWcuc3FlX21hc2tfbGVuID0gSFBSRV9TUUVfTUFTS19M
-RU47DQo+ID4gIAloaXNpX3FtX2RlYnVnX2luaXQocW0pOw0KPiA+DQo+ID4gLQlpZiAocW0tPnBk
-ZXYtPmRldmljZSA9PSBIUFJFX1BDSV9ERVZJQ0VfSUQpIHsNCj4gPiArCWlmIChxbS0+cGRldi0+
-ZGV2aWNlID09IFBDSV9ERVZJQ0VfSURfSFVBV0VJX0hQUkVfUEYpIHsNCj4gPiAgCQlyZXQgPSBo
-cHJlX2N0cmxfZGVidWdfaW5pdChxbSk7DQo+ID4gIAkJaWYgKHJldCkNCj4gPiAgCQkJZ290byBm
-YWlsZWRfdG9fY3JlYXRlOw0KPiA+IEBAIC05NTgsNyArOTU3LDcgQEAgc3RhdGljIGludCBocHJl
-X3FtX2luaXQoc3RydWN0IGhpc2lfcW0gKnFtLCBzdHJ1Y3QNCj4gcGNpX2RldiAqcGRldikNCj4g
-PiAgCXFtLT5zcWVfc2l6ZSA9IEhQUkVfU1FFX1NJWkU7DQo+ID4gIAlxbS0+ZGV2X25hbWUgPSBo
-cHJlX25hbWU7DQo+ID4NCj4gPiAtCXFtLT5mdW5fdHlwZSA9IChwZGV2LT5kZXZpY2UgPT0gSFBS
-RV9QQ0lfREVWSUNFX0lEKSA/DQo+ID4gKwlxbS0+ZnVuX3R5cGUgPSAocGRldi0+ZGV2aWNlID09
-IFBDSV9ERVZJQ0VfSURfSFVBV0VJX0hQUkVfUEYpID8NCj4gPiAgCQkJUU1fSFdfUEYgOiBRTV9I
-V19WRjsNCj4gPiAgCWlmIChxbS0+ZnVuX3R5cGUgPT0gUU1fSFdfUEYpIHsNCj4gPiAgCQlxbS0+
-cXBfYmFzZSA9IEhQUkVfUEZfREVGX1FfQkFTRTsNCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9j
-cnlwdG8vaGlzaWxpY29uL3NlYzIvc2VjX21haW4uYw0KPiBiL2RyaXZlcnMvY3J5cHRvL2hpc2ls
-aWNvbi9zZWMyL3NlY19tYWluLmMNCj4gPiBpbmRleCAyNmQzYWIxZDMwOGIuLjMxMWE4NzQ3YjVi
-ZiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2NyeXB0by9oaXNpbGljb24vc2VjMi9zZWNfbWFp
-bi5jDQo+ID4gKysrIGIvZHJpdmVycy9jcnlwdG8vaGlzaWxpY29uL3NlYzIvc2VjX21haW4uYw0K
-PiA+IEBAIC0yMCw4ICsyMCw3IEBADQo+ID4NCj4gPiAgI2RlZmluZSBTRUNfVkZfTlVNCQkJNjMN
-Cj4gPiAgI2RlZmluZSBTRUNfUVVFVUVfTlVNX1YxCQk0MDk2DQo+ID4gLSNkZWZpbmUgU0VDX1BG
-X1BDSV9ERVZJQ0VfSUQJCTB4YTI1NQ0KPiA+IC0jZGVmaW5lIFNFQ19WRl9QQ0lfREVWSUNFX0lE
-CQkweGEyNTYNCj4gPiArI2RlZmluZSBQQ0lfREVWSUNFX0lEX0hVQVdFSV9TRUNfUEYJMHhhMjU1
-DQo+ID4NCj4gPiAgI2RlZmluZSBTRUNfQkRfRVJSX0NIS19FTjAJCTB4RUZGRkZGRkYNCj4gPiAg
-I2RlZmluZSBTRUNfQkRfRVJSX0NIS19FTjEJCTB4N2ZmZmY3ZmQNCj4gPiBAQCAtMjI1LDcgKzIy
-NCw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZGVidWdmc19yZWczMiBzZWNfZGZ4X3JlZ3NbXSA9
-IHsNCj4gPg0KPiA+ICBzdGF0aWMgaW50IHNlY19wZl9xX251bV9zZXQoY29uc3QgY2hhciAqdmFs
-LCBjb25zdCBzdHJ1Y3Qga2VybmVsX3BhcmFtDQo+ICprcCkNCj4gPiAgew0KPiA+IC0JcmV0dXJu
-IHFfbnVtX3NldCh2YWwsIGtwLCBTRUNfUEZfUENJX0RFVklDRV9JRCk7DQo+ID4gKwlyZXR1cm4g
-cV9udW1fc2V0KHZhbCwga3AsIFBDSV9ERVZJQ0VfSURfSFVBV0VJX1NFQ19QRik7DQo+ID4gIH0N
-Cj4gPg0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0IGtlcm5lbF9wYXJhbV9vcHMgc2VjX3BmX3Ff
-bnVtX29wcyA9IHsNCj4gPiBAQCAtMzEzLDggKzMxMiw4IEBAIG1vZHVsZV9wYXJhbV9jYih1YWNj
-ZV9tb2RlLA0KPiAmc2VjX3VhY2NlX21vZGVfb3BzLCAmdWFjY2VfbW9kZSwgMDQ0NCk7DQo+ID4g
-IE1PRFVMRV9QQVJNX0RFU0ModWFjY2VfbW9kZSwgVUFDQ0VfTU9ERV9ERVNDKTsNCj4gPg0KPiA+
-ICBzdGF0aWMgY29uc3Qgc3RydWN0IHBjaV9kZXZpY2VfaWQgc2VjX2Rldl9pZHNbXSA9IHsNCj4g
-PiAtCXsgUENJX0RFVklDRShQQ0lfVkVORE9SX0lEX0hVQVdFSSwgU0VDX1BGX1BDSV9ERVZJQ0Vf
-SUQpIH0sDQo+ID4gLQl7IFBDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9IVUFXRUksIFNFQ19WRl9Q
-Q0lfREVWSUNFX0lEKSB9LA0KPiA+ICsJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURfSFVBV0VJ
-LA0KPiBQQ0lfREVWSUNFX0lEX0hVQVdFSV9TRUNfUEYpIH0sDQo+ID4gKwl7IFBDSV9ERVZJQ0Uo
-UENJX1ZFTkRPUl9JRF9IVUFXRUksDQo+IFBDSV9ERVZJQ0VfSURfSFVBV0VJX1NFQ19WRikgfSwN
-Cj4gPiAgCXsgMCwgfQ0KPiA+ICB9Ow0KPiA+ICBNT0RVTEVfREVWSUNFX1RBQkxFKHBjaSwgc2Vj
-X2Rldl9pZHMpOw0KPiA+IEBAIC03MTcsNyArNzE2LDcgQEAgc3RhdGljIGludCBzZWNfY29yZV9k
-ZWJ1Z19pbml0KHN0cnVjdCBoaXNpX3FtICpxbSkNCj4gPiAgCXJlZ3NldC0+YmFzZSA9IHFtLT5p
-b19iYXNlOw0KPiA+ICAJcmVnc2V0LT5kZXYgPSBkZXY7DQo+ID4NCj4gPiAtCWlmIChxbS0+cGRl
-di0+ZGV2aWNlID09IFNFQ19QRl9QQ0lfREVWSUNFX0lEKQ0KPiA+ICsJaWYgKHFtLT5wZGV2LT5k
-ZXZpY2UgPT0gUENJX0RFVklDRV9JRF9IVUFXRUlfU0VDX1BGKQ0KPiA+ICAJCWRlYnVnZnNfY3Jl
-YXRlX2ZpbGUoInJlZ3MiLCAwNDQ0LCB0bXBfZCwgcmVnc2V0LCAmc2VjX3JlZ3NfZm9wcyk7DQo+
-ID4NCj4gPiAgCWZvciAoaSA9IDA7IGkgPCBBUlJBWV9TSVpFKHNlY19kZnhfbGFiZWxzKTsgaSsr
-KSB7DQo+ID4gQEAgLTczNSw3ICs3MzQsNyBAQCBzdGF0aWMgaW50IHNlY19kZWJ1Z19pbml0KHN0
-cnVjdCBoaXNpX3FtICpxbSkNCj4gPiAgCXN0cnVjdCBzZWNfZGV2ICpzZWMgPSBjb250YWluZXJf
-b2YocW0sIHN0cnVjdCBzZWNfZGV2LCBxbSk7DQo+ID4gIAlpbnQgaTsNCj4gPg0KPiA+IC0JaWYg
-KHFtLT5wZGV2LT5kZXZpY2UgPT0gU0VDX1BGX1BDSV9ERVZJQ0VfSUQpIHsNCj4gPiArCWlmIChx
-bS0+cGRldi0+ZGV2aWNlID09IFBDSV9ERVZJQ0VfSURfSFVBV0VJX1NFQ19QRikgew0KPiA+ICAJ
-CWZvciAoaSA9IFNFQ19DTEVBUl9FTkFCTEU7IGkgPCBTRUNfREVCVUdfRklMRV9OVU07IGkrKykg
-ew0KPiA+ICAJCQlzcGluX2xvY2tfaW5pdCgmc2VjLT5kZWJ1Zy5maWxlc1tpXS5sb2NrKTsNCj4g
-PiAgCQkJc2VjLT5kZWJ1Zy5maWxlc1tpXS5pbmRleCA9IGk7DQo+ID4gQEAgLTg3Nyw3ICs4NzYs
-NyBAQCBzdGF0aWMgaW50IHNlY19xbV9pbml0KHN0cnVjdCBoaXNpX3FtICpxbSwgc3RydWN0DQo+
-IHBjaV9kZXYgKnBkZXYpDQo+ID4gIAlxbS0+c3FlX3NpemUgPSBTRUNfU1FFX1NJWkU7DQo+ID4g
-IAlxbS0+ZGV2X25hbWUgPSBzZWNfbmFtZTsNCj4gPg0KPiA+IC0JcW0tPmZ1bl90eXBlID0gKHBk
-ZXYtPmRldmljZSA9PSBTRUNfUEZfUENJX0RFVklDRV9JRCkgPw0KPiA+ICsJcW0tPmZ1bl90eXBl
-ID0gKHBkZXYtPmRldmljZSA9PSBQQ0lfREVWSUNFX0lEX0hVQVdFSV9TRUNfUEYpID8NCj4gPiAg
-CQkJUU1fSFdfUEYgOiBRTV9IV19WRjsNCj4gPiAgCWlmIChxbS0+ZnVuX3R5cGUgPT0gUU1fSFdf
-UEYpIHsNCj4gPiAgCQlxbS0+cXBfYmFzZSA9IFNFQ19QRl9ERUZfUV9CQVNFOw0KPiA+IGRpZmYg
-LS1naXQgYS9kcml2ZXJzL2NyeXB0by9oaXNpbGljb24vemlwL3ppcF9tYWluLmMNCj4gYi9kcml2
-ZXJzL2NyeXB0by9oaXNpbGljb24vemlwL3ppcF9tYWluLmMNCj4gPiBpbmRleCA2NzhmOGI1OGVj
-NDIuLjY2ZGVjZmUwNzI4MiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2NyeXB0by9oaXNpbGlj
-b24vemlwL3ppcF9tYWluLmMNCj4gPiArKysgYi9kcml2ZXJzL2NyeXB0by9oaXNpbGljb24vemlw
-L3ppcF9tYWluLmMNCj4gPiBAQCAtMTUsOCArMTUsNyBAQA0KPiA+ICAjaW5jbHVkZSA8bGludXgv
-dWFjY2UuaD4NCj4gPiAgI2luY2x1ZGUgInppcC5oIg0KPiA+DQo+ID4gLSNkZWZpbmUgUENJX0RF
-VklDRV9JRF9aSVBfUEYJCTB4YTI1MA0KPiA+IC0jZGVmaW5lIFBDSV9ERVZJQ0VfSURfWklQX1ZG
-CQkweGEyNTENCj4gPiArI2RlZmluZSBQQ0lfREVWSUNFX0lEX0hVQVdFSV9aSVBfUEYJMHhhMjUw
-DQo+ID4NCj4gPiAgI2RlZmluZSBIWklQX1FVRVVFX05VTV9WMQkJNDA5Ng0KPiA+DQo+ID4gQEAg
-LTI0Niw3ICsyNDUsNyBAQCBNT0RVTEVfUEFSTV9ERVNDKHVhY2NlX21vZGUsDQo+IFVBQ0NFX01P
-REVfREVTQyk7DQo+ID4NCj4gPiAgc3RhdGljIGludCBwZl9xX251bV9zZXQoY29uc3QgY2hhciAq
-dmFsLCBjb25zdCBzdHJ1Y3Qga2VybmVsX3BhcmFtICprcCkNCj4gPiAgew0KPiA+IC0JcmV0dXJu
-IHFfbnVtX3NldCh2YWwsIGtwLCBQQ0lfREVWSUNFX0lEX1pJUF9QRik7DQo+ID4gKwlyZXR1cm4g
-cV9udW1fc2V0KHZhbCwga3AsIFBDSV9ERVZJQ0VfSURfSFVBV0VJX1pJUF9QRik7DQo+ID4gIH0N
-Cj4gPg0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0IGtlcm5lbF9wYXJhbV9vcHMgcGZfcV9udW1f
-b3BzID0gew0KPiA+IEBAIC0yNjgsOCArMjY3LDggQEAgbW9kdWxlX3BhcmFtX2NiKHZmc19udW0s
-ICZ2ZnNfbnVtX29wcywNCj4gJnZmc19udW0sIDA0NDQpOw0KPiA+ICBNT0RVTEVfUEFSTV9ERVND
-KHZmc19udW0sICJOdW1iZXIgb2YgVkZzIHRvIGVuYWJsZSgxLTYzKSwNCj4gMChkZWZhdWx0KSIp
-Ow0KPiA+DQo+ID4gIHN0YXRpYyBjb25zdCBzdHJ1Y3QgcGNpX2RldmljZV9pZCBoaXNpX3ppcF9k
-ZXZfaWRzW10gPSB7DQo+ID4gLQl7IFBDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9IVUFXRUksIFBD
-SV9ERVZJQ0VfSURfWklQX1BGKSB9LA0KPiA+IC0JeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURf
-SFVBV0VJLCBQQ0lfREVWSUNFX0lEX1pJUF9WRikgfSwNCj4gPiArCXsgUENJX0RFVklDRShQQ0lf
-VkVORE9SX0lEX0hVQVdFSSwNCj4gUENJX0RFVklDRV9JRF9IVUFXRUlfWklQX1BGKSB9LA0KPiA+
-ICsJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURfSFVBV0VJLA0KPiBQQ0lfREVWSUNFX0lEX0hV
-QVdFSV9aSVBfVkYpIH0sDQo+ID4gIAl7IDAsIH0NCj4gPiAgfTsNCj4gPiAgTU9EVUxFX0RFVklD
-RV9UQUJMRShwY2ksIGhpc2lfemlwX2Rldl9pZHMpOw0KPiA+IEBAIC04MzgsNyArODM3LDcgQEAg
-c3RhdGljIGludCBoaXNpX3ppcF9xbV9pbml0KHN0cnVjdCBoaXNpX3FtICpxbSwgc3RydWN0DQo+
-IHBjaV9kZXYgKnBkZXYpDQo+ID4gIAlxbS0+c3FlX3NpemUgPSBIWklQX1NRRV9TSVpFOw0KPiA+
-ICAJcW0tPmRldl9uYW1lID0gaGlzaV96aXBfbmFtZTsNCj4gPg0KPiA+IC0JcW0tPmZ1bl90eXBl
-ID0gKHBkZXYtPmRldmljZSA9PSBQQ0lfREVWSUNFX0lEX1pJUF9QRikgPw0KPiA+ICsJcW0tPmZ1
-bl90eXBlID0gKHBkZXYtPmRldmljZSA9PSBQQ0lfREVWSUNFX0lEX0hVQVdFSV9aSVBfUEYpID8N
-Cj4gPiAgCQkJUU1fSFdfUEYgOiBRTV9IV19WRjsNCj4gPiAgCWlmIChxbS0+ZnVuX3R5cGUgPT0g
-UU1fSFdfUEYpIHsNCj4gPiAgCQlxbS0+cXBfYmFzZSA9IEhaSVBfUEZfREVGX1FfQkFTRTsNCj4g
-PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9wY2lfaWRzLmggYi9pbmNsdWRlL2xpbnV4L3Bj
-aV9pZHMuaA0KPiA+IGluZGV4IGFhZDU0YzY2NjQwNy4uMzFkZWUyYjY1YTYyIDEwMDY0NA0KPiA+
-IC0tLSBhL2luY2x1ZGUvbGludXgvcGNpX2lkcy5oDQo+ID4gKysrIGIvaW5jbHVkZS9saW51eC9w
-Y2lfaWRzLmgNCj4gPiBAQCAtMjUyOSw2ICsyNTI5LDkgQEANCj4gPiAgI2RlZmluZSBQQ0lfREVW
-SUNFX0lEX0tPUkVOSVhfSkVUQ0FSREYzCTB4MTdmZg0KPiA+DQo+ID4gICNkZWZpbmUgUENJX1ZF
-TkRPUl9JRF9IVUFXRUkJCTB4MTllNQ0KPiA+ICsjZGVmaW5lIFBDSV9ERVZJQ0VfSURfSFVBV0VJ
-X1pJUF9WRgkweGEyNTENCj4gPiArI2RlZmluZSBQQ0lfREVWSUNFX0lEX0hVQVdFSV9TRUNfVkYJ
-MHhhMjU2DQo+ID4gKyNkZWZpbmUgUENJX0RFVklDRV9JRF9IVUFXRUlfSFBSRV9WRgkweGEyNTkN
-Cj4gPg0KPiA+ICAjZGVmaW5lIFBDSV9WRU5ET1JfSURfTkVUUk9OT01FCQkweDE5ZWUNCj4gPiAg
-I2RlZmluZSBQQ0lfREVWSUNFX0lEX05FVFJPTk9NRV9ORlA0MDAwCTB4NDAwMA0KPiA+DQo=
+On Wed, Mar 2, 2022 at 5:29 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> During a patch discussion, Linus brought up the option of changing
+> the C standard version from gnu89 to gnu99, which allows using variable
+> declaration inside of a for() loop. While the C99, C11 and later standard=
+s
+> introduce many other features, most of these are already available in
+> gnu89 as GNU extensions as well.
+>
+> An earlier attempt to do this when gcc-5 started defaulting to
+> -std=3Dgnu11 failed because at the time that caused warnings about
+> designated initializers with older compilers. Now that gcc-5.1 is
+> the minimum compiler version used for building kernels, that is no
+> longer a concern. Similarly, the behavior of 'inline' functions changes
+> between gnu89 using gnu_inline behavior and gnu11 using standard c99+
+> behavior, but this was taken care of by defining 'inline' to include
+> __attribute__((gnu_inline)) in order to allow building with clang a
+> while ago.
+>
+> One minor issue that remains is an added gcc warning for shifts of
+> negative integers when building with -Wextra, which happens with the
+> 'make W=3D1' option, as well as for three drivers in the kernel that alwa=
+ys
+> enable -Wextra, but it was only observed with the i915 driver so far.
+> To be on the safe side, add -Wno-shift-negative-value to any -Wextra
+> in a Makefile.
+>
+> Nathan Chancellor reported an additional -Wdeclaration-after-statement
+> warning that appears in a system header on arm, this still needs a
+> workaround.
+>
+> The differences between gnu99, gnu11, gnu1x and gnu17 are fairly
+> minimal and mainly impact warnings at the -Wpedantic level that the
+> kernel never enables. Between these, gnu11 is the newest version
+> that is supported by all supported compiler versions, though it is
+> only the default on gcc-5, while all other supported versions of
+> gcc or clang default to gnu1x/gnu17.
+>
+> Link: https://lore.kernel.org/lkml/CAHk-=3DwiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdK=
+pcovt8fYbVFW3TA@mail.gmail.com/
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1603
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Acked-by: Marco Elver <elver@google.com>
+> Acked-by: Jani Nikula <jani.nikula@intel.com>
+> Acked-by: David Sterba <dsterba@suse.com>
+> Reviewed-by: Alex Shi <alexs@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+
+Arnd, please CC me on further patches/patchsets.
+Thanks.
+
+- Sedat -
+
+> [v3]
+>  - split out USERCFLAGS to a separate patch
+>  - add -Wdeclaration-after-statement patch from Mark Rutland
+>  - leave out C17 reference
+>  - more rewording the descrption
+>
+> [v2]
+>  - added -std=3Dgnu11 back, rather than just relying on the default
+>  - minor changes to changelog text
+> ---
+>  Documentation/process/programming-language.rst              | 6 +++---
+>  .../translations/it_IT/process/programming-language.rst     | 4 ++--
+>  .../translations/zh_CN/process/programming-language.rst     | 3 +--
+>  .../translations/zh_TW/process/programming-language.rst     | 3 +--
+>  Makefile                                                    | 4 ++--
+>  arch/arm64/kernel/vdso32/Makefile                           | 2 +-
+>  drivers/gpu/drm/i915/Makefile                               | 1 +
+>  drivers/staging/greybus/tools/Makefile                      | 3 ++-
+>  fs/btrfs/Makefile                                           | 1 +
+>  scripts/Makefile.extrawarn                                  | 1 +
+>  10 files changed, 15 insertions(+), 13 deletions(-)
+>
+> diff --git a/Documentation/process/programming-language.rst b/Documentati=
+on/process/programming-language.rst
+> index ec474a70a02f..5fc9160ca1fa 100644
+> --- a/Documentation/process/programming-language.rst
+> +++ b/Documentation/process/programming-language.rst
+> @@ -5,9 +5,9 @@ Programming Language
+>
+>  The kernel is written in the C programming language [c-language]_.
+>  More precisely, the kernel is typically compiled with ``gcc`` [gcc]_
+> -under ``-std=3Dgnu89`` [gcc-c-dialect-options]_: the GNU dialect of ISO =
+C90
+> -(including some C99 features). ``clang`` [clang]_ is also supported, see
+> -docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+> +under ``-std=3Dgnu11`` [gcc-c-dialect-options]_: the GNU dialect of ISO =
+C11.
+> +``clang`` [clang]_ is also supported, see docs on
+> +:ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+>
+>  This dialect contains many extensions to the language [gnu-extensions]_,
+>  and many of them are used within the kernel as a matter of course.
+> diff --git a/Documentation/translations/it_IT/process/programming-languag=
+e.rst b/Documentation/translations/it_IT/process/programming-language.rst
+> index 41db2598ce11..c1a9b481a6f9 100644
+> --- a/Documentation/translations/it_IT/process/programming-language.rst
+> +++ b/Documentation/translations/it_IT/process/programming-language.rst
+> @@ -10,8 +10,8 @@ Linguaggio di programmazione
+>
+>  Il kernel =C3=A8 scritto nel linguaggio di programmazione C [it-c-langua=
+ge]_.
+>  Pi=C3=B9 precisamente, il kernel viene compilato con ``gcc`` [it-gcc]_ u=
+sando
+> -l'opzione ``-std=3Dgnu89`` [it-gcc-c-dialect-options]_: il dialetto GNU
+> -dello standard ISO C90 (con l'aggiunta di alcune funzionalit=C3=A0 da C9=
+9).
+> +l'opzione ``-std=3Dgnu11`` [it-gcc-c-dialect-options]_: il dialetto GNU
+> +dello standard ISO C11.
+>  Linux supporta anche ``clang`` [it-clang]_, leggete la documentazione
+>  :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
+>
+> diff --git a/Documentation/translations/zh_CN/process/programming-languag=
+e.rst b/Documentation/translations/zh_CN/process/programming-language.rst
+> index 2a47a1d2ec20..fabdc338dbfb 100644
+> --- a/Documentation/translations/zh_CN/process/programming-language.rst
+> +++ b/Documentation/translations/zh_CN/process/programming-language.rst
+> @@ -9,8 +9,7 @@
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  =E5=86=85=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AF=AD=E8=A8=80 :ref:`c-language=
+ <cn_c-language>` =E7=BC=96=E5=86=99=E7=9A=84=E3=80=82=E6=9B=B4=E5=87=86=E7=
+=A1=AE=E5=9C=B0=E8=AF=B4=EF=BC=8C=E5=86=85=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=98=
+=AF=E7=94=A8 :ref:`gcc <cn_gcc>`
+> -=E5=9C=A8 ``-std=3Dgnu89`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect=
+-options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C90=E7=9A=84 GN=
+U =E6=96=B9=E8=A8=80=EF=BC=88
+> -=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC99=E7=89=B9=E6=80=A7=EF=BC=89
+> +=E5=9C=A8 ``-std=3Dgnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect=
+-options>` =E4=B8=8B=E7=BC=96=E8=AF=91=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 GN=
+U =E6=96=B9=E8=A8=80
+>
+>  =E8=BF=99=E7=A7=8D=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=AF=B9=E8=AF=AD=
+=E8=A8=80 :ref:`gnu-extensions <cn_gnu-extensions>` =E7=9A=84=E8=AE=B8=E5=
+=A4=9A=E6=89=A9=E5=B1=95=EF=BC=8C=E5=BD=93=E7=84=B6=EF=BC=8C=E5=AE=83=E4=BB=
+=AC=E8=AE=B8=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=86=85=E6=A0=B8=E4=B8=AD=E4=BD=BF=
+=E7=94=A8=E3=80=82
+>
+> diff --git a/Documentation/translations/zh_TW/process/programming-languag=
+e.rst b/Documentation/translations/zh_TW/process/programming-language.rst
+> index 54e3699eadf8..144bdaf81a41 100644
+> --- a/Documentation/translations/zh_TW/process/programming-language.rst
+> +++ b/Documentation/translations/zh_TW/process/programming-language.rst
+> @@ -12,8 +12,7 @@
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  =E5=85=A7=E6=A0=B8=E6=98=AF=E7=94=A8C=E8=AA=9E=E8=A8=80 :ref:`c-language=
+ <tw_c-language>` =E7=B7=A8=E5=AF=AB=E7=9A=84=E3=80=82=E6=9B=B4=E6=BA=96=E7=
+=A2=BA=E5=9C=B0=E8=AA=AA=EF=BC=8C=E5=85=A7=E6=A0=B8=E9=80=9A=E5=B8=B8=E6=98=
+=AF=E7=94=A8 :ref:`gcc <tw_gcc>`
+> -=E5=9C=A8 ``-std=3Dgnu89`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect=
+-options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C90=E7=9A=84 GN=
+U =E6=96=B9=E8=A8=80=EF=BC=88
+> -=E5=8C=85=E6=8B=AC=E4=B8=80=E4=BA=9BC99=E7=89=B9=E6=80=A7=EF=BC=89
+> +=E5=9C=A8 ``-std=3Dgnu11`` :ref:`gcc-c-dialect-options <tw_gcc-c-dialect=
+-options>` =E4=B8=8B=E7=B7=A8=E8=AD=AF=E7=9A=84=EF=BC=9AISO C11=E7=9A=84 GN=
+U =E6=96=B9=E8=A8=80
+>
+>  =E9=80=99=E7=A8=AE=E6=96=B9=E8=A8=80=E5=8C=85=E5=90=AB=E5=B0=8D=E8=AA=9E=
+=E8=A8=80 :ref:`gnu-extensions <tw_gnu-extensions>` =E7=9A=84=E8=A8=B1=E5=
+=A4=9A=E6=93=B4=E5=B1=95=EF=BC=8C=E7=95=B6=E7=84=B6=EF=BC=8C=E5=AE=83=E5=80=
+=91=E8=A8=B1=E5=A4=9A=E9=83=BD=E5=9C=A8=E5=85=A7=E6=A0=B8=E4=B8=AD=E4=BD=BF=
+=E7=94=A8=E3=80=82
+>
+> diff --git a/Makefile b/Makefile
+> index 289ce2be8032..94fa9a849a7a 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -515,7 +515,7 @@ KBUILD_CFLAGS   :=3D -Wall -Wundef -Werror=3Dstrict-p=
+rototypes -Wno-trigraphs \
+>                    -fno-strict-aliasing -fno-common -fshort-wchar -fno-PI=
+E \
+>                    -Werror=3Dimplicit-function-declaration -Werror=3Dimpl=
+icit-int \
+>                    -Werror=3Dreturn-type -Wno-format-security \
+> -                  -std=3Dgnu89
+> +                  -std=3Dgnu11
+>  KBUILD_CPPFLAGS :=3D -D__KERNEL__
+>  KBUILD_AFLAGS_KERNEL :=3D
+>  KBUILD_CFLAGS_KERNEL :=3D
+> @@ -782,7 +782,7 @@ KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMP=
+LICIT_FALLTHROUGH)
+>
+>  ifdef CONFIG_CC_IS_CLANG
+>  KBUILD_CPPFLAGS +=3D -Qunused-arguments
+> -# The kernel builds with '-std=3Dgnu89' so use of GNU extensions is acce=
+ptable.
+> +# The kernel builds with '-std=3Dgnu11' so use of GNU extensions is acce=
+ptable.
+>  KBUILD_CFLAGS +=3D -Wno-gnu
+>  # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, =
+as the
+>  # source of a reference will be _MergedGlobals and not on of the whiteli=
+sted names.
+> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32=
+/Makefile
+> index 6c01b63ff56d..9378ea055bf2 100644
+> --- a/arch/arm64/kernel/vdso32/Makefile
+> +++ b/arch/arm64/kernel/vdso32/Makefile
+> @@ -68,7 +68,7 @@ VDSO_CFLAGS +=3D -Wall -Wundef -Wstrict-prototypes -Wno=
+-trigraphs \
+>                 -fno-strict-aliasing -fno-common \
+>                 -Werror-implicit-function-declaration \
+>                 -Wno-format-security \
+> -               -std=3Dgnu89
+> +               -std=3Dgnu11
+>  VDSO_CFLAGS  +=3D -O2
+>  # Some useful compiler-dependent flags from top-level Makefile
+>  VDSO_CFLAGS +=3D $(call cc32-option,-Wdeclaration-after-statement,)
+> diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefil=
+e
+> index 1b62b9f65196..1618a6e0af4e 100644
+> --- a/drivers/gpu/drm/i915/Makefile
+> +++ b/drivers/gpu/drm/i915/Makefile
+> @@ -17,6 +17,7 @@ subdir-ccflags-y +=3D -Wno-unused-parameter
+>  subdir-ccflags-y +=3D -Wno-type-limits
+>  subdir-ccflags-y +=3D -Wno-missing-field-initializers
+>  subdir-ccflags-y +=3D -Wno-sign-compare
+> +subdir-ccflags-y +=3D -Wno-shift-negative-value
+>  subdir-ccflags-y +=3D $(call cc-disable-warning, unused-but-set-variable=
+)
+>  subdir-ccflags-y +=3D $(call cc-disable-warning, frame-address)
+>  subdir-ccflags-$(CONFIG_DRM_I915_WERROR) +=3D -Werror
+> diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/gre=
+ybus/tools/Makefile
+> index ad0ae8053b79..a3bbd73171f2 100644
+> --- a/drivers/staging/greybus/tools/Makefile
+> +++ b/drivers/staging/greybus/tools/Makefile
+> @@ -12,7 +12,8 @@ CFLAGS        +=3D -std=3Dgnu99 -Wall -Wextra -g \
+>             -Wredundant-decls \
+>             -Wcast-align \
+>             -Wsign-compare \
+> -           -Wno-missing-field-initializers
+> +           -Wno-missing-field-initializers \
+> +           -Wno-shift-negative-value
+>
+>  CC     :=3D $(CROSS_COMPILE)gcc
+>
+> diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
+> index 4188ba3fd8c3..99f9995670ea 100644
+> --- a/fs/btrfs/Makefile
+> +++ b/fs/btrfs/Makefile
+> @@ -17,6 +17,7 @@ subdir-ccflags-y +=3D $(condflags)
+>  subdir-ccflags-y +=3D -Wno-missing-field-initializers
+>  subdir-ccflags-y +=3D -Wno-sign-compare
+>  subdir-ccflags-y +=3D -Wno-type-limits
+> +subdir-ccflags-y +=3D -Wno-shift-negative-value
+>
+>  obj-$(CONFIG_BTRFS_FS) :=3D btrfs.o
+>
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 8be892887d71..650d0b8ceec3 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -36,6 +36,7 @@ KBUILD_CFLAGS +=3D $(call cc-option, -Wstringop-truncat=
+ion)
+>  KBUILD_CFLAGS +=3D -Wno-missing-field-initializers
+>  KBUILD_CFLAGS +=3D -Wno-sign-compare
+>  KBUILD_CFLAGS +=3D -Wno-type-limits
+> +KBUILD_CFLAGS +=3D -Wno-shift-negative-value
+>
+>  KBUILD_CPPFLAGS +=3D -DKBUILD_EXTRA_WARN1
+>
+> --
+> 2.29.2
+>

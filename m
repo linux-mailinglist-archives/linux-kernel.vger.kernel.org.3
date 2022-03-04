@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F834CD48D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 13:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0081B4CD48C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 13:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbiCDMza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 07:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S233907AbiCDMyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 07:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbiCDMz2 (ORCPT
+        with ESMTP id S231825AbiCDMyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 07:55:28 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B09CE8695
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 04:54:39 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id 5so12050308lfz.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 04:54:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VRhT9ifLMxDJ5IabGicl6XqHaEU8Ks5ZJGYgqwJqGwA=;
-        b=hDPAhA8repavaxUJtbdf4L32y02IDzMELyfpe9MaQUdmm6gBI17FLk6fxNh4iIVADX
-         F6O9vVw3Iy75iGQOHdk8Hy7EAOmpEUcy9Fcx00LiTuRY5pZE6tOqbA0gk896G7ppbzDf
-         w4/OsdLuMKmbsGHwUebT/OYznI7Pf5KLVnAFICpSf7p/Ecrw9qUfFCmjsZoQZqloKZmk
-         eOkxQOrvPVIDnj5SKNPD91A1XlK8uQDz7oo+zKEAq81+BFKmjO7NsswAF4c4+M139NUy
-         57DyjZLTMeq4V7njp1B/ijbjxkXH6d3kvW1OMiQKxhFUH43Gh6tP+P7XmP4zZmiOBYpH
-         eECQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VRhT9ifLMxDJ5IabGicl6XqHaEU8Ks5ZJGYgqwJqGwA=;
-        b=r+o6NeUn0340la6xnBDV37zUSY+AGrA5R/ccYAJVvGuFQNEdzp5fFVSUyTMR7MlBRa
-         CultT6UvRLXIRZ1tJ2lAj4fcXn8ThV85vIPskFDOKI+BOjtEEwbNTQiRZL3KwhTdGkJg
-         uZ1epnd1cavnaX3G5Vy8BBDaivLX2NyeGTI8/7XrXQT5newzbYUlpIgRNWpm5cYmOqBC
-         lfwELTm1/zZ7PtFvqL68Ef9EXYT3zTXNWzokrqHY9ZOcJDlOfkgV/QFHnMlYMQdhOh90
-         XHNSKL6VDU3+VLXC8teIAYSClznu+QNMomp5lMxRbqCk6ABshtIn240fyvVJPhVAPfux
-         xCvg==
-X-Gm-Message-State: AOAM530ZdvHt0nl6o8RpRScK2vjlNs+kMK+NuJ8HlEL2KuPkslr+Agox
-        Pb5+z2OU+9AXKYH1pc9ZL+jZ2QrJuPI=
-X-Google-Smtp-Source: ABdhPJw3S6r+dScC0Fu+hyur/qZyKZLixrkUWXfCapeEbuhXrL+ZJTxly+pZmnsfiDT9twfTmIzdkg==
-X-Received: by 2002:a05:6512:22c8:b0:447:fb92:ded3 with SMTP id g8-20020a05651222c800b00447fb92ded3mr1853833lfu.459.1646398477752;
-        Fri, 04 Mar 2022 04:54:37 -0800 (PST)
-Received: from elysium.toya.net.pl (staticline-31-183-165-244.toya.net.pl. [31.183.165.244])
-        by smtp.gmail.com with ESMTPSA id w27-20020ac2599b000000b004481e254f08sm95547lfn.240.2022.03.04.04.54.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 04:54:37 -0800 (PST)
-From:   Karolina Drobnik <karolinadrobnik@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     rppt@kernel.org, linux-kernel@vger.kernel.org,
-        Karolina Drobnik <karolinadrobnik@gmail.com>
-Subject: [PATCH] memblock tests: Fix testing with 32-bit physical addresses
-Date:   Fri,  4 Mar 2022 13:52:49 +0100
-Message-Id: <20220304125249.253578-1-karolinadrobnik@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 4 Mar 2022 07:54:24 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9739BAD6
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 04:53:35 -0800 (PST)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K977g4RdZz67KmH;
+        Fri,  4 Mar 2022 20:53:19 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 13:53:33 +0100
+Received: from [10.47.95.117] (10.47.95.117) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Mar
+ 2022 12:53:32 +0000
+Message-ID: <1cbe7daa-8003-562b-06fa-5a50f7ee6ed2@huawei.com>
+Date:   Fri, 4 Mar 2022 12:53:31 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: PCI MSI issue for maxcpus=1
+From:   John Garry <john.garry@huawei.com>
+To:     Marc Zyngier <maz@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuqi (BA)" <liuqi115@huawei.com>, <wangxiongfeng2@huawei.com>
+References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+ <87a6g8vp8k.wl-maz@kernel.org>
+ <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
+ <87v8yjyjc0.wl-maz@kernel.org> <87k0ey9122.wl-maz@kernel.org>
+ <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
+In-Reply-To: <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.47.95.117]
+X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building memblock simulator on x86_64 with 32BIT_PHYS_ADDR_T=1
-produces "cast to pointer from integer of different size" warnings.
-Fix them by building the binary in 32-bit environment when using
-32-bit physical addresses.
+> ...
 
-Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
----
+> 
+> [ 7.961007]  valid_col+0x14/0x24
+> [ 7.964223]  its_send_single_command+0x4c/0x150
+> [ 7.968741]  its_irq_domain_activate+0xc8/0x104
+> [ 7.973259]  __irq_domain_activate_irq+0x5c/0xac
+> [ 7.977865]  __irq_domain_activate_irq+0x38/0xac
+> [ 7.982471]  irq_domain_activate_irq+0x3c/0x64
+> [ 7.986902]  __msi_domain_alloc_irqs+0x1a8/0x2f4
+> [ 7.991507]  msi_domain_alloc_irqs+0x20/0x2c
+> [ 7.995764]  __pci_enable_msi_range+0x2ec/0x590
+> [ 8.000284]  pci_alloc_irq_vectors_affinity+0xe0/0x140
+> [ 8.005410]  hisi_sas_v3_probe+0x300/0xbe0
+> [ 8.009494]  local_pci_probe+0x44/0xb0
+> [ 8.013232]  work_for_cpu_fn+0x20/0x34
+> [ 8.016969]  process_one_work+0x1d0/0x354
+> [ 8.020966]  worker_thread+0x2c0/0x470
+> [ 8.024703]  kthread+0x17c/0x190
+> [ 8.027920]  ret_from_fork+0x10/0x20
+> [ 8.031485] ---[ end trace bb67cfc7eded7361 ]---
+> 
 
-This patch is on the top of memblock/for-next.
+...
 
- tools/testing/memblock/scripts/Makefile.include | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> Ah, of course. the CPU hasn't booted yet, so its collection isn't
+> mapped. I was hoping that the core code would keep the interrupt in
+> shutdown state, but it doesn't seem to be the case...
+> 
+>  > Apart from this, I assume that if another cpu comes online later in
+>  > the affinity mask I would figure that we want to target the irq to
+>  > that cpu (which I think we would not do here).
+> 
+> That's probably also something that should come from core code, as
+> we're not really in a position to decide this in the ITS driver.
+> .
 
-diff --git a/tools/testing/memblock/scripts/Makefile.include b/tools/testing/memblock/scripts/Makefile.include
-index 699b0d6cda07..393655310324 100644
---- a/tools/testing/memblock/scripts/Makefile.include
-+++ b/tools/testing/memblock/scripts/Makefile.include
-@@ -11,7 +11,9 @@ ifeq ($(MOVABLE_NODE), 1)
- 	CFLAGS += -D MOVABLE_NODE
- endif
 
--# Use 32 bit physical addresses
-+# Use 32 bit physical addresses.
-+# Remember to install 32-bit version of dependencies.
- ifeq ($(32BIT_PHYS_ADDR_T), 1)
--	CFLAGS += -U CONFIG_PHYS_ADDR_T_64BIT
-+	CFLAGS += -m32 -U CONFIG_PHYS_ADDR_T_64BIT
-+	LDFLAGS += -m32
- endif
---
-2.30.2
+Hi Marc,
+
+Have you had a chance to consider this issue further?
+
+So I think that x86 avoids this issue as it uses matrix.c, which handles 
+CPUs being offline when selecting target CPUs for managed interrupts.
+
+So is your idea still that core code should keep the interrupt in 
+shutdown state (for no CPUs online in affinity mask)?
+
+Thanks,
+John
+
+
 

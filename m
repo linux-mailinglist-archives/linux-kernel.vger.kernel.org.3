@@ -2,423 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F504CE0FB
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 00:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E01E4CE105
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 00:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiCDXcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 18:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
+        id S229745AbiCDXhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 18:37:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiCDXcY (ORCPT
+        with ESMTP id S229728AbiCDXhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 18:32:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF0A15C640
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 15:31:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC7F461F17
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 23:31:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D462AC340E9;
-        Fri,  4 Mar 2022 23:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646436694;
-        bh=cuivl5xhaBfw2BG4pn4GV1CzKR6YspfIoW1eqw2UYW4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=txn7+Fu37g1CmddPrQEvbmX8thqo0qXJCpxkduorNtlVrVsMhYRULAMMjhQAcDLIF
-         Y63OkqhR6ECUrjGlbCkP2oCewip6wuuEiF+Il0CSabAgQuufBLrthRYUowEPNCjSeS
-         Gv17YAxFMHkUHppH48uuilThmJIK6KiEsxS28m9o=
-Date:   Sat, 5 Mar 2022 00:31:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Won Chung <wonchung@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] driver core: Add sysfs support for physical location
- of a device
-Message-ID: <YiKhU0G0l5GuKCv0@kroah.com>
-References: <20220304232553.2475051-1-wonchung@google.com>
+        Fri, 4 Mar 2022 18:37:47 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A88FD1C8854
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 15:36:57 -0800 (PST)
+Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
+        by 156.147.23.52 with ESMTP; 5 Mar 2022 08:36:56 +0900
+X-Original-SENDERIP: 156.147.1.121
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.121 with ESMTP; 5 Mar 2022 08:36:56 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Sat, 5 Mar 2022 08:36:33 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, paolo.valente@linaro.org,
+        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
+        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+        djwong@kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
+        melissa.srw@gmail.com, hamohammed.sa@gmail.com
+Subject: Re: [PATCH v4 16/24] locking/lockdep, cpu/hotplus: Use a weaker
+ annotation in AP thread
+Message-ID: <20220304233633.GA31304@X58A-UD3R>
+References: <1646377603-19730-1-git-send-email-byungchul.park@lge.com>
+ <1646377603-19730-17-git-send-email-byungchul.park@lge.com>
+ <aac81d30-ccc6-b351-729a-7265e8b6ec2c@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220304232553.2475051-1-wonchung@google.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <aac81d30-ccc6-b351-729a-7265e8b6ec2c@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 11:25:53PM +0000, Won Chung wrote:
-> When ACPI table includes _PLD fields for a device, create a new
-> directory (physical_location) in sysfs to share _PLD fields.
+On Fri, Mar 04, 2022 at 10:28:57PM +0300, Sergei Shtylyov wrote:
+> On 3/4/22 10:06 AM, Byungchul Park wrote:
 > 
-> Currently without PLD information, when there are multiple of same
-> devices, it is hard to distinguish which device corresponds to which
-> physical device at which location. For example, when there are two Type
-> C connectors, it is hard to find out which connector corresponds to the
-> Type C port on the left panel versus the Type C port on the right panel.
-> With PLD information provided, we can determine which specific device at
-> which location is doing what.
+> > cb92173d1f0 (locking/lockdep, cpu/hotplug: Annotate AP thread) was
 > 
-> _PLD output includes much more fields, but only generic fields are added
-> and exposed to sysfs, so that non-ACPI devices can also support it in
-> the future. The minimal generic fields needed for locating a device are
-> the following.
-> - panel
-> - vertical_position
-> - horizontal_position
-> - dock
-> - lid
+>    You need to enclose the commit summary in (""), not just (). :-)
+
+Thank you! I will!
+
+> > introduced to make lockdep_assert_cpus_held() work in AP thread.
+> > 
+> > However, the annotation is too strong for that purpose. We don't have to
+> > use more than try lock annotation for that.
+> > 
+> > Furthermore, now that Dept was introduced, false positive alarms was
+> > reported by that. Replaced it with try lock annotation.
+> > 
+> > Signed-off-by: Byungchul Park <byungchul.park@lge.com>
+> [...]
 > 
-> Signed-off-by: Won Chung <wonchung@google.com>
-> ---
->  .../testing/sysfs-devices-physical_location   |  42 ++++++
->  drivers/base/core.c                           | 139 ++++++++++++++++++
->  include/linux/device.h                        |  73 +++++++++
->  3 files changed, 254 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_location
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/Documentation/ABI/testing/sysfs-devices-physical_location
-> new file mode 100644
-> index 000000000000..202324b87083
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-devices-physical_location
-> @@ -0,0 +1,42 @@
-> +What:		/sys/devices/.../physical_location
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		This directory contains information on physical location of
-> +		the device connection point with respect to the system's
-> +		housing.
-> +
-> +What:		/sys/devices/.../physical_location/panel
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes which panel surface of the system’s housing the
-> +		device connection point resides on.
-> +
-> +What:		/sys/devices/.../physical_location/vertical_position
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes vertical position of the device connection point on
-> +		the panel surface.
-> +
-> +What:		/sys/devices/.../physical_location/horizontal_position
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes horizontal position of the device connection point on
-> +		the panel surface.
-> +
-> +What:		/sys/devices/.../physical_location/dock
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		"Yes" if the device connection point resides in a docking
-> +		station or a port replicator. "No" otherwise.
-> +
-> +What:		/sys/devices/.../physical_location/lid
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		"Yes" if the device connection point resides on the lid of
-> +		laptop system. "No" otherwise.
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 7bb957b11861..9cfa71ad21f3 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2466,6 +2466,136 @@ static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RO(removable);
->  
-> +static int dev_add_physical_location(struct device *dev)
-> +{
-> +#if defined(CONFIG_ACPI)
-> +	struct acpi_pld_info *pld;
-> +	acpi_status status;
-> +
-> +	if (!has_acpi_companion(dev))
-> +		return 0;
-> +
-> +	status = acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
-> +	if (ACPI_FAILURE(status) || !pld)
-> +		return 0;
-> +
-> +	dev->location = (struct device_location) {
-> +		.panel = pld->panel,
-> +		.vertical_position = pld->vertical_position,
-> +		.horizontal_position = pld->horizontal_position,
-> +		.dock = pld->dock,
-> +		.lid = pld->lid,
-> +	};
-> +
-> +	return 1;
-> +#else
-> +	return 0;
-> +#endif
-> +}
-> +
-> +static ssize_t panel_show(struct device *dev, struct device_attribute *attr,
-> +	char *buf)
-> +{
-> +	const char *panel;
-> +
-> +	switch (dev->location.panel) {
-> +	case DEVICE_PANEL_TOP:
-> +		panel = "top";
-> +		break;
-> +	case DEVICE_PANEL_BOTTOM:
-> +		panel = "bottom";
-> +		break;
-> +	case DEVICE_PANEL_LEFT:
-> +		panel = "left";
-> +		break;
-> +	case DEVICE_PANEL_RIGHT:
-> +		panel = "right";
-> +		break;
-> +	case DEVICE_PANEL_FRONT:
-> +		panel = "front";
-> +		break;
-> +	case DEVICE_PANEL_BACK:
-> +		panel = "back";
-> +		break;
-> +	default:
-> +		panel = "unknown";
-> +	}
-> +	return sysfs_emit(buf, "%s\n", panel);
-> +}
-> +static DEVICE_ATTR_RO(panel);
-> +
-> +static ssize_t vertical_position_show(struct device *dev,
-> +	struct device_attribute *attr, char *buf)
-> +{
-> +	const char *vertical_position;
-> +
-> +	switch (dev->location.vertical_position) {
-> +	case DEVICE_VERT_POS_UPPER:
-> +		vertical_position = "upper";
-> +		break;
-> +	case DEVICE_VERT_POS_CENTER:
-> +		vertical_position = "center";
-> +		break;
-> +	case DEVICE_VERT_POS_LOWER:
-> +		vertical_position = "lower";
-> +		break;
-> +	default:
-> +		vertical_position = "unknown";
-> +	}
-> +	return sysfs_emit(buf, "%s\n", vertical_position);
-> +}
-> +static DEVICE_ATTR_RO(vertical_position);
-> +
-> +static ssize_t horizontal_position_show(struct device *dev,
-> +	struct device_attribute *attr, char *buf)
-> +{
-> +	const char *horizontal_position;
-> +
-> +	switch (dev->location.horizontal_position) {
-> +	case DEVICE_HORI_POS_LEFT:
-> +		horizontal_position = "left";
-> +		break;
-> +	case DEVICE_HORI_POS_CENTER:
-> +		horizontal_position = "center";
-> +		break;
-> +	case DEVICE_HORI_POS_RIGHT:
-> +		horizontal_position = "right";
-> +		break;
-> +	default:
-> +		horizontal_position = "unknown";
-> +	}
-> +	return sysfs_emit(buf, "%s\n", horizontal_position);
-> +}
-> +static DEVICE_ATTR_RO(horizontal_position);
-> +
-> +static ssize_t dock_show(struct device *dev, struct device_attribute *attr,
-> +	char *buf)
-> +{
-> +	return sysfs_emit(buf, "%s\n", dev->location.dock ? "yes" : "no");
-> +}
-> +static DEVICE_ATTR_RO(dock);
-> +
-> +static ssize_t lid_show(struct device *dev, struct device_attribute *attr,
-> +	char *buf)
-> +{
-> +	return sysfs_emit(buf, "%s\n", dev->location.lid ? "yes" : "no");
-> +}
-> +static DEVICE_ATTR_RO(lid);
-> +
-> +static struct attribute *dev_attr_physical_location[] = {
-> +	&dev_attr_panel.attr,
-> +	&dev_attr_vertical_position.attr,
-> +	&dev_attr_horizontal_position.attr,
-> +	&dev_attr_dock.attr,
-> +	&dev_attr_lid.attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group dev_attr_physical_location_group = {
-> +	.name = "physical_location",
-> +	.attrs = dev_attr_physical_location,
-> +};
-> +
->  int device_add_groups(struct device *dev, const struct attribute_group **groups)
->  {
->  	return sysfs_create_groups(&dev->kobj, groups);
-> @@ -2649,8 +2779,17 @@ static int device_add_attrs(struct device *dev)
->  			goto err_remove_dev_waiting_for_supplier;
->  	}
->  
-> +	if (dev_add_physical_location(dev)) {
-> +		error = device_add_group(dev,
-> +			&dev_attr_physical_location_group);
-> +		if (error)
-> +			goto err_remove_dev_physical_location;
-> +	}
-> +
->  	return 0;
->  
-> + err_remove_dev_physical_location:
-> +	device_remove_group(dev, &dev_attr_physical_location_group);
->   err_remove_dev_waiting_for_supplier:
->  	device_remove_file(dev, &dev_attr_waiting_for_supplier);
->   err_remove_dev_online:
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 93459724dcde..424be9cb735e 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -386,6 +386,75 @@ struct dev_msi_info {
->  #endif
->  };
->  
-> +/**
-> + * enum device_location_panel - Describes which panel surface of the system's
-> + * housing the device connection point resides on.
-> + * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
-> + * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
-> + * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
-> + * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
-> + * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
-> + * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
-> + * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unknown.
-> + */
-> +enum device_location_panel {
-> +	DEVICE_PANEL_TOP,
-> +	DEVICE_PANEL_BOTTOM,
-> +	DEVICE_PANEL_LEFT,
-> +	DEVICE_PANEL_RIGHT,
-> +	DEVICE_PANEL_FRONT,
-> +	DEVICE_PANEL_BACK,
-> +	DEVICE_PANEL_UNKNOWN,
-> +};
-> +
-> +/**
-> + * enum device_location_vertical_position - Describes vertical position of the
-> + * device connection point on the panel surface.
-> + * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of panel.
-> + * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of panel.
-> + * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of panel.
-> + */
-> +enum device_location_vertical_position {
-> +	DEVICE_VERT_POS_UPPER,
-> +	DEVICE_VERT_POS_CENTER,
-> +	DEVICE_VERT_POS_LOWER,
-> +};
-> +
-> +/**
-> + * enum device_location_horizontal_position - Describes horizontal position of
-> + * the device connection point on the panel surface.
-> + * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of panel.
-> + * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of panel.
-> + * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of panel.
-> + */
-> +enum device_location_horizontal_position {
-> +	DEVICE_HORI_POS_LEFT,
-> +	DEVICE_HORI_POS_CENTER,
-> +	DEVICE_HORI_POS_RIGHT,
-> +};
-> +
-> +/**
-> + * struct device_location - Device data related to physical location of the
-> + * device connection point.
-> + * @panel: Panel surface of the system's housing that the device connection
-> + *         point resides on.
-> + * @vertical_position: Vertical position of the device connection point within
-> + *                     the panel.
-> + * @horizontal_position: Horizontal position of the device connection point
-> + *                       within the panel.
-> + * @dock: Set if the device connection point resides in a docking station or
-> + *        port replicator.
-> + * @lid: Set if this device connection point resides on the lid of laptop
-> + *       system.
-> + */
-> +struct device_location {
-> +	enum device_location_panel panel;
-> +	enum device_location_vertical_position vertical_position;
-> +	enum device_location_horizontal_position horizontal_position;
-> +	bool dock;
-> +	bool lid;
-> +};
-> +
->  /**
->   * struct device - The basic device structure
->   * @parent:	The device's "parent" device, the device to which it is attached.
-> @@ -456,6 +525,8 @@ struct dev_msi_info {
->   * @removable:  Whether the device can be removed from the system. This
->   *              should be set by the subsystem / bus driver that discovered
->   *              the device.
-> + * @location:	Describes physical location of the device connection point in
-> + *		the system housing.
->   *
->   * @offline_disabled: If set, the device is permanently online.
->   * @offline:	Set after successful invocation of bus type's .offline().
-> @@ -569,6 +640,8 @@ struct device {
->  
->  	enum device_removable	removable;
->  
-> +	struct device_location	location;
-> +
->  	bool			offline_disabled:1;
->  	bool			offline:1;
->  	bool			of_node_reused:1;
-> -- 
-> 2.35.1.616.g0bdcbb4464-goog
-> 
-
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+> MBR, Sergey

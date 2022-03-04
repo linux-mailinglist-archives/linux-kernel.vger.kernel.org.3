@@ -2,221 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE7A4CD2D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA3A4CD2DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238188AbiCDKzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 05:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S238225AbiCDK6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 05:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238141AbiCDKzu (ORCPT
+        with ESMTP id S238313AbiCDK56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 05:55:50 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7361AEECF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:55:02 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220304105501epoutp0192bf0895e0672e3551a55dec15742608~ZKCpXYS4H1654316543epoutp01N
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:55:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220304105501epoutp0192bf0895e0672e3551a55dec15742608~ZKCpXYS4H1654316543epoutp01N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646391301;
-        bh=PeKxTyJYomZgkUR9VUiGwHMm2Y0LyuPIS5zGUqsb2qo=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=NvOmRBBROv/yoZkCDiGO1TBWhlzB/1ZtfqtJR08mliDHioFWtqpWuzpIg7EORqu1y
-         ZMMKNZ3YFjJ4TkLjmDGTcud5UZRVKIGJE0NOH3O5boZipQgdtc4InWgMr+gEtDNiT0
-         vGDuTVkYR29niTnqvTBvr3BmLHY3OLuGP7n5tZgg=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220304105500epcas5p410dea918415264a49db48ae1e38edc1f~ZKCo7IiXZ1841218412epcas5p4K;
-        Fri,  4 Mar 2022 10:55:00 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4K94W06mFkz4x9QW; Fri,  4 Mar
-        2022 10:54:52 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        11.63.05590.EEFE1226; Fri,  4 Mar 2022 19:54:38 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220304105438epcas5p2dd384708df0503a3217011409b14d583~ZKCUh2zSP3003130031epcas5p2B;
-        Fri,  4 Mar 2022 10:54:38 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220304105438epsmtrp1d0ac0e9501e28bdd1b4f73707394fc23~ZKCUhDuFA1956019560epsmtrp1N;
-        Fri,  4 Mar 2022 10:54:38 +0000 (GMT)
-X-AuditID: b6c32a4b-723ff700000015d6-86-6221efeee1c1
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3F.26.29871.EEFE1226; Fri,  4 Mar 2022 19:54:38 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220304105437epsmtip1bea365639ce88721ca76c177658e7a20~ZKCTO6vm61640716407epsmtip1W;
-        Fri,  4 Mar 2022 10:54:37 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
-        "'Thomas Gleixner'" <tglx@linutronix.de>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>
-In-Reply-To: <20220225153650.289923-2-krzysztof.kozlowski@canonical.com>
-Subject: RE: [PATCH 2/3] ARM: dts: exynos: add a specific compatible to MCT
-Date:   Fri, 4 Mar 2022 16:24:36 +0530
-Message-ID: <000101d82fb6$3e613160$bb239420$@samsung.com>
+        Fri, 4 Mar 2022 05:57:58 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F391AEECD
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:57:10 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id e8so10485505ljj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 02:57:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jFhO7NN17N/Woor4pmTV0MTUo+f4zftXWLtspOge3Rg=;
+        b=XaBwEaRS4R2gx1K6Trkm/vnS71BZmpMru2l5kjPIcko+oCOQLmOAJvobGXvXAGNqJK
+         PwTQ80++wBOmQvhJVzrqV0b66VvSUVevLQbWwzXeGQkS460YI3CRvvCCJLEi7SFHouWG
+         1sZlKE3qKNc5Ghn3Kd8CQ4XGTGkW9F+gEwsqNI1zfnBu8smW0dTJVdPVPlH8i1Dhcw7i
+         Wb85+yMFp+T+0yR7PRUxEqb9Y7cR7Lo8rHmhgY7K7Y1PlvqT667V/goav4YH3iDUKfsj
+         0gaK/fEczu+FYaZec4PDRTQsFSQLWemsVXW9+b5NygltIUwt8CYwojvksHHtximhQ5vB
+         EzmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jFhO7NN17N/Woor4pmTV0MTUo+f4zftXWLtspOge3Rg=;
+        b=JaCh1RAlmW9rjc47t8+PEd8mq+5KPqFTvCBc4ctrNEzVVI9XsogjAV5U4FDlKIYtVo
+         9onyJMlY4QqwBnM2WF8eyIPv8uuImzFtUKV0bNme8W0Myv176fkyxQI3v25FWZ6ltQ2S
+         Gfj4WTAqikb0H2t2WYMLNRlgyE2MxdDAegJv1x349FdbRSK24oRjmJfguN1ZryDQakrD
+         /Ul3JbfWsn8oiP+3bWPLmnLYlI91Vh9DeBv1aarRk6QrFxRbiVnsJ2YVcaBD9b6mf1b7
+         2MG/ORsUqcriEGb7BzVj7+9KRGM6ON2KhRhVcc9UIAjTOd8sBKqCQ8j+y93bAjP00Ok2
+         19yA==
+X-Gm-Message-State: AOAM532ShAWtO01d8kNAg4CPVBE5DF4qu61h9DGb7iMkPv7mnAQYYMLG
+        YH7sxeC4GzNYhBnakT5zhyZWjg==
+X-Google-Smtp-Source: ABdhPJzvWZ11ecPQZx1D0QUIbADDMd+0J/st6OtjE9c9d3gXXALzpYbxWxrkrWXQ/suL1boJKVz1lw==
+X-Received: by 2002:a2e:a4b4:0:b0:246:2930:53d7 with SMTP id g20-20020a2ea4b4000000b00246293053d7mr25182002ljm.74.1646391429310;
+        Fri, 04 Mar 2022 02:57:09 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-129-34.NA.cust.bahnhof.se. [155.4.129.34])
+        by smtp.gmail.com with ESMTPSA id i12-20020a056512006c00b004481d8f1bf5sm92913lfo.153.2022.03.04.02.57.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 02:57:08 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     linux-mmc@vger.kernel.org,
+        Jean Rene Dawin <jdawin@math.uni-bielefeld.de>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Huijin Park <huijin.park@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mmc: core: Restore (almost) the busy polling for MMC_SEND_OP_COND
+Date:   Fri,  4 Mar 2022 11:56:56 +0100
+Message-Id: <20220304105656.149281-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJxTl5cVJJB5hst+orov2J0YUHPrQJrEfyiAQR8T5irYVLBUA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmuu6794pJBieW21jM+yxrMf/IOVaL
-        jW9/MFlsenyN1eLyrjlsFjPO72OyaN17hN1i86apzA4cHrMaetk8Nq3qZPO4c20Pm8e7c+fY
-        PTYvqff4vEkugC0q2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnF
-        J0DXLTMH6BwlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5q
-        iZWhgYGRKVBhQnbGnWe7mQq+SFWcnfqSsYHxilgXIyeHhICJxKSJj5i7GLk4hAR2M0p8mvSL
-        EcL5xCgxe8JyJgjnG6PEno3X2WBabm7tZoFI7GWU2Pp5AiuE85JR4vm9PlaQKjYBXYkdi9vY
-        QBIiApeYJE50tDCBJDgFPCRWTjvJCGILC3hL/L3dCjaWRUBFYtqj/UBjOTh4BSwllm7lBwnz
-        CghKnJz5hAXEZhaQl9j+dg4zxBUKEj+fLgPbJSLgJLFs2zJGiBpxiZdHj7CD7JUQmMkh8XrW
-        L6gGF4k/H88xQdjCEq+Ob2GHsKUkXva3sYPslRDIlujZZQwRrpFYOu8YC4RtL3Hgyhyw05gF
-        NCXW79KHWMUn0fv7CRNEJ69ER5sQRLWqRPO7q1Cd0hITu7tZIUo8JFpOOEBC6iajxMoTK9gm
-        MCrMQvLkLCRPzkLyzCyExQsYWVYxSqYWFOempxabFhjnpZbD4zs5P3cTIzixannvYHz04IPe
-        IUYmDsZDjBIczEoivJaaCklCvCmJlVWpRfnxRaU5qcWHGE2BAT+RWUo0OR+Y2vNK4g1NLA1M
-        zMzMTCyNzQyVxHlPpW9IFBJITyxJzU5NLUgtgulj4uCUamA6N8Nv05uNkwqPJqRXTRW0NJ8w
-        dZZP5frXl4Tn6cy7zlxyWGzj/zk3NO+lP491qK4IrN8b4xE1UWvFDo0LXtHznLyX7Uicy3y/
-        ZAbrZkH2XOaF6/erW2aJOKuxrdi6f1LbBDkrSVXtdPXtnGt2qy6v2FB5KuPLF/81z8re+b++
-        17Lqs+di7ujHeQvvZek/TDf+s/1ci3KDgflWp89Xb+YFODO/fhFbtWbFZYFVX42FRE9cODt9
-        kqDW5hVcHRYnb705yi346TJreOfOvtagqpMNN5umsJnNW/hWXaG0ZmWU46GLd6/633e76T7n
-        rbzs8l1hct8e79nFddmb5SSLRrCfx8/Hq1eIhtg1TmFg++7moMRSnJFoqMVcVJwIAGZxavA1
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHLMWRmVeSWpSXmKPExsWy7bCSnO6794pJBm+PqFjM+yxrMf/IOVaL
-        jW9/MFlsenyN1eLyrjlsFjPO72OyaN17hN1i86apzA4cHrMaetk8Nq3qZPO4c20Pm8e7c+fY
-        PTYvqff4vEkugC2KyyYlNSezLLVI3y6BK+POs91MBV+kKs5OfcnYwHhFrIuRk0NCwETi5tZu
-        li5GLg4hgd2MEp2rv7JDJKQlrm+cAGULS6z895wdoug5o8SsH3fYQBJsAroSOxa3sYEkRARu
-        MElMP3CTCaLqKqNE7+plrCBVnAIeEiunnWQEsYUFvCX+3m4F62YRUJGY9mg/0G4ODl4BS4ml
-        W/lBwrwCghInZz4BCzML6Em0bQTrZBaQl9j+dg4zxEEKEj+fQkwXEXCSWLZtGVSNuMTLo0fY
-        JzAKzUIyaRbCpFlIJs1C0rGAkWUVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpecn7uJkZwFGlp
-        7mDcvuqD3iFGJg7GQ4wSHMxKIryWmgpJQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJI
-        TyxJzU5NLUgtgskycXBKNTCVfM7eenn7p0PrZkfPjb3Zc6t9kbi9wAmR1FDhgj7Decz/Fh5X
-        28J8bnHHvbnfHnVwPAiwuO69NmpBhvzbT3MjQ4tTWzhCgk6fL16wWkHs5QM9xuCKXIXudxmp
-        8un5rwo/sMgqS8x0lot7foDzhF/VCvfmXTptjRUvSk1be5eICjXM3CLN9uVMX8npTclHQqc4
-        /vAyODrrR8XyiZNFjjDOeKi9Z/ENV9erR/hNlFR778Y3aMscvq19e39T0k1esVvN854Z32hx
-        elF+Wa17ZsI6kfDqrYwus37ynhd/fP4ev5Xm7Mi06xxZpyOcuTKM7HgCBS/yNFetmJJ+2a6x
-        /oNrX4jM5sBn92OzmY7ufKHEUpyRaKjFXFScCACZVUs7EQMAAA==
-X-CMS-MailID: 20220304105438epcas5p2dd384708df0503a3217011409b14d583
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220225180401epcas5p1688ae4e0752f11522aaf6c33295ebc53
-References: <20220225153650.289923-1-krzysztof.kozlowski@canonical.com>
-        <CGME20220225180401epcas5p1688ae4e0752f11522aaf6c33295ebc53@epcas5p1.samsung.com>
-        <20220225153650.289923-2-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 76bfc7ccc2fa ("mmc: core: adjust polling interval for CMD1"),
+significantly decreased the polling period from ~10-12ms into just a couple
+of us. The purpose was to decrease the total time spent in the busy polling
+loop, but unfortunate it has lead to problems, that causes eMMC cards to
+never gets out busy and thus fails to be initialized.
 
+To fix the problem, but also to try to keep some of the new improved
+behaviour, let's start by using a polling period of 1-2ms, which then
+increases for each loop, according to common polling loop in
+__mmc_poll_for_busy().
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
->Sent: Friday, February 25, 2022 9:07 PM
->To: Daniel Lezcano <daniel.lezcano@linaro.org>; Thomas Gleixner
-><tglx@linutronix.de>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-><krzysztof.kozlowski@canonical.com>; Alim Akhtar
-><alim.akhtar@samsung.com>; linux-kernel@vger.kernel.org;
->devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->samsung-soc@vger.kernel.org
->Subject: [PATCH 2/3] ARM: dts: exynos: add a specific compatible to MCT
->
->One compatible is used for the Multi-Core Timer on most of the Samsung
-Exynos
->SoCs, which is correct but not specific enough.  These MCT blocks have
-different
->number of interrupts, so add a second specific compatible to Exynos3250 and
-all
->Exynos5 SoCs.
->
->Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->---
+Reported-by: Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
+Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+Cc: Huijin Park <huijin.park@samsung.com>
+Fixes: 76bfc7ccc2fa ("mmc: core: adjust polling interval for CMD1")
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Jean Rene and H. Nikolaus, if this doesn't work, please try extending the
+the MMC_OP_COND_PERIOD_US a bit, to so see if we can find a value that always
+works.
 
+Kind regards
+Uffe
 
-> arch/arm/boot/dts/exynos3250.dtsi | 3 ++-
-arch/arm/boot/dts/exynos5250.dtsi
->| 3 ++-  arch/arm/boot/dts/exynos5260.dtsi | 3 ++-
->arch/arm/boot/dts/exynos54xx.dtsi | 3 ++-
-> 4 files changed, 8 insertions(+), 4 deletions(-)
->
->diff --git a/arch/arm/boot/dts/exynos3250.dtsi
->b/arch/arm/boot/dts/exynos3250.dtsi
->index ae644315855d..41bb421e67c2 100644
->--- a/arch/arm/boot/dts/exynos3250.dtsi
->+++ b/arch/arm/boot/dts/exynos3250.dtsi
->@@ -269,7 +269,8 @@ gic: interrupt-controller@10481000 {
-> 		};
->
-> 		timer@10050000 {
->-			compatible = "samsung,exynos4210-mct";
->+			compatible = "samsung,exynos3250-mct",
->+				     "samsung,exynos4210-mct";
-> 			reg = <0x10050000 0x800>;
-> 			interrupts = <GIC_SPI 218 IRQ_TYPE_LEVEL_HIGH>,
-> 				     <GIC_SPI 219 IRQ_TYPE_LEVEL_HIGH>, diff
---
->git a/arch/arm/boot/dts/exynos5250.dtsi b/arch/arm/boot/dts/exynos5250.dtsi
->index 5baaa7eb71a4..63d1dcf2c55c 100644
->--- a/arch/arm/boot/dts/exynos5250.dtsi
->+++ b/arch/arm/boot/dts/exynos5250.dtsi
->@@ -245,7 +245,8 @@ clock_audss: audss-clock-controller@3810000 {
-> 		};
->
-> 		timer@101c0000 {
->-			compatible = "samsung,exynos4210-mct";
->+			compatible = "samsung,exynos5250-mct",
->+				     "samsung,exynos4210-mct";
-> 			reg = <0x101C0000 0x800>;
-> 			clocks = <&clock CLK_FIN_PLL>, <&clock CLK_MCT>;
-> 			clock-names = "fin_pll", "mct";
->diff --git a/arch/arm/boot/dts/exynos5260.dtsi
->b/arch/arm/boot/dts/exynos5260.dtsi
->index 56271e7c4587..ff1ee409eff3 100644
->--- a/arch/arm/boot/dts/exynos5260.dtsi
->+++ b/arch/arm/boot/dts/exynos5260.dtsi
->@@ -333,7 +333,8 @@ chipid: chipid@10000000 {
-> 		};
->
-> 		mct: timer@100b0000 {
->-			compatible = "samsung,exynos4210-mct";
->+			compatible = "samsung,exynos5260-mct",
->+				     "samsung,exynos4210-mct";
-> 			reg = <0x100B0000 0x1000>;
-> 			clocks = <&fin_pll>, <&clock_peri PERI_CLK_MCT>;
-> 			clock-names = "fin_pll", "mct";
->diff --git a/arch/arm/boot/dts/exynos54xx.dtsi
->b/arch/arm/boot/dts/exynos54xx.dtsi
->index 2ddb7a5f12b3..3ec43761d8b9 100644
->--- a/arch/arm/boot/dts/exynos54xx.dtsi
->+++ b/arch/arm/boot/dts/exynos54xx.dtsi
->@@ -74,7 +74,8 @@ smp-sram@53000 {
-> 		};
->
-> 		mct: timer@101c0000 {
->-			compatible = "samsung,exynos4210-mct";
->+			compatible = "samsung,exynos5420-mct",
->+				     "samsung,exynos4210-mct";
-> 			reg = <0x101c0000 0xb00>;
-> 			interrupts-extended = <&combiner 23 3>,
-> 					      <&combiner 23 4>,
->--
->2.32.0
+---
+ drivers/mmc/core/block.c   |  2 +-
+ drivers/mmc/core/mmc.c     |  2 +-
+ drivers/mmc/core/mmc_ops.c | 13 +++++++++----
+ drivers/mmc/core/mmc_ops.h |  3 ++-
+ drivers/mmc/core/sd.c      |  2 +-
+ 5 files changed, 14 insertions(+), 8 deletions(-)
 
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 8d718aa56d33..4e67c1403cc9 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1908,7 +1908,7 @@ static int mmc_blk_card_busy(struct mmc_card *card, struct request *req)
+ 
+ 	cb_data.card = card;
+ 	cb_data.status = 0;
+-	err = __mmc_poll_for_busy(card->host, MMC_BLK_TIMEOUT_MS,
++	err = __mmc_poll_for_busy(card->host, 0, MMC_BLK_TIMEOUT_MS,
+ 				  &mmc_blk_busy_cb, &cb_data);
+ 
+ 	/*
+diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
+index 13abfcd130a5..43d1b9b2fa49 100644
+--- a/drivers/mmc/core/mmc.c
++++ b/drivers/mmc/core/mmc.c
+@@ -1962,7 +1962,7 @@ static int mmc_sleep(struct mmc_host *host)
+ 		goto out_release;
+ 	}
+ 
+-	err = __mmc_poll_for_busy(host, timeout_ms, &mmc_sleep_busy_cb, host);
++	err = __mmc_poll_for_busy(host, 0, timeout_ms, &mmc_sleep_busy_cb, host);
+ 
+ out_release:
+ 	mmc_retune_release(host);
+diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
+index d63d1c735335..180d7e9d3400 100644
+--- a/drivers/mmc/core/mmc_ops.c
++++ b/drivers/mmc/core/mmc_ops.c
+@@ -21,6 +21,8 @@
+ 
+ #define MMC_BKOPS_TIMEOUT_MS		(120 * 1000) /* 120s */
+ #define MMC_SANITIZE_TIMEOUT_MS		(240 * 1000) /* 240s */
++#define MMC_OP_COND_PERIOD_US		(1 * 1000) /* 1ms */
++#define MMC_OP_COND_TIMEOUT_MS		1000 /* 1s */
+ 
+ static const u8 tuning_blk_pattern_4bit[] = {
+ 	0xff, 0x0f, 0xff, 0x00, 0xff, 0xcc, 0xc3, 0xcc,
+@@ -232,7 +234,9 @@ int mmc_send_op_cond(struct mmc_host *host, u32 ocr, u32 *rocr)
+ 	cmd.arg = mmc_host_is_spi(host) ? 0 : ocr;
+ 	cmd.flags = MMC_RSP_SPI_R1 | MMC_RSP_R3 | MMC_CMD_BCR;
+ 
+-	err = __mmc_poll_for_busy(host, 1000, &__mmc_send_op_cond_cb, &cb_data);
++	err = __mmc_poll_for_busy(host, MMC_OP_COND_PERIOD_US,
++				  MMC_OP_COND_TIMEOUT_MS,
++				  &__mmc_send_op_cond_cb, &cb_data);
+ 	if (err)
+ 		return err;
+ 
+@@ -495,13 +499,14 @@ static int mmc_busy_cb(void *cb_data, bool *busy)
+ 	return 0;
+ }
+ 
+-int __mmc_poll_for_busy(struct mmc_host *host, unsigned int timeout_ms,
++int __mmc_poll_for_busy(struct mmc_host *host, unsigned int period_us,
++			unsigned int timeout_ms,
+ 			int (*busy_cb)(void *cb_data, bool *busy),
+ 			void *cb_data)
+ {
+ 	int err;
+ 	unsigned long timeout;
+-	unsigned int udelay = 32, udelay_max = 32768;
++	unsigned int udelay = period_us ? period_us : 32, udelay_max = 32768;
+ 	bool expired = false;
+ 	bool busy = false;
+ 
+@@ -546,7 +551,7 @@ int mmc_poll_for_busy(struct mmc_card *card, unsigned int timeout_ms,
+ 	cb_data.retry_crc_err = retry_crc_err;
+ 	cb_data.busy_cmd = busy_cmd;
+ 
+-	return __mmc_poll_for_busy(host, timeout_ms, &mmc_busy_cb, &cb_data);
++	return __mmc_poll_for_busy(host, 0, timeout_ms, &mmc_busy_cb, &cb_data);
+ }
+ EXPORT_SYMBOL_GPL(mmc_poll_for_busy);
+ 
+diff --git a/drivers/mmc/core/mmc_ops.h b/drivers/mmc/core/mmc_ops.h
+index 9c813b851d0b..09ffbc00908b 100644
+--- a/drivers/mmc/core/mmc_ops.h
++++ b/drivers/mmc/core/mmc_ops.h
+@@ -41,7 +41,8 @@ int mmc_can_ext_csd(struct mmc_card *card);
+ int mmc_switch_status(struct mmc_card *card, bool crc_err_fatal);
+ bool mmc_prepare_busy_cmd(struct mmc_host *host, struct mmc_command *cmd,
+ 			  unsigned int timeout_ms);
+-int __mmc_poll_for_busy(struct mmc_host *host, unsigned int timeout_ms,
++int __mmc_poll_for_busy(struct mmc_host *host, unsigned int period_us,
++			unsigned int timeout_ms,
+ 			int (*busy_cb)(void *cb_data, bool *busy),
+ 			void *cb_data);
+ int mmc_poll_for_busy(struct mmc_card *card, unsigned int timeout_ms,
+diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+index 24b0418a24bb..68df6b2f49cc 100644
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -1671,7 +1671,7 @@ static int sd_poweroff_notify(struct mmc_card *card)
+ 
+ 	cb_data.card = card;
+ 	cb_data.reg_buf = reg_buf;
+-	err = __mmc_poll_for_busy(card->host, SD_POWEROFF_NOTIFY_TIMEOUT_MS,
++	err = __mmc_poll_for_busy(card->host, 0, SD_POWEROFF_NOTIFY_TIMEOUT_MS,
+ 				  &sd_busy_poweroff_notify_cb, &cb_data);
+ 
+ out:
+-- 
+2.25.1
 

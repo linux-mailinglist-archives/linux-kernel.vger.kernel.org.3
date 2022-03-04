@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2FC4CD3C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110914CD3C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbiCDLur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S236212AbiCDLvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCDLuq (ORCPT
+        with ESMTP id S229491AbiCDLvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:50:46 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EEE18022F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:49:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646394598; x=1677930598;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fUXyJLIdFhiyxULhk8zOA6BP1tAoMR/8RP78/EcpwW0=;
-  b=wWM65DfJJBlGCxTKE2Y35NoPgP24nebFyaSQQ2FgoDBLItzGCe2fjVuv
-   LQAFkRInehUkKlXmXeRjiqRU4+/Tx4mk8eRUW69wuloViMtaaomTflGBp
-   RU+x0N21izHasq6Zvl8DkaYbUovs4BlbLX36I+JO6yYXACyWzb+5ElPZ4
-   N97YU/surm3h6X6VkItQ5en8tbQvbcUWQQNO1NzCR5lBbrm/7ih78/cmo
-   IarpzIEvxJQ6UJe41wl+4vqzyGfGc1DR2DsgS0O9HdfAxcqEij3Kqixg5
-   Zn+kSUr6OBOAvdPpykTflSkksMvW8NxfNimTkdJ87eA1ZfRtUqYwvGV2/
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
-   d="scan'208";a="87826588"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 04:49:57 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 04:49:57 -0700
-Received: from [10.12.72.98] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 4 Mar 2022 04:49:56 -0700
-Message-ID: <60224607-230a-8933-bb6e-f907df0630c8@microchip.com>
-Date:   Fri, 4 Mar 2022 12:49:55 +0100
+        Fri, 4 Mar 2022 06:51:46 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE5E1AA067
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 03:50:58 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2dc585dbb02so24721287b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 03:50:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/QMKz41by9JRTwwLAdweIX5q4Gx6CkMA+bu/XdMpGwU=;
+        b=MHERMiV3OzEHRf+oF3doL0VQqQqulIYbwiwmvY/ysTPJav11DFfh4asKH3SgRWJi5u
+         m2uwY1RGax0AJ6EvROBRltNM5lW+1/7lSEVWhl8mFgYw2s+Eef1R79xadJj7r0WzZGDG
+         tEqKIDEEn28WvQXYtSLQsFKhUWSiM3fFlEHZQCvb14ZLjsbLESZq87mChm5j69nvUVUP
+         HWr4nTzh8pga6taIJuuWJGUzdEEdPPOPqW2iQEtBFR628dhd/tJUf8S7uLGffSTYfD21
+         g9JSDqrt8ZBbkhtruGglMmKn9DD9HUl6omKKoKH3CVzAFW65h/spw/oE6qf+W1XqmU04
+         Xu2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/QMKz41by9JRTwwLAdweIX5q4Gx6CkMA+bu/XdMpGwU=;
+        b=VZiIt45SzlIhjzUInpSZFbi+5YXhKi7gLu4RM5QN1oqj2XI9SV5Zbbah4cqQOoEulh
+         7jMcuxDjVg9mMoMGBPPdX9+lZJzhiQ2MZ5uD8bH2vlOpujoVVRDGQA3LFDqmvrd0NZfG
+         SzMpIOno3esKAGiGCOSL0pc6X26lmtH2ws7h3GZUYcU/a1a32oJGU9u0mnBdjuIaI9WS
+         uCwaX4n8r/OVPghJ0SB8wwNQxDmDDUfAW/mdlH6NLe2MzZqmPeOzhXffGRzg6qy7FVvN
+         q28AWK4Vx97aJD3yJ09AAtV4YwgNWSxjQ9JbTcDk+J5uyU530zCwfd79n6ZbuD5o8yCC
+         DEXQ==
+X-Gm-Message-State: AOAM5301BTRbTtbwvU6k6A9DivGu2HUn3KrE95UrqnGKcdTojEmcc0q8
+        ubYk+Q772ENVDccLFSos7hC68kdpbJxfu9SnbEyirA==
+X-Google-Smtp-Source: ABdhPJzNQ8uG33oC4WJoKAcrp2fTVx9Gy+VaRHhWr0JwhE78dBabgNIhxzHRennaCQGr10Ej+e620fnWt1LOUbTblPo=
+X-Received: by 2002:a81:9ad7:0:b0:2db:f000:32e7 with SMTP id
+ r206-20020a819ad7000000b002dbf00032e7mr16196340ywg.412.1646394657601; Fri, 04
+ Mar 2022 03:50:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ARM: at91: add support in soc driver for new SAMA5D29
-Content-Language: en-US
-To:     Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Mihai Sain - M19926" <Mihai.Sain@microchip.com>
-References: <20220302155329.27668-1-nicolas.ferre@microchip.com>
- <63d5bc08-7681-954a-2106-2653abf76b57@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <63d5bc08-7681-954a-2106-2653abf76b57@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
+In-Reply-To: <20220304063427.372145-1-42.hyeyoo@gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 4 Mar 2022 12:50:21 +0100
+Message-ID: <CANpmjNNv8+frHPdvT=0ZNuz5phUy1WRanJ6DkiiNvDTBtFraAQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] slab cleanups
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2022 at 09:19, Claudiu Beznea - M18063 wrote:
-> On 02.03.2022 17:53, nicolas.ferre@microchip.com wrote:
->> From: Mihai Sain <mihai.sain@microchip.com>
->>
->> Add detection of new SAMA5D29 by the SoC driver.
->>
->> Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
->> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> 
-> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+On Fri, 4 Mar 2022 at 07:34, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+>
+> Changes from v1:
+>         Now SLAB passes requests larger than order-1 page
+>         to page allocator.
+>
+>         Adjusted comments from Matthew, Vlastimil, Rientjes.
+>         Thank you for feedback!
+>
+>         BTW, I have no idea what __ksize() should return when an object that
+>         is not allocated from slab is passed. both 0 and folio_size()
+>         seems wrong to me.
 
-Queued in at91-soc for 5.18.
+Didn't we say 0 would be the safer of the two options?
+https://lkml.kernel.org/r/0e02416f-ef43-dc8a-9e8e-50ff63dd3c61@suse.cz
 
-Best regards,
-   Nicolas
-
-> 
->> ---
->>   drivers/soc/atmel/soc.c | 3 +++
->>   drivers/soc/atmel/soc.h | 1 +
->>   2 files changed, 4 insertions(+)
->>
->> diff --git a/drivers/soc/atmel/soc.c b/drivers/soc/atmel/soc.c
->> index a490ad7e090f..b2d365ae0282 100644
->> --- a/drivers/soc/atmel/soc.c
->> +++ b/drivers/soc/atmel/soc.c
->> @@ -156,6 +156,9 @@ static const struct at91_soc socs[] __initconst = {
->>   	AT91_SOC(SAMA5D2_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
->>   		 AT91_CIDR_VERSION_MASK, SAMA5D28C_LD2G_EXID_MATCH,
->>   		 "sama5d28c 256MiB LPDDR2 SiP", "sama5d2"),
->> +	AT91_SOC(SAMA5D2_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
->> +		 AT91_CIDR_VERSION_MASK, SAMA5D29CN_EXID_MATCH,
->> +		 "sama5d29", "sama5d2"),
->>   	AT91_SOC(SAMA5D3_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
->>   		 AT91_CIDR_VERSION_MASK, SAMA5D31_EXID_MATCH,
->>   		 "sama5d31", "sama5d3"),
->> diff --git a/drivers/soc/atmel/soc.h b/drivers/soc/atmel/soc.h
->> index c3eb3c8f0834..2ecaa75b00f0 100644
->> --- a/drivers/soc/atmel/soc.h
->> +++ b/drivers/soc/atmel/soc.h
->> @@ -95,6 +95,7 @@ at91_soc_init(const struct at91_soc *socs);
->>   #define SAMA5D28C_LD2G_EXID_MATCH	0x00000072
->>   #define SAMA5D28CU_EXID_MATCH		0x00000010
->>   #define SAMA5D28CN_EXID_MATCH		0x00000020
->> +#define SAMA5D29CN_EXID_MATCH		0x00000023
->>   
->>   #define SAMA5D3_CIDR_MATCH		0x0a5c07c0
->>   #define SAMA5D31_EXID_MATCH		0x00444300
-> 
-
-
--- 
-Nicolas Ferre
+> Hello, these are cleanup patches for slab.
+> Please consider them for slab-next :)
+>
+> Any comments will be appreciated.
+> Thanks.
+>
+> Hyeonggon Yoo (5):
+>   mm/slab: kmalloc: pass requests larger than order-1 page to page
+>     allocator
+>   mm/sl[au]b: unify __ksize()
+>   mm/sl[auo]b: move definition of __ksize() to mm/slab.h
+>   mm/slub: limit number of node partial slabs only in cache creation
+>   mm/slub: refactor deactivate_slab()
+>
+>  include/linux/slab.h |  36 ++++++------
+>  mm/slab.c            |  51 ++++++++---------
+>  mm/slab.h            |  21 +++++++
+>  mm/slab_common.c     |  20 +++++++
+>  mm/slob.c            |   1 -
+>  mm/slub.c            | 130 ++++++++++++-------------------------------
+>  6 files changed, 114 insertions(+), 145 deletions(-)
+>
+> --
+> 2.33.1
+>

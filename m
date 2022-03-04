@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDF84CDE61
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADE54CDE9A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiCDUXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
+        id S230015AbiCDUXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 15:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiCDUWv (ORCPT
+        with ESMTP id S230177AbiCDUWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:22:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70028151696
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:22:02 -0800 (PST)
+        Fri, 4 Mar 2022 15:22:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D59D151344
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:22:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BA5E61976
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95856B82B8B
         for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 20:22:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74D2BC340F4;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 47553C340F2;
         Fri,  4 Mar 2022 20:22:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1646425321;
-        bh=drtAVc9iu/9kuWtQa9BBtKt9Vne7cc+zjPAYGhDvYRc=;
+        bh=ytGZY9VItoWDUzY9wExvq+MKYgXA96wESg6XX13ZWxw=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=uGKvNQs0VgiBauASMTlKebGz0/T77FYskLsJd9PIc3AQTjAn0+IRmu7FI0WzlNJSj
-         AF85MecRPTf9uaIQnmbLbutx/18VNOz9pJNhiqLUvohNexwNQMq4Rd7n7SRDYdrUGI
-         OTgYfcnGJUuHxQBIn7+Gp3K3zdX2Ir3UHDIBzBlJ+jnqqGpme2hBwmO59SF4ZhQsO0
-         QIQLJLhMA85e8FdecyjGMgHQj3rO5h2/kUeE/BI1Lf9INNk58c/ZgELG5+gaypmfzf
-         Wtdl0ytHaLtfWoWz7nwMqR5RmCLs/VefdVYHM/XQWI/UqzxXx8zaouCEpUCu2RxZvq
-         TkuYLFgE3iVFg==
+        b=QZHODvayfQtw3ULjF2BYU4UP7Q5MwyTl8HfgMnJzPSszZV38ebA/UpgWWwtGpMs/q
+         7xIET6EeIIwaeK1rWzsXF7xvGTE5wPZCmUgQ94JQK61UiGAF2tmuut0IKl4Szf5PTo
+         zo1lf+dfh/MPDVXnxvJ2frak17Rb1x7ffeQquuThP48AgH7RSr1lYS4H54eGTZFrIO
+         H4C2BgmU7OpI6f22mkhnkCTvVUOXTmeMxE/+EgHhFvIshk205Kh5/eYoMuFlCpa8GV
+         /Utoz2xn4G/dijs0LQo/+KMwxpH010H5Ms1EGP/7FmDr8Ebk5kgVbe5+uxLLx3bv8+
+         Rzmz45TwV+StQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60B9FE6D4BB;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34451EAC099;
         Fri,  4 Mar 2022 20:22:01 +0000 (UTC)
-Subject: Re: [git pull] IOMMU Fixes for Linux v5.17-rc6
+Subject: Re: [GIT PULL] sound fixes for 5.17-rc7
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YiIxynRjN0sRPIju@8bytes.org>
-References: <YiIxynRjN0sRPIju@8bytes.org>
+In-Reply-To: <s5ho82mrt55.wl-tiwai@suse.de>
+References: <s5ho82mrt55.wl-tiwai@suse.de>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YiIxynRjN0sRPIju@8bytes.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v5.17-rc6
-X-PR-Tracked-Commit-Id: 9826e393e4a8c3df474e7f9eacd3087266f74005
+X-PR-Tracked-Message-Id: <s5ho82mrt55.wl-tiwai@suse.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.17-rc7
+X-PR-Tracked-Commit-Id: 0aa6b294b312d9710804679abd2c0c8ca52cc2bc
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3f509f5971bca38eeb543186131fb1b404262023
-Message-Id: <164642532139.24805.4276557423762311140.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 8d670948f4d6d372935b7dcf9f7db14548859b67
+Message-Id: <164642532120.24805.10120001757678167310.pr-tracker-bot@kernel.org>
 Date:   Fri, 04 Mar 2022 20:22:01 +0000
-To:     Joerg Roedel <joro@8bytes.org>
+To:     Takashi Iwai <tiwai@suse.de>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 4 Mar 2022 16:35:38 +0100:
+The pull request you sent on Fri, 04 Mar 2022 09:58:30 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v5.17-rc6
+> git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.17-rc7
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3f509f5971bca38eeb543186131fb1b404262023
+https://git.kernel.org/torvalds/c/8d670948f4d6d372935b7dcf9f7db14548859b67
 
 Thank you!
 

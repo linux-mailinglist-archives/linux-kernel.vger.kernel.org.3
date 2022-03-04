@@ -2,97 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB7A4CE0E2
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 00:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249944CE0F3
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 00:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiCDXVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 18:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S229608AbiCDX0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 18:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiCDXVP (ORCPT
+        with ESMTP id S229449AbiCDX0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 18:21:15 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C31BCF3A4;
-        Fri,  4 Mar 2022 15:20:26 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224LgfXR027489;
-        Fri, 4 Mar 2022 23:20:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=WCYSt8KRidhL4NjdsV5ZjsM4ES0G/Mb3imPT1/Z1NME=;
- b=GM3RPUriKqkoAraxi1Ti0h6WRnBo4j1Xc739RhCFPF1GcuXhy1jU2kBNy+0BVZUJxsET
- pADnnoNMGphPdFhgir96oe4BWn9ZZuvvQhhivHNG4aPeY5eO5hbGs+zEN/UuBbVhh2So
- EMnZfrbxeD59wGPzNETl0fsxBQ/JjP9jG+5jNT145W0jRnREmtVHU0FA665jnfQMMsIC
- o+Cm/P8SPV1niiN0fDtFsOVzFTId79CHErduo8/hPLzO848JPiKTR5BgOTXAbDtYaRu6
- HalRcLb2PAD6leRRasdWz+d9Gv506eusFkuThSamEnncqe1R5N3XWPatz8EM5ClwcxYV HQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ektx2sbeq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 23:20:03 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 224MuQkK000670;
-        Fri, 4 Mar 2022 23:20:03 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ektx2sbe4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 23:20:03 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 224NHPSM031883;
-        Fri, 4 Mar 2022 23:20:01 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma05wdc.us.ibm.com with ESMTP id 3ek4k9qyrf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 23:20:01 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 224NK0dm24379686
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Mar 2022 23:20:00 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 953F46A057;
-        Fri,  4 Mar 2022 23:20:00 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F3786A051;
-        Fri,  4 Mar 2022 23:19:59 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  4 Mar 2022 23:19:59 +0000 (GMT)
-Message-ID: <59f08890-f3f9-43fe-e1cc-6648071e33e0@linux.ibm.com>
-Date:   Fri, 4 Mar 2022 18:19:59 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4/4] integrity: CA enforcement in machine keyring
-Content-Language: en-US
-To:     Eric Snowberg <eric.snowberg@oracle.com>, zohar@linux.ibm.com,
-        jarkko@kernel.org, dhowells@redhat.com, dwmw2@infradead.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
-        mic@linux.microsoft.com, konrad.wilk@oracle.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20220301173651.3435350-1-eric.snowberg@oracle.com>
- <20220301173651.3435350-5-eric.snowberg@oracle.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220301173651.3435350-5-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FFoQN9N1jdMMU59j4bVoavWi3cmld1m-
-X-Proofpoint-GUID: S4tRvY4JhVV13QKqIFRBF79Lc8SxZ32e
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-04_09,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- suspectscore=0 spamscore=0 clxscore=1015 phishscore=0 priorityscore=1501
- malwarescore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203040115
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Fri, 4 Mar 2022 18:26:46 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED4CBD7E8
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 15:25:57 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id j204-20020a6280d5000000b004e107ad3488so5912134pfd.15
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 15:25:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=E1a/PK0RmVxTCPWpIdWKH/yHe7zM3AEtbIeJWKLYm9s=;
+        b=ZqeWVyJ2GbUZUKLpDj6j5kMLlJxTNfmXj/ztBgNIJc+2nj+1b71RWgcw8c5mdUnEjn
+         IGeHthZqeUHEfpKUsXCBRNv2rMNGgErnNQF5e2lOen4ayOtzi4lzgWl8Sly3VurCANAu
+         7z8KPBSNA+iBKX4Os3D8if+Fn737tobJzG0GGia6TOl1Jk4mOcFrjmjG8YKZgU7MBQp4
+         qVI26/hpL4w7tcbY4LS+lWCzvFKOTzXj/RWHJoGJbCn3EFJ+UDtpoxqUzpKJ1S3n4For
+         mCWnZ15wDQXQo8+mw0cVs+Fa0ddGOQgfSQZM4juATQ7it29mIC4q0Sbw3bztChx0IZpZ
+         +bOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=E1a/PK0RmVxTCPWpIdWKH/yHe7zM3AEtbIeJWKLYm9s=;
+        b=ftebveqVsLdCKvGdX2K5mT+58/PuICtheh4FcBOfyUng0i4BNfY+BW737CMBslA2Yz
+         qtDDg+06+Sk90c+mEmcKuyUxSIXAczka/VkB4Qj3dhBha7/KHa+p3XwN19nlt9/1rPvA
+         LZH3w7a12aqD5D3dtxmd82VseKju4MoMCMnn7UJDAviya9Xh9EdToMWGEgCz0zkDvN66
+         wvB/Ebcy0UEzyPThNszeb2wMzzgRk3cnQWmxWHoqLMx8FspLyUyUbIO0OvIm4XZQ9BlX
+         8pxHiYd2HNSBnzdn3X+QEMuJVdt3iQC239CqM9hEzyre4iRHpyl1qNNkpFaCHsB9kPiY
+         x5tg==
+X-Gm-Message-State: AOAM532YM7ecaCxkXqNKI0WzDpgFAvnLHfAhkWqqG07bSckzyvrzc71P
+        si5aS2QInV+mhHiEk97bnC/Zm0atmHUPBw==
+X-Google-Smtp-Source: ABdhPJzAba43ZcO6l49Zt6VUoK8xb21G7+wMnw1+MFyf1gRTjgRJY4vEqe9PF104gQ1ozh8peh5mEBR12iKyZQ==
+X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
+ (user=wonchung job=sendgmr) by 2002:a17:90b:1bc1:b0:1bf:35bf:24ab with SMTP
+ id oa1-20020a17090b1bc100b001bf35bf24abmr248714pjb.1.1646436356611; Fri, 04
+ Mar 2022 15:25:56 -0800 (PST)
+Date:   Fri,  4 Mar 2022 23:25:53 +0000
+Message-Id: <20220304232553.2475051-1-wonchung@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH v3] driver core: Add sysfs support for physical location of a device
+From:   Won Chung <wonchung@google.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Won Chung <wonchung@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,212 +71,364 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When ACPI table includes _PLD fields for a device, create a new
+directory (physical_location) in sysfs to share _PLD fields.
 
-On 3/1/22 12:36, Eric Snowberg wrote:
-> When INTEGRITY_MACHINE_KEYRING is set, all Machine Owner Keys (MOK)
-> are loaded into the machine keyring.  Add a new
-> INTEGRITY_MACHINE_KEYRING_CA_ENFORCED option where only MOK CA keys are
-> added.
->
-> Set the restriction check to restrict_link_by_ca.  This will only allow
-> CA keys into the machine keyring. Unlike when INTEGRITY_MACHINE_KEYRING
-> is enabled, IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY may
-> also be enabled, allowing IMA to use keys in the machine keyring as
-> another trust anchor.
+Currently without PLD information, when there are multiple of same
+devices, it is hard to distinguish which device corresponds to which
+physical device at which location. For example, when there are two Type
+C connectors, it is hard to find out which connector corresponds to the
+Type C port on the left panel versus the Type C port on the right panel.
+With PLD information provided, we can determine which specific device at
+which location is doing what.
 
-I tried to test this but could only do it by disabling the 
-MokListTrustedRT variable check and then also the check for secure boot. 
-It did load the expected keys onto the .machine keyring, enforcing the 
-x509 indicating a self-signed CA if the compile time option 
-CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED=y was set, loading all keys 
-in the case of CONFIG_INTEGRITY_MACHINE_KEYRING=y.
+_PLD output includes much more fields, but only generic fields are added
+and exposed to sysfs, so that non-ACPI devices can also support it in
+the future. The minimal generic fields needed for locating a device are
+the following.
+- panel
+- vertical_position
+- horizontal_position
+- dock
+- lid
 
-I tried with this branch here from mokutils 
-https://github.com/esnowberg/mokutil/tree/trust-mok but this seems to 
-create an EFI variable with a different name. I guess this is the wrong 
-branch?
+Signed-off-by: Won Chung <wonchung@google.com>
+---
+ .../testing/sysfs-devices-physical_location   |  42 ++++++
+ drivers/base/core.c                           | 139 ++++++++++++++++++
+ include/linux/device.h                        |  73 +++++++++
+ 3 files changed, 254 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_locati=
+on
 
-    Stefan
+diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/Do=
+cumentation/ABI/testing/sysfs-devices-physical_location
+new file mode 100644
+index 000000000000..202324b87083
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-devices-physical_location
+@@ -0,0 +1,42 @@
++What:		/sys/devices/.../physical_location
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		This directory contains information on physical location of
++		the device connection point with respect to the system's
++		housing.
++
++What:		/sys/devices/.../physical_location/panel
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		Describes which panel surface of the system=E2=80=99s housing the
++		device connection point resides on.
++
++What:		/sys/devices/.../physical_location/vertical_position
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		Describes vertical position of the device connection point on
++		the panel surface.
++
++What:		/sys/devices/.../physical_location/horizontal_position
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		Describes horizontal position of the device connection point on
++		the panel surface.
++
++What:		/sys/devices/.../physical_location/dock
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		"Yes" if the device connection point resides in a docking
++		station or a port replicator. "No" otherwise.
++
++What:		/sys/devices/.../physical_location/lid
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		"Yes" if the device connection point resides on the lid of
++		laptop system. "No" otherwise.
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 7bb957b11861..9cfa71ad21f3 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2466,6 +2466,136 @@ static ssize_t removable_show(struct device *dev, s=
+truct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(removable);
+=20
++static int dev_add_physical_location(struct device *dev)
++{
++#if defined(CONFIG_ACPI)
++	struct acpi_pld_info *pld;
++	acpi_status status;
++
++	if (!has_acpi_companion(dev))
++		return 0;
++
++	status =3D acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
++	if (ACPI_FAILURE(status) || !pld)
++		return 0;
++
++	dev->location =3D (struct device_location) {
++		.panel =3D pld->panel,
++		.vertical_position =3D pld->vertical_position,
++		.horizontal_position =3D pld->horizontal_position,
++		.dock =3D pld->dock,
++		.lid =3D pld->lid,
++	};
++
++	return 1;
++#else
++	return 0;
++#endif
++}
++
++static ssize_t panel_show(struct device *dev, struct device_attribute *att=
+r,
++	char *buf)
++{
++	const char *panel;
++
++	switch (dev->location.panel) {
++	case DEVICE_PANEL_TOP:
++		panel =3D "top";
++		break;
++	case DEVICE_PANEL_BOTTOM:
++		panel =3D "bottom";
++		break;
++	case DEVICE_PANEL_LEFT:
++		panel =3D "left";
++		break;
++	case DEVICE_PANEL_RIGHT:
++		panel =3D "right";
++		break;
++	case DEVICE_PANEL_FRONT:
++		panel =3D "front";
++		break;
++	case DEVICE_PANEL_BACK:
++		panel =3D "back";
++		break;
++	default:
++		panel =3D "unknown";
++	}
++	return sysfs_emit(buf, "%s\n", panel);
++}
++static DEVICE_ATTR_RO(panel);
++
++static ssize_t vertical_position_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++{
++	const char *vertical_position;
++
++	switch (dev->location.vertical_position) {
++	case DEVICE_VERT_POS_UPPER:
++		vertical_position =3D "upper";
++		break;
++	case DEVICE_VERT_POS_CENTER:
++		vertical_position =3D "center";
++		break;
++	case DEVICE_VERT_POS_LOWER:
++		vertical_position =3D "lower";
++		break;
++	default:
++		vertical_position =3D "unknown";
++	}
++	return sysfs_emit(buf, "%s\n", vertical_position);
++}
++static DEVICE_ATTR_RO(vertical_position);
++
++static ssize_t horizontal_position_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++{
++	const char *horizontal_position;
++
++	switch (dev->location.horizontal_position) {
++	case DEVICE_HORI_POS_LEFT:
++		horizontal_position =3D "left";
++		break;
++	case DEVICE_HORI_POS_CENTER:
++		horizontal_position =3D "center";
++		break;
++	case DEVICE_HORI_POS_RIGHT:
++		horizontal_position =3D "right";
++		break;
++	default:
++		horizontal_position =3D "unknown";
++	}
++	return sysfs_emit(buf, "%s\n", horizontal_position);
++}
++static DEVICE_ATTR_RO(horizontal_position);
++
++static ssize_t dock_show(struct device *dev, struct device_attribute *attr=
+,
++	char *buf)
++{
++	return sysfs_emit(buf, "%s\n", dev->location.dock ? "yes" : "no");
++}
++static DEVICE_ATTR_RO(dock);
++
++static ssize_t lid_show(struct device *dev, struct device_attribute *attr,
++	char *buf)
++{
++	return sysfs_emit(buf, "%s\n", dev->location.lid ? "yes" : "no");
++}
++static DEVICE_ATTR_RO(lid);
++
++static struct attribute *dev_attr_physical_location[] =3D {
++	&dev_attr_panel.attr,
++	&dev_attr_vertical_position.attr,
++	&dev_attr_horizontal_position.attr,
++	&dev_attr_dock.attr,
++	&dev_attr_lid.attr,
++	NULL,
++};
++
++static const struct attribute_group dev_attr_physical_location_group =3D {
++	.name =3D "physical_location",
++	.attrs =3D dev_attr_physical_location,
++};
++
+ int device_add_groups(struct device *dev, const struct attribute_group **g=
+roups)
+ {
+ 	return sysfs_create_groups(&dev->kobj, groups);
+@@ -2649,8 +2779,17 @@ static int device_add_attrs(struct device *dev)
+ 			goto err_remove_dev_waiting_for_supplier;
+ 	}
+=20
++	if (dev_add_physical_location(dev)) {
++		error =3D device_add_group(dev,
++			&dev_attr_physical_location_group);
++		if (error)
++			goto err_remove_dev_physical_location;
++	}
++
+ 	return 0;
+=20
++ err_remove_dev_physical_location:
++	device_remove_group(dev, &dev_attr_physical_location_group);
+  err_remove_dev_waiting_for_supplier:
+ 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+  err_remove_dev_online:
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 93459724dcde..424be9cb735e 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -386,6 +386,75 @@ struct dev_msi_info {
+ #endif
+ };
+=20
++/**
++ * enum device_location_panel - Describes which panel surface of the syste=
+m's
++ * housing the device connection point resides on.
++ * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
++ * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
++ * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
++ * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
++ * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
++ * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
++ * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unknow=
+n.
++ */
++enum device_location_panel {
++	DEVICE_PANEL_TOP,
++	DEVICE_PANEL_BOTTOM,
++	DEVICE_PANEL_LEFT,
++	DEVICE_PANEL_RIGHT,
++	DEVICE_PANEL_FRONT,
++	DEVICE_PANEL_BACK,
++	DEVICE_PANEL_UNKNOWN,
++};
++
++/**
++ * enum device_location_vertical_position - Describes vertical position of=
+ the
++ * device connection point on the panel surface.
++ * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of pan=
+el.
++ * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of p=
+anel.
++ * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of pan=
+el.
++ */
++enum device_location_vertical_position {
++	DEVICE_VERT_POS_UPPER,
++	DEVICE_VERT_POS_CENTER,
++	DEVICE_VERT_POS_LOWER,
++};
++
++/**
++ * enum device_location_horizontal_position - Describes horizontal positio=
+n of
++ * the device connection point on the panel surface.
++ * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of panel=
+.
++ * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of p=
+anel.
++ * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of pan=
+el.
++ */
++enum device_location_horizontal_position {
++	DEVICE_HORI_POS_LEFT,
++	DEVICE_HORI_POS_CENTER,
++	DEVICE_HORI_POS_RIGHT,
++};
++
++/**
++ * struct device_location - Device data related to physical location of th=
+e
++ * device connection point.
++ * @panel: Panel surface of the system's housing that the device connectio=
+n
++ *         point resides on.
++ * @vertical_position: Vertical position of the device connection point wi=
+thin
++ *                     the panel.
++ * @horizontal_position: Horizontal position of the device connection poin=
+t
++ *                       within the panel.
++ * @dock: Set if the device connection point resides in a docking station =
+or
++ *        port replicator.
++ * @lid: Set if this device connection point resides on the lid of laptop
++ *       system.
++ */
++struct device_location {
++	enum device_location_panel panel;
++	enum device_location_vertical_position vertical_position;
++	enum device_location_horizontal_position horizontal_position;
++	bool dock;
++	bool lid;
++};
++
+ /**
+  * struct device - The basic device structure
+  * @parent:	The device's "parent" device, the device to which it is attach=
+ed.
+@@ -456,6 +525,8 @@ struct dev_msi_info {
+  * @removable:  Whether the device can be removed from the system. This
+  *              should be set by the subsystem / bus driver that discovere=
+d
+  *              the device.
++ * @location:	Describes physical location of the device connection point i=
+n
++ *		the system housing.
+  *
+  * @offline_disabled: If set, the device is permanently online.
+  * @offline:	Set after successful invocation of bus type's .offline().
+@@ -569,6 +640,8 @@ struct device {
+=20
+ 	enum device_removable	removable;
+=20
++	struct device_location	location;
++
+ 	bool			offline_disabled:1;
+ 	bool			offline:1;
+ 	bool			of_node_reused:1;
+--=20
+2.35.1.616.g0bdcbb4464-goog
 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> ---
->   certs/system_keyring.c                        |  9 +++++---
->   include/keys/system_keyring.h                 |  3 ++-
->   security/integrity/Kconfig                    | 21 +++++++++++++++++++
->   security/integrity/Makefile                   |  1 +
->   security/integrity/digsig.c                   | 14 ++++++++++---
->   security/integrity/integrity.h                |  3 ++-
->   .../platform_certs/keyring_handler.c          |  4 +++-
->   7 files changed, 46 insertions(+), 9 deletions(-)
->
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index 05b66ce9d1c9..0811b44cf3bf 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -22,7 +22,8 @@ static struct key *builtin_trusted_keys;
->   #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
->   static struct key *secondary_trusted_keys;
->   #endif
-> -#ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
-> +#if defined(CONFIG_INTEGRITY_MACHINE_KEYRING) || \
-> +    defined(CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED)
->   static struct key *machine_trusted_keys;
->   #endif
->   #ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-> @@ -89,7 +90,8 @@ static __init struct key_restriction *get_builtin_and_secondary_restriction(void
->   	if (!restriction)
->   		panic("Can't allocate secondary trusted keyring restriction\n");
->   
-> -	if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))
-> +	if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) ||
-> +	    IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED))
->   		restriction->check = restrict_link_by_builtin_secondary_and_machine;
->   	else
->   		restriction->check = restrict_link_by_builtin_and_secondary_trusted;
-> @@ -97,7 +99,8 @@ static __init struct key_restriction *get_builtin_and_secondary_restriction(void
->   	return restriction;
->   }
->   #endif
-> -#ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
-> +#if defined(CONFIG_INTEGRITY_MACHINE_KEYRING) || \
-> +    defined(CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED)
->   void __init set_machine_trusted_keys(struct key *keyring)
->   {
->   	machine_trusted_keys = keyring;
-> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.h
-> index 91e080efb918..e4a6574bbcb6 100644
-> --- a/include/keys/system_keyring.h
-> +++ b/include/keys/system_keyring.h
-> @@ -45,7 +45,8 @@ extern int restrict_link_by_builtin_and_secondary_trusted(
->   #define restrict_link_by_builtin_and_secondary_trusted restrict_link_by_builtin_trusted
->   #endif
->   
-> -#ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
-> +#if defined(CONFIG_INTEGRITY_MACHINE_KEYRING) || \
-> +    defined(CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED)
->   extern int restrict_link_by_builtin_secondary_and_machine(
->   	struct key *dest_keyring,
->   	const struct key_type *type,
-> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-> index 599429f99f99..14c927eea5ee 100644
-> --- a/security/integrity/Kconfig
-> +++ b/security/integrity/Kconfig
-> @@ -62,6 +62,14 @@ config INTEGRITY_PLATFORM_KEYRING
->            provided by the platform for verifying the kexec'ed kerned image
->            and, possibly, the initramfs signature.
->   
-> +
-> +choice
-> +	prompt "Machine keyring"
-> +	default INTEGRITY_MACHINE_NONE
-> +
-> +config INTEGRITY_MACHINE_NONE
-> +	bool "Do not enable the Machine Owner Keyring"
-> +
->   config INTEGRITY_MACHINE_KEYRING
->   	bool "Provide a keyring to which Machine Owner Keys may be added"
->   	depends on SECONDARY_TRUSTED_KEYRING
-> @@ -75,6 +83,19 @@ config INTEGRITY_MACHINE_KEYRING
->   	 in the platform keyring, keys contained in the .machine keyring will
->   	 be trusted within the kernel.
->   
-> +config INTEGRITY_MACHINE_KEYRING_CA_ENFORCED
-> +	bool "Provide a keyring to which Machine Owner CA Keys may be added"
-> +	depends on SECONDARY_TRUSTED_KEYRING
-> +	depends on INTEGRITY_ASYMMETRIC_KEYS
-> +	depends on SYSTEM_BLACKLIST_KEYRING
-> +	depends on LOAD_UEFI_KEYS
-> +	help
-> +	 If set, provide a keyring to which CA Machine Owner Keys (MOK) may
-> +	 be added. This keyring shall contain just CA MOK keys.  Unlike keys
-> +	 in the platform keyring, keys contained in the .machine keyring will
-> +	 be trusted within the kernel.
-> +endchoice
-> +
->   config LOAD_UEFI_KEYS
->          depends on INTEGRITY_PLATFORM_KEYRING
->          depends on EFI
-> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-> index d0ffe37dc1d6..370ee63774c3 100644
-> --- a/security/integrity/Makefile
-> +++ b/security/integrity/Makefile
-> @@ -11,6 +11,7 @@ integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
->   integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
->   integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
->   integrity-$(CONFIG_INTEGRITY_MACHINE_KEYRING) += platform_certs/machine_keyring.o
-> +integrity-$(CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED) += platform_certs/machine_keyring.o
->   integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
->   				      platform_certs/load_uefi.o \
->   				      platform_certs/keyring_handler.o
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index c8c8a4a4e7a0..041edd9744db 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -34,7 +34,11 @@ static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
->   };
->   
->   #ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
-> +#ifdef CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED
-> +#define restrict_link_to_ima restrict_link_by_builtin_secondary_and_machine
-> +#else
->   #define restrict_link_to_ima restrict_link_by_builtin_and_secondary_trusted
-> +#endif
->   #else
->   #define restrict_link_to_ima restrict_link_by_builtin_trusted
->   #endif
-> @@ -130,19 +134,23 @@ int __init integrity_init_keyring(const unsigned int id)
->   		| KEY_USR_READ | KEY_USR_SEARCH;
->   
->   	if (id == INTEGRITY_KEYRING_PLATFORM ||
-> -	    id == INTEGRITY_KEYRING_MACHINE) {
-> +	   (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))) {
->   		restriction = NULL;
->   		goto out;
->   	}
->   
-> -	if (!IS_ENABLED(CONFIG_INTEGRITY_TRUSTED_KEYRING))
-> +	if (!IS_ENABLED(CONFIG_INTEGRITY_TRUSTED_KEYRING) &&
-> +	    id != INTEGRITY_KEYRING_MACHINE)
->   		return 0;
->   
->   	restriction = kzalloc(sizeof(struct key_restriction), GFP_KERNEL);
->   	if (!restriction)
->   		return -ENOMEM;
->   
-> -	restriction->check = restrict_link_to_ima;
-> +	if (id == INTEGRITY_KEYRING_MACHINE)
-> +		restriction->check = restrict_link_by_ca;
-> +	else
-> +		restriction->check = restrict_link_to_ima;
->   
->   	/*
->   	 * MOK keys can only be added through a read-only runtime services
-> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-> index 2e214c761158..ca4d72fbd045 100644
-> --- a/security/integrity/integrity.h
-> +++ b/security/integrity/integrity.h
-> @@ -285,7 +285,8 @@ static inline void __init add_to_platform_keyring(const char *source,
->   }
->   #endif
->   
-> -#ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
-> +#if defined(CONFIG_INTEGRITY_MACHINE_KEYRING) || \
-> +    defined(CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED)
->   void __init add_to_machine_keyring(const char *source, const void *data, size_t len);
->   bool __init trust_moklist(void);
->   #else
-> diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
-> index a2464f3e66cc..9c456ad0ab67 100644
-> --- a/security/integrity/platform_certs/keyring_handler.c
-> +++ b/security/integrity/platform_certs/keyring_handler.c
-> @@ -61,7 +61,9 @@ __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
->   __init efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type)
->   {
->   	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0) {
-> -		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && trust_moklist())
-> +		if ((IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) ||
-> +		     IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING_CA_ENFORCED)) &&
-> +		     trust_moklist())
->   			return add_to_machine_keyring;
->   		else
->   			return add_to_platform_keyring;

@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6514C4CD4DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6964CD4FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239722AbiCDNKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S231424AbiCDNRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239005AbiCDNKA (ORCPT
+        with ESMTP id S230038AbiCDNRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:10:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E02371B50DC
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 05:09:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646399343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jV96QDQfXFziaL0vRlxFYke/x+ja4OWA5o4UOaANEss=;
-        b=K6aGf5Zx4NTarbSWY0l61NbtzpWz1bMEhHPWCRZBzZAqK/aSSeVmzE3WrMBTqYUaTDXtxY
-        x6zMwtXWlIZVQj6v2AXS2Q3Pf4tJ/WCIfPhQP8zKeF3luU5gB5rREF5+WBOabcTU2JRQZw
-        G6EzbjhX3a7M5Qs4FpkNL2XwFqbDFk8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-JsxlKjzdNo6ctDD6dyUyAQ-1; Fri, 04 Mar 2022 08:09:00 -0500
-X-MC-Unique: JsxlKjzdNo6ctDD6dyUyAQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 187-20020a1c19c4000000b0037cc0d56524so4135501wmz.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 05:09:00 -0800 (PST)
+        Fri, 4 Mar 2022 08:17:32 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE871B50E8
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 05:16:45 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id j8-20020a056830014800b005ad00ef6d5dso7448210otp.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 05:16:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c9/jSKEYWvjLYNnnhLPXkny4KyJtY1E3bTqXKWbpe38=;
+        b=Jtoc93twUP7xt3r79Uyv6rhXGAGErLwtgbpDV0TdhEQLZukQFNjpRDFDC/bJ3XS64t
+         Qya/0WpS5ZGuoPxfr6xXDfYrQK4PkM6ukAxxg/9Hb0JnTX+wmPVE+D/XqOTL2GrmI6qe
+         LO4Qgwe3oa4I9Wr5CYJ7nf+FNizvb0WCsCQOLQ2pnOOpe57bQ/ck3w8uTo6LlxdAAMrf
+         9cDNTJb7heD08la654ZqIdA3m4wqVwkE2TfSzZk0hdWrqIGtsB3Qm5AvHAHSh9xUX+5y
+         48zipgUTasJF4JXa9uW/2YjQgag6duDl3fn4LeEN8AOrirH0Peq/Nq+1t6ltkdRAlJYM
+         nV+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=jV96QDQfXFziaL0vRlxFYke/x+ja4OWA5o4UOaANEss=;
-        b=u2Ev7XuGfclbBUuh9R3lFWgX7hruAeqCcQszV2I5GCDOJYrnNpubTfuSbLTMlfSAwJ
-         ylWXdQacSxst66nnXGP2QF57LgMECLmDeDB6BOzbFA2DBPxBHFSTSAyjvzNtmNpRpVwB
-         EqiguPsjtBs8TlYFscXZCyhNG2pHq/2C9FItI1cf1NIG0IwDgDjj3G5OFE0LCoS1+xQC
-         qNZC5529FysTw4jhy4gwXlAtv0dEbuqnX2xp7q1tZ+4qRvihUWVJ2tmk3ZsRjPmBTRnV
-         o0lYXMAbB4s2i+Y/fjzB0ZWAmcUfT2l2RdYSOOjuDaH84h6+81RZ+eTfrEEkKsa4ChBI
-         ZCww==
-X-Gm-Message-State: AOAM530IuWErpskuUESuyjVPp8R5wKV9oRscsV0+QXHoBzi4rnnY2ro4
-        CglOJD6UQddpq+U3CeSfe7h7uO6vsCL0ahozlC6RM++MpJf/d7DEsDH65ACU3kL+oy71FInpwVa
-        zykGtx6jY1UqjkzgRwb80Z0DV
-X-Received: by 2002:a5d:4dc4:0:b0:1ef:7aa9:5a8e with SMTP id f4-20020a5d4dc4000000b001ef7aa95a8emr24348666wru.168.1646399339606;
-        Fri, 04 Mar 2022 05:08:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwTMqwe4LsUwaoHrcsvjBPAt9as9hy5C/Ekyk/47uS9Fy4qmMvnToGpILbP7mlm9PMiAlnQXQ==
-X-Received: by 2002:a5d:4dc4:0:b0:1ef:7aa9:5a8e with SMTP id f4-20020a5d4dc4000000b001ef7aa95a8emr24348658wru.168.1646399339359;
-        Fri, 04 Mar 2022 05:08:59 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:4600:7355:df2c:f6ff:94d? (p200300cbc70946007355df2cf6ff094d.dip0.t-ipconnect.de. [2003:cb:c709:4600:7355:df2c:f6ff:94d])
-        by smtp.gmail.com with ESMTPSA id m10-20020adfe94a000000b001ef57f562ccsm4501764wrn.51.2022.03.04.05.08.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 05:08:58 -0800 (PST)
-Message-ID: <d67e9c8c-fa82-3ce4-1894-f2ad1779d834@redhat.com>
-Date:   Fri, 4 Mar 2022 14:08:57 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c9/jSKEYWvjLYNnnhLPXkny4KyJtY1E3bTqXKWbpe38=;
+        b=QjMmxn+33mq1Mq3nxG2tpBtEIfzoFCHDqftlEfapbf7l33VHLkfMfhR8EjbwfE+UoL
+         QAfSTGTqLSrcl4auiTpEEdFVzNp263kgB702VIfnvLmcwHgTOCBiRiHq1stxmFjtiGOP
+         ecf8WpoPk0/Q/X5h1V+6/7LYMzAkiFt1CjcyrgCdGSSzCsxTNVDrkhr6deMPbznoWShk
+         ZIPIYSPdnFNWHGb5e956mIUT4BgyPq9TpHXAqalTuQsaloRK+3MQP9IFoOxx1B+I4GQG
+         Bz5isFWNXXOEirYTc67gSm5AMu/4RpQxhTj9KObfKSx5YsAf7+yby3thY+ggJymyesTE
+         svtw==
+X-Gm-Message-State: AOAM530iJSXESccLgaiswGU//pqiCvhUA4S4q1NHXdsun/aFGe7lXzgT
+        Ta/zBWUrRX4K9VkDVEc7UwCue32mt4I/AGvvW/jrTA==
+X-Google-Smtp-Source: ABdhPJyEyS19l/rBk/OtEhxkYjWkowMwfjtY+zPzabBZVyeCZ2VNTvSFAtUJyFOigXbcTktkrJa6rpE3ZN3Azh4mQq8=
+X-Received: by 2002:a9d:6e09:0:b0:5ad:1fcd:bfd0 with SMTP id
+ e9-20020a9d6e09000000b005ad1fcdbfd0mr22496944otr.312.1646399804477; Fri, 04
+ Mar 2022 05:16:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm: madvise: MADV_DONTNEED_LOCKED
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>
-References: <20220303212956.229409-1-hannes@cmpxchg.org>
- <YiE3do4qCmJ6RsmP@cmpxchg.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YiE3do4qCmJ6RsmP@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220222120054.400208-4-andrew@daynix.com> <202202230342.HPYe6dHA-lkp@intel.com>
+ <20220304030742-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220304030742-mutt-send-email-mst@kernel.org>
+From:   Andrew Melnichenko <andrew@daynix.com>
+Date:   Fri, 4 Mar 2022 15:09:02 +0200
+Message-ID: <CABcq3pF9566uzh2oQF1u8EF_LgFQ0azhzD+2xX4CfqB=MhKCOQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] drivers/net/virtio_net: Added RSS hash report.
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Network Development <netdev@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wang <jasowang@redhat.com>, kbuild-all@lists.01.org,
+        Yan Vugenfirer <yan@daynix.com>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,25 +74,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.03.22 22:47, Johannes Weiner wrote:
-> On Thu, Mar 03, 2022 at 04:29:56PM -0500, Johannes Weiner wrote:
->> MADV_DONTNEED historically rejects mlocked ranges, but with
->> MLOCK_ONFAULT and MCL_ONFAULT allowing to mlock without populating,
->> there are valid use cases for depopulating locked ranges as well.
+Hi all,
+Yes, I'll prepare a new commit later.
 
-Indeed, there are. I'd have use for that in QEMU for virtio-mem (which
-uses MADV_POPULATE_WRITE+MADV_DONTNEED to dynamically allocate/discard
-memory in a sparse memory mapping to be used by the VM, currently
-doesn't support mlock for obvious reasons).
-
-Further, QEMU postcopy live migration handling requires an munlockall()
-before registering the uffd handler and discarding all RAM via
-MADV_DONTNEED. Once postcopy finished, we have to mlock() again. I
-didn't check if there would be more stopping uffd from working on a
-mlocked region, but this would be one piece of the puzzle I guess.
-
--- 
-Thanks,
-
-David / dhildenb
-
+On Fri, Mar 4, 2022 at 10:08 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Wed, Feb 23, 2022 at 03:15:28AM +0800, kernel test robot wrote:
+> > Hi Andrew,
+> >
+> > Thank you for the patch! Perhaps something to improve:
+> >
+> > [auto build test WARNING on mst-vhost/linux-next]
+> > [also build test WARNING on net/master horms-ipvs/master net-next/master linus/master v5.17-rc5 next-20220217]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch]
+>
+>
+> Andrew,
+> do you plan to fix this?
+>
+> > url:    https://github.com/0day-ci/linux/commits/Andrew-Melnychenko/RSS-support-for-VirtioNet/20220222-200334
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+> > config: i386-randconfig-s002-20220221 (https://download.01.org/0day-ci/archive/20220223/202202230342.HPYe6dHA-lkp@intel.com/config)
+> > compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+> > reproduce:
+> >         # apt-get install sparse
+> >         # sparse version: v0.6.4-dirty
+> >         # https://github.com/0day-ci/linux/commit/4fda71c17afd24d8afb675baa0bb14dbbc6cd23c
+> >         git remote add linux-review https://github.com/0day-ci/linux
+> >         git fetch --no-tags linux-review Andrew-Melnychenko/RSS-support-for-VirtioNet/20220222-200334
+> >         git checkout 4fda71c17afd24d8afb675baa0bb14dbbc6cd23c
+> >         # save the config file to linux build tree
+> >         mkdir build_dir
+> >         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> >
+> > sparse warnings: (new ones prefixed by >>)
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> >    drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
+> > >> drivers/net/virtio_net.c:1178:35: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] hash @@     got restricted __le32 const [usertype] hash_value @@
+> >    drivers/net/virtio_net.c:1178:35: sparse:     expected unsigned int [usertype] hash
+> >    drivers/net/virtio_net.c:1178:35: sparse:     got restricted __le32 const [usertype] hash_value
+> >
+> > vim +1178 drivers/net/virtio_net.c
+> >
+> >   1151
+> >   1152        static void virtio_skb_set_hash(const struct virtio_net_hdr_v1_hash *hdr_hash,
+> >   1153                                        struct sk_buff *skb)
+> >   1154        {
+> >   1155                enum pkt_hash_types rss_hash_type;
+> >   1156
+> >   1157                if (!hdr_hash || !skb)
+> >   1158                        return;
+> >   1159
+> >   1160                switch (hdr_hash->hash_report) {
+> >   1161                case VIRTIO_NET_HASH_REPORT_TCPv4:
+> >   1162                case VIRTIO_NET_HASH_REPORT_UDPv4:
+> >   1163                case VIRTIO_NET_HASH_REPORT_TCPv6:
+> >   1164                case VIRTIO_NET_HASH_REPORT_UDPv6:
+> >   1165                case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
+> >   1166                case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
+> >   1167                        rss_hash_type = PKT_HASH_TYPE_L4;
+> >   1168                        break;
+> >   1169                case VIRTIO_NET_HASH_REPORT_IPv4:
+> >   1170                case VIRTIO_NET_HASH_REPORT_IPv6:
+> >   1171                case VIRTIO_NET_HASH_REPORT_IPv6_EX:
+> >   1172                        rss_hash_type = PKT_HASH_TYPE_L3;
+> >   1173                        break;
+> >   1174                case VIRTIO_NET_HASH_REPORT_NONE:
+> >   1175                default:
+> >   1176                        rss_hash_type = PKT_HASH_TYPE_NONE;
+> >   1177                }
+> > > 1178                skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
+> >   1179        }
+> >   1180
+> >
+> > ---
+> > 0-DAY CI Kernel Test Service, Intel Corporation
+> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>

@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE484CCB80
+	by mail.lfdr.de (Postfix) with ESMTP id 620004CCB7F
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 03:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236998AbiCDCAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 21:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
+        id S237383AbiCDCAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 21:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiCDCA2 (ORCPT
+        with ESMTP id S233849AbiCDCAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 21:00:28 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE9B12168D;
-        Thu,  3 Mar 2022 17:59:41 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id b13so5406455qkj.12;
-        Thu, 03 Mar 2022 17:59:41 -0800 (PST)
+        Thu, 3 Mar 2022 21:00:32 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C6D123433
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 17:59:45 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so5569226pju.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 17:59:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hPxZniYbsdME7IwFNKIAC4U4H+A/bP4PnATkKwGBL9g=;
-        b=FR+E635Su1qePwmL2VjYxRW7K8qihJu9NkgOUP9/0BpZzaV2gI0j9+If3EyUwTRkH5
-         1cRkhXvR4MmbFNJAInLu5PvrVuQOflv+3zDMwrdNKpQ3FFlv1btIs4NJdDGo+pzt/wMa
-         EC5Y89rS58mLFRQ6b6IfvRTp0JHqAIgor8qf70HUVyg7CR/w36MsOa+Eu7yui9ay5i3X
-         N7UlJWrIJh9uK60XsSxA8Lh57eXABCqvFFIRWXCb1mLWOclZ8TCTh1FUGF0t24BHSu4y
-         GqduVyFFVCSCl+OSQCRLBEz2LM7fnvC9rETT/OHIwKAc2/nvmuCJHVLQP/g7canRPkN1
-         SZeA==
+        bh=pNg4kYdxlqLlNjGIaXFPv1B8vrhqGS0uOksmeWZwteY=;
+        b=Yn0FTrDQatEF8PVLYqXopPVgnNKeu9lW4Zw8fNZ5BHwT69cz0rxT2QHh2/ntvLX/zK
+         bMgZI3k/5CagA9npMGZnDnn5uaAaTEzMR441qWmN9efL5NC59ZJnQ106kviOBjGgSA9w
+         O0ZM1E5SwNwKwX1yMlJG/6dtOwOk9iHwHZsZ7Tz4bv26+1+gI4LiFR4UX373TwWVg2nz
+         qu9CII6nKmUfew9ROh8F9KQNmMKusTg0d+aQbO61HsHklNlbdxVyaatQ2xGFPnIE9nkh
+         bFWVMwHajfUOYRjHttDpu7EAEplD1wWoHcRB8GE1DH1Lr3ZWgkAib2pyEyEN/fJL+6vk
+         9Dpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hPxZniYbsdME7IwFNKIAC4U4H+A/bP4PnATkKwGBL9g=;
-        b=KD1CM0qul0hopHQz1kN0cATIxIvBDr3bQfPFkkzAs4gRKND3EtweFkDB/4gpc2vxgQ
-         Eiu4JcAkFcNdU/iu/OoP1MluNr6Pn7Obn1bg0+3ygTUa58wyNuZZHQzof3i/XO1pzXjd
-         aO/HVGSxwAlTNpczM+NU3uSV7Df8VCU+wl7CKtTiAIl1UA36Hls1c92QOP/rs9TuHO80
-         ZS7m+kDAgVZUyi34rQ6e/BdPM2OzuH+W6fWRKh7zELFz9gGrnXG2wO33A//bPXJH8pJr
-         cJ3hsG8cYIWmrhaEYlnpCU55ZxOvcOVUawaH/GanEQeaCXXLIShlrFljLVXDYkJOo6Wu
-         Bs2g==
-X-Gm-Message-State: AOAM533gya8KfVsD3KaBe2rQVAZJkmCTbXHp44LYTJmAssaGUmxW60Uc
-        8DDbWxWPZ5lYMWk2cKAuB7Q=
-X-Google-Smtp-Source: ABdhPJyaNKmVUoEK6j9JEv8+I6Pe+grVQ6B9KPcnMorkG8Er/9o+d4uPDiLE3dpttVFUL0Siu/CTFw==
-X-Received: by 2002:a37:bc45:0:b0:47e:292:4b8d with SMTP id m66-20020a37bc45000000b0047e02924b8dmr1295977qkf.484.1646359180557;
-        Thu, 03 Mar 2022 17:59:40 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j18-20020ac85c52000000b002deaca065dfsm2620349qtj.10.2022.03.03.17.59.37
+        bh=pNg4kYdxlqLlNjGIaXFPv1B8vrhqGS0uOksmeWZwteY=;
+        b=eUqetk/TM/mGv7S/0YCI3+AQn/qXs5HKjbVlFVNePU9UR7WqJw3C5DouoP18uxn2Q8
+         SY5LRF9sx/d4vkPGFdRBl1E5mD+mpyYB+LKINuDLsE8ZgxLb3tXiDkMO24LpCTUvo9n4
+         V3BBHCPaHmn97ScOap8FMgdvPruDrnypTYtE7uB6vJni4qVgEFWE+DTIqRICZ+6CaRqR
+         4wyGWBOhwS/LLhMsj55+eKJ3aaV1zLWw3Ln19gPKeQB7G1vAlJZSC6pT4RnU05/Emgmb
+         H7/mBRNa20CuduoJX8LrDuRHwE8RwSpxYnlt5K83ks5f6q4DQ4EWZCaWDdxb2B9YaU55
+         /SQQ==
+X-Gm-Message-State: AOAM532bOA5WCbvYvhzF8/2S3iTrBJ9tIFmRVcuNdxuSPuVy2Cp4b7nI
+        kSUHCXMUEhcQg6woeltVQlxl5Vhe16A=
+X-Google-Smtp-Source: ABdhPJwgnJJcohamGBceHBePfAkZJZnry0WsByYaX3qChlXOBgHodh4y3rKqkzAB9D27cneAm4Sx6Q==
+X-Received: by 2002:a17:902:aa84:b0:150:8d6:bdec with SMTP id d4-20020a170902aa8400b0015008d6bdecmr38486225plr.118.1646359185389;
+        Thu, 03 Mar 2022 17:59:45 -0800 (PST)
+Received: from edumazet1.svl.corp.google.com ([2620:15c:2c4:201:5388:c313:5e37:a261])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056a00248500b004f6b5ddcc65sm296707pfv.199.2022.03.03.17.59.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 17:59:40 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jic23@kernel.org
-Cc:     lars@metafoo.de, tangbin@cmss.chinamobile.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] iio:adc:twl6030: Use of_device_get_match_data()
-Date:   Fri,  4 Mar 2022 01:59:32 +0000
-Message-Id: <20220304015932.2061712-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 03 Mar 2022 17:59:44 -0800 (PST)
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>
+Subject: [PATCH] mm/page_alloc: call check_new_pages() while zone spinlock is not held
+Date:   Thu,  3 Mar 2022 17:59:41 -0800
+Message-Id: <20220304015941.1704249-1-eric.dumazet@gmail.com>
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,41 +77,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+From: Eric Dumazet <edumazet@google.com>
 
-Use of_device_get_match_data() to simplify the code.
+For high order pages not using pcp, rmqueue() is currently calling
+the costly check_new_pages() while zone spinlock is held.
 
-v1->v2:
-  iio:adc:->iio:adc:twl6030:
+This is not needed, we can release the spinlock sooner to reduce
+zone spinlock contention.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Wei Xu <weixugc@google.com>
+Cc: Greg Thelen <gthelen@google.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: David Rientjes <rientjes@google.com>
 ---
- drivers/iio/adc/twl6030-gpadc.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ mm/page_alloc.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
-index afdb59e0b526..6a022e583658 100644
---- a/drivers/iio/adc/twl6030-gpadc.c
-+++ b/drivers/iio/adc/twl6030-gpadc.c
-@@ -867,16 +867,11 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct twl6030_gpadc_data *gpadc;
- 	const struct twl6030_gpadc_platform_data *pdata;
--	const struct of_device_id *match;
- 	struct iio_dev *indio_dev;
- 	int irq;
- 	int ret;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 3589febc6d31928f850ebe5a4015ddc40e0469f3..0890a65f8cc2259e82bc1f5ba95a592fb30f9fb8 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3685,7 +3685,6 @@ struct page *rmqueue(struct zone *preferred_zone,
+ 			gfp_t gfp_flags, unsigned int alloc_flags,
+ 			int migratetype)
+ {
+-	unsigned long flags;
+ 	struct page *page;
  
--	match = of_match_device(of_twl6030_match_tbl, dev);
--	if (!match)
--		return -EINVAL;
+ 	if (likely(pcp_allowed_order(order))) {
+@@ -3706,10 +3705,12 @@ struct page *rmqueue(struct zone *preferred_zone,
+ 	 * allocate greater than order-1 page units with __GFP_NOFAIL.
+ 	 */
+ 	WARN_ON_ONCE((gfp_flags & __GFP_NOFAIL) && (order > 1));
+-	spin_lock_irqsave(&zone->lock, flags);
+ 
+ 	do {
++		unsigned long flags;
++
+ 		page = NULL;
++		spin_lock_irqsave(&zone->lock, flags);
+ 		/*
+ 		 * order-0 request can reach here when the pcplist is skipped
+ 		 * due to non-CMA allocation context. HIGHATOMIC area is
+@@ -3723,13 +3724,13 @@ struct page *rmqueue(struct zone *preferred_zone,
+ 		}
+ 		if (!page)
+ 			page = __rmqueue(zone, order, migratetype, alloc_flags);
+-	} while (page && check_new_pages(page, order));
+-	if (!page)
+-		goto failed;
++		spin_unlock_irqrestore(&zone->lock, flags);
++		if (!page)
++			return NULL;
++	} while (check_new_pages(page, order));
+ 
+ 	__mod_zone_freepage_state(zone, -(1 << order),
+ 				  get_pcppage_migratetype(page));
+-	spin_unlock_irqrestore(&zone->lock, flags);
+ 
+ 	__count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+ 	zone_statistics(preferred_zone, zone, 1);
+@@ -3743,10 +3744,6 @@ struct page *rmqueue(struct zone *preferred_zone,
+ 
+ 	VM_BUG_ON_PAGE(page && bad_range(zone, page), page);
+ 	return page;
 -
--	pdata = match->data;
-+	pdata = of_device_get_match_data(dev);
+-failed:
+-	spin_unlock_irqrestore(&zone->lock, flags);
+-	return NULL;
+ }
  
- 	indio_dev = devm_iio_device_alloc(dev, sizeof(*gpadc));
- 	if (!indio_dev)
+ #ifdef CONFIG_FAIL_PAGE_ALLOC
 -- 
-2.25.1
+2.35.1.616.g0bdcbb4464-goog
 

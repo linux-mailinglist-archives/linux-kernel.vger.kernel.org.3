@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269034CD2CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 420294CD2D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238075AbiCDKyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 05:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
+        id S238129AbiCDKzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 05:55:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234789AbiCDKyr (ORCPT
+        with ESMTP id S231475AbiCDKzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 05:54:47 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79F118F208;
-        Fri,  4 Mar 2022 02:53:56 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id F07E31F46564
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646391234;
-        bh=iyvfPCOywVdYTVL340FKcoWnpL9Q7LDdzRZuLLuLf0I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=i8EVJZVcAkDv0a4yRg2+xUaJmxcNaMTJ8wMR1qdO/p00rkXl6HGckPXX9CP/dab7G
-         eUkDYd1J9SJkiJL2v3S8YEcBfXuWyBn6Ck8rOkT88Yri8eKSoeqf0gWC16cDULxuhR
-         MDwQp4xWmAA8zQDunNVUP0Quf4OXRdTGPjc7uFXtdqGcNJRaFbnpokRYjMkgX12Zhm
-         /d0ENXnxc1PDjoCBKEbVgesQ+aPfOH+NssrBw1YVJqQKe0Nn+2mm0UhqSzGnekyMmq
-         KqloPbnfxtA/wX75CVIE5YgiZL5d1jvamUt4Z8PVzF/yTgBvBYWxta2PV9EZ2Qnv96
-         8RLK36k87Ny/w==
-Message-ID: <312a66e2-b0da-23a4-d922-0a37e04367d9@collabora.com>
-Date:   Fri, 4 Mar 2022 11:53:51 +0100
+        Fri, 4 Mar 2022 05:55:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3CD31AEEC4
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:54:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646391284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z7s/lxrFPB1XJVbl3uCZFp5Kc2+3RQJwgC3q7lGcv94=;
+        b=DOFLsK52LbBwtAU4ReBOYDePZEZ+bT9IWkJOkC5N5m4BsAFdsR2NPqU19Y8qvrwefCMSkF
+        rvl67Gped4WTl0ThXiRPja8jrvgCVHvrZvyBnzdIVPdXGgo1EMw9rxO9ormV2MnysovVzN
+        QOrxLmTQEqO39AKkl3gRYR0z+AwjX8I=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-258-suPo5m-5NNukxLXVpqeNUw-1; Fri, 04 Mar 2022 05:54:40 -0500
+X-MC-Unique: suPo5m-5NNukxLXVpqeNUw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E8E2B1800D50;
+        Fri,  4 Mar 2022 10:54:38 +0000 (UTC)
+Received: from starship (unknown [10.40.192.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C2A98842D9;
+        Fri,  4 Mar 2022 10:54:34 +0000 (UTC)
+Message-ID: <bc54dd197ce2e13420ce43be0156ee7335cf9de6.camel@redhat.com>
+Subject: Re: [PATCH 4/4] KVM: x86: lapic: don't allow to set non default
+ apic id when not using x2apic api
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org
+Date:   Fri, 04 Mar 2022 12:54:33 +0200
+In-Reply-To: <YiEbsasKjrvKKyff@google.com>
+References: <20220301135526.136554-1-mlevitsk@redhat.com>
+         <20220301135526.136554-5-mlevitsk@redhat.com> <Yh5QJ4dJm63fC42n@google.com>
+         <6f4819b4169bd4e2ca9ab710388ebd44b7918eed.camel@redhat.com>
+         <Yh5b3eBYK/rGzFfj@google.com>
+         <297c8e41f512587230a54130a71ddfd9004c9507.camel@redhat.com>
+         <eae0b69fb8f5c47457fac853cc55b41a30762994.camel@redhat.com>
+         <YiDx/uYAMSZDvobO@google.com>
+         <df1ed2b01c74310bd4918196ba632e906e4c78f1.camel@redhat.com>
+         <YiEZJ6tg0+I+MdW5@google.com> <YiEbsasKjrvKKyff@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v21 1/3] dt-bindings: input: Add bindings for Mediatek
- matrix keypad
-Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Fengping Yu <fengping.yu@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20220303154302.252041-1-mkorpershoek@baylibre.com>
- <20220303154302.252041-2-mkorpershoek@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220303154302.252041-2-mkorpershoek@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/03/22 16:43, Mattijs Korpershoek ha scritto:
-> From: "fengping.yu" <fengping.yu@mediatek.com>
+On Thu, 2022-03-03 at 19:49 +0000, Sean Christopherson wrote:
+> On Thu, Mar 03, 2022, Sean Christopherson wrote:
+> > With your proposed change, KVM_SET_LAPIC will fail and we've broken a functional,
+> > if sketchy, setup.  Is there likely to be such a real-world setup that doesn't
+> > barf on the inconsistent x2APIC ID?  Probably not, but I don't see any reason to
+> > find out.
 > 
-> This patch add devicetree bindings for Mediatek matrix keypad driver.
+> I take back the "probably not", this isn't even all that contrived.  Prior to the
+> "migration", the guest will see a consistent x2APIC ID.  It's not hard to imagine
+> a guest that snapshots the ID and never re-reads the value from "hardware".
 > 
-> Signed-off-by: fengping.yu <fengping.yu@mediatek.com>
-> Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Ok. you win. I will not argue about this.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Best regards,
+	Maxim Levitsky
 
-> ---
->   .../input/mediatek,mt6779-keypad.yaml         | 77 +++++++++++++++++++
->   1 file changed, 77 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-> 

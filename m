@@ -2,91 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B0A4CD8FD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C8A4CD900
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240525AbiCDQVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
+        id S240670AbiCDQV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbiCDQVA (ORCPT
+        with ESMTP id S240601AbiCDQVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:21:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EF6160409;
-        Fri,  4 Mar 2022 08:20:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDDD061D7E;
-        Fri,  4 Mar 2022 16:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 53219C340F2;
-        Fri,  4 Mar 2022 16:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646410811;
-        bh=0CgI4EyPQ3DSrNgA4EAA+Bcj2udpKg57T6VI4Q17lW8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mbCIYPc9uC+t+PrLOKazYEkrO67jPoHNt8uIe9SJ5t5xmbTYOl9JIT7dkGYecJ+w+
-         lC5+upOS31pP12Zu9AszERqNrpDA1zIQDgifRtxQ5IKIj+Zm50xhXF0V02c6VrJ6Ct
-         UmtFzDXAsBPw75JerRvgfl6Yb4/YXCmGemlNvGfn9OJxPJF6Ej2t3B20voFGJfai+d
-         qE6i+HOcrKerdZkb99K3L/AB9Sh083CHcGc3BH5tRg0wGkYVh85N0umf8971Rt22UN
-         I7CWHLKpY0Dfg59l9wQiNQekRjjNFgZUSRbPmw/sq21ocKKrAAv+v/Dind4xL95n2h
-         G+M1nk0OvpoCw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 37F9CEAC081;
-        Fri,  4 Mar 2022 16:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 4 Mar 2022 11:21:24 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084851C2314
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:20:36 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 836D168AFE; Fri,  4 Mar 2022 17:20:32 +0100 (CET)
+Date:   Fri, 4 Mar 2022 17:20:32 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mingbao Sun <sunmingbao@tom.com>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
+        libin.zhang@dell.com, ao.sun@dell.com
+Subject: Re: [PATCH 2/2] nvme-tcp: support specifying the congestion-control
+Message-ID: <20220304162032.GA12250@lst.de>
+References: <20220304092754.2721-1-sunmingbao@tom.com> <20220304092754.2721-3-sunmingbao@tom.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH iproute2-next V2 0/4] Add support for locked bridge ports (for
- 802.1X)
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164641081122.17358.2982887378090859629.git-patchwork-notify@kernel.org>
-Date:   Fri, 04 Mar 2022 16:20:11 +0000
-References: <20220228133650.31358-1-schultz.hans+netdev@gmail.com>
-In-Reply-To: <20220228133650.31358-1-schultz.hans+netdev@gmail.com>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        schultz.hans+netdev@gmail.com, stephen@networkplumber.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304092754.2721-3-sunmingbao@tom.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+I'll let the NVMe/TCP maintainer comment on the actual functionality,
+but:
 
-This series was applied to iproute2/iproute2-next.git (main)
-by David Ahern <dsahern@kernel.org>:
+> +			p = match_strdup(args);
+> +			if (!p) {
+> +				ret = -ENOMEM;
+> +				goto out;
+> +			}
+> +
+> +			key = tcp_ca_get_key_by_name(NULL, p, &ecn_ca);
+> +			if (key == TCP_CA_UNSPEC) {
+> +				pr_err("congestion control %s not found.\n",
+> +				       p);
+> +				ret = -EINVAL;
+> +				kfree(p);
+> +				goto out;
+> +			}
 
-On Mon, 28 Feb 2022 14:36:46 +0100 you wrote:
-> This patch set is to complement the kernel locked port patches, such
-> that iproute2 can be used to lock/unlock a port and check if a port
-> is locked or not. To lock or unlock a port use the command:
-> 
-> bridge link set dev DEV locked {on | off}
-> 
-> 
-> [...]
-
-Here is the summary with links:
-  - [iproute2-next,V2,1/4] bridge: link: add command to set port in locked mode
-    (no matching commit)
-  - [iproute2-next,V2,2/4] ip: iplink_bridge_slave: add locked port flag support
-    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=092af16b7eed
-  - [iproute2-next,V2,3/4] man8/bridge.8: add locked port feature description and cmd syntax
-    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=d4fe36736dfb
-  - [iproute2-next,V2,4/4] man8/ip-link.8: add locked port feature description and cmd syntax
-    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=0a685b987c06
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+We can't just call networking code from nvme-fabrics.ko

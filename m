@@ -2,116 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102294CD4EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C71104CD4EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234315AbiCDNNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:13:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S234020AbiCDNOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239819AbiCDNNR (ORCPT
+        with ESMTP id S229625AbiCDNOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:13:17 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8B239D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 05:12:27 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2dbc48104beso90903017b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 05:12:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+H2bUE5UsRsJ8ptX5NtZZM4AcJoObuD1URIhhCGz76U=;
-        b=WhB6Wh48TEvBjTMv5sZSD54nnulAJ98TiG3gAlpuBqQcLeaGikVqYWVb/nhT8a5XdL
-         yy2hwNvFmjgolm5P3uKxHN+2usV3ZsLzdIR9+xopAPcebCiRHAT26e6UquIRe9sP3NFk
-         b4uQfK4KXV9leOilYP5YntZClBt/2p3OhyB7FypzGZiCzvYud137u1x/16P5AnpwKPXA
-         MATxTbv4ooL9VCRFkrLEFjYTVhVPDa9oKeLFHNVFMTxvKXwl3S5xjrz2UMwYLJ2804kn
-         FIcK4vbe6j4VBpwCQi8MLvPLCsLluqvS6oyRyjWXsfDkXXgSEcuR7Hq/OrZ1eGRwvSdx
-         0hRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+H2bUE5UsRsJ8ptX5NtZZM4AcJoObuD1URIhhCGz76U=;
-        b=DFlWUZtmA6bvam1PKFNLfR65H/EvTjg9eBucaE8/jufnWHOjtOrIySSBF8VfHyIaPw
-         WN+Rr6LcjuMRdEBlMnDEQfeVTCm16wDK/M1rcZhXf41BTfMsJCyH0OAv88LNgZW0bqQ1
-         zHuAITmY6RTDnsgZMFQmTORwfeudcFIydhr6Q9pjkgVGqUyYaNwUk0rPAshn/5268Uew
-         fuQPP1/9jvs/bokhFRtGBrv1XZ3lkNX9eHC8PVDbTm03JsJBZpOjgsD7y4xHlN0QwrIF
-         OBKsnosAaAdSrBuv9E0/A0DZgXf8Gl69ziBwUIEY73JiA+gRPnn610Z5UqsrZ5g4u5Gt
-         EUIA==
-X-Gm-Message-State: AOAM5311bqeFm2xoX7OZhSCUJoOT4ro5Gcm2XbDS2/gsle+n+kziUSpd
-        3Y55BoXn+DJ6DVC8yhVS7XVk675LQW/RMVn/JuLbfOxpgJQ=
-X-Google-Smtp-Source: ABdhPJxjkfwG98FgwOAXl83TLDHcTm1Al4pPfH1i7QQy4ifqoR9WTmSoh3auS2zPcJ0r2ugyjkD9CXiSzzilelN6HjQ=
-X-Received: by 2002:a81:8985:0:b0:2dc:472:ff3f with SMTP id
- z127-20020a818985000000b002dc0472ff3fmr14307942ywf.333.1646399546204; Fri, 04
- Mar 2022 05:12:26 -0800 (PST)
+        Fri, 4 Mar 2022 08:14:23 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE570106B3E;
+        Fri,  4 Mar 2022 05:13:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=pB32wDUZL436jRAa3plkNzIxf0EDPP1psVM4KdlXbSo=; b=35Rj16SwC/t855RzQ+l3mNRNge
+        M79/mtVA9+V688ERcQpmxRX6RDBL1naaxDHjf1L+dgIpPwy9nPeMSGrqVH2nJc44sAzxB/CY7YJRB
+        GE016xHJNCwSInhA9tUca+h5xvCmxsMYewAgRDujyr5tG8ZUIXGSv+6UaertoQwymo9M=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nQ7kT-009EPO-Jh; Fri, 04 Mar 2022 14:13:33 +0100
+Date:   Fri, 4 Mar 2022 14:13:33 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next 6/6] net: phy: added ethtool master-slave
+ configuration support
+Message-ID: <YiIQfcKccbjtfPJo@lunn.ch>
+References: <20220304094401.31375-1-arun.ramadoss@microchip.com>
+ <20220304094401.31375-7-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-References: <20220304063427.372145-1-42.hyeyoo@gmail.com> <CANpmjNNv8+frHPdvT=0ZNuz5phUy1WRanJ6DkiiNvDTBtFraAQ@mail.gmail.com>
- <YiH/6MeYNaEehXmj@ip-172-31-19-208.ap-northeast-1.compute.internal>
-In-Reply-To: <YiH/6MeYNaEehXmj@ip-172-31-19-208.ap-northeast-1.compute.internal>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 4 Mar 2022 14:11:50 +0100
-Message-ID: <CANpmjNNYt9AG8RrGF0pq2dPbFc=vw2kaOnL2k5+8kfJeEMGuwg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] slab cleanups
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew WilCox <willy@infradead.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304094401.31375-7-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 at 13:02, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
->
-> On Fri, Mar 04, 2022 at 12:50:21PM +0100, Marco Elver wrote:
-> > On Fri, 4 Mar 2022 at 07:34, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
-> > >
-> > > Changes from v1:
-> > >         Now SLAB passes requests larger than order-1 page
-> > >         to page allocator.
-> > >
-> > >         Adjusted comments from Matthew, Vlastimil, Rientjes.
-> > >         Thank you for feedback!
-> > >
-> > >         BTW, I have no idea what __ksize() should return when an object that
-> > >         is not allocated from slab is passed. both 0 and folio_size()
-> > >         seems wrong to me.
-> >
-> > Didn't we say 0 would be the safer of the two options?
-> > https://lkml.kernel.org/r/0e02416f-ef43-dc8a-9e8e-50ff63dd3c61@suse.cz
-> >
->
-> Oh sorry, I didn't understand why 0 was safer when I was reading it.
->
-> Reading again, 0 is safer because kasan does not unpoison for
-> wrongly passed object, right?
+> +static int lan87xx_read_master_slave(struct phy_device *phydev)
+> +{
+> +	int rc = 0;
+> +
+> +	phydev->master_slave_get = MASTER_SLAVE_CFG_UNKNOWN;
+> +	phydev->master_slave_state = MASTER_SLAVE_STATE_UNKNOWN;
+> +
+> +	rc = phy_read(phydev, MII_CTRL1000);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	if (rc & CTL1000_AS_MASTER)
+> +		phydev->master_slave_get = MASTER_SLAVE_CFG_MASTER_FORCE;
+> +	else
+> +		phydev->master_slave_get = MASTER_SLAVE_CFG_SLAVE_FORCE;
+> +
+> +	rc = phy_read(phydev, MII_STAT1000);
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	if (rc & LPA_1000MSRES)
+> +		phydev->master_slave_state = MASTER_SLAVE_STATE_MASTER;
+> +	else
+> +		phydev->master_slave_state = MASTER_SLAVE_STATE_SLAVE;
+> +
+> +	return rc;
+> +}
 
-Not quite. KASAN can tell if something is wrong, i.e. invalid object.
-Similarly, if you are able to tell if the passed pointer is not a
-valid object some other way, you can do something better - namely,
-return 0. The intuition here is that the caller has a pointer to an
-invalid object, and wants to use ksize() to determine its size, and
-most likely access all those bytes. Arguably, at that point the kernel
-is already in a degrading state. But we can try to not let things get
-worse by having ksize() return 0, in the hopes that it will stop
-corrupting more memory. It won't work in all cases, but should avoid
-things like "s = ksize(obj); touch_all_bytes(obj, s)" where the size
-bounds the memory accessed corrupting random memory.
+It looks like you can just call genphy_read_master_slave()? Or am i
+missing some subtle difference?
 
-The other reason is that a caller could actually check the size, and
-if 0, do something else. Few callers will do so, because nobody
-expects that their code has a bug. :-)
+> +static int lan87xx_config_aneg(struct phy_device *phydev)
+> +{
+> +	u16 ctl = 0;
+> +	int rc;
+> +
+> +	switch (phydev->master_slave_set) {
+> +	case MASTER_SLAVE_CFG_MASTER_FORCE:
+> +		ctl |= CTL1000_AS_MASTER;
+> +		break;
+> +	case MASTER_SLAVE_CFG_SLAVE_FORCE:
+> +		break;
+> +	case MASTER_SLAVE_CFG_UNKNOWN:
+> +	case MASTER_SLAVE_CFG_UNSUPPORTED:
+> +		return 0;
+> +	default:
+> +		phydev_warn(phydev, "Unsupported Master/Slave mode\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	rc = phy_modify_changed(phydev, MII_CTRL1000, CTL1000_AS_MASTER, ctl);
+> +	if (rc == 1)
+> +		rc = genphy_soft_reset(phydev);
+> +
+> +	return rc;
+> +}
+
+Please use genphy_setup_master_slave()
+
+       Andrew

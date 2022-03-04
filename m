@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B2F4CCDDB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 123594CCDE8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238516AbiCDGg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S237954AbiCDGge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:36:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238497AbiCDGgP (ORCPT
+        with ESMTP id S238481AbiCDGgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:36:15 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3F518DAAD
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 22:34:47 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id g1so6862322pfv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 22:34:47 -0800 (PST)
+        Fri, 4 Mar 2022 01:36:16 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77FE18E3E8
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 22:34:50 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so7164480pjl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 22:34:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sl+tnBHk3Om3exFNoQL1k9gm+o8msiRC3imZlWXFCFQ=;
-        b=RqVWgGr9J9yOyOmhf/M7Rf5rVoQmBacywljxXUt7owe+MoiBcPp5It1tMurj0PjnXd
-         Ouqe/V6NBZrcvo6w7ZMuEdxfbsjAkSoFES01WeJvCt6D3HdrZvRJXFnMbIvexDn/FyhD
-         iBQzMeqSvC0nBRzJ88nbEK9TTmcnpWFpAxvynTA7kLxRKnDcYMzhsuN3zD9VWmGIrmOM
-         vhEzX4e6v7tTBdZfWd55w0xwJa+3Yup/4gmOEjWsj/dO0PJNxiG4madqTytAua4HdpvS
-         04mkkhHJhosVGbv66Ql6zJ2KJ/C0GcJtbwewtqAQtFtaP+l7OfjN6qUJehTr+x3SRHe9
-         UhgQ==
+        bh=kPOOk68I4eD0EZtqHYKQaSrGBjBqSrtM4mnuv4oRjyQ=;
+        b=nDQzt1phNSGQYKWCNk0gp2OnBhDzbFsLtVoMQZYprv1JockjSyVxMyhajm1xm7lr7V
+         AWmFM71q4nLmK+IbMdcN4MrfIWcWUSusSJ2Ak1sFRxCRVgo9+yRWwtHiBLiO5kN6l0Cf
+         yLLWwtivZxP28j4U1PbUfMvuJgkWTHpSgrnltIZ0HxRydMzgP58+XIo8ze8XNWAnBf2r
+         jxc5GN7nej6IJEd/CXES7lSAJZ89+/JWxuMRhSr1m6iMiAkoym1w3oFIxqXIbLz27+YQ
+         I4aOWtlXWIArSgaMdhm6eVGUNNI2Nn3Ars/MW3LDXBiy2RoYV6zkphnKYaYNQ1rT3Fwa
+         B46Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sl+tnBHk3Om3exFNoQL1k9gm+o8msiRC3imZlWXFCFQ=;
-        b=g9Pd08BtkrnkKkvselJ0RqlOR8gfLmktibbFUn8VOdoLgtZEQk4ySts6Gc0a+26akt
-         3OeVnda8yVni7SG6yNFSdb4ETS/y3zxjTHDNMOqxkg5Bra6y6uSUQlvV41zQGAzLpitW
-         4ZILNqMrtpfvgKPXbS8Ye9OROZe5ND3zdG3kg2LyPeyDZbTQ1BPLywJp6qfTd0lhc2F2
-         77P00LIlaYzTildqD6gtRsLuwkRYE/ICQAdi0uFv89Bn3lfgtemfqZ81GU5BxGbqN4aL
-         qpToaxpGXWAV8rBu9Nu2BYgWuqFlPZA7XU7wpSgbrU2seMdPA7YOldl/sTgWGSbYV3k/
-         k0Rg==
-X-Gm-Message-State: AOAM533GzZSMiPqr4W55b2stKTDqewPmmqxYe31CCFo9YG8bJGiC5uR0
-        ElElTJl6iXsD4CT/uhlpSr61LAtbyeeGCw==
-X-Google-Smtp-Source: ABdhPJxAx/kaLkY9NudzLA8xsz3v1HTz5vDFFp5IWgY5okd3A/kN+0kX2WWhmiiBZ7RvUzsi5ADCrg==
-X-Received: by 2002:a63:cd02:0:b0:378:9b24:4a9 with SMTP id i2-20020a63cd02000000b003789b2404a9mr20323397pgg.327.1646375687212;
-        Thu, 03 Mar 2022 22:34:47 -0800 (PST)
+        bh=kPOOk68I4eD0EZtqHYKQaSrGBjBqSrtM4mnuv4oRjyQ=;
+        b=pXentCywoqSr30KC+dN7fPjSaIpW+wsbuf3xJWY4bN/79g1HTfOIpMzXKSyA5UhXnJ
+         JVYSCOI6e/ay0FqX4EkbFxDneVXTJ+O+HHuRv1vrWFWg+0kYnuPcqykm6W6zn85Q7gH+
+         rg5KzmB0OJM3w8eQIyrpL5WTJiGOWolvvcoH6d12ZaCde9vjcaQiW14aPBt0jDoo4Dz3
+         TcA3MQNzl8Q7aLqFpN6JXEmeXy1UgpBn/wCumMmmyRoAy9GSO60VnGRaUxcR+9ajOW9n
+         QF0gHnFH+K3Y5DsNUKuaSMra+Xrt3qromqQPGpl1XT+kMBERwmvpLY6dXnu/oIXsspzS
+         UPjA==
+X-Gm-Message-State: AOAM530dqYRpBVFjSjE9EqxbTkkU13hroxjZRNUBMnKCt+/i3d3uO6Kl
+        kfKIbcRT6sTtVHFxiG75QAU=
+X-Google-Smtp-Source: ABdhPJx6Xk2mOdK3KCJoE/feOSg8DDkvCzteGHm0Tcc9N7Tq32/YEHDYtA7ATrAkhbz8I8OkNz0/Dg==
+X-Received: by 2002:a17:90a:eb07:b0:1be:f354:9404 with SMTP id j7-20020a17090aeb0700b001bef3549404mr9122314pjz.90.1646375689983;
+        Thu, 03 Mar 2022 22:34:49 -0800 (PST)
 Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id v10-20020a056a00148a00b004e0f420dd90sm4900007pfu.40.2022.03.03.22.34.44
+        by smtp.gmail.com with ESMTPSA id v10-20020a056a00148a00b004e0f420dd90sm4900007pfu.40.2022.03.03.22.34.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 22:34:47 -0800 (PST)
+        Thu, 03 Mar 2022 22:34:49 -0800 (PST)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     Christoph Lameter <cl@linux.com>,
@@ -60,9 +60,9 @@ Cc:     Christoph Lameter <cl@linux.com>,
         Matthew WilCox <willy@infradead.org>,
         Roman Gushchin <roman.gushchin@linux.dev>,
         linux-kernel@vger.kernel.org, 42.hyeyoo@gmail.com
-Subject: [PATCH v2 2/5] mm/sl[au]b: unify __ksize()
-Date:   Fri,  4 Mar 2022 06:34:24 +0000
-Message-Id: <20220304063427.372145-3-42.hyeyoo@gmail.com>
+Subject: [PATCH v2 3/5] mm/sl[auo]b: move definition of __ksize() to mm/slab.h
+Date:   Fri,  4 Mar 2022 06:34:25 +0000
+Message-Id: <20220304063427.372145-4-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220304063427.372145-1-42.hyeyoo@gmail.com>
 References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
@@ -78,27 +78,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that SLAB passes large requests to page allocator like SLUB,
-Unify __ksize(). Only SLOB need to implement own version of __ksize()
-because it stores size in object header for kmalloc objects.
+__ksize() is only called by KASAN. Remove export symbol and move
+definition to mm/slab.h as we don't want to grow its callers.
+
+[ willy@infradead.org: Move definition to mm/slab.h and reduce comments ]
 
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- mm/slab.c        | 30 ------------------------------
- mm/slab_common.c | 27 +++++++++++++++++++++++++++
- mm/slub.c        | 16 ----------------
- 3 files changed, 27 insertions(+), 46 deletions(-)
+ include/linux/slab.h | 1 -
+ mm/slab.h            | 2 ++
+ mm/slab_common.c     | 9 +--------
+ mm/slob.c            | 1 -
+ 4 files changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/mm/slab.c b/mm/slab.c
-index 570af6dc3478..3ddf2181d8e4 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -4216,33 +4216,3 @@ void __check_heap_object(const void *ptr, unsigned long n,
- 	usercopy_abort("SLAB object", cachep->name, to_user, offset, n);
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index e7b3330db4f3..d2b896553315 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -182,7 +182,6 @@ int kmem_cache_shrink(struct kmem_cache *s);
+ void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __alloc_size(2);
+ void kfree(const void *objp);
+ void kfree_sensitive(const void *objp);
+-size_t __ksize(const void *objp);
+ size_t ksize(const void *objp);
+ #ifdef CONFIG_PRINTK
+ bool kmem_valid_obj(void *object);
+diff --git a/mm/slab.h b/mm/slab.h
+index 31e98beb47a3..79b319d58504 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -685,6 +685,8 @@ static inline void free_large_kmalloc(struct folio *folio, void *object)
  }
- #endif /* CONFIG_HARDENED_USERCOPY */
--
--/**
+ #endif /* CONFIG_SLOB */
+ 
++size_t __ksize(const void *objp);
++
+ static inline size_t slab_ksize(const struct kmem_cache *s)
+ {
+ #ifndef CONFIG_SLUB
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 1d2f92e871d2..b126fc7247b9 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -1247,13 +1247,7 @@ EXPORT_SYMBOL(kfree_sensitive);
+ 
+ #ifndef CONFIG_SLOB
+ /**
 - * __ksize -- Uninstrumented ksize.
 - * @objp: pointer to the object
 - *
@@ -106,92 +131,30 @@ index 570af6dc3478..3ddf2181d8e4 100644
 - * safety checks as ksize() with KASAN instrumentation enabled.
 - *
 - * Return: size of the actual memory used by @objp in bytes
-- */
--size_t __ksize(const void *objp)
--{
--	struct kmem_cache *c;
--	struct folio *folio;
--	size_t size;
--
--	BUG_ON(!objp);
--	if (unlikely(objp == ZERO_SIZE_PTR))
--		return 0;
--
--	folio = virt_to_folio(objp);
--	if (!folio_test_slab(folio))
--		return folio_size(folio);
--
--	c = virt_to_cache(objp);
--	size = c ? c->object_size : 0;
--
--	return size;
--}
--EXPORT_SYMBOL(__ksize);
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 23f2ab0713b7..1d2f92e871d2 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1245,6 +1245,33 @@ void kfree_sensitive(const void *p)
- }
- EXPORT_SYMBOL(kfree_sensitive);
- 
-+#ifndef CONFIG_SLOB
-+/**
-+ * __ksize -- Uninstrumented ksize.
-+ * @objp: pointer to the object
-+ *
-+ * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
-+ * safety checks as ksize() with KASAN instrumentation enabled.
-+ *
-+ * Return: size of the actual memory used by @objp in bytes
-+ */
-+size_t __ksize(const void *object)
-+{
-+	struct folio *folio;
-+
-+	if (unlikely(object == ZERO_SIZE_PTR))
-+		return 0;
-+
-+	folio = virt_to_folio(object);
-+
-+	if (unlikely(!folio_test_slab(folio)))
-+		return folio_size(folio);
-+
-+	return slab_ksize(folio_slab(folio)->slab_cache);
-+}
-+EXPORT_SYMBOL(__ksize);
-+#endif
-+
- /**
-  * ksize - get the actual amount of memory allocated for a given object
-  * @objp: Pointer to the object
-diff --git a/mm/slub.c b/mm/slub.c
-index 04fd084f4709..6f0ebadd8f30 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -4507,22 +4507,6 @@ void __check_heap_object(const void *ptr, unsigned long n,
- }
- #endif /* CONFIG_HARDENED_USERCOPY */
- 
--size_t __ksize(const void *object)
--{
--	struct folio *folio;
--
--	if (unlikely(object == ZERO_SIZE_PTR))
--		return 0;
--
--	folio = virt_to_folio(object);
--
--	if (unlikely(!folio_test_slab(folio)))
--		return folio_size(folio);
--
--	return slab_ksize(folio_slab(folio)->slab_cache);
--}
--EXPORT_SYMBOL(__ksize);
--
- void kfree(const void *x)
++ * __ksize -- Uninstrumented ksize. Only called by KASAN.
+  */
+ size_t __ksize(const void *object)
  {
- 	struct folio *folio;
+@@ -1269,7 +1263,6 @@ size_t __ksize(const void *object)
+ 
+ 	return slab_ksize(folio_slab(folio)->slab_cache);
+ }
+-EXPORT_SYMBOL(__ksize);
+ #endif
+ 
+ /**
+diff --git a/mm/slob.c b/mm/slob.c
+index 60c5842215f1..d8af6c54f133 100644
+--- a/mm/slob.c
++++ b/mm/slob.c
+@@ -588,7 +588,6 @@ size_t __ksize(const void *block)
+ 	m = (unsigned int *)(block - align);
+ 	return SLOB_UNITS(*m) * SLOB_UNIT;
+ }
+-EXPORT_SYMBOL(__ksize);
+ 
+ int __kmem_cache_create(struct kmem_cache *c, slab_flags_t flags)
+ {
 -- 
 2.33.1
 

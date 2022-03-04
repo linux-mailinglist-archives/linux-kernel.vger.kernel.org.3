@@ -2,113 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A934CDB14
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90ACD4CDB1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbiCDRiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:38:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S236851AbiCDRkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiCDRiC (ORCPT
+        with ESMTP id S231807AbiCDRke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:38:02 -0500
-Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550B353B5B;
-        Fri,  4 Mar 2022 09:37:14 -0800 (PST)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 0D6B625AC1;
-        Fri,  4 Mar 2022 17:37:11 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 8345420033;
-        Fri,  4 Mar 2022 17:36:54 +0000 (UTC)
-Message-ID: <ad3567301af7b1b24cf4ac447fec8d618231ea33.camel@perches.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-From:   Joe Perches <joe@perches.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     Finn Thain <fthain@linux-m68k.org>,
-        Konrad Wilhelm Kleine <kkleine@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-In-Reply-To: <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
-References: <20220127151945.1244439-1-trix@redhat.com>
-         <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
-         <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
-         <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
-         <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
-         <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
-         <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
-         <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
-         <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
-         <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
-         <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
-         <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com>
-         <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
+        Fri, 4 Mar 2022 12:40:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0A82158D86
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:39:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646415585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lPgI5KBDMxO+9gfbk0fo+LKFfqiPLnIuJyBRw1R+UJk=;
+        b=P8zvlBmjjZfk2mjJOGNe2e1eDR8m9V1XYt4GLF+jjCo9gdNJJBQ2tr3zox/pnFaBHkPvWv
+        ahBtmP6g74Uso8DcvNG76X/5oStw4FP9JJIaz1R4Tsk1CCe1Dt+cDW+k62HHXBhYEyamb0
+        /OSOYCsQ83zN51ag88Rx6P402CyaZu4=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-146-TJt8zkqvPYqelExP_u39VQ-1; Fri, 04 Mar 2022 12:39:44 -0500
+X-MC-Unique: TJt8zkqvPYqelExP_u39VQ-1
+Received: by mail-oo1-f71.google.com with SMTP id u13-20020a4ab5cd000000b002e021ad5bbcso6126696ooo.17
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 09:39:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lPgI5KBDMxO+9gfbk0fo+LKFfqiPLnIuJyBRw1R+UJk=;
+        b=b+a1tElajm1P7pYp356cGmDeZu79A9asFab3xw18D9qd94HqRoB0J2lxzZl7iQDlpI
+         VECtc2+u0onIZ2MMp/uhqb4qUatVvLz9FHrnQ58aqgt0/VjncaaxU5lyd9cJuACN3Rbo
+         vucaHd+X2RXvepvXp3R+2j7H/OTS5xfzjtKokZZUJUoctu8hqSFeQ3WVBeyf9/Rc2BnD
+         bZq4EYfpmloRyYLplSKLBHWf/N3n6VaNaYu3TLPWM053TbSQ5UefKMJlnXv4t9Xj6t8A
+         /8JWB+gpYiBQ5zddLsX8BpTe1rk8JsD5/rCqlg6qGsvr3ZTaBq0yAsJcwyvZRsncuWxm
+         BiiA==
+X-Gm-Message-State: AOAM530FA/2oEozzGdMHh5z+YAgYtrjqPQ5n0JjeFOlZiGPVFSrBl4P4
+        Lw8tKgC9k2gT+bEWqDutUHzY1mpQcffOoOHEGFVXXOoPiytlBXKbto1nXxif9/f+GdwUIWqRcSm
+        SVPFXdgMQxIhb0qBUsHhBN9Hk
+X-Received: by 2002:a05:6808:308e:b0:2d9:a01a:48a2 with SMTP id bl14-20020a056808308e00b002d9a01a48a2mr180638oib.237.1646415583289;
+        Fri, 04 Mar 2022 09:39:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyzfCC5LGdrrnBfiKqlqU7ceAnut51+V2E9Fz7RfzPGdXifWJEhhr9Eqw2bTucadAyvx3VSqQ==
+X-Received: by 2002:a05:6808:308e:b0:2d9:a01a:48a2 with SMTP id bl14-20020a056808308e00b002d9a01a48a2mr180615oib.237.1646415583038;
+        Fri, 04 Mar 2022 09:39:43 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id k25-20020a9d7019000000b005af14095afdsm2586483otj.0.2022.03.04.09.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 09:39:42 -0800 (PST)
+Date:   Fri, 4 Mar 2022 09:39:39 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v3 25/39] x86/bugs: Disable Retpoline when IBT
+Message-ID: <20220304173939.rea2ud2h45l2gcpj@treble>
+References: <20220303112321.422525803@infradead.org>
+ <20220303112826.481793874@infradead.org>
 MIME-Version: 1.0
-Date:   Fri, 04 Mar 2022 09:36:47 -0800
-User-Agent: Evolution 3.40.4-1ubuntu2 
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 8345420033
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: 1c6ug8i9pqxuqjhad1yefjg3b57awop5
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18PthH+crZJzJrKjbbP7DvDY/cONgYvkvc=
-X-HE-Tag: 1646415414-943187
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220303112826.481793874@infradead.org>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 15:02 +0100, Miguel Ojeda wrote:
-> On Fri, Mar 4, 2022 at 2:46 PM Tom Rix <trix@redhat.com> wrote:
-> > 
-> > The churn level will be very high.
+On Thu, Mar 03, 2022 at 12:23:46PM +0100, Peter Zijlstra wrote:
+> Retpoline and IBT are mutually exclusive. IBT relies on indirect
+> branches (JMP/CALL *%reg) while retpoline avoids them by design.
 > 
-> Nobody is planning to reformat the entire kernel, at least not until
-> the tool is close enough to the kernel style, which will take a while.
+> Demote to LFENCE on IBT enabled hardware.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/x86/kernel/cpu/bugs.c |   13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+> @@ -891,6 +891,7 @@ static void __init spectre_v2_select_mit
+>  {
+>  	enum spectre_v2_mitigation_cmd cmd = spectre_v2_parse_cmdline();
+>  	enum spectre_v2_mitigation mode = SPECTRE_V2_NONE;
+> +	bool silent_demote = false;
+>  
+>  	/*
+>  	 * If the CPU is not affected and the command line mode is NONE or AUTO
+> @@ -906,6 +907,7 @@ static void __init spectre_v2_select_mit
+>  
+>  	case SPECTRE_V2_CMD_FORCE:
+>  	case SPECTRE_V2_CMD_AUTO:
+> +		silent_demote = true;
+>  		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
+>  			mode = SPECTRE_V2_IBRS_ENHANCED;
+>  			/* Force it so VMEXIT will restore correctly */
+> @@ -938,6 +940,7 @@ static void __init spectre_v2_select_mit
+>  	retpoline_amd:
+>  		if (!boot_cpu_has(X86_FEATURE_LFENCE_RDTSC)) {
+>  			pr_err("Spectre mitigation: LFENCE not serializing, switching to generic retpoline\n");
+> +			silent_demote = false;
+>  			goto retpoline_generic;
+>  		}
+>  		mode = SPECTRE_V2_RETPOLINE_AMD;
+> @@ -947,6 +950,16 @@ static void __init spectre_v2_select_mit
+>  	retpoline_generic:
+>  		mode = SPECTRE_V2_RETPOLINE_GENERIC;
+>  		setup_force_cpu_cap(X86_FEATURE_RETPOLINE);
+> +
+> +		/*
+> +		 * ROP defeats IBT, make sure not to use Retpolines and IBT together.
+> +		 */
+> +		if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT)) {
+> +			if (!silent_demote)
+> +				pr_warn("Spectre mitigation: Switching to LFENCE due to IBT\n");
+> +			mode = SPECTRE_V2_RETPOLINE_AMD;
+> +			setup_force_cpu_cap(X86_FEATURE_RETPOLINE_AMD);
+> +		}
 
-I rather doubt clang-format will ever be 'close enough'.
+This is better.  But AFAIK, the 'silent_demote' case should only happen
+on a hypothetically weird/broken virt setup, right?  Why silence the
+warning?  It still seems legit.  If you have IBT on non-eIBRS Intel, and
+you get silently demoted from retpoline to lfence, it presumably opens
+up some Spectre v2 attack vectors, despite IBT's implicit promise of
+providing *more* protection overall.
 
-A human's sense of 'taste' for reading code is very different than
-what an automated tool produces.
+And actually, after thinking about it, my most preferred approach would
+be to do the converse of this patch: only enable IBT if
+!X86_FEATURE_RETPOLINE.  And do a real warning, like "your setup is
+broken, IBT is disabled".  Maybe even make it a real WARN() so we could
+find out if it's a real possibility.  Since this feature is much newer
+than retpoline, that would probably be the simplest and least surprising
+option.
 
-For instance, clang-format does a quite poor job when comments are
-intermixed with definitions.
-
-Also, try looking at the changes clang-format does on a file chosen
-at random:
-
-$ clang-format -i drivers/hid/hid-sony.c
-$ git diff drivers/hid/hid-sony.c
-[...]
-
-o columnarized definitions -> not columnarized
-o odd line continuation placement using spaces and not tabs before \
-o odd array definition layouts
-o per line definitions with comments poorly laid out
-o individual line definitions rewrapped
-o enum definitions on multiple lines compressed to single lines
-o u8 array definition layouts where the first element has a separate
-  meaning than the subsequent elements are compressed and made
-  difficult to understand
-
-I think _some_ clang-format output is ok, but the concept of
-enabling/disabling specific reformatting bits would be quite useful.
-
-And sprinkling "clang-format on/off" lines in the code is not good.
-
-Any control codes that determine when source code layout might be
-immutable or allowed to be modified could be should be tool name
-agnostic.
-
+-- 
+Josh
 

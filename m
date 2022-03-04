@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FF84CCCFF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 06:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4209C4CCCF6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 06:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237821AbiCDFUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 00:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S238124AbiCDFUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 00:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238114AbiCDFUa (ORCPT
+        with ESMTP id S238122AbiCDFUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 00:20:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10995186225
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 21:19:42 -0800 (PST)
+        Fri, 4 Mar 2022 00:20:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13467184B75
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 21:19:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646371182;
+        s=mimecast20190719; t=1646371190;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=W3A1Sw4gSLvq3WpWIO0c1Ts85eaL9QjEv2hQ97BtHXI=;
-        b=HmdgJAZ8zrF1KvAZn7ZTifd4/4NGqTA5dHAFWSt58JmrtZ2aNqEuzaFywBPwiSVVatFSEk
-        hSEMtsSFQgRpQaTcHzPYsJkhvlNyarL96qa+mRZ3kaSkm5KGQlmD7vNiN4mmEAb5MYQa89
-        9KDBJS9K/WSwlVmhowBuqrnmng4jGk4=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Wn3ILT0Lxv5s6XkvrMXIyY+ihJQ80lsNhwBboggDj0M=;
+        b=d6XhGMTO4JNx7TAyA9UtAGDe203phBfwTEZExJPKqIBLVE8vZPC+SAUGKMXChBRGVoXRuX
+        w8LfMPmAlnDIBr1M+Ly4ilu+jhJHqZxvs9rFdMUd2LFIRBmrhlTRFehwtIo7vjlHa88bNp
+        ZZMdHXWe4s1xiNEMiXNecIrVBdRD0ac=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-31-kg2NmLfVND2FP1Ik24wbMw-1; Fri, 04 Mar 2022 00:19:40 -0500
-X-MC-Unique: kg2NmLfVND2FP1Ik24wbMw-1
-Received: by mail-pf1-f200.google.com with SMTP id j204-20020a6280d5000000b004e107ad3488so4454269pfd.15
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 21:19:40 -0800 (PST)
+ us-mta-464-YeHpyN9vP2GHZyPuREOxpw-1; Fri, 04 Mar 2022 00:19:49 -0500
+X-MC-Unique: YeHpyN9vP2GHZyPuREOxpw-1
+Received: by mail-pj1-f70.google.com with SMTP id m14-20020a17090a4d8e00b001bf2d4926c5so67406pjh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 21:19:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=W3A1Sw4gSLvq3WpWIO0c1Ts85eaL9QjEv2hQ97BtHXI=;
-        b=RTsGWwC6V4PorcwCyYzXhZEQcOGg7VyWVFpU4/on1utaq3qneHe2qXgFJMZWi56FKx
-         I2fM+LrDCTM0lrh50ss/bgyftRdrrhvhoz3O2gs6FRiOQUhSgK/ywrJKeZ4q+Be9gpVe
-         c1eEoteruvOy5jO8yfZ1HDOMKmHqQ0QNdaT4RPHIjmGJWFkUZF3moZdT+NW0GLxk7ALg
-         Khouo5t9GqODIAvFhObcLwSR0RtE4eo538rsRJbnpD/F58FlExDn4CQmfeqFQRWBy06W
-         bVBEng8J0EYtRP18GDFyC0Id4VRa2J4hS4LpnN6fMXWlKDmR7LN9H+jOnY994Hqd+3G7
-         fv9A==
-X-Gm-Message-State: AOAM533ai/59ZNmsJZXNFJ94hxfZsEIJCH7OlzNS8MCbATl5ov+u701b
-        9MXU2IO39bjYPdyO3X+5QpFz5vXWLdBZtwuk7MxH0D6ETnCz/j72brknvEUnmUopYBVDVrC4Bn2
-        7rKl7uR9JSrRxXLs+Y3ZppAyD
-X-Received: by 2002:a17:902:b908:b0:151:b8ec:2038 with SMTP id bf8-20020a170902b90800b00151b8ec2038mr2680076plb.76.1646371179418;
-        Thu, 03 Mar 2022 21:19:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx0oSKjLHhzbwnFEI3D/leuju9Hh++AWa1WGIDqEaacCZODw/P1z3OkOVq6mvSOA7JhcqdiMA==
-X-Received: by 2002:a17:902:b908:b0:151:b8ec:2038 with SMTP id bf8-20020a170902b90800b00151b8ec2038mr2680056plb.76.1646371179057;
-        Thu, 03 Mar 2022 21:19:39 -0800 (PST)
+        bh=Wn3ILT0Lxv5s6XkvrMXIyY+ihJQ80lsNhwBboggDj0M=;
+        b=7vjBfIsrbmiEvMibOVuJ1sIyNfq01UNwsDiCjFzJk0M2+IPxo84zd4U3VGjZZVw4f3
+         i7MEKy2WCICcpz3oZqPreMjENHO3i7q+x3gT0YCwYq1ntJO+CmibOGNRpCqmNK9ZyYCA
+         bJM9+hOy9BPrKA19/W85EkLYqr7wTj+EMNnIWGhxzFdCWfDOYpI3ZyxV/hWIZYAUO5JT
+         fwGGu0eU8B4Y/MRSKMd4LZ1cD6Zmi7Nf+cvmRUbez3UU7vmSuzoHuVMB4XgFfo+C6nYk
+         bu0RJD6ZwTt7inoIfcETSy4+xQBZeKPMf78mJNvQrsd4IqM5MzOShP+ezR6V87cNqWDc
+         jrnw==
+X-Gm-Message-State: AOAM533NERY5aGIoZ9dfKRELp2fM/FAJDA+Xb75WQvUqIA3i8w3mPvnZ
+        OKRVf5mzu0Fhig33ftJw8RumHrxcf8AAerUE+CttVhGO32+L0GvMn0Y9HNGAipE8AgdLLZaCE1Z
+        qaWwmnH9kHlBdMOv3l+W0iOYZ
+X-Received: by 2002:a17:90a:f48f:b0:1bc:2521:fb0a with SMTP id bx15-20020a17090af48f00b001bc2521fb0amr9165163pjb.48.1646371187693;
+        Thu, 03 Mar 2022 21:19:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJycPvMgb2+JEX9mKyCqqvdoYelrEZ2x92Thb/SSCgHsoZmufdyixH7q1XZKq5P8YsP5zDuMwg==
+X-Received: by 2002:a17:90a:f48f:b0:1bc:2521:fb0a with SMTP id bx15-20020a17090af48f00b001bc2521fb0amr9165135pjb.48.1646371187413;
+        Thu, 03 Mar 2022 21:19:47 -0800 (PST)
 Received: from localhost.localdomain ([94.177.118.59])
-        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm4323865pfo.87.2022.03.03.21.19.31
+        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm4323865pfo.87.2022.03.03.21.19.39
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 03 Mar 2022 21:19:38 -0800 (PST)
+        Thu, 03 Mar 2022 21:19:47 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     peterx@redhat.com, Nadav Amit <nadav.amit@gmail.com>,
@@ -69,9 +69,9 @@ Cc:     peterx@redhat.com, Nadav Amit <nadav.amit@gmail.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
         Andrea Arcangeli <aarcange@redhat.com>
-Subject: [PATCH v7 17/23] mm/hugetlb: Only drop uffd-wp special pte if required
-Date:   Fri,  4 Mar 2022 13:17:02 +0800
-Message-Id: <20220304051708.86193-18-peterx@redhat.com>
+Subject: [PATCH v7 18/23] mm/hugetlb: Handle uffd-wp during fork()
+Date:   Fri,  4 Mar 2022 13:17:03 +0800
+Message-Id: <20220304051708.86193-19-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220304051708.86193-1-peterx@redhat.com>
 References: <20220304051708.86193-1-peterx@redhat.com>
@@ -87,220 +87,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As with shmem uffd-wp special ptes, only drop the uffd-wp special swap pte if
-unmapping an entire vma or synchronized such that faults can not race with the
-unmap operation.  This requires passing zap_flags all the way to the lowest
-level hugetlb unmap routine: __unmap_hugepage_range.
+Firstly, we'll need to pass in dst_vma into copy_hugetlb_page_range() because
+for uffd-wp it's the dst vma that matters on deciding how we should treat
+uffd-wp protected ptes.
 
-In general, unmap calls originated in hugetlbfs code will pass the
-ZAP_FLAG_DROP_MARKER flag as synchronization is in place to prevent faults.
-The exception is hole punch which will first unmap without any synchronization.
-Later when hole punch actually removes the page from the file, it will check to
-see if there was a subsequent fault and if so take the hugetlb fault mutex
-while unmapping again.  This second unmap will pass in ZAP_FLAG_DROP_MARKER.
+We should recognize pte markers during fork and do the pte copy if needed.
 
-The justification of "whether to apply ZAP_FLAG_DROP_MARKER flag when unmap a
-hugetlb range" is (IMHO): we should never reach a state when a page fault could
-errornously fault in a page-cache page that was wr-protected to be writable,
-even in an extremely short period.  That could happen if e.g. we pass
-ZAP_FLAG_DROP_MARKER when hugetlbfs_punch_hole() calls hugetlb_vmdelete_list(),
-because if a page faults after that call and before remove_inode_hugepages() is
-executed, the page cache can be mapped writable again in the small racy window,
-that can cause unexpected data overwritten.
-
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- fs/hugetlbfs/inode.c    | 15 +++++++++------
- include/linux/hugetlb.h |  8 +++++---
- mm/hugetlb.c            | 33 +++++++++++++++++++++++++--------
- mm/memory.c             |  5 ++++-
- 4 files changed, 43 insertions(+), 18 deletions(-)
+ include/linux/hugetlb.h |  7 +++++--
+ mm/hugetlb.c            | 41 +++++++++++++++++++++++++++--------------
+ mm/memory.c             |  2 +-
+ 3 files changed, 33 insertions(+), 17 deletions(-)
 
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 171212bdaae6..d017c674f1b8 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -404,7 +404,8 @@ static void remove_huge_page(struct page *page)
- }
- 
- static void
--hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end)
-+hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end,
-+		      unsigned long zap_flags)
- {
- 	struct vm_area_struct *vma;
- 
-@@ -438,7 +439,7 @@ hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end)
- 		}
- 
- 		unmap_hugepage_range(vma, vma->vm_start + v_offset, v_end,
--									NULL);
-+				     NULL, zap_flags);
- 	}
- }
- 
-@@ -516,7 +517,8 @@ static void remove_inode_hugepages(struct inode *inode, loff_t lstart,
- 				mutex_lock(&hugetlb_fault_mutex_table[hash]);
- 				hugetlb_vmdelete_list(&mapping->i_mmap,
- 					index * pages_per_huge_page(h),
--					(index + 1) * pages_per_huge_page(h));
-+					(index + 1) * pages_per_huge_page(h),
-+					ZAP_FLAG_DROP_MARKER);
- 				i_mmap_unlock_write(mapping);
- 			}
- 
-@@ -582,7 +584,8 @@ static void hugetlb_vmtruncate(struct inode *inode, loff_t offset)
- 	i_mmap_lock_write(mapping);
- 	i_size_write(inode, offset);
- 	if (!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root))
--		hugetlb_vmdelete_list(&mapping->i_mmap, pgoff, 0);
-+		hugetlb_vmdelete_list(&mapping->i_mmap, pgoff, 0,
-+				      ZAP_FLAG_DROP_MARKER);
- 	i_mmap_unlock_write(mapping);
- 	remove_inode_hugepages(inode, offset, LLONG_MAX);
- }
-@@ -615,8 +618,8 @@ static long hugetlbfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
- 		i_mmap_lock_write(mapping);
- 		if (!RB_EMPTY_ROOT(&mapping->i_mmap.rb_root))
- 			hugetlb_vmdelete_list(&mapping->i_mmap,
--						hole_start >> PAGE_SHIFT,
--						hole_end  >> PAGE_SHIFT);
-+					      hole_start >> PAGE_SHIFT,
-+					      hole_end >> PAGE_SHIFT, 0);
- 		i_mmap_unlock_write(mapping);
- 		remove_inode_hugepages(inode, hole_start, hole_end);
- 		inode_unlock(inode);
 diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 38c5ac28b787..ab48b3bbb0e6 100644
+index ab48b3bbb0e6..6df51d23b7ee 100644
 --- a/include/linux/hugetlb.h
 +++ b/include/linux/hugetlb.h
-@@ -143,11 +143,12 @@ long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
+@@ -137,7 +137,8 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
+ 			     struct vm_area_struct *new_vma,
+ 			     unsigned long old_addr, unsigned long new_addr,
+ 			     unsigned long len);
+-int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *, struct vm_area_struct *);
++int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *,
++			    struct vm_area_struct *, struct vm_area_struct *);
+ long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
+ 			 struct page **, struct vm_area_struct **,
  			 unsigned long *, unsigned long *, long, unsigned int,
- 			 int *);
- void unmap_hugepage_range(struct vm_area_struct *,
--			  unsigned long, unsigned long, struct page *);
-+			  unsigned long, unsigned long, struct page *,
-+			  unsigned long);
- void __unmap_hugepage_range_final(struct mmu_gather *tlb,
- 			  struct vm_area_struct *vma,
- 			  unsigned long start, unsigned long end,
--			  struct page *ref_page);
-+			  struct page *ref_page, unsigned long zap_flags);
- void hugetlb_report_meminfo(struct seq_file *);
- int hugetlb_report_node_meminfo(char *buf, int len, int nid);
- void hugetlb_show_meminfo(void);
-@@ -400,7 +401,8 @@ static inline unsigned long hugetlb_change_protection(
+@@ -268,7 +269,9 @@ static inline struct page *follow_huge_addr(struct mm_struct *mm,
+ }
  
- static inline void __unmap_hugepage_range_final(struct mmu_gather *tlb,
- 			struct vm_area_struct *vma, unsigned long start,
--			unsigned long end, struct page *ref_page)
-+			unsigned long end, struct page *ref_page,
-+			unsigned long zap_flags)
+ static inline int copy_hugetlb_page_range(struct mm_struct *dst,
+-			struct mm_struct *src, struct vm_area_struct *vma)
++					  struct mm_struct *src,
++					  struct vm_area_struct *dst_vma,
++					  struct vm_area_struct *src_vma)
  {
  	BUG();
- }
+ 	return 0;
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 1a20be29ac3a..994d7a3ee871 100644
+index 994d7a3ee871..f2508620f197 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -4931,7 +4931,7 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
- 
- static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 				   unsigned long start, unsigned long end,
--				   struct page *ref_page)
-+				   struct page *ref_page, unsigned long zap_flags)
- {
- 	struct mm_struct *mm = vma->vm_mm;
- 	unsigned long address;
-@@ -4987,7 +4987,18 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
- 		 * unmapped and its refcount is dropped, so just clear pte here.
- 		 */
- 		if (unlikely(!pte_present(pte))) {
--			huge_pte_clear(mm, address, ptep, sz);
-+			/*
-+			 * If the pte was wr-protected by uffd-wp in any of the
-+			 * swap forms, meanwhile the caller does not want to
-+			 * drop the uffd-wp bit in this zap, then replace the
-+			 * pte with a marker.
-+			 */
-+			if (pte_swp_uffd_wp_any(pte) &&
-+			    !(zap_flags & ZAP_FLAG_DROP_MARKER))
-+				set_huge_pte_at(mm, address, ptep,
-+						make_pte_marker(PTE_MARKER_UFFD_WP));
-+			else
-+				huge_pte_clear(mm, address, ptep, sz);
- 			spin_unlock(ptl);
- 			continue;
- 		}
-@@ -5015,7 +5026,11 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
- 		tlb_remove_huge_tlb_entry(h, tlb, ptep, address);
- 		if (huge_pte_dirty(pte))
- 			set_page_dirty(page);
--
-+		/* Leave a uffd-wp pte marker if needed */
-+		if (huge_pte_uffd_wp(pte) &&
-+		    !(zap_flags & ZAP_FLAG_DROP_MARKER))
-+			set_huge_pte_at(mm, address, ptep,
-+					make_pte_marker(PTE_MARKER_UFFD_WP));
- 		hugetlb_count_sub(pages_per_huge_page(h), mm);
- 		page_remove_rmap(page, vma, true);
- 
-@@ -5049,9 +5064,10 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
- 
- void __unmap_hugepage_range_final(struct mmu_gather *tlb,
- 			  struct vm_area_struct *vma, unsigned long start,
--			  unsigned long end, struct page *ref_page)
-+			  unsigned long end, struct page *ref_page,
-+			  unsigned long zap_flags)
- {
--	__unmap_hugepage_range(tlb, vma, start, end, ref_page);
-+	__unmap_hugepage_range(tlb, vma, start, end, ref_page, zap_flags);
- 
- 	/*
- 	 * Clear this flag so that x86's huge_pmd_share page_table_shareable
-@@ -5067,12 +5083,13 @@ void __unmap_hugepage_range_final(struct mmu_gather *tlb,
+@@ -4696,23 +4696,24 @@ hugetlb_install_page(struct vm_area_struct *vma, pte_t *ptep, unsigned long addr
  }
  
- void unmap_hugepage_range(struct vm_area_struct *vma, unsigned long start,
--			  unsigned long end, struct page *ref_page)
-+			  unsigned long end, struct page *ref_page,
-+			  unsigned long zap_flags)
+ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+-			    struct vm_area_struct *vma)
++			    struct vm_area_struct *dst_vma,
++			    struct vm_area_struct *src_vma)
  {
- 	struct mmu_gather tlb;
+ 	pte_t *src_pte, *dst_pte, entry, dst_entry;
+ 	struct page *ptepage;
+ 	unsigned long addr;
+-	bool cow = is_cow_mapping(vma->vm_flags);
+-	struct hstate *h = hstate_vma(vma);
++	bool cow = is_cow_mapping(src_vma->vm_flags);
++	struct hstate *h = hstate_vma(src_vma);
+ 	unsigned long sz = huge_page_size(h);
+ 	unsigned long npages = pages_per_huge_page(h);
+-	struct address_space *mapping = vma->vm_file->f_mapping;
++	struct address_space *mapping = src_vma->vm_file->f_mapping;
+ 	struct mmu_notifier_range range;
+ 	int ret = 0;
  
- 	tlb_gather_mmu(&tlb, vma->vm_mm);
--	__unmap_hugepage_range(&tlb, vma, start, end, ref_page);
-+	__unmap_hugepage_range(&tlb, vma, start, end, ref_page, zap_flags);
- 	tlb_finish_mmu(&tlb);
- }
- 
-@@ -5127,7 +5144,7 @@ static void unmap_ref_private(struct mm_struct *mm, struct vm_area_struct *vma,
- 		 */
- 		if (!is_vma_resv_set(iter_vma, HPAGE_RESV_OWNER))
- 			unmap_hugepage_range(iter_vma, address,
--					     address + huge_page_size(h), page);
-+					     address + huge_page_size(h), page, 0);
+ 	if (cow) {
+-		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, src,
+-					vma->vm_start,
+-					vma->vm_end);
++		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, src_vma, src,
++					src_vma->vm_start,
++					src_vma->vm_end);
+ 		mmu_notifier_invalidate_range_start(&range);
+ 	} else {
+ 		/*
+@@ -4724,12 +4725,12 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 		i_mmap_lock_read(mapping);
  	}
- 	i_mmap_unlock_write(mapping);
- }
+ 
+-	for (addr = vma->vm_start; addr < vma->vm_end; addr += sz) {
++	for (addr = src_vma->vm_start; addr < src_vma->vm_end; addr += sz) {
+ 		spinlock_t *src_ptl, *dst_ptl;
+ 		src_pte = huge_pte_offset(src, addr, sz);
+ 		if (!src_pte)
+ 			continue;
+-		dst_pte = huge_pte_alloc(dst, vma, addr, sz);
++		dst_pte = huge_pte_alloc(dst, dst_vma, addr, sz);
+ 		if (!dst_pte) {
+ 			ret = -ENOMEM;
+ 			break;
+@@ -4764,6 +4765,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 		} else if (unlikely(is_hugetlb_entry_migration(entry) ||
+ 				    is_hugetlb_entry_hwpoisoned(entry))) {
+ 			swp_entry_t swp_entry = pte_to_swp_entry(entry);
++			bool uffd_wp = huge_pte_uffd_wp(entry);
+ 
+ 			if (is_writable_migration_entry(swp_entry) && cow) {
+ 				/*
+@@ -4773,10 +4775,21 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 				swp_entry = make_readable_migration_entry(
+ 							swp_offset(swp_entry));
+ 				entry = swp_entry_to_pte(swp_entry);
++				if (userfaultfd_wp(src_vma) && uffd_wp)
++					entry = huge_pte_mkuffd_wp(entry);
+ 				set_huge_swap_pte_at(src, addr, src_pte,
+ 						     entry, sz);
+ 			}
++			if (!userfaultfd_wp(dst_vma) && uffd_wp)
++				entry = huge_pte_clear_uffd_wp(entry);
+ 			set_huge_swap_pte_at(dst, addr, dst_pte, entry, sz);
++		} else if (unlikely(is_pte_marker(entry))) {
++			/*
++			 * We copy the pte marker only if the dst vma has
++			 * uffd-wp enabled.
++			 */
++			if (userfaultfd_wp(dst_vma))
++				set_huge_pte_at(dst, addr, dst_pte, entry);
+ 		} else {
+ 			entry = huge_ptep_get(src_pte);
+ 			ptepage = pte_page(entry);
+@@ -4791,20 +4804,20 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 			 * need to be without the pgtable locks since we could
+ 			 * sleep during the process.
+ 			 */
+-			if (unlikely(page_needs_cow_for_dma(vma, ptepage))) {
++			if (unlikely(page_needs_cow_for_dma(src_vma, ptepage))) {
+ 				pte_t src_pte_old = entry;
+ 				struct page *new;
+ 
+ 				spin_unlock(src_ptl);
+ 				spin_unlock(dst_ptl);
+ 				/* Do not use reserve as it's private owned */
+-				new = alloc_huge_page(vma, addr, 1);
++				new = alloc_huge_page(dst_vma, addr, 1);
+ 				if (IS_ERR(new)) {
+ 					put_page(ptepage);
+ 					ret = PTR_ERR(new);
+ 					break;
+ 				}
+-				copy_user_huge_page(new, ptepage, addr, vma,
++				copy_user_huge_page(new, ptepage, addr, dst_vma,
+ 						    npages);
+ 				put_page(ptepage);
+ 
+@@ -4814,13 +4827,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 				spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
+ 				entry = huge_ptep_get(src_pte);
+ 				if (!pte_same(src_pte_old, entry)) {
+-					restore_reserve_on_error(h, vma, addr,
++					restore_reserve_on_error(h, dst_vma, addr,
+ 								new);
+ 					put_page(new);
+ 					/* dst_entry won't change as in child */
+ 					goto again;
+ 				}
+-				hugetlb_install_page(vma, dst_pte, addr, new);
++				hugetlb_install_page(dst_vma, dst_pte, addr, new);
+ 				spin_unlock(src_ptl);
+ 				spin_unlock(dst_ptl);
+ 				continue;
 diff --git a/mm/memory.c b/mm/memory.c
-index e9e335ecb5dc..43ab8d6c768e 100644
+index 43ab8d6c768e..66c9890b7678 100644
 --- a/mm/memory.c
 +++ b/mm/memory.c
-@@ -1679,8 +1679,11 @@ static void unmap_single_vma(struct mmu_gather *tlb,
- 			 * safe to do nothing in this case.
- 			 */
- 			if (vma->vm_file) {
-+				unsigned long zap_flags = details ?
-+				    details->zap_flags : 0;
- 				i_mmap_lock_write(vma->vm_file->f_mapping);
--				__unmap_hugepage_range_final(tlb, vma, start, end, NULL);
-+				__unmap_hugepage_range_final(tlb, vma, start, end,
-+							     NULL, zap_flags);
- 				i_mmap_unlock_write(vma->vm_file->f_mapping);
- 			}
- 		} else
+@@ -1282,7 +1282,7 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
+ 		return 0;
+ 
+ 	if (is_vm_hugetlb_page(src_vma))
+-		return copy_hugetlb_page_range(dst_mm, src_mm, src_vma);
++		return copy_hugetlb_page_range(dst_mm, src_mm, dst_vma, src_vma);
+ 
+ 	if (unlikely(src_vma->vm_flags & VM_PFNMAP)) {
+ 		/*
 -- 
 2.32.0
 

@@ -2,54 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D454CD11C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D9D4CD11D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 10:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237221AbiCDJf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 04:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S237272AbiCDJfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 04:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235351AbiCDJf0 (ORCPT
+        with ESMTP id S235351AbiCDJfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 04:35:26 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC46E8F9B6;
-        Fri,  4 Mar 2022 01:34:37 -0800 (PST)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K92cx6QR7z1GCNS;
-        Fri,  4 Mar 2022 17:29:53 +0800 (CST)
-Received: from [10.67.103.22] (10.67.103.22) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Mar
- 2022 17:34:36 +0800
-Message-ID: <e0ccebeb-b5ff-5bb7-87c9-c453eb71fa3f@hisilicon.com>
-Date:   Fri, 4 Mar 2022 17:34:35 +0800
+        Fri, 4 Mar 2022 04:35:45 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30864180238
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 01:34:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646386497; x=1677922497;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=ok/AZauEfQUxiYX4qHYBlIGQ0+QwAb17AIUQ8qTKo0E=;
+  b=oEWOos/OhFjWUIdSAXBJ3tBsPDGxA9eKA5RdHH6WlFdOBKpCtybiMSYD
+   cj3VIOnt41H2EjwcaSG/H+Xp0RnwsU2Fx+9L4NHNgOCiIOIBVctMQkE0Y
+   BND4P+T9PAKrXmFHYH/SlSz0kLihadquCNvBey9LIu8+aqOG/qSJWXaDb
+   vN4lMjijCBpTgoWWwz9zdQlO5NEUK3gnqhrGSv7Tqhiw+9VeElbq/Ovm6
+   wQAM/tPmhfN4zmjNz7W6K1Q74SCeSJi0sHeBKr1Y5nlhrOZqIeWI4n4JU
+   gVHom1xBZhY5tzRTtOcZt2J7excx1uDPkpJG/R+F5e4YRdDYeWcZXGjW6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,154,1643698800"; 
+   d="scan'208";a="155708299"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 02:34:56 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 02:34:56 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Fri, 4 Mar 2022 02:34:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fnOOMltY9jVLaJ31H6EQ1VNxYGMhkPFBjvbQScnZGXle4pHpDf2YHEe3XZHrVbjJ02Bh4awqw1yDWDjSqGykTcPEDxKHeIibK55XakQMIYPC/qREcFyuOe3sEqds+EW7D9I1dJiZyaoYW1eczmDklo7EoxNZYtnKQefGU7Trqt2kmKRMnwY2a7n0mNqETtumvJjeGCa7diNX9XEnakxirLxzQ9oFXgbpqtI57bGjX16IOKP4Pyjk9rDVFv/FYbW/wjgAO8nNWejCpZjW4R5Gjas6k4nmE0Vtr9qqo+nK4ENoUqOi5ybZ0Twc1p6BYx1r9RYgaO2goOxG/SmejCAIOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ok/AZauEfQUxiYX4qHYBlIGQ0+QwAb17AIUQ8qTKo0E=;
+ b=L0MMscSN5XQUW2xUvTBiLwhhmdllPf4rXxysIpYOhl8+7DS4tY4H2tyEGoDCOwh2/Fr2D4BAUJGfMUS9YBP5C0/pH6qgi4dt1QBmsuNFtzS6lBYpmFyxNsXs7LEVEH1tmFiPWdRfSrjhW4f4atna3nxlDhjzAJytlMVFnLIuBSCbgExRs+4LTgJzF/syYxTWVpExoza8lzWVTrmJyHzwaulFwN1ohgm+1dVGFsngncxZA0lqPEhlSBufvOIikZa++ri5gPwaDxeZVpreZ9mxGGXQjasmhSQC8cb39OAp9hO0iT63X9eW8sXDNUU0QZovQjRs046YIwqY7RpozgD/FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ok/AZauEfQUxiYX4qHYBlIGQ0+QwAb17AIUQ8qTKo0E=;
+ b=UmCBjC9geKYL95DLuu5G9f0KNxc2kCKrkWaS6aEpFN9fo+m+ckA7Os/2oCBT2pgYlIqWwfrRjJOeR4ZsEIbm5c+s5jxjT1ATKpOCk8smhbRAp+9Wi2bQsML4+fcZ0SqB8LT7rVO4tyNQOsC3dSaRu+mHwM5qUTR790wyLf9P+zo=
+Received: from CO1PR11MB4865.namprd11.prod.outlook.com (2603:10b6:303:9c::9)
+ by DM5PR11MB1868.namprd11.prod.outlook.com (2603:10b6:3:114::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Fri, 4 Mar
+ 2022 09:34:49 +0000
+Received: from CO1PR11MB4865.namprd11.prod.outlook.com
+ ([fe80::4cec:634:7163:c4c7]) by CO1PR11MB4865.namprd11.prod.outlook.com
+ ([fe80::4cec:634:7163:c4c7%5]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
+ 09:34:49 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <p.yadav@ti.com>, <michael@walle.cc>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <michal.simek@xilinx.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Nicolas.Ferre@microchip.com>
+Subject: Re: [PATCH] mtd: spi-nor: Introduce templates for SPI NOR operations
+Thread-Topic: [PATCH] mtd: spi-nor: Introduce templates for SPI NOR operations
+Thread-Index: AQHYL6sXY/7kSmK8TkCTUnmKCS036g==
+Date:   Fri, 4 Mar 2022 09:34:49 +0000
+Message-ID: <c4d0846f-2592-1a4f-bf33-dcb3f846ffaa@microchip.com>
+References: <20220304093011.198173-1-tudor.ambarus@microchip.com>
+In-Reply-To: <20220304093011.198173-1-tudor.ambarus@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c08b97d9-ee98-4b6e-8621-08d9fdc23a6b
+x-ms-traffictypediagnostic: DM5PR11MB1868:EE_
+x-microsoft-antispam-prvs: <DM5PR11MB1868EBEA77A20E9D4A6E46FEF0059@DM5PR11MB1868.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: d5Rr/16LDrtyyltykdMIcrvQtpR3arYUe6QKQ6nQCDVMSsy9QJT31vhUbBHiX4z1Wug7/i0GLKC4TM1cGRcKNpzssjc874tk9UZiBELBgU2B+r9srOdYt12d7GB/IsefOqZTPo6b1v1TQ/VA1fHOZjFvuTHlsS5fRs8EEvTPD/rwDPQWqS7BSnqWOhAa1aMgWbyzpEI49QdmZJp330p3xU11kgqsugP3ygeVGaTU+dieV7SHfbIReb80FfF7uMn4sy64dIyRCf0tR1SzIg4m9sFetBGIhvn5+v47vXWak81VT7SKuwesArsOoj4Js38kwrP8hvdTB9/43u0kEm8FU2yomketF88LWaJAm/OC+qmXbMokqTN2/3u2ribtPuZjjw3JoBbfgfCLlm5le1Sp1mydDho6EGBQf3KsS7Oo1RDeLXNeHiyOhBhgCcBn0qJu45hsepLy70naetBUDOJy6OTgcsAkwkXQ2wy7kFYzG1jTU9slK6ZcHVn+nPK4ceBMOaMvUmRps8/VhkbT4CvpBWMHnfPtYgzEY1VSQNSyIEoW5Gj9zRRD994QxBkehcq9/bFPD6YF2u+e3T4WaePk/GNdaZoZg7Nu6swLT7krD/i2fQlwUvB7I3kZ8ohUaScyZ2x1k6IQPtjn59HIOpBuHddZPBda2bmsgCq0nPjxO3aVEB7pCLPkLiI7qDRUmL8W0A/DXs1/PxrsX+QLQhzF07buov43h8NyYxfYOAsAIFpeaUfq78aOMQkPa7Mu/pCeuWqqb3WWLVQBJZcpuw9qceUjifV7v3JBlbKQqXe7rHUgI5Tnc95ul3QGz394Z/VeQsQLZ6ah76/3pySBMrI8UJk+0sr00Kr0iiaFdHAC3YM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4865.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(76116006)(966005)(316002)(4326008)(8676002)(6486002)(2616005)(64756008)(38070700005)(66946007)(91956017)(66556008)(66476007)(508600001)(6512007)(66446008)(71200400001)(86362001)(31696002)(6506007)(54906003)(110136005)(107886003)(26005)(186003)(122000001)(83380400001)(4744005)(2906002)(31686004)(8936002)(5660300002)(38100700002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlhFS2llQVg0U0p3ZXZ5U1JwN0Jta0RZRUhjL1BnblRsa29XSlNhbnAyZ3NH?=
+ =?utf-8?B?Q2NYOWc0UE1NTGYySjJzNzBwdVg1b0dzUXBBZEF3MU0rUWlvdFREMU9GbmFx?=
+ =?utf-8?B?YVlZWXFHbENCVzB6OFgwRHRqbk5nbTQrUVNaMGExOFJFTzZha2RvZzNTaDVu?=
+ =?utf-8?B?alhackdTS0prUERKRThBRjYwb0xYRW1TVG55VnJaMEN0YnUrcDEvUkE0V1d3?=
+ =?utf-8?B?cDZMbHNSanBrM0kxSGdhaWdsWjdGbzNRTGpuTkw3R2c0dHJLNTNiS3BqU1Jr?=
+ =?utf-8?B?UDN3M3Z6bUFEWlppdWZvTVNSdUNEMWxMbjVVR2VsK3ROcG8xNS92SFRPRmFv?=
+ =?utf-8?B?eTZMU0NHT2s3YkR0U1dHTlhZRG15dmsxaTQyNU5MVXFkYjRrMnNpKytXWm9j?=
+ =?utf-8?B?emFIbWExSHphQ1JQTVNzWmVVcHpUdTA0cU9vZVk4OWI0OHpJSGJmZk9IYmVK?=
+ =?utf-8?B?NVN1cnlQSzdGbHdVL3VwZXo4T1czRnpQdElBU3NnSFFNVkV2elhoaXhkbmVo?=
+ =?utf-8?B?bTc5QWpYd2JvK0RRNmdRWjVZWGk5ampZc3NyMWZLN0lHMENWak9NNnR0amRE?=
+ =?utf-8?B?UTFnZWxRWGl1VWZNTUswd1ZZMzdzdmZHYnpQOWRVb0NUVy8vTTErQkRYQ0xX?=
+ =?utf-8?B?WS9SQXpHOHpVMzk5RUgydGR3QUZOWUJ4NVBVSTI2NVM5a3RtWTF1bTk1b0F5?=
+ =?utf-8?B?VmZBZDJ5UXJtQW9zbU9BR0FhMVRGQW1WL1orNDRDcFNUeDJaUkNsUmhlaFZu?=
+ =?utf-8?B?OS9oSHBDazdTaDRpallpdmQ0MU85NXkzZkRQemxEQlNZUVhnY0ZzMmhOK3d4?=
+ =?utf-8?B?ZW90NnIvVTVsM3JJV1ZTZVVTajZjUnlZUDB2Nis5dmI3WFhESGo1SUhqUkZU?=
+ =?utf-8?B?azJMTzVGb3Y4YzUrcHhLNENveVpkSitWVk00clU2YjFZYkM4TTZ3b21IQ3E2?=
+ =?utf-8?B?cHlBcTNHdTIzY08xTjA2T2FwUzN5MEx1RGwyUFZmTW9FNU1WYVU2SnY0M2Mw?=
+ =?utf-8?B?L0RybVRadnptVm15L0ZlM2lIUG1KcWFkdFUzdjdscWY5ZnlKdndqTTZoZWxK?=
+ =?utf-8?B?clZDWWE0Y2M1UitrSzJ2SUFCOWNEek0vUzVYY1l2K0hUOXV1ekJzSnpJb05U?=
+ =?utf-8?B?Rkl5Mkd5Um5JMUpTdloycjBZbG5Ya01RMWxaRndWVVN2akNONkpPWnRFamZy?=
+ =?utf-8?B?T1Fyd05QR25DbzhPUi9UM0YvYnFWWUsvR1RuSHlvdDhlaTdGL0RUamZ0TXdQ?=
+ =?utf-8?B?KzNkaUNlUmFBSktwcHNVWDhONU5tOFFOeE1DTW1XL05nZHlkWVlhWm5HbkN6?=
+ =?utf-8?B?K2hCUml1ekQwYmdaTzZVN2l3SXJvS0g5M0RFMGJTQ2w3b3R3Rm5JUGJWSUlC?=
+ =?utf-8?B?TEhFNURmeDJlMU5XSmdhNE9oY2QvTVhIZDBDckY5Rnl6TVRrR0FHVTBlYTBQ?=
+ =?utf-8?B?VTc1eHRWd3JWUU11dVRSRVVhRkphKzhsZERjYUVHL1BTbzJuYTJZT3pKWmtq?=
+ =?utf-8?B?c0phMUgvRTV0K3RvdERVaHJ1OWowT3V5WTVnRG5DWW9Pd2xvbVVEVzR4dml2?=
+ =?utf-8?B?NkNSa0YrdVliWnRpSDBaak9OSTBkN29EZHlkTVA5c1BCNW5CdGNpdkRvQzlw?=
+ =?utf-8?B?RGd0OVhibU9IWHZoMFQwbnFOcG1NaXRCMmN4eEhXaE9oNjhpM3JXb083UTMr?=
+ =?utf-8?B?bmFQbjN1Q3ZRMmVuZ0FhZTM4SHZLbzIyUTNlVWhja1pNUFk0bmF6UWtiTUZS?=
+ =?utf-8?B?enplVXpHTjY4Zm82aGdiTnlINGtRQ01JWnVqOWNKeDRpT25EaXJKMXdhU2xY?=
+ =?utf-8?B?ei9ZejdZVnlXWDVSSmdvODJVK1lsUmRDQzVJb2d5ODd5UHdxdnNVR2J1b2pw?=
+ =?utf-8?B?Y09qUzFxdzNFSDk5OEhSYUppcDVhN1JwVGowSFRmbWhlVUk2K0FJR2hSdWZB?=
+ =?utf-8?B?bnpGcHB4MDdoNGtuZDJXMEpMcEFGUVVXaUVrUklsbEVMOWdwUTRIWlpEc3Jr?=
+ =?utf-8?B?RkROQnhCN0p2eTZ6a1pNc2M3WndDY2ZiZlpkRHJ0d2Jqc1VacTR1d0g0U1Vw?=
+ =?utf-8?B?YnFBYm9iVXBrakJjaHZKZDRDSndpRWNaVm1vM25aMGJEeHNydjkvT1gvWG9u?=
+ =?utf-8?B?dG94NnFjbkdjcjN0RkhyaDByZFVkODc1TmRXOXZaVVpRYzJtV2o4aVNSQmJh?=
+ =?utf-8?B?MUtRYUg2azFEaTdtNHptSzRVRGkzSXU1UmZPYy9SYm51d1NMQ05weU1zakFJ?=
+ =?utf-8?B?UzBJTGExN25RRkw1ZVpVRHNVREZRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5182FFF0BAFB1D42A7169F32B1278B80@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH v8 3/9] hisi_acc_qm: Move VF PCI device IDs to common
- header
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
-        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
-        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
-        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
-        <jonathan.cameron@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
- <20220303230131.2103-4-shameerali.kolothum.thodi@huawei.com>
-From:   Zhou Wang <wangzhou1@hisilicon.com>
-In-Reply-To: <20220303230131.2103-4-shameerali.kolothum.thodi@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.22]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4865.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c08b97d9-ee98-4b6e-8621-08d9fdc23a6b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2022 09:34:49.4462
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OOTJxupYW1XwJai/3J/msCUL7+IUgSs1+Wc74d+s5dTN5OSismJwtJGe3h9PnE8ckAJIQL+roShJ232xeWpe4fiGClUptXbkVQp/YnKDQwo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1868
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SCC_BODY_URI_ONLY,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,193 +161,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Move the PCI Device IDs of HiSilicon ACC VF devices to a common heade> and also use a uniform naming convention.
-> 
-> This will be useful when we introduce the vfio PCI HiSilicon ACC live
-> migration driver in subsequent patches.
-> 
-> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-
-Acked-by: Zhou Wang <wangzhou1@hisilicon.com>
-
-Best,
-Zhou
-
-> ---
->  drivers/crypto/hisilicon/hpre/hpre_main.c | 13 ++++++-------
->  drivers/crypto/hisilicon/sec2/sec_main.c  | 15 +++++++--------
->  drivers/crypto/hisilicon/zip/zip_main.c   | 11 +++++------
->  include/linux/pci_ids.h                   |  3 +++
->  4 files changed, 21 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> index ebfab3e14499..3589d8879b5e 100644
-> --- a/drivers/crypto/hisilicon/hpre/hpre_main.c
-> +++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> @@ -68,8 +68,7 @@
->  #define HPRE_REG_RD_INTVRL_US		10
->  #define HPRE_REG_RD_TMOUT_US		1000
->  #define HPRE_DBGFS_VAL_MAX_LEN		20
-> -#define HPRE_PCI_DEVICE_ID		0xa258
-> -#define HPRE_PCI_VF_DEVICE_ID		0xa259
-> +#define PCI_DEVICE_ID_HUAWEI_HPRE_PF	0xa258
->  #define HPRE_QM_USR_CFG_MASK		GENMASK(31, 1)
->  #define HPRE_QM_AXI_CFG_MASK		GENMASK(15, 0)
->  #define HPRE_QM_VFG_AX_MASK		GENMASK(7, 0)
-> @@ -111,8 +110,8 @@
->  static const char hpre_name[] = "hisi_hpre";
->  static struct dentry *hpre_debugfs_root;
->  static const struct pci_device_id hpre_dev_ids[] = {
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, HPRE_PCI_DEVICE_ID) },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, HPRE_PCI_VF_DEVICE_ID) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_HPRE_PF) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_HPRE_VF) },
->  	{ 0, }
->  };
->  
-> @@ -242,7 +241,7 @@ MODULE_PARM_DESC(uacce_mode, UACCE_MODE_DESC);
->  
->  static int pf_q_num_set(const char *val, const struct kernel_param *kp)
->  {
-> -	return q_num_set(val, kp, HPRE_PCI_DEVICE_ID);
-> +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_HPRE_PF);
->  }
->  
->  static const struct kernel_param_ops hpre_pf_q_num_ops = {
-> @@ -921,7 +920,7 @@ static int hpre_debugfs_init(struct hisi_qm *qm)
->  	qm->debug.sqe_mask_len = HPRE_SQE_MASK_LEN;
->  	hisi_qm_debug_init(qm);
->  
-> -	if (qm->pdev->device == HPRE_PCI_DEVICE_ID) {
-> +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_HPRE_PF) {
->  		ret = hpre_ctrl_debug_init(qm);
->  		if (ret)
->  			goto failed_to_create;
-> @@ -958,7 +957,7 @@ static int hpre_qm_init(struct hisi_qm *qm, struct pci_dev *pdev)
->  	qm->sqe_size = HPRE_SQE_SIZE;
->  	qm->dev_name = hpre_name;
->  
-> -	qm->fun_type = (pdev->device == HPRE_PCI_DEVICE_ID) ?
-> +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_HPRE_PF) ?
->  			QM_HW_PF : QM_HW_VF;
->  	if (qm->fun_type == QM_HW_PF) {
->  		qm->qp_base = HPRE_PF_DEF_Q_BASE;
-> diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
-> index 26d3ab1d308b..311a8747b5bf 100644
-> --- a/drivers/crypto/hisilicon/sec2/sec_main.c
-> +++ b/drivers/crypto/hisilicon/sec2/sec_main.c
-> @@ -20,8 +20,7 @@
->  
->  #define SEC_VF_NUM			63
->  #define SEC_QUEUE_NUM_V1		4096
-> -#define SEC_PF_PCI_DEVICE_ID		0xa255
-> -#define SEC_VF_PCI_DEVICE_ID		0xa256
-> +#define PCI_DEVICE_ID_HUAWEI_SEC_PF	0xa255
->  
->  #define SEC_BD_ERR_CHK_EN0		0xEFFFFFFF
->  #define SEC_BD_ERR_CHK_EN1		0x7ffff7fd
-> @@ -225,7 +224,7 @@ static const struct debugfs_reg32 sec_dfx_regs[] = {
->  
->  static int sec_pf_q_num_set(const char *val, const struct kernel_param *kp)
->  {
-> -	return q_num_set(val, kp, SEC_PF_PCI_DEVICE_ID);
-> +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_SEC_PF);
->  }
->  
->  static const struct kernel_param_ops sec_pf_q_num_ops = {
-> @@ -313,8 +312,8 @@ module_param_cb(uacce_mode, &sec_uacce_mode_ops, &uacce_mode, 0444);
->  MODULE_PARM_DESC(uacce_mode, UACCE_MODE_DESC);
->  
->  static const struct pci_device_id sec_dev_ids[] = {
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, SEC_PF_PCI_DEVICE_ID) },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, SEC_VF_PCI_DEVICE_ID) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_SEC_PF) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_SEC_VF) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sec_dev_ids);
-> @@ -717,7 +716,7 @@ static int sec_core_debug_init(struct hisi_qm *qm)
->  	regset->base = qm->io_base;
->  	regset->dev = dev;
->  
-> -	if (qm->pdev->device == SEC_PF_PCI_DEVICE_ID)
-> +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF)
->  		debugfs_create_file("regs", 0444, tmp_d, regset, &sec_regs_fops);
->  
->  	for (i = 0; i < ARRAY_SIZE(sec_dfx_labels); i++) {
-> @@ -735,7 +734,7 @@ static int sec_debug_init(struct hisi_qm *qm)
->  	struct sec_dev *sec = container_of(qm, struct sec_dev, qm);
->  	int i;
->  
-> -	if (qm->pdev->device == SEC_PF_PCI_DEVICE_ID) {
-> +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF) {
->  		for (i = SEC_CLEAR_ENABLE; i < SEC_DEBUG_FILE_NUM; i++) {
->  			spin_lock_init(&sec->debug.files[i].lock);
->  			sec->debug.files[i].index = i;
-> @@ -877,7 +876,7 @@ static int sec_qm_init(struct hisi_qm *qm, struct pci_dev *pdev)
->  	qm->sqe_size = SEC_SQE_SIZE;
->  	qm->dev_name = sec_name;
->  
-> -	qm->fun_type = (pdev->device == SEC_PF_PCI_DEVICE_ID) ?
-> +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF) ?
->  			QM_HW_PF : QM_HW_VF;
->  	if (qm->fun_type == QM_HW_PF) {
->  		qm->qp_base = SEC_PF_DEF_Q_BASE;
-> diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
-> index 678f8b58ec42..66decfe07282 100644
-> --- a/drivers/crypto/hisilicon/zip/zip_main.c
-> +++ b/drivers/crypto/hisilicon/zip/zip_main.c
-> @@ -15,8 +15,7 @@
->  #include <linux/uacce.h>
->  #include "zip.h"
->  
-> -#define PCI_DEVICE_ID_ZIP_PF		0xa250
-> -#define PCI_DEVICE_ID_ZIP_VF		0xa251
-> +#define PCI_DEVICE_ID_HUAWEI_ZIP_PF	0xa250
->  
->  #define HZIP_QUEUE_NUM_V1		4096
->  
-> @@ -246,7 +245,7 @@ MODULE_PARM_DESC(uacce_mode, UACCE_MODE_DESC);
->  
->  static int pf_q_num_set(const char *val, const struct kernel_param *kp)
->  {
-> -	return q_num_set(val, kp, PCI_DEVICE_ID_ZIP_PF);
-> +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_ZIP_PF);
->  }
->  
->  static const struct kernel_param_ops pf_q_num_ops = {
-> @@ -268,8 +267,8 @@ module_param_cb(vfs_num, &vfs_num_ops, &vfs_num, 0444);
->  MODULE_PARM_DESC(vfs_num, "Number of VFs to enable(1-63), 0(default)");
->  
->  static const struct pci_device_id hisi_zip_dev_ids[] = {
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_ZIP_PF) },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_ZIP_VF) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_ZIP_PF) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_ZIP_VF) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, hisi_zip_dev_ids);
-> @@ -838,7 +837,7 @@ static int hisi_zip_qm_init(struct hisi_qm *qm, struct pci_dev *pdev)
->  	qm->sqe_size = HZIP_SQE_SIZE;
->  	qm->dev_name = hisi_zip_name;
->  
-> -	qm->fun_type = (pdev->device == PCI_DEVICE_ID_ZIP_PF) ?
-> +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_ZIP_PF) ?
->  			QM_HW_PF : QM_HW_VF;
->  	if (qm->fun_type == QM_HW_PF) {
->  		qm->qp_base = HZIP_PF_DEF_Q_BASE;
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index aad54c666407..31dee2b65a62 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -2529,6 +2529,9 @@
->  #define PCI_DEVICE_ID_KORENIX_JETCARDF3	0x17ff
->  
->  #define PCI_VENDOR_ID_HUAWEI		0x19e5
-> +#define PCI_DEVICE_ID_HUAWEI_ZIP_VF	0xa251
-> +#define PCI_DEVICE_ID_HUAWEI_SEC_VF	0xa256
-> +#define PCI_DEVICE_ID_HUAWEI_HPRE_VF	0xa259
->  
->  #define PCI_VENDOR_ID_NETRONOME		0x19ee
->  #define PCI_DEVICE_ID_NETRONOME_NFP4000	0x4000
-> 
+T24gMy80LzIyIDExOjMwLCBUdWRvciBBbWJhcnVzIHdyb3RlOg0KPiBDbGVhbiB0aGUgb3AgZGVj
+bGFyYXRpb24gYW5kIGhpZGUgdGhlIGRldGFpbHMgb2YgZWFjaCBvcC4gV2l0aCB0aGlzIGl0DQo+
+IHJlc3VsdHMgYSBjbGVhbm5lciwgZWFzaWVyIHRvIHJlYWQgY29kZS4gTm8gZnVuY3Rpb25hbCBj
+aGFuZ2UgZXhwZWN0ZWQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBUdWRvciBBbWJhcnVzIDx0dWRv
+ci5hbWJhcnVzQG1pY3JvY2hpcC5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy9tdGQvc3BpLW5vci9j
+b3JlLmMgICAgICB8IDEwMSArKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ICBkcml2
+ZXJzL210ZC9zcGktbm9yL2NvcmUuaCAgICAgIHwgMTAyICsrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrDQo+ICBkcml2ZXJzL210ZC9zcGktbm9yL21pY3Jvbi1zdC5jIHwgIDI0ICsrKyst
+LS0tDQo+ICBkcml2ZXJzL210ZC9zcGktbm9yL3NwYW5zaW9uLmMgIHwgIDI2ICsrKysrLS0tDQo+
+ICBkcml2ZXJzL210ZC9zcGktbm9yL3hpbGlueC5jICAgIHwgIDEyICsrLS0NCj4gIDUgZmlsZXMg
+Y2hhbmdlZCwgMTU4IGluc2VydGlvbnMoKyksIDEwNyBkZWxldGlvbnMoLSkNCj4gVGhlIHBhdGNo
+IGlzIHdyaXR0ZW4gb24gdG9wIG9mOg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8yMDIy
+MDIyODExMTcxMi4xMTE3MzctMS10dWRvci5hbWJhcnVzQG1pY3JvY2hpcC5jb20vDQo=

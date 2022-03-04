@@ -2,162 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2AB4CD3AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C68034CD3B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 12:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbiCDLkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 06:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
+        id S233889AbiCDLmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 06:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiCDLk3 (ORCPT
+        with ESMTP id S231373AbiCDLmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 06:40:29 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E2A145E12;
-        Fri,  4 Mar 2022 03:39:42 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso10390429pjj.2;
-        Fri, 04 Mar 2022 03:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T0KWcfrVhfRiQuPhzFUu+oUHR0+0iQuCKbqqyufUMXA=;
-        b=BS4C5Y1tL4r8PWIRqTmC6gS0HaL1ikR+470ZGcTaIa4wFQYparRJpFgi8byBxYfS+3
-         h+/0V9Om3+A1FxjtUhzi8xUX8SQHq+v8HkFoG+J6SemhINeDJSnxowDMKlAz8H8duGxN
-         dQUqq+1LAnYBfNHP7SN7AA2Kj/WI0bj5UMk5D1tTDQS+yqA1Cfs9LXdRBoRhuywGMkHh
-         uxofCQJrdhXypoU+Kck6or68lCBk3WDfd06ViBAREudViDBHavC9dOljVk6YKVx+g6tI
-         ywHzdC7NPv1PVpGFaSAGB5AQ+PPtoXYZIHynTx/iBcL2C16vxnOubx0fFVbm7AZnrUe7
-         ko/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T0KWcfrVhfRiQuPhzFUu+oUHR0+0iQuCKbqqyufUMXA=;
-        b=SUm9pOojNamHPikMlB/n+EFKQFn3Rg0DDWlrp1hfpRaXk/NQJfqcUDmbqOM68K6PLg
-         REBrtim79cDhhEAvhxvgisnVKhxdhi5kd02XyaEn8XKxBPEK4miUimkxL9LGOc/KxF36
-         n7Hhld7eU2PY/2XhEZHd/z0sYBiz275zgtvo+8oB3gL9oUvRNa/2WHwtz3chcWisFZZr
-         Shj2psy3XglQEgff2yELmuVfH/oU7e/nw4XQDa8jI2RPSf92kNizoaEegxxttEIEX7oM
-         LY/J7qWjSF58EkFxVKzXZ0rrwRXr/LHmQvgcLSdwDiDMgd4FKa9nXQjqh7lPFzvFY2i2
-         w6tA==
-X-Gm-Message-State: AOAM533fUHX1ynobtTFmoTJgqDlhesmnWPAFZTwUKLyiIKr9Xk5n8mYL
-        /hBBGJytElepF23W2/dANNA=
-X-Google-Smtp-Source: ABdhPJwUeGy/HJBpt8MjGZ13EzUfgfohEC7mxxbk5v1dgWi77zTAJpDwQo+/X8i3EoW7ntQ/oQ2ZNw==
-X-Received: by 2002:a17:90b:390c:b0:1bf:2d83:c70c with SMTP id ob12-20020a17090b390c00b001bf2d83c70cmr1346393pjb.217.1646393982299;
-        Fri, 04 Mar 2022 03:39:42 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id e18-20020a63d952000000b00372a1295210sm4394691pgj.51.2022.03.04.03.39.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 03:39:41 -0800 (PST)
-Date:   Fri, 4 Mar 2022 11:39:29 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        bfields@fieldses.org, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
-        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-        djwong@kernel.org, dri-devel@lists.freedesktop.org,
-        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com
-Subject: Re: [PATCH v4 22/24] dept: Don't create dependencies between
- different depths in any case
-Message-ID: <YiH6cXo1qThA1X6B@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <1646377603-19730-1-git-send-email-byungchul.park@lge.com>
- <1646377603-19730-23-git-send-email-byungchul.park@lge.com>
+        Fri, 4 Mar 2022 06:42:04 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7B9162013;
+        Fri,  4 Mar 2022 03:41:16 -0800 (PST)
+Received: from Monstersaurus.ksquared.org.uk.beta.tailscale.net (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B971D51C;
+        Fri,  4 Mar 2022 12:41:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1646394074;
+        bh=znyJ/7LFtbo32JZV1vCfRMhmsn+HUg4UTHM7rnmyVe8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F6zHpnkwai2c7OsKRk5k0Mjvwc82dbr4e5vtOsxIzLVLrQnYaIXRsTm+zNZ4e3c4D
+         /EUbSu4cN2IW+5NYS3GH4xN1iLKurnQn/4TbO9qS8aNIueHnVvpfM/mY+A5z6ILyQE
+         OhOidrPUXTVzZfW/p9bGDUTYpelBeqv34yFcmISs=
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+To:     Geert Uytterhoeven <geert@glider.be>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] arm64: dts: renesas: falcon-cpu: Use INTC_EX for SN65DSI86
+Date:   Fri,  4 Mar 2022 11:41:10 +0000
+Message-Id: <20220304114110.3939390-1-kieran.bingham+renesas@ideasonboard.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646377603-19730-23-git-send-email-byungchul.park@lge.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 04:06:41PM +0900, Byungchul Park wrote:
-> Dept already prevents creating dependencies between different depths of
-> the class indicated by *_lock_nested() when the lock acquisitions happen
-> consecutively.
-> 
->    lock A0 with depth
->    lock_nested A1 with depth + 1
->    ...
->    unlock A1
->    unlock A0
-> 
-> Dept does not create A0 -> A1 dependency in this case, either.
-> 
-> However, once another class cut in, the code becomes problematic. When
-> Dept tries to create real dependencies, it does not only create real
-> ones but also wrong ones between different depths of the class.
-> 
->    lock A0 with depth
->    lock B
->    lock_nested A1 with depth + 1
->    ...
->    unlock A1
->    unlock B
->    unlock A0
-> 
-> Even in this case, Dept should not create A0 -> A1 dependency.
-> 
-> So let Dept not create wrong dependencies between different depths of
-> the class in any case.
-> 
-> Reported-by: 42.hyeyoo@gmail.com
-> Signed-off-by: Byungchul Park <byungchul.park@lge.com>
-> ---
->  kernel/dependency/dept.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
-> index 5d4efc3..cc1b3a3 100644
-> --- a/kernel/dependency/dept.c
-> +++ b/kernel/dependency/dept.c
-> @@ -1458,14 +1458,7 @@ static void add_wait(struct dept_class *c, unsigned long ip,
->  
->  		eh = dt->ecxt_held + i;
->  		if (eh->ecxt->class != c || eh->nest == ne)
-> -			break;
-> -	}
-> -
-> -	for (; i >= 0; i--) {
-> -		struct dept_ecxt_held *eh;
-> -
-> -		eh = dt->ecxt_held + i;
-> -		add_dep(eh->ecxt, w);
-> +			add_dep(eh->ecxt, w);
->  	}
->  
->  	if (!wait_consumed(w) && !rich_stack) {
-> -- 
-> 1.9.1
-> 
-> 
+The INTC block is a better choice for handling the interrupts on the V3U
+as the INTC will always be powered, while the GPIO block may be
+de-clocked if not in use. Further more, it may be likely to have a lower
+power consumption as it does not need to drive the pins.
 
-Works as expected, Thanks!
-I would report if there is anything else interesting.
+Switch the interrupt parent and interrupts definition from gpio1 to
+intc_ex, allowing the PFC to configure the pin muxing accordingly.
 
-Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+---
+ arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi
+index 6af3f4f4f268..b7254a0f08b6 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi
+@@ -198,8 +198,8 @@ bridge@2c {
+ 		clocks = <&sn65dsi86_refclk>;
+ 		clock-names = "refclk";
+ 
+-		interrupt-parent = <&gpio1>;
+-		interrupts = <24 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-parent = <&intc_ex>;
++		interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
+ 
+ 		vccio-supply = <&reg_1p8v>;
+ 		vpll-supply = <&reg_1p8v>;
 -- 
-Thank you, You are awesome!
-Hyeonggon :-)
+2.32.0
+

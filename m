@@ -2,97 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A01C4CCDFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3032D4CCE14
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238489AbiCDGrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:47:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S238559AbiCDGsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiCDGrd (ORCPT
+        with ESMTP id S236380AbiCDGsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:47:33 -0500
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C657218CC21;
-        Thu,  3 Mar 2022 22:46:45 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowADHqPHQtSFiSwAcAg--.15700S2;
-        Fri, 04 Mar 2022 14:46:41 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     broonie@kernel.org, michal.simek@xilinx.com
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] spi: spi-zynq-qspi: Handle error for clk_enable
-Date:   Fri,  4 Mar 2022 14:46:39 +0800
-Message-Id: <20220304064639.416690-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 4 Mar 2022 01:48:47 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903F74DF5C;
+        Thu,  3 Mar 2022 22:47:51 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id d19so8560028ioc.8;
+        Thu, 03 Mar 2022 22:47:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=j23UEdgmoD3PT7cpFQAiB9cWyyGiVLaUvaBGU1GyBnM=;
+        b=O4anCBKrsFyHyGzL2RF8B7cVoEGN7VorjGDN2lWfWk7InIipFAsHECPDsdOCfaRbpB
+         2Kt82y1BnVO5YHOf3TxW7h/ybyzM3bT9MqjlwgrpF2WtQIymp3JrcV5QOJEJ8rNAIy4a
+         PLCK58ysJgdl6mAUW1D1vHWF/bPt2T/nCsKva5+pRKypjda9JkxpjO555iUWjqjtp6yX
+         zHOy96yoFqH9Ox7QiF69+hVa9y7GMf1LfN3bnbRccWkQk1lRwTQ5rw3V4NJLJHSc6e0c
+         VwIf3JuNMtpCudUkuFthPr30ar6Xx9zkMXFuboIjXHL3QE+cBaOVO72cXXKQ0MYLNUUC
+         qmAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=j23UEdgmoD3PT7cpFQAiB9cWyyGiVLaUvaBGU1GyBnM=;
+        b=EIWJKxLuaZjNPU0LmcF8cDkwAq9ngR+mdK8bsVpJCGcbFbjpMPcLDvzWHYpAn9yq47
+         Icd443w3TnxHlDHSPJxGJEWejQaeQ8MUUNzCfKYbOxSR71OgZ3U/Y3bxo0RKb6orkhCM
+         WLRC5ME66XoaWdf8woMGmJexguOVua8cULNdOU1dSI/TQ9yz75sKn1qq8z8eOxZWfwl0
+         Esmaz7Tu7i6oZBYCmF15YWMAJTn5kqMBdJEH0KjgLmRfAosgOq8vpPCIKGH+O/o0No2L
+         dlDWx/hEGVDmoyHKAVtl8iwhpIt91Jt+HHHh+E/w5Ru/BZG75HBw+3+JvFBaDZqwOyb0
+         ukZw==
+X-Gm-Message-State: AOAM530QWvkRdgD7Nl6oOSuSxW7IAvy26KMZXE/uLE4LLVfu10TPlUpO
+        FLi+ws4Jt91Kni9DdMlxbnFK7iTvlofHV2tlHwU=
+X-Google-Smtp-Source: ABdhPJxjDfv6jFJYN4fxfZbOXWdF3sJLBJrEkBPrcaNpWv3Ngca5sjQyQ48mqksXjVECGHbzT/Tk6PN8pi5cV3tELNU=
+X-Received: by 2002:a05:6638:a9b:b0:317:12d1:5a46 with SMTP id
+ 27-20020a0566380a9b00b0031712d15a46mr15095078jas.306.1646376471271; Thu, 03
+ Mar 2022 22:47:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADHqPHQtSFiSwAcAg--.15700S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xr47tF17AF47CryxZr1rtFb_yoWkGrg_Ca
-        17XrZIqrs8uw4xCF1xtr4DAFyUurs5Xr12q3Wvqay3trZxJrnFqrWDZrWUJ34fZw1UCrs3
-        Cr429340yr43CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-3-arnd@kernel.org>
+ <CA+icZUWCTuVeohWvePhxYY3WC9xAYSy9nP1xQQf=tFH_mWDCNQ@mail.gmail.com>
+ <CAKwvOdn04aoWO_384k5HQodwA1-DCFwU50iRXQXh_BQk5pyz7w@mail.gmail.com>
+ <CA+icZUWD_O1WTKNDTj7f+EUxx5Pf=zC53mfOBNgtj1JQwjZVAQ@mail.gmail.com> <YiD86pay2ENCebkR@dev-arch.thelio-3990X>
+In-Reply-To: <YiD86pay2ENCebkR@dev-arch.thelio-3990X>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 4 Mar 2022 07:47:14 +0100
+Message-ID: <CA+icZUXDBe5MF6G_2v4XoV0SFVkTZ96M5i-VGSvHsP1pFJ+nAg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
+On Thu, Mar 3, 2022 at 6:37 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Sedat,
+>
+> On Thu, Mar 03, 2022 at 07:26:05AM +0100, Sedat Dilek wrote:
+> > Hey Nick!
+> >
+> > This only applies 1/3.
+> >
+> > $ b4 --version
+> > 0.8.0
+> >
+> > $ b4 am https://lore.kernel.org/lkml/20220301145233.3689119-1-arnd@kern=
+el.org/
+> > -o - | git am -3
+> > Analyzing 14 messages in the thread
+> > Will use the latest revision: v3
+> > You can pick other revisions using the -vN flag
+> > Checking attestation on all messages, may take a moment...
+> > ---
+> >  =E2=9C=93 [PATCH v3 1/3] Kbuild: move to -std=3Dgnu11
+> >    =E2=9C=93 Signed: DKIM/kernel.org
+> >    + Reviewed-by: Nathan Chancellor <nathan@kernel.org> (=E2=9C=93 DKIM=
+/kernel.org)
+> >  ERROR: missing [2/3]!
+> >  ERROR: missing [3/3]!
+> >  ---
+> >  NOTE: install patatt for end-to-end signature verification
+> > ---
+> > Total patches: 1
+> > ---
+> > WARNING: Thread incomplete!
+> > Link: https://lore.kernel.org/r/20220301145233.3689119-1-arnd@kernel.or=
+g
+> > Base: not specified
+> > Wende an: Kbuild: move to -std=3Dgnu11
+>
+> It looks like the threading somehow got broken, likely due to the [v3]
+> on the first patch and not the second or third:
+>
+> This worked for me on v5.17-rc6:
+>
+> $ for i in $(seq 1 3); do b4 shazam -P _ 20220301145233.3689119-"$i"-arnd=
+@kernel.org; done
+>
+> "b4 shazam" is the equivalent of "b4 am -o - ... | git am" and the
+> "-P _" tells b4 to only fetch that exact message ID, not the whole
+> thread.
+>
 
-Fixes: 67dca5e580f1 ("spi: spi-mem: Add support for Zynq QSPI controller")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/spi/spi-zynq-qspi.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Hmm, the universe is not good to me...
 
-diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index 78f31b61a2aa..77ea6b522348 100644
---- a/drivers/spi/spi-zynq-qspi.c
-+++ b/drivers/spi/spi-zynq-qspi.c
-@@ -379,12 +379,21 @@ static int zynq_qspi_setup_op(struct spi_device *spi)
- {
- 	struct spi_controller *ctlr = spi->master;
- 	struct zynq_qspi *qspi = spi_controller_get_devdata(ctlr);
-+	int ret;
- 
- 	if (ctlr->busy)
- 		return -EBUSY;
- 
--	clk_enable(qspi->refclk);
--	clk_enable(qspi->pclk);
-+	ret = clk_enable(qspi->refclk);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_enable(qspi->pclk);
-+	if (ret) {
-+		clk_disable(qspi->refclk);
-+		return ret;
-+	}
-+
- 	zynq_qspi_write(qspi, ZYNQ_QSPI_ENABLE_OFFSET,
- 			ZYNQ_QSPI_ENABLE_ENABLE_MASK);
- 
--- 
-2.25.1
+$ for i in $(seq 1 3); do b4 shazam -P _
+20220301145233.3689119-"$i"-arnd@kernel.org; done
+usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
+usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
+usage: b4 [-h] [--version] [-d] [-q] {mbox,am,attest,pr,ty,diff,kr} ...
+b4: error: argument subcmd: invalid choice: 'shazam' (choose from
+'mbox', 'am', 'attest', 'pr', 'ty', 'diff', 'kr')
 
+Do I need a higher version of b4 (here: v0.8.0)?
+
+Check myself... b4.git:
+
+commit 7c1d044ff1d5235e598d4c777c4abfe60e0a09a8
+("shazam: change default behaviour to be "apply-here"")
+
+...is post-v0.8.0.
+
+Lemme see if I can apply this patch...
+
+# cd /usr/lib/python3/dist-packages
+
+# LC_ALL=3DC git apply --check --verbose /root/b4-shazam.patch
+Checking patch b4/command.py...
+error: while searching for:
+   sp.add_argument('-M', '--save-as-maildir', dest=3D'maildir',
+action=3D'store_true', default=3DFalse,
+                   help=3D'Save as maildir (avoids mbox format ambiguities)=
+')
+
+def cmd_am_common_opts(sp):
+   sp.add_argument('-v', '--use-version', dest=3D'wantver', type=3Dint,
+default=3DNone,
+                   help=3D'Get a specific version of the patch/series')
+
+error: patch failed: b4/command.py:35
+error: b4/command.py: patch does not apply
+Checking patch b4/mbox.py...
+error: while searching for:
+       ifh =3D io.StringIO()
+       b4.save_git_am_mbox(am_msgs, ifh)
+       ambytes =3D ifh.getvalue().encode()
+       if cmdargs.applyhere:
+           amflags =3D config.get('git-am-flags', '')
+           sp =3D shlex.shlex(amflags, posix=3DTrue)
+           sp.whitespace_split =3D True
+
+error: patch failed: b4/mbox.py:262
+error: b4/mbox.py: patch does not apply
+
+Nope.
+Dunno if I am willing to do that manually or build-from-git.
+
+Anyway, can you add this b4 shazam tipp/trick to our wiki, please?
+
+Last question:
+
+LLVM/Clang-14...
+Do I need any patches to Linux v5.17-rc6 or upstream Git?
+Dependent/Independent of "std-gnu-11"?
+
+I can see on my Debian/unstable AMD64 system:
+
+# LC_ALL=3DC apt-cache policy clang-14
+clang-14:
+ Installed: (none)
+ Candidate: 1:14.0.0~++20220301114802+19149538e9a9-1~exp1~20220301234814.85
+ Version table:
+    1:14.0.0~++20220301114802+19149538e9a9-1~exp1~20220301234814.85 99
+        99 https://apt.llvm.org/unstable llvm-toolchain-14/main amd64 Packa=
+ges
+    1:14.0.0~+rc1-1 99
+        99 https://ftp.debian.org/debian unstable/main amd64 Packages
+        99 https://deb.debian.org/debian unstable/main amd64 Packages
+
+The one from apt.llvm.org I guess is LLVM/Clang v14.0.0-rc2?
+
+Maybe, I wait until Masahiroy has the triple in his kbuild Git tree...
+
+Thanks.
+
+Have a nice Friday,
+- sed@ -
+
+[1] https://git.kernel.org/pub/scm/utils/b4/b4.git/tag/?h=3Dv0.8.0
+[2] https://git.kernel.org/pub/scm/utils/b4/b4.git/commit/?id=3D7c1d044ff1d=
+5235e598d4c777c4abfe60e0a09a8
+[3] https://github.com/ClangBuiltLinux/linux/wiki/Command-line-tips-and-tri=
+cks

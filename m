@@ -2,78 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908624CCFCD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAB84CCFD4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbiCDITK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S232715AbiCDIVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiCDITI (ORCPT
+        with ESMTP id S229862AbiCDIVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:19:08 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD432198ED4
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:18:19 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id ay10so11475969wrb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:18:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KHvgGTih2dVoUEaH61oQ42JGeTYk4JGgudGnLS9971U=;
-        b=u0n+IPWNbY4HzO5MAQdFq+nogfDQDq2mUjKhkhY8vQHB+CBjNtWqxy6h7vKvbG5E++
-         JQ0a4Ui+PjFo7PnbPcYc1P9/V5VZwEw7AKHSanNI1+jUrTOlmlngAZSd7yzIwmND0ofm
-         Noztmv14PL7HWthkf1ftO7dlbvVFtKY5qHrKL/8SKReN+rrmDzWXIbRTYPuX8FIu/q/j
-         YycuDnwcrNqBm8ixbGoOYKHycgtIz3d4q1wTKEufEyDAylvgNsC4vxhy0JN7hIB0VqlW
-         FoqX4oYvGSbXXW7Oa2jyowRdUMrYdyupwp8GwWiHBx8+4n351Ik2arpvC9iXI/ESO7jA
-         N1jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KHvgGTih2dVoUEaH61oQ42JGeTYk4JGgudGnLS9971U=;
-        b=cy2yG5OhhSzDp4OEZEQ5seB+oJPYbdEL0epVGb+qlQtz/8OplRlepee1WnBI4qA/7e
-         QzcMR5x/wOV+cOoPydcuDI8DkNAsxIFv1GngP8ZscRLp8TUNWZ2fTSpbLGd8ehmtJOYU
-         WkHMAbrNSJbPFK/cSSZ3ZBCZXuqIxyqoD2bzAxzxUIZr1u/t7WZXbasmcSeYQRlDvVUD
-         2Sl+b72lG4uJJcC4bvt2gg7dIQQgYAZKpRMa38rXcUwjZInjFGcKaJjzhuopPdKVHZhx
-         vqvCWWXBpR9tV9XBw8KKrXaa5XJ0Bs928OsC6MPCUsd2w9cBr7kdEJab9qcp5RsvG4gR
-         Cmeg==
-X-Gm-Message-State: AOAM5336lQxraMfpL2fnfup0KfvMubu10SaiqQrIzAVoDYz1JeYqb5L9
-        cjaaXtqDPkEGnfuaj5Q4a1AKxNLmYXMuiQ==
-X-Google-Smtp-Source: ABdhPJzxdM8deXKouzdgjNPY43ykpYWNxmiMKuoUK0JBgLG1mk7sq7VRJQGPUSX50J0Z9N1xzC1ufA==
-X-Received: by 2002:adf:fa8c:0:b0:1f0:47ef:a04 with SMTP id h12-20020adffa8c000000b001f047ef0a04mr6664397wrr.398.1646381897794;
-        Fri, 04 Mar 2022 00:18:17 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:551f:d79e:5d4c:9b99? ([2a01:e34:ed2f:f020:551f:d79e:5d4c:9b99])
-        by smtp.googlemail.com with ESMTPSA id n5-20020a05600c3b8500b00380fc02ff76sm4783611wms.15.2022.03.04.00.18.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 00:18:17 -0800 (PST)
-Message-ID: <5ca8ba3b-e5e0-805d-bc48-7a00d424722f@linaro.org>
-Date:   Fri, 4 Mar 2022 09:18:15 +0100
+        Fri, 4 Mar 2022 03:21:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F99A195335
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:20:45 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1nQ3An-0002sn-TG; Fri, 04 Mar 2022 09:20:25 +0100
+Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1nQ3Am-0002hT-2F; Fri, 04 Mar 2022 09:20:24 +0100
+Date:   Fri, 4 Mar 2022 09:20:24 +0100
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     vkoul@kernel.org, michal.simek@xilinx.com, yukuai3@huawei.com,
+        lars@metafoo.de, libaokun1@huawei.com, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] dma: xilinx: check the return value of dma_set_mask() in
+ zynqmp_dma_probe()
+Message-ID: <20220304082024.GO8137@pengutronix.de>
+References: <20220303024334.813-1-baijiaju1990@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next] clocksource/drivers/imx-tpm: Move
- tpm_read_sched_clock() under CONFIG_ARM
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, patches@lists.linux.dev
-References: <20220303184212.2356245-1-nathan@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220303184212.2356245-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220303024334.813-1-baijiaju1990@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:16:28 up 83 days, 17:02, 75 users,  load average: 0.05, 0.22,
+ 0.31
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,26 +59,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2022 19:42, Nathan Chancellor wrote:
-> When building this driver for an architecture other than ARCH=arm:
+On Wed, 02 Mar 2022 18:43:34 -0800, Jia-Ju Bai wrote:
+> The function dma_set_mask() in zynqmp_dma_probe() can fail, so its
+> return value should be checked.
 > 
->    drivers/clocksource/timer-imx-tpm.c:78:20: error: unused function 'tpm_read_sched_clock' [-Werror,-Wunused-function]
->    static u64 notrace tpm_read_sched_clock(void)
->                       ^
->    1 error generated.
-> 
-> Move the function definition under the existing CONFIG_ARM section so
-> there is no more warning.
-> 
-> Fixes: 10720e120e2b ("clocksource/drivers/imx-tpm: Exclude sched clock for ARM64")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Fixes: b0cc417c1637 ("dmaengine: Add Xilinx zynqmp dma engine driver support")
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
 > ---
+>  drivers/dma/xilinx/zynqmp_dma.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/xilinx/zynqmp_dma.c b/drivers/dma/xilinx/zynqmp_dma.c
+> index 7aa63b652027..963fb1de93af 100644
+> --- a/drivers/dma/xilinx/zynqmp_dma.c
+> +++ b/drivers/dma/xilinx/zynqmp_dma.c
+> @@ -1050,7 +1050,8 @@ static int zynqmp_dma_probe(struct platform_device *pdev)
+>  	zdev->dev = &pdev->dev;
+>  	INIT_LIST_HEAD(&zdev->common.channels);
+>  
+> -	dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
+> +	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(44)))
+> +		return -EIO;
 
-Applied, thx
+Thanks.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+You may print an error message with dev_err_probe and forward the return value
+of dma_set_mask.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Michael
+
+>  	dma_cap_set(DMA_MEMCPY, zdev->common.cap_mask);
+>  
+>  	p = &zdev->common;
+> -- 
+> 2.17.1
+> 
+> 

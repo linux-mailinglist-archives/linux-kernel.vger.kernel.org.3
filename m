@@ -2,155 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC714CD59A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1314CD59D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238574AbiCDN4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S238601AbiCDN4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiCDN42 (ORCPT
+        with ESMTP id S238638AbiCDN4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:56:28 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3606619D634;
-        Fri,  4 Mar 2022 05:55:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646402141; x=1677938141;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c4N+V43B3i0c7JWoTDHNDNh4DYCcViChbXoi/oxgYJ4=;
-  b=nOzgqITRsYTt3w3jH6R4vrDtROCF2kN2Q9RZ329aWoWgCxUGPkyE9FpJ
-   0bKMjYn5S7aBex4XDPD8gm24Tm4uJCFYISHl/XYMwPY/TtRp+WQ8OgQoG
-   O5b+8Ex3mDwyKX4QJECQeZioe8utkAHvxS7bbjPJ2/FaKr/rzGBbaqU5Z
-   d78vi5BtDMNxNxJbdZWGkSzfNsM5fqJ5BARrDdhoxVHIAOgg1PSnEV0qn
-   mS9EmC3sZ8Y/x+XFOlomzjmmbAmQjSEMgU4s0Ex8EdbOMDIM42NKGbcXj
-   QpIHWBjW0HADYY/407JMXkOxFCUm/SkNXVVRQ1sMsi8pzn3nWuWdMwXL8
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="314693087"
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="314693087"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 05:55:40 -0800
-X-IronPort-AV: E=Sophos;i="5.90,155,1643702400"; 
-   d="scan'208";a="511854676"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 05:55:37 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nQ8OR-00BF8a-QX;
-        Fri, 04 Mar 2022 15:54:51 +0200
-Date:   Fri, 4 Mar 2022 15:54:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v3 4/6] typec: mux: Allow multiple mux_devs per mux
-Message-ID: <YiIaK8kSYGtivvhk@smile.fi.intel.com>
-References: <20220303223351.141238-1-bjorn.andersson@linaro.org>
- <20220303223351.141238-4-bjorn.andersson@linaro.org>
+        Fri, 4 Mar 2022 08:56:32 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E44E1A3633;
+        Fri,  4 Mar 2022 05:55:45 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id q11so7782907pln.11;
+        Fri, 04 Mar 2022 05:55:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=+2Ag8K/blpO/TDuAG0o3dn05J6Gq6o2fRSh54mpEwNc=;
+        b=B71XufcFomvBNM9td+bERxkg2FnnNIE9z1nFpYLaic4J1is3LslJm+trITcDpEppZ8
+         I0cS8rlQohzdopXi/QsAbtGWrI0JM+Ht5Fu+93Zjd80WJNSh6nLUyXscc3FAdJaJRi8F
+         jRb/E1d6oovgk1UYZtWTqRt8Qj7gdKco/+AgYb5y/0z4woLwswXubxhRCM0gNXqx4tR/
+         XrHlkDmLSDQEHiph4KOkQWfh4xT0Kalrpx7nR0U1ie1V8JjssCrxz+HqWqLEhNArz3Cf
+         FRnix0gcKRlYythQZCI3zd9KWWmOiZQvcOgquPZ0vJPbfLVTFtn7M6Gd53Yeky+D4+u1
+         Vbaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=+2Ag8K/blpO/TDuAG0o3dn05J6Gq6o2fRSh54mpEwNc=;
+        b=E0T0gEwamddL1kCOofdzJFBqHABy2cgu4TwhS9lLZv0xP5XHK6oYNj3K2Ok07RDSeI
+         fibA4hIoG8YNnj1lebdkOkoPTqBqd3js1NmiOoUB+tczYZL30QWvRC+jdMrBdnq/wdjU
+         5X1vnRBRKJk55vMh6YAsNIu/VvXqxGJrruEHVb3vT3iI8FOyK6dqMyAeNB+tBvU5x9/z
+         BWbGAey9n7OydSJv1asuMJ+lsQdVPNzFyWCsUyueqfX5oxGEGg7axU03RhDX/CysRunt
+         +lJdIcGONpKfuJ0oqQtpFgduY3e0V1rUz+4LQo8i++YgDcQrezZEz47NKBTciIXF2kLV
+         cHIw==
+X-Gm-Message-State: AOAM531MHgbNAhNbcmJFnOIHtMeRZrb2kF+5zT+0aK2sMSwJivtnik0M
+        LFkoby9Hy0UR4Lveha/vaD0=
+X-Google-Smtp-Source: ABdhPJxa/iKoXGuaImlslpn8S7p8aK0lGXiSONR4kJcxGBaijeonlXy+/ieYTqit5J/nGuCrpHELyA==
+X-Received: by 2002:a17:90b:3886:b0:1bf:1a16:25d4 with SMTP id mu6-20020a17090b388600b001bf1a1625d4mr6829177pjb.193.1646402144501;
+        Fri, 04 Mar 2022 05:55:44 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056a00088800b004bca31c8e56sm6371367pfj.115.2022.03.04.05.55.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 05:55:43 -0800 (PST)
+Date:   Fri, 4 Mar 2022 05:55:40 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Divya Koppera <Divya.Koppera@microchip.com>,
+        netdev@vger.kernel.org, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, kuba@kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        madhuri.sripada@microchip.com, manohar.puri@microchip.com
+Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
+ values and timestamping check for LAN8814 phy
+Message-ID: <20220304135540.GD16032@hoboy.vegasvil.org>
+References: <20220304093418.31645-1-Divya.Koppera@microchip.com>
+ <20220304093418.31645-3-Divya.Koppera@microchip.com>
+ <YiILJ3tXs9Sba42B@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220303223351.141238-4-bjorn.andersson@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YiILJ3tXs9Sba42B@lunn.ch>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 02:33:49PM -0800, Bjorn Andersson wrote:
-> In the Qualcomm platforms the USB/DP PHY handles muxing and orientation
-> switching of the SuperSpeed lines, but the SBU lines needs to be
-> connected and switched by external (to the SoC) hardware.
-> 
-> It's therefor necessary to be able to have the TypeC controller operate
-> multiple TypeC muxes and switches. Use the newly introduced indirection
-> object to handle this, to avoid having to taint the TypeC controllers
-> with knowledge about the downstream hardware configuration.
-> 
-> The max number of devs per indirection is set to 3, which account for
-> being able to mux/switch the USB HS, SS and SBU lines, as per defined
-> defined in the usb-c-connector binding. This number could be grown if
-> need arrises at a later point in time.
+On Fri, Mar 04, 2022 at 01:50:47PM +0100, Andrew Lunn wrote:
+> Why does this need to be configured, rather than hard coded? Why would
+> the latency for a given speed change? I would of thought though you
+> would take the average length of a PTP packet and divide is by the
+> link speed.
 
-...
+Latency is unrelated to frame length.
 
-> +	for (i = 0; i < count; i++) {
-> +		if (IS_ERR(sw_devs[i])) {
-> +			err = PTR_ERR(sw_devs[i]);
-> +			goto put_sw_devs;
-> +		}
-> +	}
->  
-> -	sw->sw_dev = sw_dev;
-> +	for (i = 0; i < count; i++) {
-> +		WARN_ON(!try_module_get(sw_devs[i]->dev.parent->driver->owner));
-> +		sw->sw_devs[i] = sw_devs[i];
-> +	}
-> +
-> +	sw->num_sw_devs = count;
->  
->  	return sw;
-> +
-> +put_sw_devs:
-> +	for (i = 0; i < count; i++) {
+My understanding is that it is VERY tricky to measure PHY latency.
+Studies have shown that some PHYs vary by link speed, and some vary
+randomly, frame by frame.
 
-Shouldn't it be
+So I can understand wanting to configure it.  However, DTS is probably
+the wrong place.  The linuxptp user space stack has configuration
+variables for this purpose:
 
-	while (i--)
+       egressLatency
+              Specifies  the  difference  in  nanoseconds  between  the actual
+              transmission time at the reference plane and the reported trans‐
+              mit  time  stamp. This value will be added to egress time stamps
+              obtained from the hardware.  The default is 0.
 
-?
+       ingressLatency
+              Specifies the difference in nanoseconds between the reported re‐
+              ceive  time  stamp  and  the  actual reception time at reference
+              plane. This value will be subtracted from  ingress  time  stamps
+              obtained from the hardware.  The default is 0.
 
-> +		if (!IS_ERR(sw_devs[i]))
-
-We may get rid of this check if we guarantee that the device is NULL.
-
-> +			put_device(&sw_devs[i]->dev);
-> +	}
-> +
-> +	kfree(sw);
-> +
-> +	return ERR_PTR(err);
->  }
-
-...
-
-> +	for (i = 0; i < count; i++) {
-> +		if (IS_ERR(mux_devs[i])) {
-> +			err = PTR_ERR(mux_devs[i]);
-> +			goto put_mux_devs;
-> +		}
-
-Ditto.
-
-> +	}
-
-...
-
-> +put_mux_devs:
-> +	for (i = 0; i < count; i++) {
-> +		if (!IS_ERR(mux_devs[i]))
-> +			put_device(&mux_devs[i]->dev);
-> +	}
-
-Ditto.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Richard

@@ -2,96 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2774CDE28
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 21:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C194CDD95
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 20:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbiCDULp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
+        id S229520AbiCDT7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 14:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiCDUHl (ORCPT
+        with ESMTP id S229436AbiCDT7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:07:41 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB7269A76;
-        Fri,  4 Mar 2022 12:02:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646424126; x=1677960126;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8l8peHNVZyeS/auPKUnLmYj1Qk41lhKXin8JnhT2XHY=;
-  b=BOqqTk8/SqdXnbd9eusAr/cKyYg6F/sJqWv8GoMrQLWjCYhR5hFOwk3b
-   +bH1HjrfEmo6h97KaDkjbRPVje5iVD6pYz7dtNJwtcITmR2gmNeGp2QDz
-   f4YtKfuxDiXv3z+cwjL56HFXCxmrMKx6Fbm35h7PYgTopP2qDNkPvaBIp
-   txLycVy4jyEymfdbRysjxru77Q+Tvx3yJV27Cq9Av/SoCi5r2V3a1157t
-   3zg36EpqcJWZirsLT5Z/jAGg2YtYhme6pKpeoTG9lZ9rZzFX98P6D7qwX
-   lVYD+zAaF091E/vj3lS4sThRhKKdgoHlzE2oKFcmGpyajaYYezFhjiu70
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="253983457"
-X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
-   d="scan'208";a="253983457"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 11:50:19 -0800
-X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
-   d="scan'208";a="552344305"
-Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 11:50:19 -0800
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: [RFC PATCH v5 036/104] KVM: x86/mmu: Explicitly check for MMIO spte in fast page fault
-Date:   Fri,  4 Mar 2022 11:48:52 -0800
-Message-Id: <b0e81b4a4abfbe8bd6d43e4b1c0349a79517dfb0.1646422845.git.isaku.yamahata@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
+        Fri, 4 Mar 2022 14:59:06 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECAF269A43
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 11:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=no0VEInXnl23SVS24m7UlFq4G8qUDmTk6Ccbs3zl4O0=; b=m9q/ektnWd85Jw/Qd6H4P70IG4
+        CJf+sOmXwSGuEqphk+S4yoarL//k1hmWAubjEcXmQI1IrVfxaM/Hm0JjOUr+aztLad+dOno1N79R1
+        /vwPkKlasJz1ZAhouQ05wHfJWkQ3tuIJhqSYWCktaU5aOQZXevWk7E1J0yNsdmwR6dxWTIEY8Skwg
+        RbxobHgOmLnyWLNN7meCUboCnv/Nh7k+7jQ0AEoN25d+48/9ensMwRzq/3h+TzQ2j5VE/IUXOO9Nk
+        sRjzPLiPSsO4IN7gThomloitB3WQqcShb8V1zcSRk9ufai1o8sYVjULJfPwxZKxhHNXSLlshjkQe0
+        CbEbpPXw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nQDv5-00FIPA-Fj; Fri, 04 Mar 2022 19:48:55 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6241398624E; Fri,  4 Mar 2022 20:48:53 +0100 (CET)
+Date:   Fri, 4 Mar 2022 20:48:53 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v3 18/39] x86/ibt,ftrace: Make function-graph play nice
+Message-ID: <20220304194853.GN11184@worktop.programming.kicks-ass.net>
+References: <20220303112321.422525803@infradead.org>
+ <20220303112826.044301664@infradead.org>
+ <20220304175154.l2otvmqd4r7ozsuy@treble>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304175154.l2otvmqd4r7ozsuy@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <sean.j.christopherson@intel.com>
+On Fri, Mar 04, 2022 at 09:51:54AM -0800, Josh Poimboeuf wrote:
+> On Thu, Mar 03, 2022 at 12:23:39PM +0100, Peter Zijlstra wrote:
+> > +
+> > +	addq $16, %rsp
+> > +	ANNOTATE_INTRA_FUNCTION_CALL
+> > +	call .Ldo_rop
+> > +	int3
+> > +.Ldo_rop:
+> > +	mov %rdi, (%rsp)
+> > +	UNWIND_HINT_FUNC
+> > +	RET
+> 
+> Why the int3?
 
-Explicitly check for an MMIO spte in the fast page fault flow.  TDX will
-use a not-present entry for MMIO sptes, which can be mistaken for an
-access-tracked spte since both have SPTE_SPECIAL_MASK set.
-
-The fast page fault handles the case of changing access bits without
-obtaining mmu_lock.  For example, clear write protect bit for dirty page
-tracking.  MMIO emulation is handled in a slow path.  So it doesn't affect
-the default VM case.
-
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
----
- arch/x86/kvm/mmu/mmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index b68191aa39bf..9907cb759fd1 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3167,7 +3167,7 @@ static int fast_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
- 			break;
- 
- 		sp = sptep_to_sp(sptep);
--		if (!is_last_spte(spte, sp->role.level))
-+		if (!is_last_spte(spte, sp->role.level) || is_mmio_spte(spte))
- 			break;
- 
- 		/*
--- 
-2.25.1
-
+Speculation trap :-) Either I'm too paranoid or not paranoid enough; but
+without it it's just too close to a retpoline and it doesn't feel right.

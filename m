@@ -2,85 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7C64CD71B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0D74CD73B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240062AbiCDPHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        id S240154AbiCDPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiCDPHa (ORCPT
+        with ESMTP id S240128AbiCDPJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:07:30 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9C21BE132;
-        Fri,  4 Mar 2022 07:06:42 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2247SMLb025160;
-        Fri, 4 Mar 2022 09:05:57 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=hHITQXFDQDnRVWlkIt1+iWr/oKBoaKdy+qjH2sz4sAM=;
- b=IsJ8rhNcxyRTNptJtHGf/XKlRes2VmKvXjN4MiC3hXgjc+SCQAGlcP7wFPe5Qiu/cI/d
- lLT+tZo+wdUn+yZM8sTE0XtZBI71J5pJVBNUoIvQhgwFZAOFDZ0y6g0XLn7Nox3FWbsE
- 4sDx6JOQH4xHyBsiUYnoKsyMK2yu9A+h41AcllIp3YGJDFC7AiVOOmYFMRJhO+BN/skR
- 1f7XFo4WlzsCgJeC+Syi4Wt1UyNLeQBGYlAkTqjNMEkZoqyE5Z/526UyTGgQqfXw9ed7
- ZO5EewpTc/AlXUh3V7gE+UzYM6R7mbdAUB36kKMt1upplO/JrjgKJ3z+UhVIzgZUpAqw Dw== 
+        Fri, 4 Mar 2022 10:09:07 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF09BE0AD6;
+        Fri,  4 Mar 2022 07:08:08 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2248TInB019088;
+        Fri, 4 Mar 2022 09:07:25 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=o/svsH3mKdQh2w7l93HqT3MWcfDGsdP0tpIyvmUqC4M=;
+ b=nthAdfW/pHfh/griJOYc4x7Zctg2Xl04KxrLrkfbMFeuQCkMKwxp8Plpu3rkXnPjvYOo
+ 9jSlhZUf9i2XNVF1Ya26Zup0qXM0y+gEIaFQcJeSWEBF2KoWGI+OvaTTgmSWIAEbAWcb
+ sON3CPUbHcVj1CNlgs+Re+h1aKICOkxn6znnNuHIninxScyna7rH4L7sUO3Vh75JI1Gc
+ iKhKPFmymlJ+Euh82t63J69T8kI6ql0OgLtFVNa7h4MxLCCSj7chNvtwJYNKKCUBnjUr
+ ZcyWUmtQJ5vKb31J5YplxwnUMad1eU+xxpEL4iU6JBUfPrkGduxgxvVeWvpsCjl73li2 rg== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3ek4j1s3c6-1
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ek4j3h413-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 04 Mar 2022 09:05:57 -0600
+        Fri, 04 Mar 2022 09:07:25 -0600
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 4 Mar
- 2022 15:05:55 +0000
+ 2022 15:07:23 +0000
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Fri, 4 Mar 2022 15:05:55 +0000
-Received: from [198.61.65.198] (unknown [198.61.65.198])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 27CBE7C;
-        Fri,  4 Mar 2022 15:05:55 +0000 (UTC)
-Message-ID: <f4e04900-1451-0b6a-e4c1-cc51cafe9309@opensource.cirrus.com>
-Date:   Fri, 4 Mar 2022 15:05:54 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 15/20] hda: cs35l41: Remove unnecessary log
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
+ Transport; Fri, 4 Mar 2022 15:07:23 +0000
+Received: from aryzen.ad.cirrus.com (unknown [198.61.65.198])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 52417B06;
+        Fri,  4 Mar 2022 15:07:23 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220303173059.269657-1-tanureal@opensource.cirrus.com>
- <20220303173059.269657-16-tanureal@opensource.cirrus.com>
- <YiD/0ZMcSGVRTZxx@sirena.org.uk>
-From:   Lucas tanure <tanureal@opensource.cirrus.com>
-In-Reply-To: <YiD/0ZMcSGVRTZxx@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: g_vDq3ATg4q1fK_fIDlsb4DJAWr8jJmS
-X-Proofpoint-ORIG-GUID: g_vDq3ATg4q1fK_fIDlsb4DJAWr8jJmS
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v2 00/20] Support external boost at CS35l41 ASoC driver
+Date:   Fri, 4 Mar 2022 15:07:01 +0000
+Message-ID: <20220304150721.3802-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: ehVGpwv1bl5E8i1YZkXmXSNJ6dLE_oD6
+X-Proofpoint-ORIG-GUID: ehVGpwv1bl5E8i1YZkXmXSNJ6dLE_oD6
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/22 17:50, Mark Brown wrote:
-> On Thu, Mar 03, 2022 at 05:30:54PM +0000, Lucas Tanure wrote:
-> 
->> If regmap fails would fail during probe of the device.
-> 
-> I'm pretty sure circumstances could arise which would break things at
-> runtime.
-Yes, so instead of not logging that, we can log the last regmap access 
-per switch case, instead of all of them.
+Move the support for CS35L41 external boost to its shared library
+for ASoC use.
+This move resulted in cs35l41_hda_reg_sequence being removed,
+and its steps were broken down into regmap writes or functions
+from the library. And hardware configuration struct was unified
+for its use in the shared lib.
+While at it, some minor bugs were found and fixed it.
+
+v2 changelog:
+ - Instead of removing the log, playback actions will log the last regmap access.
+ - Documentation patch with the correct subject line and fixed bug reported by Rob Herring on the
+ provided example.
+
+Previous versions:
+ v1: https://lkml.org/lkml/2022/3/3/759
+
+David Rhodes (2):
+  ASoC: cs35l41: Fix GPIO2 configuration
+  ASoC: cs35l41: Document CS35l41 External Boost
+
+Lucas Tanure (18):
+  ASoC: cs35l41: Fix max number of TX channels
+  ASoC: cs35l41: Fix DSP mbox start command and global enable order
+  ASoC: cs35l41: Remove unnecessary param
+  sound: cs35l41: Unify hardware configuration
+  sound: cs35l41: Check hw_config before using it
+  sound: cs35l41: Move cs35l41_gpio_config to shared lib
+  hda: cs35l41: Fix I2S params comments
+  hda: cs35l41: Always configure the DAI
+  hda: cs35l41: Add Boost type flag
+  hda: cs35l41: Put the device into safe mode for external boost
+  hda: cs35l41: Mute the device before shutdown
+  sound: cs35l41: Enable Internal Boost in shared lib
+  hda: cs35l41: Move boost config to initialization code
+  hda: cs35l41: Remove cs35l41_hda_reg_sequence struct
+  hda: cs35l41: Reorganize log for playback actions
+  hda: cs35l41: Handle all external boost setups the same way
+  hda: cs35l41: Move external boost handling to lib for ASoC use
+  ASoC: cs35l41: Support external boost
+
+ .../bindings/sound/cirrus,cs35l41.yaml        |  44 ++-
+ include/sound/cs35l41.h                       |  53 +++-
+ sound/pci/hda/cs35l41_hda.c                   | 295 ++++++------------
+ sound/pci/hda/cs35l41_hda.h                   |  27 +-
+ sound/soc/codecs/cs35l41-i2c.c                |   4 +-
+ sound/soc/codecs/cs35l41-lib.c                | 190 ++++++++++-
+ sound/soc/codecs/cs35l41-spi.c                |   4 +-
+ sound/soc/codecs/cs35l41.c                    | 174 +++++------
+ sound/soc/codecs/cs35l41.h                    |   5 +-
+ 9 files changed, 440 insertions(+), 356 deletions(-)
+
+-- 
+2.35.1
+

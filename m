@@ -2,97 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA234CD564
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D434CD565
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbiCDNrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S232395AbiCDNrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiCDNq5 (ORCPT
+        with ESMTP id S231432AbiCDNrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:46:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C171E1B84D6
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 05:46:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646401568;
+        Fri, 4 Mar 2022 08:47:00 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8054A1B84D6;
+        Fri,  4 Mar 2022 05:46:12 -0800 (PST)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646401570;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6AS9vldJLrqi2tiwa++Hi55C1gYgBHhwabhvXG7rxQc=;
-        b=Mlq7tyfpKDjbYhnt6OTrR91mmJKbpVtfvBpXSCUdoCLmtdEpkCmmPs+BYHTMpsnbTZDqf0
-        yAKd+vI4Z2FyJ9nY2tadugBbwwcrpmsGO1ikPEKd1s3OSYAOIpowOkaYxGU1GBpxa9Ze+i
-        UJDmZ4H0UOB0rd8mFn3KyeiVybxDo8Y=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-e8ZfidUAMZCn0QAvtxd4hA-1; Fri, 04 Mar 2022 08:46:07 -0500
-X-MC-Unique: e8ZfidUAMZCn0QAvtxd4hA-1
-Received: by mail-qv1-f71.google.com with SMTP id fw9-20020a056214238900b0043522aa5b81so6216984qvb.21
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 05:46:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=6AS9vldJLrqi2tiwa++Hi55C1gYgBHhwabhvXG7rxQc=;
-        b=ohOzDKQJkLkrQbM9+J2fYOsFWz5bvJ5tw5GFuSWwMd1oy6rvN/sHLqdSjYtgw0CIQd
-         5lJ5w8uzEhILAicM6ZS3gdUi6V2NENY8ZFHi5uwL5/ktd8BVrqGwXvRB9CgHNVd0lqoa
-         rHtUe42YLuP+4fv9F0CaPSHkmUOVmgYaidiCTi8Nvy1xCtD64gBm+MeHmtLkr6JIydpP
-         hwd1C9sTqXRcQFZI3rfwmSHekh/SzWJn2gkCz5Bl1aqvdkJm7rOAjcStwedVgAGJOVMw
-         BvpvLFJRDsfXEBnfFPNRS+uPwLQ+6yMzN1PjCB+bm1fWqhzMo5/hFLipmfvgxpJS7xH9
-         bZTQ==
-X-Gm-Message-State: AOAM531bmiY6xlkEBmcNw2FwcT+/0ELNmfut+/U4OkL9IHfLzJO7qICv
-        aNU78DAY2hJRMxU854EDHtb4CXosbP8WrGbzCs9yz8Lu9fcdpIAkPizjorSFfdus6cNm74Hsf0d
-        WHagUBN2Q39vdpZWOA+lmCHhI
-X-Received: by 2002:a05:622a:1392:b0:2de:4e16:d7a9 with SMTP id o18-20020a05622a139200b002de4e16d7a9mr31925008qtk.680.1646401567391;
-        Fri, 04 Mar 2022 05:46:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxQHhXySv6wvXYlS/EA/l4dJ+N4lPXOuDXMCujrScg7kQKn2HWmh5DC1HAgcq3MPtMYpIqgwA==
-X-Received: by 2002:a05:622a:1392:b0:2de:4e16:d7a9 with SMTP id o18-20020a05622a139200b002de4e16d7a9mr31924981qtk.680.1646401567142;
-        Fri, 04 Mar 2022 05:46:07 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id o4-20020a05620a22c400b006490deb5687sm2375962qki.76.2022.03.04.05.46.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 05:46:06 -0800 (PST)
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To:     Joe Perches <joe@perches.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Finn Thain <fthain@linux-m68k.org>
-Cc:     Konrad Wilhelm Kleine <kkleine@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-References: <20220127151945.1244439-1-trix@redhat.com>
- <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
- <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com>
- <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
- <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com>
- <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
- <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org>
- <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
- <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org>
- <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
- <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com>
-Date:   Fri, 4 Mar 2022 05:46:01 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        bh=+qVNVphU3Gm3EnlFWZRXmSURmHaVndeojdH/n2OcvIc=;
+        b=Mj3OST0SQfXiy8DBZm8US3DVz9ppbnUkSJpLY44P+ArnzdySToKmhmuGZnF4tpaMKXBFpt
+        gi6CbIccfUQn5ljWOqqEE1fzsjOBtbYgamV9lXVAoZiPPYaXJZjyzi48O63yLYniupf+p6
+        jlZvYIEiE4LNXj1s5zsHVUwlyF4yH52tiEozJD5gXYU9wIZatN6as1/civFdn2RYxQz9EX
+        DBPVdduv5BkyNacUMmY04dIWOLAB2jy70h1cy6mVaZnZeQVmTpR6xrhech45o0M/plz6Ls
+        DRhCxfST8Wf+9LljIruDg3o9fFmw1MLCKWNzH3/NznwEuGzkbVDEg/y2hgBJ4Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646401570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+qVNVphU3Gm3EnlFWZRXmSURmHaVndeojdH/n2OcvIc=;
+        b=Xb19Oja3bbFVg6GnmPnbHKScCj4hVOICzSVFdCDOd3fy0iXUfHKIjiWyUlwjXSgkmFwFHX
+        H9HkP1l3NmfntNAQ==
+To:     Divya Koppera <Divya.Koppera@microchip.com>,
+        netdev@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, kuba@kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        richardcochran@gmail.com
+Cc:     linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        madhuri.sripada@microchip.com, manohar.puri@microchip.com
+Subject: Re: [PATCH net-next 3/3] net: phy: micrel: 1588 support for LAN8814
+ phy
+In-Reply-To: <20220304093418.31645-4-Divya.Koppera@microchip.com>
+References: <20220304093418.31645-1-Divya.Koppera@microchip.com>
+ <20220304093418.31645-4-Divya.Koppera@microchip.com>
+Date:   Fri, 04 Mar 2022 14:46:08 +0100
+Message-ID: <87ee3hde5b.fsf@kurt>
 MIME-Version: 1.0
-In-Reply-To: <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,52 +62,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
 
-On 3/3/22 3:38 PM, Joe Perches wrote:
-> On Fri, 2022-03-04 at 00:17 +0100, Miguel Ojeda wrote:
->> On Thu, Mar 3, 2022 at 11:44 PM Finn Thain <fthain@linux-m68k.org> wrote:
->>> Others might argue that they should always be changed from,
->>>
->>> /*
->>>   * this style
->>>   * of multiline comment
->>>   */
->>>
->>> to
->>>
->>> /* this style
->>>   * of multiline comment
->>>   */
->> In general, for things that the coding style guide talks about, we
->> should follow them, even if some subsystems do not (they can always
->> override in their folder if they really, really want it). So, here for
->> instance, the first one should be used.
-> It's up to individual maintainers to each decide on what might be
-> considered unnecessary churn for the subsystems they control.
-
-clang-format does not have an opt-in mechanism like indent, it is 
-all-or-nothing
-
-What is done is all the settings in .clang-format and the default settings.
-
-The churn level will be very high.
-
-Until clang-format has an opt-in mechanism, I do not think clang-format 
-should be used.
-
-.clang-format should be moved to staging/ to reflect its not being ready 
-status.
-
-staging/ would be a good long term home. it's content should not need 
-backporting and is more likely to have style issues.
-
-Tom
-
+On Fri Mar 04 2022, Divya Koppera wrote:
+> Add support for 1588 in LAN8814 phy driver.
+> It supports 1-step and 2-step timestamping.
 >
-> One argument is that churn leads to difficulty in backporting
-> fixes to older 'stable' versions.
->
-> I think the churn argument is overstated.
->
->
+> Co-developed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+> ---
+>  drivers/net/phy/micrel.c | 1088 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 1066 insertions(+), 22 deletions(-)
 
+[snip]
+
+> +static bool is_sync(struct sk_buff *skb, int type)
+> +{
+> +	struct ptp_header *hdr;
+> +
+> +	hdr = ptp_parse_header(skb, type);
+> +	if (!hdr)
+> +		return false;
+> +
+> +	return ((ptp_get_msgtype(hdr, type) & 0xf) == 0);
+
+The '& 0xf' is already performed by ptp_get_msgtype() and you can use '==
+PTP_MSGTYPE_SYNC' instead of 0.
+
+Second, this seems like the second driver to use is_sync(). The other
+one is dp83640. Richard, should it be moved to ptp classify?
+
+Thanks,
+Kurt
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmIiGCATHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgkafD/9Amt6hCJYn08slvDgpUI1XdQ3cmggH
+t9PslPZSCutHidicIoDgLtEI1AtQAVexZN181eHLF6SjRDoNA0hgQQCMR4b/TkWH
+vYWUXcoabIxeG0cnf/hAlfgdceMF7d5QdJxHIIBu09KXlDojqp1pAFOy7yxODM+g
+hcuB9WsBzRiPE4QZbPENXd3XoGHsECfNb1owUPIUS47DJPUwsfPwyoJjc9bIUKz7
+0W5WYdV97GbU+omp8Pt8NCT100FfIFN0cCJ/VN7ra5KI9olXGWQA8FvnUQgQmdZF
+whskULc2aNxb2g+4c09aD/Ykpuiy7YvwG1tSAFqbVhzJV0A4bT7tkZkz042E81ik
+GbT+UpGGXReQzFt1jb887CMR0JHYw4A3GyZVx7l7pDoYvx99BMUUIF1Bz89x4Lnj
+vIcQaK01qVFpfwnY7y/QrFEzO0E+3xbIDrVBu0HgdpUOvL4rL3VhDA3E3qVN5WpS
+yOjnWiP36OtXdDgpXLM9VdqbYo7vzEhikeFBkJIbL3dlL5iFtCMip41/5YWYFOGh
+ObWfJ5cO5VfXcpcxag24s0zEG1lK83UfO64YNV90DxbbTbR19EzN702qCmj2AyMv
+VDbQw71WrX3OpAIslfbaATPeDvY3x8ZECmCvryiRpZb7c7YZ7spWJFqeEZnoayv4
+OG+rQebpHO/Flg==
+=Uwq4
+-----END PGP SIGNATURE-----
+--=-=-=--

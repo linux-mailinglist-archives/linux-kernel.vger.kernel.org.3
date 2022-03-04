@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E914CD80D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DEB4CD810
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240417AbiCDPiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S240451AbiCDPia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236785AbiCDPiS (ORCPT
+        with ESMTP id S240458AbiCDPi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:38:18 -0500
-Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.143.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C832821A1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:37:29 -0800 (PST)
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id EA73022D0D7
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 09:37:28 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id Q9zknZmGWXvvJQ9zkn3bvR; Fri, 04 Mar 2022 09:37:28 -0600
-X-Authority-Reason: nr=8
-Received: from host-82-63-1-3.business.telecomitalia.it ([82.63.1.3]:40142 helo=[10.0.0.45])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1nQ9zk-001CZJ-0l; Fri, 04 Mar 2022 09:37:28 -0600
-Message-ID: <bc048c18-0ba7-1cb9-90a0-0bc049997c23@kernel.org>
-Date:   Fri, 4 Mar 2022 16:37:24 +0100
+        Fri, 4 Mar 2022 10:38:26 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1ED62E6;
+        Fri,  4 Mar 2022 07:37:36 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id p12-20020a05683019cc00b005af1442c9e9so7712751otp.13;
+        Fri, 04 Mar 2022 07:37:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r+7LdT2y9uXyeXQDCwlxps28MTYEq5fDPijsqcJwyto=;
+        b=FE7JCxVUXpUZGI2xsiKBFkyUXyMiyE/EmCcOhFEBItYSKcPW2W9HoXVhld2PejJQ0i
+         Id03mnbzFGOpcq14261opqMf+97M4JenpUpRw2iMdSZ0w9qN/fdlWQ4C2nnT72xWuxRs
+         zu5BuxMC8BMY102yG1dSoo3HUsV2nbejtwz6XkGM/qeTEW30AFEFOp4CDDId7Ftj0okP
+         3b/tIDbHg24xzBWbzCI6ToW7XaBOV7sy3Mojf4nIF0ccGhaIzqbIxYP/DUYDyr+cZ5MG
+         Ka7e3FLcIP2NZ+20C/q1eqJIb0tZ9a/c8hXIZLIKpTmL8SD6S3snZp2ti9Z4LdCU/gdr
+         ln8w==
+X-Gm-Message-State: AOAM531SI/3TXmjMRvZEHF0ZjRTfMXkd/yVziEHCaOakNt2cJZptyYtj
+        6xhmmErHTwHUcJ2+t6V+AQ==
+X-Google-Smtp-Source: ABdhPJyS8IcggXZIQLqNgBK43mnyO4KB0rLd++CNegRmXhAPHh2bGQ7UVv06ZazIdvDbkatuCV33kw==
+X-Received: by 2002:a05:6830:33cf:b0:5af:4018:fc2a with SMTP id q15-20020a05683033cf00b005af4018fc2amr22847666ott.161.1646408255646;
+        Fri, 04 Mar 2022 07:37:35 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056830054d00b005a3cce351a1sm2577422otb.28.2022.03.04.07.37.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 07:37:34 -0800 (PST)
+Received: (nullmailer pid 3984240 invoked by uid 1000);
+        Fri, 04 Mar 2022 15:37:33 -0000
+Date:   Fri, 4 Mar 2022 09:37:33 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     robh+dt@kernel.org, matthias.bgg@gmail.com,
+        alexandre.torgue@foss.st.com, airlied@linux.ie,
+        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
+        ck.hu@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        jitao.shi@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, p.zabel@pengutronix.de,
+        jason-jh.lin@mediatek.com, linux-kernel@vger.kernel.org,
+        chunkuang.hu@kernel.org, krzysztof.kozlowski@canonical.com,
+        devicetree@vger.kernel.org, mcoquelin.stm32@gmail.com
+Subject: Re: [PATCH 2/3] dt-bindings: display: mediatek,ovl: Fix 'iommu'
+ required property typo
+Message-ID: <YiIyPUGsH5bxapMS@robh.at.kernel.org>
+References: <20220304095458.12409-1-angelogioacchino.delregno@collabora.com>
+ <20220304095458.12409-3-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-Content-Language: en-US
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
-        mtosatti@redhat.com, paulmck@kernel.org, rostedt@goodmis.org,
-        Juri Lelli <juri.lelli@redhat.com>
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
- <78d798aa-388c-70bc-4227-985ba76c1d7e@kernel.org>
- <b5e1f0d14a48c0815863af623cedbdc8c1bc255f.camel@redhat.com>
- <abb789c3-0d1a-28e9-3b8d-e4a68e3f57f5@kernel.org>
- <2b47679c6248a0d113b556ed6118e8ed72c74b29.camel@redhat.com>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <2b47679c6248a0d113b556ed6118e8ed72c74b29.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 82.63.1.3
-X-Source-L: No
-X-Exim-ID: 1nQ9zk-001CZJ-0l
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-82-63-1-3.business.telecomitalia.it ([10.0.0.45]) [82.63.1.3]:40142
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 5
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304095458.12409-3-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,20 +72,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 16:28, Nicolas Saenz Julienne wrote:
-> Some comments:
->  - You're not exiting/entering EQS on IRQ/NMI entry/exit. See
->    irqentry_{enter,exit}() and irqentry_nmi_{enter,exit}().
-
-hummm, right!
-
->  - See this series[1], if we ever pursue this approach, it's important we got
->    through context tracking, instead of poking at RCU directly.
-
-I had a test patch with context_tracking as well... entering and leaving using
-it. Lemme find it.... but it basically works in the same way as for RCU (or
-pretend to work).
-
+On Fri, 04 Mar 2022 10:54:57 +0100, AngeloGioacchino Del Regno wrote:
+> The property is called 'iommus' and not 'iommu'. Fix this typo.
 > 
-> [1] https://lore.kernel.org/lkml/20220302154810.42308-1-frederic@kernel.org/T/#t
+> Fixes: 4ed545e7d100 ("dt-bindings: display: mediatek: disp: split each block to individual yaml")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../devicetree/bindings/display/mediatek/mediatek,ovl.yaml      | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
+Acked-by: Rob Herring <robh@kernel.org>

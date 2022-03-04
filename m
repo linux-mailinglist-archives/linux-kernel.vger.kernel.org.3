@@ -2,48 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015BC4CD54D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD354CD550
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbiCDNit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:38:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S236217AbiCDNkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbiCDNip (ORCPT
+        with ESMTP id S232034AbiCDNkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:38:45 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55CD663BEF;
-        Fri,  4 Mar 2022 05:37:56 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADEDD1396;
-        Fri,  4 Mar 2022 05:37:55 -0800 (PST)
-Received: from [10.57.39.47] (unknown [10.57.39.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA9903F70D;
-        Fri,  4 Mar 2022 05:37:52 -0800 (PST)
-Message-ID: <cd14d9f2-5bd5-ed45-8e49-42e6d5e69a38@arm.com>
-Date:   Fri, 4 Mar 2022 13:37:47 +0000
+        Fri, 4 Mar 2022 08:40:11 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CA710EC4A;
+        Fri,  4 Mar 2022 05:39:23 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id d64so3459187vsd.12;
+        Fri, 04 Mar 2022 05:39:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4cvMl/4qYoB0J9ZtKfUyo3O1j1h4wuQkE/ll5CQ0EvE=;
+        b=BOf+p0bXU0//OteVvJrqjfh2RxAMmJA0rI4mRyPA1+kD9F9k8jQUQKx9UUVW4JcAn0
+         R+u5HF9s+ires93EjvMO0Pxu2gO29z5cyOkS9RH69rN9sM7V7ndD0oBV7jQJaxKD79qk
+         vht7crtzrG+E20IUp79ds32p22VqMC/JSjiZj9U95mvGXdENjqYRxoytgXKQj9o68r0p
+         CeVfwkZ+svIlIELuLKPyG7LcqOdY+k7xJWPfJXF7QaWZF4WEl2T7zUtEa5fFDYkuI05O
+         SorVG79DepqQgC7qfq0LRF3X6NqSZGQVk9HS1Zizx2gd2NlYnkJIAjHtV1rYqihNfPLx
+         rvUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4cvMl/4qYoB0J9ZtKfUyo3O1j1h4wuQkE/ll5CQ0EvE=;
+        b=SEAwi52O3xWc3XcHErgseJIRdWUbhkyLqYRFmuF4g+ZVdxO6v60XVxf7uYNI3tGc4j
+         efGVUJCtQayuUUETxTglzF0lCR/BmzAT7v5/vzKFV96Jyi8MfHEnbjQLWvW+4fq0pCbt
+         0GVPP7T5NoY7ZHbrw1Ng7PLf7G6ZnoC3yGv9YCGyCgfyPokfdu0HAxIvXB7DSPq5ULVb
+         2dysHm94a2znhyxWxcanaJKvP8XZenhLTx2KnAaaOIce+q9blvh2CKgoQBvMS9g/SFDz
+         QKSlRQQuRurD7uNfYDIgb5Y8Wli4LBRenh1dttn3Xnw4UBycx1GGBgzOukD4KlBjv7lH
+         F3FQ==
+X-Gm-Message-State: AOAM532Jb/vwGaXvWJdT2Qlw+ghO9+5lbFYbkTyaJ/MdsyHnI3f3P8gQ
+        wmlZDa3TLxE6f15fcIdqSRyb+zWzX6xYUpVxaV634GavUA==
+X-Google-Smtp-Source: ABdhPJylHP1GmLWtcK6ibGHJi6U7Q9Nprg9MNaWs6QPNI9/RlRS8QJn5WasxlxNnf9ODDDxRXY2eEnX+GKY0yoC59SA=
+X-Received: by 2002:a05:6102:6d4:b0:320:7cd0:a5e3 with SMTP id
+ m20-20020a05610206d400b003207cd0a5e3mr1575595vsg.84.1646401162809; Fri, 04
+ Mar 2022 05:39:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] mmc: host: dw-mmc-rockchip: fix handling invalid clock
- rates
-Content-Language: en-GB
-To:     Peter Geis <pgwipeout@gmail.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Addy Ke <addy.ke@rock-chips.com>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220303015151.1711860-1-pgwipeout@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220303015151.1711860-1-pgwipeout@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220303083141.8742-1-warp5tw@gmail.com> <20220303083141.8742-4-warp5tw@gmail.com>
+ <YiCYshb354S9T5ev@smile.fi.intel.com>
+In-Reply-To: <YiCYshb354S9T5ev@smile.fi.intel.com>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Fri, 4 Mar 2022 21:39:11 +0800
+Message-ID: <CACD3sJZQJFvgNT2da+1Zx0UugoMRWNw4np3Ub3PTKejjS7X0Sg@mail.gmail.com>
+Subject: Re: [PATCH v3 03/11] i2c: npcm: Fix client address calculation
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,113 +77,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-03 01:51, Peter Geis wrote:
-> The Rockchip ciu clock cannot be set as low as the dw-mmc hardware
-> supports. This leads to a situation during card initialization where the
-> ciu clock is set lower than the clock driver can support. The
-> dw-mmc-rockchip driver spews errors when this happens.
-> For normal operation this only happens a few times during boot, but when
-> cd-broken is enabled (in cases such as the SoQuartz module) this fires
-> multiple times each poll cycle.
-> 
-> Fix this by testing the minimum frequency the clock driver can support
-> that is within the mmc specification, then divide that by the internal
-> clock divider. Set the f_min frequency to this value, or if it fails,
-> set f_min to the downstream driver's default.
-> 
-> Fixes: f629ba2c04c9 ("mmc: dw_mmc: add support for RK3288")
-> 
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> ---
->   drivers/mmc/host/dw_mmc-rockchip.c | 31 ++++++++++++++++++++++++++----
->   1 file changed, 27 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
-> index 95d0ec0f5f3a..c198590cd74a 100644
-> --- a/drivers/mmc/host/dw_mmc-rockchip.c
-> +++ b/drivers/mmc/host/dw_mmc-rockchip.c
-> @@ -15,7 +15,9 @@
->   #include "dw_mmc.h"
->   #include "dw_mmc-pltfm.h"
->   
-> -#define RK3288_CLKGEN_DIV       2
-> +#define RK3288_CLKGEN_DIV	2
-> +#define RK3288_MIN_INIT_FREQ	375000
-> +#define MMC_MAX_INIT_FREQ	400000
->   
->   struct dw_mci_rockchip_priv_data {
->   	struct clk		*drv_clk;
-> @@ -27,6 +29,7 @@ struct dw_mci_rockchip_priv_data {
->   static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
->   {
->   	struct dw_mci_rockchip_priv_data *priv = host->priv;
-> +	struct mmc_host *mmc = mmc_from_priv(host);
->   	int ret;
->   	unsigned int cclkin;
->   	u32 bus_hz;
-> @@ -34,6 +37,10 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
->   	if (ios->clock == 0)
->   		return;
->   
-> +	/* the clock will fail if below the f_min rate */
-> +	if (ios->clock < mmc->f_min)
-> +		ios->clock = mmc->f_min;
-> +
->   	/*
->   	 * cclkin: source clock of mmc controller
->   	 * bus_hz: card interface clock generated by CLKGEN
-> @@ -51,7 +58,7 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
->   
->   	ret = clk_set_rate(host->ciu_clk, cclkin);
->   	if (ret)
-> -		dev_warn(host->dev, "failed to set rate %uHz\n", ios->clock);
-> +		dev_warn(host->dev, "failed to set rate %uHz err: %d\n", cclkin, ret);
->   
->   	bus_hz = clk_get_rate(host->ciu_clk) / RK3288_CLKGEN_DIV;
->   	if (bus_hz != host->bus_hz) {
-> @@ -290,13 +297,29 @@ static int dw_mci_rk3288_parse_dt(struct dw_mci *host)
->   
->   static int dw_mci_rockchip_init(struct dw_mci *host)
->   {
-> +	struct mmc_host *mmc = mmc_from_priv(host);
+Hi Andy:
 
-Hang on, "host" here is a struct dw_mci allocated directly by 
-dw_mci_pltfm_register(), not as private data via mmc_alloc_host(), so 
-surely this is bogus?
+Thank you for your comment and it'll be addressed.
 
-If I've followed things through correctly, I think it's host->slot->mmc 
-that we need to propagate a non-default f_min to, except that that 
-hasn't been allocated yet at this point.
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> =E6=96=BC 2022=E5=B9=B4=
+3=E6=9C=883=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=886:31=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> On Thu, Mar 03, 2022 at 04:31:33PM +0800, Tyrone Ting wrote:
+> > From: Tali Perry <tali.perry1@gmail.com>
+> >
+> > Fix i2c client address by left-shifting 1 bit before
+> > applying it to the data register.
+>
+> ...
+>
+> > -     bus->dest_addr =3D slave_addr;
+> > +     bus->dest_addr =3D slave_addr << 1;
+>
+> 1. Why this is not using i2c_8bit_addr_from_msg() helper?
+> 2. This is duplication of what npcm_i2c_master_start_xmit() does.
+>
+> Taking 2 into account, what is this exactly fixing?
+> Sounds like a red herring.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-Having multiple different types of "host", "slot" and "mmc" variables 
-certainly does no favours to making sense of this stuff :(
-
-Robin.
-
-> +	int ret;
-> +
->   	/* It is slot 8 on Rockchip SoCs */
->   	host->sdio_id0 = 8;
->   
-> -	if (of_device_is_compatible(host->dev->of_node,
-> -				    "rockchip,rk3288-dw-mshc"))
-> +	if (of_device_is_compatible(host->dev->of_node, "rockchip,rk3288-dw-mshc")) {
->   		host->bus_hz /= RK3288_CLKGEN_DIV;
->   
-> +		/* clock driver will fail if the clock is less than the lowest source clock
-> +		 * divided by the internal clock divider. Test for the lowest available
-> +		 * clock and set the f_min freq to clock / clock divider. If we fail, set
-> +		 * it to the downstream hardcoded value.
-> +		 */
-> +		ret = clk_round_rate(host->ciu_clk, MMC_MAX_INIT_FREQ * RK3288_CLKGEN_DIV);
-> +		if (ret < 0) {
-> +			dev_warn(host->dev, "mmc safe rate failed: %d\n", ret);
-> +			mmc->f_min = RK3288_MIN_INIT_FREQ;
-> +		} else {
-> +			mmc->f_min = ret / RK3288_CLKGEN_DIV;
-> +		}
-> +	}
-> +
->   	return 0;
->   }
->   
+Best regards,
+Tyrone

@@ -2,350 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4979B4CDC49
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBD94CDC4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240927AbiCDSWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        id S241546AbiCDSWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiCDSWN (ORCPT
+        with ESMTP id S241596AbiCDSWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:22:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2C81D3045;
-        Fri,  4 Mar 2022 10:21:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C56BB82A88;
-        Fri,  4 Mar 2022 18:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D9BC340E9;
-        Fri,  4 Mar 2022 18:21:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646418081;
-        bh=ijAnT92eJIWDRpJp0pSBCthRFzRenCZ3oVxEs3ekiKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eJ+8W3M/Fd3dxHBMcadLocUW48x7wlVV3T950BQXjmcgY5tgOPNMVt8kdZ1dQSrAB
-         hSr66zlEH6giXWJvtV6eixvm1ADH1hplwb3t3hegm7uToNSax9wicI9bMEnhFNIcuv
-         CT5YoYXa6T9TA55foie+L9Vi/LsMGqOl6bQ6Tjdk=
-Date:   Fri, 4 Mar 2022 19:21:09 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 02/28] bpf: introduce hid program type
-Message-ID: <YiJYlfIywoG5yIMd@kroah.com>
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-3-benjamin.tissoires@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304172852.274126-3-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 4 Mar 2022 13:22:47 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4501D3050
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:21:55 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id z13-20020a1709027e8d00b001518de7a06cso5088753pla.14
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:21:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=ahaL2dP2bZkoJj+gEDVYwPqi0qSBfQNaQNWk62u5wf8=;
+        b=b+yFJAiJz7erSr7C+4U3ydT9F225o171aYSFJp68TrMDQmlMfEVvc5ep+RUyOXG7Q3
+         IdP9lNYl/YExLLAwJoDiE9GuK0DteSUre/kVPsUfkFYs2kU2enZi8wiwrasYhcCj3xpw
+         +0FYGWXmH4W+D/BejaEk7P/f4Stf2i4jptaqM5GznytPo3BT9nSvkoslyegnTznviw6M
+         juy/zOUl4T/z0tP7bpiEl6hjkYDd0bGhnlUlizRSexzyWmA1mQQNcR29rcgZ5IZWTlkQ
+         FrC57Yp1jwIVz91bZTOAx4WOImf18V7fmbpGrWSVKH8/teXoMuQaoZuBn8fvAUTU7os3
+         ix3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=ahaL2dP2bZkoJj+gEDVYwPqi0qSBfQNaQNWk62u5wf8=;
+        b=t1Q6H9ppt5zsZ9dphpXveI74F9TICh54Rad1oFVwai97bDU0SWuYqsH9T2eOtmRJ5p
+         PrGdGgmHYc6elw/DkPKokGkEM4l74mvFAsRzO628pbqHK6Zr/1GeJMOvBtfVLPsHk1eF
+         KqvNf1RkDLhcAj4/ZvH5v+0PX3TeWqf+ES7Jhi9oaSDqnSQfgoHHLuTRpsz87JhpzhHa
+         sXTZCDU+bpuV7wtQcCqUj8wxGxIq52ZQCeTC5/nW44i9WU3DRbVU1LyhPtq1dMzZms04
+         5nCprgbgKnHw0PcZMLAjy+ss6/NS+m0oAWXOranKze7fmlCOVmlPng6kCH3JyQdGd9Rr
+         +ukg==
+X-Gm-Message-State: AOAM5300cY+jtpYidEN3jTBBr12Ce//ZX79d0h3139p9uuBKxXkFNvTT
+        N+TIzHTB9XmqHwLFAxjdv80p6cwSkStKEA==
+X-Google-Smtp-Source: ABdhPJwqnJwT9gWCLObcQN7lR5QEjB7TDTasHOIJTK3ya7Eg2wdgryqq4tNXTOTmydZJCRQYhl67XRG+yPEuqQ==
+X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
+ (user=wonchung job=sendgmr) by 2002:a17:90a:4411:b0:1bc:99b0:acad with SMTP
+ id s17-20020a17090a441100b001bc99b0acadmr12127129pjg.25.1646418115256; Fri,
+ 04 Mar 2022 10:21:55 -0800 (PST)
+Date:   Fri,  4 Mar 2022 18:21:52 +0000
+Message-Id: <20220304182152.2038961-1-wonchung@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH v2] driver core: Add sysfs support for physical location of a device
+From:   Won Chung <wonchung@google.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Won Chung <wonchung@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 06:28:26PM +0100, Benjamin Tissoires wrote:
-> HID is a protocol that could benefit from using BPF too.
-> 
-> This patch implements a net-like use of BPF capability for HID.
-> Any incoming report coming from the device can be injected into a series
-> of BPF programs that can modify it or even discard it by setting the
-> size in the context to 0.
-> 
-> The kernel/bpf implementation is based on net-namespace.c, with only
-> the bpf_link part kept, there is no real points in keeping the
-> bpf_prog_{attach|detach} API.
-> 
-> The implementation here is only focusing on the bpf changes. The HID
-> changes that hooks onto this are coming in a separate patch.
-> 
-> Given that HID can be compiled in as a module, and the functions that
-> kernel/bpf/hid.c needs to call in hid.ko are exported in struct hid_hooks.
-> 
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> 
-> ---
-> 
-> changes in v2:
-> - split the series by bpf/libbpf/hid/selftests and samples
-> - unsigned long -> __u16 in uapi/linux/bpf_hid.h
-> - change the bpf_ctx to be of variable size, with a min of 1024 bytes
-> - make this 1 kB available directly from bpf program, the rest will
->   need a helper
-> - add some more doc comments in uapi
-> ---
->  include/linux/bpf-hid.h        | 108 ++++++++
->  include/linux/bpf_types.h      |   4 +
->  include/linux/hid.h            |   5 +
->  include/uapi/linux/bpf.h       |   7 +
->  include/uapi/linux/bpf_hid.h   |  39 +++
->  kernel/bpf/Makefile            |   3 +
->  kernel/bpf/hid.c               | 437 +++++++++++++++++++++++++++++++++
->  kernel/bpf/syscall.c           |   8 +
->  tools/include/uapi/linux/bpf.h |   7 +
->  9 files changed, 618 insertions(+)
->  create mode 100644 include/linux/bpf-hid.h
->  create mode 100644 include/uapi/linux/bpf_hid.h
->  create mode 100644 kernel/bpf/hid.c
-> 
-> diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
-> new file mode 100644
-> index 000000000000..3cda78051b5f
-> --- /dev/null
-> +++ b/include/linux/bpf-hid.h
-> @@ -0,0 +1,108 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _BPF_HID_H
-> +#define _BPF_HID_H
-> +
-> +#include <linux/mutex.h>
-> +#include <uapi/linux/bpf.h>
-> +#include <uapi/linux/bpf_hid.h>
-> +#include <linux/list.h>
-> +#include <linux/slab.h>
-> +
-> +struct bpf_prog;
-> +struct bpf_prog_array;
-> +struct hid_device;
-> +
-> +enum bpf_hid_attach_type {
-> +	BPF_HID_ATTACH_INVALID = -1,
-> +	BPF_HID_ATTACH_DEVICE_EVENT = 0,
-> +	MAX_BPF_HID_ATTACH_TYPE
-> +};
-> +
-> +struct bpf_hid {
-> +	struct hid_bpf_ctx *ctx;
-> +
-> +	/* Array of programs to run compiled from links */
-> +	struct bpf_prog_array __rcu *run_array[MAX_BPF_HID_ATTACH_TYPE];
-> +	struct list_head links[MAX_BPF_HID_ATTACH_TYPE];
-> +};
-> +
-> +static inline enum bpf_hid_attach_type
-> +to_bpf_hid_attach_type(enum bpf_attach_type attach_type)
-> +{
-> +	switch (attach_type) {
-> +	case BPF_HID_DEVICE_EVENT:
-> +		return BPF_HID_ATTACH_DEVICE_EVENT;
-> +	default:
-> +		return BPF_HID_ATTACH_INVALID;
-> +	}
-> +}
-> +
-> +static inline struct hid_bpf_ctx *bpf_hid_allocate_ctx(struct hid_device *hdev,
-> +						       size_t data_size)
-> +{
-> +	struct hid_bpf_ctx *ctx;
-> +
-> +	/* ensure data_size is between min and max */
-> +	data_size = clamp_val(data_size,
-> +			      HID_BPF_MIN_BUFFER_SIZE,
-> +			      HID_BPF_MAX_BUFFER_SIZE);
+When ACPI table includes _PLD fields for a device, create a new
+directory (physical_location) in sysfs to share _PLD fields.
 
-Do you want to return an error if the data size is not within the range?
-Otherwise people will just start to use crazy values and you will always
-be limiting them?
+Currently without PLD information, when there are multiple of same
+devices, it is hard to distinguish which device corresponds to which
+physical device at which location. For example, when there are two Type
+C connectors, it is hard to find out which connector corresponds to the
+Type C port on the left panel versus the Type C port on the right panel.
+With PLD information provided, we can determine which specific device at
+which location is doing what.
 
-> +
-> +	ctx = kzalloc(sizeof(*ctx) + data_size, GFP_KERNEL);
-> +	if (!ctx)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ctx->hdev = hdev;
-> +	ctx->allocated_size = data_size;
-> +
-> +	return ctx;
-> +}
+_PLD output includes much more fields, but only generic fields are added
+and exposed to sysfs, so that non-ACPI devices can also support it in
+the future. The minimal generic fields needed for locating a device are
+the following.
+- panel
+- vertical_position
+- horizontal_position
+- dock
+- lid
 
-And why is this an inline function?  Why not put it in a .c file?
+Signed-off-by: Won Chung <wonchung@google.com>
+---
+ .../testing/sysfs-devices-physical_location   |  42 ++++++
+ drivers/base/core.c                           | 139 ++++++++++++++++++
+ include/linux/device.h                        |  73 +++++++++
+ 3 files changed, 254 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_locati=
+on
 
-> +
-> +union bpf_attr;
-> +struct bpf_prog;
-> +
-> +#if IS_ENABLED(CONFIG_HID)
-> +int bpf_hid_prog_query(const union bpf_attr *attr,
-> +		       union bpf_attr __user *uattr);
-> +int bpf_hid_link_create(const union bpf_attr *attr,
-> +			struct bpf_prog *prog);
-> +#else
-> +static inline int bpf_hid_prog_query(const union bpf_attr *attr,
-> +				     union bpf_attr __user *uattr)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline int bpf_hid_link_create(const union bpf_attr *attr,
-> +				      struct bpf_prog *prog)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +#endif
-> +
-> +static inline bool bpf_hid_link_empty(struct bpf_hid *bpf,
-> +				      enum bpf_hid_attach_type type)
-> +{
-> +	return list_empty(&bpf->links[type]);
-> +}
-> +
-> +struct bpf_hid_hooks {
-> +	struct hid_device *(*hdev_from_fd)(int fd);
-> +	int (*link_attach)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> +	void (*array_detached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> +};
-> +
-> +#ifdef CONFIG_BPF
-> +int bpf_hid_init(struct hid_device *hdev);
-> +void bpf_hid_exit(struct hid_device *hdev);
-> +void bpf_hid_set_hooks(struct bpf_hid_hooks *hooks);
-> +#else
-> +static inline int bpf_hid_init(struct hid_device *hdev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline void bpf_hid_exit(struct hid_device *hdev) {}
-> +static inline void bpf_hid_set_hooks(struct bpf_hid_hooks *hooks) {}
-> +#endif
-> +
-> +#endif /* _BPF_HID_H */
-> diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-> index 48a91c51c015..1509862aacc4 100644
-> --- a/include/linux/bpf_types.h
-> +++ b/include/linux/bpf_types.h
-> @@ -76,6 +76,10 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_EXT, bpf_extension,
->  BPF_PROG_TYPE(BPF_PROG_TYPE_LSM, lsm,
->  	       void *, void *)
->  #endif /* CONFIG_BPF_LSM */
-> +#if IS_ENABLED(CONFIG_HID)
-> +BPF_PROG_TYPE(BPF_PROG_TYPE_HID, hid,
-> +	      __u32, u32)
-
-Why the mix of __u32 and u32 here?
-
-> +#endif
->  #endif
->  BPF_PROG_TYPE(BPF_PROG_TYPE_SYSCALL, bpf_syscall,
->  	      void *, void *)
-> diff --git a/include/linux/hid.h b/include/linux/hid.h
-> index 7487b0586fe6..56f6f4ad45a7 100644
-> --- a/include/linux/hid.h
-> +++ b/include/linux/hid.h
-> @@ -15,6 +15,7 @@
->  
->  
->  #include <linux/bitops.h>
-> +#include <linux/bpf-hid.h>
->  #include <linux/types.h>
->  #include <linux/slab.h>
->  #include <linux/list.h>
-> @@ -639,6 +640,10 @@ struct hid_device {							/* device report descriptor */
->  	struct list_head debug_list;
->  	spinlock_t  debug_list_lock;
->  	wait_queue_head_t debug_wait;
-> +
-> +#ifdef CONFIG_BPF
-> +	struct bpf_hid bpf;
-> +#endif
->  };
->  
->  #define to_hid_device(pdev) \
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index afe3d0d7f5f2..5978b92cacd3 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -952,6 +952,7 @@ enum bpf_prog_type {
->  	BPF_PROG_TYPE_LSM,
->  	BPF_PROG_TYPE_SK_LOOKUP,
->  	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
-> +	BPF_PROG_TYPE_HID,
->  };
->  
->  enum bpf_attach_type {
-> @@ -997,6 +998,7 @@ enum bpf_attach_type {
->  	BPF_SK_REUSEPORT_SELECT,
->  	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
->  	BPF_PERF_EVENT,
-> +	BPF_HID_DEVICE_EVENT,
->  	__MAX_BPF_ATTACH_TYPE
->  };
->  
-> @@ -1011,6 +1013,7 @@ enum bpf_link_type {
->  	BPF_LINK_TYPE_NETNS = 5,
->  	BPF_LINK_TYPE_XDP = 6,
->  	BPF_LINK_TYPE_PERF_EVENT = 7,
-> +	BPF_LINK_TYPE_HID = 8,
->  
->  	MAX_BPF_LINK_TYPE,
->  };
-> @@ -5870,6 +5873,10 @@ struct bpf_link_info {
->  		struct {
->  			__u32 ifindex;
->  		} xdp;
-> +		struct  {
-> +			__s32 hidraw_ino;
-
-"ino"?  We have lots of letters to spell words out :)
-
-> +			__u32 attach_type;
-> +		} hid;
->  	};
->  } __attribute__((aligned(8)));
->  
-> diff --git a/include/uapi/linux/bpf_hid.h b/include/uapi/linux/bpf_hid.h
-> new file mode 100644
-> index 000000000000..975ca5bd526f
-> --- /dev/null
-> +++ b/include/uapi/linux/bpf_hid.h
-> @@ -0,0 +1,39 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
-> +
-> +/*
-> + *  HID BPF public headers
-> + *
-> + *  Copyright (c) 2021 Benjamin Tissoires
-
-Did you forget the copyright line on the other .h file above?
-
-> + */
-> +
-> +#ifndef _UAPI__LINUX_BPF_HID_H__
-> +#define _UAPI__LINUX_BPF_HID_H__
-> +
-> +#include <linux/types.h>
-> +
-> +/*
-> + * The first 1024 bytes are available directly in the bpf programs.
-> + * To access the rest of the data (if allocated_size is bigger
-> + * than 1024, you need to use bpf_hid_ helpers.
-> + */
-> +#define HID_BPF_MIN_BUFFER_SIZE		1024
-> +#define HID_BPF_MAX_BUFFER_SIZE		16384		/* in sync with HID_MAX_BUFFER_SIZE */
-
-Can't you just use HID_MAX_BUFFER_SIZE?
-
-Anyway, all minor stuff, looks good!
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/Do=
+cumentation/ABI/testing/sysfs-devices-physical_location
+new file mode 100644
+index 000000000000..1b2c6edb791b
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-devices-physical_location
+@@ -0,0 +1,42 @@
++What:		/sys/devices/.../physical_location
++Date:		March 2022
++Contact:	Won Chung <wonchung@google.com>
++Description:
++		This directory contains information on physical location of
++		the device connection point with respect to the system's
++		housing.
++
++What:           /sys/devices/.../physical_location/panel
++Date:           March 2022
++Contact:        Won Chung <wonchung@google.com>
++Description:
++		Describes which panel surface of the system=E2=80=99s housing the
++		device connection point resides on.
++
++What:           /sys/devices/.../physical_location/vertical_position
++Date:           March 2022
++Contact:        Won Chung <wonchung@google.com>
++Description:
++		Describes vertical position of the device connection point on
++		the panel surface.
++
++What:           /sys/devices/.../physical_location/horizontal_position
++Date:           March 2022
++Contact:        Won Chung <wonchung@google.com>
++Description:
++		Describes horizontal position of the device connection point on
++		the panel surface.
++
++What:           /sys/devices/.../physical_location/dock
++Date:           March 2022
++Contact:        Won Chung <wonchung@google.com>
++Description:
++		"Yes" if the device connection point resides in a docking
++		station or a port replicator. "No" otherwise.
++
++What:           /sys/devices/.../physical_location/lid
++Date:           March 2022
++Contact:        Won Chung <wonchung@google.com>
++Description:
++		"Yes" if the device connection point resides on the lid of
++		laptop system. "No" otherwise.
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 7bb957b11861..96147e5951f4 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2466,6 +2466,136 @@ static ssize_t removable_show(struct device *dev, s=
+truct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(removable);
+=20
++static int dev_add_physical_location(struct device *dev)
++{
++#if defined(CONFIG_ACPI)
++	struct acpi_pld_info *pld;
++	acpi_status status;
++
++	if (!has_acpi_companion(dev))
++		return 0;
++
++	status =3D acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
++	if (ACPI_FAILURE(status) || !pld)
++		return 0;
++
++	dev->location =3D (struct device_location) {
++		.panel =3D pld->panel,
++		.vertical_position =3D pld->vertical_position,
++		.horizontal_position =3D pld->horizontal_position,
++		.dock =3D pld->dock,
++		.lid =3D pld->lid,
++	};
++
++	return 1;
++#else
++	return 0;
++#endif
++}
++
++static ssize_t panel_show(struct device *dev, struct device_attribute *att=
+r,
++	char *buf)
++{
++	const char *panel;
++
++	switch (dev->location.panel) {
++	case DEVICE_PANEL_TOP:
++		panel =3D "top";
++		break;
++	case DEVICE_PANEL_BOTTOM:
++		panel =3D "bottom";
++		break;
++	case DEVICE_PANEL_LEFT:
++		panel =3D "left";
++		break;
++	case DEVICE_PANEL_RIGHT:
++		panel =3D "right";
++		break;
++	case DEVICE_PANEL_FRONT:
++		panel =3D "front";
++		break;
++	case DEVICE_PANEL_BACK:
++		panel =3D "back";
++		break;
++	default:
++		panel =3D "unknown";
++	}
++	return sprintf(buf, "%s\n", panel);
++}
++static DEVICE_ATTR_RO(panel);
++
++static ssize_t vertical_position_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++{
++	const char *vertical_position;
++
++	switch (dev->location.vertical_position) {
++	case DEVICE_VERT_POS_UPPER:
++		vertical_position =3D "upper";
++		break;
++	case DEVICE_VERT_POS_CENTER:
++		vertical_position =3D "center";
++		break;
++	case DEVICE_VERT_POS_LOWER:
++		vertical_position =3D "lower";
++		break;
++	default:
++		vertical_position =3D "unknown";
++	}
++	return sprintf(buf, "%s\n", vertical_position);
++}
++static DEVICE_ATTR_RO(vertical_position);
++
++static ssize_t horizontal_position_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++{
++	const char *horizontal_position;
++
++	switch (dev->location.horizontal_position) {
++	case DEVICE_HORI_POS_LEFT:
++		horizontal_position =3D "left";
++		break;
++	case DEVICE_HORI_POS_CENTER:
++		horizontal_position =3D "center";
++		break;
++	case DEVICE_HORI_POS_RIGHT:
++		horizontal_position =3D "right";
++		break;
++	default:
++		horizontal_position =3D "unknown";
++	}
++	return sprintf(buf, "%s\n", horizontal_position);
++}
++static DEVICE_ATTR_RO(horizontal_position);
++
++static ssize_t dock_show(struct device *dev, struct device_attribute *attr=
+,
++	char *buf)
++{
++	return sprintf(buf, "%s\n", dev->location.dock ? "yes" : "no");
++}
++static DEVICE_ATTR_RO(dock);
++
++static ssize_t lid_show(struct device *dev, struct device_attribute *attr,
++	char *buf)
++{
++	return sprintf(buf, "%s\n", dev->location.lid ? "yes" : "no");
++}
++static DEVICE_ATTR_RO(lid);
++
++static struct attribute *dev_attr_physical_location[] =3D {
++	&dev_attr_panel.attr,
++	&dev_attr_vertical_position.attr,
++	&dev_attr_horizontal_position.attr,
++	&dev_attr_dock.attr,
++	&dev_attr_lid.attr,
++	NULL,
++};
++
++static const struct attribute_group dev_attr_physical_location_group =3D {
++	.name =3D "physical_location",
++	.attrs =3D dev_attr_physical_location,
++};
++
+ int device_add_groups(struct device *dev, const struct attribute_group **g=
+roups)
+ {
+ 	return sysfs_create_groups(&dev->kobj, groups);
+@@ -2649,8 +2779,17 @@ static int device_add_attrs(struct device *dev)
+ 			goto err_remove_dev_waiting_for_supplier;
+ 	}
+=20
++	if (dev_add_physical_location(dev)) {
++		error =3D device_add_group(dev,
++			&dev_attr_physical_location_group);
++		if (error)
++			goto err_remove_dev_physical_location;
++	}
++
+ 	return 0;
+=20
++ err_remove_dev_physical_location:
++	device_remove_group(dev, &dev_attr_physical_location_group);
+  err_remove_dev_waiting_for_supplier:
+ 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+  err_remove_dev_online:
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 93459724dcde..424be9cb735e 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -386,6 +386,75 @@ struct dev_msi_info {
+ #endif
+ };
+=20
++/**
++ * enum device_location_panel - Describes which panel surface of the syste=
+m's
++ * housing the device connection point resides on.
++ * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
++ * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
++ * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
++ * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
++ * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
++ * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
++ * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unknow=
+n.
++ */
++enum device_location_panel {
++	DEVICE_PANEL_TOP,
++	DEVICE_PANEL_BOTTOM,
++	DEVICE_PANEL_LEFT,
++	DEVICE_PANEL_RIGHT,
++	DEVICE_PANEL_FRONT,
++	DEVICE_PANEL_BACK,
++	DEVICE_PANEL_UNKNOWN,
++};
++
++/**
++ * enum device_location_vertical_position - Describes vertical position of=
+ the
++ * device connection point on the panel surface.
++ * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of pan=
+el.
++ * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of p=
+anel.
++ * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of pan=
+el.
++ */
++enum device_location_vertical_position {
++	DEVICE_VERT_POS_UPPER,
++	DEVICE_VERT_POS_CENTER,
++	DEVICE_VERT_POS_LOWER,
++};
++
++/**
++ * enum device_location_horizontal_position - Describes horizontal positio=
+n of
++ * the device connection point on the panel surface.
++ * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of panel=
+.
++ * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of p=
+anel.
++ * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of pan=
+el.
++ */
++enum device_location_horizontal_position {
++	DEVICE_HORI_POS_LEFT,
++	DEVICE_HORI_POS_CENTER,
++	DEVICE_HORI_POS_RIGHT,
++};
++
++/**
++ * struct device_location - Device data related to physical location of th=
+e
++ * device connection point.
++ * @panel: Panel surface of the system's housing that the device connectio=
+n
++ *         point resides on.
++ * @vertical_position: Vertical position of the device connection point wi=
+thin
++ *                     the panel.
++ * @horizontal_position: Horizontal position of the device connection poin=
+t
++ *                       within the panel.
++ * @dock: Set if the device connection point resides in a docking station =
+or
++ *        port replicator.
++ * @lid: Set if this device connection point resides on the lid of laptop
++ *       system.
++ */
++struct device_location {
++	enum device_location_panel panel;
++	enum device_location_vertical_position vertical_position;
++	enum device_location_horizontal_position horizontal_position;
++	bool dock;
++	bool lid;
++};
++
+ /**
+  * struct device - The basic device structure
+  * @parent:	The device's "parent" device, the device to which it is attach=
+ed.
+@@ -456,6 +525,8 @@ struct dev_msi_info {
+  * @removable:  Whether the device can be removed from the system. This
+  *              should be set by the subsystem / bus driver that discovere=
+d
+  *              the device.
++ * @location:	Describes physical location of the device connection point i=
+n
++ *		the system housing.
+  *
+  * @offline_disabled: If set, the device is permanently online.
+  * @offline:	Set after successful invocation of bus type's .offline().
+@@ -569,6 +640,8 @@ struct device {
+=20
+ 	enum device_removable	removable;
+=20
++	struct device_location	location;
++
+ 	bool			offline_disabled:1;
+ 	bool			offline:1;
+ 	bool			of_node_reused:1;
+--=20
+2.35.1.616.g0bdcbb4464-goog
 

@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D324CCF2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9E74CCF33
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238892AbiCDHkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S238922AbiCDHoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238827AbiCDHku (ORCPT
+        with ESMTP id S231557AbiCDHoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:40:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72390192E05;
-        Thu,  3 Mar 2022 23:40:03 -0800 (PST)
+        Fri, 4 Mar 2022 02:44:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2623A192E05
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:43:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06ED261DC8;
-        Fri,  4 Mar 2022 07:40:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1870C340E9;
-        Fri,  4 Mar 2022 07:40:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646379602;
-        bh=iF00+VTLj0F97lveZdVtr3jeXZU8hN5zrFZ7CZRmu44=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mTscX5e1x91/GynIboZbkqfGBogZ1mNux/d5YfpVmUL1qkdKebSGp/AMWxyzMNPLA
-         4fjtBY+xoMb8nPzO4ypqn/Df27C5+HO5GvTWTOmh4gQ3/bGyM1iCe/LhJDqQP4b/kz
-         T7M1E4eLJMYbDIjXMIclrFnE7KfFXjeXPuEZCETA=
-Date:   Fri, 4 Mar 2022 08:39:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>,
-        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
-        cpgs@samsung.com, cpgsproxy5@samsung.com
-Subject: Re: [PATCH v1 0/4] support USB offload feature
-Message-ID: <YiHCTgg5Ibv9YQvi@kroah.com>
-References: <CGME20220304062609epcas2p1b9e2720d2d7d66438e1eab92546f46cc@epcas2p1.samsung.com>
- <1027007693.21646375403236.JavaMail.epsvc@epcpadp3>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1027007693.21646375403236.JavaMail.epsvc@epcpadp3>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93FD361DD8
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:43:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00A6C340E9;
+        Fri,  4 Mar 2022 07:43:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646379809;
+        bh=60yY9HVLhK8/t2M1w3LiVuZX83vkOi/zQAXA3qcCoqc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SaNDELGtVtvBQ9An+5RKJxudNwF8tXXwOGvbthSzIVOPfbA5eu7mcxwvccKO6WQub
+         Vo+q1tFTKUkegZBg1pW3A5l+858kq6Pu77F9olHDRZmn1JmnkTFd/zFAcCcP/gIz5b
+         o0c2knFhfwfiFhyG/SOBrrG6AaxgG4IZfZEyXg1C7nqhBLxTFMiIHHuL/N6mOYC+vd
+         1/MruBvc9ts0UY9aCORcZRrWuAtt59gSZ5+cALpeoQnjDBx0MzNBL9SDvSbLvEpoV+
+         i9Npc0RJN00RTc+1tIBxNfr23k1+M8cz86TnqVGXsbKrvorNkX1+7K//Zb3FPCzwx8
+         F097+ctBUanCQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nQ2b1-00C96v-2J; Fri, 04 Mar 2022 07:43:27 +0000
+Date:   Fri, 04 Mar 2022 07:43:19 +0000
+Message-ID: <87ilsutb6w.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linu Cherian <lcherian@marvell.com>
+Cc:     <tglx@linutronix.de>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuc.decode@gmail.com>
+Subject: Re: [PATCH V2] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
+In-Reply-To: <20220304014301.2515-1-lcherian@marvell.com>
+References: <20220304014301.2515-1-lcherian@marvell.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: lcherian@marvell.com, tglx@linutronix.de, catalin.marinas@arm.com, will@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linuc.decode@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,53 +66,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 03:23:54PM +0900, Daehwan Jung wrote:
-> This patchset is for USB offload feature, which makes Co-processor to use
-> some memories of xhci. Especially it's useful for USB Audio scenario.
-> Audio stream would get shortcut because Co-processor directly write/read
-> data in xhci memories. It could get speed-up using faster memory like SRAM.
-> That's why this also gives vendors flexibilty of memory management.
-> Below pathches have been merged in AOSP kernel(android12-5.10) and I put
-> together and split into 3 patches. Plus let me add user(xhci-exynos) module 
-> to see how user could use it. 
+On Fri, 04 Mar 2022 01:43:01 +0000,
+Linu Cherian <lcherian@marvell.com> wrote:
 > 
-> To sum up, it's for providing xhci memories to Co-Processor.
-> It would cover DCBAA, Device Context, Tranfer Ring, Event Ring, ERST.
-> It needs xhci hooks and to export some xhci symbols.
+> When a IAR register read races with a GIC interrupt RELEASE event,
+> GIC-CPU interface could wrongly return a valid INTID to the CPU
+> for an interrupt that is already released(non activated) instead of 0x3ff.
 > 
-> ANDROID: usb: host: fix slab-out-of-bounds in xhci_vendor_get_ops
-> ANDROID: usb: export built-in tracepoint functions
-> ANDROID: usb: host: Use old init scheme when hook unavailable
-> ANDROID: usb: host: free the offload TR by vendor hook
-> ANDROID: usb: host: xhci: provide function prototype for xhci_address_device
-> ANDROID: usb: host: add bus_suspend/bus_resume to xhci overrides
-> ANDROID: usb: host: add address_device to xhci overrides
-> ANDROID: usb: host: add max packet parameter on alloc_transfer_ring hook
-> ANDROID: usb: host: add xhci hooks for vendor specific container context
-> ANDROID: usb: host: export xhci symbols for ring management
-> ANDROID: usb: host: export additional xhci symbols for ring management
-> FROMLIST: usb: xhci-plat: add xhci_plat_priv_overwrite
-> FROMLIST: usb: host: export symbols for xhci hooks usage
-> FROMLIST: usb: host: add xhci hooks for USB offload
-
-What does that list of text mean?  You are only submitting 4 patches
-here, not that many.
-
+> As a side effect, an interrupt handler could run twice, once with
+> interrupt priority and then with idle priority.
 > 
-> Below are owners of patches.
+> As a workaround, gic_read_iar is updated so that it will return a
+> valid interrupt ID only if there is a change in the active priority list
+> after the IAR read on all the affected Silicons.
 > 
-> Howard Yen <howardyen@google.com>
-> Jack Pham <jackp@codeaurora.org>
-> Puma Hsu <pumahsu@google.com>
-> J. Avila <elavila@google.com>
-> chihhao.chen <chihhao.chen@mediatek.com>
+> Since there are silicon variants where both 23154 and 38545 are applicable,
+> workaround for erratum 23154 has been extended to address both of them.
+> 
+> Signed-off-by: Linu Cherian <lcherian@marvell.com>
+> ---
+> Changes since V2:
+> - IIDR based quirk management done for 23154 has been reverted
+> - Extended existing 23154 errata to address 38545 as well,
+>   so that existing static keys are reused. 
+> - Added MIDR based support macros to cover all the affected parts
+> - Changed the unlikely construct to likely construct in the workaround
+>   function.
+> 
+> 
+> 
+>  Documentation/arm64/silicon-errata.rst |  2 +-
+>  arch/arm64/Kconfig                     |  8 ++++++--
+>  arch/arm64/include/asm/arch_gicv3.h    | 22 ++++++++++++++++++++--
+>  arch/arm64/include/asm/cputype.h       |  2 ++
+>  arch/arm64/kernel/cpu_errata.c         | 25 ++++++++++++++++++++++---
+>  5 files changed, 51 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+> index ea281dd75517..466cb9e89047 100644
+> --- a/Documentation/arm64/silicon-errata.rst
+> +++ b/Documentation/arm64/silicon-errata.rst
+> @@ -136,7 +136,7 @@ stable kernels.
+>  +----------------+-----------------+-----------------+-----------------------------+
+>  | Cavium         | ThunderX ITS    | #23144          | CAVIUM_ERRATUM_23144        |
+>  +----------------+-----------------+-----------------+-----------------------------+
+> -| Cavium         | ThunderX GICv3  | #23154          | CAVIUM_ERRATUM_23154        |
+> +| Cavium         | ThunderX GICv3  | #23154,38545    | CAVIUM_ERRATUM_23154        |
+>  +----------------+-----------------+-----------------+-----------------------------+
+>  | Cavium         | ThunderX GICv3  | #38539          | N/A                         |
+>  +----------------+-----------------+-----------------+-----------------------------+
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 09b885cc4db5..778cc2e22c21 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -891,13 +891,17 @@ config CAVIUM_ERRATUM_23144
+>  	  If unsure, say Y.
+>  
+>  config CAVIUM_ERRATUM_23154
+> -	bool "Cavium erratum 23154: Access to ICC_IAR1_EL1 is not sync'ed"
+> +	bool "Cavium errata 23154 and 38545: GICv3 lacks HW synchronisation"
+>  	default y
+>  	help
+> -	  The gicv3 of ThunderX requires a modified version for
+> +	  The ThunderX GICv3 implementation requires a modified version for
+>  	  reading the IAR status to ensure data synchronization
+>  	  (access to icc_iar1_el1 is not sync'ed before and after).
+>  
+> +	  It also suffers from erratum 38545 (also present on Marvell's
+> +	  OcteonTX and OcteonTX2), resulting in deactivated interrupts being
+> +	  spuriously presented to the CPU interface.
+> +
+>  	  If unsure, say Y.
+>  
+>  config CAVIUM_ERRATUM_27456
+> diff --git a/arch/arm64/include/asm/arch_gicv3.h b/arch/arm64/include/asm/arch_gicv3.h
+> index 4ad22c3135db..b8fd7b1f9944 100644
+> --- a/arch/arm64/include/asm/arch_gicv3.h
+> +++ b/arch/arm64/include/asm/arch_gicv3.h
+> @@ -53,17 +53,35 @@ static inline u64 gic_read_iar_common(void)
+>   * The gicv3 of ThunderX requires a modified version for reading the
+>   * IAR status to ensure data synchronization (access to icc_iar1_el1
+>   * is not sync'ed before and after).
+> + *
+> + * Erratum 38545
+> + *
+> + * When a IAR register read races with a GIC interrupt RELEASE event,
+> + * GIC-CPU interface could wrongly return a valid INTID to the CPU
+> + * for an interrupt that is already released(non activated) instead of 0x3ff.
+> + *
+> + * To workaround this, return a valid interrupt ID only if there is a change
+> + * in the active priority list after the IAR read.
+> + *
+> + * Common function used for both the workarounds since,
+> + * 1. On Thunderx 88xx 1.x both erratas are applicable.
+> + * 2. Having extra nops doesn't add any side effects for Silicons where
+> + *    erratum 23154 is not applicable.
+>   */
+>  static inline u64 gic_read_iar_cavium_thunderx(void)
+>  {
+> -	u64 irqstat;
+> +	u64 irqstat, apr;
+>  
+> +	apr = read_sysreg_s(SYS_ICC_AP1R0_EL1);
 
-What do you mean by this?  Did you loose authorship of the code you just
-submitted?  That's not ok.  You always have to properly credit the
-creators of the changes you submit to us for obvious legal reasons.
+Why only AP1R0? Does the HW only support 5 bits of priority? If it
+supports more, you need to check all the registers that may contain an
+active priority (0xa0 for a standard interrupt, 0x20 for a pNMI).
 
-Please fix up and resend this series properly.
+>  	nops(8);
+>  	irqstat = read_sysreg_s(SYS_ICC_IAR1_EL1);
+>  	nops(4);
+>  	mb();
+>  
+> -	return irqstat;
+> +	if (likely(apr != read_sysreg_s(SYS_ICC_AP1R0_EL1)))
+> +		return irqstat;
+> +
+> +	return 0x3ff;
 
-thanks,
+This should be ICC_IAR1_EL1_SPURIOUS.
 
-greg k-h
+>  }
+>  
+>  static inline void gic_write_ctlr(u32 val)
+> diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
+> index 999b9149f856..9407c5074a4f 100644
+> --- a/arch/arm64/include/asm/cputype.h
+> +++ b/arch/arm64/include/asm/cputype.h
+> @@ -80,6 +80,7 @@
+>  
+>  #define APM_CPU_PART_POTENZA		0x000
+>  
+> +#define CAVIUM_CPU_PART_THUNDERX_OTX_GEN 0x0A0
+
+Is this an actual part number? What does 'GEN' stand for?
+
+>  #define CAVIUM_CPU_PART_THUNDERX	0x0A1
+>  #define CAVIUM_CPU_PART_THUNDERX_81XX	0x0A2
+>  #define CAVIUM_CPU_PART_THUNDERX_83XX	0x0A3
+> @@ -121,6 +122,7 @@
+>  #define MIDR_CORTEX_A710 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A710)
+>  #define MIDR_CORTEX_X2 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_X2)
+>  #define MIDR_NEOVERSE_N2 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_NEOVERSE_N2)
+> +#define MIDR_THUNDERX_OTX_GEN MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM, CAVIUM_CPU_PART_THUNDERX_OTX_GEN)
+>  #define MIDR_THUNDERX	MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM, CAVIUM_CPU_PART_THUNDERX)
+>  #define MIDR_THUNDERX_81XX MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM, CAVIUM_CPU_PART_THUNDERX_81XX)
+>  #define MIDR_THUNDERX_83XX MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM, CAVIUM_CPU_PART_THUNDERX_83XX)
+> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+> index b217941713a8..82ed09b363d6 100644
+> --- a/arch/arm64/kernel/cpu_errata.c
+> +++ b/arch/arm64/kernel/cpu_errata.c
+> @@ -41,6 +41,25 @@ is_affected_midr_range_list(const struct arm64_cpu_capabilities *entry,
+>  	return is_midr_in_range_list(read_cpuid_id(), entry->midr_range_list);
+>  }
+>  
+> +static bool __maybe_unused
+> +is_marvell_thunderx_otx_family(const struct arm64_cpu_capabilities *entry,
+> +			       int scope)
+> +{
+> +	u32 model;
+> +
+> +	WARN_ON(scope != SCOPE_LOCAL_CPU || preemptible());
+> +
+> +	model = read_cpuid_id();
+> +	/* 0xe8 mask will cover  0xA1 - 0xA3 and 0xB1 - 0xB6 series with
+> +	 * 0xAF and 0xB8 as exceptions
+> +	 */
+> +	model &= MIDR_IMPLEMENTOR_MASK | (0x0e8 << MIDR_PARTNUM_SHIFT) |
+> +		 MIDR_ARCHITECTURE_MASK;
+> +
+> +	/* This includes Thunderx, OcteonTx, OcteonTx2 family of processors */
+> +	return model == MIDR_THUNDERX_OTX_GEN;
+> +}
+> +
+
+No, please.  This is a version of the Kryo hack, only worse. We
+*really* want to see an actual list of models and revisions, not an
+obfuscated mask that covers HW that may or may not exist. All the
+infrastructure is there to describe these constraints as data, just
+make use of it.
+
+>  static bool __maybe_unused
+>  is_kryo_midr(const struct arm64_cpu_capabilities *entry, int scope)
+>  {
+> @@ -425,10 +444,10 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+>  #endif
+>  #ifdef CONFIG_CAVIUM_ERRATUM_23154
+>  	{
+> -	/* Cavium ThunderX, pass 1.x */
+> -		.desc = "Cavium erratum 23154",
+> +		.desc = "Cavium errata 23154 and 38545",
+>  		.capability = ARM64_WORKAROUND_CAVIUM_23154,
+> -		ERRATA_MIDR_REV_RANGE(MIDR_THUNDERX, 0, 0, 1),
+> +		.type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
+> +		.matches = is_marvell_thunderx_otx_family,
+>  	},
+>  #endif
+>  #ifdef CONFIG_CAVIUM_ERRATUM_27456
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,149 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980A14CD7BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F5B4CD7C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239621AbiCDP3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
+        id S240241AbiCDP3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiCDP3D (ORCPT
+        with ESMTP id S240103AbiCDP3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:29:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4558A5D5F0
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:28:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646407694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g42Xqz/xFjdfHKKctZX2n0O2xenLqOF9Td0jlr5ge1E=;
-        b=KCkJIkZaPuWhZgeSQpV7/MzcSBmtKrVglox/mKxkjl3qKgl030ioXeTUkxRCOaU1ZrLXnY
-        GbG2iaDQ2Q5MOipmAxaFro3oG245B4ZuI7+9o04EbyWyGg4tjxdHaPcj/YOVyPxgHrvVGu
-        iZT9AG4VYWwTse77udKgoGkoxhDd/MM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-bG2cGgz9MgW04LjEmes3ew-1; Fri, 04 Mar 2022 10:28:13 -0500
-X-MC-Unique: bG2cGgz9MgW04LjEmes3ew-1
-Received: by mail-wm1-f71.google.com with SMTP id f189-20020a1c38c6000000b0037d1bee4847so4239485wma.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 07:28:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=g42Xqz/xFjdfHKKctZX2n0O2xenLqOF9Td0jlr5ge1E=;
-        b=PraRT/H9w06Woxgugx8ekvuYcQrTjIUftCqO/5tkaU4TJfEMB7Hgdd54VWApvUPGEG
-         Y8lBX5nifwoxuL+NLgkAQ1dL1J1E0DfdtzTEaQpZqwpmpBIFzgQPUuOiUzNK8VF5drwU
-         Ytdnggebx4WTLuf6+YC9ls3Z+7sH/o+to93EN38H2qFgP4FAOeA2QvzkXvULAgOjo66a
-         eLCQ8EjwcCZOMeR9RqkLmpA6eMrhek3qkupaRNkF/tItXaeMftQ4fUvUt1kFImdc9q1O
-         B3b5e9f8ID047XRFaxvPc905En9+COc33ImRSetzLw/LgJVvPoI/0smERtrfV/ttNXME
-         aR8A==
-X-Gm-Message-State: AOAM5317YZYnw2SR5j4NguCOGHdJ74nBTP9gdiZxkbS1Y7MzrBKoO1Yd
-        rqfnw6y0H97qhDIGa7nZAXpmgQCueYhbPUClthPbXA60/ay9dBeKpAqX1O1jbLuYUV5NthD/Wqy
-        ejTyIK3NZq9QCiCYPXoK2eIvV
-X-Received: by 2002:a05:600c:2056:b0:389:736a:5631 with SMTP id p22-20020a05600c205600b00389736a5631mr4720019wmg.120.1646407691890;
-        Fri, 04 Mar 2022 07:28:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzaYJwwz0uhJI5sa9O0jVgucPyHxAZEk/U+E5pSIXGXG5hl28xfZA2tDnmw93kWXnDHBP+YLQ==
-X-Received: by 2002:a05:600c:2056:b0:389:736a:5631 with SMTP id p22-20020a05600c205600b00389736a5631mr4720006wmg.120.1646407691680;
-        Fri, 04 Mar 2022 07:28:11 -0800 (PST)
-Received: from ?IPv6:2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8? ([2a0c:5a80:1b14:b500:abb:f9d1:7bc2:3db8])
-        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b001f049726044sm4846550wrv.79.2022.03.04.07.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 07:28:11 -0800 (PST)
-Message-ID: <2b47679c6248a0d113b556ed6118e8ed72c74b29.camel@redhat.com>
-Subject: Re: [PATCH] tracing/osnoise: Force quiescent states while tracing
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
-        mtosatti@redhat.com, paulmck@kernel.org, rostedt@goodmis.org,
-        Juri Lelli <juri.lelli@redhat.com>
-Date:   Fri, 04 Mar 2022 16:28:10 +0100
-In-Reply-To: <abb789c3-0d1a-28e9-3b8d-e4a68e3f57f5@kernel.org>
-References: <20220228141423.259691-1-nsaenzju@redhat.com>
-         <78d798aa-388c-70bc-4227-985ba76c1d7e@kernel.org>
-         <b5e1f0d14a48c0815863af623cedbdc8c1bc255f.camel@redhat.com>
-         <abb789c3-0d1a-28e9-3b8d-e4a68e3f57f5@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Fri, 4 Mar 2022 10:29:17 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FFE1B7609;
+        Fri,  4 Mar 2022 07:28:29 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224ErmgO012060;
+        Fri, 4 Mar 2022 15:28:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=v5Se0jKm4CMv9uIVa6be0qCve1fQPCIql88P/RlscIA=;
+ b=TRvzmKdRhjqQG5owYoA3iDZXDs8fOo4vA5+NtcI+bfol5C0RNiqHlufIkai16ejsDRPy
+ 0zQ18peXmYR8jxR1c0sK8nBzRImmgWdaQBS9BZHNuhFh5qjhW9C50VKk6ZvAdMAenBIA
+ 1WCHhsva/oe2qOqq4jzjV+PmBZhKjn43GrFuS/zEtLQzPvVxJdhaJMCWgfJNQ7SoLNOH
+ bTikiOj6QK7wZJdd/hJxujVeil9aO385m7T/zlRPomqgs3fGKefUjWWcqbV1curyALyL
+ 9bHN0bRp9XeWSMZG+vxR97NF/4PdHu3jXYAZPSzP1yHYzNtjGY/82EOXQd8x6/590SeW ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ekmxe0r2g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Mar 2022 15:28:15 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 224FMRHb004683;
+        Fri, 4 Mar 2022 15:28:14 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ekmxe0r28-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Mar 2022 15:28:14 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 224F3Vla026833;
+        Fri, 4 Mar 2022 15:28:13 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma04wdc.us.ibm.com with ESMTP id 3ek4kbdk9t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Mar 2022 15:28:13 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 224FSCrJ32309540
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 4 Mar 2022 15:28:12 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2730228064;
+        Fri,  4 Mar 2022 15:28:12 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DC07328059;
+        Fri,  4 Mar 2022 15:28:11 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri,  4 Mar 2022 15:28:11 +0000 (GMT)
+Message-ID: <47f3654e-892d-a35a-e77c-70ada1ebcf43@linux.ibm.com>
+Date:   Fri, 4 Mar 2022 10:28:11 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/4] KEYS: CA link restriction
+Content-Language: en-US
+To:     Eric Snowberg <eric.snowberg@oracle.com>, zohar@linux.ibm.com,
+        jarkko@kernel.org, dhowells@redhat.com, dwmw2@infradead.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
+        mic@linux.microsoft.com, konrad.wilk@oracle.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20220301173651.3435350-1-eric.snowberg@oracle.com>
+ <20220301173651.3435350-4-eric.snowberg@oracle.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220301173651.3435350-4-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RuNIIzeS8WIQ_TOMFwmjOBKOWyyIVYyO
+X-Proofpoint-GUID: h-ySz9CxSLuwNKm-arhd5Et2R_ciAJ8n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-04_06,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
+ suspectscore=0 impostorscore=0 bulkscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203040081
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
 
-On Fri, 2022-03-04 at 15:51 +0100, Daniel Bristot de Oliveira wrote:
-> > > Hey Nicolas,
-> > > 
-> > > While testing this patch with rtla osnoise on the 5.17.0-rc6-rt10+, when I hit
-> > > ^c on osnoise top, the system freezes :-/.
-> > > 
-> > > Could you try that on your system?
-> > Yes of course, I'll get a build going.
-> 
-> 
-> also, could you try this? 
-
-Yes, of course.
-
-> it is an RFC I was thinking to send, as I mentioned before (and on IRC).
-> 
-> It works fine, I see nohz_full and rcu behaving like if osnoise was a
-> user-space tool. It is more invasive on osnoise, but the behavior does not
-> change - like, run cyclictest on top of osnoise and you will see that
-> the system is still preemptive with low latency even with osnoise with
-> "preempt_disabled."
+On 3/1/22 12:36, Eric Snowberg wrote:
+> Add a new link restriction.  Restrict the addition of keys in a keyring
+> based on the key to be added being a CA.
 >
-> do you mind having a look to see if it behaves as expected in your scenario?
-> 
-> [ note, there are things to cleanup in this patch, like adding a static key ]
-> [ in is_osnoise_cur(), it was a real RFC. 				    ]
-> 
-> -- Daniel
-> 
-> tracing/osnoise: Pretend to be in user-space for RCU
-> 
-> To simulate an user-space workload, osnoise informs RCU that it
-> is going to user-space by calling rcu_user_enter(). However,
-> osnoise never actually goes to user-space. It keeps running
-> in an intermediate stage.
-> 
-> This stage runs with preemption disabled, like the idle thread
-> does. Likewise idle, osnoise will continuously check for need
-> resched, allowing its preemption, simulating a fully preemptive
-> mode.
-> 
-> Anytime a kernel function needs to be called, the rcu_user_enter()
-> needs to be called.
-> 
-> Any change on rcu_user_enter/exit needs to be tested with
-> CONFIG_RCU_EQS_DEBUG=y.
-> 
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 > ---
+>   crypto/asymmetric_keys/restrict.c | 43 +++++++++++++++++++++++++++++++
+>   include/crypto/public_key.h       | 15 +++++++++++
+>   2 files changed, 58 insertions(+)
+>
+> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
+> index 6b1ac5f5896a..49bb2ea7f609 100644
+> --- a/crypto/asymmetric_keys/restrict.c
+> +++ b/crypto/asymmetric_keys/restrict.c
+> @@ -108,6 +108,49 @@ int restrict_link_by_signature(struct key *dest_keyring,
+>   	return ret;
+>   }
+>   
+> +/**
+> + * restrict_link_by_ca - Restrict additions to a ring of CA keys
+> + * @dest_keyring: Keyring being linked to.
+> + * @type: The type of key being added.
+> + * @payload: The payload of the new key.
+> + * @trust_keyring: Unused.
+> + *
+> + * Check if the new certificate is a CA. If it is a CA, then mark the new
+> + * certificate as being ok to link.
 
-Some comments:
- - You're not exiting/entering EQS on IRQ/NMI entry/exit. See
-   irqentry_{enter,exit}() and irqentry_nmi_{enter,exit}().
+CA = root CA here, right?
 
- - See this series[1], if we ever pursue this approach, it's important we got
-   through context tracking, instead of poking at RCU directly.
 
-[1] https://lore.kernel.org/lkml/20220302154810.42308-1-frederic@kernel.org/T/#t
+> + *
+> + * Returns 0 if the new certificate was accepted, -ENOKEY if the
+> + * certificate is not a CA. -ENOPKG if the signature uses unsupported
+> + * crypto, or some other error if there is a matching certificate but
+> + * the signature check cannot be performed.
+> + */
+> +int restrict_link_by_ca(struct key *dest_keyring,
+> +			const struct key_type *type,
+> +			const union key_payload *payload,
+> +			struct key *trust_keyring)
+This function needs to correspond to the key_restrict_link_func_t and 
+therefore has 4 parameter. Call the unused 'trust_keyring' 'unused' instead?
+> +{
+> +	const struct public_key_signature *sig;
+> +	const struct public_key *pkey;
+> +
+> +	if (type != &key_type_asymmetric)
+> +		return -EOPNOTSUPP;
+> +
+> +	sig = payload->data[asym_auth];
+> +	if (!sig)
+> +		return -ENOPKG;
+> +
+> +	if (!sig->auth_ids[0] && !sig->auth_ids[1])
+> +		return -ENOKEY;
+> +
+> +	pkey = payload->data[asym_crypto];
+> +	if (!pkey)
+> +		return -ENOPKG;
+> +
+> +	if (!pkey->key_is_ca)
+> +		return -ENOKEY;
+> +
+> +	return public_key_verify_signature(pkey, sig);
+> +}
+> +
 
-Regards,
+Comparing this to 'restrict_link_by_signature'... looks good.
 
--- 
-Nicolás Sáenz
 
+>   static bool match_either_id(const struct asymmetric_key_id **pair,
+>   			    const struct asymmetric_key_id *single)
+>   {
+> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
+> index 0521241764b7..5eadb182a400 100644
+> --- a/include/crypto/public_key.h
+> +++ b/include/crypto/public_key.h
+> @@ -72,6 +72,21 @@ extern int restrict_link_by_key_or_keyring_chain(struct key *trust_keyring,
+>   						 const union key_payload *payload,
+>   						 struct key *trusted);
+>   
+> +#if IS_REACHABLE(CONFIG_ASYMMETRIC_KEY_TYPE)
+> +extern int restrict_link_by_ca(struct key *dest_keyring,
+> +			       const struct key_type *type,
+> +			       const union key_payload *payload,
+> +			       struct key *trust_keyring);
+> +#else
+> +static inline int restrict_link_by_ca(struct key *dest_keyring,
+> +				      const struct key_type *type,
+> +				      const union key_payload *payload,
+> +				      struct key *trust_keyring)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+>   extern int query_asymmetric_key(const struct kernel_pkey_params *,
+>   				struct kernel_pkey_query *);
+>   

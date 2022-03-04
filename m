@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95B44CD865
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFF04CD86A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240033AbiCDP5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S240466AbiCDQBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235619AbiCDP5s (ORCPT
+        with ESMTP id S234317AbiCDQBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:57:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5051C6EF0
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:56:59 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A1FF61F385;
-        Fri,  4 Mar 2022 15:56:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646409418; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bGT8Ow4NIxBkj0yHGqhgln0GynFbynwDxe/+jElokrM=;
-        b=inuxdLvIghYVTeB3ztgSE0TSH7BdmBLA6EGRlhiiA8Znrxnf/S5cGvhDvH8g9qQGZ8k+jh
-        /ffikZgPj7eJviIXTeG4YPqc2qOeJj1XDB7XGiBGy7P+6mxQzydAPNqoYHHPiiBWTUrIG6
-        Xd7hQiBFyGkQyKEKLkGdukmekl5y814=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 68013A3B83;
-        Fri,  4 Mar 2022 15:56:58 +0000 (UTC)
-Date:   Fri, 4 Mar 2022 16:56:55 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 03/13] printk: use percpu flag instead of
- cpu_online()
-Message-ID: <YiI2x6K5IhsADEmK@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-4-john.ogness@linutronix.de>
- <YgaJZtY+EH9JIGyo@alley>
- <YgoGNmYER8xni34K@google.com>
- <YguCuFYeZ52mkr4r@alley>
- <87zgm8h1tt.fsf@jogness.linutronix.de>
+        Fri, 4 Mar 2022 11:01:31 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52291B0BCE
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:00:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646409643; x=1677945643;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m1ChR7M0tuClOXVONifHVOA2VcoI0G6cdp50B0K6wFI=;
+  b=f6RevXHBt1i7JzGdGKLnSp6sFjXV/VlpYiNqQwHXmL01d+YOe6ukqt2i
+   ZxILCd8nY7JCMWt11yJCD3mFnpvgAU3S6NEtfBtVAeVaJaikDiTcGy2av
+   01malZJOW/uzkFAw0S4Cd4lexwstGInKCq9ZjvRvkGOFuEFsmzJoXPn8Y
+   yhEtnulmftN3JxVhCpwq/1sRVh4lmvcdpV6cZVCqJxcZJRnck9yfCcdLS
+   iIIpnthUIXJ+w9ej1zLu0vIrbT8XwALM/Bg2OwlFmqFR9MAVwc2Axopyl
+   8tx2+HYqnh3j0G82E/+sBwp90xxo4MAqa3B8VQR7TnyKwJNhd7oKWY0XT
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="164553996"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 09:00:43 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 09:00:42 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 09:00:40 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>
+Subject: [GIT PULL] ARM: at91: dt for 5.18 #2
+Date:   Fri, 4 Mar 2022 17:00:36 +0100
+Message-ID: <20220304160036.27392-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87zgm8h1tt.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-03-02 15:27:50, John Ogness wrote:
-> I have taken some time to investigate the percpu implementation so that
-> I could provide clear answers here.
-> 
-> On 2022-02-15, Petr Mladek <pmladek@suse.com> wrote:
-> > I am not 100% sure. But it seems that static per-CPU variables might
-> > actually be used since the boot.
-> 
-> You are correct, but until per-cpu areas are setup, they all point to
-> CPU0. Normally that is not a problem since usually code is using
-> this_cpu_ptr() (which will always be the CPU0 in early boot), rather
-> than specifying foreign CPUs with per_cpu_ptr().
-> 
-> > Most likely, only dynamically allocated per-cpu variables have to wait
-> > until the per-cpu areas are initialized.
-> 
-> It is also important to wait if data will be stored that is no longer
-> valid after per-cpu areas are setup. setup_per_cpu_areas() copies the
-> static CPU0 per-cpu value to all the newly setup per-cpu areas.
-> 
-> This is actually the cause for the mystery [0] of failing irq_work when
-> printk_deferred was added with commit
-> 15341b1dd409749fa5625e4b632013b6ba81609b ("char/random: silence a
-> lockdep splat with printk()".
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Just for record, the right commit ID in the mainline is
-1b710b1b10eff9d466. It used printk_deferred() in _warn_unseeded_randomness():
+Arnd, Olof,
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1687,8 +1687,9 @@ static void _warn_unseeded_randomness(const char *func_name, void *caller,
- 	print_once = true;
- #endif
- 	if (__ratelimit(&unseeded_warning))
--		pr_notice("random: %s called from %pS with crng_init=%d\n",
--			  func_name, caller, crng_init);
-+		printk_deferred(KERN_NOTICE "random: %s called from %pS "
-+				"with crng_init=%d\n", func_name, caller,
-+				crng_init);
- }
- 
- /*
+Some more dt changes for 5.18.
+I had to modify one patch to remove a dependency with the clock tree because of
+a modification of the header file in [1] which is already in linux-next.
+I tought it would be the simplest solution as I didn't manage to get an
+inmutable branch (which could be an overkill solution for such a small change).
 
+I verified that there is no conflict when merging this content with linux-next.
+Anyway, tell me if you prefer to not proceed like this.
 
+Thanks, best regards,
+  Nicolas
 
-> By avoiding queueing irq_work before setup_per_cpu_areas(), we correctly
-> avoided this problem. (I considered sending a patch so that
-> irq_work_claim() will fail if a global @percpu_complete is not yet
-> set.
+[1]: https://lore.kernel.org/linux-clk/20220111125310.902856-1-tudor.ambarus@microchip.com/T/#u
 
-That is a great TODO :-)
+The following changes since commit 3c8a9c2e2daf51bd3dcaedd321ecc79f10227c41:
 
-> But for now, our set_percpu_data_ready() solution is at least good
-> enough for the printk subsystem.)
+  ARM: dts: at91: sama7g5: add opps (2022-02-25 11:32:22 +0100)
 
-Yes but it is most likely not needed for CON_ANYTIME consoles,
-see below.
+are available in the Git repository at:
 
-> > We should probably revisit the code and remove the fallback to
-> > normal static variables.
-> 
-> Definitely. Now it is clear that @printk_count and @printk_count_nmi do
-> not need early variants.
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-5.18-2
 
-Note the ordering:
+for you to fetch changes up to 92499dec3aa9c251e605b42e1024e805bbaa50ad:
 
-asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
-{
-[...]
-	early_security_init();
-[...]
-	setup_per_cpu_areas();
-[...]
-	parse_early_param();
-	after_dashes = parse_args("Booting kernel",
+  ARM: dts: at91: sama7g5: Add NAND support (2022-03-04 15:03:53 +0100)
 
+----------------------------------------------------------------
+AT91 DT #2 for 5.18:
 
-My guess is that _warn_unseeded_randomness() was called from a code
-before early_security_init(). It was bad because per-CPU variables
-were not ready yet.
+- Align one sam9x60ek regulator with reality at vdd_1v15
+- Clean sama7g5 i2c nodes
+- Add EIC and NAND nodes to sama7g5
 
-The early consoles are enabled by parse_early_param(). It happens
-after setup_per_cpu_areas(). It means that all console drivers
-should be on the safe side.
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      ARM: dts: at91: sama7g5: add eic node
 
-Best Regards,
-Petr
+Mihai Sain (1):
+      ARM: dts: at91: sam9x60ek: modify vdd_1v5 regulator to vdd_1v15
+
+Tudor Ambarus (2):
+      ARM: dts: at91: sama7g5: Remove unused properties in i2c nodes
+      ARM: dts: at91: sama7g5: Add NAND support
+
+ arch/arm/boot/dts/at91-sam9x60ek.dts |  8 ++--
+ arch/arm/boot/dts/sama7g5.dtsi       | 74 ++++++++++++++++++++++++++++++++---
+ include/dt-bindings/clock/at91.h     |  1 +
+ 3 files changed, 73 insertions(+), 10 deletions(-)
+
+-- 
+Nicolas Ferre

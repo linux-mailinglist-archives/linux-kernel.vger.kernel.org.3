@@ -2,350 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E5F4CD5F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7F44CD5F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236384AbiCDOKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S237643AbiCDOLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:11:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbiCDOKn (ORCPT
+        with ESMTP id S231820AbiCDOLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:10:43 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E001BA90E;
-        Fri,  4 Mar 2022 06:09:54 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B192451C;
-        Fri,  4 Mar 2022 15:09:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646402991;
-        bh=tF6TWpIIc5PYHjBDOutrn91zOquoDieFQB9UV4VT/xA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wOH+XCeCDQNhLB7bifxDul4QCeIEWLjntNs3CPSl+Zkx5jp0ASRiqJL7k6CxknFC3
-         CanLGoUWehTHglLWgU6Glf7e2tZ9H6hKYFg0nHl5aTpnkRSmJlzq52sFAxRwluP1Br
-         onB5Km/r+4hvLynzOqJ+NATBoTng1c6nfR9gcJkE=
-Date:   Fri, 4 Mar 2022 16:09:39 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 61/66] dt-bindings: media: Add Allwinner A31 ISP
- bindings documentation
-Message-ID: <YiIdo4PF/5smLocf@pendragon.ideasonboard.com>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-62-paul.kocialkowski@bootlin.com>
- <YgE/+UmP4nJVxtRT@pendragon.ideasonboard.com>
- <YgqAv2vLimYgRwDS@aptenodytes>
- <YgqM3ZdMfEz+ZKo/@pendragon.ideasonboard.com>
- <Ygt8LF8qx3rnxlgp@aptenodytes>
- <Ygt9j+rwEC+2aUjH@pendragon.ideasonboard.com>
- <Yh4+E9el5NdQ7qJq@aptenodytes>
- <YiH/kLakb/GOaYIT@pendragon.ideasonboard.com>
- <YiIa1SRFhtvURTbN@aptenodytes>
+        Fri, 4 Mar 2022 09:11:50 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CCB51BA917;
+        Fri,  4 Mar 2022 06:11:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEB871424;
+        Fri,  4 Mar 2022 06:11:00 -0800 (PST)
+Received: from [10.57.39.47] (unknown [10.57.39.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB4983F70D;
+        Fri,  4 Mar 2022 06:10:56 -0800 (PST)
+Message-ID: <e2698dbe-18e2-1a82-8a12-fe45bc9be534@arm.com>
+Date:   Fri, 4 Mar 2022 14:10:55 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YiIa1SRFhtvURTbN@aptenodytes>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v7 01/11] iommu: Add DMA ownership management interfaces
+Content-Language: en-GB
+To:     eric.auger@redhat.com, Lu Baolu <baolu.lu@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Cc:     Chaitanya Kulkarni <kch@nvidia.com>, kvm@vger.kernel.org,
+        Stuart Yoder <stuyoder@gmail.com>, rafael@kernel.org,
+        David Airlie <airlied@linux.ie>, linux-pci@vger.kernel.org,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Li Yang <leoyang.li@nxp.com>, Will Deacon <will@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20220228005056.599595-1-baolu.lu@linux.intel.com>
+ <20220228005056.599595-2-baolu.lu@linux.intel.com>
+ <c75b6e04-bc1b-b9f6-1a44-bf1567a8c19d@redhat.com>
+ <7a3dc977-0c5f-6d88-6d3a-8e49bc717690@linux.intel.com>
+ <1648bc97-a0d3-4051-58d0-e24fa9e9d183@arm.com>
+ <350a8e09-08a9-082b-3ad1-b711c7d98d73@redhat.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <350a8e09-08a9-082b-3ad1-b711c7d98d73@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-(With a question for Sakari below)
-
-On Fri, Mar 04, 2022 at 02:57:41PM +0100, Paul Kocialkowski wrote:
-> On Fri 04 Mar 22, 14:01, Laurent Pinchart wrote:
-> > On Tue, Mar 01, 2022 at 04:38:59PM +0100, Paul Kocialkowski wrote:
-> > > On Tue 15 Feb 22, 12:16, Laurent Pinchart wrote:
-> > > > On Tue, Feb 15, 2022 at 11:10:52AM +0100, Paul Kocialkowski wrote:
-> > > > > On Mon 14 Feb 22, 19:09, Laurent Pinchart wrote:
-> > > > > > On Mon, Feb 14, 2022 at 05:18:07PM +0100, Paul Kocialkowski wrote:
-> > > > > > > On Mon 07 Feb 22, 17:51, Laurent Pinchart wrote:
-> > > > > > > > On Sat, Feb 05, 2022 at 07:54:24PM +0100, Paul Kocialkowski wrote:
-> > > > > > > > > This introduces YAML bindings documentation for the Allwinner A31 Image
-> > > > > > > > > Signal Processor (ISP).
-> > > > > > > > > 
-> > > > > > > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > > > > > > ---
-> > > > > > > > >  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
-> > > > > > > > >  1 file changed, 117 insertions(+)
-> > > > > > > > >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > > > > > > > 
-> > > > > > > > > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > > > > > > > new file mode 100644
-> > > > > > > > > index 000000000000..2d87022c43ce
-> > > > > > > > > --- /dev/null
-> > > > > > > > > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > > > > > > > @@ -0,0 +1,117 @@
-> > > > > > > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > > > > > > > +%YAML 1.2
-> > > > > > > > > +---
-> > > > > > > > > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
-> > > > > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > > > > > +
-> > > > > > > > > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
-> > > > > > > > > +
-> > > > > > > > > +maintainers:
-> > > > > > > > > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > > > > > > +
-> > > > > > > > > +properties:
-> > > > > > > > > +  compatible:
-> > > > > > > > > +    enum:
-> > > > > > > > > +      - allwinner,sun6i-a31-isp
-> > > > > > > > > +      - allwinner,sun8i-v3s-isp
-> > > > > > > > > +
-> > > > > > > > > +  reg:
-> > > > > > > > > +    maxItems: 1
-> > > > > > > > > +
-> > > > > > > > > +  interrupts:
-> > > > > > > > > +    maxItems: 1
-> > > > > > > > > +
-> > > > > > > > > +  clocks:
-> > > > > > > > > +    items:
-> > > > > > > > > +      - description: Bus Clock
-> > > > > > > > > +      - description: Module Clock
-> > > > > > > > > +      - description: DRAM Clock
-> > > > > > > > 
-> > > > > > > > That's interesting, does the ISP have a dedicated DRAM ?
-> > > > > > > 
-> > > > > > > It doesn't, it actually uses the main DRAM with the "mbus" interconnect.
-> > > > > > > The clock is probably for the DMA engine.
-> > > > > > > 
-> > > > > > > > > +
-> > > > > > > > > +  clock-names:
-> > > > > > > > > +    items:
-> > > > > > > > > +      - const: bus
-> > > > > > > > > +      - const: mod
-> > > > > > > > > +      - const: ram
-> > > > > > > > > +
-> > > > > > > > > +  resets:
-> > > > > > > > > +    maxItems: 1
-> > > > > > > > > +
-> > > > > > > > > +  ports:
-> > > > > > > > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > > > > > > > +
-> > > > > > > > > +    properties:
-> > > > > > > > > +      port@0:
-> > > > > > > > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > > > > > > > +        description: CSI0 input port
-> > > > > > > > > +
-> > > > > > > > > +        properties:
-> > > > > > > > > +          reg:
-> > > > > > > > > +            const: 0
-> > > > > > > > > +
-> > > > > > > > > +          endpoint:
-> > > > > > > > > +            $ref: video-interfaces.yaml#
-> > > > > > > > > +            unevaluatedProperties: false
-> > > > > > > > 
-> > > > > > > > If no other property than remote-endpoint are allowed, I'd write
-> > > > > > > > 
-> > > > > > > >           endpoint:
-> > > > > > > >             $ref: video-interfaces.yaml#
-> > > > > > > > 	    remote-endpoint: true
-> > > > > > > >             additionalProperties: false
-> > > > > > > > 
-> > > > > > > > Same below.
-> > > > > > > > 
-> > > > > > > > > +
-> > > > > > > > > +        additionalProperties: false
-> > > > > > > > > +
-> > > > > > > > > +      port@1:
-> > > > > > > > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > > > > > > > +        description: CSI1 input port
-> > > > > > > > > +
-> > > > > > > > > +        properties:
-> > > > > > > > > +          reg:
-> > > > > > > > > +            const: 0
-> > > > > > > > 
-> > > > > > > > This should be 1.
-> > > > > > > 
-> > > > > > > Correct, thanks!
-> > > > > > > 
-> > > > > > > > > +
-> > > > > > > > > +          endpoint:
-> > > > > > > > > +            $ref: video-interfaces.yaml#
-> > > > > > > > > +            unevaluatedProperties: false
-> > > > > > > > > +
-> > > > > > > > > +        additionalProperties: false
-> > > > > > > > > +
-> > > > > > > > > +    anyOf:
-> > > > > > > > > +      - required:
-> > > > > > > > > +        - port@0
-> > > > > > > > > +      - required:
-> > > > > > > > > +        - port@1
-> > > > > > > > 
-> > > > > > > > As ports are an intrinsic property of the ISP, both should be required,
-> > > > > > > > but they don't have to be connected.
-> > > > > > > 
-> > > > > > > Well the ISP does have the ability to source from either CSI0 and CSI1
-> > > > > > > but I don't really get the point of declaring both ports when only one
-> > > > > > > of the two controllers is present.
-> > > > > > 
-> > > > > > If it's within an SoC I don't mind too much. What I usually insist on is
-> > > > > > declaring all ports even when no external devices are connected on the
-> > > > > > board. It may however be easier to implement things on the driver side
-> > > > > > when all the ports are declared, even for internal devices. I won't
-> > > > > > insist either way here.
-> > > > > > 
-> > > > > > > > By the way, how do you select at runtime which CSI-2 RX the ISP gets its
-> > > > > > > > image stream from ? Is it configured through registers of the ISP ?
-> > > > > > > 
-> > > > > > > Actually what the ISP gets is fully dependent on what is received by the
-> > > > > > > CSI controller it is connected to (which can be the mipi csi-2 controller
-> > > > > > > or its direct parallel pins), so the configuration happens on the CSI side.
-> > > > > > 
-> > > > > > OK, then how do you select at runtime which CSI the ISP gets its image
-> > > > > > stream from ? :-)
-> > > > > 
-> > > > > What is done in the driver is that all available csi(s) entities pads are linked
-> > > > > to a single csi sink media pad, which allows userspace to enable one or the
-> > > > > other. If there's only one, it's enabled by default.
-> > > > > 
-> > > > > The actual stream source (isp_dev->proc.source) is selected at link_validate
-> > > > > time and the source bit is set in sun6i_isp_proc_enable.
-> > > > > 
-> > > > > I hope this answers your question!
-> > > > 
-> > > > Yes it does, thank you.
-> > > > 
-> > > > While this works, it makes life a bit more complicated for userspace, as
-> > > > switching between the two sources require disabling the link first and
-> > > > then enabling the new one. This is something that caused issues in the
-> > > > libcamera simple pipeline handler, I ended up having to implement a
-> > > > workaround.
-> > > 
-> > > That surprises me a bit, I thought this was a typical use-case for links.
-> > > So the fact that it's a two-step process causes issues somehow?
-> > 
-> > It's not so much that the links have to be configured in two steps
-> > (although it would be nice if that could be fixed), but the fact that
-> > the order of the operations matter. Userspace has to know what
-> > combination of links is acceptable in order to determine the order of
-> > the enable/disable operations, otherwise errors may be returned. That
-> > makes it more difficult to write generic userspace code.
+On 2022-03-04 13:55, Eric Auger wrote:
+> Hi Robin,
 > 
-> Ah right, I understand that. Now it's pretty much trial-and-error if userspace
-> doesn't have prior knowledge about the hardware. But to be honest I assumed
-> that it was more or less understood that there cannot be fully generic
-> userspace for this and that knowedlege about the driver and pipeline flow
-> is required to do things right.
-
-You're right, and that's why we have device-specific code in libcamera.
-However, the more generic-friendly the APIs can be, the more the
-device-specific userspace code will be able to use generic helpers, so
-it still matters.
-
-> > > > Could you instead have two sink pads for the ISP, and select the sensor
-> > > > at stream on time instead of link validation time by checking which link
-> > > > is enabled ? If no links or both links are enabled, you can then return
-> > > > an error.
-> > > 
-> > > Yes that's totally doable.
-> > > 
-> > > There's a similar situation with the sun6i-csi bridge where the source pad
-> > > has two possible links: one for routing to sun6i-csi capture (video device)
-> > > and one for routing to the isp entity.
-> > > 
-> > > Would that also be best represented as two pads?
-> > 
-> > Are the two outputs mutually exclusive ? Sorry if I've asked before.
+> On 3/4/22 1:22 PM, Robin Murphy wrote:
+>> On 2022-03-04 10:43, Lu Baolu wrote:
+>>> Hi Eric,
+>>>
+>>> On 2022/3/4 18:34, Eric Auger wrote:
+>>>> I hit a WARN_ON() when unbinding an e1000e driver just after boot:
+>>>>
+>>>> sudo modprobe -v vfio-pci
+>>>> echo vfio-pci | sudo tee -a
+>>>> /sys/bus/pci/devices/0004:01:00.0/driver_override
+>>>> vfio-pci
+>>>> echo 0004:01:00.0 | sudo tee -a  /sys/bus/pci/drivers/e1000e/unbind
+>>>>
+>>>>
+>>>> [  390.042811] ------------[ cut here ]------------
+>>>> [  390.046468] WARNING: CPU: 42 PID: 5589 at drivers/iommu/iommu.c:3123
+>>>> iommu_device_unuse_default_domain+0x68/0x100
+>>>> [  390.056710] Modules linked in: vfio_pci vfio_pci_core vfio_virqfd
+>>>> vfio_iommu_type1 vfio xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT
+>>>> nf_reject_ipv4 nft_compat nft_chain_nat nf_nat nf_conntrack
+>>>> nf_defrag_ipv6 nf_defrag_ipv4 nf_tables nfnetlink bridge stp llc rfkill
+>>>> sunrpc vfat fat mlx5_ib ib_uverbs ib_core acpi_ipmi ipmi_ssif
+>>>> ipmi_devintf ipmi_msghandler cppc_cpufreq drm xfs libcrc32c
+>>>> mlx5_core sg
+>>>> mlxfw crct10dif_ce tls ghash_ce sha2_ce sha256_arm64 sha1_ce sbsa_gwdt
+>>>> e1000e psample sdhci_acpi ahci_platform sdhci libahci_platform
+>>>> qcom_emac
+>>>> mmc_core hdma hdma_mgmt dm_mirror dm_region_hash dm_log dm_mod fuse
+>>>> [  390.110618] CPU: 42 PID: 5589 Comm: tee Kdump: loaded Not tainted
+>>>> 5.17.0-rc4-lu-v7-official+ #24
+>>>> [  390.119384] Hardware name: WIWYNN QDF2400 Reference Evaluation
+>>>> Platform CV90-LA115-P120/QDF2400 Customer Reference Board, BIOS
+>>>> 0ACJA570
+>>>> 11/05/2018
+>>>> [  390.132492] pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS
+>>>> BTYPE=--)
+>>>> [  390.139436] pc : iommu_device_unuse_default_domain+0x68/0x100
+>>>> [  390.145165] lr : iommu_device_unuse_default_domain+0x38/0x100
+>>>> [  390.150894] sp : ffff80000fbb3bc0
+>>>> [  390.154193] x29: ffff80000fbb3bc0 x28: ffff03c0cf6b2400 x27:
+>>>> 0000000000000000
+>>>> [  390.161311] x26: 0000000000000000 x25: 0000000000000000 x24:
+>>>> ffff03c0c7cc5720
+>>>> [  390.168429] x23: ffff03c0c2b9d150 x22: ffffb4e61df223f8 x21:
+>>>> ffffb4e61df223f8
+>>>> [  390.175547] x20: ffff03c7c03c3758 x19: ffff03c7c03c3700 x18:
+>>>> 0000000000000000
+>>>> [  390.182665] x17: 0000000000000000 x16: 0000000000000000 x15:
+>>>> 0000000000000000
+>>>> [  390.189783] x14: 0000000000000000 x13: 0000000000000030 x12:
+>>>> ffff03c0d519cd80
+>>>> [  390.196901] x11: 7f7f7f7f7f7f7f7f x10: 0000000000000dc0 x9 :
+>>>> ffffb4e620b54f8c
+>>>> [  390.204019] x8 : ffff03c0cf6b3220 x7 : ffff4ef132bba000 x6 :
+>>>> 00000000000000ff
+>>>> [  390.211137] x5 : ffff03c0c2b9f108 x4 : ffff03c0d51f6438 x3 :
+>>>> 0000000000000000
+>>>> [  390.218255] x2 : ffff03c0cf6b2400 x1 : 0000000000000000 x0 :
+>>>> 0000000000000000
+>>>> [  390.225374] Call trace:
+>>>> [  390.227804]  iommu_device_unuse_default_domain+0x68/0x100
+>>>> [  390.233187]  pci_dma_cleanup+0x38/0x44
+>>>> [  390.236919]  __device_release_driver+0x1a8/0x260
+>>>> [  390.241519]  device_driver_detach+0x50/0xd0
+>>>> [  390.245686]  unbind_store+0xf8/0x120
+>>>> [  390.249245]  drv_attr_store+0x30/0x44
+>>>> [  390.252891]  sysfs_kf_write+0x50/0x60
+>>>> [  390.256537]  kernfs_fop_write_iter+0x134/0x1cc
+>>>> [  390.260964]  new_sync_write+0xf0/0x18c
+>>>> [  390.264696]  vfs_write+0x230/0x2d0
+>>>> [  390.268082]  ksys_write+0x74/0x100
+>>>> [  390.271467]  __arm64_sys_write+0x28/0x3c
+>>>> [  390.275373]  invoke_syscall.constprop.0+0x58/0xf0
+>>>> [  390.280061]  el0_svc_common.constprop.0+0x160/0x164
+>>>> [  390.284922]  do_el0_svc+0x34/0xcc
+>>>> [  390.288221]  el0_svc+0x30/0x140
+>>>> [  390.291346]  el0t_64_sync_handler+0xa4/0x130
+>>>> [  390.295599]  el0t_64_sync+0x1a0/0x1a4
+>>>> [  390.299245] ---[ end trace 0000000000000000 ]---
+>>>>
+>>>>
+>>>> I put some traces in the code and I can see that
+>>>> iommu_device_use_default_domain() effectively is called on
+>>>> 0004:01:00.0 e1000e device on pci_dma_configure() but at that time
+>>>> the iommu group is NULL:
+>>>> [   10.569427] e1000e 0004:01:00.0: ------ ENTRY pci_dma_configure
+>>>> driver_managed_area=0
+>>>> [   10.569431] e1000e 0004:01:00.0: ****
+>>>> iommu_device_use_default_domain ENTRY
+>>>> [   10.569433] e1000e 0004:01:00.0: ****
+>>>> iommu_device_use_default_domain no group
+>>>> [   10.569435] e1000e 0004:01:00.0: pci_dma_configure
+>>>> iommu_device_use_default_domain returned 0
+>>>> [   10.569492] e1000e 0004:01:00.0: Adding to iommu group 3
+>>>>
+>>>> ^^^the group is added after the
+>>>> iommu_device_use_default_domain() call
+>>>> So the group->owner_cnt is not incremented as expected.
+>>>
+>>> Thank you for reporting this. Do you have any idea why the driver is
+>>> loaded before iommu_probe_device()?
+>>
+>> Urgh, this is the horrible firmware-data-ordering thing again. The
+>> stuff I've been saying about having to rework the whole .dma_configure
+>> mechanism in the near future is to fix this properly.
+>>
+>> The summary is that in patch #4, calling
+>> iommu_device_use_default_domain() *before* {of,acpi}_dma_configure is
+>> currently a problem. As things stand, the IOMMU driver ignored the
+>> initial iommu_probe_device() call when the device was added, since at
+>> that point it had no fwspec yet. In this situation,
+>> {of,acpi}_iommu_configure() are retriggering iommu_probe_device()
+>> after the IOMMU driver has seen the firmware data via .of_xlate to
+>> learn that it it actually responsible for the given device.
 > 
-> I don't think you have. Yes they are mutually exclusive, only one source
-> can be selected at a time. Same situation as the ISP where the two CSI unit
-> inputs are mutually exclusive.
+> thank you for providing the info. Hope this is something Lu can work around.
 
-On the sink (input) side that's quite common, if you have two different
-sources but a single sink, the sink can't (usually) process both sources
-at the same time. I understand that for the sun6i-csi bridge it's the
-other way around, with the bridge can output to either a DMA engine or
-to the ISP, but not both at the same time. That's less common, but can
-certainly happen. I think I'd go for two source pads in that case too.
-Sakari, any opinion ?
+Hopefully it's just a case of flipping the calls around, so that 
+iommu_use_default_domain() goes at the end, and calls 
+arch_teardown_dma_ops() if it fails. From a quick skim I *think* that 
+should still work out to the desired behaviour (or at least close enough 
+that we can move forward without a circular dependency between fixes...)
 
-> > > > Ideally I'd say such internal routing should use the new V4L2 subdev
-> > > > routing API that is currently being implemented (see [1]), but I don't
-> > > > know when it will land, and I don't want to delay your patch series.
-> > > > 
-> > > > [1] https://lore.kernel.org/linux-media/20211130141536.891878-28-tomi.valkeinen@ideasonboard.com
-> > > 
-> > > I'm still a bit confused what problem this is trying to solve.
-> > > My understanding was that the current pad/link API allows representing complex
-> > > topologies and switching different paths with link enable/disable.
-> > 
-> > That was the intent of the MEDIA_IOC_SETUP_LINK ioctl, but we ended up
-> > with something that is fairly ill-defined, and doesn't have the ability
-> > to set multiple links atomically. It turned out to be less usable for
-> > userspace than expected. Mistakes happen (and I'll blame myself here,
-> > having designed that API) when we don't have real test cases during
-> > kernel development.
-> 
-> Yeah it's hard to predict these kinds of things in advance I suppose.
-> Thanks for the heads up!
-> 
-> > > > > > > > > +
-> > > > > > > > > +required:
-> > > > > > > > > +  - compatible
-> > > > > > > > > +  - reg
-> > > > > > > > > +  - interrupts
-> > > > > > > > > +  - clocks
-> > > > > > > > > +  - clock-names
-> > > > > > > > > +  - resets
-> > > > > > > > > +
-> > > > > > > > > +additionalProperties: false
-> > > > > > > > > +
-> > > > > > > > > +examples:
-> > > > > > > > > +  - |
-> > > > > > > > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > > > > > > > > +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> > > > > > > > > +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-> > > > > > > > > +
-> > > > > > > > > +    isp: isp@1cb8000 {
-> > > > > > > > > +        compatible = "allwinner,sun8i-v3s-isp";
-> > > > > > > > > +        reg = <0x01cb8000 0x1000>;
-> > > > > > > > > +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> > > > > > > > > +        clocks = <&ccu CLK_BUS_CSI>,
-> > > > > > > > > +             <&ccu CLK_CSI1_SCLK>,
-> > > > > > > > > +             <&ccu CLK_DRAM_CSI>;
-> > > > > > > > > +        clock-names = "bus", "mod", "ram";
-> > > > > > > > > +        resets = <&ccu RST_BUS_CSI>;
-> > > > > > > > > +
-> > > > > > > > > +        ports {
-> > > > > > > > > +            #address-cells = <1>;
-> > > > > > > > > +            #size-cells = <0>;
-> > > > > > > > > +
-> > > > > > > > > +            port@0 {
-> > > > > > > > > +                reg = <0>;
-> > > > > > > > > +
-> > > > > > > > > +                isp_in_csi0: endpoint {
-> > > > > > > > > +                    remote-endpoint = <&csi0_out_isp>;
-> > > > > > > > > +                };
-> > > > > > > > > +            };
-> > > > > > > > > +        };
-> > > > > > > > > +    };
-> > > > > > > > > +
-> > > > > > > > > +...
-
--- 
-Regards,
-
-Laurent Pinchart
+Robin.

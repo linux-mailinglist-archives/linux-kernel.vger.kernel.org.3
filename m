@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B15F4CDCFD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 922724CDD08
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 19:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241879AbiCDSyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 13:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S232568AbiCDS5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 13:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiCDSyU (ORCPT
+        with ESMTP id S230443AbiCDS5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 13:54:20 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D1D1BD04D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 10:53:32 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id z30so5827642ybi.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 10:53:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bEOxM9dCTwOgx3v/sybpuLomdOANvZM0pQSflYOHu1w=;
-        b=i652L4F2GnSj5foPdKPemlgr6xx94ua5Ic9XEX8NWr98rE/J8kp3lucWhLtM4AOES3
-         T9r1sjUabt2iScIDVpUdwI7AvcDZFK6NUnb+i966anXeK79MKuuIqPU7cQfPEN83otOC
-         mKwkhFqmQ0lI9vTrYAN1FaKXTRwQdjLTY1yTk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bEOxM9dCTwOgx3v/sybpuLomdOANvZM0pQSflYOHu1w=;
-        b=uFBaPYnCScUil39kAQ2FL0jZSXpYUn0vnQg3iI+LoIaaB0B2e5jFu93ootydc3i7hA
-         c1oY7z5pK10+Cfy/T6N2Qw7aFYLfUyUGcpc5t6Mnn6Iv/Ee7NQE4uIlRWfuKu3YqJLtR
-         QyItwilzIEd8njWkxNlu11tqJqkAE37yb2Sgv728gBIPAKBrfuFwfIzOdXOUg9DSgDNw
-         PMX/sHmXYMzmvoOuaF86Od9QjbqlSIL6k6I7kuApJtLjBaXYSwWticH4ZSELUK4B34YT
-         ih5Lady4cuyLGGLcw5uGhiX7IB0Da3MfscaP65bXvNuWkARgCk42WbKtHY2+wg0nH7RL
-         S9/A==
-X-Gm-Message-State: AOAM530NiYQTYv2FiaFPeuohB/v8ZyJD5hlBalkZrY9+jbVitY+KEPp2
-        7YGrUeW1iwC/Oac0wg9pcmCCH5MDddG9tedRjTYeqQ==
-X-Google-Smtp-Source: ABdhPJxmeYC7TAv458Sge2scZxXaYjCZnTUCKtizCBToEOesPPQLwrIAjrV205QglSMumtJodE5x7d4SMdWgl+HQSTw=
-X-Received: by 2002:a25:bc8:0:b0:628:80d9:526c with SMTP id
- 191-20020a250bc8000000b0062880d9526cmr17661448ybl.115.1646420011206; Fri, 04
- Mar 2022 10:53:31 -0800 (PST)
+        Fri, 4 Mar 2022 13:57:30 -0500
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D239F1D6F54;
+        Fri,  4 Mar 2022 10:56:41 -0800 (PST)
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 224IuJHs020122;
+        Sat, 5 Mar 2022 03:56:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 224IuJHs020122
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1646420179;
+        bh=ae5Yd4J05pJERqgIww/ekBg7J6J/HW2Ax8vCdSSmy7I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WKMGWPQS0Angn6t12jeTQy1uq7SLzAJU1sXmgpzQtIHXctTlvx1O0lx3cm1Mn/83A
+         f4BNL0rhAMmm3jEPmI9iYkzOGjqwz0Hw8hAZfrdcUZTTOBv1zl35I0a1QhcjaR1kXg
+         PVNwELdrqMn/QhbIfySunaXJa4W7oHu1fSQ4QdmOYGKONCQzltHfAxL916AOH7qMBD
+         OXSwajo5M5YSX9KY9yONKMtmjySyfsD8mRYrZc0d/CdanYqsmXfRA9sgZ/ZNDwTPa/
+         24dEYq9D/tTuJ90JcGf92jiA8byZ6erLknY4PA27638/IAImOhPOSLQl2lZM5bvNyr
+         Js+MOIERcMr6g==
+X-Nifty-SrcIP: [209.85.216.50]
+Received: by mail-pj1-f50.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so8748642pjl.4;
+        Fri, 04 Mar 2022 10:56:19 -0800 (PST)
+X-Gm-Message-State: AOAM533e4EUJWcFmMOPyXUohtVpK3SWdGNf8NFgsB/24D2cbt4fqMdzt
+        QsmQGn5Zz/BwGCNmBhAH+BqBDW5TxlTqexyANiQ=
+X-Google-Smtp-Source: ABdhPJwRRAwCRJWCopAh560BqX5nnMFeJX4fJRkUamLZIOmZSLvfoVWOOqJxRKhig5RNtnEWMDnmuKsSg5SnHO/by8w=
+X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id
+ s3-20020a170902b18300b0014fc26620d5mr43172969plr.136.1646420178457; Fri, 04
+ Mar 2022 10:56:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20220304184040.1304781-1-shakeelb@google.com>
-In-Reply-To: <20220304184040.1304781-1-shakeelb@google.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Fri, 4 Mar 2022 10:53:20 -0800
-Message-ID: <CABWYdi0t6W4269g5OMLuLG=SWESDDEDPF-1kv1OKnzua=6=mBQ@mail.gmail.com>
-Subject: Re: [PATCH] memcg: sync flush only if periodic flush is delayed
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Frank Hofmann <fhofmann@cloudflare.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Daniel Dao <dqminh@cloudflare.com>, stable@vger.kernel.org
+References: <20220304170813.1689186-1-nathan@kernel.org> <202203041005.A3B985C@keescook>
+ <YiJXUL3zIik+4QDv@thelio-3990X>
+In-Reply-To: <YiJXUL3zIik+4QDv@thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 5 Mar 2022 03:55:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT+4t_c=SLJqVWYVMaQ8C1uqWCeOFJ6eNczT1TUgEG_Cg@mail.gmail.com>
+Message-ID: <CAK7LNAT+4t_c=SLJqVWYVMaQ8C1uqWCeOFJ6eNczT1TUgEG_Cg@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 10:40 AM Shakeel Butt <shakeelb@google.com> wrote:
+On Sat, Mar 5, 2022 at 3:15 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> Daniel Dao has reported [1] a regression on workloads that may trigger
-> a lot of refaults (anon and file). The underlying issue is that flushing
-> rstat is expensive. Although rstat flush are batched with (nr_cpus *
-> MEMCG_BATCH) stat updates, it seems like there are workloads which
-> genuinely do stat updates larger than batch value within short amount of
-> time. Since the rstat flush can happen in the performance critical
-> codepaths like page faults, such workload can suffer greatly.
+> On Fri, Mar 04, 2022 at 10:09:03AM -0800, Kees Cook wrote:
+> > On Fri, Mar 04, 2022 at 10:08:14AM -0700, Nathan Chancellor wrote:
+> > > [...]
+> > >
+> > > Update and reorder the documentation to reflect these new additions.
+> > > At the same time, notate that LLVM=0 is not the same as just omitting it
+> > > altogether, which has confused people in the past.
+> >
+> > Is it worth making LLVM=0 actually act the way it's expected to?
 >
-> This patch fixes this regression by making the rstat flushing
-> conditional in the performance critical codepaths. More specifically,
-> the kernel relies on the async periodic rstat flusher to flush the stats
-> and only if the periodic flusher is delayed by more than twice the
-> amount of its normal time window then the kernel allows rstat flushing
-> from the performance critical codepaths.
->
-> Now the question: what are the side-effects of this change? The worst
-> that can happen is the refault codepath will see 4sec old lruvec stats
-> and may cause false (or missed) activations of the refaulted page which
-> may under-or-overestimate the workingset size. Though that is not very
-> concerning as the kernel can already miss or do false activations.
->
-> There are two more codepaths whose flushing behavior is not changed by
-> this patch and we may need to come to them in future. One is the
-> writeback stats used by dirty throttling and second is the deactivation
-> heuristic in the reclaim. For now keeping an eye on them and if there is
-> report of regression due to these codepaths, we will reevaluate then.
->
-> Link: https://lore.kernel.org/all/CA+wXwBSyO87ZX5PVwdHm-=dBjZYECGmfnydUicUyrQqndgX2MQ@mail.gmail.com [1]
-> Fixes: 1f828223b799 ("memcg: flush lruvec stats in the refault")
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> Reported-by: Daniel Dao <dqminh@cloudflare.com>
-> Cc: <stable@vger.kernel.org>
-> ---
+> I don't really see the point, omitting $(LLVM) altogether is simpler.
+> Why specify LLVM=0 if you want GNU tools, since it is the default?
+> However, I can look into changing that in a new revision or a follow up
+> if others disagree?
 
-See my testing results here:
-https://lore.kernel.org/linux-mm/CABWYdi2usrWOnOnmKYYvuFpE=yJmgtq4a7u6FiGJGJkskv+eVQ@mail.gmail.com/
 
-Tested-by: Ivan Babrou <ivan@cloudflare.com>
+Changing the meaning of LLVM=0 is beyond the scope of what
+we are trying to achieve now.
+
+I think documenting it is enough.
+
+(If we have a good reason to change it, we can. But, it should be
+done in a separate patch, at least)
+
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

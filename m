@@ -2,33 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07244CD7F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2574CD7FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240385AbiCDPgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S240403AbiCDPhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240383AbiCDPga (ORCPT
+        with ESMTP id S232540AbiCDPhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:36:30 -0500
-Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481F31C60F4
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:35:41 -0800 (PST)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id E18F91CA; Fri,  4 Mar 2022 16:35:39 +0100 (CET)
-Date:   Fri, 4 Mar 2022 16:35:38 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-Subject: [git pull] IOMMU Fixes for Linux v5.17-rc6
-Message-ID: <YiIxynRjN0sRPIju@8bytes.org>
+        Fri, 4 Mar 2022 10:37:06 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A311C4B3F;
+        Fri,  4 Mar 2022 07:36:18 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 2957A22175;
+        Fri,  4 Mar 2022 16:36:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1646408176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T9dPXHdGA1VZg8WnVxsyYzelfA1obOsxDGtftJwTRgo=;
+        b=gTf/3yn2LOnWm+Zt0G/SGD90UeDuGoLY5DD76Q+V7COAOGRkAPwFY7gPETOWXiQTXn7/Eo
+        +2/rmoBKuVyXaQv3ylI7AQPUnekzpKwA/Rzd/nehQ/VWtJCe93RsKRY0iM0EwJp9pMhL4R
+        +FQTtuFKZpmq+YE6zbiiJ6/7BgM3uEE=
+From:   Michael Walle <michael@walle.cc>
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v2 0/7] ARM: dts: lan966x: dtsi improvements and KSwitch D10 support
+Date:   Fri,  4 Mar 2022 16:35:41 +0100
+Message-Id: <20220304153548.3364480-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="sAXEzC0S1am36OTS"
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -37,85 +57,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add missing nodes for the flexcom blocks and a node for the SGPIO
+block. Then add basic support for the Kontron KSwitch D10.
 
---sAXEzC0S1am36OTS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Microchip, please take a closer look at the compatible strings of
+the newly added nodes.
 
-Hi Linus,
+changes since v1:
+ - fixed indendation
+ - keep compatible, reg first, move #address-cells and #size-cells
+   towards the end
 
-The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
+Michael Walle (7):
+  ARM: dts: lan966x: swap dma channels for crypto node
+  ARM: dts: lan966x: add sgpio node
+  ARM: dts: lan966x: add missing uart DMA channel
+  ARM: dts: lan966x: add all flexcom usart nodes
+  ARM: dts: lan966x: add flexcom SPI nodes
+  ARM: dts: lan966x: add flexcom I2C nodes
+  ARM: dts: lan966x: add basic Kontron KSwitch D10 support
 
-  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
+ arch/arm/boot/dts/Makefile                    |   3 +-
+ ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 159 ++++++++++++
+ arch/arm/boot/dts/lan966x.dtsi                | 227 +++++++++++++++++-
+ 3 files changed, 385 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
 
-are available in the Git repository at:
+-- 
+2.30.2
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v5.17-rc6
-
-for you to fetch changes up to 9826e393e4a8c3df474e7f9eacd3087266f74005:
-
-  iommu/tegra-smmu: Fix missing put_device() call in tegra_smmu_find (2022-02-28 14:01:57 +0100)
-
-----------------------------------------------------------------
-IOMMU Fixes for Linux v5.17-rc6
-
-Including:
-
-	- Fix a double list_add() in Intel VT-d code
-
-	- Add missing put_device() in Tegra SMMU driver
-
-	- Two AMD IOMMU fixes:
-	  - Memory leak in IO page-table freeing code
-	  - Add missing recovery from event-log overflow
-
-----------------------------------------------------------------
-Adrian Huang (1):
-      iommu/vt-d: Fix double list_add when enabling VMD in scalable mode
-
-Lennert Buytenhek (1):
-      iommu/amd: Recover from event log overflow
-
-Miaoqian Lin (1):
-      iommu/tegra-smmu: Fix missing put_device() call in tegra_smmu_find
-
-Suravee Suthikulpanit (1):
-      iommu/amd: Fix I/O page table memory leak
-
- drivers/iommu/amd/amd_iommu.h       |  1 +
- drivers/iommu/amd/amd_iommu_types.h |  1 +
- drivers/iommu/amd/init.c            | 10 ++++++++++
- drivers/iommu/amd/io_pgtable.c      | 12 ++++++------
- drivers/iommu/amd/iommu.c           | 10 ++++++++--
- drivers/iommu/intel/iommu.c         |  2 +-
- drivers/iommu/tegra-smmu.c          |  4 +++-
- 7 files changed, 30 insertions(+), 10 deletions(-)
-
-Please pull.
-
-Thanks,
-
-	Joerg
-
---sAXEzC0S1am36OTS
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmIiMcoACgkQK/BELZcB
-GuOVgw//cRwpzihkCZzEyg3UdyLz3/T2+rJukHB+ACyZot/DmB4ygu/SNI5CY2tE
-b5gbxBEX8ZiKoobFewhMe+qWi0z9y5FIuuKOOGgnS81XYb89DhedMsIeiTtLNa5m
-87BrByk+t9x7Nlo5AHfm8RfpBaRs6ZFewP37twZMdq+MF0lKyl7Af5kFxwol4D7Q
-+3oxGHl6zEINYeFB6i+/8hUm0zk4uTOZPdai52HNXbH658Mz07+xi03h7EK0SfWC
-y8eJvjUvO/9+JSYdYn7FJiyo8WsV/p+UaxoVQ6sHo6/pmTT7tB/ENsWnzCde+KVB
-a2Pali17xmQunUvP74QMHgghf6ebvEcqgIqn8tTrEdNfkcJRp9XrZgVRdYeZlSOX
-gjTfqTcoLfkIrnJlfC36zYa4QmXtp6jE9n3D3i8zkGSKVqKu4fRgjyXF2gBBUm03
-CTMRZW1Z63HyiDBbZfwwVzMGVhmNKBDAX4xPIiTQwb6yh52a3LhRTQP22mSmnpjp
-W4UaJSucKkkpeGvQKwr6Qx9Td2fYCL5tiKdP1u8fH9rAPT9TX1LKZKpncFJE+d/7
-kMN62iDnYdOm0AZiWkSQ0Xr5FIbTLfMAqiIAQ3zbt6ujNVl7be20h9ZOvgUeckUX
-e6mZHuyhhUT1V/XslRwWldo1TsZC2HYCKsNddQVd6in9B0gr4zY=
-=bjSp
------END PGP SIGNATURE-----
-
---sAXEzC0S1am36OTS--

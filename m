@@ -2,73 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9284CD406
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 13:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1664CD3FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 13:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237658AbiCDMJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 07:09:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S239688AbiCDMHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 07:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiCDMJz (ORCPT
+        with ESMTP id S239677AbiCDMHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 07:09:55 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586262980B
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 04:09:08 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id v10-20020a92c80a000000b002c281af4ddfso5350788iln.21
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 04:09:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=ZLQ+l6U3cC3xcyZ26dmva83Rjla9btl+5WyQj7ZwMUQ=;
-        b=x07u51M28BHhafBIckCN+044KbfXYi5yxetJeuVmLj0jI1Ifc0dh/vZksn73ygjJdx
-         UzLhiO+HIl0eAWb2VptH8I4wLB0TKRV39PCy8FCknz/tJRgkFs7eS9HOGBrJyoRXir2h
-         R2Y3ZsXqfJp5M8WtTAA2sTAup8t0BTzZMd01QZBWyLc3RN6hTs+3w2Act027P6SYgsSr
-         kXkI6bKnL3KZcRNWQupgjD74s5fpFJgm8vJ2iJimPmbecEXh324XjfGwAE8hkHjfVSpk
-         WL4Qg5oD5/EWsxWWLXlRCUZYhCsD/3EDnFR0Lmwb+AJAeu0VZwtOnvOHpsffbz73+WXH
-         oYCg==
-X-Gm-Message-State: AOAM532HihUEpJek1dUdcffwxYcs11aMcVYU9VsAwtmyUKThQluoC0YZ
-        ckUOexNn2cPXh9VNC+DCJjbnaWEFIeAKEHcIhGB192v+Bmyp
-X-Google-Smtp-Source: ABdhPJzTtUgWNdrJB42fkiOFuPQZ9wPjXcRLvuJiYwlAZuwlxR2NYIaEMoOGsQAnk3FD4ovrLTnL00mlm28BFC5D8h0pBTHV1nNt
+        Fri, 4 Mar 2022 07:07:10 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807E01B30A4;
+        Fri,  4 Mar 2022 04:06:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646395583; x=1677931583;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gZtyK7pDwLY5lAZrCyJHDcj242KDLDUK8zT8V+IfAjI=;
+  b=2kGsGoJqcUzDc0l+/4+cfvp8oJ/tsYBEV/Aq5wUA3fJH4EoAdIRYPMnY
+   bEHuYbZpbL8VdJH8ohMbigYceA4wtTEXX+Z8ofgPmit9ecAFsu2W2w2MV
+   OYvfHGUk81CuKXMhEtHFcLpME1XaoUqP9Sqo5EJW12rD/h2KDBAHF/3Sm
+   v+WhmToKQgVSTgDjHCjSVr1fPl/QzGS4utCSB0UwUO91nwhFikPkzSXAq
+   95zGEdpOUXNOq7RdUqRDYn1Nx/41ifAWI/zy1xkuc3E5bFgxSNNHruWv7
+   1sOJLKG1omr21flg7WVct/r9WULm6z/gkltNC2ZVIpEnJNqApVoOcz+uM
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="148093200"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 05:06:22 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 05:06:21 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 05:06:21 -0700
+Date:   Fri, 4 Mar 2022 13:09:11 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <UNGLinuxDriver@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>
+Subject: Re: [PATCH v1 5/5] pinctrl: microchip-sgpio: wait until output is
+ actually set
+Message-ID: <20220304120911.i5rngplg5l6gnnyy@soft-dev3-1.localhost>
+References: <20220224161021.2197263-1-michael@walle.cc>
+ <20220224161021.2197263-6-michael@walle.cc>
+ <20220225092427.jjilv3qo52crsmuw@soft-dev3-1.localhost>
+ <2f8a215c67269d639290515931d10b78@walle.cc>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1487:b0:2c2:e41d:f72b with SMTP id
- n7-20020a056e02148700b002c2e41df72bmr23414746ilk.61.1646395747743; Fri, 04
- Mar 2022 04:09:07 -0800 (PST)
-Date:   Fri, 04 Mar 2022 04:09:07 -0800
-In-Reply-To: <20220304114907.2733-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b43dde05d96361a0@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in btrfs_scan_one_device (2)
-From:   syzbot <syzbot+82650a4e0ed38f218363@syzkaller.appspotmail.com>
-To:     anand.jain@oracle.com, dsterba@suse.com, hdanton@sina.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <2f8a215c67269d639290515931d10b78@walle.cc>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The 02/25/2022 12:29, Michael Walle wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Hi Michael,
 
-Reported-and-tested-by: syzbot+82650a4e0ed38f218363@syzkaller.appspotmail.com
+Sorry for late reply.
 
-Tested on:
+> 
+> Hi Horatiu,
+> 
+> Am 2022-02-25 10:24, schrieb Horatiu Vultur:
+> > The 02/24/2022 17:10, Michael Walle wrote:
+> > > Right now, when a gpio value is set, the actual hardware pin gets set
+> > > asynchronously. When linux write the output register, it takes some
+> > > time
+> > > until it is actually propagated to the output shift registers. If that
+> > > output port is connected to an I2C mux for example, the linux driver
+> > > assumes the I2C bus is already switched although it is not.
+> > > 
+> > > Fortunately, there is a single shot mode with a feedback: you can
+> > > trigger the single shot and the hardware will clear that bit once it
+> > > has
+> > > finished the clocking and strobed the load signal of the shift
+> > > registers. This can take a considerable amount of time though.
+> > > Measuremens have shown that it takes up to a whole burst cycle gap
+> > > which
+> > > is about 50ms on the largest setting. Therefore, we have to mark the
+> > > output bank as sleepable. To avoid unnecessary waiting, just trigger
+> > > the
+> > > single shot if the value was actually changed.
+> > 
+> > I have tested this patch series on our lan9668 board and it worked
+> > fine. Thanks!
+> 
+> Thanks for testing!
+> 
+> > I just have few questions:
+> > 1. What about other boards/chips that have this sgpio, do they have
+> > also
+> >    the same issue? Because from what I recall on sparx5 they don't have
+> >    this issue. I have seen it only on lan9668.
+> 
+> Unfortunatly, I don't have any knowledge what IP core is used in
+> which SoC. I assumed the lan9668 used the same as the sparx5. If
+> that is not the case, we need a new compatible. Do you know if it
+> the same?
 
-commit:         2293be58 Merge tag 'trace-v5.17-rc4' of git://git.kern..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5f28851401b410e5
-dashboard link: https://syzkaller.appspot.com/bug?extid=82650a4e0ed38f218363
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1723b521700000
+From what I see, it is the same IP.
 
-Note: testing is done by a robot and is best-effort only.
+> 
+> On the sparx5 are there any peripheral who you would actually
+> notice that the timing is off?
+
+There are some SFP connected, similar to lan966x. So I don't understand
+why that issue is not seen there.
+
+> 
+> That being said, I'd assume all the serial gpio controller has
+> this "flaw". Simply because a register write won't block until the
+> value is shifted out to the shift register and actualy loaded by
+> strobing the load signal. It just depends on your burst setting
+> (even with bursts off, and clocking all the time) on how large
+> the delay is. So you might or might not notice it on a board.
+> 
+> Could you also have a look at the other supported sgpio block,
+> the ocelot and the luton? I don't have any register description
+> of these.
+> 
+> > 2. I remember that I have tried to fix this issue like this [1], but
+> >    unfortunetly that was never accepted. Is this something that is
+> > worth
+> >    at looking at?
+> 
+> That fix is at the wrong place. You'd need to fix every gpio user, no?
+> Instead this tries to fix the controller.
+
+Yes, you are right.
+
+> 
+> > 
+> > [1]
+> > https://patchwork.ozlabs.org/project/linux-i2c/patch/20211103091839.1665672-3-horatiu.vultur@microchip.com/
+> 
+> -michael
+
+-- 
+/Horatiu

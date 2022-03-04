@@ -2,113 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AF84CD8CE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559084CD8D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 17:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240692AbiCDQPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 11:15:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S240702AbiCDQPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 11:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240702AbiCDQPK (ORCPT
+        with ESMTP id S240703AbiCDQPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:15:10 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33B4158790;
-        Fri,  4 Mar 2022 08:14:13 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id F19981F46AE7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646410452;
-        bh=E2LGBSxjIQabf0bhUjv3Mh0qf9oY5wW2xSYGdoaQSxE=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=J9MMbjEO8Vy4G1dcC7G1yQdRQ9ENG/jVUp0O6noQk/Ma9SU0TLw8UG8CkNW2jzY5b
-         veOgEMQBVj9OJM1zt6lBrNmxVrWnsBgnUSoWp8GUf5DT7cQYXjUQRj0pGetcZX+kEw
-         21ju2TRlhS+XJIr3CEVqM4YYBBNA68UdKjiI97IhBvVbBOqzpvtqCsDgZB83MFvyuY
-         1RJyljs9KALlkEydSHqQo0YtWxP1+RAK+EZZIEiiULoAbrgWRWdFWMHvHe3DBrYx5c
-         eIsqA8VwNkmev52sWjJzCbJdrjnJqHeXHxms2Vxfb+I/NvDZw7ZQ49br7OGtWBx4ic
-         Dxl2RU/jOHsCg==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        kernelci@groups.io, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
-Organization: Collabora
-References: <20220224212335.3045905-1-usama.anjum@collabora.com>
-        <3b7c068b-ac7e-62fc-f0cd-a8dbf8642876@redhat.com>
-        <6133317f-4da0-3aae-f352-b75f0f94dbd4@linuxfoundation.org>
-        <87o82mkhif.fsf@collabora.com>
-        <ee9b8c8b-0d27-bd01-e10d-9062c32f2486@linuxfoundation.org>
-Date:   Fri, 04 Mar 2022 11:14:08 -0500
-In-Reply-To: <ee9b8c8b-0d27-bd01-e10d-9062c32f2486@linuxfoundation.org> (Shuah
-        Khan's message of "Thu, 3 Mar 2022 14:46:08 -0700")
-Message-ID: <87r17hg0fj.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 4 Mar 2022 11:15:16 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F71598FC
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 08:14:19 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A61231F386;
+        Fri,  4 Mar 2022 16:14:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646410457; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D6tMkw9qlM5UYaKemwdZ5cjjRWO9/r0Z1+FOXCrzn3o=;
+        b=EUxzWi3PMQBW0303yGQhoiej9gRMkAwhmAofPOnfT9450HtKx0EY2zWHmd+FRaSY1aYVmS
+        ZNi8An8P112TTSuS7tnOeUhV3ihkyd+cKiXbgYpTm+2n+yr/Rv3gIH5hDhVeyRvCXcitKu
+        5yITB+gndn9MChP7x/G4hppEdJBW49w=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8CB94A3B95;
+        Fri,  4 Mar 2022 16:14:17 +0000 (UTC)
+Date:   Fri, 4 Mar 2022 17:14:14 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: two locations: was: Re: [PATCH printk v1 03/13] printk: use
+ percpu flag instead of cpu_online()
+Message-ID: <YiI61ppIW+FsrzPu@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-4-john.ogness@linutronix.de>
+ <Yg0C+UtoegnybA4q@alley>
+ <87v8wwh0jw.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8wwh0jw.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shuah Khan <skhan@linuxfoundation.org> writes:
+On Wed 2022-03-02 15:55:23, John Ogness wrote:
+> On 2022-02-16, Petr Mladek <pmladek@suse.com> wrote:
+> >> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> >> index d1b773823d63..b346e60e9e51 100644
+> >> --- a/kernel/printk/printk.c
+> >> +++ b/kernel/printk/printk.c
+> >> @@ -2577,11 +2577,11 @@ static int have_callable_console(void)
+> >>   *
+> >>   * Console drivers may assume that per-cpu resources have been allocated. So
+> >>   * unless they're explicitly marked as being able to cope (CON_ANYTIME) don't
+> >> - * call them until this CPU is officially up.
+> >> + * call them until per-cpu resources have been allocated.
+> >>   */
+> >>  static inline int can_use_console(void)
+> >>  {
+> >> -	return cpu_online(raw_smp_processor_id()) || have_callable_console();
+> >> +	return (printk_percpu_data_ready() || have_callable_console());
+> >>  }
+> >
+> > cpu_online(raw_smp_processor_id()) check is used also in
+> > call_console_drivers(). The same logic should be used in both
+> > locations.
+> >
+> > I found this when reviewing 6th patch that replaced both checks
+> > with a single one.
+> >
+> > Note that I am still not sure if this change is correct at all.
+> > It will allow to always call the console during CPU hotplug
+> > and I am not sure if it is safe. IMHO, it might cause problems when
+> > a console driver uses, for example, CPU-bound workqueues.
+> 
+> You are correct. We must take hotplug into account for !CON_ANYTIME
+> consoles. There may be some hotplug callbacks that make memory
+> unavailable for the console.
+> 
+> However, I will add the use of printk_percpu_data_ready() in the
+> check. !CON_ANYTIME consoles also should not be called until the per-cpu
+> areas are ready. For example, it would be bad if a console queued
+> irq_work before per-cpu areas are setup (cpu_online() is true during
+> this time).
+> 
+> One of my main concerns was that raw_smp_processor_id() was used for the
+> check. It is conceptually wrong to exclude certain consoles based on a
+> current CPU when migration is still enabled. I understand that the use
+> of can_use_console() is an optimization to avoid doing extra work where
+> there are no consoles available. But the task could be preemptible there
+> and _conceptually_, could get moved to another CPU before its write()
+> callback is called. The cpu_online() check belongs in code where
+> preemption is disabled.
+> 
+> If the context is preemptible, I do not think it will ever see
+> !cpu_online(). So I think if the cpu_online() check is limited to
+> unlocking when console_trylock() was used, it will be correct.
 
-> On 3/3/22 11:39 AM, Gabriel Krisman Bertazi wrote:
->> Shuah Khan <skhan@linuxfoundation.org> writes:
->> 
->>> On 2/28/22 2:37 AM, David Hildenbrand wrote:
->>>> On 24.02.22 22:23, Muhammad Usama Anjum wrote:
->>>>> This introduces three tests:
->>>>> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
->>>>> check if the SD bit flipped.
->>>>> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
->>>>> 3) Check soft-dirty on huge pages
->>>>>
->>>>> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
->>>>> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
->>>>> same issue that he fixed, and this test would have caught it.
->>>>>
->>>> A note that madv_populate.c already contains some SOFTDIRTY tests
->>>> regarding MADV_POPULATE. Eventually we want to factor out
->>>> softdirty/pagemap handling+checks for easier reuse.
->>>>
->>>
->>> Is this patch unnecessary then?
->> It is not unnecessary since the madv test doesn't cover the bug tested
->> here, afaik.  But, as mentioned when I originally submitted this patch,
->> it should be merged into selftests/vm/madv_populate.c or, at least,
->> reuse that existing infrastructure.
->> https://lore.kernel.org/lkml/87lf553z5g.fsf@collabora.com/
->> 
->
-> Oops this one came in a few months ago and appears to have slipped
-> through and didn't get the right attention. Sorry about that.
->
-> Please resend the patch and cc all the everybody on this thread.
->
-> I would like to have your patch reviewed and looked at first. This
-> patch needs rework sine it has several comments to be addressed.
+This would require calling console_lock()/console_unlock()
+in a hotplug code when cpu_online() already returns false.
+Do I get it correctly?
 
-Hi Shuah,
+I agree that it should not happen. console_lock() must be called in
+a preemptible context. And CPU should not be in a pre-emptible
+context when cpu_online() returns false. To be honest, I did
+not check the code. It just does not make much sense.
 
-The patch being discussed in that thread is the same that Usama is
-proposing here, minus a few modifications. Usama has taken over the work
-to upstream it.
+> In the current implementation of printk(), it would be odd to do this
+> conditional check (perhaps by passing @do_cond_resched to
+> can_use_console()). But my series does significant refactoring and
+> actually does need to distinguish between console_lock() and
+> console_trylock() due to the kthreads and supporting the handover. So it
+> should work well that the cpu_online() check for !CON_ANYTIME is only
+> performed when !preemptible.
+> 
+> Regardless, my v2 will keep cpu_online() checks since they are necessary
+> for hotplug support.
 
-We just spoke, and he will follow up with a new version that addresses
-the coding issues and reuses the infrastructure from madv_populate.c
+Yes, I would do it to stay on the safe side.
 
-Sorry for the noise.
-
--- 
-Gabriel Krisman Bertazi
+Best Regards,
+Petr

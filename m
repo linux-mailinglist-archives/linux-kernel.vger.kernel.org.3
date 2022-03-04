@@ -2,111 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F04D4CD9CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31AE4CD9D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 18:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240887AbiCDRLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 12:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S240891AbiCDRMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 12:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240870AbiCDRLj (ORCPT
+        with ESMTP id S237000AbiCDRMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:11:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2581CD9D6;
-        Fri,  4 Mar 2022 09:10:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33402B827EA;
-        Fri,  4 Mar 2022 17:10:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F16C1C340E9;
-        Fri,  4 Mar 2022 17:10:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646413849;
-        bh=Ds1CUkU7UJjiWAdE0+xZMgQsZmoxCwPqtCIMS0NNp5A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EA7yu/IROGfdSgKyOrBu8bT76eexmYri8ZSVbgz1qHTtzt1RI+qQdCks6wtlyl3eW
-         4XWB3HCTp6HtkpAAFNwdzQFn60forLUNs1zvg+mdX4mTJFCV9fKz03gGy3lgRHmrsZ
-         DNKBc28pZVlNB9VBlpkpVozlz75RUsvq+YXASqYajSkHNEv8c1BXroYR9QRz+0b6B9
-         Ss1SYTBV4zI9Xolb5L+Yl+HuevD4rfjGKHOKtehMtBNWH9hKbjkxqHGOlLf5GrvGVK
-         oSPmW8nEIyt0j1fVH15vsJShel4+aqY4NkDb4PpnaFKwAJ2qAYn7Ur9qMjr8jEg4us
-         qbX0wXDKvNj+A==
-Received: by mail-ed1-f50.google.com with SMTP id q17so11607608edd.4;
-        Fri, 04 Mar 2022 09:10:48 -0800 (PST)
-X-Gm-Message-State: AOAM533fofffIpN/fp+iKoMny2wK8/ThsGaGKWbVvZnu310+u70mbHqN
-        XEdJadZ7nGqlI5bV6Dxpl+SZ81fqAO1M9H4m2A==
-X-Google-Smtp-Source: ABdhPJyv33ipIntcHpbv1qfxGMnwrXmM5pCVhZvYqYuBcIOtqTdc2+oPX0xtMXbyCVPXlf8ixI0YtHesErJAvOBNjaY=
-X-Received: by 2002:aa7:d147:0:b0:415:c68c:f8d6 with SMTP id
- r7-20020aa7d147000000b00415c68cf8d6mr12008248edo.67.1646413847174; Fri, 04
- Mar 2022 09:10:47 -0800 (PST)
+        Fri, 4 Mar 2022 12:12:33 -0500
+X-Greylist: delayed 358 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Mar 2022 09:11:45 PST
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C64A71CD9EF;
+        Fri,  4 Mar 2022 09:11:45 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id F09E792009D; Fri,  4 Mar 2022 18:11:44 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id EA18792009B;
+        Fri,  4 Mar 2022 17:11:44 +0000 (GMT)
+Date:   Fri, 4 Mar 2022 17:11:44 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] MIPS: Refactor early_parse_mem() to fix mem=
+ parameter
+In-Reply-To: <20220304153517.GA28487@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <1646108941-27919-2-git-send-email-yangtiezhu@loongson.cn> <20220304151052.GA27642@alpha.franken.de> <20220304153517.GA28487@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-References: <6d26f16646294836b87611f4dc5fe763@huawei.com>
-In-Reply-To: <6d26f16646294836b87611f4dc5fe763@huawei.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 4 Mar 2022 11:10:33 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKKj5znW1z7Oyk03O1qLVADUNRC5GthoVcM37HajHnxBA@mail.gmail.com>
-Message-ID: <CAL_JsqKKj5znW1z7Oyk03O1qLVADUNRC5GthoVcM37HajHnxBA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: dwc: solve returning success but actually failed
-To:     "Zhangjiantao(Kirin,Nanjing)" <water.zhangjiantao@huawei.com>
-Cc:     "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
-        "gustavo.pimentel@synopsys.com" <gustavo.pimentel@synopsys.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Caiyadong <caiyadong@huawei.com>,
-        guhengsheng <guhengsheng@hisilicon.com>,
-        "zhangjianrong (E)" <zhangjianrong5@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 6:06 AM Zhangjiantao(Kirin,Nanjing)
-<water.zhangjiantao@huawei.com> wrote:
->
+On Fri, 4 Mar 2022, Thomas Bogendoerfer wrote:
 
-For the subject, something like: 'PCI: dwc: Fix setting error return
-on MSI DMA mapping failure'
+> > > With this patch, when add "mem=3G" to the command-line, the
+> > > kernel boots successfully, we can see the following messages:
+> > 
+> > unfortunately this patch would break platforms without memory detection,
+> > which simply use mem=32M for memory configuration. Not sure how many
+> > rely on this mechanism. If we can make sure nobody uses it, I'm fine
+> > with your patch.
+> 
+> maybe we could add a CONFIG option, which will be selected by
+> platforms, which don't need/want this usermem thing.
 
-> When dma_mapping_error returns error because of no enough memory available, dw_pcie_host_init will return success, which will mislead the callers.
+ FWIW I don't understand what the issue is here beyond that we have a bug 
+that causes a system to hang when "mem=3G" is passed on the kernel command 
+line.  That is assuming that system does have contiguous RAM available for 
+the kernel to use from address 0 up to 3GiB; otherwise it's a user error 
+to tell the kernel it has that memory available (I did get bitten by that 
+myself too): garbage in, garbage out.
 
-Wrap lines at 72 char.
+ I think having a CONFIG option automatically selected to disable the 
+ability to give a memory map override would handicap people in debugging 
+their systems or working around firmware bugs, so I would rather be 
+against it.
 
->
-
-Add a Fixes tag with whatever commit introduced the problem.
-
-> Signed-off-by: zhangjianrong <zhangjianrong5@huawei.com>
-> Signed-off-by: zhangjiantao <water.zhangjiantao@huawei.com>
-
-Author and S-o-b names should match.
-
->
-> ---
->   drivers/pci/controller/dwc/pcie-designware-host.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c
-> b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index f4755f3a03be..ac691d733848 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -393,6 +393,7 @@ int dw_pcie_host_init(struct pcie_port *pp)
->               if (dma_mapping_error(pci->dev, pp->msi_data)) {
->                   dev_err(pci->dev, "Failed to map MSI data\n");
->                   pp->msi_data = 0;
-> +                ret = -1;
-
-Use an errno value. ENOMEM seems to be common, but I also see EIO and
-EFAULT used.
-
-Rob
+  Maciej

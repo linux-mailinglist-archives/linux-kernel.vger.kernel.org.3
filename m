@@ -2,52 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A744CDF74
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7444CDF79
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiCDU71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S229751AbiCDVB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 16:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiCDU7X (ORCPT
+        with ESMTP id S229561AbiCDVB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:59:23 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AEF419B5;
-        Fri,  4 Mar 2022 12:58:34 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 7F3BB1F469EA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646427513;
-        bh=hTgfC44JS9v44NLsD1sg7Y1pWVGJtaRJ7sUIWmhL94M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dyP/MFwpz0UOS7kMPEvfTweRCqsKtp7dZgta3bMnXhGcc+jkvVKQZ8QoYxmpAstfR
-         aC/cIHqtWLAJK2PqednXw/M9h9nxt53MOuJhaw5vZaD54OeHllhS0Uqnu4EuOcvZbp
-         ZyHIXeG2lWYIj4OI2MjYS2unJscfG8H8zz4hx+rkBpDxlg6dq8H+4Qb3MZqBAXfPpc
-         KTrsDUAMx8fvgBrQhZpe4yHwRqADaJ/d+xM5w8yg7JMJCTIh+gfGnBmHZKcFQ0pjLO
-         dWx3FpD/uZEt3jQ+pUCV+Hvy2m90r7ZzCmM5M65e/yI0Db1gCtGT65nfdk1x2bNYiU
-         nDwMoTzuVWA+g==
-Received: by mercury (Postfix, from userid 1000)
-        id E1C301060602; Fri,  4 Mar 2022 21:58:30 +0100 (CET)
-Date:   Fri, 4 Mar 2022 21:58:30 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        patches@opensource.cirrus.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] power: supply: Handle error for wm8350_register_irq
-Message-ID: <20220304205830.udamvgsngin2gib5@mercury.elektranox.org>
-References: <20220304015751.367280-1-jiasheng@iscas.ac.cn>
- <20220304100011.GU38351@ediswmail.ad.cirrus.com>
+        Fri, 4 Mar 2022 16:01:57 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA9A9FD9;
+        Fri,  4 Mar 2022 13:01:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646427666; x=1677963666;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=VjE5SQTXxcv9yH10VlgYyxJXzMzTnv0lxqg2YttM5ew=;
+  b=W7zK2rYiW1tXaUw6tdNLagtCRnu0b+g8MogjJzEGFtUyetu8TFP8W/zy
+   eRKHWw2jJFf+StRBl9XmAu7hSZ2SeluOzxiWCuFnjjhFN8/SF3uqFLTab
+   iFv6sRF7bHpnXfnrPyg6wT/ar8mi1NRnOoS8cWfL64Zit8Jxr1RFcuNns
+   nI8lC/8COrNH38Ef9lGK5Ll5lNTqL14RigdQQzhpbDrCR4jsw3h78sLL5
+   E5bV1e44xum+bCLRv31LLWDtODJio51uN+5XB2pRb4J688RqaW9qrTaGo
+   GZ5A2z9naxKsWFsc9z1Rjo4bTVntzyEZStYNDf4l1ZWCIiiTcxCur6TxF
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="234020443"
+X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
+   d="scan'208";a="234020443"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 13:01:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
+   d="scan'208";a="610056761"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Mar 2022 13:01:06 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 13:01:05 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 13:01:04 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.021;
+ Fri, 4 Mar 2022 13:01:04 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de" <bp@alien8.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [RFC 08/10] platform/x86/intel/ifs: Add IFS sysfs interface
+Thread-Topic: [RFC 08/10] platform/x86/intel/ifs: Add IFS sysfs interface
+Thread-Index: AQHYLaZd5d+yEBuhdEqmhIRDOkET6qyu6T6AgAFSX4D//33N4A==
+Date:   Fri, 4 Mar 2022 21:01:03 +0000
+Message-ID: <52a16a3eb3f54ec88f7a841baa7000fd@intel.com>
+References: <20220301195457.21152-1-jithu.joseph@intel.com>
+ <20220301195457.21152-9-jithu.joseph@intel.com>
+ <188492dc80c017375da76d444347b1d00c2031f6.camel@intel.com>
+ <7b9c788e-21dc-eedc-a1b4-9c6877fa48fe@intel.com>
+In-Reply-To: <7b9c788e-21dc-eedc-a1b4-9c6877fa48fe@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nyivvc77cwjv2mom"
-Content-Disposition: inline
-In-Reply-To: <20220304100011.GU38351@ediswmail.ad.cirrus.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,48 +102,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---nyivvc77cwjv2mom
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Fri, Mar 04, 2022 at 10:00:11AM +0000, Charles Keepax wrote:
-> On Fri, Mar 04, 2022 at 09:57:51AM +0800, Jiasheng Jiang wrote:
-> > As the potential failure of the wm8350_register_irq(),
-> > it should be better to check it and return error if fails.
-> > Also, use 'free_' in order to avoid same code.
-> >=20
-> > Fixes: 14431aa0c5a4 ("power_supply: Add support for WM8350 PMU")
-> > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > ---
->=20
-> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-
-Thanks, queued.
-
--- Sebastian
-
---nyivvc77cwjv2mom
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIifXYACgkQ2O7X88g7
-+pqrTA/+PuT7os9q1eAwQg7iAxaYXRN5lEODz98SiA0Sjphxskwj4xf+M8RRPYo4
-N3Fswgl6df7KiiqCsRbCaappMjvRPkU2y74dAiavo4kxytPI63DuW/CPk0E0lagm
-15/Zhqj5tLKH2wBzJC54lgH7AijtPkprPQTaoNc4v6IEjiu9sS+1AipHYtlvX0Y5
-e0BNATEZoT4NUn64Q2zWXD8ZjjcD4AwLqVtCpWeSRWKffw5c9fKkr6X6Tu1o7KVZ
-ydwTnuJUDfLqrvxfSyzVvC93vEmvqubBMyMB7XSeNlaFCWj06f0YF4B9qN4dabFs
-BsQE7WuUiFs4aI70OoEHeBBVkxH17kVgrHyYFC00UM+D6XYGJ5gEhqV0jWoj8K9c
-epNGfBSmxRqrsniGc4yKrBQFr0MC7iyaMS9omQOUw7Vy5mwI1TrfW3WRB49zfLIT
-DiupIuawh3VajLjwHw4/KGjUNH3d4Pk8LiuYiJZn3y6yk0gy1G/4WcnTaqRnJkyO
-UtWdqEHhmmsWEtaxtwL3ZpdocBXRvscPXJ6+SAtJP3XlEskSevzHF9oMunHvxzF0
-s+8M9tDjGQ05Ywh1e8WhcHcTjL1cbOzMaXpgCPEgUXszpc5KkXyGyXYAwxknH/tK
-pTPOGLL2kET4zrI9QdD9EkyWe8QWWgHnsUyMxj8bKm8GedcWj9U=
-=ysUY
------END PGP SIGNATURE-----
-
---nyivvc77cwjv2mom--
+Pj4gWW91IGNvdWxkIGp1c3QgY3V0IHRvIHRoZSBjaGFzZSBhbmQgZG86IHN5c2ZzX2VxKGJ1Ziwg
+IjEiKQ0KPg0KPiBUaGFua3Mgd2lsbCB1c2UgdGhpcw0KDQokIGdpdCBncmVwIHN5c2ZzX2VxDQok
+DQoNCkkgZG9uJ3Qgc2VlIHRoaXMgZGVmaW5lZCAob3IgdXNlZCkgYW55d2hlcmUgaW4gdGhlIGtl
+cm5lbC4gSXMNCml0IHNwZWxsZWQgZGlmZmVyZW50bHkgZnJvbSBob3cgdHlwZWQgaGVyZT8NCg0K
+LVRvbnkNCg0K

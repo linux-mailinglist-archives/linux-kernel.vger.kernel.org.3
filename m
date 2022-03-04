@@ -2,165 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE87B4CD615
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1450A4CD617
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239052AbiCDONQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S239865AbiCDONd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239861AbiCDOMv (ORCPT
+        with ESMTP id S239855AbiCDON0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:12:51 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD211BAF0E;
-        Fri,  4 Mar 2022 06:12:03 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224DQ4vw030810;
-        Fri, 4 Mar 2022 14:12:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=pGmYGwb79apXudBWe4k2mRuaKzUVH0A8Evs3CZ+9Nhs=;
- b=Tj10yMLrKB85pP3n/RGMgzoJaBUhWQMfpVGEnOrgJjrK4iesVHS6Iea2tdMrb7Kqxj9P
- ku07n1fA9kIHfV7srCurdGdbgoTuWMSUn88mlNkf+cUfgBffDFx1yG01W8Mjawd7ARpu
- 8x1qYENSa51pNRCD/6G1q3FNptl6OZzueE2YNc2djF+yKXiLO42wU8iDQ/ri+TzrCTjF
- YnXmz8fTcT6Bo3WG+kV5PvJWZIznmvgEowEThmJ1weM2mXeXjlMbE4tHez8wI9V1nc7q
- f57Z3k/PY9ZMtc1MMpcPoidXgosMoUCHdrL8aN705gj1gIAD/nDIzzqx6OZKdxuzIp9P 4A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekgwgv73s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 14:12:02 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 224E5YbX012333;
-        Fri, 4 Mar 2022 14:12:02 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekgwgv72k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 14:12:01 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 224E7QO0004051;
-        Fri, 4 Mar 2022 14:11:59 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3ek4k81nej-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 14:11:59 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 224EBuGs52625702
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Mar 2022 14:11:56 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5D01E42042;
-        Fri,  4 Mar 2022 14:11:56 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F0BE42041;
-        Fri,  4 Mar 2022 14:11:53 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.114.12.92])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  4 Mar 2022 14:11:53 +0000 (GMT)
-From:   Steffen Eiden <seiden@linux.ibm.com>
-To:     linux-s390@vger.kernel.org
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>, Nico Boehr <nrb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 4/4]  selftests: drivers/s390x: Add uvdevice  QUI tests
-Date:   Fri,  4 Mar 2022 09:11:41 -0500
-Message-Id: <20220304141141.32767-5-seiden@linux.ibm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220304141141.32767-1-seiden@linux.ibm.com>
-References: <20220304141141.32767-1-seiden@linux.ibm.com>
+        Fri, 4 Mar 2022 09:13:26 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EBB1BB720;
+        Fri,  4 Mar 2022 06:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646403145; x=1677939145;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=Is/ItGtQqugXnrksFzi3WsWP524rFjNifUTd7uJUz1g=;
+  b=DiKyJwskLewUD2olshfuXVKC7yrABrXVT+VLzlrIaSmvtxa3DJXJBLCV
+   4003+ziwQeOnWUioBfjPONVyOx4C5xse0Dh6UJSHBuHgasF7FJlxhzu5O
+   1wyrmEZhUnggsSBpaMokx5vJ0Lo0he2Qqb6AdJVx1PXxCE2mBclxW9o57
+   nIhVGQ9oGSXgO4Y3iBi3UR1uu1vRqU/sLMyZhKQFqD6wiclGoHV/KF7Xt
+   pTKLT0ljADYyq7D6K7qDK2sRntMTJ1q6Ye4PH9x4+2UtxcxS7lSGCqHJH
+   qu3nqq4/UVLImLB9F5TGs0YCxngvZiH7t5/jkNylhWLV9FP3WWOdEfQMy
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="148102473"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:12:24 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 07:12:22 -0700
+Received: from [10.12.73.230] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 07:12:20 -0700
+Message-ID: <92c78eb4-bdc2-4240-4eb7-dc8b2b736cac@microchip.com>
+Date:   Fri, 4 Mar 2022 15:12:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: s_IpDuoY74pg2aeZrn5jeNC6EYW4Zrdr
-X-Proofpoint-ORIG-GUID: pgKV1ARvP8UgVWrTGqVt2G-3-wRewzHR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-04_06,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
- mlxlogscore=999 bulkscore=0 spamscore=0 priorityscore=1501 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203040077
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ARM: dts: at91: sama7g5: Add NAND support
+Content-Language: en-US
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+To:     Tudor Ambarus - M18064 <Tudor.Ambarus@microchip.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "Ludovic Desroches - M43218" <Ludovic.Desroches@microchip.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220111130556.905978-1-tudor.ambarus@microchip.com>
+ <2fa34fae-7736-670a-1d31-7928fbcf95bd@microchip.com>
+ <c708f761-aad4-a2f2-9255-01bcb6ad73de@microchip.com>
+ <3cd1fd6b-d3a4-5ac5-22fa-c854e2f25a65@microchip.com>
+ <647e801b-88d3-6169-0354-ba1cdff8d807@microchip.com>
+ <3cc35822-cbfb-28e5-5fdb-76ceb1eebd27@microchip.com>
+Organization: microchip
+In-Reply-To: <3cc35822-cbfb-28e5-5fdb-76ceb1eebd27@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add test variant to also verify that QUI-error paths
-are working as intended.
+On 25/02/2022 at 11:28, Nicolas Ferre wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On 24/02/2022 at 19:26, Tudor Ambarus - M18064 wrote:
+>> On 2/24/22 19:44, Nicolas Ferre wrote:
+>>> Hi Tudor,
+>>
+>> Hi,
+>>
+>>>
+>>> On 24/02/2022 at 16:49, Tudor Ambarus - M18064 wrote:
+>>>> On 2/24/22 17:04, Nicolas Ferre wrote:
+>>>>> On 11/01/2022 at 14:05, Tudor Ambarus wrote:
+>>>>>> Add NAND support. The sama7g5's SMC IP is the same as sama5d2's with
+>>>>>> a slightly change: it provides a synchronous clock output (SMC clock)
+>>>>>> that is dedicated to FPGA usage. Since this doesn't interfere with the SMC
+>>>>>> NAND configuration, thus code will not be added in the current nand driver
+>>>>>> to address the FPGA usage, use the sama5d2's compatible and choose not to
+>>>>>> introduce dedicated compatibles for sama7g5.
+>>>>>> Tested with Micron MT29F4G08ABAEAWP NAND flash.
+>>>>>>
+>>>>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+>>>>>
+>>>>> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+>>>>>
+>>>>>> ---
+>>>>>> The patch depends on the following patch:
+>>>>>> https://lore.kernel.org/linux-clk/20220111125310.902856-1-tudor.ambarus@microchip.com/T/#u
+>>>>>
+>>>>> Patch seems taken, so I add this one to at91-dt branch for 5.18 merge window.
+>>>>>
+>>>>
+>>>> I think it depends on who gets to next first. If at91 gets before clk,
+>>>> there will be a build error, isn't it?
+>>>
+>>
+>> Sorry, not linux-next, but whose PR gets first applied by Linus.
+>>
+>>> Clk patch is already in linux-next, so no worries.
+>>> Moreover, I don't get why there could be a build error as there is no build dependency between DT changes and C changes.
+>>> Sorry but I'm puzzled... Or I'm not looking at the right patch.
+>>>
+>>
+>> You would see this kind of error:
+>> Error: arch/arm/boot/dts/sama7g5.dtsi:102.21-22 syntax error
+>> FATAL ERROR: Unable to parse input tree
+>> make[1]: *** [scripts/Makefile.lib:346: arch/arm/boot/dts/at91-sama7g5ek.dtb] Error 1
+>> make[1]: *** Waiting for unfinished jobs....
+>> make: *** [Makefile:1385: dtbs] Error 2
+>> make: *** Waiting for unfinished jobs....
+>>
+>> This patch uses "PMC_MCK1" which is defined in:
+>> https://lore.kernel.org/linux-clk/20220111125310.902856-1-tudor.ambarus@microchip.com/T/#u
+>>
+>> If Linus applies the arm-soc PR before the clk PR, it will see the same error, no?
+> 
+> Yes, absolutely.
+> So I need to have an immutable branch from Stephen then. I'm removing
+> the patch from the at91-dt branch for now.
 
-  ./test-uv-device
-  TAP version 13
-  1..10
-  # Starting 10 tests from 4 test cases.
-  #  RUN           uvio_fixture.qui.fault_ioctl_arg ...
-  #            OK  uvio_fixture.qui.fault_ioctl_arg
-  ok 1 uvio_fixture.qui.fault_ioctl_arg
-  #  RUN           uvio_fixture.qui.fault_uvio_arg ...
-  #            OK  uvio_fixture.qui.fault_uvio_arg
-  ok 2 uvio_fixture.qui.fault_uvio_arg
-  #  RUN           uvio_fixture.qui.inval_ioctl_cb ...
-  #            OK  uvio_fixture.qui.inval_ioctl_cb
-  ok 3 uvio_fixture.qui.inval_ioctl_cb
-  #  RUN           uvio_fixture.qui.inval_ioctl_cmd ...
-  #            OK  uvio_fixture.qui.inval_ioctl_cmd
-  ok 4 uvio_fixture.qui.inval_ioctl_cmd
-  #  RUN           uvio_fixture.att.fault_ioctl_arg ...
-  #            OK  uvio_fixture.att.fault_ioctl_arg
-  ok 5 uvio_fixture.att.fault_ioctl_arg
-  #  RUN           uvio_fixture.att.fault_uvio_arg ...
-  #            OK  uvio_fixture.att.fault_uvio_arg
-  ok 6 uvio_fixture.att.fault_uvio_arg
-  #  RUN           uvio_fixture.att.inval_ioctl_cb ...
-  #            OK  uvio_fixture.att.inval_ioctl_cb
-  ok 7 uvio_fixture.att.inval_ioctl_cb
-  #  RUN           uvio_fixture.att.inval_ioctl_cmd ...
-  #            OK  uvio_fixture.att.inval_ioctl_cmd
-  ok 8 uvio_fixture.att.inval_ioctl_cmd
-  #  RUN           attest_fixture.att_inval_request ...
-  #            OK  attest_fixture.att_inval_request
-  ok 9 attest_fixture.att_inval_request
-  #  RUN           attest_fixture.att_inval_addr ...
-  #            OK  attest_fixture.att_inval_addr
-  ok 10 attest_fixture.att_inval_addr
-  # PASSED: 10 / 10 tests passed.
-  # Totals: pass:10 fail:0 xfail:0 xpass:0 skip:0 error:0
+I didn't hear from Setphen so I'm adding the missing piece in the patch 
+and queue it in my next DT pull-request to arm-soc (target: 5.18).
+I verified that there is no conflict when merging with linux-next which 
+already contains this chunk.
 
-Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-Acked-by: Janosch Frank <frankja@linux.ibm.com>
----
- .../testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Best regards,
+   Nicolas
 
-diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-index ea0cdc37b44f..44a6fbefc156 100644
---- a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-+++ b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-@@ -30,6 +30,11 @@ FIXTURE_VARIANT(uvio_fixture) {
- 	uint32_t arg_size;
- };
- 
-+FIXTURE_VARIANT_ADD(uvio_fixture, qui) {
-+	.ioctl_cmd = UVIO_IOCTL_QUI,
-+	.arg_size = BUFFER_SIZE,
-+};
-+
- FIXTURE_VARIANT_ADD(uvio_fixture, att) {
- 	.ioctl_cmd = UVIO_IOCTL_ATT,
- 	.arg_size = sizeof(struct uvio_attest),
+> Thanks for the insight and sorry not having overlooked at that crucial
+> piece of header file ;-)
+> 
+> Best regards,
+>     Nicolas
+> 
+> --
+> Nicolas Ferre
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+
 -- 
-2.25.1
-
+Nicolas Ferre

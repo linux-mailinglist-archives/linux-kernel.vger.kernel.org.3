@@ -2,141 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF684CCF15
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 962E24CCF1A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 08:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238701AbiCDHcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 02:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34992 "EHLO
+        id S238769AbiCDHfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 02:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238690AbiCDHcU (ORCPT
+        with ESMTP id S238731AbiCDHfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 02:32:20 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38914192C82
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:31:33 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F19CF3F5F9
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646379091;
-        bh=znesbVorVsm63iCSSQmBPsZdwQn81pwm1UwoEW27Z4s=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=XWILBgk1RZT4tjCIfg0GQKUxdUG9diADsp3bIWb8HDkbIf174VXs+VMFbtoxaeLjf
-         bkMQiIC0+XZcxA4DdDioZX3VZ+iA5cElczxhhvp7RWRK4tkX4EVxTqpd8Ql6QBFFBk
-         vfACzqApbdbIeAdMSul6mok4skfKtNiTpjqKud/fzpAoAU30YGB+LhyTWCg3lA4VK+
-         oxHwGifgJNEdQkxqR63+2PujmeKgZObCgwa7aYsr1+3ogILlUbPueVOT3tsHNbj5MM
-         6EgdTXroc30RcYeBnso74kAsGxXKebTDpRu+0Rb90ZLStbTJVb+aWT2RFjZo0nHo7S
-         xxoWu5PRZwMoA==
-Received: by mail-ej1-f72.google.com with SMTP id la22-20020a170907781600b006a7884de505so4011588ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 23:31:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=znesbVorVsm63iCSSQmBPsZdwQn81pwm1UwoEW27Z4s=;
-        b=TqK0g5JC13eV1f4mHjgPyQsnDI7blI6SsIRb7iXGTEFvpc9uQfjLq4ZDm+tLLVULUB
-         49HSo3IuT2Rm3z6UhHqgxzZAIdfVzASluZlTtzZX+YsVi7ynrP9r/DOwl/3Nc4+bhx8o
-         /5E5ZGa2adB13kse8rKCvUSw7xSH3VIZgh4MCTe4gdOxU8k1w+UzMZYUQPlLia98AUZL
-         cqYbJczxZ89/rvR6n2/kdmYVf4+JweCPBZvanxHwDhvTqzVHEqNEuz2+V60KeS12/RLE
-         UsPqQwOL1kwBXx0/qgApTvdnmTbyhtf8c9Vv3UhcbSfZFO88+CBsVe/Imf9U7IZ0Bidb
-         NBmg==
-X-Gm-Message-State: AOAM5305XcQN9xvf620bthGhfU4tlKYpOuDCsLgAzar6O/IpbgdxQ6VO
-        4pUKYMm/9ztti+/UuiDJrlHZi1a/gqUP4BSGDJ79CB60n2530pmEDhYpi3ymtEsCQ0VyXQOyB7b
-        Yr2XU+5lP0yRuWY2XbUSJNOknj5Sy57+RHpIumPevQQ==
-X-Received: by 2002:a17:907:c0c:b0:6d1:8c46:6415 with SMTP id ga12-20020a1709070c0c00b006d18c466415mr30485461ejc.326.1646379090608;
-        Thu, 03 Mar 2022 23:31:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxGxs7X16ZzeLCZ/AHvyM0eIiEfVTT/3+RbXNFeYwjEzaLA6uLgNdT/DxKdJK+w4/ntCeI8hg==
-X-Received: by 2002:a17:907:c0c:b0:6d1:8c46:6415 with SMTP id ga12-20020a1709070c0c00b006d18c466415mr30485439ejc.326.1646379090348;
-        Thu, 03 Mar 2022 23:31:30 -0800 (PST)
-Received: from [192.168.0.138] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1709063e4700b006da6357b1c0sm1445738eji.196.2022.03.03.23.31.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 23:31:29 -0800 (PST)
-Message-ID: <53fbfcde-0f5e-8ea2-4bca-c7a414f96c57@canonical.com>
-Date:   Fri, 4 Mar 2022 08:31:28 +0100
+        Fri, 4 Mar 2022 02:35:09 -0500
+Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B5EA2F29
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 23:34:21 -0800 (PST)
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
+        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 2247XY0G007345
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Mar 2022 23:33:34 -0800
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Thu, 3 Mar 2022 23:33:34 -0800
+Received: from pek-lpd-ccm2.wrs.com (128.224.179.210) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2242.12 via Frontend Transport; Thu, 3 Mar 2022 23:33:31 -0800
+From:   Dongyang Wang <dongyang.wang@windriver.com>
+To:     <dongyang.wang@windriver.com>
+CC:     <akpm@linux-foundation.org>, <christian.brauner@ubuntu.com>,
+        <dave@stgolabs.net>, <ebiederm@xmission.com>, <legion@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <manfred@colorfullife.com>,
+        <varad.gautam@suse.com>
+Subject: Re: [PATCH] To fix the below failure of handling page fault caused by the invalid input from user.
+Date:   Fri, 4 Mar 2022 15:33:30 +0800
+Message-ID: <20220304073330.13587-1-dongyang.wang@windriver.com>
+X-Mailer: git-send-email 2.26.1
+In-Reply-To: <20220209072820.18238-1-dongyang.wang@windriver.com>
+References: <20220209072820.18238-1-dongyang.wang@windriver.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] dt-bindings: mfd: Fix pinctrl node name warnings
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Lee Jones <lee.jones@linaro.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        - <patches@opensource.cirrus.com>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org
-References: <20220303232350.2591143-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220303232350.2591143-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/03/2022 00:23, Rob Herring wrote:
-> The recent addition pinctrl.yaml in commit c09acbc499e8 ("dt-bindings:
-> pinctrl: use pinctrl.yaml") resulted in some node name warnings:
-> 
-> Documentation/devicetree/bindings/mfd/cirrus,lochnagar.example.dt.yaml: \
->  lochnagar-pinctrl: $nodename:0: 'lochnagar-pinctrl' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
-> Documentation/devicetree/bindings/mfd/cirrus,madera.example.dt.yaml: \
->  codec@1a: $nodename:0: 'codec@1a' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
-> Documentation/devicetree/bindings/mfd/brcm,cru.example.dt.yaml: \
->  pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
-> 
-> Fix the node names to the preferred 'pinctrl'. For cirrus,madera,
-> nothing from pinctrl.yaml schema is used, so just drop the reference.
-> 
-> Fixes: c09acbc499e8 ("dt-bindings: pinctrl: use pinctrl.yaml")
-> Cc: Rafał Miłecki <rafal@milecki.pl>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v2:
->  - Fix lochnagar-pinctrl nodename in example
-> v3:
->  - And fix lochnagar-pinctrl nodename in 'required'. Sigh...
-> ---
->  Documentation/devicetree/bindings/mfd/brcm,cru.yaml         | 4 ++--
->  Documentation/devicetree/bindings/mfd/cirrus,lochnagar.yaml | 6 +++---
->  .../devicetree/bindings/pinctrl/cirrus,madera.yaml          | 3 ---
->  3 files changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/brcm,cru.yaml b/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
-> index be4a2df71c25..b85819fbb07c 100644
-> --- a/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/brcm,cru.yaml
-> @@ -39,7 +39,7 @@ patternProperties:
->    '^phy@[a-f0-9]+$':
->      $ref: ../phy/bcm-ns-usb2-phy.yaml
->  
-> -  '^pin-controller@[a-f0-9]+$':
-> +  '^pinctrl@[a-f0-9]+$':
->      $ref: ../pinctrl/brcm,ns-pinmux.yaml
->  
->    '^syscon@[a-f0-9]+$':
-> @@ -94,7 +94,7 @@ examples:
->              reg = <0x180 0x4>;
->          };
->  
-> -        pin-controller@1c0 {
-> +        pinctrl@1c0 {
+>>>> On 1/26/22 03:42, Andrew Morton wrote:
+>>>>> On Tue, 18 Jan 2022 17:19:52 +0800 Dongyang Wang <dongyang.wang@windriver.com> wrote:
+>>>>>
+>>>>>> [786058.308965] Unable to handle kernel paging request at virtual address 01000004
+>>>>>> [786058.316286] pgd = 38a99693
+>>>>>> [786058.319080] [01000004] *pgd=07800003, *pmd=00000000
+>>>>>> [786058.324056] Internal error: Oops: 206 [#1] PREEMPT SMP ARM
+>>>>>> [786058.324100] CPU:  PID: Comm:  Tainted: G         C
+>>>>>> [786058.324102] Hardware name:
+>>>>>> [786058.324114] PC is at __copy_to_user_std+0x4c/0x3c4
+>>>>>> [786058.324120] LR is at store_msg+0xc0/0xe8
+>>>>>> [786058.324124] pc : [<c0c0587c>]    lr : [<c0871d04>]    psr: 20010013
+>>>>>> [786058.324126] sp : c3503ec4  ip : 00000000  fp : b4c9a660
+>>>>>> [786058.324129] r10: c4228dc0  r9 : c3502000  r8 : 00000ffc
+>>>>>> [786058.324132] r7 : 01000000  r6 : 546d3f8b  r5 : b4911690  r4 : 00000ffc
+>>>>>> [786058.324134] r3 : 00000000  r2 : 00000f7c  r1 : 01000004  r0 : b4911690
+>>>>>> [786058.324139] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
+>>>>>> [786058.324142] Control: 30c5387d  Table: 0edc2040  DAC: 55555555
+>>>>>> [786058.324145] Process  (pid: , stack limit = 0x25018bdf)
+>>>> Why is process and pid: empty? Is this some kind of kernel process calling?
+>>> The pid is 8369, it's a userspace app.
+>>>
+>>>>>> [786058.324148] Stack: (0xc3503ec4 to 0xc3504000)
+>>>>>> [786058.324153] 3ec0:          b4911690 546d3f8b 01000000 00000ffc b4911690 00000ffc 00000000
+>>>>>> [786058.324157] 3ee0: 00000ffc c0871d04 546d4f73 c3407801 c3503f28 c3407800 00000000 b49106a8
+>>>>>> [786058.324161] 3f00: c4228dc0 c087abd4 00000002 b49106a8 617b9d03 00000000 00000000 c121d508
+>>>>>> [786058.324165] 3f20: 00000000 bf06a1a8 d1b634cc 16b26e77 c5af5280 00000100 00000200 db806540
+>>>>>> [786058.324170] 3f40: 00000001 c121d508 00000008 0000005c 00000000 00010008 b49106a8 c0601208
+>>>>>> [786058.324173] 3f60: c3502000 00000040 b4c9a660 c087b474 c3503f78 c121d508 617b9d03 00000000
+>>>>>> [786058.324177] 3f80: 2303d6cc 00000115 c0601208 c121d508 b4c9a660 b4c9a660 00000001 b49106a8
+>>>>>> [786058.324181] 3fa0: 00000115 c06011dc b4c9a660 00000001 0000005c b49106a8 00010008 00000000
+>>>>>> [786058.324185] 3fc0: b4c9a660 00000001 b49106a8 00000115 00000000 b4c9b400 00000000 b4c9a660
+>>>>>> [786058.324189] 3fe0: 00000115 b4c9a650 b6b253bd b6b254b6 800d0030 0000005c 00000000 00000000
+>>>>>> [786058.324201] [<c0c0587c>] (__copy_to_user_std) from [<c0871d04>] (store_msg+0xc0/0xe8)
+>>
+>>I would search here: __copy_to_user_std should fail if the address is 
+>>invalid.
+>>
+>>For whatever reasons, it produces a page fault.
+>
+>Totally agree with you. 
+>
+>>First: Is this reproducible? Does it fail immediately if you pass an 
+>>invalid value to mq_timedreceive()?
+>
+>This crash info is from another team. It can't be reproduced until now.
+>Yesterday, I changed the 'u_msg_ptr' and 'msg_ptr->m_ts' to a wrong value, but don't cause crash. 
+>I will watch this part. 
 
-DTS also need such change.
+Status update:
+Sorry, after changing the "u_msg_ptr", "msg_ptr->m_ts" to the wrong value, I still can't reproduce this issue. 
 
-Best regards,
-Krzysztof
+>>https://elixir.bootlin.com/linux/v4.18.20/source/arch/arm/include/asm/uaccess.h#L464
+>>
+>>It seems ARM has special optimizations (CONFIG_UACCESS_WITH_MEMCPY), and 
+>>I cannot see if this is MMU or NO_MMU
+>
+>This is MMU. 
+
+Best Regards,
+Dongyang

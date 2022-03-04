@@ -2,168 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C847D4CD701
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 059C94CD705
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 16:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240003AbiCDPCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 10:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S240017AbiCDPCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 10:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiCDPCO (ORCPT
+        with ESMTP id S240008AbiCDPC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:02:14 -0500
-Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FCA177D24;
-        Fri,  4 Mar 2022 07:01:25 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6CkI3R_1646406078;
-Received: from 192.168.193.155(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6CkI3R_1646406078)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 04 Mar 2022 23:01:19 +0800
-Message-ID: <48268e7c-a912-c648-be69-b5e41639bf3e@linux.alibaba.com>
-Date:   Fri, 4 Mar 2022 07:01:18 -0800
+        Fri, 4 Mar 2022 10:02:29 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F0E1BD9BD
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 07:01:41 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6A5E93F5F9
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 15:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646406100;
+        bh=veW4gKIbKo9jmCs1Wuv5XKB6ixDrTo7kj8IuMc2L6jg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=pGvlInyP5nsEnv2ieQEJQj0xU33/9KyzT3Y8oL14o5rpl5ZjZPQATtVqT+JEO8ITI
+         0Rb0b7IUNCNSdHX/E278DDEA3MyuacQF1L5fWa9AqGqGisGJy7P4ia0f7gBKcqc+ID
+         7qcTU57ZyrdKlw62h30WpJLrHl1gq6YfpbdUVZx6hOnjwT7jTt/5STTsjk6K8rA4ZB
+         TQoCsgNFaY11kgDvytRP1A+xOmnQ+gIauC2IBjCHd5OFFCpRPY6wMVq7kt7vUZhys4
+         SjpCi/Z4Mszjh/QfvIxx74b9MOMSP8Qr/kzjYhaD/T4GMnbcD8vXBH0L74CzlRpgCl
+         l8kYKo6OzXqZw==
+Received: by mail-ed1-f69.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso4691568edt.20
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 07:01:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=veW4gKIbKo9jmCs1Wuv5XKB6ixDrTo7kj8IuMc2L6jg=;
+        b=fej1P+By+62myn9cN3Gy/iKOivimxSs/SwBzGgU2sxf2kLbbdauYz2dWhjcDZGsCgw
+         qnPJ10tHuLvt8rMODaoPo4OQPglakQ9MnqQd0bViYF0flzCbLEzZPB1Jl29DDB3ad0WU
+         6DGA6CSj15xyX5uTl4MV/PNtamgchjPYKrd6dMAnkUm/Sxg3kYb1QiHW/Ftl6wUg3Pam
+         +YqcONPCBCjroeSaQqBSU19DyOpnIhASqWvW3zcfxik9ku1ImHzUMtbA5Buj7V31FMT9
+         SncRDyv/QusbQDi9gM2iItHqRFxf+1/GgQ1a8ewPdTwRpAfFA/NB9TSeQ72Sxg0o4TmJ
+         BsTw==
+X-Gm-Message-State: AOAM531vTobOa6h7xttE+vrHgfmyu6/x/nnqVOQjZsuaImjRI1wc+LsO
+        DK0MVe6HEBKRPkBFnmYqLwAHNN+gdk/i9Fa26nN/oMWSTdfB8TG9JoQZaS3QmCAK7xDjNbenAIo
+        0fCPXQYwDHuXUbUmR3we4iM7UMmyIJhTexaZjCkOIIA==
+X-Received: by 2002:a05:6402:3489:b0:415:bc37:a81f with SMTP id v9-20020a056402348900b00415bc37a81fmr12512743edc.354.1646406100072;
+        Fri, 04 Mar 2022 07:01:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxgaVeX2hMApbdyglZkusLEVifJ+zoAKzqcXR0aV/1vWe1MjVa35U8Tzx/bcGq+skX2sVwWTA==
+X-Received: by 2002:a05:6402:3489:b0:415:bc37:a81f with SMTP id v9-20020a056402348900b00415bc37a81fmr12512608edc.354.1646406098927;
+        Fri, 04 Mar 2022 07:01:38 -0800 (PST)
+Received: from [192.168.0.139] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0041605b2d9c1sm603615edx.58.2022.03.04.07.01.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Mar 2022 07:01:37 -0800 (PST)
+Message-ID: <9113e319-58a2-fd90-6887-fb32eb21fd18@canonical.com>
+Date:   Fri, 4 Mar 2022 16:01:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] dt-bindings:pwm:Add bindings doc for Sunplus SoC
+ PWM Driver
 Content-Language: en-US
-From:   Dan Li <ashimida@linux.alibaba.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
- <c26c8946-f979-de83-38ff-ab6533b55885@linux.alibaba.com>
-In-Reply-To: <c26c8946-f979-de83-38ff-ab6533b55885@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Hammer Hsieh <hammerh0314@gmail.com>, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        robh+dt@kernel.org, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com
+References: <1646374812-2988-1-git-send-email-hammerh0314@gmail.com>
+ <1646374812-2988-2-git-send-email-hammerh0314@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1646374812-2988-2-git-send-email-hammerh0314@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04/03/2022 07:20, Hammer Hsieh wrote:
+> Add bindings doc for Sunplus SoC PWM Driver
+
+You miss spaces in the subject.
+
+> 
+> Signed-off-by: Hammer Hsieh <hammerh0314@gmail.com>
+> ---
+> Changes in v2:
+>  - Addressed all comments from Rob Herring.
+>    modify author's mail match Signed-off-by.
+>  - rebase kernel to 5.17 rc5
+> 
+>  .../devicetree/bindings/pwm/pwm-sunplus.yaml       | 40 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  5 +++
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml b/Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml
+> new file mode 100644
+> index 0000000..19fe5d5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pwm/pwm-sunplus.yaml#
+
+Is it going to be one binding for all Sunplus SoCs? Existing and future?
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus SoC PWM Controller
+> +
+> +maintainers:
+> +  - Hammer Hsieh <hammerh0314@gmail.com>
+> +
+
+allOf with pwm.yaml
+Then unevaluatedProperties instead of additionalProperties.
 
 
-On 3/4/22 06:54, Dan Li wrote:
-> 
-> 
-> On 3/3/22 11:09, Kees Cook wrote:
->> On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
->>> Though, having the IS_ENABLED in there makes me wonder if this test
->>> should instead be made _survivable_ on failure. Something like this,
->>> completely untested:
->>>
->>>
->>> And we should, actually, be able to make the "set_lr" functions be
->>> arch-specific, leaving the test itself arch-agnostic....
->>
->> Yeah, as a tested example, this works for x86_64, and based on what you
->> had, I'd expect it to work on arm64 too:
->>
->> #include <stdio.h>
->>
->> static __attribute__((noinline))
->> void set_return_addr(unsigned long *expected, unsigned long *addr)
->> {
->>      /* Use of volatile is to make sure final write isn't seen as a dead store. */
->>      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
->>
->>      /* Make sure we've found the right place on the stack before writing it. */
->>      if (*ret_addr == expected)
->>          *ret_addr = addr;
->> }
->>
->> volatile int force_label;
->> int main(void)
->> {
->>      do {
->>          /* Keep labels in scope. */
->>          if (force_label)
->>              goto normal;
->>          if (force_label)
->>              goto redirected;
->>
->>          set_return_addr(&&normal, &&redirected);
->> normal:
->>          printf("I should be skipped\n");
->>          break;
-> 
->  From the assembly code, it seems that "&&normal" does't always equal
-> to the address of label "normal" when we use clang with -O2.
-> 
->> redirected:
->>          printf("Redirected\n");
->>      } while (0);
->>
-> 
-> The address of "&&redirected" may appear in the middle of the assembly
-> instructions of the printf. If we unconditionally jump to "&&normal",> it may crash directly because x0 is not set correctly.
+> +properties:
+> +  '#pwm-cells':
+> +    const: 2
+> +
+> +  compatible:
 
-Sorry, it should be:
-The address of "&&redirected" may appear in the middle of the assembly
-instructions of the printf. If we unconditionally jump to "&&redirected",
-it may crash directly because x0 of printf is not set correctly.
+Commpatible goes first. Rest of properties you could order
+alphabetically. Similar approach in required.
 
-Thanks,
-Dan.
-> 
->>      return 0;
->> }
->>
->>
->> It does _not_ work under Clang, though, which I'm still looking at.
->>
-> 
-> AFAICT, maybe we could specify -O0 optimization to bypass this.
-> 
-> 
-> BTW:
-> Occasionally found, the following code works correctly, but i think
-> it doesn't solve the issue :)
-> 
-> #include <stdio.h>
-> 
-> static __attribute__((noinline))
-> void set_return_addr(unsigned long *expected, unsigned long *addr)
-> {
->      /* Use of volatile is to make sure final write isn't seen as a dead store. */
->      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> 
->      /* Make sure we've found the right place on the stack before writing it. */
-> //    if (*ret_addr == expected)
->          *ret_addr = addr;
-> }
-> volatile int force_label;
-> int main(void)
-> {
->      do {
->          /* Keep labels in scope. */
->          if (force_label)
->              goto normal;
->          if (force_label)
->              goto redirected;
-> 
->          set_return_addr(&&normal, &&redirected);
-> normal:
->          printf("I should be skipped\n");
->          break;
-> 
-> redirected:
->          printf("Redirected\n");
->          printf("\n");                //add a new printf
->      } while (0);
-> 
->      return 0;
-> }
+
+> +    items:
+> +      - const: sunplus,sp7021-pwm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+
+compatible
+
+> +  - reg
+> +  - clocks
+
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pwm: pwm@9c007a00 {
+> +      #pwm-cells = <2>;
+> +      compatible = "sunplus,sp7021-pwm";
+
+compatible goes first, then reg.
+
+
+Best regards,
+Krzysztof

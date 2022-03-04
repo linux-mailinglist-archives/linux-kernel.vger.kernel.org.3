@@ -2,382 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D494CDF61
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 881BA4CDF6C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiCDUev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 15:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S229829AbiCDUhi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Mar 2022 15:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbiCDUd0 (ORCPT
+        with ESMTP id S230525AbiCDUh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 15:33:26 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C521F487E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 12:32:22 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id u61so19098399ybi.11
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 12:32:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=5Va0AzpfFrj2CIxQZYECbB+NvfeYwGm1BAKxA+n6QB4=;
-        b=aqiySkX9xXwyx0pXK5VRBPZs+THKKNzuz8P4dXhtgCvyYD83k10XEbPITizjiFC5+1
-         +uJJ/WstvMVQTxU+LxuP8XvWADlDCdusBlVQa6BMMZVrW+OvyLaQ8uvd5/vC5a3PIP7E
-         7y8BB4T4piZJGQnj00J7i5/x2Tvr9Q2Vswp09xESARUUFkWHsHOeWImu8+bTyTXXx/eQ
-         bg48wFjeuxt3dXnyUZI9XGuyC+9UU7Mxo4DmQDp55ReOUMP1xATcFBsHN4NlsMWvv7SO
-         XFJtejMlR6DmbxBbJo6wJuIsEUUP9J9LGUSnI+XbbgA5eFTL5pRLbzkWbAK92pr+ZBX7
-         OlDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=5Va0AzpfFrj2CIxQZYECbB+NvfeYwGm1BAKxA+n6QB4=;
-        b=vFdMvs37CB+NDE9XsddHl2KEcddRQZKkdbIh2K5NmFvToLomi4i1x42baRi25KhRNo
-         WaweP82Ss4yeyiMR8c9A7Zs1zHFpVmv6ujFwyAgMLkPVG+eKpZIfPFSRhMYeGfMzk8Ym
-         WsSqKgMxmXjbYh3s5FRAUhH7vg+QZjUnya/rMJ/Q3348uPqCI9XE8dOJo+OEV/lSLZMk
-         gaOQDpgXl/8tfqWykpUmunBTPykCrJWfcW9/rNez8soagKiRf8lQ9/4XkzZzZAdrJkDX
-         D8TXSh7/q6QiC2Y/mUC8Bz1na6LvABpeH9K8aLQ8vYtNeV6joAz8FsKMpibWvtaUXwjT
-         XRug==
-X-Gm-Message-State: AOAM532cP3DQiJCzPCa3INhdaKp2nK8pZG7bZe1/JQKCMYm+RWc/ENRY
-        Vz/q9RIN9vwXw0z/XqvVJhEcyeUczT2wcqhuxWG6Dw==
-X-Google-Smtp-Source: ABdhPJzxs23o8/HFTUjwCIU9Csa6E4rXqxc9gfNR5DpVCPks40rysm/OfOjtL91itmtSRi55jiNUior2jV/kxeE11DA=
-X-Received: by 2002:a25:c487:0:b0:61d:9570:e77f with SMTP id
- u129-20020a25c487000000b0061d9570e77fmr202540ybf.229.1646425927962; Fri, 04
- Mar 2022 12:32:07 -0800 (PST)
+        Fri, 4 Mar 2022 15:37:28 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582AC219EFB;
+        Fri,  4 Mar 2022 12:36:27 -0800 (PST)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K9KNX3dmXz67Kvx;
+        Sat,  5 Mar 2022 04:35:08 +0800 (CST)
+Received: from lhreml718-chm.china.huawei.com (10.201.108.69) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 21:36:24 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml718-chm.china.huawei.com (10.201.108.69) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Mar 2022 20:36:24 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Fri, 4 Mar 2022 20:36:24 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
+        Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Topic: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Index: AQHYL1LUtVDDY2S/e06nk5NDxfriXKyu5+MQgAC55gCAAA3s0A==
+Date:   Fri, 4 Mar 2022 20:36:24 +0000
+Message-ID: <7a1802e00d1a4741bbf9978b960bfa06@huawei.com>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+        <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
+        <0dc03eab33b74e6ea95f2ac0eb39cc83@huawei.com>
+ <20220304124410.02423606.alex.williamson@redhat.com>
+In-Reply-To: <20220304124410.02423606.alex.williamson@redhat.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.89.131]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Received: by 2002:a0d:df06:0:0:0:0:0 with HTTP; Fri, 4 Mar 2022 12:32:07 -0800 (PST)
-In-Reply-To: <202202071325.F8450B3B2D@keescook>
-References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
- <20220203164328.203629-4-martin.fernandez@eclypsium.com> <202202071325.F8450B3B2D@keescook>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Fri, 4 Mar 2022 17:32:07 -0300
-Message-ID: <CAKgze5ZXzVYHK+iR0RMRy+M9ws6kFiq0XY55+fmxmo3baUu+Bw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] x86/e820: Refactor range_update and range_remove
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/22, Kees Cook <keescook@chromium.org> wrote:
-> Something I think would be really amazing here is if you could add KUnit
-> tests here to exercise the corner cases and validate the changes. It
-> should be pretty easy to add. Here's a quick example for the boilerplate
-> and testing a bit of __e820__range_add():
->
-> #ifdef CONFIG_E820_KUNIT_TEST
-> #include <kunit/test.h>
->
-> static void __init test_e820_range_add(struct kunit *context)
-> {
-> 	struct e820_table table;
-> 	u32 full;
->
-> 	full = ARRAY_SIZE(table.entries);
-> 	/* Add last entry. */
-> 	table->nr_entries = full - 1;
-> 	__e820__range_add(&table, 0, 15, 0);
-> 	KUNIT_EXPECT_EQ(table->nr_entries, full)
-> 	/* Skip new entry when full. */
-> 	__e820__range_add(&table, 0, 15, 0);
-> 	KUNIT_EXPECT_EQ(table->nr_entries, full)
-> }
->
-> static void __init test_e820_update(struct kunit *context)
-> {
-> ...
-> }
->
-> static struct kunit_case __refdata e820_test_cases[] = {
->         KUNIT_CASE(test_e820_range_add),
->         KUNIT_CASE(test_e820_update),
-> 	...
->         {}
-> };
->
-> static struct kunit_suite e820_test_suite = {
->         .name = "e820",
->         .test_cases = e820_test_cases,
-> };
->
-> kunit_test_suites(&e820_test_suite);
-> #endif
-
-I almost got it. Although when added the tests I have a warning
-when compiling, because KUnit doens't want to deal with __init things:
-
-    WARNING: modpost: vmlinux.o(.data+0x26800): Section mismatch in
-reference from the variable __UNIQUE_ID_array286 to the variable
-.init.data:e820_test_suite
-    The variable __UNIQUE_ID_array286 references
-    the variable __initdata e820_test_suite
-    If the reference is valid then annotate the
-    variable with __init* or __refdata (see linux/init.h) or name the variable:
-    *_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
-
-I need to test __init functions. I couldn't find any other similar
-cases in existant code. Is there a nice way to solve this?
-
-I'm adding the file that contains the tests just in case..
 
 
-#include <kunit/test.h>
+> -----Original Message-----
+> From: Alex Williamson [mailto:alex.williamson@redhat.com]
+> Sent: 04 March 2022 19:44
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org; jgg@nvidia.com;
+> cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com;
+> liulongfang <liulongfang@huawei.com>; Zengtao (B)
+> <prime.zeng@hisilicon.com>; Jonathan Cameron
+> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
+> Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+> migration
+> 
+> On Fri, 4 Mar 2022 08:48:27 +0000
+> Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> wrote:
+> 
+> > Hi Alex,
+> >
+> > > -----Original Message-----
+> > > From: Shameerali Kolothum Thodi
+> > > Sent: 03 March 2022 23:02
+> > > To: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > > linux-crypto@vger.kernel.org
+> > > Cc: linux-pci@vger.kernel.org; alex.williamson@redhat.com;
+> jgg@nvidia.com;
+> > > cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com;
+> Linuxarm
+> > > <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>;
+> Zengtao (B)
+> > > <prime.zeng@hisilicon.com>; Jonathan Cameron
+> > > <jonathan.cameron@huawei.com>; Wangzhou (B)
+> <wangzhou1@hisilicon.com>
+> > > Subject: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+> migration
+> > >
+> > > From: Longfang Liu <liulongfang@huawei.com>
+> > >
+> > > VMs assigned with HiSilicon ACC VF devices can now perform live
+> migration if
+> > > the VF devices are bind to the hisi_acc_vfio_pci driver.
+> > >
+> > > Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+> > > Signed-off-by: Shameer Kolothum
+> <shameerali.kolothum.thodi@huawei.com>
+> >
+> > [...]
+> > > +
+> > > +static int vf_qm_check_match(struct hisi_acc_vf_core_device
+> *hisi_acc_vdev,
+> > > +			     struct hisi_acc_vf_migration_file *migf) {
+> > > +	struct acc_vf_data *vf_data = &migf->vf_data;
+> > > +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+> > > +	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
+> >
+> > Oops, the above has to be,
+> >   struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
+> >
+> > This was actually fixed in v6, but now that I rebased mainly to v5, missed it.
+> > Please let me know if you want a re-spin with the above fix(in case there are
+> no further
+> > comments) or this is something you can take care.
+> 
+> To confirm, you're looking for this change:
+> 
+> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> index aa2e4b6bf598..f2a0c046413f 100644
+> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> @@ -413,7 +413,7 @@ static int vf_qm_check_match(struct
+> hisi_acc_vf_core_device *hisi_acc_vdev,
+>  {
+>  	struct acc_vf_data *vf_data = &migf->vf_data;
+>  	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+> -	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
+> +	struct hisi_qm *pf_qm = &hisi_acc_vdev->pf_qm;
+>  	struct device *dev = &vf_qm->pdev->dev;
+>  	u32 que_iso_state;
+>  	int ret;
+> 
+> Right? 
 
-#include <asm/e820/api.h>
-#include <asm/setup.h>
+Not really. pf_qm is a pointer. This is the change,
 
-#define KUNIT_EXPECT_E820_ENTRY_EQ(test, entry, _addr, _size, _type,           \
-				   _crypto_capable)                            \
-	do {                                                                   \
-		KUNIT_EXPECT_EQ((test), (entry).addr, (_addr));                \
-		KUNIT_EXPECT_EQ((test), (entry).size, (_size));                \
-		KUNIT_EXPECT_EQ((test), (entry).type, (_type));                \
-		KUNIT_EXPECT_EQ((test), (entry).crypto_capable,                \
-				(_crypto_capable));                            \
-	} while (0)
+diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+index 53e4c5cb3a71..54813772a071 100644
+--- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
++++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+@@ -413,7 +413,7 @@ static int vf_qm_check_match(struct hisi_acc_vf_core_device *hisi_acc_vdev,
+ {
+ 	struct acc_vf_data *vf_data = &migf->vf_data;
+ 	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+-	struct hisi_qm *pf_qm = &hisi_acc_vdev->vf_qm;
++	struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
+ 	struct device *dev = &vf_qm->pdev->dev;
+ 	u32 que_iso_state;
+ 	int ret;
 
-struct e820_table test_table __initdata;
+ I can roll that in assuming there are no further comments that
+> would generate a respin.  Thanks,
+> 
+Thanks,
+Shameer
 
-static void __init test_e820_range_add(struct kunit *test)
-{
-        u32 full;
-
-        full = ARRAY_SIZE(test_table.entries);
-        /* Add last entry. */
-        test_table.nr_entries = full - 1;
-        __e820__range_add(&test_table, 0, 15, 0, 0);
-        KUNIT_EXPECT_EQ(test, test_table.nr_entries, full);
-        /* Skip new entry when full. */
-        __e820__range_add(&test_table, 0, 15, 0, 0);
-        KUNIT_EXPECT_EQ(test, test_table.nr_entries, full);
-}
-
-static void __init test_e820_range_update(struct kunit *test)
-{
-	u64 entry_size = 15;
-	u64 updated_size = 0;
-	/* Initialize table */
-	test_table.nr_entries = 0;
-	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-			  E820_NOT_CRYPTO_CAPABLE);
-	__e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
-			  E820_NOT_CRYPTO_CAPABLE);
-	__e820__range_add(&test_table, entry_size * 2, entry_size,
-			  E820_TYPE_ACPI, E820_NOT_CRYPTO_CAPABLE);
-
-	updated_size = __e820__range_update(&test_table, 0, entry_size * 2,
-					    E820_TYPE_RAM, E820_TYPE_RESERVED);
-	/* The first 2 regions were updated */
-	KUNIT_EXPECT_EQ(test, updated_size, entry_size * 2);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
-				   E820_TYPE_RESERVED, E820_NOT_CRYPTO_CAPABLE);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
-				   entry_size, E820_TYPE_RESERVED,
-				   E820_NOT_CRYPTO_CAPABLE);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
-				   entry_size, E820_TYPE_ACPI,
-				   E820_NOT_CRYPTO_CAPABLE);
-
-	updated_size = __e820__range_update(&test_table, 0, entry_size * 3,
-					    E820_TYPE_RESERVED, E820_TYPE_RAM);
-	/* Only the first 2 regions were updated */
-	KUNIT_EXPECT_EQ(test, updated_size, entry_size * 2);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
-				   E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
-				   entry_size, E820_TYPE_RAM,
-				   E820_NOT_CRYPTO_CAPABLE);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
-				   entry_size, E820_TYPE_ACPI,
-				   E820_NOT_CRYPTO_CAPABLE);
-}
-
-static void __init test_e820_range_remove(struct kunit *test)
-{
-	u64 entry_size = 15;
-	u64 removed_size = 0;
-
-	struct e820_entry_updater updater = {
-		.should_update = remover__should_update,
-		.update = remover__update,
-		.new = remover__new
-	};
-
-	struct e820_remover_data data = {
-		.check_type = true,
-		.old_type = E820_TYPE_RAM
-	};
-
-	/* Initialize table */
-	test_table.nr_entries = 0;
-	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-			  E820_NOT_CRYPTO_CAPABLE);
-	__e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
-			  E820_NOT_CRYPTO_CAPABLE);
-	__e820__range_add(&test_table, entry_size * 2, entry_size,
-			  E820_TYPE_ACPI, E820_NOT_CRYPTO_CAPABLE);
-
-	/*
-	 * Need to use __e820__handle_range_update because
-	 * e820__range_remove doesn't ask for the table
-	 */
-	removed_size = __e820__handle_range_update(&test_table,
-						   0, entry_size * 2,
-						   &updater, &data);
-	/* The first two regions were removed */
-	KUNIT_EXPECT_EQ(test, removed_size, entry_size * 2);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 0, 0, 0);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0, 0, 0, 0);
-
-	removed_size = __e820__handle_range_update(&test_table,
-						   0, entry_size * 3,
-						   &updater, &data);
-	/* Nothing was removed */
-	KUNIT_EXPECT_EQ(test, removed_size, 0);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 0, 0, 0);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0, 0, 0, 0);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
-				   entry_size, E820_TYPE_ACPI,
-				   E820_NOT_CRYPTO_CAPABLE);
-}
-
-static void __init test_e820_range_crypto_update(struct kunit *test)
-{
-	u64 entry_size = 15;
-	u64 updated_size = 0;
-	/* Initialize table */
-	test_table.nr_entries = 0;
-	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-			  E820_CRYPTO_CAPABLE);
-	__e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
-			  E820_NOT_CRYPTO_CAPABLE);
-	__e820__range_add(&test_table, entry_size * 2, entry_size,
-			  E820_TYPE_RAM, E820_CRYPTO_CAPABLE);
-
-	updated_size = __e820__range_update_crypto(&test_table, 0, entry_size * 3,
-						   E820_CRYPTO_CAPABLE);
-	/* Only the region in the middle was updated */
-	KUNIT_EXPECT_EQ(test, updated_size, entry_size);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
-				   E820_TYPE_RAM, E820_CRYPTO_CAPABLE);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
-				   entry_size, E820_TYPE_RAM,
-				   E820_CRYPTO_CAPABLE);
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
-				   entry_size, E820_TYPE_RAM,
-				   E820_CRYPTO_CAPABLE);
-}
-
-static void __init test_e820_handle_range_update_intersection(struct
-kunit *test)
-{
-	struct e820_entry_updater updater = {
-		.should_update = type_updater__should_update,
-		.update = type_updater__update,
-		.new = type_updater__new
-	};
-
-	struct e820_type_updater_data data = {
-		.old_type = E820_TYPE_RAM,
-		.new_type = E820_TYPE_RESERVED
-	};
-
-	u64 entry_size = 15;
-	u64 updated_size = 0;
-	/* Initialize table */
-	test_table.nr_entries = 0;
-	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-			  E820_NOT_CRYPTO_CAPABLE);
-
-	updated_size = __e820__handle_range_update(&test_table,
-						   0, entry_size - 2,
-						   &updater, &data);
-
-	KUNIT_EXPECT_EQ(test, updated_size, entry_size - 2);
-
-	/* There is a new entry */
-	KUNIT_EXPECT_EQ(test, test_table.nr_entries, 2);
-
-	/* The original entry now is moved */
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], entry_size - 2,
-				   2, E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
-
-	/* The new entry has the correct values */
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0, 13,
-				   E820_TYPE_RESERVED, E820_NOT_CRYPTO_CAPABLE);
-}
-
-static void __init test_e820_handle_range_update_inside(struct kunit *test)
-{
-	struct e820_entry_updater updater = {
-		.should_update = type_updater__should_update,
-		.update = type_updater__update,
-		.new = type_updater__new
-	};
-
-	struct e820_type_updater_data data = {
-		.old_type = E820_TYPE_RAM,
-		.new_type = E820_TYPE_RESERVED
-	};
-
-	u64 entry_size = 15;
-	u64 updated_size = 0;
-	/* Initialize table */
-	test_table.nr_entries = 0;
-	__e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-			  E820_NOT_CRYPTO_CAPABLE);
-
-	updated_size = __e820__handle_range_update(&test_table,
-						   5, entry_size - 10,
-						   &updater, &data);
-
-	KUNIT_EXPECT_EQ(test, updated_size, entry_size - 10);
-
-	/* There are two new entrie */
-	KUNIT_EXPECT_EQ(test, test_table.nr_entries, 3);
-
-	/* The original entry now shrinked */
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 5,
-				   E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
-
-	/* The new entries have the correct values */
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 5,
-				   entry_size - 10, E820_TYPE_RESERVED,
-				   E820_NOT_CRYPTO_CAPABLE);
-	/* Left over of the original region */
-	KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size - 5,
-				   5, E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
-}
-
-static struct kunit_case e820_test_cases[] __initdata = {
-        KUNIT_CASE(test_e820_range_add),
-        KUNIT_CASE(test_e820_range_update),
-        KUNIT_CASE(test_e820_range_remove),
-        KUNIT_CASE(test_e820_range_crypto_update),
-        KUNIT_CASE(test_e820_handle_range_update_intersection),
-        KUNIT_CASE(test_e820_handle_range_update_inside),
-        {}
-};
-
-static struct kunit_suite e820_test_suite __initdata = {
-        .name = "e820",
-        .test_cases = e820_test_cases,
-};
-
-kunit_test_suite(e820_test_suite);

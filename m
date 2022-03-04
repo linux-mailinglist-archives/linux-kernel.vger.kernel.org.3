@@ -2,159 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4685C4CD088
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADD84CD08A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 09:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235181AbiCDIz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 03:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S235225AbiCDI4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 03:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiCDIz0 (ORCPT
+        with ESMTP id S229789AbiCDI4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 03:55:26 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2065.outbound.protection.outlook.com [40.107.94.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D99819DEB2;
-        Fri,  4 Mar 2022 00:54:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hn8wcRvhNK2pDXNMoWtzA0IxQyEZpqG/jIM4ZIfUq3ocrepCdchydmVd9+2j8BYwHLaD/HTkiwklAJ3saqSgXy+Bdil96vZP2A9VZeTQfVJag9a5xHq2RWPTkAigqoVex3qGECCh9Fir0XMuaN1TaLUldtp+OCXdwpWHiqSrYe2+lTeZ/MIgUqzmjpfsC51vA+07vdhq99bpXly9E+d3crJ6x0/Y5vCMD9YRnOJhwK1ZTwxyGC2rPeklaXDLihXHa0/8AYgxJWz2ioNZ/0eJSoBMS/vQAXx/mlbThmdJL5oai92buhRp6Zdol4ryRRkacwUq+jEbVZbvh66CI2/VnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/r+MatPPCy0pohx0s7qXFkl3DnCYd4LOmBIhKQGzTS4=;
- b=Ru/EosZHrGV3Y5/vsEQ9DYkSsFuJJcB64LDiSNZrTc0QbQ/8VtzL+UrpIsZFMEyxlnCwF6Eh1zz5AecBP8qwdA7bPi4FtkfR1NM2oHaEVlD9RrGoH9ar11Zk+NpOmr/7VOTd26W6MUH1ELcBTbDxVd/c2jYWFVKXOI5IcHdaxG7ivDXi1ArBLK4g+71HPxf+NeewYTiaPor1y7MdalyCXNrcGA0JUyzusUgS69C2aHdKtRaBFAlrxyqNI1p2/4wR9dEsoXxT50aacJJKVBhzNOF22e9ZEB584kZB8+aa4X141W9dGSluTQsGyfW+q9iK16eOUtdwGUoLWmNLbqQ0kA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/r+MatPPCy0pohx0s7qXFkl3DnCYd4LOmBIhKQGzTS4=;
- b=a6DoSsZEZtD/v1865SsRnVaoEfwjvgLyrZcdSUaUZVCnqfXgvJR0x57A1py5RsPYRtACBrq/Jcivl602kYzvFMmhvEZnPOXxmIb3q1e9vSCF7ZoLbFWX8aRSp7rJ2QYqERwhtsejnzngr/USwBSrdz9cvy+tB9uVrC71GsCcxTg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CY4PR12MB1816.namprd12.prod.outlook.com (2603:10b6:903:11c::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
- 2022 08:54:33 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.5038.014; Fri, 4 Mar 2022
- 08:54:32 +0000
-Message-ID: <dbb0f319-5e54-8a86-fcee-2c88c9891898@amd.com>
-Date:   Fri, 4 Mar 2022 09:54:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] i2c: at91: use dma safe buffers
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, Michael Walle <michael@walle.cc>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        stable@vger.kernel.org
-References: <20220303161724.3324948-1-michael@walle.cc>
- <fff424e7-247c-38d8-4151-8b0503a16a7d@amd.com> <YiHIIjSs03gDJmHV@shikoro>
- <4e25e595-cccb-0970-67b3-fc215bfd5b14@amd.com> <YiHRGa5bDJAuBuHj@shikoro>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <YiHRGa5bDJAuBuHj@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM7PR02CA0015.eurprd02.prod.outlook.com
- (2603:10a6:20b:100::25) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Fri, 4 Mar 2022 03:56:04 -0500
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5EC19DEB2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 00:55:17 -0800 (PST)
+Received: by mail-vk1-f169.google.com with SMTP id k9so4040790vki.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:55:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L/NeTMxhGm+l5YpPOiR/XhgTXlp1h5VVk6yshpmQCRE=;
+        b=CtSA4n+/rUy9LcAOcUcLDb64lEmWEJDnR/6VX/BtBqfWimtWydFLPlLu4rdpNvf6H1
+         K1iGNtCTHnSvU22K0OkKHMzbfYg6sW+hcEjTaTHUUcLBRIvLa+vzz6AsgkqRMTo+GfuR
+         MQsHmimijDzyA0xyaOLdX4bcx/uD3Nfe63oBwYuCVJIpJ1Xtk80zwzEJwS+Xm+KOCKz2
+         3sD/0oPhyCexl7u3IOsAtNNMO0RzqVrQ6+g7dtgOQHrLosYhU65R7GBYcJNGo7InggVX
+         TiCHU5Orx3S5cyaizEXdhu5p18sumbIYCMJmM1RHom7yTC4HIM7XacE3KtuDUxBivPdC
+         viYw==
+X-Gm-Message-State: AOAM530bA039WtKwnljZ1Efwh5VhjnaBzs3l2XrQUWkXhhFw6R2upAXc
+        aLaxdRv4omOyJOaVgiK45CvCwn1KGzlCXw==
+X-Google-Smtp-Source: ABdhPJzL9B+snhkuGLIoIdG6/BkYyQs+gpw4cZfSfky1Paoltfru+Q1WvkssEF1POO2u86G9PG0ufA==
+X-Received: by 2002:ac5:c88f:0:b0:332:b8e:c085 with SMTP id n15-20020ac5c88f000000b003320b8ec085mr17314284vkl.6.1646384116688;
+        Fri, 04 Mar 2022 00:55:16 -0800 (PST)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
+        by smtp.gmail.com with ESMTPSA id g16-20020ab00e10000000b0034a4433fe84sm699562uak.38.2022.03.04.00.55.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Mar 2022 00:55:16 -0800 (PST)
+Received: by mail-ua1-f49.google.com with SMTP id y44so3280397uac.11
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 00:55:16 -0800 (PST)
+X-Received: by 2002:ab0:3da4:0:b0:306:a7f8:f28b with SMTP id
+ l36-20020ab03da4000000b00306a7f8f28bmr17141959uac.47.1646384115825; Fri, 04
+ Mar 2022 00:55:15 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 907f7b6b-a15f-42dc-00b9-08d9fdbc996f
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1816:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB1816671B2E3CC1947950AAD683059@CY4PR12MB1816.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NQg0o6ElwuDjAF2zwxdianzTthERJcOkdffV3ZU0m3/ilSQqPTOIprbpmkFlOAfd0Hy3YZl5sHB/EMfY1wJIMGuO9umQu25AU0jiggjGTxs4xUxQ5TdmlzJqKxsd8mrzEI/ipA4fblN7ZMiMLDX55Plczt8bFTO2TMwQ1p9/vK1jyK21uvC4EuB+FunC3pBPgAEvAlfvkvzyNAY9LSYwMF46JLG4+u2WBRA6tqpPTYe0aWNA0el6ESCHmGf57GFbyYLtmu5zu0dcsWrBfJNUHqWkSJGj6fo8o+aqd1PhJXQG/TTL44720ZfTFgod4T+SD9+R9EoATqPyP8TclBMnAyEsWgShpE84bKAu2Q43esQbaII8XTjvwNNyY2IpcskjX3bcG/rlXTyoUExHuFwhnUOvoqKBw1gfwG3yH6f6agW5D2hLjuMERHSkIGmqGOz3POgDiZA1rwVEqsrDvovLqJxmV+DChbyQLOqxF1xwPJ5Pqp9RUza3Xi+RBDoNPK9ZpWp1kekpaVhLJ3rmXSA5MniUAV0pnvsdr8vddb/DIDfZ74/Z8N2WuCXLRxHxtyDFYGxSi+DdMiaPcuh61up+yDQ7Upv1tokFgEDm3neSjvcw/e4L+wzDIBz9KzzNcSh39CFjgtMQ7MyLXhQ5Bz2KBAaM3uxn/JyFUR0bd0uyOC1OcI9hkDxApwmh9qk/gfNHUt50FPG86nD+blTiiB8GU9d/UtDFYUVhx04god3ibTZRoM+n2gr1d//Wz37wqNdrWaWiBHYZWjDDUIlMMCKW3A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(7416002)(31686004)(921005)(8936002)(36756003)(2906002)(2616005)(26005)(186003)(38100700002)(316002)(110136005)(6486002)(8676002)(31696002)(86362001)(508600001)(5660300002)(66476007)(6666004)(6512007)(66556008)(6506007)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z3BMSWUwNFV1YlNUdUtIcWJOdUNZaCtyejk4QTZzSUtaOGJRRERHcFFBb2t2?=
- =?utf-8?B?YTVtc0NvVjV6c2lRUHNZdlpQc2d5dkNyL1gyQlB1TUcwM09Wei9IRU0xTGNE?=
- =?utf-8?B?K2E1SlhWQXN2bVBRdzVJV2lyNFp3M0dlSTZ6ZkZ6cnRuN1NmTzdhakUxQkk1?=
- =?utf-8?B?V1pQSUpkT1IvdnN2L3NQTmlBbVZLdGt5ai9ZblVGaStwN3o1ZzVUSCsxTnRm?=
- =?utf-8?B?K0syVHJVREtDblh4SFZBaFlwdjNIVnBob213VlhUNHBVSlJieXlNY0xYWnNX?=
- =?utf-8?B?Z1R6RllEcnRVbnNlcjZjS3VqNVZ4THo2alMyZHdCRzVXVzA0V2pHeTU5OW5s?=
- =?utf-8?B?cEc5WGtqSkdpdVJ4Sll1Q1JtVURwQlRWMWJWaVVnemZYZHFTREpmdHNrY2w5?=
- =?utf-8?B?TWxhbmJQamNOR0xkdVVTOElSQjMxWFAxV0E1NGpHb2tpTDJrWDhxUTNjbTB5?=
- =?utf-8?B?TEMzVzY3YnNWdDlWa1ZhY0ZuRUpKc3M2djdUNFB6elJCOGM1TWRkMDFEb2g5?=
- =?utf-8?B?elBMM1FHdWMzcGJhMGN5NGQ5cUZZd010MW5tNmhmaTRVRzVjaCt6cFpBMGdQ?=
- =?utf-8?B?aUxLM0dCcEp0M0NBcWozQkhLK3BvQjhFMUJmeFNDL1pFWENOcnBJejBaNjNB?=
- =?utf-8?B?Y0hxeU1zN2N0MWhTTGNhWlZ6WGlXWXBaU0RzWkFwdlRRUnVvZXkwQnhnNzF5?=
- =?utf-8?B?VituaEw1TVFSWEQ2Wm9JMlYyajg1TVhBRXpiSDVlV3BENlFsUFNkUXM4Y05u?=
- =?utf-8?B?N0VTRlJLOHFEelVRZTJmMTFPY3BkYnRZYVZneVNFNVpTYm01RmZrVVNITDdJ?=
- =?utf-8?B?ZG9BMWQvcUlwZC9oVUpLbnVJeVNlanRQNTErNGpVdE9PQ1AzTDVrUk8wclZN?=
- =?utf-8?B?bC8xTHJ1LzlEMWFRbFlMcVNXYzQrdmZZWnltSlY4WnU2TnBpSWxPVHdGSEZ6?=
- =?utf-8?B?L00yeW5GYVdsWWlrSXVneThYYU9sejdHY0FxbmJDZ281UlJoVkpyNC8xV0dn?=
- =?utf-8?B?Q0xuM0JHVzBPaVc5eVFBMTB5RHlZWXRtTjZtWGxDSHdSVDFINE1hN3BXaE9T?=
- =?utf-8?B?dTgzM3AwQUVlU2d2c3RwVUdXalJvdEpIMCsvbHd1WGRIeU9WV0FDa2UyMmhU?=
- =?utf-8?B?MFoyZzNkTnpjbGFYOG1DSmUyaDFiUTcrWFhBd2JmQ04vcElkWjJIR01RK1Ru?=
- =?utf-8?B?MVp6WFFEdEgzZ2pSUEVlOEppOEVnWnczUGRzeENUODBkNDduN3hQeTJmNlRz?=
- =?utf-8?B?QnU2OW5Wa1NDYWhhMHI0dTRHRk5IbzJEQUtFdlU4ZUY3N1o4bVpMU3U1K050?=
- =?utf-8?B?a2hweWF5eVBidEVOalBVT2RpazVhMlFVTE4zWFBDdlhaNjJNcDcremRNZmpV?=
- =?utf-8?B?QjJEU2FqSlVEb2FyK1Z6dFdkNEcyZVl3U0tqQml5NVlmb0FkYVUrUHJQY09i?=
- =?utf-8?B?OWJSRmcyOHVQU1ZoeFBhUHoxRUlWUVVkZHBVU1N1ckh4MXlmdnNKUWIwVTRD?=
- =?utf-8?B?WHQ4U0dUYzlSZXZMaHQwdmNiZVhXQTBuSXdsK1NEMERMRHZoZC9Ybm1ETmNC?=
- =?utf-8?B?YVU4dm9kcmcrazBmaW5vV2FYY3hpKzZKYUNvVVE0Vm9YMEIyQ1h1eDQ2VnNJ?=
- =?utf-8?B?ckVDTk9hSmhDNHhxOG9xWEd1ajBzYzFGbmd1TnJaSi8yZHVWcm9nQVpYVmc0?=
- =?utf-8?B?dks2ZVZrams3a2o1WW9jVjFsRStJSDdVaTFNNW9TMVJvbVQwT09KaWdpb29X?=
- =?utf-8?B?K05peXhLbzNIQ0k0dVpLb01jQnF0cTBORWIrbXQweGhWQ0p5NEJsNFhpMXJP?=
- =?utf-8?B?WXZIMWNnV1VrWG15YzRJdXc0N1B3OVRSZVVnNFUwblNvSVhsc3VuTzhFUWhU?=
- =?utf-8?B?RG8yTVNNcnpMOFVSTFhVeWdOZGpYQnc5bEo0VWhOUXlZVVcybER5aGdWUCtp?=
- =?utf-8?B?VThDbnJydGgralo2Um1ZTkQ5WHpRU2tWTXBTTHJIL0N5T0xKWGp6a3ZUSUp5?=
- =?utf-8?B?c2k2WXZlbnlXUVF5UWFLOW56aFJkQW8zbXA1QmttRGV1ODdDWGkzemZyVkYr?=
- =?utf-8?B?ZllsNFhCdEV5OFkyUVdlelBLUHgzZjdPNnM5WlVTVGNzWUYzdU05QjNRUnl6?=
- =?utf-8?Q?riMg=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 907f7b6b-a15f-42dc-00b9-08d9fdbc996f
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 08:54:32.2315
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KzoCr3sb31YDjLEqJIDLukpBXIVC1OrdSk0616uWIzt1zepnbTv4js9TnZU03/Dj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1816
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220304033531.28667-1-rdunlap@infradead.org>
+In-Reply-To: <20220304033531.28667-1-rdunlap@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 4 Mar 2022 09:55:04 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWM_a7gmBw3gQd+BCTuFGpsHN3o9HuU=ivWnZraYXewqQ@mail.gmail.com>
+Message-ID: <CAMuHMdWM_a7gmBw3gQd+BCTuFGpsHN3o9HuU=ivWnZraYXewqQ@mail.gmail.com>
+Subject: Re: [PATCH] m68k: tweak coldfire/device.c for COMPILE_TEST
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patches@lists.linux.dev, kernel test robot <lkp@intel.com>,
+        Angelo Dureghello <angelo@sysam.it>,
+        Greg Ungerer <gerg@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        uClinux development list <uclinux-dev@uclinux.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 04.03.22 um 09:43 schrieb Wolfram Sang:
->> I'm getting quite a bunch of unrelated mails because the regex is not the
->> best.
-> I can imagine!
+Hi Randy,
+
+On Fri, Mar 4, 2022 at 4:35 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> When CONFIG_MCF_EDMA is set (due to COMPILE_TEST, not due to
+> CONFIG_M5441x), coldfire/device.c has compile errors due to
+> missing MCFEDMA_* symbols. In the .config file that was provided,
+> CONFIG_M5206=y, not CONFIG_M5441x, so <asm/m5441xsim.h> is not
+> included in coldfire/device.c.
 >
->> On the other hand the framework is used in a lot of drivers and I do want to
->> be notified when they mess with their interfaces.
-> Sure thing. I am convinced the regex can be improved to ensure that to a
-> high degree. I think it is also less work for you than asking people to
-> rename their variable all the time :)
-
-Well not all the time. It's just that you absolutely hit the nail on the 
-head with the name.
-
-The local variable for the DMA-buf handle is just nearly always named 
-dma_buf or dmabuf in the drivers.
-
-Christian.
-
+> Only build the MCF_EDMA code in coldfire/device.c if both MCF_EDMA
+> and M5441x are enabled.
 >
->> Going to take a another look at that when I have time.
-> Thank you!
+> Fixes these build errors:
 >
+> ../arch/m68k/coldfire/device.c:512:35: error: 'MCFEDMA_BASE' undeclared here (not in a function); did you mean 'MCFDMA_BASE1'?
+>   512 |                 .start          = MCFEDMA_BASE,
+> ../arch/m68k/coldfire/device.c:513:50: error: 'MCFEDMA_SIZE' undeclared here (not in a function)
+>   513 |                 .end            = MCFEDMA_BASE + MCFEDMA_SIZE - 1,
+> ../arch/m68k/coldfire/device.c:517:35: error: 'MCFEDMA_IRQ_INTR0' undeclared here (not in a function)
+>   517 |                 .start          = MCFEDMA_IRQ_INTR0,
+> ../arch/m68k/coldfire/device.c:523:35: error: 'MCFEDMA_IRQ_INTR16' undeclared here (not in a function)
+>   523 |                 .start          = MCFEDMA_IRQ_INTR16,
+> ../arch/m68k/coldfire/device.c:529:35: error: 'MCFEDMA_IRQ_INTR56' undeclared here (not in a function)
+>   529 |                 .start          = MCFEDMA_IRQ_INTR56,
+> ../arch/m68k/coldfire/device.c:535:35: error: 'MCFEDMA_IRQ_ERR' undeclared here (not in a function)
+>   535 |                 .start          = MCFEDMA_IRQ_ERR,
+>
+> Fixes: d7e9d01ac292 ("m68k: add ColdFire mcf5441x eDMA platform support")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
+Thanks for your patch!
+
+> --- linux-next-20220303.orig/arch/m68k/coldfire/device.c
+> +++ linux-next-20220303/arch/m68k/coldfire/device.c
+> @@ -480,7 +480,7 @@ static struct platform_device mcf_i2c5 =
+>  #endif /* MCFI2C_BASE5 */
+>  #endif /* IS_ENABLED(CONFIG_I2C_IMX) */
+>
+> -#if IS_ENABLED(CONFIG_MCF_EDMA)
+> +#if IS_ENABLED(CONFIG_MCF_EDMA) && IS_ENABLED(CONFIG_M5441x)
+
+As this protects hardware description, I'm wondering if this and
+below shouldn't just be"#ifdef CONFIG_M5441x"?
+
+See also commit 322c512f476f07e9 ("m68knommu: include SDHC support
+only when hardware has it")
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

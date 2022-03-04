@@ -2,326 +2,923 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D764CD2B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F164CD2BB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 11:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237208AbiCDKs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 05:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
+        id S234268AbiCDKtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 05:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbiCDKsy (ORCPT
+        with ESMTP id S230507AbiCDKtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 05:48:54 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C308134645
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:48:05 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so7498217pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 02:48:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z54H2QvreHmJqqQnwQD09l+XU0wFN1Y2CxR47bcJ36Y=;
-        b=B9zgMJXFKibA/4srIpbdHFFI7vfXq0r70bUvuhAidUvllaRYXwbC4w/vOtqYMhh+Cu
-         79zXMyTR7F0uQJmF6oWPVJy8HMQ92Bc6qbPqu9hT4RP3akjQwermpe4cjB/2QD6PELVn
-         lltOqQIlX9v2S+lExEfduP5IKZ5bof0jgaKvOhEZC5Q1Xl9CPSxwsgJwV9kn07IrdZ9d
-         lZenOiDi/a1lVhxHTJjfQaqPldY+uRd523kqlAL0IPFMl7lkdYXaDtZ9f81sl+qooBPZ
-         XNV/Qbr4RXPOyVTMOakD6gAREQxDafdAvipBS6+G452kvdgA3NNYD96xWxtTjGJBdrg7
-         +3dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z54H2QvreHmJqqQnwQD09l+XU0wFN1Y2CxR47bcJ36Y=;
-        b=YQMp5chyA+zk2Mp9bAUSo7+08hFjAXN1CrKLHUOLK6fD467q1AZjfImS3Hfl+ontNR
-         g/a9kFSjQaH6Xj7yg/LYDjOePR7MklWyBPGi1cxjvjlSqDNMMX9X/UQL09WFwelcDSmb
-         YcQkapcKcTceXer40RiKwc1727/5hnaN904YxXMOlUsGIwH6hL6R6+jNSiEGTgcrI2Ll
-         2KpV71XrM1i+91uGkKnVWBTq4jCAzl9S65EyaMY4NsGvuQxMburJgpUvVshEhy+DeZUZ
-         lWLyTx/fJcv8pfOHPFVjYq2lWQUcg/AvVad/YNFK7dzB6fm3cRepFw279F/YSbPeGjZ0
-         Vm2w==
-X-Gm-Message-State: AOAM532UsZU7M8K+sDI/qjQ3XBd7a2TmriUqlYvoCkL2l2wWj0N4Xj7B
-        u3EX2Lz25gb9hgjC7UpJ/kw=
-X-Google-Smtp-Source: ABdhPJyv1f/qjb13ch8hfn//KCV8fKt9UHWLMFcFGeFj8P6lx9v0weoDI0vgtRrL2iHJ0OVRi3trYA==
-X-Received: by 2002:a17:90b:3b82:b0:1bf:32c4:7dc6 with SMTP id pc2-20020a17090b3b8200b001bf32c47dc6mr237756pjb.155.1646390885229;
-        Fri, 04 Mar 2022 02:48:05 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id cv15-20020a17090afd0f00b001bedcbca1a9sm10278010pjb.57.2022.03.04.02.48.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 02:48:04 -0800 (PST)
-Date:   Fri, 4 Mar 2022 10:47:59 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Faiyaz Mohammed <faiyazm@codeaurora.org>,
-        Marco Elver <elver@google.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Imran Khan <imran.f.khan@oracle.com>
-Subject: Re: [PATCH v3r0 1/6] lib/stackdepot: allow requesting early
- initialization dynamically
-Message-ID: <YiHuXyu9/5I83hP8@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220302173122.11939-1-vbabka@suse.cz>
- <20220302173122.11939-2-vbabka@suse.cz>
- <c923550e-c88e-aad4-ecc2-fa8a3d0a1f1c@suse.cz>
+        Fri, 4 Mar 2022 05:49:45 -0500
+Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [84.16.66.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EB341F86
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 02:48:55 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K94N55qFQzMqLlC;
+        Fri,  4 Mar 2022 11:48:53 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4K94N347yKzlhMC7;
+        Fri,  4 Mar 2022 11:48:51 +0100 (CET)
+Message-ID: <ecbe78fa-a032-e01d-2134-0dba8176ffba@digikod.net>
+Date:   Fri, 4 Mar 2022 11:48:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c923550e-c88e-aad4-ecc2-fa8a3d0a1f1c@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: 
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        paul@paul-moore.com, sds@tycho.nsa.gov,
+        linux-kernel@vger.kernel.org
+References: <20220202235323.23929-1-casey@schaufler-ca.com>
+ <20220202235323.23929-4-casey@schaufler-ca.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v32 03/28] LSM: Add the lsmblob data structure.
+In-Reply-To: <20220202235323.23929-4-casey@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 08:19:33PM +0100, Vlastimil Babka wrote:
-> Here's an updated version based on feedback so I don't re-send everything
-> so soon after v2. Also in git:
-> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git/log/?h=slub-stackdepot-v3r0
-> There are only trivial adaptations in patch 3/6 to the stack depot init
-> changes otherwise.
-> Thanks, Vlastimil
+
+On 03/02/2022 00:52, Casey Schaufler wrote:
+> When more than one security module is exporting data to
+> audit and networking sub-systems a single 32 bit integer
+> is no longer sufficient to represent the data. Add a
+> structure to be used instead.
 > 
-> ----8<----
-> From 230ebae0f83540574d167f9ba1f71d3f602ca410 Mon Sep 17 00:00:00 2001
-> From: Vlastimil Babka <vbabka@suse.cz>
-> Date: Wed, 2 Mar 2022 12:02:22 +0100
-> Subject: [PATCH v3 1/6] lib/stackdepot: allow requesting early initialization
->  dynamically
+> The lsmblob structure is currently an array of
+> u32 "secids". There is an entry for each of the
+> security modules built into the system that would
+> use secids if active. The system assigns the module
+> a "slot" when it registers hooks. If modules are
+> compiled in but not registered there will be unused
+> slots.
 > 
-> In a later patch we want to add stackdepot support for object owner
-> tracking in slub caches, which is enabled by slub_debug boot parameter.
-> This creates a bootstrap problem as some caches are created early in
-> boot when slab_is_available() is false and thus stack_depot_init()
-> tries to use memblock. But, as reported by Hyeonggon Yoo [1] we are
-> already beyond memblock_free_all(). Ideally memblock allocation should
-> fail, yet it succeeds, but later the system crashes, which is a
-> separately handled issue.
+> A new lsm_id structure, which contains the name
+> of the LSM and its slot number, is created. There
+> is an instance for each LSM, which assigns the name
+> and passes it to the infrastructure to set the slot.
 > 
-> To resolve this boostrap issue in a robust way, this patch adds another
-> way to request stack_depot_early_init(), which happens at a well-defined
-> point of time. In addition to build-time CONFIG_STACKDEPOT_ALWAYS_INIT,
-> code that's e.g. processing boot parameters (which happens early enough)
-> can call a new function stack_depot_want_early_init(), which sets a flag
-> that stack_depot_early_init() will check.
+> The audit rules data is expanded to use an array of
+> security module data rather than a single instance.
+> A new structure audit_lsm_rules is defined to avoid the
+> confusion which commonly accompanies the use of
+> void ** parameters.
 > 
-> In this patch we also convert page_owner to this approach. While it
-> doesn't have the bootstrap issue as slub, it's also a functionality
-> enabled by a boot param and can thus request stack_depot_early_init()
-> with memblock allocation instead of later initialization with
-> kvmalloc().
-> 
-> As suggested by Mike, make stack_depot_early_init() only attempt
-> memblock allocation and stack_depot_init() only attempt kvmalloc().
-> Also change the latter to kvcalloc(). In both cases we can lose the
-> explicit array zeroing, which the allocations do already.
-> 
-> As suggested by Marco, provide empty implementations of the init
-> functions for !CONFIG_STACKDEPOT builds to simplify the callers.
-> 
-> [1] https://lore.kernel.org/all/YhnUcqyeMgCrWZbd@ip-172-31-19-208.ap-northeast-1.compute.internal/
-> 
-> Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Suggested-by: Mike Rapoport <rppt@linux.ibm.com>
-> Suggested-by: Marco Elver <elver@google.com>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+
+Reviewed-by: Mickaël Salaün <mic@linux.microsoft.com>
+
+
+Minor fixes:
+
+
 > ---
->  include/linux/stackdepot.h | 26 ++++++++++++---
->  lib/stackdepot.c           | 67 +++++++++++++++++++++++++-------------
->  mm/page_owner.c            |  9 +++--
->  3 files changed, 73 insertions(+), 29 deletions(-)
+>   include/linux/audit.h        | 10 ++++-
+>   include/linux/lsm_hooks.h    | 12 +++++-
+>   include/linux/security.h     | 74 +++++++++++++++++++++++++++++---
+>   kernel/auditfilter.c         | 23 +++++-----
+>   kernel/auditsc.c             | 17 +++-----
+>   security/apparmor/lsm.c      |  7 ++-
+>   security/bpf/hooks.c         | 12 +++++-
+>   security/commoncap.c         |  7 ++-
+>   security/landlock/cred.c     |  2 +-
+>   security/landlock/fs.c       |  2 +-
+>   security/landlock/ptrace.c   |  2 +-
+>   security/landlock/setup.c    |  5 +++
+>   security/landlock/setup.h    |  1 +
+>   security/loadpin/loadpin.c   |  8 +++-
+>   security/lockdown/lockdown.c |  7 ++-
+>   security/safesetid/lsm.c     |  8 +++-
+>   security/security.c          | 82 ++++++++++++++++++++++++++++++------
+>   security/selinux/hooks.c     |  8 +++-
+>   security/smack/smack_lsm.c   |  7 ++-
+>   security/tomoyo/tomoyo.c     |  8 +++-
+>   security/yama/yama_lsm.c     |  7 ++-
+>   21 files changed, 253 insertions(+), 56 deletions(-)
 > 
-> diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-> index 17f992fe6355..bc2797955de9 100644
-> --- a/include/linux/stackdepot.h
-> +++ b/include/linux/stackdepot.h
-> @@ -20,18 +20,36 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
->  					gfp_t gfp_flags, bool can_alloc);
->  
->  /*
-> - * Every user of stack depot has to call this during its own init when it's
-> - * decided that it will be calling stack_depot_save() later.
-> + * Every user of stack depot has to call stack_depot_init() during its own init
-> + * when it's decided that it will be calling stack_depot_save() later. This is
-> + * recommended for e.g. modules initialized later in the boot process, when
-> + * slab_is_available() is true.
->   *
->   * The alternative is to select STACKDEPOT_ALWAYS_INIT to have stack depot
->   * enabled as part of mm_init(), for subsystems where it's known at compile time
->   * that stack depot will be used.
+> diff --git a/include/linux/audit.h b/include/linux/audit.h
+> index d06134ac6245..14849d5f84b4 100644
+> --- a/include/linux/audit.h
+> +++ b/include/linux/audit.h
+> @@ -11,6 +11,7 @@
+>   
+>   #include <linux/sched.h>
+>   #include <linux/ptrace.h>
+> +#include <linux/security.h>
+>   #include <linux/audit_arch.h>
+>   #include <uapi/linux/audit.h>
+>   #include <uapi/linux/netfilter/nf_tables.h>
+> @@ -59,6 +60,10 @@ struct audit_krule {
+>   /* Flag to indicate legacy AUDIT_LOGINUID unset usage */
+>   #define AUDIT_LOGINUID_LEGACY		0x1
+>   
+> +struct audit_lsm_rules {
+> +	void	*rule[LSMBLOB_ENTRIES];
+> +};
+> +
+>   struct audit_field {
+>   	u32				type;
+>   	union {
+> @@ -66,8 +71,9 @@ struct audit_field {
+>   		kuid_t			uid;
+>   		kgid_t			gid;
+>   		struct {
+> -			char		*lsm_str;
+> -			void		*lsm_rule;
+> +			bool			lsm_isset;
+> +			char			*lsm_str;
+> +			struct audit_lsm_rules	lsm_rules;
+>   		};
+>   	};
+>   	u32				op;
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 129d99c6f9ed..2c2d0ef59a41 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -1582,6 +1582,14 @@ struct security_hook_heads {
+>   	#undef LSM_HOOK
+>   } __randomize_layout;
+>   
+> +/*
+> + * Information that identifies a security module.
+> + */
+> +struct lsm_id {
+> +	const char	*lsm;	/* Name of the LSM */
+> +	int		slot;	/* Slot in lsmblob if one is allocated */
+> +};
+> +
+>   /*
+>    * Security module hook list structure.
+>    * For use with generic list macros for common operations.
+> @@ -1590,7 +1598,7 @@ struct security_hook_list {
+>   	struct hlist_node		list;
+>   	struct hlist_head		*head;
+>   	union security_list_options	hook;
+> -	char				*lsm;
+> +	struct lsm_id			*lsmid;
+>   } __randomize_layout;
+>   
+>   /*
+> @@ -1626,7 +1634,7 @@ extern struct security_hook_heads security_hook_heads;
+>   extern char *lsm_names;
+>   
+>   extern void security_add_hooks(struct security_hook_list *hooks, int count,
+> -				char *lsm);
+> +			       struct lsm_id *lsmid);
+>   
+>   #define LSM_FLAG_LEGACY_MAJOR	BIT(0)
+>   #define LSM_FLAG_EXCLUSIVE	BIT(1)
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 33e0f2e659df..1a7e5bf36a82 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -39,6 +39,7 @@ struct kernel_siginfo;
+>   struct sembuf;
+>   struct kern_ipc_perm;
+>   struct audit_context;
+> +struct audit_lsm_rules;
+>   struct super_block;
+>   struct inode;
+>   struct dentry;
+> @@ -134,6 +135,65 @@ enum lockdown_reason {
+>   
+>   extern const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1];
+>   
+> +/*
+> + * Data exported by the security modules
 > + *
-> + * Another alternative is to call stack_depot_want_early_init(), when the
-> + * decision to use stack depot is taken e.g. when evaluating kernel boot
-> + * parameters, which precedes the enablement point in mm_init().
+> + * Any LSM that provides secid or secctx based hooks must be included.
+> + */
+> +#define LSMBLOB_ENTRIES ( \
+> +	(IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
+> +	(IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) + \
+> +	(IS_ENABLED(CONFIG_SECURITY_APPARMOR) ? 1 : 0) + \
+> +	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0))
+> +
+> +struct lsmblob {
+> +	u32     secid[LSMBLOB_ENTRIES];
+> +};
+> +
+> +#define LSMBLOB_INVALID		-1	/* Not a valid LSM slot number */
+> +#define LSMBLOB_NEEDED		-2	/* Slot requested on initialization */
+> +#define LSMBLOB_NOT_NEEDED	-3	/* Slot not requested */
+> +
+> +/**
+> + * lsmblob_init - initialize an lsmblob structure
+> + * @blob: Pointer to the data to initialize
+> + * @secid: The initial secid value
 > + *
-> + * stack_depot_init() and stack_depot_want_early_init() can be called regardless
-> + * of CONFIG_STACKDEPOT and are no-op when disabled. The actual save/fetch/print
-> + * functions should only be called from code that makes sure CONFIG_STACKDEPOT
-> + * is enabled.
->   */
-> +#ifdef CONFIG_STACKDEPOT
->  int stack_depot_init(void);
->  
-> -#ifdef CONFIG_STACKDEPOT_ALWAYS_INIT
-> -static inline int stack_depot_early_init(void)	{ return stack_depot_init(); }
-> +void __init stack_depot_want_early_init(void);
-> +
-> +/* This is supposed to be called only from mm_init() */
-> +int __init stack_depot_early_init(void);
->  #else
-> +static inline int stack_depot_init(void) { return 0; }
-> +
-> +static inline void stack_depot_want_early_init(void) { }
-> +
->  static inline int stack_depot_early_init(void)	{ return 0; }
->  #endif
->  
-> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> index bf5ba9af0500..0a5916f1e7a3 100644
-> --- a/lib/stackdepot.c
-> +++ b/lib/stackdepot.c
-> @@ -66,6 +66,9 @@ struct stack_record {
->  	unsigned long entries[];	/* Variable-sized array of entries. */
->  };
->  
-> +static bool __stack_depot_want_early_init __initdata = IS_ENABLED(CONFIG_STACKDEPOT_ALWAYS_INIT);
-> +static bool __stack_depot_early_init_passed __initdata;
-> +
->  static void *stack_slabs[STACK_ALLOC_MAX_SLABS];
->  
->  static int depot_index;
-> @@ -162,38 +165,58 @@ static int __init is_stack_depot_disabled(char *str)
->  }
->  early_param("stack_depot_disable", is_stack_depot_disabled);
->  
-> -/*
-> - * __ref because of memblock_alloc(), which will not be actually called after
-> - * the __init code is gone, because at that point slab_is_available() is true
-> - */
-> -__ref int stack_depot_init(void)
-> +void __init stack_depot_want_early_init(void)
+> + * Set all secid for all modules to the specified value.
+> + */
+> +static inline void lsmblob_init(struct lsmblob *blob, u32 secid)
 > +{
-> +	/* Too late to request early init now */
-> +	WARN_ON(__stack_depot_early_init_passed);
+> +	int i;
 > +
-> +	__stack_depot_want_early_init = true;
+> +	for (i = 0; i < LSMBLOB_ENTRIES; i++)
+> +		blob->secid[i] = secid;
 > +}
 > +
-> +int __init stack_depot_early_init(void)
+> +/**
+> + * lsmblob_is_set - report if there is an value in the lsmblob
+
+*a* value
+
+
+> + * @blob: Pointer to the exported LSM data
+> + *
+> + * Returns true if there is a secid set, false otherwise
+> + */
+> +static inline bool lsmblob_is_set(struct lsmblob *blob)
 > +{
-> +	size_t size;
-> +	int i;
+> +	struct lsmblob empty = {};
 
-compile warning: unused variable i.
+const struct lsmblob empty = {};
 
-> +	/* This is supposed to be called only once, from mm_init() */
-> +	if (WARN_ON(__stacki_depot_early_init_passed))
-> +		return 0;
 > +
-> +	__stack_depot_early_init_passed = true;
+> +	return !!memcmp(blob, &empty, sizeof(*blob));
+> +}
 > +
-> +	if (!__stack_depot_want_early_init || stack_depot_disable)
-> +		return 0;
+> +/**
+> + * lsmblob_equal - report if the two lsmblob's are equal
+> + * @bloba: Pointer to one LSM data
+> + * @blobb: Pointer to the other LSM data
+> + *
+> + * Returns true if all entries in the two are equal, false otherwise
+> + */
+> +static inline bool lsmblob_equal(struct lsmblob *bloba, struct lsmblob *blobb)
+
+const struct lsmblob *bloba, const struct lsmblob *blobb
+
+
+> +{
+> +	return !memcmp(bloba, blobb, sizeof(*bloba));
+> +}
 > +
-> +	pr_info("Stack Depot early init allocating hash table with memblock_alloc\n");
-> +	size = (STACK_HASH_SIZE * sizeof(struct stack_record *));
-> +	stack_table = memblock_alloc(size, SMP_CACHE_BYTES);
+>   /* These functions are in security/commoncap.c */
+>   extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
+>   		       int cap, unsigned int opts);
+> @@ -1879,15 +1939,17 @@ static inline int security_key_getsecurity(struct key *key, char **_buffer)
+>   
+>   #ifdef CONFIG_AUDIT
+>   #ifdef CONFIG_SECURITY
+> -int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule);
+> +int security_audit_rule_init(u32 field, u32 op, char *rulestr,
+> +			     struct audit_lsm_rules *lsmrules);
+>   int security_audit_rule_known(struct audit_krule *krule);
+> -int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule);
+> -void security_audit_rule_free(void *lsmrule);
+> +int security_audit_rule_match(u32 secid, u32 field, u32 op,
+> +			      struct audit_lsm_rules *lsmrules);
+> +void security_audit_rule_free(struct audit_lsm_rules *lsmrules);
+>   
+>   #else
+>   
+>   static inline int security_audit_rule_init(u32 field, u32 op, char *rulestr,
+> -					   void **lsmrule)
+> +					   struct audit_lsm_rules *lsmrules)
+>   {
+>   	return 0;
+>   }
+> @@ -1898,12 +1960,12 @@ static inline int security_audit_rule_known(struct audit_krule *krule)
+>   }
+>   
+>   static inline int security_audit_rule_match(u32 secid, u32 field, u32 op,
+> -					    void *lsmrule)
+> +					    struct audit_lsm_rules *lsmrules)
+>   {
+>   	return 0;
+>   }
+>   
+> -static inline void security_audit_rule_free(void *lsmrule)
+> +static inline void security_audit_rule_free(struct audit_lsm_rules *lsmrules)
+>   { }
+>   
+>   #endif /* CONFIG_SECURITY */
+> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+> index 42d99896e7a6..de75bd6ad866 100644
+> --- a/kernel/auditfilter.c
+> +++ b/kernel/auditfilter.c
+> @@ -76,7 +76,7 @@ static void audit_free_lsm_field(struct audit_field *f)
+>   	case AUDIT_OBJ_LEV_LOW:
+>   	case AUDIT_OBJ_LEV_HIGH:
+>   		kfree(f->lsm_str);
+> -		security_audit_rule_free(f->lsm_rule);
+> +		security_audit_rule_free(&f->lsm_rules);
+>   	}
+>   }
+>   
+> @@ -529,7 +529,7 @@ static struct audit_entry *audit_data_to_entry(struct audit_rule_data *data,
+>   			entry->rule.buflen += f_val;
+>   			f->lsm_str = str;
+>   			err = security_audit_rule_init(f->type, f->op, str,
+> -						       (void **)&f->lsm_rule);
+> +						       &f->lsm_rules);
+>   			/* Keep currently invalid fields around in case they
+>   			 * become valid after a policy reload. */
+>   			if (err == -EINVAL) {
+> @@ -782,7 +782,7 @@ static int audit_compare_rule(struct audit_krule *a, struct audit_krule *b)
+>   	return 0;
+>   }
+>   
+> -/* Duplicate LSM field information.  The lsm_rule is opaque, so must be
+> +/* Duplicate LSM field information.  The lsm_rules is opaque, so must be
+>    * re-initialized. */
+>   static inline int audit_dupe_lsm_field(struct audit_field *df,
+>   					   struct audit_field *sf)
+> @@ -796,9 +796,9 @@ static inline int audit_dupe_lsm_field(struct audit_field *df,
+>   		return -ENOMEM;
+>   	df->lsm_str = lsm_str;
+>   
+> -	/* our own (refreshed) copy of lsm_rule */
+> +	/* our own (refreshed) copy of lsm_rules */
+>   	ret = security_audit_rule_init(df->type, df->op, df->lsm_str,
+> -				       (void **)&df->lsm_rule);
+> +				       &df->lsm_rules);
+>   	/* Keep currently invalid fields around in case they
+>   	 * become valid after a policy reload. */
+>   	if (ret == -EINVAL) {
+> @@ -850,7 +850,7 @@ struct audit_entry *audit_dupe_rule(struct audit_krule *old)
+>   	new->tree = old->tree;
+>   	memcpy(new->fields, old->fields, sizeof(struct audit_field) * fcount);
+>   
+> -	/* deep copy this information, updating the lsm_rule fields, because
+> +	/* deep copy this information, updating the lsm_rules fields, because
+>   	 * the originals will all be freed when the old rule is freed. */
+>   	for (i = 0; i < fcount; i++) {
+>   		switch (new->fields[i].type) {
+> @@ -1367,10 +1367,11 @@ int audit_filter(int msgtype, unsigned int listtype)
+>   			case AUDIT_SUBJ_TYPE:
+>   			case AUDIT_SUBJ_SEN:
+>   			case AUDIT_SUBJ_CLR:
+> -				if (f->lsm_rule) {
+> +				if (f->lsm_str) {
+>   					security_current_getsecid_subj(&sid);
+>   					result = security_audit_rule_match(sid,
+> -						   f->type, f->op, f->lsm_rule);
+> +						   f->type, f->op,
+> +						   &f->lsm_rules);
+>   				}
+>   				break;
+>   			case AUDIT_EXE:
+> @@ -1397,7 +1398,7 @@ int audit_filter(int msgtype, unsigned int listtype)
+>   	return ret;
+>   }
+>   
+> -static int update_lsm_rule(struct audit_krule *r)
+> +static int update_lsm_rules(struct audit_krule *r)
+>   {
+>   	struct audit_entry *entry = container_of(r, struct audit_entry, rule);
+>   	struct audit_entry *nentry;
+> @@ -1429,7 +1430,7 @@ static int update_lsm_rule(struct audit_krule *r)
+>   	return err;
+>   }
+>   
+> -/* This function will re-initialize the lsm_rule field of all applicable rules.
+> +/* This function will re-initialize the lsm_rules field of all applicable rules.
+>    * It will traverse the filter lists serarching for rules that contain LSM
+>    * specific filter fields.  When such a rule is found, it is copied, the
+>    * LSM field is re-initialized, and the old rule is replaced with the
+> @@ -1444,7 +1445,7 @@ int audit_update_lsm_rules(void)
+>   
+>   	for (i = 0; i < AUDIT_NR_FILTERS; i++) {
+>   		list_for_each_entry_safe(r, n, &audit_rules_list[i], list) {
+> -			int res = update_lsm_rule(r);
+> +			int res = update_lsm_rules(r);
+>   			if (!err)
+>   				err = res;
+>   		}
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index fce5d43a933f..f1c26a322f9d 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -664,7 +664,7 @@ static int audit_filter_rules(struct task_struct *tsk,
+>   			   match for now to avoid losing information that
+>   			   may be wanted.   An error message will also be
+>   			   logged upon error */
+> -			if (f->lsm_rule) {
+> +			if (f->lsm_str) {
+>   				if (need_sid) {
+>   					/* @tsk should always be equal to
+>   					 * @current with the exception of
+> @@ -679,8 +679,7 @@ static int audit_filter_rules(struct task_struct *tsk,
+>   					need_sid = 0;
+>   				}
+>   				result = security_audit_rule_match(sid, f->type,
+> -								   f->op,
+> -								   f->lsm_rule);
+> +							f->op, &f->lsm_rules);
+>   			}
+>   			break;
+>   		case AUDIT_OBJ_USER:
+> @@ -690,21 +689,19 @@ static int audit_filter_rules(struct task_struct *tsk,
+>   		case AUDIT_OBJ_LEV_HIGH:
+>   			/* The above note for AUDIT_SUBJ_USER...AUDIT_SUBJ_CLR
+>   			   also applies here */
+> -			if (f->lsm_rule) {
+> +			if (f->lsm_str) {
+>   				/* Find files that match */
+>   				if (name) {
+>   					result = security_audit_rule_match(
+>   								name->osid,
+>   								f->type,
+>   								f->op,
+> -								f->lsm_rule);
+> +								&f->lsm_rules);
+>   				} else if (ctx) {
+>   					list_for_each_entry(n, &ctx->names_list, list) {
+>   						if (security_audit_rule_match(
+> -								n->osid,
+> -								f->type,
+> -								f->op,
+> -								f->lsm_rule)) {
+> +							n->osid, f->type, f->op,
+> +							&f->lsm_rules)) {
+>   							++result;
+>   							break;
+>   						}
+> @@ -715,7 +712,7 @@ static int audit_filter_rules(struct task_struct *tsk,
+>   					break;
+>   				if (security_audit_rule_match(ctx->ipc.osid,
+>   							      f->type, f->op,
+> -							      f->lsm_rule))
+> +							      &f->lsm_rules))
+>   					++result;
+>   			}
+>   			break;
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index be8976c407f4..1e53fea61335 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -1168,6 +1168,11 @@ struct lsm_blob_sizes apparmor_blob_sizes __lsm_ro_after_init = {
+>   	.lbs_sock = sizeof(struct aa_sk_ctx),
+>   };
+>   
+> +static struct lsm_id apparmor_lsmid __lsm_ro_after_init = {
+> +	.lsm  = "apparmor",
+> +	.slot = LSMBLOB_NEEDED
+> +};
 > +
-> +	if (!stack_table) {
-> +		pr_err("Stack Depot hash table allocation failed, disabling\n");
-> +		stack_depot_disable = true;
-> +		return -ENOMEM;
+>   static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
+>   	LSM_HOOK_INIT(ptrace_access_check, apparmor_ptrace_access_check),
+>   	LSM_HOOK_INIT(ptrace_traceme, apparmor_ptrace_traceme),
+> @@ -1853,7 +1858,7 @@ static int __init apparmor_init(void)
+>   		goto buffers_out;
+>   	}
+>   	security_add_hooks(apparmor_hooks, ARRAY_SIZE(apparmor_hooks),
+> -				"apparmor");
+> +				&apparmor_lsmid);
+>   
+>   	/* Report that AppArmor successfully initialized */
+>   	apparmor_initialized = 1;
+> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+> index e5971fa74fd7..7a58fe9ab8c4 100644
+> --- a/security/bpf/hooks.c
+> +++ b/security/bpf/hooks.c
+> @@ -15,9 +15,19 @@ static struct security_hook_list bpf_lsm_hooks[] __lsm_ro_after_init = {
+>   	LSM_HOOK_INIT(task_free, bpf_task_storage_free),
+>   };
+>   
+> +/*
+> + * slot has to be LSMBLOB_NEEDED because some of the hooks
+> + * supplied by this module require a slot.
+> + */
+> +struct lsm_id bpf_lsmid __lsm_ro_after_init = {
+> +	.lsm = "bpf",
+> +	.slot = LSMBLOB_NEEDED
+> +};
+> +
+>   static int __init bpf_lsm_init(void)
+>   {
+> -	security_add_hooks(bpf_lsm_hooks, ARRAY_SIZE(bpf_lsm_hooks), "bpf");
+> +	security_add_hooks(bpf_lsm_hooks, ARRAY_SIZE(bpf_lsm_hooks),
+> +			   &bpf_lsmid);
+>   	pr_info("LSM support for eBPF active\n");
+>   	return 0;
+>   }
+> diff --git a/security/commoncap.c b/security/commoncap.c
+> index 5fc8986c3c77..c94ec46e07ac 100644
+> --- a/security/commoncap.c
+> +++ b/security/commoncap.c
+> @@ -1446,6 +1446,11 @@ int cap_mmap_file(struct file *file, unsigned long reqprot,
+>   
+>   #ifdef CONFIG_SECURITY
+>   
+> +static struct lsm_id capability_lsmid __lsm_ro_after_init = {
+> +	.lsm  = "capability",
+> +	.slot = LSMBLOB_NOT_NEEDED
+> +};
+> +
+>   static struct security_hook_list capability_hooks[] __lsm_ro_after_init = {
+>   	LSM_HOOK_INIT(capable, cap_capable),
+>   	LSM_HOOK_INIT(settime, cap_settime),
+> @@ -1470,7 +1475,7 @@ static struct security_hook_list capability_hooks[] __lsm_ro_after_init = {
+>   static int __init capability_init(void)
+>   {
+>   	security_add_hooks(capability_hooks, ARRAY_SIZE(capability_hooks),
+> -				"capability");
+> +			   &capability_lsmid);
+>   	return 0;
+>   }
+>   
+> diff --git a/security/landlock/cred.c b/security/landlock/cred.c
+> index 6725af24c684..56b121d65436 100644
+> --- a/security/landlock/cred.c
+> +++ b/security/landlock/cred.c
+> @@ -42,5 +42,5 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+>   __init void landlock_add_cred_hooks(void)
+>   {
+>   	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+> -			LANDLOCK_NAME);
+> +			&landlock_lsmid);
+>   }
+> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+> index 97b8e421f617..319e90e9290c 100644
+> --- a/security/landlock/fs.c
+> +++ b/security/landlock/fs.c
+> @@ -688,5 +688,5 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+>   __init void landlock_add_fs_hooks(void)
+>   {
+>   	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+> -			LANDLOCK_NAME);
+> +			&landlock_lsmid);
+>   }
+> diff --git a/security/landlock/ptrace.c b/security/landlock/ptrace.c
+> index f55b82446de2..54ccf55a077a 100644
+> --- a/security/landlock/ptrace.c
+> +++ b/security/landlock/ptrace.c
+> @@ -116,5 +116,5 @@ static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+>   __init void landlock_add_ptrace_hooks(void)
+>   {
+>   	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+> -			LANDLOCK_NAME);
+> +			&landlock_lsmid);
+>   }
+> diff --git a/security/landlock/setup.c b/security/landlock/setup.c
+> index f8e8e980454c..759e00b9436c 100644
+> --- a/security/landlock/setup.c
+> +++ b/security/landlock/setup.c
+> @@ -23,6 +23,11 @@ struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
+>   	.lbs_superblock = sizeof(struct landlock_superblock_security),
+>   };
+>   
+> +struct lsm_id landlock_lsmid __lsm_ro_after_init = {
+> +	.lsm = LANDLOCK_NAME,
+> +	.slot = LSMBLOB_NOT_NEEDED,
+> +};
+> +
+>   static int __init landlock_init(void)
+>   {
+>   	landlock_add_cred_hooks();
+> diff --git a/security/landlock/setup.h b/security/landlock/setup.h
+> index 1daffab1ab4b..38bce5b172dc 100644
+> --- a/security/landlock/setup.h
+> +++ b/security/landlock/setup.h
+> @@ -14,5 +14,6 @@
+>   extern bool landlock_initialized;
+>   
+>   extern struct lsm_blob_sizes landlock_blob_sizes;
+> +extern struct lsm_id landlock_lsmid;
+>   
+>   #endif /* _SECURITY_LANDLOCK_SETUP_H */
+> diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+> index b12f7d986b1e..b569f3bc170b 100644
+> --- a/security/loadpin/loadpin.c
+> +++ b/security/loadpin/loadpin.c
+> @@ -192,6 +192,11 @@ static int loadpin_load_data(enum kernel_load_data_id id, bool contents)
+>   	return loadpin_read_file(NULL, (enum kernel_read_file_id) id, contents);
+>   }
+>   
+> +static struct lsm_id loadpin_lsmid __lsm_ro_after_init = {
+> +	.lsm  = "loadpin",
+> +	.slot = LSMBLOB_NOT_NEEDED
+> +};
+> +
+>   static struct security_hook_list loadpin_hooks[] __lsm_ro_after_init = {
+>   	LSM_HOOK_INIT(sb_free_security, loadpin_sb_free_security),
+>   	LSM_HOOK_INIT(kernel_read_file, loadpin_read_file),
+> @@ -239,7 +244,8 @@ static int __init loadpin_init(void)
+>   	pr_info("ready to pin (currently %senforcing)\n",
+>   		enforce ? "" : "not ");
+>   	parse_exclude();
+> -	security_add_hooks(loadpin_hooks, ARRAY_SIZE(loadpin_hooks), "loadpin");
+> +	security_add_hooks(loadpin_hooks, ARRAY_SIZE(loadpin_hooks),
+> +			   &loadpin_lsmid);
+>   	return 0;
+>   }
+>   
+> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+> index 87cbdc64d272..4e24ea3f7b7e 100644
+> --- a/security/lockdown/lockdown.c
+> +++ b/security/lockdown/lockdown.c
+> @@ -75,6 +75,11 @@ static struct security_hook_list lockdown_hooks[] __lsm_ro_after_init = {
+>   	LSM_HOOK_INIT(locked_down, lockdown_is_locked_down),
+>   };
+>   
+> +static struct lsm_id lockdown_lsmid __lsm_ro_after_init = {
+> +	.lsm = "lockdown",
+> +	.slot = LSMBLOB_NOT_NEEDED
+> +};
+> +
+>   static int __init lockdown_lsm_init(void)
+>   {
+>   #if defined(CONFIG_LOCK_DOWN_KERNEL_FORCE_INTEGRITY)
+> @@ -83,7 +88,7 @@ static int __init lockdown_lsm_init(void)
+>   	lock_kernel_down("Kernel configuration", LOCKDOWN_CONFIDENTIALITY_MAX);
+>   #endif
+>   	security_add_hooks(lockdown_hooks, ARRAY_SIZE(lockdown_hooks),
+> -			   "lockdown");
+> +			   &lockdown_lsmid);
+>   	return 0;
+>   }
+>   
+> diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
+> index 963f4ad9cb66..0c368950dc14 100644
+> --- a/security/safesetid/lsm.c
+> +++ b/security/safesetid/lsm.c
+> @@ -241,6 +241,11 @@ static int safesetid_task_fix_setgid(struct cred *new,
+>   	return -EACCES;
+>   }
+>   
+> +static struct lsm_id safesetid_lsmid __lsm_ro_after_init = {
+> +	.lsm  = "safesetid",
+> +	.slot = LSMBLOB_NOT_NEEDED
+> +};
+> +
+>   static struct security_hook_list safesetid_security_hooks[] = {
+>   	LSM_HOOK_INIT(task_fix_setuid, safesetid_task_fix_setuid),
+>   	LSM_HOOK_INIT(task_fix_setgid, safesetid_task_fix_setgid),
+> @@ -250,7 +255,8 @@ static struct security_hook_list safesetid_security_hooks[] = {
+>   static int __init safesetid_security_init(void)
+>   {
+>   	security_add_hooks(safesetid_security_hooks,
+> -			   ARRAY_SIZE(safesetid_security_hooks), "safesetid");
+> +			   ARRAY_SIZE(safesetid_security_hooks),
+> +			   &safesetid_lsmid);
+>   
+>   	/* Report that SafeSetID successfully initialized */
+>   	safesetid_initialized = 1;
+> diff --git a/security/security.c b/security/security.c
+> index f2d4b20613c8..2bf21c726ba0 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -345,6 +345,7 @@ static void __init ordered_lsm_init(void)
+>   	init_debug("sock blob size       = %d\n", blob_sizes.lbs_sock);
+>   	init_debug("superblock blob size = %d\n", blob_sizes.lbs_superblock);
+>   	init_debug("task blob size       = %d\n", blob_sizes.lbs_task);
+> +	init_debug("lsmblob size         = %zu\n", sizeof(struct lsmblob));
+>   
+>   	/*
+>   	 * Create any kmem_caches needed for blobs
+> @@ -472,21 +473,38 @@ static int lsm_append(const char *new, char **result)
+>   	return 0;
+>   }
+>   
+> +/*
+> + * Current index to use while initializing the lsmblob secid list.
+> + */
+> +static int lsm_slot __lsm_ro_after_init;
+> +
+>   /**
+>    * security_add_hooks - Add a modules hooks to the hook lists.
+>    * @hooks: the hooks to add
+>    * @count: the number of hooks to add
+> - * @lsm: the name of the security module
+> + * @lsmid: the identification information for the security module
+>    *
+>    * Each LSM has to register its hooks with the infrastructure.
+> + * If the LSM is using hooks that export secids allocate a slot
+> + * for it in the lsmblob.
+>    */
+>   void __init security_add_hooks(struct security_hook_list *hooks, int count,
+> -				char *lsm)
+> +			       struct lsm_id *lsmid)
+>   {
+>   	int i;
+>   
+> +	WARN_ON(!lsmid->slot || !lsmid->lsm);
+> +
+> +	if (lsmid->slot == LSMBLOB_NEEDED) {
+> +		if (lsm_slot >= LSMBLOB_ENTRIES)
+> +			panic("%s Too many LSMs registered.\n", __func__);
+> +		lsmid->slot = lsm_slot++;
+> +		init_debug("%s assigned lsmblob slot %d\n", lsmid->lsm,
+> +			   lsmid->slot);
 > +	}
 > +
+>   	for (i = 0; i < count; i++) {
+> -		hooks[i].lsm = lsm;
+> +		hooks[i].lsmid = lsmid;
+>   		hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
+>   	}
+>   
+> @@ -495,7 +513,7 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+>   	 * and fix this up afterwards.
+>   	 */
+>   	if (slab_is_available()) {
+> -		if (lsm_append(lsm, &lsm_names) < 0)
+> +		if (lsm_append(lsmid->lsm, &lsm_names) < 0)
+>   			panic("%s - Cannot get early memory.\n", __func__);
+>   	}
+>   }
+> @@ -2075,7 +2093,7 @@ int security_getprocattr(struct task_struct *p, const char *lsm, char *name,
+>   	struct security_hook_list *hp;
+>   
+>   	hlist_for_each_entry(hp, &security_hook_heads.getprocattr, list) {
+> -		if (lsm != NULL && strcmp(lsm, hp->lsm))
+> +		if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
+>   			continue;
+>   		return hp->hook.getprocattr(p, name, value);
+>   	}
+> @@ -2088,7 +2106,7 @@ int security_setprocattr(const char *lsm, const char *name, void *value,
+>   	struct security_hook_list *hp;
+>   
+>   	hlist_for_each_entry(hp, &security_hook_heads.setprocattr, list) {
+> -		if (lsm != NULL && strcmp(lsm, hp->lsm))
+> +		if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
+>   			continue;
+>   		return hp->hook.setprocattr(name, value, size);
+>   	}
+> @@ -2579,9 +2597,27 @@ int security_key_getsecurity(struct key *key, char **_buffer)
+>   
+>   #ifdef CONFIG_AUDIT
+>   
+> -int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule)
+> +int security_audit_rule_init(u32 field, u32 op, char *rulestr,
+> +			     struct audit_lsm_rules *lsmrules)
+>   {
+> -	return call_int_hook(audit_rule_init, 0, field, op, rulestr, lsmrule);
+> +	struct security_hook_list *hp;
+> +	bool one_is_good = false;
+> +	int rc = 0;
+> +	int trc;
+> +
+> +	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_init, list) {
+> +		if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
+> +			continue;
+> +		trc = hp->hook.audit_rule_init(field, op, rulestr,
+> +					&lsmrules->rule[hp->lsmid->slot]);
+> +		if (trc == 0)
+> +			one_is_good = true;
+> +		else
+> +			rc = trc;
+> +	}
+> +	if (one_is_good)
+> +		return 0;
+> +	return rc;
+>   }
+>   
+>   int security_audit_rule_known(struct audit_krule *krule)
+> @@ -2589,14 +2625,36 @@ int security_audit_rule_known(struct audit_krule *krule)
+>   	return call_int_hook(audit_rule_known, 0, krule);
+>   }
+>   
+> -void security_audit_rule_free(void *lsmrule)
+> +void security_audit_rule_free(struct audit_lsm_rules *lsmrules)
+>   {
+> -	call_void_hook(audit_rule_free, lsmrule);
+> +	struct security_hook_list *hp;
+> +
+> +	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_free, list) {
+> +		if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
+> +			continue;
+> +		if (lsmrules->rule[hp->lsmid->slot] == NULL)
+> +			continue;
+> +		hp->hook.audit_rule_free(lsmrules->rule[hp->lsmid->slot]);
+> +	}
+>   }
+>   
+> -int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
+> +int security_audit_rule_match(u32 secid, u32 field, u32 op,
+> +			      struct audit_lsm_rules *lsmrules)
+>   {
+> -	return call_int_hook(audit_rule_match, 0, secid, field, op, lsmrule);
+> +	struct security_hook_list *hp;
+> +	int rc;
+> +
+> +	hlist_for_each_entry(hp, &security_hook_heads.audit_rule_match, list) {
+> +		if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
+> +			continue;
+> +		if (lsmrules->rule[hp->lsmid->slot] == NULL)
+> +			continue;
+> +		rc = hp->hook.audit_rule_match(secid, field, op,
+> +					&lsmrules->rule[hp->lsmid->slot]);
+> +		if (rc)
+> +			return rc;
+> +	}
 > +	return 0;
-> +}
+>   }
+>   #endif /* CONFIG_AUDIT */
+>   
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index dffde40d367e..d67bcd1aeaf5 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -7009,6 +7009,11 @@ static int selinux_uring_sqpoll(void)
+>   }
+>   #endif /* CONFIG_IO_URING */
+>   
+> +static struct lsm_id selinux_lsmid __lsm_ro_after_init = {
+> +	.lsm  = "selinux",
+> +	.slot = LSMBLOB_NEEDED
+> +};
 > +
-> +int stack_depot_init(void)
->  {
->  	static DEFINE_MUTEX(stack_depot_init_mutex);
-> +	int ret = 0;
->  
->  	mutex_lock(&stack_depot_init_mutex);
->  	if (!stack_depot_disable && !stack_table) {
-> -		size_t size = (STACK_HASH_SIZE * sizeof(struct stack_record *));
-> -		int i;
-> -
-> -		if (slab_is_available()) {
-> -			pr_info("Stack Depot allocating hash table with kvmalloc\n");
-> -			stack_table = kvmalloc(size, GFP_KERNEL);
-> -		} else {
-> -			pr_info("Stack Depot allocating hash table with memblock_alloc\n");
-> -			stack_table = memblock_alloc(size, SMP_CACHE_BYTES);
-> -		}
-> -		if (stack_table) {
-> -			for (i = 0; i < STACK_HASH_SIZE;  i++)
-> -				stack_table[i] = NULL;
-> -		} else {
-> +		pr_info("Stack Depot allocating hash table with kvcalloc\n");
-> +		stack_table = kvcalloc(STACK_HASH_SIZE, sizeof(struct stack_record *), GFP_KERNEL);
-> +		if (!stack_table) {
->  			pr_err("Stack Depot hash table allocation failed, disabling\n");
->  			stack_depot_disable = true;
-> -			mutex_unlock(&stack_depot_init_mutex);
-> -			return -ENOMEM;
-> +			ret = -ENOMEM;
->  		}
->  	}
->  	mutex_unlock(&stack_depot_init_mutex);
-> -	return 0;
-> +	return ret;
->  }
->  EXPORT_SYMBOL_GPL(stack_depot_init);
->  
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 99e360df9465..4313f8212a83 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -42,7 +42,12 @@ static void init_early_allocated_pages(void);
->  
->  static int __init early_page_owner_param(char *buf)
->  {
-> -	return kstrtobool(buf, &page_owner_enabled);
-> +	int ret = kstrtobool(buf, &page_owner_enabled);
+>   /*
+>    * IMPORTANT NOTE: When adding new hooks, please be careful to keep this order:
+>    * 1. any hooks that don't belong to (2.) or (3.) below,
+> @@ -7324,7 +7329,8 @@ static __init int selinux_init(void)
+>   
+>   	hashtab_cache_init();
+>   
+> -	security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hooks), "selinux");
+> +	security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hooks),
+> +			   &selinux_lsmid);
+>   
+>   	if (avc_add_callback(selinux_netcache_avc_callback, AVC_CALLBACK_RESET))
+>   		panic("SELinux: Unable to register AVC netcache callback\n");
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index d58b50006e79..ff832d47479f 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -4744,6 +4744,11 @@ struct lsm_blob_sizes smack_blob_sizes __lsm_ro_after_init = {
+>   	.lbs_superblock = sizeof(struct superblock_smack),
+>   };
+>   
+> +static struct lsm_id smack_lsmid __lsm_ro_after_init = {
+> +	.lsm  = "smack",
+> +	.slot = LSMBLOB_NEEDED
+> +};
 > +
-> +	if (page_owner_enabled)
-> +		stack_depot_want_early_init();
+>   static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
+>   	LSM_HOOK_INIT(ptrace_access_check, smack_ptrace_access_check),
+>   	LSM_HOOK_INIT(ptrace_traceme, smack_ptrace_traceme),
+> @@ -4947,7 +4952,7 @@ static __init int smack_init(void)
+>   	/*
+>   	 * Register with LSM
+>   	 */
+> -	security_add_hooks(smack_hooks, ARRAY_SIZE(smack_hooks), "smack");
+> +	security_add_hooks(smack_hooks, ARRAY_SIZE(smack_hooks), &smack_lsmid);
+>   	smack_enabled = 1;
+>   
+>   	pr_info("Smack:  Initializing.\n");
+> diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
+> index b6a31901f289..e8f6bb9782c1 100644
+> --- a/security/tomoyo/tomoyo.c
+> +++ b/security/tomoyo/tomoyo.c
+> @@ -521,6 +521,11 @@ static void tomoyo_task_free(struct task_struct *task)
+>   	}
+>   }
+>   
+> +static struct lsm_id tomoyo_lsmid __lsm_ro_after_init = {
+> +	.lsm  = "tomoyo",
+> +	.slot = LSMBLOB_NOT_NEEDED
+> +};
 > +
-> +	return ret;
->  }
->  early_param("page_owner", early_page_owner_param);
->  
-> @@ -80,8 +85,6 @@ static __init void init_page_owner(void)
->  	if (!page_owner_enabled)
->  		return;
->  
-> -	stack_depot_init();
-> -
->  	register_dummy_stack();
->  	register_failure_stack();
->  	register_early_stack();
-> -- 
-> 2.35.1
-> 
->
-
-This approach looks much better!
-
-Otherwise looks good.
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
-Works as expected on my system.
-Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
--- 
-Thank you, You are awesome!
-Hyeonggon :-)
+>   /*
+>    * tomoyo_security_ops is a "struct security_operations" which is used for
+>    * registering TOMOYO.
+> @@ -573,7 +578,8 @@ static int __init tomoyo_init(void)
+>   	struct tomoyo_task *s = tomoyo_task(current);
+>   
+>   	/* register ourselves with the security framework */
+> -	security_add_hooks(tomoyo_hooks, ARRAY_SIZE(tomoyo_hooks), "tomoyo");
+> +	security_add_hooks(tomoyo_hooks, ARRAY_SIZE(tomoyo_hooks),
+> +			   &tomoyo_lsmid);
+>   	pr_info("TOMOYO Linux initialized\n");
+>   	s->domain_info = &tomoyo_kernel_domain;
+>   	atomic_inc(&tomoyo_kernel_domain.users);
+> diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
+> index 06e226166aab..a9639ea541f7 100644
+> --- a/security/yama/yama_lsm.c
+> +++ b/security/yama/yama_lsm.c
+> @@ -421,6 +421,11 @@ static int yama_ptrace_traceme(struct task_struct *parent)
+>   	return rc;
+>   }
+>   
+> +static struct lsm_id yama_lsmid __lsm_ro_after_init = {
+> +	.lsm  = "yama",
+> +	.slot = LSMBLOB_NOT_NEEDED
+> +};
+> +
+>   static struct security_hook_list yama_hooks[] __lsm_ro_after_init = {
+>   	LSM_HOOK_INIT(ptrace_access_check, yama_ptrace_access_check),
+>   	LSM_HOOK_INIT(ptrace_traceme, yama_ptrace_traceme),
+> @@ -477,7 +482,7 @@ static inline void yama_init_sysctl(void) { }
+>   static int __init yama_init(void)
+>   {
+>   	pr_info("Yama: becoming mindful.\n");
+> -	security_add_hooks(yama_hooks, ARRAY_SIZE(yama_hooks), "yama");
+> +	security_add_hooks(yama_hooks, ARRAY_SIZE(yama_hooks), &yama_lsmid);
+>   	yama_init_sysctl();
+>   	return 0;
+>   }

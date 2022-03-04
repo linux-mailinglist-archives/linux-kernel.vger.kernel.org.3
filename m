@@ -2,75 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465A04CD5CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374264CD5D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 15:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239743AbiCDODb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 09:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
+        id S239762AbiCDOEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 09:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239189AbiCDOD2 (ORCPT
+        with ESMTP id S239756AbiCDOEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:03:28 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A9911A0F;
-        Fri,  4 Mar 2022 06:02:38 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id q4so6634144ilt.0;
-        Fri, 04 Mar 2022 06:02:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZzBK5WA3QVrcuQnQd4ntSERHlUAQ+GXLljw8Z7OoM1w=;
-        b=gql0/NZ9ElEaLpJcoudiGif5RN5qPMlJiaKX7m517j2VwmaKvsNpJNz6gM45g/JcS9
-         rsA5xoUm06axa8boCk+7Xp850UdRUPuMKH5xG6Lkut3tfvpxqOLjyEUEhItI9Cx/ADrs
-         Wa6gHbviGEDvLPDtQ5jcEv+3U4ZB0hLc9bgvVIv6h5jbsZCec8FFoNLo5KjnbOvdvqIc
-         meJk1l1uqgbFn3BjJoiTQhsNYBAAhUH7VyPFDg1S1U7FsKsO+Di1Wgc9Ka21lL0oStys
-         Hi3CztQlo27qYQ4BSVxZhEp8tOJwTETLgG2xBJGMOnjtUmXbWCHca00E0YAZ7GnulxTp
-         aI4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZzBK5WA3QVrcuQnQd4ntSERHlUAQ+GXLljw8Z7OoM1w=;
-        b=N2K50vgB1OAaIIsWQw2bUBOfdjwDWnn8ylvqSNwfAnwJG0OLn13nwLel54Gu0eoGw4
-         SKOeV8Gr/2AAYeBL44M2uCDg5LuRFFraun7ZzKF4UeAx59qt7D8O3nZDSNztXnRAdiH/
-         HD1XqGDrhMlLYAKgT1r0hLpwtyJR8bvsTbKm8aPsOZBfsTyOO+GhciUy83MexIsA7Vus
-         /sT/zWsW7NTYGsUSwlf99ZMimAyZatzMXaK+5F9Yctoy4mMqaNnX/B0GPOo1PhHNGKs2
-         Mi6DBqnZaPiKrcmf5FX9Kt/e4jhNwY5R9bT7bSLsU2B3rZLSF66iMDTBccGDgy0vH/xF
-         dcJw==
-X-Gm-Message-State: AOAM533jcAQ6dV2/lfgnhRk3pIntioKyAkw+vM6WhXpQNkSSaAD0KjQg
-        3S0vN7+mi6SyqHanEr3VWZbBmeEuAOo7IkEZUgw=
-X-Google-Smtp-Source: ABdhPJwN3WEErb2vH6B5dP6UVI1dEFWdcimvNqhP0CYrCi0JEKnjM0RGkRw2NrXmb/cu+Z/9c+O/3Qw3B9+ytktZl+E=
-X-Received: by 2002:a05:6e02:198b:b0:2c2:c454:ea7 with SMTP id
- g11-20020a056e02198b00b002c2c4540ea7mr27132602ilf.151.1646402557663; Fri, 04
- Mar 2022 06:02:37 -0800 (PST)
+        Fri, 4 Mar 2022 09:04:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF6A8532D8;
+        Fri,  4 Mar 2022 06:03:25 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7893E1424;
+        Fri,  4 Mar 2022 06:03:25 -0800 (PST)
+Received: from [10.57.39.47] (unknown [10.57.39.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A7E423F70D;
+        Fri,  4 Mar 2022 06:03:23 -0800 (PST)
+Message-ID: <906a446e-3e25-5813-d380-de699a84b6f4@arm.com>
+Date:   Fri, 4 Mar 2022 14:03:22 +0000
 MIME-Version: 1.0
-References: <20220127151945.1244439-1-trix@redhat.com> <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
- <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com> <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
- <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com> <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
- <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org> <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
- <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org> <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
- <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com> <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com>
-In-Reply-To: <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 4 Mar 2022 15:02:26 +0100
-Message-ID: <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To:     Tom Rix <trix@redhat.com>
-Cc:     Joe Perches <joe@perches.com>, Finn Thain <fthain@linux-m68k.org>,
-        Konrad Wilhelm Kleine <kkleine@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] iommu/iova: Free all CPU rcache for retry when iova alloc
+ failure
+Content-Language: en-GB
+To:     yf.wang@mediatek.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
+        stable@vger.kernel.org, Ning Li <Ning.Li@mediatek.com>
+References: <20220304044635.4273-1-yf.wang@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220304044635.4273-1-yf.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,23 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 2:46 PM Tom Rix <trix@redhat.com> wrote:
->
-> The churn level will be very high.
+On 2022-03-04 04:46, yf.wang--- via iommu wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
+> 
+> In alloc_iova_fast function, if an iova alloc request fail,
+> it will free the iova ranges present in the percpu iova
+> rcaches and free global iova rcache and then retry, but
+> flushing CPU iova rcaches only for each online CPU, which
+> will cause incomplete rcache cleaning, and iova rcaches of
+> not online CPU cannot be flushed, because iova rcaches may
+> also lead to fragmentation of iova space, so the next retry
+> action may still be fail.
+> 
+> Based on the above, so need to flushing all iova rcaches
+> for each possible CPU, use for_each_possible_cpu instead of
+> for_each_online_cpu like in free_iova_rcaches function,
+> so that all rcaches can be completely released to try
+> replenishing IOVAs.
 
-Nobody is planning to reformat the entire kernel, at least not until
-the tool is close enough to the kernel style, which will take a while.
+OK, so either there's a mystery bug where IOVAs somehow get freed on 
+offline CPUs, or the hotplug notifier isn't working correctly, or you've 
+contrived a situation where alloc_iova_fast() is actually racing against 
+iova_cpuhp_dead(). In the latter case, the solution is "don't do that".
 
-> Until clang-format has an opt-in mechanism, I do not think clang-format
-> should be used.
->
-> .clang-format should be moved to staging/ to reflect its not being ready
-> status.
+This change should not be necessary.
 
-What is not ready about it?
+Thanks,
+Robin.
 
-It is a fairly useful tool that some people is already using, either
-for full file formatting or for sections within their editor.
-
-Cheers,
-Miguel
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+> Cc: <stable@vger.kernel.org> # 5.4.*
+> ---
+>   drivers/iommu/iova.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index b28c9435b898..5a0637cd7bc2 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -460,7 +460,7 @@ alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
+>   
+>   		/* Try replenishing IOVAs by flushing rcache. */
+>   		flush_rcache = false;
+> -		for_each_online_cpu(cpu)
+> +		for_each_possible_cpu(cpu)
+>   			free_cpu_cached_iovas(cpu, iovad);
+>   		free_global_cached_iovas(iovad);
+>   		goto retry;
+> 
+> 
+> _______________________________________________
+> iommu mailing list
+> iommu@lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/iommu

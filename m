@@ -2,159 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B61E4CDF9A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC864CDF97
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiCDVFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 16:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S229891AbiCDVGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 16:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiCDVFb (ORCPT
+        with ESMTP id S229490AbiCDVGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 16:05:31 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B87BD2E4;
-        Fri,  4 Mar 2022 13:04:43 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id t11so10899740ioi.7;
-        Fri, 04 Mar 2022 13:04:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U+E0PkkZm4GMMA/j/YXjv17yT9pu9dITlUBR8RUwlzY=;
-        b=VrJT2u3fwB1RZfA1ws8RJp7Ck2jXPGvKKEFOszNj0C57Etrv6+GbJbRAil6tagMQG0
-         RX638ubu19X/K9XkbONfcUGenCTxL+Mp2JMslcM/Z7c1FFlN/meurEeQGwvRmxbz03sI
-         chQIb7eanCgBVCCTosn72/gyywDMJSL+HYEQO4KQuVqYyJ9JuuDrCF5oo/WdMoLIlyr8
-         qZmDjKkWVwyAJG9yOWgVtwosFvs+wgStFxZtleQAG64SogpgNYvtXOar5n4/AzhRFmO8
-         rBybqYhr2meXAEyw5S6Knkxi1HuKl1xEFrKALABQ1DcHKabFDW7DjI81SLQlxXP3q0cY
-         mM4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U+E0PkkZm4GMMA/j/YXjv17yT9pu9dITlUBR8RUwlzY=;
-        b=05Ki1fnssLK9kfLtGB+su2ZiP/XZ1MGZnKm93yf1MFW6bnMPGXdCk2vbkC/iJFiiot
-         t2xjIRGCx0+g9rOpvkNh0KmRK6ANkwmb6RTe0gEbjDJaTrh2oR3n974cAtreLFgQdAAk
-         QAXkP0KOPa67voiQXri6+31jHTBCbPhxfI17AJKN0nf7Iw2EeyBqSZd0x66jsDzABHbE
-         3rF5Bkxow/pne9X+M4/CznMdMl/nAqFmJ0qEvmQ19XV8VqezC0+80htdpy5bjZ7QK82J
-         UTRzRdGfLPjKDqtW/N/WfqsbP0F3XDleMh+vrUsckBfToWBZv5jInIMNz2phZlhfivgn
-         5VMA==
-X-Gm-Message-State: AOAM530yUMb0K8/b60r62zgkqxGthEmD3BzZe493eaIniKNGtW9bd12C
-        wYdfYJ89mm01YdVZ7ej+Jjd3HlB/fVldcIypLSg=
-X-Google-Smtp-Source: ABdhPJzDpEH6kq/lE/65CKhDbZk3TjAZz1VyHGBvt3NPi8FiQIqeIe5nu9xipcBZOr/YbiNPdFZDFKYgiwhLbpqzdHg=
-X-Received: by 2002:a6b:661a:0:b0:640:dd42:58ff with SMTP id
- a26-20020a6b661a000000b00640dd4258ffmr420359ioc.64.1646427882556; Fri, 04 Mar
- 2022 13:04:42 -0800 (PST)
+        Fri, 4 Mar 2022 16:06:37 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F44DF497
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:05:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646427949; x=1677963949;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y39UWfeG5t/f8koENMZSdik7oyaXSsbs1Bgp7FvTwlY=;
+  b=QmEzqadHZSkha2QtZRjuMC7q8Z2di6L/1bqE7vPcqSrUffeqxsTFiumw
+   WYXoBGNEBDYp97GRP0T9lO6/Ow8yCCv6ls0BMRXArfOdVCqPRTyiFnMpk
+   PMrVRbLheKQVx8vK2QJYfNqobEqMJj+8ma54O7fulirxcEFbArB8lUGAj
+   vKN/2ctWBlvk5EjeynLA5igi68va318iU0Z5okkLmCFTuroYCGZw0TSSs
+   CPuCcOaDig29g69YtjVCRLUvmEzgEbKAWEzDsy0P5baY+XMw+0HysR/f/
+   oTbWuWcnZVPmIaTngNb3hTdMsjoY5ZijLdAKNuGuCOcZN8Nv1FLY/+o5I
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="252891284"
+X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
+   d="scan'208";a="252891284"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 13:05:48 -0800
+X-IronPort-AV: E=Sophos;i="5.90,156,1643702400"; 
+   d="scan'208";a="810884761"
+Received: from fushengl-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.64.239])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2022 13:05:48 -0800
+From:   ira.weiny@intel.com
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Subject: [PATCH] pkeys: Make pkey unsigned in arch_set_user_pkey_access()
+Date:   Fri,  4 Mar 2022 13:05:43 -0800
+Message-Id: <20220304210543.3490880-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220127151945.1244439-1-trix@redhat.com> <d26d4bd8-b5e1-f4d5-b563-9bc4dd384ff8@acm.org>
- <0adde369-3fd7-3608-594c-d199cce3c936@redhat.com> <e3ae392a16491b9ddeb1f0b2b74fdf05628b1996.camel@perches.com>
- <46441b86-1d19-5eb4-0013-db1c63a9b0a5@redhat.com> <8dd05afd-0bb9-c91b-6393-aff69f1363e1@redhat.com>
- <233660d0-1dee-7d80-1581-2e6845bf7689@linux-m68k.org> <CABRYuGk+1AGpvfkR7=LTCm+bN4kt55fwQnQXCjidSXWxuMWsiQ@mail.gmail.com>
- <95f5be1d-f5f3-478-5ccb-76556a41de78@linux-m68k.org> <CANiq72kOJh_rGg6cT+S833HYqwHnZJzZss8v+kQDcgz_cZUfBQ@mail.gmail.com>
- <7368bc3ea6dece01004c3e0c194abb0d26d4932b.camel@perches.com>
- <9dc86e74-7741-bb8e-bbad-ae96cebaaebc@redhat.com> <CANiq72nsKijH4zgLoEpiiq4462r1zYmaiDs13SEHDYR3aQziUw@mail.gmail.com>
- <ad3567301af7b1b24cf4ac447fec8d618231ea33.camel@perches.com>
- <CANiq72kWJtOTmcXNO+t4NY22v6xM49Z-U2aSB4apNd96PYbD4Q@mail.gmail.com> <451bb2c394b05928c815f1eb349a1281a687a608.camel@perches.com>
-In-Reply-To: <451bb2c394b05928c815f1eb349a1281a687a608.camel@perches.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 4 Mar 2022 22:04:32 +0100
-Message-ID: <CANiq72kqpcs==-+FOqoRwxHQ0s9D=gf-QAM9UTm4rA=GwHWUVQ@mail.gmail.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To:     Joe Perches <joe@perches.com>
-Cc:     Tom Rix <trix@redhat.com>, Finn Thain <fthain@linux-m68k.org>,
-        Konrad Wilhelm Kleine <kkleine@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        megaraidlinux.pdl@broadcom.com, scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 8:28 PM Joe Perches <joe@perches.com> wrote:
->
-> Is that statement really disputable?
+From: Ira Weiny <ira.weiny@intel.com>
 
-By "Maybe", I only mean that you may be right (or not), i.e. we cannot
-really show one way or the other with data.
+The WARN_ON check in arch_set_user_pkey_access() in the x86 architecture
+fails to check for an invalid negative value.
 
-But note that many people (including projects, companies and even
-programming languages) prefer consistency and automated formatting vs.
-the alternative.
+A simple check for less than 0 would fix this issue however, in the call
+stack below arch_set_user_pkey_access() the pkey should never be
+negative on any architecture.  It is always best to use correct types
+when possible.  x86 only supports 16 keys while ppc supports 32, u8 is
+therefore large enough for all current architectures and likely those in
+the future.
 
-> IYO.  I think using an SCCS with better language understanding rather
-> than a line oriented one could be an improvement.  Such a tool could
-> allow arbitrary style reformatting at check-in/check-out.
+Change the type of the pkey passed to arch_set_user_pkey_access() to u8.
 
-clang-format is not line oriented. In fact, you may be able to get
-quite close to what you suggest with clang-format if you have a
-project that is automatically formatted.
+To: Dave Hansen <dave.hansen@linux.intel.com>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+---
+ arch/powerpc/include/asm/pkeys.h | 4 ++--
+ arch/powerpc/mm/book3s64/pkeys.c | 2 +-
+ arch/x86/include/asm/pkeys.h     | 4 ++--
+ arch/x86/kernel/fpu/xstate.c     | 2 +-
+ include/linux/pkeys.h            | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-> All of these existing code are more human readable than the code
-> reformatted using clang-format.
+diff --git a/arch/powerpc/include/asm/pkeys.h b/arch/powerpc/include/asm/pkeys.h
+index 59a2c7dbc78f..e70615a1da9b 100644
+--- a/arch/powerpc/include/asm/pkeys.h
++++ b/arch/powerpc/include/asm/pkeys.h
+@@ -143,9 +143,9 @@ static inline int arch_override_mprotect_pkey(struct vm_area_struct *vma,
+ 	return __arch_override_mprotect_pkey(vma, prot, pkey);
+ }
+ 
+-extern int __arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
++extern int __arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+ 				       unsigned long init_val);
+-static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
++static inline int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+ 					    unsigned long init_val)
+ {
+ 	if (!mmu_has_feature(MMU_FTR_PKEY))
+diff --git a/arch/powerpc/mm/book3s64/pkeys.c b/arch/powerpc/mm/book3s64/pkeys.c
+index 753e62ba67af..c048467669df 100644
+--- a/arch/powerpc/mm/book3s64/pkeys.c
++++ b/arch/powerpc/mm/book3s64/pkeys.c
+@@ -333,7 +333,7 @@ static inline void init_iamr(int pkey, u8 init_bits)
+  * Set the access rights in AMR IAMR and UAMOR registers for @pkey to that
+  * specified in @init_val.
+  */
+-int __arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
++int __arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+ 				unsigned long init_val)
+ {
+ 	u64 new_amr_bits = 0x0ul;
+diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
+index 5292e6dfe2a7..48efb81f6cc6 100644
+--- a/arch/x86/include/asm/pkeys.h
++++ b/arch/x86/include/asm/pkeys.h
+@@ -9,7 +9,7 @@
+  */
+ #define arch_max_pkey() (cpu_feature_enabled(X86_FEATURE_OSPKE) ? 16 : 1)
+ 
+-extern int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
++extern int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+ 		unsigned long init_val);
+ 
+ static inline bool arch_pkeys_enabled(void)
+@@ -115,7 +115,7 @@ int mm_pkey_free(struct mm_struct *mm, int pkey)
+ 	return 0;
+ }
+ 
+-extern int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
++extern int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+ 		unsigned long init_val);
+ 
+ static inline int vma_pkey(struct vm_area_struct *vma)
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 7c7824ae7862..db511bec57e5 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1068,7 +1068,7 @@ void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
+  * This will go out and modify PKRU register to set the access
+  * rights for @pkey to @init_val.
+  */
+-int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
++int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+ 			      unsigned long init_val)
+ {
+ 	u32 old_pkru, new_pkru_bits = 0;
+diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
+index 86be8bf27b41..aa40ed2fb0fc 100644
+--- a/include/linux/pkeys.h
++++ b/include/linux/pkeys.h
+@@ -35,7 +35,7 @@ static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
+ 	return -EINVAL;
+ }
+ 
+-static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
++static inline int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+ 			unsigned long init_val)
+ {
+ 	return 0;
+-- 
+2.35.1
 
-That is subjective (for some it may be good enough), and anyway you
-compared it to the current config file (clang-format 4). The point I
-raised is that clang-format 13 and future versions should be closer to
-what you expect.
-
-And by saying "I rather doubt clang-format will ever be 'close
-enough'.", then there is little incentive for the clang-format team to
-actually add support the things we need...
-
-> I used whatever is the latest clang-format here with today's -next.
-> https://releases.llvm.org/download.html
-
-I think this may be the source of confusion -- even if you use
-clang-format 13, you need to edit the config file to use the new
-options.
-
-In other words, when I said something is supported since e.g.
-clang-format 9, one still needs to enable it in the config file.
-
-> Then perhaps you as the maintainer of the kernel's .clang-format file
-> could update the entries for those new options.
-
-No, I cannot, because that is an error, thus breaks users of old
-clang-format versions.
-
-That is why I suggested to track the minimum LLVM supported version in
-the kernel, i.e. go at least to LLVM 11. And then over time keep
-upgrading it and getting better output.
-
-> I believe the minimum clang version is already 11.  Maybe higher.
-> I don't track clang or use it very much.  The clang version I use
-> though is 13.
-
-Yes, I am aware, please see above. The issue and why I did not "just
-do it" is that people could have been using clang-format from e.g.
-their distro, but compiling with GCC.
-
-> But perhaps tweaking will just improve some cases and worsen others.
-
-Yes, of course.
-
-> I don't think so.
-
-Why?
-
-> There is no "one true editor".
-> There will not be "one true source code formatter" either.
-
-Not for every project, but for a single project, there can definitely
-be a "single formatter". In fact, that is what many other projects do
-in practice in order to reach a point where automatic formatting is
-done.
-
-Cheers,
-Miguel

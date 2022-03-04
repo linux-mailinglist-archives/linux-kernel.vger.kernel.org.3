@@ -2,291 +2,418 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446034CD51A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B704CD51C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 14:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235218AbiCDN0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 08:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S235826AbiCDN05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 08:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234834AbiCDN0K (ORCPT
+        with ESMTP id S234834AbiCDN04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:26:10 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A5D5AA73
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 05:25:21 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2dc585dbb02so27519007b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 05:25:21 -0800 (PST)
+        Fri, 4 Mar 2022 08:26:56 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB5F5BE7C
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 05:26:04 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22475FO0002077;
+        Fri, 4 Mar 2022 05:25:48 -0800
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3ek4j63kv1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Mar 2022 05:25:47 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n5TuAfdd2Rnzo6Lj4S10c19s23tSvhUe6CBcWBDH8qDS1D2dMaDz9ZeO2SUY0SZMkafCcyUEnaWOtPq1A8DaHatP/vNHc/SjkHW4gl3nSB/dI+ll2rLuO62Em+5W+v9cOx7/oi5Ct7Pu/zj9HcwBaSb0R8S69OmVotEV6JDzqXcTXq2oOgM6YjdYiLzDvQY/EZ2z6FddRff7wZ+fxzSaDkGFTqxt1MA6TvYX3Ai7iNW/yqRSC/hLV4VI9zYVB2LKOw13GZm9EyAGJCR7BNhrtLwT7obLHoC/+HlXq1ERU1dwHx5YxBtJzVToRukGRs9ndvHQE//4YW4T79BJ/Rabyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xudAO6ybTBjIiM2R3RYcPgihFTnutYjftOndViI8QjM=;
+ b=YkxA9BmtcvjkU8M0p9ljoixRWNmoPIt1Z52K1g1hBaXcrYGmZGLck4392lEp9QO7gvhSqKQWArBcRd0mbYPZrE61EdyHX2x5rg2FbbAL9CEUQXEE1I47RaKQxjQSophTn2EvdIIxDC3L+Y0ZmaKHO9Cqn10T9dERRFcyIzgUqZG4emuRQq2vTbplMmgN9GPuiw/3E74HXXbN+vgLjkN58rctVxTqX1VZl2o/VPAeJT5PLjx9QTYjaOI1EkXAzzdwMzqgqJ54FzZ3klxHZB4FgV9Euuqg5Y8/lGi9VCCxp29ZJUmK/FG80Heuf8uQNZfRMGhYaheDfFYsFZqCMNDGwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=4NLbbTF7m3VQeC0WECXHEcxgsL4edTraps0b1k6PLl4=;
-        b=nSfCzv9Sp5Ec/04WE82UHWKAQlky+Bj+H3nLSIXm4K1IrMvCArGfZuZ+inpcuUZlcP
-         slvQX4gMeOQl9y4IiI6XxztX0qf4yHXbVT2zp1oi60I2Ansg+che3OuGiwirRgrT6wj+
-         Y16UKqnIfR+bGxf75WcSqHvbc583RSHYRAiRZmslmp4cz0SI+XH+vVUx7W5bN5ZmWipS
-         m3JiqY1qMjv/6+AoIt4PQ1+fK9z+FeRULOeZTfCPP1YBhTmryX9V6fWDC0IDy5bt1Fvb
-         LHYh4ZO6PI6Do7Eh/3L2eMlBkRSFOH5vpMer4rLYIJEeOBDpRKUEulaeIj/WV/N12dJ4
-         jLBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=4NLbbTF7m3VQeC0WECXHEcxgsL4edTraps0b1k6PLl4=;
-        b=OuotcluYTfqGVWC9J4GghbtKGFD/FejYYZkcb8t09TQtPMaueidLvLGfovxlqs0Clq
-         //QFVYXT6bJU3VHM7uIIQMJGbTAKh54XU03u/Es7ajWMw8wZ1ZV+BudA7JcpKA+Vvmxr
-         iVeUVd1UXvbhUjdvdJ6d8byh0WOpqdCGU/MTAEBVHtUKQp2DejJ4yrNV840vK+Yi8RzS
-         WuB/NTpy1WyQ19xfFU3wyd/E/mPwbWYn2adMuJx6ZDFKQZtCtsHpUxYK7gwAqRSyb1I+
-         ZAdKF3qBLf3ydfAC63wbf04A3koHviaAfYsHAm4tZ85lEPrwnRealWz6pGjB0sIxIniE
-         wgbw==
-X-Gm-Message-State: AOAM533i1uJYmfX/wBMVocq0ThZWiNsbpvifAb/sAb1Pk2/+3B3JXoHL
-        oFBA4GsF+/rzqk+VONG8/uDnz3IRW2lhxb5EsS9cwA==
-X-Google-Smtp-Source: ABdhPJyqUtYcWXQcyb4vquLCfOznV04t+joQbrXIDtqRIKHRiXaxhVT3mCyLSDvig9IxSVkh04wRnYxr8n8dNUGXmyo=
-X-Received: by 2002:a81:e90c:0:b0:2db:d63e:56ff with SMTP id
- d12-20020a81e90c000000b002dbd63e56ffmr19804025ywm.60.1646400320617; Fri, 04
- Mar 2022 05:25:20 -0800 (PST)
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xudAO6ybTBjIiM2R3RYcPgihFTnutYjftOndViI8QjM=;
+ b=DAcvmb0n6/B/a2AVoceVi7CrLVq1ffup96eocBLN4wRnHH79eG1lTF0ehHfiVIkagjhnwu65gu7dEtwQ4L9zCz3jJn2ie1m3BwgcmV24kF5c9JKODhCzGXWBH2320F0AAUqUJSHjBMpEjurkEy+yXDu2tiEKUdoeYtBMtgHgA4c=
+Received: from PH0PR18MB5002.namprd18.prod.outlook.com (2603:10b6:510:11d::12)
+ by MWHPR18MB1373.namprd18.prod.outlook.com (2603:10b6:300:d1::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Fri, 4 Mar
+ 2022 13:25:43 +0000
+Received: from PH0PR18MB5002.namprd18.prod.outlook.com
+ ([fe80::493d:175f:17e6:8e8d]) by PH0PR18MB5002.namprd18.prod.outlook.com
+ ([fe80::493d:175f:17e6:8e8d%3]) with mapi id 15.20.5038.019; Fri, 4 Mar 2022
+ 13:25:43 +0000
+From:   Linu Cherian <lcherian@marvell.com>
+To:     Marc Zyngier <maz@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linuc.decode@gmail.com" <linuc.decode@gmail.com>
+Subject: RE: [EXT] Re: [PATCH V2] irqchip/gic-v3: Workaround Marvell erratum
+ 38545 when reading IAR
+Thread-Topic: [EXT] Re: [PATCH V2] irqchip/gic-v3: Workaround Marvell erratum
+ 38545 when reading IAR
+Thread-Index: AQHYL2k2E2FeFsn0dkSwz7SJzm5coayu2DWAgAA5DIA=
+Date:   Fri, 4 Mar 2022 13:25:42 +0000
+Message-ID: <PH0PR18MB50021922303A495B997648FACE059@PH0PR18MB5002.namprd18.prod.outlook.com>
+References: <20220304014301.2515-1-lcherian@marvell.com>
+ <87ilsutb6w.wl-maz@kernel.org>
+In-Reply-To: <87ilsutb6w.wl-maz@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 409e1317-7236-42bd-fb2f-08d9fde27bd3
+x-ms-traffictypediagnostic: MWHPR18MB1373:EE_
+x-microsoft-antispam-prvs: <MWHPR18MB1373D2F22D2F760C8ECC2A0FCE059@MWHPR18MB1373.namprd18.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hmCBqpqK3hghOCQPz9pQAc6yBfJfWkvpclpecMqxiLRa/DTRq45sTaPI0Eeii7EOIs1bAA2bQLJnpa8ry6kEp3vzJKk3qKAlhU66uLtvnHY7ts6bDsM6RSimX7ZbV5xaBQ+KeGb+xoPrdfPRJ9VSRaMqVm+BnA2Hy6SadJlGqQ6/ahYGwcAz8R5DMgznVcQ1KsDBnL+/se7e4L//JuBMScO1jq3AIEziEOamxuOP+x5pPK6wbw7Pg0ZrmaY8dFBaeKfcAlX/natDmTZZHykP3B5hEegqkmfRULiwIqKlD6d/XrAbSCmRohKhxVI0x79wVCIge3fwoH/p/4/0UYRcWwVMk/yIENdkSL/VHtYLrKtwULs57Slh2atAQ+iY76nVibExZ2yUaOGZMcPjejg5QlHdKBQd3cTdbW9G/HqV68g4Iwrxu0B3tjvCb7uvy9L8bHYBXxkCNwmPghAE0MTiu6t1xwNtvx7hQ5dfRynflQYiJcarpVjz+51jxdklErOW65Ex45l7b5EEAnIwghc73/AUzwgqkUrXto/BvrWUKgsTNuXPjCy/kVpSAO0gob7lJy+wlNtCJX1s6y+TVlWsO7d8jlcuO1B+Q3ZzJ0d7lwURdU6DphkfgJ3UWPZjJt6jbVKZOvXXS8iVwSRLNwoRTbdf+M771OqaBEU1thUnDRoX/5jmWT3JgkJslChXmV5SBe6WgshuDYIki9qF0uTnwg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR18MB5002.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(38070700005)(122000001)(38100700002)(508600001)(64756008)(8676002)(4326008)(6506007)(7696005)(71200400001)(76116006)(316002)(54906003)(66446008)(66476007)(66946007)(6916009)(66556008)(5660300002)(26005)(83380400001)(55236004)(53546011)(9686003)(52536014)(8936002)(186003)(33656002)(55016003)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5ky01EzKSR7oB3ad5J/Y0a0XygEWAHvhCHt3qoe//nKzG7xr/RKWRQL3cbZN?=
+ =?us-ascii?Q?BBnjo5whC2gdleYkhyaV2qeVOtOzo7gBxI/DFyu+hsJ0iFU9E6a8YVeohLBq?=
+ =?us-ascii?Q?jMEro6yXSDPIo3ZDV1AkydZ1ESHhpRW/UiRAlGCk6NI3CsCldhD0XT01UiiY?=
+ =?us-ascii?Q?lMKywOB7QVDgLAGEd5cylMMM4LuzYcawFueBsucS7OZB/gtaeqszgXaG5K5P?=
+ =?us-ascii?Q?Kt94Y60N5oK7H5wGbAdgd2LXElQlS4Lj5qkoqDGWkcpc/lNaIMgyp+BSbup0?=
+ =?us-ascii?Q?pUSbIMxzUdZ7tATORpVuEJZODPTv7+LJoOB7xWa/W3PBCvZEUrFG2vN+ZDGd?=
+ =?us-ascii?Q?BMvXWSbQP7Fl+xdse37Ed9bYd/iv3AhbI2zz/qhsBX6ku96U8F0u5V3FMYV6?=
+ =?us-ascii?Q?HtuJPTZgMP1nYRRGV7rrb7bYfJHG8bJKXvtp7fyvD8lN0RXwB7MfK2rkWgxb?=
+ =?us-ascii?Q?cU0Iep09R0MNkeZ99d+sPEPJ9w+rmi29Nt7jWSDlnt4a1JUQmDtK7tpaUUyY?=
+ =?us-ascii?Q?zcxju9KUGvLF8M93D3SpicldLLBeJE7ayYMdHgHZw74rO/neG2DcbjBd3YPx?=
+ =?us-ascii?Q?2eNVdHqh7qRw3sOfz3ktsqHfXQCEZ6noh+IwWrSvg6KcT925yqYuRpkFGFYJ?=
+ =?us-ascii?Q?ZOBk76oa+0EpgbEQ2iybF+Du57qgMuSbCaBD0uuq4PY4IM3+11fW9oAuPlOB?=
+ =?us-ascii?Q?DBnkC5FrYKpU+WenGG9OZRXjIBtMOVhNOqYTMZ6iYVqGChayP2zmcMim0t23?=
+ =?us-ascii?Q?4DN6Fk9+vsZBMaLLkCQo5cVmyCR9APaSre7VkVTa0D9ZQJnN6HXHogf5FVxG?=
+ =?us-ascii?Q?tBHJ1mq5Lo2AKKoF6ZRnpg0PYGOJTd+CWkWHgMTQiLgi8ppDWWSs2qVIdVVq?=
+ =?us-ascii?Q?bAnGPicE7atTZAWDgveZN0Rp4o4zqNfoM6zuuDLDD3k8iqsuA1AcKeoNesEh?=
+ =?us-ascii?Q?Va6FYQVAuKvaQf/mEjp6F2QJfykpFajXBYDc5L744a+fyq26VwdyEwR0d31d?=
+ =?us-ascii?Q?S9np991a2JIGs1jCyRzGdtRg3ssyEm3VSQ5JaHqESr8HtucIlt2Kw7jp/ork?=
+ =?us-ascii?Q?nI/X2EA3Dg+ijXnZAtXr4MLiTT4uFgx4vDvWp8JFGdUTOOVFA/Bj0fOEWHpN?=
+ =?us-ascii?Q?9CG+nnxALkll9DhWW3k07zYUM4Ut3ZjqApnm2YhGSbVZcl/fI+XAG5hMJVMK?=
+ =?us-ascii?Q?DABTKKo9jHcyjVsubSv7w+fv8H1d2NYtKCT3Z2eh77Z7jCjF8WeD4WfJCLiX?=
+ =?us-ascii?Q?COcpt/UDafERwfQNseJgxiWDSJtrRi6BNXCAimrkbsrrMMQnFoYiVt2wg9BV?=
+ =?us-ascii?Q?QsEiihUkQDuzXH1Tfg1GHMJAlWNoMgtw5juzHUlZO1WrpB5k8gHFzFznyN4v?=
+ =?us-ascii?Q?9cZ0M73iVfxGYxF4mYWq0U8UlXoVacTpHismb1aVpMoukZ4gzpOOmgWD8C58?=
+ =?us-ascii?Q?MyVeinb++sp13BJHlvjsPNFztZMfZHLxM3i0HjNAPDXOO3xd48xgn5ARs4s9?=
+ =?us-ascii?Q?2q4GuYNvHStW0bYB0gfjhNBEFJAAwEAvSsdp4VXAXrHKZ/vf2gGTSkbf2Aum?=
+ =?us-ascii?Q?cJPxHxlfxXwjvbJ+u5UZTkC80lL0gu0ruVCOfq1rS2W2+9nwBgyV+2/gm1Hw?=
+ =?us-ascii?Q?NJOMSygPWz+Vk5n0ORKImzg=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 4 Mar 2022 18:55:08 +0530
-Message-ID: <CA+G9fYs+Qc3rAONJBmyQXFnYmrzFBJ8GMpwWXBMpj3Nx6wQ0Hg@mail.gmail.com>
-Subject: [next] WARNING: suspicious RCU usage : include/linux/cgroup.h:494
- suspicious rcu_dereference_check() usage
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, rcu@vger.kernel.org
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR18MB5002.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 409e1317-7236-42bd-fb2f-08d9fde27bd3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2022 13:25:42.8905
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WQpUqy9sgta/HDjfFSg7M0QLejuouE1QSzbXgAMvTMHYc0XpPtc469d+7Dd9CR44A1x4LXEkTSSkWHEk8o4lgw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR18MB1373
+X-Proofpoint-GUID: mQkgPGdmqZDVtkI48VZ72jG6nw9evSHv
+X-Proofpoint-ORIG-GUID: mQkgPGdmqZDVtkI48VZ72jG6nw9evSHv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-04_06,2022-03-04_01,2022-02-23_01
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While booting x86_64 with linux next-20220304 kernel the following kernel
-warning reported [1].
+Hi Marc,
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 6d284ba80c0c485bcaa7bdf67f232d572640edc4
-  git_describe: next-20220304
-  kernel-config: https://builds.tuxbuild.com/25uuYdm2vTO275aZ3IewZY5sKbU/config
+> -----Original Message-----
+> From: Marc Zyngier <maz@kernel.org>
+> Sent: Friday, March 4, 2022 1:13 PM
+> To: Linu Cherian <lcherian@marvell.com>
+> Cc: tglx@linutronix.de; catalin.marinas@arm.com; will@kernel.org; linux-
+> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> linuc.decode@gmail.com
+> Subject: [EXT] Re: [PATCH V2] irqchip/gic-v3: Workaround Marvell erratum
+> 38545 when reading IAR
+>=20
+> External Email
+>=20
+> ----------------------------------------------------------------------
+> On Fri, 04 Mar 2022 01:43:01 +0000,
+> Linu Cherian <lcherian@marvell.com> wrote:
+> >
+> > When a IAR register read races with a GIC interrupt RELEASE event,
+> > GIC-CPU interface could wrongly return a valid INTID to the CPU for an
+> > interrupt that is already released(non activated) instead of 0x3ff.
+> >
+> > As a side effect, an interrupt handler could run twice, once with
+> > interrupt priority and then with idle priority.
+> >
+> > As a workaround, gic_read_iar is updated so that it will return a
+> > valid interrupt ID only if there is a change in the active priority
+> > list after the IAR read on all the affected Silicons.
+> >
+> > Since there are silicon variants where both 23154 and 38545 are
+> > applicable, workaround for erratum 23154 has been extended to address
+> both of them.
+> >
+> > Signed-off-by: Linu Cherian <lcherian@marvell.com>
+> > ---
+> > Changes since V2:
+> > - IIDR based quirk management done for 23154 has been reverted
+> > - Extended existing 23154 errata to address 38545 as well,
+> >   so that existing static keys are reused.
+> > - Added MIDR based support macros to cover all the affected parts
+> > - Changed the unlikely construct to likely construct in the workaround
+> >   function.
+> >
+> >
+> >
+> >  Documentation/arm64/silicon-errata.rst |  2 +-
+> >  arch/arm64/Kconfig                     |  8 ++++++--
+> >  arch/arm64/include/asm/arch_gicv3.h    | 22 ++++++++++++++++++++--
+> >  arch/arm64/include/asm/cputype.h       |  2 ++
+> >  arch/arm64/kernel/cpu_errata.c         | 25 ++++++++++++++++++++++---
+> >  5 files changed, 51 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/Documentation/arm64/silicon-errata.rst
+> > b/Documentation/arm64/silicon-errata.rst
+> > index ea281dd75517..466cb9e89047 100644
+> > --- a/Documentation/arm64/silicon-errata.rst
+> > +++ b/Documentation/arm64/silicon-errata.rst
+> > @@ -136,7 +136,7 @@ stable kernels.
+> >  +----------------+-----------------+-----------------+----------------=
+-------------+
+> >  | Cavium         | ThunderX ITS    | #23144          | CAVIUM_ERRATUM_=
+23144
+> |
+> >
+> > +----------------+-----------------+-----------------+----------------
+> > -------------+
+> > -| Cavium         | ThunderX GICv3  | #23154          |
+> CAVIUM_ERRATUM_23154        |
+> > +| Cavium         | ThunderX GICv3  | #23154,38545    |
+> CAVIUM_ERRATUM_23154        |
+> >  +----------------+-----------------+-----------------+----------------=
+-------------+
+> >  | Cavium         | ThunderX GICv3  | #38539          | N/A            =
+             |
+> >
+> > +----------------+-----------------+-----------------+----------------
+> > -------------+ diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 09b885cc4db5..778cc2e22c21 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -891,13 +891,17 @@ config CAVIUM_ERRATUM_23144
+> >  	  If unsure, say Y.
+> >
+> >  config CAVIUM_ERRATUM_23154
+> > -	bool "Cavium erratum 23154: Access to ICC_IAR1_EL1 is not sync'ed"
+> > +	bool "Cavium errata 23154 and 38545: GICv3 lacks HW
+> synchronisation"
+> >  	default y
+> >  	help
+> > -	  The gicv3 of ThunderX requires a modified version for
+> > +	  The ThunderX GICv3 implementation requires a modified version for
+> >  	  reading the IAR status to ensure data synchronization
+> >  	  (access to icc_iar1_el1 is not sync'ed before and after).
+> >
+> > +	  It also suffers from erratum 38545 (also present on Marvell's
+> > +	  OcteonTX and OcteonTX2), resulting in deactivated interrupts being
+> > +	  spuriously presented to the CPU interface.
+> > +
+> >  	  If unsure, say Y.
+> >
+> >  config CAVIUM_ERRATUM_27456
+> > diff --git a/arch/arm64/include/asm/arch_gicv3.h
+> > b/arch/arm64/include/asm/arch_gicv3.h
+> > index 4ad22c3135db..b8fd7b1f9944 100644
+> > --- a/arch/arm64/include/asm/arch_gicv3.h
+> > +++ b/arch/arm64/include/asm/arch_gicv3.h
+> > @@ -53,17 +53,35 @@ static inline u64 gic_read_iar_common(void)
+> >   * The gicv3 of ThunderX requires a modified version for reading the
+> >   * IAR status to ensure data synchronization (access to icc_iar1_el1
+> >   * is not sync'ed before and after).
+> > + *
+> > + * Erratum 38545
+> > + *
+> > + * When a IAR register read races with a GIC interrupt RELEASE event,
+> > + * GIC-CPU interface could wrongly return a valid INTID to the CPU
+> > + * for an interrupt that is already released(non activated) instead of=
+ 0x3ff.
+> > + *
+> > + * To workaround this, return a valid interrupt ID only if there is a
+> > + change
+> > + * in the active priority list after the IAR read.
+> > + *
+> > + * Common function used for both the workarounds since,
+> > + * 1. On Thunderx 88xx 1.x both erratas are applicable.
+> > + * 2. Having extra nops doesn't add any side effects for Silicons wher=
+e
+> > + *    erratum 23154 is not applicable.
+> >   */
+> >  static inline u64 gic_read_iar_cavium_thunderx(void)
+> >  {
+> > -	u64 irqstat;
+> > +	u64 irqstat, apr;
+> >
+> > +	apr =3D read_sysreg_s(SYS_ICC_AP1R0_EL1);
+>=20
+> Why only AP1R0? Does the HW only support 5 bits of priority? If it suppor=
+ts
+> more, you need to check all the registers that may contain an active prio=
+rity
+> (0xa0 for a standard interrupt, 0x20 for a pNMI).
+>=20
+
+Yes correct. HW supports only 5 bits of priority groups.
+Will note this in the comment.
+
+> >  	nops(8);
+> >  	irqstat =3D read_sysreg_s(SYS_ICC_IAR1_EL1);
+> >  	nops(4);
+> >  	mb();
+> >
+> > -	return irqstat;
+> > +	if (likely(apr !=3D read_sysreg_s(SYS_ICC_AP1R0_EL1)))
+> > +		return irqstat;
+> > +
+> > +	return 0x3ff;
+>=20
+> This should be ICC_IAR1_EL1_SPURIOUS.
+
+Looks like we need fixes like below in couple of files to make use of this =
+macro.
+
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm=
+_host.h
+index 5bc01e62c08a..d02b7339d21a 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -18,7 +18,7 @@
+ #include <linux/kvm_types.h>
+ #include <linux/percpu.h>
+ #include <linux/psci.h>
+-#include <asm/arch_gicv3.h>
++#include <linux/irqchip/arm-gic-v3.h>
+
+Should I consider fixing these ?=20
+At least  its builds fine for me with similar header fixes.
+
+>=20
+> >  }
+> >
+> >  static inline void gic_write_ctlr(u32 val) diff --git
+> > a/arch/arm64/include/asm/cputype.h
+> b/arch/arm64/include/asm/cputype.h
+> > index 999b9149f856..9407c5074a4f 100644
+> > --- a/arch/arm64/include/asm/cputype.h
+> > +++ b/arch/arm64/include/asm/cputype.h
+> > @@ -80,6 +80,7 @@
+> >
+> >  #define APM_CPU_PART_POTENZA		0x000
+> >
+> > +#define CAVIUM_CPU_PART_THUNDERX_OTX_GEN 0x0A0
+>=20
+> Is this an actual part number? What does 'GEN' stand for?
+>=20
+
+No, this is not an actual part number. GEN was meant to be generic
+to cover a group of part numbers.
+
+> >  #define CAVIUM_CPU_PART_THUNDERX	0x0A1
+> >  #define CAVIUM_CPU_PART_THUNDERX_81XX	0x0A2
+> >  #define CAVIUM_CPU_PART_THUNDERX_83XX	0x0A3
+> > @@ -121,6 +122,7 @@
+> >  #define MIDR_CORTEX_A710 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM,
+> > ARM_CPU_PART_CORTEX_A710)  #define MIDR_CORTEX_X2
+> > MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_X2)
+> #define
+> > MIDR_NEOVERSE_N2 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM,
+> > ARM_CPU_PART_NEOVERSE_N2)
+> > +#define MIDR_THUNDERX_OTX_GEN
+> MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM,
+> > +CAVIUM_CPU_PART_THUNDERX_OTX_GEN)
+> >  #define MIDR_THUNDERX	MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM,
+> CAVIUM_CPU_PART_THUNDERX)
+> >  #define MIDR_THUNDERX_81XX
+> MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM,
+> > CAVIUM_CPU_PART_THUNDERX_81XX)  #define MIDR_THUNDERX_83XX
+> > MIDR_CPU_MODEL(ARM_CPU_IMP_CAVIUM,
+> CAVIUM_CPU_PART_THUNDERX_83XX) diff
+> > --git a/arch/arm64/kernel/cpu_errata.c
+> > b/arch/arm64/kernel/cpu_errata.c index b217941713a8..82ed09b363d6
+> > 100644
+> > --- a/arch/arm64/kernel/cpu_errata.c
+> > +++ b/arch/arm64/kernel/cpu_errata.c
+> > @@ -41,6 +41,25 @@ is_affected_midr_range_list(const struct
+> arm64_cpu_capabilities *entry,
+> >  	return is_midr_in_range_list(read_cpuid_id(),
+> > entry->midr_range_list);  }
+> >
+> > +static bool __maybe_unused
+> > +is_marvell_thunderx_otx_family(const struct arm64_cpu_capabilities
+> *entry,
+> > +			       int scope)
+> > +{
+> > +	u32 model;
+> > +
+> > +	WARN_ON(scope !=3D SCOPE_LOCAL_CPU || preemptible());
+> > +
+> > +	model =3D read_cpuid_id();
+> > +	/* 0xe8 mask will cover  0xA1 - 0xA3 and 0xB1 - 0xB6 series with
+> > +	 * 0xAF and 0xB8 as exceptions
+> > +	 */
+> > +	model &=3D MIDR_IMPLEMENTOR_MASK | (0x0e8 <<
+> MIDR_PARTNUM_SHIFT) |
+> > +		 MIDR_ARCHITECTURE_MASK;
+> > +
+> > +	/* This includes Thunderx, OcteonTx, OcteonTx2 family of processors
+> */
+> > +	return model =3D=3D MIDR_THUNDERX_OTX_GEN; }
+> > +
+>=20
+> No, please.  This is a version of the Kryo hack, only worse. We
+> *really* want to see an actual list of models and revisions, not an obfus=
+cated
+> mask that covers HW that may or may not exist. All the infrastructure is =
+there
+> to describe these constraints as data, just make use of it.
+>=20
+
+Ack. Will change this to actual part numbers.=20
 
 
-warning log:
----------
-[    1.482171] MDS: Mitigation: Clear CPU buffers
-[    1.485680] Freeing SMP alternatives memory: 52K
-[    1.487341]
-[    1.488169] =============================
-[    1.488169] WARNING: suspicious RCU usage
-[    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
-[    1.488169] -----------------------------
-[    1.488169] include/linux/cgroup.h:494 suspicious
-rcu_dereference_check() usage!
-[    1.488169]
-[    1.488169] other info that might help us debug this:
-[    1.488169]
-[    1.488169]
-[    1.488169] rcu_scheduler_active = 1, debug_locks = 1
-[    1.488169] 2 locks held by kthreadd/2:
-[    1.488169]  #0: ffff9ba440352330 (&p->pi_lock){....}-{2:2}, at:
-task_rq_lock+0x2e/0x130
-[    1.488169]  #1: ffff9ba7a7a2d058 (&rq->__lock){-...}-{2:2}, at:
-task_rq_lock+0x5d/0x130
-[    1.488169]
-[    1.488169] stack backtrace:
-[    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
-5.17.0-rc6-next-20220304 #1
-[    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.5 11/26/2020
-[    1.488169] Call Trace:
-[    1.488169]  <TASK>
-[    1.488169]  dump_stack_lvl+0x49/0x5e
-[    1.488169]  dump_stack+0x10/0x12
-[    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
-[    1.488169]  cpuacct_charge+0x10c/0x120
-[    1.488169]  update_curr+0x165/0x340
-[    1.488169]  dequeue_entity+0x23/0x430
-[    1.488169]  dequeue_task_fair+0xba/0x3b0
-[    1.488169]  __do_set_cpus_allowed+0xca/0x2c0
-[    1.488169]  __set_cpus_allowed_ptr_locked+0x128/0x1b0
-[    1.488169]  set_cpus_allowed_ptr+0x43/0x70
-[    1.488169]  kthreadd+0x49/0x230
-[    1.488169]  ? kthread_is_per_cpu+0x30/0x30
-[    1.488169]  ret_from_fork+0x22/0x30
-[    1.488169]  </TASK>
-[    1.488169]
-[    1.488169] =============================
-[    1.488169] WARNING: suspicious RCU usage
-[    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
-[    1.488169] -----------------------------
-[    1.488169] include/linux/cgroup.h:481 suspicious
-rcu_dereference_check() usage!
-[    1.488169]
-[    1.488169] other info that might help us debug this:
-[    1.488169]
-[    1.488169]
-[    1.488169] rcu_scheduler_active = 1, debug_locks = 1
-[    1.488169] 2 locks held by kthreadd/2:
-[    1.488169]  #0: ffff9ba440352330 (&p->pi_lock){....}-{2:2}, at:
-task_rq_lock+0x2e/0x130
-[    1.488169]  #1: ffff9ba7a7a2d058 (&rq->__lock){-...}-{2:2}, at:
-task_rq_lock+0x5d/0x130
-[    1.488169]
-[    1.488169] stack backtrace:
-[    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
-5.17.0-rc6-next-20220304 #1
-[    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.5 11/26/2020
-[    1.488169] Call Trace:
-[    1.488169]  <TASK>
-[    1.488169]  dump_stack_lvl+0x49/0x5e
-[    1.488169]  dump_stack+0x10/0x12
-[    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
-[    1.488169]  update_curr+0x2b7/0x340
-[    1.488169]  dequeue_entity+0x23/0x430
-[    1.488169]  dequeue_task_fair+0xba/0x3b0
-[    1.488169]  __do_set_cpus_allowed+0xca/0x2c0
-[    1.488169]  __set_cpus_allowed_ptr_locked+0x128/0x1b0
-[    1.488169]  set_cpus_allowed_ptr+0x43/0x70
-[    1.488169]  kthreadd+0x49/0x230
-[    1.488169]  ? kthread_is_per_cpu+0x30/0x30
-[    1.488169]  ret_from_fork+0x22/0x30
-[    1.488169]  </TASK>
-[    1.488169]
-[    1.488169] =============================
-[    1.488169] WARNING: suspicious RCU usage
-[    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
-[    1.488169] -----------------------------
-[    1.488169] include/linux/cgroup.h:481 suspicious
-rcu_dereference_check() usage!
-[    1.488169]
-[    1.488169] other info that might help us debug this:
-[    1.488169]
-[    1.488169]
-[    1.488169] rcu_scheduler_active = 1, debug_locks = 1
-[    1.488169] no locks held by kthreadd/2.
-[    1.488169]
-[    1.488169] stack backtrace:
-[    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
-5.17.0-rc6-next-20220304 #1
-[    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.5 11/26/2020
-[    1.488169] Call Trace:
-[    1.488169]  <IRQ>
-[    1.488169]  dump_stack_lvl+0x49/0x5e
-[    1.488169]  dump_stack+0x10/0x12
-[    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
-[    1.488169]  account_system_index_time+0x127/0x130
-[    1.488169]  account_system_time+0x50/0x60
-[    1.488169]  account_process_tick+0x59/0x80
-[    1.488169]  update_process_times+0x58/0xe0
-[    1.488169]  tick_periodic+0x37/0xf0
-[    1.488169]  tick_handle_periodic+0x24/0x70
-[    1.488169]  timer_interrupt+0x18/0x20
-[    1.488169]  __handle_irq_event_percpu+0x95/0x2f0
-[    1.488169]  handle_irq_event+0x39/0x80
-[    1.488169]  handle_edge_irq+0xa4/0x240
-[    1.488169]  __common_interrupt+0x8d/0x170
-[    1.488169]  common_interrupt+0xbd/0xe0
-[    1.488169]  </IRQ>
-[    1.488169]  <TASK>
-[    1.488169]  asm_common_interrupt+0x1e/0x40
-[    1.488169] RIP: 0010:_raw_spin_unlock_irqrestore+0x37/0x60
-[    1.488169] Code: fc 48 83 c7 18 53 48 89 f3 48 8b 75 08 e8 21 83
-ed fe 4c 89 e7 e8 19 b0 ed fe 80 e7 02 74 06 e8 6f 77 fa fe fb bf 01
-00 00 00 <e8> 24 6b e9 fe 65 8b 05 bd e1 28 66 85 c0 74 05 5b 41 5c 5d
-c3 0f
-[    1.488169] RSP: 0000:ffffb75b0002fd50 EFLAGS: 00000202
-[    1.488169] RAX: 0000000000000007 RBX: 0000000000000246 RCX: 0000000000000000
-[    1.488169] RDX: 0000000000000000 RSI: ffffffff9a800a7c RDI: 0000000000000001
-[    1.488169] RBP: ffffb75b0002fd60 R08: 0000000000000001 R09: 0000000000000001
-[    1.488169] R10: 0000000000000002 R11: 0000000000000001 R12: ffff9ba440352318
-[    1.488169] R13: 0000000000000000 R14: 0000000000000000 R15: ffff9ba7a7a2d040
-[    1.488169]  affine_move_task+0x2d4/0x5d0
-[    1.488169]  ? __this_cpu_preempt_check+0x13/0x20
-[    1.488169]  ? lock_is_held_type+0xdd/0x130
-[    1.488169]  ? enqueue_entity+0x1b8/0x520
-[    1.488169]  __set_cpus_allowed_ptr_locked+0x15c/0x1b0
-[    1.488169]  set_cpus_allowed_ptr+0x43/0x70
-[    1.488169]  kthreadd+0x49/0x230
-[    1.488169]  ? kthread_is_per_cpu+0x30/0x30
-[    1.488169]  ret_from_fork+0x22/0x30
-[    1.488169]  </TASK>
-[    1.489211] smpboot: Estimated ratio of average max frequency by
-base frequency (times 1024): 1126
-[    1.490189] smpboot: CPU0: Intel(R) Xeon(R) CPU E3-1220 v6 @
-3.00GHz (family: 0x6, model: 0x9e, stepping: 0x9)
-[    1.491635] cblist_init_generic: Setting adjustable number of
-callback queues.
-[    1.492171] cblist_init_generic: Setting shift to 2 and lim to 1.
-[    1.493226] cblist_init_generic: Setting shift to 2 and lim to 1.
-[    1.494226] cblist_init_generic: Setting shift to 2 and lim to 1.
-[    1.495219] Running RCU-tasks wait API self tests
-[    1.598317] Performance Events: PEBS fmt3+, Skylake events, 32-deep
-LBR, full-width counters, Intel PMU driver.
-[    1.599176] ... version:                4
-[    1.600171] ... bit width:              48
-[    1.601171] ... generic registers:      8
-[    1.602171] ... value mask:             0000ffffffffffff
-[    1.603171] ... max period:             00007fffffffffff
-[    1.604176] ... fixed-purpose events:   3
-[    1.605171] ... event mask:             00000007000000ff
-[    1.606188] Callback from call_rcu_tasks_trace() invoked.
-[    1.607450] rcu: Hierarchical SRCU implementation.
-[    1.608310]
-[    1.609169] =============================
-[    1.609169] WARNING: suspicious RCU usage
-[    1.609169] 5.17.0-rc6-next-20220304 #1 Not tainted
-[    1.609169] -----------------------------
-[    1.609169] include/linux/cgroup.h:481 suspicious
-rcu_dereference_check() usage!
-[    1.609169]
-[    1.609169] other info that might help us debug this:
-[    1.609169]
-[    1.609169]
-[    1.609169] rcu_scheduler_active = 1, debug_locks = 1
-[    1.609169] 1 lock held by migration/0/17:
-[    1.609169]  #0: ffff9ba7a7a2d058 (&rq->__lock){-.-.}-{2:2}, at:
-__schedule+0x12d/0xcb0
-[    1.609169]
-[    1.609169] stack backtrace:
-[    1.609169] CPU: 0 PID: 17 Comm: migration/0 Not tainted
-5.17.0-rc6-next-20220304 #1
-[    1.609169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.5 11/26/2020
-[    1.609169] Stopper: 0x0 <- 0x0
-[    1.609169] Call Trace:
-[    1.609169]  <TASK>
-[    1.609169]  dump_stack_lvl+0x49/0x5e
-[    1.609169]  dump_stack+0x10/0x12
-[    1.609169]  lockdep_rcu_suspicious+0xed/0xf8
-[    1.609169]  put_prev_task_stop+0x1dc/0x240
-[    1.609169]  __schedule+0x751/0xcb0
-[    1.609169]  ? trace_preempt_off+0x29/0xc0
-[    1.609169]  ? smpboot_thread_fn+0x33/0x290
-[    1.609169]  schedule+0x58/0xc0
-[    1.609169]  smpboot_thread_fn+0xec/0x290
-[    1.609169]  ? sort_range+0x30/0x30
-[    1.609169]  kthread+0x107/0x130
-[    1.609169]  ? kthread_complete_and_exit+0x20/0x20
-[    1.609169]  ret_from_fork+0x22/0x30
-[    1.609169]  </TASK>
-[    1.610276] smp: Bringing up secondary CPUs ...
-[    1.611596] x86: Booting SMP configuration:
-[    1.612179] .... node  #0, CPUs:      #1 #2 #3
-[    1.614396] smp: Brought up 1 node, 4 CPUs
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220304/testrun/8235955/suite/linux-log-parser/test/check-kernel-warning-4655400/log
+> >  static bool __maybe_unused
+> >  is_kryo_midr(const struct arm64_cpu_capabilities *entry, int scope)
+> > { @@ -425,10 +444,10 @@ const struct arm64_cpu_capabilities
+> > arm64_errata[] =3D {  #endif  #ifdef CONFIG_CAVIUM_ERRATUM_23154
+> >  	{
+> > -	/* Cavium ThunderX, pass 1.x */
+> > -		.desc =3D "Cavium erratum 23154",
+> > +		.desc =3D "Cavium errata 23154 and 38545",
+> >  		.capability =3D ARM64_WORKAROUND_CAVIUM_23154,
+> > -		ERRATA_MIDR_REV_RANGE(MIDR_THUNDERX, 0, 0, 1),
+> > +		.type =3D ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
+> > +		.matches =3D is_marvell_thunderx_otx_family,
+> >  	},
+> >  #endif
+> >  #ifdef CONFIG_CAVIUM_ERRATUM_27456
+>=20
+> Thanks,
+>=20
+> 	M.
+>=20
+> --
+> Without deviation from the norm, progress is not possible.

@@ -2,74 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F14C4CDFB9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3364CDFBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 22:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiCDVYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 16:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S229884AbiCDVZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 16:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiCDVYv (ORCPT
+        with ESMTP id S229498AbiCDVZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 16:24:51 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A77B5EBD8
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 13:24:03 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id 9so8850737pll.6
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 13:24:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0/gI0rQqdFAbRjNwHFPVJ4i6AznAGpkDeOuSwoRZAto=;
-        b=dW6sniIDfe4ZwFk7pH6asyZbMfHUDkzWKEaqD8k09+XRZxqGVgvxvwowBaBBa8GvSB
-         LnIHuXeBP/MKBb2IurRBYrLkjNiDDW9kZzPMXsmeLPCaYAg2Za7l9w1TJzZSI2ILROCa
-         Bq/xEX+B3iF9Vgn8acNFkeBDRtPua299o+IvI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0/gI0rQqdFAbRjNwHFPVJ4i6AznAGpkDeOuSwoRZAto=;
-        b=kI21blpnHlSJ4AHKaDnVvn+Ry7VS0nquc/ofIn8SVxHsyVJp4WR6PI3iKRNIvpnOyD
-         t8UQR09B039KgtvpPYm/CoOV3dj6WG5NWAwmyluRDTvUh4OKvWdlwTDh/u5uBmnmUItK
-         cqi/yKwrbSwjkqKX0TslFd4sLBdWjZ8FJYvxBO9fdDVRDTgThtDDLRukf+opa4YrJK1a
-         gcAqfXRoegnsji045XwYk7Y0BveXbEjddJ3vorQ2yauuW7sl7Z7qbQjYGnyA6rbVNvuq
-         yy+rtdT1HK3lzt8Or+hNf8Pnx6CC6EBp1yF7x5l8qlHYB3uLfiJB/GHHw1axidVElv0c
-         PTZg==
-X-Gm-Message-State: AOAM5307sIn5b2RY8JSGTp9xPo3Utds+VPWSsD2YubGIqdR9FLnYTtaC
-        uIAvOvSAODoBUlLFXKSd2HZ/IQ==
-X-Google-Smtp-Source: ABdhPJzeXYM5JVp1IZEistkWdlM9E10Rt6/gCbVwnsqXjdM071vp3edsel14904JddV43vI5XN1yYQ==
-X-Received: by 2002:a17:902:b784:b0:151:a28a:9445 with SMTP id e4-20020a170902b78400b00151a28a9445mr512967pls.82.1646429042669;
-        Fri, 04 Mar 2022 13:24:02 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:2947:8460:2ca7:c348])
-        by smtp.gmail.com with ESMTPSA id g10-20020a056a000b8a00b004de9129eb80sm7612495pfj.85.2022.03.04.13.24.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 13:24:02 -0800 (PST)
-Date:   Fri, 4 Mar 2022 13:23:59 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Lin Huang <hl@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Derek Basehore <dbasehore@chromium.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH v2 01/15] dt-bindings: devfreq: rk3399_dmc: Convert to
- YAML
-Message-ID: <YiKDb6q5k4NHpyVn@google.com>
-References: <20220127230727.3369358-1-briannorris@chromium.org>
- <20220127150615.v2.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
- <YgQhXb/0BM0OFy/6@robh.at.kernel.org>
+        Fri, 4 Mar 2022 16:25:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575B837A13;
+        Fri,  4 Mar 2022 13:24:55 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 21AB31F46DBD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646429094;
+        bh=oahX6BKKRUADoQxxViiHUeyWMtqZ5bjQV0BfWQNZtKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fCh3DIN2CSUUmUJNSyQAOJRnXRB+EysTscJF4H8PJHmpYxb+Mt6xghX2QmmHESqbN
+         Kp4sJQCrjnqJCqJgPWHf2B6Y0HlfgKp93/gwyeKbRQ5MFX9vpx73tL1qC8Vtliobpa
+         2bVz5Nn7EElzcGtzVz8RknVOyxJ7Wd/27XZjsDPjQIi39aF6FUXpxJ5UF4sP7OhVXZ
+         ElhjZT48xTqJozSXBUf2dUJFBqr10ycjH3I3L4Qh5rJ+3ymIh8U+JiThT2ggcXdfdV
+         Ppk1d9qttg+j5UBoj4VJeLtFqpGe1RAXFfnVmhqrAFV1V92faPo9Sj52Tm/CUcaVUO
+         AF2yF0WOiN5rQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 2333B1060602; Fri,  4 Mar 2022 22:24:52 +0100 (CET)
+Date:   Fri, 4 Mar 2022 22:24:52 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Souptick Joarder <jrdr.linux@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] power: supply: ab8500: Remove unused variable
+Message-ID: <20220304212452.pyqbxqbmhu6ewpcy@mercury.elektranox.org>
+References: <20220301052850.5382-1-jrdr.linux@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7ort522qbjz7sr4x"
 Content-Disposition: inline
-In-Reply-To: <YgQhXb/0BM0OFy/6@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220301052850.5382-1-jrdr.linux@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,104 +53,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 02:17:33PM -0600, Rob Herring wrote:
-> On Thu, Jan 27, 2022 at 03:07:12PM -0800, Brian Norris wrote:
-> > I want to add, deprecate, and bugfix some properties, as well as add the
-> > first users. This is easier with a proper schema.
-> > 
-> > The transformation is mostly straightforward, plus a few notable tweaks:
-> > 
-> >  * Renamed rockchip,dram_speed_bin to rockchip,ddr3_speed_bin. The
-> >    driver code and the example matched, but the description was
-> >    different. I went with the implementation.
 
-...
+--7ort522qbjz7sr4x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
-> > @@ -0,0 +1,293 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# %YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/devfreq/rk3399_dmc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Rockchip rk3399 DMC (Dynamic Memory Controller) device
-> > +
-> > +maintainers:
-> > +  - Brian Norris <briannorris@chromium.org>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - rockchip,rk3399-dmc
-> > +
-> > +  devfreq-events:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > +    minItems: 1
-> 
-> What's the max?
-> 
-> If this is just phandles (no arg cells), then you need:
-> 
-> items:
->   maxItems: 1
-> 
-> IOW, fully describe the number of entries and cells for each entry.
+Hi,
 
-We only need 1, with no args. Will add |maxItems|.
+On Tue, Mar 01, 2022 at 10:58:50AM +0530, Souptick Joarder wrote:
+> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+>=20
+> Kernel test robot reported below warning ->
+> drivers/power/supply/ab8500_chargalg.c:790:13: warning:
+> variable 'delta_i_ua' set but not used [-Wunused-but-set-variable]
+>=20
+> Remove unused variable delta_i_ua.
+>=20
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+> ---
 
-> > +    description:
-> > +      Node to get DDR loading. Refer to
-> > +      Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt.
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: dmc_clk
-> > +
-> > +  operating-points-v2: true
-> > +
-> > +  center-supply:
-> > +    description:
-> > +      DMC regulator supply.
-> > +
-> > +  rockchip,pmu:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      Phandle to the syscon managing the "PMU general register files".
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +    description:
-> > +      The CPU interrupt number. It should be a DCF interrupt. When DDR DVFS
-> > +      finishes, a DCF interrupt is triggered.
-> > +
-> > +  rockchip,ddr3_speed_bin:
-> 
-> Since you are changing this, s/_/-/
+Thanks, queued.
 
-I'm only including this because the driver already supports the
-rockchip,ddr3_speed_bin spelling. But I'm also deprecating it (because
-it's not really needed) and removing it later in the series. I'd rather
-not change the spelling again in the middle, when it doesn't really have
-any net effect.
+-- Sebastian
 
-I can add some clarifying notes in the commit message, about impending
-deprecations, so this makes a little more sense as a standalone commit.
+>  drivers/power/supply/ab8500_chargalg.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/suppl=
+y/ab8500_chargalg.c
+> index b5a3096e78a1..f73d29c09caf 100644
+> --- a/drivers/power/supply/ab8500_chargalg.c
+> +++ b/drivers/power/supply/ab8500_chargalg.c
+> @@ -793,13 +793,10 @@ static void init_maxim_chg_curr(struct ab8500_charg=
+alg *di)
+>   */
+>  static enum maxim_ret ab8500_chargalg_chg_curr_maxim(struct ab8500_charg=
+alg *di)
+>  {
+> -	int delta_i_ua;
+> =20
+>  	if (!di->bm->maxi->ena_maxi)
+>  		return MAXIM_RET_NOACTION;
+> =20
+> -	delta_i_ua =3D di->ccm.original_iset_ua - di->batt_data.inst_curr_ua;
+> -
+>  	if (di->events.vbus_collapsed) {
+>  		dev_dbg(di->dev, "Charger voltage has collapsed %d\n",
+>  				di->ccm.wait_cnt);
+> --=20
+> 2.25.1
+>=20
 
-Or if it's somehow better, I can just drop the to-be-deprecated
-properties right now in the .yaml conversion? As it happens, I've seen
-at least one (probably more) other YAML conversion that made breaking
-changes at the same time...
+--7ort522qbjz7sr4x
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      For values, reference include/dt-bindings/clock/rk3399-ddr.h. Selects the
-> > +      DDR3 cl-trp-trcd type. It must be set according to "Speed Bin" in DDR3
-> > +      datasheet; DO NOT use a smaller "Speed Bin" than specified for the DDR3
-> > +      being used.
+-----BEGIN PGP SIGNATURE-----
 
-Brian
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIig6MACgkQ2O7X88g7
++prdGA//eF9JmBR99xdPgdAoicwtAquDf3nGDNRy5F1GLhM+ZX17vYFR8r4Wc74v
+cAjV7kOWdbwleBs05+pemRKbwvv0p+sNwxqccApPA7jzpI8escZxlys2u4or9fNM
+KU7o8w1NgYedcCq6ek5dLYbX17DtWicA099AVR2wyYnuW9PBDCNMNmgRhOmlaD2U
+lZUR9ehz6myHH3rHAWeV54xaIDKk16ogVL7Yf8n47VU4pf3OiLIdlDbeLDiAyua8
+FYMQK6U9jAm7vj9/OjatAFr9bQGftWukBELrmajCJBREjH83y/rjgwKRQIQ5x2RE
+uTfGt75jtrOMvXnt+pKkeWe2AhKAqv5UaUMWWEa7+gOPP6zna8Fw778TPjOygdkK
++UyvRiZ29pi2VZbzMO4MMbGG6N6i/BAucYd8NisL9RlhR03rwlESNgT9urV9XcrB
+zCCBliwSaX59ZDacPODWVUE/4loctY9+NZRM/TgCzjSofQ0B6LrN92hehO0oiLjs
+IlUGVJd1qr5lxM15xH2o4JTWGIokD/ZUx8DAQiUc9SoICceoUewSSL6PNgajmrKb
+l7TnBv7GIVU5ijM9yNPlFSTt6EdszIjibJ28ByU6DGWufL3YG0D8pCizu1KLOAu9
+bYTOdOF9+l4S9tMfqpIggX83DpcHrkHdn+lVe1GFJuLXY/JlHVk=
+=E9c1
+-----END PGP SIGNATURE-----
+
+--7ort522qbjz7sr4x--

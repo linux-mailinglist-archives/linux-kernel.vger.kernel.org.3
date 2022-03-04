@@ -2,321 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D921E4CCC73
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 05:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200C64CCC77
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 05:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237817AbiCDEEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Mar 2022 23:04:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S237871AbiCDEH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Mar 2022 23:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiCDEEX (ORCPT
+        with ESMTP id S233770AbiCDEH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Mar 2022 23:04:23 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8321793A2;
-        Thu,  3 Mar 2022 20:03:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646366615; x=1677902615;
-  h=to:cc:subject:references:date:mime-version:
-   content-transfer-encoding:from:message-id:in-reply-to;
-  bh=bUMmO7tROcQ2j5Hsaumbm18OWJYS6wycT7R2E7Yc6Pg=;
-  b=RP3go/lWyAI2QqGHvnN+p1HDTQmMcHs921/T6RMdsSh92Dv/SPeitWeY
-   0AytzN8ANLMOsxzKd32CUM4EyQLn0S4hmjBFW+NbIty7ozvQdvm1UyH8s
-   fV5r2HnvVWKMsjR9w5cS7OZlDsjlDLXdILcdxy7aPBqdthyA2cKum4Tlj
-   RvuCvyLtmT+xT3YaFIQIxAAb0iYmwgB/U+HTDwPwAmQKhXb0EAKafmbwh
-   kb3Mg8YXnAEpziTZmn2EL6JbcMtnXRiNb1A6tFSzSlOtqYXsh9jHDWohz
-   58Ttsug58o6OqUic2Yn9/yD0vGUFs+9SLFHG5Lq19bNmjxeSpk75nuBuI
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="254081268"
-X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
-   d="scan'208";a="254081268"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2022 20:03:34 -0800
-X-IronPort-AV: E=Sophos;i="5.90,154,1643702400"; 
-   d="scan'208";a="552065305"
-Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.255.32.200])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 03 Mar 2022 20:03:32 -0800
-Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc:     "Reinette Chatre" <reinette.chatre@intel.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-References: <YhLhoMFPyOFZ2fsX@iki.fi> <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com> <Yhy/GvJegnTqYdq6@iki.fi> <f6a256a6-a7d7-a8e7-c9a8-e232203c63af@intel.com> <Yh4fGORDaJyVrJQW@iki.fi> <Yh4i4hVcnfZ8QDAl@iki.fi> <2d2d3471-78ce-9faa-daf6-138078f5ffaa@intel.com> <Yh7Q5fbOtr+6YWaS@iki.fi> <6f65287a-f69c-971e-be2c-929e327e7ff9@intel.com> <op.1igppyk9wjvjmi@hhuan26-mobl1.mshome.net> <YiFMyZ4t2MC0n5Pn@iki.fi>
-Date:   Thu, 03 Mar 2022 22:03:30 -0600
+        Thu, 3 Mar 2022 23:07:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F6A17FD12;
+        Thu,  3 Mar 2022 20:06:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 642A6B82750;
+        Fri,  4 Mar 2022 04:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF720C340E9;
+        Fri,  4 Mar 2022 04:06:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646366798;
+        bh=JA53j2AgX/X9G8Xvc7wkJOeH5rUcfRDdjpdniPTSIVE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oAHVzz7X5kV61UUkWQKjfmwMykgBKD7PJkuQSgcKFBIw2YjksnJrCxtuntINs5owG
+         Yl0e0u1JcN2qjzcdy1LS7/3v7LMdxJKVbdeeuA+/xPZlegElPBP/Nfb+Vjmj99Jlzd
+         oWoEeQyHGHX4bt0D0DZpLUeKkaBXtLaL8qqnmQHIOj1nl1lCy+RZgLa0aU5frAx5AA
+         DJg34gTsypaZcTNM1C+jE3PovbGMmD4VKx4H7Kss8tKwYviTYfVzh2MEdyCZOi1G6o
+         gWkVmRHi3lLNBq/Z1EI+9Mqlll+/ywKFIwbgQS3sjlaPGMFlgCRfLn+yLkIn9otE52
+         ipwYAJ7AlcYVQ==
+Date:   Thu, 3 Mar 2022 20:06:35 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     menglong8.dong@gmail.com, dsahern@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, davem@davemloft.net, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        imagedong@tencent.com, edumazet@google.com, talalahmad@google.com,
+        keescook@chromium.org, ilias.apalodimas@linaro.org, alobakin@pm.me,
+        flyingpeng@tencent.com, mengensun@tencent.com, atenart@kernel.org,
+        bigeasy@linutronix.de, memxor@gmail.com, arnd@arndb.de,
+        pabeni@redhat.com, willemb@google.com, vvs@virtuozzo.com,
+        cong.wang@bytedance.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next 2/7] net: skb: introduce the function
+ kfree_skb_list_reason()
+Message-ID: <20220303200635.0718540e@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <40f63798-2b85-c31c-9722-ee24d55093a8@oracle.com>
+References: <20220303174707.40431-1-imagedong@tencent.com>
+        <20220303174707.40431-3-imagedong@tencent.com>
+        <40f63798-2b85-c31c-9722-ee24d55093a8@oracle.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-From:   "Haitao Huang" <haitao.huang@linux.intel.com>
-Organization: Intel Corp
-Message-ID: <op.1ihmv4mvwjvjmi@hhuan26-mobl1.mshome.net>
-In-Reply-To: <YiFMyZ4t2MC0n5Pn@iki.fi>
-User-Agent: Opera Mail/1.0 (Win32)
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 3 Mar 2022 16:12:05 -0800 Dongli Zhang wrote:
+> I am going to send another v5 soon which introduces kfree_skb_list_reason() as well.
+> 
+> https://lore.kernel.org/all/20220226084929.6417-2-dongli.zhang@oracle.com/
+> 
+> I will need to make it inline as suggested by Jakub.
+> 
+> Not sure how to handle such scenario :)
 
-On Thu, 03 Mar 2022 17:18:33 -0600, Jarkko Sakkinen <jarkko@kernel.org>  
-wrote:
-
-> On Thu, Mar 03, 2022 at 10:08:14AM -0600, Haitao Huang wrote:
->> Hi all,
->>
->> On Wed, 02 Mar 2022 16:57:45 -0600, Reinette Chatre
->> <reinette.chatre@intel.com> wrote:
->>
->> > Hi Jarkko,
->> >
->> > On 3/1/2022 6:05 PM, Jarkko Sakkinen wrote:
->> > > On Tue, Mar 01, 2022 at 09:48:48AM -0800, Reinette Chatre wrote:
->> > > > Hi Jarkko,
->> > > >
->> > > > On 3/1/2022 5:42 AM, Jarkko Sakkinen wrote:
->> > > > > > With EACCEPTCOPY (kudos to Mark S. for reminding me of
->> > > > > > this version of
->> > > > > > EACCEPT @ chat.enarx.dev) it is possible to make R and RX  
->> pages but
->> > > > > > obviously new RX pages are now out of the picture:
->> > > > > >
->> > > > > >
->> > > > > > 	/*
->> > > > > > 	 * Adding a regular page that is architecturally allowed to  
->> only
->> > > > > > 	 * be created with RW permissions.
->> > > > > > 	 * TBD: Interface with user space policy to support max  
->> permissions
->> > > > > > 	 * of RWX.
->> > > > > > 	 */
->> > > > > > 	prot = PROT_READ | PROT_WRITE;
->> > > > > > 	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
->> > > > > > 	encl_page->vm_max_prot_bits = encl_page->vm_run_prot_bits;
->> > > > > >
->> > > > > > If that TBD is left out to the final version the page
->> > > > > > augmentation has a
->> > > > > > risk of a API bottleneck, and that risk can realize then
->> > > > > > also in the page
->> > > > > > permission ioctls.
->> > > > > >
->> > > > > > I.e. now any review comment is based on not fully known
->> > > > > > territory, we have
->> > > > > > one known unknown, and some unknown unknowns from
->> > > > > > unpredictable effect to
->> > > > > > future API changes.
->> > > >
->> > > > The plan to complete the "TBD" in the above snippet was to
->> > > > follow this work
->> > > > with user policy integration at this location. On a high level
->> > > > the plan was
->> > > > for this to look something like:
->> > > >
->> > > >
->> > > >  	/*
->> > > >  	 * Adding a regular page that is architecturally allowed to only
->> > > >  	 * be created with RW permissions.
->> > > >  	 * Interface with user space policy to support max permissions
->> > > >  	 * of RWX.
->> > > >  	 */
->> > > >  	prot = PROT_READ | PROT_WRITE;
->> > > >  	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
->> > > >
->> > > >         if (user space policy allows RWX on dynamically added  
->> pages)
->> > > > 	 	encl_page->vm_max_prot_bits = calc_vm_prot_bits(PROT_READ |
->> > > > PROT_WRITE | PROT_EXEC, 0);
->> > > > 	else
->> > > > 		encl_page->vm_max_prot_bits = calc_vm_prot_bits(PROT_READ |
->> > > > PROT_WRITE, 0);
->> > > >
->> > > > The work that follows this series aimed to do the integration  
->> with user
->> > > > space policy.
->> > >
->> > > What do you mean by "user space policy" anyway exactly? I'm sorry  
->> but I
->> > > just don't fully understand this.
->> >
->> > My apologies - I just assumed that you would need no reminder about  
->> this
->> > contentious
->> > part of SGX history. Essentially it means that, yes, the kernel could
->> > theoretically
->> > permit any kind of access to any file/page, but some accesses are  
->> known
->> > to generally
->> > be a bad idea - like making memory executable as well as writable -  
->> and
->> > thus there
->> > are additional checks based on what user space permits before the  
->> kernel
->> > allows
->> > such accesses.
->> >
->> > For example,
->> > mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect()
->> >
->> > User policy and SGX has seen significant discussion. Some notable
->> > threads:
->> >  
->> https://lore.kernel.org/linux-security-module/CALCETrXf8mSK45h7sTK5Wf+pXLVn=Bjsc_RLpgO-h-qdzBRo5Q@mail.gmail.com/
->> >  
->> https://lore.kernel.org/linux-security-module/20190619222401.14942-1-sean.j.christopherson@intel.com/
->> >
->> > > It's too big of a risk to accept this series without X taken care
->> > > of. Patch
->> > > series should neither have TODO nor TBD comments IMHO. I don't want
->> > > to ack
->> > > a series based on speculation what might happen in the future.
->> >
->> > ok
->> >
->> > >
->> > > > > I think the best way to move forward would be to do EAUG's
->> > > > > explicitly with
->> > > > > an ioctl that could also include secinfo for permissions. Then  
->> you can
->> > > > > easily do the rest with EACCEPTCOPY inside the enclave.
->> > > >
->> > > > SGX_IOC_ENCLAVE_ADD_PAGES already exists and could possibly be  
->> used for
->> > > > this purpose. It already includes SECINFO which may also be  
->> useful if
->> > > > needing to later support EAUG of PT_SS* pages.
->> > >
->> > > You could also simply add SGX_IOC_ENCLAVE_AUGMENT_PAGES and call it
->> > > a day.
->> >
->> > I could, yes.
->> >
->> > > And if there is plan to extend SGX_IOC_ENCLAVE_ADD_PAGES what is
->> > > this weird
->> > > thing added to the #PF handler? Why is it added at all then?
->> >
->> > I was just speculating in my response, there is no plan to extend
->> > SGX_IOC_ENCLAVE_ADD_PAGES (that I am aware of).
->> >
->> > > > How this could work is user space calls SGX_IOC_ENCLAVE_ADD_PAGES
->> > > > after enclave initialization on any memory region within the
->> > > > enclave where
->> > > > pages are planned to be added dynamically. This ioctl() calls
->> > > > EAUG to add the
->> > > > new pages with RW permissions and their vm_max_prot_bits can be
->> > > > set to the
->> > > > permissions found in the included SECINFO. This will support
->> > > > later EACCEPTCOPY
->> > > > as well as SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
->> > >
->> > > I don't like this type of re-use of the existing API.
->> >
->> > I could proceed with SGX_IOC_ENCLAVE_AUGMENT_PAGES if there is  
->> consensus
->> > after
->> > considering the user policy question (above) and performance trade-off
->> > (more below).
->> >
->> > >
->> > > > The big question is whether communicating user policy after
->> > > > enclave initialization
->> > > > via the SECINFO within SGX_IOC_ENCLAVE_ADD_PAGES is acceptable
->> > > > to all? I would
->> > > > appreciate a confirmation on this direction considering the
->> > > > significant history
->> > > > behind this topic.
->> > >
->> > > I have no idea because I don't know what is user space policy.
->> >
->> > This discussion is about some enclave usages needing RWX permissions
->> > on dynamically added enclave pages. RWX permissions on dynamically  
->> added
->> > pages is
->> > not something that should blindly be allowed for all SGX enclaves but
->> > instead the user
->> > needs to explicitly allow specific enclaves to have such ability. This
->> > is equivalent
->> > to (but not the same as) what exists in Linux today with LSM. As seen  
->> in
->> > mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect() Linux is  
->> able
->> > to make
->> > files and memory be both writable and executable, but it would only do
->> > so for those
->> > files and memory that the LSM (which is how user policy is  
->> communicated,
->> > like SELinux)
->> > indicates it is allowed, not blindly do so for all files and all  
->> memory.
->> >
->> > > > > Putting EAUG to the #PF handler and implicitly call it just
->> > > > > too flakky and
->> > > > > hard to make deterministic for e.g. JIT compiler in our use
->> > > > > case (not to
->> > > > > mention that JIT is not possible at all because inability to
->> > > > > do RX pages).
->> >
->> > I understand how SGX_IOC_ENCLAVE_AUGMENT_PAGES can be more  
->> deterministic
->> > but from
->> > what I understand it would have a performance impact since it would
->> > require all memory
->> > that may be needed by the enclave be pre-allocated from outside the
->> > enclave and not
->> > just dynamically allocated from within the enclave at the time it is
->> > needed.
->> >
->> > Would such a performance impact be acceptable?
->> >
->>
->> User space won't always have enough info to decide whether the pages to  
->> be
->> EAUG'd immediately. In some cases (shared libraries, JVM for example)  
->> lots
->> of code/data pages can be mapped but never actually touched. One
->> enclave/process does not know if any other more important  
->> enclave/process
->> would need the EPC.
->>
->> It should be for kernel to make the final decision as it has overall  
->> picture
->> of the system EPC usage and availability.
->
-> EAUG ioctl does not give better capabilities for user space to waste
-> EPC given that EADD ioctl already exists, i.e. your argument is logically
-> incorrect.
-
-The point of adding EAUG is to allow more efficient use of EPC pages.  
-Without EAUG, enclaves have to EADD everything upfront into EPC, consuming  
-predetermined number of EPC pages, some of which may not be used at all.  
-With EAUG, enclaves should be able to load minimal pages to get started,  
-pages added on #PF as they are actually accessed.
-
-Obviously as you pointed out, some usages make more sense to pre-EAUG  
-(EAUG before #PF). But your proposal of supporting only pre-EAUG here  
-essentially makes EAUG behave almost the same as EADD.  If the current  
-implementation with EAUG on #PF can also use MAP_POPULATE for pre-EAUG  
-(seems possible based on Dave's comments), then it is flxible to cover all  
-cases and allow kernel to optimize allocation of EPC pages.
-
-Thanks
-Haitao
+Probably nothing we can do about that :( I'd say proceed as if the
+other series didn't exist, and after one series is merged the author
+of the other one will have to rebase.

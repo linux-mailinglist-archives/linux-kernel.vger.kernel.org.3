@@ -2,75 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F244CCDEE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649D54CCDEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Mar 2022 07:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiCDGgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 01:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
+        id S236755AbiCDGhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 01:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238482AbiCDGgT (ORCPT
+        with ESMTP id S238479AbiCDGh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 01:36:19 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C124B18F226
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Mar 2022 22:34:55 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id mv5-20020a17090b198500b001bf2a039831so546029pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Mar 2022 22:34:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PgzWIJiGbElIzAA/+g3O4R+XIWRWlKNYEXwjILpxSlg=;
-        b=VcsP531XOAZHoSzYutr+YrhPB/02f1REI7a2paVkswi+VQ1RJWPGg8afSzCgogHzyW
-         dOUmDbKrKlQ2pIGPipEijTjuCJ2N6uNcjHbyMswPnO5gSGm6KKC8lgnMd5CDOze45fm6
-         ox2otFm8rAec4bBP8ZSzRbgS3yv+isnJSeAwbZSwGe0Xkpa/AIWIQs8BoVspdQDH/ejc
-         RRFaT/TeqUqitkGA1WFWDZ75k4/o1UNUPoYyOumZB47EYuTWitcDPlm20xlJHkYfJCpF
-         UAvLaQjJ1EFDEDIzDPfSx00I4XvsOPzMJ4rQuu9LeeLw8WyY2JgBU6nlJxw2wLfrXsCY
-         DdbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PgzWIJiGbElIzAA/+g3O4R+XIWRWlKNYEXwjILpxSlg=;
-        b=Xj7FTaJC07cVddU5dswXuBgerXmqWRnKSAf2GlJzBmknMC0pYEaMRyr70mcvWW/QeP
-         zoYhszVC/fs7221dw5xpU+JXcqCaiF4HfgQG5AQe4nsGrcfB0giivGpgjX8gADjj6ldf
-         G3VTHgGBqgGHTCE8mVaoQGvPmwS1tgAV9BhfHZDetR2fIsvqmCWTHDQ/B8oYbrd3H6Do
-         rneuaxqdgPQX75dvMtg3QvahHAVFGfDQvs82LZIuZ3riC+w1fRNy+m+4C7gcV6PyDBjs
-         WcSBJIGMdFJJhkVzS54TfTa4T3/9naXm/Q9Ax0cddT3/HdBPMDL+flyANGJTSRw+xC5s
-         3IHQ==
-X-Gm-Message-State: AOAM531mjlqVwQaCnvHDUj9RK+snT5bPzmAk/VMyb+aE3qzdF0pM40Iy
-        To6SAi2TD269eFQll8eObeo=
-X-Google-Smtp-Source: ABdhPJxUr2XDiJRBOKg+kXq0iUgKNnV8N4aWOKmy0bwGTHBAdBDB2wi3hQmPcbrds4di6UaI00Dbuw==
-X-Received: by 2002:a17:902:c401:b0:14f:b686:e6ff with SMTP id k1-20020a170902c40100b0014fb686e6ffmr15079443plk.45.1646375695469;
-        Thu, 03 Mar 2022 22:34:55 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id v10-20020a056a00148a00b004e0f420dd90sm4900007pfu.40.2022.03.03.22.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 22:34:55 -0800 (PST)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org, 42.hyeyoo@gmail.com
-Subject: [PATCH v2 5/5] mm/slub: refactor deactivate_slab()
-Date:   Fri,  4 Mar 2022 06:34:27 +0000
-Message-Id: <20220304063427.372145-6-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220304063427.372145-1-42.hyeyoo@gmail.com>
-References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
+        Fri, 4 Mar 2022 01:37:29 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2041.outbound.protection.outlook.com [40.107.22.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1353D18CC0C;
+        Thu,  3 Mar 2022 22:36:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SsfpVJ5zMAPPJCp91Ge4/ja4DPffqpIpD2ih+Lx5SYo9X6wbdG3ZT/bTa8HhiH7iwi1yxQpiWVhbfpcJA06vfQzE0xGl3MU+QbUcQpCraXqeSe56Rngzem5u3XMpJKyL/1V5lkFV2d6zQsgRFvJ/BfMvV2vit20SDdXmrp3u/NX7zemuBKBj6EvDEPlw7SyByfCIFeD6+KhSp3DqawWzQ5j2sLu2tUOuXw5EVFtMzQJhgh0iyTjNBaP24c/LkBHTClKPsm9BdfmLz26XY/8ZyTP2n4UHt/tGk8dSQWtBZX3Xn8RIvXJEn943aoDEKcOUxaKkQ8j3Zp5KdpPgSsM+Ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ucv9KOqezzVtY7dl0ACi2OUlllz3kxbIzfeKXHwz+Q8=;
+ b=LfoQTbZ9JaFja/lYy1fHP6neAwULkNhIim916Hc58Xisj0+O4/ZdWupXe/7RtqVlNhDxLBeavD5/0gS6q2kBBZt7g0NxG7zdJo0+hg02hQKAux2Q1sDXJh1SXQp3m4gRdkB+PuHA9cN8qkuPZdOmlEpN6CQbM1KkEtXOIb2/M+ZMAwvgmJEJu2GpeQV6y/ZeyQCZcqzTCJN1YNuu5CsJmMwRxR2a/SHExbEHICokGE0zXC9RYRWaqJnzMHso6Qskkh6M0yHKs5xiVs7DYseoQNMIs1AZ9IJDYlHRQqnG60gucJYYSvBCJjyl0onEEGPNxpDWqTpLK4QkgeGaDy77+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.70) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ucv9KOqezzVtY7dl0ACi2OUlllz3kxbIzfeKXHwz+Q8=;
+ b=t7bQR5pizRmd1dYRK6s1k4PntfRU4xA5/XahbHevY5+pIKT8+4UL2SSPYqKMzpAvEHxKHLV70mV40yPOP4fNmQiOzWYdS/qAuhIolU4nsALiFuOt/QnvEFb1pZ5rVIAoo6hFOYrsKFm5ApH0NGQu35IR+QY68VknLpDegpQvKu9KxMM3Fumvdgb2KpMa8BGR9obxCbqmXCXsBADrq1xIIj21f0cpPt6vGwvLJv3yfGuBzKKZUisVjJulgeUwkpiNGHs3bnP1XhAwhFTFEIu1DjRfy1kzlSF8yJz3aB1LP0uzslNkk+mwFJ/iw0DCmuoakcw0u+rsgOe1rhpxxXmzug==
+Received: from OL1P279CA0028.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:13::15)
+ by AM9PR10MB4580.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:271::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
+ 2022 06:36:40 +0000
+Received: from HE1EUR01FT043.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:e10:13:cafe::74) by OL1P279CA0028.outlook.office365.com
+ (2603:10a6:e10:13::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15 via Frontend
+ Transport; Fri, 4 Mar 2022 06:36:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.70)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.70 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.70; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.70) by
+ HE1EUR01FT043.mail.protection.outlook.com (10.152.0.207) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5038.14 via Frontend Transport; Fri, 4 Mar 2022 06:36:39 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC9SJA.ad011.siemens.net (194.138.21.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Fri, 4 Mar 2022 07:36:39 +0100
+Received: from [167.87.0.77] (167.87.0.77) by DEMCHDC8A0A.ad011.siemens.net
+ (139.25.226.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 4 Mar
+ 2022 07:36:38 +0100
+Message-ID: <c28d3f86-dd72-27d1-e2c2-40971b8da6bd@siemens.com>
+Date:   Fri, 4 Mar 2022 07:36:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Subject: [PATCH] efi: Add missing prototype for efi_capsule_setup_info
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.87.0.77]
+X-ClientProxiedBy: DEMCHDC8A1A.ad011.siemens.net (139.25.226.107) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 79410c4a-daf9-413d-4323-08d9fda956d0
+X-MS-TrafficTypeDiagnostic: AM9PR10MB4580:EE_
+X-Microsoft-Antispam-PRVS: <AM9PR10MB4580A8E1EAB9F67137E2D8BA95059@AM9PR10MB4580.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hAb4s4ML5eNS6eJbEyatIMxAOpBPxG1dMUITZz9BvPQn9uRljsIaidWiScc67zVhCZvZ8DbsK0xUT29Q5oyHEoYa55DvfVXuDjy6yAZeeo478H7T2IadyPH2389NqfG1xKf35c0C9TbbRLeANF8rU4U+OFTkiJRGOc7AVaSRJVRATAzJfMUXDVbSJe3Q733jTjteUjVvtxQh+Tl6t1Wjm+Hpi3uMUMxuhgpJ6GCowXJequ7iUNzuCi8HD5A6YBUEqGZ7RpFcuf0Pqd8XdrOm/hGSzfeZzdESLjUxT3MXz9Vc6FXDrvNHgG0IXnrh3h7sEXQns+YMU+hDGM8FGIcbQark6/ZF3+pyQXl9CEUBtQ5EZSEqdzqAtdhLFWf0PvmttQS7+7GKH2Q6EXvi3hMU0LiJAaEPVtkR0uuG8Wx3i1Dmj3RWIM5o28TdbPPYAz4/JQtfcJImOQTAVxou3rqK0nn+VLftnbHI0yiRKTeWhu6u3BiVjtXuNbl7/ZXqT9olVfZk6DYUr4ed+EA1knEt4j3s/O0HE5Je8BF/TyQ0ZVRvtyM/47UjiFnSnXlVAs+zF1YSWJ4rPibRQvrEzkxU8rgVgxQMHaIb+Mp9D9BhBSRY7Oo0WelCSv9Pu6J7KQS9sjtB4nKf/7y8jyhXYPX8SG8ghwU0aPVcrHHGAFnwNPquL4nlBNq3Hk1I8diPCMFlBVRBsIDZT8GjaocnsOAhToiPjKJnORnZZn/TJa9TGhBtSLF/qY1zgLqSRPe/sYym
+X-Forefront-Antispam-Report: CIP:194.138.21.70;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:hybrid.siemens.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(36860700001)(956004)(336012)(186003)(2616005)(16526019)(31686004)(83380400001)(47076005)(40460700003)(7636003)(356005)(7596003)(26005)(82960400001)(8936002)(508600001)(2906002)(82310400004)(44832011)(5660300002)(70206006)(70586007)(316002)(4326008)(110136005)(36756003)(6706004)(16576012)(8676002)(31696002)(86362001)(4744005)(3940600001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:36:39.6644
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79410c4a-daf9-413d-4323-08d9fda956d0
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.70];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT043.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4580
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,139 +105,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify deactivate_slab() by unlocking n->list_lock and retrying
-cmpxchg_double() when cmpxchg_double() fails, and perform
-add_{partial,full} only when it succeed.
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-Releasing and taking n->list_lock again here is not harmful as SLUB
-avoids deactivating slabs as much as possible.
+Fixes "no previous declaration for 'efi_capsule_setup_info'" warnings 
+under W=1.
 
-[ vbabka@suse.cz: perform add_{partial,full} when cmpxchg_double()
-  succeed. ]
-
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Fixes: 2959c95d510c ("efi/capsule: Add support for Quark security header")
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 ---
- mm/slub.c | 81 ++++++++++++++++++++++---------------------------------
- 1 file changed, 32 insertions(+), 49 deletions(-)
+ include/linux/efi.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/mm/slub.c b/mm/slub.c
-index f9ae983a3dc6..c1a693ec5874 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -2344,8 +2344,8 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- {
- 	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE };
- 	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
--	int lock = 0, free_delta = 0;
--	enum slab_modes l = M_NONE, m = M_NONE;
-+	int free_delta = 0;
-+	enum slab_modes mode = M_NONE;
- 	void *nextfree, *freelist_iter, *freelist_tail;
- 	int tail = DEACTIVATE_TO_HEAD;
- 	unsigned long flags = 0;
-@@ -2387,14 +2387,10 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- 	 * Ensure that the slab is unfrozen while the list presence
- 	 * reflects the actual number of objects during unfreeze.
- 	 *
--	 * We setup the list membership and then perform a cmpxchg
--	 * with the count. If there is a mismatch then the slab
--	 * is not unfrozen but the slab is on the wrong list.
--	 *
--	 * Then we restart the process which may have to remove
--	 * the slab from the list that we just put it on again
--	 * because the number of objects in the slab may have
--	 * changed.
-+	 * We first perform cmpxchg holding lock and insert to list
-+	 * when it succeed. If there is mismatch then slub is not
-+	 * unfrozen and number of objects in the slab may have changed.
-+	 * Then release lock and retry cmpxchg again.
- 	 */
- redo:
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index ccd4d3f91c98..cc6d2be2ffd5 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -213,6 +213,8 @@ struct capsule_info {
+ 	size_t			page_bytes_remain;
+ };
  
-@@ -2414,57 +2410,44 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- 	new.frozen = 0;
++int efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
++                           size_t hdr_bytes);
+ int __efi_capsule_setup_info(struct capsule_info *cap_info);
  
- 	if (!new.inuse && n->nr_partial >= s->min_partial)
--		m = M_FREE;
-+		mode = M_FREE;
- 	else if (new.freelist) {
--		m = M_PARTIAL;
--		if (!lock) {
--			lock = 1;
--			/*
--			 * Taking the spinlock removes the possibility that
--			 * acquire_slab() will see a slab that is frozen
--			 */
--			spin_lock_irqsave(&n->list_lock, flags);
--		}
--	} else {
--		m = M_FULL;
--		if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
--			lock = 1;
--			/*
--			 * This also ensures that the scanning of full
--			 * slabs from diagnostic functions will not see
--			 * any frozen slabs.
--			 */
--			spin_lock_irqsave(&n->list_lock, flags);
--		}
-+		mode = M_PARTIAL;
-+		/*
-+		 * Taking the spinlock removes the possibility that
-+		 * acquire_slab() will see a slab that is frozen
-+		 */
-+		spin_lock_irqsave(&n->list_lock, flags);
-+	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
-+		mode = M_FULL;
-+		/*
-+		 * This also ensures that the scanning of full
-+		 * slabs from diagnostic functions will not see
-+		 * any frozen slabs.
-+		 */
-+		spin_lock_irqsave(&n->list_lock, flags);
- 	}
- 
--	if (l != m) {
--		if (l == M_PARTIAL)
--			remove_partial(n, slab);
--		else if (l == M_FULL)
--			remove_full(s, n, slab);
--
--		if (m == M_PARTIAL)
--			add_partial(n, slab, tail);
--		else if (m == M_FULL)
--			add_full(s, n, slab);
--	}
- 
--	l = m;
- 	if (!cmpxchg_double_slab(s, slab,
- 				old.freelist, old.counters,
- 				new.freelist, new.counters,
--				"unfreezing slab"))
-+				"unfreezing slab")) {
-+		if (mode == M_PARTIAL || mode == M_FULL)
-+			spin_unlock_irqrestore(&n->list_lock, flags);
- 		goto redo;
-+	}
- 
--	if (lock)
--		spin_unlock_irqrestore(&n->list_lock, flags);
- 
--	if (m == M_PARTIAL)
-+	if (mode == M_PARTIAL) {
-+		add_partial(n, slab, tail);
-+		spin_unlock_irqrestore(&n->list_lock, flags);
- 		stat(s, tail);
--	else if (m == M_FULL)
-+	} else if (mode == M_FULL) {
-+		add_full(s, n, slab);
-+		spin_unlock_irqrestore(&n->list_lock, flags);
- 		stat(s, DEACTIVATE_FULL);
--	else if (m == M_FREE) {
-+	} else if (mode == M_FREE) {
- 		stat(s, DEACTIVATE_EMPTY);
- 		discard_slab(s, slab);
- 		stat(s, FREE_SLAB);
+ /*
 -- 
-2.33.1
-
+2.34.1

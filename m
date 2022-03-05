@@ -2,155 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9924CE49C
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 12:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD604CE4A6
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 12:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbiCEL1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 06:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
+        id S230496AbiCELiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 06:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiCEL1P (ORCPT
+        with ESMTP id S231681AbiCELiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 06:27:15 -0500
-Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBD940E7D;
-        Sat,  5 Mar 2022 03:26:25 -0800 (PST)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout2.routing.net (Postfix) with ESMTP id 8AA445FD5D;
-        Sat,  5 Mar 2022 11:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1646479584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oeojDkbixb+3+AqcShTPnuHWz+1GrcPznWJUJt5Sy3k=;
-        b=v+/pylN7fIi8+EJUtnWzr056KkXzMdaedd8sSSturEfyQOeI/a9pkpI49bIs4yF/Ja939r
-        PGjd/jAyuF/eyz+2yuGft/UJbOOMwn/NJkYAHL3di/Z10AG0fLpyvwGR17sXfiZhtiOV2b
-        w34lFlqgJmc4Nma/5qE68J+88L8z9Mw=
-Received: from localhost.localdomain (fttx-pool-217.61.157.101.bambit.de [217.61.157.101])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 9D40F1007DD;
-        Sat,  5 Mar 2022 11:26:23 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     devicetree@vger.kernel.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH v5 5/5] arm64: dts: rockchip: Add sata nodes to rk356x
-Date:   Sat,  5 Mar 2022 12:26:07 +0100
-Message-Id: <20220305112607.257734-6-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220305112607.257734-1-linux@fw-web.de>
-References: <20220305112607.257734-1-linux@fw-web.de>
+        Sat, 5 Mar 2022 06:38:01 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8DA1CD7C2;
+        Sat,  5 Mar 2022 03:37:11 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2258Rh2r021928;
+        Sat, 5 Mar 2022 11:37:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=JUE9MkZrXGHLNUB1IJSigF2Ut9A0BXyg9PBlMjVNyuU=;
+ b=TaaG1FPsrtB+mMyk9f+KJc2FAvYh9hV0lfxhp3N2CNE1DMOC1IdTXDXMiqnPQwXyDEam
+ kpBq0SJBPAyyOhc3Lr9c+e05pashvUBT8KJvMXt4DER+1QKb75jg8+g9xm7l9Pchcn4c
+ nMs5VmpA4YwUFvH9Kukr4USfMEw5VQXV+DO7eAzu9jVZAZlo9OuXY6BzDWA41d4LL2AN
+ 1o4req/dhhFAt3bjgMssh8x8YyVUCJTpY3S7Utd/obLGa4zWANP5K/aeaupYULjHgZrt
+ XTLpyBkjghqRXo7z6z8r2KbAPWxQywfSDovQtDSkuQMUQasLf70DBZ66ZpHs0rt5bioL Mg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ekxnr621w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 05 Mar 2022 11:37:09 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 225BS78D021994;
+        Sat, 5 Mar 2022 11:37:07 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ekyg90s2d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 05 Mar 2022 11:37:07 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 225Bb4GV44892458
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 5 Mar 2022 11:37:04 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 76634AE04D;
+        Sat,  5 Mar 2022 11:37:04 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30D86AE045;
+        Sat,  5 Mar 2022 11:37:04 +0000 (GMT)
+Received: from localhost (unknown [9.171.8.66])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sat,  5 Mar 2022 11:37:04 +0000 (GMT)
+Date:   Sat, 5 Mar 2022 12:37:02 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [GIT PULL] s390 updates for 5.17-rc7
+Message-ID: <your-ad-here.call-01646480222-ext-8975@work.hours>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: OIFXRh5t9pZWjNf9tHzpmns4U5wVitRS
+X-Proofpoint-GUID: OIFXRh5t9pZWjNf9tHzpmns4U5wVitRS
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 6c0e6171-3ca7-422f-bfb9-56d26079865c
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-05_04,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ mlxscore=0 malwarescore=0 adultscore=0 mlxlogscore=943 clxscore=1011
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203050063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+Hello Linus,
 
-RK356x supports up to 3 sata controllers which were compatible with the
-existing snps,dwc-ahci binding.
+please pull s390 changes for 5.17-rc7.
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
-changes in v4:
- - drop newline in dts
- - re-add clock-names
- -  add soc specific compatible
-changes in v3:
-  - fix combphy error by moving sata0 to rk3568.dtsi
-  - remove clock-names and interrupt-names
-changes in v2:
-  - added sata0 + 1, but have only tested sata2
----
- arch/arm64/boot/dts/rockchip/rk3568.dtsi | 14 ++++++++++++
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 28 ++++++++++++++++++++++++
- 2 files changed, 42 insertions(+)
+Thank you,
+Vasily
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-index 5b0f528d6818..3e07d9f6a2d1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-@@ -8,6 +8,20 @@
- / {
- 	compatible = "rockchip,rk3568";
- 
-+	sata0: sata@fc000000 {
-+		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-+		reg = <0 0xfc000000 0 0x1000>;
-+		clocks = <&cru ACLK_SATA0>, <&cru CLK_SATA0_PMALIVE>,
-+			 <&cru CLK_SATA0_RXOOB>;
-+		clock-names = "sata", "pmalive", "rxoob";
-+		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
-+		phys = <&combphy0 PHY_TYPE_SATA>;
-+		phy-names = "sata-phy";
-+		ports-implemented = <0x1>;
-+		power-domains = <&power RK3568_PD_PIPE>;
-+		status = "disabled";
-+	};
-+
- 	pipe_phy_grf0: syscon@fdc70000 {
- 		compatible = "rockchip,rk3568-pipe-phy-grf", "syscon";
- 		reg = <0x0 0xfdc70000 0x0 0x1000>;
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index 7cdef800cb3c..264dd030e703 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -230,6 +230,34 @@ scmi_shmem: sram@0 {
- 		};
- 	};
- 
-+	sata1: sata@fc400000 {
-+		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-+		reg = <0 0xfc400000 0 0x1000>;
-+		clocks = <&cru ACLK_SATA1>, <&cru CLK_SATA1_PMALIVE>,
-+			 <&cru CLK_SATA1_RXOOB>;
-+		clock-names = "sata", "pmalive", "rxoob";
-+		interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
-+		phys = <&combphy1 PHY_TYPE_SATA>;
-+		phy-names = "sata-phy";
-+		ports-implemented = <0x1>;
-+		power-domains = <&power RK3568_PD_PIPE>;
-+		status = "disabled";
-+	};
-+
-+	sata2: sata@fc800000 {
-+		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-+		reg = <0 0xfc800000 0 0x1000>;
-+		clocks = <&cru ACLK_SATA2>, <&cru CLK_SATA2_PMALIVE>,
-+			 <&cru CLK_SATA2_RXOOB>;
-+		clock-names = "sata", "pmalive", "rxoob";
-+		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
-+		phys = <&combphy2 PHY_TYPE_SATA>;
-+		phy-names = "sata-phy";
-+		ports-implemented = <0x1>;
-+		power-domains = <&power RK3568_PD_PIPE>;
-+		status = "disabled";
-+	};
-+
- 	gic: interrupt-controller@fd400000 {
- 		compatible = "arm,gic-v3";
- 		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
--- 
-2.25.1
+The following changes since commit dd9cb842fa9d90653a9b48aba52f89c069f3bc50:
 
+  s390/cio: verify the driver availability for path_event call (2022-02-09 22:55:01 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.17-5
+
+for you to fetch changes up to c194dad21025dfd043210912653baab823bdff67:
+
+  s390/extable: fix exception table sorting (2022-03-01 20:41:28 +0100)
+
+----------------------------------------------------------------
+s390 updates for 5.17-rc7
+
+- Fix HAVE_DYNAMIC_FTRACE_WITH_ARGS implementation by providing correct
+  switching between ftrace_caller/ftrace_regs_caller and supplying pt_regs
+  only when ftrace_regs_caller is activated.
+
+- Fix exception table sorting.
+
+- Fix breakage of kdump tooling by preserving metadata it cannot function
+  without.
+
+----------------------------------------------------------------
+Alexander Egorenkov (1):
+      s390/setup: preserve memory at OLDMEM_BASE and OLDMEM_SIZE
+
+Heiko Carstens (3):
+      s390/ftrace: fix ftrace_caller/ftrace_regs_caller generation
+      s390/ftrace: fix arch_ftrace_get_regs implementation
+      s390/extable: fix exception table sorting
+
+ arch/s390/include/asm/extable.h |  9 +++++++--
+ arch/s390/include/asm/ftrace.h  | 10 ++++++----
+ arch/s390/include/asm/ptrace.h  |  2 ++
+ arch/s390/kernel/ftrace.c       | 37 ++++++++++++++++++++++++++++++++++++-
+ arch/s390/kernel/mcount.S       |  9 +++++++++
+ arch/s390/kernel/setup.c        |  2 ++
+ 6 files changed, 62 insertions(+), 7 deletions(-)

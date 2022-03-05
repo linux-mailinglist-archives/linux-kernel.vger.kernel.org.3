@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195DA4CE609
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527764CE60D
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbiCEQxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 11:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
+        id S232068AbiCEQxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 11:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiCEQxB (ORCPT
+        with ESMTP id S232063AbiCEQxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 11:53:01 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0F43B29C;
-        Sat,  5 Mar 2022 08:52:10 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id l12so14833715ljh.12;
-        Sat, 05 Mar 2022 08:52:09 -0800 (PST)
+        Sat, 5 Mar 2022 11:53:08 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6553B3C6;
+        Sat,  5 Mar 2022 08:52:12 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id g39so19282629lfv.10;
+        Sat, 05 Mar 2022 08:52:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rb1jkGqn3lqkO3YdEDUTTI8tdGFfrGu1bTvf//nCloM=;
-        b=bS1cx8Fusb3z1ZkXUixhTvZpBIQyFSPIBzg901//38HXYJec8yqJPG2DKfgmWn6vMt
-         JstfwOj53ftcHwrRYN5nzzj9Wl7w9jF+uwOKHY34b41TgSaurnVUdf8K72jZCHVO6By9
-         oXeRRJ+cRztoVNx9MJstnkGdkREiBoK/0RShlAg4P6w5f9mu1CuA1R6sv44ItCoJ8qj7
-         ClCY7fQGBj7AgW8bOOuK22zayrqZiVDVu5svQYHhK02SNM/VocLX2QOXoDs4GANGAdGU
-         ieAkHMtKZC8uZLTh4wKSWsn7tw8NTDjbZJ7njNAH3EZrlRJjF738QRobmmLUHNVaWr92
-         pvwQ==
+        bh=+FiJx5gescDdcx8BtGU1joboCGEN0cEdbkRq7CYc/eY=;
+        b=QKmOJiFS0IDe8rEPUOqkru1cfY4m+xgqI+irzaGieOQfR6UmP68fvH4Qf7CQ1s+fb+
+         Ce3PoCvXC8J0eifrh6m+eWrCyRak1FAQ5Uw2BJnUFBCK/fIRs5Epjf5rHMZxFhX0rzsU
+         EdwPH2YHuvJ+uLpusm5O1rbpSeKMcanSlDKaOdspjIr0Ylsveav2swLu8ugMbKSUp9Nk
+         2DaxcM+1PW3Ie3uWb3XH0Xx2V+NeKj7NI8OpbUOjTBX3txd41Ir3HYNHGYO0AJQdjzCB
+         rDHsXw8XrQ/VhtWp3jkSUnDUJU+kqATFTCjkBYGRZ8BOklVfkWc+U6O5SlgD3uCkBq/F
+         H2Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rb1jkGqn3lqkO3YdEDUTTI8tdGFfrGu1bTvf//nCloM=;
-        b=IDbLooDAO6JvkUWJbw3wBkBzOxs/7ZZAH0WFtiMUTCXYtEQy6oSFlns0TFrszpPNnt
-         RGWKI2ZlfUvL9UJWURAlSafdCkhS9PSyP6xapK8Upk8PQ+fblJORpuAPKtKoWWXi57sT
-         py1GPOzoV7WQ8aNjTGplk+tftmqsyMGK951+FGi5Xtv6R8UDI3Vv+SkySF5Avh5WM+ig
-         ZO6hJ7gSdiHkjZfy66gaafZElo+JxuexbB+nvHb/0O4uRcWk0ABfKJJNJdoDTBbu5Mqb
-         XgGszMAln5CRMhzGYtVgGT/SWRvZoKb33eCN/Xdihiwe4+AuT72G2kY948lZyzHl8SO9
-         2xDg==
-X-Gm-Message-State: AOAM532o1gr+Lbp0zBShKjKg9atHdoB02QYemXXfOxN36O6tvsom8NVJ
-        FNM+igj0goQowZrU39faRtvjDXdGZ7PfwQC0
-X-Google-Smtp-Source: ABdhPJzkHQYPa1CdDUOmt4XerTbVNJQxUGyUGE/Z3kiOmFEwpelLmdWtPRVZR7fGB9waCYiLwQ2eqQ==
-X-Received: by 2002:a05:651c:2102:b0:244:c93d:178b with SMTP id a2-20020a05651c210200b00244c93d178bmr2500806ljq.123.1646499126188;
-        Sat, 05 Mar 2022 08:52:06 -0800 (PST)
+        bh=+FiJx5gescDdcx8BtGU1joboCGEN0cEdbkRq7CYc/eY=;
+        b=aZgO4tDns+G0SBirXGL7ZCnc0ch5q6460fhefvPMq4CnixmCbufe2GAMYyqgPLuzk4
+         cXMRdGVagAshWSkU2I1Y9PxE/2W8GARB2a9a04Vjs32HNLxvdPmsrhURR7rr7IrMTXko
+         hbTGRreztk6RP2AKlZBDrHOUH7+SF+kWE08fUQWTLg50NcQqruHJErWbu+0r33mMApZU
+         JJfen9tcqbAYGeb9+GtfEqIVo1+Ho86GDaQT0obarElriXW2GgkK4imtDVO8+w+6p6k+
+         x+Zj75y3MUyVCmjiZGLO75u4NrMD6mImDSH8mcgea6UaMM8lHZncytLHWlGxVrBKfWxN
+         jJBQ==
+X-Gm-Message-State: AOAM532zkG88Nqzrh63EroB2ELovKrkefo9JMZYc0BefXAikuJsvwuCb
+        l8ckpz/0Cc5WLYrQo3y+avLb0AV5Hi8DG+/+
+X-Google-Smtp-Source: ABdhPJxS4S1Eu0lLkLMS6BwKj1YmzwHh6c1eDAYgZZFeQSYc/PT8LV0OxS5cKMstyhm8b+DshxllpA==
+X-Received: by 2002:a05:6512:ad3:b0:430:5c07:467 with SMTP id n19-20020a0565120ad300b004305c070467mr2631270lfu.632.1646499127985;
+        Sat, 05 Mar 2022 08:52:07 -0800 (PST)
 Received: from localhost.localdomain (adsa4.neoplus.adsl.tpnet.pl. [79.185.186.4])
-        by smtp.gmail.com with ESMTPSA id n16-20020a0565120ad000b00443c3f383c5sm1751287lfu.231.2022.03.05.08.52.05
+        by smtp.gmail.com with ESMTPSA id n16-20020a0565120ad000b00443c3f383c5sm1751287lfu.231.2022.03.05.08.52.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 08:52:05 -0800 (PST)
+        Sat, 05 Mar 2022 08:52:07 -0800 (PST)
 From:   Adam Skladowski <a39.skl@gmail.com>
 To:     phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
@@ -59,9 +59,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Jassi Brar <jassisinghbrar@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] mailbox: qcom-apcs-ipc: Add compatible for MSM8976 SoC
-Date:   Sat,  5 Mar 2022 17:49:03 +0100
-Message-Id: <20220305164906.16853-3-a39.skl@gmail.com>
+Subject: [PATCH 3/4] dt-bindings: firmware: qcom-scm: Document msm8976 bindings
+Date:   Sat,  5 Mar 2022 17:49:04 +0100
+Message-Id: <20220305164906.16853-4-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220305164906.16853-1-a39.skl@gmail.com>
 References: <20220305164906.16853-1-a39.skl@gmail.com>
@@ -78,24 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MSM8976 APCS block is similar to one found in MSM8994.
+SCM driver on MSM8976 requires 3 clocks.
 Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 ---
- drivers/mailbox/qcom-apcs-ipc-mailbox.c | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/firmware/qcom,scm.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-index 9325d2abc745b..80a54d81412e3 100644
---- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-+++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-@@ -146,6 +146,7 @@ static const struct of_device_id qcom_apcs_ipc_of_match[] = {
- 	{ .compatible = "qcom,msm8916-apcs-kpss-global", .data = &msm8916_apcs_data },
- 	{ .compatible = "qcom,msm8939-apcs-kpss-global", .data = &msm8916_apcs_data },
- 	{ .compatible = "qcom,msm8953-apcs-kpss-global", .data = &msm8994_apcs_data },
-+	{ .compatible = "qcom,msm8976-apcs-kpss-global", .data = &msm8994_apcs_data },
- 	{ .compatible = "qcom,msm8994-apcs-kpss-global", .data = &msm8994_apcs_data },
- 	{ .compatible = "qcom,msm8996-apcs-hmss-global", .data = &msm8996_apcs_data },
- 	{ .compatible = "qcom,msm8998-apcs-hmss-global", .data = &msm8994_apcs_data },
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.txt b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+index b1cd4ad1889ae..0f4e5ab264779 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.txt
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+@@ -19,6 +19,7 @@ Required properties:
+  * "qcom,scm-msm8953"
+  * "qcom,scm-msm8960"
+  * "qcom,scm-msm8974"
++ * "qcom,scm-msm8976"
+  * "qcom,scm-msm8994"
+  * "qcom,scm-msm8996"
+  * "qcom,scm-msm8998"
+@@ -37,7 +38,7 @@ Required properties:
+  * core clock required for "qcom,scm-apq8064", "qcom,scm-msm8660" and
+    "qcom,scm-msm8960"
+  * core, iface and bus clocks required for "qcom,scm-apq8084",
+-   "qcom,scm-msm8916", "qcom,scm-msm8953" and "qcom,scm-msm8974"
++   "qcom,scm-msm8916", "qcom,scm-msm8953", "qcom,scm-msm8974" and "qcom,scm-msm8976"
+ - clock-names: Must contain "core" for the core clock, "iface" for the interface
+   clock and "bus" for the bus clock per the requirements of the compatible.
+ - qcom,dload-mode: phandle to the TCSR hardware block and offset of the
 -- 
 2.25.1
 

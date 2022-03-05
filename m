@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB894CE72A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 22:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A901D4CE72C
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 22:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiCEVMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 16:12:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S232584AbiCEVNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 16:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiCEVMx (ORCPT
+        with ESMTP id S229944AbiCEVNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 16:12:53 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F777486F
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 13:12:00 -0800 (PST)
+        Sat, 5 Mar 2022 16:13:37 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7751164BFF
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 13:12:47 -0800 (PST)
 Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AF0483F5F9
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 21:11:59 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4A3373F614
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 21:12:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646514719;
-        bh=f9rg0FgBlrSDEqY2yi+3lyLjudJ4mNThDGgUXldVQBc=;
+        s=20210705; t=1646514766;
+        bh=c7nvDWFcwUU/UCEXDJQ70xZTwc42c5nskfhluppR+58=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=v/wzlMqNWMQAHsFokgtWwoCMfyaWlHPK8Q2afF9vYz5DZA1EKK1BbuaCGDciUCaCZ
-         dFqHtUhwoMxMHeDVu/53dFTWbPG5mbbequZsQNyLSQCO2NUa0jV+gKJ9xc25eM/NBc
-         KDFXzcWx5XQHypf/bYsWCMYyIYF+zcqBoqPCditJzS3zxsoC1RhpnPo7uPtTqJfCzs
-         db2hNUaqryGMPeKLfsd54B9v2Xj3eqiSN3bcqd68H7aO8U9s2X97JnpvTnN1wqKFgQ
-         ixbk0FzJLMeluxoENCiM36sfkWHxGtt87sH4XpTKuMXpZUv/aXn6Y2OsxRd2Z/ewTE
-         xrpiR+vV5JkXw==
-Received: by mail-ej1-f69.google.com with SMTP id i14-20020a17090639ce00b006dabe6a112fso2248916eje.13
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 13:11:59 -0800 (PST)
+        b=B2nfFygCbl/IfokpY9TqXZqYKX2OA+4PFQfgrVtdz/3QQGCkwSHGuLJv9+QhME3Hc
+         dEUwwbOZXxT4fnQs7c2qOcCEQCvUPFWC3x+OQTFWzyKEXevC+V9j7UYv0AOhjy0JcL
+         hiRA0kqcwIf0uJOWY8bdhjOOoBRtFQ/UZYMmWsOt1n6Yh7EPWgJQjq/3Z+cSljrKdH
+         w0BLOdwWjJwMFh2+CYb/7oWOE3rof/ZgnzGe6lAB0BjRfVInnmYI29WUOxmAQWdb2k
+         GNBUrWvKVjweMn1oeCJNi8/f6d/DYVTstIVOBKMPzzqW2dVwSaQyXRcRF2BWSxC02/
+         OtxOmr6ZFBiYA==
+Received: by mail-ej1-f69.google.com with SMTP id d7-20020a1709061f4700b006bbf73a7becso5978212ejk.17
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 13:12:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=f9rg0FgBlrSDEqY2yi+3lyLjudJ4mNThDGgUXldVQBc=;
-        b=NhZzumh4CACm2F9CZgHemSyCApMWvBuNMDa6DHSl8NohzS5xRM+d0T1VK6PKiNCazK
-         YXgRhI99AFg5j3gCN53q5EBju4s3l83C1gkkhu7dBwT0OK1lcCuKjDslEQ+eN8YkYlRc
-         F+EGAxme8Fz7KTYel8MIWQ1BrZfC/5n0qWXBGLGKK599c+xQipmXIZGs0C/TvfSKm7jW
-         ymCaanLQOS5GC1UXYvT1cf2OkpbL9AyaHLjNx/Jx6BLlctlxTIKHuhhjP9s5WTCPjTSm
-         ci86Ka9Bto9B+CIz93F3x8ZtqbV/8oxG29xRS23uOjv4xcahY3OJGnIdFlfBv7ofGYKx
-         asCw==
-X-Gm-Message-State: AOAM533SHV4q352L2twf3xjtTs6IbDrHZFyc8S3E6Y2OkZ01jl6rsWwt
-        mQrsbCsSxW3jT2fKwzQZ2xhocl6unS6DomCCNjanu8PxkFp2Qtiiiy83OR8CA88zXRbjg2K6dMc
-        sReG5M492WJuWlxxShsqUDOgTWMAiCMryRXyAUGqWXg==
-X-Received: by 2002:a05:6402:d08:b0:412:a33e:24fe with SMTP id eb8-20020a0564020d0800b00412a33e24femr4259966edb.281.1646514719106;
-        Sat, 05 Mar 2022 13:11:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw6EnzMhmk2unJ5RFjXOKVNXUa2owCkF9J5nLRQs3gFUUn+a8r+YO80rbTs6y2ECtGD+LHULg==
-X-Received: by 2002:a05:6402:d08:b0:412:a33e:24fe with SMTP id eb8-20020a0564020d0800b00412a33e24femr4259953edb.281.1646514718938;
-        Sat, 05 Mar 2022 13:11:58 -0800 (PST)
+        bh=c7nvDWFcwUU/UCEXDJQ70xZTwc42c5nskfhluppR+58=;
+        b=ifn0hRD/5N5ZYkUV0l9BsdwPLnENkOHHAY4x3wUBCdAweYGtWwQwX3KuxZMjHkU4lm
+         Z9SogEbsKwLpJG1ghfDLIIDZz02PGUHljKrhVcHmnURcop5FxTkBNddhtNax33XbJJLu
+         SiUFZ1ent+rqxpUpQeuqrxh0UXS2u2e1fdGYxVhQp7knoWwW/vUKbTRbq94nzLohbAaa
+         d53TsZ1Sl5hd4bNlwXuysL/P6a2ZfSjUMwUS/sE9SqbuAsMwWn3odlLrzpRbVeQt/0dw
+         As7UKf3ONtKE0IWZ35gk4xi9v55C9ox4xpicX/9JOIDwmJGUKq/a9Oin8FK/HWO0ha8L
+         j+vw==
+X-Gm-Message-State: AOAM530mxY5XTO9K0hK3oSAAoe7HNrWfL6zWk6mcQC7wAhrGMCUDW4CF
+        H9YTKaUxZpjdtqMxf+zgbKPVlGSD5OzA6vZ+oYP+0MlxUDD0GCt7vTEWiOmwSV9TLoQevhasjFF
+        dy7FqXU6ULB+e4voJitImBJP22sWfRmYfq/zHl0Vv+A==
+X-Received: by 2002:a17:906:2846:b0:6ce:21cd:5398 with SMTP id s6-20020a170906284600b006ce21cd5398mr3859161ejc.49.1646514765640;
+        Sat, 05 Mar 2022 13:12:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwQWtd1Rccv7Kbrfkpj21uOWYbCPVJQ8Isf4LoTsdDQe/XmKzNu3ITY1TALeARndSrDs8ssrg==
+X-Received: by 2002:a17:906:2846:b0:6ce:21cd:5398 with SMTP id s6-20020a170906284600b006ce21cd5398mr3859151ejc.49.1646514765494;
+        Sat, 05 Mar 2022 13:12:45 -0800 (PST)
 Received: from [192.168.0.139] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id b6-20020a50e386000000b00410d64cb3e4sm4055506edm.75.2022.03.05.13.11.58
+        by smtp.gmail.com with ESMTPSA id o2-20020a50d802000000b00410d7f0c52csm4018060edj.8.2022.03.05.13.12.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Mar 2022 13:11:58 -0800 (PST)
-Message-ID: <7266d4c0-8c5c-24e9-e573-f10ced0c1760@canonical.com>
-Date:   Sat, 5 Mar 2022 22:11:57 +0100
+        Sat, 05 Mar 2022 13:12:45 -0800 (PST)
+Message-ID: <ed2c1e67-4d45-5602-7adc-be0451c7ae1f@canonical.com>
+Date:   Sat, 5 Mar 2022 22:12:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 1/4] dt-bindings: mailbox: Add compatible for the MSM8976
+Subject: Re: [PATCH 3/4] dt-bindings: firmware: qcom-scm: Document msm8976
+ bindings
 Content-Language: en-US
 To:     Adam Skladowski <a39.skl@gmail.com>, phone-devel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
@@ -74,15 +75,15 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220305164906.16853-1-a39.skl@gmail.com>
- <20220305164906.16853-2-a39.skl@gmail.com>
+ <20220305164906.16853-4-a39.skl@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220305164906.16853-2-a39.skl@gmail.com>
+In-Reply-To: <20220305164906.16853-4-a39.skl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,32 +91,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 05/03/2022 17:49, Adam Skladowski wrote:
-> Add the mailbox compatible for the MSM8976 SoC.
-
-Missing empty line. With this fixed:
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-P.S. Please avoid some unusual formatting/bold in commit title (*** of
-cover letter). The subject should be informative and simple.
-
+> SCM driver on MSM8976 requires 3 clocks.
 > Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 > ---
->  .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml       | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/firmware/qcom,scm.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> index 01e9d9155c836..3b5ba7ecc19d9 100644
-> --- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-> @@ -21,6 +21,7 @@ properties:
->        - qcom,msm8916-apcs-kpss-global
->        - qcom,msm8939-apcs-kpss-global
->        - qcom,msm8953-apcs-kpss-global
-> +      - qcom,msm8976-apcs-kpss-global
->        - qcom,msm8994-apcs-kpss-global
->        - qcom,msm8996-apcs-hmss-global
->        - qcom,msm8998-apcs-hmss-global
+
+Same as in other patches - missing blank line before SoB.
+
+With that fixed:
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 
 Best regards,

@@ -2,69 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD714CE430
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 11:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECA24CE433
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 11:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiCEK32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 05:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S231418AbiCEKeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 05:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiCEK32 (ORCPT
+        with ESMTP id S229878AbiCEKeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 05:29:28 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C724EA29
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 02:28:38 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id w7so4601941lfd.6
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 02:28:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=B3GY5pHxl40fgyTRDEfHUIewqx+99afdPdvQA2cgGa0=;
-        b=ImmE5WMlVq+YKZQ+V7DtrC8cjT3FeeZ53XNVKQl6B5JqBJI4CPjwieVN/zMErwWrOd
-         NNw/Ey82kzlZ39SHRZP2OzMQcN5aemCIr2ACcHlBcxm27915JIUQywe9MM3lYzaRKAqM
-         VZSRsFBJfW9e9VPPZNmmSio0xoLEhsXxysbR2xpUwmrEyBZGZrq/Mf5eXyQ1VvuSK/iE
-         lk8bnIgNtTQ0ZZ8eG+fnafolzgcxxzD2dfkP4c5Mf4lkcpFEEHUFvrq0OrQxDiqdFzKC
-         YH/bVE6WFQCrsGR9e6pE9ARH/oLpVw+/VqiblIguHIAr2ACKv9g4hGIgBraPGLX9h0NC
-         E3eg==
+        Sat, 5 Mar 2022 05:34:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E51451D7933
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 02:33:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646476402;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WaB48QPXvxyorCNEAfGOqCQhNyQCx5tsNaq3iOR1gLs=;
+        b=ANo2qHAzTOKj60pnGNwYYpUJZp5H2rYji4CLRrm+TthhIA1CygqbM+h66Bs/J76sh+6yM8
+        GOWpor6NA0sEjoqe5MaNE2Flaydd8wdnlNsEVXKZq2EvuM9eTQU0bSaqbjY/zzgpF+oKD5
+        RvfuGtaZOSK1SEyrh4Q+pTM86ZytToE=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-365-je5YPtr_MoOzD8S4eK2L3g-1; Sat, 05 Mar 2022 05:33:20 -0500
+X-MC-Unique: je5YPtr_MoOzD8S4eK2L3g-1
+Received: by mail-pf1-f197.google.com with SMTP id y27-20020aa7943b000000b004f6decccdb5so255569pfo.1
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 02:33:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=B3GY5pHxl40fgyTRDEfHUIewqx+99afdPdvQA2cgGa0=;
-        b=CxwI/546UyEZfuASYnUwLgt1CV73lME+x5+VfaBSApe4XfR1AnMfmAQKTQeZXIJe8m
-         wCwIeo9NbvMWlm5vv3U0dOfMz0/DJDJ6qBUCOfSkRH9vN3nIJ6itzMTi5weWroqBXNSI
-         t6Yrxa3qDDBr2oEHAGX4tLnfepMms0YEuzMRPp0M/lq++1OBxwqiiIsxWOewdaNNTjwe
-         m7r16IP2xZyYAZ20bgw5tBf02I9kJqJ+C3CIdapFcasXswUgED7QjLy5iiycWjc4Opia
-         zdx3R06KWtXBbh9yOfPuxAnS6d8ae8AQwQhEPB1kdsTQj6CKyJYWJKMSA9sLsdkPNr3o
-         Cr9g==
-X-Gm-Message-State: AOAM530HhQ7koIygOeFzZtKBqYVl44bNgKyJ5HAl/vZHA122G2FCbiyt
-        vNZxombJhMWYSTBpa18hoAVLsES+yFsv+Yx5wiM=
-X-Google-Smtp-Source: ABdhPJx1wPczKrARywIlL+889LXeODVcVFlmFIY4RimQzhPKlhgMYi4zYGPBG+uymXtjUD2gO8ix3BsOJZOV/jcCnXM=
-X-Received: by 2002:a05:6512:3402:b0:448:c29:ce8a with SMTP id
- i2-20020a056512340200b004480c29ce8amr1948239lfr.633.1646476116683; Sat, 05
- Mar 2022 02:28:36 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WaB48QPXvxyorCNEAfGOqCQhNyQCx5tsNaq3iOR1gLs=;
+        b=XDQ5rrdpEQ9Rkw/H5PBPYrFKsohJJFd4Dn4nE8LaAZovQwSqv0hnjf+WLR5rAXiUOT
+         t9Eh+HBPwkzNVk7oOehGOUM7+c8+3x1KnjiqZzQ/1jJIEtfLghsIYSeDB+8SR69siEES
+         ynZ7Oqhjhl7aWFdMnRDDgrKzNhx0OZsmjNOlo3QJ3rjk5sRiJKFYeSQgvULq9R+8rvDD
+         yVIyYlGgnUlhxuGWDbhQ7HiKbYvjBeGSqCzvGHFdW6shN96E5sgGwH6+PrI16Do/q9hm
+         PDu3DBWI70fl81CUL5jgdL+qPUlEtk2ptxuwthUc9+0JUIce98GVZjcso+RkJCP1ZK12
+         FFow==
+X-Gm-Message-State: AOAM531UDzzVgku21IlQDACLM0rMN/2i15pinvvE86I+d++nkc5H1RZf
+        uazM3Hr60dtDuBmm29F2uYGYCEtUDXlMYoOgYSG/zuvG5h0QhuBNruN7MLb9f2Qcv9ExOsWJpeg
+        i/tXfDfNPubM48Kg8+y3Dj5WoqTl/CJ9NAB31NCOD
+X-Received: by 2002:a17:902:e051:b0:151:b485:3453 with SMTP id x17-20020a170902e05100b00151b4853453mr2939346plx.116.1646476399596;
+        Sat, 05 Mar 2022 02:33:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwvMDMUSIapPGQR4vWL/oj2loykrWmm3QH2dbQIs2qPbGiLM6oj2RR6sBZVongKZSYwpL44WrYmtyNHa5g2bns=
+X-Received: by 2002:a17:902:e051:b0:151:b485:3453 with SMTP id
+ x17-20020a170902e05100b00151b4853453mr2939309plx.116.1646476399238; Sat, 05
+ Mar 2022 02:33:19 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6512:e8a:0:0:0:0 with HTTP; Sat, 5 Mar 2022 02:28:36
- -0800 (PST)
-Reply-To: sgtkaylam28@gmail.com
-From:   sgtkayla manthey <sgtkaylam20@gmail.com>
-Date:   Sat, 5 Mar 2022 02:28:36 -0800
-Message-ID: <CA+RGHE-2YB+pR+K4Z-Ozoexgp0DnQ1gozfOaCC-E0x2De53Lkw@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+ <20220304172852.274126-13-benjamin.tissoires@redhat.com> <YiJdRQxYzfncfTR5@kroah.com>
+In-Reply-To: <YiJdRQxYzfncfTR5@kroah.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Sat, 5 Mar 2022 11:33:07 +0100
+Message-ID: <CAO-hwJJ3Yi+JLr40J8nXccjF8PrjiQw1w0Bskz8QHXdNVh1n+A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 12/28] bpf/hid: add hid_{get|set}_data helpers
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
-Please did you receive my previous message? Write me back
+On Fri, Mar 4, 2022 at 7:41 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Mar 04, 2022 at 06:28:36PM +0100, Benjamin Tissoires wrote:
+> > When we process an incoming HID report, it is common to have to account
+> > for fields that are not aligned in the report. HID is using 2 helpers
+> > hid_field_extract() and implement() to pick up any data at any offset
+> > within the report.
+> >
+> > Export those 2 helpers in BPF programs so users can also rely on them.
+> > The second net worth advantage of those helpers is that now we can
+> > fetch data anywhere in the report without knowing at compile time the
+> > location of it. The boundary checks are done in hid-bpf.c, to prevent
+> > a memory leak.
+> >
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> >
+> > ---
+> >
+> > changes in v2:
+> > - split the patch with libbpf and HID left outside.
+> > ---
+> >  include/linux/bpf-hid.h        |  4 +++
+> >  include/uapi/linux/bpf.h       | 32 ++++++++++++++++++++
+> >  kernel/bpf/hid.c               | 53 ++++++++++++++++++++++++++++++++++
+> >  tools/include/uapi/linux/bpf.h | 32 ++++++++++++++++++++
+> >  4 files changed, 121 insertions(+)
+> >
+> > diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
+> > index 0c5000b28b20..69bb28523ceb 100644
+> > --- a/include/linux/bpf-hid.h
+> > +++ b/include/linux/bpf-hid.h
+> > @@ -93,6 +93,10 @@ struct bpf_hid_hooks {
+> >       int (*link_attach)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+> >       void (*link_attached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+> >       void (*array_detached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+> > +     int (*hid_get_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
+> > +                         u64 offset, u32 n, u8 *data, u64 data_size);
+> > +     int (*hid_set_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
+> > +                         u64 offset, u32 n, u8 *data, u64 data_size);
+> >  };
+> >
+> >  #ifdef CONFIG_BPF
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index a7a8d9cfcf24..4845a20e6f96 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -5090,6 +5090,36 @@ union bpf_attr {
+> >   *   Return
+> >   *           0 on success, or a negative error in case of failure. On error
+> >   *           *dst* buffer is zeroed out.
+> > + *
+> > + * int bpf_hid_get_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
+> > + *   Description
+> > + *           Get the data of size n (in bits) at the given offset (bits) in the
+> > + *           ctx->event.data field and store it into data.
+> > + *
+> > + *           if n is less or equal than 32, we can address with bit precision,
+> > + *           the value in the buffer. However, data must be a pointer to a u32
+> > + *           and size must be 4.
+> > + *
+> > + *           if n is greater than 32, offset and n must be a multiple of 8
+> > + *           and the result is working with a memcpy internally.
+> > + *   Return
+> > + *           The length of data copied into data. On error, a negative value
+> > + *           is returned.
+> > + *
+> > + * int bpf_hid_set_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
+> > + *   Description
+> > + *           Set the data of size n (in bits) at the given offset (bits) in the
+> > + *           ctx->event.data field.
+> > + *
+> > + *           if n is less or equal than 32, we can address with bit precision,
+> > + *           the value in the buffer. However, data must be a pointer to a u32
+> > + *           and size must be 4.
+> > + *
+> > + *           if n is greater than 32, offset and n must be a multiple of 8
+> > + *           and the result is working with a memcpy internally.
+> > + *   Return
+> > + *           The length of data copied into ctx->event.data. On error, a negative
+> > + *           value is returned.
+>
+
+Quick answer on this one (before going deeper with the other remarks next week):
+
+> Wait, nevermind my reviewed-by previously, see my comment about how this
+> might be split into 4:
+>         bpf_hid_set_bytes()
+>         bpf_hid_get_bytes()
+>         bpf_hid_set_bits()
+>         bpf_hid_get_bits()
+>
+> Should be easier to understand and maintain over time, right?
+
+Yes, definitively. I thought about adding a `bytes` suffix to the
+function name for n > 32, but not the `bits` one, meaning the API was
+still bunkers in my head.
+
+And as I mentioned in the commit notes, I knew the API proposed in
+this patch was not correct, simply because while working on the
+selftests it was completely wrong :)
+
+In terms of API usage, does it feel wrong for you to have only a
+subset of the array available "for free" and enforce the rest to be
+used through these helpers?
+That's the point I am not sure but I feel like 1024 (or slightly more)
+would be enough for most use cases, and when we are dealing with
+bigger data sets the helpers can be justified.
+
+Thanks for the suggestion.
+
+Cheers,
+Benjamin
+
+>
+> thanks,
+>
+> greg k-h
+>
+

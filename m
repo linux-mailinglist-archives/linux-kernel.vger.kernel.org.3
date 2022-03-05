@@ -2,339 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D110A4CE2C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 06:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7899F4CE2CB
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 06:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbiCEFW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 00:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S231222AbiCEFYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 00:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiCEFWy (ORCPT
+        with ESMTP id S229495AbiCEFYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 00:22:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A16926F67F;
-        Fri,  4 Mar 2022 21:22:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA522609AE;
-        Sat,  5 Mar 2022 05:22:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF04C004E1;
-        Sat,  5 Mar 2022 05:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646457724;
-        bh=hLQYHNr9sUqGhRI1qa9bZt/dGdsE+ifbm7fp2GhQy9M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fNsCPp4QnuvPhrVONr7/il0tNTD8TjO4ZBOuSoMF+PyJwfTeA1iQ3IspH8i+XMqX/
-         xcVAG14V+GC1QH+1/Y7CYdjZynE6TFMNb1Q1shI6jjD6Ayu3zmG9ePVkmq5zcZVgPc
-         B1fkH7ES11nIxexmKMpTbXSRNX1kE8oxGMCX35mxABwZdpV21ZFVAT9oFABjN7oBE7
-         JE2yTU1//DDKh4EoFF5BzgteBTR9UIp087aMY5Ah24fKPLQ72SuZtYJ2cXfLuJ2rCF
-         ozCNdFQUdx5/Ug561P7hndJi4KsV8abLWPwcdtyXU18iGtbGdK3K5vHrkQW2IHaqwa
-         vyAj7Uv0GQ57w==
-Date:   Sat, 5 Mar 2022 07:21:17 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v9 1/1] tpm: fix reference counting for struct tpm_chip
-Message-ID: <YiLzTWfo5P1pyxtp@iki.fi>
-References: <20220302094353.3465-1-LinoSanfilippo@gmx.de>
- <20220302094353.3465-2-LinoSanfilippo@gmx.de>
- <YiFFCP3/KVl6uo3e@iki.fi>
- <8b594101-f676-ca9d-ebe5-337470a3de80@linux.ibm.com>
+        Sat, 5 Mar 2022 00:24:03 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2063.outbound.protection.outlook.com [40.107.92.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8C015DDC6;
+        Fri,  4 Mar 2022 21:23:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PR6l2Lt+D3QVz2t1mLYQ17y+uqhn0JnodrVFuX9m17uNeeLu9u392vujGRq7XXJD7y0W3loU0BdtjVoH0YNmkpJWbVzi3ROn0VXEpHOUHVq42a2frDRvM9SKqkLbfR7ZveHH/rkUaTM7On0JI3gBoeXPKy0M1tdx8LaI2RWmw4s+YiJzqoftYBl1GeAJOHtOx67xDfKkqUJUEVtRyf2jMl/UGsW/qhqi0Z19Xxa3BBjwoAcIBnmrgUKExs5ttZNL1LFvTaGK/Gw2Vdyenh1TPHBKGJEQNDFG6TUVltfBD4ltSg2T8yE0p5tEQrlHP/Dwh81DuGNZQy/bG9wwWc03Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h3RZfQfbzp56H7JxrSTQKwKzWHkNw8aoinzPf6a2z3k=;
+ b=CHnTLOokre5Z/gR4EueGyuNKyJbNJT4ok5woKOVwJCf+ZnEYhInd7dYHv6cTqc5rl1tAqz1+SkMF2CknEuGMOR10j/i0UmSXsMGfSeZ2ySsFsWgAtJlWrxg0kMyKslDIT7u8CZTRrJXpPwBWUuRVRYHZIAd038D2OUGFU2nRM4CBqR334vWJx+4uQh/nawazLIkjoAXzNG/tRvrF5Ri18RH7a/WfzT+IrUOfGTau0QvIZGUDZO+yDvvvlCewX+wSqVRU27i3SQvmbtCLcBdCEHBRu0bif5Ms0+KlTjcvYpXuqfn6Mel6oAzxX95/yxH8HTXJMwTJRJ24u2SgbcaKIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h3RZfQfbzp56H7JxrSTQKwKzWHkNw8aoinzPf6a2z3k=;
+ b=b0+RE/zk7N/prMHk7gjJU9PMyU8TeRegeqIOoFHZTMLMrz2T/K+4RnV+fScip//lnUQAb+Cwku3CnaAY3lCi0gol3HW/FIP1CwvthHd9Qv0kIBs4YNBCK13rgGWWdQ4Q3bSjv99sNKCP4i0ynAuvazi49jn4zyKduC8LXvZhIIM=
+Received: from SN1PR12CA0085.namprd12.prod.outlook.com (2603:10b6:802:21::20)
+ by DM5PR02MB2476.namprd02.prod.outlook.com (2603:10b6:3:3a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Sat, 5 Mar
+ 2022 05:23:11 +0000
+Received: from SN1NAM02FT0032.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:802:21:cafe::59) by SN1PR12CA0085.outlook.office365.com
+ (2603:10b6:802:21::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12 via Frontend
+ Transport; Sat, 5 Mar 2022 05:23:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0032.mail.protection.outlook.com (10.97.5.58) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5038.14 via Frontend Transport; Sat, 5 Mar 2022 05:23:11 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 4 Mar 2022 21:23:10 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 4 Mar 2022 21:23:10 -0800
+Envelope-to: dwmw2@infradead.org,
+ yilun.xu@intel.com,
+ mdf@kernel.org,
+ robh@kernel.org,
+ trix@redhat.com,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-pci@vger.kernel.org
+Received: from [172.19.72.93] (port=44426 helo=xsj-xw9400.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <lizhi.hou@xilinx.com>)
+        id 1nQMso-0002XZ-1x; Fri, 04 Mar 2022 21:23:10 -0800
+Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
+        id D8C4E600155; Fri,  4 Mar 2022 21:23:09 -0800 (PST)
+From:   Lizhi Hou <lizhi.hou@xilinx.com>
+To:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <robh@kernel.org>
+CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <yilun.xu@intel.com>,
+        <maxz@xilinx.com>, <sonal.santan@xilinx.com>, <yliu@xilinx.com>,
+        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
+        <trix@redhat.com>, <mdf@kernel.org>, <dwmw2@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH V1 RESEND 0/4] Infrastructure to define apertures in a PCIe device with a flattened device tree
+Date:   Fri, 4 Mar 2022 21:23:00 -0800
+Message-ID: <20220305052304.726050-1-lizhi.hou@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b594101-f676-ca9d-ebe5-337470a3de80@linux.ibm.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e33ae53d-6781-4846-bbcb-08d9fe683d90
+X-MS-TrafficTypeDiagnostic: DM5PR02MB2476:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR02MB24762C29557893BAF70E15DEA1069@DM5PR02MB2476.namprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 165WegotESVhGnc00/tfCOEucUFVRKiw8R7dg0c2NqjRGrYu6G99Y+5/zbIqB3sBwUhZOFVyMbSBZzoCJZXAkgiCu1WyuUkfdFYkvWdYo92w3LQg8YRxly7tMddoOoA4IhPAbVKsQcjk+gsUlFFX2Xia44nqn+hX55oFtMwlR6HShDYno6x1mUxyA9dD3POWziGhaF+GoXKS+q9w8v1IntnT02T0x6chOHfiuFj2eX/pJBbzZktImJb4c38ykh8IeFr9R1hegr2/c4QkajC8v4nx7iHBwHMzNuJ8R4jFbtJjw6reeQDi2P6EvrNLVOhcWRGnjCew+Qy47CYFug4H8gtNP1zypO9RzDLr2kAhJIIdjmN280qXMVuR1293UilEXwG60f5O+jiAVsW7mAOc+yU61ktz9FWYGyimXqEYTeXxcpycpeKLrMFiTBqUTnD0HVhQpzCGYJCe87VA3+kZMprPWetJkRJbb2sS3xOHvMCNPZ1RYvwBlyAZIIDlESMzU578K8Ii/os5cX+sTsDbXToufjzNhRrJNsrm4QcTCAvHo5dNz9MS3oStOchZ4TbDg4y45IZw29x2/isuaYCldg5SBl0jLqfoc4xlZcqly2qAGSErbGT7oFveqv+Bt7PyGI5WvTh3rv4FEdS7//GmV4bLATZi0s1Jo3LvKJ1osw1k+p1wiXteG3yalYLn8bQPW3EOc6yLRNwzWj8EbT7dil59Ro5bawjXoxnhxsR7PEo=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(7636003)(42186006)(8936002)(316002)(82310400004)(110136005)(356005)(54906003)(5660300002)(6266002)(186003)(26005)(426003)(336012)(83380400001)(6666004)(70586007)(1076003)(36756003)(36860700001)(44832011)(966005)(2616005)(4326008)(70206006)(8676002)(508600001)(2906002)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2022 05:23:11.1803
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e33ae53d-6781-4846-bbcb-08d9fe683d90
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0032.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2476
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 01:34:06PM -0500, Stefan Berger wrote:
-> 
-> On 3/3/22 17:45, Jarkko Sakkinen wrote:
-> > On Wed, Mar 02, 2022 at 10:43:53AM +0100, Lino Sanfilippo wrote:
-> > > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > > 
-> > > The following sequence of operations results in a refcount warning:
-> > > 
-> > > 1. Open device /dev/tpmrm.
-> > > 2. Remove module tpm_tis_spi.
-> > > 3. Write a TPM command to the file descriptor opened at step 1.
-> > > 
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
-> > > refcount_t: addition on 0; use-after-free.
-> > > Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfmac
-> > > sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 vc4
-> > > brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
-> > > raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
-> > > snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
-> > > CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
-> > > Hardware name: BCM2711
-> > > [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14)
-> > > [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
-> > > [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
-> > > [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
-> > > [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0xa4)
-> > > [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54 [tpm])
-> > > [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_write+0x38/0x60 [tpm])
-> > > [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4/0x3c0)
-> > > [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
-> > > [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
-> > > Exception stack(0xc226bfa8 to 0xc226bff0)
-> > > bfa0:                   00000000 000105b4 00000003 beafe664 00000014 00000000
-> > > bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 beafe684
-> > > bfe0: 0000006c beafe648 0001056c b6eb6944
-> > > ---[ end trace d4b8409def9b8b1f ]---
-> > > 
-> > > The reason for this warning is the attempt to get the chip->dev reference
-> > > in tpm_common_write() although the reference counter is already zero.
-> > > 
-> > > Since commit 8979b02aaf1d ("tpm: Fix reference count to main device") the
-> > > extra reference used to prevent a premature zero counter is never taken,
-> > > because the required TPM_CHIP_FLAG_TPM2 flag is never set.
-> > > 
-> > > Fix this by moving the TPM 2 character device handling from
-> > > tpm_chip_alloc() to tpm_add_char_device() which is called at a later point
-> > > in time when the flag has been set in case of TPM2.
-> > > 
-> > > Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
-> > > already introduced function tpm_devs_release() to release the extra
-> > > reference but did not implement the required put on chip->devs that results
-> > > in the call of this function.
-> > > 
-> > > Fix this by putting chip->devs in tpm_chip_unregister().
-> > > 
-> > > Finally move the new implementation for the TPM 2 handling into a new
-> > > function to avoid multiple checks for the TPM_CHIP_FLAG_TPM2 flag in the
-> > > good case and error cases.
-> > > 
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
-> > > Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
-> > > Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
-> > > Tested-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > Signed-off-by: Jason Gunthorpe <jgg@ziepe.ca>
-> > > Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-> > > ---
-> > >   drivers/char/tpm/tpm-chip.c   | 46 +++++--------------------
-> > >   drivers/char/tpm/tpm.h        |  2 ++
-> > >   drivers/char/tpm/tpm2-space.c | 65 +++++++++++++++++++++++++++++++++++
-> > >   3 files changed, 75 insertions(+), 38 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> > > index b009e7479b70..783d65fc71f0 100644
-> > > --- a/drivers/char/tpm/tpm-chip.c
-> > > +++ b/drivers/char/tpm/tpm-chip.c
-> > > @@ -274,14 +274,6 @@ static void tpm_dev_release(struct device *dev)
-> > >   	kfree(chip);
-> > >   }
-> > > -static void tpm_devs_release(struct device *dev)
-> > > -{
-> > > -	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
-> > > -
-> > > -	/* release the master device reference */
-> > > -	put_device(&chip->dev);
-> > > -}
-> > > -
-> > >   /**
-> > >    * tpm_class_shutdown() - prepare the TPM device for loss of power.
-> > >    * @dev: device to which the chip is associated.
-> > > @@ -344,7 +336,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
-> > >   	chip->dev_num = rc;
-> > >   	device_initialize(&chip->dev);
-> > > -	device_initialize(&chip->devs);
-> > >   	chip->dev.class = tpm_class;
-> > >   	chip->dev.class->shutdown_pre = tpm_class_shutdown;
-> > > @@ -352,29 +343,12 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
-> > >   	chip->dev.parent = pdev;
-> > >   	chip->dev.groups = chip->groups;
-> > > -	chip->devs.parent = pdev;
-> > > -	chip->devs.class = tpmrm_class;
-> > > -	chip->devs.release = tpm_devs_release;
-> > > -	/* get extra reference on main device to hold on
-> > > -	 * behalf of devs.  This holds the chip structure
-> > > -	 * while cdevs is in use.  The corresponding put
-> > > -	 * is in the tpm_devs_release (TPM2 only)
-> > > -	 */
-> > > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > > -		get_device(&chip->dev);
-> > > -
-> > >   	if (chip->dev_num == 0)
-> > >   		chip->dev.devt = MKDEV(MISC_MAJOR, TPM_MINOR);
-> > >   	else
-> > >   		chip->dev.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num);
-> > > -	chip->devs.devt =
-> > > -		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> > > -
-> > >   	rc = dev_set_name(&chip->dev, "tpm%d", chip->dev_num);
-> > > -	if (rc)
-> > > -		goto out;
-> > > -	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
-> > >   	if (rc)
-> > >   		goto out;
-> > > @@ -382,9 +356,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
-> > >   		chip->flags |= TPM_CHIP_FLAG_VIRTUAL;
-> > >   	cdev_init(&chip->cdev, &tpm_fops);
-> > > -	cdev_init(&chip->cdevs, &tpmrm_fops);
-> > >   	chip->cdev.owner = THIS_MODULE;
-> > > -	chip->cdevs.owner = THIS_MODULE;
-> > >   	rc = tpm2_init_space(&chip->work_space, TPM2_SPACE_BUFFER_SIZE);
-> > >   	if (rc) {
-> > > @@ -396,7 +368,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
-> > >   	return chip;
-> > >   out:
-> > > -	put_device(&chip->devs);
-> > >   	put_device(&chip->dev);
-> > >   	return ERR_PTR(rc);
-> > >   }
-> > > @@ -445,14 +416,9 @@ static int tpm_add_char_device(struct tpm_chip *chip)
-> > >   	}
-> > >   	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip)) {
-> > > -		rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> > > -		if (rc) {
-> > > -			dev_err(&chip->devs,
-> > > -				"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
-> > > -				dev_name(&chip->devs), MAJOR(chip->devs.devt),
-> > > -				MINOR(chip->devs.devt), rc);
-> > > -			return rc;
-> > > -		}
-> > > +		rc = tpm_devs_add(chip);
-> > > +		if (rc)
-> > > +			goto err_del_cdev;
-> > >   	}
-> > >   	/* Make the chip available. */
-> > > @@ -460,6 +426,10 @@ static int tpm_add_char_device(struct tpm_chip *chip)
-> > >   	idr_replace(&dev_nums_idr, chip, chip->dev_num);
-> > >   	mutex_unlock(&idr_lock);
-> > > +	return 0;
-> > > +
-> > > +err_del_cdev:
-> > > +	cdev_device_del(&chip->cdev, &chip->dev);
-> > >   	return rc;
-> > >   }
-> > > @@ -654,7 +624,7 @@ void tpm_chip_unregister(struct tpm_chip *chip)
-> > >   		hwrng_unregister(&chip->hwrng);
-> > >   	tpm_bios_log_teardown(chip);
-> > >   	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip))
-> > > -		cdev_device_del(&chip->cdevs, &chip->devs);
-> > > +		tpm_devs_remove(chip);
-> > >   	tpm_del_char_device(chip);
-> > >   }
-> > >   EXPORT_SYMBOL_GPL(tpm_chip_unregister);
-> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > > index 283f78211c3a..2163c6ee0d36 100644
-> > > --- a/drivers/char/tpm/tpm.h
-> > > +++ b/drivers/char/tpm/tpm.h
-> > > @@ -234,6 +234,8 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
-> > >   		       size_t cmdsiz);
-> > >   int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
-> > >   		      size_t *bufsiz);
-> > > +int tpm_devs_add(struct tpm_chip *chip);
-> > > +void tpm_devs_remove(struct tpm_chip *chip);
-> > >   void tpm_bios_log_setup(struct tpm_chip *chip);
-> > >   void tpm_bios_log_teardown(struct tpm_chip *chip);
-> > > diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-> > > index 97e916856cf3..265ec72b1d81 100644
-> > > --- a/drivers/char/tpm/tpm2-space.c
-> > > +++ b/drivers/char/tpm/tpm2-space.c
-> > > @@ -574,3 +574,68 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
-> > >   	dev_err(&chip->dev, "%s: error %d\n", __func__, rc);
-> > >   	return rc;
-> > >   }
-> > > +
-> > > +/*
-> > > + * Put the reference to the main device.
-> > > + */
-> > > +static void tpm_devs_release(struct device *dev)
-> > > +{
-> > > +	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
-> > > +
-> > > +	/* release the master device reference */
-> > > +	put_device(&chip->dev);
-> > > +}
-> > > +
-> > > +/*
-> > > + * Remove the device file for exposed TPM spaces and release the device
-> > > + * reference. This may also release the reference to the master device.
-> > > + */
-> > > +void tpm_devs_remove(struct tpm_chip *chip)
-> > > +{
-> > > +	cdev_device_del(&chip->cdevs, &chip->devs);
-> > > +	put_device(&chip->devs);
-> > > +}
-> > > +
-> > > +/*
-> > > + * Add a device file to expose TPM spaces. Also take a reference to the
-> > > + * main device.
-> > > + */
-> > > +int tpm_devs_add(struct tpm_chip *chip)
-> > > +{
-> > > +	int rc;
-> > > +
-> > > +	device_initialize(&chip->devs);
-> > > +	chip->devs.parent = chip->dev.parent;
-> > > +	chip->devs.class = tpmrm_class;
-> > > +
-> > > +	/*
-> > > +	 * Get extra reference on main device to hold on behalf of devs.
-> > > +	 * This holds the chip structure while cdevs is in use. The
-> > > +	 * corresponding put is in the tpm_devs_release.
-> > > +	 */
-> > > +	get_device(&chip->dev);
-> > > +	chip->devs.release = tpm_devs_release;
-> > > +	chip->devs.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> > > +	cdev_init(&chip->cdevs, &tpmrm_fops);
-> > > +	chip->cdevs.owner = THIS_MODULE;
-> > > +
-> > > +	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
-> > > +	if (rc)
-> > > +		goto err_put_devs;
-> > > +
-> > > +	rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> > > +	if (rc) {
-> > > +		dev_err(&chip->devs,
-> > > +			"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
-> > > +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
-> > > +			MINOR(chip->devs.devt), rc);
-> > > +		goto err_put_devs;
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +
-> > > +err_put_devs:
-> > > +	put_device(&chip->devs);
-> > > +
-> > > +	return rc;
-> > > +}
-> > > -- 
-> > > 2.35.1
-> > > 
-> > LGTM, thank you.
-> > 
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> > Stefan, if possible, for sanity check, redo test with v9.
-> 
-> We need that other patch as well!
+Hello,
 
-Yes.
+This V1 of patch series is to provide the required pci OF interfaces for
+the PCIe device which uses flattened device tree to describe apertures in
+its PCIe BARs. e.g, Xilinx Alveo PCIe accelerator. This requires a base
+device tree which contains nodes for PCIe devices. A PCIe device driver
+can then overlay a flattened device tree on the PCIe device tree node.
+There are two separate parts for this to work. First, not all system has
+a base device tree created by default. Thus, a patch to create an empty
+device tree root node has been submitted.
+  https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
+Second, PCIe is self discoverable bus and there might not be a device tree
+node created for PCIe device. This patch provides a new interface to create
+a ‘pci-ep-bus’ node under the base device tree root node. PCIe device
+driver may call this interface in its probe routine to create device tree
+node, then overlays its device tree to the node.
+For the overlayed device tree nodes, each node presents a hardware aperture
+implemented in its PCIe BARs. The aperture register address consists of BAR
+index and offset. It uses the following encoding:
+  0xIooooooo 0xoooooooo
+Where:
+  I = BAR index
+  ooooooo oooooooo = BAR offset
+The ‘pci-ep-bus’ node been created is compatible with ‘simple-bus’ and
+contains ‘ranges’ property for translating aperture address to CPU address.
+The last patch enhances of_overlay_fdt_apply(). The ‘pci-ep-bus’ device
+node is created dynamically. The flattened device tree may not specify an
+fixed target overlay path in front. Instead, a relative path to the
+‘pci-ep-bus’ node is specified in the flattened tree. Thus, a new
+parameter is added to point the target base node which is ‘pci-ep-bus’
+node in this case. Then the entire overlay target path is target base node
+path plus the relative path specified in the flattened device tree.
 
-> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+Lizhi Hou (4):
+  pci: add interface to create pci-ep device tree node
+  Documentation: devicetree: bindings: add binding for PCIe endpoint bus
+  fpga: xrt: management physical function driver
+  of: enhance overlay applying interface to specific target base node
 
-Thank you.
+ .../devicetree/bindings/bus/pci-ep-bus.yaml   |  72 +++++++
+ drivers/fpga/Kconfig                          |   3 +
+ drivers/fpga/Makefile                         |   3 +
+ drivers/fpga/xrt/Kconfig                      |  24 +++
+ drivers/fpga/xrt/Makefile                     |   8 +
+ drivers/fpga/xrt/mgmt/Makefile                |  13 ++
+ drivers/fpga/xrt/mgmt/dt-test.dts             |  15 ++
+ drivers/fpga/xrt/mgmt/dt-test.h               |  15 ++
+ drivers/fpga/xrt/mgmt/xmgmt-drv.c             | 102 ++++++++++
+ drivers/gpu/drm/rcar-du/rcar_du_of.c          |   2 +-
+ drivers/of/overlay.c                          |  37 ++--
+ drivers/of/unittest.c                         |   2 +-
+ drivers/pci/of.c                              | 180 ++++++++++++++++++
+ include/linux/of.h                            |   2 +-
+ include/linux/of_pci.h                        |  15 ++
+ 15 files changed, 479 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+ create mode 100644 drivers/fpga/xrt/Kconfig
+ create mode 100644 drivers/fpga/xrt/Makefile
+ create mode 100644 drivers/fpga/xrt/mgmt/Makefile
+ create mode 100644 drivers/fpga/xrt/mgmt/dt-test.dts
+ create mode 100644 drivers/fpga/xrt/mgmt/dt-test.h
+ create mode 100644 drivers/fpga/xrt/mgmt/xmgmt-drv.c
 
-BR, Jarkko
+-- 
+2.27.0
+

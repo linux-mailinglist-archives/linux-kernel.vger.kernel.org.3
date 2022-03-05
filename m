@@ -2,119 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A285E4CE35A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3524CE35D
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbiCEHKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 02:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        id S231401AbiCEHMc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 5 Mar 2022 02:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiCEHKF (ORCPT
+        with ESMTP id S229479AbiCEHMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 02:10:05 -0500
-Received: from smtp.tom.com (smtprz15.163.net [106.3.154.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C818D220FD2
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 23:09:15 -0800 (PST)
-Received: from my-app02.tom.com (my-app02.tom.com [127.0.0.1])
-        by freemail02.tom.com (Postfix) with ESMTP id B075DB00CC2
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 15:09:13 +0800 (CST)
-Received: from my-app02.tom.com (HELO smtp.tom.com) ([127.0.0.1])
-          by my-app02 (TOM SMTP Server) with SMTP ID 653284539
-          for <linux-kernel@vger.kernel.org>;
-          Sat, 05 Mar 2022 15:09:13 +0800 (CST)
-Received: from antispam1.tom.com (unknown [172.25.16.55])
-        by freemail02.tom.com (Postfix) with ESMTP id 9FF4DB00D30
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 15:09:13 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=201807;
-        t=1646464153; bh=eNSZNCIQvJX3BIsPSVxmvt3kCFvgkMDpfMtpQFtvFKk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MSuUsI3uWf0AtRseaOViOhhCSlQvi0Aopj+QQKGFcdh+zcl+30hSDQ5/3f1+ONiuq
-         dP3dNZBPMnvx8GsERgLrjZIS+fPuqyQwog/2soieSChu7O3BOxXP3HLlfs7D7D45Mk
-         XbCRl8Emnbw27rJRP3C80h3xXJeIrn2lrkuSliX0=
-Received: from antispam1.tom.com (antispam1.tom.com [127.0.0.1])
-        by antispam1.tom.com (Postfix) with ESMTP id A83C9D4159C
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 15:09:11 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at antispam1.tom.com
-Received: from antispam1.tom.com ([127.0.0.1])
-        by antispam1.tom.com (antispam1.tom.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9K1Mese6hSzr for <linux-kernel@vger.kernel.org>;
-        Sat,  5 Mar 2022 15:09:08 +0800 (CST)
-Received: from localhost (unknown [101.93.196.13])
-        by antispam1.tom.com (Postfix) with ESMTPA id 0F053D41550;
-        Sat,  5 Mar 2022 15:09:06 +0800 (CST)
-Date:   Sat, 5 Mar 2022 15:09:15 +0800
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
-        libin.zhang@dell.com, ao.sun@dell.com
-Subject: Re: [PATCH 2/2] nvme-tcp: support specifying the congestion-control
-Message-ID: <20220305150915.00006b44@tom.com>
-In-Reply-To: <20220304162032.GA12250@lst.de>
-References: <20220304092754.2721-1-sunmingbao@tom.com>
-        <20220304092754.2721-3-sunmingbao@tom.com>
-        <20220304162032.GA12250@lst.de>
-Organization: DELL
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+        Sat, 5 Mar 2022 02:12:30 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71536224749;
+        Fri,  4 Mar 2022 23:11:40 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K9bQn0KV3z9sH3;
+        Sat,  5 Mar 2022 15:08:01 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 5 Mar 2022 15:11:37 +0800
+Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
+ dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2308.021;
+ Sat, 5 Mar 2022 15:11:37 +0800
+From:   "Gonglei (Arei)" <arei.gonglei@huawei.com>
+To:     zhenwei pi <pizhenwei@bytedance.com>,
+        "mst@redhat.com" <mst@redhat.com>
+CC:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>
+Subject: RE: [PATCH v3 2/4] virtio-crypto: introduce akcipher service
+Thread-Topic: [PATCH v3 2/4] virtio-crypto: introduce akcipher service
+Thread-Index: AQHYLeeMUc1GsWuz90i/NBDHup0cZaywZIOw
+Date:   Sat, 5 Mar 2022 07:11:37 +0000
+Message-ID: <fb80509cfc6e4658bdda886ca3405101@huawei.com>
+References: <20220302033917.1295334-1-pizhenwei@bytedance.com>
+ <20220302033917.1295334-3-pizhenwei@bytedance.com>
+In-Reply-To: <20220302033917.1295334-3-pizhenwei@bytedance.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.149.11]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 17:20:32 +0100
-Christoph Hellwig <hch@lst.de> wrote:
 
-> I'll let the NVMe/TCP maintainer comment on the actual functionality,
-> but:
+
+> -----Original Message-----
+> From: zhenwei pi [mailto:pizhenwei@bytedance.com]
+> Sent: Wednesday, March 2, 2022 11:39 AM
+> To: Gonglei (Arei) <arei.gonglei@huawei.com>; mst@redhat.com
+> Cc: jasowang@redhat.com; virtualization@lists.linux-foundation.org;
+> linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org;
+> herbert@gondor.apana.org.au; helei.sig11@bytedance.com; zhenwei pi
+> <pizhenwei@bytedance.com>
+> Subject: [PATCH v3 2/4] virtio-crypto: introduce akcipher service
 > 
-> > +			p = match_strdup(args);
-> > +			if (!p) {
-> > +				ret = -ENOMEM;
-> > +				goto out;
-> > +			}
-> > +
-> > +			key = tcp_ca_get_key_by_name(NULL, p,
-> > &ecn_ca);
-> > +			if (key == TCP_CA_UNSPEC) {
-> > +				pr_err("congestion control %s not
-> > found.\n",
-> > +				       p);
-> > +				ret = -EINVAL;
-> > +				kfree(p);
-> > +				goto out;
-> > +			}  
+> Introduce asymmetric service definition, asymmetric operations and several
+> well known algorithms.
 > 
-> We can't just call networking code from nvme-fabrics.ko
+> Co-developed-by: lei he <helei.sig11@bytedance.com>
+> Signed-off-by: lei he <helei.sig11@bytedance.com>
+> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+> ---
+>  include/uapi/linux/virtio_crypto.h | 81 +++++++++++++++++++++++++++++-
+>  1 file changed, 80 insertions(+), 1 deletion(-)
+> 
 
-Well, actually I did have thought whether the calling of network API
-here is proper. Since I did find that there is no call to APIs of
-PCI/RDMA/TCP in fabrics.c.
+Reviewed-by: Gonglei <arei.gonglei@huawei.com>
 
-But I hope the following could make a defense for it:
+Regards,
+-Gonglei
 
-Anyway, we need to validate the tcp_congestion passed in from
-user-space, right?
-And it's reasonable to validate it via network API, right?
+> diff --git a/include/uapi/linux/virtio_crypto.h
+> b/include/uapi/linux/virtio_crypto.h
+> index 1166a49084b0..71a54a6849ca 100644
+> --- a/include/uapi/linux/virtio_crypto.h
+> +++ b/include/uapi/linux/virtio_crypto.h
+> @@ -37,6 +37,7 @@
+>  #define VIRTIO_CRYPTO_SERVICE_HASH   1
+>  #define VIRTIO_CRYPTO_SERVICE_MAC    2
+>  #define VIRTIO_CRYPTO_SERVICE_AEAD   3
+> +#define VIRTIO_CRYPTO_SERVICE_AKCIPHER 4
+> 
+>  #define VIRTIO_CRYPTO_OPCODE(service, op)   (((service) << 8) | (op))
+> 
+> @@ -57,6 +58,10 @@ struct virtio_crypto_ctrl_header {
+>  	   VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AEAD, 0x02)
+> #define VIRTIO_CRYPTO_AEAD_DESTROY_SESSION \
+>  	   VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AEAD, 0x03)
+> +#define VIRTIO_CRYPTO_AKCIPHER_CREATE_SESSION \
+> +	   VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AKCIPHER, 0x04)
+> #define
+> +VIRTIO_CRYPTO_AKCIPHER_DESTROY_SESSION \
+> +	   VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AKCIPHER,
+> 0x05)
+>  	__le32 opcode;
+>  	__le32 algo;
+>  	__le32 flag;
+> @@ -180,6 +185,58 @@ struct virtio_crypto_aead_create_session_req {
+>  	__u8 padding[32];
+>  };
+> 
+> +struct virtio_crypto_rsa_session_para {
+> +#define VIRTIO_CRYPTO_RSA_RAW_PADDING   0
+> +#define VIRTIO_CRYPTO_RSA_PKCS1_PADDING 1
+> +	__le32 padding_algo;
+> +
+> +#define VIRTIO_CRYPTO_RSA_NO_HASH   0
+> +#define VIRTIO_CRYPTO_RSA_MD2       1
+> +#define VIRTIO_CRYPTO_RSA_MD3       2
+> +#define VIRTIO_CRYPTO_RSA_MD4       3
+> +#define VIRTIO_CRYPTO_RSA_MD5       4
+> +#define VIRTIO_CRYPTO_RSA_SHA1      5
+> +#define VIRTIO_CRYPTO_RSA_SHA256    6
+> +#define VIRTIO_CRYPTO_RSA_SHA384    7
+> +#define VIRTIO_CRYPTO_RSA_SHA512    8
+> +#define VIRTIO_CRYPTO_RSA_SHA224    9
+> +	__le32 hash_algo;
+> +};
+> +
+> +struct virtio_crypto_ecdsa_session_para {
+> +#define VIRTIO_CRYPTO_CURVE_UNKNOWN   0
+> +#define VIRTIO_CRYPTO_CURVE_NIST_P192 1 #define
+> +VIRTIO_CRYPTO_CURVE_NIST_P224 2 #define
+> VIRTIO_CRYPTO_CURVE_NIST_P256 3
+> +#define VIRTIO_CRYPTO_CURVE_NIST_P384 4 #define
+> +VIRTIO_CRYPTO_CURVE_NIST_P521 5
+> +	__le32 curve_id;
+> +	__le32 padding;
+> +};
+> +
+> +struct virtio_crypto_akcipher_session_para {
+> +#define VIRTIO_CRYPTO_NO_AKCIPHER    0
+> +#define VIRTIO_CRYPTO_AKCIPHER_RSA   1
+> +#define VIRTIO_CRYPTO_AKCIPHER_DSA   2
+> +#define VIRTIO_CRYPTO_AKCIPHER_ECDSA 3
+> +	__le32 algo;
+> +
+> +#define VIRTIO_CRYPTO_AKCIPHER_KEY_TYPE_PUBLIC  1 #define
+> +VIRTIO_CRYPTO_AKCIPHER_KEY_TYPE_PRIVATE 2
+> +	__le32 keytype;
+> +	__le32 keylen;
+> +
+> +	union {
+> +		struct virtio_crypto_rsa_session_para rsa;
+> +		struct virtio_crypto_ecdsa_session_para ecdsa;
+> +	} u;
+> +};
+> +
+> +struct virtio_crypto_akcipher_create_session_req {
+> +	struct virtio_crypto_akcipher_session_para para;
+> +	__u8 padding[36];
+> +};
+> +
+>  struct virtio_crypto_alg_chain_session_para {  #define
+> VIRTIO_CRYPTO_SYM_ALG_CHAIN_ORDER_HASH_THEN_CIPHER  1
+> #define VIRTIO_CRYPTO_SYM_ALG_CHAIN_ORDER_CIPHER_THEN_HASH  2
+> @@ -247,6 +304,8 @@ struct virtio_crypto_op_ctrl_req {
+>  			mac_create_session;
+>  		struct virtio_crypto_aead_create_session_req
+>  			aead_create_session;
+> +		struct virtio_crypto_akcipher_create_session_req
+> +			akcipher_create_session;
+>  		struct virtio_crypto_destroy_session_req
+>  			destroy_session;
+>  		__u8 padding[56];
+> @@ -266,6 +325,14 @@ struct virtio_crypto_op_header {
+>  	VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AEAD, 0x00)
+> #define VIRTIO_CRYPTO_AEAD_DECRYPT \
+>  	VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AEAD, 0x01)
+> +#define VIRTIO_CRYPTO_AKCIPHER_ENCRYPT \
+> +	VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AKCIPHER, 0x00)
+> #define
+> +VIRTIO_CRYPTO_AKCIPHER_DECRYPT \
+> +	VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AKCIPHER, 0x01)
+> #define
+> +VIRTIO_CRYPTO_AKCIPHER_SIGN \
+> +	VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AKCIPHER, 0x02)
+> #define
+> +VIRTIO_CRYPTO_AKCIPHER_VERIFY \
+> +	VIRTIO_CRYPTO_OPCODE(VIRTIO_CRYPTO_SERVICE_AKCIPHER, 0x03)
+>  	__le32 opcode;
+>  	/* algo should be service-specific algorithms */
+>  	__le32 algo;
+> @@ -390,6 +457,16 @@ struct virtio_crypto_aead_data_req {
+>  	__u8 padding[32];
+>  };
+> 
+> +struct virtio_crypto_akcipher_para {
+> +	__le32 src_data_len;
+> +	__le32 dst_data_len;
+> +};
+> +
+> +struct virtio_crypto_akcipher_data_req {
+> +	struct virtio_crypto_akcipher_para para;
+> +	__u8 padding[40];
+> +};
+> +
+>  /* The request of the data virtqueue's packet */  struct
+> virtio_crypto_op_data_req {
+>  	struct virtio_crypto_op_header header; @@ -399,6 +476,7 @@ struct
+> virtio_crypto_op_data_req {
+>  		struct virtio_crypto_hash_data_req hash_req;
+>  		struct virtio_crypto_mac_data_req mac_req;
+>  		struct virtio_crypto_aead_data_req aead_req;
+> +		struct virtio_crypto_akcipher_data_req akcipher_req;
+>  		__u8 padding[48];
+>  	} u;
+>  };
+> @@ -409,6 +487,7 @@ struct virtio_crypto_op_data_req {
+>  #define VIRTIO_CRYPTO_NOTSUPP   3
+>  #define VIRTIO_CRYPTO_INVSESS   4 /* Invalid session id */
+>  #define VIRTIO_CRYPTO_NOSPC     5 /* no free session ID */
+> +#define VIRTIO_CRYPTO_KEY_REJECTED 6 /* Signature verification failed
+> +*/
+> 
+>  /* The accelerator hardware is ready */  #define
+> VIRTIO_CRYPTO_S_HW_READY  (1 << 0) @@ -439,7 +518,7 @@ struct
+> virtio_crypto_config {
+>  	__le32 max_cipher_key_len;
+>  	/* Maximum length of authenticated key */
+>  	__le32 max_auth_key_len;
+> -	__le32 reserve;
+> +	__le32 akcipher_algo;
+>  	/* Maximum size of each crypto request's content */
+>  	__le64 max_size;
+>  };
+> --
+> 2.20.1
 
-The role of nvmf_parse_options is similar to that of
-drivers/nvme/target/configfs.c from the target side.
-And both of them can not avoid handling specific options of the
-sub-classes (e.g., NVMF_OPT_HDR_DIGEST, NVMF_OPT_TOS, NVMF_OPT_KATO).
-
-Given the fact that the configfs.c already contains some RDMA-specific
-code and has the calls to PCI-specific APIs pci_p2pdma_enable_store and
-pci_p2pdma_enable_show, so I added the calling of network APIs in
-configfs.c for the validation of tcp_congestion specified by the user.
-
-So I feel this is also acceptable for nvme-fabrics.ko.

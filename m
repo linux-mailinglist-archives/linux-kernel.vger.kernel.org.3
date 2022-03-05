@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69F34CE4B2
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 13:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6DD4CE4C8
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 13:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbiCEMLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 07:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S231706AbiCEMcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 07:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiCEMLB (ORCPT
+        with ESMTP id S231688AbiCEMcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 07:11:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1395440E51;
-        Sat,  5 Mar 2022 04:10:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B787DB80BE7;
-        Sat,  5 Mar 2022 12:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 80BF2C340F1;
-        Sat,  5 Mar 2022 12:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646482209;
-        bh=POlbJ+3a+0ccS7uKBAWFPqA5GXG9dgf0YBx1qQKxGzM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DZY+59sp7fffH6fhjfe6Sx8Ae95LTXMiWduV+06/ey2DcQAu5N0o4oLPMiPrsd8w5
-         7X6DwClq5TkO7nzdfLH8twDsvwxlNO2Z4Sg1ZcS6R23CkP/2bOP70gfJoDF3owOvjX
-         6+JqzEw0F/pa3SykM4YudRV8ecFdb0NVdurBtWD10oNc5fuTZIXDxEf4XHw+lEyI66
-         4+WTmo5WOcfheusU2KketcowtGhIWHGPtEYdH5VbVYazgeacvFZlTmBdT9uoJjEaQ8
-         7ZQS9bpi/0qj/+MjzQMJgM4yX183GVPv/NRU/hlDaEpJNNnZGlqeV1+j+cOvDyAn1E
-         shJ7sIli90Ngw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68076EAC095;
-        Sat,  5 Mar 2022 12:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 5 Mar 2022 07:32:25 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B718240048
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 04:31:35 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K9kWw3JHYz9sPg;
+        Sat,  5 Mar 2022 20:27:56 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 5 Mar
+ 2022 20:31:33 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <jk@ozlabs.org>, <arnd@arndb.de>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>
+CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] powerpc/spufs: Fix build warning when CONFIG_PROC_FS=n
+Date:   Sat, 5 Mar 2022 20:31:16 +0800
+Message-ID: <20220305123116.26828-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] mISDN: Fix memory leak in dsp_pipeline_build()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164648220942.4612.11657656133766874161.git-patchwork-notify@kernel.org>
-Date:   Sat, 05 Mar 2022 12:10:09 +0000
-References: <1646418336-12115-1-git-send-email-khoroshilov@ispras.ru>
-In-Reply-To: <1646418336-12115-1-git-send-email-khoroshilov@ispras.ru>
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
-Cc:     isdn@linux-pingi.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+arch/powerpc/platforms/cell/spufs/sched.c:1055:12: warning: ‘show_spu_loadavg’ defined but not used [-Wunused-function]
+ static int show_spu_loadavg(struct seq_file *s, void *private)
+            ^~~~~~~~~~~~~~~~
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Mark this as __maybe_unused to fix this.
 
-On Fri,  4 Mar 2022 21:25:36 +0300 you wrote:
-> dsp_pipeline_build() allocates dup pointer by kstrdup(cfg),
-> but then it updates dup variable by strsep(&dup, "|").
-> As a result when it calls kfree(dup), the dup variable contains NULL.
-> 
-> Found by Linux Driver Verification project (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> Fixes: 960366cf8dbb ("Add mISDN DSP")
-> 
-> [...]
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ arch/powerpc/platforms/cell/spufs/sched.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Here is the summary with links:
-  - mISDN: Fix memory leak in dsp_pipeline_build()
-    https://git.kernel.org/netdev/net/c/c6a502c22999
-
-You are awesome, thank you!
+diff --git a/arch/powerpc/platforms/cell/spufs/sched.c b/arch/powerpc/platforms/cell/spufs/sched.c
+index d058f6233e66..c46835625133 100644
+--- a/arch/powerpc/platforms/cell/spufs/sched.c
++++ b/arch/powerpc/platforms/cell/spufs/sched.c
+@@ -1052,7 +1052,7 @@ void spuctx_switch_state(struct spu_context *ctx,
+ 	}
+ }
+ 
+-static int show_spu_loadavg(struct seq_file *s, void *private)
++static int __maybe_unused show_spu_loadavg(struct seq_file *s, void *private)
+ {
+ 	int a, b, c;
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 

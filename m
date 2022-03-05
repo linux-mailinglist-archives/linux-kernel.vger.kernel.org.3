@@ -2,83 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80F74CE294
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 05:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23B14CE296
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 05:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiCEEM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 23:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S231194AbiCEEWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 23:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiCEEM4 (ORCPT
+        with ESMTP id S230401AbiCEEWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 23:12:56 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6281587B2
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 20:12:06 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id 3-20020a056e020ca300b002c2cf74037cso6824883ilg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 20:12:06 -0800 (PST)
+        Fri, 4 Mar 2022 23:22:34 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B4B51333
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 20:21:45 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id m22so8945837pja.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 20:21:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+WecTfOPB5EXS9NO8w7OJhZo+wpvPjeoC9Ba/0fEu0s=;
+        b=V8R9hNSnyF2Wgb3QNGFSuVg0OqcmkPUclEYv4iRrpN/LDJjFvWry+/pfFYEAj2TaJm
+         nnTnDiBI6eVBVhRlPMW7vawy7I/SEfbLAtyboRSrOIXkUb3pPx3o06AhJuCbhC4s7LGB
+         MwhRmzeFMxdFqKSrVAxp11RMkjlhqxtLxne91Ldriqjg1AijsXb0qOaA5IkKU41sI9Yq
+         vylMOaMI3e8/Yiaz6Qj1EfDRRZlV7iLG4Ehat0+xSnJ+kCoxMepfPRwZQwakJbltfaju
+         TcgJqz6MN/5tzrtGzpLdqNEu6EgAOInuIpwhoVn7/EhqyFdoel6zho4b+Maty0N9T732
+         UQ7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=onw4IedYX5qQ+gs+/33tUPuWqMbo0NqLTtVJkCIiq2g=;
-        b=6uOaasRTXFKxvJHxLXCz41nYM3ogkenlJ+zXNJUtrl6gRHgz6WVuL1QsFtYJtI2GxH
-         9x4pe+1iPv8Xw/iDy5JTUlfnVz/YbafDExZRrbMVGK2zXGDdEycNYcR4NcBd9a3PHs82
-         wSdWOnyRpiPDZ5aLSZFIs0tbkewRJe8dFsgKDo7DuVGCzcJKa/DNG+pZI+I22F3fhd24
-         62lk8kvH4G1NwDHKr7Qx63QUox3dhGMtPhVJWTBkHQkluHdxmTIm7dJ6rh2cM1/pmBwj
-         OzAdhlUnBqS69fIdHv8BHqanAGer33O4Q+1p6haLMICL6pV778WF9bZDMnQ1MO85IXq2
-         WBxw==
-X-Gm-Message-State: AOAM530Jj06zjRejhkkPcVmzTzoUShK9yrphiIYfttG+9KPy02lA1O/M
-        XBO3QBsA6Qp6/yjfWJrurvNDrU7qyuFzVj0Cgkq5ZcuD8CKw
-X-Google-Smtp-Source: ABdhPJzOBwKReV3RereJZlHH5ZjtC5jwfknmMso75kx0/qkY3OMmwZ+dbVFJ25ESSnLpfhjnoGRcvzf6EVGbNodG6+8WXvw/FBWI
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+WecTfOPB5EXS9NO8w7OJhZo+wpvPjeoC9Ba/0fEu0s=;
+        b=oqAdQcNc4Wb8KM53adZyMhh0rGBQ79TpNoQgUJfkCEZZbouCuZYIV5f1cU18kdTVns
+         4gawFyRk2Au1V4cmmloTatSj41FE45DIBWOKCRBa1mJXBNn0i8+JiCsihY9HxNDTiluL
+         gcCDOb7fK0T6jbBON1yrlUkUPxbo4hasPb50nxcBD1l2V47ZCwnb4YH634DbnNbzVLpv
+         kZffqN1QyJ+Id5fALm/tN5ltp3FhuEZTdpujuFaLt17xLNfqOsqZtSvLGQFj/9kSnX1p
+         BXJ3nnC6Rw0Qo8KOZQxh0pI+mxIhM5PF9nup8gZ3YftZNIzWoD18gSyGpN/zzM9YvxGE
+         D8ZQ==
+X-Gm-Message-State: AOAM530tHV7kkXMWdyz0yovvAZP4kuoJf81u8rbnLi21NbWZwNCql4SS
+        tJHipTm6ezFqfFXXacIq3+0=
+X-Google-Smtp-Source: ABdhPJy0PemOG682V8NIgEbnJiFKcBnPK7RUoXhG3leKLVwaTC3SRCuJ+pZWu6KWHvJrbQ1iVc1sgA==
+X-Received: by 2002:a17:90a:cf87:b0:1bd:3595:3ee4 with SMTP id i7-20020a17090acf8700b001bd35953ee4mr14182043pju.100.1646454105409;
+        Fri, 04 Mar 2022 20:21:45 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id j7-20020a056a00130700b004b9f7cd94a4sm7260689pfu.56.2022.03.04.20.21.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 20:21:44 -0800 (PST)
+Date:   Sat, 5 Mar 2022 04:21:39 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] mm/slub: refactor deactivate_slab()
+Message-ID: <YiLlUx0Re/A6lzfI@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
+ <20220304063427.372145-6-42.hyeyoo@gmail.com>
+ <6763e97b-88bf-59b0-c80e-26c3846531fc@suse.cz>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:170f:b0:2c2:c247:b586 with SMTP id
- u15-20020a056e02170f00b002c2c247b586mr1696971ill.155.1646453526316; Fri, 04
- Mar 2022 20:12:06 -0800 (PST)
-Date:   Fri, 04 Mar 2022 20:12:06 -0800
-In-Reply-To: <00000000000061d7eb05d7057144@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000934ec105d970d589@google.com>
-Subject: Re: [syzbot] WARNING in bpf_prog_test_run_xdp
-From:   syzbot <syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, boris.ostrovsky@oracle.com,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        hawk@kernel.org, jgross@suse.com, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, lorenzo@kernel.org,
-        netdev@vger.kernel.org, roger.pau@citrix.com,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        toke@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6763e97b-88bf-59b0-c80e-26c3846531fc@suse.cz>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Fri, Mar 04, 2022 at 08:01:20PM +0100, Vlastimil Babka wrote:
+> On 3/4/22 07:34, Hyeonggon Yoo wrote:
+> > Simplify deactivate_slab() by unlocking n->list_lock and retrying
+> > cmpxchg_double() when cmpxchg_double() fails, and perform
+> > add_{partial,full} only when it succeed.
+> > 
+> > Releasing and taking n->list_lock again here is not harmful as SLUB
+> > avoids deactivating slabs as much as possible.
+> > 
+> > [ vbabka@suse.cz: perform add_{partial,full} when cmpxchg_double()
+> >   succeed. ]
+> > 
+> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> 
+> Looks good, just noticed a tiny issue.
+> 
+> > ---
+> >  mm/slub.c | 81 ++++++++++++++++++++++---------------------------------
+> >  1 file changed, 32 insertions(+), 49 deletions(-)
+> > 
+> > diff --git a/mm/slub.c b/mm/slub.c
+> > index f9ae983a3dc6..c1a693ec5874 100644
+> > --- a/mm/slub.c
+> > +++ b/mm/slub.c
+> > @@ -2344,8 +2344,8 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+> >  {
+> >  	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE };
+> >  	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+> > -	int lock = 0, free_delta = 0;
+> > -	enum slab_modes l = M_NONE, m = M_NONE;
+> > +	int free_delta = 0;
+> > +	enum slab_modes mode = M_NONE;
+> >  	void *nextfree, *freelist_iter, *freelist_tail;
+> >  	int tail = DEACTIVATE_TO_HEAD;
+> >  	unsigned long flags = 0;
+> > @@ -2387,14 +2387,10 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+> >  	 * Ensure that the slab is unfrozen while the list presence
+> >  	 * reflects the actual number of objects during unfreeze.
+> >  	 *
+> > -	 * We setup the list membership and then perform a cmpxchg
+> > -	 * with the count. If there is a mismatch then the slab
+> > -	 * is not unfrozen but the slab is on the wrong list.
+> > -	 *
+> > -	 * Then we restart the process which may have to remove
+> > -	 * the slab from the list that we just put it on again
+> > -	 * because the number of objects in the slab may have
+> > -	 * changed.
+> > +	 * We first perform cmpxchg holding lock and insert to list
+> > +	 * when it succeed. If there is mismatch then slub is not
+> > +	 * unfrozen and number of objects in the slab may have changed.
+> > +	 * Then release lock and retry cmpxchg again.
+> >  	 */
+> >  redo:
+> >  
+> > @@ -2414,57 +2410,44 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+> >  	new.frozen = 0;
+> >  
+> >  	if (!new.inuse && n->nr_partial >= s->min_partial)
+> > -		m = M_FREE;
+> > +		mode = M_FREE;
+> >  	else if (new.freelist) {
+> > -		m = M_PARTIAL;
+> > -		if (!lock) {
+> > -			lock = 1;
+> > -			/*
+> > -			 * Taking the spinlock removes the possibility that
+> > -			 * acquire_slab() will see a slab that is frozen
+> > -			 */
+> > -			spin_lock_irqsave(&n->list_lock, flags);
+> > -		}
+> > -	} else {
+> > -		m = M_FULL;
+> > -		if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
+> 
+> This used to set m = M_FULL; always.
+> 
+> > -			lock = 1;
+> > -			/*
+> > -			 * This also ensures that the scanning of full
+> > -			 * slabs from diagnostic functions will not see
+> > -			 * any frozen slabs.
+> > -			 */
+> > -			spin_lock_irqsave(&n->list_lock, flags);
+> > -		}
+> > +		mode = M_PARTIAL;
+> > +		/*
+> > +		 * Taking the spinlock removes the possibility that
+> > +		 * acquire_slab() will see a slab that is frozen
+> > +		 */
+> > +		spin_lock_irqsave(&n->list_lock, flags);
+> > +	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
+> > +		mode = M_FULL;
+> 
+> Now you only set it for SLAB_STORE_USER caches.
+> 
+> > +		/*
+> > +		 * This also ensures that the scanning of full
+> > +		 * slabs from diagnostic functions will not see
+> > +		 * any frozen slabs.
+> > +		 */
+> > +		spin_lock_irqsave(&n->list_lock, flags);
+> >  	}
+> >  
+> > -	if (l != m) {
+> > -		if (l == M_PARTIAL)
+> > -			remove_partial(n, slab);
+> > -		else if (l == M_FULL)
+> > -			remove_full(s, n, slab);
+> > -
+> > -		if (m == M_PARTIAL)
+> > -			add_partial(n, slab, tail);
+> > -		else if (m == M_FULL)
+> > -			add_full(s, n, slab);
+> > -	}
+> >  
+> > -	l = m;
+> >  	if (!cmpxchg_double_slab(s, slab,
+> >  				old.freelist, old.counters,
+> >  				new.freelist, new.counters,
+> > -				"unfreezing slab"))
+> > +				"unfreezing slab")) {
+> > +		if (mode == M_PARTIAL || mode == M_FULL)
+> > +			spin_unlock_irqrestore(&n->list_lock, flags);
+> >  		goto redo;
+> > +	}
+> >  
+> > -	if (lock)
+> > -		spin_unlock_irqrestore(&n->list_lock, flags);
+> >  
+> > -	if (m == M_PARTIAL)
+> > +	if (mode == M_PARTIAL) {
+> > +		add_partial(n, slab, tail);
+> > +		spin_unlock_irqrestore(&n->list_lock, flags);
+> >  		stat(s, tail);
+> > -	else if (m == M_FULL)
+> > +	} else if (mode == M_FULL) {
+> > +		add_full(s, n, slab);
+> > +		spin_unlock_irqrestore(&n->list_lock, flags);
+> >  		stat(s, DEACTIVATE_FULL);
+> 
+> As a result, full slabs without SLAB_STORE_USER will not count
+> DEACTIVATE_FULL anymore.
 
-commit c8980fcb210851138cb34c9a8cb0cf0c09f07bf9
-Author: Roger Pau Monne <roger.pau@citrix.com>
-Date:   Fri Jan 21 09:01:46 2022 +0000
+Oh, thank you for catching this.
 
-    xen/x2apic: enable x2apic mode when supported for HVM
+We usually only deactivate full slabs for debugging to track all list of slabs.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13b1991a700000
-start commit:   000fe940e51f sfc: The size of the RX recycle ring should b..
-git tree:       net-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e029d3b2ccd4c91a
-dashboard link: https://syzkaller.appspot.com/bug?extid=79fd1ab62b382be6f337
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a719cc700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15851cec700000
+But as you pointed, in rare case when pfmemalloc flag does not match, full slabs
+can be deactivated (even if they are not put on list).
 
-If the result looks correct, please mark the issue as fixed by replying with:
+> I guess the easiest way to solve it is to e.g. add a M_FULL_NOLIST mode that
+> only does the DEACTIVATE_FULL counting.
 
-#syz fix: xen/x2apic: enable x2apic mode when supported for HVM
+That will be enough solution.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Will fix this in v3. Thank you!
+
+> > -	else if (m == M_FREE) {
+> > +	} else if (mode == M_FREE) {
+> >  		stat(s, DEACTIVATE_EMPTY);
+> >  		discard_slab(s, slab);
+> >  		stat(s, FREE_SLAB);
+> 
+
+-- 
+Thank you, You are awesome!
+Hyeonggon :-)

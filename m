@@ -2,152 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF00F4CE189
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEDA4CE18D
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiCEAcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 19:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S230247AbiCEAf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 19:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiCEAcN (ORCPT
+        with ESMTP id S229449AbiCEAfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 19:32:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9BECE91E;
-        Fri,  4 Mar 2022 16:31:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E941C61F4A;
-        Sat,  5 Mar 2022 00:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54163C340F0;
-        Sat,  5 Mar 2022 00:31:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646440284;
-        bh=awRIwbysAAAcaXhf9r6G70yV9eNUMtyfdpt6cG+WdS4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NFihrsXcizDRGkyxR3Cg8awQAmkhhYtn0duiPuoXhota0ipzzUhn0yIn1mBzEff/z
-         lYSENiDeC1aSvAozEsWcLonBQoLmwjVnsusZmchqpphq73olCMv8xLDYP3QBOefsMZ
-         MAbKYdMeDjdCecydm+LAf7EnOwEE2BIoIB1d7q7mZ+03q3qGfKoPAAM5YEF+URMYEu
-         eDh9hcN5B+BgMM42Zf8YyBIekByZ7I0WQEvhF3HEU/GAONPC+qkgVlTqicNjptUXkx
-         lnbaxgOJWuAM4jKtf5q98skl8kVSVfV/UFjSL5U6MnfPgtguZC1hA1eBwugEgEfK2a
-         Ha+p1aGLhWxmg==
-Received: by mail-yb1-f182.google.com with SMTP id u10so237377ybd.9;
-        Fri, 04 Mar 2022 16:31:24 -0800 (PST)
-X-Gm-Message-State: AOAM532hF4FQd+XySXHlgCbIMUMbQctUrbc0ehJa/S6UcmQyDpccTJmP
-        aEoY6GGCmJIP9sVwG8GgCjYml/DJ6FA1RHGcCUc=
-X-Google-Smtp-Source: ABdhPJwBFO65kWq2rI3Da1Dusm/a5tFW4fIDNdvUf2aQDb/11b8ll7yQ8fxaG8oivNovon9SFOEepuumfAFj9I22pOY=
-X-Received: by 2002:a05:6902:1ca:b0:624:e2a1:2856 with SMTP id
- u10-20020a05690201ca00b00624e2a12856mr946847ybh.389.1646440283308; Fri, 04
- Mar 2022 16:31:23 -0800 (PST)
+        Fri, 4 Mar 2022 19:35:24 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5AB4A900
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:34:36 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id g1so8973938pfv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 16:34:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9awKCCKzwQ2dqbJt0HhmYBsF/X0J7+H0Zf6OyrcVwwk=;
+        b=cIYwKZlXga7k55pJ6Hx6u3E1O0qMOeX9MtZ4QnhaaFbVj+Gwocpw7HAw2uXKckeyNg
+         N62ebYTAV747rJvVn2IYd5Aa4qEuDijsdldXC6LBdXSFG1gaEwhmXj5u+V4C9Uv7i05W
+         vcBM/WJyq/aqsH92E03REjyFnzq9/5xoOD2sk3jWlL74SFl7tJLknUpHVJFeHP9X8316
+         PamGMns78nhhhAN3MT6u+RF631p/F6vL32h7EAst1BR/MyuvxQSz082tcW8Jnr/Lu1Q0
+         vSLLAjS3b8zIRNMffiygjUSiKEZGO4qtL9X/CCbDprfU5GuKuBIq9KnMUoHzhyo5NDbv
+         JCiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9awKCCKzwQ2dqbJt0HhmYBsF/X0J7+H0Zf6OyrcVwwk=;
+        b=j/qobJM0wlIVP48KB6a+lI96AXpECWTXKaGYtU+xxoLTpfS6CgVImsXCTT5g/oEseZ
+         bJdsoNDSEIt65S3p9XOLefSg+3NuG9+yNegydQoRv8qV7oshGf/JeTNuIXrIEcLaCfA8
+         1ABK0mg1PZcQLgVuPlIJ/hww8YifSBe5w07x2xcmD6mI1PSUkt5h2FFbzWfm2rWeTHeu
+         cRE+hlBcw2hRgfuHkKWExtWuvxcHbQ9GMMEcnpOwENDC3PCAiYIR1a0N5zGOfp1b+XjK
+         MUNZvV6NytNUtdHUWZ5OmT5llnOr5FZZd44ncJnsDDrrk3v1x4PRfqWdKHKmAimntAiV
+         dwjA==
+X-Gm-Message-State: AOAM530k9ps8H4kD2dHGTuKyeUQbsZ7f9NqB0jRXIit/AhCr3VduMAam
+        JRA55SQd/nWnlcmg/cAMWaKAEA==
+X-Google-Smtp-Source: ABdhPJy8buS111AF6pUAsQWsQEoRwPURB2GdQ8KHQizCtZYGIDUkTVBDQTzXcgK+8pA8eE3GlkQrbg==
+X-Received: by 2002:a63:8349:0:b0:37d:5e5e:a535 with SMTP id h70-20020a638349000000b0037d5e5ea535mr799884pge.158.1646440475381;
+        Fri, 04 Mar 2022 16:34:35 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s7-20020a056a00178700b004e1a15e7928sm7730995pfg.145.2022.03.04.16.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 16:34:34 -0800 (PST)
+Date:   Sat, 5 Mar 2022 00:34:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Hildenbrand <david@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH v4 21/30] KVM: x86/mmu: Zap invalidated roots via
+ asynchronous worker
+Message-ID: <YiKwFznqqiB9VRyn@google.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-22-pbonzini@redhat.com>
+ <YiExLB3O2byI4Xdu@google.com>
+ <YiEz3D18wEn8lcEq@google.com>
+ <eeac12f0-0a18-8c63-1987-494a2032fa9d@redhat.com>
+ <YiI4AmYkm2oiuiio@google.com>
+ <8b8c28cf-cf54-f889-be7d-afc9f5430ecd@redhat.com>
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com> <20220304172852.274126-5-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220304172852.274126-5-benjamin.tissoires@redhat.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 4 Mar 2022 16:31:12 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5BtN6_x1pz1rZ-q5bF6P3XGzvp2maFiXiqSemdTC9jZw@mail.gmail.com>
-Message-ID: <CAPhsuW5BtN6_x1pz1rZ-q5bF6P3XGzvp2maFiXiqSemdTC9jZw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 04/28] libbpf: add HID program type and API
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b8c28cf-cf54-f889-be7d-afc9f5430ecd@redhat.com>
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> HID-bpf program type are needing a new SEC.
-> To bind a hid-bpf program, we can rely on bpf_program__attach_fd()
-> so export a new function to the API.
->
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+On Fri, Mar 04, 2022, Paolo Bonzini wrote:
+> On 3/4/22 17:02, Sean Christopherson wrote:
+> > On Fri, Mar 04, 2022, Paolo Bonzini wrote:
+> > > On 3/3/22 22:32, Sean Christopherson wrote:
+> > > I didn't remove the paragraph from the commit message, but I think it's
+> > > unnecessary now.  The workqueue is flushed in kvm_mmu_zap_all_fast() and
+> > > kvm_mmu_uninit_tdp_mmu(), unlike the buggy patch, so it doesn't need to take
+> > > a reference to the VM.
+> > > 
+> > > I think I don't even need to check kvm->users_count in the defunct root
+> > > case, as long as kvm_mmu_uninit_tdp_mmu() flushes and destroys the workqueue
+> > > before it checks that the lists are empty.
+> > 
+> > Yes, that should work.  IIRC, the WARN_ONs will tell us/you quite quickly if
+> > we're wrong :-)  mmu_notifier_unregister() will call the "slow" kvm_mmu_zap_all()
+> > and thus ensure all non-root pages zapped, but "leaking" a worker will trigger
+> > the WARN_ON that there are no roots on the list.
+> 
+> Good, for the record these are the commit messages I have:
+> 
+>     KVM: x86/mmu: Zap invalidated roots via asynchronous worker
+>     Use the system worker threads to zap the roots invalidated
+>     by the TDP MMU's "fast zap" mechanism, implemented by
+>     kvm_tdp_mmu_invalidate_all_roots().
+>     At this point, apart from allowing some parallelism in the zapping of
+>     roots, the workqueue is a glorified linked list: work items are added and
+>     flushed entirely within a single kvm->slots_lock critical section.  However,
+>     the workqueue fixes a latent issue where kvm_mmu_zap_all_invalidated_roots()
+>     assumes that it owns a reference to all invalid roots; therefore, no
+>     one can set the invalid bit outside kvm_mmu_zap_all_fast().  Putting the
+>     invalidated roots on a linked list... erm, on a workqueue ensures that
+>     tdp_mmu_zap_root_work() only puts back those extra references that
+>     kvm_mmu_zap_all_invalidated_roots() had gifted to it.
+> 
+> and
+> 
+>     KVM: x86/mmu: Zap defunct roots via asynchronous worker
+>     Zap defunct roots, a.k.a. roots that have been invalidated after their
+>     last reference was initially dropped, asynchronously via the existing work
+>     queue instead of forcing the work upon the unfortunate task that happened
+>     to drop the last reference.
+>     If a vCPU task drops the last reference, the vCPU is effectively blocked
+>     by the host for the entire duration of the zap.  If the root being zapped
+>     happens be fully populated with 4kb leaf SPTEs, e.g. due to dirty logging
+>     being active, the zap can take several hundred seconds.  Unsurprisingly,
+>     most guests are unhappy if a vCPU disappears for hundreds of seconds.
+>     E.g. running a synthetic selftest that triggers a vCPU root zap with
+>     ~64tb of guest memory and 4kb SPTEs blocks the vCPU for 900+ seconds.
+>     Offloading the zap to a worker drops the block time to <100ms.
+>     There is an important nuance to this change.  If the same work item
+>     was queued twice before the work function has run, it would only
+>     execute once and one reference would be leaked.  Therefore, now that
+>     queueing items is not anymore protected by write_lock(&kvm->mmu_lock),
+>     kvm_tdp_mmu_invalidate_all_roots() has to check root->role.invalid and
+>     skip already invalid roots.  On the other hand, kvm_mmu_zap_all_fast()
+>     must return only after those skipped roots have been zapped as well.
+>     These two requirements can be satisfied only if _all_ places that
+>     change invalid to true now schedule the worker before releasing the
+>     mmu_lock.  There are just two, kvm_tdp_mmu_put_root() and
+>     kvm_tdp_mmu_invalidate_all_roots().
 
-Acked-by: Song Liu <songliubraving@fb.com>
-
->
-> ---
->
-> changes in v2:
-> - split the series by bpf/libbpf/hid/selftests and samples
-> ---
->  tools/lib/bpf/libbpf.c   | 7 +++++++
->  tools/lib/bpf/libbpf.h   | 2 ++
->  tools/lib/bpf/libbpf.map | 1 +
->  3 files changed, 10 insertions(+)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 81bf01d67671..356bbd3ad2c7 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -8680,6 +8680,7 @@ static const struct bpf_sec_def section_defs[] = {
->         SEC_DEF("cgroup/setsockopt",    CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
->         SEC_DEF("struct_ops+",          STRUCT_OPS, 0, SEC_NONE),
->         SEC_DEF("sk_lookup",            SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-> +       SEC_DEF("hid/device_event",     HID, BPF_HID_DEVICE_EVENT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
->  };
->
->  #define MAX_TYPE_NAME_SIZE 32
-> @@ -10659,6 +10660,12 @@ static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie)
->         return bpf_program__attach_iter(prog, NULL);
->  }
->
-> +struct bpf_link *
-> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd)
-> +{
-> +       return bpf_program__attach_fd(prog, hid_fd, 0, "hid");
-> +}
-> +
->  struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
->  {
->         if (!prog->sec_def || !prog->sec_def->attach_fn)
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index c8d8daad212e..f677ac0a9ede 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -529,6 +529,8 @@ struct bpf_iter_attach_opts {
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_iter(const struct bpf_program *prog,
->                          const struct bpf_iter_attach_opts *opts);
-> +LIBBPF_API struct bpf_link *
-> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd);
->
->  /*
->   * Libbpf allows callers to adjust BPF programs before being loaded
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 47e70c9058d9..fdc6fa743953 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -424,6 +424,7 @@ LIBBPF_0.6.0 {
->  LIBBPF_0.7.0 {
->         global:
->                 bpf_btf_load;
-> +               bpf_program__attach_hid;
->                 bpf_program__expected_attach_type;
->                 bpf_program__log_buf;
->                 bpf_program__log_level;
-> --
-> 2.35.1
->
+Very nice!

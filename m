@@ -2,289 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC1A4CE1C0
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FEA4CE1C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiCEAzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 19:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S230321AbiCEA6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 19:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiCEAzB (ORCPT
+        with ESMTP id S229627AbiCEA6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 19:55:01 -0500
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3B55BE73;
-        Fri,  4 Mar 2022 16:54:12 -0800 (PST)
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 8B780C09C9;
-        Sat,  5 Mar 2022 00:54:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1646441651; bh=WGBSDXS4Y/ejZCyRO70N6roMlxQvnBjwTUiRapLh95g=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Zk9ugvf0Fva9yRnUHx6+Mb772o1kVMCNDD9c4sDyxD9Hf8nPmQJ6k+3PvYIUzdT1T
-         /qsSdTcM+n0tiKT7gXaxdG9Zm3NIF/I/D9dzXGIUKk18i61YPRJXKyHghLGPlqHwzI
-         bIWKOZ8+F0/zFHUCdJARM5wb0Udgvp+AVtiKe87EXKBy13c2G0VXCoX9HqHPVStLPd
-         9Z6f1FZRbwTJZEwW0wXDn7Gz9oMYTYZ6sBdIK55mkJcQa1LI1Poilp8Uw4k2sgl2Jb
-         YkQrx99zWTDfQdnCxAvoV1w9vznofRkn+bi92VDcx0IeV8Y5QA0RFXF7ehDCHBzOBo
-         +Z+OQw0NuYmDQ==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id E7A87A0064;
-        Sat,  5 Mar 2022 00:54:09 +0000 (UTC)
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2045.outbound.protection.outlook.com [104.47.74.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id CA8F580091;
-        Sat,  5 Mar 2022 00:54:08 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="JrXnCanz";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OBjE4cRY3QQHbV94kc+eu1XDdQZxuJwULPS85Gih9+yv77YKs2kRp5kQYMlEIzmnTmBO3uDvFLn8MqK7uCRHVw3SlbkFwSiv8yhD39DuXqVx0zK0DIz0inzcG2H27U/Jy4n+YGkAxF2uvINWf7uFeUoBQzIXMabhuX2zbrXynSwvhxY8gK0ZG548uLC3J4D1Sc5dX2+RWoHHG1EYzBbfN8r4w6uR+RQSYpMskXTGtJCt2r3QOs3fuQ2XXDqyJas7MRwtPMoIq62L1lr+CyoA+Yil4L+fsEW+fpJCHqfhQoq5REPxqgT20oBWWJmpVtTPGfiqnDx0UNnut86jLpIw6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WGBSDXS4Y/ejZCyRO70N6roMlxQvnBjwTUiRapLh95g=;
- b=HsQz4GSMrpPFOI/RyCSRQ62cDWh3KyOzxRAaDiSTMzeFgy6z7ocPw0kRy3gAn9vQEoeN7zus+jut+uetEa5ZbPvOXl0xW03FeP/3r9JE20gf0F1zMTjG8VpLv21JGayg0yBC2371udeVh+pUAq256KcusdFetWZWsuOMPdJ6ke3i4b255Zwhvq7ShuZLej1FVxIdqjP0eslsFuDQ9mfasVs5K2YBMAR26MLLzE9Q3nnXKkANpphuv7jGqySeeriDH5hK42QRwBVDM/HXmeJk4d55Drq3EADJG6iZQw8uipI8Udri894qwEpKcf4vrc6YqmDdjhAe9crOgI/RziWseg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WGBSDXS4Y/ejZCyRO70N6roMlxQvnBjwTUiRapLh95g=;
- b=JrXnCanzp+eKhR2mRjbg12xR9zKHUMMKYWkiPfHN5KUrIotuZaSi29oQzR7rqyMEVwTGgpCHRPKhf3f6siJ4bymDvGJEksy+nQjhPAMLfZtzvNjWOJGBrwFG51VZ5f/hDkLaYzsvDi4DDFgYZ6DRbrUtNtSV0FmVTuyw1GJbWI4=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by DM6PR12MB5519.namprd12.prod.outlook.com (2603:10b6:5:1b5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Sat, 5 Mar
- 2022 00:53:48 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::141:3edf:164a:857b]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::141:3edf:164a:857b%4]) with mapi id 15.20.5038.017; Sat, 5 Mar 2022
- 00:53:47 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Wesley Cheng <wcheng@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Jung Daehwan <dh10.jung@samsung.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-Subject: Re: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING in
- ep cmd fails
-Thread-Topic: [PATCH v2 1/2] usb: dwc3: Not set DWC3_EP_END_TRANSFER_PENDING
- in ep cmd fails
-Thread-Index: AQHYIZOvXlHACGixbUGMAnHCl5PyK6yTYqcAgADHvYCAALGHgIADVGEAgAA82ACAB34VgIAAlEuAgALM6QCAAD24AIAAAXqAgAADvQCABhmCgIAAJeOAgAAQ5ACAAA7AAIAF9GqAgAAw+IA=
-Date:   Sat, 5 Mar 2022 00:53:46 +0000
-Message-ID: <594fbaf7-d9f0-a3a0-e660-880e12418282@synopsys.com>
-References: <1644836933-141376-1-git-send-email-dh10.jung@samsung.com>
- <1644836933-141376-2-git-send-email-dh10.jung@samsung.com>
- <ff604504-00df-0c1b-673e-892e42737f7a@synopsys.com>
- <20220215063925.GC144890@ubuntu>
- <63c8c9d1-9b07-a9f2-3639-a38641e19a7a@synopsys.com>
- <6a1322c4-9589-f4de-d42c-d38af2e12e82@quicinc.com>
- <e3332511-82d3-2892-ad72-a0c167273174@synopsys.com>
- <01c4d42e-93cd-d293-f4e3-8c136049d87c@codeaurora.org>
- <894d54ad-b6f9-b942-be99-fe3ad102051b@synopsys.com>
- <dbd00cb1-b5d0-24e7-ef72-dff3765c26cf@codeaurora.org>
- <810de66c-7d73-fae0-9356-b06b48134ad6@synopsys.com>
- <1714910d-f923-d0c7-72a9-0c1d098f783f@codeaurora.org>
- <4371e407-7791-b0b5-dc8c-ad0be09acba4@synopsys.com>
- <e165c644-4ad0-b103-4f8b-2d3bc1b211f1@codeaurora.org>
- <b2eca3ba-5c36-c788-629c-016bd36be8a7@synopsys.com>
- <b0196760-0495-bd8d-7f41-e46f971b0beb@codeaurora.org>
- <d043eea8-b72e-f1ab-7f0d-93b3b0503de0@synopsys.com>
- <15aac89a-bf1d-9f30-6a9a-6d8fe97268ac@codeaurora.org>
-In-Reply-To: <15aac89a-bf1d-9f30-6a9a-6d8fe97268ac@codeaurora.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4204f1ca-a0c7-4718-f6a1-08d9fe429aee
-x-ms-traffictypediagnostic: DM6PR12MB5519:EE_
-x-microsoft-antispam-prvs: <DM6PR12MB55192CDAB920C29561D55F63AA069@DM6PR12MB5519.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uBwOpjtEuSxOggGhmKgfNy4u1ikSg7HjxNO5oxPFaibMtjjQ9YlM+iXYA/xgj+lkCIQ173c1jEuQAITkic3BnP0Zue0WBBelvxXfTG6JTZab+Ail+IDLomkOMorQ/eH4jFgX+xZ3feIh704esSb2zPqoIRCD4pa+ejLnR0EuNJEM6Aa/xccBOxLWImTTTMn3AONyXBfirtjq71WzizVPyiR/VCv7F9nc9OttK3ynZpokcMkyCAFrqC+YUu4npyTM8RVxNR/cgsYJUfJcxnu25JVpkSigtkRCeGbRRu9FKcmT58SLiRGgkcc71Btq4jP5QHUVtEZIZ2yxFQV21+uhhvlG2loSQFAuexnShtEmv0qZRz7fgfautPfFyd3Sh5zvh8wp4I2fZw3QYhYgLMQ2LSlNaliKUFk9gTiSVWpNnML+bCIiqho+hl0RiXZELfy3YrFfrj4BNHM1rRQKV02g19TAqitXiVq/0cek3Lldn7gsjXKJecnMYejdgmWB9bKq4BeKnTxJTsdtOPqQj1ToMSxdJvoO1q3tH+ReMWkOnRLGNZkD/x2SYQbhstMt2RVUYbBP0tixrWolwS+TkbgsA8jyyxTyeWms/w5BLLAfyYVhB/F7nK4qSc06b0jtTlHY+vNHc6g/s2L4PjrBeLtJuCTcNqTZwwLI5vvsJPSAdhWjX9+O+607GELG7A3vZsFQ567V48dW66k7C0XAgQhxidSGR9hgGG4aEq5/nYQ5LMMxZRp0aq8Yc4kpvAIfOOWp93bKLhMRpoabRgtiLOWg3DNm+9WRxbJvbgj4HVOQ53E8WgvPD3/TI+hX5p8pKauoi+HZRj1uEH7ouTep27/niq527ZapzEX6UBFFS3NdVjw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(26005)(38070700005)(2616005)(186003)(5660300002)(36756003)(2906002)(8936002)(31686004)(8676002)(66446008)(66476007)(64756008)(66556008)(54906003)(110136005)(6506007)(66946007)(53546011)(6512007)(4326008)(76116006)(38100700002)(316002)(122000001)(508600001)(31696002)(86362001)(966005)(6486002)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NzNMY1dYL2p2eFVlSGROV1Qwb3VOZEowVHh3R2NaTkorZ2JLRW1mMXNmRkp5?=
- =?utf-8?B?MXo1bi9ReTFKQnArSisyYWFveUUzdjV3Z3Z4UVF5UXpuUEN1VWR5UnhtRmt0?=
- =?utf-8?B?YnRBVVRKL1duKyt5cllhWDBmRjRvM0xXRmQzbE5sMnFMZGkvT3ZZNUN0NDFI?=
- =?utf-8?B?ZW9Xa0Rra3FiYWpuSWloTUVUMVFtZHV1SnFPU1lSeUpkdjR1UmptSlBWWmI0?=
- =?utf-8?B?SnkvaVhnRXBEM01RNk5xV3VkaDFlUkNRTkVMdE5yaEVUS0FySmNPZ0Z2ZUo3?=
- =?utf-8?B?WUp1UFRFRFhFNitCZGcxS2laTDh2M08rUjFwYUdxcTc0UU9wdXB1SkU2OVBr?=
- =?utf-8?B?T2ZPeDhYNGJSMVVXZzVOMWI4dWlKR2lLcXZ6TlpRUU9nMzlBTU9QeHZSNWw4?=
- =?utf-8?B?VW1zdm1vaGNxTWpWaUpaWmY2SjNjTEpXM3ZRZXBYMmkvbHR0QTM5bS9rWjE3?=
- =?utf-8?B?MkVuekxuazNJdXVWUHhEdlRna2kyZmsyRGVTb1ZvTXdnbnAyOTQ4bFk3UlRi?=
- =?utf-8?B?L2dXZitjeGR2ZC9GcW85aW9ySGpZclJTZStxUUV6WTRFKzFWamg2UDZwZmRm?=
- =?utf-8?B?Z2hFb1I1NkRFQ1EwSFpuNG92ZUpLN2dyMVNwKzM5RGg1djA4bWdCdzNramw2?=
- =?utf-8?B?UTBiVUxUeU91ZXpYTVJPVzlucXVaUjNLVW80ZHM3RW9XcU9CVi95ZVFPb0NY?=
- =?utf-8?B?UHNiMFVUdElnKytLdHpiaXFnWEhHUWNIMTNvVmlFOWg0czJzQjVCbHN3NWZa?=
- =?utf-8?B?KzdCREVBODJ1cDFOVzdUSWNFZ3JpbmxCNXhQUGZNQmQ0NWpTV1l3cElxd3NE?=
- =?utf-8?B?SXh4eldZalRHbVdoRTd5anB2YkZ1RVJBL0hTRVlSbnZZSkRGWjNDSDVMM01J?=
- =?utf-8?B?SDI3bWJJNUxoYTZjQXRaZEZXbkhMKzVEbmZEOXJGcFU5NDRhVlpTUDZEa2I5?=
- =?utf-8?B?ODNJcUFCRTYwOEpzQlZSVUlvZzNtY0JaK3pMVjFKdUVYMm9qb3Q5ek9CUnk3?=
- =?utf-8?B?cEUyVTZ2VFAvbzBPN21MaWxER2M3M0xDRENUV0x4UFYrcUtHUjlVZGdqMjEr?=
- =?utf-8?B?MldVMVZFZHlGWVozOExqQ1NJeXN3N2JpWENPS2xidHAyVUNXd3BETnZlemdP?=
- =?utf-8?B?OVhzOXAvMHhyRGVHQWU4MzBiazgzOEQ0dm1wY1dXYk5nOHI3UWtkWGxCWDdB?=
- =?utf-8?B?Si8yK1QxWWpLUUkyNjRPMUdTTnpIczV2b1V3eTY4TUhJSFJWaXo1di9iUU9a?=
- =?utf-8?B?V0hUUXh4UWVQeE5OaFMvNzN0d0ZZS1ZaVC9LK1NMRkJwUUl3c1hZZlhnWVhs?=
- =?utf-8?B?c0VUbUtBMHZSdEdaWlViZmh2alA4Y0JYZ3lqaTR6UlM1eFRWNVNQU3IwYjdP?=
- =?utf-8?B?d0JqUXI2SjE4LzlDbThMbk9VbUdieUlkWkZIWEgwem01ZXpPQXBjdWlJSTRj?=
- =?utf-8?B?RWNMUUp2UW9iR3hIOUJrSnNiQ2pxc3ZIZUdSa0FnNFl1bVlnQ1FrU1k2MTBK?=
- =?utf-8?B?TnFzai8wbkJRNUI5Y3dKNFFVRmFDSk1vUGFJM1gxamwyRzAvMERtbVMxcTZv?=
- =?utf-8?B?dFBhN3IwUzZneXcrSS9yUmRLbzFqVCtPTkRtTmRjZmppUnFXR1NhQTZmT0g5?=
- =?utf-8?B?NnhzU2RsQUs4TDZxb3hMbmpraE9NQ2dINnBwYVBhYWM3eENua0I5UDFXYXVZ?=
- =?utf-8?B?ampQbm9WNUNRYldYVlkwTkVwS2V3TElBM0ZXR0hTaHFvTEt3RngzMDllb2Jh?=
- =?utf-8?B?NUoxa09zQnVVU1VtekJBYmt6WTgxTXNrOHpJNnA3TldOY2xFekh5NEhpRU04?=
- =?utf-8?B?UEhaOEc2bzhBNVJNT2daMi9HV0dEaWZOWFE4amVPK29rRXF3cDBSWHBreW1l?=
- =?utf-8?B?U2w5andzdVdVOFVvY2h4cVNyRDFMRzZuRW5ld3RIM01oejhoYjZCUG4ycUIr?=
- =?utf-8?B?VlNybmhMS2c0YXVuSTBlMFVCdDdMWEJNbVpLMEF3cDR6aGVyY2Y2YS9uUDdB?=
- =?utf-8?B?ZjVWSE5uRnhldFVKaHhyQkVxUnpRVDF5VFN0TFlZOEY3blROV0RwS0FRV09Q?=
- =?utf-8?B?ZzBvb1k5djUwSWNEUmZtM3ExTkhkQ2YybU5DSjh3UmRqMVNITFVOVXAwMUxo?=
- =?utf-8?B?UWNoV3lxVTJoN2hoM2IvTjdNNWkvOXlLM2JTZ3FmcHZET1daSXRoNCtMcERI?=
- =?utf-8?B?YWc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <684EE8D2657F824AADAE82A4E043B109@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 4 Mar 2022 19:58:41 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D372111A3E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:57:51 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso2500329pjc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 16:57:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WRhUCDi8ybKVmqcvMo1zo6OoakRiXNlP5njWqCl1xfg=;
+        b=w1lu7a7fOkmK0cE3K0hXYFrEt75zDPhimAc2VjIptJM/NHsh2psv5ry1FxXMuJ5M+u
+         rAsfnZKjb3E5QoDqk88O37yvrkLl/hFaukVxQTL2tSAkwdy+AjzvGBOHLqI7oAV1RuX4
+         /E7J8OLK4aaace5w4I9EX4qqgLpJXaEYpUQlXYM0XcLGi2DLtS4nN1J9tr31ObztZA+6
+         X99AMSmWJuDkHka9zhMIyghfS9IPkUhhXwML3vkz9aJVp6t3/65ER6bet3dCJToIBdvS
+         06a3dh2iCYyAsT7ZQU28/Qv657/Rnx1H8Vt63TTWjxFAsnz2LndFnS+wIzjliPvzSFnP
+         y+zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WRhUCDi8ybKVmqcvMo1zo6OoakRiXNlP5njWqCl1xfg=;
+        b=HV46odLO8tzX9wwszwHde6v4vDEkH7lnHkciGiZG0H7Kj6GBFT8Uk8OD3jyANr/R5+
+         rmRh2ZkAAFaK7DVQ1T6eim4T4Ah2gzoA9+2k/bXZBlrkwamXNwgrkToKxeZB/d19wRdQ
+         9iknhsMkAKly4RGxUSeX3svwIRsFmPb0xjRxvUZ/qedKGmC5WNzHf3oRhcsw0kMcxtTE
+         4v8HXKitxlmRDk5vG8NRCI6EBir7+Wj6Dxsuzjbyq41Qo/eNZxVy7Vcq/Db0Y2LVeMxu
+         1pPe9KEdiiMmMorHvrO+MD8bLpam4B0yAvdjZdunPE4amwp1yOooXhTOoVHF0voCVtPO
+         yhMQ==
+X-Gm-Message-State: AOAM533aKWUN7YwThtKIXbjsDmC+NIBo80FgDO0ivhFbkHwYDSnQZH40
+        +sGHLv9zGJiKL4YefVLTV3o3Gg==
+X-Google-Smtp-Source: ABdhPJwDR+NmaJxrEAH8/7OGBw1t0V9tvab3C5eK7iyFdvuWS41LkE80lx2c0M/wzPFyLClQtrp1Vw==
+X-Received: by 2002:a17:903:120c:b0:14f:3f4a:f832 with SMTP id l12-20020a170903120c00b0014f3f4af832mr1248279plh.157.1646441871200;
+        Fri, 04 Mar 2022 16:57:51 -0800 (PST)
+Received: from [10.255.166.9] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id u7-20020a056a00158700b004f6ae198a56sm4334801pfk.9.2022.03.04.16.57.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Mar 2022 16:57:50 -0800 (PST)
+Message-ID: <4d828b01-b636-e0b8-0241-656331f27de4@bytedance.com>
+Date:   Sat, 5 Mar 2022 08:57:43 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4204f1ca-a0c7-4718-f6a1-08d9fe429aee
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Mar 2022 00:53:46.1691
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: d8fQdtbry3oOksI2WYihBjx/6C8i7/hseAxf6od6UeZHc9dXUgBpTFx6tmGkdirV61/U+jWgIPQhMgRLEhopgw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5519
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [External] Re: [next] WARNING: suspicious RCU usage :
+ include/linux/cgroup.h:494 suspicious rcu_dereference_check() usage
+Content-Language: en-US
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, rcu <rcu@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+References: <CA+G9fYs+Qc3rAONJBmyQXFnYmrzFBJ8GMpwWXBMpj3Nx6wQ0Hg@mail.gmail.com>
+ <CAABZP2xHynkBmsk8mcvPujSL65fsj=hpM9acuMvmDOUYbWk0KQ@mail.gmail.com>
+ <20220304194408.GP4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAABZP2x-1k_+nHzSvuD3EKD1cMSPiOFFnehJPQ7_QnaeDLpkGw@mail.gmail.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <CAABZP2x-1k_+nHzSvuD3EKD1cMSPiOFFnehJPQ7_QnaeDLpkGw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,NORMAL_HTTP_TO_IP,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V2VzbGV5IENoZW5nIHdyb3RlOg0KPiBIaSBUaGluaCwNCj4gDQo+IE9uIDIvMjgvMjAyMiA3OjAy
-IFBNLCBUaGluaCBOZ3V5ZW4gd3JvdGU6DQo+PiBXZXNsZXkgQ2hlbmcgd3JvdGU6DQo+Pj4gSGkg
-VGhpbmgsDQo+Pj4NCj4+PiBPbiAyLzI4LzIwMjIgNTowOSBQTSwgVGhpbmggTmd1eWVuIHdyb3Rl
-Og0KPj4+PiBIaSBXZXNsZXksDQo+Pj4+DQo+Pg0KPj4gPHNuaXA+DQo+Pg0KPj4+Pg0KPj4+PiBb
-IDIxODEuNDgxOTU2ODY1ICAgICAgIDB4OWRjNjNmMjY1XSAgIGRiZ19jb21wbGV0ZTogZXA2aW46
-IHRyYiBmZmZmZmZjMDFlN2Y1MmEwIChFNDM6RDQzKSBidWYgMDAwMDAwMDBlYmFmMDAwMCBzaXpl
-IDF4IDAgY3RybCAwMDAwMDgxMCAoaGxjczpzQzpub3JtYWwpDQo+Pj4+IFsgMjE4MS40ODIwNDQ3
-MzAgICAgICAgMHg5ZGM2M2Y4ZmNdICAgZGJnX2dhZGdldF9naXZlYmFjazogZXA2aW46IHJlcSBm
-ZmZmZmY4ODYwNjU3NTAwIGxlbmd0aCA4LzggenNJID09PiAwDQo+Pj4+IFsgMjE4MS40ODIyMjI0
-OTAgICAgICAgMHg5ZGM2NDA2NTFdICAgZXZlbnQgKDAwMDBjMDQwKTogZXAwb3V0OiBUcmFuc2Zl
-ciBDb21wbGV0ZSAoc0lMKSBbU2V0dXAgUGhhc2VdDQo+Pj4+IFsgMjE4MS40ODIyNzMyNzEgICAg
-ICAgMHg5ZGM2NDBhMjBdICAgZGJnX3RyYWNlX2xvZ19jdHJsOiBHZXQgSW50ZXJmYWNlIFN0YXR1
-cyhJbnRmID0gNCwgTGVuZ3RoID0gMjApDQo+Pj4+IFsgMjE4MS40ODIzMzQ3ODIgICAgICAgMHg5
-ZGM2NDBlYmNdICAgZGJnX2VwX3F1ZXVlOiBlcDZpbjogcmVxIGZmZmZmZjg4NjA2NTc1MDAgbGVu
-Z3RoIDAvOCB6c0kgPT0+IC0xMTUNCj4+Pj4gWyAyMTgxLjQ4MjM1NzM4NiAgICAgICAweDlkYzY0
-MTA2ZV0gICBkYmdfcHJlcGFyZTogZXA2aW46IHRyYiBmZmZmZmZjMDFlN2Y1MmIwIChFNDQ6RDQz
-KSBidWYgMDAwMDAwMDBlYTU3ODAwMCBzaXplIDF4IDggY3RybCAwMDAwMDgxMSAoSGxjczpzQzpu
-b3JtYWwpDQo+Pj4+IFsgMjE4MS40ODIzOTE4NjUgICAgICAgMHg5ZGM2NDEzMDRdICAgZGJnX3Nl
-bmRfZXBfY21kOiBlcDZpbjogY21kICdVcGRhdGUgVHJhbnNmZXInIFtkMDAwN10gcGFyYW1zIDAw
-MDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6IFN1Y2Nlc3NmdWwNCj4+Pj4gWyAy
-MTgxLjQ4MjQ4NTYxNSAgICAgICAweDlkYzY0MWEwZF0gICBkYmdfc2VuZF9lcF9jbWQ6IGVwMG91
-dDogY21kICdTdGFydCBUcmFuc2ZlcicgWzQwNl0gcGFyYW1zIDAwMDAwMDAwIGVmZmZhMDAwIDAw
-MDAwMDAwIC0tPiBzdGF0dXM6IFN1Y2Nlc3NmdWwNCj4+Pj4gWyAyMTgxLjQ4MjU2NTMwMyAgICAg
-ICAweDlkYzY0MjAwNl0gICBldmVudCAoMDAwMDEwYzApOiBlcDBvdXQ6IFRyYW5zZmVyIE5vdCBS
-ZWFkeSBbMF0gKE5vdCBBY3RpdmUpIFtEYXRhIFBoYXNlXQ0KPj4+PiBbIDIxODEuNDgyNzE5NDE3
-ICAgICAgIDB4OWRjNjQyYjk2XSAgIGV2ZW50ICgwMDAwMjA0MCk6IGVwMG91dDogVHJhbnNmZXIg
-Q29tcGxldGUgKFNpbCkgW0RhdGEgUGhhc2VdDQo+Pj4+IFsgMjE4MS40ODI4MTQ5MzggICAgICAg
-MHg5ZGM2NDMyYzBdICAgZGJnX2dhZGdldF9naXZlYmFjazogZXAwb3V0OiByZXEgZmZmZmZmODdk
-Zjg0ZDkwMCBsZW5ndGggMjAvMjAgenNJID09PiAwDQo+Pj4+IFsgMjE4MS40ODI5MjYwODQgICAg
-ICAgMHg5ZGM2NDNiMTZdICAgZXZlbnQgKDAwMDAyMGMyKTogZXAwaW46IFRyYW5zZmVyIE5vdCBS
-ZWFkeSBbMF0gKE5vdCBBY3RpdmUpIFtTdGF0dXMgUGhhc2VdDQo+Pj4+IFsgMjE4MS40ODMwMjQy
-NjEgICAgICAgMHg5ZGM2NDQyNzJdICAgZGJnX3NlbmRfZXBfY21kOiBlcDBpbjogY21kICdTdGFy
-dCBUcmFuc2ZlcicgWzQwNl0gcGFyYW1zIDAwMDAwMDAwIGVmZmZhMDAwIDAwMDAwMDAwIC0tPiBz
-dGF0dXM6IFN1Y2Nlc3NmdWwNCj4+Pj4NCj4+Pj4gVGhlIGNvbnRyb2wgc3RhdHVzIGlzbid0IGNv
-bXBsZXRlZCBoZXJlLg0KPj4+Pg0KPj4+PiBbIDIxODEuNDgzMDY5NTIxICAgICAgIDB4OWRjNjQ0
-NWQ3XSAgIGRiZ19lcF9kZXF1ZXVlOiBlcDJpbjogcmVxIGZmZmZmZjg3OWY1YThiMDAgbGVuZ3Ro
-IDAvNjM2ODAgenNJID09PiAtMTE1DQo+Pj4+IFsgMjE4MS40OTYwNjg3OTIgICAgICAgMHg5ZGM2
-ODE0YzldICAgZGJnX3NlbmRfZXBfY21kOiBlcDJpbjogY21kICdFbmQgVHJhbnNmZXInIFs1MGQw
-OF0gcGFyYW1zIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIC0tPiBzdGF0dXM6IFRpbWVkIE91
-dA0KPj4+Pg0KPj4+PiBCdXQgdGhlIGRlcXVldWUgbWF5IGNvbWUgd2hlbiBob3N0IGFscmVhZHkg
-c2VudCBhIG5ldyBTZXR1cCBwYWNrZXQuDQo+Pj4+IFRoZSBlcDBvdXQgaGFzbid0IHN0YXJ0ZWQg
-eWV0IGF0IHRoZSBwb2ludC4NCj4+Pj4NCj4+Pj4gRHVlIHRvIHZhcmlvdXMgc3lzdGVtIGxhdGVu
-Y3ksIEkgY2FuIHNlZSB0aGF0IHRoaXMgY2FuIGhhcHBlbiB3aGVuDQo+Pj4+IHRoZSBkd2MzIGRy
-aXZlciBoYXNuJ3QgcmVjZWl2ZWQgdGhlIGludGVycnVwdCBub3RpZmllZCB0aGUgc3RhdHVzIHN0
-YWdlDQo+Pj4+IGV2ZW50IHlldC4NCj4+Pj4NCj4+Pj4gSWYgdGhhdCdzIHRoZSBjYXNlLCB0aGUg
-aG9zdCBtYXkgaGF2ZSBhbHJlYWR5IHNlbnQgdGhlIFNldHVwIHBhY2tldA0KPj4+PiBhdCB0aGlz
-IHBvaW50LiBTbyB0aGUgRW5kIFRyYW5zZmVyIG1heSBnZXQgc3R1Y2sgaWYgdGhlIFNldHVwIHBh
-Y2tldA0KPj4+PiBpc24ndCBETUEgb3V0IHlldC4NCj4+Pj4NCj4+Pj4gQ2FuIHlvdSB0cnkgdGhl
-IGNoYW5nZSBiZWxvdyB0byBzZWUgaWYgaXQgcmVzb2x2ZXMgdGhlIGlzc3VlPw0KPj4+IFRoYW5r
-cywgVGhpbmguICBTdXJlIEknbGwgZ2l2ZSBpdCBhIHRyeSB3aXRoIHRoaXMgY2hhbmdlLiAgVGhp
-cyBpcyB2ZXJ5DQo+Pj4gc2ltaWxhciB0byB0aGUgY2hhbmdlIHByb3Bvc2VkIGhlcmUgYXMgd2Vs
-bDoNCj4+Pg0KPj4+IGh0dHBzOi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRwczovL2xvcmUua2Vy
-bmVsLm9yZy9saW51eC11c2IvMjAyMjAyMTYwMDA4MzUuMjU0MDAtMy1xdWljX3djaGVuZ0BxdWlj
-aW5jLmNvbS9fXzshIUE0RjJSOUdfcGchS2xnU3BORUxPWFF5ZElRdWFyQTNBNE5KWEljdkhzbFhx
-ek9kQndZcVVJUjk3TXFkcDh6ZHllemhPQzlFSjZVcXhMeE0kIA0KPj4+DQo+Pg0KPj4gTm90IHN1
-cmUgaWYgdGhpcyBjb21wbGV0ZWx5IHJlc29sdmVzIHRoZSBpc3N1ZSBoZXJlLiBUaGUgY2hhbmdl
-IHNlZW1zIHRvDQo+PiBpc3N1ZSB0aGUgRW5kIFRyYW5zZmVyIGNvbW1hbmQgYmVmb3JlIFN0YXJ0
-IFRyYW5zZmVyIGZvciB0aGUgbmV4dCBTZXR1cA0KPj4gc3RhZ2UgY29tcGxldGVzLiBBbHNvIGl0
-J3MgbWlzc2luZyBzb21lIGNoZWNrcyBmb3IgYXN5bmMgY2FsbHMgdG8gdGhlDQo+PiBlbmRwb2lu
-dCB0aGF0J3MgcGVuZGluZyBkZXF1ZXVlLiBBbHNvLCB3ZSBtYXkgbm90IG5lZWQgdG8gd2FpdCBm
-b3IgRW5kDQo+PiBUcmFuc2ZlciBjb21tYW5kIHRvIHRpbWUgb3V0IGlmIHdlIGtub3cgdGhlIGNv
-bmRpdGlvbiB0byBhdm9pZC4NCj4+DQo+Pj4gT25lIHRoaW5nIHRvIG1lbnRpb24gaXMgdGhhdCwg
-SSdtIG5vdCBzdXJlIGhvdyBkZXBlbmRhYmxlIGNoZWNraW5nIHNvbGV5DQo+Pj4gdGhlIGVwMHN0
-YXRlIHdvdWxkIGJlLiAgSSd2ZSBzZWVuIHNvbWUgc2NlbmFyaW9zIHdoZXJlIHdlJ2QgcnVuIGlu
-dG8gdGhlDQo+Pj4gZW5kIHRyYW5zZmVyIHRpbWVvdXQgZHVyaW5nIHRoZSB0aW1lIGJldHdlZW4g
-aW5zcGVjdGluZyB0aGUgU0VUVVAgcGFja2V0DQo+Pj4gKGR3YzNfZXAwX2luc3BlY3Rfc2V0dXAo
-KSkgYW5kIHdoZW4gdGhlIGRhdGEgcGhhc2UgaXMgcXVldWVkLiAgVGhlDQo+Pj4gdGltaW5nIG9m
-IHRoZSBkYXRhIHBoYXNlIGNhbiBwb3RlbnRpYWxseSBkaWZmZXIgaWYgaXQgaXMgYSB2ZW5kb3IN
-Cj4+PiBzcGVjaWZpYyBjb250cm9sIHJlcXVlc3QuDQo+Pg0KPj4gVGhpcyB0aW1lb3V0IHNob3Vs
-ZCBvbmx5IGFwcGx5IHRvIFNldHVwIHBhY2tldCBhbmQgU2V0dXAgc3RhZ2UuIEV2ZW4gaWYNCj4+
-IGl0J3MgdmVuZG9yIHNwZWNpZmljIGNvbnRyb2wgcmVxdWVzdCwgaXQgc2hvdWxkIGJlIGZpbmUu
-IEhvc3Qgc2hvdWxkIG5vdA0KPj4gaXNzdWUgYSBTZXR1cCBwYWNrZXQgdW50aWwgaXQgcmVjZWl2
-ZXMgYSBzdGF0dXMgc3RhZ2UgKHVubGVzcyB0aGVyZSdzIGENCj4+IGRpc2Nvbm5lY3QgaW4gdGhl
-IG1pZGRsZSBvZiBhIGNvbnRyb2wgdHJhbnNmZXIsIGJ1dCB0aGF0J3MgYSBkaWZmZXJlbnQNCj4+
-IGlzc3VlKS4NCj4+DQo+PiBJZiB5b3UgZG8gc2VlIGEgcHJvYmxlbS4gV2UgY2FuIHRha2UgYSBs
-b29rIGZ1cnRoZXIuDQo+Pg0KPiBTbyBmYXIgc28gZ29vZCB3LyB0aGUgdGVzdGluZy4gIEhhZCB0
-byBtYWtlIGEgc21hbGwgY2hhbmdlIGluIHlvdXIgcGF0Y2gNCj4gdG8gZml4IGEgdHlwbzoNCj4g
-ICAgICAgICAgICAgICAgIGlmICghKGR3YzNfZXAtPmZsYWdzICYgRFdDM19FUF9ERUxBWV9TVE9Q
-KSkNCj4gICAgICAgICAgICAgICAgICAgICAgICAgY29udGludWU7DQo+IA0KPiAgICAgICAgICAg
-ICAgICAgZHdjM19lcC0+ZmxhZ3MgJj0gfkRXQzNfRVBfREVMQVlfU1RPUDsNCj4gICAgICAgICAg
-ICAgICAgIHJldCA9IGR3YzNfc3RvcF9hY3RpdmVfdHJhbnNmZXIoZHdjM19lcCwgdHJ1ZSwgdHJ1
-ZSk7DQo+IA0KPiBXYXMgdXNpbmcgZGVwIGluc3RlYWQgb2YgZHdjM19lcC4gIFdpbGwgbGV0IHRo
-aXMgcnVuIG92ZXIgdGhlIHdlZWtlbmQNCj4gYW5kIGdldCBiYWNrIHRvIHlvdS4NCj4gDQoNCk9r
-LiBUaGlzIHNlZW1zIHRvIGNvbmZpcm0gbXkgc3VzcGljaW9uLiBDYW4geW91IHVwZGF0ZSB0aGUg
-cGF0Y2ggd2l0aA0KdGhlIGZvbGxvd2luZyBhZGp1c3RtZW50Og0KDQpkaWZmIC0tZ2l0IGEvZHJp
-dmVycy91c2IvZHdjMy9nYWRnZXQuYyBiL2RyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMNCmluZGV4
-IDNlNzVlYWExM2FiYy4uYzNmNzUyOWY2NGZjIDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2IvZHdj
-My9nYWRnZXQuYw0KKysrIGIvZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYw0KQEAgLTIzMDksNiAr
-MjMwOSwxMCBAQCBzdGF0aWMgaW50IGR3YzNfZ2FkZ2V0X2VwX2RlcXVldWUoc3RydWN0IHVzYl9l
-cCAqZXAsDQogICAgICAgICAgICAgICAgaWYgKHIgPT0gcmVxKSB7DQogICAgICAgICAgICAgICAg
-ICAgICAgICBzdHJ1Y3QgZHdjM19yZXF1ZXN0ICp0Ow0KDQorICAgICAgICAgICAgICAgICAgICAg
-ICBpZiAoZHdjLT5lcDBzdGF0ZSAhPSBFUDBfU0VUVVBfUEhBU0UgJiYNCisgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAhZHdjLT5kZWxheWVkX3N0YXR1cykNCisgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgZGVwLT5mbGFncyB8PSBEV0MzX0VQX0RFTEFZX1NUT1A7DQorDQogICAgICAg
-ICAgICAgICAgICAgICAgICAvKiB3YWl0IHVudGlsIGl0IGlzIHByb2Nlc3NlZCAqLw0KICAgICAg
-ICAgICAgICAgICAgICAgICAgZHdjM19zdG9wX2FjdGl2ZV90cmFuc2ZlcihkZXAsIHRydWUsIHRy
-dWUpOw0KDQpUaGlzIGlzIHRvIGF2b2lkIGEgY2FzZSBpZiB0aGUgZnVuY3Rpb24gZHJpdmVyIGhh
-cyBzb21lIGRlcGVuZGVuY3kgZm9yDQpyZXF1ZXN0cyB0byByZXR1cm4gYmVmb3JlIHNlbmRpbmcg
-dGhlIGNvbnRyb2wgc3RhdHVzIHVzaW5nIGRlbGF5ZWQNCnN0YXR1cywgd2hpY2ggY2FuIGNhdXNl
-IGEgaGFuZy4NCg0KV2Ugb25seSBuZWVkIHRvIG1ha2Ugc3VyZSBub3QgdG8gaXNzdWUgRW5kIFRy
-YW5zZmVyIGFmdGVyIHRoZSBzdGF0dXMNCnRyYW5zZmVyIHN0YXJ0ZWQgYW5kIGJlZm9yZSBpdHMg
-Y29tcGxldGlvbiBpbnRlcnJ1cHQsIHdoaWNoIG1heSBwcmV2ZW50DQp0aGUgZHJpdmVyIGZyb20g
-c3RhcnRpbmcgdGhlIFNldHVwIHN0YWdlLg0KDQpUaGFua3MsDQpUaGluaA0K
+On 2022/3/5 4:28 上午, Zhouyi Zhou wrote:
+> Hi Paul
+> 
+> Yes, your suggestion works!
+> Thank you for your guidance, this is the first time I ever did a
+> bisection, I gained greatly during this process!
+
+Hi Zhouyi, thanks for the bisection test.
+Could this patch solve RCU warning? I just tested on my machine and there
+is no RCU warning any more.
+
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 1e356c222756..0d1ada8968d7 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -450,6 +450,7 @@ extern struct mutex cgroup_mutex;
+ extern spinlock_t css_set_lock;
+ #define task_css_set_check(task, __c)                                  \
+        rcu_dereference_check((task)->cgroups,                          \
++               rcu_read_lock_sched_held() ||                           \
+                lockdep_is_held(&cgroup_mutex) ||                       \
+                lockdep_is_held(&css_set_lock) ||                       \
+                ((task)->flags & PF_EXITING) || (__c))
+
+Thanks.
+
+> 
+> On Sat, Mar 5, 2022 at 3:44 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>>
+>> On Sat, Mar 05, 2022 at 03:38:33AM +0800, Zhouyi Zhou wrote:
+>>> Hi,
+>>> I can reproduce these warnings on my X86 VM.
+>>> Following the my backtrace:
+>>>
+>>> (gdb) bt
+>>> #0  lockdep_rcu_suspicious (file=file@entry=0xffffffff825ea8ff
+>>> "include/linux/cgroup.h", line=line@entry=494,
+>>>     s=s@entry=0xffffffff825c5c50 "suspicious rcu_dereference_check()
+>>> usage") at ./arch/x86/include/asm/current.h:15
+>>> #1  0xffffffff81183103 in task_css (subsys_id=2,
+>>> task=0xffff888100804080) at ./include/linux/cgroup.h:494
+>>> #2  task_ca (tsk=0xffff888100804080) at kernel/sched/cpuacct.c:40
+>>> #3  cpuacct_charge (tsk=tsk@entry=0xffff888100804080,
+>>> cputime=cputime@entry=3344803) at kernel/sched/cpuacct.c:342
+>>> #4  0xffffffff81162655 in cgroup_account_cputime (delta_exec=3344803,
+>>> task=0xffff888100804080) at ./include/linux/cgroup.h:792
+>>> #5  update_curr (cfs_rq=cfs_rq@entry=0xffff88813b63f500) at
+>>> kernel/sched/fair.c:907
+>>> #6  0xffffffff81164797 in dequeue_entity (flags=10,
+>>> se=0xffff888100804100, cfs_rq=0xffff88813b63f500) at
+>>> kernel/sched/fair.c:5771
+>>> #7  dequeue_task_fair (rq=0xffff88813b63f440, p=0xffff888100804080,
+>>> flags=10) at kernel/sched/fair.c:5771
+>>> #8  0xffffffff8115412a in dequeue_task (flags=10,
+>>> p=0xffff888100804080, rq=0xffff88813b63f440) at
+>>> kernel/sched/core.c:2019
+>>> #9  __do_set_cpus_allowed (p=0xffff888100804080,
+>>> new_mask=0xffffffff831b4d40 <housekeeping+512>, flags=0) at
+>>> kernel/sched/core.c:2508
+>>> #10 0xffffffff811564ca in __set_cpus_allowed_ptr_locked
+>>> (p=p@entry=0xffff888100804080,
+>>> new_mask=new_mask@entry=0xffffffff831b4d40 <housekeeping+512>,
+>>>     flags=flags@entry=0, rq=0xffff88813b63f440,
+>>> rf=rf@entry=0xffffc9000012bee8) at kernel/sched/core.c:2841
+>>> #11 0xffffffff81156573 in __set_cpus_allowed_ptr
+>>> (p=p@entry=0xffff888100804080, new_mask=0xffffffff831b4d40
+>>> <housekeeping+512>, flags=flags@entry=0)
+>>>     at kernel/sched/core.c:2874
+>>> #12 0xffffffff8115664c in set_cpus_allowed_ptr
+>>> (p=p@entry=0xffff888100804080, new_mask=<optimized out>) at
+>>> kernel/sched/core.c:2879
+>>> #13 0xffffffff81144676 in kthreadd (unused=<optimized out>) at
+>>> kernel/kthread.c:724
+>>> #14 0xffffffff810019df in ret_from_fork () at arch/x86/entry/entry_64.S:295
+>>> #15 0x0000000000000000 in ?? ()
+>>>
+>>> Do the warnings have something to do with commit
+>>> dc6e0818bc9a0336d9accf3ea35d146d72aa7a18 (sched/cpuacct: Optimize away
+>>> RCU read lock) ?
+>>
+>> If you have not already done so, could you please try running on this
+>> commit and then on the commit immediately preceding it?  Just as a
+>> authoritative way to answer your question.  ;-)
+>>
+>>                                                         Thanx, Paul
+>>
+> git reset --hard dc6e0818bc9a0336d9accf3ea35d146d72aa7a18
+> make -j 16 bindeb-pkg
+> there are RCU WARNINGs:
+> http://154.223.142.244/logs/20220305/log.dc6e0818bc9a0336d9accf3ea35d146d72aa7a18.txt
+> 
+> then I running on the commit immediately preceding it
+> git reset --hard 248cc9993d1cc12b8e9ed716cc3fc09f6c3517dd
+> make -j 16 bindeb-pkg
+> the WARNINGs are gone with the wind ;-)
+> http://154.223.142.244/logs/20220305/log.248cc9993d1cc12b8e9ed716cc3fc09f6c3517dd.txt
+> 
+> Many thanks
+> Zhouyi
+>>> Many thanks
+>>> Zhouyi
+>>>
+>>> On Fri, Mar 4, 2022 at 10:43 PM Naresh Kamboju
+>>> <naresh.kamboju@linaro.org> wrote:
+>>>>
+>>>> While booting x86_64 with linux next-20220304 kernel the following kernel
+>>>> warning reported [1].
+>>>>
+>>>> metadata:
+>>>>   git_ref: master
+>>>>   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>>>>   git_sha: 6d284ba80c0c485bcaa7bdf67f232d572640edc4
+>>>>   git_describe: next-20220304
+>>>>   kernel-config: https://builds.tuxbuild.com/25uuYdm2vTO275aZ3IewZY5sKbU/config
+>>>>
+>>>>
+>>>> warning log:
+>>>> ---------
+>>>> [    1.482171] MDS: Mitigation: Clear CPU buffers
+>>>> [    1.485680] Freeing SMP alternatives memory: 52K
+>>>> [    1.487341]
+>>>> [    1.488169] =============================
+>>>> [    1.488169] WARNING: suspicious RCU usage
+>>>> [    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
+>>>> [    1.488169] -----------------------------
+>>>> [    1.488169] include/linux/cgroup.h:494 suspicious
+>>>> rcu_dereference_check() usage!
+>>>> [    1.488169]
+>>>> [    1.488169] other info that might help us debug this:
+>>>> [    1.488169]
+>>>> [    1.488169]
+>>>> [    1.488169] rcu_scheduler_active = 1, debug_locks = 1
+>>>> [    1.488169] 2 locks held by kthreadd/2:
+>>>> [    1.488169]  #0: ffff9ba440352330 (&p->pi_lock){....}-{2:2}, at:
+>>>> task_rq_lock+0x2e/0x130
+>>>> [    1.488169]  #1: ffff9ba7a7a2d058 (&rq->__lock){-...}-{2:2}, at:
+>>>> task_rq_lock+0x5d/0x130
+>>>> [    1.488169]
+>>>> [    1.488169] stack backtrace:
+>>>> [    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
+>>>> 5.17.0-rc6-next-20220304 #1
+>>>> [    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+>>>> 2.5 11/26/2020
+>>>> [    1.488169] Call Trace:
+>>>> [    1.488169]  <TASK>
+>>>> [    1.488169]  dump_stack_lvl+0x49/0x5e
+>>>> [    1.488169]  dump_stack+0x10/0x12
+>>>> [    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
+>>>> [    1.488169]  cpuacct_charge+0x10c/0x120
+>>>> [    1.488169]  update_curr+0x165/0x340
+>>>> [    1.488169]  dequeue_entity+0x23/0x430
+>>>> [    1.488169]  dequeue_task_fair+0xba/0x3b0
+>>>> [    1.488169]  __do_set_cpus_allowed+0xca/0x2c0
+>>>> [    1.488169]  __set_cpus_allowed_ptr_locked+0x128/0x1b0
+>>>> [    1.488169]  set_cpus_allowed_ptr+0x43/0x70
+>>>> [    1.488169]  kthreadd+0x49/0x230
+>>>> [    1.488169]  ? kthread_is_per_cpu+0x30/0x30
+>>>> [    1.488169]  ret_from_fork+0x22/0x30
+>>>> [    1.488169]  </TASK>
+>>>> [    1.488169]
+>>>> [    1.488169] =============================
+>>>> [    1.488169] WARNING: suspicious RCU usage
+>>>> [    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
+>>>> [    1.488169] -----------------------------
+>>>> [    1.488169] include/linux/cgroup.h:481 suspicious
+>>>> rcu_dereference_check() usage!
+>>>> [    1.488169]
+>>>> [    1.488169] other info that might help us debug this:
+>>>> [    1.488169]
+>>>> [    1.488169]
+>>>> [    1.488169] rcu_scheduler_active = 1, debug_locks = 1
+>>>> [    1.488169] 2 locks held by kthreadd/2:
+>>>> [    1.488169]  #0: ffff9ba440352330 (&p->pi_lock){....}-{2:2}, at:
+>>>> task_rq_lock+0x2e/0x130
+>>>> [    1.488169]  #1: ffff9ba7a7a2d058 (&rq->__lock){-...}-{2:2}, at:
+>>>> task_rq_lock+0x5d/0x130
+>>>> [    1.488169]
+>>>> [    1.488169] stack backtrace:
+>>>> [    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
+>>>> 5.17.0-rc6-next-20220304 #1
+>>>> [    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+>>>> 2.5 11/26/2020
+>>>> [    1.488169] Call Trace:
+>>>> [    1.488169]  <TASK>
+>>>> [    1.488169]  dump_stack_lvl+0x49/0x5e
+>>>> [    1.488169]  dump_stack+0x10/0x12
+>>>> [    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
+>>>> [    1.488169]  update_curr+0x2b7/0x340
+>>>> [    1.488169]  dequeue_entity+0x23/0x430
+>>>> [    1.488169]  dequeue_task_fair+0xba/0x3b0
+>>>> [    1.488169]  __do_set_cpus_allowed+0xca/0x2c0
+>>>> [    1.488169]  __set_cpus_allowed_ptr_locked+0x128/0x1b0
+>>>> [    1.488169]  set_cpus_allowed_ptr+0x43/0x70
+>>>> [    1.488169]  kthreadd+0x49/0x230
+>>>> [    1.488169]  ? kthread_is_per_cpu+0x30/0x30
+>>>> [    1.488169]  ret_from_fork+0x22/0x30
+>>>> [    1.488169]  </TASK>
+>>>> [    1.488169]
+>>>> [    1.488169] =============================
+>>>> [    1.488169] WARNING: suspicious RCU usage
+>>>> [    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
+>>>> [    1.488169] -----------------------------
+>>>> [    1.488169] include/linux/cgroup.h:481 suspicious
+>>>> rcu_dereference_check() usage!
+>>>> [    1.488169]
+>>>> [    1.488169] other info that might help us debug this:
+>>>> [    1.488169]
+>>>> [    1.488169]
+>>>> [    1.488169] rcu_scheduler_active = 1, debug_locks = 1
+>>>> [    1.488169] no locks held by kthreadd/2.
+>>>> [    1.488169]
+>>>> [    1.488169] stack backtrace:
+>>>> [    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
+>>>> 5.17.0-rc6-next-20220304 #1
+>>>> [    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+>>>> 2.5 11/26/2020
+>>>> [    1.488169] Call Trace:
+>>>> [    1.488169]  <IRQ>
+>>>> [    1.488169]  dump_stack_lvl+0x49/0x5e
+>>>> [    1.488169]  dump_stack+0x10/0x12
+>>>> [    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
+>>>> [    1.488169]  account_system_index_time+0x127/0x130
+>>>> [    1.488169]  account_system_time+0x50/0x60
+>>>> [    1.488169]  account_process_tick+0x59/0x80
+>>>> [    1.488169]  update_process_times+0x58/0xe0
+>>>> [    1.488169]  tick_periodic+0x37/0xf0
+>>>> [    1.488169]  tick_handle_periodic+0x24/0x70
+>>>> [    1.488169]  timer_interrupt+0x18/0x20
+>>>> [    1.488169]  __handle_irq_event_percpu+0x95/0x2f0
+>>>> [    1.488169]  handle_irq_event+0x39/0x80
+>>>> [    1.488169]  handle_edge_irq+0xa4/0x240
+>>>> [    1.488169]  __common_interrupt+0x8d/0x170
+>>>> [    1.488169]  common_interrupt+0xbd/0xe0
+>>>> [    1.488169]  </IRQ>
+>>>> [    1.488169]  <TASK>
+>>>> [    1.488169]  asm_common_interrupt+0x1e/0x40
+>>>> [    1.488169] RIP: 0010:_raw_spin_unlock_irqrestore+0x37/0x60
+>>>> [    1.488169] Code: fc 48 83 c7 18 53 48 89 f3 48 8b 75 08 e8 21 83
+>>>> ed fe 4c 89 e7 e8 19 b0 ed fe 80 e7 02 74 06 e8 6f 77 fa fe fb bf 01
+>>>> 00 00 00 <e8> 24 6b e9 fe 65 8b 05 bd e1 28 66 85 c0 74 05 5b 41 5c 5d
+>>>> c3 0f
+>>>> [    1.488169] RSP: 0000:ffffb75b0002fd50 EFLAGS: 00000202
+>>>> [    1.488169] RAX: 0000000000000007 RBX: 0000000000000246 RCX: 0000000000000000
+>>>> [    1.488169] RDX: 0000000000000000 RSI: ffffffff9a800a7c RDI: 0000000000000001
+>>>> [    1.488169] RBP: ffffb75b0002fd60 R08: 0000000000000001 R09: 0000000000000001
+>>>> [    1.488169] R10: 0000000000000002 R11: 0000000000000001 R12: ffff9ba440352318
+>>>> [    1.488169] R13: 0000000000000000 R14: 0000000000000000 R15: ffff9ba7a7a2d040
+>>>> [    1.488169]  affine_move_task+0x2d4/0x5d0
+>>>> [    1.488169]  ? __this_cpu_preempt_check+0x13/0x20
+>>>> [    1.488169]  ? lock_is_held_type+0xdd/0x130
+>>>> [    1.488169]  ? enqueue_entity+0x1b8/0x520
+>>>> [    1.488169]  __set_cpus_allowed_ptr_locked+0x15c/0x1b0
+>>>> [    1.488169]  set_cpus_allowed_ptr+0x43/0x70
+>>>> [    1.488169]  kthreadd+0x49/0x230
+>>>> [    1.488169]  ? kthread_is_per_cpu+0x30/0x30
+>>>> [    1.488169]  ret_from_fork+0x22/0x30
+>>>> [    1.488169]  </TASK>
+>>>> [    1.489211] smpboot: Estimated ratio of average max frequency by
+>>>> base frequency (times 1024): 1126
+>>>> [    1.490189] smpboot: CPU0: Intel(R) Xeon(R) CPU E3-1220 v6 @
+>>>> 3.00GHz (family: 0x6, model: 0x9e, stepping: 0x9)
+>>>> [    1.491635] cblist_init_generic: Setting adjustable number of
+>>>> callback queues.
+>>>> [    1.492171] cblist_init_generic: Setting shift to 2 and lim to 1.
+>>>> [    1.493226] cblist_init_generic: Setting shift to 2 and lim to 1.
+>>>> [    1.494226] cblist_init_generic: Setting shift to 2 and lim to 1.
+>>>> [    1.495219] Running RCU-tasks wait API self tests
+>>>> [    1.598317] Performance Events: PEBS fmt3+, Skylake events, 32-deep
+>>>> LBR, full-width counters, Intel PMU driver.
+>>>> [    1.599176] ... version:                4
+>>>> [    1.600171] ... bit width:              48
+>>>> [    1.601171] ... generic registers:      8
+>>>> [    1.602171] ... value mask:             0000ffffffffffff
+>>>> [    1.603171] ... max period:             00007fffffffffff
+>>>> [    1.604176] ... fixed-purpose events:   3
+>>>> [    1.605171] ... event mask:             00000007000000ff
+>>>> [    1.606188] Callback from call_rcu_tasks_trace() invoked.
+>>>> [    1.607450] rcu: Hierarchical SRCU implementation.
+>>>> [    1.608310]
+>>>> [    1.609169] =============================
+>>>> [    1.609169] WARNING: suspicious RCU usage
+>>>> [    1.609169] 5.17.0-rc6-next-20220304 #1 Not tainted
+>>>> [    1.609169] -----------------------------
+>>>> [    1.609169] include/linux/cgroup.h:481 suspicious
+>>>> rcu_dereference_check() usage!
+>>>> [    1.609169]
+>>>> [    1.609169] other info that might help us debug this:
+>>>> [    1.609169]
+>>>> [    1.609169]
+>>>> [    1.609169] rcu_scheduler_active = 1, debug_locks = 1
+>>>> [    1.609169] 1 lock held by migration/0/17:
+>>>> [    1.609169]  #0: ffff9ba7a7a2d058 (&rq->__lock){-.-.}-{2:2}, at:
+>>>> __schedule+0x12d/0xcb0
+>>>> [    1.609169]
+>>>> [    1.609169] stack backtrace:
+>>>> [    1.609169] CPU: 0 PID: 17 Comm: migration/0 Not tainted
+>>>> 5.17.0-rc6-next-20220304 #1
+>>>> [    1.609169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+>>>> 2.5 11/26/2020
+>>>> [    1.609169] Stopper: 0x0 <- 0x0
+>>>> [    1.609169] Call Trace:
+>>>> [    1.609169]  <TASK>
+>>>> [    1.609169]  dump_stack_lvl+0x49/0x5e
+>>>> [    1.609169]  dump_stack+0x10/0x12
+>>>> [    1.609169]  lockdep_rcu_suspicious+0xed/0xf8
+>>>> [    1.609169]  put_prev_task_stop+0x1dc/0x240
+>>>> [    1.609169]  __schedule+0x751/0xcb0
+>>>> [    1.609169]  ? trace_preempt_off+0x29/0xc0
+>>>> [    1.609169]  ? smpboot_thread_fn+0x33/0x290
+>>>> [    1.609169]  schedule+0x58/0xc0
+>>>> [    1.609169]  smpboot_thread_fn+0xec/0x290
+>>>> [    1.609169]  ? sort_range+0x30/0x30
+>>>> [    1.609169]  kthread+0x107/0x130
+>>>> [    1.609169]  ? kthread_complete_and_exit+0x20/0x20
+>>>> [    1.609169]  ret_from_fork+0x22/0x30
+>>>> [    1.609169]  </TASK>
+>>>> [    1.610276] smp: Bringing up secondary CPUs ...
+>>>> [    1.611596] x86: Booting SMP configuration:
+>>>> [    1.612179] .... node  #0, CPUs:      #1 #2 #3
+>>>> [    1.614396] smp: Brought up 1 node, 4 CPUs
+>>>>
+>>>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>>>
+>>>> --
+>>>> Linaro LKFT
+>>>> https://lkft.linaro.org
+>>>>
+>>>> [1] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220304/testrun/8235955/suite/linux-log-parser/test/check-kernel-warning-4655400/log

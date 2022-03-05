@@ -2,316 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C004CE37A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232064CE37E
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiCEHrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 02:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S231458AbiCEHvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 02:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbiCEHrl (ORCPT
+        with ESMTP id S231351AbiCEHvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 02:47:41 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A0426D54E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 23:46:51 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2dc0364d2ceso114528897b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 23:46:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TjqsWBxxcZbi0ZyhuFzQQhnaPsJXUAJuTEaqNdWIwz0=;
-        b=RgRaV0iWe0BQ5E8pr3RCiA5yXf2MEHXFDmuGl1GYpI0f8oylqwhLXyjJGvV3Xub2fR
-         Jw/qpsd/D3WwVmxeKBYqxeZP7/YYymuDFlXdfKO3mQd8x1KFATWVTqx5mvTK8PjF2io+
-         FCa6YtB3zAYeozbXafoOV1A+TkrVOp1jyUClTagNjzRptv6ifmxxUR91EFSxaVVwL44A
-         Rf4hJarMscBw1/CungLIN1mCi4FjSz85nkvosSqEgm9YErQmafweZkAh/eWulgFES/OL
-         060cfI+iPHugrqsBuU8uLOfjsQzqHbVpv7pTXX2vvTtfKK67N6pLGYtt3YNUi++hwEc9
-         36UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TjqsWBxxcZbi0ZyhuFzQQhnaPsJXUAJuTEaqNdWIwz0=;
-        b=ZK1d1Njyv5FBMuueoxJff8T/EzoOWf7NLmbe9Ezzff62j3AuOHMS2lG8sdP8c4DXSl
-         SeteI4axm8lUiN9UD30b/z9E1EVLQcU142gKHbjnboW3f9NYcJ/OBoqATaFOchP5f57W
-         0CJf5yPmzY2b/zWynfGrUsYGDFtlLZWuNvubTERKltJ722JuqnP3ZZjSvOn/l0udA0TJ
-         DIHxW5OEJ7QphbtxlhfXbXspuLlEa1CeGNy3zqgWSQsPPrR2xiLMAjEGB3neeuxcNMAB
-         1f6rWhHdqQ94Pb8pAJa9MrFsyGsAZaGZoYq24CcGU/CRmErRkE0ol0p7L2sLpp7zD61v
-         hHEg==
-X-Gm-Message-State: AOAM5302SNPHajGpENwteJML888JI4EEM+tZhOXzwnoqUrqBH/xvY78N
-        pHsBp5v64kY6IO2QM6j0V5movBEpusyL7JbCy2pTWQ==
-X-Google-Smtp-Source: ABdhPJyerSsRJf9x3mqORsCC4Df7G8X8V13fK32S6E9bCocm6w6ms/Dd0DBJzzLOTK3oZKRzD7CmPN1aqHgBhSXga/Y=
-X-Received: by 2002:a81:4f14:0:b0:2dc:266:1f26 with SMTP id
- d20-20020a814f14000000b002dc02661f26mr1865092ywb.127.1646466410710; Fri, 04
- Mar 2022 23:46:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20220215213519.v4.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
- <20220215213519.v4.2.I63681490281b2392aa1ac05dff91a126394ab649@changeid> <FCAB9F47-39D4-4564-A0E6-530F79AF5B5B@holtmann.org>
-In-Reply-To: <FCAB9F47-39D4-4564-A0E6-530F79AF5B5B@holtmann.org>
-From:   Joseph Hwang <josephsih@google.com>
-Date:   Sat, 5 Mar 2022 15:46:39 +0800
-Message-ID: <CAHFy41-j7bsbPUZ8kTzs_bJJiRqXmFCGQJPJ_tZ7vHf2YGyRnA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] Bluetooth: btintel: surface Intel telemetry events
- through mgmt
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     BlueZ <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 5 Mar 2022 02:51:10 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54041C11D;
+        Fri,  4 Mar 2022 23:50:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646466598;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=Rd2dzRhbC7TMKXZYXCyMjIw3Nh9dHZcfGisq2xIWIBY=;
+    b=kSLmZLvXfi/dtKgen6iTcjlzMLBh9l8EZfiflqV8TCRolJEisq6/9FMB3bsmN2+Kru
+    AXBiAZah3tu0zY7v3wM2FSSAuwIiQnlYIW6Bx7mr6rcAQaHE/lhMeUJ6DZEP0R68wiyb
+    jsQC/1dKEpQxmP5cTqyh9thzgUcHPTgiTVXamAuGeCjokl9VOUF2aO7GfDE/dCMYQ6XG
+    Y0Ol5lW/n64nPTYHl399XUyptDnEi3x3KIybp0CkXooSgMgRMtN9znQTgEejzq+8UumB
+    vV+o5iUNZwAQLtzDsIDo+3kLRRfpchN+DANlCBw0eH3JpIo9rZIA4zXVya9RAEPcfR4D
+    +DPg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3i8cX7w=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
+    with ESMTPSA id n729cey257nuBmA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Sat, 5 Mar 2022 08:49:56 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [Letux-kernel] [PATCH v16 1/4] drm/bridge: dw-hdmi: introduce
+ dw_hdmi_enable_poll()
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <02FDA8C2-68FD-4EB8-9846-AF510D16424D@goldelico.com>
+Date:   Sat, 5 Mar 2022 08:49:56 +0100
+Cc:     Paul Boddie <paul@boddie.org.uk>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <C61F337D-7325-43BA-AFF1-A6E7FD602693@goldelico.com>
+References: <cover.1645895582.git.hns@goldelico.com>
+ <e54838849f80454b863f9f5634dd10f79ef7bb8f.1645895582.git.hns@goldelico.com>
+ <983e9064-17ad-e646-f37d-ca9173ba0967@baylibre.com>
+ <C8AE9A7A-E288-4637-ACAD-40CD33CD5F8C@goldelico.com>
+ <3E620AF4-402E-45EA-9D92-92EAEA9647F5@goldelico.com>
+ <SHH68R.Z3J9KSY0GQVA2@crapouillou.net>
+ <ABC1BD09-383B-4499-B034-340CE88725B3@goldelico.com>
+ <RUI68R.Z009SPJAAD8N1@crapouillou.net>
+ <F0F8F36B-3A0A-476C-8C7D-566255C629C6@goldelico.com>
+ <a52702bd-c929-8170-8896-d34ba82aba3c@baylibre.com>
+ <VYB88R.ATGIVGZ13PFM1@crapouillou.net>
+ <929BF693-D54F-40F0-BB61-520301D1C31F@goldelico.com>
+ <8JF88R.9V5YQ3Q6E8QO2@crapouillou.net>
+ <5CC8B441-AA50-45F5-A5D3-2F40F72A1B50@goldelico.com>
+ <NWG88R.ZTPBZB4D9J5Z@crapouillou.net>
+ <02FDA8C2-68FD-4EB8-9846-AF510D16424D@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcel, thank you for reviewing the patches! I have some questions.
-Please read my replies in the lines below. Thanks!
+Hi Paul,
 
-On Thu, Feb 17, 2022 at 8:53 PM Marcel Holtmann <marcel@holtmann.org> wrote=
-:
->
-> Hi Jospeh,
->
-> > When receiving a HCI vendor event, the kernel checks if it is an
-> > Intel telemetry event. If yes, the event is sent to bluez user
-> > space through the mgmt socket.
-> >
-> > Signed-off-by: Joseph Hwang <josephsih@chromium.org>
-> > Reviewed-by: Archie Pusaka <apusaka@chromium.org>
-> > ---
-> >
-> > (no changes since v3)
-> >
-> > Changes in v3:
-> > - Move intel_vendor_evt() from hci_event.c to the btintel driver.
-> >
-> > Changes in v2:
-> > - Drop the pull_quality_report_data function from hci_dev.
-> >  Do not bother hci_dev with it. Do not bleed the details
-> >  into the core.
-> >
-> > drivers/bluetooth/btintel.c      | 37 +++++++++++++++++++++++++++++++-
-> > drivers/bluetooth/btintel.h      |  7 ++++++
-> > include/net/bluetooth/hci_core.h |  2 ++
-> > net/bluetooth/hci_event.c        | 12 +++++++++++
-> > 4 files changed, 57 insertions(+), 1 deletion(-)
->
-> I don=E2=80=99t like intermixing core additions with driver implementatio=
-ns of it. I thought that I have mentioned this a few times, but maybe I mis=
-sed that in the last review round. So first introduce the callbacks and the=
- handling in hci_core etc. and then provide a patch for the driver using it=
-.
->
-> >
-> > diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-> > index 06514ed66022..c7732da2752f 100644
-> > --- a/drivers/bluetooth/btintel.c
-> > +++ b/drivers/bluetooth/btintel.c
-> > @@ -2401,9 +2401,12 @@ static int btintel_setup_combined(struct hci_dev=
- *hdev)
-> >       set_bit(HCI_QUIRK_SIMULTANEOUS_DISCOVERY, &hdev->quirks);
-> >       set_bit(HCI_QUIRK_NON_PERSISTENT_DIAG, &hdev->quirks);
-> >
-> > -     /* Set up the quality report callback for Intel devices */
-> > +     /* Set up the quality report callbacks for Intel devices */
-> >       hdev->set_quality_report =3D btintel_set_quality_report;
-> >
-> > +     /* Set up the vendor specific callback for Intel devices */
-> > +     hdev->vendor_evt =3D btintel_vendor_evt;
-> > +
-> >       /* For Legacy device, check the HW platform value and size */
-> >       if (skb->len =3D=3D sizeof(ver) && skb->data[1] =3D=3D 0x37) {
-> >               bt_dev_dbg(hdev, "Read the legacy Intel version informati=
-on");
-> > @@ -2650,6 +2653,38 @@ void btintel_secure_send_result(struct hci_dev *=
-hdev,
-> > }
-> > EXPORT_SYMBOL_GPL(btintel_secure_send_result);
-> >
-> > +#define INTEL_PREFIX         0x8087
-> > +#define TELEMETRY_CODE               0x03
-> > +
-> > +struct intel_prefix_evt_data {
-> > +     __le16 vendor_prefix;
-> > +     __u8 code;
-> > +     __u8 data[];   /* a number of struct intel_tlv subevents */
-> > +} __packed;
-> > +
-> > +static bool is_quality_report_evt(struct sk_buff *skb)
-> > +{
-> > +     struct intel_prefix_evt_data *ev;
-> > +     u16 vendor_prefix;
-> > +
-> > +     if (skb->len < sizeof(struct intel_prefix_evt_data))
-> > +             return false;
-> > +
-> > +     ev =3D (struct intel_prefix_evt_data *)skb->data;
-> > +     vendor_prefix =3D __le16_to_cpu(ev->vendor_prefix);
-> > +
-> > +     return vendor_prefix =3D=3D INTEL_PREFIX && ev->code =3D=3D TELEM=
-ETRY_CODE;
-> > +}
-> > +
-> > +void btintel_vendor_evt(struct hci_dev *hdev,  void *data, struct sk_b=
-uff *skb)
-> > +{
-> > +     /* Only interested in the telemetry event for now. */
-> > +     if (hdev->set_quality_report && is_quality_report_evt(skb))
-> > +             mgmt_quality_report(hdev, skb->data, skb->len,
-> > +                                 QUALITY_SPEC_INTEL_TELEMETRY);
->
-> You can not do that. Keep the interaction with hci_dev as limited as poss=
-ible. I think it would be best to introduce a hci_recv_quality_report funct=
-ion that drivers can call.
+> Am 04.03.2022 um 19:41 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+>=20
+>=20
+>> Am 04.03.2022 um 19:33 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>=20
+>>=20
+>>=20
+>> Le ven., mars 4 2022 at 19:15:13 +0100, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>>> Hi Paul,
+>>>> Am 04.03.2022 um 19:04 schrieb Paul Cercueil =
+<paul@crapouillou.net>:
+>>>> Le ven., mars 4 2022 at 18:51:14 +0100, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>>>>> Hi Paul, Neil,
+>>>>>> Am 04.03.2022 um 17:47 schrieb Paul Cercueil =
+<paul@crapouillou.net>:
+>>>>>> =46rom what I understood in Nikolaus' last message, HDMI hotplug =
+is actually correctly detected, so there's no need for polling. What is =
+missing is the call to drm_kms_helper_hotplug_event *somewhere*, so that =
+the information is correctly relayed to userspace.
+>>>>> Exactly.
+>>>>> As Maxime pointed out it should already be called by =
+drm_helper_hpd_irq_event() in dw_hdmi_irq() but isn't
+>>>>> because mode_config.poll_enabled isn't enabled.
+>>>>> So we can either
+>>>>> a) enable mode_config.poll_enabled so that it is called by =
+drm_helper_hpd_irq_event() or
+>>>>> b) make drm_kms_helper_hotplug_event() being called explicitly in =
+dw_hdmi_irq().
+>>>>>  We could guard that by mode_config.poll_enabled to avoid =
+drm_kms_helper_hotplug_event()
+>>>>>  being called twice (but I think the "changed" mechanism will take =
+care of).
+>>>>>> I think this issue can be fixed by calling =
+drm_bridge_connector_enable_hpd() on the connector in ingenic-drm-drv.c.
+>>>>> I don't see yet how this would solve it, but it may work.
+>>>> dw_hdmi_irq() calls drm_bridge_hpd_notify(), which would call =
+bridge->hpd_cb() if it was non-NULL.
+>>> Ok, this is a case c).
+>>> I vaguely remember having tried to analyse what bridge->hpd_cb is =
+but stopped since it is NULL...
+>>>> Calling drm_bridge_connector_enable_hpd() will set the =
+bridge->hpd_cb() callback to point to drm_bridge_connector_hpd_cb(), =
+which itself will call drm_kms_helper_hotplug_event(). Therefore, all =
+that is missing is one call to drm_bridge_connector_enable_hpd().
+>>> Ah, ok, I see.
+>>>>> Anyways, this all is a missing feature (sometimes called "bug") of =
+the *dw-hdmi driver* and IMHO
+>>>>> neither of the connector nor the ingenic-drm-drv.
+>>> Well, a little more analysis shows that =
+drm_bridge_connector_enable_hpd is called
+>>> in the *-drv.c for some other plaforms:
+>>> =
+https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/imx/dcss/dc=
+ss-dev.c#L292
+>>> =
+https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/imx/dcss/dc=
+ss-kms.c#L145
+>>> =
+https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/omapdrm/oma=
+p_drv.c#L393
+>>> =
+https://elixir.bootlin.com/linux/v5.17-rc6/source/drivers/gpu/drm/msm/hdmi=
+/hdmi.c#L317
+>>>>> So I think it should not be solved outside dw-hdmi.
+>>> Hm. Can we call drm_bridge_connector_enable_hpd() from inside =
+dw-hdmi?
+>>> Or would this be the solution if merged? (I currently can't try =
+code).
+>>> =
+https://lore.kernel.org/lkml/a7d0b013-6114-07b3-0a7b-0d17db8a3982@cogentem=
+bedded.com/T/
+>>=20
+>> Looks correct to me. It has been reviewed by two people so I believe =
+it will be merged very soon.
+>=20
+> Great. I will try asap. If it works we can drop all our private =
+ideas...
+>=20
+> And focus on the last missing piece for jz4780 HDMI: the output format =
+negotiation (which still is not working properly - but I have to analyse =
+why).
 
-Do you mean to set a callback hdev->hci_recv_quality_report in the
-kernel (which will invoke mgmt_quality_report) so that the driver can
-call it to send the quality reports?  There would be very few things
-done (maybe just to strip off the prefix header) in the driver before
-passing the skb data back to the kernel via
-hdev->hci_recv_quality_report. Does this sound good with you?
+Yes, it works. And I see you have merged it to drm-misc-next so that I =
+can build on it.
 
->
-> And really don=E2=80=99t bother with all these check. Dissect the vendor =
-event, if it is a quality report, then just report it via that callback. An=
-d you should be stripping off the prefix etc. Just report the plain data.
+So there is only the bus format negotiation to be understood and finally =
+solved for v17.
 
-I will remove those checks. As to stripping off the prefix, that was
-what I did in Series-version: 1. Your comment about my AOSP function
-in pulling off the prefix header from the skb was =E2=80=9Cjust do a basic
-length check and then move on. The kernel has no interest in this
-data.=E2=80=9D So that is why the whole skb->data is sent to the user space
-for further handling. Please let me know if it is better to strip off
-the prefix header for both Intel and AOSP.
+Great and thanks,
+Nikolaus
 
->
-> > +}
-> > +EXPORT_SYMBOL_GPL(btintel_vendor_evt);
-> > +
-> > MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
-> > MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSION);
-> > MODULE_VERSION(VERSION);
-> > diff --git a/drivers/bluetooth/btintel.h b/drivers/bluetooth/btintel.h
-> > index e0060e58573c..82dc278b09eb 100644
-> > --- a/drivers/bluetooth/btintel.h
-> > +++ b/drivers/bluetooth/btintel.h
-> > @@ -211,6 +211,7 @@ void btintel_bootup(struct hci_dev *hdev, const voi=
-d *ptr, unsigned int len);
-> > void btintel_secure_send_result(struct hci_dev *hdev,
-> >                               const void *ptr, unsigned int len);
-> > int btintel_set_quality_report(struct hci_dev *hdev, bool enable);
-> > +void btintel_vendor_evt(struct hci_dev *hdev,  void *data, struct sk_b=
-uff *skb);
-> > #else
-> >
-> > static inline int btintel_check_bdaddr(struct hci_dev *hdev)
-> > @@ -306,4 +307,10 @@ static inline int btintel_set_quality_report(struc=
-t hci_dev *hdev, bool enable)
-> > {
-> >       return -ENODEV;
-> > }
-> > +
-> > +static inline void btintel_vendor_evt(struct hci_dev *hdev,  void *dat=
-a,
->
-> Double space here.
->
-> > +                                   struct sk_buff *skb)
-> > +{
-> > +}
-> > +
-> > #endif
-> > diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/h=
-ci_core.h
-> > index ea83619ac4de..3505ffe20779 100644
-> > --- a/include/net/bluetooth/hci_core.h
-> > +++ b/include/net/bluetooth/hci_core.h
-> > @@ -635,6 +635,8 @@ struct hci_dev {
-> >       void (*cmd_timeout)(struct hci_dev *hdev);
-> >       bool (*wakeup)(struct hci_dev *hdev);
-> >       int (*set_quality_report)(struct hci_dev *hdev, bool enable);
-> > +     void (*vendor_evt)(struct hci_dev *hdev, void *data,
-> > +                        struct sk_buff *skb);
->
-> So I do not understand the void *data portion. Just hand down the skb.
->
-> >       int (*get_data_path_id)(struct hci_dev *hdev, __u8 *data_path);
-> >       int (*get_codec_config_data)(struct hci_dev *hdev, __u8 type,
-> >                                    struct bt_codec *codec, __u8 *vnd_le=
-n,
-> > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-> > index 6468ea0f71bd..e34dea0f0c2e 100644
-> > --- a/net/bluetooth/hci_event.c
-> > +++ b/net/bluetooth/hci_event.c
-> > @@ -4250,6 +4250,7 @@ static void hci_num_comp_blocks_evt(struct hci_de=
-v *hdev, void *data,
-> >  *       space to avoid collision.
-> >  */
-> > static unsigned char AOSP_BQR_PREFIX[] =3D { 0x58 };
-> > +static unsigned char INTEL_PREFIX[] =3D { 0x87, 0x80 };
->
-> This really bugs me. Intel specifics can not be here. I think we really h=
-ave to push all vendor events down to the driver.
-
-Can we have new hdev callbacks like hdev->get_vendor_prefix() and
-hdev->get_vendor_prefix_len() so that the vendor drivers such as Intel
-can set up their driver functions to derive the prefix and its length?
-
->
-> >
-> > /* Some vendor prefixes are fixed values and lengths. */
-> > #define FIXED_EVT_PREFIX(_prefix, _vendor_func)                        =
-       \
-> > @@ -4273,6 +4274,16 @@ static unsigned char AOSP_BQR_PREFIX[] =3D { 0x5=
-8 };
-> >       .get_prefix_len =3D _prefix_len_func,                            =
- \
-> > }
-> >
-> > +/* Every vendor that handles particular vendor events in its driver sh=
-ould
-> > + * 1. set up the vendor_evt callback in its driver and
-> > + * 2. add an entry in struct vendor_event_prefix.
-> > + */
-> > +static void vendor_evt(struct hci_dev *hdev,  void *data, struct sk_bu=
-ff *skb)
-> > +{
-> > +     if (hdev->vendor_evt)
-> > +             hdev->vendor_evt(hdev, data, skb);
-> > +}
-> > +
-> > /* Every distinct vendor specification must have a well-defined vendor
-> >  * event prefix to determine if a vendor event meets the specification.
-> >  * If an event prefix is fixed, it should be delcared with FIXED_EVT_PR=
-EFIX.
-> > @@ -4287,6 +4298,7 @@ struct vendor_event_prefix {
-> >       __u8 (*get_prefix_len)(struct hci_dev *hdev);
-> > } evt_prefixes[] =3D {
-> >       FIXED_EVT_PREFIX(AOSP_BQR_PREFIX, aosp_quality_report_evt),
-> > +     FIXED_EVT_PREFIX(INTEL_PREFIX, vendor_evt),
-> >       DYNAMIC_EVT_PREFIX(get_msft_evt_prefix, get_msft_evt_prefix_len,
-> >                          msft_vendor_evt),
->
-> Regards
->
-> Marcel
->
-
-
---=20
-
-Joseph Shyh-In Hwang
-Email: josephsih@google.com

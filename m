@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD71D4CE750
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 22:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B770D4CE754
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 23:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbiCEV7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 16:59:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
+        id S232328AbiCEWEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 17:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiCEV7e (ORCPT
+        with ESMTP id S229480AbiCEWEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 16:59:34 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCAD3D4A4;
-        Sat,  5 Mar 2022 13:58:43 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id s16so904596qks.4;
-        Sat, 05 Mar 2022 13:58:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bA6COhkxqJULw1J6YY+ycVS3dSCISRuj2zyilCuPjTI=;
-        b=BXZW4KqpbIUC7e+zCk9eKL18jIJ0xZDUM3QtLst9hKoIqWVpoDyleq8wSY2l5TncMf
-         JQk2xtn64KZmU1Ia3GSEU6RIMKWAGnrVYFoHUoI2RhJSOit01nr0AibQupeN8cW08iHC
-         RDYBX6rgSbkNCwhalIT+DRyn1Gbr/XWUyswf8JXXuhL9gyPJ6zlQexrG+xA6/BSn0g0B
-         skCYIBmAmproF0AygsVLr6LeZBsjJkbCkYF7zkkea53wpfy42+0yUB6rY9VY4apC7SzL
-         xwf5LMUJyZKnmUL0YucmXeOny0+opvohkONeP7QKsY/f8na36oD8KkMEjI5GAXEhuUh5
-         1H4g==
+        Sat, 5 Mar 2022 17:04:41 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D425EDEB
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 14:03:51 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BAD3E3F614
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 22:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646517829;
+        bh=kcOebttsrbGDsv+l6IIiJwH3C8wz7II7oFbthNyR+Kg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Lc0Yhkp+LwOoodKeDhvX4EyeK7NbR3rFJ0SafJKFJ1Pv6z18+qrzkpcvVTxsWi0k4
+         uwIpeaHpUo/sEzI/cjnsxdf9HB+Doy4qXY7PxlKEyNvF4inGB1lkthiBNlwYISNwEG
+         A91l86tFbRnZdEM404rQQs1P771XS0VE0WpxM3QuXualqyI5F0KXHrOF2Ni71psHPx
+         op4yQUzu9oshMdFHj2zHU28ary3jf8OSm6b307YHGyVWjmLdcisgZEm4DmjKQ6U726
+         CzNZF2XVMdk0TDlkj9QKMzYRXjyroB2ko+zsgqK8BECTSlYjtjb6BCm8jHyz31yLI8
+         x2Gcpafkr/lNg==
+Received: by mail-ej1-f71.google.com with SMTP id i14-20020a17090639ce00b006dabe6a112fso2288236eje.13
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 14:03:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bA6COhkxqJULw1J6YY+ycVS3dSCISRuj2zyilCuPjTI=;
-        b=rbJ4wQIJ+WGD6OY4epI3i1iOCYwNmR5oqor6PwDbrNo0kG/3Kv1pGYvz0xEcNJ5jtC
-         w5e0Ux/VJYdQ6JbNM68RNOZe4WpHG2b+EHlmrsv5s+K68c59CGzNDaqwj/dC4Ci/ww2S
-         tB54dQI63O1+J9rHwSp/Rmi7HON/AchJQnoGxCwpVoukNapWpGnyR7zV2HEpR9MpazBp
-         sWMlx9yjTei7T60UQuIM8LrzTGsThskCpmFlCfiajWr+rA2i20dGqj5KgXgYXgGKbkyG
-         L8B6+0fbcRnoPI3+uNjJtuwA1C4/JfbJeJMRitWQD89J3U2lIdESyMNF6pNGc/bSGXxd
-         aqdQ==
-X-Gm-Message-State: AOAM533kqOA3pj1XU5wHZQjd9QIwRRMe/Y/AlcTgFIR6rM1C8dx7ZU1e
-        /ai+pk6sBiVw1TSxPj+Q+EA=
-X-Google-Smtp-Source: ABdhPJw4vJOzmKSTMCO2ApCNqa91/MVS9ULXJohkxDqioQVkTER3QFf0T9/hF/IJnPH+tAoyzM+xew==
-X-Received: by 2002:a05:620a:4307:b0:507:d5b1:f65e with SMTP id u7-20020a05620a430700b00507d5b1f65emr2924851qko.363.1646517522746;
-        Sat, 05 Mar 2022 13:58:42 -0800 (PST)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id h188-20020a376cc5000000b00648d7e2a36bsm4230067qkc.117.2022.03.05.13.58.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 13:58:42 -0800 (PST)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     robin.murphy@arm.com, linux-rockchip@lists.infradead.org,
-        Peter Geis <pgwipeout@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] mmc: host: dw-mmc-rockchip: fix handling invalid clock rates
-Date:   Sat,  5 Mar 2022 16:58:35 -0500
-Message-Id: <20220305215835.2210388-3-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220305215835.2210388-1-pgwipeout@gmail.com>
-References: <20220305215835.2210388-1-pgwipeout@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kcOebttsrbGDsv+l6IIiJwH3C8wz7II7oFbthNyR+Kg=;
+        b=BM62OI7W3lmoSSUV2juQC+9VPUOwRze5GSyN10IyMJxE1inMOEYeD66LX4bPCYRCqg
+         msgGiZwDR9kHxlQmgB7Mcumi5B7NctWw9eGXB8ZI8MRSMTKp82/OIsWmvx9YyM01ojKL
+         CQwvIY4lw759G517kwPmCMWMdhDEyPnILuKL2N387zM9wYAfzfbVCtMR51/4lbkgdFtq
+         +1/8WiUIGkUxWrO1yUEfcLJFG5JO2PU5GK7K8oW6+4ejSQUAwCDrS5E4JaoiWX3/HqaV
+         FOWhjOKvau5nPcGH9IS7Vihc2m7KhecWkRb1xPpN+2NeNzLuCMNjobGG4dB5WqwrNRNl
+         2muQ==
+X-Gm-Message-State: AOAM530gAxrIQw9l4e4w624yrMaB8Jy5a8H0Dm8mo5QuJ0D3nek4o80d
+        MhFQN6Z0cjlujKhUF40ZlDpoq6rsjMA8GhXHiv/+/7DMqBXCIrrjAAzhSC1Lfm2FxkiLfrT6+Fg
+        /yucGIJ4eCWaxcYZkO1OrD1HK1H7VM0yOjEM250IT/w==
+X-Received: by 2002:a17:907:60d0:b0:6da:b397:42b0 with SMTP id hv16-20020a17090760d000b006dab39742b0mr4006789ejc.664.1646517829193;
+        Sat, 05 Mar 2022 14:03:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzu568kMEdY9mBB4SY3WtLiN2hC+mxjkPHjcxldg6hya+nNfdxz0DF7WRdYiLsTXUxBLcTs7Q==
+X-Received: by 2002:a17:907:60d0:b0:6da:b397:42b0 with SMTP id hv16-20020a17090760d000b006dab39742b0mr4006780ejc.664.1646517828964;
+        Sat, 05 Mar 2022 14:03:48 -0800 (PST)
+Received: from [192.168.0.140] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id p14-20020aa7cc8e000000b0040f13865fa9sm3974492edt.3.2022.03.05.14.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Mar 2022 14:03:48 -0800 (PST)
+Message-ID: <9e6bfc9b-63d0-d4b3-90af-4bf06cdb27f2@canonical.com>
+Date:   Sat, 5 Mar 2022 23:03:47 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/6] ASoC: add DT bindings for Microchip PDMC
+Content-Language: en-US
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     lars@metafoo.de, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, robh+dt@kernel.org, nicolas.ferre@microchip.com
+References: <20220304181756.1894561-1-codrin.ciubotariu@microchip.com>
+ <20220304181756.1894561-3-codrin.ciubotariu@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220304181756.1894561-3-codrin.ciubotariu@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,80 +86,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Rockchip rk356x ciu clock cannot be set as low as the dw-mmc
-hardware supports. This leads to a situation during card initialization
-where the clock is set lower than the clock driver can support. The
-dw-mmc-rockchip driver spews errors when this happens.
-For normal operation this only happens a few times during boot, but when
-cd-broken is enabled (in cases such as the SoQuartz module) this fires
-multiple times each poll cycle.
+On 04/03/2022 19:17, Codrin Ciubotariu wrote:
+> This patch adds DT bindings for the new Microchip PDMC embedded in
+> sama7g5 SoCs.
 
-Fix this by testing the lowest possible frequency that the clock driver
-can support which is within the mmc specification. Divide that rate by
-the internal divider and set f_min to this.
+Do not use "this patch" but simple imperative mode. See submitting patches.
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- drivers/mmc/host/dw_mmc-rockchip.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+> 
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> ---
+>  .../devicetree/bindings/sound/mchp,pdmc.yaml  | 99 +++++++++++++++++++
+>  include/dt-bindings/sound/mchp,pdmc.h         | 13 +++
+>  2 files changed, 112 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/mchp,pdmc.yaml
+>  create mode 100644 include/dt-bindings/sound/mchp,pdmc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mchp,pdmc.yaml b/Documentation/devicetree/bindings/sound/mchp,pdmc.yaml
+> new file mode 100644
+> index 000000000000..bdf5c52c29d9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/mchp,pdmc.yaml
 
-diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
-index 95d0ec0f5f3a..f825487aa739 100644
---- a/drivers/mmc/host/dw_mmc-rockchip.c
-+++ b/drivers/mmc/host/dw_mmc-rockchip.c
-@@ -15,7 +15,9 @@
- #include "dw_mmc.h"
- #include "dw_mmc-pltfm.h"
- 
--#define RK3288_CLKGEN_DIV       2
-+#define RK3288_CLKGEN_DIV	2
-+
-+static const unsigned int freqs[] = { 100000, 200000, 300000, 400000 };
- 
- struct dw_mci_rockchip_priv_data {
- 	struct clk		*drv_clk;
-@@ -51,7 +53,7 @@ static void dw_mci_rk3288_set_ios(struct dw_mci *host, struct mmc_ios *ios)
- 
- 	ret = clk_set_rate(host->ciu_clk, cclkin);
- 	if (ret)
--		dev_warn(host->dev, "failed to set rate %uHz\n", ios->clock);
-+		dev_warn(host->dev, "failed to set rate %uHz err: %d\n", cclkin, ret);
- 
- 	bus_hz = clk_get_rate(host->ciu_clk) / RK3288_CLKGEN_DIV;
- 	if (bus_hz != host->bus_hz) {
-@@ -290,13 +292,30 @@ static int dw_mci_rk3288_parse_dt(struct dw_mci *host)
- 
- static int dw_mci_rockchip_init(struct dw_mci *host)
- {
-+	int ret, i;
-+
- 	/* It is slot 8 on Rockchip SoCs */
- 	host->sdio_id0 = 8;
- 
--	if (of_device_is_compatible(host->dev->of_node,
--				    "rockchip,rk3288-dw-mshc"))
-+	if (of_device_is_compatible(host->dev->of_node, "rockchip,rk3288-dw-mshc")) {
- 		host->bus_hz /= RK3288_CLKGEN_DIV;
- 
-+		/* clock driver will fail if the clock is less than the lowest source clock
-+		 * divided by the internal clock divider. Test for the lowest available
-+		 * clock and set the minimum freq to clock / clock divider.
-+		 */
-+
-+		for (i = 0; i < ARRAY_SIZE(freqs); i++) {
-+			ret = clk_round_rate(host->ciu_clk, freqs[i] * RK3288_CLKGEN_DIV);
-+			if (ret > 0) {
-+				host->minimum_speed = ret / RK3288_CLKGEN_DIV;
-+				break;
-+			}
-+		}
-+		if (ret < 0)
-+			dev_warn(host->dev, "no valid minimum freq: %d\n", ret);
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+mchp is not a proper Microchip vendor prefix. You wanted "microchip"
+probably.
 
+> @@ -0,0 +1,99 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/mchp,pdmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip PDMC Device Tree Bindings
+
+s/PDMC/Pulse Density Microphone Controller/
+s/Device Tree Bindings//
+(title is about hardware)
+
+> +
+> +maintainers:
+> +  - Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> +
+> +description:
+> +  The Microchip Pulse Density Microphone Controller (PDMC) interfaces up to 4 digital microphones
+> +  having Pulse Density Modulated (PDM) outputs.
+> +
+> +properties:
+> +  "#sound-dai-cells":
+> +    const: 0
+> +
+> +  compatible:
+> +    const: microchip,sama7g5-pdmc
+
+Compatible goes first (and also keep such order in "required").
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Peripheral Bus Clock
+> +      - description: Generic Clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pclk
+> +      - const: gclk
+> +
+> +  dmas:
+> +    description: RX DMA Channel
+> +    maxItems: 1
+> +
+> +  dma-names:
+> +    const: rx
+> +
+> +  microchip,mic-pos:
+> +    description: |
+> +      Position of PDM microphones on the DS line and the sampling edge (rising or falling) of the
+> +      CLK line. A microphone is represented as a pair of DS line and the sampling edge. The first
+> +      microhpone is mapped to channel 0, the second to channel 1, etc.
+
+Lang typo (microphone).
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    items:
+> +      items:
+> +        - description: value for DS line
+> +        - description: value for sampling edge
+> +      anyOf:
+> +        - enum:
+> +            - [0, 0]
+> +            - [0, 1]
+> +            - [1, 0]
+> +            - [1, 1]
+> +    minItems: 1
+> +    maxItems: 4
+> +    uniqueItems: true
+> +
+> +required:
+> +  - "#sound-dai-cells"
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - dmas
+> +  - dma-names
+> +  - microchip,mic-pos
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/at91.h>
+> +    #include <dt-bindings/dma/at91.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/sound/mchp,pdmc.h>
+> +
+> +    pdmc: pdmc@e1608000 {
+
+Generic node name, so microphone? microphone-controller? sound? audio-codec?
+
+> +        #sound-dai-cells = <0>;
+> +        compatible = "microchip,sama7g5-pdmc";
+
+Compatible goes first, then reg.
+
+> +        reg = <0xe1608000 0x4000>;
+> +        interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
+> +        dmas = <&dma0 AT91_XDMAC_DT_PERID(37)>;
+> +        dma-names = "rx";
+> +        clocks = <&pmc PMC_TYPE_PERIPHERAL 68>, <&pmc PMC_TYPE_GCK 68>;
+> +        clock-names = "pclk", "gclk";
+> +        microchip,mic-pos = <MCHP_PDMC_DS0 MCHP_PDMC_CLK_POSITIVE>,
+> +                            <MCHP_PDMC_DS0 MCHP_PDMC_CLK_NEGATIVE>,
+> +                            <MCHP_PDMC_DS1 MCHP_PDMC_CLK_POSITIVE>,
+> +                            <MCHP_PDMC_DS1 MCHP_PDMC_CLK_NEGATIVE>;
+> +    };
+> diff --git a/include/dt-bindings/sound/mchp,pdmc.h b/include/dt-bindings/sound/mchp,pdmc.h
+> new file mode 100644
+> index 000000000000..543c424a5a6f
+> --- /dev/null
+> +++ b/include/dt-bindings/sound/mchp,pdmc.h
+
+Proper vendor prefix.
+
+> @@ -0,0 +1,13 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __DT_BINDINGS_MCHP_PDMC_H__
+> +#define __DT_BINDINGS_MCHP_PDMC_H__
+> +
+> +/* PDM microphone's pin placement */
+> +#define MCHP_PDMC_DS0 0
+> +#define MCHP_PDMC_DS1 1
+> +
+> +/* PDM microphone clock edge sampling */
+> +#define MCHP_PDMC_CLK_POSITIVE 0
+> +#define MCHP_PDMC_CLK_NEGATIVE 1
+> +
+> +#endif /* __DT_BINDINGS_MCHP_PDMC_H__ */
+
+
+Best regards,
+Krzysztof

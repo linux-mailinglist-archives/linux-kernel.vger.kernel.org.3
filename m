@@ -2,79 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3BD4CE4EB
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 13:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D2B4CE4EC
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 13:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbiCEMvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 07:51:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S231734AbiCEMwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 07:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiCEMvm (ORCPT
+        with ESMTP id S230155AbiCEMwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 07:51:42 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A369A75E50;
-        Sat,  5 Mar 2022 04:50:52 -0800 (PST)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K9ky94yrsz9s9R;
-        Sat,  5 Mar 2022 20:47:13 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 5 Mar
- 2022 20:50:50 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <edubezval@gmail.com>, <j-keerthy@ti.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
-        <rui.zhang@intel.com>, <romain.naour@smile.fr>,
-        <yuehaibing@huawei.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] thermal: ti-soc-thermal: Remove unused function ti_thermal_get_temp()
-Date:   Sat, 5 Mar 2022 20:50:47 +0800
-Message-ID: <20220305125047.26948-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Sat, 5 Mar 2022 07:52:20 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB9775C37
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 04:51:26 -0800 (PST)
+X-QQ-mid: bizesmtp90t1646484673tmmsihaa
+Received: from localhost.localdomain ( [114.222.120.105])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 05 Mar 2022 20:51:08 +0800 (CST)
+X-QQ-SSF: 01400000002000B0I000000A0000000
+X-QQ-FEAT: GiB59JtT4hAixvUU2qMoUK1jxRaTIQvQpwNoHAYOtAikGp4o7FujPsm4KBCi+
+        uVQPuReEEfBKYprwtvfCTYJs5343XjPZY3W2QVV+JWWaMPx0guzNqRTPAMYx6Rp58oRc4Qy
+        XdgY/PXb+IZhSwYshdtwFPgWq8tfStviCNxVXMLeOI0zc9hzZUt/89SWqZx/GJsbWsHaRvI
+        bSK/lbPRwInv6hWY/wfJ6rY9NBPjWTq98g2GWfGbdihVmt1UXD8rDEDnxxSnv6kJI3k+oAh
+        LxS/966DoHhRMeTB8/XwlQ0Z7t03Z/473ci74uTPQekaGGSF5HjDJbKaQPDCvv6Jw+KAd8e
+        PWXuDcRZER2Ot/R0Fc=
+X-QQ-GoodBg: 1
+From:   zhanglianjie <zhanglianjie@uniontech.com>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        zhanglianjie <zhanglianjie@uniontech.com>
+Subject: [PATCH] ASoC: intel: use asoc_substream_to_rtd()
+Date:   Sat,  5 Mar 2022 20:51:05 +0800
+Message-Id: <20220305125105.142704-1-zhanglianjie@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit b263b473bf62 ("thermal: ti-soc-thermal: Remove redundant code")
-left behind this, remove it.
+Now we can use asoc_substream_to_rtd() macro,
+let's use it.
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 8 --------
- 1 file changed, 8 deletions(-)
+Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
 
-diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-index 0959632b2170..703039d8b937 100644
---- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-+++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-@@ -107,14 +107,6 @@ static inline int __ti_thermal_get_temp(void *devdata, int *temp)
- 	return ret;
- }
- 
--static inline int ti_thermal_get_temp(struct thermal_zone_device *thermal,
--				      int *temp)
--{
--	struct ti_thermal_data *data = thermal->devdata;
--
--	return __ti_thermal_get_temp(data, temp);
--}
--
- static int __ti_thermal_get_trend(void *p, int trip, enum thermal_trend *trend)
+diff --git a/sound/soc/intel/catpt/pcm.c b/sound/soc/intel/catpt/pcm.c
+index 939a9b801dec..a26000cd5ceb 100644
+--- a/sound/soc/intel/catpt/pcm.c
++++ b/sound/soc/intel/catpt/pcm.c
+@@ -74,7 +74,7 @@ static struct catpt_stream_template *catpt_topology[] = {
+ static struct catpt_stream_template *
+ catpt_get_stream_template(struct snd_pcm_substream *substream)
  {
- 	struct ti_thermal_data *data = p;
--- 
-2.17.1
+-	struct snd_soc_pcm_runtime *rtm = substream->private_data;
++	struct snd_soc_pcm_runtime *rtm = asoc_substream_to_rtd(substream);
+ 	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtm, 0);
+ 	enum catpt_stream_type type;
+
+@@ -593,7 +593,7 @@ static int catpt_component_pcm_construct(struct snd_soc_component *component,
+ static int catpt_component_open(struct snd_soc_component *component,
+ 				struct snd_pcm_substream *substream)
+ {
+-	struct snd_soc_pcm_runtime *rtm = substream->private_data;
++	struct snd_soc_pcm_runtime *rtm = asoc_substream_to_rtd(substream);
+
+ 	if (!rtm->dai_link->no_pcm)
+ 		snd_soc_set_runtime_hwparams(substream, &catpt_pcm_hardware);
+@@ -604,7 +604,7 @@ static snd_pcm_uframes_t
+ catpt_component_pointer(struct snd_soc_component *component,
+ 			struct snd_pcm_substream *substream)
+ {
+-	struct snd_soc_pcm_runtime *rtm = substream->private_data;
++	struct snd_soc_pcm_runtime *rtm = asoc_substream_to_rtd(substream);
+ 	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtm, 0);
+ 	struct catpt_stream_runtime *stream;
+ 	struct catpt_dev *cdev = dev_get_drvdata(component->dev);
+--
+2.20.1
+
+
 

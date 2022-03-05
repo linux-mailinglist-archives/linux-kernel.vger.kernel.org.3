@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5AB4CE2A1
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 06:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2BA4CE2AB
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 06:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiCEFCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 00:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
+        id S229808AbiCEFJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 00:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiCEFCB (ORCPT
+        with ESMTP id S229743AbiCEFJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 00:02:01 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327D3243151
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 21:01:12 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id j5so8174170qvs.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 21:01:12 -0800 (PST)
+        Sat, 5 Mar 2022 00:09:54 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4DD56408
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 21:09:04 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id v3so9126814qta.11
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 21:09:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:mime-version;
-        bh=2eHN3M1iaBOEXAhuMwT4K/TklzzBAZXqZy5TjPog49E=;
-        b=fTJpKc4Ukfqz8n9hmt3kieVLQFx9jGVKMlQmPJDr+Ph//7kasa7068NmKEPFsK9YJC
-         mHAg0eyxUW2ZIilDzYThgESADnYqzavU6gCXek9MzCRIzl4xmUNmJLmJzvZWbz0mgKs5
-         9P2KBoKcOBNyYVBNCr/cQ6pp96z5Dvx0gvOGOULVLJrmndNXjXgENgUWBGd2eVrlS0DD
-         DA93zQ4FyZgQgb+0ky9tQ2OqlZ16Z9Olo2azdKtjLATUQ/jyzwuwDfyPODx5Jkb3761w
-         TwdKiq66ZA55pf4+E6MD+uih8DrfG5wX7hnRhsBB1yfa0uoe3OQ5XmwE/A3BV9p1midp
-         NAQg==
+        bh=RRLGmRSN4FEWITZQTBLeanINokMLl7XBSuB1f8u1R8U=;
+        b=Qd2Mcb5+9Cp91rLqN/x7h38CVuNBC7gPy+0Nke+8O6T0WZYCjad/ZMzp2FnSbWlhYE
+         VOae4qZk7kOo1u/MUyz1U3PGRhof/VcF4eM+bdZys4lQOEUN8Udrae4ObRVdhCs+xrEK
+         x6ZOd+290P1XvjppqniCU7Vxl7YH/cZplf9mEesICeJFdUvS1aoNVwpZwQHNzGwCO2Un
+         UZSiO31u4dts5CQheLHRMpXNj7ub8LXNye4hiHmFmPKMkQxOt3ZgYI0a5S/nQVus7J1R
+         sJtCnY6KgiVYQQRh21s5rQrfRVmtJXZBJXJ5UEGUe8xDVoFgki2e2sE5t91DvCEHpHjn
+         WyWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=2eHN3M1iaBOEXAhuMwT4K/TklzzBAZXqZy5TjPog49E=;
-        b=SgfIVoyVkei/qEogpwravd5WN1rhU/FnnnIPC7an3RY/x8kNs7aAd+WGm+eu3NH+fd
-         MXsk3y6QG5UTr1s/m3lupd+YoSgb3Qp7oYQxgJtZk/mENTmBxDxVAhp4uorrtKEde976
-         1ttJxjTapJ8x88rJS5+Br/lneyLhwlk0nDiRBTPANBq4Wpb53UeNa3fi2K7In/PVre0q
-         s/wrg4QRj14GYEpkixUbTq1UyYBvkgyybJkjOkfdK9O1bPjoxSe/A8kwDAdMdsIkgHmP
-         VmjnwPr6F744JvYVsgXUN1nfqMM9Zp2sDGBXxOaoeaGFtQjcPUvi7NEg8GFY6bd6U5DD
-         XvYQ==
-X-Gm-Message-State: AOAM530lpxCJERnAfRu1P+JeGT4fK0CnAUlxAGXP7FZZojh1GpKl9LR0
-        Xb3SYmOMf+ad1d4+bq6wvef0cg==
-X-Google-Smtp-Source: ABdhPJw2+Pvs5efe6ArxppAsDNI4CrNs4kOH1t66NFlCbZ+Sv7hGfQZsWJF7sTgzsx26KcPSZaUyoQ==
-X-Received: by 2002:a05:6214:5199:b0:435:32a:13af with SMTP id kl25-20020a056214519900b00435032a13afmr1648511qvb.116.1646456470976;
-        Fri, 04 Mar 2022 21:01:10 -0800 (PST)
+        bh=RRLGmRSN4FEWITZQTBLeanINokMLl7XBSuB1f8u1R8U=;
+        b=WZdMKP8LJUIN4Cwes3n4bN4dPY4x58ckpT7Bm3sFH1DYSE+kFASjURvIfLr7X5H6Mz
+         cCovEU57pJu++Tv1rwcy+2RGt95H1KMcLK8kjuRpQRHhnYva6m4gnzkvv0+4AxSKYvQY
+         mHA+XnJQ9XO1rsbUco0VYo2L1gP0c+mxpUcyeBqa4NKpkSMeMiDQREpA6uAJv+0oWsJC
+         ruTS3dSw+9aYQ2zyrItVg0SIIiTT30XZzQjHHSaQqEdFpduPkCvTH+bK45ueKq9ckX+k
+         Ha9Xxnf4AMJf0HuDClGalRLMCx1lrExlQwiy/8NJngVaZuz0xCegBUbSiKo7rehmwRIt
+         brGQ==
+X-Gm-Message-State: AOAM532Q5GHUKHONtyYN72D2rJK9y6ZRdYh+V2TGZ7J1ghZaeHTHs2wY
+        NMQ2yJqtNUqmABofCj1m1jgRBw==
+X-Google-Smtp-Source: ABdhPJwyQuaxpv8fho+9kTbdzDIGjjpwV0LJxK/pKpMXlHUA4J5IgQrWtQcCEraaAueh5IEKRwMooQ==
+X-Received: by 2002:a05:622a:60b:b0:2dd:9686:da7e with SMTP id z11-20020a05622a060b00b002dd9686da7emr1753263qta.513.1646456943432;
+        Fri, 04 Mar 2022 21:09:03 -0800 (PST)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id t18-20020ac85892000000b002de3a8bf768sm4853239qta.52.2022.03.04.21.01.09
+        by smtp.gmail.com with ESMTPSA id c16-20020a05622a059000b002dc93dc92d1sm4894991qtb.48.2022.03.04.21.09.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 21:01:10 -0800 (PST)
-Date:   Fri, 4 Mar 2022 21:00:57 -0800 (PST)
+        Fri, 04 Mar 2022 21:09:02 -0800 (PST)
+Date:   Fri, 4 Mar 2022 21:09:01 -0800 (PST)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.anvils
 To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Alex Shi <alexs@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH mmotm] mm: __isolate_lru_page_prepare() in
- isolate_migratepages_block()
-Message-ID: <879d62a8-91cc-d3c6-fb3b-69768236df68@google.com>
+cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        Zdenek Kabelac <zkabelac@redhat.com>,
+        Lukas Czerner <lczerner@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Christoph Hellwig <hch@lst.de>, Borislav Petkov <bp@suse.de>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH mmotm] tmpfs: do not allocate pages on read
+Message-ID: <f9c2f38f-5eb8-5d30-40fa-93e88b5fbc51@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -69,296 +73,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__isolate_lru_page_prepare() conflates two unrelated functions, with
-the flags to one disjoint from the flags to the other; and hides some
-of the important checks outside of isolate_migratepages_block(), where
-the sequence is better to be visible.  It comes from the days of lumpy
-reclaim, before compaction, when the combination made more sense.
+Mikulas asked in
+https://lore.kernel.org/linux-mm/alpine.LRH.2.02.2007210510230.6959@file01.intranet.prod.int.rdu2.redhat.com/
+Do we still need a0ee5ec520ed ("tmpfs: allocate on read when stacked")?
 
-Move what's needed by mm/compaction.c isolate_migratepages_block() inline
-there, and what's needed by mm/vmscan.c isolate_lru_pages() inline there.
+Lukas noticed this unusual behavior of loop device backed by tmpfs in
+https://lore.kernel.org/linux-mm/20211126075100.gd64odg2bcptiqeb@work/
 
-Shorten "isolate_mode" to "mode", so the sequence of conditions is easier
-to read.  Declare a "mapping" variable, to save one call to page_mapping()
-(but not another: calling again after page is locked is necessary).
-Simplify isolate_lru_pages() with a "move_to" list pointer.
+Normally, shmem_file_read_iter() copies the ZERO_PAGE when reading holes;
+but if it looks like it might be a read for "a stacking filesystem", it
+allocates actual pages to the page cache, and even marks them as dirty.
+And reads from the loop device do satisfy the test that is used.
 
+This oddity was added for an old version of unionfs, to help to limit
+its usage to the limited size of the tmpfs mount involved; but about
+the same time as the tmpfs mod went in (2.6.25), unionfs was reworked
+to proceed differently; and the mod kept just in case others needed it.
+
+Do we still need it? I cannot answer with more certainty than "Probably
+not". It's nasty enough that we really should try to delete it; but if
+a regression is reported somewhere, then we might have to revert later.
+
+It's not quite as simple as just removing the test (as Mikulas did):
+xfstests generic/013 hung because splice from tmpfs failed on page not
+up-to-date and page mapping unset.  That can be fixed just by marking
+the ZERO_PAGE as Uptodate, which of course it is; doing so here in
+shmem_file_read_iter() is distasteful, but seems to be the best way.
+
+My intention, though, was to stop using the ZERO_PAGE here altogether:
+surely iov_iter_zero() is better for this case?  Sadly not: it relies
+on clear_user(), and the x86 clear_user() is slower than its copy_user():
+https://lore.kernel.org/lkml/2f5ca5e4-e250-a41c-11fb-a7f4ebc7e1c9@google.com/
+
+But while we are still using the ZERO_PAGE, let's stop dirtying its
+struct page cacheline with unnecessary get_page() and put_page().
+
+Reported-by: Mikulas Patocka <mpatocka@redhat.com>
+Reported-by: Lukas Czerner <lczerner@redhat.com>
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
 
- include/linux/swap.h |   1 -
- mm/compaction.c      |  51 ++++++++++++++++++++++----
- mm/vmscan.c          | 101 +++++++++------------------------------------------
- 3 files changed, 62 insertions(+), 91 deletions(-)
+ mm/shmem.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -386,7 +386,6 @@ extern void lru_cache_add_inactive_or_unevictable(struct page *page,
- extern unsigned long zone_reclaimable_pages(struct zone *zone);
- extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
- 					gfp_t gfp_mask, nodemask_t *mask);
--extern bool __isolate_lru_page_prepare(struct page *page, isolate_mode_t mode);
- extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
- 						  unsigned long nr_pages,
- 						  gfp_t gfp_mask,
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -785,7 +785,7 @@ static bool too_many_isolated(pg_data_t *pgdat)
-  * @cc:		Compaction control structure.
-  * @low_pfn:	The first PFN to isolate
-  * @end_pfn:	The one-past-the-last PFN to isolate, within same pageblock
-- * @isolate_mode: Isolation mode to be used.
-+ * @mode:	Isolation mode to be used.
-  *
-  * Isolate all pages that can be migrated from the range specified by
-  * [low_pfn, end_pfn). The range is expected to be within same pageblock.
-@@ -798,7 +798,7 @@ static bool too_many_isolated(pg_data_t *pgdat)
-  */
- static int
- isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
--			unsigned long end_pfn, isolate_mode_t isolate_mode)
-+			unsigned long end_pfn, isolate_mode_t mode)
- {
- 	pg_data_t *pgdat = cc->zone->zone_pgdat;
- 	unsigned long nr_scanned = 0, nr_isolated = 0;
-@@ -806,6 +806,7 @@ static bool too_many_isolated(pg_data_t *pgdat)
- 	unsigned long flags = 0;
- 	struct lruvec *locked = NULL;
- 	struct page *page = NULL, *valid_page = NULL;
-+	struct address_space *mapping;
- 	unsigned long start_pfn = low_pfn;
- 	bool skip_on_failure = false;
- 	unsigned long next_skip_pfn = 0;
-@@ -990,7 +991,7 @@ static bool too_many_isolated(pg_data_t *pgdat)
- 					locked = NULL;
- 				}
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2501,19 +2501,10 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 	struct address_space *mapping = inode->i_mapping;
+ 	pgoff_t index;
+ 	unsigned long offset;
+-	enum sgp_type sgp = SGP_READ;
+ 	int error = 0;
+ 	ssize_t retval = 0;
+ 	loff_t *ppos = &iocb->ki_pos;
  
--				if (!isolate_movable_page(page, isolate_mode))
-+				if (!isolate_movable_page(page, mode))
- 					goto isolate_success;
- 			}
- 
-@@ -1002,15 +1003,15 @@ static bool too_many_isolated(pg_data_t *pgdat)
- 		 * so avoid taking lru_lock and isolating it unnecessarily in an
- 		 * admittedly racy check.
- 		 */
--		if (!page_mapping(page) &&
--		    page_count(page) > page_mapcount(page))
-+		mapping = page_mapping(page);
-+		if (!mapping && page_count(page) > page_mapcount(page))
- 			goto isolate_fail;
- 
- 		/*
- 		 * Only allow to migrate anonymous pages in GFP_NOFS context
- 		 * because those do not depend on fs locks.
- 		 */
--		if (!(cc->gfp_mask & __GFP_FS) && page_mapping(page))
-+		if (!(cc->gfp_mask & __GFP_FS) && mapping)
- 			goto isolate_fail;
- 
- 		/*
-@@ -1021,9 +1022,45 @@ static bool too_many_isolated(pg_data_t *pgdat)
- 		if (unlikely(!get_page_unless_zero(page)))
- 			goto isolate_fail;
- 
--		if (!__isolate_lru_page_prepare(page, isolate_mode))
-+		/* Only take pages on LRU: a check now makes later tests safe */
-+		if (!PageLRU(page))
-+			goto isolate_fail_put;
-+
-+		/* Compaction might skip unevictable pages but CMA takes them */
-+		if (!(mode & ISOLATE_UNEVICTABLE) && PageUnevictable(page))
-+			goto isolate_fail_put;
-+
-+		/*
-+		 * To minimise LRU disruption, the caller can indicate with
-+		 * ISOLATE_ASYNC_MIGRATE that it only wants to isolate pages
-+		 * it will be able to migrate without blocking - clean pages
-+		 * for the most part.  PageWriteback would require blocking.
-+		 */
-+		if ((mode & ISOLATE_ASYNC_MIGRATE) && PageWriteback(page))
- 			goto isolate_fail_put;
- 
-+		if ((mode & ISOLATE_ASYNC_MIGRATE) && PageDirty(page)) {
-+			bool migrate_dirty;
-+
-+			/*
-+			 * Only pages without mappings or that have a
-+			 * ->migratepage callback are possible to migrate
-+			 * without blocking. However, we can be racing with
-+			 * truncation so it's necessary to lock the page
-+			 * to stabilise the mapping as truncation holds
-+			 * the page lock until after the page is removed
-+			 * from the page cache.
-+			 */
-+			if (!trylock_page(page))
-+				goto isolate_fail_put;
-+
-+			mapping = page_mapping(page);
-+			migrate_dirty = !mapping || mapping->a_ops->migratepage;
-+			unlock_page(page);
-+			if (!migrate_dirty)
-+				goto isolate_fail_put;
-+		}
-+
- 		/* Try isolate the page */
- 		if (!TestClearPageLRU(page))
- 			goto isolate_fail_put;
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2009,69 +2009,6 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
- }
- 
- /*
-- * Attempt to remove the specified page from its LRU.  Only take this page
-- * if it is of the appropriate PageActive status.  Pages which are being
-- * freed elsewhere are also ignored.
-- *
-- * page:	page to consider
-- * mode:	one of the LRU isolation modes defined above
-- *
-- * returns true on success, false on failure.
-- */
--bool __isolate_lru_page_prepare(struct page *page, isolate_mode_t mode)
--{
--	/* Only take pages on the LRU. */
--	if (!PageLRU(page))
--		return false;
--
--	/* Compaction should not handle unevictable pages but CMA can do so */
--	if (PageUnevictable(page) && !(mode & ISOLATE_UNEVICTABLE))
--		return false;
--
 -	/*
--	 * To minimise LRU disruption, the caller can indicate that it only
--	 * wants to isolate pages it will be able to operate on without
--	 * blocking - clean pages for the most part.
--	 *
--	 * ISOLATE_ASYNC_MIGRATE is used to indicate that it only wants to pages
--	 * that it is possible to migrate without blocking
+-	 * Might this read be for a stacking filesystem?  Then when reading
+-	 * holes of a sparse file, we actually need to allocate those pages,
+-	 * and even mark them dirty, so it cannot exceed the max_blocks limit.
 -	 */
--	if (mode & ISOLATE_ASYNC_MIGRATE) {
--		/* All the caller can do on PageWriteback is block */
--		if (PageWriteback(page))
--			return false;
+-	if (!iter_is_iovec(to))
+-		sgp = SGP_CACHE;
 -
--		if (PageDirty(page)) {
--			struct address_space *mapping;
--			bool migrate_dirty;
--
--			/*
--			 * Only pages without mappings or that have a
--			 * ->migratepage callback are possible to migrate
--			 * without blocking. However, we can be racing with
--			 * truncation so it's necessary to lock the page
--			 * to stabilise the mapping as truncation holds
--			 * the page lock until after the page is removed
--			 * from the page cache.
--			 */
--			if (!trylock_page(page))
--				return false;
--
--			mapping = page_mapping(page);
--			migrate_dirty = !mapping || mapping->a_ops->migratepage;
--			unlock_page(page);
--			if (!migrate_dirty)
--				return false;
--		}
--	}
--
--	if ((mode & ISOLATE_UNMAPPED) && page_mapped(page))
--		return false;
--
--	return true;
--}
--
--/*
-  * Update LRU sizes after isolating pages. The LRU size updates must
-  * be complete before mem_cgroup_update_lru_size due to a sanity check.
-  */
-@@ -2122,11 +2059,11 @@ static unsigned long isolate_lru_pages(unsigned long nr_to_scan,
- 	unsigned long skipped = 0;
- 	unsigned long scan, total_scan, nr_pages;
- 	LIST_HEAD(pages_skipped);
--	isolate_mode_t mode = (sc->may_unmap ? 0 : ISOLATE_UNMAPPED);
+ 	index = *ppos >> PAGE_SHIFT;
+ 	offset = *ppos & ~PAGE_MASK;
  
- 	total_scan = 0;
- 	scan = 0;
- 	while (scan < nr_to_scan && !list_empty(src)) {
-+		struct list_head *move_to = src;
- 		struct page *page;
+@@ -2522,6 +2513,7 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 		pgoff_t end_index;
+ 		unsigned long nr, ret;
+ 		loff_t i_size = i_size_read(inode);
++		bool got_page;
  
- 		page = lru_to_page(src);
-@@ -2136,9 +2073,9 @@ static unsigned long isolate_lru_pages(unsigned long nr_to_scan,
- 		total_scan += nr_pages;
+ 		end_index = i_size >> PAGE_SHIFT;
+ 		if (index > end_index)
+@@ -2532,15 +2524,13 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 				break;
+ 		}
  
- 		if (page_zonenum(page) > sc->reclaim_idx) {
--			list_move(&page->lru, &pages_skipped);
- 			nr_skipped[page_zonenum(page)] += nr_pages;
--			continue;
-+			move_to = &pages_skipped;
-+			goto move;
+-		error = shmem_getpage(inode, index, &page, sgp);
++		error = shmem_getpage(inode, index, &page, SGP_READ);
+ 		if (error) {
+ 			if (error == -EINVAL)
+ 				error = 0;
+ 			break;
+ 		}
+ 		if (page) {
+-			if (sgp == SGP_CACHE)
+-				set_page_dirty(page);
+ 			unlock_page(page);
+ 
+ 			if (PageHWPoison(page)) {
+@@ -2580,9 +2570,15 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 			 */
+ 			if (!offset)
+ 				mark_page_accessed(page);
++			got_page = true;
+ 		} else {
+ 			page = ZERO_PAGE(0);
+-			get_page(page);
++			/*
++			 * Let splice page_cache_pipe_buf_confirm() succeed.
++			 */
++			if (!PageUptodate(page))
++				SetPageUptodate(page);
++			got_page = false;
  		}
  
  		/*
-@@ -2146,37 +2083,34 @@ static unsigned long isolate_lru_pages(unsigned long nr_to_scan,
- 		 * return with no isolated pages if the LRU mostly contains
- 		 * ineligible pages.  This causes the VM to not reclaim any
- 		 * pages, triggering a premature OOM.
--		 *
--		 * Account all tail pages of THP.  This would not cause
--		 * premature OOM since __isolate_lru_page() returns -EBUSY
--		 * only when the page is being freed somewhere else.
-+		 * Account all tail pages of THP.
- 		 */
- 		scan += nr_pages;
--		if (!__isolate_lru_page_prepare(page, mode)) {
--			/* It is being freed elsewhere */
--			list_move(&page->lru, src);
--			continue;
--		}
-+
-+		if (!PageLRU(page))
-+			goto move;
-+		if (!sc->may_unmap && page_mapped(page))
-+			goto move;
-+
- 		/*
- 		 * Be careful not to clear PageLRU until after we're
- 		 * sure the page is not being freed elsewhere -- the
- 		 * page release code relies on it.
- 		 */
--		if (unlikely(!get_page_unless_zero(page))) {
--			list_move(&page->lru, src);
--			continue;
--		}
-+		if (unlikely(!get_page_unless_zero(page)))
-+			goto move;
+@@ -2595,7 +2591,8 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 		index += offset >> PAGE_SHIFT;
+ 		offset &= ~PAGE_MASK;
  
- 		if (!TestClearPageLRU(page)) {
- 			/* Another thread is already isolating this page */
- 			put_page(page);
--			list_move(&page->lru, src);
--			continue;
-+			goto move;
- 		}
- 
- 		nr_taken += nr_pages;
- 		nr_zone_taken[page_zonenum(page)] += nr_pages;
--		list_move(&page->lru, dst);
-+		move_to = dst;
-+move:
-+		list_move(&page->lru, move_to);
- 	}
- 
- 	/*
-@@ -2200,7 +2134,8 @@ static unsigned long isolate_lru_pages(unsigned long nr_to_scan,
- 	}
- 	*nr_scanned = total_scan;
- 	trace_mm_vmscan_lru_isolate(sc->reclaim_idx, sc->order, nr_to_scan,
--				    total_scan, skipped, nr_taken, mode, lru);
-+				    total_scan, skipped, nr_taken,
-+				    sc->may_unmap ? 0 : ISOLATE_UNMAPPED, lru);
- 	update_lru_sizes(lruvec, lru, nr_zone_taken);
- 	return nr_taken;
- }
+-		put_page(page);
++		if (got_page)
++			put_page(page);
+ 		if (!iov_iter_count(to))
+ 			break;
+ 		if (ret < nr) {

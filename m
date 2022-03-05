@@ -2,100 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8CD4CE55F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB044CE565
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbiCEO4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 09:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S231922AbiCEO4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 09:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbiCEO4E (ORCPT
+        with ESMTP id S231921AbiCEO4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 09:56:04 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2E2396A9;
-        Sat,  5 Mar 2022 06:55:14 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id n15so227623plh.2;
-        Sat, 05 Mar 2022 06:55:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=aCTkDCJYSB+lOnRJ9woHxklOjSBgeP6h4/7iJlYWqs8=;
-        b=KpL2cMjlDbeYQQWH0y/uLqKLMeb1AcPo65b6XqQdmB1Dc6Num2JQ25L1hz926LXuPd
-         lqndb69Dkf1lC4NIfZvneoNdMYZXUvGmsOCVDMr9wF7VmXYCdGeKGR1TCxEG9zQ4n2JN
-         lMux9BaePU5yPWP+WqDGXorL6/TXVmjtzgtQxv4heQPC2DoQwuEAW3bxnM0MCv34htju
-         UOuffRKP3pMOMKzPvZ+zp6XRJCQWiYIG9i49PcT8wfShCSc5X4+AR+HSNopwMoWR2qOm
-         rB4v/f8xsVJhIBgO92mTEiYoc5whoR1uY038ikSXARs95A2H96lR5P91nrrZ1D5OubtB
-         +P8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=aCTkDCJYSB+lOnRJ9woHxklOjSBgeP6h4/7iJlYWqs8=;
-        b=sbmH8QzKPyPQe3DbnRyOZC53MIHgduy0/MN8dOr2A8YJn8Rdloye7RESko5YhHBg6t
-         U0t4lthgOF4L11vLc7/afLG9u3BQr2xh+Ghdan4rMADumw3MJiY7gDe7nFOOaWM60x1I
-         eQYco3hqzTp/iciidYid2yjcRcg3k61HpWha+zbDfwst7zuMjbOE2KsSiAEueR+5U9uk
-         j/nzGvDSxKFY9V3/BhBJ+GCAhhk0KyuZWZq218RlD8tHEKfAM+floCH8zMtMCKLFYLdl
-         VIPjrv1lCe2DbohTx+0UXksAqlHFxKYfqpARXiWT5IRFtav8ldVRLaYMg5XnAWXwonmq
-         TYHg==
-X-Gm-Message-State: AOAM530p3FwfYuWgeHz7xRDw6NqJKLWjbF4sJCjFl22gZj4eDZoRm8LY
-        B5x2Fgw5w0Cu0h+RoYOskQ==
-X-Google-Smtp-Source: ABdhPJyuFeAxh3xixyiYxI1F75IvUa00LHlfeeQee5vDZsyzOu2SMMXR5LdlQXbbhKtZhRu9ehuilg==
-X-Received: by 2002:a17:902:8e88:b0:14f:b460:ec02 with SMTP id bg8-20020a1709028e8800b0014fb460ec02mr3954907plb.35.1646492114497;
-        Sat, 05 Mar 2022 06:55:14 -0800 (PST)
-Received: from vultr.guest ([107.191.53.97])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm10078213pfl.135.2022.03.05.06.55.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 05 Mar 2022 06:55:14 -0800 (PST)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] ethernet: sun: Free the coherent when failing in probing
-Date:   Sat,  5 Mar 2022 14:55:04 +0000
-Message-Id: <1646492104-23040-1-git-send-email-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 5 Mar 2022 09:56:52 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E995396B9
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 06:56:00 -0800 (PST)
+Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
+        by 156.147.23.51 with ESMTP; 5 Mar 2022 23:55:58 +0900
+X-Original-SENDERIP: 156.147.1.125
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.125 with ESMTP; 5 Mar 2022 23:55:58 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Sat, 5 Mar 2022 23:55:34 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        torvalds@linux-foundation.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <20220305145534.GB31268@X58A-UD3R>
+References: <YiAow5gi21zwUT54@mit.edu>
+ <1646285013-3934-1-git-send-email-byungchul.park@lge.com>
+ <YiDSabde88HJ/aTt@mit.edu>
+ <20220304032002.GD6112@X58A-UD3R>
+ <YiLbs9rszWXpHm/P@mit.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiLbs9rszWXpHm/P@mit.edu>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the driver fails to register net device, it should free the DMA
-region first, and then do other cleanup.
+On Fri, Mar 04, 2022 at 10:40:35PM -0500, Theodore Ts'o wrote:
+> On Fri, Mar 04, 2022 at 12:20:02PM +0900, Byungchul Park wrote:
+> > 
+> > I found a point that the two wait channels don't lead a deadlock in
+> > some cases thanks to Jan Kara. I will fix it so that Dept won't
+> > complain it.
+> 
+> I sent my last (admittedly cranky) message before you sent this.  I'm
+> glad you finally understood Jan's explanation.  I was trying to tell
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/net/ethernet/sun/sunhme.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Not finally. I've understood him whenever he tried to tell me something.
 
-diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-index ad9029ae6848..77e5dffb558f 100644
---- a/drivers/net/ethernet/sun/sunhme.c
-+++ b/drivers/net/ethernet/sun/sunhme.c
-@@ -3146,7 +3146,7 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
- 	if (err) {
- 		printk(KERN_ERR "happymeal(PCI): Cannot register net device, "
- 		       "aborting.\n");
--		goto err_out_iounmap;
-+		goto err_out_free_coherent;
- 	}
- 
- 	pci_set_drvdata(pdev, hp);
-@@ -3179,6 +3179,10 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
- 
- 	return 0;
- 
-+err_out_free_coherent:
-+	dma_free_coherent(hp->dma_dev, PAGE_SIZE,
-+			  hp->happy_block, hp->hblock_dvma);
-+
- err_out_iounmap:
- 	iounmap(hp->gregs);
- 
--- 
-2.25.1
+> you the same thing, but apparently I failed to communicate in a
+
+I don't think so. Your point and Jan's point are different. All he has
+said make sense. But yours does not.
+
+> sufficiently clear manner.  In any case, what Jan described is a
+> fundamental part of how wait queues work, and I'm kind of amazed that
+> you were able to implement DEPT without understanding it.  (But maybe
+
+Of course, it was possible because all that Dept has to know for basic
+work is wait and event. The subtle things like what Jan told me help
+Dept be better.
+
+> that is why some of the DEPT reports were completely incomprehensible
+
+It's because you are blinded to blame at it without understanding how
+Dept works at all. I will fix those that must be fixed. Don't worry.
+
+> to me; I couldn't interpret why in the world DEPT was saying there was
+> a problem.)
+
+I can tell you if you really want to understand why. But I can't if you
+are like this.
+
+> In any case, the thing I would ask is a little humility.  We regularly
+> use lockdep, and we run a huge number of stress tests, throughout each
+> development cycle.
+
+Sure.
+
+> So if DEPT is issuing lots of reports about apparently circular
+> dependencies, please try to be open to the thought that the fault is
+
+No one was convinced that Dept doesn't have a fault. I think your
+worries are too much.
+
+> in DEPT, and don't try to argue with maintainers that their code MUST
+> be buggy --- but since you don't understand our code, and DEPT must be
+
+No one argued that their code must be buggy, either. So I don't think
+you have to worry about what's never happened.
+
+> theoretically perfect, that it is up to the Maintainers to prove to
+> you that their code is correct.
+> 
+> I am going to gently suggest that it is at least as likely, if not
+> more likely, that the failure is in DEPT or your understanding of what
+
+No doubt. I already think so. But it doesn't mean that I have to keep
+quiet without discussing to imporve Dept. I will keep improving Dept in
+a reasonable way.
+
+> how kernel wait channels and locking works.  After all, why would it
+> be that we haven't found these problems via our other QA practices?
+
+Let's talk more once you understand how Dept works at least 10%. Or I
+think we cannot talk in a productive way.
 

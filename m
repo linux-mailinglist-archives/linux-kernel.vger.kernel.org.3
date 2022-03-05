@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DAE4CE3AE
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 09:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5904CE3E2
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 09:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiCEIv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 03:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S229821AbiCEI7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 03:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiCEIv1 (ORCPT
+        with ESMTP id S229449AbiCEI7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 03:51:27 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715DC120F43
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 00:50:37 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id u7so13857304ljk.13
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 00:50:37 -0800 (PST)
+        Sat, 5 Mar 2022 03:59:35 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA50D3BF;
+        Sat,  5 Mar 2022 00:58:45 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id x15so15868819wru.13;
+        Sat, 05 Mar 2022 00:58:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Qa5rECKJvlN1nk7iVriL5WpIcIm5alEZ4N0q0BCHVmc=;
-        b=eFOK4SMNntXYy5HkmuC/92rjlbpOoNqyOyexw/Rws5rZMTR3pBy7r5h3n0eHkS3dPY
-         LzLKQPWrwasbSBUpB8BwvAckBbf1tRn5c67glmucP+6UbmeTPFORKZiHxh5FwwZn4rI7
-         w4C24W+fBjC1vlLrR96h4ZnZ2/rXu5/u3Pmlry4EYcdJvKh01Wzdk4kNLutv8o0siLwK
-         YYRos73NUWXoTixfrgiZ4gTOzIp9hUXfKbRAEC3zPR7T1cq20SZCv0WbYdvslOMp8Kay
-         lF8SsOVterwuriBjJTB/mkzFuJGo/3FSTfuY5gNMMa6KPDp1O3BVKSln2jMZfQR0i+Fo
-         esLg==
+        h=from:to:cc:subject:date:message-id;
+        bh=SOx6GBoR3hk6Asho1tsO/KOxCoXLmE0mlhzsGo1SFqI=;
+        b=phV5baG+I5sVlpNXWTolY5DZxNEIRbJoJZWWzGQh0EWngAjR/UpTVXyMpPEzfLroZC
+         aERHd8cAI87ktK93Mz+9pV2SP4XW5TXjsFqbiMdMi0Vfv7NVlOq9SoiFHTGN+NbAKAC1
+         EKsQZkbpAUixyB2Hm7z/JyWrBaqLgDtU1vfKsrtpNB8PqhUYTztJRY/OIOrGSbYiU/TB
+         X+16aXF7rgaT3hEzr/Zi9M31u7v6Ob6HeAm6Y4aYos2OB3uNvvhi10awyYYjlTdQBnMK
+         puqeWC5NjnVTPrbSRNqFov6W8Us3+/eU5B7xs1grPgN4g3cfoBfRO88hzYHUdD+COr45
+         S4CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Qa5rECKJvlN1nk7iVriL5WpIcIm5alEZ4N0q0BCHVmc=;
-        b=v+PW2vS9o7BDrl3wGVbjzZS2lMXPBrQihyT+wlKmcwnhkRxBdWym20ttky2Dt4VVXB
-         s/IIl5/dShbd5do2+hv6ceYCC6WpobTagcL4kQ/hySHu74wjkf7oXKxc9SzCF5stB5Cm
-         dAsg1XvMHA6BaW6aso1f7E4dbOUC/quEsLfyIy7lOAu1K6WCcPIkb1oZJchajRk7z0gP
-         LHI0ec9KBnKFOraXB866x/c9RvirvDsS/vNNf/egIl0N/cfAQszldpSe1blTpaC4YX2j
-         02nC4+GzM93ZAOUPCvVmX1MNci4jvQOeUvlbKPkcIrYKZ66SMd9L85pdlODxXOuejfpH
-         m7Ug==
-X-Gm-Message-State: AOAM532ZJjSfmO5u6Pf/QTZQNp7nngCTuLi1YVMv7iWX/1elbzzz2KdP
-        Mncjukx0dsfzR6n/QZBimjmXEce6GygE8rpo1GY=
-X-Google-Smtp-Source: ABdhPJwTcuRRbv+htyh6UWSZicHy3/ESeXX5KJ+UOTDPDsEomkyjXmBv4Bb27OPxnB9DhXULh+zZoQv50o9po4bGKoo=
-X-Received: by 2002:a2e:9210:0:b0:246:323e:299a with SMTP id
- k16-20020a2e9210000000b00246323e299amr1622482ljg.34.1646470233908; Sat, 05
- Mar 2022 00:50:33 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac2:4c45:0:0:0:0:0 with HTTP; Sat, 5 Mar 2022 00:50:33 -0800 (PST)
-Reply-To: orlandomoris56@gmail.com
-From:   Orlando Moris <aliroulatifa@gmail.com>
-Date:   Sat, 5 Mar 2022 08:50:33 +0000
-Message-ID: <CAGEh6rq1_CFxN0LFuAppFLTJxVoajXBMFg7_MZxfgqSDwJkSNg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=SOx6GBoR3hk6Asho1tsO/KOxCoXLmE0mlhzsGo1SFqI=;
+        b=OfS+QnefLd2bS1lG5K+rtzw3mJc+WiJLh3om6j7rE1Bk2lCl2hwiVGgOv7AD9cFB0+
+         4adcNx2dk00J7noVlwztPZys7uOTvMI6gejAcMpggoChPHrOtM1rNii+yXEIOtantWpq
+         wk+1OgRvptOMA/krBVMP3HLRreIcg/d8IJQ4lyVuD4PBNcU7Fhp+1VzGmTLuNKoZcgFX
+         nGUXdeVpjbrEyTPr7vrVaBDpnnpbDalffq1KqVD19LTB8VVrNoYDkYtKhgc5SjTaQOBq
+         v8jJE5mXDiiq2RRTcUiNEpJDwl45UQ64PuKW92bD99lk8J/N7jZLEGTRsGX9sTB/0UKf
+         sfgA==
+X-Gm-Message-State: AOAM530wKqMj4O2B6TLNFqypuQRvLVVksPQjXWAcPq5upFtUf9bwabB1
+        QmHLrKCdaBZii9cgn1UPKJL48QrxFXMiyA==
+X-Google-Smtp-Source: ABdhPJz6afELVMrZQicO3jAt7+0KkM0rU23ldDJCoFz8kSn/AZcgpYYtS5Ib7fkbS7weYppRA3mv3w==
+X-Received: by 2002:adf:8bd4:0:b0:1ed:c1f8:3473 with SMTP id w20-20020adf8bd4000000b001edc1f83473mr1879894wra.435.1646470724200;
+        Sat, 05 Mar 2022 00:58:44 -0800 (PST)
+Received: from localhost.localdomain ([64.64.123.48])
+        by smtp.gmail.com with ESMTPSA id p12-20020a5d48cc000000b001e6114938a8sm6320131wrs.56.2022.03.05.00.58.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Mar 2022 00:58:43 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     isdn@linux-pingi.de, davem@davemloft.net, zou_wei@huawei.com,
+        zheyuma97@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH v2] isdn: hfcpci: check the return value of dma_set_mask() in setup_hw()
+Date:   Sat,  5 Mar 2022 00:58:16 -0800
+Message-Id: <20220305085816.4659-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tere! Teavitage, et see teie postkasti saabunud e-kiri ei ole viga,
-vaid see oli spetsiaalselt teile adresseeritud. Mul on (7 500 000 $)
-pakkumine, mille j=C3=A4ttis mu varalahkunud klient insener Carlos, kes
-kannab teiega sama nime, kes t=C3=B6=C3=B6tas ja elas siin Lome Togos. Minu
-hiline klient ja perekond sattusid auto=C3=B5nnetusse, mis v=C3=B5ttis neil=
-t elu
-. V=C3=B5tan teiega =C3=BChendust kui lahkunu l=C3=A4hisugulasega, et saaks=
-ite n=C3=B5uete
-alusel raha k=C3=A4tte. Teie kiire reageerimise korral teavitan teid selle
-viisist
-selle lepingu t=C3=A4itmine., v=C3=B5tke minuga sellel e-kirjal =C3=BChendu=
-st
-(orlandomoris56@gmail.com )
+The function dma_set_mask() in setup_hw() can fail, so its return value
+should be checked.
+
+Fixes: 1700fe1a10dc ("Add mISDN HFC PCI driver")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+v2:
+* Correct the fixes tag.
+  Thank Jakub for good advice.
+
+---
+ drivers/isdn/hardware/mISDN/hfcpci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
+index bd087cca1c1d..af17459c1a5c 100644
+--- a/drivers/isdn/hardware/mISDN/hfcpci.c
++++ b/drivers/isdn/hardware/mISDN/hfcpci.c
+@@ -2005,7 +2005,11 @@ setup_hw(struct hfc_pci *hc)
+ 	}
+ 	/* Allocate memory for FIFOS */
+ 	/* the memory needs to be on a 32k boundary within the first 4G */
+-	dma_set_mask(&hc->pdev->dev, 0xFFFF8000);
++	if (dma_set_mask(&hc->pdev->dev, 0xFFFF8000)) {
++		printk(KERN_WARNING
++		       "HFC-PCI: No usable DMA configuration!\n");
++		return -EIO;
++	}
+ 	buffer = dma_alloc_coherent(&hc->pdev->dev, 0x8000, &hc->hw.dmahandle,
+ 				    GFP_KERNEL);
+ 	/* We silently assume the address is okay if nonzero */
+-- 
+2.17.1
+

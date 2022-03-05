@@ -2,96 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D2B4CE4EC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 13:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48D94CE4EF
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 13:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiCEMwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 07:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S231738AbiCEM6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 07:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiCEMwU (ORCPT
+        with ESMTP id S230155AbiCEM6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 07:52:20 -0500
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB9775C37
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 04:51:26 -0800 (PST)
-X-QQ-mid: bizesmtp90t1646484673tmmsihaa
-Received: from localhost.localdomain ( [114.222.120.105])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 05 Mar 2022 20:51:08 +0800 (CST)
-X-QQ-SSF: 01400000002000B0I000000A0000000
-X-QQ-FEAT: GiB59JtT4hAixvUU2qMoUK1jxRaTIQvQpwNoHAYOtAikGp4o7FujPsm4KBCi+
-        uVQPuReEEfBKYprwtvfCTYJs5343XjPZY3W2QVV+JWWaMPx0guzNqRTPAMYx6Rp58oRc4Qy
-        XdgY/PXb+IZhSwYshdtwFPgWq8tfStviCNxVXMLeOI0zc9hzZUt/89SWqZx/GJsbWsHaRvI
-        bSK/lbPRwInv6hWY/wfJ6rY9NBPjWTq98g2GWfGbdihVmt1UXD8rDEDnxxSnv6kJI3k+oAh
-        LxS/966DoHhRMeTB8/XwlQ0Z7t03Z/473ci74uTPQekaGGSF5HjDJbKaQPDCvv6Jw+KAd8e
-        PWXuDcRZER2Ot/R0Fc=
-X-QQ-GoodBg: 1
-From:   zhanglianjie <zhanglianjie@uniontech.com>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        zhanglianjie <zhanglianjie@uniontech.com>
-Subject: [PATCH] ASoC: intel: use asoc_substream_to_rtd()
-Date:   Sat,  5 Mar 2022 20:51:05 +0800
-Message-Id: <20220305125105.142704-1-zhanglianjie@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Sat, 5 Mar 2022 07:58:16 -0500
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C206B20FCAD;
+        Sat,  5 Mar 2022 04:57:24 -0800 (PST)
+Received: from grover.. (133-32-176-37.west.xps.vectant.ne.jp [133.32.176.37]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id 225CuBjJ008491;
+        Sat, 5 Mar 2022 21:56:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 225CuBjJ008491
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1646484972;
+        bh=HbfK+WR3fpzTNPKUUwev8caY8oon1l2ZmmSStF5FWqk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=p4byQ0dhwMDAe9lQ8Wwi+jhTi0e63Pj73IdRsALxoYau54F84fozgQ/ECJEnk1gty
+         1kPIqroN2GA6uOOQXnWaAUoEbiXKXMcrvJKL8AafM6oo5q5zD878RUDyUlG8ZP/Fy6
+         BiovJEkrtDtyObiqJTyCFU0WUaKZw+XhUCwQudmKspFsA1f88vgoEgBbOIijFadWvl
+         wfoZTzhg/QjzjCOSlji0mXQriUEqRkA0CdfwOXw5PrRqdvMFbGtWkdYN7OZEsNd3ti
+         tc5fke1gp6hGR4FLFKgLklNipVnDCNWr77BY7DoYwcmrO/2q2LrUyHexdQwRgtg8AF
+         kjcUiIeauFghg==
+X-Nifty-SrcIP: [133.32.176.37]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, Fangrui Song <maskray@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2] kbuild: add --target to correctly cross-compile UAPI headers with Clang
+Date:   Sat,  5 Mar 2022 21:56:05 +0900
+Message-Id: <20220305125605.149913-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we can use asoc_substream_to_rtd() macro,
-let's use it.
+When you compile-test UAPI headers (CONFIG_UAPI_HEADER_TEST=y) with
+Clang, they are currently compiled for the host target (likely x86_64)
+regardless of the given ARCH=.
 
-Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
+In fact, some exported headers include libc headers. For example,
+include/uapi/linux/agpgart.h includes <stdlib.h> after being exported.
+The header search paths should match to the target we are compiling
+them for.
 
-diff --git a/sound/soc/intel/catpt/pcm.c b/sound/soc/intel/catpt/pcm.c
-index 939a9b801dec..a26000cd5ceb 100644
---- a/sound/soc/intel/catpt/pcm.c
-+++ b/sound/soc/intel/catpt/pcm.c
-@@ -74,7 +74,7 @@ static struct catpt_stream_template *catpt_topology[] = {
- static struct catpt_stream_template *
- catpt_get_stream_template(struct snd_pcm_substream *substream)
- {
--	struct snd_soc_pcm_runtime *rtm = substream->private_data;
-+	struct snd_soc_pcm_runtime *rtm = asoc_substream_to_rtd(substream);
- 	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtm, 0);
- 	enum catpt_stream_type type;
+Pick up the --target triple from KBUILD_CFLAGS in the same ways as
+commit 7f58b487e9ff ("kbuild: make Clang build userprogs for target
+architecture").
 
-@@ -593,7 +593,7 @@ static int catpt_component_pcm_construct(struct snd_soc_component *component,
- static int catpt_component_open(struct snd_soc_component *component,
- 				struct snd_pcm_substream *substream)
- {
--	struct snd_soc_pcm_runtime *rtm = substream->private_data;
-+	struct snd_soc_pcm_runtime *rtm = asoc_substream_to_rtd(substream);
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
- 	if (!rtm->dai_link->no_pcm)
- 		snd_soc_set_runtime_hwparams(substream, &catpt_pcm_hardware);
-@@ -604,7 +604,7 @@ static snd_pcm_uframes_t
- catpt_component_pointer(struct snd_soc_component *component,
- 			struct snd_pcm_substream *substream)
- {
--	struct snd_soc_pcm_runtime *rtm = substream->private_data;
-+	struct snd_soc_pcm_runtime *rtm = asoc_substream_to_rtd(substream);
- 	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtm, 0);
- 	struct catpt_stream_runtime *stream;
- 	struct catpt_dev *cdev = dev_get_drvdata(component->dev);
---
-2.20.1
+Changes in v2:
+  - Reword the commit description to mention agpgart.h instead of
+    asound.h because the latter is in the no-header-test list.
 
+ usr/include/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index ac206fb27c65..4215801e1110 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+ 
+ # In theory, we do not care -m32 or -m64 for header compile tests.
+ # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+-UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
++UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
+ 
+ # USERCFLAGS might contain sysroot location for CC.
+ UAPI_CFLAGS += $(USERCFLAGS)
+-- 
+2.32.0
 

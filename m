@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D7F4CE34F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 07:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 511364CE350
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 07:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiCEGjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 01:39:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S231345AbiCEGl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 01:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiCEGj3 (ORCPT
+        with ESMTP id S229479AbiCEGl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 01:39:29 -0500
+        Sat, 5 Mar 2022 01:41:27 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49E450050;
-        Fri,  4 Mar 2022 22:38:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5367250B29;
+        Fri,  4 Mar 2022 22:40:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=kGAgupbMh3Ndf3YJs4vyb3NVbPO2UtoUReczJ7rSp1M=; b=QI8eEI3/jS7C2mduMtT0uXnf+M
-        tS3nEdTpXI5QrxQvsbCf8biKrSJ09O1JCndejKjwNf9OPeJShru1MXW3/05mMjQ7BpF12V2hGqNj3
-        5cvSIUw9GPT5sA4iy87P9UGIsYmw1j+lgi8NS8QVRfLfP8Rv/KYZKjRN0swfp4seij94FQ2fqR8Yo
-        HR3zeYDPhzGqk3j4bTDPWoiCZOFM1Fidnj1WLvASQOo+qT9PdNj2slqFZ/DQR8aqU40L6B+ogp9rV
-        wXIK+vKbaIf9QkZuSPy/dc8nk2CG7FBTyeHg6FHki1ijlMAXNirddj2Pc/jxuTb06xqUIubV6+DvG
-        SKgkhFgQ==;
+        bh=psSImPzcv9vs6P1Eab/fDILx3bBTdtdrLoclhcr6SFw=; b=Rl+eO7j+hOA3cHBnij6MaHLB2I
+        Payn71csVxJx7uC44Xr910c/PN5eNPH5IZAG7ShCASpjgOM4fQv5ddXU9+OuUFKhG/y2AtVWMxZL7
+        vLA5hz5tsvGGfjFt3pvzdM0l20XtC8Aie1whDPzBuxI5yOPhn+qnHwNUj6x2mbrIoOM7A+nh9Tp/a
+        KkGhbop9dTPRY77DFW0TrbnHqzeZWFUHv0Bj80FLmdtY4NxbzV4f5jlT6AddsXNSMmuY0rgQTEb1W
+        qchdZkZMTCZFh4VLWP1RoJMib6sxICUKZpU09L5x1DauY2eA/lJfKcsBTCaIxJHHm/9DYN9mZD7KL
+        w7MKJa+Q==;
 Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nQO3n-00Crar-ES; Sat, 05 Mar 2022 06:38:35 +0000
+        id 1nQO5l-00Crh4-Ij; Sat, 05 Mar 2022 06:40:37 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
@@ -37,9 +37,9 @@ Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Greg Ungerer <gerg@linux-m68k.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-m68k@lists.linux-m68k.org, uclinux-dev@uclinux.org
-Subject: [PATCH v2] m68k: coldfire/device.c: only build for MCF_EDMA when xyz
-Date:   Fri,  4 Mar 2022 22:38:32 -0800
-Message-Id: <20220305063832.4601-1-rdunlap@infradead.org>
+Subject: [PATCH v3] m68k: coldfire/device.c: only build for MCF_EDMA when h/w macros are defined
+Date:   Fri,  4 Mar 2022 22:40:36 -0800
+Message-Id: <20220305064036.4879-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -89,6 +89,7 @@ Cc: linux-m68k@lists.linux-m68k.org
 Cc: uclinux-dev@uclinux.org
 ---
 v2: only build when the hardware macros are defined (suggested by Geert)
+v3: complete the Subject.
 
  arch/m68k/coldfire/device.c |    6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)

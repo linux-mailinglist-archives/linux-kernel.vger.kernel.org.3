@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41894CE697
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 20:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DBC4CE69C
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 20:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbiCETnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 14:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S232252AbiCETvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 14:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbiCETnw (ORCPT
+        with ESMTP id S231834AbiCETvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 14:43:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB46928C
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 11:43:02 -0800 (PST)
+        Sat, 5 Mar 2022 14:51:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A72064D4;
+        Sat,  5 Mar 2022 11:50:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4E4560AB6
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 19:43:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68459C004E1;
-        Sat,  5 Mar 2022 19:43:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1261B80CA1;
+        Sat,  5 Mar 2022 19:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEBAC004E1;
+        Sat,  5 Mar 2022 19:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646509381;
-        bh=aTwFDS8jMOiSeLykSnLcKQ9n+zp/EVyGHLTn7DlzIkY=;
+        s=korg; t=1646509853;
+        bh=zE8mY7gSZ94ep1kSuWQL2BU4MPCGeaZjsBead339r+A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=veIwZV6CHYNDlYHUU0i4h/aqyLz0BpL3r442nxVH4Fhow68c3KJgMw82DjRZtHGg+
-         BvQr/1VWlJBPSGOqnAPmUhylAJ85ZEIlCgQSFSLEZOql/1nvNxTLG/WgRLKxkOsi/r
-         E2m/lWGlkFhIoYSMNYsTWO3+bKA1ptcJyiuFcaGM=
-Date:   Sat, 5 Mar 2022 20:42:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     zhanglianjie <zhanglianjie@uniontech.com>
-Cc:     Juergen Gross <jgross@suse.com>,
-        David Vrabel <david.vrabel@citrix.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-Subject: Re: [PATCH] drivers/xen: use helper macro __ATTR_RW
-Message-ID: <YiO9QDpqepZXEZ6L@kroah.com>
-References: <20220305133823.158961-1-zhanglianjie@uniontech.com>
- <YiNry3TtIPbEh1Yr@kroah.com>
- <622382f3.1c69fb81.55f81.aff0SMTPIN_ADDED_BROKEN@mx.google.com>
+        b=LtIJ6kb3cOTmfja5IypACO5cXZ6Tq+dnIt3f6IG+FZ5Hn4skKQGJWRuvJ2v/PoytQ
+         tU88U4Y8AKnl/lbabx6BMNmhpg+8WJoAI4KdjGWLXH5rEKUyiAeFXzC2J/ysMlJJXy
+         rpCCpdtkjM8J0GJWd8g/N5hWezEyY+4giLB7TJRY=
+Date:   Sat, 5 Mar 2022 20:50:42 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     dann frazier <dann.frazier@canonical.com>
+Cc:     stable@vger.kernel.org, Miao Xie <miaox@cn.fujitsu.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Sergei Trofimovich <slyfox@gentoo.org>,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.10+5.4 0/3] sched/topology: Fix missing scheduling
+ domain levels
+Message-ID: <YiO/EsBd0QlDA9o4@kroah.com>
+References: <20220305164430.245125-1-dann.frazier@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <622382f3.1c69fb81.55f81.aff0SMTPIN_ADDED_BROKEN@mx.google.com>
+In-Reply-To: <20220305164430.245125-1-dann.frazier@canonical.com>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,42 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 11:33:58PM +0800, zhanglianjie wrote:
-> Hi,
+On Sat, Mar 05, 2022 at 09:44:27AM -0700, dann frazier wrote:
+> The LTP cpuset_sched_domains test, authored by Miao Xie, fails on a Kunpeng920
+> server that has 4 NUMA nodes:
+>   https://launchpad.net/bugs/1951289
 > 
-> 在 2022/3/5 21:55, Greg Kroah-Hartman 写道:
-> > On Sat, Mar 05, 2022 at 09:38:23PM +0800, zhanglianjie wrote:
-> > > Use helper macro __ATTR_RW to define HYPERVISOR_ATTR_RW to make code more clear.
-> > > Minor readability improvement.
-> > > 
-> > > Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
-> > 
-> > Is this the name you sign legal documents with?  (I have to ask...)
-> Yes, this is my signature.
-> > 
-> > > 
-> > > diff --git a/drivers/xen/sys-hypervisor.c b/drivers/xen/sys-hypervisor.c
-> > > index feb1d16252e7..fcb0792f090e 100644
-> > > --- a/drivers/xen/sys-hypervisor.c
-> > > +++ b/drivers/xen/sys-hypervisor.c
-> > > @@ -22,11 +22,10 @@
-> > >   #endif
-> > > 
-> > >   #define HYPERVISOR_ATTR_RO(_name) \
-> > > -static struct hyp_sysfs_attr  _name##_attr = __ATTR_RO(_name)
-> > > +static struct hyp_sysfs_attr _name##_attr = __ATTR_RO(_name)
-> > 
-> > Why change this line?  That's not relevant to this change :(
-> > 
-> There are two spaces between struct hyp_sysfs_attr and _name, by the way,
-> modify it.
+> This does appear to be a real bug. /proc/schedstat displays 4 domain levels for
+> CPUs on 2 of the nodes, but only 3 levels for the others 2 (see below).
+> I assume this means the scheduler is making suboptimal decisions about
+> where to place/move processes. I'm not sure how to demonstrate that - but
+> open to suggestions if that evidence is important justification for stable.
+> 
+> This is not a problem in current upstream kernels, so I bisected and found
+> that the first patch here fixes it. I can't tell from the commit message
+> if fixing this case was Valentin's intent, or just a happy side-effect of the
+> set conversion. The other two patches fix regressions introduced by the first.
+> All cherry-pick cleanly back to 5.10.y and 5.4.y. This platform easily
+> reproduces the problem Dietmar's fix addresses. I don't have hardware to test
+> the ia64 fix.
+> 
+> Note: This also impacts earlier stable trees, but require some minor porting,
+> so I'll submit fixes for those separately.
+> 
+> Here's a comparison of /proc/schedstat before & after applying these
+> fixes:
 
-Coding style cleanups should be a separate patch, as each change should
-only do one logical thing.
-
-But hey, I'm not the maintainer of this file/driver, others might be
-more lax.
-
-good luck!
+Thanks, now queued up.
 
 greg k-h

@@ -2,92 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA24E4CE534
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DB84CE542
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiCEORP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 09:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S231822AbiCEOZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 09:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbiCEORO (ORCPT
+        with ESMTP id S230455AbiCEOZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 09:17:14 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D789922F971
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 06:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2srIXyqFX0R0SF2dFt8yUC6cRtgAGc2dzX/ElrpejHs=; b=n40OjDPZ8S3FQEykfZUglhU9nI
-        IJiCwdq6iM45vAbbBxXzDT08UJ9ETd60cCQh2X0ENle1pLM1v7uzZ696lrlxdswdUxQjwz6ILeqYA
-        4TiZ02C6ML8vOTUkiNPkKX4awFS4WqYJWEDanTXkAHoiMISSscS63pvrNLOCNLa+gt1yasdA132Fv
-        ClFkc8muqHE+U5En9Qf6XDWJUfAVbp7uXGMUkqFDVh6fKpDqMP2lDHvixNgoxWxXBIXDL6FbCtXyz
-        8RROQRSYD20vagNa4L4Giyt64eOjxGbBEFpWL4k0jQdJn3kslZX8qIIHHDXbp6OoIlnWODz7++R2Y
-        dUU1AsTg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nQVCV-00FXJF-Px; Sat, 05 Mar 2022 14:16:03 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 68B0D9865F2; Sat,  5 Mar 2022 15:16:03 +0100 (CET)
-Date:   Sat, 5 Mar 2022 15:16:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 09/19] rcu/context-tracking: Remove rcu_irq_enter/exit()
-Message-ID: <20220305141603.GY11184@worktop.programming.kicks-ass.net>
-References: <20220302154810.42308-1-frederic@kernel.org>
- <20220302154810.42308-10-frederic@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302154810.42308-10-frederic@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 5 Mar 2022 09:25:47 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CC5A7748;
+        Sat,  5 Mar 2022 06:24:56 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id t19so6621110plr.5;
+        Sat, 05 Mar 2022 06:24:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=V0+BPych17wtPc2qM6EJ5swnTMFGy4m1k60tybQ7bJ8=;
+        b=S541tO/7BOECRkLObQ/ss88E0L5lW9NqwCtyPSw3nTGHljZZHO/1w+ZQc0jAaVlnj6
+         HS5LW7+pVNKhIQHu7Zy+ujo5/Sml34pebkIhx6y2vf6v7GRc3bmhCFwyfJhtRybriztn
+         M+anDplw+EGv8oPG0xeUS5mQncJ/ZYVLqqubhCO7nPARaCRC2JV4HcYkIiiQMa+Xw5kt
+         azyq7xnXayNdLNYP3odh0HSo6FGstz+DAN0I+Ss/RxoaqIyH8VmwZ3QbUShDZlSk447y
+         QdYj0sFrecg7toRUpkb8IY34lvAg19+4WlpTdbqDbFlR8l70M9v11pf+ixJ87TED+UCX
+         l8VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=V0+BPych17wtPc2qM6EJ5swnTMFGy4m1k60tybQ7bJ8=;
+        b=O0HscLV+1ES2BJlbdOorUTPK5RHYqNpsipQzqEoGnafL1IsPCO0L08EPeP1Oe8u1s9
+         QqPaIt13h8uQO7NvWt3wM+yHqVR22Ogksc1L9kpgYpKNjdAlxQaPfZMbA3e0ucHMu9iL
+         iRXMkylIJN6d3jZwIi9mx52GLQpmvLkmY4xcJ8hJs/NTQDrD2Axug1Wi/gb/aN74wmCA
+         Lw++VK4FXEzmKEkpQEpGsfGavIToPcGkiI4wnHgSXBCrAMfAlGL22ojSQx1ts/eLYu0D
+         ruo2XvcoXyeNbrYtw/MhlxhOrB0HgUejJkukW//j+RnnOyNQE03h1J5ULsrge5XbziMN
+         IsmA==
+X-Gm-Message-State: AOAM531BcZwgNbTIXjYwiIVMiS0gisbstUUZbH4rqvVqRS8qeYoC3eJP
+        2mmhABWQ3dbrQmA1HsUOCg==
+X-Google-Smtp-Source: ABdhPJy9LM8LD0Szs9UH11qFmWCM+7jwNJQ393lKOth1A/hR2oMDpmorF/tRORnbWEX3mtJicgnEgw==
+X-Received: by 2002:a17:90b:1a81:b0:1bc:c3e5:27b2 with SMTP id ng1-20020a17090b1a8100b001bcc3e527b2mr16247200pjb.20.1646490296243;
+        Sat, 05 Mar 2022 06:24:56 -0800 (PST)
+Received: from vultr.guest ([107.191.53.97])
+        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm13515189pju.44.2022.03.05.06.24.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 05 Mar 2022 06:24:55 -0800 (PST)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     rajur@chelsio.com, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] net: cxgb3: Fix an error code when probing the driver
+Date:   Sat,  5 Mar 2022 14:24:44 +0000
+Message-Id: <1646490284-22791-1-git-send-email-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:48:00PM +0100, Frederic Weisbecker wrote:
->  void ct_irq_enter_irqson(void)
->  {
-> -	rcu_irq_enter_irqson();
-> +	unsigned long flags;
-> +
-> +	local_irq_save(flags);
-> +	ct_irq_enter();
-> +	local_irq_restore(flags);
->  }
->  
->  void ct_irq_exit_irqson(void)
->  {
-> -	rcu_irq_exit_irqson();
-> +	unsigned long flags;
-> +
-> +	local_irq_save(flags);
-> +	ct_irq_exit();
-> +	local_irq_restore(flags);
->  }
+During the process of driver probing, probe function should return < 0
+for failure, otherwise kernel will treat value >= 0 as success.
 
-I know you're just copying code around, but this is broken per
-construction :/
+Therefore, the driver should set 'err' to -EINVAL when
+'adapter->registered_device_map' is NULL. Otherwise kernel will assume
+that the driver has been successfully probed and will cause unexpected
+errors.
 
-On the irq_enter site, local_irq_save() will hit a tracepoint, which
-requires RCU, which will only be made available by the ct_irq_enter().
-Same in reverse for the exit case.
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
+index bfffcaeee624..662af61fc723 100644
+--- a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
++++ b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
+@@ -3346,6 +3346,7 @@ static int init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	}
+ 	if (!adapter->registered_device_map) {
+ 		dev_err(&pdev->dev, "could not register any net devices\n");
++		err = -EINVAL;
+ 		goto out_free_dev;
+ 	}
+ 
+-- 
+2.25.1
+

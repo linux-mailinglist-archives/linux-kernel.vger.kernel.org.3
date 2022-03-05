@@ -2,77 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2444CE6BA
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECE34CE6C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiCEUOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 15:14:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S232357AbiCEUPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 15:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbiCEUOt (ORCPT
+        with ESMTP id S232324AbiCEUPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 15:14:49 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF76150B15;
-        Sat,  5 Mar 2022 12:13:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 5 Mar 2022 15:15:33 -0500
+Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0539FE0F5;
+        Sat,  5 Mar 2022 12:14:41 -0800 (PST)
+Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 182CDCE09EA;
-        Sat,  5 Mar 2022 20:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5412AC340EC;
-        Sat,  5 Mar 2022 20:13:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646511234;
-        bh=iy1cqsoOPXz4Qol71NxLMoDntWZr90U/+2tLasdsbtA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CB5y6bcB4tofV++kMy9Zj+UA4D9CQ1KrsFw4AtOTqpIY8FXE+Ba5xb46tbrHk5B/X
-         bA+B46He/1/yJ5ysr2CBMf6WF+iSWCZtJfOxOcwzwXMcCZatyA2/ig3wjR/5UKWDoR
-         Lw+BWls3lwTG2X9Hc6wowGLnK5hcvM4tqitxnBCVkpoMdMMWIg46qYD5mKCOzYGBTe
-         fX99oIDCyXfBPwxzFOIGoIoaTFK3xKpUQdfyOlg0JxxHT/2wRlp5EKE02efpaMz/hV
-         SVYRY6HsDohrBTAAscKuI1I1O4d7rqQ5kvdDcpXvMKxkWCuq0ILHMHvojsxSBgi/X6
-         ASOTACJ0u1rdA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 420CEE7BB18;
-        Sat,  5 Mar 2022 20:13:54 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 5.17-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <your-ad-here.call-01646480222-ext-8975@work.hours>
-References: <your-ad-here.call-01646480222-ext-8975@work.hours>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <your-ad-here.call-01646480222-ext-8975@work.hours>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.17-5
-X-PR-Tracked-Commit-Id: c194dad21025dfd043210912653baab823bdff67
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f9026e19a44d965793d25e7a02b0d6c1bcafd8f5
-Message-Id: <164651123426.11603.13575761014802884057.pr-tracker-bot@kernel.org>
-Date:   Sat, 05 Mar 2022 20:13:54 +0000
-To:     Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id 9B91E7A01BF;
+        Sat,  5 Mar 2022 21:14:39 +0100 (CET)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
+        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] pata_parport: paride replacement
+Date:   Sat,  5 Mar 2022 21:13:55 +0100
+Message-Id: <20220305201411.501-1-linux@zary.sk>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 5 Mar 2022 12:37:02 +0100:
+Hello,
+this is a RFC patch for the new pata_parport libata driver - a paride
+replacement.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.17-5
+Protocol driver registration and device creation was changed since the
+second preview - no more protocol numbers or parport I/O addresses.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f9026e19a44d965793d25e7a02b0d6c1bcafd8f5
+All parports and all protocol drivers are now probed automatically unless
+probe=0 parameter is used. So just "modprobe epat" is enough for a Imation
+SuperDisk drive to work.
 
-Thank you!
+Manual device creation:
+echo auto >/sys/bus/pata_parport/new_device
+echo "parport0 epat 4" >/sys/bus/pata_parport/new_device
+echo "parport0 auto" >/sys/bus/pata_parport/new_device
+echo "auto epat" >/sys/bus/pata_parport/new_device
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Deleting devices:
+echo pata_parport.0 >/sys/bus/pata_parport/delete_device
+
+Haven't found any sane way to hook pi_connect() and pi_disconnect() to
+libata. So pi_connect() is called on every protocol driver access and
+pi_disconnect() is called by a timer that's activated after protocol driver
+access.
+
+Found that the EPP-32 mode is buggy in EPAT - and also in many (all?) other
+protocol drivers - they don't handle non-multiple-of-4 block transfers
+correctly. I'll fix that later.
+
+The bpck_connect() in bpck driver seems to need to know if a CD drive is
+attached (weird) but it's called before device detection. This probably
+cannot be fixed without the HW.
+
+I have only two devices and both have the same EPAT chip, unfortunately:
+Imation SupserDisk
+HP C4381A (drive was dead, replaced by TOSHIBA CD-ROM XM-6202B)
+
+The both work:
+# modprobe epat
+[  122.635395] pata_parport: protocol epat registered
+[  122.738114] epat pata_parport.0: epat, Shuttle EPAT chip c6 at 0x378, mode 5 (EPP-32), delay 1
+[  122.789035] scsi host4: pata_parport-epat
+[  122.789226] ata5: PATA max PIO0 port parport0 protocol epat
+[  127.831534] ata5: link is slow to respond, please be patient (ready=0)
+[  132.811623] ata5: device not ready (errno=-16), forcing hardreset
+[  133.015024] ata5.00: ATAPI: TOSHIBA CD-ROM XM-6202B, 1108, max MWDMA2
+[  133.023016] scsi 4:0:0:0: CD-ROM            TOSHIBA  CD-ROM XM-6202B  1108 PQ: 0 ANSI: 5
+[  133.043817] scsi 4:0:0:0: Attached scsi generic sg1 type 5
+[  133.088146] sr 4:0:0:0: [sr0] scsi3-mmc drive: 32x/32x cd/rw xa/form2 cdda tray
+[  133.088163] cdrom: Uniform CD-ROM driver Revision: 3.20
+[  133.125939] sr 4:0:0:0: Attached scsi CD-ROM sr0
+# mount /dev/sr0 /mnt
+mount: /mnt: WARNING: source write-protected, mounted read-only.
+[  157.922575] ISO 9660 Extensions: Microsoft Joliet Level 3
+[  157.991030] ISO 9660 Extensions: RRIP_1991A
+# hdparm -t --direct /dev/sr0
+
+/dev/sr0:
+ Timing O_DIRECT disk reads:   2 MB in  3.08 seconds = 664.47 kB/sec
+
+
+
+# modprobe epat
+[  448.160910] pata_parport: protocol epat registered
+[  448.267068] epat pata_parport.0: epat, Shuttle EPAT chip c6 at 0x378, mode 5 (EPP-32), delay 1
+[  448.301624] scsi host4: pata_parport-epat
+[  448.301769] ata6: PATA max PIO0 port parport0 protocol epat
+[  448.533850] ata6.00: ATAPI: LS-120 COSM   04              UHD Floppy, 0270M09T, max PIO2
+[  448.615500] scsi 4:0:0:0: Direct-Access     MATSHITA LS-120 COSM   04 0270 PQ: 0 ANSI: 5
+[  448.651279] sd 4:0:0:0: Attached scsi generic sg1 type 0
+[  448.686028] sd 4:0:0:0: [sdb] Media removed, stopped polling
+[  448.717879] sd 4:0:0:0: [sdb] Attached SCSI removable disk
+[  472.259786] sd 4:0:0:0: [sdb] Read Capacity(16) failed: Result: hostbyte=DID_ERROR driverbyte=DRIVER_OK
+[  472.259805] sd 4:0:0:0: [sdb] Sense not available.
+[  483.042442] sd 4:0:0:0: [sdb] 246528 512-byte logical blocks: (126 MB/120 MiB)
+[  483.158446] sdb: detected capacity change from 0 to 246528
+[  483.309771]  sdb:
+# hdparm -t --direct /dev/sdb
+
+/dev/sdb:
+ Timing O_DIRECT disk reads:   2 MB in 44.19 seconds =  46.35 kB/sec
+
+

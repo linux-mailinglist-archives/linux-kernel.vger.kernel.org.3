@@ -2,442 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351B94CE1B7
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E5C4CE1BC
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiCEAnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 19:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        id S230329AbiCEAqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 19:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiCEAnu (ORCPT
+        with ESMTP id S230242AbiCEAqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 19:43:50 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882DD15E6F0
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:43:01 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id p5-20020a17090a748500b001bee6752974so5555270pjk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 16:43:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=hBHbJBYV7pPLoB8iL5n3f0eQXspXeuTzQNbWmwUMkhE=;
-        b=TS6VbE8cEC2wiRK89Qaf9mSZmgKI/67NAez5Rlm7J0lQm3IOfSoyNwplk7Mlt57JMM
-         wc0G43vavr2sM9br0AP6MpskjIX8/7iyFJTK55SDNuTvP7D0j55bjOcECGuqsgPR22R+
-         XpNEZaR0Gs24p7qVGPZECGTfoKMKm0upIZ6Lm1qdnt6uJyBaHhdCwGpy+k2nkEGG5+gJ
-         LmkQIT5U/JGCvVjyFrX7zMeR48sLRJZczC7Yk3dt8mn9StlMVEcdmX6NW00AVPvQnGLD
-         0OOGUdqyKeA273z2YSNh/ZuMyxVbn6a/84pyd6aaAJrJVXQ5VfCEZJSKlWK+XV7sLpwJ
-         PpiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=hBHbJBYV7pPLoB8iL5n3f0eQXspXeuTzQNbWmwUMkhE=;
-        b=VJDbKz6UxdVLQsFu15e2yhh4JII75WgTGW9/SBR6muSnsqdvBO0aTUrgWYVOQH3ddV
-         aDW47BexKwDQImala63kHbAHhRfCvZMSyps/lUISaO/IfcU8joeYBAFAR77w4q89bi02
-         7mFGX81s38ayphh4+iXRfz3KGahrYzxmSUDZUsv3nAZI4g5UiUdVYKzfl+ItNHb1GVUw
-         2I+qyqdaK9A4LNpuEkQVURVbj8wurw2zik2Aj3FsRJHuUckZmzRlzJhUJBxAO6pcJxEB
-         u9ywHeT5IQVjJw7rPm9FHePGWBTDgFy0Jdvekr01Bam9cU862OwiWAkKnJy5D4kCVX/X
-         ef5g==
-X-Gm-Message-State: AOAM533vU/vhFuhHti4RMb90g/krYXCdS2K7AjzFpuxaAMO0AXAd9que
-        g/tVDgk/Vwol27OIl/J9pga4jTB2NrgrbA==
-X-Google-Smtp-Source: ABdhPJyRPjus4NSPjNKqVR0vs2MZ6f/xmGQxo5KipiyBsgnxHU5T0BbTfXuvrdNt7VnK8k3t+vn6749tG6rNVA==
-X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a17:90b:4f4e:b0:1bf:887:9352 with SMTP id
- pj14-20020a17090b4f4e00b001bf08879352mr13272823pjb.199.1646440980996; Fri, 04
- Mar 2022 16:43:00 -0800 (PST)
-Date:   Sat,  5 Mar 2022 00:42:58 +0000
-Message-Id: <20220305004258.2484798-1-wonchung@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH v3] driver core: Add sysfs support for physical location of a device
-From:   Won Chung <wonchung@google.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Won Chung <wonchung@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Mar 2022 19:46:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6AB259F5E;
+        Fri,  4 Mar 2022 16:45:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3773761F31;
+        Sat,  5 Mar 2022 00:45:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 276C4C340E9;
+        Sat,  5 Mar 2022 00:45:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646441132;
+        bh=w5DIfLVOZvFHDb7FDRiaShuHXiBm82TgafYJ6qhz+P4=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=NYiiQ0yG5MHIzesX/aCThtvBGDeg4Q4RgNGlQiZrwq5EqLb9QCZqUK6GB4rmK0SFG
+         g7F/UXky2usgSwo6EhBgvHTATQBIAwBB+BFCaWZYpTytM6VOxDDK/vKS3yAk7zAbA4
+         MnO58RcLVrdziNQK5f1GT9ICYgrymZlFrzyqe7Fd1JjtI6QYM5ROsCqciwGwg6f+6m
+         oL5FmV99llDjLXm3Ca98DMdx7L91P1Osel59AtW6bNDPeCYi70xtO5ayqdAB79VOcT
+         msH06Fl/w080STYFAGs/oCihLnZwtNL2es6gm+YRo0ejuS0aadSQD3mThuzo25QiRD
+         cfmMsRundGfPg==
+Date:   Fri, 4 Mar 2022 16:45:31 -0800 (PST)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Sudeep Holla <sudeep.holla@arm.com>
+cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/1] dt-bindings: arm: Add scmi_devid paramter for
+In-Reply-To: <YiH0KrL9LjFZnwBe@bogus>
+Message-ID: <alpine.DEB.2.22.394.2203041624150.3261@ubuntu-linux-20-04-desktop>
+References: <cover.1645460043.git.oleksii_moisieiev@epam.com> <20220222110003.GC21915@e120937-lin> <20220222160637.yn6pru4nfgwih23j@bogus> <20220222171549.GA2194063@EPUAKYIW015D> <20220224115443.fwhczfvm3cfwoim7@bogus> <alpine.DEB.2.22.394.2202241424110.239973@ubuntu-linux-20-04-desktop>
+ <alpine.DEB.2.22.394.2202241531111.239973@ubuntu-linux-20-04-desktop> <YiH0KrL9LjFZnwBe@bogus>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ACPI table includes _PLD fields for a device, create a new
-directory (physical_location) in sysfs to share _PLD fields.
+On Fri, 4 Mar 2022, Sudeep Holla wrote:
+> (sorry for the delay, had to move my email setup and some mails were
+> stuck in outbox and I missed to notice)
+> 
+> On Thu, Feb 24, 2022 at 03:34:01PM -0800, Stefano Stabellini wrote:
+> > On Thu, 24 Feb 2022, Stefano Stabellini wrote:
+> > > On Thu, 24 Feb 2022, Sudeep Holla wrote:
+> > > > On Tue, Feb 22, 2022 at 05:15:49PM +0000, Oleksii Moisieiev wrote:
+> > > > > Hi Sudeep,
+> > > > > 
+> > > > > On Tue, Feb 22, 2022 at 04:06:37PM +0000, Sudeep Holla wrote:
+> > > > > > Hi Oleksii,
+> > > > > > 
+> > > > > > My initial feedback on this. And thanks Cristian for making it so easy as
+> > > > > > you have covered most of the things in depth(which I might have not done
+> > > > > > myself that well)
+> > > > > > 
+> > > > > > On Tue, Feb 22, 2022 at 11:00:03AM +0000, Cristian Marussi wrote:
+> > > > > > > On Mon, Feb 21, 2022 at 05:26:46PM +0000, Oleksii Moisieiev wrote:
+> > > > > > > > Introducing new parameter called scmi_devid to the device-tree bindings.
+> > > > > > > > This parameter should be set for the device nodes, which has
+> > > > > > > > clocks/power-domains/resets working through SCMI.
+> > > > > > 
+> > > > > > I prefer you had given more details on your usage model here instead of
+> > > > > > pointing to the other Xen thread as it helps for someone without much
+> > > > > > background on Xen or your use-case to review this.
+> > > > > > 
+> > > > > Let me describe the process in few words:
+> > > > > We implemented a new feature, called SCI-mediator in Xen.
+> > > > > The proposed implementation allows Guests to communicate with the Firmware using SCMI
+> > > > > protocol with SMC as a transport. Other implementation are also
+> > > > > possible, such as SCMI-Mailbox, SCPI-mailbox etc.
+> > > > > 
+> > > > > In this feature Xen is the Trusted Agent, which receives the following
+> > > > > information in Xen device-tree:
+> > > > > 1) All channels should be described, each channel defined as
+> > > > > arm,scmi-shmem node;
+> > > > > 2) Scmi node arm,scmi-smc with protocols description;
+> > > > 
+> > > > Sounds good so far.
+> > > > 
+> > > > > 3) scmi-devid should be set in nodes, which works through SCMI.
+> > > > >
+> > > > 
+> > > > Why is this needed for Guest OS, you need not populate this if Guest OS
+> > > > is not required to use it, right ? If it is needed just by Xen hypervisor,
+> > > > lets talk about that and why it is bad idea to mix that with general
+> > > > SCMI bindings.
+> > > 
+> > > I'll try to help Oleksii by answering here, I hope I am not off the mark
+> > > :-)
+> > > 
+> > > I think Sudeep is right, scmi-devid is not needed by the guest OS.
+> > > 
+> > > The host device tree is a more interesting discussion. As the host
+> > > device tree is meant to be generic and not tied to a specific version of
+> > > Linux, it should fully describe the SCMI interface available. If the
+> > > device tree is provided to a Trusted Agent, then it should also have the
+> > > scmi-devid information, right?
+> > > 
+> > > 
+> > > > > On start Xen inits itself as trusted agent and requests agent
+> > > > > configuration by using BASE_DISCOVER_AGENT message. This message is sent
+> > > > > to each configured channel to get agent_id
+> > > > > 
+> > > > > On Domain creation stage Xen will do the following steps:
+> > > > > 1) Assign channel to the Guest and map channel address to the Domain
+> > > > > address. For the Domain this address should be the same;
+> > > > > 2) Generate arm,scmi-shmem and arm,scmi-smc nodes if needed for Guest
+> > > > > device-tree (the device-tree which should be passed to the Guest);
+> > > > > 3) Process devices, which are passed through to this Guest and set
+> > > > > BASE_SET_DEVICE_PERMISSIONS for the scmi-devid, received from the
+> > > > > device-node;
+> > > > >
+> > > > 
+> > > > I am confused here. So the Xen knows which devices are assigned to each
+> > > > Guest OS but doesn't know device ID for them, but relies on the device
+> > > > tree node ?
+> > > 
+> > > Which devices go to which guest OS is a user-provided configuration. For
+> > > instance, a user can say: "assing /amba/ethernet@ff0e0000 to dom1". This
+> > > is normal and not related to SCMI: when a user configures a static
+> > > partitioning system, they decide which resources belong to which domain.
+> > > 
+> > > So Xen is told that /amba/ethernet@ff0e0000 is supposed to go to dom1.
+> > > Xen proceeds to map memory and interrupts corresponding to
+> > > /amba/ethernet@ff0e0000 to dom1. So far so good. What about SCMI?
+> > > 
+> > > In Oleksii's design, Xen is going to assign one of the available SCMI
+> > > channels to dom1 and restrict its permission to only
+> > > /amba/ethernet@ff0e0000. To do that, Xen needs to know the scmi-devid of
+> > > /amba/ethernet@ff0e0000. As far as I can tell there is nothing
+> > > Xen-specific in this activitity, that's why I asked Oleksii to reach out
+> > > to the upstream device tree community to improve the generic bindings
+> > > for everyone's benefits.
+> > 
+> > Let's leave Linux and Xen aside for the moment. What are other possible
+> > Trusted Agents? (Maybe TF-A?) How do they get the scmi-devid? It looks
+> > like it was supposed to come from device tree but nobody got around to
+> > adding it to the binding because it is not used by Linux?
+> 
+> I do agree we need this info and probably device tree is the way. But what
+> I disagree here is that it needs to part of existing SCMI bindings which are
+> for the SCMI users only and not for one that may provide the interface(SCMI
+> platform/server/arbitrator/passthrough/..whatever). You can have bindings for
+> them as part of system device tree initiative and can be merged back to Linux
+> if that happens. Or we may even take the whole devicetree bindings out of
+> the Linux one day (when all the stars are aligned :) )
 
-Currently without PLD information, when there are multiple of same
-devices, it is hard to distinguish which device corresponds to which
-physical device at which location. For example, when there are two Type
-C connectors, it is hard to find out which connector corresponds to the
-Type C port on the left panel versus the Type C port on the right panel.
-With PLD information provided, we can determine which specific device at
-which location is doing what.
+I would love to hear Rob's opinion on what I am about to write next on
+the topic of whether the binding should be under linux.git.
 
-_PLD output includes much more fields, but only generic fields are added
-and exposed to sysfs, so that non-ACPI devices can also support it in
-the future. The minimal generic fields needed for locating a device are
-the following.
-- panel
-- vertical_position
-- horizontal_position
-- dock
-- lid
+I am not sure if the policy is that only device tree bindings actively
+used by Linux are present under
+linux.git/Documentation/devicetree/bindings/. There are a tons of other
+projects using device tree and without a central point for keeping these
+bindings the specification will shatter. Given that Linux prefers to
+keep the bindings under linux.git, then the logic conclusion is that
+linux.git/Documentation/devicetree/bindings/ should also hold bindings
+not actively used by Linux right at the moment. Especially bindings that
+could be used by Linux in the future. Otherwise we risk a new binding
+being used by U-boot, Xen, Zephyr and others then Linux introduces an
+incompatible version of it. Nobody would win in that situation.
 
-Signed-off-by: Won Chung <wonchung@google.com>
----
 
-Changes from v2
-- Use sysfs_emit to create files.
-- Correct mix of spaces and tabs.
+> > After all, we are currently using in Xen a property called
+> > "linux,pci-domain". We might as well have Linux in the future use a
+> > property called "xen,scmi-devid" to even things out :-)
+> 
+> Sure or we may add a generic one in the future as mentioned in the other
+> email for reasons mentioned there.
 
-Changes from v1
-- Correct directory names in Documentation.
-- Clarify namings in core.c
+[...]
 
- .../testing/sysfs-devices-physical_location   |  42 ++++++
- drivers/base/core.c                           | 139 ++++++++++++++++++
- include/linux/device.h                        |  73 +++++++++
- 3 files changed, 254 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_locati=
-on
+> The fact that we don't need this to be part of SCMI OSPM user bindings,
+> it is not addressed and can be considered as a gap.
+> 
+> + The reason I want to keep it xen specific at the moment as we had some
+> plan to extended the device-id usage in the spec which hasn't progressed
+> a bit(I must admit that before you ask), and this addition should not be
+> obstruct that future development. If we align with what we define xen
+> specific as part of $subject work, we can always define generic binding
+> in the future and slowly make the other obsolete over the time.
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/Do=
-cumentation/ABI/testing/sysfs-devices-physical_location
-new file mode 100644
-index 000000000000..202324b87083
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-devices-physical_location
-@@ -0,0 +1,42 @@
-+What:		/sys/devices/.../physical_location
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		This directory contains information on physical location of
-+		the device connection point with respect to the system's
-+		housing.
-+
-+What:		/sys/devices/.../physical_location/panel
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		Describes which panel surface of the system=E2=80=99s housing the
-+		device connection point resides on.
-+
-+What:		/sys/devices/.../physical_location/vertical_position
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		Describes vertical position of the device connection point on
-+		the panel surface.
-+
-+What:		/sys/devices/.../physical_location/horizontal_position
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		Describes horizontal position of the device connection point on
-+		the panel surface.
-+
-+What:		/sys/devices/.../physical_location/dock
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		"Yes" if the device connection point resides in a docking
-+		station or a port replicator. "No" otherwise.
-+
-+What:		/sys/devices/.../physical_location/lid
-+Date:		March 2022
-+Contact:	Won Chung <wonchung@google.com>
-+Description:
-+		"Yes" if the device connection point resides on the lid of
-+		laptop system. "No" otherwise.
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 7bb957b11861..9cfa71ad21f3 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2466,6 +2466,136 @@ static ssize_t removable_show(struct device *dev, s=
-truct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(removable);
-=20
-+static int dev_add_physical_location(struct device *dev)
-+{
-+#if defined(CONFIG_ACPI)
-+	struct acpi_pld_info *pld;
-+	acpi_status status;
-+
-+	if (!has_acpi_companion(dev))
-+		return 0;
-+
-+	status =3D acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
-+	if (ACPI_FAILURE(status) || !pld)
-+		return 0;
-+
-+	dev->location =3D (struct device_location) {
-+		.panel =3D pld->panel,
-+		.vertical_position =3D pld->vertical_position,
-+		.horizontal_position =3D pld->horizontal_position,
-+		.dock =3D pld->dock,
-+		.lid =3D pld->lid,
-+	};
-+
-+	return 1;
-+#else
-+	return 0;
-+#endif
-+}
-+
-+static ssize_t panel_show(struct device *dev, struct device_attribute *att=
-r,
-+	char *buf)
-+{
-+	const char *panel;
-+
-+	switch (dev->location.panel) {
-+	case DEVICE_PANEL_TOP:
-+		panel =3D "top";
-+		break;
-+	case DEVICE_PANEL_BOTTOM:
-+		panel =3D "bottom";
-+		break;
-+	case DEVICE_PANEL_LEFT:
-+		panel =3D "left";
-+		break;
-+	case DEVICE_PANEL_RIGHT:
-+		panel =3D "right";
-+		break;
-+	case DEVICE_PANEL_FRONT:
-+		panel =3D "front";
-+		break;
-+	case DEVICE_PANEL_BACK:
-+		panel =3D "back";
-+		break;
-+	default:
-+		panel =3D "unknown";
-+	}
-+	return sysfs_emit(buf, "%s\n", panel);
-+}
-+static DEVICE_ATTR_RO(panel);
-+
-+static ssize_t vertical_position_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	const char *vertical_position;
-+
-+	switch (dev->location.vertical_position) {
-+	case DEVICE_VERT_POS_UPPER:
-+		vertical_position =3D "upper";
-+		break;
-+	case DEVICE_VERT_POS_CENTER:
-+		vertical_position =3D "center";
-+		break;
-+	case DEVICE_VERT_POS_LOWER:
-+		vertical_position =3D "lower";
-+		break;
-+	default:
-+		vertical_position =3D "unknown";
-+	}
-+	return sysfs_emit(buf, "%s\n", vertical_position);
-+}
-+static DEVICE_ATTR_RO(vertical_position);
-+
-+static ssize_t horizontal_position_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	const char *horizontal_position;
-+
-+	switch (dev->location.horizontal_position) {
-+	case DEVICE_HORI_POS_LEFT:
-+		horizontal_position =3D "left";
-+		break;
-+	case DEVICE_HORI_POS_CENTER:
-+		horizontal_position =3D "center";
-+		break;
-+	case DEVICE_HORI_POS_RIGHT:
-+		horizontal_position =3D "right";
-+		break;
-+	default:
-+		horizontal_position =3D "unknown";
-+	}
-+	return sysfs_emit(buf, "%s\n", horizontal_position);
-+}
-+static DEVICE_ATTR_RO(horizontal_position);
-+
-+static ssize_t dock_show(struct device *dev, struct device_attribute *attr=
-,
-+	char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", dev->location.dock ? "yes" : "no");
-+}
-+static DEVICE_ATTR_RO(dock);
-+
-+static ssize_t lid_show(struct device *dev, struct device_attribute *attr,
-+	char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", dev->location.lid ? "yes" : "no");
-+}
-+static DEVICE_ATTR_RO(lid);
-+
-+static struct attribute *dev_attr_physical_location[] =3D {
-+	&dev_attr_panel.attr,
-+	&dev_attr_vertical_position.attr,
-+	&dev_attr_horizontal_position.attr,
-+	&dev_attr_dock.attr,
-+	&dev_attr_lid.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group dev_attr_physical_location_group =3D {
-+	.name =3D "physical_location",
-+	.attrs =3D dev_attr_physical_location,
-+};
-+
- int device_add_groups(struct device *dev, const struct attribute_group **g=
-roups)
- {
- 	return sysfs_create_groups(&dev->kobj, groups);
-@@ -2649,8 +2779,17 @@ static int device_add_attrs(struct device *dev)
- 			goto err_remove_dev_waiting_for_supplier;
- 	}
-=20
-+	if (dev_add_physical_location(dev)) {
-+		error =3D device_add_group(dev,
-+			&dev_attr_physical_location_group);
-+		if (error)
-+			goto err_remove_dev_physical_location;
-+	}
-+
- 	return 0;
-=20
-+ err_remove_dev_physical_location:
-+	device_remove_group(dev, &dev_attr_physical_location_group);
-  err_remove_dev_waiting_for_supplier:
- 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
-  err_remove_dev_online:
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 93459724dcde..424be9cb735e 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -386,6 +386,75 @@ struct dev_msi_info {
- #endif
- };
-=20
-+/**
-+ * enum device_location_panel - Describes which panel surface of the syste=
-m's
-+ * housing the device connection point resides on.
-+ * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
-+ * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
-+ * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
-+ * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
-+ * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
-+ * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
-+ * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unknow=
-n.
-+ */
-+enum device_location_panel {
-+	DEVICE_PANEL_TOP,
-+	DEVICE_PANEL_BOTTOM,
-+	DEVICE_PANEL_LEFT,
-+	DEVICE_PANEL_RIGHT,
-+	DEVICE_PANEL_FRONT,
-+	DEVICE_PANEL_BACK,
-+	DEVICE_PANEL_UNKNOWN,
-+};
-+
-+/**
-+ * enum device_location_vertical_position - Describes vertical position of=
- the
-+ * device connection point on the panel surface.
-+ * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of pan=
-el.
-+ * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of p=
-anel.
-+ * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of pan=
-el.
-+ */
-+enum device_location_vertical_position {
-+	DEVICE_VERT_POS_UPPER,
-+	DEVICE_VERT_POS_CENTER,
-+	DEVICE_VERT_POS_LOWER,
-+};
-+
-+/**
-+ * enum device_location_horizontal_position - Describes horizontal positio=
-n of
-+ * the device connection point on the panel surface.
-+ * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of panel=
-.
-+ * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of p=
-anel.
-+ * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of pan=
-el.
-+ */
-+enum device_location_horizontal_position {
-+	DEVICE_HORI_POS_LEFT,
-+	DEVICE_HORI_POS_CENTER,
-+	DEVICE_HORI_POS_RIGHT,
-+};
-+
-+/**
-+ * struct device_location - Device data related to physical location of th=
-e
-+ * device connection point.
-+ * @panel: Panel surface of the system's housing that the device connectio=
-n
-+ *         point resides on.
-+ * @vertical_position: Vertical position of the device connection point wi=
-thin
-+ *                     the panel.
-+ * @horizontal_position: Horizontal position of the device connection poin=
-t
-+ *                       within the panel.
-+ * @dock: Set if the device connection point resides in a docking station =
-or
-+ *        port replicator.
-+ * @lid: Set if this device connection point resides on the lid of laptop
-+ *       system.
-+ */
-+struct device_location {
-+	enum device_location_panel panel;
-+	enum device_location_vertical_position vertical_position;
-+	enum device_location_horizontal_position horizontal_position;
-+	bool dock;
-+	bool lid;
-+};
-+
- /**
-  * struct device - The basic device structure
-  * @parent:	The device's "parent" device, the device to which it is attach=
-ed.
-@@ -456,6 +525,8 @@ struct dev_msi_info {
-  * @removable:  Whether the device can be removed from the system. This
-  *              should be set by the subsystem / bus driver that discovere=
-d
-  *              the device.
-+ * @location:	Describes physical location of the device connection point i=
-n
-+ *		the system housing.
-  *
-  * @offline_disabled: If set, the device is permanently online.
-  * @offline:	Set after successful invocation of bus type's .offline().
-@@ -569,6 +640,8 @@ struct device {
-=20
- 	enum device_removable	removable;
-=20
-+	struct device_location	location;
-+
- 	bool			offline_disabled:1;
- 	bool			offline:1;
- 	bool			of_node_reused:1;
---=20
-2.35.1.616.g0bdcbb4464-goog
+Keep in mind that device tree is supposed to be backward compatible,
+with or without a "xen," prefix. The process of updating the binding and
+making the older binding obsolete won't be any different whether the
+property is called "super-official-device-id" or "xen,scmi-devid".
 
+(Also, it is not Xen specific, but as we have enstablished, it is for any
+Trusted Agents.)
+
+Why not review the bindings now also considering a future Linux use of
+it?

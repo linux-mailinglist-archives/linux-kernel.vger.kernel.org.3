@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB044CE565
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED984CE567
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiCEO4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 09:56:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
+        id S231907AbiCEO50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 09:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbiCEO4w (ORCPT
+        with ESMTP id S229656AbiCEO5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 09:56:52 -0500
-Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E995396B9
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 06:56:00 -0800 (PST)
-Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
-        by 156.147.23.51 with ESMTP; 5 Mar 2022 23:55:58 +0900
-X-Original-SENDERIP: 156.147.1.125
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.125 with ESMTP; 5 Mar 2022 23:55:58 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Sat, 5 Mar 2022 23:55:34 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        torvalds@linux-foundation.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
-        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
-Message-ID: <20220305145534.GB31268@X58A-UD3R>
-References: <YiAow5gi21zwUT54@mit.edu>
- <1646285013-3934-1-git-send-email-byungchul.park@lge.com>
- <YiDSabde88HJ/aTt@mit.edu>
- <20220304032002.GD6112@X58A-UD3R>
- <YiLbs9rszWXpHm/P@mit.edu>
+        Sat, 5 Mar 2022 09:57:25 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31C9396AE;
+        Sat,  5 Mar 2022 06:56:35 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 60E481F38E;
+        Sat,  5 Mar 2022 14:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646492194; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jp5Wvbe6b7Bf06yAjd7FM+rHWIKWVoVK1y8+Zp4O8dw=;
+        b=XmvePgKUuL9Ym+RXKAAweGwNfLsajH4+93iGDbWjnheMuQqOS0Xoas9jAZJDm0GoSdHtnR
+        vdAV1tw0IsDHny0zTWCgOJKYjKhcvNtnvF9uylglGvr2XG1hD4xLw03mbWt/DGge3GCbgk
+        xrosyxSahLs+9AkGMBZp2L7Wt/ccIKo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646492194;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jp5Wvbe6b7Bf06yAjd7FM+rHWIKWVoVK1y8+Zp4O8dw=;
+        b=4WmqA8beWlH1y1PFB7pNfSB3ps2EiCmHnL22xKoaLmOISE3KSHkZ3j7baUZfWhEkGjHoIF
+        HT7jtf7CZH6/y0DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE0F613519;
+        Sat,  5 Mar 2022 14:56:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8abJNiF6I2KMYAAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Sat, 05 Mar 2022 14:56:33 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 4730fb07;
+        Sat, 5 Mar 2022 14:56:49 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] ceph: minor fixes and encrypted snapshot names
+References: <20220304161403.19295-1-lhenriques@suse.de>
+        <87fsnx4rb3.fsf@brahms.olymp>
+        <e7f91d0be0f41320e5a4f38ded1bde166626a17f.camel@kernel.org>
+Date:   Sat, 05 Mar 2022 14:56:49 +0000
+In-Reply-To: <e7f91d0be0f41320e5a4f38ded1bde166626a17f.camel@kernel.org> (Jeff
+        Layton's message of "Fri, 04 Mar 2022 13:30:50 -0500")
+Message-ID: <878rtoo3bi.fsf@brahms.olymp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiLbs9rszWXpHm/P@mit.edu>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,73 +77,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 10:40:35PM -0500, Theodore Ts'o wrote:
-> On Fri, Mar 04, 2022 at 12:20:02PM +0900, Byungchul Park wrote:
-> > 
-> > I found a point that the two wait channels don't lead a deadlock in
-> > some cases thanks to Jan Kara. I will fix it so that Dept won't
-> > complain it.
-> 
-> I sent my last (admittedly cranky) message before you sent this.  I'm
-> glad you finally understood Jan's explanation.  I was trying to tell
+Jeff Layton <jlayton@kernel.org> writes:
 
-Not finally. I've understood him whenever he tried to tell me something.
+> On Fri, 2022-03-04 at 16:26 +0000, Lu=C3=ADs Henriques wrote:
+>> Lu=C3=ADs Henriques <lhenriques@suse.de> writes:
+>>=20
+>> > Hi!
+>> >=20
+>> > I'm sending another iteration of the encrypted snapshot names patch.  =
+This
+>> > patch assumes PR#45224 [1] to be merged as it adds support for the
+>> > alternate names.
+>> >=20
+>> > Two notes:
+>> >=20
+>> > 1. Patch 0001 is just a small fix from another fscrypt patch.  It's
+>> >    probably better to simply squash it.
+>> >=20
+>> > 2. I'm not sure how easy it is to hit the UAF fixed by patch 0002.  I =
+can
+>> >    reproduce it easily by commenting the code that adds the
+>> >    DCACHE_NOKEY_NAME flag in patch 0003.
+>>=20
+>> Obviously, immediately after sending this patchset I realized I failed to
+>> mention a very (*VERY*) important note:
+>>=20
+>> Snapshot names can not start with a '_'.  I think the reason is related
+>> with the 'long snapshot names', but I can't really remember the details
+>> anymore.  The point is that an encrypted snapshot name base64-encoded
+>> *may* end-up starting with an '_' as we're using the base64-url variant.
+>>=20
+>> I really don't know if it's possible to fix that.  I guess that in that
+>> case the user will get an error and fail to create the snapshot but he'll
+>> be clueless because the reason.  Probably a warning can be added to the
+>> kernel logs, but maybe there are other ideas.
+>>=20
+>
+>
+> Ouch. Is that imposed by the MDS? It'd be best if we could remove that
+> limitation from it altogether if we can.
 
-> you the same thing, but apparently I failed to communicate in a
+I do remember hitting this limitation in the past, but a quick grep didn't
+show anything in the documentation about it.  This seems to have been
+added to the MDS a *long* time ago, with commit 068553473c82 ("mds: adjust
+trace encoding, clean up snap naming") but (as usual) there aren't a lot
+of details.
 
-I don't think so. Your point and Jan's point are different. All he has
-said make sense. But yours does not.
+>
+> If we can't, then we might be able to get away with prepending all the
+> encrypted names with some legal characte. Then when we go to decrypt it
+> we just strip that off.
 
-> sufficiently clear manner.  In any case, what Jan described is a
-> fundamental part of how wait queues work, and I'm kind of amazed that
-> you were able to implement DEPT without understanding it.  (But maybe
+This is probably the best way to fix it, but it's worth trying to find
+out the origins of this limitation.  I do seem to remember some obscure
+reasons, related with the long snap names (for which Xiubo has a patch),
+which will start with '_'.  But yeah I'll have to go dig deeper.
 
-Of course, it was possible because all that Dept has to know for basic
-work is wait and event. The subtle things like what Jan told me help
-Dept be better.
+> We could also consider changing the base64 routine to use something else
+> in lieu of '_' but that's more of a hassle.
 
-> that is why some of the DEPT reports were completely incomprehensible
-
-It's because you are blinded to blame at it without understanding how
-Dept works at all. I will fix those that must be fixed. Don't worry.
-
-> to me; I couldn't interpret why in the world DEPT was saying there was
-> a problem.)
-
-I can tell you if you really want to understand why. But I can't if you
-are like this.
-
-> In any case, the thing I would ask is a little humility.  We regularly
-> use lockdep, and we run a huge number of stress tests, throughout each
-> development cycle.
-
-Sure.
-
-> So if DEPT is issuing lots of reports about apparently circular
-> dependencies, please try to be open to the thought that the fault is
-
-No one was convinced that Dept doesn't have a fault. I think your
-worries are too much.
-
-> in DEPT, and don't try to argue with maintainers that their code MUST
-> be buggy --- but since you don't understand our code, and DEPT must be
-
-No one argued that their code must be buggy, either. So I don't think
-you have to worry about what's never happened.
-
-> theoretically perfect, that it is up to the Maintainers to prove to
-> you that their code is correct.
-> 
-> I am going to gently suggest that it is at least as likely, if not
-> more likely, that the failure is in DEPT or your understanding of what
-
-No doubt. I already think so. But it doesn't mean that I have to keep
-quiet without discussing to imporve Dept. I will keep improving Dept in
-a reasonable way.
-
-> how kernel wait channels and locking works.  After all, why would it
-> be that we haven't found these problems via our other QA practices?
-
-Let's talk more once you understand how Dept works at least 10%. Or I
-think we cannot talk in a productive way.
-
+Cheers,
+--=20
+Lu=C3=ADs

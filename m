@@ -2,169 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB514CE5FF
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221E74CE605
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbiCEQt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 11:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S232016AbiCEQxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 11:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbiCEQtz (ORCPT
+        with ESMTP id S230094AbiCEQw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 11:49:55 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61063275DF
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 08:49:05 -0800 (PST)
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 832B13F600
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 16:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646498943;
-        bh=DX/QurX075N9jChok0VowAMIPvPGF/QQrCN/G/CBjQs=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=vfFxc4aH03sUT7L0y/uv8sMLOsebHfc+g2JkRj2OUbY4hM3NPvFfiv9lmr7VSiohi
-         e3E7gB0HgCMcOjL7tGBvJJlo1HCVo5VjS8p7QcwFy2Wxn+PaSNvq10p08Kk1TEh6YU
-         YDVGVlsokUNyWmboBj6doEDZkuA4C9+5e1PfwuNAaLmfRbpiOiKA1pa250P5THAo0G
-         VJl8ubwvf2ps0LuteozlpT88WpK7+rY/guwNcl3WgVwSWGe3qXYxifxENsIHyQv5yg
-         PlOtq2BCncw5CohToZHFK1F8QNj1Y4/cxjepoT0U6jk7ila+9scbszv+lzP19htn0C
-         GiBlGr4WleWNQ==
-Received: by mail-il1-f197.google.com with SMTP id a2-20020a056e020e0200b002c6344a01c9so122669ilk.13
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 08:49:03 -0800 (PST)
+        Sat, 5 Mar 2022 11:52:59 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CD13B03D;
+        Sat,  5 Mar 2022 08:52:08 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id b11so19288962lfb.12;
+        Sat, 05 Mar 2022 08:52:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zxGEx/UmR4KZJ60ASWh+xU+S5NM4aOeVXtrO2lALPmM=;
+        b=iADxoUa26ngqfpURoXcgE0AmdMZfM9zKb90jIZZaqFOV8BkVXx0G9lw0QOOJ1lSHrT
+         vzb3PtOiRPmTUtwlyrEfa7BvMWtmd1uElOW+16ojotr9zWK/ZELMjt00p4zVCyv5Xg4S
+         ydNsILj0zOHrs/rDtkpnyKK7HQB0zWO+Sm2qqSGYk9s6X9VH7fXY1KuXNmPIA8Ur39gl
+         uaHFHF1G9C0Vn88OWz3W8BahFrtpfCmI7xmUTZEXKGxHZ9vEP39Jp8jxdUGM0w7M+1lM
+         l8IdiHD97HBb3cooFM2jJbumOoq+30DtO/WbtBrI6frk9lL6SzwrMAoObcAeTErpou9i
+         Or1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DX/QurX075N9jChok0VowAMIPvPGF/QQrCN/G/CBjQs=;
-        b=FpSSi2V83DIr+XUy4AsHH70FfF5JiANJkeDyf/qLcuGMabAyxg99I/ChSF5Zxh6Ipx
-         lTSCGY7FafQ2L5NI2+yOBLJHRKESvH5VbyaOiBFUlEiYqB4pGBeZugLy4OQLuBANv53O
-         QPeLOzq4qYLmEMhU8rht2Qc0LvKPc7AUVhDb/dMc2dL4nR4jh83nTHPIE3GbJ8hf0Es9
-         uykXX2R3sF60bWEMeh7EnLRgn1yamzTOIaus66CHcL53rh7nJjuswC2aj+SUtGWRP/7B
-         CCu6c6oC+q6H7NUG98Y+ZiBXYYEKKMgRjSCxiM9WG6BBGlKEGQWKrdhIPw9onOtKgTS+
-         XTkQ==
-X-Gm-Message-State: AOAM530OHWeST3UNb/KROOcdtJ+G+JOXhVSZFKhzKBBSaDLhUlQxaU+6
-        vFAMQmG/nsdL6GoCEJ4EjgpdJcpdefVFgTP1IgGoT3a5iqQTozZuEUvUEq5mIXvz4qB/UtRi8ur
-        QPQMUQNdf56mbIwmnbth3qx3goR2VWCYL5lNR2diRfw==
-X-Received: by 2002:a05:6602:281a:b0:640:d8a0:e14c with SMTP id d26-20020a056602281a00b00640d8a0e14cmr3511151ioe.164.1646498942365;
-        Sat, 05 Mar 2022 08:49:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyTyYnmy/gdQNop+N3Fmp2YZeQ+TMA6NNQtQ8grUI8NpnEknc8/xl5TFVMzuwAYepf0hycF1w==
-X-Received: by 2002:a05:6602:281a:b0:640:d8a0:e14c with SMTP id d26-20020a056602281a00b00640d8a0e14cmr3511138ioe.164.1646498942122;
-        Sat, 05 Mar 2022 08:49:02 -0800 (PST)
-Received: from localhost (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
-        by smtp.gmail.com with ESMTPSA id b25-20020a5d8059000000b00644ddaad77asm6351818ior.29.2022.03.05.08.49.00
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zxGEx/UmR4KZJ60ASWh+xU+S5NM4aOeVXtrO2lALPmM=;
+        b=y5eJQtgEnHsi13ljKAKEraTyLe5kyulw0+9sR3pTPrktCV7Rkgdwl95XljetxD/KFs
+         +BgJh+f3/aktv7hjVcZavs7IClrrQ2bJNUxv/3Oz524W3B9zYRIr3hIP/6hcqOjgejbO
+         CTX648ShMu9HNQIelI3zO1DVlaYPSuXRwGa+GXevBlZU6KWbq7raiaytgcOLbnzst6mN
+         /MmYaIHzdq+zx1JDkY8/J90Y1oZ4O2KStJPWFAWjFr0UGuOKUnxD48g0u8EBTQ2R+7dP
+         lRWSOgSx6dDQZ2DeY95GHFP67Y3AITfuTfkcuyHUnSHej5Lse8nCOTPlR4LGMDWKE25O
+         P70Q==
+X-Gm-Message-State: AOAM533aWoZ+B/Ljciv3Lu97kuqlpU66Ml9SiijLWnJUDcr9cZIdGsw4
+        2dJCSK6yjPz2afhnqDov+EXZk6h0/lel87MU
+X-Google-Smtp-Source: ABdhPJwRhGssIjRq4Dp5iXc86HaDTuXU3UrmI/ewMKgJSrHGGg+whFXyi7HLOv3RqQB6irVUFpvs8w==
+X-Received: by 2002:a05:6512:3194:b0:445:bde8:9fca with SMTP id i20-20020a056512319400b00445bde89fcamr2745174lfe.534.1646499122666;
+        Sat, 05 Mar 2022 08:52:02 -0800 (PST)
+Received: from localhost.localdomain (adsa4.neoplus.adsl.tpnet.pl. [79.185.186.4])
+        by smtp.gmail.com with ESMTPSA id n16-20020a0565120ad000b00443c3f383c5sm1751287lfu.231.2022.03.05.08.52.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 08:49:01 -0800 (PST)
-From:   dann frazier <dann.frazier@canonical.com>
-To:     stable@vger.kernel.org
-Cc:     Miao Xie <miaox@cn.fujitsu.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sergei Trofimovich <slyfox@gentoo.org>,
-        Anatoly Pugachev <matorola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sat, 05 Mar 2022 08:52:02 -0800 (PST)
+From:   Adam Skladowski <a39.skl@gmail.com>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5.10+5.4 3/3] ia64: ensure proper NUMA distance and possible map initialization
-Date:   Sat,  5 Mar 2022 09:48:53 -0700
-Message-Id: <20220305164853.245476-1-dann.frazier@canonical.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220305164430.245125-1-dann.frazier@canonical.com>
-References: <20220305164430.245125-1-dann.frazier@canonical.com>
+Subject: [PATCH 0/4] *** Add SCM and mailbox support on MSM8976  ***
+Date:   Sat,  5 Mar 2022 17:49:01 +0100
+Message-Id: <20220305164906.16853-1-a39.skl@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+This patch series adds support for SCM and mailbox as found on the QCOM
+MSM8976 platform.
 
-commit b22a8f7b4bde4e4ab73b64908ffd5d90ecdcdbfd upstream.
 
-John Paul reported a warning about bogus NUMA distance values spurred by
-commit:
+Adam Skladowski (4):
+  dt-bindings: mailbox: Add compatible for the MSM8976
+  mailbox: qcom-apcs-ipc: Add compatible for MSM8976 SoC
+  dt-bindings: firmware: qcom-scm: Document msm8976 bindings
+  firmware: qcom_scm: Add compatible for MSM8976 SoC
 
-  620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
+ Documentation/devicetree/bindings/firmware/qcom,scm.txt       | 3 ++-
+ .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml    | 1 +
+ drivers/firmware/qcom_scm.c                                   | 4 ++++
+ drivers/mailbox/qcom-apcs-ipc-mailbox.c                       | 1 +
+ 4 files changed, 8 insertions(+), 1 deletion(-)
 
-In this case, the afflicted machine comes up with a reported 256 possible
-nodes, all of which are 0 distance away from one another.  This was
-previously silently ignored, but is now caught by the aforementioned
-commit.
-
-The culprit is ia64's node_possible_map which remains unchanged from its
-initialization value of NODE_MASK_ALL.  In John's case, the machine
-doesn't have any SRAT nor SLIT table, but AIUI the possible map remains
-untouched regardless of what ACPI tables end up being parsed.  Thus,
-!online && possible nodes remain with a bogus distance of 0 (distances \in
-[0, 9] are "reserved and have no meaning" as per the ACPI spec).
-
-Follow x86 / drivers/base/arch_numa's example and set the possible map to
-the parsed map, which in this case seems to be the online map.
-
-Link: http://lore.kernel.org/r/255d6b5d-194e-eb0e-ecdd-97477a534441@physik.fu-berlin.de
-Link: https://lkml.kernel.org/r/20210318130617.896309-1-valentin.schneider@arm.com
-Fixes: 620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: Sergei Trofimovich <slyfox@gentoo.org>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Anatoly Pugachev <matorola@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: dann frazier <dann.frazier@canonical.com>
----
- arch/ia64/kernel/acpi.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/ia64/kernel/acpi.c b/arch/ia64/kernel/acpi.c
-index a5636524af76..e2af6b172200 100644
---- a/arch/ia64/kernel/acpi.c
-+++ b/arch/ia64/kernel/acpi.c
-@@ -446,7 +446,8 @@ void __init acpi_numa_fixup(void)
- 	if (srat_num_cpus == 0) {
- 		node_set_online(0);
- 		node_cpuid[0].phys_id = hard_smp_processor_id();
--		return;
-+		slit_distance(0, 0) = LOCAL_DISTANCE;
-+		goto out;
- 	}
- 
- 	/*
-@@ -489,7 +490,7 @@ void __init acpi_numa_fixup(void)
- 			for (j = 0; j < MAX_NUMNODES; j++)
- 				slit_distance(i, j) = i == j ?
- 					LOCAL_DISTANCE : REMOTE_DISTANCE;
--		return;
-+		goto out;
- 	}
- 
- 	memset(numa_slit, -1, sizeof(numa_slit));
-@@ -514,6 +515,8 @@ void __init acpi_numa_fixup(void)
- 		printk("\n");
- 	}
- #endif
-+out:
-+	node_possible_map = node_online_map;
- }
- #endif				/* CONFIG_ACPI_NUMA */
- 
 -- 
 2.25.1
 

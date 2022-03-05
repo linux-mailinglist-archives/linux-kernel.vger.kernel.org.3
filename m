@@ -2,190 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848814CE363
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C5C4CE36A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiCEHNh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 5 Mar 2022 02:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S231343AbiCEHUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 02:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiCEHNg (ORCPT
+        with ESMTP id S229479AbiCEHUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 02:13:36 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCDB225019;
-        Fri,  4 Mar 2022 23:12:47 -0800 (PST)
-Received: from kwepemi100011.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K9bQn3HShzbdy5;
-        Sat,  5 Mar 2022 15:08:01 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- kwepemi100011.china.huawei.com (7.221.188.134) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 5 Mar 2022 15:12:44 +0800
-Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
- dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2308.021;
- Sat, 5 Mar 2022 15:12:44 +0800
-From:   "Gonglei (Arei)" <arei.gonglei@huawei.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>,
-        "mst@redhat.com" <mst@redhat.com>
-CC:     "jasowang@redhat.com" <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>
-Subject: RE: [PATCH v3 4/4] virtio-crypto: rename skcipher algs
-Thread-Topic: [PATCH v3 4/4] virtio-crypto: rename skcipher algs
-Thread-Index: AQHYLeeTmt6j+2AYWUelmv+/IKlM8KywZOmg
-Date:   Sat, 5 Mar 2022 07:12:44 +0000
-Message-ID: <7be43c7ef9414be98346af8f0b20f2d5@huawei.com>
-References: <20220302033917.1295334-1-pizhenwei@bytedance.com>
- <20220302033917.1295334-5-pizhenwei@bytedance.com>
-In-Reply-To: <20220302033917.1295334-5-pizhenwei@bytedance.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.149.11]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sat, 5 Mar 2022 02:20:13 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8708D240DF7;
+        Fri,  4 Mar 2022 23:19:24 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id x14so8108323ill.12;
+        Fri, 04 Mar 2022 23:19:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=Q2swG4/Q4VYLXmiZzbAmmWAx2ko3A/RK0gh0OlX3gGA=;
+        b=YClrx//ZVwvKRW7lRukKlAo8dKnA+cN66kcPaZ1nbwvbD4+RzPoHAsNSdJ7TbD7W4P
+         moXXQjiujZTQPt3aSVv3awUViK7cYdgSticgAVoECiKUgadA/08/fJ0KVi/DVegKhBBg
+         YUprtpCkZgvls/7w880umyJN6MwV7r+h/IgiW+ItXTw1Lgo66G0Rd99h6l+W1uBTHKr7
+         SM8iDC+bMki5XfuHC4SD9DEPAwbAl8TBWqErqaP4AxqPhr0kxfeFnXJigJpn/um3Z1Uw
+         Axwsam2ht16kgCYs4TLFtxfCvc24ZQy59YlD6emtRH9o8XzlkZoQJqZ8SR7MQB2J6rJ3
+         kbxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=Q2swG4/Q4VYLXmiZzbAmmWAx2ko3A/RK0gh0OlX3gGA=;
+        b=v+mmTAIO7es1zWlki53Xb7HBGqg4E/qr7Ohj6EMD8HGC4HC64iuZund76kebihsZxm
+         Qcl65QdVLJy3LbPtglMk9IgjsXXgJzyK+i1KXJjLrQYuOqLJ3e7Tu7oXFsAPVAzwhdCV
+         A0dCm5Y45vnZVFbEGGkYwVynV0JqyDTK+ZaLFdA09NWQm1X7uVI9aYiemNrSviCUrgMG
+         asGj3+1ZugtNU81+rIOr4MkDb3CoiwPfrSJQ3GJhYocMm9fjA8htXPkMcgfhP22yom5A
+         boo7YlofQI0HB8kvY+DeQkJjtxFxk1LaEtVCCiCN2ki1ckAjKUzQVUxwvTKPgvSQXKOH
+         h5nA==
+X-Gm-Message-State: AOAM5311ISN71o6+LigCkCxtXsnPTcOgTB2waHDrOPaTVzKTqchzc18O
+        qMBs25TIsu2EwWoVvvF3VWuRpiSwLJGnhQ+YpFZhupFlhBMeZQ==
+X-Google-Smtp-Source: ABdhPJw0SXzTwY3Z/qZWZ0oIMDR5umUhkMBTmvmCDoCrsukS3xMlV5mU7mHNQBBlUhTLjEldiA0Ms94GDyjjWWd+6mY=
+X-Received: by 2002:a05:6e02:164f:b0:2c6:1b85:b985 with SMTP id
+ v15-20020a056e02164f00b002c61b85b985mr2358933ilu.4.1646464763682; Fri, 04 Mar
+ 2022 23:19:23 -0800 (PST)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220226123755.85213-1-masahiroy@kernel.org> <CA+icZUUm1zpbSyOW3xKUsqo9bBjAehw6KvVBjGxpYy4XBjO4yw@mail.gmail.com>
+ <CAK7LNARx40BnsL-8sTV+62URe2cr1K1G7MeKN-MMZ0nPw3NFVQ@mail.gmail.com> <CA+icZUXkd=dtbBX3UKLRzGiVSKC=TeW7ATiRKD9dnYtmm6RZqg@mail.gmail.com>
+In-Reply-To: <CA+icZUXkd=dtbBX3UKLRzGiVSKC=TeW7ATiRKD9dnYtmm6RZqg@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 5 Mar 2022 08:18:47 +0100
+Message-ID: <CA+icZUWBO3S4DVqDR=fQ8O07JM+w-3ThgnaBqMPo9YhivtoULA@mail.gmail.com>
+Subject: Re: [PATCH] kconfig: change .config format to use =n instead of "is
+ not set"
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Feb 27, 2022 at 8:54 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Sun, Feb 27, 2022 at 5:24 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Sun, Feb 27, 2022 at 6:38 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > On Sat, Feb 26, 2022 at 2:34 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > >
+> > > > The .config file uses "# CONFIG_FOO is not set" form to represent
+> > > > disabled options. In the old days, it was useful because the .config
+> > > > was directly included from Makefiles. For example, you can use
+> > > > "ifdef CONFIG_FOO" in Makefiles to check if the option is enabled.
+> > > >
+> > > > Commit c955ccafc38e ("kconfig: fix .config dependencies") introduced
+> > > > include/config/auto.conf, which mirrors the .config, but trims down
+> > > > all disabled options.
+> > > >
+> > > > Since then, include/config/auto.conf defines CONFIG options during the
+> > > > build. The .config is used just for storing the user's configuration.
+> > > > I do not see a strong reason to use a particular pattern of comment
+> > > > for disabled options.
+> > > >
+> > > > With this commit, Kconfig will output disable options in a more natural
+> > > > form, "CONFIG_FOO=n".
+> > > >
+> > > > Kconfig accepts both "# CONFIG_FOO is not set" and "CONFIG_FOO=n" as a
+> > > > valid input. You do not need to update arch/*/configs/*_defconfig files
+> > > > for now. "git bisect" should be able to cross the commit in both ways
+> > > > without any issue.
+> > > >
+> > >
+> > > Good.
+> > >
+> > > Lot of people use/used the notation CONFIG_FOO=n, so did I.
+> > >
+> > > Thanks for keeping the "compatibility" with old usage "# CONFIG_FOO is not set".
+> > >
+> > > Normally, I use git diff (or scripts/diffconfig in Git tree) to
+> > > compare two kernel-configs, so seeing
+> > >
+> > > -CONFIG_FOO=y
+> > > +CONFIG_FOO=n
+> > >
+> > > ...might be at first view unfamiliar/unusual.
+> > > With the old notation it was easier to see that Kconfig is unset.
+> >
+> > I agree on this point.
+> >
+> > "is not set" stands out much better than "=n",
+> > and our eyes are accustomed to this notation for 20 years.
+> >
+> > However, real comments do not stand out since
+> > we already (ab)use comments for disabled options.
+> >
+> > This is related thread
+> > https://patchwork.kernel.org/project/linux-kbuild/patch/20211213100043.45645-3-arielmarcovitch@gmail.com/
+> >
+>
+> Thanks for the link.
+>
+> > >
+> > > Is this patch on top of kbuild-next Git?
+> > >
+> >
+> > Yes.
+>
+> Let me see if I will try kbuild-next with this patch on top of
+> upcoming Linux v5.17-rc6.
+>
 
+I was not able to apply your patch on top of latest kbuild-next.git:
 
-> -----Original Message-----
-> From: zhenwei pi [mailto:pizhenwei@bytedance.com]
-> Sent: Wednesday, March 2, 2022 11:39 AM
-> To: Gonglei (Arei) <arei.gonglei@huawei.com>; mst@redhat.com
-> Cc: jasowang@redhat.com; virtualization@lists.linux-foundation.org;
-> linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org;
-> herbert@gondor.apana.org.au; helei.sig11@bytedance.com; zhenwei pi
-> <pizhenwei@bytedance.com>
-> Subject: [PATCH v3 4/4] virtio-crypto: rename skcipher algs
-> 
-> Suggested by Gonglei, rename virtio_crypto_algs.c to
-> virtio_crypto_skcipher_algs.c. Also minor changes for function name.
-> Thus the function of source files get clear: skcipher services in
-> virtio_crypto_skcipher_algs.c and akcipher services in
-> virtio_crypto_akcipher_algs.c.
-> 
-> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-> ---
->  drivers/crypto/virtio/Makefile                            | 2 +-
->  drivers/crypto/virtio/virtio_crypto_common.h              | 4 ++--
->  drivers/crypto/virtio/virtio_crypto_mgr.c                 | 8 ++++----
->  ...virtio_crypto_algs.c => virtio_crypto_skcipher_algs.c} | 4 ++--
->  4 files changed, 9 insertions(+), 9 deletions(-)  rename
-> drivers/crypto/virtio/{virtio_crypto_algs.c => virtio_crypto_skcipher_algs.c}
-> (99%)
-> 
+$ git log --oneline v5.17-rc6..
+3a8276b1ae7e (HEAD -> for-5.17/kbuild-next-2022022) Merge branch
+'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+into for-5.17/kbuild-next-2022022
+d4c858643263 kallsyms: ignore all local labels prefixed by '.L'
+a7d4f58e99dd kconfig: fix missing '# end of' for empty menu
+868653f421cd kconfig: add fflush() before ferror() check
+5c8166419acf kbuild: replace $(if A,A,B) with $(or A,B)
+f67695c9962e kbuild: Add environment variables for userprogs flags
+a5575df58004 kbuild: unify cmd_copy and cmd_shipped
 
-Reviewed-by: Gonglei <arei.gonglei@huawei.com>
+$ LC_ALL=C git apply --check --verbose
+../20220226_masahiroy_kconfig_change_config_format_to_use_n_instead_of_is_not_set.mbx
+Checking patch scripts/kconfig/confdata.c...
+error: while searching for:
+       return out;
+}
 
-Regards,
--Gonglei
+enum output_n { OUTPUT_N, OUTPUT_N_AS_UNSET, OUTPUT_N_NONE };
 
+static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n output_n,
+                          bool escape_string)
+{
+       const char *val;
 
-> diff --git a/drivers/crypto/virtio/Makefile b/drivers/crypto/virtio/Makefile index
-> f2b839473d61..bfa6cbae342e 100644
-> --- a/drivers/crypto/virtio/Makefile
-> +++ b/drivers/crypto/virtio/Makefile
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_CRYPTO_DEV_VIRTIO) += virtio_crypto.o  virtio_crypto-objs :=
-> \
-> -	virtio_crypto_algs.o \
-> +	virtio_crypto_skcipher_algs.o \
->  	virtio_crypto_akcipher_algs.o \
->  	virtio_crypto_mgr.o \
->  	virtio_crypto_core.o
-> diff --git a/drivers/crypto/virtio/virtio_crypto_common.h
-> b/drivers/crypto/virtio/virtio_crypto_common.h
-> index 214f9a6fcf84..e693d4ee83a6 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_common.h
-> +++ b/drivers/crypto/virtio/virtio_crypto_common.h
-> @@ -130,8 +130,8 @@ static inline int virtio_crypto_get_current_node(void)
->  	return node;
->  }
-> 
-> -int virtio_crypto_algs_register(struct virtio_crypto *vcrypto); -void
-> virtio_crypto_algs_unregister(struct virtio_crypto *vcrypto);
-> +int virtio_crypto_skcipher_algs_register(struct virtio_crypto
-> +*vcrypto); void virtio_crypto_skcipher_algs_unregister(struct
-> +virtio_crypto *vcrypto);
->  int virtio_crypto_akcipher_algs_register(struct virtio_crypto *vcrypto);  void
-> virtio_crypto_akcipher_algs_unregister(struct virtio_crypto *vcrypto);
-> 
-> diff --git a/drivers/crypto/virtio/virtio_crypto_mgr.c
-> b/drivers/crypto/virtio/virtio_crypto_mgr.c
-> index 1cb92418b321..70e778aac0f2 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_mgr.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_mgr.c
-> @@ -237,14 +237,14 @@ struct virtio_crypto *virtcrypto_get_dev_node(int
-> node, uint32_t service,
->   */
->  int virtcrypto_dev_start(struct virtio_crypto *vcrypto)  {
-> -	if (virtio_crypto_algs_register(vcrypto)) {
-> -		pr_err("virtio_crypto: Failed to register crypto algs\n");
-> +	if (virtio_crypto_skcipher_algs_register(vcrypto)) {
-> +		pr_err("virtio_crypto: Failed to register crypto skcipher algs\n");
->  		return -EFAULT;
->  	}
-> 
->  	if (virtio_crypto_akcipher_algs_register(vcrypto)) {
->  		pr_err("virtio_crypto: Failed to register crypto akcipher algs\n");
-> -		virtio_crypto_algs_unregister(vcrypto);
-> +		virtio_crypto_skcipher_algs_unregister(vcrypto);
->  		return -EFAULT;
->  	}
-> 
-> @@ -263,7 +263,7 @@ int virtcrypto_dev_start(struct virtio_crypto *vcrypto)
->   */
->  void virtcrypto_dev_stop(struct virtio_crypto *vcrypto)  {
-> -	virtio_crypto_algs_unregister(vcrypto);
-> +	virtio_crypto_skcipher_algs_unregister(vcrypto);
->  	virtio_crypto_akcipher_algs_unregister(vcrypto);
->  }
-> 
-> diff --git a/drivers/crypto/virtio/virtio_crypto_algs.c
-> b/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-> similarity index 99%
-> rename from drivers/crypto/virtio/virtio_crypto_algs.c
-> rename to drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-> index 583c0b535d13..a618c46a52b8 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_algs.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-> @@ -613,7 +613,7 @@ static struct virtio_crypto_algo virtio_crypto_algs[] =
-> { {
->  	},
->  } };
-> 
-> -int virtio_crypto_algs_register(struct virtio_crypto *vcrypto)
-> +int virtio_crypto_skcipher_algs_register(struct virtio_crypto *vcrypto)
->  {
->  	int ret = 0;
->  	int i = 0;
-> @@ -644,7 +644,7 @@ int virtio_crypto_algs_register(struct virtio_crypto
-> *vcrypto)
->  	return ret;
->  }
-> 
-> -void virtio_crypto_algs_unregister(struct virtio_crypto *vcrypto)
-> +void virtio_crypto_skcipher_algs_unregister(struct virtio_crypto
-> +*vcrypto)
->  {
->  	int i = 0;
-> 
-> --
-> 2.20.1
+error: patch failed: scripts/kconfig/confdata.c:658
+error: scripts/kconfig/confdata.c: patch does not apply
+Checking patch scripts/kconfig/merge_config.sh...
+Checking patch scripts/kconfig/streamline_config.pl...
+Checking patch scripts/kconfig/tests/choice/alldef_expected_config...
+Checking patch scripts/kconfig/tests/choice/allmod_expected_config...
+Checking patch scripts/kconfig/tests/choice/allno_expected_config...
+Checking patch scripts/kconfig/tests/choice/allyes_expected_config...
+Checking patch scripts/kconfig/tests/choice/oldask1_config...
+Checking patch scripts/kconfig/tests/inter_choice/expected_config...
+Checking patch scripts/kconfig/tests/new_choice_with_dep/config...
+Checking patch scripts/kconfig/tests/no_write_if_dep_unmet/__init__.py...
+Checking patch scripts/kconfig/tests/no_write_if_dep_unmet/expected_config...
 
+$ git log --oneline v5.17-rc6.. scripts/kconfig/confdata.c
+a7d4f58e99dd kconfig: fix missing '# end of' for empty menu
+868653f421cd kconfig: add fflush() before ferror() check
+
+- Sedat -

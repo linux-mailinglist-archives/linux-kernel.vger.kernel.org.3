@@ -2,164 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423484CE56B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 16:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231F14CE571
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 16:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbiCEPGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 10:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S231935AbiCEPHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 10:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiCEPGP (ORCPT
+        with ESMTP id S230204AbiCEPHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 10:06:15 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896821C65EE
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 07:05:25 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id o22so166549qta.8
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 07:05:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=geC5xDAay5dBwn3cRxysbEgCyiuAzwcwhdO/zo7/1yQ=;
-        b=tixvP1FGnq2wfskq9ETIT5h8JQ7JPBjYQlaZiVU5QEF2ebRlSOd9Hj4GHFYYxuldWh
-         AEzNtAg/yji+2YKFPr0a17Al0EC/FApvTFNyo+sILOPE6zyZMSw0ZdguDzVRFqh+N+G9
-         axgAo/svRSLgSVS0G7iScy/imA1XKMIHb1NgI=
+        Sat, 5 Mar 2022 10:07:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 447891C665D
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 07:06:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646492817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jzfuT3+UZ/fGMOnKdum70e9dYbgqhz4vQr25uVQN9DA=;
+        b=JVDn4Wil3N5HvARWHO3+5zfo+R6lBsvlKBlRKyEm+6T/fs0b5/2tK059EpoID/klQSuSf5
+        AAiN7JoiGOJELsHMrXdSALWC0g5SnKOxcAZj5S1R7bLkThn+xKVincpN2WVpkB/ccG94Yg
+        LRTs7HspyAXyadjqaeWrtasK9vNgj8I=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-222-wBeLAdOsNm2iISxh8vOaEQ-1; Sat, 05 Mar 2022 10:06:56 -0500
+X-MC-Unique: wBeLAdOsNm2iISxh8vOaEQ-1
+Received: by mail-qv1-f72.google.com with SMTP id dj3-20020a056214090300b004354a9c60aaso4730445qvb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 07:06:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=geC5xDAay5dBwn3cRxysbEgCyiuAzwcwhdO/zo7/1yQ=;
-        b=4O0AMVAyyiIPmTq3f/U0TpoEBxhXyZUiHsEg5KPddADtUGYHvc0Q71+nigfu9BEtsX
-         iLMRPYg2IUNFPBDfyiFxtCHNgcawAZkl97leYSWHJywvpcqA9lg6304bun8b+1kJ69Xd
-         vqumsC3WKZ7apjlsEXU36Pd3ScnbcpVz+Seczl7g86JKYYwgYM2i2mqirE2EzwAMetEk
-         ljQz4rxYfNCe5E7iTehAVK94YVdveY35lysNQI1GYw6ItWPOLYZZps9d6DKYRcuU9RAs
-         bJscu/xIWPocXVTH8GIAR1L6YI4BIPDMsmg9h3DDZqMUlrB04M5oJdZ5UTindCslNjFN
-         82rg==
-X-Gm-Message-State: AOAM532x50oSSCTAW0TEUfrHjEtNwzMXgLuOxgFUffeJGYm1cnWbWJes
-        g0nQtjfiSK7PU+0paGkR8ksF8g==
-X-Google-Smtp-Source: ABdhPJzC6+sWbvHtOZiDBxeMwB424Rg3yPbjjQ/pVZIkOOUQmsA5JEXntpUeTe+z/0BHUPh5FnkxHA==
-X-Received: by 2002:a05:622a:3ca:b0:2df:1cae:397b with SMTP id k10-20020a05622a03ca00b002df1cae397bmr3200121qtx.556.1646492724622;
-        Sat, 05 Mar 2022 07:05:24 -0800 (PST)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id t128-20020a37aa86000000b0060ddf2dc3ecsm3859545qke.104.2022.03.05.07.05.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jzfuT3+UZ/fGMOnKdum70e9dYbgqhz4vQr25uVQN9DA=;
+        b=m2LpleD8GRoagfg63clDqX8qIJc+fpaAjUdK142JCTjxfo7EAwd5yuMEwy0R3pNIXl
+         6Zck2wTaCYpYSWp3eOD/aX/T9Rn5EWJ2ypD//tyuVvUQ8ADEVTtldD64uBxcvbjDEVEo
+         AEg63GXgfugR7GMN9GLlNVyaNWQXFt3ERWBqBXev5EzK11Elvulzxv/vhgINJ2OtXGl7
+         9nWG7TjwXxUg+6U1/Xv1SQxNMHj3+PVgbFd6WKRz+OGEToBHP03s92mUZiX8anSDeZQ4
+         +s8Ff+XacpFdhgV3/VUR5cMQoVjAWPTsOTuxqF8Ksd29T5eWZ+fZaVSstBjH3ljtVcv4
+         bfbw==
+X-Gm-Message-State: AOAM533qkj+d9cREs5m7Q72r6Im10Q3LOt3qL43YHsLkwo7R905vYsqX
+        RQm14OKyy5XpBmG55s9SgCfjGuCYshyG/bPoissmACSEVDYwX5wtmguar6uqZ2AaZnW6lvpXhzp
+        xvbSu+J1AGi3Kho5qcoZKpJ2p
+X-Received: by 2002:a0c:e781:0:b0:42c:4e4f:a6db with SMTP id x1-20020a0ce781000000b0042c4e4fa6dbmr2581487qvn.107.1646492815793;
+        Sat, 05 Mar 2022 07:06:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyXNODovOUBWo4HOvZzg3rfVWr4dLTHn/VYXWRhOb5U7dn9g/nH3+CwN0NmC7BVIBC0c7RVNw==
+X-Received: by 2002:a0c:e781:0:b0:42c:4e4f:a6db with SMTP id x1-20020a0ce781000000b0042c4e4fa6dbmr2581464qvn.107.1646492815534;
+        Sat, 05 Mar 2022 07:06:55 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id c6-20020ac87d86000000b002ddd9f33ed1sm5754191qtd.44.2022.03.05.07.06.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 07:05:24 -0800 (PST)
-Date:   Sat, 5 Mar 2022 15:05:23 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, torvalds@linux-foundation.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        rostedt@goodmis.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
-        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com, paulmck@kernel.org
-Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
-Message-ID: <YiN8M4FwAeW/UAoN@google.com>
-References: <YiAow5gi21zwUT54@mit.edu>
- <1646285013-3934-1-git-send-email-byungchul.park@lge.com>
- <YiDSabde88HJ/aTt@mit.edu>
- <20220304004237.GB6112@X58A-UD3R>
- <YiLYX0sqmtkTEM5U@mit.edu>
- <20220305141538.GA31268@X58A-UD3R>
+        Sat, 05 Mar 2022 07:06:55 -0800 (PST)
+From:   trix@redhat.com
+To:     aelior@marvell.com, manishc@marvell.com, davem@davemloft.net,
+        kuba@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        Yuval.Mintz@qlogic.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] qed: return status of qed_iov_get_link
+Date:   Sat,  5 Mar 2022 07:06:42 -0800
+Message-Id: <20220305150642.684247-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220305141538.GA31268@X58A-UD3R>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 11:15:38PM +0900, Byungchul Park wrote:
-> On Fri, Mar 04, 2022 at 10:26:23PM -0500, Theodore Ts'o wrote:
-> > On Fri, Mar 04, 2022 at 09:42:37AM +0900, Byungchul Park wrote:
-> > > 
-> > > All contexts waiting for any of the events in the circular dependency
-> > > chain will be definitely stuck if there is a circular dependency as I
-> > > explained. So we need another wakeup source to break the circle. In
-> > > ext4 code, you might have the wakeup source for breaking the circle.
-> > > 
-> > > What I agreed with is:
-> > > 
-> > >    The case that 1) the circular dependency is unevitable 2) there are
-> > >    another wakeup source for breadking the circle and 3) the duration
-> > >    in sleep is short enough, should be acceptable.
-> > > 
-> > > Sounds good?
-> > 
-> > These dependencies are part of every single ext4 metadata update,
-> > and if there were any unnecessary sleeps, this would be a major
-> > performance gap, and this is a very well studied part of ext4.
-> > 
-> > There are some places where we sleep, sure.  In some case
-> > start_this_handle() needs to wait for a commit to complete, and the
-> > commit thread might need to sleep for I/O to complete.  But the moment
-> > the thing that we're waiting for is complete, we wake up all of the
-> > processes on the wait queue.  But in the case where we wait for I/O
-> > complete, that wakeupis coming from the device driver, when it
-> > receives the the I/O completion interrupt from the hard drive.  Is
-> > that considered an "external source"?  Maybe DEPT doesn't recognize
-> > that this is certain to happen just as day follows the night?  (Well,
-> > maybe the I/O completion interrupt might not happen if the disk drive
-> > bursts into flames --- but then, you've got bigger problems. :-)
-> 
-> Almost all you've been blaming at Dept are totally non-sense. Based on
-> what you're saying, I'm conviced that you don't understand how Dept
-> works even 1%. You don't even try to understand it before blame.
-> 
-> You don't have to understand and support it. But I can't response to you
-> if you keep saying silly things that way.
+From: Tom Rix <trix@redhat.com>
 
-Byungchul, other than ext4 have there been any DEPT reports that other
-subsystem maintainers' agree were valid usecases?
+Clang static analysis reports this issue
+qed_sriov.c:4727:19: warning: Assigned value is
+  garbage or undefined
+  ivi->max_tx_rate = tx_rate ? tx_rate : link.speed;
+                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regarding false-positives, just to note lockdep is not without its share of
-false-positives. Just that (as you know), the signal-to-noise ratio should be
-high for it to be useful. I've put up with lockdep's false positives just
-because it occasionally saves me from catastrophe.
+link is only sometimes set by the call to qed_iov_get_link()
+qed_iov_get_link fails without setting link or returning
+status.  So change the decl to return status.
 
-> > In any case, if DEPT is going to report these "circular dependencies
-> > as bugs that MUST be fixed", it's going to be pure noise and I will
-> > ignore all DEPT reports, and will push back on having Lockdep replaced
-> 
-> Dept is going to be improved so that what you are concerning about won't
-> be reported.
+Fixes: 73390ac9d82b ("qed*: support ndo_get_vf_config")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
-Yeah I am looking forward to learning more about it however I was wondering
-about the following: lockdep can already be used for modeling "resource
-acquire/release" and "resource wait" semantics that are unrelated to locks,
-like we do in mm reclaim. I am wondering why we cannot just use those existing
-lockdep mechanisms for the wait/wake usecases (Assuming that we can agree
-that circular dependencies on related to wait/wake is a bad thing. Or perhaps
-there's a reason why Peter Zijlstra did not use lockdep for wait/wake
-dependencies (such as multiple wake sources) considering he wrote a lot of
-that code.
-
-Keep kicking ass brother, you're doing great.
-
-Thanks,
-
-     Joel
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+index bf4a95186e55c..0848b5529d48a 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+@@ -3817,11 +3817,11 @@ bool qed_iov_mark_vf_flr(struct qed_hwfn *p_hwfn, u32 *p_disabled_vfs)
+ 	return found;
+ }
+ 
+-static void qed_iov_get_link(struct qed_hwfn *p_hwfn,
+-			     u16 vfid,
+-			     struct qed_mcp_link_params *p_params,
+-			     struct qed_mcp_link_state *p_link,
+-			     struct qed_mcp_link_capabilities *p_caps)
++static int qed_iov_get_link(struct qed_hwfn *p_hwfn,
++			    u16 vfid,
++			    struct qed_mcp_link_params *p_params,
++			    struct qed_mcp_link_state *p_link,
++			    struct qed_mcp_link_capabilities *p_caps)
+ {
+ 	struct qed_vf_info *p_vf = qed_iov_get_vf_info(p_hwfn,
+ 						       vfid,
+@@ -3829,7 +3829,7 @@ static void qed_iov_get_link(struct qed_hwfn *p_hwfn,
+ 	struct qed_bulletin_content *p_bulletin;
+ 
+ 	if (!p_vf)
+-		return;
++		return -EINVAL;
+ 
+ 	p_bulletin = p_vf->bulletin.p_virt;
+ 
+@@ -3839,6 +3839,7 @@ static void qed_iov_get_link(struct qed_hwfn *p_hwfn,
+ 		__qed_vf_get_link_state(p_hwfn, p_link, p_bulletin);
+ 	if (p_caps)
+ 		__qed_vf_get_link_caps(p_hwfn, p_caps, p_bulletin);
++	return 0;
+ }
+ 
+ static int
+@@ -4697,6 +4698,7 @@ static int qed_get_vf_config(struct qed_dev *cdev,
+ 	struct qed_public_vf_info *vf_info;
+ 	struct qed_mcp_link_state link;
+ 	u32 tx_rate;
++	int ret;
+ 
+ 	/* Sanitize request */
+ 	if (IS_VF(cdev))
+@@ -4710,7 +4712,9 @@ static int qed_get_vf_config(struct qed_dev *cdev,
+ 
+ 	vf_info = qed_iov_get_public_vf_info(hwfn, vf_id, true);
+ 
+-	qed_iov_get_link(hwfn, vf_id, NULL, &link, NULL);
++	ret = qed_iov_get_link(hwfn, vf_id, NULL, &link, NULL);
++	if (ret)
++		return ret;
+ 
+ 	/* Fill information about VF */
+ 	ivi->vf = vf_id;
+-- 
+2.26.3
 

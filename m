@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FE24CE374
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B594CE377
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiCEHlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 02:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        id S231444AbiCEHnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 02:43:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231434AbiCEHlU (ORCPT
+        with ESMTP id S231430AbiCEHnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 02:41:20 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746D213685F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 23:40:29 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id s12-20020a17090a13cc00b001bee1e1677fso4575949pjf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 23:40:29 -0800 (PST)
+        Sat, 5 Mar 2022 02:43:21 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020BA6446
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 23:42:29 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id h126so21313190ybc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 23:42:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=0z4cW7xQIjrEk6UGLRBISAZmjF+6UzoRq23fiadGk7M=;
-        b=KKvIgifkJCkbEu+hUZevxwXiTQUQhzYNgS8hQSlzxwKb+tIXBeCF0sSjyLwroIpM2g
-         GqTwFGZlchnx8650ZBsuFX9rOmLfN/UPuebKFtjnC2bp1uNi1wiNqDaUTfDgMr05lQiR
-         /YT72Z3fxmBOj9CiucF3ccUq3jUrfeW/TmSW8ZTqor7MKFS1lV5+VFADzSZU3gcbHf48
-         AfyNarj70Vr531sBsFuGKED4bS9mC5UsR9kPEX2l5KCvauAkQB9ACnq+w34xFUkG3sR3
-         cvm7yMEkrn9Yv7LXMDEuk11DMyjRK58GTS5FeK2VvwgXC07N5ZyhKLFEIMGKEV2Hm4dR
-         7m9g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=W/dFrJg+fXaLNA1NRQF8JSAMMhXMcsmxtldejIHxlqQ=;
+        b=MvlGq3VOaqKS9jvPrOYlaE+iwZgqp7PI5zqp3mWo4uUDTyVpOdeV3bytQrdxNIyr1k
+         Yx5gkuRxZPYtuL8uSd6Wtqc1PFjI++uvIGdecNLzr9w0BzvYFqyTrmbE1GMJsm/kVFk1
+         B+Hj5k4zX2+2rLLnUP5iS9l1LOe/FIipRxoTGnjgDkWfZV/A/eiCIIHjTh2tTYQmNiyb
+         +Yusyozm1J6HJYqSfa1QlnkRktPSjdvDc1CNDw6XKLlIiwAGQ/wauRPNR3pJ7fJf/NG1
+         HU5vZeKee+LEkbzXvz4/vxVwo0MAWHckHtWfWycFq7A66Ol2w8NAJn8ttURlJl7wb8Bc
+         4UOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=0z4cW7xQIjrEk6UGLRBISAZmjF+6UzoRq23fiadGk7M=;
-        b=AOmQ3lDcJAcXKY+J7sGiuNU/gUaBNx43Ai99mBLytzGAJqiRbxxUgRV/dKy6AJe0ng
-         OXHbq0BeQptz5DpfQ3Ao1a1SbKMhIEzGt5tqMhdNyciAOH6iE64e878vDKVjwjilSUSQ
-         KaHUgYSgpmxVSZLzK0xARRGJUhe1wjQ6w7Er1CYpEPI1Qa7MeUb6rhGqTWNiJgXYfUJF
-         D7K+DLqva18pXvZbo3/OTEPwU6EGvubOI1CNfW7ZOUPYb2jssQT4E8cBp7jYMasHle6s
-         ucMiDNYqpl0PO6j3yqx6VrQpbE218D6iD2CNF924j6rWPv7GHZIMRtrl5zCl2CQF+6gu
-         W1vg==
-X-Gm-Message-State: AOAM5311TlK/ZPDk+j7PMB1ZBH/Q9K5AFGUAU82Dr03wArS3sKoAosOS
-        LAxSltSO7JKU9uZFfOAcDsjljHp7KBoiyw==
-X-Google-Smtp-Source: ABdhPJyj0RRhMNhQYVGwLC7Bq2b+jp5t9Fr/iu2aB3MdHs47HYoUvQlbqwvptW3Z+UMl1ybrSy2Kew0c0pv40Q==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90a:b307:b0:1bd:37f3:f0fc with SMTP
- id d7-20020a17090ab30700b001bd37f3f0fcmr14615177pjr.132.1646466028769; Fri,
- 04 Mar 2022 23:40:28 -0800 (PST)
-Date:   Sat,  5 Mar 2022 15:40:20 +0800
-Message-Id: <20220305074020.751309-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH] list: test: Test the hlist structure
-From:   David Gow <davidgow@google.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=W/dFrJg+fXaLNA1NRQF8JSAMMhXMcsmxtldejIHxlqQ=;
+        b=QNnZf0il9eHXpNomPrS775X4w7mRRQJHEuP3SAmFJt/wBU3OhJt+slnFSyIRciS42j
+         s6I5AaX1QIgv137rpGrzEQyfaaVgeOo4A5FpT9Xjfi6ST5qAhtplJ6fa6Z3foUMMIneb
+         FztVOzHuSc41ftlyDWk4n5V2b9mdk8IlDDVWSqeHFY/Dz4PyThE7ED3mZ9Sokp6IaBWe
+         S67sZqdzX9Hj4MjZGTFtPbOvL5TT4H5mx/rw4jjQ0JHtutYypjpDReVSrVmX1iaOFsIT
+         6M+/9ffS34RwOxvAyMARZBVN9l80M582qo9OeT4N/bV6p8THkU8kFd6LuvDF6S7dFZLj
+         xbtQ==
+X-Gm-Message-State: AOAM532VYdRchHWFftBfWqiME36UjtJtsMMD5Sg4wCMGS7ZLCdo8h8R4
+        Ar8gJK1SX4n92ZbAiGfbAP8esOtRbD0EH5b9MDM9eQ==
+X-Google-Smtp-Source: ABdhPJzbJIYl2P8QsWMsNXi+htTVSNFbkuRv2ajs85OYtlj0/7WMM4tOQM3tJ/l7qA4ypCgytv2z3n5xmkScyQ+5RrY=
+X-Received: by 2002:a5b:f10:0:b0:628:8420:d694 with SMTP id
+ x16-20020a5b0f10000000b006288420d694mr1595447ybr.483.1646466147776; Fri, 04
+ Mar 2022 23:42:27 -0800 (PST)
+MIME-Version: 1.0
+References: <20220215213519.v4.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
+ <9F696602-8BAC-479E-998D-118DDAE54445@holtmann.org>
+In-Reply-To: <9F696602-8BAC-479E-998D-118DDAE54445@holtmann.org>
+From:   Joseph Hwang <josephsih@google.com>
+Date:   Sat, 5 Mar 2022 15:42:16 +0800
+Message-ID: <CAHFy41-DMxGo_Lc=k2kUU_fsAjdNt6o+KHTPJupas8EetdCUdw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] Bluetooth: aosp: surface AOSP quality report
+ through mgmt
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     BlueZ <linux-bluetooth@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Archie Pusaka <apusaka@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,440 +77,442 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add KUnit tests to the hlist linked-list structure which is used by
-hashtables. This should give coverage of every function and macro in
-list.h, as well as (combined with the KUnit tests for the hash
-functions) get very close to having tests for the hashtable structure.
+Hi Marcel, thank you for reviewing the patches! I have some questions
+and would like to confirm with you. Please read my replies in the
+lines below. Thanks!
 
-The tests here mirror the existing list tests, and are found in a new
-suite titled 'hlist'.
+On Thu, Feb 17, 2022 at 8:41 PM Marcel Holtmann <marcel@holtmann.org> wrote=
+:
+>
+> Hi Joseph,
+>
+> > When receiving a HCI vendor event, the kernel checks if it is an
+> > AOSP bluetooth quality report. If yes, the event is sent to bluez
+> > user space through the mgmt socket.
+> >
+> > Signed-off-by: Joseph Hwang <josephsih@chromium.org>
+> > Reviewed-by: Archie Pusaka <apusaka@chromium.org>
+> > ---
+> >
+> > (no changes since v3)
+> >
+> > Changes in v3:
+> > - Rebase to resolve the code conflict.
+> > - Move aosp_quality_report_evt() from hci_event.c to aosp.c.
+> > - A new patch (3/3) is added to enable the quality report feature.
+> >
+> > Changes in v2:
+> > - Scrap the two structures defined in aosp.c and use constants for
+> >  size check.
+> > - Do a basic size check about the quality report event. Do not pull
+> >  data from the event in which the kernel has no interest.
+> > - Define vendor event prefixes with which vendor events of distinct
+> >  vendor specifications can be clearly differentiated.
+> > - Use mgmt helpers to add the header and data to a mgmt skb.
+>
+> this unsolicited vendor event business is giving me a headache. I assume =
+it would be a lot simpler, but it doesn=E2=80=99t look like this. I need to=
+ spent some rounds of thinking to give you good advice. Unfortunately since=
+ we also want to support Intel vendor specific pieces, this is getting supe=
+r complicated.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+You have mentioned using hdev->hci_recv_quality_report to send the
+unsolicited events from the Intel driver in your comments in Patch
+2/3. Just would like to confirm with you. Thanks.
 
-Note that this patch has five checkpatch failures, all of which are
-false positives due to the test functions being confused with uses of
-the hlist_for_each* macros they're testing.
+>
+> > include/net/bluetooth/hci_core.h |  5 ++
+> > include/net/bluetooth/mgmt.h     |  7 +++
+> > net/bluetooth/aosp.c             | 27 ++++++++++
+> > net/bluetooth/aosp.h             | 13 +++++
+> > net/bluetooth/hci_event.c        | 84 +++++++++++++++++++++++++++++++-
+> > net/bluetooth/mgmt.c             | 20 ++++++++
+> > net/bluetooth/msft.c             | 14 ++++++
+> > net/bluetooth/msft.h             | 12 +++++
+> > 8 files changed, 181 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/h=
+ci_core.h
+> > index f5caff1ddb29..ea83619ac4de 100644
+> > --- a/include/net/bluetooth/hci_core.h
+> > +++ b/include/net/bluetooth/hci_core.h
+> > @@ -1864,6 +1864,8 @@ int mgmt_add_adv_patterns_monitor_complete(struct=
+ hci_dev *hdev, u8 status);
+> > int mgmt_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status);
+> > void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
+> >                                 bdaddr_t *bdaddr, u8 addr_type);
+> > +int mgmt_quality_report(struct hci_dev *hdev, void *data, u32 data_len=
+,
+> > +                     u8 quality_spec);
+> >
+> > u8 hci_le_conn_update(struct hci_conn *conn, u16 min, u16 max, u16 late=
+ncy,
+> >                     u16 to_multiplier);
+> > @@ -1882,4 +1884,7 @@ void hci_copy_identity_address(struct hci_dev *hd=
+ev, bdaddr_t *bdaddr,
+> >
+> > #define TRANSPORT_TYPE_MAX    0x04
+> >
+> > +#define QUALITY_SPEC_AOSP_BQR                0x0
+> > +#define QUALITY_SPEC_INTEL_TELEMETRY 0x1
+> > +
+> > #endif /* __HCI_CORE_H */
+> > diff --git a/include/net/bluetooth/mgmt.h b/include/net/bluetooth/mgmt.=
+h
+> > index 3d26e6a3478b..83b602636262 100644
+> > --- a/include/net/bluetooth/mgmt.h
+> > +++ b/include/net/bluetooth/mgmt.h
+> > @@ -1120,3 +1120,10 @@ struct mgmt_ev_adv_monitor_device_lost {
+> >       __le16 monitor_handle;
+> >       struct mgmt_addr_info addr;
+> > } __packed;
+> > +
+> > +#define MGMT_EV_QUALITY_REPORT                       0x0031
+> > +struct mgmt_ev_quality_report {
+> > +     __u8    quality_spec;
+> > +     __u32   data_len;
+> > +     __u8    data[];
+> > +} __packed;
+> > diff --git a/net/bluetooth/aosp.c b/net/bluetooth/aosp.c
+> > index 432ae3aac9e3..4a336433180d 100644
+> > --- a/net/bluetooth/aosp.c
+> > +++ b/net/bluetooth/aosp.c
+> > @@ -199,3 +199,30 @@ int aosp_set_quality_report(struct hci_dev *hdev, =
+bool enable)
+> >       else
+> >               return disable_quality_report(hdev);
+> > }
+> > +
+> > +#define BLUETOOTH_QUALITY_REPORT_EV          0x58
+> > +
+> > +/* The following LEN =3D 1-byte Sub-event code + 48-byte Sub-event Par=
+ameters */
+> > +#define BLUETOOTH_QUALITY_REPORT_LEN         49
+> > +
+> > +bool aosp_check_quality_report_len(struct sk_buff *skb)
+> > +{
+> > +     /* skb->len is allowed to be larger than BLUETOOTH_QUALITY_REPORT=
+_LEN
+> > +      * to accommodate an additional Vendor Specific Parameter (vsp) f=
+ield.
+> > +      */
+> > +     if (skb->len < BLUETOOTH_QUALITY_REPORT_LEN) {
+> > +             BT_ERR("AOSP evt data len %d too short (%u expected)",
+> > +                    skb->len, BLUETOOTH_QUALITY_REPORT_LEN);
+> > +             return false;
+> > +     }
+> > +
+> > +     return true;
+> > +}
+> > +
+> > +void aosp_quality_report_evt(struct hci_dev *hdev,  void *data,
+> > +                          struct sk_buff *skb)
+> > +{
+> > +     if (aosp_has_quality_report(hdev) && aosp_check_quality_report_le=
+n(skb))
+> > +             mgmt_quality_report(hdev, skb->data, skb->len,
+> > +                                 QUALITY_SPEC_AOSP_BQR);
+> > +}
+> > diff --git a/net/bluetooth/aosp.h b/net/bluetooth/aosp.h
+> > index 2fd8886d51b2..b21751e012de 100644
+> > --- a/net/bluetooth/aosp.h
+> > +++ b/net/bluetooth/aosp.h
+> > @@ -10,6 +10,9 @@ void aosp_do_close(struct hci_dev *hdev);
+> >
+> > bool aosp_has_quality_report(struct hci_dev *hdev);
+> > int aosp_set_quality_report(struct hci_dev *hdev, bool enable);
+> > +bool aosp_check_quality_report_len(struct sk_buff *skb);
+> > +void aosp_quality_report_evt(struct hci_dev *hdev,  void *data,
+> > +                          struct sk_buff *skb);
+> >
+> > #else
+> >
+> > @@ -26,4 +29,14 @@ static inline int aosp_set_quality_report(struct hci=
+_dev *hdev, bool enable)
+> >       return -EOPNOTSUPP;
+> > }
+> >
+> > +static inline bool aosp_check_quality_report_len(struct sk_buff *skb)
+> > +{
+> > +     return false;
+> > +}
+> > +
+> > +static inline void aosp_quality_report_evt(struct hci_dev *hdev,  void=
+ *data,
+> > +                                        struct sk_buff *skb)
+> > +{
+> > +}
+> > +
+> > #endif
+> > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> > index 63b925921c87..6468ea0f71bd 100644
+> > --- a/net/bluetooth/hci_event.c
+> > +++ b/net/bluetooth/hci_event.c
+> > @@ -37,6 +37,7 @@
+> > #include "smp.h"
+> > #include "msft.h"
+> > #include "eir.h"
+> > +#include "aosp.h"
+> >
+> > #define ZERO_KEY "\x00\x00\x00\x00\x00\x00\x00\x00" \
+> >                "\x00\x00\x00\x00\x00\x00\x00\x00"
+> > @@ -4241,6 +4242,87 @@ static void hci_num_comp_blocks_evt(struct hci_d=
+ev *hdev, void *data,
+> >       queue_work(hdev->workqueue, &hdev->tx_work);
+> > }
+> >
+> > +/* Define the fixed vendor event prefixes below.
+> > + * Note: AOSP HCI Requirements use 0x54 and up as sub-event codes with=
+out
+> > + *       actually defining a vendor prefix. Refer to
+> > + *       https://source.android.com/devices/bluetooth/hci_requirements
+> > + *       Hence, the other vendor event prefixes should not use the sam=
+e
+> > + *       space to avoid collision.
+> > + */
+> > +static unsigned char AOSP_BQR_PREFIX[] =3D { 0x58 };
+> > +
+> > +/* Some vendor prefixes are fixed values and lengths. */
+> > +#define FIXED_EVT_PREFIX(_prefix, _vendor_func)                       =
+       \
+> > +{                                                                    \
+> > +     .prefix =3D _prefix,                                             =
+ \
+> > +     .prefix_len =3D sizeof(_prefix),                                 =
+ \
+> > +     .vendor_func =3D _vendor_func,                                   =
+ \
+> > +     .get_prefix =3D NULL,                                            =
+ \
+> > +     .get_prefix_len =3D NULL,                                        =
+ \
+> > +}
+> > +
+> > +/* Some vendor prefixes are only available at run time. The
+> > + * values and lengths are variable.
+> > + */
+> > +#define DYNAMIC_EVT_PREFIX(_prefix_func, _prefix_len_func, _vendor_fun=
+c)\
+> > +{                                                                    \
+> > +     .prefix =3D NULL,                                                =
+ \
+> > +     .prefix_len =3D 0,                                               =
+ \
+> > +     .vendor_func =3D _vendor_func,                                   =
+ \
+> > +     .get_prefix =3D _prefix_func,                                    =
+ \
+> > +     .get_prefix_len =3D _prefix_len_func,                            =
+ \
+> > +}
+> > +
+> > +/* Every distinct vendor specification must have a well-defined vendor
+> > + * event prefix to determine if a vendor event meets the specification=
+.
+> > + * If an event prefix is fixed, it should be delcared with FIXED_EVT_P=
+REFIX.
+> > + * Otherwise, DYNAMIC_EVT_PREFIX should be used for variable prefixes.
+> > + */
+> > +struct vendor_event_prefix {
+> > +     __u8 *prefix;
+> > +     __u8 prefix_len;
+> > +     void (*vendor_func)(struct hci_dev *hdev, void *data,
+> > +                         struct sk_buff *skb);
+> > +     __u8 *(*get_prefix)(struct hci_dev *hdev);
+> > +     __u8 (*get_prefix_len)(struct hci_dev *hdev);
+> > +} evt_prefixes[] =3D {
+> > +     FIXED_EVT_PREFIX(AOSP_BQR_PREFIX, aosp_quality_report_evt),
+> > +     DYNAMIC_EVT_PREFIX(get_msft_evt_prefix, get_msft_evt_prefix_len,
+> > +                        msft_vendor_evt),
+> > +
+> > +     /* end with a null entry */
+> > +     {},
+> > +};
+> > +
+> > +static void hci_vendor_evt(struct hci_dev *hdev, void *data,
+> > +                        struct sk_buff *skb)
+> > +{
+> > +     int i;
+> > +     __u8 *prefix;
+> > +     __u8 prefix_len;
+> > +
+> > +     for (i =3D 0; evt_prefixes[i].vendor_func; i++) {
+> > +             if (evt_prefixes[i].get_prefix)
+> > +                     prefix =3D evt_prefixes[i].get_prefix(hdev);
+> > +             else
+> > +                     prefix =3D evt_prefixes[i].prefix;
+> > +
+> > +             if (evt_prefixes[i].get_prefix_len)
+> > +                     prefix_len =3D evt_prefixes[i].get_prefix_len(hde=
+v);
+> > +             else
+> > +                     prefix_len =3D evt_prefixes[i].prefix_len;
+> > +
+> > +             if (!prefix || prefix_len =3D=3D 0)
+> > +                     continue;
+> > +
+> > +             /* Compare the raw prefix data directly. */
+> > +             if (!memcmp(prefix, skb->data, prefix_len)) {
+> > +                     evt_prefixes[i].vendor_func(hdev, data, skb);
+> > +                     break;
+> > +             }
+> > +     }
+> > +}
+> > +
+> > static void hci_mode_change_evt(struct hci_dev *hdev, void *data,
+> >                               struct sk_buff *skb)
+> > {
+> > @@ -6844,7 +6926,7 @@ static const struct hci_ev {
+> >       HCI_EV(HCI_EV_NUM_COMP_BLOCKS, hci_num_comp_blocks_evt,
+> >              sizeof(struct hci_ev_num_comp_blocks)),
+> >       /* [0xff =3D HCI_EV_VENDOR] */
+> > -     HCI_EV_VL(HCI_EV_VENDOR, msft_vendor_evt, 0, HCI_MAX_EVENT_SIZE),
+> > +     HCI_EV_VL(HCI_EV_VENDOR, hci_vendor_evt, 0, HCI_MAX_EVENT_SIZE),
+> > };
+>
+> I was thinking along the lines like this:
+>
+>         HCI_EV_VND(evt_prefix, evt_prefix_len, callback),
+>
+> So that we in the end can do things like this:
+>
+>         HCI_EV_VL({ 0x58 }, 1, aosp_quality_report_evt),
+>
 
-For example:
-ERROR: that open brace { should be on the previous line
-#274: FILE: lib/list-test.c:1046:
-+static void hlist_test_for_each_safe(struct kunit *test)
-+{
+I wish I could use a macro as simple as HCI_EV_VND(evt_prefix,
+evt_prefix_len, callback). However, I do not have a clean method to
+handle the dynamic msft vendor prefix of which the value and length
+are not known until runtime. Do you have any suggestions here?
 
-The same thing occurred with the list_ variants, and since this is a
-one-off issue, it doesn't seem worth fixing in checkpatch.
+>
+>
+> >
+> > static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk_bu=
+ff *skb,
+> > diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> > index 914e2f2d3586..5e48576041fb 100644
+> > --- a/net/bluetooth/mgmt.c
+> > +++ b/net/bluetooth/mgmt.c
+> > @@ -4389,6 +4389,26 @@ static int set_exp_feature(struct sock *sk, stru=
+ct hci_dev *hdev,
+> >                              MGMT_STATUS_NOT_SUPPORTED);
+> > }
+> >
+> > +int mgmt_quality_report(struct hci_dev *hdev, void *data, u32 data_len=
+,
+> > +                     u8 quality_spec)
+> > +{
+> > +     struct mgmt_ev_quality_report *ev;
+> > +     struct sk_buff *skb;
+> > +
+> > +     skb =3D mgmt_alloc_skb(hdev, MGMT_EV_QUALITY_REPORT,
+> > +                          sizeof(*ev) + data_len);
+> > +     if (!skb)
+> > +             return -ENOMEM;
+> > +
+> > +     ev =3D skb_put(skb, sizeof(*ev));
+> > +     ev->quality_spec =3D quality_spec;
+> > +     ev->data_len =3D data_len;
+> > +     skb_put_data(skb, data, data_len);
+> > +
+> > +     return mgmt_event_skb(skb, NULL);
+> > +}
+> > +EXPORT_SYMBOL(mgmt_quality_report);
+> > +
+>
+> I know what you want to do, but I can not let you call mgmt_ function fro=
+m a driver. We need to make this cleaner and abstract so that the driver ha=
+s a proper path to report it to hci_core and that decides then to send the =
+report or not.
 
- lib/list-test.c | 397 +++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 396 insertions(+), 1 deletion(-)
+Will set up hdev->hci_recv_quality_report as you mentioned in comments
+in Patch 2/3.
 
-diff --git a/lib/list-test.c b/lib/list-test.c
-index 035ef6597640..d374cf5d1a57 100644
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -804,6 +804,401 @@ static struct kunit_suite list_test_module = {
- 	.test_cases = list_test_cases,
- };
- 
--kunit_test_suites(&list_test_module);
-+struct hlist_test_struct {
-+	int data;
-+	struct hlist_node list;
-+};
-+
-+static void hlist_test_init(struct kunit *test)
-+{
-+	/* Test the different ways of initialising a list. */
-+	struct hlist_head list1 = HLIST_HEAD_INIT;
-+	struct hlist_head list2;
-+	HLIST_HEAD(list3);
-+	struct hlist_head *list4;
-+	struct hlist_head *list5;
-+
-+	INIT_HLIST_HEAD(&list2);
-+
-+	list4 = kzalloc(sizeof(*list4), GFP_KERNEL | __GFP_NOFAIL);
-+	INIT_HLIST_HEAD(list4);
-+
-+	list5 = kmalloc(sizeof(*list5), GFP_KERNEL | __GFP_NOFAIL);
-+	memset(list5, 0xFF, sizeof(*list5));
-+	INIT_HLIST_HEAD(list5);
-+
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(&list1));
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(&list2));
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(&list3));
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(list4));
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(list5));
-+
-+	kfree(list4);
-+	kfree(list5);
-+}
-+
-+static void hlist_test_unhashed(struct kunit *test)
-+{
-+	struct hlist_node a;
-+	HLIST_HEAD(list);
-+
-+	INIT_HLIST_NODE(&a);
-+
-+	/* is unhashed by default */
-+	KUNIT_EXPECT_TRUE(test, hlist_unhashed(&a));
-+
-+	hlist_add_head(&a, &list);
-+
-+	/* is hashed once added to list */
-+	KUNIT_EXPECT_FALSE(test, hlist_unhashed(&a));
-+
-+	hlist_del_init(&a);
-+
-+	/* is again unhashed after del_init */
-+	KUNIT_EXPECT_TRUE(test, hlist_unhashed(&a));
-+}
-+
-+/* Doesn't test concurrency guarantees */
-+static void hlist_test_unhashed_lockless(struct kunit *test)
-+{
-+	struct hlist_node a;
-+	HLIST_HEAD(list);
-+
-+	INIT_HLIST_NODE(&a);
-+
-+	/* is unhashed by default */
-+	KUNIT_EXPECT_TRUE(test, hlist_unhashed_lockless(&a));
-+
-+	hlist_add_head(&a, &list);
-+
-+	/* is hashed once added to list */
-+	KUNIT_EXPECT_FALSE(test, hlist_unhashed_lockless(&a));
-+
-+	hlist_del_init(&a);
-+
-+	/* is again unhashed after del_init */
-+	KUNIT_EXPECT_TRUE(test, hlist_unhashed_lockless(&a));
-+}
-+
-+static void hlist_test_del(struct kunit *test)
-+{
-+	struct hlist_node a, b;
-+	HLIST_HEAD(list);
-+
-+	hlist_add_head(&a, &list);
-+	hlist_add_behind(&b, &a);
-+
-+	/* before: [list] -> a -> b */
-+	hlist_del(&a);
-+
-+	/* now: [list] -> b */
-+	KUNIT_EXPECT_PTR_EQ(test, list.first, &b);
-+	KUNIT_EXPECT_PTR_EQ(test, b.pprev, &list.first);
-+}
-+
-+static void hlist_test_del_init(struct kunit *test)
-+{
-+	struct hlist_node a, b;
-+	HLIST_HEAD(list);
-+
-+	hlist_add_head(&a, &list);
-+	hlist_add_behind(&b, &a);
-+
-+	/* before: [list] -> a -> b */
-+	hlist_del_init(&a);
-+
-+	/* now: [list] -> b */
-+	KUNIT_EXPECT_PTR_EQ(test, list.first, &b);
-+	KUNIT_EXPECT_PTR_EQ(test, b.pprev, &list.first);
-+
-+	/* a is now initialised */
-+	KUNIT_EXPECT_PTR_EQ(test, a.next, NULL);
-+	KUNIT_EXPECT_PTR_EQ(test, a.pprev, NULL);
-+}
-+
-+/* Tests all three hlist_add_* functions */
-+static void hlist_test_add(struct kunit *test)
-+{
-+	struct hlist_node a, b, c, d;
-+	HLIST_HEAD(list);
-+
-+	hlist_add_head(&a, &list);
-+	hlist_add_head(&b, &list);
-+	hlist_add_before(&c, &a);
-+	hlist_add_behind(&d, &a);
-+
-+	/* should be [list] -> b -> c -> a -> d */
-+	KUNIT_EXPECT_PTR_EQ(test, list.first, &b);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, c.pprev, &(b.next));
-+	KUNIT_EXPECT_PTR_EQ(test, b.next, &c);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, a.pprev, &(c.next));
-+	KUNIT_EXPECT_PTR_EQ(test, c.next, &a);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, d.pprev, &(a.next));
-+	KUNIT_EXPECT_PTR_EQ(test, a.next, &d);
-+}
-+
-+/* Tests both hlist_fake() and hlist_add_fake() */
-+static void hlist_test_fake(struct kunit *test)
-+{
-+	struct hlist_node a;
-+
-+	INIT_HLIST_NODE(&a);
-+
-+	/* not fake after init */
-+	KUNIT_EXPECT_FALSE(test, hlist_fake(&a));
-+
-+	hlist_add_fake(&a);
-+
-+	/* is now fake */
-+	KUNIT_EXPECT_TRUE(test, hlist_fake(&a));
-+}
-+
-+static void hlist_test_is_singular_node(struct kunit *test)
-+{
-+	struct hlist_node a, b;
-+	HLIST_HEAD(list);
-+
-+	INIT_HLIST_NODE(&a);
-+	KUNIT_EXPECT_FALSE(test, hlist_is_singular_node(&a, &list));
-+
-+	hlist_add_head(&a, &list);
-+	KUNIT_EXPECT_TRUE(test, hlist_is_singular_node(&a, &list));
-+
-+	hlist_add_head(&b, &list);
-+	KUNIT_EXPECT_FALSE(test, hlist_is_singular_node(&a, &list));
-+	KUNIT_EXPECT_FALSE(test, hlist_is_singular_node(&b, &list));
-+}
-+
-+static void hlist_test_empty(struct kunit *test)
-+{
-+	struct hlist_node a;
-+	HLIST_HEAD(list);
-+
-+	/* list starts off empty */
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(&list));
-+
-+	hlist_add_head(&a, &list);
-+
-+	/* list is no longer empty */
-+	KUNIT_EXPECT_FALSE(test, hlist_empty(&list));
-+}
-+
-+static void hlist_test_move_list(struct kunit *test)
-+{
-+	struct hlist_node a;
-+	HLIST_HEAD(list1);
-+	HLIST_HEAD(list2);
-+
-+	hlist_add_head(&a, &list1);
-+
-+	KUNIT_EXPECT_FALSE(test, hlist_empty(&list1));
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(&list2));
-+	hlist_move_list(&list1, &list2);
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(&list1));
-+	KUNIT_EXPECT_FALSE(test, hlist_empty(&list2));
-+
-+}
-+
-+static void hlist_test_entry(struct kunit *test)
-+{
-+	struct hlist_test_struct test_struct;
-+
-+	KUNIT_EXPECT_PTR_EQ(test, &test_struct,
-+			    hlist_entry(&(test_struct.list),
-+				struct hlist_test_struct, list));
-+}
-+
-+static void hlist_test_entry_safe(struct kunit *test)
-+{
-+	struct hlist_test_struct test_struct;
-+
-+	KUNIT_EXPECT_PTR_EQ(test, &test_struct,
-+			    hlist_entry_safe(&(test_struct.list),
-+				struct hlist_test_struct, list));
-+
-+	KUNIT_EXPECT_PTR_EQ(test, NULL,
-+			    hlist_entry_safe((struct hlist_node *)NULL,
-+				struct hlist_test_struct, list));
-+}
-+
-+static void hlist_test_for_each(struct kunit *test)
-+{
-+	struct hlist_node entries[3], *cur;
-+	HLIST_HEAD(list);
-+	int i = 0;
-+
-+	hlist_add_head(&entries[0], &list);
-+	hlist_add_behind(&entries[1], &entries[0]);
-+	hlist_add_behind(&entries[2], &entries[1]);
-+
-+	hlist_for_each(cur, &list) {
-+		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
-+		i++;
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, i, 3);
-+}
-+
-+
-+static void hlist_test_for_each_safe(struct kunit *test)
-+{
-+	struct hlist_node entries[3], *cur, *n;
-+	HLIST_HEAD(list);
-+	int i = 0;
-+
-+	hlist_add_head(&entries[0], &list);
-+	hlist_add_behind(&entries[1], &entries[0]);
-+	hlist_add_behind(&entries[2], &entries[1]);
-+
-+	hlist_for_each_safe(cur, n, &list) {
-+		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
-+		hlist_del(&entries[i]);
-+		i++;
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, i, 3);
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(&list));
-+}
-+
-+static void hlist_test_for_each_entry(struct kunit *test)
-+{
-+	struct hlist_test_struct entries[5], *cur;
-+	HLIST_HEAD(list);
-+	int i = 0;
-+
-+	entries[0].data = 0;
-+	hlist_add_head(&entries[0].list, &list);
-+	for (i = 1; i < 5; ++i) {
-+		entries[i].data = i;
-+		hlist_add_behind(&entries[i].list, &entries[i-1].list);
-+	}
-+
-+	i = 0;
-+
-+	hlist_for_each_entry(cur, &list, list) {
-+		KUNIT_EXPECT_EQ(test, cur->data, i);
-+		i++;
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, i, 5);
-+}
-+
-+static void hlist_test_for_each_entry_continue(struct kunit *test)
-+{
-+	struct hlist_test_struct entries[5], *cur;
-+	HLIST_HEAD(list);
-+	int i = 0;
-+
-+	entries[0].data = 0;
-+	hlist_add_head(&entries[0].list, &list);
-+	for (i = 1; i < 5; ++i) {
-+		entries[i].data = i;
-+		hlist_add_behind(&entries[i].list, &entries[i-1].list);
-+	}
-+
-+	/* We skip the first (zero-th) entry. */
-+	i = 1;
-+
-+	cur = &entries[0];
-+	hlist_for_each_entry_continue(cur, list) {
-+		KUNIT_EXPECT_EQ(test, cur->data, i);
-+		/* Stamp over the entry. */
-+		cur->data = 42;
-+		i++;
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, i, 5);
-+	/* The first entry was not visited. */
-+	KUNIT_EXPECT_EQ(test, entries[0].data, 0);
-+	/* The second (and presumably others), were. */
-+	KUNIT_EXPECT_EQ(test, entries[1].data, 42);
-+}
-+
-+static void hlist_test_for_each_entry_from(struct kunit *test)
-+{
-+	struct hlist_test_struct entries[5], *cur;
-+	HLIST_HEAD(list);
-+	int i = 0;
-+
-+	entries[0].data = 0;
-+	hlist_add_head(&entries[0].list, &list);
-+	for (i = 1; i < 5; ++i) {
-+		entries[i].data = i;
-+		hlist_add_behind(&entries[i].list, &entries[i-1].list);
-+	}
-+
-+	i = 0;
-+
-+	cur = &entries[0];
-+	hlist_for_each_entry_from(cur, list) {
-+		KUNIT_EXPECT_EQ(test, cur->data, i);
-+		/* Stamp over the entry. */
-+		cur->data = 42;
-+		i++;
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, i, 5);
-+	/* The first entry was visited. */
-+	KUNIT_EXPECT_EQ(test, entries[0].data, 42);
-+}
-+
-+static void hlist_test_for_each_entry_safe(struct kunit *test)
-+{
-+	struct hlist_test_struct entries[5], *cur;
-+	struct hlist_node *tmp_node;
-+	HLIST_HEAD(list);
-+	int i = 0;
-+
-+	entries[0].data = 0;
-+	hlist_add_head(&entries[0].list, &list);
-+	for (i = 1; i < 5; ++i) {
-+		entries[i].data = i;
-+		hlist_add_behind(&entries[i].list, &entries[i-1].list);
-+	}
-+
-+	i = 0;
-+
-+	hlist_for_each_entry_safe(cur, tmp_node, &list, list) {
-+		KUNIT_EXPECT_EQ(test, cur->data, i);
-+		hlist_del(&cur->list);
-+		i++;
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, i, 5);
-+	KUNIT_EXPECT_TRUE(test, hlist_empty(&list));
-+}
-+
-+
-+static struct kunit_case hlist_test_cases[] = {
-+	KUNIT_CASE(hlist_test_init),
-+	KUNIT_CASE(hlist_test_unhashed),
-+	KUNIT_CASE(hlist_test_unhashed_lockless),
-+	KUNIT_CASE(hlist_test_del),
-+	KUNIT_CASE(hlist_test_del_init),
-+	KUNIT_CASE(hlist_test_add),
-+	KUNIT_CASE(hlist_test_fake),
-+	KUNIT_CASE(hlist_test_is_singular_node),
-+	KUNIT_CASE(hlist_test_empty),
-+	KUNIT_CASE(hlist_test_move_list),
-+	KUNIT_CASE(hlist_test_entry),
-+	KUNIT_CASE(hlist_test_entry_safe),
-+	KUNIT_CASE(hlist_test_for_each),
-+	KUNIT_CASE(hlist_test_for_each_safe),
-+	KUNIT_CASE(hlist_test_for_each_entry),
-+	KUNIT_CASE(hlist_test_for_each_entry_continue),
-+	KUNIT_CASE(hlist_test_for_each_entry_from),
-+	KUNIT_CASE(hlist_test_for_each_entry_safe),
-+	{},
-+};
-+
-+static struct kunit_suite hlist_test_module = {
-+	.name = "hlist",
-+	.test_cases = hlist_test_cases,
-+};
-+
-+kunit_test_suites(&list_test_module, &hlist_test_module);
- 
- MODULE_LICENSE("GPL v2");
--- 
-2.35.1.616.g0bdcbb4464-goog
+>
+>
+> > static int get_device_flags(struct sock *sk, struct hci_dev *hdev, void=
+ *data,
+> >                           u16 data_len)
+> > {
+> > diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+> > index 9a3d77d3ca86..3edf64baf479 100644
+> > --- a/net/bluetooth/msft.c
+> > +++ b/net/bluetooth/msft.c
+> > @@ -731,6 +731,20 @@ static void msft_monitor_device_evt(struct hci_dev=
+ *hdev, struct sk_buff *skb)
+> >                                handle_data->mgmt_handle);
+> > }
+> >
+> > +__u8 *get_msft_evt_prefix(struct hci_dev *hdev)
+> > +{
+> > +     struct msft_data *msft =3D hdev->msft_data;
+> > +
+> > +     return msft->evt_prefix;
+> > +}
+> > +
+> > +__u8 get_msft_evt_prefix_len(struct hci_dev *hdev)
+> > +{
+> > +     struct msft_data *msft =3D hdev->msft_data;
+> > +
+> > +     return msft->evt_prefix_len;
+> > +}
+> > +
+>
+> So I wonder if this should be moved directly into hci_dev under CONFIG_BT=
+_MSFTEXT check. Luiz also needs to have a look at this. This is unfortunate=
+ly getting a bit nasty now. We need to find a clean solution, otherwise the=
+ next vendor thing is blowing up in our face.
 
+My understanding is that static inline hci_set_msft_opcode() under
+CONFIG_BT_MSFTEXT is placed in hci_core.h because drivers need to call
+it. Here, get_msft_evt_prefix() and get_msft_evt_prefix_len() are not
+to be called by drivers. Do we still need to move them into
+hci_core.h? Please let me know if I have any misunderstanding. Thanks.
+
+>
+>
+> > void msft_vendor_evt(struct hci_dev *hdev, void *data, struct sk_buff *=
+skb)
+> > {
+> >       struct msft_data *msft =3D hdev->msft_data;
+> > diff --git a/net/bluetooth/msft.h b/net/bluetooth/msft.h
+> > index afcaf7d3b1cb..a354ebf61fed 100644
+> > --- a/net/bluetooth/msft.h
+> > +++ b/net/bluetooth/msft.h
+> > @@ -27,6 +27,8 @@ int msft_set_filter_enable(struct hci_dev *hdev, bool=
+ enable);
+> > int msft_suspend_sync(struct hci_dev *hdev);
+> > int msft_resume_sync(struct hci_dev *hdev);
+> > bool msft_curve_validity(struct hci_dev *hdev);
+> > +__u8 *get_msft_evt_prefix(struct hci_dev *hdev);
+> > +__u8 get_msft_evt_prefix_len(struct hci_dev *hdev);
+> >
+> > #else
+> >
+> > @@ -77,4 +79,14 @@ static inline bool msft_curve_validity(struct hci_de=
+v *hdev)
+> >       return false;
+> > }
+> >
+> > +static inline __u8 *get_msft_evt_prefix(struct hci_dev *hdev)
+> > +{
+> > +     return NULL;
+> > +}
+> > +
+> > +static inline __u8 get_msft_evt_prefix_len(struct hci_dev *hdev)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > #endif
+>
+> Regards
+>
+> Marcel
+>
+
+Regards,
+--=20
+
+Joseph Shyh-In Hwang
+Email: josephsih@google.com

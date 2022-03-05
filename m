@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB544CE1CA
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 02:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D854CE1D3
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 02:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiCEBEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 20:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S230354AbiCEBO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 20:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiCEBEF (ORCPT
+        with ESMTP id S230150AbiCEBO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 20:04:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE831CE9B9;
-        Fri,  4 Mar 2022 17:03:15 -0800 (PST)
+        Fri, 4 Mar 2022 20:14:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A57222452A;
+        Fri,  4 Mar 2022 17:14:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4198161F51;
-        Sat,  5 Mar 2022 01:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26902C340E9;
-        Sat,  5 Mar 2022 01:03:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1478D61760;
+        Sat,  5 Mar 2022 01:14:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6C9C340F3;
+        Sat,  5 Mar 2022 01:14:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646442194;
-        bh=zYtuIkRNR31j199FK8vxS8K91wZhoT2cjKlItlsB5BI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YRkmV9jbquG3Ad4ozCAUiZRLKfv5Hl2E+L0NewuVd9kpGx7PJL6pfem128cjTF9Q5
-         bX9rSfSCjMce5mqzyYELGruLXf+JL4LcLg374s6hJRmnTStTp/ygfohTe1BRecFdlY
-         dlijgwCFK9zUb78kV2Yau56Wx2vYl+WBr+w1P87kTU27PZTo4iaNWoVeYGNvsSxfwB
-         qSNCye7ay0dXWieBVmnOv/AivGBfbAgfwb+kUz0k0QUimVpZUhhzxYjlQgRzFpnNTt
-         GbAXFoXUStg5HpoxV0+YtiqoWyxjbg5qKROQq+4HHInWjgnGUpbJtjDPP9AWwC2O16
-         FCFSUc2FjRNLA==
-Date:   Sat, 5 Mar 2022 03:02:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Haitao Huang <haitao.huang@linux.intel.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-Message-ID: <YiK2pL7eoVGMZyH9@iki.fi>
-References: <Yh4fGORDaJyVrJQW@iki.fi>
- <Yh4i4hVcnfZ8QDAl@iki.fi>
- <2d2d3471-78ce-9faa-daf6-138078f5ffaa@intel.com>
- <Yh7Q5fbOtr+6YWaS@iki.fi>
- <6f65287a-f69c-971e-be2c-929e327e7ff9@intel.com>
- <op.1igppyk9wjvjmi@hhuan26-mobl1.mshome.net>
- <YiFMyZ4t2MC0n5Pn@iki.fi>
- <op.1ihmv4mvwjvjmi@hhuan26-mobl1.mshome.net>
- <YiHOHn3q4gwoFv+u@iki.fi>
- <op.1iijnwtpwjvjmi@hhuan26-mobl1.mshome.net>
+        s=k20201202; t=1646442848;
+        bh=vaBaHCp9DaFEapWiEZFao3YLd11lfyjPtyNq2m5VXs4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c5/LqdcZfLOG1K7x4z+crxSvHxys5Zkw7f9QXyqpzs26ZTePy8t+0WwfcqMrN/+bL
+         7OU3ZWZcPFSiJEdUWxHxUilezuEjcF4oQsSLWZDefw7RU7+yQf6JYFeBiiFwNpBL+5
+         zheDWBqq8w34KXW1DeQAcMPyVzSlLEo/C5OUqeffQlUhhh+OQpkVI0aMAEyQVvGbcx
+         090qHvUTuLVHE08zvSEF4KwMRunGPqFd4srcdIieMD2n5NJ9xHH/NMUk5w1fQb/HQ6
+         9b+o7Dum29DB5legGE+aLzgcZ9HbFaFQmb4t6kAzbVMOL7UCGJcFGpDC4c8PC+k3jU
+         14wIbWL4XQElw==
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2dc28791ecbso96077867b3.4;
+        Fri, 04 Mar 2022 17:14:08 -0800 (PST)
+X-Gm-Message-State: AOAM530yzNX9zSgQtcryoFISWLCal/6lCu7vaUOsPUktTI/EPz/VN4+h
+        aCZR/6uH6VpYMtFQ6xl3bUTbHHS7OYrGElk8Ud8=
+X-Google-Smtp-Source: ABdhPJwbMS+4wemss6vJVt55VmA2cZt2K+EUmtlozCbIK6ZzqQVPdiXo3ZGnJj6Y4ZRvYCbj3HqANRXxoQbmZCW59R8=
+X-Received: by 2002:a81:23ce:0:b0:2dc:b20:cc73 with SMTP id
+ j197-20020a8123ce000000b002dc0b20cc73mr1211954ywj.130.1646442847422; Fri, 04
+ Mar 2022 17:14:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <op.1iijnwtpwjvjmi@hhuan26-mobl1.mshome.net>
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 4 Mar 2022 17:13:56 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5APYjoZWKDkZ9CBZzaF0NfSQQ-OeZSJgDa=wB-5O+Wng@mail.gmail.com>
+Message-ID: <CAPhsuW5APYjoZWKDkZ9CBZzaF0NfSQQ-OeZSJgDa=wB-5O+Wng@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 00/28] Introduce eBPF support for HID devices
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -80,309 +76,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 09:51:22AM -0600, Haitao Huang wrote:
-> Hi Jarkko
-> 
-> On Fri, 04 Mar 2022 02:30:22 -0600, Jarkko Sakkinen <jarkko@kernel.org>
-> wrote:
-> 
-> > On Thu, Mar 03, 2022 at 10:03:30PM -0600, Haitao Huang wrote:
-> > > 
-> > > On Thu, 03 Mar 2022 17:18:33 -0600, Jarkko Sakkinen <jarkko@kernel.org>
-> > > wrote:
-> > > 
-> > > > On Thu, Mar 03, 2022 at 10:08:14AM -0600, Haitao Huang wrote:
-> > > > > Hi all,
-> > > > >
-> > > > > On Wed, 02 Mar 2022 16:57:45 -0600, Reinette Chatre
-> > > > > <reinette.chatre@intel.com> wrote:
-> > > > >
-> > > > > > Hi Jarkko,
-> > > > > >
-> > > > > > On 3/1/2022 6:05 PM, Jarkko Sakkinen wrote:
-> > > > > > > On Tue, Mar 01, 2022 at 09:48:48AM -0800, Reinette Chatre wrote:
-> > > > > > > > Hi Jarkko,
-> > > > > > > >
-> > > > > > > > On 3/1/2022 5:42 AM, Jarkko Sakkinen wrote:
-> > > > > > > > > > With EACCEPTCOPY (kudos to Mark S. for reminding me of
-> > > > > > > > > > this version of
-> > > > > > > > > > EACCEPT @ chat.enarx.dev) it is possible to make R and RX
-> > > > > pages but
-> > > > > > > > > > obviously new RX pages are now out of the picture:
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > 	/*
-> > > > > > > > > > 	 * Adding a regular page that is architecturally allowed
-> > > > > to only
-> > > > > > > > > > 	 * be created with RW permissions.
-> > > > > > > > > > 	 * TBD: Interface with user space policy to support max
-> > > > > permissions
-> > > > > > > > > > 	 * of RWX.
-> > > > > > > > > > 	 */
-> > > > > > > > > > 	prot = PROT_READ | PROT_WRITE;
-> > > > > > > > > > 	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
-> > > > > > > > > > 	encl_page->vm_max_prot_bits =
-> > > encl_page->vm_run_prot_bits;
-> > > > > > > > > >
-> > > > > > > > > > If that TBD is left out to the final version the page
-> > > > > > > > > > augmentation has a
-> > > > > > > > > > risk of a API bottleneck, and that risk can realize then
-> > > > > > > > > > also in the page
-> > > > > > > > > > permission ioctls.
-> > > > > > > > > >
-> > > > > > > > > > I.e. now any review comment is based on not fully known
-> > > > > > > > > > territory, we have
-> > > > > > > > > > one known unknown, and some unknown unknowns from
-> > > > > > > > > > unpredictable effect to
-> > > > > > > > > > future API changes.
-> > > > > > > >
-> > > > > > > > The plan to complete the "TBD" in the above snippet was to
-> > > > > > > > follow this work
-> > > > > > > > with user policy integration at this location. On a high level
-> > > > > > > > the plan was
-> > > > > > > > for this to look something like:
-> > > > > > > >
-> > > > > > > >
-> > > > > > > >  	/*
-> > > > > > > >  	 * Adding a regular page that is architecturally allowed
-> > > to only
-> > > > > > > >  	 * be created with RW permissions.
-> > > > > > > >  	 * Interface with user space policy to support max
-> > > permissions
-> > > > > > > >  	 * of RWX.
-> > > > > > > >  	 */
-> > > > > > > >  	prot = PROT_READ | PROT_WRITE;
-> > > > > > > >  	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
-> > > > > > > >
-> > > > > > > >         if (user space policy allows RWX on dynamically added
-> > > > > pages)
-> > > > > > > > 	 	encl_page->vm_max_prot_bits = calc_vm_prot_bits(PROT_READ |
-> > > > > > > > PROT_WRITE | PROT_EXEC, 0);
-> > > > > > > > 	else
-> > > > > > > > 		encl_page->vm_max_prot_bits = calc_vm_prot_bits(PROT_READ |
-> > > > > > > > PROT_WRITE, 0);
-> > > > > > > >
-> > > > > > > > The work that follows this series aimed to do the integration
-> > > > > with user
-> > > > > > > > space policy.
-> > > > > > >
-> > > > > > > What do you mean by "user space policy" anyway exactly? I'm
-> > > > > sorry but I
-> > > > > > > just don't fully understand this.
-> > > > > >
-> > > > > > My apologies - I just assumed that you would need no reminder
-> > > > > about this
-> > > > > > contentious
-> > > > > > part of SGX history. Essentially it means that, yes, the
-> > > kernel could
-> > > > > > theoretically
-> > > > > > permit any kind of access to any file/page, but some accesses are
-> > > > > known
-> > > > > > to generally
-> > > > > > be a bad idea - like making memory executable as well as writable
-> > > > > - and
-> > > > > > thus there
-> > > > > > are additional checks based on what user space permits before the
-> > > > > kernel
-> > > > > > allows
-> > > > > > such accesses.
-> > > > > >
-> > > > > > For example,
-> > > > > > mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect()
-> > > > > >
-> > > > > > User policy and SGX has seen significant discussion. Some notable
-> > > > > > threads:
-> > > > > > https://lore.kernel.org/linux-security-module/CALCETrXf8mSK45h7sTK5Wf+pXLVn=Bjsc_RLpgO-h-qdzBRo5Q@mail.gmail.com/
-> > > > > > https://lore.kernel.org/linux-security-module/20190619222401.14942-1-sean.j.christopherson@intel.com/
-> > > > > >
-> > > > > > > It's too big of a risk to accept this series without X taken
-> > > care
-> > > > > > > of. Patch
-> > > > > > > series should neither have TODO nor TBD comments IMHO. I
-> > > don't want
-> > > > > > > to ack
-> > > > > > > a series based on speculation what might happen in the future.
-> > > > > >
-> > > > > > ok
-> > > > > >
-> > > > > > >
-> > > > > > > > > I think the best way to move forward would be to do EAUG's
-> > > > > > > > > explicitly with
-> > > > > > > > > an ioctl that could also include secinfo for permissions.
-> > > > > Then you can
-> > > > > > > > > easily do the rest with EACCEPTCOPY inside the enclave.
-> > > > > > > >
-> > > > > > > > SGX_IOC_ENCLAVE_ADD_PAGES already exists and could possibly be
-> > > > > used for
-> > > > > > > > this purpose. It already includes SECINFO which may also be
-> > > > > useful if
-> > > > > > > > needing to later support EAUG of PT_SS* pages.
-> > > > > > >
-> > > > > > > You could also simply add SGX_IOC_ENCLAVE_AUGMENT_PAGES and
-> > > call it
-> > > > > > > a day.
-> > > > > >
-> > > > > > I could, yes.
-> > > > > >
-> > > > > > > And if there is plan to extend SGX_IOC_ENCLAVE_ADD_PAGES what is
-> > > > > > > this weird
-> > > > > > > thing added to the #PF handler? Why is it added at all then?
-> > > > > >
-> > > > > > I was just speculating in my response, there is no plan to extend
-> > > > > > SGX_IOC_ENCLAVE_ADD_PAGES (that I am aware of).
-> > > > > >
-> > > > > > > > How this could work is user space calls
-> > > SGX_IOC_ENCLAVE_ADD_PAGES
-> > > > > > > > after enclave initialization on any memory region within the
-> > > > > > > > enclave where
-> > > > > > > > pages are planned to be added dynamically. This ioctl() calls
-> > > > > > > > EAUG to add the
-> > > > > > > > new pages with RW permissions and their vm_max_prot_bits
-> > > can be
-> > > > > > > > set to the
-> > > > > > > > permissions found in the included SECINFO. This will support
-> > > > > > > > later EACCEPTCOPY
-> > > > > > > > as well as SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
-> > > > > > >
-> > > > > > > I don't like this type of re-use of the existing API.
-> > > > > >
-> > > > > > I could proceed with SGX_IOC_ENCLAVE_AUGMENT_PAGES if there is
-> > > > > consensus
-> > > > > > after
-> > > > > > considering the user policy question (above) and performance
-> > > trade-off
-> > > > > > (more below).
-> > > > > >
-> > > > > > >
-> > > > > > > > The big question is whether communicating user policy after
-> > > > > > > > enclave initialization
-> > > > > > > > via the SECINFO within SGX_IOC_ENCLAVE_ADD_PAGES is acceptable
-> > > > > > > > to all? I would
-> > > > > > > > appreciate a confirmation on this direction considering the
-> > > > > > > > significant history
-> > > > > > > > behind this topic.
-> > > > > > >
-> > > > > > > I have no idea because I don't know what is user space policy.
-> > > > > >
-> > > > > > This discussion is about some enclave usages needing RWX
-> > > permissions
-> > > > > > on dynamically added enclave pages. RWX permissions on dynamically
-> > > > > added
-> > > > > > pages is
-> > > > > > not something that should blindly be allowed for all SGX
-> > > enclaves but
-> > > > > > instead the user
-> > > > > > needs to explicitly allow specific enclaves to have such
-> > > ability. This
-> > > > > > is equivalent
-> > > > > > to (but not the same as) what exists in Linux today with LSM. As
-> > > > > seen in
-> > > > > > mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect() Linux
-> > > > > is able
-> > > > > > to make
-> > > > > > files and memory be both writable and executable, but it would
-> > > only do
-> > > > > > so for those
-> > > > > > files and memory that the LSM (which is how user policy is
-> > > > > communicated,
-> > > > > > like SELinux)
-> > > > > > indicates it is allowed, not blindly do so for all files and all
-> > > > > memory.
-> > > > > >
-> > > > > > > > > Putting EAUG to the #PF handler and implicitly call it just
-> > > > > > > > > too flakky and
-> > > > > > > > > hard to make deterministic for e.g. JIT compiler in our use
-> > > > > > > > > case (not to
-> > > > > > > > > mention that JIT is not possible at all because inability to
-> > > > > > > > > do RX pages).
-> > > > > >
-> > > > > > I understand how SGX_IOC_ENCLAVE_AUGMENT_PAGES can be more
-> > > > > deterministic
-> > > > > > but from
-> > > > > > what I understand it would have a performance impact since it
-> > > would
-> > > > > > require all memory
-> > > > > > that may be needed by the enclave be pre-allocated from
-> > > outside the
-> > > > > > enclave and not
-> > > > > > just dynamically allocated from within the enclave at the time
-> > > it is
-> > > > > > needed.
-> > > > > >
-> > > > > > Would such a performance impact be acceptable?
-> > > > > >
-> > > > >
-> > > > > User space won't always have enough info to decide whether the pages
-> > > > > to be
-> > > > > EAUG'd immediately. In some cases (shared libraries, JVM for
-> > > > > example) lots
-> > > > > of code/data pages can be mapped but never actually touched. One
-> > > > > enclave/process does not know if any other more important
-> > > > > enclave/process
-> > > > > would need the EPC.
-> > > > >
-> > > > > It should be for kernel to make the final decision as it has overall
-> > > > > picture
-> > > > > of the system EPC usage and availability.
-> > > >
-> > > > EAUG ioctl does not give better capabilities for user space to waste
-> > > > EPC given that EADD ioctl already exists, i.e. your argument is
-> > > logically
-> > > > incorrect.
-> > > 
-> > > The point of adding EAUG is to allow more efficient use of EPC pages.
-> > > Without EAUG, enclaves have to EADD everything upfront into EPC,
-> > > consuming
-> > > predetermined number of EPC pages, some of which may not be used at all.
-> > > With EAUG, enclaves should be able to load minimal pages to get started,
-> > > pages added on #PF as they are actually accessed.
-> > > 
-> > > Obviously as you pointed out, some usages make more sense to
-> > > pre-EAUG (EAUG
-> > > before #PF). But your proposal of supporting only pre-EAUG here
-> > > essentially
-> > > makes EAUG behave almost the same as EADD.  If the current
-> > > implementation
-> > > with EAUG on #PF can also use MAP_POPULATE for pre-EAUG (seems possible
-> > > based on Dave's comments), then it is flxible to cover all cases and
-> > > allow
-> > > kernel to optimize allocation of EPC pages.
-> > 
-> > There is no even a working #PF based implementation in existance, and
-> > your
-> > argument has too many if's for my taste.
-> 
-> 1) if you mean no user space is implementing this kind of solution, read
-> this section, otherwise, skip to 2) below which is only couple of sentences.
-> 
-> If you are willing to look, there is already implementation in our SDK to do
-> heap and stack expansion on demand on #PF. Enclaves may not know heap/stack
-> size up front, we have implemented these features to make EPC usage more
-> efficient. I don't know why normal processes can add RAM on #PF, but
-> enclaves adding EPC on #PF becomes so unacceptable concept to you. And the
-> kernel does that for EPC swapping already when #PF happens on a swapped out
-> EPC page.
+On Fri, Mar 4, 2022 at 9:29 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> Hi,
+>
+> This is a followup of my v1 at [0].
+>
+> The short summary of the previous cover letter and discussions is that
+> HID could benefit from BPF for the following use cases:
+>
+> - simple fixup of report descriptor:
+>   benefits are faster development time and testing, with the produced
+>   bpf program being shipped in the kernel directly (the shipping part
+>   is *not* addressed here).
+>
+> - Universal Stylus Interface:
+>   allows a user-space program to define its own kernel interface
+>
+> - Surface Dial:
+>   somehow similar to the previous one except that userspace can decide
+>   to change the shape of the exported device
+>
+> - firewall:
+>   still partly missing there, there is not yet interception of hidraw
+>   calls, but it's coming in a followup series, I promise
+>
+> - tracing:
+>   well, tracing.
+>
+>
+> I tried to address as many comments as I could and here is the short log
+> of changes:
+>
+> v2:
+> ===
+>
+> - split the series by subsystem (bpf, HID, libbpf, selftests and
+>   samples)
+>
+> - Added an extra patch at the beginning to not require CAP_NET_ADMIN for
+>   BPF_PROG_TYPE_LIRC_MODE2 (please shout if this is wrong)
+>
+> - made the bpf context attached to HID program of dynamic size:
+>   * the first 1 kB will be able to be addressed directly
+>   * the rest can be retrieved through bpf_hid_{set|get}_data
+>     (note that I am definitivey not happy with that API, because there
+>     is part of it in bits and other in bytes. ouch)
+>
+> - added an extra patch to prevent non GPL HID bpf programs to be loaded
+>   of type BPF_PROG_TYPE_HID
+>   * same here, not really happy but I don't know where to put that check
+>     in verifier.c
+>
+> - added a new flag BPF_F_INSERT_HEAD for BPF_LINK_CREATE syscall when in
+>   used with HID program types.
+>   * this flag is used for tracing, to be able to load a program before
+>     any others that might already have been inserted and that might
+>     change the data stream.
+>
+> Cheers,
+> Benjamin
+>
 
-In adds O(n) round-trips for a mmap() emulation, which can be done in O(1)
-round-trips with a ioctl.
+The set looks good so far. I will review the rest later.
 
-> Our implementation has gone through several rounds, the latest is
-> here:https://github.com/intel/linux-sgx/tree/edmm_v2/sdk/emm. It was also
-> implemented in original OOT driver based SDK implementation. Customers are
-> using it and found them useful. I think this is a critical feature that many
-> other runtimes will also need.
+[...]
 
-I'm not sure what the common sense argument here is.
+A quick note about how we organize these patches. Maybe we can
+merge some of these patches like:
 
-> 2)
-> It's OK for you to request additional support for your usage and I agree it
-> is needed. But IMHO, totally getting rid of EAUG on #PF is bad and
-> unnecessary. Current implementation can be extended to support your usage.
-> What's the reason  you think MAP_POPULATE won't work for you?
+>   bpf: introduce hid program type
+>   bpf/hid: add a new attach type to change the report descriptor
+>   bpf/hid: add new BPF type to trigger commands from userspace
+I guess the three can merge into one.
 
-I do not recall taking stand on MAP_POPULATE.
+>   HID: hook up with bpf
+>   HID: allow to change the report descriptor from an eBPF program
+>   HID: bpf: compute only the required buffer size for the device
+>   HID: bpf: only call hid_bpf_raw_event() if a ctx is available
+I haven't read through all of them, but I guess they can probably merge
+as well.
 
-> BR
-> Haitao
+>   libbpf: add HID program type and API
+>   libbpf: add new attach type BPF_HID_RDESC_FIXUP
+>   libbpf: add new attach type BPF_HID_USER_EVENT
+There 3 can merge, and maybe also the one below
+>   libbpf: add handling for BPF_F_INSERT_HEAD in HID programs
 
-BR, Jarkko
+>   samples/bpf: add new hid_mouse example
+>   samples/bpf: add a report descriptor fixup
+>   samples/bpf: fix bpf_program__attach_hid() api change
+Maybe it makes sense to merge these 3?
+
+>   bpf/hid: add hid_{get|set}_data helpers
+>   HID: bpf: implement hid_bpf_get|set_data
+>   bpf/hid: add bpf_hid_raw_request helper function
+>   HID: add implementation of bpf_hid_raw_request
+We can have 1 or 2 patches for these helpers
+
+>   selftests/bpf: add tests for the HID-bpf initial implementation
+>   selftests/bpf: add report descriptor fixup tests
+>   selftests/bpf: add tests for hid_{get|set}_data helpers
+>   selftests/bpf: add test for user call of HID bpf programs
+>   selftests/bpf: hid: rely on uhid event to know if a test device is
+>     ready
+>   selftests/bpf: add tests for bpf_hid_hw_request
+>   selftests/bpf: Add a test for BPF_F_INSERT_HEAD
+These selftests could also merge into 1 or 2 patches I guess.
+
+I understand rearranging these patches may take quite some effort.
+But I do feel that's a cleaner approach (from someone doesn't know
+much about HID). If you really hate it that way, we can discuss...
+
+Thanks,
+Song

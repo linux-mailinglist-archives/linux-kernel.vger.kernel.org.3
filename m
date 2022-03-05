@@ -2,186 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C5C4CE36A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D856F4CE372
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiCEHUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 02:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S231424AbiCEHjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 02:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiCEHUN (ORCPT
+        with ESMTP id S229786AbiCEHjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 02:20:13 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8708D240DF7;
-        Fri,  4 Mar 2022 23:19:24 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id x14so8108323ill.12;
-        Fri, 04 Mar 2022 23:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=Q2swG4/Q4VYLXmiZzbAmmWAx2ko3A/RK0gh0OlX3gGA=;
-        b=YClrx//ZVwvKRW7lRukKlAo8dKnA+cN66kcPaZ1nbwvbD4+RzPoHAsNSdJ7TbD7W4P
-         moXXQjiujZTQPt3aSVv3awUViK7cYdgSticgAVoECiKUgadA/08/fJ0KVi/DVegKhBBg
-         YUprtpCkZgvls/7w880umyJN6MwV7r+h/IgiW+ItXTw1Lgo66G0Rd99h6l+W1uBTHKr7
-         SM8iDC+bMki5XfuHC4SD9DEPAwbAl8TBWqErqaP4AxqPhr0kxfeFnXJigJpn/um3Z1Uw
-         Axwsam2ht16kgCYs4TLFtxfCvc24ZQy59YlD6emtRH9o8XzlkZoQJqZ8SR7MQB2J6rJ3
-         kbxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=Q2swG4/Q4VYLXmiZzbAmmWAx2ko3A/RK0gh0OlX3gGA=;
-        b=v+mmTAIO7es1zWlki53Xb7HBGqg4E/qr7Ohj6EMD8HGC4HC64iuZund76kebihsZxm
-         Qcl65QdVLJy3LbPtglMk9IgjsXXgJzyK+i1KXJjLrQYuOqLJ3e7Tu7oXFsAPVAzwhdCV
-         A0dCm5Y45vnZVFbEGGkYwVynV0JqyDTK+ZaLFdA09NWQm1X7uVI9aYiemNrSviCUrgMG
-         asGj3+1ZugtNU81+rIOr4MkDb3CoiwPfrSJQ3GJhYocMm9fjA8htXPkMcgfhP22yom5A
-         boo7YlofQI0HB8kvY+DeQkJjtxFxk1LaEtVCCiCN2ki1ckAjKUzQVUxwvTKPgvSQXKOH
-         h5nA==
-X-Gm-Message-State: AOAM5311ISN71o6+LigCkCxtXsnPTcOgTB2waHDrOPaTVzKTqchzc18O
-        qMBs25TIsu2EwWoVvvF3VWuRpiSwLJGnhQ+YpFZhupFlhBMeZQ==
-X-Google-Smtp-Source: ABdhPJw0SXzTwY3Z/qZWZ0oIMDR5umUhkMBTmvmCDoCrsukS3xMlV5mU7mHNQBBlUhTLjEldiA0Ms94GDyjjWWd+6mY=
-X-Received: by 2002:a05:6e02:164f:b0:2c6:1b85:b985 with SMTP id
- v15-20020a056e02164f00b002c61b85b985mr2358933ilu.4.1646464763682; Fri, 04 Mar
- 2022 23:19:23 -0800 (PST)
+        Sat, 5 Mar 2022 02:39:37 -0500
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120078.outbound.protection.outlook.com [40.107.12.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F73D443ED
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 23:38:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TzzHfhyGJUeFBpnYloi3FUMZfinX7m927jXwakqyLUWjR7Zjp45aR8keBOVTLYzWi2ufWdAGzmlRC5Zfxxflp+QpTfsw2ZCZViakikXqNrdErZuH0iUxoKTDaX37zmB2z4QFT240eG/tp5XiszjAwV0L702pChu+zRpN1iMXiq7ClBG0Je9/TDZfNOlInzhZrXmFncSWJ/T/s007pZwY2q0cl59HowAeI0vChS0bggv0HfV1BBSRf0mXSSjpYukXfW2GhqJZJukybuMyiKaGxLMfZeKBW1EGgLhTVH71d7zm47rtaUNPz1FnAHeBtgOd+sU44dvjTPjsKCPwRVsYbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BIHoCpE2Q1xWpmwxfGDqxSB6rcUfj7MlACGfZnsFAjY=;
+ b=IRdSYMa9j4D9bokex3BF71so5ZZGyiKVNMNpssd57fiBvgeQmA/bqR1McnALx0ybxki6OS5VS1Bl1Gb15FHUzfFppNodhTbe1s1wGUeNOTSLjDdLF4vVrpm8BjUlkd52lmfyyqnB4rtUkLEh+hT91V0H8eAaeJLLXrAe5BMcUX2GEAC9d6NdtL1DNSNguWGsQar8O7Q/tnkh+tEQttpqDzJczoZ0NJeTgyhZH8Ljq4XIwkul2OjCgdYoF4d+iJPz6FeyrtL+Ug2X1xOq/GIjyVdPOOc765P8Ad6Z7fWz8um4E+Bz+XETVnT653T1KlyNMLOAwsDWkBIBVHHUtlMYvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB2256.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:15::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Sat, 5 Mar
+ 2022 07:38:43 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.019; Sat, 5 Mar 2022
+ 07:38:43 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm/nouveau/bios: Rename prom_init() and friends
+ functions
+Thread-Topic: [PATCH] drm/nouveau/bios: Rename prom_init() and friends
+ functions
+Thread-Index: AQHYL+w0cqx8XUQTF0SmnJmJ5+J/4Kyvq+SAgAC8V4A=
+Date:   Sat, 5 Mar 2022 07:38:43 +0000
+Message-ID: <edb9aabd-09af-ae0c-348d-f0500e3405d7@csgroup.eu>
+References: <2d97ae92b9c06214be0e088a72cf303eb591bf01.1646414295.git.christophe.leroy@csgroup.eu>
+ <47e09d6010852db928c0de29b89450ea7eee74d8.camel@redhat.com>
+In-Reply-To: <47e09d6010852db928c0de29b89450ea7eee74d8.camel@redhat.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 44c1ae05-5bfa-4196-2451-08d9fe7b2cd8
+x-ms-traffictypediagnostic: MR1P264MB2256:EE_
+x-microsoft-antispam-prvs: <MR1P264MB2256EE08598A8BFC5D6FA730ED069@MR1P264MB2256.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BKQYudpde9+gxmnHkvVFJ6FNOiPvS3ZMfnJeACBOV4/emQbs2DWhfa9zW9qPU4Rn4XQluoThANn4FcERZ6W0pB5NaZGhCX6VKxuJPHUI1v08IIU5w1NJHJvPqY1t6+/lJM43vAaaS331DmHuljADDw+lPQgA15n/NCpRZ9golkhx6MLO55UOtoOv2elWmPv6vrdGr80lrBdYnAjt50EDIwF262vL9BFeP4eHkw/idtAvvgCaiA7aBwcqLYzRYNqELAdRPWlOD1k8kx7sjEbynq/6/82vCCrWznLBGI0Rw5fIJsD41ZmoiNYw1AvefxoV/AI6hvobS38RCtaNZsJn/os6MiM3UslEJrO+4k8Oosk3zWZtiM6O4seTg8bZROAWFSFYGTiQPJrLO7Tj+EEEEbNDc+M0XEdbUEwFDSxcoowobSlSwCJJ3yzYtjEqvGZkdGtwqVyqLUZ5fFbggqxo0Rw1DhFuodsbURz4CMDMZYVvYUFyGdJpky7P0wi+RpKrRv6K2drlO3TYrY+LaJiazj/vD93g2RPSgaESY72g1FBbbC1FzUE+1nzl/gQRMW6NRbI+w7V147dK2nkWOeM6Pg01XQwK2B81wh0yJzhxO1OfViEk/3hpk6YX0b1C4KPffr/bGFsVKkzTQl2WZbwI8NPI4Z/YMP201jX/Eg1BOR8taKEf+Ds0jKCnXd/KiZWnsB4hBuyBzkcXk4xakEQcixMwofp3gVvtYCbukcJcFTQALEZj4vE4uks8KkQ67BiDOrJtufbHA3Y8R6SBX+2UdJO+WmCgbVfGatzCEGNIoUB1zU/eMAcuFjBibyIFv8QuV4VwLb/m8XQPgv6/QGkxP6dihCXB9liF8StBBgYVG2w=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(122000001)(6512007)(6506007)(110136005)(71200400001)(36756003)(26005)(66574015)(186003)(2616005)(8936002)(316002)(66446008)(66476007)(66556008)(86362001)(66946007)(64756008)(76116006)(38100700002)(8676002)(4326008)(5660300002)(44832011)(91956017)(31696002)(38070700005)(54906003)(31686004)(966005)(6486002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Qjhhc296MU51aGdPWFQ3UlNWWDVjcXZMWHdDdklkZUJpT0pONVRsVWZDWjhI?=
+ =?utf-8?B?TGYwOG0yWEpuR09ZV3JnWDBscmY2UzJHczZTWFVtRUVHV0pwWlZsazhGOC9h?=
+ =?utf-8?B?RC96TllPTTliVXlLRVg5cG1YNGtYK2swZDY0NmFkMmMyZmh2czdvMmV3SEZK?=
+ =?utf-8?B?a2pUYnVJRnB3QWxGZlg5c0pIUllHWXlhcGRGMlVUcFVkZGdjWUNsaHNkZHhn?=
+ =?utf-8?B?djdSd3RXTjU5L2JqVUFmVkp0WTdxTHEvMnloY2szUnM4WG0wVHZaTDFBV3dR?=
+ =?utf-8?B?L0FhbnFKZU8xRC9Wdm9nd1FxL1VSSGx3QkVkaENhWXczNDREYTJHNHNEdGMv?=
+ =?utf-8?B?WVJmRHZNY1krSVNUNm85YWp4dndHSmhwNzZ1UGJBUTI3Wkthd0E3d0Y4V2hT?=
+ =?utf-8?B?K2ZGUHE1TlBqTzl2ODRhSDRRRVZTbm5FcjQ3eUJvMVZuNXd0QWxSYi9lMnd0?=
+ =?utf-8?B?OVdFdVBSVGtscG5KMDU1R1J4MHlJdlh5WlF5NFo4bkM2dXB0L2NjRkVUNWpj?=
+ =?utf-8?B?SVVINTFpMTM4T01IdWtScTJ6UmJBR093cE5BbkpZa1pLVUxsWUtjL0lITjdr?=
+ =?utf-8?B?bHJWdy9BYy9PbXRmZDZzam5IM3p5TVZqdEUxaHBJWGE2eGhxSWp5MnBjSVhD?=
+ =?utf-8?B?Z2Rtb2dIQmFNQnpxQXUvTjk0eTRObVo2U3IyUHZNWFNkaGVtbGVQQUk2NmRo?=
+ =?utf-8?B?WTJOYk53bVNCZEJvSjB6Ym1lNmJKbFhLczFJYTQybUlHcmZzWVFvaU1FZVF0?=
+ =?utf-8?B?WnBGTUJBTExLZXJuSlZraGprUFJWdHFrM1NLbkFUVnl3S0tTRFVzb2tlSGZQ?=
+ =?utf-8?B?T08ycmtLL3YzcVpGUWVhWXMybHpSOVdySnljcmlKTi9UelVxOWUrWnczVTB1?=
+ =?utf-8?B?N2E2S3N0b0NWVGtIOUhkYzFWenFGbHhoZnRpcnF5ZGhqYmZKOUUyTzRJU3VB?=
+ =?utf-8?B?NjFxMDdWM0FUVGpIY3NnRVdxLzdRandqT1R5WWNnUW53K2RXUjM2UEhpR29W?=
+ =?utf-8?B?REltWSsweTZaTjhpL3paT0Y1b1BVYlNLOGt1VkxHOFNhZE1ZaGgyb3pyakNS?=
+ =?utf-8?B?b3VVSHZiWnJ2bjhCdGdQQUhQaTFQNGhMNlAwd2s0Vll3dGw1eXpQOUxLNmUx?=
+ =?utf-8?B?Ylg3d3l1alRFK29BVXVUY01IRE93UnpiSFNNenF5TVVyRkI5M2FNai9CV0FW?=
+ =?utf-8?B?ejNQNGd6Umk5cFZyR3JhMjJnWnJrRUVkQk1IV3B4NGVTampFaEJQM09oQkJU?=
+ =?utf-8?B?MW0xdXVqTjUzWHpnOEhXay9pQkJhcVdHaDJDQzN6ZHo3cmVaeEpxSFJxZnVq?=
+ =?utf-8?B?UjdnK2lQbENpdS9XR1ZkaEQzYVhiOHk3WXZxL2k1S01hb1M3WnhMVzFoWTI5?=
+ =?utf-8?B?ZjZTckxxUDY0N2pkVEFhVFR1S3JrVmtOdFBCY3NSMmZpWjNUQnZGT3YwUUpn?=
+ =?utf-8?B?dXU2NmhVN1hLT0ZiZjFveTZXYXZrVmxTR3pySmlNYjBta3RWRlhQb0xKODVR?=
+ =?utf-8?B?Wnk3UndwNFd5V2lvN3lYcXJXTE5FSjc1cTRCMDQ2OHFGOFRYajJGcW9nYm5O?=
+ =?utf-8?B?U3VhQis1d3lEUnRTNWtZM05ya1k0THh5Z1RUU2EwcjVoYlhZaVRLcXRBcnhB?=
+ =?utf-8?B?VlpBOWFoeWt5ZFRhQWg2OWpDUWJLOGtENmZsS25xQ2hhajVmME0reS9TMEhZ?=
+ =?utf-8?B?L1lwdU51cnlpUzVCRXk3VThHd21mZkhXVENkbVQ4Uk1rZDlPZXdiUWd6WGFk?=
+ =?utf-8?B?Y21sQ3NDTjZTdGJLMmlNNEhLZEJPdi9ReVdpMGdxR0tPZ2ZnMUlNa3g5d2w2?=
+ =?utf-8?B?VkpNVDhaNk5yWU1aOTNteHE2dER4WkFDQW10Q0pjMFIxQitQMXlObVhJWmZy?=
+ =?utf-8?B?OFNOOFdKTGtrdFVMemljTUtMZGttREpKaDhkdkZCTTJXNUV2TlAxUkNFWnRV?=
+ =?utf-8?B?MG9HVG9sUzlOT3RkdER4aktZN3lPZTB2YUhZdFN6NGFSRWhLZ1pBTDU2R1RG?=
+ =?utf-8?B?V2ZoYnFBVEo4Y3NSSjBuZS9VbUFWNEZRQjZqSWdGdEVRUE42WjIwNFpOckNT?=
+ =?utf-8?B?Q2FzNnJnT0ZPYTNCajNzMFM2UEVFMEdYV2ttMDl6ejRoRFQ4bEdyOTBDYVpO?=
+ =?utf-8?B?VVZ4VGM2K01PZDhQSUVoNVFZeWhFNU8ycEc2Vlo5cVJZZDUxZzV2Ui9BRWJ5?=
+ =?utf-8?B?Vy9XZE53R2FqcWtPR3dxQy95aHZEUlpkallQbkdVdjVMQ3VGRFo1dWorSEdG?=
+ =?utf-8?Q?Wqs9LWQyEngD4ylXM7htiEGJirad2arz8KAKWDaLyY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6D0156ADC48BE54EABF8600BA391162B@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220226123755.85213-1-masahiroy@kernel.org> <CA+icZUUm1zpbSyOW3xKUsqo9bBjAehw6KvVBjGxpYy4XBjO4yw@mail.gmail.com>
- <CAK7LNARx40BnsL-8sTV+62URe2cr1K1G7MeKN-MMZ0nPw3NFVQ@mail.gmail.com> <CA+icZUXkd=dtbBX3UKLRzGiVSKC=TeW7ATiRKD9dnYtmm6RZqg@mail.gmail.com>
-In-Reply-To: <CA+icZUXkd=dtbBX3UKLRzGiVSKC=TeW7ATiRKD9dnYtmm6RZqg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 5 Mar 2022 08:18:47 +0100
-Message-ID: <CA+icZUWBO3S4DVqDR=fQ8O07JM+w-3ThgnaBqMPo9YhivtoULA@mail.gmail.com>
-Subject: Re: [PATCH] kconfig: change .config format to use =n instead of "is
- not set"
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44c1ae05-5bfa-4196-2451-08d9fe7b2cd8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Mar 2022 07:38:43.4567
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hn5/WzcQ04BCCacYY7XEA1nLmdfqtUhnQzQQdNvDCK5JYyUHjTxE9uOq0Tvl45RIJnYn2Aef0UxcEpqbtfdbL5Kbr2lZasBIg5OFQTqb/Wk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2256
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 8:54 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Sun, Feb 27, 2022 at 5:24 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Sun, Feb 27, 2022 at 6:38 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Sat, Feb 26, 2022 at 2:34 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > >
-> > > > The .config file uses "# CONFIG_FOO is not set" form to represent
-> > > > disabled options. In the old days, it was useful because the .config
-> > > > was directly included from Makefiles. For example, you can use
-> > > > "ifdef CONFIG_FOO" in Makefiles to check if the option is enabled.
-> > > >
-> > > > Commit c955ccafc38e ("kconfig: fix .config dependencies") introduced
-> > > > include/config/auto.conf, which mirrors the .config, but trims down
-> > > > all disabled options.
-> > > >
-> > > > Since then, include/config/auto.conf defines CONFIG options during the
-> > > > build. The .config is used just for storing the user's configuration.
-> > > > I do not see a strong reason to use a particular pattern of comment
-> > > > for disabled options.
-> > > >
-> > > > With this commit, Kconfig will output disable options in a more natural
-> > > > form, "CONFIG_FOO=n".
-> > > >
-> > > > Kconfig accepts both "# CONFIG_FOO is not set" and "CONFIG_FOO=n" as a
-> > > > valid input. You do not need to update arch/*/configs/*_defconfig files
-> > > > for now. "git bisect" should be able to cross the commit in both ways
-> > > > without any issue.
-> > > >
-> > >
-> > > Good.
-> > >
-> > > Lot of people use/used the notation CONFIG_FOO=n, so did I.
-> > >
-> > > Thanks for keeping the "compatibility" with old usage "# CONFIG_FOO is not set".
-> > >
-> > > Normally, I use git diff (or scripts/diffconfig in Git tree) to
-> > > compare two kernel-configs, so seeing
-> > >
-> > > -CONFIG_FOO=y
-> > > +CONFIG_FOO=n
-> > >
-> > > ...might be at first view unfamiliar/unusual.
-> > > With the old notation it was easier to see that Kconfig is unset.
-> >
-> > I agree on this point.
-> >
-> > "is not set" stands out much better than "=n",
-> > and our eyes are accustomed to this notation for 20 years.
-> >
-> > However, real comments do not stand out since
-> > we already (ab)use comments for disabled options.
-> >
-> > This is related thread
-> > https://patchwork.kernel.org/project/linux-kbuild/patch/20211213100043.45645-3-arielmarcovitch@gmail.com/
-> >
->
-> Thanks for the link.
->
-> > >
-> > > Is this patch on top of kbuild-next Git?
-> > >
-> >
-> > Yes.
->
-> Let me see if I will try kbuild-next with this patch on top of
-> upcoming Linux v5.17-rc6.
->
-
-I was not able to apply your patch on top of latest kbuild-next.git:
-
-$ git log --oneline v5.17-rc6..
-3a8276b1ae7e (HEAD -> for-5.17/kbuild-next-2022022) Merge branch
-'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
-into for-5.17/kbuild-next-2022022
-d4c858643263 kallsyms: ignore all local labels prefixed by '.L'
-a7d4f58e99dd kconfig: fix missing '# end of' for empty menu
-868653f421cd kconfig: add fflush() before ferror() check
-5c8166419acf kbuild: replace $(if A,A,B) with $(or A,B)
-f67695c9962e kbuild: Add environment variables for userprogs flags
-a5575df58004 kbuild: unify cmd_copy and cmd_shipped
-
-$ LC_ALL=C git apply --check --verbose
-../20220226_masahiroy_kconfig_change_config_format_to_use_n_instead_of_is_not_set.mbx
-Checking patch scripts/kconfig/confdata.c...
-error: while searching for:
-       return out;
-}
-
-enum output_n { OUTPUT_N, OUTPUT_N_AS_UNSET, OUTPUT_N_NONE };
-
-static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n output_n,
-                          bool escape_string)
-{
-       const char *val;
-
-error: patch failed: scripts/kconfig/confdata.c:658
-error: scripts/kconfig/confdata.c: patch does not apply
-Checking patch scripts/kconfig/merge_config.sh...
-Checking patch scripts/kconfig/streamline_config.pl...
-Checking patch scripts/kconfig/tests/choice/alldef_expected_config...
-Checking patch scripts/kconfig/tests/choice/allmod_expected_config...
-Checking patch scripts/kconfig/tests/choice/allno_expected_config...
-Checking patch scripts/kconfig/tests/choice/allyes_expected_config...
-Checking patch scripts/kconfig/tests/choice/oldask1_config...
-Checking patch scripts/kconfig/tests/inter_choice/expected_config...
-Checking patch scripts/kconfig/tests/new_choice_with_dep/config...
-Checking patch scripts/kconfig/tests/no_write_if_dep_unmet/__init__.py...
-Checking patch scripts/kconfig/tests/no_write_if_dep_unmet/expected_config...
-
-$ git log --oneline v5.17-rc6.. scripts/kconfig/confdata.c
-a7d4f58e99dd kconfig: fix missing '# end of' for empty menu
-868653f421cd kconfig: add fflush() before ferror() check
-
-- Sedat -
+DQoNCkxlIDA0LzAzLzIwMjIgw6AgMjE6MjQsIEx5dWRlIFBhdWwgYSDDqWNyaXTCoDoNCj4gVGhp
+cyBtb3N0bHkgbG9va3MgZ29vZCB0byBtZS4gSnVzdCBvbmUgcXVlc3Rpb24gKGFuZCBvbmUgY29t
+bWVudCBkb3duIGJlbG93DQo+IHRoYXQgbmVlZHMgYWRkcmVzc2luZykuIElzIHRoaXMgd2l0aCBw
+cGMzMj8gKEkgYXNrIGJlY2F1c2UgcHBjNjRsZSBkb2Vzbid0DQo+IHNlZW0gdG8gaGl0IHRoaXMg
+Y29tcGlsYXRpb24gZXJyb3IpLg0KDQpUaGF0J3Mgd2l0aCBQUEM2NCwgc2VlIA0KaHR0cDovL2tp
+c3NrYi5lbGxlcm1hbi5pZC5hdS9raXNza2IvYnJhbmNoL2NobGVyb3kvaGVhZC8yNTJiYTYwOWJl
+YTgzMjM0ZDJlMzU4NDFjMTlhZTg0YzY3YjQzZWM3Lw0KDQpCdXQgdGhhdCdzIG5vdCAoeWV0KSB3
+aXRoIHRoZSBtYWlubGluZSB0cmVlLiBUaGF0J3Mgd29yayBJJ20gZG9pbmcgdG8gDQpjbGVhbnVw
+IG91ciBhc20vYXNtLXByb3RveXBlcy5oIGhlYWRlci4NCg0KU2luY2UgY29tbWl0IDRlZmNhNGVk
+MDVjYiAoImtidWlsZDogbW9kdmVyc2lvbnMgZm9yIEVYUE9SVF9TWU1CT0woKSBmb3IgDQphc20i
+KSB0aGF0IGZpbGUgaXMgZGVkaWNhdGVkIHRvIHByb3RvdHlwZXMgb2YgZnVuY3Rpb25zIGRlZmlu
+ZWQgaW4gDQphc3NlbWJseS4gVGhlcmVmb3JlIEknbSB0cnlpbmcgdG8gZGlzcGF0Y2ggQyBmdW5j
+dGlvbnMgcHJvdG90eXBlcyBpbiANCm90aGVyIGhlYWRlcnMuIEkgd2FudGVkIHRvIG1vdmUgcHJv
+bV9pbml0KCkgcHJvdG90eXBlIGludG8gYXNtL3Byb20uaCANCmFuZCB0aGVuIEkgaGl0IHRoZSBw
+cm9ibGVtLg0KDQpJbiB0aGUgYmVnaW5uaW5nIEkgd2FzIHRoaW5raW5nIGFib3V0IGp1c3QgY2hh
+bmdpbmcgdGhlIG5hbWUgb2YgdGhlIA0KZnVuY3Rpb24gaW4gcG93ZXJwYywgYnV0IGFzIEkgc2Vl
+IHRoYXQgTTY4SywgTUlQUyBhbmQgU1BBUkMgYWxzbyBoYXZlIGEgDQpwcm9tX2luaXQoKSBmdW5j
+dGlvbiwgSSB0aG91Z2h0IGl0IHdvdWxkIGJlIGJldHRlciB0byBjaGFuZ2UgdGhlIG5hbWUgaW4g
+DQpzaGFkb3dyb20uYyB0byBhdm9pZCBhbnkgZnV0dXJlIGNvbmZsaWN0IGxpa2UgdGhlIG9uZSBJ
+IGdvdCB3aGlsZSANCnJld29ya2luZyB0aGUgaGVhZGVycy4NCg0KDQo+PiBAQCAtNTcsOCArNTcs
+OCBAQCBwcm9tX2luaXQoc3RydWN0IG52a21fYmlvcyAqYmlvcywgY29uc3QgY2hhciAqbmFtZSkN
+Cj4+ICDCoGNvbnN0IHN0cnVjdCBudmJpb3Nfc291cmNlDQo+PiAgwqBudmJpb3Nfcm9tID0gew0K
+Pj4gIMKgwqDCoMKgwqDCoMKgwqAubmFtZSA9ICJQUk9NIiwNCj4+IC3CoMKgwqDCoMKgwqDCoC5p
+bml0ID0gcHJvbV9pbml0LA0KPj4gLcKgwqDCoMKgwqDCoMKgLmZpbmkgPSBwcm9tX2ZpbmksDQo+
+PiAtwqDCoMKgwqDCoMKgwqAucmVhZCA9IHByb21fcmVhZCwNCj4+ICvCoMKgwqDCoMKgwqDCoC5p
+bml0ID0gbnZiaW9zX3JvbV9pbml0LA0KPj4gK8KgwqDCoMKgwqDCoMKgLmZpbmkgPSBudmJpb3Nf
+cm9tX2ZpbmksDQo+PiArwqDCoMKgwqDCoMKgwqAucmVhZCA9IG52Ymlvc19yb21fcmVhZCwNCj4g
+DQo+IFNlZWluZyBhcyB0aGUgc291cmNlIG5hbWUgaXMgcHJvbSwgSSB0aGluayB1c2luZyB0aGUg
+bmFtaW5nIGNvbnZlbnRpb24NCj4gbnZiaW9zX3Byb21fKiB3b3VsZCBiZSBiZXR0ZXIgdGhlbiBu
+dmJpb3Nfcm9tXyouDQo+IA0KDQpZZXMgSSB3YXNuJ3Qgc3VyZSBhYm91dCB0aGUgYmVzdCBuYW1p
+bmcgYXMgdGhlIGZpbGUgbmFtZSBpcyBzaGFkb3dyb20uYyANCmFuZCBub3Qgc2hhZG93cHJvbS5j
+Lg0KDQpJIHdpbGwgc2VuZCB2MiB1c2luZyBudmJpb3NfcHJvbV8qIGFzIGEgbmFtZS4NCg0KQ2hy
+aXN0b3BoZQ==

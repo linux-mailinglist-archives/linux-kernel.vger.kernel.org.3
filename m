@@ -2,166 +2,506 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D856F4CE372
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FE24CE374
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiCEHjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 02:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
+        id S231439AbiCEHlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 02:41:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiCEHjh (ORCPT
+        with ESMTP id S231434AbiCEHlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 02:39:37 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120078.outbound.protection.outlook.com [40.107.12.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F73D443ED
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 23:38:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TzzHfhyGJUeFBpnYloi3FUMZfinX7m927jXwakqyLUWjR7Zjp45aR8keBOVTLYzWi2ufWdAGzmlRC5Zfxxflp+QpTfsw2ZCZViakikXqNrdErZuH0iUxoKTDaX37zmB2z4QFT240eG/tp5XiszjAwV0L702pChu+zRpN1iMXiq7ClBG0Je9/TDZfNOlInzhZrXmFncSWJ/T/s007pZwY2q0cl59HowAeI0vChS0bggv0HfV1BBSRf0mXSSjpYukXfW2GhqJZJukybuMyiKaGxLMfZeKBW1EGgLhTVH71d7zm47rtaUNPz1FnAHeBtgOd+sU44dvjTPjsKCPwRVsYbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BIHoCpE2Q1xWpmwxfGDqxSB6rcUfj7MlACGfZnsFAjY=;
- b=IRdSYMa9j4D9bokex3BF71so5ZZGyiKVNMNpssd57fiBvgeQmA/bqR1McnALx0ybxki6OS5VS1Bl1Gb15FHUzfFppNodhTbe1s1wGUeNOTSLjDdLF4vVrpm8BjUlkd52lmfyyqnB4rtUkLEh+hT91V0H8eAaeJLLXrAe5BMcUX2GEAC9d6NdtL1DNSNguWGsQar8O7Q/tnkh+tEQttpqDzJczoZ0NJeTgyhZH8Ljq4XIwkul2OjCgdYoF4d+iJPz6FeyrtL+Ug2X1xOq/GIjyVdPOOc765P8Ad6Z7fWz8um4E+Bz+XETVnT653T1KlyNMLOAwsDWkBIBVHHUtlMYvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2256.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:15::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Sat, 5 Mar
- 2022 07:38:43 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.019; Sat, 5 Mar 2022
- 07:38:43 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/nouveau/bios: Rename prom_init() and friends
- functions
-Thread-Topic: [PATCH] drm/nouveau/bios: Rename prom_init() and friends
- functions
-Thread-Index: AQHYL+w0cqx8XUQTF0SmnJmJ5+J/4Kyvq+SAgAC8V4A=
-Date:   Sat, 5 Mar 2022 07:38:43 +0000
-Message-ID: <edb9aabd-09af-ae0c-348d-f0500e3405d7@csgroup.eu>
-References: <2d97ae92b9c06214be0e088a72cf303eb591bf01.1646414295.git.christophe.leroy@csgroup.eu>
- <47e09d6010852db928c0de29b89450ea7eee74d8.camel@redhat.com>
-In-Reply-To: <47e09d6010852db928c0de29b89450ea7eee74d8.camel@redhat.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 44c1ae05-5bfa-4196-2451-08d9fe7b2cd8
-x-ms-traffictypediagnostic: MR1P264MB2256:EE_
-x-microsoft-antispam-prvs: <MR1P264MB2256EE08598A8BFC5D6FA730ED069@MR1P264MB2256.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BKQYudpde9+gxmnHkvVFJ6FNOiPvS3ZMfnJeACBOV4/emQbs2DWhfa9zW9qPU4Rn4XQluoThANn4FcERZ6W0pB5NaZGhCX6VKxuJPHUI1v08IIU5w1NJHJvPqY1t6+/lJM43vAaaS331DmHuljADDw+lPQgA15n/NCpRZ9golkhx6MLO55UOtoOv2elWmPv6vrdGr80lrBdYnAjt50EDIwF262vL9BFeP4eHkw/idtAvvgCaiA7aBwcqLYzRYNqELAdRPWlOD1k8kx7sjEbynq/6/82vCCrWznLBGI0Rw5fIJsD41ZmoiNYw1AvefxoV/AI6hvobS38RCtaNZsJn/os6MiM3UslEJrO+4k8Oosk3zWZtiM6O4seTg8bZROAWFSFYGTiQPJrLO7Tj+EEEEbNDc+M0XEdbUEwFDSxcoowobSlSwCJJ3yzYtjEqvGZkdGtwqVyqLUZ5fFbggqxo0Rw1DhFuodsbURz4CMDMZYVvYUFyGdJpky7P0wi+RpKrRv6K2drlO3TYrY+LaJiazj/vD93g2RPSgaESY72g1FBbbC1FzUE+1nzl/gQRMW6NRbI+w7V147dK2nkWOeM6Pg01XQwK2B81wh0yJzhxO1OfViEk/3hpk6YX0b1C4KPffr/bGFsVKkzTQl2WZbwI8NPI4Z/YMP201jX/Eg1BOR8taKEf+Ds0jKCnXd/KiZWnsB4hBuyBzkcXk4xakEQcixMwofp3gVvtYCbukcJcFTQALEZj4vE4uks8KkQ67BiDOrJtufbHA3Y8R6SBX+2UdJO+WmCgbVfGatzCEGNIoUB1zU/eMAcuFjBibyIFv8QuV4VwLb/m8XQPgv6/QGkxP6dihCXB9liF8StBBgYVG2w=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(122000001)(6512007)(6506007)(110136005)(71200400001)(36756003)(26005)(66574015)(186003)(2616005)(8936002)(316002)(66446008)(66476007)(66556008)(86362001)(66946007)(64756008)(76116006)(38100700002)(8676002)(4326008)(5660300002)(44832011)(91956017)(31696002)(38070700005)(54906003)(31686004)(966005)(6486002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Qjhhc296MU51aGdPWFQ3UlNWWDVjcXZMWHdDdklkZUJpT0pONVRsVWZDWjhI?=
- =?utf-8?B?TGYwOG0yWEpuR09ZV3JnWDBscmY2UzJHczZTWFVtRUVHV0pwWlZsazhGOC9h?=
- =?utf-8?B?RC96TllPTTliVXlLRVg5cG1YNGtYK2swZDY0NmFkMmMyZmh2czdvMmV3SEZK?=
- =?utf-8?B?a2pUYnVJRnB3QWxGZlg5c0pIUllHWXlhcGRGMlVUcFVkZGdjWUNsaHNkZHhn?=
- =?utf-8?B?djdSd3RXTjU5L2JqVUFmVkp0WTdxTHEvMnloY2szUnM4WG0wVHZaTDFBV3dR?=
- =?utf-8?B?L0FhbnFKZU8xRC9Wdm9nd1FxL1VSSGx3QkVkaENhWXczNDREYTJHNHNEdGMv?=
- =?utf-8?B?WVJmRHZNY1krSVNUNm85YWp4dndHSmhwNzZ1UGJBUTI3Wkthd0E3d0Y4V2hT?=
- =?utf-8?B?K2ZGUHE1TlBqTzl2ODRhSDRRRVZTbm5FcjQ3eUJvMVZuNXd0QWxSYi9lMnd0?=
- =?utf-8?B?OVdFdVBSVGtscG5KMDU1R1J4MHlJdlh5WlF5NFo4bkM2dXB0L2NjRkVUNWpj?=
- =?utf-8?B?SVVINTFpMTM4T01IdWtScTJ6UmJBR093cE5BbkpZa1pLVUxsWUtjL0lITjdr?=
- =?utf-8?B?bHJWdy9BYy9PbXRmZDZzam5IM3p5TVZqdEUxaHBJWGE2eGhxSWp5MnBjSVhD?=
- =?utf-8?B?Z2Rtb2dIQmFNQnpxQXUvTjk0eTRObVo2U3IyUHZNWFNkaGVtbGVQQUk2NmRo?=
- =?utf-8?B?WTJOYk53bVNCZEJvSjB6Ym1lNmJKbFhLczFJYTQybUlHcmZzWVFvaU1FZVF0?=
- =?utf-8?B?WnBGTUJBTExLZXJuSlZraGprUFJWdHFrM1NLbkFUVnl3S0tTRFVzb2tlSGZQ?=
- =?utf-8?B?T08ycmtLL3YzcVpGUWVhWXMybHpSOVdySnljcmlKTi9UelVxOWUrWnczVTB1?=
- =?utf-8?B?N2E2S3N0b0NWVGtIOUhkYzFWenFGbHhoZnRpcnF5ZGhqYmZKOUUyTzRJU3VB?=
- =?utf-8?B?NjFxMDdWM0FUVGpIY3NnRVdxLzdRandqT1R5WWNnUW53K2RXUjM2UEhpR29W?=
- =?utf-8?B?REltWSsweTZaTjhpL3paT0Y1b1BVYlNLOGt1VkxHOFNhZE1ZaGgyb3pyakNS?=
- =?utf-8?B?b3VVSHZiWnJ2bjhCdGdQQUhQaTFQNGhMNlAwd2s0Vll3dGw1eXpQOUxLNmUx?=
- =?utf-8?B?Ylg3d3l1alRFK29BVXVUY01IRE93UnpiSFNNenF5TVVyRkI5M2FNai9CV0FW?=
- =?utf-8?B?ejNQNGd6Umk5cFZyR3JhMjJnWnJrRUVkQk1IV3B4NGVTampFaEJQM09oQkJU?=
- =?utf-8?B?MW0xdXVqTjUzWHpnOEhXay9pQkJhcVdHaDJDQzN6ZHo3cmVaeEpxSFJxZnVq?=
- =?utf-8?B?UjdnK2lQbENpdS9XR1ZkaEQzYVhiOHk3WXZxL2k1S01hb1M3WnhMVzFoWTI5?=
- =?utf-8?B?ZjZTckxxUDY0N2pkVEFhVFR1S3JrVmtOdFBCY3NSMmZpWjNUQnZGT3YwUUpn?=
- =?utf-8?B?dXU2NmhVN1hLT0ZiZjFveTZXYXZrVmxTR3pySmlNYjBta3RWRlhQb0xKODVR?=
- =?utf-8?B?Wnk3UndwNFd5V2lvN3lYcXJXTE5FSjc1cTRCMDQ2OHFGOFRYajJGcW9nYm5O?=
- =?utf-8?B?U3VhQis1d3lEUnRTNWtZM05ya1k0THh5Z1RUU2EwcjVoYlhZaVRLcXRBcnhB?=
- =?utf-8?B?VlpBOWFoeWt5ZFRhQWg2OWpDUWJLOGtENmZsS25xQ2hhajVmME0reS9TMEhZ?=
- =?utf-8?B?L1lwdU51cnlpUzVCRXk3VThHd21mZkhXVENkbVQ4Uk1rZDlPZXdiUWd6WGFk?=
- =?utf-8?B?Y21sQ3NDTjZTdGJLMmlNNEhLZEJPdi9ReVdpMGdxR0tPZ2ZnMUlNa3g5d2w2?=
- =?utf-8?B?VkpNVDhaNk5yWU1aOTNteHE2dER4WkFDQW10Q0pjMFIxQitQMXlObVhJWmZy?=
- =?utf-8?B?OFNOOFdKTGtrdFVMemljTUtMZGttREpKaDhkdkZCTTJXNUV2TlAxUkNFWnRV?=
- =?utf-8?B?MG9HVG9sUzlOT3RkdER4aktZN3lPZTB2YUhZdFN6NGFSRWhLZ1pBTDU2R1RG?=
- =?utf-8?B?V2ZoYnFBVEo4Y3NSSjBuZS9VbUFWNEZRQjZqSWdGdEVRUE42WjIwNFpOckNT?=
- =?utf-8?B?Q2FzNnJnT0ZPYTNCajNzMFM2UEVFMEdYV2ttMDl6ejRoRFQ4bEdyOTBDYVpO?=
- =?utf-8?B?VVZ4VGM2K01PZDhQSUVoNVFZeWhFNU8ycEc2Vlo5cVJZZDUxZzV2Ui9BRWJ5?=
- =?utf-8?B?Vy9XZE53R2FqcWtPR3dxQy95aHZEUlpkallQbkdVdjVMQ3VGRFo1dWorSEdG?=
- =?utf-8?Q?Wqs9LWQyEngD4ylXM7htiEGJirad2arz8KAKWDaLyY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6D0156ADC48BE54EABF8600BA391162B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44c1ae05-5bfa-4196-2451-08d9fe7b2cd8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Mar 2022 07:38:43.4567
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hn5/WzcQ04BCCacYY7XEA1nLmdfqtUhnQzQQdNvDCK5JYyUHjTxE9uOq0Tvl45RIJnYn2Aef0UxcEpqbtfdbL5Kbr2lZasBIg5OFQTqb/Wk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2256
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 5 Mar 2022 02:41:20 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746D213685F
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 23:40:29 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id s12-20020a17090a13cc00b001bee1e1677fso4575949pjf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 23:40:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=0z4cW7xQIjrEk6UGLRBISAZmjF+6UzoRq23fiadGk7M=;
+        b=KKvIgifkJCkbEu+hUZevxwXiTQUQhzYNgS8hQSlzxwKb+tIXBeCF0sSjyLwroIpM2g
+         GqTwFGZlchnx8650ZBsuFX9rOmLfN/UPuebKFtjnC2bp1uNi1wiNqDaUTfDgMr05lQiR
+         /YT72Z3fxmBOj9CiucF3ccUq3jUrfeW/TmSW8ZTqor7MKFS1lV5+VFADzSZU3gcbHf48
+         AfyNarj70Vr531sBsFuGKED4bS9mC5UsR9kPEX2l5KCvauAkQB9ACnq+w34xFUkG3sR3
+         cvm7yMEkrn9Yv7LXMDEuk11DMyjRK58GTS5FeK2VvwgXC07N5ZyhKLFEIMGKEV2Hm4dR
+         7m9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=0z4cW7xQIjrEk6UGLRBISAZmjF+6UzoRq23fiadGk7M=;
+        b=AOmQ3lDcJAcXKY+J7sGiuNU/gUaBNx43Ai99mBLytzGAJqiRbxxUgRV/dKy6AJe0ng
+         OXHbq0BeQptz5DpfQ3Ao1a1SbKMhIEzGt5tqMhdNyciAOH6iE64e878vDKVjwjilSUSQ
+         KaHUgYSgpmxVSZLzK0xARRGJUhe1wjQ6w7Er1CYpEPI1Qa7MeUb6rhGqTWNiJgXYfUJF
+         D7K+DLqva18pXvZbo3/OTEPwU6EGvubOI1CNfW7ZOUPYb2jssQT4E8cBp7jYMasHle6s
+         ucMiDNYqpl0PO6j3yqx6VrQpbE218D6iD2CNF924j6rWPv7GHZIMRtrl5zCl2CQF+6gu
+         W1vg==
+X-Gm-Message-State: AOAM5311TlK/ZPDk+j7PMB1ZBH/Q9K5AFGUAU82Dr03wArS3sKoAosOS
+        LAxSltSO7JKU9uZFfOAcDsjljHp7KBoiyw==
+X-Google-Smtp-Source: ABdhPJyj0RRhMNhQYVGwLC7Bq2b+jp5t9Fr/iu2aB3MdHs47HYoUvQlbqwvptW3Z+UMl1ybrSy2Kew0c0pv40Q==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90a:b307:b0:1bd:37f3:f0fc with SMTP
+ id d7-20020a17090ab30700b001bd37f3f0fcmr14615177pjr.132.1646466028769; Fri,
+ 04 Mar 2022 23:40:28 -0800 (PST)
+Date:   Sat,  5 Mar 2022 15:40:20 +0800
+Message-Id: <20220305074020.751309-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH] list: test: Test the hlist structure
+From:   David Gow <davidgow@google.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA0LzAzLzIwMjIgw6AgMjE6MjQsIEx5dWRlIFBhdWwgYSDDqWNyaXTCoDoNCj4gVGhp
-cyBtb3N0bHkgbG9va3MgZ29vZCB0byBtZS4gSnVzdCBvbmUgcXVlc3Rpb24gKGFuZCBvbmUgY29t
-bWVudCBkb3duIGJlbG93DQo+IHRoYXQgbmVlZHMgYWRkcmVzc2luZykuIElzIHRoaXMgd2l0aCBw
-cGMzMj8gKEkgYXNrIGJlY2F1c2UgcHBjNjRsZSBkb2Vzbid0DQo+IHNlZW0gdG8gaGl0IHRoaXMg
-Y29tcGlsYXRpb24gZXJyb3IpLg0KDQpUaGF0J3Mgd2l0aCBQUEM2NCwgc2VlIA0KaHR0cDovL2tp
-c3NrYi5lbGxlcm1hbi5pZC5hdS9raXNza2IvYnJhbmNoL2NobGVyb3kvaGVhZC8yNTJiYTYwOWJl
-YTgzMjM0ZDJlMzU4NDFjMTlhZTg0YzY3YjQzZWM3Lw0KDQpCdXQgdGhhdCdzIG5vdCAoeWV0KSB3
-aXRoIHRoZSBtYWlubGluZSB0cmVlLiBUaGF0J3Mgd29yayBJJ20gZG9pbmcgdG8gDQpjbGVhbnVw
-IG91ciBhc20vYXNtLXByb3RveXBlcy5oIGhlYWRlci4NCg0KU2luY2UgY29tbWl0IDRlZmNhNGVk
-MDVjYiAoImtidWlsZDogbW9kdmVyc2lvbnMgZm9yIEVYUE9SVF9TWU1CT0woKSBmb3IgDQphc20i
-KSB0aGF0IGZpbGUgaXMgZGVkaWNhdGVkIHRvIHByb3RvdHlwZXMgb2YgZnVuY3Rpb25zIGRlZmlu
-ZWQgaW4gDQphc3NlbWJseS4gVGhlcmVmb3JlIEknbSB0cnlpbmcgdG8gZGlzcGF0Y2ggQyBmdW5j
-dGlvbnMgcHJvdG90eXBlcyBpbiANCm90aGVyIGhlYWRlcnMuIEkgd2FudGVkIHRvIG1vdmUgcHJv
-bV9pbml0KCkgcHJvdG90eXBlIGludG8gYXNtL3Byb20uaCANCmFuZCB0aGVuIEkgaGl0IHRoZSBw
-cm9ibGVtLg0KDQpJbiB0aGUgYmVnaW5uaW5nIEkgd2FzIHRoaW5raW5nIGFib3V0IGp1c3QgY2hh
-bmdpbmcgdGhlIG5hbWUgb2YgdGhlIA0KZnVuY3Rpb24gaW4gcG93ZXJwYywgYnV0IGFzIEkgc2Vl
-IHRoYXQgTTY4SywgTUlQUyBhbmQgU1BBUkMgYWxzbyBoYXZlIGEgDQpwcm9tX2luaXQoKSBmdW5j
-dGlvbiwgSSB0aG91Z2h0IGl0IHdvdWxkIGJlIGJldHRlciB0byBjaGFuZ2UgdGhlIG5hbWUgaW4g
-DQpzaGFkb3dyb20uYyB0byBhdm9pZCBhbnkgZnV0dXJlIGNvbmZsaWN0IGxpa2UgdGhlIG9uZSBJ
-IGdvdCB3aGlsZSANCnJld29ya2luZyB0aGUgaGVhZGVycy4NCg0KDQo+PiBAQCAtNTcsOCArNTcs
-OCBAQCBwcm9tX2luaXQoc3RydWN0IG52a21fYmlvcyAqYmlvcywgY29uc3QgY2hhciAqbmFtZSkN
-Cj4+ICDCoGNvbnN0IHN0cnVjdCBudmJpb3Nfc291cmNlDQo+PiAgwqBudmJpb3Nfcm9tID0gew0K
-Pj4gIMKgwqDCoMKgwqDCoMKgwqAubmFtZSA9ICJQUk9NIiwNCj4+IC3CoMKgwqDCoMKgwqDCoC5p
-bml0ID0gcHJvbV9pbml0LA0KPj4gLcKgwqDCoMKgwqDCoMKgLmZpbmkgPSBwcm9tX2ZpbmksDQo+
-PiAtwqDCoMKgwqDCoMKgwqAucmVhZCA9IHByb21fcmVhZCwNCj4+ICvCoMKgwqDCoMKgwqDCoC5p
-bml0ID0gbnZiaW9zX3JvbV9pbml0LA0KPj4gK8KgwqDCoMKgwqDCoMKgLmZpbmkgPSBudmJpb3Nf
-cm9tX2ZpbmksDQo+PiArwqDCoMKgwqDCoMKgwqAucmVhZCA9IG52Ymlvc19yb21fcmVhZCwNCj4g
-DQo+IFNlZWluZyBhcyB0aGUgc291cmNlIG5hbWUgaXMgcHJvbSwgSSB0aGluayB1c2luZyB0aGUg
-bmFtaW5nIGNvbnZlbnRpb24NCj4gbnZiaW9zX3Byb21fKiB3b3VsZCBiZSBiZXR0ZXIgdGhlbiBu
-dmJpb3Nfcm9tXyouDQo+IA0KDQpZZXMgSSB3YXNuJ3Qgc3VyZSBhYm91dCB0aGUgYmVzdCBuYW1p
-bmcgYXMgdGhlIGZpbGUgbmFtZSBpcyBzaGFkb3dyb20uYyANCmFuZCBub3Qgc2hhZG93cHJvbS5j
-Lg0KDQpJIHdpbGwgc2VuZCB2MiB1c2luZyBudmJpb3NfcHJvbV8qIGFzIGEgbmFtZS4NCg0KQ2hy
-aXN0b3BoZQ==
+Add KUnit tests to the hlist linked-list structure which is used by
+hashtables. This should give coverage of every function and macro in
+list.h, as well as (combined with the KUnit tests for the hash
+functions) get very close to having tests for the hashtable structure.
+
+The tests here mirror the existing list tests, and are found in a new
+suite titled 'hlist'.
+
+Signed-off-by: David Gow <davidgow@google.com>
+---
+
+Note that this patch has five checkpatch failures, all of which are
+false positives due to the test functions being confused with uses of
+the hlist_for_each* macros they're testing.
+
+For example:
+ERROR: that open brace { should be on the previous line
+#274: FILE: lib/list-test.c:1046:
++static void hlist_test_for_each_safe(struct kunit *test)
++{
+
+The same thing occurred with the list_ variants, and since this is a
+one-off issue, it doesn't seem worth fixing in checkpatch.
+
+ lib/list-test.c | 397 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 396 insertions(+), 1 deletion(-)
+
+diff --git a/lib/list-test.c b/lib/list-test.c
+index 035ef6597640..d374cf5d1a57 100644
+--- a/lib/list-test.c
++++ b/lib/list-test.c
+@@ -804,6 +804,401 @@ static struct kunit_suite list_test_module = {
+ 	.test_cases = list_test_cases,
+ };
+ 
+-kunit_test_suites(&list_test_module);
++struct hlist_test_struct {
++	int data;
++	struct hlist_node list;
++};
++
++static void hlist_test_init(struct kunit *test)
++{
++	/* Test the different ways of initialising a list. */
++	struct hlist_head list1 = HLIST_HEAD_INIT;
++	struct hlist_head list2;
++	HLIST_HEAD(list3);
++	struct hlist_head *list4;
++	struct hlist_head *list5;
++
++	INIT_HLIST_HEAD(&list2);
++
++	list4 = kzalloc(sizeof(*list4), GFP_KERNEL | __GFP_NOFAIL);
++	INIT_HLIST_HEAD(list4);
++
++	list5 = kmalloc(sizeof(*list5), GFP_KERNEL | __GFP_NOFAIL);
++	memset(list5, 0xFF, sizeof(*list5));
++	INIT_HLIST_HEAD(list5);
++
++	KUNIT_EXPECT_TRUE(test, hlist_empty(&list1));
++	KUNIT_EXPECT_TRUE(test, hlist_empty(&list2));
++	KUNIT_EXPECT_TRUE(test, hlist_empty(&list3));
++	KUNIT_EXPECT_TRUE(test, hlist_empty(list4));
++	KUNIT_EXPECT_TRUE(test, hlist_empty(list5));
++
++	kfree(list4);
++	kfree(list5);
++}
++
++static void hlist_test_unhashed(struct kunit *test)
++{
++	struct hlist_node a;
++	HLIST_HEAD(list);
++
++	INIT_HLIST_NODE(&a);
++
++	/* is unhashed by default */
++	KUNIT_EXPECT_TRUE(test, hlist_unhashed(&a));
++
++	hlist_add_head(&a, &list);
++
++	/* is hashed once added to list */
++	KUNIT_EXPECT_FALSE(test, hlist_unhashed(&a));
++
++	hlist_del_init(&a);
++
++	/* is again unhashed after del_init */
++	KUNIT_EXPECT_TRUE(test, hlist_unhashed(&a));
++}
++
++/* Doesn't test concurrency guarantees */
++static void hlist_test_unhashed_lockless(struct kunit *test)
++{
++	struct hlist_node a;
++	HLIST_HEAD(list);
++
++	INIT_HLIST_NODE(&a);
++
++	/* is unhashed by default */
++	KUNIT_EXPECT_TRUE(test, hlist_unhashed_lockless(&a));
++
++	hlist_add_head(&a, &list);
++
++	/* is hashed once added to list */
++	KUNIT_EXPECT_FALSE(test, hlist_unhashed_lockless(&a));
++
++	hlist_del_init(&a);
++
++	/* is again unhashed after del_init */
++	KUNIT_EXPECT_TRUE(test, hlist_unhashed_lockless(&a));
++}
++
++static void hlist_test_del(struct kunit *test)
++{
++	struct hlist_node a, b;
++	HLIST_HEAD(list);
++
++	hlist_add_head(&a, &list);
++	hlist_add_behind(&b, &a);
++
++	/* before: [list] -> a -> b */
++	hlist_del(&a);
++
++	/* now: [list] -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.first, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.pprev, &list.first);
++}
++
++static void hlist_test_del_init(struct kunit *test)
++{
++	struct hlist_node a, b;
++	HLIST_HEAD(list);
++
++	hlist_add_head(&a, &list);
++	hlist_add_behind(&b, &a);
++
++	/* before: [list] -> a -> b */
++	hlist_del_init(&a);
++
++	/* now: [list] -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.first, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.pprev, &list.first);
++
++	/* a is now initialised */
++	KUNIT_EXPECT_PTR_EQ(test, a.next, NULL);
++	KUNIT_EXPECT_PTR_EQ(test, a.pprev, NULL);
++}
++
++/* Tests all three hlist_add_* functions */
++static void hlist_test_add(struct kunit *test)
++{
++	struct hlist_node a, b, c, d;
++	HLIST_HEAD(list);
++
++	hlist_add_head(&a, &list);
++	hlist_add_head(&b, &list);
++	hlist_add_before(&c, &a);
++	hlist_add_behind(&d, &a);
++
++	/* should be [list] -> b -> c -> a -> d */
++	KUNIT_EXPECT_PTR_EQ(test, list.first, &b);
++
++	KUNIT_EXPECT_PTR_EQ(test, c.pprev, &(b.next));
++	KUNIT_EXPECT_PTR_EQ(test, b.next, &c);
++
++	KUNIT_EXPECT_PTR_EQ(test, a.pprev, &(c.next));
++	KUNIT_EXPECT_PTR_EQ(test, c.next, &a);
++
++	KUNIT_EXPECT_PTR_EQ(test, d.pprev, &(a.next));
++	KUNIT_EXPECT_PTR_EQ(test, a.next, &d);
++}
++
++/* Tests both hlist_fake() and hlist_add_fake() */
++static void hlist_test_fake(struct kunit *test)
++{
++	struct hlist_node a;
++
++	INIT_HLIST_NODE(&a);
++
++	/* not fake after init */
++	KUNIT_EXPECT_FALSE(test, hlist_fake(&a));
++
++	hlist_add_fake(&a);
++
++	/* is now fake */
++	KUNIT_EXPECT_TRUE(test, hlist_fake(&a));
++}
++
++static void hlist_test_is_singular_node(struct kunit *test)
++{
++	struct hlist_node a, b;
++	HLIST_HEAD(list);
++
++	INIT_HLIST_NODE(&a);
++	KUNIT_EXPECT_FALSE(test, hlist_is_singular_node(&a, &list));
++
++	hlist_add_head(&a, &list);
++	KUNIT_EXPECT_TRUE(test, hlist_is_singular_node(&a, &list));
++
++	hlist_add_head(&b, &list);
++	KUNIT_EXPECT_FALSE(test, hlist_is_singular_node(&a, &list));
++	KUNIT_EXPECT_FALSE(test, hlist_is_singular_node(&b, &list));
++}
++
++static void hlist_test_empty(struct kunit *test)
++{
++	struct hlist_node a;
++	HLIST_HEAD(list);
++
++	/* list starts off empty */
++	KUNIT_EXPECT_TRUE(test, hlist_empty(&list));
++
++	hlist_add_head(&a, &list);
++
++	/* list is no longer empty */
++	KUNIT_EXPECT_FALSE(test, hlist_empty(&list));
++}
++
++static void hlist_test_move_list(struct kunit *test)
++{
++	struct hlist_node a;
++	HLIST_HEAD(list1);
++	HLIST_HEAD(list2);
++
++	hlist_add_head(&a, &list1);
++
++	KUNIT_EXPECT_FALSE(test, hlist_empty(&list1));
++	KUNIT_EXPECT_TRUE(test, hlist_empty(&list2));
++	hlist_move_list(&list1, &list2);
++	KUNIT_EXPECT_TRUE(test, hlist_empty(&list1));
++	KUNIT_EXPECT_FALSE(test, hlist_empty(&list2));
++
++}
++
++static void hlist_test_entry(struct kunit *test)
++{
++	struct hlist_test_struct test_struct;
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct,
++			    hlist_entry(&(test_struct.list),
++				struct hlist_test_struct, list));
++}
++
++static void hlist_test_entry_safe(struct kunit *test)
++{
++	struct hlist_test_struct test_struct;
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct,
++			    hlist_entry_safe(&(test_struct.list),
++				struct hlist_test_struct, list));
++
++	KUNIT_EXPECT_PTR_EQ(test, NULL,
++			    hlist_entry_safe((struct hlist_node *)NULL,
++				struct hlist_test_struct, list));
++}
++
++static void hlist_test_for_each(struct kunit *test)
++{
++	struct hlist_node entries[3], *cur;
++	HLIST_HEAD(list);
++	int i = 0;
++
++	hlist_add_head(&entries[0], &list);
++	hlist_add_behind(&entries[1], &entries[0]);
++	hlist_add_behind(&entries[2], &entries[1]);
++
++	hlist_for_each(cur, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 3);
++}
++
++
++static void hlist_test_for_each_safe(struct kunit *test)
++{
++	struct hlist_node entries[3], *cur, *n;
++	HLIST_HEAD(list);
++	int i = 0;
++
++	hlist_add_head(&entries[0], &list);
++	hlist_add_behind(&entries[1], &entries[0]);
++	hlist_add_behind(&entries[2], &entries[1]);
++
++	hlist_for_each_safe(cur, n, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		hlist_del(&entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 3);
++	KUNIT_EXPECT_TRUE(test, hlist_empty(&list));
++}
++
++static void hlist_test_for_each_entry(struct kunit *test)
++{
++	struct hlist_test_struct entries[5], *cur;
++	HLIST_HEAD(list);
++	int i = 0;
++
++	entries[0].data = 0;
++	hlist_add_head(&entries[0].list, &list);
++	for (i = 1; i < 5; ++i) {
++		entries[i].data = i;
++		hlist_add_behind(&entries[i].list, &entries[i-1].list);
++	}
++
++	i = 0;
++
++	hlist_for_each_entry(cur, &list, list) {
++		KUNIT_EXPECT_EQ(test, cur->data, i);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++}
++
++static void hlist_test_for_each_entry_continue(struct kunit *test)
++{
++	struct hlist_test_struct entries[5], *cur;
++	HLIST_HEAD(list);
++	int i = 0;
++
++	entries[0].data = 0;
++	hlist_add_head(&entries[0].list, &list);
++	for (i = 1; i < 5; ++i) {
++		entries[i].data = i;
++		hlist_add_behind(&entries[i].list, &entries[i-1].list);
++	}
++
++	/* We skip the first (zero-th) entry. */
++	i = 1;
++
++	cur = &entries[0];
++	hlist_for_each_entry_continue(cur, list) {
++		KUNIT_EXPECT_EQ(test, cur->data, i);
++		/* Stamp over the entry. */
++		cur->data = 42;
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++	/* The first entry was not visited. */
++	KUNIT_EXPECT_EQ(test, entries[0].data, 0);
++	/* The second (and presumably others), were. */
++	KUNIT_EXPECT_EQ(test, entries[1].data, 42);
++}
++
++static void hlist_test_for_each_entry_from(struct kunit *test)
++{
++	struct hlist_test_struct entries[5], *cur;
++	HLIST_HEAD(list);
++	int i = 0;
++
++	entries[0].data = 0;
++	hlist_add_head(&entries[0].list, &list);
++	for (i = 1; i < 5; ++i) {
++		entries[i].data = i;
++		hlist_add_behind(&entries[i].list, &entries[i-1].list);
++	}
++
++	i = 0;
++
++	cur = &entries[0];
++	hlist_for_each_entry_from(cur, list) {
++		KUNIT_EXPECT_EQ(test, cur->data, i);
++		/* Stamp over the entry. */
++		cur->data = 42;
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++	/* The first entry was visited. */
++	KUNIT_EXPECT_EQ(test, entries[0].data, 42);
++}
++
++static void hlist_test_for_each_entry_safe(struct kunit *test)
++{
++	struct hlist_test_struct entries[5], *cur;
++	struct hlist_node *tmp_node;
++	HLIST_HEAD(list);
++	int i = 0;
++
++	entries[0].data = 0;
++	hlist_add_head(&entries[0].list, &list);
++	for (i = 1; i < 5; ++i) {
++		entries[i].data = i;
++		hlist_add_behind(&entries[i].list, &entries[i-1].list);
++	}
++
++	i = 0;
++
++	hlist_for_each_entry_safe(cur, tmp_node, &list, list) {
++		KUNIT_EXPECT_EQ(test, cur->data, i);
++		hlist_del(&cur->list);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++	KUNIT_EXPECT_TRUE(test, hlist_empty(&list));
++}
++
++
++static struct kunit_case hlist_test_cases[] = {
++	KUNIT_CASE(hlist_test_init),
++	KUNIT_CASE(hlist_test_unhashed),
++	KUNIT_CASE(hlist_test_unhashed_lockless),
++	KUNIT_CASE(hlist_test_del),
++	KUNIT_CASE(hlist_test_del_init),
++	KUNIT_CASE(hlist_test_add),
++	KUNIT_CASE(hlist_test_fake),
++	KUNIT_CASE(hlist_test_is_singular_node),
++	KUNIT_CASE(hlist_test_empty),
++	KUNIT_CASE(hlist_test_move_list),
++	KUNIT_CASE(hlist_test_entry),
++	KUNIT_CASE(hlist_test_entry_safe),
++	KUNIT_CASE(hlist_test_for_each),
++	KUNIT_CASE(hlist_test_for_each_safe),
++	KUNIT_CASE(hlist_test_for_each_entry),
++	KUNIT_CASE(hlist_test_for_each_entry_continue),
++	KUNIT_CASE(hlist_test_for_each_entry_from),
++	KUNIT_CASE(hlist_test_for_each_entry_safe),
++	{},
++};
++
++static struct kunit_suite hlist_test_module = {
++	.name = "hlist",
++	.test_cases = hlist_test_cases,
++};
++
++kunit_test_suites(&list_test_module, &hlist_test_module);
+ 
+ MODULE_LICENSE("GPL v2");
+-- 
+2.35.1.616.g0bdcbb4464-goog
+

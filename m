@@ -2,140 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED984CE567
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423484CE56B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 16:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbiCEO50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 09:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
+        id S231931AbiCEPGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 10:06:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiCEO5Z (ORCPT
+        with ESMTP id S229656AbiCEPGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 09:57:25 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31C9396AE;
-        Sat,  5 Mar 2022 06:56:35 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 60E481F38E;
-        Sat,  5 Mar 2022 14:56:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646492194; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jp5Wvbe6b7Bf06yAjd7FM+rHWIKWVoVK1y8+Zp4O8dw=;
-        b=XmvePgKUuL9Ym+RXKAAweGwNfLsajH4+93iGDbWjnheMuQqOS0Xoas9jAZJDm0GoSdHtnR
-        vdAV1tw0IsDHny0zTWCgOJKYjKhcvNtnvF9uylglGvr2XG1hD4xLw03mbWt/DGge3GCbgk
-        xrosyxSahLs+9AkGMBZp2L7Wt/ccIKo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646492194;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jp5Wvbe6b7Bf06yAjd7FM+rHWIKWVoVK1y8+Zp4O8dw=;
-        b=4WmqA8beWlH1y1PFB7pNfSB3ps2EiCmHnL22xKoaLmOISE3KSHkZ3j7baUZfWhEkGjHoIF
-        HT7jtf7CZH6/y0DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE0F613519;
-        Sat,  5 Mar 2022 14:56:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8abJNiF6I2KMYAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Sat, 05 Mar 2022 14:56:33 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 4730fb07;
-        Sat, 5 Mar 2022 14:56:49 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] ceph: minor fixes and encrypted snapshot names
-References: <20220304161403.19295-1-lhenriques@suse.de>
-        <87fsnx4rb3.fsf@brahms.olymp>
-        <e7f91d0be0f41320e5a4f38ded1bde166626a17f.camel@kernel.org>
-Date:   Sat, 05 Mar 2022 14:56:49 +0000
-In-Reply-To: <e7f91d0be0f41320e5a4f38ded1bde166626a17f.camel@kernel.org> (Jeff
-        Layton's message of "Fri, 04 Mar 2022 13:30:50 -0500")
-Message-ID: <878rtoo3bi.fsf@brahms.olymp>
+        Sat, 5 Mar 2022 10:06:15 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896821C65EE
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 07:05:25 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id o22so166549qta.8
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 07:05:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=geC5xDAay5dBwn3cRxysbEgCyiuAzwcwhdO/zo7/1yQ=;
+        b=tixvP1FGnq2wfskq9ETIT5h8JQ7JPBjYQlaZiVU5QEF2ebRlSOd9Hj4GHFYYxuldWh
+         AEzNtAg/yji+2YKFPr0a17Al0EC/FApvTFNyo+sILOPE6zyZMSw0ZdguDzVRFqh+N+G9
+         axgAo/svRSLgSVS0G7iScy/imA1XKMIHb1NgI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=geC5xDAay5dBwn3cRxysbEgCyiuAzwcwhdO/zo7/1yQ=;
+        b=4O0AMVAyyiIPmTq3f/U0TpoEBxhXyZUiHsEg5KPddADtUGYHvc0Q71+nigfu9BEtsX
+         iLMRPYg2IUNFPBDfyiFxtCHNgcawAZkl97leYSWHJywvpcqA9lg6304bun8b+1kJ69Xd
+         vqumsC3WKZ7apjlsEXU36Pd3ScnbcpVz+Seczl7g86JKYYwgYM2i2mqirE2EzwAMetEk
+         ljQz4rxYfNCe5E7iTehAVK94YVdveY35lysNQI1GYw6ItWPOLYZZps9d6DKYRcuU9RAs
+         bJscu/xIWPocXVTH8GIAR1L6YI4BIPDMsmg9h3DDZqMUlrB04M5oJdZ5UTindCslNjFN
+         82rg==
+X-Gm-Message-State: AOAM532x50oSSCTAW0TEUfrHjEtNwzMXgLuOxgFUffeJGYm1cnWbWJes
+        g0nQtjfiSK7PU+0paGkR8ksF8g==
+X-Google-Smtp-Source: ABdhPJzC6+sWbvHtOZiDBxeMwB424Rg3yPbjjQ/pVZIkOOUQmsA5JEXntpUeTe+z/0BHUPh5FnkxHA==
+X-Received: by 2002:a05:622a:3ca:b0:2df:1cae:397b with SMTP id k10-20020a05622a03ca00b002df1cae397bmr3200121qtx.556.1646492724622;
+        Sat, 05 Mar 2022 07:05:24 -0800 (PST)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id t128-20020a37aa86000000b0060ddf2dc3ecsm3859545qke.104.2022.03.05.07.05.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Mar 2022 07:05:24 -0800 (PST)
+Date:   Sat, 5 Mar 2022 15:05:23 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, torvalds@linux-foundation.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com, paulmck@kernel.org
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <YiN8M4FwAeW/UAoN@google.com>
+References: <YiAow5gi21zwUT54@mit.edu>
+ <1646285013-3934-1-git-send-email-byungchul.park@lge.com>
+ <YiDSabde88HJ/aTt@mit.edu>
+ <20220304004237.GB6112@X58A-UD3R>
+ <YiLYX0sqmtkTEM5U@mit.edu>
+ <20220305141538.GA31268@X58A-UD3R>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220305141538.GA31268@X58A-UD3R>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> writes:
+On Sat, Mar 05, 2022 at 11:15:38PM +0900, Byungchul Park wrote:
+> On Fri, Mar 04, 2022 at 10:26:23PM -0500, Theodore Ts'o wrote:
+> > On Fri, Mar 04, 2022 at 09:42:37AM +0900, Byungchul Park wrote:
+> > > 
+> > > All contexts waiting for any of the events in the circular dependency
+> > > chain will be definitely stuck if there is a circular dependency as I
+> > > explained. So we need another wakeup source to break the circle. In
+> > > ext4 code, you might have the wakeup source for breaking the circle.
+> > > 
+> > > What I agreed with is:
+> > > 
+> > >    The case that 1) the circular dependency is unevitable 2) there are
+> > >    another wakeup source for breadking the circle and 3) the duration
+> > >    in sleep is short enough, should be acceptable.
+> > > 
+> > > Sounds good?
+> > 
+> > These dependencies are part of every single ext4 metadata update,
+> > and if there were any unnecessary sleeps, this would be a major
+> > performance gap, and this is a very well studied part of ext4.
+> > 
+> > There are some places where we sleep, sure.  In some case
+> > start_this_handle() needs to wait for a commit to complete, and the
+> > commit thread might need to sleep for I/O to complete.  But the moment
+> > the thing that we're waiting for is complete, we wake up all of the
+> > processes on the wait queue.  But in the case where we wait for I/O
+> > complete, that wakeupis coming from the device driver, when it
+> > receives the the I/O completion interrupt from the hard drive.  Is
+> > that considered an "external source"?  Maybe DEPT doesn't recognize
+> > that this is certain to happen just as day follows the night?  (Well,
+> > maybe the I/O completion interrupt might not happen if the disk drive
+> > bursts into flames --- but then, you've got bigger problems. :-)
+> 
+> Almost all you've been blaming at Dept are totally non-sense. Based on
+> what you're saying, I'm conviced that you don't understand how Dept
+> works even 1%. You don't even try to understand it before blame.
+> 
+> You don't have to understand and support it. But I can't response to you
+> if you keep saying silly things that way.
 
-> On Fri, 2022-03-04 at 16:26 +0000, Lu=C3=ADs Henriques wrote:
->> Lu=C3=ADs Henriques <lhenriques@suse.de> writes:
->>=20
->> > Hi!
->> >=20
->> > I'm sending another iteration of the encrypted snapshot names patch.  =
-This
->> > patch assumes PR#45224 [1] to be merged as it adds support for the
->> > alternate names.
->> >=20
->> > Two notes:
->> >=20
->> > 1. Patch 0001 is just a small fix from another fscrypt patch.  It's
->> >    probably better to simply squash it.
->> >=20
->> > 2. I'm not sure how easy it is to hit the UAF fixed by patch 0002.  I =
-can
->> >    reproduce it easily by commenting the code that adds the
->> >    DCACHE_NOKEY_NAME flag in patch 0003.
->>=20
->> Obviously, immediately after sending this patchset I realized I failed to
->> mention a very (*VERY*) important note:
->>=20
->> Snapshot names can not start with a '_'.  I think the reason is related
->> with the 'long snapshot names', but I can't really remember the details
->> anymore.  The point is that an encrypted snapshot name base64-encoded
->> *may* end-up starting with an '_' as we're using the base64-url variant.
->>=20
->> I really don't know if it's possible to fix that.  I guess that in that
->> case the user will get an error and fail to create the snapshot but he'll
->> be clueless because the reason.  Probably a warning can be added to the
->> kernel logs, but maybe there are other ideas.
->>=20
->
->
-> Ouch. Is that imposed by the MDS? It'd be best if we could remove that
-> limitation from it altogether if we can.
+Byungchul, other than ext4 have there been any DEPT reports that other
+subsystem maintainers' agree were valid usecases?
 
-I do remember hitting this limitation in the past, but a quick grep didn't
-show anything in the documentation about it.  This seems to have been
-added to the MDS a *long* time ago, with commit 068553473c82 ("mds: adjust
-trace encoding, clean up snap naming") but (as usual) there aren't a lot
-of details.
+Regarding false-positives, just to note lockdep is not without its share of
+false-positives. Just that (as you know), the signal-to-noise ratio should be
+high for it to be useful. I've put up with lockdep's false positives just
+because it occasionally saves me from catastrophe.
 
->
-> If we can't, then we might be able to get away with prepending all the
-> encrypted names with some legal characte. Then when we go to decrypt it
-> we just strip that off.
+> > In any case, if DEPT is going to report these "circular dependencies
+> > as bugs that MUST be fixed", it's going to be pure noise and I will
+> > ignore all DEPT reports, and will push back on having Lockdep replaced
+> 
+> Dept is going to be improved so that what you are concerning about won't
+> be reported.
 
-This is probably the best way to fix it, but it's worth trying to find
-out the origins of this limitation.  I do seem to remember some obscure
-reasons, related with the long snap names (for which Xiubo has a patch),
-which will start with '_'.  But yeah I'll have to go dig deeper.
+Yeah I am looking forward to learning more about it however I was wondering
+about the following: lockdep can already be used for modeling "resource
+acquire/release" and "resource wait" semantics that are unrelated to locks,
+like we do in mm reclaim. I am wondering why we cannot just use those existing
+lockdep mechanisms for the wait/wake usecases (Assuming that we can agree
+that circular dependencies on related to wait/wake is a bad thing. Or perhaps
+there's a reason why Peter Zijlstra did not use lockdep for wait/wake
+dependencies (such as multiple wake sources) considering he wrote a lot of
+that code.
 
-> We could also consider changing the base64 routine to use something else
-> in lieu of '_' but that's more of a hassle.
+Keep kicking ass brother, you're doing great.
 
-Cheers,
---=20
-Lu=C3=ADs
+Thanks,
+
+     Joel
+

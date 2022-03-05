@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546CE4CE65C
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 19:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC194CE662
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 19:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbiCESKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 13:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S232164AbiCESOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 13:14:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiCESJ6 (ORCPT
+        with ESMTP id S229806AbiCESOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 13:09:58 -0500
+        Sat, 5 Mar 2022 13:14:50 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ECEA3DDF1
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 10:09:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A03F16D3B7
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 10:13:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646503747;
+        s=mimecast20190719; t=1646504038;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=Gi/sdentGCwJJGJ5wrqkGxtQ+g48o6zHIXuxsk4d4Og=;
-        b=Ej+74qS6Blxr1HPxx7es8uxjv+lpCZ6aUZHW5Ek+uXxhicG3SFr7XL+JvSLaveqkqvPj+I
-        af+lGr16CUJ8tGTjRhxmBSW+S7FnkO+JrVBf01mpEXE6rkAjzLhgZY6dPycMa1skfaERsv
-        8ELzG6ljFs2ik5/bNDKYiahWedzccGI=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TQ/PmDy/wAuYSRhPMWBzjgjzADBCIpXP0+QPOpZXWOA=;
+        b=eVjd5BSAJH9jYsSmtF05zs+ORjkg1vq6jSrLqK60ml/tUERZS1ZXWk0B7fbbgXwzx7xcKG
+        qpS3wLk0ADZu/5kSv8+Pw2DoU2SP0wG5WPKbB9TW18G94lGW6ZXuaB8hbXOmrEdjjDWqLT
+        ATjV8qesdDIscb46ufESL4croK9jzrs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-296-OJycTZS5MUCG-PQudT0kjA-1; Sat, 05 Mar 2022 13:09:06 -0500
-X-MC-Unique: OJycTZS5MUCG-PQudT0kjA-1
-Received: by mail-qv1-f69.google.com with SMTP id fw9-20020a056214238900b0043522aa5b81so9066964qvb.21
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 10:09:06 -0800 (PST)
+ us-mta-580-KvaqVP3fPHmw5T3-Uyfvww-1; Sat, 05 Mar 2022 13:13:57 -0500
+X-MC-Unique: KvaqVP3fPHmw5T3-Uyfvww-1
+Received: by mail-qk1-f199.google.com with SMTP id 134-20020a37088c000000b0067af418b2f1so1250085qki.16
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 10:13:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Gi/sdentGCwJJGJ5wrqkGxtQ+g48o6zHIXuxsk4d4Og=;
-        b=2pLxe9qPsEkz113gvmUAaHmo6oJoUXlbdQC5J2ON/+gLi4kdPbOl229Ha1Ndx1jErm
-         LQ57ftLeQGLKCzSpN7TC/KY/uBhnRyzcCg9oBt/8GmLKKRcFtkInWhVVpO6cnvAlBr5Z
-         /RqrLuXa3FiAnwi5a0SvRDtVzoPLL0gyoWHidoQSKSWIxoNKK3oM6nzlNfoFfoyJSPDh
-         +RFAt3kF/EHs5vpEpmzorbbfUQaE09ZR1xdSkA2P51DqL3XsbqXdefmC0czWt+B06fKl
-         ze/Hza1KMJyLVRhJiwn4HSWQYfSEy5tC6VIGz8FOq1ETmM3mzjPQi5PdGagMq15fyqzl
-         VDiw==
-X-Gm-Message-State: AOAM5304HhaXdv2gp1DwJhgsGpjHkQc7Gy9IR3zLIv32Joxh/QNb2EWZ
-        bzvE2ZRSe9+PCeRdiOQ/6GP2TWekLWUgfDi43BFqluMIypAxUm6CaHBXh0zAAAqGNlRLLPpbwHX
-        /kY/m/uW2o2OWkToBzTdFPJxs
-X-Received: by 2002:a05:620a:1720:b0:634:1cd4:5e5b with SMTP id az32-20020a05620a172000b006341cd45e5bmr2608686qkb.558.1646503745729;
-        Sat, 05 Mar 2022 10:09:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxGQ5mlxFSBTdBgddKAUdV2p2Ns+ucnV6BHi6nFkEtU3qBjVYOOUXVkuI6oaIaGKt74fm3AZQ==
-X-Received: by 2002:a05:620a:1720:b0:634:1cd4:5e5b with SMTP id az32-20020a05620a172000b006341cd45e5bmr2608676qkb.558.1646503745526;
-        Sat, 05 Mar 2022 10:09:05 -0800 (PST)
+        bh=TQ/PmDy/wAuYSRhPMWBzjgjzADBCIpXP0+QPOpZXWOA=;
+        b=GcK5Ug6/beiLFcrUGmgv63TnnNqrjB9lvG2ayWk6ds0/lJEJkeRwlFaRRXsL49iqnu
+         +EyAF+nt/Rjdy2l/ChzFvN4Xn2M5pPlsrDuaDJjLqdCJ9pD0M5QpY7/fAUv0ufX3tOq0
+         DToeL3yKr87CzqxTpC+KHQcXKhjDTxSUydAkQ7LJjQ83MMVL5/ZBPWFcM5CMUv6i7BEu
+         82kHO+0OHMiT2BUPkwjYHhv3l/d0hoxBM1aHo0tRhwke4vswC2LRTRS+aYMBAWxZ5Faj
+         /qSvoOFPD6V35y94kA5Qz2yXk74XAA71Isuz5IqWQ0E0p5NzsmQ0Ml+bOzDzXLfaZxE0
+         S7Vw==
+X-Gm-Message-State: AOAM531QS1vu+ib1AntPw8TtBjWxt+smH9wxRJfTWFw1Zn//Nl+eAXA0
+        N15psHV3g8UR5WKqyN44wmzZXurDS0JIMSqASCAV6KgesNa5Y+WfYlsV0pyMPbrFMhfE1cIFHkh
+        YCj/3u5UhcO7cBMAeeUEVq1Dl
+X-Received: by 2002:a37:55c2:0:b0:479:8293:d7d0 with SMTP id j185-20020a3755c2000000b004798293d7d0mr2560814qkb.182.1646504036865;
+        Sat, 05 Mar 2022 10:13:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz/MM0HeyZ0Th4tenJoq2/b1En2hM1Tyt/SzPGuspo4wRFFLCKSYHG4o9YEfNHsPP4FSG4HKQ==
+X-Received: by 2002:a37:55c2:0:b0:479:8293:d7d0 with SMTP id j185-20020a3755c2000000b004798293d7d0mr2560793qkb.182.1646504036653;
+        Sat, 05 Mar 2022 10:13:56 -0800 (PST)
 Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac86b46000000b002e02be9c0easm5175904qts.69.2022.03.05.10.09.02
+        by smtp.gmail.com with ESMTPSA id w20-20020a05622a135400b002dd9806d532sm5376407qtk.54.2022.03.05.10.13.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 10:09:05 -0800 (PST)
+        Sat, 05 Mar 2022 10:13:56 -0800 (PST)
 From:   trix@redhat.com
-To:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] netfilter: conditionally use ct and ctinfo
-Date:   Sat,  5 Mar 2022 10:08:53 -0800
-Message-Id: <20220305180853.696640-1-trix@redhat.com>
+To:     davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, idosch@nvidia.com, petrm@nvidia.com,
+        edumazet@google.com, avagin@gmail.com, yajun.deng@linux.dev,
+        johannes.berg@intel.com, cong.wang@bytedance.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] net: rtnetlink: fix error handling in rtnl_fill_statsinfo()
+Date:   Sat,  5 Mar 2022 10:13:46 -0800
+Message-Id: <20220305181346.697365-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,31 +79,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
 
-The setting ct and ctinfo are controlled by
-CONF_NF_CONNTRACK.  So their use should also
-be controlled.
+The clang static analyzer reports this issue
+rtnetlink.c:5481:2: warning: Undefined or garbage
+  value returned to caller
+  return err;
+  ^~~~~~~~~~
 
+There is a function level err variable, in the
+list_for_each_entry_rcu block there is a shadow
+err.  Remove the shadow.
+
+In the same block, the call to nla_nest_start_noflag()
+can fail without setting an err.  Set the err
+to -EMSGSIZE.
+
+Fixes: 216e690631f5 ("net: rtnetlink: rtnl_fill_statsinfo(): Permit non-EMSGSIZE error returns")
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- net/netfilter/nfnetlink_log.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/core/rtnetlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nfnetlink_log.c b/net/netfilter/nfnetlink_log.c
-index d97eb280cb2e8..141e0ebf4bc23 100644
---- a/net/netfilter/nfnetlink_log.c
-+++ b/net/netfilter/nfnetlink_log.c
-@@ -629,9 +629,11 @@ __build_packet_message(struct nfnl_log_net *log,
- 			 htonl(atomic_inc_return(&log->global_seq))))
- 		goto nla_put_failure;
+diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+index a66b6761b88b1..a759f9e0a8476 100644
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -5440,12 +5440,12 @@ static int rtnl_fill_statsinfo(struct sk_buff *skb, struct net_device *dev,
+ 		list_for_each_entry_rcu(af_ops, &rtnl_af_ops, list) {
+ 			if (af_ops->fill_stats_af) {
+ 				struct nlattr *af;
+-				int err;
  
-+#if IS_ENABLED(CONFIG_NF_CONNTRACK)
- 	if (ct && nfnl_ct->build(inst->skb, ct, ctinfo,
- 				 NFULA_CT, NFULA_CT_INFO) < 0)
- 		goto nla_put_failure;
-+#endif
- 
- 	if ((pf == NFPROTO_NETDEV || pf == NFPROTO_BRIDGE) &&
- 	    nfulnl_put_bridge(inst, skb) < 0)
+ 				af = nla_nest_start_noflag(skb,
+ 							   af_ops->family);
+ 				if (!af) {
+ 					rcu_read_unlock();
++					err = -EMSGSIZE;
+ 					goto nla_put_failure;
+ 				}
+ 				err = af_ops->fill_stats_af(skb, dev);
 -- 
 2.26.3
 

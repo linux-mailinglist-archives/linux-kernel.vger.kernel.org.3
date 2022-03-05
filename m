@@ -2,211 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646154CE71B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE3B4CE71D
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbiCEU4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 15:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S232548AbiCEU5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 15:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbiCEU4l (ORCPT
+        with ESMTP id S232037AbiCEU5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 15:56:41 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A60F60DB8;
-        Sat,  5 Mar 2022 12:55:50 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id n185so9081347qke.5;
-        Sat, 05 Mar 2022 12:55:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=caAOL4DhBXEAlI019vHXou2JkvhGYLGi1f2ZLFmi2YM=;
-        b=o/ZtqAjW9TUN/J9zhoYrXEl3pd6wHzuXU5sIv7W0e9lZ+vKirdBLIbt5EXUIB3V94g
-         DKCRw0pVYXAsWVJpYS2khd++s7q4he2K5cu0Qwg0tlCouP4LxRyA2nV6URJelPi1SiJN
-         f0KaPj55Src/r8mJlcGMCQ32w8rqR1qwRQyZ41YD3prfUIf1i/qGmdQ+Wmas1m5+fxJm
-         1uZKv84aVz/q40+48PPs19E8tJHjB+4iqYY0ckHlGUDIDjgQeidK+QNh8Y3h5MxmOt7Y
-         9hqlR++0Cvm/aSzqxyfdnKQb7YrDiRIY338fiNAub0oewfcJe8uV5OSq1GvZtgiQpam+
-         zR0Q==
+        Sat, 5 Mar 2022 15:57:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F267062A02
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 12:56:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646513771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=e2EYH75BVmIbRhMybWcunmFifuSH0lEu5dUIGZ1WvCM=;
+        b=F9k5P+uidCH24bg5ywFxOBHVmSnTE6B51DdbSqidnWCb/E1/OD8Mv6tD40VA152DIGeSxM
+        lRCY/taBxa0z2x3NPOPppZyj5GMFk2YaPxxNvWAl356/rJdOH7x+tHil+Qncj+Ytepy/ND
+        n8vVCHULcvtio3njsJEjMtbr8feZI4U=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-WH00X1V6NTiRx0FRaenc2g-1; Sat, 05 Mar 2022 15:56:10 -0500
+X-MC-Unique: WH00X1V6NTiRx0FRaenc2g-1
+Received: by mail-qv1-f70.google.com with SMTP id u1-20020ad45aa1000000b00435311d5b9fso8040868qvg.19
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 12:56:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=caAOL4DhBXEAlI019vHXou2JkvhGYLGi1f2ZLFmi2YM=;
-        b=LS2gChAdacllD3eQXihoeL/kCdMXeG3c4GkmTtlyoWAx/P7lQyxMCQZBKoTwFeNiia
-         3qFSxjMhnlbpLnlRcRtFDwnvAzVxLRPkwaaVQQQvkn6Mtu6SR4UZ/qIdrloORdJalqjk
-         TzaIS/f54a094UJ+dY8xqN2SMBpCAPiWZf2TBi1ne5KLaFStH/hMEbx91hl56fVQJKP1
-         lpcfpvuusukCG3EKZYi7tRgHj/HcyO6kkM6swrp0dpxAhF1bSdyN+DJTnMaRqbRnFQ+o
-         bNrjd3gjH3IA6Ei/tSxzu3TSnlDi+ZKdTMpH9IOgJfTCc9sUZKtTWUHBclW9tx6s9QzA
-         8KiA==
-X-Gm-Message-State: AOAM532K8BJ5wu5OIGyhZYMXaiwpUI2JNFW5xgs5CtRDhpeUPsozdMW2
-        4kAas63efWs1IqLvFnYY+d0Y1MVMu8KOdvjM
-X-Google-Smtp-Source: ABdhPJxVh1Furf+8z0x/WG4SjmXx52XaQjErAse2ogrA433A1nBn3oCIinn2fIB79hSQK4YEZhQ8sw==
-X-Received: by 2002:a05:620a:22a3:b0:663:7c52:51c6 with SMTP id p3-20020a05620a22a300b006637c5251c6mr2728556qkh.295.1646513749159;
-        Sat, 05 Mar 2022 12:55:49 -0800 (PST)
-Received: from henry-arch.studentwireless.binghamton.edu ([149.125.84.173])
-        by smtp.googlemail.com with ESMTPSA id l19-20020a05622a175300b002de935a94c9sm5877525qtk.8.2022.03.05.12.55.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e2EYH75BVmIbRhMybWcunmFifuSH0lEu5dUIGZ1WvCM=;
+        b=4/pYluG8B+PFrF8rS9R+tmnwZyunq0/zQM1TqhBHuUrgfTDANUwknXr+1qq19UZWvn
+         ElEuvcGv8xkxBstK/oC+/+jD4+PzlBgIyHoix3gNsB0yVYGxF3oO1GbxzgyQVFmL1nfx
+         ZZdLanSDE59uhN7ZoFOt35CFCb6w+1jzGaPyd6KCmb7gETfn/r4j8fyHsrRcJrnqRA3e
+         ZIW55+ySXoO5X5gYyVht/tAHsYE9pVA6HzUjaCfktVTRYMvy1b3MFdFW4X3EgPE+7Qr9
+         Ls9FzQgo64RQF54gF5ElTn43DXxBZ+E1Ywqu5uRKuu2R+eclgmaXiWnGwauLWk6YOfL+
+         usvA==
+X-Gm-Message-State: AOAM530hcp+hwJ2PzSq7tdu4+OjrFt7fPuqK5uTURchzrhD8QcU6LJp8
+        tCEfO8Ymb6Jsb9FE/Qdh1Qn85Mzn2XTF789yNA/Q+ixMkzMAllVECfHgKk3wos1zd3tJ3VZuq0S
+        o7pWOTztkbjOw6+uaclnaI/Gk
+X-Received: by 2002:a05:622a:2cb:b0:2df:f334:c892 with SMTP id a11-20020a05622a02cb00b002dff334c892mr4196453qtx.434.1646513770537;
+        Sat, 05 Mar 2022 12:56:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxj73gLFo//3TCHm3Z930BC1F7OmYMKClBEjNJNDMR5NVGWqWD3Q63p2CMbPiFF9mel4Lxivg==
+X-Received: by 2002:a05:622a:2cb:b0:2df:f334:c892 with SMTP id a11-20020a05622a02cb00b002dff334c892mr4196449qtx.434.1646513770323;
+        Sat, 05 Mar 2022 12:56:10 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05622a054a00b002e049ff99f2sm4774777qtx.7.2022.03.05.12.56.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 12:55:48 -0800 (PST)
-From:   Henry Sloan <henryksloan@gmail.com>
-Cc:     pbonzini@redhat.com, Henry Sloan <henryksloan@gmail.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] KVM: Fix minor indentation and brace style issues
-Date:   Sat,  5 Mar 2022 15:55:28 -0500
-Message-Id: <20220305205528.463894-7-henryksloan@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220305205528.463894-1-henryksloan@gmail.com>
-References: <20220305205528.463894-1-henryksloan@gmail.com>
+        Sat, 05 Mar 2022 12:56:09 -0800 (PST)
+From:   trix@redhat.com
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] clocksource/timer-imx-tpm: define tpm_read_sched_clock() conditionally for arm
+Date:   Sat,  5 Mar 2022 12:56:05 -0800
+Message-Id: <20220305205605.707937-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Henry Sloan <henryksloan@gmail.com>
----
- virt/kvm/kvm_main.c | 36 +++++++++++++++++++-----------------
- virt/kvm/pfncache.c |  2 +-
- 2 files changed, 20 insertions(+), 18 deletions(-)
+From: Tom Rix <trix@redhat.com>
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 1a9f20e3fa2d..c899da4515c0 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -132,7 +132,10 @@ static long kvm_vcpu_compat_ioctl(struct file *file, unsigned int ioctl,
-  *   passed to a compat task, let the ioctls fail.
-  */
- static long kvm_no_compat_ioctl(struct file *file, unsigned int ioctl,
--				unsigned long arg) { return -EINVAL; }
-+				unsigned long arg)
-+{
-+	return -EINVAL;
-+}
- 
- static int kvm_no_compat_open(struct inode *inode, struct file *file)
+On aarch64 allyesconfig there is this error
+timer-imx-tpm.c:78:20: error: 'tpm_read_sched_clock'
+  defined but not used [-Werror=unused-function]
+   78 | static u64 notrace tpm_read_sched_clock(void)
+      |                    ^~~~~~~~~~~~~~~~~~~~
+
+tpm_read_sched_clock() is only used conditionally
+for arm.  So also define conditionally for arm.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/clocksource/timer-imx-tpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clocksource/timer-imx-tpm.c b/drivers/clocksource/timer-imx-tpm.c
+index 60cefc247b715..bd64a8a8427f3 100644
+--- a/drivers/clocksource/timer-imx-tpm.c
++++ b/drivers/clocksource/timer-imx-tpm.c
+@@ -73,12 +73,12 @@ static unsigned long tpm_read_current_timer(void)
  {
-@@ -2154,9 +2157,9 @@ static int kvm_clear_dirty_log_protect(struct kvm *kvm,
- 	n = ALIGN(log->num_pages, BITS_PER_LONG) / 8;
- 
- 	if (log->first_page > memslot->npages ||
--	    log->num_pages > memslot->npages - log->first_page ||
--	    (log->num_pages < memslot->npages - log->first_page && (log->num_pages & 63)))
--	    return -EINVAL;
-+		log->num_pages > memslot->npages - log->first_page ||
-+		(log->num_pages < memslot->npages - log->first_page && (log->num_pages & 63)))
-+		return -EINVAL;
- 
- 	kvm_arch_sync_dirty_log(kvm, memslot);
- 
-@@ -2517,7 +2520,7 @@ static int hva_to_pfn_remapped(struct vm_area_struct *vma,
- 	 * tail pages of non-compound higher order allocations, which
- 	 * would then underflow the refcount when the caller does the
- 	 * required put_page. Don't allow those pages here.
--	 */ 
-+	 */
- 	if (!kvm_try_get_pfn(pfn))
- 		r = -EFAULT;
- 
-@@ -2906,7 +2909,7 @@ int kvm_vcpu_read_guest(struct kvm_vcpu *vcpu, gpa_t gpa, void *data, unsigned l
- EXPORT_SYMBOL_GPL(kvm_vcpu_read_guest);
- 
- static int __kvm_read_guest_atomic(struct kvm_memory_slot *slot, gfn_t gfn,
--			           void *data, int offset, unsigned long len)
-+						void *data, int offset, unsigned long len)
- {
- 	int r;
- 	unsigned long addr;
-@@ -2923,7 +2926,7 @@ static int __kvm_read_guest_atomic(struct kvm_memory_slot *slot, gfn_t gfn,
+ 	return tpm_read_counter();
  }
+-#endif
  
- int kvm_vcpu_read_guest_atomic(struct kvm_vcpu *vcpu, gpa_t gpa,
--			       void *data, unsigned long len)
-+						void *data, unsigned long len)
+ static u64 notrace tpm_read_sched_clock(void)
  {
- 	gfn_t gfn = gpa >> PAGE_SHIFT;
- 	struct kvm_memory_slot *slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
-@@ -2934,8 +2937,8 @@ int kvm_vcpu_read_guest_atomic(struct kvm_vcpu *vcpu, gpa_t gpa,
- EXPORT_SYMBOL_GPL(kvm_vcpu_read_guest_atomic);
- 
- static int __kvm_write_guest_page(struct kvm *kvm,
--				  struct kvm_memory_slot *memslot, gfn_t gfn,
--			          const void *data, int offset, int len)
-+						struct kvm_memory_slot *memslot, gfn_t gfn,
-+						const void *data, int offset, int len)
- {
- 	int r;
- 	unsigned long addr;
-@@ -2990,7 +2993,7 @@ int kvm_write_guest(struct kvm *kvm, gpa_t gpa, const void *data,
- EXPORT_SYMBOL_GPL(kvm_write_guest);
- 
- int kvm_vcpu_write_guest(struct kvm_vcpu *vcpu, gpa_t gpa, const void *data,
--		         unsigned long len)
-+				unsigned long len)
- {
- 	gfn_t gfn = gpa >> PAGE_SHIFT;
- 	int seg;
-@@ -3011,8 +3014,8 @@ int kvm_vcpu_write_guest(struct kvm_vcpu *vcpu, gpa_t gpa, const void *data,
- EXPORT_SYMBOL_GPL(kvm_vcpu_write_guest);
- 
- static int __kvm_gfn_to_hva_cache_init(struct kvm_memslots *slots,
--				       struct gfn_to_hva_cache *ghc,
--				       gpa_t gpa, unsigned long len)
-+				struct gfn_to_hva_cache *ghc,
-+				gpa_t gpa, unsigned long len)
- {
- 	int offset = offset_in_page(gpa);
- 	gfn_t start_gfn = gpa >> PAGE_SHIFT;
-@@ -3156,8 +3159,8 @@ int kvm_clear_guest(struct kvm *kvm, gpa_t gpa, unsigned long len)
- EXPORT_SYMBOL_GPL(kvm_clear_guest);
- 
- void mark_page_dirty_in_slot(struct kvm *kvm,
--			     const struct kvm_memory_slot *memslot,
--		 	     gfn_t gfn)
-+				const struct kvm_memory_slot *memslot,
-+				gfn_t gfn)
- {
- 	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
- 
-@@ -5176,9 +5179,8 @@ int kvm_io_bus_unregister_dev(struct kvm *kvm, enum kvm_bus bus_idx,
- 		return 0;
- 
- 	for (i = 0; i < bus->dev_count; i++) {
--		if (bus->range[i].dev == dev) {
-+		if (bus->range[i].dev == dev)
- 			break;
--		}
- 	}
- 
- 	if (i == bus->dev_count)
-@@ -5599,7 +5601,7 @@ EXPORT_SYMBOL_GPL(kvm_get_running_vcpu);
-  */
- struct kvm_vcpu * __percpu *kvm_get_running_vcpus(void)
- {
--        return &kvm_running_vcpu;
-+	return &kvm_running_vcpu;
+ 	return tpm_read_counter();
  }
++#endif
  
- #ifdef CONFIG_GUEST_PERF_EVENTS
-diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index ce878f4be4da..072c9a9e44b1 100644
---- a/virt/kvm/pfncache.c
-+++ b/virt/kvm/pfncache.c
-@@ -237,7 +237,7 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
- 				ret = -EFAULT;
- 		}
- 
--	map_done:
-+ map_done:
- 		write_lock_irq(&gpc->lock);
- 		if (ret) {
- 			gpc->valid = false;
+ static int tpm_set_next_event(unsigned long delta,
+ 				struct clock_event_device *evt)
 -- 
-2.35.1
+2.26.3
 

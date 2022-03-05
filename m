@@ -2,128 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB8D4CE407
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 10:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E694CE40A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 10:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbiCEJwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 04:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S231233AbiCEJzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 04:55:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiCEJwg (ORCPT
+        with ESMTP id S230077AbiCEJzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 04:52:36 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FAA46B39
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 01:51:45 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K9g3g4Tr5z9sT3;
-        Sat,  5 Mar 2022 10:51:43 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7txCBD_yNCyT; Sat,  5 Mar 2022 10:51:43 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K9g3g3jC8z9sSx;
-        Sat,  5 Mar 2022 10:51:43 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6AEE38B766;
-        Sat,  5 Mar 2022 10:51:43 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id bbc_MSMvmabX; Sat,  5 Mar 2022 10:51:43 +0100 (CET)
-Received: from [192.168.204.180] (unknown [192.168.204.180])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B56C28B763;
-        Sat,  5 Mar 2022 10:51:42 +0100 (CET)
-Message-ID: <672043db-5290-293c-fde4-440989c78d09@csgroup.eu>
-Date:   Sat, 5 Mar 2022 10:51:43 +0100
+        Sat, 5 Mar 2022 04:55:42 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB09357143;
+        Sat,  5 Mar 2022 01:54:52 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id z8so6995414oix.3;
+        Sat, 05 Mar 2022 01:54:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nLa4Cpd6Xd8qLrAmRhbVrWhN1Lu5pmble/aRSf36KTE=;
+        b=CKhBgN8Od9ZbW7JxeJRyxUI27hWxrvhyWv3lj4zpjleUIxL/LxTr1VyHR9lgL6ia55
+         9M/xIDy3uP6t4/jsmMpPMw/FFP+0XSEHGuLRV3XuHJ/4hU80umxifaHhljXdQx6+NSA7
+         7cZTxxAyhjuiRnfvVrtztKtVyBg3PpQM8qDm1X0GwoN3pFZw41mHAtlwUOSD0qrADfRw
+         lyf3lZrhabJz/g2bowqISwAd/Lp5WU05d47Ki160GMIgXeDdqE+8obsm0NRF3PiYvNc8
+         OJ68zBTRFxa0ovXwR9yYCx2XOKhWY+vui5WUImVRpLUcqQV3oLCNiFh3/+mjz4rgov/u
+         qnXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nLa4Cpd6Xd8qLrAmRhbVrWhN1Lu5pmble/aRSf36KTE=;
+        b=m7laIspBloAXE4zkjlHtsk5g8x0r91/o4n2ajwUSmLDMndwxxNIi9gm3RBEJETYGk2
+         lXV/mPIl541Se11x9O918mFe6TYMEz4qNxTd26hpWG7UPJJF9btE2JBlwQzvhJTRIYTM
+         fv8AiDt0Uh0bekKrJ545MrbEVwZvlht3wDo5S5Rs9Ul13469PsAkSQPIhNoHEK7VI6z8
+         vpZCtaLLt70xqyRkV598CVod2GL8uYuY7wZjgPYtXR6pcVNyeYsNhrGD5RcmlvkMR6xF
+         htXX3iNLFJEYra3bmalXy5HDYSfAseqpdgVziOtdfiibBbQsLx1lBq+jzdMLEMpezQTu
+         xjWQ==
+X-Gm-Message-State: AOAM53252cayekWPeyJtFcoLXSgliMm3ozLv5952MMVW/k2ZRVF6IPJZ
+        oSxxcMlqPnniv4gTWzVTTtU7iZ0+j3CsSR3jsSU=
+X-Google-Smtp-Source: ABdhPJz/k5bl7+Soe/sBfdfKbokR4zRXDOyv5k9or4b352BUPOFezuz+RbitwqqD0s0gHVXWRa4FTawlxMhdtC9Gd0I=
+X-Received: by 2002:a05:6808:bce:b0:2d9:a01a:487d with SMTP id
+ o14-20020a0568080bce00b002d9a01a487dmr1833093oik.200.1646474092109; Sat, 05
+ Mar 2022 01:54:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/nouveau/bios: Rename prom_init() and friends
- functions
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <2d97ae92b9c06214be0e088a72cf303eb591bf01.1646414295.git.christophe.leroy@csgroup.eu>
- <47e09d6010852db928c0de29b89450ea7eee74d8.camel@redhat.com>
- <edb9aabd-09af-ae0c-348d-f0500e3405d7@csgroup.eu>
-In-Reply-To: <edb9aabd-09af-ae0c-348d-f0500e3405d7@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220227142551.2349805-1-james.hilliard1@gmail.com> <6af1530a-a4bf-dccf-947d-78ce235a4414@iogearbox.net>
+In-Reply-To: <6af1530a-a4bf-dccf-947d-78ce235a4414@iogearbox.net>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Sat, 5 Mar 2022 02:54:41 -0700
+Message-ID: <CADvTj4pOE+WD1rmS4S6kazeJWtoRTi5Ng_gJXVUkZwC_xMCySA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] libbpf: ensure F_DUPFD_CLOEXEC is defined
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 28, 2022 at 8:00 AM Daniel Borkmann <daniel@iogearbox.net> wrot=
+e:
+>
+> Hi James,
+>
+> On 2/27/22 3:25 PM, James Hilliard wrote:
+> > This definition seems to be missing from some older toolchains.
+> >
+> > Note that the fcntl.h in libbpf_internal.h is not a kernel header
+> > but rather a toolchain libc header.
+> >
+> > Fixes:
+> > libbpf_internal.h:521:18: error: 'F_DUPFD_CLOEXEC' undeclared (first us=
+e in this function); did you mean 'FD_CLOEXEC'?
+> >     fd =3D fcntl(fd, F_DUPFD_CLOEXEC, 3);
+> >                    ^~~~~~~~~~~~~~~
+> >                    FD_CLOEXEC
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>
+> Do you have some more info on your env (e.g. libc)? Looks like F_DUPFD_CL=
+OEXEC
+> was added back in 2.6.24 kernel. When did libc add it?
+>
+> Should we instead just add an include for <linux/fcntl.h> to libbpf_inter=
+nal.h
+> (given it defines F_DUPFD_CLOEXEC as well)?
+
+That seems to cause a conflict: error: redefinition of =E2=80=98struct floc=
+k=E2=80=99
 
 
-Le 05/03/2022 à 08:38, Christophe Leroy a écrit :
-> 
-> 
-> Le 04/03/2022 à 21:24, Lyude Paul a écrit :
->> This mostly looks good to me. Just one question (and one comment down 
->> below
->> that needs addressing). Is this with ppc32? (I ask because ppc64le 
->> doesn't
->> seem to hit this compilation error).
-> 
-> That's with PPC64, see 
-> http://kisskb.ellerman.id.au/kisskb/branch/chleroy/head/252ba609bea83234d2e35841c19ae84c67b43ec7/ 
-> 
-> 
-> But that's not (yet) with the mainline tree. That's work I'm doing to 
-> cleanup our asm/asm-protoypes.h header.
-> 
-> Since commit 4efca4ed05cb ("kbuild: modversions for EXPORT_SYMBOL() for 
-> asm") that file is dedicated to prototypes of functions defined in 
-> assembly. Therefore I'm trying to dispatch C functions prototypes in 
-> other headers. I wanted to move prom_init() prototype into asm/prom.h 
-> and then I hit the problem.
-> 
-> In the beginning I was thinking about just changing the name of the 
-> function in powerpc, but as I see that M68K, MIPS and SPARC also have a 
-> prom_init() function, I thought it would be better to change the name in 
-> shadowrom.c to avoid any future conflict like the one I got while 
-> reworking the headers.
-> 
-> 
->>> @@ -57,8 +57,8 @@ prom_init(struct nvkm_bios *bios, const char *name)
->>>   const struct nvbios_source
->>>   nvbios_rom = {
->>>          .name = "PROM",
->>> -       .init = prom_init,
->>> -       .fini = prom_fini,
->>> -       .read = prom_read,
->>> +       .init = nvbios_rom_init,
->>> +       .fini = nvbios_rom_fini,
->>> +       .read = nvbios_rom_read,
->>
->> Seeing as the source name is prom, I think using the naming convention
->> nvbios_prom_* would be better then nvbios_rom_*.
->>
-> 
-> Yes I wasn't sure about the best naming as the file name is shadowrom.c 
-> and not shadowprom.c.
-> 
-> I will send v2 using nvbios_prom_* as a name.
-
-While preparing v2 I remembered that in fact, I called the functions 
-nvbios_rom_* because the name of the nvbios_source struct is nvbios_rom, 
-so for me it made sense to use the name of the struct as a prefix for 
-the functions.
-
-So I'm OK to change it to nvbios_prom_* but it looks less logical to me.
-
-Please confirm you still prefer nvbios_prom as prefix to the function names.
-
-Christophe
+>
+> > ---
+> >   tools/lib/bpf/libbpf_internal.h | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> >
+> > diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_int=
+ernal.h
+> > index 4fda8bdf0a0d..d2a86b5a457a 100644
+> > --- a/tools/lib/bpf/libbpf_internal.h
+> > +++ b/tools/lib/bpf/libbpf_internal.h
+> > @@ -31,6 +31,10 @@
+> >   #define EM_BPF 247
+> >   #endif
+> >
+> > +#ifndef F_DUPFD_CLOEXEC
+> > +#define F_DUPFD_CLOEXEC 1030
+> > +#endif
+> > +
+> >   #ifndef R_BPF_64_64
+> >   #define R_BPF_64_64 1
+> >   #endif
+> >
+>
+> Thanks,
+> Daniel

@@ -2,93 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DB84CE542
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA544CE546
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiCEOZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 09:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S231833AbiCEOaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 09:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiCEOZr (ORCPT
+        with ESMTP id S229456AbiCEOai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 09:25:47 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CC5A7748;
-        Sat,  5 Mar 2022 06:24:56 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id t19so6621110plr.5;
-        Sat, 05 Mar 2022 06:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=V0+BPych17wtPc2qM6EJ5swnTMFGy4m1k60tybQ7bJ8=;
-        b=S541tO/7BOECRkLObQ/ss88E0L5lW9NqwCtyPSw3nTGHljZZHO/1w+ZQc0jAaVlnj6
-         HS5LW7+pVNKhIQHu7Zy+ujo5/Sml34pebkIhx6y2vf6v7GRc3bmhCFwyfJhtRybriztn
-         M+anDplw+EGv8oPG0xeUS5mQncJ/ZYVLqqubhCO7nPARaCRC2JV4HcYkIiiQMa+Xw5kt
-         azyq7xnXayNdLNYP3odh0HSo6FGstz+DAN0I+Ss/RxoaqIyH8VmwZ3QbUShDZlSk447y
-         QdYj0sFrecg7toRUpkb8IY34lvAg19+4WlpTdbqDbFlR8l70M9v11pf+ixJ87TED+UCX
-         l8VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=V0+BPych17wtPc2qM6EJ5swnTMFGy4m1k60tybQ7bJ8=;
-        b=O0HscLV+1ES2BJlbdOorUTPK5RHYqNpsipQzqEoGnafL1IsPCO0L08EPeP1Oe8u1s9
-         QqPaIt13h8uQO7NvWt3wM+yHqVR22Ogksc1L9kpgYpKNjdAlxQaPfZMbA3e0ucHMu9iL
-         iRXMkylIJN6d3jZwIi9mx52GLQpmvLkmY4xcJ8hJs/NTQDrD2Axug1Wi/gb/aN74wmCA
-         Lw++VK4FXEzmKEkpQEpGsfGavIToPcGkiI4wnHgSXBCrAMfAlGL22ojSQx1ts/eLYu0D
-         ruo2XvcoXyeNbrYtw/MhlxhOrB0HgUejJkukW//j+RnnOyNQE03h1J5ULsrge5XbziMN
-         IsmA==
-X-Gm-Message-State: AOAM531BcZwgNbTIXjYwiIVMiS0gisbstUUZbH4rqvVqRS8qeYoC3eJP
-        2mmhABWQ3dbrQmA1HsUOCg==
-X-Google-Smtp-Source: ABdhPJy9LM8LD0Szs9UH11qFmWCM+7jwNJQ393lKOth1A/hR2oMDpmorF/tRORnbWEX3mtJicgnEgw==
-X-Received: by 2002:a17:90b:1a81:b0:1bc:c3e5:27b2 with SMTP id ng1-20020a17090b1a8100b001bcc3e527b2mr16247200pjb.20.1646490296243;
-        Sat, 05 Mar 2022 06:24:56 -0800 (PST)
-Received: from vultr.guest ([107.191.53.97])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm13515189pju.44.2022.03.05.06.24.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 05 Mar 2022 06:24:55 -0800 (PST)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     rajur@chelsio.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] net: cxgb3: Fix an error code when probing the driver
-Date:   Sat,  5 Mar 2022 14:24:44 +0000
-Message-Id: <1646490284-22791-1-git-send-email-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 5 Mar 2022 09:30:38 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA69BD3;
+        Sat,  5 Mar 2022 06:29:49 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6F2EB1F38D;
+        Sat,  5 Mar 2022 14:29:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646490587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R9AM/TM9vZ0PBfzZKsGMayiREwVYLiWXLX6JUe18Ioo=;
+        b=zT7YUIu8+/PlQ+AkHY+XvRVewjef/NzD8pDkMFsAuasBtzOpoO/vvYqBWw/Vs2Mm1GZJ3U
+        Ylin//RAeim0n6VTlHZ6WWMbs85yDC1VtgAyL0RnkXnEd0HGXDiCSo6QliJeenniHw9RNB
+        E2LLF4AL8Yjujmt1+68kLkr5R85pR44=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646490587;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R9AM/TM9vZ0PBfzZKsGMayiREwVYLiWXLX6JUe18Ioo=;
+        b=JeLnDPHa7Lt5RsNXFiEfnaJsbb0pjjVdKfS7TdW4fkGaSyugHoL+AXvFB0aABdv+tdSFuO
+        QUxx9OQvDuPVHeDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1938D13519;
+        Sat,  5 Mar 2022 14:29:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3ikbA9tzI2JyWQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Sat, 05 Mar 2022 14:29:47 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id b8123a79;
+        Sat, 5 Mar 2022 14:30:03 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] ceph: fix error path in ceph_readdir()
+References: <20220304161403.19295-1-lhenriques@suse.de>
+        <20220304161403.19295-2-lhenriques@suse.de>
+        <fbf5211f69b5cda372c90d78c6aeee00524fcfbf.camel@kernel.org>
+Date:   Sat, 05 Mar 2022 14:30:02 +0000
+In-Reply-To: <fbf5211f69b5cda372c90d78c6aeee00524fcfbf.camel@kernel.org> (Jeff
+        Layton's message of "Fri, 04 Mar 2022 13:17:24 -0500")
+Message-ID: <87lexoo4k5.fsf@brahms.olymp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the process of driver probing, probe function should return < 0
-for failure, otherwise kernel will treat value >= 0 as success.
+Jeff Layton <jlayton@kernel.org> writes:
 
-Therefore, the driver should set 'err' to -EINVAL when
-'adapter->registered_device_map' is NULL. Otherwise kernel will assume
-that the driver has been successfully probed and will cause unexpected
-errors.
+> On Fri, 2022-03-04 at 16:14 +0000, Lu=C3=ADs Henriques wrote:
+>> This was introduced by commit
+>>=20
+>>   "ceph: add support to readdir for encrypted filenames"
+>>=20
+>> It will eventually leak the fscrypt_str names in this error path.
+>>=20
+>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
+>> ---
+>>  fs/ceph/dir.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>>=20
+>> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+>> index 44395aae7259..0bcb677d2199 100644
+>> --- a/fs/ceph/dir.c
+>> +++ b/fs/ceph/dir.c
+>> @@ -500,7 +500,6 @@ static int ceph_readdir(struct file *file, struct di=
+r_context *ctx)
+>>  					       next_offset);
+>>  			if (err) {
+>>  				ceph_mdsc_put_request(dfi->last_readdir);
+>> -				return err;
+>>  				goto out;
+>>  			}
+>>  		} else if (req->r_reply_info.dir_end) {
+>
+> This doesn't seem to apply to the current wip-fscrypt tree. Are you
+> working against an older branch, perhaps?
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c | 1 +
- 1 file changed, 1 insertion(+)
+I thought I was on an up-to-date branch but obviously I was wrong.  I'll
+rebase the patches.  Sorry.
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-index bfffcaeee624..662af61fc723 100644
---- a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-+++ b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-@@ -3346,6 +3346,7 @@ static int init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	}
- 	if (!adapter->registered_device_map) {
- 		dev_err(&pdev->dev, "could not register any net devices\n");
-+		err = -EINVAL;
- 		goto out_free_dev;
- 	}
- 
--- 
-2.25.1
+Cheers,
+--=20
+Lu=C3=ADs
 
+>
+> --=20
+> Jeff Layton <jlayton@kernel.org>

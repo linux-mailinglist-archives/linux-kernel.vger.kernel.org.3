@@ -2,414 +2,387 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FEA4CE1C2
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB544CE1CA
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 02:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiCEA6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 19:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S230200AbiCEBEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 20:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiCEA6l (ORCPT
+        with ESMTP id S229478AbiCEBEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 19:58:41 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D372111A3E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:57:51 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso2500329pjc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 16:57:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WRhUCDi8ybKVmqcvMo1zo6OoakRiXNlP5njWqCl1xfg=;
-        b=w1lu7a7fOkmK0cE3K0hXYFrEt75zDPhimAc2VjIptJM/NHsh2psv5ry1FxXMuJ5M+u
-         rAsfnZKjb3E5QoDqk88O37yvrkLl/hFaukVxQTL2tSAkwdy+AjzvGBOHLqI7oAV1RuX4
-         /E7J8OLK4aaace5w4I9EX4qqgLpJXaEYpUQlXYM0XcLGi2DLtS4nN1J9tr31ObztZA+6
-         X99AMSmWJuDkHka9zhMIyghfS9IPkUhhXwML3vkz9aJVp6t3/65ER6bet3dCJToIBdvS
-         06a3dh2iCYyAsT7ZQU28/Qv657/Rnx1H8Vt63TTWjxFAsnz2LndFnS+wIzjliPvzSFnP
-         y+zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WRhUCDi8ybKVmqcvMo1zo6OoakRiXNlP5njWqCl1xfg=;
-        b=HV46odLO8tzX9wwszwHde6v4vDEkH7lnHkciGiZG0H7Kj6GBFT8Uk8OD3jyANr/R5+
-         rmRh2ZkAAFaK7DVQ1T6eim4T4Ah2gzoA9+2k/bXZBlrkwamXNwgrkToKxeZB/d19wRdQ
-         9iknhsMkAKly4RGxUSeX3svwIRsFmPb0xjRxvUZ/qedKGmC5WNzHf3oRhcsw0kMcxtTE
-         4v8HXKitxlmRDk5vG8NRCI6EBir7+Wj6Dxsuzjbyq41Qo/eNZxVy7Vcq/Db0Y2LVeMxu
-         1pPe9KEdiiMmMorHvrO+MD8bLpam4B0yAvdjZdunPE4amwp1yOooXhTOoVHF0voCVtPO
-         yhMQ==
-X-Gm-Message-State: AOAM533aKWUN7YwThtKIXbjsDmC+NIBo80FgDO0ivhFbkHwYDSnQZH40
-        +sGHLv9zGJiKL4YefVLTV3o3Gg==
-X-Google-Smtp-Source: ABdhPJwDR+NmaJxrEAH8/7OGBw1t0V9tvab3C5eK7iyFdvuWS41LkE80lx2c0M/wzPFyLClQtrp1Vw==
-X-Received: by 2002:a17:903:120c:b0:14f:3f4a:f832 with SMTP id l12-20020a170903120c00b0014f3f4af832mr1248279plh.157.1646441871200;
-        Fri, 04 Mar 2022 16:57:51 -0800 (PST)
-Received: from [10.255.166.9] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id u7-20020a056a00158700b004f6ae198a56sm4334801pfk.9.2022.03.04.16.57.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 16:57:50 -0800 (PST)
-Message-ID: <4d828b01-b636-e0b8-0241-656331f27de4@bytedance.com>
-Date:   Sat, 5 Mar 2022 08:57:43 +0800
+        Fri, 4 Mar 2022 20:04:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE831CE9B9;
+        Fri,  4 Mar 2022 17:03:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4198161F51;
+        Sat,  5 Mar 2022 01:03:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26902C340E9;
+        Sat,  5 Mar 2022 01:03:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646442194;
+        bh=zYtuIkRNR31j199FK8vxS8K91wZhoT2cjKlItlsB5BI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YRkmV9jbquG3Ad4ozCAUiZRLKfv5Hl2E+L0NewuVd9kpGx7PJL6pfem128cjTF9Q5
+         bX9rSfSCjMce5mqzyYELGruLXf+JL4LcLg374s6hJRmnTStTp/ygfohTe1BRecFdlY
+         dlijgwCFK9zUb78kV2Yau56Wx2vYl+WBr+w1P87kTU27PZTo4iaNWoVeYGNvsSxfwB
+         qSNCye7ay0dXWieBVmnOv/AivGBfbAgfwb+kUz0k0QUimVpZUhhzxYjlQgRzFpnNTt
+         GbAXFoXUStg5HpoxV0+YtiqoWyxjbg5qKROQq+4HHInWjgnGUpbJtjDPP9AWwC2O16
+         FCFSUc2FjRNLA==
+Date:   Sat, 5 Mar 2022 03:02:28 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Zhang, Cathy" <cathy.zhang@intel.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        "Shanahan, Mark" <mark.shanahan@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
+ permissions
+Message-ID: <YiK2pL7eoVGMZyH9@iki.fi>
+References: <Yh4fGORDaJyVrJQW@iki.fi>
+ <Yh4i4hVcnfZ8QDAl@iki.fi>
+ <2d2d3471-78ce-9faa-daf6-138078f5ffaa@intel.com>
+ <Yh7Q5fbOtr+6YWaS@iki.fi>
+ <6f65287a-f69c-971e-be2c-929e327e7ff9@intel.com>
+ <op.1igppyk9wjvjmi@hhuan26-mobl1.mshome.net>
+ <YiFMyZ4t2MC0n5Pn@iki.fi>
+ <op.1ihmv4mvwjvjmi@hhuan26-mobl1.mshome.net>
+ <YiHOHn3q4gwoFv+u@iki.fi>
+ <op.1iijnwtpwjvjmi@hhuan26-mobl1.mshome.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [External] Re: [next] WARNING: suspicious RCU usage :
- include/linux/cgroup.h:494 suspicious rcu_dereference_check() usage
-Content-Language: en-US
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, rcu <rcu@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-References: <CA+G9fYs+Qc3rAONJBmyQXFnYmrzFBJ8GMpwWXBMpj3Nx6wQ0Hg@mail.gmail.com>
- <CAABZP2xHynkBmsk8mcvPujSL65fsj=hpM9acuMvmDOUYbWk0KQ@mail.gmail.com>
- <20220304194408.GP4285@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2x-1k_+nHzSvuD3EKD1cMSPiOFFnehJPQ7_QnaeDLpkGw@mail.gmail.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <CAABZP2x-1k_+nHzSvuD3EKD1cMSPiOFFnehJPQ7_QnaeDLpkGw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,NORMAL_HTTP_TO_IP,NUMERIC_HTTP_ADDR,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <op.1iijnwtpwjvjmi@hhuan26-mobl1.mshome.net>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/5 4:28 上午, Zhouyi Zhou wrote:
-> Hi Paul
+On Fri, Mar 04, 2022 at 09:51:22AM -0600, Haitao Huang wrote:
+> Hi Jarkko
 > 
-> Yes, your suggestion works!
-> Thank you for your guidance, this is the first time I ever did a
-> bisection, I gained greatly during this process!
-
-Hi Zhouyi, thanks for the bisection test.
-Could this patch solve RCU warning? I just tested on my machine and there
-is no RCU warning any more.
-
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index 1e356c222756..0d1ada8968d7 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -450,6 +450,7 @@ extern struct mutex cgroup_mutex;
- extern spinlock_t css_set_lock;
- #define task_css_set_check(task, __c)                                  \
-        rcu_dereference_check((task)->cgroups,                          \
-+               rcu_read_lock_sched_held() ||                           \
-                lockdep_is_held(&cgroup_mutex) ||                       \
-                lockdep_is_held(&css_set_lock) ||                       \
-                ((task)->flags & PF_EXITING) || (__c))
-
-Thanks.
-
+> On Fri, 04 Mar 2022 02:30:22 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> wrote:
 > 
-> On Sat, Mar 5, 2022 at 3:44 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->>
->> On Sat, Mar 05, 2022 at 03:38:33AM +0800, Zhouyi Zhou wrote:
->>> Hi,
->>> I can reproduce these warnings on my X86 VM.
->>> Following the my backtrace:
->>>
->>> (gdb) bt
->>> #0  lockdep_rcu_suspicious (file=file@entry=0xffffffff825ea8ff
->>> "include/linux/cgroup.h", line=line@entry=494,
->>>     s=s@entry=0xffffffff825c5c50 "suspicious rcu_dereference_check()
->>> usage") at ./arch/x86/include/asm/current.h:15
->>> #1  0xffffffff81183103 in task_css (subsys_id=2,
->>> task=0xffff888100804080) at ./include/linux/cgroup.h:494
->>> #2  task_ca (tsk=0xffff888100804080) at kernel/sched/cpuacct.c:40
->>> #3  cpuacct_charge (tsk=tsk@entry=0xffff888100804080,
->>> cputime=cputime@entry=3344803) at kernel/sched/cpuacct.c:342
->>> #4  0xffffffff81162655 in cgroup_account_cputime (delta_exec=3344803,
->>> task=0xffff888100804080) at ./include/linux/cgroup.h:792
->>> #5  update_curr (cfs_rq=cfs_rq@entry=0xffff88813b63f500) at
->>> kernel/sched/fair.c:907
->>> #6  0xffffffff81164797 in dequeue_entity (flags=10,
->>> se=0xffff888100804100, cfs_rq=0xffff88813b63f500) at
->>> kernel/sched/fair.c:5771
->>> #7  dequeue_task_fair (rq=0xffff88813b63f440, p=0xffff888100804080,
->>> flags=10) at kernel/sched/fair.c:5771
->>> #8  0xffffffff8115412a in dequeue_task (flags=10,
->>> p=0xffff888100804080, rq=0xffff88813b63f440) at
->>> kernel/sched/core.c:2019
->>> #9  __do_set_cpus_allowed (p=0xffff888100804080,
->>> new_mask=0xffffffff831b4d40 <housekeeping+512>, flags=0) at
->>> kernel/sched/core.c:2508
->>> #10 0xffffffff811564ca in __set_cpus_allowed_ptr_locked
->>> (p=p@entry=0xffff888100804080,
->>> new_mask=new_mask@entry=0xffffffff831b4d40 <housekeeping+512>,
->>>     flags=flags@entry=0, rq=0xffff88813b63f440,
->>> rf=rf@entry=0xffffc9000012bee8) at kernel/sched/core.c:2841
->>> #11 0xffffffff81156573 in __set_cpus_allowed_ptr
->>> (p=p@entry=0xffff888100804080, new_mask=0xffffffff831b4d40
->>> <housekeeping+512>, flags=flags@entry=0)
->>>     at kernel/sched/core.c:2874
->>> #12 0xffffffff8115664c in set_cpus_allowed_ptr
->>> (p=p@entry=0xffff888100804080, new_mask=<optimized out>) at
->>> kernel/sched/core.c:2879
->>> #13 0xffffffff81144676 in kthreadd (unused=<optimized out>) at
->>> kernel/kthread.c:724
->>> #14 0xffffffff810019df in ret_from_fork () at arch/x86/entry/entry_64.S:295
->>> #15 0x0000000000000000 in ?? ()
->>>
->>> Do the warnings have something to do with commit
->>> dc6e0818bc9a0336d9accf3ea35d146d72aa7a18 (sched/cpuacct: Optimize away
->>> RCU read lock) ?
->>
->> If you have not already done so, could you please try running on this
->> commit and then on the commit immediately preceding it?  Just as a
->> authoritative way to answer your question.  ;-)
->>
->>                                                         Thanx, Paul
->>
-> git reset --hard dc6e0818bc9a0336d9accf3ea35d146d72aa7a18
-> make -j 16 bindeb-pkg
-> there are RCU WARNINGs:
-> http://154.223.142.244/logs/20220305/log.dc6e0818bc9a0336d9accf3ea35d146d72aa7a18.txt
+> > On Thu, Mar 03, 2022 at 10:03:30PM -0600, Haitao Huang wrote:
+> > > 
+> > > On Thu, 03 Mar 2022 17:18:33 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> > > wrote:
+> > > 
+> > > > On Thu, Mar 03, 2022 at 10:08:14AM -0600, Haitao Huang wrote:
+> > > > > Hi all,
+> > > > >
+> > > > > On Wed, 02 Mar 2022 16:57:45 -0600, Reinette Chatre
+> > > > > <reinette.chatre@intel.com> wrote:
+> > > > >
+> > > > > > Hi Jarkko,
+> > > > > >
+> > > > > > On 3/1/2022 6:05 PM, Jarkko Sakkinen wrote:
+> > > > > > > On Tue, Mar 01, 2022 at 09:48:48AM -0800, Reinette Chatre wrote:
+> > > > > > > > Hi Jarkko,
+> > > > > > > >
+> > > > > > > > On 3/1/2022 5:42 AM, Jarkko Sakkinen wrote:
+> > > > > > > > > > With EACCEPTCOPY (kudos to Mark S. for reminding me of
+> > > > > > > > > > this version of
+> > > > > > > > > > EACCEPT @ chat.enarx.dev) it is possible to make R and RX
+> > > > > pages but
+> > > > > > > > > > obviously new RX pages are now out of the picture:
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > 	/*
+> > > > > > > > > > 	 * Adding a regular page that is architecturally allowed
+> > > > > to only
+> > > > > > > > > > 	 * be created with RW permissions.
+> > > > > > > > > > 	 * TBD: Interface with user space policy to support max
+> > > > > permissions
+> > > > > > > > > > 	 * of RWX.
+> > > > > > > > > > 	 */
+> > > > > > > > > > 	prot = PROT_READ | PROT_WRITE;
+> > > > > > > > > > 	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
+> > > > > > > > > > 	encl_page->vm_max_prot_bits =
+> > > encl_page->vm_run_prot_bits;
+> > > > > > > > > >
+> > > > > > > > > > If that TBD is left out to the final version the page
+> > > > > > > > > > augmentation has a
+> > > > > > > > > > risk of a API bottleneck, and that risk can realize then
+> > > > > > > > > > also in the page
+> > > > > > > > > > permission ioctls.
+> > > > > > > > > >
+> > > > > > > > > > I.e. now any review comment is based on not fully known
+> > > > > > > > > > territory, we have
+> > > > > > > > > > one known unknown, and some unknown unknowns from
+> > > > > > > > > > unpredictable effect to
+> > > > > > > > > > future API changes.
+> > > > > > > >
+> > > > > > > > The plan to complete the "TBD" in the above snippet was to
+> > > > > > > > follow this work
+> > > > > > > > with user policy integration at this location. On a high level
+> > > > > > > > the plan was
+> > > > > > > > for this to look something like:
+> > > > > > > >
+> > > > > > > >
+> > > > > > > >  	/*
+> > > > > > > >  	 * Adding a regular page that is architecturally allowed
+> > > to only
+> > > > > > > >  	 * be created with RW permissions.
+> > > > > > > >  	 * Interface with user space policy to support max
+> > > permissions
+> > > > > > > >  	 * of RWX.
+> > > > > > > >  	 */
+> > > > > > > >  	prot = PROT_READ | PROT_WRITE;
+> > > > > > > >  	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
+> > > > > > > >
+> > > > > > > >         if (user space policy allows RWX on dynamically added
+> > > > > pages)
+> > > > > > > > 	 	encl_page->vm_max_prot_bits = calc_vm_prot_bits(PROT_READ |
+> > > > > > > > PROT_WRITE | PROT_EXEC, 0);
+> > > > > > > > 	else
+> > > > > > > > 		encl_page->vm_max_prot_bits = calc_vm_prot_bits(PROT_READ |
+> > > > > > > > PROT_WRITE, 0);
+> > > > > > > >
+> > > > > > > > The work that follows this series aimed to do the integration
+> > > > > with user
+> > > > > > > > space policy.
+> > > > > > >
+> > > > > > > What do you mean by "user space policy" anyway exactly? I'm
+> > > > > sorry but I
+> > > > > > > just don't fully understand this.
+> > > > > >
+> > > > > > My apologies - I just assumed that you would need no reminder
+> > > > > about this
+> > > > > > contentious
+> > > > > > part of SGX history. Essentially it means that, yes, the
+> > > kernel could
+> > > > > > theoretically
+> > > > > > permit any kind of access to any file/page, but some accesses are
+> > > > > known
+> > > > > > to generally
+> > > > > > be a bad idea - like making memory executable as well as writable
+> > > > > - and
+> > > > > > thus there
+> > > > > > are additional checks based on what user space permits before the
+> > > > > kernel
+> > > > > > allows
+> > > > > > such accesses.
+> > > > > >
+> > > > > > For example,
+> > > > > > mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect()
+> > > > > >
+> > > > > > User policy and SGX has seen significant discussion. Some notable
+> > > > > > threads:
+> > > > > > https://lore.kernel.org/linux-security-module/CALCETrXf8mSK45h7sTK5Wf+pXLVn=Bjsc_RLpgO-h-qdzBRo5Q@mail.gmail.com/
+> > > > > > https://lore.kernel.org/linux-security-module/20190619222401.14942-1-sean.j.christopherson@intel.com/
+> > > > > >
+> > > > > > > It's too big of a risk to accept this series without X taken
+> > > care
+> > > > > > > of. Patch
+> > > > > > > series should neither have TODO nor TBD comments IMHO. I
+> > > don't want
+> > > > > > > to ack
+> > > > > > > a series based on speculation what might happen in the future.
+> > > > > >
+> > > > > > ok
+> > > > > >
+> > > > > > >
+> > > > > > > > > I think the best way to move forward would be to do EAUG's
+> > > > > > > > > explicitly with
+> > > > > > > > > an ioctl that could also include secinfo for permissions.
+> > > > > Then you can
+> > > > > > > > > easily do the rest with EACCEPTCOPY inside the enclave.
+> > > > > > > >
+> > > > > > > > SGX_IOC_ENCLAVE_ADD_PAGES already exists and could possibly be
+> > > > > used for
+> > > > > > > > this purpose. It already includes SECINFO which may also be
+> > > > > useful if
+> > > > > > > > needing to later support EAUG of PT_SS* pages.
+> > > > > > >
+> > > > > > > You could also simply add SGX_IOC_ENCLAVE_AUGMENT_PAGES and
+> > > call it
+> > > > > > > a day.
+> > > > > >
+> > > > > > I could, yes.
+> > > > > >
+> > > > > > > And if there is plan to extend SGX_IOC_ENCLAVE_ADD_PAGES what is
+> > > > > > > this weird
+> > > > > > > thing added to the #PF handler? Why is it added at all then?
+> > > > > >
+> > > > > > I was just speculating in my response, there is no plan to extend
+> > > > > > SGX_IOC_ENCLAVE_ADD_PAGES (that I am aware of).
+> > > > > >
+> > > > > > > > How this could work is user space calls
+> > > SGX_IOC_ENCLAVE_ADD_PAGES
+> > > > > > > > after enclave initialization on any memory region within the
+> > > > > > > > enclave where
+> > > > > > > > pages are planned to be added dynamically. This ioctl() calls
+> > > > > > > > EAUG to add the
+> > > > > > > > new pages with RW permissions and their vm_max_prot_bits
+> > > can be
+> > > > > > > > set to the
+> > > > > > > > permissions found in the included SECINFO. This will support
+> > > > > > > > later EACCEPTCOPY
+> > > > > > > > as well as SGX_IOC_ENCLAVE_RELAX_PERMISSIONS
+> > > > > > >
+> > > > > > > I don't like this type of re-use of the existing API.
+> > > > > >
+> > > > > > I could proceed with SGX_IOC_ENCLAVE_AUGMENT_PAGES if there is
+> > > > > consensus
+> > > > > > after
+> > > > > > considering the user policy question (above) and performance
+> > > trade-off
+> > > > > > (more below).
+> > > > > >
+> > > > > > >
+> > > > > > > > The big question is whether communicating user policy after
+> > > > > > > > enclave initialization
+> > > > > > > > via the SECINFO within SGX_IOC_ENCLAVE_ADD_PAGES is acceptable
+> > > > > > > > to all? I would
+> > > > > > > > appreciate a confirmation on this direction considering the
+> > > > > > > > significant history
+> > > > > > > > behind this topic.
+> > > > > > >
+> > > > > > > I have no idea because I don't know what is user space policy.
+> > > > > >
+> > > > > > This discussion is about some enclave usages needing RWX
+> > > permissions
+> > > > > > on dynamically added enclave pages. RWX permissions on dynamically
+> > > > > added
+> > > > > > pages is
+> > > > > > not something that should blindly be allowed for all SGX
+> > > enclaves but
+> > > > > > instead the user
+> > > > > > needs to explicitly allow specific enclaves to have such
+> > > ability. This
+> > > > > > is equivalent
+> > > > > > to (but not the same as) what exists in Linux today with LSM. As
+> > > > > seen in
+> > > > > > mm/mprotect.c:do_mprotect_pkey()->security_file_mprotect() Linux
+> > > > > is able
+> > > > > > to make
+> > > > > > files and memory be both writable and executable, but it would
+> > > only do
+> > > > > > so for those
+> > > > > > files and memory that the LSM (which is how user policy is
+> > > > > communicated,
+> > > > > > like SELinux)
+> > > > > > indicates it is allowed, not blindly do so for all files and all
+> > > > > memory.
+> > > > > >
+> > > > > > > > > Putting EAUG to the #PF handler and implicitly call it just
+> > > > > > > > > too flakky and
+> > > > > > > > > hard to make deterministic for e.g. JIT compiler in our use
+> > > > > > > > > case (not to
+> > > > > > > > > mention that JIT is not possible at all because inability to
+> > > > > > > > > do RX pages).
+> > > > > >
+> > > > > > I understand how SGX_IOC_ENCLAVE_AUGMENT_PAGES can be more
+> > > > > deterministic
+> > > > > > but from
+> > > > > > what I understand it would have a performance impact since it
+> > > would
+> > > > > > require all memory
+> > > > > > that may be needed by the enclave be pre-allocated from
+> > > outside the
+> > > > > > enclave and not
+> > > > > > just dynamically allocated from within the enclave at the time
+> > > it is
+> > > > > > needed.
+> > > > > >
+> > > > > > Would such a performance impact be acceptable?
+> > > > > >
+> > > > >
+> > > > > User space won't always have enough info to decide whether the pages
+> > > > > to be
+> > > > > EAUG'd immediately. In some cases (shared libraries, JVM for
+> > > > > example) lots
+> > > > > of code/data pages can be mapped but never actually touched. One
+> > > > > enclave/process does not know if any other more important
+> > > > > enclave/process
+> > > > > would need the EPC.
+> > > > >
+> > > > > It should be for kernel to make the final decision as it has overall
+> > > > > picture
+> > > > > of the system EPC usage and availability.
+> > > >
+> > > > EAUG ioctl does not give better capabilities for user space to waste
+> > > > EPC given that EADD ioctl already exists, i.e. your argument is
+> > > logically
+> > > > incorrect.
+> > > 
+> > > The point of adding EAUG is to allow more efficient use of EPC pages.
+> > > Without EAUG, enclaves have to EADD everything upfront into EPC,
+> > > consuming
+> > > predetermined number of EPC pages, some of which may not be used at all.
+> > > With EAUG, enclaves should be able to load minimal pages to get started,
+> > > pages added on #PF as they are actually accessed.
+> > > 
+> > > Obviously as you pointed out, some usages make more sense to
+> > > pre-EAUG (EAUG
+> > > before #PF). But your proposal of supporting only pre-EAUG here
+> > > essentially
+> > > makes EAUG behave almost the same as EADD.  If the current
+> > > implementation
+> > > with EAUG on #PF can also use MAP_POPULATE for pre-EAUG (seems possible
+> > > based on Dave's comments), then it is flxible to cover all cases and
+> > > allow
+> > > kernel to optimize allocation of EPC pages.
+> > 
+> > There is no even a working #PF based implementation in existance, and
+> > your
+> > argument has too many if's for my taste.
 > 
-> then I running on the commit immediately preceding it
-> git reset --hard 248cc9993d1cc12b8e9ed716cc3fc09f6c3517dd
-> make -j 16 bindeb-pkg
-> the WARNINGs are gone with the wind ;-)
-> http://154.223.142.244/logs/20220305/log.248cc9993d1cc12b8e9ed716cc3fc09f6c3517dd.txt
+> 1) if you mean no user space is implementing this kind of solution, read
+> this section, otherwise, skip to 2) below which is only couple of sentences.
 > 
-> Many thanks
-> Zhouyi
->>> Many thanks
->>> Zhouyi
->>>
->>> On Fri, Mar 4, 2022 at 10:43 PM Naresh Kamboju
->>> <naresh.kamboju@linaro.org> wrote:
->>>>
->>>> While booting x86_64 with linux next-20220304 kernel the following kernel
->>>> warning reported [1].
->>>>
->>>> metadata:
->>>>   git_ref: master
->>>>   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->>>>   git_sha: 6d284ba80c0c485bcaa7bdf67f232d572640edc4
->>>>   git_describe: next-20220304
->>>>   kernel-config: https://builds.tuxbuild.com/25uuYdm2vTO275aZ3IewZY5sKbU/config
->>>>
->>>>
->>>> warning log:
->>>> ---------
->>>> [    1.482171] MDS: Mitigation: Clear CPU buffers
->>>> [    1.485680] Freeing SMP alternatives memory: 52K
->>>> [    1.487341]
->>>> [    1.488169] =============================
->>>> [    1.488169] WARNING: suspicious RCU usage
->>>> [    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
->>>> [    1.488169] -----------------------------
->>>> [    1.488169] include/linux/cgroup.h:494 suspicious
->>>> rcu_dereference_check() usage!
->>>> [    1.488169]
->>>> [    1.488169] other info that might help us debug this:
->>>> [    1.488169]
->>>> [    1.488169]
->>>> [    1.488169] rcu_scheduler_active = 1, debug_locks = 1
->>>> [    1.488169] 2 locks held by kthreadd/2:
->>>> [    1.488169]  #0: ffff9ba440352330 (&p->pi_lock){....}-{2:2}, at:
->>>> task_rq_lock+0x2e/0x130
->>>> [    1.488169]  #1: ffff9ba7a7a2d058 (&rq->__lock){-...}-{2:2}, at:
->>>> task_rq_lock+0x5d/0x130
->>>> [    1.488169]
->>>> [    1.488169] stack backtrace:
->>>> [    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
->>>> 5.17.0-rc6-next-20220304 #1
->>>> [    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
->>>> 2.5 11/26/2020
->>>> [    1.488169] Call Trace:
->>>> [    1.488169]  <TASK>
->>>> [    1.488169]  dump_stack_lvl+0x49/0x5e
->>>> [    1.488169]  dump_stack+0x10/0x12
->>>> [    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
->>>> [    1.488169]  cpuacct_charge+0x10c/0x120
->>>> [    1.488169]  update_curr+0x165/0x340
->>>> [    1.488169]  dequeue_entity+0x23/0x430
->>>> [    1.488169]  dequeue_task_fair+0xba/0x3b0
->>>> [    1.488169]  __do_set_cpus_allowed+0xca/0x2c0
->>>> [    1.488169]  __set_cpus_allowed_ptr_locked+0x128/0x1b0
->>>> [    1.488169]  set_cpus_allowed_ptr+0x43/0x70
->>>> [    1.488169]  kthreadd+0x49/0x230
->>>> [    1.488169]  ? kthread_is_per_cpu+0x30/0x30
->>>> [    1.488169]  ret_from_fork+0x22/0x30
->>>> [    1.488169]  </TASK>
->>>> [    1.488169]
->>>> [    1.488169] =============================
->>>> [    1.488169] WARNING: suspicious RCU usage
->>>> [    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
->>>> [    1.488169] -----------------------------
->>>> [    1.488169] include/linux/cgroup.h:481 suspicious
->>>> rcu_dereference_check() usage!
->>>> [    1.488169]
->>>> [    1.488169] other info that might help us debug this:
->>>> [    1.488169]
->>>> [    1.488169]
->>>> [    1.488169] rcu_scheduler_active = 1, debug_locks = 1
->>>> [    1.488169] 2 locks held by kthreadd/2:
->>>> [    1.488169]  #0: ffff9ba440352330 (&p->pi_lock){....}-{2:2}, at:
->>>> task_rq_lock+0x2e/0x130
->>>> [    1.488169]  #1: ffff9ba7a7a2d058 (&rq->__lock){-...}-{2:2}, at:
->>>> task_rq_lock+0x5d/0x130
->>>> [    1.488169]
->>>> [    1.488169] stack backtrace:
->>>> [    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
->>>> 5.17.0-rc6-next-20220304 #1
->>>> [    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
->>>> 2.5 11/26/2020
->>>> [    1.488169] Call Trace:
->>>> [    1.488169]  <TASK>
->>>> [    1.488169]  dump_stack_lvl+0x49/0x5e
->>>> [    1.488169]  dump_stack+0x10/0x12
->>>> [    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
->>>> [    1.488169]  update_curr+0x2b7/0x340
->>>> [    1.488169]  dequeue_entity+0x23/0x430
->>>> [    1.488169]  dequeue_task_fair+0xba/0x3b0
->>>> [    1.488169]  __do_set_cpus_allowed+0xca/0x2c0
->>>> [    1.488169]  __set_cpus_allowed_ptr_locked+0x128/0x1b0
->>>> [    1.488169]  set_cpus_allowed_ptr+0x43/0x70
->>>> [    1.488169]  kthreadd+0x49/0x230
->>>> [    1.488169]  ? kthread_is_per_cpu+0x30/0x30
->>>> [    1.488169]  ret_from_fork+0x22/0x30
->>>> [    1.488169]  </TASK>
->>>> [    1.488169]
->>>> [    1.488169] =============================
->>>> [    1.488169] WARNING: suspicious RCU usage
->>>> [    1.488169] 5.17.0-rc6-next-20220304 #1 Not tainted
->>>> [    1.488169] -----------------------------
->>>> [    1.488169] include/linux/cgroup.h:481 suspicious
->>>> rcu_dereference_check() usage!
->>>> [    1.488169]
->>>> [    1.488169] other info that might help us debug this:
->>>> [    1.488169]
->>>> [    1.488169]
->>>> [    1.488169] rcu_scheduler_active = 1, debug_locks = 1
->>>> [    1.488169] no locks held by kthreadd/2.
->>>> [    1.488169]
->>>> [    1.488169] stack backtrace:
->>>> [    1.488169] CPU: 0 PID: 2 Comm: kthreadd Not tainted
->>>> 5.17.0-rc6-next-20220304 #1
->>>> [    1.488169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
->>>> 2.5 11/26/2020
->>>> [    1.488169] Call Trace:
->>>> [    1.488169]  <IRQ>
->>>> [    1.488169]  dump_stack_lvl+0x49/0x5e
->>>> [    1.488169]  dump_stack+0x10/0x12
->>>> [    1.488169]  lockdep_rcu_suspicious+0xed/0xf8
->>>> [    1.488169]  account_system_index_time+0x127/0x130
->>>> [    1.488169]  account_system_time+0x50/0x60
->>>> [    1.488169]  account_process_tick+0x59/0x80
->>>> [    1.488169]  update_process_times+0x58/0xe0
->>>> [    1.488169]  tick_periodic+0x37/0xf0
->>>> [    1.488169]  tick_handle_periodic+0x24/0x70
->>>> [    1.488169]  timer_interrupt+0x18/0x20
->>>> [    1.488169]  __handle_irq_event_percpu+0x95/0x2f0
->>>> [    1.488169]  handle_irq_event+0x39/0x80
->>>> [    1.488169]  handle_edge_irq+0xa4/0x240
->>>> [    1.488169]  __common_interrupt+0x8d/0x170
->>>> [    1.488169]  common_interrupt+0xbd/0xe0
->>>> [    1.488169]  </IRQ>
->>>> [    1.488169]  <TASK>
->>>> [    1.488169]  asm_common_interrupt+0x1e/0x40
->>>> [    1.488169] RIP: 0010:_raw_spin_unlock_irqrestore+0x37/0x60
->>>> [    1.488169] Code: fc 48 83 c7 18 53 48 89 f3 48 8b 75 08 e8 21 83
->>>> ed fe 4c 89 e7 e8 19 b0 ed fe 80 e7 02 74 06 e8 6f 77 fa fe fb bf 01
->>>> 00 00 00 <e8> 24 6b e9 fe 65 8b 05 bd e1 28 66 85 c0 74 05 5b 41 5c 5d
->>>> c3 0f
->>>> [    1.488169] RSP: 0000:ffffb75b0002fd50 EFLAGS: 00000202
->>>> [    1.488169] RAX: 0000000000000007 RBX: 0000000000000246 RCX: 0000000000000000
->>>> [    1.488169] RDX: 0000000000000000 RSI: ffffffff9a800a7c RDI: 0000000000000001
->>>> [    1.488169] RBP: ffffb75b0002fd60 R08: 0000000000000001 R09: 0000000000000001
->>>> [    1.488169] R10: 0000000000000002 R11: 0000000000000001 R12: ffff9ba440352318
->>>> [    1.488169] R13: 0000000000000000 R14: 0000000000000000 R15: ffff9ba7a7a2d040
->>>> [    1.488169]  affine_move_task+0x2d4/0x5d0
->>>> [    1.488169]  ? __this_cpu_preempt_check+0x13/0x20
->>>> [    1.488169]  ? lock_is_held_type+0xdd/0x130
->>>> [    1.488169]  ? enqueue_entity+0x1b8/0x520
->>>> [    1.488169]  __set_cpus_allowed_ptr_locked+0x15c/0x1b0
->>>> [    1.488169]  set_cpus_allowed_ptr+0x43/0x70
->>>> [    1.488169]  kthreadd+0x49/0x230
->>>> [    1.488169]  ? kthread_is_per_cpu+0x30/0x30
->>>> [    1.488169]  ret_from_fork+0x22/0x30
->>>> [    1.488169]  </TASK>
->>>> [    1.489211] smpboot: Estimated ratio of average max frequency by
->>>> base frequency (times 1024): 1126
->>>> [    1.490189] smpboot: CPU0: Intel(R) Xeon(R) CPU E3-1220 v6 @
->>>> 3.00GHz (family: 0x6, model: 0x9e, stepping: 0x9)
->>>> [    1.491635] cblist_init_generic: Setting adjustable number of
->>>> callback queues.
->>>> [    1.492171] cblist_init_generic: Setting shift to 2 and lim to 1.
->>>> [    1.493226] cblist_init_generic: Setting shift to 2 and lim to 1.
->>>> [    1.494226] cblist_init_generic: Setting shift to 2 and lim to 1.
->>>> [    1.495219] Running RCU-tasks wait API self tests
->>>> [    1.598317] Performance Events: PEBS fmt3+, Skylake events, 32-deep
->>>> LBR, full-width counters, Intel PMU driver.
->>>> [    1.599176] ... version:                4
->>>> [    1.600171] ... bit width:              48
->>>> [    1.601171] ... generic registers:      8
->>>> [    1.602171] ... value mask:             0000ffffffffffff
->>>> [    1.603171] ... max period:             00007fffffffffff
->>>> [    1.604176] ... fixed-purpose events:   3
->>>> [    1.605171] ... event mask:             00000007000000ff
->>>> [    1.606188] Callback from call_rcu_tasks_trace() invoked.
->>>> [    1.607450] rcu: Hierarchical SRCU implementation.
->>>> [    1.608310]
->>>> [    1.609169] =============================
->>>> [    1.609169] WARNING: suspicious RCU usage
->>>> [    1.609169] 5.17.0-rc6-next-20220304 #1 Not tainted
->>>> [    1.609169] -----------------------------
->>>> [    1.609169] include/linux/cgroup.h:481 suspicious
->>>> rcu_dereference_check() usage!
->>>> [    1.609169]
->>>> [    1.609169] other info that might help us debug this:
->>>> [    1.609169]
->>>> [    1.609169]
->>>> [    1.609169] rcu_scheduler_active = 1, debug_locks = 1
->>>> [    1.609169] 1 lock held by migration/0/17:
->>>> [    1.609169]  #0: ffff9ba7a7a2d058 (&rq->__lock){-.-.}-{2:2}, at:
->>>> __schedule+0x12d/0xcb0
->>>> [    1.609169]
->>>> [    1.609169] stack backtrace:
->>>> [    1.609169] CPU: 0 PID: 17 Comm: migration/0 Not tainted
->>>> 5.17.0-rc6-next-20220304 #1
->>>> [    1.609169] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
->>>> 2.5 11/26/2020
->>>> [    1.609169] Stopper: 0x0 <- 0x0
->>>> [    1.609169] Call Trace:
->>>> [    1.609169]  <TASK>
->>>> [    1.609169]  dump_stack_lvl+0x49/0x5e
->>>> [    1.609169]  dump_stack+0x10/0x12
->>>> [    1.609169]  lockdep_rcu_suspicious+0xed/0xf8
->>>> [    1.609169]  put_prev_task_stop+0x1dc/0x240
->>>> [    1.609169]  __schedule+0x751/0xcb0
->>>> [    1.609169]  ? trace_preempt_off+0x29/0xc0
->>>> [    1.609169]  ? smpboot_thread_fn+0x33/0x290
->>>> [    1.609169]  schedule+0x58/0xc0
->>>> [    1.609169]  smpboot_thread_fn+0xec/0x290
->>>> [    1.609169]  ? sort_range+0x30/0x30
->>>> [    1.609169]  kthread+0x107/0x130
->>>> [    1.609169]  ? kthread_complete_and_exit+0x20/0x20
->>>> [    1.609169]  ret_from_fork+0x22/0x30
->>>> [    1.609169]  </TASK>
->>>> [    1.610276] smp: Bringing up secondary CPUs ...
->>>> [    1.611596] x86: Booting SMP configuration:
->>>> [    1.612179] .... node  #0, CPUs:      #1 #2 #3
->>>> [    1.614396] smp: Brought up 1 node, 4 CPUs
->>>>
->>>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>>>
->>>> --
->>>> Linaro LKFT
->>>> https://lkft.linaro.org
->>>>
->>>> [1] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220304/testrun/8235955/suite/linux-log-parser/test/check-kernel-warning-4655400/log
+> If you are willing to look, there is already implementation in our SDK to do
+> heap and stack expansion on demand on #PF. Enclaves may not know heap/stack
+> size up front, we have implemented these features to make EPC usage more
+> efficient. I don't know why normal processes can add RAM on #PF, but
+> enclaves adding EPC on #PF becomes so unacceptable concept to you. And the
+> kernel does that for EPC swapping already when #PF happens on a swapped out
+> EPC page.
+
+In adds O(n) round-trips for a mmap() emulation, which can be done in O(1)
+round-trips with a ioctl.
+
+> Our implementation has gone through several rounds, the latest is
+> here:https://github.com/intel/linux-sgx/tree/edmm_v2/sdk/emm. It was also
+> implemented in original OOT driver based SDK implementation. Customers are
+> using it and found them useful. I think this is a critical feature that many
+> other runtimes will also need.
+
+I'm not sure what the common sense argument here is.
+
+> 2)
+> It's OK for you to request additional support for your usage and I agree it
+> is needed. But IMHO, totally getting rid of EAUG on #PF is bad and
+> unnecessary. Current implementation can be extended to support your usage.
+> What's the reason  you think MAP_POPULATE won't work for you?
+
+I do not recall taking stand on MAP_POPULATE.
+
+> BR
+> Haitao
+
+BR, Jarkko

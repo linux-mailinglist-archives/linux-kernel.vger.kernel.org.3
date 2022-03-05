@@ -2,148 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EEDA4CE18D
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4084CE190
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiCEAf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 19:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S230260AbiCEAgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 19:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiCEAfY (ORCPT
+        with ESMTP id S229769AbiCEAgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 19:35:24 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5AB4A900
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:34:36 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id g1so8973938pfv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 16:34:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9awKCCKzwQ2dqbJt0HhmYBsF/X0J7+H0Zf6OyrcVwwk=;
-        b=cIYwKZlXga7k55pJ6Hx6u3E1O0qMOeX9MtZ4QnhaaFbVj+Gwocpw7HAw2uXKckeyNg
-         N62ebYTAV747rJvVn2IYd5Aa4qEuDijsdldXC6LBdXSFG1gaEwhmXj5u+V4C9Uv7i05W
-         vcBM/WJyq/aqsH92E03REjyFnzq9/5xoOD2sk3jWlL74SFl7tJLknUpHVJFeHP9X8316
-         PamGMns78nhhhAN3MT6u+RF631p/F6vL32h7EAst1BR/MyuvxQSz082tcW8Jnr/Lu1Q0
-         vSLLAjS3b8zIRNMffiygjUSiKEZGO4qtL9X/CCbDprfU5GuKuBIq9KnMUoHzhyo5NDbv
-         JCiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9awKCCKzwQ2dqbJt0HhmYBsF/X0J7+H0Zf6OyrcVwwk=;
-        b=j/qobJM0wlIVP48KB6a+lI96AXpECWTXKaGYtU+xxoLTpfS6CgVImsXCTT5g/oEseZ
-         bJdsoNDSEIt65S3p9XOLefSg+3NuG9+yNegydQoRv8qV7oshGf/JeTNuIXrIEcLaCfA8
-         1ABK0mg1PZcQLgVuPlIJ/hww8YifSBe5w07x2xcmD6mI1PSUkt5h2FFbzWfm2rWeTHeu
-         cRE+hlBcw2hRgfuHkKWExtWuvxcHbQ9GMMEcnpOwENDC3PCAiYIR1a0N5zGOfp1b+XjK
-         MUNZvV6NytNUtdHUWZ5OmT5llnOr5FZZd44ncJnsDDrrk3v1x4PRfqWdKHKmAimntAiV
-         dwjA==
-X-Gm-Message-State: AOAM530k9ps8H4kD2dHGTuKyeUQbsZ7f9NqB0jRXIit/AhCr3VduMAam
-        JRA55SQd/nWnlcmg/cAMWaKAEA==
-X-Google-Smtp-Source: ABdhPJy8buS111AF6pUAsQWsQEoRwPURB2GdQ8KHQizCtZYGIDUkTVBDQTzXcgK+8pA8eE3GlkQrbg==
-X-Received: by 2002:a63:8349:0:b0:37d:5e5e:a535 with SMTP id h70-20020a638349000000b0037d5e5ea535mr799884pge.158.1646440475381;
-        Fri, 04 Mar 2022 16:34:35 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s7-20020a056a00178700b004e1a15e7928sm7730995pfg.145.2022.03.04.16.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 16:34:34 -0800 (PST)
-Date:   Sat, 5 Mar 2022 00:34:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH v4 21/30] KVM: x86/mmu: Zap invalidated roots via
- asynchronous worker
-Message-ID: <YiKwFznqqiB9VRyn@google.com>
-References: <20220303193842.370645-1-pbonzini@redhat.com>
- <20220303193842.370645-22-pbonzini@redhat.com>
- <YiExLB3O2byI4Xdu@google.com>
- <YiEz3D18wEn8lcEq@google.com>
- <eeac12f0-0a18-8c63-1987-494a2032fa9d@redhat.com>
- <YiI4AmYkm2oiuiio@google.com>
- <8b8c28cf-cf54-f889-be7d-afc9f5430ecd@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b8c28cf-cf54-f889-be7d-afc9f5430ecd@redhat.com>
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 4 Mar 2022 19:36:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E49E259F5E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 16:35:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1953CB82C6D
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 00:35:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604A8C340E9;
+        Sat,  5 Mar 2022 00:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1646440555;
+        bh=mwjsS+YMGajXXQMaUkaiH/3MXku41Jx+TRuzkQ6Y6Jg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e8ct/L1e1A16OfW/iQ8Zgh+spt2H9t+3S0zaHsjY0h00LqO852i10s5evccJvhiLF
+         UONEs4TjVYWKHIagAmMk1b5Sh97NXXUgx8gKFFLTGu56sjbSKAJ4uD0Kf2+1Aj4fE6
+         9f3S2dNGVFnHOvAZ89DsE/iV3Wl33YhneVHDRfnw=
+Date:   Fri, 4 Mar 2022 16:35:54 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Minchan Kim <minchan@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [patch v4] mm: lru_cache_disable: replace work queue
+ synchronization with synchronize_rcu
+Message-Id: <20220304163554.8872fe5d5a9d634f7a2884f5@linux-foundation.org>
+In-Reply-To: <YiI+a9gTr/UBCf0X@fuller.cnet>
+References: <YhUI1wUtV8yguijO@fuller.cnet>
+        <YhUKRzEKxMvlGQ5n@fuller.cnet>
+        <YiI+a9gTr/UBCf0X@fuller.cnet>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022, Paolo Bonzini wrote:
-> On 3/4/22 17:02, Sean Christopherson wrote:
-> > On Fri, Mar 04, 2022, Paolo Bonzini wrote:
-> > > On 3/3/22 22:32, Sean Christopherson wrote:
-> > > I didn't remove the paragraph from the commit message, but I think it's
-> > > unnecessary now.  The workqueue is flushed in kvm_mmu_zap_all_fast() and
-> > > kvm_mmu_uninit_tdp_mmu(), unlike the buggy patch, so it doesn't need to take
-> > > a reference to the VM.
-> > > 
-> > > I think I don't even need to check kvm->users_count in the defunct root
-> > > case, as long as kvm_mmu_uninit_tdp_mmu() flushes and destroys the workqueue
-> > > before it checks that the lists are empty.
-> > 
-> > Yes, that should work.  IIRC, the WARN_ONs will tell us/you quite quickly if
-> > we're wrong :-)  mmu_notifier_unregister() will call the "slow" kvm_mmu_zap_all()
-> > and thus ensure all non-root pages zapped, but "leaking" a worker will trigger
-> > the WARN_ON that there are no roots on the list.
-> 
-> Good, for the record these are the commit messages I have:
-> 
->     KVM: x86/mmu: Zap invalidated roots via asynchronous worker
->     Use the system worker threads to zap the roots invalidated
->     by the TDP MMU's "fast zap" mechanism, implemented by
->     kvm_tdp_mmu_invalidate_all_roots().
->     At this point, apart from allowing some parallelism in the zapping of
->     roots, the workqueue is a glorified linked list: work items are added and
->     flushed entirely within a single kvm->slots_lock critical section.  However,
->     the workqueue fixes a latent issue where kvm_mmu_zap_all_invalidated_roots()
->     assumes that it owns a reference to all invalid roots; therefore, no
->     one can set the invalid bit outside kvm_mmu_zap_all_fast().  Putting the
->     invalidated roots on a linked list... erm, on a workqueue ensures that
->     tdp_mmu_zap_root_work() only puts back those extra references that
->     kvm_mmu_zap_all_invalidated_roots() had gifted to it.
-> 
-> and
-> 
->     KVM: x86/mmu: Zap defunct roots via asynchronous worker
->     Zap defunct roots, a.k.a. roots that have been invalidated after their
->     last reference was initially dropped, asynchronously via the existing work
->     queue instead of forcing the work upon the unfortunate task that happened
->     to drop the last reference.
->     If a vCPU task drops the last reference, the vCPU is effectively blocked
->     by the host for the entire duration of the zap.  If the root being zapped
->     happens be fully populated with 4kb leaf SPTEs, e.g. due to dirty logging
->     being active, the zap can take several hundred seconds.  Unsurprisingly,
->     most guests are unhappy if a vCPU disappears for hundreds of seconds.
->     E.g. running a synthetic selftest that triggers a vCPU root zap with
->     ~64tb of guest memory and 4kb SPTEs blocks the vCPU for 900+ seconds.
->     Offloading the zap to a worker drops the block time to <100ms.
->     There is an important nuance to this change.  If the same work item
->     was queued twice before the work function has run, it would only
->     execute once and one reference would be leaked.  Therefore, now that
->     queueing items is not anymore protected by write_lock(&kvm->mmu_lock),
->     kvm_tdp_mmu_invalidate_all_roots() has to check root->role.invalid and
->     skip already invalid roots.  On the other hand, kvm_mmu_zap_all_fast()
->     must return only after those skipped roots have been zapped as well.
->     These two requirements can be satisfied only if _all_ places that
->     change invalid to true now schedule the worker before releasing the
->     mmu_lock.  There are just two, kvm_tdp_mmu_put_root() and
->     kvm_tdp_mmu_invalidate_all_roots().
+On Fri, 4 Mar 2022 13:29:31 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
 
-Very nice!
+>  
+> On systems that run FIFO:1 applications that busy loop 
+> on isolated CPUs, executing tasks on such CPUs under
+> lower priority is undesired (since that will either
+> hang the system, or cause longer interruption to the
+> FIFO task due to execution of lower priority task 
+> with very small sched slices).
+> 
+> Commit d479960e44f27e0e52ba31b21740b703c538027c ("mm: disable LRU 
+> pagevec during the migration temporarily") relies on 
+> queueing work items on all online CPUs to ensure visibility
+> of lru_disable_count.
+> 
+> However, its possible to use synchronize_rcu which will provide the same
+> guarantees (see comment this patch modifies on lru_cache_disable).
+> 
+> Fixes:
+> 
+> ...
+>
+> --- a/mm/swap.c
+> +++ b/mm/swap.c
+> @@ -831,8 +831,7 @@ inline void __lru_add_drain_all(bool force_all_cpus)
+>  	for_each_online_cpu(cpu) {
+>  		struct work_struct *work = &per_cpu(lru_add_drain_work, cpu);
+>  
+> -		if (force_all_cpus ||
+> -		    pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
+> +		if (pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
+
+Please changelog this alteration?
+
+>  		    data_race(pagevec_count(&per_cpu(lru_rotate.pvec, cpu))) ||
+>  		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate_file, cpu)) ||
+>  		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate, cpu)) ||
+> @@ -876,15 +875,21 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
+>  void lru_cache_disable(void)
+>  {
+>  	atomic_inc(&lru_disable_count);
+> -#ifdef CONFIG_SMP
+>  	/*
+> -	 * lru_add_drain_all in the force mode will schedule draining on
+> -	 * all online CPUs so any calls of lru_cache_disabled wrapped by
+> -	 * local_lock or preemption disabled would be ordered by that.
+> -	 * The atomic operation doesn't need to have stronger ordering
+> -	 * requirements because that is enforced by the scheduling
+> -	 * guarantees.
+> +	 * Readers of lru_disable_count are protected by either disabling
+> +	 * preemption or rcu_read_lock:
+> +	 *
+> +	 * preempt_disable, local_irq_disable  [bh_lru_lock()]
+> +	 * rcu_read_lock		       [rt_spin_lock CONFIG_PREEMPT_RT]
+> +	 * preempt_disable		       [local_lock !CONFIG_PREEMPT_RT]
+> +	 *
+> +	 * Since v5.1 kernel, synchronize_rcu() is guaranteed to wait on
+> +	 * preempt_disable() regions of code. So any CPU which sees
+> +	 * lru_disable_count = 0 will have exited the critical
+> +	 * section when synchronize_rcu() returns.
+>  	 */
+> +	synchronize_rcu();
+> +#ifdef CONFIG_SMP
+>  	__lru_add_drain_all(true);
+>  #else
+>  	lru_add_and_bh_lrus_drain();

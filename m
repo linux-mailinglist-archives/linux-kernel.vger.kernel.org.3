@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056804CE738
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 22:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4BC4CE737
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 22:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbiCEVdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 16:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S232672AbiCEVfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 16:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbiCEVdP (ORCPT
+        with ESMTP id S230112AbiCEVfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 16:33:15 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29D55AED7
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 13:32:23 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q14so2063027wrc.4
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 13:32:23 -0800 (PST)
+        Sat, 5 Mar 2022 16:35:07 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2AD29805
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 13:34:16 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id dr20so24322245ejc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 13:34:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9IH5+QpuYr8xx7VseEHwb3B5cUXtUdnzvWAtsWC3Lqo=;
-        b=jjohIZhvIlSjJYT5OU4GmDH7lyi5I14Gd5Leo4WCzgkFaN0zY3hfFz1iGgWe0x3rNp
-         N7cu2YM2M4kmsLsQ76HEflqobBdlIucQ9Bi4Rt1ro46WtEeRg8+IgqKOpnZ5N8vz0BTg
-         6UNWOQyJ3Sw2IkdhYB+o7HMqEYRVx4/BfexsE3fH86a6E3m7iacquC3FEW2EGe4zo2Gc
-         VmE1aR17MIp4vunFL9JG7x3YMTs+sfN2SI956OsFcO/yHAjB0Qmyma4lFsnZhw2IfDOU
-         oiWLfz8ROFsWBV22K1RGvFEC04OG7D3/K7Ghqvfg3U3i/O72n8Po/7C5VAB2jOhlWm4W
-         QRbA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XFY4TtTjXdWPbTMt2IvpCEWRTxBseEWRBtu+kYXkcuk=;
+        b=Yyel5NfrEkG77OKFkltSillJS5j9Vf1YU5SiNYEAXt6ScDLMX23VdX69Ho6+UNipYM
+         Lk9KFXcs0fGsaU8KnVHvrlW+07FWwnjMI7DtLkD+lEsing4NkqqGBYOukpRPYGBAw50t
+         BvBPK/AS4U0LOM9sbpyfyEhVKtcexORgqxVkO6QCZJPr29lnvpa/dKD6Wr16sOAehwBH
+         pYzlyz9VRx8ZVn9hEPqd2zJXelVxIdC/dfn8y2FVrcyZ/yI0Z7iVHGpTAc6YEabNH8Ov
+         ScNaroS3MKNLFjHWGcjRvhve+hdygRfbcKziHFn3pqsi7E0i8znZURGdjS9b45OVcnuo
+         PRRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9IH5+QpuYr8xx7VseEHwb3B5cUXtUdnzvWAtsWC3Lqo=;
-        b=ZMSlpXoF9tZfvvteUm1aQB2rugGirqUZGnzFijAAQScaDJ2jyTXJoEOdDbIEFkEP9M
-         IrAtaZ5CkkrJ/nhSTcrsgQbc3470zngSlRmavpz46Kustxrr8hXPoLQ5nPENzMRgC/vw
-         Virtdd/RYRj+0pAoyRWRWiG2YTPXSZ9jMGpiP4qVB2WurpbqlijPZ/OIa+FWEoiV56tA
-         eAZWtjQE66J1GMQy51U7VAdENf0s0g+E70zee/5tNEVzJcukyftjqreZZSyILIXGV2UO
-         0yey8DeUjAG6gabWdxfMSAsmuwvszcpvmIcDJhBPQRkFIFVZl9Ykm55RUuAjAQw63EHx
-         WN+A==
-X-Gm-Message-State: AOAM530Lo47m2x2KoKoPIPZ2hH9LnpsoXfSiqn34a48VwtD3mOiDFzzg
-        5yqSwEIkIAFb8VAildyXQgE=
-X-Google-Smtp-Source: ABdhPJzV5HWPYwTYCrqKU/3cUb4+hY5cPjIC2BdFXXdl50Tp9vTG7vFSAKADoYcLSC7M8LEa3kMvjQ==
-X-Received: by 2002:a5d:4609:0:b0:1f1:de8a:af07 with SMTP id t9-20020a5d4609000000b001f1de8aaf07mr3180549wrq.549.1646515942625;
-        Sat, 05 Mar 2022 13:32:22 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p57935aa6.dip0.t-ipconnect.de. [87.147.90.166])
-        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm11472031wmq.35.2022.03.05.13.32.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 13:32:22 -0800 (PST)
-Date:   Sat, 5 Mar 2022 22:32:20 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] staging: vt6655: Remove unused byRFType in card.c
-Message-ID: <5554b243ae285e3274d9968575aadd1a79806b01.1646512837.git.philipp.g.hortmann@gmail.com>
-References: <cover.1646512837.git.philipp.g.hortmann@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XFY4TtTjXdWPbTMt2IvpCEWRTxBseEWRBtu+kYXkcuk=;
+        b=e+XtBMlZ5yOyj6TpXs3B8XS4BhJH7Jie5W1+/+0tRqzW0OvPtAD72UiRk1jjCV2AyD
+         38mQRlUoV09k1kuzwq3oYr8Pcrlk99HcLplXPaNltgrCGIg5bmqTl8NEj/iYXDdTUgeV
+         Py7qtEgnpqinghU9aFZJbmp51Eg2+R2W8SntCnjfr/1poldf+Xx/OXgzjKs/uOVZliYr
+         /MgOivPoZHc/cvHZJH/+WaTwb5yL3P/ViK+2I/W9tJAQoClhQcoWhYcrwQNLWSZSmXB3
+         diGrGdv9YjVnLP7jxh59E7EyLIU30ZPymnsFwRgkAfYtmDl2c4g5daq4s2+YF2nXMnH2
+         JgmA==
+X-Gm-Message-State: AOAM530JZqqTP2vvLP6jYlsWganBdN6ZbFKHyIu7tcIbscscXLMeAD7r
+        G16Ct8+oXaTlzQ2iSpTpEda6uesVw4hVdWt2V1E=
+X-Google-Smtp-Source: ABdhPJz4vmxxvwU59IvMLBk19rc8XncC8y8R1qUZrxuAe3CC7r7csI30J5hQTplD1Wk0ubq9ZID1os65qAxNIPCIaFs=
+X-Received: by 2002:a17:906:4cc7:b0:6d0:7efb:49f with SMTP id
+ q7-20020a1709064cc700b006d07efb049fmr3860758ejt.639.1646516054814; Sat, 05
+ Mar 2022 13:34:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1646512837.git.philipp.g.hortmann@gmail.com>
+References: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
+ <CAHp75VeT3LbdbSaiwcC2YW40LnA2h8ADtGva-CKU_xh8Edi0nw@mail.gmail.com> <CAMZ6RqJL2G=i-x3wwBD92devAxdNcnmwfDqz30+GFGobp21s+Q@mail.gmail.com>
+In-Reply-To: <CAMZ6RqJL2G=i-x3wwBD92devAxdNcnmwfDqz30+GFGobp21s+Q@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 5 Mar 2022 23:33:38 +0200
+Message-ID: <CAHp75VdTzjW_YONcFy0qQGvT-xMDQOXTYsAun40106Spzgx_2Q@mail.gmail.com>
+Subject: Re: [PATCH] linux/bits.h: fix -Wtype-limits warnings in GENMASK_INPUT_CHECK()
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,105 +70,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove byRFType that support 5GHz band.
+On Sat, Mar 5, 2022 at 2:43 PM Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
+> On Tue. 5 Mar 2022 at 03:46, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > On Fri, Mar 4, 2022 at 7:36 PM Vincent Mailhol
+> > <mailhol.vincent@wanadoo.fr> wrote:
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/vt6655/card.c | 56 +----------------------------------
- 1 file changed, 1 insertion(+), 55 deletions(-)
+...
 
-diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
-index ee2d145778ed..1110366fc415 100644
---- a/drivers/staging/vt6655/card.c
-+++ b/drivers/staging/vt6655/card.c
-@@ -183,32 +183,11 @@ bool CARDbSetPhyParameter(struct vnt_private *priv, u8 bb_type)
- 	unsigned char bySlot = 0;
- 	unsigned char bySIFS = 0;
- 	unsigned char byDIFS = 0;
--	unsigned char data;
- 	int i;
- 
- 	/* Set SIFS, DIFS, EIFS, SlotTime, CwMin */
- 	if (bb_type == BB_TYPE_11A) {
--		if (priv->byRFType == RF_AIROHA7230) {
--			/* AL7230 use single PAPE and connect to PAPE_2.4G */
--			MACvSetBBType(priv->port_offset, BB_TYPE_11G);
--			priv->abyBBVGA[0] = 0x20;
--			priv->abyBBVGA[2] = 0x10;
--			priv->abyBBVGA[3] = 0x10;
--			bb_read_embedded(priv, 0xE7, &data);
--			if (data == 0x1C)
--				bb_write_embedded(priv, 0xE7, priv->abyBBVGA[0]);
--
--		} else if (priv->byRFType == RF_UW2452) {
--			MACvSetBBType(priv->port_offset, BB_TYPE_11A);
--			priv->abyBBVGA[0] = 0x18;
--			bb_read_embedded(priv, 0xE7, &data);
--			if (data == 0x14) {
--				bb_write_embedded(priv, 0xE7, priv->abyBBVGA[0]);
--				bb_write_embedded(priv, 0xE1, 0x57);
--			}
--		} else {
--			MACvSetBBType(priv->port_offset, BB_TYPE_11A);
--		}
-+		MACvSetBBType(priv->port_offset, BB_TYPE_11A);
- 		bb_write_embedded(priv, 0x88, 0x03);
- 		bySlot = C_SLOT_SHORT;
- 		bySIFS = C_SIFS_A;
-@@ -216,22 +195,6 @@ bool CARDbSetPhyParameter(struct vnt_private *priv, u8 bb_type)
- 		byCWMaxMin = 0xA4;
- 	} else if (bb_type == BB_TYPE_11B) {
- 		MACvSetBBType(priv->port_offset, BB_TYPE_11B);
--		if (priv->byRFType == RF_AIROHA7230) {
--			priv->abyBBVGA[0] = 0x1C;
--			priv->abyBBVGA[2] = 0x00;
--			priv->abyBBVGA[3] = 0x00;
--			bb_read_embedded(priv, 0xE7, &data);
--			if (data == 0x20)
--				bb_write_embedded(priv, 0xE7, priv->abyBBVGA[0]);
--
--		} else if (priv->byRFType == RF_UW2452) {
--			priv->abyBBVGA[0] = 0x14;
--			bb_read_embedded(priv, 0xE7, &data);
--			if (data == 0x18) {
--				bb_write_embedded(priv, 0xE7, priv->abyBBVGA[0]);
--				bb_write_embedded(priv, 0xE1, 0xD3);
--			}
--		}
- 		bb_write_embedded(priv, 0x88, 0x02);
- 		bySlot = C_SLOT_LONG;
- 		bySIFS = C_SIFS_BG;
-@@ -239,22 +202,6 @@ bool CARDbSetPhyParameter(struct vnt_private *priv, u8 bb_type)
- 		byCWMaxMin = 0xA5;
- 	} else { /* PK_TYPE_11GA & PK_TYPE_11GB */
- 		MACvSetBBType(priv->port_offset, BB_TYPE_11G);
--		if (priv->byRFType == RF_AIROHA7230) {
--			priv->abyBBVGA[0] = 0x1C;
--			priv->abyBBVGA[2] = 0x00;
--			priv->abyBBVGA[3] = 0x00;
--			bb_read_embedded(priv, 0xE7, &data);
--			if (data == 0x20)
--				bb_write_embedded(priv, 0xE7, priv->abyBBVGA[0]);
--
--		} else if (priv->byRFType == RF_UW2452) {
--			priv->abyBBVGA[0] = 0x14;
--			bb_read_embedded(priv, 0xE7, &data);
--			if (data == 0x18) {
--				bb_write_embedded(priv, 0xE7, priv->abyBBVGA[0]);
--				bb_write_embedded(priv, 0xE1, 0xD3);
--			}
--		}
- 		bb_write_embedded(priv, 0x88, 0x08);
- 		bySIFS = C_SIFS_BG;
- 
-@@ -417,7 +364,6 @@ void CARDbRadioPowerOff(struct vnt_private *priv)
- 
- 	case RF_AIROHA:
- 	case RF_AL2230S:
--	case RF_AIROHA7230:
- 		MACvWordRegBitsOff(priv->port_offset, MAC_REG_SOFTPWRCTL,
- 				   SOFTPWRCTL_SWPE2);
- 		MACvWordRegBitsOff(priv->port_offset, MAC_REG_SOFTPWRCTL,
+> > NAK.
+>
+> Are you willing to change your decision following my comments?
+
+Have you read this discussion (read the thread in full)
+https://lore.kernel.org/lkml/cover.1590017578.git.syednwaris@gmail.com/
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko

@@ -2,388 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF2C4CE4D6
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 13:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F5B4CE4D8
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 13:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbiCEMkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 07:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
+        id S231543AbiCEMoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 07:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiCEMkR (ORCPT
+        with ESMTP id S229477AbiCEMoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 07:40:17 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF19F63BCA;
-        Sat,  5 Mar 2022 04:39:26 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id gb39so22716179ejc.1;
-        Sat, 05 Mar 2022 04:39:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=ziVlNME90XkjVCUOc4D/WI9RHYcSooGFrcTvyny9BL8=;
-        b=CiLsz+Z/mFV0v2uCLfoVi/IF2pVrLSTsJlm08TDTzjBXHiOPH3/i/Dr/0x2I7UXn2i
-         1twmlm9fSlPLpbuIDgocNtgSYf9UVEvKtf2a041oWFNnwMW1ei3lB8OSpNhP1e9vtFtU
-         vPCtXmtEildmLSv+biMTaM+IEM9FIuNn0vgiIGS0fUI1Jjyiv4s30Kb8gn2OZlQwJdqL
-         u91x7DKTHIHwMWCXObo3nq8pAUeYbdWeALUVXSGoQG7CRgkYg9LgvnmWdNFQcXkzHfRb
-         vGALOstYHe/HZugGmu5YHCz2PFEMmIDgNK6WnIse7H+XizwWn4gKd5FDS/O6199WHSd6
-         oW0g==
+        Sat, 5 Mar 2022 07:44:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E09FA166A7B
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 04:43:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646484195;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8GqpN7gIPCwWSZ62iyPP0jbygDvqFyRDbk/03WQxzCo=;
+        b=Dbh/IALKZRgPA3cjpf+i6vFxrGG07jXOyeKrYU47qBc+RUgDSLwe+ia3DyxO1+laVaV26u
+        6+sbyvu9HKP9WXL/vRbhAqTtj1/hgR4EGutaxseIlLJLjJocqGnfLseFW2xMyXQEbiFxck
+        3JvzEwkTDz1/oiqZjH1GlPsI1A7nwHg=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-lgdX4WNRNmyzyWxVedmWpQ-1; Sat, 05 Mar 2022 07:43:14 -0500
+X-MC-Unique: lgdX4WNRNmyzyWxVedmWpQ-1
+Received: by mail-pj1-f72.google.com with SMTP id mt1-20020a17090b230100b001beef010919so7664514pjb.7
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 04:43:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=ziVlNME90XkjVCUOc4D/WI9RHYcSooGFrcTvyny9BL8=;
-        b=JG6dMY8MeoWmLt/RBmj5gBHPTQefToEttfcmo9dSZxSI2eoHcQAzJ43jUdlRWEOw32
-         EQNgDv2Y4Q+moXnSGJLjUGdZKS8PP3gVmVaTFce2WOnv97o9UxlfLq1524ZjeiviPITK
-         aZUoaXbgPVKkP8E6TSAPlPGhUruS8OEEV44Jlk6ANXwcQQ5XN9kivx/RsZ5rAs4qmEI3
-         qGOgV3zz6PxiGMOg5CrHnEfMH6IFFzLW048aLiyAkuZRjfQuEQ/JeuJSKeDypWenCtm6
-         +KX+sEiuJd0GXvtiuqWZzb8L0Z7bKxHJHIN88NcZSgnSQnE+OKdVBDStSLw/MWNwpwuX
-         ZT8w==
-X-Gm-Message-State: AOAM532AdbD5VjRZFhfHAFYs/MS1Eqo4PZmxFoZXPZQM8cFkZeStZv1H
-        zt1RTmfpsuTWpZGE764JJ7c=
-X-Google-Smtp-Source: ABdhPJz1YuGZoTM1x0GJ1AWBZxVtm3Rk4xiJJ5gyn+BQAuoD7dad8m4BhNE0B4r7XX3zR+vpEmhmGQ==
-X-Received: by 2002:a17:906:2991:b0:6cf:1fd4:39a3 with SMTP id x17-20020a170906299100b006cf1fd439a3mr2704852eje.21.1646483964936;
-        Sat, 05 Mar 2022 04:39:24 -0800 (PST)
-Received: from ?IPv6:2001:a61:2ae0:801:d90b:c312:2baa:2aa3? ([2001:a61:2ae0:801:d90b:c312:2baa:2aa3])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1709066b8200b006bbea7e566esm2841650ejr.55.2022.03.05.04.39.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 04:39:24 -0800 (PST)
-Message-ID: <f5277691fad2a7a5330353ac38ccaf7111d5b084.camel@gmail.com>
-Subject: Re: [PATCH v4 3/3] iio: temperature: ltc2983: Make use of device
- properties
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Date:   Sat, 05 Mar 2022 13:39:23 +0100
-In-Reply-To: <20220304180257.80298-3-andriy.shevchenko@linux.intel.com>
-References: <20220304180257.80298-1-andriy.shevchenko@linux.intel.com>
-         <20220304180257.80298-3-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=8GqpN7gIPCwWSZ62iyPP0jbygDvqFyRDbk/03WQxzCo=;
+        b=7A9nvLhwXVx1V2IJhexL18NcoNecpmXTOstMjPKuA8B3VEjeS7cyE1lMAei7XTpSkK
+         sf9RQ5u5sG7SDyhazMekmlrv45yuWiuD3C3sjEuqHqyedrpn9i5bzGUQ/xtv+vIqIB3X
+         pjoMHvR/O0ayVq4Fp4rKiPjYgojkLcpQ5wTy1AnI8hw+P2ua7XVrTCtaSctAosN8EkeV
+         m5YnL9u8Saf0v25+b7kMhQ3zvzTwo8KAXF5FuLQYMfaPnaiR6neqeZut7JURLM1M7I3L
+         p2Pw73UGK1oJV7xrG3LGL17t76iam04i4XAxz7Uqy2yxAWBT7yojsGPUbC49PnGbfFUb
+         YfoQ==
+X-Gm-Message-State: AOAM532f35qbMH0TP7ERmjRKq0i/Y0U20T4qE3U4Qm1SE4fIbRiTZmP7
+        lZhZzqO99Xun6uhFV+68NmN8XO5BV2jcXOWvixuKn7rSH8mOPV+jOFY3GAAbK1quRjgpvIK5x9l
+        8uHlwJKYeCZJASPX3Qgoti/OXfRBEwe9Oj/X980dlY6b0tLJDLAf4UOZyVSCnRKtcSZS/NNCKuw
+        ==
+X-Received: by 2002:a17:90a:4542:b0:1b9:bc2a:910f with SMTP id r2-20020a17090a454200b001b9bc2a910fmr3530239pjm.133.1646484192502;
+        Sat, 05 Mar 2022 04:43:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwQOfYR7Y7u5dlrB2KRWzLGnzKbsJUjzPINaLf3a/iXbCGyBHHPekYnv12fb+marCAiF0kIVg==
+X-Received: by 2002:a17:90a:4542:b0:1b9:bc2a:910f with SMTP id r2-20020a17090a454200b001b9bc2a910fmr3530216pjm.133.1646484192159;
+        Sat, 05 Mar 2022 04:43:12 -0800 (PST)
+Received: from [10.72.13.171] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id j2-20020a655582000000b00372b2b5467asm7189298pgs.10.2022.03.05.04.43.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Mar 2022 04:43:11 -0800 (PST)
+Subject: Re: [PATCH 2/3] ceph: fix use-after-free in ceph_readdir
+To:     Jeff Layton <jlayton@kernel.org>,
+        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220304161403.19295-1-lhenriques@suse.de>
+ <20220304161403.19295-3-lhenriques@suse.de>
+ <55c6363a0ef0dcca3e6a7c882783f5d47dbbbdc7.camel@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <79cd6979-cb02-c0a3-a4e9-d66f65d78976@redhat.com>
+Date:   Sat, 5 Mar 2022 20:43:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <55c6363a0ef0dcca3e6a7c882783f5d47dbbbdc7.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 20:02 +0200, Andy Shevchenko wrote:
-> Convert the module to be property provider agnostic and allow
-> it to be used on non-OF platforms.
-> 
-> The conversion slightly changes the logic behind property reading for
-> the configuration values. Original code allocates just as much memory
-> as needed. Then for each separate 32- or 64-bit value it reads it
-> from
-> the property and converts to a raw one which will be fed to the
-> sensor.
-> In the new code we allocate the amount of memory needed to retrieve
-> all
-> values at once from the property and then convert them as required.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Tested-by: Nuno Sá <nuno.sa@analog.com>
-> ---
-> v4: added checks for error pointer (Nuno), added Tb tag (Nuno)
-> v3: no changes
-> 
 
-Hi Andy,
+On 3/5/22 2:20 AM, Jeff Layton wrote:
+> On Fri, 2022-03-04 at 16:14 +0000, Lu�s Henriques wrote:
+>> After calling ceph_mdsc_put_request() on dfi->last_readdir, this field
+>> should be set to NULL, otherwise we may end-up freeing it twince and get
+>> the following splat:
+>>
+>>    refcount_t: underflow; use-after-free.
+>>    WARNING: CPU: 0 PID: 229 at lib/refcount.c:28 refcount_warn_saturate+0xa6/0xf0
+>>    ...
+>>    Call Trace:
+>>      <TASK>
+>>      ceph_readdir+0xd35/0x1460 [ceph]
+>>      ? _raw_spin_unlock+0x12/0x30
+>>      ? preempt_count_add+0x73/0xa0
+>>      ? _raw_spin_unlock+0x12/0x30
+>>      ? __mark_inode_dirty+0x27c/0x3a0
+>>      iterate_dir+0x7d/0x190
+>>      __x64_sys_getdents64+0x80/0x120
+>>      ? compat_fillonedir+0x160/0x160
+>>      do_syscall_64+0x43/0x90
+>>      entry_SYSCALL_64_after_hwframe+0x44/0xae
+>>
+>> Signed-off-by: Lu�s Henriques <lhenriques@suse.de>
+>> ---
+>>   fs/ceph/dir.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+>> index 0bcb677d2199..934402f5e9e6 100644
+>> --- a/fs/ceph/dir.c
+>> +++ b/fs/ceph/dir.c
+>> @@ -555,6 +555,7 @@ static int ceph_readdir(struct file *file, struct dir_context *ctx)
+>>   			      le32_to_cpu(rde->inode.in->mode) >> 12)) {
+>>   			dout("filldir stopping us...\n");
+>>   			ceph_mdsc_put_request(dfi->last_readdir);
+>> +			dfi->last_readdir = NULL;
+>>   			err = 0;
+>>   			goto out;
+>>   		}
+> I think Xiubo fixed this in the testing branch late yesterday. It should
+> no longer be needed.
 
-Just small observation/question from my side...
+Right and I have sent a new version of my previous patch to remove the 
+buggy code.
 
->  drivers/iio/temperature/ltc2983.c | 209 +++++++++++++++-------------
-> --
->  1 file changed, 106 insertions(+), 103 deletions(-)
-> 
-> diff --git a/drivers/iio/temperature/ltc2983.c
-> b/drivers/iio/temperature/ltc2983.c
-> index 636bbc9011b9..6971e8828d44 100644
-> --- a/drivers/iio/temperature/ltc2983.c
-> +++ b/drivers/iio/temperature/ltc2983.c
-> @@ -12,11 +12,15 @@
->  #include <linux/iio/iio.h>
->  #include <linux/interrupt.h>
->  #include <linux/list.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
-> -#include <linux/of_gpio.h>
-> +#include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/spi/spi.h>
->  
-> +#include <asm/byteorder.h>
-> +#include <asm/unaligned.h>
-> +
->  /* register map */
->  #define LTC2983_STATUS_REG                     0x0000
->  #define LTC2983_TEMP_RES_START_REG             0x0010
-> @@ -219,7 +223,7 @@ struct ltc2983_sensor {
->  
->  struct ltc2983_custom_sensor {
->         /* raw table sensor data */
-> -       u8 *table;
-> +       void *table;
->         size_t size;
->         /* address offset */
->         s8 offset;
-> @@ -377,25 +381,25 @@ static int
-> __ltc2983_chan_custom_sensor_assign(struct ltc2983_data *st,
->         return regmap_bulk_write(st->regmap, reg, custom->table,
-> custom->size);
->  }
->  
-> -static struct ltc2983_custom_sensor *__ltc2983_custom_sensor_new(
-> -                                               struct ltc2983_data
-> *st,
-> -                                               const struct
-> device_node *np,
-> -                                               const char *propname,
-> -                                               const bool
-> is_steinhart,
-> -                                               const u32 resolution,
-> -                                               const bool
-> has_signed)
-> +static struct ltc2983_custom_sensor *
-> +__ltc2983_custom_sensor_new(struct ltc2983_data *st, const struct
-> fwnode_handle *fn,
-> +                           const char *propname, const bool
-> is_steinhart,
-> +                           const u32 resolution, const bool
-> has_signed)
->  {
->         struct ltc2983_custom_sensor *new_custom;
-> -       u8 index, n_entries, tbl = 0;
->         struct device *dev = &st->spi->dev;
->         /*
->          * For custom steinhart, the full u32 is taken. For all the
-> others
->          * the MSB is discarded.
->          */
->         const u8 n_size = is_steinhart ? 4 : 3;
-> -       const u8 e_size = is_steinhart ? sizeof(u32) : sizeof(u64);
-> +       u8 index, n_entries;
-> +       int ret;
->  
-> -       n_entries = of_property_count_elems_of_size(np, propname,
-> e_size);
-> +       if (is_steinhart)
-> +               n_entries = fwnode_property_count_u32(fn, propname);
-> +       else
-> +               n_entries = fwnode_property_count_u64(fn, propname);
->         /* n_entries must be an even number */
->         if (!n_entries || (n_entries % 2) != 0) {
->                 dev_err(dev, "Number of entries either 0 or not
-> even\n");
-> @@ -423,21 +427,33 @@ static struct ltc2983_custom_sensor
-> *__ltc2983_custom_sensor_new(
->         }
->  
->         /* allocate the table */
-> -       new_custom->table = devm_kzalloc(dev, new_custom->size,
-> GFP_KERNEL);
-> +       if (is_steinhart)
-> +               new_custom->table = devm_kcalloc(dev, n_entries,
-> sizeof(u32), GFP_KERNEL);
-> +       else
-> +               new_custom->table = devm_kcalloc(dev, n_entries,
-> sizeof(u64), GFP_KERNEL);
->         if (!new_custom->table)
->                 return ERR_PTR(-ENOMEM);
->  
-> -       for (index = 0; index < n_entries; index++) {
-> -               u64 temp = 0, j;
-> -               /*
-> -                * Steinhart sensors are configured with raw values
-> in the
-> -                * devicetree. For the other sensors we must convert
-> the
-> -                * value to raw. The odd index's correspond to
-> temperarures
-> -                * and always have 1/1024 of resolution. Temperatures
-> also
-> -                * come in kelvin, so signed values is not possible
-> -                */
-> -               if (!is_steinhart) {
-> -                       of_property_read_u64_index(np, propname,
-> index, &temp);
-> +       /*
-> +        * Steinhart sensors are configured with raw values in the
-> firmware
-> +        * node. For the other sensors we must convert the value to
-> raw.
-> +        * The odd index's correspond to temperatures and always have
-> 1/1024
-> +        * of resolution. Temperatures also come in Kelvin, so signed
-> values
-> +        * are not possible.
-> +        */
-> +       if (is_steinhart) {
-> +               ret = fwnode_property_read_u32_array(fn, propname,
-> new_custom->table, n_entries);
-> +               if (ret < 0)
-> +                       return ERR_PTR(ret);
-> +
-> +               cpu_to_be32_array(new_custom->table, new_custom-
-> >table, n_entries);
-> +       } else {
-> +               ret = fwnode_property_read_u64_array(fn, propname,
-> new_custom->table, n_entries);
-> +               if (ret < 0)
-> +                       return ERR_PTR(ret);
-> +
-> +               for (index = 0; index < n_entries; index++) {
-> +                       u64 temp = ((u64 *)new_custom->table)[index];
->  
->                         if ((index % 2) != 0)
->                                 temp = __convert_to_raw(temp, 1024);
-> @@ -445,16 +461,9 @@ static struct ltc2983_custom_sensor
-> *__ltc2983_custom_sensor_new(
->                                 temp = __convert_to_raw_sign(temp,
-> resolution);
->                         else
->                                 temp = __convert_to_raw(temp,
-> resolution);
-> -               } else {
-> -                       u32 t32;
->  
-> -                       of_property_read_u32_index(np, propname,
-> index, &t32);
-> -                       temp = t32;
-> +                       put_unaligned_be24(temp, new_custom->table +
-> index * 3);
->                 }
-> -
-> -               for (j = 0; j < n_size; j++)
-> -                       new_custom->table[tbl++] =
-> -                               temp >> (8 * (n_size - j - 1));
->         }
->  
->         new_custom->is_steinhart = is_steinhart;
-> @@ -597,13 +606,12 @@ static int ltc2983_adc_assign_chan(struct
-> ltc2983_data *st,
->         return __ltc2983_chan_assign_common(st, sensor, chan_val);
->  }
->  
-> -static struct ltc2983_sensor *ltc2983_thermocouple_new(
-> -                                       const struct device_node
-> *child,
-> -                                       struct ltc2983_data *st,
-> -                                       const struct ltc2983_sensor
-> *sensor)
-> +static struct ltc2983_sensor *
-> +ltc2983_thermocouple_new(const struct fwnode_handle *child, struct
-> ltc2983_data *st,
-> +                        const struct ltc2983_sensor *sensor)
->  {
->         struct ltc2983_thermocouple *thermo;
-> -       struct device_node *phandle;
-> +       struct fwnode_handle *ref;
->         u32 oc_current;
->         int ret;
->  
-> @@ -611,11 +619,10 @@ static struct ltc2983_sensor
-> *ltc2983_thermocouple_new(
->         if (!thermo)
->                 return ERR_PTR(-ENOMEM);
->  
-> -       if (of_property_read_bool(child, "adi,single-ended"))
-> +       if (fwnode_property_read_bool(child, "adi,single-ended"))
->                 thermo->sensor_config = LTC2983_THERMOCOUPLE_SGL(1);
->  
-> -       ret = of_property_read_u32(child, "adi,sensor-oc-current-
-> microamp",
-> -                                  &oc_current);
-> +       ret = fwnode_property_read_u32(child, "adi,sensor-oc-current-
-> microamp", &oc_current);
->         if (!ret) {
->                 switch (oc_current) {
->                 case 10:
-> @@ -651,10 +658,11 @@ static struct ltc2983_sensor
-> *ltc2983_thermocouple_new(
->                 return ERR_PTR(-EINVAL);
->         }
->  
-> -       phandle = of_parse_phandle(child, "adi,cold-junction-handle",
-> 0);
-> -       if (phandle) {
-> -               ret = of_property_read_u32(phandle, "reg",
-> -                                          &thermo-
-> >cold_junction_chan);
-> +       ref = fwnode_find_reference(child, "adi,cold-junction-
-> handle", 0);
-> +       if (IS_ERR_OR_NULL(ref)) {
-> +               ref = NULL;
-> +       } else {
-> +               ret = fwnode_property_read_u32(ref, "reg", &thermo-
-> >cold_junction_chan);
->                 if (ret) {
->                         /*
->                          * This would be catched later but we can
-> just return
-> @@ -682,41 +690,41 @@ static struct ltc2983_sensor
-> *ltc2983_thermocouple_new(
->         thermo->sensor.fault_handler =
-> ltc2983_thermocouple_fault_handler;
->         thermo->sensor.assign_chan =
-> ltc2983_thermocouple_assign_chan;
->  
-> -       of_node_put(phandle);
-> +       fwnode_handle_put(ref);
->         return &thermo->sensor;
->  
->  fail:
-> -       of_node_put(phandle);
-> +       fwnode_handle_put(ref);
->         return ERR_PTR(ret);
->  }
->  
-> -static struct ltc2983_sensor *ltc2983_rtd_new(const struct
-> device_node *child,
-> -                                         struct ltc2983_data *st,
-> -                                         const struct ltc2983_sensor
-> *sensor)
-> +static struct ltc2983_sensor *
-> +ltc2983_rtd_new(const struct fwnode_handle *child, struct
-> ltc2983_data *st,
-> +               const struct ltc2983_sensor *sensor)
->  {
->         struct ltc2983_rtd *rtd;
->         int ret = 0;
->         struct device *dev = &st->spi->dev;
-> -       struct device_node *phandle;
-> +       struct fwnode_handle *ref;
->         u32 excitation_current = 0, n_wires = 0;
->  
->         rtd = devm_kzalloc(dev, sizeof(*rtd), GFP_KERNEL);
->         if (!rtd)
->                 return ERR_PTR(-ENOMEM);
->  
-> -       phandle = of_parse_phandle(child, "adi,rsense-handle", 0);
-> -       if (!phandle) {
-> +       ref = fwnode_find_reference(child, "adi,rsense-handle", 0);
-> +       if (IS_ERR_OR_NULL(ref)) {
->                 dev_err(dev, "Property adi,rsense-handle missing or
-> invalid");
+- Xiubo
 
-I'm wondering... Is there any way for NULL being returned? Looking at
-the API, it seems it always return error pointers... Also, all the
-current users of fwnode_find_reference() only care to check for error
-pointers...
-
-Or is this just personal preference and you being prepared for any
-potential change in the API? Note that Im fine with this as-is...
-
-Anyways, will try to re-test this Monday...
-
-- Nuno Sá
-
+> Thanks,
 

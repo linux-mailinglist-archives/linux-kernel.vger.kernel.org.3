@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B91E4CE6C2
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 182884CE6CF
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbiCEUPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 15:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
+        id S232439AbiCEUPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 15:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiCEUPe (ORCPT
+        with ESMTP id S232326AbiCEUPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 5 Mar 2022 15:15:34 -0500
 Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05355E09B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF3C12DCB;
         Sat,  5 Mar 2022 12:14:41 -0800 (PST)
 Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 24A177A053C;
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id 381C87A0543;
         Sat,  5 Mar 2022 21:14:40 +0100 (CET)
 From:   Ondrej Zary <linux@zary.sk>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
@@ -26,9 +26,9 @@ Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
         Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
         linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 03/16] pata_parport: add bpck protocol driver
-Date:   Sat,  5 Mar 2022 21:13:58 +0100
-Message-Id: <20220305201411.501-4-linux@zary.sk>
+Subject: [PATCH 04/16] pata_parport: add bpck6 protocol driver
+Date:   Sat,  5 Mar 2022 21:13:59 +0100
+Message-Id: <20220305201411.501-5-linux@zary.sk>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220305201411.501-1-linux@zary.sk>
 References: <20220305201411.501-1-linux@zary.sk>
@@ -43,537 +43,715 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add MicroSolutions backpack (Series 5) protocol driver.
+Add MicroSolutions backpack (Series 6) protocol driver.
 
 Signed-off-by: Ondrej Zary <linux@zary.sk>
 ---
- drivers/ata/pata_parport/Kconfig  |  17 ++
- drivers/ata/pata_parport/Makefile |   1 +
- drivers/ata/pata_parport/bpck.c   | 481 ++++++++++++++++++++++++++++++
- 3 files changed, 499 insertions(+)
- create mode 100644 drivers/ata/pata_parport/bpck.c
+ drivers/ata/pata_parport/Kconfig   |  18 ++
+ drivers/ata/pata_parport/Makefile  |   1 +
+ drivers/ata/pata_parport/bpck6.c   | 164 ++++++++++
+ drivers/ata/pata_parport/ppc6lnx.c | 486 +++++++++++++++++++++++++++++
+ 4 files changed, 669 insertions(+)
+ create mode 100644 drivers/ata/pata_parport/bpck6.c
+ create mode 100644 drivers/ata/pata_parport/ppc6lnx.c
 
 diff --git a/drivers/ata/pata_parport/Kconfig b/drivers/ata/pata_parport/Kconfig
-index 93b0ad65b523..ed33a6a5c6fe 100644
+index ed33a6a5c6fe..e88d9c0bedc6 100644
 --- a/drivers/ata/pata_parport/Kconfig
 +++ b/drivers/ata/pata_parport/Kconfig
-@@ -19,3 +19,20 @@ config PATA_PARPORT_ATEN
- 	  support into your kernel, you may answer Y here to build in the
- 	  protocol driver, otherwise you should answer M to build it as a
- 	  loadable module. The module will be called aten.
+@@ -36,3 +36,21 @@ config PATA_PARPORT_BPCK
+ 	  answer Y here to build in the protocol driver, otherwise you should
+ 	  answer M to build it as a loadable module.  The module will be
+ 	  called bpck.
 +
-+config PATA_PARPORT_BPCK
-+	tristate "MicroSolutions backpack (Series 5) protocol"
-+	depends on PATA_PARPORT
++config PATA_PARPORT_BPCK6
++	tristate "MicroSolutions backpack (Series 6) protocol"
++	depends on PATA_PARPORT && !64BIT
 +	help
 +	  This option enables support for the Micro Solutions BACKPACK
-+	  parallel port Series 5 IDE protocol.  (Most BACKPACK drives made
-+	  before 1999 were Series 5) Series 5 drives will NOT always have the
-+	  Series noted on the bottom of the drive. Series 6 drivers will.
++	  parallel port Series 6 IDE protocol.  (Most BACKPACK drives made
++	  after 1999 were Series 6) Series 6 drives will have the Series noted
++	  on the bottom of the drive.  Series 5 drivers don't always have it
++	  noted.
 +
-+	  In other words, if your BACKPACK drive doesn't say "Series 6" on the
++	  In other words, if your BACKPACK drive says "Series 6" on the
 +	  bottom, enable this option.
 +
 +	  If you chose to build PATA_PARPORT support into your kernel, you may
 +	  answer Y here to build in the protocol driver, otherwise you should
 +	  answer M to build it as a loadable module.  The module will be
-+	  called bpck.
++	  called bpck6.
 diff --git a/drivers/ata/pata_parport/Makefile b/drivers/ata/pata_parport/Makefile
-index 7e821b629c58..1d03e49aa29f 100644
+index 1d03e49aa29f..60522279aa16 100644
 --- a/drivers/ata/pata_parport/Makefile
 +++ b/drivers/ata/pata_parport/Makefile
-@@ -8,3 +8,4 @@
- 
+@@ -9,3 +9,4 @@
  obj-$(CONFIG_PATA_PARPORT)		+= pata_parport.o
  obj-$(CONFIG_PATA_PARPORT_ATEN)		+= aten.o
-+obj-$(CONFIG_PATA_PARPORT_BPCK)		+= bpck.o
-diff --git a/drivers/ata/pata_parport/bpck.c b/drivers/ata/pata_parport/bpck.c
+ obj-$(CONFIG_PATA_PARPORT_BPCK)		+= bpck.o
++obj-$(CONFIG_PATA_PARPORT_BPCK6)	+= bpck6.o
+diff --git a/drivers/ata/pata_parport/bpck6.c b/drivers/ata/pata_parport/bpck6.c
 new file mode 100644
-index 000000000000..07ee353eae84
+index 000000000000..cd517c822ee2
 --- /dev/null
-+++ b/drivers/ata/pata_parport/bpck.c
-@@ -0,0 +1,481 @@
++++ b/drivers/ata/pata_parport/bpck6.c
+@@ -0,0 +1,164 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ *	bpck.c	(c) 1996-8  Grant R. Guenther <grant@torque.net>
-+ *			    Under the terms of the GNU General Public License.
++ *	backpack.c (c) 2001 Micro Solutions Inc.
++ *		Released under the terms of the GNU General Public license
 + *
-+ *	bpck.c is a low-level protocol driver for the MicroSolutions
-+ *	"backpack" parallel port IDE adapter.
++ *	backpack.c is a low-level protocol driver for the Micro Solutions
++ *		"BACKPACK" parallel port IDE adapter
++ *		(Works on Series 6 drives)
++ *
++ *	Written by: Ken Hahn     (linux-dev@micro-solutions.com)
++ *		    Clive Turvey (linux-dev@micro-solutions.com)
 + */
 +
 +#include <linux/module.h>
 +#include <linux/init.h>
-+#include <linux/delay.h>
 +#include <linux/kernel.h>
++#include <linux/slab.h>
 +#include <linux/types.h>
-+#include <linux/wait.h>
 +#include <linux/io.h>
++#include <linux/parport.h>
 +
++#include "ppc6lnx.c"
 +#include "pata_parport.h"
 +
-+#undef r2
-+#undef w2
-+#undef PC
++#define PPCSTRUCT(pi) ((struct ppc_storage *)(pi->private))
 +
-+#define PC		pi->private
-+#define r2()		(PC = (in_p(2) & 0xff))
-+#define w2(byte)	{ out_p(2, byte); PC = byte; }
-+#define t2(pat)		{ PC ^= pat; out_p(2, PC); }
-+#define e2()		{ PC &= 0xfe; out_p(2, PC); }
-+#define o2()		{ PC |= 1; out_p(2, PC); }
++#define ATAPI_DATA       0      /* data port */
 +
-+#define j44(l, h)     (((l >> 3) & 0x7) | ((l >> 4) & 0x8) | ((h << 1) & 0x70) | (h & 0x80))
-+
-+/* cont = 0 - access the IDE register file
-+ * cont = 1 - access the IDE command set
-+ * cont = 2 - use internal bpck register addressing
-+ */
-+
-+static int cont_map[3] = { 0x40, 0x48, 0 };
-+
-+static int bpck_read_regr(struct pi_adapter *pi, int cont, int regr)
++static int bpck6_read_regr(struct pi_adapter *pi, int cont, int reg)
 +{
-+	int r, l, h;
++	unsigned int out;
 +
-+	r = regr + cont_map[cont];
-+
-+	switch (pi->mode) {
-+	case 0:
-+		w0(r & 0xf); w0(r); t2(2); t2(4);
-+		l = r1();
-+		t2(4);
-+		h = r1();
-+		return j44(l, h);
-+	case 1:
-+		w0(r & 0xf); w0(r); t2(2);
-+		e2(); t2(0x20);
-+		t2(4); h = r0();
-+		t2(1); t2(0x20);
-+		return h;
-+	case 2:
-+	case 3:
-+	case 4:
-+		w0(r); w2(9); w2(0); w2(0x20);
-+		h = r4();
-+		w2(0);
-+		return h;
-+	}
-+	return -1;
++	/* check for bad settings */
++	if (reg < 0 || reg > 7 || cont < 0 || cont > 2)
++		return -1;
++	out = ppc6_rd_port(PPCSTRUCT(pi), cont ? reg | 8 : reg);
++	return out;
 +}
 +
-+static void bpck_write_regr(struct pi_adapter *pi, int cont, int regr, int val)
++static void bpck6_write_regr(struct pi_adapter *pi, int cont, int reg, int val)
 +{
-+	int r = regr + cont_map[cont];
-+
-+	switch (pi->mode) {
-+	case 0:
-+	case 1:
-+		w0(r);
-+		t2(2);
-+		w0(val);
-+		o2(); t2(4); t2(1);
-+		break;
-+	case 2:
-+	case 3:
-+	case 4:
-+		w0(r); w2(9); w2(0);
-+		w0(val); w2(1); w2(3); w2(0);
-+		break;
-+	}
++	/* check for bad settings */
++	if (reg >= 0 && reg <= 7 && cont >= 0 && cont <= 1)
++		ppc6_wr_port(PPCSTRUCT(pi), cont ? reg | 8 : reg, (u8)val);
 +}
 +
-+/* These macros access the bpck registers in native addressing */
-+#define WR(r, v)	bpck_write_regr(pi, 2, r, v)
-+#define RR(r)		(bpck_read_regr(pi, 2, r))
-+
-+static void bpck_write_block(struct pi_adapter *pi, char *buf, int count)
++static void bpck6_write_block(struct pi_adapter *pi, char *buf, int len)
 +{
-+	int i;
-+
-+	switch (pi->mode) {
-+	case 0:
-+		WR(4, 0x40);
-+		w0(0x40); t2(2); t2(1);
-+		for (i = 0; i < count; i++) {
-+			w0(buf[i]); t2(4);
-+		}
-+		WR(4, 0);
-+		break;
-+	case 1:
-+		WR(4, 0x50);
-+		w0(0x40); t2(2); t2(1);
-+		for (i = 0; i < count; i++) {
-+			w0(buf[i]); t2(4);
-+		}
-+		WR(4, 0x10);
-+		break;
-+	case 2:
-+		WR(4, 0x48);
-+		w0(0x40); w2(9); w2(0); w2(1);
-+		for (i = 0; i < count; i++)
-+			w4(buf[i]);
-+		w2(0);
-+		WR(4, 8);
-+		break;
-+	case 3:
-+		WR(4, 0x48);
-+		w0(0x40); w2(9); w2(0); w2(1);
-+		for (i = 0; i < count / 2; i++)
-+			w4w(((u16 *)buf)[i]);
-+		w2(0);
-+		WR(4, 8);
-+		break;
-+	case 4:
-+		WR(4, 0x48);
-+		w0(0x40); w2(9); w2(0); w2(1);
-+		for (i = 0; i < count / 4; i++)
-+			w4l(((u32 *)buf)[i]);
-+		w2(0);
-+		WR(4, 8);
-+		break;
-+	}
++	ppc6_wr_port16_blk(PPCSTRUCT(pi), ATAPI_DATA, buf, (u32)len >> 1);
 +}
 +
-+static void bpck_read_block(struct pi_adapter *pi, char *buf, int count)
++static void bpck6_read_block(struct pi_adapter *pi, char *buf, int len)
 +{
-+	int i, l, h;
-+
-+	switch (pi->mode) {
-+	case 0:
-+		WR(4, 0x40);
-+		w0(0x40); t2(2);
-+		for (i = 0; i < count; i++) {
-+			t2(4); l = r1();
-+			t2(4); h = r1();
-+			buf[i] = j44(l, h);
-+		}
-+		WR(4, 0);
-+		break;
-+	case 1:
-+		WR(4, 0x50);
-+		w0(0x40); t2(2); t2(0x20);
-+		for (i = 0; i < count; i++) {
-+			t2(4); buf[i] = r0();
-+		}
-+		t2(1); t2(0x20);
-+		WR(4, 0x10);
-+		break;
-+	case 2:
-+		WR(4, 0x48);
-+		w0(0x40); w2(9); w2(0); w2(0x20);
-+		for (i = 0; i < count; i++)
-+			buf[i] = r4();
-+		w2(0);
-+		WR(4, 8);
-+		break;
-+	case 3:
-+		WR(4, 0x48);
-+		w0(0x40); w2(9); w2(0); w2(0x20);
-+		for (i = 0; i < count / 2; i++)
-+			((u16 *)buf)[i] = r4w();
-+		w2(0);
-+		WR(4, 8);
-+		break;
-+	case 4:
-+		WR(4, 0x48);
-+		w0(0x40); w2(9); w2(0); w2(0x20);
-+		for (i = 0; i < count / 4; i++)
-+			((u32 *)buf)[i] = r4l();
-+		w2(0);
-+		WR(4, 8);
-+		break;
-+	}
++	ppc6_rd_port16_blk(PPCSTRUCT(pi), ATAPI_DATA, buf, (u32) len >> 1);
 +}
 +
-+static int bpck_probe_unit(struct pi_adapter *pi)
++static void bpck6_connect(struct pi_adapter *pi)
 +{
-+	int o1, o0, f7, id;
-+	int t, s;
++	if (pi->mode >= 2)
++		PPCSTRUCT(pi)->mode = 4 + pi->mode - 2;
++	else if (pi->mode == 1)
++		PPCSTRUCT(pi)->mode = 3;
++	else
++		PPCSTRUCT(pi)->mode = 1;
 +
-+	id = pi->unit;
-+	s = 0;
-+	w2(4); w2(0xe); r2(); t2(2);
-+	o1 = r1() & 0xf8;
-+	o0 = r0();
-+	w0(255-id); w2(4); w0(id);
-+	t2(8); t2(8); t2(8);
-+	t2(2); t = r1() & 0xf8;
-+	f7 = ((id % 8) == 7);
-+	if ((f7) || (t != o1)) {
-+		t2(2); s = r1() & 0xf8;
-+	}
-+	if ((t == o1) && ((!f7) || (s == o1)))  {
-+		w2(0x4c); w0(o0);
-+		return 0;
-+	}
-+	t2(8); w0(0); t2(2); w2(0x4c); w0(o0);
-+	return 1;
++	ppc6_open(PPCSTRUCT(pi));
++	ppc6_wr_extout(PPCSTRUCT(pi), 0x3);
 +}
 +
-+static void bpck_connect(struct pi_adapter *pi)
++static void bpck6_disconnect(struct pi_adapter *pi)
 +{
-+	pi->saved_r0 = r0();
-+	w0(0xff-pi->unit); w2(4); w0(pi->unit);
-+	t2(8); t2(8); t2(8);
-+	t2(2); t2(2);
-+
-+	switch (pi->mode) {
-+	case 0:
-+		t2(8); WR(4, 0);
-+		break;
-+	case 1:
-+		t2(8); WR(4, 0x10);
-+		break;
-+	case 2:
-+	case 3:
-+	case 4:
-+		w2(0); WR(4, 8);
-+		break;
-+	}
-+
-+	WR(5, 8);
-+
-+	//// FIXME: devtype was removed and we're called before device detection
-+//	if (pi->devtype == PI_PCD) {
-+//		WR(0x46, 0x10);		/* fiddle with ESS logic ??? */
-+//		WR(0x4c, 0x38);
-+//		WR(0x4d, 0x88);
-+//		WR(0x46, 0xa0);
-+//		WR(0x41, 0);
-+//		WR(0x4e, 8);
-+//	}
++	ppc6_wr_extout(PPCSTRUCT(pi), 0x0);
++	ppc6_close(PPCSTRUCT(pi));
 +}
 +
-+static void bpck_disconnect(struct pi_adapter *pi)
++static int bpck6_test_port(struct pi_adapter *pi)   /* check for 8-bit port */
 +{
-+	w0(0);
-+	if (pi->mode >= 2) {
-+		w2(9); w2(0);
-+	} else
-+		t2(2);
-+	w2(0x4c); w0(pi->saved_r0);
++	/* copy over duplicate stuff.. initialize state info */
++	PPCSTRUCT(pi)->ppc_id = pi->unit;
++	PPCSTRUCT(pi)->lpt_addr = pi->port;
++
++	/* look at the parport device to see if what modes we can use */
++	if (((struct pardevice *)(pi->pardev))->port->modes &
++	    (PARPORT_MODE_EPP))
++		return 5; /* Can do EPP*/
++	else if (((struct pardevice *)(pi->pardev))->port->modes &
++		 (PARPORT_MODE_TRISTATE))
++		return 2;
++	else /* Just flat SPP */
++		return 1;
 +}
 +
-+/* This fakes the EPP protocol to turn off EPP ... */
-+static void bpck_force_spp(struct pi_adapter *pi)
++static int bpck6_probe_unit(struct pi_adapter *pi)
 +{
-+	pi->saved_r0 = r0();
-+	w0(0xff-pi->unit); w2(4); w0(pi->unit);
-+	t2(8); t2(8); t2(8);
-+	t2(2); t2(2);
++	int out;
 +
-+	w2(0);
-+	w0(4); w2(9); w2(0);
-+	w0(0); w2(1); w2(3); w2(0);
-+	w0(0); w2(9); w2(0);
-+	w2(0x4c); w0(pi->saved_r0);
++	/* SET PPC UNIT NUMBER */
++	PPCSTRUCT(pi)->ppc_id = pi->unit;
++
++	/* LOWER DOWN TO UNIDIRECTIONAL */
++	PPCSTRUCT(pi)->mode = 1;
++
++	out = ppc6_open(PPCSTRUCT(pi));
++
++	if (out) {
++		ppc6_close(PPCSTRUCT(pi));
++		return 1;
++	}
++
++	return 0;
 +}
 +
-+#define TEST_LEN  16
-+
-+static int bpck_test_proto(struct pi_adapter *pi, char *scratch, int verbose)
-+{
-+	int i, e, l, h, om;
-+	char buf[TEST_LEN];
-+
-+	bpck_force_spp(pi);
-+
-+	switch (pi->mode) {
-+	case 0:
-+		bpck_connect(pi);
-+		WR(0x13, 0x7f);
-+		w0(0x13); t2(2);
-+		for (i = 0; i < TEST_LEN; i++) {
-+			t2(4); l = r1();
-+			t2(4); h = r1();
-+			buf[i] = j44(l, h);
-+		}
-+		bpck_disconnect(pi);
-+		break;
-+	case 1:
-+		bpck_connect(pi);
-+		WR(0x13, 0x7f);
-+		w0(0x13); t2(2); t2(0x20);
-+		for (i = 0; i < TEST_LEN; i++) {
-+			t2(4); buf[i] = r0();
-+		}
-+		t2(1); t2(0x20);
-+		bpck_disconnect(pi);
-+		break;
-+	case 2:
-+	case 3:
-+	case 4:
-+		om = pi->mode;
-+		pi->mode = 0;
-+		bpck_connect(pi);
-+		WR(7, 3);
-+		WR(4, 8);
-+		bpck_disconnect(pi);
-+
-+		pi->mode = om;
-+		bpck_connect(pi);
-+		w0(0x13); w2(9); w2(1); w0(0); w2(3); w2(0); w2(0xe0);
-+
-+		switch (pi->mode) {
-+		case 2:
-+			for (i = 0; i < TEST_LEN; i++)
-+				buf[i] = r4();
-+			break;
-+		case 3:
-+			for (i = 0; i < TEST_LEN / 2; i++)
-+				((u16 *)buf)[i] = r4w();
-+			break;
-+		case 4:
-+			for (i = 0; i < TEST_LEN / 4; i++)
-+				((u32 *)buf)[i] = r4l();
-+			break;
-+		}
-+
-+		w2(0);
-+		WR(7, 0);
-+		bpck_disconnect(pi);
-+
-+		break;
-+	}
-+
-+	if (verbose)
-+		dev_info(&pi->dev, "bpck: 0x%x unit %d mode %d",
-+		       pi->port, pi->unit, pi->mode);
-+
-+	e = 0;
-+	for (i = 0; i < TEST_LEN; i++)
-+		if (buf[i] != (i+1))
-+			e++;
-+	return e;
-+}
-+
-+static void bpck_read_eeprom(struct pi_adapter *pi, char *buf)
-+{
-+	int i, j, k, p, v, f, om, od;
-+
-+	bpck_force_spp(pi);
-+
-+	om = pi->mode;  od = pi->delay;
-+	pi->mode = 0; pi->delay = 6;
-+
-+	bpck_connect(pi);
-+
-+	WR(4, 0);
-+	for (i = 0; i < 64; i++) {
-+		WR(6, 8);
-+		WR(6, 0xc);
-+		p = 0x100;
-+		for (k = 0; k < 9; k++) {
-+			f = (((i + 0x180) & p) != 0) * 2;
-+			WR(6, f + 0xc);
-+			WR(6, f + 0xd);
-+			WR(6, f + 0xc);
-+			p = (p >> 1);
-+		}
-+		for (j = 0; j < 2; j++) {
-+			v = 0;
-+			for (k = 0; k < 8; k++) {
-+				WR(6, 0xc);
-+				WR(6, 0xd);
-+				WR(6, 0xc);
-+				f = RR(0);
-+				v = 2 * v + (f == 0x84);
-+			}
-+			buf[2 * i + 1 - j] = v;
-+		}
-+	}
-+	WR(6, 8);
-+	WR(6, 0);
-+	WR(5, 8);
-+
-+	bpck_disconnect(pi);
-+
-+	if (om >= 2) {
-+		bpck_connect(pi);
-+		WR(7, 3);
-+		WR(4, 8);
-+		bpck_disconnect(pi);
-+	}
-+
-+	pi->mode = om; pi->delay = od;
-+}
-+
-+static int bpck_test_port(struct pi_adapter *pi)	/* check for 8-bit port */
-+{
-+	int i, r, m;
-+
-+	w2(0x2c); i = r0(); w0(255-i); r = r0(); w0(i);
-+	m = -1;
-+	if (r == i)
-+		m = 2;
-+	if (r == (255-i))
-+		m = 0;
-+
-+	w2(0xc); i = r0(); w0(255-i); r = r0(); w0(i);
-+	if (r != (255-i))
-+		m = -1;
-+
-+	if (m == 0) {
-+		w2(6); w2(0xc); r = r0(); w0(0xaa); w0(r); w0(0xaa);
-+	}
-+	if (m == 2) {
-+		w2(0x26); w2(0xc);
-+	}
-+
-+	if (m == -1)
-+		return 0;
-+	return 5;
-+}
-+
-+static void bpck_log_adapter(struct pi_adapter *pi, char *scratch, int verbose)
++static void bpck6_log_adapter(struct pi_adapter *pi, char *scratch, int verbose)
 +{
 +	static char * const mode_string[] = {
 +		"4-bit", "8-bit", "EPP-8", "EPP-16", "EPP-32" };
 +
-+#ifdef DUMP_EEPROM
-+	int i;
-+#endif
-+
-+	bpck_read_eeprom(pi, scratch);
-+
-+#ifdef DUMP_EEPROM
-+	if (verbose) {
-+		for (i = 0; i < 128; i++)
-+			if ((scratch[i] < ' ') || (scratch[i] > '~'))
-+				scratch[i] = '.';
-+		dev_info(&pi->dev, "bpck EEPROM: %64.64s\n", scratch);
-+		dev_info(&pi->dev, "	      %64.64s\n", &scratch[64]);
-+	}
-+#endif
-+
-+	dev_info(&pi->dev, "bpck, backpack %8.8s unit %d at 0x%x, mode %d (%s), delay %d\n",
-+		&scratch[110], pi->unit, pi->port, pi->mode,
-+		mode_string[pi->mode], pi->delay);
++	dev_info(&pi->dev, "bpck6, Micro Solutions BACKPACK Drive at 0x%x\n",
++		pi->port);
++	dev_info(&pi->dev, "Unit: %d Mode:%d (%s) Delay %d\n",
++		pi->unit, pi->mode, mode_string[pi->mode], pi->delay);
 +}
 +
-+static struct pi_protocol bpck = {
++static int bpck6_init_proto(struct pi_adapter *pi)
++{
++	struct ppc_storage *p = kzalloc(sizeof(struct ppc_storage), GFP_KERNEL);
++
++	if (p) {
++		pi->private = (unsigned long)p;
++		return 0;
++	}
++
++	return -ENOMEM;
++}
++
++static void bpck6_release_proto(struct pi_adapter *pi)
++{
++	kfree((void *)(pi->private));
++}
++
++static struct pi_protocol bpck6 = {
 +	.owner		= THIS_MODULE,
-+	.name		= "bpck",
++	.name		= "bpck6",
 +	.max_mode	= 5,
-+	.epp_first	= 2,
-+	.default_delay	= 4,
++	.epp_first	= 2, /* 2-5 use epp (need 8 ports) */
 +	.max_units	= 255,
-+	.write_regr	= bpck_write_regr,
-+	.read_regr	= bpck_read_regr,
-+	.write_block	= bpck_write_block,
-+	.read_block	= bpck_read_block,
-+	.connect	= bpck_connect,
-+	.disconnect	= bpck_disconnect,
-+	.test_port	= bpck_test_port,
-+	.probe_unit	= bpck_probe_unit,
-+	.test_proto	= bpck_test_proto,
-+	.log_adapter	= bpck_log_adapter,
-+	.sht		= { PATA_PARPORT_SHT("pata_parport-bpck") },
++	.write_regr	= bpck6_write_regr,
++	.read_regr	= bpck6_read_regr,
++	.write_block	= bpck6_write_block,
++	.read_block	= bpck6_read_block,
++	.connect	= bpck6_connect,
++	.disconnect	= bpck6_disconnect,
++	.test_port	= bpck6_test_port,
++	.probe_unit	= bpck6_probe_unit,
++	.log_adapter	= bpck6_log_adapter,
++	.init_proto	= bpck6_init_proto,
++	.release_proto	= bpck6_release_proto,
++	.sht		= { PATA_PARPORT_SHT("pata_parport-bpck6") },
 +};
 +
 +MODULE_LICENSE("GPL");
-+module_pata_parport_driver(bpck);
++MODULE_AUTHOR("Micro Solutions Inc.");
++MODULE_DESCRIPTION("BACKPACK Protocol module, compatible with PARIDE");
++module_pata_parport_driver(bpck6);
+diff --git a/drivers/ata/pata_parport/ppc6lnx.c b/drivers/ata/pata_parport/ppc6lnx.c
+new file mode 100644
+index 000000000000..52e0f08548c9
+--- /dev/null
++++ b/drivers/ata/pata_parport/ppc6lnx.c
+@@ -0,0 +1,486 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *	ppc6lnx.c (c) 2001 Micro Solutions Inc.
++ *		Released under the terms of the GNU General Public license
++ *
++ *	ppc6lnx.c  is a part of the protocol driver for the Micro Solutions
++ *		"BACKPACK" parallel port IDE adapter
++ *		(Works on Series 6 drives)
++ */
++
++/* PPC 6 Code in C sanitized for LINUX */
++/* Original x86 ASM by Ron, Converted to C by Clive */
++
++#define port_stb	1
++#define port_afd	2
++#define cmd_stb		port_afd
++#define port_init	4
++#define data_stb	port_init
++#define port_sel	8
++#define port_int	16
++#define port_dir	0x20
++
++#define ECR_EPP		0x80
++#define ECR_BI		0x20
++
++/* 60772 Commands */
++#define ACCESS_REG	0x00
++#define ACCESS_PORT	0x40
++
++#define ACCESS_READ	0x00
++#define ACCESS_WRITE	0x20
++
++/* 60772 Command Prefix */
++
++#define CMD_PREFIX_SET		0xe0	/* Special cmd that modifies the next command's operation */
++#define CMD_PREFIX_RESET	0xc0	/* Resets current cmd modifier reg bits */
++ #define PREFIX_IO16		0x01	/* perform 16-bit wide I/O */
++ #define PREFIX_FASTWR		0x04	/* enable PPC mode fast-write */
++ #define PREFIX_BLK		0x08	/* enable block transfer mode */
++
++/* 60772 Registers */
++
++#define REG_STATUS		0x00	/* status register */
++ #define STATUS_IRQA		0x01	/* Peripheral IRQA line */
++ #define STATUS_EEPROM_DO	0x40	/* Serial EEPROM data bit */
++#define REG_VERSION		0x01	/* PPC version register (read) */
++#define REG_HWCFG		0x02	/* Hardware Config register */
++#define REG_RAMSIZE		0x03	/* Size of RAM Buffer */
++ #define RAMSIZE_128K		0x02
++#define REG_EEPROM		0x06	/* EEPROM control register */
++ #define EEPROM_SK		0x01	/* eeprom SK bit */
++ #define EEPROM_DI		0x02	/* eeprom DI bit */
++ #define EEPROM_CS		0x04	/* eeprom CS bit */
++ #define EEPROM_EN		0x08	/* eeprom output enable */
++#define REG_BLKSIZE		0x08	/* Block transfer len (24 bit) */
++
++struct ppc_storage {
++	u16	lpt_addr;		/* LPT base address */
++	u8	ppc_id;
++	u8	mode;			/* operating mode */
++					/* 0 = PPC Uni SW */
++					/* 1 = PPC Uni FW */
++					/* 2 = PPC Bi SW */
++					/* 3 = PPC Bi FW */
++					/* 4 = EPP Byte */
++					/* 5 = EPP Word */
++					/* 6 = EPP Dword */
++	u8	ppc_flags;
++	u8	org_data;		/* original LPT data port contents */
++	u8	org_ctrl;		/* original LPT control port contents */
++	u8	cur_ctrl;		/* current control port contents */
++};
++
++/* ppc_flags */
++#define fifo_wait		0x10
++
++/* DONT CHANGE THESE LEST YOU BREAK EVERYTHING - BIT FIELD DEPENDENCIES */
++#define PPCMODE_UNI_SW		0
++#define PPCMODE_UNI_FW		1
++#define PPCMODE_BI_SW		2
++#define PPCMODE_BI_FW		3
++#define PPCMODE_EPP_BYTE	4
++#define PPCMODE_EPP_WORD	5
++#define PPCMODE_EPP_DWORD	6
++
++static int ppc6_select(struct ppc_storage *ppc);
++static void ppc6_deselect(struct ppc_storage *ppc);
++static void ppc6_send_cmd(struct ppc_storage *ppc, u8 cmd);
++static void ppc6_wr_data_byte(struct ppc_storage *ppc, u8 data);
++static u8 ppc6_rd_data_byte(struct ppc_storage *ppc);
++static u8 ppc6_rd_port(struct ppc_storage *ppc, u8 port);
++static void ppc6_wr_port(struct ppc_storage *ppc, u8 port, u8 data);
++static void ppc6_rd_data_blk(struct ppc_storage *ppc, u8 *data, long count);
++static void ppc6_wait_for_fifo(struct ppc_storage *ppc);
++static void ppc6_wr_data_blk(struct ppc_storage *ppc, u8 *data, long count);
++static void ppc6_rd_port16_blk(struct ppc_storage *ppc, u8 port, u8 *data, long length);
++static void ppc6_wr_port16_blk(struct ppc_storage *ppc, u8 port, u8 *data, long length);
++static void ppc6_wr_extout(struct ppc_storage *ppc, u8 regdata);
++static int ppc6_open(struct ppc_storage *ppc);
++static void ppc6_close(struct ppc_storage *ppc);
++
++static int ppc6_select(struct ppc_storage *ppc)
++{
++	u8 i, j, k;
++
++	i = inb(ppc->lpt_addr + 1);
++	if (i & 1)
++		outb(i, ppc->lpt_addr + 1);
++
++	ppc->org_data = inb(ppc->lpt_addr);
++	ppc->org_ctrl = inb(ppc->lpt_addr + 2) & 0x5F; /* readback ctrl */
++	ppc->cur_ctrl = ppc->org_ctrl;
++	ppc->cur_ctrl |= port_sel;
++	outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++	if (ppc->org_data == 'b')
++		outb('x', ppc->lpt_addr);
++	outb('b', ppc->lpt_addr);
++	outb('p', ppc->lpt_addr);
++	outb(ppc->ppc_id, ppc->lpt_addr);
++	outb(~ppc->ppc_id, ppc->lpt_addr);
++	ppc->cur_ctrl &= ~port_sel;
++	outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++	ppc->cur_ctrl = (ppc->cur_ctrl & port_int) | port_init;
++	outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++	i = ppc->mode & 0x0C;
++	if (i == 0)
++		i = (ppc->mode & 2) | 1;
++	outb(i, ppc->lpt_addr);
++	ppc->cur_ctrl |= port_sel;
++	outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++	/* DELAY */
++	ppc->cur_ctrl |= port_afd;
++	outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++	j = ((i & 0x08) << 4) | ((i & 0x07) << 3);
++	k = inb(ppc->lpt_addr + 1) & 0xB8;
++	if (j == k) {
++		ppc->cur_ctrl &= ~port_afd;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		k = (inb(ppc->lpt_addr + 1) & 0xB8) ^ 0xB8;
++		if (j == k) {
++			if (i & 4)	/* EPP */
++				ppc->cur_ctrl &= ~(port_sel | port_init);
++			else		/* PPC/ECP */
++				ppc->cur_ctrl &= ~port_sel;
++
++			outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++
++			return 1;
++		}
++	}
++	outb(ppc->org_ctrl, ppc->lpt_addr + 2);
++	outb(ppc->org_data, ppc->lpt_addr);
++
++	return 0; /* FAIL */
++}
++
++static void ppc6_deselect(struct ppc_storage *ppc)
++{
++	if (ppc->mode & 4)	/* EPP */
++		ppc->cur_ctrl |= port_init;
++	else			/* PPC/ECP */
++		ppc->cur_ctrl |= port_sel;
++
++	outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++	outb(ppc->org_data, ppc->lpt_addr);
++	outb((ppc->org_ctrl | port_sel), ppc->lpt_addr + 2);
++	outb(ppc->org_ctrl, ppc->lpt_addr + 2);
++}
++
++static void ppc6_send_cmd(struct ppc_storage *ppc, u8 cmd)
++{
++	switch (ppc->mode) {
++	case PPCMODE_UNI_SW:
++	case PPCMODE_UNI_FW:
++	case PPCMODE_BI_SW:
++	case PPCMODE_BI_FW:
++		outb(cmd, ppc->lpt_addr);
++		ppc->cur_ctrl ^= cmd_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		break;
++	case PPCMODE_EPP_BYTE:
++	case PPCMODE_EPP_WORD:
++	case PPCMODE_EPP_DWORD:
++		outb(cmd, ppc->lpt_addr + 3);
++		break;
++	}
++}
++
++static void ppc6_wr_data_byte(struct ppc_storage *ppc, u8 data)
++{
++	switch (ppc->mode) {
++	case PPCMODE_UNI_SW:
++	case PPCMODE_UNI_FW:
++	case PPCMODE_BI_SW:
++	case PPCMODE_BI_FW:
++		outb(data, ppc->lpt_addr);
++		ppc->cur_ctrl ^= data_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		break;
++	case PPCMODE_EPP_BYTE:
++	case PPCMODE_EPP_WORD:
++	case PPCMODE_EPP_DWORD:
++		outb(data, ppc->lpt_addr + 4);
++		break;
++	}
++}
++
++static u8 ppc6_rd_data_byte(struct ppc_storage *ppc)
++{
++	u8 data = 0;
++
++	switch (ppc->mode) {
++	case PPCMODE_UNI_SW:
++	case PPCMODE_UNI_FW:
++		ppc->cur_ctrl = (ppc->cur_ctrl & ~port_stb) ^ data_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		/* DELAY */
++		data = inb(ppc->lpt_addr + 1);
++		data = ((data & 0x80) >> 1) | ((data & 0x38) >> 3);
++		ppc->cur_ctrl |= port_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		/* DELAY */
++		data |= inb(ppc->lpt_addr + 1) & 0xB8;
++		break;
++	case PPCMODE_BI_SW:
++	case PPCMODE_BI_FW:
++		ppc->cur_ctrl |= port_dir;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		ppc->cur_ctrl = (ppc->cur_ctrl | port_stb) ^ data_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		data = inb(ppc->lpt_addr);
++		ppc->cur_ctrl &= ~port_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		ppc->cur_ctrl &= ~port_dir;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		break;
++	case PPCMODE_EPP_BYTE:
++	case PPCMODE_EPP_WORD:
++	case PPCMODE_EPP_DWORD:
++		outb((ppc->cur_ctrl | port_dir), ppc->lpt_addr + 2);
++		data = inb(ppc->lpt_addr + 4);
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		break;
++	}
++
++	return data;
++}
++
++static u8 ppc6_rd_port(struct ppc_storage *ppc, u8 port)
++{
++	ppc6_send_cmd(ppc, port | ACCESS_PORT | ACCESS_READ);
++
++	return ppc6_rd_data_byte(ppc);
++}
++
++static void ppc6_wr_port(struct ppc_storage *ppc, u8 port, u8 data)
++{
++	ppc6_send_cmd(ppc, port | ACCESS_PORT | ACCESS_WRITE);
++
++	ppc6_wr_data_byte(ppc, data);
++}
++
++static void ppc6_rd_data_blk(struct ppc_storage *ppc, u8 *data, long count)
++{
++	switch (ppc->mode) {
++	case PPCMODE_UNI_SW:
++	case PPCMODE_UNI_FW:
++		while (count) {
++			u8 d;
++
++			ppc->cur_ctrl = (ppc->cur_ctrl & ~port_stb) ^ data_stb;
++			outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++			/* DELAY */
++			d = inb(ppc->lpt_addr + 1);
++			d = ((d & 0x80) >> 1) | ((d & 0x38) >> 3);
++			ppc->cur_ctrl |= port_stb;
++			outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++			/* DELAY */
++			d |= inb(ppc->lpt_addr + 1) & 0xB8;
++			*data++ = d;
++			count--;
++		}
++		break;
++	case PPCMODE_BI_SW:
++	case PPCMODE_BI_FW:
++		ppc->cur_ctrl |= port_dir;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		ppc->cur_ctrl |= port_stb;
++		while (count) {
++			ppc->cur_ctrl ^= data_stb;
++			outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++			*data++ = inb(ppc->lpt_addr);
++			count--;
++		}
++		ppc->cur_ctrl &= ~port_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		ppc->cur_ctrl &= ~port_dir;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		break;
++	case PPCMODE_EPP_BYTE:
++		outb((ppc->cur_ctrl | port_dir), ppc->lpt_addr + 2);
++		/* DELAY */
++		while (count) {
++			*data++ = inb(ppc->lpt_addr + 4);
++			count--;
++		}
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		break;
++	case PPCMODE_EPP_WORD:
++		outb((ppc->cur_ctrl | port_dir), ppc->lpt_addr + 2);
++		/* DELAY */
++		while (count > 1) {
++			*((u16 *)data) = inw(ppc->lpt_addr + 4);
++			data  += 2;
++			count -= 2;
++		}
++		while (count) {
++			*data++ = inb(ppc->lpt_addr + 4);
++			count--;
++		}
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		break;
++	case PPCMODE_EPP_DWORD:
++		outb((ppc->cur_ctrl | port_dir), ppc->lpt_addr + 2);
++		/* DELAY */
++		while (count > 3) {
++			*((u32 *)data) = inl(ppc->lpt_addr + 4);
++			data  += 4;
++			count -= 4;
++		}
++		while (count) {
++			*data++ = inb(ppc->lpt_addr + 4);
++			count--;
++		}
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		break;
++	}
++}
++
++static void ppc6_wait_for_fifo(struct ppc_storage *ppc)
++{
++	int i;
++
++	if (ppc->ppc_flags & fifo_wait)
++		for (i = 0; i < 20; i++)
++			inb(ppc->lpt_addr + 1);
++}
++
++static void ppc6_wr_data_blk(struct ppc_storage *ppc, u8 *data, long count)
++{
++	u8 this, last;
++
++	switch (ppc->mode) {
++	case PPCMODE_UNI_SW:
++	case PPCMODE_BI_SW:
++		while (count--)	{
++			outb(*data++, ppc->lpt_addr);
++			ppc->cur_ctrl ^= data_stb;
++			outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		}
++		break;
++	case PPCMODE_UNI_FW:
++	case PPCMODE_BI_FW:
++		ppc6_send_cmd(ppc, CMD_PREFIX_SET | PREFIX_FASTWR);
++		ppc->cur_ctrl |= port_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		last = *data;
++		outb(last, ppc->lpt_addr);
++		while (count) {
++			this = *data++;
++			count--;
++
++			if (this == last) {
++				ppc->cur_ctrl ^= data_stb;
++				outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++			} else {
++				outb(this, ppc->lpt_addr);
++				last = this;
++			}
++		}
++		ppc->cur_ctrl &= ~port_stb;
++		outb(ppc->cur_ctrl, ppc->lpt_addr + 2);
++		ppc6_send_cmd(ppc, CMD_PREFIX_RESET | PREFIX_FASTWR);
++		break;
++	case PPCMODE_EPP_BYTE:
++		while (count) {
++			outb(*data++, ppc->lpt_addr + 4);
++			count--;
++		}
++		ppc6_wait_for_fifo(ppc);
++		break;
++	case PPCMODE_EPP_WORD:
++		while (count > 1) {
++			outw(*((u16 *)data), ppc->lpt_addr + 4);
++			data  += 2;
++			count -= 2;
++		}
++		while (count) {
++			outb(*data++, ppc->lpt_addr + 4);
++			count--;
++		}
++		ppc6_wait_for_fifo(ppc);
++		break;
++	case PPCMODE_EPP_DWORD:
++		while (count > 3) {
++			outl(*((u32 *)data), ppc->lpt_addr + 4);
++			data  += 4;
++			count -= 4;
++		}
++		while (count) {
++			outb(*data++, ppc->lpt_addr + 4);
++			count--;
++		}
++		ppc6_wait_for_fifo(ppc);
++		break;
++	}
++}
++
++static void ppc6_rd_port16_blk(struct ppc_storage *ppc, u8 port, u8 *data, long length)
++{
++	length = length << 1;
++
++	ppc6_send_cmd(ppc, REG_BLKSIZE | ACCESS_REG | ACCESS_WRITE);
++	ppc6_wr_data_byte(ppc, (u8)length);
++	ppc6_wr_data_byte(ppc, (u8)(length >> 8));
++	ppc6_wr_data_byte(ppc, 0);
++
++	ppc6_send_cmd(ppc, CMD_PREFIX_SET | PREFIX_IO16 | PREFIX_BLK);
++
++	ppc6_send_cmd(ppc, port | ACCESS_PORT | ACCESS_READ);
++
++	ppc6_rd_data_blk(ppc, data, length);
++
++	ppc6_send_cmd(ppc, CMD_PREFIX_RESET | PREFIX_IO16 | PREFIX_BLK);
++}
++
++static void ppc6_wr_port16_blk(struct ppc_storage *ppc, u8 port, u8 *data, long length)
++{
++	length = length << 1;
++
++	ppc6_send_cmd(ppc, REG_BLKSIZE | ACCESS_REG | ACCESS_WRITE);
++	ppc6_wr_data_byte(ppc, (u8)length);
++	ppc6_wr_data_byte(ppc, (u8)(length >> 8));
++	ppc6_wr_data_byte(ppc, 0);
++
++	ppc6_send_cmd(ppc, CMD_PREFIX_SET | PREFIX_IO16 | PREFIX_BLK);
++
++	ppc6_send_cmd(ppc, port | ACCESS_PORT | ACCESS_WRITE);
++
++	ppc6_wr_data_blk(ppc, data, length);
++
++	ppc6_send_cmd(ppc, CMD_PREFIX_RESET | PREFIX_IO16 | PREFIX_BLK);
++}
++
++static void ppc6_wr_extout(struct ppc_storage *ppc, u8 regdata)
++{
++	ppc6_send_cmd(ppc, REG_VERSION | ACCESS_REG | ACCESS_WRITE);
++
++	ppc6_wr_data_byte(ppc, (regdata & 0x03) << 6);
++}
++
++static int ppc6_open(struct ppc_storage *ppc)
++{
++	int ret;
++
++	ret = ppc6_select(ppc);
++	if (ret == 0)
++		return ret;
++
++	ppc->ppc_flags &= ~fifo_wait;
++
++	ppc6_send_cmd(ppc, ACCESS_REG | ACCESS_WRITE | REG_RAMSIZE);
++	ppc6_wr_data_byte(ppc, RAMSIZE_128K);
++
++	ppc6_send_cmd(ppc, ACCESS_REG | ACCESS_READ | REG_VERSION);
++
++	if ((ppc6_rd_data_byte(ppc) & 0x3F) == 0x0C)
++		ppc->ppc_flags |= fifo_wait;
++
++	return ret;
++}
++
++static void ppc6_close(struct ppc_storage *ppc)
++{
++	ppc6_deselect(ppc);
++}
 -- 
 Ondrej Zary
 

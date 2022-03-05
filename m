@@ -2,132 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E004CE306
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 06:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 520304CE30B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 06:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiCEF1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 00:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S230457AbiCEFa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 00:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiCEF13 (ORCPT
+        with ESMTP id S229516AbiCEFaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 00:27:29 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C650726F879
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 21:26:39 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V6FOtNg_1646457995;
-Received: from 192.168.0.205(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0V6FOtNg_1646457995)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 05 Mar 2022 13:26:36 +0800
-Message-ID: <ea8d18d3-b3bf-dd21-2d79-a54fe4cf5bc4@linux.alibaba.com>
-Date:   Sat, 5 Mar 2022 13:26:35 +0800
+        Sat, 5 Mar 2022 00:30:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C752413DD8;
+        Fri,  4 Mar 2022 21:30:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B056B80B20;
+        Sat,  5 Mar 2022 05:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88327C004E1;
+        Sat,  5 Mar 2022 05:30:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646458201;
+        bh=Edc8b81vZYzSpHrCt+tg7zphPi/WO47pgwBOpHM+Tck=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JF27r+2dwBL7hWFpKfZY2190IhJNPQ5Ham9BXjUoSXQIAg5g0bbnPmmgJrjHf+z99
+         vu2bn70aoii6JPD+VU0wen8ciLOOLAEaDoODLsTOzqzKj4cib1qVPrI+qLT85gn8yb
+         SLWdS2WVV0kVAtUHmz4q9TTDN7FP6lq4ZV8D1H+GomadWg7P51qQZ59DBpG8AN6Egn
+         ozv4XhnXx0M1mU3vchXSb2p72Fq/dySKZQ+xEq8h79qpahUjW9tNjUl/VXKXcRi6bo
+         y2cwGzOe0Ay1vFNzCpd/CqaUQNwlBE8hKEAoig1yFjfj6ufkaBdur+L9LKInB4z44R
+         TYzgluPL+KGlw==
+Date:   Sat, 5 Mar 2022 07:29:16 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v9 1/1] tpm: fix reference counting for struct tpm_chip
+Message-ID: <YiL1LAWPvvMzKYsL@iki.fi>
+References: <20220302094353.3465-1-LinoSanfilippo@gmx.de>
+ <20220302094353.3465-2-LinoSanfilippo@gmx.de>
+ <YiFFCP3/KVl6uo3e@iki.fi>
+ <8b594101-f676-ca9d-ebe5-337470a3de80@linux.ibm.com>
+ <YiLzTWfo5P1pyxtp@iki.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [RFC PATCH 1/2] kfence: Allow re-enabling KFENCE after system
- startup
-Content-Language: en-US
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220303031505.28495-1-dtcccc@linux.alibaba.com>
- <20220303031505.28495-2-dtcccc@linux.alibaba.com>
- <CANpmjNOOkg=OUmgwdcRus2gdPXT41Y7GkFrgzuBv+o8KHKXyEA@mail.gmail.com>
-From:   Tianchen Ding <dtcccc@linux.alibaba.com>
-In-Reply-To: <CANpmjNOOkg=OUmgwdcRus2gdPXT41Y7GkFrgzuBv+o8KHKXyEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiLzTWfo5P1pyxtp@iki.fi>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/5 02:13, Marco Elver wrote:
-> On Thu, 3 Mar 2022 at 04:15, Tianchen Ding <dtcccc@linux.alibaba.com> wrote:
->>
->> If once KFENCE is disabled by:
->> echo 0 > /sys/module/kfence/parameters/sample_interval
->> KFENCE could never be re-enabled until next rebooting.
->>
->> Allow re-enabling it by writing a positive num to sample_interval.
->>
->> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+On Sat, Mar 05, 2022 at 07:21:26AM +0200, Jarkko Sakkinen wrote:
+> On Fri, Mar 04, 2022 at 01:34:06PM -0500, Stefan Berger wrote:
+> > 
+> > On 3/3/22 17:45, Jarkko Sakkinen wrote:
+> > > On Wed, Mar 02, 2022 at 10:43:53AM +0100, Lino Sanfilippo wrote:
+> > > > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > > > 
+> > > > The following sequence of operations results in a refcount warning:
+> > > > 
+> > > > 1. Open device /dev/tpmrm.
+> > > > 2. Remove module tpm_tis_spi.
+> > > > 3. Write a TPM command to the file descriptor opened at step 1.
+> > > > 
+> > > > ------------[ cut here ]------------
+> > > > WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
+> > > > refcount_t: addition on 0; use-after-free.
+> > > > Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfmac
+> > > > sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 vc4
+> > > > brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
+> > > > raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
+> > > > snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
+> > > > CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
+> > > > Hardware name: BCM2711
+> > > > [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14)
+> > > > [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
+> > > > [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
+> > > > [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
+> > > > [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0xa4)
+> > > > [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54 [tpm])
+> > > > [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_write+0x38/0x60 [tpm])
+> > > > [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4/0x3c0)
+> > > > [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
+> > > > [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
+> > > > Exception stack(0xc226bfa8 to 0xc226bff0)
+> > > > bfa0:                   00000000 000105b4 00000003 beafe664 00000014 00000000
+> > > > bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 beafe684
+> > > > bfe0: 0000006c beafe648 0001056c b6eb6944
+> > > > ---[ end trace d4b8409def9b8b1f ]---
+> > > > 
+> > > > The reason for this warning is the attempt to get the chip->dev reference
+> > > > in tpm_common_write() although the reference counter is already zero.
+> > > > 
+> > > > Since commit 8979b02aaf1d ("tpm: Fix reference count to main device") the
+> > > > extra reference used to prevent a premature zero counter is never taken,
+> > > > because the required TPM_CHIP_FLAG_TPM2 flag is never set.
+> > > > 
+> > > > Fix this by moving the TPM 2 character device handling from
+> > > > tpm_chip_alloc() to tpm_add_char_device() which is called at a later point
+> > > > in time when the flag has been set in case of TPM2.
+> > > > 
+> > > > Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+> > > > already introduced function tpm_devs_release() to release the extra
+> > > > reference but did not implement the required put on chip->devs that results
+> > > > in the call of this function.
+> > > > 
+> > > > Fix this by putting chip->devs in tpm_chip_unregister().
+> > > > 
+> > > > Finally move the new implementation for the TPM 2 handling into a new
+> > > > function to avoid multiple checks for the TPM_CHIP_FLAG_TPM2 flag in the
+> > > > good case and error cases.
+> > > > 
+> > > > Cc: stable@vger.kernel.org
+> > > > Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+> > > > Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
+> > > > Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > Signed-off-by: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> > > > ---
+> > > >   drivers/char/tpm/tpm-chip.c   | 46 +++++--------------------
+> > > >   drivers/char/tpm/tpm.h        |  2 ++
+> > > >   drivers/char/tpm/tpm2-space.c | 65 +++++++++++++++++++++++++++++++++++
+> > > >   3 files changed, 75 insertions(+), 38 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> > > > index b009e7479b70..783d65fc71f0 100644
+> > > > --- a/drivers/char/tpm/tpm-chip.c
+> > > > +++ b/drivers/char/tpm/tpm-chip.c
+> > > > @@ -274,14 +274,6 @@ static void tpm_dev_release(struct device *dev)
+> > > >   	kfree(chip);
+> > > >   }
+> > > > -static void tpm_devs_release(struct device *dev)
+> > > > -{
+> > > > -	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
+> > > > -
+> > > > -	/* release the master device reference */
+> > > > -	put_device(&chip->dev);
+> > > > -}
+> > > > -
+> > > >   /**
+> > > >    * tpm_class_shutdown() - prepare the TPM device for loss of power.
+> > > >    * @dev: device to which the chip is associated.
+> > > > @@ -344,7 +336,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+> > > >   	chip->dev_num = rc;
+> > > >   	device_initialize(&chip->dev);
+> > > > -	device_initialize(&chip->devs);
+> > > >   	chip->dev.class = tpm_class;
+> > > >   	chip->dev.class->shutdown_pre = tpm_class_shutdown;
+> > > > @@ -352,29 +343,12 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+> > > >   	chip->dev.parent = pdev;
+> > > >   	chip->dev.groups = chip->groups;
+> > > > -	chip->devs.parent = pdev;
+> > > > -	chip->devs.class = tpmrm_class;
+> > > > -	chip->devs.release = tpm_devs_release;
+> > > > -	/* get extra reference on main device to hold on
+> > > > -	 * behalf of devs.  This holds the chip structure
+> > > > -	 * while cdevs is in use.  The corresponding put
+> > > > -	 * is in the tpm_devs_release (TPM2 only)
+> > > > -	 */
+> > > > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > > > -		get_device(&chip->dev);
+> > > > -
+> > > >   	if (chip->dev_num == 0)
+> > > >   		chip->dev.devt = MKDEV(MISC_MAJOR, TPM_MINOR);
+> > > >   	else
+> > > >   		chip->dev.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num);
+> > > > -	chip->devs.devt =
+> > > > -		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
+> > > > -
+> > > >   	rc = dev_set_name(&chip->dev, "tpm%d", chip->dev_num);
+> > > > -	if (rc)
+> > > > -		goto out;
+> > > > -	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
+> > > >   	if (rc)
+> > > >   		goto out;
+> > > > @@ -382,9 +356,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+> > > >   		chip->flags |= TPM_CHIP_FLAG_VIRTUAL;
+> > > >   	cdev_init(&chip->cdev, &tpm_fops);
+> > > > -	cdev_init(&chip->cdevs, &tpmrm_fops);
+> > > >   	chip->cdev.owner = THIS_MODULE;
+> > > > -	chip->cdevs.owner = THIS_MODULE;
+> > > >   	rc = tpm2_init_space(&chip->work_space, TPM2_SPACE_BUFFER_SIZE);
+> > > >   	if (rc) {
+> > > > @@ -396,7 +368,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+> > > >   	return chip;
+> > > >   out:
+> > > > -	put_device(&chip->devs);
+> > > >   	put_device(&chip->dev);
+> > > >   	return ERR_PTR(rc);
+> > > >   }
+> > > > @@ -445,14 +416,9 @@ static int tpm_add_char_device(struct tpm_chip *chip)
+> > > >   	}
+> > > >   	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip)) {
+> > > > -		rc = cdev_device_add(&chip->cdevs, &chip->devs);
+> > > > -		if (rc) {
+> > > > -			dev_err(&chip->devs,
+> > > > -				"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
+> > > > -				dev_name(&chip->devs), MAJOR(chip->devs.devt),
+> > > > -				MINOR(chip->devs.devt), rc);
+> > > > -			return rc;
+> > > > -		}
+> > > > +		rc = tpm_devs_add(chip);
+> > > > +		if (rc)
+> > > > +			goto err_del_cdev;
+> > > >   	}
+> > > >   	/* Make the chip available. */
+> > > > @@ -460,6 +426,10 @@ static int tpm_add_char_device(struct tpm_chip *chip)
+> > > >   	idr_replace(&dev_nums_idr, chip, chip->dev_num);
+> > > >   	mutex_unlock(&idr_lock);
+> > > > +	return 0;
+> > > > +
+> > > > +err_del_cdev:
+> > > > +	cdev_device_del(&chip->cdev, &chip->dev);
+> > > >   	return rc;
+> > > >   }
+> > > > @@ -654,7 +624,7 @@ void tpm_chip_unregister(struct tpm_chip *chip)
+> > > >   		hwrng_unregister(&chip->hwrng);
+> > > >   	tpm_bios_log_teardown(chip);
+> > > >   	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip))
+> > > > -		cdev_device_del(&chip->cdevs, &chip->devs);
+> > > > +		tpm_devs_remove(chip);
+> > > >   	tpm_del_char_device(chip);
+> > > >   }
+> > > >   EXPORT_SYMBOL_GPL(tpm_chip_unregister);
+> > > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > > index 283f78211c3a..2163c6ee0d36 100644
+> > > > --- a/drivers/char/tpm/tpm.h
+> > > > +++ b/drivers/char/tpm/tpm.h
+> > > > @@ -234,6 +234,8 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
+> > > >   		       size_t cmdsiz);
+> > > >   int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
+> > > >   		      size_t *bufsiz);
+> > > > +int tpm_devs_add(struct tpm_chip *chip);
+> > > > +void tpm_devs_remove(struct tpm_chip *chip);
+> > > >   void tpm_bios_log_setup(struct tpm_chip *chip);
+> > > >   void tpm_bios_log_teardown(struct tpm_chip *chip);
+> > > > diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> > > > index 97e916856cf3..265ec72b1d81 100644
+> > > > --- a/drivers/char/tpm/tpm2-space.c
+> > > > +++ b/drivers/char/tpm/tpm2-space.c
+> > > > @@ -574,3 +574,68 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
+> > > >   	dev_err(&chip->dev, "%s: error %d\n", __func__, rc);
+> > > >   	return rc;
+> > > >   }
+> > > > +
+> > > > +/*
+> > > > + * Put the reference to the main device.
+> > > > + */
+> > > > +static void tpm_devs_release(struct device *dev)
+> > > > +{
+> > > > +	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
+> > > > +
+> > > > +	/* release the master device reference */
+> > > > +	put_device(&chip->dev);
+> > > > +}
+> > > > +
+> > > > +/*
+> > > > + * Remove the device file for exposed TPM spaces and release the device
+> > > > + * reference. This may also release the reference to the master device.
+> > > > + */
+> > > > +void tpm_devs_remove(struct tpm_chip *chip)
+> > > > +{
+> > > > +	cdev_device_del(&chip->cdevs, &chip->devs);
+> > > > +	put_device(&chip->devs);
+> > > > +}
+> > > > +
+> > > > +/*
+> > > > + * Add a device file to expose TPM spaces. Also take a reference to the
+> > > > + * main device.
+> > > > + */
+> > > > +int tpm_devs_add(struct tpm_chip *chip)
+> > > > +{
+> > > > +	int rc;
+> > > > +
+> > > > +	device_initialize(&chip->devs);
+> > > > +	chip->devs.parent = chip->dev.parent;
+> > > > +	chip->devs.class = tpmrm_class;
+> > > > +
+> > > > +	/*
+> > > > +	 * Get extra reference on main device to hold on behalf of devs.
+> > > > +	 * This holds the chip structure while cdevs is in use. The
+> > > > +	 * corresponding put is in the tpm_devs_release.
+> > > > +	 */
+> > > > +	get_device(&chip->dev);
+> > > > +	chip->devs.release = tpm_devs_release;
+> > > > +	chip->devs.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
+> > > > +	cdev_init(&chip->cdevs, &tpmrm_fops);
+> > > > +	chip->cdevs.owner = THIS_MODULE;
+> > > > +
+> > > > +	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
+> > > > +	if (rc)
+> > > > +		goto err_put_devs;
+> > > > +
+> > > > +	rc = cdev_device_add(&chip->cdevs, &chip->devs);
+> > > > +	if (rc) {
+> > > > +		dev_err(&chip->devs,
+> > > > +			"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
+> > > > +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
+> > > > +			MINOR(chip->devs.devt), rc);
+> > > > +		goto err_put_devs;
+> > > > +	}
+> > > > +
+> > > > +	return 0;
+> > > > +
+> > > > +err_put_devs:
+> > > > +	put_device(&chip->devs);
+> > > > +
+> > > > +	return rc;
+> > > > +}
+> > > > -- 
+> > > > 2.35.1
+> > > > 
+> > > LGTM, thank you.
+> > > 
+> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > 
+> > > Stefan, if possible, for sanity check, redo test with v9.
+> > 
+> > We need that other patch as well!
 > 
-> The only problem I see with this is if KFENCE was disabled because of
-> a KFENCE_WARN_ON(). See below.
+> Yes.
 > 
->> ---
->>   mm/kfence/core.c | 16 ++++++++++++++--
->>   1 file changed, 14 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
->> index 13128fa13062..19eb123c0bba 100644
->> --- a/mm/kfence/core.c
->> +++ b/mm/kfence/core.c
->> @@ -55,6 +55,7 @@ EXPORT_SYMBOL_GPL(kfence_sample_interval); /* Export for test modules. */
->>   #endif
->>   #define MODULE_PARAM_PREFIX "kfence."
->>
->> +static int kfence_enable_late(void);
->>   static int param_set_sample_interval(const char *val, const struct kernel_param *kp)
->>   {
->>          unsigned long num;
->> @@ -65,10 +66,11 @@ static int param_set_sample_interval(const char *val, const struct kernel_param
->>
->>          if (!num) /* Using 0 to indicate KFENCE is disabled. */
->>                  WRITE_ONCE(kfence_enabled, false);
->> -       else if (!READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
->> -               return -EINVAL; /* Cannot (re-)enable KFENCE on-the-fly. */
->>
->>          *((unsigned long *)kp->arg) = num;
->> +
->> +       if (num && !READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
+> > Tested-by: Stefan Berger <stefanb@linux.ibm.com>
 > 
-> Should probably have an 'old_sample_interval = *((unsigned long
-> *)kp->arg)' somewhere before, and add a '&& !old_sample_interval',
-> because if old_sample_interval!=0 then KFENCE was disabled due to a
-> KFENCE_WARN_ON(). Also in this case, it should return -EINVAL. So you
-> want a flow like this:
-> 
-> old_sample_interval = ...;
-> ...
-> if (num && !READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
->    return old_sample_interval ? -EINVAL : kfence_enable_late();
-> ...
-> 
+> Thank you.
 
-Because sample_interval will used by delayed_work, we must put setting 
-sample_interval before enabling KFENCE.
-So the order would be:
+I fixed this manually:
 
-old_sample_interval = sample_interval;
-sample_interval = num;
-if (...) kfence_enable_late();
+$ scripts/checkpatch.pl  0001-tpm-fix-reference-counting-for-struct-tpm_chip.patch 
+WARNING: From:/Signed-off-by: email address mismatch: 'From: Lino Sanfilippo <l.sanfilippo@kunbus.com>' != 'Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>'
 
-This may be bypassed after KFENCE_WARN_ON() happens, if we first write 
-0, and then write 100 to it.
+Changed "From:" to sob address.
 
-How about this one:
+It's now in
 
-	if (ret < 0)
-		return ret;
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
 
-+	/* Cannot set sample_interval after KFENCE_WARN_ON(). */
-+	if (unlikely(*((unsigned long *)kp->arg) && !READ_ONCE(kfence_enabled)))
-+		return -EINVAL;
-+
-	if (!num) /* Using 0 to indicate KFENCE is disabled. */
-		WRITE_ONCE(kfence_enabled, false);
+and should appear to linux-next.
 
-> Thanks,
-> -- Marco
-
+BR, Jarkko

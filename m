@@ -2,121 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC194CE662
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 19:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCB44CE672
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 19:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbiCESOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 13:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S232179AbiCESuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 13:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiCESOu (ORCPT
+        with ESMTP id S229869AbiCESux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 13:14:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A03F16D3B7
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 10:13:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646504038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=TQ/PmDy/wAuYSRhPMWBzjgjzADBCIpXP0+QPOpZXWOA=;
-        b=eVjd5BSAJH9jYsSmtF05zs+ORjkg1vq6jSrLqK60ml/tUERZS1ZXWk0B7fbbgXwzx7xcKG
-        qpS3wLk0ADZu/5kSv8+Pw2DoU2SP0wG5WPKbB9TW18G94lGW6ZXuaB8hbXOmrEdjjDWqLT
-        ATjV8qesdDIscb46ufESL4croK9jzrs=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-KvaqVP3fPHmw5T3-Uyfvww-1; Sat, 05 Mar 2022 13:13:57 -0500
-X-MC-Unique: KvaqVP3fPHmw5T3-Uyfvww-1
-Received: by mail-qk1-f199.google.com with SMTP id 134-20020a37088c000000b0067af418b2f1so1250085qki.16
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 10:13:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TQ/PmDy/wAuYSRhPMWBzjgjzADBCIpXP0+QPOpZXWOA=;
-        b=GcK5Ug6/beiLFcrUGmgv63TnnNqrjB9lvG2ayWk6ds0/lJEJkeRwlFaRRXsL49iqnu
-         +EyAF+nt/Rjdy2l/ChzFvN4Xn2M5pPlsrDuaDJjLqdCJ9pD0M5QpY7/fAUv0ufX3tOq0
-         DToeL3yKr87CzqxTpC+KHQcXKhjDTxSUydAkQ7LJjQ83MMVL5/ZBPWFcM5CMUv6i7BEu
-         82kHO+0OHMiT2BUPkwjYHhv3l/d0hoxBM1aHo0tRhwke4vswC2LRTRS+aYMBAWxZ5Faj
-         /qSvoOFPD6V35y94kA5Qz2yXk74XAA71Isuz5IqWQ0E0p5NzsmQ0Ml+bOzDzXLfaZxE0
-         S7Vw==
-X-Gm-Message-State: AOAM531QS1vu+ib1AntPw8TtBjWxt+smH9wxRJfTWFw1Zn//Nl+eAXA0
-        N15psHV3g8UR5WKqyN44wmzZXurDS0JIMSqASCAV6KgesNa5Y+WfYlsV0pyMPbrFMhfE1cIFHkh
-        YCj/3u5UhcO7cBMAeeUEVq1Dl
-X-Received: by 2002:a37:55c2:0:b0:479:8293:d7d0 with SMTP id j185-20020a3755c2000000b004798293d7d0mr2560814qkb.182.1646504036865;
-        Sat, 05 Mar 2022 10:13:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz/MM0HeyZ0Th4tenJoq2/b1En2hM1Tyt/SzPGuspo4wRFFLCKSYHG4o9YEfNHsPP4FSG4HKQ==
-X-Received: by 2002:a37:55c2:0:b0:479:8293:d7d0 with SMTP id j185-20020a3755c2000000b004798293d7d0mr2560793qkb.182.1646504036653;
-        Sat, 05 Mar 2022 10:13:56 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w20-20020a05622a135400b002dd9806d532sm5376407qtk.54.2022.03.05.10.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 10:13:56 -0800 (PST)
-From:   trix@redhat.com
-To:     davem@davemloft.net, kuba@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, idosch@nvidia.com, petrm@nvidia.com,
-        edumazet@google.com, avagin@gmail.com, yajun.deng@linux.dev,
-        johannes.berg@intel.com, cong.wang@bytedance.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] net: rtnetlink: fix error handling in rtnl_fill_statsinfo()
-Date:   Sat,  5 Mar 2022 10:13:46 -0800
-Message-Id: <20220305181346.697365-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Sat, 5 Mar 2022 13:50:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6296217ED9D;
+        Sat,  5 Mar 2022 10:50:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25A26B80CA1;
+        Sat,  5 Mar 2022 18:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0EAEC004E1;
+        Sat,  5 Mar 2022 18:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646506198;
+        bh=JqYl0znm1BYdpC9OUgVyirfpI605DPBrVG/MLUoKXQ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lgOhfRUk5YwFSQq97l2pds/OziT7CD+DWMF8D3zvcNSW5jVEA9eY9oGBdPxXNTI/V
+         K3jafAqUn1u+ZQg+Xp5bY8SWthmoQy0OUtgqWyzcbAYEd5nMmPP8r4IS2W3UveqgI2
+         dKHOzLmT2kIHX2NbCoGS1DXvbjFtWDnbWZp9+snW/n7GUcpLcOZCe4qMw9R+bH8fVh
+         Pb3msSzt9ccYlafuu8gvy98RPYNwtC3ZjuscXn1/4iHCnOCtLcAzbVMCeK1sdoXBte
+         7LPOdB0U4IpNjfK2+6WSdBvWST5whWhXVHVLLkRrULY3i8t7tMLkjsJ1O/UJj5kq2O
+         t/mcegqZchkog==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 58B32403C8; Sat,  5 Mar 2022 15:49:55 -0300 (-03)
+Date:   Sat, 5 Mar 2022 15:49:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     kkourt@kkourt.io
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kornilios Kourtis <kornilios@isovalent.com>
+Subject: Re: [PATCH] pahole: avoid segfault when parsing a problematic file
+Message-ID: <YiOw06rlBwdw2uYx@kernel.org>
+References: <20220304113821.2366328-1-kkourt@kkourt.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304113821.2366328-1-kkourt@kkourt.io>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Em Fri, Mar 04, 2022 at 12:38:21PM +0100, kkourt@kkourt.io escreveu:
+> From: Kornilios Kourtis <kornilios@isovalent.com>
+> 
+> When trying to use btf encoding for an apparently problematic kernel file,
+> pahole segfaults. As can be seen below [1], the problem is that we are trying to
+> dereference a NULL decoder.
+> 
+> Fix this by checking the return value of dwfl_getmodules which [2] whill return
+> -1 on errors or an offset if one of the modules did not return DWARF_CB_OK. (In
+> this specific case, it was __cus__load_debug_types that returnd
+> DWARF_CB_ABORT.)
+> 
+> Also, ensure that we get a reasonable error by setting errno in
+> cus__load_files(). Otherwise, we get a "No such file or directory" error which
+> might be confusing.
 
-The clang static analyzer reports this issue
-rtnetlink.c:5481:2: warning: Undefined or garbage
-  value returned to caller
-  return err;
-  ^~~~~~~~~~
+Can you break this into two patches, one for checking dwfl_getmodules()
+failure and the second setting errno?
 
-There is a function level err variable, in the
-list_for_each_entry_rcu block there is a shadow
-err.  Remove the shadow.
+We should try to avoid these patches that do multiple fixes, as
+sometimes one of the fixes isn't really correct and we end up not being
+able to use 'git revert' which should be the case when we figure out
+that some previous fix wasn't correct.
 
-In the same block, the call to nla_nest_start_noflag()
-can fail without setting an err.  Set the err
-to -EMSGSIZE.
+Thanks for working on this, lemme know if you're busy in which case I
+can do this myself.
 
-Fixes: 216e690631f5 ("net: rtnetlink: rtnl_fill_statsinfo(): Permit non-EMSGSIZE error returns")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- net/core/rtnetlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Best regards,
 
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index a66b6761b88b1..a759f9e0a8476 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -5440,12 +5440,12 @@ static int rtnl_fill_statsinfo(struct sk_buff *skb, struct net_device *dev,
- 		list_for_each_entry_rcu(af_ops, &rtnl_af_ops, list) {
- 			if (af_ops->fill_stats_af) {
- 				struct nlattr *af;
--				int err;
+- Arnaldo
  
- 				af = nla_nest_start_noflag(skb,
- 							   af_ops->family);
- 				if (!af) {
- 					rcu_read_unlock();
-+					err = -EMSGSIZE;
- 					goto nla_put_failure;
- 				}
- 				err = af_ops->fill_stats_af(skb, dev);
--- 
-2.26.3
+> After tha patch:
+> $ ./pahole -J vmlinux-5.3.18-24.102-default.debug
+> pahole: vmlinux-5.3.18-24.102-default.debug: Unknown error -22
+> 
+> [1]:
+> $ gdb -q --args ./pahole -J vmlinux-5.3.18-24.102-default.debug
+> Reading symbols from ./pahole...
+> (gdb) r
+> Starting program: /tmp/pahole/build/pahole -J vmlinux-5.3.18-24.102-default.debug
+> [Thread debugging using libthread_db enabled]
+> Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+> 
+> Program received signal SIGSEGV, Segmentation fault.
+> 0x00007ffff7f4000e in gobuffer__size (gb=0x18) at /tmp/pahole/gobuffer.h:39
+> 39              return gb->index;
+> (gdb) bt
+> (gdb) frame 1
+> 1042            if (gobuffer__size(&encoder->percpu_secinfo) != 0)
+> (gdb) list
+> 1037
+> 1038    int btf_encoder__encode(struct btf_encoder *encoder)
+> 1039    {
+> 1040            int err;
+> 1041
+> 1042            if (gobuffer__size(&encoder->percpu_secinfo) != 0)
+> 1043                    btf_encoder__add_datasec(encoder, PERCPU_SECTION);
+> 1044
+> 1045            /* Empty file, nothing to do, so... done! */
+> 1046            if (btf__get_nr_types(encoder->btf) == 0)
+> (gdb) print encoder
+> $1 = (struct btf_encoder *) 0x0
+> 
+> [2] https://sourceware.org/git/?p=elfutils.git;a=blob;f=libdwfl/libdwfl.h;h=f98f1d525d94bc7bcfc7c816890de5907ee4bd6d;hb=HEAD#l200
+> 
+> Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
+> ---
+>  dwarf_loader.c | 5 ++++-
+>  dwarves.c      | 5 ++++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index e30b03c..fecf711 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -3235,7 +3235,10 @@ static int cus__process_file(struct cus *cus, struct conf_load *conf, int fd,
+>  	};
+>  
+>  	/* Process the one or more modules gleaned from this file. */
+> -	dwfl_getmodules(dwfl, cus__process_dwflmod, &parms, 0);
+> +	int err = dwfl_getmodules(dwfl, cus__process_dwflmod, &parms, 0);
+> +	if (err) {
+> +		return -1;
+> +	}
+>  
+>  	// We can't call dwfl_end(dwfl) here, as we keep pointers to strings
+>  	// allocated by libdw that will be freed at dwfl_end(), so leave this for
+> diff --git a/dwarves.c b/dwarves.c
+> index 81fa47b..c5935ec 100644
+> --- a/dwarves.c
+> +++ b/dwarves.c
+> @@ -2391,8 +2391,11 @@ int cus__load_files(struct cus *cus, struct conf_load *conf,
+>  	int i = 0;
+>  
+>  	while (filenames[i] != NULL) {
+> -		if (cus__load_file(cus, conf, filenames[i]))
+> +		int err = cus__load_file(cus, conf, filenames[i]);
+> +		if (err) {
+> +			errno = err;
+>  			return -++i;
+> +		}
+>  		++i;
+>  	}
+>  
+> -- 
+> 2.25.1
 
+-- 
+
+- Arnaldo

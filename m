@@ -2,88 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E070C4CE705
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BCE4CE707
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232286AbiCEUi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 15:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S232495AbiCEUr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 15:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiCEUix (ORCPT
+        with ESMTP id S231810AbiCEUr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 15:38:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B13A9FF8
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 12:38:02 -0800 (PST)
+        Sat, 5 Mar 2022 15:47:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0204034B98
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 12:47:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646512681;
+        s=mimecast20190719; t=1646513224;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LTq2l8ofz9rdVgsUXAyYiBJlx/2wq7tGHGb9qgHLPos=;
-        b=Na7IWn8d4p3kFHKi7aGUaDrYwKML0YsJX4BIt+EtF6qT6lAQsrGdu0icoNRQy1ZlzbeNCk
-        w8SIt4L/YMfDHIOdu6HzZ2rDOe1iSTbRWZwQgB8APnhPtL0dY8qVLPZUMwN+2INGxnnf+B
-        4XlRrdNSrCGW0BEZC6SATS/teab2fj8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2fc8Gxpcx7Zhgatwh3dEBnBzDu9lzxud4zSky9VbbU4=;
+        b=K+dAwXe3VgnixLPETYwsefACmb4N8cqKvHw80ggnSiXV8lwNdNsDF0WrpFohEbYM6lDick
+        UAsEgCydAH0l2EKD0B50jdUE/ggVo0Mxqi5QTnQ4+z7m/nd5tBBvGaZxzbW2pH7ucMEn2C
+        L8opP35PENdJxrvVG0h+setgisBCHos=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-416-XDigI6JDMom-MOAFdr8-pA-1; Sat, 05 Mar 2022 15:38:00 -0500
-X-MC-Unique: XDigI6JDMom-MOAFdr8-pA-1
-Received: by mail-wm1-f69.google.com with SMTP id o207-20020a1ca5d8000000b0038977354e75so1750473wme.1
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 12:38:00 -0800 (PST)
+ us-mta-299-3jW-woVDNDmfAZJqpJwgBg-1; Sat, 05 Mar 2022 15:47:02 -0500
+X-MC-Unique: 3jW-woVDNDmfAZJqpJwgBg-1
+Received: by mail-qv1-f72.google.com with SMTP id u1-20020ad45aa1000000b00435311d5b9fso8028934qvg.19
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 12:47:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LTq2l8ofz9rdVgsUXAyYiBJlx/2wq7tGHGb9qgHLPos=;
-        b=Q2lQGA0FZWPHIP16BSWHSpFg7vt1KEr2ifmhdN8Azl484435/PBTnaQWZjT3N+2+Sp
-         flY1q+WA3J8u4aC4oJO8gJ0iZXIFQv/QNFHcoKC7eeyHkgnd+qop6xpI4725vsU/rnbk
-         MuHFhyajKkGeVqJG8YDTZd0qYzCegp78g0pPYPINCPSyqUCLXPG+lHwVg0Bf4NtVHgIJ
-         ECqfUAzSuFRMicxnbKF1BDRQvsIrM+MTIR2bhWUtCa1/YvJgxX7ymXDfCgxKvlLPGht+
-         iYIybkim6pmdtli2dJgJdjh/0wGvX38tTH68fbDesD9Ec79En1y37ZeFI7IeWZ3Mso1X
-         LuZw==
-X-Gm-Message-State: AOAM533rX3WO0Ozg3L+HKHLNA5+TMFC/Hk2r1znIr5DO7HlGSa1Smkhl
-        ZN44lF9dUbrIt04GNpHrECTNyRV9Qa7M4UqrI3N6ErNi0HJ1kuz/sDRvycucR+fqqKMuR0PO8Cx
-        m6rwF5eannHTDHYuNOY9FFWs=
-X-Received: by 2002:a5d:6da8:0:b0:1f0:4c26:3f57 with SMTP id u8-20020a5d6da8000000b001f04c263f57mr3501213wrs.460.1646512679062;
-        Sat, 05 Mar 2022 12:37:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzV1YoK0tLxXR6swa6/8fXMxsqZhiV8WJMWAsr0QJnH+uc8+sh3Wp/MtpytQyrJNwH1BzNGwQ==
-X-Received: by 2002:a5d:6da8:0:b0:1f0:4c26:3f57 with SMTP id u8-20020a5d6da8000000b001f04c263f57mr3501203wrs.460.1646512678803;
-        Sat, 05 Mar 2022 12:37:58 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id r12-20020a05600c2c4c00b003816932de9csm15206434wmg.24.2022.03.05.12.37.57
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2fc8Gxpcx7Zhgatwh3dEBnBzDu9lzxud4zSky9VbbU4=;
+        b=tDfpY8UCi/zh8OhjPx2gRH9fp8sElagTyH3J+dcBR80+ox74RlYBVjRTMET238CkMa
+         PyDp+vBjVupDfqyZa4CkwY0+2TpMKYxZ1SAKVndNCtLQrFYPXCSZ7vzUFuFfnYyqSfxe
+         /wTJ3ES8uYSsAQlaIIecrE/KgebDkMUJpyT2SyDhRtjR+cAQlXitnzD7n7j6IdQgq8D+
+         r0yOTc1AbEftEA2m1J28opEZt2SXbjwD0PnmfLgvW7vAOYZVNVgguKbkfvvow+IA59Wd
+         o7aYae/SLe63JQgNT7E8n4N/92/cju5Xx8pE4vuK7iArlsbFBErs/u9//p1ewUrRhZ/g
+         vCQg==
+X-Gm-Message-State: AOAM530MJHzn0zRBREUSFFYMtZSyeuswIP9GXq4M1O/P8j3Eo3n3kvMv
+        w3c6QcM8oQKhrv1/KY6jymMkuZ4dcx40vELnj9Pg/Z5qAAuJm+Ub3moHjT68KRtu14xL5XxO/BF
+        ezO8ucTd8yGYbPs7YVpHYzLCC
+X-Received: by 2002:a05:622a:54b:b0:2e0:634d:1136 with SMTP id m11-20020a05622a054b00b002e0634d1136mr709406qtx.494.1646513222393;
+        Sat, 05 Mar 2022 12:47:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzt8NahR+QVo5aapC9rYWNeYjDAXnxgheZXn0nMcCJ1x55g8uNOvGb7jtcL2ozTXIP+0ODtQw==
+X-Received: by 2002:a05:622a:54b:b0:2e0:634d:1136 with SMTP id m11-20020a05622a054b00b002e0634d1136mr709394qtx.494.1646513222159;
+        Sat, 05 Mar 2022 12:47:02 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id s11-20020a37a90b000000b005f1806cbfe4sm4206941qke.42.2022.03.05.12.47.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 12:37:57 -0800 (PST)
-Date:   Sat, 5 Mar 2022 20:37:56 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "pmladek@suse.com" <pmladek@suse.com>
-Subject: Re: [PATCH v9 07/14] module: Move extra signature support out of
- core code
-Message-ID: <20220305203756.jc5ayzboea6ixm4a@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220228234322.2073104-1-atomlin@redhat.com>
- <20220228234322.2073104-8-atomlin@redhat.com>
- <c03fa2bb-1b0e-62c7-53fe-33e44d20b564@csgroup.eu>
+        Sat, 05 Mar 2022 12:47:01 -0800 (PST)
+From:   trix@redhat.com
+To:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] cgroup: cleanup comments
+Date:   Sat,  5 Mar 2022 12:46:57 -0800
+Message-Id: <20220305204657.707070-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c03fa2bb-1b0e-62c7-53fe-33e44d20b564@csgroup.eu>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -95,26 +75,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-03-02 08:08 +0000, Christophe Leroy wrote:
-> When it was in main.c, is_module_sig_enforced() was build as soon as 
-> CONFIG_MODULES was set.
-> 
-> Now it is only built when CONFIG_MODULE_SIG is selected, so you have to 
-> modify include/linux/modules.h and have the stub 
-> is_module_sig_enforced() when CONFIG_MODULE_SIG is not selected and not 
-> only when CONFIG_MODULES is not selected.
+From: Tom Rix <trix@redhat.com>
 
-Hi Christophe,
+for spdx, add a space before //
 
-Looking at this again, perhaps I'm missing something. If I understand
-correctly, Kconfig CONFIG_MODULE_SIG cannot be selected without
-CONFIG_MODULES; also CONFIG_MODULE_SIG depends on CONFIG_MODULES, no?
-So, what is present is enough right i.e. the stub when CONFIG_MODULES is
-not enabled?
+replacements
+judgement to judgment
+transofrmed to transformed
+partitition to partition
+histrical to historical
+migratecd to migrated
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ kernel/cgroup/cpuset.c  | 10 +++++-----
+ kernel/cgroup/freezer.c |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Kind regards,
-
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index ef88cc366bb84..9390bfd9f1cd3 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -71,7 +71,7 @@ DEFINE_STATIC_KEY_FALSE(cpusets_enabled_key);
+ 
+ /*
+  * There could be abnormal cpuset configurations for cpu or memory
+- * node binding, add this key to provide a quick low-cost judgement
++ * node binding, add this key to provide a quick low-cost judgment
+  * of the situation.
+  */
+ DEFINE_STATIC_KEY_FALSE(cpusets_insane_config_key);
+@@ -1181,7 +1181,7 @@ enum subparts_cmd {
+  * effective_cpus. The function will return 0 if all the CPUs listed in
+  * cpus_allowed can be granted or an error code will be returned.
+  *
+- * For partcmd_disable, the cpuset is being transofrmed from a partition
++ * For partcmd_disable, the cpuset is being transformed from a partition
+  * root back to a non-partition root. Any CPUs in cpus_allowed that are in
+  * parent's subparts_cpus will be taken away from that cpumask and put back
+  * into parent's effective_cpus. 0 should always be returned.
+@@ -2027,7 +2027,7 @@ static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
+ }
+ 
+ /*
+- * update_prstate - update partititon_root_state
++ * update_prstate - update partition_root_state
+  * cs: the cpuset to update
+  * new_prs: new partition root state
+  *
+@@ -2879,7 +2879,7 @@ static int cpuset_css_online(struct cgroup_subsys_state *css)
+ 	/*
+ 	 * Clone @parent's configuration if CGRP_CPUSET_CLONE_CHILDREN is
+ 	 * set.  This flag handling is implemented in cgroup core for
+-	 * histrical reasons - the flag may be specified during mount.
++	 * historical reasons - the flag may be specified during mount.
+ 	 *
+ 	 * Currently, if any sibling cpusets have exclusive cpus or mem, we
+ 	 * refuse to clone the configuration - thereby refusing the task to
+@@ -3076,7 +3076,7 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
+ 
+ 	/*
+ 	 * Don't call update_tasks_cpumask() if the cpuset becomes empty,
+-	 * as the tasks will be migratecd to an ancestor.
++	 * as the tasks will be migrated to an ancestor.
+ 	 */
+ 	if (cpus_updated && !cpumask_empty(cs->cpus_allowed))
+ 		update_tasks_cpumask(cs);
+diff --git a/kernel/cgroup/freezer.c b/kernel/cgroup/freezer.c
+index 3984dd6b8ddbc..617861a547935 100644
+--- a/kernel/cgroup/freezer.c
++++ b/kernel/cgroup/freezer.c
+@@ -1,4 +1,4 @@
+-//SPDX-License-Identifier: GPL-2.0
++// SPDX-License-Identifier: GPL-2.0
+ #include <linux/cgroup.h>
+ #include <linux/sched.h>
+ #include <linux/sched/task.h>
 -- 
-Aaron Tomlin
+2.26.3
 

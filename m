@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E4E4CE5F8
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3A94CE5FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbiCEQpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 11:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S231273AbiCEQpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 11:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCEQpl (ORCPT
+        with ESMTP id S232029AbiCEQpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 11:45:41 -0500
+        Sat, 5 Mar 2022 11:45:45 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14949972E7
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 08:44:50 -0800 (PST)
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B70972E5
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 08:44:51 -0800 (PST)
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 09B2B3F5FC
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 515E93F61D
         for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 16:44:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646498687;
-        bh=EDwfNFL1fK+rOF/m99RkTD5BEbFCgIKUCdGfm95Kzlk=;
+        s=20210705; t=1646498688;
+        bh=91gUovgwKJ5DLGOHRuVyw9SD+EFQtKrhfPdgvnBGTeA=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=r8yP7zYaHQKN8X26Cu34qgQksLisAAavjjg53TQVvUAk62vAyRomWNFwdfhjs6Ice
-         kQKlo73V2BT+C8niMEqgS+BQP75Ax7qL2sIumAYL4xFxEJIxp2MmY5DgltFpMnE8yT
-         uxD9Xu9U4sU3EWeU9d5YPAxvdGgJIKDUmOURtHfCWZvA+n/FEHYolIPopaqSe6I0Aq
-         gQ4G44Rnpuh7d47gKaJHeafCOVouA+KxrMyNQaeiZwiRvpHn9YdvqnfcWtFyL90nsb
-         lJaOtGVqpRUPrF2nJmu4fMYLcvVmngfUEcRa8X7Fd2CU0GJAWpePlCFTVHWwm2yTDF
-         S0OcwyOirL/7A==
-Received: by mail-il1-f197.google.com with SMTP id a5-20020a92c545000000b002c2875a2a57so7682503ilj.0
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 08:44:46 -0800 (PST)
+         MIME-Version;
+        b=qIZ1h3tRNf8MVv4XLSxcunJt8oNgxqsZHPXPvnIZ1ZaVTMT6kOaXU+9DyRy6Hr57n
+         fgMH0MHW/j3MKuJUdAMQBlBOT+9E69lE3Jb4QIegtv5lXmNSmTgFmfatR6C1RLl/VK
+         PnF868E9t3EgA086vNvnAYU12LIzm3b4JcRMsQoAR/8kG0SxszlDhj0qadqaUdJ5Wp
+         P2jsUiQ6KEJUkyPyj4YZqZ6MZmbzRo0zO81SpSQUaEdEYmqbNyhFlI9fg3pT/rM9au
+         MJKvynqGNLhc5TwBBShGwlCaliXIasdG/8WqGTYl05yZ9DA91a9O83VGDDRYxiTS9U
+         mOBtXhlfcnlTQ==
+Received: by mail-io1-f72.google.com with SMTP id w25-20020a6bd619000000b00640ddd0ad11so7560188ioa.2
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 08:44:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EDwfNFL1fK+rOF/m99RkTD5BEbFCgIKUCdGfm95Kzlk=;
-        b=mgun0TnwcPYkyaKjlyxTud+xVVg776QbSQPRc0qRPwMTM2V9MqlgE6RogLB7UelsNH
-         AyLf0snE/CLDf2mSBGXYuhxDROAkZzYK5wIXogj4bRCCYSUrICQH4r+DuRKijWEbrVEZ
-         F63VknnXZbRs6SAh4HEKABTH+gejsciLAFncOU+Gy0/+8UxlHp5ZxNsEBmJ0jLyTrSRs
-         aDgFVKvgS3P8xXAQkTRCXU9Uy5i/5L18gM2nHRW9CDVVT3pTvY/IcEMlkTvlsRoGA8q7
-         ywbp/N6rJBV4m2Wb/wfjD/DfQJsFhOg3966iiVNsslTO7Re0WFHHnkAmiaz9gwLJibQi
-         nciQ==
-X-Gm-Message-State: AOAM533TM2ltnG4IMGzldLYSY7hz7SMr+IUtAY4TuYccl1SbOzszBD8D
-        zMDyuy4dHu2GfDOCSXmPfasMyZEsWESn58QU21Ak21cfDE/a/QGPFnNutnzzo11JjpyLltIacvo
-        OYwXRGyhkVEs8rO2g0xM7NhrqV+KfoCJZwTcaO1srzg==
-X-Received: by 2002:a92:130b:0:b0:2c5:66a6:cad8 with SMTP id 11-20020a92130b000000b002c566a6cad8mr3712774ilt.285.1646498684306;
-        Sat, 05 Mar 2022 08:44:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyDIL4xYKIxwtQDdT4LeDC1u5qF2R2Oa0m+5CXIkLZMfPBEDhpYRvgI7Hw5afkDidS1ua6GEg==
-X-Received: by 2002:a92:130b:0:b0:2c5:66a6:cad8 with SMTP id 11-20020a92130b000000b002c566a6cad8mr3712760ilt.285.1646498683999;
-        Sat, 05 Mar 2022 08:44:43 -0800 (PST)
+        bh=91gUovgwKJ5DLGOHRuVyw9SD+EFQtKrhfPdgvnBGTeA=;
+        b=vapr+Z0bEgYWsh8TCw0GzV1TndSdqnJ5Y0/1Ouwv64gV1Kh6wK3HBhEezOWykO1Dnk
+         khVRhG54+7BDmIXTlONHyPG48jngpW4L+cciFQ/mckc88niMuDsSw9qw77k3cVzGpY1Y
+         gh6UKW5tzR3bnL+c3D3DWXH4OI6UW5bOHHvewOw38D23KcLQPmOsD14UW7knoRbZL/3K
+         7NVEcyT2/ejuySvLgTniMGPlwXIf448xnHLt+yIUdSn+/vbKtAzj5/zDTL540In8mU//
+         CUcd1XTSbs14io/Wlrh5yJbT+i2C4qoKLaMN4LuT09IyFy0HGGFjUFRYhx+KSxcvUHSj
+         Ng6A==
+X-Gm-Message-State: AOAM531NO42bmdRTkLJcwyOdyx6CxAN/VUXsgTlg1wPcrJPY80SPSgEH
+        4jCoNFUaY4tGPk/iCJnHirSFzJJrfUJBhwvh410ZYXK1IihK2k1buAmodPqK5I0YefAv0fqGEnb
+        WX9icSaZejmK8g71iSK3un6DRqTGLJI/Hwp84pwZHrw==
+X-Received: by 2002:a02:cb5c:0:b0:317:201a:951f with SMTP id k28-20020a02cb5c000000b00317201a951fmr3825305jap.181.1646498686253;
+        Sat, 05 Mar 2022 08:44:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRFXjul4I4nIVFRDhogQAm7luLzvS/w2BGIN3Tb5DEuZraXitlL7FY9u4UBfBITIIEZYXWFg==
+X-Received: by 2002:a02:cb5c:0:b0:317:201a:951f with SMTP id k28-20020a02cb5c000000b00317201a951fmr3825284jap.181.1646498686049;
+        Sat, 05 Mar 2022 08:44:46 -0800 (PST)
 Received: from localhost (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056602000a00b0064074921986sm6351319ioa.41.2022.03.05.08.44.42
+        by smtp.gmail.com with ESMTPSA id m7-20020a056e02158700b002c61541edd7sm4011274ilu.3.2022.03.05.08.44.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 08:44:42 -0800 (PST)
+        Sat, 05 Mar 2022 08:44:44 -0800 (PST)
 From:   dann frazier <dann.frazier@canonical.com>
 To:     stable@vger.kernel.org
 Cc:     Miao Xie <miaox@cn.fujitsu.com>,
@@ -72,14 +72,13 @@ Cc:     Miao Xie <miaox@cn.fujitsu.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5.10+5.4 1/3] sched/topology: Make sched_init_numa() use a set for the deduplicating sort
-Date:   Sat,  5 Mar 2022 09:44:28 -0700
-Message-Id: <20220305164430.245125-2-dann.frazier@canonical.com>
+Subject: [PATCH 5.10+5.4 2/3] sched/topology: Fix sched_domain_topology_level alloc in sched_init_numa()
+Date:   Sat,  5 Mar 2022 09:44:29 -0700
+Message-Id: <20220305164430.245125-3-dann.frazier@canonical.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220305164430.245125-1-dann.frazier@canonical.com>
 References: <20220305164430.245125-1-dann.frazier@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -91,262 +90,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-commit 620a6dc40754dc218f5b6389b5d335e9a107fd29 upstream.
+commit 71e5f6644fb2f3304fcb310145ded234a37e7cc1 upstream.
 
-The deduplicating sort in sched_init_numa() assumes that the first line in
-the distance table contains all unique values in the entire table. I've
-been trying to pen what this exactly means for the topology, but it's not
-straightforward. For instance, topology.c uses this example:
+Commit "sched/topology: Make sched_init_numa() use a set for the
+deduplicating sort" allocates 'i + nr_levels (level)' instead of
+'i + nr_levels + 1' sched_domain_topology_level.
 
-  node   0   1   2   3
-    0:  10  20  20  30
-    1:  20  10  20  20
-    2:  20  20  10  20
-    3:  30  20  20  10
+This led to an Oops (on Arm64 juno with CONFIG_SCHED_DEBUG):
 
-  0 ----- 1
-  |     / |
-  |   /   |
-  | /     |
-  2 ----- 3
+sched_init_domains
+  build_sched_domains()
+    __free_domain_allocs()
+      __sdt_free() {
+	...
+        for_each_sd_topology(tl)
+	  ...
+          sd = *per_cpu_ptr(sdd->sd, j); <--
+	  ...
+      }
 
-Which works out just fine. However, if we swap nodes 0 and 1:
-
-  1 ----- 0
-  |     / |
-  |   /   |
-  | /     |
-  2 ----- 3
-
-we get this distance table:
-
-  node   0  1  2  3
-    0:  10 20 20 20
-    1:  20 10 20 30
-    2:  20 20 10 20
-    3:  20 30 20 10
-
-Which breaks the deduplicating sort (non-representative first line). In
-this case this would just be a renumbering exercise, but it so happens that
-we can have a deduplicating sort that goes through the whole table in O(n²)
-at the extra cost of a temporary memory allocation (i.e. any form of set).
-
-The ACPI spec (SLIT) mentions distances are encoded on 8 bits. Following
-this, implement the set as a 256-bits bitmap. Should this not be
-satisfactory (i.e. we want to support 32-bit values), then we'll have to go
-for some other sparse set implementation.
-
-This has the added benefit of letting us allocate just the right amount of
-memory for sched_domains_numa_distance[], rather than an arbitrary
-(nr_node_ids + 1).
-
-Note: DT binding equivalent (distance-map) decodes distances as 32-bit
-values.
-
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20210122123943.1217-2-valentin.schneider@arm.com
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+Tested-by: Barry Song <song.bao.hua@hisilicon.com>
+Link: https://lkml.kernel.org/r/6000e39e-7d28-c360-9cd6-8798fd22a9bf@arm.com
 Signed-off-by: dann frazier <dann.frazier@canonical.com>
 ---
- include/linux/topology.h |  1 +
- kernel/sched/topology.c  | 99 +++++++++++++++++++---------------------
- 2 files changed, 49 insertions(+), 51 deletions(-)
+ kernel/sched/topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/topology.h b/include/linux/topology.h
-index ad03df1cc266..7634cd737061 100644
---- a/include/linux/topology.h
-+++ b/include/linux/topology.h
-@@ -48,6 +48,7 @@ int arch_update_cpu_topology(void);
- /* Conform to ACPI 2.0 SLIT distance definitions */
- #define LOCAL_DISTANCE		10
- #define REMOTE_DISTANCE		20
-+#define DISTANCE_BITS           8
- #ifndef node_distance
- #define node_distance(from,to)	((from) == (to) ? LOCAL_DISTANCE : REMOTE_DISTANCE)
- #endif
 diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index dd7770226086..f2951eba9592 100644
+index f2951eba9592..ff2c6d3ba6c7 100644
 --- a/kernel/sched/topology.c
 +++ b/kernel/sched/topology.c
-@@ -1549,66 +1549,58 @@ static void init_numa_topology_type(void)
- 	}
- }
- 
-+
-+#define NR_DISTANCE_VALUES (1 << DISTANCE_BITS)
-+
- void sched_init_numa(void)
- {
--	int next_distance, curr_distance = node_distance(0, 0);
- 	struct sched_domain_topology_level *tl;
--	int level = 0;
--	int i, j, k;
--
--	sched_domains_numa_distance = kzalloc(sizeof(int) * (nr_node_ids + 1), GFP_KERNEL);
--	if (!sched_domains_numa_distance)
--		return;
--
--	/* Includes NUMA identity node at level 0. */
--	sched_domains_numa_distance[level++] = curr_distance;
--	sched_domains_numa_levels = level;
-+	unsigned long *distance_map;
-+	int nr_levels = 0;
-+	int i, j;
- 
- 	/*
- 	 * O(nr_nodes^2) deduplicating selection sort -- in order to find the
- 	 * unique distances in the node_distance() table.
--	 *
--	 * Assumes node_distance(0,j) includes all distances in
--	 * node_distance(i,j) in order to avoid cubic time.
- 	 */
--	next_distance = curr_distance;
-+	distance_map = bitmap_alloc(NR_DISTANCE_VALUES, GFP_KERNEL);
-+	if (!distance_map)
-+		return;
-+
-+	bitmap_zero(distance_map, NR_DISTANCE_VALUES);
- 	for (i = 0; i < nr_node_ids; i++) {
- 		for (j = 0; j < nr_node_ids; j++) {
--			for (k = 0; k < nr_node_ids; k++) {
--				int distance = node_distance(i, k);
--
--				if (distance > curr_distance &&
--				    (distance < next_distance ||
--				     next_distance == curr_distance))
--					next_distance = distance;
--
--				/*
--				 * While not a strong assumption it would be nice to know
--				 * about cases where if node A is connected to B, B is not
--				 * equally connected to A.
--				 */
--				if (sched_debug() && node_distance(k, i) != distance)
--					sched_numa_warn("Node-distance not symmetric");
-+			int distance = node_distance(i, j);
- 
--				if (sched_debug() && i && !find_numa_distance(distance))
--					sched_numa_warn("Node-0 not representative");
-+			if (distance < LOCAL_DISTANCE || distance >= NR_DISTANCE_VALUES) {
-+				sched_numa_warn("Invalid distance value range");
-+				return;
- 			}
--			if (next_distance != curr_distance) {
--				sched_domains_numa_distance[level++] = next_distance;
--				sched_domains_numa_levels = level;
--				curr_distance = next_distance;
--			} else break;
-+
-+			bitmap_set(distance_map, distance, 1);
- 		}
-+	}
-+	/*
-+	 * We can now figure out how many unique distance values there are and
-+	 * allocate memory accordingly.
-+	 */
-+	nr_levels = bitmap_weight(distance_map, NR_DISTANCE_VALUES);
- 
--		/*
--		 * In case of sched_debug() we verify the above assumption.
--		 */
--		if (!sched_debug())
--			break;
-+	sched_domains_numa_distance = kcalloc(nr_levels, sizeof(int), GFP_KERNEL);
-+	if (!sched_domains_numa_distance) {
-+		bitmap_free(distance_map);
-+		return;
-+	}
-+
-+	for (i = 0, j = 0; i < nr_levels; i++, j++) {
-+		j = find_next_bit(distance_map, NR_DISTANCE_VALUES, j);
-+		sched_domains_numa_distance[i] = j;
- 	}
- 
-+	bitmap_free(distance_map);
-+
- 	/*
--	 * 'level' contains the number of unique distances
-+	 * 'nr_levels' contains the number of unique distances
- 	 *
- 	 * The sched_domains_numa_distance[] array includes the actual distance
- 	 * numbers.
-@@ -1617,15 +1609,15 @@ void sched_init_numa(void)
- 	/*
- 	 * Here, we should temporarily reset sched_domains_numa_levels to 0.
- 	 * If it fails to allocate memory for array sched_domains_numa_masks[][],
--	 * the array will contain less then 'level' members. This could be
-+	 * the array will contain less then 'nr_levels' members. This could be
- 	 * dangerous when we use it to iterate array sched_domains_numa_masks[][]
- 	 * in other functions.
- 	 *
--	 * We reset it to 'level' at the end of this function.
-+	 * We reset it to 'nr_levels' at the end of this function.
- 	 */
- 	sched_domains_numa_levels = 0;
- 
--	sched_domains_numa_masks = kzalloc(sizeof(void *) * level, GFP_KERNEL);
-+	sched_domains_numa_masks = kzalloc(sizeof(void *) * nr_levels, GFP_KERNEL);
- 	if (!sched_domains_numa_masks)
- 		return;
- 
-@@ -1633,7 +1625,7 @@ void sched_init_numa(void)
- 	 * Now for each level, construct a mask per node which contains all
- 	 * CPUs of nodes that are that many hops away from us.
- 	 */
--	for (i = 0; i < level; i++) {
-+	for (i = 0; i < nr_levels; i++) {
- 		sched_domains_numa_masks[i] =
- 			kzalloc(nr_node_ids * sizeof(void *), GFP_KERNEL);
- 		if (!sched_domains_numa_masks[i])
-@@ -1641,12 +1633,17 @@ void sched_init_numa(void)
- 
- 		for (j = 0; j < nr_node_ids; j++) {
- 			struct cpumask *mask = kzalloc(cpumask_size(), GFP_KERNEL);
-+			int k;
-+
- 			if (!mask)
- 				return;
- 
- 			sched_domains_numa_masks[i][j] = mask;
- 
- 			for_each_node(k) {
-+				if (sched_debug() && (node_distance(j, k) != node_distance(k, j)))
-+					sched_numa_warn("Node-distance not symmetric");
-+
- 				if (node_distance(j, k) > sched_domains_numa_distance[i])
- 					continue;
- 
-@@ -1658,7 +1655,7 @@ void sched_init_numa(void)
+@@ -1655,7 +1655,7 @@ void sched_init_numa(void)
  	/* Compute default topology size */
  	for (i = 0; sched_domain_topology[i].mask; i++);
  
--	tl = kzalloc((i + level + 1) *
-+	tl = kzalloc((i + nr_levels) *
+-	tl = kzalloc((i + nr_levels) *
++	tl = kzalloc((i + nr_levels + 1) *
  			sizeof(struct sched_domain_topology_level), GFP_KERNEL);
  	if (!tl)
  		return;
-@@ -1681,7 +1678,7 @@ void sched_init_numa(void)
- 	/*
- 	 * .. and append 'j' levels of NUMA goodness.
- 	 */
--	for (j = 1; j < level; i++, j++) {
-+	for (j = 1; j < nr_levels; i++, j++) {
- 		tl[i] = (struct sched_domain_topology_level){
- 			.mask = sd_numa_mask,
- 			.sd_flags = cpu_numa_flags,
-@@ -1693,8 +1690,8 @@ void sched_init_numa(void)
- 
- 	sched_domain_topology = tl;
- 
--	sched_domains_numa_levels = level;
--	sched_max_numa_distance = sched_domains_numa_distance[level - 1];
-+	sched_domains_numa_levels = nr_levels;
-+	sched_max_numa_distance = sched_domains_numa_distance[nr_levels - 1];
- 
- 	init_numa_topology_type();
- }
 -- 
 2.25.1
 

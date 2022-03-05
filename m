@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3A94CE5FA
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB514CE5FF
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiCEQpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 11:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S232051AbiCEQt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 11:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbiCEQpp (ORCPT
+        with ESMTP id S232043AbiCEQtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 11:45:45 -0500
+        Sat, 5 Mar 2022 11:49:55 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B70972E5
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 08:44:51 -0800 (PST)
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61063275DF
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 08:49:05 -0800 (PST)
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 515E93F61D
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 16:44:47 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 832B13F600
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 16:49:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646498688;
-        bh=91gUovgwKJ5DLGOHRuVyw9SD+EFQtKrhfPdgvnBGTeA=;
+        s=20210705; t=1646498943;
+        bh=DX/QurX075N9jChok0VowAMIPvPGF/QQrCN/G/CBjQs=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=qIZ1h3tRNf8MVv4XLSxcunJt8oNgxqsZHPXPvnIZ1ZaVTMT6kOaXU+9DyRy6Hr57n
-         fgMH0MHW/j3MKuJUdAMQBlBOT+9E69lE3Jb4QIegtv5lXmNSmTgFmfatR6C1RLl/VK
-         PnF868E9t3EgA086vNvnAYU12LIzm3b4JcRMsQoAR/8kG0SxszlDhj0qadqaUdJ5Wp
-         P2jsUiQ6KEJUkyPyj4YZqZ6MZmbzRo0zO81SpSQUaEdEYmqbNyhFlI9fg3pT/rM9au
-         MJKvynqGNLhc5TwBBShGwlCaliXIasdG/8WqGTYl05yZ9DA91a9O83VGDDRYxiTS9U
-         mOBtXhlfcnlTQ==
-Received: by mail-io1-f72.google.com with SMTP id w25-20020a6bd619000000b00640ddd0ad11so7560188ioa.2
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 08:44:47 -0800 (PST)
+        b=vfFxc4aH03sUT7L0y/uv8sMLOsebHfc+g2JkRj2OUbY4hM3NPvFfiv9lmr7VSiohi
+         e3E7gB0HgCMcOjL7tGBvJJlo1HCVo5VjS8p7QcwFy2Wxn+PaSNvq10p08Kk1TEh6YU
+         YDVGVlsokUNyWmboBj6doEDZkuA4C9+5e1PfwuNAaLmfRbpiOiKA1pa250P5THAo0G
+         VJl8ubwvf2ps0LuteozlpT88WpK7+rY/guwNcl3WgVwSWGe3qXYxifxENsIHyQv5yg
+         PlOtq2BCncw5CohToZHFK1F8QNj1Y4/cxjepoT0U6jk7ila+9scbszv+lzP19htn0C
+         GiBlGr4WleWNQ==
+Received: by mail-il1-f197.google.com with SMTP id a2-20020a056e020e0200b002c6344a01c9so122669ilk.13
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 08:49:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=91gUovgwKJ5DLGOHRuVyw9SD+EFQtKrhfPdgvnBGTeA=;
-        b=vapr+Z0bEgYWsh8TCw0GzV1TndSdqnJ5Y0/1Ouwv64gV1Kh6wK3HBhEezOWykO1Dnk
-         khVRhG54+7BDmIXTlONHyPG48jngpW4L+cciFQ/mckc88niMuDsSw9qw77k3cVzGpY1Y
-         gh6UKW5tzR3bnL+c3D3DWXH4OI6UW5bOHHvewOw38D23KcLQPmOsD14UW7knoRbZL/3K
-         7NVEcyT2/ejuySvLgTniMGPlwXIf448xnHLt+yIUdSn+/vbKtAzj5/zDTL540In8mU//
-         CUcd1XTSbs14io/Wlrh5yJbT+i2C4qoKLaMN4LuT09IyFy0HGGFjUFRYhx+KSxcvUHSj
-         Ng6A==
-X-Gm-Message-State: AOAM531NO42bmdRTkLJcwyOdyx6CxAN/VUXsgTlg1wPcrJPY80SPSgEH
-        4jCoNFUaY4tGPk/iCJnHirSFzJJrfUJBhwvh410ZYXK1IihK2k1buAmodPqK5I0YefAv0fqGEnb
-        WX9icSaZejmK8g71iSK3un6DRqTGLJI/Hwp84pwZHrw==
-X-Received: by 2002:a02:cb5c:0:b0:317:201a:951f with SMTP id k28-20020a02cb5c000000b00317201a951fmr3825305jap.181.1646498686253;
-        Sat, 05 Mar 2022 08:44:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwRFXjul4I4nIVFRDhogQAm7luLzvS/w2BGIN3Tb5DEuZraXitlL7FY9u4UBfBITIIEZYXWFg==
-X-Received: by 2002:a02:cb5c:0:b0:317:201a:951f with SMTP id k28-20020a02cb5c000000b00317201a951fmr3825284jap.181.1646498686049;
-        Sat, 05 Mar 2022 08:44:46 -0800 (PST)
+        bh=DX/QurX075N9jChok0VowAMIPvPGF/QQrCN/G/CBjQs=;
+        b=FpSSi2V83DIr+XUy4AsHH70FfF5JiANJkeDyf/qLcuGMabAyxg99I/ChSF5Zxh6Ipx
+         lTSCGY7FafQ2L5NI2+yOBLJHRKESvH5VbyaOiBFUlEiYqB4pGBeZugLy4OQLuBANv53O
+         QPeLOzq4qYLmEMhU8rht2Qc0LvKPc7AUVhDb/dMc2dL4nR4jh83nTHPIE3GbJ8hf0Es9
+         uykXX2R3sF60bWEMeh7EnLRgn1yamzTOIaus66CHcL53rh7nJjuswC2aj+SUtGWRP/7B
+         CCu6c6oC+q6H7NUG98Y+ZiBXYYEKKMgRjSCxiM9WG6BBGlKEGQWKrdhIPw9onOtKgTS+
+         XTkQ==
+X-Gm-Message-State: AOAM530OHWeST3UNb/KROOcdtJ+G+JOXhVSZFKhzKBBSaDLhUlQxaU+6
+        vFAMQmG/nsdL6GoCEJ4EjgpdJcpdefVFgTP1IgGoT3a5iqQTozZuEUvUEq5mIXvz4qB/UtRi8ur
+        QPQMUQNdf56mbIwmnbth3qx3goR2VWCYL5lNR2diRfw==
+X-Received: by 2002:a05:6602:281a:b0:640:d8a0:e14c with SMTP id d26-20020a056602281a00b00640d8a0e14cmr3511151ioe.164.1646498942365;
+        Sat, 05 Mar 2022 08:49:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyTyYnmy/gdQNop+N3Fmp2YZeQ+TMA6NNQtQ8grUI8NpnEknc8/xl5TFVMzuwAYepf0hycF1w==
+X-Received: by 2002:a05:6602:281a:b0:640:d8a0:e14c with SMTP id d26-20020a056602281a00b00640d8a0e14cmr3511138ioe.164.1646498942122;
+        Sat, 05 Mar 2022 08:49:02 -0800 (PST)
 Received: from localhost (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056e02158700b002c61541edd7sm4011274ilu.3.2022.03.05.08.44.44
+        by smtp.gmail.com with ESMTPSA id b25-20020a5d8059000000b00644ddaad77asm6351818ior.29.2022.03.05.08.49.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 08:44:44 -0800 (PST)
+        Sat, 05 Mar 2022 08:49:01 -0800 (PST)
 From:   dann frazier <dann.frazier@canonical.com>
 To:     stable@vger.kernel.org
 Cc:     Miao Xie <miaox@cn.fujitsu.com>,
@@ -72,9 +72,9 @@ Cc:     Miao Xie <miaox@cn.fujitsu.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5.10+5.4 2/3] sched/topology: Fix sched_domain_topology_level alloc in sched_init_numa()
-Date:   Sat,  5 Mar 2022 09:44:29 -0700
-Message-Id: <20220305164430.245125-3-dann.frazier@canonical.com>
+Subject: [PATCH 5.10+5.4 3/3] ia64: ensure proper NUMA distance and possible map initialization
+Date:   Sat,  5 Mar 2022 09:48:53 -0700
+Message-Id: <20220305164853.245476-1-dann.frazier@canonical.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220305164430.245125-1-dann.frazier@canonical.com>
 References: <20220305164430.245125-1-dann.frazier@canonical.com>
@@ -90,51 +90,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+From: Valentin Schneider <valentin.schneider@arm.com>
 
-commit 71e5f6644fb2f3304fcb310145ded234a37e7cc1 upstream.
+commit b22a8f7b4bde4e4ab73b64908ffd5d90ecdcdbfd upstream.
 
-Commit "sched/topology: Make sched_init_numa() use a set for the
-deduplicating sort" allocates 'i + nr_levels (level)' instead of
-'i + nr_levels + 1' sched_domain_topology_level.
+John Paul reported a warning about bogus NUMA distance values spurred by
+commit:
 
-This led to an Oops (on Arm64 juno with CONFIG_SCHED_DEBUG):
+  620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
 
-sched_init_domains
-  build_sched_domains()
-    __free_domain_allocs()
-      __sdt_free() {
-	...
-        for_each_sd_topology(tl)
-	  ...
-          sd = *per_cpu_ptr(sdd->sd, j); <--
-	  ...
-      }
+In this case, the afflicted machine comes up with a reported 256 possible
+nodes, all of which are 0 distance away from one another.  This was
+previously silently ignored, but is now caught by the aforementioned
+commit.
 
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
-Tested-by: Barry Song <song.bao.hua@hisilicon.com>
-Link: https://lkml.kernel.org/r/6000e39e-7d28-c360-9cd6-8798fd22a9bf@arm.com
+The culprit is ia64's node_possible_map which remains unchanged from its
+initialization value of NODE_MASK_ALL.  In John's case, the machine
+doesn't have any SRAT nor SLIT table, but AIUI the possible map remains
+untouched regardless of what ACPI tables end up being parsed.  Thus,
+!online && possible nodes remain with a bogus distance of 0 (distances \in
+[0, 9] are "reserved and have no meaning" as per the ACPI spec).
+
+Follow x86 / drivers/base/arch_numa's example and set the possible map to
+the parsed map, which in this case seems to be the online map.
+
+Link: http://lore.kernel.org/r/255d6b5d-194e-eb0e-ecdd-97477a534441@physik.fu-berlin.de
+Link: https://lkml.kernel.org/r/20210318130617.896309-1-valentin.schneider@arm.com
+Fixes: 620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Tested-by: Sergei Trofimovich <slyfox@gentoo.org>
+Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Anatoly Pugachev <matorola@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: dann frazier <dann.frazier@canonical.com>
 ---
- kernel/sched/topology.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/ia64/kernel/acpi.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index f2951eba9592..ff2c6d3ba6c7 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1655,7 +1655,7 @@ void sched_init_numa(void)
- 	/* Compute default topology size */
- 	for (i = 0; sched_domain_topology[i].mask; i++);
+diff --git a/arch/ia64/kernel/acpi.c b/arch/ia64/kernel/acpi.c
+index a5636524af76..e2af6b172200 100644
+--- a/arch/ia64/kernel/acpi.c
++++ b/arch/ia64/kernel/acpi.c
+@@ -446,7 +446,8 @@ void __init acpi_numa_fixup(void)
+ 	if (srat_num_cpus == 0) {
+ 		node_set_online(0);
+ 		node_cpuid[0].phys_id = hard_smp_processor_id();
+-		return;
++		slit_distance(0, 0) = LOCAL_DISTANCE;
++		goto out;
+ 	}
  
--	tl = kzalloc((i + nr_levels) *
-+	tl = kzalloc((i + nr_levels + 1) *
- 			sizeof(struct sched_domain_topology_level), GFP_KERNEL);
- 	if (!tl)
- 		return;
+ 	/*
+@@ -489,7 +490,7 @@ void __init acpi_numa_fixup(void)
+ 			for (j = 0; j < MAX_NUMNODES; j++)
+ 				slit_distance(i, j) = i == j ?
+ 					LOCAL_DISTANCE : REMOTE_DISTANCE;
+-		return;
++		goto out;
+ 	}
+ 
+ 	memset(numa_slit, -1, sizeof(numa_slit));
+@@ -514,6 +515,8 @@ void __init acpi_numa_fixup(void)
+ 		printk("\n");
+ 	}
+ #endif
++out:
++	node_possible_map = node_online_map;
+ }
+ #endif				/* CONFIG_ACPI_NUMA */
+ 
 -- 
 2.25.1
 

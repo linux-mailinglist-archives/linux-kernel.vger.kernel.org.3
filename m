@@ -2,142 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5ED4CE28F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 05:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80F74CE294
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 05:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbiCEEEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 23:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        id S231185AbiCEEM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 23:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiCEEEF (ORCPT
+        with ESMTP id S231131AbiCEEM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 23:04:05 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A4BB84C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 20:03:16 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so6776509pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 20:03:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DNjNmMTRFvb6vnONGhIWC+OgnqkQwzJ4U2IjjfTyD90=;
-        b=MWnFBNqUbnqmMxySEyPpYYnG3q+KcX1+dVgjHzaU5bfUpCng3VkKxrl/jXTMT/AYFG
-         wB840KdN4gx8Wg5CgJIfQSSPdzIsRvMkY9wJ2km+kPpRt46fGlY7c1RcbEhiwygxuMoH
-         LrdU+9+7KDzRiVUGTh6QyQyWgJRZ3CDHrpt+J3U6l2TtFzy+bW+Kl1oA28hRalvKAzsR
-         HHzD9ULUTZJtzX7TxAZt6Dgi/o45EcOtqt2Y7GrPrCp4u7dPp7wdgQRm7J/J8e9IniEW
-         KPaqla2Vh3rAIH4dykXe6cN3FGRCUdXEl4fhTUVTNvlxTNma14OM/Pkhpjf38jLAtjtw
-         RLwQ==
+        Fri, 4 Mar 2022 23:12:56 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6281587B2
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 20:12:06 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id 3-20020a056e020ca300b002c2cf74037cso6824883ilg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Mar 2022 20:12:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DNjNmMTRFvb6vnONGhIWC+OgnqkQwzJ4U2IjjfTyD90=;
-        b=Oe+Kc9g0kBj8BQiYjBGwdn/N+yOZ/YE8b+aDDFu9qFXoBNsFry6jWd3QbdnZtuUwp8
-         mu6OfOKm3HR93jfNjd5Ghu5JTslYa2Yqsm7EgckexdYO/DR3Bxf0ZbNQei+dHXg9M1RY
-         vEbdViEfCYwrQ7uXXx9Lw6XwzU5LnH+SGg2CzozE/OMRjgeFihgwWSOC07HygjolNkVA
-         M5bC7LuFV2C60KpKS2LfQCR51GVkL3yP30oy1SBDoZlC8vJbp9ePsiON6SEll8M/hqpI
-         BhTqowWWPnutl62ApteGlu5T3S7w8y5V1caJo7ghG3rfZDe81t4BaZX1LxElBwrugy8d
-         i+Nw==
-X-Gm-Message-State: AOAM531HW/BMZh6jpB5+XU7/1SJm360bgO5HB24iVsHCG4yorby4gR0a
-        5mpXrFKUHfY82sNwZIQUVXk=
-X-Google-Smtp-Source: ABdhPJyWbF8QQR9hXYPHj02x5hZat2KesBN01K5DTAtPPg71Q20nhFYTjyR1Oa2SSlfbMTLaLlXitA==
-X-Received: by 2002:a17:90a:7e8b:b0:1be:ef6c:9797 with SMTP id j11-20020a17090a7e8b00b001beef6c9797mr14102508pjl.183.1646452996098;
-        Fri, 04 Mar 2022 20:03:16 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id n34-20020a056a000d6200b004e1ba1016absm7384637pfv.31.2022.03.04.20.03.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 20:03:15 -0800 (PST)
-Date:   Sat, 5 Mar 2022 04:03:11 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] mm/sl[auo]b: move definition of __ksize() to
- mm/slab.h
-Message-ID: <YiLg/0be3jp9mg2V@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220304063427.372145-1-42.hyeyoo@gmail.com>
- <20220304063427.372145-4-42.hyeyoo@gmail.com>
- <a7a7fb5a-6c3b-d85f-e4aa-6027a941760d@suse.cz>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=onw4IedYX5qQ+gs+/33tUPuWqMbo0NqLTtVJkCIiq2g=;
+        b=6uOaasRTXFKxvJHxLXCz41nYM3ogkenlJ+zXNJUtrl6gRHgz6WVuL1QsFtYJtI2GxH
+         9x4pe+1iPv8Xw/iDy5JTUlfnVz/YbafDExZRrbMVGK2zXGDdEycNYcR4NcBd9a3PHs82
+         wSdWOnyRpiPDZ5aLSZFIs0tbkewRJe8dFsgKDo7DuVGCzcJKa/DNG+pZI+I22F3fhd24
+         62lk8kvH4G1NwDHKr7Qx63QUox3dhGMtPhVJWTBkHQkluHdxmTIm7dJ6rh2cM1/pmBwj
+         OzAdhlUnBqS69fIdHv8BHqanAGer33O4Q+1p6haLMICL6pV778WF9bZDMnQ1MO85IXq2
+         WBxw==
+X-Gm-Message-State: AOAM530Jj06zjRejhkkPcVmzTzoUShK9yrphiIYfttG+9KPy02lA1O/M
+        XBO3QBsA6Qp6/yjfWJrurvNDrU7qyuFzVj0Cgkq5ZcuD8CKw
+X-Google-Smtp-Source: ABdhPJzOBwKReV3RereJZlHH5ZjtC5jwfknmMso75kx0/qkY3OMmwZ+dbVFJ25ESSnLpfhjnoGRcvzf6EVGbNodG6+8WXvw/FBWI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7a7fb5a-6c3b-d85f-e4aa-6027a941760d@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:170f:b0:2c2:c247:b586 with SMTP id
+ u15-20020a056e02170f00b002c2c247b586mr1696971ill.155.1646453526316; Fri, 04
+ Mar 2022 20:12:06 -0800 (PST)
+Date:   Fri, 04 Mar 2022 20:12:06 -0800
+In-Reply-To: <00000000000061d7eb05d7057144@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000934ec105d970d589@google.com>
+Subject: Re: [syzbot] WARNING in bpf_prog_test_run_xdp
+From:   syzbot <syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, boris.ostrovsky@oracle.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        hawk@kernel.org, jgross@suse.com, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, lorenzo@kernel.org,
+        netdev@vger.kernel.org, roger.pau@citrix.com,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        toke@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 07:29:21PM +0100, Vlastimil Babka wrote:
-> On 3/4/22 07:34, Hyeonggon Yoo wrote:
-> > __ksize() is only called by KASAN. Remove export symbol and move
-> > definition to mm/slab.h as we don't want to grow its callers.
-> > 
-> > [ willy@infradead.org: Move definition to mm/slab.h and reduce comments ]
-> > 
-> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> 
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
->
+syzbot suspects this issue was fixed by commit:
 
-Thanks!
+commit c8980fcb210851138cb34c9a8cb0cf0c09f07bf9
+Author: Roger Pau Monne <roger.pau@citrix.com>
+Date:   Fri Jan 21 09:01:46 2022 +0000
 
-> > --- a/mm/slab.h
-> > +++ b/mm/slab.h
-> > @@ -685,6 +685,8 @@ static inline void free_large_kmalloc(struct folio *folio, void *object)
-> >  }
-> >  #endif /* CONFIG_SLOB */
-> >  
-> > +size_t __ksize(const void *objp);
-> > +
-> >  static inline size_t slab_ksize(const struct kmem_cache *s)
-> >  {
-> >  #ifndef CONFIG_SLUB
-> > diff --git a/mm/slab_common.c b/mm/slab_common.c
-> > index 1d2f92e871d2..b126fc7247b9 100644
-> > --- a/mm/slab_common.c
-> > +++ b/mm/slab_common.c
-> > @@ -1247,13 +1247,7 @@ EXPORT_SYMBOL(kfree_sensitive);
-> >  
-> >  #ifndef CONFIG_SLOB
-> >  /**
-> 
-> Maybe just /* so it's not even parsed as a kernel-doc anymore?
->
+    xen/x2apic: enable x2apic mode when supported for HVM
 
-Oh yes, that would be better.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13b1991a700000
+start commit:   000fe940e51f sfc: The size of the RX recycle ring should b..
+git tree:       net-next
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e029d3b2ccd4c91a
+dashboard link: https://syzkaller.appspot.com/bug?extid=79fd1ab62b382be6f337
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a719cc700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15851cec700000
 
-> > - * __ksize -- Uninstrumented ksize.
-> > - * @objp: pointer to the object
-> > - *
-> > - * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
-> > - * safety checks as ksize() with KASAN instrumentation enabled.
-> > - *
-> > - * Return: size of the actual memory used by @objp in bytes
-> > + * __ksize -- Uninstrumented ksize. Only called by KASAN.
-> >   */
-> >  size_t __ksize(const void *object)
-> >  {
-> > @@ -1269,7 +1263,6 @@ size_t __ksize(const void *object)
-> >  
-> >  	return slab_ksize(folio_slab(folio)->slab_cache);
-> >  }
-> > -EXPORT_SYMBOL(__ksize);
-> >  #endif
-> >  
+If the result looks correct, please mark the issue as fixed by replying with:
 
--- 
-Thank you, You are awesome!
-Hyeonggon :-)
+#syz fix: xen/x2apic: enable x2apic mode when supported for HVM
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

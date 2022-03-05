@@ -2,133 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6904CE6B4
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 576F34CE6B7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 21:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbiCEUKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 15:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S232299AbiCEUKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 15:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232278AbiCEUKL (ORCPT
+        with ESMTP id S232288AbiCEUKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 15:10:11 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAC77A982;
-        Sat,  5 Mar 2022 12:09:19 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id y2so10209588edc.2;
-        Sat, 05 Mar 2022 12:09:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5PE++IT0SqH+nerQPYhASiAdS43lKhMISvZVQhTLbEg=;
-        b=EDVWhlWI7LvbOBwC5MFrncrM4F8LwYzO7Y26iKuIPCyrXgi1PWhpLCTH8+D6Ne3MAv
-         9nlSNjgrvZaGgdgiYqr82pUGdFkU5yIfDfG/4bonGeh8X2NICURRvAMmpj9xGXFP7Fml
-         znWWon3NdwX49z5OrJOqaObU5zA+orZTWoMoYuQ1JBwoXR1SQmZ6+yip/Zm537wLU8kh
-         ihfFClRHE9dvvI9gWGVaWByJewdpeNGB9phyFgZ6VdhTMIJ4mlQJH+xEiPFP1uKnzUCT
-         BMvJnM6vcrm87nTV3Xar5QFNnl6TI/JKTMiAI89/OcQno0S4jySgGIk2W2m0v3kt8ciT
-         SeiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5PE++IT0SqH+nerQPYhASiAdS43lKhMISvZVQhTLbEg=;
-        b=2WpqD8lUQFJvCPm49FVK/dhTQSYV9nq7S4TwBi4ReLDIZxXm6JKssBkUpIjAEI6Sje
-         8sxciV+HXNcozcy74RJrTy1NSVJzWFvArKzV0WwwMcTwRuDUqafgENgdB6XmKDvylA1h
-         8UEBW2ZPuQrN4AgP4v+VdB35KmbhzzrsHgtWHnbGUJY5dLiaaksCOCVX1FB/W0uHtryv
-         07hYswvKDOhg/NtmwKNQJN+UVXouETn/Y2z2hgDq1EMNWIBpa16NjzDb96tX3EijbsoL
-         DVUcGRPQ53DKLNBWH2F8Jv11Iz2sKOzeZOI2Vf0zQN/WZQQLfFGM5oKUpTlCc08V1vqx
-         FtCA==
-X-Gm-Message-State: AOAM5320G+bR8BeslL4F0cHd/uKppHUYTgABaLJVeMhubKQ0IN4Atbsd
-        oWWS/nWE/8fWlD9LVXT5r6Q=
-X-Google-Smtp-Source: ABdhPJxUdD7Gx/19q3e4nu4bpRaOEl4lNk+TUvgRgirTobQYwgy6h24wLDJOyhkHHk9kFjTRE8F6+g==
-X-Received: by 2002:a05:6402:2744:b0:415:c590:3ac3 with SMTP id z4-20020a056402274400b00415c5903ac3mr4194670edd.405.1646510958178;
-        Sat, 05 Mar 2022 12:09:18 -0800 (PST)
-Received: from krava (94.113.247.30.static.b2b.upcbusiness.cz. [94.113.247.30])
-        by smtp.gmail.com with ESMTPSA id kw5-20020a170907770500b006db075e5358sm726265ejc.66.2022.03.05.12.09.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 12:09:17 -0800 (PST)
-Date:   Sat, 5 Mar 2022 21:09:14 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Linux-v5.17-rc6] Building tools/perf with perl v5.34
-Message-ID: <YiPDaiYffeK4lF+l@krava>
-References: <CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com>
+        Sat, 5 Mar 2022 15:10:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8E33FBCB;
+        Sat,  5 Mar 2022 12:09:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4865260B87;
+        Sat,  5 Mar 2022 20:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2014C004E1;
+        Sat,  5 Mar 2022 20:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646510984;
+        bh=Z797Y7dPt9dgaRbnjf5KloG1BlL0Aq4hMvRukaJ3WzI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SB4IoPKCSfquWYvbGqOw7m2BfjhC/gtGoYuzF6LlvjV13gi2qqsTlvFDHkusMnRqg
+         Hp6AmtuK8EhZ/p4LcX7t5ArqcPyfubPVtrMDYZLF9mO4OzTfMnUPGaikkJFYb6Zrwa
+         Z9TwLMZ38drrWErJA9eWhtDUONUDyf72iROl+pq5CyP+qmNIAQU2Kff51cIa3l1tkI
+         8tNUAPptys7h0rJzvK+JqEayWxRgK2paebrvHqXuRXF55onMAST5n9Ez4gfMd96poV
+         MHZcOZnFV7ZQnjdcihtdjCJ7sV+Z565h1j4bIRi4JOksacLDyz0rBm/5mKFko6Cng4
+         LOQBCMV6mzM3A==
+Date:   Sat, 5 Mar 2022 22:09:34 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
+Message-ID: <YiPDfhfwYUQy9Pfd@kernel.org>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+ <Yh3tgr+g/6IElq0P@kernel.org>
+ <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
+ <Yh4uUoYT+YS5Jxsv@kernel.org>
+ <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
+ <alpine.DEB.2.21.2203041627150.47558@angie.orcam.me.uk>
+ <4e10d7a4-3b3e-a220-8cd2-565614288950@loongson.cn>
+ <YiNlDxF9WppxbkiX@kernel.org>
+ <alpine.DEB.2.21.2203051837280.47558@angie.orcam.me.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.21.2203051837280.47558@angie.orcam.me.uk>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 08:52:18AM +0100, Sedat Dilek wrote:
-> Hi,
+On Sat, Mar 05, 2022 at 07:21:15PM +0000, Maciej W. Rozycki wrote:
+> On Sat, 5 Mar 2022, Mike Rapoport wrote:
 > 
-> I am here on Debian/unstable AMD64 which switched over to perl v5.34
-> in February 2022.
+> > > >  For example I have an x86 system that Linux does not how to interrogate
+> > > > for RAM beyond 64MiB, so I do use `memmap=128M@0' (for legacy reasons the
+> > > > x86 platform has a special exception to always exclude area between 640K
+> > > > and 1M from being used even if not explicitly specified, but we do not
+> > > > have a need for such legacy such legacy concerns with the MIPS port).  I
+> > > > consider it an interim measure however until the kernel has been fixed.
+> > > > 
+> > > >   Maciej
+> > > > 
+> > > 
+> > > Hi Mike, Thomas and Maciej,
+> > > 
+> > > Thank you very much for your feedbacks and discussions.
+> > > 
+> > > To be frank, I think mem= and memmap= are used for debugging and testing
+> > > in most cases, the intention of this patchset is to refactor the related
+> > > code to make them work well on mips.
+> > 
+> > mem= works fine on mips and there is no need to change it.
+> > 
+> > If you must supply complex memory layout on the command line, consider
+> > implementing support for memmap=exact and multiple memmap= parameters on
+> > the kernel command line, like x86 does.
 > 
-> Unfortunately, my perf does not build with this (lib)perl version:
-> 
-> $ ~/bin/perf -vv
-> perf version 5.17-rc6
->                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
->    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
->                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
->         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
->                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
->                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
->               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
-> numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
->               libperl: [ OFF ]  # HAVE_LIBPERL_SUPPORT
->             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
->              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
->             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
->             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
->    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
->                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
->                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
->             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
->                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
->                   aio: [ on  ]  # HAVE_AIO_SUPPORT
->                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
->               libpfm4: [ OFF ]  # HAVE_LIBPFM
-> 
-> $ grep libperl ../make-log_perf-python3.10-install_bin.txt
-> 9:Makefile.config:788: Missing perl devel files. Disabling perl
-> scripting support, please install perl-ExtUtils-Embed/libperl-dev
-> 22:...                       libperl: [ OFF ]
-> 
-> Checking for these requirements:
-> 
-> # dpkg -l | grep perl | grep 5.34 | awk '/^ii/ {print $1 " " $2 " "
-> $3}' | column -t
-> ii  libperl-dev:amd64  5.34.0-3
-> ii  libperl5.34:amd64  5.34.0-3
-> ii  perl               5.34.0-3
-> ii  perl-base          5.34.0-3
-> ii  perl-modules-5.34  5.34.0-3
-> 
-> # dpkg -L perl-modules-5.34 | grep -i ExtUtils | grep -i Embed
-> /usr/share/perl/5.34.0/ExtUtils/Embed.pm
-> 
-> Can you please comment on this?
+>  There's nothing to implement as the MIPS port has supported arbitrary 
+> memory maps since Dec 11th, 2000; that's almost 22 years now.  C.f.: 
+> <https://lore.kernel.org/linux-mips/Pine.GSO.3.96.1000814133957.7256S-100000@delta.ds2.pg.gda.pl/>, 
+> <https://git.kernel.org/pub/scm/linux/kernel/git/ralf/linux.git/commit/?id=97b7ae4257ef>.
 
-hi,
-is there something in tools/build/feature/test-libperl.make.output ?
+You are right, and providing mem=X@Y for each contiguous memory range
+should work even after 22 years.
+I missed the fact that mem= can be repeated several times.
+ 
+>  Sadly commit a09fc446fb6d ("[MIPS] setup.c: use early_param() for early 
+> command line parsing") removed last pieces of inline documentation; I 
+> don't know why things like that get approved, but neither I can take 
+> responsibility.
 
-jirka
+This is sad indeed, but we still can update the kernel-parameters.txt with
+a MIPS paragraph.
+ 
+>   Maciej
+
+-- 
+Sincerely yours,
+Mike.

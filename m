@@ -2,133 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B514CE5E3
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784894CE5E8
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbiCEQWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 11:22:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
+        id S232016AbiCEQZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 11:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiCEQWL (ORCPT
+        with ESMTP id S229864AbiCEQZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 11:22:11 -0500
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233DD3464A
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 08:21:20 -0800 (PST)
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 225GKf6o001491
-        for <linux-kernel@vger.kernel.org>; Sun, 6 Mar 2022 01:20:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 225GKf6o001491
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1646497242;
-        bh=OQaHUsCK31E2885i0/6iI0cNC8O73o+D08L86QnBoLg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Zo2q6xUQ04UcQv+Sm0g6q/3ndqA7rl8xUFHswEBDER4XP6KWNb1aY1Vo2+GezArOc
-         C9vPRzLfORk4gNu1fmBJKHe5qP2Ta4Z1RmVRGBzWj5EaAWmI5z21Wky6yDViC1GAsc
-         DNReYtrjjyP4tiltkSAH/52Fzr5ObIL68p40JgOzNj6Tt1Qdb1CTy++p0vvEmORGNx
-         8aCIhZ6zmfJN5J6/l0By5NftjmRHkZLP97Gi1narKYsygSQJ6JHKJsLPNKPdd+nCFg
-         TPIq8MHUhPopTR7z5YMRFZ1K0B5TrzYG/LwR4tNBFi3RI0L+moORYjw6BOzivCIt9l
-         42itokx4XZt0g==
-X-Nifty-SrcIP: [209.85.215.181]
-Received: by mail-pg1-f181.google.com with SMTP id 6so5483726pgg.0
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 08:20:42 -0800 (PST)
-X-Gm-Message-State: AOAM5327pQkwwPIIbbebUff/RDw9gRZmDDkDGYhbexyJtpC/dHnr8fre
-        NOZKvKoR4wz5dKoFDTrSRFyaz2lO1j3B/mWi2/8=
-X-Google-Smtp-Source: ABdhPJwd7LcS9o5BzbJzElgGRsdtBBsodn0+ZXvGx2+oMyjBzI5Yjs4ONk4h3NRFGXw3OvUGPbzQgKbVuXAjSez4eMk=
-X-Received: by 2002:a05:6a02:182:b0:374:5a57:cbf9 with SMTP id
- bj2-20020a056a02018200b003745a57cbf9mr3203326pgb.616.1646497241154; Sat, 05
- Mar 2022 08:20:41 -0800 (PST)
+        Sat, 5 Mar 2022 11:25:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB8DB1D8AA2
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 08:24:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646497485;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=X5vVGCBXhfOjvA/aAVkk1z+IDPpRkv20HBT1rIRWe78=;
+        b=jGnzXxOOplScVpgz/EsBhNbCFQc2y6+pyfu75j2ffRGwiIEh1Sv26h6crT0SyeV9t7n1hZ
+        /6BWFwgpcsDX2MY9R0+iMbugtItJBaY8bHZ/U17dsMkx47zqpuNOhUJn6HnyjPwcwXVUcm
+        HvUBcq1y3BUTVjLsmML5Pq5uWhgaU3k=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-216-_8KXbSewNQ-Vseu6lCFykw-1; Sat, 05 Mar 2022 11:24:44 -0500
+X-MC-Unique: _8KXbSewNQ-Vseu6lCFykw-1
+Received: by mail-qv1-f70.google.com with SMTP id w7-20020a0ce107000000b0043512c55ecaso9493119qvk.11
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 08:24:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X5vVGCBXhfOjvA/aAVkk1z+IDPpRkv20HBT1rIRWe78=;
+        b=WuaqOAJLB6GNbhc95WOyZwRixYWGLKWsw3/ndoh8IcfQkEEgoLorFXjliRCTamzasp
+         zuW9F8W9PCNgZed99C22FTA2z6Z0Pkd2BRfvDS4GNvRdDVUnz9Xdv8VUkHEl5rM2OgC/
+         iY7kyP4ngGBrodk5Qu+Sqsbo6LfALJ11nR8dUKKJFWZUJO+8B0Mw20oaAUnhuKfKmz8H
+         t5vvJMUw87jsYcJUkyeVNuQ07iGbe5reEtowgQmDP1suf9k3CeodZI05mQIzBEtqJ890
+         hNpaQHSSoN7B1sWBOgMCWM3PnRGQxVf6PbKhsJyyWEqH1UJar/ZOzWXqq6jxl5bsMpob
+         u8zg==
+X-Gm-Message-State: AOAM531N9m7FntRJXX/vsGOnHD68y4f4fMXARKLQaVGv2KrtohCaOTwn
+        y1YiM1SiTmyVoD2m0vOuyj5dGdBnpvIwutlzXwV18wUJzl9j88VrGTVXFECDxApNFLOqk6OK3uo
+        i2wI5jb8NPhprI0NnX5V+OLHk
+X-Received: by 2002:a05:620a:13cc:b0:662:f88d:d45 with SMTP id g12-20020a05620a13cc00b00662f88d0d45mr2429027qkl.248.1646497483610;
+        Sat, 05 Mar 2022 08:24:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy9FlHALJhCXN9cNLA1EjgTmC/jjU226ABYa1Xc/qbwZ8xBWb9WdQRxA6W3++QW/Jq3Jcr+bQ==
+X-Received: by 2002:a05:620a:13cc:b0:662:f88d:d45 with SMTP id g12-20020a05620a13cc00b00662f88d0d45mr2429019qkl.248.1646497483380;
+        Sat, 05 Mar 2022 08:24:43 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id n1-20020a05622a11c100b002dff3364c6esm5712200qtk.19.2022.03.05.08.24.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Mar 2022 08:24:42 -0800 (PST)
+From:   trix@redhat.com
+To:     lgirdwood@gmail.com, broonie@kernel.org, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com
+Cc:     linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] regulator: cleanup comments
+Date:   Sat,  5 Mar 2022 08:24:38 -0800
+Message-Id: <20220305162438.689442-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-References: <202203032027.8qFpOWlq-lkp@intel.com>
-In-Reply-To: <202203032027.8qFpOWlq-lkp@intel.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 6 Mar 2022 01:19:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASwGU=-KWfYbcHjEP=pyRvcwY5rmWk_X0a6wMz20s2Pqw@mail.gmail.com>
-Message-ID: <CAK7LNASwGU=-KWfYbcHjEP=pyRvcwY5rmWk_X0a6wMz20s2Pqw@mail.gmail.com>
-Subject: Re: [masahiroy:kbuild 9/9] include/linux/byteorder/big_endian.h:8:2:
- error: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Boris Kolpackov <boris@codesynthesis.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 9:33 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git kbuild
-> head:   55de8686df7ed2b5237867b130e30c728bbd9db4
-> commit: 55de8686df7ed2b5237867b130e30c728bbd9db4 [9/9] kconfig: change .config format to use =n instead of "is not set"
-> config: arc-randconfig-r005-20220302 (https://download.01.org/0day-ci/archive/20220303/202203032027.8qFpOWlq-lkp@intel.com/config)
-> compiler: arceb-elf-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=55de8686df7ed2b5237867b130e30c728bbd9db4
->         git remote add masahiroy https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
->         git fetch --no-tags masahiroy kbuild
->         git checkout 55de8686df7ed2b5237867b130e30c728bbd9db4
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash lib/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->    In file included from arch/arc/include/uapi/asm/byteorder.h:14,
->                     from include/asm-generic/bitops/le.h:6,
->                     from arch/arc/include/asm/bitops.h:192,
->                     from include/linux/bitops.h:33,
->                     from include/linux/log2.h:12,
->                     from include/asm-generic/div64.h:55,
->                     from ./arch/arc/include/generated/asm/div64.h:1,
->                     from include/linux/math.h:5,
->                     from include/linux/math64.h:6,
->                     from include/linux/time.h:6,
->                     from include/linux/stat.h:19,
->                     from include/linux/module.h:13,
->                     from lib/test_bitops.c:9:
-> >> include/linux/byteorder/big_endian.h:8:2: error: #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN [-Werror=cpp]
->        8 | #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
->          |  ^~~~~~~
->    cc1: all warnings being treated as errors
->
->
-> vim +8 include/linux/byteorder/big_endian.h
->
-> ^1da177e4c3f41 Linus Torvalds 2005-04-16   6
-> e9ef073a0796e4 Babu Moger     2017-09-08   7  #ifndef CONFIG_CPU_BIG_ENDIAN
-> e9ef073a0796e4 Babu Moger     2017-09-08  @8  #warning inconsistent configuration, needs CONFIG_CPU_BIG_ENDIAN
-> e9ef073a0796e4 Babu Moger     2017-09-08   9  #endif
-> e9ef073a0796e4 Babu Moger     2017-09-08  10
->
-> :::::: The code at line 8 was first introduced by commit
-> :::::: e9ef073a0796e46c24f037237291efe56fc28ad9 include: warn for inconsistent endian config definition
->
-> :::::: TO: Babu Moger <babu.moger@oracle.com>
-> :::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+From: Tom Rix <trix@redhat.com>
 
+For spdx
+Remove leading space, add space after //
 
-I cannot reproduce this.
+Replacements
+overriden to overridden
+Calulate to Calculate
+addional to additional
+regulatior to regulator
+devive to device
 
-Maybe, this was a bug in make.cross
-(but already fixed??)
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/regulator/max8973-regulator.c | 2 +-
+ drivers/regulator/sc2731-regulator.c  | 2 +-
+ drivers/regulator/ti-abb-regulator.c  | 6 +++---
+ drivers/regulator/wm8350-regulator.c  | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-
-
+diff --git a/drivers/regulator/max8973-regulator.c b/drivers/regulator/max8973-regulator.c
+index 80b65cb87cefd..cb7e50003f702 100644
+--- a/drivers/regulator/max8973-regulator.c
++++ b/drivers/regulator/max8973-regulator.c
+@@ -459,7 +459,7 @@ static int max8973_thermal_read_temp(void *data, int *temp)
+ 		return ret;
+ 	}
+ 
+-	/* +1 degC to trigger cool devive */
++	/* +1 degC to trigger cool device */
+ 	if (val & MAX77621_CHIPID_TJINT_S)
+ 		*temp = mchip->junction_temp_warning + 1000;
+ 	else
+diff --git a/drivers/regulator/sc2731-regulator.c b/drivers/regulator/sc2731-regulator.c
+index 0f21f95c8981c..71e5ceb679f4a 100644
+--- a/drivers/regulator/sc2731-regulator.c
++++ b/drivers/regulator/sc2731-regulator.c
+@@ -1,4 +1,4 @@
+- //SPDX-License-Identifier: GPL-2.0
++// SPDX-License-Identifier: GPL-2.0
+ /*
+  * Copyright (C) 2017 Spreadtrum Communications Inc.
+  */
+diff --git a/drivers/regulator/ti-abb-regulator.c b/drivers/regulator/ti-abb-regulator.c
+index 2931a0b89bffb..bd7b2f287250e 100644
+--- a/drivers/regulator/ti-abb-regulator.c
++++ b/drivers/regulator/ti-abb-regulator.c
+@@ -42,7 +42,7 @@
+ /**
+  * struct ti_abb_info - ABB information per voltage setting
+  * @opp_sel:	one of TI_ABB macro
+- * @vset:	(optional) vset value that LDOVBB needs to be overriden with.
++ * @vset:	(optional) vset value that LDOVBB needs to be overridden with.
+  *
+  * Array of per voltage entries organized in the same order as regulator_desc's
+  * volt_table list. (selector is used to index from this array)
+@@ -484,7 +484,7 @@ static int ti_abb_init_timings(struct device *dev, struct ti_abb *abb)
+ 	/* Calculate cycle rate */
+ 	cycle_rate = DIV_ROUND_CLOSEST(clock_cycles * 10, clk_rate);
+ 
+-	/* Calulate SR2_WTCNT_VALUE */
++	/* Calculate SR2_WTCNT_VALUE */
+ 	sr2_wt_cnt_val = DIV_ROUND_CLOSEST(abb->settling_time * 10, cycle_rate);
+ 
+ 	dev_dbg(dev, "%s: Clk_rate=%ld, sr2_cnt=0x%08x\n", __func__,
+@@ -688,7 +688,7 @@ MODULE_DEVICE_TABLE(of, ti_abb_of_match);
+  * @pdev: ABB platform device
+  *
+  * Initializes an individual ABB LDO for required Body-Bias. ABB is used to
+- * addional bias supply to SoC modules for power savings or mandatory stability
++ * additional bias supply to SoC modules for power savings or mandatory stability
+  * configuration at certain Operating Performance Points(OPPs).
+  *
+  * Return: 0 on success or appropriate error value when fails
+diff --git a/drivers/regulator/wm8350-regulator.c b/drivers/regulator/wm8350-regulator.c
+index 6579bfdb0c262..b1d5aac8917de 100644
+--- a/drivers/regulator/wm8350-regulator.c
++++ b/drivers/regulator/wm8350-regulator.c
+@@ -1112,7 +1112,7 @@ static int wm8350_regulator_probe(struct platform_device *pdev)
+ 	if (pdev->id < WM8350_DCDC_1 || pdev->id > WM8350_ISINK_B)
+ 		return -ENODEV;
+ 
+-	/* do any regulatior specific init */
++	/* do any regulator specific init */
+ 	switch (pdev->id) {
+ 	case WM8350_DCDC_1:
+ 		val = wm8350_reg_read(wm8350, WM8350_DCDC1_LOW_POWER);
 -- 
-Best Regards
-Masahiro Yamada
+2.26.3
+

@@ -2,73 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACB74CE151
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1124CE153
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 01:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiCEADy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Mar 2022 19:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S230142AbiCEAEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Mar 2022 19:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiCEADx (ORCPT
+        with ESMTP id S229521AbiCEAEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Mar 2022 19:03:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA971FA1C5;
-        Fri,  4 Mar 2022 16:03:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF05FB82C77;
-        Sat,  5 Mar 2022 00:03:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461F5C340E9;
-        Sat,  5 Mar 2022 00:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646438581;
-        bh=HkQ4qKe5yFev3q2U/3+9s4iDlAiLS8y6DXp1GDO1UtQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LP+SM2taO+rPs4vmzpYIxIk58rHQ5CsAq0GDiYcja/rNgS74SUtbCyii3pngvVRvU
-         Bhj8nszROutnhmR3kkF6jHoimCEG1j7xv2TgPTKPLurLSxyVUS8uraZUxixZ6J3KGt
-         1QFXCSbB+Ai/6A3TkxdPCneLdaTnIDx7skKRJmy/F5ClgnEHzPXRUae/4q9HcYmZ2O
-         rrUqdjuUuejc7bwaY7RaAObZWCRsHIsdnWNlVucn5hnq0KiLke+iYHxq6UCDGRORdZ
-         9ZTc+zIGLleAclobsmAmMsRBog98Edls8noBeJCw/q0uuwErkU26EkriyLqHSv3i/5
-         BbHf0HT3g4LHA==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2dc0364d2ceso108898417b3.7;
-        Fri, 04 Mar 2022 16:03:01 -0800 (PST)
-X-Gm-Message-State: AOAM531qpEVi2knn610Vizqkoxu99XEeOUvezOcdge5ssoGK4OJWw3nj
-        ABZTjliRqK6+kkuuCBLyHLQDtjfhFdafh1NXw0E=
-X-Google-Smtp-Source: ABdhPJzqy9U4NMVkCiJSdrG4jE3r+07o5tK+2YmcaQ58sGinDLQEh5daP1Ce1ujhZvoysk50PZ14aLNbDE6nXFJOBgA=
-X-Received: by 2002:a81:10cc:0:b0:2dc:24f7:7dd3 with SMTP id
- 195-20020a8110cc000000b002dc24f77dd3mr1020905ywq.460.1646438580349; Fri, 04
- Mar 2022 16:03:00 -0800 (PST)
+        Fri, 4 Mar 2022 19:04:34 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4121D207A0A;
+        Fri,  4 Mar 2022 16:03:45 -0800 (PST)
+X-UUID: d4708299e3234759b8b7d1d628fb891a-20220305
+X-UUID: d4708299e3234759b8b7d1d628fb891a-20220305
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 974430699; Sat, 05 Mar 2022 08:03:38 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 5 Mar 2022 08:03:37 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 5 Mar 2022 08:03:37 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <robin.murphy@arm.com>
+CC:     <iommu@lists.linux-foundation.org>, <joro@8bytes.org>,
+        <linux-kernel@vger.kernel.org>, <miles.chen@mediatek.com>,
+        <stable@vger.kernel.org>, <will@kernel.org>,
+        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>
+Subject: Re: [PATCH] iommu/iova: Improve 32-bit free space estimate
+Date:   Sat, 5 Mar 2022 08:03:37 +0800
+Message-ID: <20220305000337.24995-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <77b0c978-7caa-c333-6015-1d784b5daf3f@arm.com>
+References: <77b0c978-7caa-c333-6015-1d784b5daf3f@arm.com>
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com> <20220304172852.274126-3-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220304172852.274126-3-benjamin.tissoires@redhat.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 4 Mar 2022 16:02:49 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
-Message-ID: <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/28] bpf: introduce hid program type
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,68 +52,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> HID is a protocol that could benefit from using BPF too.
+Hi Joerg, Robin,
 
-[...]
+> Applied without stable tag for now. If needed, please consider
+> re-sending it for stable when this patch is merged upstream.
 
-> +#include <linux/list.h>
-> +#include <linux/slab.h>
-> +
-> +struct bpf_prog;
-> +struct bpf_prog_array;
-> +struct hid_device;
-> +
-> +enum bpf_hid_attach_type {
-> +       BPF_HID_ATTACH_INVALID = -1,
-> +       BPF_HID_ATTACH_DEVICE_EVENT = 0,
-> +       MAX_BPF_HID_ATTACH_TYPE
+> Yeah, having figured out the history, I ended up with the opinion that 
+> it was a missed corner-case optimisation opportunity, rather than an 
+> actual error with respect to intent or implementation, so I 
+> intentionally left that out. Plus figuring out an exact Fixes tag might 
+> be tricky - as above I reckon it probably only started to become 
+> significant somwehere around 5.11 or so.
+> 
+> All of these various levels of retry mechanisms are only a best-effort 
+> thing, and ultimately if you're making large allocations from a small 
+> space there are always going to be *some* circumstances that still 
+> manage to defeat them. Over time, we've made them try harder, but that 
+> fact that we haven't yet made them try hard enough to work well for a 
+> particular use-case does not constitute a bug. However as Joerg says, 
+> anyone's welcome to make a case to Greg to backport a mainline commit if 
+> it's a low-risk change with significant benefit to real-world stable 
+> kernel users.
 
-Is it typical to have different BPF programs for different attach types?
-Otherwise, (different types may have similar BPF programs), maybe
-we can pass type as an argument to the program (shared among
-different types)?
+Got it, thank you. 
+We will try to push to the android LTS trees we need.
 
-[...]
+Thanks,
+Miles
 
-> +struct hid_device;
-> +
-> +enum hid_bpf_event {
-> +       HID_BPF_UNDEF = 0,
-> +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
-> +};
-> +
-> +struct hid_bpf_ctx {
-> +       enum hid_bpf_event type;        /* read-only */
-> +       __u16 allocated_size;           /* the allocated size of data below (RO) */
-
-There is a (6-byte?) hole here.
-
-> +       struct hid_device *hdev;        /* read-only */
-> +
-> +       __u16 size;                     /* used size in data (RW) */
-> +       __u8 data[];                    /* data buffer (RW) */
-> +};
-
-Do we really need hit_bpf_ctx in uapi? Maybe we can just use it
-from vmlinuxh?
-
-[...]
-
-> +
-> +static bool hid_is_valid_access(int off, int size,
-> +                               enum bpf_access_type access_type,
-> +                               const struct bpf_prog *prog,
-> +                               struct bpf_insn_access_aux *info)
-> +{
-> +       /* everything not in ctx is prohibited */
-> +       if (off < 0 || off + size > sizeof(struct hid_bpf_ctx) + HID_BPF_MIN_BUFFER_SIZE)
-> +               return false;
-
-Mabe add the following here to fail unaligned accesses
-
-        if (off % size != 0)
-                return false;
-[...]
+> 
+> Thanks all!
+> 
+> Robin.

@@ -2,125 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D84F4CE626
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 17:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C41B4CE629
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 18:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiCEQ6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 11:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S232068AbiCERGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 12:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiCEQ6x (ORCPT
+        with ESMTP id S229543AbiCERF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 11:58:53 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5408E41FA9;
-        Sat,  5 Mar 2022 08:58:02 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 47BBB101CB3; Sat,  5 Mar 2022 16:58:00 +0000 (UTC)
-Date:   Sat, 5 Mar 2022 16:58:00 +0000
-From:   Sean Young <sean@mess.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Song Liu <song@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 01/28] bpf: add new is_sys_admin_prog_type()
- helper
-Message-ID: <YiOWmG2oARiYmRHr@gofer.mess.org>
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-2-benjamin.tissoires@redhat.com>
- <CAPhsuW4otgwwDN6+xcjPXmZyUDiynEKFtXjaFb-=kjz7HzUmZw@mail.gmail.com>
- <CAO-hwJJjDMaTXH9i1UkO7Qy+sbNprDyW67cRp8HryMMWMi5H9w@mail.gmail.com>
+        Sat, 5 Mar 2022 12:05:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4D2141463
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 09:05:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D966090A
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 17:05:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 146E0C004E1;
+        Sat,  5 Mar 2022 17:05:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="kPvDz/zM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646499905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/GAJKVN6Yd0y16J1H2ziPUNbfPK/uHlz6EiSpfX2wCc=;
+        b=kPvDz/zMeFF/GOSyJ47AnhcUNGQr32DtURB2/heaUakiT642yUMW2l0EOTafmN3SQVHtr/
+        jgsc1qxq0Sbu8ijZLSveQOVzEPbHAow/vdr6s5+KVfCMdfmdCHdv2IH7jtmlPrEbS3Fgj0
+        297V4oDREndky5C+Eb6Irt35Ibf/iBg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7604d99c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 5 Mar 2022 17:05:05 +0000 (UTC)
+Date:   Sat, 5 Mar 2022 10:05:02 -0700
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v1 03/13] printk: use percpu flag instead of
+ cpu_online()
+Message-ID: <YiOYPvleCsTT9vGu@zx2c4.com>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-4-john.ogness@linutronix.de>
+ <YgaJZtY+EH9JIGyo@alley>
+ <YgoGNmYER8xni34K@google.com>
+ <YguCuFYeZ52mkr4r@alley>
+ <87zgm8h1tt.fsf@jogness.linutronix.de>
+ <YiI2x6K5IhsADEmK@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAO-hwJJjDMaTXH9i1UkO7Qy+sbNprDyW67cRp8HryMMWMi5H9w@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YiI2x6K5IhsADEmK@alley>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 11:07:04AM +0100, Benjamin Tissoires wrote:
-> On Sat, Mar 5, 2022 at 12:12 AM Song Liu <song@kernel.org> wrote:
-> >
-> > On Fri, Mar 4, 2022 at 9:30 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > LIRC_MODE2 does not really need net_admin capability, but only sys_admin.
-> > >
-> > > Extract a new helper for it, it will be also used for the HID bpf
-> > > implementation.
-> > >
-> > > Cc: Sean Young <sean@mess.org>
-> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > >
-> > > ---
-> > >
-> > > new in v2
-> > > ---
-> > >  kernel/bpf/syscall.c | 14 +++++++++++++-
-> > >  1 file changed, 13 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > > index db402ebc5570..cc570891322b 100644
-> > > --- a/kernel/bpf/syscall.c
-> > > +++ b/kernel/bpf/syscall.c
-> > > @@ -2165,7 +2165,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
-> > >         case BPF_PROG_TYPE_LWT_SEG6LOCAL:
-> > >         case BPF_PROG_TYPE_SK_SKB:
-> > >         case BPF_PROG_TYPE_SK_MSG:
-> > > -       case BPF_PROG_TYPE_LIRC_MODE2:
-> > >         case BPF_PROG_TYPE_FLOW_DISSECTOR:
-> > >         case BPF_PROG_TYPE_CGROUP_DEVICE:
-> > >         case BPF_PROG_TYPE_CGROUP_SOCK:
-> > > @@ -2202,6 +2201,17 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
-> > >         }
-> > >  }
-> > >
-> > > +static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
-> > > +{
-> > > +       switch (prog_type) {
-> > > +       case BPF_PROG_TYPE_LIRC_MODE2:
-> > > +       case BPF_PROG_TYPE_EXT: /* extends any prog */
-> > > +               return true;
-> > > +       default:
-> > > +               return false;
-> > > +       }
-> > > +}
-> >
-> > I am not sure whether we should do this. This is a behavior change, that may
-> > break some user space. Also, BPF_PROG_TYPE_EXT is checked in
-> > is_perfmon_prog_type(), and this change will make that case useless.
+Hi Petr,
+
+On Fri, Mar 04, 2022 at 04:56:55PM +0100, Petr Mladek wrote:
+
+> Just for record, the right commit ID in the mainline is
+> 1b710b1b10eff9d466. It used printk_deferred() in _warn_unseeded_randomness():
 > 
-> Sure, I can drop it from v3 and make this function appear for HID only.
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -1687,8 +1687,9 @@ static void _warn_unseeded_randomness(const char *func_name, void *caller,
+>  	print_once = true;
+>  #endif
+>  	if (__ratelimit(&unseeded_warning))
+> -		pr_notice("random: %s called from %pS with crng_init=%d\n",
+> -			  func_name, caller, crng_init);
+> +		printk_deferred(KERN_NOTICE "random: %s called from %pS "
+> +				"with crng_init=%d\n", func_name, caller,
+> +				crng_init);
+>  }
 
-For BPF_PROG_TYPE_LIRC_MODE2, I don't think this change will break userspace.
-This is called from ir-keytable(1) which is called from udev. It should have
-all the necessary permissions.
+Are we able to revert this yet? Or is it still required because of
+locking issues? Would gladly take a patch to revert that if the
+non-deferred function is fine for 5.18.
 
-In addition, the vast majority IR decoders are non-bpf. bpf ir decoders have
-very few users at the moment.
-
-I am working on completely new userspace tooling which will make extensive
-use of bpf ir decoding with full lircd and IRP compatibility, but this is not
-finished yet (see https://github.com/seanyoung/cir).
-
-Thanks
-
-Sean
+Jason

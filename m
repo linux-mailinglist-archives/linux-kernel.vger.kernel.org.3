@@ -2,244 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD1A4CE43A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 11:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EC04CE43E
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 11:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiCEKiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 05:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
+        id S231418AbiCEKi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 05:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiCEKiX (ORCPT
+        with ESMTP id S231496AbiCEKiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 05:38:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6092B22527
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 02:37:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646476647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sxnm92K8BcGrTDkhusF0TdYHzI5WzXe99rqHFRUvS4Y=;
-        b=GfiQJsC9YlZRznqqxgf7Rg27cpWMyj08y+uj4Yx7kB6tUqT7twgesMAHxD2tMgiwergJF5
-        XAuua9+IZq6CenQ3Z3Zr7Ky/OJkRwUMRW0Q3uhtENGMEXAgXzpSaJQjBH6iFIgcmdS1D8b
-        IiRWMxoPisdRa8GftLg66UGgy7EKyCE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-NNQeDqvQMWiWiBry-E1RFg-1; Sat, 05 Mar 2022 05:37:26 -0500
-X-MC-Unique: NNQeDqvQMWiWiBry-E1RFg-1
-Received: by mail-ed1-f72.google.com with SMTP id da28-20020a056402177c00b00415ce4b20baso4882063edb.17
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 02:37:25 -0800 (PST)
+        Sat, 5 Mar 2022 05:38:55 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C8615A06
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 02:38:05 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id q4so8327891qki.11
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 02:38:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lz9u63IzQ1ny8p1MWQPaj5qIKrAWncsqwglKvPt7b18=;
+        b=ureuxwwCPGYZzOPqWphv5EaO1kY1yEOA+OfcMXKh++Ta5PzP3Vqj41pK77KeSt1CKr
+         oHiDbgZS3JHbshLxXF+pEYWSLCyWKXK/3lNXWTjopaR9vPXmmPkmu1OeG56DQVBJKixm
+         r1cZRZJw0aXAtNVTrDkVjGhEATMpLEMgHw1s67JnIwIUkOTer5TKItbrALbdsagJRkso
+         1vze8yvTmfCCdTYPrB4FmzaUBlrchxOnMSc8i6PM4to8Avv9Su3Z1nVYOaYiJ32b+cLI
+         BpP5eGR4IFMfuig3q+aDiYLkT8Xi41yIKswVkI2IOnKqaxrgZyqMnvFpr7tWsXugSDJ6
+         ri2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=Sxnm92K8BcGrTDkhusF0TdYHzI5WzXe99rqHFRUvS4Y=;
-        b=FM3LWIe98BK0OL5/oVTC5kHtfMfezNP5gbAebHKOnQXrWLyq+M+9QztA31F5gWDWIt
-         03yxZqBU4SsDma7IaXaDKFcj5aDdJIXi4ojRqDyCxadc/H1jEN6rvvS0YFED2Vv5jUi9
-         d5w1Hj5ZQlDCM1zZsb5IxXvyY0Cfh1VtDgCAKrBUZP6gMl18g1jqoKtVkL7syBCdUkUa
-         nTNkABvHq7TxM58RfSvyseYMrze568nH/Bt1vrvRbbz78h07XzbeSTx0b3BQ9oklbCzv
-         rkmWdjtpo9apNrqBOhKbVTJIdvPO61I4OSRXC5nm2HE/QgLm8jriDJDKL8zTK9ZnVdBx
-         UoTQ==
-X-Gm-Message-State: AOAM530E0S2F7E6IPm0VloJEAA174v5RB5Dh6qm5t/AO2rkjx9kfTnpA
-        nl+8ZVoRkjxjA6bZOYQHlGBpphAB2w7yJN/JWyzZmGWdsZxwW6ARlH11Gea5EgLagyBmi8uRlqS
-        mLg+tBAx/ReFVwfhmr+K/ZCYK
-X-Received: by 2002:a50:a68b:0:b0:413:3b43:ae02 with SMTP id e11-20020a50a68b000000b004133b43ae02mr2474610edc.11.1646476644883;
-        Sat, 05 Mar 2022 02:37:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyMWBC+rGTw/SMh/xY2esi/Xkgc3gYCVse5gjtk9TrQ3wR/N4TpVoPk3zXr58jAmu8x3QEqhQ==
-X-Received: by 2002:a50:a68b:0:b0:413:3b43:ae02 with SMTP id e11-20020a50a68b000000b004133b43ae02mr2474581edc.11.1646476644582;
-        Sat, 05 Mar 2022 02:37:24 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id a4-20020a170906274400b006da9456e802sm2529071ejd.102.2022.03.05.02.37.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Mar 2022 02:37:24 -0800 (PST)
-Message-ID: <bfdb214d-b6e7-f0e7-60de-f30204b0aa90@redhat.com>
-Date:   Sat, 5 Mar 2022 11:37:23 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lz9u63IzQ1ny8p1MWQPaj5qIKrAWncsqwglKvPt7b18=;
+        b=R7296uKMC6D5Y+JAGXjR2OxyIdsWV5Tb2v/eMSNv1xcgfwEA56psBorRJQlJ+Iw0Ik
+         dVpI29J/7H2Q54WW3o24mijmdkNMBSw2rgwX6Cg5rtt1SCH2Cc4M6LBZ+mw+XTlAe7ja
+         I0OC2M5tnzl+whYxG3WZrgmijOz0kuQ7P4D92zGwOseFl+Wm8NINDXTAli2WeQn4LI5a
+         3aZSuEBPwfjME5NCpm2aTj2rtAzTpoyDC2BjO7mbGpTF2L+55tuHSmtgKNv0rdTjlGML
+         L6/t+3oDbheHg3ByWzyR8app+QL9yNGsI2TxgBSHsf2kXXgSquE5MmXllg+Eic9umxdY
+         7Zjw==
+X-Gm-Message-State: AOAM533dJLBMr79o9VD59Yp3UZnDZOmtmHJvjoWa+FqxCgUS6LZJWoFR
+        5wWMYNkydJ8Jr2fSAP/xqYu4tHlJUlSzTVzp3eZ9Uw==
+X-Google-Smtp-Source: ABdhPJwhxXcWrkTJz60CRz6vpb74RSpT9uPgyqmT08HWXkR+SLRk4QdjvtxL/93LY0auGa7N0SvwegppCk4zzWi/9Z4=
+X-Received: by 2002:a05:620a:1392:b0:60d:d76a:5073 with SMTP id
+ k18-20020a05620a139200b0060dd76a5073mr1620167qki.59.1646476683364; Sat, 05
+ Mar 2022 02:38:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 3/3] x86/PCI: Preserve host bridge windows completely
- covered by E820
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, wse@tuxedocomputers.com
-References: <20220304153245.GA1030861@bhelgaas>
- <86b17447-b285-f6ce-99d8-f2cad01405d5@redhat.com>
-In-Reply-To: <86b17447-b285-f6ce-99d8-f2cad01405d5@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220304202406.846485-1-robdclark@gmail.com> <CAA8EJprik57F+t0KicoYaRm=oDOgcQHyHSBjJKbekBKjO_-=0A@mail.gmail.com>
+ <CAF6AEGtM+Jhye7ahW3uFg-8PFHH257-T7Qudo=XMU5-AU2LvcA@mail.gmail.com>
+In-Reply-To: <CAF6AEGtM+Jhye7ahW3uFg-8PFHH257-T7Qudo=XMU5-AU2LvcA@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 5 Mar 2022 13:37:52 +0300
+Message-ID: <CAA8EJpr3yDW=f4gc4d06KiETtNJkrLNaTcOx28UpS3toVOh6nw@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/a6xx: Fix missing ARRAY_SIZE() check
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, 5 Mar 2022 at 00:57, Rob Clark <robdclark@gmail.com> wrote:
+>
+> On Fri, Mar 4, 2022 at 1:47 PM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On Fri, 4 Mar 2022 at 23:23, Rob Clark <robdclark@gmail.com> wrote:
+> > >
+> > > From: Rob Clark <robdclark@chromium.org>
+> > >
+> > > Fixes: f6d62d091cfd ("drm/msm/a6xx: add support for Adreno 660 GPU")
+> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > However see the comment below.
+> >
+> > > ---
+> > >  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> > > index 02b47977b5c3..6406d8c3411a 100644
+> > > --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> > > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> > > @@ -687,6 +687,7 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+> > >
+> > >         BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+> > >         BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
+> > > +       BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
+> >
+> > The magic number 32 and 48 are repeated through this code. I'd suggest
+> > to define them and use defined names.
+> > It can come up as a separate commit.
+> >
+>
+> Or perhaps instead:
 
-On 3/4/22 16:46, Hans de Goede wrote:
-> Hi,
-> 
-> On 3/4/22 16:32, Bjorn Helgaas wrote:
->> On Fri, Mar 04, 2022 at 03:16:42PM +0100, Hans de Goede wrote:
->>> Hi Bjorn,
->>>
->>> On 3/4/22 04:51, Bjorn Helgaas wrote:
->>>> From: Bjorn Helgaas <bhelgaas@google.com>
->>>>
->>>> Many folks have reported PCI devices not working.  It could affect any
->>>> device, but most reports are for Thunderbolt controllers on Lenovo Yoga and
->>>> Clevo Barebone laptops and the touchpad on Lenovo IdeaPads.
->>>>
->>>> In every report, a region in the E820 table entirely encloses a PCI host
->>>> bridge window from _CRS, and because of 4dc2287c1805 ("x86: avoid E820
->>>> regions when allocating address space"), we ignore the entire window,
->>>> preventing us from assigning space to PCI devices.
->>>>
->>>> For example, the dmesg log [2] from bug report [1] shows:
->>>>
->>>>   BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
->>>>   pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
->>>>   pci 0000:00:15.0: BAR 0: no space for [mem size 0x00001000 64bit]
->>>>
->>>> The efi=debug dmesg log [3] from the same report shows the EFI memory map
->>>> entries that created the E820 map:
->>>>
->>>>   efi: mem47: [Reserved |   |WB|WT|WC|UC] range=[0x4bc50000-0x5fffffff]
->>>>   efi: mem48: [Reserved |   |WB|  |  |UC] range=[0x60000000-0x60ffffff]
->>>>   efi: mem49: [Reserved |   |  |  |  |  ] range=[0x61000000-0x653fffff]
->>>>   efi: mem50: [MMIO     |RUN|  |  |  |UC] range=[0x65400000-0xcfffffff]
->>>>
->>>> 4dc2287c1805 ("x86: avoid E820 regions when allocating address space")
->>>> works around issues where _CRS contains non-window address space that can't
->>>> be used for PCI devices.  It does this by removing E820 regions from host
->>>> bridge windows.  But in these reports, the E820 region covers the entire
->>>> window, so 4dc2287c1805 makes it completely unusable.
->>>>
->>>> Per UEFI v2.8, sec 7.2, the EfiMemoryMappedIO type means:
->>>>
->>>>   Used by system firmware to request that a memory-mapped IO region be
->>>>   mapped by the OS to a virtual address so it can be accessed by EFI
->>>>   runtime services.
->>>>
->>>> A host bridge window is definitely a memory-mapped IO region, and EFI
->>>> runtime services may need to access it, so I don't think we can argue that
->>>> this is a firmware defect.
->>>>
->>>> Instead, change the 4dc2287c1805 strategy so it only removes E820 regions
->>>> when they overlap *part* of a host bridge window on the assumption that a
->>>> partial overlap is really register space, not part of the window proper.
->>>>
->>>> If an E820 region covers the entire window from _CRS, assume the _CRS
->>>> window is correct and do nothing.
->>>>
->>>> [1] https://bugzilla.redhat.com/show_bug.cgi?id=1868899
->>>> [2] https://bugzilla.redhat.com/attachment.cgi?id=1711424
->>>> [3] https://bugzilla.redhat.com/attachment.cgi?id=1861407
->>>>
->>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
->>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=214259
->>>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
->>>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
->>>> BugLink: https://bugs.launchpad.net/bugs/1878279
->>>> BugLink: https://bugs.launchpad.net/bugs/1931715
->>>> BugLink: https://bugs.launchpad.net/bugs/1932069
->>>> BugLink: https://bugs.launchpad.net/bugs/1921649
->>>> Fixes: 4dc2287c1805 ("x86: avoid E820 regions when allocating address space")
->>>> Link: https://lore.kernel.org/r/20220228105259.230903-1-hdegoede@redhat.com
->>>> Based-on-patch-by: Hans de Goede <hdegoede@redhat.com>
->>>> Reported-by: Benoit Grégoire <benoitg@coeus.ca>   # BZ 206459
->>>> Reported-by: wse@tuxedocomputers.com              # BZ 214259
->>>> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->>>> ---
->>>>  arch/x86/kernel/resource.c | 11 +++++++++++
->>>>  1 file changed, 11 insertions(+)
->>>>
->>>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
->>>> index 7378ea146976..405f0af53e3d 100644
->>>> --- a/arch/x86/kernel/resource.c
->>>> +++ b/arch/x86/kernel/resource.c
->>>> @@ -39,6 +39,17 @@ void remove_e820_regions(struct device *dev, struct resource *avail)
->>>>  		e820_start = entry->addr;
->>>>  		e820_end = entry->addr + entry->size - 1;
->>>>  
->>>> +		/*
->>>> +		 * If an E820 entry covers just part of the resource, we
->>>> +		 * assume E820 is telling us about something like host
->>>> +		 * bridge register space that is unavailable for PCI
->>>> +		 * devices.  But if it covers the *entire* resource, it's
->>>> +		 * more likely just telling us that this is MMIO space, and
->>>> +		 * that doesn't need to be removed.
->>>> +		 */
->>>> +		if (e820_start <= avail->start && avail->end <= e820_end)
->>>> +			continue;
->>>> +
->>>
->>> IMHO it would be good to add some logging here, since hitting this is
->>> somewhat of a special case. For the Fedora test kernels I did I changed
->>> this to:
->>>
->>> 		if (e820_start <= avail->start && avail->end <= e820_end) {
->>> 			dev_info(dev, "resource %pR fully covered by e820 entry [mem %#010Lx-%#010Lx]\n",
->>> 				 avail, e820_start, e820_end);
->>> 			continue;
->>> 		}
->>>
->>> And I expect/hope to see this new info message on the ideapad with the
->>> touchpad issue.
->>
->> Right, I would expect the same.
->>
->> We could add something like this.  But both the e820 entry and the
->> host bridge window are already in the dmesg log, so it doesn't really
->> add new information
-> 
-> Well it adds the information that the workaround (to the workaround)
-> which we added for this case is working as expected and it allows
-> seeing that is the case in a single glance.
+IMO this is much better.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-So I just got the first report back from the Fedora test 5.16.12 kernel
-with this series added. Good news on the ideapad this wotks fine to
-fix the touchpad issue (as expected).
-
-What is interesting is that the above dev_info message which I added
-triggers *twice*:
-
-[    0.327837] acpi PNP0A08:00: resource [mem 0x000a0000-0x000bffff window] fully covered by e820 entry [mem 0x0009f000-0x000fffff]
-[    0.327843] acpi PNP0A08:00: resource [mem 0x65400000-0xbfffffff window] fully covered by e820 entry [mem 0x4bc50000-0xcfffffff]
-
-Notice that it also stops from the mem-window for ISA io getting fully
-clipped, which I did not realize also was a potential issue.
-
-I hope this also shows that having the dev_info here is good,
-at least IMHO this confirms that having the dev_info for this
-is a good thing.
-
-I'm still waiting for testing results on the X1C2 which had the
-suspend/resume regressions with my bios-date based approach.
-
-Regards,
-
-Hans
+> ----
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 6406d8c3411a..58c371930fb4 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -683,20 +683,23 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+>  {
+>         struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>         const u32 *regs = a6xx_protect;
+> -       unsigned i, count = ARRAY_SIZE(a6xx_protect), count_max = 32;
+> -
+> -       BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+> -       BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
+> -       BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
+> +       unsigned i, count, count_max;
+>
+>         if (adreno_is_a650(adreno_gpu)) {
+>                 regs = a650_protect;
+>                 count = ARRAY_SIZE(a650_protect);
+>                 count_max = 48;
+> +               BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
+>         } else if (adreno_is_a660_family(adreno_gpu)) {
+>                 regs = a660_protect;
+>                 count = ARRAY_SIZE(a660_protect);
+>                 count_max = 48;
+> +               BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
+> +       } else {
+> +               regs = a6xx_protect;
+> +               count = ARRAY_SIZE(a6xx_protect);
+> +               count_max = 32;
+> +               BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+>         }
+>
+>         /*
+> ----
+>
+> that moves each of the two uses of constant together..  adding three
+> #defines each used only twice seems a bit silly, IMHO
+>
+> BR,
+> -R
 
 
+
+-- 
+With best wishes
+Dmitry

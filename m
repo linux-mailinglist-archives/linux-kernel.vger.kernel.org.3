@@ -2,80 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C7F4CE4A1
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 12:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8953D4CE487
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 12:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiCEL22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 06:28:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
+        id S231576AbiCELZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 06:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiCEL2U (ORCPT
+        with ESMTP id S230452AbiCELZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 06:28:20 -0500
-X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Mar 2022 03:27:28 PST
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174C846140
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 03:27:26 -0800 (PST)
-Received: (wp-smtpd smtp.wp.pl 14111 invoked from network); 5 Mar 2022 12:20:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1646479242; bh=6AbNWZDZCiF9jH5VR5VSePUPgG0zk15w1zGXl48ihEA=;
-          h=From:To:Cc:Subject;
-          b=puyzONj/lzworgWrJ+9XQb6eehA+uMpq3bf/dGBBOInrxXDQga09PndMyGOCxuy4a
-           4GcJUfWRQypytZTXLmh3BsGslZNXr24zD4TzEI/UmvCV4jQ7/zMvlwTx8mblT94Cd2
-           LTc1ftUat/D8/Svzfo5yZeivO9N1/elDKjBkHB2I=
-Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <hauke@hauke-m.de>; 5 Mar 2022 12:20:42 +0100
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
-        olek2@wp.pl, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>
-Subject: [PATCH net] net: lantiq_xrx200: fix use after free bug
-Date:   Sat,  5 Mar 2022 12:20:39 +0100
-Message-Id: <20220305112039.3989-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 1b6ae7147e494104fbc28afc62fdc88d
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [0aME]                               
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 5 Mar 2022 06:25:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B6B3F888
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 03:24:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A564F611D7
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 11:24:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F2BC340EC;
+        Sat,  5 Mar 2022 11:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646479497;
+        bh=qCo0pwezqT2xKEd7m5v7jYOp12d25MhNEuqdikO48bg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W5xIWSVvQRmSYBOW8lyADWW1FhhXdTMK50w+RI+ab7zi7Jb5DcZfI8hnWzXLhNolq
+         moDMiBxUQBLwmhNzfI9NIKJyOrcrDCkDBAQilg0Qrd3xvqU1TJ8i+TQ9d8GmWA3frw
+         fB/9uRGw2bzzeFpVYNwwU55m5w+rOpi/8yhXhQNRU5dtumFPUeo4UY8hd0Kzfd/mWO
+         D51jvCPMxN0r9BuuPPH44Og+GnzrqSWXyxJSB1klzklXcx+YZn/ECpZCFE7wXxAR2+
+         GXkuorOVUiPbjCJ1GQ/l7Ksc2I21z4y2nuoKNeU47xjgr9UV40Q9nd82chptuzf8+o
+         9GWR3Z6CB68Lw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nQSWs-00CQcA-Mv; Sat, 05 Mar 2022 11:24:54 +0000
+Date:   Sat, 05 Mar 2022 11:24:54 +0000
+Message-ID: <87bkyktzeh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     David Decotigny <decot+git@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        David Decotigny <ddecotig@google.com>
+Subject: Re: [PATCH v1 1/1] irqchip/gic-v3-its: fixup IRQ affinities to account for online CPUs
+In-Reply-To: <20220304195238.1141725-1-decot+git@google.com>
+References: <20220304195238.1141725-1-decot+git@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: decot+git@google.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, ddecotig@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The skb->len field is read after the packet is sent to the network
-stack. In the meantime, skb can be freed. This patch fixes this bug.
+On Fri, 04 Mar 2022 19:52:38 +0000,
+David Decotigny <decot+git@google.com> wrote:
+> 
+> From: David Decotigny <ddecotig@google.com>
+> 
+> In some cases (eg. when booting with maxcpus=X), it is possible that
+> the preset IRQ affinity masks don't intersect with the set of online
+> CPUs. This patch extends the fallback strategy implemented when
+> IRQD_AFFINITY_MANAGED is not set to all cases. This is logged the
+> first time that happens.
+> 
+> Fixes: c5d6082d35e0 ("irqchip/gic-v3-its: Balance initial LPI affinity across CPUs")
+> 
 
-Fixes: c3e6b2c35b34 ("net: lantiq_xrx200: add ingress SG DMA support")
-Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/net/ethernet/lantiq_xrx200.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Missing SoB?
 
-diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
-index 41d11137cde0..5712c3e94be8 100644
---- a/drivers/net/ethernet/lantiq_xrx200.c
-+++ b/drivers/net/ethernet/lantiq_xrx200.c
-@@ -260,9 +260,9 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
- 
- 	if (ctl & LTQ_DMA_EOP) {
- 		ch->skb_head->protocol = eth_type_trans(ch->skb_head, net_dev);
--		netif_receive_skb(ch->skb_head);
- 		net_dev->stats.rx_packets++;
- 		net_dev->stats.rx_bytes += ch->skb_head->len;
-+		netif_receive_skb(ch->skb_head);
- 		ch->skb_head = NULL;
- 		ch->skb_tail = NULL;
- 		ret = XRX200_DMA_PACKET_COMPLETE;
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index cd772973114a..de862fd9ad73 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -1618,11 +1618,6 @@ static int its_select_cpu(struct irq_data *d,
+>  		/* Try the intersection of the affinity and online masks */
+>  		cpumask_and(tmpmask, aff_mask, cpu_online_mask);
+>  
+> -		/* If that doesn't fly, the online mask is the last resort */
+> -		if (cpumask_empty(tmpmask))
+> -			cpumask_copy(tmpmask, cpu_online_mask);
+> -
+> -		cpu = cpumask_pick_least_loaded(d, tmpmask);
+>  	} else {
+>  		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
+>  
+> @@ -1630,9 +1625,13 @@ static int its_select_cpu(struct irq_data *d,
+>  		if ((its_dev->its->flags & ITS_FLAGS_WORKAROUND_CAVIUM_23144) &&
+>  		    node != NUMA_NO_NODE)
+>  			cpumask_and(tmpmask, tmpmask, cpumask_of_node(node));
+> -
+> -		cpu = cpumask_pick_least_loaded(d, tmpmask);
+>  	}
+> +
+> +	/* If that doesn't fly, the online mask is the last resort */
+> +	if (WARN_ON_ONCE(cpumask_empty(tmpmask)))
+> +		cpumask_copy(tmpmask, cpu_online_mask);
+> +
+> +	cpu = cpumask_pick_least_loaded(d, tmpmask);
+>  out:
+>  	free_cpumask_var(tmpmask);
+>  
+
+Known issue, see [1] and [2].
+
+I don't think the above is the right approach. For managed interrupts,
+we shouldn't try and enable these interrupts until the CPUs are up,
+and activating them on *another* CPU breaks the abstraction entirely.
+
+The right way to do it would be to not activate them (marking them as
+shutdown) until the CPUs are up and running, similarly to what x86
+does (but we obviously can't reuse the matrix allocator for that).
+Looking into this is on my TODO list, just didn't get the time to work
+on it.
+
+	M.
+
+[1] https://lore.kernel.org/r/78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com
+[2] https://lore.kernel.org/r/20220124073440.88598-1-wangxiongfeng2@huawei.com
+
 -- 
-2.30.2
-
+Without deviation from the norm, progress is not possible.

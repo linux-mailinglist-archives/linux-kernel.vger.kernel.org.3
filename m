@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2514CE598
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 16:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BF94CE59A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 16:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiCEPmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 10:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S231305AbiCEPnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 10:43:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiCEPmG (ORCPT
+        with ESMTP id S229878AbiCEPnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 10:42:06 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B9B23BEF;
-        Sat,  5 Mar 2022 07:41:15 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K9ppt318Cz9sqb;
-        Sat,  5 Mar 2022 16:41:10 +0100 (CET)
-Message-ID: <3f3957dd-5aae-ca0d-d487-fe062d989980@hauke-m.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
-        t=1646494868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4p4r1LsqVbNtuaN4+UAKCcBfS2bVk6T+s/lsV//2jnY=;
-        b=jskBSbhBeHHTqsPz5DQ9MKbWrOEdKZ3J+YdfOc3Sj60U/2/Yi9Ay9t3kVCAr9/944aOT41
-        2OMo9xKrCejSK2kES1NAVzJBvGR2yy97HHXSRmR9gVbfS5nS7m5Vc8LNebdefDQHXTpkEJ
-        ivzogByp9ODBStm3y9J4315uX7dM2Xt7qlUyAGMqQgYpzOKuTygA0HBpsPLtzE/iKhcOaH
-        0vZ98dgFCh8jN/zicOU95GAyuuAcbh278bnnpxsL8cz6XByVXUjsttglibq0+yFFExcKJ9
-        DMGny5/+gss8Sir9FRSq8TO7TudU0GXMG3iMm8e6mADcZr/y7r6I01SaOx43AA==
-Date:   Sat, 5 Mar 2022 16:41:00 +0100
+        Sat, 5 Mar 2022 10:43:51 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285211DD
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 07:43:00 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id r129-20020a1c4487000000b003898fc06f1eso79867wma.1
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 07:43:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5knFVechqLRRoXBkQeiWnLlTmYCcvi5f90+imAg2cOY=;
+        b=6GIQsk7E60HvmrJlWOB81ghr8WfFAcCK+WRKuC0zMYbLUAyMbvPV3UGg/4t9Ex/Izw
+         j0J1Q1P1AgBIk1cRAD0yuuE4KPHIsoZZOPhdJLF7p+MH+eb3XMzhgYWdiaocbjGb+MPi
+         mTql/YSVVPTp8YJse7dT4MJH/H3lkmCbTFp5mGSLlemQlXdewTib1NRWfljatEvLBjBD
+         56ygfhUrASNeL59k33XDDaT0fozZKeizkB1kEK4YwnkI5eLQzmWWol2w29OwcUH0wM1j
+         Sb8aCjZ6N3XDpjvFP1qu6LASl0WNJ35/lkCCUvi/JhfpgbDdxGYdgutd/uuvDUX5jShU
+         m+bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5knFVechqLRRoXBkQeiWnLlTmYCcvi5f90+imAg2cOY=;
+        b=A+52iejXagem/2S6BtyLJIizZRm+tB9igYCIsyMXcHr+sFXBTPg9FokIg4RCqYWgZ1
+         KvmN6E64N01OGenqzEHjbkX9Omw3bcvK+CodN5spc6K6aEEKwrARZinyQSdhDA1vgENY
+         013pVYhoSHW7V8pNPNIcCsMIo1nLgn604M5ZcUyQc8R6P3mnV33vMGZtndL/7AxD3jLE
+         PBAwGY7CYgoNdQDvcHrnOdr9aAxBVoQI8SqfMDWEqKTg5fxDA3OdnY+tbJJbuRaB5Gwy
+         A00QTJqdhGYsYAaDZLUW+SAPSuFfoZCTMQWgGP2+LXrvIGifYkqq1JxhIRReK1ULn4eD
+         eZyg==
+X-Gm-Message-State: AOAM533Rp+1J3a0ROLdG2IhMJvWKrjNfQOYClcXmK9SuYOUze6X3nySg
+        2TMbCHhcDAoWGhZzcZMx6NMyqA==
+X-Google-Smtp-Source: ABdhPJy+SNKXJeLTJy8POUvyAoiHW/OMNnPo+MkaECuSUorkrJ9qGUSpWqPl+BU0JFsdnVH8sPrg1w==
+X-Received: by 2002:a05:600c:651:b0:381:3d7b:40e0 with SMTP id p17-20020a05600c065100b003813d7b40e0mr12016162wmm.17.1646494978708;
+        Sat, 05 Mar 2022 07:42:58 -0800 (PST)
+Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
+        by smtp.gmail.com with ESMTPSA id bk19-20020a0560001d9300b001a65e479d20sm6758970wrb.83.2022.03.05.07.42.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Mar 2022 07:42:58 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH] gpiolib: fix the size of the ngpios variable
+Date:   Sat,  5 Mar 2022 16:42:56 +0100
+Message-Id: <20220305154256.278394-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Subject: Re: [PATCH net] net: lantiq_xrx200: fix use after free bug
-Content-Language: en-US
-To:     Aleksander Jan Bajkowski <olek2@wp.pl>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>
-References: <20220305112039.3989-1-olek2@wp.pl>
-From:   Hauke Mehrtens <hauke@hauke-m.de>
-In-Reply-To: <20220305112039.3989-1-olek2@wp.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/5/22 12:20, Aleksander Jan Bajkowski wrote:
-> The skb->len field is read after the packet is sent to the network
-> stack. In the meantime, skb can be freed. This patch fixes this bug.
-> 
-> Fixes: c3e6b2c35b34 ("net: lantiq_xrx200: add ingress SG DMA support")
-> Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
-> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+The ngpio fields both in struct gpio_device as well as gpio_chip are
+16 bit unsigned integers. Let's not risk an overflow and use the correct
+size when reading the device property.
 
-Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
+Fixes: 9dbd1ab20509 ("gpiolib: check the 'ngpios' property in core gpiolib code")
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ drivers/gpio/gpiolib.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->   drivers/net/ethernet/lantiq_xrx200.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
-> index 41d11137cde0..5712c3e94be8 100644
-> --- a/drivers/net/ethernet/lantiq_xrx200.c
-> +++ b/drivers/net/ethernet/lantiq_xrx200.c
-> @@ -260,9 +260,9 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
->   
->   	if (ctl & LTQ_DMA_EOP) {
->   		ch->skb_head->protocol = eth_type_trans(ch->skb_head, net_dev);
-> -		netif_receive_skb(ch->skb_head);
->   		net_dev->stats.rx_packets++;
->   		net_dev->stats.rx_bytes += ch->skb_head->len;
-> +		netif_receive_skb(ch->skb_head);
->   		ch->skb_head = NULL;
->   		ch->skb_tail = NULL;
->   		ret = XRX200_DMA_PACKET_COMPLETE;
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index a3d14277f17c..147b86db16aa 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -607,7 +607,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+ 	int base = gc->base;
+ 	unsigned int i;
+ 	int ret = 0;
+-	u32 ngpios;
++	u16 ngpios;
+ 
+ 	if (gc->fwnode)
+ 		fwnode = gc->fwnode;
+@@ -665,7 +665,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+ 	 * of GPIO lines.
+ 	 */
+ 	if (gc->ngpio == 0) {
+-		ret = device_property_read_u32(&gdev->dev, "ngpios", &ngpios);
++		ret = device_property_read_u16(&gdev->dev, "ngpios", &ngpios);
+ 		if (ret == -ENODATA)
+ 			/*
+ 			 * -ENODATA means that there is no property found and
+-- 
+2.30.1
 

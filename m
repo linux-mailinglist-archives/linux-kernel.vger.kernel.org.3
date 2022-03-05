@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1914F4CE548
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F444CE54B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 15:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbiCEOdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 09:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S231849AbiCEOf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 09:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiCEOc5 (ORCPT
+        with ESMTP id S229456AbiCEOf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 09:32:57 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CAC6243;
-        Sat,  5 Mar 2022 06:32:08 -0800 (PST)
+        Sat, 5 Mar 2022 09:35:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0583A4162C;
+        Sat,  5 Mar 2022 06:34:38 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CE542210FD;
-        Sat,  5 Mar 2022 14:32:06 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AD2E61F38E;
+        Sat,  5 Mar 2022 14:34:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646490726; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1646490876; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1pkewT5jbNnN2HTsBh7xuswvEese/PWWGAMR/fts6ok=;
-        b=IwcC+H9NPeQDyRL96F6rjHmMP31gweE4oUUKFRxPkTu7CqkYfu0TkJXVhVESXE/4lYNCXr
-        367uA1ClLwLDdnsg+YaFNE0P12Y/OkPRqi5mvEkdPZAQ3teV5j1JtFRLqlbknblqmcJRt9
-        nUu2YfAuJmmKx0u+IFQyvCSuzZW+Zzo=
+        bh=6jvn6usLbCQxA25jgqsaOq2N8KJNQyCUH1bEKc0db2E=;
+        b=Q7CfJfHjazC7014CUJGGnkKeMXAl3lc2wmQBXKwFuTeZo5Ho0FPCZrJ43XfDoUwZ9LwjRG
+        BgrP0SfJhkWS1dKGV7vZEhOwFPB/fc3VVom+5v7/LYdGLAzkwjckYx+hareU1dvZRCDaMf
+        pMvxP0AM5CR8D6zAdsqOTDj8GuQhcHI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646490726;
+        s=susede2_ed25519; t=1646490876;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1pkewT5jbNnN2HTsBh7xuswvEese/PWWGAMR/fts6ok=;
-        b=jFcYZm4CnouZthNJTPfpiMqALiZuaAEFX/J3sKtcXHjONnlL7hPbnd9wG9EVqtXdgQDuiu
-        DMUGSEVXXp3LIYAA==
+        bh=6jvn6usLbCQxA25jgqsaOq2N8KJNQyCUH1bEKc0db2E=;
+        b=QCkWaB9jJGkBr3ycD0Hg1xGa5k0pESBOOTA6OhBDklaY1LUFfw/Yst8PQ1LdztG9Br4+4/
+        pvublvB1uWq222Dg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EDAE13519;
-        Sat,  5 Mar 2022 14:32:06 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 428D813519;
+        Sat,  5 Mar 2022 14:34:36 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id u5+tF2Z0I2IcWgAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Sat, 05 Mar 2022 14:32:06 +0000
+        id ZD+WDPx0I2K4WgAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Sat, 05 Mar 2022 14:34:36 +0000
 Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 3f547f38;
-        Sat, 5 Mar 2022 14:32:22 +0000 (UTC)
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 13ded349;
+        Sat, 5 Mar 2022 14:34:52 +0000 (UTC)
 From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] ceph: fix use-after-free in ceph_readdir
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] ceph: add support for encrypted snapshot names
 References: <20220304161403.19295-1-lhenriques@suse.de>
-        <20220304161403.19295-3-lhenriques@suse.de>
-        <55c6363a0ef0dcca3e6a7c882783f5d47dbbbdc7.camel@kernel.org>
-        <79cd6979-cb02-c0a3-a4e9-d66f65d78976@redhat.com>
-Date:   Sat, 05 Mar 2022 14:32:22 +0000
-In-Reply-To: <79cd6979-cb02-c0a3-a4e9-d66f65d78976@redhat.com> (Xiubo Li's
-        message of "Sat, 5 Mar 2022 20:43:04 +0800")
-Message-ID: <87h78co4g9.fsf@brahms.olymp>
+        <20220304161403.19295-4-lhenriques@suse.de>
+        <c3d26fbd7691155cedc06dd44344d868f4d9112a.camel@kernel.org>
+Date:   Sat, 05 Mar 2022 14:34:52 +0000
+In-Reply-To: <c3d26fbd7691155cedc06dd44344d868f4d9112a.camel@kernel.org> (Jeff
+        Layton's message of "Fri, 04 Mar 2022 13:25:44 -0500")
+Message-ID: <87czj0o4c3.fsf@brahms.olymp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -79,60 +77,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> writes:
+Jeff Layton <jlayton@kernel.org> writes:
 
-> On 3/5/22 2:20 AM, Jeff Layton wrote:
->> On Fri, 2022-03-04 at 16:14 +0000, Lu=C3=ADs Henriques wrote:
->>> After calling ceph_mdsc_put_request() on dfi->last_readdir, this field
->>> should be set to NULL, otherwise we may end-up freeing it twince and get
->>> the following splat:
->>>
->>>    refcount_t: underflow; use-after-free.
->>>    WARNING: CPU: 0 PID: 229 at lib/refcount.c:28 refcount_warn_saturate=
-+0xa6/0xf0
->>>    ...
->>>    Call Trace:
->>>      <TASK>
->>>      ceph_readdir+0xd35/0x1460 [ceph]
->>>      ? _raw_spin_unlock+0x12/0x30
->>>      ? preempt_count_add+0x73/0xa0
->>>      ? _raw_spin_unlock+0x12/0x30
->>>      ? __mark_inode_dirty+0x27c/0x3a0
->>>      iterate_dir+0x7d/0x190
->>>      __x64_sys_getdents64+0x80/0x120
->>>      ? compat_fillonedir+0x160/0x160
->>>      do_syscall_64+0x43/0x90
->>>      entry_SYSCALL_64_after_hwframe+0x44/0xae
->>>
->>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
->>> ---
->>>   fs/ceph/dir.c | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
->>> index 0bcb677d2199..934402f5e9e6 100644
->>> --- a/fs/ceph/dir.c
->>> +++ b/fs/ceph/dir.c
->>> @@ -555,6 +555,7 @@ static int ceph_readdir(struct file *file, struct d=
-ir_context *ctx)
->>>   			      le32_to_cpu(rde->inode.in->mode) >> 12)) {
->>>   			dout("filldir stopping us...\n");
->>>   			ceph_mdsc_put_request(dfi->last_readdir);
->>> +			dfi->last_readdir =3D NULL;
->>>   			err =3D 0;
->>>   			goto out;
->>>   		}
->> I think Xiubo fixed this in the testing branch late yesterday. It should
->> no longer be needed.
+> On Fri, 2022-03-04 at 16:14 +0000, Lu=C3=ADs Henriques wrote:
+>> Since filenames in encrypted directories are already encrypted and shown
+>> as a base64-encoded string when the directory is locked, snapshot names
+>> should show a similar behaviour.
+>>=20
+>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
+>> ---
+>>  fs/ceph/dir.c   |  9 +++++++++
+>>  fs/ceph/inode.c | 13 +++++++++++++
+>>  2 files changed, 22 insertions(+)
+>>=20
+>> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+>> index 934402f5e9e6..17d2f18a1fd1 100644
+>> --- a/fs/ceph/dir.c
+>> +++ b/fs/ceph/dir.c
+>> @@ -1069,6 +1069,15 @@ static int ceph_mkdir(struct user_namespace *mnt_=
+userns, struct inode *dir,
+>>  		op =3D CEPH_MDS_OP_MKSNAP;
+>>  		dout("mksnap dir %p snap '%pd' dn %p\n", dir,
+>>  		     dentry, dentry);
+>> +		/*
+>> +		 * Encrypted snapshots require d_revalidate to force a
+>> +		 * LOOKUPSNAP to cleanup dcache
+>> +		 */
+>> +		if (IS_ENCRYPTED(dir)) {
+>> +			spin_lock(&dentry->d_lock);
+>> +			dentry->d_flags |=3D DCACHE_NOKEY_NAME;
+>> +			spin_unlock(&dentry->d_lock);
+>> +		}
+>>  	} else if (ceph_snap(dir) =3D=3D CEPH_NOSNAP) {
+>>  		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
+>>  		op =3D CEPH_MDS_OP_MKDIR;
+>> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+>> index 8b0832271fdf..357335a11384 100644
+>> --- a/fs/ceph/inode.c
+>> +++ b/fs/ceph/inode.c
+>> @@ -182,6 +182,19 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+>>  	ci->i_rbytes =3D 0;
+>>  	ci->i_btime =3D ceph_inode(parent)->i_btime;
+>>=20=20
+>> +	/* if encrypted, just borrow fscrypt_auth from parent */
+>> +	if (IS_ENCRYPTED(parent)) {
+>> +		struct ceph_inode_info *pci =3D ceph_inode(parent);
+>> +
+>> +		ci->fscrypt_auth =3D kmemdup(pci->fscrypt_auth,
+>> +					   pci->fscrypt_auth_len,
+>> +					   GFP_KERNEL);
+>> +		if (ci->fscrypt_auth) {
+>> +			inode->i_flags |=3D S_ENCRYPTED;
+>> +			ci->fscrypt_auth_len =3D pci->fscrypt_auth_len;
+>> +		} else
+>> +			dout("Failed to alloc memory for fscrypt_auth in snapdir\n");
 >
-> Right and I have sent a new version of my previous patch to remove the bu=
-ggy
-> code.
+> Should we return an error in this case?
 
-Ok, cool.  This definitely proofs that my local branch wasn't updated :-)
-
-(I really need to get rid of this mails/patches backlog.)
+Yeah, definitely.  I'll add that and send out v2.  Thanks.
 
 Cheers,
 --=20
 Lu=C3=ADs
+
+
+>
+>> +	}
+>>  	if (inode->i_state & I_NEW) {
+>>  		inode->i_op =3D &ceph_snapdir_iops;
+>>  		inode->i_fop =3D &ceph_snapdir_fops;
+>
+> Seems simple and straightforward at first glance.
+> --=20
+> Jeff Layton <jlayton@kernel.org>
+

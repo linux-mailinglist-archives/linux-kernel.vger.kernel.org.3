@@ -2,157 +2,464 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05674CE388
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 08:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52C54CE394
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 09:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiCEH64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 02:58:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
+        id S229697AbiCEIXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 03:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbiCEH6z (ORCPT
+        with ESMTP id S229458AbiCEIXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 02:58:55 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85040522E8;
-        Fri,  4 Mar 2022 23:58:05 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id u8so803072ilv.0;
-        Fri, 04 Mar 2022 23:58:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=vtF/fnbl8MgG+NykIfC5YN+vxFv+WkRJMgmDqAzHsCA=;
-        b=GmHbVKbEEyvIwE2w3MGW64jxl0gF2z+G9w15w/LS3iflGnnLlXKs+RNQYxjnWaCFCL
-         wZyf6Oe33VDc5l8sNRHDjB2mLEUU7uaZQ3W/ycIJHpQvVi/2TrNPsnZGNWul6TsLRpS0
-         Qr1M2+wJUX5efy/PNECZdfy1SNrpWgWOiHAKCm31xDq0ykIv4vuoOG8xkiYUxolG1UEv
-         6ukWUQGwqxyKwml997wUahlOdwmLIvxFiXEInkr414bxVNnhqnXpnv9XvS+vjCAI4UQ9
-         eaVpJ/AunTbFgsqjuhUE7UODrN/wd/2wzax+NEzUM+KyDdB7rgbyU6KaYQ/mw/FUUUuY
-         aWnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=vtF/fnbl8MgG+NykIfC5YN+vxFv+WkRJMgmDqAzHsCA=;
-        b=sc754NrGswLIfygqNjAgcisFa+kS4G+2m2o4YiZvIsCjqRTS6v9il/k4Nri6NR136t
-         Utf68pXnmaKywss9af8ADOSD00C4HatJDLpt0avD5VOMsnLD4d0crcvrjh5IO+g30XcX
-         fzXAXMmAvN/Jt1OtBvJX+HGuOtgxd9xk03e1yolJ82hx7ZaJ9ybYGG06I77Gzu1NfGZO
-         Bun2+jNIOtx3k0NGA1AQqLKH25gzxmVYuTM2GBmtUs1YaAlUTVTm3nlViaSuvspyvuUP
-         meas9WN5utAWMlT9fBVDpp8pWyfr3jNp9bU/6OVIFz444OOBLz0aRA0fcortFu4WLKN0
-         QubA==
-X-Gm-Message-State: AOAM531/AkBsCmwnnfKiaYuyXlDV+Gx01YIQxZV6MYYqsPBcsgT/Mqt2
-        9rsC2JRqfFC9HZIVIQM1aqKCdzVjKoAWY9Q0PxhJ/vJWi3kYuQ==
-X-Google-Smtp-Source: ABdhPJwY1Or5oX2Gt/bz3/eAnC5jdQWXbHKBmkaC7aM2Cw/Foc5M0Iy12blgkxnczZLiGflEzpW0q0AL4xypgPpFxE8=
-X-Received: by 2002:a05:6e02:18cd:b0:2c2:f50c:278 with SMTP id
- s13-20020a056e0218cd00b002c2f50c0278mr2292350ilu.1.1646467084930; Fri, 04 Mar
- 2022 23:58:04 -0800 (PST)
-MIME-Version: 1.0
-References: <CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com>
-In-Reply-To: <CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 5 Mar 2022 08:57:28 +0100
-Message-ID: <CA+icZUW7LESaDG5gLQs9kOJp=0Anp=+jNb8L1u91iAf625m6wA@mail.gmail.com>
-Subject: Re: [Linux-v5.17-rc6] Building tools/perf with perl v5.34
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+        Sat, 5 Mar 2022 03:23:09 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F258221BB5;
+        Sat,  5 Mar 2022 00:22:15 -0800 (PST)
+X-UUID: 3f0045f906424d1d869dd924349f3313-20220305
+X-UUID: 3f0045f906424d1d869dd924349f3313-20220305
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 754612243; Sat, 05 Mar 2022 16:22:06 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 5 Mar 2022 16:22:04 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 5 Mar 2022 16:22:04 +0800
+Message-ID: <88c09cbb11c76e17ce78376103d17ac408f3cfd5.camel@mediatek.com>
+Subject: Re: [PATCH V2 4/6] spi: mediatek: add spi memory support
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Sat, 5 Mar 2022 16:22:04 +0800
+In-Reply-To: <2c1a0925aeb1f3ba640a29e0f6f9765eb609293b.camel@mediatek.com>
+References: <20220221040717.3729-1-leilk.liu@mediatek.com>
+         <20220221040717.3729-5-leilk.liu@mediatek.com>
+         <2e994be0-8b60-a3dc-2ab7-34d93192dc09@collabora.com>
+         <2c1a0925aeb1f3ba640a29e0f6f9765eb609293b.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 5, 2022 at 8:52 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> Hi,
->
-> I am here on Debian/unstable AMD64 which switched over to perl v5.34
-> in February 2022.
->
-> Unfortunately, my perf does not build with this (lib)perl version:
->
-> $ ~/bin/perf -vv
-> perf version 5.17-rc6
->                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
->    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
->                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
->         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
->                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
->                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
->               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
-> numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
->               libperl: [ OFF ]  # HAVE_LIBPERL_SUPPORT
->             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
->              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
->             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
->             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
->    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
->                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
->                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
->             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
->                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
->                   aio: [ on  ]  # HAVE_AIO_SUPPORT
->                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
->               libpfm4: [ OFF ]  # HAVE_LIBPFM
->
-> $ grep libperl ../make-log_perf-python3.10-install_bin.txt
-> 9:Makefile.config:788: Missing perl devel files. Disabling perl
-> scripting support, please install perl-ExtUtils-Embed/libperl-dev
-> 22:...                       libperl: [ OFF ]
->
-> Checking for these requirements:
->
-> # dpkg -l | grep perl | grep 5.34 | awk '/^ii/ {print $1 " " $2 " "
-> $3}' | column -t
-> ii  libperl-dev:amd64  5.34.0-3
-> ii  libperl5.34:amd64  5.34.0-3
-> ii  perl               5.34.0-3
-> ii  perl-base          5.34.0-3
-> ii  perl-modules-5.34  5.34.0-3
->
-> # dpkg -L perl-modules-5.34 | grep -i ExtUtils | grep -i Embed
-> /usr/share/perl/5.34.0/ExtUtils/Embed.pm
->
-> Can you please comment on this?
->
-> Thanks.
->
-> Regards,
-> - Sedat -
->
-> [1] https://unix.stackexchange.com/questions/167292/what-is-debian-equivalent-of-rpm-package-perl-extutils-embed
+On Wed, 2022-02-23 at 09:59 +0800, Leilk Liu wrote:
+> On Tue, 2022-02-22 at 11:49 +0100, AngeloGioacchino Del Regno wrote:
+> > Il 21/02/22 05:07, Leilk Liu ha scritto:
+> > > this patch add the support of spi-mem.
+> > > 
+> > > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> > > ---
+> > >   drivers/spi/spi-mt65xx.c | 310
+> > > ++++++++++++++++++++++++++++++++++++++-
+> > >   1 file changed, 309 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> > > index 5fa677a589a4..852fc008329a 100644
+> > > --- a/drivers/spi/spi-mt65xx.c
+> > > +++ b/drivers/spi/spi-mt65xx.c
+> > > @@ -17,6 +17,7 @@
+> > >   #include <linux/platform_data/spi-mt65xx.h>
+> > >   #include <linux/pm_runtime.h>
+> > >   #include <linux/spi/spi.h>
+> > > +#include <linux/spi/spi-mem.h>
+> > >   #include <linux/dma-mapping.h>
+> > >   
+> > >   #define SPI_CFG0_REG                      0x0000
+> > > @@ -75,8 +76,21 @@
+> > >   #define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
+> > >   
+> > >   #define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
+> > > +
+> > > +#define PIN_MODE_CFG(x)	((x) / 2)
+> > > +
+> > > +#define SPI_CFG3_IPM_PIN_MODE_OFFSET		0
+> > >   #define SPI_CFG3_IPM_HALF_DUPLEX_DIR		BIT(2)
+> > >   #define SPI_CFG3_IPM_HALF_DUPLEX_EN		BIT(3)
+> > > +#define SPI_CFG3_IPM_XMODE_EN			BIT(4)
+> > > +#define SPI_CFG3_IPM_NODATA_FLAG		BIT(5)
+> > > +#define SPI_CFG3_IPM_CMD_BYTELEN_OFFSET		8
+> > > +#define SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET	12
+> > > +
+> > > +#define SPI_CFG3_IPM_CMD_PIN_MODE_MASK		GENMASK(1, 0)
+> > > +#define SPI_CFG3_IPM_CMD_BYTELEN_MASK		GENMASK(11, 8)
+> > > +#define SPI_CFG3_IPM_ADDR_BYTELEN_MASK		GENMASK(15, 12)
+> > > +
+> > >   #define MT8173_SPI_MAX_PAD_SEL 3
+> > >   
+> > >   #define MTK_SPI_PAUSE_INT_STATUS 0x2
+> > > @@ -87,6 +101,8 @@
+> > >   #define MTK_SPI_MAX_FIFO_SIZE 32U
+> > >   #define MTK_SPI_PACKET_SIZE 1024
+> > >   #define MTK_SPI_IPM_PACKET_SIZE SZ_64K
+> > > +#define MTK_SPI_IPM_PACKET_LOOP SZ_256
+> > > +
+> > >   #define MTK_SPI_32BITS_MASK  (0xffffffff)
+> > >   
+> > >   #define DMA_ADDR_EXT_BITS (36)
+> > > @@ -104,7 +120,8 @@ struct mtk_spi_compatible {
+> > >   	bool no_need_unprepare;
+> > >   	/* IPM design improve some single mode features */
+> > >   	bool ipm_design;
+> > > -
+> > > +	/* IPM design that support quad mode */
+> > > +	bool support_quad;
+> > >   };
+> > >   
+> > >   struct mtk_spi {
+> > > @@ -120,6 +137,11 @@ struct mtk_spi {
+> > >   	u32 tx_sgl_len, rx_sgl_len;
+> > >   	const struct mtk_spi_compatible *dev_comp;
+> > >   	u32 spi_clk_hz;
+> > > +	struct completion spimem_done;
+> > > +	bool use_spimem;
+> > > +	struct device *dev;
+> > > +	dma_addr_t tx_dma;
+> > > +	dma_addr_t rx_dma;
+> > >   };
+> > >   
+> > >   static const struct mtk_spi_compatible mtk_common_compat;
+> > > @@ -134,6 +156,13 @@ static const struct mtk_spi_compatible
+> > > ipm_compat_single = {
+> > >   	.ipm_design = true,
+> > >   };
+> > >   
+> > > +static const struct mtk_spi_compatible ipm_compat_quad = {
+> > > +	.enhance_timing = true,
+> > > +	.dma_ext = true,
+> > > +	.ipm_design = true,
+> > > +	.support_quad = true,
+> > > +};
+> > > +
+> > >   static const struct mtk_spi_compatible mt6765_compat = {
+> > >   	.need_pad_sel = true,
+> > >   	.must_tx = true,
+> > > @@ -178,6 +207,9 @@ static const struct of_device_id
+> > > mtk_spi_of_match[] = {
+> > >   	{ .compatible = "mediatek,ipm-spi-single",
+> > >   		.data = (void *)&ipm_compat_single,
+> > >   	},
+> > > +	{ .compatible = "mediatek,ipm-spi-quad",
+> > > +		.data = (void *)&ipm_compat_quad,
+> > > +	},
+> > >   	{ .compatible = "mediatek,mt2701-spi",
+> > >   		.data = (void *)&mtk_common_compat,
+> > >   	},
+> > > @@ -694,6 +726,13 @@ static irqreturn_t mtk_spi_interrupt(int
+> > > irq,
+> > > void *dev_id)
+> > >   	else
+> > >   		mdata->state = MTK_SPI_IDLE;
+> > >   
+> > > +	/* SPI-MEM ops */
+> > > +	if (mdata->use_spimem) {
+> > > +		complete(&mdata->spimem_done);
+> > > +
+> > > +		return IRQ_HANDLED;
+> > > +	}
+> > > +
+> > 
+> > I would instead make a new ISR for the SPI-MEM case... as you're
+> > bypassing the
+> > entire mtk_spi_interrupt() function like that.
+> > 
+> > Example:
+> > 
+> > static void mtk_spi_check_and_set_state(struct mtk_spi *mdata)
+> > {
+> > 	u32 reg_val;
+> > 
+> > 	reg_val = readl(mdata->base + SPI_STATUS0_REG);
+> > 
+> > 	if (reg_val & MTK_SPI_PAUSE_INT_STATUS)
+> > 
+> > 		mdata->state = MTK_SPI_PAUSED;
+> > 
+> > 	else
+> > 
+> > 		mdata->state = MTK_SPI_IDLE;
+> > }
+> > 
+> > static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
+> > 
+> > {
+> > 	u32 cmd, reg_val, cnt, remainder, len;
+> > 
+> > 	struct spi_master *master = dev_id;
+> > 
+> > 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> > 
+> > 	struct spi_transfer *trans = mdata->cur_transfer;
+> > 
+> > 	mtk_spi_check_and_set_state(mdata);
+> > 
+> > 	if (!master->can_dma(........
+> > 	.... blurb...
+> > }
+> > 
+> > static irqreturn_t mtk_spimem_interrupt(int irq, void *dev_id)
+> > {
+> > 	struct spi_master *master = dev_id;
+> > 
+> > 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> > 
+> > 	mtk_spi_check_and_set_state(mdata);
+> > 	complete(&mdata->spimem_done);
+> > 
+> > 	return IRQ_HANDLED;
+> > }
+> > 
+> > ... of course, in mtk_spi_probe(), you would do something like
+> > 
+> > if (mdata->use_spimem)
+> > 	ret = devm_request_irq(&pdev->dev, irq, mtk_spimem_interrupt,
+> > 		...... blah ......
+> > else
+> > 	ret = devm_request_irq(&pdev->dev, irq, mtk_spi_interrupt,
+> > 		..... blah ......
+> > 
+> > This way, you're separating the two - increasing human readability
+> > and showing
+> > the simplifications (in that regard) in the IPM IP's SPI-MEM
+> > handling.
+> > 
+> 
+> thanks for your advise, I'll do it in the next version.
+Hi AngeloGioacchino,
+ It can't request mtk_spimem_interrupt() only while support spimem
+core, since spi driver should support spi_sync and spi_mem_exec_op
+both.
 
-My command-line:
+> 
+> > >   	if (!master->can_dma(master, NULL, trans)) {
+> > >   		if (trans->rx_buf) {
+> > >   			cnt = mdata->xfer_len / 4;
+> > > @@ -777,6 +816,266 @@ static irqreturn_t mtk_spi_interrupt(int
+> > > irq,
+> > > void *dev_id)
+> > >   	return IRQ_HANDLED;
+> > >   }
+> > >   
+> > > +static int mtk_spi_mem_adjust_op_size(struct spi_mem *mem,
+> > > +				      struct spi_mem_op *op)
+> > > +{
+> > > +	int opcode_len;
+> > > +
+> > > +	if (op->data.dir != SPI_MEM_NO_DATA) {
+> > > +		opcode_len = 1 + op->addr.nbytes + op->dummy.nbytes;
+> > > +		if (opcode_len + op->data.nbytes >
+> > > MTK_SPI_IPM_PACKET_SIZE) {
+> > > +			op->data.nbytes = MTK_SPI_IPM_PACKET_SIZE -
+> > > opcode_len;
+> > > +			/* force data buffer dma-aligned. */
+> > > +			op->data.nbytes -= op->data.nbytes % 4;
+> > > +		}
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static bool mtk_spi_mem_supports_op(struct spi_mem *mem,
+> > > +				    const struct spi_mem_op *op)
+> > > +{
+> > > +	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
+> > > +	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
+> > > +		return false;
+> > > +
+> > > +	if (op->addr.nbytes && op->dummy.nbytes &&
+> > > +	    op->addr.buswidth != op->dummy.buswidth)
+> > > +		return false;
+> > > +
+> > > +	if (op->addr.nbytes + op->dummy.nbytes > 16)
+> > > +		return false;
+> > > +
+> > > +	if (op->data.nbytes > MTK_SPI_IPM_PACKET_SIZE) {
+> > > +		if (op->data.nbytes / MTK_SPI_IPM_PACKET_SIZE >
+> > > +		    MTK_SPI_IPM_PACKET_LOOP ||
+> > > +		    op->data.nbytes % MTK_SPI_IPM_PACKET_SIZE != 0)
+> > > +			return false;
+> > > +	}
+> > > +
+> > > +	return true;
+> > > +}
+> > > +
+> > > +static void mtk_spi_mem_setup_dma_xfer(struct spi_master
+> > > *master,
+> > > +				       const struct spi_mem_op *op)
+> > > +{
+> > > +	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> > > +
+> > > +	writel((u32)(mdata->tx_dma & MTK_SPI_32BITS_MASK),
+> > > +	       mdata->base + SPI_TX_SRC_REG);
+> > > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> > > +	if (mdata->dev_comp->dma_ext)
+> > > +		writel((u32)(mdata->tx_dma >> 32),
+> > > +		       mdata->base + SPI_TX_SRC_REG_64);
+> > > +#endif
+> > > +
+> > > +	if (op->data.dir == SPI_MEM_DATA_IN) {
+> > > +		writel((u32)(mdata->rx_dma & MTK_SPI_32BITS_MASK),
+> > > +		       mdata->base + SPI_RX_DST_REG);
+> > > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> > > +		if (mdata->dev_comp->dma_ext)
+> > > +			writel((u32)(mdata->rx_dma >> 32),
+> > > +			       mdata->base + SPI_RX_DST_REG_64);
+> > > +#endif
+> > > +	}
+> > > +}
+> > > +
+> > > +static int mtk_spi_transfer_wait(struct spi_mem *mem,
+> > > +				 const struct spi_mem_op *op)
+> > > +{
+> > > +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi-
+> > > > master);
+> > > 
+> > > +	unsigned long long ms = 1;
+> > 
+> > Initializing ms to 1 here is useless, as you're anyway
+> > reinitializing
+> > it
+> > right after. I would do it as following:
+> > 
+> > u64 ms = 8000LL;
+> > 
+> > if (op->data.dir == SPI_MEM_NO_DATA)
+> > 	ms *= 32;
+> > else
+> > 	ms *= op->data.nbytes;
+> > 
+> 
+> OK,I'll fix it.
+> 
+> > Besides, can you please add a comment to the code explaining why
+> > the
+> > reason for the waits (why 8, why 1000, why 32)?
+> > 
+> 
+> OK,THANKS
+> 
+> > > +
+> > > +	if (op->data.dir == SPI_MEM_NO_DATA)
+> > > +		ms = 8LL * 1000LL * 32;
+> > > +	else
+> > > +		ms = 8LL * 1000LL * op->data.nbytes;
+> > > +	do_div(ms, mem->spi->max_speed_hz);
+> > 
+> > I appreciate the usage of safe division helpers, but this is the
+> > wrong one:
+> > you have a unsigned long long (64-bits) dividend and a u32 divisor,
+> > so the
+> > right function to use here is div_u64().
+> > 
+> 
+> OK, I'll fix it. thanks!
+> 
+> > 	ms = div_u64(ms, mem->spi->max_speed_hz);
+> > 
+> > > +	ms += ms + 1000; /* 1s tolerance */
+> > > +
+> > > +	if (ms > UINT_MAX)
+> > > +		ms = UINT_MAX;
+> > > +
+> > > +	if (!wait_for_completion_timeout(&mdata->spimem_done,
+> > > +					 msecs_to_jiffies(ms))) {
+> > > +		dev_err(mdata->dev, "spi-mem transfer timeout\n");
+> > > +		return -ETIMEDOUT;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int mtk_spi_mem_exec_op(struct spi_mem *mem,
+> > > +			       const struct spi_mem_op *op)
+> > > +{
+> > > +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi-
+> > > > master);
+> > > 
+> > > +	u32 reg_val, nio = 1, tx_size;
+> > > +	char *tx_tmp_buf, *rx_tmp_buf;
+> > > +	int ret = 0;
+> > > +
+> > > +	mdata->use_spimem = true;
+> > > +	reinit_completion(&mdata->spimem_done);
+> > > +
+> > > +	mtk_spi_reset(mdata);
+> > > +	mtk_spi_hw_init(mem->spi->master, mem->spi);
+> > > +	mtk_spi_prepare_transfer(mem->spi->master, mem->spi-
+> > > > max_speed_hz);
+> > > 
+> > > +
+> > > +	reg_val = readl(mdata->base + SPI_CFG3_IPM_REG);
+> > > +	/* opcode byte len */
+> > > +	reg_val &= ~SPI_CFG3_IPM_CMD_BYTELEN_MASK;
+> > > +	reg_val |= 1 << SPI_CFG3_IPM_CMD_BYTELEN_OFFSET;
+> > > +
+> > > +	/* addr & dummy byte len */
+> > > +	reg_val &= ~SPI_CFG3_IPM_ADDR_BYTELEN_MASK;
+> > > +	if (op->addr.nbytes || op->dummy.nbytes)
+> > > +		reg_val |= (op->addr.nbytes + op->dummy.nbytes) <<
+> > > +			    SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET;
+> > > +
+> > > +	/* data byte len */
+> > > +	if (op->data.dir == SPI_MEM_NO_DATA) {
+> > > +		reg_val |= SPI_CFG3_IPM_NODATA_FLAG;
+> > > +		writel(0, mdata->base + SPI_CFG1_REG);
+> > > +	} else {
+> > > +		reg_val &= ~SPI_CFG3_IPM_NODATA_FLAG;
+> > > +		mdata->xfer_len = op->data.nbytes;
+> > > +		mtk_spi_setup_packet(mem->spi->master);
+> > > +	}
+> > > +
+> > > +	if (op->addr.nbytes || op->dummy.nbytes) {
+> > > +		if (op->addr.buswidth == 1 || op->dummy.buswidth == 1)
+> > > +			reg_val |= SPI_CFG3_IPM_XMODE_EN;
+> > > +		else
+> > > +			reg_val &= ~SPI_CFG3_IPM_XMODE_EN;
+> > > +	}
+> > > +
+> > > +	if (op->addr.buswidth == 2 ||
+> > > +	    op->dummy.buswidth == 2 ||
+> > > +	    op->data.buswidth == 2)
+> > > +		nio = 2;
+> > > +	else if (op->addr.buswidth == 4 ||
+> > > +		 op->dummy.buswidth == 4 ||
+> > > +		 op->data.buswidth == 4)
+> > > +		nio = 4;
+> > 
+> > 	else
+> > 		nio = 1;
+> > 
+> > ...so that you can avoid double initialization of the `nio`
+> > variable.
+> > 
+> 
+> OK, I'll fix it,thanks
+> 
+> > > +
+> > > +	reg_val &= ~SPI_CFG3_IPM_CMD_PIN_MODE_MASK;
+> > > +	reg_val |= PIN_MODE_CFG(nio) << SPI_CFG3_IPM_PIN_MODE_OFFSET;
+> > > +
+> > 
+> > Regards,
+> > Angelo
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
 
-cd /path/to/linux.git
-
-$ make V=1 -j4 HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld
-HOSTAR=llvm-ar CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm
-OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size
-READELF=llvm-readelf STRIP=llvm-strip LLVM_IAS=1 -C tools/perf
-PYTHON=python3.10 install-bin
-
-I use the -gnu-std-11 patchset plus some own:
-
-$ git log --oneline v5.17-rc6.. | grep 'std=gnu11'
-05d8e9b88918 tools: libtraceevent: Use -std=gnu11
-ee44279e6b01 tools: libsubcmd: Use -std=gnu11
-411fa2d6da5c tools: libapi: Use -std=gnu11
-3f0092b7e1b9 tools: perf: Use -std=gnu11
-0cf56ddf2b41 tools: libbpf: Use -std=gnu11
-96a4222bdd4c Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
-6a7cc105b238 Kbuild: move to -std=gnu11
-
-If this matters...
-
-- Sedat -

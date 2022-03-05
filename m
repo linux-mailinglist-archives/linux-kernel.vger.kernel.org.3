@@ -2,410 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBA04CE465
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 12:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD384CE46B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 12:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbiCELI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 06:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S231522AbiCELMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 06:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiCELIy (ORCPT
+        with ESMTP id S229463AbiCELMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 06:08:54 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9C23EA87;
-        Sat,  5 Mar 2022 03:08:01 -0800 (PST)
-X-UUID: 925afbf654c141299bd365f188cd639d-20220305
-X-UUID: 925afbf654c141299bd365f188cd639d-20220305
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 999676758; Sat, 05 Mar 2022 19:07:56 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 5 Mar 2022 19:07:54 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 5 Mar 2022 19:07:54 +0800
-Message-ID: <3acf0e4bc1a6ce41c04978c715dd3ed351e4de3d.camel@mediatek.com>
-Subject: Re: [v2 06/17] ASoC: mediatek: mt8186: support i2s in platform
- driver
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <broonie@kernel.org>
-CC:     <lgirdwood@gmail.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <perex@perex.cz>,
-        <p.zabel@pengutronix.de>, <geert+renesas@glider.be>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <aaronyu@google.com>, <zhangqilong3@huawei.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Sat, 5 Mar 2022 19:07:53 +0800
-In-Reply-To: <30ec6389-5972-02c8-9147-c4624f5f97cb@collabora.com>
-References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
-         <20220217134205.15400-7-jiaxin.yu@mediatek.com>
-         <30ec6389-5972-02c8-9147-c4624f5f97cb@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sat, 5 Mar 2022 06:12:49 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD42580C3;
+        Sat,  5 Mar 2022 03:11:59 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id r8so12228285ioj.9;
+        Sat, 05 Mar 2022 03:11:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=WWytVZibtRPywRB6Mck+JDJeinanVwzEpaOU6BzFGn8=;
+        b=l+2fxzK7shuiDrImoKUHu7PRWY6mYWhFu1iCCe+ocJMWzdKrPyId/X/U12cjR0BNrL
+         3DrGJ266eQY2a/IuO0SIx3Fe9ub7cFsaLyxi4lJj2x5j3+YVkiKne8DWPyDn+/rXbeaX
+         5hShiOHVh3wXzJ9gYgS4srACCN+kvZOeFwUH37KYrndSNo1jKV/wNRPQCQt7D9wHeZjO
+         NQh+VjzR/M6ehLk8SJl7bE5wtVf16nDM8YpVoZMbZoPEflDNQc0BwiuC8JkRk/n4yLmj
+         vhveo8Q6hF7fEE2/Crunb54GvEX7wDvDgwB+pvGR2HyQafBB0luQYneXroopHKQD9y5T
+         TBfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=WWytVZibtRPywRB6Mck+JDJeinanVwzEpaOU6BzFGn8=;
+        b=Ar/0zDlkAiZ1zuDRNuDeX9QpApYwsQM2t8bUHDQIvDU9wl9boi7sr2TESYm8IuSOCH
+         oyq5m2qXRyv0j8fQoi5DewBkc++pEns2+gPx/KEhmN9fOUZV6mWyfm0NVSLyKlu+aRLw
+         V78JAKqmrUU0Xn/C9qsxuzS/sqJ+ciUtw13luuOhVBXwDaU/7kc/VVtj4JurE3OcLLjv
+         m+2FzpEhoV2QSYeRTn11uYBLbM89UHLY82euElxEQK0vv5+DCidRAJn0DWTngvwfuXd6
+         GwyD2q5ZVrusSTX/XwTgZKQl1A3UWnO6Z5rgMydfrv/NAh9dpuk69nV+rF/aQR7ngUIW
+         ECkQ==
+X-Gm-Message-State: AOAM533Sq/YAEmOp6PQGahR9IsRg1EhOpeItvSHXFrvGzxIj8tj1UWaa
+        BWAgI+vElPyvAKDxPF2+f6WHwUby1hQsSu+OXB0=
+X-Google-Smtp-Source: ABdhPJxABf3kiJ9pEGvbNV+3GgtfJjZHeN+hzyfUu+qq/TYfxPHcJRjHbj2FVOBOrYwovko5E6PFuGdgu2giztFJDQo=
+X-Received: by 2002:a05:6638:3462:b0:314:199a:aad4 with SMTP id
+ q34-20020a056638346200b00314199aaad4mr2580585jav.52.1646478718779; Sat, 05
+ Mar 2022 03:11:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com>
+ <CA+icZUW7LESaDG5gLQs9kOJp=0Anp=+jNb8L1u91iAf625m6wA@mail.gmail.com> <CA+icZUVd19avD71K1NcCogr86fxkGHxEWVeFzYW-AWuoGJ3zzA@mail.gmail.com>
+In-Reply-To: <CA+icZUVd19avD71K1NcCogr86fxkGHxEWVeFzYW-AWuoGJ3zzA@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 5 Mar 2022 12:11:22 +0100
+Message-ID: <CA+icZUV840wd-jmYkcXVuG0iSsGRLhZ8p+pgbiEABWOmuFQcNA@mail.gmail.com>
+Subject: Re: [Linux-v5.17-rc6] Building tools/perf with perl v5.34
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-18 at 15:54 +0100, AngeloGioacchino Del Regno wrote:
-> Il 17/02/22 14:41, Jiaxin Yu ha scritto:
-> > This patch adds mt8186 i2s dai driver
-> > 
-> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> > ---
-> >   sound/soc/mediatek/mt8186/mt8186-dai-i2s.c | 1371
-> > ++++++++++++++++++++
-> >   1 file changed, 1371 insertions(+)
-> >   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-i2s.c
-> > 
-> > diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-i2s.c
-> > b/sound/soc/mediatek/mt8186/mt8186-dai-i2s.c
-> > new file mode 100644
-> > index 000000000000..d6db5f6a7315
-> > --- /dev/null
-> > +++ b/sound/soc/mediatek/mt8186/mt8186-dai-i2s.c
-> > @@ -0,0 +1,1371 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +//
-> > +// MediaTek ALSA SoC Audio DAI I2S Control
-> > +//
-> > +// Copyright (c) 2022 MediaTek Inc.
-> > +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> > +
-> > +#include <linux/bitops.h>
-> > +#include <linux/regmap.h>
-> > +#include <sound/pcm_params.h>
-> > +#include "mt8186-afe-clk.h"
-> > +#include "mt8186-afe-common.h"
-> > +#include "mt8186-afe-gpio.h"
-> > +#include "mt8186-interconnection.h"
-> > +
-> > 
-> > +static int mtk_afe_i2s_share_connect(struct snd_soc_dapm_widget
-> > *source,
-> > +				     struct snd_soc_dapm_widget *sink)
-> > +{
-> > +	struct snd_soc_dapm_widget *w = sink;
-> > +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w-
-> > >dapm);
-> > +	struct mtk_base_afe *afe =
-> > snd_soc_component_get_drvdata(cmpnt);
-> > +	struct mtk_afe_i2s_priv *i2s_priv;
-> > +
-> > +	i2s_priv = get_i2s_priv_by_name(afe, sink->name);
-> > +
-> > +	if (!i2s_priv) {
-> > +		dev_info(afe->dev, "%s(), i2s_priv == NULL", __func__);
-> 
-> Is this an error? => dev_err()
-> Is this expected? => dev_dbg()
-> 
-It should be an error here and use dev_err().
-I will fix the rest of the similar log level issues.
+On Sat, Mar 5, 2022 at 9:26 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Sat, Mar 5, 2022 at 8:57 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Sat, Mar 5, 2022 at 8:52 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > I am here on Debian/unstable AMD64 which switched over to perl v5.34
+> > > in February 2022.
+> > >
+> > > Unfortunately, my perf does not build with this (lib)perl version:
+> > >
+> > > $ ~/bin/perf -vv
+> > > perf version 5.17-rc6
+> > >                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+> > >    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+> > >                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
+> > >         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+> > >                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
+> > >                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+> > >               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> > > numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> > >               libperl: [ OFF ]  # HAVE_LIBPERL_SUPPORT
+> > >             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+> > >              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+> > >             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+> > >             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+> > >    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+> > >                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+> > >                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+> > >             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+> > >                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+> > >                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+> > >                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+> > >               libpfm4: [ OFF ]  # HAVE_LIBPFM
+> > >
+> > > $ grep libperl ../make-log_perf-python3.10-install_bin.txt
+> > > 9:Makefile.config:788: Missing perl devel files. Disabling perl
+> > > scripting support, please install perl-ExtUtils-Embed/libperl-dev
+> > > 22:...                       libperl: [ OFF ]
+> > >
+> > > Checking for these requirements:
+> > >
+> > > # dpkg -l | grep perl | grep 5.34 | awk '/^ii/ {print $1 " " $2 " "
+> > > $3}' | column -t
+> > > ii  libperl-dev:amd64  5.34.0-3
+> > > ii  libperl5.34:amd64  5.34.0-3
+> > > ii  perl               5.34.0-3
+> > > ii  perl-base          5.34.0-3
+> > > ii  perl-modules-5.34  5.34.0-3
+> > >
+> > > # dpkg -L perl-modules-5.34 | grep -i ExtUtils | grep -i Embed
+> > > /usr/share/perl/5.34.0/ExtUtils/Embed.pm
+> > >
+> > > Can you please comment on this?
+> > >
+> > > Thanks.
+> > >
+> > > Regards,
+> > > - Sedat -
+> > >
+> > > [1] https://unix.stackexchange.com/questions/167292/what-is-debian-equivalent-of-rpm-package-perl-extutils-embed
+> >
+> > My command-line:
+> >
+> > cd /path/to/linux.git
+> >
+> > $ make V=1 -j4 HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld
+> > HOSTAR=llvm-ar CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm
+> > OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump OBJSIZE=llvm-size
+> > READELF=llvm-readelf STRIP=llvm-strip LLVM_IAS=1 -C tools/perf
+> > PYTHON=python3.10 install-bin
+> >
+> > I use the -gnu-std-11 patchset plus some own:
+> >
+> > $ git log --oneline v5.17-rc6.. | grep 'std=gnu11'
+> > 05d8e9b88918 tools: libtraceevent: Use -std=gnu11
+> > ee44279e6b01 tools: libsubcmd: Use -std=gnu11
+> > 411fa2d6da5c tools: libapi: Use -std=gnu11
+> > 3f0092b7e1b9 tools: perf: Use -std=gnu11
+> > 0cf56ddf2b41 tools: libbpf: Use -std=gnu11
+> > 96a4222bdd4c Kbuild: use -std=gnu11 for KBUILD_USERCFLAGS
+> > 6a7cc105b238 Kbuild: move to -std=gnu11
+> >
+> > If this matters...
+> >
+>
+> [ tools/perf/Makefile.config ]
+>
+> ifdef NO_LIBPERL
+>   CFLAGS += -DNO_LIBPERL
+> else
+>   PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+>   PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+>   PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+>   PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+>   PERL_EMBED_CCOPTS := $(filter-out -specs=%,$(PERL_EMBED_CCOPTS))
+>   PERL_EMBED_CCOPTS := $(filter-out -flto=auto -ffat-lto-objects,
+> $(PERL_EMBED_CCOPTS))
+>   PERL_EMBED_LDOPTS := $(filter-out -specs=%,$(PERL_EMBED_LDOPTS))
+>   FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
+>
+>   ifneq ($(feature-libperl), 1)
+>     CFLAGS += -DNO_LIBPERL
+>     NO_LIBPERL := 1
+>     msg := $(warning Missing perl devel files. Disabling perl
+> scripting support, please install perl-ExtUtils-Embed/libperl-dev);
+>   else
+>     LDFLAGS += $(PERL_EMBED_LDFLAGS)
+>     EXTLIBS += $(PERL_EMBED_LIBADD)
+>     CFLAGS += -DHAVE_LIBPERL_SUPPORT
+>     $(call detected,CONFIG_LIBPERL)
+>   endif
+> endif
+>
+> $ perl -MExtUtils::Embed -e ldopts
+> -Wl,-E  -fstack-protector-strong -L/usr/local/lib
+> -L/usr/lib/x86_64-linux-gnu/perl/5.34/CORE -lperl -ldl -lm -lpthread
+> -lc -lcrypt
+>
+> $ perl -MExtUtils::Embed -e ccopts
+> -D_REENTRANT -D_GNU_SOURCE -DDEBIAN -fwrapv -fno-strict-aliasing -pipe
+> -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+> -I/usr/lib/x86_64-linux-gnu/perl/5.34/CORE
+>
 
-> > +		return 0;
-> > +	}
-> > +
-> > +	if (i2s_priv->share_i2s_id < 0)
-> > +		return 0;
-> > +
-> > +	return i2s_priv->share_i2s_id == get_i2s_id_by_name(afe,
-> > source->name);
-> > +}
-> > +
-> > +static int mtk_afe_i2s_hd_connect(struct snd_soc_dapm_widget
-> > *source,
-> > +				  struct snd_soc_dapm_widget *sink)
-> > +{
-> > +	struct snd_soc_dapm_widget *w = sink;
-> > +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w-
-> > >dapm);
-> > +	struct mtk_base_afe *afe =
-> > snd_soc_component_get_drvdata(cmpnt);
-> > +	struct mtk_afe_i2s_priv *i2s_priv;
-> > +
-> > +	i2s_priv = get_i2s_priv_by_name(afe, sink->name);
-> > +
-> > +	if (!i2s_priv) {
-> > +		dev_info(afe->dev, "%s(), i2s_priv == NULL", __func__);
-> 
-> Is this an error? => dev_err()
-> Is this expected? => dev_dbg()
-> 
-> Please fix all of the other instances of this.
-> 
-Yes, I know.
+Looks like an issue when using LLVM/Clang - distro or selfmade does not matter.
+With GCC I can see libperl enabled.
 
-> > +		return 0;
-> > +	}
-> > +
-> > +	if (get_i2s_id_by_name(afe, sink->name) ==
-> > +	    get_i2s_id_by_name(afe, source->name))
-> > +		return i2s_priv->low_jitter_en;
-> > +
-> > +	/* check if share i2s need hd en */
-> > +	if (i2s_priv->share_i2s_id < 0)
-> > +		return 0;
-> > +
-> > +	if (i2s_priv->share_i2s_id == get_i2s_id_by_name(afe, source-
-> > >name))
-> > +		return i2s_priv->low_jitter_en;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> 
-> ..snip...
-> 
-> > +
-> > +/* dai ops */
-> > +static int mtk_dai_connsys_i2s_hw_params(struct snd_pcm_substream
-> > *substream,
-> > +					 struct snd_pcm_hw_params
-> > *params,
-> > +					 struct snd_soc_dai *dai)
-> > +{
-> > +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-> > +	unsigned int rate = params_rate(params);
-> > +	unsigned int rate_reg = mt8186_rate_transform(afe->dev,
-> > +						      rate, dai->id);
-> > +	unsigned int i2s_con = 0;
-> > +
-> > +	dev_info(afe->dev, "%s(), id %d, stream %d, rate %d\n",
-> > +		 __func__,
-> > +		 dai->id,
-> > +		 substream->stream,
-> > +		 rate);
-> > +
-> > +	/* non-inverse, i2s mode, slave, 16bits, from connsys */
-> > +	i2s_con |= 0 << INV_PAD_CTRL_SFT;
-> > +	i2s_con |= I2S_FMT_I2S << I2S_FMT_SFT;
-> > +	i2s_con |= 1 << I2S_SRC_SFT;
-> > +	i2s_con |= get_i2s_wlen(SNDRV_PCM_FORMAT_S16_LE) <<
-> > I2S_WLEN_SFT;
-> > +	i2s_con |= 0 << I2SIN_PAD_SEL_SFT;
-> > +	regmap_write(afe->regmap, AFE_CONNSYS_I2S_CON, i2s_con);
-> > +
-> > +	/* use asrc */
-> > +	regmap_update_bits(afe->regmap,
-> > +			   AFE_CONNSYS_I2S_CON,
-> > +			   I2S_BYPSRC_MASK_SFT,
-> > +			   0x0 << I2S_BYPSRC_SFT);
-> 
-> Zero shifted of a billion bits is still zero.
-> 
-Got it.
-
-> regmap_update_bits(afe->regmap, AFE_CONNSYS_I2S_CON,
-> I2S_BYPSRC_MASK_SFT, 0);
-> 
-> > +
-> > +	/* slave mode, set i2s for asrc */
-> > +	regmap_update_bits(afe->regmap,
-> > +			   AFE_CONNSYS_I2S_CON,
-> > +			   I2S_MODE_MASK_SFT,
-> > +			   rate_reg << I2S_MODE_SFT);
-> 
-> 	regmap_update_bits(afe->regmap, AFE_CONNSYS_I2S_CON,
-> 
-> 			   I2S_MODE_MASK_SFT, rate_reg <<
-> I2S_MODE_SFT);
-> 
-> > +
-> > +	if (rate == 44100)
-> > +		regmap_write(afe->regmap, AFE_ASRC_2CH_CON3,
-> > 0x001B9000);
-> 
-> lower case hex, please, and no leading zeros.
-> 
-Got it.
-> > +	else if (rate == 32000)
-> > +		regmap_write(afe->regmap, AFE_ASRC_2CH_CON3, 0x140000);
-> > +	else
-> > +		regmap_write(afe->regmap, AFE_ASRC_2CH_CON3,
-> > 0x001E0000);
-> > +
-> > +	/* Calibration setting */
-> > +	regmap_write(afe->regmap, AFE_ASRC_2CH_CON4, 0x00140000);
-> > +	regmap_write(afe->regmap, AFE_ASRC_2CH_CON9, 0x00036000);
-> > +	regmap_write(afe->regmap, AFE_ASRC_2CH_CON10, 0x0002FC00);
-> > +	regmap_write(afe->regmap, AFE_ASRC_2CH_CON6, 0x00007EF4);
-> > +	regmap_write(afe->regmap, AFE_ASRC_2CH_CON5, 0x00FF5986);
-> 
-
-snip...
-> > +
-> > +	if (i2s_priv)
-> > +		i2s_priv->rate = rate;
-> > +	else
-> > +		dev_info(afe->dev, "%s(), i2s_priv == NULL", __func__);
-> 
-> I'm not sure about this print, maybe this should also be dev_dbg()
-> 
-It should be return error.
-> > +
-> > +	switch (i2s_id) {
-> > +	case MT8186_DAI_I2S_0:
-> > +		i2s_con = I2S_IN_PAD_IO_MUX << I2SIN_PAD_SEL_SFT;
-> > +		i2s_con |= rate_reg << I2S_OUT_MODE_SFT;
-> > +		i2s_con |= I2S_FMT_I2S << I2S_FMT_SFT;
-> > +		i2s_con |= get_i2s_wlen(format) << I2S_WLEN_SFT;
-> > +		regmap_update_bits(afe->regmap, AFE_I2S_CON,
-> > +				   0xffffeffa, i2s_con);
-> > +		break;
-> > +	case MT8186_DAI_I2S_1:
-> > +		i2s_con = I2S1_SEL_O28_O29 << I2S2_SEL_O03_O04_SFT;
-> > +		i2s_con |= rate_reg << I2S2_OUT_MODE_SFT;
-> > +		i2s_con |= I2S_FMT_I2S << I2S2_FMT_SFT;
-> > +		i2s_con |= get_i2s_wlen(format) << I2S2_WLEN_SFT;
-> > +		regmap_update_bits(afe->regmap, AFE_I2S_CON1,
-> > +				   0xffffeffa, i2s_con);
-> > +		break;
-> > +	case MT8186_DAI_I2S_2:
-> > +		i2s_con = 8 << I2S3_UPDATE_WORD_SFT;
-> > +		i2s_con |= rate_reg << I2S3_OUT_MODE_SFT;
-> > +		i2s_con |= I2S_FMT_I2S << I2S3_FMT_SFT;
-> > +		i2s_con |= get_i2s_wlen(format) << I2S3_WLEN_SFT;
-> > +		regmap_update_bits(afe->regmap, AFE_I2S_CON2,
-> > +				   0xffffeffa, i2s_con);
-> > +		break;
-> > +	case MT8186_DAI_I2S_3:
-> > +		i2s_con = rate_reg << I2S4_OUT_MODE_SFT;
-> > +		i2s_con |= I2S_FMT_I2S << I2S4_FMT_SFT;
-> > +		i2s_con |= get_i2s_wlen(format) << I2S4_WLEN_SFT;
-> > +		regmap_update_bits(afe->regmap, AFE_I2S_CON3,
-> > +				   0xffffeffa, i2s_con);
-> > +		break;
-> > +	default:
-> > +		dev_info(afe->dev, "%s(), id %d not support\n",
-> > +			 __func__, i2s_id);
-> 
-> dev_err()
-> 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	/* set share i2s */
-> > +	if (i2s_priv && i2s_priv->share_i2s_id >= 0)
-> > +		ret = mtk_dai_i2s_config(afe, params, i2s_priv-
-> > >share_i2s_id);
-> > +
-> 
-> 	if (i2s_priv && i2s_priv->share_i2s_id >= 0) {
-> 
-> 		ret = mtk_dai_i2s_config(afe, params, i2s_priv-
-> >share_i2s_id);
-> 
-> 		if (ret)
-> 
-> 			return ret;
-> 
-> 	}
-> 
-> 
-> 
-> 	return 0;
-> 
-> > +	return ret;
-> > +}
-> > +
-> > +static int mtk_dai_i2s_hw_params(struct snd_pcm_substream
-> > *substream,
-> > +				 struct snd_pcm_hw_params *params,
-> > +				 struct snd_soc_dai *dai)
-> > +{
-> > +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-> > +
-> > +	return mtk_dai_i2s_config(afe, params, dai->id);
-> > +}
-> > +
-> > +static int mtk_dai_i2s_set_sysclk(struct snd_soc_dai *dai,
-> > +				  int clk_id, unsigned int freq, int
-> > dir)
-> > +{
-> > +	struct mtk_base_afe *afe = dev_get_drvdata(dai->dev);
-> > +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-> > +	struct mtk_afe_i2s_priv *i2s_priv = afe_priv->dai_priv[dai-
-> > >id];
-> > +	int apll;
-> > +	int apll_rate;
-> > +
-> > +	if (!i2s_priv) {
-> > +		dev_info(afe->dev, "%s(), i2s_priv == NULL", __func__);
-> 
-> dev_err()
-> 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (dir != SND_SOC_CLOCK_OUT) {
-> > +		dev_info(afe->dev, "%s(), dir != SND_SOC_CLOCK_OUT",
-> > __func__);
-> 
-> again...
-> 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	dev_info(afe->dev, "%s(), freq %d\n", __func__, freq);
-> 
-> dev_dbg()
-> 
-> > +
-> > +	apll = mt8186_get_apll_by_rate(afe, freq);
-> > +	apll_rate = mt8186_get_apll_rate(afe, apll);
-> > +
-> > +	if (freq > apll_rate) {
-> > +		dev_info(afe->dev, "%s(), freq > apll rate", __func__);
-> 
-> dev_err() .... please fix the rest as well.
-> 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (apll_rate % freq != 0) {
-> > +		dev_info(afe->dev, "%s(), APLL cannot generate freq
-> > Hz", __func__);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	i2s_priv->mclk_rate = freq;
-> > +	i2s_priv->mclk_apll = apll;
-> > +
-> > +	if (i2s_priv->share_i2s_id > 0) {
-> > +		struct mtk_afe_i2s_priv *share_i2s_priv;
-> > +
-> > +		share_i2s_priv = afe_priv->dai_priv[i2s_priv-
-> > >share_i2s_id];
-> > +		if (!share_i2s_priv) {
-> > +			dev_info(afe->dev, "%s(), share_i2s_priv ==
-> > NULL", __func__);
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		share_i2s_priv->mclk_rate = i2s_priv->mclk_rate;
-> > +		share_i2s_priv->mclk_apll = i2s_priv->mclk_apll;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> 
-> Regards,
-> Angelo
-> 
-
+- Sedat -

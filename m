@@ -2,157 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EE74CE726
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 22:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D19384CE724
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 22:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiCEVKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 16:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
+        id S232599AbiCEVKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 16:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiCEVKO (ORCPT
+        with ESMTP id S232432AbiCEVKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 16:10:14 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEE96A07F
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 13:09:22 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id w7so6281320lfd.6
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 13:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s2/4A0u52052NhlLyv5JICwZ+hKXNcyjgvPejm7yB/I=;
-        b=g8gQIPzfZ2LG3gjucY5ZIcN2ya279MiioMJ7uCceoo9vkrRICzK31sZf9y8ntZ/OSZ
-         zhNbSxIWHh/6mLmeJ3TGYLeWaMuJcyFXU4X67ktDHsEMcoPGvxH3OT6tsXf+Mv+yzcoc
-         1mE2TNZgL4GXuqrwWSr6hHya2FaGxdYrQzaZU=
+        Sat, 5 Mar 2022 16:10:03 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5866854F8A
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 13:09:13 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A94C33F5F9
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 21:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646514551;
+        bh=WAQKhYMo57N8as5lEM8TfNIA75uLIrH1Mak0qxJFf+E=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=K9PYHdGmOms9YAQW9dzC2dxZET+pErICNwRKhTOYz0s4Sz+67HbtnHT9XPAPg4Wyh
+         p/EhQW3N187LMeTLVfnYSrQqcThMVSgZE1mdPCrd0W2TSHmVRX4yhOeA1tkdspx0SP
+         uhxqqskUZv848pULCvNFzy7Q/w6vvd3g45mag5kEATyydsJRSneQY/roKAd9KkHZOZ
+         mFgURPxYidH04QwMLvq2LJVjCG6UcIKyYyNvOlBS6WnvMrFpAxhR8GD1FO/4OjuuFh
+         vn3ObyQM/U0/0pgyRJwLKM0d6mqWOH7YVO4vBSSTDk64G3YhEyn/19b8EsNewBQK4l
+         WTv91gJwNg8Dg==
+Received: by mail-ej1-f71.google.com with SMTP id lf15-20020a170906ae4f00b006da86a43346so4842444ejb.14
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 13:09:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s2/4A0u52052NhlLyv5JICwZ+hKXNcyjgvPejm7yB/I=;
-        b=SkSDUaxylMj9F53LyN9Zp80uI7q/fs5jbtXlZfqLy3EdXYQSdrZiSI20KZZZ+33m+w
-         +Not7M/+wR9ykDwJatHVLRInAP7vH+FMxuF5lU/WrLdDvCcC8tLyosXpXiG4f0Vdnyhs
-         r0olmlOOyoiw1PXaUE1luYEapO/BnAKfRHiyzlIISIo/IVPyjHP46LBoyKiGv1ZZ3p6D
-         WXchcBN2vYnoQMqB0IDDIJlStwS3HHGGXkW6SxxeGszBZHpDtJAlDHUxjcq6A3Wzdo2h
-         m6/d/SGctWjvFkaShr3/MqTjrHt3L9GdFfCWWx2NKwCap+4w5ARazHG2F/jtgK1sQ7Zy
-         kbOw==
-X-Gm-Message-State: AOAM530Fie4NssdRX1wKgEfF9ae00vuHcPX8I3wvvoC/UzHcU3++ywDl
-        Agu3FrNqxN7fzl+Iecuy2rtvNFrh0i8VHtoqe/Q=
-X-Google-Smtp-Source: ABdhPJwYtVsfNvP0fr57rh16fCYi8wLUWYLHQbd+Gtjt6wrNpvNRAaSx4RVkK3aQ9ev9n+z9nfM52w==
-X-Received: by 2002:a05:6512:1398:b0:445:bcef:e4fd with SMTP id p24-20020a056512139800b00445bcefe4fdmr3244876lfa.398.1646514560940;
-        Sat, 05 Mar 2022 13:09:20 -0800 (PST)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id s10-20020a19ad4a000000b0044826a25a2esm392550lfd.292.2022.03.05.13.09.17
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WAQKhYMo57N8as5lEM8TfNIA75uLIrH1Mak0qxJFf+E=;
+        b=SLMy4tNHs4hD92bq/yZ1BEc2CNCmi07OKtQXDPM2VGDD6OpOymYqwBZ7mmGFDjbgeB
+         bvoCF88B+wu/hzPsI0dObYhP84pnb2hAVFpFYimfr3uJq3nIvHp3YWSY36eQia8xbWlT
+         JG5h9YYBRhHx1laHmHy663/YGkS1iex516URou+cwxGgl2OKunzBau7xwI68xtTQYoby
+         Jo03dfaHSY9iZ08pHkIwXQ3zuj8m9BIaPOA1vKoROiP50Vre5Keyzcyv/ihMHZLSO/sT
+         ny2DMub9zehaqSYaKYRE9+4dDtLn901Yd/ruIaMA94tBkgngLAzQZX2deQhiMgTa8L3U
+         xI1g==
+X-Gm-Message-State: AOAM533YaLzOmbtJsWByvrogjVDrjf+OhD2ltkmJ4WOXTrI9ApaN48/n
+        DMRenDtSn4/HwAlkvAhkgUuMtmVEcjcs1JjjSOkhR6IIXzNn2e/xTXijoEONeDaiTNcTALRNF/5
+        HEXZeeNs6slYJqp33A2A7ta0o6oqp7xUfuuk7WEV19Q==
+X-Received: by 2002:a17:907:a0c9:b0:6da:9614:2626 with SMTP id hw9-20020a170907a0c900b006da96142626mr3849154ejc.100.1646514551251;
+        Sat, 05 Mar 2022 13:09:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzH7XB367R4/kjja1V8vqLgC03VVcgl4o0Hpo/HnAQb3z1YSU8ztZqR+PCDQe6ctX9cwcHg3Q==
+X-Received: by 2002:a17:907:a0c9:b0:6da:9614:2626 with SMTP id hw9-20020a170907a0c900b006da96142626mr3849136ejc.100.1646514551027;
+        Sat, 05 Mar 2022 13:09:11 -0800 (PST)
+Received: from [192.168.0.139] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm3196513ejc.25.2022.03.05.13.09.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Mar 2022 13:09:19 -0800 (PST)
-Received: by mail-lj1-f174.google.com with SMTP id u7so15329707ljk.13
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 13:09:17 -0800 (PST)
-X-Received: by 2002:a2e:80c6:0:b0:246:3334:9778 with SMTP id
- r6-20020a2e80c6000000b0024633349778mr2967024ljg.443.1646514557473; Sat, 05
- Mar 2022 13:09:17 -0800 (PST)
+        Sat, 05 Mar 2022 13:09:10 -0800 (PST)
+Message-ID: <41a4ee47-9dc4-a79f-97be-5d50e1b1c29c@canonical.com>
+Date:   Sat, 5 Mar 2022 22:09:09 +0100
 MIME-Version: 1.0
-References: <CAHk-=whJX52b1jNsmzXeVr6Z898R=9rBcSYx2oLt69XKDbqhOg@mail.gmail.com>
- <20220304025109.15501-1-xiam0nd.tong@gmail.com>
-In-Reply-To: <20220304025109.15501-1-xiam0nd.tong@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 5 Mar 2022 13:09:01 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjesxw9U6JvTw34FREFAsayEE196Fi=VHtJXL8_9wgi=A@mail.gmail.com>
-Message-ID: <CAHk-=wjesxw9U6JvTw34FREFAsayEE196Fi=VHtJXL8_9wgi=A@mail.gmail.com>
-Subject: Re: [PATCH 2/6] list: add new MACROs to make iterator invisiable
- outside the loop
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 3/4] dt-bindings: rtc: convert at91sam9 bindings to
+ json-schema
+Content-Language: en-US
+To:     Sergiu Moga <sergiu.moga@microchip.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220304161159.147784-1-sergiu.moga@microchip.com>
+ <20220304161159.147784-4-sergiu.moga@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220304161159.147784-4-sergiu.moga@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 6:51 PM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
->
-> >  - it means that the already *good* cases are the ones that are
-> > penalized by having to change
->
-> Yes, but it also kills potential risks that one day somebody mistakely
-> uses iterator after the loop in this already *good* cases, as it removed
-> the original declare of pos and any use-after-loop will be catched by
-> compiler.
+On 04/03/2022 17:11, Sergiu Moga wrote:
+> Convert RTC binding for Atmel/Microchip SoCs to Device Tree Schema
+> format.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> ---
+>  .../bindings/rtc/atmel,at91sam9-rtc.txt       | 25 -------
+>  .../bindings/rtc/atmel,at91sam9-rtc.yaml      | 65 +++++++++++++++++++
+>  2 files changed, 65 insertions(+), 25 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
+> 
 
-The thing is, I think we already have a solution to that case.
 
-I think it's the bad "entry used outside" that we need to care about doing well.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-> 3. restore all name back to list_for_each_entry after everything is done:
->    (minus 2 chars)
 
-You are ignoring the big elephant in the room - counting the small
-things, but not counting the BIG thing.
-
-That type name argument is long.
-
-Right now we avoid it by pre-declaring it, and that's in many ways the
-natural thing to do in C (you don't declare types in the place that
-uses them, you declare the types in the variable declarations above
-the code).
-
-Now, I'd love for the list head entry itself to "declare the type",
-and solve it that way. That would in many ways be the optimal
-situation, in that when a structure has that
-
-        struct list_head xyz;
-
-entry, it would be lovely to declare *there* what the list entry type
-is - and have 'list_for_each_entry()' just pick it up that way.
-
-It would be doable in theory - with some preprocessor trickery all the
-'struct list_head' things *could* be made to be unnamed unions of the
-list head, and the actual type it points to, ie something like
-
-   #define declare_list_head(type,type) union { struct list_head x;
-type *x##_list_type; }
-
-and then (to pick one particular example), we could make the "struct
-task_struct" entry for children be
-
--       struct list_head                children;
-+       declare_list_head(struct task_struct, children);
-
-and now when you use
-
-        list_for_each_entry(p, &father->children, sibling) {
-
-you could actually pick out the type with some really ugly
-preprocessor crud, by doing 'typeof(*head##_list_type)' to get the
-type of the thing we iterate over.
-
-So we *could* embed the type that a list head points to with tricks
-like that. The it would actually be type-safe, and not need a
-declaration of the type anywhere. And it would be kind of nice to
-document "this is a list head pointer to this kind of type".
-
-And yes, it would be even better if we could also encode the member
-name that contains the list entries somehow (ie in this case the
-'sibling' list entry of the task struct) so that you'd really document
-the full chain. But even my twisted mind cannot come up with any
-tricks to do *that*.
-
-But the above would be quite a *major* change.
-
-And the above kind of preprocessor trickery and encoding a secondary
-type as a union entry that isn't actually used for anythign else may
-be too ugly to live anyway.
-
-                 Linus
+Best regards,
+Krzysztof

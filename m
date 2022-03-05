@@ -2,75 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFCA4CE595
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 16:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC8F4CE596
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 16:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbiCEPlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 10:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        id S231966AbiCEPlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 10:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiCEPlO (ORCPT
+        with ESMTP id S231964AbiCEPlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 10:41:14 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB10823BEF;
-        Sat,  5 Mar 2022 07:40:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=mq+oVdjzUV5/PGYLllzSBMDbNl5gTK9JnEFs/8f6PNo=; b=rQDLFY+mXacacX96NhGlm/P1Wm
-        cKc5tEm2kGzyjwYwOOofrWLHm+HvytH+UYAZk/Ceukq5wtjBjruPKmTKlOUontpEkkWmWerAvWeuZ
-        dJ6bXPIt1gABlyJdUI460w1hJhf/lviXoav6N8qHnWd5joBCRNHJIZVJbVi2ty4ts+Ew=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nQWVs-009Obl-3W; Sat, 05 Mar 2022 16:40:08 +0100
-Date:   Sat, 5 Mar 2022 16:40:08 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     rajur@chelsio.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: cxgb3: Fix an error code when probing the driver
-Message-ID: <YiOEWOID23zxaSod@lunn.ch>
-References: <1646490284-22791-1-git-send-email-zheyuma97@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646490284-22791-1-git-send-email-zheyuma97@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 5 Mar 2022 10:41:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04163BFBB
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 07:40:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D63261376
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 15:40:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7470C004E1;
+        Sat,  5 Mar 2022 15:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646494828;
+        bh=YN9L2FkeHDpIRmpx0V+fQEsZyvLKLeQ9Fxacm6tqc94=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e16kNu2liV4rtdaHcoEEdEmsIXSloWyMCPUDYuZ38xveBPA5sozYEcSHVdLiMaB0Q
+         96MPFFzxP5ZpLQuH7Zdt2eYXIzZGrFwCt996tAhlA8XA1gb9cy16LYFDsFqhJiosK3
+         oyRYBxZKt9voQjA03Y7Tu4JIhZbunBkaUaQry1Nabj0rDcaPHsIn8sprlbXAJ58LnM
+         He8Hl/1vch+cZnGSHoPLngQYuj0t6Vo39xrXAx7xJK/AREd8W8giBtQ+83kiymBkZP
+         nODkMvu0RGQz7qbqtl7IjHw1yebXQceejCwQJ+mTD4LwsjOnseQO9mfwsfTlZii/6n
+         Y1DQcTxFfOqfQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nQWWA-00CS6D-4L; Sat, 05 Mar 2022 15:40:26 +0000
+Date:   Sat, 05 Mar 2022 15:40:25 +0000
+Message-ID: <87a6e4tnkm.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuqi (BA)" <liuqi115@huawei.com>, <wangxiongfeng2@huawei.com>,
+        David Decotigny <decot@google.com>
+Subject: Re: PCI MSI issue for maxcpus=1
+In-Reply-To: <1cbe7daa-8003-562b-06fa-5a50f7ee6ed2@huawei.com>
+References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+        <87a6g8vp8k.wl-maz@kernel.org>
+        <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
+        <87v8yjyjc0.wl-maz@kernel.org>
+        <87k0ey9122.wl-maz@kernel.org>
+        <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
+        <1cbe7daa-8003-562b-06fa-5a50f7ee6ed2@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: john.garry@huawei.com, tglx@linutronix.de, chenxiang66@hisilicon.com, shameerali.kolothum.thodi@huawei.com, linux-kernel@vger.kernel.org, liuqi115@huawei.com, wangxiongfeng2@huawei.com, decot@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 02:24:44PM +0000, Zheyu Ma wrote:
-> During the process of driver probing, probe function should return < 0
-> for failure, otherwise kernel will treat value >= 0 as success.
-> 
-> Therefore, the driver should set 'err' to -EINVAL when
-> 'adapter->registered_device_map' is NULL. Otherwise kernel will assume
-> that the driver has been successfully probed and will cause unexpected
-> errors.
-> 
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> ---
->  drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-> index bfffcaeee624..662af61fc723 100644
-> --- a/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-> +++ b/drivers/net/ethernet/chelsio/cxgb3/cxgb3_main.c
-> @@ -3346,6 +3346,7 @@ static int init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
->  	}
->  	if (!adapter->registered_device_map) {
->  		dev_err(&pdev->dev, "could not register any net devices\n");
-> +		err = -EINVAL;
+[+ David, who was chasing something similar]
 
-ENODEV would be better.
+Hi John,
 
-       Andrew
+On Fri, 04 Mar 2022 12:53:31 +0000,
+John Garry <john.garry@huawei.com> wrote:
+>=20
+> > ...
+>=20
+> >=20
+> > [ 7.961007]=C2=A0 valid_col+0x14/0x24
+> > [ 7.964223]=C2=A0 its_send_single_command+0x4c/0x150
+> > [ 7.968741]=C2=A0 its_irq_domain_activate+0xc8/0x104
+> > [ 7.973259]=C2=A0 __irq_domain_activate_irq+0x5c/0xac
+> > [ 7.977865]=C2=A0 __irq_domain_activate_irq+0x38/0xac
+> > [ 7.982471]=C2=A0 irq_domain_activate_irq+0x3c/0x64
+> > [ 7.986902]=C2=A0 __msi_domain_alloc_irqs+0x1a8/0x2f4
+> > [ 7.991507]=C2=A0 msi_domain_alloc_irqs+0x20/0x2c
+> > [ 7.995764]=C2=A0 __pci_enable_msi_range+0x2ec/0x590
+> > [ 8.000284]=C2=A0 pci_alloc_irq_vectors_affinity+0xe0/0x140
+> > [ 8.005410]=C2=A0 hisi_sas_v3_probe+0x300/0xbe0
+> > [ 8.009494]=C2=A0 local_pci_probe+0x44/0xb0
+> > [ 8.013232]=C2=A0 work_for_cpu_fn+0x20/0x34
+> > [ 8.016969]=C2=A0 process_one_work+0x1d0/0x354
+> > [ 8.020966]=C2=A0 worker_thread+0x2c0/0x470
+> > [ 8.024703]=C2=A0 kthread+0x17c/0x190
+> > [ 8.027920]=C2=A0 ret_from_fork+0x10/0x20
+> > [ 8.031485] ---[ end trace bb67cfc7eded7361 ]---
+> >=20
+>=20
+> ...
+>=20
+> > Ah, of course. the CPU hasn't booted yet, so its collection isn't
+> > mapped. I was hoping that the core code would keep the interrupt in
+> > shutdown state, but it doesn't seem to be the case...
+> >=20
+> >  > Apart from this, I assume that if another cpu comes online later in
+> >  > the affinity mask I would figure that we want to target the irq to
+> >  > that cpu (which I think we would not do here).
+> >=20
+> > That's probably also something that should come from core code, as
+> > we're not really in a position to decide this in the ITS driver.
+> > .
+>=20
+>=20
+> Hi Marc,
+>=20
+> Have you had a chance to consider this issue further?
+>=20
+> So I think that x86 avoids this issue as it uses matrix.c, which
+> handles CPUs being offline when selecting target CPUs for managed
+> interrupts.
+>=20
+> So is your idea still that core code should keep the interrupt in
+> shutdown state (for no CPUs online in affinity mask)?
+
+Yup. I came up with this:
+
+diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+index 2bdfce5edafd..97e9eb9aecc6 100644
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -823,6 +823,19 @@ static int msi_init_virq(struct irq_domain *domain, in=
+t virq, unsigned int vflag
+ 	if (!(vflags & VIRQ_ACTIVATE))
+ 		return 0;
+=20
++	if (!(vflags & VIRQ_CAN_RESERVE)) {
++		/*
++		 * If the interrupt is managed but no CPU is available
++		 * to service it, shut it down until better times.
++		 */
++		if (irqd_affinity_is_managed(irqd) &&
++		    !cpumask_intersects(irq_data_get_affinity_mask(irqd),
++					cpu_online_mask)) {
++			irqd_set_managed_shutdown(irqd);
++			return 0;
++		}
++	}
++
+ 	ret =3D irq_domain_activate_irq(irqd, vflags & VIRQ_CAN_RESERVE);
+ 	if (ret)
+ 		return ret;
+
+With this in place, I get the following results (VM booted with 4
+vcpus and maxcpus=3D1, the virtio device is using managed interrupts):
+
+root@debian:~# cat /proc/interrupts=20
+           CPU0      =20
+ 10:       2298     GICv3  27 Level     arch_timer
+ 12:         84     GICv3  33 Level     uart-pl011
+ 49:          0     GICv3  41 Edge      ACPI:Ged
+ 50:          0   ITS-MSI 16384 Edge      virtio0-config
+ 51:       2088   ITS-MSI 16385 Edge      virtio0-req.0
+ 52:          0   ITS-MSI 16386 Edge      virtio0-req.1
+ 53:          0   ITS-MSI 16387 Edge      virtio0-req.2
+ 54:          0   ITS-MSI 16388 Edge      virtio0-req.3
+ 55:      11641   ITS-MSI 32768 Edge      xhci_hcd
+ 56:          0   ITS-MSI 32769 Edge      xhci_hcd
+IPI0:         0       Rescheduling interrupts
+IPI1:         0       Function call interrupts
+IPI2:         0       CPU stop interrupts
+IPI3:         0       CPU stop (for crash dump) interrupts
+IPI4:         0       Timer broadcast interrupts
+IPI5:         0       IRQ work interrupts
+IPI6:         0       CPU wake-up interrupts
+Err:          0
+root@debian:~# echo 1 >/sys/devices/system/cpu/cpu2/online=20
+root@debian:~# cat /proc/interrupts=20
+           CPU0       CPU2      =20
+ 10:       2530         90     GICv3  27 Level     arch_timer
+ 12:        103          0     GICv3  33 Level     uart-pl011
+ 49:          0          0     GICv3  41 Edge      ACPI:Ged
+ 50:          0          0   ITS-MSI 16384 Edge      virtio0-config
+ 51:       2097          0   ITS-MSI 16385 Edge      virtio0-req.0
+ 52:          0          0   ITS-MSI 16386 Edge      virtio0-req.1
+ 53:          0         12   ITS-MSI 16387 Edge      virtio0-req.2
+ 54:          0          0   ITS-MSI 16388 Edge      virtio0-req.3
+ 55:      13487          0   ITS-MSI 32768 Edge      xhci_hcd
+ 56:          0          0   ITS-MSI 32769 Edge      xhci_hcd
+IPI0:        38         45       Rescheduling interrupts
+IPI1:         3          3       Function call interrupts
+IPI2:         0          0       CPU stop interrupts
+IPI3:         0          0       CPU stop (for crash dump) interrupts
+IPI4:         0          0       Timer broadcast interrupts
+IPI5:         0          0       IRQ work interrupts
+IPI6:         0          0       CPU wake-up interrupts
+Err:          0
+
+Would this solve your problem?
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

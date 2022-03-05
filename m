@@ -2,180 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792B24CE339
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 07:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2E94CE341
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Mar 2022 07:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbiCEGHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 01:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S231341AbiCEGUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 01:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiCEGHR (ORCPT
+        with ESMTP id S231288AbiCEGUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 01:07:17 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2ACF23F38B
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Mar 2022 22:06:27 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V6FfDh8_1646460384;
-Received: from 192.168.0.205(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0V6FfDh8_1646460384)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 05 Mar 2022 14:06:25 +0800
-Message-ID: <a293da49-b62e-8ad1-5dde-9dcbdbcf475e@linux.alibaba.com>
-Date:   Sat, 5 Mar 2022 14:06:23 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [RFC PATCH 1/2] kfence: Allow re-enabling KFENCE after system
- startup
-Content-Language: en-US
-From:   Tianchen Ding <dtcccc@linux.alibaba.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
+        Sat, 5 Mar 2022 01:20:47 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F54E522DA;
+        Fri,  4 Mar 2022 22:19:55 -0800 (PST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWs39ACNi6B0DAA--.15394S3;
+        Sat, 05 Mar 2022 14:19:42 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+ <Yh3tgr+g/6IElq0P@kernel.org>
+ <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
+ <Yh4uUoYT+YS5Jxsv@kernel.org>
+ <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
+ <alpine.DEB.2.21.2203041627150.47558@angie.orcam.me.uk>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220303031505.28495-1-dtcccc@linux.alibaba.com>
- <20220303031505.28495-2-dtcccc@linux.alibaba.com>
- <CANpmjNOOkg=OUmgwdcRus2gdPXT41Y7GkFrgzuBv+o8KHKXyEA@mail.gmail.com>
- <ea8d18d3-b3bf-dd21-2d79-a54fe4cf5bc4@linux.alibaba.com>
-In-Reply-To: <ea8d18d3-b3bf-dd21-2d79-a54fe4cf5bc4@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <4e10d7a4-3b3e-a220-8cd2-565614288950@loongson.cn>
+Date:   Sat, 5 Mar 2022 14:19:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <alpine.DEB.2.21.2203041627150.47558@angie.orcam.me.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxWs39ACNi6B0DAA--.15394S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw1Uur1xJw4DKrWrKr48JFb_yoW5ZF1xpF
+        W5Ka1xKF4kJF1SkryxCw1Iqry0y3yrt395Kr93Jryvkws8ZF1I9r1fKa98Za4DXr1fWa42
+        vF42qF9F9a4DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfU1uc_DUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/5 13:26, Tianchen Ding wrote:
-> On 2022/3/5 02:13, Marco Elver wrote:
->> On Thu, 3 Mar 2022 at 04:15, Tianchen Ding <dtcccc@linux.alibaba.com> 
->> wrote:
+
+
+On 03/05/2022 01:05 AM, Maciej W. Rozycki wrote:
+> On Wed, 2 Mar 2022, Tiezhu Yang wrote:
+>
+>>> As for memmap= option, it does not specify the memory map but rather alters
+>>> the memory map passed by the firmware. Particularity in MIPS implementation
+>>> it allows to add a single range of available or reserved memory.
 >>>
->>> If once KFENCE is disabled by:
->>> echo 0 > /sys/module/kfence/parameters/sample_interval
->>> KFENCE could never be re-enabled until next rebooting.
->>>
->>> Allow re-enabling it by writing a positive num to sample_interval.
->>>
->>> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+>>> AFAIU, for the kdump use-case mem=X@Y should suffice.
 >>
->> The only problem I see with this is if KFENCE was disabled because of
->> a KFENCE_WARN_ON(). See below.
->>
->>> ---
->>>   mm/kfence/core.c | 16 ++++++++++++++--
->>>   1 file changed, 14 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
->>> index 13128fa13062..19eb123c0bba 100644
->>> --- a/mm/kfence/core.c
->>> +++ b/mm/kfence/core.c
->>> @@ -55,6 +55,7 @@ EXPORT_SYMBOL_GPL(kfence_sample_interval); /* 
->>> Export for test modules. */
->>>   #endif
->>>   #define MODULE_PARAM_PREFIX "kfence."
->>>
->>> +static int kfence_enable_late(void);
->>>   static int param_set_sample_interval(const char *val, const struct 
->>> kernel_param *kp)
->>>   {
->>>          unsigned long num;
->>> @@ -65,10 +66,11 @@ static int param_set_sample_interval(const char 
->>> *val, const struct kernel_param
->>>
->>>          if (!num) /* Using 0 to indicate KFENCE is disabled. */
->>>                  WRITE_ONCE(kfence_enabled, false);
->>> -       else if (!READ_ONCE(kfence_enabled) && system_state != 
->>> SYSTEM_BOOTING)
->>> -               return -EINVAL; /* Cannot (re-)enable KFENCE 
->>> on-the-fly. */
->>>
->>>          *((unsigned long *)kp->arg) = num;
->>> +
->>> +       if (num && !READ_ONCE(kfence_enabled) && system_state != 
->>> SYSTEM_BOOTING)
->>
->> Should probably have an 'old_sample_interval = *((unsigned long
->> *)kp->arg)' somewhere before, and add a '&& !old_sample_interval',
->> because if old_sample_interval!=0 then KFENCE was disabled due to a
->> KFENCE_WARN_ON(). Also in this case, it should return -EINVAL. So you
->> want a flow like this:
->>
->> old_sample_interval = ...;
->> ...
->> if (num && !READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
->>    return old_sample_interval ? -EINVAL : kfence_enable_late();
->> ...
->>
-> 
-> Because sample_interval will used by delayed_work, we must put setting 
-> sample_interval before enabling KFENCE.
-> So the order would be:
-> 
-> old_sample_interval = sample_interval;
-> sample_interval = num;
-> if (...) kfence_enable_late();
-> 
-> This may be bypassed after KFENCE_WARN_ON() happens, if we first write 
-> 0, and then write 100 to it.
-> 
-> How about this one:
-> 
->      if (ret < 0)
->          return ret;
-> 
-> +    /* Cannot set sample_interval after KFENCE_WARN_ON(). */
-> +    if (unlikely(*((unsigned long *)kp->arg) && 
-> !READ_ONCE(kfence_enabled)))
-> +        return -EINVAL;
-> +
->      if (!num) /* Using 0 to indicate KFENCE is disabled. */
->          WRITE_ONCE(kfence_enabled, false);
-> 
+>> We can modify some code to make mem=X@Y work well,
+>> but according to Documentation/admin-guide/kernel-parameters.txt,
+>> the common way is mem=X and memmap=X@Y, so mem=X@Y for mips seems
+>> odd, the intention of this patchset is to make mem= and memmap=
+>> work well and consistent with the other archs.
+>
+>  It is not the MIPS implementation that is odd, it is the others that have
+> changed the semantics that are.
+>
+>  When I added `mem=...' support to the MIPS platform, back on Dec 11th,
+> 2000, which I needed for a system with with memory holes until I got
+> proper memory probing implemented, AFAIR the only other implementation was
+> for the x86 and naturally what I did for the MIPS platform was exactly the
+> same.  It used to be documented too, but the documentation was removed
+> sometime back in 2003 when someone has changed the x86 semantics for
+> reasons unknown to me and without letting people working on other
+> platforms know, so things diverged.
+>
+>  Please review:
+>
+> <https://lore.kernel.org/linux-mips/alpine.LFD.2.21.2010050133330.333514@eddie.linux-mips.org/>
+>
+> as it has been already discussed.
+>
+>  If you have a system that hangs with `mem=3G' and which does have
+> contiguous RAM available for the kernel to use from 0 through to 3GiB,
+> then please either bisect the problem or try finding the root cause as it
+> used to work at least those 21 years ago.  Conversely if your system does
+> *not* have such RAM available, then use the correct option(s) instead that
+> reflect your memory map.
+>
+>  It is preferable that the memory map be determined automatically either
+> by the firmware and then passed to the kernel somehow, or a device tree
+> entry, or probed by the kernel itself.  You shouldn't have to specify
+> `mem=...' by hand except for debugging or as a temporary workaround.
+>
+>  For example I have an x86 system that Linux does not how to interrogate
+> for RAM beyond 64MiB, so I do use `memmap=128M@0' (for legacy reasons the
+> x86 platform has a special exception to always exclude area between 640K
+> and 1M from being used even if not explicitly specified, but we do not
+> have a need for such legacy such legacy concerns with the MIPS port).  I
+> consider it an interim measure however until the kernel has been fixed.
+>
+>   Maciej
+>
 
-Hmm...
-I found KFENCE_WARN_ON() may be called when sample_interval==0. (e.g., 
-kfence_guarded_free())
-So it's better to add a bool.
+Hi Mike, Thomas and Maciej,
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index ae69b2a113a4..c729be0207e8 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -38,14 +38,17 @@
-  #define KFENCE_WARN_ON(cond) 
-          \
-  	({                                                                     \
-  		const bool __cond = WARN_ON(cond);                             \
--		if (unlikely(__cond))                                          \
-+		if (unlikely(__cond)) {                                        \
-  			WRITE_ONCE(kfence_enabled, false);                     \
-+			disabled_by_warn = true;                               \
-+		}                                                              \
-  		__cond;                                                        \
-  	})
+Thank you very much for your feedbacks and discussions.
 
-  /* === Data 
-================================================================= */
+To be frank, I think mem= and memmap= are used for debugging and testing
+in most cases, the intention of this patchset is to refactor the related
+code to make them work well on mips.
 
-  static bool kfence_enabled __read_mostly;
-+static bool disabled_by_warn __read_mostly;
+Now, if put the current patch #2 as the first patch, and then modify the
+current patch #1 to support both mem=limit and mem=limit@base (if @base
+is omitted, it is equivalent to mem=limit), the other patches #3 and #4
+remain unchanged, make sense?
 
-  unsigned long kfence_sample_interval __read_mostly = 
-CONFIG_KFENCE_SAMPLE_INTERVAL;
-  EXPORT_SYMBOL_GPL(kfence_sample_interval); /* Export for test modules. */
-@@ -70,7 +73,7 @@ static int param_set_sample_interval(const char *val, 
-const struct kernel_param
-  	*((unsigned long *)kp->arg) = num;
+I will send v5 for your review.
 
-  	if (num && !READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
--		return kfence_enable_late();
-+		return disabled_by_warn ? -EINVAL : kfence_enable_late();
-  	return 0;
-  }
+Thanks,
+Tiezhu
+

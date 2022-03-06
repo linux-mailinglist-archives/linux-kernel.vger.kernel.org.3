@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182B64CEDB4
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 21:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DF24CEDB7
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 21:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234227AbiCFUdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 15:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S234254AbiCFUfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 15:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234221AbiCFUdW (ORCPT
+        with ESMTP id S232943AbiCFUe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 15:33:22 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4C06386;
-        Sun,  6 Mar 2022 12:32:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 6 Mar 2022 15:34:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080835D1A9
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 12:34:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBYDT4r6rz4xsk;
-        Mon,  7 Mar 2022 07:32:25 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646598745;
-        bh=Y1LnWnzTuiK+qUe2dOaAZFJLdDa/r/dVbAhlbUr1IOU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZHmy8FCQ0kbC6QlhU4xALxzOcohaMRb6ubkkY9g1yqwFbotXxa1mDqjCX8jWEpwT0
-         l/PCuGkrbnETvYMUA3TVR3A+FfnDQUJfdi/nis/2ABm9W4XKnMIQCWuI4E2x0dZVuX
-         LSb9bEC2rl4a1hDcTG93Exy+2s50bZfeS11JwnvFCwRBOpW2YCMaY7OwfImJ15qoHp
-         NcTBeZreIcl8lgAH9tWAAOVa+t4XrHxfNx9WX6nfvbCPv5Oy7nDAXxTsG6anMKhJbd
-         jA+rQYMZLJNpyeJsL4BBMuludSGf8iorLsYMZUs9By/egUVyI9spxDFArGzGbk2pDi
-         6ZlhTqH2tO/Jg==
-Date:   Mon, 7 Mar 2022 07:32:24 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the iommu tree
-Message-ID: <20220307073224.704133ff@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wPnO2v21jsZ7ne.aNnm1Apr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id 561D4CE0D85
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 20:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C15DBC340EC;
+        Sun,  6 Mar 2022 20:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646598843;
+        bh=5TYPJG5BEum420Pvp4/P32yoIZjvFF47gqf1WdmIiTk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=rQ1FX1gbzA//7iI7b8wGJhXHBqHr3gpq3LLLuj1vOTOsNE30QiqGRPz3FkQxo73wb
+         EVzYDaQr87b6Y/nNsHsWvQeUZisXECNuDEVjBOmnDoVj4D3x0+0XFRE3/b37PV60ra
+         2Mf26pIugRzh/h+RLwC5dFsHtc/566dRvVRcyUQtnxDdBlwJ20we/5yJWoXwSMquU3
+         PYz3OMiaWjDo+C+P9+OBQ/Y4BLmP8YU8z4eqvEWMDIWaNSg+0g8paZtymyKwFXplPO
+         yFgHhUnGm5nX4g3hz2A73jaes07eIMbMdO5AUMEbFPs3sz34fu4LZqiGZclcDfcA43
+         KdSdyEgmrQLiQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AEB60E8DD5B;
+        Sun,  6 Mar 2022 20:34:03 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-5.17-5 tag
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <87bkyjo6wn.fsf@mpe.ellerman.id.au>
+References: <87bkyjo6wn.fsf@mpe.ellerman.id.au>
+X-PR-Tracked-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
+X-PR-Tracked-Message-Id: <87bkyjo6wn.fsf@mpe.ellerman.id.au>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-5
+X-PR-Tracked-Commit-Id: 58dbe9b373df2828d873b1c0e5afc77485b2f376
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9bdeaca18bf61d55029277bb35f72c2002c88c4d
+Message-Id: <164659884370.14106.12409054934091400945.pr-tracker-bot@kernel.org>
+Date:   Sun, 06 Mar 2022 20:34:03 +0000
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        muriloo@linux.ibm.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/wPnO2v21jsZ7ne.aNnm1Apr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The pull request you sent on Sun, 06 Mar 2022 18:51:36 +1100:
 
-Hi all,
+> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-5
 
-Commits
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9bdeaca18bf61d55029277bb35f72c2002c88c4d
 
-  71cc6e9b3f17 ("iommu/amd: Remove unused struct fault.devid")
-  ff1580d8e352 ("iommu/amd: Clean up function declarations")
-  34dbeaf4e950 ("iommu/amd: Call memunmap in error path")
+Thank you!
 
-are missing a Signed-off-by from their author.
-
-Vasant Hegde via iommu <iommu@lists.linux-foundation.org> v
-Vasant Hegde <vasant.hegde@amd.com>.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wPnO2v21jsZ7ne.aNnm1Apr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlGlgACgkQAVBC80lX
-0Gx1xgf/W6+u86gnSaRgzKuACwapP7Ch/I1Er1TWld0CZmZ4ITWShe5nLEAVCWYw
-9tQmTYgrh8t3pA2/sGv7boWxaGD8/esT2NfYgzWLdK77qDqREXLBCaUUAl9N8Jy4
-QsNyEEeftCY4kwx4zqy5u/XkZldgCPX3Ja0F2dGhkZ5ofxf6Zl7FqEMlNaCSIvPa
-sSCyTgTs24bnWgMHBqnCfIftUe472Pyboz140COdVJcYIYWBiHI6imPnJzTL3+t6
-6zfwhfC52qXlnxiTVKoo+WSi6dwfAPZsYvFQZca44w/IE0QOQ3mD2rIqVTFWF3iI
-AaT7+YMWJ/TA6sxlTjo5EersIfOW1A==
-=q+Cf
------END PGP SIGNATURE-----
-
---Sig_/wPnO2v21jsZ7ne.aNnm1Apr--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

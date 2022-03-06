@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A81C4CECE3
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 18:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EA24CECE5
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 18:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbiCFRxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 12:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S232244AbiCFRx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 12:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbiCFRww (ORCPT
+        with ESMTP id S234198AbiCFRw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 12:52:52 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA864090E;
-        Sun,  6 Mar 2022 09:51:44 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id kt27so27577422ejb.0;
-        Sun, 06 Mar 2022 09:51:44 -0800 (PST)
+        Sun, 6 Mar 2022 12:52:59 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F053EF30;
+        Sun,  6 Mar 2022 09:51:50 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id bi12so14345023ejb.3;
+        Sun, 06 Mar 2022 09:51:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6nL7RfWQJUoD4Uxzup8Ya34s2l2dL8vEBMEWVZsq5Ao=;
-        b=S+XeJpGyyiU19cam3cKA+JBLCqcrL6ui9Npkw6EC9KPEfYQ3WAQ9Ct1vo8chBsN8yb
-         iU1XEJbGYEuq1O0PlZ+KNAjNzRCWvLpBSTW3N6IzbNLQNd1OTNHbgZxxilk5uGbl+nqs
-         ZLIbP8a0H8nnMjKCFWGkAWVBc4EfGmYEySJFOR1wAeIrrv+lhqaJu29S/bkVLqWAqgTi
-         6cw3qo+RLDDRmgnSbQhj5bUYjGPkBOhCmGdQUKY9nNZCl29i1jmSvwfPhKg6yB1K5RWi
-         wdqJgU0G/ENcI3zYGRCT5z45pJBXnuEauCfZvtJ65//xFdxg2yYvJx2cA1BNHJFXZABs
-         qxBA==
+        bh=HcQZB6Ou2DJOpmDHHbEeLT9eVra9fyNzoo1Isgk0YuU=;
+        b=G31UKxrXM0ceKXWQOtiF6wqKmSQfZ83nhi589fq6DGgiMF0n9ZjeLl0ryCQoijQWhZ
+         ap6sQT6lAHkedMcbN/K/WLzVuF5S3JxkLhxnN/YkzZ4roTQRGmRChY7WvCci8/UfjCKP
+         xMqmv80JZZBQkj0D9FhL/nsjA063Bb+aL4M640Cn0TEwlzFBDWJnmHUcIb1Qv3FN65VB
+         CS93zKq4467GNhU81fFb5IqDD6iCQjONnEJL9MPiP/EDQR7YNz1O9vrRlhUGY+qCLvi7
+         xrDlfLPQCjAR4ijT1aianHXk5XNVJTmO5oIU336kyiGQPheymeOqJjBFcJHQxxgO1BPz
+         0mwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6nL7RfWQJUoD4Uxzup8Ya34s2l2dL8vEBMEWVZsq5Ao=;
-        b=UEkIfmIJdMmRxXevBK+6WpugHZ8x8zQL3H2sUS3Stsi75GsrglZVH1FAhCyfVKhrFy
-         oNYFCe2Q6YDAot63fdDsSwmKoEaHE+aU9uhjEEyZBzAFdQRC3x1dNF+mhX6mNIyTbsCN
-         E1BBMoOQsDsWz2VwQLPNcCKrqy+RRlBKRrtA+WWGviVfWNsPW+REAmOEwZhkQXC8H+iV
-         UvfNofkh2YLYV+bdVv/4gLUwT6zCUMqqyUJ+hcjW+rOfcjTn1QZ56Tf95SMPfz9adfJd
-         d8eJkhQhfNIm4OGZm2EmcVe0Nqm29++HcQ0OLw33Bmb4y8+7FFTCIuknytCHYKnRp2Fl
-         7h6A==
-X-Gm-Message-State: AOAM530EsoBW8mIhqae3XxSswoPeOw0j2STS+MHP1RnI/Z1HkD5Xnl61
-        FLq/NvXOawlp5Gfy6R/Pun0=
-X-Google-Smtp-Source: ABdhPJxOmOH2jyWx2isFpTEsJYGn2fFofs/tdGmKq2C/AcUm2ZFI8lfEcJptT7RCZHzFu4wV6Pi1lA==
-X-Received: by 2002:a17:906:7751:b0:6ce:e3c:81a6 with SMTP id o17-20020a170906775100b006ce0e3c81a6mr6271973ejn.278.1646589100841;
-        Sun, 06 Mar 2022 09:51:40 -0800 (PST)
+        bh=HcQZB6Ou2DJOpmDHHbEeLT9eVra9fyNzoo1Isgk0YuU=;
+        b=TrNI0CQVImFV1iFpgjNCrSG6yjRHbQujyGuSeWZGSx1Hi5CElJkVyg4kGj4G5lTtFc
+         rGeOuL3nh3+9Kbp6qMkQzQhVr+Pi3J6QzxdjgqNzbvj5eMndeQmTKzw/FVxeOfo6rDoN
+         5T1D82Wu+J3Hc+71Lf8mScNWSyr+WVcRdlDLqByDrH8Cp/ADwexXd+SkfJsCd3tmSX0p
+         PfzRPOaen+Q8XJVMV27NrGlz5gYImu8StjxvuMyeaFfM4wG7lr1mR91aACcZQbmRPLbw
+         uRey46S5FofKotwuO27lkOOOgJH4dzFeMfOUmbrNjbWREVAF4L5aWQJFPGoy7QD/5e4P
+         gNTg==
+X-Gm-Message-State: AOAM532NJ7Q7kQPQQDVmmgM67NcpMg3KXWjw7ZgfTJD0+ZaPcDyKJvv7
+        k/ueJBwAtyjoiw1VnxnVHYA=
+X-Google-Smtp-Source: ABdhPJzIYgztiVm79b+tYLDse5ioBPvmL8FWLZSMdXXTiwy7PDaN42gD7M5HGDOIE0iwmdYSgsWvtw==
+X-Received: by 2002:a17:907:1c20:b0:6da:8a7f:657 with SMTP id nc32-20020a1709071c2000b006da8a7f0657mr6640896ejc.730.1646589102253;
+        Sun, 06 Mar 2022 09:51:42 -0800 (PST)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id 20-20020a17090601d400b006caff964e30sm4052606ejj.19.2022.03.06.09.51.39
+        by smtp.googlemail.com with ESMTPSA id 20-20020a17090601d400b006caff964e30sm4052606ejj.19.2022.03.06.09.51.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 09:51:40 -0800 (PST)
+        Sun, 06 Mar 2022 09:51:41 -0800 (PST)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Greg Kroah-Hartman <greg@kroah.com>
 Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
@@ -74,9 +74,9 @@ Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH 25/26] usb: gadget: dummy_hcd: replace usage of rc to check if a list element was found
-Date:   Sun,  6 Mar 2022 18:50:33 +0100
-Message-Id: <20220306175034.3084609-26-jakobkoschel@gmail.com>
+Subject: [PATCH 26/26] usb: gadget: udc: s3c2410: replace usage of rc to check if a list element was found
+Date:   Sun,  6 Mar 2022 18:50:34 +0100
+Message-Id: <20220306175034.3084609-27-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220306175034.3084609-1-jakobkoschel@gmail.com>
 References: <20220306175034.3084609-1-jakobkoschel@gmail.com>
@@ -106,26 +106,26 @@ by checking if the variable was set within the list traversal loop.
 Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/usb/gadget/udc/dummy_hcd.c | 11 ++++++-----
+ drivers/usb/gadget/udc/s3c2410_udc.c | 11 ++++++-----
  1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-index a2d956af42a2..f21944707707 100644
---- a/drivers/usb/gadget/udc/dummy_hcd.c
-+++ b/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -751,7 +751,7 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
- 	struct dummy		*dum;
+diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
+index e3931da24277..fe6ecb0d16d1 100644
+--- a/drivers/usb/gadget/udc/s3c2410_udc.c
++++ b/drivers/usb/gadget/udc/s3c2410_udc.c
+@@ -1265,7 +1265,7 @@ static int s3c2410_udc_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ 	struct s3c2410_ep	*ep = to_s3c2410_ep(_ep);
  	int			retval = -EINVAL;
  	unsigned long		flags;
--	struct dummy_request	*req = NULL;
-+	struct dummy_request	*req = NULL, *tmp;
+-	struct s3c2410_request	*req = NULL;
++	struct s3c2410_request	*req = NULL, *tmp;
  
- 	if (!_ep || !_req)
- 		return retval;
-@@ -763,17 +763,18 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ 	dprintk(DEBUG_VERBOSE, "%s(%p,%p)\n", __func__, _ep, _req);
+ 
+@@ -1277,16 +1277,17 @@ static int s3c2410_udc_dequeue(struct usb_ep *_ep, struct usb_request *_req)
  
  	local_irq_save(flags);
- 	spin_lock(&dum->lock);
+ 
 -	list_for_each_entry(req, &ep->queue, queue) {
 -		if (&req->req == _req) {
 -			list_del_init(&req->queue);
@@ -138,13 +138,12 @@ index a2d956af42a2..f21944707707 100644
  			break;
  		}
  	}
- 	spin_unlock(&dum->lock);
  
 -	if (retval == 0) {
 +	if (req) {
- 		dev_dbg(udc_dev(dum),
- 				"dequeued req %p from %s, len %d buf %p\n",
- 				req, _ep->name, _req->length, _req->buf);
+ 		dprintk(DEBUG_VERBOSE,
+ 			"dequeued req %p from %s, len %d buf %p\n",
+ 			req, _ep->name, _req->length, _req->buf);
 -- 
 2.25.1
 

@@ -2,522 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E2A4CEC6D
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 18:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1A94CEC72
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 18:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbiCFROj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 12:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S231622AbiCFRVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 12:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiCFROh (ORCPT
+        with ESMTP id S229445AbiCFRVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 12:14:37 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410054D276;
-        Sun,  6 Mar 2022 09:13:44 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3CC8A482;
-        Sun,  6 Mar 2022 18:13:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646586822;
-        bh=zROrlvTRwijiOBdNYPr2SrQ3EnkMrdrSHZkgUp8Pka4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PH+voqzCGu3NYJCEPx/ZSt9aqAZ0xnPKSN5JlShddWNRNpyB7mbZLxNy8JogZe0qO
-         XtqFb46Eo6J+09cyRB+LQTB6nod1K58qbmRkK8zyKUFitpgje87XO1C3rFvoRmPFok
-         wLFfV6MlGbz/KXdCszWb9uBIWzz4WcR0FFDZrjaQ=
-Date:   Sun, 6 Mar 2022 19:13:30 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     a.hajda@samsung.com, narmstrong@baylibre.com,
-        dan.carpenter@oracle.com, robert.foss@linaro.org, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        sam@ravnborg.org, pihsun@chromium.org, tzungbi@google.com,
-        maxime@cerno.tech, drinkcat@google.com, hsinyi@chromium.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        bliang@analogixsemi.com, qwen@analogixsemi.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v12 3/4] drm/bridge: anx7625: add MIPI DPI input feature
-Message-ID: <YiTruiCIkyxs3jTC@pendragon.ideasonboard.com>
-References: <20211105031904.2641088-1-xji@analogixsemi.com>
- <20211105031904.2641088-3-xji@analogixsemi.com>
+        Sun, 6 Mar 2022 12:21:22 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D9D245AD
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 09:20:26 -0800 (PST)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220306172020epoutp04305ab74922ff63ffd2bfbd0d7c95b810~Z2lpEo7-j2293122931epoutp04L
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 17:20:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220306172020epoutp04305ab74922ff63ffd2bfbd0d7c95b810~Z2lpEo7-j2293122931epoutp04L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646587220;
+        bh=A7KtOLPZVWFsTO7OyVJwzwhNGBs0pLNxtYLHY9E2064=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=Pw6O4R9DeADOuTyYWYE7AtbFH7wn5gS95CTbJKXhFv9jnL9coDGsEVGrPxQkkG4HG
+         SSt7ft4azzJ3xZVNs4o1oZPj9iuFm0ZIKU99MOJZsRUC8nTGhmbu8J1EOATEe2BPY/
+         3wlGADPwk6vRp5g9v/FuNDLxwRoYUSoeeru+gGqI=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220306172018epcas5p269b68ed09ef06e9929a232957712581e~Z2loB3rEI0288402884epcas5p2b;
+        Sun,  6 Mar 2022 17:20:18 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4KBSyj4GpNz4x9Pv; Sun,  6 Mar
+        2022 17:20:13 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F6.2E.46822.9CAE4226; Mon,  7 Mar 2022 02:09:29 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220306172013epcas5p4650d57c16461a6f0934875a396c1df55~Z2lisXH8p0834708347epcas5p4Z;
+        Sun,  6 Mar 2022 17:20:13 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220306172013epsmtrp15653eecf51c292eaf7a54cf168c733a2~Z2lirkx_R0697306973epsmtrp1d;
+        Sun,  6 Mar 2022 17:20:13 +0000 (GMT)
+X-AuditID: b6c32a4a-de5ff7000000b6e6-9d-6224eac978bc
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        24.C7.29871.C4DE4226; Mon,  7 Mar 2022 02:20:13 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220306172011epsmtip26592aa2c1d88224622690ca207b7ea3d~Z2lhc-cwI0078500785epsmtip20;
+        Sun,  6 Mar 2022 17:20:11 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>
+In-Reply-To: <20220304122424.307885-2-krzysztof.kozlowski@canonical.com>
+Subject: RE: [PATCH v2 1/4] dt-bindings: timer: exynos4210-mct: describe
+ known hardware and its interrupts
+Date:   Sun, 6 Mar 2022 22:50:10 +0530
+Message-ID: <000401d8317e$706f1cc0$514d5640$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211105031904.2641088-3-xji@analogixsemi.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQF3mhFkGb8Ybu5ilR4JKjDBi+CLBwJb5505Ae63bI6tUXOZYA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmhu7JVypJBn+n8FjM+yxrMf/IOVaL
+        jW9/MFlsenyN1eLyrjlsFjPO72OyaN17hN1i86apzA4cHrMaetk8Nq3qZPO4c20Pm8e7c+fY
+        PTYvqff4vEkugC0q2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnF
+        J0DXLTMH6BwlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5q
+        iZWhgYGRKVBhQnbGvNNiBZNkKha+WcLewLhFpIuRg0NCwETi/xe3LkYuDiGB3YwSG399YYJw
+        PjFK3Jz2mxnC+cYosezsQ7YuRk6wjll929ggEnsZJb5//AXlvGSUePu8kR2kik1AV2LH4jaw
+        hIjAJSaJEx0tTCALOQU8JJ4uEgSpERbIkTjzv5MJxGYRUJF4cGwh2AZeAUuJXRfbmCFsQYmT
+        M5+wgNjMAvIS29/OYYa4QkHi59NlrCC2iICTRNPUlYwQNeISL48eYQfZKyEwk0Pi7dJrUA0u
+        EhO/zGSHsIUlXh3fAmVLSbzsb2OHBEa2RM8uY4hwjcTSecdYIGx7iQNX5rCAlDALaEqs36UP
+        sYpPovf3EyaITl6JjjYhiGpVieZ3V6E6pSUmdnezQtgeEquOnIIG1U1GiW2PZrFOYFSYheTL
+        WUi+nIXkm1kImxcwsqxilEwtKM5NTy02LTDKSy2HR3dyfu4mRnBa1fLawfjwwQe9Q4xMHIyH
+        GCU4mJVEeO+fV0kS4k1JrKxKLcqPLyrNSS0+xGgKDPqJzFKiyfnAxJ5XEm9oYmlgYmZmZmJp
+        bGaoJM57On1DopBAemJJanZqakFqEUwfEwenVAOT5twFiz8d6L9z7HvQnTK9rsgZOusKPpQ8
+        3PfqapTslev3hbKUevpfKqzQnXcyZaao++w3nDN0ufNu/mm5vK5G/p1AVVPPzbr1abLPYjUW
+        LjX54ug3xTz9zP2HC+XvLA1mWXr80cG38cWCyWcCp5b8XfviS1j746eHWFQ6IkO5nn3aO33J
+        NL57Umr5aUv/R7/skEn7dHdnctbCJ4uYAxvPNHL+PfBRr3K+TZyhi22x8NVmBqa/V7XjWB9e
+        /vil727vbsbDe3acmmrHxHztZD5LgsKEyIVzW9gmqh3f8s6+gOWg+qRtvuuUo+4v0d4unjEl
+        037VsvyExpibFrHiy3dk9m8/22YndULiopPN4uW8W5VYijMSDbWYi4oTAfhQiTg0BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRmVeSWpSXmKPExsWy7bCSvK7vW5UkgwuXmSzmfZa1mH/kHKvF
+        xrc/mCw2Pb7GanF51xw2ixnn9zFZtO49wm6xedNUZgcOj1kNvWwem1Z1snncubaHzePduXPs
+        HpuX1Ht83iQXwBbFZZOSmpNZllqkb5fAlTHvtFjBJJmKhW+WsDcwbhHpYuTkkBAwkZjVt40N
+        xBYS2M0ocfqHLURcWuL6xgnsELawxMp/z4FsLqCa54wSvQ9OgCXYBHQldixuYwNJiAjcYJKY
+        fuAmE8Skq4wSrXeiuhg5ODgFPCSeLhIECQsLZEksWLINrJdFQEXiwbGFYIt5BSwldl1sY4aw
+        BSVOznzCAtLKLKAn0baRESTMLCAvsf3tHGaIexQkfj5dxgpiiwg4STRNXQlVIy7x8ugR9gmM
+        QrOQTJqFMGkWkkmzkHQsYGRZxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kRHD9amjsY
+        t6/6oHeIkYmD8RCjBAezkgjv/fMqSUK8KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8s
+        Sc1OTS1ILYLJMnFwSjUwObIWuZnt9fDfo3PanW/ixf9TXN0rzwiulJA0eWP5uWCb7reaJ0rf
+        PsdaZVfUflFxWb6GcfmOg5cnyC8N4lL6yTOtqi055Evy2QmODyR9nO5/P57xOqlkqkSwwGmd
+        46vq5eXtgzrE1ksczJKJ5eJ7uOnwUfEf1j2nds5Xdd1969rirWvu9ld8F87iur/L5tifmUrO
+        Wd//bvG1OHpgdQj/h2OmR43Y45gVlL7LCczOLiyb/z1w8dm9HMtnSD24Xbx1Stz2laKPlGfo
+        xOxhtX/16NcMnhVnleR+BMXJrf7/6ETBqqd76kxTXrybKTp9S/1EtbOrT01LWpH94pD3kqbN
+        Cekv7iUFRH96t2rxp582SbVKLMUZiYZazEXFiQDSaFJ8DgMAAA==
+X-CMS-MailID: 20220306172013epcas5p4650d57c16461a6f0934875a396c1df55
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220304122515epcas5p2c0835d037d950d786b4da1a19e467eac
+References: <20220304122424.307885-1-krzysztof.kozlowski@canonical.com>
+        <CGME20220304122515epcas5p2c0835d037d950d786b4da1a19e467eac@epcas5p2.samsung.com>
+        <20220304122424.307885-2-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Xin,
 
-(Question for Rob below, and I'm afraid this is urgent as we need to
-merge a fix in v5.17).
 
-On Fri, Nov 05, 2021 at 11:19:03AM +0800, Xin Ji wrote:
-> The basic anx7625 driver only support MIPI DSI rx signal input.
-> This patch add MIPI DPI rx input configuration support, after apply
-> this patch, the driver can support DSI rx or DPI rx by adding
-> 'bus-type' in DT.
-> 
-> Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> ---
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 247 ++++++++++++++++------
->  drivers/gpu/drm/bridge/analogix/anx7625.h |  18 +-
->  2 files changed, 205 insertions(+), 60 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index f48e91134c20..f7c3386c8929 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -32,6 +32,7 @@
->  #include <drm/drm_print.h>
->  #include <drm/drm_probe_helper.h>
->  
-> +#include <media/v4l2-fwnode.h>
->  #include <video/display_timing.h>
->  
->  #include "anx7625.h"
-> @@ -152,18 +153,18 @@ static int anx7625_write_and(struct anx7625_data *ctx,
->  	return anx7625_reg_write(ctx, client, offset, (val & (mask)));
->  }
->  
-> -static int anx7625_write_and_or(struct anx7625_data *ctx,
-> -				struct i2c_client *client,
-> -				u8 offset, u8 and_mask, u8 or_mask)
-> +static int anx7625_config_bit_matrix(struct anx7625_data *ctx)
->  {
-> -	int val;
-> +	int i, ret;
->  
-> -	val = anx7625_reg_read(ctx, client, offset);
-> -	if (val < 0)
-> -		return val;
-> +	ret = anx7625_write_or(ctx, ctx->i2c.tx_p2_client,
-> +			       AUDIO_CONTROL_REGISTER, 0x80);
-> +	for (i = 0; i < 13; i++)
-> +		ret |= anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-> +					 VIDEO_BIT_MATRIX_12 + i,
-> +					 0x18 + i);
->  
-> -	return anx7625_reg_write(ctx, client,
-> -				 offset, (val & and_mask) | (or_mask));
-> +	return ret;
->  }
->  
->  static int anx7625_read_ctrl_status_p0(struct anx7625_data *ctx)
-> @@ -221,38 +222,6 @@ static int anx7625_video_mute_control(struct anx7625_data *ctx,
->  	return ret;
->  }
->  
-> -static int anx7625_config_audio_input(struct anx7625_data *ctx)
-> -{
-> -	struct device *dev = &ctx->client->dev;
-> -	int ret;
-> -
-> -	/* Channel num */
-> -	ret = anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-> -				AUDIO_CHANNEL_STATUS_6, I2S_CH_2 << 5);
-> -
-> -	/* FS */
-> -	ret |= anx7625_write_and_or(ctx, ctx->i2c.tx_p2_client,
-> -				    AUDIO_CHANNEL_STATUS_4,
-> -				    0xf0, AUDIO_FS_48K);
-> -	/* Word length */
-> -	ret |= anx7625_write_and_or(ctx, ctx->i2c.tx_p2_client,
-> -				    AUDIO_CHANNEL_STATUS_5,
-> -				    0xf0, AUDIO_W_LEN_24_24MAX);
-> -	/* I2S */
-> -	ret |= anx7625_write_or(ctx, ctx->i2c.tx_p2_client,
-> -				AUDIO_CHANNEL_STATUS_6, I2S_SLAVE_MODE);
-> -	ret |= anx7625_write_and(ctx, ctx->i2c.tx_p2_client,
-> -				 AUDIO_CONTROL_REGISTER, ~TDM_TIMING_MODE);
-> -	/* Audio change flag */
-> -	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
-> -				AP_AV_STATUS, AP_AUDIO_CHG);
-> -
-> -	if (ret < 0)
-> -		DRM_DEV_ERROR(dev, "fail to config audio.\n");
-> -
-> -	return ret;
-> -}
-> -
->  /* Reduction of fraction a/b */
->  static void anx7625_reduction_of_a_fraction(unsigned long *a, unsigned long *b)
->  {
-> @@ -431,7 +400,7 @@ static int anx7625_dsi_video_timing_config(struct anx7625_data *ctx)
->  	ret |= anx7625_write_and(ctx, ctx->i2c.rx_p1_client,
->  			MIPI_LANE_CTRL_0, 0xfc);
->  	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p1_client,
-> -				MIPI_LANE_CTRL_0, 3);
-> +				MIPI_LANE_CTRL_0, ctx->pdata.mipi_lanes - 1);
->  
->  	/* Htotal */
->  	htotal = ctx->dt.hactive.min + ctx->dt.hfront_porch.min +
-> @@ -615,6 +584,76 @@ static int anx7625_dsi_config(struct anx7625_data *ctx)
->  	return ret;
->  }
->  
-> +static int anx7625_api_dpi_config(struct anx7625_data *ctx)
-> +{
-> +	struct device *dev = &ctx->client->dev;
-> +	u16 freq = ctx->dt.pixelclock.min / 1000;
-> +	int ret;
-> +
-> +	/* configure pixel clock */
-> +	ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
-> +				PIXEL_CLOCK_L, freq & 0xFF);
-> +	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
-> +				 PIXEL_CLOCK_H, (freq >> 8));
-> +
-> +	/* set DPI mode */
-> +	/* set to DPI PLL module sel */
-> +	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p1_client,
-> +				 MIPI_DIGITAL_PLL_9, 0x20);
-> +	/* power down MIPI */
-> +	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p1_client,
-> +				 MIPI_LANE_CTRL_10, 0x08);
-> +	/* enable DPI mode */
-> +	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p1_client,
-> +				 MIPI_DIGITAL_PLL_18, 0x1C);
-> +	/* set first edge */
-> +	ret |= anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
-> +				 VIDEO_CONTROL_0, 0x06);
-> +	if (ret < 0)
-> +		DRM_DEV_ERROR(dev, "IO error : dpi phy set failed.\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static int anx7625_dpi_config(struct anx7625_data *ctx)
-> +{
-> +	struct device *dev = &ctx->client->dev;
-> +	int ret;
-> +
-> +	DRM_DEV_DEBUG_DRIVER(dev, "config dpi\n");
-> +
-> +	/* DSC disable */
-> +	ret = anx7625_write_and(ctx, ctx->i2c.rx_p0_client,
-> +				R_DSC_CTRL_0, ~DSC_EN);
-> +	if (ret < 0) {
-> +		DRM_DEV_ERROR(dev, "IO error : disable dsc failed.\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = anx7625_config_bit_matrix(ctx);
-> +	if (ret < 0) {
-> +		DRM_DEV_ERROR(dev, "config bit matrix failed.\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = anx7625_api_dpi_config(ctx);
-> +	if (ret < 0) {
-> +		DRM_DEV_ERROR(dev, "mipi phy(dpi) setup failed.\n");
-> +		return ret;
-> +	}
-> +
-> +	/* set MIPI RX EN */
-> +	ret = anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
-> +			       AP_AV_STATUS, AP_MIPI_RX_EN);
-> +	/* clear mute flag */
-> +	ret |= anx7625_write_and(ctx, ctx->i2c.rx_p0_client,
-> +				 AP_AV_STATUS, (u8)~AP_MIPI_MUTE);
-> +	if (ret < 0)
-> +		DRM_DEV_ERROR(dev, "IO error : enable mipi rx failed.\n");
-> +
-> +	return ret;
-> +}
-> +
->  static void anx7625_dp_start(struct anx7625_data *ctx)
->  {
->  	int ret;
-> @@ -625,9 +664,10 @@ static void anx7625_dp_start(struct anx7625_data *ctx)
->  		return;
->  	}
->  
-> -	anx7625_config_audio_input(ctx);
-> -
-> -	ret = anx7625_dsi_config(ctx);
-> +	if (ctx->pdata.is_dpi)
-> +		ret = anx7625_dpi_config(ctx);
-> +	else
-> +		ret = anx7625_dsi_config(ctx);
->  
->  	if (ret < 0)
->  		DRM_DEV_ERROR(dev, "MIPI phy setup error.\n");
-> @@ -1075,6 +1115,7 @@ static void anx7625_start_dp_work(struct anx7625_data *ctx)
->  		return;
->  	}
->  
-> +	ctx->hpd_status = 1;
->  	ctx->hpd_high_cnt++;
->  
->  	/* Not support HDCP */
-> @@ -1084,8 +1125,10 @@ static void anx7625_start_dp_work(struct anx7625_data *ctx)
->  	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p1_client, 0xec, 0x10);
->  	/* Interrupt for DRM */
->  	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p1_client, 0xff, 0x01);
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		DRM_DEV_ERROR(dev, "fail to setting HDCP/auth\n");
->  		return;
-> +	}
->  
->  	ret = anx7625_reg_read(ctx, ctx->i2c.rx_p1_client, 0x86);
->  	if (ret < 0)
-> @@ -1104,6 +1147,10 @@ static void anx7625_hpd_polling(struct anx7625_data *ctx)
->  	int ret, val;
->  	struct device *dev = &ctx->client->dev;
->  
-> +	/* Interrupt mode, no need poll HPD status, just return */
-> +	if (ctx->pdata.intp_irq)
-> +		return;
-> +
->  	ret = readx_poll_timeout(anx7625_read_hpd_status_p0,
->  				 ctx, val,
->  				 ((val & HPD_STATUS) || (val < 0)),
-> @@ -1131,6 +1178,21 @@ static void anx7625_remove_edid(struct anx7625_data *ctx)
->  	ctx->slimport_edid_p.edid_block_num = -1;
->  }
->  
-> +static void anx7625_dp_adjust_swing(struct anx7625_data *ctx)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ctx->pdata.dp_lane0_swing_reg_cnt; i++)
-> +		anx7625_reg_write(ctx, ctx->i2c.tx_p1_client,
-> +				  DP_TX_LANE0_SWING_REG0 + i,
-> +				  ctx->pdata.lane0_reg_data[i] & 0xFF);
-> +
-> +	for (i = 0; i < ctx->pdata.dp_lane1_swing_reg_cnt; i++)
-> +		anx7625_reg_write(ctx, ctx->i2c.tx_p1_client,
-> +				  DP_TX_LANE1_SWING_REG0 + i,
-> +				  ctx->pdata.lane1_reg_data[i] & 0xFF);
-> +}
-> +
->  static void dp_hpd_change_handler(struct anx7625_data *ctx, bool on)
->  {
->  	struct device *dev = &ctx->client->dev;
-> @@ -1146,9 +1208,8 @@ static void dp_hpd_change_handler(struct anx7625_data *ctx, bool on)
->  	} else {
->  		DRM_DEV_DEBUG_DRIVER(dev, " HPD high\n");
->  		anx7625_start_dp_work(ctx);
-> +		anx7625_dp_adjust_swing(ctx);
->  	}
-> -
-> -	ctx->hpd_status = 1;
->  }
->  
->  static int anx7625_hpd_change_detect(struct anx7625_data *ctx)
-> @@ -1225,20 +1286,72 @@ static irqreturn_t anx7625_intr_hpd_isr(int irq, void *data)
->  	return IRQ_HANDLED;
->  }
->  
-> +static int anx7625_get_swing_setting(struct device *dev,
-> +				     struct anx7625_platform_data *pdata)
-> +{
-> +	int num_regs;
-> +
-> +	if (of_get_property(dev->of_node,
-> +			    "analogix,lane0-swing", &num_regs)) {
-> +		if (num_regs > DP_TX_SWING_REG_CNT)
-> +			num_regs = DP_TX_SWING_REG_CNT;
-> +
-> +		pdata->dp_lane0_swing_reg_cnt = num_regs;
-> +		of_property_read_u32_array(dev->of_node, "analogix,lane0-swing",
-> +					   pdata->lane0_reg_data, num_regs);
-> +	}
-> +
-> +	if (of_get_property(dev->of_node,
-> +			    "analogix,lane1-swing", &num_regs)) {
-> +		if (num_regs > DP_TX_SWING_REG_CNT)
-> +			num_regs = DP_TX_SWING_REG_CNT;
-> +
-> +		pdata->dp_lane1_swing_reg_cnt = num_regs;
-> +		of_property_read_u32_array(dev->of_node, "analogix,lane1-swing",
-> +					   pdata->lane1_reg_data, num_regs);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int anx7625_parse_dt(struct device *dev,
->  			    struct anx7625_platform_data *pdata)
->  {
-> -	struct device_node *np = dev->of_node;
-> +	struct device_node *np = dev->of_node, *ep0;
->  	struct drm_panel *panel;
->  	int ret;
-> +	int bus_type, mipi_lanes;
-> +
-> +	anx7625_get_swing_setting(dev, pdata);
->  
-> +	pdata->is_dpi = 1; /* default dpi mode */
->  	pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
->  	if (!pdata->mipi_host_node) {
->  		DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
->  		return -ENODEV;
->  	}
->  
-> -	DRM_DEV_DEBUG_DRIVER(dev, "found dsi host node.\n");
-> +	bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
-> +	mipi_lanes = MAX_LANES_SUPPORT;
-> +	ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
-> +	if (ep0) {
-> +		if (of_property_read_u32(ep0, "bus-type", &bus_type))
-> +			bus_type = 0;
-> +
-> +		mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
-> +	}
-> +
-> +	if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+>Sent: Friday, March 4, 2022 5:54 PM
+>To: Daniel Lezcano <daniel.lezcano@linaro.org>; Thomas Gleixner
+><tglx@linutronix.de>; Rob Herring <robh+dt@kernel.org>; Krzysztof
+>Kozlowski <krzysztof.kozlowski@canonical.com>; Alim Akhtar
+><alim.akhtar@samsung.com>; linux-kernel@vger.kernel.org;
+>devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>samsung-soc@vger.kernel.org
+>Subject: [PATCH v2 1/4] dt-bindings: timer: exynos4210-mct: describe known
+>hardware and its interrupts
+>
+>Most of the Samsung Exynos SoCs use almost the same Multi-Core Timer
+>block, so only two compatibles were used so far (for Exynos4210 and
+>Exynos4412 flavors) with Exynos4210-one being used in most of the SoCs.
+>However the Exynos4210 flavor actually differs by number of interrupts.
+>
+>Add new compatibles, maintaining backward compatibility with Exynos4210,
+>and constraints for number of interrupts.  This allows to exactly match the
+>Exynos MCT hardware.
+>
+>Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>---
 
-This is not correct *at all*. V4L2_FWNODE_BUS_TYPE_PARALLEL has nothing
-to do with DSI. DSI stands for Digital *Serial* Interface. If anything,
-the V4L2_FWNODE_BUS_TYPE_PARALLEL type would map better to DPI, even if
-it's not an exact match.
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-This patch has landed in v5.17-rc1, along with the corresponding
-bindings. As DT bindings are an ABI, we should really fix this before
-v5.17 is released. There is no DSI bus types defined in DT, and adding
-one as a fix so late in the v5.17-rc cycle seems a bit of a stretch to
-me (unless Rob disagrees).
 
-It would seem best to revert this series and the corresponding bindings,
-and retry in v5.18.
+> .../timer/samsung,exynos4210-mct.yaml         | 67 ++++++++++++++++++-
+> 1 file changed, 64 insertions(+), 3 deletions(-)
+>
+>diff --git a/Documentation/devicetree/bindings/timer/samsung,exynos4210-
+>mct.yaml
+>b/Documentation/devicetree/bindings/timer/samsung,exynos4210-mct.yaml
+>index f11cbc7ccc14..1584944c7ac4 100644
+>--- a/Documentation/devicetree/bindings/timer/samsung,exynos4210-
+>mct.yaml
+>+++ b/Documentation/devicetree/bindings/timer/samsung,exynos4210-
+>mct.yam
+>+++ l
+>@@ -19,9 +19,20 @@ description: |+
+>
+> properties:
+>   compatible:
+>-    enum:
+>-      - samsung,exynos4210-mct
+>-      - samsung,exynos4412-mct
+>+    oneOf:
+>+      - enum:
+>+          - samsung,exynos4210-mct
+>+          - samsung,exynos4412-mct
+>+      - items:
+>+          - enum:
+>+              - samsung,exynos3250-mct
+>+              - samsung,exynos5250-mct
+>+              - samsung,exynos5260-mct
+>+              - samsung,exynos5420-mct
+>+              - samsung,exynos5433-mct
+>+              - samsung,exynos850-mct
+>+              - tesla,fsd-mct
+>+          - const: samsung,exynos4210-mct
+>
+>   clocks:
+>     minItems: 2
+>@@ -63,6 +74,56 @@ required:
+>   - interrupts
+>   - reg
+>
+>+allOf:
+>+  - if:
+>+      properties:
+>+        compatible:
+>+          contains:
+>+            const: samsung,exynos3250-mct
+>+    then:
+>+      properties:
+>+        interrupts:
+>+          minItems: 8
+>+          maxItems: 8
+>+
+>+  - if:
+>+      properties:
+>+        compatible:
+>+          contains:
+>+            const: samsung,exynos5250-mct
+>+    then:
+>+      properties:
+>+        interrupts:
+>+          minItems: 6
+>+          maxItems: 6
+>+
+>+  - if:
+>+      properties:
+>+        compatible:
+>+          contains:
+>+            enum:
+>+              - samsung,exynos5260-mct
+>+              - samsung,exynos5420-mct
+>+              - samsung,exynos5433-mct
+>+              - samsung,exynos850-mct
+>+    then:
+>+      properties:
+>+        interrupts:
+>+          minItems: 12
+>+          maxItems: 12
+>+
+>+  - if:
+>+      properties:
+>+        compatible:
+>+          contains:
+>+            enum:
+>+              - tesla,fsd-mct
+>+    then:
+>+      properties:
+>+        interrupts:
+>+          minItems: 16
+>+          maxItems: 16
+>+
+> additionalProperties: false
+>
+> examples:
+>--
+>2.32.0
 
-> +		pdata->is_dpi = 0;
-> +
-> +	pdata->mipi_lanes = mipi_lanes;
-> +	if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
-> +		pdata->mipi_lanes = MAX_LANES_SUPPORT;
-> +
-> +	if (pdata->is_dpi)
-> +		DRM_DEV_DEBUG_DRIVER(dev, "found MIPI DPI host node.\n");
-> +	else
-> +		DRM_DEV_DEBUG_DRIVER(dev, "found MIPI DSI host node.\n");
->  
->  	ret = drm_of_find_panel_or_bridge(np, 1, 0, &panel, NULL);
->  	if (ret < 0) {
-> @@ -1301,9 +1414,13 @@ static enum drm_connector_status anx7625_sink_detect(struct anx7625_data *ctx)
->  {
->  	struct device *dev = &ctx->client->dev;
->  
-> -	DRM_DEV_DEBUG_DRIVER(dev, "sink detect, return connected\n");
-> +	DRM_DEV_DEBUG_DRIVER(dev, "sink detect\n");
->  
-> -	return connector_status_connected;
-> +	if (ctx->pdata.panel_bridge)
-> +		return connector_status_connected;
-> +
-> +	return ctx->hpd_status ? connector_status_connected :
-> +				     connector_status_disconnected;
->  }
->  
->  static int anx7625_attach_dsi(struct anx7625_data *ctx)
-> @@ -1332,7 +1449,7 @@ static int anx7625_attach_dsi(struct anx7625_data *ctx)
->  		return -EINVAL;
->  	}
->  
-> -	dsi->lanes = 4;
-> +	dsi->lanes = ctx->pdata.mipi_lanes;
->  	dsi->format = MIPI_DSI_FMT_RGB888;
->  	dsi->mode_flags = MIPI_DSI_MODE_VIDEO	|
->  		MIPI_DSI_MODE_VIDEO_SYNC_PULSE	|
-> @@ -1460,6 +1577,10 @@ static bool anx7625_bridge_mode_fixup(struct drm_bridge *bridge,
->  
->  	DRM_DEV_DEBUG_DRIVER(dev, "drm mode fixup set\n");
->  
-> +	/* No need fixup for external monitor */
-> +	if (!ctx->pdata.panel_bridge)
-> +		return true;
-> +
->  	hsync = mode->hsync_end - mode->hsync_start;
->  	hfp = mode->hsync_start - mode->hdisplay;
->  	hbp = mode->htotal - mode->hsync_end;
-> @@ -1835,14 +1956,22 @@ static int anx7625_i2c_probe(struct i2c_client *client,
->  
->  	platform->bridge.funcs = &anx7625_bridge_funcs;
->  	platform->bridge.of_node = client->dev.of_node;
-> -	platform->bridge.ops = DRM_BRIDGE_OP_EDID | DRM_BRIDGE_OP_HPD;
-> -	platform->bridge.type = DRM_MODE_CONNECTOR_eDP;
-> +	platform->bridge.ops = DRM_BRIDGE_OP_EDID;
-> +	if (!platform->pdata.panel_bridge)
-> +		platform->bridge.ops |= DRM_BRIDGE_OP_HPD |
-> +					DRM_BRIDGE_OP_DETECT;
-> +	platform->bridge.type = platform->pdata.panel_bridge ?
-> +				    DRM_MODE_CONNECTOR_eDP :
-> +				    DRM_MODE_CONNECTOR_DisplayPort;
-> +
->  	drm_bridge_add(&platform->bridge);
->  
-> -	ret = anx7625_attach_dsi(platform);
-> -	if (ret) {
-> -		DRM_DEV_ERROR(dev, "Fail to attach to dsi : %d\n", ret);
-> -		goto unregister_bridge;
-> +	if (!platform->pdata.is_dpi) {
-> +		ret = anx7625_attach_dsi(platform);
-> +		if (ret) {
-> +			DRM_DEV_ERROR(dev, "Fail to attach to dsi : %d\n", ret);
-> +			goto unregister_bridge;
-> +		}
->  	}
->  
->  	DRM_DEV_DEBUG_DRIVER(dev, "probe done\n");
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> index 6dcf64c703f9..3ef1d8f4e575 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
-> @@ -141,12 +141,20 @@
->  #define  HORIZONTAL_BACK_PORCH_H      0x22  /* Bit[7:4] are reserved */
->  
->  /******** END of I2C Address 0x72 *********/
-> +
-> +/***************************************************************/
-> +/* Register definition of device address 0x7a */
-> +#define DP_TX_SWING_REG_CNT		0x14
-> +#define DP_TX_LANE0_SWING_REG0		0x00
-> +#define DP_TX_LANE1_SWING_REG0		0x14
-> +/******** END of I2C Address 0x7a *********/
-> +
->  /***************************************************************/
->  /* Register definition of device address 0x7e */
->  
->  #define  I2C_ADDR_7E_FLASH_CONTROLLER  0x7E
->  
-> -#define FLASH_LOAD_STA 0x05
-> +#define FLASH_LOAD_STA          0x05
->  #define FLASH_LOAD_STA_CHK	BIT(7)
->  
->  #define  XTAL_FRQ_SEL    0x3F
-> @@ -349,12 +357,20 @@ struct s_edid_data {
->  
->  /***************** Display End *****************/
->  
-> +#define MAX_LANES_SUPPORT	4
-> +
->  struct anx7625_platform_data {
->  	struct gpio_desc *gpio_p_on;
->  	struct gpio_desc *gpio_reset;
->  	struct regulator_bulk_data supplies[3];
->  	struct drm_bridge *panel_bridge;
->  	int intp_irq;
-> +	int is_dpi;
-> +	int mipi_lanes;
-> +	int dp_lane0_swing_reg_cnt;
-> +	int lane0_reg_data[DP_TX_SWING_REG_CNT];
-> +	int dp_lane1_swing_reg_cnt;
-> +	int lane1_reg_data[DP_TX_SWING_REG_CNT];
->  	u32 low_power_mode;
->  	struct device_node *mipi_host_node;
->  };
 
--- 
-Regards,
-
-Laurent Pinchart

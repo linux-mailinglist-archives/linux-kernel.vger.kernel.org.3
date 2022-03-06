@@ -2,62 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066374CEC06
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15A94CEC08
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233675AbiCFPNQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 6 Mar 2022 10:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S233685AbiCFPQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 10:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiCFPNO (ORCPT
+        with ESMTP id S229541AbiCFPQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 10:13:14 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B62B257
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 07:12:21 -0800 (PST)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KBQ5c2hkdz67gtM;
-        Sun,  6 Mar 2022 23:11:00 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sun, 6 Mar 2022 16:12:19 +0100
-Received: from localhost (10.47.64.190) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sun, 6 Mar
- 2022 15:12:18 +0000
-Date:   Sun, 6 Mar 2022 15:12:12 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Wei WANG <wei_wang@realsil.com.cn>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        <jonathan.cameron@huawei.com>
-Subject: Re: [PATCH -next] misc: rtsx: fix build for CONFIG_PM not set
-Message-ID: <20220306151212.00003e6f@Huawei.com>
-In-Reply-To: <7U5Z7R.RNKITPUWCPX32@crapouillou.net>
-References: <20220226222457.13668-1-rdunlap@infradead.org>
-        <CAK8P3a07PoFGC8jyRG5_CjfVPCc2T79c7Fs_WmHZEkuqtG+oPg@mail.gmail.com>
-        <449d6ceb-7308-9543-c23c-831bebffda21@infradead.org>
-        <CAK8P3a30RbSk3Y5CyRrOjfTiq0c9XGxC3qjAD0154j3a7k+xQQ@mail.gmail.com>
-        <0D5Z7R.NUOWBMRT4GQ2@crapouillou.net>
-        <CAK8P3a3=5uud3jd7N3FEAnaLapX-0OYaiscBFNEQm2hzkTmj7g@mail.gmail.com>
-        <7U5Z7R.RNKITPUWCPX32@crapouillou.net>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Sun, 6 Mar 2022 10:16:12 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D2E3FBD3;
+        Sun,  6 Mar 2022 07:15:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=SjmhTAZ5MddX6Jnp7nERsxNAziDtI725HDbO/okkTmI=; b=peROvnfp4rQKRplUsV7HF4sWz5
+        6FdrREDyFJpwcWC+ZCCyRJsWXF7rp+mH+Qvxu8CtdsucSKa4dcXr9A17eD6KTWtoQzgQtMzhtZYeB
+        jjJ8OlYQ7ZCxknDJ2HUYknnQD42eS2Tfh5N7fCfr3TDn3u1LghNl6Qu7AnxJJ7esrnPs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nQsbH-009V6m-06; Sun, 06 Mar 2022 16:15:11 +0100
+Date:   Sun, 6 Mar 2022 16:15:10 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     rajur@chelsio.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: cxgb3: Fix an error code when probing the driver
+Message-ID: <YiTP/t65qhhBaKvf@lunn.ch>
+References: <1646490284-22791-1-git-send-email-zheyuma97@gmail.com>
+ <1646546192-32737-1-git-send-email-zheyuma97@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.47.64.190]
-X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646546192-32737-1-git-send-email-zheyuma97@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,68 +48,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 17:56:31 +0000
-Paul Cercueil <paul@crapouillou.net> wrote:
-
-> Le dim., févr. 27 2022 at 18:51:38 +0100, Arnd Bergmann 
-> <arnd@arndb.de> a écrit :
-> > On Sun, Feb 27, 2022 at 6:46 PM Paul Cercueil <paul@crapouillou.net> 
-> > wrote:  
-> >>  Le dim., févr. 27 2022 at 18:30:16 +0100, Arnd Bergmann
-> >> 
-> >>  There could be a DEFINE_DEV_PM_OPS(), but I don't think that's 
-> >> really
-> >>  needed - you can very well declare your struct dev_pm_ops without 
-> >> using
-> >>  one of these macros. Just make sure to use the SYSTEM_SLEEP_PM_OPS /
-> >>  RUNTIME_PM_OPS macros for the callbacks and pm_ptr() for the 
-> >> device.pm
-> >>  pointer.  
-> > 
-> > Ah, of course, so it comes down to
-> > s/SET_SYSTEM_SLEEP_PM_OPS/SYSTEM_SLEEP_PM_OPS/ while
-> > removing all the #ifdef an __maybe_unused annotations. The pm_ptr()
-> > in driver.pm makes this slightly more optimized AFAICT, but has no
-> > effect on behavior, right?  
+On Sun, Mar 06, 2022 at 05:56:32AM +0000, Zheyu Ma wrote:
+> During the process of driver probing, probe function should return < 0
+> for failure, otherwise kernel will treat value >= 0 as success.
 > 
-> The use of SYSTEM_SLEEP_PM_OPS makes sure that the callbacks are 
-> dropped if the dev_pm_ops is dead code, and the pm_ptr() must be used 
-> for the compiler to know that the dev_pm_ops is dead code.
+> Therefore, the driver should set 'err' to -ENODEV when
+> 'adapter->registered_device_map' is NULL. Otherwise kernel will assume
+> that the driver has been successfully probed and will cause unexpected
+> errors.
 > 
-> -Paul
-> 
-> 
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 
-Hi Paul,
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-We have one remaining case which is still ugly to do.
-Where both SYSTEM_SLEEP_PM_OPS/RUNTIME_PM_OPS are set and
-the dev_pm_ops structure is exported.
-
-For that one we still need to expose #ifdef fun in the
-drivers I think.
-
-Any suggestions on a clean solution for that?
-
-Currently I have this...
-
-#ifdef CONFIG_PM
-const struct dev_pm_ops bmc150_magn_pm_ops = {
-	SYSTEM_SLEEP_PM_OPS(...)
-	RUNTIME_PM_OPS(...)
-};
-EXPORT_SYMBOL_NS(bmc150_magn_pm_ops, IIO_BMC150_MAGN);
-#else
-static const __maybe_unused dev_pm_ops bmc150_magn_pm_ops = {
-	SYSTEM_SLEEP_PM_OPS(...)
-	RUNTIME_PM_OPS(...)
-};
-#endif
-Not super clean but perhaps we do need
-EXPORT_NS_DEV_PM_OPS
-EXPORT_NS_GPL_DEV_PM_OPS
-and potentially the non namespaced versions.
-
-Thanks,
-
-Jonathan
+    Andrew

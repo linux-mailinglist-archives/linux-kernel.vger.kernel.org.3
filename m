@@ -2,67 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CCE4CEDFE
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 22:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0C84CEE15
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 23:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbiCFVuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 16:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
+        id S233283AbiCFWIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 17:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiCFVuM (ORCPT
+        with ESMTP id S229643AbiCFWIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 16:50:12 -0500
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D885DA7D;
-        Sun,  6 Mar 2022 13:49:19 -0800 (PST)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1nQykc-0004yX-P4; Mon, 07 Mar 2022 08:49:15 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Mon, 07 Mar 2022 09:49:14 +1200
-Date:   Mon, 7 Mar 2022 09:49:14 +1200
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>
-Cc:     Gilad Ben-Yossef <gilad@benyossef.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] crypto: ccree: driver does not handle case where cryptlen
- = authsize =0
-Message-ID: <YiUsWosH+MKMF7DQ@gondor.apana.org.au>
-References: <YgOQBNIdf0UnSH+M@Red>
- <CAOtvUMeoYcVm7OQdqXd1V5iPSXW_BkVxx6TA6nF7zTLVeHe0Ww@mail.gmail.com>
- <CAOtvUMfy1fF35B2sfbOMui8n9Q4iCke9rgn5TiYMUMjd8gqHsA@mail.gmail.com>
- <YhKV55t90HWm6bhv@Red>
- <CAOtvUMdRU4wnRCXsC+U5XBDp+b+u8w7W7JCUKW2+ohuJz3PVhQ@mail.gmail.com>
- <YhOcEQEjIKBrbMIZ@Red>
- <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
- <CAOtvUMeRb=j=NDrc88x8aB-3=D1mxZ_-aA1d4FfvJmj7Jrbi4w@mail.gmail.com>
- <YiIUXtxd44ut5uzV@Red>
+        Sun, 6 Mar 2022 17:08:36 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18241D326
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 14:07:42 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id s1so12166178plg.12
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 14:07:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=ott2Fy6zW0YAlx8wzwMZzzUaVRMCd6cEJUB+xxtueUk=;
+        b=Qj1awOLyyLqVwaOgk5PKOi4INIcAaAkqsf36jgPyP1DIXghU7kqsv5eoerO37U4A1s
+         uA1pf8jYDMytw9X3Pym0vYmxpdndetiW9tBjHRPBYGuM+c5cOEG2Nbv3f56pUmPRWgRR
+         vOpuYVWNO980M3HylaUGpMGZMy+4X1qCl+umpTPVDLXCa3maWuuQAN6ZkLT+GrISWGZp
+         s1QLKinV/QLGQYwgaG1loQQCFUNB5QE5cYSPrOGMWPTIZ/GxTghHMXYsIwcNH7PvdSi+
+         V54Bg4kfWKfIVoBHMD1uGX9qERNIxnGWS4RF85iT9z6M0ivKRbBI8CIHYgpRnHZTmzKb
+         RpAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=ott2Fy6zW0YAlx8wzwMZzzUaVRMCd6cEJUB+xxtueUk=;
+        b=WawRKVigVrt5+EMa9K+VJSjMFz7Sl1+X6obav2+wGTF5LDFKtcmwQ29zVXUKI5I+wY
+         3j/484toRs+2JI5k7gAZKDkq1OWfuolnCdrOQK0TD1J+j1Xi+M8D5Yddj1UV9dUQL8r3
+         htlmWuDcVYCYmB7t7ERrHYUjTohsR59twMaLJ8jZE7+DxdyQqGP7sgb1HaVhTULGG4SC
+         bl8wFWwXiUqCpCK/S2gyWD5bzBHhqdM1U8+f9fUXEEa6NeSp8E4q8DAsCM//GXX6F5FB
+         97xIicGGB00Nf78wWURDQ79exeglpBiK5kMjLcOJGRHsRFqMn4W0c9STYG905kvC7QmM
+         s9dw==
+X-Gm-Message-State: AOAM531bkYBBsmwt+dzTh3ARo0mtBiqdaSe5AeYR1U2fDgiOGmnL4BLu
+        xYx2VcZ12VzfYkfaD8YpmLAE6w==
+X-Google-Smtp-Source: ABdhPJxWgicViQ9wemdU1MnHl7NEto1XHjnw/D9hyBaoAh07z1cixmUct+1ujUEekw/FlGuF5PBORw==
+X-Received: by 2002:a17:902:e552:b0:14f:bfec:eb2c with SMTP id n18-20020a170902e55200b0014fbfeceb2cmr9248566plf.108.1646604461700;
+        Sun, 06 Mar 2022 14:07:41 -0800 (PST)
+Received: from [2620:15c:29:204:5f87:a605:2b59:e392] ([2620:15c:29:204:5f87:a605:2b59:e392])
+        by smtp.gmail.com with ESMTPSA id s21-20020a63dc15000000b00378c9e5b37fsm9670409pgg.63.2022.03.06.14.07.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 14:07:41 -0800 (PST)
+Date:   Sun, 6 Mar 2022 14:07:40 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Hugh Dickins <hughd@google.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alex Shi <alexs@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH mmotm] mm: __isolate_lru_page_prepare() in
+ isolate_migratepages_block()
+In-Reply-To: <879d62a8-91cc-d3c6-fb3b-69768236df68@google.com>
+Message-ID: <f77de36f-32f3-9036-98b0-d07d851b8e0@google.com>
+References: <879d62a8-91cc-d3c6-fb3b-69768236df68@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiIUXtxd44ut5uzV@Red>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 02:30:06PM +0100, Corentin Labbe wrote:
->
-> Hello
+On Fri, 4 Mar 2022, Hugh Dickins wrote:
+
+> __isolate_lru_page_prepare() conflates two unrelated functions, with
+> the flags to one disjoint from the flags to the other; and hides some
+> of the important checks outside of isolate_migratepages_block(), where
+> the sequence is better to be visible.  It comes from the days of lumpy
+> reclaim, before compaction, when the combination made more sense.
 > 
-> I got:
-> [   17.563793] ------------[ cut here ]------------
-> [   17.568492] DMA-API: ccree e6601000.crypto: device driver frees DMA memory with different direction [device address=0x0000000078fe5800] [size=8 bytes] [mapped with DMA_TO_DEVICE] [unmapped with DMA_BIDIRECTIONAL]
+> Move what's needed by mm/compaction.c isolate_migratepages_block() inline
+> there, and what's needed by mm/vmscan.c isolate_lru_pages() inline there.
+> 
+> Shorten "isolate_mode" to "mode", so the sequence of conditions is easier
+> to read.  Declare a "mapping" variable, to save one call to page_mapping()
+> (but not another: calling again after page is locked is necessary).
+> Simplify isolate_lru_pages() with a "move_to" list pointer.
+> 
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-The direction argument during unmap must match whatever direction
-you used during the original map call.
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Acked-by: David Rientjes <rientjes@google.com>

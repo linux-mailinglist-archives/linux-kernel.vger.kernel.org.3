@@ -2,104 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B283B4CE921
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 06:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A265B4CE967
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 06:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiCFFgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 00:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S232014AbiCFFxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 00:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiCFFgK (ORCPT
+        with ESMTP id S229480AbiCFFxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 00:36:10 -0500
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D49670F7C
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 21:35:19 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id u3so24931949ybh.5
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 21:35:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=slqIUnaaim/Zcjf+c7IWsC5j1SzZDBhUp+PgfUoBld8=;
-        b=yUCnr6cVrswC5Zjv7eDb+8v/VMzk90XUF5w+hlhCG2gZp+8zqOTGVAIth7SvL7qDoj
-         gBISxlFAiou+G3jkX7U9PIQSjz0RVidHv/k8xrcrLEpwaWoExp4LCYkaQbr7XQZxO01D
-         lJupq7SpkhnD6Xqr6ZbD1FK7k/Jhi7T76329jl6TbU59tDSkTC6jFWsYHvBb7lcZv6R8
-         5o97Egs7fixQU7prjsiwO8NqMPatFN/YgDbZXnNlzSZrrhoobqyfhPiUi6pvvkKJvRfm
-         K/F36voNg+VZA+rvAqoRDqdIBgkl6WugG5wQpSGbP3Onk4AJyvk8m28QM1poBtgh8nKE
-         pDDg==
-X-Gm-Message-State: AOAM533JO1yJFqgj1YhDjicafpuX3cRFlBClIRePDxVry+jkhF2arZ46
-        xMHEXdOIEhvMc/ubDfrG+4iMr9A27VO9r0pDGQo=
-X-Google-Smtp-Source: ABdhPJylYsvZMKOiM8jj1gW+qtyMFrOIfVgOOzq4IJ1ob3Pv0oHImP5Q8GspS17DIFDZx6swlK1Xf8/unPvySqf8PPY=
-X-Received: by 2002:a25:2685:0:b0:629:1eee:81e1 with SMTP id
- m127-20020a252685000000b006291eee81e1mr2644568ybm.20.1646544918376; Sat, 05
- Mar 2022 21:35:18 -0800 (PST)
+        Sun, 6 Mar 2022 00:53:20 -0500
+Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E48E25D2
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 21:52:27 -0800 (PST)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4KB9j62qkZz4xLFC
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 05:52:26 +0000 (UTC)
+Authentication-Results: mail-4321.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="R3pLfFH/"
+Date:   Sun, 06 Mar 2022 05:52:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1646545941;
+        bh=jlHvcCrmUJa3Tgqz2MiMzMxuvjdRv3ydQ/NyZc+5Npo=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=R3pLfFH/NetUj6mPXDbbD8SQJCLX+gkdh8pi4P3/DIfBMMoccXIOkQbvv+qYorcPh
+         I0G8ftBHaEgMVeDFu3BTku24W+oBLibBJPtOVoUBU0NnOmu51fML9+ehXtb9JQh4Ta
+         oC762S1ljBSBDGwoOkdZqNIf5P8cFobNBN/iHj9Fo32MPrGEoncVBCo27JH+sf2JYI
+         8jCO8VpwC7EL6yGIe8qRgQusJ8f8JYLYXgRPHmBlsv5QxjSwAZ/GFAOlTfhCArEbo7
+         vBLFOaeDfwLxqD7kW0I84uOeZiRSt5BldujmMME7MDG/LCB51O/Q8445jsh26867vE
+         VhRsQznCbra2A==
+To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com
+From:   David Cohen <dacohen@pm.me>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Cohen <dacohen@pm.me>
+Reply-To: David Cohen <dacohen@pm.me>
+Subject: [PATCH] PM: fix dynamic debug within pm_pr_debug()
+Message-ID: <20220306055207.386821-1-dacohen@pm.me>
 MIME-Version: 1.0
-References: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
- <CAHp75VeT3LbdbSaiwcC2YW40LnA2h8ADtGva-CKU_xh8Edi0nw@mail.gmail.com>
- <CAMZ6RqJL2G=i-x3wwBD92devAxdNcnmwfDqz30+GFGobp21s+Q@mail.gmail.com> <CAHp75VdTzjW_YONcFy0qQGvT-xMDQOXTYsAun40106Spzgx_2Q@mail.gmail.com>
-In-Reply-To: <CAHp75VdTzjW_YONcFy0qQGvT-xMDQOXTYsAun40106Spzgx_2Q@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 6 Mar 2022 14:35:07 +0900
-Message-ID: <CAMZ6RqJAxqbbkMP=r7h0b2nvobYu8tcSm8PLaPNbXb0NV+gzaw@mail.gmail.com>
-Subject: Re: [PATCH] linux/bits.h: fix -Wtype-limits warnings in GENMASK_INPUT_CHECK()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun. 6 Mar 2022 at 06:33, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> On Sat, Mar 5, 2022 at 2:43 PM Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> > On Tue. 5 Mar 2022 at 03:46, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > On Fri, Mar 4, 2022 at 7:36 PM Vincent Mailhol
-> > > <mailhol.vincent@wanadoo.fr> wrote:
->
-> ...
->
-> > > NAK.
-> >
-> > Are you willing to change your decision following my comments?
->
-> Have you read this discussion (read the thread in full)
-> https://lore.kernel.org/lkml/cover.1590017578.git.syednwaris@gmail.com/
+Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
+to filter pm debug messages based on pm_debug_messages_on flag.
+According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
+indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
+support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
+which does support dynamic debug.
 
-Thank you, this was an instructive read.
+The problem is if we enable/disable dynamic debug inside __pm_pr_debug()
+it will affect all pm_pr_debug() calls at once, so we can't individually
+control them.
 
-For what I understand, there was an effort to fix this when
--Wtype-limits was still a W=1 warning but the effort was stopped
-after -Wtype-limits was moved to W=2 despite a v4 patch being very
-close to the goal.
+This patch changes __pm_pr_debug() implementation into macros to make
+pr_debug() to be directly called by all pr_pm_debug() cases. As a direct
+side effect all pr_pm_debug() can be individually controlled by dynamic
+debug feature.
 
-Back to my patch, it successfully passes the lib/test_bits.c
-build test (including the TEST_GENMASK_FAILURES) and it also
-fixes the last open warning from the thread you pointed me to (on
-drivers/crypto/inside-secure/safexcel.o):
-https://lore.kernel.org/lkml/20200709123011.GA18734@gondor.apana.org.au/
+Signed-off-by: David Cohen <dacohen@pm.me>
+---
+ include/linux/suspend.h | 19 +++++++++++++++----
+ kernel/power/main.c     | 29 -----------------------------
+ 2 files changed, 15 insertions(+), 33 deletions(-)
 
-So, I am still not sure to understand what issue you see with my
-patch. Is it that we should just not care about fixing W=2? Or
-do you still see some issues which are not being addressed (if
-so, sorry for not understanding)?
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index 300273ff40cc..d727d3c867e3 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -542,22 +542,33 @@ static inline void unlock_system_sleep(void) {}
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+ extern bool pm_print_times_enabled;
+ extern bool pm_debug_messages_on;
+-extern __printf(2, 3) void __pm_pr_dbg(bool defer, const char *fmt, ...);
++#define __pm_pr_dbg(fmt, ...)=09=09=09=09=09\
++=09do {=09=09=09=09=09=09=09\
++=09=09if (pm_debug_messages_on)=09=09=09\
++=09=09=09pr_debug("PM: " fmt, ##__VA_ARGS__);=09\
++=09} while(0)
++#define __pm_deferred_pr_dbg(fmt, ...)=09=09=09=09\
++=09do {=09=09=09=09=09=09=09\
++=09=09if (pm_debug_messages_on)=09=09=09\
++=09=09=09printk_deferred(KERN_DEBUG "PM: " fmt, ##__VA_ARGS__);=09\
++=09} while(0)
+ #else
+ #define pm_print_times_enabled=09(false)
+ #define pm_debug_messages_on=09(false)
 
-I do agree that fixing a W=2 has small value for all the files
-which are still emitting some W=1. However, I think it is
-beneficial to remove this W=2 spam for all the developers who
-produced W=1 clean files and would like to tackle the W=2
-warnings.
+ #include <linux/printk.h>
+
+-#define __pm_pr_dbg(defer, fmt, ...) \
++#define __pm_pr_dbg(fmt, ...) \
++=09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
++#define __pm_deferred_pr_dbg(fmt, ...) \
+ =09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
+ #endif
+
+ #define pm_pr_dbg(fmt, ...) \
+-=09__pm_pr_dbg(false, fmt, ##__VA_ARGS__)
++=09__pm_pr_dbg(fmt, ##__VA_ARGS__)
+
+ #define pm_deferred_pr_dbg(fmt, ...) \
+-=09__pm_pr_dbg(true, fmt, ##__VA_ARGS__)
++=09__pm_deferred_pr_dbg(fmt, ##__VA_ARGS__)
+
+ #ifdef CONFIG_PM_AUTOSLEEP
+
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 7e646079fbeb..5242bf2ee469 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -545,35 +545,6 @@ static int __init pm_debug_messages_setup(char *str)
+ }
+ __setup("pm_debug_messages", pm_debug_messages_setup);
+
+-/**
+- * __pm_pr_dbg - Print a suspend debug message to the kernel log.
+- * @defer: Whether or not to use printk_deferred() to print the message.
+- * @fmt: Message format.
+- *
+- * The message will be emitted if enabled through the pm_debug_messages
+- * sysfs attribute.
+- */
+-void __pm_pr_dbg(bool defer, const char *fmt, ...)
+-{
+-=09struct va_format vaf;
+-=09va_list args;
+-
+-=09if (!pm_debug_messages_on)
+-=09=09return;
+-
+-=09va_start(args, fmt);
+-
+-=09vaf.fmt =3D fmt;
+-=09vaf.va =3D &args;
+-
+-=09if (defer)
+-=09=09printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
+-=09else
+-=09=09printk(KERN_DEBUG "PM: %pV", &vaf);
+-
+-=09va_end(args);
+-}
+-
+ #else /* !CONFIG_PM_SLEEP_DEBUG */
+ static inline void pm_print_times_init(void) {}
+ #endif /* CONFIG_PM_SLEEP_DEBUG */
+--
+2.35.1
 
 
-Yours sincerely,
-Vincent Mailhol

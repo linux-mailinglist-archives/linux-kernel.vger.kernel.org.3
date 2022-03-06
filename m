@@ -2,151 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8F54CEAF2
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 12:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF7F4CEAF8
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 12:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiCFLQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 06:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        id S231989AbiCFLVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 06:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiCFLQe (ORCPT
+        with ESMTP id S229458AbiCFLV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 06:16:34 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3E86BDDE
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 03:15:42 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 6 Mar 2022 06:21:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6F66C950
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 03:20:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 59B563F614
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 11:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646565341;
-        bh=wyammkcETMVkrXCUYgMgwXTQvzjKUephDdK6rDf8ZyE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=NH7RIc2F0YE2rJdbLxEsMFy2stcxWIapAC54U4o7HavrNrXU18FNa+okw3n+1CGP+
-         6rSmc861ZWyMTdIqUs2Mvg3dYRhM0id13o3WMyDmi5I15AY+JZsMHWihy1OW8AXByt
-         TVNpGXw5vV7SAOXJzL6NDrpffYgGhCfF50quVAjE7DJQ5eh0ApCFDHaWhtHn4GQ9zk
-         XJGyRSQZsL5A58EaUzz97S33gctmKnvDYhW+6GFwIWoavFHqJRwLcB0FiRJf3qrC99
-         vVdhh+XOYrK7XKB5NaBR67L8ytd1cl7MP7DF37jk5LN71t2P+TYwGEcn50+kIRIeCi
-         mnw2euxyIwLMQ==
-Received: by mail-ej1-f70.google.com with SMTP id ey18-20020a1709070b9200b006da9614af58so4100046ejc.10
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 03:15:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wyammkcETMVkrXCUYgMgwXTQvzjKUephDdK6rDf8ZyE=;
-        b=D0pAFlmj4CMu6rmt8zDC0k+1+RaWXwRZ1pP/kM5g85yRYY+6EjSA/Ye2c+tOEOlSQi
-         okHOSP65+ZKlhayAj+rFuy49MGKN4PMYAvqzZvtj49+xhzk5+mqFf7UAwSzRI2oIsx56
-         ShhhKRfllo4+X3LUgfLr+79G798EaMmvpuDjLV6xYB3hkgLuyLJdWtqNiHkWY0UX8wq4
-         NqLwkI9IuY1HGazQJnRE41QefLyBgj1D90qhSUF50ArKkMhA4XV7jp4C8vlhjKZDmrPy
-         Sg0nA/JkETwFP+7bTf793aDyZ7MRcvSlB/S57ksD+o5HqZApOHMgIg6qmO7LJudBlu2C
-         kpLw==
-X-Gm-Message-State: AOAM5304ZUVISu3GaJQJU7iHQM9Y34hJtAAEU5KqszXQ//E8RItx/ZAz
-        dQrZIxohZcCrGIbcA5PKQeO2JgJpIicHpEwklaxEy9kkH1peEz4LRkcixhWE6fyiiotpy0CQtiQ
-        7TWXwxsTm99XCcZhDL8UdKlp5E/jriIy5/uM6BP/JjQ==
-X-Received: by 2002:a17:906:37c3:b0:6cf:8ece:e8e7 with SMTP id o3-20020a17090637c300b006cf8ecee8e7mr5592061ejc.690.1646565340985;
-        Sun, 06 Mar 2022 03:15:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyhbRMr/4T2U3uNL1LtOd9tdA3aZRpYQJJ6IbPVRuKfFwgRhJ732IjpYPYwbnyUEsPTo33edA==
-X-Received: by 2002:a17:906:37c3:b0:6cf:8ece:e8e7 with SMTP id o3-20020a17090637c300b006cf8ecee8e7mr5592032ejc.690.1646565340776;
-        Sun, 06 Mar 2022 03:15:40 -0800 (PST)
-Received: from [192.168.0.140] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id 5-20020a508e45000000b003fe03798eafsm4839466edx.32.2022.03.06.03.15.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 03:15:40 -0800 (PST)
-Message-ID: <18f4dc19-b8a4-015e-48c8-923326cc7932@canonical.com>
-Date:   Sun, 6 Mar 2022 12:15:39 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D085B80CB9
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 11:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4C1C340EC;
+        Sun,  6 Mar 2022 11:20:31 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V10 00/10] irqchip: Add LoongArch-related irqchip drivers
+Date:   Sun,  6 Mar 2022 19:21:45 +0800
+Message-Id: <20220306112155.811157-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Aw: Re: Re: [PATCH v5 1/5] dt-bindings: ata: ahci-platform:
- Convert DT bindings to yaml
-Content-Language: en-US
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-References: <20220305112607.257734-1-linux@fw-web.de>
- <20220305112607.257734-2-linux@fw-web.de>
- <a2839b00-d195-131f-b2a7-d2f030a5bd95@canonical.com>
- <trinity-9ef9e0d3-e70c-45d9-bdd8-e43d1c89a8c9-1646560070497@3c-app-gmx-bs46>
- <b8553651-3cd0-845c-efbf-d2341d5506b3@canonical.com>
- <trinity-d42352e1-d778-40dd-9464-90a145653f74-1646563315484@3c-app-gmx-bs46>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <trinity-d42352e1-d778-40dd-9464-90a145653f74-1646563315484@3c-app-gmx-bs46>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2022 11:41, Frank Wunderlich wrote:
->> Gesendet: Sonntag, 06. März 2022 um 11:27 Uhr
->> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>
->>>     add compatibles used together with generic-ahci
->>>       - marvell,berlin2-ahci
->>
->> This is fine, just mention it in commit msg.
->>
->>>       - qcom,apq8064-ahci
->>>       - qcom,ipq806x-ahci
->>
->> These you need to consult with qcom-sata.txt. This could be a following
->> commit which will integrate qcom-sata.txt and remove it.
-> 
-> this depends on Robs opinion
+LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+are already added in the next revision of ACPI Specification (current
+revision is 6.4).
 
-Then maybe precise the question for Rob...
+Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+work together with LS7A chipsets. The irq chips in LoongArch computers
+include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
 
-> 
->> Either you have
->> binding document for all devices or you create a common part, like for UFS:
->> https://lore.kernel.org/linux-devicetree/20220222145854.358646-1-krzysztof.kozlowski@canonical.com/
->> https://github.com/krzk/linux/commits/n/dt-bindings-ufs-v2
->>
->> The choice depends more or less on complexity of bindings, IOW, how big
->> and complicated bindings would be if you combine everything to one YAML.
->>
->> In the case of UFS, the devices differ - by clocks, resets, phys and
->> sometimes supplies. Therefore it easier to have one common shared part
->> and several device bindings.
->>
->> AHCI looks more consistent - except that Qualcomm - so maybe better to
->> have one document.
->>
->>>     increase reg-count to 2 (used in omap5-l4.dtsi)
->>>     increase clock-count to 5 (used in qcom-apq8064.dtsi)
->>
->> This would need allOf+if.
-> 
-> if i get ok from rob i add only the berlin-compatible and skip the qcom+reg/clock-change in the first applied version. Adding the allOf/if (and making it right) will only delay the sata-binding/dts-change.
+CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC are
+per-package controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are all
+controllers out of CPU (i.e., in chipsets). These controllers (in other
+words, irqchips) are linked in a hierarchy, and there are two models of
+hierarchy (legacy model and extended model).
 
-I don't get what is the problem with delaying this patch for the time
-needed to make the bindings correct? Especially that alternative is to
-add bindings document which soon will need to be modified, e.g. split
-into common part. Is there a particular hurry with these bindings
-conversion?
+Legacy IRQ model:
 
+In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+gathered by HTVECINTC, and then go to LIOINTC, and then CPUINTC.
 
-Best regards,
-Krzysztof
+ +---------------------------------------------+
+ |                                             |
+ |    +-----+     +---------+     +-------+    |
+ |    | IPI | --> | CPUINTC | <-- | Timer |    |
+ |    +-----+     +---------+     +-------+    |
+ |                     ^                       |
+ |                     |                       |
+ |                +---------+     +-------+    |
+ |                | LIOINTC | <-- | UARTs |    |
+ |                +---------+     +-------+    |
+ |                     ^                       |
+ |                     |                       |
+ |               +-----------+                 |
+ |               | HTVECINTC |                 |
+ |               +-----------+                 |
+ |                ^         ^                  |
+ |                |         |                  |
+ |          +---------+ +---------+            |
+ |          | PCH-PIC | | PCH-MSI |            |
+ |          +---------+ +---------+            |
+ |            ^     ^           ^              |
+ |            |     |           |              |
+ |    +---------+ +---------+ +---------+      |
+ |    | PCH-LPC | | Devices | | Devices |      |
+ |    +---------+ +---------+ +---------+      |
+ |         ^                                   |
+ |         |                                   |
+ |    +---------+                              |
+ |    | Devices |                              |
+ |    +---------+                              |
+ |                                             |
+ |                                             |
+ +---------------------------------------------+
+
+Extended IRQ model:
+
+In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+gathered by EIOINTC, and then go to to CPUINTC directly.
+
+ +--------------------------------------------------------+
+ |                                                        |
+ |         +-----+     +---------+     +-------+          |
+ |         | IPI | --> | CPUINTC | <-- | Timer |          |
+ |         +-----+     +---------+     +-------+          |
+ |                      ^       ^                         |
+ |                      |       |                         |
+ |               +---------+ +---------+     +-------+    |
+ |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+ |               +---------+ +---------+     +-------+    |
+ |                ^       ^                               |
+ |                |       |                               |
+ |         +---------+ +---------+                        |
+ |         | PCH-PIC | | PCH-MSI |                        |
+ |         +---------+ +---------+                        |
+ |           ^     ^           ^                          |
+ |           |     |           |                          |
+ |   +---------+ +---------+ +---------+                  |
+ |   | PCH-LPC | | Devices | | Devices |                  |
+ |   +---------+ +---------+ +---------+                  |
+ |        ^                                               |
+ |        |                                               |
+ |   +---------+                                          |
+ |   | Devices |                                          |
+ |   +---------+                                          |
+ |                                                        |
+ |                                                        |
+ +--------------------------------------------------------+
+
+This patchset adds some irqchip drivers for LoongArch, it is preparing
+to add LoongArch support in mainline kernel, we can see a snapshot here:
+https://github.com/loongson/linux/tree/loongarch-next
+
+Cross-compile tool chain to build kernel:
+https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-20211202-cross-tools.tar.xz
+
+A CLFS-based Linux distro:
+https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-system-2021-12-02.tar.bz2
+
+Loongson and LoongArch documentations:
+https://github.com/loongson/LoongArch-Documentation
+
+LoongArch-specific interrupt controllers:
+https://mantis.uefi.org/mantis/view.php?id=2203
+
+LoongArch use ACPI, but ACPI tables cannot describe the hierarchy of
+irqchips, so we initilize the irqchip subsystem in this way (from arch
+code):
+
+  cpu_domain = loongarch_cpu_irq_init();
+  liointc_domain = liointc_acpi_init(cpu_domain, acpi_liointc);
+  eiointc_domain = eiointc_acpi_init(cpu_domain, acpi_eiointc);
+  pch_pic_domain = pch_pic_acpi_init(eiointc_domain, acpi_pchpic);
+  pch_msi_domain = pch_msi_acpi_init(eiointc_domain, acpi_pchmsi);
+
+Upstream irqchip init function return an irqdomain, and this domain
+will be used by downstream irqchips as their parent domains. For more
+infomation please refer:
+https://lore.kernel.org/linux-arch/20210927064300.624279-11-chenhuacai@loongson.cn/T/#u
+
+Q: Why we don't declare irqchips in ACPI DSDT where hierarchy is possible?
+A: This is answered in V8 of this series as below:
+
+  - There are several kinds of irq chips(e.g. pchpic、eiointc、cpuintc)
+  for LoongArch. SCI interrupt (Fixed hardware is implemented for
+  LoongArch in pch such as LS7A1000, and SCI interrupt is used for fixed
+  event handling.) is an irq input of pch irq chip which routes
+  interrupts to cpu as following irq chips path:
+
+  sci interrupt->|pchpic| ->|eiointc|->|cpuintc|
+
+  sci_interrupt will be transferred from gsi to irq through
+  acpi_gsi_to_irq in acpi_enable_subsystem called from acpi_bus_init
+  before acpi_scan_init where acpi device namespace is created, so we
+  should build pch irq domain and related upstream irq domains before
+  acpi_bus_init.
+
+  - PCI bus enumeration is executed from acpi_scan_init, and
+  pci_set_msi_domain will be called for setting msi_domain of enumerated
+  pci device. In pci_set_msi_domain, msi domain may be got through
+  pcibios_device_add, fdt, iort(used for arm64) or inheriting from host
+  bridge domain. And in each way, the msi domain needs to be found by
+  calling irq_find_matching_fwnode(fwnode, DOMAIN_BUS_PCI_MSI) to match
+  one from the registered msi domain before. So we build the msi domain
+  as x86 and arm64 before acpi_scan_init. The msi domain is hierarchic
+  as following:
+
+  msi interrupt->|msipic| ->|eiointc|->|cpuintc|
+
+  - Yes, a driver can be deferred probed when get -EPROBE_DEFER on
+  probing, but both sci interrupt transfer and pci bus enumeration are
+  common code (not private driver for LoongArch).
+
+  So, declaring pic devices in DSDT for seems not suitable, we can only
+  select the X86-like way which is a bit ugly.
+
+Attention: CPUINTC is CSR.ECFG/CSR.ESTAT and its interrupt controller
+described in Section 7.4 of "LoongArch Reference Manual, Vol 1"; LIOINTC
+is "Legacy I/O Interrupts" described in Section 11.1 of "Loongson 3A5000
+Processor Reference Manual"; EIOINTC is "Extended I/O Interrupts" described
+in Section 11.2 of "Loongson 3A5000 Processor Reference Manual"; HTVECINTC
+is "HyperTransport Interrupts" described in Section 14.3 of "Loongson 3A5000
+Processor Reference Manual"; PCH-PIC/PCH-MSI is "Interrupt Controller"
+described in Section 5 of "Loongson 7A1000 Bridge User Manual"; PCH-LPC
+is "LPC Interrupts" described in Section 24.3 of "Loongson 7A1000 Bridge
+User Manual".
+
+V1 -> V2:
+1, Remove queued patches;
+2, Move common logic of DT/ACPI probing to common functions;
+3, Split .suspend()/.resume() functions to separate patches.
+
+V2 -> V3:
+1, Fix a bug for loongson-pch-pic probe;
+2, Some minor improvements for LPC controller.
+
+V3 -> V4:
+1, Rework the CPU interrupt controller driver;
+2, Some minor improvements for other controllers.
+
+V4 -> V5:
+1, Add a description of LoonArch's IRQ model;
+2, Support multiple EIOINTCs in one system;
+3, Some minor improvements for other controllers.
+
+V5 -> V6:
+1, Attach a fwnode to CPUINTC irq domain;
+2, Use raw spinlock instead of generic spinlock;
+3, Improve the method of restoring EIOINTC state;
+4, Update documentation, comments and commit messages.
+
+V6 -> V7:
+1, Fix build warnings reported by kernel test robot.
+
+V7 -> V8:
+1, Add arguments sanity checking for irqchip init functions;
+2, Support Loongson-3C5000 (One NUMA Node includes 4 EIOINTC Node).
+
+V8 -> V9:
+1, Rebase on 5.17-rc5;
+2, Update cover letter;
+3, Some small improvements.
+
+V9 -> V10:
+1, Rebase on 5.17-rc6;
+2, Fix build warnings reported by kernel test robot.
+
+Huacai Chen:
+ irqchip: Adjust Kconfig for Loongson.
+ irqchip/loongson-pch-pic: Add ACPI init support.
+ irqchip/loongson-pch-pic: Add suspend/resume support.
+ irqchip/loongson-pch-msi: Add ACPI init support.
+ irqchip/loongson-htvec: Add ACPI init support.
+ irqchip/loongson-htvec: Add suspend/resume support.
+ irqchip/loongson-liointc: Add ACPI init support. 
+ irqchip: Add LoongArch CPU interrupt controller support.
+ irqchip: Add Loongson Extended I/O interrupt controller.
+ irqchip: Add Loongson PCH LPC controller support.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ drivers/irqchip/Kconfig                |  38 +++-
+ drivers/irqchip/Makefile               |   3 +
+ drivers/irqchip/irq-loongarch-cpu.c    |  92 ++++++++
+ drivers/irqchip/irq-loongson-eiointc.c | 372 +++++++++++++++++++++++++++++++++
+ drivers/irqchip/irq-loongson-htvec.c   | 146 ++++++++++---
+ drivers/irqchip/irq-loongson-liointc.c | 204 +++++++++++-------
+ drivers/irqchip/irq-loongson-pch-lpc.c | 225 ++++++++++++++++++++
+ drivers/irqchip/irq-loongson-pch-msi.c | 128 ++++++++----
+ drivers/irqchip/irq-loongson-pch-pic.c | 155 +++++++++++---
+ include/linux/cpuhotplug.h             |   1 +
+ 10 files changed, 1177 insertions(+), 187 deletions(-)
+ create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+ create mode 100644 drivers/irqchip/irq-loongson-eiointc.c
+ create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+--
+2.27.0
+

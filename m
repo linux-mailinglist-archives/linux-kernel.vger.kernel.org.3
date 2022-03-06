@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AEA4CEB7E
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 13:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AFB4CEB80
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 13:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbiCFMT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 07:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S233600AbiCFMTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 07:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiCFMT1 (ORCPT
+        with ESMTP id S233593AbiCFMTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 07:19:27 -0500
+        Sun, 6 Mar 2022 07:19:32 -0500
 Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11E311140;
-        Sun,  6 Mar 2022 04:18:34 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6AD8C5802B4;
-        Sun,  6 Mar 2022 07:18:32 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879791114F;
+        Sun,  6 Mar 2022 04:18:38 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id E78915802BB;
+        Sun,  6 Mar 2022 07:18:37 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 06 Mar 2022 07:18:32 -0500
+  by compute2.internal (MEProxy); Sun, 06 Mar 2022 07:18:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; bh=m9Zg33CwkxLAO0J/WxcneNphNUWbcCPDXzRgvb
-        MpS/s=; b=V7GflugNVOEZE8oHq6kfrHx9o42Lj4yucIrtPfSmw3WL8d/Zeg1fL8
-        +bHwn9fbafl6x9UiQEElbdPO4qVKb7d5aV6aDMiIr5EIY6KHxn7oGG361Mp1zoa3
-        F9W4bCogGSIqUCtCGvzITRSA0yzHXUaD4+OR16XVMFcYl3N0IteS5LmpowY7M0CX
-        JBnpDzMpChM49XVv7ZldyFu+nRwqoKdeSx43YPokVXPHRZqjy3Pd8d5i1eJQjP7W
-        IIZM3QtlSBL5BQNoGKeYl1HiPw+xi2+b189F4owTCZNIMkRgMPbRq9mrvg69RAEJ
-        KIpN+RkJsvtdEXQqVpOYLeWdJfp8BlOg==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=fAqBZoyuXQbc0j
+        buBUfb/Ov5yXGEQBn0rxhq7UBBsaM=; b=vKfmb+l6J6pFh49CxyzDJHfC+DJPva
+        OnOKC84BiDG0ASp1tfKfOc7SAKVOk+JhXRkUaINFp0+DTlDdYbpl7WNfjaLW6dkq
+        3OClfcIFgCKFH+9JpcSPF5LOguY/C6bO0oZe+RuH0GJCW1akZrPWvW4wVsKCb8wh
+        vlUdntqal7GEqnQQZMJn42av9Fk0izXdaCkh5cK/DjFNWfIz7qZm1DnDCD/Ve2af
+        5aC/IdRhaX637vk6QyejVg2PZj1lqSZHppPAhQctMDq28CisRgSZGKpoNApF0ApW
+        23PlTX9xNJpaAQEm/kBsdznnzlNzdMIvr9nYY1X/El5bsMAmtCIkd8Dg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; bh=m9Zg33CwkxLAO0J/WxcneNphNUWbc
-        CPDXzRgvbMpS/s=; b=KuhxlSQDUuiItNs5e32MVt1QJzZ1JMdoYKMNEwZdRM6Tg
-        XKmTGE76XUbpJIQHf8tpfORps5X6r/Eu9LcUp3YYS1Yvl+pmeSjZQc1Dux5cgd7q
-        DKG2U/NS6Hd7VJGaVvkp6/WxHM6v/oCi2xRCUL0bLLEIIwuFEIVlLALVpHaWO46t
-        dfweuV+xD/rom1VxMfCjzFVlhcM//IjQmVgLVy3BfayibxwDry7s3i4eZGoImIHb
-        VYVI3jCtT3lJ2L0xPPJwT8XOkC/SL/on/RlMZLWB3l8OVBqrQ6cWBuZ3DSQ03O/C
-        ClHCadW1UJ6x27O9nah3okXjBUSkGr7foIFP6kwCA==
-X-ME-Sender: <xms:l6YkYkvJQ8RGHWUjpqKHncsRXGRqlLqSVS2PQ3PlpKLRKj6ranPsSQ>
-    <xme:l6YkYhcz0FpUemcYZv1MEzyxbXQm3xdjOGMVIypkPR5Vs6kqndooyGWKhMygFqaGO
-    MO6nEOyKyXp76iy50Y>
-X-ME-Received: <xmr:l6YkYvzCILuKtcwKUKI9kgt7642hDKYTxEvvsofgfFXbEdlmUpbYfuqs6J6B2i717f6Xzd-XAWmUC6gWyIoGdoeEDjcWco3JTCPWg3xfj1FnCBx7JQIiclbOC8AJQGM>
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=fAqBZo
+        yuXQbc0jbuBUfb/Ov5yXGEQBn0rxhq7UBBsaM=; b=EX5FSqR5H2MUYWHSAGXHMO
+        uXUNweBpBl6uXA6hgCbI1omawj02EC9QS15pdj2H1T8vz+dTNS4I3+LjskMsPmjB
+        aND7Zv8nrm1ARU2ZiTTmObySoBl48Q/WhTHyaAeMN6VURPpSrlRbqXEI7PqKHV9D
+        XCHZrR4B6Jjwn1j73Ekrekix1tW2tFGhRwveazfMfLBO9FUcKfuR9xzuTKKUvcYe
+        hIOjNJdx5J1MvqrFy8pn4ftvHByFwOAG9pirp03Qez7GfAb8qjcKRR1eDSlwrN/W
+        B0W+nSI0WWxPaktWwhSNnplO6SCigjhwQ8AIqdIwMVPYvz5VIzgNrxh992VSsw5A
+        ==
+X-ME-Sender: <xms:naYkYolAt3JaglncPM_q0SgLzH_9_RSNEWgSI-AUa9gT2FO45Y5dwg>
+    <xme:naYkYn2sQxBNl--wQdG4NsexJma9e_13E8uF4tl72Eq8oVZFX868kj67tWOepcxUK
+    0Tw9sWxPh_HzDXOnuU>
+X-ME-Received: <xmr:naYkYmoXZRoq96nQHVh9OITRiwKH-vFvv_bwP1TKpxU2Sbmpwvdv18qFQw_j7dRFJIX03lyJV2MOCbIba22_MjhkbJvG2QYpRrIjhS8xp51IhnGfw0BaWm2pIngHN08>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudduvddgfeelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
-    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
-    epudffjeekveelgffgkeekveejffegkeejtdejtdeftefhleduheekhefgueetkefhnecu
-    ffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggv
-    vh
-X-ME-Proxy: <xmx:l6YkYnPZVKnH31GNspv9hVCxURRhzk4e8-o2RFnnbOvr3jxkLwOXSw>
-    <xmx:l6YkYk-sxcApURTzz9Wu63wHT1SglM_6ZcFTTzDnsgAgneDgUe95_g>
-    <xmx:l6YkYvXzs4gxMKfU1aHjUZ7MGicTvWIrtckYr2_pkWObv3dXoouyKg>
-    <xmx:mKYkYvY8b23vK-XTD-RCLy8gPjXAe-dh6yO7rJR1duapHsOOQvSOAg>
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcu
+    rfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvg
+    hrnheptedvkeetleeuffffhfekteetffeggffgveehieelueefvddtueffveevlefhfeej
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvg
+    hnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:naYkYkmgr9bagCFd1l7_jUSf5m618nllMhf4FUHLFkYx2QJGwlUk9Q>
+    <xmx:naYkYm2ZWICu4Ma7pF2d0troxT9MmbG8lwaY8UclZdxmv2m_zpKsBQ>
+    <xmx:naYkYrvd87b3chnk5z_AEDUjLhDILEmbgk7uJTTUNxVYBMTN3YsO5g>
+    <xmx:naYkYkxlAQDrgtXagbU2PG4o-Xo2nuEOMcB9jzs_AgDke7i-rRdpXg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 6 Mar 2022 07:18:30 -0500 (EST)
+ 6 Mar 2022 07:18:35 -0500 (EST)
 From:   Sven Peter <sven@svenpeter.dev>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowsk <krzysztof.kozlowski@canonical.com>,
         Joey Gouly <joey.gouly@arm.com>,
         Hector Martin <marcan@marcan.st>,
@@ -71,10 +70,12 @@ Cc:     Sven Peter <sven@svenpeter.dev>,
         Mark Kettenis <kettenis@openbsd.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: nvmem: Add apple,efuses
-Date:   Sun,  6 Mar 2022 13:18:15 +0100
-Message-Id: <20220306121816.70537-1-sven@svenpeter.dev>
+Subject: [PATCH v2 2/2] nvmem: Add Apple eFuse driver
+Date:   Sun,  6 Mar 2022 13:18:16 +0100
+Message-Id: <20220306121816.70537-2-sven@svenpeter.dev>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <20220306121816.70537-1-sven@svenpeter.dev>
+References: <20220306121816.70537-1-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,87 +88,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apple SoCs come with eFuses used to store factory-programmed data
-such as calibration settings for the PCIe and Type-C PHY.
+Apple SoCs contain eFuses used to store factory-programmed data such
+as calibration values for the PCIe or the Type-C PHY. They are organized
+as 32bit values exposed as MMIO.
 
 Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
 v1 -> v2:
-  - fixed indentation issue pointed out by Krzysztof Kozlowski
+  - fixed sparse warning about __iomem by introducing
+    struct apple_efuses_priv as done in other nvmem drivers
+  - make sure the driver actually works as a module by
+    setting .owner to THIS_MODULE and adding MODULE_DEVICE_TABLE
+    pointed out by Joey Gouly
 
- .../bindings/nvmem/apple,efuses.yaml          | 50 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+ MAINTAINERS                  |  1 +
+ drivers/nvmem/Kconfig        | 12 ++++++
+ drivers/nvmem/Makefile       |  2 +
+ drivers/nvmem/apple-efuses.c | 82 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 97 insertions(+)
+ create mode 100644 drivers/nvmem/apple-efuses.c
 
-diff --git a/Documentation/devicetree/bindings/nvmem/apple,efuses.yaml b/Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
-new file mode 100644
-index 000000000000..5ec8f2bdb3a5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/apple,efuses.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Apple SoC eFuse-based NVMEM
-+
-+description: |
-+  Apple SoCs such as the M1 contain factory-programmed eFuses used to e.g. store
-+  calibration data for the PCIe and the Type-C PHY or unique chip identifiers
-+  such as the ECID.
-+
-+maintainers:
-+  - Sven Peter <sven@svenpeter.dev>
-+
-+allOf:
-+  - $ref: "nvmem.yaml#"
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - apple,t8103-efuses
-+          - apple,t6000-efuses
-+      - const: apple,efuses
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    efuse@3d2bc000 {
-+        compatible = "apple,t8103-efuses", "apple,efuses";
-+        reg = <0x3d2bc000 0x1000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        ecid: efuse@500 {
-+            reg = <0x500 0x8>;
-+        };
-+    };
-+
-+...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 05fd080b82f3..f70d8525cbd4 100644
+index f70d8525cbd4..e3e973a3f651 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -1771,6 +1771,7 @@ F:	Documentation/devicetree/bindings/arm/apple/*
- F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
- F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
-+F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
- F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
- F:	Documentation/devicetree/bindings/power/apple*
+@@ -1781,6 +1781,7 @@ F:	drivers/i2c/busses/i2c-pasemi-core.c
+ F:	drivers/i2c/busses/i2c-pasemi-platform.c
+ F:	drivers/irqchip/irq-apple-aic.c
+ F:	drivers/mailbox/apple-mailbox.c
++F:	drivers/nvmem/apple-efuses.c
+ F:	drivers/pinctrl/pinctrl-apple-gpio.c
+ F:	drivers/soc/apple/*
+ F:	drivers/watchdog/apple_wdt.c
+diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+index da414617a54d..bba29d1aec96 100644
+--- a/drivers/nvmem/Kconfig
++++ b/drivers/nvmem/Kconfig
+@@ -300,4 +300,16 @@ config NVMEM_BRCM_NVRAM
+ 	  This driver provides support for Broadcom's NVRAM that can be accessed
+ 	  using I/O mapping.
+ 
++config NVMEM_APPLE_EFUSES
++	tristate "Apple eFuse support"
++	depends on ARCH_APPLE || COMPILE_TEST
++	default ARCH_APPLE
++	help
++	  Say y here to enable support for reading eFuses on Apple SoCs
++	  such as the M1. These are e.g. used to store factory programmed
++	  calibration data required for the PCIe or the USB-C PHY.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called nvmem-apple-efuses.
++
+ endif
+diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+index dcbbde35b6a8..1a8e54691d3e 100644
+--- a/drivers/nvmem/Makefile
++++ b/drivers/nvmem/Makefile
+@@ -61,3 +61,5 @@ obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
+ nvmem-rmem-y			:= rmem.o
+ obj-$(CONFIG_NVMEM_BRCM_NVRAM)	+= nvmem_brcm_nvram.o
+ nvmem_brcm_nvram-y		:= brcm_nvram.o
++obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
++nvmem-apple-efuses-y 		:= apple-efuses.o
+diff --git a/drivers/nvmem/apple-efuses.c b/drivers/nvmem/apple-efuses.c
+new file mode 100644
+index 000000000000..dd5576ec5408
+--- /dev/null
++++ b/drivers/nvmem/apple-efuses.c
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Apple SoC eFuse driver
++ *
++ * Copyright (C) The Asahi Linux Contributors
++ */
++
++#include <linux/io.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/nvmem-provider.h>
++#include <linux/platform_device.h>
++
++struct apple_efuses_priv {
++	void __iomem *fuses;
++};
++
++static int apple_efuses_read(void *context, unsigned int offset, void *val,
++			     size_t bytes)
++{
++	struct apple_efuses_priv *priv = context;
++	u32 *dst = val;
++
++	while (bytes >= sizeof(u32)) {
++		*dst++ = readl_relaxed(priv->fuses + offset);
++		bytes -= sizeof(u32);
++		offset += sizeof(u32);
++	}
++
++	return 0;
++}
++
++static int apple_efuses_probe(struct platform_device *pdev)
++{
++	struct apple_efuses_priv *priv;
++	struct resource *res;
++	struct nvmem_config config = {
++		.dev = &pdev->dev,
++		.read_only = true,
++		.reg_read = apple_efuses_read,
++		.stride = sizeof(u32),
++		.word_size = sizeof(u32),
++		.name = "apple_efuses_nvmem",
++		.id = NVMEM_DEVID_AUTO,
++		.owner = THIS_MODULE,
++		.root_only = true,
++	};
++
++	priv = devm_kzalloc(config.dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->fuses = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
++	if (IS_ERR(priv->fuses))
++		return PTR_ERR(priv->fuses);
++
++	config.priv = priv;
++	config.size = resource_size(res);
++
++	return PTR_ERR_OR_ZERO(devm_nvmem_register(config.dev, &config));
++}
++
++static const struct of_device_id apple_efuses_of_match[] = {
++	{ .compatible = "apple,efuses", },
++	{}
++};
++
++MODULE_DEVICE_TABLE(of, apple_efuses_of_match);
++
++static struct platform_driver apple_efuses_driver = {
++	.driver = {
++		.name = "apple_efuses",
++		.of_match_table = apple_efuses_of_match,
++		.owner = THIS_MODULE,
++	},
++	.probe = apple_efuses_probe,
++};
++
++module_platform_driver(apple_efuses_driver);
++
++MODULE_AUTHOR("Sven Peter <sven@svenpeter.dev>");
++MODULE_LICENSE("GPL");
 -- 
 2.25.1
 

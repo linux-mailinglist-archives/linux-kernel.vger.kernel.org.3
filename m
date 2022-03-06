@@ -2,39 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F184CEA76
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 11:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2BF4CEA7C
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 11:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbiCFKOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 05:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
+        id S233165AbiCFKTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 05:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiCFKOP (ORCPT
+        with ESMTP id S230004AbiCFKS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 05:14:15 -0500
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB1D4198D
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 02:13:22 -0800 (PST)
-Received: from localhost.localdomain ([106.133.32.90])
-        by smtp.orange.fr with ESMTPA
-        id Qnsun8hn1tSo5Qnt6nrJUj; Sun, 06 Mar 2022 11:13:20 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sun, 06 Mar 2022 11:13:20 +0100
-X-ME-IP: 106.133.32.90
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        kernel test robot <yujie.liu@intel.com>
-Subject: [PATCH] can: etas_es58x: initialize rx_event_msg before calling es58x_check_msg_len()
-Date:   Sun,  6 Mar 2022 19:13:02 +0900
-Message-Id: <20220306101302.708783-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 6 Mar 2022 05:18:58 -0500
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA5027CFE;
+        Sun,  6 Mar 2022 02:18:06 -0800 (PST)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-2dbd8777564so134833787b3.0;
+        Sun, 06 Mar 2022 02:18:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=FMOobh8nHhcrPpWV4O/wajuKnYqT9MqpD2rk4aIOeew=;
+        b=Goedn+VBvsRSba5EGffAp1+WLrLJfspwNpMpUqoW/ooYaehP3heX/hRuDnsyJxzS3/
+         gHugUemS2aSDn80bCTFowNaF5KWVcmLRIyAZdNTWKrJe4asm9hSNsnEuDoi9kP1/yv5N
+         oZCdqn7jvhMNgpRZzSkbU2vvBivUeCoBrmqwtLtZfaOlTqjikwvLrMpmCnVuufu+OF2c
+         7i/IXSJlywGHxK6yeHTOgVUAh+a+E4OVl+0ecIWxxNsz4soz8nGHlkx3c+18UEGiAYZe
+         YMM/BxKDzlPbbM1nvjGeaWLpKXHEIew25bWlQsGNmScLjTn8HMDVLGqG+2KSA7Pmr/Zx
+         PaLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=FMOobh8nHhcrPpWV4O/wajuKnYqT9MqpD2rk4aIOeew=;
+        b=UZ4jVLLlJiNEU7pJGJ8/nGg4hdFtHBCw8jrTh8Mn4q6pFzm9MX/yV3DpWigXGUVwgv
+         FbF17hXHkCQ3jva/O0/ip6aGbmbkhQ3zlaGOL6rgo9EFyGarGCdRyMAMyaJzTy56ZdIz
+         ZmzX+LJ28CxsiuUreH21HcMTzjzEqTN3Qyd6FIb0Z47v6V94ldSVIRFFsHnsMaYqTZwy
+         WWgbNcQe9rttodR8CHgC8qapntGA57ESKugzioyPIQyqx7W0I8sOMsid4fnJpHh1xqUi
+         JfEyiS/NKlpIGAqeIuPbYdpI7n8qsGDcxaWq8Wsqns+hWn6ov1/Y/QmHPKGf2G9Bx4x7
+         AkqQ==
+X-Gm-Message-State: AOAM5327g9SGRzC9MXXhP5NAm98/lXAdSJvPgsnvvT8t1MaioM3/evia
+        6UGC+FRLqsIiWhrQY2y/hAmYIgcP9bZIg9kT7u5XaNXAQeGgM9VR
+X-Google-Smtp-Source: ABdhPJxiOhUnhtEwbnu50sJjXz6gV1Z3Rk2jM1FVLyO/ASgHE9+5+Jubw//NwDs2sQTh3QYGJPjxSUbMq6kEGP/RrMg=
+X-Received: by 2002:a81:8781:0:b0:2db:da7f:c068 with SMTP id
+ x123-20020a818781000000b002dbda7fc068mr4772814ywf.75.1646561885254; Sun, 06
+ Mar 2022 02:18:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+From:   Yunhao Tian <t123yh.xyz@gmail.com>
+Date:   Sun, 6 Mar 2022 18:17:54 +0800
+Message-ID: <CAFQXTv2B10=i6DMV1iJpOT-Mj9F93hOi_415cn49N6X_yDFw2g@mail.gmail.com>
+Subject: PREEMPT_RT causes scheduling errors with f_rndis USB gadget
+To:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,60 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function es58x_fd_rx_event() invokes the es58x_check_msg_len() macro:
-| 	ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
-While doing so, it deferences an uninitialized variable: *rx_event_msg.
+Hi everyone,
 
-This is actually harmless because es58x_check_msg_len() only uses
-preprocessors macro (sizeof() and __stringify()) on
-*rx_event_msg. c.f. [1].
+I'm using Linux 5.15.24-rt31 kernel with PREEMPT_RT enabled, on my
+RK3308 board. I set up f_rndis gadget with the following script, and
+plugged my board to a x86 Linux computer running 5.15.25 kernel:
 
-Nonetheless, this pattern is confusing so the lines are reordered to
-make sure that rx_event_msg is correctly initialized.
+#!/bin/sh
+cd /sys/kernel/config/usb_gadget
+mkdir g_smartcross; cd g_smartcross
+echo 0xF055 > idVendor
+echo 0xCAFE > idProduct
+mkdir strings/0x409
+echo "SmartCross" > strings/0x409/manufacturer
+echo "SC-1 USB Device" > strings/0x409/product
+mkdir configs/c.1
+mkdir functions/rndis.usb0
+echo EF > functions/rndis.usb0/class
+echo 4 > functions/rndis.usb0/subclass
+echo 1 > functions/rndis.usb0/protocol
+ln -s functions/rndis.usb0 configs/c.1
+echo ff400000.usb > UDC
 
-This patch also fixes a false positive warning reported by cppcheck:
+ I started a HTTP server using python3 -m http.server on the x86
+computer, and executed curl on my board to download a 100MB file from
+the computer. I got the following kernel logs from serial console of
+the board:
 
-| cppcheck possible warnings: (new ones prefixed by >>, may not be real problems)
-|
-|     In file included from drivers/net/can/usb/etas_es58x/es58x_fd.c:
-|  >> drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning: Uninitialized variable: rx_event_msg [uninitvar]
-|      ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
-|            ^
+% Total % Received % Xferd Average Speed Time Time Time Current
+Dload Upload Total Spent Left Speed
+7 100M 7 7500k 0 0 7217k 0 0:00:14 0:00:01 0:00:13 7218k[ 23.002846]
+sched: RT throttling activated
+23 100M 23 23.4M 0 0 5948k 0 0:00:17 0:00:04 0:00:13 5948k[ 25.992869]
+NOHZ tick-stop error: Non-RCU local softi!
+[ 25.993834] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #80!!!
+[ 25.994833] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #80!!!
+[ 25.995832] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #80!!!
+[ 25.995885] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #180!!!
+[ 25.996831] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #180!!!
+[ 25.997830] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #180!!!
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/etas_es58x/es58x_core.h#L467
+If I turn off PREEMPT_RT, there won't be any errors while downloading.
 
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-As discussed in
-https://lore.kernel.org/linux-can/20220302130423.ddd2ulldffpo5lb2@pengutronix.de/T/#u,
-no need to backport this patch because this is not a fix.
-
-@Yujie Liu: I added the "Reported-by: kernel test robot". This being a
-false positive, let me know if you would like to remove the tag in
-order not to mess with you statistics.
----
- drivers/net/can/usb/etas_es58x/es58x_fd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-index 88d2540abbbe..c97ffa71fd75 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-@@ -173,12 +173,11 @@ static int es58x_fd_rx_event_msg(struct net_device *netdev,
- 	const struct es58x_fd_rx_event_msg *rx_event_msg;
- 	int ret;
- 
-+	rx_event_msg = &es58x_fd_urb_cmd->rx_event_msg;
- 	ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
- 	if (ret)
- 		return ret;
- 
--	rx_event_msg = &es58x_fd_urb_cmd->rx_event_msg;
--
- 	return es58x_rx_err_msg(netdev, rx_event_msg->error_code,
- 				rx_event_msg->event_code,
- 				get_unaligned_le64(&rx_event_msg->timestamp));
--- 
-2.34.1
-
+I believe this problem is not tied to any specific board, and anyone
+can reproduce this problem using a Raspberry Pi (Although I didn't try
+because I don't have one). I would like to ask for assistance
+regarding this problem.

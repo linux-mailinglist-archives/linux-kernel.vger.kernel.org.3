@@ -2,136 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8037E4CE7F8
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 01:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADD54CE801
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 02:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232168AbiCFAuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 19:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
+        id S232109AbiCFBKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 20:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiCFAuD (ORCPT
+        with ESMTP id S230077AbiCFBKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 19:50:03 -0500
-Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535017A9B6
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 16:49:12 -0800 (PST)
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 2A9E8474;
-        Sun,  6 Mar 2022 00:49:11 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 2F83620011;
-        Sun,  6 Mar 2022 00:49:10 +0000 (UTC)
-Message-ID: <6185c67d2cca274aee019808f16855ecfd0c33d8.camel@perches.com>
-Subject: Re: [PATCH 2/6] KVM: Replace bare 'unsigned' with 'unsigned int'
-From:   Joe Perches <joe@perches.com>
-To:     Henry Sloan <henryksloan@gmail.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 05 Mar 2022 16:49:09 -0800
-In-Reply-To: <20220305205528.463894-3-henryksloan@gmail.com>
-References: <20220305205528.463894-1-henryksloan@gmail.com>
-         <20220305205528.463894-3-henryksloan@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sat, 5 Mar 2022 20:10:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E709735DC3;
+        Sat,  5 Mar 2022 17:09:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8ECE3B80DF0;
+        Sun,  6 Mar 2022 01:09:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E0C2C004E1;
+        Sun,  6 Mar 2022 01:09:40 +0000 (UTC)
+Date:   Sat, 5 Mar 2022 20:09:39 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [PATCHv2 bpf-next 0/8] bpf: Add kprobe multi link
+Message-ID: <20220305200939.2754ba82@yoga.local.home>
+In-Reply-To: <CAEf4BzaugZWf6f_0JzA-mqaGfp52tCwEp5dWdhpeVt6GjDLQ3Q@mail.gmail.com>
+References: <20220222170600.611515-1-jolsa@kernel.org>
+        <CAEf4BzaugZWf6f_0JzA-mqaGfp52tCwEp5dWdhpeVt6GjDLQ3Q@mail.gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: qg7qgw7nknhygyx8buxkk1k9dxxgho6h
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 2F83620011
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/ss7Wion9R5Tx6ngsggSoSpNtuOFElpKU=
-X-HE-Tag: 1646527750-232767
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-03-05 at 15:55 -0500, Henry Sloan wrote:
-> Signed-off-by: Henry Sloan <henryksloan@gmail.com>
-> ---
->  virt/kvm/coalesced_mmio.c |  2 +-
-[]
-> diff --git a/virt/kvm/coalesced_mmio.c b/virt/kvm/coalesced_mmio.c
-[]
-> @@ -43,7 +43,7 @@ static int coalesced_mmio_in_range(struct kvm_coalesced_mmio_dev *dev,
->  static int coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
->  {
->  	struct kvm_coalesced_mmio_ring *ring;
-> -	unsigned avail;
-> +	unsigned int avail;
->  
->  	/* Are we able to batch it ? */
->  
+On Fri, 4 Mar 2022 15:10:55 -0800
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-Instead of just converting this to unsigned int,
-the function return could be converted to bool.
+> Masami, Jiri, Steven, what would be the logistics here? What's the
+> plan for getting this upstream? Any idea about timelines? I really
+> hope it won't take as long as it took for kretprobe stack trace
+> capturing fixes last year to land. Can we take Masami's changes
+> through bpf-next tree? If yes, Steven, can you please review and give
+> your acks? Thanks for understanding!
 
-So could another int return in the same file.
+Yeah, I'll start looking at it this week. I just started a new job and
+that's been taking up a lot of my time and limiting what I can look at
+upstream.
 
-Something like:
----
- virt/kvm/coalesced_mmio.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
-
-diff --git a/virt/kvm/coalesced_mmio.c b/virt/kvm/coalesced_mmio.c
-index 0be80c213f7f2..452ae20c9ed06 100644
---- a/virt/kvm/coalesced_mmio.c
-+++ b/virt/kvm/coalesced_mmio.c
-@@ -22,28 +22,28 @@ static inline struct kvm_coalesced_mmio_dev *to_mmio(struct kvm_io_device *dev)
- 	return container_of(dev, struct kvm_coalesced_mmio_dev, dev);
- }
- 
--static int coalesced_mmio_in_range(struct kvm_coalesced_mmio_dev *dev,
--				   gpa_t addr, int len)
-+static bool coalesced_mmio_in_range(struct kvm_coalesced_mmio_dev *dev,
-+				    gpa_t addr, int len)
- {
- 	/* is it in a batchable area ?
- 	 * (addr,len) is fully included in
- 	 * (zone->addr, zone->size)
- 	 */
- 	if (len < 0)
--		return 0;
-+		return false;
- 	if (addr + len < addr)
--		return 0;
-+		return false;
- 	if (addr < dev->zone.addr)
--		return 0;
-+		return false;
- 	if (addr + len > dev->zone.addr + dev->zone.size)
--		return 0;
--	return 1;
-+		return false;
-+
-+	return true;
- }
- 
--static int coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
-+static bool coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
- {
- 	struct kvm_coalesced_mmio_ring *ring;
--	unsigned avail;
- 
- 	/* Are we able to batch it ? */
- 
-@@ -52,13 +52,8 @@ static int coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
- 	 * there is always one unused entry in the buffer
- 	 */
- 	ring = dev->kvm->coalesced_mmio_ring;
--	avail = (ring->first - last - 1) % KVM_COALESCED_MMIO_MAX;
--	if (avail == 0) {
--		/* full */
--		return 0;
--	}
- 
--	return 1;
-+	return (ring->first - last - 1) % KVM_COALESCED_MMIO_MAX != 0;
- }
- 
- static int coalesced_mmio_write(struct kvm_vcpu *vcpu,
-
-
+-- Steve

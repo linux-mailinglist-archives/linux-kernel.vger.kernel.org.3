@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6CD4CECB1
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 18:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2774CECB9
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 18:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiCFRwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 12:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S233971AbiCFRwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 12:52:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiCFRwD (ORCPT
+        with ESMTP id S233831AbiCFRwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 12:52:03 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A1F3E5DB;
-        Sun,  6 Mar 2022 09:51:11 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id w4so14454240edc.7;
-        Sun, 06 Mar 2022 09:51:11 -0800 (PST)
+        Sun, 6 Mar 2022 12:52:04 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AA13E5DD;
+        Sun,  6 Mar 2022 09:51:12 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id p15so27458436ejc.7;
+        Sun, 06 Mar 2022 09:51:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1sHC6Xk8ZJo08DuzVROXh4Esd+CuhfmZFv4uGHlwk+M=;
-        b=EEvkjMNywY4oF2c5mrnpcqCp5FoCPw334cGIv0cmdOBtW81bzJ9LqxFKiV+98acAKV
-         0ju3vfoIc2jnStgxoewNjOKNG8wT4f9dMzryh+NCq8xMb3SB6vwq5W6SDVcR5sfHUD2F
-         OJiNtcLxwDi9LGrqxvthxHmCsnLIUmixF1tr7eVqIRPYaHNztb9aLhF6dfsd0mpGG8WL
-         X0/2TIy2TVaQNxlzNyh6cG1qxJpdBtLWeZzlZMZ2/NUeH3SKKXC2TklGFPsJ+TDZw6Z1
-         MPGWgMY32ZzocJ2q8zMuLpZedccQD+UayRt0agOip4/nDYAoFOi9mQU2DPeJCXntAnPK
-         8BVA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=MFt2C4v3MHiA6cRFvbwFucUFojonhWM9CACowSfppes=;
+        b=Tolycnv7VYddPSTnHUPVc8T2MLtAr6i1eIjLjhBH86eZUoumoTFWROly+HHb06LqB3
+         ugHsQtipGLBEGBGc/SOLNog12BqLN5Xdd17r2TO4VR34UBns31kYHGmNJBZ2zepTxuVE
+         7GU/RjLNn0/fIaG2hbIYjgjMPaHF83ma18PD/op0cDq8lEamu0dF8ae3CB4mW5X08BFk
+         fqE5yfu6Q167r6L4wJcOwCsX4MfAxduSA+q4mQX6QrKXJFcX2yB3CvGf70ueBRGHSxcb
+         Or3DPvp3Ic8PrVu9Af3nPM8uUV+L3uVGasnhL2egxvGCVtSz3bLYr411/OnZJVO87aUc
+         1JHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1sHC6Xk8ZJo08DuzVROXh4Esd+CuhfmZFv4uGHlwk+M=;
-        b=ueVF8xJgBQqjNm4/zz3BtMRa6jaX+yvk5SPRgRWfWbaWX+F49l65tDKWJeIKv8CPFD
-         QvmkB0D/0n015JXstEIx3KoZuf438ru/b/+S9cvN4Fphta1apNX63e/2AAy7KIC00cju
-         B2fiP6rzXg9Wn1CdpqeUH8+DP+zmb/xenKclfol8J1cpaaKV05OmLUleZstvA47CLSTY
-         MsFBok8Fog2dGzB+EC6M4JNlWEf1pr6qIwK3zxwCTGE9T3HIb3Oyn/z3RBT6KMAqtwzQ
-         T0JcBhVteI8ugFv5VVFWlGVgkjtUkSDR7/j/S+GQY6R57KuMBxLH1ku+uTFeOxMjChMF
-         I4+w==
-X-Gm-Message-State: AOAM532gghsDpNEmvqAJHFZ/iAQ4WqEkyoNQ4pXirdaw8U80yvVIaB7K
-        jj62Fb4hh1QHLJ94MBZ9YofI5OBIfhZ9z2l7
-X-Google-Smtp-Source: ABdhPJyc22m5/ALErbRpRTh2XeUC5yNaZMHuKbVd8vo5meeNd5UuqpZDLskh9+j+VbijF/OjTkI1jg==
-X-Received: by 2002:a50:fd0f:0:b0:416:e62:ccec with SMTP id i15-20020a50fd0f000000b004160e62ccecmr7651074eds.300.1646589069555;
-        Sun, 06 Mar 2022 09:51:09 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MFt2C4v3MHiA6cRFvbwFucUFojonhWM9CACowSfppes=;
+        b=lBt21sUzMMzy7UQrlCx+0edgmWAVE8ITCqvXe9SXlg8lNHK8IDRFULffVZFTUXdG6l
+         4xqxQmlgXCn9cQH81gS6cQ4Cx2zeV7aG4UhjMCIbvpyyKfb/757y4i392nh3mOYANaff
+         r4aIdZn04hzsZwNupBLbcS+PeqS6XEFZXd7mER61wMUGdgChcBiNypoMiA+CaARd1vrh
+         rFGP+pL/H333oom35cmAaDu+UIvgLJsBHTars3R1TKAFAUqVzxOPoHa6aM3hYfJlwjSU
+         PyKe4A+h3ZLFOJqj6pwaNdgMEX4fSa063iJsBgkLhuIDZxAFOfu7gUTONGy5LizfBKOp
+         JEAw==
+X-Gm-Message-State: AOAM532SEbHqVf3c3tGn0OrOtgpTJTPMnsKOuhSZfHtspK1TXzXTM05P
+        121tqjr5nZD+elhz5p0gD4I=
+X-Google-Smtp-Source: ABdhPJxcBDS2fKAC3UP2mJtbSlN6nfaiW3fyJgPpLmVwl8GN6KhfNQ55qpfpsXcMqKt2QBcWUp3vQQ==
+X-Received: by 2002:a17:906:c053:b0:6b5:fde8:af2 with SMTP id bm19-20020a170906c05300b006b5fde80af2mr6500304ejb.642.1646589070687;
+        Sun, 06 Mar 2022 09:51:10 -0800 (PST)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id 20-20020a17090601d400b006caff964e30sm4052606ejj.19.2022.03.06.09.51.08
+        by smtp.googlemail.com with ESMTPSA id 20-20020a17090601d400b006caff964e30sm4052606ejj.19.2022.03.06.09.51.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 09:51:09 -0800 (PST)
+        Sun, 06 Mar 2022 09:51:10 -0800 (PST)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Greg Kroah-Hartman <greg@kroah.com>
 Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
@@ -74,10 +74,12 @@ Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH 00/26] usb: gadget: remove usage of list iterator past the loop
-Date:   Sun,  6 Mar 2022 18:50:08 +0100
-Message-Id: <20220306175034.3084609-1-jakobkoschel@gmail.com>
+Subject: [PATCH 01/26] usb: gadget: fsl: remove usage of list iterator past the loop body
+Date:   Sun,  6 Mar 2022 18:50:09 +0100
+Message-Id: <20220306175034.3084609-2-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220306175034.3084609-1-jakobkoschel@gmail.com>
+References: <20220306175034.3084609-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,112 +92,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ok, let's start here.
+If the list representing the request queue does not contain the expected
+request, the value of the list_for_each_entry() iterator will not point
+to a valid structure. To avoid type confusion in such case, the list
+iterator scope will be limited to the list_for_each_entry() loop.
 
-This patch set removes any use of the list iterator variable past
-the list body. This will allow defining the list iterator variable
-within the list_for_each_entry_*() macros to avoid any (invalid)
-use after the loop. If no break/goto was hit during list traversal
-the list iterator variable would otherwise be a bogus pointer
-since it is computed on something that is not actually an element
-of the list.
+In preparation to limiting scope of the list iterator to the list traversal
+loop, use a dedicated pointer to point to the found request object [1].
 
-I've basically followed what we discussed in:
-https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
+Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+ drivers/usb/gadget/udc/fsl_qe_udc.c   | 11 +++++++----
+ drivers/usb/gadget/udc/fsl_udc_core.c | 11 +++++++----
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
-There are some cases where it might be possible to 'ditch' the tmp
-variable and refactor the code past the loop into the loop body.
-For the sake of keeping the *_dequeue() functions more similar, I've
-decided against doing it for some and leaving it in others.
-
-In general there are four use cases after the loop body here:
-
-1) using &req->req in a comparision after the loop
-2) using the iterator as a pointer in a comparision after the loop
-3) use the &iterator->list to compare with the head to see if the
-	loop exits early
-4) using the iterator past the loop but using the rc variable to see if the
-	loop exits early
-
-Jakob Koschel (26):
-  usb: gadget: fsl: remove usage of list iterator past the loop body
-  usb: gadget: bdc: remove usage of list iterator past the loop body
-  usb: gadget: udc: atmel: remove usage of list iterator past the loop
-    body
-  usb: gadget: udc: pxa25x: remove usage of list iterator past the loop
-    body
-  usb: gadget: udc: at91: remove usage of list iterator past the loop
-    body
-  usb: gadget: goku_udc: remove usage of list iterator past the loop
-    body
-  usb: gadget: udc: gr_udc: remove usage of list iterator past the loop
-    body
-  usb: gadget: lpc32xx_udc: remove usage of list iterator past the loop
-    body
-  usb: gadget: mv_u3d: remove usage of list iterator past the loop body
-  usb: gadget: udc: mv_udc_core: remove usage of list iterator past the
-    loop body
-  usb: gadget: net2272: remove usage of list iterator past the loop body
-  usb: gadget: udc: net2280: remove usage of list iterator past the loop
-    body
-  usb: gadget: omap_udc: remove usage of list iterator past the loop
-    body
-  usb: gadget: s3c-hsudc: remove usage of list iterator past the loop
-    body
-  usb: gadget: udc-xilinx: remove usage of list iterator past the loop
-    body
-  usb: gadget: aspeed: remove usage of list iterator past the loop body
-  usb: gadget: configfs: remove using list iterator after loop body as a
-    ptr
-  usb: gadget: legacy: remove using list iterator after loop body as a
-    ptr
-  usb: gadget: udc: max3420_udc: remove using list iterator after loop
-    body as a ptr
-  usb: gadget: tegra-xudc: remove using list iterator after loop body as
-    a ptr
-  usb: gadget: composite: remove check of list iterator against head
-    past the loop body
-  usb: gadget: pxa27x_udc: replace usage of rc to check if a list
-    element was found
-  usb: gadget: udc: s3c2410: replace usage of rc to check if a list
-    element was found
-  usb: gadget: udc: core: replace usage of rc to check if a list element
-    was found
-  usb: gadget: dummy_hcd: replace usage of rc to check if a list element
-    was found
-  usb: gadget: udc: s3c2410: replace usage of rc to check if a list
-    element was found
-
- drivers/usb/gadget/composite.c           | 18 ++++++++++--------
- drivers/usb/gadget/configfs.c            | 20 ++++++++++++--------
- drivers/usb/gadget/legacy/hid.c          | 23 ++++++++++++-----------
- drivers/usb/gadget/udc/aspeed-vhub/epn.c | 10 ++++++----
- drivers/usb/gadget/udc/at91_udc.c        | 10 ++++++----
- drivers/usb/gadget/udc/atmel_usba_udc.c  | 11 +++++++----
- drivers/usb/gadget/udc/bdc/bdc_ep.c      | 11 ++++++++---
- drivers/usb/gadget/udc/core.c            | 16 ++++++++++------
- drivers/usb/gadget/udc/dummy_hcd.c       | 11 ++++++-----
- drivers/usb/gadget/udc/fsl_qe_udc.c      | 11 +++++++----
- drivers/usb/gadget/udc/fsl_udc_core.c    | 11 +++++++----
- drivers/usb/gadget/udc/goku_udc.c        | 10 ++++++----
- drivers/usb/gadget/udc/gr_udc.c          | 10 ++++++----
- drivers/usb/gadget/udc/lpc32xx_udc.c     | 10 ++++++----
- drivers/usb/gadget/udc/max3420_udc.c     | 11 +++++++----
- drivers/usb/gadget/udc/mv_u3d_core.c     | 10 ++++++----
- drivers/usb/gadget/udc/mv_udc_core.c     | 10 ++++++----
- drivers/usb/gadget/udc/net2272.c         | 11 ++++++-----
- drivers/usb/gadget/udc/net2280.c         | 11 +++++++----
- drivers/usb/gadget/udc/omap_udc.c        | 10 ++++++----
- drivers/usb/gadget/udc/pxa25x_udc.c      | 11 +++++++----
- drivers/usb/gadget/udc/pxa27x_udc.c      |  9 +++++----
- drivers/usb/gadget/udc/s3c-hsudc.c       | 10 ++++++----
- drivers/usb/gadget/udc/s3c2410_udc.c     | 11 ++++++-----
- drivers/usb/gadget/udc/tegra-xudc.c      | 10 ++++++----
- drivers/usb/gadget/udc/udc-xilinx.c      | 11 +++++++----
- 26 files changed, 184 insertions(+), 123 deletions(-)
-
-
-base-commit: 719fce7539cd3e186598e2aed36325fe892150cf
---
+diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/fsl_qe_udc.c
+index 15db7a3868fe..3979a2825e3c 100644
+--- a/drivers/usb/gadget/udc/fsl_qe_udc.c
++++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
+@@ -1776,7 +1776,8 @@ static int qe_ep_queue(struct usb_ep *_ep, struct usb_request *_req,
+ static int qe_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ {
+ 	struct qe_ep *ep = container_of(_ep, struct qe_ep, ep);
+-	struct qe_req *req;
++	struct qe_req *req = NULL;
++	struct qe_req *tmp;
+ 	unsigned long flags;
+ 
+ 	if (!_ep || !_req)
+@@ -1785,12 +1786,14 @@ static int qe_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ 	spin_lock_irqsave(&ep->udc->lock, flags);
+ 
+ 	/* make sure it's actually queued on this endpoint */
+-	list_for_each_entry(req, &ep->queue, queue) {
+-		if (&req->req == _req)
++	list_for_each_entry(tmp, &ep->queue, queue) {
++		if (&tmp->req == _req) {
++			req = tmp;
+ 			break;
++		}
+ 	}
+ 
+-	if (&req->req != _req) {
++	if (!req) {
+ 		spin_unlock_irqrestore(&ep->udc->lock, flags);
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc/fsl_udc_core.c
+index 29fcb9b461d7..23d670fae12c 100644
+--- a/drivers/usb/gadget/udc/fsl_udc_core.c
++++ b/drivers/usb/gadget/udc/fsl_udc_core.c
+@@ -918,7 +918,8 @@ fsl_ep_queue(struct usb_ep *_ep, struct usb_request *_req, gfp_t gfp_flags)
+ static int fsl_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ {
+ 	struct fsl_ep *ep = container_of(_ep, struct fsl_ep, ep);
+-	struct fsl_req *req;
++	struct fsl_req *req = NULL;
++	struct fsl_req *tmp;
+ 	unsigned long flags;
+ 	int ep_num, stopped, ret = 0;
+ 	u32 epctrl;
+@@ -940,11 +941,13 @@ static int fsl_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ 	fsl_writel(epctrl, &dr_regs->endptctrl[ep_num]);
+ 
+ 	/* make sure it's actually queued on this endpoint */
+-	list_for_each_entry(req, &ep->queue, queue) {
+-		if (&req->req == _req)
++	list_for_each_entry(tmp, &ep->queue, queue) {
++		if (&tmp->req == _req) {
++			req = tmp;
+ 			break;
++		}
+ 	}
+-	if (&req->req != _req) {
++	if (!req) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+-- 
 2.25.1
 

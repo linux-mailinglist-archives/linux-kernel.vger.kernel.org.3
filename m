@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910714CE9E5
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 08:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADEC4CE9E8
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 08:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbiCFHjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 02:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42282 "EHLO
+        id S231882AbiCFHwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 02:52:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiCFHjs (ORCPT
+        with ESMTP id S229445AbiCFHwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 02:39:48 -0500
-Received: from smtpbg501.qq.com (smtpbg501.qq.com [203.205.250.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD9CBCB5
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 23:38:51 -0800 (PST)
-X-QQ-mid: bizesmtp69t1646552310tk98wg0s
-Received: from localhost.localdomain ( [114.222.120.105])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 06 Mar 2022 15:38:22 +0800 (CST)
-X-QQ-SSF: 01400000002000B0I000B00A0000000
-X-QQ-FEAT: vv5b1ORzlwA//lBeTBx3hH/+TE8VTKy7zZkspP8+8k8WRyWXvDPKr0VnixV9t
-        BzaA7vdzzkYkLO/ryAcJ1WE2TX8wsAW8rv0uljFDHFyTWHQ4MJ7ze9/0QMiyfd+NgCQtzMW
-        whV+DzzCgCppHMNQpWpw8J1BwBCG8tAn2MCc2uN+Dt+UC2yfX2Bdg462kSPqvHfzJEx7392
-        a5QPGrnFRziz/tphxJt6erG8uylxMALHAeL8r/BnJiJXH+CY6iDTnSZPqYf/6stn9KZDqQ4
-        mcq1sRAnD07z9sUn2eg53XhxtDDM+f3qbK09pMswDKoiTHv3uf+gpNR9brlrahySilzCAbv
-        UehudOt/h2sXFDCw3VjoECDFOO/nJfHL0H/k9mX
-X-QQ-GoodBg: 2
-From:   Lianjie Zhang <zhanglianjie@uniontech.com>
-To:     Christoph Lameter <cl@linux.com>
-Cc:     Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Lianjie Zhang <zhanglianjie@uniontech.com>
-Subject: [PATCH] mm/slub: helper macro __ATTR_XX to make code more clear
-Date:   Sun,  6 Mar 2022 15:38:18 +0800
-Message-Id: <20220306073818.15089-1-zhanglianjie@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Sun, 6 Mar 2022 02:52:33 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EBE6EB2E
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 23:51:41 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBDLd1jY2z4xZq;
+        Sun,  6 Mar 2022 18:51:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1646553097;
+        bh=B5XtaoeoT0rBTwSnV/F7wwngkRnmYj50AHXgTV5L/xs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZzwUG+a17wEYCLewAxXIC4+mo+VoHEj+eu6uk8qDjf9J1A7deoZt9fiyi8vhCsuJ1
+         1Yd8P7i6dkBYj2Rh28qRROiuLjOtr2+KW+nZX7Rx+quGSgtYtnyTDpahV95t8qulVw
+         903QozxkWNgtUGkGTtFy20KMW4v/mtSXveo6TeoS0zLnylZLpJrbEN3S9Ac1cCoK5C
+         OvEbsDtSCLsLpwvLMAN51Nen+2fFjhQ7ULrUGOTmDv3+M0fQTpe4Xm6R+B960COdRg
+         6vvIFkvcpjy6phU6kY+rXv4/f6iEEEYvHBTglWpjtTfZjG6M+B/aSionMGnmaoJ3ZZ
+         c5mtXHNcUf4CQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        muriloo@linux.ibm.com
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.17-5 tag
+Date:   Sun, 06 Mar 2022 18:51:36 +1100
+Message-ID: <87bkyjo6wn.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Lianjie Zhang <zhanglianjie@uniontech.com>
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-diff --git a/mm/slub.c b/mm/slub.c
-index 07cdd999c3fe..59992de7d3db 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5358,12 +5358,10 @@ struct slab_attribute {
- };
+Hi Linus,
 
- #define SLAB_ATTR_RO(_name) \
--	static struct slab_attribute _name##_attr = \
--	__ATTR(_name, 0400, _name##_show, NULL)
-+	static struct slab_attribute _name##_attr = __ATTR_RO_MODE(_name, 0400)
+Please pull another powerpc fix for 5.17:
 
- #define SLAB_ATTR(_name) \
--	static struct slab_attribute _name##_attr =  \
--	__ATTR(_name, 0600, _name##_show, _name##_store)
-+	static struct slab_attribute _name##_attr = __ATTR_RW_MODE(_name, 0600)
+The following changes since commit fe663df7825811358531dc2e8a52d9eaa5e3515e:
 
- static ssize_t slab_size_show(struct kmem_cache *s, char *buf)
- {
---
-2.20.1
+  powerpc/lib/sstep: fix 'ptesync' build error (2022-02-15 22:31:35 +1100)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.17-5
+
+for you to fetch changes up to 58dbe9b373df2828d873b1c0e5afc77485b2f376:
+
+  powerpc/64s: Fix build failure when CONFIG_PPC_64S_HASH_MMU is not set (2022-03-05 20:42:21 +1100)
+
+- ------------------------------------------------------------------
+powerpc fixes for 5.17 #5
+
+Fix build failure when CONFIG_PPC_64S_HASH_MMU is not set.
+
+Thanks to: Murilo Opsfelder Araujo, Erhard F.
+
+- ------------------------------------------------------------------
+Murilo Opsfelder Araujo (1):
+      powerpc/64s: Fix build failure when CONFIG_PPC_64S_HASH_MMU is not set
 
 
+ arch/powerpc/include/asm/book3s/64/mmu.h | 2 +-
+ arch/powerpc/include/asm/kexec_ranges.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmIkZ+cACgkQUevqPMjh
+pYCF1BAAnmZb6JbgLgztefPUyq9mx0q5FqcCqAhj6I+x/8T4qBGawbFpqazW6BIm
+i1vHp2Yrj+S86qDQLo33LzO4nKK+EMDhgCAjFpryD8Kla0wDHBYDZy6JMd7LDYao
++j0EBB3w+HOWIUB50fb6EbEgRUFA1gMK4UaOxDRW5dnZCJ7h2qWB5Yev4i1Lzkmb
+tPMvfPQYqMjzEcdMt07m7qHG72VxyBUgQbSMhE7VSKjmp9/oNPzxFFBmA0HoX6md
+0pwXfXtvnVnMboSTHBYe6Ohk+kdA2P8P7agn/TW0kENP+RM+KePWVOAvAfqPjYCJ
+dmqQsmn5ar46tlpPTS834ErDlCNNmfWuNAVILxUt3hQOyHQn4lDDZLR6EDKX22GX
+OV9Hth5VPKqkiz8PmGAgcTE+A0s+kGU8DZN9LZefyBLV3Wb5/gHuxQFn8SCX71aE
+EtcPJTP7IxZN8epI0b0ZEwM88i6RtFcteAlwYErGe9/UYBJK91zHj4FMWf83BI73
+tmJkaVcDDezsbKGuibj3THB5SgzCcp/W5FrPjHWGXbrtYvjGuYp0HKraMGiLimlo
+QV3uB/j7qMK0zHBXcypH0P6RrNN3NlaFiSMdl7KrdeWEsaGN8dQ8vKDYo3gJSKF+
+lbUkYQV0d6RvHVZvgT11WC9o1SoKH2V5n9OGKNKUmz4RquAbCd8=
+=7GLj
+-----END PGP SIGNATURE-----

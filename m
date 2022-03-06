@@ -2,433 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DF54CED89
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 20:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B384CED91
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 20:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234050AbiCFTta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 14:49:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        id S234162AbiCFT7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 14:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiCFTt2 (ORCPT
+        with ESMTP id S233896AbiCFT7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 14:49:28 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8865124F37
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 11:48:33 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id t187so7594348pgb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 11:48:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V8o345/U/xZ+bjJ6j5/nCCvu5f93SiHdFcgtIE5P7Zk=;
-        b=Q13DY70WzeqD2z7eQAmEC27U76Nromlg2gNrZaiy9555jWwZUmFFmgtBdSxDQh0gGK
-         /5FhG4FwcX31wP9pIiE44ho9bkCUs8WDOBMf11CfkabE/GoT7MSJUF7euYclAksuZU/5
-         29kRR0vsocPETEo60yoEk0gl9UzWFaZyGxGt8H1Br1YxPcMGSXXixiUMgONBHWf2Hokj
-         ftyDnTkY+awDd5/+l8J8JFN1WXPneh84kGO/zDwQ4SPE0hncM+OhSSRWDrgkCvtppRt+
-         v59+oI5TyTF/pyp91PpFVfN4oZ9YCIvips6IfJoKNurL7lDYwDuBvJvFCVXnK6Cq2Rp1
-         oaYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V8o345/U/xZ+bjJ6j5/nCCvu5f93SiHdFcgtIE5P7Zk=;
-        b=qKlZh2vlx68cIy+dTDjSKplG0n0mDq5/PerwjdKU5OMeanDAVXPqQnKYh9K3nwK2Gm
-         PNH5Kf7MeJSNlWOOJ8hl7zURKZWS/PVeVRKvhkfbwl+s7kECv/Mejo/wZww+hsBJMz+8
-         YdVKFvkScd62wuS3KivPfZTO1rTeTDLlCDTr5HmuclGZqZkrwFh8VyhaUA8QPTDi+mMt
-         9IV+z4T0UVSJ2A+JaKejtzSEDpwmg5qvQxdv5601zGRy9S9Sfktx9otZR8oamgBp+RO7
-         qClQ6+KFcPugd/qyX8UAd1elpoYY+zBRv7XUm0GrZRsRdZBhHIy62qbapQjR3/C2IHK9
-         kZMw==
-X-Gm-Message-State: AOAM532eXsbDDJkvqC9pDMn3tB8QU1IbVUtugIb9kQBMYtc2Bndl+P01
-        7Cia8Cx7RTE+Bq70ATa20U8How==
-X-Google-Smtp-Source: ABdhPJyISgIo1e0238uVrMNqaSgm1KHuW+wPkREa40+KO5ke+bD8eIlApLP+OX3NJImk6X/aAtsUDQ==
-X-Received: by 2002:a05:6a00:14d6:b0:4f6:f496:c1e2 with SMTP id w22-20020a056a0014d600b004f6f496c1e2mr3057932pfu.45.1646596112702;
-        Sun, 06 Mar 2022 11:48:32 -0800 (PST)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00150a00b004f6f1ddafd4sm2683798pfu.191.2022.03.06.11.48.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 11:48:31 -0800 (PST)
-Date:   Sun, 6 Mar 2022 19:48:28 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Nikunj A Dadhania <nikunj@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
-Message-ID: <YiUQDHdT0DB/mYVc@google.com>
-References: <20220118110621.62462-1-nikunj@amd.com>
- <20220118110621.62462-4-nikunj@amd.com>
+        Sun, 6 Mar 2022 14:59:48 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1026165C0
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 11:58:53 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=regzbot.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1nQx1n-0008IS-Bc; Sun, 06 Mar 2022 20:58:51 +0100
+From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Linux regressions report  for mainline [2022-03-06]
+Date:   Sun,  6 Mar 2022 19:58:50 +0000
+Message-Id: <164659571791.547857.13375280613389065406@leemhuis.info>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118110621.62462-4-nikunj@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646596734;19de4d75;
+X-HE-SMSGID: 1nQx1n-0008IS-Bc
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022, Nikunj A Dadhania wrote:
-> Use the memslot metadata to store the pinned data along with the pfns.
-> This improves the SEV guest startup time from O(n) to a constant by
-> deferring guest page pinning until the pages are used to satisfy nested
-> page faults. The page reference will be dropped in the memslot free
-> path.
-> 
-> Remove the enc_region structure definition and the code which did
-> upfront pinning, as they are no longer needed in view of the demand
-> pinning support.
-> 
-> Leave svm_register_enc_region() and svm_unregister_enc_region() as stubs
-> since qemu is dependent on this API.
-> 
-> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
-> ---
->  arch/x86/kvm/svm/sev.c | 208 ++++++++++++++++-------------------------
->  arch/x86/kvm/svm/svm.c |   1 +
->  arch/x86/kvm/svm/svm.h |   3 +-
->  3 files changed, 81 insertions(+), 131 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index d972ab4956d4..a962bed97a0b 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -66,14 +66,6 @@ static unsigned int nr_asids;
->  static unsigned long *sev_asid_bitmap;
->  static unsigned long *sev_reclaim_asid_bitmap;
->  
-> -struct enc_region {
-> -	struct list_head list;
-> -	unsigned long npages;
-> -	struct page **pages;
-> -	unsigned long uaddr;
-> -	unsigned long size;
-> -};
-> -
->  /* Called with the sev_bitmap_lock held, or on shutdown  */
->  static int sev_flush_asids(int min_asid, int max_asid)
->  {
-> @@ -257,8 +249,6 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  	if (ret)
->  		goto e_free;
->  
-> -	INIT_LIST_HEAD(&sev->regions_list);
-> -
->  	return 0;
->  
->  e_free:
-> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
->  	src->handle = 0;
->  	src->pages_locked = 0;
->  	src->enc_context_owner = NULL;
-> -
-> -	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
->  }
->  
->  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
-> @@ -1861,115 +1849,13 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *argp)
->  int svm_register_enc_region(struct kvm *kvm,
->  			    struct kvm_enc_region *range)
->  {
-> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> -	struct enc_region *region;
-> -	int ret = 0;
-> -
-> -	if (!sev_guest(kvm))
-> -		return -ENOTTY;
-> -
-> -	/* If kvm is mirroring encryption context it isn't responsible for it */
-> -	if (is_mirroring_enc_context(kvm))
-> -		return -EINVAL;
-> -
-> -	if (range->addr > ULONG_MAX || range->size > ULONG_MAX)
-> -		return -EINVAL;
-> -
-> -	region = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
-> -	if (!region)
-> -		return -ENOMEM;
-> -
-> -	mutex_lock(&kvm->lock);
-> -	region->pages = sev_pin_memory(kvm, range->addr, range->size, &region->npages, 1);
-> -	if (IS_ERR(region->pages)) {
-> -		ret = PTR_ERR(region->pages);
-> -		mutex_unlock(&kvm->lock);
-> -		goto e_free;
-> -	}
-> -
-> -	region->uaddr = range->addr;
-> -	region->size = range->size;
-> -
-> -	list_add_tail(&region->list, &sev->regions_list);
-> -	mutex_unlock(&kvm->lock);
-> -
-> -	/*
-> -	 * The guest may change the memory encryption attribute from C=0 -> C=1
-> -	 * or vice versa for this memory range. Lets make sure caches are
-> -	 * flushed to ensure that guest data gets written into memory with
-> -	 * correct C-bit.
-> -	 */
-> -	sev_clflush_pages(region->pages, region->npages);
-> -
-> -	return ret;
-> -
-> -e_free:
-> -	kfree(region);
-> -	return ret;
-> -}
-> -
-> -static struct enc_region *
-> -find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
-> -{
-> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> -	struct list_head *head = &sev->regions_list;
-> -	struct enc_region *i;
-> -
-> -	list_for_each_entry(i, head, list) {
-> -		if (i->uaddr == range->addr &&
-> -		    i->size == range->size)
-> -			return i;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -
-> -static void __unregister_enc_region_locked(struct kvm *kvm,
-> -					   struct enc_region *region)
-> -{
-> -	sev_unpin_memory(kvm, region->pages, region->npages);
-> -	list_del(&region->list);
-> -	kfree(region);
-> +	return 0;
->  }
->  
->  int svm_unregister_enc_region(struct kvm *kvm,
->  			      struct kvm_enc_region *range)
->  {
-> -	struct enc_region *region;
-> -	int ret;
-> -
-> -	/* If kvm is mirroring encryption context it isn't responsible for it */
-> -	if (is_mirroring_enc_context(kvm))
-> -		return -EINVAL;
-> -
-> -	mutex_lock(&kvm->lock);
-> -
-> -	if (!sev_guest(kvm)) {
-> -		ret = -ENOTTY;
-> -		goto failed;
-> -	}
-> -
-> -	region = find_enc_region(kvm, range);
-> -	if (!region) {
-> -		ret = -EINVAL;
-> -		goto failed;
-> -	}
-> -
-> -	/*
-> -	 * Ensure that all guest tagged cache entries are flushed before
-> -	 * releasing the pages back to the system for use. CLFLUSH will
-> -	 * not do this, so issue a WBINVD.
-> -	 */
-> -	wbinvd_on_all_cpus();
-> -
-> -	__unregister_enc_region_locked(kvm, region);
-> -
-> -	mutex_unlock(&kvm->lock);
->  	return 0;
-> -
-> -failed:
-> -	mutex_unlock(&kvm->lock);
-> -	return ret;
->  }
->  
->  int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
-> @@ -2018,7 +1904,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
->  	mirror_sev->fd = source_sev->fd;
->  	mirror_sev->es_active = source_sev->es_active;
->  	mirror_sev->handle = source_sev->handle;
-> -	INIT_LIST_HEAD(&mirror_sev->regions_list);
->  	ret = 0;
->  
->  	/*
-> @@ -2038,8 +1923,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
->  void sev_vm_destroy(struct kvm *kvm)
->  {
->  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> -	struct list_head *head = &sev->regions_list;
-> -	struct list_head *pos, *q;
->  
->  	WARN_ON(sev->num_mirrored_vms);
->  
-> @@ -2066,18 +1949,6 @@ void sev_vm_destroy(struct kvm *kvm)
->  	 */
->  	wbinvd_on_all_cpus();
->  
-> -	/*
-> -	 * if userspace was terminated before unregistering the memory regions
-> -	 * then lets unpin all the registered memory.
-> -	 */
-> -	if (!list_empty(head)) {
-> -		list_for_each_safe(pos, q, head) {
-> -			__unregister_enc_region_locked(kvm,
-> -				list_entry(pos, struct enc_region, list));
-> -			cond_resched();
-> -		}
-> -	}
-> -
->  	sev_unbind_asid(kvm, sev->handle);
->  	sev_asid_free(sev);
->  }
-> @@ -2946,13 +2817,90 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
->  	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, 1);
->  }
->  
-> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
-> +		  kvm_pfn_t pfn)
-> +{
-> +	struct kvm_arch_memory_slot *aslot;
-> +	struct kvm_memory_slot *slot;
-> +	gfn_t rel_gfn, pin_pfn;
-> +	unsigned long npages;
-> +	kvm_pfn_t old_pfn;
-> +	int i;
-> +
-> +	if (!sev_guest(kvm))
-> +		return;
-> +
-> +	if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) || kvm_is_reserved_pfn(pfn)))
-> +		return;
-> +
-> +	/* Tested till 1GB pages */
-> +	if (KVM_BUG_ON(level > PG_LEVEL_1G, kvm))
-> +		return;
-> +
-> +	slot = gfn_to_memslot(kvm, gfn);
-> +	if (!slot || !slot->arch.pfns)
-> +		return;
-> +
-> +	/*
-> +	 * Use relative gfn index within the memslot for the bitmap as well as
-> +	 * the pfns array
-> +	 */
-> +	rel_gfn = gfn - slot->base_gfn;
-> +	aslot = &slot->arch;
-> +	pin_pfn = pfn;
-> +	npages = KVM_PAGES_PER_HPAGE(level);
-> +
-> +	/* Pin the page, KVM doesn't yet support page migration. */
-> +	for (i = 0; i < npages; i++, rel_gfn++, pin_pfn++) {
-> +		if (test_bit(rel_gfn, aslot->pinned_bitmap)) {
-> +			old_pfn = aslot->pfns[rel_gfn];
-> +			if (old_pfn == pin_pfn)
-> +				continue;
-> +
-> +			put_page(pfn_to_page(old_pfn));
+Hi Linus, Thorsten here, with a quick preface before the latest report
+from regzbot.
 
-You need to flush the old pfn using VMPAGE_FLUSH before doing put_page.
-Normally, this should not happen. But if the user-level VMM is
-malicious, then it could just munmap() the region (not the memslot);
-mmap() it again; let the guest VM touches the page and you will see this
-path get executed.
+From my side things seem to look normal right now; quite a few
+regressions got fixed in the past few days. I (and thus regzbot) are
+only aware of two regressions remaining that got introduced this cycle
+(at least one of them pretty special); I didn't add those build problems
+from Guenter to the tracking: he seems to look after those quite well
+already (I need to talk to him if he want's me to track them, but I
+didn't get around to do that).
 
-Clearly, this will slow down the faulting path if this happens.  So,
-alternatively, you can register a hook in mmu_notifier and shoot a flush
-there according to the bitmap. Either way should work.
+Sadly I'm guess there are some regressions out there which I and regzbot
+are not aware of. Hopefully more people will at least CC the regressions
+mailing list (regressions@lists.linux.dev) on regressions reports in the
+future (and/or get regzbot involved themselves), as that ensures I'll
+get aware of them.
 
-> +		}
-> +
-> +		set_bit(rel_gfn, aslot->pinned_bitmap);
-> +		aslot->pfns[rel_gfn] = pin_pfn;
-> +		get_page(pfn_to_page(pin_pfn));
-> +	}
-> +
-> +	/*
-> +	 * Flush any cached lines of the page being added since "ownership" of
-> +	 * it will be transferred from the host to an encrypted guest.
-> +	 */
-> +	clflush_cache_range(__va(pfn << PAGE_SHIFT), page_level_size(level));
-> +}
-> +
->  void sev_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
->  {
->  	struct kvm_arch_memory_slot *aslot = &slot->arch;
-> +	kvm_pfn_t *pfns;
-> +	gfn_t gfn;
-> +	int i;
->  
->  	if (!sev_guest(kvm))
->  		return;
->  
-> +	if (!aslot->pinned_bitmap || !slot->arch.pfns)
-> +		goto out;
-> +
-> +	pfns = aslot->pfns;
-> +
-> +	/*
-> +	 * Iterate the memslot to find the pinned pfn using the bitmap and drop
-> +	 * the pfn stored.
-> +	 */
-> +	for (i = 0, gfn = slot->base_gfn; i < slot->npages; i++, gfn++) {
-> +		if (test_and_clear_bit(i, aslot->pinned_bitmap)) {
-> +			if (WARN_ON(!pfns[i]))
-> +				continue;
-> +
-> +			put_page(pfn_to_page(pfns[i]));
+Ciao, Thorsten
 
-Here, you get lucky that you don't have to flush the cache. However,
-this is because sev_free_memslots is called after the
-kvm_arch_destroy_vm, which flushes the cache system wise.
-> +		}
-> +	}
-> +
-> +out:
->  	if (aslot->pinned_bitmap) {
->  		kvfree(aslot->pinned_bitmap);
->  		aslot->pinned_bitmap = NULL;
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 3fb19974f719..22535c680b3f 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4743,6 +4743,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->  
->  	.alloc_memslot_metadata = sev_alloc_memslot_metadata,
->  	.free_memslot = sev_free_memslot,
-> +	.pin_spte = sev_pin_spte,
->  };
->  
->  static struct kvm_x86_init_ops svm_init_ops __initdata = {
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index b2f8b3b52680..c731bc91ea8f 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -77,7 +77,6 @@ struct kvm_sev_info {
->  	unsigned int handle;	/* SEV firmware handle */
->  	int fd;			/* SEV device fd */
->  	unsigned long pages_locked; /* Number of pages locked */
-> -	struct list_head regions_list;  /* List of registered regions */
->  	u64 ap_jump_table;	/* SEV-ES AP Jump Table address */
->  	struct kvm *enc_context_owner; /* Owner of copied encryption context */
->  	unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
-> @@ -648,5 +647,7 @@ int sev_alloc_memslot_metadata(struct kvm *kvm,
->  			       struct kvm_memory_slot *new);
->  void sev_free_memslot(struct kvm *kvm,
->  		      struct kvm_memory_slot *slot);
-> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
-> +		  kvm_pfn_t pfn);
->  
->  #endif
-> -- 
-> 2.32.0
-> 
+---
+
+Hi, this is regzbot, the Linux kernel regression tracking bot.
+
+Currently I'm aware of 15 regressions in linux-mainline. Find the
+current status below and the latest on the web:
+
+https://linux-regtracking.leemhuis.info/regzbot/mainline/
+
+Bye bye, hope to see you soon for the next report.
+   Regzbot (on behalf of Thorsten Leemhuis)
+
+
+========================================================
+current cycle (v5.16.. aka v5.17-rc), culprit identified
+========================================================
+
+
+Follow-up error for the commit fixing "PCIe regression on APM Merlin (aarch64 dev platform) preventing NVME initialization"
+---------------------------------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/Yf2wTLjmcRj+AbDv@xps13.dannf/
+https://lore.kernel.org/stable/Yf2wTLjmcRj%2BAbDv@xps13.dannf/
+
+By dann frazier, 29 days ago; 7 activities, latest 23 days ago; poked 13 days ago.
+Introduced in c7a75d07827a (v5.17-rc1)
+
+
+====================================================
+current cycle (v5.16.. aka v5.17-rc), unkown culprit
+====================================================
+
+
+net: bluetooth: qualcom and intel adapters, unable to reliably connect to bluetooth devices
+-------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAJCQCtSeUtHCgsHXLGrSTWKmyjaQDbDNpP4rb0i+RE+L2FTXSA@mail.gmail.com/
+https://lore.kernel.org/linux-bluetooth/CAJCQCtSeUtHCgsHXLGrSTWKmyjaQDbDNpP4rb0i%2BRE%2BL2FTXSA@mail.gmail.com/
+
+By Chris Murphy, 23 days ago; 47 activities, latest 3 days ago.
+Introduced in v5.16..f1baf68e1383 (v5.16..v5.17-rc4)
+
+Fix incoming:
+* https://lore.kernel.org/regressions/1686eb5f-7484-8ec2-8564-84fe04bf6a70@leemhuis.info/
+
+
+=========================================================================================
+previous cycle (v5.15..v5.16), culprit identified, with activity in the past three months
+=========================================================================================
+
+
+drm: fb_helper:  Build failure of mainline kernel with qcom_defconfig
+---------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/YhofdlzadzRmy7tj@debian/
+https://lore.kernel.org/lkml/YhofdlzadzRmy7tj@debian/
+
+By Sudip Mukherjee, 8 days ago; 10 activities, latest 2 days ago.
+Introduced in 9d6366e743f3 (v5.16-rc1)
+
+Fix incoming:
+* drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=eea89dff4c39a106f98d1cb5e4d626f8c63908b9
+
+
+net: wireless: rtl8723bs (SDIO) - Access point mode causes a kernel panic
+-------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/d58625ad-6f3e-a7d7-b5b4-d18eb16f4082@leemhuis.info/
+https://lore.kernel.org/regressions/d58625ad-6f3e-a7d7-b5b4-d18eb16f4082@leemhuis.info/
+
+By José Ángel Pastrana, 35 days ago; 3 activities, latest 2 days ago.
+Introduced in 54659ca026e5 (v5.16-rc1)
+
+Fix incoming:
+* staging: rtl8723bs: Fix access-point mode deadlock
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=8f4347081be32e67b0873827e0138ab0fdaaf450
+
+
+bluetooth: HSP/HFP mSBC profile broken with QCA6174
+---------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/bug-215576-62941@https.bugzilla.kernel.org//
+https://lore.kernel.org/linux-bluetooth/bug-215576-62941@https.bugzilla.kernel.org%2F/
+
+By bugzilla-daemon@kernel.org, 27 days ago; 11 activities, latest 7 days ago.
+Introduced in b2af264ad3af (v5.16-rc1)
+
+2 patch postings are associated with this regression, the latest is this:
+* [Bug 215576] HSP/HFP mSBC profile broken with QCA6174
+  https://lore.kernel.org/linux-bluetooth/bug-215576-62941-2nprEl3omz@https.bugzilla.kernel.org%2F/
+  15 days ago, by bugzilla-daemon@kernel.org
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=215576
+
+
+==================================================================================
+older cycles (..v5.15), culprit identified, with activity in the past three months
+==================================================================================
+
+
+mtd: cfi_cmdset_0002: flash write accesses on the hardware fail on a PowerPC MPC8313 to a 8-bit-parallel S29GL064N flash
+------------------------------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de/
+https://lore.kernel.org/lkml/b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de/
+
+By Ahmad Fatoum, 83 days ago; 16 activities, latest 0 days ago.
+Introduced in dfeae1073583 (v4.18-rc1)
+
+Recent activities from: Tokunori Ikegami (3), Ahmad Fatoum (1), Vignesh
+  Raghavendra (1)
+
+2 patch postings are associated with this regression, the latest is this:
+* [PATCH v2] mtd: cfi_cmdset_0002: Use chip_ready() for write on S29GL064N
+  https://lore.kernel.org/stable/20220306153213.411425-1-ikegami.t@gmail.com/
+  0 days ago, by Tokunori Ikegami; thread monitored.
+
+Noteworthy links:
+* [PATCH] mtd: cfi_cmdset_0002: Use chip_ready() for write on S29GL064N
+  https://lore.kernel.org/stable/20220214182011.8493-1-ikegami.t@gmail.com/
+  20 days ago, by Tokunori Ikegami; thread monitored.
+
+
+[ *NEW* ] memory corruption on Atmel SAMA5D31
+---------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se/
+https://lore.kernel.org/lkml/13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se/
+
+By Peter Rosin, 3 days ago; 10 activities, latest 1 days ago.
+Introduced in f9aa460672c9 (v5.11-rc1)
+
+Recent activities from: Peter Rosin (5), Saravana Kannan (3),
+  Tudor.Ambarus@microchip.com (2)
+
+
+btrfs: deadlocks in dedupe
+--------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20211210183456.GP17148@hungrycats.org/
+https://lore.kernel.org/linux-btrfs/20211210183456.GP17148@hungrycats.org/
+
+By Zygo Blaxell, 86 days ago; 15 activities, latest 16 days ago; poked 0 days ago.
+Introduced in 3078d85c9a10 (v5.11-rc1)
+
+
+gpio: some GPIO lines have stopped working
+------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20211217153555.9413-1-marcelo.jimenez@gmail.com/
+https://lore.kernel.org/stable/20211217153555.9413-1-marcelo.jimenez@gmail.com/
+
+By Marcelo Roberto Jimenez, 79 days ago; 19 activities, latest 17 days ago; poked 2 days ago.
+Introduced in 2ab73c6d8323 (v5.7-rc1)
+
+One patch associated with this regression:
+* Patch "ARM: dts: gpio-ranges property is now required" has been added to the 5.4-stable tree
+  https://lore.kernel.org/linux-arm-kernel/16432993096685@kroah.com/
+  38 days ago, by gregkh@linuxfoundation.org
+
+
+drm: amdgpu: Too-low frequency limit for AMD GPU PCI-passed-through to Windows VM
+---------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/87ee57c8fu.fsf@turner.link/
+https://lore.kernel.org/lkml/87ee57c8fu.fsf@turner.link/
+
+By James D. Turner, 48 days ago; 19 activities, latest 18 days ago; poked 0 days ago.
+Introduced in f9b7f3703ff9 (v5.14-rc1)
+
+
+Intel TGL notebook no longer enters power states deeper than PC2
+----------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/34eb9d46-d937-fc29-02b1-7cfb9162f9b8@leemhuis.info/
+https://lore.kernel.org/regressions/34eb9d46-d937-fc29-02b1-7cfb9162f9b8@leemhuis.info/
+
+By MarcelHB, 45 days ago; 19 activities, latest 24 days ago.
+Introduced in e5ad96f388b7 (v5.15-rc1)
+
+One patch associated with this regression:
+* Re: [PATCH] nvme/pci: default to simple suspend
+  https://lore.kernel.org/linux-nvme/20220207160655.GB635727@dhcp-10-100-145-180.wdc.com/
+  27 days ago, by Keith Busch
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=215467
+* [Bug] nvme blocks PC10 since v5.15 - bisected
+  https://lore.kernel.org/lkml/CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com/
+  44 days ago, by Rafael J. Wysocki; thread monitored.
+* [PATCH] nvme/pci: default to simple suspend
+  https://lore.kernel.org/linux-nvme/20220201165006.3074615-1-kbusch@kernel.org/
+  33 days ago, by Keith Busch; thread monitored.
+
+
+=============================================================================
+older cycles (..v5.15), unkown culprit, with activity in the past three weeks
+=============================================================================
+
+
+Regression in workingset_refault latency on 5.15
+------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CA+wXwBSyO87ZX5PVwdHm-=dBjZYECGmfnydUicUyrQqndgX2MQ@mail.gmail.com/
+https://lore.kernel.org/linux-mm/CA%2BwXwBSyO87ZX5PVwdHm-=dBjZYECGmfnydUicUyrQqndgX2MQ@mail.gmail.com/
+
+By Daniel Dao, 11 days ago; 49 activities, latest 1 days ago.
+Introduced in v3.0..v5.15.19
+
+Recent activities from: Shakeel Butt (11), Ivan Babrou (8), Michal
+  Koutný (3), Andrew Morton (1), Frank Hofmann (1), Michal Hocko (1)
+
+8 patch postings are associated with this regression, the latest is this:
+* + memcg-sync-flush-only-if-periodic-flush-is-delayed.patch added to -mm tree
+  https://lore.kernel.org/stable/20220304235350.5043FC340E9@smtp.kernel.org/
+  1 days ago, by Andrew Morton; thread monitored.
+
+Noteworthy links:
+* [PATCH] memcg: async flush memcg stats from perf sensitive codepaths
+  https://lore.kernel.org/stable/20220226002412.113819-1-shakeelb@google.com/
+  8 days ago, by Shakeel Butt; thread monitored.
+* [PATCH] memcg: sync flush only if periodic flush is delayed
+  https://lore.kernel.org/stable/20220304184040.1304781-1-shakeelb@google.com/
+  2 days ago, by Shakeel Butt; thread monitored.
+
+
+cifs: Failure to access cifs mount of samba share after resume from sleep
+-------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAFrh3J9soC36+BVuwHB=g9z_KB5Og2+p2_W+BBoBOZveErz14w@mail.gmail.com/
+https://lore.kernel.org/linux-cifs/CAFrh3J9soC36%2BBVuwHB=g9z_KB5Og2%2Bp2_W%2BBBoBOZveErz14w@mail.gmail.com/
+
+By Satadru Pramanik, 7 days ago; 10 activities, latest 2 days ago.
+Introduced in v5.16.11..v5.17-rc5
+
+Recent activities from: Satadru Pramanik (6), Shyam Prasad N (2), Steve
+  French (1)
+
+
+md: unable to handle page fault while running badblocks (fsck.ext4 -c) on a raid5 md array
+------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/53e7de78-4d27-5089-f159-0d443b354666@leemhuis.info/
+https://lore.kernel.org/lkml/53e7de78-4d27-5089-f159-0d443b354666@leemhuis.info/
+
+By Dominik Mierzejewski, 12 days ago; 4 activities, latest 2 days ago.
+Introduced in v5.13..v5.14.10
+
+Recent activities from: Song Liu (2), Dominik Mierzejewski (1)
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=215605
+
+
+====================================================================
+all others with unkown culprit and activity in the past three months
+====================================================================
+
+
+backlight: Intel_backlight does not work after updating from 5.10.89 to latest 5.15.17
+--------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/74ee2216-a295-c2b6-328b-3e6d0cc1847e@leemhuis.info/
+https://lore.kernel.org/regressions/74ee2216-a295-c2b6-328b-3e6d0cc1847e@leemhuis.info/
+
+By Filippo Falezza, 34 days ago; 1 activities, latest 34 days ago.
+Introduced in v5.10.89..v5.15.17
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=215553
+
+
+=============
+End of report
+=============
+
+All regressions marked '[ *NEW* ]' were added since the previous report,
+which can be found here:
+https://lore.kernel.org/r/164598944963.346832.10219407090470852309@leemhuis.info
+
+Thanks for your attention, have a nice day!
+
+  Regzbot, your hard working Linux kernel regression tracking robot
+
+
+P.S.: Wanna know more about regzbot or how to use it to track regressions
+for your subsystem? Then check out the getting started guide or the
+reference documentation:
+
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The short version: if you see a regression report you want to see
+tracked, just send a reply to the report where you Cc
+regressions@lists.linux.dev with a line like this:
+
+#regzbot introduced: v5.13..v5.14-rc1
+
+If you want to fix a tracked regression, just do what is expected
+anyway: add a 'Link:' tag with the url to the report, e.g.:
+
+Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/

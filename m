@@ -2,250 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C084CE920
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 06:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B283B4CE921
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 06:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbiCFFeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 00:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S231444AbiCFFgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 00:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbiCFFeM (ORCPT
+        with ESMTP id S229763AbiCFFgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 00:34:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F013E5F5;
-        Sat,  5 Mar 2022 21:33:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D77486117B;
-        Sun,  6 Mar 2022 05:33:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC34DC340EF;
-        Sun,  6 Mar 2022 05:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646544798;
-        bh=1QleQuXD9sbYe+LmMXGxObgEQXN9PMHkgqkds+kRlTM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=br5rY6M8UUvmHms71AlgV5lsODOmGXw50MS4+I7V3fElgLb1vTu6qkTPjqi9p/dbq
-         4yNZe7DQNlbD0VSvppQYCxnMI0UN8amuBXXfmZMqztoZCCA9IC5Nd5svIFTZMuuKUs
-         uvus/R1Z//ZKIJWKCAdh7lkXI29aKiUZm+8QTv6ORJ1FzJWbmN0xsZJ9okwsiG65HU
-         Q5NDUSii2Syt8UHh4JyJBS0siKxrhe0QxfBPhS7eXwugtFzSn/NqmWIfTYAc2e3AU7
-         SjgecmBC1M7G8Cl8UthVLZ2xk8evtzDlzNhm3mEz66egcGd+rub4wBzjX4nQkRJ5HJ
-         wGLon7vKnOtQA==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-mm@kvack.org
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        zhangyiru <zhangyiru3@huawei.com>, linux-mips@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        codalist@coda.cs.cmu.edu, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH RFC 3/3] x86/sgx: Implement EAUG population with MAP_POPULATE
-Date:   Sun,  6 Mar 2022 07:32:07 +0200
-Message-Id: <20220306053211.135762-4-jarkko@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220306053211.135762-1-jarkko@kernel.org>
-References: <20220306053211.135762-1-jarkko@kernel.org>
+        Sun, 6 Mar 2022 00:36:10 -0500
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D49670F7C
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Mar 2022 21:35:19 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id u3so24931949ybh.5
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Mar 2022 21:35:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=slqIUnaaim/Zcjf+c7IWsC5j1SzZDBhUp+PgfUoBld8=;
+        b=yUCnr6cVrswC5Zjv7eDb+8v/VMzk90XUF5w+hlhCG2gZp+8zqOTGVAIth7SvL7qDoj
+         gBISxlFAiou+G3jkX7U9PIQSjz0RVidHv/k8xrcrLEpwaWoExp4LCYkaQbr7XQZxO01D
+         lJupq7SpkhnD6Xqr6ZbD1FK7k/Jhi7T76329jl6TbU59tDSkTC6jFWsYHvBb7lcZv6R8
+         5o97Egs7fixQU7prjsiwO8NqMPatFN/YgDbZXnNlzSZrrhoobqyfhPiUi6pvvkKJvRfm
+         K/F36voNg+VZA+rvAqoRDqdIBgkl6WugG5wQpSGbP3Onk4AJyvk8m28QM1poBtgh8nKE
+         pDDg==
+X-Gm-Message-State: AOAM533JO1yJFqgj1YhDjicafpuX3cRFlBClIRePDxVry+jkhF2arZ46
+        xMHEXdOIEhvMc/ubDfrG+4iMr9A27VO9r0pDGQo=
+X-Google-Smtp-Source: ABdhPJylYsvZMKOiM8jj1gW+qtyMFrOIfVgOOzq4IJ1ob3Pv0oHImP5Q8GspS17DIFDZx6swlK1Xf8/unPvySqf8PPY=
+X-Received: by 2002:a25:2685:0:b0:629:1eee:81e1 with SMTP id
+ m127-20020a252685000000b006291eee81e1mr2644568ybm.20.1646544918376; Sat, 05
+ Mar 2022 21:35:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
+ <CAHp75VeT3LbdbSaiwcC2YW40LnA2h8ADtGva-CKU_xh8Edi0nw@mail.gmail.com>
+ <CAMZ6RqJL2G=i-x3wwBD92devAxdNcnmwfDqz30+GFGobp21s+Q@mail.gmail.com> <CAHp75VdTzjW_YONcFy0qQGvT-xMDQOXTYsAun40106Spzgx_2Q@mail.gmail.com>
+In-Reply-To: <CAHp75VdTzjW_YONcFy0qQGvT-xMDQOXTYsAun40106Spzgx_2Q@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 6 Mar 2022 14:35:07 +0900
+Message-ID: <CAMZ6RqJAxqbbkMP=r7h0b2nvobYu8tcSm8PLaPNbXb0NV+gzaw@mail.gmail.com>
+Subject: Re: [PATCH] linux/bits.h: fix -Wtype-limits warnings in GENMASK_INPUT_CHECK()
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With SGX1 an enclave needs to be created with its maximum memory demands
-pre-allocated. Pages cannot be added to an enclave after it is initialized.
-SGX2 introduces a new function, ENCLS[EAUG] for adding pages to an
-initialized enclave.
+On Sun. 6 Mar 2022 at 06:33, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> On Sat, Mar 5, 2022 at 2:43 PM Vincent MAILHOL
+> <mailhol.vincent@wanadoo.fr> wrote:
+> > On Tue. 5 Mar 2022 at 03:46, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > On Fri, Mar 4, 2022 at 7:36 PM Vincent Mailhol
+> > > <mailhol.vincent@wanadoo.fr> wrote:
+>
+> ...
+>
+> > > NAK.
+> >
+> > Are you willing to change your decision following my comments?
+>
+> Have you read this discussion (read the thread in full)
+> https://lore.kernel.org/lkml/cover.1590017578.git.syednwaris@gmail.com/
 
-Add support for dynamically adding pages to an initialized enclave with
-mmap() by populating pages with EAUG. Use f_ops->populate() callback to
-achieve this behaviour.
+Thank you, this was an instructive read.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- arch/x86/kernel/cpu/sgx/driver.c | 129 +++++++++++++++++++++++++++++++
- 1 file changed, 129 insertions(+)
+For what I understand, there was an effort to fix this when
+-Wtype-limits was still a W=1 warning but the effort was stopped
+after -Wtype-limits was moved to W=2 despite a v4 patch being very
+close to the goal.
 
-diff --git a/arch/x86/kernel/cpu/sgx/driver.c b/arch/x86/kernel/cpu/sgx/driver.c
-index aa9b8b868867..0e97e7476076 100644
---- a/arch/x86/kernel/cpu/sgx/driver.c
-+++ b/arch/x86/kernel/cpu/sgx/driver.c
-@@ -9,6 +9,7 @@
- #include <asm/traps.h>
- #include "driver.h"
- #include "encl.h"
-+#include "encls.h"
- 
- u64 sgx_attributes_reserved_mask;
- u64 sgx_xfrm_reserved_mask = ~0x3;
-@@ -101,6 +102,133 @@ static int sgx_mmap(struct file *file, struct vm_area_struct *vma)
- 	return 0;
- }
- 
-+static int sgx_encl_augment_page(struct sgx_encl *encl, unsigned long offset)
-+{
-+	struct sgx_pageinfo pginfo = {0};
-+	struct sgx_encl_page *encl_page;
-+	struct sgx_epc_page *epc_page;
-+	struct sgx_va_page *va_page;
-+	u64 secinfo_flags;
-+	int ret;
-+
-+	/*
-+	 * Ignore internal permission checking for dynamically added pages.
-+	 * They matter only for data added during the pre-initialization phase.
-+	 * The enclave decides the permissions by the means of EACCEPT,
-+	 * EACCEPTCOPY and EMODPE.
-+	 */
-+	secinfo_flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_X;
-+	encl_page = sgx_encl_page_alloc(encl, offset, secinfo_flags);
-+	if (IS_ERR(encl_page))
-+		return PTR_ERR(encl_page);
-+
-+	epc_page = sgx_alloc_epc_page(encl_page, true);
-+	if (IS_ERR(epc_page)) {
-+		ret = PTR_ERR(epc_page);
-+		goto err_alloc_epc_page;
-+	}
-+
-+	va_page = sgx_encl_grow(encl);
-+	if (IS_ERR(va_page)) {
-+		ret = PTR_ERR(va_page);
-+		goto err_grow;
-+	}
-+
-+	mutex_lock(&encl->lock);
-+
-+	/*
-+	 * Adding to encl->va_pages must be done under encl->lock.  Ditto for
-+	 * deleting (via sgx_encl_shrink()) in the error path.
-+	 */
-+	if (va_page)
-+		list_add(&va_page->list, &encl->va_pages);
-+
-+	/*
-+	 * Insert prior to EADD in case of OOM.  EADD modifies MRENCLAVE, i.e.
-+	 * can't be gracefully unwound, while failure on EADD/EXTEND is limited
-+	 * to userspace errors (or kernel/hardware bugs).
-+	 */
-+	ret = xa_insert(&encl->page_array, PFN_DOWN(encl_page->desc),
-+			encl_page, GFP_KERNEL);
-+
-+	/*
-+	 * If ret == -EBUSY then page was created in another flow while
-+	 * running without encl->lock
-+	 */
-+	if (ret)
-+		goto err_xa_insert;
-+
-+	pginfo.secs = (unsigned long)sgx_get_epc_virt_addr(encl->secs.epc_page);
-+	pginfo.addr = encl_page->desc & PAGE_MASK;
-+	pginfo.metadata = 0;
-+
-+	ret = __eaug(&pginfo, sgx_get_epc_virt_addr(epc_page));
-+	if (ret)
-+		goto err_eaug;
-+
-+	encl_page->encl = encl;
-+	encl_page->epc_page = epc_page;
-+	encl_page->type = SGX_PAGE_TYPE_REG;
-+	encl->secs_child_cnt++;
-+
-+	sgx_mark_page_reclaimable(encl_page->epc_page);
-+
-+	mutex_unlock(&encl->lock);
-+
-+	return 0;
-+
-+err_eaug:
-+	xa_erase(&encl->page_array, PFN_DOWN(encl_page->desc));
-+
-+err_xa_insert:
-+	sgx_encl_shrink(encl, va_page);
-+	mutex_unlock(&encl->lock);
-+
-+err_grow:
-+	sgx_encl_free_epc_page(epc_page);
-+
-+err_alloc_epc_page:
-+	kfree(encl_page);
-+
-+	return VM_FAULT_SIGBUS;
-+}
-+
-+/*
-+ * Add new pages to the enclave sequentially with ENCLS[EAUG]. Note that
-+ * sgx_mmap() validates that the given VMA is within the enclave range. Calling
-+ * here sgx_encl_may_map() second time would too time consuming.
-+ */
-+static int sgx_populate(struct file *file, struct vm_area_struct *vma)
-+{
-+	unsigned long length = vma->vm_end - vma->vm_start;
-+	struct sgx_encl *encl = file->private_data;
-+	unsigned long start = encl->base - vma->vm_start;
-+	unsigned long pos;
-+	int ret;
-+
-+	/* EAUG works only for initialized enclaves. */
-+	if (!test_bit(SGX_ENCL_INITIALIZED, &encl->flags))
-+		return -EINVAL;
-+
-+	for (pos = 0 ; pos < length; pos += PAGE_SIZE) {
-+		if (signal_pending(current)) {
-+			if (!pos)
-+				ret = -ERESTARTSYS;
-+
-+			break;
-+		}
-+
-+		if (need_resched())
-+			cond_resched();
-+
-+		ret = sgx_encl_augment_page(encl, start + pos);
-+		if (ret)
-+			break;
-+	}
-+
-+	return ret;
-+}
-+
- static unsigned long sgx_get_unmapped_area(struct file *file,
- 					   unsigned long addr,
- 					   unsigned long len,
-@@ -133,6 +261,7 @@ static const struct file_operations sgx_encl_fops = {
- 	.compat_ioctl		= sgx_compat_ioctl,
- #endif
- 	.mmap			= sgx_mmap,
-+	.populate		= sgx_populate,
- 	.get_unmapped_area	= sgx_get_unmapped_area,
- };
- 
--- 
-2.35.1
+Back to my patch, it successfully passes the lib/test_bits.c
+build test (including the TEST_GENMASK_FAILURES) and it also
+fixes the last open warning from the thread you pointed me to (on
+drivers/crypto/inside-secure/safexcel.o):
+https://lore.kernel.org/lkml/20200709123011.GA18734@gondor.apana.org.au/
 
+So, I am still not sure to understand what issue you see with my
+patch. Is it that we should just not care about fixing W=2? Or
+do you still see some issues which are not being addressed (if
+so, sorry for not understanding)?
+
+I do agree that fixing a W=2 has small value for all the files
+which are still emitting some W=1. However, I think it is
+beneficial to remove this W=2 spam for all the developers who
+produced W=1 clean files and would like to tackle the W=2
+warnings.
+
+
+Yours sincerely,
+Vincent Mailhol

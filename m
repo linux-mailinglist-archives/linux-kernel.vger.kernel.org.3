@@ -2,138 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9EF4CE86D
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 04:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9064CE87A
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 04:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiCFDUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 22:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S232849AbiCFDWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 22:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232790AbiCFDUP (ORCPT
+        with ESMTP id S232536AbiCFDWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 22:20:15 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CDC3335A;
-        Sat,  5 Mar 2022 19:19:24 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id e2so10649961qte.12;
-        Sat, 05 Mar 2022 19:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FH3A/E2W0O7IE23aSLKaPOzTxYbpDcfx+ImWb5Kh3ok=;
-        b=nf/tMJjStWFiBSHv+/JkLI595GOmYrGpkTMp1B4ugTfZ1plHH3nhkz0Q3o77tiVg8z
-         0f+z/JiCPv6bbBK6Z048Z/RO1k5hT3RmHzGr5JPSPErXJOPalWArYJPBJtoFgSfxxzQG
-         a5B6fg8E8thptzxgUI2yWwUYV61TT0IMWrgO6oKLDNO8Wq3Z1iv6BAfW3w0tgUIo/uGS
-         8JzXgoPO7PfPlO3EhSJhQhpQWChWRvpjW6Tw25ywa/DaTf0TXEmMcqaiTCYnfVpM3alv
-         FW8IK4SnrcVJEW+ZrEqARk6u2GD/pgBl7ljWZvqkJQ8Aflyq3vkdILl1hgKzMQqXzoGF
-         8Dnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FH3A/E2W0O7IE23aSLKaPOzTxYbpDcfx+ImWb5Kh3ok=;
-        b=auwlhpbIVFEQCrTFmeTcP5b6xBVvGV9kO7yVxB95gLPXbHptWwmmwvLF75bhdkXAQk
-         sC/d46cdwXHXjQzUjBytb6NjgPzRShB7W7z4HqR3urJzNyzRoraPMdKMzCxSa0ICZIg+
-         CUg2FVkf2irfJF4xADTFkwXx7Q6v7EAdmklnL8TJhG0HPl7o8+zRl4CtKPDw6QYPVCaB
-         ZWs/1s0VaQ8KIwGA/oxK68mB5OJqxQ9B3aAPmVzwpbdjWQXv8ZDFEw/qs/y00yw5iC9F
-         KUP896mPff6jcBttshaHPA+Oe0FK06Ez9aP1bcs5vzMMHQm9iXgzwPvtbs3buW/ZNiGs
-         SCBQ==
-X-Gm-Message-State: AOAM532OEawInBMovBFev40As+JDH0nxCOJsK7VIhBdOej5f9cq5FFF5
-        CcqjK8lu31DLq0QxvSSWNp0=
-X-Google-Smtp-Source: ABdhPJzuSA+jebqZTqC0s9bkkwmBksTHakOaub3cfbRjLhGy3lh9ISTmcl6MnB2BdRIdUFazW4QK2w==
-X-Received: by 2002:a05:622a:1192:b0:2d1:e58e:7659 with SMTP id m18-20020a05622a119200b002d1e58e7659mr4880333qtk.41.1646536763568;
-        Sat, 05 Mar 2022 19:19:23 -0800 (PST)
-Received: from henry-arch.studentwireless.binghamton.edu ([149.125.84.173])
-        by smtp.googlemail.com with ESMTPSA id f1-20020a37ad01000000b0064919f4b37csm4463183qkm.75.2022.03.05.19.19.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 19:19:23 -0800 (PST)
-From:   Henry Sloan <henryksloan@gmail.com>
-Cc:     pbonzini@redhat.com, Henry Sloan <henryksloan@gmail.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] KVM: Modified two MMIO functions to return bool
-Date:   Sat,  5 Mar 2022 22:19:07 -0500
-Message-Id: <20220306031907.210499-9-henryksloan@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220306031907.210499-1-henryksloan@gmail.com>
-References: <20220306031907.210499-1-henryksloan@gmail.com>
+        Sat, 5 Mar 2022 22:22:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF263336E;
+        Sat,  5 Mar 2022 19:21:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5933EB80CA3;
+        Sun,  6 Mar 2022 03:21:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BDEFC340F3;
+        Sun,  6 Mar 2022 03:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646536912;
+        bh=REVJSPu0LMK0qtybGjVcYKrtnj1nArD7KxhlEeXpL5g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FLMwT+NpOuEP0vOHJMxtaQQCN/mZaYJMCmAdZvyES6nO1Jm9Au4J35+ADH3prFkmM
+         ZsC2YEFVN7imDE5s5m8f6PyDIVn26Y6IqFvrL83GF/k/fzjXYe3wb03jR5BRTgcRrr
+         GplpnIQyNciooTCOdLNEMZ4J6FdjftAAzxXYLvLg5JuVN5xalRzaVfVDXNYEjymA2u
+         G39goguDmEepx6hgQ/mKOml4CV+xaHXfjnm/O86YxVDqFDzM3UK9bjFVdOxTUxUeu7
+         yImes0TPKrEI4GAgeKyN+EY3e+9oLaGDV0HhAbva7R4LTpTZ+3MuNkaM5Do/Q61952
+         YLB3lWUFpmNpQ==
+Date:   Sun, 6 Mar 2022 05:21:11 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        linux-sgx@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
+        linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH RFC] mm: Add f_ops->populate()
+Message-ID: <YiQop71ABWm7hbMy@iki.fi>
+References: <20220306021534.83553-1-jarkko@kernel.org>
+ <YiQjM7LdwoAWpC5L@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiQjM7LdwoAWpC5L@casper.infradead.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjusted the signatures and implementations of
-coalesced_mmio_in_range and coalesced_mmio_has_room to produce booleans.
+On Sun, Mar 06, 2022 at 02:57:55AM +0000, Matthew Wilcox wrote:
+> On Sun, Mar 06, 2022 at 04:15:33AM +0200, Jarkko Sakkinen wrote:
+> > Sometimes you might want to use MAP_POPULATE to ask a device driver to
+> > initialize the device memory in some specific manner. SGX driver can use
+> > this to request more memory by issuing ENCLS[EAUG] x86 opcode for each
+> > page in the address range.
+> > 
+> > Add f_ops->populate() with the same parameters as f_ops->mmap() and make
+> > it conditionally called inside call_mmap(). Update call sites
+> > accodingly.
+> 
+> Your device driver has a ->mmap operation.  Why does it need another
+> one?  More explanation required here.
 
-Signed-off-by: Henry Sloan <henryksloan@gmail.com>
----
- virt/kvm/coalesced_mmio.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+f_ops->mmap() would require an additional parameter, which results
+heavy refactoring.
 
-diff --git a/virt/kvm/coalesced_mmio.c b/virt/kvm/coalesced_mmio.c
-index 1ff2bca6489c..e129d88a95c5 100644
---- a/virt/kvm/coalesced_mmio.c
-+++ b/virt/kvm/coalesced_mmio.c
-@@ -22,28 +22,27 @@ static inline struct kvm_coalesced_mmio_dev *to_mmio(struct kvm_io_device *dev)
- 	return container_of(dev, struct kvm_coalesced_mmio_dev, dev);
- }
- 
--static int coalesced_mmio_in_range(struct kvm_coalesced_mmio_dev *dev,
--				   gpa_t addr, int len)
-+static bool coalesced_mmio_in_range(struct kvm_coalesced_mmio_dev *dev,
-+				    gpa_t addr, int len)
- {
- 	/* is it in a batchable area ?
- 	 * (addr,len) is fully included in
- 	 * (zone->addr, zone->size)
- 	 */
- 	if (len < 0)
--		return 0;
-+		return false;
- 	if (addr + len < addr)
--		return 0;
-+		return false;
- 	if (addr < dev->zone.addr)
--		return 0;
-+		return false;
- 	if (addr + len > dev->zone.addr + dev->zone.size)
--		return 0;
--	return 1;
-+		return false;
-+	return true;
- }
- 
--static int coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
-+static bool coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
- {
- 	struct kvm_coalesced_mmio_ring *ring;
--	unsigned int avail;
- 
- 	/* Are we able to batch it ? */
- 
-@@ -52,13 +51,7 @@ static int coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
- 	 * there is always one unused entry in the buffer
- 	 */
- 	ring = dev->kvm->coalesced_mmio_ring;
--	avail = (ring->first - last - 1) % KVM_COALESCED_MMIO_MAX;
--	if (avail == 0) {
--		/* full */
--		return 0;
--	}
--
--	return 1;
-+	return (ring->first - last - 1) % KVM_COALESCED_MMIO_MAX != 0;
- }
- 
- static int coalesced_mmio_write(struct kvm_vcpu *vcpu,
--- 
-2.35.1
+struct file_operations has 1125 references in the kernel tree, so I
+decided to check this way around first. 
 
+BR, Jarkko

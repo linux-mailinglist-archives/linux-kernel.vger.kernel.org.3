@@ -2,59 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020294CEA9A
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 11:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB7F4CEA94
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 11:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbiCFKxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 05:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S233224AbiCFKwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 05:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbiCFKxC (ORCPT
+        with ESMTP id S231508AbiCFKwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 05:53:02 -0500
-Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 696B842EF9
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 02:52:09 -0800 (PST)
-Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
-        by 156.147.23.53 with ESMTP; 6 Mar 2022 19:52:07 +0900
-X-Original-SENDERIP: 156.147.1.126
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.126 with ESMTP; 6 Mar 2022 19:52:07 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     tytso@mit.edu
-Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        torvalds@linux-foundation.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
-        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
-Date:   Sun,  6 Mar 2022 19:51:42 +0900
-Message-Id: <1646563902-6671-1-git-send-email-byungchul.park@lge.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <YiQq6Ou39uzHC0mu@mit.edu>
-References: <YiQq6Ou39uzHC0mu@mit.edu>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        Sun, 6 Mar 2022 05:52:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B52FC427D1
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 02:52:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646563920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iVPsJI++8NxTvQuxgpBGAj3rYePyGMR0RrHuKmSxq8k=;
+        b=XMELMaauiFbZkJ+VFo3O4MZpkDS8TJPaDtzS3Zc9AM7ajIUe9RMLwv//j1NaT/W3K9O9Ed
+        5irV4PjmjkfPXSZlj3ktwd+0FuS3op6YqPfzV4SlTg/QShi4206DPyvt05FY7y+DQxfEgH
+        k3MRQC6z4k7H/VBnHp0gNN3Sq7Espnw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-383-uO4hlnhaNli3-8AmFLIeFg-1; Sun, 06 Mar 2022 05:51:59 -0500
+X-MC-Unique: uO4hlnhaNli3-8AmFLIeFg-1
+Received: by mail-wm1-f72.google.com with SMTP id j42-20020a05600c1c2a00b00381febe402eso5858976wms.0
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 02:51:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=iVPsJI++8NxTvQuxgpBGAj3rYePyGMR0RrHuKmSxq8k=;
+        b=icK5xtgmIMWNXuZedPqCWHwVSsXsJER0p7KOZwpOvskmCCo/b/6wQs1lE66gQHEGs3
+         4AlabBs1mZT7dTgp0hYBH5Zn7WLBzyak438bMjkM4OREsz6421m2U0lF3mx4v1WI/6vA
+         Yy7jWypM8GaWjJrYNqcz2tEqmyFZtJdbiEbDNNBYatIlRmLX1ySCEPM54FKFJM2ph9Up
+         55AHg9xxnrSDVOEINMKV7WlxwLo2dSTMWXRvWnzWObQrAbjj0UfdXMUBfJgWCUZyd1PE
+         b4gF773ygGHh5fyiEtzrCz71ha3ZUkR0iydRZ9rTOeVmrl/bQWv9p4UhWH4tvJBNuLqg
+         9opA==
+X-Gm-Message-State: AOAM533eQ1EYNNMdVpQ4Bh/3kkQqzv9qLvCcn0CoJAtW3cqRsFnvTI/r
+        Q6c/saER9CZhJgQBVmJErF0i3lGbs9kJqYV6a+JERgyROK18cqvNR/6ThRraaCmmtMu7vkuPOs2
+        Je7FgoCw2nL9k5pBuozaqW52nfkl33lVKz8+c5OaANYDk5ZeamVVaUhItbnEDm4RL7llWiUTOBh
+        lE
+X-Received: by 2002:a1c:f211:0:b0:381:6c60:742f with SMTP id s17-20020a1cf211000000b003816c60742fmr5362114wmc.130.1646563918234;
+        Sun, 06 Mar 2022 02:51:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz4kHksoHXBhkHSVL8W5sWONv/Xj5su2acSsqZQ8EHOl6htL6S1vVyXLg1NZgl/COehMlmxKQ==
+X-Received: by 2002:a1c:f211:0:b0:381:6c60:742f with SMTP id s17-20020a1cf211000000b003816c60742fmr5362087wmc.130.1646563917917;
+        Sun, 06 Mar 2022 02:51:57 -0800 (PST)
+Received: from fedora (ec2-3-80-233-239.compute-1.amazonaws.com. [3.80.233.239])
+        by smtp.gmail.com with ESMTPSA id 11-20020a05600c26cb00b0037ff53511f2sm15657788wmv.31.2022.03.06.02.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 02:51:57 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] arm64: hyperv: make the format of 'Hyper-V: Host Build'
+ output match x86
+In-Reply-To: <MN0PR21MB309826D5A9E262A65E0E07F9D7059@MN0PR21MB3098.namprd21.prod.outlook.com>
+References: <20220304122425.1638370-1-vkuznets@redhat.com>
+ <MN0PR21MB309826D5A9E262A65E0E07F9D7059@MN0PR21MB3098.namprd21.prod.outlook.com>
+Date:   Sun, 06 Mar 2022 11:51:51 +0100
+Message-ID: <875yorbbg8.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,154 +86,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ted wrote:
-> On Sat, Mar 05, 2022 at 11:55:34PM +0900, Byungchul Park wrote:
-> > > that is why some of the DEPT reports were completely incomprehensible
-> > 
-> > It's because you are blinded to blame at it without understanding how
-> > Dept works at all. I will fix those that must be fixed. Don't worry.
-> 
-> Users of DEPT must not have to understand how DEPT works in order to
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> writes:
 
-Users must not have to understand how Dept works for sure, and haters
-must not blame things based on what they guess wrong.
+> From: Vitaly Kuznetsov <vkuznets@redhat.com> Sent: Friday, March 4, 2022 4:24 AM
+>> 
+>> Currently, the following is observed on Hyper-V/ARM:
+>> 
+>>  Hyper-V: Host Build 10.0.22477.1061-1-0
+>> 
+>> This differs from similar output on x86:
+>> 
+>>  Hyper-V Host Build:20348-10.0-1-0.1138
+>> 
+>> and this is inconvenient. As x86 was the first to introduce the current
+>> format and to not break existing tools parsing it, change the format on
+>> ARM to match.
+>
+> Interesting.  I had explicitly output this line differently on ARM64 so
+> that the output is in the standard form of a Windows version number,
+> which is what the Host Build value actually is.  My intent is to fix the
+> x86 side as well.  I had not anticipated there being automated parsing
+> of these strings.
+>
+> I had also put the colon in the place to be consistent with most
+> other Hyper-V messages.  I know:  picky, picky. :-)
+>
+> What's the impact of changing the tools that parse it so that
+> either version could be handled?
 
-> understand and use DEPT reports.  If you think I don't understand how
-> DEPT work, I'm going to gently suggest that this means DEPT reports
-> are clear enough, and/or DEPT documentation needs to be
-> *substantially* improved, or both --- and these needs to happen before
-> DEPT is ready to be merged.
+I wish we knew what tools are out there parsing this line :-) The issue
+got reported by QA as 'inconsistency'.
 
-Okay.
+As the format of this string was never promissed to be an ABI I think we
+can go the other way around: change x86 to match ARM. Some scripts may
+need fixing but IMO this is acceptable. Let's just promiss to not change
+it in the future :-)
 
-> > > So if DEPT is issuing lots of reports about apparently circular
-> > > dependencies, please try to be open to the thought that the fault is
-> > 
-> > No one was convinced that Dept doesn't have a fault. I think your
-> > worries are too much.
-> 
-> In that case, may I ask that you add back a RFC to the subject prefix
-> (e.g., [PATCH RFC -v5]?)  Or maybe even add the subject prefix NOT YET
+-- 
+Vitaly
 
-I will.
-
-> READY?  I have seen cases when after a patch series get to PATCH -v22,
-> and then people assume that it *must* be ready, as opposed what it
-> really means, which is "the author is just persistently reposting and
-> rebasing the patch series over and over again".  It would be helpful
-> if you directly acknowledge, in each patch submission, that it is not
-> yet ready for prime time.
-> 
-> After all, right now, DEPT has generated two reports in ext4, both of
-> which were false positives, and both of which have required a lot of
-> maintainer times to prove to you that they were in fact false
-> positives.  So are we all agreed that DEPT is not ready for prime
-> time?
-
-Yes.
-
-> > No one argued that their code must be buggy, either. So I don't think
-> > you have to worry about what's never happened.
-> 
-> Well, you kept on insisting that ext4 must have a circular dependency,
-> and that depending on a "rescue wakeup" is bad programming practice,
-> but you'll reluctantly agree to make DEPT accept "rescue wakeups" if
-> that is the will of the developers.  My concern here is the
-> fundmaental concept of "rescue wakeups" is wrong; I don't see how you
-> can distinguish between a valid wakeup and one that you and DEPT is
-> going to somehow characterize as dodgy.
-
-Your concern on it makes sense. I need to explain how I think about it
-more, but not now cuz I guess the other folks alrealy got tired enough.
-Let's talk about it later when needed again.
-
-> Consider: a process can first subscribe to multiple wait queues, and
-> arrange to be woken up by a timeout, and then call schedule() to go to
-> sleep.  So it is not waiting on a single wait channel, but potentially
-> *multiple* wakeup sources.  If you are going to prove that kernel is
-> not going to make forward progress, you need to prove that *all* ways
-> that process might not wake up aren't going to happen for some reason.
-> 
-> Just because one wakeup source seems to form a circular dependency
-> proves nothing, since another wakeup source might be the designed and
-> architected way that code makes forward progress.
-
-I also think it's legal if the design is intended. But it's not if not.
-This is what I meant. Again, it's not about ext4.
-
-> You seem to be assuminng that one wakeup source is somehow the
-> "correct" one, and the other ways that process could be woken up is a
-> "rescue wakeup source" and you seem to believe that relying on a
-> "rescue wakeup source" is bad.  But in the case of a process which has
-
-It depends on whether or not it's intended IMHO.
-
-> called prepare-to-wait on more than one wait queue, how is DEPT going
-> to distinguish between your "morally correct" wkaeup source, and the
-> "rescue wakeup source"?
-
-Sure, it should be done manually. I should do it on my own when that
-kind of issue arises. Agian, ext4 is not the case cuz, based on what Jan
-explained, there's no real circular dependency wrt commit wq, done wq
-and so on.
-
-> > No doubt. I already think so. But it doesn't mean that I have to keep
-> > quiet without discussing to imporve Dept. I will keep improving Dept in
-> > a reasonable way.
-> 
-> Well, I don't want to be in a position of having to prove that every
-> single DEPT report in my code that doesn't make sense to me is
-> nonsense, or else DEPT will get merged.
-> 
-> So maybe we need to reverse the burden of proof.
-
-I will keep in mind.
-
-> Instead of just sending a DEPT report, and then asking the maintainers
-> to explain why it is a false positive, how about if *you* use the DEPT
-> report to examinie the subsystem code, and then explain plain English,
-> how you think this could trigger in real life, or cause a performance
-> problem in real life or perhaps provide a script or C reproducer that
-> triggers the supposed deadlock?
-
-Makes sense. Let me try.
-
-> Yes, that means you will need to understand the code in question, but
-> hopefully the DEPT reports should be clear enough that someone who
-> isn't a deep expert in the code should be able to spot the bug.  If
-> not, and if only a few deep experts of code in question will be able
-> to decipher the DEPT report and figure out a fix, that's really not
-> ideal.
-
-Agree. Just FYI, I've never blamed you are not the expert on Dept.
-
-> If DEPT can find a real bug and you can show that Lockdep wouldn't
-> have been able to find it, then that would be proof that it is making
-> a real contribution.  That's would be real benefit.  At the same time,
-> DEPT will hopefully be able to demonstrate a false positive rate which
-> is low enough that the benefits clearly outweight the costs.
-> 
-> At the moment, I believe the scoreboard for DEPT with respect to ext4
-> is zero real bugs found, and two false positives, both of which have
-> required significant rounds of e-mail before the subsystem maintainers
-> were able to prove to you that it was, indeed, DEPT reporting a false
-> positive.
-
-Right. But we've barely talked in a productive way. We've talked about
-other things way more than proving what you're mentioning.
-
-> Do you now understand why I am so concerned that you aren't putting an
-> RFC or NOT YET READY in the subject line?
-
-Yes. I will.
-
-> - Ted
-> 
-> P.S.  If DEPT had a CONFIG_EXPERIMENTAL, with a disclaimer in the
-> KConfig that some of its reports might be false positives, that might
-> be another way of easing my fears that this won't get used by
-> Syzkaller, and to generate a lot of burdensome triage work on the
-> maintainers.
-
-Thank you for straightforward explanation this time,
-Byungchul

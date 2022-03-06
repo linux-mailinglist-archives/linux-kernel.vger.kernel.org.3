@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0C84CEE15
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 23:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F784CEE17
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 23:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiCFWIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 17:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
+        id S234243AbiCFWJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 17:09:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiCFWIg (ORCPT
+        with ESMTP id S229643AbiCFWJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 17:08:36 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18241D326
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 14:07:42 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id s1so12166178plg.12
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 14:07:42 -0800 (PST)
+        Sun, 6 Mar 2022 17:09:15 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9831822B0E;
+        Sun,  6 Mar 2022 14:08:22 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id kt27so28266849ejb.0;
+        Sun, 06 Mar 2022 14:08:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=ott2Fy6zW0YAlx8wzwMZzzUaVRMCd6cEJUB+xxtueUk=;
-        b=Qj1awOLyyLqVwaOgk5PKOi4INIcAaAkqsf36jgPyP1DIXghU7kqsv5eoerO37U4A1s
-         uA1pf8jYDMytw9X3Pym0vYmxpdndetiW9tBjHRPBYGuM+c5cOEG2Nbv3f56pUmPRWgRR
-         vOpuYVWNO980M3HylaUGpMGZMy+4X1qCl+umpTPVDLXCa3maWuuQAN6ZkLT+GrISWGZp
-         s1QLKinV/QLGQYwgaG1loQQCFUNB5QE5cYSPrOGMWPTIZ/GxTghHMXYsIwcNH7PvdSi+
-         V54Bg4kfWKfIVoBHMD1uGX9qERNIxnGWS4RF85iT9z6M0ivKRbBI8CIHYgpRnHZTmzKb
-         RpAw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=B+OdQEqw3gVimMqDvTK4mctUlemCPrMedCr5iIpp+zM=;
+        b=Qu6f92sIsjPSPety4vCcVtCiuPb634KVCRKpGyaQY8869tDnAjA6x1Gv5st7j1xZHh
+         lT6QhOZr7BnCay8Rzh2OkruAFEWMhgtJGNl/aQt2SCZV28gk9OGhAAN5mCcEYZoQjUNj
+         w+1Z7KyrOTbBvXrrzCcFOhOIbuRE4hOI0LBmY/C2+sv6Wo5KOXPtRMlRDWkUcZk1+U8m
+         jhnOGCxAsDRwvQMhqPczsq+hnTlhjVLbYGSX35JXPCJFVHiaTBaMq1vbSYdZmLZw7cdH
+         9x/79BDlPAydtMRqvJ1qYORTYmbPX5bMHDQ/CeenyylujzvWyhRnT7BKyq6LVHJFqOB1
+         F3Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=ott2Fy6zW0YAlx8wzwMZzzUaVRMCd6cEJUB+xxtueUk=;
-        b=WawRKVigVrt5+EMa9K+VJSjMFz7Sl1+X6obav2+wGTF5LDFKtcmwQ29zVXUKI5I+wY
-         3j/484toRs+2JI5k7gAZKDkq1OWfuolnCdrOQK0TD1J+j1Xi+M8D5Yddj1UV9dUQL8r3
-         htlmWuDcVYCYmB7t7ERrHYUjTohsR59twMaLJ8jZE7+DxdyQqGP7sgb1HaVhTULGG4SC
-         bl8wFWwXiUqCpCK/S2gyWD5bzBHhqdM1U8+f9fUXEEa6NeSp8E4q8DAsCM//GXX6F5FB
-         97xIicGGB00Nf78wWURDQ79exeglpBiK5kMjLcOJGRHsRFqMn4W0c9STYG905kvC7QmM
-         s9dw==
-X-Gm-Message-State: AOAM531bkYBBsmwt+dzTh3ARo0mtBiqdaSe5AeYR1U2fDgiOGmnL4BLu
-        xYx2VcZ12VzfYkfaD8YpmLAE6w==
-X-Google-Smtp-Source: ABdhPJxWgicViQ9wemdU1MnHl7NEto1XHjnw/D9hyBaoAh07z1cixmUct+1ujUEekw/FlGuF5PBORw==
-X-Received: by 2002:a17:902:e552:b0:14f:bfec:eb2c with SMTP id n18-20020a170902e55200b0014fbfeceb2cmr9248566plf.108.1646604461700;
-        Sun, 06 Mar 2022 14:07:41 -0800 (PST)
-Received: from [2620:15c:29:204:5f87:a605:2b59:e392] ([2620:15c:29:204:5f87:a605:2b59:e392])
-        by smtp.gmail.com with ESMTPSA id s21-20020a63dc15000000b00378c9e5b37fsm9670409pgg.63.2022.03.06.14.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 14:07:41 -0800 (PST)
-Date:   Sun, 6 Mar 2022 14:07:40 -0800 (PST)
-From:   David Rientjes <rientjes@google.com>
-To:     Hugh Dickins <hughd@google.com>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alex Shi <alexs@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH mmotm] mm: __isolate_lru_page_prepare() in
- isolate_migratepages_block()
-In-Reply-To: <879d62a8-91cc-d3c6-fb3b-69768236df68@google.com>
-Message-ID: <f77de36f-32f3-9036-98b0-d07d851b8e0@google.com>
-References: <879d62a8-91cc-d3c6-fb3b-69768236df68@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=B+OdQEqw3gVimMqDvTK4mctUlemCPrMedCr5iIpp+zM=;
+        b=P/ycxzVogmVZMLVBbO4mwM4VNxQlGM76+9VSWNMuucSh4poRk72lcNT95lh+HQWv+x
+         SSLizoQeLpSkqTlSgsE/fX7PZIKsG16wbTo/TBFw/pJ6sF+GeqqfNtqEAXbSOw0WmG3S
+         Ph+xRS5vACGfvqctnRU2CvMdAHtfvGdyHpHJlC65KmEdSb/NNWSSSqjL6lBms2Aip5uV
+         SQFqr7zs9ffet+54JH18tTyYFSAkCBpblMjinQV5qlrjnnBCtYfHjH+wepFOpbKBwD4L
+         6/pVMV5ywOLtRM+zV3a4UWneg5TCZwjtFcNTItoKbvegVD3cPMWlByCguDWKijDpn0Cr
+         lgCw==
+X-Gm-Message-State: AOAM531n32c4mG6vIbLk2zNFLhbXALzvxnCpW/WrF79Pj4fQgKtX8DMs
+        NabD+cRiAfRJibPsgkMrYMXR9DdqULh1KfJG2rnC0514LEA=
+X-Google-Smtp-Source: ABdhPJxtJPeQPYTwcWknxaOsrytx6gzAfSrsO8vnTvrMWRTFPtLU10WxSJ3igPjaAPfMi3Fv9tDnRcnGtHQF/bM4X4U=
+X-Received: by 2002:a17:907:6e01:b0:6d0:562c:e389 with SMTP id
+ sd1-20020a1709076e0100b006d0562ce389mr7073620ejc.497.1646604501024; Sun, 06
+ Mar 2022 14:08:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
+ <20220302095606.14818-2-ilpo.jarvinen@linux.intel.com> <20220306184857.GA19394@wunner.de>
+In-Reply-To: <20220306184857.GA19394@wunner.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 7 Mar 2022 00:07:44 +0200
+Message-ID: <CAHp75Vdxa_p866t5B7zJ8nHS-v+tu3vLiW0=vaBznnyCGyve_g@mail.gmail.com>
+Subject: Re: [PATCH 1/7] serial: 8250_dwlib: RS485 HW half duplex support
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Raymond Tan <raymond.tan@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,22 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022, Hugh Dickins wrote:
+On Mon, Mar 7, 2022 at 12:00 AM Lukas Wunner <lukas@wunner.de> wrote:
+> On Wed, Mar 02, 2022 at 11:56:00AM +0200, Ilpo J=C3=A4rvinen wrote:
 
-> __isolate_lru_page_prepare() conflates two unrelated functions, with
-> the flags to one disjoint from the flags to the other; and hides some
-> of the important checks outside of isolate_migratepages_block(), where
-> the sequence is better to be visible.  It comes from the days of lumpy
-> reclaim, before compaction, when the combination made more sense.
-> 
-> Move what's needed by mm/compaction.c isolate_migratepages_block() inline
-> there, and what's needed by mm/vmscan.c isolate_lru_pages() inline there.
-> 
-> Shorten "isolate_mode" to "mode", so the sequence of conditions is easier
-> to read.  Declare a "mapping" variable, to save one call to page_mapping()
-> (but not another: calling again after page is locked is necessary).
-> Simplify isolate_lru_pages() with a "move_to" list pointer.
-> 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+...
 
-Acked-by: David Rientjes <rientjes@google.com>
+> Does the DesignWare UART use dedicated DE and RE pins instead of
+> the RTS pin?  That would be quite unusual.
+
+They are muxed with other UART pins on SoC level, but I don't remember
+by heart which ones. According to the Synopsys datasheet they are
+separate signals. It might be that I'm missing something, since the
+last time I looked was last year.
+
+...
+
+> > +     d->hw_rs485_support =3D device_property_read_bool(p->dev, "snps,r=
+s485-interface-en");
+> > +     if (d->hw_rs485_support)
+> > +             p->rs485_config =3D dw8250_rs485_config;
+> > +
+>
+> You wrote in the commit message that rs485 support is present from
+> version 4.0 onward.  Can't we just check the IP version and enable
+> rs485 support for >=3D 4.0?  That would seem more appropriate instead
+> of introducing yet another new property.
+
+AFAIU this is dependent on the IP syntheses. I.o.w. version 4.0+ is a
+prerequisite, but doesn't automatically mean that there is a support.
+Unfortunately there is no way to tell this clearly in the IP
+configuration register.
+
+--=20
+With Best Regards,
+Andy Shevchenko

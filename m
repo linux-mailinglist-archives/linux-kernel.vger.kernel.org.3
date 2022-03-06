@@ -2,87 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3B84CEC28
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0174CEC2E
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 17:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbiCFPuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 10:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S233771AbiCFQBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 11:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiCFPuj (ORCPT
+        with ESMTP id S230313AbiCFQBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 10:50:39 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A652553E30
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 07:49:46 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id kx1-20020a17090b228100b001bf2dd26729so4783209pjb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 07:49:46 -0800 (PST)
+        Sun, 6 Mar 2022 11:01:51 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB3A68F8A;
+        Sun,  6 Mar 2022 08:00:59 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id h7so1760045ile.1;
+        Sun, 06 Mar 2022 08:00:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=iKa7k5SfVCfzzATQN9q6JAKUZNX+2kkckFzGpq84zGk=;
-        b=Nc2fqHoT6OtKZba0CDPnZjCvCZt71kl2n9xvik3idJpP79RVZPu/gd6wmghz+1sTeX
-         HZqrQ6hwJbV1gF0t0WT2yVU5p1+voZO87c135RXfcVnQRxwgWq4UnLUwHg+TNfVaQIWJ
-         L/ZN2pexhPQjzdXVQTpCUsXMY2WVwIauM5dEe3APtf5Gp2TcqhRKVF7ISLHjnNMG9T52
-         Bm80aOijCA2/wdKElstloGbFWnhII2ocrWpI5q0J65IIXrLg0HWqLEY2Y4gLEEPseRA3
-         l1W+7AErVFpo1b683t1tG5Xh2OLHF3iNX3AXshhPciOKvhRhPHSp0SmpYGegjQSt26sL
-         QFjg==
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=QccD7eNSgfKU2QlS5bqdDnSgDvMBGUtw/Y8Ns4tdASM=;
+        b=a2stWlRcD4yCiqlfh9dOM01Mek1hvp4gGtBEw+AFzjS4dw/aGf6xVjIQRs1RWD37Cn
+         fBCQU0IkwFRXHMLUKnnynW23Iw1sscxxNilH3ca0W9f9qBw+mcE6EnjFyNcF9/gKauhy
+         KQ6dMwi3u7yHRDtBg+3O+O6OqWSAXY2pShdGEAtLEozp8yuLj2DC/Zy4kP08SY6Y4H5x
+         jJpjJhCgXvxeAnTa2S/MD8RRuOf1ayLBcuuaee9i25QEnje+pDuYv2mWxHJ7ubpY8cxp
+         Qb8abP2z3JWK7b8bMaXd8oBjvYv1+1d3531Dt6bOtPwrwpOmKcOCSKTRIZ5NNxklmRMz
+         JyFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=iKa7k5SfVCfzzATQN9q6JAKUZNX+2kkckFzGpq84zGk=;
-        b=tQX9HffNZpcUi/jWS4mir2hllcbkYCrSPVm7GZo1oaiag6aPf7j9vo/okWnR5nIwuZ
-         UShVGAw1qdDAysBzzXpI1UNWHNsTAm0RLp0koKeVFR/YHCYbqiFllgQNAe8w5LgUyl99
-         j3BBzyfKYlEeJVUpJk2pZwVAr+tpBsX/7LjjJ9VT2YTKzdDfjQe+xuV2S5qqBNa50F8g
-         LvW8osZCIeu1eUmw088JBv+DKbZfiCLuOwF4cplS2RU4EFJMhj0/t/tVxr2luDegEyXs
-         OLWWOGaIl/NQGqHzhlTf+PcVlivBs4X5f7Zgp9DgL8CViJAHHP6tx+AXNhkzrACTrqEN
-         P7xw==
-X-Gm-Message-State: AOAM533x8qa9TD+QOgheqh5AJcDzB33ouC+aPBo4Y2liHd/P2Sxqv02S
-        kf463M/dAU+U6yHDYkaHr9Q=
-X-Google-Smtp-Source: ABdhPJzYDZ0fkCnD/0VHrWoJ7v+XwIFJSYxjSjiR4XMIJUwGaEOSB3nn07oVYk+K4IZS/S7HMfIg8Q==
-X-Received: by 2002:a17:90a:990c:b0:1bc:3c9f:2abe with SMTP id b12-20020a17090a990c00b001bc3c9f2abemr8743398pjp.220.1646581785992;
-        Sun, 06 Mar 2022 07:49:45 -0800 (PST)
-Received: from ?IPV6:240b:10:2720:5500:7cd8:5236:546e:2b2c? ([240b:10:2720:5500:7cd8:5236:546e:2b2c])
-        by smtp.gmail.com with ESMTPSA id p28-20020a056a000a1c00b004f6519e61b7sm13601015pfh.21.2022.03.06.07.49.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 07:49:45 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------K91juOuLpSSbXSC0vYcfI0J1"
-Message-ID: <9621c512-06f2-17b2-5c68-943b1f0981eb@gmail.com>
-Date:   Mon, 7 Mar 2022 00:49:39 +0900
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=QccD7eNSgfKU2QlS5bqdDnSgDvMBGUtw/Y8Ns4tdASM=;
+        b=EAjxeYgtUcmoKftdfW/c08oTwFXk/zX0B+tnb/6edpIjegRZTP4tPVAWDwoaZGnO/Y
+         /11n82aJzm62dj5pjOZLx3ZoS51BKbqa/XYJoIiaSpzjD2zsVnleMmcuGfIlD1Mmn+SL
+         VITEGLCgi0fE+l3wvqyNv9Z1NwSDSaSbBXXu34OSnTKZmypZa/32k3Jcj6yJKcJMXmKY
+         /QFPE2fzvONo+ouWFP2zpde6e2xt/Q6BynD8vr2XtEhor2dtUADd/uVfCVWjNvdh1Ncb
+         aaJIDJY0mq+QLVWssIeIwkIlP5vVn5BvtK3tx3klD3eiGU6BWciIgx+OevN8spMh1RDC
+         rxfQ==
+X-Gm-Message-State: AOAM530O5WjUC4fcQ1qHECydq7CZ9h7Ua1mYLmWtVTr+dS+kcFDRhsk5
+        /llALXvg5XmEsqJWbaEb+KsihstFyrMX/OAfEsw=
+X-Google-Smtp-Source: ABdhPJw2O8zA14WfTk20GoYCmEGyTdGhydeLsJ3ih+XfhDC0UktCQKAVmBFbu91+TYAbyd6h87vtoqYvlycNr0GTQa0=
+X-Received: by 2002:a05:6e02:de2:b0:2c6:f14:884a with SMTP id
+ m2-20020a056e020de200b002c60f14884amr7908645ilj.100.1646582458668; Sun, 06
+ Mar 2022 08:00:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
-Content-Language: en-US
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
-        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Brian Norris <computersforpeace@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
-        cyrille.pitchen@wedev4u.fr,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linuxppc-dev@lists.ozlabs.org
-References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
- <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
- <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
- <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
- <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
- <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
- <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
- <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
- <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
- <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
- <f9e46b61-37e5-a280-edb0-27f8e81a8680@pengutronix.de>
-From:   Tokunori Ikegami <ikegami.t@gmail.com>
-In-Reply-To: <f9e46b61-37e5-a280-edb0-27f8e81a8680@pengutronix.de>
+References: <CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com>
+ <YiPDaiYffeK4lF+l@krava> <CA+icZUW0XyDHFTYF_j1QECpqP4kmTXqCqX_HfEVvQ4aWZecW5Q@mail.gmail.com>
+ <YiTWVjKwOO/bMNz/@krava>
+In-Reply-To: <YiTWVjKwOO/bMNz/@krava>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 6 Mar 2022 17:00:22 +0100
+Message-ID: <CA+icZUWBFAWx1DgN-nqUkr7W9W3hjhNRChEaXrfW5unoU_Lqdw@mail.gmail.com>
+Subject: Re: [Linux-v5.17-rc6] Building tools/perf with perl v5.34
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,203 +76,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------K91juOuLpSSbXSC0vYcfI0J1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Hi,
-
-On 2022/03/04 20:11, Ahmad Fatoum wrote:
-> Hello Tokunori-san,
+On Sun, Mar 6, 2022 at 4:42 PM Jiri Olsa <olsajiri@gmail.com> wrote:
 >
-> On 20.02.22 13:22, Tokunori Ikegami wrote:
->> Hi Ahmad-san,
->>
->> Could you please try the version 2 patch attached for the error case?
->> This version is to check the DQ true data 0xFF by chip_good().
-> I had a similar patch locally as well at first. I just tested yours
-> and I can't reproduce the issue.
-Thanks for your support.
-Sorry if possible could you please retest the attached the patch again 
-since this fixed the version 1 patch maintainer review comments?
+> On Sun, Mar 06, 2022 at 03:28:09AM +0100, Sedat Dilek wrote:
+> > On Sat, Mar 5, 2022 at 9:09 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Sat, Mar 05, 2022 at 08:52:18AM +0100, Sedat Dilek wrote:
+> > > > Hi,
+> > > >
+> > > > I am here on Debian/unstable AMD64 which switched over to perl v5.3=
+4
+> > > > in February 2022.
+> > > >
+> > > > Unfortunately, my perf does not build with this (lib)perl version:
+> > > >
+> > > > $ ~/bin/perf -vv
+> > > > perf version 5.17-rc6
+> > > >                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+> > > >    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+> > > >                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
+> > > >         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+> > > >                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
+> > > >                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+> > > >               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> > > > numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> > > >               libperl: [ OFF ]  # HAVE_LIBPERL_SUPPORT
+> > > >             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+> > > >              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+> > > >             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+> > > >             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+> > > >    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+> > > >                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+> > > >                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+> > > >             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+> > > >                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+> > > >                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+> > > >                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+> > > >               libpfm4: [ OFF ]  # HAVE_LIBPFM
+> > > >
+> > > > $ grep libperl ../make-log_perf-python3.10-install_bin.txt
+> > > > 9:Makefile.config:788: Missing perl devel files. Disabling perl
+> > > > scripting support, please install perl-ExtUtils-Embed/libperl-dev
+> > > > 22:...                       libperl: [ OFF ]
+> > > >
+> > > > Checking for these requirements:
+> > > >
+> > > > # dpkg -l | grep perl | grep 5.34 | awk '/^ii/ {print $1 " " $2 " "
+> > > > $3}' | column -t
+> > > > ii  libperl-dev:amd64  5.34.0-3
+> > > > ii  libperl5.34:amd64  5.34.0-3
+> > > > ii  perl               5.34.0-3
+> > > > ii  perl-base          5.34.0-3
+> > > > ii  perl-modules-5.34  5.34.0-3
+> > > >
+> > > > # dpkg -L perl-modules-5.34 | grep -i ExtUtils | grep -i Embed
+> > > > /usr/share/perl/5.34.0/ExtUtils/Embed.pm
+> > > >
+> > > > Can you please comment on this?
+> > >
+> > > hi,
+> > > is there something in tools/build/feature/test-libperl.make.output ?
+> > >
+> >
+> > Hey jirka!
+> >
+> > Indeed there is such a file.
+> >
+> > $ LC_ALL=3DC ll tools/build/feature/test-libperl.make.output
+> > -rw-r--r-- 1 dileks dileks 24K Mar  6 03:22
+> > tools/build/feature/test-libperl.make.output
+> >
+> > Reproducer:
+> >
+> > make distclean
+> > make -C tools/perf clean
+> >
+> > MAKE=3D"make"
+> > MAKE_OPTS=3D"HOSTCC=3Dclang-13 HOSTCXX=3Dclang++-13 HOSTLD=3Dld.lld-13
+> > HOSTAR=3Dllvm-ar-13 CC=3Dclang-13 LD=3Dld.lld-13 AR=3Dllvm-ar-13 NM=3Dl=
+lvm-nm-13
+> > OBJCOPY=3Dllvm-objcopy-13 OBJDUMP=3Dllvm-objdump-13 OBJSIZE=3Dllvm-size=
+-13
+> > READELF=3Dllvm-readelf-13 STRIP=3Dllvm-strip-13 LLVM_IAS=3D1"
+> >
+> > LC_ALL=3DC $MAKE V=3D1 $MAKE_OPTS -C tools/perf PYTHON=3Dpython3 instal=
+l-bin
 >
->> But I am not sure if this works or not since the error is possible to be caused by Hi-Z 0xff on floating bus or etc.
-> That it works for me could be because of Hi-Z 0xff, which is why
-> decided against it.
-I see.
+> yea, looks like we can't compile perl devel includes with clang,
+> we use simple perl test program:
 >
->>>>>> What seems to work for me is checking if chip_good or chip_ready
->>>>>> and map_word is equal to 0xFF. I can't justify why this is ok though.
->>>>>> (Worst case bus is floating at this point of time and Hi-Z is read
->>>>>> as 0xff on CPU data lines...)
->>>>> Sorry I am not sure about this.
->>>>> I thought the chip_ready() itself is correct as implemented as the data sheet in the past.
->>>>> But it did not work correctly so changed to use chip_good() instead as it is also correct.
->>>> What exactly in the datasheet makes you believe chip_good is not appropriate?
->>> I just mentioned about the actual issue behaviors as not worked chip_good() on S29GL964N and not worked chip_ready() on MX29GL512FHT2I-11G before etc.
->>> Anyway let me recheck the data sheet details as just checked it again quickly but needed more investigation to understand.
->> As far as I checked still both chip_good() and chip_ready() seem correct but still the root cause is unknown.
->> If as you mentioned the issue was cased by the DQ true data 0xFF I am not sure why the read work without any error after the write operation.
->> Also if the error was caused by the Hi-Z 0xff on floating bus as mentioned I am not sure why the read work without any error after the write operation with chip_ready().
->> Sorry anyway the root cause is also unknown when the write operation was changed to use chip_good() instead of chip_ready().
-> I've be ok with v1 then. Restores working behavior for me and shouldn't break others.
+>         $ cd tools/build/feature/
+>         $ cat test-libperl.c
+>         // SPDX-License-Identifier: GPL-2.0
+>         #include <EXTERN.h>
+>         #include <perl.h>
+>
+>         int main(void)
+>         {
+>                 perl_alloc();
+>
+>                 return 0;
+>         }
+>
+>
+> and if I compile it with:
+>
+>         $ CC=3Dclang make test-libperl.bin
+>         clang  -MD -Wall -Werror -o test-libperl.bin test-libperl.c  > te=
+st-libperl.make.output 2>&1 `perl -MExtUtils::Embed -e ccopts 2>/dev/null` =
+-Wl,--enable-new-dtags -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=3D/us=
+r/lib/rpm/redhat/redhat-hardened-ld -specs=3D/usr/lib/rpm/redhat/redhat-ann=
+obin-cc1  -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=3D/usr/lib/rpm/red=
+hat/redhat-hardened-ld -specs=3D/usr/lib/rpm/redhat/redhat-annobin-cc1  -fs=
+tack-protector-strong -L/usr/local/lib  -L/usr/lib64/perl5/CORE -lperl -lpt=
+hread -lresolv -ldl -lm -lcrypt -lutil -lc
+>         make: *** [Makefile:224: test-libperl.bin] Error 1
+>
+>
+> I'm getting some other lto related error:
+>
+>         $ cat test-libperl.make.output
+>         clang-13: error: optimization flag '-ffat-lto-objects' is not sup=
+ported [-Werror,-Wignored-optimization-argument]
+>
 
-Noted but still I am thinking the version 2 patch to check 0xff seems 
-better than to use chip_ready() so let me consider this again later.
+Hehe.
 
-Regards,
-Ikegami
+I was thinking about syncing the flags for both feature test-perl and
+perf/libperl-support.
+
+tools/build/feature/Makefile
+tools/perf/Makefile.config
+
+So, I guess FLAGS_PERL_EMBED differs.
+
+For building perf '-ffat-lto-objects'  is filtered-out...
+
+$ git grep ffat-lto-objects tools/perf/
+tools/perf/Makefile.config:  PERL_EMBED_CCOPTS :=3D $(filter-out
+-flto=3Dauto -ffat-lto-objects, $(PERL_EMBED_CCOPTS))
+
+- Sedat -
 
 >
-> Cheers and thanks again,
-> Ahmad
+> with my clang version:
 >
->> Regards,
->> Ikegami
->>
->>> Regards,
->>> Ikegami
->>>
->>>> Cheers,
->>>> Ahmad
->>>>
->>>>
+>         $ clang --version
+>         clang version 13.0.0 (Fedora 13.0.0-3.fc35)
+>         Target: x86_64-redhat-linux-gnu
+>         Thread model: posix
+>         InstalledDir: /usr/bin
 >
---------------K91juOuLpSSbXSC0vYcfI0J1
-Content-Type: text/x-patch; charset=UTF-8;
- name="v2-0001-mtd-cfi_cmdset_0002-Use-chip_ready-for-write-on-S.patch"
-Content-Disposition: attachment;
- filename*0="v2-0001-mtd-cfi_cmdset_0002-Use-chip_ready-for-write-on-S.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
-
-RnJvbSAzMDZmNzI2NmNiMmI2ZDA3YmJjNTg4MmIzYjk3NzI2NDQ4M2FkMTI4IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBUb2t1bm9yaSBJa2VnYW1pIDxpa2VnYW1pLnRAZ21h
-aWwuY29tPgpEYXRlOiBNb24sIDE0IEZlYiAyMDIyIDAxOjA4OjAyICswOTAwClN1YmplY3Q6
-IFtQQVRDSCB2Ml0gbXRkOiBjZmlfY21kc2V0XzAwMDI6IFVzZSBjaGlwX3JlYWR5KCkgZm9y
-IHdyaXRlIG9uCiBTMjlHTDA2NE4KClRoZSByZWdyZXNzaW9uIGlzc3VlIGhhcyBiZWVuIGNh
-dXNlZCBvbiBTMjlHTDA2NE4gYW5kIHJlcG9ydGVkIGl0LgpBbHNvIHRoZSBjaGFuZ2UgbWVu
-dGlvbmVkIGlzIHRvIHVzZSBjaGlwX2dvb2QoKSBmb3IgYnVmZmVyZWQgd3JpdGUuClNvIGRp
-c2FibGUgdGhlIGNoYW5nZSBvbiBTMjlHTDA2NE4gYW5kIHVzZSBjaGlwX3JlYWR5KCkgYXMg
-YmVmb3JlLgoKRml4ZXM6IGRmZWFlMTA3MzU4MygibXRkOiBjZmlfY21kc2V0XzAwMDI6IENo
-YW5nZSB3cml0ZSBidWZmZXIgdG8gY2hlY2sgY29ycmVjdCB2YWx1ZSIpClNpZ25lZC1vZmYt
-Ynk6IFRva3Vub3JpIElrZWdhbWkgPGlrZWdhbWkudEBnbWFpbC5jb20+CkNjOiBNaXF1ZWwg
-UmF5bmFsIDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4uY29tPgpDYzogUmljaGFyZCBXZWluYmVy
-Z2VyIDxyaWNoYXJkQG5vZC5hdD4KQ2M6IFZpZ25lc2ggUmFnaGF2ZW5kcmEgPHZpZ25lc2hy
-QHRpLmNvbT4KQ2M6IGxpbnV4LW10ZEBsaXN0cy5pbmZyYWRlYWQub3JnCkNjOiBzdGFibGVA
-dmdlci5rZXJuZWwub3JnCkxpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvYjY4N2My
-NTktNjQxMy0yNmM5LWQ0YzktYjNhZmE2OWVhMTI0QHBlbmd1dHJvbml4LmRlLwotLS0KIGRy
-aXZlcnMvbXRkL2NoaXBzL2NmaV9jbWRzZXRfMDAwMi5jIHwgODkgKysrKysrKysrKysrKysr
-LS0tLS0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA0NyBpbnNlcnRpb25zKCspLCA0MiBk
-ZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0
-XzAwMDIuYyBiL2RyaXZlcnMvbXRkL2NoaXBzL2NmaV9jbWRzZXRfMDAwMi5jCmluZGV4IGE3
-NjExMzRmZDNiZS4uNWUxNGI2MGU4NjM4IDEwMDY0NAotLS0gYS9kcml2ZXJzL210ZC9jaGlw
-cy9jZmlfY21kc2V0XzAwMDIuYworKysgYi9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0
-XzAwMDIuYwpAQCAtNDgsNiArNDgsNyBAQAogI2RlZmluZSBTU1Q0OUxGMDQwQgkJMHgwMDUw
-CiAjZGVmaW5lIFNTVDQ5TEYwMDhBCQkweDAwNWEKICNkZWZpbmUgQVQ0OUJWNjQxNgkJMHgw
-MGQ2CisjZGVmaW5lIFMyOUdMMDY0Tl9NTjEyCQkweDBjMDEKIAogLyoKICAqIFN0YXR1cyBS
-ZWdpc3RlciBiaXQgZGVzY3JpcHRpb24uIFVzZWQgYnkgZmxhc2ggZGV2aWNlcyB0aGF0IGRv
-bid0CkBAIC00NjIsNyArNDYzLDcgQEAgc3RhdGljIHN0cnVjdCBjZmlfZml4dXAgY2ZpX2Zp
-eHVwX3RhYmxlW10gPSB7CiAJeyBDRklfTUZSX0FNRCwgMHgwMDU2LCBmaXh1cF91c2Vfc2Vj
-c2kgfSwKIAl7IENGSV9NRlJfQU1ELCAweDAwNUMsIGZpeHVwX3VzZV9zZWNzaSB9LAogCXsg
-Q0ZJX01GUl9BTUQsIDB4MDA1RiwgZml4dXBfdXNlX3NlY3NpIH0sCi0JeyBDRklfTUZSX0FN
-RCwgMHgwYzAxLCBmaXh1cF9zMjlnbDA2NG5fc2VjdG9ycyB9LAorCXsgQ0ZJX01GUl9BTUQs
-IFMyOUdMMDY0Tl9NTjEyLCBmaXh1cF9zMjlnbDA2NG5fc2VjdG9ycyB9LAogCXsgQ0ZJX01G
-Ul9BTUQsIDB4MTMwMSwgZml4dXBfczI5Z2wwNjRuX3NlY3RvcnMgfSwKIAl7IENGSV9NRlJf
-QU1ELCAweDFhMDAsIGZpeHVwX3MyOWdsMDMybl9zZWN0b3JzIH0sCiAJeyBDRklfTUZSX0FN
-RCwgMHgxYTAxLCBmaXh1cF9zMjlnbDAzMm5fc2VjdG9ycyB9LApAQCAtODAxLDIyICs4MDIs
-MTIgQEAgc3RhdGljIHN0cnVjdCBtdGRfaW5mbyAqY2ZpX2FtZHN0ZF9zZXR1cChzdHJ1Y3Qg
-bXRkX2luZm8gKm10ZCkKIAlyZXR1cm4gTlVMTDsKIH0KIAotLyoKLSAqIFJldHVybiB0cnVl
-IGlmIHRoZSBjaGlwIGlzIHJlYWR5LgotICoKLSAqIFJlYWR5IGlzIG9uZSBvZjogcmVhZCBt
-b2RlLCBxdWVyeSBtb2RlLCBlcmFzZS1zdXNwZW5kLXJlYWQgbW9kZSAoaW4gYW55Ci0gKiBu
-b24tc3VzcGVuZGVkIHNlY3RvcikgYW5kIGlzIGluZGljYXRlZCBieSBubyB0b2dnbGUgYml0
-cyB0b2dnbGluZy4KLSAqCi0gKiBOb3RlIHRoYXQgYW55dGhpbmcgbW9yZSBjb21wbGljYXRl
-ZCB0aGFuIGNoZWNraW5nIGlmIG5vIGJpdHMgYXJlIHRvZ2dsaW5nCi0gKiAoaW5jbHVkaW5n
-IGNoZWNraW5nIERRNSBmb3IgYW4gZXJyb3Igc3RhdHVzKSBpcyB0cmlja3kgdG8gZ2V0IHdv
-cmtpbmcKLSAqIGNvcnJlY3RseSBhbmQgaXMgdGhlcmVmb3JlIG5vdCBkb25lCShwYXJ0aWN1
-bGFybHkgd2l0aCBpbnRlcmxlYXZlZCBjaGlwcwotICogYXMgZWFjaCBjaGlwIG11c3QgYmUg
-Y2hlY2tlZCBpbmRlcGVuZGVudGx5IG9mIHRoZSBvdGhlcnMpLgotICovCi1zdGF0aWMgaW50
-IF9feGlwcmFtIGNoaXBfcmVhZHkoc3RydWN0IG1hcF9pbmZvICptYXAsIHN0cnVjdCBmbGNo
-aXAgKmNoaXAsCi0JCQkgICAgICAgdW5zaWduZWQgbG9uZyBhZGRyKQorc3RhdGljIGludCBf
-X3hpcHJhbSBjaGlwX2NoZWNrKHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlw
-ICpjaGlwLAorCQkJICAgICAgIHVuc2lnbmVkIGxvbmcgYWRkciwgbWFwX3dvcmQgKmV4cGVj
-dGVkKQogewogCXN0cnVjdCBjZmlfcHJpdmF0ZSAqY2ZpID0gbWFwLT5mbGRydl9wcml2Owot
-CW1hcF93b3JkIGQsIHQ7CisJbWFwX3dvcmQgb2xkZCwgY3VyZDsKKwlpbnQgcmV0OwogCiAJ
-aWYgKGNmaV91c2Vfc3RhdHVzX3JlZyhjZmkpKSB7CiAJCW1hcF93b3JkIHJlYWR5ID0gQ01E
-KENGSV9TUl9EUkIpOwpAQCAtODI2LDE3ICs4MTcsMzUgQEAgc3RhdGljIGludCBfX3hpcHJh
-bSBjaGlwX3JlYWR5KHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpjaGlw
-LAogCQkgKi8KIAkJY2ZpX3NlbmRfZ2VuX2NtZCgweDcwLCBjZmktPmFkZHJfdW5sb2NrMSwg
-Y2hpcC0+c3RhcnQsIG1hcCwgY2ZpLAogCQkJCSBjZmktPmRldmljZV90eXBlLCBOVUxMKTsK
-LQkJZCA9IG1hcF9yZWFkKG1hcCwgYWRkcik7CisJCWN1cmQgPSBtYXBfcmVhZChtYXAsIGFk
-ZHIpOwogCi0JCXJldHVybiBtYXBfd29yZF9hbmRlcXVhbChtYXAsIGQsIHJlYWR5LCByZWFk
-eSk7CisJCXJldHVybiBtYXBfd29yZF9hbmRlcXVhbChtYXAsIGN1cmQsIHJlYWR5LCByZWFk
-eSk7CiAJfQogCi0JZCA9IG1hcF9yZWFkKG1hcCwgYWRkcik7Ci0JdCA9IG1hcF9yZWFkKG1h
-cCwgYWRkcik7CisJb2xkZCA9IG1hcF9yZWFkKG1hcCwgYWRkcik7CisJY3VyZCA9IG1hcF9y
-ZWFkKG1hcCwgYWRkcik7CisKKwlyZXQgPSBtYXBfd29yZF9lcXVhbChtYXAsIG9sZGQsIGN1
-cmQpOwogCi0JcmV0dXJuIG1hcF93b3JkX2VxdWFsKG1hcCwgZCwgdCk7CisJaWYgKCFyZXQg
-fHwgIWV4cGVjdGVkKQorCQlyZXR1cm4gcmV0OworCisJcmV0dXJuIG1hcF93b3JkX2VxdWFs
-KG1hcCwgY3VyZCwgKmV4cGVjdGVkKTsKIH0KIAorLyoKKyAqIFJldHVybiB0cnVlIGlmIHRo
-ZSBjaGlwIGlzIHJlYWR5LgorICoKKyAqIFJlYWR5IGlzIG9uZSBvZjogcmVhZCBtb2RlLCBx
-dWVyeSBtb2RlLCBlcmFzZS1zdXNwZW5kLXJlYWQgbW9kZSAoaW4gYW55CisgKiBub24tc3Vz
-cGVuZGVkIHNlY3RvcikgYW5kIGlzIGluZGljYXRlZCBieSBubyB0b2dnbGUgYml0cyB0b2dn
-bGluZy4KKyAqCisgKiBOb3RlIHRoYXQgYW55dGhpbmcgbW9yZSBjb21wbGljYXRlZCB0aGFu
-IGNoZWNraW5nIGlmIG5vIGJpdHMgYXJlIHRvZ2dsaW5nCisgKiAoaW5jbHVkaW5nIGNoZWNr
-aW5nIERRNSBmb3IgYW4gZXJyb3Igc3RhdHVzKSBpcyB0cmlja3kgdG8gZ2V0IHdvcmtpbmcK
-KyAqIGNvcnJlY3RseSBhbmQgaXMgdGhlcmVmb3JlIG5vdCBkb25lCShwYXJ0aWN1bGFybHkg
-d2l0aCBpbnRlcmxlYXZlZCBjaGlwcworICogYXMgZWFjaCBjaGlwIG11c3QgYmUgY2hlY2tl
-ZCBpbmRlcGVuZGVudGx5IG9mIHRoZSBvdGhlcnMpLgorICovCisjZGVmaW5lIGNoaXBfcmVh
-ZHkobWFwLCBjaGlwLCBhZGRyKSBjaGlwX2NoZWNrKG1hcCwgY2hpcCwgYWRkciwgTlVMTCkK
-KwogLyoKICAqIFJldHVybiB0cnVlIGlmIHRoZSBjaGlwIGlzIHJlYWR5IGFuZCBoYXMgdGhl
-IGNvcnJlY3QgdmFsdWUuCiAgKgpAQCAtODU1LDI4ICs4NjQsMjQgQEAgc3RhdGljIGludCBf
-X3hpcHJhbSBjaGlwX3JlYWR5KHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlw
-ICpjaGlwLAogc3RhdGljIGludCBfX3hpcHJhbSBjaGlwX2dvb2Qoc3RydWN0IG1hcF9pbmZv
-ICptYXAsIHN0cnVjdCBmbGNoaXAgKmNoaXAsCiAJCQkgICAgICB1bnNpZ25lZCBsb25nIGFk
-ZHIsIG1hcF93b3JkIGV4cGVjdGVkKQogewotCXN0cnVjdCBjZmlfcHJpdmF0ZSAqY2ZpID0g
-bWFwLT5mbGRydl9wcml2OwotCW1hcF93b3JkIG9sZGQsIGN1cmQ7Ci0KLQlpZiAoY2ZpX3Vz
-ZV9zdGF0dXNfcmVnKGNmaSkpIHsKLQkJbWFwX3dvcmQgcmVhZHkgPSBDTUQoQ0ZJX1NSX0RS
-Qik7CisJcmV0dXJuIGNoaXBfY2hlY2sobWFwLCBjaGlwLCBhZGRyLCAmZXhwZWN0ZWQpOwor
-fQogCi0JCS8qCi0JCSAqIEZvciBjaGlwcyB0aGF0IHN1cHBvcnQgc3RhdHVzIHJlZ2lzdGVy
-LCBjaGVjayBkZXZpY2UKLQkJICogcmVhZHkgYml0Ci0JCSAqLwotCQljZmlfc2VuZF9nZW5f
-Y21kKDB4NzAsIGNmaS0+YWRkcl91bmxvY2sxLCBjaGlwLT5zdGFydCwgbWFwLCBjZmksCi0J
-CQkJIGNmaS0+ZGV2aWNlX3R5cGUsIE5VTEwpOwotCQljdXJkID0gbWFwX3JlYWQobWFwLCBh
-ZGRyKTsKK3N0YXRpYyBib29sIGNmaV91c2VfY2hpcF9yZWFkeV9mb3Jfd3JpdGUoc3RydWN0
-IG1hcF9pbmZvICptYXApCit7CisJc3RydWN0IGNmaV9wcml2YXRlICpjZmkgPSBtYXAtPmZs
-ZHJ2X3ByaXY7CiAKLQkJcmV0dXJuIG1hcF93b3JkX2FuZGVxdWFsKG1hcCwgY3VyZCwgcmVh
-ZHksIHJlYWR5KTsKLQl9CisJcmV0dXJuIGNmaS0+bWZyID09IENGSV9NRlJfQU1EICYmIGNm
-aS0+aWQgPT0gUzI5R0wwNjROX01OMTI7Cit9CiAKLQlvbGRkID0gbWFwX3JlYWQobWFwLCBh
-ZGRyKTsKLQljdXJkID0gbWFwX3JlYWQobWFwLCBhZGRyKTsKK3N0YXRpYyBpbnQgX194aXBy
-YW0gY2hpcF9nb29kX2Zvcl93cml0ZShzdHJ1Y3QgbWFwX2luZm8gKm1hcCwKKwkJCQkJc3Ry
-dWN0IGZsY2hpcCAqY2hpcCwgdW5zaWduZWQgbG9uZyBhZGRyLAorCQkJCQltYXBfd29yZCBl
-eHBlY3RlZCkKK3sKKwlpZiAoY2ZpX3VzZV9jaGlwX3JlYWR5X2Zvcl93cml0ZShtYXApKQor
-CQlyZXR1cm4gY2hpcF9yZWFkeShtYXAsIGNoaXAsIGFkZHIpOwogCi0JcmV0dXJuCW1hcF93
-b3JkX2VxdWFsKG1hcCwgb2xkZCwgY3VyZCkgJiYKLQkJbWFwX3dvcmRfZXF1YWwobWFwLCBj
-dXJkLCBleHBlY3RlZCk7CisJcmV0dXJuIGNoaXBfZ29vZChtYXAsIGNoaXAsIGFkZHIsIGV4
-cGVjdGVkKTsKIH0KIAogc3RhdGljIGludCBnZXRfY2hpcChzdHJ1Y3QgbWFwX2luZm8gKm1h
-cCwgc3RydWN0IGZsY2hpcCAqY2hpcCwgdW5zaWduZWQgbG9uZyBhZHIsIGludCBtb2RlKQpA
-QCAtMTY5OSw3ICsxNzA0LDcgQEAgc3RhdGljIGludCBfX3hpcHJhbSBkb193cml0ZV9vbmV3
-b3JkX29uY2Uoc3RydWN0IG1hcF9pbmZvICptYXAsCiAJCSAqICJjaGlwX2dvb2QiIHRvIGF2
-b2lkIHRoZSBmYWlsdXJlIGR1ZSB0byBzY2hlZHVsaW5nLgogCQkgKi8KIAkJaWYgKHRpbWVf
-YWZ0ZXIoamlmZmllcywgdGltZW8pICYmCi0JCSAgICAhY2hpcF9nb29kKG1hcCwgY2hpcCwg
-YWRyLCBkYXR1bSkpIHsKKwkJICAgICFjaGlwX2dvb2RfZm9yX3dyaXRlKG1hcCwgY2hpcCwg
-YWRyLCBkYXR1bSkpIHsKIAkJCXhpcF9lbmFibGUobWFwLCBjaGlwLCBhZHIpOwogCQkJcHJp
-bnRrKEtFUk5fV0FSTklORyAiTVREICVzKCk6IHNvZnR3YXJlIHRpbWVvdXRcbiIsIF9fZnVu
-Y19fKTsKIAkJCXhpcF9kaXNhYmxlKG1hcCwgY2hpcCwgYWRyKTsKQEAgLTE3MDcsNyArMTcx
-Miw3IEBAIHN0YXRpYyBpbnQgX194aXByYW0gZG9fd3JpdGVfb25ld29yZF9vbmNlKHN0cnVj
-dCBtYXBfaW5mbyAqbWFwLAogCQkJYnJlYWs7CiAJCX0KIAotCQlpZiAoY2hpcF9nb29kKG1h
-cCwgY2hpcCwgYWRyLCBkYXR1bSkpIHsKKwkJaWYgKGNoaXBfZ29vZF9mb3Jfd3JpdGUobWFw
-LCBjaGlwLCBhZHIsIGRhdHVtKSkgewogCQkJaWYgKGNmaV9jaGVja19lcnJfc3RhdHVzKG1h
-cCwgY2hpcCwgYWRyKSkKIAkJCQlyZXQgPSAtRUlPOwogCQkJYnJlYWs7CkBAIC0xOTc5LDE0
-ICsxOTg0LDE0IEBAIHN0YXRpYyBpbnQgX194aXByYW0gZG9fd3JpdGVfYnVmZmVyX3dhaXQo
-c3RydWN0IG1hcF9pbmZvICptYXAsCiAJCSAqICJjaGlwX2dvb2QiIHRvIGF2b2lkIHRoZSBm
-YWlsdXJlIGR1ZSB0byBzY2hlZHVsaW5nLgogCQkgKi8KIAkJaWYgKHRpbWVfYWZ0ZXIoamlm
-ZmllcywgdGltZW8pICYmCi0JCSAgICAhY2hpcF9nb29kKG1hcCwgY2hpcCwgYWRyLCBkYXR1
-bSkpIHsKKwkJICAgICFjaGlwX2dvb2RfZm9yX3dyaXRlKG1hcCwgY2hpcCwgYWRyLCBkYXR1
-bSkpIHsKIAkJCXByX2VycigiTVREICVzKCk6IHNvZnR3YXJlIHRpbWVvdXQsIGFkZHJlc3M6
-MHglLjhseC5cbiIsCiAJCQkgICAgICAgX19mdW5jX18sIGFkcik7CiAJCQlyZXQgPSAtRUlP
-OwogCQkJYnJlYWs7CiAJCX0KIAotCQlpZiAoY2hpcF9nb29kKG1hcCwgY2hpcCwgYWRyLCBk
-YXR1bSkpIHsKKwkJaWYgKGNoaXBfZ29vZF9mb3Jfd3JpdGUobWFwLCBjaGlwLCBhZHIsIGRh
-dHVtKSkgewogCQkJaWYgKGNmaV9jaGVja19lcnJfc3RhdHVzKG1hcCwgY2hpcCwgYWRyKSkK
-IAkJCQlyZXQgPSAtRUlPOwogCQkJYnJlYWs7Ci0tIAoyLjMyLjAKCg==
-
---------------K91juOuLpSSbXSC0vYcfI0J1--
+> so you need to figure out how to compile the test program
+> above first with clang
+>
+> jirka

@@ -2,74 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349E14CEDB1
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 21:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 182B64CEDB4
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 21:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234218AbiCFUcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 15:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
+        id S234227AbiCFUdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 15:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiCFUcX (ORCPT
+        with ESMTP id S234221AbiCFUdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 15:32:23 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A4257B1F
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 12:31:31 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id r13so27922403ejd.5
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 12:31:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K4n21OYXdDZM4hk/UjVZvxqo76lcN1HhOZ4vArZv8OU=;
-        b=WKfevEQAwsxI+yju5ynzzh6Tx2zdUBz9O/xOYN8MkQkoFhsfBcGRIIqxWqNNhJv9G9
-         cGj9+7GBoGSyhhebJh2v7ZgRmX9Y/0YouNMSe9pzeYPYkwmbWR5SN8jg6yed730dyeuL
-         E0KZ7sQOluB9Tc2GoJQZZlOfdFNT2RWadGnQZ57/g3VotDS2NUWY5yQH8rdO4C23djHP
-         sbqkyIMfGlS6fBhuNFN3q2n/saPK3O0tIhTwBfuihtVasHdNOuhE6LaPL5Daycqfikbs
-         k1d0yq2xWK35u/5jDuHjaaLgHMF8F4598TwUs5gRX1P0nYoj2VDtYq90a5lSdV3/LftJ
-         T8eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K4n21OYXdDZM4hk/UjVZvxqo76lcN1HhOZ4vArZv8OU=;
-        b=gTm0iVBgKeuTUmOQAVQvIVdRJR3DMD24BWrKC4Nor2qRvYc4WFcWU+EB3Ce7BOXygz
-         oUzmqne2fLdbDH/6zc+ewbCkfrM9MjUYFWnvqYJeO05amqRibdAFhbVsDCE6Qp2FJK3i
-         jPpO2pbpZoeU7Xr/YKxPECRQ1e02pfmX3CxhXRdFq7wFjkOFUVfpWZUeKFCpfG+8J7RX
-         Gx1A3S9FHA0tXh00wT5Mj6UG7k6UuznOMOjvNinFtJOUnaJinh+tqUOdoByQeU/BVjJF
-         u48yXPq+Lntt6jnTp2A440zy2DyHLCBpp76l7qB5X72hXqKcPUJ8NgySe6xWg/wfRR91
-         8sBQ==
-X-Gm-Message-State: AOAM532v5Rk2YRepvloTSl+URsukLmGrLDWVIFfKAo+5Q3lhjYs3dhEU
-        oDGACIq/fFhOO1ojTg8bvQ7Y2ZridgZELMNDw/Q=
-X-Google-Smtp-Source: ABdhPJwq+ENNOmm023HEMN0NHnRWKo1CSAdsqHqpMxrXDwLXKbqpfQ6vkWwsTliG+xADpIloRlSQ/LKUP/4vyZlwxb8=
-X-Received: by 2002:a17:907:d13:b0:6db:de8:615e with SMTP id
- gn19-20020a1709070d1300b006db0de8615emr3928656ejc.649.1646598689737; Sun, 06
- Mar 2022 12:31:29 -0800 (PST)
+        Sun, 6 Mar 2022 15:33:22 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4C06386;
+        Sun,  6 Mar 2022 12:32:28 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBYDT4r6rz4xsk;
+        Mon,  7 Mar 2022 07:32:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646598745;
+        bh=Y1LnWnzTuiK+qUe2dOaAZFJLdDa/r/dVbAhlbUr1IOU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZHmy8FCQ0kbC6QlhU4xALxzOcohaMRb6ubkkY9g1yqwFbotXxa1mDqjCX8jWEpwT0
+         l/PCuGkrbnETvYMUA3TVR3A+FfnDQUJfdi/nis/2ABm9W4XKnMIQCWuI4E2x0dZVuX
+         LSb9bEC2rl4a1hDcTG93Exy+2s50bZfeS11JwnvFCwRBOpW2YCMaY7OwfImJ15qoHp
+         NcTBeZreIcl8lgAH9tWAAOVa+t4XrHxfNx9WX6nfvbCPv5Oy7nDAXxTsG6anMKhJbd
+         jA+rQYMZLJNpyeJsL4BBMuludSGf8iorLsYMZUs9By/egUVyI9spxDFArGzGbk2pDi
+         6ZlhTqH2tO/Jg==
+Date:   Mon, 7 Mar 2022 07:32:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the iommu tree
+Message-ID: <20220307073224.704133ff@canb.auug.org.au>
 MIME-Version: 1.0
-References: <298f0644275d7d0b4aa3ee7143756a2431a4900c.1646311443.git.geert+renesas@glider.be>
-In-Reply-To: <298f0644275d7d0b4aa3ee7143756a2431a4900c.1646311443.git.geert+renesas@glider.be>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sun, 6 Mar 2022 21:31:18 +0100
-Message-ID: <CAFBinCBVB8eK-4k3Kgz5bNr++k=7pjHFg+hsqO8WGTLzUzhePw@mail.gmail.com>
-Subject: Re: [PATCH] drm: Drop commas after SoC match table sentinels
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/wPnO2v21jsZ7ne.aNnm1Apr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,20 +50,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 3, 2022 at 1:45 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> It does not make sense to have a comma after a sentinel, as any new
-> elements must be added before the sentinel.
-agreed, thanks for taking care of this!
+--Sig_/wPnO2v21jsZ7ne.aNnm1Apr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/gpu/drm/bridge/nwl-dsi.c  | 2 +-
->  drivers/gpu/drm/meson/meson_drv.c | 2 +-
-for drivers/gpu/drm/meson/meson_drv.c:
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Hi all,
 
+Commits
 
-Best regards,
-Martin
+  71cc6e9b3f17 ("iommu/amd: Remove unused struct fault.devid")
+  ff1580d8e352 ("iommu/amd: Clean up function declarations")
+  34dbeaf4e950 ("iommu/amd: Call memunmap in error path")
+
+are missing a Signed-off-by from their author.
+
+Vasant Hegde via iommu <iommu@lists.linux-foundation.org> v
+Vasant Hegde <vasant.hegde@amd.com>.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/wPnO2v21jsZ7ne.aNnm1Apr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlGlgACgkQAVBC80lX
+0Gx1xgf/W6+u86gnSaRgzKuACwapP7Ch/I1Er1TWld0CZmZ4ITWShe5nLEAVCWYw
+9tQmTYgrh8t3pA2/sGv7boWxaGD8/esT2NfYgzWLdK77qDqREXLBCaUUAl9N8Jy4
+QsNyEEeftCY4kwx4zqy5u/XkZldgCPX3Ja0F2dGhkZ5ofxf6Zl7FqEMlNaCSIvPa
+sSCyTgTs24bnWgMHBqnCfIftUe472Pyboz140COdVJcYIYWBiHI6imPnJzTL3+t6
+6zfwhfC52qXlnxiTVKoo+WSi6dwfAPZsYvFQZca44w/IE0QOQ3mD2rIqVTFWF3iI
+AaT7+YMWJ/TA6sxlTjo5EersIfOW1A==
+=q+Cf
+-----END PGP SIGNATURE-----
+
+--Sig_/wPnO2v21jsZ7ne.aNnm1Apr--

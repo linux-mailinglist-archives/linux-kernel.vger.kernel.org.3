@@ -2,209 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371984CEE4A
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 23:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA70A4CEE57
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 00:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbiCFXAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 18:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S229445AbiCFXPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 18:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbiCFXAC (ORCPT
+        with ESMTP id S230331AbiCFXPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 18:00:02 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BDF5D5EE
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 14:59:08 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id j83so2812492oih.6
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 14:59:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=kuAwFNdvfUoB+jhabmE+ejZcyF5svphRQA7Cw43kwi8=;
-        b=kPpUrffhO4TxCVaOXzvYs3e+cRGTHM3KtZ7WfofY+N2dasiK1j/6xoWwLR2tAm09KP
-         mebxc6zSJHXoGueC47+fk0VBombrG/KE4uWHWY1VJhkV50ZNt525Cds4bc+B/USeEcG7
-         FIHMN5Hvi+uN4TskszrITE8f5QC/SJqiuC/FeXphySHlXyGsD4Iu9boUgR5OXeE9FWf8
-         3LXroc8K5k3cLjEyDk/dp+yW6EvpFaIggjg6OHx66pO6L76jeZLWAcdg8fK3AuISQl/y
-         JXmV3xxAcUXzM6hXZRv7rdyt7uHpCNKZMqXbOa+l5A4VdxulEsmI5VwOHylGRJjlwwfw
-         E+nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=kuAwFNdvfUoB+jhabmE+ejZcyF5svphRQA7Cw43kwi8=;
-        b=mNuJvQrp6fAYSEJnPUnsEuaCFPy9DiM0y2XdrgKAhqmgGKCzqS7DhJxy+MB62tgv94
-         dV3Vg7O7YICwUy3zwCIBVGiYzSca1At1+Yz7njUbb3Im/TOhfIsox3WgDVXNepvc8dJA
-         ik1v6SRGHc2Z4B0SZsuy6LpluROs1ZpGbOl+uLCRN7cwSlN6idYoAEcZnS9aimnk7q64
-         II0+6NL+pNdUxCwJ3VzrNzJiBntKkTGgqDBI8FmT1gqMiIuvTF+67T0W5kb7qrO8yp3B
-         aQ4nuXwPBcmM01h7YmjRU3dUPmtpoxv+YL15ANOE6Wb99b1bDxliqiTTCSzNQdUieiun
-         GSiw==
-X-Gm-Message-State: AOAM530pXlJeLVWUbzm4Vi7lWLdhKTve8H7pTNvPn8W68SGpaNOr+C7h
-        0s+W2kwyYHLR0SMLALoz/Tz0Yg==
-X-Google-Smtp-Source: ABdhPJx/Hqu7SfzlGzmEpo8d7O7y359VqM5bOvt1wDfmQObfLuYDP6UYX4MMELpvv/a9avdsR+wwjQ==
-X-Received: by 2002:a05:6808:18a7:b0:2d4:6a7e:23e6 with SMTP id bi39-20020a05680818a700b002d46a7e23e6mr5771492oib.152.1646607547846;
-        Sun, 06 Mar 2022 14:59:07 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 67-20020aca0746000000b002d71928659dsm5586722oih.8.2022.03.06.14.59.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 14:59:07 -0800 (PST)
-Date:   Sun, 6 Mar 2022 14:59:05 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Hugh Dickins <hughd@google.com>, Christoph Hellwig <hch@lst.de>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Zdenek Kabelac <zkabelac@redhat.com>,
-        Lukas Czerner <lczerner@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Borislav Petkov <bp@suse.de>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH mmotm v2] tmpfs: do not allocate pages on read
-In-Reply-To: <20220306092709.GA22883@lst.de>
-Message-ID: <90bc5e69-9984-b5fa-a685-be55f2b64b@google.com>
-References: <f9c2f38f-5eb8-5d30-40fa-93e88b5fbc51@google.com> <20220306092709.GA22883@lst.de>
+        Sun, 6 Mar 2022 18:15:36 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA7323BF9;
+        Sun,  6 Mar 2022 15:14:42 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBcqd2hTvz4xvS;
+        Mon,  7 Mar 2022 10:14:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646608477;
+        bh=aEQWMqXdoCOIPAGzph08yIKzBRNDLEBPjztdvdKgsxI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=da4/zggK4h0oxQLkbp+BpzP6JTFgUvdgJscjxkUoAMfSGLahGu7I4l/gmaIW+ZXcC
+         6WqfFZ9got+GeFy9Str5JVyp0eL+ddGXdGT+PMsxYpSr6ZE8p0AHdRRyQxGiZl8zAC
+         b1dvxSCYGJCK3+lbk3V4/wIwwaJFAv5p61DnFQucF4XA5xMrlIMt2oo9dGZvKg7TzC
+         dhoNwbxjq1vO6UCsaIOL6f5fLHjwrPn4rrWqOHJt1tMhsOGMwOLxE+RuwHyz3ulEOT
+         6L//q4SQvyrMeFWYNwmkEO2olPO7DWpLYYWAhrLaB6yHpbzLMQHiHkxaOe3yb7mZTG
+         ERMXk9axjWqzg==
+Date:   Mon, 7 Mar 2022 10:14:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220307101436.7ae87da0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YFuQs165iYKTP7YjEyi1H7z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mikulas asked in
-https://lore.kernel.org/linux-mm/alpine.LRH.2.02.2007210510230.6959@file01.intranet.prod.int.rdu2.redhat.com/
-Do we still need a0ee5ec520ed ("tmpfs: allocate on read when stacked")?
+--Sig_/YFuQs165iYKTP7YjEyi1H7z
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Lukas noticed this unusual behavior of loop device backed by tmpfs in
-https://lore.kernel.org/linux-mm/20211126075100.gd64odg2bcptiqeb@work/
+Hi all,
 
-Normally, shmem_file_read_iter() copies the ZERO_PAGE when reading holes;
-but if it looks like it might be a read for "a stacking filesystem", it
-allocates actual pages to the page cache, and even marks them as dirty.
-And reads from the loop device do satisfy the test that is used.
+Today's linux-next merge of the net-next tree got a conflict in:
 
-This oddity was added for an old version of unionfs, to help to limit
-its usage to the limited size of the tmpfs mount involved; but about
-the same time as the tmpfs mod went in (2.6.25), unionfs was reworked
-to proceed differently; and the mod kept just in case others needed it.
+  net/dsa/dsa2.c
 
-Do we still need it? I cannot answer with more certainty than "Probably
-not". It's nasty enough that we really should try to delete it; but if
-a regression is reported somewhere, then we might have to revert later.
+between commit:
 
-It's not quite as simple as just removing the test (as Mikulas did):
-xfstests generic/013 hung because splice from tmpfs failed on page not
-up-to-date and page mapping unset.  That can be fixed just by marking
-the ZERO_PAGE as Uptodate, which of course it is: do so in
-pagecache_init() - it might be useful to others than tmpfs.
+  afb3cc1a397d ("net: dsa: unlock the rtnl_mutex when dsa_master_setup() fa=
+ils")
 
-My intention, though, was to stop using the ZERO_PAGE here altogether:
-surely iov_iter_zero() is better for this case?  Sadly not: it relies
-on clear_user(), and the x86 clear_user() is slower than its copy_user():
-https://lore.kernel.org/lkml/2f5ca5e4-e250-a41c-11fb-a7f4ebc7e1c9@google.com/
+from the net tree and commit:
 
-But while we are still using the ZERO_PAGE, let's stop dirtying its
-struct page cacheline with unnecessary get_page() and put_page().
+  e83d56537859 ("net: dsa: replay master state events in dsa_tree_{setup,te=
+ardown}_master")
 
-Reported-by: Mikulas Patocka <mpatocka@redhat.com>
-Reported-by: Lukas Czerner <lczerner@redhat.com>
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-v2: Set ZERO_PAGE uptodate during init, per hch.
+from the net-next tree.
 
- mm/filemap.c |  6 ++++++
- mm/shmem.c   | 20 ++++++--------------
- 2 files changed, 12 insertions(+), 14 deletions(-)
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1063,6 +1063,12 @@ void __init pagecache_init(void)
- 		init_waitqueue_head(&folio_wait_table[i]);
- 
- 	page_writeback_init();
-+
-+	/*
-+	 * tmpfs uses the ZERO_PAGE for reading holes: it is up-to-date,
-+	 * and splice's page_cache_pipe_buf_confirm() needs to see that.
-+	 */
-+	SetPageUptodate(ZERO_PAGE(0));
- }
- 
- /*
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 3c346f2e557f..659bd599d731 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2501,19 +2501,10 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 	struct address_space *mapping = inode->i_mapping;
- 	pgoff_t index;
- 	unsigned long offset;
--	enum sgp_type sgp = SGP_READ;
- 	int error = 0;
- 	ssize_t retval = 0;
- 	loff_t *ppos = &iocb->ki_pos;
- 
--	/*
--	 * Might this read be for a stacking filesystem?  Then when reading
--	 * holes of a sparse file, we actually need to allocate those pages,
--	 * and even mark them dirty, so it cannot exceed the max_blocks limit.
--	 */
--	if (!iter_is_iovec(to))
--		sgp = SGP_CACHE;
--
- 	index = *ppos >> PAGE_SHIFT;
- 	offset = *ppos & ~PAGE_MASK;
- 
-@@ -2522,6 +2513,7 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 		pgoff_t end_index;
- 		unsigned long nr, ret;
- 		loff_t i_size = i_size_read(inode);
-+		bool got_page;
- 
- 		end_index = i_size >> PAGE_SHIFT;
- 		if (index > end_index)
-@@ -2532,15 +2524,13 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 				break;
- 		}
- 
--		error = shmem_getpage(inode, index, &page, sgp);
-+		error = shmem_getpage(inode, index, &page, SGP_READ);
- 		if (error) {
- 			if (error == -EINVAL)
- 				error = 0;
- 			break;
- 		}
- 		if (page) {
--			if (sgp == SGP_CACHE)
--				set_page_dirty(page);
- 			unlock_page(page);
- 
- 			if (PageHWPoison(page)) {
-@@ -2580,9 +2570,10 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 			 */
- 			if (!offset)
- 				mark_page_accessed(page);
-+			got_page = true;
- 		} else {
- 			page = ZERO_PAGE(0);
--			get_page(page);
-+			got_page = false;
- 		}
- 
- 		/*
-@@ -2595,7 +2586,8 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 		index += offset >> PAGE_SHIFT;
- 		offset &= ~PAGE_MASK;
- 
--		put_page(page);
-+		if (got_page)
-+			put_page(page);
- 		if (!iov_iter_count(to))
- 			break;
- 		if (ret < nr) {
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/dsa/dsa2.c
+index 074e4a69a728,d5f21a770689..000000000000
+--- a/net/dsa/dsa2.c
++++ b/net/dsa/dsa2.c
+@@@ -1064,9 -1078,18 +1078,18 @@@ static int dsa_tree_setup_master(struc
+ =20
+  	list_for_each_entry(dp, &dst->ports, list) {
+  		if (dsa_port_is_cpu(dp)) {
+- 			err =3D dsa_master_setup(dp->master, dp);
++ 			struct net_device *master =3D dp->master;
++ 			bool admin_up =3D (master->flags & IFF_UP) &&
++ 					!qdisc_tx_is_noop(master);
++=20
++ 			err =3D dsa_master_setup(master, dp);
+  			if (err)
+ -				return err;
+ +				break;
++=20
++ 			/* Replay master state event */
++ 			dsa_tree_master_admin_state_change(dst, master, admin_up);
++ 			dsa_tree_master_oper_state_change(dst, master,
++ 							  netif_oper_up(master));
+  		}
+  	}
+ =20
+
+--Sig_/YFuQs165iYKTP7YjEyi1H7z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlQFwACgkQAVBC80lX
+0GzeuQf7Bwf9dz0BDxU3kURL6XgCo4QmQ7w1lTSP9AIfFMHX/G6PLiHzH6eOPnfW
+00ED2iMXzLRaCRwXs7Pm+d656HEPLgfAZCTC9nV8dAPxtPtEUjGLXJmgEAyXsP0Y
+FhL8OzHd3/5xovWqUbavMWxIgwfpGOo+ngMRRFerMt0yolum3HwAAIWjLPukPYA5
+MQRw1gM0dzqRToLRCNl+Bzzkfx0tLz5KJi29HEpTk6ok6HTJoZ0VHutViqJelssD
+G+5GNXu7t/MZ10ZxL16JCH4NiSbBmwTmvbe59IA5pFbCXok7AWDLXHtJbpJAVq74
+ptqYQ4Bm9kfR+ppux7N8fNmYNBAdrA==
+=AcCJ
+-----END PGP SIGNATURE-----
+
+--Sig_/YFuQs165iYKTP7YjEyi1H7z--

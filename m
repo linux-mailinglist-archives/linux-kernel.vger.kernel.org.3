@@ -2,166 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AA64CE978
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 07:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C74B4CE986
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 07:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiCFGLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 01:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S232999AbiCFGqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 01:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbiCFGLP (ORCPT
+        with ESMTP id S231496AbiCFGqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 01:11:15 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E6447571;
-        Sat,  5 Mar 2022 22:10:23 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id t14so10955245pgr.3;
-        Sat, 05 Mar 2022 22:10:23 -0800 (PST)
+        Sun, 6 Mar 2022 01:46:15 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF0B5520E;
+        Sat,  5 Mar 2022 22:45:23 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id p8so11116165pfh.8;
+        Sat, 05 Mar 2022 22:45:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=IFP0n3aR1KLrugHWvaTBlE8oeqir0qwrjSN1W4oR8A4=;
-        b=LutdSF7TOGs9m0nw/abVQLroRBIkivCxvs6RTvSJbASkCA5qJ/eA67aCcCtwtTjQJx
-         DX35hdPLW3DY/whBS9xo8PGCJqxym+u83naFZoF7W7dgBq4JYzh/y+keHZGnqISOI5FD
-         ieAbgQRDiHj15tFxN1Q2730SAIGpme19UhzBG+hEVwADld6q/zCb/ugFLljw4401FIyG
-         WS7UmejkwMMrib6R5PZGyo0hq1jYrX8TumfCSuLmnzHMGzmQPLR7mm3jDQEODvcjXmbu
-         4VLRZ00c0vOloumUhVGXP/5SWnRrE2KYNUqkXf8iumu34xdm4uFrqwmIK7nv89CTXfb0
-         nkSw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y17NxRIyAZ0QbQh8HrJFU8tqK+/ZOu5SO1Yl2JzX3sE=;
+        b=dMIstqJ/q4smhGApxPpkCzFLpM0TFtDMP1bJHsILasMeddSesq3Cmm+DZv9oWnPTVU
+         ZLnbNiJ4e+rvKN5aRog6ykEbmf59X5R9YLwt2QiTIg2GKyETyLccL/tcXK8enSk6TG1M
+         YBbebz2oBtiVXdRYV8ATjjzkwLPwrKfzCNebH/GCJVAVmE851mqWR5SUkieEXJQ6hC0m
+         0JKv/WICjxNH5UUObbIAKmO/qESh2RNKV6nXrc6CFAYMzuBRyJanoNeKjJaXUp6puRsb
+         jmNwKlVLGzyOqVODbmev8lL+By+QZFXlH16J4NnGvjeojHj2Y3xsAUQ5A3x3yGE9Ee6F
+         bITg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=IFP0n3aR1KLrugHWvaTBlE8oeqir0qwrjSN1W4oR8A4=;
-        b=vzGv2iFq9OljeM53ppkeELn4MwVMk/Yt2tHfqGnqFYNHj2RHTneEe8rvc1ybhmpW9V
-         FzXzpgR4SrYBuBnbM62KJo8+50xn2nScQf2IOmHMTFBxGC9ex0/cRmxegSwl/AIvDltU
-         GXBqRPuvj2YWi3elz3PaIaAf7hp6t39zj7fNFUYH7+v9gu4z2QqeDdn4TnMnv9I0YcbR
-         bB8BO9mvF/wi2J8CFI4a4mD6xWpOAOIs6jYFHwOBnVDRB0g0BPVLbWyPMBb9ghiGUj39
-         /rpR6CihMmMeZMpeE5YulQ3to4iwZSp/tbAMw0lzjjtiPUJK9UXoQ1ew1z4l8G5rqUsy
-         Yjpg==
-X-Gm-Message-State: AOAM531QpAhZWv02cQNc5oMlR9q/0nAyDgfNOp7IALY81ztsKNOIWyVA
-        cgzk/FfrX1Q8q93oKp5q0Yc=
-X-Google-Smtp-Source: ABdhPJxV26u+wQtug7E3G5n/M1Gwls9RdmZzpeT486WpZCawBt9nzrdidxecQW//rxYRhRK9jIvbWg==
-X-Received: by 2002:a63:2c53:0:b0:373:7234:adf2 with SMTP id s80-20020a632c53000000b003737234adf2mr5141415pgs.111.1646547023418;
-        Sat, 05 Mar 2022 22:10:23 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id q13-20020aa7982d000000b004cb98a2ca35sm11994907pfl.211.2022.03.05.22.10.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 05 Mar 2022 22:10:22 -0800 (PST)
-From:   Vincent Shih <vincent.sunplus@gmail.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>
-Subject: [PATCH v3 2/2] dt-bindings: usb: Add bindings doc for Sunplus EHCI driver
-Date:   Sun,  6 Mar 2022 14:10:36 +0800
-Message-Id: <1646547036-14885-3-git-send-email-vincent.sunplus@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1646547036-14885-1-git-send-email-vincent.sunplus@gmail.com>
-References: <1646547036-14885-1-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y17NxRIyAZ0QbQh8HrJFU8tqK+/ZOu5SO1Yl2JzX3sE=;
+        b=eawUMecd5yegU33VQ385dLBAM7O/fhqyW2lSP/TCLdPNX+4H2ly4ALq6ZI2lfqxuQ/
+         +lW9umZzE/NAQ7prZiFUSoPj6wsNm69ibNut9lGFMaJ15Ye7A3rtRLlEwp/y0zKUxsDG
+         wXjaRwEuD9/bBGOSRwFUFcF4TfV9AoYFM1u4mIBvZd6Gwwdq7SysxZVOC1ku8oNh/FFK
+         1YViWiW8Vy1SLwwbNk6ehZg7p4eQZfOAEGgq3BYHGX9GYp67ve/sVXgbkJsGkhGCLASB
+         MrkT0dAaSSBCsWLmnSwxxSbFVvU1znaMKuTjVcP7pQOcuaZ261tCe0eSN5NQId43gF1K
+         52bQ==
+X-Gm-Message-State: AOAM531+aLC2Ti7ri0iJNf3vwvPItM1bR3gOMZYameFAIWHvcpHJlfcH
+        HlcgkGR8j040wpP4rVwJBTA=
+X-Google-Smtp-Source: ABdhPJyW7sA5A2y8aHP1+G+dmwlasq7FW8LB/j07ubqGhUzv26cDWtaG+dyWY8q9dLFOqb12uOwwkw==
+X-Received: by 2002:a62:be1a:0:b0:4f4:c50:4209 with SMTP id l26-20020a62be1a000000b004f40c504209mr7158090pff.64.1646549122248;
+        Sat, 05 Mar 2022 22:45:22 -0800 (PST)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:dcdb:d868:b18f:a9a8])
+        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm12229047pfw.188.2022.03.05.22.45.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Mar 2022 22:45:21 -0800 (PST)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 0/2] xtensa: fix pt_regs to cover user exception frame
+Date:   Sat,  5 Mar 2022 22:44:33 -0800
+Message-Id: <20220306064435.256328-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings doc for Sunplus EHCI driver
+Hello,
 
-Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
----
-Changes in v2:
-  - Address the comments by Rob Herring.
+this series updates xtensa struct pt_regs so that it covers the whole
+user exception frame fixing kernel build issue visible in the current
+linux-next.
 
- .../bindings/usb/sunplus,sp7021-usb-ehci.yaml      | 63 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
+Max Filippov (2):
+  xtensa: rename PT_SIZE to PT_KERNEL_SIZE
+  xtensa: use XCHAL_NUM_AREGS as pt_regs::areg size
 
-diff --git a/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
-new file mode 100644
-index 0000000..905f68c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/sunplus,sp7021-usb-ehci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus SP7021 EHCI Controller Device Tree bindings
-+
-+allOf:
-+  - $ref: usb-hcd.yaml#
-+
-+maintainers:
-+  - Vincent Shih <vincent.sunplus@gmail.com>
-+
-+properties:
-+  compatible:
-+    const: sunplus,sp7021-usb2-ehci
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    minItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  phys:
-+    maxItems: 1
-+
-+  phy-names:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - clocks
-+  - resets
-+  - reg
-+  - interrupts
-+  - phys
-+  - phy-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    sp_ehci0: usb@9c102100 {
-+      compatible = "sunplus,sp7021-usb-ehci";
-+      clocks = <&clkc 0x3a>;
-+      resets = <&rstc 0x2a>;
-+      reg = <0x9c102100 0x68>;
-+      interrupt-parent = <&intc>;
-+      interrupts = <14 IRQ_TYPE_LEVEL_HIGH>;
-+      phys = <&sp_uphy0>;
-+      phy-names = "uphy";
-+    };
-+    ...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6c2faf3..4e66993 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17951,6 +17951,7 @@ SUNPLUS USB EHCI DRIVER
- M:	Vincent Shih <vincent.sunplus@gmail.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ehci.yaml
- F:	drivers/usb/host/ehci-sunplus.c
- 
- SUPERH
+ arch/xtensa/include/asm/ptrace.h |  7 +++----
+ arch/xtensa/kernel/asm-offsets.c |  2 +-
+ arch/xtensa/kernel/entry.S       | 14 +++++++-------
+ arch/xtensa/kernel/process.c     | 10 ----------
+ arch/xtensa/kernel/vectors.S     |  4 ++--
+ 5 files changed, 13 insertions(+), 24 deletions(-)
+
 -- 
-2.7.4
+2.30.2
 

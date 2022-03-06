@@ -2,302 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DD74CEA52
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 10:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E77D4CEA62
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 10:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbiCFJiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 04:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        id S231781AbiCFJtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 04:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbiCFJiq (ORCPT
+        with ESMTP id S230478AbiCFJtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 04:38:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ADD13CE2;
-        Sun,  6 Mar 2022 01:37:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EBDB6103C;
-        Sun,  6 Mar 2022 09:37:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5407C340EC;
-        Sun,  6 Mar 2022 09:37:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646559474;
-        bh=33xTofm5tNJfVFvrdxFoHym3nFCdtF5+sqI7opLuv3M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UGqS2FkWPBkDFnYXfG70XW8rrO/XVoGtZYtqtqr+V/2h8g7OQG5rRAdK4/1RCpuEx
-         4xwfIY9tfcaZYGQgmrRK6ut80mQEbRRMx85+aBVMPmR5DVd7q88Qc/0I9wPSQNmo4Z
-         +BtRNqMDi6Q+N5xqIOZWQpeGl2qqtXWAuuo+h9p6WfKMzC1kfGGgOJP7Lz6UYfPXps
-         R7irDlkTmHA7fSrMeBL81s7rJ7QbltT9OL0H1IttWmqcInzv3bn9pqd3dmLHE51XHy
-         qKA5ZBFAj7UF0MIBrpF/jimqOWgHL7ucWGE1Lvt+EZ/KD+Ll7iJUVbBGeDu5IWIzjl
-         b5yMhYHAjHVMA==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v9 11/11] fprobe: Add a selftest for fprobe
-Date:   Sun,  6 Mar 2022 18:37:48 +0900
-Message-Id: <164655946801.1674510.4687155136966760019.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164655933970.1674510.3809060481512713846.stgit@devnote2>
-References: <164655933970.1674510.3809060481512713846.stgit@devnote2>
-User-Agent: StGit/0.19
+        Sun, 6 Mar 2022 04:49:21 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B1315A28;
+        Sun,  6 Mar 2022 01:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1646560070;
+        bh=OD9fC9I+jhM8Okh3twd8v6eVvZwsGcKGQ/IgKak8Gv0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Ny5UjL1sTdiqrIRD3wdU7tqzCN4lUZru1dJUCIRnKTmN6xcyx5SmRkhxv8IEgbQG9
+         StdwseJ272DQcBXAXCYlVGGK4ct+XstTGKsg6xLMOjBff/XferX08EL1cUoBzgtV6e
+         zRtzz0bjaKKyJrk/BAV3PJK+cmUHxysOpADXtyI8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.145.243] ([217.61.145.243]) by web-mail.gmx.net
+ (3c-app-gmx-bs46.server.lan [172.19.170.98]) (via HTTP); Sun, 6 Mar 2022
+ 10:47:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <trinity-9ef9e0d3-e70c-45d9-bdd8-e43d1c89a8c9-1646560070497@3c-app-gmx-bs46>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Aw: Re: [PATCH v5 1/5] dt-bindings: ata: ahci-platform: Convert DT
+ bindings to yaml
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 6 Mar 2022 10:47:50 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <a2839b00-d195-131f-b2a7-d2f030a5bd95@canonical.com>
+References: <20220305112607.257734-1-linux@fw-web.de>
+ <20220305112607.257734-2-linux@fw-web.de>
+ <a2839b00-d195-131f-b2a7-d2f030a5bd95@canonical.com>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:Echz34LhzOW5lmBqLmmb4P7mnPgqTTUheGQ31g1l4cvCB7QgzRtTYu2fQgCY6tYwBeroz
+ bkiKXu1NYcjP50rVa7bvFlK05WbKn34j5J3LeomEbN8mZHBor8Z9e28tvxyU13X+a1B0VMcEo3Is
+ 0c0SW2QymXtdzlA+3Qs7FfKYs175VGlLw9j2We/yhu1/F44dZQpZMdH6WaBV5zgfbEXy9abRCjeQ
+ DusZRjUvBrwRp0/hkZr1HHgYogx4mFESNDB/LGNEl/HZTSYqypdTFzqW+nkovm4U4zLCjm+2iuI8
+ es=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EowYyED6Quw=:Z01UPjyHuVxost3uxThyxc
+ ozZn7Bq/AJadPhkzyUmulvBAuWzvsO5W3OMUpNO0YksneTyUgNH9j6cdGxoLDJJMpQhgEa5r0
+ iZ1lMnk5aXliO2O4GQgH2NuaEAFVYV/4C3fIHC7p2wsRLGhsynzhz4IqITYN/uN2sIQ6XvrfP
+ wu92vavFMgcD+otN+pZxhhdAVUWuwsHZiVwtY8bKhbvDEVbnUh0f3svL1u2dWi0cCcEXVHHSU
+ UZrM7kXHfO474b4HE1QgZUdfQgY97n7fTuNzzP6v9mq2TOIjjUvyFr5TkxNeGI3vZrH/tt6v6
+ PyUgdKaj8qGR0IDHvGogajmD7i+t1WqfPh6QrWrkFhcpuy7Z+w5zKNIdE3du+yymkHFFDNHk2
+ 3YQS0yVgRg8ezuyQ10swPa/GdqYoGnKfMXC0i7jjH1wajvnRhshKRtxTCy2CtRL0dEO2FRwey
+ WFoVaJFlYriuZ4Hu7e1kmCYpbxFTf4frCUC7RvY4dMUiYTMTXNaDigbA7+J+LTVrG764N5EJ7
+ u2KkQ7ekRZrjH1FbhdwgROx+Q0LQSrzgWc0gjNOlPsk95dxjpnqy5Vt7YryeT4PebHNgt/3CM
+ 7wrwruTI0TxxG81/zyYzIT96eB2rbFe0Ipu8ZUkHLpvy2qczvvlAQx9aX5xAemMDXRln4XvtF
+ qeU4NcZcPfO5nmqFSa+2SqwLHW7QvdZR1Yn+YsEg2gDIjLpFAktTlvRoIT0SnlsTEcqBCOmks
+ NTdRv10cnMvpSQmGXXEwB1CKjmVrB9cE42vPy7dXJScAKy7sakNygTCNVmspFw2QqJF8W2XbE
+ p8XvUie
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a KUnit based selftest for fprobe interface.
+Hi Krzysztof,
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- Changes in v9:
-  - Rename fprobe_target* to fprobe_selftest_target*.
-  - Find the correct expected ip by ftrace_location_range().
-  - Since the ftrace_location_range() is not exposed to module, make
-    this test only for embedded.
-  - Add entry only test.
-  - Reset the fprobe structure before reuse it.
----
- lib/Kconfig.debug |   12 ++++
- lib/Makefile      |    2 +
- lib/test_fprobe.c |  174 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 188 insertions(+)
- create mode 100644 lib/test_fprobe.c
+have seen some warnings in Robs bot for arm=2E
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 14b89aa37c5c..ffc469a12afc 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2100,6 +2100,18 @@ config KPROBES_SANITY_TEST
- 
- 	  Say N if you are unsure.
- 
-+config FPROBE_SANITY_TEST
-+	bool "Self test for fprobe"
-+	depends on DEBUG_KERNEL
-+	depends on FPROBE
-+	depends on KUNIT
-+	help
-+	  This option will enable testing the fprobe when the system boot.
-+	  A series of tests are made to verify that the fprobe is functioning
-+	  properly.
-+
-+	  Say N if you are unsure.
-+
- config BACKTRACE_SELF_TEST
- 	tristate "Self test for the backtrace code"
- 	depends on DEBUG_KERNEL
-diff --git a/lib/Makefile b/lib/Makefile
-index 300f569c626b..154008764b16 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -103,6 +103,8 @@ obj-$(CONFIG_TEST_HMM) += test_hmm.o
- obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
- obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
- obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
-+CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
-+obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
- #
- # CFLAGS for compiling floating point code inside the kernel. x86/Makefile turns
- # off the generation of FPU/SSE* instructions for kernel proper but FPU_FLAGS
-diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
-new file mode 100644
-index 000000000000..ed70637a2ffa
---- /dev/null
-+++ b/lib/test_fprobe.c
-@@ -0,0 +1,174 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * test_fprobe.c - simple sanity test for fprobe
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/fprobe.h>
-+#include <linux/random.h>
-+#include <kunit/test.h>
-+
-+#define div_factor 3
-+
-+static struct kunit *current_test;
-+
-+static u32 rand1, entry_val, exit_val;
-+
-+/* Use indirect calls to avoid inlining the target functions */
-+static u32 (*target)(u32 value);
-+static u32 (*target2)(u32 value);
-+static unsigned long target_ip;
-+static unsigned long target2_ip;
-+
-+static noinline u32 fprobe_selftest_target(u32 value)
-+{
-+	return (value / div_factor);
-+}
-+
-+static noinline u32 fprobe_selftest_target2(u32 value)
-+{
-+	return (value / div_factor) + 1;
-+}
-+
-+static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+{
-+	KUNIT_EXPECT_FALSE(current_test, preemptible());
-+	/* This can be called on the fprobe_selftest_target and the fprobe_selftest_target2 */
-+	if (ip != target_ip)
-+		KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
-+	entry_val = (rand1 / div_factor);
-+}
-+
-+static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+{
-+	unsigned long ret = regs_return_value(regs);
-+
-+	KUNIT_EXPECT_FALSE(current_test, preemptible());
-+	if (ip != target_ip) {
-+		KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
-+		KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor) + 1);
-+	} else
-+		KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor));
-+	KUNIT_EXPECT_EQ(current_test, entry_val, (rand1 / div_factor));
-+	exit_val = entry_val + div_factor;
-+}
-+
-+/* Test entry only (no rethook) */
-+static void test_fprobe_entry(struct kunit *test)
-+{
-+	struct fprobe fp_entry = {
-+		.entry_handler = fp_entry_handler,
-+	};
-+
-+	current_test = test;
-+
-+	/* Before register, unregister should be failed. */
-+	KUNIT_EXPECT_NE(test, 0, unregister_fprobe(&fp_entry));
-+	KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp_entry, "fprobe_selftest_target*", NULL));
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, 0, exit_val);
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target2(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, 0, exit_val);
-+
-+	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp_entry));
-+}
-+
-+static void test_fprobe(struct kunit *test)
-+{
-+	struct fprobe fp = {
-+		.entry_handler = fp_entry_handler,
-+		.exit_handler = fp_exit_handler,
-+	};
-+
-+	current_test = test;
-+	KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp, "fprobe_selftest_target*", NULL));
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target2(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
-+
-+	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
-+}
-+
-+static void test_fprobe_syms(struct kunit *test)
-+{
-+	static const char *syms[] = {"fprobe_selftest_target", "fprobe_selftest_target2"};
-+	struct fprobe fp = {
-+		.entry_handler = fp_entry_handler,
-+		.exit_handler = fp_exit_handler,
-+	};
-+
-+	current_test = test;
-+	KUNIT_EXPECT_EQ(test, 0, register_fprobe_syms(&fp, syms, 2));
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target2(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
-+
-+	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
-+}
-+
-+static unsigned long get_ftrace_location(void *func)
-+{
-+	unsigned long size, addr = (unsigned long)func;
-+
-+	if (!kallsyms_lookup_size_offset(addr, &size, NULL) || !size)
-+		return 0;
-+
-+	return ftrace_location_range(addr, addr + size - 1);
-+}
-+
-+static int fprobe_test_init(struct kunit *test)
-+{
-+	do {
-+		rand1 = prandom_u32();
-+	} while (rand1 <= div_factor);
-+
-+	target = fprobe_selftest_target;
-+	target2 = fprobe_selftest_target2;
-+	target_ip = get_ftrace_location(target);
-+	target2_ip = get_ftrace_location(target2);
-+
-+	return 0;
-+}
-+
-+static struct kunit_case fprobe_testcases[] = {
-+	KUNIT_CASE(test_fprobe_entry),
-+	KUNIT_CASE(test_fprobe),
-+	KUNIT_CASE(test_fprobe_syms),
-+	{}
-+};
-+
-+static struct kunit_suite fprobe_test_suite = {
-+	.name = "fprobe_test",
-+	.init = fprobe_test_init,
-+	.test_cases = fprobe_testcases,
-+};
-+
-+kunit_test_suites(&fprobe_test_suite);
-+
-+MODULE_LICENSE("GPL");
+imho have fixed them (and the indention you've mentioned already squashed)=
+ in my tree [1]=2E
+
+    add compatibles used together with generic-ahci
+      - marvell,berlin2-ahci
+      - qcom,apq8064-ahci
+      - qcom,ipq806x-ahci
+    increase reg-count to 2 (used in omap5-l4=2Edtsi)
+    increase clock-count to 5 (used in qcom-apq8064=2Edtsi)
+
+can i still add you reviewed-by to v6?
+
+[1] https://github=2Ecom/frank-w/BPI-R2-4=2E14/commits/5=2E17-next-2022022=
+5
+
+regards Frank
+
+
+> Gesendet: Samstag, 05=2E M=C3=A4rz 2022 um 18:43 Uhr
+> Von: "Krzysztof Kozlowski" <krzysztof=2Ekozlowski@canonical=2Ecom>
+>=20
+> Thanks for the changes, all look good except now I noticed that
+> indentation of example is unusual=2E It's not consistent=2E Starts with =
+four
+> space (correct) but then goes to 7 spaces=2E Please adjust entire exampl=
+e
+> to use 4 spaces indentation=2E
+>=20
+> With that:
+>=20
+> Reviewed-by: Krzysztof Kozlowski <krzysztof=2Ekozlowski@canonical=2Ecom>
+
 

@@ -2,135 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15034CECF9
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 19:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E234CED10
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 19:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiCFSBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 13:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S232529AbiCFSJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 13:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiCFSBA (ORCPT
+        with ESMTP id S229864AbiCFSJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 13:01:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126763EF37;
-        Sun,  6 Mar 2022 10:00:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2AA9B80EBE;
-        Sun,  6 Mar 2022 18:00:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6463AC340EC;
-        Sun,  6 Mar 2022 18:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646589605;
-        bh=HZP74ZA4RW2ibfRByAf5KWvT/L7pk7G/fjmfHeBhJD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rPFmLs3H6+2+NS3g3jxd6sVwEX3G8BorFRhHe5/+q54jru0FUXLK9xUYb+4B6eB+2
-         iWPwoBI4Fh3j6h9WJQNO+ojbIM2SoUsM+v6y0hEQHFyVVio3gKIDsqnVFbJfoaWaXQ
-         4hD4RDZMKn7uDHG3kb9yPMFQGisOh3cdrINAtU7w=
-Date:   Sun, 6 Mar 2022 19:00:01 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Sun, 6 Mar 2022 13:09:06 -0500
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBFE10FC6
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 10:08:13 -0800 (PST)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id QvIenSw8RqMVEQvIfn0MA6; Sun, 06 Mar 2022 19:08:12 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 06 Mar 2022 19:08:12 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Eddie James <eajames@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
-        <linux-usb@vger.kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH 25/26] usb: gadget: dummy_hcd: replace usage of rc to
- check if a list element was found
-Message-ID: <YiT2odfvXhp4nsK4@kroah.com>
-References: <20220306175034.3084609-1-jakobkoschel@gmail.com>
- <20220306175034.3084609-26-jakobkoschel@gmail.com>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-media@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Subject: [PATCH] media: aspeed: Fix an error handling path in aspeed_video_probe()
+Date:   Sun,  6 Mar 2022 19:08:07 +0100
+Message-Id: <7d1f5e853bccba4a70294d81419a0cf21ff91f41.1646590067.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220306175034.3084609-26-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 06:50:33PM +0100, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable [1].
-> 
-> This removes the need to check the rc value to determine if the
-> break/goto was hit and can be made more obvious
-> by checking if the variable was set within the list traversal loop.
-> 
-> Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  drivers/usb/gadget/udc/dummy_hcd.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-> index a2d956af42a2..f21944707707 100644
-> --- a/drivers/usb/gadget/udc/dummy_hcd.c
-> +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-> @@ -751,7 +751,7 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->  	struct dummy		*dum;
->  	int			retval = -EINVAL;
->  	unsigned long		flags;
-> -	struct dummy_request	*req = NULL;
-> +	struct dummy_request	*req = NULL, *tmp;
->  
->  	if (!_ep || !_req)
->  		return retval;
-> @@ -763,17 +763,18 @@ static int dummy_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->  
->  	local_irq_save(flags);
->  	spin_lock(&dum->lock);
-> -	list_for_each_entry(req, &ep->queue, queue) {
-> -		if (&req->req == _req) {
-> -			list_del_init(&req->queue);
-> +	list_for_each_entry(tmp, &ep->queue, queue) {
-> +		if (&tmp->req == _req) {
-> +			list_del_init(&tmp->queue);
->  			_req->status = -ECONNRESET;
-> +			req = tmp;
->  			retval = 0;
->  			break;
->  		}
->  	}
->  	spin_unlock(&dum->lock);
->  
-> -	if (retval == 0) {
-> +	if (req) {
+A dma_free_coherent() call is missing in the error handling path of the
+probe, as already done in the remove function.
 
-There's no need for this change as we are testing retval, not req here,
-unlike the other udc drivers.
+In fact, this call is included in aspeed_video_free_buf(). So use the
+latter both in the error handling path of the probe and in the remove
+function.
+It is easier to see the relation with aspeed_video_alloc_buf() this way.
 
-So this one I think is correct as-is, or am I mistaken somehow?
+Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Compile tested only
+---
+ drivers/media/platform/aspeed-video.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index 51fb18453b81..e0b5d416b6ee 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -1933,6 +1933,7 @@ static int aspeed_video_probe(struct platform_device *pdev)
+ 
+ 	rc = aspeed_video_setup_video(video);
+ 	if (rc) {
++		aspeed_video_free_buf(video, &video->jpeg);
+ 		clk_unprepare(video->vclk);
+ 		clk_unprepare(video->eclk);
+ 		return rc;
+@@ -1964,8 +1965,7 @@ static int aspeed_video_remove(struct platform_device *pdev)
+ 
+ 	v4l2_device_unregister(v4l2_dev);
+ 
+-	dma_free_coherent(video->dev, VE_JPEG_HEADER_SIZE, video->jpeg.virt,
+-			  video->jpeg.dma);
++	aspeed_video_free_buf(video, &video->jpeg);
+ 
+ 	of_reserved_mem_device_release(dev);
+ 
+-- 
+2.32.0
 
-greg k-h

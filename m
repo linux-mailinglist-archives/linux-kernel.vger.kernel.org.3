@@ -2,191 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9364CEC20
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285904CEC22
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbiCFPiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 10:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S233743AbiCFPnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 10:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbiCFPio (ORCPT
+        with ESMTP id S230439AbiCFPnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 10:38:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 629A4DF20
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 07:37:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646581071;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+EG5ZoN5dKDEhImu4B6iOHSdTTgzb/PcHdEoxTJUFR4=;
-        b=M1APDMRAI9zkqsSvXwNunHrWq0cMUWgkb40KNPbyNMfJcsLFzBH9d8zNgkN86Tw8IsCkfk
-        qGR7pm5vyLyyYzCBSebiD+4X0wWK1lLF7ovieEsWePqg4H35OAdpapSddQdV2LXsY6w4qB
-        XzDCc3X36869JHI+r7UVG6yOAgRP4xM=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-257-sH5cqo3mOX-y5ur6fIYe4Q-1; Sun, 06 Mar 2022 10:37:49 -0500
-X-MC-Unique: sH5cqo3mOX-y5ur6fIYe4Q-1
-Received: by mail-oi1-f198.google.com with SMTP id s21-20020a056808009500b002d9b146c8d6so777845oic.5
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 07:37:49 -0800 (PST)
+        Sun, 6 Mar 2022 10:43:14 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA19910FEB;
+        Sun,  6 Mar 2022 07:42:21 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id hw13so26982346ejc.9;
+        Sun, 06 Mar 2022 07:42:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HfO2h5q1473JP2upK1zqZF3m0Phtdwl0dsxMjuAMUAc=;
+        b=TUG2TbXA26Z7N1AdNjzw5HZWtBkBdsXv/EgmeAiKT5NQJn7ma2tI921ze85VnP1szT
+         P4lPetpnIzpdqCyvo9vxUKY8lP0o6/TBIp2/0uRHEUkwix4wtNqmMzZGE96jSJS9lTdC
+         1lhSplGrTY0luO0XkZhO1uaL7EavP+1J4EUYQ4zByDypg7QIJVGpHTQEbo95/fw7HTYA
+         6zGsvuJGYZzyvbJOwQ8FOV3SkMjPP8CzYlKRbrpJifORo7xRzNTLKdS6T5RbhtiaSCiy
+         X02REn2eDUZUzA6OyxfCiZxWz8PjcGL9fJTHe+trTDR5UiMiU0xGwXOLfUdSxfd5Zsyh
+         /u1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=+EG5ZoN5dKDEhImu4B6iOHSdTTgzb/PcHdEoxTJUFR4=;
-        b=MUjhtGuJm75+EjOLIlp4xwwONtoaxrYux3g8Fdx9xZULikt9VztPlAiaf2Thl47LHM
-         Jd4fRj+bQyP2xLVVeo2N1PtiOErEQxLZ/YFLdjnal3C8sxbqRT4ZkStpORrnEFfPjuMX
-         Q87x2QACrY10A2RG32YvGoNRY8G4KSv40KJgWhB43dcr5IiBGpTTC3wZNDan/0mRJ2fI
-         TB5jP8+tHRifWYLOZ+2bY6zyTemciL+tUIDwHY/vqzdyforJ4WoNF4HbQjEtAyWLEUPc
-         3GCpl1Sxa6mNzhj7hJNRS2TCwGBfkcmbYKetnmxIMubIua77sapdoI3NDHtJUVbFiCmc
-         C/vw==
-X-Gm-Message-State: AOAM530q0q1yhqO049JiZf4KTXbFT3MLfPL8HldiZS2HxB+YRh/K6CpJ
-        z3+9JKGOG72NltKb9B2NBjxmEmkW+Z+c7FFKbNXrxOAs/qbIMkng7VtVI0xKLqPFkPlWLd68hGh
-        QHfFvjcyuBWlgmiR0fqdBJZ+Q
-X-Received: by 2002:a05:6808:128a:b0:2d7:8f0b:e9a8 with SMTP id a10-20020a056808128a00b002d78f0be9a8mr15583076oiw.174.1646581069141;
-        Sun, 06 Mar 2022 07:37:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyreqCZKQRU6DE2UD+nV7uwMFiFA/fm+L0rSDFLM2D9m2xql4ezmaJW0qh4SxoQwGlSM2Qd0w==
-X-Received: by 2002:a05:6808:128a:b0:2d7:8f0b:e9a8 with SMTP id a10-20020a056808128a00b002d78f0be9a8mr15583063oiw.174.1646581068891;
-        Sun, 06 Mar 2022 07:37:48 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056808114300b002d51f9b3263sm5328725oiu.28.2022.03.06.07.37.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 07:37:48 -0800 (PST)
-Subject: Re: [PATCH V1 RESEND 2/4] Documentation: devicetree: bindings: add
- binding for PCIe endpoint bus
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org
-Cc:     yilun.xu@intel.com, maxz@xilinx.com, sonal.santan@xilinx.com,
-        yliu@xilinx.com, michal.simek@xilinx.com, stefanos@xilinx.com,
-        mdf@kernel.org, dwmw2@infradead.org, linux-kernel@vger.kernel.org,
-        Max Zhen <max.zhen@xilinx.com>
-References: <20220305052304.726050-1-lizhi.hou@xilinx.com>
- <20220305052304.726050-3-lizhi.hou@xilinx.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <e4c058e9-6549-4ce2-be05-d09d5b1a9fc9@redhat.com>
-Date:   Sun, 6 Mar 2022 07:37:46 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HfO2h5q1473JP2upK1zqZF3m0Phtdwl0dsxMjuAMUAc=;
+        b=RWNUDv6JUdKktOO0AmsFpZo5DOTnUsaZ6QDHFfKu8r4fLPyX9ogYIMCvk3/p6O5BDy
+         N32ubBQg+AldM9jq54NUvAnXQ/uPUK3xsT8zBdVk+r79IYtvl3CiC2IMfzbV5bzrOMxR
+         8wL9g3cB4X7JNZb7BkBdv8WraPtEyhh4i5QwdHcqiAjshPnXRN7rkksDi3ERpgKvkAvb
+         Xuous/y4VcmESB6jZuzgIqhRbczDuI1tzVWZVPsOCZv9FeT+9uLApFTYdM501lkaCN2B
+         DTE2w50mmLLAvu1nrr6o4aE8vf49BiF6Git9Okep//JXjngBUa+F70QmUejA/PIr7s+E
+         VxQQ==
+X-Gm-Message-State: AOAM533gHIWBt3SBC1JNGDOxzvooxwUMZzqbMeJFiK4JgwSsjnCiUPp9
+        v/HrAb/JrCLCCC7w3p6ljt4tHaRcyl2poQ==
+X-Google-Smtp-Source: ABdhPJwNCo+8KRwq9nmvmwmLV85jcIttAIb9ng/q1JMqBPiV/Ons8xrtuf3CO1z3ijgUBYyRIdxe1Q==
+X-Received: by 2002:a17:906:9744:b0:6da:9e49:9fe3 with SMTP id o4-20020a170906974400b006da9e499fe3mr6218024ejy.319.1646581340155;
+        Sun, 06 Mar 2022 07:42:20 -0800 (PST)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id v2-20020a509d02000000b00412d53177a6sm4941630ede.20.2022.03.06.07.42.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 07:42:19 -0800 (PST)
+Date:   Sun, 6 Mar 2022 16:42:14 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Linux-v5.17-rc6] Building tools/perf with perl v5.34
+Message-ID: <YiTWVjKwOO/bMNz/@krava>
+References: <CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com>
+ <YiPDaiYffeK4lF+l@krava>
+ <CA+icZUW0XyDHFTYF_j1QECpqP4kmTXqCqX_HfEVvQ4aWZecW5Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220305052304.726050-3-lizhi.hou@xilinx.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUW0XyDHFTYF_j1QECpqP4kmTXqCqX_HfEVvQ4aWZecW5Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lizhi,
+On Sun, Mar 06, 2022 at 03:28:09AM +0100, Sedat Dilek wrote:
+> On Sat, Mar 5, 2022 at 9:09 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Sat, Mar 05, 2022 at 08:52:18AM +0100, Sedat Dilek wrote:
+> > > Hi,
+> > >
+> > > I am here on Debian/unstable AMD64 which switched over to perl v5.34
+> > > in February 2022.
+> > >
+> > > Unfortunately, my perf does not build with this (lib)perl version:
+> > >
+> > > $ ~/bin/perf -vv
+> > > perf version 5.17-rc6
+> > >                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+> > >    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+> > >                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
+> > >         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+> > >                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
+> > >                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+> > >               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> > > numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> > >               libperl: [ OFF ]  # HAVE_LIBPERL_SUPPORT
+> > >             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+> > >              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+> > >             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+> > >             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+> > >    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+> > >                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+> > >                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+> > >             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+> > >                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+> > >                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+> > >                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+> > >               libpfm4: [ OFF ]  # HAVE_LIBPFM
+> > >
+> > > $ grep libperl ../make-log_perf-python3.10-install_bin.txt
+> > > 9:Makefile.config:788: Missing perl devel files. Disabling perl
+> > > scripting support, please install perl-ExtUtils-Embed/libperl-dev
+> > > 22:...                       libperl: [ OFF ]
+> > >
+> > > Checking for these requirements:
+> > >
+> > > # dpkg -l | grep perl | grep 5.34 | awk '/^ii/ {print $1 " " $2 " "
+> > > $3}' | column -t
+> > > ii  libperl-dev:amd64  5.34.0-3
+> > > ii  libperl5.34:amd64  5.34.0-3
+> > > ii  perl               5.34.0-3
+> > > ii  perl-base          5.34.0-3
+> > > ii  perl-modules-5.34  5.34.0-3
+> > >
+> > > # dpkg -L perl-modules-5.34 | grep -i ExtUtils | grep -i Embed
+> > > /usr/share/perl/5.34.0/ExtUtils/Embed.pm
+> > >
+> > > Can you please comment on this?
+> >
+> > hi,
+> > is there something in tools/build/feature/test-libperl.make.output ?
+> >
+> 
+> Hey jirka!
+> 
+> Indeed there is such a file.
+> 
+> $ LC_ALL=C ll tools/build/feature/test-libperl.make.output
+> -rw-r--r-- 1 dileks dileks 24K Mar  6 03:22
+> tools/build/feature/test-libperl.make.output
+> 
+> Reproducer:
+> 
+> make distclean
+> make -C tools/perf clean
+> 
+> MAKE="make"
+> MAKE_OPTS="HOSTCC=clang-13 HOSTCXX=clang++-13 HOSTLD=ld.lld-13
+> HOSTAR=llvm-ar-13 CC=clang-13 LD=ld.lld-13 AR=llvm-ar-13 NM=llvm-nm-13
+> OBJCOPY=llvm-objcopy-13 OBJDUMP=llvm-objdump-13 OBJSIZE=llvm-size-13
+> READELF=llvm-readelf-13 STRIP=llvm-strip-13 LLVM_IAS=1"
+> 
+> LC_ALL=C $MAKE V=1 $MAKE_OPTS -C tools/perf PYTHON=python3 install-bin
 
-Sorry for the delay, I am fighting with checking this with 'make 
-dt_binding_check'
+yea, looks like we can't compile perl devel includes with clang,
+we use simple perl test program:
 
-There is a recent failure in linux-next around display/mediatek,* 
-between next-20220301 and next-20220302 that I am bisecting.
+	$ cd tools/build/feature/
+	$ cat test-libperl.c 
+	// SPDX-License-Identifier: GPL-2.0
+	#include <EXTERN.h>
+	#include <perl.h>
 
-There are a couple of checkpatch --strict warnings for this set, the 
-obvious one is adding to the MAINTAINERS for new files.
+	int main(void)
+	{
+		perl_alloc();
 
-Tom
+		return 0;
+	}
 
-On 3/4/22 9:23 PM, Lizhi Hou wrote:
-> Create device tree binding document for PCIe endpoint bus.
->
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
-> ---
->   .../devicetree/bindings/bus/pci-ep-bus.yaml   | 72 +++++++++++++++++++
->   1 file changed, 72 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
->
-> diff --git a/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
-> new file mode 100644
-> index 000000000000..0ca96298db6f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
-> @@ -0,0 +1,72 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/bus/pci-ep-bus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PCIe Endpoint Bus binding
-> +
-> +description: |
-> +  PCIe device may use flattened device tree to describe apertures in its
-> +  PCIe BARs. The Bus PCIe endpoint node is created and attached under the
-> +  device tree root node for this kind of device. Then the flatten device
-> +  tree overlay for this device is attached under the endpoint node.
-> +
-> +  The aperture address which is under the endpoint node consists of BAR
-> +  index and offset. It uses the following encoding:
-> +
-> +    0xIooooooo 0xoooooooo
-> +
-> +  Where:
-> +
-> +    I = BAR index
-> +    oooooo oooooooo = BAR offset
-> +
-> +  The endpoint is compatible with 'simple-bus' and contains 'ranges'
-> +  property for translating aperture address to CPU address.
-> +
-> +allOf:
-> +  - $ref: /schemas/simple-bus.yaml#
-> +
-> +maintainers:
-> +  - Lizhi Hou <lizhi.hou@xilinx.com>
-> +
-> +properties:
-> +  compatible:
-> +    contains:
-> +      const: pci-ep-bus
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 2
-> +
-> +  ranges: true
-> +
-> +patternProperties:
-> +  "^.*@[0-9a-f]+$":
-> +    description: hardware apertures belong to this device.
-> +    type: object
-> +
-> +required:
-> +  - compatible
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    bus {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +        pci-ep-bus@e0000000 {
-> +            compatible = "pci-ep-bus", "simple-bus";
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +            ranges = <0x0 0x0 0x0 0xe0000000 0x0 0x2000000
-> +                      0x20000000 0x0 0x0 0xe4200000 0x0 0x40000>;
-> +        };
-> +    };
 
+and if I compile it with:
+
+	$ CC=clang make test-libperl.bin
+	clang  -MD -Wall -Werror -o test-libperl.bin test-libperl.c  > test-libperl.make.output 2>&1 `perl -MExtUtils::Embed -e ccopts 2>/dev/null` -Wl,--enable-new-dtags -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -fstack-protector-strong -L/usr/local/lib  -L/usr/lib64/perl5/CORE -lperl -lpthread -lresolv -ldl -lm -lcrypt -lutil -lc
+	make: *** [Makefile:224: test-libperl.bin] Error 1
+
+
+I'm getting some other lto related error:
+
+	$ cat test-libperl.make.output 
+	clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+
+
+with my clang version:
+
+	$ clang --version
+	clang version 13.0.0 (Fedora 13.0.0-3.fc35)
+	Target: x86_64-redhat-linux-gnu
+	Thread model: posix
+	InstalledDir: /usr/bin
+
+so you need to figure out how to compile the test program
+above first with clang
+
+jirka

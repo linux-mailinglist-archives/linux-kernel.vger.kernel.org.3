@@ -2,34 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6194CEB60
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 12:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215274CEB6D
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 12:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbiCFLre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 06:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S233562AbiCFL4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 06:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiCFLrd (ORCPT
+        with ESMTP id S229745AbiCFL4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 06:47:33 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870CF4163E;
-        Sun,  6 Mar 2022 03:46:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646567165;
-        bh=toZdQsJmBfXRcv7SI2pH2kTldzfr60wZt0rjnEq6McM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=UmQq29xJ5H3eALR4nI4JW7urBDyIjBkc0rherFEaUVPUMwCUkHnSQe5JIru9rJACu
-         fSQmOsFofSpvDiLO4mtoLvPM3mJkIqLMwEBAE3fWwKltNVlRwWXHpD037gwV21iCif
-         uVLjE8NTG6Sy7qJIi4iWpdkb+qEDMr3Fa96S8sJA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [157.180.225.163] ([157.180.225.163]) by web-mail.gmx.net
- (3c-app-gmx-bs64.server.lan [172.19.170.148]) (via HTTP); Sun, 6 Mar 2022
- 12:46:05 +0100
+        Sun, 6 Mar 2022 06:56:03 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889E62A276
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 03:55:11 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D74833F60B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 11:55:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646567708;
+        bh=M7HhdQnqg/99QgckiwYhOLXnbb7e+E0jF9L8MBDB2C0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=qFHQ7ZrqttMPNjBsATzdWYMFVMRwB3Is9cJXob7eZ/18dZNX0ne0KpEiN3a7d3aO8
+         /QCNQhoA72RA5KuY6OzYPOgJZjca72U3uWMzBYRl/QWKyo1M93b7Nlas1k+8h1CEP+
+         yBG9yS++0OJpFyA8ieZaAHgihSRPN6FeuF87XNnSCsX2Duk27k+YhqGqogAg1014g0
+         S0TVSqj4q0yfcMTe7Ta/fGhDGT/ZjsI/6TRq8LDpR0RhXugza1yN9x9Dwj9Mf4eP5M
+         lUBDp93+lW3GUayHIb6lqq3QUG5WFi/2wm+0a7k5Ypmvx7EtbH1biOrD1ardqGheEK
+         o3po4p0h/gCmg==
+Received: by mail-ed1-f72.google.com with SMTP id r9-20020a05640251c900b00412d54ea618so6756090edd.3
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 03:55:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=M7HhdQnqg/99QgckiwYhOLXnbb7e+E0jF9L8MBDB2C0=;
+        b=5DZeSPsKl/Gy0wGeLy4vaqddmYJktE5PO9ZwX5EoNqrY2kCLt28MUv7b7ZJ3y/uh33
+         fDWBjTnocfrKvDk3o4AvkRvwcu3JeZUeCHyFxqQyFvsTS3D1mra8VaekZhjD+N+a6lNE
+         EaSAJe8elYRnrEVAdU5ZxRnbsvV3NHr/684V7YRu1JK+MhAh1kVfkxTd9MICcG9fSgzo
+         x3nx6UZP7VrvA31aPl7B8hOIbySvc4SWvTsIpnagbkRuTp4GX7ZOyvx1DhjY0CQ091a6
+         fx4EzRrX8U+BDSoVeUb1Lb2P2ahHMCgpz/um4xfM7XyBHAVRr+Zraocjfge2gSHjwQWR
+         RVaA==
+X-Gm-Message-State: AOAM531uh4Mbfsu6JfO0p79nhOeo5nQfoZadqTl+E3nXZG5RXmeefUup
+        pmOuPY8LnQUhGKzStlGDlMujIGS2+C3uFrJeejXJj9RhEvGSE+NFf68HKU+TVhQnEYifUwCv7Me
+        BIUaHLP+DtPhQCyCNzCDPZHV5GNLxQbmTdNbhQD3qIA==
+X-Received: by 2002:aa7:c7c4:0:b0:407:52cc:3b32 with SMTP id o4-20020aa7c7c4000000b0040752cc3b32mr6335745eds.397.1646567708100;
+        Sun, 06 Mar 2022 03:55:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzEqcWBPOeCVNUb/IWUj+A8DrXorGXUVAFBV0XM7Z0DdE7bS6WcOFGj7u+16JP6Qhb+rlqEpg==
+X-Received: by 2002:aa7:c7c4:0:b0:407:52cc:3b32 with SMTP id o4-20020aa7c7c4000000b0040752cc3b32mr6335725eds.397.1646567707943;
+        Sun, 06 Mar 2022 03:55:07 -0800 (PST)
+Received: from [192.168.0.140] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id ce12-20020a170906b24c00b006da824011eesm3734626ejb.166.2022.03.06.03.55.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 03:55:07 -0800 (PST)
+Message-ID: <c2e01b71-efbe-7d6f-5cdf-1340c5210798@canonical.com>
+Date:   Sun, 6 Mar 2022 12:55:06 +0100
 MIME-Version: 1.0
-Message-ID: <trinity-955432eb-74c6-48f6-984e-d88a61854727-1646567165101@3c-app-gmx-bs64>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Aw: Re: Re: Re: [PATCH v5 1/5] dt-bindings: ata: ahci-platform:
+ Convert DT bindings to yaml
+Content-Language: en-US
+To:     Frank Wunderlich <frank-w@public-files.de>
 Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
@@ -43,13 +80,6 @@ Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
         Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org
-Subject: Aw: Re:  Re: Re: [PATCH v5 1/5] dt-bindings: ata: ahci-platform:
- Convert DT bindings to yaml
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 6 Mar 2022 12:46:05 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <18f4dc19-b8a4-015e-48c8-923326cc7932@canonical.com>
 References: <20220305112607.257734-1-linux@fw-web.de>
  <20220305112607.257734-2-linux@fw-web.de>
  <a2839b00-d195-131f-b2a7-d2f030a5bd95@canonical.com>
@@ -57,125 +87,33 @@ References: <20220305112607.257734-1-linux@fw-web.de>
  <b8553651-3cd0-845c-efbf-d2341d5506b3@canonical.com>
  <trinity-d42352e1-d778-40dd-9464-90a145653f74-1646563315484@3c-app-gmx-bs46>
  <18f4dc19-b8a4-015e-48c8-923326cc7932@canonical.com>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:mzvp8M4NWgc9gJ3vkex67E26cqQCs5HCxUZgX/Fd8GRab70hsw69IlVSs19mFcSVaCM2a
- x2svUvC79JwWz/8wwX22cOIenh1xT+532wIDzWzghI97EIb73RxaXZ7ObK4KzAEkcNq5FB8pbsCh
- 6unSNFeQA6vk+LHLbtwHxcd5xRwGUFCbcuPonVWKivdVsrKhp0EHWETBPmgYc5xeQsPildfsTCi+
- FS4CpUrcN53g8cfM7WFeFARmHrX7GgUzxhLT3l8s1JCeVC2UjBiEWcBtMzHBdOWHh54gIYOJXlHO
- 64=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZNjNO/uzYqk=:X2O/REvEWSryvey9+y4EqS
- ZBQGJvSyGHkqrI6ePKzxmqiyfN8RECxyxN/bjtxERimKtekTd3/5ihR1BD1NAypbaZBr++B7F
- HclK3R8rgHrENMZb0d+fOYORLBsU2poVRXETSFox9AsBA9N5PUwjGQL7I3x2p8fLTbLh+jIbe
- lstae7v779Ol65aOkvJckZYjfrPUg9jN1g6/DeMPqTogVwpNRpLvf32lNNfPAAovRnP1Q6Gk3
- z5mS5YA4tvGH9XQUuWsPRtOtmMxPepuRfl3nKW3+uWyHcowCGPG0UJyI5XMjctAfbB7dpbrH2
- 9x7ZkZhWp1+IviUxd/XTfccCs9nzu9rCfusTbVPD0VpcLe55DG58yzUaviFo6g6tKC6abynJ9
- oVuzWQ2dBNNcT3lzPpduVUVGuRIpL3kQRqsup88JUsBHjPqUGe9N846SWVbISW80DCkTyGm62
- jKGogqsJGQjcTNlOYCBChD5zcyZHLM9jsSmYE+aEM4aM7A5txWlVfW72XC9Mh1htHA47UjK4o
- xLZ+HG+LI70giZODhVhSrZv21MNrewLB38yeIqe5gCgrvbK7Ijh08S5TusvWj060i76vOAvQ8
- dt2x1xzE9QfztAe8CZGldHpstFff8Zca72ANQegukVvOq9GnQO4GEJBFtSNJMHNu5qYKCxMxg
- H60DzykJm7olpLJWDtwzkV/xtjf6LiYcuAMhtkEb+u3QcfgGB0/fA11syEOED6YozjjyKvi5d
- Hr69/6benqG0spnkOwFAi+0l6rexToNjOab41sUIHk729DKjDz9hlqThb0+BdUfLz3SweXXjA
- Hw2ZSFf
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <trinity-955432eb-74c6-48f6-984e-d88a61854727-1646567165101@3c-app-gmx-bs64>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <trinity-955432eb-74c6-48f6-984e-d88a61854727-1646567165101@3c-app-gmx-bs64>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/03/2022 12:46, Frank Wunderlich wrote:
+> 
+> i see it as requirement for last part
+> 
+> "arm64: dts: rockchip: Add sata nodes to rk356x"
+> 
+> if this can applied without the bindings conversion there is nothing to hurry :)
+
+This actually depends more on Heiko, whether he is willing to take DTS
+change even though the compatible was not yet merged. There is no strict
+dependency here, so DTS change could go now...
 
 
-> Gesendet: Sonntag, 06=2E M=C3=A4rz 2022 um 12:15 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof=2Ekozlowski@canonical=2Ecom>
-> An: "Frank Wunderlich" <frank-w@public-files=2Ede>
-> Cc: "Frank Wunderlich" <linux@fw-web=2Ede>, devicetree@vger=2Ekernel=2Eo=
-rg, "Damien Le Moal" <damien=2Elemoal@opensource=2Ewdc=2Ecom>, "Rob Herring=
-" <robh+dt@kernel=2Eorg>, "Andrew Lunn" <andrew@lunn=2Ech>, "Gregory Clemen=
-t" <gregory=2Eclement@bootlin=2Ecom>, "Sebastian Hesselbarth" <sebastian=2E=
-hesselbarth@gmail=2Ecom>, "Russell King" <linux@armlinux=2Eorg=2Euk>, "Heik=
-o Stuebner" <heiko@sntech=2Ede>, "Peter Geis" <pgwipeout@gmail=2Ecom>, "Mic=
-hael Riesch" <michael=2Eriesch@wolfvision=2Enet>, "Hans de Goede" <hdegoede=
-@redhat=2Ecom>, "Jens Axboe" <axboe@kernel=2Edk>, linux-ide@vger=2Ekernel=
-=2Eorg, linux-kernel@vger=2Ekernel=2Eorg, linux-arm-kernel@lists=2Einfradea=
-d=2Eorg, linux-rockchip@lists=2Einfradead=2Eorg
-> Betreff: Re: Aw: Re: Re: [PATCH v5 1/5] dt-bindings: ata: ahci-platform:=
- Convert DT bindings to yaml
->
-> On 06/03/2022 11:41, Frank Wunderlich wrote:
-> >> Gesendet: Sonntag, 06=2E M=C3=A4rz 2022 um 11:27 Uhr
-> >> Von: "Krzysztof Kozlowski" <krzysztof=2Ekozlowski@canonical=2Ecom>
-> >>>     add compatibles used together with generic-ahci
-> >>>       - marvell,berlin2-ahci
-> >>
-> >> This is fine, just mention it in commit msg=2E
-> >>
-> >>>       - qcom,apq8064-ahci
-> >>>       - qcom,ipq806x-ahci
-> >>
-> >> These you need to consult with qcom-sata=2Etxt=2E This could be a fol=
-lowing
-> >> commit which will integrate qcom-sata=2Etxt and remove it=2E
-> >=20
-> > this depends on Robs opinion
->=20
-> Then maybe precise the question for Rob=2E=2E=2E
-
-do i need to fix the errors for qcom-compatibles/reg-count/clock-count (re=
-ported by your bot) *now*?
-
-or is binding well enough with adding berlin-compatible and fixing the ind=
-entation error in example?
-
-for the marvell anyof issue and the spear13xx i have a patch in my tree wh=
-ich i include in v6
-
-> >=20
-> >> Either you have
-> >> binding document for all devices or you create a common part, like fo=
-r UFS:
-> >> https://lore=2Ekernel=2Eorg/linux-devicetree/20220222145854=2E358646-=
-1-krzysztof=2Ekozlowski@canonical=2Ecom/
-> >> https://github=2Ecom/krzk/linux/commits/n/dt-bindings-ufs-v2
-> >>
-> >> The choice depends more or less on complexity of bindings, IOW, how b=
-ig
-> >> and complicated bindings would be if you combine everything to one YA=
-ML=2E
-> >>
-> >> In the case of UFS, the devices differ - by clocks, resets, phys and
-> >> sometimes supplies=2E Therefore it easier to have one common shared p=
-art
-> >> and several device bindings=2E
-> >>
-> >> AHCI looks more consistent - except that Qualcomm - so maybe better t=
-o
-> >> have one document=2E
-> >>
-> >>>     increase reg-count to 2 (used in omap5-l4=2Edtsi)
-> >>>     increase clock-count to 5 (used in qcom-apq8064=2Edtsi)
-> >>
-> >> This would need allOf+if=2E
-> >=20
-> > if i get ok from rob i add only the berlin-compatible and skip the qco=
-m+reg/clock-change in the first applied version=2E Adding the allOf/if (and=
- making it right) will only delay the sata-binding/dts-change=2E
->=20
-> I don't get what is the problem with delaying this patch for the time
-> needed to make the bindings correct? Especially that alternative is to
-> add bindings document which soon will need to be modified, e=2Eg=2E spli=
-t
-> into common part=2E Is there a particular hurry with these bindings
-> conversion?
-
-i see it as requirement for last part
-
-"arm64: dts: rockchip: Add sata nodes to rk356x"
-
-if this can applied without the bindings conversion there is nothing to hu=
-rry :)
-
-regards Frank
+Best regards,
+Krzysztof

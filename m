@@ -2,201 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285904CEC22
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFF04CEC26
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbiCFPnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 10:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S233753AbiCFPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 10:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiCFPnO (ORCPT
+        with ESMTP id S230313AbiCFPtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 10:43:14 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA19910FEB;
-        Sun,  6 Mar 2022 07:42:21 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id hw13so26982346ejc.9;
-        Sun, 06 Mar 2022 07:42:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HfO2h5q1473JP2upK1zqZF3m0Phtdwl0dsxMjuAMUAc=;
-        b=TUG2TbXA26Z7N1AdNjzw5HZWtBkBdsXv/EgmeAiKT5NQJn7ma2tI921ze85VnP1szT
-         P4lPetpnIzpdqCyvo9vxUKY8lP0o6/TBIp2/0uRHEUkwix4wtNqmMzZGE96jSJS9lTdC
-         1lhSplGrTY0luO0XkZhO1uaL7EavP+1J4EUYQ4zByDypg7QIJVGpHTQEbo95/fw7HTYA
-         6zGsvuJGYZzyvbJOwQ8FOV3SkMjPP8CzYlKRbrpJifORo7xRzNTLKdS6T5RbhtiaSCiy
-         X02REn2eDUZUzA6OyxfCiZxWz8PjcGL9fJTHe+trTDR5UiMiU0xGwXOLfUdSxfd5Zsyh
-         /u1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HfO2h5q1473JP2upK1zqZF3m0Phtdwl0dsxMjuAMUAc=;
-        b=RWNUDv6JUdKktOO0AmsFpZo5DOTnUsaZ6QDHFfKu8r4fLPyX9ogYIMCvk3/p6O5BDy
-         N32ubBQg+AldM9jq54NUvAnXQ/uPUK3xsT8zBdVk+r79IYtvl3CiC2IMfzbV5bzrOMxR
-         8wL9g3cB4X7JNZb7BkBdv8WraPtEyhh4i5QwdHcqiAjshPnXRN7rkksDi3ERpgKvkAvb
-         Xuous/y4VcmESB6jZuzgIqhRbczDuI1tzVWZVPsOCZv9FeT+9uLApFTYdM501lkaCN2B
-         DTE2w50mmLLAvu1nrr6o4aE8vf49BiF6Git9Okep//JXjngBUa+F70QmUejA/PIr7s+E
-         VxQQ==
-X-Gm-Message-State: AOAM533gHIWBt3SBC1JNGDOxzvooxwUMZzqbMeJFiK4JgwSsjnCiUPp9
-        v/HrAb/JrCLCCC7w3p6ljt4tHaRcyl2poQ==
-X-Google-Smtp-Source: ABdhPJwNCo+8KRwq9nmvmwmLV85jcIttAIb9ng/q1JMqBPiV/Ons8xrtuf3CO1z3ijgUBYyRIdxe1Q==
-X-Received: by 2002:a17:906:9744:b0:6da:9e49:9fe3 with SMTP id o4-20020a170906974400b006da9e499fe3mr6218024ejy.319.1646581340155;
-        Sun, 06 Mar 2022 07:42:20 -0800 (PST)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id v2-20020a509d02000000b00412d53177a6sm4941630ede.20.2022.03.06.07.42.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 07:42:19 -0800 (PST)
-Date:   Sun, 6 Mar 2022 16:42:14 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Linux-v5.17-rc6] Building tools/perf with perl v5.34
-Message-ID: <YiTWVjKwOO/bMNz/@krava>
-References: <CA+icZUWHd4VTKNwBtuxt9-fHoiYV+Q7tQ809Cn83k8sbQ_uNHw@mail.gmail.com>
- <YiPDaiYffeK4lF+l@krava>
- <CA+icZUW0XyDHFTYF_j1QECpqP4kmTXqCqX_HfEVvQ4aWZecW5Q@mail.gmail.com>
+        Sun, 6 Mar 2022 10:49:09 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C84E0D7;
+        Sun,  6 Mar 2022 07:48:16 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nQt7F-0006pL-Di; Sun, 06 Mar 2022 16:48:13 +0100
+Message-ID: <092b825a-10ff-e197-18a1-d3e3a097b0e3@leemhuis.info>
+Date:   Sun, 6 Mar 2022 16:48:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+icZUW0XyDHFTYF_j1QECpqP4kmTXqCqX_HfEVvQ4aWZecW5Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
+ PCI-passed-through to Windows VM
+Content-Language: en-US
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        "James D. Turner" <linuxkernel.foss@dmarc-none.turner.link>
+Cc:     "Lazar, Lijo" <lijo.lazar@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+References: <87ee57c8fu.fsf@turner.link>
+ <acd2fd5e-d622-948c-82ef-629a8030c9d8@leemhuis.info>
+ <87a6ftk9qy.fsf@dmarc-none.turner.link> <87zgnp96a4.fsf@turner.link>
+ <fc2b7593-db8f-091c-67a0-ae5ffce71700@leemhuis.info>
+ <CADnq5_Nr5-FR2zP1ViVsD_ZMiW=UHC1wO8_HEGm26K_EG2KDoA@mail.gmail.com>
+ <87czkk1pmt.fsf@dmarc-none.turner.link>
+ <BYAPR12MB46140BE09E37244AE129C01A975C9@BYAPR12MB4614.namprd12.prod.outlook.com>
+ <87sftfqwlx.fsf@dmarc-none.turner.link>
+ <BYAPR12MB4614E2CFEDDDEAABBAB986A0975E9@BYAPR12MB4614.namprd12.prod.outlook.com>
+ <87ee4wprsx.fsf@turner.link> <4b3ed7f6-d2b6-443c-970e-d963066ebfe3@amd.com>
+ <87pmo8r6ob.fsf@turner.link>
+ <5a68afe4-1e9e-c683-e06d-30afc2156f14@leemhuis.info>
+ <CADnq5_MCKTLOfWKWvi94Q9-d5CGdWBoWVxEYL3YXOpMiPnLOyg@mail.gmail.com>
+ <87pmnnpmh5.fsf@dmarc-none.turner.link>
+ <CADnq5_NG_dQCYwqHM0umjTMg5Uud6zC4=MiscH91Y9v7mW9bJA@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CADnq5_NG_dQCYwqHM0umjTMg5Uud6zC4=MiscH91Y9v7mW9bJA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646581696;ebba6b85;
+X-HE-SMSGID: 1nQt7F-0006pL-Di
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 03:28:09AM +0100, Sedat Dilek wrote:
-> On Sat, Mar 5, 2022 at 9:09 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Sat, Mar 05, 2022 at 08:52:18AM +0100, Sedat Dilek wrote:
-> > > Hi,
-> > >
-> > > I am here on Debian/unstable AMD64 which switched over to perl v5.34
-> > > in February 2022.
-> > >
-> > > Unfortunately, my perf does not build with this (lib)perl version:
-> > >
-> > > $ ~/bin/perf -vv
-> > > perf version 5.17-rc6
-> > >                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
-> > >    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
-> > >                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
-> > >         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
-> > >                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
-> > >                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
-> > >               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
-> > > numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
-> > >               libperl: [ OFF ]  # HAVE_LIBPERL_SUPPORT
-> > >             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
-> > >              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
-> > >             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
-> > >             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
-> > >    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
-> > >                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
-> > >                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
-> > >             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
-> > >                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
-> > >                   aio: [ on  ]  # HAVE_AIO_SUPPORT
-> > >                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
-> > >               libpfm4: [ OFF ]  # HAVE_LIBPFM
-> > >
-> > > $ grep libperl ../make-log_perf-python3.10-install_bin.txt
-> > > 9:Makefile.config:788: Missing perl devel files. Disabling perl
-> > > scripting support, please install perl-ExtUtils-Embed/libperl-dev
-> > > 22:...                       libperl: [ OFF ]
-> > >
-> > > Checking for these requirements:
-> > >
-> > > # dpkg -l | grep perl | grep 5.34 | awk '/^ii/ {print $1 " " $2 " "
-> > > $3}' | column -t
-> > > ii  libperl-dev:amd64  5.34.0-3
-> > > ii  libperl5.34:amd64  5.34.0-3
-> > > ii  perl               5.34.0-3
-> > > ii  perl-base          5.34.0-3
-> > > ii  perl-modules-5.34  5.34.0-3
-> > >
-> > > # dpkg -L perl-modules-5.34 | grep -i ExtUtils | grep -i Embed
-> > > /usr/share/perl/5.34.0/ExtUtils/Embed.pm
-> > >
-> > > Can you please comment on this?
-> >
-> > hi,
-> > is there something in tools/build/feature/test-libperl.make.output ?
-> >
+Hi, this is your Linux kernel regression tracker again. Top-posting once
+more, to make this easily accessible to everyone.
+
+What's the status of this? It looks stuck, or did the discussion
+continue somewhere else? James, it sounded like you wanted to test
+something, did you give it a try? Or is there some reason why I should
+stop tracking this regression?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+#regzbot poke
+
+On 16.02.22 17:37, Alex Deucher wrote:
+> On Tue, Feb 15, 2022 at 9:35 PM James D. Turner
+> <linuxkernel.foss@dmarc-none.turner.link> wrote:
+>>
+>> Hi Alex,
+>>
+>>> I guess just querying the ATIF method does something that negatively
+>>> influences the windows driver in the guest. Perhaps the platform
+>>> thinks the driver has been loaded since the method has been called so
+>>> it enables certain behaviors that require ATIF interaction that never
+>>> happen because the ACPI methods are not available in the guest.
+>>
+>> Do you mean the `amdgpu_atif_pci_probe_handle` function? If it would be
+>> helpful, I could try disabling that function and testing again.
 > 
-> Hey jirka!
+> Correct.
 > 
-> Indeed there is such a file.
+>>
+>>> I don't really have a good workaround other than blacklisting the
+>>> driver since on bare metal the driver needs to use this interface for
+>>> platform interactions.
+>>
+>> I'm not familiar with ATIF, but should `amdgpu_atif_pci_probe_handle`
+>> really be called for PCI devices which are bound to vfio-pci? I'd expect
+>> amdgpu to ignore such devices.
+>>
+>> As I understand it, starting with
+>> f9b7f3703ff9 ("drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)"),
+>> the `amdgpu_acpi_detect` function loops over all PCI devices in the
+>> `PCI_CLASS_DISPLAY_VGA` and `PCI_CLASS_DISPLAY_OTHER` classes to find
+>> the ATIF and ATCS handles. Maybe skipping over any PCI devices bound to
+>> vfio-pci would fix the issue? On a related note, shouldn't it also skip
+>> over any PCI devices with non-AMD vendor IDs?
 > 
-> $ LC_ALL=C ll tools/build/feature/test-libperl.make.output
-> -rw-r--r-- 1 dileks dileks 24K Mar  6 03:22
-> tools/build/feature/test-libperl.make.output
+> The ACPI methods are global.  There's only one instance of each per
+> system and they are relevant to add GPUs on the platform.  That's why
+> they are a global resource in the driver.  They can be hung off of the
+> dGPU or APU ACPI namespace, depending on the platform which is why we
+> check all of the display devices.  Skipping them would prevent them
+> from being available if you later bound the amdgpu driver to the GPU
+> device(s) I think.
 > 
-> Reproducer:
+> Alex
 > 
-> make distclean
-> make -C tools/perf clean
+>>
+>> Regards,
+>> James
 > 
-> MAKE="make"
-> MAKE_OPTS="HOSTCC=clang-13 HOSTCXX=clang++-13 HOSTLD=ld.lld-13
-> HOSTAR=llvm-ar-13 CC=clang-13 LD=ld.lld-13 AR=llvm-ar-13 NM=llvm-nm-13
-> OBJCOPY=llvm-objcopy-13 OBJDUMP=llvm-objdump-13 OBJSIZE=llvm-size-13
-> READELF=llvm-readelf-13 STRIP=llvm-strip-13 LLVM_IAS=1"
 > 
-> LC_ALL=C $MAKE V=1 $MAKE_OPTS -C tools/perf PYTHON=python3 install-bin
-
-yea, looks like we can't compile perl devel includes with clang,
-we use simple perl test program:
-
-	$ cd tools/build/feature/
-	$ cat test-libperl.c 
-	// SPDX-License-Identifier: GPL-2.0
-	#include <EXTERN.h>
-	#include <perl.h>
-
-	int main(void)
-	{
-		perl_alloc();
-
-		return 0;
-	}
-
-
-and if I compile it with:
-
-	$ CC=clang make test-libperl.bin
-	clang  -MD -Wall -Werror -o test-libperl.bin test-libperl.c  > test-libperl.make.output 2>&1 `perl -MExtUtils::Embed -e ccopts 2>/dev/null` -Wl,--enable-new-dtags -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -fstack-protector-strong -L/usr/local/lib  -L/usr/lib64/perl5/CORE -lperl -lpthread -lresolv -ldl -lm -lcrypt -lutil -lc
-	make: *** [Makefile:224: test-libperl.bin] Error 1
-
-
-I'm getting some other lto related error:
-
-	$ cat test-libperl.make.output 
-	clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
-
-
-with my clang version:
-
-	$ clang --version
-	clang version 13.0.0 (Fedora 13.0.0-3.fc35)
-	Target: x86_64-redhat-linux-gnu
-	Thread model: posix
-	InstalledDir: /usr/bin
-
-so you need to figure out how to compile the test program
-above first with clang
-
-jirka

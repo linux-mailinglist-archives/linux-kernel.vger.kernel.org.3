@@ -2,223 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E10F4CEA6A
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 11:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FD94CEA71
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 11:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbiCFKCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 05:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S232677AbiCFKEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 05:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiCFKCc (ORCPT
+        with ESMTP id S229491AbiCFKEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 05:02:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A515F64BDB;
-        Sun,  6 Mar 2022 02:01:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3054D611F9;
-        Sun,  6 Mar 2022 10:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E17FDC340EC;
-        Sun,  6 Mar 2022 10:01:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646560899;
-        bh=tWOO0ueZM0TxA/mZfTkeEMBGYFRJ0CsEHmRlfeNLsuI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=deotAlwf6wSuJyZfOJmHrjfd+h9Wp09amboA1hEbBfApU+qyf/CwgBoRpCqQ1TspJ
-         XNXBxqWGnldkKo03mDYeMJFs4Chsk3zCxdAp9ZgySLo1AiWKPcObcvYq0+hoo/EywF
-         +8VdGKEH0u1uRm0bEmNOqJu6kkjDkJgDmsC+QrUY=
-Date:   Sun, 6 Mar 2022 11:01:36 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        zhangyiru <zhangyiru3@huawei.com>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        Alexey Gladkov <legion@kernel.org>, linux-mips@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        codalist@coda.cs.cmu.edu, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH RFC 1/3] mm: Add f_ops->populate()
-Message-ID: <YiSGgCV9u9NglYsM@kroah.com>
-References: <20220306053211.135762-1-jarkko@kernel.org>
- <20220306053211.135762-2-jarkko@kernel.org>
+        Sun, 6 Mar 2022 05:04:38 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234AB692A2;
+        Sun,  6 Mar 2022 02:03:47 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id d19so14142013ioc.8;
+        Sun, 06 Mar 2022 02:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=niJBbZgiI5OBSLzHg1nrz9EzrLqTnnJRoqrcX06Ph8c=;
+        b=gQzYX5+c1SWh3o9SrqV4/mdHeNbYDClO8uqa+fCKWHwOi9jD1u6v7C/w0SY/gAS1Ld
+         GzWjY3Hofn31JaEwnViv/IjI+5Q8GdAXDd826iFVu2RTAo+9ZsL2k+l45x4BFSCeFhNh
+         JtuVTs2SuH3UD+SRvD7hSt7OVarJaxsgd0o1YP6FZFpqOr6V9XV1M13NJfNZuwHI+ksw
+         X63unOD+ogiq2tgFoCSeZuCCBx/uGWT2gEE3OCVB1M3zsW8dHNiviCj00opY+8Jc/amf
+         43LJu9g7Ol6LrqpyxqOlwHsrG+mq0ZXJD6OZaIEk6hshiNJqt+CpjqyO6PyHxg59whBp
+         TA/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=niJBbZgiI5OBSLzHg1nrz9EzrLqTnnJRoqrcX06Ph8c=;
+        b=q9Uy639Dmdfb1icD+2WBn/hAEuqfrlNsnER94yHzMq1UeyaXPyOi45pXtCMeqNu8cl
+         toCGrv6o2TK0drg7QODTPGbts1/l0KRl86YxPVj75hc0dAgZZnVEq4P409MsjHWkRGhL
+         jVTpJfVo836dWja3r/2o4jlHMp8uwjvBmRTn0lBL9sJjBBfwjMHTAaLeHRJvai2djUWq
+         JFeGtjM5PNBv5vPesnmXZp7vUlCgPquTGq6taAYUlxSr1f4MV0w5h8a2lrHEy6JaOPV6
+         5eHx7FdhYGsPpd1xpQzDDXKoQSHxI6ywtV5oUXObLzu+DUm7KBE74izX+M+YlkEzwm2s
+         27Jw==
+X-Gm-Message-State: AOAM533hwsdHKF5cSEwcLuz3mhjXPUYxURvtArOFJ2ofJBpXi7Vdabfy
+        2e7ZVNtpdbCzU5iJoz7yo9W/ybWFxS3CSeIwqaM=
+X-Google-Smtp-Source: ABdhPJydSEmwomHwyNsWYaGS/ohQWvidZgafVS8CwhaQS/OMYrQf2CmHLB8gJp1NguIARHfPlrLXm1nwizmXiCozfeU=
+X-Received: by 2002:a02:c733:0:b0:2fe:ab40:d2cc with SMTP id
+ h19-20020a02c733000000b002feab40d2ccmr6516525jao.126.1646561026589; Sun, 06
+ Mar 2022 02:03:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220306053211.135762-2-jarkko@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220301145233.3689119-1-arnd@kernel.org> <20220301145233.3689119-2-arnd@kernel.org>
+ <CA+icZUVcNppitX53A-f9EAh-Lp6aQq1Qn7Ns1J=tDfQAf_K9vQ@mail.gmail.com>
+In-Reply-To: <CA+icZUVcNppitX53A-f9EAh-Lp6aQq1Qn7Ns1J=tDfQAf_K9vQ@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 6 Mar 2022 11:03:10 +0100
+Message-ID: <CA+icZUVkpvQuRHqeRtQbrVHU7mb0rK7-TTFMHEgZ8k=_keMTSA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] treewide: use -Wdeclaration-after-statement
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 07:32:05AM +0200, Jarkko Sakkinen wrote:
-> Sometimes you might want to use MAP_POPULATE to ask a device driver to
-> initialize the device memory in some specific manner. SGX driver can use
-> this to request more memory by issuing ENCLS[EAUG] x86 opcode for each
-> page in the address range.
-> 
-> Add f_ops->populate() with the same parameters as f_ops->mmap() and make
-> it conditionally called inside call_mmap(). Update call sites
-> accodingly.
-> ---
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> v3:
-> -       if (!ret && do_populate && file->f_op->populate)
-> +       if (!ret && do_populate && file->f_op->populate &&
-> +           !!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-> (reported by Matthew Wilcox)
-> v2:
-> -       if (!ret && do_populate)
-> +       if (!ret && do_populate && file->f_op->populate)
-> (reported by Jan Harkes)
-> ---
->  arch/mips/kernel/vdso.c                    |  2 +-
->  drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c |  2 +-
->  fs/coda/file.c                             |  2 +-
->  fs/overlayfs/file.c                        |  2 +-
->  include/linux/fs.h                         | 12 ++++++++++--
->  include/linux/mm.h                         |  2 +-
->  ipc/shm.c                                  |  2 +-
->  mm/mmap.c                                  | 10 +++++-----
->  mm/nommu.c                                 |  4 ++--
->  9 files changed, 23 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-> index 3d0cf471f2fe..89f3f3da9abd 100644
-> --- a/arch/mips/kernel/vdso.c
-> +++ b/arch/mips/kernel/vdso.c
-> @@ -102,7 +102,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
->  		base = mmap_region(NULL, STACK_TOP, PAGE_SIZE,
->  				VM_READ | VM_EXEC |
->  				VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC,
-> -				0, NULL);
-> +				0, NULL, false);
->  		if (IS_ERR_VALUE(base)) {
->  			ret = base;
->  			goto out;
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-> index 1b526039a60d..4c71f64d6a79 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-> @@ -107,7 +107,7 @@ static int i915_gem_dmabuf_mmap(struct dma_buf *dma_buf, struct vm_area_struct *
->  	if (!obj->base.filp)
->  		return -ENODEV;
->  
-> -	ret = call_mmap(obj->base.filp, vma);
-> +	ret = call_mmap(obj->base.filp, vma, false);
->  	if (ret)
->  		return ret;
->  
-> diff --git a/fs/coda/file.c b/fs/coda/file.c
-> index 29dd87be2fb8..e14f312fdbf8 100644
-> --- a/fs/coda/file.c
-> +++ b/fs/coda/file.c
-> @@ -173,7 +173,7 @@ coda_file_mmap(struct file *coda_file, struct vm_area_struct *vma)
->  	spin_unlock(&cii->c_lock);
->  
->  	vma->vm_file = get_file(host_file);
-> -	ret = call_mmap(vma->vm_file, vma);
-> +	ret = call_mmap(vma->vm_file, vma, false);
->  
->  	if (ret) {
->  		/* if call_mmap fails, our caller will put host_file so we
-> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
-> index fa125feed0ff..b963a9397e80 100644
-> --- a/fs/overlayfs/file.c
-> +++ b/fs/overlayfs/file.c
-> @@ -503,7 +503,7 @@ static int ovl_mmap(struct file *file, struct vm_area_struct *vma)
->  	vma_set_file(vma, realfile);
->  
->  	old_cred = ovl_override_creds(file_inode(file)->i_sb);
-> -	ret = call_mmap(vma->vm_file, vma);
-> +	ret = call_mmap(vma->vm_file, vma, false);
->  	revert_creds(old_cred);
->  	ovl_file_accessed(file);
->  
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index e2d892b201b0..2909e2d14af8 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -42,6 +42,7 @@
->  #include <linux/mount.h>
->  #include <linux/cred.h>
->  #include <linux/mnt_idmapping.h>
-> +#include <linux/mm.h>
->  
->  #include <asm/byteorder.h>
->  #include <uapi/linux/fs.h>
-> @@ -1993,6 +1994,7 @@ struct file_operations {
->  	long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
->  	long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
->  	int (*mmap) (struct file *, struct vm_area_struct *);
-> +	int (*populate)(struct file *, struct vm_area_struct *);
->  	unsigned long mmap_supported_flags;
->  	int (*open) (struct inode *, struct file *);
->  	int (*flush) (struct file *, fl_owner_t id);
-> @@ -2074,9 +2076,15 @@ static inline ssize_t call_write_iter(struct file *file, struct kiocb *kio,
->  	return file->f_op->write_iter(kio, iter);
->  }
->  
-> -static inline int call_mmap(struct file *file, struct vm_area_struct *vma)
-> +static inline int call_mmap(struct file *file, struct vm_area_struct *vma, bool do_populate)
->  {
-> -	return file->f_op->mmap(file, vma);
-> +	int ret = file->f_op->mmap(file, vma);
-> +
-> +	if (!ret && do_populate && file->f_op->populate &&
-> +	    !!(vma->vm_flags & (VM_IO | VM_PFNMAP)))
-> +		ret = file->f_op->populate(file, vma);
-> +
-> +	return ret;
->  }
->  
->  extern ssize_t vfs_read(struct file *, char __user *, size_t, loff_t *);
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 213cc569b192..6c8c036f423b 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2683,7 +2683,7 @@ extern unsigned long get_unmapped_area(struct file *, unsigned long, unsigned lo
->  
->  extern unsigned long mmap_region(struct file *file, unsigned long addr,
->  	unsigned long len, vm_flags_t vm_flags, unsigned long pgoff,
-> -	struct list_head *uf);
-> +	struct list_head *uf, bool do_populate);
+On Fri, Mar 4, 2022 at 12:29 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Tue, Mar 1, 2022 at 4:59 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Mark Rutland <mark.rutland@arm.com>
+> >
+> > In a subsequent patch we'll move the kernel from using `-std=3Dgnu89` t=
+o
+> > `-std=3Dgnu11`, permitting the use of additional C11 features such as
+> > for-loop initial declarations.
+> >
+> > One contentious aspect of C99 is that it permits mixed declarations and
+> > code, and for now at least, it seems preferable to enforce that
+> > declarations must come first.
+> >
+> > These warnings were already disabled in the kernel itself, but not
+> > for KBUILD_USERCFLAGS or the compat VDSO on arch/arm64, which uses
+> > a separate set of CFLAGS.
+> >
+> > This patch fixes an existing violation in modpost.c, which is not
+> > reported because of the missing flag in KBUILD_USERCFLAGS:
+> >
+> > | scripts/mod/modpost.c: In function =E2=80=98match=E2=80=99:
+> > | scripts/mod/modpost.c:837:3: warning: ISO C90 forbids mixed declarati=
+ons and code [-Wdeclaration-after-statement]
+> > |   837 |   const char *endp =3D p + strlen(p) - 1;
+> > |       |   ^~~~~
+> >
+> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> > [arnd: don't add a duplicate flag to the default set, update changelog]
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> I was able to build and boot on bare metal.
+>
+> No new warnings in my build-log here after switching to -std=3Dgnu11.
+>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v13.0.0 x86-6=
+4
+>
 
-As I have said many times before, don't add random boolean flags to
-function arguments, as they provide no hint as to what they do at all.
-When you read the code, you then have to go back and look up the
-function definition here and see what exactly it means and the flow is
-broken.
+I have re-tested with Debian's LLVM/Clang v14.0.0-rc2.
 
-Make function names mean something obvious, for this, if it really is a
-good idea to have this new flag (and I doubt it, but that's not my
-call), then make this a mmap_region_populate() call to make it obvious
-it is something different than the notmal mmap_region() call.
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v14.0.0-rc2 (x8=
+6-64)
 
-But as is, this is pretty horrid, don't you agree?
+- sed@ -
 
-thanks,
-
-greg k-h
+> - sed@ -
+>
+> > ---
+> >  Makefile                          | 3 ++-
+> >  arch/arm64/kernel/vdso32/Makefile | 1 +
+> >  scripts/mod/modpost.c             | 4 +++-
+> >  3 files changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index 94fa9a849a7a..37ef6a555dcd 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -432,7 +432,8 @@ HOSTCXX     =3D g++
+> >  endif
+> >
+> >  export KBUILD_USERCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prot=
+otypes \
+> > -                             -O2 -fomit-frame-pointer -std=3Dgnu89
+> > +                           -O2 -fomit-frame-pointer -std=3Dgnu89 \
+> > +                           -Wdeclaration-after-statement
+> >  export KBUILD_USERLDFLAGS :=3D
+> >
+> >  KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOS=
+TCFLAGS)
+> > diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso=
+32/Makefile
+> > index 9378ea055bf2..ed181bedbffc 100644
+> > --- a/arch/arm64/kernel/vdso32/Makefile
+> > +++ b/arch/arm64/kernel/vdso32/Makefile
+> > @@ -68,6 +68,7 @@ VDSO_CFLAGS +=3D -Wall -Wundef -Wstrict-prototypes -W=
+no-trigraphs \
+> >                 -fno-strict-aliasing -fno-common \
+> >                 -Werror-implicit-function-declaration \
+> >                 -Wno-format-security \
+> > +               -Wdeclaration-after-statement \
+> >                 -std=3Dgnu11
+> >  VDSO_CFLAGS  +=3D -O2
+> >  # Some useful compiler-dependent flags from top-level Makefile
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index 6bfa33217914..fe693304b120 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -833,8 +833,10 @@ static int match(const char *sym, const char * con=
+st pat[])
+> >  {
+> >         const char *p;
+> >         while (*pat) {
+> > +               const char *endp;
+> > +
+> >                 p =3D *pat++;
+> > -               const char *endp =3D p + strlen(p) - 1;
+> > +               endp =3D p + strlen(p) - 1;
+> >
+> >                 /* "*foo*" */
+> >                 if (*p =3D=3D '*' && *endp =3D=3D '*') {
+> > --
+> > 2.29.2
+> >

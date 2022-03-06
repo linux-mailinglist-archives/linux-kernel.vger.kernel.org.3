@@ -2,186 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD874CEBE0
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 15:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDAC4CEBE5
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 15:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiCFOWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 09:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
+        id S232764AbiCFOYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 09:24:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiCFOWx (ORCPT
+        with ESMTP id S229463AbiCFOYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 09:22:53 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9713F897;
-        Sun,  6 Mar 2022 06:21:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Py4p6iS6EYZuvEmVNp0u2Xszje9rqH2a0r3dEaBrDKY=; b=I6z8nkqYupJIL9fdF/+cj5VkWW
-        rGpMh4385K6I/UX+qNroLSy0xlWald17f4KzPRGlCHLwj8UD55D0UA/l4jynz3vyPVHfIBdSyxBIi
-        a+OykIHn1wD7VEcSLzjFn7TqgdDVRN7FpHuol+hOrKgbuDYy/AvOCFYcUAGvA3wIik9w3D4TDSTHm
-        nXaO3uCHQg/84Rw2TDleypxOZr/T6md2HPilZNYKPEi+srOfujw5LcTMHcd8QWu66+9szF8857SeE
-        404i9i5L9WcGwZo9kVLxkzUwcGIsPpw3ziNg5sgEG2WiJ4U5w4n+d96QkeCG7fdxwjePmMUzV6EUW
-        AbOd8Wqg==;
-Received: from [187.56.66.217] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nQrlZ-0004v2-94; Sun, 06 Mar 2022 15:21:45 +0100
-Message-ID: <73011b6f-084b-43f5-cc01-1818a8a57e56@igalia.com>
-Date:   Sun, 6 Mar 2022 11:21:28 -0300
+        Sun, 6 Mar 2022 09:24:19 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA874AE28;
+        Sun,  6 Mar 2022 06:23:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1646576597;
+        bh=fviFSK5y5Aaq+IIWP/+WE3VsHMV+uByyn72NZHtxZGo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=gFuohdMiQxK092zL861CnVC6HhvUDaFQXDoPR5uoy4b2ltLTxiCWQ8D8CqB0b3D/k
+         bhk5v6/IL1S13BeBo3jA5DMR6z1dQ1YO+K2aiTgWa54qRuke3D830VRCnXUe7X/7Xa
+         nba8RO7xfwWICGkrxRCqVJVP/uFKnrlgbmgswJpo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([89.0.78.102]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2mBQ-1o9nuj1CJg-0139Ak; Sun, 06
+ Mar 2022 15:23:17 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-spi@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Mark Brown <broonie@kernel.org>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: npcm-fiu: Fix typo ("npxm")
+Date:   Sun,  6 Mar 2022 15:23:12 +0100
+Message-Id: <20220306142312.109017-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>, "bhe@redhat.com" <bhe@redhat.com>
-Cc:     "d.hatayama@fujitsu.com" <d.hatayama@fujitsu.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
- <TYAPR01MB6507D06BA6D32218F6E88198955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
- <fda509a5-ea0d-4d1d-a1c1-ca5e80010fc0@igalia.com>
- <TYAPR01MB6507D9747647685B554B8F8F955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
- <fb5e66b6-049a-22ab-5913-a04cc302b629@igalia.com> <YfPxvzSzDLjO5ldp@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YfPxvzSzDLjO5ldp@alley>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:zRDIEOS8jqLfAJl4QOpA4SuB/spvp9/RlpdN88YIsCOrFgmGdrb
+ ZbySwwkT42wTut3PNqASXXlG5Yq07czXCjm2JNUN1tYf1EUIgHL70Lh67dZLphRkmNRupa5
+ xijxWZRxen9Tv/OLMfZ95QrsgE+r2V78K35aOA99tIrltg7sOdQhgpN5TOF25kswQm3tVaf
+ RynjU6K172AYYubLOAZEg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oD/RSu1sJY4=:mI9NtcgMTu+ubTueJ7hMFF
+ uoyUXKzGDJzDdKfeQI9rRKfpD1LE8ntAX7+t+XQmGgYz8wlN41Z+aId+Kjilf/G7M+pz4D7Er
+ 3SAyoa8RN8NSU4ndxJhYd7SacLsqBUoK98kfoh5icQjvtk3lW5eVkWE1uwLd1jRBR6f8SCw0a
+ pLYQsSlhYgevKtk7zmqyHbAtKbqo6NJATTHqffYe5Oz0sLZ+BoL+TN9+DJCRMAHSCAfVWX/R5
+ dWC+CrtU5IxqZTxToJ7xVRRXOjspx9/SZ6zibOgbfrD0XWWPzmhe+y+tFAOD21cErStMckOUA
+ 3OP384m9Z0rG5eh6DggWT7f/zr5BGDgn7OxJNB2hmdyrZaNW+jfm3vsDKw1lrKi8/Y4YSKCuB
+ 3gpkj6f/RhbMhvgz5wBbAujsXLEJut/2Mh3JWjIlQChqovV2BDj/xmhtDTDgTNvjtttlM079E
+ 4+/At1HKSvpm5PCMmpBR8H9/PDEmlXy4s+K4nb0W0TNl36KgZouyqatw9FUB7X6DafoJ+MdIA
+ hkCEK92qh+X4i/+CbZrM2RU6oXt3AK5WHRD4Y16DPubBDadcKGu8d8GphNXIyjVLYJEuGerYM
+ u/3TnIpIcQJRkCmz5yFSIJPjX/lmhojoc/PRgvx/rB/wU5yPKHCtvJfVPoTzyn9NARAQ4sSGq
+ v0yLfZWvxgbvv7TWMIxuS/nTXjbWo0ChyZsyjibc8HrhmmopNL1U+uEt1gCbFWrIZyTshc9AD
+ xmzbQJGnNru6Jra4TpEjXZjc+dl2wMNm+bFpOS558DIx+1frX2CBEA7hinRjMtmmuGPdMxpnN
+ NIndXSuFbTNTGPVrR+f75b8h5l8HIYrL2K1CeTAf+T8J2DAvF06HM5F0oCGYpb241rx766Ch2
+ 6jQf7jv2TjmHz4BiWvkpiGOwGFYoRDxYVZx0YCPrXuqnngqeBH2o1R8enQE+leSHwNLStOrLh
+ NxZt4oTY74hSQeER9Mlq1LcCxpT9AKfgX9Gs0tIpIdEnJ6MQsKoui2ILJa+lw840M6Pir60yU
+ ASsSrFV142sv+TJuZvqRhz+RNbymJRXqTSr7kwWVLP3PWEV8kZpePEdOxZ4KqPEWc2SWE1Tpv
+ U9KncsdR7BOtbU=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/01/2022 10:38, Petr Mladek wrote:
-> [...] 
-> I think about the following solution:
-> 
->     + split the notifiers into three lists:
-> 
-> 	+ info: stop watchdogs, provide extra info
-> 	+ hypervisor: poke hypervisor
-> 	+ reboot: actions needed only when crash dump did not happen
-> 
->     + allow to call hypervisor notifiers before or after kdump
-> 
->     + stop CPUs before kdump when either hypervisor notifiers or
->       kmsg_dump is enabled
-> 
-> Note that it still allows to call kdump as the first action when
-> hypervisor notifiers are called after kdump and no kmsg dumper
-> is registered.
-> 
-> 
-> void panic(void)
-> {
-> 	[...]
-> 
-> 	if (crash_kexec_post_hypervisor || panic_print || enabled_kmsg_dump()) {
-> 		/*
-> 		 * Stop CPUs when some extra action is required before
-> 		 * crash dump. We will need architecture dependent extra
-> 		 * works in addition to stopping other CPUs.
-> 		 */
-> 		 crash_smp_send_stop();
-> 		 cpus_stopped = true;
-> 	}
-> 
-> 	if (crash_kexec_post_hypervisor) {
-> 		  /* Tell hypervisor about the panic */
-> 		  atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
-> 	}
-> 
-> 	if (enabled_kmsg_dump) {
-> 		  /*
-> 		   * Print extra info by notifiers.
-> 		   * Prevent rumors, for example, by stopping watchdogs.
-> 		   */
-> 		  atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
-> 	}
-> 
-> 	/* Optional extra info */
-> 	panic_printk_sys_info();
-> 
-> 	/* No dumper by default */
-> 	kmsg_dump();
-> 
-> 	/* Used only when crash kernel loaded */
-> 	__crash_kexec(NULL);
-> 
-> 	if (!cpus_stopped) {
-> 		/*
-> 		 * Note smp_send_stop is the usual smp shutdown function, which
-> 		 * unfortunately means it may not be hardened to work in a
-> 		 * panic situation.
-> 		 */
-> 		smp_send_stop();
-> 	}
-> 
-> 	if (!crash_kexec_post_hypervisor) {
-> 		  /* Tell hypervisor about the panic */
-> 		  atomic_notifier_call_chain(&panic_hypervisor_notifier_list, 0, buf);
-> 	}
-> 
-> 	if (!enabled_kmsg_dump) {
-> 		  /*
-> 		   * Print extra info by notifiers.
-> 		   * Prevent rumors, for example, by stopping watchdogs.
-> 		   */
-> 		  atomic_notifier_call_chain(&panic_info_notifier_list, 0, buf);
-> 	}
-> 
-> 	/*
-> 	 * Help to reboot a safe way.
-> 	 */
-> 	atomic_notifier_call_chain(&panic_reboot_notifier_list, 0, buf);
-> 
-> 	[...]
-> }
-> 
-> Any opinion?
-> Do the notifier list names make sense?
-> 
-> Best Regards,
-> Petr
+The platform is called NPCM, not NPXM.
 
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/spi/spi-npcm-fiu.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Hi folks, I'm working on this now, and while looking into it I've
-noticed that we have the concept of "priority" in the notifiers list.
-Basically, you can order the calls the way it fits best, priority is an
-integer and must the set in the moment of registration, it's up to the
-users of the notifiers to set it and enforce the ordering.
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index b62471ab6d7f2..f11246884df82 100644
+=2D-- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -201,7 +201,7 @@ struct fiu_data {
+ 	int fiu_max;
+ };
 
-So what I'm thinking is: currently, only 3 or 4 panic notifiers make use
-of that. What if, since we're re-working this, we add a priority for
-*all* notifiers and enforce its usage? This way we guarantee
-consistency, it'd make debug easier and maybe even more important:
-having all the notifiers and their priorities in a list present in the
-header file would be great documentation about all the existing
-notifiers and how they are called - today this information is quite
-obscure and requires lots of code grepping!
+-static const struct npcm_fiu_info npxm7xx_fiu_info[] =3D {
++static const struct npcm_fiu_info npcm7xx_fiu_info[] =3D {
+ 	{.name =3D "FIU0", .fiu_id =3D FIU0,
+ 		.max_map_size =3D MAP_SIZE_128MB, .max_cs =3D 2},
+ 	{.name =3D "FIU3", .fiu_id =3D FIU3,
+@@ -209,8 +209,8 @@ static const struct npcm_fiu_info npxm7xx_fiu_info[] =
+=3D {
+ 	{.name =3D "FIUX", .fiu_id =3D FIUX,
+ 		.max_map_size =3D MAP_SIZE_16MB, .max_cs =3D 2} };
 
-Let me know your thoughts Petr / Baoquan - it would add slightly more
-code / complexity, but in my opinion the payback is very good.
-Cheers,
+-static const struct fiu_data npxm7xx_fiu_data =3D {
+-	.npcm_fiu_data_info =3D npxm7xx_fiu_info,
++static const struct fiu_data npcm7xx_fiu_data =3D {
++	.npcm_fiu_data_info =3D npcm7xx_fiu_info,
+ 	.fiu_max =3D 3,
+ };
 
+@@ -664,7 +664,7 @@ static const struct spi_controller_mem_ops npcm_fiu_me=
+m_ops =3D {
+ };
 
-Guilherme
+ static const struct of_device_id npcm_fiu_dt_ids[] =3D {
+-	{ .compatible =3D "nuvoton,npcm750-fiu", .data =3D &npxm7xx_fiu_data  },
++	{ .compatible =3D "nuvoton,npcm750-fiu", .data =3D &npcm7xx_fiu_data  },
+ 	{ /* sentinel */ }
+ };
+
+=2D-
+2.34.1
+

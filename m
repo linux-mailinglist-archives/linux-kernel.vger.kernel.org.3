@@ -2,138 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFF04CEC26
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3B84CEC28
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbiCFPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 10:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
+        id S233759AbiCFPuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 10:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiCFPtJ (ORCPT
+        with ESMTP id S230313AbiCFPuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 10:49:09 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C84E0D7;
-        Sun,  6 Mar 2022 07:48:16 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nQt7F-0006pL-Di; Sun, 06 Mar 2022 16:48:13 +0100
-Message-ID: <092b825a-10ff-e197-18a1-d3e3a097b0e3@leemhuis.info>
-Date:   Sun, 6 Mar 2022 16:48:12 +0100
+        Sun, 6 Mar 2022 10:50:39 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A652553E30
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 07:49:46 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id kx1-20020a17090b228100b001bf2dd26729so4783209pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 07:49:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=iKa7k5SfVCfzzATQN9q6JAKUZNX+2kkckFzGpq84zGk=;
+        b=Nc2fqHoT6OtKZba0CDPnZjCvCZt71kl2n9xvik3idJpP79RVZPu/gd6wmghz+1sTeX
+         HZqrQ6hwJbV1gF0t0WT2yVU5p1+voZO87c135RXfcVnQRxwgWq4UnLUwHg+TNfVaQIWJ
+         L/ZN2pexhPQjzdXVQTpCUsXMY2WVwIauM5dEe3APtf5Gp2TcqhRKVF7ISLHjnNMG9T52
+         Bm80aOijCA2/wdKElstloGbFWnhII2ocrWpI5q0J65IIXrLg0HWqLEY2Y4gLEEPseRA3
+         l1W+7AErVFpo1b683t1tG5Xh2OLHF3iNX3AXshhPciOKvhRhPHSp0SmpYGegjQSt26sL
+         QFjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=iKa7k5SfVCfzzATQN9q6JAKUZNX+2kkckFzGpq84zGk=;
+        b=tQX9HffNZpcUi/jWS4mir2hllcbkYCrSPVm7GZo1oaiag6aPf7j9vo/okWnR5nIwuZ
+         UShVGAw1qdDAysBzzXpI1UNWHNsTAm0RLp0koKeVFR/YHCYbqiFllgQNAe8w5LgUyl99
+         j3BBzyfKYlEeJVUpJk2pZwVAr+tpBsX/7LjjJ9VT2YTKzdDfjQe+xuV2S5qqBNa50F8g
+         LvW8osZCIeu1eUmw088JBv+DKbZfiCLuOwF4cplS2RU4EFJMhj0/t/tVxr2luDegEyXs
+         OLWWOGaIl/NQGqHzhlTf+PcVlivBs4X5f7Zgp9DgL8CViJAHHP6tx+AXNhkzrACTrqEN
+         P7xw==
+X-Gm-Message-State: AOAM533x8qa9TD+QOgheqh5AJcDzB33ouC+aPBo4Y2liHd/P2Sxqv02S
+        kf463M/dAU+U6yHDYkaHr9Q=
+X-Google-Smtp-Source: ABdhPJzYDZ0fkCnD/0VHrWoJ7v+XwIFJSYxjSjiR4XMIJUwGaEOSB3nn07oVYk+K4IZS/S7HMfIg8Q==
+X-Received: by 2002:a17:90a:990c:b0:1bc:3c9f:2abe with SMTP id b12-20020a17090a990c00b001bc3c9f2abemr8743398pjp.220.1646581785992;
+        Sun, 06 Mar 2022 07:49:45 -0800 (PST)
+Received: from ?IPV6:240b:10:2720:5500:7cd8:5236:546e:2b2c? ([240b:10:2720:5500:7cd8:5236:546e:2b2c])
+        by smtp.gmail.com with ESMTPSA id p28-20020a056a000a1c00b004f6519e61b7sm13601015pfh.21.2022.03.06.07.49.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 07:49:45 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------K91juOuLpSSbXSC0vYcfI0J1"
+Message-ID: <9621c512-06f2-17b2-5c68-943b1f0981eb@gmail.com>
+Date:   Mon, 7 Mar 2022 00:49:39 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
- PCI-passed-through to Windows VM
+Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
 Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        "James D. Turner" <linuxkernel.foss@dmarc-none.turner.link>
-Cc:     "Lazar, Lijo" <lijo.lazar@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-References: <87ee57c8fu.fsf@turner.link>
- <acd2fd5e-d622-948c-82ef-629a8030c9d8@leemhuis.info>
- <87a6ftk9qy.fsf@dmarc-none.turner.link> <87zgnp96a4.fsf@turner.link>
- <fc2b7593-db8f-091c-67a0-ae5ffce71700@leemhuis.info>
- <CADnq5_Nr5-FR2zP1ViVsD_ZMiW=UHC1wO8_HEGm26K_EG2KDoA@mail.gmail.com>
- <87czkk1pmt.fsf@dmarc-none.turner.link>
- <BYAPR12MB46140BE09E37244AE129C01A975C9@BYAPR12MB4614.namprd12.prod.outlook.com>
- <87sftfqwlx.fsf@dmarc-none.turner.link>
- <BYAPR12MB4614E2CFEDDDEAABBAB986A0975E9@BYAPR12MB4614.namprd12.prod.outlook.com>
- <87ee4wprsx.fsf@turner.link> <4b3ed7f6-d2b6-443c-970e-d963066ebfe3@amd.com>
- <87pmo8r6ob.fsf@turner.link>
- <5a68afe4-1e9e-c683-e06d-30afc2156f14@leemhuis.info>
- <CADnq5_MCKTLOfWKWvi94Q9-d5CGdWBoWVxEYL3YXOpMiPnLOyg@mail.gmail.com>
- <87pmnnpmh5.fsf@dmarc-none.turner.link>
- <CADnq5_NG_dQCYwqHM0umjTMg5Uud6zC4=MiscH91Y9v7mW9bJA@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CADnq5_NG_dQCYwqHM0umjTMg5Uud6zC4=MiscH91Y9v7mW9bJA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646581696;ebba6b85;
-X-HE-SMSGID: 1nQt7F-0006pL-Di
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
+        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Brian Norris <computersforpeace@gmail.com>,
+        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
+        cyrille.pitchen@wedev4u.fr,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linuxppc-dev@lists.ozlabs.org
+References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
+ <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
+ <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
+ <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
+ <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
+ <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
+ <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
+ <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
+ <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
+ <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
+ <f9e46b61-37e5-a280-edb0-27f8e81a8680@pengutronix.de>
+From:   Tokunori Ikegami <ikegami.t@gmail.com>
+In-Reply-To: <f9e46b61-37e5-a280-edb0-27f8e81a8680@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker again. Top-posting once
-more, to make this easily accessible to everyone.
+This is a multi-part message in MIME format.
+--------------K91juOuLpSSbXSC0vYcfI0J1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-What's the status of this? It looks stuck, or did the discussion
-continue somewhere else? James, it sounded like you wanted to test
-something, did you give it a try? Or is there some reason why I should
-stop tracking this regression?
+Hi,
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+On 2022/03/04 20:11, Ahmad Fatoum wrote:
+> Hello Tokunori-san,
+>
+> On 20.02.22 13:22, Tokunori Ikegami wrote:
+>> Hi Ahmad-san,
+>>
+>> Could you please try the version 2 patch attached for the error case?
+>> This version is to check the DQ true data 0xFF by chip_good().
+> I had a similar patch locally as well at first. I just tested yours
+> and I can't reproduce the issue.
+Thanks for your support.
+Sorry if possible could you please retest the attached the patch again 
+since this fixed the version 1 patch maintainer review comments?
+>
+>> But I am not sure if this works or not since the error is possible to be caused by Hi-Z 0xff on floating bus or etc.
+> That it works for me could be because of Hi-Z 0xff, which is why
+> decided against it.
+I see.
+>
+>>>>>> What seems to work for me is checking if chip_good or chip_ready
+>>>>>> and map_word is equal to 0xFF. I can't justify why this is ok though.
+>>>>>> (Worst case bus is floating at this point of time and Hi-Z is read
+>>>>>> as 0xff on CPU data lines...)
+>>>>> Sorry I am not sure about this.
+>>>>> I thought the chip_ready() itself is correct as implemented as the data sheet in the past.
+>>>>> But it did not work correctly so changed to use chip_good() instead as it is also correct.
+>>>> What exactly in the datasheet makes you believe chip_good is not appropriate?
+>>> I just mentioned about the actual issue behaviors as not worked chip_good() on S29GL964N and not worked chip_ready() on MX29GL512FHT2I-11G before etc.
+>>> Anyway let me recheck the data sheet details as just checked it again quickly but needed more investigation to understand.
+>> As far as I checked still both chip_good() and chip_ready() seem correct but still the root cause is unknown.
+>> If as you mentioned the issue was cased by the DQ true data 0xFF I am not sure why the read work without any error after the write operation.
+>> Also if the error was caused by the Hi-Z 0xff on floating bus as mentioned I am not sure why the read work without any error after the write operation with chip_ready().
+>> Sorry anyway the root cause is also unknown when the write operation was changed to use chip_good() instead of chip_ready().
+> I've be ok with v1 then. Restores working behavior for me and shouldn't break others.
 
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
+Noted but still I am thinking the version 2 patch to check 0xff seems 
+better than to use chip_ready() so let me consider this again later.
 
-#regzbot poke
+Regards,
+Ikegami
 
-On 16.02.22 17:37, Alex Deucher wrote:
-> On Tue, Feb 15, 2022 at 9:35 PM James D. Turner
-> <linuxkernel.foss@dmarc-none.turner.link> wrote:
->>
->> Hi Alex,
->>
->>> I guess just querying the ATIF method does something that negatively
->>> influences the windows driver in the guest. Perhaps the platform
->>> thinks the driver has been loaded since the method has been called so
->>> it enables certain behaviors that require ATIF interaction that never
->>> happen because the ACPI methods are not available in the guest.
->>
->> Do you mean the `amdgpu_atif_pci_probe_handle` function? If it would be
->> helpful, I could try disabling that function and testing again.
-> 
-> Correct.
-> 
->>
->>> I don't really have a good workaround other than blacklisting the
->>> driver since on bare metal the driver needs to use this interface for
->>> platform interactions.
->>
->> I'm not familiar with ATIF, but should `amdgpu_atif_pci_probe_handle`
->> really be called for PCI devices which are bound to vfio-pci? I'd expect
->> amdgpu to ignore such devices.
->>
->> As I understand it, starting with
->> f9b7f3703ff9 ("drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)"),
->> the `amdgpu_acpi_detect` function loops over all PCI devices in the
->> `PCI_CLASS_DISPLAY_VGA` and `PCI_CLASS_DISPLAY_OTHER` classes to find
->> the ATIF and ATCS handles. Maybe skipping over any PCI devices bound to
->> vfio-pci would fix the issue? On a related note, shouldn't it also skip
->> over any PCI devices with non-AMD vendor IDs?
-> 
-> The ACPI methods are global.  There's only one instance of each per
-> system and they are relevant to add GPUs on the platform.  That's why
-> they are a global resource in the driver.  They can be hung off of the
-> dGPU or APU ACPI namespace, depending on the platform which is why we
-> check all of the display devices.  Skipping them would prevent them
-> from being available if you later bound the amdgpu driver to the GPU
-> device(s) I think.
-> 
-> Alex
-> 
->>
+>
+> Cheers and thanks again,
+> Ahmad
+>
 >> Regards,
->> James
-> 
-> 
+>> Ikegami
+>>
+>>> Regards,
+>>> Ikegami
+>>>
+>>>> Cheers,
+>>>> Ahmad
+>>>>
+>>>>
+>
+--------------K91juOuLpSSbXSC0vYcfI0J1
+Content-Type: text/x-patch; charset=UTF-8;
+ name="v2-0001-mtd-cfi_cmdset_0002-Use-chip_ready-for-write-on-S.patch"
+Content-Disposition: attachment;
+ filename*0="v2-0001-mtd-cfi_cmdset_0002-Use-chip_ready-for-write-on-S.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
+
+RnJvbSAzMDZmNzI2NmNiMmI2ZDA3YmJjNTg4MmIzYjk3NzI2NDQ4M2FkMTI4IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBUb2t1bm9yaSBJa2VnYW1pIDxpa2VnYW1pLnRAZ21h
+aWwuY29tPgpEYXRlOiBNb24sIDE0IEZlYiAyMDIyIDAxOjA4OjAyICswOTAwClN1YmplY3Q6
+IFtQQVRDSCB2Ml0gbXRkOiBjZmlfY21kc2V0XzAwMDI6IFVzZSBjaGlwX3JlYWR5KCkgZm9y
+IHdyaXRlIG9uCiBTMjlHTDA2NE4KClRoZSByZWdyZXNzaW9uIGlzc3VlIGhhcyBiZWVuIGNh
+dXNlZCBvbiBTMjlHTDA2NE4gYW5kIHJlcG9ydGVkIGl0LgpBbHNvIHRoZSBjaGFuZ2UgbWVu
+dGlvbmVkIGlzIHRvIHVzZSBjaGlwX2dvb2QoKSBmb3IgYnVmZmVyZWQgd3JpdGUuClNvIGRp
+c2FibGUgdGhlIGNoYW5nZSBvbiBTMjlHTDA2NE4gYW5kIHVzZSBjaGlwX3JlYWR5KCkgYXMg
+YmVmb3JlLgoKRml4ZXM6IGRmZWFlMTA3MzU4MygibXRkOiBjZmlfY21kc2V0XzAwMDI6IENo
+YW5nZSB3cml0ZSBidWZmZXIgdG8gY2hlY2sgY29ycmVjdCB2YWx1ZSIpClNpZ25lZC1vZmYt
+Ynk6IFRva3Vub3JpIElrZWdhbWkgPGlrZWdhbWkudEBnbWFpbC5jb20+CkNjOiBNaXF1ZWwg
+UmF5bmFsIDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4uY29tPgpDYzogUmljaGFyZCBXZWluYmVy
+Z2VyIDxyaWNoYXJkQG5vZC5hdD4KQ2M6IFZpZ25lc2ggUmFnaGF2ZW5kcmEgPHZpZ25lc2hy
+QHRpLmNvbT4KQ2M6IGxpbnV4LW10ZEBsaXN0cy5pbmZyYWRlYWQub3JnCkNjOiBzdGFibGVA
+dmdlci5rZXJuZWwub3JnCkxpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvYjY4N2My
+NTktNjQxMy0yNmM5LWQ0YzktYjNhZmE2OWVhMTI0QHBlbmd1dHJvbml4LmRlLwotLS0KIGRy
+aXZlcnMvbXRkL2NoaXBzL2NmaV9jbWRzZXRfMDAwMi5jIHwgODkgKysrKysrKysrKysrKysr
+LS0tLS0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA0NyBpbnNlcnRpb25zKCspLCA0MiBk
+ZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0
+XzAwMDIuYyBiL2RyaXZlcnMvbXRkL2NoaXBzL2NmaV9jbWRzZXRfMDAwMi5jCmluZGV4IGE3
+NjExMzRmZDNiZS4uNWUxNGI2MGU4NjM4IDEwMDY0NAotLS0gYS9kcml2ZXJzL210ZC9jaGlw
+cy9jZmlfY21kc2V0XzAwMDIuYworKysgYi9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0
+XzAwMDIuYwpAQCAtNDgsNiArNDgsNyBAQAogI2RlZmluZSBTU1Q0OUxGMDQwQgkJMHgwMDUw
+CiAjZGVmaW5lIFNTVDQ5TEYwMDhBCQkweDAwNWEKICNkZWZpbmUgQVQ0OUJWNjQxNgkJMHgw
+MGQ2CisjZGVmaW5lIFMyOUdMMDY0Tl9NTjEyCQkweDBjMDEKIAogLyoKICAqIFN0YXR1cyBS
+ZWdpc3RlciBiaXQgZGVzY3JpcHRpb24uIFVzZWQgYnkgZmxhc2ggZGV2aWNlcyB0aGF0IGRv
+bid0CkBAIC00NjIsNyArNDYzLDcgQEAgc3RhdGljIHN0cnVjdCBjZmlfZml4dXAgY2ZpX2Zp
+eHVwX3RhYmxlW10gPSB7CiAJeyBDRklfTUZSX0FNRCwgMHgwMDU2LCBmaXh1cF91c2Vfc2Vj
+c2kgfSwKIAl7IENGSV9NRlJfQU1ELCAweDAwNUMsIGZpeHVwX3VzZV9zZWNzaSB9LAogCXsg
+Q0ZJX01GUl9BTUQsIDB4MDA1RiwgZml4dXBfdXNlX3NlY3NpIH0sCi0JeyBDRklfTUZSX0FN
+RCwgMHgwYzAxLCBmaXh1cF9zMjlnbDA2NG5fc2VjdG9ycyB9LAorCXsgQ0ZJX01GUl9BTUQs
+IFMyOUdMMDY0Tl9NTjEyLCBmaXh1cF9zMjlnbDA2NG5fc2VjdG9ycyB9LAogCXsgQ0ZJX01G
+Ul9BTUQsIDB4MTMwMSwgZml4dXBfczI5Z2wwNjRuX3NlY3RvcnMgfSwKIAl7IENGSV9NRlJf
+QU1ELCAweDFhMDAsIGZpeHVwX3MyOWdsMDMybl9zZWN0b3JzIH0sCiAJeyBDRklfTUZSX0FN
+RCwgMHgxYTAxLCBmaXh1cF9zMjlnbDAzMm5fc2VjdG9ycyB9LApAQCAtODAxLDIyICs4MDIs
+MTIgQEAgc3RhdGljIHN0cnVjdCBtdGRfaW5mbyAqY2ZpX2FtZHN0ZF9zZXR1cChzdHJ1Y3Qg
+bXRkX2luZm8gKm10ZCkKIAlyZXR1cm4gTlVMTDsKIH0KIAotLyoKLSAqIFJldHVybiB0cnVl
+IGlmIHRoZSBjaGlwIGlzIHJlYWR5LgotICoKLSAqIFJlYWR5IGlzIG9uZSBvZjogcmVhZCBt
+b2RlLCBxdWVyeSBtb2RlLCBlcmFzZS1zdXNwZW5kLXJlYWQgbW9kZSAoaW4gYW55Ci0gKiBu
+b24tc3VzcGVuZGVkIHNlY3RvcikgYW5kIGlzIGluZGljYXRlZCBieSBubyB0b2dnbGUgYml0
+cyB0b2dnbGluZy4KLSAqCi0gKiBOb3RlIHRoYXQgYW55dGhpbmcgbW9yZSBjb21wbGljYXRl
+ZCB0aGFuIGNoZWNraW5nIGlmIG5vIGJpdHMgYXJlIHRvZ2dsaW5nCi0gKiAoaW5jbHVkaW5n
+IGNoZWNraW5nIERRNSBmb3IgYW4gZXJyb3Igc3RhdHVzKSBpcyB0cmlja3kgdG8gZ2V0IHdv
+cmtpbmcKLSAqIGNvcnJlY3RseSBhbmQgaXMgdGhlcmVmb3JlIG5vdCBkb25lCShwYXJ0aWN1
+bGFybHkgd2l0aCBpbnRlcmxlYXZlZCBjaGlwcwotICogYXMgZWFjaCBjaGlwIG11c3QgYmUg
+Y2hlY2tlZCBpbmRlcGVuZGVudGx5IG9mIHRoZSBvdGhlcnMpLgotICovCi1zdGF0aWMgaW50
+IF9feGlwcmFtIGNoaXBfcmVhZHkoc3RydWN0IG1hcF9pbmZvICptYXAsIHN0cnVjdCBmbGNo
+aXAgKmNoaXAsCi0JCQkgICAgICAgdW5zaWduZWQgbG9uZyBhZGRyKQorc3RhdGljIGludCBf
+X3hpcHJhbSBjaGlwX2NoZWNrKHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlw
+ICpjaGlwLAorCQkJICAgICAgIHVuc2lnbmVkIGxvbmcgYWRkciwgbWFwX3dvcmQgKmV4cGVj
+dGVkKQogewogCXN0cnVjdCBjZmlfcHJpdmF0ZSAqY2ZpID0gbWFwLT5mbGRydl9wcml2Owot
+CW1hcF93b3JkIGQsIHQ7CisJbWFwX3dvcmQgb2xkZCwgY3VyZDsKKwlpbnQgcmV0OwogCiAJ
+aWYgKGNmaV91c2Vfc3RhdHVzX3JlZyhjZmkpKSB7CiAJCW1hcF93b3JkIHJlYWR5ID0gQ01E
+KENGSV9TUl9EUkIpOwpAQCAtODI2LDE3ICs4MTcsMzUgQEAgc3RhdGljIGludCBfX3hpcHJh
+bSBjaGlwX3JlYWR5KHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpjaGlw
+LAogCQkgKi8KIAkJY2ZpX3NlbmRfZ2VuX2NtZCgweDcwLCBjZmktPmFkZHJfdW5sb2NrMSwg
+Y2hpcC0+c3RhcnQsIG1hcCwgY2ZpLAogCQkJCSBjZmktPmRldmljZV90eXBlLCBOVUxMKTsK
+LQkJZCA9IG1hcF9yZWFkKG1hcCwgYWRkcik7CisJCWN1cmQgPSBtYXBfcmVhZChtYXAsIGFk
+ZHIpOwogCi0JCXJldHVybiBtYXBfd29yZF9hbmRlcXVhbChtYXAsIGQsIHJlYWR5LCByZWFk
+eSk7CisJCXJldHVybiBtYXBfd29yZF9hbmRlcXVhbChtYXAsIGN1cmQsIHJlYWR5LCByZWFk
+eSk7CiAJfQogCi0JZCA9IG1hcF9yZWFkKG1hcCwgYWRkcik7Ci0JdCA9IG1hcF9yZWFkKG1h
+cCwgYWRkcik7CisJb2xkZCA9IG1hcF9yZWFkKG1hcCwgYWRkcik7CisJY3VyZCA9IG1hcF9y
+ZWFkKG1hcCwgYWRkcik7CisKKwlyZXQgPSBtYXBfd29yZF9lcXVhbChtYXAsIG9sZGQsIGN1
+cmQpOwogCi0JcmV0dXJuIG1hcF93b3JkX2VxdWFsKG1hcCwgZCwgdCk7CisJaWYgKCFyZXQg
+fHwgIWV4cGVjdGVkKQorCQlyZXR1cm4gcmV0OworCisJcmV0dXJuIG1hcF93b3JkX2VxdWFs
+KG1hcCwgY3VyZCwgKmV4cGVjdGVkKTsKIH0KIAorLyoKKyAqIFJldHVybiB0cnVlIGlmIHRo
+ZSBjaGlwIGlzIHJlYWR5LgorICoKKyAqIFJlYWR5IGlzIG9uZSBvZjogcmVhZCBtb2RlLCBx
+dWVyeSBtb2RlLCBlcmFzZS1zdXNwZW5kLXJlYWQgbW9kZSAoaW4gYW55CisgKiBub24tc3Vz
+cGVuZGVkIHNlY3RvcikgYW5kIGlzIGluZGljYXRlZCBieSBubyB0b2dnbGUgYml0cyB0b2dn
+bGluZy4KKyAqCisgKiBOb3RlIHRoYXQgYW55dGhpbmcgbW9yZSBjb21wbGljYXRlZCB0aGFu
+IGNoZWNraW5nIGlmIG5vIGJpdHMgYXJlIHRvZ2dsaW5nCisgKiAoaW5jbHVkaW5nIGNoZWNr
+aW5nIERRNSBmb3IgYW4gZXJyb3Igc3RhdHVzKSBpcyB0cmlja3kgdG8gZ2V0IHdvcmtpbmcK
+KyAqIGNvcnJlY3RseSBhbmQgaXMgdGhlcmVmb3JlIG5vdCBkb25lCShwYXJ0aWN1bGFybHkg
+d2l0aCBpbnRlcmxlYXZlZCBjaGlwcworICogYXMgZWFjaCBjaGlwIG11c3QgYmUgY2hlY2tl
+ZCBpbmRlcGVuZGVudGx5IG9mIHRoZSBvdGhlcnMpLgorICovCisjZGVmaW5lIGNoaXBfcmVh
+ZHkobWFwLCBjaGlwLCBhZGRyKSBjaGlwX2NoZWNrKG1hcCwgY2hpcCwgYWRkciwgTlVMTCkK
+KwogLyoKICAqIFJldHVybiB0cnVlIGlmIHRoZSBjaGlwIGlzIHJlYWR5IGFuZCBoYXMgdGhl
+IGNvcnJlY3QgdmFsdWUuCiAgKgpAQCAtODU1LDI4ICs4NjQsMjQgQEAgc3RhdGljIGludCBf
+X3hpcHJhbSBjaGlwX3JlYWR5KHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlw
+ICpjaGlwLAogc3RhdGljIGludCBfX3hpcHJhbSBjaGlwX2dvb2Qoc3RydWN0IG1hcF9pbmZv
+ICptYXAsIHN0cnVjdCBmbGNoaXAgKmNoaXAsCiAJCQkgICAgICB1bnNpZ25lZCBsb25nIGFk
+ZHIsIG1hcF93b3JkIGV4cGVjdGVkKQogewotCXN0cnVjdCBjZmlfcHJpdmF0ZSAqY2ZpID0g
+bWFwLT5mbGRydl9wcml2OwotCW1hcF93b3JkIG9sZGQsIGN1cmQ7Ci0KLQlpZiAoY2ZpX3Vz
+ZV9zdGF0dXNfcmVnKGNmaSkpIHsKLQkJbWFwX3dvcmQgcmVhZHkgPSBDTUQoQ0ZJX1NSX0RS
+Qik7CisJcmV0dXJuIGNoaXBfY2hlY2sobWFwLCBjaGlwLCBhZGRyLCAmZXhwZWN0ZWQpOwor
+fQogCi0JCS8qCi0JCSAqIEZvciBjaGlwcyB0aGF0IHN1cHBvcnQgc3RhdHVzIHJlZ2lzdGVy
+LCBjaGVjayBkZXZpY2UKLQkJICogcmVhZHkgYml0Ci0JCSAqLwotCQljZmlfc2VuZF9nZW5f
+Y21kKDB4NzAsIGNmaS0+YWRkcl91bmxvY2sxLCBjaGlwLT5zdGFydCwgbWFwLCBjZmksCi0J
+CQkJIGNmaS0+ZGV2aWNlX3R5cGUsIE5VTEwpOwotCQljdXJkID0gbWFwX3JlYWQobWFwLCBh
+ZGRyKTsKK3N0YXRpYyBib29sIGNmaV91c2VfY2hpcF9yZWFkeV9mb3Jfd3JpdGUoc3RydWN0
+IG1hcF9pbmZvICptYXApCit7CisJc3RydWN0IGNmaV9wcml2YXRlICpjZmkgPSBtYXAtPmZs
+ZHJ2X3ByaXY7CiAKLQkJcmV0dXJuIG1hcF93b3JkX2FuZGVxdWFsKG1hcCwgY3VyZCwgcmVh
+ZHksIHJlYWR5KTsKLQl9CisJcmV0dXJuIGNmaS0+bWZyID09IENGSV9NRlJfQU1EICYmIGNm
+aS0+aWQgPT0gUzI5R0wwNjROX01OMTI7Cit9CiAKLQlvbGRkID0gbWFwX3JlYWQobWFwLCBh
+ZGRyKTsKLQljdXJkID0gbWFwX3JlYWQobWFwLCBhZGRyKTsKK3N0YXRpYyBpbnQgX194aXBy
+YW0gY2hpcF9nb29kX2Zvcl93cml0ZShzdHJ1Y3QgbWFwX2luZm8gKm1hcCwKKwkJCQkJc3Ry
+dWN0IGZsY2hpcCAqY2hpcCwgdW5zaWduZWQgbG9uZyBhZGRyLAorCQkJCQltYXBfd29yZCBl
+eHBlY3RlZCkKK3sKKwlpZiAoY2ZpX3VzZV9jaGlwX3JlYWR5X2Zvcl93cml0ZShtYXApKQor
+CQlyZXR1cm4gY2hpcF9yZWFkeShtYXAsIGNoaXAsIGFkZHIpOwogCi0JcmV0dXJuCW1hcF93
+b3JkX2VxdWFsKG1hcCwgb2xkZCwgY3VyZCkgJiYKLQkJbWFwX3dvcmRfZXF1YWwobWFwLCBj
+dXJkLCBleHBlY3RlZCk7CisJcmV0dXJuIGNoaXBfZ29vZChtYXAsIGNoaXAsIGFkZHIsIGV4
+cGVjdGVkKTsKIH0KIAogc3RhdGljIGludCBnZXRfY2hpcChzdHJ1Y3QgbWFwX2luZm8gKm1h
+cCwgc3RydWN0IGZsY2hpcCAqY2hpcCwgdW5zaWduZWQgbG9uZyBhZHIsIGludCBtb2RlKQpA
+QCAtMTY5OSw3ICsxNzA0LDcgQEAgc3RhdGljIGludCBfX3hpcHJhbSBkb193cml0ZV9vbmV3
+b3JkX29uY2Uoc3RydWN0IG1hcF9pbmZvICptYXAsCiAJCSAqICJjaGlwX2dvb2QiIHRvIGF2
+b2lkIHRoZSBmYWlsdXJlIGR1ZSB0byBzY2hlZHVsaW5nLgogCQkgKi8KIAkJaWYgKHRpbWVf
+YWZ0ZXIoamlmZmllcywgdGltZW8pICYmCi0JCSAgICAhY2hpcF9nb29kKG1hcCwgY2hpcCwg
+YWRyLCBkYXR1bSkpIHsKKwkJICAgICFjaGlwX2dvb2RfZm9yX3dyaXRlKG1hcCwgY2hpcCwg
+YWRyLCBkYXR1bSkpIHsKIAkJCXhpcF9lbmFibGUobWFwLCBjaGlwLCBhZHIpOwogCQkJcHJp
+bnRrKEtFUk5fV0FSTklORyAiTVREICVzKCk6IHNvZnR3YXJlIHRpbWVvdXRcbiIsIF9fZnVu
+Y19fKTsKIAkJCXhpcF9kaXNhYmxlKG1hcCwgY2hpcCwgYWRyKTsKQEAgLTE3MDcsNyArMTcx
+Miw3IEBAIHN0YXRpYyBpbnQgX194aXByYW0gZG9fd3JpdGVfb25ld29yZF9vbmNlKHN0cnVj
+dCBtYXBfaW5mbyAqbWFwLAogCQkJYnJlYWs7CiAJCX0KIAotCQlpZiAoY2hpcF9nb29kKG1h
+cCwgY2hpcCwgYWRyLCBkYXR1bSkpIHsKKwkJaWYgKGNoaXBfZ29vZF9mb3Jfd3JpdGUobWFw
+LCBjaGlwLCBhZHIsIGRhdHVtKSkgewogCQkJaWYgKGNmaV9jaGVja19lcnJfc3RhdHVzKG1h
+cCwgY2hpcCwgYWRyKSkKIAkJCQlyZXQgPSAtRUlPOwogCQkJYnJlYWs7CkBAIC0xOTc5LDE0
+ICsxOTg0LDE0IEBAIHN0YXRpYyBpbnQgX194aXByYW0gZG9fd3JpdGVfYnVmZmVyX3dhaXQo
+c3RydWN0IG1hcF9pbmZvICptYXAsCiAJCSAqICJjaGlwX2dvb2QiIHRvIGF2b2lkIHRoZSBm
+YWlsdXJlIGR1ZSB0byBzY2hlZHVsaW5nLgogCQkgKi8KIAkJaWYgKHRpbWVfYWZ0ZXIoamlm
+ZmllcywgdGltZW8pICYmCi0JCSAgICAhY2hpcF9nb29kKG1hcCwgY2hpcCwgYWRyLCBkYXR1
+bSkpIHsKKwkJICAgICFjaGlwX2dvb2RfZm9yX3dyaXRlKG1hcCwgY2hpcCwgYWRyLCBkYXR1
+bSkpIHsKIAkJCXByX2VycigiTVREICVzKCk6IHNvZnR3YXJlIHRpbWVvdXQsIGFkZHJlc3M6
+MHglLjhseC5cbiIsCiAJCQkgICAgICAgX19mdW5jX18sIGFkcik7CiAJCQlyZXQgPSAtRUlP
+OwogCQkJYnJlYWs7CiAJCX0KIAotCQlpZiAoY2hpcF9nb29kKG1hcCwgY2hpcCwgYWRyLCBk
+YXR1bSkpIHsKKwkJaWYgKGNoaXBfZ29vZF9mb3Jfd3JpdGUobWFwLCBjaGlwLCBhZHIsIGRh
+dHVtKSkgewogCQkJaWYgKGNmaV9jaGVja19lcnJfc3RhdHVzKG1hcCwgY2hpcCwgYWRyKSkK
+IAkJCQlyZXQgPSAtRUlPOwogCQkJYnJlYWs7Ci0tIAoyLjMyLjAKCg==
+
+--------------K91juOuLpSSbXSC0vYcfI0J1--

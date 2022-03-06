@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AE24CEEC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 00:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CA34CEECB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 00:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbiCFXve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 18:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S234545AbiCFXwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 18:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiCFXvc (ORCPT
+        with ESMTP id S234544AbiCFXwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 18:51:32 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3566C4614A;
-        Sun,  6 Mar 2022 15:50:40 -0800 (PST)
+        Sun, 6 Mar 2022 18:52:17 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0CF46676;
+        Sun,  6 Mar 2022 15:51:24 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DF78C210EA;
-        Sun,  6 Mar 2022 23:50:38 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 822841F37D;
+        Sun,  6 Mar 2022 23:51:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646610638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1646610683; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jIwc70WfyZePk+M4TY2KFFjSotnhhDywYz77GPeU54I=;
-        b=yW2mlcWWshB+Zpw8lpFaHuA/Po1I8F2jWDiyqn7SoLSvTRka3d/5LKHQAA958Hn/X7jqzQ
-        nPn1sBMTzfBI0RCVJ2S28aRK82AYrW3xg5pTJaCRg3P3dwNe2iXM2f5X2sX6HZDgy3bRjQ
-        xjaohQhwB2DDhNQCyxlXYQ2jBPbw+8Q=
+        bh=/g0ODDKZICxfw8OkQOAdWjyHJrJLWNkQcZQcCR78ueM=;
+        b=T4ukFn+wEDeh92N6fLVx9pN4gaNzy8X+S+e+lwobhcFMlsRCPQ7ggGCMUmzO6Bqosm6uJP
+        xQFdmw9zoZtCmbWIBndnKIzVCiEn7NRKA2g+6iVtYnCjEMNgjzrhJscCsfkDTDB9sfk5Ze
+        vCKJDgX+f4SMwDZK9mUW9Mj5dKpSrH0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646610638;
+        s=susede2_ed25519; t=1646610683;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jIwc70WfyZePk+M4TY2KFFjSotnhhDywYz77GPeU54I=;
-        b=Ctxa6xp0IpfZB8kCQyX3+nRmsObXTjF6Y2MZzMXc9UTNyI9IFR7N3dAaYiwjKrXeL+5eaG
-        FmcJk4vtYoJsrBAw==
+        bh=/g0ODDKZICxfw8OkQOAdWjyHJrJLWNkQcZQcCR78ueM=;
+        b=3y2nW3HMAtzr9BW6DPGKlFpc7QpW5ZZRZzQLJgUOj8C3vMFbWB0vZJXllGWnl+xxsKMhIx
+        ED8ZXABe7j73IaDQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EB19A134CD;
-        Sun,  6 Mar 2022 23:50:36 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8E8D1134CD;
+        Sun,  6 Mar 2022 23:51:21 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id Arb/KMxIJWI3WgAAMHmgww
-        (envelope-from <neilb@suse.de>); Sun, 06 Mar 2022 23:50:36 +0000
-Subject: [PATCH 03/10] MM: move responsibility for setting SWP_FS_OPS to
- ->swap_activate
+        id 6Hx2EvlIJWJ1WgAAMHmgww
+        (envelope-from <neilb@suse.de>); Sun, 06 Mar 2022 23:51:21 +0000
+Subject: [PATCH 09/10] MM: submit multipage write for SWP_FS_OPS swap-space
 From:   NeilBrown <neilb@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Christoph Hellwig <hch@infradead.org>,
         David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Date:   Mon, 07 Mar 2022 10:49:38 +1100
-Message-ID: <164661057804.13454.2171827219509234605.stgit@noble.brown>
+Message-ID: <164661057808.13454.2786821520388177290.stgit@noble.brown>
 In-Reply-To: <164661047081.13454.11679636335222534920.stgit@noble.brown>
 References: <164661047081.13454.11679636335222534920.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -74,115 +73,236 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a filesystem wishes to handle all swap IO itself (via ->direct_IO and
-->readpage), rather than just providing devices addresses for
-submit_bio(), SWP_FS_OPS must be set.
-Currently the protocol for setting this it to have ->swap_activate
-return zero.  In that case SWP_FS_OPS is set, and add_swap_extent()
-is called for the entire file.
+swap_writepage() is given one page at a time, but may be called repeatedly
+in succession.
+For block-device swapspace, the blk_plug functionality allows the
+multiple pages to be combined together at lower layers.
+That cannot be used for SWP_FS_OPS as blk_plug may not exist - it is
+only active when CONFIG_BLOCK=y.  Consequently all swap reads over NFS
+are single page reads.
 
-This is a little clumsy as different return values for ->swap_activate
-have quite different meanings, and it makes it hard to search for which
-filesystems require SWP_FS_OPS to be set.
-
-So remove the special meaning of a zero return, and require the
-filesystem to set SWP_FS_OPS if it so desires, and to always call
-add_swap_extent() as required.
-
-Currently only NFS and CIFS return zero for add_swap_extent().
+With this patch we pass a pointer-to-pointer via the wbc.
+swap_writepage can store state between calls - much like the pointer
+passed explicitly to swap_readpage.  After calling swap_writepage() some
+number of times, the state will be passed to swap_write_unplug() which
+can submit the combined request.
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- fs/cifs/file.c       |    3 ++-
- fs/nfs/file.c        |   13 +++++++++++--
- include/linux/swap.h |    6 ++++++
- mm/swapfile.c        |   10 +++-------
- 4 files changed, 22 insertions(+), 10 deletions(-)
+ include/linux/writeback.h |    7 ++++
+ mm/page_io.c              |   78 ++++++++++++++++++++++++++++++++-------------
+ mm/swap.h                 |    4 ++
+ mm/vmscan.c               |    9 ++++-
+ 4 files changed, 74 insertions(+), 24 deletions(-)
 
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index e7af802dcfa6..fe49f1cab018 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -4917,7 +4917,8 @@ static int cifs_swap_activate(struct swap_info_struct *sis,
- 	 * from reading or writing the file
- 	 */
+diff --git a/include/linux/writeback.h b/include/linux/writeback.h
+index fec248ab1fec..32b35f21cb97 100644
+--- a/include/linux/writeback.h
++++ b/include/linux/writeback.h
+@@ -80,6 +80,13 @@ struct writeback_control {
  
--	return 0;
-+	sis->flags |= SWP_FS_OPS;
-+	return add_swap_extent(sis, 0, sis->max, 0);
- }
+ 	unsigned punt_to_cgroup:1;	/* cgrp punting, see __REQ_CGROUP_PUNT */
  
- static void cifs_swap_deactivate(struct file *file)
-diff --git a/fs/nfs/file.c b/fs/nfs/file.c
-index 76d76acbc594..d5aa55c7edb0 100644
---- a/fs/nfs/file.c
-+++ b/fs/nfs/file.c
-@@ -488,6 +488,7 @@ static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
++	/* To enable batching of swap writes to non-block-device backends,
++	 * "plug" can be set point to a 'struct swap_iocb *'.  When all swap
++	 * writes have been submitted, if with swap_iocb is not NULL,
++	 * swap_write_unplug() should be called.
++	 */
++	struct swap_iocb **swap_plug;
++
+ #ifdef CONFIG_CGROUP_WRITEBACK
+ 	struct bdi_writeback *wb;	/* wb this writeback is issued under */
+ 	struct inode *inode;		/* inode being written out */
+diff --git a/mm/page_io.c b/mm/page_io.c
+index 4e8abbfbe388..3bf6547d6789 100644
+--- a/mm/page_io.c
++++ b/mm/page_io.c
+@@ -308,8 +308,9 @@ static void sio_write_complete(struct kiocb *iocb, long ret)
  {
- 	unsigned long blocks;
- 	long long isize;
-+	int ret;
- 	struct rpc_clnt *clnt = NFS_CLIENT(file->f_mapping->host);
- 	struct inode *inode = file->f_mapping->host;
+ 	struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
+ 	struct page *page = sio->bvec[0].bv_page;
++	int p;
  
-@@ -500,9 +501,17 @@ static int nfs_swap_activate(struct swap_info_struct *sis, struct file *file,
- 		return -EINVAL;
- 	}
+-	if (ret != PAGE_SIZE) {
++	if (ret != PAGE_SIZE * sio->pages) {
+ 		/*
+ 		 * In the case of swap-over-nfs, this can be a
+ 		 * temporary failure if the system has limited
+@@ -320,43 +321,63 @@ static void sio_write_complete(struct kiocb *iocb, long ret)
+ 		 * the normal direct-to-bio case as it could
+ 		 * be temporary.
+ 		 */
+-		set_page_dirty(page);
+-		ClearPageReclaim(page);
+ 		pr_err_ratelimited("Write error %ld on dio swapfile (%llu)\n",
+ 				   ret, page_file_offset(page));
++		for (p = 0; p < sio->pages; p++) {
++			page = sio->bvec[p].bv_page;
++			set_page_dirty(page);
++			ClearPageReclaim(page);
++		}
+ 	} else
+-		count_vm_event(PSWPOUT);
+-	end_page_writeback(page);
++		count_vm_events(PSWPOUT, sio->pages);
++
++	for (p = 0; p < sio->pages; p++)
++		end_page_writeback(sio->bvec[p].bv_page);
++
+ 	mempool_free(sio, sio_pool);
+ }
  
-+	ret = rpc_clnt_swap_activate(clnt);
-+	if (ret)
-+		return ret;
-+	ret = add_swap_extent(sis, 0, sis->max, 0);
-+	if (ret < 0) {
-+		rpc_clnt_swap_deactivate(clnt);
-+		return ret;
+ static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
+ {
+-	struct swap_iocb *sio;
++	struct swap_iocb *sio = NULL;
+ 	struct swap_info_struct *sis = page_swap_info(page);
+ 	struct file *swap_file = sis->swap_file;
+-	struct address_space *mapping = swap_file->f_mapping;
+-	struct iov_iter from;
+-	int ret;
++	loff_t pos = page_file_offset(page);
+ 
+ 	set_page_writeback(page);
+ 	unlock_page(page);
+-	sio = mempool_alloc(sio_pool, GFP_NOIO);
+-	init_sync_kiocb(&sio->iocb, swap_file);
+-	sio->iocb.ki_complete = sio_write_complete;
+-	sio->iocb.ki_pos = page_file_offset(page);
+-	sio->bvec[0].bv_page = page;
+-	sio->bvec[0].bv_len = PAGE_SIZE;
+-	sio->bvec[0].bv_offset = 0;
+-	iov_iter_bvec(&from, WRITE, &sio->bvec[0], 1, PAGE_SIZE);
+-	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
+-	if (ret != -EIOCBQUEUED)
+-		sio_write_complete(&sio->iocb, ret);
+-	return ret;
++	if (wbc->swap_plug)
++		sio = *wbc->swap_plug;
++	if (sio) {
++		if (sio->iocb.ki_filp != swap_file ||
++		    sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
++			swap_write_unplug(sio);
++			sio = NULL;
++		}
 +	}
- 	*span = sis->pages;
--
--	return rpc_clnt_swap_activate(clnt);
-+	sis->flags |= SWP_FS_OPS;
-+	return ret;
++	if (!sio) {
++		sio = mempool_alloc(sio_pool, GFP_NOIO);
++		init_sync_kiocb(&sio->iocb, swap_file);
++		sio->iocb.ki_complete = sio_write_complete;
++		sio->iocb.ki_pos = pos;
++		sio->pages = 0;
++	}
++	sio->bvec[sio->pages].bv_page = page;
++	sio->bvec[sio->pages].bv_len = PAGE_SIZE;
++	sio->bvec[sio->pages].bv_offset = 0;
++	sio->pages += 1;
++	if (sio->pages == ARRAY_SIZE(sio->bvec) || !wbc->swap_plug) {
++		swap_write_unplug(sio);
++		sio = NULL;
++	}
++	if (wbc->swap_plug)
++		*wbc->swap_plug = sio;
++
++	return 0;
  }
  
- static void nfs_swap_deactivate(struct file *file)
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index a43929f7033e..b57cff3c5ac2 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -573,6 +573,12 @@ static inline swp_entry_t get_swap_page(struct page *page)
- 	return entry;
+ int __swap_writepage(struct page *page, struct writeback_control *wbc,
+-		bio_end_io_t end_write_func)
++		     bio_end_io_t end_write_func)
+ {
+ 	struct bio *bio;
+ 	int ret;
+@@ -393,6 +414,19 @@ int __swap_writepage(struct page *page, struct writeback_control *wbc,
+ 	return 0;
  }
  
-+static inline int add_swap_extent(struct swap_info_struct *sis,
-+				  unsigned long start_page,
-+				  unsigned long nr_pages, sector_t start_block)
++void swap_write_unplug(struct swap_iocb *sio)
 +{
-+	return -EINVAL;
++	struct iov_iter from;
++	struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
++	int ret;
++
++	iov_iter_bvec(&from, WRITE, sio->bvec, sio->pages,
++		      PAGE_SIZE * sio->pages);
++	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
++	if (ret != -EIOCBQUEUED)
++		sio_write_complete(&sio->iocb, ret);
 +}
- #endif /* CONFIG_SWAP */
++
+ static void sio_read_complete(struct kiocb *iocb, long ret)
+ {
+ 	struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
+diff --git a/mm/swap.h b/mm/swap.h
+index 0389ab147837..a6da8f612904 100644
+--- a/mm/swap.h
++++ b/mm/swap.h
+@@ -16,6 +16,7 @@ static inline void swap_read_unplug(struct swap_iocb *plug)
+ 	if (unlikely(plug))
+ 		__swap_read_unplug(plug);
+ }
++void swap_write_unplug(struct swap_iocb *sio);
+ int swap_writepage(struct page *page, struct writeback_control *wbc);
+ void end_swap_bio_write(struct bio *bio);
+ int __swap_writepage(struct page *page, struct writeback_control *wbc,
+@@ -71,6 +72,9 @@ static inline int swap_readpage(struct page *page, bool do_poll,
+ {
+ 	return 0;
+ }
++static inline void swap_write_unplug(struct swap_iocb *sio)
++{
++}
  
- #ifdef CONFIG_THP_SWAP
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 71c7a31dd291..ed6028aea8bf 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -2347,13 +2347,9 @@ static int setup_swap_extents(struct swap_info_struct *sis, sector_t *span)
+ static inline struct address_space *swap_address_space(swp_entry_t entry)
+ {
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index ffae4ba82eae..1918650abf39 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1166,7 +1166,8 @@ typedef enum {
+  * pageout is called by shrink_page_list() for each dirty page.
+  * Calls ->writepage().
+  */
+-static pageout_t pageout(struct page *page, struct address_space *mapping)
++static pageout_t pageout(struct page *page, struct address_space *mapping,
++			 struct swap_iocb **plug)
+ {
+ 	/*
+ 	 * If the page is dirty, only perform writeback if that write
+@@ -1213,6 +1214,7 @@ static pageout_t pageout(struct page *page, struct address_space *mapping)
+ 			.range_start = 0,
+ 			.range_end = LLONG_MAX,
+ 			.for_reclaim = 1,
++			.swap_plug = plug,
+ 		};
  
- 	if (mapping->a_ops->swap_activate) {
- 		ret = mapping->a_ops->swap_activate(sis, swap_file, span);
--		if (ret >= 0)
--			sis->flags |= SWP_ACTIVATED;
--		if (!ret) {
--			sis->flags |= SWP_FS_OPS;
--			ret = add_swap_extent(sis, 0, sis->max, 0);
--			*span = sis->pages;
--		}
-+		if (ret < 0)
-+			return ret;
-+		sis->flags |= SWP_ACTIVATED;
- 		return ret;
- 	}
+ 		SetPageReclaim(page);
+@@ -1539,6 +1541,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 	unsigned int nr_reclaimed = 0;
+ 	unsigned int pgactivate = 0;
+ 	bool do_demote_pass;
++	struct swap_iocb *plug = NULL;
+ 
+ 	memset(stat, 0, sizeof(*stat));
+ 	cond_resched();
+@@ -1819,7 +1822,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 			 * starts and then write it out here.
+ 			 */
+ 			try_to_unmap_flush_dirty();
+-			switch (pageout(page, mapping)) {
++			switch (pageout(page, mapping, &plug)) {
+ 			case PAGE_KEEP:
+ 				goto keep_locked;
+ 			case PAGE_ACTIVATE:
+@@ -1973,6 +1976,8 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 	list_splice(&ret_pages, page_list);
+ 	count_vm_events(PGACTIVATE, pgactivate);
+ 
++	if (plug)
++		swap_write_unplug(plug);
+ 	return nr_reclaimed;
+ }
  
 
 

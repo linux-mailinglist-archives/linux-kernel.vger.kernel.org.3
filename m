@@ -2,240 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9684CEB8B
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 13:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DAD4CEB97
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 13:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233599AbiCFM0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 07:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
+        id S233616AbiCFM6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 07:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbiCFM0u (ORCPT
+        with ESMTP id S229607AbiCFM6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 07:26:50 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845676BDCE
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 04:25:58 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5198C3F1C5
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 12:25:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646569557;
-        bh=F59/L+mw5wL4Sw8uoAIL7Xh6MYhNksArDry85+EJ/z4=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=PHeIs/ac+9eC2hU3sAAJisucySejzgssiooO0vlOSUYHWETYonnTTD9bdf44P34gC
-         u2mdvQOdacyPFwwSskKFHhXD3+ScXskStLzYOC+ZPDcTgFqjJS/DbTxtMuJjEf/bhd
-         hePl7j8NEQnlPHYD48FaxtAqqYLCH+iq1Kr/0rrC/38XvArU4FXcY2mwsWbChSfd+L
-         6zPjdCz/H17Rhs0S+Ru+QUp4NUr7RSiqZVCKDDTp346Yvi8KYPJbqMDFu/8+MRivbP
-         mMllNfnEiWxHClW2aljo2PfW6gqkHvMD9wayieSnUEwL+Jj9R4PIfsNv+tRGilQr3x
-         voAKtBwjETA6A==
-Received: by mail-ed1-f72.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so6835056edb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 04:25:57 -0800 (PST)
+        Sun, 6 Mar 2022 07:58:10 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9D041628
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 04:57:18 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 6so6840063pgg.0
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 04:57:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AGNlNYvrYq+F+LYnefVTTHEG0vAmzNrpj7QYD32tJhY=;
+        b=GvPjdJ0lJdL9rTjiFTxQKmLTmmVFYsrRwAD5ohdBTYZ8+EERBC6QIp85nNKtpBHCA6
+         iVd+/Txv+wgH01Fe/DHVjsvse4ANlwiGApz3RsCAArNst+pXbyqolo66ND6ktY+Opgjc
+         NZ4Dg7QGQkMmoNOKTQ4Fkg9I0aKpco8ptnKX5zHOdzcl5uYpkbkPbUvEc3GXf2FFpPHZ
+         jmB6vPOzAytT1Ok6M9ioAFVSGcSX9lq87RW43xExV9oqyU1GekpiPD4LYsgoFaiveExk
+         vhl7PpMWRwo9zP/ojcUig7tTKMDgyG2/A2NmNMyVgnZz8GDf9abkPRWmYeKS6iWO6zsC
+         CPIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=F59/L+mw5wL4Sw8uoAIL7Xh6MYhNksArDry85+EJ/z4=;
-        b=AFweTWCV1STBTrGvnqBGblYptcg5y+egNP3YpeCuBKCd6OE0glK901qyyoSq5Ura84
-         7I8NNPzGhgwDZkFi99cB4T0FITGz/PwGRjXm/Dy/C+/acfBJ7zBVvlSjl8dhKd9B+C6E
-         qWP6dusoUSbeQg+ey+rz1vjX1WsZo11S0YVs35DH3DtvGs2o86L4PcVz6EPjwpZQeYrn
-         z9i/nlRi9jqYmXd0hqZ+JjVnV80FfSvX9P2ZQ6LRIwskGdL+gUAyw3m7+M3Lwqef3fvR
-         DyhWg9KPKrqv2y12mD7RQV4g8HmESbcF20tBh/eVMQQ75h+FMF6B1aeYGmOI1LqS0EEU
-         i5kg==
-X-Gm-Message-State: AOAM532D2sQN1Z18bj9N1m7VnPzy9CQogDkK+Um+8cwDgQflOGw1h2T0
-        xCw7Axxy1Wz+en03k8+tpUu2BE6N3/YDc61xaFB5/TjNUEZ7wziphGhb1KXQ1c6csmU+sjX2cyA
-        PaHsn0P6kZnnQWxL3zqHmY8LWE2DrMZBNKnusgxY5vg==
-X-Received: by 2002:a17:906:fc10:b0:6cd:84e:7248 with SMTP id ov16-20020a170906fc1000b006cd084e7248mr5828489ejb.281.1646569556989;
-        Sun, 06 Mar 2022 04:25:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxtjGEBqK86psci1L+lbsLAgMQjYw6AEHose62VxcrfITBR0rIq63rYjHniHfZEmpIxnejZuw==
-X-Received: by 2002:a17:906:fc10:b0:6cd:84e:7248 with SMTP id ov16-20020a170906fc1000b006cd084e7248mr5828479ejb.281.1646569556757;
-        Sun, 06 Mar 2022 04:25:56 -0800 (PST)
-Received: from [192.168.0.140] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id m26-20020a1709060d9a00b006da81fb9d72sm3767472eji.100.2022.03.06.04.25.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 04:25:56 -0800 (PST)
-Message-ID: <ab2c0a8d-d27b-0c93-c7bc-2c8bf8ee1036@canonical.com>
-Date:   Sun, 6 Mar 2022 13:25:55 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AGNlNYvrYq+F+LYnefVTTHEG0vAmzNrpj7QYD32tJhY=;
+        b=H7Y9Mshhy2kOHZOh86AzLmkdsrjtYJRYDpZnmM3UqBwRW4H/h2ifvgucBCv7LkwGyb
+         sH8/9pp520S3+o9tWq253EbNvyZzoajRgTB5TObJDncC1epQBebMeANnCK1PK/FbwfCV
+         S9/crQ98pmGW6frbGvQ220EVcL8bGiiOMYmop8kk+maU6SftT+GVwNymSwMBZKa1nQ4p
+         q/7TgvUncWr9i2EGUwhgXg5fGwz4hFn7RbXnjOJ+T0xEvls23Jm7DchIA/CfieVZTkWc
+         9sKJNietHCOkEnBwpJMiBZkpwQqscBNrgvfTKkoql0qHRL7YR8CrLzAN1zDsad6j5tF9
+         uO7A==
+X-Gm-Message-State: AOAM53070I1mExbZylY+vawKCH8bpUV8wMrC+Bm/r8509L4xCpZcFHZY
+        XIEVUzEISg1fVm3NIknm0jCh9Q==
+X-Google-Smtp-Source: ABdhPJz/XXcg7KC7A+AktmZhW/Po/W5UWWZkGBdtvfYCN/S7VBZ2hrI9FbT1kObOi8mZMARBEVROGQ==
+X-Received: by 2002:a63:d306:0:b0:34e:4330:efea with SMTP id b6-20020a63d306000000b0034e4330efeamr6011096pgg.174.1646571437919;
+        Sun, 06 Mar 2022 04:57:17 -0800 (PST)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004e10af156adsm12538057pfc.190.2022.03.06.04.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 04:57:17 -0800 (PST)
+Date:   Sun, 6 Mar 2022 20:57:10 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] irqchip: Add Qualcomm MPM controller driver
+Message-ID: <20220306125710.GQ269879@dragon>
+References: <20220302084028.GL269879@dragon>
+ <877d9c3b2u.wl-maz@kernel.org>
+ <20220302133441.GM269879@dragon>
+ <875yow31a0.wl-maz@kernel.org>
+ <20220303040229.GN269879@dragon>
+ <87fsnytagc.wl-maz@kernel.org>
+ <20220304082342.GO269879@dragon>
+ <87lexp211g.wl-maz@kernel.org>
+ <20220305092420.GP269879@dragon>
+ <87czj0u0bg.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] nvmem: Add Apple eFuse driver
-Content-Language: en-US
-To:     Sven Peter <sven@svenpeter.dev>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220306121816.70537-1-sven@svenpeter.dev>
- <20220306121816.70537-2-sven@svenpeter.dev>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220306121816.70537-2-sven@svenpeter.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87czj0u0bg.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2022 13:18, Sven Peter wrote:
-> Apple SoCs contain eFuses used to store factory-programmed data such
-> as calibration values for the PCIe or the Type-C PHY. They are organized
-> as 32bit values exposed as MMIO.
+On Sat, Mar 05, 2022 at 11:05:07AM +0000, Marc Zyngier wrote:
+> On Sat, 05 Mar 2022 09:24:20 +0000,
+> Shawn Guo <shawn.guo@linaro.org> wrote:
+> > 
+> > On Fri, Mar 04, 2022 at 03:24:43PM +0000, Marc Zyngier wrote:
+> > > On Fri, 04 Mar 2022 08:23:42 +0000,
+> > > Shawn Guo <shawn.guo@linaro.org> wrote:
+> > > > 
+> > > > On Fri, Mar 04, 2022 at 07:59:15AM +0000, Marc Zyngier wrote:
+> > > > > On Thu, 03 Mar 2022 04:02:29 +0000,
+> > > > > Shawn Guo <shawn.guo@linaro.org> wrote:
+> > > > > > 
+> > > > > > On Wed, Mar 02, 2022 at 01:57:27PM +0000, Marc Zyngier wrote:
+> > > > > > > This code actually makes me ask more questions. Why is it programming
+> > > > > > > 2 'pins' for each IRQ?
+> > > > > > 
+> > > > > > The mapping between MPM pin and GIC IRQ is not strictly 1-1.  There are
+> > > > > > some rare case that up to 2 MPM pins map to a single GIC IRQ, for
+> > > > > > example the last two in QC2290 'qcom,mpm-pin-map' below.
+> > > > > > 
+> > > > > > 	qcom,mpm-pin-map = <2 275>,     /* tsens0_tsens_upper_lower_int */
+> > > > > > 			   <5 296>,     /* lpass_irq_out_sdc */
+> > > > > > 			   <12 422>,    /* b3_lfps_rxterm_irq */
+> > > > > > 			   <24 79>,     /* bi_px_lpi_1_aoss_mx */
+> > > > > > 			   <86 183>,    /* mpm_wake,spmi_m */
+> > > > > > 			   <90 260>,    /* eud_p0_dpse_int_mx */
+> > > > > > 			   <91 260>;    /* eud_p0_dmse_int_mx */
+> > > > > > 
+> > > > > > 
+> > > > > > The downstream uses a DT bindings that specifies GIC hwirq number in
+> > > > > > client device nodes.  In that case, d->hwirq in the driver is GIC IRQ
+> > > > > > number, and the driver will need to query mapping table, find out the
+> > > > > > possible 2 MPM pins, and set them up.
+> > > > > > 
+> > > > > > The patches I'm posting here use a different bindings that specifies MPM
+> > > > > > pin instead in client device nodes.  Thus the driver can simply get the
+> > > > > > MPM pin from d->hwirq, so that the whole look-up procedure can be saved.
+> > > > > 
+> > > > > It still remains that there is no 1:1 mapping between input and
+> > > > > output, which is the rule #1 to be able to use a hierarchical setup.
+> > > > 
+> > > > For direction of MPM pin -> GIC interrupt, it's a 1:1 mapping, i.e. for
+> > > > given MPM pin, there is only one GIC interrupt.  And that's the
+> > > > mapping MPM driver relies on.  For GIC interrupt -> MPM pin, it's not
+> > > > a strict 1:1 mapping.
+> > > 
+> > > Then this isn't a 1:1 mapping *AT ALL*. The hierarchical setup
+> > > mandates that the mapping is a bijective function, and that's exactly
+> > > what 1:1 means. There is no such thing a 1:1 in a single
+> > > direction. When you take an interrupt, all you see is the GIC
+> > > interrupt. How do you know which of the *two* pins interrupted you? Oh
+> > > wait, you *can't* know. You end-up never servicing one of the two
+> > > interrupts
+> > 
+> > Yes, you are right!  But that might be a problem only in theory.  I
+> > checked all the Qualcomm platforms I know built on MPM, and found that
+> > the only 2:1 case is USB DP & DM sensing pins.  Since these two pins
+> > will be handled by USB driver with a single interrupt handler, it should
+> > not cause any problem in practice.  That said, the 2:1 mapping is just
+> > a special case specific to USB, and MPM driver can be implemented as if
+> > it's just a 1:1 mapping.
+> >
+> > Shawn
+> > 
+> > > (and I suspect this results in memory corruption if you
+> > > tear a hierarchy down).
 > 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
-> v1 -> v2:
->   - fixed sparse warning about __iomem by introducing
->     struct apple_efuses_priv as done in other nvmem drivers
->   - make sure the driver actually works as a module by
->     setting .owner to THIS_MODULE and adding MODULE_DEVICE_TABLE
->     pointed out by Joey Gouly
+> Key point here ^^^^^^^^^^
 > 
->  MAINTAINERS                  |  1 +
->  drivers/nvmem/Kconfig        | 12 ++++++
->  drivers/nvmem/Makefile       |  2 +
->  drivers/nvmem/apple-efuses.c | 82 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 97 insertions(+)
->  create mode 100644 drivers/nvmem/apple-efuses.c
+> You can't have *any* interrupt that fits this 2:1 model if the irqchip
+> implements 1:1. Think about the data structures for a second:
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f70d8525cbd4..e3e973a3f651 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1781,6 +1781,7 @@ F:	drivers/i2c/busses/i2c-pasemi-core.c
->  F:	drivers/i2c/busses/i2c-pasemi-platform.c
->  F:	drivers/irqchip/irq-apple-aic.c
->  F:	drivers/mailbox/apple-mailbox.c
-> +F:	drivers/nvmem/apple-efuses.c
->  F:	drivers/pinctrl/pinctrl-apple-gpio.c
->  F:	drivers/soc/apple/*
->  F:	drivers/watchdog/apple_wdt.c
-> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-> index da414617a54d..bba29d1aec96 100644
-> --- a/drivers/nvmem/Kconfig
-> +++ b/drivers/nvmem/Kconfig
-> @@ -300,4 +300,16 @@ config NVMEM_BRCM_NVRAM
->  	  This driver provides support for Broadcom's NVRAM that can be accessed
->  	  using I/O mapping.
->  
-> +config NVMEM_APPLE_EFUSES
-> +	tristate "Apple eFuse support"
-> +	depends on ARCH_APPLE || COMPILE_TEST
-> +	default ARCH_APPLE
-> +	help
-> +	  Say y here to enable support for reading eFuses on Apple SoCs
-> +	  such as the M1. These are e.g. used to store factory programmed
-> +	  calibration data required for the PCIe or the USB-C PHY.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called nvmem-apple-efuses.
-> +
->  endif
-> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-> index dcbbde35b6a8..1a8e54691d3e 100644
-> --- a/drivers/nvmem/Makefile
-> +++ b/drivers/nvmem/Makefile
-> @@ -61,3 +61,5 @@ obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
->  nvmem-rmem-y			:= rmem.o
->  obj-$(CONFIG_NVMEM_BRCM_NVRAM)	+= nvmem_brcm_nvram.o
->  nvmem_brcm_nvram-y		:= brcm_nvram.o
-> +obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
-> +nvmem-apple-efuses-y 		:= apple-efuses.o
-> diff --git a/drivers/nvmem/apple-efuses.c b/drivers/nvmem/apple-efuses.c
-> new file mode 100644
-> index 000000000000..dd5576ec5408
-> --- /dev/null
-> +++ b/drivers/nvmem/apple-efuses.c
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Apple SoC eFuse driver
-> + *
-> + * Copyright (C) The Asahi Linux Contributors
-> + */
-> +
-> +#include <linux/io.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-provider.h>
-> +#include <linux/platform_device.h>
-> +
-> +struct apple_efuses_priv {
-> +	void __iomem *fuses;
-> +};
-> +
-> +static int apple_efuses_read(void *context, unsigned int offset, void *val,
-> +			     size_t bytes)
-> +{
-> +	struct apple_efuses_priv *priv = context;
-> +	u32 *dst = val;
-> +
-> +	while (bytes >= sizeof(u32)) {
-> +		*dst++ = readl_relaxed(priv->fuses + offset);
-> +		bytes -= sizeof(u32);
-> +		offset += sizeof(u32);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int apple_efuses_probe(struct platform_device *pdev)
-> +{
-> +	struct apple_efuses_priv *priv;
-> +	struct resource *res;
-> +	struct nvmem_config config = {
-> +		.dev = &pdev->dev,
-> +		.read_only = true,
-> +		.reg_read = apple_efuses_read,
-> +		.stride = sizeof(u32),
-> +		.word_size = sizeof(u32),
-> +		.name = "apple_efuses_nvmem",
-> +		.id = NVMEM_DEVID_AUTO,
-> +		.owner = THIS_MODULE,
-> +		.root_only = true,
-> +	};
-> +
-> +	priv = devm_kzalloc(config.dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->fuses = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-> +	if (IS_ERR(priv->fuses))
-> +		return PTR_ERR(priv->fuses);
-> +
-> +	config.priv = priv;
-> +	config.size = resource_size(res);
-> +
-> +	return PTR_ERR_OR_ZERO(devm_nvmem_register(config.dev, &config));
-> +}
-> +
-> +static const struct of_device_id apple_efuses_of_match[] = {
-> +	{ .compatible = "apple,efuses", },
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, apple_efuses_of_match);
-> +
-> +static struct platform_driver apple_efuses_driver = {
-> +	.driver = {
-> +		.name = "apple_efuses",
-> +		.of_match_table = apple_efuses_of_match,
-> +		.owner = THIS_MODULE,
+> Pins x and y and routed to GIC interrupt z. This results in the
+> following irq_data structures:
+> 
+>    MPM-x ---\
+>              GIC-z
+>    MPM-y ---/
+> 
+> Now, the driver using these interrupts is being removed, and the
+> hierarchies is being freed. Tearing down the interrupt with pin x will
+> result in z being also freed. And then you'll process pin y, which
+> will just explode.
 
-You wrote it also in changelog, but why do you need it? Doesn't core set
-it? Coccinelle should complain about this as well.
+I tested with manually unbinding the USB driver and didn't run into any
+memory corruption.  If I read irq_domain code right, it seems that
+irq_domain_alloc_irq_data() will call into irq_domain_insert_irq_data()
+to allocate z irq_data in context of virq x and y respectively.  So x
+and y do not share a single parent (z) irq_data but have their own copy
+of z irq_data, no?
 
-Best regards,
-Krzysztof
+Shawn

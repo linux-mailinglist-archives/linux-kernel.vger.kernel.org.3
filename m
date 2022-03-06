@@ -2,153 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8936B4CED97
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 21:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD454CED9A
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 21:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234180AbiCFUFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 15:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S234192AbiCFUIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 15:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiCFUFe (ORCPT
+        with ESMTP id S232908AbiCFUIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 15:05:34 -0500
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90082.outbound.protection.outlook.com [40.107.9.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23941401B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 12:04:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YhBe+f87/k9Tm9v8Y7m+ERakg2KJ7hjHtnDQdiNO1JylKVbv9+n7SOSUXkI4u3whuMRJXBP0uMfO1w3Uhry90Fw0Mxg/vkvQbmtGH23ui3jWHxq0GwdyECzN9n750u5fTuZK5meDo+7nm73WsOBY6EWi375De5gLg7arid/6E4ZatDVbnixxtVvzThUI9MH5EWSGRNKSTAa8oc1rPeXTB/jIpYU4by8qmgdA2Udlml75wkWyGz0kbZRlzclWPAswefaWwoMTX0g037wpTO+lLcnsPlzKvRUQkHunTPFMZTbhnQuep0IJBQG/oR/tr+IRPREvJIX2J9tjJlGFgaqsBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=My70ewoGJ8jgzeTnraJRoJGw5MYrxOCUi3YC4g5HMng=;
- b=Dnz9dOcuXU9i5WrRvsUj5Ol55OShdMcUTPk8v+63Z8Rk8ITPR+sVACUoRXUgpcakSXkrTdi52KZqPi2dLJOtiX92sdexLVrMLIyIDLnbsy/4I9u7f2WQohO5nYUHBay8may++IiPzTfw8vvdR9Fu3AMJHzG73kPq2UMb73VVHMkUXalQWL2VEciMGQ2TpNHUIt2d7/ap7ulfWa7BIIW+kKDqP3OTp/C2kuNn34PpSs8u12tseEdVg2tkk+BBRaeTvpwlij7LOROv5b0eaDrTH4SyLS4oq7DMC5VwupwkbpHgs7MLlLXZGvzC2Sfp/qpuGWxHOurtR6MJb34Xb6OH7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR2P264MB0306.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:6::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Sun, 6 Mar
- 2022 20:04:37 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.026; Sun, 6 Mar 2022
- 20:04:37 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     YueHaibing <yuehaibing@huawei.com>,
-        "jk@ozlabs.org" <jk@ozlabs.org>, "arnd@arndb.de" <arnd@arndb.de>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] powerpc/spufs: Fix build warning when
- CONFIG_PROC_FS=n
-Thread-Topic: [PATCH -next] powerpc/spufs: Fix build warning when
- CONFIG_PROC_FS=n
-Thread-Index: AQHYMI/JaxR2O8+ZXk+GW3DAquAf+qyyybCA
-Date:   Sun, 6 Mar 2022 20:04:37 +0000
-Message-ID: <860002a4-4e52-c399-fda6-054fa64df3ce@csgroup.eu>
-References: <20220305123116.26828-1-yuehaibing@huawei.com>
-In-Reply-To: <20220305123116.26828-1-yuehaibing@huawei.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8ea622f4-3da4-4e24-c7af-08d9ffac8a7f
-x-ms-traffictypediagnostic: MR2P264MB0306:EE_
-x-microsoft-antispam-prvs: <MR2P264MB0306CE7D14A1824392696CA1ED079@MR2P264MB0306.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: R9IJ5sYZ2h6skzicIgCXltNFsC04WXEW10q7qGQ11kDyYKD6OGtObAcifovxBqdB3SBlZGDZORpi67bnI47dAvg8O84Hsp/JbPccQgfDdE8AiLRL1hkdcH7R6zAbK7/U25XDFkd1TVoV74kCRvhVmM2m7RG5MtNBPGNYi75HSOlCwLpNMKpNf+l7ot4N7WY1acgJUI2kcbkxrYz5sr4U4sUnpEtNMWRMz1ZfccuffS5FnWnYMsYkkoUXx898BUeXxmqhex0pgOtc4GTJsXieMwOnf6LoOUtFxiXl4uh/VjkOEyGlnYbJha3ncPAVLpXoKhDPhjG7UR8Xm+R1N+riwQksnLL6kyYR9lgGmHThMT0CgtWVMpKJfhg7GtkrBZbs5JbgIHqeWGolcnhhlFIjvqCklwBIHodV+R0U5w3mUrprSQFV1QwgLDPyUp9if35G/58o6LsUeI7kedAnFD6PAO6RJ0f7pimlbMGF50obiSnZGiKoXPWPwsTTdY7CTF6UtDchlLCLJBZ3oFbHA2Fgi0MiDXElVjjP7pF07TQ6FCqUf49HU1VLMK3YSvjw88GAoD4U4rcCOAaIHjUmSAWR/1wus29EhvjMAuvnJqFVZHUE6nC6ytd5X1l4y00OVqy+oGoyhemy9rqecJ56xW6bT9yiFPpHX1u9RBKg5iHee0PZi2Ee8ZFhv90bBFrApFJOZh/f2NBlWWGhIjAFRbL2qvua7dEa48sik21i6QkV9i21LdHk92ZmHCm/z6xFIazKRK8Efix1QV8evQFaqXv9Jg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(316002)(66476007)(66446008)(8676002)(64756008)(76116006)(66556008)(66946007)(4326008)(66574015)(91956017)(44832011)(5660300002)(2906002)(2616005)(26005)(186003)(6512007)(83380400001)(8936002)(31696002)(38100700002)(86362001)(508600001)(31686004)(38070700005)(36756003)(6486002)(110136005)(71200400001)(122000001)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NFpacnVlOUV2WjV4Vnc1cHo5YktGZlFXMlZaY2FqTE0ySmFyTHhsQ1h3bTB3?=
- =?utf-8?B?K0o3citIQ0RUdExScTdRM2UrRndORW9sTWxtazZDSklac2RtNmJUUWdjTXRj?=
- =?utf-8?B?bmZXWGRmeS9yQU56YWx5OGVJQzhuZmF0K2xGUWUxUTZlc1pJMnF3dGpFd0Qz?=
- =?utf-8?B?NDNsOFVtOUFzZWFiUXVtWUVkdmF4UStRaFh5SXIzc2E4alVidHNBbzBZSy91?=
- =?utf-8?B?QUdkSWZ1YU0vRmpwcDRlSGc5U2FJQ042cTB4UjEwUUUrQ0loNGQ5ZFBoL0pZ?=
- =?utf-8?B?TWlJaXIwQm9wLzNKeDhCZUNVZ25mMXB3Z0FuTk1YUk5XeDJFaDYxN29Uempv?=
- =?utf-8?B?TG1KQ3RtT3F1L3BTOVZYQ1gzZzlnOUZjcUZZcWpobExoTnNMZHlLN2E4TE94?=
- =?utf-8?B?YUhKa2FsR21oMmVXM1R0SkpDNzZGUGwybVdmeHFIemp3QjlYOGthcXBFTjFU?=
- =?utf-8?B?RXdNYmRxN1ZGOU02NkVSdU91aGY3c1VCQXJzY05OYk9uN2dxdTVlTTMzNk5i?=
- =?utf-8?B?eDJCeHF6dHNYdkNIVnB2bUtEQWpZcUFqbldjL1c5NHIxWktPZld2cjI4UWRq?=
- =?utf-8?B?RFBzZmd4SkhTcUo1b21xWEhtWG80K1VMOXBkbW5OMUtyeldPZVQvUjJSMWNI?=
- =?utf-8?B?OGNYWXJBcFVLSzA4TWlRcFVZN2k4dTh5dHRqaFFvMFplTktOQjg1N1dxbkJx?=
- =?utf-8?B?dGEzREpsMU5mcmJORm1BQVkrc3JpOHJySFY1WnVWZmxOeC9mY3pWZVJ5ZDVw?=
- =?utf-8?B?cG4xTmg4K0dQR3JZeDk3emZReWRhbVZvc0xRL05UdWkrYlR6SlMxVkpYRE9Y?=
- =?utf-8?B?NEhiV09rMzUwbnpIQ3dpZlhqWVlTd01FcDBaZFRDeTNPejdHMjhKekw4amdC?=
- =?utf-8?B?c3RaOGd2QjNISzJ6MDU2YmNCR3FvUnBSa3B2Mng3ZUl2a0kxbTVVSWp6UCtS?=
- =?utf-8?B?UGgvdjZTVk5JTE9IVTNrRnlBd2pkOWQrNWRzTzdCZ2V5azU2YXJ2MDVzZnNY?=
- =?utf-8?B?Z0tQKzErMVhVVUdRYjl0dEJiczRaTDNLUFRER2VjS3pLT0Nnd2RpSHRQK1Vx?=
- =?utf-8?B?RTFIVWhUeHFuSzhtTU00Z08rbUgrQ0RSbnFwMTNjSmhzRHZ1Tjg4SWQ0cFRN?=
- =?utf-8?B?cXNsMkczZHhkTTVEZlFRU1VGdUpycU5jVGkwd1FUMmRjTUp6dkZoKzNhNjh6?=
- =?utf-8?B?UldvQjlRZi9LSkphRCtpVXNCNDgyMVV4eVIzUHk4QXRjVWdRQlZSb0hBL1Za?=
- =?utf-8?B?YSs4ME1nT2svNXd3aU83cW1xVENleUNuYmx2QlRPTVJQaVlyOE1NUG9GNVZE?=
- =?utf-8?B?Wkw5UUhmREUwOTA5UGU2aldTaGZwb3MwQW9mdXVQL0tBUE1zWXJaSVc4MDBm?=
- =?utf-8?B?SUcrM3lBRFlkL05CM2RlTEo2NVpsTEZaWjZNUStDNmNjYSs1NlBzbHFzUDNh?=
- =?utf-8?B?NkNtOGo4VGFiYTVFRXJyK2V6ZkNaMlROWjAzYlJ6TkJsNFJCWVVDay9jOFh1?=
- =?utf-8?B?VWVWUWpBVmJaUEt1V1NpNVFYRzdQL0dVZmNkS3FGeU9LOVpSa3MyUG4rTjUz?=
- =?utf-8?B?UjIxWTh2MVFkdkJXNStST2JHMmNCTDZQNFJva2hBTyt4T3lQbUsrL29WdGlJ?=
- =?utf-8?B?SXBQSGRHZGp3MmpLbUhMN0hMK2V1T29YMTMrbStqTDAzQW5CczVPUVp0SlFI?=
- =?utf-8?B?MDZUbWFtZk1rTUVTdy93TW5yZTBuckJGdmphV3pxMnpLUy90N0xMeUcvOEY4?=
- =?utf-8?B?NUZPS2x0SzIrOE1aQndRdXlNTkdHdlY1S3JoSUJRZkUvT0NlUkl6WDlKNXp1?=
- =?utf-8?B?ZytUMTcxRnduRE5qb2NIQkc5dWRHbnZLem9hUHJ2MHFuOExQVklsMG80Q1gx?=
- =?utf-8?B?Qi9zZGcvUk9JUkVBYnlMdTc5SEtwL3U1ajJJVXlZbGREMmRaWnpBNFBQNDQv?=
- =?utf-8?B?U3EyWUpmVnd4V1p2MWF2amNzRkxKanAwaUZsT2JVNW55dGQwZ0g1QW1Zak9r?=
- =?utf-8?B?NC9ybi8rQ01ydTJRaE9MbWRqVkRpOE01TFpKQkdjVStidVpoWXRyS1dtUXlK?=
- =?utf-8?B?MGdpUThsNFhRdzhTWHhYUlNnUThyOUNrcTQzVCsxZ0I5YTNuTXdWK2xTallx?=
- =?utf-8?B?a0wzejZYMDFHeWZKWFVBd1FGdXVzdDU1bTZ3WndXZ1NGL2tTeXErVS93d2Js?=
- =?utf-8?B?WkE4TkRCME5iaTBZbldvaXRBa0xxNGswbWIzUnZXNUlVY0w5blVoSExDNzdz?=
- =?utf-8?Q?Q8ekLZ9bd3fUsp04+NTM3PQZLWlApjgqrE4idpIuoM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <042EF85253D0EF4BA592702AEFC96ADA@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sun, 6 Mar 2022 15:08:12 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D4423BE1
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 12:07:19 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id fs4-20020a17090af28400b001bf5624c0aaso1276794pjb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 12:07:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gil5ranxrEJQ6Leg6l42UoKvzbmcu5Ve8XhC1QPDDh8=;
+        b=Y8HpHgHECt/Zx/Om11L0P313HOLC4xvjSlEdMDGyN80Kbp6fI7BJUX4GMLqOEsro1t
+         qwV8njf8GH/M0ju7kRVfUeyOyOOAni5GhoUw4Q/nT9ILPtzqiHzEBioYxda4UJSG9n/k
+         sjii8cyE+T6B5lQKE5m3+mzV8BQI96TIMoDrAx27orzo2pOuCZSrnfOLtum1KkHOZii4
+         8iFGBLAEDRnEdLZi67NYTqVylV4DCQ277DIEBHppKAwBUL7Jc7Z44gtPhGgKh+6B2qDF
+         3NtcTdkirnZav2k7Zaw7B6tTO8tjWBYCrNFVulRmqz97qyaBGTDlYlEPLZcVva8C2idB
+         bjKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gil5ranxrEJQ6Leg6l42UoKvzbmcu5Ve8XhC1QPDDh8=;
+        b=YabPZYj3lpur47pggim76AOZQDbZIbxSkjCtIbAcfdkraeF7pfVCV7mY58elt3c/vJ
+         SJRF1V1amvDXQbStKO/qLraOJ5lWECdCU5dLlHB79QraWhdzfIOrNnQg4uW/XTTDxC02
+         AyfkW7L6niLOlSpVzXjUSny6LXP+BdxQSbbFBOTxCiy0p0v5H951l7dDIHh+vP2MC/NH
+         rgq6JUz1trjPegH7j9zBbNvFEKgns3aHJJIjj9ITCiRV16esLW2Xi8Pcx40814dW9XbO
+         1p/VjEgowiqTyVF+1DImLnGHJopKEKIhnmyMJ8r8leHOpoALCJbM+sBNmBcdw3iH1ZBU
+         ncCw==
+X-Gm-Message-State: AOAM530FYfOCT7Qt1SHRZ4afKk3QqraUWrSvRZ0MTa6Bbpv6hdnV/i6P
+        tvQmR0b1lUd7eJRg5OVR2wdqOw==
+X-Google-Smtp-Source: ABdhPJxmr7dUAsczuQV6y0q70V9lG/wZoht0kvNb2atRV5xwDENR0kx8e9qzWQbN73L5E0dUtC0+HA==
+X-Received: by 2002:a17:902:aa8d:b0:150:c60:29a4 with SMTP id d13-20020a170902aa8d00b001500c6029a4mr9015870plr.40.1646597238817;
+        Sun, 06 Mar 2022 12:07:18 -0800 (PST)
+Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
+        by smtp.gmail.com with ESMTPSA id p16-20020a056a000b5000b004f669806cd9sm13318385pfo.87.2022.03.06.12.07.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 12:07:18 -0800 (PST)
+Date:   Sun, 6 Mar 2022 20:07:14 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/6] KVM: SVM: Defer page pinning for SEV guests
+Message-ID: <YiUUcuEuWbQrPs2E@google.com>
+References: <20220118110621.62462-1-nikunj@amd.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ea622f4-3da4-4e24-c7af-08d9ffac8a7f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2022 20:04:37.1928
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: H9c05mnT3tm61xtv5H91w4UbmklzpPiGzTwTZ92jE5nNWw3po2Swd17E69o/1cqvSQKRRHINvYdT+xCEcolqQR6/caJxeUzYp4Ee9p69Dt0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0306
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118110621.62462-1-nikunj@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA1LzAzLzIwMjIgw6AgMTM6MzEsIFl1ZUhhaWJpbmcgYSDDqWNyaXTCoDoNCj4gYXJj
-aC9wb3dlcnBjL3BsYXRmb3Jtcy9jZWxsL3NwdWZzL3NjaGVkLmM6MTA1NToxMjogd2FybmluZzog
-4oCYc2hvd19zcHVfbG9hZGF2Z+KAmSBkZWZpbmVkIGJ1dCBub3QgdXNlZCBbLVd1bnVzZWQtZnVu
-Y3Rpb25dDQo+ICAgc3RhdGljIGludCBzaG93X3NwdV9sb2FkYXZnKHN0cnVjdCBzZXFfZmlsZSAq
-cywgdm9pZCAqcHJpdmF0ZSkNCj4gICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn4NCj4gDQo+
-IE1hcmsgdGhpcyBhcyBfX21heWJlX3VudXNlZCB0byBmaXggdGhpcy4NCg0KTWFya2luZyBpdCBh
-cyBfX21heWJlX3VudXNlZCBkb2Vzbid0IGZpeCBpdC4gSXQganVzdCBwdXNoZXMgdGhlIGR1c3Qg
-DQp1bmRlciB0aGUgY2FycGV0Lg0KDQpwcm9jX2NyZWF0ZV9zaW5nbGUgbWFjcm8gc2hvdWxkIGJl
-IGZpeCB0byBhdm9pZCB0aGF0IHdhcm5pbmcuDQoNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFl1ZUhh
-aWJpbmcgPHl1ZWhhaWJpbmdAaHVhd2VpLmNvbT4NCj4gLS0tDQo+ICAgYXJjaC9wb3dlcnBjL3Bs
-YXRmb3Jtcy9jZWxsL3NwdWZzL3NjaGVkLmMgfCAyICstDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEg
-aW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dl
-cnBjL3BsYXRmb3Jtcy9jZWxsL3NwdWZzL3NjaGVkLmMgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1z
-L2NlbGwvc3B1ZnMvc2NoZWQuYw0KPiBpbmRleCBkMDU4ZjYyMzNlNjYuLmM0NjgzNTYyNTEzMyAx
-MDA2NDQNCj4gLS0tIGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy9jZWxsL3NwdWZzL3NjaGVkLmMN
-Cj4gKysrIGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy9jZWxsL3NwdWZzL3NjaGVkLmMNCj4gQEAg
-LTEwNTIsNyArMTA1Miw3IEBAIHZvaWQgc3B1Y3R4X3N3aXRjaF9zdGF0ZShzdHJ1Y3Qgc3B1X2Nv
-bnRleHQgKmN0eCwNCj4gICAJfQ0KPiAgIH0NCj4gICANCj4gLXN0YXRpYyBpbnQgc2hvd19zcHVf
-bG9hZGF2ZyhzdHJ1Y3Qgc2VxX2ZpbGUgKnMsIHZvaWQgKnByaXZhdGUpDQo+ICtzdGF0aWMgaW50
-IF9fbWF5YmVfdW51c2VkIHNob3dfc3B1X2xvYWRhdmcoc3RydWN0IHNlcV9maWxlICpzLCB2b2lk
-ICpwcml2YXRlKQ0KPiAgIHsNCj4gICAJaW50IGEsIGIsIGM7DQo+ICAg
+On Tue, Jan 18, 2022, Nikunj A Dadhania wrote:
+> SEV guest requires the guest's pages to be pinned in host physical
+> memory as migration of encrypted pages is not supported. The memory
+> encryption scheme uses the physical address of the memory being
+> encrypted. If guest pages are moved by the host, content decrypted in
+> the guest would be incorrect thereby corrupting guest's memory.
+> 
+> For SEV/SEV-ES guests, the hypervisor doesn't know which pages are
+> encrypted and when the guest is done using those pages. Hypervisor
+> should treat all the guest pages as encrypted until the guest is
+> destroyed.
+"Hypervisor should treat all the guest pages as encrypted until they are
+deallocated or the guest is destroyed".
+
+Note: in general, the guest VM could ask the user-level VMM to free the
+page by either free the memslot or free the pages (munmap(2)).
+
+> 
+> Actual pinning management is handled by vendor code via new
+> kvm_x86_ops hooks. MMU calls in to vendor code to pin the page on
+> demand. Metadata of the pinning is stored in architecture specific
+> memslot area. During the memslot freeing path guest pages are
+> unpinned.
+
+"During the memslot freeing path and deallocation path"
+
+> 
+> Initially started with [1], where the idea was to store the pinning
+> information using the software bit in the SPTE to track the pinned
+> page. That is not feasible for the following reason:
+> 
+> The pinned SPTE information gets stored in the shadow pages(SP). The
+> way current MMU is designed, the full MMU context gets dropped
+> multiple number of times even when CR0.WP bit gets flipped. Due to
+> dropping of the MMU context (aka roots), there is a huge amount of SP
+> alloc/remove churn. Pinned information stored in the SP gets lost
+> during the dropping of the root and subsequent SP at the child levels.
+> Without this information making decisions about re-pinnning page or
+> unpinning during the guest shutdown will not be possible
+> 
+> [1] https://patchwork.kernel.org/project/kvm/cover/20200731212323.21746-1-sean.j.christopherson@intel.com/ 
+> 
+
+A general feedback: I really like this patch set and I think doing
+memory pinning at fault path in kernel and storing the metadata in
+memslot is the right thing to do.
+
+This basically solves all the problems triggered by the KVM based API
+that trusts the user-level VMM to do the memory pinning.
+
+Thanks.
+> Nikunj A Dadhania (4):
+>   KVM: x86/mmu: Add hook to pin PFNs on demand in MMU
+>   KVM: SVM: Add pinning metadata in the arch memslot
+>   KVM: SVM: Implement demand page pinning
+>   KVM: SEV: Carve out routine for allocation of pages
+> 
+> Sean Christopherson (2):
+>   KVM: x86/mmu: Introduce kvm_mmu_map_tdp_page() for use by SEV/TDX
+>   KVM: SVM: Pin SEV pages in MMU during sev_launch_update_data()
+> 
+>  arch/x86/include/asm/kvm-x86-ops.h |   3 +
+>  arch/x86/include/asm/kvm_host.h    |   9 +
+>  arch/x86/kvm/mmu.h                 |   3 +
+>  arch/x86/kvm/mmu/mmu.c             |  41 +++
+>  arch/x86/kvm/mmu/tdp_mmu.c         |   7 +
+>  arch/x86/kvm/svm/sev.c             | 423 +++++++++++++++++++----------
+>  arch/x86/kvm/svm/svm.c             |   4 +
+>  arch/x86/kvm/svm/svm.h             |   9 +-
+>  arch/x86/kvm/x86.c                 |  11 +-
+>  9 files changed, 359 insertions(+), 151 deletions(-)
+> 
+> -- 
+> 2.32.0
+> 

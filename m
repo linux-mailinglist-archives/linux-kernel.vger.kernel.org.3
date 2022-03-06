@@ -2,47 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30EE4CEC3F
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 17:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8950F4CEC44
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 17:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbiCFQhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 11:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S233838AbiCFQkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 11:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiCFQhT (ORCPT
+        with ESMTP id S233818AbiCFQkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 11:37:19 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAE82654F;
-        Sun,  6 Mar 2022 08:36:26 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 312CB1F38E;
-        Sun,  6 Mar 2022 16:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646584585; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=y/OFp9JJppWMgaJ4C2eJKgXQ8oIgkJro1umFnsey9cs=;
-        b=n3hV1mEWP6oV9tNhk/zwFZMNJNwvg+uXHvtBHfm1/iglGqA22nfhyTqR6sdglHu0lVEGcc
-        Kv3uiEVcMdDPL/HeSC2NugPwAp1PpS+8iXrA6UPGKISJNz3tTepNSHNmyw2yxoNKFUHuSL
-        hSRmjOWVgVen5SXg9EJU9Uhgvr/TBco=
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 2905EA3B81;
-        Sun,  6 Mar 2022 16:36:25 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 239A4DA823; Sun,  6 Mar 2022 17:32:31 +0100 (CET)
-From:   David Sterba <dsterba@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Btrfs fixes for 5.17-rc7
-Date:   Sun,  6 Mar 2022 17:32:30 +0100
-Message-Id: <cover.1646581845.git.dsterba@suse.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 6 Mar 2022 11:40:07 -0500
+Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45A83ED13
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 08:39:14 -0800 (PST)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id QtuZnKV3iuCn2QtuZniRqp; Sun, 06 Mar 2022 17:39:12 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 06 Mar 2022 17:39:12 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netdev@vger.kernel.org
+Subject: [PATCH] ethernet: sun: Fix an error handling path in happy_meal_pci_probe()
+Date:   Sun,  6 Mar 2022 17:39:10 +0100
+Message-Id: <242ebc5e7dedc6b0d7f47cbf7768326c127f955b.1646584729.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,76 +43,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+A dma_free_coherent() call is missing in the error handling path of the
+probe, as already done in the remove function.
 
-a few more fixes for various problems that have user visible effects or
-seem to be urgent. Please pull, thanks.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+dma_alloc_coherent() uses '&pdev->dev' and the remove function
+'hp->dma_dev'.
+This change is a copy&paste from the remove function, so I've left the
+latter. It is not important because on line 3017 we have
+"hp->dma_dev = &pdev->dev;" so both expression are the same.
 
-* fix corruption when combining DIO and non-blocking iouring over
-  multiple extents (seen on MariaDB)
 
-* fix relocation crash due to premature return from commit
+I've not been able to find a Fixes tag because of the renaming of
+function and files.
+However, it looks old (before 2008)
+---
+ drivers/net/ethernet/sun/sunhme.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-* fix quota deadlock between rescan and qgroup removal
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index ad9029ae6848..348ed5412544 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -3146,7 +3146,7 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
+ 	if (err) {
+ 		printk(KERN_ERR "happymeal(PCI): Cannot register net device, "
+ 		       "aborting.\n");
+-		goto err_out_iounmap;
++		goto err_out_free_dma;
+ 	}
+ 
+ 	pci_set_drvdata(pdev, hp);
+@@ -3179,6 +3179,10 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
+ 
+ 	return 0;
+ 
++err_out_free_dma:
++	dma_free_coherent(hp->dma_dev, PAGE_SIZE,
++			  hp->happy_block, hp->hblock_dvma);
++
+ err_out_iounmap:
+ 	iounmap(hp->gregs);
+ 
+-- 
+2.32.0
 
-* fix item data bounds checks in tree-checker (found on a fuzzed image)
-
-* fix fsync of prealloc extents after EOF
-
-* add missing run of delayed items after unlink during log replay
-
-* don't start relocation until snapshot drop is finished
-
-* fix reversed condition for subpage writers locking
-
-* fix warning on page error
-
-----------------------------------------------------------------
-The following changes since commit 558732df2122092259ab4ef85594bee11dbb9104:
-
-  btrfs: reduce extent threshold for autodefrag (2022-02-24 16:11:28 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.17-rc6-tag
-
-for you to fetch changes up to ca93e44bfb5fd7996b76f0f544999171f647f93b:
-
-  btrfs: fallback to blocking mode when doing async dio over multiple extents (2022-03-04 15:09:21 +0100)
-
-----------------------------------------------------------------
-Filipe Manana (3):
-      btrfs: fix lost prealloc extents beyond eof after full fsync
-      btrfs: add missing run of delayed items after unlink during log replay
-      btrfs: fallback to blocking mode when doing async dio over multiple extents
-
-Josef Bacik (2):
-      btrfs: do not WARN_ON() if we have PageError set
-      btrfs: do not start relocation until in progress drops are done
-
-Omar Sandoval (1):
-      btrfs: fix relocation crash due to premature return from btrfs_commit_transaction()
-
-Qu Wenruo (1):
-      btrfs: subpage: fix a wrong check on subpage->writers
-
-Sidong Yang (1):
-      btrfs: qgroup: fix deadlock between rescan worker and remove qgroup
-
-Su Yue (1):
-      btrfs: tree-checker: use u64 for item data end to avoid overflow
-
- fs/btrfs/ctree.h        | 10 ++++++++
- fs/btrfs/disk-io.c      | 10 ++++++++
- fs/btrfs/extent-tree.c  | 10 ++++++++
- fs/btrfs/extent_io.c    | 16 +++++++++---
- fs/btrfs/inode.c        | 28 +++++++++++++++++++++
- fs/btrfs/qgroup.c       |  9 ++++++-
- fs/btrfs/relocation.c   | 13 ++++++++++
- fs/btrfs/root-tree.c    | 15 ++++++++++++
- fs/btrfs/subpage.c      |  2 +-
- fs/btrfs/transaction.c  | 65 +++++++++++++++++++++++++++++++++++++++++++++++--
- fs/btrfs/transaction.h  |  1 +
- fs/btrfs/tree-checker.c | 18 +++++++-------
- fs/btrfs/tree-log.c     | 61 +++++++++++++++++++++++++++++++++++++---------
- 13 files changed, 230 insertions(+), 28 deletions(-)

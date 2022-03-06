@@ -2,85 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130214CEA0D
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 09:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E9F4CEA16
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 09:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbiCFIbP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 6 Mar 2022 03:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S232960AbiCFIvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 03:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiCFIbN (ORCPT
+        with ESMTP id S230026AbiCFIvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 03:31:13 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF25345794
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 00:30:20 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-108-tUwZomUWMYSiN451TxRaKw-1; Sun, 06 Mar 2022 08:30:17 +0000
-X-MC-Unique: tUwZomUWMYSiN451TxRaKw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Sun, 6 Mar 2022 08:30:15 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Sun, 6 Mar 2022 08:30:14 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jarkko Sakkinen' <jarkko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-CC:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?iso-8859-1?Q?Thomas_Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        "Michal Hocko" <mhocko@suse.com>,
-        zhangyiru <zhangyiru3@huawei.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "codalist@coda.cs.cmu.edu" <codalist@coda.cs.cmu.edu>,
-        "linux-unionfs@vger.kernel.org" <linux-unionfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: RE: [PATCH RFC 0/3] MAP_POPULATE for device memory
-Thread-Topic: [PATCH RFC 0/3] MAP_POPULATE for device memory
-Thread-Index: AQHYMRun9YUfQRgF3USRgOtqAakL96yyAc1Q
-Date:   Sun, 6 Mar 2022 08:30:14 +0000
-Message-ID: <7f46ef3c80734f478501d21cef0182c5@AcuMS.aculab.com>
-References: <20220306053211.135762-1-jarkko@kernel.org>
-In-Reply-To: <20220306053211.135762-1-jarkko@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sun, 6 Mar 2022 03:51:09 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFAA6580B;
+        Sun,  6 Mar 2022 00:50:17 -0800 (PST)
+Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KBFXp1MZhz1GBwq;
+        Sun,  6 Mar 2022 16:45:30 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sun, 6 Mar 2022 16:50:14 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sun, 6 Mar 2022 16:50:14 +0800
+Message-ID: <1789b0d7-edc1-8c66-602b-2ca66de7a2be@huawei.com>
+Date:   Sun, 6 Mar 2022 16:50:13 +0800
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH -next 2/2] nfs: nfs_file_write() check writeback errors
+ correctly
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "anna@kernel.org" <anna@kernel.org>,
+        "smayhew@redhat.com" <smayhew@redhat.com>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
+References: <20220305124636.2002383-1-chenxiaosong2@huawei.com>
+ <20220305124636.2002383-3-chenxiaosong2@huawei.com>
+ <461aafe64a56836b8d248556052f8d00b6d37731.camel@hammerspace.com>
+From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
+In-Reply-To: <461aafe64a56836b8d248556052f8d00b6d37731.camel@hammerspace.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,39 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jarkko Sakkinen
-> Sent: 06 March 2022 05:32
+filemap_sample_wb_err() -> errseq_sample() initialise errseq_t variable 
+`since`, the caller of this function will checks for an error using 
+filemap_check_wb_err(since) -> errseq_check().
+
+filemap_sample_wb_err's purpose is just sampling consumed (seen) 
+writeback error to initialise errseq_t variable. I understand that 
+filemap_sample_wb_err()/filemap_check_wb_err() cannot detect the new 
+error between filemap_sample_wb_err() and filemap_check_wb_err().
+
+It would be better using file->f_mapping->wb_err instead of 
+filemap_sample_wb_err() in nfs_file_write() to sample wb_err at that 
+time point.
+
+In do_dentry_open(), we just sample consumed(seen) writeback error. It 
+is necessary to consume the writeback error before close() over.
+
+There is some cases that writeback error have not been consumed(seen) 
+after close() file over, I think it is unexpected behavior, is this a 
+bug? It is worth noting that fsync() will not be called after close() in 
+nfs.
+
+在 2022/3/6 1:12, Trond Myklebust 写道:
+> Hmm... Why isn't this considered a bug with filemap_sample_wb_err()? If
+> what you say is true, then do_dentry_open() could be picking up
+> existing errors from the filesystem and from the inode and propagating
+> them to random processes.
 > 
-> For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
-> to use that for initializing the device memory by providing a new callback
-> f_ops->populate() for the purpose.
+> It basically means everyone who cares about correctness of the error
+> return values needs to do a fsync() immediately after open() in order
+> to sync up the value in file->f_wb_err.
 > 
-> SGX patches are provided to show the callback in context.
-> 
-> An obvious alternative is a ioctl but it is less elegant and requires
-> two syscalls (mmap + ioctl) per memory range, instead of just one
-> (mmap).
-
-Is this all about trying to stop the vm_operations_struct.fault()
-function being called?
-
-It is pretty easy to ensure the mappings are setup in the driver's
-mmap() function.
-Then the fault() function can just return -VM_FAULT_SIGBUS;
-
-If it is actually device memory you just need to call vm_iomap_memory()
-That quite nicely mmap()s PCIe memory space into a user process.
-
-Mapping driver memory is slightly more difficult.
-For buffers allocated with dma_alloc_coherent() you can
-probably use dma_mmap_coherent().
-But I have a loop calling remap_pfn_range() because the
-buffer area is made of multiple 16kB kernel buffers that
-need to be mapped to contiguous user pages.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-

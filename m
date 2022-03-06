@@ -2,63 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15A94CEC08
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772BB4CEC0E
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiCFPQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 10:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
+        id S233704AbiCFPRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 10:17:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiCFPQM (ORCPT
+        with ESMTP id S233687AbiCFPRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 10:16:12 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D2E3FBD3;
-        Sun,  6 Mar 2022 07:15:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=SjmhTAZ5MddX6Jnp7nERsxNAziDtI725HDbO/okkTmI=; b=peROvnfp4rQKRplUsV7HF4sWz5
-        6FdrREDyFJpwcWC+ZCCyRJsWXF7rp+mH+Qvxu8CtdsucSKa4dcXr9A17eD6KTWtoQzgQtMzhtZYeB
-        jjJ8OlYQ7ZCxknDJ2HUYknnQD42eS2Tfh5N7fCfr3TDn3u1LghNl6Qu7AnxJJ7esrnPs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nQsbH-009V6m-06; Sun, 06 Mar 2022 16:15:11 +0100
-Date:   Sun, 6 Mar 2022 16:15:10 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     rajur@chelsio.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: cxgb3: Fix an error code when probing the driver
-Message-ID: <YiTP/t65qhhBaKvf@lunn.ch>
-References: <1646490284-22791-1-git-send-email-zheyuma97@gmail.com>
- <1646546192-32737-1-git-send-email-zheyuma97@gmail.com>
+        Sun, 6 Mar 2022 10:17:51 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499473FBEC;
+        Sun,  6 Mar 2022 07:16:57 -0800 (PST)
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     YunQiang Su <yunqiang.su@cipunited.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        od@opendingux.net, Paul Cercueil <paul@crapouillou.net>,
+        stable@vger.kernel.org
+Subject: [PATCH] mips: Always permit to build u-boot images
+Date:   Sun,  6 Mar 2022 15:16:48 +0000
+Message-Id: <20220306151648.39599-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646546192-32737-1-git-send-email-zheyuma97@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 05:56:32AM +0000, Zheyu Ma wrote:
-> During the process of driver probing, probe function should return < 0
-> for failure, otherwise kernel will treat value >= 0 as success.
-> 
-> Therefore, the driver should set 'err' to -ENODEV when
-> 'adapter->registered_device_map' is NULL. Otherwise kernel will assume
-> that the driver has been successfully probed and will cause unexpected
-> errors.
-> 
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+The platforms where the kernel should be loaded above 0x8000.0000 do not
+support loading u-boot images, that doesn't mean that we shouldn't be
+able to generate them.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Additionally, since commit 79876cc1d7b8 ("MIPS: new Kconfig option
+ZBOOT_LOAD_ADDRESS"), the $(zload-y) variable was no longer hardcoded,
+which made it impossible to use the uzImage.bin target.
 
-    Andrew
+Fixes: 79876cc1d7b8 ("MIPS: new Kconfig option ZBOOT_LOAD_ADDRESS")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ arch/mips/Makefile | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index e036fc025ccc..4478c5661d61 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -340,14 +340,12 @@ drivers-$(CONFIG_PM)	+= arch/mips/power/
+ boot-y			:= vmlinux.bin
+ boot-y			+= vmlinux.ecoff
+ boot-y			+= vmlinux.srec
+-ifeq ($(shell expr $(load-y) \< 0xffffffff80000000 2> /dev/null), 0)
+ boot-y			+= uImage
+ boot-y			+= uImage.bin
+ boot-y			+= uImage.bz2
+ boot-y			+= uImage.gz
+ boot-y			+= uImage.lzma
+ boot-y			+= uImage.lzo
+-endif
+ boot-y			+= vmlinux.itb
+ boot-y			+= vmlinux.gz.itb
+ boot-y			+= vmlinux.bz2.itb
+@@ -359,9 +357,7 @@ bootz-y			:= vmlinuz
+ bootz-y			+= vmlinuz.bin
+ bootz-y			+= vmlinuz.ecoff
+ bootz-y			+= vmlinuz.srec
+-ifeq ($(shell expr $(zload-y) \< 0xffffffff80000000 2> /dev/null), 0)
+ bootz-y			+= uzImage.bin
+-endif
+ bootz-y			+= vmlinuz.itb
+ 
+ #
+-- 
+2.34.1
+

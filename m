@@ -2,440 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAD54CEBD0
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 15:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C9F4CEBD2
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 15:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbiCFOFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 09:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
+        id S233008AbiCFOGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 09:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiCFOFj (ORCPT
+        with ESMTP id S232115AbiCFOGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 09:05:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B6640908
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 06:04:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAFF960E9B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 14:04:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBCBC340EC;
-        Sun,  6 Mar 2022 14:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646575486;
-        bh=ieZAAuLE2MqhkV1Cof3A6CiHjYoDqDFGjs5NWimG56U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eg3KAjiiC+RhqbG5+9l4LvJigHfOg60eVzgrpsxAk7fWK7nREbGvy9pszmIMyqopM
-         9zEIDsNAnl/+B0i9eGB+XDf3Mo7by4FDQ+OzHUJOmFIzfOp6pPFdnjAoccOB+TOc6P
-         vq4c1ODjSeWR+dh5feG6yt1LPvLM6WONYiUyjEgc=
-Date:   Sun, 6 Mar 2022 15:04:42 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Won Chung <wonchung@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] driver core: Add sysfs support for physical location
- of a device
-Message-ID: <YiS/ei+GFF0bwBSr@kroah.com>
-References: <20220305004258.2484798-1-wonchung@google.com>
+        Sun, 6 Mar 2022 09:06:01 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2131.outbound.protection.outlook.com [40.107.220.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F3740A13;
+        Sun,  6 Mar 2022 06:05:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UKtq/vTY5uqEiX54YTO3CXlOQoIkmS4S0KrEWKVR/7oOrzkKGUbEQu5E7xGjO77lNEN/GJfZaTGv+FnWuI4m3J2hxV2fQ93kw+YDCNhswmJgwVEnDr5SrGbhdSim7wUR8Yvkb2Z6BG/sKpGAzobDq81VnDI2LHBDnLBs1SSFv5xqjWMeCcKDGizL3gRCv18XEXPJAj9YgMuFJAG3Ojm1tYxsVMteb06CW9oNWXyhmI+Ay8W4KqZ7HNGr7AghiMThEB4tR5SHnABJiQT3lJQ9BZTUFxnYXcIs4YgH9MbjVZocvMrUNBEgN7j42qm8s38JgMbxiNyi0N3hkP/y/GXA3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jK492WafI5hXu2uKeyRbD39wjOefyMQR36dBhlIvY8I=;
+ b=lEYyvaBfRrTcAEn+yJs4yf6T3CiIfOiYX0fmQQXriJdTvq03GG/KdWUrBRNMz32rcNFMFVCgw7iLP0F75R9HyXtJlMmDnluj25W21cOnLOH51ZQxwDLAm65+UUM+mvBsryzLj6Bn7iJ0bHMeMKIsWo9/Mryydp3crOAdeiRFbJN7+/GU5yXF20n6uWfnc0OEFypgVc88ZP6DMUbCUf1BlzP4PAKJbfQCsGLqK64rOJq8MBKLF4iKgImqJ9SRQjP6S0GLCj6fAjG2LTPsGX+/BpaNKnMLEq5U0HrnsO17CnAU3HDGSkNCybVB5kyNbsiTYvTfbXq47837NIO82Hs+PQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hammerspace.com; dmarc=pass action=none
+ header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jK492WafI5hXu2uKeyRbD39wjOefyMQR36dBhlIvY8I=;
+ b=Y78fIgDN4n78dazG5V+Y51ADqn67HwA6Umle8j4HC+PrxDEjtU2fstlTByoYjN0nsymAQjuzEJN2aSM9WfAtXjR9f5sMNkNB/TnUnWpZvE5pU6fKnnT9odSksnjIRYTUKOQd7UtNqNdWFJtpwznpOG7iP/ncF6TqMANwTaguTHw=
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
+ by SN4PR13MB5373.namprd13.prod.outlook.com (2603:10b6:806:20c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.8; Sun, 6 Mar
+ 2022 14:04:59 +0000
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::70cc:dd9c:25b:4f3f]) by CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::70cc:dd9c:25b:4f3f%7]) with mapi id 15.20.5061.017; Sun, 6 Mar 2022
+ 14:04:59 +0000
+From:   Trond Myklebust <trondmy@hammerspace.com>
+To:     "anna@kernel.org" <anna@kernel.org>,
+        "chenxiaosong2@huawei.com" <chenxiaosong2@huawei.com>,
+        "smayhew@redhat.com" <smayhew@redhat.com>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
+Subject: Re: [PATCH -next 1/2] nfs: nfs{,4}_file_flush should consume
+ writeback error
+Thread-Topic: [PATCH -next 1/2] nfs: nfs{,4}_file_flush should consume
+ writeback error
+Thread-Index: AQHYMIz4ntebXgxsJ0GgUhvxvI+AhayxAgAAgAC4igCAAKqugA==
+Date:   Sun, 6 Mar 2022 14:04:58 +0000
+Message-ID: <eab4bbb565a50bd09c2dbd3522177237fde2fad9.camel@hammerspace.com>
+References: <20220305124636.2002383-1-chenxiaosong2@huawei.com>
+         <20220305124636.2002383-2-chenxiaosong2@huawei.com>
+         <ca81e90788eabbf6b5df5db7ea407199a6a3aa04.camel@hammerspace.com>
+         <5666cb64-c9e4-0549-6ddb-cfc877c9c071@huawei.com>
+In-Reply-To: <5666cb64-c9e4-0549-6ddb-cfc877c9c071@huawei.com>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hammerspace.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8bb126c4-2775-49c8-bc2b-08d9ff7a4cdb
+x-ms-traffictypediagnostic: SN4PR13MB5373:EE_
+x-microsoft-antispam-prvs: <SN4PR13MB5373AA9062BC18A073988632B8079@SN4PR13MB5373.namprd13.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ge0D6HmSFprsuUl9ROSpEGUpVO+wubmww+wpoHJrMuawWs5FW1GhRUHpJZaN7aj9eapG5aa3FJVSj619rG7mfN4t25xBU86d/86ochwSHod7yiDH/SEiA22illK7khIlO+N6jYwBrCtHKJXfL28VlfEnvDhw/IVeffZxekhpUidwYXa6Io5axjuQdDdyNGCbsd0iTGTesKhQ0aPfZE4NAeo1taGvSMXFAKdhRbIcKPzg2vD6PFWn4CLYfEdPNMcgEI4YMrjJ05uJlGImS3M4cyWEn4coGvyYkEE0k7mdCdmsERHTmXzJ1iiZTXMUYlGjwazpIjt3G6mJ2S6aZybMfQJi6YSNVCj69hL3J2Ejj1KE039y7bqLpKaw15ZvyvtEXinFxyZ4bD8jP1cY2l9mSs1UX4iFmMkq0GMC51mfuyuvCgqLrMw+Ez+0L3Uo7lwkDEgay/03fQSVz1CQng5tfqcyNZFaq/hwZttne88gr859AaZ1X551SED7+fpKFrKrYh0NH68imUOi4BR1YfAeI5hHghPjYTqNAmBwyBK1inuwILasSpiaFoK/8trp5Y+V2cXvdXV4gtTG/IR20YNcTpppHYn6Gk7mQuLAoLORDWOqs3emVUqd62mpZXSvYt4NeWiaY4ISJXZywJXtT57nV3qIGkJ61HZ8J1h1SqPmE5Vq244sYFbZepzjzUpiZEeM7fBWMoeqj2qKOFlheWhxcDMZeORSwPUmOq3H3I2AxiflEBuwrTfRLpimhGqZ/mfX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36756003)(66446008)(6486002)(38100700002)(38070700005)(26005)(186003)(2616005)(83380400001)(71200400001)(6512007)(6506007)(8676002)(8936002)(66946007)(66556008)(4326008)(122000001)(66476007)(508600001)(2906002)(5660300002)(86362001)(64756008)(54906003)(76116006)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UTBwMW5RbmxmNkZpUGVEMmJKeldqakh6b0dNeHhNcTA3RTcxbTczMzBObDdl?=
+ =?utf-8?B?L1dQWEJ0UlRFTWFRckpMem5VQkwxV3RtT2pmOWNOZ2g1TGVuMjRWZ1ZLbW43?=
+ =?utf-8?B?SEcyUEVHU2dmcGtIVlFFOXV2RVh3N2dvZjVkckNYQitYVVh6WGlhYTdOWHha?=
+ =?utf-8?B?NUVWOHJteG1qc2ZCVkM3VU1OT1Z3dEJ6QWxkZGg2K0wrYitVQ2Urd3FWSWJH?=
+ =?utf-8?B?WGdDc3hwTmRQQ1JhQ3BFQ0krM2xuT2ZHSzF1dDY2VS8rSzFkcDQyQklraS9R?=
+ =?utf-8?B?TDhKVnUyMjdPc0haUWt3MXh2MUthTC85L0tBZENaQVNYbnlLb3JyTHFhNStE?=
+ =?utf-8?B?Rnk4ZkphWVN0bW9UMERGWWRncXdiSncyYldVSEtXdFlrWnFuT0s3WDdjRyt5?=
+ =?utf-8?B?ZlFDY1lGY2RUL21NUWtLNnNTN1NVbHp4S1A0RzB0TWUvVjJiM2FqTDg2VW9D?=
+ =?utf-8?B?ck1NQUNWWEJ6QkRrQmw2a0dFd1N1RWUwR0k5MjZKK1BGVms0ZWlWT0twZGRo?=
+ =?utf-8?B?ejhOVW9ZOHpzdlZLYTVSSmdQeU4yWHlNK3diNUxuN3ZGUjdudW9WN1NTbDFD?=
+ =?utf-8?B?TnpIM1laUER6ZG14VE8ybEYzNWNaRTNOdTEwTlFvM3NhUHplMjkvZjRvSW95?=
+ =?utf-8?B?eDg3clQ5UmxZZmNRL0d2YmdPcW1abmw5U3RDWW4vWjFBeUVPWU9ydDhnVzZV?=
+ =?utf-8?B?QkE2VExPV2RKUzFncVhMcVpvdmR3L2c4MW5HSS94ZnpPVVJtSWFXOFV6clho?=
+ =?utf-8?B?Y1lpRUNyZFFQcW01UVRwYm9lQ1RnOVljaklrMlR6cnNrMUF4VDk5ZVd0aDBB?=
+ =?utf-8?B?TFZnZTJCRjYrU2lFY1RkU0JtTjFpTE9kRzM0eVQ3ZEFUUjVPVG1HQzNDaHEy?=
+ =?utf-8?B?RVRvQ3hHQmt1akV0Z0hUU1MvWjA2eHJqZ2xpVXZyNjAxNk45OWIxUDB2ZXJN?=
+ =?utf-8?B?VVBVZi9KcTdZd1pPWjZQMmRoVzViZkcxRDhjRGR4aE15ZS85b0F5ZmYvY2dt?=
+ =?utf-8?B?bElxSnN2eUo0M2RibGhXeS95ckJaUTVZRnpJdmYvRUw5Y1pJOExrVWxwbFlU?=
+ =?utf-8?B?cWVyQ3dKNm1hbExuUmlML1k2RHhsOFRLZFBvVkpraFYzQXc1Wk56aXdBQWp0?=
+ =?utf-8?B?QVgvVzlPRllpMTE4UzJnRzZKR3ZmTlJZWnptQUs0S1VMRVhqUkRUcGVkeVpT?=
+ =?utf-8?B?WUU3eWJhQ0FscnY0OC93N3EyQVZDQ3dTdUFhekYzK0p0eUNMcDJRSGQvVU50?=
+ =?utf-8?B?NjJ1WWhQTUVoM2JYSGRzd1BJRjVpQmV5YXhwTmRldFg2bW8xUXZEdW1BS2lR?=
+ =?utf-8?B?Zy9pYXNRSFc2T2xqaEdHcmlmcm9GNjRNNldiVkV2RWQ2bUxBR3lac1hWTlJC?=
+ =?utf-8?B?TW5MMW8vUnU3RVUwcTd6ZWpwTHRCbm9XWFdIRk12elZKSWliL2RzNE4rMEZo?=
+ =?utf-8?B?MEpkZXdVT1lzaTV3TUVkMFVNNzB0UWJSSm1EU0xXeHhmcmIrOXZidlFuY3M5?=
+ =?utf-8?B?cE93Ri93d1pvRGY2eDBod0c5VnJjYTFhZ0VHbDlWL2RWWlR3VHJjT012Z1pY?=
+ =?utf-8?B?VmRyOUcwTUFRN2dHelpZcVgrcjcxcGdHSkorRUNydERLZmVJZ1dSNEtyZGM4?=
+ =?utf-8?B?S1IrRElwR05HTFNvdDJqUWp3akl0M1NPNTl1U1E3bjNYYjFxZGtEblJmUHh4?=
+ =?utf-8?B?MmZGWHBmMG9JTzYrUHlIQmhYeWszNmR3dzcwVU83d0tBd1lyOGFtVDRmL1dI?=
+ =?utf-8?B?ZWxOKzNRZWw2Y3BPL29VTytxQW1YNVJheGZlYXVSZnRLTW5QWHJ6RnBHUmhU?=
+ =?utf-8?B?MzNKcUVxMmZBTUVaUkRQMlRpWUNmZ2pVM0xpc25CYmNVSTg5eHNjK0x1bW91?=
+ =?utf-8?B?RlZFZkJsMHdaRlhTVy83OWZJbjNpRHQ4cDRxWG96VXVRZC93S2xHTEgzbm9J?=
+ =?utf-8?B?ZHo5V25jT1R2NHJYdDBDN3FrdGdtZzZTTkZRZERUWG13ZFJqaUU5Si9EN0FC?=
+ =?utf-8?B?Z3lGOXBTa0RnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C6F0C9F8CAF8FF45A4FF183D3B6B7A81@namprd13.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220305004258.2484798-1-wonchung@google.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: hammerspace.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR13MB5084.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb126c4-2775-49c8-bc2b-08d9ff7a4cdb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2022 14:04:58.9103
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5v3XdwsQf2ke54zQ9kmJOLXHVjDPH/0HNqbNTL/wtdFruckgdp5NOvBZPJol/mrPNku9wfgR/I+lmLw3wBksqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5373
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 12:42:58AM +0000, Won Chung wrote:
-> When ACPI table includes _PLD fields for a device, create a new
-> directory (physical_location) in sysfs to share _PLD fields.
-> 
-> Currently without PLD information, when there are multiple of same
-> devices, it is hard to distinguish which device corresponds to which
-> physical device at which location. For example, when there are two Type
-> C connectors, it is hard to find out which connector corresponds to the
-> Type C port on the left panel versus the Type C port on the right panel.
-> With PLD information provided, we can determine which specific device at
-> which location is doing what.
-> 
-> _PLD output includes much more fields, but only generic fields are added
-> and exposed to sysfs, so that non-ACPI devices can also support it in
-> the future. The minimal generic fields needed for locating a device are
-> the following.
-> - panel
-> - vertical_position
-> - horizontal_position
-> - dock
-> - lid
-> 
-> Signed-off-by: Won Chung <wonchung@google.com>
-> ---
-> 
-> Changes from v2
-> - Use sysfs_emit to create files.
-> - Correct mix of spaces and tabs.
-> 
-> Changes from v1
-> - Correct directory names in Documentation.
-> - Clarify namings in core.c
-> 
->  .../testing/sysfs-devices-physical_location   |  42 ++++++
->  drivers/base/core.c                           | 139 ++++++++++++++++++
->  include/linux/device.h                        |  73 +++++++++
->  3 files changed, 254 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_location
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-physical_location b/Documentation/ABI/testing/sysfs-devices-physical_location
-> new file mode 100644
-> index 000000000000..202324b87083
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-devices-physical_location
-> @@ -0,0 +1,42 @@
-> +What:		/sys/devices/.../physical_location
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		This directory contains information on physical location of
-> +		the device connection point with respect to the system's
-> +		housing.
-> +
-> +What:		/sys/devices/.../physical_location/panel
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes which panel surface of the system’s housing the
-> +		device connection point resides on.
-> +
-> +What:		/sys/devices/.../physical_location/vertical_position
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes vertical position of the device connection point on
-> +		the panel surface.
-> +
-> +What:		/sys/devices/.../physical_location/horizontal_position
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		Describes horizontal position of the device connection point on
-> +		the panel surface.
-> +
-> +What:		/sys/devices/.../physical_location/dock
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		"Yes" if the device connection point resides in a docking
-> +		station or a port replicator. "No" otherwise.
-> +
-> +What:		/sys/devices/.../physical_location/lid
-> +Date:		March 2022
-> +Contact:	Won Chung <wonchung@google.com>
-> +Description:
-> +		"Yes" if the device connection point resides on the lid of
-> +		laptop system. "No" otherwise.
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 7bb957b11861..9cfa71ad21f3 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2466,6 +2466,136 @@ static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RO(removable);
->  
-> +static int dev_add_physical_location(struct device *dev)
-> +{
-> +#if defined(CONFIG_ACPI)
-> +	struct acpi_pld_info *pld;
-> +	acpi_status status;
-> +
-> +	if (!has_acpi_companion(dev))
-> +		return 0;
-> +
-> +	status = acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld);
-> +	if (ACPI_FAILURE(status) || !pld)
-> +		return 0;
-> +
-> +	dev->location = (struct device_location) {
-> +		.panel = pld->panel,
-> +		.vertical_position = pld->vertical_position,
-> +		.horizontal_position = pld->horizontal_position,
-> +		.dock = pld->dock,
-> +		.lid = pld->lid,
-> +	};
-
-Is this a memcpy()?  Ick, that's odd.
-
-> +
-> +	return 1;
-
-Kernel functions do not return "1" as success.  Or as an error.
-Positive numbers are ONLY for when to return the number of bytes
-consumed/written or the like.
-
-> +#else
-
-I have asked multiple times to not put #ifdef in .c files.  I can't take
-this patch for that fact alone (also big hint, if acpi is not enabled,
-loads of these functions and the structure itself should not be present
-at all...)
-
-
-
-
-
-> +	return 0;
-> +#endif
-> +}
-> +
-> +static ssize_t panel_show(struct device *dev, struct device_attribute *attr,
-> +	char *buf)
-> +{
-> +	const char *panel;
-> +
-> +	switch (dev->location.panel) {
-> +	case DEVICE_PANEL_TOP:
-> +		panel = "top";
-> +		break;
-> +	case DEVICE_PANEL_BOTTOM:
-> +		panel = "bottom";
-> +		break;
-> +	case DEVICE_PANEL_LEFT:
-> +		panel = "left";
-> +		break;
-> +	case DEVICE_PANEL_RIGHT:
-> +		panel = "right";
-> +		break;
-> +	case DEVICE_PANEL_FRONT:
-> +		panel = "front";
-> +		break;
-> +	case DEVICE_PANEL_BACK:
-> +		panel = "back";
-> +		break;
-> +	default:
-> +		panel = "unknown";
-> +	}
-> +	return sysfs_emit(buf, "%s\n", panel);
-> +}
-> +static DEVICE_ATTR_RO(panel);
-> +
-> +static ssize_t vertical_position_show(struct device *dev,
-> +	struct device_attribute *attr, char *buf)
-> +{
-> +	const char *vertical_position;
-> +
-> +	switch (dev->location.vertical_position) {
-> +	case DEVICE_VERT_POS_UPPER:
-> +		vertical_position = "upper";
-> +		break;
-> +	case DEVICE_VERT_POS_CENTER:
-> +		vertical_position = "center";
-> +		break;
-> +	case DEVICE_VERT_POS_LOWER:
-> +		vertical_position = "lower";
-> +		break;
-> +	default:
-> +		vertical_position = "unknown";
-> +	}
-> +	return sysfs_emit(buf, "%s\n", vertical_position);
-> +}
-> +static DEVICE_ATTR_RO(vertical_position);
-> +
-> +static ssize_t horizontal_position_show(struct device *dev,
-> +	struct device_attribute *attr, char *buf)
-> +{
-> +	const char *horizontal_position;
-> +
-> +	switch (dev->location.horizontal_position) {
-> +	case DEVICE_HORI_POS_LEFT:
-> +		horizontal_position = "left";
-> +		break;
-> +	case DEVICE_HORI_POS_CENTER:
-> +		horizontal_position = "center";
-> +		break;
-> +	case DEVICE_HORI_POS_RIGHT:
-> +		horizontal_position = "right";
-> +		break;
-> +	default:
-> +		horizontal_position = "unknown";
-> +	}
-> +	return sysfs_emit(buf, "%s\n", horizontal_position);
-> +}
-> +static DEVICE_ATTR_RO(horizontal_position);
-> +
-> +static ssize_t dock_show(struct device *dev, struct device_attribute *attr,
-> +	char *buf)
-
-Did you run your patch through checkpatch.pl?
-
-Please do so.
-
-> +{
-> +	return sysfs_emit(buf, "%s\n", dev->location.dock ? "yes" : "no");
-> +}
-> +static DEVICE_ATTR_RO(dock);
-> +
-> +static ssize_t lid_show(struct device *dev, struct device_attribute *attr,
-> +	char *buf)
-> +{
-> +	return sysfs_emit(buf, "%s\n", dev->location.lid ? "yes" : "no");
-> +}
-> +static DEVICE_ATTR_RO(lid);
-> +
-> +static struct attribute *dev_attr_physical_location[] = {
-> +	&dev_attr_panel.attr,
-> +	&dev_attr_vertical_position.attr,
-> +	&dev_attr_horizontal_position.attr,
-> +	&dev_attr_dock.attr,
-> +	&dev_attr_lid.attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group dev_attr_physical_location_group = {
-> +	.name = "physical_location",
-
-I'm all for being verbose, but why not just "location"?  What other type
-of location is there for a device?
-
-> +	.attrs = dev_attr_physical_location,
-> +};
-> +
->  int device_add_groups(struct device *dev, const struct attribute_group **groups)
->  {
->  	return sysfs_create_groups(&dev->kobj, groups);
-> @@ -2649,8 +2779,17 @@ static int device_add_attrs(struct device *dev)
->  			goto err_remove_dev_waiting_for_supplier;
->  	}
->  
-> +	if (dev_add_physical_location(dev)) {
-> +		error = device_add_group(dev,
-> +			&dev_attr_physical_location_group);
-> +		if (error)
-> +			goto err_remove_dev_physical_location;
-> +	}
-> +
->  	return 0;
->  
-> + err_remove_dev_physical_location:
-> +	device_remove_group(dev, &dev_attr_physical_location_group);
->   err_remove_dev_waiting_for_supplier:
->  	device_remove_file(dev, &dev_attr_waiting_for_supplier);
->   err_remove_dev_online:
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 93459724dcde..424be9cb735e 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -386,6 +386,75 @@ struct dev_msi_info {
->  #endif
->  };
->  
-> +/**
-> + * enum device_location_panel - Describes which panel surface of the system's
-> + * housing the device connection point resides on.
-> + * @DEVICE_PANEL_TOP: Device connection point is on the top panel.
-> + * @DEVICE_PANEL_BOTTOM: Device connection point is on the bottom panel.
-> + * @DEVICE_PANEL_LEFT: Device connection point is on the left panel.
-> + * @DEVICE_PANEL_RIGHT: Device connection point is on the right panel.
-> + * @DEVICE_PANEL_FRONT: Device connection point is on the front panel.
-> + * @DEVICE_PANEL_BACK: Device connection point is on the back panel.
-> + * @DEVICE_PANEL_UNKNOWN: The panel with device connection point is unknown.
-> + */
-> +enum device_location_panel {
-> +	DEVICE_PANEL_TOP,
-> +	DEVICE_PANEL_BOTTOM,
-> +	DEVICE_PANEL_LEFT,
-> +	DEVICE_PANEL_RIGHT,
-> +	DEVICE_PANEL_FRONT,
-> +	DEVICE_PANEL_BACK,
-> +	DEVICE_PANEL_UNKNOWN,
-> +};
-> +
-> +/**
-> + * enum device_location_vertical_position - Describes vertical position of the
-> + * device connection point on the panel surface.
-> + * @DEVICE_VERT_POS_UPPER: Device connection point is at upper part of panel.
-> + * @DEVICE_VERT_POS_CENTER: Device connection point is at center part of panel.
-> + * @DEVICE_VERT_POS_LOWER: Device connection point is at lower part of panel.
-> + */
-> +enum device_location_vertical_position {
-> +	DEVICE_VERT_POS_UPPER,
-> +	DEVICE_VERT_POS_CENTER,
-> +	DEVICE_VERT_POS_LOWER,
-> +};
-> +
-> +/**
-> + * enum device_location_horizontal_position - Describes horizontal position of
-> + * the device connection point on the panel surface.
-> + * @DEVICE_HORI_POS_LEFT: Device connection point is at left part of panel.
-> + * @DEVICE_HORI_POS_CENTER: Device connection point is at center part of panel.
-> + * @DEVICE_HORI_POS_RIGHT: Device connection point is at right part of panel.
-> + */
-> +enum device_location_horizontal_position {
-> +	DEVICE_HORI_POS_LEFT,
-> +	DEVICE_HORI_POS_CENTER,
-> +	DEVICE_HORI_POS_RIGHT,
-> +};
-
-Why do these enum values need to be in device.h?  Can they just live in
-drivers/base/ somewhere?
-
-
-> +
-> +/**
-> + * struct device_location - Device data related to physical location of the
-> + * device connection point.
-> + * @panel: Panel surface of the system's housing that the device connection
-> + *         point resides on.
-> + * @vertical_position: Vertical position of the device connection point within
-> + *                     the panel.
-> + * @horizontal_position: Horizontal position of the device connection point
-> + *                       within the panel.
-> + * @dock: Set if the device connection point resides in a docking station or
-> + *        port replicator.
-> + * @lid: Set if this device connection point resides on the lid of laptop
-> + *       system.
-> + */
-> +struct device_location {
-> +	enum device_location_panel panel;
-> +	enum device_location_vertical_position vertical_position;
-> +	enum device_location_horizontal_position horizontal_position;
-> +	bool dock;
-> +	bool lid;
-
-How badly did you just inflate all device structures in the kernel?  Did
-you use 'pahole' to see if you added padding or not?
-
-> +};
-> +
->  /**
->   * struct device - The basic device structure
->   * @parent:	The device's "parent" device, the device to which it is attached.
-> @@ -456,6 +525,8 @@ struct dev_msi_info {
->   * @removable:  Whether the device can be removed from the system. This
->   *              should be set by the subsystem / bus driver that discovered
->   *              the device.
-> + * @location:	Describes physical location of the device connection point in
-> + *		the system housing.
->   *
->   * @offline_disabled: If set, the device is permanently online.
->   * @offline:	Set after successful invocation of bus type's .offline().
-> @@ -569,6 +640,8 @@ struct device {
->  
->  	enum device_removable	removable;
->  
-> +	struct device_location	location;
-
-See, you just call it "location" here, not "physical_location", so why
-does userspace get a bigger name than the kernel does?  :)
-
-thanks,
-
-greg k-h
+T24gU3VuLCAyMDIyLTAzLTA2IGF0IDExOjU0ICswODAwLCBjaGVueGlhb3NvbmcgKEEpIHdyb3Rl
+Ogo+IEl0IHdvdWxkIGJlIG1vcmUgY2xlYXIgaWYgSSB1cGRhdGUgdGhlIHJlcHJvZHVjZXIgbGlr
+ZSB0aGlzOgo+IAo+IMKgwqDCoMKgwqDCoMKgwqAgbmZzIHNlcnZlcsKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHzCoMKgwqDCoMKgwqAgbmZzIGNsaWVudAo+IMKgIC0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLSB8LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0K
+PiAtCj4gwqAgIyBObyBzcGFjZSBsZWZ0IG9uIHNlcnZlcsKgwqDCoMKgwqDCoMKgwqAgfAo+IMKg
+IGZhbGxvY2F0ZSAtbCAxMDBHIC9zZXJ2ZXIvbm9zcGFjZSB8Cj4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IG1v
+dW50IC10IG5mcyAkbmZzX3NlcnZlcl9pcDovCj4gL21udAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfAo+IMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgfCAjIEV4cGVjdGVkIGVycm9yCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IGRkIGlmPS9k
+ZXYvemVybyBvZj0vbW50L2ZpbGUKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwKPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwg
+IyBSZWxlYXNlIHNwYWNlIG9uIG1vdW50cG9pbnQKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgcm0gL21udC9u
+b3NwYWNlCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8ICMgVW5leHBlY3RlZCBl
+cnJvcgo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgfCBkZCBpZj0vZGV2L3plcm8gb2Y9L21udC9maWxlCj4gCj4g
+VGhlIFVuZXhwZWN0ZWQgZXJyb3IgKE5vIHNwYWNlIGxlZnQgb24gZGV2aWNlKSB3aGVuIGRvaW5n
+IHNlY29uZAo+IGBkZGAsIAo+IGlzIGZyb20gdW5jb25zdW1lZCB3cml0ZWJhY2sgZXJyb3IgYWZ0
+ZXIgY2xvc2UoKSB0aGUgZmlsZSB3aGVuIGRvaW5nIAo+IGZpcnN0IGBkZGAuIFRoZXJlIGlzIGVu
+b3VnaCBzcGFjZSB3aGVuIGRvaW5nIHNlY29uZCBgZGRgLCB3ZSBzaG91bGQKPiBub3QgCj4gcmVw
+b3J0IHRoZSBub3NwYWNlIGVycm9yLgo+IAo+IFdlIHNob3VsZCByZXBvcnQgYW5kIGNvbnN1bWUg
+dGhlIHdyaXRlYmFjayBlcnJvciB3aGVuIHVzZXJzcGFjZSBjYWxsIAo+IGNsb3NlKCktPmZsdXNo
+KCksIHRoZSB3cml0ZWJhY2sgZXJyb3Igc2hvdWxkIG5vdCBiZSBsZWZ0IGZvciBuZXh0Cj4gb3Bl
+bigpLgo+IAo+IEN1cnJlbnRseSwgZnN5bmMoKSB3aWxsIGNvbnN1bWUgdGhlIHdyaXRlYmFjayBl
+cnJvciB3aGlsZSBjYWxsaW5nIAo+IGZpbGVfY2hlY2tfYW5kX2FkdmFuY2Vfd2JfZXJyKCksIGNs
+b3NlKCktPmZsdXNoKCkgc2hvdWxkIGFsc28gY29uc3VtZQo+IHRoZSB3cml0ZWJhY2sgZXJyb3Iu
+CgpOby4gVGhhdCdzIG5vdCBwYXJ0IG9mIHRoZSBBUEkgb2YgYW55IG90aGVyIGZpbGVzeXN0ZW0u
+IFdoeSBzaG91bGQgd2UKbWFrZSBhbiBleGNlcHRpb24gZm9yIE5GUz8KClRoZSBwcm9ibGVtIGhl
+cmUgc2VlbXMgdG8gYmUgdGhlIHdheSB0aGF0IGZpbGVtYXBfc2FtcGxlX3diX2VycigpIGlzCmRl
+ZmluZWQsIGFuZCBob3cgaXQgaW5pdGlhbGlzZXMgZi0+Zl93Yl9lcnIgaW4gdGhlIGZ1bmN0aW9u
+CmRvX2RlbnRyeV9vcGVuKCkuIEl0IGlzIGRlc2lnbmVkIHRvIGRvIGV4YWN0bHkgd2hhdCB5b3Ug
+c2VlIGFib3ZlLgoKCgotLSAKVHJvbmQgTXlrbGVidXN0CkxpbnV4IE5GUyBjbGllbnQgbWFpbnRh
+aW5lciwgSGFtbWVyc3BhY2UKdHJvbmQubXlrbGVidXN0QGhhbW1lcnNwYWNlLmNvbQoKCg==

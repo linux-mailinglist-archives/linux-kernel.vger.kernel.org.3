@@ -2,276 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51FA4CE814
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 02:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DF94CE818
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 02:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbiCFB3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Mar 2022 20:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
+        id S232460AbiCFBdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Mar 2022 20:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiCFB3N (ORCPT
+        with ESMTP id S230507AbiCFBdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Mar 2022 20:29:13 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D4465E9;
-        Sat,  5 Mar 2022 17:28:22 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id b12so9555948qvk.1;
-        Sat, 05 Mar 2022 17:28:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qUed4120jDx2UY0O7Y5US190Wq5Hulu3C54Li89uLcI=;
-        b=lD5pjdk6alcurCyRkzBTmUam1ncqaaoC9/2yjX+9GNmldE751cGVY+4cLHWf6fY7nq
-         eVQMaeuwiMpJs7UGIonYjdcIWLz8Y0M+2rJc7kbWIyj6q3KjC98GbIlAxtwSTH+soYEs
-         +x8tQwLtaBQPfUw+vMjtxtDuisAFdNOTCf0yAny93dAt/2i+FYXRFfc6HSfY8MpjzZ2X
-         y7qRO3sQAkYTwPkyGfTFS2OIX+/p3jm/4xStqh4sou8n8af4YMoiqdWkHmRWgoJSU2IK
-         IUIPJ3/wk7cED7COYEPWRcM0seecd03ydFzrB/Im0lAgDO7tyLHudQ+aWcMW7H66KdeG
-         A9+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qUed4120jDx2UY0O7Y5US190Wq5Hulu3C54Li89uLcI=;
-        b=tC7O6W4AkTvpRYNIec9PaFB8dIvyB7FHvfOUeS3u1M6eOYcS8fh4dGqzPhqEG1DWPs
-         DxTDxyz4Rd4hJeTZBQQzUh6hrFMWEBRbGheLQ45qcCFwWnvBW2UznQuOU3AjImAzAvgu
-         c28xjcjwvC7zSzi7+RNkCDYfOja16EBpLjnkAOf9mbac4eyyhSVpflNtKY+7BdNPZhhC
-         lgEt4A9LxcPvqDXv9/XaL+2+Vx8b3eeh5VtpkL++TmQdgmFYOX5ejIw4W8lvpmzE+PUF
-         CNJvPdo5wn/9g7gN1WSkAtkODuGTdMMTomuG0Cof043PR0/FwV+ieKdFovOdMx30bmsk
-         11oQ==
-X-Gm-Message-State: AOAM532lW9cYpSXyhcU8DMfsHpceG6dZ1H+2IwxhGqdlseUBUZ3a16AG
-        n/fO154znsGWzDBvGsSDn/4htC1GOjcONIni
-X-Google-Smtp-Source: ABdhPJyat3VMSiplta/RvLwlCf3ig0Kzfej0E8PbjdiQmrXBYoXztH+o56mD62n/J3AEy7TOiJ6O1A==
-X-Received: by 2002:ad4:5fce:0:b0:42d:fa10:6451 with SMTP id jq14-20020ad45fce000000b0042dfa106451mr4326090qvb.1.1646530101512;
-        Sat, 05 Mar 2022 17:28:21 -0800 (PST)
-Received: from henry-arch.studentwireless.binghamton.edu ([149.125.84.173])
-        by smtp.googlemail.com with ESMTPSA id k4-20020a05620a142400b0067b03a73e70sm951068qkj.85.2022.03.05.17.28.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 17:28:21 -0800 (PST)
-From:   Henry Sloan <henryksloan@gmail.com>
-Cc:     pbonzini@redhat.com, Henry Sloan <henryksloan@gmail.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/6] KVM: Replace bare 'unsigned' with 'unsigned int'
-Date:   Sat,  5 Mar 2022 20:28:04 -0500
-Message-Id: <20220306012804.117574-1-henryksloan@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220305205528.463894-7-henryksloan@gmail.com>
-References: <20220305205528.463894-7-henryksloan@gmail.com>
-MIME-Version: 1.0
+        Sat, 5 Mar 2022 20:33:49 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A012D506FB;
+        Sat,  5 Mar 2022 17:32:58 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2260g5MM017611;
+        Sun, 6 Mar 2022 01:32:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=sqj4L3iFBiCsxLfju0d8t9uixWVZhENCYyevRk24lZU=;
+ b=KUss6NYbEoOIMGm4Cdz4u+bgZpGiq/Qhs2DjdoUDwvmaryejA/6FlZGx8vjbPPlkriqR
+ et26Nr4EWbexHsTqwVmh3QZl7dIWXX6rqMyInrj821hfXn47oJH5PIYcLgv7So3Cdm0t
+ Xre3Hcilglu9Wziic1PgYqNVBa18Kk23Ie4zXWnUgYHe1i69m8lPLYCPa0U+iXYSlSDT
+ KXtkqwsnsE0COFquXl+Tl59rVxos2lzLyJsJ9BB0EYFjLOzTlFgw3VCxEMP/01WPvq/0
+ 7dbgI6zYzHcuT4v6ct0Z03BgcCIDecSwRSubCDcqoxVSuUHvubDBKIDMtqV3XFWrddkU hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3emjmw0f62-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Mar 2022 01:32:48 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2261WlnS027644;
+        Sun, 6 Mar 2022 01:32:47 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3emjmw0f60-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Mar 2022 01:32:47 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2261GndM025340;
+        Sun, 6 Mar 2022 01:32:46 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma01dal.us.ibm.com with ESMTP id 3emgak0wt7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Mar 2022 01:32:46 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2261WjSN41746894
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 6 Mar 2022 01:32:45 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 940CEAE05C;
+        Sun,  6 Mar 2022 01:32:45 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 732D3AE062;
+        Sun,  6 Mar 2022 01:32:44 +0000 (GMT)
+Received: from [9.211.132.166] (unknown [9.211.132.166])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Sun,  6 Mar 2022 01:32:44 +0000 (GMT)
+Message-ID: <0902b082-d0c8-cbcd-f8fa-68696527144d@linux.vnet.ibm.com>
+Date:   Sat, 5 Mar 2022 20:32:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v9 0/3] integrity: support including firmware ".platform"
+ keys at build time
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Nayna Jain <nayna@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        dhowells@redhat.com, zohar@linux.ibm.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
+        seth@forshee.me, rnsastry@linux.ibm.com
+References: <20220304175403.20092-1-nayna@linux.ibm.com>
+ <YiL3DvrlAHaMm+lk@iki.fi> <YiL55eyeoyjbW6JH@iki.fi>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <YiL55eyeoyjbW6JH@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hOPsRyrsIY2qaXYUTB1PodnsmRzvl79H
+X-Proofpoint-GUID: VqDZTZrhEhcBNeB8xkJZKyEfhK2qBFtH
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-05_09,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203060006
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Henry Sloan <henryksloan@gmail.com>
----
- virt/kvm/coalesced_mmio.c | 23 ++++++++---------------
- virt/kvm/eventfd.c        |  8 ++++----
- virt/kvm/irqchip.c        |  6 +++---
- virt/kvm/kvm_main.c       | 16 ++++++++--------
- 4 files changed, 23 insertions(+), 30 deletions(-)
 
-diff --git a/virt/kvm/coalesced_mmio.c b/virt/kvm/coalesced_mmio.c
-index 0be80c213f7f..b0501a2538d7 100644
---- a/virt/kvm/coalesced_mmio.c
-+++ b/virt/kvm/coalesced_mmio.c
-@@ -22,7 +22,7 @@ static inline struct kvm_coalesced_mmio_dev *to_mmio(struct kvm_io_device *dev)
- 	return container_of(dev, struct kvm_coalesced_mmio_dev, dev);
- }
- 
--static int coalesced_mmio_in_range(struct kvm_coalesced_mmio_dev *dev,
-+static bool coalesced_mmio_in_range(struct kvm_coalesced_mmio_dev *dev,
- 				   gpa_t addr, int len)
- {
- 	/* is it in a batchable area ?
-@@ -30,20 +30,19 @@ static int coalesced_mmio_in_range(struct kvm_coalesced_mmio_dev *dev,
- 	 * (zone->addr, zone->size)
- 	 */
- 	if (len < 0)
--		return 0;
-+		return false;
- 	if (addr + len < addr)
--		return 0;
-+		return false;
- 	if (addr < dev->zone.addr)
--		return 0;
-+		return false;
- 	if (addr + len > dev->zone.addr + dev->zone.size)
--		return 0;
--	return 1;
-+		return false;
-+	return true;
- }
- 
--static int coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
-+static bool coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
- {
- 	struct kvm_coalesced_mmio_ring *ring;
--	unsigned avail;
- 
- 	/* Are we able to batch it ? */
- 
-@@ -52,13 +51,7 @@ static int coalesced_mmio_has_room(struct kvm_coalesced_mmio_dev *dev, u32 last)
- 	 * there is always one unused entry in the buffer
- 	 */
- 	ring = dev->kvm->coalesced_mmio_ring;
--	avail = (ring->first - last - 1) % KVM_COALESCED_MMIO_MAX;
--	if (avail == 0) {
--		/* full */
--		return 0;
--	}
--
--	return 1;
-+	return (ring->first - last - 1) % KVM_COALESCED_MMIO_MAX != 0;
- }
- 
- static int coalesced_mmio_write(struct kvm_vcpu *vcpu,
-diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
-index 59b1dd4a549e..1054ddb915b0 100644
---- a/virt/kvm/eventfd.c
-+++ b/virt/kvm/eventfd.c
-@@ -182,14 +182,14 @@ int __attribute__((weak)) kvm_arch_set_irq_inatomic(
-  * Called with wqh->lock held and interrupts disabled
-  */
- static int
--irqfd_wakeup(wait_queue_entry_t *wait, unsigned mode, int sync, void *key)
-+irqfd_wakeup(wait_queue_entry_t *wait, unsigned int mode, int sync, void *key)
- {
- 	struct kvm_kernel_irqfd *irqfd =
- 		container_of(wait, struct kvm_kernel_irqfd, wait);
- 	__poll_t flags = key_to_poll(key);
- 	struct kvm_kernel_irq_routing_entry irq;
- 	struct kvm *kvm = irqfd->kvm;
--	unsigned seq;
-+	unsigned int seq;
- 	int idx;
- 	int ret = 0;
- 
-@@ -455,7 +455,7 @@ kvm_irqfd_assign(struct kvm *kvm, struct kvm_irqfd *args)
- 	return ret;
- }
- 
--bool kvm_irq_has_notifier(struct kvm *kvm, unsigned irqchip, unsigned pin)
-+bool kvm_irq_has_notifier(struct kvm *kvm, unsigned int irqchip, unsigned int pin)
- {
- 	struct kvm_irq_ack_notifier *kian;
- 	int gsi, idx;
-@@ -486,7 +486,7 @@ void kvm_notify_acked_gsi(struct kvm *kvm, int gsi)
- 			kian->irq_acked(kian);
- }
- 
--void kvm_notify_acked_irq(struct kvm *kvm, unsigned irqchip, unsigned pin)
-+void kvm_notify_acked_irq(struct kvm *kvm, unsigned int irqchip, unsigned int pin)
- {
- 	int gsi, idx;
- 
-diff --git a/virt/kvm/irqchip.c b/virt/kvm/irqchip.c
-index 58e4f88b2b9f..dcd51e6efb8a 100644
---- a/virt/kvm/irqchip.c
-+++ b/virt/kvm/irqchip.c
-@@ -38,7 +38,7 @@ int kvm_irq_map_gsi(struct kvm *kvm,
- 	return n;
- }
- 
--int kvm_irq_map_chip_pin(struct kvm *kvm, unsigned irqchip, unsigned pin)
-+int kvm_irq_map_chip_pin(struct kvm *kvm, unsigned int irqchip, unsigned int pin)
- {
- 	struct kvm_irq_routing_table *irq_rt;
- 
-@@ -168,8 +168,8 @@ bool __weak kvm_arch_can_set_irq_routing(struct kvm *kvm)
- 
- int kvm_set_irq_routing(struct kvm *kvm,
- 			const struct kvm_irq_routing_entry *ue,
--			unsigned nr,
--			unsigned flags)
-+			unsigned int nr,
-+			unsigned int flags)
- {
- 	struct kvm_irq_routing_table *new, *old;
- 	struct kvm_kernel_irq_routing_entry *e;
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 0afc016cc54d..c5fb79e64e75 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -216,7 +216,7 @@ void vcpu_put(struct kvm_vcpu *vcpu)
- EXPORT_SYMBOL_GPL(vcpu_put);
- 
- /* TODO: merge with kvm_arch_vcpu_should_kick */
--static bool kvm_request_needs_ipi(struct kvm_vcpu *vcpu, unsigned req)
-+static bool kvm_request_needs_ipi(struct kvm_vcpu *vcpu, unsigned int req)
- {
- 	int mode = kvm_vcpu_exiting_guest_mode(vcpu);
- 
-@@ -415,7 +415,7 @@ void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc)
- }
- #endif
- 
--static void kvm_vcpu_init(struct kvm_vcpu *vcpu, struct kvm *kvm, unsigned id)
-+static void kvm_vcpu_init(struct kvm_vcpu *vcpu, struct kvm *kvm, unsigned int id)
- {
- 	mutex_init(&vcpu->mutex);
- 	vcpu->cpu = -1;
-@@ -3454,7 +3454,7 @@ void kvm_vcpu_kick(struct kvm_vcpu *vcpu)
- 	 */
- 	if (kvm_arch_vcpu_should_kick(vcpu)) {
- 		cpu = READ_ONCE(vcpu->cpu);
--		if (cpu != me && (unsigned)cpu < nr_cpu_ids && cpu_online(cpu))
-+		if (cpu != me && (unsigned int)cpu < nr_cpu_ids && cpu_online(cpu))
- 			smp_send_reschedule(cpu);
- 	}
- out:
-@@ -5366,7 +5366,7 @@ static const struct file_operations stat_fops_per_vm = {
- 
- static int vm_stat_get(void *_offset, u64 *val)
- {
--	unsigned offset = (long)_offset;
-+	unsigned int offset = (long)_offset;
- 	struct kvm *kvm;
- 	u64 tmp_val;
- 
-@@ -5382,7 +5382,7 @@ static int vm_stat_get(void *_offset, u64 *val)
- 
- static int vm_stat_clear(void *_offset, u64 val)
- {
--	unsigned offset = (long)_offset;
-+	unsigned int offset = (long)_offset;
- 	struct kvm *kvm;
- 
- 	if (val)
-@@ -5402,7 +5402,7 @@ DEFINE_SIMPLE_ATTRIBUTE(vm_stat_readonly_fops, vm_stat_get, NULL, "%llu\n");
- 
- static int vcpu_stat_get(void *_offset, u64 *val)
- {
--	unsigned offset = (long)_offset;
-+	unsigned int offset = (long)_offset;
- 	struct kvm *kvm;
- 	u64 tmp_val;
- 
-@@ -5418,7 +5418,7 @@ static int vcpu_stat_get(void *_offset, u64 *val)
- 
- static int vcpu_stat_clear(void *_offset, u64 val)
- {
--	unsigned offset = (long)_offset;
-+	unsigned int offset = (long)_offset;
- 	struct kvm *kvm;
- 
- 	if (val)
-@@ -5654,7 +5654,7 @@ static void check_processor_compat(void *data)
- 	*c->ret = kvm_arch_check_processor_compat(c->opaque);
- }
- 
--int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
-+int kvm_init(void *opaque, unsigned int vcpu_size, unsigned int vcpu_align,
- 		  struct module *module)
- {
- 	struct kvm_cpu_compat_check c;
--- 
-2.35.1
+On 3/5/22 00:49, Jarkko Sakkinen wrote:
+> On Sat, Mar 05, 2022 at 07:37:18AM +0200, Jarkko Sakkinen wrote:
+>> On Fri, Mar 04, 2022 at 12:54:00PM -0500, Nayna Jain wrote:
+>>> Some firmware support secure boot by embedding static keys to verify the
+>>> Linux kernel during boot. However, these firmware do not expose an
+>>> interface for the kernel to load firmware keys onto the ".platform"
+>>> keyring, preventing the kernel from verifying the kexec kernel image
+>>> signature.
+>>>
+>>> This patchset exports load_certificate_list() and defines a new function
+>>> load_builtin_platform_cert() to load compiled in certificates onto the
+>>> ".platform" keyring.
+>>>
+>>> Changelog:
+>>> v9:
+>>> * Rebased on tpmdd master branch repo -
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+>>>
+>>> v8:
+>>> * Includes Jarkko's feedback on patch description and removed Reported-by
+>>> for Patch 1.
+>>>
+>>> v7:
+>>> * Incldues Jarkko's feedback on patch description for Patch 1 and 3.
+>>>
+>>> v6:
+>>> * Includes Jarkko's feedback:
+>>>   * Split Patch 2 into two.
+>>>   * Update Patch description.
+>>>
+>>> v5:
+>>> * Renamed load_builtin_platform_cert() to load_platform_certificate_list()
+>>> and config INTEGRITY_PLATFORM_BUILTIN_KEYS to INTEGRITY_PLATFORM_KEYS, as
+>>> suggested by Mimi Zohar.
+>>>
+>>> v4:
+>>> * Split into two patches as per Mimi Zohar and Dimitri John Ledkov
+>>> recommendation.
+>>>
+>>> v3:
+>>> * Included Jarkko's feedback
+>>>   ** updated patch description to include approach.
+>>>   ** removed extern for function declaration in the .h file.
+>>> * Included load_certificate_list() within #ifdef CONFIG_KEYS condition.
+>>>
+>>> v2:
+>>> * Fixed the error reported by kernel test robot
+>>> * Updated patch description based on Jarkko's feedback.
+>>>
+>>> Nayna Jain (3):
+>>>    certs: export load_certificate_list() to be used outside certs/
+>>>    integrity: make integrity_keyring_from_id() non-static
+>>>    integrity: support including firmware ".platform" keys at build time
+>>>
+>>>   certs/Makefile                                |  5 ++--
+>>>   certs/blacklist.c                             |  1 -
+>>>   certs/common.c                                |  2 +-
+>>>   certs/common.h                                |  9 -------
+>>>   certs/system_keyring.c                        |  1 -
+>>>   include/keys/system_keyring.h                 |  6 +++++
+>>>   security/integrity/Kconfig                    | 10 +++++++
+>>>   security/integrity/Makefile                   | 15 ++++++++++-
+>>>   security/integrity/digsig.c                   |  2 +-
+>>>   security/integrity/integrity.h                |  6 +++++
+>>>   .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
+>>>   .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
+>>>   12 files changed, 90 insertions(+), 16 deletions(-)
+>>>   delete mode 100644 certs/common.h
+>>>   create mode 100644 security/integrity/platform_certs/platform_cert.S
+>>>
+>>>
+>>> base-commit: c9e54f38976a1c0ec69c0a6208b3fd55fceb01d1
+>>> -- 
+>>> 2.27.0
+>> Thank you, applied.
+>>
+>> BR, Jarkko
+> You need to fix this:
+>
+> WARNING: externs should be avoided in .c files
+> #129: FILE: security/integrity/platform_certs/platform_keyring.c:19:
+> +extern __initconst const unsigned long platform_certificate_list_size;
+
+Yes, because I followed the same convention as used for system keyring 
+certs. Following externs are defined in system_keyring.c for referencing 
+variables defined in .S file.
+
+extern __initconst const u8 system_certificate_list[];
+extern __initconst const unsigned long system_certificate_list_size;
+extern __initconst const unsigned long module_cert_size;
+
+Thanks & Regards,
+
+     - Nayna
 

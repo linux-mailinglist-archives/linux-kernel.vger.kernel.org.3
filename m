@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC104CEA9D
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 11:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ED94CEAA3
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 11:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233265AbiCFKzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 05:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S233266AbiCFK6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 05:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiCFKzj (ORCPT
+        with ESMTP id S230380AbiCFK6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 05:55:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 517D95131F
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 02:54:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646564086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6C+14RT/WBu/+yhSoFqCrDNXOq/wjuT0/qYJr4t18Zo=;
-        b=NtGEoeSWuWyC4w8LVSEho9ZdhEKlYyB+WyGwV3cWAm4jUrRf62KEtIKtnevOVERPo6Pctt
-        JtEEoqj+wLz8UJ+ebjev8FqBmWCddutipPOQ1s4PfOU/PwmXzjhxHnN7BcPCSMY/FUMQ9T
-        dZAanj+AS46O+X8tbxdZymmw3ECYxbk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-354-p2wh5w0zNHCENBnLgi_j4A-1; Sun, 06 Mar 2022 05:54:41 -0500
-X-MC-Unique: p2wh5w0zNHCENBnLgi_j4A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C2F78659;
-        Sun,  6 Mar 2022 10:54:40 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 73B271F467;
-        Sun,  6 Mar 2022 10:54:40 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] More KVM fixes for Linux 5.17-rc7
-Date:   Sun,  6 Mar 2022 05:54:39 -0500
-Message-Id: <20220306105439.141939-1-pbonzini@redhat.com>
+        Sun, 6 Mar 2022 05:58:11 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B510251327;
+        Sun,  6 Mar 2022 02:57:19 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id u61so25627525ybi.11;
+        Sun, 06 Mar 2022 02:57:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aHEq+uTl6nfvsjsO/RJcNNeHwQ4EKazLFhLjmEVQatc=;
+        b=MxBksCesBDIcCWl+hkBYg/w6miXRG9Q5QrE5gjytZ6YKublGRH9IYnkpD0RzjgIkMM
+         Ybh0KOf6dtjpuq9kCTt4E7V1UfmygXNWfCINHRLa08wpRGCs0lNcyPvbRDZnLNBkV84z
+         rj/Glxe5SM5cHaRqyBdtvKL/RDdDkPsU1uTZyeclgHZ9C67hEibAWAanMAmVw/zICM95
+         Vqtoo6CNXnH63pboR78m7cZjfQucUP7CbDCNbHvoKKbYX0FxBx4F00WxDrVzw4YvAFhx
+         xCwFfhPf+Dj9bUr7WHxHXTYjFqaNzTPfYhsppMAyzrL/NFBXtnTOcfUxcW2Bnb0Uv1dD
+         DdCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aHEq+uTl6nfvsjsO/RJcNNeHwQ4EKazLFhLjmEVQatc=;
+        b=XL1OM3ZEJfK7rrxZKf7g0hayTwOR6wP+dNqk9POXnnQOeQOfhKp1iXtpHCLXu+CioD
+         m6YOlr6DUXe7D5aINqNanqz+LCH2za8lS/58/OCP9/7bhmtoXC6lP0vUMI59CTf+hrJh
+         Famq5Mvr+pJM3RL6g9debJ+fiwX1Gz2IBRLB3g6Iy8zr/P0ojmjz5tvg9lJCdfT3f917
+         36MNPQfehZUMrDKZZuFa3gtyYigv3k1tXDlkajeGiCZRs5O9XqBkj1EoKFDKutWP/Mtz
+         3R/7yehGZ8NQb2iRjw+/hWEcT6c1dZj7+Q7SMMGHzzE1LER31IwmEk4lpaANjvHraMBC
+         GbTg==
+X-Gm-Message-State: AOAM530/w+CpZ887AQ5PgcCmBCWoaJkuPjQX4kNcin10Pxjc1KiaiXFP
+        k3LEry7hAXnBKiYbpS/tNAa2oCuWaTF/Kp2aORTEKLDkyBe1ng==
+X-Google-Smtp-Source: ABdhPJybb2kdKRoB/rsyuepmnmiAe86JSY4KXc40Fc9E2GwkqLNQDoZvLstL653EXSTGn3ccBwMmArYLPv0I+kbebCQ=
+X-Received: by 2002:a25:a064:0:b0:629:4589:ed3 with SMTP id
+ x91-20020a25a064000000b0062945890ed3mr299260ybh.301.1646564238978; Sun, 06
+ Mar 2022 02:57:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAFQXTv2B10=i6DMV1iJpOT-Mj9F93hOi_415cn49N6X_yDFw2g@mail.gmail.com>
+ <YiSOjGLzMCvKOm0G@kroah.com>
+In-Reply-To: <YiSOjGLzMCvKOm0G@kroah.com>
+From:   Yunhao Tian <t123yh.xyz@gmail.com>
+Date:   Sun, 6 Mar 2022 18:57:08 +0800
+Message-ID: <CAFQXTv1CACLRB-Tx07pR4xFNQncdq=i7Q7=vQzgD3hpdehr7cQ@mail.gmail.com>
+Subject: Re: PREEMPT_RT causes scheduling errors with f_rndis USB gadget
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B43=E6=9C=886=E6=
+=97=A5=E5=91=A8=E6=97=A5 18:36=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Sun, Mar 06, 2022 at 06:17:54PM +0800, Yunhao Tian wrote:
+> > Hi everyone,
+> >
+> > I'm using Linux 5.15.24-rt31 kernel with PREEMPT_RT enabled, on my
+> > RK3308 board. I set up f_rndis gadget with the following script, and
+> > plugged my board to a x86 Linux computer running 5.15.25 kernel:
+>
+> Does the same thing happen with the non-rt kernel?
+>
+> thanks,
+>
+> greg k-h
 
-The following changes since commit ece32a75f003464cad59c26305b4462305273d70:
+Hi Greg,
 
-  Merge tag 'kvmarm-fixes-5.17-4' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2022-02-25 09:49:30 -0500)
+Thanks for your reply!
 
-are available in the Git repository at:
+This doesn't happen to non-rt kernel. It will only happen when
+PREEMPT_RT is turned on, with rt kernel.
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
-
-for you to fetch changes up to 8d25b7beca7ed6ca34f53f0f8abd009e2be15d94:
-
-  KVM: x86: pull kvm->srcu read-side to kvm_arch_vcpu_ioctl_run (2022-03-02 10:55:58 -0500)
-
-----------------------------------------------------------------
-x86 guest:
-
-* Tweaks to the paravirtualization code, to avoid using them
-when they're pointless or harmful
-
-x86 host:
-
-* Fix for SRCU lockdep splat
-
-* Brown paper bag fix for the propagation of errno
-
-----------------------------------------------------------------
-Dexuan Cui (1):
-      x86/kvmclock: Fix Hyper-V Isolated VM's boot issue when vCPUs > 64
-
-Li RongQing (1):
-      KVM: x86: Yield to IPI target vCPU only if it is busy
-
-Like Xu (1):
-      KVM: x86/mmu: Passing up the error state of mmu_alloc_shadow_roots()
-
-Paolo Bonzini (1):
-      KVM: x86: pull kvm->srcu read-side to kvm_arch_vcpu_ioctl_run
-
-Wanpeng Li (2):
-      x86/kvm: Don't use PV TLB/yield when mwait is advertised
-      x86/kvm: Don't waste memory if kvmclock is disabled
-
- arch/x86/kernel/kvm.c      |  4 +++-
- arch/x86/kernel/kvmclock.c |  3 +++
- arch/x86/kvm/mmu/mmu.c     |  2 +-
- arch/x86/kvm/x86.c         | 25 +++++++++++++------------
- 4 files changed, 20 insertions(+), 14 deletions(-)
-
+Regards,
+Yunhao

@@ -2,133 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8941E4CEC16
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7660B4CEC19
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbiCFPaX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 6 Mar 2022 10:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        id S233740AbiCFPcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 10:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiCFPaU (ORCPT
+        with ESMTP id S230420AbiCFPcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 10:30:20 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4E7403F9
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 07:29:28 -0800 (PST)
-Date:   Sun, 06 Mar 2022 15:29:17 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH -next] misc: rtsx: fix build for CONFIG_PM not set
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei WANG <wei_wang@realsil.com.cn>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Message-Id: <TOXB8R.SKOD9EMPEKSW1@crapouillou.net>
-In-Reply-To: <20220306151212.00003e6f@Huawei.com>
-References: <20220226222457.13668-1-rdunlap@infradead.org>
-        <CAK8P3a07PoFGC8jyRG5_CjfVPCc2T79c7Fs_WmHZEkuqtG+oPg@mail.gmail.com>
-        <449d6ceb-7308-9543-c23c-831bebffda21@infradead.org>
-        <CAK8P3a30RbSk3Y5CyRrOjfTiq0c9XGxC3qjAD0154j3a7k+xQQ@mail.gmail.com>
-        <0D5Z7R.NUOWBMRT4GQ2@crapouillou.net>
-        <CAK8P3a3=5uud3jd7N3FEAnaLapX-0OYaiscBFNEQm2hzkTmj7g@mail.gmail.com>
-        <7U5Z7R.RNKITPUWCPX32@crapouillou.net> <20220306151212.00003e6f@Huawei.com>
+        Sun, 6 Mar 2022 10:32:53 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4762540928;
+        Sun,  6 Mar 2022 07:32:01 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id t11so14567637ioi.7;
+        Sun, 06 Mar 2022 07:32:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=lTxXsLQ3/sJFqkOXAUPDqcJOvuhEL+3+rvVpOV3yWgw=;
+        b=RnGMWIJ3X7XTQvdkajhB5xVRNavoMahZJLBD9vyo0KNzdbWHGQaNf6knBDBoQ55VKT
+         F1YZYuOBsKX7jyVBVwT6yyn6ij94uvyHV75j+fGsXYREYMcGkTcobcAkuRiSpWYhyHbj
+         4apRIQoLGDHinLIEd+yHG8G1ErdUdvduAtRLBoAmOf3DsWksKa8xDilKfoZNdqxC0urv
+         8sYOAwGPAjSknRcnPCgDWuzHcloa4RF3zBgQPUqtiLbF1xLpauScZEhOgHQJQUCzcu13
+         1g46ZyUKbOOCasFMGWhP2+Arb1JT/MrH66sT0nJia2yu+1W1ufX86S1zeHHIF+9e8M+O
+         HYnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=lTxXsLQ3/sJFqkOXAUPDqcJOvuhEL+3+rvVpOV3yWgw=;
+        b=tGppqTxHMLi1QrCSoiQmmc3yLzTrXPKz6e0P7a0pkiLmrDHdrtFQ5YxZLs5yCcIyV0
+         CwGyUDyGGg4SkfrDRDY74susVcc8gZdeZrBD/6Mq+bmvkhsSbocOO6IZB3k1rHuE1cMh
+         Eg91o5pK31b2VSCkmc+xpq5CQJUs61L8rG4eQ36aRlP+Ixmmvgz7G6dyoUHIaaLYP57p
+         2yBp8zFHDmXAMf7wEGel3n4R4awGkifOMfpTx+qKd0u2CX4He0sew8Ab6sSQRXOnhl1Z
+         LrBxV7Z35i3hITzm3fCeyqEbrd+RLQraoIwlbn8/b82mggxQ1CrQ2RVl+eVNwE5QZxQx
+         T+IA==
+X-Gm-Message-State: AOAM530FfYYbQdazA3wcJiV+/0VQGq7G2KssEAaza6qBI5RPIpPyOHzl
+        B2D5h8EnxnS61ojkuGzVaDB6eKFeVJ1lQYW/JH8LRo+GIZDinw==
+X-Google-Smtp-Source: ABdhPJyurIugi2NpH/AHJdPJSjrCSnkjk+CgFnV6VItjl+2OHue5fkK5G7G6tY9vo60gMRNBnEb4/q68ZQ/zEQ56f2o=
+X-Received: by 2002:a05:6638:168b:b0:314:7a8d:19d4 with SMTP id
+ f11-20020a056638168b00b003147a8d19d4mr7354926jat.199.1646580720634; Sun, 06
+ Mar 2022 07:32:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220301145233.3689119-1-arnd@kernel.org> <CA+icZUW8N25F_9_DVhRiQoe6rnvARH2AhKJgjKeYyNmdz5t_Lw@mail.gmail.com>
+In-Reply-To: <CA+icZUW8N25F_9_DVhRiQoe6rnvARH2AhKJgjKeYyNmdz5t_Lw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 6 Mar 2022 16:31:24 +0100
+Message-ID: <CA+icZUUM1v1FCaJDk1BaRN9+uOQD53r5Rwcv=ESQHhdN9QRedA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] [v3] Kbuild: move to -std=gnu11
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+On Fri, Mar 4, 2022 at 5:25 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+[ ... ]
+> When I saw the first patches in this area, I was thinking what about
+> the tools/ build-system?
+> This ECO system has its own rules.
+>
 
-Le dim., mars 6 2022 at 15:12:12 +0000, Jonathan Cameron 
-<Jonathan.Cameron@Huawei.com> a écrit :
-> On Sun, 27 Feb 2022 17:56:31 +0000
-> Paul Cercueil <paul@crapouillou.net> wrote:
-> 
->>  Le dim., févr. 27 2022 at 18:51:38 +0100, Arnd Bergmann
->>  <arnd@arndb.de> a écrit :
->>  > On Sun, Feb 27, 2022 at 6:46 PM Paul Cercueil 
->> <paul@crapouillou.net>
->>  > wrote:
->>  >>  Le dim., févr. 27 2022 at 18:30:16 +0100, Arnd Bergmann
->>  >>
->>  >>  There could be a DEFINE_DEV_PM_OPS(), but I don't think that's
->>  >> really
->>  >>  needed - you can very well declare your struct dev_pm_ops 
->> without
->>  >> using
->>  >>  one of these macros. Just make sure to use the 
->> SYSTEM_SLEEP_PM_OPS /
->>  >>  RUNTIME_PM_OPS macros for the callbacks and pm_ptr() for the
->>  >> device.pm
->>  >>  pointer.
->>  >
->>  > Ah, of course, so it comes down to
->>  > s/SET_SYSTEM_SLEEP_PM_OPS/SYSTEM_SLEEP_PM_OPS/ while
->>  > removing all the #ifdef an __maybe_unused annotations. The 
->> pm_ptr()
->>  > in driver.pm makes this slightly more optimized AFAICT, but has no
->>  > effect on behavior, right?
->> 
->>  The use of SYSTEM_SLEEP_PM_OPS makes sure that the callbacks are
->>  dropped if the dev_pm_ops is dead code, and the pm_ptr() must be 
->> used
->>  for the compiler to know that the dev_pm_ops is dead code.
->> 
->>  -Paul
->> 
->> 
-> 
-> Hi Paul,
-> 
-> We have one remaining case which is still ugly to do.
-> Where both SYSTEM_SLEEP_PM_OPS/RUNTIME_PM_OPS are set and
-> the dev_pm_ops structure is exported.
-> 
-> For that one we still need to expose #ifdef fun in the
-> drivers I think.
-> 
-> Any suggestions on a clean solution for that?
+My other goal was to build perf with my selfmade or distro LLVM/Clang
+and -std=gnu11.
 
-Use the _EXPORT_DEV_PM_OPS() macro?
+I was able to do so:
 
-If you make it call __EXPORT_SYMBOL() (with two underscores instead of 
-one) you can specify the namespace as well. All you need then is a nice 
-wrapper macro in pm_runtime.h, that can be used in the driver.
+$ git log --oneline --no-merges v5.17-rc6..for-5.17/tools-std_gnu11-dileks-v2
+2d99b1cfa897 (for-5.17/tools-std_gnu11-dileks-v2) perf: Use -std=gnu11
+c345a183c4ef tools: libtraceevent: Use -std=gnu11
+26f77082f233 tools: libsubcmd: Use -std=gnu11
+aaba58ec81c8 tools: libbpf: Use -std=gnu11
+ffc800af3be4 tools: libapi: Use -std=gnu11
 
-Cheers,
--Paul
+For perf/libperl-support I needed an extra patch:
 
-> Currently I have this...
-> 
-> #ifdef CONFIG_PM
-> const struct dev_pm_ops bmc150_magn_pm_ops = {
-> 	SYSTEM_SLEEP_PM_OPS(...)
-> 	RUNTIME_PM_OPS(...)
-> };
-> EXPORT_SYMBOL_NS(bmc150_magn_pm_ops, IIO_BMC150_MAGN);
-> #else
-> static const __maybe_unused dev_pm_ops bmc150_magn_pm_ops = {
-> 	SYSTEM_SLEEP_PM_OPS(...)
-> 	RUNTIME_PM_OPS(...)
-> };
-> #endif
-> Not super clean but perhaps we do need
-> EXPORT_NS_DEV_PM_OPS
-> EXPORT_NS_GPL_DEV_PM_OPS
-> and potentially the non namespaced versions.
-> 
-> Thanks,
-> 
-> Jonathan
+$ git log --oneline --no-merges
+v5.17-rc6..for-5.17/perf-libperl_support-clang-dileks
+316a1917ec05 (for-5.17/perf-libperl_support-clang-dileks) perf: Fix
+libperl support with clang and perl v5.34
 
+For details see [1].
 
+I can send the patches if someone wants them.
+
+[1] https://marc.info/?t=164646683300002&r=1&w=2

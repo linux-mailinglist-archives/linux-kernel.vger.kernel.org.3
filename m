@@ -2,108 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7660B4CEC19
-	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9364CEC20
+	for <lists+linux-kernel@lfdr.de>; Sun,  6 Mar 2022 16:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbiCFPcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 10:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
+        id S233714AbiCFPiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 10:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiCFPcx (ORCPT
+        with ESMTP id S231271AbiCFPio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 10:32:53 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4762540928;
-        Sun,  6 Mar 2022 07:32:01 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id t11so14567637ioi.7;
-        Sun, 06 Mar 2022 07:32:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=lTxXsLQ3/sJFqkOXAUPDqcJOvuhEL+3+rvVpOV3yWgw=;
-        b=RnGMWIJ3X7XTQvdkajhB5xVRNavoMahZJLBD9vyo0KNzdbWHGQaNf6knBDBoQ55VKT
-         F1YZYuOBsKX7jyVBVwT6yyn6ij94uvyHV75j+fGsXYREYMcGkTcobcAkuRiSpWYhyHbj
-         4apRIQoLGDHinLIEd+yHG8G1ErdUdvduAtRLBoAmOf3DsWksKa8xDilKfoZNdqxC0urv
-         8sYOAwGPAjSknRcnPCgDWuzHcloa4RF3zBgQPUqtiLbF1xLpauScZEhOgHQJQUCzcu13
-         1g46ZyUKbOOCasFMGWhP2+Arb1JT/MrH66sT0nJia2yu+1W1ufX86S1zeHHIF+9e8M+O
-         HYnw==
+        Sun, 6 Mar 2022 10:38:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 629A4DF20
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 07:37:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646581071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+EG5ZoN5dKDEhImu4B6iOHSdTTgzb/PcHdEoxTJUFR4=;
+        b=M1APDMRAI9zkqsSvXwNunHrWq0cMUWgkb40KNPbyNMfJcsLFzBH9d8zNgkN86Tw8IsCkfk
+        qGR7pm5vyLyyYzCBSebiD+4X0wWK1lLF7ovieEsWePqg4H35OAdpapSddQdV2LXsY6w4qB
+        XzDCc3X36869JHI+r7UVG6yOAgRP4xM=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-257-sH5cqo3mOX-y5ur6fIYe4Q-1; Sun, 06 Mar 2022 10:37:49 -0500
+X-MC-Unique: sH5cqo3mOX-y5ur6fIYe4Q-1
+Received: by mail-oi1-f198.google.com with SMTP id s21-20020a056808009500b002d9b146c8d6so777845oic.5
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 07:37:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=lTxXsLQ3/sJFqkOXAUPDqcJOvuhEL+3+rvVpOV3yWgw=;
-        b=tGppqTxHMLi1QrCSoiQmmc3yLzTrXPKz6e0P7a0pkiLmrDHdrtFQ5YxZLs5yCcIyV0
-         CwGyUDyGGg4SkfrDRDY74susVcc8gZdeZrBD/6Mq+bmvkhsSbocOO6IZB3k1rHuE1cMh
-         Eg91o5pK31b2VSCkmc+xpq5CQJUs61L8rG4eQ36aRlP+Ixmmvgz7G6dyoUHIaaLYP57p
-         2yBp8zFHDmXAMf7wEGel3n4R4awGkifOMfpTx+qKd0u2CX4He0sew8Ab6sSQRXOnhl1Z
-         LrBxV7Z35i3hITzm3fCeyqEbrd+RLQraoIwlbn8/b82mggxQ1CrQ2RVl+eVNwE5QZxQx
-         T+IA==
-X-Gm-Message-State: AOAM530FfYYbQdazA3wcJiV+/0VQGq7G2KssEAaza6qBI5RPIpPyOHzl
-        B2D5h8EnxnS61ojkuGzVaDB6eKFeVJ1lQYW/JH8LRo+GIZDinw==
-X-Google-Smtp-Source: ABdhPJyurIugi2NpH/AHJdPJSjrCSnkjk+CgFnV6VItjl+2OHue5fkK5G7G6tY9vo60gMRNBnEb4/q68ZQ/zEQ56f2o=
-X-Received: by 2002:a05:6638:168b:b0:314:7a8d:19d4 with SMTP id
- f11-20020a056638168b00b003147a8d19d4mr7354926jat.199.1646580720634; Sun, 06
- Mar 2022 07:32:00 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=+EG5ZoN5dKDEhImu4B6iOHSdTTgzb/PcHdEoxTJUFR4=;
+        b=MUjhtGuJm75+EjOLIlp4xwwONtoaxrYux3g8Fdx9xZULikt9VztPlAiaf2Thl47LHM
+         Jd4fRj+bQyP2xLVVeo2N1PtiOErEQxLZ/YFLdjnal3C8sxbqRT4ZkStpORrnEFfPjuMX
+         Q87x2QACrY10A2RG32YvGoNRY8G4KSv40KJgWhB43dcr5IiBGpTTC3wZNDan/0mRJ2fI
+         TB5jP8+tHRifWYLOZ+2bY6zyTemciL+tUIDwHY/vqzdyforJ4WoNF4HbQjEtAyWLEUPc
+         3GCpl1Sxa6mNzhj7hJNRS2TCwGBfkcmbYKetnmxIMubIua77sapdoI3NDHtJUVbFiCmc
+         C/vw==
+X-Gm-Message-State: AOAM530q0q1yhqO049JiZf4KTXbFT3MLfPL8HldiZS2HxB+YRh/K6CpJ
+        z3+9JKGOG72NltKb9B2NBjxmEmkW+Z+c7FFKbNXrxOAs/qbIMkng7VtVI0xKLqPFkPlWLd68hGh
+        QHfFvjcyuBWlgmiR0fqdBJZ+Q
+X-Received: by 2002:a05:6808:128a:b0:2d7:8f0b:e9a8 with SMTP id a10-20020a056808128a00b002d78f0be9a8mr15583076oiw.174.1646581069141;
+        Sun, 06 Mar 2022 07:37:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyreqCZKQRU6DE2UD+nV7uwMFiFA/fm+L0rSDFLM2D9m2xql4ezmaJW0qh4SxoQwGlSM2Qd0w==
+X-Received: by 2002:a05:6808:128a:b0:2d7:8f0b:e9a8 with SMTP id a10-20020a056808128a00b002d78f0be9a8mr15583063oiw.174.1646581068891;
+        Sun, 06 Mar 2022 07:37:48 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id u3-20020a056808114300b002d51f9b3263sm5328725oiu.28.2022.03.06.07.37.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 07:37:48 -0800 (PST)
+Subject: Re: [PATCH V1 RESEND 2/4] Documentation: devicetree: bindings: add
+ binding for PCIe endpoint bus
+To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, robh@kernel.org
+Cc:     yilun.xu@intel.com, maxz@xilinx.com, sonal.santan@xilinx.com,
+        yliu@xilinx.com, michal.simek@xilinx.com, stefanos@xilinx.com,
+        mdf@kernel.org, dwmw2@infradead.org, linux-kernel@vger.kernel.org,
+        Max Zhen <max.zhen@xilinx.com>
+References: <20220305052304.726050-1-lizhi.hou@xilinx.com>
+ <20220305052304.726050-3-lizhi.hou@xilinx.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <e4c058e9-6549-4ce2-be05-d09d5b1a9fc9@redhat.com>
+Date:   Sun, 6 Mar 2022 07:37:46 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220301145233.3689119-1-arnd@kernel.org> <CA+icZUW8N25F_9_DVhRiQoe6rnvARH2AhKJgjKeYyNmdz5t_Lw@mail.gmail.com>
-In-Reply-To: <CA+icZUW8N25F_9_DVhRiQoe6rnvARH2AhKJgjKeYyNmdz5t_Lw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sun, 6 Mar 2022 16:31:24 +0100
-Message-ID: <CA+icZUUM1v1FCaJDk1BaRN9+uOQD53r5Rwcv=ESQHhdN9QRedA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] [v3] Kbuild: move to -std=gnu11
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        David Sterba <dsterba@suse.com>, Alex Shi <alexs@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220305052304.726050-3-lizhi.hou@xilinx.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 5:25 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-[ ... ]
-> When I saw the first patches in this area, I was thinking what about
-> the tools/ build-system?
-> This ECO system has its own rules.
+Lizhi,
+
+Sorry for the delay, I am fighting with checking this with 'make 
+dt_binding_check'
+
+There is a recent failure in linux-next around display/mediatek,* 
+between next-20220301 and next-20220302 that I am bisecting.
+
+There are a couple of checkpatch --strict warnings for this set, the 
+obvious one is adding to the MAINTAINERS for new files.
+
+Tom
+
+On 3/4/22 9:23 PM, Lizhi Hou wrote:
+> Create device tree binding document for PCIe endpoint bus.
 >
+> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+> ---
+>   .../devicetree/bindings/bus/pci-ep-bus.yaml   | 72 +++++++++++++++++++
+>   1 file changed, 72 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+> new file mode 100644
+> index 000000000000..0ca96298db6f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bus/pci-ep-bus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: PCIe Endpoint Bus binding
+> +
+> +description: |
+> +  PCIe device may use flattened device tree to describe apertures in its
+> +  PCIe BARs. The Bus PCIe endpoint node is created and attached under the
+> +  device tree root node for this kind of device. Then the flatten device
+> +  tree overlay for this device is attached under the endpoint node.
+> +
+> +  The aperture address which is under the endpoint node consists of BAR
+> +  index and offset. It uses the following encoding:
+> +
+> +    0xIooooooo 0xoooooooo
+> +
+> +  Where:
+> +
+> +    I = BAR index
+> +    oooooo oooooooo = BAR offset
+> +
+> +  The endpoint is compatible with 'simple-bus' and contains 'ranges'
+> +  property for translating aperture address to CPU address.
+> +
+> +allOf:
+> +  - $ref: /schemas/simple-bus.yaml#
+> +
+> +maintainers:
+> +  - Lizhi Hou <lizhi.hou@xilinx.com>
+> +
+> +properties:
+> +  compatible:
+> +    contains:
+> +      const: pci-ep-bus
+> +
+> +  "#address-cells":
+> +    const: 2
+> +
+> +  "#size-cells":
+> +    const: 2
+> +
+> +  ranges: true
+> +
+> +patternProperties:
+> +  "^.*@[0-9a-f]+$":
+> +    description: hardware apertures belong to this device.
+> +    type: object
+> +
+> +required:
+> +  - compatible
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    bus {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        pci-ep-bus@e0000000 {
+> +            compatible = "pci-ep-bus", "simple-bus";
+> +            #address-cells = <2>;
+> +            #size-cells = <2>;
+> +            ranges = <0x0 0x0 0x0 0xe0000000 0x0 0x2000000
+> +                      0x20000000 0x0 0x0 0xe4200000 0x0 0x40000>;
+> +        };
+> +    };
 
-My other goal was to build perf with my selfmade or distro LLVM/Clang
-and -std=gnu11.
-
-I was able to do so:
-
-$ git log --oneline --no-merges v5.17-rc6..for-5.17/tools-std_gnu11-dileks-v2
-2d99b1cfa897 (for-5.17/tools-std_gnu11-dileks-v2) perf: Use -std=gnu11
-c345a183c4ef tools: libtraceevent: Use -std=gnu11
-26f77082f233 tools: libsubcmd: Use -std=gnu11
-aaba58ec81c8 tools: libbpf: Use -std=gnu11
-ffc800af3be4 tools: libapi: Use -std=gnu11
-
-For perf/libperl-support I needed an extra patch:
-
-$ git log --oneline --no-merges
-v5.17-rc6..for-5.17/perf-libperl_support-clang-dileks
-316a1917ec05 (for-5.17/perf-libperl_support-clang-dileks) perf: Fix
-libperl support with clang and perl v5.34
-
-For details see [1].
-
-I can send the patches if someone wants them.
-
-[1] https://marc.info/?t=164646683300002&r=1&w=2

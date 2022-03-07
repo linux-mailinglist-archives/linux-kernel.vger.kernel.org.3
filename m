@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B8F4CFA03
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD7E4CF7EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238193AbiCGKMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S239145AbiCGJtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238764AbiCGJyM (ORCPT
+        with ESMTP id S239176AbiCGJjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:54:12 -0500
+        Mon, 7 Mar 2022 04:39:18 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD2378055;
-        Mon,  7 Mar 2022 01:45:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C13670CE0;
+        Mon,  7 Mar 2022 01:34:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 306766137D;
-        Mon,  7 Mar 2022 09:45:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD7CC340E9;
-        Mon,  7 Mar 2022 09:45:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D5506116E;
+        Mon,  7 Mar 2022 09:33:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A067C340E9;
+        Mon,  7 Mar 2022 09:33:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646323;
-        bh=IiS7yHaWm4QOG2+YIP3ZKm2D0uUzYZnty3HNZZCfhAo=;
+        s=korg; t=1646645630;
+        bh=JmT9QfBOyZJcBBwWxnPYAC63NAd5BxcKK3R707o9fKY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TCISR3ApkT7K7m92tXZzSRAGvb8gl9HOjlUe8Fcot5THt/yKa+vpEtcP8BnMtyHmX
-         XK9AM569VI3SWSVmD8lF5hbniqgjGT4l9KGNzCa6f0RFajw0vu78jDHC47ERY/amRf
-         rbmHCpVaXhCG2FYRmWc14KR2vXksKs1a8/fCG+BA=
+        b=tnQg0xCW/WBAsTrJYPcSwlQjHj21wCSsLzGbUJxHMijmproZBB63OTID+Sq8NZ8SA
+         vD02vcnWn+8HTY0Vj323k5zI02XiTINtt728NauKiG60zwY93s0MrpqLNsU7KKexkM
+         tmCvBYvYnagqf8S908+9naF/4m+AuzvPF4GV94yI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 205/262] iommu/amd: Use put_pages_list
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 066/105] net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
 Date:   Mon,  7 Mar 2022 10:19:09 +0100
-Message-Id: <20220307091708.549722003@linuxfoundation.org>
+Message-Id: <20220307091646.035443224@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,173 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox (Oracle) <willy@infradead.org>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit ce00eece6909c266da123fd147172d745a4f14a0 ]
+commit bd6f1fd5d33dfe5d1b4f2502d3694a7cc13f166d upstream.
 
-page->freelist is for the use of slab.  We already have the ability
-to free a list of pages in the core mm, but it requires the use of a
-list_head and for the pages to be chained together through page->lru.
-Switch the AMD IOMMU code over to using free_pages_list().
+During driver initialization, the pointer of card info, i.e. the
+variable 'ci' is required. However, the definition of
+'com20020pci_id_table' reveals that this field is empty for some
+devices, which will cause null pointer dereference when initializing
+these devices.
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-[rm: split from original patch, cosmetic tweaks]
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Link: https://lore.kernel.org/r/73af128f651aaa1f38f69e586c66765a88ad2de0.1639753638.git.robin.murphy@arm.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The following log reveals it:
+
+[    3.973806] KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+[    3.973819] RIP: 0010:com20020pci_probe+0x18d/0x13e0 [com20020_pci]
+[    3.975181] Call Trace:
+[    3.976208]  local_pci_probe+0x13f/0x210
+[    3.977248]  pci_device_probe+0x34c/0x6d0
+[    3.977255]  ? pci_uevent+0x470/0x470
+[    3.978265]  really_probe+0x24c/0x8d0
+[    3.978273]  __driver_probe_device+0x1b3/0x280
+[    3.979288]  driver_probe_device+0x50/0x370
+
+Fix this by checking whether the 'ci' is a null pointer first.
+
+Fixes: 8c14f9c70327 ("ARCNET: add com20020 PCI IDs with metadata")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/amd/io_pgtable.c | 50 ++++++++++++----------------------
- 1 file changed, 18 insertions(+), 32 deletions(-)
+ drivers/net/arcnet/com20020-pci.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
-index 4165e1372b6e..b1bf4125b0f7 100644
---- a/drivers/iommu/amd/io_pgtable.c
-+++ b/drivers/iommu/amd/io_pgtable.c
-@@ -74,26 +74,14 @@ static u64 *first_pte_l7(u64 *pte, unsigned long *page_size,
-  *
-  ****************************************************************************/
+--- a/drivers/net/arcnet/com20020-pci.c
++++ b/drivers/net/arcnet/com20020-pci.c
+@@ -136,6 +136,9 @@ static int com20020pci_probe(struct pci_
+ 		return -ENOMEM;
  
--static void free_page_list(struct page *freelist)
--{
--	while (freelist != NULL) {
--		unsigned long p = (unsigned long)page_address(freelist);
--
--		freelist = freelist->freelist;
--		free_page(p);
--	}
--}
--
--static struct page *free_pt_page(u64 *pt, struct page *freelist)
-+static void free_pt_page(u64 *pt, struct list_head *freelist)
- {
- 	struct page *p = virt_to_page(pt);
+ 	ci = (struct com20020_pci_card_info *)id->driver_data;
++	if (!ci)
++		return -EINVAL;
++
+ 	priv->ci = ci;
+ 	mm = &ci->misc_map;
  
--	p->freelist = freelist;
--
--	return p;
-+	list_add_tail(&p->lru, freelist);
- }
- 
--static struct page *free_pt_lvl(u64 *pt, struct page *freelist, int lvl)
-+static void free_pt_lvl(u64 *pt, struct list_head *freelist, int lvl)
- {
- 	u64 *p;
- 	int i;
-@@ -114,22 +102,22 @@ static struct page *free_pt_lvl(u64 *pt, struct page *freelist, int lvl)
- 		 */
- 		p = IOMMU_PTE_PAGE(pt[i]);
- 		if (lvl > 2)
--			freelist = free_pt_lvl(p, freelist, lvl - 1);
-+			free_pt_lvl(p, freelist, lvl - 1);
- 		else
--			freelist = free_pt_page(p, freelist);
-+			free_pt_page(p, freelist);
- 	}
- 
--	return free_pt_page(pt, freelist);
-+	free_pt_page(pt, freelist);
- }
- 
--static struct page *free_sub_pt(u64 *root, int mode, struct page *freelist)
-+static void free_sub_pt(u64 *root, int mode, struct list_head *freelist)
- {
- 	switch (mode) {
- 	case PAGE_MODE_NONE:
- 	case PAGE_MODE_7_LEVEL:
- 		break;
- 	case PAGE_MODE_1_LEVEL:
--		freelist = free_pt_page(root, freelist);
-+		free_pt_page(root, freelist);
- 		break;
- 	case PAGE_MODE_2_LEVEL:
- 	case PAGE_MODE_3_LEVEL:
-@@ -141,8 +129,6 @@ static struct page *free_sub_pt(u64 *root, int mode, struct page *freelist)
- 	default:
- 		BUG();
- 	}
--
--	return freelist;
- }
- 
- void amd_iommu_domain_set_pgtable(struct protection_domain *domain,
-@@ -350,7 +336,7 @@ static u64 *fetch_pte(struct amd_io_pgtable *pgtable,
- 	return pte;
- }
- 
--static struct page *free_clear_pte(u64 *pte, u64 pteval, struct page *freelist)
-+static void free_clear_pte(u64 *pte, u64 pteval, struct list_head *freelist)
- {
- 	u64 *pt;
- 	int mode;
-@@ -361,12 +347,12 @@ static struct page *free_clear_pte(u64 *pte, u64 pteval, struct page *freelist)
- 	}
- 
- 	if (!IOMMU_PTE_PRESENT(pteval))
--		return freelist;
-+		return;
- 
- 	pt   = IOMMU_PTE_PAGE(pteval);
- 	mode = IOMMU_PTE_MODE(pteval);
- 
--	return free_sub_pt(pt, mode, freelist);
-+	free_sub_pt(pt, mode, freelist);
- }
- 
- /*
-@@ -380,7 +366,7 @@ static int iommu_v1_map_page(struct io_pgtable_ops *ops, unsigned long iova,
- 			  phys_addr_t paddr, size_t size, int prot, gfp_t gfp)
- {
- 	struct protection_domain *dom = io_pgtable_ops_to_domain(ops);
--	struct page *freelist = NULL;
-+	LIST_HEAD(freelist);
- 	bool updated = false;
- 	u64 __pte, *pte;
- 	int ret, i, count;
-@@ -400,9 +386,9 @@ static int iommu_v1_map_page(struct io_pgtable_ops *ops, unsigned long iova,
- 		goto out;
- 
- 	for (i = 0; i < count; ++i)
--		freelist = free_clear_pte(&pte[i], pte[i], freelist);
-+		free_clear_pte(&pte[i], pte[i], &freelist);
- 
--	if (freelist != NULL)
-+	if (!list_empty(&freelist))
- 		updated = true;
- 
- 	if (count > 1) {
-@@ -437,7 +423,7 @@ static int iommu_v1_map_page(struct io_pgtable_ops *ops, unsigned long iova,
- 	}
- 
- 	/* Everything flushed out, free pages now */
--	free_page_list(freelist);
-+	put_pages_list(&freelist);
- 
- 	return ret;
- }
-@@ -499,7 +485,7 @@ static void v1_free_pgtable(struct io_pgtable *iop)
- {
- 	struct amd_io_pgtable *pgtable = container_of(iop, struct amd_io_pgtable, iop);
- 	struct protection_domain *dom;
--	struct page *freelist = NULL;
-+	LIST_HEAD(freelist);
- 
- 	if (pgtable->mode == PAGE_MODE_NONE)
- 		return;
-@@ -516,9 +502,9 @@ static void v1_free_pgtable(struct io_pgtable *iop)
- 	BUG_ON(pgtable->mode < PAGE_MODE_NONE ||
- 	       pgtable->mode > PAGE_MODE_6_LEVEL);
- 
--	freelist = free_sub_pt(pgtable->root, pgtable->mode, freelist);
-+	free_sub_pt(pgtable->root, pgtable->mode, &freelist);
- 
--	free_page_list(freelist);
-+	put_pages_list(&freelist);
- }
- 
- static struct io_pgtable *v1_alloc_pgtable(struct io_pgtable_cfg *cfg, void *cookie)
--- 
-2.34.1
-
 
 

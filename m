@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036234CF4C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405E84CF578
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbiCGJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
+        id S237412AbiCGJ2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbiCGJUz (ORCPT
+        with ESMTP id S236891AbiCGJZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:20:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9F652E0C;
-        Mon,  7 Mar 2022 01:19:58 -0800 (PST)
+        Mon, 7 Mar 2022 04:25:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5635AED8;
+        Mon,  7 Mar 2022 01:23:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81015B810B2;
-        Mon,  7 Mar 2022 09:19:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F97C340F3;
-        Mon,  7 Mar 2022 09:19:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4F9FB810B2;
+        Mon,  7 Mar 2022 09:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A8DC36AE3;
+        Mon,  7 Mar 2022 09:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644796;
-        bh=iBvjP1rGofaAshTMa1YLhVUOkhCZApTWJjLw46wGUmo=;
+        s=korg; t=1646645028;
+        bh=LjmCCzyJ4aPcXWTC21PM/lRsM5r1gRl3bn7TDBYxgqQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hKm9LpGjIRIPhtorSh93goe+wmdRxnSxk5y9rn6BPkcYJIVSQjU+3C2jjh1l68Uuh
-         9BhGJa+BYog1cLwHXG+zOLAEMZTfBw0o2B1Yv8OhZfAt3LMKIFJ2alJmEVysUbBMR9
-         GCY7ED19860VymjJj3WRaCLbJBhNS9zQKVatAc1M=
+        b=W0lBnPZVaWltVQR/wnnLdar9lLHE6KiMZzyTjkGGZvk+DURVHdTu5ovGVmg8bq4CD
+         Amml5CbBpSBblw1PIMQ6IFE3a3UHiLsmOry6HxuVqTyjczJZPQUuDZBmB0FagYm/jM
+         /8CJfgx90jN9edIX63t5Rmin31IwpaeNxRXiLoUQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.9 24/32] can: gs_usb: change active_channelss type from atomic_t to u8
+        stable@vger.kernel.org, Zhen Ni <nizhen@uniontech.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 15/51] ALSA: intel_hdmi: Fix reference to PCM buffer address
 Date:   Mon,  7 Mar 2022 10:18:50 +0100
-Message-Id: <20220307091635.123858288@linuxfoundation.org>
+Message-Id: <20220307091637.426541540@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
-References: <20220307091634.434478485@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Zhen Ni <nizhen@uniontech.com>
 
-commit 035b0fcf02707d3c9c2890dc1484b11aa5335eb1 upstream.
+commit 0aa6b294b312d9710804679abd2c0c8ca52cc2bc upstream.
 
-The driver uses an atomic_t variable: gs_usb:active_channels to keep
-track of the number of opened channels in order to only allocate
-memory for the URBs when this count changes from zero to one.
+PCM buffers might be allocated dynamically when the buffer
+preallocation failed or a larger buffer is requested, and it's not
+guaranteed that substream->dma_buffer points to the actually used
+buffer.  The driver needs to refer to substream->runtime->dma_addr
+instead for the buffer address.
 
-However, the driver does not decrement the counter when an error
-occurs in gs_can_open(). This issue is fixed by changing the type from
-atomic_t to u8 and by simplifying the logic accordingly.
-
-It is safe to use an u8 here because the network stack big kernel lock
-(a.k.a. rtnl_mutex) is being hold. For details, please refer to [1].
-
-[1] https://lore.kernel.org/linux-can/CAMZ6Rq+sHpiw34ijPsmp7vbUpDtJwvVtdV7CvRZJsLixjAFfrg@mail.gmail.com/T/#t
-
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Link: https://lore.kernel.org/all/20220214234814.1321599-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220302074241.30469-1-nizhen@uniontech.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/gs_usb.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ sound/x86/intel_hdmi_audio.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -198,8 +198,8 @@ struct gs_can {
- struct gs_usb {
- 	struct gs_can *canch[GS_MAX_INTF];
- 	struct usb_anchor rx_submitted;
--	atomic_t active_channels;
- 	struct usb_device *udev;
-+	u8 active_channels;
- };
- 
- /* 'allocate' a tx context.
-@@ -597,7 +597,7 @@ static int gs_can_open(struct net_device
- 	if (rc)
- 		return rc;
- 
--	if (atomic_add_return(1, &parent->active_channels) == 1) {
-+	if (!parent->active_channels) {
- 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
- 			struct urb *urb;
- 			u8 *buf;
-@@ -698,6 +698,7 @@ static int gs_can_open(struct net_device
- 
- 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
- 
-+	parent->active_channels++;
- 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
- 		netif_start_queue(netdev);
- 
-@@ -713,7 +714,8 @@ static int gs_can_close(struct net_devic
- 	netif_stop_queue(netdev);
- 
- 	/* Stop polling */
--	if (atomic_dec_and_test(&parent->active_channels))
-+	parent->active_channels--;
-+	if (!parent->active_channels)
- 		usb_kill_anchored_urbs(&parent->rx_submitted);
- 
- 	/* Stop sending URBs */
-@@ -992,8 +994,6 @@ static int gs_usb_probe(struct usb_inter
- 
- 	init_usb_anchor(&dev->rx_submitted);
- 
--	atomic_set(&dev->active_channels, 0);
--
- 	usb_set_intfdata(intf, dev);
- 	dev->udev = interface_to_usbdev(intf);
+--- a/sound/x86/intel_hdmi_audio.c
++++ b/sound/x86/intel_hdmi_audio.c
+@@ -1310,7 +1310,7 @@ static int had_pcm_mmap(struct snd_pcm_s
+ {
+ 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+ 	return remap_pfn_range(vma, vma->vm_start,
+-			substream->dma_buffer.addr >> PAGE_SHIFT,
++			substream->runtime->dma_addr >> PAGE_SHIFT,
+ 			vma->vm_end - vma->vm_start, vma->vm_page_prot);
+ }
  
 
 

@@ -2,162 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DD64D0291
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B4E4D0292
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243675AbiCGPS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S243690AbiCGPS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbiCGPSz (ORCPT
+        with ESMTP id S242843AbiCGPS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:18:55 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3C95044C;
-        Mon,  7 Mar 2022 07:17:55 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6XN-TY_1646666269;
-Received: from 192.168.193.155(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6XN-TY_1646666269)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 07 Mar 2022 23:17:51 +0800
-Message-ID: <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
-Date:   Mon, 7 Mar 2022 07:16:36 -0800
+        Mon, 7 Mar 2022 10:18:57 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41EA50069;
+        Mon,  7 Mar 2022 07:17:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 51A62CE10C2;
+        Mon,  7 Mar 2022 15:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163CAC340EB;
+        Mon,  7 Mar 2022 15:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646666276;
+        bh=uqyrsemsbiCBvuiaRtl+MNqCGa0Z70W2a9m+jp91M2w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=v+ZNWJ4u53E/YpV5raYTl+5IC5U0clCuC5RCbgduh3lxqdScg2YReRgLnhroSqSOf
+         GI573HeHE/KMYy/TtC2jPDXZtatuJZcsnsX7b7iGM2a29//G83m16ggLoo6nnz6s10
+         rFjfMe7UdORTF5uPVmXAcfa0k/CX3GfzUZg8x0Bk=
+Date:   Mon, 7 Mar 2022 16:17:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/105] 5.10.104-rc1 review
+Message-ID: <YiYiIZMJTUkx6cu2@kroah.com>
+References: <20220307091644.179885033@linuxfoundation.org>
+ <d71d84d2-5aa2-7d72-9fdb-a0ac203cefb2@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
-From:   Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <202203031105.A1B4CAE6@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d71d84d2-5aa2-7d72-9fdb-a0ac203cefb2@roeck-us.net>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/3/22 11:09, Kees Cook wrote:
-> On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
->> And we should, actually, be able to make the "set_lr" functions be
->> arch-specific, leaving the test itself arch-agnostic....
-> 
-> Yeah, as a tested example, this works for x86_64, and based on what you
-> had, I'd expect it to work on arm64 too:
-> 
-> #include <stdio.h>
-> 
-> static __attribute__((noinline))
-> void set_return_addr(unsigned long *expected, unsigned long *addr)
-> {
->      /* Use of volatile is to make sure final write isn't seen as a dead store. */
->      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> 
->      /* Make sure we've found the right place on the stack before writing it. */
->      if (*ret_addr == expected)
->          *ret_addr = addr;
-> }
-> 
-> volatile int force_label;
-> int main(void)
-> {
->      do {
->          /* Keep labels in scope. */
->          if (force_label)
->              goto normal;
->          if (force_label)
->              goto redirected;
-> 
->          set_return_addr(&&normal, &&redirected);
-> normal:
->          printf("I should be skipped\n");
->          break;
-> redirected:
->          printf("Redirected\n");
->      } while (0);
-> 
->      return 0;
-> }
+On Mon, Mar 07, 2022 at 06:15:02AM -0800, Guenter Roeck wrote:
+> On 3/7/22 01:18, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.10.104 release.
+> > There are 105 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
+> > Anything received after that time might be too late.
+> > 
 > 
 > 
-> It does _not_ work under Clang, though, which I'm still looking at.
+> Building powerpc:allmodconfig ... failed
 > 
+> In file included from include/linux/module.h:12,
+>                  from drivers/net/ethernet/ibm/ibmvnic.c:35:
+> drivers/net/ethernet/ibm/ibmvnic.c: In function 'ibmvnic_reset':
+> drivers/net/ethernet/ibm/ibmvnic.c:2349:23: error: 'entry' undeclared
 
-The following code seems to work fine under clang/gcc, x86_64/aarch64
-(also tested in lkdtm_CFI_BACKWARD_SHADOW):
+I'll go drop the offending patch, thanks!
 
-#include <stdio.h>
-
-static __attribute__((noinline))
-void set_return_addr(unsigned long *expected, unsigned long *addr)
-{
-     /* Use of volatile is to make sure final write isn't seen as a dead store. */
-     unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-
-     /* Make sure we've found the right place on the stack before writing it. */
-     if(*ret_addr == expected)
-         *ret_addr = (addr);
-}
-
-static volatile int force_label;
-
-int main(void)
-{
-     void *array[] = {0, &&normal, &&redirected};
-
-     if (force_label) {
-         /* Call it with a NULL to avoid parameters being treated as constants in -02. */
-         set_return_addr(NULL, NULL);
-         goto * array[force_label];
-     }
-
-     do {
-
-         set_return_addr(&&normal, &&redirected);
-
-normal:
-         printf("I should be skipped\n");
-         break;
-
-redirected:
-         printf("Redirected\n");
-
-     } while (0);
-
-     return 0;
-}
-
-But currently it still crashes when I try to enable
-"-mbranch-protection=pac-ret+leaf+bti".
-
-Because the address of "&&redirected" is not encrypted under pac,
-the autiasp check will fail when set_return_addr returns, and
-eventually cause the function to crash when it returns to "&&redirected"
-("&&redirected" as a reserved label always seems to start with a bti j
-insn).
-
-For lkdtm, if we're going to handle both cases in one function, maybe
-it would be better to turn off the -mbranch-protection=pac-ret+leaf+bti
-and maybe also turn off -O2 options for the function :)
-
-Thanks,
-Dan.
+greg k-h

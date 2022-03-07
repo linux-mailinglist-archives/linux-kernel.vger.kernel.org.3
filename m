@@ -2,198 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50F24D0729
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDFB4D0723
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244932AbiCGTDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
+        id S244899AbiCGTDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244917AbiCGTDn (ORCPT
+        with ESMTP id S238153AbiCGTDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:03:43 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC142DAAD;
-        Mon,  7 Mar 2022 11:02:48 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 227ISbDm002094;
-        Mon, 7 Mar 2022 19:02:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=EiUIzX1Xb5W8F+EungegBUeN15VaZWJ1OOPtqlFLS8U=;
- b=iwfYbzdXLqS5BbU2B+TGVV9kL0mq5aiywR1xYHnlgDs7HzeYp1SSyOU+gJEuA2DafbN3
- liNJ4l2/qVJaiIuoba/ZLNzC1p5KKxH0MJ2IS5A02THndLqwmW7NEYbi8SE4cevyqwjz
- 4iCyBKmiYxFaWMFcJEMxcKNxJq+aP0/FiuCJzRXWiMgutOueM+lv47DOV4uno8IMimm/
- 7XKEwcNFQvOcGWYbrTPNg+6cAHI8I7cSxtMHJP+evedhPaJlWUNdwgKMpVKqOCeScqeu
- e4AJAnmhfpReqbGNE11Y5ZGyw3HQamnh+RV+RI+xHZBTA17H/IecHU3b09Q9TN3PMchE Kw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyfscste-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Mar 2022 19:02:27 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 227J1ZlB153606;
-        Mon, 7 Mar 2022 19:02:26 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        by aserp3030.oracle.com with ESMTP id 3ekwwb83g0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Mar 2022 19:02:26 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SrCIIOCqUmkF76YYGiJvGL2tbCkkCpcSk5wXXbglmZlrz3Lcawiuc5m2rmxfSGkDKMHPJP6rXe+QIZq9n5vEprfVDKhjpMOuCpXT7dfN+fGtUrePrW6uY7nicEQCGbn866dU/EqnOfVTLdH+8uqG/Y7za4HlWFXowmVMXGP0lJy6lsJiz/Z855pvrb2SKUi13Vmwakx9RzLyAVQgITPBGCk4rfIofDLfA0JfLLg+Ogdh1xwIMSu/LxqJjXZ2qns0CcOTUBcj75itXqBdpoR25RCzItLZDRL0QCt/hep1O1+8wm5Z2Ew6mUt6j0cw3Ioz49ewXIpiGPY+iN/bARaF/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EiUIzX1Xb5W8F+EungegBUeN15VaZWJ1OOPtqlFLS8U=;
- b=laZifPaRy0R12J9+hj6NgzI82L1GIIPbPNI38kNW/7I+7mTddD7KgJcP5qe/S8JRzlSJdF9v1iiBxOwbOwq5/lot3M5vcTmWOnbTzLfCvXewPQgUOCNO8VURPGzzqmg3U7pNklIpFtUAjwAMPc1SBvYJCOwT1GgOGjylaz4eIFvyRBfa6QwBP8Ww7SCn88kkGvnB8e6giHULcpoK+vJnmNkspbUGuqkcdyNweIQJftxfwVkWgOqcE2psx73yp5j31BXe+Qz+akl17ER/rc0dq0T5ygLBsUfOuIDjrg8b98X5VqIBKMpatLsAeHtAhWmLLOiKWwJwuWCjF+TTkOnfLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EiUIzX1Xb5W8F+EungegBUeN15VaZWJ1OOPtqlFLS8U=;
- b=bs6A6N+9MHx/Fiw0IdE5vXVE4q0fHQZf8xiBqzyXcia3Ig2HYi/e4jfb54jDYq7AaJYjr+MAOs7VXGoLzFkYrSATyw7LE4LTXEbJLhWb+c6zHXgf/6h8EJfBbxhmV/W8XpNu1S2UeziYi5bi/Jx6Xip4zGGDb2xthj5ymyfOrYs=
-Received: from CO1PR10MB4403.namprd10.prod.outlook.com (2603:10b6:303:9a::17)
- by SJ0PR10MB4622.namprd10.prod.outlook.com (2603:10b6:a03:2d6::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.16; Mon, 7 Mar
- 2022 19:02:24 +0000
-Received: from CO1PR10MB4403.namprd10.prod.outlook.com
- ([fe80::3027:414a:140b:9bd7]) by CO1PR10MB4403.namprd10.prod.outlook.com
- ([fe80::3027:414a:140b:9bd7%6]) with mapi id 15.20.5038.027; Mon, 7 Mar 2022
- 19:02:24 +0000
-Date:   Mon, 7 Mar 2022 13:02:17 -0600
-From:   Alex Thorlton <alex.thorlton@oracle.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Alex Thorlton <alex.thorlton@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] x86/paravirt: Apply paravirt instructions in consistent
- order during boot/module load
-Message-ID: <YiZWudMX7Yt3QSs2@linux-qygv>
-References: <20220307180338.7608-1-alex.thorlton@oracle.com>
- <20220307184505.pvwzjujlqoyrpk44@treble>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307184505.pvwzjujlqoyrpk44@treble>
-X-ClientProxiedBy: BY5PR17CA0050.namprd17.prod.outlook.com
- (2603:10b6:a03:167::27) To CO1PR10MB4403.namprd10.prod.outlook.com
- (2603:10b6:303:9a::17)
+        Mon, 7 Mar 2022 14:03:38 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D977A11C21
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:02:43 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 207413F60B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 19:02:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646679762;
+        bh=Vq+Wtj+GyJ+co0AT1jDLyXY4eOmwo/VOwm55xSz0z6A=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=iaibsntuZUYaI9SuqeS53Lsp5ttMCrc13+sj4nSDHaoNBltU5HfuySfw7R9VwgYzs
+         zvDsLGXz/3x0VqLzgdgAxcFRdNw4AEWMov5g3xYqh6Dq6cY0srtKQuCNbLWqnh7TmN
+         DorIe2KLzdp6AnWZyIMPg1C+BEBsUii70txrZ9Wjc6MyI8/++Q4vwfSl3vrGaod5s+
+         hbDUhNPoQGNrcmL1wwO7DtrPSDVjao7BActJVlmR+/XSE1ebL6AXTjYFZdMLTa9019
+         6nEPWb0sSg30x6OwabiNFEpYYMgAQGf9abPOLZ9l5e6BlYuRHo+ZGLpnc6t2sxe6EH
+         9OPrJdRicB7Pw==
+Received: by mail-ed1-f69.google.com with SMTP id h17-20020a05640250d100b004133863d836so9197264edb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:02:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vq+Wtj+GyJ+co0AT1jDLyXY4eOmwo/VOwm55xSz0z6A=;
+        b=4y0tIZAfmXWefCs+LDfuD2CgGubzyVIlU1CJlldw08it6Uw/H7R8WJuoKRe21DCbZ3
+         J7c/wuWS/qATX8VnXK56k0xh5+seW/TDHrbVpCd7CXuOADkb5szahMF0MdxAYOYSwozu
+         q/5Viwl9sx1ShnULrunaJrwfbjrYd8Yjg6R/xivIJuVk/ez5UBMWqQpsyvLSpoI+hvsP
+         20EVqtrF6ZgCT7Yy6/eYd0HhVdhPAcgqsLC+Esd2FEWBt7JfFN8puUrz2DGE6pLa/oO/
+         R8nQM0rKcJpAqx49KBYwGi3KEZtBjQEccrkZWaGt9imdHUf9Nzx9NFiC3aP9/T5SZHIG
+         hyfg==
+X-Gm-Message-State: AOAM530O/mv0zs0Yf2o97dN3NHq21boIfIwMVL4oIBhjM3Hjhgz6OZ4L
+        c+kDsRxMUb7yzNrpi2wjNrjSn7CHwHrusTdXV2uIMYqOw6HGjrreR0tZ1ALf/rFE+xbBHCkaTH6
+        zJvs7cFprybSqOnXhSuD08NSgLILGcmGnmCfYrMcjXw==
+X-Received: by 2002:a05:6402:168a:b0:3fb:600e:4cc3 with SMTP id a10-20020a056402168a00b003fb600e4cc3mr12645895edv.32.1646679761691;
+        Mon, 07 Mar 2022 11:02:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzGHTRfZqI1f7NfmlXnfc8CnSpyAgiiBB+6cgpM2S/0teiqFrn9zZ+Tl1DI7G8Bi+m6XdPd9A==
+X-Received: by 2002:a05:6402:168a:b0:3fb:600e:4cc3 with SMTP id a10-20020a056402168a00b003fb600e4cc3mr12645854edv.32.1646679761342;
+        Mon, 07 Mar 2022 11:02:41 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm6699066eds.21.2022.03.07.11.02.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 11:02:40 -0800 (PST)
+Message-ID: <0fa44005-158b-74ee-f4ff-f2694ffce38a@canonical.com>
+Date:   Mon, 7 Mar 2022 20:02:39 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 664a4adb-b856-4ce8-dcbb-08da006d03cb
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB4622:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR10MB4622C951DDA5287325B0646C85089@SJ0PR10MB4622.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OU4F3GcW0Vyr6fdyYjY6oqGaaHUh2IR2lo+XV54fpzSvbV0aFE52WUW7c2yqjwqxhM64eak94Z2nNI7uHZf2tusoejE3B1hcJJP1te3P3FmLfJI8ajpThTCtx2vkKmCOSEWbf+OyxqbfgHhiiPsBw0JQoKMOMhepv5R/7SnaBZpksk0+MmFkLK3WuBzPyyqOemPWnSbusqhvsLaWnx83WxcrUVPonYBCX5HfkXSe2f0H2Z+cpd0mXt+R3G4eAav8Vt8ZIQkwJEEBgbzwYUBzguYWKVMqL+Q9Nea5CQVZCPrEeVk13EgF3w9JJ0hDaIptQKgA15VCrLYEvV80t0u5FO2jMxvlYQTT05w6qTl01elPHUy6miGHBi30PFpQkD4EShxxBotXsILlQCNmpi/tA6JzDkkbltc0lRLJgeM3cUwBe9vXeeImBMwC6qXELB+4JUTV+tfO8Jb83hS4PQ27Jb9VsyDjS+jQDBnDJfgGmdjkW/GLn64CX7EBPUwV/VNB4gp6pvwZtfrhpxxZLYGe5BN36aBHoCN+bWbWKE+ULvkxOlKgED+q0h8KrlIPG+iz8i/5pcKDj50+c+m8fy+3XGcpzVpnwMMd12KqUPdrz/kigxC12g2W9l5b2XYo7GUfilGEQyhjpCTq275XLij6IgkKSPnrwQpW1/5iYwH7wESEr065KfWBfLhQ060Xv4ruiv1STLNeGeDug9/Jfuir9sPPun7IWfqf4VtMiptLcU0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4403.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(86362001)(4326008)(8676002)(54906003)(508600001)(33716001)(2906002)(316002)(6916009)(66556008)(66476007)(66946007)(44832011)(38100700002)(8936002)(7416002)(5660300002)(966005)(6486002)(83380400001)(9686003)(6666004)(6512007)(6506007)(52116002)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tu8bMv/IfrGR6PK1ciMAr4dEJ1/ygWyG/tm9WMzp+iw75Rx+XReru10CGuJN?=
- =?us-ascii?Q?ZgD5rduZeN6XEq4z2gKdS0pboS2PsQTBByNLCz4Iyfs7yBkG4AQYzXuRLERm?=
- =?us-ascii?Q?WQw9/1PCWgNuq+7ppYdB4kGyMjmXgjwd+wCQT55p0G3LS21Cegjj/OwBZAfY?=
- =?us-ascii?Q?Tsgbglu3LzNZl0ZlappaEjOb4zuzNGchicj34N4QdcUhC/ThfsMHqC2rXA9T?=
- =?us-ascii?Q?xXwhZzNKB5YKf9XHaSDM0YyMIjpTdDWSVhW3aGdtBAbIxVooCJRuiZzVDAoU?=
- =?us-ascii?Q?9VmK0fvstQV64Q1FklwELsQlNR5iMA4zXIKNfvbxCEJbKPVHq3TQ8q+A3psR?=
- =?us-ascii?Q?KHQru4RFSwwlnS7F0yMQRgT1jSntKb1AoTj1nXttm43J9jyP8hy0PAg6Xm8W?=
- =?us-ascii?Q?6H3fZbcWloyJkRJyzEnMy/xL9MZv6Euftt1VL9WSeL23ewoBXeTWvvX7sRAN?=
- =?us-ascii?Q?rG19vz3DjHPdwvh2AnfVSuB6/815pZT6xTAZDdHZnq7qqc6WSHpDs/fRitTV?=
- =?us-ascii?Q?gXl7RlMYpSBkQkFqxBpnXaYelfepDYmhTyrRXewSPp8+JNyeAccyBRhKJ/Kr?=
- =?us-ascii?Q?5nLVspi85oWmfnUKPWYdhSb12WJasbna012CP068E83yPzeaLbqqfw6EX8dq?=
- =?us-ascii?Q?BMUMQOPDJIDAgMkZIo7U6ccKfg4DFWaimXm0gp0DWDQCfMCAMJHE9gwRX7Qa?=
- =?us-ascii?Q?krCZ0EEysauS0A4KsliDcdJZvKajUx4ZalYFDFATtPvA5++uTrWIeK6zGNai?=
- =?us-ascii?Q?qET7AEDfAZDanquX41JWdumt14mniGkbyga1Ym0TDpbZOVzdKSAqhh90Wzbg?=
- =?us-ascii?Q?ygKrs5sppQ2BiNdENGf8jF8pJ0er9SdCsuDaULrGflFSSBrGxRR65SPD2QZI?=
- =?us-ascii?Q?XSY3d0MIhtUvVL/pbqnWjgNsX6oZ9/Msc0I/on+4pGGbNQOPMHGpPdAIf0vL?=
- =?us-ascii?Q?civ8iMCM8vCE8FH2LNR2eSlTatAKlH4XFrwyUkdZrNBcu1eLus61r3zFWZqC?=
- =?us-ascii?Q?BYKlsL9Nc5fRY2U1le0rri05cyKTD3Oiix0DHuYEZo1+V8Muvu1d/cAyz3Y5?=
- =?us-ascii?Q?u6cQcbN7EjXMeEFRE0XaQgTC8TsfRBkWtlKOxi6FhHzXOCeYF8NE0k66vyrD?=
- =?us-ascii?Q?oUqXzgvEswYyCb4USl8FF9MAdc8xlG+0PWD3VRj5K/2i0bGkvEJj4nlZXs5o?=
- =?us-ascii?Q?ejD2HRjlzWHoxR9L0sWG1CQEUUu4D/wM7BeLvqONw8E57Zb/mtz2v2dfXDnQ?=
- =?us-ascii?Q?J1zZIWANnEf/xvdPShkBBb2rRK4U0SIyDAW8yQsWegXdB43IfQKWDSfC54+q?=
- =?us-ascii?Q?0Y6gg62FvPYk3FJd/wgRR1VCcJvm4uVMn4VciXf3KUcDpp37slFUqpqljKT2?=
- =?us-ascii?Q?im6uAdNOoIiIZnJONjhBaUGJa5eJVTE3gwSKupoVnN9cXBnA7Zdq1ktH9s/L?=
- =?us-ascii?Q?3i0trq6p4mEUYjj8WUuj++Fl0X6UTEPy07yneOPhEIdLlCBNO4InYhBSHCw+?=
- =?us-ascii?Q?+xq6nqouhWnXJBykLgkQo/wq/7qf9OuL/rkRupORZQ+i6EuUiLPWYdfNKRLm?=
- =?us-ascii?Q?95qZn4wsTuBAms62xH8RDNPq/MFifiGMqV7jDQrDaVGOaQDiDbWIAqydt4aM?=
- =?us-ascii?Q?rSApgeBH1duCFza+A3D8SQHacZ/e5Pkql6hxtuDC5BmsErzP5Wb5jPBRSTAe?=
- =?us-ascii?Q?dclUFf/CX0U/tkgakRaK+P/4LB3ZOQ0Huvq3T3ho/T63xYVZ?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 664a4adb-b856-4ce8-dcbb-08da006d03cb
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4403.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 19:02:24.3035
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OX3o/95EpkWzc8l9uVzokfPwfojzHWMQvuJ611ycyWVaedFsj/ZI69eg3pOVlf8eyhMhACBaGpAtMPB6tUd0N2d6kon1AFQT07LdorJnc84=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4622
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10279 signatures=690470
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203070106
-X-Proofpoint-GUID: xAE-nr5TmRGocmBx8x7ROFXBpcJBGBF2
-X-Proofpoint-ORIG-GUID: xAE-nr5TmRGocmBx8x7ROFXBpcJBGBF2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/4] cpufreq: mediatek: clean up cpufreq driver
+Content-Language: en-US
+To:     Tim Chang <jia-wei.chang@mediatek.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, fan.chen@mediatek.com,
+        louis.yu@mediatek.com, roger.lu@mediatek.com,
+        Allen-yy.Lin@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        hsinyi@google.com,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
+ <20220307122151.11666-4-jia-wei.chang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307122151.11666-4-jia-wei.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 10:45:05AM -0800, Josh Poimboeuf wrote:
-> On Mon, Mar 07, 2022 at 12:03:38PM -0600, Alex Thorlton wrote:
-> > Commit 4e6292114c74 ("x86/paravirt: Add new features for paravirt
-> > patching") changed the order in which altinstructions and paravirt
-> > instructions are patched at boot time.  However, no analogous change was
-> > made in module_finalize, where we apply altinstructions and
-> > parainstructions during module load.
-> > 
-> > As a result, any code that generates "stacked up" altinstructions and
-> > parainstructions (i.e. local_irq_save/restore) will produce different
-> > results when used in built-in kernel code vs. kernel modules.  This also
-> > makes it possible to inadvertently replace altinstructions in the booted
-> > kernel with their parainstruction counterparts when using
-> > livepatch/kpatch.
-> > 
-> > To fix this, re-order the processing in module_finalize, so that we do
-> > things in this order:
-> > 
-> >  1. apply_paravirt
-> >  2. apply_retpolines
-> >  3. apply_alternatives
-> >  4. alternatives_smp_module_add
-> > 
-> > This is the same ordering that is used at boot time in
-> > alternative_instructions.
-> > 
-> > Fixes: 4e6292114c74 ("x86/paravirt: Add new features for paravirt patching")
-> > Signed-off-by: Alex Thorlton <alex.thorlton@oracle.com>
-> > Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+On 07/03/2022 13:21, Tim Chang wrote:
+> cleanup of naming, print log and comments.
 > 
-> Peter previously posted a fix, buried in his IBT series:
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 487 ++++++++++++++---------------
+>  1 file changed, 233 insertions(+), 254 deletions(-)
 > 
->   https://urldefense.com/v3/__https://lkml.kernel.org/r/20220303112825.068773913@infradead.org__;!!ACWV5N9M2RV99hQ!YARvXhahbleGAt689pqTXJU7ko-rePIjzrbuGmemJXgFRViFZ8FDfOy7mHZQ7CPaG6Y$ 
-> 
-> It should probably go ahead and be merged now...
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 8e9d706d8081..3f00c7eb01f1 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -1,7 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2015 Linaro Ltd.
+> - * Author: Pi-Cheng Chen <pi-cheng.chen@linaro.org>
+> + * Copyright (C) 2022 MediaTek Inc.
 
-Ahh, yep - hadn't seen that one yet!  In any case, I'm glad this is on
-other folk's radar.
+Removal of authorship and existing copyrights does not fit into "clean
+up". Please explain this thoroughly.
 
-Thanks for letting me know, Josh!
+>   */
+>  
+>  #include <linux/clk.h>
+> @@ -22,7 +21,7 @@
+>  #define VOLT_TOL		(10000)
+>  
+>  /*
+> - * The struct mtk_cpu_dvfs_info holds necessary information for doing CPU DVFS
+> + * The struct mtk_cpufreq_drv holds necessary information for doing CPU DVFS
+>   * on each CPU power/clock domain of Mediatek SoCs. Each CPU cluster in
+>   * Mediatek SoCs has two voltage inputs, Vproc and Vsram. In some cases the two
+>   * voltage inputs need to be controlled under a hardware limitation:
+> @@ -32,7 +31,7 @@
+>   * needs to be switched to another stable PLL clock temporarily until
+>   * the original PLL becomes stable at target frequency.
+>   */
+> -struct mtk_cpu_dvfs_info {
+> +struct mtk_cpufreq_drv {
+>  	struct cpumask cpus;
+>  	struct device *cpu_dev;
+>  	struct regulator *proc_reg;
+> @@ -40,45 +39,45 @@ struct mtk_cpu_dvfs_info {
+>  	struct clk *cpu_clk;
+>  	struct clk *inter_clk;
+>  	struct list_head list_head;
+> -	int intermediate_voltage;
+> +	int inter_voltage;
+>  	bool need_voltage_tracking;
+> -	int old_vproc;
+> -	struct mutex lock; /* avoid notify and policy race condition */
+> +	int old_voltage;
+> +	struct mutex lock;  /* avoid notify and policy race condition */
+>  	struct notifier_block opp_nb;
+>  	int opp_cpu;
+>  	unsigned long opp_freq;
+>  };
+>  
+> -static LIST_HEAD(dvfs_info_list);
+> +static LIST_HEAD(drv_list);
+>  
+> -static struct mtk_cpu_dvfs_info *mtk_cpu_dvfs_info_lookup(int cpu)
+> +static struct mtk_cpufreq_drv *mtk_cpufreq_drv_lookup(int cpu)
+>  {
+> -	struct mtk_cpu_dvfs_info *info;
+> +	struct mtk_cpufreq_drv *drv;
+>  
+> -	list_for_each_entry(info, &dvfs_info_list, list_head) {
+> -		if (cpumask_test_cpu(cpu, &info->cpus))
+> -			return info;
+> +	list_for_each_entry(drv, &drv_list, list_head) {
+> +		if (cpumask_test_cpu(cpu, &drv->cpus))
+> +			return drv;>  	}
+>  
+>  	return NULL;
+>  }
+>  
+> -static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+> -					int new_vproc)
+> +static int mtk_cpufreq_voltage_tracking(struct mtk_cpufreq_drv *drv,
+> +					int new_voltage)
+>  {
+> -	struct regulator *proc_reg = info->proc_reg;
+> -	struct regulator *sram_reg = info->sram_reg;
+> -	int old_vproc, old_vsram, new_vsram, vsram, vproc, ret;
+> -
+> -	old_vproc = regulator_get_voltage(proc_reg);
+> -	if (old_vproc < 0) {
+> -		pr_err("%s: invalid Vproc value: %d\n", __func__, old_vproc);
+> -		return old_vproc;
+> +	struct regulator *proc_reg = drv->proc_reg;
+> +	struct regulator *sram_reg = drv->sram_reg;
+> +	int old_voltage, old_vsram, new_vsram, vsram, voltage, ret;
+> +
+> +	old_voltage = regulator_get_voltage(proc_reg);
+> +	if (old_voltage < 0) {
+> +		pr_err("%s: invalid vproc value: %d\n", __func__, old_voltage);
+> +		return old_voltage;
 
-- Alex
+
+Several different changes in one commit. Please read the document
+"Submitting patches".
+
+(...)
+
+> -MODULE_AUTHOR("Pi-Cheng Chen <pi-cheng.chen@linaro.org>");
+> +MODULE_AUTHOR("Jia-Wei Chang <jia-wei.chang@mediatek.com>");
+
+Ekhm, why? He was not the author?
+
+Best regards,
+Krzysztof

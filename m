@@ -2,271 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECC14CFEFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2064CFF08
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240756AbiCGMnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S242471AbiCGMpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiCGMnM (ORCPT
+        with ESMTP id S242470AbiCGMpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:43:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA8E049F8E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646656937;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6eeNwR4loaBjjEP8RdScYzxO+RCd7H+nxGYKGNuzU6E=;
-        b=QiLrZYU689r2pwazuEPbfY2rIHinJFTIaDcmeAQFaOop8sAEME3GqnGJKzW5VpVZqoWqDA
-        hK9IWdpYnwy36y7a2GuisqnTfwJUYkcp7nm2WJ9i5eShRo8sM23OhZS9glx/tsikGuustB
-        t8ddUqQO0EZh4KU8eIgepyo1tDp2ZQE=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-280-UY1MKjzsMvKUd-1dcXhO4A-1; Mon, 07 Mar 2022 07:42:16 -0500
-X-MC-Unique: UY1MKjzsMvKUd-1dcXhO4A-1
-Received: by mail-wr1-f71.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so4510853wrg.19
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 04:42:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:subject:to:cc:references:from
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-transfer-encoding:content-language;
-        bh=6eeNwR4loaBjjEP8RdScYzxO+RCd7H+nxGYKGNuzU6E=;
-        b=cniJUDV8ZoDpmjJ9HkKd5jScTFKc98UWboZpmVb1gbHYKygJHXudUWaejTVYZ531PG
-         WKqH58kLrAs42L8AUHEn5hlW4rbX7rHlWUAYHYLiX5URDaPz5xMOsbiWt775FyyWb8YM
-         h8KTRgL0O1WaSO0f9YnDSJ311sEcDkqWDKLFKYh8/kEEwXyYDwJUdFRu6DOJbobh7FxN
-         9s/jRosxUa7QMt4k7+Sh7kLqUjXR061QSXiYYC7367R2OqT9px3k6f/u3RsZkPc160dI
-         7TiCIgrzvl1/RJ/lrLxTkb+Q/syu72m0vxy1kvCXc03vWj2BELeZePQJCke9QyPlL/wp
-         nijw==
-X-Gm-Message-State: AOAM533mzR/fBAJM71A/XqmhkU1dFzeWP/cOO9WaKJYCUO4hhIvqeb6M
-        GQjIH9bngkdNUbV9SkGzvX7XtNlQ5a3HYnk4symJqwFq5oRWfY2VyaQxgV7xKYdw+AhaAf3kakk
-        hBL5wjEq7CmSd15L4KtTkaVL0
-X-Received: by 2002:adf:dcc2:0:b0:1f0:4c38:d6be with SMTP id x2-20020adfdcc2000000b001f04c38d6bemr8115717wrm.79.1646656935521;
-        Mon, 07 Mar 2022 04:42:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJypym0PVHFx9W4v/f24ImuL8HFKfTAheoICss9sCuocVDFJFJoyHsNopW+2XcaueuxzLmWzTA==
-X-Received: by 2002:adf:dcc2:0:b0:1f0:4c38:d6be with SMTP id x2-20020adfdcc2000000b001f04c38d6bemr8115695wrm.79.1646656935224;
-        Mon, 07 Mar 2022 04:42:15 -0800 (PST)
-Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id v124-20020a1cac82000000b0037c3d08e0e7sm19689931wme.29.2022.03.07.04.42.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 04:42:14 -0800 (PST)
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH v7 01/11] iommu: Add DMA ownership management interfaces
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Cc:     Chaitanya Kulkarni <kch@nvidia.com>, kvm@vger.kernel.org,
-        Stuart Yoder <stuyoder@gmail.com>, rafael@kernel.org,
-        David Airlie <airlied@linux.ie>, linux-pci@vger.kernel.org,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        iommu@lists.linux-foundation.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Li Yang <leoyang.li@nxp.com>, Will Deacon <will@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220228005056.599595-1-baolu.lu@linux.intel.com>
- <20220228005056.599595-2-baolu.lu@linux.intel.com>
- <c75b6e04-bc1b-b9f6-1a44-bf1567a8c19d@redhat.com>
- <7a3dc977-0c5f-6d88-6d3a-8e49bc717690@linux.intel.com>
- <1648bc97-a0d3-4051-58d0-e24fa9e9d183@arm.com>
- <350a8e09-08a9-082b-3ad1-b711c7d98d73@redhat.com>
- <e2698dbe-18e2-1a82-8a12-fe45bc9be534@arm.com>
- <b1a5db0a-0373-5ca0-6256-85a96d029ec9@linux.intel.com>
-From:   Eric Auger <eric.auger@redhat.com>
-Message-ID: <ac75c521-fb13-8414-a81b-9178cbed3471@redhat.com>
-Date:   Mon, 7 Mar 2022 13:42:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 7 Mar 2022 07:45:23 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60983B54C;
+        Mon,  7 Mar 2022 04:44:24 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 227Ci78D077726;
+        Mon, 7 Mar 2022 06:44:07 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646657047;
+        bh=yrWf0B/fJAOio3vFdUY7ba/YHjA66XBw8K8AaY9J4cA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ZFNpivCeJsVtZp1cz5guGxCWalEHX0vqmaRZi1hC35hLdr0bkPcjkiIvxMWmc+5Ly
+         UBwEJf9e86ym19n+mBfSJsdbgEbZNg+Z6aDLhtvb0AINn9NNQx5oIqlFwXSqDAYuoh
+         CXMNvwt29OIjFkapgaEaIU9DXNXFzmipWPV/Fc60=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 227Ci6Ld101768
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 7 Mar 2022 06:44:07 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 7
+ Mar 2022 06:44:06 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 7 Mar 2022 06:44:06 -0600
+Received: from [10.250.232.186] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 227Ci2M5088480;
+        Mon, 7 Mar 2022 06:44:03 -0600
+Message-ID: <229abc21-ebf6-4b78-e92a-2e943d46b84b@ti.com>
+Date:   Mon, 7 Mar 2022 18:14:01 +0530
 MIME-Version: 1.0
-In-Reply-To: <b1a5db0a-0373-5ca0-6256-85a96d029ec9@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RESEND PATCH] net: ethernet: ti: am65-cpsw: Convert to PHYLINK
 Content-Language: en-US
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kishon@ti.com>, <vigneshr@ti.com>,
+        <grygorii.strashko@ti.com>
+References: <20220304075812.1723-1-s-vadapalli@ti.com>
+ <YiHa/himI3WJVOhy@shell.armlinux.org.uk>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <YiHa/himI3WJVOhy@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lu,
+Hi Russell,
 
-On 3/7/22 4:27 AM, Lu Baolu wrote:
-> Hi Robin,
->
-> On 3/4/22 10:10 PM, Robin Murphy wrote:
->> On 2022-03-04 13:55, Eric Auger wrote:
->>> Hi Robin,
->>>
->>> On 3/4/22 1:22 PM, Robin Murphy wrote:
->>>> On 2022-03-04 10:43, Lu Baolu wrote:
->>>>> Hi Eric,
->>>>>
->>>>> On 2022/3/4 18:34, Eric Auger wrote:
->>>>>> I hit a WARN_ON() when unbinding an e1000e driver just after boot:
->>>>>>
->>>>>> sudo modprobe -v vfio-pci
->>>>>> echo vfio-pci | sudo tee -a
->>>>>> /sys/bus/pci/devices/0004:01:00.0/driver_override
->>>>>> vfio-pci
->>>>>> echo 0004:01:00.0 | sudo tee -a  /sys/bus/pci/drivers/e1000e/unbind
->>>>>>
->>>>>>
->>>>>> [  390.042811] ------------[ cut here ]------------
->>>>>> [  390.046468] WARNING: CPU: 42 PID: 5589 at
->>>>>> drivers/iommu/iommu.c:3123
->>>>>> iommu_device_unuse_default_domain+0x68/0x100
->>>>>> [  390.056710] Modules linked in: vfio_pci vfio_pci_core vfio_virqfd
->>>>>> vfio_iommu_type1 vfio xt_CHECKSUM xt_MASQUERADE xt_conntrack
->>>>>> ipt_REJECT
->>>>>> nf_reject_ipv4 nft_compat nft_chain_nat nf_nat nf_conntrack
->>>>>> nf_defrag_ipv6 nf_defrag_ipv4 nf_tables nfnetlink bridge stp llc
->>>>>> rfkill
->>>>>> sunrpc vfat fat mlx5_ib ib_uverbs ib_core acpi_ipmi ipmi_ssif
->>>>>> ipmi_devintf ipmi_msghandler cppc_cpufreq drm xfs libcrc32c
->>>>>> mlx5_core sg
->>>>>> mlxfw crct10dif_ce tls ghash_ce sha2_ce sha256_arm64 sha1_ce
->>>>>> sbsa_gwdt
->>>>>> e1000e psample sdhci_acpi ahci_platform sdhci libahci_platform
->>>>>> qcom_emac
->>>>>> mmc_core hdma hdma_mgmt dm_mirror dm_region_hash dm_log dm_mod fuse
->>>>>> [  390.110618] CPU: 42 PID: 5589 Comm: tee Kdump: loaded Not tainted
->>>>>> 5.17.0-rc4-lu-v7-official+ #24
->>>>>> [  390.119384] Hardware name: WIWYNN QDF2400 Reference Evaluation
->>>>>> Platform CV90-LA115-P120/QDF2400 Customer Reference Board, BIOS
->>>>>> 0ACJA570
->>>>>> 11/05/2018
->>>>>> [  390.132492] pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS
->>>>>> BTYPE=--)
->>>>>> [  390.139436] pc : iommu_device_unuse_default_domain+0x68/0x100
->>>>>> [  390.145165] lr : iommu_device_unuse_default_domain+0x38/0x100
->>>>>> [  390.150894] sp : ffff80000fbb3bc0
->>>>>> [  390.154193] x29: ffff80000fbb3bc0 x28: ffff03c0cf6b2400 x27:
->>>>>> 0000000000000000
->>>>>> [  390.161311] x26: 0000000000000000 x25: 0000000000000000 x24:
->>>>>> ffff03c0c7cc5720
->>>>>> [  390.168429] x23: ffff03c0c2b9d150 x22: ffffb4e61df223f8 x21:
->>>>>> ffffb4e61df223f8
->>>>>> [  390.175547] x20: ffff03c7c03c3758 x19: ffff03c7c03c3700 x18:
->>>>>> 0000000000000000
->>>>>> [  390.182665] x17: 0000000000000000 x16: 0000000000000000 x15:
->>>>>> 0000000000000000
->>>>>> [  390.189783] x14: 0000000000000000 x13: 0000000000000030 x12:
->>>>>> ffff03c0d519cd80
->>>>>> [  390.196901] x11: 7f7f7f7f7f7f7f7f x10: 0000000000000dc0 x9 :
->>>>>> ffffb4e620b54f8c
->>>>>> [  390.204019] x8 : ffff03c0cf6b3220 x7 : ffff4ef132bba000 x6 :
->>>>>> 00000000000000ff
->>>>>> [  390.211137] x5 : ffff03c0c2b9f108 x4 : ffff03c0d51f6438 x3 :
->>>>>> 0000000000000000
->>>>>> [  390.218255] x2 : ffff03c0cf6b2400 x1 : 0000000000000000 x0 :
->>>>>> 0000000000000000
->>>>>> [  390.225374] Call trace:
->>>>>> [  390.227804]  iommu_device_unuse_default_domain+0x68/0x100
->>>>>> [  390.233187]  pci_dma_cleanup+0x38/0x44
->>>>>> [  390.236919]  __device_release_driver+0x1a8/0x260
->>>>>> [  390.241519]  device_driver_detach+0x50/0xd0
->>>>>> [  390.245686]  unbind_store+0xf8/0x120
->>>>>> [  390.249245]  drv_attr_store+0x30/0x44
->>>>>> [  390.252891]  sysfs_kf_write+0x50/0x60
->>>>>> [  390.256537]  kernfs_fop_write_iter+0x134/0x1cc
->>>>>> [  390.260964]  new_sync_write+0xf0/0x18c
->>>>>> [  390.264696]  vfs_write+0x230/0x2d0
->>>>>> [  390.268082]  ksys_write+0x74/0x100
->>>>>> [  390.271467]  __arm64_sys_write+0x28/0x3c
->>>>>> [  390.275373]  invoke_syscall.constprop.0+0x58/0xf0
->>>>>> [  390.280061]  el0_svc_common.constprop.0+0x160/0x164
->>>>>> [  390.284922]  do_el0_svc+0x34/0xcc
->>>>>> [  390.288221]  el0_svc+0x30/0x140
->>>>>> [  390.291346]  el0t_64_sync_handler+0xa4/0x130
->>>>>> [  390.295599]  el0t_64_sync+0x1a0/0x1a4
->>>>>> [  390.299245] ---[ end trace 0000000000000000 ]---
->>>>>>
->>>>>>
->>>>>> I put some traces in the code and I can see that
->>>>>> iommu_device_use_default_domain() effectively is called on
->>>>>> 0004:01:00.0 e1000e device on pci_dma_configure() but at that time
->>>>>> the iommu group is NULL:
->>>>>> [   10.569427] e1000e 0004:01:00.0: ------ ENTRY pci_dma_configure
->>>>>> driver_managed_area=0
->>>>>> [   10.569431] e1000e 0004:01:00.0: ****
->>>>>> iommu_device_use_default_domain ENTRY
->>>>>> [   10.569433] e1000e 0004:01:00.0: ****
->>>>>> iommu_device_use_default_domain no group
->>>>>> [   10.569435] e1000e 0004:01:00.0: pci_dma_configure
->>>>>> iommu_device_use_default_domain returned 0
->>>>>> [   10.569492] e1000e 0004:01:00.0: Adding to iommu group 3
->>>>>>
->>>>>> ^^^the group is added after the
->>>>>> iommu_device_use_default_domain() call
->>>>>> So the group->owner_cnt is not incremented as expected.
->>>>>
->>>>> Thank you for reporting this. Do you have any idea why the driver is
->>>>> loaded before iommu_probe_device()?
->>>>
->>>> Urgh, this is the horrible firmware-data-ordering thing again. The
->>>> stuff I've been saying about having to rework the whole .dma_configure
->>>> mechanism in the near future is to fix this properly.
->>>>
->>>> The summary is that in patch #4, calling
->>>> iommu_device_use_default_domain() *before* {of,acpi}_dma_configure is
->>>> currently a problem. As things stand, the IOMMU driver ignored the
->>>> initial iommu_probe_device() call when the device was added, since at
->>>> that point it had no fwspec yet. In this situation,
->>>> {of,acpi}_iommu_configure() are retriggering iommu_probe_device()
->>>> after the IOMMU driver has seen the firmware data via .of_xlate to
->>>> learn that it it actually responsible for the given device.
->>>
->>> thank you for providing the info. Hope this is something Lu can work
->>> around.
->>
->> Hopefully it's just a case of flipping the calls around, so that
->> iommu_use_default_domain() goes at the end, and calls
->> arch_teardown_dma_ops() if it fails. From a quick skim I *think* that
->> should still work out to the desired behaviour (or at least close
->> enough that we can move forward without a circular dependency between
->> fixes...)
->
-> This is a reasonable solution to me. Thank you for the information and
-> suggestion.
->
-> Eric, I have updated the patch #4 and uploaded a new version here:
->
-> https://github.com/LuBaolu/intel-iommu/commits/iommu-dma-ownership-v8
+On 04/03/22 14:55, Russell King (Oracle) wrote:
+> Hi,
+> 
+> On Fri, Mar 04, 2022 at 01:28:12PM +0530, Siddharth Vadapalli wrote:
+>> Convert am65-cpsw driver and am65-cpsw ethtool to use Phylink APIs
+>> as described at Documentation/networking/sfp-phylink.rst. All calls
+>> to Phy APIs are replaced with their equivalent Phylink APIs.
 
-with v8 I do not hit the warning anymore and the owner accounting seems
-to work as expected.
+Thank you for reviewing the patch.
 
-Thanks
+> 
+> Okay, that's what you're doing, but please mention what the reason for
+> the change is.
 
-Eric
->
-> Can you please give it a try?
->
-> Best regards,
-> baolu
->
+This patch does not intend to make any functional change. The aim is just to
+update the existing driver to use the Phylink framework.
 
+Though the same functionality can be achieved by using the Phylib framework, we
+would like to add Phylink support before adding support for SGMII/QSGMII modes
+in am65-cpsw driver. The patches for SGMII/QSGMII support in am65-cpsw driver
+will be sent later.
+
+> 
+>> @@ -1494,6 +1409,87 @@ static const struct net_device_ops am65_cpsw_nuss_netdev_ops = {
+>>  	.ndo_get_devlink_port   = am65_cpsw_ndo_get_devlink_port,
+>>  };
+>>  
+>> +static void am65_cpsw_nuss_validate(struct phylink_config *config, unsigned long *supported,
+>> +				    struct phylink_link_state *state)
+>> +{
+>> +	phylink_generic_validate(config, supported, state);
+>> +}
+> 
+> If you don't need anything special, please just initialise the member
+> directly:
+> 
+> 	.validate = phylink_generic_validate,
+
+Sure, I will fix this in v2.
+
+> 
+>> +
+>> +static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned int mode,
+>> +				      const struct phylink_link_state *state)
+>> +{
+>> +	/* Currently not used */
+>> +}
+>> +
+>> +static void am65_cpsw_nuss_mac_link_down(struct phylink_config *config, unsigned int mode,
+>> +					 phy_interface_t interface)
+>> +{
+>> +	struct am65_cpsw_slave_data *slave = container_of(config, struct am65_cpsw_slave_data,
+>> +							  phylink_config);
+>> +	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+>> +	struct am65_cpsw_common *common = port->common;
+>> +	struct net_device *ndev = port->ndev;
+>> +	int tmo;
+>> +
+>> +	/* disable forwarding */
+>> +	cpsw_ale_control_set(common->ale, port->port_id, ALE_PORT_STATE, ALE_PORT_STATE_DISABLE);
+>> +
+>> +	cpsw_sl_ctl_set(port->slave.mac_sl, CPSW_SL_CTL_CMD_IDLE);
+>> +
+>> +	tmo = cpsw_sl_wait_for_idle(port->slave.mac_sl, 100);
+>> +	dev_dbg(common->dev, "down msc_sl %08x tmo %d\n",
+>> +		cpsw_sl_reg_read(port->slave.mac_sl, CPSW_SL_MACSTATUS), tmo);
+>> +
+>> +	cpsw_sl_ctl_reset(port->slave.mac_sl);
+>> +
+>> +	am65_cpsw_qos_link_down(ndev);
+>> +	netif_tx_disable(ndev);
+> 
+> You didn't call netif_tx_disable() in your adjust_link afaics, so why
+> is it added here?
+
+When I was working on the conversion, I had added the phylink_create() and
+related initialization in the wrong section of the driver. This had caused
+"NETDEV WATCHDOG: transmit queue timed out" errors on calls to
+netif_tx_stop_all_queues(ndev).
+
+To fix this, I had used netif_tx_disable() as a temporary workaround then.
+Now, after fixing the calls to phylink_create() and related code, I realize that
+it works even with netif_tx_stop_all_queues(ndev), so I will revert to it in v2.
+
+> 
+>> +}
+>> +
+>> +static void am65_cpsw_nuss_mac_link_up(struct phylink_config *config, struct phy_device *phy,
+>> +				       unsigned int mode, phy_interface_t interface, int speed,
+>> +				       int duplex, bool tx_pause, bool rx_pause)
+>> +{
+>> +	struct am65_cpsw_slave_data *slave = container_of(config, struct am65_cpsw_slave_data,
+>> +							  phylink_config);
+>> +	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
+>> +	struct am65_cpsw_common *common = port->common;
+>> +	struct net_device *ndev = port->ndev;
+>> +	u32 mac_control = CPSW_SL_CTL_GMII_EN;
+>> +
+>> +	if (speed == SPEED_1000)
+>> +		mac_control |= CPSW_SL_CTL_GIG;
+>> +	if (speed == SPEED_10 && interface == PHY_INTERFACE_MODE_RGMII)
+>> +		/* Can be used with in band mode only */
+>> +		mac_control |= CPSW_SL_CTL_EXT_EN;
+>> +	if (speed == SPEED_100 && interface == PHY_INTERFACE_MODE_RMII)
+>> +		mac_control |= CPSW_SL_CTL_IFCTL_A;
+>> +	if (duplex)
+>> +		mac_control |= CPSW_SL_CTL_FULLDUPLEX;
+>> +
+>> +	/* rx_pause/tx_pause */
+>> +	if (rx_pause)
+>> +		mac_control |= CPSW_SL_CTL_RX_FLOW_EN;
+>> +
+>> +	if (tx_pause)
+>> +		mac_control |= CPSW_SL_CTL_TX_FLOW_EN;
+>> +
+>> +	cpsw_sl_ctl_set(port->slave.mac_sl, mac_control);
+>> +
+>> +	/* enable forwarding */
+>> +	cpsw_ale_control_set(common->ale, port->port_id, ALE_PORT_STATE, ALE_PORT_STATE_FORWARD);
+>> +
+>> +	am65_cpsw_qos_link_up(ndev, speed);
+>> +	netif_tx_wake_all_queues(ndev);
+>> +}
+>> +
+>> +static const struct phylink_mac_ops am65_cpsw_phylink_mac_ops = {
+>> +	.validate = am65_cpsw_nuss_validate,
+>> +	.mac_config = am65_cpsw_nuss_mac_config,
+>> +	.mac_link_down = am65_cpsw_nuss_mac_link_down,
+>> +	.mac_link_up = am65_cpsw_nuss_mac_link_up,
+>> +};
+>> +
+>>  static void am65_cpsw_nuss_slave_disable_unused(struct am65_cpsw_port *port)
+>>  {
+>>  	struct am65_cpsw_common *common = port->common;
+>> @@ -1887,24 +1883,7 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
+>>  				of_property_read_bool(port_np, "ti,mac-only");
+>>  
+>>  		/* get phy/link info */
+>> -		if (of_phy_is_fixed_link(port_np)) {
+>> -			ret = of_phy_register_fixed_link(port_np);
+>> -			if (ret)
+>> -				return dev_err_probe(dev, ret,
+>> -						     "failed to register fixed-link phy %pOF\n",
+>> -						     port_np);
+>> -			port->slave.phy_node = of_node_get(port_np);
+>> -		} else {
+>> -			port->slave.phy_node =
+>> -				of_parse_phandle(port_np, "phy-handle", 0);
+>> -		}
+>> -
+>> -		if (!port->slave.phy_node) {
+>> -			dev_err(dev,
+>> -				"slave[%d] no phy found\n", port_id);
+>> -			return -ENODEV;
+>> -		}
+>> -
+>> +		port->slave.phy_node = port_np;
+>>  		ret = of_get_phy_mode(port_np, &port->slave.phy_if);
+>>  		if (ret) {
+>>  			dev_err(dev, "%pOF read phy-mode err %d\n",
+>> @@ -1947,6 +1926,7 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
+>>  	struct am65_cpsw_ndev_priv *ndev_priv;
+>>  	struct device *dev = common->dev;
+>>  	struct am65_cpsw_port *port;
+>> +	struct phylink *phylink;
+>>  	int ret;
+>>  
+>>  	port = &common->ports[port_idx];
+>> @@ -1984,6 +1964,26 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
+>>  	port->ndev->netdev_ops = &am65_cpsw_nuss_netdev_ops;
+>>  	port->ndev->ethtool_ops = &am65_cpsw_ethtool_ops_slave;
+>>  
+>> +	/* Configuring Phylink */
+>> +	port->slave.phylink_config.dev = &port->ndev->dev;
+>> +	port->slave.phylink_config.type = PHYLINK_NETDEV;
+>> +	port->slave.phylink_config.pcs_poll = true;
+> 
+> Does this compile? This member was removed, so you probably get a
+> compile error today.
+
+Sorry for not updating to the latest kernel before posting. I was working with
+5.16 when I was creating the patch.
+
+> 
+>> +	port->slave.phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_10 |
+>> +	MAC_100 | MAC_1000FD | MAC_2500FD;
+>> +
+>> +	phy_interface_set_rgmii(port->slave.phylink_config.supported_interfaces);
+>> +	__set_bit(PHY_INTERFACE_MODE_SGMII, port->slave.phylink_config.supported_interfaces);
+>> +	__set_bit(PHY_INTERFACE_MODE_1000BASEX, port->slave.phylink_config.supported_interfaces);
+> 
+> If you support SGMII and 1000BASE-X with inband signalling, I strongly
+> recommend that you implement phylink_pcs support as well, so you are
+> able to provide phylink with the inband results.
+
+Currently, SGMII and 1000BASE-X are not supported by the driver. I had added
+these as supported modes accidentally. I will be working on supporting SGMII and
+QSGMII modes in the near future and will add these along with phylink_pcs
+support as well in the patch for the same. I will remove these from the v2 patch.
+
+> 
+>> +
+>> +	phylink = phylink_create(&port->slave.phylink_config, dev->fwnode, port->slave.phy_if,
+>> +				 &am65_cpsw_phylink_mac_ops);
+>> +	if (IS_ERR(phylink)) {
+>> +		phylink_destroy(port->slave.phylink);
+> 
+> This is wrong and will cause a NULL pointer dereference - please remove
+> the call to phylink_destroy() here.
+> 
+> However, I could not find another call to phylink_destroy() in your
+> patch which means you will leak memory when the driver is unbound.
+
+I added this in the wrong section due to a misunderstanding on my part. I will
+fix this in v2.
+
+Regards,
+Siddharth.

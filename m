@@ -2,85 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2034CF301
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7FD4CF304
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235992AbiCGH4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 02:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S235999AbiCGH4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 02:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbiCGH4R (ORCPT
+        with ESMTP id S232814AbiCGH4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 02:56:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1344506C
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:55:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C84460B99
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:55:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 698C0C340F3;
-        Mon,  7 Mar 2022 07:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646639722;
-        bh=ftjiV6vEKk1X9wO1Fyhk7bmaXl5AeD+Ymy6D0UqL6JU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zqL/pDKCeEvQ7qn1CKZllOJe/IJ2nUaGyioCKS6SSL4wRtU16ZzT7DfT8LYWSyrAy
-         TqaUYj+b9YPi1kCyhX5rpP3dSGlR4EEjHR4JJuIw+XnRbmKcRMdBRfvbR3uEaCqK4K
-         6jJJcGJT5cBn9H4GI9xAG4XmLS1BPQQOILLhyw0o=
-Date:   Mon, 7 Mar 2022 08:55:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Oh Eomji <eomji.oh@samsung.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, Leon Romanovsky <leon@kernel.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        JaeHun Jung <jh0801.jung@samsung.com>
-Subject: Re: [PATCH 1/2] sound: usb: Add vendor's hooking interface
-Message-ID: <YiW6ZqnINsOSyN+z@kroah.com>
-References: <CGME20220307022409epcas2p4a2955a746c87d66564556e18ab94845f@epcas2p4.samsung.com>
- <1646619720-97113-1-git-send-email-eomji.oh@samsung.com>
+        Mon, 7 Mar 2022 02:56:51 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E664476E
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:55:57 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id h2so614909ila.12
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 23:55:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xo58dTEXY/F27fYmOPR69bFboaa6IH78uUyf90/I3RI=;
+        b=ouJ9RdXFMnX5gGHLKbsx9hsTgcffnj3wGWeNg4qpAqsc97iAu8JCrIunoXNmm1vqIi
+         Pcq8dvQIYDuAbl+956vKOKPiO8YtE/7zS4bGkXjil5DclKrGUwMv88jrCN562G6miir9
+         wL759rF4Dumw6tsge2gPyhKrQwPMfQOSg2CtK+oNuH8odEq7z/7UMfbc6FuboeH+/h3c
+         6mBauXZMFi+HU8TkLdDRnu797IqogPdUqxC7MgM3B+YiVqQ43mdzb95dMOjbtGIDHId1
+         3bre+uwFJ7ampbhJ+GMbnQBRBACVRxL1bw03GwyodfxOK0QZ6RMdGIum/qp710NMUN9r
+         mO7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xo58dTEXY/F27fYmOPR69bFboaa6IH78uUyf90/I3RI=;
+        b=ci9iPkywlLrlUUKTauO+zFrWOaZ2zELs+tVneK6vi4CPbSVRK+Jhl1Am2YZ2p/0qwW
+         5zSogBw2YMVAXt9Dj1CekdCa12Mt0WLMgs6OEW5sCE++H3EbdNUg1o+5Jdq7wu1mt7/n
+         pPY9d+a3NzGuS7lK0tNc5FKPA2a3QXiWkkQP7aQDJ5hdTgkFyZH4DQcabxvwonxsa7yZ
+         CmQuxIgz2ivglKf8sF5W1QRiD6wTwZ2KxNv4KUonTBeob+ePpkAXkBi0d02P7PBfnm2H
+         YdctdN5AOqczX7P15miG+8rVhSv78eCGmfbQDQgsYOinaHmKbPX2wng0Gbu/gUM5BtEm
+         tn7Q==
+X-Gm-Message-State: AOAM532OO1gITh7CmliJPHA5YnvDbsGgZg/5dZP0yGLjxj6cNyr78bt6
+        fG7hwdih1eTgrVISvvBNBbMGxLNlC14mxxTyY68eyw==
+X-Google-Smtp-Source: ABdhPJwS/bLUDjG66OuG9kDu3XVfgunh5kbfyN6i+8T3f3mMdXidurrKrq/cKnLH3uPLi90tx8VbI8LSCnG2kSGKvPM=
+X-Received: by 2002:a92:6907:0:b0:2bc:4b18:e671 with SMTP id
+ e7-20020a926907000000b002bc4b18e671mr9712117ilc.299.1646639757324; Sun, 06
+ Mar 2022 23:55:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646619720-97113-1-git-send-email-eomji.oh@samsung.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211229040239.66075-1-zhangjiachen.jaycee@bytedance.com>
+ <YhX1QlW87Hs/HS4h@miu.piliscsaba.redhat.com> <CAFQAk7gUCefe7WJhLD-oJdnjowqDVorpYv_u9_AqkceTvn9xNA@mail.gmail.com>
+ <CAJfpegt=9D1wAdxbr82br-cCnikNTiEZ=9NfPo02LAbTPMNb2Q@mail.gmail.com>
+In-Reply-To: <CAJfpegt=9D1wAdxbr82br-cCnikNTiEZ=9NfPo02LAbTPMNb2Q@mail.gmail.com>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Date:   Mon, 7 Mar 2022 15:55:46 +0800
+Message-ID: <CAFQAk7j-Osw7jR6YxOL3OgcAiwmVq_bfV-ceqrD4JzyLEnBe7Q@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v2] fuse: fix deadlock between atomic
+ O_TRUNC open() and page invalidations
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xie Yongji <xieyongji@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 11:21:59AM +0900, Oh Eomji wrote:
-> In mobile, a co-processor can be used with USB audio to improve power
-> consumption.  To support this type of hardware, hooks need to be added
-> to the USB audio subsystem to be able to call into the hardware when
-> needed.
-> 
-> The main operation of the call-backs are:
->   - Initialize the co-processor by transmitting data when initializing.
->   - Change the co-processor setting value through the interface
->     function.
->   - Configure sampling rate
->   - pcm open/close
->   - other housekeeping
-> 
-> Known issues:
->   - This only supports one set of callback hooks, meaning that this only
->     works if there is one type of USB controller in the system.  This
->     should be changed to be a per-host-controller interface instead of
->     one global set of callbacks.
+On Fri, Mar 4, 2022 at 11:30 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+>
+> On Fri, 4 Mar 2022 at 07:23, Jiachen Zhang
+> <zhangjiachen.jaycee@bytedance.com> wrote:
+>
+> > I tested this fix, and it did pass the xfstests generic/464 in our
+>
+> Thanks for testing!
+>
+> > environment. However, if I understand correctly, one of the usages of
+> > the nowrite is to protect file truncation, as said in the commit
+> > message of e4648309b85a78f8c787457832269a8712a8673e. So, does that
+> > mean this fix may introduce some other problems?
+>
+> That's an excellent question.  I don't think this will cause an issue,
+> since the nowrite protection is for truncation of the file on the
+> server (userspace) side.   The inode lock still protects concurrent
+> writes against page cache truncation in the writeback cache case.   In
+> the non-writeback cache case the nowrite protection does not do
+> anything.
 
-Also, this is a non-starter, and not going to work at all, sorry.  Most
-devices have more than one USB controller in the system, and we can
-never accept changes that break that model.
+Got it. So the nowrite is protecting O_TRUNC FUSE_OPEN (or truncating
+FUSE_SETATTR) against FUSE_WRITE in writeback_cache mode? Then this
+patch looks good to me.
 
-Nor would you want us to, as it would break many Samsung devices...
+Thanks,
+Jiachen
 
-thanks,
-
-greg k-h
+>
+> Thanks,
+> Miklos

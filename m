@@ -2,57 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146DC4CFEEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F0C4CFEEB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiCGMhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S233035AbiCGMhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238124AbiCGMh0 (ORCPT
+        with ESMTP id S242514AbiCGMh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Mar 2022 07:37:26 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B8E240A2B;
-        Mon,  7 Mar 2022 04:35:59 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 360A81FB;
-        Mon,  7 Mar 2022 04:35:59 -0800 (PST)
-Received: from [10.57.39.47] (unknown [10.57.39.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D2CE03F766;
-        Mon,  7 Mar 2022 04:35:57 -0800 (PST)
-Message-ID: <6cf91f43-df23-3ac9-e9b5-958d99d37422@arm.com>
-Date:   Mon, 7 Mar 2022 12:35:51 +0000
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F57D424AF;
+        Mon,  7 Mar 2022 04:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646656571; x=1678192571;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yrdF25iT52XAtwb6HtvmSGaVHOaZC8q1BXW6Q9LjzsY=;
+  b=Uxdah2WaBk/CB1XOwLG6S6/SMecoYLQN0FVfcnoLg2mvbVH74PLFyIMR
+   IZPwJh3STm9/+pmO/xzBaN43c9fzw3LKXErwqPjEjPYhREBLhutiIAWWd
+   67RRXBqXDCs/X6pG+Bh55J6CncMVq4KEJ7mhJVK4Yyds2oucfZePMhHCO
+   RFujHfXbnT2Cw/Q57CQ7KR/GhwKXNUgbbN6N5vrmihux2KlDcGjxuVYhO
+   e8AeQcWJI4bEzhoaeu4sORwCI11YAcqBIcDMlVNVBhSSyLtiiCMltIkEe
+   aiD2jX85odKb/vzmridtBeLip/P6z2iOpsS7LuZ5fjCoYszZ2KfNLwM3F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="317610619"
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="317610619"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 04:36:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="553136286"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga008.jf.intel.com with ESMTP; 07 Mar 2022 04:36:04 -0800
+Message-ID: <30383f92-59cb-2875-1e1b-ff1a0eacd235@intel.com>
+Date:   Mon, 7 Mar 2022 14:36:03 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [BUG] crypto: ccree: driver does not handle case where cryptlen =
- authsize =0
-Content-Language: en-GB
-To:     Gilad Ben-Yossef <gilad@benyossef.com>
-Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux-foundation.org
-References: <CAOtvUMeoYcVm7OQdqXd1V5iPSXW_BkVxx6TA6nF7zTLVeHe0Ww@mail.gmail.com>
- <CAOtvUMfy1fF35B2sfbOMui8n9Q4iCke9rgn5TiYMUMjd8gqHsA@mail.gmail.com>
- <YhKV55t90HWm6bhv@Red>
- <CAOtvUMdRU4wnRCXsC+U5XBDp+b+u8w7W7JCUKW2+ohuJz3PVhQ@mail.gmail.com>
- <YhOcEQEjIKBrbMIZ@Red>
- <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
- <CAOtvUMeRb=j=NDrc88x8aB-3=D1mxZ_-aA1d4FfvJmj7Jrbi4w@mail.gmail.com>
- <YiIUXtxd44ut5uzV@Red> <YiUsWosH+MKMF7DQ@gondor.apana.org.au>
- <CAOtvUMcudG3ySU+VeE7hfneDVWGLKFTnws-xjhq4hgFYSj0qOg@mail.gmail.com>
- <YiXjCcXXk0f18FDL@Red> <aca4117c-b7a5-f7eb-eb03-4e1f1a93a730@arm.com>
- <CAOtvUMePFR4e2jgHZKOvs3J3Xt4NzRbzD_=vr_49Qgs5HTrvHw@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAOtvUMePFR4e2jgHZKOvs3J3Xt4NzRbzD_=vr_49Qgs5HTrvHw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
+ a perf event clock
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>, jgross@suse.com,
+        sdeep@vmware.com, pv-drivers@vmware.com, pbonzini@redhat.com,
+        seanjc@google.com, kys@microsoft.com, sthemmin@microsoft.com,
+        virtualization@lists.linux-foundation.org,
+        Andrew.Cooper3@citrix.com
+References: <20220214110914.268126-1-adrian.hunter@intel.com>
+ <20220214110914.268126-4-adrian.hunter@intel.com>
+ <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
+ <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
+ <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,45 +82,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-07 12:17, Gilad Ben-Yossef wrote:
-> On Mon, Mar 7, 2022 at 1:14 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> 
->> The "overlap" is in the sense of having more than one mapping within the
->> same cacheline:
+On 07/03/2022 11:50, Peter Zijlstra wrote:
+> On Fri, Mar 04, 2022 at 08:27:45PM +0200, Adrian Hunter wrote:
+>> On 04/03/2022 15:41, Peter Zijlstra wrote:
+>>> On Mon, Feb 14, 2022 at 01:09:06PM +0200, Adrian Hunter wrote:
+>>>> Currently, when Intel PT is used within a VM guest, it is not possible to
+>>>> make use of TSC because perf clock is subject to paravirtualization.
+>>>
+>>> Yeah, so how much of that still makes sense, or ever did? AFAIK the
+>>> whole pv_clock thing is utter crazy. Should we not fix that instead?
 >>
->> [  142.458120] DMA-API: add_dma_entry start P=ba79f200 N=ba79f
->> D=ba79f200 L=10 DMA_FROM_DEVICE attrs=0
->> [  142.458156] DMA-API: add_dma_entry start P=445dc010 N=445dc
->> D=445dc010 L=10 DMA_TO_DEVICE attrs=0
->> [  142.458178] sun8i-ss 1c15000.crypto: SRC 0/1/1 445dc000 len=16 bi=0
->> [  142.458215] sun8i-ss 1c15000.crypto: DST 0/1/1 ba79f200 len=16 bi=0
->> [  142.458234] DMA-API: add_dma_entry start P=ba79f210 N=ba79f
->> D=ba79f210 L=10 DMA_FROM_DEVICE attrs=0
->>
->> This actually illustrates exactly the reason why this is unsupportable.
->> ba79f200 is mapped for DMA_FROM_DEVICE, therefore subsequently mapping
->> ba79f210 for DMA_TO_DEVICE may cause the cacheline covering the range
->> ba79f200-ba79f23f to be written back over the top of data that the
->> device has already started to write to memory. Hello data corruption.
->>
->> Separate DMA mappings should be from separate memory allocations,
->> respecting ARCH_DMA_MINALIGN.
+>> Presumably pv_clock must work with different host operating systems.
+>> Similarly, KVM must work with different guest operating systems.
+>> Perhaps I'm wrong, but I imagine re-engineering time virtualization
+>> might be a pretty big deal,  far exceeding the scope of these patches.
 > 
-> hmm... I know I'm missing something here, but how does this align with
-> the following from active_cacheline_insert() in kernel/dma/debug.c ?
+> I think not; on both counts. That is, I don't think it's going to be
+> hard, and even it if were, it would still be the right thing to do.
 > 
->          /* If the device is not writing memory then we don't have any
->           * concerns about the cpu consuming stale data.  This mitigates
->           * legitimate usages of overlapping mappings.
->           */
->          if (entry->direction == DMA_TO_DEVICE)
->                  return 0;
+> We're not going to add interface just to work around a known broken
+> piece of crap just because we don't want to fix it.
+> 
+> So I'm thinking we should do the below and simply ignore any paravirt
+> sched clock offered when there's ART on.
+> 
+> ---
+> diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+> index 4420499f7bb4..a1f179ed39bf 100644
+> --- a/arch/x86/kernel/paravirt.c
+> +++ b/arch/x86/kernel/paravirt.c
+> @@ -145,6 +145,15 @@ DEFINE_STATIC_CALL(pv_sched_clock, native_sched_clock);
+>  
+>  void paravirt_set_sched_clock(u64 (*func)(void))
+>  {
+> +	/*
+> +	 * Anything with ART on promises to have sane TSC, otherwise the whole
+> +	 * ART thing is useless. In order to make ART useful for guests, we
+> +	 * should continue to use the TSC. As such, ignore any paravirt
+> +	 * muckery.
+> +	 */
+> +	if (cpu_feature_enabled(X86_FEATURE_ART))
 
-It's OK to have multiple mappings that are *all* DMA_TO_DEVICE, which 
-looks to be the case that this check was intended to allow. However I 
-think you're right that it should still actually check for conflicting 
-directions between the new entry and any existing ones, otherwise it 
-ends up a bit too lenient.
+Does not seem to work because the feature X86_FEATURE_ART does not seem to get set.
+Possibly because detect_art() excludes anything running on a hypervisor.
 
-Cheers,
-Robin.
+> +		return;
+> +
+>  	static_call_update(pv_sched_clock, func);
+>  }
+>  
+

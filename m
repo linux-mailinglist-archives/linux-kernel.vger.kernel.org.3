@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B92C4D08EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C964D4D0914
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245470AbiCGUy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
+        id S243294AbiCGU5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245404AbiCGUyV (ORCPT
+        with ESMTP id S245475AbiCGU5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:54:21 -0500
+        Mon, 7 Mar 2022 15:57:43 -0500
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AAE2A26B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:53:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F36C37029
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:56:47 -0800 (PST)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1nRKM5-0002DJ-FY; Mon, 07 Mar 2022 21:53:21 +0100
+        id 1nRKM6-0002DJ-9K; Mon, 07 Mar 2022 21:53:22 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -31,9 +31,9 @@ Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         allen.baum@esperantotech.com, jscheid@ventanamicro.com,
         rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
         philipp.tomsich@vrull.eu, Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v7 09/13] riscv: Fix accessing pfn bits in PTEs for non-32bit variants
-Date:   Mon,  7 Mar 2022 21:53:06 +0100
-Message-Id: <20220307205310.1905628-10-heiko@sntech.de>
+Subject: [PATCH v7 10/13] riscv: add cpufeature handling via alternatives
+Date:   Mon,  7 Mar 2022 21:53:07 +0100
+Message-Id: <20220307205310.1905628-11-heiko@sntech.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220307205310.1905628-1-heiko@sntech.de>
 References: <20220307205310.1905628-1-heiko@sntech.de>
@@ -48,144 +48,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On rv32 the PFN part of PTEs is defined to use bits [xlen-1:10]
-while on rv64 it is defined to use bits [53:10], leaving [63:54]
-as reserved.
+Some cpufeatures should be handled via the alternatives mechanism
+to not incur penalties on unsupporting variants.
 
-With upcoming optional extensions like svpbmt these previously
-reserved bits will get used so simply right-shifting the PTE
-to get the PFN won't be enough.
-
-So introduce a _PAGE_PFN_MASK constant to mask the correct bits
-for both rv32 and rv64 before shifting.
+So add a mechanism to handle these similar to cpu erratas.
 
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 ---
- arch/riscv/include/asm/pgtable-32.h   |  8 ++++++++
- arch/riscv/include/asm/pgtable-64.h   | 14 +++++++++++---
- arch/riscv/include/asm/pgtable-bits.h |  6 ------
- arch/riscv/include/asm/pgtable.h      |  6 +++---
- 4 files changed, 22 insertions(+), 12 deletions(-)
+ arch/riscv/include/asm/alternative.h |  3 ++
+ arch/riscv/include/asm/errata_list.h |  2 +
+ arch/riscv/kernel/alternative.c      |  2 +
+ arch/riscv/kernel/cpufeature.c       | 57 +++++++++++++++++++++++++++-
+ 4 files changed, 63 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/pgtable-32.h b/arch/riscv/include/asm/pgtable-32.h
-index 5b2e79e5bfa5..e266a4fe7f43 100644
---- a/arch/riscv/include/asm/pgtable-32.h
-+++ b/arch/riscv/include/asm/pgtable-32.h
-@@ -7,6 +7,7 @@
- #define _ASM_RISCV_PGTABLE_32_H
- 
- #include <asm-generic/pgtable-nopmd.h>
-+#include <linux/bits.h>
- #include <linux/const.h>
- 
- /* Size of region mapped by a page global directory */
-@@ -16,4 +17,11 @@
- 
- #define MAX_POSSIBLE_PHYSMEM_BITS 34
- 
-+/*
-+ * rv32 PTE format:
-+ * | XLEN-1  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-+ *       PFN      reserved for SW   D   A   G   U   X   W   R   V
-+ */
-+#define _PAGE_PFN_MASK  GENMASK(31, 10)
+diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
+index f0657b1b3174..cf3b22173834 100644
+--- a/arch/riscv/include/asm/alternative.h
++++ b/arch/riscv/include/asm/alternative.h
+@@ -39,5 +39,8 @@ struct errata_checkfunc_id {
+ void sifive_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
+ 			      unsigned long archid, unsigned long impid,
+ 			      unsigned int stage);
 +
- #endif /* _ASM_RISCV_PGTABLE_32_H */
-diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-index bbbdd66e5e2f..9412c6157c88 100644
---- a/arch/riscv/include/asm/pgtable-64.h
-+++ b/arch/riscv/include/asm/pgtable-64.h
-@@ -6,6 +6,7 @@
- #ifndef _ASM_RISCV_PGTABLE_64_H
- #define _ASM_RISCV_PGTABLE_64_H
++void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
++				 unsigned int stage);
+ #endif
+ #endif
+diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+index 5f1046e82d9f..6b95bd9aee82 100644
+--- a/arch/riscv/include/asm/errata_list.h
++++ b/arch/riscv/include/asm/errata_list.h
+@@ -14,6 +14,8 @@
+ #define	ERRATA_SIFIVE_NUMBER 2
+ #endif
  
-+#include <linux/bits.h>
- #include <linux/const.h>
- 
- extern bool pgtable_l4_enabled;
-@@ -48,6 +49,13 @@ typedef struct {
- 
- #define PTRS_PER_PMD    (PAGE_SIZE / sizeof(pmd_t))
- 
-+/*
-+ * rv64 PTE format:
-+ * | 63 | 62 61 | 60 54 | 53  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-+ *   N      MT     RSV    PFN      reserved for SW   D   A   G   U   X   W   R   V
-+ */
-+#define _PAGE_PFN_MASK  GENMASK(53, 10)
++#define	CPUFEATURE_NUMBER 0
 +
- static inline int pud_present(pud_t pud)
- {
- 	return (pud_val(pud) & _PAGE_PRESENT);
-@@ -91,12 +99,12 @@ static inline unsigned long _pud_pfn(pud_t pud)
+ #ifdef __ASSEMBLY__
  
- static inline pmd_t *pud_pgtable(pud_t pud)
+ #define ALT_INSN_FAULT(x)						\
+diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
+index 223770b3945c..e6c9de9f9ba6 100644
+--- a/arch/riscv/kernel/alternative.c
++++ b/arch/riscv/kernel/alternative.c
+@@ -63,6 +63,8 @@ static void __init_or_module _apply_alternatives(struct alt_entry *begin,
+ 						 struct alt_entry *end,
+ 						 unsigned int stage)
  {
--	return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
-+	return (pmd_t *)pfn_to_virt((pud_val(pud) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT);
++	riscv_cpufeature_patch_func(begin, end, stage);
++
+ 	if (!vendor_patch_func)
+ 		return;
+ 
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index f3a4b0619aa0..92d4b4c25d47 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -8,9 +8,14 @@
+ 
+ #include <linux/bitmap.h>
+ #include <linux/ctype.h>
++#include <linux/module.h>
+ #include <linux/of.h>
+-#include <asm/processor.h>
++#include <asm/alternative.h>
++#include <asm/errata_list.h>
+ #include <asm/hwcap.h>
++#include <asm/patch.h>
++#include <asm/pgtable.h>
++#include <asm/processor.h>
+ #include <asm/smp.h>
+ #include <asm/switch_to.h>
+ 
+@@ -237,3 +242,53 @@ void __init riscv_fill_hwcap(void)
+ 		static_branch_enable(&cpu_hwcap_fpu);
+ #endif
  }
- 
- static inline struct page *pud_page(pud_t pud)
- {
--	return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
-+	return pfn_to_page((pud_val(pud) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT);
- }
- 
- #define mm_pud_folded  mm_pud_folded
-@@ -117,7 +125,7 @@ static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
- 
- static inline unsigned long _pmd_pfn(pmd_t pmd)
- {
--	return pmd_val(pmd) >> _PAGE_PFN_SHIFT;
-+	return (pmd_val(pmd) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT;
- }
- 
- #define mk_pmd(page, prot)    pfn_pmd(page_to_pfn(page), prot)
-diff --git a/arch/riscv/include/asm/pgtable-bits.h b/arch/riscv/include/asm/pgtable-bits.h
-index a6b0c89824c2..e571fa954afc 100644
---- a/arch/riscv/include/asm/pgtable-bits.h
-+++ b/arch/riscv/include/asm/pgtable-bits.h
-@@ -6,12 +6,6 @@
- #ifndef _ASM_RISCV_PGTABLE_BITS_H
- #define _ASM_RISCV_PGTABLE_BITS_H
- 
--/*
-- * PTE format:
-- * | XLEN-1  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-- *       PFN      reserved for SW   D   A   G   U   X   W   R   V
-- */
--
- #define _PAGE_ACCESSED_OFFSET 6
- 
- #define _PAGE_PRESENT   (1 << 0)
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index e3549e50de95..6d31489818cd 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -259,12 +259,12 @@ static inline unsigned long _pgd_pfn(pgd_t pgd)
- 
- static inline struct page *pmd_page(pmd_t pmd)
- {
--	return pfn_to_page(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
-+	return pfn_to_page((pmd_val(pmd) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT);
- }
- 
- static inline unsigned long pmd_page_vaddr(pmd_t pmd)
- {
--	return (unsigned long)pfn_to_virt(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
-+	return (unsigned long)pfn_to_virt((pmd_val(pmd) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT);
- }
- 
- static inline pte_t pmd_pte(pmd_t pmd)
-@@ -280,7 +280,7 @@ static inline pte_t pud_pte(pud_t pud)
- /* Yields the page frame number (PFN) of a page table entry */
- static inline unsigned long pte_pfn(pte_t pte)
- {
--	return (pte_val(pte) >> _PAGE_PFN_SHIFT);
-+	return ((pte_val(pte) & _PAGE_PFN_MASK) >> _PAGE_PFN_SHIFT);
- }
- 
- #define pte_page(x)     pfn_to_page(pte_pfn(x))
++
++struct cpufeature_info {
++	char name[ERRATA_STRING_LENGTH_MAX];
++	bool (*check_func)(unsigned int stage);
++};
++
++static const struct cpufeature_info __initdata_or_module cpufeature_list[CPUFEATURE_NUMBER] = {
++};
++
++static u32 __init_or_module cpufeature_probe(unsigned int stage)
++{
++	const struct cpufeature_info *info;
++	u32 cpu_req_feature = 0;
++	int idx;
++
++	for (idx = 0; idx < CPUFEATURE_NUMBER; idx++) {
++		info = &cpufeature_list[idx];
++
++		if (info->check_func(stage))
++			cpu_req_feature |= (1U << idx);
++	}
++
++	return cpu_req_feature;
++}
++
++void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
++						  struct alt_entry *end,
++						  unsigned int stage)
++{
++	u32 cpu_req_feature = cpufeature_probe(stage);
++	u32 cpu_apply_feature = 0;
++	struct alt_entry *alt;
++	u32 tmp;
++
++	for (alt = begin; alt < end; alt++) {
++		if (alt->vendor_id != 0)
++			continue;
++		if (alt->errata_id >= CPUFEATURE_NUMBER) {
++			WARN(1, "This feature id:%d is not in kernel cpufeature list",
++				alt->errata_id);
++			continue;
++		}
++
++		tmp = (1U << alt->errata_id);
++		if (cpu_req_feature & tmp) {
++			patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
++			cpu_apply_feature |= tmp;
++		}
++	}
++}
 -- 
 2.30.2
 

@@ -2,163 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B96E74D0228
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 606E64D0229
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238030AbiCGO4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:56:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
+        id S239824AbiCGO4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236557AbiCGO4L (ORCPT
+        with ESMTP id S240874AbiCGO41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:56:11 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2F93BBFA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:55:16 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 619D73F5F9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:55:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646664915;
-        bh=C8pfnsecsrezK4Nb7IRuKxjSY5+ji8Ej5U+DGoorANw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=WJt3+JH5GgdWW887A6G1YWpLfGkR0tH4I3f1/i69wAy/cgVWX1yWUUUK47vF4307+
-         gizh6u1POkIM0+gaqLwqIyV+UOGh7wIfXYzB0lLKr/Icey16HXPyu+4TLSP118wr/R
-         z+t+M7zvnnLln+JxLJhO213UNO56dtQtqolyfYIJnxBF7LWJOTlHvJSqDO+s7/dnLE
-         w83+eeHrco70R9vTgyc5MaMABrlR36+50e3wFvVmtNUwWQFFLsFw4eGriduBtN7IQV
-         BilMGPpmCYFzzvwE4IJ3ZADr/QQpd3yXR9WenIaM9AcK2aNLq/slyuJ1a57aUbrEvT
-         +j8ZsjHZncAGw==
-Received: by mail-ed1-f69.google.com with SMTP id b24-20020a50e798000000b0041631767675so2862167edn.23
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:55:15 -0800 (PST)
+        Mon, 7 Mar 2022 09:56:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B8089137C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:55:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646664931;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D5zPX7+bWmI/CpaY4FGFLKYM45UiVk77Y9xHMmgz+n8=;
+        b=TfFokRXEOpugpbElX+Pa9zP+ZH741b3reDKciLQGyvxdb4u2M9m/cMbDjMo/oETg/QJ0QM
+        HYEwQI8eKkNMJgr6qAzquhQ/ofFDZx6bjw37T/4n/p4DPQHkRQlykngyWy7aBv7h34OFza
+        aALgR4z7dnxSG9RFLzzeCW/kmM3llJE=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-274-ZPVXWx4PPbeOElJ86Kjs1w-1; Mon, 07 Mar 2022 09:55:30 -0500
+X-MC-Unique: ZPVXWx4PPbeOElJ86Kjs1w-1
+Received: by mail-ed1-f72.google.com with SMTP id n11-20020a50cc4b000000b00415e939bf9eso6590261edi.22
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:55:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=C8pfnsecsrezK4Nb7IRuKxjSY5+ji8Ej5U+DGoorANw=;
-        b=fO7zqHqO1oTUp4FCTDzLqTzD4v7RXnIn+lgCPrllJDzfQc5eUCHod0x5eqgO63iEQ4
-         /r4fFFfnnuKpLcD412zqZ8VR9eWZav4iNRMEuFvk1iiuCLHjj1yxGCKDSGKu1K8onFDU
-         irYL5zPrZ8baXMrrk186yb9TQV4MFyBwp3nYG+V1DoHeiJitinP5EX9xCg7jCqUTjhx1
-         V2vf5JA4vgpoepWH0Qwb1QZr5bN5w0nxkCYJpz5k7gsFAlcJTK0TYpsISryn7N56x5eM
-         pIAhHqVsvrJ4vjHaoBc1mxzBrxyVe6nLyoK2w4vF3Hv02bpH+pxQXXJuk8MEOumZD93M
-         9mtQ==
-X-Gm-Message-State: AOAM532l6b1Q0T441GaK6xT0yUXzgIWIBvTELzMYgejBz30v87YNxpLC
-        Cgw+Qlv5h31wmBFATl1Bon8fDt8+J5S/1nVUjnTpHf1Vt9vGycgweHufrKXw0PLVJJVOxRVgc6m
-        qucW2WeGEeKTzlLWCrEqWveE8qP+OTaTOQsk4Px5ulQ==
-X-Received: by 2002:a17:906:6a0f:b0:6d7:1021:2bd2 with SMTP id qw15-20020a1709066a0f00b006d710212bd2mr9960420ejc.395.1646664915107;
-        Mon, 07 Mar 2022 06:55:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx0lnoIbRB64+BxucbKOyxrxZ+MR5/YF75HAstgYp2zaexCX+E0Y4T2gxNY+oCkTIf2TYVxVA==
-X-Received: by 2002:a17:906:6a0f:b0:6d7:1021:2bd2 with SMTP id qw15-20020a1709066a0f00b006d710212bd2mr9960403ejc.395.1646664914823;
-        Mon, 07 Mar 2022 06:55:14 -0800 (PST)
-Received: from [192.168.0.142] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id z92-20020a509e65000000b00416466dc220sm1749452ede.87.2022.03.07.06.55.13
+        bh=D5zPX7+bWmI/CpaY4FGFLKYM45UiVk77Y9xHMmgz+n8=;
+        b=leIPh5dic0HJoej/VhVJqZYYxqyRZbxUFTbqnYH175VlsoVnFbXFkoQu0VoIcfGryH
+         R578KEdRgS5lvQQBs+BP2t2WS2XRiT0Y9WBnM/28BjRQkg4Bb83gDxcQzn57S9poU+Sw
+         v458LwXeJHT2l6oxWe5AUD061sXCn0Qfo4UO4KjcC2z//KHvWzjbBRpPrXQSr3q8CEHi
+         bjFzO/Is4zCT9OeUkeLmoDjp2EOICXw29Dgk5ae+TlZubNqiJVMyD4FNQn7wMpZjRm6C
+         JjamgsH6RzRVk29QY0fAlKtn+QfLzb4RLYIjIuNpmRjgTWIx5dnfY1ARxZgvJpX8hTML
+         r5xw==
+X-Gm-Message-State: AOAM531MpW8zeGfboIFvLHe6upF1y9MkGeBu1qB5f6hQzLT9UW4pSwqa
+        Mj4Z3k0soC7AKZpQbtGa/TPxV42c7NhS+MV6cg4liSuTILfeAeTFEzUWfrGbKLywEPQGg2wACOu
+        huqm0rIA9ZSJK+mohk5np8Y+T
+X-Received: by 2002:a05:6402:386:b0:415:ead8:ced with SMTP id o6-20020a056402038600b00415ead80cedmr11409633edv.407.1646664928823;
+        Mon, 07 Mar 2022 06:55:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJySUeZ/g15Q+Zh/jVxG1SoCZ4fgYUQpZ1q4Lpw/TD/4UegnrNhxHRfVUXWGGufXmdViY21jeA==
+X-Received: by 2002:a05:6402:386:b0:415:ead8:ced with SMTP id o6-20020a056402038600b00415ead80cedmr11409623edv.407.1646664928587;
+        Mon, 07 Mar 2022 06:55:28 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id bk1-20020a170906b0c100b006d47308d84dsm4820465ejb.33.2022.03.07.06.55.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 06:55:13 -0800 (PST)
-Message-ID: <4e137401-4b8c-0abc-0c50-d784d579a991@canonical.com>
-Date:   Mon, 7 Mar 2022 15:55:12 +0100
+        Mon, 07 Mar 2022 06:55:28 -0800 (PST)
+Message-ID: <ac21f173-2cba-0ddc-67db-27e06950c2d4@redhat.com>
+Date:   Mon, 7 Mar 2022 15:55:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: pwm: convert atmel pwm to json-schema
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/2] mfd: arizona-spi: Add Android board ACPI table
+ handling
 Content-Language: en-US
-To:     Sergiu Moga <sergiu.moga@microchip.com>,
-        claudiu.beznea@microchip.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        robh+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220307144652.162706-1-sergiu.moga@microchip.com>
- <20220307144652.162706-2-sergiu.moga@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307144652.162706-2-sergiu.moga@microchip.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+References: <20220223134222.730886-1-hdegoede@redhat.com>
+ <20220223134222.730886-2-hdegoede@redhat.com> <YiYb+Ea7aKO99gXL@google.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YiYb+Ea7aKO99gXL@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 15:46, Sergiu Moga wrote:
-> Convert PWM binding for Atmel/Microchip SoCs to Device Tree Schema
-> format.
+Hi,
+
+On 3/7/22 15:51, Lee Jones wrote:
+> On Wed, 23 Feb 2022, Hans de Goede wrote:
 > 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> ---
->  .../bindings/pwm/atmel,at91sam-pwm.yaml       | 42 +++++++++++++++++++
->  .../devicetree/bindings/pwm/atmel-pwm.txt     | 35 ----------------
->  2 files changed, 42 insertions(+), 35 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pwm/atmel-pwm.txt
+>> x86/ACPI boards with an arizona WM5102 codec ship with either Windows or
+>> Android as factory installed OS.
+>>
+>> The ACPI fwnode for the codec on Android boards misses 2 things compared
+>> to the Windows boards (this is hardcoded in the Android board kernels):
+>>
+>> 1. There is no CLKE ACPI method to enabe the 32 KHz clock the codec needs
+>>    for jack-detection.
+>>
+>> 2. The GPIOs used by the codec are not listed in the fwnode for the codec.
+>>
+>> The ACPI tables on x86/ACPI boards shipped with Android being incomplete
+>> happens a lot. The special drivers/platform/x86/x86-android-tablets.c
+>> module contains DMI based per model handling to compensate for this.
+>>
+>> This module will enable the 32KHz clock through the pinctrl framework
+>> to fix 1. and it will also register a gpio-lookup table for all GPIOs
+>> needed by the codec + machine driver, including the GPIOs coming from
+>> the codec itself.
+>>
+>> Add an arizona_spi_acpi_android_probe() function which waits for the
+>> x86-android-tablets to have set things up before continue with probing
+>> the arizona WM5102 codec.
+>>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>>  drivers/mfd/arizona-spi.c | 34 +++++++++++++++++++++++++++++++++-
+>>  1 file changed, 33 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/mfd/arizona-spi.c b/drivers/mfd/arizona-spi.c
+>> index 238355542ab1..2c686e71db21 100644
+>> --- a/drivers/mfd/arizona-spi.c
+>> +++ b/drivers/mfd/arizona-spi.c
+>> @@ -81,6 +81,29 @@ static int arizona_spi_acpi_windows_probe(struct arizona *arizona)
+>>  	return 0;
+>>  }
+>>  
+>> +/* For ACPI tables from boards which ship with Android as factory OS */
+>> +static int arizona_spi_acpi_android_probe(struct arizona *arizona)
+>> +{
+>> +	int ret;
+>> +
+>> +	/*
+>> +	 * Get the reset GPIO, treating -ENOENT as -EPROBE_DEFER to wait for
+>> +	 * the x86-android-tablets module to register the board specific GPIO
+>> +	 * lookup table.
+>> +	 */
+>> +	arizona->pdata.reset = devm_gpiod_get(arizona->dev, "reset", GPIOD_OUT_LOW);
+>> +	if (IS_ERR(arizona->pdata.reset)) {
+>> +		ret = PTR_ERR(arizona->pdata.reset);
+>> +		if (ret == -ENOENT) {
+>> +			dev_info_once(arizona->dev, "Deferring probe till GPIO lookup is registered\n");
 > 
-> diff --git a/Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml b/Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml
-> new file mode 100644
-> index 000000000000..2d5dd51a6a55
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pwm/atmel,at91sam-pwm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel/Microchip PWM controller
-> +
-> +allOf:
-> +  - $ref: "pwm.yaml#"
+> Nit: How many chars is this?
 
-allOf by convention should go between maintaners and properties.
+105.
 
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - atmel,at91sam9rl-pwm
-> +      - atmel,sama5d3-pwm
-> +      - atmel,sama5d2-pwm
-> +      - microchip,sam9x60-pwm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#pwm-cells":
-> +    const: 3
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: true
+> I thought we were drawing the line at 100 these days?
 
-This has to be either additionalProperties:false or
-"unevaluatedProperties:false".
+We have an exception for log lines, since we don't want to break them
+up because that makes grepping for them impossible.
 
-> +
-> +examples:
-> +  - |
-> +        pwm0: pwm@f8034000 {
-> +                compatible = "atmel,at91sam9rl-pwm";
-> +                reg = <0xf8034000 0x400>;
-> +                #pwm-cells = <3>;
+> Does this patch pass checkpatch.pl?
 
-Also please change indentation to 2 or 4 spaces (like we use for all DTS
-examples). Four is preferred (only personally).
+Yes because of the exception for log lines:
 
-You also need to update the path in MAINTAINERS.
+[hans@x1 linux]$ scripts/checkpatch.pl 0001-mfd-arizona-spi-Add-Android-board-ACPI-table-handlin.patch 
+total: 0 errors, 0 warnings, 54 lines checked
 
-Best regards,
-Krzysztof
+0001-mfd-arizona-spi-Add-Android-board-ACPI-table-handlin.patch has no obvious style problems and is ready for submission.
+
+Regards,
+
+Hans
+
+
+> 
+>> +			ret = -EPROBE_DEFER;
+>> +		}
+>> +		return dev_err_probe(arizona->dev, ret, "getting reset GPIO\n");
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  /*
+>>   * The AOSP 3.5 mm Headset: Accessory Specification gives the following values:
+>>   * Function A Play/Pause:           0 ohm
+>> @@ -102,9 +125,14 @@ static const struct arizona_micd_range arizona_micd_aosp_ranges[] = {
+>>  
+>>  static int arizona_spi_acpi_probe(struct arizona *arizona)
+>>  {
+>> +	struct acpi_device *adev = ACPI_COMPANION(arizona->dev);
+>>  	int ret;
+>>  
+>> -	ret = arizona_spi_acpi_windows_probe(arizona);
+>> +	if (acpi_dev_hid_uid_match(adev, "10WM5102", NULL))
+>> +		ret = arizona_spi_acpi_android_probe(arizona);
+>> +	else
+>> +		ret = arizona_spi_acpi_windows_probe(arizona);
+>> +
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> @@ -142,6 +170,10 @@ static const struct acpi_device_id arizona_acpi_match[] = {
+>>  		.id = "WM510205",
+>>  		.driver_data = WM5102,
+>>  	},
+>> +	{
+>> +		.id = "10WM5102",
+>> +		.driver_data = WM5102,
+>> +	},
+>>  	{ }
+>>  };
+>>  MODULE_DEVICE_TABLE(acpi, arizona_acpi_match);
+> 
+

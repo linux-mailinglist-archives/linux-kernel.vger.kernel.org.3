@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87364D0B30
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC234D0B36
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbiCGWhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
+        id S1343813AbiCGWiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbiCGWhV (ORCPT
+        with ESMTP id S1343807AbiCGWiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:37:21 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A026158
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:36:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646692586; x=1678228586;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IQs7hZPHXapM5VVr1ROT2fk/ZVFBxJexvpNeSw1IuV8=;
-  b=LutNApXPekCioYWV/51SX5XiGOuQwUbdtrNHWUem/nOd40VqEdo+YWkD
-   VgDVJUQfgZ0rzNq/ZXWVX1sZ7bXgqKuMi75r7DguT6BUNj3kmf2C6Itz9
-   TVI9E7ijrjjPM4SEA8Fayb3eMdSx5SoLDsVJKbHbYVPh6aIrUgMRe+Hcx
-   Jz4Hx1Nni5QOKNZH6sAxGDSPxruP2VUptuKP2hQwtyqeFFCNjcCvdoOcC
-   Wcc808HJaatXVDCmAOeJx7eZ13oZJxQAxauUZOc2NKzOHlvVKYxqb0TSR
-   W9FlddXT0SqY4Ma4zh+YwAnsor8qtwKLK01ToTWuwF5qjyA4yYoZzpVLc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="253354811"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="253354811"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 14:36:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="711284155"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 07 Mar 2022 14:36:08 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id D91831D6; Tue,  8 Mar 2022 00:36:26 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     xiaoyao.li@intel.com
-Cc:     aarcange@redhat.com, ak@linux.intel.com, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
-        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
-        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
-        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Subject: [PATCHv5.1 23/30] x86/boot: Avoid #VE during boot for TDX platforms
-Date:   Tue,  8 Mar 2022 01:36:25 +0300
-Message-Id: <20220307223625.2456-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <e8452e86-4063-c85b-5e21-c7cd6ce51423@intel.com>
-References: <e8452e86-4063-c85b-5e21-c7cd6ce51423@intel.com>
+        Mon, 7 Mar 2022 17:38:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53A877007B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:37:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646692645;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z8UjngamxI9B+AYkCciPjNfNT+6reXZ4EgmCRb4lE+4=;
+        b=Dwwumy2HCKqhRYHT26TSmZQMBqn/3VFevfbwJp66ErLNom4JtP87PAKCB7L84omqcQv5rG
+        G9RaXuWbPEmuzcyqopZv+GRaeqa92e0Jsaj0i/fy4W7fa3cGXa/YZRWaETdTdwRazRew3b
+        J4wZv/EaNFbt0nH4nu4FUyzTefQ5ISA=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-Nptis-jjNp6Jq7tJB8PAIw-1; Mon, 07 Mar 2022 17:37:24 -0500
+X-MC-Unique: Nptis-jjNp6Jq7tJB8PAIw-1
+Received: by mail-ej1-f70.google.com with SMTP id lf15-20020a170906ae4f00b006da86a43346so6518888ejb.14
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 14:37:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z8UjngamxI9B+AYkCciPjNfNT+6reXZ4EgmCRb4lE+4=;
+        b=tlIH4x3JuliamckJfioVihMOzNh4cl9l3pit4fFyP70zGM8adbvnCv0nuisMGaITBZ
+         zVZXJF6+pu8+x7YW6vFSimrFMyLc7QCoepxwf14LitGnYy6knJFPBfNE7nfos+NUkIIl
+         juC0nHFNtRo9VWNb95tTHcm3GzyCLuFcpLoTWZxekWQ15/N/6J7N6yCnxpX70030J7uf
+         dBaXOyI3FA6KkVGQBfnmPxIJXHSV+9z4ULHYHA2yVoqVg3x9HOxXBucIciLs7JRA5vGx
+         zCer70a+2hSVGe8hoEKrvyzKqbJXzoILghT4gax0qsqgle/tNHcjz9yy4KP7/BgYGi4B
+         m27A==
+X-Gm-Message-State: AOAM5322z80cqJ2RQPq4BDOdyUWI4vi/8LNbNKRpgjvD71MpyyY8HbVH
+        FPvvawwBgRW6XRQA4I+qLgtVKsmG/ifTlGmr5Umul28LWby5pYJUsIZwi7DIoNzMd4L2764kYJV
+        qd/ADqHTmQvEfSxPwVOvcu0wV
+X-Received: by 2002:a05:6402:644:b0:416:4ade:54e3 with SMTP id u4-20020a056402064400b004164ade54e3mr5993880edx.222.1646692642160;
+        Mon, 07 Mar 2022 14:37:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwDQfReYKCLxP7wgXRhk5w7cO+7IyYbZrZcsq5S+N9M32u3NyUw3dG6w3ZKY6BWETW8k6zHrA==
+X-Received: by 2002:a05:6402:644:b0:416:4ade:54e3 with SMTP id u4-20020a056402064400b004164ade54e3mr5993869edx.222.1646692641977;
+        Mon, 07 Mar 2022 14:37:21 -0800 (PST)
+Received: from redhat.com ([2.55.138.228])
+        by smtp.gmail.com with ESMTPSA id w14-20020a170906d20e00b006cee22553f7sm5205644ejz.213.2022.03.07.14.37.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 14:37:21 -0800 (PST)
+Date:   Mon, 7 Mar 2022 17:37:18 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     jasowang@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <20220307173439-mutt-send-email-mst@kernel.org>
+References: <20220307191757.3177139-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307191757.3177139-1-lee.jones@linaro.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,188 +80,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+On Mon, Mar 07, 2022 at 07:17:57PM +0000, Lee Jones wrote:
+> vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> to vhost_get_vq_desc().  All we have to do here is take the same lock
+> during virtqueue clean-up and we mitigate the reported issues.
 
-There are a few MSRs and control register bits that the kernel
-normally needs to modify during boot. But, TDX disallows
-modification of these registers to help provide consistent security
-guarantees. Fortunately, TDX ensures that these are all in the correct
-state before the kernel loads, which means the kernel does not need to
-modify them.
+Pls just basically copy the code comment here. this is just confuses.
 
-The conditions to avoid are:
+> Also WARN() as a precautionary measure.  The purpose of this is to
+> capture possible future race conditions which may pop up over time.
+> 
+> Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
 
- * Any writes to the EFER MSR
- * Clearing CR4.MCE
+And this is a bug we already fixed, right?
 
-This theoretically makes the guest boot more fragile. If, for instance,
-EFER was set up incorrectly and a WRMSR was performed, it will trigger
-early exception panic or a triple fault, if it's before early
-exceptions are set up. However, this is likely to trip up the guest
-BIOS long before control reaches the kernel. In any case, these kinds
-of problems are unlikely to occur in production environments, and
-developers have good debug tools to fix them quickly.
+> Cc: <stable@vger.kernel.org>
+> Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
 
-Change the common boot code to work on TDX and non-TDX systems.
-This should have no functional effect on non-TDX systems.
+not really applicable anymore ...
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- v5.1:
-  - Fix typo in commit message: CR3.MCE -> CR4.MCE.
----
- arch/x86/Kconfig                     |  1 +
- arch/x86/boot/compressed/head_64.S   | 20 ++++++++++++++++++--
- arch/x86/boot/compressed/pgtable.h   |  2 +-
- arch/x86/kernel/head_64.S            | 28 ++++++++++++++++++++++++++--
- arch/x86/realmode/rm/trampoline_64.S | 13 ++++++++++++-
- 5 files changed, 58 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index d2f45e58e846..98efb35ed7b1 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -886,6 +886,7 @@ config INTEL_TDX_GUEST
- 	depends on X86_X2APIC
- 	select ARCH_HAS_CC_PLATFORM
- 	select DYNAMIC_PHYSICAL_MASK
-+	select X86_MCE
- 	help
- 	  Support running as a guest under Intel TDX.  Without this support,
- 	  the guest kernel can not boot or run under TDX.
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index d0c3d33f3542..6d903b2fc544 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -643,12 +643,28 @@ SYM_CODE_START(trampoline_32bit_src)
- 	movl	$MSR_EFER, %ecx
- 	rdmsr
- 	btsl	$_EFER_LME, %eax
-+	/* Avoid writing EFER if no change was made (for TDX guest) */
-+	jc	1f
- 	wrmsr
--	popl	%edx
-+1:	popl	%edx
- 	popl	%ecx
- 
-+#ifdef CONFIG_X86_MCE
-+	/*
-+	 * Preserve CR4.MCE if the kernel will enable #MC support.
-+	 * Clearing MCE may fault in some environments (that also force #MC
-+	 * support). Any machine check that occurs before #MC support is fully
-+	 * configured will crash the system regardless of the CR4.MCE value set
-+	 * here.
-+	 */
-+	movl	%cr4, %eax
-+	andl	$X86_CR4_MCE, %eax
-+#else
-+	movl	$0, %eax
-+#endif
-+
- 	/* Enable PAE and LA57 (if required) paging modes */
--	movl	$X86_CR4_PAE, %eax
-+	orl	$X86_CR4_PAE, %eax
- 	testl	%edx, %edx
- 	jz	1f
- 	orl	$X86_CR4_LA57, %eax
-diff --git a/arch/x86/boot/compressed/pgtable.h b/arch/x86/boot/compressed/pgtable.h
-index 6ff7e81b5628..cc9b2529a086 100644
---- a/arch/x86/boot/compressed/pgtable.h
-+++ b/arch/x86/boot/compressed/pgtable.h
-@@ -6,7 +6,7 @@
- #define TRAMPOLINE_32BIT_PGTABLE_OFFSET	0
- 
- #define TRAMPOLINE_32BIT_CODE_OFFSET	PAGE_SIZE
--#define TRAMPOLINE_32BIT_CODE_SIZE	0x70
-+#define TRAMPOLINE_32BIT_CODE_SIZE	0x80
- 
- #define TRAMPOLINE_32BIT_STACK_END	TRAMPOLINE_32BIT_SIZE
- 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 9c63fc5988cd..184b7468ea76 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -140,8 +140,22 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	addq	$(init_top_pgt - __START_KERNEL_map), %rax
- 1:
- 
-+#ifdef CONFIG_X86_MCE
-+	/*
-+	 * Preserve CR4.MCE if the kernel will enable #MC support.
-+	 * Clearing MCE may fault in some environments (that also force #MC
-+	 * support). Any machine check that occurs before #MC support is fully
-+	 * configured will crash the system regardless of the CR4.MCE value set
-+	 * here.
-+	 */
-+	movq	%cr4, %rcx
-+	andl	$X86_CR4_MCE, %ecx
-+#else
-+	movl	$0, %ecx
-+#endif
-+
- 	/* Enable PAE mode, PGE and LA57 */
--	movl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
-+	orl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
- #ifdef CONFIG_X86_5LEVEL
- 	testl	$1, __pgtable_l5_enabled(%rip)
- 	jz	1f
-@@ -246,13 +260,23 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	/* Setup EFER (Extended Feature Enable Register) */
- 	movl	$MSR_EFER, %ecx
- 	rdmsr
-+	/*
-+	 * Preserve current value of EFER for comparison and to skip
-+	 * EFER writes if no change was made (for TDX guest)
-+	 */
-+	movl    %eax, %edx
- 	btsl	$_EFER_SCE, %eax	/* Enable System Call */
- 	btl	$20,%edi		/* No Execute supported? */
- 	jnc     1f
- 	btsl	$_EFER_NX, %eax
- 	btsq	$_PAGE_BIT_NX,early_pmd_flags(%rip)
--1:	wrmsr				/* Make changes effective */
- 
-+	/* Avoid writing EFER if no change was made (for TDX guest) */
-+1:	cmpl	%edx, %eax
-+	je	1f
-+	xor	%edx, %edx
-+	wrmsr				/* Make changes effective */
-+1:
- 	/* Setup cr0 */
- 	movl	$CR0_STATE, %eax
- 	/* Make changes effective */
-diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
-index d380f2d1fd23..e38d61d6562e 100644
---- a/arch/x86/realmode/rm/trampoline_64.S
-+++ b/arch/x86/realmode/rm/trampoline_64.S
-@@ -143,11 +143,22 @@ SYM_CODE_START(startup_32)
- 	movl	%eax, %cr3
- 
- 	# Set up EFER
-+	movl	$MSR_EFER, %ecx
-+	rdmsr
-+	/*
-+	 * Skip writing to EFER if the register already has desired
-+	 * value (to avoid #VE for the TDX guest).
-+	 */
-+	cmp	pa_tr_efer, %eax
-+	jne	.Lwrite_efer
-+	cmp	pa_tr_efer + 4, %edx
-+	je	.Ldone_efer
-+.Lwrite_efer:
- 	movl	pa_tr_efer, %eax
- 	movl	pa_tr_efer + 4, %edx
--	movl	$MSR_EFER, %ecx
- 	wrmsr
- 
-+.Ldone_efer:
- 	# Enable paging and in turn activate Long Mode.
- 	movl	$CR0_STATE, %eax
- 	movl	%eax, %cr0
--- 
-2.34.1
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/vhost/vhost.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> index 59edb5a1ffe28..ef7e371e3e649 100644
+> --- a/drivers/vhost/vhost.c
+> +++ b/drivers/vhost/vhost.c
+> @@ -693,6 +693,15 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>  	int i;
+>  
+>  	for (i = 0; i < dev->nvqs; ++i) {
+> +		/* No workers should run here by design. However, races have
+> +		 * previously occurred where drivers have been unable to flush
+> +		 * all work properly prior to clean-up.  Without a successful
+> +		 * flush the guest will malfunction, but avoiding host memory
+> +		 * corruption in those cases does seem preferable.
+> +		 */
+> +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
+> +
+> +		mutex_lock(&dev->vqs[i]->mutex);
+>  		if (dev->vqs[i]->error_ctx)
+>  			eventfd_ctx_put(dev->vqs[i]->error_ctx);
+>  		if (dev->vqs[i]->kick)
+> @@ -700,6 +709,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>  		if (dev->vqs[i]->call_ctx.ctx)
+>  			eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
+>  		vhost_vq_reset(dev, dev->vqs[i]);
+> +		mutex_unlock(&dev->vqs[i]->mutex);
+>  	}
+>  	vhost_dev_free_iovecs(dev);
+>  	if (dev->log_ctx)
+> -- 
+> 2.35.1.616.g0bdcbb4464-goog
 

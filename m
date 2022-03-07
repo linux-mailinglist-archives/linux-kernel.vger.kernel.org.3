@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE6D4D0B83
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227464D0B89
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiCGWxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S245702AbiCGW4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343500AbiCGWxk (ORCPT
+        with ESMTP id S234381AbiCGW4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:53:40 -0500
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D8DBE8;
-        Mon,  7 Mar 2022 14:52:40 -0800 (PST)
-Received: by mail-oi1-f176.google.com with SMTP id w127so6565760oig.10;
-        Mon, 07 Mar 2022 14:52:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A2csD67qXGoEvqs1Prld6d2oP9SlviApXy9zPbagNDQ=;
-        b=6YLk8fpAzvanY92PEGJjijjIQ5io9yEC7LQVBJEoD9lYrPKaU7eGFWncBDgmPiCWO7
-         tuUioOVhrYGXhkQ5LBeyqJYMw/I22ARMzOOQs/WtGSMVhX98GpTWJJ14/UwKXdOx6PhO
-         C8uqWYCXdFRyon8QvvdCKg0VTEln8qtaSk9dsd2XHNSezWXxDbAFZVeRIaUnDEzStUxB
-         lZju5NA7btg4is2vfzck2eUPkqCPZ6led9priSd7lBX9gni2GlevzmkN6AnO7Tfkh0lB
-         ci2KAo+sHiesdUjyJz7ZlNhPaYOl4AvPidelu4nYW9hsLk8+VBzkW65WohM3dL9m1A5e
-         h1Mw==
-X-Gm-Message-State: AOAM531YHfzQQFEBWC6OGcD6Sq+Nu4Ledz0lZHAV1ke65x3nu3106Yk3
-        kS6Pv7yA/vDOgNafplQbVA==
-X-Google-Smtp-Source: ABdhPJzwg6DunqXDMtn0yEvy0iRyMNFCMs9Y1knxfp1LMKwv8i7Tzf+hrKkDYPkVFGhsJAaNvBDOcQ==
-X-Received: by 2002:a05:6808:f92:b0:2d9:d230:221c with SMTP id o18-20020a0568080f9200b002d9d230221cmr865229oiw.96.1646693560192;
-        Mon, 07 Mar 2022 14:52:40 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bb39-20020a05680816a700b002d9a8eb89fasm3558038oib.46.2022.03.07.14.52.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 14:52:39 -0800 (PST)
-Received: (nullmailer pid 3405258 invoked by uid 1000);
-        Mon, 07 Mar 2022 22:52:38 -0000
-Date:   Mon, 7 Mar 2022 16:52:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Charles Mirabile <cmirabil@redhat.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Serge Schneider <serge@raspberrypi.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mwesigwa Guma <mguma@redhat.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-rpi-kernel@lists.infradead.org,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-input@vger.kernel.org, Joel Savitz <jsavitz@redhat.com>,
-        fedora-rpi@googlegroups.com,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH v7 4/6] dt-bindings: mfd: sensehat: Add Raspberry Pi
- Sense HAT schema
-Message-ID: <YiaMtu901yHS+3Ql@robh.at.kernel.org>
-References: <20220303173935.100622-1-cmirabil@redhat.com>
- <20220303173935.100622-5-cmirabil@redhat.com>
+        Mon, 7 Mar 2022 17:56:39 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21B438BED;
+        Mon,  7 Mar 2022 14:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=XkJHzBoGYjd42n0LjqjVuQ+Gqe3G1cnjzHTE4xVFH0g=; b=XX8eamN6U1ecX+0CvO70mry5jB
+        VuOLX7Nbhjxt/nkGJf5zaSo9OLpgHV2ahJUvQH/bbuvKkX6q5kyS+YeZU6kOivk0COIlw2d7p+ebN
+        fkb67Dx86KjMiM4x/adLmI76rRLVPxbG17OSVyI21lVL/Kwg0BIQVUoesScIjp2uzr10=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nRMGP-009fOm-4H; Mon, 07 Mar 2022 23:55:37 +0100
+Date:   Mon, 7 Mar 2022 23:55:37 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: dsa: tag_dsa: Fix tx from VLAN uppers on
+ non-filtering bridges
+Message-ID: <YiaNaRp64ByP2SFa@lunn.ch>
+References: <20220307110548.812455-1-tobias@waldekranz.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220303173935.100622-5-cmirabil@redhat.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220307110548.812455-1-tobias@waldekranz.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 03 Mar 2022 12:39:33 -0500, Charles Mirabile wrote:
-> This patch adds the device tree bindings for the Sense HAT
-> and each of its children devices in yaml form.
+On Mon, Mar 07, 2022 at 12:05:48PM +0100, Tobias Waldekranz wrote:
+> In this situation (VLAN filtering disabled on br0):
 > 
-> Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
-> Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
-> Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-> Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
-> ---
->  .../raspberrypi,sensehat-display.yaml         | 27 ++++++++
->  .../input/raspberrypi,sensehat-joystick.yaml  | 33 +++++++++
->  .../bindings/mfd/raspberrypi,sensehat.yaml    | 69 +++++++++++++++++++
->  3 files changed, 129 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/auxdisplay/raspberrypi,sensehat-display.yaml
->  create mode 100644 Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml
+>     br0.10
+>      /
+>    br0
+>    / \
+> swp0 swp1
 > 
+> When a frame is transmitted from the VLAN upper, the bridge will send
+> it down to one of the switch ports with forward offloading
+> enabled. This will cause tag_dsa to generate a FORWARD tag. Before
+> this change, that tag would have it's VID set to 10, even though VID
+> 10 is not loaded in the VTU.
+> 
+> Before the blamed commit, the frame would trigger a VTU miss and be
+> forwarded according to the PVT configuration. Now that all fabric
+> ports are in 802.1Q secure mode, the frame is dropped instead.
+> 
+> Therefore, restrict the condition under which we rewrite an 802.1Q tag
+> to a DSA tag. On standalone port's, reuse is always safe since we will
+> always generate FROM_CPU tags in that case. For bridged ports though,
+> we must ensure that VLAN filtering is enabled, which in turn
+> guarantees that the VID in question is loaded into the VTU.
+> 
+> Fixes: d352b20f4174 ("net: dsa: mv88e6xxx: Improve multichip isolation of standalone ports")
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks Tobias
+
+Tested-by: Andrew Lunn <andrew@lunn.ch>
+
+    Andrew

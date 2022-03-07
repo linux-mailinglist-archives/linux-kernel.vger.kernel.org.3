@@ -2,89 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8D04D0213
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772DD4D01D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbiCGOyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
+        id S241214AbiCGOvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243709AbiCGOw5 (ORCPT
+        with ESMTP id S243397AbiCGOvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:52:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C8A48A6DC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:51:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646664684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3smDROMP8QMSLDecB2DTW8XgUBKKv8Df2PL4vzKcmzw=;
-        b=EbP4OA25ODB4gIF/eUvJGien1o66XiP3Q0QYJVvzXVTq6GP+LVbgBdFa8KUlba2cNGnCTV
-        QCXZgXrYngXBUbrWnJJDJLIupboNrjhqBMlH0z8cWxIAG+sHHKLsa3SooeHC9+qxHzQErA
-        qbSvWLb1J40EsN80BdNBQ6h5aj+Qzd4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-456-IbXWloJJNCO6R6dPZ7MaZA-1; Mon, 07 Mar 2022 09:51:21 -0500
-X-MC-Unique: IbXWloJJNCO6R6dPZ7MaZA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 44BEF1854E27;
-        Mon,  7 Mar 2022 14:51:20 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.193.244])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 176A07FFEF;
-        Mon,  7 Mar 2022 14:51:17 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-hyperv@vger.kernel.org,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RFC 19/19] KVM: x86: Expose Hyper-V Direct TLB flush feature
-Date:   Mon,  7 Mar 2022 15:50:23 +0100
-Message-Id: <20220307145023.1913205-20-vkuznets@redhat.com>
-In-Reply-To: <20220307145023.1913205-1-vkuznets@redhat.com>
-References: <20220307145023.1913205-1-vkuznets@redhat.com>
+        Mon, 7 Mar 2022 09:51:31 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CDA85BE2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:50:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646664635; x=1678200635;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=g3MS51Wrb/eQYTnuO0rlbMIdHyQkKGH4tCbFKOZOOtc=;
+  b=jCuabJn3EGT4QdiJtsQFnrhUJrwdxUV97fO9/++2toMlAsPLtO/eIAZS
+   X/1ZlZRZyDZevQY5NKWeopGjgcv1GNGxRUgM67Kmt4LpFL5i5d0ppOr3o
+   zD6tTZQmnowmaBkScE9Osmkg4VVAuLbevNTK4yiXJMGF8y+bsG+/3naRe
+   s=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Mar 2022 06:50:35 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 06:50:35 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 7 Mar 2022 06:50:34 -0800
+Received: from [10.216.62.152] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 7 Mar 2022
+ 06:50:30 -0800
+Message-ID: <cc194110-2467-47d3-9868-89e092a542e9@quicinc.com>
+Date:   Mon, 7 Mar 2022 20:20:27 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v4] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
+ shmem
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>
+CC:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        <markhemm@googlemail.com>, Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1644572051-24091-1-git-send-email-quic_charante@quicinc.com>
+ <CAJuCfpGAaqZv68q-jrBuFArq+6wKBsNys+b=eaBr+03KZf-EHA@mail.gmail.com>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <CAJuCfpGAaqZv68q-jrBuFArq+6wKBsNys+b=eaBr+03KZf-EHA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With both nSVM and nVMX implementations in place, KVM can export
-Hyper-V Direct TLB flush feature to userspace.
+Thanks Suren for your comments!!
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/hyperv.c | 1 +
- 1 file changed, 1 insertion(+)
+On 3/5/2022 2:00 AM, Suren Baghdasaryan wrote:
+>> +               test_and_clear_page_young(page);
+>> +               SetPageDirty(page);
+> I asked Hugh about how clean shmem pages are handled during normal
+> reclaim and his reply is:
+> 
+> Clean shmem pages are rare: they correspond to where a hole in a
+> sparse file has been mapped read-only to userspace. Those get dropped
+> from pagecache without being written to swap, when memory pressure
+> comes to reclaim them. Otherwise, shmem pages are dirty: as soon as
+> they've been read from swap and identified as shmem (moved from swap
+> cache to page cache), that swap is freed so they're no longer clean
+> representations of anything on swap. (Our use of "swap cache" and/or
+> "page cache" may have inconsistencies in what I've written: sometimes
+> we use them interchangeably, sometimes we're making a distinction.)
+> 
+> So, IIUC his explanation, you don't really need to mark clean shmem
+> pages dirty for FADV_DONTNEED since normal reclaim does not do that
+> either.
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 31acc08a6b23..d52de033ce36 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -2815,6 +2815,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 
- 		case HYPERV_CPUID_NESTED_FEATURES:
- 			ent->eax = evmcs_ver;
-+			ent->eax |= HV_X64_NESTED_DIRECT_FLUSH;
- 			ent->eax |= HV_X64_NESTED_MSR_BITMAP;
- 
- 			break;
--- 
-2.35.1
+Thanks for the details here. Will change it in the next patch.
 
+
+> 
+>> +               list_add(&page->lru, list);
+>> +               if (need_resched()) {
+>> +                       xas_pause(&xas);
+>> +                       cond_resched_rcu();
+>> +               }
+>> +       }
+>> +       rcu_read_unlock();
+>> +}
+>> +
+>> +static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
+>> +                               loff_t end)
+>> +{
+>> +       LIST_HEAD(list);
+>> +
+>> +       if (!shmem_mapping(mapping))
+>> +               return -EINVAL;
+>> +
+>> +       if (!total_swap_pages)
+>> +               return 0;
+>> +
+>> +       lru_add_drain();
+>> +       shmem_isolate_pages_range(mapping, start, end, &list);
+>> +       reclaim_pages(&list);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int shmem_fadvise_willneed(struct address_space *mapping,
+>> +                                pgoff_t start, pgoff_t long end)
+>> +{
+>> +       struct page *page;
+>> +       pgoff_t index;
+>> +
+>> +       xa_for_each_range(&mapping->i_pages, index, page, start, end) {
+>> +               if (!xa_is_value(page))
+>> +                       continue;
+>> +               page = shmem_read_mapping_page(mapping, index);
+>> +               if (!IS_ERR(page))
+>> +                       put_page(page);
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int shmem_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
+>> +{
+>> +       loff_t endbyte;
+>> +       pgoff_t start_index;.
+>> +       pgoff_t end_index;
+>> +       struct address_space *mapping;
+>> +       int ret = 0;
+>> +
+>> +       mapping = file->f_mapping;
+>> +       if (!mapping || len < 0)
+>> +               return -EINVAL;
+>> +
+>> +       endbyte = (u64)offset + (u64)len;
+>> +       if (!len || endbyte < len)
+>> +               endbyte = -1;
+>> +       else
+>> +               endbyte--;
+> The above block is exactly the same as in
+> https://elixir.bootlin.com/linux/latest/source/mm/fadvise.c#L73 with
+> the exception that generic_fadvise has comments with explanations of
+> this math. You might consider consolidating them into a helper
+> function to calculate the endbyte.
+
+
+Yes, I simply copy pasted these. Will try to consolidate them into one.
+
+> 

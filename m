@@ -2,230 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364084D0760
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4584D0755
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240733AbiCGTOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S235488AbiCGTMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:12:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234144AbiCGTOG (ORCPT
+        with ESMTP id S234144AbiCGTMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:14:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4793338BF;
-        Mon,  7 Mar 2022 11:13:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E8B5B81678;
-        Mon,  7 Mar 2022 19:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD1DC340F4;
-        Mon,  7 Mar 2022 19:13:07 +0000 (UTC)
-Date:   Mon, 7 Mar 2022 14:13:05 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: add tracepoints for I2C slave events
-Message-ID: <20220307141305.18f0c20b@gandalf.local.home>
-In-Reply-To: <20220307182049.3790905-1-quic_jaehyoo@quicinc.com>
-References: <20220307182049.3790905-1-quic_jaehyoo@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 7 Mar 2022 14:12:41 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AE35641B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:11:46 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id w17-20020a056830111100b005b22c584b93so3624660otq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:11:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Jb3LOlMf5pk1D9PjLVHGSfg0goBFbrUHnygCupUhgZI=;
+        b=iNQpsc5C47zsL+rwea5Gp9oqE5D8fpUxVHM/oEeqnouFvmu3EH516OlUb2UAnzE9j7
+         0fKrEb4VlNgNhBDOxV3WTDoN9IjJv7auS6de717hqUuXbO8rfTXzlEGqnVyfSBYs4TRo
+         JbHNYrXbasfzo6mbe5OoZ43yxlqsM24sjqZeKJddKqh+lHn/8ULKrgyJODzAudqWEF2M
+         dZQJtvb/W71PecwPK8ychQ5EwhbpQfCJL6Yz3j/4KX4p5jnGKQKdzSlKW5WRYZOJA82r
+         SQi+26rzzx5f0ztSOvpa211LBscQiorvpyq+3U7Wca8GeWz9ACEhPQLS8pKIgqhbMLjM
+         9itg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Jb3LOlMf5pk1D9PjLVHGSfg0goBFbrUHnygCupUhgZI=;
+        b=YJiYLklzSmyIORJCDgpC/DjWciLckXgBICxfhFB8+QafHm9/mgbNJAuPvGK68sX2xz
+         it+AlX/ng23qwgJt7JDrrbXXdxipaF8zPOLD9YFYDYLXqgZP9+Fp1d9uctIzRhN+q61y
+         LkAeAM9CQP6JpxPyRjIAf/vTeEP2wYdkzXnIZlciNQp9VPECbRiby6up52ATnJkG+heT
+         DKvHh9fl60lKyV67ci1WW4gtx6xSdnB4duoKEECFTnhCZuaH3fXP5nHQxf7PLi5dqyYh
+         7TRXd8CGGrnO7JNcH9trYNpsP5x2sqKpGKyeIQ3r0+w8de1oTPVY6CYlGfTnqq8rnIot
+         d47Q==
+X-Gm-Message-State: AOAM533rksMR1laniYeYK5WgriW9IJXTcstts2opMT3n0HWtzbU/228j
+        2qzby4G9z+txkYZYzmKpKZJnxQ==
+X-Google-Smtp-Source: ABdhPJyrQkhnOMlIjCfuY6r6deiMNn2tGrB6tFf9VgrnJ7SyMmVsaBZWntgAitDk2cHkCVeXVdDvAQ==
+X-Received: by 2002:a9d:2045:0:b0:5b2:1052:93fd with SMTP id n63-20020a9d2045000000b005b2105293fdmr6358924ota.259.1646680305167;
+        Mon, 07 Mar 2022 11:11:45 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id k15-20020a056808068f00b002d91362e56esm6764310oig.1.2022.03.07.11.11.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 11:11:44 -0800 (PST)
+Date:   Mon, 7 Mar 2022 11:13:28 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v4 1/7] device property: Helper to match multiple
+ connections
+Message-ID: <YiZZWN1FgnWxBCuN@ripper>
+References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
+ <YiXZBMG7cK6Cm7wP@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiXZBMG7cK6Cm7wP@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 10:20:49 -0800
-Jae Hyun Yoo <quic_jaehyoo@quicinc.com> wrote:
+On Mon 07 Mar 02:05 PST 2022, Andy Shevchenko wrote:
 
-> I2C slave events tracepoints can be enabled by:
+> On Sun, Mar 06, 2022 at 07:40:34PM -0800, Bjorn Andersson wrote:
+> > In some cases multiple connections with the same connection id
+> > needs to be resolved from a fwnode graph.
+> > 
+> > One such example is when separate hardware is used for performing muxing
+> > and/or orientation switching of the SuperSpeed and SBU lines in a USB
+> > Type-C connector. In this case the connector needs to belong to a graph
+> > with multiple matching remote endpoints, and the Type-C controller needs
+> > to be able to resolve them both.
+> > 
+> > Add a new API that allows this kind of lookup.
 > 
-> 	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
+> Thanks for the update!
 > 
-> and logs in /sys/kernel/tracing/trace will look like:
+> First of all, I have noticed that subject misses the verb, something like Add
+> or Introduce.
 > 
-> 	... i2c_slave: i2c-0 a=010 WR_REQ []
-> 	... i2c_slave: i2c-0 a=010 WR_RCV [02]
-> 	... i2c_slave: i2c-0 a=010 WR_RCV [0c]
-> 	... i2c_slave: i2c-0 a=010   STOP []
-> 	... i2c_slave: i2c-0 a=010 RD_REQ [04]
-> 	... i2c_slave: i2c-0 a=010 RD_PRO [b4]
-> 	... i2c_slave: i2c-0 a=010   STOP []
+
+Will update accordingly.
+
+> ...
 > 
-> formatted as:
+> > +/**
+> > + * fwnode_connection_find_matches - Find connections from a device node
+> > + * @fwnode: Device node with the connection
+> > + * @con_id: Identifier for the connection
+> > + * @data: Data for the match function
+> > + * @match: Function to check and convert the connection description
+> > + * @matches: Array of pointers to fill with matches
 > 
-> 	i2c-<adapter-nr>
-> 	a=<addr>
-> 	<event>
-> 	[<data>]
+> (Optional) array...
 > 
-> trace printings can be selected by adding a filter like:
+
+Ditto.
+
+> > + * @matches_len: Length of @matches
+> > + *
+> > + * Find up to @matches_len connections with unique identifier @con_id between
+> > + * @fwnode and other device nodes. @match will be used to convert the
+> > + * connection description to data the caller is expecting to be returned
+> > + * through the @matches array.
 > 
-> 	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
+> > + * If @matches is NULL @matches_len is ignored and the total number of resolved
+> > + * matches is returned.
 > 
-> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-> ---
->  drivers/i2c/i2c-core-slave.c     | 15 +++++++++
->  include/linux/i2c.h              |  8 ++---
->  include/trace/events/i2c_slave.h | 57 ++++++++++++++++++++++++++++++++
->  3 files changed, 74 insertions(+), 6 deletions(-)
->  create mode 100644 include/trace/events/i2c_slave.h
+> I would require matches_len to be 0, see below.
 > 
-> diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
-> index 1589179d5eb9..4968a17328b3 100644
-> --- a/drivers/i2c/i2c-core-slave.c
-> +++ b/drivers/i2c/i2c-core-slave.c
-> @@ -14,6 +14,9 @@
->  
->  #include "i2c-core.h"
->  
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/i2c_slave.h>
-> +
->  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
->  {
->  	int ret;
-> @@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
->  }
->  EXPORT_SYMBOL_GPL(i2c_slave_unregister);
->  
-> +int i2c_slave_event(struct i2c_client *client,
-> +		    enum i2c_slave_event event, u8 *val)
-> +{
-> +	int ret = client->slave_cb(client, event, val);
-> +
-> +	if (!ret)
+> > + * Return: Number of matches resolved, or negative errno.
+> > + */
+> > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
+> > +				   const char *con_id, void *data,
+> > +				   devcon_match_fn_t match,
+> > +				   void **matches, unsigned int matches_len)
+> > +{
+> > +	unsigned int count_graph;
+> > +	unsigned int count_ref;
+> > +
+> > +	if (!fwnode || !match)
+> > +		return -EINVAL;
+> > +
+> > +	count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
+> > +						  matches, matches_len);
+> 
+> > +	if (matches) {
+> > +		matches += count_graph;
+> > +		matches_len -= count_graph;
+> > +	}
+> 
+> So, the valid case is matches != NULL and matches_len == 0. For example, when
+> we have run something previously on the buffer and it becomes full.
+> 
+> In this case we have carefully handle this case.
+> 
+> 	if (matches) {
+> 		matches += count_graph;
+> 		if (matches_len)
+> 			matches_len -= count_graph;
 
-You can make the above into:
+When matches is non-NULL, both the sub-functions are limited by
+matches_len and as such count_graph <= matches_len.
 
-	if (trace_i2c_slave_enabled() && !ret)
+As such matches_len >= 0.
 
-to make this conditional compare only happen if the tracepoint is enabled.
-As the trace_i2c_slave_enabled() is a static branch (non-conditional jump).
+In the event that the originally passed matches_len was 0, then
+count_graph will be 0 and matches_len will remain 0.
 
-> +		trace_i2c_slave(client, event, val);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(i2c_slave_event);
-> +
->  /**
->   * i2c_detect_slave_mode - detect operation mode
->   * @dev: The device owning the bus
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index 7d4f52ceb7b5..fbda5ada2afc 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -392,12 +392,8 @@ enum i2c_slave_event {
->  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
->  int i2c_slave_unregister(struct i2c_client *client);
->  bool i2c_detect_slave_mode(struct device *dev);
-> -
-> -static inline int i2c_slave_event(struct i2c_client *client,
-> -				  enum i2c_slave_event event, u8 *val)
-> -{
-> -	return client->slave_cb(client, event, val);
-> -}
-> +int i2c_slave_event(struct i2c_client *client,
-> +		    enum i2c_slave_event event, u8 *val);
->  #else
->  static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
->  #endif
-> diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
-> new file mode 100644
-> index 000000000000..1f0c1cfbf2ef
-> --- /dev/null
-> +++ b/include/trace/events/i2c_slave.h
-> @@ -0,0 +1,57 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/*
-> + * I2C slave tracepoints
-> + *
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM i2c_slave
-> +
-> +#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_I2C_SLAVE_H
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(i2c_slave,
-> +	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
-> +		 __u8 *val),
-> +	TP_ARGS(client, event, val),
-> +	TP_STRUCT__entry(
-> +		__field(int,				adapter_nr	)
-> +		__field(__u16,				addr		)
-> +		__field(enum i2c_slave_event,		event		)
-> +		__field(__u16,				len		)
+I therefor don't see that this additional check changes things.
 
-I would keep the u16 together:
+> 	}
+> 
+> Seems it can be also
+> 
+> 	if (matches)
+> 		matches += count_graph;
+> 
+> 	if (matches_len)
+> 		matches_len -= count_graph;
 
-		__field(int,				adapter_nr	)
-		__field(__u16,				addr		)
-		__field(__u16,				len		)
-		__field(enum i2c_slave_event,		event		)
+We covered the case of matches && (matches_len || !matches_len) above.
 
-Otherwise you will likely have a hole in the event, which wastes space on
-the ring buffer.
+For the case of !matches && matches_len, this added conditional would
+cause matches_len to be extra ignored by keeping it at 0, but per
+kernel-doc and implementation we ignore all other values already.
 
 
-> +		__dynamic_array(__u8, buf, 1)				),
-> +
-> +	TP_fast_assign(
-> +		__entry->adapter_nr = client->adapter->nr;
-> +		__entry->addr = client->addr;
-> +		__entry->event = event;
-> +		switch (event) {
-> +		case I2C_SLAVE_READ_REQUESTED:
-> +		case I2C_SLAVE_READ_PROCESSED:
-> +		case I2C_SLAVE_WRITE_RECEIVED:
-> +			__entry->len = 1;
-> +			memcpy(__get_dynamic_array(buf), val, __entry->len);
+Note that this is in contrast from vsnprintf() where the code will
+continue to produce results, only store the first "matches_len"
+entires and return the final count.
 
-Why the dynamic event, if it is always the size of 1? Why not make it an
-array. It will save space, as the dynamic meta data has to live on the
-event which is 4 bytes big. Just make it:
+Unfortunately we can't follow such semantics here, instead it is clearly
+documented in the kernel-doc that @matches_len is ignored when @matches
+is NULL.
 
-		__array(__u8, buf, 1);
 
-It's faster and saves space.
+So unless I'm missing something I don't see what you gain over keeping
+the check on only matches.
 
--- Steve
+> 
+> That said, do we have a test cases for this?
+> 
 
-> +			break;
-> +		default:
-> +			__entry->len = 0;
-> +			break;
-> +		}
-> +		),
-> +	TP_printk("i2c-%d a=%03x %s [%*phD]",
-> +		__entry->adapter_nr, __entry->addr,
-> +		__print_symbolic(__entry->event,
-> +				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
-> +				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
-> +				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
-> +				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
-> +				 { I2C_SLAVE_STOP,		"  STOP" }),
-> +		__entry->len, __get_dynamic_array(buf)
-> +		));
-> +
-> +#endif /* _TRACE_I2C_SLAVE_H */
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
+I looked briefly at adding some kunit tests for this, but was discourage
+by the prospect of building up the graphs to run the tests against.
 
+Regards,
+Bjorn
+
+> > +	count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
+> > +					  matches, matches_len);
+> > +
+> > +	return count_graph + count_ref;
+> > +}
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 

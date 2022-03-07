@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D2F4CF4B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FF94CF76E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236553AbiCGJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S234015AbiCGJqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236477AbiCGJUu (ORCPT
+        with ESMTP id S237741AbiCGJgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:20:50 -0500
+        Mon, 7 Mar 2022 04:36:24 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A78522CC;
-        Mon,  7 Mar 2022 01:19:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14896E293;
+        Mon,  7 Mar 2022 01:31:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17D04B810C2;
-        Mon,  7 Mar 2022 09:19:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D843C340F6;
-        Mon,  7 Mar 2022 09:19:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3C2FB810B9;
+        Mon,  7 Mar 2022 09:31:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B9EBC340E9;
+        Mon,  7 Mar 2022 09:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644783;
-        bh=y9KA5wwVId2J/79PmTHLJjOXo7qU9HSGK1698oX2Oug=;
+        s=korg; t=1646645476;
+        bh=AnauxGBZ8p0xwscdaSv0eJJZrWzw18OZ91+tPeMhTpk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vIjpe4eTfpDj7/sMqOk5LL8KOCFIuHhqxObOH+6vgElFj7W15G/qS/tqeC23BDmTZ
-         5mgVMjxlgU1iDROn7urPcKC04seylGNQY7E1Jbz0PhYQMEXmzvY+sLLbYFZTMc0VUX
-         eKBFwzaxkCF3KCgcxO4/nVzLISiP0e0gWQXLbeHo=
+        b=kHOVXQv6dDSemxRZ7yR2q+2p4iCkfCECwm5h0AJ1hAFTnZ2pjmsAqW+hGfYoFpQcG
+         ohLWDsBu2GHypnKNAN9Ldp3H7YHr3s0qT/hh+YLGkLww2evFwsLkEd/HxmfqAJeV0V
+         jPR/dJnZiggSno/hsH1c5Us0wC2gLDt36Nld0lQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 20/32] net: stmmac: fix return value of __setup handler
+        stable@vger.kernel.org, Oleksandr Natalenko <oleksandr@redhat.com>,
+        Florian Westphal <fw@strlen.de>
+Subject: [PATCH 5.10 043/105] netfilter: nf_queue: dont assume sk is full socket
 Date:   Mon,  7 Mar 2022 10:18:46 +0100
-Message-Id: <20220307091635.013218557@linuxfoundation.org>
+Message-Id: <20220307091645.397407421@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
-References: <20220307091634.434478485@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,53 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Florian Westphal <fw@strlen.de>
 
-commit e01b042e580f1fbf4fd8da467442451da00c7a90 upstream.
+commit 747670fd9a2d1b7774030dba65ca022ba442ce71 upstream.
 
-__setup() handlers should return 1 on success, i.e., the parameter
-has been handled. A return of 0 causes the "option=value" string to be
-added to init's environment strings, polluting it.
+There is no guarantee that state->sk refers to a full socket.
 
-Fixes: 47dd7a540b8a ("net: add support for STMicroelectronics Ethernet controllers.")
-Fixes: f3240e2811f0 ("stmmac: remove warning when compile as built-in (V2)")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Jose Abreu <joabreu@synopsys.com>
-Link: https://lore.kernel.org/r/20220224033536.25056-1-rdunlap@infradead.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+If refcount transitions to 0, sock_put calls sk_free which then ends up
+with garbage fields.
+
+I'd like to thank Oleksandr Natalenko and Jiri Benc for considerable
+debug work and pointing out state->sk oddities.
+
+Fixes: ca6fb0651883 ("tcp: attach SYNACK messages to request sockets instead of listener")
+Tested-by: Oleksandr Natalenko <oleksandr@redhat.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/netfilter/nf_queue.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -3608,7 +3608,7 @@ static int __init stmmac_cmdline_opt(cha
- 	char *opt;
- 
- 	if (!str || !*str)
--		return -EINVAL;
-+		return 1;
- 	while ((opt = strsep(&str, ",")) != NULL) {
- 		if (!strncmp(opt, "debug:", 6)) {
- 			if (kstrtoint(opt + 6, 0, &debug))
-@@ -3639,11 +3639,11 @@ static int __init stmmac_cmdline_opt(cha
- 				goto err;
- 		}
- 	}
--	return 0;
-+	return 1;
- 
- err:
- 	pr_err("%s: ERROR broken module parameter conversion", __func__);
--	return -EINVAL;
-+	return 1;
+--- a/net/netfilter/nf_queue.c
++++ b/net/netfilter/nf_queue.c
+@@ -46,6 +46,15 @@ void nf_unregister_queue_handler(struct
  }
+ EXPORT_SYMBOL(nf_unregister_queue_handler);
  
- __setup("stmmaceth=", stmmac_cmdline_opt);
++static void nf_queue_sock_put(struct sock *sk)
++{
++#ifdef CONFIG_INET
++	sock_gen_put(sk);
++#else
++	sock_put(sk);
++#endif
++}
++
+ static void nf_queue_entry_release_refs(struct nf_queue_entry *entry)
+ {
+ 	struct nf_hook_state *state = &entry->state;
+@@ -56,7 +65,7 @@ static void nf_queue_entry_release_refs(
+ 	if (state->out)
+ 		dev_put(state->out);
+ 	if (state->sk)
+-		sock_put(state->sk);
++		nf_queue_sock_put(state->sk);
+ 
+ #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+ 	if (entry->physin)
 
 

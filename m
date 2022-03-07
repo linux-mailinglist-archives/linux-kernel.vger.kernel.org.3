@@ -2,51 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50A64D0896
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6784D08A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237252AbiCGUkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:40:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S236412AbiCGUm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:42:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245363AbiCGUkk (ORCPT
+        with ESMTP id S232105AbiCGUmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:40:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620957A992;
-        Mon,  7 Mar 2022 12:39:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DB19B8170D;
-        Mon,  7 Mar 2022 20:39:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D084C340E9;
-        Mon,  7 Mar 2022 20:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646685582;
-        bh=MFEDq2n1I3WmHMz8Kow++qRNInnWnoXDBUgAcH7XvzE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=b4tO1DNqOx/0jhQZuhWK5AlDL887sre7rBG6ciHsdXbBiGvNZtYOflpJX6RnSu1lm
-         vCdHcm3TeOYF6pdSYo+ob1FPbahCG9anHTxgsP70KPidlmVNcNZrADA66oeqYux1iN
-         denyUai9gHEbP0euUe90hxwYKGDc3mv3fFTpFgTxQNfbNokAQYh9/Lib2S3XLQnLzQ
-         Rg7+Y+vlfgFEyN/Nz5v23maT/f+U2dQfexhpKaFRBj2GYDfgI1L2fSt1/pcBm1l4O4
-         VEsmsLdGy2C8xTjCih/bIXaXV8gXnMJxh5/CIIzRKDhPtvz13UYC/u1+Hg1PIgTdF/
-         pxlbspMhMa2tA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Han Xu <han.xu@nxp.com>, Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20220302192915.6193-1-singh.kuldeep87k@gmail.com>
-References: <20220302192915.6193-1-singh.kuldeep87k@gmail.com>
-Subject: Re: [PATCH] dt-bindings: spi: Update NXP Flexspi maintainer details
-Message-Id: <164668558136.3137564.9240243225598212483.b4-ty@kernel.org>
-Date:   Mon, 07 Mar 2022 20:39:41 +0000
+        Mon, 7 Mar 2022 15:42:25 -0500
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFF87CDE5
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:41:30 -0800 (PST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3186C20021F;
+        Mon,  7 Mar 2022 21:41:29 +0100 (CET)
+Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EE2ED202391;
+        Mon,  7 Mar 2022 21:41:28 +0100 (CET)
+Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.142])
+        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 599E540591;
+        Mon,  7 Mar 2022 13:41:28 -0700 (MST)
+From:   Li Yang <leoyang.li@nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] memory: fsl_ifc: populate child nodes of buses and mfd devices
+Date:   Mon,  7 Mar 2022 14:41:18 -0600
+Message-Id: <20220307204118.19093-1-leoyang.li@nxp.com>
+X-Mailer: git-send-email 2.25.1.377.g2d2118b
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,36 +43,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Mar 2022 00:59:15 +0530, Kuldeep Singh wrote:
-> Add Han Xu as flexspi maintainer.
-> Also, update my email address as previous one is not working anymore.
-> 
-> 
+Commit 98f1323959b8 was trying to replace the "simple-bus" compatible
+with explicit bus populate in the driver.  But of_platform_populate()
+only populates child nodes of ifc without populating child buses and
+child mfd devices residing under ifc.  Change it to
+of_platform_default_populate() to fix the problem.
 
-Applied to
+Fixes: 98f1323959b8 ("memory: fsl_ifc: populate child devices without relying on simple-bus")
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Signed-off-by: Li Yang <leoyang.li@nxp.com>
+---
+ drivers/memory/fsl_ifc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks!
+diff --git a/drivers/memory/fsl_ifc.c b/drivers/memory/fsl_ifc.c
+index 6e6de52bb82d..1604de863d41 100644
+--- a/drivers/memory/fsl_ifc.c
++++ b/drivers/memory/fsl_ifc.c
+@@ -290,8 +290,7 @@ static int fsl_ifc_ctrl_probe(struct platform_device *dev)
+ 	}
+ 
+ 	/* legacy dts may still use "simple-bus" compatible */
+-	ret = of_platform_populate(dev->dev.of_node, NULL, NULL,
+-					&dev->dev);
++	ret = of_platform_default_populate(dev->dev.of_node, NULL, &dev->dev);
+ 	if (ret)
+ 		goto err_free_nandirq;
+ 
+-- 
+2.25.1
 
-[1/1] dt-bindings: spi: Update NXP Flexspi maintainer details
-      commit: af524ae5ad13a9c28acf0b2ec4489d5903c4fbed
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

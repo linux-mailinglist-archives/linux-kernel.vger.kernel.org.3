@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEE14CF4E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D674CF80D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236534AbiCGJYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
+        id S239690AbiCGJuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237298AbiCGJXj (ORCPT
+        with ESMTP id S237998AbiCGJhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:39 -0500
+        Mon, 7 Mar 2022 04:37:55 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCD451E47;
-        Mon,  7 Mar 2022 01:22:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A8F6E57C;
+        Mon,  7 Mar 2022 01:31:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C48C860F63;
-        Mon,  7 Mar 2022 09:22:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0A9C340E9;
-        Mon,  7 Mar 2022 09:22:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C45546112D;
+        Mon,  7 Mar 2022 09:31:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3686C340F3;
+        Mon,  7 Mar 2022 09:31:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644942;
-        bh=8hpKamfxg1T8JN9vzi7VHlfE8PZstfB+AUhGlZlHYc4=;
+        s=korg; t=1646645511;
+        bh=IcPN0zA1ei5ek21ILpNh54yqLo/XHVgxtqlXUxuRxf4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1IF8x0qHVMYgiesb3RR+ynhplGGS/tFYDc+ymZ2Uejf++BFnLaHoi9gcrJ8nlk4q2
-         aFUmEsLBj34JNqtrzeJ0svUPEPAVIqRk9OP5xeLRFxx6SpzgzYoCea5raR7tQx1E4D
-         EjqqMqbivuKepJorBBzSUh7VTeDk9q8Ef9NIrcfk=
+        b=hb2atqm4XukNYTeM+79pj8PmtMRfh3OVokabVT/ixvF3aOcUefvul9E8KYPBlpwIv
+         tmXI0byG8Incq/oAadzVHMeCIT/QVooPvycpjSWUI9HaLj2AWtB0dmEfPSchSaAowO
+         +ErszQENmWI83vLH/7ILpNX+bl0apiTQ9Exw/vt0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sabrina Dubroca <sd@queasysnail.net>,
-        Sven Eckelmann <sven@narfation.org>,
-        Simon Wunderlich <sw@simonwunderlich.de>
-Subject: [PATCH 4.14 22/42] batman-adv: Dont expect inter-netns unique iflink indices
+        stable@vger.kernel.org, "D. Wythe" <alibuda@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 053/105] net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error cause by server
 Date:   Mon,  7 Mar 2022 10:18:56 +0100
-Message-Id: <20220307091636.796307669@linuxfoundation.org>
+Message-Id: <20220307091645.674559860@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,95 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Eckelmann <sven@narfation.org>
+From: D. Wythe <alibuda@linux.alibaba.com>
 
-commit 6c1f41afc1dbe59d9d3c8bb0d80b749c119aa334 upstream.
+commit 4940a1fdf31c39f0806ac831cde333134862030b upstream.
 
-The ifindex doesn't have to be unique for multiple network namespaces on
-the same machine.
+The problem of SMC_CLC_DECL_ERR_REGRMB on the server is very clear.
+Based on the fact that whether a new SMC connection can be accepted or
+not depends on not only the limit of conn nums, but also the available
+entries of rtoken. Since the rtoken release is trigger by peer, while
+the conn nums is decrease by local, tons of thing can happen in this
+time difference.
 
-  $ ip netns add test1
-  $ ip -net test1 link add dummy1 type dummy
-  $ ip netns add test2
-  $ ip -net test2 link add dummy2 type dummy
+This only thing that needs to be mentioned is that now all connection
+creations are completely protected by smc_server_lgr_pending lock, it's
+enough to check only the available entries in rtokens_used_mask.
 
-  $ ip -net test1 link show dev dummy1
-  6: dummy1: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
-      link/ether 96:81:55:1e:dd:85 brd ff:ff:ff:ff:ff:ff
-  $ ip -net test2 link show dev dummy2
-  6: dummy2: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
-      link/ether 5a:3c:af:35:07:c3 brd ff:ff:ff:ff:ff:ff
-
-But the batman-adv code to walk through the various layers of virtual
-interfaces uses this assumption because dev_get_iflink handles it
-internally and doesn't return the actual netns of the iflink. And
-dev_get_iflink only documents the situation where ifindex == iflink for
-physical devices.
-
-But only checking for dev->netdev_ops->ndo_get_iflink is also not an option
-because ipoib_get_iflink implements it even when it sometimes returns an
-iflink != ifindex and sometimes iflink == ifindex. The caller must
-therefore make sure itself to check both netns and iflink + ifindex for
-equality. Only when they are equal, a "physical" interface was detected
-which should stop the traversal. On the other hand, vxcan_get_iflink can
-also return 0 in case there was currently no valid peer. In this case, it
-is still necessary to stop.
-
-Fixes: b7eddd0b3950 ("batman-adv: prevent using any virtual device created on batman-adv as hard-interface")
-Fixes: 5ed4a460a1d3 ("batman-adv: additional checks for virtual interfaces on top of WiFi")
-Reported-by: Sabrina Dubroca <sd@queasysnail.net>
-Signed-off-by: Sven Eckelmann <sven@narfation.org>
-Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
+Fixes: cd6851f30386 ("smc: remote memory buffers (RMBs)")
+Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/batman-adv/hard-interface.c |   19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ net/smc/smc_core.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/net/batman-adv/hard-interface.c
-+++ b/net/batman-adv/hard-interface.c
-@@ -163,13 +163,15 @@ static bool batadv_is_on_batman_iface(co
- 		return true;
- 
- 	iflink = dev_get_iflink(net_dev);
--
--	/* no more parents..stop recursion */
--	if (iflink == 0 || iflink == net_dev->ifindex)
-+	if (iflink == 0)
- 		return false;
- 
- 	parent_net = batadv_getlink_net(net_dev, net);
- 
-+	/* iflink to itself, most likely physical device */
-+	if (net == parent_net && iflink == net_dev->ifindex)
-+		return false;
-+
- 	/* recurse over the parent device */
- 	parent_dev = __dev_get_by_index((struct net *)parent_net, iflink);
- 	/* if we got a NULL parent_dev there is something broken.. */
-@@ -229,8 +231,7 @@ static struct net_device *batadv_get_rea
- 		return NULL;
- 
- 	iflink = dev_get_iflink(netdev);
--
--	if (netdev->ifindex == iflink) {
-+	if (iflink == 0) {
- 		dev_hold(netdev);
- 		return netdev;
- 	}
-@@ -241,6 +242,14 @@ static struct net_device *batadv_get_rea
- 
- 	net = dev_net(hard_iface->soft_iface);
- 	real_net = batadv_getlink_net(netdev, net);
-+
-+	/* iflink to itself, most likely physical device */
-+	if (net == real_net && netdev->ifindex == iflink) {
-+		real_netdev = netdev;
-+		dev_hold(real_netdev);
-+		goto out;
-+	}
-+
- 	real_netdev = dev_get_by_index(real_net, iflink);
- 
- out:
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -1316,7 +1316,8 @@ int smc_conn_create(struct smc_sock *smc
+ 		    (ini->smcd_version == SMC_V2 ||
+ 		     lgr->vlan_id == ini->vlan_id) &&
+ 		    (role == SMC_CLNT || ini->is_smcd ||
+-		     lgr->conns_num < SMC_RMBS_PER_LGR_MAX)) {
++		    (lgr->conns_num < SMC_RMBS_PER_LGR_MAX &&
++		      !bitmap_full(lgr->rtokens_used_mask, SMC_RMBS_PER_LGR_MAX)))) {
+ 			/* link group found */
+ 			ini->first_contact_local = 0;
+ 			conn->lgr = lgr;
 
 

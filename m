@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF39E4CF5B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7424CF9C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236906AbiCGJag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
+        id S239073AbiCGKM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237211AbiCGJ1w (ORCPT
+        with ESMTP id S238730AbiCGJyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:27:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B15AED8;
-        Mon,  7 Mar 2022 01:24:59 -0800 (PST)
+        Mon, 7 Mar 2022 04:54:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0CC77A8D;
+        Mon,  7 Mar 2022 01:45:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 339FAB810BF;
-        Mon,  7 Mar 2022 09:24:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F213C340E9;
-        Mon,  7 Mar 2022 09:24:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F7D161382;
+        Mon,  7 Mar 2022 09:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80630C340E9;
+        Mon,  7 Mar 2022 09:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645092;
-        bh=EWQa5r9e93SJmy+EJGlMIbPR/OtWqdd39e8vMt+MA2E=;
+        s=korg; t=1646646330;
+        bh=x+/m0XSob4i8XhaSbKnkLEgxtn13mwwPLD6Br4nANn4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zl74+Z4gMc0/BXG5JvkDEOoRFAWzQDa+rVtJFbNw2Dl73x8ZvKwKQRBAkgQdIaGC3
-         2xnpbZGlXB+Oa8g97ccS0sMcC7O9AyBkyeZwY5gGfx+o4oOxxLC7TW7bYr7xZTsftn
-         gGmd5ZJpZyuq7mTwPIxubZsdDb6CNqNqmx8vnvTs=
+        b=NieYrSNdiyZia+llTzXr8m2nFNuoMl7zkyjzIBFX+pfEuqRHtGpVxcOxfg6fnt6cc
+         YYHOxYXzMALx2DSLypctg3Ah/ei5lBVNov2XFAi+qY4Nvy7EJRHr4wlRC2uEZepX7R
+         oQHavygF647Bvnm5L5uc/EJoIvqvjSyYApYoMP9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 4.19 36/51] efivars: Respect "block" flag in efivar_entry_set_safe()
+        stable@vger.kernel.org, Rui Salvaterra <rsalvaterra@gmail.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 207/262] MIPS: ralink: mt7621: do memory detection on KSEG1
 Date:   Mon,  7 Mar 2022 10:19:11 +0100
-Message-Id: <20220307091638.019822501@linuxfoundation.org>
+Message-Id: <20220307091708.646624628@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +57,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Chuanhong Guo <gch981213@gmail.com>
 
-commit 258dd902022cb10c83671176688074879517fd21 upstream.
+[ Upstream commit cc19db8b312a6c75645645f5cc1b45166b109006 ]
 
-When the "block" flag is false, the old code would sometimes still call
-check_var_size(), which wrongly tells ->query_variable_store() that it can
-block.
+It's reported that current memory detection code occasionally detects
+larger memory under some bootloaders.
+Current memory detection code tests whether address space wraps around
+on KSEG0, which is unreliable because it's cached.
 
-As far as I can tell, this can't really materialize as a bug at the moment,
-because ->query_variable_store only does something on X86 with generic EFI,
-and in that configuration we always take the efivar_entry_set_nonblocking()
-path.
+Rewrite memory size detection to perform the same test on KSEG1 instead.
+While at it, this patch also does the following two things:
+1. use a fixed pattern instead of a random function pointer as the magic
+   value.
+2. add an additional memory write and a second comparison as part of the
+   test to prevent possible smaller memory detection result due to
+   leftover values in memory.
 
-Fixes: ca0e30dcaa53 ("efi: Add nonblocking option to efi_query_variable_store()")
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Link: https://lore.kernel.org/r/20220218180559.1432559-1-jannh@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
+Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/vars.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
 
---- a/drivers/firmware/efi/vars.c
-+++ b/drivers/firmware/efi/vars.c
-@@ -763,6 +763,7 @@ int efivar_entry_set_safe(efi_char16_t *
+diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+index bd71f5b14238..fd9a872d5713 100644
+--- a/arch/mips/ralink/mt7621.c
++++ b/arch/mips/ralink/mt7621.c
+@@ -20,31 +20,41 @@
+ 
+ #include "common.h"
+ 
+-static void *detect_magic __initdata = detect_memory_region;
++#define MT7621_MEM_TEST_PATTERN         0xaa5555aa
++
++static u32 detect_magic __initdata;
+ 
+ phys_addr_t mips_cpc_default_phys_base(void)
  {
- 	const struct efivar_operations *ops;
- 	efi_status_t status;
-+	unsigned long varsize;
+ 	panic("Cannot detect cpc address");
+ }
  
- 	if (!__efivars)
- 		return -EINVAL;
-@@ -785,15 +786,17 @@ int efivar_entry_set_safe(efi_char16_t *
- 		return efivar_entry_set_nonblocking(name, vendor, attributes,
- 						    size, data);
++static bool __init mt7621_addr_wraparound_test(phys_addr_t size)
++{
++	void *dm = (void *)KSEG1ADDR(&detect_magic);
++
++	if (CPHYSADDR(dm + size) >= MT7621_LOWMEM_MAX_SIZE)
++		return true;
++	__raw_writel(MT7621_MEM_TEST_PATTERN, dm);
++	if (__raw_readl(dm) != __raw_readl(dm + size))
++		return false;
++	__raw_writel(!MT7621_MEM_TEST_PATTERN, dm);
++	return __raw_readl(dm) == __raw_readl(dm + size);
++}
++
+ static void __init mt7621_memory_detect(void)
+ {
+-	void *dm = &detect_magic;
+ 	phys_addr_t size;
  
-+	varsize = size + ucs2_strsize(name, 1024);
- 	if (!block) {
- 		if (down_trylock(&efivars_lock))
- 			return -EBUSY;
-+		status = check_var_size_nonblocking(attributes, varsize);
- 	} else {
- 		if (down_interruptible(&efivars_lock))
- 			return -EINTR;
-+		status = check_var_size(attributes, varsize);
+-	for (size = 32 * SZ_1M; size < 256 * SZ_1M; size <<= 1) {
+-		if (!__builtin_memcmp(dm, dm + size, sizeof(detect_magic)))
+-			break;
++	for (size = 32 * SZ_1M; size <= 256 * SZ_1M; size <<= 1) {
++		if (mt7621_addr_wraparound_test(size)) {
++			memblock_add(MT7621_LOWMEM_BASE, size);
++			return;
++		}
  	}
  
--	status = check_var_size(attributes, size + ucs2_strsize(name, 1024));
- 	if (status != EFI_SUCCESS) {
- 		up(&efivars_lock);
- 		return -ENOSPC;
+-	if ((size == 256 * SZ_1M) &&
+-	    (CPHYSADDR(dm + size) < MT7621_LOWMEM_MAX_SIZE) &&
+-	    __builtin_memcmp(dm, dm + size, sizeof(detect_magic))) {
+-		memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
+-		memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
+-	} else {
+-		memblock_add(MT7621_LOWMEM_BASE, size);
+-	}
++	memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
++	memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
+ }
+ 
+ void __init ralink_of_remap(void)
+-- 
+2.34.1
+
 
 

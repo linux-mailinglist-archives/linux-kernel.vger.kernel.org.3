@@ -2,282 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C134CFCC6
+	by mail.lfdr.de (Postfix) with ESMTP id 383C34CFCC5
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiCGL1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S239936AbiCGL1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:27:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbiCGL1Q (ORCPT
+        with ESMTP id S238245AbiCGL1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Mar 2022 06:27:16 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8199F4A3DE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 03:03:41 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id v4so13078759pjh.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 03:03:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JFEOo1tcEco00+Nvk7m320IFPXwMdnmT4rBSqgHwb9U=;
-        b=qtjDbzotyaVzeWfh9ZP2lKirFOAUTh9U/lRfK/AmyUHC81BOUQqRWV8uYCpRv45zF/
-         JfuELtkYJkfkeBsnkNyb8dSw5o0huILMLDVO1CneisVMVdzYZp/KPIHiPffB7jNk2y7g
-         7qyMbiP+ZcgwqY03j2iV6pztEiry52W4y6m3vGeh+ccjyh55cthC36FA9t/+YbMF5ueK
-         A2JLckHy3vDz9ECpC+g5tiA3F/I6nZlnFG5BHEUusdCqvxPTit5boDlsMSM0/QLfegx9
-         g92RR3KXXqWVJ/Twx7BOxF8eaSreXTIq8xxN1/uSlLTZHQdvtbmc+BKtR2ukBE4PkzPm
-         22Sw==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E78A4B43E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 03:03:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646651022;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=gNPPt7IcCgazViAJnPdJB9z9Owb+g+PUdYAZ9hinRqk=;
+        b=V/Kot64+pJmhaGIV+uTpQRskZ1NbErh8D7kNb4orWTioIVOKo8/tHXV2bUJOh3oxpAbm47
+        bcpV6iEGniSk6ASo+LqHDiKmC/CUkQpZ9KeJ4pgXibb33gmYuXF9Y6HoPmAU9F8jDcBj4M
+        AdG1sCO+cwVVM5W06E310MCTJnL1ack=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-522-EMlJF1ksPh-zVJOcUiqd0w-1; Mon, 07 Mar 2022 06:03:39 -0500
+X-MC-Unique: EMlJF1ksPh-zVJOcUiqd0w-1
+Received: by mail-ed1-f72.google.com with SMTP id u28-20020a50d51c000000b004159ffb8f24so8416322edi.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 03:03:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JFEOo1tcEco00+Nvk7m320IFPXwMdnmT4rBSqgHwb9U=;
-        b=t/aILU1QWwlEDjFdoQM200CfWHpc8lWX9zyXnsseCJKPIbCkYSltAdO2mAb67xuymw
-         ywHE9x+ZuY2QDoUiuzM+hkJjwzMpxuibahjiInDc0K+ez6fJPAkRLnoGlYEYobRo9g0c
-         w72z1CERM7vfnR3tKAZRwMdHB/DLfjOtNcFZtTM9LnSqcTgEDi5/IAcXypHwArgCrDeL
-         yjYN7ZNu8yrZPsEmK/aj3jtruaXa7oDjo0d6GXSiHl6x8lLNDejsdUYmSj5UPZoZHIaG
-         hdnPEncaxuazgPEhnjODj/NBBtX7+7Qy5NPvXCLQmCm6vxhqBHQ0yejOQQofg1bd6Zli
-         NlIw==
-X-Gm-Message-State: AOAM533MstlhwJctwTojQIdT9Nmdl/zXlvQpibBTyXelzXTMPEHPohYb
-        wF50oJ864n/oBExlQ/MY83Wzfg==
-X-Google-Smtp-Source: ABdhPJzQWuDyPVOZV8+vb7zFRV1bqqY/2Jkp1Y9YhwzRyLVg+CvO8Hap3qvd2yxJOHBDSbBx85jL6Q==
-X-Received: by 2002:a17:90b:216:b0:1bc:5d68:e7aa with SMTP id fy22-20020a17090b021600b001bc5d68e7aamr12283884pjb.57.1646651020984;
-        Mon, 07 Mar 2022 03:03:40 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1c2a:216d:d967:c5a7:5da:6441])
-        by smtp.gmail.com with ESMTPSA id mw7-20020a17090b4d0700b001b8baf6b6f5sm12390121pjb.50.2022.03.07.03.03.36
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=gNPPt7IcCgazViAJnPdJB9z9Owb+g+PUdYAZ9hinRqk=;
+        b=JJDvOyCXmCdeoZuRftEqYSmmBtpBY97s2aLxoDoafYU7LnNp+Geyt69AWsMjzi8ZQc
+         dk4DTYN25l8gKTDc8GQqbbG2x081uzSQW8fqX06zgWujB2nlQxj4sdSDs6Mjf+VSs5Ki
+         0JLTOjUyvX0UIseyrYJiKoTxW60FCR18QtNYPkICyh37W04MC+O4/pQXxo/heRRUM22/
+         0tgBYUH4HwacruxTN5AJT50HHWt1/B/wy7oqvxI0psMB3g27iKy/vLUb4aJflKUlKBwf
+         GGEPZLTTtTXDHyV/WAtCQM7ye4G14sAkoQ20L9bauVoOY9oeaek/c144sQjE04x3nSWf
+         3KVA==
+X-Gm-Message-State: AOAM531pmD9+ck2QUxC0G/uVOqThT9PwAUVrXRrOkbeE6LoRunx28ttr
+        dwKTonVG3YwzHf+Qm3AXQkTFxZU3qnPYDLOh72OM2SMK2D1Bm6poyeYQiEVj4ljWklDllMFgHmN
+        WYIVUu/siMP6PiLyK5TD/XB4/
+X-Received: by 2002:a05:6402:1e91:b0:415:ecdb:bb42 with SMTP id f17-20020a0564021e9100b00415ecdbbb42mr10485776edf.367.1646651017438;
+        Mon, 07 Mar 2022 03:03:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzm045HAXHomDdQ4eh2BMpTcblB2cVV+JVDBoNGC3+rpUKylFjFOJZk78RZ+xJFhn3Hw+5UaQ==
+X-Received: by 2002:a05:6402:1e91:b0:415:ecdb:bb42 with SMTP id f17-20020a0564021e9100b00415ecdbbb42mr10485752edf.367.1646651017235;
+        Mon, 07 Mar 2022 03:03:37 -0800 (PST)
+Received: from redhat.com ([2.55.138.228])
+        by smtp.gmail.com with ESMTPSA id er12-20020a056402448c00b00413d03ac4a2sm5718316edb.69.2022.03.07.03.03.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 03:03:40 -0800 (PST)
-From:   Sumit Garg <sumit.garg@linaro.org>
-To:     linux-serial@vger.kernel.org, hasegawa-hitomi@fujitsu.com,
-        dianders@chromium.org
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        linux-kernel@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        arnd@arndb.de, peterz@infradead.org,
-        Sumit Garg <sumit.garg@linaro.org>
-Subject: [RFT v4] tty/sysrq: Make sysrq handler NMI aware
-Date:   Mon,  7 Mar 2022 16:33:28 +0530
-Message-Id: <20220307110328.2557655-1-sumit.garg@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 07 Mar 2022 03:03:36 -0800 (PST)
+Date:   Mon, 7 Mar 2022 06:03:32 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dan.carpenter@oracle.com, david@redhat.com, jasowang@redhat.com,
+        lkp@intel.com, mail@anirudhrb.com, mst@redhat.com,
+        pasic@linux.ibm.com, sgarzare@redhat.com, si-wei.liu@oracle.com,
+        stable@vger.kernel.org,
+        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
+        wang.yi59@zte.com.cn, xieyongji@bytedance.com,
+        zhang.min9@zte.com.cn
+Subject: [GIT PULL] virtio: last minute fixes
+Message-ID: <20220307060332-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow a magic sysrq to be triggered from an NMI context. This is done
-via marking some sysrq actions as NMI safe. Safe actions will be allowed
-to run from NMI context whilst that cannot run from an NMI will be queued
-as irq_work for later processing.
+The following changes since commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3:
 
-The major use-case is to add NMI debugging capabilities to the kernel
-in order to debug scenarios such as:
-- Primary CPU is stuck in deadlock with interrupts disabled and hence
-  doesn't honor serial device interrupt. So having magic sysrq triggered
-  as an NMI is helpful for debugging.
-- Always enabled NMI based magic sysrq irrespective of whether the serial
-  TTY port is active or not.
-- Apart from UART interrupts, it allows magic sysrq to be triggered from
-  a diagnostic NMI interrupt on systems such as A64FX.
+  Linux 5.17-rc6 (2022-02-27 14:36:33 -0800)
 
-A particular sysrq handler is only marked as NMI safe in case the handler
-isn't contending for any synchronization primitives as in NMI context
-they are expected to cause deadlocks. Note that the debug sysrq do not
-contend for any synchronization primitives. It does call kgdb_breakpoint()
-to provoke a trap but that trap handler should be NMI safe on
-architectures that implement an NMI.
+are available in the Git repository at:
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
----
+  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
 
-Changes in v4:
-- Use atomic operations for sysrq key variable to gracefully handle
-  concurrent sysrq entry on multiple CPUs.
-- Rename sysrq_nmi_key to sysrq_key as it isn't anymore specific to NMI
-  context.
-- Addressed other misc. comments from Doug.
+for you to fetch changes up to 3dd7d135e75cb37c8501ba02977332a2a487dd39:
 
-Changes in v3:
-- Extend commit message to include use-cases.
-- Get rid of redundant kfifo stuff.
-- Incorporate other misc. feedback from Peter Z.
+  tools/virtio: handle fallout from folio work (2022-03-06 06:06:50 -0500)
 
-Changes in v2:
-- Rebased to 5.17-rc5.
-- Separate this patch from complete patch-set [1] as its relevant for
-  other diagnostic NMI interrupts [2] as well apart from uart NMI
-  interrupts.
-- Incorporated suggestions from Doug.
+----------------------------------------------------------------
+virtio: last minute fixes
 
-[1] https://lore.kernel.org/linux-arm-kernel/CAFA6WYOWHgmYYt=KGXDh2hKiuy_rQbJfi279ev0+s-Qh7L21kA@mail.gmail.com/t/#m2b5006f08581448020eb24566927a104d0b95c44
-[2] https://lore.kernel.org/all/Yhi0rrkSR63ZhjX1@kroah.com/T/
+Some fixes that took a while to get ready. Not regressions,
+but they look safe and seem to be worth to have.
 
- drivers/tty/sysrq.c       | 50 ++++++++++++++++++++++++++++++++++++++-
- include/linux/sysrq.h     |  1 +
- kernel/debug/debug_core.c |  1 +
- 3 files changed, 51 insertions(+), 1 deletion(-)
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 
-diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-index bbfd004449b5..005c9f9e0004 100644
---- a/drivers/tty/sysrq.c
-+++ b/drivers/tty/sysrq.c
-@@ -51,6 +51,7 @@
- #include <linux/syscalls.h>
- #include <linux/of.h>
- #include <linux/rcupdate.h>
-+#include <linux/irq_work.h>
- 
- #include <asm/ptrace.h>
- #include <asm/irq_regs.h>
-@@ -112,6 +113,7 @@ static const struct sysrq_key_op sysrq_loglevel_op = {
- 	.help_msg	= "loglevel(0-9)",
- 	.action_msg	= "Changing Loglevel",
- 	.enable_mask	= SYSRQ_ENABLE_LOG,
-+	.nmi_safe	= true,
- };
- 
- #ifdef CONFIG_VT
-@@ -159,6 +161,7 @@ static const struct sysrq_key_op sysrq_crash_op = {
- 	.help_msg	= "crash(c)",
- 	.action_msg	= "Trigger a crash",
- 	.enable_mask	= SYSRQ_ENABLE_DUMP,
-+	.nmi_safe	= true,
- };
- 
- static void sysrq_handle_reboot(int key)
-@@ -172,6 +175,7 @@ static const struct sysrq_key_op sysrq_reboot_op = {
- 	.help_msg	= "reboot(b)",
- 	.action_msg	= "Resetting",
- 	.enable_mask	= SYSRQ_ENABLE_BOOT,
-+	.nmi_safe	= true,
- };
- 
- const struct sysrq_key_op *__sysrq_reboot_op = &sysrq_reboot_op;
-@@ -219,6 +223,7 @@ static const struct sysrq_key_op sysrq_showlocks_op = {
- 	.handler	= sysrq_handle_showlocks,
- 	.help_msg	= "show-all-locks(d)",
- 	.action_msg	= "Show Locks Held",
-+	.nmi_safe	= true,
- };
- #else
- #define sysrq_showlocks_op (*(const struct sysrq_key_op *)NULL)
-@@ -291,6 +296,7 @@ static const struct sysrq_key_op sysrq_showregs_op = {
- 	.help_msg	= "show-registers(p)",
- 	.action_msg	= "Show Regs",
- 	.enable_mask	= SYSRQ_ENABLE_DUMP,
-+	.nmi_safe	= true,
- };
- 
- static void sysrq_handle_showstate(int key)
-@@ -328,6 +334,7 @@ static const struct sysrq_key_op sysrq_ftrace_dump_op = {
- 	.help_msg	= "dump-ftrace-buffer(z)",
- 	.action_msg	= "Dump ftrace buffer",
- 	.enable_mask	= SYSRQ_ENABLE_DUMP,
-+	.nmi_safe	= true,
- };
- #else
- #define sysrq_ftrace_dump_op (*(const struct sysrq_key_op *)NULL)
-@@ -566,12 +573,46 @@ static void __sysrq_put_key_op(int key, const struct sysrq_key_op *op_p)
- 		sysrq_key_table[i] = op_p;
- }
- 
-+static atomic_t sysrq_key = ATOMIC_INIT(-1);
-+
-+static void sysrq_do_irq_work(struct irq_work *work)
-+{
-+	const struct sysrq_key_op *op_p;
-+	int orig_suppress_printk;
-+	int key = atomic_read(&sysrq_key);
-+
-+	orig_suppress_printk = suppress_printk;
-+	suppress_printk = 0;
-+
-+	rcu_sysrq_start();
-+	rcu_read_lock();
-+
-+	op_p = __sysrq_get_key_op(key);
-+	if (op_p)
-+		op_p->handler(key);
-+
-+	rcu_read_unlock();
-+	rcu_sysrq_end();
-+
-+	suppress_printk = orig_suppress_printk;
-+	atomic_set(&sysrq_key, -1);
-+}
-+
-+static DEFINE_IRQ_WORK(sysrq_irq_work, sysrq_do_irq_work);
-+
- void __handle_sysrq(int key, bool check_mask)
- {
- 	const struct sysrq_key_op *op_p;
- 	int orig_log_level;
- 	int orig_suppress_printk;
- 	int i;
-+	bool irq_work = false;
-+
-+	/* Skip sysrq handling if one already in progress */
-+	if (atomic_cmpxchg(&sysrq_key, -1, key) != -1) {
-+		pr_warn("Skip sysrq key: %i as one already in progress\n", key);
-+		return;
-+	}
- 
- 	orig_suppress_printk = suppress_printk;
- 	suppress_printk = 0;
-@@ -596,7 +637,11 @@ void __handle_sysrq(int key, bool check_mask)
- 		if (!check_mask || sysrq_on_mask(op_p->enable_mask)) {
- 			pr_info("%s\n", op_p->action_msg);
- 			console_loglevel = orig_log_level;
--			op_p->handler(key);
-+
-+			if (in_nmi() && !op_p->nmi_safe)
-+				irq_work = irq_work_queue(&sysrq_irq_work);
-+			else
-+				op_p->handler(key);
- 		} else {
- 			pr_info("This sysrq operation is disabled.\n");
- 			console_loglevel = orig_log_level;
-@@ -623,6 +668,9 @@ void __handle_sysrq(int key, bool check_mask)
- 	rcu_sysrq_end();
- 
- 	suppress_printk = orig_suppress_printk;
-+
-+	if (!irq_work)
-+		atomic_set(&sysrq_key, -1);
- }
- 
- void handle_sysrq(int key)
-diff --git a/include/linux/sysrq.h b/include/linux/sysrq.h
-index 3a582ec7a2f1..630b5b9dc225 100644
---- a/include/linux/sysrq.h
-+++ b/include/linux/sysrq.h
-@@ -34,6 +34,7 @@ struct sysrq_key_op {
- 	const char * const help_msg;
- 	const char * const action_msg;
- 	const int enable_mask;
-+	const bool nmi_safe;
- };
- 
- #ifdef CONFIG_MAGIC_SYSRQ
-diff --git a/kernel/debug/debug_core.c b/kernel/debug/debug_core.c
-index da06a5553835..53b56114f59b 100644
---- a/kernel/debug/debug_core.c
-+++ b/kernel/debug/debug_core.c
-@@ -978,6 +978,7 @@ static const struct sysrq_key_op sysrq_dbg_op = {
- 	.handler	= sysrq_handle_dbg,
- 	.help_msg	= "debug(g)",
- 	.action_msg	= "DEBUG",
-+	.nmi_safe	= true,
- };
- #endif
- 
--- 
-2.25.1
+----------------------------------------------------------------
+Anirudh Rayabharam (1):
+      vhost: fix hung thread due to erroneous iotlb entries
+
+Michael S. Tsirkin (6):
+      virtio: unexport virtio_finalize_features
+      virtio: acknowledge all features before access
+      virtio: document virtio_reset_device
+      virtio_console: break out of buf poll on remove
+      virtio: drop default for virtio-mem
+      tools/virtio: handle fallout from folio work
+
+Si-Wei Liu (3):
+      vdpa: factor out vdpa_set_features_unlocked for vdpa internal use
+      vdpa/mlx5: should verify CTRL_VQ feature exists for MQ
+      vdpa/mlx5: add validation for VIRTIO_NET_CTRL_MQ_VQ_PAIRS_SET command
+
+Stefano Garzarella (2):
+      vhost: remove avail_event arg from vhost_update_avail_event()
+      tools/virtio: fix virtio_test execution
+
+Xie Yongji (3):
+      vduse: Fix returning wrong type in vduse_domain_alloc_iova()
+      virtio-blk: Don't use MAX_DISCARD_SEGMENTS if max_discard_seg is zero
+      virtio-blk: Remove BUG_ON() in virtio_queue_rq()
+
+Zhang Min (1):
+      vdpa: fix use-after-free on vp_vdpa_remove
+
+ drivers/block/virtio_blk.c           | 20 ++++++-------
+ drivers/char/virtio_console.c        |  7 +++++
+ drivers/vdpa/mlx5/net/mlx5_vnet.c    | 34 ++++++++++++++++++++--
+ drivers/vdpa/vdpa.c                  |  2 +-
+ drivers/vdpa/vdpa_user/iova_domain.c |  2 +-
+ drivers/vdpa/virtio_pci/vp_vdpa.c    |  2 +-
+ drivers/vhost/iotlb.c                | 11 +++++++
+ drivers/vhost/vdpa.c                 |  2 +-
+ drivers/vhost/vhost.c                |  9 ++++--
+ drivers/virtio/Kconfig               |  1 -
+ drivers/virtio/virtio.c              | 56 ++++++++++++++++++++++++------------
+ drivers/virtio/virtio_vdpa.c         |  2 +-
+ include/linux/vdpa.h                 | 18 ++++++++----
+ include/linux/virtio.h               |  1 -
+ include/linux/virtio_config.h        |  3 +-
+ tools/virtio/linux/mm_types.h        |  3 ++
+ tools/virtio/virtio_test.c           |  1 +
+ 17 files changed, 127 insertions(+), 47 deletions(-)
+ create mode 100644 tools/virtio/linux/mm_types.h
 

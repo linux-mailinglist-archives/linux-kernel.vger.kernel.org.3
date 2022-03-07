@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4932D4CF81D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A32594CFB36
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238997AbiCGJtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:49:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
+        id S235352AbiCGKc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239149AbiCGJjR (ORCPT
+        with ESMTP id S242063AbiCGKLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:39:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE2E70913;
-        Mon,  7 Mar 2022 01:34:48 -0800 (PST)
+        Mon, 7 Mar 2022 05:11:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16A886E06;
+        Mon,  7 Mar 2022 01:54:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21DB2B80F9F;
-        Mon,  7 Mar 2022 09:34:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533DEC340E9;
-        Mon,  7 Mar 2022 09:34:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDA2760A27;
+        Mon,  7 Mar 2022 09:54:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DFBC340F3;
+        Mon,  7 Mar 2022 09:54:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645686;
-        bh=ho+1fk4JbqUuOdumvMPIOqALlMHuN+23rs2JHlchIaA=;
+        s=korg; t=1646646854;
+        bh=jZhJUgnC00Oi4NxwevCHNXIQrXbw0XYFCaL4YrnILQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dH0tG8Ba7zzgExZll9jZ1mdnIyFmnRrLUK7FSesO6e7eLqS8TdNRFvcv1kksqtdNj
-         nnjWq6+R9N6Cxw0I5Q1kIDtxIRsDTNjnJP2AKl831cobqmjBFgQcR+TLSRJMLMBD76
-         LKZup7/KClGqAhJoGUYjGyPTWfboGByD2lRw2Aj0=
+        b=n2wE6EF0YTP/DSpmC8gqswD7PGylnjwqu7qDlXDNh3AscQ3JYnM8nyeZ7remSygBG
+         EWiZog8EAfN7dRDA6WYiSSwYnrMqQoJ70CSPYZ0t21pTD1LqnMJ75dVwOvmR3oZmAR
+         LtyvX7Ol0LnyFZIOjqPWdHexwA2rIO8K16NOiUUI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 070/105] ASoC: cs4265: Fix the duplicated control name
-Date:   Mon,  7 Mar 2022 10:19:13 +0100
-Message-Id: <20220307091646.147215888@linuxfoundation.org>
+        stable@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Zeal Robot <zealci@zte.com.cn>,
+        wangyong <wang.yong12@zte.com.cn>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        CGEL ZTE <cgel.zte@gmail.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Song Liu <songliubraving@fb.com>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 116/186] memfd: fix F_SEAL_WRITE after shmem huge page allocated
+Date:   Mon,  7 Mar 2022 10:19:14 +0100
+Message-Id: <20220307091657.321646178@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +63,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Hugh Dickins <hughd@google.com>
 
-commit c5487b9cdea5c1ede38a7ec94db0fc59963c8e86 upstream.
+commit f2b277c4d1c63a85127e8aa2588e9cc3bd21cb99 upstream.
 
-Currently, the following error messages are seen during boot:
+Wangyong reports: after enabling tmpfs filesystem to support transparent
+hugepage with the following command:
 
-asoc-simple-card sound: control 2:0:0:SPDIF Switch:0 is already present
-cs4265 1-004f: ASoC: failed to add widget SPDIF dapm kcontrol SPDIF Switch: -16
+  echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
 
-Quoting Mark Brown:
+the docker program tries to add F_SEAL_WRITE through the following
+command, but it fails unexpectedly with errno EBUSY:
 
-"The driver is just plain buggy, it defines both a regular SPIDF Switch
-control and a SND_SOC_DAPM_SWITCH() called SPDIF both of which will
-create an identically named control, it can never have loaded without
-error.  One or both of those has to be renamed or they need to be
-merged into one thing."
+  fcntl(5, F_ADD_SEALS, F_SEAL_WRITE) = -1.
 
-Fix the duplicated control name by combining the two SPDIF controls here
-and move the register bits onto the DAPM widget and have DAPM control them.
+That is because memfd_tag_pins() and memfd_wait_for_pins() were never
+updated for shmem huge pages: checking page_mapcount() against
+page_count() is hopeless on THP subpages - they need to check
+total_mapcount() against page_count() on THP heads only.
 
-Fixes: f853d6b3ba34 ("ASoC: cs4265: Add a S/PDIF enable switch")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220215120514.1760628-1-festevam@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Make memfd_tag_pins() (compared > 1) as strict as memfd_wait_for_pins()
+(compared != 1): either can be justified, but given the non-atomic
+total_mapcount() calculation, it is better now to be strict.  Bear in
+mind that total_mapcount() itself scans all of the THP subpages, when
+choosing to take an XA_CHECK_SCHED latency break.
+
+Also fix the unlikely xa_is_value() case in memfd_wait_for_pins(): if a
+page has been swapped out since memfd_tag_pins(), then its refcount must
+have fallen, and so it can safely be untagged.
+
+Link: https://lkml.kernel.org/r/a4f79248-df75-2c8c-3df-ba3317ccb5da@google.com
+Signed-off-by: Hugh Dickins <hughd@google.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Reported-by: wangyong <wang.yong12@zte.com.cn>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: CGEL ZTE <cgel.zte@gmail.com>
+Cc: Kirill A. Shutemov <kirill@shutemov.name>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yang Yang <yang.yang29@zte.com.cn>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/cs4265.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ mm/memfd.c |   40 ++++++++++++++++++++++++++++------------
+ 1 file changed, 28 insertions(+), 12 deletions(-)
 
---- a/sound/soc/codecs/cs4265.c
-+++ b/sound/soc/codecs/cs4265.c
-@@ -150,7 +150,6 @@ static const struct snd_kcontrol_new cs4
- 	SOC_SINGLE("E to F Buffer Disable Switch", CS4265_SPDIF_CTL1,
- 				6, 1, 0),
- 	SOC_ENUM("C Data Access", cam_mode_enum),
--	SOC_SINGLE("SPDIF Switch", CS4265_SPDIF_CTL2, 5, 1, 1),
- 	SOC_SINGLE("Validity Bit Control Switch", CS4265_SPDIF_CTL2,
- 				3, 1, 0),
- 	SOC_ENUM("SPDIF Mono/Stereo", spdif_mono_stereo_enum),
-@@ -186,7 +185,7 @@ static const struct snd_soc_dapm_widget
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -31,20 +31,28 @@
+ static void memfd_tag_pins(struct xa_state *xas)
+ {
+ 	struct page *page;
+-	unsigned int tagged = 0;
++	int latency = 0;
++	int cache_count;
  
- 	SND_SOC_DAPM_SWITCH("Loopback", SND_SOC_NOPM, 0, 0,
- 			&loopback_ctl),
--	SND_SOC_DAPM_SWITCH("SPDIF", SND_SOC_NOPM, 0, 0,
-+	SND_SOC_DAPM_SWITCH("SPDIF", CS4265_SPDIF_CTL2, 5, 1,
- 			&spdif_switch),
- 	SND_SOC_DAPM_SWITCH("DAC", CS4265_PWRCTL, 1, 1,
- 			&dac_switch),
+ 	lru_add_drain();
+ 
+ 	xas_lock_irq(xas);
+ 	xas_for_each(xas, page, ULONG_MAX) {
+-		if (xa_is_value(page))
+-			continue;
+-		page = find_subpage(page, xas->xa_index);
+-		if (page_count(page) - page_mapcount(page) > 1)
++		cache_count = 1;
++		if (!xa_is_value(page) &&
++		    PageTransHuge(page) && !PageHuge(page))
++			cache_count = HPAGE_PMD_NR;
++
++		if (!xa_is_value(page) &&
++		    page_count(page) - total_mapcount(page) != cache_count)
+ 			xas_set_mark(xas, MEMFD_TAG_PINNED);
++		if (cache_count != 1)
++			xas_set(xas, page->index + cache_count);
+ 
+-		if (++tagged % XA_CHECK_SCHED)
++		latency += cache_count;
++		if (latency < XA_CHECK_SCHED)
+ 			continue;
++		latency = 0;
+ 
+ 		xas_pause(xas);
+ 		xas_unlock_irq(xas);
+@@ -73,7 +81,8 @@ static int memfd_wait_for_pins(struct ad
+ 
+ 	error = 0;
+ 	for (scan = 0; scan <= LAST_SCAN; scan++) {
+-		unsigned int tagged = 0;
++		int latency = 0;
++		int cache_count;
+ 
+ 		if (!xas_marked(&xas, MEMFD_TAG_PINNED))
+ 			break;
+@@ -87,10 +96,14 @@ static int memfd_wait_for_pins(struct ad
+ 		xas_lock_irq(&xas);
+ 		xas_for_each_marked(&xas, page, ULONG_MAX, MEMFD_TAG_PINNED) {
+ 			bool clear = true;
+-			if (xa_is_value(page))
+-				continue;
+-			page = find_subpage(page, xas.xa_index);
+-			if (page_count(page) - page_mapcount(page) != 1) {
++
++			cache_count = 1;
++			if (!xa_is_value(page) &&
++			    PageTransHuge(page) && !PageHuge(page))
++				cache_count = HPAGE_PMD_NR;
++
++			if (!xa_is_value(page) && cache_count !=
++			    page_count(page) - total_mapcount(page)) {
+ 				/*
+ 				 * On the last scan, we clean up all those tags
+ 				 * we inserted; but make a note that we still
+@@ -103,8 +116,11 @@ static int memfd_wait_for_pins(struct ad
+ 			}
+ 			if (clear)
+ 				xas_clear_mark(&xas, MEMFD_TAG_PINNED);
+-			if (++tagged % XA_CHECK_SCHED)
++
++			latency += cache_count;
++			if (latency < XA_CHECK_SCHED)
+ 				continue;
++			latency = 0;
+ 
+ 			xas_pause(&xas);
+ 			xas_unlock_irq(&xas);
 
 

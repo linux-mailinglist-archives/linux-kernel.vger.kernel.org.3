@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D334D014C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1084D0153
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243222AbiCGOdi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Mar 2022 09:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S243235AbiCGOe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243228AbiCGOdf (ORCPT
+        with ESMTP id S243232AbiCGOeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:33:35 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D81622AE39
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:32:40 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-90-h5M8wZQmO6yot19GRlHRaQ-1; Mon, 07 Mar 2022 14:32:37 +0000
-X-MC-Unique: h5M8wZQmO6yot19GRlHRaQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 7 Mar 2022 14:32:34 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 7 Mar 2022 14:32:34 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jisheng Zhang' <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] riscv: add irq stack support
-Thread-Topic: [PATCH v2] riscv: add irq stack support
-Thread-Index: AQHYMi3k+WYJFHSO9UyI1q+ElBcqo6yz+IIw
-Date:   Mon, 7 Mar 2022 14:32:34 +0000
-Message-ID: <f7f46323619e4084b4cfc551cdb47dd0@AcuMS.aculab.com>
-References: <20220307140804.1400-1-jszhang@kernel.org>
-In-Reply-To: <20220307140804.1400-1-jszhang@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 7 Mar 2022 09:34:23 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5C73AA4E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:33:28 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id a8so32354038ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:33:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gX0VA6G+m/fx1Btx4oSZIKt5x8VtazQqeF2Zzwz+qYc=;
+        b=iJUIDDKLOPdWItQyphmj7LpSXG3tIZGArCCQOTt4CF1F3NN2giBXuKYzQjlJZs7kZ9
+         meBzE/SjbB8h8M/YdAFwDzFL/eYOitVpCEfgCkC224Dgiq61z8wp91/fxMhW7bkJSkdj
+         OBPeEkKgzX/nc+xQcYXesC+k1Uv6lfoShTkYnxReVlKcsEY1ELEj3w7APsQ1Qle7lcAs
+         jGsaRA28GMkAQmsorSXNryFcywNrpHgTAucrKq7t1Sdi8LSsi39lP5phf0+o+72ASTk0
+         qtTbS+7sNhB/dD7bDctWC6ee8LvUecpoLgTpwvpLYTyjeb9D3eHGkLv1D5je4snKxxQ+
+         ZD3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gX0VA6G+m/fx1Btx4oSZIKt5x8VtazQqeF2Zzwz+qYc=;
+        b=fSt8w13gsfwQzAPR6L7NN4qNOwXDRW78Y7wl1PJPQEghULFwj6/m1vqij6Vfj7aYZw
+         ZDhRkcYJz4F08q73wAaKy5r+he5aOo8duJgIhPgm0GhbIdcRtMcFuzeJef6ruW5h/FGM
+         ur4yfr1LHqvF0H29DlMJ2CJzhBSEthpifyyTmvwDDAXBsUXJ3WW35xqZGvLP+cvn4Qbf
+         BSyxl0OOPJLVmDcpmv2uf+JWNAVZS4Sa+CUSwT5PWVxirKXF7o+eaYirqhNABIm62GmM
+         jkKmcxgnhUaMcMWxJNU3lI9rk6U8BUNbim5fmu+oy3OS0szNSiC1Wj5jUguQv14VqnPW
+         UK7w==
+X-Gm-Message-State: AOAM533mvgMzHAc5HfzupdOd92F7HksybpmdWKiJtAroZofuT5PWh8TH
+        uPR3easQbvUDwQgqSMG6XWMMfVKqqwS9MnVfnzCBsg==
+X-Google-Smtp-Source: ABdhPJzj/3liPkwVOlu1feutaA0UkA9vnyA93ILCkc0CWbYLSnerDF1GMcEzni9G0ChIMAqxXzMw8R2BawsGlDWAVCw=
+X-Received: by 2002:a17:907:72c3:b0:6ce:5256:1125 with SMTP id
+ du3-20020a17090772c300b006ce52561125mr9575123ejc.697.1646663607082; Mon, 07
+ Mar 2022 06:33:27 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+References: <20220307141955.28040-1-alifer.m@variscite.com>
+In-Reply-To: <20220307141955.28040-1-alifer.m@variscite.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 7 Mar 2022 15:33:16 +0100
+Message-ID: <CAMRc=Mf0uBOHe=Ff6_1GcpEPX4d4wYJsnBBE=Mri-Um_sq2nog@mail.gmail.com>
+Subject: Re: [PATCH] driver: pca953x: avoid error message when resuming
+To:     Alifer Moraes <alifer.m@variscite.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        eran.m@variscite.com, Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        pierluigi.p@variscite.com,
+        FrancescoFerraro <francesco.f@variscite.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,45 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jisheng Zhang
-> Sent: 07 March 2022 14:08
-> Currently, IRQs are still handled on the kernel stack of the current
-> task on riscv platforms. If the task has a deep call stack at the time
-> of interrupt, and handling the interrupt also requires a deep stack,
-> it's possible to see stack overflow.
-> 
-...
-I'd have thought that a single page is (probably) enough for the
-IRQ stack.
-Certainly its sizing isn't really related to the normal thread
-stack size.
+On Mon, Mar 7, 2022 at 3:20 PM Alifer Moraes <alifer.m@variscite.com> wrote:
+>
+> From: FrancescoFerraro <francesco.f@variscite.com>
+>
+> Avoids the error messages "pca953x 1-0020: failed reading register"
+> when resuming from suspend using gpio-key attached to pca9534.
+>
 
-> From another side, after this patch, it's possible to reduce the
-> THREAD_SIZE to 8KB for RV64 platforms. This is especially useful for
-> those systems with small memory size, e.g the Allwinner D1S platform
-> which is RV64 but only has 64MB DDR.
+The commit message should read: "gpio: pca953x: ..."
 
-Are you sure?
-Is the stack use likely to be very much less than that of x86-64?
-The real problem isn't the stack use of the test you are doing,
-but the horrid worst case stack of some path that has multiple
-1k+ buffers on stack.
+> Signed-off-by: Francesco Ferraro <francesco.f@variscite.com>
+> Signed-off-by: Alifer Moraes <alifer.m@variscite.com>
+> ---
+>  drivers/gpio/gpio-pca953x.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
+> index d2fe76f3f34f..4f35b75dcbb1 100644
+> --- a/drivers/gpio/gpio-pca953x.c
+> +++ b/drivers/gpio/gpio-pca953x.c
+> @@ -211,6 +211,7 @@ struct pca953x_chip {
+>         struct regulator *regulator;
+>
+>         const struct pca953x_reg_config *regs;
+> +       int is_in_suspend;
 
-Apart from compiler fubar (which usually hit KASAN) that stack
-is actually likely to be architecture independent.
-(The difference between 32bit and 64bit is also likely to be
-relatively small - unless there are on-stack arrays of 'long'.)
+Something like this is not needed because we already have
+pm_runtime_status_suspended().
 
-For VMAP stacks is there a 'guard' KVA page allocated below
-all of the stacks?
-64bit systems should have lots of KVA so this shouldn't be
-a problem.
-Then stack overruns will fault and panic rather than trashing
-another data area - which is really hard to debug.
+>  };
+>
+>  static int pca953x_bank_shift(struct pca953x_chip *chip)
+> @@ -412,7 +413,8 @@ static int pca953x_read_regs(struct pca953x_chip *chip, int reg, unsigned long *
+>
+>         ret = regmap_bulk_read(chip->regmap, regaddr, value, NBANK(chip));
+>         if (ret < 0) {
+> -               dev_err(&chip->client->dev, "failed reading register\n");
+> +               if (!chip->is_in_suspend)
+> +                       dev_err(&chip->client->dev, "failed reading register\n");
+>                 return ret;
+>         }
+>
+> @@ -954,6 +956,7 @@ static int pca953x_probe(struct i2c_client *client,
+>         chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+>         if (chip == NULL)
+>                 return -ENOMEM;
+> +       chip->is_in_suspend = 0;
+>
+>         pdata = dev_get_platdata(&client->dev);
+>         if (pdata) {
+> @@ -1161,6 +1164,8 @@ static int pca953x_suspend(struct device *dev)
+>         else
+>                 regulator_disable(chip->regulator);
+>
+> +       chip->is_in_suspend = 1;
+> +
+>         return 0;
+>  }
+>
+> @@ -1189,6 +1194,8 @@ static int pca953x_resume(struct device *dev)
+>                 return ret;
+>         }
+>
+> +       chip->is_in_suspend = 0;
+> +
+>         return 0;
+>  }
+>  #endif
+> --
+> 2.25.1
+>
 
-	David
+Can you elaborate more on the circumstances in which you're seeing this?
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Bart

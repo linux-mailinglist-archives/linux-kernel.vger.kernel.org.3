@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113914CF60F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E260D4CF78D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238078AbiCGJdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
+        id S238313AbiCGJqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238551AbiCGJ3S (ORCPT
+        with ESMTP id S238197AbiCGJiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EA4344E0;
-        Mon,  7 Mar 2022 01:27:36 -0800 (PST)
+        Mon, 7 Mar 2022 04:38:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2621169CF9;
+        Mon,  7 Mar 2022 01:32:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3ED54B810B2;
-        Mon,  7 Mar 2022 09:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A25C340E9;
-        Mon,  7 Mar 2022 09:27:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55AD660C7D;
+        Mon,  7 Mar 2022 09:32:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4796CC340F4;
+        Mon,  7 Mar 2022 09:32:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645232;
-        bh=37Czy/XIDuF5pub/L9jgRS+Unyz4h5tBEJDYZjBSadc=;
+        s=korg; t=1646645526;
+        bh=tC2F6x7TDUkqwS0UP/ZuZht6uZTAjPAdpKW7Sy5CtOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ha/C4SCUE6hfj2dWOc9lrTCMvJMEdVzDyDKMDowJju6szQ9zbbQPzWTov+Bx6TMBG
-         /RAXHwFpO9JGcGgeYdSe5drgbKXo6yqZ/Am5OrIaJmkEGfoFFGiS8dykG3eDitY5rX
-         RFntxOLYAXWI07Gmt19Y/Kq/cvWyWbdNLWluQ3ac=
+        b=aOOTYzUtVSWDiBpkoPUe6OQUb0CxD2MHvNrRYNm5IPJOhRrCl5DIHyjDQQi1fR5cj
+         HWpRly9tlbNBjE/gUO4UAXfwfQuWBLhLOgQPR/3eHBxQMoORKElpzimfu+gpO6Wd5z
+         KdsWXJaOL5fFmyvIwvf03JclCc1hMOZezvdVhfGA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "D. Wythe" <alibuda@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 28/64] net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error cause by server
+        stable@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        dann frazier <dann.frazier@canonical.com>
+Subject: [PATCH 5.10 058/105] sched/topology: Fix sched_domain_topology_level alloc in sched_init_numa()
 Date:   Mon,  7 Mar 2022 10:19:01 +0100
-Message-Id: <20220307091639.943993080@linuxfoundation.org>
+Message-Id: <20220307091645.813251748@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: D. Wythe <alibuda@linux.alibaba.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-commit 4940a1fdf31c39f0806ac831cde333134862030b upstream.
+commit 71e5f6644fb2f3304fcb310145ded234a37e7cc1 upstream.
 
-The problem of SMC_CLC_DECL_ERR_REGRMB on the server is very clear.
-Based on the fact that whether a new SMC connection can be accepted or
-not depends on not only the limit of conn nums, but also the available
-entries of rtoken. Since the rtoken release is trigger by peer, while
-the conn nums is decrease by local, tons of thing can happen in this
-time difference.
+Commit "sched/topology: Make sched_init_numa() use a set for the
+deduplicating sort" allocates 'i + nr_levels (level)' instead of
+'i + nr_levels + 1' sched_domain_topology_level.
 
-This only thing that needs to be mentioned is that now all connection
-creations are completely protected by smc_server_lgr_pending lock, it's
-enough to check only the available entries in rtokens_used_mask.
+This led to an Oops (on Arm64 juno with CONFIG_SCHED_DEBUG):
 
-Fixes: cd6851f30386 ("smc: remote memory buffers (RMBs)")
-Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+sched_init_domains
+  build_sched_domains()
+    __free_domain_allocs()
+      __sdt_free() {
+	...
+        for_each_sd_topology(tl)
+	  ...
+          sd = *per_cpu_ptr(sdd->sd, j); <--
+	  ...
+      }
+
+Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+Tested-by: Barry Song <song.bao.hua@hisilicon.com>
+Link: https://lkml.kernel.org/r/6000e39e-7d28-c360-9cd6-8798fd22a9bf@arm.com
+Signed-off-by: dann frazier <dann.frazier@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/smc/smc_core.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/sched/topology.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -632,7 +632,8 @@ int smc_conn_create(struct smc_sock *smc
- 		    !lgr->sync_err &&
- 		    lgr->vlan_id == ini->vlan_id &&
- 		    (role == SMC_CLNT ||
--		     lgr->conns_num < SMC_RMBS_PER_LGR_MAX)) {
-+		    (lgr->conns_num < SMC_RMBS_PER_LGR_MAX &&
-+		      !bitmap_full(lgr->rtokens_used_mask, SMC_RMBS_PER_LGR_MAX)))) {
- 			/* link group found */
- 			ini->cln_first_contact = SMC_REUSE_CONTACT;
- 			conn->lgr = lgr;
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1655,7 +1655,7 @@ void sched_init_numa(void)
+ 	/* Compute default topology size */
+ 	for (i = 0; sched_domain_topology[i].mask; i++);
+ 
+-	tl = kzalloc((i + nr_levels) *
++	tl = kzalloc((i + nr_levels + 1) *
+ 			sizeof(struct sched_domain_topology_level), GFP_KERNEL);
+ 	if (!tl)
+ 		return;
 
 

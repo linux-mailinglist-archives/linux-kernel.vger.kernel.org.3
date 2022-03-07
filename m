@@ -2,94 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47864D013F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A974D0097
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243195AbiCGObQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
+        id S242956AbiCGOBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbiCGObP (ORCPT
+        with ESMTP id S239786AbiCGOB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:31:15 -0500
-X-Greylist: delayed 1300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Mar 2022 06:30:19 PST
-Received: from host.metroassettman.biz (metroassettman.biz [62.173.138.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF58A78929
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:30:19 -0800 (PST)
-Received: from metroassettman.biz (ec2-18-116-66-108.us-east-2.compute.amazonaws.com [18.116.66.108])
-        by host.metroassettman.biz (Postfix) with ESMTPA id 0CF571208F2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:59:14 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.metroassettman.biz 0CF571208F2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=metroassettman.biz;
-        s=default; t=1646661555;
-        bh=FBYaKmVy75dN2Nuxl+GNzc8EK1j9WPRyTaK0gW915Q0=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=cA4SwXqnRWwlLbeL25l06q+TQlOCCNOZm+XfSOdOo2TFipNYmLVoeS1seHU1fygX6
-         Oj+s4CsGiBFneULiVpN96GltleSNR+TQuiInDQ6oa1tC7TghqBTyibWUaOhgEAXSdQ
-         BYfuWmO/YgTdTjcTRn7bRQ3zSUEttct+n+IUIb3A=
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.metroassettman.biz 0CF571208F2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=metroassettman.biz;
-        s=default; t=1646661555;
-        bh=FBYaKmVy75dN2Nuxl+GNzc8EK1j9WPRyTaK0gW915Q0=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=cA4SwXqnRWwlLbeL25l06q+TQlOCCNOZm+XfSOdOo2TFipNYmLVoeS1seHU1fygX6
-         Oj+s4CsGiBFneULiVpN96GltleSNR+TQuiInDQ6oa1tC7TghqBTyibWUaOhgEAXSdQ
-         BYfuWmO/YgTdTjcTRn7bRQ3zSUEttct+n+IUIb3A=
-Reply-To: elliotmatare20@metropolitanasset-manager.com
-From:   E Matare <elliotmatare20@metroassettman.biz>
-To:     linux-kernel@vger.kernel.org
-Subject: Projects
-Date:   07 Mar 2022 13:59:14 +0000
-Message-ID: <20220307135914.E676751BB7C52146@metroassettman.biz>
+        Mon, 7 Mar 2022 09:01:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA03889333;
+        Mon,  7 Mar 2022 06:00:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E7F61266;
+        Mon,  7 Mar 2022 14:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DF5C340EB;
+        Mon,  7 Mar 2022 14:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646661633;
+        bh=AUTZ4SHzz2itvOQ5SUm88SHoX24HvJUW+0NaQzv8J3k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=F2td//5fwB39fMMh4fLb1tfGTG7iJWRLyOteTNLVh3RSr7ZDvo6TI5EoHtEmkldr3
+         JHettZzepZj6pizKJFWpNJOPkrGYfw0hjj3nO54kOmGilLmflhHz/au6guRoCLiAQQ
+         xArwZmCN2pbLODGTDEdML7aYksfF62X6/rGLeSkwVGAsxhWkB9WOYHALLVuf7xhik/
+         T5c5EJY/3T3/j0OOwETzv0rktoa19OAdGNW7dC2pGwIr4m9qQltiOWS8z8i0lsO1vh
+         m0l5yJbkSfCHreDcZgmA7uz83N7gK2UvdAUiqHTfwMuSFL6tqoG2nJ0DYYqS2+hddc
+         4rmFvAw3Haetw==
+Date:   Mon, 7 Mar 2022 23:00:27 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v9 02/11] fprobe: Add ftrace based probe APIs
+Message-Id: <20220307230027.679cca95a201b094e700716d@kernel.org>
+In-Reply-To: <YiYAw64nDTWB/V0t@krava>
+References: <164655933970.1674510.3809060481512713846.stgit@devnote2>
+        <164655936328.1674510.15506582463881824113.stgit@devnote2>
+        <YiYAw64nDTWB/V0t@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: metroassettman.biz]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 0.9998]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 0.9998]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  1.5 FROM_FMBLA_NEWDOM From domain was registered in last 7 days
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *******
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, I hope this message finds you in good spirits especially=20
-during this challenging period. Firstly, let me introduce myself.=20
-I am Elliot Matare, a private broker with Metropolitan Asset=20
-Manager in South Africa. I am privately contacting you because=20
-one of my high profile clients is interested in investing abroad=20
-and has asked me to look for individuals and companies with=20
-interesting business ideas that he can invest in. He has an=20
-interest in investing a very substantial amount abroad. I got=20
-your email contact through an online business directory and I=20
-thought I'd contact you to see if you are interested in this=20
-opportunity. Do you or your company have new or existing projects=20
-that require funding? If so, kindly get back to me so that I can=20
-give you more details and we can also plan a strategy that will=20
-be beneficial to all parties. Please also indicate your direct=20
-mobile and whatsapp numbers for an easier communication. 
+On Mon, 7 Mar 2022 13:55:31 +0100
+Jiri Olsa <olsajiri@gmail.com> wrote:
 
-Best Regards,
+> On Sun, Mar 06, 2022 at 06:36:03PM +0900, Masami Hiramatsu wrote:
+> 
+> SNIP
+> 
+> > +}
+> > +NOKPROBE_SYMBOL(fprobe_handler);
+> > +
+> > +/* Convert ftrace location address from symbols */
+> > +static unsigned long *get_ftrace_locations(const char **syms, int num)
+> > +{
+> > +	unsigned long addr, size;
+> > +	unsigned long *addrs;
+> > +	int i;
+> > +
+> > +	/* Convert symbols to symbol address */
+> > +	addrs = kcalloc(num, sizeof(*addrs), GFP_KERNEL);
+> > +	if (!addrs)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	for (i = 0; i < num; i++) {
+> > +		addrs[i] = kallsyms_lookup_name(syms[i]);
+> > +		if (!addrs[i])	/* Maybe wrong symbol */
+> > +			goto error;
+> > +	}
+> > +
+> > +	/* Convert symbol address to ftrace location. */
+> > +	for (i = 0; i < num; i++) {
+> > +		if (!kallsyms_lookup_size_offset(addrs[i], &size, NULL) || !size)
+> > +			goto error;
+> > +		addr = ftrace_location_range(addrs[i], addrs[i] + size - 1);
+> > +		if (!addr) /* No dynamic ftrace there. */
+> > +			goto error;
+> > +		addrs[i] = addr;
+> > +	}
+> 
+> why not one just single loop ?
 
-Elliot.
+Indeed :-D Thanks!
+
+> 
+> jirka
+> 
+> 
+> > +
+> > +	return addrs;
+> > +
+> > +error:
+> > +	kfree(addrs);
+> > +
+> > +	return ERR_PTR(-ENOENT);
+> > +}
+> > +
+> > +static void fprobe_init(struct fprobe *fp)
+> > +{
+> > +	fp->nmissed = 0;
+> > +	fp->ops.func = fprobe_handler;
+> > +	fp->ops.flags |= FTRACE_OPS_FL_SAVE_REGS;
+> > +}
+> 
+> SNIP
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

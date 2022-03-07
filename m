@@ -2,125 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A114CF3C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D6E4CF3C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbiCGIgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 03:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S232761AbiCGIi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 03:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbiCGIgw (ORCPT
+        with ESMTP id S229648AbiCGIiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 03:36:52 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BF0205E3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:35:58 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so15937712pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 00:35:58 -0800 (PST)
+        Mon, 7 Mar 2022 03:38:24 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC9B1C6
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:37:28 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2d6d0cb5da4so154735737b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 00:37:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=mNiCQomHe3AZpULgmNuzd/nevg4o0tLCGfPqsWacIDg=;
-        b=kSq5RBX4GqueV2igKVHKCILxMbbWs7+3aAu+Vpq8k2nZErehVPHkMl7W3dmW4MpcGR
-         kuA1JEdVxm1mqyxpKKZ/Z0PNvZ+h/nW5QLJUpuF9sepwi6TYVFwhMLi4cci1AmUk5NB8
-         Ccu7E/UsHX7FYUx3/dr6/1w+f23vtFBZgC7u6PjZp40j2Lq6QD/r5C/gRndmIDtTrC0g
-         Ds+LAeufJHywwhIgNDp2br/5ML3rm7unqaqsGu4hAWXe6c9ONh34KMKvrwyTTnx0Qr9b
-         b3+7ekRl3eLkdnKqx/qU4XM8WlYTM0ju1/wX6FJHm7lgt/1tHSnskXKyQSfXUgmL2lol
-         rPtg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E6x5yVDLBVFqVJQNZ+OEdQbw27fgZWH2Vrmnv9e+WIA=;
+        b=oNhgYRxfC5S7Flav03PFuf0rKKCE1fufuLFFan6hXVBjpSOfsSMnXBp4h2wik/njKd
+         91RQgRcuaWeCEIreQbS23aCelM6cQM927Z6zYvena3xPhX/EbcZYVf1pXWn/UHGguVqO
+         K2dcx/WFIciVIgUJg6j2gunB1QhflbZ9WWaz5mhcysoBCYf4XbjaXP2arDS86gyk6Whv
+         Fy0TdFWNL6/dvv3rSHgocQnjfmtxiXyjTLLdqb6oxObw0ZLXSd2iTALIhmrpIPhT4yhx
+         LPRRT2WhEJDGKz3oI1Udexe3bON05QXHXPqDUhbfXuQVslCHzamXeETBxry7RtIbIAS2
+         xMBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=mNiCQomHe3AZpULgmNuzd/nevg4o0tLCGfPqsWacIDg=;
-        b=uKg3gpIg8EdP81Gdq1SRPI5GLhbUBPkNb5i3WYkTFIXXTLVYhHqZPY2rPMl8dGcK7E
-         iPWqMA3bRuJgtEE7aBSQKjsqibpNGVojYR9TzyPVTzN+bx6nSR4mRtP5rl60Fi7CWUyx
-         gOjbivlLl+Kf9AOWS+W+5KX4KVg8MzabrtkK9inVeSg4YyIZqbyyCwmuw/2WFFe2lnim
-         G7sS/B6C8KwvUpg1bYNSw7co0JuQ86XpVTrwijvnJV+wVsqOifyp9BA8JjGtd6PlTREB
-         JFjFWssU7/4uPjVOuSJEMiRq2ariSMf9Nr58OfMYdXS+M5bOGAAi7qSKJ+Cc2HO9WKYx
-         Hj0A==
-X-Gm-Message-State: AOAM53353xghX1hdL86Zqng6wrru8EAEhLWtLp/HgLJgl9e1f2pqHb8L
-        0IbYQamhWAzsSJkg15c50vfaP9yINoQFGfBzfEjjGg==
-X-Google-Smtp-Source: ABdhPJxOvB200XwC3KbSEeD9yNj4/yZaDfwprj85CYxXE7HWOzQrXXTiuZQc9KJCbRN0m7Ef8wgh/A==
-X-Received: by 2002:a17:902:bb8f:b0:151:c488:cd24 with SMTP id m15-20020a170902bb8f00b00151c488cd24mr10673839pls.118.1646642158364;
-        Mon, 07 Mar 2022 00:35:58 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id o65-20020a17090a0a4700b001bef5cffea7sm14562495pjo.0.2022.03.07.00.35.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 00:35:58 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jianqun <jay.xu@rock-chips.com>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ASoC: rockchip: i2s: Fix missing clk_disable_unprepare() in rockchip_i2s_probe
-Date:   Mon,  7 Mar 2022 08:35:52 +0000
-Message-Id: <20220307083553.26009-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E6x5yVDLBVFqVJQNZ+OEdQbw27fgZWH2Vrmnv9e+WIA=;
+        b=8Q9r+oAa3UC/F4lF3r1wGOZ/wDAUIix0HPp3oNLFTMe+cd+g5NeEY4EYuq7U3oSqZO
+         StwuzeIRn5IKg/JWEmopI3Rszdb9gZslWZtD1uREfGn/U2HWitXR6VknTxPLkCTgbNfz
+         IRt0xhNfsvsN2yGKkkQPvx/HXvZpbTODQarQ+B+D+eBSqm5snItJJMZbo3eDHgjYCLI6
+         C0mcu8vMkWkrLEc8R9tbVhkvnAuPyGCPeJzPuMW7Ez0hpq5WD+KYVXyez8zjKgoQg96w
+         u7RBCVbZu+/+1MqZsNB53dr47smPUbTcxHe9vK+oUygD8TvoZU3EiDmXaoATjPoMU1M0
+         z5Sg==
+X-Gm-Message-State: AOAM532B/g1khjy3VkdMQcVONODiGCHI5o7qLEWCxr+EVq6ijoRPGk4y
+        N20dOfJN96ZPBkDrqcIrutBQPWNCwHsAB52QTXVOocmI548V8j3k
+X-Google-Smtp-Source: ABdhPJxkcnqrAUZ0/BuHe0V4d9rKIzD/3EzUc+kmn55bYHjaih5zVBAoZ44017nG3klZVXrKnoyRs3z6yh7rXxMOItE=
+X-Received: by 2002:a81:c45:0:b0:2dc:59c4:3555 with SMTP id
+ 66-20020a810c45000000b002dc59c43555mr7687451ywm.36.1646642247656; Mon, 07 Mar
+ 2022 00:37:27 -0800 (PST)
+MIME-Version: 1.0
+References: <20220219183310.557435-1-robdclark@gmail.com>
+In-Reply-To: <20220219183310.557435-1-robdclark@gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 7 Mar 2022 14:07:16 +0530
+Message-ID: <CA+G9fYv6dPUsPzbFLr9PxJoe4eRAUdQyD4xT4hh4-xw=n9r=Bw@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/gpu: Fix crash on devices without devfreq support
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the missing clk_disable_unprepare() before return
-from rockchip_i2s_probe() in the error handling case.
+Hi Rob,
 
-Fixes: 01605ad12875 ("ASoC: rockchip-i2s: enable "hclk" for rockchip I2S controller")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- sound/soc/rockchip/rockchip_i2s.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+On Sun, 20 Feb 2022 at 00:02, Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Avoid going down devfreq paths on devices where devfreq is not
+> initialized.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Reported-by: Anders Roxell <anders.roxell@linaro.org>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-diff --git a/sound/soc/rockchip/rockchip_i2s.c b/sound/soc/rockchip/rockchip_i2s.c
-index a6d7656c206e..4ce5d2579387 100644
---- a/sound/soc/rockchip/rockchip_i2s.c
-+++ b/sound/soc/rockchip/rockchip_i2s.c
-@@ -716,19 +716,23 @@ static int rockchip_i2s_probe(struct platform_device *pdev)
- 	i2s->mclk = devm_clk_get(&pdev->dev, "i2s_clk");
- 	if (IS_ERR(i2s->mclk)) {
- 		dev_err(&pdev->dev, "Can't retrieve i2s master clock\n");
--		return PTR_ERR(i2s->mclk);
-+		ret = PTR_ERR(i2s->mclk);
-+		goto err_clk;
- 	}
- 
- 	regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
--	if (IS_ERR(regs))
--		return PTR_ERR(regs);
-+	if (IS_ERR(regs)) {
-+		ret = PTR_ERR(regs);
-+		goto err_clk;
-+	}
- 
- 	i2s->regmap = devm_regmap_init_mmio(&pdev->dev, regs,
- 					    &rockchip_i2s_regmap_config);
- 	if (IS_ERR(i2s->regmap)) {
- 		dev_err(&pdev->dev,
- 			"Failed to initialise managed register map\n");
--		return PTR_ERR(i2s->regmap);
-+		ret = PTR_ERR(i2s->regmap);
-+		goto err_clk;
- 	}
- 
- 	i2s->bclk_ratio = 64;
-@@ -768,7 +772,8 @@ static int rockchip_i2s_probe(struct platform_device *pdev)
- 		i2s_runtime_suspend(&pdev->dev);
- err_pm_disable:
- 	pm_runtime_disable(&pdev->dev);
--
-+err_clk:
-+	clk_disable_unprepare(i2s->hclk);
- 	return ret;
- }
- 
--- 
-2.17.1
+I have tested this patch and the reported kernel crash is fixed [1].
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+> ---
+>  drivers/gpu/drm/msm/msm_gpu_devfreq.c | 31 +++++++++++++++++++++------
+>  1 file changed, 25 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> index 9bf319be11f6..26a3669a97b3 100644
+> --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+> @@ -83,12 +83,17 @@ static struct devfreq_dev_profile msm_devfreq_profile = {
+>  static void msm_devfreq_boost_work(struct kthread_work *work);
+>  static void msm_devfreq_idle_work(struct kthread_work *work);
+>
+> +static bool has_devfreq(struct msm_gpu *gpu)
+> +{
+> +       return !!gpu->funcs->gpu_busy;
+> +}
+> +
+>  void msm_devfreq_init(struct msm_gpu *gpu)
+>  {
+>         struct msm_gpu_devfreq *df = &gpu->devfreq;
+>
+>         /* We need target support to do devfreq */
+> -       if (!gpu->funcs->gpu_busy)
+> +       if (!has_devfreq(gpu))
+>                 return;
+>
+>         dev_pm_qos_add_request(&gpu->pdev->dev, &df->idle_freq,
+> @@ -149,6 +154,9 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
+>  {
+>         struct msm_gpu_devfreq *df = &gpu->devfreq;
+>
+> +       if (!has_devfreq(gpu))
+> +               return;
+> +
+>         devfreq_cooling_unregister(gpu->cooling);
+>         dev_pm_qos_remove_request(&df->boost_freq);
+>         dev_pm_qos_remove_request(&df->idle_freq);
+> @@ -156,16 +164,24 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
+>
+>  void msm_devfreq_resume(struct msm_gpu *gpu)
+>  {
+> -       gpu->devfreq.busy_cycles = 0;
+> -       gpu->devfreq.time = ktime_get();
+> +       struct msm_gpu_devfreq *df = &gpu->devfreq;
+>
+> -       devfreq_resume_device(gpu->devfreq.devfreq);
+> +       if (!has_devfreq(gpu))
+> +               return;
+> +
+> +       df->busy_cycles = 0;
+> +       df->time = ktime_get();
+> +
+> +       devfreq_resume_device(df->devfreq);
+>  }
+>
+>  void msm_devfreq_suspend(struct msm_gpu *gpu)
+>  {
+>         struct msm_gpu_devfreq *df = &gpu->devfreq;
+>
+> +       if (!has_devfreq(gpu))
+> +               return;
+> +
+>         devfreq_suspend_device(df->devfreq);
+>
+>         cancel_idle_work(df);
+> @@ -185,6 +201,9 @@ void msm_devfreq_boost(struct msm_gpu *gpu, unsigned factor)
+>         struct msm_gpu_devfreq *df = &gpu->devfreq;
+>         uint64_t freq;
+>
+> +       if (!has_devfreq(gpu))
+> +               return;
+> +
+>         freq = get_freq(gpu);
+>         freq *= factor;
+>
+> @@ -207,7 +226,7 @@ void msm_devfreq_active(struct msm_gpu *gpu)
+>         struct devfreq_dev_status status;
+>         unsigned int idle_time;
+>
+> -       if (!df->devfreq)
+> +       if (!has_devfreq(gpu))
+>                 return;
+>
+>         /*
+> @@ -253,7 +272,7 @@ void msm_devfreq_idle(struct msm_gpu *gpu)
+>  {
+>         struct msm_gpu_devfreq *df = &gpu->devfreq;
+>
+> -       if (!df->devfreq)
+> +       if (!has_devfreq(gpu))
+>                 return;
+>
+>         msm_hrtimer_queue_work(&df->idle_work, ms_to_ktime(1),
+> --
+> 2.34.1
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://lkft.validation.linaro.org/scheduler/job/4664600#L1894

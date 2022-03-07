@@ -2,138 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC654CF295
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D998A4CF297
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235797AbiCGH3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 02:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S235803AbiCGHbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 02:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234444AbiCGH3d (ORCPT
+        with ESMTP id S234444AbiCGHbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 02:29:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EE420F5B;
-        Sun,  6 Mar 2022 23:28:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67673B80F88;
-        Mon,  7 Mar 2022 07:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9EAC340EF;
-        Mon,  7 Mar 2022 07:28:35 +0000 (UTC)
-Message-ID: <818eb53d-0ca5-d0dc-4a06-37615a5c4c3b@xs4all.nl>
-Date:   Mon, 7 Mar 2022 08:28:34 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] media: av7110: av7110_av: Fix Switch and Case Same Indent
- Style Error
-Content-Language: en-US
-To:     Husni Faiz <ahamedhusni73@gmail.com>, mchehab@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mon, 7 Mar 2022 02:31:05 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258B72559B
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:30:12 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id f8so2513486pfj.5
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 23:30:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=xKxlOxWfrmgXn5SkJ9aDfWlv4XICNMC1SPIGCB1K5to=;
+        b=Yh8A6+bzem3stvMecYeEPYwCnT85/VpriMI8No9Hh8ZtwetOetqpoonF2+OcsZEds+
+         Mc340hEbtKAGO945F6NrdNV6hjyoq7/CWKzBR+aX1Kbloy8JAkfI7EVIwO5KFYDQxa9r
+         l90hGXosH/5C4ha/LAW/MLsKa+S/uQHqjFdFx4u6bQMc/HEARsWXIfa0XUJbqCZdAT1l
+         M8GiUJk0Y7yWQaIOXB+TxI4LgnJ5EzaEPKfTt4VKgP6HZWHS6isXbNTVvnaIrta+lzKG
+         txponFY5oGEW18sejXK2PnYZmuywpZDRjHRjQHfAppEad+6zmapi4LwpBQYWMgW0JWG2
+         GpuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=xKxlOxWfrmgXn5SkJ9aDfWlv4XICNMC1SPIGCB1K5to=;
+        b=V9Byg+lIsVNvFFKKyQ9k55PBTeNo3q4L6syidbS5/jzBGKSIpgAXcP73C8i17fQGWS
+         ogNRvAo8Q11gmf7Y+wHby5svGZ1/ztSOmBQPZqs0v88q8EUJs3h3F99M9arJ/GMSccCR
+         DZrmjFFtyN6AckbPgUQPMhMaiYF2sbTHhxU1n4HfHV9+2z1mNvPTy9qEl72MmLctSsP+
+         PoiDr80H78ZbeDFa4hjhb2tiUWvujvDXsIAMHe/MuYBbRJgGCDBOWAiS1wlqMri/sWS+
+         NK5hfaZRu6/66HChdRVYVCm/RRyXCpKk5m9SB7/oXRBAW+YqEBPAQR9ogBNG6ptmVbr7
+         BrCw==
+X-Gm-Message-State: AOAM5324PzfZhH9Qtk3MClnPxq7GS5rKvqVdidUt22vvm131HIEgetVR
+        MzUZOCWxWNsmWKJzgmWxUqc=
+X-Google-Smtp-Source: ABdhPJyHaqgnKw1KIqNGqr9CbeBTqHGFGXTfWkmRWSby68YI1HFcGRbwebDPTzohMGMzWT/vMJumIg==
+X-Received: by 2002:a05:6a00:a06:b0:4f6:aa23:edaa with SMTP id p6-20020a056a000a0600b004f6aa23edaamr11451892pfh.8.1646638211601;
+        Sun, 06 Mar 2022 23:30:11 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm15049504pfi.170.2022.03.06.23.30.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 23:30:11 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>, Magnus Damm <damm@opensource.se>,
+        Ian Molton <ian@mnementh.co.uk>,
+        Samuel Ortiz <sameo@linux.intel.com>,
         linux-kernel@vger.kernel.org
-References: <20220225155622.585621-1-ahamedhusni73@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220225155622.585621-1-ahamedhusni73@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     linmq006@gmail.com
+Subject: [PATCH] mfd: asic3: Add missing iounmap() on error asic3_mfd_probe
+Date:   Mon,  7 Mar 2022 07:29:47 +0000
+Message-Id: <20220307072947.5369-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Husni,
+Add the missing iounmap() before return from asic3_mfd_probe
+in the error handling case.
 
-Thank you for the patch.
+Fixes: 64e8867ba809 ("mfd: tmio_mmc hardware abstraction for CNF area")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/mfd/asic3.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-The Subject line needs some work: either name the source ('av7110_av.c:') or
-driver ('av7110:'), but not both. Also just stick to lower case, so:
-"media: av7110_av.c: fix switch indentation"
+diff --git a/drivers/mfd/asic3.c b/drivers/mfd/asic3.c
+index 8d58c8df46cf..56338f9dbd0b 100644
+--- a/drivers/mfd/asic3.c
++++ b/drivers/mfd/asic3.c
+@@ -906,14 +906,14 @@ static int __init asic3_mfd_probe(struct platform_device *pdev,
+ 		ret = mfd_add_devices(&pdev->dev, pdev->id,
+ 			&asic3_cell_ds1wm, 1, mem, asic->irq_base, NULL);
+ 		if (ret < 0)
+-			goto out;
++			goto out_unmap;
+ 	}
+ 
+ 	if (mem_sdio && (irq >= 0)) {
+ 		ret = mfd_add_devices(&pdev->dev, pdev->id,
+ 			&asic3_cell_mmc, 1, mem_sdio, irq, NULL);
+ 		if (ret < 0)
+-			goto out;
++			goto out_unmap;
+ 	}
+ 
+ 	ret = 0;
+@@ -927,8 +927,12 @@ static int __init asic3_mfd_probe(struct platform_device *pdev,
+ 		ret = mfd_add_devices(&pdev->dev, 0,
+ 			asic3_cell_leds, ASIC3_NUM_LEDS, NULL, 0, NULL);
+ 	}
++	return ret;
+ 
+- out:
++out_unmap:
++	if (asic->tmio_cnf)
++		iounmap(asic->tmio_cnf);
++out:
+ 	return ret;
+ }
+ 
+-- 
+2.17.1
 
-That gives all the relevant information, and is a lot shorter.
-
-On 2/25/22 16:56, Husni Faiz wrote:
-> This patch fixes "switch and case should be at the same indent"
-> checkpatch error.
-> 
-> Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
-> ---
->  drivers/staging/media/av7110/av7110_av.c | 30 ++++++++++++------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
-> index 91f4866c7e59..1d42862e9669 100644
-> --- a/drivers/staging/media/av7110/av7110_av.c
-> +++ b/drivers/staging/media/av7110/av7110_av.c
-> @@ -770,22 +770,22 @@ static void p_to_t(u8 const *buf, long int length, u16 pid, u8 *counter,
->  	if (length > 3 &&
->  	     buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
->  		switch (buf[3]) {
-> -			case PROG_STREAM_MAP:
-> -			case PRIVATE_STREAM2:
-> -			case PROG_STREAM_DIR:
-> -			case ECM_STREAM     :
-> -			case EMM_STREAM     :
-> -			case PADDING_STREAM :
-> -			case DSM_CC_STREAM  :
-> -			case ISO13522_STREAM:
-> -			case PRIVATE_STREAM1:
-> -			case AUDIO_STREAM_S ... AUDIO_STREAM_E:
-> -			case VIDEO_STREAM_S ... VIDEO_STREAM_E:
-> -				pes_start = 1;
-> -				break;
-> +		case PROG_STREAM_MAP:
-> +		case PRIVATE_STREAM2:
-> +		case PROG_STREAM_DIR:
-> +		case ECM_STREAM     :
-> +		case EMM_STREAM     :
-> +		case PADDING_STREAM :
-> +		case DSM_CC_STREAM  :
-> +		case ISO13522_STREAM:
-> +		case PRIVATE_STREAM1:
-> +		case AUDIO_STREAM_S ... AUDIO_STREAM_E:
-> +		case VIDEO_STREAM_S ... VIDEO_STREAM_E:
-> +			pes_start = 1;
-> +			break;
->  
-> -			default:
-> -				break;
-> +		default:
-> +			break;
->  		}
->  
->  	while (c < length) {
-
-Running checkpatch.pl over this patch give me:
-
-ERROR: space prohibited before that ':' (ctx:WxE)
-#40: FILE: drivers/staging/media/av7110/av7110_av.c:776:
-+               case ECM_STREAM     :
-                                    ^
-
-ERROR: space prohibited before that ':' (ctx:WxE)
-#41: FILE: drivers/staging/media/av7110/av7110_av.c:777:
-+               case EMM_STREAM     :
-                                    ^
-
-ERROR: space prohibited before that ':' (ctx:WxE)
-#42: FILE: drivers/staging/media/av7110/av7110_av.c:778:
-+               case PADDING_STREAM :
-                                    ^
-
-ERROR: space prohibited before that ':' (ctx:WxE)
-#43: FILE: drivers/staging/media/av7110/av7110_av.c:779:
-+               case DSM_CC_STREAM  :
-                                    ^
-Can you fix that as well in a v2 of this patch?
-
-Thanks!
-
-	Hans

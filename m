@@ -2,88 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D624D03DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C07D4D03E8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240647AbiCGQSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S244102AbiCGQUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244125AbiCGQSC (ORCPT
+        with ESMTP id S239693AbiCGQUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:18:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC8248E53;
-        Mon,  7 Mar 2022 08:17:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4267860C3E;
-        Mon,  7 Mar 2022 16:17:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 199FBC340EB;
-        Mon,  7 Mar 2022 16:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646669826;
-        bh=g7AkI7UmXjqtWe/0nY3r8R1FTcT6BYIuEgvHT7ed2UA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jS6bdkyhDdnlOXciwJ71UjeRz7uCXsBTwcyBL4m2+vLZ4ALa4/pak7K4FPM7Wq219
-         lKJ1PnYnJxd53MhCWcP+teEm8/DLCWSx7H1oI0yMOWDo62iVT81CcVJ1EaU8c6aPI2
-         VPUBC8hpzXR4POlmZbTWFnkFWCGWBcJIAsDqhphs=
-Date:   Mon, 7 Mar 2022 17:17:03 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Netdev <netdev@vger.kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Hou Tao <houtao1@huawei.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>
-Subject: Re: [PATCH 5.15 000/262] 5.15.27-rc1 review
-Message-ID: <YiYv/4EIrx4AV6wi@kroah.com>
-References: <20220307091702.378509770@linuxfoundation.org>
- <CA+G9fYtXE1TvxtXZPw++ZkGAUZ4f1rD1tBkMsDb33jsm-C1OZw@mail.gmail.com>
+        Mon, 7 Mar 2022 11:20:50 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309E24D9C4;
+        Mon,  7 Mar 2022 08:19:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646669995; x=1678205995;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=nCdJ9kv9kF9+cM2VoJw0GpTu/gzqvrLvVOduS7j3Scc=;
+  b=CQnyZ6uKeXx+2VdZoFPbzHVP6x4A19dlH6gtmodZooPLgDtxfy9Ef6tQ
+   RrnG9bSiU4XxO88sHs1im9ZaciIN+bebuCbb0M7bOtq0++KfIZaOyDWJB
+   ZIUIE+nmZeWtsjTPX6aRnP4LtBhI1zXMkLrK5OmZdmwL1NMSm7Xmulsz3
+   PYteMph+DQILcVMwmC7I4hz+aJvhQJC8FrUteYZAz0xOGkBbj+hav0P33
+   L+DPlCpQ7bWHy1gXcEUA9ufvBMZeVDRsRraZQzsOZCEoUZTB3l13Ag1TJ
+   JivhwQBiVT5fjjweMIbIXfRKwPT11BiZnDYDcEOsxSlycGfEIC5fyr2h0
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="241865103"
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="241865103"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 08:18:39 -0800
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="711162057"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 08:18:36 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nRG3T-00CrIo-NM;
+        Mon, 07 Mar 2022 18:17:51 +0200
+Date:   Mon, 7 Mar 2022 18:17:51 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Sa, Nuno" <Nuno.Sa@analog.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH v2 1/1] device property: Allow error pointer to be passed
+ to fwnode APIs
+Message-ID: <YiYwL7gCprl69A2c@smile.fi.intel.com>
+References: <20220304173256.39059-1-andriy.shevchenko@linux.intel.com>
+ <PH0PR03MB67863963179FBA901E649C7599089@PH0PR03MB6786.namprd03.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYtXE1TvxtXZPw++ZkGAUZ4f1rD1tBkMsDb33jsm-C1OZw@mail.gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH0PR03MB67863963179FBA901E649C7599089@PH0PR03MB6786.namprd03.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 06:30:18PM +0530, Naresh Kamboju wrote:
-> drivers/gpu/drm/mediatek/mtk_dsi.c: In function 'mtk_dsi_host_attach':
-> drivers/gpu/drm/mediatek/mtk_dsi.c:858:28: error: implicit declaration
-> of function 'devm_drm_of_get_bridge'; did you mean
-> 'devm_drm_panel_bridge_add'? [-Werror=implicit-function-declaration]
->   858 |         dsi->next_bridge = devm_drm_of_get_bridge(dev,
-> dev->of_node, 0, 0);
->       |                            ^~~~~~~~~~~~~~~~~~~~~~
->       |                            devm_drm_panel_bridge_add
-> drivers/gpu/drm/mediatek/mtk_dsi.c:858:26: warning: assignment to
-> 'struct drm_bridge *' from 'int' makes pointer from integer without a
-> cast [-Wint-conversion]
->   858 |         dsi->next_bridge = devm_drm_of_get_bridge(dev,
-> dev->of_node, 0, 0);
->       |                          ^
-> cc1: some warnings being treated as errors
+On Mon, Mar 07, 2022 at 04:15:23PM +0000, Sa, Nuno wrote:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Sent: Friday, March 4, 2022 6:33 PM
 
-Offending commit now dropped, thanks.
+...
+
+> > Some of the fwnode APIs might return an error pointer instead of
+> > NULL
+> > or valid fwnode handle. The result of such API call may be considered
+> > optional and hence the test for it is usually done in a form of
+> > 
+> > 	fwnode = fwnode_find_reference(...);
+> > 	if (IS_ERR_OR_NULL(fwnode))
+> > 		...error handling...
+> > 
+> > Nevertheless the resulting fwnode may have bumped reference count
+> > and
+> > hence caller of the above API is obliged to call fwnode_handle_put().
+> > Since fwnode may be not valid either as NULL or error pointer the
+> > check
+> > has to be performed there. This approach uglifies the code and adds
+> > a point of making a mistake, i.e. forgetting about error point case.
+> > 
+> > To prevent this allow error pointer to be passed to the fwnode APIs.
+
+...
+
+> > v2: adjusted the entire fwnode API (Sakari)
+> > 
+> > Nuno, can you test this with the ltc2983 series, including the
+> > IS_ERR_OR_NULL()
+> > fix to it?
+> 
+> Hi Andy,
+> 
+> Just tested this patch with the ltc2983 series and now 
+> fwnode_handle_put() does not crash when fwnode is an
+> error pointer. I think this usecase does not cover all
+> of the patch so I'm not sure if a tested by tag here is
+> meaningful...
+
+I believe it still makes sense because we understand what you have tested.
+And at least it has some kind of BAT:
+- compile testing
+- testing (some of the) branches
+
+> If it is, go ahead:
+> 
+> Tested-by: Nuno Sá <nuno.sa@analog.com>
+
+Thank you!
+
+I'll send v3 because I want to amend the commit message.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-greg k-h

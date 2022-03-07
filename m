@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71DD4CFA39
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820674CFACF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241048AbiCGKJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S241289AbiCGKUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239034AbiCGJtF (ORCPT
+        with ESMTP id S241063AbiCGKBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:49:05 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF28BC18;
-        Mon,  7 Mar 2022 01:42:51 -0800 (PST)
+        Mon, 7 Mar 2022 05:01:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7343F70CF0;
+        Mon,  7 Mar 2022 01:51:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5FF91CE0E89;
-        Mon,  7 Mar 2022 09:42:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423A5C36AFA;
-        Mon,  7 Mar 2022 09:42:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAF26609E9;
+        Mon,  7 Mar 2022 09:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9055C340F3;
+        Mon,  7 Mar 2022 09:51:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646153;
-        bh=y1BsQKiLTO1A3AKXrh/GAfO9ZWkThHBc5nZ8Agw/RQU=;
+        s=korg; t=1646646678;
+        bh=zkLJNs8O2CCSa0+qdjEJ0wIH1AngXqnd3Wz7sPQS0m0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ymguUbKF0reR0EBMvGfFTrINaMJ8gcFXJ6pNmgKT6aq/iVuN6RNx+7iS0FkNlumvj
-         GxfQZvfXVXa5+piznEV8kaNprbVxc00P0ii48xEYC3ZHMzlGsyMTcfEnvGx9LGDim3
-         T4+Rzv/ZbqopLAspvW4x9sUC3xR5qJFGuLXrsFd0=
+        b=vCTbom9RqWpXfr+5cakHFvugVvYfbCz6muGl/J0paRnA/01f2vdVaqYpgDwNee2ka
+         OfNMCrOh9Y69G7Jf+GzyGYSZW3jgULgvczyd+JvcG+2UuyzvBYk7lH9yn6xHyNJCqv
+         a5wCCvoX3GAEI9qyrTdAJwby5LsB/Katklv2QOSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 150/262] blktrace: fix use after free for struct blk_trace
-Date:   Mon,  7 Mar 2022 10:18:14 +0100
-Message-Id: <20220307091706.674690599@linuxfoundation.org>
+        stable@vger.kernel.org, Lennert Buytenhek <buytenh@arista.com>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 5.16 057/186] iommu/amd: Recover from event log overflow
+Date:   Mon,  7 Mar 2022 10:18:15 +0100
+Message-Id: <20220307091655.687642912@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,180 +54,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Lennert Buytenhek <buytenh@wantstofly.org>
 
-commit 30939293262eb433c960c4532a0d59c4073b2b84 upstream.
+commit 5ce97f4ec5e0f8726a5dda1710727b1ee9badcac upstream.
 
-When tracing the whole disk, 'dropped' and 'msg' will be created
-under 'q->debugfs_dir' and 'bt->dir' is NULL, thus blk_trace_free()
-won't remove those files. What's worse, the following UAF can be
-triggered because of accessing stale 'dropped' and 'msg':
+The AMD IOMMU logs I/O page faults and such to a ring buffer in
+system memory, and this ring buffer can overflow.  The AMD IOMMU
+spec has the following to say about the interrupt status bit that
+signals this overflow condition:
 
-==================================================================
-BUG: KASAN: use-after-free in blk_dropped_read+0x89/0x100
-Read of size 4 at addr ffff88816912f3d8 by task blktrace/1188
+	EventOverflow: Event log overflow. RW1C. Reset 0b. 1 = IOMMU
+	event log overflow has occurred. This bit is set when a new
+	event is to be written to the event log and there is no usable
+	entry in the event log, causing the new event information to
+	be discarded. An interrupt is generated when EventOverflow = 1b
+	and MMIO Offset 0018h[EventIntEn] = 1b. No new event log
+	entries are written while this bit is set. Software Note: To
+	resume logging, clear EventOverflow (W1C), and write a 1 to
+	MMIO Offset 0018h[EventLogEn].
 
-CPU: 27 PID: 1188 Comm: blktrace Not tainted 5.17.0-rc4-next-20220217+ #469
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-4
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_address_description.constprop.0.cold+0xab/0x381
- ? blk_dropped_read+0x89/0x100
- ? blk_dropped_read+0x89/0x100
- kasan_report.cold+0x83/0xdf
- ? blk_dropped_read+0x89/0x100
- kasan_check_range+0x140/0x1b0
- blk_dropped_read+0x89/0x100
- ? blk_create_buf_file_callback+0x20/0x20
- ? kmem_cache_free+0xa1/0x500
- ? do_sys_openat2+0x258/0x460
- full_proxy_read+0x8f/0xc0
- vfs_read+0xc6/0x260
- ksys_read+0xb9/0x150
- ? vfs_write+0x3d0/0x3d0
- ? fpregs_assert_state_consistent+0x55/0x60
- ? exit_to_user_mode_prepare+0x39/0x1e0
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fbc080d92fd
-Code: ce 20 00 00 75 10 b8 00 00 00 00 0f 05 48 3d 01 f0 ff ff 73 31 c3 48 83 1
-RSP: 002b:00007fbb95ff9cb0 EFLAGS: 00000293 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 00007fbb95ff9dc0 RCX: 00007fbc080d92fd
-RDX: 0000000000000100 RSI: 00007fbb95ff9cc0 RDI: 0000000000000045
-RBP: 0000000000000045 R08: 0000000000406299 R09: 00000000fffffffd
-R10: 000000000153afa0 R11: 0000000000000293 R12: 00007fbb780008c0
-R13: 00007fbb78000938 R14: 0000000000608b30 R15: 00007fbb780029c8
- </TASK>
+The AMD IOMMU driver doesn't currently implement this recovery
+sequence, meaning that if a ring buffer overflow occurs, logging
+of EVT/PPR/GA events will cease entirely.
 
-Allocated by task 1050:
- kasan_save_stack+0x1e/0x40
- __kasan_kmalloc+0x81/0xa0
- do_blk_trace_setup+0xcb/0x410
- __blk_trace_setup+0xac/0x130
- blk_trace_ioctl+0xe9/0x1c0
- blkdev_ioctl+0xf1/0x390
- __x64_sys_ioctl+0xa5/0xe0
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+This patch implements the spec-mandated reset sequence, with the
+minor tweak that the hardware seems to want to have a 0 written to
+MMIO Offset 0018h[EventLogEn] first, before writing an 1 into this
+field, or the IOMMU won't actually resume logging events.
 
-Freed by task 1050:
- kasan_save_stack+0x1e/0x40
- kasan_set_track+0x21/0x30
- kasan_set_free_info+0x20/0x30
- __kasan_slab_free+0x103/0x180
- kfree+0x9a/0x4c0
- __blk_trace_remove+0x53/0x70
- blk_trace_ioctl+0x199/0x1c0
- blkdev_common_ioctl+0x5e9/0xb30
- blkdev_ioctl+0x1a5/0x390
- __x64_sys_ioctl+0xa5/0xe0
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff88816912f380
- which belongs to the cache kmalloc-96 of size 96
-The buggy address is located 88 bytes inside of
- 96-byte region [ffff88816912f380, ffff88816912f3e0)
-The buggy address belongs to the page:
-page:000000009a1b4e7c refcount:1 mapcount:0 mapping:0000000000000000 index:0x0f
-flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
-raw: 0017ffffc0000200 ffffea00044f1100 dead000000000002 ffff88810004c780
-raw: 0000000000000000 0000000000200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff88816912f280: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff88816912f300: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
->ffff88816912f380: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-                                                    ^
- ffff88816912f400: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff88816912f480: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-==================================================================
-
-Fixes: c0ea57608b69 ("blktrace: remove debugfs file dentries from struct blk_trace")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20220228034354.4047385-1-yukuai3@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/YVrSXEdW2rzEfOvk@wantstofly.org
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/blktrace.c |   26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ drivers/iommu/amd/amd_iommu.h       |    1 +
+ drivers/iommu/amd/amd_iommu_types.h |    1 +
+ drivers/iommu/amd/init.c            |   10 ++++++++++
+ drivers/iommu/amd/iommu.c           |   10 ++++++++--
+ 4 files changed, 20 insertions(+), 2 deletions(-)
 
---- a/kernel/trace/blktrace.c
-+++ b/kernel/trace/blktrace.c
-@@ -310,10 +310,20 @@ record_it:
- 	local_irq_restore(flags);
+--- a/drivers/iommu/amd/amd_iommu.h
++++ b/drivers/iommu/amd/amd_iommu.h
+@@ -14,6 +14,7 @@
+ extern irqreturn_t amd_iommu_int_thread(int irq, void *data);
+ extern irqreturn_t amd_iommu_int_handler(int irq, void *data);
+ extern void amd_iommu_apply_erratum_63(u16 devid);
++extern void amd_iommu_restart_event_logging(struct amd_iommu *iommu);
+ extern void amd_iommu_reset_cmd_buffer(struct amd_iommu *iommu);
+ extern int amd_iommu_init_devices(void);
+ extern void amd_iommu_uninit_devices(void);
+--- a/drivers/iommu/amd/amd_iommu_types.h
++++ b/drivers/iommu/amd/amd_iommu_types.h
+@@ -110,6 +110,7 @@
+ #define PASID_MASK		0x0000ffff
+ 
+ /* MMIO status bits */
++#define MMIO_STATUS_EVT_OVERFLOW_INT_MASK	(1 << 0)
+ #define MMIO_STATUS_EVT_INT_MASK	(1 << 1)
+ #define MMIO_STATUS_COM_WAIT_INT_MASK	(1 << 2)
+ #define MMIO_STATUS_PPR_INT_MASK	(1 << 6)
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -658,6 +658,16 @@ static int __init alloc_command_buffer(s
  }
  
--static void blk_trace_free(struct blk_trace *bt)
-+static void blk_trace_free(struct request_queue *q, struct blk_trace *bt)
- {
- 	relay_close(bt->rchan);
--	debugfs_remove(bt->dir);
+ /*
++ * This function restarts event logging in case the IOMMU experienced
++ * an event log buffer overflow.
++ */
++void amd_iommu_restart_event_logging(struct amd_iommu *iommu)
++{
++	iommu_feature_disable(iommu, CONTROL_EVT_LOG_EN);
++	iommu_feature_enable(iommu, CONTROL_EVT_LOG_EN);
++}
 +
-+	/*
-+	 * If 'bt->dir' is not set, then both 'dropped' and 'msg' are created
-+	 * under 'q->debugfs_dir', thus lookup and remove them.
-+	 */
-+	if (!bt->dir) {
-+		debugfs_remove(debugfs_lookup("dropped", q->debugfs_dir));
-+		debugfs_remove(debugfs_lookup("msg", q->debugfs_dir));
-+	} else {
-+		debugfs_remove(bt->dir);
-+	}
- 	free_percpu(bt->sequence);
- 	free_percpu(bt->msg_data);
- 	kfree(bt);
-@@ -335,10 +345,10 @@ static void put_probe_ref(void)
- 	mutex_unlock(&blk_probe_mutex);
- }
++/*
+  * This function resets the command buffer if the IOMMU stopped fetching
+  * commands from it.
+  */
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -764,7 +764,8 @@ amd_iommu_set_pci_msi_domain(struct devi
+ #endif /* !CONFIG_IRQ_REMAP */
  
--static void blk_trace_cleanup(struct blk_trace *bt)
-+static void blk_trace_cleanup(struct request_queue *q, struct blk_trace *bt)
- {
- 	synchronize_rcu();
--	blk_trace_free(bt);
-+	blk_trace_free(q, bt);
- 	put_probe_ref();
- }
+ #define AMD_IOMMU_INT_MASK	\
+-	(MMIO_STATUS_EVT_INT_MASK | \
++	(MMIO_STATUS_EVT_OVERFLOW_INT_MASK | \
++	 MMIO_STATUS_EVT_INT_MASK | \
+ 	 MMIO_STATUS_PPR_INT_MASK | \
+ 	 MMIO_STATUS_GALOG_INT_MASK)
  
-@@ -352,7 +362,7 @@ static int __blk_trace_remove(struct req
- 		return -EINVAL;
+@@ -774,7 +775,7 @@ irqreturn_t amd_iommu_int_thread(int irq
+ 	u32 status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
  
- 	if (bt->trace_state != Blktrace_running)
--		blk_trace_cleanup(bt);
-+		blk_trace_cleanup(q, bt);
+ 	while (status & AMD_IOMMU_INT_MASK) {
+-		/* Enable EVT and PPR and GA interrupts again */
++		/* Enable interrupt sources again */
+ 		writel(AMD_IOMMU_INT_MASK,
+ 			iommu->mmio_base + MMIO_STATUS_OFFSET);
  
- 	return 0;
- }
-@@ -572,7 +582,7 @@ static int do_blk_trace_setup(struct req
- 	ret = 0;
- err:
- 	if (ret)
--		blk_trace_free(bt);
-+		blk_trace_free(q, bt);
- 	return ret;
- }
+@@ -795,6 +796,11 @@ irqreturn_t amd_iommu_int_thread(int irq
+ 		}
+ #endif
  
-@@ -1615,7 +1625,7 @@ static int blk_trace_remove_queue(struct
- 
- 	put_probe_ref();
- 	synchronize_rcu();
--	blk_trace_free(bt);
-+	blk_trace_free(q, bt);
- 	return 0;
- }
- 
-@@ -1646,7 +1656,7 @@ static int blk_trace_setup_queue(struct
- 	return 0;
- 
- free_bt:
--	blk_trace_free(bt);
-+	blk_trace_free(q, bt);
- 	return ret;
- }
- 
++		if (status & MMIO_STATUS_EVT_OVERFLOW_INT_MASK) {
++			pr_info_ratelimited("IOMMU event log overflow\n");
++			amd_iommu_restart_event_logging(iommu);
++		}
++
+ 		/*
+ 		 * Hardware bug: ERBT1312
+ 		 * When re-enabling interrupt (by writing 1
 
 

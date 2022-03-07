@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BEE4CFD9A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFB84CFD9C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbiCGMCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        id S233704AbiCGMDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiCGMCS (ORCPT
+        with ESMTP id S234208AbiCGMDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:02:18 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1CC30F45
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:01:23 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KBxp80RDSzBrZP;
-        Mon,  7 Mar 2022 19:59:28 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Mar 2022 20:01:20 +0800
-Subject: Re: [PATCH 12/16] mm/migration: fix potential page refcounts leak in
- migrate_pages
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        <akpm@linux-foundation.org>
-CC:     <mike.kravetz@oracle.com>, <shy828301@gmail.com>,
-        <willy@infradead.org>, <ying.huang@intel.com>, <ziy@nvidia.com>,
-        <minchan@kernel.org>, <apopple@nvidia.com>,
-        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
-        <almasrymina@google.com>, <jhubbard@nvidia.com>,
-        <rcampbell@nvidia.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
- <20220304093409.25829-13-linmiaohe@huawei.com>
- <20f47ec9-3b5b-5326-b1c3-4b1a0c38ef46@linux.alibaba.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <ad20fbf2-095e-3db9-bc54-a5000a179480@huawei.com>
-Date:   Mon, 7 Mar 2022 20:01:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20f47ec9-3b5b-5326-b1c3-4b1a0c38ef46@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Mon, 7 Mar 2022 07:03:34 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1D827172;
+        Mon,  7 Mar 2022 04:02:41 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id c11so968659pgu.11;
+        Mon, 07 Mar 2022 04:02:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=n+d9Lxh+NheIDAOxQIfuGYj1TJDnhntgDMXeTmrg5/4=;
+        b=DN/v/7UttIijMOQM5kxSoTk4ag0wCFMu0YYo1p7SHYc5pnmgTNisTRag9pMLEz/J6r
+         H/uilcgT0hQkiOR0tazG+guECgx2t8dHC2g9It+CG3t+mD7SiKoFBFxqemhFsPadMZrW
+         U/vOrVznUIyqR9vaLCNX7SN3IbJGWYdludIyNvivcBUno5bpx4/sYk5OhegahlN7neE1
+         7z3u/EfSHU+XAPIVZS1knrLyoLIm0at8HuHzzN9RpIkuoo1Ada+iZ7UOpfBUothnqziZ
+         hSsi1c5dST7M2hhRi9xz1TmaZkJJFK91jNzNLo2WrDHFf2JSV+OoXgpk4zxNjiU2nDGI
+         CGsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=n+d9Lxh+NheIDAOxQIfuGYj1TJDnhntgDMXeTmrg5/4=;
+        b=qI20c56AEAIsiE2hUVCg6dC8visFHWHifVOwU1apj5OYAkqy99WHtlksswqpSTGxIU
+         iNgjL0K0sR76m+aIe61bB+rejGSke6ISv04vspLL5yMCNsy736gh/OK+nxtB3BiQ6Dzi
+         GJKXO/GtiJMr5BEzgelSMGRc52XhON2/MBQ96XjtLBS4PncPHVIn3ZqZunOAAXGocjtp
+         frtw9fQ03GDz/cFuIWUwnbtYLFkf40gOUAjnau2XWzQMGqZpRo+L9GTpPOjCQAscvjgJ
+         KuxITLAYkzNUebwDw1wYbhM/jA8qO/3RMv35CjEaEKgQjfUB7dXbYPo1xmPRhvw+So++
+         F25g==
+X-Gm-Message-State: AOAM533qcTQEw33MGvt//FTWgpLBim3oPneLqQBPmnud6HI+A+BwfVkF
+        Q3VYCqvM3c03iya5EfwRavg=
+X-Google-Smtp-Source: ABdhPJxNNKbKfGTPrzvPjBpyu7ws4sfOGeZM9oyV399bYvQQJpZhZNHYPE2OhyHQHlPyYUE1/CmU9w==
+X-Received: by 2002:a05:6a00:2166:b0:4f6:67fe:a336 with SMTP id r6-20020a056a00216600b004f667fea336mr12370831pff.17.1646654560561;
+        Mon, 07 Mar 2022 04:02:40 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id 23-20020a17090a0d5700b001bc3c650e01sm19684932pju.1.2022.03.07.04.02.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 04:02:40 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] pinctrl/rockchip: Add missing of_node_put() in rockchip_pinctrl_probe
+Date:   Mon,  7 Mar 2022 12:02:34 +0000
+Message-Id: <20220307120234.28657-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,46 +67,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/7 9:57, Baolin Wang wrote:
-> Hi Miaohe,
-> 
-> On 3/4/2022 5:34 PM, Miaohe Lin wrote:
->> In -ENOMEM case, there might be some subpages of fail-to-migrate THPs
->> left in thp_split_pages list. We should move them back to migration
->> list so that they could be put back to the right list by the caller
->> otherwise the page refcnt will be leaked here. Also adjust nr_failed
->> and nr_thp_failed accordingly to make vm events account more accurate.
->>
->> Fixes: b5bade978e9b ("mm: migrate: fix the return value of migrate_pages()")
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>   mm/migrate.c | 9 +++++++++
->>   1 file changed, 9 insertions(+)
->>
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index e0db06927f02..6c2dfed2ddb8 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1422,6 +1422,15 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>                   }
->>                     nr_failed_pages += nr_subpages;
->> +                /*
->> +                 * There might be some subpages of fail-to-migrate THPs
->> +                 * left in thp_split_pages list. Move them back to migration
->> +                 * list so that they could be put back to the right list by
->> +                 * the caller otherwise the page refcnt will be leaked.
->> +                 */
->> +                list_splice_init(&thp_split_pages, from);
->> +                nr_failed += retry;
->> +                nr_thp_failed += thp_retry;
-> 
-> Yes, I think we missed this case before, and your patch looks right. But we should also update the 'rc' to return the correct number of pages that were not migrated, right?
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-I'am not sure. -ENOMEM case always returns -ENOMEM since commit 95a402c3847c ("[PATCH] page migration:
-use allocator function for migrate_pages()"). So I did not change rc. But I think you're right. We should
-return the correct number of pages that were not migrated in this case.
+Fixes: 1e747e59cc4d ("pinctrl: rockchip: base regmap supplied by a syscon")
+Fixes: 14dee8677e19 ("pinctrl: rockchip: let pmu registers be supplied by a syscon")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/pinctrl/pinctrl-rockchip.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks.
-
-> .
+diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
+index d8dd8415fa81..a1b598b86aa9 100644
+--- a/drivers/pinctrl/pinctrl-rockchip.c
++++ b/drivers/pinctrl/pinctrl-rockchip.c
+@@ -2693,6 +2693,7 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+ 	node = of_parse_phandle(np, "rockchip,grf", 0);
+ 	if (node) {
+ 		info->regmap_base = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(info->regmap_base))
+ 			return PTR_ERR(info->regmap_base);
+ 	} else {
+@@ -2725,6 +2726,7 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+ 	node = of_parse_phandle(np, "rockchip,pmu", 0);
+ 	if (node) {
+ 		info->regmap_pmu = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(info->regmap_pmu))
+ 			return PTR_ERR(info->regmap_pmu);
+ 	}
+-- 
+2.17.1
 

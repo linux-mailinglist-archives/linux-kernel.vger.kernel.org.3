@@ -2,175 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D91B4CF37F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E5A4CF381
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbiCGI0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 03:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S236119AbiCGI04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 03:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiCGIZ6 (ORCPT
+        with ESMTP id S229864AbiCGI0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 03:25:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8E3360AB8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:25:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646641503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jp8xbJXc3F2xf0wOHHnbLnk2PeJF6d1Q4COXVNu7Rm8=;
-        b=iySDEOo/sb5je6ezmF3kn0G2YQSfBrQhvgneomKkUzwiljPrAcGlUKZ/TPmqQvREphHpbj
-        YhhueFsZoJb2UnXZHZzD4dcEhgqpkT34956ZnM161ltF0MmWVR8Whb7fJI+lee4L/KYUR3
-        +qI+++5A14Nj9QgpJOdyYI58Q6GVHUw=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-341-TKTZ08G4Pqm-R9JGCIbR8A-1; Mon, 07 Mar 2022 03:25:01 -0500
-X-MC-Unique: TKTZ08G4Pqm-R9JGCIbR8A-1
-Received: by mail-wr1-f69.google.com with SMTP id n4-20020a5d4844000000b001f1ed76e943so338731wrs.22
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 00:25:01 -0800 (PST)
+        Mon, 7 Mar 2022 03:26:53 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193B460AB8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:25:59 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DBD7C3F614
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:25:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646641557;
+        bh=4WIPZDs1A+/ztSWSMIGd9RnjoSgJeXHblH2bIob06Us=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=BEs9Ctn9PdO9AMWnHl8aa3x2zZ7m6g4akw7eaDUpfXk95ewtSv8sfTL5yc9pFF9o4
+         lC1718cP5MEO2Zt5KMgfyGjygL36Gl2+Fxu6fU02uTyQUkwKjhEGDyJryosGsS/tzo
+         XVV+ibMOvDn3t2ksbesTK34omnJO0lMWZRy51h4eMAmdT0YtYrup9fO2WOOyhuquJA
+         giBaDuZZQvpMFdSmqWLgRsZc+llISk7xfcZQ2SphBH7Iq/NIOASK50wDr1Yx+SRNtK
+         nzRFfi3X5bu6eg9WAy0JexA2gxiZQVaQ54Eip/M+eU/eP3m3rMsJEWob9VKhGh1g8x
+         iaB8nn3GsUoPA==
+Received: by mail-ed1-f71.google.com with SMTP id h17-20020a05640250d100b004133863d836so8203086edb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 00:25:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=Jp8xbJXc3F2xf0wOHHnbLnk2PeJF6d1Q4COXVNu7Rm8=;
-        b=Xko/59ImEeDc+AN90Yk9BO4EzLnf2wDG8V/ngdKai74yH3Fsj0fyJzY7ApiIau4i9L
-         yYAq/p/4mruxhdB5Pmu3cirH6oor/J4cfYypWjsCytKlF2SOoID+GgRRMCo6NFUi5fii
-         UfLLlc2n4ikdAT2olNZgSmAmUYl6rV+vSKZeHnTyczVBSnP4t66/CA2dtcwMQc041C8O
-         IYOPXZtYro8p+W0b2TwvqpBfUEovczdq7wvD7lSnogVRcyqZe5cDcnReFzn7IIb8pyWM
-         erpzMJCYEv5gCyd/Evkqcw/YBg1pPH/yqaBBsPyG7xokR7KE4WOldzaNikDcQQY+wGcr
-         tU+g==
-X-Gm-Message-State: AOAM5304yfZzdqU/XAObb03A7Gc3KO/P44sKELZIwJaXBQ06W69AEuyY
-        GnZmeMpoMTgX/H9WvEs4tk521weTfZFIIdJ/NdKG3X8jIjHw/tSX5fkB5YUNtBynxuseaTPmiMJ
-        QlRH4tzj//F2KXu4j+dTrRqCX
-X-Received: by 2002:a5d:4992:0:b0:1f0:68bd:4c34 with SMTP id r18-20020a5d4992000000b001f068bd4c34mr7633604wrq.670.1646641500044;
-        Mon, 07 Mar 2022 00:25:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxXMKXq8Pic3/bEs4X9zXY/UJ/munTO9d4a7KdGL1+a0vKhRumDwQZuZusyk2ldq7j4udF4mA==
-X-Received: by 2002:a5d:4992:0:b0:1f0:68bd:4c34 with SMTP id r18-20020a5d4992000000b001f068bd4c34mr7633589wrq.670.1646641499742;
-        Mon, 07 Mar 2022 00:24:59 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:1e00:8d67:f75a:a8ae:dc02? (p200300cbc7051e008d67f75aa8aedc02.dip0.t-ipconnect.de. [2003:cb:c705:1e00:8d67:f75a:a8ae:dc02])
-        by smtp.gmail.com with ESMTPSA id f186-20020a1c38c3000000b00382a9b91515sm16784987wma.37.2022.03.07.00.24.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 00:24:59 -0800 (PST)
-Message-ID: <84a6c9c1-d18f-6955-2666-0a2d7bce6094@redhat.com>
-Date:   Mon, 7 Mar 2022 09:24:58 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4WIPZDs1A+/ztSWSMIGd9RnjoSgJeXHblH2bIob06Us=;
+        b=t21djC/qQL3Xh4XLHfdLufVT2sBon+iQ2YTwZRpvZcCN3MzutBMmyS5Dixli72RtLR
+         AApctsyVcYmT9AJBegwBWL/axGGop5ybj0G86cKj6S96Xfcn7rMnO0WfpfhWmNLUJa9A
+         sPM6OZ7bbY5KpcG0qQnlcXRKxpHRc2rTzr+5ZvSYeKmF3r8YCxwvNRd1VSgumBAabCqJ
+         3H1G7/7YjqXOclo8fsbDU2ctnXbbscKSWaGmK57w669zl+osZH/MUV4jQVpRiwlVBbz3
+         Yc76cpx4Livqg519W9iwGqApU1nC7HANsRfVr3nMQXcdplZ+VgmKHNedUbmu59rWKhQi
+         iVXQ==
+X-Gm-Message-State: AOAM530xXCyPC/DZReyG5ypzpPg1Ch+Ps5b3P7whErIsNd+OWwi4yN0P
+        N6usp5Ix1AB2WLYWbqUSmaB7pIhFePOgxS54dQV0TlNlk/JIucbNmWumkvM7ecKEOdnXWmv4xy8
+        p5IfC21Tzs4uOUGWCuIl4vblvJK7g5StgnX0wwD0rkQ==
+X-Received: by 2002:a17:907:1b20:b0:6da:649b:d99e with SMTP id mp32-20020a1709071b2000b006da649bd99emr8063231ejc.712.1646641557282;
+        Mon, 07 Mar 2022 00:25:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw3PnjZMFJvegI51mXQwwX0sRYgYwW8EY4J4ZgrQfsyrHK1k4RLdJcsXQGEpnSPKZJdgRK8AA==
+X-Received: by 2002:a17:907:1b20:b0:6da:649b:d99e with SMTP id mp32-20020a1709071b2000b006da649bd99emr8063220ejc.712.1646641557106;
+        Mon, 07 Mar 2022 00:25:57 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id qp3-20020a170907206300b006da96b87e9csm4207080ejb.181.2022.03.07.00.25.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 00:25:56 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers for v5.18, part two, late
+Date:   Mon,  7 Mar 2022 09:25:52 +0100
+Message-Id: <20220307082552.55719-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20220303222014.517033-1-shy828301@gmail.com>
- <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
- <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com>
- <13ad4ba1-2a88-9459-3995-70af36aba33e@redhat.com>
- <20220306180718.6d4e6233130b94fdad98df88@linux-foundation.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm: thp: don't have to lock page anymore when splitting
- PMD
-In-Reply-To: <20220306180718.6d4e6233130b94fdad98df88@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.03.22 03:07, Andrew Morton wrote:
-> On Fri, 4 Mar 2022 19:50:08 +0100 David Hildenbrand <david@redhat.com> wrote:
-> 
->> @Andrew, the last mail I received was
->>
->> + mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
->> added to -mm tree
->>
->> The patch shows up in mmotm as
->>
->> #[merged]mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
->>
->> ... which shouldn't be true.
-> 
-> I guess I mislabelled the reason for dropping it.  Should have been to-be-updated, 
-> due to https://lkml.kernel.org/r/CAHbLzkpbnQyHRckoRtbZoaLvANu92MY4kEsbKudaQ8MDUA3nVg@mail.gmail.com
-> 
+Hi,
 
-Let me clarify.
+Late minor fixes for v5.18 memory drivers. On top of previous pull
+(tags/memory-controller-drv, soc branch: memory/drivers).
 
-1. I sent [1] (9 patches)
+If these are too late, please consider it also for fixes after merge window.
+These are not typical merge-window fixes though (issues existed for long time).
 
-2. You queued the 9 patches
+Best regards,
+Krzysztof
 
-E.g., in "mmotm 2022-02-15-20-22 uploaded"
+The following changes since commit a06bf59d07f45a0a6ab4ab8ac69c1d708d3fadcb:
 
-* mm-optimize-do_wp_page-for-exclusive-pages-in-the-swapcache.patch
-* mm-optimize-do_wp_page-for-fresh-pages-in-local-lru-pagevecs.patch
-* mm-slightly-clarify-ksm-logic-in-do_swap_page.patch
-* mm-streamline-cow-logic-in-do_swap_page.patch
-* mm-huge_memory-streamline-cow-logic-in-do_huge_pmd_wp_page.patch
-* mm-khugepaged-remove-reuse_swap_page-usage.patch
-* mm-swapfile-remove-stale-reuse_swap_page.patch
-* mm-huge_memory-remove-stale-page_trans_huge_mapcount.patch
-* mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
+  memory: Update of_memory lpddr2 revision-id binding (2022-02-25 13:36:49 +0100)
 
-3. The last patch in the series was dropped. What remains are 8 patches.
+are available in the Git repository at:
 
-E.g., in "mmotm 2022-02-24-22-38 uploaded"
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.18-2
 
-* mm-optimize-do_wp_page-for-exclusive-pages-in-the-swapcache.patch
-* mm-optimize-do_wp_page-for-fresh-pages-in-local-lru-pagevecs.patch
-* mm-slightly-clarify-ksm-logic-in-do_swap_page.patch
-* mm-streamline-cow-logic-in-do_swap_page.patch
-* mm-huge_memory-streamline-cow-logic-in-do_huge_pmd_wp_page.patch
-* mm-khugepaged-remove-reuse_swap_page-usage.patch
-* mm-swapfile-remove-stale-reuse_swap_page.patch
-* mm-huge_memory-remove-stale-page_trans_huge_mapcount.patch
+for you to fetch changes up to 69d6941949ea8a113ffc89410b0cb79bc7b35a0b:
 
-4. Yang Shi sent his patch (the one we're replying to)
+  dt-bindings: memory: renesas,rpc-if: Document RZ/V2L SoC (2022-03-04 09:09:52 +0100)
 
-5. You picked his patch and dropped it again due to [2]
+----------------------------------------------------------------
+Memory controller drivers for v5.18, part two
 
+1. TI: Two fixes for TI EMIF driver for quite old error path issues (so
+   for unlikely scenarios).
+2. Renesas: Document RZ/V2L SoC in bindings.
 
-I'm wondering why 3 happened and why
-https://www.ozlabs.org/~akpm/mmotm/series contains:
+----------------------------------------------------------------
+Jia-Ju Bai (1):
+      memory: emif: check the pointer temp in get_device_details()
 
+Jiasheng Jiang (1):
+      memory: emif: Add check for setup_interrupts
 
-mm-optimize-do_wp_page-for-exclusive-pages-in-the-swapcache.patch
-mm-optimize-do_wp_page-for-fresh-pages-in-local-lru-pagevecs.patch
-mm-slightly-clarify-ksm-logic-in-do_swap_page.patch
-mm-streamline-cow-logic-in-do_swap_page.patch
-mm-huge_memory-streamline-cow-logic-in-do_huge_pmd_wp_page.patch
-mm-khugepaged-remove-reuse_swap_page-usage.patch
-mm-swapfile-remove-stale-reuse_swap_page.patch
-mm-huge_memory-remove-stale-page_trans_huge_mapcount.patch
-...
-#[merged]mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
+Lad Prabhakar (1):
+      dt-bindings: memory: renesas,rpc-if: Document RZ/V2L SoC
 
-
-[1]
-https://lore.kernel.org/linux-mm/20220131162940.210846-1-david@redhat.com/
-
-[2]
-https://lkml.kernel.org/r/CAHbLzkpbnQyHRckoRtbZoaLvANu92MY4kEsbKudaQ8MDUA3nVg@mail.gmail.com
-
--- 
-Thanks,
-
-David / dhildenb
-
+ .../devicetree/bindings/memory-controllers/renesas,rpc-if.yaml    | 3 ++-
+ drivers/memory/emif.c                                             | 8 +++++---
+ 2 files changed, 7 insertions(+), 4 deletions(-)

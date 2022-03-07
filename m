@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBD74CFA35
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2A24CF7A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240784AbiCGKIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:08:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
+        id S238489AbiCGJrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239768AbiCGJuH (ORCPT
+        with ESMTP id S238443AbiCGJi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:50:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A786271CBF;
-        Mon,  7 Mar 2022 01:43:46 -0800 (PST)
+        Mon, 7 Mar 2022 04:38:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D336465433;
+        Mon,  7 Mar 2022 01:32:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AA826116E;
-        Mon,  7 Mar 2022 09:43:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64031C340F5;
-        Mon,  7 Mar 2022 09:43:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFEE9B80F9F;
+        Mon,  7 Mar 2022 09:32:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F69DC340F3;
+        Mon,  7 Mar 2022 09:32:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646210;
-        bh=Fc98zMDhL8Mmh0dv/2NfafLTu+ILc5NmvsEARaw9H/M=;
+        s=korg; t=1646645557;
+        bh=fUk54RCdU5Q2bjljqigjse/3y6qzXzXSMrLJGAcJO1o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZN382S0MFSrmATkZK/y4tK4hsnQpVGELRF+/9DFjrlYL1rgVGZtXile+UHGMbUbxg
-         z0V67PgH3x0vKygIBTIe9+/6PgkCTdRiYN6JwWOrZ9U3sZ5n4+/+JYrm7J438h+R4e
-         fyhDwb8sf6XL1xuE9Vkk0WwrXgWNt2OTM9jrahaQ=
+        b=J2JsRGGKL84nVOrgSeAHK/ZWpxBJiK9ml37ovBwweDses6TeZFHqU9IfQhqvWeGbZ
+         2ajLVtlwIDxUgIi3XidDFWOxT/vr7IjlKbwv/Xjz/AtCUOCCFWE+OP3x2xZcr+bZ9J
+         QdV7pnRgb3OGWTxkGZmVuDKQL2q08K2vd5b99W2w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 167/262] net: dcb: flush lingering app table entries for unregistered devices
+        stable@vger.kernel.org,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.10 028/105] riscv: Fix config KASAN && DEBUG_VIRTUAL
 Date:   Mon,  7 Mar 2022 10:18:31 +0100
-Message-Id: <20220307091707.140955686@linuxfoundation.org>
+Message-Id: <20220307091644.972444145@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,101 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 
-commit 91b0383fef06f20b847fa9e4f0e3054ead0b1a1b upstream.
+commit c648c4bb7d02ceb53ee40172fdc4433b37cee9c6 upstream.
 
-If I'm not mistaken (and I don't think I am), the way in which the
-dcbnl_ops work is that drivers call dcb_ieee_setapp() and this populates
-the application table with dynamically allocated struct dcb_app_type
-entries that are kept in the module-global dcb_app_list.
+__virt_to_phys function is called very early in the boot process (ie
+kasan_early_init) so it should not be instrumented by KASAN otherwise it
+bugs.
 
-However, nobody keeps exact track of these entries, and although
-dcb_ieee_delapp() is supposed to remove them, nobody does so when the
-interface goes away (example: driver unbinds from device). So the
-dcb_app_list will contain lingering entries with an ifindex that no
-longer matches any device in dcb_app_lookup().
+Fix this by declaring phys_addr.c as non-kasan instrumentable.
 
-Reclaim the lost memory by listening for the NETDEV_UNREGISTER event and
-flushing the app table entries of interfaces that are now gone.
-
-In fact something like this used to be done as part of the initial
-commit (blamed below), but it was done in dcbnl_exit() -> dcb_flushapp(),
-essentially at module_exit time. That became dead code after commit
-7a6b6f515f77 ("DCB: fix kconfig option") which essentially merged
-"tristate config DCB" and "bool config DCBNL" into a single "bool config
-DCB", so net/dcb/dcbnl.c could not be built as a module anymore.
-
-Commit 36b9ad8084bd ("net/dcb: make dcbnl.c explicitly non-modular")
-recognized this and deleted dcbnl_exit() and dcb_flushapp() altogether,
-leaving us with the version we have today.
-
-Since flushing application table entries can and should be done as soon
-as the netdevice disappears, fundamentally the commit that is to blame
-is the one that introduced the design of this API.
-
-Fixes: 9ab933ab2cc8 ("dcbnl: add appliction tlv handlers")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Fixes: 8ad8b72721d0 (riscv: Add KASAN support)
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/dcb/dcbnl.c |   44 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ arch/riscv/mm/Makefile |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/net/dcb/dcbnl.c
-+++ b/net/dcb/dcbnl.c
-@@ -2073,8 +2073,52 @@ u8 dcb_ieee_getapp_default_prio_mask(con
- }
- EXPORT_SYMBOL(dcb_ieee_getapp_default_prio_mask);
+--- a/arch/riscv/mm/Makefile
++++ b/arch/riscv/mm/Makefile
+@@ -24,6 +24,9 @@ obj-$(CONFIG_KASAN)   += kasan_init.o
+ ifdef CONFIG_KASAN
+ KASAN_SANITIZE_kasan_init.o := n
+ KASAN_SANITIZE_init.o := n
++ifdef CONFIG_DEBUG_VIRTUAL
++KASAN_SANITIZE_physaddr.o := n
++endif
+ endif
  
-+static void dcbnl_flush_dev(struct net_device *dev)
-+{
-+	struct dcb_app_type *itr, *tmp;
-+
-+	spin_lock(&dcb_lock);
-+
-+	list_for_each_entry_safe(itr, tmp, &dcb_app_list, list) {
-+		if (itr->ifindex == dev->ifindex) {
-+			list_del(&itr->list);
-+			kfree(itr);
-+		}
-+	}
-+
-+	spin_unlock(&dcb_lock);
-+}
-+
-+static int dcbnl_netdevice_event(struct notifier_block *nb,
-+				 unsigned long event, void *ptr)
-+{
-+	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-+
-+	switch (event) {
-+	case NETDEV_UNREGISTER:
-+		if (!dev->dcbnl_ops)
-+			return NOTIFY_DONE;
-+
-+		dcbnl_flush_dev(dev);
-+
-+		return NOTIFY_OK;
-+	default:
-+		return NOTIFY_DONE;
-+	}
-+}
-+
-+static struct notifier_block dcbnl_nb __read_mostly = {
-+	.notifier_call  = dcbnl_netdevice_event,
-+};
-+
- static int __init dcbnl_init(void)
- {
-+	int err;
-+
-+	err = register_netdevice_notifier(&dcbnl_nb);
-+	if (err)
-+		return err;
-+
- 	rtnl_register(PF_UNSPEC, RTM_GETDCB, dcb_doit, NULL, 0);
- 	rtnl_register(PF_UNSPEC, RTM_SETDCB, dcb_doit, NULL, 0);
- 
+ obj-$(CONFIG_DEBUG_VIRTUAL) += physaddr.o
 
 

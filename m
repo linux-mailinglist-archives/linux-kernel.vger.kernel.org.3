@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844444CEED2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 00:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 676184CEEE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 01:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233226AbiCFXyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 18:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S233800AbiCGAOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 19:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiCFXyS (ORCPT
+        with ESMTP id S233373AbiCGAOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 18:54:18 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28833FDA9
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 15:53:25 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id u61so27728084ybi.11
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 15:53:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MABB9jbYy82t2uep+ZIaOcEDc6tX3sRenZED6Ge1JDM=;
-        b=IHktzUDVKrKIVxQ4HDD3Rv7QGA73LmXaavAstRHiRzhkmC0G0hmVe+D6q49aG2U6EC
-         Kd5YkkAIhToulRkgOuCXjoOTt5z59ECY0LYLH/tBHTgB6rbuK+uwu4oKbYuW08ZgFk+E
-         gI7kMvaaOKx+HHuAMnsWu1hbhqI7VVyoXnx6Sb35SDMVzIidLE/1APJKUBuWZ1kDgEd/
-         hDBo25nu4RtmPBLaohIaOSJH1je7x+Fx2qtycn0jYimcaTqR/slb6UbQcPykMqtCJVFt
-         XvxxXUVLXqsdJR7rfQObC4iGpJ2xAK9Va3MJpeRaxPbq9V9EGc3RhCvJevnWRPhf5nBe
-         FBkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MABB9jbYy82t2uep+ZIaOcEDc6tX3sRenZED6Ge1JDM=;
-        b=znsD6Nzn6+b/ZNaU+Oaz8rP5UQ+lDs5nVfJ0Uk28rxj4zGrlHggDtqk7FagWqaPDbd
-         tQISYQUEeJNjKY0BN4Yf7kimW/T5GWX4is1kmKci1xgkd+kLNuwAHfvv5z10BKP5Qsf/
-         Yvkur+UzKTGB8YCqvSzPpIwk2hKTHn9YAuBwMLfy2PfBiHxR80JLnWxiF8tlzIqg9+Yn
-         VRWsyFOsyUdt4o6z4v4h3NbnvREuXOu+vdRnI0Rv/MhAzo2sJX1jDYDOPO9Iz8Vx0Eu0
-         9Qb5F5uM5UFBtCGhK6wZouZUa8Pmy+Py0gNNFFXgBewgpro8YpRYoEJgI/RkMJCog0Ic
-         PVrA==
-X-Gm-Message-State: AOAM5327fXs2JL2ndhk2gWTtJITFckJGt/IrHb9iT6SG81hPaQAKzcSA
-        gmCF9v6sVwTnhv0l13grOOoUvZeI41TRcqit8YGzTA==
-X-Google-Smtp-Source: ABdhPJygx1A2AusLyn9WPUOBSFcm7WnRpGHbgCIPuNrCg0pqSirO8cVnfajx0dHKvgz+KV/y14mXXxsh8J4kwjsSlYI=
-X-Received: by 2002:a25:6994:0:b0:629:1e05:b110 with SMTP id
- e142-20020a256994000000b006291e05b110mr4736034ybc.425.1646610804997; Sun, 06
- Mar 2022 15:53:24 -0800 (PST)
+        Sun, 6 Mar 2022 19:14:42 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826504B87F;
+        Sun,  6 Mar 2022 16:13:48 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBf7r630bz4xsk;
+        Mon,  7 Mar 2022 11:13:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646612026;
+        bh=OfUQf/emLmUE3ac6PJaQkNyOVOPCgK/lCEyh/+gJ6tA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NR1yJ4g+bwE30i2MCd/3NvchRgxp89qmYuujjfqYkx6ZDmaNniBvCRc3ersqQApDV
+         Y/XfoZsivQCT4CTU0gfZQwt8dI8j/G5jMweDA+tLFgyIYkPGC4GemaOKqP9/J0UNQt
+         L/OB1hkpPantcJpRHbZ/Muqvsrb4vaEL47Q1M9lFA7LWYxicQToZ81WL3/oeAv26sO
+         xwQOSEauCeIh4dNUBaH0SlHsDkp+FZ6tsd5H3U6Jrffz4ZpIQHne7uYSFR0Dya81QU
+         XGf3XPT5ixMYK5NdV3krL4eXiN/y+unX3OsNWJa8cxg3mBDQSOev2mNU5XcMQXVQRa
+         d2gtO5RatWr8g==
+Date:   Mon, 7 Mar 2022 11:13:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Noralf =?UTF-8?B?VHLDuG5uZXM=?= <noralf@tronnes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220307111342.105ce204@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220305144858.17040-1-dtcccc@linux.alibaba.com> <20220305144858.17040-3-dtcccc@linux.alibaba.com>
-In-Reply-To: <20220305144858.17040-3-dtcccc@linux.alibaba.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 7 Mar 2022 00:52:48 +0100
-Message-ID: <CANpmjNM+47dfjLyyuQwUWZyJgsr1Uxd72VPe9Vva3Qr2oiXRHA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kfence: Alloc kfence_pool after system startup
-To:     Tianchen Ding <dtcccc@linux.alibaba.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: multipart/signed; boundary="Sig_/C4CihK6q6=.LhC.PZI7Q3UD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 5 Mar 2022 at 15:49, Tianchen Ding <dtcccc@linux.alibaba.com> wrote=
-:
-[...]
-> +static int kfence_init_late(void)
-> +{
-> +       const unsigned long nr_pages =3D KFENCE_POOL_SIZE / PAGE_SIZE;
-> +       struct page *pages;
-> +
-> +       pages =3D alloc_contig_pages(nr_pages, GFP_KERNEL, first_online_n=
-ode, NULL);
+--Sig_/C4CihK6q6=.LhC.PZI7Q3UD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> mm/kfence/core.c:836:17: error: implicit declaration of function =E2=80=
-=98alloc_contig_pages=E2=80=99 [-Werror=3Dimplicit-function-declaration]
+Hi all,
 
-This doesn't build without CMA. See ifdef CONFIG_CONTIG_ALLOC in
-gfp.h, which declares alloc_contig_pages.
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Will alloc_pages() work as you expect? If so, perhaps only use
-alloc_contig_pages() #ifdef CONFIG_CONTIG_ALLOC.
+drivers/gpu/drm/tiny/panel-mipi-dbi.c:391:19: error: initialization of 'voi=
+d (*)(struct spi_device *)' from incompatible pointer type 'int (*)(struct =
+spi_device *)' [-Werror=3Dincompatible-pointer-types]
+  391 |         .remove =3D panel_mipi_dbi_spi_remove,
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-Thanks,
--- Marco
+Caused by commit
+
+  0e65e2e6abb0 ("drm/tiny: Add MIPI DBI compatible SPI driver")
+
+interacting with commit
+
+  a0386bba7093 ("spi: make remove callback a void function")
+
+from the spi trees.
+
+I have applied the following merge fix.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 7 Mar 2022 11:01:01 +1100
+Subject: [PATCH] fix up for "spi: make remove callback a void function"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/tiny/panel-mipi-dbi.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/tiny/panel-mipi-dbi.c b/drivers/gpu/drm/tiny/p=
+anel-mipi-dbi.c
+index 7f8c6c51387f..c759ff9c2c87 100644
+--- a/drivers/gpu/drm/tiny/panel-mipi-dbi.c
++++ b/drivers/gpu/drm/tiny/panel-mipi-dbi.c
+@@ -336,14 +336,12 @@ static int panel_mipi_dbi_spi_probe(struct spi_device=
+ *spi)
+ 	return 0;
+ }
+=20
+-static int panel_mipi_dbi_spi_remove(struct spi_device *spi)
++static void panel_mipi_dbi_spi_remove(struct spi_device *spi)
+ {
+ 	struct drm_device *drm =3D spi_get_drvdata(spi);
+=20
+ 	drm_dev_unplug(drm);
+ 	drm_atomic_helper_shutdown(drm);
+-
+-	return 0;
+ }
+=20
+ static void panel_mipi_dbi_spi_shutdown(struct spi_device *spi)
+--=20
+2.34.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/C4CihK6q6=.LhC.PZI7Q3UD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlTjYACgkQAVBC80lX
+0Gya9AgAnf8khqgClzhiCdnkQ72wArvffQGdP9ZzlX50GJ0Dz0fz0dkNytNbA0Jr
+26FAhcX56OTtcWtmWguHcLLMowmzA350EBop3eQM9+wpj382CdMepoOJIfLn0/Ik
+tHv+IjrkHKR+Gzlhhi563J/mx2+lXSapG69FANtK6p5CO1IxCIRx9FT5MbnDa71Z
+mT4pkBkEOGZnaRmmnnKBsrtdTOucAfDRrhtDjj84gHfH8j2G9ggkkPJHv/LhOxz+
+OQItxBl2kkRcpFxp0rhgy9XMrIwtdk5+Nu9jw0a1oKDs59xb7Dp3Drwziq7SikDf
+igJO88twe7Hm3gZwF59s79hPpEI8Og==
+=wta6
+-----END PGP SIGNATURE-----
+
+--Sig_/C4CihK6q6=.LhC.PZI7Q3UD--

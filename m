@@ -2,172 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFEB4CEF91
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 03:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD314CEF98
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 03:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbiCGCT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 21:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S234604AbiCGCZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 21:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbiCGCTW (ORCPT
+        with ESMTP id S234216AbiCGCZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 21:19:22 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09B417A9D
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 18:18:27 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id o106-20020a9d2273000000b005b21f46878cso2952131ota.3
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 18:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=I75h6LhAtjwEVOG1obXgRQCns82YtNru8ErTsopmb+c=;
-        b=Lq99Jt34fM3nkb6AASGabMpRh9l5yEgk02yWCnzPFj5RpuIo0JiRtcpEo4M/Os2Sah
-         wyiNCyU9e2SJaNnO6koj/C5/ZSzM1CvuZ0kzCEz9aWWgahJg843WS3uqfqKtvPRIjgPe
-         VRb/Lk13abbodpYzFbG8Jb4C1TUl3aHuwr8/H8cWJYDMmAPxCjfW17pNJ+HJLzJoJCdS
-         ZQJXXs3OKBw6IeMKBk9W6EX3PBIshkqNBblS5tuOIgVMnBBWx5+hStSh2IreMQgIC+pX
-         BrWDo4mrRf6Mg2H6AXJD4+DN88ii7MzSTeprb0usnzpS3fdLDMb/8Mi0qOsMoBBr9rDp
-         V8Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I75h6LhAtjwEVOG1obXgRQCns82YtNru8ErTsopmb+c=;
-        b=NifDGb9OVp9UvIjmy73a4xkInVjqk+6fv8E4ctp9xloOuqpNGZXVUr4+dg970eylUW
-         ih2hM4fpHljOkqo4xxXy0boa0xkT2YAPdqAm1UN0fsvLnO6R47GGxhjihix15C/+Sjfr
-         dOA7bPlvIL+CHKO8KfmxhFOHI/v0GKt+6u1WLaN0k/eZ0FQgOleHLdjx6jsfNqwTHj9p
-         L04zphuiwH4iBRusN5CbrHNmVTqV4yY6vTmU0e1Wk/Qrjj9E34nooy4omzQo1YdACtNb
-         S8r4sf0/WZA3a1fO3uVvn1wRSgQymwgkG5YUxEYy2fBn1NqjgpDZcLVlE2YfxTaA+ue/
-         og/w==
-X-Gm-Message-State: AOAM5322blxpbh1B+vEC7B68gV7WZYxFHJ1U89e042Nm+0e6xGU9O+1s
-        vdUp+S0CfdsO1ltGGYxv00fwmg==
-X-Google-Smtp-Source: ABdhPJxeOnJtyKa0nRFCFoj+YWeMcIoJsmC3kWoeTCLFhLbBXTmKoqVh6yxCQxm5CEM2JOtCzTyMvg==
-X-Received: by 2002:a05:6830:1089:b0:5af:1840:81c0 with SMTP id y9-20020a056830108900b005af184081c0mr4629756oto.232.1646619506724;
-        Sun, 06 Mar 2022 18:18:26 -0800 (PST)
-Received: from yoga ([2600:1700:a0:3dc8:5c39:baff:fe03:898d])
-        by smtp.gmail.com with ESMTPSA id w1-20020a056871060100b000d9a1c283e8sm5066422oan.37.2022.03.06.18.18.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 18:18:26 -0800 (PST)
-Date:   Sun, 6 Mar 2022 20:18:24 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v3 1/6] device property: Helper to match multiple
- connections
-Message-ID: <YiVrcN3NA3uS0icv@yoga>
-References: <20220303223351.141238-1-bjorn.andersson@linaro.org>
- <YiIL/ejgxhfRhTDP@smile.fi.intel.com>
- <YiIXDZnquRZj8dU5@paasikivi.fi.intel.com>
- <YiIZoyfsJDcwR4gr@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiIZoyfsJDcwR4gr@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Sun, 6 Mar 2022 21:25:14 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D155B887
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 18:24:19 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220307022417epoutp04afb60b921506cfde5c37396bc718c401~Z_Aku3lU43025830258epoutp04C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:24:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220307022417epoutp04afb60b921506cfde5c37396bc718c401~Z_Aku3lU43025830258epoutp04C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646619857;
+        bh=G8q/Umh2vObZldto5+JDObwZYzuCpopDseh7c0F8fuo=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=hwsx5Q51D5DfXf8LEw0oyJe9GqvZ84Kn3VqYbsaQ7Mr3TAiZwsQw+ULK03n2ntQwA
+         6/oNxLkFXw4DDlDvGyrx0IMKfN5u0MEQoPRyunuxyKCanzqb7upI0Wyg6irLYCps7t
+         nc11hzv1UQ6SMIIENxcmUUv45U5cx+yMjAiyWUCY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220307022416epcas2p2c38b97b861c10aee392f0da26d24a651~Z_AkI1baZ0054200542epcas2p2t;
+        Mon,  7 Mar 2022 02:24:16 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KBj2M2V24z4x9Q2; Mon,  7 Mar
+        2022 02:24:11 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4D.6F.25540.83A65226; Mon,  7 Mar 2022 11:13:12 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220307022409epcas2p4a2955a746c87d66564556e18ab94845f~Z_AdtxZd50597405974epcas2p4Q;
+        Mon,  7 Mar 2022 02:24:09 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220307022409epsmtrp2ecf8955bf8d9cee6a2a8ba785d323a6c~Z_Adsy6O72162921629epsmtrp2R;
+        Mon,  7 Mar 2022 02:24:09 +0000 (GMT)
+X-AuditID: b6c32a47-81bff700000063c4-52-62256a38bcd1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B3.D2.29871.9CC65226; Mon,  7 Mar 2022 11:24:09 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220307022409epsmtip2836fbdc1baffef14253813093f509cc7~Z_Add9EU02591225912epsmtip2t;
+        Mon,  7 Mar 2022 02:24:09 +0000 (GMT)
+From:   Oh Eomji <eomji.oh@samsung.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org (open list),
+        alsa-devel@alsa-project.org, Leon Romanovsky <leon@kernel.org>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Oh Eomji <eomji.oh@samsung.com>,
+        JaeHun Jung <jh0801.jung@samsung.com>
+Subject: [PATCH 1/2] sound: usb: Add vendor's hooking interface
+Date:   Mon,  7 Mar 2022 11:21:59 +0900
+Message-Id: <1646619720-97113-1-git-send-email-eomji.oh@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOKsWRmVeSWpSXmKPExsWy7bCmua5FlmqSQcsTDosrFw8xWZxavpDJ
+        onnxejaLuw9/sFhM+bWU2eLyrjlsFgf+LGaz6NzVz2qx4ftaRgdOjw2fm9g8ds66y+6xaVUn
+        m8f+uWvYPfa9Xcbm0bdlFaPH+i1XWTw+b5IL4IjKtslITUxJLVJIzUvOT8nMS7dV8g6Od443
+        NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBuk9JoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquU
+        WpCSU2BeoFecmFtcmpeul5daYmVoYGBkClSYkJ0xY+sl9oLjThV37yQ3MK4x62Lk5JAQMJE4
+        cvUjexcjF4eQwA5GiePzz7BAOJ8YJfqfrmCFcL4xSjxsf84M0/JsxWUmiMReRol3n2cxQjg/
+        GCVO3T/KDlLFJqAqMX3ZdqAEB4eIQJnEsumWIDXMAvcZJbrXXWIDqREWsJdouzwPbCoLUP3k
+        letYQWxeAReJnguHWSC2yUncPNfJDNIsIXCJXeJ702I2iISLxPOl16FOEpZ4dXwLO4QtJfH5
+        3V6ommKJgwueQ9k1Em8PtkLVGEvMetYOdhyzgKbE+l36IKaEgLLEkVtga5kF+CQ6Dv9lhwjz
+        SnS0CUE0KklMaupkgrAlJFZ8boKyPST6z84Eu15IIFaie9cD1gmMsrMQ5i9gZFzFKJZaUJyb
+        nlpsVGAMj6Pk/NxNjOAUp+W+g3HG2w96hxiZOBgPMUpwMCuJ8N4/r5IkxJuSWFmVWpQfX1Sa
+        k1p8iNEUGFwTmaVEk/OBSTavJN7QxNLAxMzM0NzI1MBcSZzXK2VDopBAemJJanZqakFqEUwf
+        EwenVAOT2d7NM1uznoWv/p9me3zJxvcr1/+Wck3bOvGF2BJTpy8R894HfdUQ2Pfh4dZwtnrr
+        jChlHr4vz9ctS1fw2Wz8+Hb9JTauaUfLkvhjK2cdl7byummlpJDB6bRQ9O40h8UtkYZ6U7v/
+        THvz+EJmxczOS7aZ0zsCi8XXPC+dFZdy2ofzhnuS+ROtf7tTG2rfLlH62DjtuFXkbbFZ2l87
+        X3/tTlijrPbcd1rY5jTN/l/KU3zlt9gx8/YKJArsDZ/UckN2m0rZV//HlR47jmRrnTT6mZTL
+        rrck6tr5Mxt1W19LeCrnzVv78EnC8fz8i/N15rJu5utdEPqE4ezLivQVNT1Oefki038uuaZ3
+        leXferP7SizFGYmGWsxFxYkAcFetnPoDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBLMWRmVeSWpSXmKPExsWy7bCSvO7JHNUkg4l3JS2uXDzEZHFq+UIm
+        i+bF69ks7j78wWIx5ddSZovLu+awWRz4s5jNonNXP6vFhu9rGR04PTZ8bmLz2DnrLrvHplWd
+        bB77565h99j3dhmbR9+WVYwe67dcZfH4vEkugCOKyyYlNSezLLVI3y6BK2PG1kvsBcedKu7e
+        SW5gXGPWxcjJISFgIvFsxWWmLkYuDiGB3YwSKx5vZ4NISEgs6HrNDGELS9xvOcIKUfSNUWLq
+        4T4mkASbgKrE9GXbGUFsEYEKiVtftzODFDELPGWUWDjhBli3sIC9RNvleWA2C1DD5JXrWEFs
+        XgEXiZ4Lh1kgNshJ3DzXyTyBkWcBI8MqRsnUguLc9NxiwwLDvNRyveLE3OLSvHS95PzcTYzg
+        wNPS3MG4fdUHvUOMTByMhxglOJiVRHjvn1dJEuJNSaysSi3Kjy8qzUktPsQozcGiJM57oetk
+        vJBAemJJanZqakFqEUyWiYNTqoFpxk5VZYZdRXnHrE5+at+QdLFM/ljqThWtHhb29nLPFJlr
+        2x5KCB34YuAR/bpgvoz9/9x5LFeWi1ZUR6q7bZ1R/FUsMt1M/HZ68aby2idSu4vmKMwVn7bd
+        t172WcUGjZSTl3/+aDDc6MorqDSlZ14Y87oO387k5RaL3N+/nH5O+vH0p7eMxLzvT+e1F5k5
+        LfmXp+ILzfIzaTaiE6U8xbnPTrNd3uO9K/VlyBrnuvnHzUUTzpdX39r8Mjvm7O9cC4akZQf2
+        Hay8XnrFSle4dWmYv5zJo7fBF2W/HNgkWWqqzjUh+VCYDXfJtX8cz4zMnUN2y5zIELxcd5p7
+        S23FZ/Xmi0KGc+/X53Q5urP0/VJiKc5INNRiLipOBADRWfFiqwIAAA==
+X-CMS-MailID: 20220307022409epcas2p4a2955a746c87d66564556e18ab94845f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220307022409epcas2p4a2955a746c87d66564556e18ab94845f
+References: <CGME20220307022409epcas2p4a2955a746c87d66564556e18ab94845f@epcas2p4.samsung.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 04 Mar 07:52 CST 2022, Andy Shevchenko wrote:
+In mobile, a co-processor can be used with USB audio to improve power
+consumption.  To support this type of hardware, hooks need to be added
+to the USB audio subsystem to be able to call into the hardware when
+needed.
 
-> On Fri, Mar 04, 2022 at 03:41:33PM +0200, Sakari Ailus wrote:
-> > On Fri, Mar 04, 2022 at 02:54:21PM +0200, Andy Shevchenko wrote:
-> > > On Thu, Mar 03, 2022 at 02:33:46PM -0800, Bjorn Andersson wrote:
-> 
-> ...
-> 
-> > > > +		if (count >= matches_len && matches) {
-> > > > +			fwnode_handle_put(ep);
-> > > > +			return count;
-> > > > +		}
-> > > 
-> > > Wouldn't be the same as
-> > > 
-> > > 		if (count >= matches_len) {
-> > > 			fwnode_handle_put(ep);
-> > > 			break;
-> > > 		}
-> > 
-> > Don't you need to check for non-NULL matches here?
-> 
-> Right, this should be kept as in original patch.
-> 
-> > I find return above easier to read.
-> 
-> Okay, original code may work, so I have no strong opinion about return vs
-> break, although I find slightly better to have a single point of return in
-> such case.
-> 
+The main operation of the call-backs are:
+  - Initialize the co-processor by transmitting data when initializing.
+  - Change the co-processor setting value through the interface
+    function.
+  - Configure sampling rate
+  - pcm open/close
+  - other housekeeping
 
-I like using early returns when possible, but this is not an early
-return and it is in the loop so it makes more sense to me to break out.
+Known issues:
+  - This only supports one set of callback hooks, meaning that this only
+    works if there is one type of USB controller in the system.  This
+    should be changed to be a per-host-controller interface instead of
+    one global set of callbacks.
 
-> > > ?
-> 
-> ...
-> 
-> > > > +	count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
-> > > > +						  matches, matches_len);
-> > > 
-> > > > +	matches += count_graph;
-> > > > +	matches_len -= count_graph;
-> > > 
-> > > No, won't work when matches == NULL.
-> > > 
-> > > Also, matches_len is expected to be 0 in that case (or at least being ignored,
-> > > check with vsnprintf() behaviour in similar case).
-> > > 
-> > > So, something like this, perhaps
-> > > 
-> > > 	if (matches && matches_len) {
-> > > 		matches += count_graph;
-> > > 		matches_len -= count_graph;
-> > > 	}
-> > 
-> > Good find!
-> 
-> I have checked vsnprintf() and indeed, it expects to have the size is 0 when
-> the resulting buffer pointer is NULL, and it doesn't do any additional checks.
-> 
+Signed-off-by: JaeHun Jung <jh0801.jung@samsung.com>
+Signed-off-by: Oh Eomji <eomji.oh@samsung.com>
+---
+ sound/usb/card.c     | 120 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ sound/usb/card.h     |  21 +++++++++
+ sound/usb/usbaudio.h |  46 ++++++++++++++++++++
+ 3 files changed, 187 insertions(+)
 
-Per the vsnprintf() semantics it's not the destination buffer being NULL
-that's significant, but rather just the length being 0 that matters.
+diff --git a/sound/usb/card.c b/sound/usb/card.c
+index 3769622..ac81c5f 100644
+--- a/sound/usb/card.c
++++ b/sound/usb/card.c
+@@ -117,6 +117,118 @@ MODULE_PARM_DESC(skip_validation, "Skip unit descriptor validation (default: no)
+ static DEFINE_MUTEX(register_mutex);
+ static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
+ static struct usb_driver usb_audio_driver;
++static struct snd_usb_audio_vendor_ops *usb_vendor_ops;
++
++int snd_vendor_set_ops(struct snd_usb_audio_vendor_ops *ops)
++{
++	if ((!ops->connect) ||
++	    (!ops->disconnect) ||
++	    (!ops->set_interface) ||
++	    (!ops->set_rate) ||
++	    (!ops->set_pcm_buf) ||
++	    (!ops->set_pcm_intf) ||
++	    (!ops->set_pcm_connection) ||
++	    (!ops->set_pcm_binterval) ||
++	    (!ops->usb_add_ctls))
++		return -EINVAL;
++
++	usb_vendor_ops = ops;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(snd_vendor_set_ops);
++
++struct snd_usb_audio_vendor_ops *snd_vendor_get_ops(void)
++{
++	return usb_vendor_ops;
++}
++
++static int snd_vendor_connect(struct usb_interface *intf)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		return ops->connect(intf);
++	return 0;
++}
++
++static void snd_vendor_disconnect(struct usb_interface *intf)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		ops->disconnect(intf);
++}
++
++int snd_vendor_set_interface(struct usb_device *udev,
++			     struct usb_host_interface *intf,
++			     int iface, int alt)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		return ops->set_interface(udev, intf, iface, alt);
++	return 0;
++}
++
++int snd_vendor_set_rate(struct usb_interface *intf, int iface, int rate,
++			int alt)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		return ops->set_rate(intf, iface, rate, alt);
++	return 0;
++}
++
++int snd_vendor_set_pcm_buf(struct usb_device *udev, int iface)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		ops->set_pcm_buf(udev, iface);
++	return 0;
++}
++
++int snd_vendor_set_pcm_intf(struct usb_interface *intf, int iface, int alt,
++			    int direction)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		return ops->set_pcm_intf(intf, iface, alt, direction);
++	return 0;
++}
++
++int snd_vendor_set_pcm_connection(struct usb_device *udev,
++				  enum snd_vendor_pcm_open_close onoff,
++				  int direction)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		return ops->set_pcm_connection(udev, onoff, direction);
++	return 0;
++}
++
++int snd_vendor_set_pcm_binterval(const struct audioformat *fp,
++				 const struct audioformat *found,
++				 int *cur_attr, int *attr)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		return ops->set_pcm_binterval(fp, found, cur_attr, attr);
++	return 0;
++}
++
++static int snd_vendor_usb_add_ctls(struct snd_usb_audio *chip)
++{
++	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
++
++	if (ops)
++		return ops->usb_add_ctls(chip);
++	return 0;
++}
+ 
+ /*
+  * disconnect streams
+@@ -753,6 +865,10 @@ static int usb_audio_probe(struct usb_interface *intf,
+ 	if (err < 0)
+ 		return err;
+ 
++	err = snd_vendor_connect(intf);
++	if (err)
++		return err;
++
+ 	/*
+ 	 * found a config.  now register to ALSA
+ 	 */
+@@ -820,6 +936,8 @@ static int usb_audio_probe(struct usb_interface *intf,
+ 	if (chip->quirk_flags & QUIRK_FLAG_DISABLE_AUTOSUSPEND)
+ 		usb_disable_autosuspend(interface_to_usbdev(intf));
+ 
++	snd_vendor_usb_add_ctls(chip);
++
+ 	/*
+ 	 * For devices with more than one control interface, we assume the
+ 	 * first contains the audio controls. We might need a more specific
+@@ -907,6 +1025,8 @@ static void usb_audio_disconnect(struct usb_interface *intf)
+ 
+ 	card = chip->card;
+ 
++	snd_vendor_disconnect(intf);
++
+ 	mutex_lock(&register_mutex);
+ 	if (atomic_inc_return(&chip->shutdown) == 1) {
+ 		struct snd_usb_stream *as;
+diff --git a/sound/usb/card.h b/sound/usb/card.h
+index 87f042d..2b686e4 100644
+--- a/sound/usb/card.h
++++ b/sound/usb/card.h
+@@ -204,4 +204,25 @@ struct snd_usb_stream {
+ 	struct list_head list;
+ };
+ 
++struct snd_usb_substream *find_snd_usb_substream(unsigned int card_num,
++	unsigned int pcm_idx, unsigned int direction, struct snd_usb_audio
++	**uchip, void (*disconnect_cb)(struct snd_usb_audio *chip));
++
++int snd_vendor_set_ops(struct snd_usb_audio_vendor_ops *vendor_ops);
++struct snd_usb_audio_vendor_ops *snd_vendor_get_ops(void);
++int snd_vendor_set_interface(struct usb_device *udev,
++			     struct usb_host_interface *alts,
++			     int iface, int alt);
++int snd_vendor_set_rate(struct usb_interface *intf, int iface, int rate,
++			int alt);
++int snd_vendor_set_pcm_buf(struct usb_device *udev, int iface);
++int snd_vendor_set_pcm_intf(struct usb_interface *intf, int iface, int alt,
++			    int direction);
++int snd_vendor_set_pcm_connection(struct usb_device *udev,
++				  enum snd_vendor_pcm_open_close onoff,
++				  int direction);
++int snd_vendor_set_pcm_binterval(const struct audioformat *fp,
++				 const struct audioformat *found,
++				 int *cur_attr, int *attr);
++
+ #endif /* __USBAUDIO_CARD_H */
+diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
+index 1678341..edcb5a3 100644
+--- a/sound/usb/usbaudio.h
++++ b/sound/usb/usbaudio.h
+@@ -184,4 +184,50 @@ extern bool snd_usb_skip_validation;
+ #define QUIRK_FLAG_DSD_RAW		(1U << 15)
+ #define QUIRK_FLAG_SET_IFACE_FIRST	(1U << 16)
+ 
++struct audioformat;
++
++enum snd_vendor_pcm_open_close {
++	SOUND_PCM_CLOSE = 0,
++	SOUND_PCM_OPEN,
++};
++
++/**
++ * struct snd_usb_audio_vendor_ops - function callbacks for USB audio accelerators
++ * @connect: called when a new interface is found
++ * @disconnect: called when an interface is removed
++ * @set_interface: called when an interface is initialized
++ * @set_rate: called when the rate is set
++ * @set_pcm_buf: called when the pcm buffer is set
++ * @set_pcm_intf: called when the pcm interface is set
++ * @set_pcm_connection: called when pcm is opened/closed
++ * @set_pcm_binterval: called when the pcm binterval is set
++ * @usb_add_ctls: called when USB controls are added
++ *
++ * Set of callbacks for some accelerated USB audio streaming hardware.
++ *
++ * TODO: make this USB host-controller specific, right now this only works for
++ * one USB controller in the system at a time, which is only realistic for
++ * self-contained systems like phones.
++ */
++struct snd_usb_audio_vendor_ops {
++	int (*connect)(struct usb_interface *intf);
++	void (*disconnect)(struct usb_interface *intf);
++
++	int (*set_interface)(struct usb_device *udev,
++			     struct usb_host_interface *alts,
++			     int iface, int alt);
++	int (*set_rate)(struct usb_interface *intf, int iface, int rate,
++			int alt);
++	int (*set_pcm_buf)(struct usb_device *udev, int iface);
++	int (*set_pcm_intf)(struct usb_interface *intf, int iface, int alt,
++			    int direction);
++	int (*set_pcm_connection)(struct usb_device *udev,
++				  enum snd_vendor_pcm_open_close onoff,
++				  int direction);
++	int (*set_pcm_binterval)(const struct audioformat *fp,
++				 const struct audioformat *found,
++				 int *cur_attr, int *attr);
++	int (*usb_add_ctls)(struct snd_usb_audio *chip);
++};
++
+ #endif /* __USBAUDIO_H */
+-- 
+2.7.4
 
-To follow that, I should fill @matches_len entries in @matches and then
-just continue counting without storing anything in @matches.
-
-But that won't work in this case, because in the event that the @match
-function returns something that has to be freed (such as the refcounted
-objects returned by the typec_mux code), dropping this in favor of just
-counting it would cause memory/reference leaks.
-
-As such, I think this should differ in that @matches = NULL is
-significant, and it's nice to not have matches_len turn negative/bogus
-in the count case.
-
-So I like your suggestion.
-
-Thanks,
-Bjorn
-
-> > > > +	count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
-> > > > +					  matches, matches_len);
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 

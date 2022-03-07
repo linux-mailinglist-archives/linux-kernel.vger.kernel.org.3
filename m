@@ -2,127 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D17E4CFAB5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAB74CFACD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241873AbiCGKV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S242161AbiCGKVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:21:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240442AbiCGKBC (ORCPT
+        with ESMTP id S240477AbiCGKBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:02 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58372205FE;
-        Mon,  7 Mar 2022 01:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646646492; x=1678182492;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=zC3EygN9B67AQNPvzALqT8NwONoTEFy8bHC2L1G4njc=;
-  b=JstJxVGBbUqE7vEW33wQJkXrLylT4VHJHp2qZByUKOt5Ea7DtujQMZh8
-   eD4/p7aAvS7znQV2M4cLJCV3289l50yZljmgVJegACGGpfsnYkNK4iwEv
-   6Rq23GvPRKd9xdGv+/0yFzkXAu32KlTEIdIVlLnEKFwtmE1a8PlsK9Gv9
-   S5Vy0eNpJ1dwLCb9fVBk5sTsC5VDt96c4+53HwmmVr/stwhCVPE8BChgM
-   H0zS0ozy1z+ffacOSmiAbdAftg5+tnLSBZJ6qerHsv/n+0tvGrKgJ70Fr
-   gtaq25O0hr0Fd+5X5xvgw3//4ynct9C8buIMAbJVhuf23vJHpzDFbVSuv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="340782145"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="340782145"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:48:11 -0800
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="553088602"
-Received: from rabl-mobl2.ger.corp.intel.com ([10.252.54.114])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:48:03 -0800
-Date:   Mon, 7 Mar 2022 11:48:01 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-api@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [RFC PATCH 6/7] serial: General support for multipoint
- addresses
-In-Reply-To: <20220306194001.GD19394@wunner.de>
-Message-ID: <ab43569c-6488-12a6-823-3ef09f2849d@linux.intel.com>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com> <20220302095606.14818-7-ilpo.jarvinen@linux.intel.com> <20220306194001.GD19394@wunner.de>
+        Mon, 7 Mar 2022 05:01:03 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63583A1AB
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:48:57 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id 25so5923414ljv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:48:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=wR7uUmbbvzhrVgB5o+Q2sMAbGJGY4qZBiplWhLQEv1c=;
+        b=YOpecoJFuATb/PO3KJQdDdeR4s7tDdXf9G9ddUQLCIrj/u73k9Jea10hbSfBesdLZ8
+         iOLaiYNN3RrPc64eKGtbH4wHiY607ktZPlME4faTIExmeFTE6Rwnm6bsazkkfH2wujI2
+         uDp3aMnb1x0ocMxd78sz93bQ/cyz6VywQVcjUJaYOk3nSOBPWeR8tes8qqf7zMEUDVSN
+         in5rn/REV4IZPkZuUs/WOjxH4m5SlqlF8noSIGPpY44pRDDJBxsY2c5RTnl+sUq94gSv
+         QsS1cdOgLH2xznilWoqSyNzZ1lXtUyHWK3ciRqAAKb9uUZ330hl1gAMFnBuStmLtLlw6
+         xMTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=wR7uUmbbvzhrVgB5o+Q2sMAbGJGY4qZBiplWhLQEv1c=;
+        b=Gq7cZjkCMxaTN60rppRe/950Q8RBWGH0o2zW5PWDAODkA/zj04U7KW997xzQKGNjWJ
+         VvYqUaFPnfOaVZaF5Kr05g7YBQZLGWNe8/PB4fEuOrmRgs8MBjv5eG3rIFwNcKhTon56
+         wcJmRUBNZZprzP0CdAEmXDCIoeYu+jZo+psszlSfOqyps3v0NC8C0ZO1YM5HGYwAVT7O
+         Tpn3kVxKRfai93IyfqRmpOuhZIIv1b0kW3WzZEJ2DArCUdWpG7A2McVPcNgWQ9Uqz7q5
+         R5WZHvQtiyuENy1d7L9rcpqQDpiy7V57+T7SYiC3uQ1o48rTur6aPoNmrye4pDCl4DVp
+         nsqw==
+X-Gm-Message-State: AOAM531jdM2vPCD5bIOrX7gG5N95QxtsE0dG4hpt6N0oFkx5AkXApYEG
+        OQCbwA5ay1B3dnj/IY5p0bpmmNMiadzah4BPVOo=
+X-Google-Smtp-Source: ABdhPJysx9GAqaT8JDVChkC19/A1nVzm37pP9X9ONHYsY87xZZ65MwjksNfDC7PoU+jhxxbsQoVwX/ue5jvTrgDd3QY=
+X-Received: by 2002:a05:651c:54d:b0:247:b65e:7018 with SMTP id
+ q13-20020a05651c054d00b00247b65e7018mr6948380ljp.362.1646646535624; Mon, 07
+ Mar 2022 01:48:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-971395012-1646646016=:1677"
-Content-ID: <cbee2ae-83f0-872e-34dd-cb9866dd3f6e@linux.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a2e:8098:0:0:0:0:0 with HTTP; Mon, 7 Mar 2022 01:48:55 -0800 (PST)
+Reply-To: edsonbaafi@yahoo.com
+From:   edsonbaafi@gmail.com
+Date:   Mon, 7 Mar 2022 09:48:55 +0000
+Message-ID: <CAF9Z-82aQXXTso1f44R5L9b0chvXqtzb4037EgH9_RSR7ZiXLQ@mail.gmail.com>
+Subject: =?UTF-8?B?5YaZ?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-971395012-1646646016=:1677
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <07d5f9f-7fe3-3c54-6566-1873a5191970@linux.intel.com>
-
-On Sun, 6 Mar 2022, Lukas Wunner wrote:
-
-> On Wed, Mar 02, 2022 at 11:56:05AM +0200, Ilpo Järvinen wrote:
-> 
-> > This change is necessary for supporting devices with RS485
-> > multipoint addressing [*].
-> 
-> If this is only used with RS485, why can't we just store the
-> addresses in struct serial_rs485 and use the existing TIOCSRS485
-> and TIOCGRS485 ioctls?  There's 20 bytes of padding left in
-> struct serial_rs485 which you could use.  No need to add more
-> user-space ABI.
-
-It could if it is agreed that serial multipoint addressing is just
-a thing in RS-485 and nowhere else? In that case, there is no point
-in adding more generic support for it.
-
-> > [*] Technically, RS485 is just an electronic spec and does not
-> > itself specify the 9th bit addressing mode but 9th bit seems
-> > at least "semi-standard" way to do addressing with RS485.
-> 
-> Is 9th bit addressing actually used by an Intel customer or was
-> it implemented just for feature completeness? I think this mode
-> isn't used often (I've never seen a use case myself), primarily
-> because it requires disabling parity.
-
-On what basis? ...The datasheet I'm looking at has a timing diagram 
-with both D8 (9th bit) and parity so I think your information must be
-incorrect. I don't have direct contacts with customers but I'm told
-it's important for other org's customers.
-
-
--- 
- i.
---8323329-971395012-1646646016=:1677--
+5oiR5oOz55+l6YGT5L2g5piv5ZCm5pS25Yiw5oiR55qE6YKu5Lu2DQo=

@@ -2,122 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469334D0963
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 22:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97C94D09EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 22:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244883AbiCGVeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 16:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
+        id S1343557AbiCGVjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 16:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbiCGVen (ORCPT
+        with ESMTP id S1343646AbiCGVhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 16:34:43 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0547450457;
-        Mon,  7 Mar 2022 13:33:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646688829; x=1678224829;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=P7fA5VAziyLx4eErnIxNtk976YKxMu7dfIcAeyiLxV0=;
-  b=CtRBnAEk995hrpSLj8dkq0b8//iZBcS4hN5Heu9La8xxk/4tW+uY62er
-   rmIKDt1Grhv+JE/SjhNmGNdOe00YefpNdEQeKVaSl7g4+6ijBu2q1k9Si
-   lLOlVaVFvSgo7+0UGNW/RASGE6LjBoMxSLM8iqu3iYEWHNes7O0Z6wDQQ
-   LDPLKsBMMRoB/p3j1sYwuT0tExMXkeVMip3u7KhxoPml5v4t8P4bwfkqM
-   vfwZ2qvPVvstaS0gLKbGdsvI5rlwNLjdhN1qo7P82nK7Ht5K2t6UuoGkx
-   ouLRXhCrYATESwtgw/vuFvf61qEjrfqD0R3GmnD74NU+ICjrxOomzEQ03
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="317743362"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="317743362"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 13:33:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="687687259"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Mar 2022 13:33:48 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Mar 2022 13:33:47 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Mar 2022 13:33:46 -0800
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.021;
- Mon, 7 Mar 2022 13:33:46 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>
-CC:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "platform-driver-x86@vger.kernel.org" 
+        Mon, 7 Mar 2022 16:37:51 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2050.outbound.protection.outlook.com [40.107.212.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3B58B6E7;
+        Mon,  7 Mar 2022 13:35:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HQIgLg9Dan9rj4YHphLyB0PMVMxYeWVd4AGPE8h4XVNp+avxa5sZn/f/TaZpAaQ4+vnqKdWJhmfo7ztoHxu2kVfy6B/FeitHu0blqXDs53LSlikXRCzWXDrZ+F21kZp+3ktqIgrJ/oMBInND2bKkAC18hjlc3IJ7ARQcgZMHPr1V+sIHB/roShJigtE4orrHyafMgEHrT/HLqSlhBBI5N/gaWhsSd2WOhzjbeMTPFrg39992/NwN/qF4QezTTHaO07KnsxOx3ydwgpPHTFOGD/YQnc4Jp8qQWRYI7scPX9dssfZq6dGwdeCGS65v3jfobvrsCDNOIF5bsxLo6lcDrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ONB4YuxHXa++hwuSa4pidiloNkIVh6LyvbA7ZAHShv0=;
+ b=RyLavGtEgXErmXgDPDt5nxqAERg6vZlfAFQgFOmLOlozB6j02UchyXIL0sl4yAPda8MVUEIkgJuOYnIlGJ8GD+jjPuA0LDOUcBnnmLfD02Qdz5PvQk6I3mmkfjI8YJ9wRDQfcPOPorb5y1QLNlU4SYXMBgE9EOoUv80AO52+5dObGgz0jM6tqabQu3+cgTvjj+LSuUeXQYZZid9tZ665Jnx284DsSsf2aZfktww4g1GZcXYPqO3zX1kWx4KUooKyXndCyUEqBEekMgyBetc0BlhjEZ97C5htYtPG+ESAeQYBuzyxaQrl5FEt7ZXu1vMBAW1THT8T7JsS2y7JZf1rhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ONB4YuxHXa++hwuSa4pidiloNkIVh6LyvbA7ZAHShv0=;
+ b=w/ZSZvbk5jQy9I7WyJjubNU7FsH7CpuV93g44z1Yg+u1cefu9qno/zuneBBeRq/TMPZ47rOuahO0eERmeIwRyvsP++J9GTCVRkgZxgd6CyZPPH72y6Ti9jqP2dWX1oHQHrCZYtSv304bX+UgsidUcxt6Hf63xFAD0IhgYFMKnbY=
+Received: from BN9PR03CA0096.namprd03.prod.outlook.com (2603:10b6:408:fd::11)
+ by MW4PR12MB5603.namprd12.prod.outlook.com (2603:10b6:303:16a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Mon, 7 Mar
+ 2022 21:35:25 +0000
+Received: from BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fd:cafe::11) by BN9PR03CA0096.outlook.office365.com
+ (2603:10b6:408:fd::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.16 via Frontend
+ Transport; Mon, 7 Mar 2022 21:35:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT005.mail.protection.outlook.com (10.13.176.69) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5038.14 via Frontend Transport; Mon, 7 Mar 2022 21:35:24 +0000
+Received: from sbrijesh-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 7 Mar
+ 2022 15:35:20 -0600
+From:   Brijesh Singh <brijesh.singh@amd.com>
+To:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-efi@vger.kernel.org>,
         <platform-driver-x86@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de" <bp@alien8.de>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [RFC 08/10] platform/x86/intel/ifs: Add IFS sysfs interface
-Thread-Topic: [RFC 08/10] platform/x86/intel/ifs: Add IFS sysfs interface
-Thread-Index: AQHYLaZd5d+yEBuhdEqmhIRDOkET6qyu6T6AgAFSX4CABIOMgIAAGXcAgAABjACAAAs3AIAACG0AgAAIiACAAAmQgP//ejMg
-Date:   Mon, 7 Mar 2022 21:33:46 +0000
-Message-ID: <5129ec667d734f3da4043ce1b7df0439@intel.com>
-References: <20220301195457.21152-1-jithu.joseph@intel.com>
- <20220301195457.21152-9-jithu.joseph@intel.com>
- <188492dc80c017375da76d444347b1d00c2031f6.camel@intel.com>
- <7b9c788e-21dc-eedc-a1b4-9c6877fa48fe@intel.com>
- <CAPcyv4h=qPFrP+mRqaZhkh5ZmYjuQawsqvf+-R036ZJVKBNK4Q@mail.gmail.com>
- <33d0e764-86d9-8504-17fa-14b31c87de4e@intel.com>
- <CAPcyv4g5bq9+u0iLjhpeJw8bkbCREUw60H2z_KfDz4hHCrKdFQ@mail.gmail.com>
- <7c620f8a-189e-5ac4-30fe-1fa14ba799ea@intel.com>
- <CAPcyv4iUuZ0aAWckWvwbxJJgt5tDJRpeonfE4DegWS6KPtJq8A@mail.gmail.com>
- <eab8177d-eb73-ec64-ec1f-4f2a51be8aee@intel.com> <YiZ5bYPvssUFYGZj@kroah.com>
-In-Reply-To: <YiZ5bYPvssUFYGZj@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
+        <marcorr@google.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v12 36/46] x86/compressed: Export and rename add_identity_map()
+Date:   Mon, 7 Mar 2022 15:33:46 -0600
+Message-ID: <20220307213356.2797205-37-brijesh.singh@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220307213356.2797205-1-brijesh.singh@amd.com>
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c445c3bd-609f-4a8d-295c-08da008263f5
+X-MS-TrafficTypeDiagnostic: MW4PR12MB5603:EE_
+X-Microsoft-Antispam-PRVS: <MW4PR12MB5603FF6C4FCD923B615E41CDE5089@MW4PR12MB5603.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7So/Kju6vIpxxeBZmLlhFQbsW34En/LnmWnZxRcrgnQdtgX1+gthAuD1TceG7QXVyjiZPGTR25BnmthJc6/dLE2tHN6P6HriSlBM+lZ1TXyhppffNAIk8OgJUeptkmiNtzC55Ut2LTCEKBR6SGf35RuuGTc1RokAMrZo3ngNkrFGbGpCQfvZ4vOXrI4uxKhB1hKgcjzNUMm72/+x9l7fPpzdJNUIqRBMWUYbYqMmsXVzWM9uyDwvg4G2Riwq3KIcjoggLVgTevxbuFstfgEXb3r7xrsxGv2WAGB0bEkzqVIkztwW6hj6Px00iX0C0M7oSgNJQ9dwPF6DjeElMcfu89t78ZFoo3fadG54XOl9D63kE9y6Lt0yUXgBsGSwLliPgSTD0ovROx4I6MGEzhmpKJRZG8QmA2Zkyo2SIaVRPfPqZuzvIkRNP+0zB9y8YWb/v1eHovGtkRmtkpY2a7o8vwdRrtY7KZ40jLrXTi15kFG96GgaGN79w+XTeY/C9Sxj2O6FRigXNVzIv3nwJJVy9wpMKX9EbpMuDksOzIVxH2m0CUNCOuYRI/os+AdVPtNVq5fIjPhjy1CU7m3G+G4NhikoCHCSTjx0B/6azZIsUq/TGFRKMYtjQ7cnI/fcTyHunASR9cJjQTSyZygsaA/uTBdNqWkNXuWeWvXpn0cXwmo/w9NumZDzdshBJaMQXYVSvUuNAvaI5BEYt6aYdgE3QCo/Cp9S1j3C079hjprCgbg=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(4326008)(70586007)(70206006)(2906002)(8676002)(36756003)(508600001)(7696005)(6666004)(336012)(1076003)(82310400004)(426003)(186003)(26005)(16526019)(36860700001)(2616005)(316002)(54906003)(110136005)(356005)(86362001)(83380400001)(44832011)(81166007)(47076005)(5660300002)(7406005)(40460700003)(8936002)(7416002)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 21:35:24.8325
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c445c3bd-609f-4a8d-295c-08da008263f5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5603
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Also some context on test frequency: Hardware has  strict rate limiting=
- of tests.
-> > Every core can be tested only once in every 30 minutes. So it is pointl=
-ess to test at high frequency.
->
-> What limits this, the kernel?
+From: Michael Roth <michael.roth@amd.com>
 
-Microcode enforces the per-core repeat rate on the first implementation.
+SEV-specific code will need to add some additional mappings, but doing
+this within ident_map_64.c requires some SEV-specific helpers to be
+exported and some SEV-specific struct definitions to be pulled into
+ident_map_64.c. Instead, export add_identity_map() so SEV-specific (and
+other subsystem-specific) code can be better contained outside of
+ident_map_64.c.
 
-But this limit isn't architectural. Future implementations may not have
-the same, or perhaps any, limit.
+While at it, rename the function to kernel_add_identity_map(), similar
+to the kernel_ident_mapping_init() function it relies upon.
 
--Tony
+No functional changes.
+
+Suggested-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Michael Roth <michael.roth@amd.com>
+---
+ arch/x86/boot/compressed/ident_map_64.c | 18 +++++++++---------
+ arch/x86/boot/compressed/misc.h         |  1 +
+ 2 files changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
+index 3d566964b829..7975680f521f 100644
+--- a/arch/x86/boot/compressed/ident_map_64.c
++++ b/arch/x86/boot/compressed/ident_map_64.c
+@@ -90,7 +90,7 @@ static struct x86_mapping_info mapping_info;
+ /*
+  * Adds the specified range to the identity mappings.
+  */
+-static void add_identity_map(unsigned long start, unsigned long end)
++void kernel_add_identity_map(unsigned long start, unsigned long end)
+ {
+ 	int ret;
+ 
+@@ -157,11 +157,11 @@ void initialize_identity_maps(void *rmode)
+ 	 * explicitly here in case the compressed kernel does not touch them,
+ 	 * or does not touch all the pages covering them.
+ 	 */
+-	add_identity_map((unsigned long)_head, (unsigned long)_end);
++	kernel_add_identity_map((unsigned long)_head, (unsigned long)_end);
+ 	boot_params = rmode;
+-	add_identity_map((unsigned long)boot_params, (unsigned long)(boot_params + 1));
++	kernel_add_identity_map((unsigned long)boot_params, (unsigned long)(boot_params + 1));
+ 	cmdline = get_cmd_line_ptr();
+-	add_identity_map(cmdline, cmdline + COMMAND_LINE_SIZE);
++	kernel_add_identity_map(cmdline, cmdline + COMMAND_LINE_SIZE);
+ 
+ 	/* Load the new page-table. */
+ 	sev_verify_cbit(top_level_pgt);
+@@ -246,10 +246,10 @@ static int set_clr_page_flags(struct x86_mapping_info *info,
+ 	 * It should already exist, but keep things generic.
+ 	 *
+ 	 * To map the page just read from it and fault it in if there is no
+-	 * mapping yet. add_identity_map() can't be called here because that
+-	 * would unconditionally map the address on PMD level, destroying any
+-	 * PTE-level mappings that might already exist. Use assembly here so
+-	 * the access won't be optimized away.
++	 * mapping yet. kernel_add_identity_map() can't be called here because
++	 * that would unconditionally map the address on PMD level, destroying
++	 * any PTE-level mappings that might already exist. Use assembly here
++	 * so the access won't be optimized away.
+ 	 */
+ 	asm volatile("mov %[address], %%r9"
+ 		     :: [address] "g" (*(unsigned long *)address)
+@@ -363,5 +363,5 @@ void do_boot_page_fault(struct pt_regs *regs, unsigned long error_code)
+ 	 * Error code is sane - now identity map the 2M region around
+ 	 * the faulting address.
+ 	 */
+-	add_identity_map(address, end);
++	kernel_add_identity_map(address, end);
+ }
+diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+index ba538af37e90..aae2722c6e9a 100644
+--- a/arch/x86/boot/compressed/misc.h
++++ b/arch/x86/boot/compressed/misc.h
+@@ -156,6 +156,7 @@ static inline int count_immovable_mem_regions(void) { return 0; }
+ #ifdef CONFIG_X86_5LEVEL
+ extern unsigned int __pgtable_l5_enabled, pgdir_shift, ptrs_per_p4d;
+ #endif
++extern void kernel_add_identity_map(unsigned long start, unsigned long end);
+ 
+ /* Used by PAGE_KERN* macros: */
+ extern pteval_t __default_kernel_pte_mask;
+-- 
+2.25.1
+

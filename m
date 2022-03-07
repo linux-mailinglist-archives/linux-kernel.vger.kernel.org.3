@@ -2,106 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275264D064E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D8C4D0656
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244749AbiCGSWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S244755AbiCGSWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244732AbiCGSWI (ORCPT
+        with ESMTP id S236052AbiCGSWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:22:08 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F4F818AC;
-        Mon,  7 Mar 2022 10:21:14 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id p8so14806498pfh.8;
-        Mon, 07 Mar 2022 10:21:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=h8VKW3KucGatzYLlN7O6KhroN7xX8cfI5ePJaahJhr8=;
-        b=qXloZCd25pfaaeManAbAUBZpoWdm1OzF4/nEt00iEgN0AAK0QDo2rnZZLMRnkFKrpM
-         XWCPa+YpS03+E2PAO1Z0D7BnKXi9Ay8w5uVDVIeJHvK4SEJzoJ8Sg0So4dYFj/YhUPSC
-         vVF582vHCMd5D+OrGLUNs3HC9aaIfLqFXLG1gExx4a95oPzXb4KnZxDZrrc7lCS+jU4D
-         gKqJlfvN2JHzKRRZ9SYluwzjvo9kRqGeGCvA/g3UdADdFQN3agjmgEgxdlc5trCg+nU4
-         Ldol1lriGWAwt1DTwL0Gesn0PGrJrNcHpk0hTdp2h8Y0nRf2leeBXv3UyJNCnpKSbpHs
-         +W5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=h8VKW3KucGatzYLlN7O6KhroN7xX8cfI5ePJaahJhr8=;
-        b=QHrAixnZEAsk3plreO2xVOyM4kpKmDwnxdmZbARRQp38Oi/p72wcj2NFhQBPG4zMOp
-         2RQCjPwfg9DyKrtZrio+aX28nSUsiFMlKYZKRQS14g58+C+ztCGKLrocbiQlrMpf7i14
-         kqUhSaVStsPQI3JMzKz8ISFmfIeyE2N8HHp2ghgzGrFQVa7O/iAb94vU4AWD29ao7bOy
-         h5VeAuo8mgznqftnYhEGXdPypKF/ixpu++kuXmt25U5jKiLZpBr3WwL0W1mJfoqMRcWE
-         f9juHSB4eHsdM5WTR6JzXvlYcpO0gSP0u5eceUIi8zL6UHmhLWinyDwfEg8758/JcLXm
-         1fgg==
-X-Gm-Message-State: AOAM532bcw3knvG9iTkA5/zipmBgkJtkyAoiGViFGaiIfY5T9Z1ogeJQ
-        gz1hOvde+aXk2JPZGuK/IC4=
-X-Google-Smtp-Source: ABdhPJzXl4xFXnuTGX09muyLAhW0L0eXYapNdcDy+OXqESsWVXXd7ctu/NOFEPICzR+UZBOrDsOQCg==
-X-Received: by 2002:a63:c00c:0:b0:37c:942e:6c3c with SMTP id h12-20020a63c00c000000b0037c942e6c3cmr10947396pgg.336.1646677273705;
-        Mon, 07 Mar 2022 10:21:13 -0800 (PST)
-Received: from localhost.localdomain ([122.161.53.68])
-        by smtp.gmail.com with ESMTPSA id t190-20020a632dc7000000b003759f87f38csm12245809pgt.17.2022.03.07.10.21.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 10:21:13 -0800 (PST)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Cc:     Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>
-Subject: [PATCH 3/3] arm64: dts: stingray: Fix spi clock name
-Date:   Mon,  7 Mar 2022 23:51:01 +0530
-Message-Id: <20220307182101.84730-3-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220307182101.84730-1-singh.kuldeep87k@gmail.com>
-References: <20220307182101.84730-1-singh.kuldeep87k@gmail.com>
+        Mon, 7 Mar 2022 13:22:34 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A0F82D08
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:21:39 -0800 (PST)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220307182137epoutp02c2deb06ce59f19ef8f101df4752ac788~aLEcJsR0J3120131201epoutp02Y
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:21:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220307182137epoutp02c2deb06ce59f19ef8f101df4752ac788~aLEcJsR0J3120131201epoutp02Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646677297;
+        bh=/J+z6G42rWkxE8lu/uL7Rm+nMfgqe+5jZvMCgeeEWfY=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=R8F+5QO8jTyoTNeT95BT0wOlZxmePeLkqV3CbnpKVMrZ94fbx1QH20xIxLTnZbCvp
+         EJf+nMxtwk/CNIIFa9UwonoDp6PW/9Xdhwvakmu2OAq7kgR5QPepY8XGgXTwva48d5
+         6SK02zmVTx2IxHQkgKMIrhec0VGiRRmAr+qndsdk=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220307182136epcas5p4337edae5bcac87f910a0b77ed170ea3d~aLEa_kO-s3151331513epcas5p4J;
+        Mon,  7 Mar 2022 18:21:36 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.180]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KC6Gz3Dccz4x9Pr; Mon,  7 Mar
+        2022 18:21:31 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B7.1D.46822.97A46226; Tue,  8 Mar 2022 03:10:01 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220307182131epcas5p266101e33fa3d9e181ace27e833047be4~aLEWX_u5I0752707527epcas5p2M;
+        Mon,  7 Mar 2022 18:21:31 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220307182131epsmtrp2f67a7a71de449a2e899da573da6036d7~aLEWXPQ1Y0032100321epsmtrp2m;
+        Mon,  7 Mar 2022 18:21:31 +0000 (GMT)
+X-AuditID: b6c32a4a-dfbff7000000b6e6-7b-62264a79d757
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A8.E1.29871.B2D46226; Tue,  8 Mar 2022 03:21:31 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220307182130epsmtip2691ead9ace9d1e46069f48ea33f55583~aLEVUAL4I1136311363epsmtip23;
+        Mon,  7 Mar 2022 18:21:29 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        "'Jiri Slaby'" <jirislaby@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20220307080810.53847-1-krzysztof.kozlowski@canonical.com>
+Subject: RE: [PATCH v2 0/7] tty: serial: samsung: minor fixes/cleanups
+Date:   Mon, 7 Mar 2022 23:51:28 +0530
+Message-ID: <000201d83250$2b1fb3a0$815f1ae0$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIJNNL4wI7r1IeeqxSWm7dk8MPZOAGoAYk8rET1w7A=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGJsWRmVeSWpSXmKPExsWy7bCmpm6ll1qSwYSjVhbNi9ezWbybK2Ox
+        8e0PJotNj6+xWlzeNYfNYsb5fUwWZxb3sjuwe8xq6GXz2LSqk81j/9w17B6bl9R7fN4kF8Aa
+        lW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SEkkJZ
+        Yk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafApECvODG3uDQvXS8vtcTK0MDAyBSoMCE7
+        4+bPuWwFb3kqvtz7x9LA+IGri5GTQ0LARKLz6hymLkYuDiGB3YwS59paWSCcT4wSp7/0M0I4
+        3xgl9uxfzwTTcrS5hRkisZdRYuOC1WwQzktGiW8TlzCDVLEJ6ErsWNwGlhAR2MAkceneVLB2
+        TgF3ia7Jz8BsYQE3ic6j11m7GDk4WARUJA4szgAJ8wpYSlzf28sKYQtKnJz5hAXEZhaQl9j+
+        dg4zxBUKEj+fLgOrERGwkrhz4DcTRI24xMujR9ghano5JCZ/5QQZLyHgIjHlQjxEWFji1fEt
+        UCVSEp/f7WWDKMmW6NllDBGukVg67xgLhG0vceDKHBaQEmYBTYn1u/QhFvFJ9P5+wgTRySvR
+        0SYEUa0q0fzuKlSntMTE7m5WiBIPiflnNSHhNItR4mfzbMYJjAqzkLw4C8mLs5C8Mgth8QJG
+        llWMkqkFxbnpqcWmBUZ5qeXw2E7Oz93ECE6gWl47GB8++KB3iJGJg/EQowQHs5II7/3zKklC
+        vCmJlVWpRfnxRaU5qcWHGE2BwT6RWUo0OR+YwvNK4g1NLA1MzMzMTCyNzQyVxHlPp29IFBJI
+        TyxJzU5NLUgtgulj4uCUamBycHxwblJNnWvb3MTso6ouR5p/98T9qS+e4lBwnT8zMkqje5Jk
+        1Y2CpPv6kr5H/MJWeVX9MhbfKSJ8/XTJE59raUd/mGQ7bc521O15/fGqmI/dz+iX2z26U3+0
+        9x03DzL0twjnYg4RE5vq17bITv+gzn3diQarFslziWg9epSvVC/CNWna/ITcGe3t/fv3Z6qv
+        l8oriFo7Wzu/z7g8cFblYZOQiIO3jHx1I360fXhWc/vbTrXfjZLvpe8mGFyKE1y0e62R9lED
+        r8ON/L842AXvlLnccLgSutviwJ/CeXYXAiff+fjc0Onx+YpUvvbAOJeISe9VlrUty/i9Vt3d
+        yWK2r8rVBQqKfw63Gcw+p8RSnJFoqMVcVJwIAHpITVYpBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrELMWRmVeSWpSXmKPExsWy7bCSvK62r1qSwY/zbBbNi9ezWbybK2Ox
+        8e0PJotNj6+xWlzeNYfNYsb5fUwWZxb3sjuwe8xq6GXz2LSqk81j/9w17B6bl9R7fN4kF8Aa
+        xWWTkpqTWZZapG+XwJVx8+dctoK3PBVf7v1jaWD8wNXFyMkhIWAicbS5hbmLkYtDSGA3o8S/
+        3m2sEAlpiesbJ7BD2MISK/89B7OFBJ4zSuxamQNiswnoSuxY3MYGYosIbGGSWPQtDmLQDEaJ
+        SVt+M4IkOAXcJbomP2MCsYUF3CQ6j14HWsDBwSKgInFgcQZImFfAUuL63l5WCFtQ4uTMJywg
+        JcwCehJtG8GmMAvIS2x/O4cZ4hwFiZ9Pl7FCrLWSuHPgNxNEjbjEy6NH2CcwCs1CMmkWwqRZ
+        SCbNQtKxgJFlFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZGcLRoae5g3L7qg94hRiYO
+        xkOMEhzMSiK898+rJAnxpiRWVqUW5ccXleakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgm
+        y8TBKdXAdFg4qXapx4M50jv+WBtL/vU0bmf44Ro0V6r4sk24xpmslw5P5NgVzmudOFC/9o8H
+        5wLj8+ozIhh3ypQnyhvNzG/jONB86ALziUM8/Y++/34y52GjSd+2h0pvuNcuYV8cv8TpwhKB
+        a6kVib6akwXsnv9xm6S/aseilzMnRR/Mmr4wY6r9r/BXver/1sxlDP93/WV7v9uBTr2isCu3
+        ZWZoRp3ZFXh07afC6O1rT0m8XPQraOqn14Lmre/Ck5/olDjrf6/MN9oW/sg1+dc5ibladxav
+        0JoquOlQ9kyFA/55r2ecvtlXUOUXc6ar4Mr/aufPpicmuL/l+OMp2hoS7as9e9Ez22OBL6b+
+        41XIX3xkWbwSS3FGoqEWc1FxIgCyfnN5BQMAAA==
+X-CMS-MailID: 20220307182131epcas5p266101e33fa3d9e181ace27e833047be4
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220307080826epcas5p13d71054f6b461cff91edbbb2cf42491a
+References: <CGME20220307080826epcas5p13d71054f6b461cff91edbbb2cf42491a@epcas5p1.samsung.com>
+        <20220307080810.53847-1-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SPI clock name for pl022 is "sspclk" and not "spiclk".
-Also fix below dtc warning:
-clock-names:0: 'spiclk' is not one of ['SSPCLK', 'sspclk']
+Hi Krzysztof
 
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
- arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+>Sent: Monday, March 7, 2022 1:38 PM
+>To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Alim Akhtar
+><alim.akhtar@samsung.com>; Greg Kroah-Hartman
+><gregkh@linuxfoundation.org>; Jiri Slaby <jirislaby@kernel.org>; linux-arm-
+>kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+>serial@vger.kernel.org; linux-kernel@vger.kernel.org
+>Subject: [PATCH v2 0/7] tty: serial: samsung: minor fixes/cleanups
+>
+>Hi,
+>
+>Changes since v1:
+>1. Patch 3: remove unneeded parenthesis and module alias change (Jiri).
+>2. Patch 3: move unrelated "constify" bits to patch 6.
+>3. Patch 5: fix typo.
+>4. Add review tags.
+>
+>Best regards,
+>Krzysztof
+>
+>Krzysztof Kozlowski (7):
+>  tty: serial: samsung: embed s3c24xx_uart_info in parent structure
+>  tty: serial: samsung: embed s3c2410_uartcfg in parent structure
+>  tty: serial: samsung: constify s3c24xx_serial_drv_data
+>  tty: serial: samsung: constify UART name
+>  tty: serial: samsung: constify s3c24xx_serial_drv_data members
+>  tty: serial: samsung: constify variables and pointers
+>  tty: serial: samsung: simplify getting OF match data
+>
+> drivers/tty/serial/samsung_tty.c | 225 +++++++++++++++----------------
+> 1 file changed, 109 insertions(+), 116 deletions(-)
+>
 
-diff --git a/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi b/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
-index 4135246b6e72..7f1b8efd0883 100644
---- a/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
-+++ b/arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi
-@@ -519,7 +519,7 @@ ssp0: spi@180000 {
- 			reg = <0x00180000 0x1000>;
- 			interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&hsls_div2_clk>, <&hsls_div2_clk>;
--			clock-names = "spiclk", "apb_pclk";
-+			clock-names = "sspclk", "apb_pclk";
- 			num-cs = <1>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -531,7 +531,7 @@ ssp1: spi@190000 {
- 			reg = <0x00190000 0x1000>;
- 			interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&hsls_div2_clk>, <&hsls_div2_clk>;
--			clock-names = "spiclk", "apb_pclk";
-+			clock-names = "sspclk", "apb_pclk";
- 			num-cs = <1>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--- 
-2.25.1
+For this series feel free to add
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+Sanity tested on Exynos7 Espresso board, boot log and other console prints
+after boot looks fine, so
+
+Tested-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+>--
+>2.32.0
+
 

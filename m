@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1614CFB6D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B724CFB73
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240871AbiCGKh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S239453AbiCGKkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:40:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237718AbiCGKOY (ORCPT
+        with ESMTP id S240162AbiCGKSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:14:24 -0500
-Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-hk2apc01on0720.outbound.protection.outlook.com [IPv6:2a01:111:f400:febc::720])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649AD7A9A6
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:56:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OInw9ptdhThV942f9FPz0Rd/hpHJ8wsmRpbShPX41jZ2IgkqhxNVP7v0R58EZQ0evsJt9DWQZzoacET9nX9X8uLGuhdlP3w8u8bAVv+I1SYXY8puNdkI8mKnwKkbA3vJymshWxHqo6hDlu4tXACrqWU2X8Y+SGv0QcXTVIq1MWOWvkduO6JWL9tKIe58u8uWg6qHkSqGn3myxpMIjeKd07k6dcDbebh68wrxXdsK8KY0UScxFDWahN+Q5y57WI3eOksdXVbL6Td6roTSGUewvhCZR0evtI4YoDr/VeybujtU8CXnK7mMde8txNSB2PN+DkLJFjEzqegfxXKRrggY3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UcjSFt6u4NSsFSgY6g9g/sb4Od9X0lYnTX4YrUwJW0s=;
- b=mpoecq7nmPXNUCy/fBFRVQYuwnlZ6tA2UHYf8/YjhCMQwuMK0AyUPOtEZPuqkjysFucBZ7vCAlSb80AbGd5e/u6cpTnbCNHlCm1NTnJLvu4JLE8vAaRs6Um6gDoY17EoXO4LbAAlh86WaMWXcOir9oVLyXw2mV+9kZUlb7v5DGB5FcMVdMJC3IRzxe+A3WnP5P+RN5jmRyGEwkg476S3XatPBhx5sTRdDtmxHT6eXGUtWMqJds7yRl6HIb9/YjuMyqAH6hkcCVD05xdllgBPkFXm/jDfFlIRz09T4zhBs4VSvCzha8QGbqIb8aupYO+HVIhX7/gxqae0+pgRvtt/SQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UcjSFt6u4NSsFSgY6g9g/sb4Od9X0lYnTX4YrUwJW0s=;
- b=XdAfvJ8QgrWAQSGdN3/PYy9FoueHrPlRTZ5MKzG2hLuYabeTj/EfB6GVjv5ViylWV+c+/oSbH2KWBR/NiMeftaO9rqsauKTNfdgcHISTyKfGznKUbQV0G8CKr2W4Mo83kxXbHiLeKxiUI5c/f/DqfDDRrybtiQXIYmiQPdW/IVM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- SEZPR06MB5071.apcprd06.prod.outlook.com (2603:1096:101:39::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.14; Mon, 7 Mar 2022 09:56:30 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::9d3f:ff3b:1948:d732]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::9d3f:ff3b:1948:d732%4]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
- 09:56:30 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Tomi Valkeinen <tomba@kernel.org>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     kael_w@qq.com, Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] drm/omap: fix NULL but dereferenced coccicheck error
-Date:   Mon,  7 Mar 2022 17:56:12 +0800
-Message-Id: <20220307095612.409090-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR03CA0050.apcprd03.prod.outlook.com
- (2603:1096:202:17::20) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Mon, 7 Mar 2022 05:18:14 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90F411A1E;
+        Mon,  7 Mar 2022 01:57:53 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id a1so12712490qta.13;
+        Mon, 07 Mar 2022 01:57:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y5/GrbGP30m/mBAfAcX6vDwX2g44JqlyQq0dC+zaJsw=;
+        b=uk4n6cV8afUzJx3aAeHA3w6oypDyqGgb2j9ShGXZEIBaBxULcOC8vgimaflgjTKM9e
+         KxPT1fG6M24qk7MCuo2xkN5L6ZjoySirS8iqAlMnvYH0/W3+tZDI976GSpy+/uBbd4B+
+         IouTh9Q/BDm7VqlKRcKLL2G8I9YBGmVOI3oTmKlbEkHxm+9v2MoWJPsMw9MZouvmNWir
+         anHK8yYGhmLXhmAPI506M01BzIuFDyl7Oxqe8BMHuc6NzMcHtfTtfARkC6mkXYVMsS9b
+         J5A/KJjTLxeqy0+2juyo0Vgdbeuq3qc1KKOcjlgeeknXrzmfqzC7Ez15NEjsz6+4GitR
+         QOAw==
+X-Gm-Message-State: AOAM530wu+h5aCG0NoiVhcsB+pQXXH8uBbiTK84sjXsqjLoEjJlcsX2Q
+        sEqKk0uDH9qdlZNvOgk/0z1K1ByJZdH64A==
+X-Google-Smtp-Source: ABdhPJySkFDaPuOoH/VjQ5Kd2S4WFv2CR+xSiFUvFBwIIUoaRMZb6uXbpZwnCMtg2a+QDvJ8qjBMXg==
+X-Received: by 2002:a05:622a:1820:b0:2dc:93dd:19f8 with SMTP id t32-20020a05622a182000b002dc93dd19f8mr8784308qtc.301.1646647020574;
+        Mon, 07 Mar 2022 01:57:00 -0800 (PST)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id t2-20020a05622a01c200b002de5098fbaesm8612622qtw.26.2022.03.07.01.57.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 01:57:00 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2d6d0cb5da4so156915357b3.10;
+        Mon, 07 Mar 2022 01:57:00 -0800 (PST)
+X-Received: by 2002:a0d:f1c7:0:b0:2db:d2bc:be11 with SMTP id
+ a190-20020a0df1c7000000b002dbd2bcbe11mr7687812ywf.62.1646647019946; Mon, 07
+ Mar 2022 01:56:59 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bd23b7b9-a011-4c5a-68b5-08da0020c105
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5071:EE_
-X-Microsoft-Antispam-PRVS: <SEZPR06MB507122A3AF53ACCA89A8E02AAB089@SEZPR06MB5071.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rDUe4FSNJ/Iu9cSgMveZhzTTQt5/dxckq2tv1W63vAfRO9dkcuYsB9Vp3qEFy6L3q4K0IpmLLp15LROVSPJhI9AKdKN40Koxw6u7ibpsenxPf6EjXm5CUD2UDGd/BbCZpb67VlxznO0UfC05GXOaDOe2IMckHWEx6gyl07mqged6yCUkVG8CNPxQShRbdVUrj6pteuXRYW8JPEIRXsUCfM7beClaxNG1Fu/nOlVvgWWO4d9qOI1BonSMrkPm7cPVu6B6xFwa6rlAjcvqo09VaVLBm+BJ1CacOjo5MRHioU61R3OZctYU95mtW5s6tG2tPEuxvqo8V8gEtz8HgpkOyT+mRjvMe9oYPIG3hXapBiuqLAXUThwbLX2kvfwYpWj+q9fqpWoj2Yd2/cZDGJoibTKoyCeVlduqXur0GuzSw34iZJ/Xyo+n6zp2pmuEkbuZNGiCosOqZgeBrNqjrQbtJ9q1uAUJaMoia/WSZ0wbzhlAloxPrwSFDFiOoNXsVWpXXo6H3k2JtNylGW7+IoDEMEZBXfUSxUGWJgrHv7NwrlPKjS8ow0EtDkcSjyVcLDQP3xT5iHibZ3rRIpS4Nym5C8Tr2Sh9bSq8PMh3a55BJN9rMkVlLfreSvqRFJz8qHSDhg1pigE5oWXqKwYMViCxMFxPIwBkm80rHO6rJQUXzhbuZesFgwzjwCGGbfEVgjqI/N73Op8mbOr7D9hJ2Xh0qQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66946007)(107886003)(52116002)(8936002)(66476007)(4744005)(2616005)(1076003)(186003)(26005)(8676002)(4326008)(5660300002)(86362001)(83380400001)(508600001)(36756003)(6506007)(6666004)(6512007)(110136005)(2906002)(38350700002)(38100700002)(316002)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J4HmWOH5MdEF5hVUFvZRamGPIXLBPADEcXqH+iFaPjQbbXD12a2AxkbvqD+G?=
- =?us-ascii?Q?pEgiF/uDW4laK0/0O95UpIgwcF8kNCVDfhVm4FDLKm+Ei8Qy/xqSsqsDjiCn?=
- =?us-ascii?Q?unRK46j5O7Mp/vM7TzBzcTw1dM/mSRKR7k4Yg0kvMzQnLQ+LivuIAjT5gpxO?=
- =?us-ascii?Q?zTRSaIp+0ik5QJHwhc6EzAbBXmC4XWpm8i0k6+80AVRb47vur+U6bk8NlTaP?=
- =?us-ascii?Q?UKvpUsZ05unz4DVXfw8TeHYIj8JOr7t5KG/mYAUVin/6AHKJS6aq36OrjVFT?=
- =?us-ascii?Q?u2RAjujcjKvry5lDnEkA0fyWAlXlPErTskeaQ5uZH1V7TPtJrY7tO6hbs4A0?=
- =?us-ascii?Q?kvjRkWOkNsVEacy19fwY3VsHbA+mQVwSMyCjRGzX4Jdwi+u7lUrEtYAlp0o3?=
- =?us-ascii?Q?55jYX5Dh+aytormec2GkxVFCODwye+RVLgecd48HRBnrf6qU5JRfUAS0VLj7?=
- =?us-ascii?Q?aT55jGMRDW1Ev7TG/rnQ3mqEqAfXZ1AqHhXHFG6IcDFR6YGINGErBnQFcKcZ?=
- =?us-ascii?Q?t3oVG3Yp7TbLp0aQr3NYEV8vO/sR7WT76svxNGuYEL9OhY3qcX2ztYxKnc+9?=
- =?us-ascii?Q?5rmOOkO8tKc97xT1NSGcrlCUtDy41mzu9A6cW3VC8DCh5Csrwq1yGmHa85+1?=
- =?us-ascii?Q?f6HTR2HBesSKFkjSUhmbeh21kpYHQfGkI41DcOVOKAP0F414Z1MMYgTJCNrM?=
- =?us-ascii?Q?RrBKvICcJssgMDczdWncy2M9XygG2CW3yhbCjZNKzDdJwAB0f35JJxNjHd5z?=
- =?us-ascii?Q?+znVwMSeULd+E8Fo2PBS4Y4T8xpyq+rgHyfwVSKfSjdKUAKMsxYXHe/t8cHn?=
- =?us-ascii?Q?JzZ+7ndTSGT4TiOQR1zKsO+yD30sx5X/GRQNJ0WZ3DCzzgJIhjfTpAes9QkI?=
- =?us-ascii?Q?w+iHXyVP5RaYN8zRDOSDtoq1AEEqMiuZ7evIik72G5tUBGQzZJyeMXls9AsS?=
- =?us-ascii?Q?arrlzTM/PaXSX6s0MhDOOSWiRcd27/f2NUJojJs8WGdCing2B/LpkBZzRHvt?=
- =?us-ascii?Q?IN6WAJQd2bHEDKgLTIbaYQm2LFt9n6EW+QgOTHYIhbY7DkHx8gnxp+DaRigq?=
- =?us-ascii?Q?9CK+lq1Y4iBeu4DW1r88HQCEcn0DDehBrtKOzwfobDYwTScqeiodzATAy0K4?=
- =?us-ascii?Q?bwr1je3HZUnMIKWpv4n2CcDRWsxowfBp0EKE57CvcV1soO6dcOgkzkXJe6gt?=
- =?us-ascii?Q?r1OOOE62Mc2/GA70yvaQEygpAQct5MoQBeSNxiKAanZlOh5Fxt/G3Ega07Fy?=
- =?us-ascii?Q?Vof6wJFlnJLJgKqMWvsDUrU/fEYLMRyPpTqsJUuOGQUAY92sSsoxDcCNOx/r?=
- =?us-ascii?Q?eccwZEEr8Ezo6WBTxAlzgrlEw7molO8emq9dJYOKNnCv2SzSpCS6NJiUhrpe?=
- =?us-ascii?Q?peEeUZi4J7pZfZmG9kmH+SU+zSrpoXbcs2B4uQ5/g811oqBX8pTRkKXuxRjx?=
- =?us-ascii?Q?NK3mi7k0Zzm9dU+TB7CdnQwNsayQAhAfQDAB1HEKzxTMnsqP28kzVr1mJkTe?=
- =?us-ascii?Q?uCKE5Fd4PfM4t99vniiOJhE9sQM9VwuUW2GbtwLAo8O6BodHwPGLPI1eJlWf?=
- =?us-ascii?Q?/lgD1yIkasLWS7mrTPSg9BetVIgZjtutvSIKr36OB1HPuI30t5dZp+pm0dl6?=
- =?us-ascii?Q?fuHP3X8pVmfsGhxsh2m7rpk=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd23b7b9-a011-4c5a-68b5-08da0020c105
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:56:30.6469
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5vvOYnygho/cbRWRejA8bxBKkCh5B+heuEbYXer2nxoKvTZ3wlMf7lMmKyMx6tAtA8MA6g2lsZgXYmFSQ8Wf0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5071
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAHk-=wjkkYX8OvTv60+XvQkAK4Pg0QC0Hn-4+n7Q0t1+QWw7Sw@mail.gmail.com>
+ <20220307081540.2716107-1-geert@linux-m68k.org>
+In-Reply-To: <20220307081540.2716107-1-geert@linux-m68k.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 7 Mar 2022 10:56:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW=S=BJouptLGw12CbAqeYbBYwnsdrn90C_04n6s4H7bg@mail.gmail.com>
+Message-ID: <CAMuHMdW=S=BJouptLGw12CbAqeYbBYwnsdrn90C_04n6s4H7bg@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v5.17-rc7
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
-./drivers/gpu/drm/omapdrm/omap_overlay.c:89:22-25: ERROR: r_ovl is NULL
-but dereferenced.
+On Mon, Mar 7, 2022 at 10:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> JFYI, when comparing v5.17-rc7[1] to v5.17-rc6[3], the summaries are:
+>   - build errors: +4/-1
 
-Here should be ovl->idx rather than r_ovl->idx.
+  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit
+declaration of function 'nmi_cpu_backtrace'
+[-Werror=implicit-function-declaration]: 171:2 => 171:9, 171:2
+  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit
+declaration of function 'nmi_trigger_cpumask_backtrace'; did you mean
+'arch_trigger_cpumask_backtrace'?
+[-Werror=implicit-function-declaration]:  => 226:9
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- drivers/gpu/drm/omapdrm/omap_overlay.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+powerpc-gcc11/skiroot_defconfig (this is a new config)
+Seen before with powerpc-gcc5/skiroot_defconfig.
 
-diff --git a/drivers/gpu/drm/omapdrm/omap_overlay.c b/drivers/gpu/drm/omapdrm/omap_overlay.c
-index 10730c9b2752..b0bc9ad2ef73 100644
---- a/drivers/gpu/drm/omapdrm/omap_overlay.c
-+++ b/drivers/gpu/drm/omapdrm/omap_overlay.c
-@@ -86,7 +86,7 @@ int omap_overlay_assign(struct drm_atomic_state *s, struct drm_plane *plane,
- 		r_ovl = omap_plane_find_free_overlay(s->dev, overlay_map,
- 						     caps, fourcc);
- 		if (!r_ovl) {
--			overlay_map[r_ovl->idx] = NULL;
-+			overlay_map[ovl->idx] = NULL;
- 			*overlay = NULL;
- 			return -ENOMEM;
- 		}
--- 
-2.35.1
+  + /kisskb/src/crypto/blake2b_generic.c: error: the frame size of
+2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  =>
+109:1
 
+sparc64-gcc11/sparc-allmodconfig
+
+  + error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to
+fit: R_PPC64_REL14 (stub) against symbol `machine_check_common'
+defined in .text section in arch/powerpc/kernel/head_64.o:  =>
+(.text+0x3e4)
+
+powerpc-gcc5/powerpc-allyesconfig
+
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2/ (all 100 configs)
+> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3/ (99 out of 100 configs)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

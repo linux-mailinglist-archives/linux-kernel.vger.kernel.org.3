@@ -2,218 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289574D085A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1A24D0851
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242114AbiCGUci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        id S238430AbiCGUao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234979AbiCGUch (ORCPT
+        with ESMTP id S234979AbiCGUak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:32:37 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7A580D7;
-        Mon,  7 Mar 2022 12:31:33 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.48.249]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MwQw1-1oHMkY04NZ-00sNLz; Mon, 07 Mar 2022 21:28:03 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id D43483C092; Mon,  7 Mar 2022 21:28:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1646684881; bh=2GqYEnWAhlFGnBFmpTswah2anL2T7B/Q0ZAYyhsx6A0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M44MLFcMyfLv78bMq4nudo3eEgAHXmp5wy+ssAkT/XW68kLUgEu8qjEw4O0aV9UBI
-         nCLbPj9osDifGrA5tU3kT+C5M1I1X+EDAcshJHsyyvtUMnAYJYd7ygIw36FfZcPIDA
-         5tXanKwkwxANTQi7l7YioRIXDnRIoiuO1LzBPK+o=
-Date:   Mon, 7 Mar 2022 21:28:00 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Chun-Tse Shao <ctshao@google.com>
-Cc:     rostedt@goodmis.org, ndesaulniers@google.com,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3] config: Allow kernel installation packaging to
- override pkg-config
-Message-ID: <YiZq0CMK2GUCkt4e@fjasle.eu>
-References: <20220304041449.939308-1-ctshao@google.com>
- <YiPUp2KDmlnzv0MR@fjasle.eu>
- <YiU6qJ9EIspJfnto@google.com>
+        Mon, 7 Mar 2022 15:30:40 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2309574A7;
+        Mon,  7 Mar 2022 12:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646684985; x=1678220985;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uQIjKu/qjwzFXGSLSmIUdR//ml6vKPhPZdbrnXFYAAU=;
+  b=WszdeIccC+fM0JlGUdqh9MzZypJsV7RpzqtRNjOHgRUey77RoscLzTuG
+   VCZtQly5E1ycMxLBYhdziW2+ZVeE56L+4Oc3DdaOU95nZ6bh45Pf3B5XV
+   KYanFbpfr1b8xFyUpp8JbdWrpbzwNptHckzaQZG9jc6hLq77eRPusbGnp
+   oCTE8QwsqJNuKnXrWHcYAM+7uIdnaYA5VY21nWyIHYHAc+BbuZe2OHAKg
+   i7/YvAhZf1VJKS0pNLFhLe3lh5f4TDXE85xm8cBsnTw7mdP7ar2As5ULE
+   Af3WDyThPxCQjb9wK4ucqJCF1l8zFGumVfBVqphZ8azCY4grmpRnlkZEy
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234451976"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="234451976"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 12:29:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="509838533"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2022 12:29:40 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E5A551D6; Mon,  7 Mar 2022 22:29:58 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
+Subject: [PATCH v3 1/1] device property: Allow error pointer to be passed to fwnode APIs
+Date:   Mon,  7 Mar 2022 22:29:49 +0200
+Message-Id: <20220307202949.75300-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiU6qJ9EIspJfnto@google.com>
-X-Provags-ID: V03:K1:3P2vwG85fiWojFSYQ4ges4jlIKLOGEqkmB6t6R+hyAzfDnD7eqj
- xW9DiFnTQlAXfjVPCNtHuLm774iyTBXfyBiHeUyKuR+2hTYDdJ/vy3IHXWXtDizQcYamEIq
- KNemQV9Ln7FUF6rWFiwBuRE+eqmGHTAE9SqRFdtAM0EDCB+RU2z/eRL/StKaSq4h74IoqX+
- 7pkL1ByS/o2fkaXTUqIaw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pBgHgMzBdUY=:UMnwiUyJ5aE0RatGg/eXkP
- bKlhVbHcqGfrSiobw9L2qbPUhcTSj6GCnVIzq2Nix7avfurouC5k8WeOjg8iQXrFCzFjdvuIc
- /5KEIzUV85pctV9INrOFDbev9NE/PyCHcF+ThkuIv/OJ3sBLSQ5LqcdZDM/lUlcgIxGEwGIE0
- BxfBnYRT8jCW7Kx/y+4tqex30d8O0rjteKjRDGJ0730PGwiO4FCFyXJvMJeOOi28Ixv1pi3nv
- +wVCOWxo0wR44JUcC1viGERVQnB0GC8gzKOBpgLIshHt2IB8ZFLkNF//hT5HJUXOw4Gv2vkYW
- 3GQE/mB41q1nRh2QzpGeoT+wok+HidZwn1iGeQV52LrmSK6pwjvpE2MqeoiHaajzP7U5u6tHI
- ZKf7jt09W4aW8ytcBJ4nwFEgKNVbO6PYWO42OSTvF9PQELhbNPUOMx2Hq5BvWLpFCc0lv3ApP
- 8bz82ep0pjXHR8WmZk2UlvE4jJ+l+3kStw8zbwMmIisFwObdK+/TfaxHuMeiFjSYQtRJZNcBG
- jKHEwZ/459dNWUI8qIVHwQDZD4MdzNlT4ouyHY2dp+DVtbB5r0yADiOu4WouzbgdTiBEOVueg
- CXpr6LzcXkJLpIaoqDnfpBeNR7m5u22Ouq7hStrcrSkGxe3nfuHm24YyYSV3JNrutSzUNyZX9
- 49vxpB4vUxzKJMZreyp7ns8JHo4Znq6aRtXmo1int58visRh/ruCBnWFy7aBMM8puNgk=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 10:50:16PM +0000 Chun-Tse Shao wrote:
-> On Sat, Mar 05, 2022 at 10:22:47PM +0100, Nicolas Schier wrote:
-> > On Fri, Mar 04, 2022 at 04:14:51AM +0000 Chun-Tse Shao wrote:
-> > > [ Resending as a separate thread ]
-> > >
-> > > Add HOSTPKG_CONFIG to allow tooling that builds the kernel to override
-> > > what pkg-config and parameters are used.
-> > >
-> > > Signed-off-by: Chun-Tse Shao <ctshao@google.com>
-> > > ---
-> > > Changes from v2: https://lore.kernel.org/all/20220302193638.11034-1-ctshao@google.com/
-> > >   - Fix more open coded instance of pkg-config in scripts and certs
-> > >   - Tested with make allmodconfig
-> > >
-> > > Changes from v1: https://lore.kernel.org/all/20220301230629.1892828-1-ctshao@google.com/
-> > >   - Make the commit message more clearer.
-> > > ---
-> > >
-> > >  Makefile                     |  3 ++-
-> > >  certs/Makefile               |  4 ++--
-> > >  scripts/Makefile             |  4 ++--
-> > >  scripts/dtc/Makefile         |  6 +++---
-> > >  scripts/kconfig/gconf-cfg.sh | 10 +++++-----
-> > >  scripts/kconfig/mconf-cfg.sh | 14 +++++++-------
-> > >  scripts/kconfig/nconf-cfg.sh | 14 +++++++-------
-> > >  scripts/kconfig/qconf-cfg.sh | 14 +++++++-------
-> > >  tools/objtool/Makefile       |  4 ++--
-> > >  9 files changed, 37 insertions(+), 36 deletions(-)
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index daeb5c88b50b..f6c5bef7e141 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -430,6 +430,7 @@ else
-> > >  HOSTCC	= gcc
-> > >  HOSTCXX	= g++
-> > >  endif
-> > > +HOSTPKG_CONFIG	= pkg-config
-> > >
-> > >  export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-> > >  			      -O2 -fomit-frame-pointer -std=gnu89
-> > > @@ -525,7 +526,7 @@ KBUILD_LDFLAGS_MODULE :=
-> > >  KBUILD_LDFLAGS :=
-> > >  CLANG_FLAGS :=
-> > >
-> > > -export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
-> > > +export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC HOSTPKG_CONFIG
-> > >  export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
-> > >  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
-> > >  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
-> > > diff --git a/certs/Makefile b/certs/Makefile
-> > > index 3ea7fe60823f..fa540d14ef2d 100644
-> > > --- a/certs/Makefile
-> > > +++ b/certs/Makefile
-> > > @@ -89,5 +89,5 @@ targets += x509_revocation_list
-> > >
-> > >  hostprogs := extract-cert
-> > >
-> > > -HOSTCFLAGS_extract-cert.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
-> > > -HOSTLDLIBS_extract-cert = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
-> > > +HOSTCFLAGS_extract-cert.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
-> > > +HOSTLDLIBS_extract-cert = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
-> > > diff --git a/scripts/Makefile b/scripts/Makefile
-> > > index ce5aa9030b74..f084f08ed176 100644
-> > > --- a/scripts/Makefile
-> > > +++ b/scripts/Makefile
-> > > @@ -14,8 +14,8 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
-> > >  HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
-> > >  HOSTLDLIBS_sorttable = -lpthread
-> > >  HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
-> > > -HOSTCFLAGS_sign-file.o = $(shell pkg-config --cflags libcrypto 2> /dev/null)
-> > > -HOSTLDLIBS_sign-file = $(shell pkg-config --libs libcrypto 2> /dev/null || echo -lcrypto)
-> > > +HOSTCFLAGS_sign-file.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
-> > > +HOSTLDLIBS_sign-file = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
-> > >
-> > >  ifdef CONFIG_UNWINDER_ORC
-> > >  ifeq ($(ARCH),x86_64)
-> > > diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
-> > > index 95aaf7431bff..743fc08827ea 100644
-> > > --- a/scripts/dtc/Makefile
-> > > +++ b/scripts/dtc/Makefile
-> > > @@ -18,7 +18,7 @@ fdtoverlay-objs	:= $(libfdt) fdtoverlay.o util.o
-> > >  # Source files need to get at the userspace version of libfdt_env.h to compile
-> > >  HOST_EXTRACFLAGS += -I $(srctree)/$(src)/libfdt
-> > >
-> > > -ifeq ($(shell pkg-config --exists yaml-0.1 2>/dev/null && echo yes),)
-> > > +ifeq ($(shell $(HOSTPKG_CONFIG) --exists yaml-0.1 2>/dev/null && echo yes),)
-> > >  ifneq ($(CHECK_DT_BINDING)$(CHECK_DTBS),)
-> > >  $(error dtc needs libyaml for DT schema validation support. \
-> > >  	Install the necessary libyaml development package.)
-> > > @@ -27,9 +27,9 @@ HOST_EXTRACFLAGS += -DNO_YAML
-> > >  else
-> > >  dtc-objs	+= yamltree.o
-> > >  # To include <yaml.h> installed in a non-default path
-> > > -HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
-> > > +HOSTCFLAGS_yamltree.o := $(shell $(HOSTPKG_CONFIG) --cflags yaml-0.1)
-> > >  # To link libyaml installed in a non-default path
-> > > -HOSTLDLIBS_dtc	:= $(shell pkg-config yaml-0.1 --libs)
-> > > +HOSTLDLIBS_dtc	:= $(shell $(HOSTPKG_CONFIG) yaml-0.1 --libs)
-> > >  endif
-> > >
-> > >  # Generated files need one more search path to include headers in source tree
-> > > diff --git a/scripts/kconfig/gconf-cfg.sh b/scripts/kconfig/gconf-cfg.sh
-> > > index 480ecd8b9f41..267ef6012203 100755
-> > > --- a/scripts/kconfig/gconf-cfg.sh
-> > > +++ b/scripts/kconfig/gconf-cfg.sh
-> > > @@ -3,14 +3,14 @@
-> > >
-> > >  PKG="gtk+-2.0 gmodule-2.0 libglade-2.0"
-> > >
-> > > -if [ -z "$(command -v pkg-config)" ]; then
-> > > +if [ -z "$(command -v $(HOSTPKG_CONFIG))" ]; then
-> >
-> > Dereferencing variables in shell scripts has to be done by using "${var}" or
-> > "$var".  "$(var)" starts a sub-shell and executes "var", which is not your
-> > intention.  Thus, better try something like:
-> >
-> >     if [ -z "$(command -v "${HOSTPKG_CONFIG}")" ]; then
-> >
-> > (and all other shell script replacements in need to be revised, too.)
-> >
-> > Kind regards,
-> > Nicolas
-> 
-> Thanks Nicolas! I submitted another patch with your suggestions:
-> https://lore.kernel.org/all/20220306223016.2239094-1-ctshao@google.com/
-> 
-> A question: Would it be good if I also add {} for other variables (for exmaple: $PKG
-> and $PKG2) in these scripts along with my change?
-> 
-> -CT
+Some of the fwnode APIs might return an error pointer instead of NULL
+or valid fwnode handle. The result of such API call may be considered
+optional and hence the test for it is usually done in a form of
 
-No, I would not recommend restyling the shell scripts within your patch.
+	fwnode = fwnode_find_reference(...);
+	if (IS_ERR(fwnode))
+		...error handling...
 
-Using braces for variable dereferencing helps the shell to determine the end of
-the variable name, if it is followed by some non-control character; thus, such
-a change alone will not make the changed shell scripts more robust.  Putting
-dereferences inside of double qoutes helps to handle variables containing
-multiple words.  But I think. this is a topic for a different patch set.
+Nevertheless the resulting fwnode may have bumped the reference count
+and hence caller of the above API is obliged to call fwnode_handle_put().
+Since fwnode may be not valid either as NULL or error pointer the check
+has to be performed there. This approach uglifies the code and adds
+a point of making a mistake, i.e. forgetting about error point case.
 
-Kind regards,
-Nicolas
+To prevent this, allow an error pointer to be passed to the fwnode APIs.
+
+Fixes: 83b34afb6b79 ("device property: Introduce fwnode_find_reference()")
+Reported-by: Nuno Sá <nuno.sa@analog.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Nuno Sá <nuno.sa@analog.com>
+---
+
+v3: dropped test of secondary fwnode (Nuno), added tag (Nuno), amended commit message
+v2: adjusted the entire fwnode API (Sakari)
+
+Nuno, can you re-test this with the ltc2983 series to be sure it is still okay?
+
+ drivers/base/property.c | 76 +++++++++++++++++++++++------------------
+ include/linux/fwnode.h  | 10 +++---
+ 2 files changed, 48 insertions(+), 38 deletions(-)
+
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index c0e94cce9c29..635a0e556a4f 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/acpi.h>
+ #include <linux/export.h>
++#include <linux/fwnode.h>
+ #include <linux/kernel.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+@@ -47,12 +48,14 @@ bool fwnode_property_present(const struct fwnode_handle *fwnode,
+ {
+ 	bool ret;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return false;
++
+ 	ret = fwnode_call_bool_op(fwnode, property_present, propname);
+-	if (ret == false && !IS_ERR_OR_NULL(fwnode) &&
+-	    !IS_ERR_OR_NULL(fwnode->secondary))
+-		ret = fwnode_call_bool_op(fwnode->secondary, property_present,
+-					 propname);
+-	return ret;
++	if (ret == true)
++		return ret;
++
++	return fwnode_call_bool_op(fwnode->secondary, property_present, propname);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_property_present);
+ 
+@@ -232,15 +235,16 @@ static int fwnode_property_read_int_array(const struct fwnode_handle *fwnode,
+ {
+ 	int ret;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return -EINVAL;
++
+ 	ret = fwnode_call_int_op(fwnode, property_read_int_array, propname,
+ 				 elem_size, val, nval);
+-	if (ret == -EINVAL && !IS_ERR_OR_NULL(fwnode) &&
+-	    !IS_ERR_OR_NULL(fwnode->secondary))
+-		ret = fwnode_call_int_op(
+-			fwnode->secondary, property_read_int_array, propname,
+-			elem_size, val, nval);
++	if (ret != -EINVAL)
++		return ret;
+ 
+-	return ret;
++	return fwnode_call_int_op(fwnode->secondary, property_read_int_array, propname,
++				  elem_size, val, nval);
+ }
+ 
+ /**
+@@ -371,14 +375,16 @@ int fwnode_property_read_string_array(const struct fwnode_handle *fwnode,
+ {
+ 	int ret;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return -EINVAL;
++
+ 	ret = fwnode_call_int_op(fwnode, property_read_string_array, propname,
+ 				 val, nval);
+-	if (ret == -EINVAL && !IS_ERR_OR_NULL(fwnode) &&
+-	    !IS_ERR_OR_NULL(fwnode->secondary))
+-		ret = fwnode_call_int_op(fwnode->secondary,
+-					 property_read_string_array, propname,
+-					 val, nval);
+-	return ret;
++	if (ret != -EINVAL)
++		return ret;
++
++	return fwnode_call_int_op(fwnode->secondary, property_read_string_array, propname,
++				  val, nval);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_property_read_string_array);
+ 
+@@ -480,15 +486,16 @@ int fwnode_property_get_reference_args(const struct fwnode_handle *fwnode,
+ {
+ 	int ret;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return -ENOENT;
++
+ 	ret = fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
+ 				 nargs, index, args);
++	if (ret == 0)
++		return ret;
+ 
+-	if (ret < 0 && !IS_ERR_OR_NULL(fwnode) &&
+-	    !IS_ERR_OR_NULL(fwnode->secondary))
+-		ret = fwnode_call_int_op(fwnode->secondary, get_reference_args,
+-					 prop, nargs_prop, nargs, index, args);
+-
+-	return ret;
++	return fwnode_call_int_op(fwnode->secondary, get_reference_args, prop, nargs_prop,
++				  nargs, index, args);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_property_get_reference_args);
+ 
+@@ -698,7 +705,7 @@ fwnode_get_next_available_child_node(const struct fwnode_handle *fwnode,
+ {
+ 	struct fwnode_handle *next_child = child;
+ 
+-	if (!fwnode)
++	if (IS_ERR_OR_NULL(fwnode))
+ 		return NULL;
+ 
+ 	do {
+@@ -722,16 +729,16 @@ struct fwnode_handle *device_get_next_child_node(struct device *dev,
+ 	const struct fwnode_handle *fwnode = dev_fwnode(dev);
+ 	struct fwnode_handle *next;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return NULL;
++
+ 	/* Try to find a child in primary fwnode */
+ 	next = fwnode_get_next_child_node(fwnode, child);
+ 	if (next)
+ 		return next;
+ 
+ 	/* When no more children in primary, continue with secondary */
+-	if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
+-		next = fwnode_get_next_child_node(fwnode->secondary, child);
+-
+-	return next;
++	return fwnode_get_next_child_node(fwnode->secondary, child);
+ }
+ EXPORT_SYMBOL_GPL(device_get_next_child_node);
+ 
+@@ -798,6 +805,9 @@ EXPORT_SYMBOL_GPL(fwnode_handle_put);
+  */
+ bool fwnode_device_is_available(const struct fwnode_handle *fwnode)
+ {
++	if (IS_ERR_OR_NULL(fwnode))
++		return false;
++
+ 	if (!fwnode_has_op(fwnode, device_is_available))
+ 		return true;
+ 
+@@ -988,14 +998,14 @@ fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
+ 		parent = fwnode_graph_get_port_parent(prev);
+ 	else
+ 		parent = fwnode;
++	if (IS_ERR_OR_NULL(parent))
++		return NULL;
+ 
+ 	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
++	if (ep)
++		return ep;
+ 
+-	if (IS_ERR_OR_NULL(ep) &&
+-	    !IS_ERR_OR_NULL(parent) && !IS_ERR_OR_NULL(parent->secondary))
+-		ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+-
+-	return ep;
++	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
+ 
+diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+index 3a532ba66f6c..7defac04f9a3 100644
+--- a/include/linux/fwnode.h
++++ b/include/linux/fwnode.h
+@@ -148,12 +148,12 @@ struct fwnode_operations {
+ 	int (*add_links)(struct fwnode_handle *fwnode);
+ };
+ 
+-#define fwnode_has_op(fwnode, op)				\
+-	((fwnode) && (fwnode)->ops && (fwnode)->ops->op)
++#define fwnode_has_op(fwnode, op)					\
++	(!IS_ERR_OR_NULL(fwnode) && (fwnode)->ops && (fwnode)->ops->op)
++
+ #define fwnode_call_int_op(fwnode, op, ...)				\
+-	(fwnode ? (fwnode_has_op(fwnode, op) ?				\
+-		   (fwnode)->ops->op(fwnode, ## __VA_ARGS__) : -ENXIO) : \
+-	 -EINVAL)
++	(fwnode_has_op(fwnode, op) ?					\
++	 (fwnode)->ops->op(fwnode, ## __VA_ARGS__) : (IS_ERR_OR_NULL(fwnode) ? -EINVAL : -ENXIO))
+ 
+ #define fwnode_call_bool_op(fwnode, op, ...)		\
+ 	(fwnode_has_op(fwnode, op) ?			\
+-- 
+2.34.1
+

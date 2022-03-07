@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56B14CF3CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B496F4CF3D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbiCGIlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 03:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S233365AbiCGImR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 03:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiCGIlX (ORCPT
+        with ESMTP id S232717AbiCGImQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 03:41:23 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51C92559A
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:40:29 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 823BE3F5F1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646642428;
-        bh=rO2I99jv/62SugdeMBeIu0gQLuVDL/KgowlHEXSt9XY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-         In-Reply-To:Content-Type;
-        b=RnZRDYSOk6rS4+1PtoMtgc6GXoXaCKThFJpXB1z+I7ScPeeZdPRZBKJEhlf+4Ta99
-         0kbCyBPH9sZxUQv066NHzmEW2vUrE82H/VEq6Z8wDe6snWdOu/p3h5kvmPC7q4eu4U
-         ZFzELyG2ve0EnT1Xp6KV3kirWS7ymG+nlSyrGaJHWp0pAO8h1YksHeQkOF3pX0fMCN
-         oT5VaN3Ersvg9286GWDhnOPBmFiFfRfT+ZZ0UQHBZbn5R7CYpumtJ7h3Pkn46ygBn3
-         AOUNoVVAzarKX+MDUaYcN/U7RnztmqMtrnFdkRBCjFQQAmdaq+d6/Y/SYqSSHtSZ0x
-         0XKbR8kDmE6lQ==
-Received: by mail-ed1-f71.google.com with SMTP id i5-20020a056402054500b00415ce7443f4so7264643edx.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 00:40:28 -0800 (PST)
+        Mon, 7 Mar 2022 03:42:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0416536B4F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:41:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646642482;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WZ/jRjm903Qd3wvvBRPNuh4p9MGGDlugM+CNft25NUA=;
+        b=LmoEMjF3cVhbtbF9UEopoJSFahYPWIOpJzN6UUkHJ4FDgNz4COXP8fxJOEkjsbCegTEBVd
+        IDlG/pc3EYSe+8g551td4+8K+P0G8RiB51R8jiyyVvFbneXDsQDo9kBUmAIiQqtAJfIyNN
+        wYxAwdR+yhQSnSBpnh3SAvWKgQIPNRQ=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225-sfZCj0BLNReEmT8D7U72Mw-1; Mon, 07 Mar 2022 03:41:20 -0500
+X-MC-Unique: sfZCj0BLNReEmT8D7U72Mw-1
+Received: by mail-wr1-f72.google.com with SMTP id n4-20020a5d4844000000b001f1ed76e943so357702wrs.22
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 00:41:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=rO2I99jv/62SugdeMBeIu0gQLuVDL/KgowlHEXSt9XY=;
-        b=geielPHchq9cZFnNvp3Q3TeU1AOi4A3Z53cHJucy66s7HTbkzWAHiamibz08Wlxp7C
-         63omI4vT3XFXveoUI2UtFbnBFiPYX7iRJg+ccFbpEn/s7f/vgSFBWixmejBNbmSnzo8K
-         HAf0tqEEwIzAOV6PP6Dfk7NiWldlmGlWOTlQ5Xheoh4IXjmUGQPcmd54HdQpSUIFYrhi
-         0oA298DstE2x4rUa7e/50jyFd/U5XKLHmrfvyWFjtEKTK/6uOlQsrcv1T7E40/h9C1TJ
-         OwWQx+TfQ9+Vc6Jm1N0yVz2OHERR8ajobJFm756KHPyDTWn47sizmP36e7D78frX2hbb
-         GLSg==
-X-Gm-Message-State: AOAM530F6/J8iBRhwxkGMZnizP4aZehT2/cujZHNuNgZdlzMLt/YCGTO
-        2gKbTWi76awihgDU1UEU3+SknMqg3HPzsGbK197gsoUoBJ7rtwpbQlHO/XHAyqDG+5BGLReXqIJ
-        IrTZko8NeHUQb8iGhaILwVSDRx/9M0/xXLRSR5yP2nA==
-X-Received: by 2002:a50:9d47:0:b0:40f:9d3d:97b6 with SMTP id j7-20020a509d47000000b0040f9d3d97b6mr9926770edk.392.1646642427974;
-        Mon, 07 Mar 2022 00:40:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyL6fmdV5iKJnJB72/p5jFwG1rLkPoi95bQHxRu8Lb8Q0NaduvA8lt+bMJzhT3Gi1R4kBrBjw==
-X-Received: by 2002:a50:9d47:0:b0:40f:9d3d:97b6 with SMTP id j7-20020a509d47000000b0040f9d3d97b6mr9926760edk.392.1646642427802;
-        Mon, 07 Mar 2022 00:40:27 -0800 (PST)
-Received: from [192.168.0.140] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id ka6-20020a170907990600b006ce54c95e3csm4515902ejc.161.2022.03.07.00.40.27
+        bh=WZ/jRjm903Qd3wvvBRPNuh4p9MGGDlugM+CNft25NUA=;
+        b=FgUcfLk7xKmpE9szdG3rtkKO4SAZD66D/VWcRE8X9yCB3HKl3ClIflst08s46In6Qa
+         nYt6LDf3che1MVHBYTfC9Xq30yuqp0aro/uklFBV3gEDlWeuNeOcPCLyIWlOS1ehAuUA
+         cgX+NIVXvR4bpzpay4/rgZS8wQE6AD1jL1XrLMEO2RHik9qPOZ7WKbfk3hNO4ysf/6M2
+         1WyhEQQW/26uGtNFsSbgAZ/X9kRKJu7LGQE0iw4M5BoLTAQLjxBe+F8y1ZIBe2h1y76E
+         Veqglq2f/F1npW4gDmPzVYkQEz0+XxJf+4aYnpAQI0rqMF7QR09iIjN6huzmmjOG0k25
+         yo2A==
+X-Gm-Message-State: AOAM5321sS11GXUpV9TGbGWQXG4Ks0DXz33WJcWWz2Lz4W/Fwe1XsDiZ
+        TEbGIITearE+tC8Fji8UKlxzRDbaAQUPhKOoaRNFjQz9S2+Fr2K28xyag6mroJ6dJHjDlKDJz4z
+        x7iUE3uJ8siB8AECY54Ds4bj1
+X-Received: by 2002:a05:600c:3487:b0:382:aa28:fe1f with SMTP id a7-20020a05600c348700b00382aa28fe1fmr8466868wmq.170.1646642479629;
+        Mon, 07 Mar 2022 00:41:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzh3j8bOrlKZVeuOO6ZBdw54ZKnMPAH6OWecAGua1WoBrret/+L6m+6T54iTZ88hifVbfDIvQ==
+X-Received: by 2002:a05:600c:3487:b0:382:aa28:fe1f with SMTP id a7-20020a05600c348700b00382aa28fe1fmr8466859wmq.170.1646642479426;
+        Mon, 07 Mar 2022 00:41:19 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:1e00:8d67:f75a:a8ae:dc02? (p200300cbc7051e008d67f75aa8aedc02.dip0.t-ipconnect.de. [2003:cb:c705:1e00:8d67:f75a:a8ae:dc02])
+        by smtp.gmail.com with ESMTPSA id r20-20020adfa154000000b001f0326a23e1sm10674958wrr.88.2022.03.07.00.41.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 00:40:27 -0800 (PST)
-Message-ID: <cf34d431-22ba-ccaa-3622-a098b09a8bfe@canonical.com>
-Date:   Mon, 7 Mar 2022 09:40:26 +0100
+        Mon, 07 Mar 2022 00:41:19 -0800 (PST)
+Message-ID: <8c73ec79-d580-81a4-b8d4-a06a48a35f7a@redhat.com>
+Date:   Mon, 7 Mar 2022 09:41:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/7] tty: serial: samsung: constify
- s3c24xx_serial_drv_data
+Subject: Re: [PATCH mmotm v2] mm: delete __ClearPageWaiters()
 Content-Language: en-US
-To:     Jiri Slaby <jirislaby@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220307080810.53847-1-krzysztof.kozlowski@canonical.com>
- <20220307080925.54131-2-krzysztof.kozlowski@canonical.com>
- <3eecfcea-8eeb-3ea2-566b-704c314af718@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <3eecfcea-8eeb-3ea2-566b-704c314af718@kernel.org>
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, Yang Shi <shy828301@gmail.com>,
+        Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <351df0af-78f2-c20-2a6d-e5f978e5ca1@google.com>
+ <a2f6aa01-8003-6791-718d-3898f77ef643@redhat.com>
+ <9dda55d5-eafa-3177-2a4c-32ccb7e146e3@google.com>
+ <90aafe84-fe7d-c70e-8e15-c222869f30fc@redhat.com>
+ <6e5262ff-8596-a86-7388-eddb2b2c53c@google.com>
+ <3eafa969-5b1a-accf-88fe-318784c791a@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <3eafa969-5b1a-accf-88fe-318784c791a@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 09:33, Jiri Slaby wrote:
-> On 07. 03. 22, 9:09, Krzysztof Kozlowski wrote:
->> The driver data (struct s3c24xx_serial_drv_data) is only used to
->> initialize the driver properly and is not modified.  Make it const.
-> ...
->> @@ -2755,9 +2755,9 @@ static struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
->>   	},
->>   	.fifosize = { 256, 64, 16, 16 },
->>   };
->> -#define S5PV210_SERIAL_DRV_DATA ((kernel_ulong_t)&s5pv210_serial_drv_data)
->> +#define S5PV210_SERIAL_DRV_DATA (&s5pv210_serial_drv_data)
->>   #else
->> -#define S5PV210_SERIAL_DRV_DATA	(kernel_ulong_t)NULL
->> +#define S5PV210_SERIAL_DRV_DATA	NULL
+On 04.03.22 22:25, Hugh Dickins wrote:
+> The PG_waiters bit is not included in PAGE_FLAGS_CHECK_AT_FREE, and
+> vmscan.c's free_unref_page_list() callers rely on that not to generate
+> bad_page() alerts.  So __page_cache_release(), put_pages_list() and
+> release_pages() (and presumably copy-and-pasted free_zone_device_page())
+> are redundant and misleading to make a special point of clearing it (as
+> the "__" implies, it could only safely be used on the freeing path).
 > 
-> Yet, I still don't see why the switch from ulong->ptr happens in this 
-> "constify it" patch?
+> Delete __ClearPageWaiters().  Remark on this in one of the "possible"
+> comments in folio_wake_bit(), and delete the superfluous comments.
+> 
+> Signed-off-by: Hugh Dickins <hughd@google.com>
+> Tested-by: Yu Zhao <yuzhao@google.com>
 
-All these defines S5PV210_SERIAL_DRV_DATA and so on are now const and
-are assigned to of_device_id.data (s3c24xx_uart_dt_match). Before, these
-were assigned with a cast:
+Thanks
 
-static const struct of_device_id s3c24xx_uart_dt_match[] = {
-	{ .compatible = "samsung,s5pv210-uart",
-
-	.data = (void *)S5PV210_SERIAL_DRV_DATA }
-
-but since the actual data structure is const, I want to drop the cast.
-Casting const via (void *) might hide some possible issues, e.g. if
-of_device_id.data becomes actually non-const. There is no particular
-issue here, because of_device_id.data and S5PV210_SERIAL_DRV_DATA are
-const. But also because they are both const now, I want to drop the cast
-via void *.
-
-When (void *) is dropped, the S5PV210_SERIAL_DRV_DATA cannot be
-kernel_ulong_t:
-
-../drivers/tty/serial/samsung_tty.c:2753:33: warning: initialization of
-‘const void *’ from ‘long unsigned int’ makes pointer from integer
-without a cast [-Wint-conversion]
-
- 2753 | #define S5PV210_SERIAL_DRV_DATA (kernel_ulong_t)NULL
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
 
+-- 
+Thanks,
 
-Best regards,
-Krzysztof
+David / dhildenb
+

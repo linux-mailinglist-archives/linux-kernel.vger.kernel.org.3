@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B7D4CF25D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2084CF25F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235554AbiCGHEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 02:04:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S234855AbiCGHIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 02:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiCGHEv (ORCPT
+        with ESMTP id S232511AbiCGHIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 02:04:51 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73765A084
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:03:56 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V6QeAlb_1646636630;
-Received: from 30.97.48.83(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V6QeAlb_1646636630)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 07 Mar 2022 15:03:51 +0800
-Message-ID: <0e74a360-6a72-4edf-47bb-8358a3f1d883@linux.alibaba.com>
-Date:   Mon, 7 Mar 2022 15:04:52 +0800
+        Mon, 7 Mar 2022 02:08:11 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91B35F244
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:07:16 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KBqGn0dQZzBrc6;
+        Mon,  7 Mar 2022 15:05:21 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 7 Mar 2022 15:07:13 +0800
+Subject: Re: [PATCH 4/4] mm/memory-failure.c: fix potential VM_BUG_ON_PAGE in
+ split_huge_page_to_list
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220228140245.24552-1-linmiaohe@huawei.com>
+ <20220228140245.24552-5-linmiaohe@huawei.com>
+ <20220304082804.GC3778609@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <2311bee4-cc11-93fc-6992-6c327a150e3d@huawei.com>
+Date:   Mon, 7 Mar 2022 15:07:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 14/16] mm/migration: fix potential invalid node access for
- reclaim-based migration
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
-        mike.kravetz@oracle.com, shy828301@gmail.com, willy@infradead.org,
-        ziy@nvidia.com, minchan@kernel.org, apopple@nvidia.com,
-        ave.hansen@linux.intel.com, o451686892@gmail.com,
-        almasrymina@google.com, jhubbard@nvidia.com, rcampbell@nvidia.com,
-        peterx@redhat.com, naoya.horiguchi@nec.com, mhocko@suse.com,
-        riel@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
- <20220304093409.25829-15-linmiaohe@huawei.com>
- <aa367733-a1e7-10c7-6355-5ed9e502e4c9@linux.alibaba.com>
- <87ee3e5opu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <87ee3e5opu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220304082804.GC3778609@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/7/2022 1:14 PM, Huang, Ying wrote:
-> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+On 2022/3/4 16:28, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Mon, Feb 28, 2022 at 10:02:45PM +0800, Miaohe Lin wrote:
+>> The huge zero page could reach here and if we ever try to split it, the
+>> VM_BUG_ON_PAGE will be triggered in split_huge_page_to_list(). Also the
+>> non-lru compound movable pages could be taken for transhuge pages. Skip
+>> these pages by checking PageLRU because huge zero page isn't lru page as
+>> non-lru compound movable pages.
 > 
->> On 3/4/2022 5:34 PM, Miaohe Lin wrote:
->>> If we failed to setup hotplug state callbacks for mm/demotion:online in
->>> some corner cases, node_demotion will be left uninitialized. Invalid node
->>> might be returned from the next_demotion_node() when doing reclaim-based
->>> migration. Use kcalloc to allocate node_demotion to fix the issue.
->>> Fixes: ac16ec835314 ("mm: migrate: support multiple target nodes
->>> demotion")
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> ---
->>>    mm/migrate.c | 6 +++---
->>>    1 file changed, 3 insertions(+), 3 deletions(-)
->>> diff --git a/mm/migrate.c b/mm/migrate.c
->>> index 279940c0c064..7b1c0b988234 100644
->>> --- a/mm/migrate.c
->>> +++ b/mm/migrate.c
->>> @@ -2516,9 +2516,9 @@ static int __init migrate_on_reclaim_init(void)
->>>    {
->>>    	int ret;
->>>    -	node_demotion = kmalloc_array(nr_node_ids,
->>> -				      sizeof(struct demotion_nodes),
->>> -				      GFP_KERNEL);
->>> +	node_demotion = kcalloc(nr_node_ids,
->>> +				sizeof(struct demotion_nodes),
->>> +				GFP_KERNEL);
+> It seems that memory_failure() also fails at get_any_page() with "hwpoison:
+> unhandlable page" message.
+> 
+>   [16478.203474] page:00000000b6acdbd1 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1810b4
+>   [16478.206612] flags: 0x57ffffc0801000(reserved|hwpoison|node=1|zone=2|lastcpupid=0x1fffff)
+>   [16478.209411] raw: 0057ffffc0801000 fffff11bc6042d08 fffff11bc6042d08 0000000000000000
+>   [16478.211921] raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+>   [16478.214473] page dumped because: hwpoison: unhandlable page
+>   [16478.216386] Memory failure: 0x1810b4: recovery action for unknown page: Ignored
+> 
+> We can't handle errors on huge (or normal) zero page, so the current
+
+Sorry for confusing commit log again. I should have a coffee before I make this patch.
+Huge or normal zero page will fail at get_any_page because they're neither HWPoisonHandlable
+nor PageHuge.
+
+> behavior seems to me more suitable than "unsplit thp".
+> 
+> Or if you have some producer to reach the following path with huge zero
+> page, could you share it?
+> 
+
+What I mean is that non-lru movable compound page can reach here unexpected because __PageMovable(page)
+is handleable now. So get_any_page could succeed to grab the page refcnt. And since it's compound page,
+it will go through the split_huge_page_to_list because PageTransHuge checks PageHead(page) which can also
+be true for compound page. But this type of pages is unexpected for split_huge_page_to_list.
+
+Does this make sense for you? Thanks Naoya.
+
+> Thanks,
+> Naoya Horiguchi
+> 
 >>
->> Nit: not sure if this is worthy of this rare corner case, but I think
->> the target demotion nodes' default value should be NUMA_NO_NODE
->> instead of 0.
-> 
-> The "nr" field of "struct demotion_nodes" should be initialized as 0.  I
-> think that is checked before "nodes[]" field.
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/memory-failure.c | 14 ++++++++++++++
+>>  1 file changed, 14 insertions(+)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 23bfd809dc8c..ac6492e36978 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1792,6 +1792,20 @@ int memory_failure(unsigned long pfn, int flags)
+>>  	}
+>>  
+>>  	if (PageTransHuge(hpage)) {
+>> +		/*
+>> +		 * The non-lru compound movable pages could be taken for
+>> +		 * transhuge pages. Also huge zero page could reach here
+>> +		 * and if we ever try to split it, the VM_BUG_ON_PAGE will
+>> +		 * be triggered in split_huge_page_to_list(). Skip these
+>> +		 * pages by checking PageLRU because huge zero page isn't
+>> +		 * lru page as non-lru compound movable pages.
+>> +		 */
+>> +		if (!PageLRU(hpage)) {
+>> +			put_page(p);
+>> +			action_result(pfn, MF_MSG_UNSPLIT_THP, MF_IGNORED);
+>> +			res = -EBUSY;
+>> +			goto unlock_mutex;
+>> +		}
+>>  		/*
+>>  		 * The flag must be set after the refcount is bumped
+>>  		 * otherwise it may race with THP split.
+>> -- 
+>> 2.23.0
 
-Right, but it will be confusing that if nr = 0, while the nodes[] still 
-contains valid node id 0. While we are at this, why not initialize the 
-node_demotion structure with a clear default value? Anyway, no strong 
-opinion on this :)

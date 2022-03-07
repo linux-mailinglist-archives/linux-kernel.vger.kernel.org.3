@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF4A4D04DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A882E4D04E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240934AbiCGRFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:05:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S244372AbiCGRHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238330AbiCGRFn (ORCPT
+        with ESMTP id S235114AbiCGRHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:05:43 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3971664BC5
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:04:48 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E1365210EF;
-        Mon,  7 Mar 2022 17:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646672686; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wS6Ue02k7hebk/Mgz2MF8d/Kcu7OchpiW9RtZ99n1Tk=;
-        b=h/KHreq1aZibiQdnyTkaKYnSAiIewWKzL98qQei2xPe5fc++FeoxnTlennRxorxjCBkG8E
-        qU/VQcHwTsKYY92NJCHgJiZtajusWWDiEbF/ynBNVGjDB42z9zrpLCc4EedxDiitQ7xWuK
-        ekphZJHyi1XjrHagrf0AtbVKScVsDj0=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B10DAA3B83;
-        Mon,  7 Mar 2022 17:04:46 +0000 (UTC)
-Date:   Mon, 7 Mar 2022 18:04:43 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, pmladek@suse.com,
-        peterz@infradead.org, guro@fb.com, shakeelb@google.com,
-        minchan@kernel.org, timmurray@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [RFC 1/1] mm: page_alloc: replace mm_percpu_wq with kthreads in
- drain_all_pages
-Message-ID: <YiY7K4ftAI3t6km8@dhcp22.suse.cz>
-References: <20220225012819.1807147-1-surenb@google.com>
+        Mon, 7 Mar 2022 12:07:15 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFA27C169
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:06:20 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id i8so24355816wrr.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:06:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sr6hFLYKJ6ZsTgfOYjeBp4uWIne5BXMN/b0HprWBPy4=;
+        b=12DRR/xZnfcwRl5Fq9ydzhNfHtZYiYBxvFitpmWuxkWWA1envSdYXKq9vlEx7X248U
+         tD6c7yGEmP3BmF0BUbY9aSb9Scxmhvhf74qEvzc31aCVBTThjhVprYY/UC1GIQ2RcfUb
+         kohvvhIRfvRA5s/0+oOelEedeyJlZ+d+zH893bztNpYYuGtxQXiQyKnOBhbBto1Ahsbn
+         AZeem6lJjFhMUcVRspEFGE8g4hvIDSksaNyIcxaRkCuOrWNop+6uRvctNpuqOYJnTtSp
+         EkNdwreve0L3GWAV1sU+XyVO7oEflTcr5cad37TY4HN/MVbU/lu3qDcwM7T28lZ5VTA6
+         3jCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sr6hFLYKJ6ZsTgfOYjeBp4uWIne5BXMN/b0HprWBPy4=;
+        b=IHWkpGUXk7Qn66qUh7yx8/u1qFt5LnWI4of9QKyVS9+0uW68W6MHbNz9876fg2lUlu
+         nBDy9HST+Zel7zc1XraUQPC8BkOUQqJZ3MP9re192sgzppHYi0RVhViXiJwup03SUHZE
+         ulfuSCoTYuy5+qI/LZevsA7wO6LViWj7KxwZwp3YhyXsY+SPDBlvjnVllDJIB4kk9AUJ
+         7lEsdB6ybMmFZ8AlHghzZjt1HJIBeD+xCytd6VZ6bBg8Ci27tKJA6LDqudGiJejp5HFf
+         XU895uhtmG6NAf5Hfuq/7xCEZp8mIbIk5Pv/ze6tTHp/xNPEUJZPWpbM5w5a7SAaxtBm
+         io3A==
+X-Gm-Message-State: AOAM531XIgjmhjdoo3R07Qq5ihjXfHjtvw2zLtmvQzlO8Pg06iX/AC0m
+        QAnS9Z46Nq0gFxRI9YHSsDmaxW1gKodtUj4MA14=
+X-Google-Smtp-Source: ABdhPJws0CTTyXTbkfcrLlHvLeHfV9Sn474JetVyckBI6FLVcWdRLhFnjOg4U7REZmNBNRxJx8QNqw==
+X-Received: by 2002:a05:6000:1a52:b0:1f0:2d62:2bbb with SMTP id t18-20020a0560001a5200b001f02d622bbbmr9022775wry.614.1646672778788;
+        Mon, 07 Mar 2022 09:06:18 -0800 (PST)
+Received: from [192.168.1.8] ([149.86.77.40])
+        by smtp.gmail.com with ESMTPSA id n7-20020a05600c3b8700b00389a6241669sm3088772wms.33.2022.03.07.09.06.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 09:06:18 -0800 (PST)
+Message-ID: <56b9dab5-6a3d-58ff-69c9-7abaabf41d05@isovalent.com>
+Date:   Mon, 7 Mar 2022 17:06:17 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225012819.1807147-1-surenb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH bpf-next] bpf: Remove redundant slash
+Content-Language: en-GB
+To:     Yuntao Wang <ytcoode@gmail.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220305161013.361646-1-ytcoode@gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20220305161013.361646-1-ytcoode@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 24-02-22 17:28:19, Suren Baghdasaryan wrote:
-> Sending as an RFC to confirm if this is the right direction and to
-> clarify if other tasks currently executed on mm_percpu_wq should be
-> also moved to kthreads. The patch seems stable in testing but I want
-> to collect more performance data before submitting a non-RFC version.
+2022-03-06 00:10 UTC+0800 ~ Yuntao Wang <ytcoode@gmail.com>
+> The trailing slash of LIBBPF_SRCS is redundant, remove it.
 > 
+> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+> ---
+>  kernel/bpf/preload/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Currently drain_all_pages uses mm_percpu_wq to drain pages from pcp
-> list during direct reclaim. The tasks on a workqueue can be delayed
-> by other tasks in the workqueues using the same per-cpu worker pool.
-> This results in sizable delays in drain_all_pages when cpus are highly
-> contended.
+> diff --git a/kernel/bpf/preload/Makefile b/kernel/bpf/preload/Makefile
+> index 167534e3b0b4..7b62b3e2bf6d 100644
+> --- a/kernel/bpf/preload/Makefile
+> +++ b/kernel/bpf/preload/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -LIBBPF_SRCS = $(srctree)/tools/lib/bpf/
+> +LIBBPF_SRCS = $(srctree)/tools/lib/bpf
+>  LIBBPF_INCLUDE = $(LIBBPF_SRCS)/..
+>  
+>  obj-$(CONFIG_BPF_PRELOAD_UMD) += bpf_preload.o
 
-This is not about cpus being highly contended. It is about too much work
-on the WQ context.
+Looks good to me, but we could maybe just as well get rid of LIBBPF_SRCS
+in this file?:
 
-> Memory management operations designed to relieve memory pressure should
-> not be allowed to block by other tasks, especially if the task in direct
-> reclaim has higher priority than the blocking tasks.
+	LIBBPF_INCLUDE = $(srctree)/tools/lib
 
-Agreed here.
-
-> Replace the usage of mm_percpu_wq with per-cpu low priority FIFO
-> kthreads to execute draining tasks.
-
-This looks like a natural thing to do when WQ context is not suitable
-but I am not sure the additional resources is really justified. Large
-machines with a lot of cpus would create a lot of kernel threads. Can we
-do better than that?
-
-Would it be possible to have fewer workers (e.g. 1 or one per numa node)
-and it would perform the work on a dedicated cpu by changing its
-affinity? Or would that introduce an unacceptable overhead?
-
-Or would it be possible to update the existing WQ code to use rescuer
-well before the WQ is completely clogged?
--- 
-Michal Hocko
-SUSE Labs
+Quentin

@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C35C4D05C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BAB4D05C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244571AbiCGRzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:55:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
+        id S244582AbiCGR4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:56:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244269AbiCGRz2 (ORCPT
+        with ESMTP id S240723AbiCGR4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:55:28 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E26FA18
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:54:34 -0800 (PST)
+        Mon, 7 Mar 2022 12:56:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD0990278;
+        Mon,  7 Mar 2022 09:55:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C2FCCCE0EDB
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:54:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C82ECC340F6;
-        Mon,  7 Mar 2022 17:54:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A5A6B8166D;
+        Mon,  7 Mar 2022 17:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ABFCC340E9;
+        Mon,  7 Mar 2022 17:55:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646675671;
-        bh=skJXL8/N2xCsgKAp+CXm32RgRJoIRM8CbDaIsqyS5+A=;
+        s=k20201202; t=1646675745;
+        bh=XO3bnEiXx2AK1tV25481oizUAmIkV4mdmJSlm+qfhiI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mVFXmd5iXoXH64fcOXo1x8kyRaopJJw7P0/ydyBOtJiC4KItvqq3AicpSs44vn1R1
-         0hM+MVkZk3BWyZIrzK0QLlWxeI6+8y27fhD63zmOfJk2Z8yrsXoEAm2W53wQmoteGE
-         e20cUSpUPPMvyySRtwRZS2NoBcxsIJbPB8G6IY2NNe6VW4rtq5SrVSoarx0Fy3W3LP
-         YGMaVIkxneeBXxN+M3tq+/BsAanyhmbsfaxP2a9xw2+bX7YhTQVIy9CyDsiPfJh1Cr
-         CUzPiFXLrPGY+blvo1zyWmq4IumfSEMLfUB4f69QbIqyUeRyLkNd8g8HBCmIta1EwG
-         Y96HaS1kd3SMg==
-Date:   Mon, 7 Mar 2022 10:54:24 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     trix@redhat.com
-Cc:     mst@redhat.com, jasowang@redhat.com, ndesaulniers@google.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] virtio_ring: Initialize vring_size_in_bytes
-Message-ID: <YiZG0Nx9j++bJaA4@dev-arch.thelio-3990X>
-References: <20220307174916.892433-1-trix@redhat.com>
+        b=f7902SwpBaZPMSr94um8+n3bwsC/Bs/KzHx+plOYERkKUm2bDbac2Kt8sZOwNENKr
+         6EgldiYxwLEhFFpBbd7zzzMQLaI6tVZKOXvj9ijr2KKZoGYTMEESw1mDAocvn7ZXjz
+         rrtSwg8hbOFcksWh+CaLYFwraMmY0KprJZTfhvQ235WYBGptePMVQLI+fnE/+P+3rI
+         9mTFsbjkllSgH6Ka1RAfvblgSo/oS2owcNjQSDvqyp5vDj08ZbbKFU98se+3jgJ0Eg
+         +yL/87UvaZF833G1XkQ8NtQ/5iC7mqrmL6fY9InCIwn8JCFjKpuv3jY57SJ/p2Qu+m
+         4SXuVfxauylSg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B2DD8403C8; Mon,  7 Mar 2022 14:55:42 -0300 (-03)
+Date:   Mon, 7 Mar 2022 14:55:42 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Guo Zhengkui <guozhengkui@vivo.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] perf tools: fix array_size.cocci warning
+Message-ID: <YiZHHs/UlL/zE/jh@kernel.org>
+References: <20220307034008.4024-1-guozhengkui@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307174916.892433-1-trix@redhat.com>
+In-Reply-To: <20220307034008.4024-1-guozhengkui@vivo.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,42 +65,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 09:49:16AM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+Em Mon, Mar 07, 2022 at 11:39:59AM +0800, Guo Zhengkui escreveu:
+> Fix the following coccicheck warning:
+> tools/perf/util/trace-event-parse.c:209:35-36: WARNING: Use ARRAY_SIZE
 > 
-> On the clang build, there is this error
-> virtio_ring.c:1772:26: error: variable 'ring_size_in_bytes'
->   is uninitialized when used here
->   vring_free_queue(vdev, ring_size_in_bytes,
->                          ^~~~~~~~~~~~~~~~~~
+> ARRAY_SIZE(arr) is a macro provided in tools/include/linux/kernel.h,
+> which not only measures the size of the array, but also makes sure
+> that `arr` is really an array.
+
+Thanks, applied.
+ 
+> It has been tested with gcc (Debian 8.3.0-6) 8.3.0.
 > 
-> ring_dma_addr was intialized twice, once with the ring_size_in_bytes.
-> value.  So fix typo.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-I was getting ready to send the same patch.
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 > ---
->  drivers/virtio/virtio_ring.c | 2 +-
+>  tools/perf/util/trace-event-parse.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 905c882600618..b2b567ebb9120 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -1756,7 +1756,7 @@ static void vring_free_vring_packed(struct vring_packed *vring,
->  	ring                  = vring->ring;
->  	driver                = vring->driver;
->  	device                = vring->device;
-> -	ring_dma_addr         = vring->ring_size_in_bytes;
-> +	ring_size_in_bytes    = vring->ring_size_in_bytes;
->  	event_size_in_bytes   = vring->event_size_in_bytes;
->  	ring_dma_addr         = vring->ring_dma_addr;
->  	driver_event_dma_addr = vring->driver_event_dma_addr;
+> diff --git a/tools/perf/util/trace-event-parse.c b/tools/perf/util/trace-event-parse.c
+> index 9634f0ae57be..c9c83a40647c 100644
+> --- a/tools/perf/util/trace-event-parse.c
+> +++ b/tools/perf/util/trace-event-parse.c
+> @@ -206,7 +206,7 @@ unsigned long long eval_flag(const char *flag)
+>  	if (isdigit(flag[0]))
+>  		return strtoull(flag, NULL, 0);
+>  
+> -	for (i = 0; i < (int)(sizeof(flags)/sizeof(flags[0])); i++)
+> +	for (i = 0; i < (int)(ARRAY_SIZE(flags)); i++)
+>  		if (strcmp(flags[i].name, flag) == 0)
+>  			return flags[i].value;
+>  
 > -- 
-> 2.26.3
-> 
-> 
+> 2.20.1
+
+-- 
+
+- Arnaldo

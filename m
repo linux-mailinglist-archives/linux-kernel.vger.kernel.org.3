@@ -2,86 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B964D0192
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF65B4D0196
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243313AbiCGOi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:38:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S243320AbiCGOk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240410AbiCGOiz (ORCPT
+        with ESMTP id S234931AbiCGOkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:38:55 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430A31A837;
-        Mon,  7 Mar 2022 06:38:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NW9RpFh+hvH2B+kdkMZrrBGYcByfxt2ECpS3XLUg5ic=; b=tJW4g9xzh7Hr7eTiR6n30j60WO
-        IYwXR9LZ0duAlYTPi8RrvkjPPngfb7+5UiJ9/ZQDEmqZxuVEE7Qbp6lMMYytUbktkhxgCkWSDTHz/
-        1HZ0/A46EkR5RhOL/6a/GA/m7T0Xdl7GYI14I9F+ekXEYTzuywuHs6g05qrRgYv8hr/bztXDiu2e+
-        NN0Vkgbei6YVv2EJhvRxLOhyg0NOBGLz0ad8LGOORcltIsEZCfhwsdgFVWe1FyuU/IK3Nyj+5fUwi
-        f50yHXIse9zePYwFp7mtZTHd3yptwZqau6qA/Lwjq3Ry8EyNIJpG+QOGy9Q7M8mbbEBcnSDA3dMvA
-        /ZHTriAA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nREUe-00FIYz-EZ; Mon, 07 Mar 2022 14:37:48 +0000
-Date:   Mon, 7 Mar 2022 14:37:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        linux-sgx@vger.kernel.org, jaharkes@cs.cmu.edu,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        codalist@telemann.coda.cs.cmu.edu, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH RFC v2] mm: Add f_ops->populate()
-Message-ID: <YiYYvAWYgC+PKEx0@casper.infradead.org>
-References: <20220306032655.97863-1-jarkko@kernel.org>
- <20220306152456.2649b1c56da2a4ce4f487be4@linux-foundation.org>
- <c3083144-bfc1-3260-164c-e59b2d110df8@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3083144-bfc1-3260-164c-e59b2d110df8@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 7 Mar 2022 09:40:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6046665497
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:39:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A7DAB815AC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:39:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B398FC340E9;
+        Mon,  7 Mar 2022 14:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646663967;
+        bh=YfE/KGzlAzInoMUlekJ47nSUzyULGjw7PxFX9ewaJtw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ow+8Cy+yPZwA9pJzACUmolLy6Dyr0vQVWel51k/LWd2tX1jVyx6E5RoAPJR5NJcNF
+         ZD2H0mKkwnVdxQFIoyKE0i7BYC6YkBjZxXFUsmOLzS3EOGNkwdIsJ/TaXEx3ERqE80
+         zlsXrVN6LIhqJlJlLT2xlCesDaDSDkrPpdBULhRq7rwbcb04q2gzZMQCfHcK4BSW0q
+         Oj1XGkPAQVZsf5NvwrgGa9to7k6w+fdqGWpQ/Ax0p9JExYq7WUmFfrqPG3Rh4iSdcF
+         cCgehfrshFpVubGFWT2GQWv0RVI+E5Ms6OE4CJ3Q3EAjUhabV041th/eJdtmN3iyjB
+         9JUQOtn7LLsXw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nREWD-00CoSw-CB; Mon, 07 Mar 2022 14:39:25 +0000
+Date:   Mon, 07 Mar 2022 14:39:25 +0000
+Message-ID: <877d9525eq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        Linu Cherian <lcherian@marvell.com>
+Cc:     <tglx@linutronix.de>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuc.decode@gmail.com>
+Subject: Re: [PATCH V3] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
+In-Reply-To: <20220307143014.22758-1-lcherian@marvell.com>
+References: <20220307143014.22758-1-lcherian@marvell.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, lcherian@marvell.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linuc.decode@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 03:41:54PM -0800, Dave Hansen wrote:
-> In short: page faults stink.  The core kernel has lots of ways of
-> avoiding page faults like madvise(MADV_WILLNEED) or mmap(MAP_POPULATE).
->  But, those only work on normal RAM that the core mm manages.
+On Mon, 07 Mar 2022 14:30:14 +0000,
+Linu Cherian <lcherian@marvell.com> wrote:
 > 
-> SGX is weird.  SGX memory is managed outside the core mm.  It doesn't
-> have a 'struct page' and get_user_pages() doesn't work on it.  Its VMAs
-> are marked with VM_IO.  So, none of the existing methods for avoiding
-> page faults work on SGX memory.
+> When a IAR register read races with a GIC interrupt RELEASE event,
+> GIC-CPU interface could wrongly return a valid INTID to the CPU
+> for an interrupt that is already released(non activated) instead of 0x3ff.
 > 
-> This essentially helps extend existing "normal RAM" kernel ABIs to work
-> for avoiding faults for SGX too.  SGX users want to enjoy all of the
-> benefits of a delayed allocation policy (better resource use,
-> overcommit, NUMA affinity) but without the cost of millions of faults.
+> As a side effect, an interrupt handler could run twice, once with
+> interrupt priority and then with idle priority.
+> 
+> As a workaround, gic_read_iar is updated so that it will return a
+> valid interrupt ID only if there is a change in the active priority list
+> after the IAR read on all the affected Silicons.
+> 
+> Since there are silicon variants where both 23154 and 38545 are applicable,
+> workaround for erratum 23154 has been extended to address both of them.
+> 
+> Signed-off-by: Linu Cherian <lcherian@marvell.com>
+> ---
+> Changes since V2:
+> - Changed masked part number to individual part numbers
+> - Added additional comment to clarify on priority groups
+> 
+> 
+> Changes since V1:
+> - IIDR based quirk management done for 23154 has been reverted
+> - Extended existing 23154 errata to address 38545 as well,
+>   so that existing static keys are reused. 
+> - Added MIDR based support macros to cover all the affected parts
+> - Changed the unlikely construct to likely construct in the workaround
+>   function.
+> 
+> 
+> 
+> 
+>  Documentation/arm64/silicon-errata.rst |  2 +-
+>  arch/arm64/Kconfig                     |  8 ++++++--
+>  arch/arm64/include/asm/arch_gicv3.h    | 23 +++++++++++++++++++++--
+>  arch/arm64/include/asm/cputype.h       | 13 +++++++++++++
+>  arch/arm64/kernel/cpu_errata.c         | 20 +++++++++++++++++---
+>  5 files changed, 58 insertions(+), 8 deletions(-)
 
-We have a mechanism for dynamically reducing the number of page faults
-already; it's just buried in the page cache code.  You have vma->vm_file,
-which contains a file_ra_state.  You can use this to track where
-recent faults have been and grow the size of the region you fault in
-per page fault.  You don't have to (indeed probably don't want to) use
-the same algorithm as the page cache, but the _principle_ is the same --
-were recent speculative faults actually used; should we grow the number
-of pages actually faulted in, or is this a random sparse workload where
-we want to allocate individual pages.
+Looks good to me this time.
 
-Don't rely on the user to ask.  They don't know.
+Catalin, Will: happy to take this into the irqchip tree for 5.18 with
+your Ack, or you can take it into the arm64 tree with my
+
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

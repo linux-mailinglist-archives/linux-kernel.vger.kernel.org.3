@@ -2,92 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95B84D0514
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D92354D0518
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240148AbiCGRSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S243685AbiCGRTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:19:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235109AbiCGRSh (ORCPT
+        with ESMTP id S241473AbiCGRTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:18:37 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2C61261E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:17:42 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7848D40005;
-        Mon,  7 Mar 2022 17:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646673460;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=uAiCuWoMbD3fjoAvdv+nrJeK43GJCyewkymDyP5ee7I=;
-        b=ipWv51NMK/X6ZXHmPyxKkgw4EkZFEb8BgFqVaqFHvvqo9HGJDteh9OmuEbaCbq4g8VyW3l
-        5wm76igc3zZJnz5THFbRm7Wrb71elSSTIAS7HwJlMsv5Vek0BT50LSFuTjgO6J6utZHa58
-        k78eVnQGO/4ziObl4ch+5ema4l1yVVqghP54R+5CHaNsE75L5du/Cv06sJM3GIy6MVs9qc
-        JVuW9Nu7yeFjNVDqZBmuSavFFG0xTajlABG6R70CaAtlc5lJnxPLJiopUkW9d02awqlwin
-        da+Ypihm3Ji7nVY68YtW2SibPAcbYpPp41LWzVuEPRW4PdVPrDEP9H3lzObrWQ==
-Date:   Mon, 7 Mar 2022 18:17:34 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] mtd: Fixes for the next -rc/v5.17 final
-Message-ID: <20220307181734.750b4661@xps13>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 7 Mar 2022 12:19:22 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0492E091
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:18:27 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id u7so21417450ljk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:18:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fungible.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PytMAvERvamFaZa2mj5LMYSOqi/GBoG5kLYBTiktqF4=;
+        b=T+dSeMWfcde2IMq2WUbaYuLqzEIakHQTrdFu/RiI3mChnzXdpRv+55gHKXnNrQ7OTQ
+         h9aCbBjLij3fFFlTaUgAPBZ+hfgXAUSpJGn8ZEcHmsG7BrWcjhUyAgSAbr71oFbd7ihM
+         ezjO8fkfFFAJOqGQZOIsPnGT7/ZRa9s3eGn4U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PytMAvERvamFaZa2mj5LMYSOqi/GBoG5kLYBTiktqF4=;
+        b=0XrRzsyAxIW31kMYEL7HIAAzlypU7kfE+xxrfmuKjEQjx1s0K/4VoYQtaGRqiFHXGn
+         qliI/lSvAAk0Ku6vbgdukCEGUitx4yvp58fTAPSnDlS9FS9brJZMizg3UUZBXAn5BXVF
+         fWZaSWQMTGyIpDmEqXldJcMSsVqllcaGayVp7IZi5PH+OwXaxJPaxq2pLdZtWr15CqLg
+         XHYPimkB4e2tYk/4MCpTdV7D4J66ys/WG1PqYlql7hzTnYj+eiyF2ORJvB63dxp3P9e/
+         fId97Win7vykpHg3T/oALYaTxDqQ4iRtZXZf/cgMCOcWoUpWlY3EAb3DQs/X3z+8vgrb
+         0J/g==
+X-Gm-Message-State: AOAM531SiMZ5sHi+SDyjApLe/suNIKXhXStm9ZNi420yLdsm+oThXCQM
+        TOEgUobE4GNb84bEJ5Tqt4adn4eHh0cRMUJJUPoyTNqz+wM=
+X-Google-Smtp-Source: ABdhPJzeDulbdEBe1aXrA3wisAoL7vLDU4NWEToPGu7WCSEho7enCbGd/lemy+S0Y+Yp1jhMoep5A9rr8ih9oTxIJKg=
+X-Received: by 2002:a2e:90cb:0:b0:22e:5363:95f0 with SMTP id
+ o11-20020a2e90cb000000b0022e536395f0mr8195637ljg.210.1646673502736; Mon, 07
+ Mar 2022 09:18:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220307214539.473d7563@canb.auug.org.au>
+In-Reply-To: <20220307214539.473d7563@canb.auug.org.au>
+From:   Dimitris Michailidis <d.michailidis@fungible.com>
+Date:   Mon, 7 Mar 2022 09:18:10 -0800
+Message-ID: <CAOkoqZkCN9SiG41MmaD+Qv-zvTftz=MDJeiuDJfV2Ws+ezBS_g@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Dimitris Michailidis <dmichail@fungible.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+On Mon, Mar 7, 2022 at 2:45 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the net-next tree, today's linux-next build (powerpc
+> allmodconfig) failed like this:
+>
+> ERROR: modpost: ".local_memory_node" [drivers/net/ethernet/fungible/funeth/funeth.ko] undefined!
 
-The following changes since commit ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2:
+I will take a look at this.
 
-  Linux 5.17-rc7 (2022-03-06 14:28:31 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/fixes-for-5.17-rc8
-
-for you to fetch changes up to 42da5a4ba17070e9d99abf375a5bd70e85d2a6b8:
-
-  mtd: rawnand: omap2: Actually prevent invalid configuration and build error (2022-03-07 17:46:54 +0100)
-
-----------------------------------------------------------------
-As part of a previous changeset introducing support for the K3
-architecture, the OMAP_GPMC (a non visible symbol) got selected by the
-selection of MTD_NAND_OMAP2 instead of doing so from the architecture
-directly (like for the other users of these two drivers). Indeed, from a
-hardware perspective, the OMAP NAND controller needs the GPMC to
-work.
-
-This led to a robot error which got addressed in fix merge into
--rc4. Unfortunately, the approach at this time still used "select" and
-lead to further robot reports.
-
-This time we switch to "depends on" in order to prevent random
-misconfigurations. The different dependencies will however need a future
-cleanup.
-
-----------------------------------------------------------------
-Roger Quadros (1):
-      mtd: rawnand: omap2: Actually prevent invalid configuration and build error
-
- drivers/mtd/nand/raw/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> Caused by commits
+>
+>   ee6373ddf3a9 ("net/funeth: probing and netdev ops")
+>   db37bc177dae ("net/funeth: add the data path")
+>
+> --
+> Cheers,
+> Stephen Rothwell

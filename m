@@ -2,80 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97C34D075A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 364084D0760
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235158AbiCGTMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S240733AbiCGTOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:14:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234144AbiCGTMq (ORCPT
+        with ESMTP id S234144AbiCGTOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:12:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA5295674F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646680311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xbJb2hnF7RB31QQPcCB0cHRYiPJl+mMbTgOzYpqEqG4=;
-        b=hhJszi7zWty7ydqM/W0evqWUOpa+kxs6MzLmHu7lWt+/4KVlXV32uQ++oJnNnVpIrk+hCu
-        NVx9OaHDF10ee1Vzap5xXQP5k9/OrvgrzDtpfKehz4utmOFathmQNvRjxYJSvMMnwCmsZN
-        4647BCNrcjYoQDFAkt+IvN0/BiTFYCE=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-606-bsRFVDazN5ysmZhp4E4sCw-1; Mon, 07 Mar 2022 14:11:50 -0500
-X-MC-Unique: bsRFVDazN5ysmZhp4E4sCw-1
-Received: by mail-oi1-f197.google.com with SMTP id w19-20020a0568080d5300b002d54499cc1eso10243047oik.19
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:11:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xbJb2hnF7RB31QQPcCB0cHRYiPJl+mMbTgOzYpqEqG4=;
-        b=4vzzGxqCvWPueratLNliDdUweBM9+/sYu9BjMiKOyeVBYGpbscofxAHqgqmD8ShPwD
-         eRQXz2Ybd3n4sNSRhi7YsFJmVOf12uzLORbsq3xSJ+y3vdla/KjvhPJ5ZDYCNTa9ufBK
-         Za6ZNiNndOFrzyB5TPPVA4KQZalQcMZVL/pdVUMwmmMreQHJWlpribBvDnITe3ofvoal
-         k8v6A1lZ0GYsLK4w9rOdcKCEljQjPFSufLlX+g0wBEyBOwy6BbqE9nZPsgYViU3PGDlt
-         hv5H15E7YU0HYriWoABJvJhGOE9ILqFXY1qEJyeWYSxqHNcbF166i43lHLjnE8aDEOiG
-         hcwA==
-X-Gm-Message-State: AOAM533McLAb80Cg7KSlMZSfLuHpwA4R3e0iPXmAl080kjpRPSXTjuId
-        w+eGXujJvVrHXo5i8qFEMx5M5jP+h3ltWKeNIsrFiBgMDCNZZ0VCIyhqYx8fEk8ewYCPZuhCWD2
-        NRCQgz8d0a9K1cl0YTe3VoGDJ
-X-Received: by 2002:a9d:6e04:0:b0:5af:6426:6d39 with SMTP id e4-20020a9d6e04000000b005af64266d39mr6603705otr.75.1646680309249;
-        Mon, 07 Mar 2022 11:11:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyrESkXA1V/9qY/xyUZhdUFyJNgxWEtqLu7JVFsEUrY4QNKlYbaQPLHPF8qRRFz3N5uWmV5CA==
-X-Received: by 2002:a9d:6e04:0:b0:5af:6426:6d39 with SMTP id e4-20020a9d6e04000000b005af64266d39mr6603689otr.75.1646680309017;
-        Mon, 07 Mar 2022 11:11:49 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05687072c200b000d9ae3e1fabsm5888678oak.12.2022.03.07.11.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 11:11:48 -0800 (PST)
-Date:   Mon, 7 Mar 2022 12:11:47 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-pci@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH vfio-next] PCI/IOV: Fix wrong kernel-doc identifier
-Message-ID: <20220307121147.4a12f2a7.alex.williamson@redhat.com>
-In-Reply-To: <8cecf7df45948a256dc56148cf9e87b2f2bb4198.1646652504.git.leonro@nvidia.com>
-References: <8cecf7df45948a256dc56148cf9e87b2f2bb4198.1646652504.git.leonro@nvidia.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Mon, 7 Mar 2022 14:14:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4793338BF;
+        Mon,  7 Mar 2022 11:13:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E8B5B81678;
+        Mon,  7 Mar 2022 19:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD1DC340F4;
+        Mon,  7 Mar 2022 19:13:07 +0000 (UTC)
+Date:   Mon, 7 Mar 2022 14:13:05 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: add tracepoints for I2C slave events
+Message-ID: <20220307141305.18f0c20b@gandalf.local.home>
+In-Reply-To: <20220307182049.3790905-1-quic_jaehyoo@quicinc.com>
+References: <20220307182049.3790905-1-quic_jaehyoo@quicinc.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,42 +46,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  7 Mar 2022 13:33:25 +0200
-Leon Romanovsky <leon@kernel.org> wrote:
+On Mon, 7 Mar 2022 10:20:49 -0800
+Jae Hyun Yoo <quic_jaehyoo@quicinc.com> wrote:
 
-> From: Leon Romanovsky <leonro@nvidia.com>
+> I2C slave events tracepoints can be enabled by:
 > 
-> Replace "-" to be ":" in comment section to be aligned with
-> kernel-doc format.
+> 	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
 > 
-> drivers/pci/iov.c:67: warning: Function parameter or member 'dev' not described in 'pci_iov_get_pf_drvdata'
-> drivers/pci/iov.c:67: warning: Function parameter or member 'pf_driver' not described in 'pci_iov_get_pf_drvdata'
+> and logs in /sys/kernel/tracing/trace will look like:
 > 
-> Fixes: a7e9f240c0da ("PCI/IOV: Add pci_iov_get_pf_drvdata() to allow VF reaching the drvdata of a PF")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> 	... i2c_slave: i2c-0 a=010 WR_REQ []
+> 	... i2c_slave: i2c-0 a=010 WR_RCV [02]
+> 	... i2c_slave: i2c-0 a=010 WR_RCV [0c]
+> 	... i2c_slave: i2c-0 a=010   STOP []
+> 	... i2c_slave: i2c-0 a=010 RD_REQ [04]
+> 	... i2c_slave: i2c-0 a=010 RD_PRO [b4]
+> 	... i2c_slave: i2c-0 a=010   STOP []
+> 
+> formatted as:
+> 
+> 	i2c-<adapter-nr>
+> 	a=<addr>
+> 	<event>
+> 	[<data>]
+> 
+> trace printings can be selected by adding a filter like:
+> 
+> 	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
+> 
+> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
 > ---
->  drivers/pci/iov.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/i2c/i2c-core-slave.c     | 15 +++++++++
+>  include/linux/i2c.h              |  8 ++---
+>  include/trace/events/i2c_slave.h | 57 ++++++++++++++++++++++++++++++++
+>  3 files changed, 74 insertions(+), 6 deletions(-)
+>  create mode 100644 include/trace/events/i2c_slave.h
 > 
-> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> index 28ec952e1221..952217572113 100644
-> --- a/drivers/pci/iov.c
-> +++ b/drivers/pci/iov.c
-> @@ -49,8 +49,8 @@ EXPORT_SYMBOL_GPL(pci_iov_vf_id);
+> diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
+> index 1589179d5eb9..4968a17328b3 100644
+> --- a/drivers/i2c/i2c-core-slave.c
+> +++ b/drivers/i2c/i2c-core-slave.c
+> @@ -14,6 +14,9 @@
 >  
+>  #include "i2c-core.h"
+>  
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/i2c_slave.h>
+> +
+>  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
+>  {
+>  	int ret;
+> @@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
+>  }
+>  EXPORT_SYMBOL_GPL(i2c_slave_unregister);
+>  
+> +int i2c_slave_event(struct i2c_client *client,
+> +		    enum i2c_slave_event event, u8 *val)
+> +{
+> +	int ret = client->slave_cb(client, event, val);
+> +
+> +	if (!ret)
+
+You can make the above into:
+
+	if (trace_i2c_slave_enabled() && !ret)
+
+to make this conditional compare only happen if the tracepoint is enabled.
+As the trace_i2c_slave_enabled() is a static branch (non-conditional jump).
+
+> +		trace_i2c_slave(client, event, val);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(i2c_slave_event);
+> +
 >  /**
->   * pci_iov_get_pf_drvdata - Return the drvdata of a PF
-> - * @dev - VF pci_dev
-> - * @pf_driver - Device driver required to own the PF
-> + * @dev: VF pci_dev
-> + * @pf_driver: Device driver required to own the PF
->   *
->   * This must be called from a context that ensures that a VF driver is attached.
->   * The value returned is invalid once the VF driver completes its remove()
+>   * i2c_detect_slave_mode - detect operation mode
+>   * @dev: The device owning the bus
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 7d4f52ceb7b5..fbda5ada2afc 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -392,12 +392,8 @@ enum i2c_slave_event {
+>  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
+>  int i2c_slave_unregister(struct i2c_client *client);
+>  bool i2c_detect_slave_mode(struct device *dev);
+> -
+> -static inline int i2c_slave_event(struct i2c_client *client,
+> -				  enum i2c_slave_event event, u8 *val)
+> -{
+> -	return client->slave_cb(client, event, val);
+> -}
+> +int i2c_slave_event(struct i2c_client *client,
+> +		    enum i2c_slave_event event, u8 *val);
+>  #else
+>  static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
+>  #endif
+> diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
+> new file mode 100644
+> index 000000000000..1f0c1cfbf2ef
+> --- /dev/null
+> +++ b/include/trace/events/i2c_slave.h
+> @@ -0,0 +1,57 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + * I2C slave tracepoints
+> + *
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM i2c_slave
+> +
+> +#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_I2C_SLAVE_H
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/tracepoint.h>
+> +
+> +TRACE_EVENT(i2c_slave,
+> +	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
+> +		 __u8 *val),
+> +	TP_ARGS(client, event, val),
+> +	TP_STRUCT__entry(
+> +		__field(int,				adapter_nr	)
+> +		__field(__u16,				addr		)
+> +		__field(enum i2c_slave_event,		event		)
+> +		__field(__u16,				len		)
 
-Applied to vfio next branch for v5.18 with acks from Randy and Bjorn.
-Thanks,
+I would keep the u16 together:
 
-Alex
+		__field(int,				adapter_nr	)
+		__field(__u16,				addr		)
+		__field(__u16,				len		)
+		__field(enum i2c_slave_event,		event		)
+
+Otherwise you will likely have a hole in the event, which wastes space on
+the ring buffer.
+
+
+> +		__dynamic_array(__u8, buf, 1)				),
+> +
+> +	TP_fast_assign(
+> +		__entry->adapter_nr = client->adapter->nr;
+> +		__entry->addr = client->addr;
+> +		__entry->event = event;
+> +		switch (event) {
+> +		case I2C_SLAVE_READ_REQUESTED:
+> +		case I2C_SLAVE_READ_PROCESSED:
+> +		case I2C_SLAVE_WRITE_RECEIVED:
+> +			__entry->len = 1;
+> +			memcpy(__get_dynamic_array(buf), val, __entry->len);
+
+Why the dynamic event, if it is always the size of 1? Why not make it an
+array. It will save space, as the dynamic meta data has to live on the
+event which is 4 bytes big. Just make it:
+
+		__array(__u8, buf, 1);
+
+It's faster and saves space.
+
+-- Steve
+
+> +			break;
+> +		default:
+> +			__entry->len = 0;
+> +			break;
+> +		}
+> +		),
+> +	TP_printk("i2c-%d a=%03x %s [%*phD]",
+> +		__entry->adapter_nr, __entry->addr,
+> +		__print_symbolic(__entry->event,
+> +				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
+> +				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
+> +				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
+> +				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
+> +				 { I2C_SLAVE_STOP,		"  STOP" }),
+> +		__entry->len, __get_dynamic_array(buf)
+> +		));
+> +
+> +#endif /* _TRACE_I2C_SLAVE_H */
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
 

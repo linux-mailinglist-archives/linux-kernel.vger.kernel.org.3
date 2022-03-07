@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8EF4CFB3C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0794CFA99
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243049AbiCGKd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S241539AbiCGKUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242472AbiCGKLf (ORCPT
+        with ESMTP id S239785AbiCGKAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA5B8A321;
-        Mon,  7 Mar 2022 01:55:14 -0800 (PST)
+        Mon, 7 Mar 2022 05:00:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5757CDCF;
+        Mon,  7 Mar 2022 01:46:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8398960C6C;
-        Mon,  7 Mar 2022 09:55:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DFB4C340E9;
-        Mon,  7 Mar 2022 09:55:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4052460FB3;
+        Mon,  7 Mar 2022 09:46:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E12C340E9;
+        Mon,  7 Mar 2022 09:46:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646912;
-        bh=pQlJEJDvqtDu+suvKnjHMbbeU6Qxo+vHXTUbe6fe3vk=;
+        s=korg; t=1646646381;
+        bh=RfcgCi+OgPHxW8rGPGMHmlN7CGVuKzFFNDwYuTGQzag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PgJB61eUEMo21CZE7+T+kHVzNshrNZ9P9wedvzaaCtiU6hLy93Yqu/Z2wbL83L3ez
-         3i4g7loxxjwac/CRSjkzQVkx0bYHN5N26sLzWgd0pg+QK74+4u4H4uScr/Zk3Hj+jU
-         PE69wu16+cWxXWcEP6Qh6WX9o6aLTi5lHdeKGL7o=
+        b=qTCqYS1l6SnOefVt1dH56bPMXkDYyD/OnpAjND1vqqaZZBK8wYgOKzwTX3fwJOiTa
+         QfYM+tNewIGJSRVRowXlFkyfZ9zXv06VgHFlZssgLS5xBxBuaBxb+OnwP9HeydYOOq
+         Wn4scKOCbce51g/w3Jja40aLUvJp1B7+MhW++RNA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Li Yang <leoyang.li@nxp.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 132/186] soc: fsl: qe: Check of ioremap return value
+        stable@vger.kernel.org,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 226/262] iavf: Add trace while removing device
 Date:   Mon,  7 Mar 2022 10:19:30 +0100
-Message-Id: <20220307091657.769905852@linuxfoundation.org>
+Message-Id: <20220307091709.525351216@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
 
-[ Upstream commit a222fd8541394b36b13c89d1698d9530afd59a9c ]
+[ Upstream commit bdb9e5c7aec73a7b8b5acab37587b6de1203e68d ]
 
-As the possible failure of the ioremap(), the par_io could be NULL.
-Therefore it should be better to check it and return error in order to
-guarantee the success of the initiation.
-But, I also notice that all the caller like mpc85xx_qe_par_io_init() in
-`arch/powerpc/platforms/85xx/common.c` don't check the return value of
-the par_io_init().
-Actually, par_io_init() needs to check to handle the potential error.
-I will submit another patch to fix that.
-Anyway, par_io_init() itsely should be fixed.
+Add kernel trace that device was removed.
+Currently there is no such information.
+I.e. Host admin removes a PCI device from a VM,
+than on VM shall be info about the event.
 
-Fixes: 7aa1aa6ecec2 ("QE: Move QE from arch/powerpc to drivers/soc")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
+This patch adds info log to iavf_remove function.
+
+Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/fsl/qe/qe_io.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/fsl/qe/qe_io.c b/drivers/soc/fsl/qe/qe_io.c
-index e277c827bdf3..a5e2d0e5ab51 100644
---- a/drivers/soc/fsl/qe/qe_io.c
-+++ b/drivers/soc/fsl/qe/qe_io.c
-@@ -35,6 +35,8 @@ int par_io_init(struct device_node *np)
- 	if (ret)
- 		return ret;
- 	par_io = ioremap(res.start, resource_size(&res));
-+	if (!par_io)
-+		return -ENOMEM;
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 7bc8b646e37c..75fab4ea42b6 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -3985,6 +3985,7 @@ static void iavf_remove(struct pci_dev *pdev)
+ 	if (iavf_lock_timeout(&adapter->crit_lock, 5000))
+ 		dev_warn(&adapter->pdev->dev, "failed to acquire crit_lock in %s\n", __FUNCTION__);
  
- 	if (!of_property_read_u32(np, "num-ports", &num_ports))
- 		num_par_io_ports = num_ports;
++	dev_info(&adapter->pdev->dev, "Removing device\n");
+ 	/* Shut down all the garbage mashers on the detention level */
+ 	iavf_change_state(adapter, __IAVF_REMOVE);
+ 	adapter->aq_required = 0;
 -- 
 2.34.1
 

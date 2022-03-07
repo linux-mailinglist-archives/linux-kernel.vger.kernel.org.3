@@ -2,131 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8DC4CFFD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAD74CFFD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242803AbiCGNTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
+        id S239114AbiCGNUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:20:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242797AbiCGNTG (ORCPT
+        with ESMTP id S234668AbiCGNU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:19:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BE027B13
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 05:18:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C80661202
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 13:18:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA8EC36AEC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 13:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646659088;
-        bh=0x9avxE1QuPb1xRSPHVfHgo20smbkC0ezQPHmsX583Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fdfnW2FlS2s/NtI9OIEPoL3friIZhn4gB+q9ykNTwU5vvuw+nEflebKpQ3V3Pf4Lq
-         z1BWhCICYLQtHghvBBeeuVJezZ3Hf6PZ3w+svus4UbBeUsvAyA0WgXS5q6PEXrcohQ
-         U23e8nTBn7HGvs9ksItlQIjmC62kxSbWB5GB4c5VWjL7CJVUNiioReQrUB0b+B0izG
-         3192CzMmcsmDuN9waHQVmNKjgENwZ5u7B40kB4aazoknGByseLS7kWkeZnji6uljzW
-         qp6gKFVNXu3ojloMsNRa7sUIp/hh1PyEtMUFyfS2vflRdTLJz7zczBt/r6E6axLPhR
-         2anp04mEGAqyA==
-Received: by mail-ej1-f53.google.com with SMTP id kt27so31982180ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 05:18:08 -0800 (PST)
-X-Gm-Message-State: AOAM5332dFgoGB3DE2xz3JMlpRbd1i3urPLP7IHoPZMs/wg5jBUdVHDz
-        BbGy+XGGkY0cydHaAWnoAQSXEDbq+/sxwuYKGa64Mg==
-X-Google-Smtp-Source: ABdhPJxvgCXjgHPF1PjOKJm57sEpqWrgNtbAss/mIVzf2hdDQwOt3w5GqYZan1KufyCv5U1e45adv0v2fXT5T3kQmJk=
-X-Received: by 2002:a17:906:a1c8:b0:6da:a635:e402 with SMTP id
- bx8-20020a170906a1c800b006daa635e402mr9441257ejb.598.1646659086280; Mon, 07
- Mar 2022 05:18:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
- <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
- <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
- <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
- <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
- <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
- <b6bf8463c1b370a5b5c9987ae1312fd930d36785.camel@linux.ibm.com>
- <CAADnVQKfh3Z1DXJ3PEjFheQWEDFOKQjuyx+pkvqe6MXEmo7YHQ@mail.gmail.com> <40db9f74fd3c9c7b660e3a203c5a6eda08736d5b.camel@linux.ibm.com>
-In-Reply-To: <40db9f74fd3c9c7b660e3a203c5a6eda08736d5b.camel@linux.ibm.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 7 Mar 2022 14:17:55 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ65D2OZKrEbrCS32+FsQ3BVzs1zQcRQSLnaNQHYTjZFBA@mail.gmail.com>
-Message-ID: <CACYkzJ65D2OZKrEbrCS32+FsQ3BVzs1zQcRQSLnaNQHYTjZFBA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Florent Revest <revest@google.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 08:20:29 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9625F75223
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 05:19:35 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id g19so2195413pfc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 05:19:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id;
+        bh=8UIXOdI0t1TiJ+FRLj3UKI2HFoPWogUwUu2GB97fws0=;
+        b=aFXQLGZNm6HlTM+8vb5jBpBwR6GcUgZ+vJeu6kLxjsPs4qpHX63yj5GjD7LIv+R0qG
+         uW0/fL50y3txM8TmbA+ZeFDXGIwErtwvN+cksdP91/UNNNL8nnfMlNWMM+xMKJot988o
+         FCNj/CFn2yPPNnTAmUEmNjayZTw8UHpvKiLp9kqXlLOwmJBU1aIqd3sXdxKGPLu56/85
+         XZMh0ztdYKajUKKqNMaUCjrqzpZ5Jd7hH5ZrmkrDm6eMZxAciarclpNiwIiMPuA/a4C+
+         m01AWr7JiT9EH/Lu/XqMPX6IH6dVMj6+VCCWXrUhuXDnD0HZ0VdfgxDJdNAJ74Caj/Gc
+         ZZGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=8UIXOdI0t1TiJ+FRLj3UKI2HFoPWogUwUu2GB97fws0=;
+        b=dZXA2WKKc1xy9kmlXWpZ0/5NMP3IiFtHBwzX6eRDrsYOBNppClSAXMdtdFFugAhTQg
+         6T1w7OqWYwquK+GcEsfMffoAXtRt3eFYi1ukeShVgKSZmwWSFrcOyFicx/OvNrFdpqJb
+         Ad2eF4j7TRQJNe0htsDtkahmO0uQIxXZQ1F9bY5l3viZkMJEGdVnm8507AXpV4y/j2Bq
+         Ow+utvprCj26xNSj1q0v0WdUnO4CV9Q8/ilCTy1iEq95b9SgVw3BZVva0jVXM15C//e1
+         YP/xGufgm5cqSYsaiBbX56fp+/hKHZxG0jaCs7kkYEH3ZV/RS7BKwkm7msRkihsa7Nxn
+         bOow==
+X-Gm-Message-State: AOAM5303kRs9WTBwtnaiN0FAH9qLw07Y9VQsBQr+FBUL5zotNMuNDbw+
+        1vjKm4N0y68uQ4szNRpgnAM=
+X-Google-Smtp-Source: ABdhPJw2cXIDr0JRcIC/XnOnRqQeuQAShi8lvv7wag+5HYdHbVOXvTbaf3SR8QpJ/e9XmNztZflyDw==
+X-Received: by 2002:a62:8f83:0:b0:4f1:68e4:c561 with SMTP id n125-20020a628f83000000b004f168e4c561mr12760779pfd.67.1646659175160;
+        Mon, 07 Mar 2022 05:19:35 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id m8-20020a17090a158800b001bf2cec0377sm11040696pja.3.2022.03.07.05.19.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 05:19:34 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Shunli Wang <shunli.wang@mediatek.com>,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: mediatek: Fix error handling in mt8183_da7219_max98357_dev_probe
+Date:   Mon,  7 Mar 2022 13:19:21 +0000
+Message-Id: <20220307131924.9905-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 3:57 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Thu, 2022-03-03 at 14:39 -0800, Alexei Starovoitov wrote:
->
-> > . There is no such thing as "eBPF modules". There are BPF programs.
-> > They cannot be signed the same way as kernel modules.
-> > We've been working on providing a way to sign them for more
-> > than a year now. That work is still ongoing.
-> >
-> > . IMA cannot be used for integrity check of BPF programs for the same
-> > reasons why kernel module like signing cannot be used.
->
-> I assume the issue isn't where the signature is stored (e.g. appended,
-> xattr), but of calculating the hash.  Where is the discussion taking
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-This has the relevant background: https://lwn.net/Articles/853489/
+This function only calls of_node_put() in the regular path.
+And it will cause refcount leak in error paths.
+Fix this by calling of_node_put() in error handling too.
 
-We had some more discussions in one of our BSC meeting:
+Fixes: ebbddc75bbe8 ("ASoC: Mediatek: MT8183: Add machine driver with DA7219")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ .../mediatek/mt8183/mt8183-da7219-max98357.c  | 23 +++++++++++++------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
-https://github.com/ebpf-io/bsc/blob/master/minutes.md
+diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
+index 718505c75418..f090dee0c7a4 100644
+--- a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
++++ b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
+@@ -695,8 +695,11 @@ static int mt8183_da7219_max98357_dev_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
+-	if (!card)
+-		return -EINVAL;
++	if (!card) {
++		ret = -EINVAL;
++		goto put_platform_node;
++	}
++
+ 	card->dev = &pdev->dev;
+ 
+ 	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
+@@ -761,12 +764,15 @@ static int mt8183_da7219_max98357_dev_probe(struct platform_device *pdev)
+ 	if (!mt8183_da7219_max98357_headset_dev.dlc.of_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'mediatek,headset-codec' missing/invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_hdmi_codec;
+ 	}
+ 
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+-	if (!priv)
+-		return -ENOMEM;
++	if (!priv) {
++		ret = -ENOMEM;
++		goto put_hdmi_codec;
++	}
+ 
+ 	snd_soc_card_set_drvdata(card, priv);
+ 
+@@ -775,13 +781,16 @@ static int mt8183_da7219_max98357_dev_probe(struct platform_device *pdev)
+ 		ret = PTR_ERR(pinctrl);
+ 		dev_err(&pdev->dev, "%s failed to select default state %d\n",
+ 			__func__, ret);
+-		return ret;
++		goto put_hdmi_codec;
+ 	}
+ 
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 
+-	of_node_put(platform_node);
++
++put_hdmi_codec:
+ 	of_node_put(hdmi_codec);
++put_platform_node:
++	of_node_put(platform_node);
+ 	return ret;
+ }
+ 
+-- 
+2.17.1
 
-and we expect the discussions to continue over conferences this year
- (e.g. LSF/MM/BPF, Linux Plumbers). As I mentioned on another thread
-we don't have to wait for conferences and we can discuss this in the BPF
-office hours. Please feel free to add an agenda at:
-
-https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU/edit#gid=0
-
-(best is to give some notice so that interested folks can join).
-
-> place?   Are there any summaries of what has been discussed?
->
-> FYI, IMA isn't limited to measuring files.  Support was added for
-> buffer measurements (e.g kexec boot command line, certificates) and
-> measuring kernel critical data (e.g. SELinux in memory policy & state,
-> device mapper).
-
-Nice. I need to look at how this is implemented.
-
-- KP
-
->
-> thanks,
->
-> Mimi
->

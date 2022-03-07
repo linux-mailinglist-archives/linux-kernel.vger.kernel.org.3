@@ -2,142 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDE84D06F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7544D06FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244859AbiCGSyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:54:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S244870AbiCGSya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240811AbiCGSyW (ORCPT
+        with ESMTP id S244863AbiCGSy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:54:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08D0F6A05E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:53:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646679207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TP3Z04R2ENiiCiT1sP6xPbXB81WvAx5IRO6MwOlOi5Y=;
-        b=aOxrk4AuBRM4HMKtgEBENadp9WPPKsJezDI9rSEOb5f+Kl5YvSL47+zAWoz5a5MeIhUsN/
-        5I6yF/47nzkFx8ex+7Z5v1xMVX+dSt6TkZX/p4XR+yi3WNtcvaGDF3+UMVQSa08ENTLB7a
-        U0ozxQfFIHisScPJue8S0+5bM2ua6/g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-132-p9U_p9tIO_O6KctzzHFnpA-1; Mon, 07 Mar 2022 13:53:22 -0500
-X-MC-Unique: p9U_p9tIO_O6KctzzHFnpA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 548001091DA0;
-        Mon,  7 Mar 2022 18:53:20 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1184292307;
-        Mon,  7 Mar 2022 18:53:05 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 305A4416CE5D; Mon,  7 Mar 2022 15:52:43 -0300 (-03)
-Date:   Mon, 7 Mar 2022 15:52:43 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [patch v4] mm: lru_cache_disable: replace work queue
- synchronization with synchronize_rcu
-Message-ID: <YiZUewMgjIt1as25@fuller.cnet>
-References: <YhUI1wUtV8yguijO@fuller.cnet>
- <YhUKRzEKxMvlGQ5n@fuller.cnet>
- <YiI+a9gTr/UBCf0X@fuller.cnet>
- <20220304163554.8872fe5d5a9d634f7a2884f5@linux-foundation.org>
+        Mon, 7 Mar 2022 13:54:27 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902B36FA19;
+        Mon,  7 Mar 2022 10:53:31 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id u3so5366666ljd.0;
+        Mon, 07 Mar 2022 10:53:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tG48zlfsIlWWdNAN2VROyEUyP9nwE+RyuWnK+Wi+nbE=;
+        b=hSW9HPyRvQxcoxlM6Ti3yu+7lcVrC32NoquHW9HJano7RmoAh3txW5r8Fwrx9c4bh5
+         vN82VNNNUsiCn/FMhn4Cas5VQ/wMHbkzyL+uPGM6xoknI6Urjj/qXDOSNQ08eEA+s8yP
+         qI3HT5EqYpwM2ybKgn2ErYkeu+/5oAtf0z18ODuPya4NQR1LDpV7W7Hho069moOrw/m2
+         R9DgGMFn1Uu5aPWWHNDBxY+sIqSf9Wi5yjqVX+Ylcpr5iVyT7ejP9HKGGDMOXRgOBBDA
+         sQjCNkb2NfJBLbdbBprhLKJ67QRdZDzU8kbvyF1b4vqt2zq8yXmdYjz9q1i3t6Cn2BW0
+         M61g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tG48zlfsIlWWdNAN2VROyEUyP9nwE+RyuWnK+Wi+nbE=;
+        b=s0cx8JeZ/HRHgcDDNC9Ff0BVPy65agAeyJQIDvPoJCPAQSsU7kOTAvDvYBpvFGvFIA
+         HSiikbI3o5dYIJE+zzGOLwRY50oX7jAMtpIvHrPPJqtutfGGNC4Dj7p9qEcIfUkKEAud
+         sSgoioYG/3J3jhaEMSBRGYMHJiZA5TCm1gWqKlBbvZp/plZFbhIo/lqqsPYy6vYBoKUw
+         Cs5fsTcZJyOksjLCv5nhJ1wjf2LFdTFluWpPx6MEWITZ/9S4ik+dfGrv6yxuIRK4njiM
+         DLiiAKgZmEtNMYphzngElt/+4pNvFZ/2yAcGRVSTdq9fCwtb2AP3UvKEH0crkGZ8/6UW
+         mxqw==
+X-Gm-Message-State: AOAM533Rt0nBeUGCZXGhBOUTkdNeYlEn2rto2hoQqm8TNscXc6Ux5xui
+        noiFJBIcIMKi6J8wDO0LNuU=
+X-Google-Smtp-Source: ABdhPJy7vgdlX6mMw01hF7mdZkBKOrFSYrPSdFFrKw04H+LG1RKRKNnP+OzMN3TnJHikOATsjltdww==
+X-Received: by 2002:a2e:bc0c:0:b0:247:ee54:3a84 with SMTP id b12-20020a2ebc0c000000b00247ee543a84mr159091ljf.286.1646679209014;
+        Mon, 07 Mar 2022 10:53:29 -0800 (PST)
+Received: from localhost.localdomain ([94.103.229.107])
+        by smtp.gmail.com with ESMTPSA id o11-20020ac2434b000000b004478421baaesm2517827lfl.6.2022.03.07.10.53.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 10:53:28 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     yashi@spacecubics.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, kuba@kernel.org, mailhol.vincent@wanadoo.fr
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+Subject: [PATCH RFT] can: mcba_usb: properly check endpoint type
+Date:   Mon,  7 Mar 2022 21:53:14 +0300
+Message-Id: <20220307185314.11228-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304163554.8872fe5d5a9d634f7a2884f5@linux-foundation.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 04:35:54PM -0800, Andrew Morton wrote:
-> On Fri, 4 Mar 2022 13:29:31 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> 
-> >  
-> > On systems that run FIFO:1 applications that busy loop 
-> > on isolated CPUs, executing tasks on such CPUs under
-> > lower priority is undesired (since that will either
-> > hang the system, or cause longer interruption to the
-> > FIFO task due to execution of lower priority task 
-> > with very small sched slices).
-> > 
-> > Commit d479960e44f27e0e52ba31b21740b703c538027c ("mm: disable LRU 
-> > pagevec during the migration temporarily") relies on 
-> > queueing work items on all online CPUs to ensure visibility
-> > of lru_disable_count.
-> > 
-> > However, its possible to use synchronize_rcu which will provide the same
-> > guarantees (see comment this patch modifies on lru_cache_disable).
-> > 
-> > Fixes:
-> > 
-> > ...
-> >
-> > --- a/mm/swap.c
-> > +++ b/mm/swap.c
-> > @@ -831,8 +831,7 @@ inline void __lru_add_drain_all(bool force_all_cpus)
-> >  	for_each_online_cpu(cpu) {
-> >  		struct work_struct *work = &per_cpu(lru_add_drain_work, cpu);
-> >  
-> > -		if (force_all_cpus ||
-> > -		    pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
-> > +		if (pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
-> 
-> Please changelog this alteration?
+Syzbot reported warning in usb_submit_urb() which is caused by wrong
+endpoint type. We should check that in endpoint is actually present to
+prevent this warning
 
-It should be now. Are you OK with this changelog ?
-(if not, please let me know what should be improved).
+Fail log:
 
-On systems that run FIFO:1 applications that busy loop,
-any SCHED_OTHER task that attempts to execute
-on such a CPU (such as work threads) will not
-be scheduled, which leads to system hangs.
-
-Commit d479960e44f27e0e52ba31b21740b703c538027c ("mm: disable LRU
-pagevec during the migration temporarily") relies on
-queueing work items on all online CPUs to ensure visibility
-of lru_disable_count.
-
-To fix this, replace the usage of work items with synchronize_rcu,
-which provides the same guarantees:
-
-Readers of lru_disable_count are protected by either disabling
-preemption or rcu_read_lock:
-
-preempt_disable, local_irq_disable  [bh_lru_lock()]
-rcu_read_lock                       [rt_spin_lock CONFIG_PREEMPT_RT]
-preempt_disable                     [local_lock !CONFIG_PREEMPT_RT]
-
-Since v5.1 kernel, synchronize_rcu() is guaranteed to wait on
-preempt_disable() regions of code. So any CPU which sees
-lru_disable_count = 0 will have exited the critical
-section when synchronize_rcu() returns.
-
-Fixes:
+usb 5-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 1 PID: 49 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+Modules linked in:
+CPU: 1 PID: 49 Comm: kworker/1:2 Not tainted 5.17.0-rc6-syzkaller-00184-g38f80f42147f #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
 ...
+Call Trace:
+ <TASK>
+ mcba_usb_start drivers/net/can/usb/mcba_usb.c:662 [inline]
+ mcba_usb_probe+0x8a3/0xc50 drivers/net/can/usb/mcba_usb.c:858
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:517 [inline]
 
-Thanks.
+Reported-and-tested-by: syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+
+Meta comments:
+
+I am not an usb expert, but looks like this driver uses one
+endpoint for in and out transactions:
+
+/* MCBA endpoint numbers */
+#define MCBA_USB_EP_IN 1
+#define MCBA_USB_EP_OUT 1
+
+That's why check only for in endpoint is added
+
+---
+ drivers/net/can/usb/mcba_usb.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+index 77bddff86252..646aac1a8684 100644
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -807,6 +807,13 @@ static int mcba_usb_probe(struct usb_interface *intf,
+ 	struct mcba_priv *priv;
+ 	int err;
+ 	struct usb_device *usbdev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *in;
++
++	err = usb_find_common_endpoints(intf->cur_altsetting, &in, NULL, NULL, NULL);
++	if (err) {
++		dev_err(&intf->dev, "Can't find endpoints\n");
++		return -ENODEV;
++	}
+ 
+ 	netdev = alloc_candev(sizeof(struct mcba_priv), MCBA_MAX_TX_URBS);
+ 	if (!netdev) {
+-- 
+2.35.1
 

@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775FB4D03E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D624D03DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244092AbiCGQSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:18:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S240647AbiCGQSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:18:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244075AbiCGQSf (ORCPT
+        with ESMTP id S244125AbiCGQSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:18:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF5465C2;
-        Mon,  7 Mar 2022 08:17:41 -0800 (PST)
+        Mon, 7 Mar 2022 11:18:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC8248E53;
+        Mon,  7 Mar 2022 08:17:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9A260C53;
-        Mon,  7 Mar 2022 16:17:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD9DDC340E9;
-        Mon,  7 Mar 2022 16:17:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646669860;
-        bh=Ow0qlJFv8Ai59R6SHq7SYcAd/WZ7HKl8y68xRyfOxi4=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4267860C3E;
+        Mon,  7 Mar 2022 16:17:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 199FBC340EB;
+        Mon,  7 Mar 2022 16:17:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646669826;
+        bh=g7AkI7UmXjqtWe/0nY3r8R1FTcT6BYIuEgvHT7ed2UA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WuKoSqjhMqktUxl46K8ouMyuOIiXymZ2HjoZbPuOghcZie5K3+EVDsY3WOmi5DFQJ
-         2kSKhUsaVelRDLZRnVg7WF8c7nHebO9+ZThCKAFWorgAPUiIfF+CD1demP0pR7ti+y
-         xFP3jtJL4kaufTDt12aTMdlYxuA9SF6bXNpbLwXWk7tjSgi0nMa1P/DK7bCQB851ZU
-         Cc4AXxEmFN3o8UA9q/HKTJB5MchFo4iRbXEejhaBFq/7xrOBnpzaKT/lDUok9xsbZ7
-         5g87SlzJkSDEAAzbYvFHH2kRCUT8iHg3tOCV/Pqb1FCFcV66hPW9+/fhGou/9nudSR
-         W9dA2Vo/K9FFA==
-Date:   Mon, 7 Mar 2022 18:16:59 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 19/32] x86/sgx: Support adding of pages to an
- initialized enclave
-Message-ID: <YiYv+2YRiavU3KBN@iki.fi>
-References: <cover.1644274683.git.reinette.chatre@intel.com>
- <fcbde9c3e67289eaff9cd8b34989919629fe823c.1644274683.git.reinette.chatre@intel.com>
+        b=jS6bdkyhDdnlOXciwJ71UjeRz7uCXsBTwcyBL4m2+vLZ4ALa4/pak7K4FPM7Wq219
+         lKJ1PnYnJxd53MhCWcP+teEm8/DLCWSx7H1oI0yMOWDo62iVT81CcVJ1EaU8c6aPI2
+         VPUBC8hpzXR4POlmZbTWFnkFWCGWBcJIAsDqhphs=
+Date:   Mon, 7 Mar 2022 17:17:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Netdev <netdev@vger.kernel.org>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Hou Tao <houtao1@huawei.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>
+Subject: Re: [PATCH 5.15 000/262] 5.15.27-rc1 review
+Message-ID: <YiYv/4EIrx4AV6wi@kroah.com>
+References: <20220307091702.378509770@linuxfoundation.org>
+ <CA+G9fYtXE1TvxtXZPw++ZkGAUZ4f1rD1tBkMsDb33jsm-C1OZw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fcbde9c3e67289eaff9cd8b34989919629fe823c.1644274683.git.reinette.chatre@intel.com>
+In-Reply-To: <CA+G9fYtXE1TvxtXZPw++ZkGAUZ4f1rD1tBkMsDb33jsm-C1OZw@mail.gmail.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,28 +66,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 04:45:41PM -0800, Reinette Chatre wrote:
-> +	encl_page = kzalloc(sizeof(*encl_page), GFP_KERNEL);
-> +	if (!encl_page)
-> +		return VM_FAULT_OOM;
-> +
-> +	encl_page->desc = addr;
-> +	encl_page->encl = encl;
-> +
-> +	/*
-> +	 * Adding a regular page that is architecturally allowed to only
-> +	 * be created with RW permissions.
-> +	 * TBD: Interface with user space policy to support max permissions
-> +	 * of RWX.
-> +	 */
-> +	prot = PROT_READ | PROT_WRITE;
-> +	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
-> +	encl_page->vm_max_prot_bits = encl_page->vm_run_prot_bits;
+On Mon, Mar 07, 2022 at 06:30:18PM +0530, Naresh Kamboju wrote:
+> drivers/gpu/drm/mediatek/mtk_dsi.c: In function 'mtk_dsi_host_attach':
+> drivers/gpu/drm/mediatek/mtk_dsi.c:858:28: error: implicit declaration
+> of function 'devm_drm_of_get_bridge'; did you mean
+> 'devm_drm_panel_bridge_add'? [-Werror=implicit-function-declaration]
+>   858 |         dsi->next_bridge = devm_drm_of_get_bridge(dev,
+> dev->of_node, 0, 0);
+>       |                            ^~~~~~~~~~~~~~~~~~~~~~
+>       |                            devm_drm_panel_bridge_add
+> drivers/gpu/drm/mediatek/mtk_dsi.c:858:26: warning: assignment to
+> 'struct drm_bridge *' from 'int' makes pointer from integer without a
+> cast [-Wint-conversion]
+>   858 |         dsi->next_bridge = devm_drm_of_get_bridge(dev,
+> dev->of_node, 0, 0);
+>       |                          ^
+> cc1: some warnings being treated as errors
 
-You should use sgx_encl_page_alloc() here and not reinvent wheel.
+Offending commit now dropped, thanks.
 
-I wrote a patch that exports it:
 
-https://lore.kernel.org/linux-sgx/20220306053211.135762-3-jarkko@kernel.org/T/#u
-
-BR, Jarkko
+greg k-h

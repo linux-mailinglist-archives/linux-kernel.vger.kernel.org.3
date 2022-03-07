@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8EE4CF767
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE094CF4A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237933AbiCGJp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
+        id S236440AbiCGJUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237593AbiCGJgU (ORCPT
+        with ESMTP id S236412AbiCGJU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:36:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ACF66FAA;
-        Mon,  7 Mar 2022 01:31:25 -0800 (PST)
+        Mon, 7 Mar 2022 04:20:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1353C51312;
+        Mon,  7 Mar 2022 01:19:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54592611AE;
-        Mon,  7 Mar 2022 09:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571F7C340E9;
-        Mon,  7 Mar 2022 09:31:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A418AB810BF;
+        Mon,  7 Mar 2022 09:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0127C340E9;
+        Mon,  7 Mar 2022 09:19:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645467;
-        bh=21YY4NxrrfmPda0r7VTfoipztWCNAl+87mork/YF//A=;
+        s=korg; t=1646644771;
+        bh=EKlNeRm8n7rn3wTopxpaOhV7jlkMIUFOoC8L4W+BktQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hi/jOk6zozW9k1ii7PU9/WZmnZc5OkueblWEubXW4bF0tEwmD/2Vp9P9uH8jpEoDe
-         h3TzCKkVJFDH+c08pzYCFXkRa1/vlw4ew6cNPB/EclHa7iy93glrtitkjwlmyhpyNO
-         szZ9hUt7w4GQg39kds8qQUDxa6jm2m3ATHtYRxnE=
+        b=W+ESyYl8IP5PEchnMX9IXKmj265jbseNAoDAhwCJDb2uLKm/5fn6ahA93tt35V8T5
+         Bc59CLQjXd1J1rbpZVeP2fOq4yp1q6tymV39jhnDCeib2xvvocNtvVG3eyBbxdqKzY
+         VVSWuQb2uXnNXcsAwca1zjhycH/bqkDWcZ6Eye1A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 5.10 040/105] xfrm: enforce validity of offload input flags
+        stable@vger.kernel.org, Qiushi Wu <wu000273@umn.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4.9 17/32] firmware: Fix a reference count leak.
 Date:   Mon,  7 Mar 2022 10:18:43 +0100
-Message-Id: <20220307091645.315094498@linuxfoundation.org>
+Message-Id: <20220307091634.929397930@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
+References: <20220307091634.434478485@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Qiushi Wu <wu000273@umn.edu>
 
-commit 7c76ecd9c99b6e9a771d813ab1aa7fa428b3ade1 upstream.
+commit fe3c60684377d5ad9b0569b87ed3e26e12c8173b upstream.
 
-struct xfrm_user_offload has flags variable that received user input,
-but kernel didn't check if valid bits were provided. It caused a situation
-where not sanitized input was forwarded directly to the drivers.
+kobject_init_and_add() takes reference even when it fails.
+If this function returns an error, kobject_put() must be called to
+properly clean up the memory associated with the object.
+Callback function fw_cfg_sysfs_release_entry() in kobject_put()
+can handle the pointer "entry" properly.
 
-For example, XFRM_OFFLOAD_IPV6 define that was exposed, was used by
-strongswan, but not implemented in the kernel at all.
-
-As a solution, check and sanitize input flags to forward
-XFRM_OFFLOAD_INBOUND to the drivers.
-
-Fixes: d77e38e612a0 ("xfrm: Add an IPsec hardware offloading API")
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Qiushi Wu <wu000273@umn.edu>
+Link: https://lore.kernel.org/r/20200613190533.15712-1-wu000273@umn.edu
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/xfrm.h |    6 ++++++
- net/xfrm/xfrm_device.c    |    6 +++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ drivers/firmware/qemu_fw_cfg.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/include/uapi/linux/xfrm.h
-+++ b/include/uapi/linux/xfrm.h
-@@ -506,6 +506,12 @@ struct xfrm_user_offload {
- 	int				ifindex;
- 	__u8				flags;
- };
-+/* This flag was exposed without any kernel code that supporting it.
-+ * Unfortunately, strongswan has the code that uses sets this flag,
-+ * which makes impossible to reuse this bit.
-+ *
-+ * So leave it here to make sure that it won't be reused by mistake.
-+ */
- #define XFRM_OFFLOAD_IPV6	1
- #define XFRM_OFFLOAD_INBOUND	2
+--- a/drivers/firmware/qemu_fw_cfg.c
++++ b/drivers/firmware/qemu_fw_cfg.c
+@@ -461,8 +461,10 @@ static int fw_cfg_register_file(const st
+ 	/* register entry under "/sys/firmware/qemu_fw_cfg/by_key/" */
+ 	err = kobject_init_and_add(&entry->kobj, &fw_cfg_sysfs_entry_ktype,
+ 				   fw_cfg_sel_ko, "%d", entry->f.select);
+-	if (err)
+-		goto err_register;
++	if (err) {
++		kobject_put(&entry->kobj);
++		return err;
++	}
  
---- a/net/xfrm/xfrm_device.c
-+++ b/net/xfrm/xfrm_device.c
-@@ -223,6 +223,9 @@ int xfrm_dev_state_add(struct net *net,
- 	if (x->encap || x->tfcpad)
- 		return -EINVAL;
+ 	/* add raw binary content access */
+ 	err = sysfs_create_bin_file(&entry->kobj, &fw_cfg_sysfs_attr_raw);
+@@ -478,7 +480,6 @@ static int fw_cfg_register_file(const st
  
-+	if (xuo->flags & ~(XFRM_OFFLOAD_IPV6 | XFRM_OFFLOAD_INBOUND))
-+		return -EINVAL;
-+
- 	dev = dev_get_by_index(net, xuo->ifindex);
- 	if (!dev) {
- 		if (!(xuo->flags & XFRM_OFFLOAD_INBOUND)) {
-@@ -261,7 +264,8 @@ int xfrm_dev_state_add(struct net *net,
- 	xso->dev = dev;
- 	xso->real_dev = dev;
- 	xso->num_exthdrs = 1;
--	xso->flags = xuo->flags;
-+	/* Don't forward bit that is not implemented */
-+	xso->flags = xuo->flags & ~XFRM_OFFLOAD_IPV6;
- 
- 	err = dev->xfrmdev_ops->xdo_dev_state_add(x);
- 	if (err) {
+ err_add_raw:
+ 	kobject_del(&entry->kobj);
+-err_register:
+ 	kfree(entry);
+ 	return err;
+ }
 
 

@@ -2,116 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AB54D0BEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB16B4D0BF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343745AbiCGXUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 18:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S243447AbiCGXWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 18:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbiCGXUH (ORCPT
+        with ESMTP id S234371AbiCGXWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 18:20:07 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6133A2D;
-        Mon,  7 Mar 2022 15:19:11 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCDtH6pLqz4xvZ;
-        Tue,  8 Mar 2022 10:19:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646695148;
-        bh=f6lolPIC5IwKsskdbeaJLI6CQbyWlj670tBD1PrZiFU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rtQsTnf2fM/PW6Yxqdh9+8bGgk+r0/Z7391IQU2irc2Fa2Jiwtndzx1uoOhhDoRqB
-         OY0wy/oCebxT10Wh49bgOfAMeOUg+mFYO6WcSXH5MeZDKqyAEDVjyDFbQ1GwYQ3sKf
-         nzcTKw8YzUetVNmaTGLh8313P1Ny2YBWXLMzZlVbwJFP02dSFrKLIxZ9GA9aHUZXDt
-         uMesZneKQqo0Mha3JoeARnUnHTmeC0TjTeIN9kP1kp7updi5mf9AHWye9Kn/0pMlpL
-         m7GJg6Wi+MbfxPCTrdAG9SoyHlZX4dN94zren4EuywTKQpzmvG4mpwbo/tkfqkydel
-         d1TiTHqym+URQ==
-Date:   Tue, 8 Mar 2022 10:19:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commits in the net-next
- tree
-Message-ID: <20220308101903.68e0ba72@canb.auug.org.au>
-In-Reply-To: <20220307150248.388314c1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220307072248.7435feed@canb.auug.org.au>
-        <20220307150248.388314c1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Mon, 7 Mar 2022 18:22:32 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406656450;
+        Mon,  7 Mar 2022 15:21:37 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso19855970ooi.3;
+        Mon, 07 Mar 2022 15:21:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GwqBsAiwDA57OzBbnIQApP2KsOEcfE99XASAzmUckUs=;
+        b=Wy//6Z68zjnAA5Y71EKIdbLiAgDKvdqMCDXutIY1lpFcaNm0TOAPQRFKyPxAwDZ2BJ
+         TTl/xe9C9IsnAbiNsvr1/H/lZADPtwM34QSBM1TcNifRq2jOnRoRaNrKQdevc9zOI7q8
+         RIosBpDIAHl9HkCH6Z/rjP1+Ts2vJBwxDd0mnlp+JC6eog3WwzgNzn+n5w+FR9kztrsQ
+         HxXLsgguUaMUsqf3ZNGrux+rUPSFQdiTmqATyDjSrJ5tNUiOvikiKcR3VkJpIVJPlOqx
+         UR/haiaEj9UQwpsHpWhYhspYF0y0gUtPGnutWc7Dh49j7nh6sYxV0jTtmQXq/U+44bQW
+         CCQA==
+X-Gm-Message-State: AOAM5321JlyRnwTKn9j6T5UJ5q5itaNPaqpU90ICO9ymDh7GZbH+bFSZ
+        eFkSqgtkM8AWs6bdnRQOtQ==
+X-Google-Smtp-Source: ABdhPJw/AE1EhWJP6qxkDyeRTJYp+la3lVDGzD9DakazOBHyOJ9Qw5nCO7bMG8JD6/2WWxv5bamQjg==
+X-Received: by 2002:a05:6870:d151:b0:da:4cd6:552e with SMTP id f17-20020a056870d15100b000da4cd6552emr788011oac.136.1646695296565;
+        Mon, 07 Mar 2022 15:21:36 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ay44-20020a056808302c00b002d9d2b564absm2177987oib.43.2022.03.07.15.21.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 15:21:35 -0800 (PST)
+Received: (nullmailer pid 3453254 invoked by uid 1000);
+        Mon, 07 Mar 2022 23:21:34 -0000
+Date:   Mon, 7 Mar 2022 17:21:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH RFC v3 1/8] of: Mark interconnects property supplier as
+ optional
+Message-ID: <YiaTfsMDs7RGob2N@robh.at.kernel.org>
+References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
+ <20220302211100.65264-2-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Reui66SgsK_ABwD5cryGsg6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302211100.65264-2-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Reui66SgsK_ABwD5cryGsg6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
++Saravana
 
-Hi Jakub,
-
-On Mon, 7 Mar 2022 15:02:48 -0800 Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon, 7 Mar 2022 07:22:48 +1100 Stephen Rothwell wrote:
-> >=20
-> > Commits
-> >=20
-> >   c2b2a1a77f6b ("Bluetooth: Improve skb handling in mgmt_device_connect=
-ed()")
-> >   ba17bb62ce41 ("Bluetooth: Fix skb allocation in mgmt_remote_name() & =
-mgmt_device_connected()")
-> >   a6fbb2bf51ad ("Bluetooth: mgmt: Remove unneeded variable")
-> >   8cd3c55c629e ("Bluetooth: hci_sync: fix undefined return of hci_disco=
-nnect_all_sync()")
-> >   3a0318140a6f ("Bluetooth: mgmt: Replace zero-length array with flexib=
-le-array member")
-> >=20
-> > are missing a Signed-off-by from their committer. =20
->=20
-> Would it be possible to add bluetooth trees to linux-next?
->=20
-> Marcel, Luiz, Johan, would it help?
-
-I already have
-
-git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git
-branch master
-
-in linux-next.  Those commits appeared in the bluetooth and net-next
-trees on the same day (Monday) for me.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Reui66SgsK_ABwD5cryGsg6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmImkucACgkQAVBC80lX
-0GwWJggApMriWmXL058glg0rQD+d+Cgu/IvprAQpgcdBnaQDZ2xzH4hCZmTiBkj7
-evCJlER5qAgEJXVSvrVB635a/J+TcVEO3/wKugyapSrUlYAOSBgedmne2Iy2kmeI
-jjp1gVVlUs2ji2bEiCPcXH+rT6NKk3yHIUeShe8nTieW+6QLjHPyrSTif4rcz63S
-C5+056XdwAkuWh5BxzIazNA6PLr1MFpCBSXd9hmSD35fUjj7B7XesAErN1jZl9w/
-viq9gbc9qv0MqFDLXezbZ3pW+VE3yFLlFnvBsa6mGDXEWOTSszAtBigLr4St657k
-Avzt67XP/dhaFDVmngoHkV4/2zvW8w==
-=Z3y5
------END PGP SIGNATURE-----
-
---Sig_/Reui66SgsK_ABwD5cryGsg6--
+On Wed, Mar 02, 2022 at 10:10:53PM +0100, Paul Kocialkowski wrote:
+> In order to set their correct DMA address offset, some devices rely on
+> the device-tree interconnects property which identifies an
+> interconnect node that provides a dma-ranges property that can be used
+> to set said offset.
+> 
+> Since that logic is all handled by the generic openfirmware and driver
+> code, the device-tree description could be enough to properly set
+> the offset.
+> 
+> However the interconnects property is currently not marked as
+> optional, which implies that a driver for the corresponding node
+> must be loaded as a requirement. When no such driver exists, this
+> results in an endless EPROBE_DEFER which gets propagated to the
+> calling driver. This ends up in the driver never loading.
+> 
+> Marking the interconnects property as optional makes it possible
+> to load the driver in that situation, since the EPROBE_DEFER return
+> code will no longer be propagated to the driver.
+> 
+> There might however be undesirable consequences with this change,
+> which I do not fully grasp at this point.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  drivers/of/property.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index 8e90071de6ed..ef7c56b510e8 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1365,7 +1365,7 @@ static struct device_node *parse_interrupts(struct device_node *np,
+>  
+>  static const struct supplier_bindings of_supplier_bindings[] = {
+>  	{ .parse_prop = parse_clocks, },
+> -	{ .parse_prop = parse_interconnects, },
+> +	{ .parse_prop = parse_interconnects, .optional = true,},
+>  	{ .parse_prop = parse_iommus, .optional = true, },
+>  	{ .parse_prop = parse_iommu_maps, .optional = true, },
+>  	{ .parse_prop = parse_mboxes, },
+> -- 
+> 2.35.1
+> 
+> 

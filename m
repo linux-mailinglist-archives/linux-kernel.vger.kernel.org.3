@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416084CF9F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8254CFA3C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239638AbiCGKHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S241079AbiCGKJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239309AbiCGJta (ORCPT
+        with ESMTP id S239073AbiCGJtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:49:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC83F2C11D;
-        Mon,  7 Mar 2022 01:42:58 -0800 (PST)
+        Mon, 7 Mar 2022 04:49:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27AABCBE;
+        Mon,  7 Mar 2022 01:42:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D773160C7D;
-        Mon,  7 Mar 2022 09:42:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCF5C340E9;
-        Mon,  7 Mar 2022 09:42:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5ABF61009;
+        Mon,  7 Mar 2022 09:42:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6EB9C340F3;
+        Mon,  7 Mar 2022 09:42:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646168;
-        bh=CwRWz1iT0e8U+3QDeSULEs/jxlFAROz4A7uwq2PHYqA=;
+        s=korg; t=1646646171;
+        bh=K6eS3JaZPT0Wb2NjGA557EzkMGcgAGrutANdqmeykiI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bWfALnZ0rhIik1kIBpAQ0ZCMpol63qZ+Pe37e/YRl3RAJV5kDRRxkGAnnDp1Ya+T5
-         TiuBln/ksIbyqi0rH7vjGI/96J1gAXD3Cg2srpTpPlkUWS9fWOcl68PZOGiakuny8T
-         KxTddlXacK4HEBB5gA0Vk7sKnHPvX+xcSAiJ1Fu8=
+        b=iFmAPxIqA9A1ZoKkoRJmjPHDM17/TliKshHYYHLk4SCQ0qUsq0LE76TQIUCZA4u3W
+         ZiEQUqRwNE+nFEx1MT/t1U6RMQcZDC83oCn178U4ljhTfGA8aandgdZFXtit/P8Qp6
+         SsIth8E2b47fCAE+ePDIanZQcP0bDQqtfbegG314=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 155/262] bpf, sockmap: Do not ignore orig_len parameter
-Date:   Mon,  7 Mar 2022 10:18:19 +0100
-Message-Id: <20220307091706.810903558@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Antony Antony <antony.antony@secunet.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Subject: [PATCH 5.15 156/262] xfrm: fix the if_id check in changelink
+Date:   Mon,  7 Mar 2022 10:18:20 +0100
+Message-Id: <20220307091706.839313588@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
 References: <20220307091702.378509770@linuxfoundation.org>
@@ -58,43 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Antony Antony <antony.antony@secunet.com>
 
-commit 60ce37b03917e593d8e5d8bcc7ec820773daf81d upstream.
+commit 6d0d95a1c2b07270870e7be16575c513c29af3f1 upstream.
 
-Currently, sk_psock_verdict_recv() returns skb->len
+if_id will be always 0, because it was not yet initialized.
 
-This is problematic because tcp_read_sock() might have
-passed orig_len < skb->len, due to the presence of TCP urgent data.
-
-This causes an infinite loop from tcp_read_sock()
-
-Followup patch will make tcp_read_sock() more robust vs bad actors.
-
-Fixes: ef5659280eb1 ("bpf, sockmap: Allow skipping sk_skb parser program")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
-Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/r/20220302161723.3910001-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 8dce43919566 ("xfrm: interface with if_id 0 should return error")
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Antony Antony <antony.antony@secunet.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/skmsg.c |    2 +-
+ net/xfrm/xfrm_interface.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -1153,7 +1153,7 @@ static int sk_psock_verdict_recv(read_de
- 	struct sk_psock *psock;
- 	struct bpf_prog *prog;
- 	int ret = __SK_DROP;
--	int len = skb->len;
-+	int len = orig_len;
+--- a/net/xfrm/xfrm_interface.c
++++ b/net/xfrm/xfrm_interface.c
+@@ -673,12 +673,12 @@ static int xfrmi_changelink(struct net_d
+ 	struct net *net = xi->net;
+ 	struct xfrm_if_parms p = {};
  
- 	/* clone here so sk_eat_skb() in tcp_read_sock does not drop our data */
- 	skb = skb_clone(skb, GFP_ATOMIC);
++	xfrmi_netlink_parms(data, &p);
+ 	if (!p.if_id) {
+ 		NL_SET_ERR_MSG(extack, "if_id must be non zero");
+ 		return -EINVAL;
+ 	}
+ 
+-	xfrmi_netlink_parms(data, &p);
+ 	xi = xfrmi_locate(net, &p);
+ 	if (!xi) {
+ 		xi = netdev_priv(dev);
 
 

@@ -2,273 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559ED4CFD60
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FD74CFD63
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240484AbiCGLuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
+        id S239195AbiCGLuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238906AbiCGLuO (ORCPT
+        with ESMTP id S236012AbiCGLux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 06:50:14 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF74A66630;
-        Mon,  7 Mar 2022 03:49:19 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id l1-20020a05600c4f0100b00389645443d2so6267985wmq.2;
-        Mon, 07 Mar 2022 03:49:19 -0800 (PST)
+        Mon, 7 Mar 2022 06:50:53 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11E566AD4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 03:49:57 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id 25so6391557ljv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 03:49:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ebv4wRovj70KG8uF5gc7UC8c0Xuo000rWiEHlagQEq8=;
-        b=pvyDOySoBXFDOYhct7puGFCOpDvUqtmZOn4/I1xtNdXvorYhegmYmOtDsIG+9sT+xl
-         YOu92CfjrYAT7tAqgHpsrj+q05amk3O27nl+PbTfFhGdH2UPPmCCYYT3oglY1H9H8Tmi
-         c/9UHo0FE53g3MiUW0ZetD7R+de03f9zIiQU7XKCK/qE53iwCtblvOP5cs5qUr042K8X
-         uXxbUBUVxSU9GxE4H6nUHOsBT/j5oWTaRMv5eqEZbhDrX8gx+80KBrKYLw7nqRuqVS7B
-         MpqoqpLwPA7Bo5QprGWarxRvyt9EljVyyu3nt8zI59adNHxUXlJvU76x1Ms2cKnloYr6
-         1MSw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3oNYsvo/F5DGbw8OUwaIiDSPumnbVG2IEq3aeIvy6mQ=;
+        b=q9YyJ+jhCvpuHK0K7JPpF2ke/kCBSFI5muT5vbDOE32JHr8TsYQTl2S1DMiAeB+qfa
+         n6p6OkDZhS7gYcrBsTXclKrTitHbvBOWPjgjs35rMA8S9N77+ePdBO34Tp3BlAtbFSeC
+         5GVf7eS+M/CrXoV5qxm53zW0RxjQ8tI0V1Xh8sv+dmywWKVWHWmA5qh7u4YvweR1yPHF
+         ydDSUGhwe3HLomIY33JF8EWuQuu6gnIwLb5lrvN+bzykYEc0ue7dRv3ubp8p7wsUVSYD
+         AMtfPQvv3rWa6hu1SDByWuvR+HUWp2ZnH4MkjGtSC1I/mVTrekZ08cbiOullyY+2bpEC
+         9RwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ebv4wRovj70KG8uF5gc7UC8c0Xuo000rWiEHlagQEq8=;
-        b=bwz6TMpDWGSarVD2vTsxzgB2w8hsDLPQ509CE0Ud4UF402QvEWpZYDQp+h696R/FJK
-         4kyvCcSq8Mb+tDTADAHNtahvrd5pgfBMyzFyUOi6W4JcBTbNKlkDwdSy+uZYvdcbCb6g
-         tFPw+xWnzAZ7zHAuJVCNo4BtRfXN/OTf4XcUbmZzyX0lsLCYznYTKvVuKV//2NxIG0XG
-         CZ/fa+R7qV05DwcqfgO6b4aqBzLuit+QPM2nBlh4POBnrDX68ESqkqCtbft55+Z7RG21
-         CKEw/PhnNI/ve1kDBg53JJmOEyVd2p44TeVQyy+laXvsEwb+HT8X0MIKH/MUAagvab7h
-         W6TQ==
-X-Gm-Message-State: AOAM533Vd0BfGBUH1SL0c2bhWnji48ZRk5uktInLXrlONO+OW+DGdUmS
-        u0WbjFoxZQO+nwrhuBwURp8=
-X-Google-Smtp-Source: ABdhPJx+GnLHEJJ+FDMRm8MHItvvYqChTZvRoIe5yiJ3MiTULGprMAB1sJJExC2f1Nq96cbHv0nUkQ==
-X-Received: by 2002:a05:600c:4f85:b0:382:e2bf:5fd2 with SMTP id n5-20020a05600c4f8500b00382e2bf5fd2mr8840222wmq.30.1646653758134;
-        Mon, 07 Mar 2022 03:49:18 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id ay24-20020a05600c1e1800b00389a420e1ecsm3742530wmb.37.2022.03.07.03.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 03:49:17 -0800 (PST)
-Date:   Mon, 7 Mar 2022 12:49:14 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Gilad Ben-Yossef <gilad@benyossef.com>, hch@lst.de,
-        m.szyprowski@samsung.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux-foundation.org
-Subject: Re: [BUG] crypto: ccree: driver does not handle case where cryptlen
- = authsize =0
-Message-ID: <YiXxOqfF21q5LAxR@Red>
-References: <YhKV55t90HWm6bhv@Red>
- <CAOtvUMdRU4wnRCXsC+U5XBDp+b+u8w7W7JCUKW2+ohuJz3PVhQ@mail.gmail.com>
- <YhOcEQEjIKBrbMIZ@Red>
- <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
- <CAOtvUMeRb=j=NDrc88x8aB-3=D1mxZ_-aA1d4FfvJmj7Jrbi4w@mail.gmail.com>
- <YiIUXtxd44ut5uzV@Red>
- <YiUsWosH+MKMF7DQ@gondor.apana.org.au>
- <CAOtvUMcudG3ySU+VeE7hfneDVWGLKFTnws-xjhq4hgFYSj0qOg@mail.gmail.com>
- <YiXjCcXXk0f18FDL@Red>
- <aca4117c-b7a5-f7eb-eb03-4e1f1a93a730@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3oNYsvo/F5DGbw8OUwaIiDSPumnbVG2IEq3aeIvy6mQ=;
+        b=ITW+8Jx8S+MzA1Xcxpw9T6jd7LuMeohIwFZCYkw1WYsXOLoZrBSYeJ76E/48h8/is7
+         PACLADGm9L/mTEyIrHzDy/IMGdElvJCDBEwI5q23SLgY7b49Ko4hz0aMlQ1L30RjOPs9
+         NlUFmFuu9YuIaaB/uXyM8kHlDhK0yLaCaa+m6HwMlOi8jmmL/eiZ8uHnu+IDcpHF8020
+         WokidWJQHttQesi9lqdvZllSBxZhqRFkcpeMH1EE5bQrpCPlAVUecGyLhAxsZXhqRere
+         gQmXn00VlnOnmPuHlJvHotjsoxE9LtI8QYciPEjMK0TBCDRH3Sym8udfkRCwROXK1iGS
+         8iVg==
+X-Gm-Message-State: AOAM530jjpr8bbf/w+t8U8NA22Rk1MEEz5+UaQuM1BS5E5R5UPPtyvTA
+        5zGavN6oGgNesE/2XbAlPzUhsM8q76cc0IPsjT6xrw==
+X-Google-Smtp-Source: ABdhPJw4bJq4WfIgUCEtKkQKqNSB/sOky7s1uibTCNu/t+Y6ALSxpyerIB06LbZuJvmINwIq9p7zHptOUtcn3LbcAYk=
+X-Received: by 2002:a2e:8798:0:b0:244:d49b:956a with SMTP id
+ n24-20020a2e8798000000b00244d49b956amr7227130lji.420.1646653796221; Mon, 07
+ Mar 2022 03:49:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aca4117c-b7a5-f7eb-eb03-4e1f1a93a730@arm.com>
+References: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com> <20220304064324.331217-3-hasegawa-hitomi@fujitsu.com>
+In-Reply-To: <20220304064324.331217-3-hasegawa-hitomi@fujitsu.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 7 Mar 2022 17:19:44 +0530
+Message-ID: <CAFA6WYMESyto9bFtk2qNBMi40BkJOoUKpYtAScXjb3yunhHTJA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] soc: fujitsu: Add A64FX diagnostic interrupt driver
+To:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+Cc:     linux-arm-kernel@lists.infradead.org, soc@kernel.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, olof@lixom.net,
+        catalin.marinas@arm.com, will@kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        dianders@chromium.org, linux-kernel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net, peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, Mar 07, 2022 at 11:14:16AM +0000, Robin Murphy a écrit :
-> On 2022-03-07 10:48, Corentin Labbe wrote:
-> > Le Mon, Mar 07, 2022 at 09:59:29AM +0200, Gilad Ben-Yossef a ï¿½crit :
-> >> On Sun, Mar 6, 2022 at 11:49 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> >>>
-> >>> On Fri, Mar 04, 2022 at 02:30:06PM +0100, Corentin Labbe wrote:
-> >>>>
-> >>>> Hello
-> >>>>
-> >>>> I got:
-> >>>> [   17.563793] ------------[ cut here ]------------
-> >>>> [   17.568492] DMA-API: ccree e6601000.crypto: device driver frees DMA memory with different direction [device address=0x0000000078fe5800] [size=8 bytes] [mapped with DMA_TO_DEVICE] [unmapped with DMA_BIDIRECTIONAL]
-> >>>
-> >>> The direction argument during unmap must match whatever direction
-> >>> you used during the original map call.
-> >>
-> >>
-> >> Yes, of course. I changed one but forgot the other.
-> >>
-> >> Corentin, could you be kind and check that this solves the original
-> >> problem and does not produce new warnings?
-> >>
-> >> diff --git a/drivers/crypto/ccree/cc_buffer_mgr.c
-> >> b/drivers/crypto/ccree/cc_buffer_mgr.c
-> >> index 11e0278c8631..31cfe014922e 100644
-> >> --- a/drivers/crypto/ccree/cc_buffer_mgr.c
-> >> +++ b/drivers/crypto/ccree/cc_buffer_mgr.c
-> >> @@ -356,12 +356,14 @@ void cc_unmap_cipher_request(struct device *dev,
-> >> void *ctx,
-> >>                                req_ctx->mlli_params.mlli_dma_addr);
-> >>          }
-> >>
-> >> -       dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_BIDIRECTIONAL);
-> >> -       dev_dbg(dev, "Unmapped req->src=%pK\n", sg_virt(src));
-> >> -
-> >>          if (src != dst) {
-> >> -               dma_unmap_sg(dev, dst, req_ctx->out_nents, DMA_BIDIRECTIONAL);
-> >> +               dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_TO_DEVICE);
-> >> +               dma_unmap_sg(dev, dst, req_ctx->out_nents, DMA_FROM_DEVICE);
-> >>                  dev_dbg(dev, "Unmapped req->dst=%pK\n", sg_virt(dst));
-> >> +               dev_dbg(dev, "Unmapped req->src=%pK\n", sg_virt(src));
-> >> +       } else {
-> >> +               dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_BIDIRECTIONAL);
-> >> +               dev_dbg(dev, "Unmapped req->src=%pK\n", sg_virt(src));
-> >>          }
-> >>   }
-> >>
-> >> @@ -377,6 +379,7 @@ int cc_map_cipher_request(struct cc_drvdata
-> >> *drvdata, void *ctx,
-> >>          u32 dummy = 0;
-> >>          int rc = 0;
-> >>          u32 mapped_nents = 0;
-> >> +       int src_direction = (src != dst ? DMA_TO_DEVICE : DMA_BIDIRECTIONAL);
-> >>
-> >>          req_ctx->dma_buf_type = CC_DMA_BUF_DLLI;
-> >>          mlli_params->curr_pool = NULL;
-> >> @@ -399,7 +402,7 @@ int cc_map_cipher_request(struct cc_drvdata
-> >> *drvdata, void *ctx,
-> >>          }
-> >>
-> >>          /* Map the src SGL */
-> >> -       rc = cc_map_sg(dev, src, nbytes, DMA_BIDIRECTIONAL, &req_ctx->in_nents,
-> >> +       rc = cc_map_sg(dev, src, nbytes, src_direction, &req_ctx->in_nents,
-> >>                         LLI_MAX_NUM_OF_DATA_ENTRIES, &dummy, &mapped_nents);
-> >>          if (rc)
-> >>                  goto cipher_exit;
-> >> @@ -416,7 +419,7 @@ int cc_map_cipher_request(struct cc_drvdata
-> >> *drvdata, void *ctx,
-> >>                  }
-> >>          } else {
-> >>                  /* Map the dst sg */
-> >> -               rc = cc_map_sg(dev, dst, nbytes, DMA_BIDIRECTIONAL,
-> >> +               rc = cc_map_sg(dev, dst, nbytes, DMA_FROM_DEVICE,
-> >>                                 &req_ctx->out_nents, LLI_MAX_NUM_OF_DATA_ENTRIES,
-> >>                                 &dummy, &mapped_nents);
-> >>                  if (rc)
-> >>
-> >>
-> > 
-> > Hello
-> > 
-> > I still get the warning:
-> > [  433.406230] ------------[ cut here ]------------
-> > [  433.406326] DMA-API: ccree e6601000.crypto: cacheline tracking EEXIST, overlapping mappings aren't supported
-> > [  433.406386] WARNING: CPU: 7 PID: 31074 at /home/clabbe/linux-next/kernel/dma/debug.c:571 add_dma_entry+0x1d0/0x288
-> > [  433.406434] Modules linked in:
-> > [  433.406458] CPU: 7 PID: 31074 Comm: kcapi Not tainted 5.17.0-rc6-next-20220303-00130-g30042e47ee47-dirty #54
-> > [  433.406473] Hardware name: Renesas Salvator-X board based on r8a77950 (DT)
-> > [  433.406484] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [  433.406498] pc : add_dma_entry+0x1d0/0x288
-> > [  433.406510] lr : add_dma_entry+0x1d0/0x288
-> > [  433.406522] sp : ffff800015da3690
-> > [  433.406531] x29: ffff800015da3690 x28: 0000000000000000 x27: 0000000000000000
-> > [  433.406562] x26: 0000000000000000 x25: ffff80000b4c7bc0 x24: ffff80000b4c7000
-> > [  433.406593] x23: 0000000000000000 x22: 00000000ffffffef x21: ffff80000a9b6000
-> > [  433.406623] x20: ffff0004c0af5c00 x19: ffff80000b420000 x18: ffffffffffffffff
-> > [  433.406653] x17: 6c7265766f202c54 x16: 534958454520676e x15: 000000000000022e
-> > [  433.406683] x14: ffff800015da3380 x13: 00000000ffffffea x12: ffff80000b4be010
-> > [  433.406713] x11: 0000000000000001 x10: 0000000000000001 x9 : ffff80000b4a6028
-> > [  433.406743] x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : ffff80000b4a5fd0
-> > [  433.406773] x5 : ffff0006ff795c48 x4 : 0000000000000000 x3 : 0000000000000027
-> > [  433.406802] x2 : 0000000000000023 x1 : 8ca4e4fbf4b87900 x0 : 0000000000000000
-> > [  433.406833] Call trace:
-> > [  433.406841]  add_dma_entry+0x1d0/0x288
-> > [  433.406854]  debug_dma_map_sg+0x150/0x398
-> > [  433.406869]  __dma_map_sg_attrs+0x9c/0x108
-> > [  433.406889]  dma_map_sg_attrs+0x10/0x28
-> > [  433.406904]  cc_map_sg+0x80/0x100
-> > [  433.406924]  cc_map_cipher_request+0x178/0x3c8
-> > [  433.406939]  cc_cipher_process+0x210/0xb58
-> > [  433.406953]  cc_cipher_encrypt+0x2c/0x38
-> > [  433.406967]  crypto_skcipher_encrypt+0x44/0x78
-> > [  433.406986]  skcipher_recvmsg+0x36c/0x420
-> > [  433.407003]  ____sys_recvmsg+0x90/0x280
-> > [  433.407024]  ___sys_recvmsg+0x88/0xd0
-> > [  433.407038]  __sys_recvmsg+0x6c/0xd0
-> > [  433.407049]  __arm64_sys_recvmsg+0x24/0x30
-> > [  433.407061]  invoke_syscall+0x44/0x100
-> > [  433.407082]  el0_svc_common.constprop.3+0x90/0x120
-> > [  433.407096]  do_el0_svc+0x24/0x88
-> > [  433.407110]  el0_svc+0x4c/0x100
-> > [  433.407131]  el0t_64_sync_handler+0x90/0xb8
-> > [  433.407145]  el0t_64_sync+0x170/0x174
-> > [  433.407160] irq event stamp: 5624
-> > [  433.407168] hardirqs last  enabled at (5623): [<ffff80000812f6a8>] __up_console_sem+0x60/0x98
-> > [  433.407191] hardirqs last disabled at (5624): [<ffff800009c9a060>] el1_dbg+0x28/0x90
-> > [  433.407208] softirqs last  enabled at (5570): [<ffff8000097e62f8>] lock_sock_nested+0x80/0xa0
-> > [  433.407226] softirqs last disabled at (5568): [<ffff8000097e62d8>] lock_sock_nested+0x60/0xa0
-> > [  433.407241] ---[ end trace 0000000000000000 ]---
-> > [  433.407381] DMA-API: Mapped at:
-> > [  433.407396]  debug_dma_map_sg+0x16c/0x398
-> > [  433.407416]  __dma_map_sg_attrs+0x9c/0x108
-> > [  433.407436]  dma_map_sg_attrs+0x10/0x28
-> > [  433.407455]  cc_map_sg+0x80/0x100
-> > [  433.407475]  cc_map_cipher_request+0x178/0x3c8
-> > 
-> > 
-> > BUT I start to thing this is a bug in DMA-API debug.
-> > 
-> > 
-> > My sun8i-ss driver hit the same warning:
-> > [  142.458351] WARNING: CPU: 1 PID: 90 at kernel/dma/debug.c:597 add_dma_entry+0x2ec/0x4cc
-> > [  142.458429] DMA-API: sun8i-ss 1c15000.crypto: cacheline tracking EEXIST, overlapping mappings aren't supported
-> > [  142.458455] Modules linked in: ccm algif_aead xts cmac
-> > [  142.458563] CPU: 1 PID: 90 Comm: 1c15000.crypto- Not tainted 5.17.0-rc6-next-20220307-00132-g39dad568d20a-dirty #223
-> > [  142.458581] Hardware name: Allwinner A83t board
-> > [  142.458596]  unwind_backtrace from show_stack+0x10/0x14
-> > [  142.458627]  show_stack from 0xf0abdd1c
-> > [  142.458646] irq event stamp: 31747
-> > [  142.458660] hardirqs last  enabled at (31753): [<c019316c>] __up_console_sem+0x50/0x60
-> > [  142.458688] hardirqs last disabled at (31758): [<c0193158>] __up_console_sem+0x3c/0x60
-> > [  142.458710] softirqs last  enabled at (31600): [<c06990c8>] sun8i_ss_handle_cipher_request+0x300/0x8b8
-> > [  142.458738] softirqs last disabled at (31580): [<c06990c8>] sun8i_ss_handle_cipher_request+0x300/0x8b8
-> > [  142.458758] ---[ end trace 0000000000000000 ]---
-> > [  142.458771] DMA-API: Mapped at:
-> > 
-> > Yes the mapped at is empty just after.
-> > 
-> > And the sequence of DMA operations in my driver is simple, so I cannot see how any overlap could occur.
-> 
-> The "overlap" is in the sense of having more than one mapping within the 
-> same cacheline:
-> 
-> [  142.458120] DMA-API: add_dma_entry start P=ba79f200 N=ba79f 
-> D=ba79f200 L=10 DMA_FROM_DEVICE attrs=0
-> [  142.458156] DMA-API: add_dma_entry start P=445dc010 N=445dc 
-> D=445dc010 L=10 DMA_TO_DEVICE attrs=0
-> [  142.458178] sun8i-ss 1c15000.crypto: SRC 0/1/1 445dc000 len=16 bi=0
-> [  142.458215] sun8i-ss 1c15000.crypto: DST 0/1/1 ba79f200 len=16 bi=0
-> [  142.458234] DMA-API: add_dma_entry start P=ba79f210 N=ba79f 
-> D=ba79f210 L=10 DMA_FROM_DEVICE attrs=0
-> 
-> This actually illustrates exactly the reason why this is unsupportable. 
-> ba79f200 is mapped for DMA_FROM_DEVICE, therefore subsequently mapping 
-> ba79f210 for DMA_TO_DEVICE may cause the cacheline covering the range 
-> ba79f200-ba79f23f to be written back over the top of data that the 
-> device has already started to write to memory. Hello data corruption.
-> 
-> Separate DMA mappings should be from separate memory allocations, 
-> respecting ARCH_DMA_MINALIGN.
-> 
+Hi Hitomi,
 
-Hello, thanks for the explanation.
-Does my driver can do something about it ?
-Like checking SGs respect this ARCH_DMA_MINALIGN constraints and if not fallback to a software implementation (as it will does non-DMA transfer).
+On Fri, 4 Mar 2022 at 12:15, Hitomi Hasegawa
+<hasegawa-hitomi@fujitsu.com> wrote:
+>
+> Enable diagnostic interrupts for the A64FX.
+> This is done using a pseudo-NMI.
+>
+> Signed-off-by: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> ---
+>  MAINTAINERS                      |   5 +
+>  drivers/soc/Kconfig              |   1 +
+>  drivers/soc/Makefile             |   1 +
+>  drivers/soc/fujitsu/Kconfig      |  13 +++
+>  drivers/soc/fujitsu/Makefile     |   3 +
+>  drivers/soc/fujitsu/a64fx-diag.c | 151 +++++++++++++++++++++++++++++++
+>  6 files changed, 174 insertions(+)
+>  create mode 100644 drivers/soc/fujitsu/Kconfig
+>  create mode 100644 drivers/soc/fujitsu/Makefile
+>  create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index dd36acc87ce6..e9663fa92a52 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -239,6 +239,11 @@ F: include/trace/events/9p.h
+>  F:     include/uapi/linux/virtio_9p.h
+>  F:     net/9p/
+>
+> +A64FX DIAG DRIVER
+> +M:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> +S:     Supported
+> +F:     drivers/soc/fujitsu/a64fx-diag.c
+> +
+>  A8293 MEDIA DRIVER
+>  M:     Antti Palosaari <crope@iki.fi>
+>  L:     linux-media@vger.kernel.org
+> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+> index e8a30c4c5aec..0405ff0b3be6 100644
+> --- a/drivers/soc/Kconfig
+> +++ b/drivers/soc/Kconfig
+> @@ -8,6 +8,7 @@ source "drivers/soc/atmel/Kconfig"
+>  source "drivers/soc/bcm/Kconfig"
+>  source "drivers/soc/canaan/Kconfig"
+>  source "drivers/soc/fsl/Kconfig"
+> +source "drivers/soc/fujitsu/Kconfig"
+>  source "drivers/soc/imx/Kconfig"
+>  source "drivers/soc/ixp4xx/Kconfig"
+>  source "drivers/soc/litex/Kconfig"
+> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> index a05e9fbcd3e0..86596405a39c 100644
+> --- a/drivers/soc/Makefile
+> +++ b/drivers/soc/Makefile
+> @@ -11,6 +11,7 @@ obj-$(CONFIG_SOC_CANAAN)      += canaan/
+>  obj-$(CONFIG_ARCH_DOVE)                += dove/
+>  obj-$(CONFIG_MACH_DOVE)                += dove/
+>  obj-y                          += fsl/
+> +obj-y                          += fujitsu/
+>  obj-$(CONFIG_ARCH_GEMINI)      += gemini/
+>  obj-y                          += imx/
+>  obj-y                          += ixp4xx/
+> diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
+> new file mode 100644
+> index 000000000000..b41cdac67637
+> --- /dev/null
+> +++ b/drivers/soc/fujitsu/Kconfig
+> @@ -0,0 +1,13 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +menu "fujitsu SoC drivers"
+> +
+> +config A64FX_DIAG
+> +       bool "A64FX diag driver"
+> +       depends on ARM64
+> +       help
+> +         Say Y here if you want to enable diag interrupt on A64FX.
+> +         This driver uses pseudo-NMI if available.
+> +
+> +         If unsure, say N.
+> +
+> +endmenu
+> diff --git a/drivers/soc/fujitsu/Makefile b/drivers/soc/fujitsu/Makefile
+> new file mode 100644
+> index 000000000000..945bc1c14ad0
+> --- /dev/null
+> +++ b/drivers/soc/fujitsu/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_A64FX_DIAG)       += a64fx-diag.o
+> diff --git a/drivers/soc/fujitsu/a64fx-diag.c b/drivers/soc/fujitsu/a64fx-diag.c
+> new file mode 100644
+> index 000000000000..c6f895cf8912
+> --- /dev/null
+> +++ b/drivers/soc/fujitsu/a64fx-diag.c
+> @@ -0,0 +1,151 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * A64FX diag driver.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/sysrq.h>
+> +
+> +#define A64FX_DIAG_IRQ 1
+> +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044)
+> +#define BMC_INTERRUPT_STATUS_MASK ((1U) << 31)
+> +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040)
+> +#define BMC_INTERRUPT_ENABLE_MASK ((1U) << 31)
+> +
+> +struct a64fx_diag_priv {
+> +       int irq;
+> +       void __iomem *mmsc_reg_base;
+> +       bool has_nmi;
+> +};
+> +
+> +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id)
+> +{
+> +       handle_sysrq('c');
+> +
 
-Regards
+Would it be possible to pass a dynamic sysrq key from BMC to the host
+as that would unleash the true power of sysrq in an NMI context
+capable of launching kdb as one example?
+
+-Sumit
+
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static void a64fx_diag_interrupt_clear(struct a64fx_diag_priv *priv)
+> +{
+> +       u32 mmsc;
+> +       const void __iomem *diag_status_reg_addr;
+> +
+> +       diag_status_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_STATUS_OFFSET;
+> +       mmsc = readl(diag_status_reg_addr);
+> +       if (mmsc & BMC_INTERRUPT_STATUS_MASK)
+> +               writel(BMC_INTERRUPT_STATUS_MASK, (void *)diag_status_reg_addr);
+> +}
+> +
+> +static void a64fx_diag_interrupt_enable(struct a64fx_diag_priv *priv)
+> +{
+> +       u32 mmsc;
+> +       const void __iomem *diag_enable_reg_addr;
+> +
+> +       diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
+> +       mmsc = readl(diag_enable_reg_addr);
+> +       if (!(mmsc & BMC_INTERRUPT_ENABLE_MASK)) {
+> +               mmsc |= BMC_INTERRUPT_STATUS_MASK;
+> +               writel(mmsc, (void *)diag_enable_reg_addr);
+> +       }
+> +}
+> +
+> +static void a64fx_diag_interrupt_disable(struct a64fx_diag_priv *priv)
+> +{
+> +       u32 mmsc;
+> +       const void __iomem *diag_enable_reg_addr;
+> +
+> +       diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
+> +       mmsc = readl(diag_enable_reg_addr);
+> +       if (mmsc & BMC_INTERRUPT_ENABLE_MASK) {
+> +               mmsc &= ~BMC_INTERRUPT_ENABLE_MASK;
+> +               writel(mmsc, (void *)diag_enable_reg_addr);
+> +       }
+> +}
+> +
+> +static int a64fx_diag_probe(struct platform_device *pdev)
+> +{
+> +       int ret;
+> +       unsigned long irq_flags;
+> +       struct device *dev = &pdev->dev;
+> +       struct a64fx_diag_priv *priv;
+> +
+> +       priv = devm_kzalloc(dev, sizeof(struct a64fx_diag_priv), GFP_KERNEL);
+> +       if (priv == NULL)
+> +               return -ENOMEM;
+> +
+> +       priv->mmsc_reg_base = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(priv->mmsc_reg_base))
+> +               return PTR_ERR(priv->mmsc_reg_base);
+> +
+> +       priv->irq = platform_get_irq(pdev, A64FX_DIAG_IRQ);
+> +       if (priv->irq < 0)
+> +               return priv->irq;
+> +
+> +       platform_set_drvdata(pdev, priv);
+> +
+> +       a64fx_diag_interrupt_clear(priv);
+> +       a64fx_diag_interrupt_enable(priv);
+> +
+> +       irq_flags = IRQF_PERCPU | IRQF_NOBALANCING | IRQF_NO_AUTOEN |
+> +                  IRQF_NO_THREAD;
+> +       ret = request_nmi(priv->irq, &a64fx_diag_handler, irq_flags,
+> +                       "a64fx_diag_nmi", NULL);
+> +       if (ret) {
+> +               ret = request_irq(priv->irq, &a64fx_diag_handler,
+> +                               irq_flags, "a64fx_diag_irq", NULL);
+> +               if (ret) {
+> +                       dev_err(dev, "cannot register IRQ %d\n", ret);
+> +                       return ret;
+> +               }
+> +               enable_irq(priv->irq);
+> +               priv->has_nmi = false;
+> +               dev_info(dev, "registered for IRQ %d\n", priv->irq);
+> +       } else {
+> +               enable_nmi(priv->irq);
+> +               priv->has_nmi = true;
+> +               dev_info(dev, "registered for NMI %d\n", priv->irq);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int __exit a64fx_diag_remove(struct platform_device *pdev)
+> +{
+> +       struct a64fx_diag_priv *priv = platform_get_drvdata(pdev);
+> +
+> +       a64fx_diag_interrupt_disable(priv);
+> +       a64fx_diag_interrupt_clear(priv);
+> +
+> +       if (priv->has_nmi)
+> +               free_nmi(priv->irq, NULL);
+> +       else
+> +               free_irq(priv->irq, NULL);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct acpi_device_id a64fx_diag_acpi_match[] = {
+> +       { "FUJI2007", 0 },
+> +       { },
+> +};
+> +MODULE_DEVICE_TABLE(acpi, a64fx_diag_acpi_match);
+> +
+> +
+> +static struct platform_driver a64fx_diag_driver = {
+> +       .driver = {
+> +               .name = "a64fx_diag_driver",
+> +               .acpi_match_table = ACPI_PTR(a64fx_diag_acpi_match),
+> +       },
+> +       .probe = a64fx_diag_probe,
+> +       .remove = a64fx_diag_remove,
+> +};
+> +
+> +module_platform_driver(a64fx_diag_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>");
+> +MODULE_DESCRIPTION("A64FX diag driver");
+> --
+> 2.27.0
+>

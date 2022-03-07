@@ -2,120 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFEB04D0267
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACD44D0264
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241719AbiCGPE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S243646AbiCGPER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243611AbiCGPEL (ORCPT
+        with ESMTP id S243629AbiCGPEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:04:11 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E606C1EC5B;
-        Mon,  7 Mar 2022 07:03:12 -0800 (PST)
+        Mon, 7 Mar 2022 10:04:10 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69AE1D0D0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:03:06 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a8so32565378ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 07:03:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646665392; x=1678201392;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=umwhJdrGoC63TnJH8ZK3SWSf8crbwjpWewFR8Jdg3UA=;
-  b=yJoIAlMC9/YlLI4The/YETLKcjqNk+lvefafTDFshrPPJv+lhmFNkJqF
-   T0yEmatZNFfhNtakfyC0DqXW4U5EN0bAV7luKWCR03W/QY6Uy7YkTwVge
-   gDSmLJPYgF3gewIHbT8xZHgN8yjhHXkVzoBHDPZqnF3WIk4x/RuPmuwcq
-   0=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 07 Mar 2022 07:03:12 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 07:03:12 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 7 Mar 2022 07:03:11 -0800
-Received: from [10.216.32.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 7 Mar 2022
- 07:03:05 -0800
-Message-ID: <81e33d86-74f4-fead-a77e-aab5c2059996@quicinc.com>
-Date:   Mon, 7 Mar 2022 20:33:01 +0530
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1jGYNh9y1jCRU2Ce5sNN/KIt4KeyZCiwBUd3+H3/o08=;
+        b=EPe6VKyTN3nTIzc2Xu7I2TzJ81mO0rAjis5e8dPqpR3ke+IxwnOlBfNPx+2ws/yGE3
+         6N4/8USZpMXGOwMkBkqaPsVFdpV8/CL4M6KipioCaKru2ps8txN/LvRTjfo3odLRts6j
+         fi+KihWJv3uBnoAWDW/kotNPPjMlBie/FtXtowgGvSNW5z1WUt6J+yYac/cEsP5deNzy
+         MA/WWVTVHSo3WhWOdvDyX/xgxHTh5EllYSTqr1Fwj2IiAvONMN961PLJ9mcXqr8FOl2c
+         GrZBmpYQfZ3YXMy3aolMw9hj5Rniup+pGJVxlRmHJbWomoHnT+ZUyYSJXJ315/KKHgwj
+         vM0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1jGYNh9y1jCRU2Ce5sNN/KIt4KeyZCiwBUd3+H3/o08=;
+        b=AiT9Jq+PDOzPqF1YYxvQWxvm+4o7iqPZfFQgC07QCZsj++iF4GlAsI4mkWTrUPNHO+
+         hDE6tNvz+efl70IU0ht7jNk98lr0QORgBLAFrlrll/m6Qr5HVKZym6IOXfMj3lMqaA2F
+         QsMSPiTJ3fxeI9SVXlj3Q/EOwte7Der9dMHrUNFEwA9qYY0wMPQom4WHivqIH0t3z38v
+         rFEygYiPKM83Hhw1zoScL2JH+BhfbbKL7W5ST95fw/ts26MlMTkITPuWyKQw36klvzGj
+         XNrHYmElKxZKgZ7tllKkzq9F0Aysn3Pd/IkR9Hr7Ws5NIHr4mIx7kP1JOFUw08tPGJa/
+         +FgQ==
+X-Gm-Message-State: AOAM530dukJZvZxLJIrEJ95Hr7bm0ZjyiDoy5yT7aKC8MYcLrFGD7NG5
+        T2TE6A6VRmHelNTh/Li/gQO6nQ==
+X-Google-Smtp-Source: ABdhPJxw/ApTPxDn/10PdEkN1SCTAkfYKFxobqWQQuC1vOOuDcHNFUBkcLCxGISX5Csx6MeskjbIMg==
+X-Received: by 2002:a17:907:7f03:b0:6d9:acb2:33ac with SMTP id qf3-20020a1709077f0300b006d9acb233acmr9165596ejc.705.1646665384867;
+        Mon, 07 Mar 2022 07:03:04 -0800 (PST)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id jl2-20020a17090775c200b006dabe8887b8sm3535382ejc.21.2022.03.07.07.03.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 07:03:04 -0800 (PST)
+Message-ID: <4fc171ed-98dd-2574-6373-f58b4b9e036a@blackwall.org>
+Date:   Mon, 7 Mar 2022 17:03:02 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/msm/a6xx: Fix missing ARRAY_SIZE() check
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 net-next 03/10] net: bridge: mst: Support setting and
+ reporting MST port states
 Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
-CC:     <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        "Rob Clark" <robdclark@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220305173405.914989-1-robdclark@gmail.com>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20220305173405.914989-1-robdclark@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+References: <20220301100321.951175-1-tobias@waldekranz.com>
+ <20220301100321.951175-4-tobias@waldekranz.com>
+ <53EED92D-FEAC-4CC6-AF2A-52E73F839AB5@blackwall.org>
+ <874k49olix.fsf@waldekranz.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <874k49olix.fsf@waldekranz.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/5/2022 11:04 PM, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
->
-> Fixes: f6d62d091cfd ("drm/msm/a6xx: add support for Adreno 660 GPU")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 02b47977b5c3..83c31b2ad865 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -683,19 +683,23 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
->   {
->   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->   	const u32 *regs = a6xx_protect;
-> -	unsigned i, count = ARRAY_SIZE(a6xx_protect), count_max = 32;
-> -
-> -	BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
-> -	BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
-> +	unsigned i, count, count_max;
->   
->   	if (adreno_is_a650(adreno_gpu)) {
->   		regs = a650_protect;
->   		count = ARRAY_SIZE(a650_protect);
->   		count_max = 48;
-> +		BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
->   	} else if (adreno_is_a660_family(adreno_gpu)) {
->   		regs = a660_protect;
->   		count = ARRAY_SIZE(a660_protect);
->   		count_max = 48;
-> +		BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
-> +	} else {
-> +		regs = a6xx_protect;
-> +		count = ARRAY_SIZE(a6xx_protect);
-> +		count_max = 32;
-> +		BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
->   	}
->   
->   	/*
-Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+On 07/03/2022 17:00, Tobias Waldekranz wrote:
+> On Wed, Mar 02, 2022 at 00:19, Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>> On 1 March 2022 11:03:14 CET, Tobias Waldekranz <tobias@waldekranz.com> wrote:
+>>> Make it possible to change the port state in a given MSTI. This is
+>>> done through a new netlink interface, since the MSTIs are objects in
+>>> their own right. The proposed iproute2 interface would be:
+>>>
+>>>    bridge mst set dev <PORT> msti <MSTI> state <STATE>
+>>>
+>>> Current states in all applicable MSTIs can also be dumped. The
+>>> proposed iproute interface looks like this:
+>>>
+>>> $ bridge mst
+>>> port              msti
+>>> vb1               0
+>>> 		    state forwarding
+>>> 		  100
+>>> 		    state disabled
+>>> vb2               0
+>>> 		    state forwarding
+>>> 		  100
+>>> 		    state forwarding
+>>>
+>>> The preexisting per-VLAN states are still valid in the MST
+>>> mode (although they are read-only), and can be queried as usual if one
+>>> is interested in knowing a particular VLAN's state without having to
+>>> care about the VID to MSTI mapping (in this example VLAN 20 and 30 are
+>>> bound to MSTI 100):
+>>>
+>>> $ bridge -d vlan
+>>> port              vlan-id
+>>> vb1               10
+>>> 		    state forwarding mcast_router 1
+>>> 		  20
+>>> 		    state disabled mcast_router 1
+>>> 		  30
+>>> 		    state disabled mcast_router 1
+>>> 		  40
+>>> 		    state forwarding mcast_router 1
+>>> vb2               10
+>>> 		    state forwarding mcast_router 1
+>>> 		  20
+>>> 		    state forwarding mcast_router 1
+>>> 		  30
+>>> 		    state forwarding mcast_router 1
+>>> 		  40
+>>> 		    state forwarding mcast_router 1
+>>>
+>>> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+>>> ---
+>>> include/uapi/linux/if_bridge.h |  16 +++
+>>> include/uapi/linux/rtnetlink.h |   5 +
+>>> net/bridge/br_mst.c            | 244 +++++++++++++++++++++++++++++++++
+>>> net/bridge/br_netlink.c        |   3 +
+>>> net/bridge/br_private.h        |   4 +
+>>> 5 files changed, 272 insertions(+)
+>>>
+>>> diff --git a/include/uapi/linux/if_bridge.h b/include/uapi/linux/if_bridge.h
+>>> index b68016f625b7..784482527861 100644
+>>> --- a/include/uapi/linux/if_bridge.h
+>>> +++ b/include/uapi/linux/if_bridge.h
+>>> @@ -785,4 +785,20 @@ enum {
+>>> 	__BRIDGE_QUERIER_MAX
+>>> };
+>>> #define BRIDGE_QUERIER_MAX (__BRIDGE_QUERIER_MAX - 1)
+>>> +
+>>> +enum {
+>>> +	BRIDGE_MST_UNSPEC,
+>>> +	BRIDGE_MST_ENTRY,
+>>> +	__BRIDGE_MST_MAX,
+>>> +};
+>>> +#define BRIDGE_MST_MAX (__BRIDGE_MST_MAX - 1)
+>>> +
+>>> +enum {
+>>> +	BRIDGE_MST_ENTRY_UNSPEC,
+>>> +	BRIDGE_MST_ENTRY_MSTI,
+>>> +	BRIDGE_MST_ENTRY_STATE,
+>>> +	__BRIDGE_MST_ENTRY_MAX,
+>>> +};
+>>> +#define BRIDGE_MST_ENTRY_MAX (__BRIDGE_MST_ENTRY_MAX - 1)
+>>> +
+>>> #endif /* _UAPI_LINUX_IF_BRIDGE_H */
+>>> diff --git a/include/uapi/linux/rtnetlink.h b/include/uapi/linux/rtnetlink.h
+>>> index 0970cb4b1b88..4a48f3ce862c 100644
+>>> --- a/include/uapi/linux/rtnetlink.h
+>>> +++ b/include/uapi/linux/rtnetlink.h
+>>> @@ -192,6 +192,11 @@ enum {
+>>> 	RTM_GETTUNNEL,
+>>> #define RTM_GETTUNNEL	RTM_GETTUNNEL
+>>>
+>>> +	RTM_GETMST = 124 + 2,
+>>> +#define RTM_GETMST	RTM_GETMST
+>>> +	RTM_SETMST,
+>>> +#define RTM_SETMST	RTM_SETMST
+>>> +
+>>
+>> I think you should also update selinux  (see nlmsgtab.c)
+>> I'll think about this one, if there is some nice way to avoid the new rtm types.
+>>
+>>> 	__RTM_MAX,
+>>> #define RTM_MAX		(((__RTM_MAX + 3) & ~3) - 1)
+>>> };
+>>> diff --git a/net/bridge/br_mst.c b/net/bridge/br_mst.c
+>>> index f3b8e279b85c..8dea8e7257fd 100644
+>>> --- a/net/bridge/br_mst.c
+>>> +++ b/net/bridge/br_mst.c
+>>> @@ -120,3 +120,247 @@ int br_mst_set_enabled(struct net_bridge *br, unsigned long val)
+>>> 	br_opt_toggle(br, BROPT_MST_ENABLED, !!val);
+>>> 	return 0;
+>>> }
+>>> +
+>>> +static int br_mst_nl_get_one(struct net_bridge_port *p, struct sk_buff *skb,
+>>> +			     struct netlink_callback *cb)
+>>> +{
+>>> +	struct net_bridge_vlan_group *vg = nbp_vlan_group(p);
+>>> +	int err = 0, idx = 0, s_idx = cb->args[1];
+>>> +	struct net_bridge_vlan *v;
+>>> +	struct br_port_msg *bpm;
+>>> +	struct nlmsghdr *nlh;
+>>> +	struct nlattr *nest;
+>>> +	unsigned long *seen;
+>>> +
+>>
+>> Reverse xmas tree
+> 
+> Both of these lines end at the 28th column. Is there some other
+> tiebreaking mechanism that forces the reverse ordering of nest and seen?
+> 
+> In a variable-width font, the nest declaration does appear shorter. I
+> remember that you did not have your laptop with you, could that be it?
 
--Akhil.
+Ah yes, you're right. :) Sorry for the noise.
+

@@ -2,32 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B7A4CEEFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 01:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DD54CEEFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 01:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234548AbiCGAnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 19:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S234558AbiCGAoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 19:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbiCGAnH (ORCPT
+        with ESMTP id S231548AbiCGAoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 19:43:07 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475C028E02;
-        Sun,  6 Mar 2022 16:42:13 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V6NhnNp_1646613727;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V6NhnNp_1646613727)
+        Sun, 6 Mar 2022 19:44:03 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB2513E39
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 16:43:10 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V6NTmX2_1646613785;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V6NTmX2_1646613785)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 07 Mar 2022 08:42:10 +0800
+          Mon, 07 Mar 2022 08:43:08 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     rostedt@goodmis.org
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] btrfs: Fix non-kernel-doc comment
-Date:   Mon,  7 Mar 2022 08:42:04 +0800
-Message-Id: <20220307004204.25417-1-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] ftrace: Fix some W=1 warnings
+Date:   Mon,  7 Mar 2022 08:43:03 +0800
+Message-Id: <20220307004303.26399-1-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -44,69 +43,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Clean up the following clang-w1 warning:
 
-fs/btrfs/space-info.c:1594: warning: This comment starts with '/**', but
-isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Trye to reserve metadata bytes from the block_rsv's space.
+kernel/trace/ftrace.c:7827: warning: Function parameter or member 'ops'
+not described in 'unregister_ftrace_function'.
 
-fs/btrfs/space-info.c:1629: warning: This comment starts with '/**', but
-isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Try to reserve data bytes for an allocation.
-
-fs/btrfs/space-info.c:1468: warning: This comment starts with '/**', but
-isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Try to reserve bytes from the block_rsv's space.
-
-fs/btrfs/space-info.c:1375: warning: This comment starts with '/**', but
-isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Do the appropriate flushing and waiting for a ticket.
+kernel/trace/ftrace.c:7805: warning: Function parameter or member 'ops'
+not described in 'register_ftrace_function'.
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- fs/btrfs/space-info.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ kernel/trace/ftrace.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
-index 9652dd042c20..37b3b6f107ee 100644
---- a/fs/btrfs/space-info.c
-+++ b/fs/btrfs/space-info.c
-@@ -1372,7 +1372,7 @@ static void wait_reserve_ticket(struct btrfs_fs_info *fs_info,
- }
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index acb50fb7ed2d..8b568f57cc24 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -7792,7 +7792,7 @@ int ftrace_is_dead(void)
  
  /**
-- * Do the appropriate flushing and waiting for a ticket
-+ * handle_reserve_ticket - Do the appropriate flushing and waiting for a ticket
+  * register_ftrace_function - register a function for profiling
+- * @ops - ops structure that holds the function for profiling.
++ * @ops:	ops structure that holds the function for profiling.
   *
-  * @fs_info:    the filesystem
-  * @space_info: space info for the reservation
-@@ -1465,7 +1465,7 @@ static inline bool can_steal(enum btrfs_reserve_flush_enum flush)
- }
+  * Register a function to be called by all functions in the
+  * kernel.
+@@ -7819,7 +7819,7 @@ EXPORT_SYMBOL_GPL(register_ftrace_function);
  
  /**
-- * Try to reserve bytes from the block_rsv's space
-+ * __reserve_bytes - Try to reserve bytes from the block_rsv's space
+  * unregister_ftrace_function - unregister a function for profiling.
+- * @ops - ops structure that holds the function to unregister
++ * @ops:	ops structure that holds the function to unregister
   *
-  * @fs_info:    the filesystem
-  * @space_info: space info we want to allocate from
-@@ -1591,7 +1591,8 @@ static int __reserve_bytes(struct btrfs_fs_info *fs_info,
- }
- 
- /**
-- * Trye to reserve metadata bytes from the block_rsv's space
-+ * btrfs_reserve_metadata_bytes - Trye to reserve metadata bytes from
-+ * the block_rsv's space
-  *
-  * @fs_info:    the filesystem
-  * @block_rsv:  block_rsv we're allocating for
-@@ -1626,7 +1627,7 @@ int btrfs_reserve_metadata_bytes(struct btrfs_fs_info *fs_info,
- }
- 
- /**
-- * Try to reserve data bytes for an allocation
-+ * btrfs_reserve_data_bytes - Try to reserve data bytes for an allocation
-  *
-  * @fs_info: the filesystem
-  * @bytes:   number of bytes we need
+  * Unregister a function that was added to be called by ftrace profiling.
+  */
 -- 
 2.20.1.7.g153144c
 

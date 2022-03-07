@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F634D0274
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCF74D0275
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242699AbiCGPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S243521AbiCGPIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239155AbiCGPI2 (ORCPT
+        with ESMTP id S241606AbiCGPIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:08:28 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B296C2DE0
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:07:33 -0800 (PST)
+        Mon, 7 Mar 2022 10:08:30 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E356D5F8F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:07:35 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6F9DC1F394;
-        Mon,  7 Mar 2022 15:07:32 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A33DB210F6;
+        Mon,  7 Mar 2022 15:07:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646665652; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=nNqrbcx3hlm6bW5QamgpEPJVajxBuWoj7VtZh9OD3tg=;
-        b=CWa8yZuYAuQBxa6hAXICLsLOPu4OQlApY1SyBAU/aQ35Ne3D0XHbLIiY1VHuJnNggRYYGK
-        qBbNLosXBXkusBFxESZ9q3c9WYUjIU/pz+DI2m6mkn4pOqi9csdAG3N0QKcubzYFJ2pxUX
-        sqB7RjWt+4MrKmuYnXLW2Rdmpcqh5JE=
+        t=1646665654; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/+A0bDyvDGXMAEGgLd6HrR1FD9t6zIOokUQHzoAnIiw=;
+        b=Jd6GKQ9CUlQiRU4Ruylo/72Vw/mzoTPXEaHLVjz3U8htklKaWXDhh9ENlGO9pxRJZIBssi
+        xT0bfWbxVcU0t1QCPYCITTJc2yOFlnQI+7wA2EIPrI6tzRst7ssacZ4QAJS7/QVSeAOhNu
+        CpyiHOz9t06tLOWQ+3RF2Nx3Le+5x0g=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646665652;
+        s=susede2_ed25519; t=1646665654;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=nNqrbcx3hlm6bW5QamgpEPJVajxBuWoj7VtZh9OD3tg=;
-        b=UyvTe/9aUvyUe2vAwXMVy8aojAB+HmE+v6kjDl7sQONxFIKuOXIeeZvWM3amwmgS7n2E9e
-        NiuUOif/kv2p9ABg==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/+A0bDyvDGXMAEGgLd6HrR1FD9t6zIOokUQHzoAnIiw=;
+        b=+G0LP7QZV1k0Ud+wRWdG3t4zAkFwL8JaDfCtV/eqHl+PU2FLOf/Dn6GQfw2oJ2vtjkuwN4
+        Jg/zADZI7rm8fPBg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6468132BC;
-        Mon,  7 Mar 2022 15:07:31 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 27D34132BC;
+        Mon,  7 Mar 2022 15:07:34 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id nQaDNbMfJmLrHgAAMHmgww
-        (envelope-from <osalvador@suse.de>); Mon, 07 Mar 2022 15:07:31 +0000
+        id eAj7BrYfJmLrHgAAMHmgww
+        (envelope-from <osalvador@suse.de>); Mon, 07 Mar 2022 15:07:34 +0000
 From:   Oscar Salvador <osalvador@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -52,10 +56,12 @@ Cc:     David Hildenbrand <david@redhat.com>,
         Wei Yang <richard.weiyang@gmail.com>,
         Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH 0/3] A minor hotplug refactoring
-Date:   Mon,  7 Mar 2022 16:07:22 +0100
-Message-Id: <20220307150725.6810-1-osalvador@suse.de>
+Subject: [PATCH 1/3] mm/page_alloc: Do not calculate node's total pages and memmap pages when empty
+Date:   Mon,  7 Mar 2022 16:07:23 +0100
+Message-Id: <20220307150725.6810-2-osalvador@suse.de>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220307150725.6810-1-osalvador@suse.de>
+References: <20220307150725.6810-1-osalvador@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,25 +74,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+free_area_init_node() calls calculate_node_totalpages() and
+free_area_init_core(). The former to get node's {spanned,present}_pages,
+and the latter to calculate, among other things, how many pages per zone
+we spent on memmap_pages, which is used to substract zone's free pages.
 
-These are a few cleanups that go on top of Michal's work [1].
+On memoryless-nodes, it is pointless to perform such a bunch of work, so
+make sure we skip the calculations when having a node or empty zone.
 
-Thanks
+Signed-off-by: Oscar Salvador <osalvador@suse.de>
+---
+ mm/page_alloc.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-[1] https://lore.kernel.org/lkml/20220127085305.20890-1-mhocko@kernel.org/
-
-Oscar Salvador (3):
-  mm/page_alloc: Do not calculate node's total pages and memmap pages
-    when empty
-  mm/memory_hotplug: Reset node's state when empty during offline
-  mm/memory_hotplug: Refactor hotadd_init_pgdat and try_online_node
-
- include/linux/memory_hotplug.h |  2 +-
- mm/memory_hotplug.c            | 93 ++++++++++++++++++----------------
- mm/page_alloc.c                | 59 +++++++--------------
- 3 files changed, 69 insertions(+), 85 deletions(-)
-
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 967085c1c78a..0b7d176a8990 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -7312,6 +7312,10 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+ 	unsigned long realtotalpages = 0, totalpages = 0;
+ 	enum zone_type i;
+ 
++	/* Skip calculation for memoryless nodes */
++	if (node_start_pfn == node_end_pfn)
++		goto no_pages;
++
+ 	for (i = 0; i < MAX_NR_ZONES; i++) {
+ 		struct zone *zone = pgdat->node_zones + i;
+ 		unsigned long zone_start_pfn, zone_end_pfn;
+@@ -7344,6 +7348,7 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+ 		realtotalpages += real_size;
+ 	}
+ 
++no_pages:
+ 	pgdat->node_spanned_pages = totalpages;
+ 	pgdat->node_present_pages = realtotalpages;
+ 	pr_debug("On node %d totalpages: %lu\n", pgdat->node_id, realtotalpages);
+@@ -7562,6 +7567,10 @@ static void __init free_area_init_core(struct pglist_data *pgdat)
+ 		size = zone->spanned_pages;
+ 		freesize = zone->present_pages;
+ 
++		/* No pages? Nothing to calculate then. */
++		if (!size)
++			goto no_pages;
++
+ 		/*
+ 		 * Adjust freesize so that it accounts for how much memory
+ 		 * is used by this zone for memmap. This affects the watermark
+@@ -7597,6 +7606,7 @@ static void __init free_area_init_core(struct pglist_data *pgdat)
+ 		 * when the bootmem allocator frees pages into the buddy system.
+ 		 * And all highmem pages will be managed by the buddy system.
+ 		 */
++no_pages:
+ 		zone_init_internals(zone, j, nid, freesize);
+ 
+ 		if (!size)
 -- 
 2.34.1
 

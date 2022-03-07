@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5B24CF186
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 06:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AA94CF188
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235436AbiCGGAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58102 "EHLO
+        id S235447AbiCGGDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:03:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234713AbiCGGAS (ORCPT
+        with ESMTP id S235438AbiCGGDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:00:18 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84785D65B
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 21:59:24 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V6Qe..f_1646632757;
-Received: from 30.97.48.83(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V6Qe..f_1646632757)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 07 Mar 2022 13:59:19 +0800
-Message-ID: <6c65c8b7-9a62-c027-e2b9-7d1531e43dfa@linux.alibaba.com>
-Date:   Mon, 7 Mar 2022 14:00:20 +0800
+        Mon, 7 Mar 2022 01:03:51 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A4C340C1
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 22:02:58 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id g26so28786401ybj.10
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 22:02:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7Im1JG6q3q15hqSa7NWQHVGGERLfnPf1iBbuaSTqgJQ=;
+        b=c1bDG9VxRM0GGNj757DrmXHfFRpAS5nkQXMs+Oj4aPTCkzXBOFbj1k5qasjuP7b7w1
+         npZK8ypTFGHQkM192ZbB3h70SclmR/FmMnE+o2NAlsAka1vqxjsPQeWInjwcch4TWwgd
+         4QVOYWL8dQqZPl+i4iCJaqArfPnnv+jExWbuY3eVqEjcJc1aSHg3Lcx3lIOQXDek7wFm
+         t7MzZLz82GBobHT7mDif3bTdRhxbaDoNrhirZ+qnUTn6EuqEMnP6dAqdpJ1F4dkR6Svp
+         iHP0XtJsVxroeHH+7LQk43FT7RNNVvr+5ATFXMTuMadcULQyJpXd23Q2U4Bv/EiS3fq5
+         idng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7Im1JG6q3q15hqSa7NWQHVGGERLfnPf1iBbuaSTqgJQ=;
+        b=4RUC6Fcf7Id46ciVkHM2pziGlnhSIu9o9Oe8REowg/5WdOXWXc8xfUv0Xx5yvzOesa
+         W3wCJxXpco+VQPQRu1kPsLs62vYDbQdvluHh/ZObGKusFFxqaplD8c2laIAGmou+xkqy
+         UALH5nv96CAJwDZcdk7CBL/lEvLv4qY/1xISdWdAjnZ/qdHA+AA+QEjKt2rd54kqdMw1
+         OrOeU2suLvK/D18y+dmeHWDtzB6ZIapkI0EZ5Pi8L64TkncYVjqtbqvuXg/kp6fncUb4
+         ZtaC3/B1aqi8vX6a/z1CfDOfg3jtAWvhkACuYSumLCcNPcBqb83JVz7TMhQiDuRqpaPd
+         86rQ==
+X-Gm-Message-State: AOAM531NP1IsOL8yxCFLofo/kOZMGTq1ZmxjdKHGTtg+mvrcSx4w6bAY
+        XlJcoyYYj9vIzMiD/sIpZXNSTZokrb/vc4yp0xw=
+X-Google-Smtp-Source: ABdhPJyAe5UnFIIefjeCQ7lyCJoaXg9dQlqs5YWp+6bozjLqI+f6cKyL2Z06ocEcRIxz94VzK8QoOBCTKjhmSTrR4+c=
+X-Received: by 2002:a25:dfd3:0:b0:629:24ff:eab0 with SMTP id
+ w202-20020a25dfd3000000b0062924ffeab0mr5097816ybg.613.1646632976811; Sun, 06
+ Mar 2022 22:02:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 12/16] mm/migration: fix potential page refcounts leak in
- migrate_pages
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
-        mike.kravetz@oracle.com, shy828301@gmail.com, willy@infradead.org,
-        ziy@nvidia.com, minchan@kernel.org, apopple@nvidia.com,
-        dave.hansen@linux.intel.com, o451686892@gmail.com,
-        almasrymina@google.com, jhubbard@nvidia.com, rcampbell@nvidia.com,
-        peterx@redhat.com, naoya.horiguchi@nec.com, mhocko@suse.com,
-        riel@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
- <20220304093409.25829-13-linmiaohe@huawei.com>
- <20f47ec9-3b5b-5326-b1c3-4b1a0c38ef46@linux.alibaba.com>
- <87mti25p98.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <87mti25p98.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6918:b986:b0:a4:b698:78d9 with HTTP; Sun, 6 Mar 2022
+ 22:02:56 -0800 (PST)
+Reply-To: markwillima00@gmail.com
+From:   Mark <markpeterdavid@gmail.com>
+Date:   Sun, 6 Mar 2022 22:02:56 -0800
+Message-ID: <CAC_St2-sdO6bqD=Ek0iLO-xK1-wW3yNcMoWDU3W-5iJ1Rf4Gsg@mail.gmail.com>
+Subject: Re: Greetings!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b2e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [markwillima00[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [markpeterdavid[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+Good day,
+
+The HSBC Bank is a financial institution in United Kingdom. We
+promotes long-term,sustainable and broad-based economic growth in
+developing and emerging countries by providing financial support like
+loans and investment to large, small and
+medium-sized companies (SMEs) as well as fast-growing enterprises
+which in turn helps to create secure and permanent jobs and reduce
+poverty.
+
+If you need fund to promotes your business, project(Project Funding),
+Loan, planning, budgeting and expansion of your business(s) , do not
+hesitate to indicate your interest as we are here to serve you better
+by granting your request.
 
 
-On 3/7/2022 1:02 PM, Huang, Ying wrote:
-> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-> 
->> Hi Miaohe,
->>
->> On 3/4/2022 5:34 PM, Miaohe Lin wrote:
->>> In -ENOMEM case, there might be some subpages of fail-to-migrate THPs
->>> left in thp_split_pages list. We should move them back to migration
->>> list so that they could be put back to the right list by the caller
->>> otherwise the page refcnt will be leaked here. Also adjust nr_failed
->>> and nr_thp_failed accordingly to make vm events account more accurate.
->>> Fixes: b5bade978e9b ("mm: migrate: fix the return value of
->>> migrate_pages()")
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> ---
->>>    mm/migrate.c | 9 +++++++++
->>>    1 file changed, 9 insertions(+)
->>> diff --git a/mm/migrate.c b/mm/migrate.c
->>> index e0db06927f02..6c2dfed2ddb8 100644
->>> --- a/mm/migrate.c
->>> +++ b/mm/migrate.c
->>> @@ -1422,6 +1422,15 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>    				}
->>>      				nr_failed_pages += nr_subpages;
->>> +				/*
->>> +				 * There might be some subpages of fail-to-migrate THPs
->>> +				 * left in thp_split_pages list. Move them back to migration
->>> +				 * list so that they could be put back to the right list by
->>> +				 * the caller otherwise the page refcnt will be leaked.
->>> +				 */
->>> +				list_splice_init(&thp_split_pages, from);
->>> +				nr_failed += retry;
->>> +				nr_thp_failed += thp_retry;
->>
->> Yes, I think we missed this case before, and your patch looks
->> right. But we should also update the 'rc' to return the correct number
->> of pages that were not migrated, right?
-> 
-> Per my understanding, -ENOMEM should be returned to indicate an fatal
-> error.
-> 
-
-Ah, right. Sorry for noise.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Thank you
+Mr:Mark

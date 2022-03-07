@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A9A4CFA67
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38554CFA6E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234545AbiCGKQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S239216AbiCGKRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:17:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240320AbiCGKA4 (ORCPT
+        with ESMTP id S240407AbiCGKBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:00:56 -0500
+        Mon, 7 Mar 2022 05:01:00 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88F57EA2B;
-        Mon,  7 Mar 2022 01:47:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5ADDEB4;
+        Mon,  7 Mar 2022 01:47:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62A48B810AA;
-        Mon,  7 Mar 2022 09:47:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFBEEC340E9;
-        Mon,  7 Mar 2022 09:47:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE7B0B810AA;
+        Mon,  7 Mar 2022 09:47:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3C9C340E9;
+        Mon,  7 Mar 2022 09:47:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646440;
-        bh=x8ZYtRRcL48dYlDHV1QRsqoLWP2M1e17vPSx1/fvbqQ=;
+        s=korg; t=1646646474;
+        bh=I5u6IfSANuhAMwea1cGIDxXBM8bn7OdydXst9KFSiNs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g7sYPbL+5DWHgSZd/R0Rt3bWZ40k4Q/wK+qHESG3oHpoul5JgqFVZ1vnYW7G5Vydk
-         cgAl6m13uN502pQspRjoF1KQCoxk7ZQ052F9AjZTMF71F6o1iV0sxpt6jHQfT9DECy
-         lsatPoiT1pDB5feyTOoUGdvGIA+HDa1bmct6Rw2k=
+        b=RENGWEInU5qbyc1IHWOK9PggLM8CN9f8ClyG+Hzf/z9BT6Eufjj5olhvnn/qQodjK
+         on46/TqA+OQOPRhKaqa2SHzHmE8f+ASAV0h5tk7w7HxKMF85g9LAfo684r8B4+VuYu
+         GUzYgLWb1DsOx/0TGUtO6y4Xo7slpCeb9+EDal+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars Persson <larper@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        stable@vger.kernel.org,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 217/262] net: stmmac: only enable DMA interrupts when ready
-Date:   Mon,  7 Mar 2022 10:19:21 +0100
-Message-Id: <20220307091709.110171415@linuxfoundation.org>
+Subject: [PATCH 5.15 218/262] ibmvnic: initialize rc before completing wait
+Date:   Mon,  7 Mar 2022 10:19:22 +0100
+Message-Id: <20220307091709.157309871@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
 References: <20220307091702.378509770@linuxfoundation.org>
@@ -56,109 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Whitchurch <vincent.whitchurch@axis.com>
+From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
 
-[ Upstream commit 087a7b944c5db409f7c1a68bf4896c56ba54eaff ]
+[ Upstream commit 765559b10ce514eb1576595834f23cdc92125fee ]
 
-In this driver's ->ndo_open() callback, it enables DMA interrupts,
-starts the DMA channels, then requests interrupts with request_irq(),
-and then finally enables napi.
+We should initialize ->init_done_rc before calling complete(). Otherwise
+the waiting thread may see ->init_done_rc as 0 before we have updated it
+and may assume that the CRQ was successful.
 
-If RX DMA interrupts are received before napi is enabled, no processing
-is done because napi_schedule_prep() will return false.  If the network
-has a lot of broadcast/multicast traffic, then the RX ring could fill up
-completely before napi is enabled.  When this happens, no further RX
-interrupts will be delivered, and the driver will fail to receive any
-packets.
-
-Fix this by only enabling DMA interrupts after all other initialization
-is complete.
-
-Fixes: 523f11b5d4fd72efb ("net: stmmac: move hardware setup for stmmac_open to new function")
-Reported-by: Lars Persson <larper@axis.com>
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Fixes: 6b278c0cb378 ("ibmvnic delay complete()")
+Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 28 +++++++++++++++++--
- 1 file changed, 26 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/ibm/ibmvnic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 4595282a9790..73f66170829a 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2268,6 +2268,23 @@ static void stmmac_stop_tx_dma(struct stmmac_priv *priv, u32 chan)
- 	stmmac_stop_tx(priv, priv->ioaddr, chan);
- }
+diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
+index 52eb6629328c..e98f7d3f935d 100644
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -5145,9 +5145,9 @@ static void ibmvnic_handle_crq(union ibmvnic_crq *crq,
+ 			}
  
-+static void stmmac_enable_all_dma_irq(struct stmmac_priv *priv)
-+{
-+	u32 rx_channels_count = priv->plat->rx_queues_to_use;
-+	u32 tx_channels_count = priv->plat->tx_queues_to_use;
-+	u32 dma_csr_ch = max(rx_channels_count, tx_channels_count);
-+	u32 chan;
-+
-+	for (chan = 0; chan < dma_csr_ch; chan++) {
-+		struct stmmac_channel *ch = &priv->channel[chan];
-+		unsigned long flags;
-+
-+		spin_lock_irqsave(&ch->lock, flags);
-+		stmmac_enable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-+		spin_unlock_irqrestore(&ch->lock, flags);
-+	}
-+}
-+
- /**
-  * stmmac_start_all_dma - start all RX and TX DMA channels
-  * @priv: driver private structure
-@@ -2903,8 +2920,10 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
- 		stmmac_axi(priv, priv->ioaddr, priv->plat->axi);
+ 			if (!completion_done(&adapter->init_done)) {
+-				complete(&adapter->init_done);
+ 				if (!adapter->init_done_rc)
+ 					adapter->init_done_rc = -EAGAIN;
++				complete(&adapter->init_done);
+ 			}
  
- 	/* DMA CSR Channel configuration */
--	for (chan = 0; chan < dma_csr_ch; chan++)
-+	for (chan = 0; chan < dma_csr_ch; chan++) {
- 		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
-+		stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-+	}
- 
- 	/* DMA RX Channel Configuration */
- 	for (chan = 0; chan < rx_channels_count; chan++) {
-@@ -3756,6 +3775,7 @@ static int stmmac_open(struct net_device *dev)
- 
- 	stmmac_enable_all_queues(priv);
- 	netif_tx_start_all_queues(priv->dev);
-+	stmmac_enable_all_dma_irq(priv);
- 
- 	return 0;
- 
-@@ -6514,8 +6534,10 @@ int stmmac_xdp_open(struct net_device *dev)
- 	}
- 
- 	/* DMA CSR Channel configuration */
--	for (chan = 0; chan < dma_csr_ch; chan++)
-+	for (chan = 0; chan < dma_csr_ch; chan++) {
- 		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
-+		stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-+	}
- 
- 	/* Adjust Split header */
- 	sph_en = (priv->hw->rx_csum > 0) && priv->sph;
-@@ -6575,6 +6597,7 @@ int stmmac_xdp_open(struct net_device *dev)
- 	stmmac_enable_all_queues(priv);
- 	netif_carrier_on(dev);
- 	netif_tx_start_all_queues(dev);
-+	stmmac_enable_all_dma_irq(priv);
- 
- 	return 0;
- 
-@@ -7453,6 +7476,7 @@ int stmmac_resume(struct device *dev)
- 	stmmac_restore_hw_vlan_rx_fltr(priv, ndev, priv->hw);
- 
- 	stmmac_enable_all_queues(priv);
-+	stmmac_enable_all_dma_irq(priv);
- 
- 	mutex_unlock(&priv->lock);
- 	rtnl_unlock();
+ 			break;
 -- 
 2.34.1
 

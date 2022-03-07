@@ -2,146 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04EA4CF1ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 748BE4CF1F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbiCGGf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
+        id S235594AbiCGGhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbiCGGf1 (ORCPT
+        with ESMTP id S232389AbiCGGhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:35:27 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17771409D;
-        Sun,  6 Mar 2022 22:34:33 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id s11so12842219pfu.13;
-        Sun, 06 Mar 2022 22:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Al0YeHlSZcSS4QCKRtFyAOPKrqPPjHztCvNSPqTvt8k=;
-        b=lbFEXIgx3/FZzJ6Bpq6H23qkCE3wi0vEbHqKjS2245Rcdtk8FpXGyf/reYE1SG3o1l
-         0gRmwxX+DGtWdcexzqQ0GiM1h81JP+jUIce0qrJTWhiwW6c1taOwb9KUGiHWsTtWdzym
-         I97btsyrc3yLMNuWfdQ/rMmk4U1lZk/gR2NhvrV/ifpXhjZSgniJS6QST/sizaapVCSS
-         KWGMmJJxCdIaVwVabncL2obmZAh0O7dvSUOkhdeVZRGZLJkLSPBhfzS6X1orrtRPpXjk
-         JgWTLQHw2T+gAcAIQ9FK+UPFHkxGYwlbtVjC3BHYxUqpLgyr5vi6uBCQk2bkoERUZSu6
-         Rkgw==
+        Mon, 7 Mar 2022 01:37:01 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F765523D;
+        Sun,  6 Mar 2022 22:36:07 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id bi12so16499446ejb.3;
+        Sun, 06 Mar 2022 22:36:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Al0YeHlSZcSS4QCKRtFyAOPKrqPPjHztCvNSPqTvt8k=;
-        b=S99Gr3sp1V0IEOGvJujUHAhyeqkfQg2R2RessohLuJQk82mexsb2w0ALOwWUsh7N49
-         WrWABxiFJyOEGrm45KQkCh1hR0v3e8GQb4masYQc15hRU5LLMVbps1p5QB6IHX30DVmi
-         Ukb8t4JEYfCfqsLwaWgXb6qC2DT7oiXSx5Q+2fSHmNHtAivPcxLvVUs03mUWazLnS3iC
-         kPoKTlSZsV20rKrx8aEcE6j9TzfTKEW+hsFj16aCV/LkXKyf3vFfpw7feFkktQrNDJSc
-         JUcR9t4AUvL1ClTvkUl2QK88Fqkzx4OUyGWm9t8efbOPTayy5kbV49P1FUkmMyuNtVia
-         qR+w==
-X-Gm-Message-State: AOAM530JZycgfqIZsy8042LAIhX6A08qKU4rYQTUOWj/i9/+6cw/4GUk
-        S/6caP233xoiMo4npow09cB7q3hNBC8=
-X-Google-Smtp-Source: ABdhPJz591+WWFKk5GdiNQr6RztVHEiWiiMANV9V95huqFPq+a3Wi2PBZzzvhNPCQbeFmQJag+hWNg==
-X-Received: by 2002:a63:7c5c:0:b0:380:7412:341b with SMTP id l28-20020a637c5c000000b003807412341bmr172282pgn.38.1646634872466;
-        Sun, 06 Mar 2022 22:34:32 -0800 (PST)
-Received: from ubuntu.mate (subs02-180-214-232-81.three.co.id. [180.214.232.81])
-        by smtp.gmail.com with ESMTPSA id x1-20020a637c01000000b0038007eeee0bsm4834288pgc.22.2022.03.06.22.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 22:34:31 -0800 (PST)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: describe how to apply incremental stable patches
-Date:   Mon,  7 Mar 2022 13:33:41 +0700
-Message-Id: <20220307063340.256671-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=CLWBvEKY0bZFqdu8keT0kKq+r86IcfvnbkU0z1432mo=;
+        b=1Oj/Q2dD8xBFE2ITh/pgIK4sZZ1C4HqN1y0Zi+H68qV/Fj4Gd8QDXTAFczdZKzZMCa
+         umScqz7CdrmOHKaavYe84+L5P/x1ubBJAOqJEgoAbLenhYvHiH9fE8ojZjm7420at/lE
+         9I9L9yc8hZ8oJ/Y836xLQz6IETK+MiqjC0nS2xtpf42YClc7+JWxDP/bL4Jk8Zw6r5/n
+         XMD6/2a56HJuWyTtR4iBn3uXT1oATWb06rmHtd9k5EUJyUSNWEOiFe33rF3UYu2vslln
+         KAgFT0157GXk35/qW7S9GP4gYjhma8HglS6l3y8DXVNO5Yb9QmdHeNJz/bhlgdx6q4Sf
+         d56w==
+X-Gm-Message-State: AOAM533fEnucljcsK2hjAcK3EZPX7yKgS4lyxsJnlg5EKM0Bsay9LXJu
+        ypJYnRpcBC81ADloF7xZh5Wn0ppbg/U=
+X-Google-Smtp-Source: ABdhPJyghdxWDdZZiQiAA3A7jAfnXkNCsCEMdJbKxV9nI2lKjSqvi1c13Wt3y029SncPbA34DLhP5g==
+X-Received: by 2002:a17:907:1c0e:b0:6da:a5cc:95a9 with SMTP id nc14-20020a1709071c0e00b006daa5cc95a9mr8026023ejc.631.1646634966342;
+        Sun, 06 Mar 2022 22:36:06 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id p14-20020a05640210ce00b00413211746d4sm5696583edu.51.2022.03.06.22.36.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 22:36:05 -0800 (PST)
+Message-ID: <ba2a4504-b886-09b6-71ea-528c99a869f6@kernel.org>
+Date:   Mon, 7 Mar 2022 07:36:04 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 3/7] tty: serial: samsung: constify
+ s3c24xx_serial_drv_data
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220304080348.218581-1-krzysztof.kozlowski@canonical.com>
+ <20220304080348.218581-3-krzysztof.kozlowski@canonical.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220304080348.218581-3-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The applying patches document
-(Documentation/process/applying-patches.rst) mentions incremental stable
-patches, but there is no example of how to apply them. Describe the
-process.
+On 04. 03. 22, 9:03, Krzysztof Kozlowski wrote:
+> The driver data (struct s3c24xx_serial_drv_data) is only used to
+> initialize the driver properly and is not modified.  Make it const.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+...
+> @@ -2726,13 +2726,13 @@ static struct s3c24xx_serial_drv_data s3c6400_serial_drv_data = {
+>   		.ufcon		= S3C2410_UFCON_DEFAULT,
+>   	},
+>   };
+> -#define S3C6400_SERIAL_DRV_DATA ((kernel_ulong_t)&s3c6400_serial_drv_data)
+> +#define S3C6400_SERIAL_DRV_DATA (&s3c6400_serial_drv_data)
+>   #else
+> -#define S3C6400_SERIAL_DRV_DATA (kernel_ulong_t)NULL
+> +#define S3C6400_SERIAL_DRV_DATA (NULL)
+>   #endif
+>   
+>   #ifdef CONFIG_CPU_S5PV210
+> -static struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
+> +static const struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
+>   	.info = {
+>   		.name		= "Samsung S5PV210 UART",
+>   		.type		= TYPE_S3C6400,
+> @@ -2755,9 +2755,9 @@ static struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
+>   	},
+>   	.fifosize = { 256, 64, 16, 16 },
+>   };
+> -#define S5PV210_SERIAL_DRV_DATA ((kernel_ulong_t)&s5pv210_serial_drv_data)
+> +#define S5PV210_SERIAL_DRV_DATA (&s5pv210_serial_drv_data)
+>   #else
+> -#define S5PV210_SERIAL_DRV_DATA	(kernel_ulong_t)NULL
+> +#define S5PV210_SERIAL_DRV_DATA	(NULL)
 
-While at it, remove note about incremental patches and move the external
-link of 5.x.y incremental patches to "Where can I download patches?"
-section.
 
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: SeongJae Park <sjpark@amazon.de>
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/process/applying-patches.rst | 28 ++++++++++++++++++----
- 1 file changed, 23 insertions(+), 5 deletions(-)
+All these changes are somehow irrelevant to the subject/to this patch. 
+Care to put them into a separate patch?
 
-diff --git a/Documentation/process/applying-patches.rst b/Documentation/process/applying-patches.rst
-index c2121c1e55d..c269f5e1a0a 100644
---- a/Documentation/process/applying-patches.rst
-+++ b/Documentation/process/applying-patches.rst
-@@ -249,6 +249,10 @@ The 5.x.y (-stable) and 5.x patches live at
- 
- 	https://www.kernel.org/pub/linux/kernel/v5.x/
- 
-+The 5.x.y incremental patches live at
-+
-+	https://www.kernel.org/pub/linux/kernel/v5.x/incr/
-+
- The -rc patches are not stored on the webserver but are generated on
- demand from git tags such as
- 
-@@ -308,12 +312,11 @@ versions.
- If no 5.x.y kernel is available, then the highest numbered 5.x kernel is
- the current stable kernel.
- 
--.. note::
-+The -stable team provides normal as well as incremental patches. Below is
-+how to apply these patches.
- 
-- The -stable team usually do make incremental patches available as well
-- as patches against the latest mainline release, but I only cover the
-- non-incremental ones below. The incremental ones can be found at
-- https://www.kernel.org/pub/linux/kernel/v5.x/incr/
-+Normal patches
-+~~~~~~~~~~~~~~
- 
- These patches are not incremental, meaning that for example the 5.7.3
- patch does not apply on top of the 5.7.2 kernel source, but rather on top
-@@ -331,6 +334,21 @@ Here's a small example::
- 	$ cd ..
- 	$ mv linux-5.7.2 linux-5.7.3	# rename the kernel source dir
- 
-+Incremental patches
-+~~~~~~~~~~~~~~~~~~~
-+
-+Incremental patches are different: instead of being applied on top
-+of base 5.x kernel, they are applied on top of previous stable kernel
-+(5.x.y-1).
-+
-+Here's the example to apply these::
-+
-+	$ cd ~/linux-5.7.2		# change to the kernel source dir
-+	$ patch -p1 < ../patch-5.7.2-3	# apply the new 5.7.3 patch
-+	$ cd ..
-+	$ mv linux-5.7.2 linux-5.7.3	# rename the kernel source dir
-+
-+
- The -rc kernels
- ===============
- 
+There is no need to put NULL into parentheses.
 
-base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
+> @@ -3062,7 +3062,6 @@ static int __init apple_s5l_early_console_setup(struct earlycon_device *device,
+>   OF_EARLYCON_DECLARE(s5l, "apple,s5l-uart", apple_s5l_early_console_setup);
+>   #endif
+>   
+> -MODULE_ALIAS("platform:samsung-uart");
+
+This is as well a different change to what is claimed.
+
+thanks,
 -- 
-An old man doll... just what I always wanted! - Clara
-
+js
+suse labs

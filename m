@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFB94CF554
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C974CF50E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236687AbiCGJZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S236570AbiCGJYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237327AbiCGJXo (ORCPT
+        with ESMTP id S237334AbiCGJXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:44 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83AA41F95;
-        Mon,  7 Mar 2022 01:22:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646644960; x=1678180960;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=vSoHg7P7RzMmNdIR6BzHpRebOwVwB1J20xCgeUpckYs=;
-  b=JQAGDNlaxPTKTysQgoOpWxPsnvu6EFyFDtsxxabPWu9aTga3EF0P33MM
-   SHMLxhry3s8nQA1of/FEM86ykzb1ZIjR61q4nQRV7Spo8rOlArzg0fGuK
-   xA5NjPYekxNoB6cxjy2n/1yvurASGzy34uQTxoEU+j326NN4iLgOPHE/P
-   +9SPeHnkvGQYU++iRkq6Jg5zDtLdE4D0kGLtXSsLLRycKSh5tullv23Ks
-   C5Xrac6W7IrrW+roA6Mgj5XMZliJptAHAw3zNj5pEHPB9YktjNuujmCSW
-   HwxBngXxFkapImUc5ejBYpQfq3Y/BO6xWzR42AXG3u1JoTMXpDtJiBxl6
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="251920343"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="251920343"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:22:40 -0800
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="553081017"
-Received: from rabl-mobl2.ger.corp.intel.com ([10.252.54.114])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:22:37 -0800
-Date:   Mon, 7 Mar 2022 11:22:35 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>
-Subject: Re: [PATCH 2/7] serial: 8250_dwlib: RS485 HW full duplex support
-In-Reply-To: <20220306185149.GB19394@wunner.de>
-Message-ID: <801197e8-7cc4-93fe-d3fe-8cee8c153c97@linux.intel.com>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com> <20220302095606.14818-3-ilpo.jarvinen@linux.intel.com> <20220306185149.GB19394@wunner.de>
+        Mon, 7 Mar 2022 04:23:45 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C256527C7
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:22:50 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id k24so12673667wrd.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:22:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2H3bOlfOoJGazb69yKfS/sfq+9Q8+S0RoO93d6v477E=;
+        b=qitkM+VpPRyZ/7PZxnPXOdyD3DXCy+67o2nET6cp2jEHCTTb96yr41T9AXJKcRZ1hp
+         WtyeZpk2YKhEzas9JXy9ICW3KI0X/3Wzyc9WDibpfnb2G0CE29bV37s7HfSgRyeLO5rA
+         FuhXPOGGHm96mkDBm7ZmCjkUpIRg3diZIX12Q4cPLHN76zYpmUyPawOfOhTZ6ydVkIn1
+         M94R2/vtVzuXVSv/qfYLNWiXAfxND42doEg7n4P7aZnq0s4onroDm9r77+mxTEyAYZEI
+         5Gg/6aJSHVh+Ow4TQE49JKlw+ShZ7Oe+tU1tMGw8k8jBgPxnFLR0W/cmlWWDaL/tG9pN
+         fTcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2H3bOlfOoJGazb69yKfS/sfq+9Q8+S0RoO93d6v477E=;
+        b=Q/NV0+vJnVBgvBM6QHixItBY1tAHa1lpkisutbiLtcZb1vRlOum2/uhhsaO2W/6Kch
+         c9wxXIVX+kBZzA6+cR23Nf4lhm4NlALIpo6hykqlUOK0kGrz3L4uk7rIfvuibue76psO
+         YlBYVFskzT+LYGga4KAXz//emSriYCxMMS1mAFiIHJDqmi+j9mQADaNxLAbmKsXyUqeZ
+         00WVvKONmDQfq31tTKC4hqEWObWnzp5euYzoDZZyV1WiVAW+7fKqFq0M6RrbFFxiFQDC
+         e8fySelc+KL3a/K0g7SFeSfNvZZ8Sb84n2LJCeRhBFkguCrSeJy6nuiSeuCEkCKoeH98
+         GfyA==
+X-Gm-Message-State: AOAM533xd+nK+2ruPMNQqH7MW9vfsz8yEc2ZT0g5ul+FOY/5TVCLXJwT
+        zufQ8UHxShbYUm8vxtT3h/eqoA==
+X-Google-Smtp-Source: ABdhPJxPhwAw8l9WqBnwJbxiH9KL3OutpuQdPLX3w899jAz9Onsp44AI9k8My/RHezDWBSOGBG/UKw==
+X-Received: by 2002:a5d:5449:0:b0:1f0:1a0c:963f with SMTP id w9-20020a5d5449000000b001f01a0c963fmr7231900wrv.98.1646644968650;
+        Mon, 07 Mar 2022 01:22:48 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id b1-20020a5d40c1000000b001f1dd6ea504sm5440695wrq.59.2022.03.07.01.22.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 01:22:48 -0800 (PST)
+Date:   Mon, 7 Mar 2022 09:22:46 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 4/4] spi: s3c64xx: allow controller-data to be optional
+Message-ID: <YiXO5plQdpsVfwo1@google.com>
+References: <20220124082347.32747-1-krzysztof.kozlowski@canonical.com>
+ <20220124082347.32747-5-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1449773282-1646644959=:1677"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220124082347.32747-5-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, 24 Jan 2022, Krzysztof Kozlowski wrote:
 
---8323329-1449773282-1646644959=:1677
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Sun, 6 Mar 2022, Lukas Wunner wrote:
-
-> On Wed, Mar 02, 2022 at 11:56:01AM +0200, Ilpo J�rvinen wrote:
-> > @@ -110,9 +110,14 @@ static int dw8250_rs485_config(struct uart_port *p, struct serial_rs485 *rs485)
-> >  
-> >  	if (rs485->flags & SER_RS485_ENABLED) {
-> >  		/* Clearing unsupported flags. */
-> > -		rs485->flags &= SER_RS485_ENABLED;
-> > -
-> > -		tcr |= DW_UART_TCR_RS485_EN | DW_UART_TCR_XFER_MODE_DE_OR_RE;
-> > +		rs485->flags &= SER_RS485_ENABLED | SER_RS485_RX_DURING_TX;
-> > +		tcr |= DW_UART_TCR_RS485_EN;
-> > +
-> > +		if (rs485->flags & SER_RS485_RX_DURING_TX) {
-> > +			tcr |= DW_UART_TCR_XFER_MODE_DE_DURING_RE;
-> > +		} else {
-> > +			tcr |= DW_UART_TCR_XFER_MODE_DE_OR_RE;
-> > +		}
+> The Samsung SoC SPI driver requires to provide controller-data node
+> for each of SPI peripheral device nodes.  Make this controller-data node
+> optional, so DTS could be simpler.
 > 
-> This patch deletes lines introduced by the preceding patch.
-> I'd just squash the two together, I don't see much value in
-> introducing full duplex support in a separate patch.
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Reviewed-by: Andi Shyti <andi@etezian.org>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 
-Sure, I can merge them.
+Applied, thanks.
 
 -- 
- i.
-
---8323329-1449773282-1646644959=:1677--
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

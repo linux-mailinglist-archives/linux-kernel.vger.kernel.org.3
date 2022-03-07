@@ -2,90 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2A44D0224
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96E74D0228
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239180AbiCGOzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:55:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        id S238030AbiCGO4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240371AbiCGOz1 (ORCPT
+        with ESMTP id S236557AbiCGO4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:55:27 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B342A3BBFA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:54:31 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id q20so7006823wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:54:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=vnv/T0jtIsN6/gFrs/X2gg4CwShLcXUqKrzBTNpYqaQ=;
-        b=PS+ggUAj/n2BR6SUJ3nS2pcJSAimRbrhrOKO+cR3qWhjJGEdBPC2/OQfY3Qy4AU/d/
-         Kd9PIjcytkrxzzcTGB4FiMZcTwB8NgkyCczAOviXIrOTjbDvPpOjxS6z+YWAXzJrOIpY
-         +/Y0LBV82jKsiEM6rrOews+0e1Z4evU56wYsC61a37P8A5zq4AgXAcQqMwIaX0sTrHKN
-         V3JJvMhjNaAmRyLb4yJUFK8efCiVJ8PeIQFCXzugWCgejlxIAxtYyJYMikqPQE4M50+l
-         3pWHbpmo2RfTaLXAyuDU/bzhOn9KE0MPa0/Hab6vvbjRNmTdPRAT1ixHH+jiktanW9Ic
-         P9kA==
+        Mon, 7 Mar 2022 09:56:11 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2F93BBFA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:55:16 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 619D73F5F9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646664915;
+        bh=C8pfnsecsrezK4Nb7IRuKxjSY5+ji8Ej5U+DGoorANw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=WJt3+JH5GgdWW887A6G1YWpLfGkR0tH4I3f1/i69wAy/cgVWX1yWUUUK47vF4307+
+         gizh6u1POkIM0+gaqLwqIyV+UOGh7wIfXYzB0lLKr/Icey16HXPyu+4TLSP118wr/R
+         z+t+M7zvnnLln+JxLJhO213UNO56dtQtqolyfYIJnxBF7LWJOTlHvJSqDO+s7/dnLE
+         w83+eeHrco70R9vTgyc5MaMABrlR36+50e3wFvVmtNUwWQFFLsFw4eGriduBtN7IQV
+         BilMGPpmCYFzzvwE4IJ3ZADr/QQpd3yXR9WenIaM9AcK2aNLq/slyuJ1a57aUbrEvT
+         +j8ZsjHZncAGw==
+Received: by mail-ed1-f69.google.com with SMTP id b24-20020a50e798000000b0041631767675so2862167edn.23
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:55:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vnv/T0jtIsN6/gFrs/X2gg4CwShLcXUqKrzBTNpYqaQ=;
-        b=qHqsWyjr0X2IGi7X+Kq8NgIHSqr3AfNVG4kU1sSM1BWOOrI5tZFzJyRNdOQZz+bHty
-         g+kumQ1Jo4Yi4/AdCaxurp3k10arrc4hvwwHOdtS9NbcQfHx2hKwVG8eYZMGjCESN2oq
-         ibWWlChQOwbZpOdZJWTp1N7sEVOm0+yuH5OMiYe59B7d5uCxqwK0TMCUy6Mq43/Yx8vm
-         UQjFhQOPRjMTE0qBnIY4lt2Ajr/mo1hYWffKI9PRfMB/ch3pnFsgwhjqJbszQxUtLNfc
-         ikdu6N4KAjA4OnVl7G8e+QhWHUa49pj/flLuD6WPhGb28+6gkfa2mfavgmKkddulm2vZ
-         QTag==
-X-Gm-Message-State: AOAM531Kap3MCvJbiAr5fCzgzrydIBJKGtd1dTCc3PNrElP+lXwAh48H
-        ayUYxZL6fhIWiEKfBQx3owRcjcYNPQWLKQ==
-X-Google-Smtp-Source: ABdhPJzAeWe3VEXyIIxRTMHLSkAE8gpROG5jXFruV7JLNY57Qm1zLZG3hOTbUTnEPgc9wWDflMMLAQ==
-X-Received: by 2002:a05:600c:216:b0:387:d3c0:8214 with SMTP id 22-20020a05600c021600b00387d3c08214mr9842987wmi.96.1646664870245;
-        Mon, 07 Mar 2022 06:54:30 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05600011cf00b001edc2966dd4sm11384327wrx.47.2022.03.07.06.54.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 06:54:29 -0800 (PST)
-Date:   Mon, 7 Mar 2022 14:54:28 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] mfd: intel-lpss: Provide an SSP type to the driver
-Message-ID: <YiYcpDJZlmjMEEWw@google.com>
-References: <20220301205056.79810-1-andriy.shevchenko@linux.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C8pfnsecsrezK4Nb7IRuKxjSY5+ji8Ej5U+DGoorANw=;
+        b=fO7zqHqO1oTUp4FCTDzLqTzD4v7RXnIn+lgCPrllJDzfQc5eUCHod0x5eqgO63iEQ4
+         /r4fFFfnnuKpLcD412zqZ8VR9eWZav4iNRMEuFvk1iiuCLHjj1yxGCKDSGKu1K8onFDU
+         irYL5zPrZ8baXMrrk186yb9TQV4MFyBwp3nYG+V1DoHeiJitinP5EX9xCg7jCqUTjhx1
+         V2vf5JA4vgpoepWH0Qwb1QZr5bN5w0nxkCYJpz5k7gsFAlcJTK0TYpsISryn7N56x5eM
+         pIAhHqVsvrJ4vjHaoBc1mxzBrxyVe6nLyoK2w4vF3Hv02bpH+pxQXXJuk8MEOumZD93M
+         9mtQ==
+X-Gm-Message-State: AOAM532l6b1Q0T441GaK6xT0yUXzgIWIBvTELzMYgejBz30v87YNxpLC
+        Cgw+Qlv5h31wmBFATl1Bon8fDt8+J5S/1nVUjnTpHf1Vt9vGycgweHufrKXw0PLVJJVOxRVgc6m
+        qucW2WeGEeKTzlLWCrEqWveE8qP+OTaTOQsk4Px5ulQ==
+X-Received: by 2002:a17:906:6a0f:b0:6d7:1021:2bd2 with SMTP id qw15-20020a1709066a0f00b006d710212bd2mr9960420ejc.395.1646664915107;
+        Mon, 07 Mar 2022 06:55:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx0lnoIbRB64+BxucbKOyxrxZ+MR5/YF75HAstgYp2zaexCX+E0Y4T2gxNY+oCkTIf2TYVxVA==
+X-Received: by 2002:a17:906:6a0f:b0:6d7:1021:2bd2 with SMTP id qw15-20020a1709066a0f00b006d710212bd2mr9960403ejc.395.1646664914823;
+        Mon, 07 Mar 2022 06:55:14 -0800 (PST)
+Received: from [192.168.0.142] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id z92-20020a509e65000000b00416466dc220sm1749452ede.87.2022.03.07.06.55.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 06:55:13 -0800 (PST)
+Message-ID: <4e137401-4b8c-0abc-0c50-d784d579a991@canonical.com>
+Date:   Mon, 7 Mar 2022 15:55:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220301205056.79810-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: pwm: convert atmel pwm to json-schema
+Content-Language: en-US
+To:     Sergiu Moga <sergiu.moga@microchip.com>,
+        claudiu.beznea@microchip.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        robh+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220307144652.162706-1-sergiu.moga@microchip.com>
+ <20220307144652.162706-2-sergiu.moga@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307144652.162706-2-sergiu.moga@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Mar 2022, Andy Shevchenko wrote:
-
-> The SPI driver wants to know the exact type of the controller.
-> Provide this information to it, hence it allows to fix the
-> Intel Cannon Lake and others in the future.
+On 07/03/2022 15:46, Sergiu Moga wrote:
+> Convert PWM binding for Atmel/Microchip SoCs to Device Tree Schema
+> format.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
 > ---
->  drivers/mfd/intel-lpss-acpi.c | 41 ++++++++++++++++++++++++++++++++---
->  1 file changed, 38 insertions(+), 3 deletions(-)
+>  .../bindings/pwm/atmel,at91sam-pwm.yaml       | 42 +++++++++++++++++++
+>  .../devicetree/bindings/pwm/atmel-pwm.txt     | 35 ----------------
+>  2 files changed, 42 insertions(+), 35 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/pwm/atmel-pwm.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml b/Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml
+> new file mode 100644
+> index 000000000000..2d5dd51a6a55
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pwm/atmel,at91sam-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel/Microchip PWM controller
+> +
+> +allOf:
+> +  - $ref: "pwm.yaml#"
 
-Applied, thanks.
+allOf by convention should go between maintaners and properties.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - atmel,at91sam9rl-pwm
+> +      - atmel,sama5d3-pwm
+> +      - atmel,sama5d2-pwm
+> +      - microchip,sam9x60-pwm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#pwm-cells":
+> +    const: 3
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: true
+
+This has to be either additionalProperties:false or
+"unevaluatedProperties:false".
+
+> +
+> +examples:
+> +  - |
+> +        pwm0: pwm@f8034000 {
+> +                compatible = "atmel,at91sam9rl-pwm";
+> +                reg = <0xf8034000 0x400>;
+> +                #pwm-cells = <3>;
+
+Also please change indentation to 2 or 4 spaces (like we use for all DTS
+examples). Four is preferred (only personally).
+
+You also need to update the path in MAINTAINERS.
+
+Best regards,
+Krzysztof

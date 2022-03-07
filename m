@@ -2,155 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3391A4CF20A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6CD4CF20B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235631AbiCGGj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S235654AbiCGGji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:39:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbiCGGjM (ORCPT
+        with ESMTP id S235678AbiCGGjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:39:12 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C83D21E0A;
-        Sun,  6 Mar 2022 22:38:18 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id d187so12876898pfa.10;
-        Sun, 06 Mar 2022 22:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hlJQ+XgCbYmU2b5PFSmSFsvCWIeaJuMoYnTA7mdc6RQ=;
-        b=CLPyGMv2xW5xrhX6ODf0JGNlwNnLU/VotOZNKudnoGF16G5tm4/AQW4wJvgcADxxmK
-         lOsGRD0SPCRZtafU6Uq3JfJN1iNjx2ZG2fNt7d3rqM3r9r5xX+pn5X1jz2+t56OR7Mqp
-         DX4MOT/cUaO6MMY8KV2VOhkCMACbO9xuTjW5FxgiDsZa4PtOi4xu1JOLfeeEICd9dSAR
-         EYvLOFYjdntVRYggTXKltge6TDgegT2VeVlmQnWjETlgamOcLcjiFdTiFSvQmyGiiFI8
-         dIZTy3GV2mFlP1GLExvBAT0jKKRmEdMNojhJgkTJCrrAvTyvH6ualZCNDrGe4pv3Z9HQ
-         IvXg==
+        Mon, 7 Mar 2022 01:39:25 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0215F21E1E;
+        Sun,  6 Mar 2022 22:38:27 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id g20so18439693edw.6;
+        Sun, 06 Mar 2022 22:38:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=hlJQ+XgCbYmU2b5PFSmSFsvCWIeaJuMoYnTA7mdc6RQ=;
-        b=xZbpUO/2AQJLCu4+IBqT4i0DrblE5jlAgx6MPGGoCDIj2z4koFDi9TAaCSnpgpnKYA
-         XLwza2yQhn2cQCeZXEDVFSDkuLnosEmj8xUCvN/H8SBms3kX6AuPe51zP5bvHBpHKtH0
-         M9ZYMQNz4ZOxexgG9MQ99tfU4MOhV6en05pGWHSiXACgxaxwtbqTrkdmHBS0QKkH53Xl
-         QZPm7XFTeKrrCYC/qSs1shntrgYY4LM1i4R2XKLVl92Q/wWTH+qbbDYebODL7xmTdMnd
-         1oEBgKpA3wsLPMvjNZwKvUgzadn9ednOgGZpxFIhCB3nnxClbVEvmCPKpQ8IWJWr4wnU
-         cCug==
-X-Gm-Message-State: AOAM532rq0PCQYMUEXlLAWsOHDKGJw+N4V1h3+q8R56WS81ddugGNFmW
-        72BNkSlBoPQYsbDJokKUB9Y=
-X-Google-Smtp-Source: ABdhPJxvvzeqR0jnq79NJUHVu11FZCXl3znAlYicg60rY9IG0lSOqgKRJaU9Ts1jsKR4N43ASNbbnQ==
-X-Received: by 2002:a05:6a00:150a:b0:4cc:f6a6:1bc6 with SMTP id q10-20020a056a00150a00b004ccf6a61bc6mr11370956pfu.74.1646635098029;
-        Sun, 06 Mar 2022 22:38:18 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id h17-20020a056a001a5100b004f0edf683dfsm14134781pfv.168.2022.03.06.22.38.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 22:38:17 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andi Kleen <ak@linux.intel.com>, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/pmu: Isolate TSX specific perf_event_attr.attr logic for AMD
-Date:   Mon,  7 Mar 2022 14:38:05 +0800
-Message-Id: <20220307063805.65030-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.35.1
+        bh=9RhIAjzasxR4eX7FzaVOgWlxabsqBx2x17G0bYv+CRg=;
+        b=gsJg5tHL7b+L+r7AkeMCIsLaWy2Cf4TYJudC+daOBzRbrHr8D6GugIzqUTJZH1BK39
+         dHNQXyM9tR9OzW6AnBOUCT3FBKUUnbhNnlwYo4YZo1lAN0jsQvJaiN/rXWKe02f3FMAG
+         7pwy2IKiPoN2a7YqjN97hx/MSaQVuLarP2j5vnmakYE+bV3tOwnATiXAz0ik6/nE7dB+
+         6Y6ACwoSe+Hdbdbbia9ca5LDDc4bFbBr1bV70nzF3BDLBzcpj/bkZehgSdkGeuZE+doM
+         33uo3jofazXGtsrxVDea+U+h9YkLvWt1BleilYi6cMdoh1pzVY8zeLFm22MdhyaVBQsx
+         YLqg==
+X-Gm-Message-State: AOAM532lrplzAA4BgL6hTcO0VeFnxIBBANK5iq+pS13EdKkcFMEjtuzb
+        yto2/4Ok3ibIDzrLQ8JkwoCwTr/6pBE=
+X-Google-Smtp-Source: ABdhPJwdgubxYBuiYoTzQceUVMm6boCorMzuF0z62sATkZSq7DWyqlQRv533Ri0VBGFeJVgnbg8jJQ==
+X-Received: by 2002:a05:6402:370b:b0:413:3bcd:3d0e with SMTP id ek11-20020a056402370b00b004133bcd3d0emr9885718edb.178.1646635106494;
+        Sun, 06 Mar 2022 22:38:26 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id t3-20020a170906268300b006db02dda82fsm2194278ejc.168.2022.03.06.22.38.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 22:38:25 -0800 (PST)
+Message-ID: <06f2b1a8-301e-6a54-50bb-58eca6b93850@kernel.org>
+Date:   Mon, 7 Mar 2022 07:38:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 5/7] tty: serial: samsung: constify
+ s3c24xx_serial_drv_data members
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220304080348.218581-1-krzysztof.kozlowski@canonical.com>
+ <20220304080348.218581-5-krzysztof.kozlowski@canonical.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220304080348.218581-5-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On 04. 03. 22, 9:03, Krzysztof Kozlowski wrote:
+> The driver data (struct s3c24xx_serial_drv_data) is never modified, so
+> also its members can be make const.  Except code style this has no
 
-HSW_IN_TX* bits are used in generic code which are not supported on
-AMD. Worse, these bits overlap with AMD EventSelect[11:8] and hence
-using HSW_IN_TX* bits unconditionally in generic code is resulting in
-unintentional pmu behavior on AMD. For example, if EventSelect[11:8]
-is 0x2, pmc_reprogram_counter() wrongly assumes that
-HSW_IN_TX_CHECKPOINTED is set and thus forces sampling period to be 0.
+s/make/made/ if you do a v2.
 
-Opportunistically remove two TSX specific incoming parameters for
-the generic interface reprogram_counter().
+> impact because the structure itself is always a const.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Fixes: 103af0a98788 ("perf, kvm: Support the in_tx/in_tx_cp modifiers in KVM arch perfmon emulation v5")
-Co-developed-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
----
-Note: this patch is based on [1] which is considered to be a necessary cornerstone.
-[1] https://lore.kernel.org/kvm/20220302111334.12689-1-likexu@tencent.com/
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
- arch/x86/kvm/pmu.c | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+> ---
+>   drivers/tty/serial/samsung_tty.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index 279c413f2300..eecefff5c4a4 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -85,9 +85,9 @@ struct s3c24xx_uart_info {
+>   };
+>   
+>   struct s3c24xx_serial_drv_data {
+> -	struct s3c24xx_uart_info	info;
+> -	struct s3c2410_uartcfg		def_cfg;
+> -	unsigned int			fifosize[CONFIG_SERIAL_SAMSUNG_UARTS];
+> +	const struct s3c24xx_uart_info	info;
+> +	const struct s3c2410_uartcfg	def_cfg;
+> +	const unsigned int		fifosize[CONFIG_SERIAL_SAMSUNG_UARTS];
+>   };
+>   
+>   struct s3c24xx_uart_dma {
 
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 17c61c990282..d0f9515c37dd 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -99,8 +99,7 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
- 
- static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 				  u64 config, bool exclude_user,
--				  bool exclude_kernel, bool intr,
--				  bool in_tx, bool in_tx_cp)
-+				  bool exclude_kernel, bool intr)
- {
- 	struct perf_event *event;
- 	struct perf_event_attr attr = {
-@@ -116,16 +115,18 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
- 
- 	attr.sample_period = get_sample_period(pmc, pmc->counter);
- 
--	if (in_tx)
--		attr.config |= HSW_IN_TX;
--	if (in_tx_cp) {
--		/*
--		 * HSW_IN_TX_CHECKPOINTED is not supported with nonzero
--		 * period. Just clear the sample period so at least
--		 * allocating the counter doesn't fail.
--		 */
--		attr.sample_period = 0;
--		attr.config |= HSW_IN_TX_CHECKPOINTED;
-+	if (guest_cpuid_is_intel(pmc->vcpu)) {
-+		if (pmc->eventsel & HSW_IN_TX)
-+			attr.config |= HSW_IN_TX;
-+		if (pmc->eventsel & HSW_IN_TX_CHECKPOINTED) {
-+			/*
-+			 * HSW_IN_TX_CHECKPOINTED is not supported with nonzero
-+			 * period. Just clear the sample period so at least
-+			 * allocating the counter doesn't fail.
-+			 */
-+			attr.sample_period = 0;
-+			attr.config |= HSW_IN_TX_CHECKPOINTED;
-+		}
- 	}
- 
- 	event = perf_event_create_kernel_counter(&attr, -1, current,
-@@ -268,9 +269,7 @@ void reprogram_counter(struct kvm_pmc *pmc)
- 			(eventsel & AMD64_RAW_EVENT_MASK),
- 			!(eventsel & ARCH_PERFMON_EVENTSEL_USR),
- 			!(eventsel & ARCH_PERFMON_EVENTSEL_OS),
--			eventsel & ARCH_PERFMON_EVENTSEL_INT,
--			(eventsel & HSW_IN_TX),
--			(eventsel & HSW_IN_TX_CHECKPOINTED));
-+			eventsel & ARCH_PERFMON_EVENTSEL_INT);
- }
- EXPORT_SYMBOL_GPL(reprogram_counter);
- 
+
 -- 
-2.35.1
-
+js
+suse labs

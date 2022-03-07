@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB644D0C0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A68D4D0C13
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343915AbiCGXbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 18:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        id S1343933AbiCGXbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 18:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343911AbiCGXbk (ORCPT
+        with ESMTP id S1343920AbiCGXbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 18:31:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBACD88
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 15:30:45 -0800 (PST)
+        Mon, 7 Mar 2022 18:31:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CEAD88
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 15:30:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A1866122C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 23:30:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ABD3C340F4;
-        Mon,  7 Mar 2022 23:30:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD017B8174B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 23:30:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46705C340F3;
+        Mon,  7 Mar 2022 23:30:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646695844;
-        bh=qUVF7kTyEancPlf3zp+fG1Apgn/5q8QCxp97FRG2MdY=;
+        s=k20201202; t=1646695846;
+        bh=nN8KeMyaNCF4PtBAXxi6MOQhA1/rey5kYpWAZLjTD/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YdzhOa38yhphI+8m7LvPVRRF444bSSgLUtnwFnki/g5xnQOjhYw/Z83I0CzxQONMd
-         1lBJMuRjNlnch69p4CZMIxAq4T+3CwQOndd2nv8HKOWR3laNwyvGO2b1OlR9yq5C4q
-         5l8VQtzEqdjflPojl9DVyMshrtvwZY1gsYeMU2up6CfJOYePsNtfVNnLEIcb8A0tZ6
-         dP5Rv0YGExgTg0RVaVTvcSz4fIFazVZXqcShsCYFRgx7H9ZYJAddHnb+oaP8ThkwLS
-         TlC5xx+AsskP56e8GUoC1Sx9Ajjc2eS+uRroLmSIl7TpQqKLOtEAUS3XIn86nJyVrR
-         pnW3Bx8yS8AaA==
+        b=ed+Wqy1ezWhsg2PZiASlygw4Xz6ohnIPmw+BU/3Ot711LZ2nIVHzURSZfO4zJUFHq
+         wQnFe4rr7AsPBIiwOjIff0zFzrhDb0Z+q/O5S+KmtSYn4onO3lJ9ks3c9Kaimt6eSq
+         TMzHLDedrNkaMhvFO9RzR4SdjEdTIdbbzqwNU1SAXKHFXtjuGOUbbM+h2Ee322ekoC
+         z/VmudX8fptNVbiloqYCjslxFjVWZ6gBoWiwCC8pXY+WCCa0l6tMGbGvWDt1P3b9MM
+         DI/x4iZmvqNACRIbisIPLTNUPce72LSwWNBnD2rpTLzLkiy2O16gaw4nAzDvskcKXb
+         WndwLx6Is9uBg==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -39,9 +39,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: [PATCH 1/4] tick: Detect and fix jiffies update stall
-Date:   Tue,  8 Mar 2022 00:30:31 +0100
-Message-Id: <20220307233034.34550-2-frederic@kernel.org>
+Subject: [PATCH 2/4] tick/rcu: Remove obsolete rcu_needs_cpu() parameters
+Date:   Tue,  8 Mar 2022 00:30:32 +0100
+Message-Id: <20220307233034.34550-3-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220307233034.34550-1-frederic@kernel.org>
 References: <20220307233034.34550-1-frederic@kernel.org>
@@ -57,84 +57,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some rare cases, the timekeeper CPU may be delaying its jiffies
-update duty for a while. Known causes include:
+With the removal of CONFIG_RCU_FAST_NO_HZ, the parameters in
+rcu_needs_cpu() are not necessary anymore. Simply remove them.
 
-* The timekeeper is waiting on stop_machine in a MULTI_STOP_DISABLE_IRQ
-  or MULTI_STOP_RUN state. Disabled interrupts prevent from timekeeping
-  updates while waiting for the target CPU to complete its
-  stop_machine() callback.
-
-* The timekeeper vcpu has VMEXIT'ed for a long while due to some overload
-  on the host.
-
-Detect and fix these situations with emergency timekeeping catchups.
-
-Original-patch-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>
 ---
- kernel/time/tick-sched.c | 17 +++++++++++++++++
- kernel/time/tick-sched.h |  4 ++++
- 2 files changed, 21 insertions(+)
+ include/linux/rcutiny.h  |  3 +--
+ include/linux/rcutree.h  |  2 +-
+ kernel/rcu/tree.c        |  3 +--
+ kernel/time/tick-sched.c | 10 ++++------
+ 4 files changed, 7 insertions(+), 11 deletions(-)
 
+diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
+index 858f4d429946..5fed476f977f 100644
+--- a/include/linux/rcutiny.h
++++ b/include/linux/rcutiny.h
+@@ -64,9 +64,8 @@ static inline void rcu_softirq_qs(void)
+ 		rcu_tasks_qs(current, (preempt)); \
+ 	} while (0)
+ 
+-static inline int rcu_needs_cpu(u64 basemono, u64 *nextevt)
++static inline int rcu_needs_cpu(void)
+ {
+-	*nextevt = KTIME_MAX;
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
+index 53209d669400..6cc91291d078 100644
+--- a/include/linux/rcutree.h
++++ b/include/linux/rcutree.h
+@@ -19,7 +19,7 @@
+ 
+ void rcu_softirq_qs(void);
+ void rcu_note_context_switch(bool preempt);
+-int rcu_needs_cpu(u64 basem, u64 *nextevt);
++int rcu_needs_cpu(void);
+ void rcu_cpu_stall_reset(void);
+ 
+ /*
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index a4c25a6283b0..80faf2273ce9 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -1086,9 +1086,8 @@ void rcu_irq_enter_irqson(void)
+  * Just check whether or not this CPU has non-offloaded RCU callbacks
+  * queued.
+  */
+-int rcu_needs_cpu(u64 basemono, u64 *nextevt)
++int rcu_needs_cpu(void)
+ {
+-	*nextevt = KTIME_MAX;
+ 	return !rcu_segcblist_empty(&this_cpu_ptr(&rcu_data)->cblist) &&
+ 		!rcu_rdp_is_offloaded(this_cpu_ptr(&rcu_data));
+ }
 diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 17a283ce2b20..c89f50a7e690 100644
+index c89f50a7e690..566ad5bd83e9 100644
 --- a/kernel/time/tick-sched.c
 +++ b/kernel/time/tick-sched.c
-@@ -169,6 +169,8 @@ static ktime_t tick_init_jiffy_update(void)
- 	return period;
- }
+@@ -785,7 +785,7 @@ static inline bool local_timer_softirq_pending(void)
  
-+#define MAX_STALLED_JIFFIES 5
-+
- static void tick_sched_do_timer(struct tick_sched *ts, ktime_t now)
+ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
  {
- 	int cpu = smp_processor_id();
-@@ -196,6 +198,21 @@ static void tick_sched_do_timer(struct tick_sched *ts, ktime_t now)
- 	if (tick_do_timer_cpu == cpu)
- 		tick_do_update_jiffies64(now);
+-	u64 basemono, next_tick, next_tmr, next_rcu, delta, expires;
++	u64 basemono, next_tick, delta, expires;
+ 	unsigned long basejiff;
+ 	unsigned int seq;
  
-+	/*
-+	 * If jiffies update stalled for too long (timekeeper in stop_machine()
-+	 * or VMEXIT'ed for several msecs), force an update.
-+	 */
-+	if (ts->last_tick_jiffies != jiffies) {
-+		ts->stalled_jiffies = 0;
-+		ts->last_tick_jiffies = READ_ONCE(jiffies);
-+	} else {
-+		if (++ts->stalled_jiffies == MAX_STALLED_JIFFIES) {
-+			tick_do_update_jiffies64(now);
-+			ts->stalled_jiffies = 0;
-+			ts->last_tick_jiffies = READ_ONCE(jiffies);
-+		}
-+	}
-+
- 	if (ts->inidle)
- 		ts->got_idle_tick = 1;
- }
-diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-index d952ae393423..504649513399 100644
---- a/kernel/time/tick-sched.h
-+++ b/kernel/time/tick-sched.h
-@@ -49,6 +49,8 @@ enum tick_nohz_mode {
-  * @timer_expires_base:	Base time clock monotonic for @timer_expires
-  * @next_timer:		Expiry time of next expiring timer for debugging purpose only
-  * @tick_dep_mask:	Tick dependency mask - is set, if someone needs the tick
-+ * @last_tick_jiffies:	Value of jiffies seen on last tick
-+ * @stalled_jiffies:	Number of stalled jiffies detected across ticks
-  */
- struct tick_sched {
- 	struct hrtimer			sched_timer;
-@@ -77,6 +79,8 @@ struct tick_sched {
- 	u64				next_timer;
- 	ktime_t				idle_expires;
- 	atomic_t			tick_dep_mask;
-+	unsigned long			last_tick_jiffies;
-+	unsigned int			stalled_jiffies;
- };
+@@ -808,7 +808,7 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
+ 	 * minimal delta which brings us back to this place
+ 	 * immediately. Lather, rinse and repeat...
+ 	 */
+-	if (rcu_needs_cpu(basemono, &next_rcu) || arch_needs_cpu() ||
++	if (rcu_needs_cpu() || arch_needs_cpu() ||
+ 	    irq_work_needs_cpu() || local_timer_softirq_pending()) {
+ 		next_tick = basemono + TICK_NSEC;
+ 	} else {
+@@ -819,10 +819,8 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
+ 		 * disabled this also looks at the next expiring
+ 		 * hrtimer.
+ 		 */
+-		next_tmr = get_next_timer_interrupt(basejiff, basemono);
+-		ts->next_timer = next_tmr;
+-		/* Take the next rcu event into account */
+-		next_tick = next_rcu < next_tmr ? next_rcu : next_tmr;
++		next_tick = get_next_timer_interrupt(basejiff, basemono);
++		ts->next_timer = next_tick;
+ 	}
  
- extern struct tick_sched *tick_get_tick_sched(int cpu);
+ 	/*
 -- 
 2.25.1
 

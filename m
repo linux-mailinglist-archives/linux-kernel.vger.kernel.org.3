@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602E74CFA09
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BFF4CFB06
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241194AbiCGKKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S234850AbiCGKZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239543AbiCGJtw (ORCPT
+        with ESMTP id S239866AbiCGKDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:49:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E457770CF0;
-        Mon,  7 Mar 2022 01:43:26 -0800 (PST)
+        Mon, 7 Mar 2022 05:03:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805D875201;
+        Mon,  7 Mar 2022 01:51:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20440B80E70;
-        Mon,  7 Mar 2022 09:43:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F197C340F3;
-        Mon,  7 Mar 2022 09:43:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F89160A28;
+        Mon,  7 Mar 2022 09:51:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47310C340F3;
+        Mon,  7 Mar 2022 09:51:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646204;
-        bh=oMThjiixOCJ9dPH1HEuqZKbfzqOPbQDdMFQOvJ+z7Q8=;
+        s=korg; t=1646646718;
+        bh=MWNdMjbNh4UhiYgSJBEtVbNiySIpwKPjsIXuqTbu7D0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MUiXeTwXXDzF/oPR19IrYW32c7sDTOvFMNnuhbMjukTV+Zqkk1bpsc3fbD/11ZXF2
-         qZiMIyXKa1s1/t9/YvDKF/ciyKjT4W2i73nNFPWoZjMUPYkCZOeWzHxddhznvyA+8A
-         0hPeoxy96nIJOA8N+h1Rk0Vo9zsi5Khsekr+8iUQ=
+        b=LIgtMHSoOR0itYiRiFzja7Fi1FtV6X5rpCTBtQ3sz0dKW57e+Bd3sSLNyQMsjrQJ4
+         rHWaz1sS8JhgbHkwHXnXumD3c/bF/1ezzBi+bZ9o3e/96uB+H5AUc/j4FNXOhEMH7y
+         eHvDqiUKFJDHQljkhSL5Izi6La+zibq3eWxIKdvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Nixdorf <j.nixdorf@avm.de>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 166/262] net: ipv6: ensure we call ipv6_mc_down() at most once
+        stable@vger.kernel.org, lena wang <lena.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 072/186] net: fix up skbs delta_truesize in UDP GRO frag_list
 Date:   Mon,  7 Mar 2022 10:18:30 +0100
-Message-Id: <20220307091707.113195308@linuxfoundation.org>
+Message-Id: <20220307091656.103893732@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,93 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: j.nixdorf@avm.de <j.nixdorf@avm.de>
+From: lena wang <lena.wang@mediatek.com>
 
-commit 9995b408f17ff8c7f11bc725c8aa225ba3a63b1c upstream.
+commit 224102de2ff105a2c05695e66a08f4b5b6b2d19c upstream.
 
-There are two reasons for addrconf_notify() to be called with NETDEV_DOWN:
-either the network device is actually going down, or IPv6 was disabled
-on the interface.
+The truesize for a UDP GRO packet is added by main skb and skbs in main
+skb's frag_list:
+skb_gro_receive_list
+        p->truesize += skb->truesize;
 
-If either of them stays down while the other is toggled, we repeatedly
-call the code for NETDEV_DOWN, including ipv6_mc_down(), while never
-calling the corresponding ipv6_mc_up() in between. This will cause a
-new entry in idev->mc_tomb to be allocated for each multicast group
-the interface is subscribed to, which in turn leaks one struct ifmcaddr6
-per nontrivial multicast group the interface is subscribed to.
+The commit 53475c5dd856 ("net: fix use-after-free when UDP GRO with
+shared fraglist") introduced a truesize increase for frag_list skbs.
+When uncloning skb, it will call pskb_expand_head and trusesize for
+frag_list skbs may increase. This can occur when allocators uses
+__netdev_alloc_skb and not jump into __alloc_skb. This flow does not
+use ksize(len) to calculate truesize while pskb_expand_head uses.
+skb_segment_list
+err = skb_unclone(nskb, GFP_ATOMIC);
+pskb_expand_head
+        if (!skb->sk || skb->destructor == sock_edemux)
+                skb->truesize += size - osize;
 
-The following reproducer will leak at least $n objects:
+If we uses increased truesize adding as delta_truesize, it will be
+larger than before and even larger than previous total truesize value
+if skbs in frag_list are abundant. The main skb truesize will become
+smaller and even a minus value or a huge value for an unsigned int
+parameter. Then the following memory check will drop this abnormal skb.
 
-ip addr add ff2e::4242/32 dev eth0 autojoin
-sysctl -w net.ipv6.conf.eth0.disable_ipv6=1
-for i in $(seq 1 $n); do
-	ip link set up eth0; ip link set down eth0
-done
+To avoid this error we should use the original truesize to segment the
+main skb.
 
-Joining groups with IPV6_ADD_MEMBERSHIP (unprivileged) or setting the
-sysctl net.ipv6.conf.eth0.forwarding to 1 (=> subscribing to ff02::2)
-can also be used to create a nontrivial idev->mc_list, which will the
-leak objects with the right up-down-sequence.
-
-Based on both sources for NETDEV_DOWN events the interface IPv6 state
-should be considered:
-
- - not ready if the network interface is not ready OR IPv6 is disabled
-   for it
- - ready if the network interface is ready AND IPv6 is enabled for it
-
-The functions ipv6_mc_up() and ipv6_down() should only be run when this
-state changes.
-
-Implement this by remembering when the IPv6 state is ready, and only
-run ipv6_mc_down() if it actually changed from ready to not ready.
-
-The other direction (not ready -> ready) already works correctly, as:
-
- - the interface notification triggered codepath for NETDEV_UP /
-   NETDEV_CHANGE returns early if ipv6 is disabled, and
- - the disable_ipv6=0 triggered codepath skips fully initializing the
-   interface as long as addrconf_link_ready(dev) returns false
- - calling ipv6_mc_up() repeatedly does not leak anything
-
-Fixes: 3ce62a84d53c ("ipv6: exit early in addrconf_notify() if IPv6 is disabled")
-Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 53475c5dd856 ("net: fix use-after-free when UDP GRO with shared fraglist")
+Signed-off-by: lena wang <lena.wang@mediatek.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/1646133431-8948-1-git-send-email-lena.wang@mediatek.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/addrconf.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ net/core/skbuff.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -3730,6 +3730,7 @@ static int addrconf_ifdown(struct net_de
- 	struct inet6_dev *idev;
- 	struct inet6_ifaddr *ifa, *tmp;
- 	bool keep_addr = false;
-+	bool was_ready;
- 	int state, i;
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3854,6 +3854,7 @@ struct sk_buff *skb_segment_list(struct
+ 		list_skb = list_skb->next;
  
- 	ASSERT_RTNL();
-@@ -3795,7 +3796,10 @@ restart:
+ 		err = 0;
++		delta_truesize += nskb->truesize;
+ 		if (skb_shared(nskb)) {
+ 			tmp = skb_clone(nskb, GFP_ATOMIC);
+ 			if (tmp) {
+@@ -3878,7 +3879,6 @@ struct sk_buff *skb_segment_list(struct
+ 		tail = nskb;
  
- 	addrconf_del_rs_timer(idev);
+ 		delta_len += nskb->len;
+-		delta_truesize += nskb->truesize;
  
--	/* Step 2: clear flags for stateless addrconf */
-+	/* Step 2: clear flags for stateless addrconf, repeated down
-+	 *         detection
-+	 */
-+	was_ready = idev->if_flags & IF_READY;
- 	if (!unregister)
- 		idev->if_flags &= ~(IF_RS_SENT|IF_RA_RCVD|IF_READY);
- 
-@@ -3869,7 +3873,7 @@ restart:
- 	if (unregister) {
- 		ipv6_ac_destroy_dev(idev);
- 		ipv6_mc_destroy_dev(idev);
--	} else {
-+	} else if (was_ready) {
- 		ipv6_mc_down(idev);
- 	}
+ 		skb_push(nskb, -skb_network_offset(nskb) + offset);
  
 
 

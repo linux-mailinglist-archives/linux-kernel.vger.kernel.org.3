@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BD34CF9DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8994CF665
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242166AbiCGKLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S237651AbiCGJgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240622AbiCGJvM (ORCPT
+        with ESMTP id S238399AbiCGJ3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:51:12 -0500
+        Mon, 7 Mar 2022 04:29:09 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C901D6582B;
-        Mon,  7 Mar 2022 01:44:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882AE66F87;
+        Mon,  7 Mar 2022 01:27:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59469B810CF;
-        Mon,  7 Mar 2022 09:44:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC459C340F6;
-        Mon,  7 Mar 2022 09:44:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C80AB810AC;
+        Mon,  7 Mar 2022 09:27:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E9EC340F3;
+        Mon,  7 Mar 2022 09:27:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646296;
-        bh=XNFfssC4dcywt09vS1FDrDsp4FKO7LtqQ6ia6lOx3UI=;
+        s=korg; t=1646645235;
+        bh=6IjUGTiW8p4e+fU2RmYZBwhQ+7d4bpZmupWB9zHQXDQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=efK96Z+xXbWq5juTOqlfP2+QztRpbmneHtmjQjDmlMp7kjiUPPvIgbmFSt+FlyuGA
-         Arb9LnHEoTW8RB6SknZNJKs8XF77tVRg/NKRtC3G+HwVgq2GY5mTRpAfCqyuSuOrxB
-         rAxNmCbaSIeSmGicUz1xO8+W3YhWdKoRDptMuMSQ=
+        b=Nu410yVuTdIQTHyVP1dX08A8WZXfMB8ZySEJkeTuLTZq/k/dRRbcLhFISCRnPKWc1
+         496AV3d/w+BWjm/ofZd6H2/ajmauwvR9HIX+8BSa0cep3ydK8TiWF4E9gVQh6PqlGh
+         HFc1MkzBfSwoBKLyNtiZtmCF+9qFZJnnvWceRVsU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.15 197/262] pinctrl: sunxi: Use unique lockdep classes for IRQs
-Date:   Mon,  7 Mar 2022 10:19:01 +0100
-Message-Id: <20220307091708.187406745@linuxfoundation.org>
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 5.4 29/64] block: Fix fsync always failed if once failed
+Date:   Mon,  7 Mar 2022 10:19:02 +0100
+Message-Id: <20220307091639.971939559@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,104 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Ye Bin <yebin10@huawei.com>
 
-commit bac129dbc6560dfeb634c03f0c08b78024e71915 upstream.
+commit 8a7518931baa8ea023700987f3db31cb0a80610b upstream.
 
-This driver, like several others, uses a chained IRQ for each GPIO bank,
-and forwards .irq_set_wake to the GPIO bank's upstream IRQ. As a result,
-a call to irq_set_irq_wake() needs to lock both the upstream and
-downstream irq_desc's. Lockdep considers this to be a possible deadlock
-when the irq_desc's share lockdep classes, which they do by default:
+We do test with inject error fault base on v4.19, after test some time we found
+sync /dev/sda always failed.
+[root@localhost] sync /dev/sda
+sync: error syncing '/dev/sda': Input/output error
 
- ============================================
- WARNING: possible recursive locking detected
- 5.17.0-rc3-00394-gc849047c2473 #1 Not tainted
- --------------------------------------------
- init/307 is trying to acquire lock:
- c2dfe27c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+scsi log as follows:
+[19069.812296] sd 0:0:0:0: [sda] tag#64 Send: scmd 0x00000000d03a0b6b
+[19069.812302] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
+[19069.812533] sd 0:0:0:0: [sda] tag#64 Done: SUCCESS Result: hostbyte=DID_OK driverbyte=DRIVER_OK
+[19069.812536] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
+[19069.812539] sd 0:0:0:0: [sda] tag#64 scsi host busy 1 failed 0
+[19069.812542] sd 0:0:0:0: Notifying upper driver of completion (result 0)
+[19069.812546] sd 0:0:0:0: [sda] tag#64 sd_done: completed 0 of 0 bytes
+[19069.812549] sd 0:0:0:0: [sda] tag#64 0 sectors total, 0 bytes done.
+[19069.812564] print_req_error: I/O error, dev sda, sector 0
 
- but task is already holding lock:
- c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+ftrace log as follows:
+ rep-306069 [007] .... 19654.923315: block_bio_queue: 8,0 FWS 0 + 0 [rep]
+ rep-306069 [007] .... 19654.923333: block_getrq: 8,0 FWS 0 + 0 [rep]
+ kworker/7:1H-250   [007] .... 19654.923352: block_rq_issue: 8,0 FF 0 () 0 + 0 [kworker/7:1H]
+ <idle>-0     [007] ..s. 19654.923562: block_rq_complete: 8,0 FF () 18446744073709551615 + 0 [0]
+ <idle>-0     [007] d.s. 19654.923576: block_rq_complete: 8,0 WS () 0 + 0 [-5]
 
- other info that might help us debug this:
-  Possible unsafe locking scenario:
+As 8d6996630c03 introduce 'fq->rq_status', this data only update when 'flush_rq'
+reference count isn't zero. If flush request once failed and record error code
+in 'fq->rq_status'. If there is no chance to update 'fq->rq_status',then do fsync
+will always failed.
+To address this issue reset 'fq->rq_status' after return error code to upper layer.
 
-        CPU0
-        ----
-   lock(&irq_desc_lock_class);
-   lock(&irq_desc_lock_class);
-
-  *** DEADLOCK ***
-
-  May be due to missing lock nesting notation
-
- 4 locks held by init/307:
-  #0: c1f29f18 (system_transition_mutex){+.+.}-{3:3}, at: __do_sys_reboot+0x90/0x23c
-  #1: c20f7760 (&dev->mutex){....}-{3:3}, at: device_shutdown+0xf4/0x224
-  #2: c2e804d8 (&dev->mutex){....}-{3:3}, at: device_shutdown+0x104/0x224
-  #3: c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
-
- stack backtrace:
- CPU: 0 PID: 307 Comm: init Not tainted 5.17.0-rc3-00394-gc849047c2473 #1
- Hardware name: Allwinner sun8i Family
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x68/0x90
-  dump_stack_lvl from __lock_acquire+0x1680/0x31a0
-  __lock_acquire from lock_acquire+0x148/0x3dc
-  lock_acquire from _raw_spin_lock_irqsave+0x50/0x6c
-  _raw_spin_lock_irqsave from __irq_get_desc_lock+0x58/0xa0
-  __irq_get_desc_lock from irq_set_irq_wake+0x2c/0x19c
-  irq_set_irq_wake from irq_set_irq_wake+0x13c/0x19c
-    [tail call from sunxi_pinctrl_irq_set_wake]
-  irq_set_irq_wake from gpio_keys_suspend+0x80/0x1a4
-  gpio_keys_suspend from gpio_keys_shutdown+0x10/0x2c
-  gpio_keys_shutdown from device_shutdown+0x180/0x224
-  device_shutdown from __do_sys_reboot+0x134/0x23c
-  __do_sys_reboot from ret_fast_syscall+0x0/0x1c
-
-However, this can never deadlock because the upstream and downstream
-IRQs are never the same (nor do they even involve the same irqchip).
-
-Silence this erroneous lockdep splat by applying what appears to be the
-usual fix of moving the GPIO IRQs to separate lockdep classes.
-
-Fixes: a59c99d9eaf9 ("pinctrl: sunxi: Forward calls to irq_set_irq_wake")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220216040037.22730-1-samuel@sholland.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 8d6996630c03("block: fix null pointer dereference in blk_mq_rq_timed_out()")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Link: https://lore.kernel.org/r/20211129012659.1553733-1-yebin10@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-sunxi.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ block/blk-flush.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-@@ -36,6 +36,13 @@
- #include "../core.h"
- #include "pinctrl-sunxi.h"
+--- a/block/blk-flush.c
++++ b/block/blk-flush.c
+@@ -222,8 +222,10 @@ static void flush_end_io(struct request
+ 		return;
+ 	}
  
-+/*
-+ * These lock classes tell lockdep that GPIO IRQs are in a different
-+ * category than their parents, so it won't report false recursion.
-+ */
-+static struct lock_class_key sunxi_pinctrl_irq_lock_class;
-+static struct lock_class_key sunxi_pinctrl_irq_request_class;
-+
- static struct irq_chip sunxi_pinctrl_edge_irq_chip;
- static struct irq_chip sunxi_pinctrl_level_irq_chip;
+-	if (fq->rq_status != BLK_STS_OK)
++	if (fq->rq_status != BLK_STS_OK) {
+ 		error = fq->rq_status;
++		fq->rq_status = BLK_STS_OK;
++	}
  
-@@ -1551,6 +1558,8 @@ int sunxi_pinctrl_init_with_variant(stru
- 	for (i = 0; i < (pctl->desc->irq_banks * IRQ_PER_BANK); i++) {
- 		int irqno = irq_create_mapping(pctl->domain, i);
- 
-+		irq_set_lockdep_class(irqno, &sunxi_pinctrl_irq_lock_class,
-+				      &sunxi_pinctrl_irq_request_class);
- 		irq_set_chip_and_handler(irqno, &sunxi_pinctrl_edge_irq_chip,
- 					 handle_edge_irq);
- 		irq_set_chip_data(irqno, pctl);
+ 	hctx = flush_rq->mq_hctx;
+ 	if (!q->elevator) {
 
 

@@ -2,67 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658234D0AC4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3003B4D0AC7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343680AbiCGWOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
+        id S1343682AbiCGWPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343673AbiCGWOr (ORCPT
+        with ESMTP id S1343713AbiCGWPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:14:47 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8F3580C3;
-        Mon,  7 Mar 2022 14:13:51 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id u10so23906845wra.9;
-        Mon, 07 Mar 2022 14:13:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S4KRc2JPrzXRUzhnhouVf6rWLnTNsy7QJgg90N+SFgg=;
-        b=OJtwXtXx5Eannq7k//Jp5ML1sR9bjgU0QhTwDhoiYjGHJzvyWMKCjsL6808BvtzLX7
-         MsCm1kwWhic6uQ2XcyfXFmqa0/UI0qPdcdwqiu3Q+jCCsbmRv4pdtgatzOZ3qkBkDdSK
-         M62qT+tJqC7J/4A91+1QBiosBt66dMVGT0lNc/NBJ1QO3wKDdUm22UbmqOh0+EX/3CMg
-         IdtfFVzSgrYJyZhXrzvjRa3RD7MyWNiAW0yQlzWHxhPsuxFrUjIxz1ubrg8oRy1hlURO
-         yLJTC9J4X9bIXlj3+yRkucOed8eOecV5OfSJdP2xpJpveTN8hFSgJFJvtKMTDOkZfXUQ
-         kdMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S4KRc2JPrzXRUzhnhouVf6rWLnTNsy7QJgg90N+SFgg=;
-        b=edQ1riKNDLM3hSPhHy1mq15+WYXnAO6sPO3l4wHGo+TMgCWXNmR/FP8rNo3bm08JTW
-         49nwtms0eMumoaImm2zsO44TYzBCrVyl7/LS/9uHBdTQHoJuneqrovtZUT0VUBSuWrt4
-         E/fvXeQ0GTcqTV6xLJb60O22Kn6VhP25VLzIwZlvWHxAiiArfvl3I9BajDtDTsmTEoou
-         +T879qGFHKl2Fnjyesqu8H0hg9fAYdp0uMzj4hQrWKisH92rQuHjhu86LLa8qnw3agXf
-         BVuZ0zpR0EOI7bas7eiOl9jO+9V/GYLiqxBadZcQ0GYND5Ekli91Dc6oTHBIljtHMll1
-         9sFA==
-X-Gm-Message-State: AOAM530Afh5s2UNz7nPdBfpcpVyIuYAbPhxulX1H11fP3pN3RwuI0OXe
-        gexncZO+mx22ICa45+lgjG0=
-X-Google-Smtp-Source: ABdhPJxuX46N8YfLziPqQK5LGqqqEsE4uEjlh6AByOvMMDk5DZJk92B96+DWQv3THo8a6V4GBZOjJg==
-X-Received: by 2002:adf:eb4d:0:b0:1ed:c1f7:a951 with SMTP id u13-20020adfeb4d000000b001edc1f7a951mr9484235wrn.454.1646691230225;
-        Mon, 07 Mar 2022 14:13:50 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056000170400b001f1fefa429bsm2741564wrc.8.2022.03.07.14.13.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 14:13:49 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Taras Chornyi <tchornyi@marvell.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] net: prestera: acl: make read-only array client_map static const
-Date:   Mon,  7 Mar 2022 22:13:49 +0000
-Message-Id: <20220307221349.164585-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 7 Mar 2022 17:15:15 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D9E58E50;
+        Mon,  7 Mar 2022 14:14:19 -0800 (PST)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id BB716100005;
+        Mon,  7 Mar 2022 22:14:13 +0000 (UTC)
+Message-ID: <3a96b606-c3aa-c39b-645e-a3af0c82e44b@ovn.org>
+Date:   Mon, 7 Mar 2022 23:14:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     dev@openvswitch.org, Toms Atteka <cpp.code.lv@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, i.maximets@ovn.org
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>, Roi Dayan <roid@nvidia.com>
+References: <20220224005409.411626-1-cpp.code.lv@gmail.com>
+ <164578561098.13834.14017896440355101001.git-patchwork-notify@kernel.org>
+ <3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com>
+ <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
+ <57996C97-5845-425B-9B13-7F33EE05D704@redhat.com>
+ <26b924fb-ed26-bb3f-8c6b-48edac825f73@nvidia.com>
+ <20220307122638.215427b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [ovs-dev] [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6
+ extension header support
+In-Reply-To: <20220307122638.215427b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,28 +50,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the read-only array client_map  on the stack but
-instead make it static const. Also makes the object code a little
-smaller.
+On 3/7/22 21:26, Jakub Kicinski wrote:
+> On Mon, 7 Mar 2022 10:49:31 +0200 Roi Dayan wrote:
+>>>> I think there is a missing userspace fix. didnt verify yet.
+>>>> but in ovs userspace odp-netlink.h created from datapath/linux/compat/include/linux/openvswitch.h
+>>>> and that file is not synced the change here.
+>>>> So the new enum OVS_KEY_ATTR_IPV6_EXTHDRS is missing and also struct
+>>>> ovs_key_ipv6_exthdrs which is needed in lib/udp-util.c
+>>>> in struct ovs_flow_key_attr_lens to add expected len for
+>>>> OVS_KEY_ATTR_IPV6_EXTHDR.  
+>>>
+>>> I guess if this is creating backward compatibility issues, this
+>>> patch should be reverted/fixed. As a kmod upgrade should not break
+>>> existing deployments. 
+>>
+>> it looks like it does. we can't work with ovs without reverting this.
+>> can we continue with reverting this commit please?
+> 
+> Sure, can someone ELI5 what the problem is?
+> 
+> What's "kmod upgrade" in this context a kernel upgrade or loading 
+> a newer module in older kernel? 
+> 
+> How can adding a new nl attr break user space? Does the user space
+> actually care about the OVS_KEY_ATTR_TUNNEL_INFO wart?
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/marvell/prestera/prestera_acl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi, Jakub.
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_acl.c b/drivers/net/ethernet/marvell/prestera/prestera_acl.c
-index e4af8a503277..47c899c08951 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_acl.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_acl.c
-@@ -91,7 +91,7 @@ static const struct rhashtable_params __prestera_acl_rule_entry_ht_params = {
- 
- int prestera_acl_chain_to_client(u32 chain_index, u32 *client)
- {
--	u32 client_map[] = {
-+	static const u32 client_map[] = {
- 		PRESTERA_HW_COUNTER_CLIENT_LOOKUP_0,
- 		PRESTERA_HW_COUNTER_CLIENT_LOOKUP_1,
- 		PRESTERA_HW_COUNTER_CLIENT_LOOKUP_2
--- 
-2.35.1
+The main problem is that userspace uses the modified copy of the uapi header
+which looks like this:
+  https://github.com/openvswitch/ovs/blob/f77dbc1eb2da2523625cd36922c6fccfcb3f3eb7/datapath/linux/compat/include/linux/openvswitch.h#L357
 
+In short, the userspace view:
+
+  enum ovs_key_attr {
+      <common attrs>
+
+  #ifdef __KERNEL__
+      /* Only used within kernel data path. */
+  #endif
+
+  #ifndef __KERNEL__
+      /* Only used within userspace data path. */
+  #endif
+      __OVS_KEY_ATTR_MAX
+};
+
+And the kernel view:
+
+  enum ovs_key_attr {
+      <common attrs>
+
+  #ifdef __KERNEL__
+      /* Only used within kernel data path. */
+  #endif
+
+      __OVS_KEY_ATTR_MAX
+  };
+
+This happened before my time, but the commit where userspace made a wrong
+turn appears to be this one:
+  https://github.com/openvswitch/ovs/commit/beb75a40fdc295bfd6521b0068b4cd12f6de507c
+The attribute for userspace only was added to the common enum after the
+OVS_KEY_ATTR_TUNNEL_INFO.   I'm not sure how things didn't fall apart when
+OVS_KEY_ATTR_NSH was added later (no-one cared that NSH doesn't work, because
+OVS didn't support it yet?).
+
+In general, any addition of a new attribute into that enumeration leads to
+inevitable clash between userpsace-only attributes and new kernel attributes.
+
+After the kernel update, kernel provides new attributes to the userspace and
+userspace tries to parse them as one of the userspace-only attributes and
+fails.   In our current case userspace is trying to parse OVS_KEY_ATTR_IPV6_EXTHDR
+as userspace-only OVS_KEY_ATTR_PACKET_TYPE, because they have the same value in the
+enum, fails and discards the netlink message as malformed.  So, IPv6 is fully
+broken, because OVS_KEY_ATTR_IPV6_EXTHDR is supplied now with every IPv6 packet
+that goes to userspace.
+
+We need to unify the view of 'enum ovs_key_attr' between userspace and kernel
+before we can add any new values to it.
+
+One way to do that should be addition of both userspace-only attributes to the
+kernel header (and maybe exposing OVS_KEY_ATTR_TUNNEL_INFO too, just to keep
+it flat and avoid any possible problems in the future).  Any other suggestions
+are welcome.  But in any case this will require careful testing with existing
+OVS userspace to avoid any unexpected issues.
+
+Moving forward, I think, userspace OVS should find a way to not have userpsace-only
+attributes, or have them as a separate enumeration.  But I'm not sure how to do
+that right now.  Or we'll have to add userspace-only attributes to the kernel
+uapi before using them.
+
+Sorry for the mess.
+
+Best regards, Ilya Maximets.

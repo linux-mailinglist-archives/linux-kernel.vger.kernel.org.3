@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BFC4CF708
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C728B4CFAAE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237907AbiCGJoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        id S241478AbiCGKUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237759AbiCGJdK (ORCPT
+        with ESMTP id S241266AbiCGKBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:33:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37426AA72;
-        Mon,  7 Mar 2022 01:30:08 -0800 (PST)
+        Mon, 7 Mar 2022 05:01:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A7F71EF2;
+        Mon,  7 Mar 2022 01:51:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C037F61185;
-        Mon,  7 Mar 2022 09:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B564EC36AE2;
-        Mon,  7 Mar 2022 09:29:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 163B5B810A8;
+        Mon,  7 Mar 2022 09:51:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81533C340F3;
+        Mon,  7 Mar 2022 09:51:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645388;
-        bh=n5T1+I/pmeyijBxU7FOIfuJEcV3dxvkqCaFuwww8pfg=;
+        s=korg; t=1646646693;
+        bh=tASFS12VFZE0Hg//RyMEhiQzQWm30R89kvIwSlVGTrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DMu31jaBRiNECbZ+YdxX2I1Fx3f581AlqoXH20bXD2g0At0yY5Q+2OJKAd1T4BFb+
-         IGW8DYajVLiRmxWlwJoNI4dbEDqjub9k1IHHbECExZoHG3v0YDnZNm/Rjxa070ZgsB
-         6xeNb0wQ5tDIQj+9v6aX4XVvBTb8VPWH+hBncQWo=
+        b=JdwpKvWNN4m0TyiN1LBNkT4ARXHZVUrgFA/6a9MRQbK5ouN7zmuB8fh/1HC2Y4yXd
+         lV1ejC+CpQTlarmXobun1N6cG3WkDsreWcqPUELdrRhWV3Gh9SyFG4MseL+aOoCB08
+         McYyAKjiuaQC5g1f39mRrEC/4NdvnZ4qWa1fPKdc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 015/105] net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
-Date:   Mon,  7 Mar 2022 10:18:18 +0100
-Message-Id: <20220307091644.613697554@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.16 061/186] thermal: core: Fix TZ_GET_TRIP NULL pointer dereference
+Date:   Mon,  7 Mar 2022 10:18:19 +0100
+Message-Id: <20220307091655.798390056@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
-[ Upstream commit 21e8a96377e6b6debae42164605bf9dcbe5720c5 ]
+commit 5838a14832d447990827d85e90afe17e6fb9c175 upstream.
 
-Add quirk CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE for Telit FN990
-0x1071 composition in order to avoid bind error.
+Do not call get_trip_hyst() from thermal_genl_cmd_tz_get_trip() if
+the thermal zone does not define one.
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 1ce50e7d408e ("thermal: core: genetlink support for events/cmd/sampling")
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Cc: 5.10+ <stable@vger.kernel.org> # 5.10+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/cdc_mbim.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/thermal/thermal_netlink.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
-index 77ac5a721e7b6..414341c9cf5ae 100644
---- a/drivers/net/usb/cdc_mbim.c
-+++ b/drivers/net/usb/cdc_mbim.c
-@@ -658,6 +658,11 @@ static const struct usb_device_id mbim_devs[] = {
- 	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
- 	},
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -419,11 +419,12 @@ static int thermal_genl_cmd_tz_get_trip(
+ 	for (i = 0; i < tz->trips; i++) {
  
-+	/* Telit FN990 */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x1bc7, 0x1071, USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
-+	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
-+	},
-+
- 	/* default entry */
- 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
- 	  .driver_info = (unsigned long)&cdc_mbim_info_zlp,
--- 
-2.34.1
-
+ 		enum thermal_trip_type type;
+-		int temp, hyst;
++		int temp, hyst = 0;
+ 
+ 		tz->ops->get_trip_type(tz, i, &type);
+ 		tz->ops->get_trip_temp(tz, i, &temp);
+-		tz->ops->get_trip_hyst(tz, i, &hyst);
++		if (tz->ops->get_trip_hyst)
++			tz->ops->get_trip_hyst(tz, i, &hyst);
+ 
+ 		if (nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, i) ||
+ 		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TYPE, type) ||
 
 

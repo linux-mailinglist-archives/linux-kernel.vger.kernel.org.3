@@ -2,151 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E634D05ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DE34D05EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244638AbiCGSFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S244643AbiCGSGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:06:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235549AbiCGSF0 (ORCPT
+        with ESMTP id S241332AbiCGSGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:05:26 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2918F7667A;
-        Mon,  7 Mar 2022 10:04:31 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 227GoOOg028756;
-        Mon, 7 Mar 2022 18:03:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2021-07-09; bh=VaZ2XNfWa+sxnZt8BlXloidMA1oZxGb7o2hFwBgpKUc=;
- b=F9zpUBG1zFyDC6RjeUbG8ng0dfsP8L/8kxhBPtuZSy6Btk/LNS6LVWFxZC3SnSpMM33b
- iKBdXDRG197LOOfrGSo0NNG/9kqjVk95OShzgVbwmUAGLfCfhjuiE7qtbFNF40w9JA2w
- ZyPJZBY3cy2T0qnr9Dr8gms6uVkM0pJsqNUqtRXdWKulKS3p923XgwUlJTXHk8R2idT6
- ylOVUngMVyjohinXM/75KcWZL/3kjpTNBzYNshPNgvfhurYdk3StdPOznj+W/hkRJLop
- XZ2/B3gEQVPNg/x8bDg9eD14pLS5LqnSIpw01qo7pPZJxa8O+4BF89+L5iK4ECO9Urlj dg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyfscm7n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Mar 2022 18:03:56 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 227Hj8Gj132509;
-        Mon, 7 Mar 2022 18:03:55 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3ekyp1c1g6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Mar 2022 18:03:55 +0000
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 227I3skO178106;
-        Mon, 7 Mar 2022 18:03:54 GMT
-Received: from localhost (dhcp-10-154-98-43.vpn.oracle.com [10.154.98.43])
-        by aserp3020.oracle.com with ESMTP id 3ekyp1c1fn-1;
-        Mon, 07 Mar 2022 18:03:54 +0000
-Received: by localhost (Postfix, from userid 1000)
-        id 75DF3BD0049; Mon,  7 Mar 2022 12:03:52 -0600 (CST)
-From:   Alex Thorlton <alex.thorlton@oracle.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Alex Thorlton <alex.thorlton@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] x86/paravirt: Apply paravirt instructions in consistent order during boot/module load
-Date:   Mon,  7 Mar 2022 12:03:38 -0600
-Message-Id: <20220307180338.7608-1-alex.thorlton@oracle.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 7 Mar 2022 13:06:46 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ADA7DE1C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:05:51 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5B37F3F5FC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646676350;
+        bh=Xrzjqgd/gsl48ny3tXE+vznfcNU58djyNkJpGir9KQM=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=SrMz0L+DGu7LtMCVoOEdsxsSbnTbbMPBdwRBqg3kelLbm2bZQOdX/mOQ6ZjQlbajF
+         b3vI5UfvkmJvER7BKINzdGlPgUcJEqMeIu5Kh0E0DHUSlFE0lBQldu+gX6qWNt54+o
+         GBvPovAB4oxd+V7KqLWLa9W0Sf7TzfQU51yKR1ltylxYaftNowAqlF4Q3ihkIR6sXW
+         Qe47LxEjV+Fo+dJC+wYGT3mMjHFWlyREZ7ocTDdxJvDpWhnx7fpFPeBtthX9yNayoi
+         pqOSxvUrbsTd1NjBpHfqV7OwkRXbXLKxs+UbkpnwF5KBWq+YgwXb5xRrUHvwb53V/f
+         Ii9jh/AFVpkJA==
+Received: by mail-ed1-f70.google.com with SMTP id h17-20020a05640250d100b004133863d836so9119291edb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 10:05:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Xrzjqgd/gsl48ny3tXE+vznfcNU58djyNkJpGir9KQM=;
+        b=E4YU7klTS3SB5f6Gz53uGIrNR488zZmDl57ECu1vJ1UvxetCYDGLUU+eYC528uem1S
+         SrUJhAQZV6Li0Qj/YrBUkMgn2mvi+4cKM0o+5yjbRdNPCgoLhZYXhkIx/BBbQi92f51P
+         S5moNJrORhaHobo4PpRDFwLgjwd/pChj920Lp/ohE0fOTRVP7TNJJ4bqNSZiTy5jj1D1
+         ar1sCW7lkmZUNAIL5X+e39qOiFpUm+IUdPZyPBL458MXpiFksAy3SwgCdgpemGW8tyaB
+         vEa1o2sKD8T2x0HL2ZQMGqJixoqWZshYqlDLN6BEhiV32R70uI7YWm2YWZHtUgm/Wwpg
+         c22g==
+X-Gm-Message-State: AOAM533eZ02O9ZDC9KhrM7e3nwMRYVBbvsMfi8no33aIrFgbML/0Erwy
+        pJeGazYGAB0F2g56CCBs86puV5KkFTJde0vV88EeuRd8Xb+bchjfHLJ5HZAVAVOUjc5+7Z+XXzk
+        9tWOILotSlJsAPUoceN+lfPZKwwnBx82YMB23/NsgGA==
+X-Received: by 2002:a17:906:3cb1:b0:6ce:2a97:5ade with SMTP id b17-20020a1709063cb100b006ce2a975ademr9760141ejh.728.1646676349692;
+        Mon, 07 Mar 2022 10:05:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwe67Q+swcXzSKOn48eStmQdS6VNlblylpGjl5p/IJ03rs754mXnx2sOAo7MoENuJ8rlIpWlw==
+X-Received: by 2002:a17:906:3cb1:b0:6ce:2a97:5ade with SMTP id b17-20020a1709063cb100b006ce2a975ademr9760126ejh.728.1646676349499;
+        Mon, 07 Mar 2022 10:05:49 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id yy18-20020a170906dc1200b006d6e5c75029sm5039499ejb.187.2022.03.07.10.05.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 10:05:47 -0800 (PST)
+Message-ID: <9cb70402-432d-0f45-37aa-c9d613c0a284@canonical.com>
+Date:   Mon, 7 Mar 2022 19:05:46 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-GUID: vZ0joBF1F-hkBOpzxKQljlYQ0FcJewlK
-X-Proofpoint-ORIG-GUID: vZ0joBF1F-hkBOpzxKQljlYQ0FcJewlK
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MAINTAINERS: dt-bindings: update Krzysztof Kozlowski's
+ email
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220307172901.156929-1-krzysztof.kozlowski@canonical.com>
+ <CAL_Jsq+ufttuegvW_STJ7yjDY_5TRAuLNqfAAxR9gjrqtbMP8w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAL_Jsq+ufttuegvW_STJ7yjDY_5TRAuLNqfAAxR9gjrqtbMP8w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4e6292114c74 ("x86/paravirt: Add new features for paravirt
-patching") changed the order in which altinstructions and paravirt
-instructions are patched at boot time.  However, no analogous change was
-made in module_finalize, where we apply altinstructions and
-parainstructions during module load.
+On 07/03/2022 19:03, Rob Herring wrote:
+> On Mon, Mar 7, 2022 at 11:29 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> Use Krzysztof Kozlowski's @kernel.org account in dt-bindings maintainer
+>> entry.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>
+>> ---
+>>
+>> Hi Rob,
+>>
+>> Could you take this one directly (optionally squash with the patch
+>> adding me as maintainer)?
+>>
+>> My email address also appears in the bindings. For now mailmap will
+>> handle it (see my other commit). I will change it after merge window,
+>> because some of the bindings are in separate for-next branches.
+>> ---
+>>  MAINTAINERS | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 4e88b4e17e35..48b0cf606be0 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -14604,7 +14604,7 @@ F:      scripts/dtc/
+>>
+>>  OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
+>>  M:     Rob Herring <robh+dt@kernel.org>
+>> -M:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> +M:     Krzysztof Kozlowski <krzk+dt@kernel.org>
+> 
+> FWIW, the +dt never really worked that well for me. I've concluded
+> that anything that relies on submitters getting things right doesn't
+> work.
 
-As a result, any code that generates "stacked up" altinstructions and
-parainstructions (i.e. local_irq_save/restore) will produce different
-results when used in built-in kernel code vs. kernel modules.  This also
-makes it possible to inadvertently replace altinstructions in the booted
-kernel with their parainstruction counterparts when using
-livepatch/kpatch.
+I was afraid of this. :) Still this is the high-volume maintainership,
+so I need to try to organize it.
 
-To fix this, re-order the processing in module_finalize, so that we do
-things in this order:
 
- 1. apply_paravirt
- 2. apply_retpolines
- 3. apply_alternatives
- 4. alternatives_smp_module_add
-
-This is the same ordering that is used at boot time in
-alternative_instructions.
-
-Fixes: 4e6292114c74 ("x86/paravirt: Add new features for paravirt patchin=
-g")
-Signed-off-by: Alex Thorlton <alex.thorlton@oracle.com>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org # 5.13+
----
- arch/x86/kernel/module.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index 95fa745e310a5..4edc9c87ad0bc 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -273,6 +273,10 @@ int module_finalize(const Elf_Ehdr *hdr,
- 			retpolines =3D s;
- 	}
-=20
-+	if (para) {
-+		void *pseg =3D (void *)para->sh_addr;
-+		apply_paravirt(pseg, pseg + para->sh_size);
-+	}
- 	if (retpolines) {
- 		void *rseg =3D (void *)retpolines->sh_addr;
- 		apply_retpolines(rseg, rseg + retpolines->sh_size);
-@@ -290,11 +294,6 @@ int module_finalize(const Elf_Ehdr *hdr,
- 					    tseg, tseg + text->sh_size);
- 	}
-=20
--	if (para) {
--		void *pseg =3D (void *)para->sh_addr;
--		apply_paravirt(pseg, pseg + para->sh_size);
--	}
--
- 	/* make jump label nops */
- 	jump_label_apply_nops(me);
-=20
---=20
-2.33.1
-
+Best regards,
+Krzysztof

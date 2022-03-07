@@ -2,224 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318254D04BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7254D04CE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242639AbiCGQ65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S238330AbiCGRB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237432AbiCGQ6y (ORCPT
+        with ESMTP id S232458AbiCGRBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:58:54 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97645193F7
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:57:59 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id cx5so14277162pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 08:57:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tIhXGZLVpZ9gpPB8Y0IEDVl0g8sNd0sXb4aXiUdZXd0=;
-        b=YP2FNy86W7N8nKMNMqM2YUGV/GbODjCGqey24vRQhOQVk5clrTz+DAxqejvidakQBI
-         9TtFA05SljyJ4KDFxjiN0umUq+/62+jga/bbaQdWUCLFfYvljIcv4m9X07eYaYh0Nadd
-         DQuK/PW1H4wFsAybKEPfJVLdPlSP3bAmsH1B3AbYFXJSnSoGSKcjtg9OJUWvYtY3JuFR
-         nUOmT0BkXOrKM/WQSvWbp9PZTq2KswXC8vo4U+i925uXsuuaZkdSAV4S3wC2QQBiR+ra
-         amwbzwb/jnl2ZttKE0v8nzwzkmsCIX0ezC7DO1vPG97dlUA+tsLIOXhpelHcLD5a3Fzj
-         6vpw==
+        Mon, 7 Mar 2022 12:01:25 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74376C1C3;
+        Mon,  7 Mar 2022 09:00:30 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id l24-20020a4a8558000000b00320d5a1f938so5847354ooh.8;
+        Mon, 07 Mar 2022 09:00:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tIhXGZLVpZ9gpPB8Y0IEDVl0g8sNd0sXb4aXiUdZXd0=;
-        b=xEbqaqTbfomiq+8rBXBb2vPZ+DIOP3FLNVM/Sdk1Mq+X2yx/ZOdgVcSnzZZgkqjQnX
-         PvifocduadbUiRcUjjqYaA2BsFxCx+Qt1cy9gq51N5R9eJVOS7XeicCrTA53Sq1YNUpG
-         W+drvLTrTBCecxWx6MILA7Pp+pPMgHhHpLROekxvDSzKu3kNqye6EgTt9yr/U2vf08m+
-         Vif4VEDQhaHgijJ7axrdoCIxXn7gMFae73+gCkkeltKjY7kGIXBFokmefxqpsDXqr4mX
-         PpCdDjaj2n9+yLbiUY0xZWSPapV9A7eIpzbuY84d8C+4FQ/lm01ZVKEUgjoHTbPBUAWu
-         qSzQ==
-X-Gm-Message-State: AOAM533REAHP06FiBU3muNPjvBq7cNiA2Kj2xxTk/CzwrZIco099DtKc
-        9Goa+JMilAWUwF20gv3KRHvZdeMCasQ5Ih1XT3x8Og==
-X-Google-Smtp-Source: ABdhPJx8XmL3ynHyeduH/5RI2S24f5ccnfYE5r4H7NIQr7UVkGE6yqNch4rjeZxEKJVjLao5GJVTFGn1w108kteXJF8=
-X-Received: by 2002:a17:902:7044:b0:14e:e1b1:bb0e with SMTP id
- h4-20020a170902704400b0014ee1b1bb0emr12959564plt.65.1646672279034; Mon, 07
- Mar 2022 08:57:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20220307154558.2505734-1-robert.foss@linaro.org>
- <20220307154558.2505734-2-robert.foss@linaro.org> <YiY1CP6DkfgU4re/@robh.at.kernel.org>
-In-Reply-To: <YiY1CP6DkfgU4re/@robh.at.kernel.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 7 Mar 2022 17:57:47 +0100
-Message-ID: <CAG3jFyssPxuRXzZsZkVHWrSS8b6pRHRRmpZCTvLmDV-t2CDA1g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] Revert "dt-bindings:drm/bridge:anx7625:add vendor define"
-To:     Rob Herring <robh@kernel.org>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, matthias.bgg@gmail.com,
-        xji@analogixsemi.com, hsinyi@chromium.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4gIqvsVuKj0bmzWmxEJWkf2QmkNfqBuOw31l6fZNNHA=;
+        b=2UC68IK2XXEkinqs4BQn1bpHN+SbFNqXn3p1mU7Ya2LSCARXF7hePUBEU+8ChxsRZV
+         u8zSDgogHBtdJR8RixWfiB0+N/O0cOL4pLNOqrFTia7fjlU+09xxAC7L3lIJa8BLwhX9
+         il/8fuwEYZY9PbLdsPeBChZq2mb2P15nNDHB2xyYhsk5SQaHvE8wNCwjGT3mIEnEpde1
+         jY76RJQDqQqqiVp8dIMyMp1Xr4z9LPZytOAkfob2D3pN/86WVpKQSjnpDAcHdnXAGdMK
+         n3jj7QJFC7g8fT7o9YIdseUxnqKwkYoR5MbUo52Oam91C4xp+6riqxCqp2mZqZSvkbDT
+         YQTg==
+X-Gm-Message-State: AOAM532sw6WLfRDcxksHIhFPQwkGo3bIsYYKs3LkmaXb+49u3kzXU2Qc
+        poxxlWy+VCfe/vRYDKBe1w==
+X-Google-Smtp-Source: ABdhPJz/GOWVesh7UGjjHVCC0K2DVCJ0vgsEuh3sHrQM74Ly2KtoME4lmaL/B88SNsxEMnD1zzZQvw==
+X-Received: by 2002:a05:6870:e352:b0:d6:e15f:2d40 with SMTP id a18-20020a056870e35200b000d6e15f2d40mr15181748oae.137.1646672429885;
+        Mon, 07 Mar 2022 09:00:29 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 60-20020a9d0f42000000b005ad59a0fe01sm6531777ott.35.2022.03.07.09.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 09:00:29 -0800 (PST)
+Received: (nullmailer pid 2757845 invoked by uid 1000);
+        Mon, 07 Mar 2022 17:00:28 -0000
+Date:   Mon, 7 Mar 2022 11:00:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Maxime Ripard <maxime@cerno.tech>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH 2/2] dt-bindings: kbuild: Use DTB files for validation
+Message-ID: <YiY6LNfEGhz1hSYg@robh.at.kernel.org>
+References: <20220303224237.2497570-1-robh@kernel.org>
+ <20220303224237.2497570-3-robh@kernel.org>
+ <CAMuHMdUzu2PMN7ZerX=D0KsiqKZFDW5dVe3BY77wR=H-grrPVA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUzu2PMN7ZerX=D0KsiqKZFDW5dVe3BY77wR=H-grrPVA@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 at 17:38, Rob Herring <robh@kernel.org> wrote:
->
-> On Mon, Mar 07, 2022 at 04:45:57PM +0100, Robert Foss wrote:
-> > This reverts commit a43661e7e819b100e1f833a35018560a1d9abb39.
->
-> S-o-b and reason for the revert?
->
-> > ---
-> >  .../display/bridge/analogix,anx7625.yaml      | 65 +------------------
-> >  1 file changed, 2 insertions(+), 63 deletions(-)
+On Mon, Mar 07, 2022 at 01:20:29PM +0100, Geert Uytterhoeven wrote:
+> Hi Rob,
+> 
+> On Thu, Mar 3, 2022 at 11:43 PM Rob Herring <robh@kernel.org> wrote:
+> > Switch the DT validation to use DTB files directly instead of a DTS to
+> > YAML conversion.
 > >
-> > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > index 1d3e88daca041..ab48ab2f4240d 100644
-> > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > @@ -43,70 +43,14 @@ properties:
-> >    vdd33-supply:
-> >      description: Regulator that provides the supply 3.3V power.
+> > The original motivation for supporting validation on DTB files was to
+> > enable running validation on a running system (e.g. 'dt-validate
+> > /sys/firmware/fdt') or other cases where the original source DTS is not
+> > available.
 > >
-> > -  analogix,lane0-swing:
-> > -    $ref: /schemas/types.yaml#/definitions/uint8-array
-> > -    minItems: 1
-> > -    maxItems: 20
-> > -    description:
-> > -      an array of swing register setting for DP tx lane0 PHY.
-> > -      Registers 0~9 are Swing0_Pre0, Swing1_Pre0, Swing2_Pre0,
-> > -      Swing3_Pre0, Swing0_Pre1, Swing1_Pre1, Swing2_Pre1, Swing0_Pre2,
-> > -      Swing1_Pre2, Swing0_Pre3, they are for [Boost control] and
-> > -      [Swing control] setting.
-> > -      Registers 0~9, bit 3:0 is [Boost control], these bits control
-> > -      post cursor manual, increase the [Boost control] to increase
-> > -      Pre-emphasis value.
-> > -      Registers 0~9, bit 6:4 is [Swing control], these bits control
-> > -      swing manual, increase [Swing control] setting to add Vp-p value
-> > -      for each Swing, Pre.
-> > -      Registers 10~19 are Swing0_Pre0, Swing1_Pre0, Swing2_Pre0,
-> > -      Swing3_Pre0, Swing0_Pre1, Swing1_Pre1, Swing2_Pre1, Swing0_Pre2,
-> > -      Swing1_Pre2, Swing0_Pre3, they are for [R select control] and
-> > -      [R Termination control] setting.
-> > -      Registers 10~19, bit 4:0 is [R select control], these bits are
-> > -      compensation manual, increase it can enhance IO driven strength
-> > -      and Vp-p.
-> > -      Registers 10~19, bit 5:6 is [R termination control], these bits
-> > -      adjust 50ohm impedance of DP tx termination. 00:55 ohm,
-> > -      01:50 ohm(default), 10:45 ohm, 11:40 ohm.
-> > -
-> > -  analogix,lane1-swing:
-> > -    $ref: /schemas/types.yaml#/definitions/uint8-array
-> > -    minItems: 1
-> > -    maxItems: 20
-> > -    description:
-> > -      an array of swing register setting for DP tx lane1 PHY.
-> > -      DP TX lane1 swing register setting same with lane0
-> > -      swing, please refer lane0-swing property description.
->
-> These apply to the DP side, so no need to revert this part.
-
-Ack.
-
->
-> > -
-> > -  analogix,audio-enable:
-> > -    type: boolean
-> > -    description: let the driver enable audio HDMI codec function or not.
-> > -
->
-> Not sure on this one...
-
-These additions are independent from my reading of this, would you
-like a v2 with only the bus-type related changes reverted?
-
->
-> >    ports:
-> >      $ref: /schemas/graph.yaml#/properties/ports
+> > The YAML format was not without issues. Using DTBs with the schema type
+> > information solves some of those problems. The YAML format relies on the
+> > DTS source level information including bracketing of properties, size
+> > directives, and phandle tags all of which are lost in a DTB file. While
+> > standardizing the bracketing is a good thing, it does cause a lot of
+> > extra warnings and churn to fix them.
 > >
-> >      properties:
-> >        port@0:
-> > -        $ref: /schemas/graph.yaml#/$defs/port-base
-> > -        unevaluatedProperties: false
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> >          description:
-> > -          MIPI DSI/DPI input.
-> > -
-> > -        properties:
-> > -          endpoint:
-> > -            $ref: /schemas/media/video-interfaces.yaml#
-> > -            type: object
-> > -            additionalProperties: false
-> > -
-> > -            properties:
-> > -              remote-endpoint: true
-> > -
-> > -              bus-type:
-> > -                enum: [1, 5]
->
-> I think the error here is really 1 should be 4 which corresponds to
-> D-PHY which is used by both CSI and DSI. Otherwise, I don't really see
-> the issue with bus-type being shared between CSI and DSI.
-
-I think that would be a correct solution. And ignoring everything
-else, the range of this property is something that should be fixed.
-
-But that would mean that CPI (camera parallel interface) and DPI
-(display parallel interface) would share the
-V4L2_FWNODE_BUS_TYPE_PARALLEL enum. I think that would be perfectly
-functional, but it is not what V4L2_FWNODE_BUS_TYPE_PARALLEL is
-documented to represent. As far as I can see it's only intended to
-represent CPI.
-
-Instead of having V4L2_FWNODE_BUS_TYPE_PARALLEL represent two
-standards, I think they should be split. And possibly
-V4L2_FWNODE_BUS_TYPE_PARALLEL should be renamed for CPI, but that is a
-separate story. This would provide for the neatest and most legible
-solution. If this solution is implemented, this range would be
-incorrect. Additionally the snippet reverted in 2/2 of this series
-would no longer be valid.
-
-As it stands V4L2_FWNODE_BUS_TYPE_PARALLEL was used to represent DPI
-due to not being caught in the review process.
-
->
-> > -                default: 1
-> > -
-> > -              data-lanes: true
-> > +          Video port for MIPI DSI input.
+> > Another issue has been signed types are not validated correctly as sign
+> > information is not propagated to YAML. Using the schema type information
+> > allows for proper handling of signed types. YAML also can't represent
+> > the full range of 64-bit integers as numbers are stored as floats by
+> > most/all parsers.
 > >
-> >        port@1:
-> >          $ref: /schemas/graph.yaml#/properties/port
-> > @@ -143,9 +87,6 @@ examples:
-> >              vdd10-supply = <&pp1000_mipibrdg>;
-> >              vdd18-supply = <&pp1800_mipibrdg>;
-> >              vdd33-supply = <&pp3300_mipibrdg>;
-> > -            analogix,audio-enable;
-> > -            analogix,lane0-swing = /bits/ 8 <0x14 0x54 0x64 0x74>;
-> > -            analogix,lane1-swing = /bits/ 8 <0x14 0x54 0x64 0x74>;
+> > The DTB validation works by decoding property values using the type
+> > information in the schemas themselves. The main corner case this does
+> > not work for is matrix types where neither dimension is fixed. For
+> > now, checking the dimensions in these cases are skipped.
 > >
-> >              ports {
-> >                  #address-cells = <1>;
-> > @@ -155,8 +96,6 @@ examples:
-> >                      reg = <0>;
-> >                      anx7625_in: endpoint {
-> >                          remote-endpoint = <&mipi_dsi>;
-> > -                        bus-type = <5>;
-> > -                        data-lanes = <0 1 2 3>;
-> >                      };
-> >                  };
-> >
-> > --
-> > 2.32.0
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> 
+> Thanks for your patch!
+> 
+> While investigating why a newly added device node to DTS was not
+> instantiated as a platform device, I discovered an issue with this
+> patch: "make dtbs" no longer rebuilds DTB files that need a rebuild.
+> 
+> How to reproduce:
+> 
+>     $ git checkout next-20220307
+>     # apply this series and its dependency:
+>     # dt-bindings: kbuild: Support partial matches with DT_SCHEMA_FILES
+>     # dt-bindings: kbuild: Pass DT_SCHEMA_FILES to dt-validate
+>     # dt-bindings: kbuild: Use DTB files for validation
+>     $ make ARCH=arm shmobile_defconfig
+>     $ make ARCH=arm dtbs
+>     $ touch arch/arm/boot/dts/r8a7791.dtsi
+>     $ make ARCH=arm dtbs
+>     # The above command does NOT cause:
+>     # DTC     arch/arm/boot/dts/r8a7791-koelsch.dtb
+>     # DTC     arch/arm/boot/dts/r8a7791-porter.dtb
+> 
+> I don't see anything wrong with this patch at first sight, though.
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Was this a clean tree?
+
+I think I reproduced it, but then couldn't... But then after a 'make 
+clean', 'make dtbs' would error out. I think the issue in both cases was 
+processed-schema.json always a dependency when it should be conditional 
+on 'dtbs_check'. The patch below fixes that. Can you give it a try too.
+
+
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 4629af60160b..9d5320a47ef8 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -349,12 +349,12 @@ $(multi-dtb-y): FORCE
+        $(call if_changed,fdtoverlay)
+ $(call multi_depend, $(multi-dtb-y), .dtb, -dtbs)
+ 
++ifneq ($(CHECK_DTBS)$(CHECK_DT_BINDING),)
+ DT_CHECKER ?= dt-validate
+ DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
+ DT_BINDING_DIR := Documentation/devicetree/bindings
+-DT_TMP_SCHEMA ?= $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
++DT_TMP_SCHEMA := $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
+ 
+-ifneq ($(CHECK_DTBS)$(CHECK_DT_BINDING),)
+ quiet_cmd_dtb_check =  CHECK   $@
+       cmd_dtb_check =  $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
+ endif

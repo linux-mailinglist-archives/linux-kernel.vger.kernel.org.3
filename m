@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1866B4CF4D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F854CF7FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236415AbiCGJWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S238084AbiCGJrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbiCGJWS (ORCPT
+        with ESMTP id S238519AbiCGJib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:22:18 -0500
+        Mon, 7 Mar 2022 04:38:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28782522E0;
-        Mon,  7 Mar 2022 01:20:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E059424A4;
+        Mon,  7 Mar 2022 01:32:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B556061033;
-        Mon,  7 Mar 2022 09:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91034C340F7;
-        Mon,  7 Mar 2022 09:20:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47116611AE;
+        Mon,  7 Mar 2022 09:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458B8C340E9;
+        Mon,  7 Mar 2022 09:32:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644832;
-        bh=+6XjYk4EJwm/J+lyiGtf8jIrpFJkTC+MKtWsP5gwjrc=;
+        s=korg; t=1646645554;
+        bh=s7RKyKCdoWIbiAKu7tIbVIF6+FyE4HSjQxDrQ1ZCu5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SqxX67VQNNlmHXYhhA6pfgp5mUOrKNG3582u7kS1uJ8kAAkqyXIzZM6RxyHz4XKsD
-         Wf76hPP9GhRHo8WH8YUlR1cBKlL6Gp1MkPb2F4ZNCYjAEzhiobClALxwHnXkK5gZr/
-         YWOjaURcT6g/lv3wICctKtGT3CZnDJXCkcVfGLMI=
+        b=V9TQ1BL6B2S2OlFWu5HiNgINEgdG08Qt0P/H1XDbGz7U4HPyWsrO9VypMpVtUq7eC
+         ZwrxpfWmRdQrc7kgpHXo7F4DzjIUuLkurhLOsBVMffKNTGiEYYHGKfR45dC/zRnbfh
+         kSfzMsyX+yDIqQvnmbBo2hgvM/nJPo9/eIAy5O3g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Hutterer <peter.hutterer@who-t.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jkosina@suse.cz>,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 04/32] Input: clear BTN_RIGHT/MIDDLE on buttonpads
+        stable@vger.kernel.org,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.10 027/105] riscv: Fix config KASAN && SPARSEMEM && !SPARSE_VMEMMAP
 Date:   Mon,  7 Mar 2022 10:18:30 +0100
-Message-Id: <20220307091634.566777307@linuxfoundation.org>
+Message-Id: <20220307091644.944399615@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
-References: <20220307091634.434478485@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,82 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Expósito <jose.exposito89@gmail.com>
+From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 
-[ Upstream commit 37ef4c19b4c659926ce65a7ac709ceaefb211c40 ]
+commit a3d328037846d013bb4c7f3777241e190e4c75e1 upstream.
 
-Buttonpads are expected to map the INPUT_PROP_BUTTONPAD property bit
-and the BTN_LEFT key bit.
+In order to get the pfn of a struct page* when sparsemem is enabled
+without vmemmap, the mem_section structures need to be initialized which
+happens in sparse_init.
 
-As explained in the specification, where a device has a button type
-value of 0 (click-pad) or 1 (pressure-pad) there should not be
-discrete buttons:
-https://docs.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-windows-precision-touchpad-collection#device-capabilities-feature-report
+But kasan_early_init calls pfn_to_page way before sparse_init is called,
+which then tries to dereference a null mem_section pointer.
 
-However, some drivers map the BTN_RIGHT and/or BTN_MIDDLE key bits even
-though the device is a buttonpad and therefore does not have those
-buttons.
+Fix this by removing the usage of this function in kasan_early_init.
 
-This behavior has forced userspace applications like libinput to
-implement different workarounds and quirks to detect buttonpads and
-offer to the user the right set of features and configuration options.
-For more information:
-https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/726
-
-In order to avoid this issue clear the BTN_RIGHT and BTN_MIDDLE key
-bits when the input device is register if the INPUT_PROP_BUTTONPAD
-property bit is set.
-
-Notice that this change will not affect udev because it does not check
-for buttons. See systemd/src/udev/udev-builtin-input_id.c.
-
-List of known affected hardware:
-
- - Chuwi AeroBook Plus
- - Chuwi Gemibook
- - Framework Laptop
- - GPD Win Max
- - Huawei MateBook 2020
- - Prestigio Smartbook 141 C2
- - Purism Librem 14v1
- - StarLite Mk II   - AMI firmware
- - StarLite Mk II   - Coreboot firmware
- - StarLite Mk III  - AMI firmware
- - StarLite Mk III  - Coreboot firmware
- - StarLabTop Mk IV - AMI firmware
- - StarLabTop Mk IV - Coreboot firmware
- - StarBook Mk V
-
-Acked-by: Peter Hutterer <peter.hutterer@who-t.net>
-Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Acked-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Link: https://lore.kernel.org/r/20220208174806.17183-1-jose.exposito89@gmail.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8ad8b72721d0 ("riscv: Add KASAN support")
+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/input.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/riscv/mm/kasan_init.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/input/input.c b/drivers/input/input.c
-index 5d94fc3fce0bb..cb31236425a11 100644
---- a/drivers/input/input.c
-+++ b/drivers/input/input.c
-@@ -2112,6 +2112,12 @@ int input_register_device(struct input_dev *dev)
- 	/* KEY_RESERVED is not supposed to be transmitted to userspace. */
- 	__clear_bit(KEY_RESERVED, dev->keybit);
+--- a/arch/riscv/mm/kasan_init.c
++++ b/arch/riscv/mm/kasan_init.c
+@@ -21,8 +21,7 @@ asmlinkage void __init kasan_early_init(
  
-+	/* Buttonpads should not map BTN_RIGHT and/or BTN_MIDDLE. */
-+	if (test_bit(INPUT_PROP_BUTTONPAD, dev->propbit)) {
-+		__clear_bit(BTN_RIGHT, dev->keybit);
-+		__clear_bit(BTN_MIDDLE, dev->keybit);
-+	}
-+
- 	/* Make sure that bitmasks not mentioned in dev->evbit are clean. */
- 	input_cleanse_bitmasks(dev);
+ 	for (i = 0; i < PTRS_PER_PTE; ++i)
+ 		set_pte(kasan_early_shadow_pte + i,
+-			mk_pte(virt_to_page(kasan_early_shadow_page),
+-			       PAGE_KERNEL));
++			pfn_pte(virt_to_pfn(kasan_early_shadow_page), PAGE_KERNEL));
  
--- 
-2.34.1
-
+ 	for (i = 0; i < PTRS_PER_PMD; ++i)
+ 		set_pmd(kasan_early_shadow_pmd + i,
 
 

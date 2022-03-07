@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EA54CF680
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C817A4CF82F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238291AbiCGJiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
+        id S238360AbiCGJwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbiCGJ3v (ORCPT
+        with ESMTP id S240983AbiCGJlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A702BDEF;
-        Mon,  7 Mar 2022 01:28:57 -0800 (PST)
+        Mon, 7 Mar 2022 04:41:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E06E6D194;
+        Mon,  7 Mar 2022 01:38:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40DBA60C00;
-        Mon,  7 Mar 2022 09:28:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 525DAC340E9;
-        Mon,  7 Mar 2022 09:28:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 016F2B810CC;
+        Mon,  7 Mar 2022 09:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF16C340F3;
+        Mon,  7 Mar 2022 09:33:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645336;
-        bh=6ZBj3r1Avvm002zaEoE/iDo0vTxoL/2Zm5ACvtb4eeo=;
+        s=korg; t=1646645633;
+        bh=FKaTv4ewBvPPtU04iar21AHuOmepis0nGGadrUm3lE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KOktFm8ae/wWv0PVx4yPs4CaMNjXjSHLUGzPG68XkEW9o+rn6I43bOypOHN4JDdgm
-         +P6vK8NvmaGcaT+iyJIlUtqBb14KPe/oq8sChQi9wL66M9YiHaVjSmmb+RQSqMoiZf
-         ELClfBhAfVGWPfS1wbq2awKd+3wWm3+uPddlxvaM=
+        b=t7OsAvqbtDJDEnuCOsP8RGVIEUbJTVmmglIeRRS2B/wZQeWH6lMeVpsitU/u0syiD
+         aqFF6Lqmh3Q+AA7mkCtfkX8uGof6CXL6OVcygO14BX8jZfij6zLVL4Oh/BA/ysxK+1
+         V/Kb6zKhjmR+D+USm4cdTLCqhBea4QlNA1UdzEoM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Bohac <jbohac@suse.cz>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 5.4 63/64] Revert "xfrm: xfrm_state_mtu should return at least 1280 for ipv6"
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <qiang.yu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 093/105] drm/amdgpu: fix suspend/resume hang regression
 Date:   Mon,  7 Mar 2022 10:19:36 +0100
-Message-Id: <20220307091640.937915287@linuxfoundation.org>
+Message-Id: <20220307091646.793701042@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,107 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Bohac <jbohac@suse.cz>
+From: Qiang Yu <qiang.yu@amd.com>
 
-commit a6d95c5a628a09be129f25d5663a7e9db8261f51 upstream.
+[ Upstream commit f1ef17011c765495c876fa75435e59eecfdc1ee4 ]
 
-This reverts commit b515d2637276a3810d6595e10ab02c13bfd0b63a.
+Regression has been reported that suspend/resume may hang with
+the previous vm ready check commit.
 
-Commit b515d2637276a3810d6595e10ab02c13bfd0b63a ("xfrm: xfrm_state_mtu
-should return at least 1280 for ipv6") in v5.14 breaks the TCP MSS
-calculation in ipsec transport mode, resulting complete stalls of TCP
-connections. This happens when the (P)MTU is 1280 or slighly larger.
+So bring back the evicted list check as a temp fix.
 
-The desired formula for the MSS is:
-MSS = (MTU - ESP_overhead) - IP header - TCP header
-
-However, the above commit clamps the (MTU - ESP_overhead) to a
-minimum of 1280, turning the formula into
-MSS = max(MTU - ESP overhead, 1280) -  IP header - TCP header
-
-With the (P)MTU near 1280, the calculated MSS is too large and the
-resulting TCP packets never make it to the destination because they
-are over the actual PMTU.
-
-The above commit also causes suboptimal double fragmentation in
-xfrm tunnel mode, as described in
-https://lore.kernel.org/netdev/20210429202529.codhwpc7w6kbudug@dwarf.suse.cz/
-
-The original problem the above commit was trying to fix is now fixed
-by commit 6596a0229541270fb8d38d989f91b78838e5e9da ("xfrm: fix MTU
-regression").
-
-Signed-off-by: Jiri Bohac <jbohac@suse.cz>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1922
+Fixes: c1a66c3bc425 ("drm/amdgpu: check vm ready by amdgpu_vm->evicting flag")
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Qiang Yu <qiang.yu@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/xfrm.h    |    1 -
- net/ipv4/esp4.c       |    2 +-
- net/ipv6/esp6.c       |    2 +-
- net/xfrm/xfrm_state.c |   14 ++------------
- 4 files changed, 4 insertions(+), 15 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/include/net/xfrm.h
-+++ b/include/net/xfrm.h
-@@ -1543,7 +1543,6 @@ void xfrm_sad_getinfo(struct net *net, s
- void xfrm_spd_getinfo(struct net *net, struct xfrmk_spdinfo *si);
- u32 xfrm_replay_seqhi(struct xfrm_state *x, __be32 net_seq);
- int xfrm_init_replay(struct xfrm_state *x);
--u32 __xfrm_state_mtu(struct xfrm_state *x, int mtu);
- u32 xfrm_state_mtu(struct xfrm_state *x, int mtu);
- int __xfrm_init_state(struct xfrm_state *x, bool init_replay, bool offload);
- int xfrm_init_state(struct xfrm_state *x);
---- a/net/ipv4/esp4.c
-+++ b/net/ipv4/esp4.c
-@@ -499,7 +499,7 @@ static int esp_output(struct xfrm_state
- 		struct xfrm_dst *dst = (struct xfrm_dst *)skb_dst(skb);
- 		u32 padto;
- 
--		padto = min(x->tfcpad, __xfrm_state_mtu(x, dst->child_mtu_cached));
-+		padto = min(x->tfcpad, xfrm_state_mtu(x, dst->child_mtu_cached));
- 		if (skb->len < padto)
- 			esp.tfclen = padto - skb->len;
- 	}
---- a/net/ipv6/esp6.c
-+++ b/net/ipv6/esp6.c
-@@ -440,7 +440,7 @@ static int esp6_output(struct xfrm_state
- 		struct xfrm_dst *dst = (struct xfrm_dst *)skb_dst(skb);
- 		u32 padto;
- 
--		padto = min(x->tfcpad, __xfrm_state_mtu(x, dst->child_mtu_cached));
-+		padto = min(x->tfcpad, xfrm_state_mtu(x, dst->child_mtu_cached));
- 		if (skb->len < padto)
- 			esp.tfclen = padto - skb->len;
- 	}
---- a/net/xfrm/xfrm_state.c
-+++ b/net/xfrm/xfrm_state.c
-@@ -2440,7 +2440,7 @@ void xfrm_state_delete_tunnel(struct xfr
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+index 47cc038d7d50..635601d8b131 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+@@ -724,7 +724,8 @@ bool amdgpu_vm_ready(struct amdgpu_vm *vm)
+ 	amdgpu_vm_eviction_lock(vm);
+ 	ret = !vm->evicting;
+ 	amdgpu_vm_eviction_unlock(vm);
+-	return ret;
++
++	return ret && list_empty(&vm->evicted);
  }
- EXPORT_SYMBOL(xfrm_state_delete_tunnel);
  
--u32 __xfrm_state_mtu(struct xfrm_state *x, int mtu)
-+u32 xfrm_state_mtu(struct xfrm_state *x, int mtu)
- {
- 	const struct xfrm_type *type = READ_ONCE(x->type);
- 	struct crypto_aead *aead;
-@@ -2471,17 +2471,7 @@ u32 __xfrm_state_mtu(struct xfrm_state *
- 	return ((mtu - x->props.header_len - crypto_aead_authsize(aead) -
- 		 net_adj) & ~(blksize - 1)) + net_adj - 2;
- }
--EXPORT_SYMBOL_GPL(__xfrm_state_mtu);
--
--u32 xfrm_state_mtu(struct xfrm_state *x, int mtu)
--{
--	mtu = __xfrm_state_mtu(x, mtu);
--
--	if (x->props.family == AF_INET6 && mtu < IPV6_MIN_MTU)
--		return IPV6_MIN_MTU;
--
--	return mtu;
--}
-+EXPORT_SYMBOL_GPL(xfrm_state_mtu);
- 
- int __xfrm_init_state(struct xfrm_state *x, bool init_replay, bool offload)
- {
+ /**
+-- 
+2.34.1
+
 
 

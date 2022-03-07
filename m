@@ -2,121 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBE04D0B29
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87364D0B30
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238819AbiCGWel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S238101AbiCGWhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343770AbiCGWeh (ORCPT
+        with ESMTP id S232029AbiCGWhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:34:37 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D83C4F458
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:33:42 -0800 (PST)
+        Mon, 7 Mar 2022 17:37:21 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A026158
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:36:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646692422; x=1678228422;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wA16yBwlwF+DWTbp4910PgdT1LOf5Q0v33N301bxq8A=;
-  b=ME77HN0iP5fPfXjp6f0r6uQ7F4fG/GEmCXNUiljYOdAyt6AaGzqUuHSv
-   5De64iUbOb5kjzBi7iVeifgYN7A2P/FRBv6RWxOHBx3gvJhot1crzWrO/
-   rLVGAgBLM2EkdiSdhwj3ygpoukL/0Kos/eU5u8fufA0cKxhgLPLMUcYHy
-   KEDMWtvUkntYmMK6zPjLx82Ywyb1uaI4XMFusVOz6IXdVkX76jSFeIgb+
-   avSLrw+AWO6x2CQt6nZ+kJGrP+0MpqIJuKqDmzCHLhN1aw/aDolIjD2w/
-   Gnyc2hAW9KrXNp0GCu9A4VHIgpyUYkOJlapkvZsR4ym7RyFyXTrtD4whl
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254253007"
+  t=1646692586; x=1678228586;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=IQs7hZPHXapM5VVr1ROT2fk/ZVFBxJexvpNeSw1IuV8=;
+  b=LutNApXPekCioYWV/51SX5XiGOuQwUbdtrNHWUem/nOd40VqEdo+YWkD
+   VgDVJUQfgZ0rzNq/ZXWVX1sZ7bXgqKuMi75r7DguT6BUNj3kmf2C6Itz9
+   TVI9E7ijrjjPM4SEA8Fayb3eMdSx5SoLDsVJKbHbYVPh6aIrUgMRe+Hcx
+   Jz4Hx1Nni5QOKNZH6sAxGDSPxruP2VUptuKP2hQwtyqeFFCNjcCvdoOcC
+   Wcc808HJaatXVDCmAOeJx7eZ13oZJxQAxauUZOc2NKzOHlvVKYxqb0TSR
+   W9FlddXT0SqY4Ma4zh+YwAnsor8qtwKLK01ToTWuwF5qjyA4yYoZzpVLc
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="253354811"
 X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="254253007"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 14:33:41 -0800
+   d="scan'208";a="253354811"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 14:36:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="687704236"
+   d="scan'208";a="711284155"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Mar 2022 14:33:35 -0800
+  by orsmga005.jf.intel.com with ESMTP; 07 Mar 2022 14:36:08 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 682041D6; Tue,  8 Mar 2022 00:33:53 +0200 (EET)
-Date:   Tue, 8 Mar 2022 01:33:53 +0300
+        id D91831D6; Tue,  8 Mar 2022 00:36:26 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+To:     xiaoyao.li@intel.com
+Cc:     aarcange@redhat.com, ak@linux.intel.com, bp@alien8.de,
+        brijesh.singh@amd.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 23/30] x86/boot: Avoid #VE during boot for TDX platforms
-Message-ID: <20220307223353.f7cqzqispfeltvb2@black.fi.intel.com>
-References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
- <20220302142806.51844-24-kirill.shutemov@linux.intel.com>
- <e8452e86-4063-c85b-5e21-c7cd6ce51423@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        x86@kernel.org
+Subject: [PATCHv5.1 23/30] x86/boot: Avoid #VE during boot for TDX platforms
+Date:   Tue,  8 Mar 2022 01:36:25 +0300
+Message-Id: <20220307223625.2456-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 In-Reply-To: <e8452e86-4063-c85b-5e21-c7cd6ce51423@intel.com>
+References: <e8452e86-4063-c85b-5e21-c7cd6ce51423@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 05:29:27PM +0800, Xiaoyao Li wrote:
-> On 3/2/2022 10:27 PM, Kirill A. Shutemov wrote:
-> > From: Sean Christopherson <seanjc@google.com>
-> > 
-> > There are a few MSRs and control register bits that the kernel
-> > normally needs to modify during boot. But, TDX disallows
-> > modification of these registers to help provide consistent security
-> > guarantees. Fortunately, TDX ensures that these are all in the correct
-> > state before the kernel loads, which means the kernel does not need to
-> > modify them.
-> > 
-> > The conditions to avoid are:
-> > 
-> >   * Any writes to the EFER MSR
-> >   * Clearing CR3.MCE
-> 
-> typo. CR4.MCE
+From: Sean Christopherson <seanjc@google.com>
 
-Thanks, will send updated patch.
+There are a few MSRs and control register bits that the kernel
+normally needs to modify during boot. But, TDX disallows
+modification of these registers to help provide consistent security
+guarantees. Fortunately, TDX ensures that these are all in the correct
+state before the kernel loads, which means the kernel does not need to
+modify them.
 
-> BTW, I remember there was a patch to clear X86_FEATURE_MCE for TDX guest.
-> Why does that get dropped?
+The conditions to avoid are:
 
-It is not dropped. It is just not part of the initial submission. It will
-come later.
+ * Any writes to the EFER MSR
+ * Clearing CR4.MCE
 
-> Even though CPUID reports MCE is supported, all the access to MCE related
-> MSRs causes #VE. If they are accessed via mce_rdmsrl(), the #VE will be
-> fixed up and goes to ex_handler_msr_mce(). Finally lead to panic().
+This theoretically makes the guest boot more fragile. If, for instance,
+EFER was set up incorrectly and a WRMSR was performed, it will trigger
+early exception panic or a triple fault, if it's before early
+exceptions are set up. However, this is likely to trip up the guest
+BIOS long before control reaches the kernel. In any case, these kinds
+of problems are unlikely to occur in production environments, and
+developers have good debug tools to fix them quickly.
 
-It is not panic, but warning. Like this:
+Change the common boot code to work on TDX and non-TDX systems.
+This should have no functional effect on non-TDX systems.
 
-	unchecked MSR access error: RDMSR from 0x179 at rIP: 0xffffffff810df1e9 (__mcheck_cpu_cap_init+0x9/0x130)
-	Call Trace:
-	 <TASK>
-	 mcheck_cpu_init+0x3d/0x2c0
-	 identify_cpu+0x85a/0x910
-	 identify_boot_cpu+0xc/0x98
-	 check_bugs+0x6/0xa7
-	 start_kernel+0x363/0x3d1
-	 secondary_startup_64_no_verify+0xe5/0xeb
-	 </TASK>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+ v5.1:
+  - Fix typo in commit message: CR3.MCE -> CR4.MCE.
+---
+ arch/x86/Kconfig                     |  1 +
+ arch/x86/boot/compressed/head_64.S   | 20 ++++++++++++++++++--
+ arch/x86/boot/compressed/pgtable.h   |  2 +-
+ arch/x86/kernel/head_64.S            | 28 ++++++++++++++++++++++++++--
+ arch/x86/realmode/rm/trampoline_64.S | 13 ++++++++++++-
+ 5 files changed, 58 insertions(+), 6 deletions(-)
 
-It is annoying, but not fatal. The patchset is big enough as it is.
-I tried to keep patch number under control.
-
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index d2f45e58e846..98efb35ed7b1 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -886,6 +886,7 @@ config INTEL_TDX_GUEST
+ 	depends on X86_X2APIC
+ 	select ARCH_HAS_CC_PLATFORM
+ 	select DYNAMIC_PHYSICAL_MASK
++	select X86_MCE
+ 	help
+ 	  Support running as a guest under Intel TDX.  Without this support,
+ 	  the guest kernel can not boot or run under TDX.
+diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+index d0c3d33f3542..6d903b2fc544 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -643,12 +643,28 @@ SYM_CODE_START(trampoline_32bit_src)
+ 	movl	$MSR_EFER, %ecx
+ 	rdmsr
+ 	btsl	$_EFER_LME, %eax
++	/* Avoid writing EFER if no change was made (for TDX guest) */
++	jc	1f
+ 	wrmsr
+-	popl	%edx
++1:	popl	%edx
+ 	popl	%ecx
+ 
++#ifdef CONFIG_X86_MCE
++	/*
++	 * Preserve CR4.MCE if the kernel will enable #MC support.
++	 * Clearing MCE may fault in some environments (that also force #MC
++	 * support). Any machine check that occurs before #MC support is fully
++	 * configured will crash the system regardless of the CR4.MCE value set
++	 * here.
++	 */
++	movl	%cr4, %eax
++	andl	$X86_CR4_MCE, %eax
++#else
++	movl	$0, %eax
++#endif
++
+ 	/* Enable PAE and LA57 (if required) paging modes */
+-	movl	$X86_CR4_PAE, %eax
++	orl	$X86_CR4_PAE, %eax
+ 	testl	%edx, %edx
+ 	jz	1f
+ 	orl	$X86_CR4_LA57, %eax
+diff --git a/arch/x86/boot/compressed/pgtable.h b/arch/x86/boot/compressed/pgtable.h
+index 6ff7e81b5628..cc9b2529a086 100644
+--- a/arch/x86/boot/compressed/pgtable.h
++++ b/arch/x86/boot/compressed/pgtable.h
+@@ -6,7 +6,7 @@
+ #define TRAMPOLINE_32BIT_PGTABLE_OFFSET	0
+ 
+ #define TRAMPOLINE_32BIT_CODE_OFFSET	PAGE_SIZE
+-#define TRAMPOLINE_32BIT_CODE_SIZE	0x70
++#define TRAMPOLINE_32BIT_CODE_SIZE	0x80
+ 
+ #define TRAMPOLINE_32BIT_STACK_END	TRAMPOLINE_32BIT_SIZE
+ 
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 9c63fc5988cd..184b7468ea76 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -140,8 +140,22 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	addq	$(init_top_pgt - __START_KERNEL_map), %rax
+ 1:
+ 
++#ifdef CONFIG_X86_MCE
++	/*
++	 * Preserve CR4.MCE if the kernel will enable #MC support.
++	 * Clearing MCE may fault in some environments (that also force #MC
++	 * support). Any machine check that occurs before #MC support is fully
++	 * configured will crash the system regardless of the CR4.MCE value set
++	 * here.
++	 */
++	movq	%cr4, %rcx
++	andl	$X86_CR4_MCE, %ecx
++#else
++	movl	$0, %ecx
++#endif
++
+ 	/* Enable PAE mode, PGE and LA57 */
+-	movl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
++	orl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
+ #ifdef CONFIG_X86_5LEVEL
+ 	testl	$1, __pgtable_l5_enabled(%rip)
+ 	jz	1f
+@@ -246,13 +260,23 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	/* Setup EFER (Extended Feature Enable Register) */
+ 	movl	$MSR_EFER, %ecx
+ 	rdmsr
++	/*
++	 * Preserve current value of EFER for comparison and to skip
++	 * EFER writes if no change was made (for TDX guest)
++	 */
++	movl    %eax, %edx
+ 	btsl	$_EFER_SCE, %eax	/* Enable System Call */
+ 	btl	$20,%edi		/* No Execute supported? */
+ 	jnc     1f
+ 	btsl	$_EFER_NX, %eax
+ 	btsq	$_PAGE_BIT_NX,early_pmd_flags(%rip)
+-1:	wrmsr				/* Make changes effective */
+ 
++	/* Avoid writing EFER if no change was made (for TDX guest) */
++1:	cmpl	%edx, %eax
++	je	1f
++	xor	%edx, %edx
++	wrmsr				/* Make changes effective */
++1:
+ 	/* Setup cr0 */
+ 	movl	$CR0_STATE, %eax
+ 	/* Make changes effective */
+diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
+index d380f2d1fd23..e38d61d6562e 100644
+--- a/arch/x86/realmode/rm/trampoline_64.S
++++ b/arch/x86/realmode/rm/trampoline_64.S
+@@ -143,11 +143,22 @@ SYM_CODE_START(startup_32)
+ 	movl	%eax, %cr3
+ 
+ 	# Set up EFER
++	movl	$MSR_EFER, %ecx
++	rdmsr
++	/*
++	 * Skip writing to EFER if the register already has desired
++	 * value (to avoid #VE for the TDX guest).
++	 */
++	cmp	pa_tr_efer, %eax
++	jne	.Lwrite_efer
++	cmp	pa_tr_efer + 4, %edx
++	je	.Ldone_efer
++.Lwrite_efer:
+ 	movl	pa_tr_efer, %eax
+ 	movl	pa_tr_efer + 4, %edx
+-	movl	$MSR_EFER, %ecx
+ 	wrmsr
+ 
++.Ldone_efer:
+ 	# Enable paging and in turn activate Long Mode.
+ 	movl	$CR0_STATE, %eax
+ 	movl	%eax, %cr0
 -- 
- Kirill A. Shutemov
+2.34.1
+

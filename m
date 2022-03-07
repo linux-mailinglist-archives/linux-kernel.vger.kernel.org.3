@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA494CF2E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B514CF2E1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbiCGHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 02:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S235933AbiCGHt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 02:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235940AbiCGHte (ORCPT
+        with ESMTP id S231326AbiCGHtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 02:49:34 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4D629CAA;
-        Sun,  6 Mar 2022 23:48:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=u44gcPJxldLKcwFv2Kgs/qlvzNfA8B/3/pfeFxePDMc=; b=ka9PRijrZ3eRBw1yItomT14Sqq
-        jmBORx4WCv4segJPEOqcAC3tqzYtvC+BUZU4+e3vHCXkSbArBKnX45ei5WNvlf36lcWjyUgzAE7OG
-        1oA20KbtigBeQELHwPKsjqg0DOYHqmH+C8bYJm1QGOnPjx44rkEdJgP72nidrDZW/i/nFGHYMk5sJ
-        XS5iV8+/7Zp5yJKt3rpIucmjX76N4zA0MRmAt1xxlFlNsVXNgR3q/FjL5Vu+0O5asOVkTIwmnnVbT
-        zBu2SjEeBZ2Q6NXtgxS2ilZzHIYsyxgi3fxgw7eWR6CXDcPj2eTY9YRLOob0H05nk494vP2VOmvp4
-        TM7swpKg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nR86U-00GK0Y-TY; Mon, 07 Mar 2022 07:48:26 +0000
-Date:   Sun, 6 Mar 2022 23:48:26 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, linux-mm@kvack.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        zhangyiru <zhangyiru3@huawei.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        linux-mips@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
-        linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/3] MAP_POPULATE for device memory
-Message-ID: <YiW4yurDXSifTYUt@infradead.org>
-References: <20220306053211.135762-1-jarkko@kernel.org>
- <YiSb7tsUEBRGS+HA@casper.infradead.org>
+        Mon, 7 Mar 2022 02:49:25 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6E9220DD
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:48:30 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id r11so11413446ioh.10
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 23:48:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=8J38Rv9T88O8LznVLYDAMzgkYD+RbVqzgKVGb2a4ys8=;
+        b=C8tUdaN4Ho1KtRgmpMqNKpIK0uns1KlJbuWW/a5RactIDPbEp7MKSuKX36WVTq76Zu
+         /LWz6u36HbO2tISPIlbwSpWMqWIaKuJbLIsRzV/9POU6ReLgzmLSm55MGUXceGygRrw3
+         5NR8qgFZhzryYwEoEb/XgCVbmJ71YjwUlULuBQgvr0RIGrnct/Pjy48ROR5lOSFQjshh
+         AOy9el8iVbV2COXBKimY7d32GMJqvdFsiLESuhXNd4MGMxTNpYmnucRuMOkgS1Ts0HPR
+         SqP6Lo3mv9fQzGAD5u/6nS/MvK3HCJfLze26E65gqIdgJrWyK36sVNHPr6d3SJFCTAoA
+         HUBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=8J38Rv9T88O8LznVLYDAMzgkYD+RbVqzgKVGb2a4ys8=;
+        b=RmXeWD2yy1Z1lyEyyGuF2fUA84qC2ZnbvigCMAjSAq6QQ1uidsLVp+lvBT4YnxWhJR
+         UuEfiQoMIsM6FCqy87L+1xckOXpF7S4Y9zYLBLMVZOZKxktyv8iY9aZPUp2CmvBOHeD/
+         hPKIYIl0z8179geHfrQRKidND4i0sO1/vc2CwSPYV15FrDygZyNM1z/b5PaVyylccKvp
+         qq1MI+WXENoqmKJrVLRT8rnT7kpY1d67FKVOv0ZQUiCVhxYQpoL6+6F/rQlS/Ad/CZLR
+         oNLtRiCmmcySPXSeFt8bM7XpWUq24ZPyTOr2SYwT5fkhulnOktCxK6NUxGtbcwMcuOZU
+         U7bg==
+X-Gm-Message-State: AOAM5336+XugDgmM5AtWkPf8oLwB8EGMcjaN+cOsO9zJAnR6Vbs1z3YN
+        iYDWkC3rFa5JZK0U+XW/m1wGcl5r+lsTzO/FWAY=
+X-Google-Smtp-Source: ABdhPJy0m8WFCbnEHh7+SXhPsiMuUf+Y9a0VoChZDv9Nv97O1qdlwAQdWjFZ2AuknrEtA/QiDLSSGKYkEtSXPX0aRvU=
+X-Received: by 2002:a5d:944a:0:b0:645:dc2c:46c6 with SMTP id
+ x10-20020a5d944a000000b00645dc2c46c6mr523779ior.190.1646639309845; Sun, 06
+ Mar 2022 23:48:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiSb7tsUEBRGS+HA@casper.infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6e02:1e0b:0:0:0:0 with HTTP; Sun, 6 Mar 2022 23:48:29
+ -0800 (PST)
+Reply-To: fb5485370@gmail.com
+From:   fred benson <fb5088646@gmail.com>
+Date:   Mon, 7 Mar 2022 08:48:29 +0100
+Message-ID: <CAGY2EXNO1MLbF5FVBNWiQhsXwfMkGouHTuQktcO6QitqV3avUw@mail.gmail.com>
+Subject: hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 11:33:02AM +0000, Matthew Wilcox wrote:
-> On Sun, Mar 06, 2022 at 07:32:04AM +0200, Jarkko Sakkinen wrote:
-> > For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
-> > to use that for initializing the device memory by providing a new callback
-> > f_ops->populate() for the purpose.
-> 
-> As I said, NAK.
+please get back to me for more information on the transfer.
 
-Agreed.  This is an amazingly bad interface.
+THANKS

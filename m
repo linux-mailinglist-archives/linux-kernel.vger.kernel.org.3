@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EB34D05BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C35C4D05C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244579AbiCGRzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:55:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S244571AbiCGRzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244070AbiCGRy6 (ORCPT
+        with ESMTP id S244269AbiCGRz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:54:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B3C70917;
-        Mon,  7 Mar 2022 09:54:03 -0800 (PST)
+        Mon, 7 Mar 2022 12:55:28 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E26FA18
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:54:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61DA7B81654;
-        Mon,  7 Mar 2022 17:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2CEFC340EB;
-        Mon,  7 Mar 2022 17:54:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C2FCCCE0EDB
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C82ECC340F6;
+        Mon,  7 Mar 2022 17:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646675641;
-        bh=SYv38mIqyJ/kUbZba218Eg6gzm9gAmX2mF5NRxwBAu0=;
+        s=k20201202; t=1646675671;
+        bh=skJXL8/N2xCsgKAp+CXm32RgRJoIRM8CbDaIsqyS5+A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uF3ao08msPIYvAyDOUwnmcq6PJqWBBRJcE4FTCDOAHBSSt4GFTMvgqXbQI34K3TzN
-         /xpRo29FuAEzEzQZc9mU5lBM5PndqpCzr47nWgg4MIS92vlRKvsOzivGM44LlojJFz
-         EzrTzAB4I3+KtqyYmu+vphiGFI4JSv/Jfsshu0hRSrmnT8GLIa54Or/C5p6QNC7eKK
-         rIkIBn10pWLsTTBt3+GT9SbjDEQBGHaTTQkJs5JakGVxwnZwW3TlbyLYgT5DiiKQTf
-         /3jqkQ4hvmP5TAzhxbHXrDzRjD+DwFbc638yywb6FM8QxSAG5Ugpix5lOYCUGbZ0cY
-         Z8EPeFRiaz0xw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0C746403C8; Mon,  7 Mar 2022 14:53:57 -0300 (-03)
-Date:   Mon, 7 Mar 2022 14:53:56 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org, anshuman.khandual@arm.com,
-        german.gomez@arm.com, leo.yan@linaro.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] Branch stack improvements
-Message-ID: <YiZGtCptGtphNasv@kernel.org>
-References: <20220307171917.2555829-1-james.clark@arm.com>
+        b=mVFXmd5iXoXH64fcOXo1x8kyRaopJJw7P0/ydyBOtJiC4KItvqq3AicpSs44vn1R1
+         0hM+MVkZk3BWyZIrzK0QLlWxeI6+8y27fhD63zmOfJk2Z8yrsXoEAm2W53wQmoteGE
+         e20cUSpUPPMvyySRtwRZS2NoBcxsIJbPB8G6IY2NNe6VW4rtq5SrVSoarx0Fy3W3LP
+         YGMaVIkxneeBXxN+M3tq+/BsAanyhmbsfaxP2a9xw2+bX7YhTQVIy9CyDsiPfJh1Cr
+         CUzPiFXLrPGY+blvo1zyWmq4IumfSEMLfUB4f69QbIqyUeRyLkNd8g8HBCmIta1EwG
+         Y96HaS1kd3SMg==
+Date:   Mon, 7 Mar 2022 10:54:24 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     trix@redhat.com
+Cc:     mst@redhat.com, jasowang@redhat.com, ndesaulniers@google.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] virtio_ring: Initialize vring_size_in_bytes
+Message-ID: <YiZG0Nx9j++bJaA4@dev-arch.thelio-3990X>
+References: <20220307174916.892433-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307171917.2555829-1-james.clark@arm.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20220307174916.892433-1-trix@redhat.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,41 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Mar 07, 2022 at 05:19:13PM +0000, James Clark escreveu:
-> I came across a few generic non-Arm issues when reviewing Anshuman's new
-> support for branch record buffers on Arm [1].
+On Mon, Mar 07, 2022 at 09:49:16AM -0800, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
 > 
-> The first one is a fix to an error message which is misleading if the
-> feature is unavailable and the remaining ones make the branch type field
-> visible in perf report and perf script so that it can be debugged or used
-> by other tools.
+> On the clang build, there is this error
+> virtio_ring.c:1772:26: error: variable 'ring_size_in_bytes'
+>   is uninitialized when used here
+>   vring_free_queue(vdev, ring_size_in_bytes,
+>                          ^~~~~~~~~~~~~~~~~~
 > 
-> Applies to perf/core (56dce86819)
+> ring_dma_addr was intialized twice, once with the ring_size_in_bytes.
+> value.  So fix typo.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thanks, applied to tmp.perf/core, locally, if someone spots some
-problem, there is some time till I run tests and move it to perf/core.
+I was getting ready to send the same patch.
 
-- Arnaldo
- 
-> Thanks
-> James
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  drivers/virtio/virtio_ring.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [1] https://lore.kernel.org/lkml/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
-> 
-> James Clark (4):
->   perf: Add error message for unsupported branch stack cases
->   perf: Print branch stack entry type in --dump-raw-trace
->   perf: Refactor perf script branch stack printing
->   perf script: Output branch sample type
-> 
->  tools/perf/builtin-script.c | 28 +++++++++++++---------------
->  tools/perf/util/evsel.c     |  4 ++++
->  tools/perf/util/session.c   |  5 +++--
->  3 files changed, 20 insertions(+), 17 deletions(-)
-> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 905c882600618..b2b567ebb9120 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -1756,7 +1756,7 @@ static void vring_free_vring_packed(struct vring_packed *vring,
+>  	ring                  = vring->ring;
+>  	driver                = vring->driver;
+>  	device                = vring->device;
+> -	ring_dma_addr         = vring->ring_size_in_bytes;
+> +	ring_size_in_bytes    = vring->ring_size_in_bytes;
+>  	event_size_in_bytes   = vring->event_size_in_bytes;
+>  	ring_dma_addr         = vring->ring_dma_addr;
+>  	driver_event_dma_addr = vring->driver_event_dma_addr;
 > -- 
-> 2.28.0
-
--- 
-
-- Arnaldo
+> 2.26.3
+> 
+> 

@@ -2,159 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C8E4D08CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEAB4D08CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245271AbiCGUw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        id S245298AbiCGUxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiCGUw0 (ORCPT
+        with ESMTP id S245320AbiCGUwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:52:26 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F60A29CA1;
-        Mon,  7 Mar 2022 12:51:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=9tM1IcUHnS8qh7d8odUKJS/jksWImABpShrJtrAv/fU=; b=nl0IUzM8m9zG2uM2Bg1l50f93u
-        KdNLWT3fvZCaIQHByKLJO5y2Buzwqj8Unp7PsxqY+A/7hfqDwG1abfy6lpWiWax7EH6HCkI8Rifpf
-        pTbTkH/N4loW4QOk09E5UVOaVV6Zy3Hp9/YBxSjW6rCbb1+zFcI+jldU/JHP/KL8JrgEzuDHfLFEQ
-        PEPholr+lgZBFTNDokot78d3MP0pRcaOE3Qv3H2xjgpOmgwESq5DoseTRGpfnpAB8MMHy3zBC+HK+
-        PH2a7IlVhUJDYCHvL/J7yHfRuTSvMcXAOMxYUHrkNM2Z35el1UXIQ2mj8tv/06ctcHAD1H+MFX325
-        t9kuHWtg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRKK7-00FXcm-Nt; Mon, 07 Mar 2022 20:51:20 +0000
-Message-ID: <ea27ccf9-9ef2-f1db-815b-176b4ed1a907@infradead.org>
-Date:   Mon, 7 Mar 2022 12:51:13 -0800
+        Mon, 7 Mar 2022 15:52:54 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569396E348;
+        Mon,  7 Mar 2022 12:51:59 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id w4so4747181ply.13;
+        Mon, 07 Mar 2022 12:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yR4pOnNNi+W5qKC3ntFghkt+5izb2a8c8+qMVgl1ApA=;
+        b=NMPhOzq/mMkrZi5s2ob46xsjhUImMM+S51Ohw253Be5IB2AqUfkoGWIsRG78GPNIe9
+         l49K8cC320ZDVF6hl6ODxby80/z1d5Dg2rk8YnabapY45nxqBojFbGsAOxe8jR+Rv3/5
+         s4uZnESwccKzVjg8DwSBZ5kzofetAnaVvOMuBRdni8yqHc0+KXC8fGLoT6Sq8SxhDkb1
+         j1vlzr8iCKaO2GIuxisUt2ZU4XAKG2dgWce+2fOmMZs05WasPdJw6LfyXgbGzK/Tp+p7
+         cuBZH5YD7194STKKMIyxTkosa/8JXebt2/kqqZgWLwHwkoYCUlQ7WeMfWb7XU7xGPpGY
+         SizQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yR4pOnNNi+W5qKC3ntFghkt+5izb2a8c8+qMVgl1ApA=;
+        b=5JSjylugoIY/mB5sdKLgER41jkjkxxNG099bbV1lqK2//kkQjr5eT0nwwXtpzxkicq
+         K1r7+XN5vndWQiwqZbB9x+gYQKRA4zD2f8m5skjizhc7BIpMS05D4x77UFXf0wU0r5Y3
+         40PPgOG1RZYsezWx3yPWrJJNerpHZGi5yvgTy1CehzR53vJ3zXxMd3R6idnNQTMmIl/5
+         0ITIfemf+qUNSb/P1yEODJKLPkT6y8F1+dg0AeN6bEyZqEmuwWJlr9lEHsA6GFmHfClR
+         +6LzDB0ccT6mTkKCg0GMBFJx04j6KhtXVgbfJ2gXIssHSpEoID7m6cwsGTgmFV0HRNfu
+         Cudw==
+X-Gm-Message-State: AOAM530/549iLNOFg74HvNxi7omwQH1kgBwOx72qesChFoNIkJjPOqky
+        5utQmQcxvOgE3/slANX8c3M=
+X-Google-Smtp-Source: ABdhPJxHqcU3WIyLk0oEV7FvoQHKglguPDulf9d2KfRb9YdFvgiso16bvhyigvSgEvM7VMU799xHcw==
+X-Received: by 2002:a17:902:7595:b0:151:7b0b:11c4 with SMTP id j21-20020a170902759500b001517b0b11c4mr14337470pll.126.1646686318792;
+        Mon, 07 Mar 2022 12:51:58 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id f7-20020a056a0022c700b004e11d3d0459sm17440929pfj.65.2022.03.07.12.51.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 12:51:58 -0800 (PST)
+Date:   Tue, 8 Mar 2022 02:21:56 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 6/8] compiler_types.h: Add unified
+ __diag_ignore_all for GCC/LLVM
+Message-ID: <20220307205156.g5pv4jg3iihhffxc@apollo.legion>
+References: <20220304224645.3677453-1-memxor@gmail.com>
+ <20220304224645.3677453-7-memxor@gmail.com>
+ <YiZdSoNcaESkzvBs@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [next] mips-mt.c:233:19: error: conflicting types for 'mt_init'
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <CA+G9fYtEx=k9TM7c7EihbO3U0qxZLbKX26NWJ1L=jjEOuy7cHQ@mail.gmail.com>
- <4c8f31d0-d51c-bb8c-acae-da1f1b1ada51@infradead.org>
- <20220307191537.jz6rho2vikdybpam@revolver>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220307191537.jz6rho2vikdybpam@revolver>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiZdSoNcaESkzvBs@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 08, 2022 at 01:00:18AM IST, Nick Desaulniers wrote:
+> On Sat, Mar 05, 2022 at 04:16:43AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > Add a __diag_ignore_all macro, to ignore warnings for both GCC and LLVM,
+> > without having to specify the compiler type and version. By default, GCC
+> > 8 and clang 11 are used. This will be used by bpf subsystem to ignore
+> > -Wmissing-prototypes warning for functions that are meant to be global
+> > functions so that they are in vmlinux BTF, but don't have a prototype.
+> >
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > ---
+> >  include/linux/compiler-clang.h | 3 +++
+> >  include/linux/compiler-gcc.h   | 3 +++
+> >  include/linux/compiler_types.h | 4 ++++
+> >  3 files changed, 10 insertions(+)
+> >
+> > diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+> > index f1aa41d520bd..babb1347148c 100644
+> > --- a/include/linux/compiler-clang.h
+> > +++ b/include/linux/compiler-clang.h
+> > @@ -90,3 +90,6 @@
+> >  #else
+> >  #define __diag_clang_11(s)
+> >  #endif
+> > +
+> > +#define __diag_ignore_all(option, comment) \
+> > +	__diag_clang(11, ignore, option)
+> > diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> > index ccbbd31b3aae..d364c98a4a80 100644
+> > --- a/include/linux/compiler-gcc.h
+> > +++ b/include/linux/compiler-gcc.h
+> > @@ -151,6 +151,9 @@
+> >  #define __diag_GCC_8(s)
+> >  #endif
+> >
+> > +#define __diag_ignore_all(option, comment) \
+> > +	__diag_GCC(8, ignore, option)
+>
+> While this approach will work for clang, it doesn't seem scalable for
+> GCC. Documentation/process/changes.rst documents that we support gcc
+> 5.1+. This approach will only disable diagnostics for gcc 8+.
+>
 
+ISTM the original commit adding these macros only defined them for GCC 8+, so
+coverage for previous versions is already not there, unrelated to this change.
+I am not sure what the reason for that was, though.
 
-On 3/7/22 11:15, Liam Howlett wrote:
-> Hello Randy,
-> 
-> I did address this when it occurred on the 24th [1].  I had looked at
-> this and was thinking I would rename the maple tree function, but
-> Matthew suggested renaming the mips function instead.  I looked into the
-> conflict and the arch/mips/kernel/mips-mt.c uses the mips_ prefix for
-> almost all of the functions. So I generated a patch on my tree for
-> next-20220225 which fixes the issue by renaming the mips side of things.
-> Please see 51e773764d11 for the very small rename.
-> 
-> [1]
-> https://lore.kernel.org/linux-mm/202202241817.MXoE0NcM-lkp@intel.com/
-> 
-> Thanks,
-> Liam
+> > +
+> >  /*
+> >   * Prior to 9.1, -Wno-alloc-size-larger-than (and therefore the "alloc_size"
+> >   * attribute) do not work, and must be disabled.
+> > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> > index 3f31ff400432..8e5d2f50f951 100644
+> > --- a/include/linux/compiler_types.h
+> > +++ b/include/linux/compiler_types.h
+> > @@ -371,4 +371,8 @@ struct ftrace_likely_data {
+> >  #define __diag_error(compiler, version, option, comment) \
+> >  	__diag_ ## compiler(version, error, option)
+> >
+> > +#ifndef __diag_ignore_all
+> > +#define __diag_ignore_all(option, comment)
+> > +#endif
+> > +
+> >  #endif /* __LINUX_COMPILER_TYPES_H */
+> > --
+> > 2.35.1
+> >
 
-OK, sounds good. Thanks.
-
-> 
-> * Randy Dunlap <rdunlap@infradead.org> [220305 22:50]:
->> Hi Liam,
->>
->> Would you consider renaming maple tree's "mt_init()" function to
->> maple_tree_init() or mtree_init() or something that does not
->> conflict with the mt_init() function in arch/mips/ so that
->> these build errors don't happen?
->>
->> thanks.
->>
->> On 2/24/22 23:09, Naresh Kamboju wrote:
->>> [Please ignore this email if it is already reported]
->>>
->>> Linux next-20220224 arch mips build errors / warnings noticed [1].
->>>
->>> Build configs:
->>>   -  mips-gcc-8-malta_defconfig
->>>   -  mips-gcc-10-malta_defconfig
->>>   -  mips-gcc-8-defconfig
->>>   -  mips-gcc-10-defconfig
->>>
->>> metadata:
->>>     git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->>>     git_sha: 44948bd49d878dad6c9707e34f4a06df73c3a800
->>>     git_short_log: 44948bd49d87 (\Add linux-next specific files for 20220224\)
->>>     kconfig: defconfig
->>>     target_arch: mips
->>>     toolchain: gcc-10
->>>
->>>
->>> Build errors / warnings:
->>>
->>> arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for 'mt_init'
->>>   233 | static int __init mt_init(void)
->>>       |                   ^~~~~~~
->>> In file included from include/linux/mm_types.h:12,
->>>                  from include/linux/mmzone.h:21,
->>>                  from include/linux/gfp.h:6,
->>>                  from include/linux/radix-tree.h:12,
->>>                  from include/linux/idr.h:15,
->>>                  from include/linux/kernfs.h:12,
->>>                  from include/linux/sysfs.h:16,
->>>                  from include/linux/kobject.h:20,
->>>                  from include/linux/energy_model.h:7,
->>>                  from include/linux/device.h:16,
->>>                  from arch/mips/kernel/mips-mt.c:7:
->>> include/linux/maple_tree.h:589:20: note: previous definition of
->>> 'mt_init' was here
->>>   589 | static inline void mt_init(struct maple_tree *mt)
->>>       |                    ^~~~~~~
->>> make[3]: *** [scripts/Makefile.build:288: arch/mips/kernel/mips-mt.o] Error 1
->>>
->>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>>
->>> Steps to reproduce:
->>> ------------------
->>> # To install tuxmake on your system globally:
->>> # sudo pip3 install -U tuxmake
->>>
->>> tuxmake --runtime podman --target-arch mips --toolchain gcc-10
->>> --kconfig defconfig
->>>
->>> --
->>>
->>> [1] https://builds.tuxbuild.com/25aFF2X7uoyebURaYzNHW9FVEmN/
->>
->> -- 
->> ~Randy
-
--- 
-~Randy
+--
+Kartikeya

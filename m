@@ -2,188 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCECB4D0006
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31634D000A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242866AbiCGN2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:28:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
+        id S242876AbiCGN2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237420AbiCGN2R (ORCPT
+        with ESMTP id S237420AbiCGN2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:28:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F89E8BF1B;
-        Mon,  7 Mar 2022 05:27:23 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 227CovUk011559;
-        Mon, 7 Mar 2022 13:27:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=9Xs1+iRscnxalmm+QWUBm4v/2ipilHWpYzFSRmzQuE4=;
- b=KgIxQj40lAFrL/mTjT90VfeGBQuJ5NxG7hzFZaDiiok/UxeI+fxP16MsJvT0va6mjaY5
- J9zhx//B4X7ZBafeHnshjWA285GD0KahsJE+aDNYPQJPLJ7qJhc2pNyodnBXDBtY7ext
- nLLgxGJABm/ZL2IzTcg7THxJmE9eXrhcYfOIakaf1mdcf+77zr0Z+2OAGf5BIPVVjYT2
- Dpm8kMwoMmtyzlETP86U9Zv6J6j19kbfnLxVvttqfw7z/JdXBioag9yezzDc6gTaGWk9
- XFhZiTAF00FElfw1u7SYriArGoqo8eXemSM8C43M/gTJiFkBCXI6V3J1UikNdvtvH1NW mQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3end6fyd2b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Mar 2022 13:27:20 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 227DRKbN006511;
-        Mon, 7 Mar 2022 13:27:20 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3end6fyd1g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Mar 2022 13:27:20 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 227DCw0U010197;
-        Mon, 7 Mar 2022 13:27:17 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3eky4hvsyr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Mar 2022 13:27:17 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 227DRE3l41812332
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Mar 2022 13:27:14 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 667E34C04A;
-        Mon,  7 Mar 2022 13:27:14 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BF7C54C044;
-        Mon,  7 Mar 2022 13:27:13 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.73.209])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Mon,  7 Mar 2022 13:27:13 +0000 (GMT)
-Date:   Mon, 7 Mar 2022 14:27:11 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
-        kwankhede@nvidia.com, fiuczy@linux.ibm.com,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH v18 08/18] s390/vfio-ap: allow assignment of unavailable
- AP queues to mdev device
-Message-ID: <20220307142711.5af33ece.pasic@linux.ibm.com>
-In-Reply-To: <9ac3908e-06da-6276-d1df-94898918fc5b@linux.ibm.com>
-References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
-        <20220215005040.52697-9-akrowiak@linux.ibm.com>
-        <97681738-50a1-976d-9f0f-be326eab7202@linux.ibm.com>
-        <9ac3908e-06da-6276-d1df-94898918fc5b@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Mon, 7 Mar 2022 08:28:38 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11441EC4E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 05:27:43 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 528FD3F1C9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 13:27:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646659661;
+        bh=0p+VuFDj8xL9U854Xhzlb2R5Iw4DSHVh49A3ct6TpJY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=T/6zZG5bBzY6FcHnpU7heMw7IvmqxCnWPDn0sQEruF6ZyzQGpXj2NtpGjW2FNw30A
+         8cM7o3T6GRDjQSAEWfzrE9UHPzJ+SzvR16Fz2BUeX8QNNsczdVVrm6ZCQMr8q3hufc
+         o2pBvOLfTfjk/XK+JvM6GW+vm1GDv0K3yMGrlLvoULDjQrEc4Fm6CK0Uv0RS1wZdMh
+         zp0Q3ZNK4ylUXTIfQabdI8ArskcNv+6mMtTGeSu8+IiDXLrL8hj0E1TrQHMJPs6vjo
+         kWIxaGXRZMSZzAugcvs75bo1WWSPCf/yX8/sc64x7oHaMEz8B9Usghk0ZcaPL8Nrrn
+         xOivXom6iFMow==
+Received: by mail-ed1-f69.google.com with SMTP id i17-20020aa7c711000000b00415ecaefd07so6241795edq.21
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 05:27:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0p+VuFDj8xL9U854Xhzlb2R5Iw4DSHVh49A3ct6TpJY=;
+        b=UpSMW4cRj3zqq9pHDxEaiM/TcaBGAkVpaqrhoIqbe5nYWY/HfF7hqDSD61eDLYYFXG
+         uPQ5f10qDvAKYCbvb4IOzMgpz64U2r/saYP5NGQbrdJ+/GIeTKUja4B6dIpJouunjTcD
+         Ft1T4QElKCqoOoh/gK0dV8KR0KLMFXctqxg9fBmksqihBKB3PTV/rzynGf1uIIS3lKg7
+         2oJXYkCAY9wD4qym7XSqSZ/siK4CF/J/oZ01LKydpAChh9lbIuxf0x5lXSYndxfEYBfb
+         Tb5oMl/NQStD3UtE/M0NLk2xyzwWv4ilrP0FvUHlUiq9NBcOz5cGmfgs9ji9j46C24Pk
+         JEpw==
+X-Gm-Message-State: AOAM5310psmMEfOQW5vV5jCO5avz3vmol/fSnW2ZKSkmkOeYvspkCP6L
+        5vyB62K4utbv/3Ny8zEp5em8/ruVZEaRZTDO+RZT1i8R9ITLpIwT3hPtMMKUhif+wmHBX6ySoTj
+        Qv6nqMiV3aZbncpo50DPvi6sF8IvlsgTueEKA7IVEAw==
+X-Received: by 2002:aa7:d708:0:b0:416:67d:5e07 with SMTP id t8-20020aa7d708000000b00416067d5e07mr11332747edq.166.1646659661048;
+        Mon, 07 Mar 2022 05:27:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxROn5oRRrVhYMnIFfX1j+2EeerLJmDS9wAaPDjifZ9sXyeRLKRZqzm4A9FlkGfkFICnqDwaA==
+X-Received: by 2002:aa7:d708:0:b0:416:67d:5e07 with SMTP id t8-20020aa7d708000000b00416067d5e07mr11332734edq.166.1646659660859;
+        Mon, 07 Mar 2022 05:27:40 -0800 (PST)
+Received: from [192.168.0.142] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170906b10500b006ce6fa4f510sm4707518ejy.165.2022.03.07.05.27.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 05:27:40 -0800 (PST)
+Message-ID: <060968dc-9460-1b75-12a7-cb0bbe9563cc@canonical.com>
+Date:   Mon, 7 Mar 2022 14:27:39 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add bindings for Richtek
+ RT5190A PMIC
+Content-Language: en-US
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <1646647704-2331-1-git-send-email-u0084500@gmail.com>
+ <1646647704-2331-2-git-send-email-u0084500@gmail.com>
+ <1e6893ca-69f4-a2ed-6ecc-23507c04002b@canonical.com>
+ <CADiBU3_jC_+P4d-gjMRGpP0uBejUkCY-axNd4nh1Y_=95iav3A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CADiBU3_jC_+P4d-gjMRGpP0uBejUkCY-axNd4nh1Y_=95iav3A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: vXZ-5ZoGv8gC9JSVNAOvIWNDczue8gZe
-X-Proofpoint-GUID: WCccG6fkHYA87iWWq4ky5tfjAr1HYwTd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-07_05,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
- spamscore=0 suspectscore=0 clxscore=1011 malwarescore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203070076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 07:31:21 -0500
-Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+On 07/03/2022 14:21, ChiYuan Huang wrote:
+> Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> 於 2022年3月7日 週一 下午7:14寫道：
+>>
+>> On 07/03/2022 11:08, cy_huang wrote:
+>>> From: ChiYuan Huang <cy_huang@richtek.com>
+>>>
+>>> Add bindings for Richtek RT5190A PMIC.
+>>>
+>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+>>> ---
+>>>  .../regulator/richtek,rt5190a-regulator.yaml       | 138 +++++++++++++++++++++
+>>>  1 file changed, 138 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5190a-regulator.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt5190a-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt5190a-regulator.yaml
+>>> new file mode 100644
+>>> index 00000000..b9f5836
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt5190a-regulator.yaml
+>>> @@ -0,0 +1,138 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/regulator/richtek,rt5190a-regulator.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Richtek RT5190A PMIC Regulator
+>>> +
+>>> +maintainers:
+>>> +  - ChiYuan Huang <cy_huang@richtek.com>
+>>> +
+>>> +description: |
+>>> +  The RT5190A integrates 1 channel buck controller, 3 channels high efficiency
+>>> +  synchronous buck converters, 1 LDO, I2C control interface and peripherial
+>>> +  logical control.
+>>> +
+>>> +  It also supports mute AC OFF depop sound and quick setting storage while
+>>> +  input power is removed.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - richtek,rt5190a
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  vin2-supply:
+>>> +    description: phandle to buck2 input voltage.
+>>> +
+>>> +  vin3-supply:
+>>> +    description: phandle to buck3 input voltage.
+>>> +
+>>> +  vin4-supply:
+>>> +    description: phandle to buck4 input voltage.
+>>> +
+>>> +  vinldo-supply:
+>>> +    description: phandle to ldo input voltage
+>>> +
+>>> +  richtek,buck1-fixed-microvolt:
+>>> +    description: buck1 fixed voltage that depends on the external resistor.
+>>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+>>
+>> You should use standard bindings for it.
+>>
+> Sorry, I didn't get the point for the meaning 'standard binding'.
+> Do you mean to change 'richtek,buck1-fixed-microvolt' or 'uint32' definition?
+> This voltage depends on the external resistor selection. It's 'fixed'
+> by the application.
 
-> On 3/3/22 10:39, Jason J. Herne wrote:
-> > On 2/14/22 19:50, Tony Krowiak wrote:  
-> >>   /**
-> >> - * vfio_ap_mdev_verify_no_sharing - verifies that the AP matrix is 
-> >> not configured
-> >> + * vfio_ap_mdev_verify_no_sharing - verify APQNs are not shared by 
-> >> matrix mdevs
-> >>    *
-> >> - * @matrix_mdev: the mediated matrix device
-> >> + * @mdev_apm: mask indicating the APIDs of the APQNs to be verified
-> >> + * @mdev_aqm: mask indicating the APQIs of the APQNs to be verified
-> >>    *
-> >> - * Verifies that the APQNs derived from the cross product of the AP 
-> >> adapter IDs
-> >> - * and AP queue indexes comprising the AP matrix are not configured 
-> >> for another
-> >> + * Verifies that each APQN derived from the Cartesian product of a 
-> >> bitmap of
-> >> + * AP adapter IDs and AP queue indexes is not configured for any matrix
-> >>    * mediated device. AP queue sharing is not allowed.
-> >>    *
-> >> - * Return: 0 if the APQNs are not shared; otherwise returns 
-> >> -EADDRINUSE.
-> >> + * Return: 0 if the APQNs are not shared; otherwise return -EADDRINUSE.
-> >>    */
-> >> -static int vfio_ap_mdev_verify_no_sharing(struct ap_matrix_mdev 
-> >> *matrix_mdev)
-> >> +static int vfio_ap_mdev_verify_no_sharing(unsigned long *mdev_apm,
-> >> +                      unsigned long *mdev_aqm)
-> >>   {
-> >> -    struct ap_matrix_mdev *lstdev;
-> >> +    struct ap_matrix_mdev *matrix_mdev;
-> >>       DECLARE_BITMAP(apm, AP_DEVICES);
-> >>       DECLARE_BITMAP(aqm, AP_DOMAINS);
-> >>   -    list_for_each_entry(lstdev, &matrix_dev->mdev_list, node) {
-> >> -        if (matrix_mdev == lstdev)
-> >> +    list_for_each_entry(matrix_mdev, &matrix_dev->mdev_list, node) {
-> >> +        /*
-> >> +         * If the input apm and aqm belong to the matrix_mdev's matrix,
-
-How about:
-
-s/belong to the matrix_mdev's matrix/are fields of the matrix_mdev
-object/
+I meant that you should not have dedicated binding to set regulator
+voltage, but use regulator-min/max-microvolt instead, within one
+regulator node. Just set min/max to same level and handle it in the
+driver. See for example:
+drivers/regulator/scmi-regulator.c
 
 
-> >> +         * then move on to the next.
-> >> +         */
-> >> +        if (mdev_apm == matrix_mdev->matrix.apm &&
-> >> +            mdev_aqm == matrix_mdev->matrix.aqm)
-> >>               continue;  
-> >
-> > We may have a problem here. This check seems like it exists to stop 
-> > you from
-> > comparing an mdev's apm/aqm with itself. Obviously comparing an mdev's 
-> > newly
-> > updated apm/aqm with itself would cause a false positive sharing 
-> > check, right?
-> > If this is the case, I think the comment should be changed to reflect 
-> > that.  
-> 
-> You are correct, this check is performed to prevent comparing an mdev to
-> itself, I'll improve the comment.
-> 
-> >
-> > Aside from the comment, what stops this particular series of if 
-> > statements from
-> > allowing us to configure a second mdev with the exact same apm/aqm 
-> > values as an
-> > existing mdev? If we do, then this check's continue will short circuit 
-> > the rest
-> > of the function thereby allowing that 2nd mdev even though it should be a
-> > sharing violation.  
-> 
-> I don't see how this is possible.
-
-I agree with Tony and his explanation.
-
-Furthermore IMHO is relates to the class identity vs equality problem, in
-a sense that identity always implies equality.
-
-Regards,
-Halil
+Best regards,
+Krzysztof

@@ -2,145 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44E34CFB64
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1614CFB6D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240262AbiCGKhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S240871AbiCGKh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242126AbiCGKLP (ORCPT
+        with ESMTP id S237718AbiCGKOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:15 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51898879E;
-        Mon,  7 Mar 2022 01:54:29 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id qx21so30577618ejb.13;
-        Mon, 07 Mar 2022 01:54:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=LFdIEDDy0ZaKGYeFQ4O3vTisKLa+lVgmmPHb0pU4IoY=;
-        b=qoygGdB9he2opWGHDYY9XoglRQBeKxqr2galGyGL324N6uwz5pYadRvnCC/qmNoth2
-         SSfIHRN5tIWzfosn3sS8tPkOytRkjeisdeDpM2k0zRYTe/kAsGdQqIyqANiVzAG6P2LH
-         SAdpeHjenJ2OHWABdj13zKU8Psy1bUdE1o5tqvvOETChL5hMz1fNIOWfsXUewp8/wHDB
-         1ve8ceRYlWaZyuxoBXLj1LzDNjKUn/oSswux10YTXCHdGobid0FL5GdG3MYQ13HM5Vat
-         RJgFmQFHC+D1lnfzCKDRY+bOBt0pYxbEdb+n/OuV599iG3vXRILheS1wnPIMPCbFBhbf
-         ObjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LFdIEDDy0ZaKGYeFQ4O3vTisKLa+lVgmmPHb0pU4IoY=;
-        b=ZSJ6dqaohmaCwsyTuH+7l5R5WCVFbKN11n4pK83+QxxpMbxpfxvL11DEX/Kmra6X6c
-         lhMtQ7zmEErvtU+0Xk6KDe7LjmA2KJg2kn75LnxrSWQPb6ME10HwdkthF9/kDkpLggwf
-         Y9x3Rp0mThP0vFxX2b2HIu9lmA4uEJJBcEi97pgMnfsTKoNYZ0zJjuR7TFqvrUJEU2sO
-         KyWjsMxWSz8XCGJP4COEe7nJjFNqS9HSKxfF4AiJMrP3ne3QwB+pPMPXoaVWnBdldtut
-         uayaGvo7Fs511gIJvKy8pTVB1czTtCYq3Iq4DXFjHd04mllGVUlGaBrn9253McIpgN4k
-         nPHQ==
-X-Gm-Message-State: AOAM532q1BSIxL/r6IAIyR/38gw4a7c2elZJm/yHAXDfIGwSG/QkR/yE
-        Wdb66Dyi60Vkw1Wv9Gzvbzk=
-X-Google-Smtp-Source: ABdhPJzn9/vfO4XyyIBeJkoetqe/kypEJfdHkvj7lvP5sVvs0XW3c1b5gVNgK7dQKvtaEsb5zpkcxw==
-X-Received: by 2002:a17:907:168f:b0:6da:b548:4f9f with SMTP id hc15-20020a170907168f00b006dab5484f9fmr8375270ejc.666.1646646867157;
-        Mon, 07 Mar 2022 01:54:27 -0800 (PST)
-Received: from felia.fritz.box (200116b826f87d009c8e984acb545ab7.dip.versatel-1u1.de. [2001:16b8:26f8:7d00:9c8e:984a:cb54:5ab7])
-        by smtp.gmail.com with ESMTPSA id n3-20020a1709061d0300b006da94efcc7esm4333310ejh.204.2022.03.07.01.54.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 01:54:26 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH RESEND] block: remove dead queue_dma_alignment branch from bio_map_user_iov()
-Date:   Mon,  7 Mar 2022 10:54:11 +0100
-Message-Id: <20220307095411.30459-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 05:14:24 -0500
+Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-hk2apc01on0720.outbound.protection.outlook.com [IPv6:2a01:111:f400:febc::720])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649AD7A9A6
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:56:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OInw9ptdhThV942f9FPz0Rd/hpHJ8wsmRpbShPX41jZ2IgkqhxNVP7v0R58EZQ0evsJt9DWQZzoacET9nX9X8uLGuhdlP3w8u8bAVv+I1SYXY8puNdkI8mKnwKkbA3vJymshWxHqo6hDlu4tXACrqWU2X8Y+SGv0QcXTVIq1MWOWvkduO6JWL9tKIe58u8uWg6qHkSqGn3myxpMIjeKd07k6dcDbebh68wrxXdsK8KY0UScxFDWahN+Q5y57WI3eOksdXVbL6Td6roTSGUewvhCZR0evtI4YoDr/VeybujtU8CXnK7mMde8txNSB2PN+DkLJFjEzqegfxXKRrggY3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UcjSFt6u4NSsFSgY6g9g/sb4Od9X0lYnTX4YrUwJW0s=;
+ b=mpoecq7nmPXNUCy/fBFRVQYuwnlZ6tA2UHYf8/YjhCMQwuMK0AyUPOtEZPuqkjysFucBZ7vCAlSb80AbGd5e/u6cpTnbCNHlCm1NTnJLvu4JLE8vAaRs6Um6gDoY17EoXO4LbAAlh86WaMWXcOir9oVLyXw2mV+9kZUlb7v5DGB5FcMVdMJC3IRzxe+A3WnP5P+RN5jmRyGEwkg476S3XatPBhx5sTRdDtmxHT6eXGUtWMqJds7yRl6HIb9/YjuMyqAH6hkcCVD05xdllgBPkFXm/jDfFlIRz09T4zhBs4VSvCzha8QGbqIb8aupYO+HVIhX7/gxqae0+pgRvtt/SQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UcjSFt6u4NSsFSgY6g9g/sb4Od9X0lYnTX4YrUwJW0s=;
+ b=XdAfvJ8QgrWAQSGdN3/PYy9FoueHrPlRTZ5MKzG2hLuYabeTj/EfB6GVjv5ViylWV+c+/oSbH2KWBR/NiMeftaO9rqsauKTNfdgcHISTyKfGznKUbQV0G8CKr2W4Mo83kxXbHiLeKxiUI5c/f/DqfDDRrybtiQXIYmiQPdW/IVM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ SEZPR06MB5071.apcprd06.prod.outlook.com (2603:1096:101:39::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.14; Mon, 7 Mar 2022 09:56:30 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732%4]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
+ 09:56:30 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Tomi Valkeinen <tomba@kernel.org>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     kael_w@qq.com, Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] drm/omap: fix NULL but dereferenced coccicheck error
+Date:   Mon,  7 Mar 2022 17:56:12 +0800
+Message-Id: <20220307095612.409090-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR03CA0050.apcprd03.prod.outlook.com
+ (2603:1096:202:17::20) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bd23b7b9-a011-4c5a-68b5-08da0020c105
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5071:EE_
+X-Microsoft-Antispam-PRVS: <SEZPR06MB507122A3AF53ACCA89A8E02AAB089@SEZPR06MB5071.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rDUe4FSNJ/Iu9cSgMveZhzTTQt5/dxckq2tv1W63vAfRO9dkcuYsB9Vp3qEFy6L3q4K0IpmLLp15LROVSPJhI9AKdKN40Koxw6u7ibpsenxPf6EjXm5CUD2UDGd/BbCZpb67VlxznO0UfC05GXOaDOe2IMckHWEx6gyl07mqged6yCUkVG8CNPxQShRbdVUrj6pteuXRYW8JPEIRXsUCfM7beClaxNG1Fu/nOlVvgWWO4d9qOI1BonSMrkPm7cPVu6B6xFwa6rlAjcvqo09VaVLBm+BJ1CacOjo5MRHioU61R3OZctYU95mtW5s6tG2tPEuxvqo8V8gEtz8HgpkOyT+mRjvMe9oYPIG3hXapBiuqLAXUThwbLX2kvfwYpWj+q9fqpWoj2Yd2/cZDGJoibTKoyCeVlduqXur0GuzSw34iZJ/Xyo+n6zp2pmuEkbuZNGiCosOqZgeBrNqjrQbtJ9q1uAUJaMoia/WSZ0wbzhlAloxPrwSFDFiOoNXsVWpXXo6H3k2JtNylGW7+IoDEMEZBXfUSxUGWJgrHv7NwrlPKjS8ow0EtDkcSjyVcLDQP3xT5iHibZ3rRIpS4Nym5C8Tr2Sh9bSq8PMh3a55BJN9rMkVlLfreSvqRFJz8qHSDhg1pigE5oWXqKwYMViCxMFxPIwBkm80rHO6rJQUXzhbuZesFgwzjwCGGbfEVgjqI/N73Op8mbOr7D9hJ2Xh0qQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66946007)(107886003)(52116002)(8936002)(66476007)(4744005)(2616005)(1076003)(186003)(26005)(8676002)(4326008)(5660300002)(86362001)(83380400001)(508600001)(36756003)(6506007)(6666004)(6512007)(110136005)(2906002)(38350700002)(38100700002)(316002)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J4HmWOH5MdEF5hVUFvZRamGPIXLBPADEcXqH+iFaPjQbbXD12a2AxkbvqD+G?=
+ =?us-ascii?Q?pEgiF/uDW4laK0/0O95UpIgwcF8kNCVDfhVm4FDLKm+Ei8Qy/xqSsqsDjiCn?=
+ =?us-ascii?Q?unRK46j5O7Mp/vM7TzBzcTw1dM/mSRKR7k4Yg0kvMzQnLQ+LivuIAjT5gpxO?=
+ =?us-ascii?Q?zTRSaIp+0ik5QJHwhc6EzAbBXmC4XWpm8i0k6+80AVRb47vur+U6bk8NlTaP?=
+ =?us-ascii?Q?UKvpUsZ05unz4DVXfw8TeHYIj8JOr7t5KG/mYAUVin/6AHKJS6aq36OrjVFT?=
+ =?us-ascii?Q?u2RAjujcjKvry5lDnEkA0fyWAlXlPErTskeaQ5uZH1V7TPtJrY7tO6hbs4A0?=
+ =?us-ascii?Q?kvjRkWOkNsVEacy19fwY3VsHbA+mQVwSMyCjRGzX4Jdwi+u7lUrEtYAlp0o3?=
+ =?us-ascii?Q?55jYX5Dh+aytormec2GkxVFCODwye+RVLgecd48HRBnrf6qU5JRfUAS0VLj7?=
+ =?us-ascii?Q?aT55jGMRDW1Ev7TG/rnQ3mqEqAfXZ1AqHhXHFG6IcDFR6YGINGErBnQFcKcZ?=
+ =?us-ascii?Q?t3oVG3Yp7TbLp0aQr3NYEV8vO/sR7WT76svxNGuYEL9OhY3qcX2ztYxKnc+9?=
+ =?us-ascii?Q?5rmOOkO8tKc97xT1NSGcrlCUtDy41mzu9A6cW3VC8DCh5Csrwq1yGmHa85+1?=
+ =?us-ascii?Q?f6HTR2HBesSKFkjSUhmbeh21kpYHQfGkI41DcOVOKAP0F414Z1MMYgTJCNrM?=
+ =?us-ascii?Q?RrBKvICcJssgMDczdWncy2M9XygG2CW3yhbCjZNKzDdJwAB0f35JJxNjHd5z?=
+ =?us-ascii?Q?+znVwMSeULd+E8Fo2PBS4Y4T8xpyq+rgHyfwVSKfSjdKUAKMsxYXHe/t8cHn?=
+ =?us-ascii?Q?JzZ+7ndTSGT4TiOQR1zKsO+yD30sx5X/GRQNJ0WZ3DCzzgJIhjfTpAes9QkI?=
+ =?us-ascii?Q?w+iHXyVP5RaYN8zRDOSDtoq1AEEqMiuZ7evIik72G5tUBGQzZJyeMXls9AsS?=
+ =?us-ascii?Q?arrlzTM/PaXSX6s0MhDOOSWiRcd27/f2NUJojJs8WGdCing2B/LpkBZzRHvt?=
+ =?us-ascii?Q?IN6WAJQd2bHEDKgLTIbaYQm2LFt9n6EW+QgOTHYIhbY7DkHx8gnxp+DaRigq?=
+ =?us-ascii?Q?9CK+lq1Y4iBeu4DW1r88HQCEcn0DDehBrtKOzwfobDYwTScqeiodzATAy0K4?=
+ =?us-ascii?Q?bwr1je3HZUnMIKWpv4n2CcDRWsxowfBp0EKE57CvcV1soO6dcOgkzkXJe6gt?=
+ =?us-ascii?Q?r1OOOE62Mc2/GA70yvaQEygpAQct5MoQBeSNxiKAanZlOh5Fxt/G3Ega07Fy?=
+ =?us-ascii?Q?Vof6wJFlnJLJgKqMWvsDUrU/fEYLMRyPpTqsJUuOGQUAY92sSsoxDcCNOx/r?=
+ =?us-ascii?Q?eccwZEEr8Ezo6WBTxAlzgrlEw7molO8emq9dJYOKNnCv2SzSpCS6NJiUhrpe?=
+ =?us-ascii?Q?peEeUZi4J7pZfZmG9kmH+SU+zSrpoXbcs2B4uQ5/g811oqBX8pTRkKXuxRjx?=
+ =?us-ascii?Q?NK3mi7k0Zzm9dU+TB7CdnQwNsayQAhAfQDAB1HEKzxTMnsqP28kzVr1mJkTe?=
+ =?us-ascii?Q?uCKE5Fd4PfM4t99vniiOJhE9sQM9VwuUW2GbtwLAo8O6BodHwPGLPI1eJlWf?=
+ =?us-ascii?Q?/lgD1yIkasLWS7mrTPSg9BetVIgZjtutvSIKr36OB1HPuI30t5dZp+pm0dl6?=
+ =?us-ascii?Q?fuHP3X8pVmfsGhxsh2m7rpk=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd23b7b9-a011-4c5a-68b5-08da0020c105
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:56:30.6469
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5vvOYnygho/cbRWRejA8bxBKkCh5B+heuEbYXer2nxoKvTZ3wlMf7lMmKyMx6tAtA8MA6g2lsZgXYmFSQ8Wf0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5071
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If queue_dma_alignment(rq->q), then blk_rq_map_user_iov() will call
-bio_copy_user_iov() and not bio_map_user_iov(). So, bio_map_user_iov() does
-not need to handle the queue_dma_alignment(rq->q) case in any special way.
+Fix the following coccicheck warning:
+./drivers/gpu/drm/omapdrm/omap_overlay.c:89:22-25: ERROR: r_ovl is NULL
+but dereferenced.
 
-Remove this dead branch from bio_map_user_iov().
+Here should be ovl->idx rather than r_ovl->idx.
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 ---
-still applies on next-20220307
+ drivers/gpu/drm/omapdrm/omap_overlay.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-added Christoph's Reviewed-by tag from:
-  https://lore.kernel.org/all/20220104124724.GA21670@lst.de/
-
-Jens, this patch must have fell through the cracks...
-please pick this minor non-urgent clean-up patch.
-
-
- block/blk-map.c | 41 ++++++++++++++++++-----------------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
-
-diff --git a/block/blk-map.c b/block/blk-map.c
-index c7f71d83eff1..2a1d7c5f791e 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -260,31 +260,26 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 
- 		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
- 
--		if (unlikely(offs & queue_dma_alignment(rq->q))) {
--			ret = -EINVAL;
--			j = 0;
--		} else {
--			for (j = 0; j < npages; j++) {
--				struct page *page = pages[j];
--				unsigned int n = PAGE_SIZE - offs;
--				bool same_page = false;
--
--				if (n > bytes)
--					n = bytes;
--
--				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
--						     max_sectors, &same_page)) {
--					if (same_page)
--						put_page(page);
--					break;
--				}
--
--				added += n;
--				bytes -= n;
--				offs = 0;
-+		for (j = 0; j < npages; j++) {
-+			struct page *page = pages[j];
-+			unsigned int n = PAGE_SIZE - offs;
-+			bool same_page = false;
-+
-+			if (n > bytes)
-+				n = bytes;
-+
-+			if (!bio_add_hw_page(rq->q, bio, page, n, offs,
-+					     max_sectors, &same_page)) {
-+				if (same_page)
-+					put_page(page);
-+				break;
- 			}
--			iov_iter_advance(iter, added);
-+
-+			added += n;
-+			bytes -= n;
-+			offs = 0;
+diff --git a/drivers/gpu/drm/omapdrm/omap_overlay.c b/drivers/gpu/drm/omapdrm/omap_overlay.c
+index 10730c9b2752..b0bc9ad2ef73 100644
+--- a/drivers/gpu/drm/omapdrm/omap_overlay.c
++++ b/drivers/gpu/drm/omapdrm/omap_overlay.c
+@@ -86,7 +86,7 @@ int omap_overlay_assign(struct drm_atomic_state *s, struct drm_plane *plane,
+ 		r_ovl = omap_plane_find_free_overlay(s->dev, overlay_map,
+ 						     caps, fourcc);
+ 		if (!r_ovl) {
+-			overlay_map[r_ovl->idx] = NULL;
++			overlay_map[ovl->idx] = NULL;
+ 			*overlay = NULL;
+ 			return -ENOMEM;
  		}
-+		iov_iter_advance(iter, added);
- 		/*
- 		 * release the pages we didn't map into the bio, if any
- 		 */
 -- 
-2.17.1
+2.35.1
 

@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243144CF664
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10E24CF9F4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237546AbiCGJgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
+        id S242675AbiCGKLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:11:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237647AbiCGJ2R (ORCPT
+        with ESMTP id S238218AbiCGJvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:28:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEA26AA63;
-        Mon,  7 Mar 2022 01:25:48 -0800 (PST)
+        Mon, 7 Mar 2022 04:51:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0E566C8B;
+        Mon,  7 Mar 2022 01:45:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B65E2B810B9;
-        Mon,  7 Mar 2022 09:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF12C340F3;
-        Mon,  7 Mar 2022 09:25:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2CB8B810B9;
+        Mon,  7 Mar 2022 09:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10237C340E9;
+        Mon,  7 Mar 2022 09:45:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645145;
-        bh=l/hF19ts1pVffdE2/W6xqEpFVxjmTbWSdZr2grIVloI=;
+        s=korg; t=1646646305;
+        bh=jZhJUgnC00Oi4NxwevCHNXIQrXbw0XYFCaL4YrnILQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uEmlSwFoQ7CtG7dSTmRXKxYuR6sn5h+vmspFCJZ1eEs118uUW8DdCkyfBH2KkmuvB
-         QOn0XsvQ4UCFa5zvP4s1mv8mlgEOo8SHAD35D42WzIbtgQDLss2qtxnXyB3NDAp1mp
-         jW36X1CPxi+a9KP4COXhhwqmX9U6yptQ3finjUSE=
+        b=Pb7aLgPGeFJDwWRN9GUpIpRH4Ca8ECVsfgyTC11ihhfmK+mgCdbZZQBpJhlm19i/m
+         FMQMBOuBP9EXpOAjjA5veOeeu+Tj05VzyA7TYzKjttjMzRuKgvczXt0sBrGHWCOMXN
+         wvq4XFdFFd/HPqgqFHJCNg08MaNA53gmZhuRJ68c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 4.19 29/51] block: Fix fsync always failed if once failed
+        stable@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Zeal Robot <zealci@zte.com.cn>,
+        wangyong <wang.yong12@zte.com.cn>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        CGEL ZTE <cgel.zte@gmail.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Song Liu <songliubraving@fb.com>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 200/262] memfd: fix F_SEAL_WRITE after shmem huge page allocated
 Date:   Mon,  7 Mar 2022 10:19:04 +0100
-Message-Id: <20220307091637.820937128@linuxfoundation.org>
+Message-Id: <20220307091708.322068557@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +63,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Hugh Dickins <hughd@google.com>
 
-commit 8a7518931baa8ea023700987f3db31cb0a80610b upstream.
+commit f2b277c4d1c63a85127e8aa2588e9cc3bd21cb99 upstream.
 
-We do test with inject error fault base on v4.19, after test some time we found
-sync /dev/sda always failed.
-[root@localhost] sync /dev/sda
-sync: error syncing '/dev/sda': Input/output error
+Wangyong reports: after enabling tmpfs filesystem to support transparent
+hugepage with the following command:
 
-scsi log as follows:
-[19069.812296] sd 0:0:0:0: [sda] tag#64 Send: scmd 0x00000000d03a0b6b
-[19069.812302] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
-[19069.812533] sd 0:0:0:0: [sda] tag#64 Done: SUCCESS Result: hostbyte=DID_OK driverbyte=DRIVER_OK
-[19069.812536] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
-[19069.812539] sd 0:0:0:0: [sda] tag#64 scsi host busy 1 failed 0
-[19069.812542] sd 0:0:0:0: Notifying upper driver of completion (result 0)
-[19069.812546] sd 0:0:0:0: [sda] tag#64 sd_done: completed 0 of 0 bytes
-[19069.812549] sd 0:0:0:0: [sda] tag#64 0 sectors total, 0 bytes done.
-[19069.812564] print_req_error: I/O error, dev sda, sector 0
+  echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
 
-ftrace log as follows:
- rep-306069 [007] .... 19654.923315: block_bio_queue: 8,0 FWS 0 + 0 [rep]
- rep-306069 [007] .... 19654.923333: block_getrq: 8,0 FWS 0 + 0 [rep]
- kworker/7:1H-250   [007] .... 19654.923352: block_rq_issue: 8,0 FF 0 () 0 + 0 [kworker/7:1H]
- <idle>-0     [007] ..s. 19654.923562: block_rq_complete: 8,0 FF () 18446744073709551615 + 0 [0]
- <idle>-0     [007] d.s. 19654.923576: block_rq_complete: 8,0 WS () 0 + 0 [-5]
+the docker program tries to add F_SEAL_WRITE through the following
+command, but it fails unexpectedly with errno EBUSY:
 
-As 8d6996630c03 introduce 'fq->rq_status', this data only update when 'flush_rq'
-reference count isn't zero. If flush request once failed and record error code
-in 'fq->rq_status'. If there is no chance to update 'fq->rq_status',then do fsync
-will always failed.
-To address this issue reset 'fq->rq_status' after return error code to upper layer.
+  fcntl(5, F_ADD_SEALS, F_SEAL_WRITE) = -1.
 
-Fixes: 8d6996630c03("block: fix null pointer dereference in blk_mq_rq_timed_out()")
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20211129012659.1553733-1-yebin10@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+That is because memfd_tag_pins() and memfd_wait_for_pins() were never
+updated for shmem huge pages: checking page_mapcount() against
+page_count() is hopeless on THP subpages - they need to check
+total_mapcount() against page_count() on THP heads only.
+
+Make memfd_tag_pins() (compared > 1) as strict as memfd_wait_for_pins()
+(compared != 1): either can be justified, but given the non-atomic
+total_mapcount() calculation, it is better now to be strict.  Bear in
+mind that total_mapcount() itself scans all of the THP subpages, when
+choosing to take an XA_CHECK_SCHED latency break.
+
+Also fix the unlikely xa_is_value() case in memfd_wait_for_pins(): if a
+page has been swapped out since memfd_tag_pins(), then its refcount must
+have fallen, and so it can safely be untagged.
+
+Link: https://lkml.kernel.org/r/a4f79248-df75-2c8c-3df-ba3317ccb5da@google.com
+Signed-off-by: Hugh Dickins <hughd@google.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Reported-by: wangyong <wang.yong12@zte.com.cn>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: CGEL ZTE <cgel.zte@gmail.com>
+Cc: Kirill A. Shutemov <kirill@shutemov.name>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yang Yang <yang.yang29@zte.com.cn>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-flush.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ mm/memfd.c |   40 ++++++++++++++++++++++++++++------------
+ 1 file changed, 28 insertions(+), 12 deletions(-)
 
---- a/block/blk-flush.c
-+++ b/block/blk-flush.c
-@@ -239,8 +239,10 @@ static void flush_end_io(struct request
- 			return;
- 		}
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -31,20 +31,28 @@
+ static void memfd_tag_pins(struct xa_state *xas)
+ {
+ 	struct page *page;
+-	unsigned int tagged = 0;
++	int latency = 0;
++	int cache_count;
  
--		if (fq->rq_status != BLK_STS_OK)
-+		if (fq->rq_status != BLK_STS_OK) {
- 			error = fq->rq_status;
-+			fq->rq_status = BLK_STS_OK;
-+		}
+ 	lru_add_drain();
  
- 		hctx = blk_mq_map_queue(q, flush_rq->mq_ctx->cpu);
- 		if (!q->elevator) {
+ 	xas_lock_irq(xas);
+ 	xas_for_each(xas, page, ULONG_MAX) {
+-		if (xa_is_value(page))
+-			continue;
+-		page = find_subpage(page, xas->xa_index);
+-		if (page_count(page) - page_mapcount(page) > 1)
++		cache_count = 1;
++		if (!xa_is_value(page) &&
++		    PageTransHuge(page) && !PageHuge(page))
++			cache_count = HPAGE_PMD_NR;
++
++		if (!xa_is_value(page) &&
++		    page_count(page) - total_mapcount(page) != cache_count)
+ 			xas_set_mark(xas, MEMFD_TAG_PINNED);
++		if (cache_count != 1)
++			xas_set(xas, page->index + cache_count);
+ 
+-		if (++tagged % XA_CHECK_SCHED)
++		latency += cache_count;
++		if (latency < XA_CHECK_SCHED)
+ 			continue;
++		latency = 0;
+ 
+ 		xas_pause(xas);
+ 		xas_unlock_irq(xas);
+@@ -73,7 +81,8 @@ static int memfd_wait_for_pins(struct ad
+ 
+ 	error = 0;
+ 	for (scan = 0; scan <= LAST_SCAN; scan++) {
+-		unsigned int tagged = 0;
++		int latency = 0;
++		int cache_count;
+ 
+ 		if (!xas_marked(&xas, MEMFD_TAG_PINNED))
+ 			break;
+@@ -87,10 +96,14 @@ static int memfd_wait_for_pins(struct ad
+ 		xas_lock_irq(&xas);
+ 		xas_for_each_marked(&xas, page, ULONG_MAX, MEMFD_TAG_PINNED) {
+ 			bool clear = true;
+-			if (xa_is_value(page))
+-				continue;
+-			page = find_subpage(page, xas.xa_index);
+-			if (page_count(page) - page_mapcount(page) != 1) {
++
++			cache_count = 1;
++			if (!xa_is_value(page) &&
++			    PageTransHuge(page) && !PageHuge(page))
++				cache_count = HPAGE_PMD_NR;
++
++			if (!xa_is_value(page) && cache_count !=
++			    page_count(page) - total_mapcount(page)) {
+ 				/*
+ 				 * On the last scan, we clean up all those tags
+ 				 * we inserted; but make a note that we still
+@@ -103,8 +116,11 @@ static int memfd_wait_for_pins(struct ad
+ 			}
+ 			if (clear)
+ 				xas_clear_mark(&xas, MEMFD_TAG_PINNED);
+-			if (++tagged % XA_CHECK_SCHED)
++
++			latency += cache_count;
++			if (latency < XA_CHECK_SCHED)
+ 				continue;
++			latency = 0;
+ 
+ 			xas_pause(&xas);
+ 			xas_unlock_irq(&xas);
 
 

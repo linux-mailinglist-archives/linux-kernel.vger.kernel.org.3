@@ -2,102 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BAF4D05E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E634D05ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244624AbiCGSEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S244638AbiCGSFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240475AbiCGSEf (ORCPT
+        with ESMTP id S235549AbiCGSF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:04:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2B74EA3D;
-        Mon,  7 Mar 2022 10:03:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD078612CE;
-        Mon,  7 Mar 2022 18:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BE4DC340F6;
-        Mon,  7 Mar 2022 18:03:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646676220;
-        bh=GroBZq5f9ydM0k881i6/q8HA2YBB5lbcWXHdWwi9oEE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VZv892sUwGARHDj+GY7H6M676BMAGIHmkA0BmAKxWKaSxrfsUGm4yjD0WDHXFEc5l
-         m2fU9mC0K4EZ/Ub+HVbTiWJejn75h8mVwmtQ96fo+wDfMArr46NmvqqOxB3gSPMXT3
-         bz3XtbaVQj23r82vdBxkCc5LdZs6cWn55iO9iYJBrvRJUhsYIxP1Vz19TgVf3Gyr6W
-         zXe7f2yuvVv6dA9Wn/quxONzGtTwdiDUk2ALsB7GXW/bpslRs3PblT67Mwp3POxF/R
-         nFhjFe4qWU5w8pXr55/De8kItH6iEkS0MiqjSFw0oPHC0Y8e+z1M+gx0BpK/qVkvEs
-         4rVrGIr+g+rRg==
-Received: by mail-ed1-f44.google.com with SMTP id q17so21118252edd.4;
-        Mon, 07 Mar 2022 10:03:39 -0800 (PST)
-X-Gm-Message-State: AOAM5310q0eBeyDslrXwifVCN/uQK79KUNpgfAdkD6HF9on4bQKU8+3e
-        54D862mWixbLkh3lxMLGac5qBVay/MEPfUkqHw==
-X-Google-Smtp-Source: ABdhPJyFuI/fg6RMtF1oAdFB4y+D9IZhG87aW9IlKhHbcqAMXheFmUXB6WhCL2/DsQNWoPooxUAVoIpIywyXTL9oAxQ=
-X-Received: by 2002:a05:6402:51cb:b0:409:e99f:bc1c with SMTP id
- r11-20020a05640251cb00b00409e99fbc1cmr12439878edd.68.1646676218348; Mon, 07
- Mar 2022 10:03:38 -0800 (PST)
+        Mon, 7 Mar 2022 13:05:26 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2918F7667A;
+        Mon,  7 Mar 2022 10:04:31 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 227GoOOg028756;
+        Mon, 7 Mar 2022 18:03:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=VaZ2XNfWa+sxnZt8BlXloidMA1oZxGb7o2hFwBgpKUc=;
+ b=F9zpUBG1zFyDC6RjeUbG8ng0dfsP8L/8kxhBPtuZSy6Btk/LNS6LVWFxZC3SnSpMM33b
+ iKBdXDRG197LOOfrGSo0NNG/9kqjVk95OShzgVbwmUAGLfCfhjuiE7qtbFNF40w9JA2w
+ ZyPJZBY3cy2T0qnr9Dr8gms6uVkM0pJsqNUqtRXdWKulKS3p923XgwUlJTXHk8R2idT6
+ ylOVUngMVyjohinXM/75KcWZL/3kjpTNBzYNshPNgvfhurYdk3StdPOznj+W/hkRJLop
+ XZ2/B3gEQVPNg/x8bDg9eD14pLS5LqnSIpw01qo7pPZJxa8O+4BF89+L5iK4ECO9Urlj dg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyfscm7n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 07 Mar 2022 18:03:56 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 227Hj8Gj132509;
+        Mon, 7 Mar 2022 18:03:55 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 3ekyp1c1g6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 07 Mar 2022 18:03:55 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 227I3skO178106;
+        Mon, 7 Mar 2022 18:03:54 GMT
+Received: from localhost (dhcp-10-154-98-43.vpn.oracle.com [10.154.98.43])
+        by aserp3020.oracle.com with ESMTP id 3ekyp1c1fn-1;
+        Mon, 07 Mar 2022 18:03:54 +0000
+Received: by localhost (Postfix, from userid 1000)
+        id 75DF3BD0049; Mon,  7 Mar 2022 12:03:52 -0600 (CST)
+From:   Alex Thorlton <alex.thorlton@oracle.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Alex Thorlton <alex.thorlton@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] x86/paravirt: Apply paravirt instructions in consistent order during boot/module load
+Date:   Mon,  7 Mar 2022 12:03:38 -0600
+Message-Id: <20220307180338.7608-1-alex.thorlton@oracle.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220307172901.156929-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307172901.156929-1-krzysztof.kozlowski@canonical.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 7 Mar 2022 12:03:26 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+ufttuegvW_STJ7yjDY_5TRAuLNqfAAxR9gjrqtbMP8w@mail.gmail.com>
-Message-ID: <CAL_Jsq+ufttuegvW_STJ7yjDY_5TRAuLNqfAAxR9gjrqtbMP8w@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: dt-bindings: update Krzysztof Kozlowski's email
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-GUID: vZ0joBF1F-hkBOpzxKQljlYQ0FcJewlK
+X-Proofpoint-ORIG-GUID: vZ0joBF1F-hkBOpzxKQljlYQ0FcJewlK
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 11:29 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> Use Krzysztof Kozlowski's @kernel.org account in dt-bindings maintainer
-> entry.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->
-> ---
->
-> Hi Rob,
->
-> Could you take this one directly (optionally squash with the patch
-> adding me as maintainer)?
->
-> My email address also appears in the bindings. For now mailmap will
-> handle it (see my other commit). I will change it after merge window,
-> because some of the bindings are in separate for-next branches.
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4e88b4e17e35..48b0cf606be0 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14604,7 +14604,7 @@ F:      scripts/dtc/
->
->  OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
->  M:     Rob Herring <robh+dt@kernel.org>
-> -M:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +M:     Krzysztof Kozlowski <krzk+dt@kernel.org>
+Commit 4e6292114c74 ("x86/paravirt: Add new features for paravirt
+patching") changed the order in which altinstructions and paravirt
+instructions are patched at boot time.  However, no analogous change was
+made in module_finalize, where we apply altinstructions and
+parainstructions during module load.
 
-FWIW, the +dt never really worked that well for me. I've concluded
-that anything that relies on submitters getting things right doesn't
-work.
+As a result, any code that generates "stacked up" altinstructions and
+parainstructions (i.e. local_irq_save/restore) will produce different
+results when used in built-in kernel code vs. kernel modules.  This also
+makes it possible to inadvertently replace altinstructions in the booted
+kernel with their parainstruction counterparts when using
+livepatch/kpatch.
 
-Rob
+To fix this, re-order the processing in module_finalize, so that we do
+things in this order:
+
+ 1. apply_paravirt
+ 2. apply_retpolines
+ 3. apply_alternatives
+ 4. alternatives_smp_module_add
+
+This is the same ordering that is used at boot time in
+alternative_instructions.
+
+Fixes: 4e6292114c74 ("x86/paravirt: Add new features for paravirt patchin=
+g")
+Signed-off-by: Alex Thorlton <alex.thorlton@oracle.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org # 5.13+
+---
+ arch/x86/kernel/module.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index 95fa745e310a5..4edc9c87ad0bc 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -273,6 +273,10 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 			retpolines =3D s;
+ 	}
+=20
++	if (para) {
++		void *pseg =3D (void *)para->sh_addr;
++		apply_paravirt(pseg, pseg + para->sh_size);
++	}
+ 	if (retpolines) {
+ 		void *rseg =3D (void *)retpolines->sh_addr;
+ 		apply_retpolines(rseg, rseg + retpolines->sh_size);
+@@ -290,11 +294,6 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 					    tseg, tseg + text->sh_size);
+ 	}
+=20
+-	if (para) {
+-		void *pseg =3D (void *)para->sh_addr;
+-		apply_paravirt(pseg, pseg + para->sh_size);
+-	}
+-
+ 	/* make jump label nops */
+ 	jump_label_apply_nops(me);
+=20
+--=20
+2.33.1
+

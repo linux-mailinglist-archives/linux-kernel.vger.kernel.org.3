@@ -2,225 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A6B4CFCB8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE54D4CFCBA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241735AbiCGL0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S238599AbiCGL0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233599AbiCGLZz (ORCPT
+        with ESMTP id S240166AbiCGL0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 06:25:55 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7486D21E12;
-        Mon,  7 Mar 2022 02:58:22 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2EB071F37D;
-        Mon,  7 Mar 2022 10:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646650701; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iCHMjY+ZPjiNIpWBX9vPX8pxE8O3mm4NFvjAqDMCwDA=;
-        b=ePF8+laPogCunbljm3E0kk+a6ExGKTEIKOO0gEUvMD3VvpUmfSWzK14c0pIWu9HNiI/NuE
-        hH85ECjaSu03dKP+zoa7OYBNmJFcJe66TqL2taJ/1DBqC0O2uqvd3dY4Az4XoREjo2vQ0+
-        GMvl0TMyFKG4cS6+IefvwRNqEMbV3gk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7ABC013AD8;
-        Mon,  7 Mar 2022 10:58:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id djM+HEzlJWJ5PAAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 07 Mar 2022 10:58:20 +0000
-Message-ID: <b3d6e048-6922-ce00-7c1f-3702695c2974@suse.com>
-Date:   Mon, 7 Mar 2022 11:58:19 +0100
+        Mon, 7 Mar 2022 06:26:22 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C050A7B576;
+        Mon,  7 Mar 2022 02:59:26 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id d10so30972440eje.10;
+        Mon, 07 Mar 2022 02:59:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=r5VXslgP94xhLV5io8KJ01AqHztBTaI4x6W9LXcGA90=;
+        b=adaCimCEapoeMYpC/ZE2NLgvStFiaW0VcbYV3GwhSoqjEeBraZzqFoRcIjXsjP4gqy
+         cMssg5boVXUWj6spHFArGC0GdpcZ/uTNoHfPrIHUEnTGpFVreJf85nq+j0AknJNJJwE0
+         2gs5xOWbbSbzpTjB/4ekFu/5SrlKgTpiKJO0R+wR9RH23tYealJ46s4tJSSmxbkJhFwF
+         BJDEDc/4o2KS8/BsgatU7cu9bHuO5QUK0ocp/oqp35xzfE0EioyB6y8YtjrMFT27/eij
+         XRNVg76PUimdQXhWRO9YOhQM7Y4BRz7a6HBRZcStpXaEb/y51zDidyCYcW2qImMxOVCz
+         yBVQ==
+X-Gm-Message-State: AOAM532/bynPl6pG+6uDVSMGysauFyf32yoDWhlSCFhBn5MOIwEJQ9Wk
+        owAJjMLNBq3YFWElBxBGj8A=
+X-Google-Smtp-Source: ABdhPJzgorhzP42AxP+JSuvqOu+8dKd4gFe+NvN34jFpSiNFvrBV+ToNj4a4mEKPhuTh+iMqHgGtZA==
+X-Received: by 2002:a17:906:4796:b0:6d6:dd04:147b with SMTP id cw22-20020a170906479600b006d6dd04147bmr8736146ejc.80.1646650765283;
+        Mon, 07 Mar 2022 02:59:25 -0800 (PST)
+Received: from [192.168.0.142] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.googlemail.com with ESMTPSA id c5-20020a170906d18500b006ce371f09d4sm4656903ejz.57.2022.03.07.02.59.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 02:59:24 -0800 (PST)
+Message-ID: <ee5ad930-7b48-5b7c-f810-76fe497595f3@kernel.org>
+Date:   Mon, 7 Mar 2022 11:59:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
- a perf event clock
+Subject: Re: [PATCH v1 4/4] usb: host: add xhci-exynos module
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>, sdeep@vmware.com,
-        pv-drivers@vmware.com, pbonzini@redhat.com, seanjc@google.com,
-        kys@microsoft.com, sthemmin@microsoft.com,
-        virtualization@lists.linux-foundation.org,
-        Andrew.Cooper3@citrix.com
-References: <20220214110914.268126-1-adrian.hunter@intel.com>
- <20220214110914.268126-4-adrian.hunter@intel.com>
- <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
- <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
- <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
- <f40937c9-35f6-ce86-f07b-5cea09a963af@suse.com>
- <YiXgirw1kFOPgBgY@hirez.programming.kicks-ass.net>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <YiXgirw1kFOPgBgY@hirez.programming.kicks-ass.net>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------E3fHmzravdxJ5wg2RM8eMWCa"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        "chihhao . chen" <chihhao.chen@mediatek.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+References: <1646375038-72082-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220304062618epcas2p2e3c73b5c4ed0c9bc0ca0c02aa658d3fb@epcas2p2.samsung.com>
+ <1027007693.21646375582736.JavaMail.epsvc@epcpadp4>
+ <32e72657-a43d-0ae1-1bf2-d15b7426765f@kernel.org>
+ <1983025922.01646649181793.JavaMail.epsvc@epcpadp4>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1983025922.01646649181793.JavaMail.epsvc@epcpadp4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------E3fHmzravdxJ5wg2RM8eMWCa
-Content-Type: multipart/mixed; boundary="------------i8OSTNlIs3fqr6qkIPVWLXyW";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
- linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
- Mathieu Poirier <mathieu.poirier@linaro.org>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Leo Yan <leo.yan@linaro.org>,
- sdeep@vmware.com, pv-drivers@vmware.com, pbonzini@redhat.com,
- seanjc@google.com, kys@microsoft.com, sthemmin@microsoft.com,
- virtualization@lists.linux-foundation.org, Andrew.Cooper3@citrix.com
-Message-ID: <b3d6e048-6922-ce00-7c1f-3702695c2974@suse.com>
-Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
- a perf event clock
-References: <20220214110914.268126-1-adrian.hunter@intel.com>
- <20220214110914.268126-4-adrian.hunter@intel.com>
- <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
- <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
- <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
- <f40937c9-35f6-ce86-f07b-5cea09a963af@suse.com>
- <YiXgirw1kFOPgBgY@hirez.programming.kicks-ass.net>
-In-Reply-To: <YiXgirw1kFOPgBgY@hirez.programming.kicks-ass.net>
+On 07/03/2022 11:26, Jung Daehwan wrote:
+> On Mon, Mar 07, 2022 at 11:07:04AM +0100, Krzysztof Kozlowski wrote:
+>> On 04/03/2022 07:23, Daehwan Jung wrote:
+>>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+>>
+>> +Cc Randy,
+>> I guess here is the rest of the patches.
+>>
+>>> ---
+>>>  drivers/usb/host/xhci-exynos.c | 2025 ++++++++++++++++++++++++++++++++
+>>>  drivers/usb/host/xhci-exynos.h |  150 +++
+>>>  2 files changed, 2175 insertions(+)
+>>>  create mode 100644 drivers/usb/host/xhci-exynos.c
+>>>  create mode 100644 drivers/usb/host/xhci-exynos.h
+>>>
+>>> diff --git a/drivers/usb/host/xhci-exynos.c b/drivers/usb/host/xhci-exynos.c
+>>> new file mode 100644
+>>> index 000000000000..3913c48d4b20
+>>> --- /dev/null
+>>> +++ b/drivers/usb/host/xhci-exynos.c
+>>> @@ -0,0 +1,2025 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * xhci-exynos.c - xHCI host controller driver platform Bus Glue for Exynos.
+>>> + *
+>>> + * Copyright (C) 2022 Samsung Electronics Incorporated - http://www.samsung.com
+>>> + * Author: Daehwan Jung <dh10.jung@samsung.com>
+>>> + *
+>>> + * A lot of code borrowed from the Linux xHCI driver.
+>>
+>>> + */
+>>> +
+>>> +#include <linux/clk.h>
+>>> +#include <linux/dma-mapping.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/pci.h>
+>>> +#include <linux/of.h>
+>>> +#include <linux/of_device.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <linux/usb/phy.h>
+>>> +#include <linux/slab.h>
+>>> +#include <linux/phy/phy.h>
+>>> +#include <linux/acpi.h>
+>>> +#include <linux/usb/of.h>
+>>> +#ifdef CONFIG_SND_EXYNOS_USB_AUDIO
+>>
+>> This does not exist.
+>>
+>> Please do not add dead code to Linux kernel.
+>>
+>>> +#include "../../../sound/usb/exynos_usb_audio.h"
+>>> +#include <linux/types.h>
+>>> +#include "xhci-trace.h"
+>>> +#endif
+>>> +
+>>> +#include "../core/hub.h"
+>>> +#include "../core/phy.h"
+>>> +#include "xhci.h"
+>>> +#include "xhci-plat.h"
+>>> +#include "xhci-mvebu.h"
+>>> +#include "xhci-rcar.h"
+>>> +#include "../dwc3/dwc3-exynos.h"
+>>> +#include "../dwc3/exynos-otg.h"
+>>
+>> No, how XHCI is related to dwc3? What if different block provides XHCI,
+>> not DWC3?
+>>
+>>> +#include "xhci-exynos.h"
+>>> +#include <soc/samsung/exynos-cpupm.h>
+>>
+>> This does not exist and does not even compile.
+>>
+>> Please do not send code which does not compile... Also, just in case -
+>> do not send code which compiles but does not work. :)
+>>
+> 
+> Hi Krzysztof
+> 
+> I'm sorry to confuse you. But, it's just for reference module to introduce
+> new feature. That's why I just submitted source code and header without
+> makefile. It's not going to compiled at all now.
 
---------------i8OSTNlIs3fqr6qkIPVWLXyW
-Content-Type: multipart/mixed; boundary="------------hMbD6nOPQ14JFkw0B4c45F9t"
+Thanks for explanation. Such of tree code must be clearly marked in
+commit title and subject (e.g. RFC). Additionally this out of tree
+module does not solve the problem of lack of users. For all your sound
+hooks you need in-tree user.
 
---------------hMbD6nOPQ14JFkw0B4c45F9t
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMDcuMDMuMjIgMTE6MzgsIFBldGVyIFppamxzdHJhIHdyb3RlOg0KPiBPbiBNb24sIE1h
-ciAwNywgMjAyMiBhdCAxMTowNjo0NkFNICswMTAwLCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0K
-PiANCj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL3BhcmF2aXJ0LmMgYi9hcmNo
-L3g4Ni9rZXJuZWwvcGFyYXZpcnQuYw0KPj4+IGluZGV4IDQ0MjA0OTlmN2JiNC4uYTFmMTc5
-ZWQzOWJmIDEwMDY0NA0KPj4+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9wYXJhdmlydC5jDQo+
-Pj4gKysrIGIvYXJjaC94ODYva2VybmVsL3BhcmF2aXJ0LmMNCj4+PiBAQCAtMTQ1LDYgKzE0
-NSwxNSBAQCBERUZJTkVfU1RBVElDX0NBTEwocHZfc2NoZWRfY2xvY2ssIG5hdGl2ZV9zY2hl
-ZF9jbG9jayk7DQo+Pj4gICAgdm9pZCBwYXJhdmlydF9zZXRfc2NoZWRfY2xvY2sodTY0ICgq
-ZnVuYykodm9pZCkpDQo+Pj4gICAgew0KPj4+ICsJLyoNCj4+PiArCSAqIEFueXRoaW5nIHdp
-dGggQVJUIG9uIHByb21pc2VzIHRvIGhhdmUgc2FuZSBUU0MsIG90aGVyd2lzZSB0aGUgd2hv
-bGUNCj4+PiArCSAqIEFSVCB0aGluZyBpcyB1c2VsZXNzLiBJbiBvcmRlciB0byBtYWtlIEFS
-VCB1c2VmdWwgZm9yIGd1ZXN0cywgd2UNCj4+PiArCSAqIHNob3VsZCBjb250aW51ZSB0byB1
-c2UgdGhlIFRTQy4gQXMgc3VjaCwgaWdub3JlIGFueSBwYXJhdmlydA0KPj4+ICsJICogbXVj
-a2VyeS4NCj4+PiArCSAqLw0KPj4+ICsJaWYgKGNwdV9mZWF0dXJlX2VuYWJsZWQoWDg2X0ZF
-QVRVUkVfQVJUKSkNCj4+PiArCQlyZXR1cm47DQo+Pj4gKw0KPj4+ICAgIAlzdGF0aWNfY2Fs
-bF91cGRhdGUocHZfc2NoZWRfY2xvY2ssIGZ1bmMpOw0KPj4+ICAgIH0NCj4+Pg0KPj4NCj4+
-IE5BSywgdGhpcyB3aWxsIGJyZWFrIGxpdmUgbWlncmF0aW9uIG9mIGEgZ3Vlc3QgY29taW5n
-IGZyb20gYSBob3N0DQo+PiB3aXRob3V0IHRoaXMgZmVhdHVyZS4NCj4gDQo+IEkgdGhvdWdo
-dCB0aGUgd2hvbGUgbGl2ZS1taWdyYXRpb24gbm9uc2Vuc2UgbWFkZSBzdXJlIHRvIGVxdWFs
-aXplIGNydWQNCj4gbGlrZSB0aGF0LiBUaGF0IGlzLCB0aGVuIGRvbid0IGV4cG9zZSBBUlQg
-dG8gdGhlIGd1ZXN0Lg0KDQpPaCwgcmlnaHQuIEkgbWFuYWdlZCB0byBjb25mdXNlIGhvc3Qt
-c2lkZSBhbmQgZ3Vlc3Qtc2lkZSB1c2FnZS4NCg0KU29ycnkgZm9yIHRoZSBub2lzZS4NCg0K
-DQpKdWVyZ2VuDQo=
---------------hMbD6nOPQ14JFkw0B4c45F9t
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------hMbD6nOPQ14JFkw0B4c45F9t--
-
---------------i8OSTNlIs3fqr6qkIPVWLXyW--
-
---------------E3fHmzravdxJ5wg2RM8eMWCa
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmIl5UsFAwAAAAAACgkQsN6d1ii/Ey+l
-nwf+P5PI/iiKDcEHE7/irYMs9uf9Oo2kAcgdy2+YvEEZXdsLTR4/v6y+ALFQAF940ROkKclH9Byf
-h8MIpq5zDbgYQUh8zGvJIrJVDaularN2ge8sUJxT1hMTNBC5ZssFKEWUFMzYEm7zXFhdWews+ptE
-bH95AJ/6NsXsVJ+KO3yU+SxDPfBmBs+rGIv61THrwGYiIDtwZD8Wqlq6C7oA1SYGFr5zAnO0UJ3J
-VF2g333pEzb7qOFbCQhKfF1M4Q9OzPpd4y/1B1MUuHhpGg+qay3TYVpoYurlx72piiqKC+iqf5It
-s1Tqp5TtA0zXw91OkKlttA6haoHUCHZeLJTScuR7qg==
-=ZJzJ
------END PGP SIGNATURE-----
-
---------------E3fHmzravdxJ5wg2RM8eMWCa--
+Best regards,
+Krzysztof

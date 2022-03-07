@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7FD4CF304
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F4F4CF30C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235999AbiCGH4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 02:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S236009AbiCGH6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 02:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbiCGH4v (ORCPT
+        with ESMTP id S235972AbiCGH6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 02:56:51 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E664476E
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:55:57 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id h2so614909ila.12
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 23:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xo58dTEXY/F27fYmOPR69bFboaa6IH78uUyf90/I3RI=;
-        b=ouJ9RdXFMnX5gGHLKbsx9hsTgcffnj3wGWeNg4qpAqsc97iAu8JCrIunoXNmm1vqIi
-         Pcq8dvQIYDuAbl+956vKOKPiO8YtE/7zS4bGkXjil5DclKrGUwMv88jrCN562G6miir9
-         wL759rF4Dumw6tsge2gPyhKrQwPMfQOSg2CtK+oNuH8odEq7z/7UMfbc6FuboeH+/h3c
-         6mBauXZMFi+HU8TkLdDRnu797IqogPdUqxC7MgM3B+YiVqQ43mdzb95dMOjbtGIDHId1
-         3bre+uwFJ7ampbhJ+GMbnQBRBACVRxL1bw03GwyodfxOK0QZ6RMdGIum/qp710NMUN9r
-         mO7g==
+        Mon, 7 Mar 2022 02:58:07 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D779160DA8
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:57:13 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A65613F5FD
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646639832;
+        bh=AHjs0QVNDIis7IjbqKISlEAz1swFuZig4/uG4UShOyE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+         In-Reply-To:Content-Type;
+        b=nEl8mjnZiB5/FVWjTbsg3JhHK7FC8C3VzYGfG0Mf6jidLCTgGxlI0RnJtb6wfZfDr
+         XhQTHPJycROyzCG+Z2KMA7UBuN3rcMxhh9xhm/NqJz6aYyncDGLsSL8SRfh6HM2oQW
+         oSKSfGBJDLyIwTRsaea+lGJKj+sarZeAdlJR4QpD/UExgDRumSXLZs3jRlYKtXB/1Q
+         FMONPV5OgEmrHDkbFbpQYyde8I5JZqqANKww0aWpWcAZIpruPZNnJSmtjd3zRoIF1d
+         9ABQVFCrf+uAB8WvGWD4JTDLTzHwxXUqT4fI8cNJ5kqtMfrKe7SOXpdoNs69FrO43K
+         MhihBAjFhRvPQ==
+Received: by mail-ed1-f71.google.com with SMTP id b24-20020a50e798000000b0041631767675so2238836edn.23
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 23:57:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xo58dTEXY/F27fYmOPR69bFboaa6IH78uUyf90/I3RI=;
-        b=ci9iPkywlLrlUUKTauO+zFrWOaZ2zELs+tVneK6vi4CPbSVRK+Jhl1Am2YZ2p/0qwW
-         5zSogBw2YMVAXt9Dj1CekdCa12Mt0WLMgs6OEW5sCE++H3EbdNUg1o+5Jdq7wu1mt7/n
-         pPY9d+a3NzGuS7lK0tNc5FKPA2a3QXiWkkQP7aQDJ5hdTgkFyZH4DQcabxvwonxsa7yZ
-         CmQuxIgz2ivglKf8sF5W1QRiD6wTwZ2KxNv4KUonTBeob+ePpkAXkBi0d02P7PBfnm2H
-         YdctdN5AOqczX7P15miG+8rVhSv78eCGmfbQDQgsYOinaHmKbPX2wng0Gbu/gUM5BtEm
-         tn7Q==
-X-Gm-Message-State: AOAM532OO1gITh7CmliJPHA5YnvDbsGgZg/5dZP0yGLjxj6cNyr78bt6
-        fG7hwdih1eTgrVISvvBNBbMGxLNlC14mxxTyY68eyw==
-X-Google-Smtp-Source: ABdhPJwS/bLUDjG66OuG9kDu3XVfgunh5kbfyN6i+8T3f3mMdXidurrKrq/cKnLH3uPLi90tx8VbI8LSCnG2kSGKvPM=
-X-Received: by 2002:a92:6907:0:b0:2bc:4b18:e671 with SMTP id
- e7-20020a926907000000b002bc4b18e671mr9712117ilc.299.1646639757324; Sun, 06
- Mar 2022 23:55:57 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AHjs0QVNDIis7IjbqKISlEAz1swFuZig4/uG4UShOyE=;
+        b=qPu0vJ5sVWkTNPMepP/Pcc8PbzNCtU/KgFH4Lj21Q9l5J45h2nhOgY++2lV0ETu3JT
+         ML+65WL57xxwEPv5HjziLUa3rVrjvd9wcSo89sYGpn9wNqlnN2GKZGoOcF3wqAMHHohI
+         e/1U/mWP9e4vHZEZzdvcoQD6xO6EBE76ULC2YuCTCIO1UIRYbdkinOmh7Ai2maTd4S+3
+         5uSYBwD20suT+5VdyCtCt15EFmAxjCsKZiQX28Yfp2EU2UoDeMJLM0Muwfjg5AdQCtQn
+         UcHwNTcstFwvBYusG4GUXO2xRE0fnmRM8e5LlcnePrje8amKNffALi/qUXysGiwBtXtA
+         vjzg==
+X-Gm-Message-State: AOAM5326kKFyjQXsr4OjW8WajZm6Ls23vhjUo/dmJYuFbkKUXhT3LcjL
+        gp60ELU79sC14tfReNsSATvDwrpDiVLxPSjooNM+v3MgR/hjj7gx4dQI4URNx3ObDe+2kDGLOOg
+        4cffDIlpX0D7hpz4iDsaMk4nnVnwhZggGynj8aywvdQ==
+X-Received: by 2002:a50:cc89:0:b0:400:8f82:99e8 with SMTP id q9-20020a50cc89000000b004008f8299e8mr9972844edi.7.1646639831759;
+        Sun, 06 Mar 2022 23:57:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJygdn8fB+C/23DihWZly2xL8YqfCrN9GvsUhuY2VVyKRBR/TZrb3zslpnePuPyHobQpUacerg==
+X-Received: by 2002:a50:cc89:0:b0:400:8f82:99e8 with SMTP id q9-20020a50cc89000000b004008f8299e8mr9972836edi.7.1646639831624;
+        Sun, 06 Mar 2022 23:57:11 -0800 (PST)
+Received: from [192.168.0.140] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170906124900b006ce88a505a1sm4573922eja.179.2022.03.06.23.57.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 23:57:10 -0800 (PST)
+Message-ID: <a41fb0e8-ce9e-9bdf-c583-a0b6098d70d6@canonical.com>
+Date:   Mon, 7 Mar 2022 08:57:10 +0100
 MIME-Version: 1.0
-References: <20211229040239.66075-1-zhangjiachen.jaycee@bytedance.com>
- <YhX1QlW87Hs/HS4h@miu.piliscsaba.redhat.com> <CAFQAk7gUCefe7WJhLD-oJdnjowqDVorpYv_u9_AqkceTvn9xNA@mail.gmail.com>
- <CAJfpegt=9D1wAdxbr82br-cCnikNTiEZ=9NfPo02LAbTPMNb2Q@mail.gmail.com>
-In-Reply-To: <CAJfpegt=9D1wAdxbr82br-cCnikNTiEZ=9NfPo02LAbTPMNb2Q@mail.gmail.com>
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Date:   Mon, 7 Mar 2022 15:55:46 +0800
-Message-ID: <CAFQAk7j-Osw7jR6YxOL3OgcAiwmVq_bfV-ceqrD4JzyLEnBe7Q@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v2] fuse: fix deadlock between atomic
- O_TRUNC open() and page invalidations
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xie Yongji <xieyongji@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] media: exynos4-is: Fix PM disable depth imbalance in
+ fimc_is_probe
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Younghwan Joo <yhwan.joo@samsung.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220307075206.10737-1-linmq006@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307075206.10737-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 11:30 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
->
-> On Fri, 4 Mar 2022 at 07:23, Jiachen Zhang
-> <zhangjiachen.jaycee@bytedance.com> wrote:
->
-> > I tested this fix, and it did pass the xfstests generic/464 in our
->
-> Thanks for testing!
->
-> > environment. However, if I understand correctly, one of the usages of
-> > the nowrite is to protect file truncation, as said in the commit
-> > message of e4648309b85a78f8c787457832269a8712a8673e. So, does that
-> > mean this fix may introduce some other problems?
->
-> That's an excellent question.  I don't think this will cause an issue,
-> since the nowrite protection is for truncation of the file on the
-> server (userspace) side.   The inode lock still protects concurrent
-> writes against page cache truncation in the writeback cache case.   In
-> the non-writeback cache case the nowrite protection does not do
-> anything.
+On 07/03/2022 08:52, Miaoqian Lin wrote:
+> If probe fails then we need to call pm_runtime_disable() to balance
+> out the previous pm_runtime_enable() call.
+> 
+> Fixes: 9a761e436843 ("[media] exynos4-is: Add Exynos4x12 FIMC-IS driver")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/media/platform/exynos4-is/fimc-is.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-Got it. So the nowrite is protecting O_TRUNC FUSE_OPEN (or truncating
-FUSE_SETATTR) against FUSE_WRITE in writeback_cache mode? Then this
-patch looks good to me.
 
-Thanks,
-Jiachen
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
->
-> Thanks,
-> Miklos
+
+Best regards,
+Krzysztof

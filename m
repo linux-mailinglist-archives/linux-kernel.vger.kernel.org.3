@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94174CFAD6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72484CF892
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241620AbiCGKUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S238093AbiCGJ5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240266AbiCGKAy (ORCPT
+        with ESMTP id S239057AbiCGJjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:00:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B7B7DE24;
-        Mon,  7 Mar 2022 01:47:13 -0800 (PST)
+        Mon, 7 Mar 2022 04:39:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819227090B;
+        Mon,  7 Mar 2022 01:34:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9370FB810B9;
-        Mon,  7 Mar 2022 09:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC847C340E9;
-        Mon,  7 Mar 2022 09:47:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC7AAB80F9F;
+        Mon,  7 Mar 2022 09:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0D5C340F4;
+        Mon,  7 Mar 2022 09:34:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646431;
-        bh=Qhn1dzLQ60XqRJgYiz0jMsK2rdWDBMOKVka6WLgUbOg=;
+        s=korg; t=1646645660;
+        bh=yLMggVWrw2CvWPwrPuMOkNZreJCpGwnFTi/CCPfek6Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H84b+dfEV/B5sXsMLciK113xotqONvjh+JWVpmVCts6Cj1O//lym2T6J/TkxJaZFU
-         j0Q0eem3fF/rhk3Vsjvlvc4x0533LvRjmkAtNluzzavH4SPXU8OoEwrstP2WYUTeda
-         GTOFMUhYUVALPJ3pw7U4Ce3NIIoXbbbjNgaprhGE=
+        b=h6pyDIvNeDYvMkr022DWeu88A3Y69JdlE5Y3ZsoLIGQSAMi22/opPzmtQt6c7mz53
+         OLYSlX8Vb1vzyZl768BvUq6HeLdkEXUQkeRJmlPZqnNI7gdBNgzdO5WBz96KWk3gs8
+         nmCpS/7M9lEL98QLjXe+wqrCne9Uc2rHMg4BV0T8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ido Schimmel <idosch@idosch.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 241/262] net: dcb: disable softirqs in dcbnl_flush_dev()
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.10 102/105] btrfs: fix lost prealloc extents beyond eof after full fsync
 Date:   Mon,  7 Mar 2022 10:19:45 +0100
-Message-Id: <20220307091710.242137283@linuxfoundation.org>
+Message-Id: <20220307091647.045618197@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +54,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Filipe Manana <fdmanana@suse.com>
 
-[ Upstream commit 10b6bb62ae1a49ee818fc479cf57b8900176773e ]
+commit d99478874355d3a7b9d86dfb5d7590d5b1754b1f upstream.
 
-Ido Schimmel points out that since commit 52cff74eef5d ("dcbnl : Disable
-software interrupts before taking dcb_lock"), the DCB API can be called
-by drivers from softirq context.
+When doing a full fsync, if we have prealloc extents beyond (or at) eof,
+and the leaves that contain them were not modified in the current
+transaction, we end up not logging them. This results in losing those
+extents when we replay the log after a power failure, since the inode is
+truncated to the current value of the logged i_size.
 
-One such in-tree example is the chelsio cxgb4 driver:
-dcb_rpl
--> cxgb4_dcb_handle_fw_update
-   -> dcb_ieee_setapp
+Just like for the fast fsync path, we need to always log all prealloc
+extents starting at or beyond i_size. The fast fsync case was fixed in
+commit 471d557afed155 ("Btrfs: fix loss of prealloc extents past i_size
+after fsync log replay") but it missed the full fsync path. The problem
+exists since the very early days, when the log tree was added by
+commit e02119d5a7b439 ("Btrfs: Add a write ahead tree log to optimize
+synchronous operations").
 
-If the firmware for this driver happened to send an event which resulted
-in a call to dcb_ieee_setapp() at the exact same time as another
-DCB-enabled interface was unregistering on the same CPU, the softirq
-would deadlock, because the interrupted process was already holding the
-dcb_lock in dcbnl_flush_dev().
+Example reproducer:
 
-Fix this unlikely event by using spin_lock_bh() in dcbnl_flush_dev() as
-in the rest of the dcbnl code.
+  $ mkfs.btrfs -f /dev/sdc
+  $ mount /dev/sdc /mnt
 
-Fixes: 91b0383fef06 ("net: dcb: flush lingering app table entries for unregistered devices")
-Reported-by: Ido Schimmel <idosch@idosch.org>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/r/20220302193939.1368823-1-vladimir.oltean@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  # Create our test file with many file extent items, so that they span
+  # several leaves of metadata, even if the node/page size is 64K. Use
+  # direct IO and not fsync/O_SYNC because it's both faster and it avoids
+  # clearing the full sync flag from the inode - we want the fsync below
+  # to trigger the slow full sync code path.
+  $ xfs_io -f -d -c "pwrite -b 4K 0 16M" /mnt/foo
+
+  # Now add two preallocated extents to our file without extending the
+  # file's size. One right at i_size, and another further beyond, leaving
+  # a gap between the two prealloc extents.
+  $ xfs_io -c "falloc -k 16M 1M" /mnt/foo
+  $ xfs_io -c "falloc -k 20M 1M" /mnt/foo
+
+  # Make sure everything is durably persisted and the transaction is
+  # committed. This makes all created extents to have a generation lower
+  # than the generation of the transaction used by the next write and
+  # fsync.
+  sync
+
+  # Now overwrite only the first extent, which will result in modifying
+  # only the first leaf of metadata for our inode. Then fsync it. This
+  # fsync will use the slow code path (inode full sync bit is set) because
+  # it's the first fsync since the inode was created/loaded.
+  $ xfs_io -c "pwrite 0 4K" -c "fsync" /mnt/foo
+
+  # Extent list before power failure.
+  $ xfs_io -c "fiemap -v" /mnt/foo
+  /mnt/foo:
+   EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
+     0: [0..7]:          2178048..2178055     8   0x0
+     1: [8..16383]:      26632..43007     16376   0x0
+     2: [16384..32767]:  2156544..2172927 16384   0x0
+     3: [32768..34815]:  2172928..2174975  2048 0x800
+     4: [34816..40959]:  hole              6144
+     5: [40960..43007]:  2174976..2177023  2048 0x801
+
+  <power fail>
+
+  # Mount fs again, trigger log replay.
+  $ mount /dev/sdc /mnt
+
+  # Extent list after power failure and log replay.
+  $ xfs_io -c "fiemap -v" /mnt/foo
+  /mnt/foo:
+   EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
+     0: [0..7]:          2178048..2178055     8   0x0
+     1: [8..16383]:      26632..43007     16376   0x0
+     2: [16384..32767]:  2156544..2172927 16384   0x1
+
+  # The prealloc extents at file offsets 16M and 20M are missing.
+
+So fix this by calling btrfs_log_prealloc_extents() when we are doing a
+full fsync, so that we always log all prealloc extents beyond eof.
+
+A test case for fstests will follow soon.
+
+CC: stable@vger.kernel.org # 4.19+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/dcb/dcbnl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/btrfs/tree-log.c |   43 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 31 insertions(+), 12 deletions(-)
 
-diff --git a/net/dcb/dcbnl.c b/net/dcb/dcbnl.c
-index 36c91273daac..dc4fb699b56c 100644
---- a/net/dcb/dcbnl.c
-+++ b/net/dcb/dcbnl.c
-@@ -2077,7 +2077,7 @@ static void dcbnl_flush_dev(struct net_device *dev)
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -4297,7 +4297,7 @@ static int log_one_extent(struct btrfs_t
+ 
+ /*
+  * Log all prealloc extents beyond the inode's i_size to make sure we do not
+- * lose them after doing a fast fsync and replaying the log. We scan the
++ * lose them after doing a full/fast fsync and replaying the log. We scan the
+  * subvolume's root instead of iterating the inode's extent map tree because
+  * otherwise we can log incorrect extent items based on extent map conversion.
+  * That can happen due to the fact that extent maps are merged when they
+@@ -5084,6 +5084,7 @@ static int copy_inode_items_to_log(struc
+ 				   struct btrfs_log_ctx *ctx,
+ 				   bool *need_log_inode_item)
  {
- 	struct dcb_app_type *itr, *tmp;
++	const u64 i_size = i_size_read(&inode->vfs_inode);
+ 	struct btrfs_root *root = inode->root;
+ 	int ins_start_slot = 0;
+ 	int ins_nr = 0;
+@@ -5104,13 +5105,21 @@ again:
+ 		if (min_key->type > max_key->type)
+ 			break;
  
--	spin_lock(&dcb_lock);
-+	spin_lock_bh(&dcb_lock);
+-		if (min_key->type == BTRFS_INODE_ITEM_KEY)
++		if (min_key->type == BTRFS_INODE_ITEM_KEY) {
+ 			*need_log_inode_item = false;
+-
+-		if ((min_key->type == BTRFS_INODE_REF_KEY ||
+-		     min_key->type == BTRFS_INODE_EXTREF_KEY) &&
+-		    inode->generation == trans->transid &&
+-		    !recursive_logging) {
++		} else if (min_key->type == BTRFS_EXTENT_DATA_KEY &&
++			   min_key->offset >= i_size) {
++			/*
++			 * Extents at and beyond eof are logged with
++			 * btrfs_log_prealloc_extents().
++			 * Only regular files have BTRFS_EXTENT_DATA_KEY keys,
++			 * and no keys greater than that, so bail out.
++			 */
++			break;
++		} else if ((min_key->type == BTRFS_INODE_REF_KEY ||
++			    min_key->type == BTRFS_INODE_EXTREF_KEY) &&
++			   inode->generation == trans->transid &&
++			   !recursive_logging) {
+ 			u64 other_ino = 0;
+ 			u64 other_parent = 0;
  
- 	list_for_each_entry_safe(itr, tmp, &dcb_app_list, list) {
- 		if (itr->ifindex == dev->ifindex) {
-@@ -2086,7 +2086,7 @@ static void dcbnl_flush_dev(struct net_device *dev)
+@@ -5141,10 +5150,8 @@ again:
+ 				btrfs_release_path(path);
+ 				goto next_key;
+ 			}
+-		}
+-
+-		/* Skip xattrs, we log them later with btrfs_log_all_xattrs() */
+-		if (min_key->type == BTRFS_XATTR_ITEM_KEY) {
++		} else if (min_key->type == BTRFS_XATTR_ITEM_KEY) {
++			/* Skip xattrs, logged later with btrfs_log_all_xattrs() */
+ 			if (ins_nr == 0)
+ 				goto next_slot;
+ 			ret = copy_items(trans, inode, dst_path, path,
+@@ -5197,9 +5204,21 @@ next_key:
+ 			break;
  		}
  	}
+-	if (ins_nr)
++	if (ins_nr) {
+ 		ret = copy_items(trans, inode, dst_path, path, ins_start_slot,
+ 				 ins_nr, inode_only, logged_isize);
++		if (ret)
++			return ret;
++	}
++
++	if (inode_only == LOG_INODE_ALL && S_ISREG(inode->vfs_inode.i_mode)) {
++		/*
++		 * Release the path because otherwise we might attempt to double
++		 * lock the same leaf with btrfs_log_prealloc_extents() below.
++		 */
++		btrfs_release_path(path);
++		ret = btrfs_log_prealloc_extents(trans, inode, dst_path);
++	}
  
--	spin_unlock(&dcb_lock);
-+	spin_unlock_bh(&dcb_lock);
+ 	return ret;
  }
- 
- static int dcbnl_netdevice_event(struct notifier_block *nb,
--- 
-2.34.1
-
 
 

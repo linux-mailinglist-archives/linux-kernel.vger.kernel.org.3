@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0884CFA28
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EAA4CF633
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiCGKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S237384AbiCGJeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239060AbiCGJ6C (ORCPT
+        with ESMTP id S238758AbiCGJ3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:58:02 -0500
+        Mon, 7 Mar 2022 04:29:40 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231377C160;
-        Mon,  7 Mar 2022 01:46:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F017B5B893;
+        Mon,  7 Mar 2022 01:28:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E63EB80F9F;
-        Mon,  7 Mar 2022 09:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B44A4C340F5;
-        Mon,  7 Mar 2022 09:46:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 995AFB810B2;
+        Mon,  7 Mar 2022 09:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3801C340E9;
+        Mon,  7 Mar 2022 09:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646366;
-        bh=aJiMtZDEzYoL9IK8Ld/F52RoqRogDvXyrBRCMv7st+U=;
+        s=korg; t=1646645305;
+        bh=n5T1+I/pmeyijBxU7FOIfuJEcV3dxvkqCaFuwww8pfg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1pSOpyQ2fTqUDGzQhvx9xyZUAFELAU7JdScOUXGTMujIT1ADAMfInBlm0wyIUVRRt
-         /JNnpomS+bemBpzhKQKVxxemzptiq1Pi9gLJPbGtx+znBr/io8l+5DQG/+JWgCtw51
-         feh0GsNlXkuiJr2D8gCkNMyrBCTR2pmfzMQLFOOk=
+        b=MOxwcVXguvS1L9VbHa/8vrnmxaSP65MkWMMlZ0dKO3pS7Glmm/jUc7OEzS0RzI+Ta
+         lhec6GwbwJR/2tKd8tUXoN6EVA7YgvLMIPb6s70Ttb+u8GJohZA8towf6BCpLJ8vpN
+         04kM+fk/6+KDha+AxStMNMxkOIfBX5N9BGZATFqg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maurice Baijens <maurice.baijens@ellips.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 180/262] ixgbe: xsk: change !netif_carrier_ok() handling in ixgbe_xmit_zc()
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 11/64] net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
 Date:   Mon,  7 Mar 2022 10:18:44 +0100
-Message-Id: <20220307091707.496512150@linuxfoundation.org>
+Message-Id: <20220307091639.465137235@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,50 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-commit 6c7273a266759d9d36f7c862149f248bcdeddc0f upstream.
+[ Upstream commit 21e8a96377e6b6debae42164605bf9dcbe5720c5 ]
 
-Commit c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if
-netif is not OK") addressed the ring transient state when
-MEM_TYPE_XSK_BUFF_POOL was being configured which in turn caused the
-interface to through down/up. Maurice reported that when carrier is not
-ok and xsk_pool is present on ring pair, ksoftirqd will consume 100% CPU
-cycles due to the constant NAPI rescheduling as ixgbe_poll() states that
-there is still some work to be done.
+Add quirk CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE for Telit FN990
+0x1071 composition in order to avoid bind error.
 
-To fix this, do not set work_done to false for a !netif_carrier_ok().
-
-Fixes: c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if netif is not OK")
-Reported-by: Maurice Baijens <maurice.baijens@ellips.com>
-Tested-by: Maurice Baijens <maurice.baijens@ellips.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/usb/cdc_mbim.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-@@ -388,12 +388,14 @@ static bool ixgbe_xmit_zc(struct ixgbe_r
- 	u32 cmd_type;
+diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
+index 77ac5a721e7b6..414341c9cf5ae 100644
+--- a/drivers/net/usb/cdc_mbim.c
++++ b/drivers/net/usb/cdc_mbim.c
+@@ -658,6 +658,11 @@ static const struct usb_device_id mbim_devs[] = {
+ 	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
+ 	},
  
- 	while (budget-- > 0) {
--		if (unlikely(!ixgbe_desc_unused(xdp_ring)) ||
--		    !netif_carrier_ok(xdp_ring->netdev)) {
-+		if (unlikely(!ixgbe_desc_unused(xdp_ring))) {
- 			work_done = false;
- 			break;
- 		}
- 
-+		if (!netif_carrier_ok(xdp_ring->netdev))
-+			break;
++	/* Telit FN990 */
++	{ USB_DEVICE_AND_INTERFACE_INFO(0x1bc7, 0x1071, USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
++	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
++	},
 +
- 		if (!xsk_tx_peek_desc(pool, &desc))
- 			break;
- 
+ 	/* default entry */
+ 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
+ 	  .driver_info = (unsigned long)&cdc_mbim_info_zlp,
+-- 
+2.34.1
+
 
 

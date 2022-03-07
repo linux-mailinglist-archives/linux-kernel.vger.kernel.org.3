@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADB34CFA24
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 721454CF55D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242097AbiCGKLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
+        id S236689AbiCGJ0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:26:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240581AbiCGJvL (ORCPT
+        with ESMTP id S237447AbiCGJYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:51:11 -0500
+        Mon, 7 Mar 2022 04:24:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4D475C32;
-        Mon,  7 Mar 2022 01:44:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A139A56410;
+        Mon,  7 Mar 2022 01:23:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B34ACB80E70;
-        Mon,  7 Mar 2022 09:44:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1533FC36AE7;
-        Mon,  7 Mar 2022 09:44:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54DB5B810AC;
+        Mon,  7 Mar 2022 09:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4110C340F3;
+        Mon,  7 Mar 2022 09:23:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646289;
-        bh=CuVv0srCJLASUG7O3QLyufLAvEapLieoDVMlDzAxUHk=;
+        s=korg; t=1646644988;
+        bh=BFFp1pVHCDEv00xgtl+NWNa9vFm2290tTNvwIjg8F74=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hCQCqnuBWzP7+a+JvrmRlcQuF2b89CnKcUZDDK7/l+MFRLBdPY7HU5t4jjZHLfwl2
-         97cSFPcsCimdvRuTNI+Oj269jG0nA1nsJC6N9BbcpFH5ioaODUlk0NO22tXsUU1yrN
-         cgMr96K4J4LKGv9+CkoDSoqYxwof1AejGGj1WuAc=
+        b=CJI5bqOZI18Fl74/qctSfVTSIQKVr2HSv8DWPYRY6XVFzG9Jn0xBw0iYvCzCyAnbI
+         DwFX73mIAYV9rbFReE9S56nofZLtgu21z9cX+vbdsV3BXZjbFzriLAGu+eWRIlAib9
+         aKnJ8LSmX685TqWsG9ZnegNkp6Pu/lqVfhlCUZjQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 195/262] mptcp: Correctly set DATA_FIN timeout when number of retransmits is large
+        stable@vger.kernel.org, "D. Wythe" <alibuda@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 25/42] net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error cause by server
 Date:   Mon,  7 Mar 2022 10:18:59 +0100
-Message-Id: <20220307091708.093390682@linuxfoundation.org>
+Message-Id: <20220307091636.884201563@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mat Martineau <mathew.j.martineau@linux.intel.com>
+From: D. Wythe <alibuda@linux.alibaba.com>
 
-commit 877d11f0332cd2160e19e3313e262754c321fa36 upstream.
+commit 4940a1fdf31c39f0806ac831cde333134862030b upstream.
 
-Syzkaller with UBSAN uncovered a scenario where a large number of
-DATA_FIN retransmits caused a shift-out-of-bounds in the DATA_FIN
-timeout calculation:
+The problem of SMC_CLC_DECL_ERR_REGRMB on the server is very clear.
+Based on the fact that whether a new SMC connection can be accepted or
+not depends on not only the limit of conn nums, but also the available
+entries of rtoken. Since the rtoken release is trigger by peer, while
+the conn nums is decrease by local, tons of thing can happen in this
+time difference.
 
-================================================================================
-UBSAN: shift-out-of-bounds in net/mptcp/protocol.c:470:29
-shift exponent 32 is too large for 32-bit type 'unsigned int'
-CPU: 1 PID: 13059 Comm: kworker/1:0 Not tainted 5.17.0-rc2-00630-g5fbf21c90c60 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: events mptcp_worker
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x5a lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb2/0x20e lib/ubsan.c:330
- mptcp_set_datafin_timeout net/mptcp/protocol.c:470 [inline]
- __mptcp_retrans.cold+0x72/0x77 net/mptcp/protocol.c:2445
- mptcp_worker+0x58a/0xa70 net/mptcp/protocol.c:2528
- process_one_work+0x9df/0x16d0 kernel/workqueue.c:2307
- worker_thread+0x95/0xe10 kernel/workqueue.c:2454
- kthread+0x2f4/0x3b0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-================================================================================
+This only thing that needs to be mentioned is that now all connection
+creations are completely protected by smc_server_lgr_pending lock, it's
+enough to check only the available entries in rtokens_used_mask.
 
-This change limits the maximum timeout by limiting the size of the
-shift, which keeps all intermediate values in-bounds.
-
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/259
-Fixes: 6477dd39e62c ("mptcp: Retransmit DATA_FIN")
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: cd6851f30386 ("smc: remote memory buffers (RMBs)")
+Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mptcp/protocol.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ net/smc/smc_core.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -406,9 +406,12 @@ static bool mptcp_pending_data_fin(struc
- static void mptcp_set_datafin_timeout(const struct sock *sk)
- {
- 	struct inet_connection_sock *icsk = inet_csk(sk);
-+	u32 retransmits;
- 
--	mptcp_sk(sk)->timer_ival = min(TCP_RTO_MAX,
--				       TCP_RTO_MIN << icsk->icsk_retransmits);
-+	retransmits = min_t(u32, icsk->icsk_retransmits,
-+			    ilog2(TCP_RTO_MAX / TCP_RTO_MIN));
-+
-+	mptcp_sk(sk)->timer_ival = TCP_RTO_MIN << retransmits;
- }
- 
- static void __mptcp_set_timeout(struct sock *sk, long tout)
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -428,7 +428,8 @@ int smc_conn_create(struct smc_sock *smc
+ 		    (lgr->role == role) &&
+ 		    (lgr->vlan_id == vlan_id) &&
+ 		    ((role == SMC_CLNT) ||
+-		     (lgr->conns_num < SMC_RMBS_PER_LGR_MAX))) {
++		     (lgr->conns_num < SMC_RMBS_PER_LGR_MAX &&
++		      !bitmap_full(lgr->rtokens_used_mask, SMC_RMBS_PER_LGR_MAX)))) {
+ 			/* link group found */
+ 			local_contact = SMC_REUSE_CONTACT;
+ 			conn->lgr = lgr;
 
 

@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24D74CFB63
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69134CF884
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240141AbiCGKhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:37:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S238934AbiCGJ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242158AbiCGKLQ (ORCPT
+        with ESMTP id S238644AbiCGJii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E82887B5;
-        Mon,  7 Mar 2022 01:54:32 -0800 (PST)
+        Mon, 7 Mar 2022 04:38:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135646AA76;
+        Mon,  7 Mar 2022 01:33:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38FD460B6F;
-        Mon,  7 Mar 2022 09:54:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350B8C340E9;
-        Mon,  7 Mar 2022 09:54:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBA58B810C5;
+        Mon,  7 Mar 2022 09:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C83BC340F4;
+        Mon,  7 Mar 2022 09:32:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646871;
-        bh=TGDEm7/2812po9GORf08IwKMORinJ4Qursm9zlLlTP8=;
+        s=korg; t=1646645572;
+        bh=CaKtX6RI701ZDx4Bn/ja5BTKe+943YPz+gM9MRC0pRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=evL89cgD7KoPlvMsBHd+gtFRZuh+73qsTrfdb1c2KDzJ/JY61dShzQwjU6mxrDDWb
-         KKI4FsfMNrlathgyHGdDTzbGg9tO6oDdUSmXFnJO9PSiT3dTougRAn7juAo5ERlaXb
-         tRAS7Zrqq+3+MLQq5Fi1nj2oTXxh0eveg5DwNXZk=
+        b=HXtGaXbJIP1KTLvcZg56IZaNxCLuzVsk7+yvlvf1p3AS01yEISQF4Dg3QBBi+XYbW
+         t0fWT0epGe0FY8pPTasCpUHmDK8OxN5iRMZ+V2X+5rXj2rMYZCcHrbFoXUk5mBelh+
+         4bmJNv9mlyYuKADyhtc5QeRaVOfbrT2tz3oM13mE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 120/186] arm64: dts: rockchip: drop pclk_xpcs from gmac0 on rk3568
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.10 075/105] ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
 Date:   Mon,  7 Mar 2022 10:19:18 +0100
-Message-Id: <20220307091657.434434017@linuxfoundation.org>
+Message-Id: <20220307091646.287106770@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,64 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 85a8bccfa945680dc561f06b65ea01341d2033fc ]
+commit 7b83299e5b9385943a857d59e15cba270df20d7e upstream.
 
-pclk_xpcs is not supported by mainline driver and breaks dtbs_check
+early_param() handlers should return 0 on success.
+__setup() handlers should return 1 on success, i.e., the parameter
+has been handled. A return of 0 would cause the "option=value" string
+to be added to init's environment strings, polluting it.
 
-following warnings occour, and many more
+../arch/arm/mm/mmu.c: In function 'test_early_cachepolicy':
+../arch/arm/mm/mmu.c:215:1: error: no return statement in function returning non-void [-Werror=return-type]
+../arch/arm/mm/mmu.c: In function 'test_noalign_setup':
+../arch/arm/mm/mmu.c:221:1: error: no return statement in function returning non-void [-Werror=return-type]
 
-rk3568-evb1-v10.dt.yaml: ethernet@fe2a0000: clocks:
-    [[15, 386], [15, 389], [15, 389], [15, 184], [15, 180], [15, 181],
-    [15, 389], [15, 185], [15, 172]] is too long
-	From schema: Documentation/devicetree/bindings/net/snps,dwmac.yaml
-rk3568-evb1-v10.dt.yaml: ethernet@fe2a0000: clock-names:
-    ['stmmaceth', 'mac_clk_rx', 'mac_clk_tx', 'clk_mac_refout', 'aclk_mac',
-    'pclk_mac', 'clk_mac_speed', 'ptp_ref', 'pclk_xpcs'] is too long
-	From schema: Documentation/devicetree/bindings/net/snps,dwmac.yaml
-
-after removing it, the clock and other warnings are gone.
-
-pclk_xpcs on gmac is used to support QSGMII, but this requires a driver
-supporting it.
-Once xpcs support is introduced, the clock can be added to the
-documentation and both controllers.
-
-Fixes: b8d41e5053cd ("arm64: dts: rockchip: add gmac0 node to rk3568")
-Co-developed-by: Peter Geis <pgwipeout@gmail.com>
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Acked-by: Michael Riesch <michael.riesch@wolfvision.net>
-Link: https://lore.kernel.org/r/20220123133510.135651-1-linux@fw-web.de
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: b849a60e0903 ("ARM: make cr_alignment read-only #ifndef CONFIG_CPU_CP15")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: patches@armlinux.org.uk
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3568.dtsi | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ arch/arm/mm/mmu.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-index 2fd313a295f8..d91df1cde736 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-@@ -32,13 +32,11 @@
- 		clocks = <&cru SCLK_GMAC0>, <&cru SCLK_GMAC0_RX_TX>,
- 			 <&cru SCLK_GMAC0_RX_TX>, <&cru CLK_MAC0_REFOUT>,
- 			 <&cru ACLK_GMAC0>, <&cru PCLK_GMAC0>,
--			 <&cru SCLK_GMAC0_RX_TX>, <&cru CLK_GMAC0_PTP_REF>,
--			 <&cru PCLK_XPCS>;
-+			 <&cru SCLK_GMAC0_RX_TX>, <&cru CLK_GMAC0_PTP_REF>;
- 		clock-names = "stmmaceth", "mac_clk_rx",
- 			      "mac_clk_tx", "clk_mac_refout",
- 			      "aclk_mac", "pclk_mac",
--			      "clk_mac_speed", "ptp_ref",
--			      "pclk_xpcs";
-+			      "clk_mac_speed", "ptp_ref";
- 		resets = <&cru SRST_A_GMAC0>;
- 		reset-names = "stmmaceth";
- 		rockchip,grf = <&grf>;
--- 
-2.34.1
-
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -212,12 +212,14 @@ early_param("ecc", early_ecc);
+ static int __init early_cachepolicy(char *p)
+ {
+ 	pr_warn("cachepolicy kernel parameter not supported without cp15\n");
++	return 0;
+ }
+ early_param("cachepolicy", early_cachepolicy);
+ 
+ static int __init noalign_setup(char *__unused)
+ {
+ 	pr_warn("noalign kernel parameter not supported without cp15\n");
++	return 1;
+ }
+ __setup("noalign", noalign_setup);
+ 
 
 

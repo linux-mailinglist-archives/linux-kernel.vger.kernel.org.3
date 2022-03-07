@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD854CF9C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0254CF678
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239079AbiCGKMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S237727AbiCGJhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238897AbiCGJzp (ORCPT
+        with ESMTP id S238676AbiCGJ3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:55:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9087893F;
-        Mon,  7 Mar 2022 01:45:35 -0800 (PST)
+        Mon, 7 Mar 2022 04:29:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01E7593A6;
+        Mon,  7 Mar 2022 01:27:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8380CB80E70;
-        Mon,  7 Mar 2022 09:45:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E12C340E9;
-        Mon,  7 Mar 2022 09:45:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B5B161119;
+        Mon,  7 Mar 2022 09:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A047C340F3;
+        Mon,  7 Mar 2022 09:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646333;
-        bh=B67qt1s9/yhVlYKNjUE5sEKW8kaB1jXEWKvNU9m/iuw=;
+        s=korg; t=1646645268;
+        bh=LQXi6+tj6xNyWviwQ4Ff20ElLn5mPIjwO2ZEQlz1n+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CI6VjZN0+gpwzMD+JZwwf4lqDG6s3zyTbAn212fE9vEcI539kQRIuIqq4+0OOAKim
-         3EkcBJTTfEmWN1y9OwMNQtdEN60Wy6b0hyhdaH3j3s1nrUbStYHQlyEaBZ5rLwluwI
-         nHLql0nGrug9xBGvuwQIDULuu2ILVjrz9W0arRxQ=
+        b=WFowhp2izzVlgWjl1NqkwaWawnySJI2sc3VVzAQuHfaN1NqHNJKV6UFdRBsr2ZZVB
+         5hJrqNU3+0JAzvhz9JDk15oXcppHezD/P6afkFSzYB2Dm6aB5KYYNtq3vWPkLt6k3c
+         cqyTXcnobF5qwGMi2xLlj1mEai/JvotQUd3UqLJ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Anthoine Bourgeois <anthoine.bourgeois@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 208/262] ARM: dts: switch timer config to common devkit8000 devicetree
+        Maurice Baijens <maurice.baijens@ellips.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 39/64] ixgbe: xsk: change !netif_carrier_ok() handling in ixgbe_xmit_zc()
 Date:   Mon,  7 Mar 2022 10:19:12 +0100
-Message-Id: <20220307091708.692051365@linuxfoundation.org>
+Message-Id: <20220307091640.256636889@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,109 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anthoine Bourgeois <anthoine.bourgeois@gmail.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit 64324ef337d0caa5798fa8fa3f6bbfbd3245868a ]
+commit 6c7273a266759d9d36f7c862149f248bcdeddc0f upstream.
 
-This patch allow lcd43 and lcd70 flavors to benefit from timer
-evolution.
+Commit c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if
+netif is not OK") addressed the ring transient state when
+MEM_TYPE_XSK_BUFF_POOL was being configured which in turn caused the
+interface to through down/up. Maurice reported that when carrier is not
+ok and xsk_pool is present on ring pair, ksoftirqd will consume 100% CPU
+cycles due to the constant NAPI rescheduling as ixgbe_poll() states that
+there is still some work to be done.
 
-Fixes: e428e250fde6 ("ARM: dts: Configure system timers for omap3")
-Signed-off-by: Anthoine Bourgeois <anthoine.bourgeois@gmail.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To fix this, do not set work_done to false for a !netif_carrier_ok().
+
+Fixes: c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if netif is not OK")
+Reported-by: Maurice Baijens <maurice.baijens@ellips.com>
+Tested-by: Maurice Baijens <maurice.baijens@ellips.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../arm/boot/dts/omap3-devkit8000-common.dtsi | 33 +++++++++++++++++++
- arch/arm/boot/dts/omap3-devkit8000.dts        | 33 -------------------
- 2 files changed, 33 insertions(+), 33 deletions(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/omap3-devkit8000-common.dtsi b/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
-index 2c19d6e255bd..0df2b1dd07f6 100644
---- a/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
-+++ b/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
-@@ -158,6 +158,39 @@
- 	status = "disabled";
- };
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@ -583,12 +583,14 @@ static bool ixgbe_xmit_zc(struct ixgbe_r
+ 	u32 cmd_type;
  
-+/* Unusable as clocksource because of unreliable oscillator */
-+&counter32k {
-+	status = "disabled";
-+};
+ 	while (budget-- > 0) {
+-		if (unlikely(!ixgbe_desc_unused(xdp_ring)) ||
+-		    !netif_carrier_ok(xdp_ring->netdev)) {
++		if (unlikely(!ixgbe_desc_unused(xdp_ring))) {
+ 			work_done = false;
+ 			break;
+ 		}
+ 
++		if (!netif_carrier_ok(xdp_ring->netdev))
++			break;
 +
-+/* Unusable as clockevent because if unreliable oscillator, allow to idle */
-+&timer1_target {
-+	/delete-property/ti,no-reset-on-init;
-+	/delete-property/ti,no-idle;
-+	timer@0 {
-+		/delete-property/ti,timer-alwon;
-+	};
-+};
-+
-+/* Preferred always-on timer for clocksource */
-+&timer12_target {
-+	ti,no-reset-on-init;
-+	ti,no-idle;
-+	timer@0 {
-+		/* Always clocked by secure_32k_fck */
-+	};
-+};
-+
-+/* Preferred timer for clockevent */
-+&timer2_target {
-+	ti,no-reset-on-init;
-+	ti,no-idle;
-+	timer@0 {
-+		assigned-clocks = <&gpt2_fck>;
-+		assigned-clock-parents = <&sys_ck>;
-+	};
-+};
-+
- &twl_gpio {
- 	ti,use-leds;
- 	/*
-diff --git a/arch/arm/boot/dts/omap3-devkit8000.dts b/arch/arm/boot/dts/omap3-devkit8000.dts
-index c2995a280729..162d0726b008 100644
---- a/arch/arm/boot/dts/omap3-devkit8000.dts
-+++ b/arch/arm/boot/dts/omap3-devkit8000.dts
-@@ -14,36 +14,3 @@
- 		display2 = &tv0;
- 	};
- };
--
--/* Unusable as clocksource because of unreliable oscillator */
--&counter32k {
--	status = "disabled";
--};
--
--/* Unusable as clockevent because if unreliable oscillator, allow to idle */
--&timer1_target {
--	/delete-property/ti,no-reset-on-init;
--	/delete-property/ti,no-idle;
--	timer@0 {
--		/delete-property/ti,timer-alwon;
--	};
--};
--
--/* Preferred always-on timer for clocksource */
--&timer12_target {
--	ti,no-reset-on-init;
--	ti,no-idle;
--	timer@0 {
--		/* Always clocked by secure_32k_fck */
--	};
--};
--
--/* Preferred timer for clockevent */
--&timer2_target {
--	ti,no-reset-on-init;
--	ti,no-idle;
--	timer@0 {
--		assigned-clocks = <&gpt2_fck>;
--		assigned-clock-parents = <&sys_ck>;
--	};
--};
--- 
-2.34.1
-
+ 		if (!xsk_umem_consume_tx(xdp_ring->xsk_umem, &desc))
+ 			break;
+ 
 
 

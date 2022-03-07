@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D074D08EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869934D08F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245424AbiCGUye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S245466AbiCGUyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245363AbiCGUyS (ORCPT
+        with ESMTP id S245392AbiCGUyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:54:18 -0500
+        Mon, 7 Mar 2022 15:54:20 -0500
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6087727FEC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:53:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C0529C84
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:53:25 -0800 (PST)
 Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1nRKM3-0002DJ-Qu; Mon, 07 Mar 2022 21:53:19 +0100
+        id 1nRKM4-0002DJ-LE; Mon, 07 Mar 2022 21:53:20 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -31,9 +31,9 @@ Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         allen.baum@esperantotech.com, jscheid@ventanamicro.com,
         rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
         philipp.tomsich@vrull.eu, Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v7 07/13] riscv: prevent compressed instructions in alternatives
-Date:   Mon,  7 Mar 2022 21:53:04 +0100
-Message-Id: <20220307205310.1905628-8-heiko@sntech.de>
+Subject: [PATCH v7 08/13] riscv: move boot alternatives to after fill_hwcap
+Date:   Mon,  7 Mar 2022 21:53:05 +0100
+Message-Id: <20220307205310.1905628-9-heiko@sntech.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220307205310.1905628-1-heiko@sntech.de>
 References: <20220307205310.1905628-1-heiko@sntech.de>
@@ -48,94 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instructions are opportunistically compressed by the RISC-V assembler
-when possible, but in alternatives-blocks both the old and new content
-need to be the same size, so having the toolchain do somewhat random
-optimizations will cause strange side-effects like
-"attempt to move .org backwards" compile-time errors.
-
-Already a simple "and" used in alternatives assembly will cause these
-mismatched code sizes.
-
-So prevent compressed instructions to be generated in alternatives-
-code and use option-push and -pop to only limit this to the relevant
-code blocks
+Move the application of boot alternatives to after the hw-capabilities
+are populated. This allows to check for available extensions when
+determining which alternatives to apply and also makes it actually
+work if CONFIG_SMP is disabled for whatever reason.
 
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 ---
- arch/riscv/include/asm/alternative-macros.h | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ arch/riscv/kernel/setup.c   | 2 ++
+ arch/riscv/kernel/smpboot.c | 2 --
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-index c0fb11fad631..3a52884bf23d 100644
---- a/arch/riscv/include/asm/alternative-macros.h
-+++ b/arch/riscv/include/asm/alternative-macros.h
-@@ -19,7 +19,10 @@
- 	.popsection
- 	.subsection 1
- 888 :
-+	.option push
-+	.option norvc
- 	\new_c
-+	.option pop
- 889 :
- 	.previous
- 	.org    . - (889b - 888b) + (887b - 886b)
-@@ -29,7 +32,10 @@
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 339ceb595b38..b4879c942b42 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -21,6 +21,7 @@
+ #include <linux/efi.h>
+ #include <linux/crash_dump.h>
  
- .macro __ALTERNATIVE_CFG old_c, new_c, vendor_id, errata_id, enable
- 886 :
-+	.option push
-+	.option norvc
- 	\old_c
-+	.option pop
- 887 :
- 	ALT_NEW_CONTENT \vendor_id, \errata_id, \enable, \new_c
- .endm
-@@ -40,7 +46,10 @@
- .macro __ALTERNATIVE_CFG_2 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
- 				  new_c_2, vendor_id_2, errata_id_2, enable_2
- 886 :
-+	.option push
-+	.option norvc
- 	\old_c
-+	.option pop
- 887 :
- 	ALT_NEW_CONTENT \vendor_id_1, \errata_id_1, \enable_1, \new_c_1
- 	ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
-@@ -70,7 +79,10 @@
- 	".popsection\n"							\
- 	".subsection 1\n"						\
- 	"888 :\n"							\
-+	".option push\n"						\
-+	".option norvc\n"						\
- 	new_c "\n"							\
-+	".option pop\n"							\
- 	"889 :\n"							\
- 	".previous\n"							\
- 	".org	. - (887b - 886b) + (889b - 888b)\n"			\
-@@ -79,7 +91,10 @@
++#include <asm/alternative.h>
+ #include <asm/cpu_ops.h>
+ #include <asm/early_ioremap.h>
+ #include <asm/pgtable.h>
+@@ -295,6 +296,7 @@ void __init setup_arch(char **cmdline_p)
+ #endif
  
- #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
- 	"886 :\n"							\
-+	".option push\n"						\
-+	".option norvc\n"						\
- 	old_c "\n"							\
-+	".option pop\n"							\
- 	"887 :\n"							\
- 	ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+ 	riscv_fill_hwcap();
++	apply_boot_alternatives();
+ }
  
-@@ -89,7 +104,10 @@
- #define __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
- 				  new_c_2, vendor_id_2, errata_id_2, enable_2) \
- 	"886 :\n"							\
-+	".option push\n"						\
-+	".option norvc\n"						\
- 	old_c "\n"							\
-+	".option pop\n"							\
- 	"887 :\n"							\
- 	ALT_NEW_CONTENT(vendor_id_1, errata_id_1, enable_1, new_c_1)	\
- 	ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
+ static int __init topology_init(void)
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index a6d13dca1403..f1e4948a4b52 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -32,7 +32,6 @@
+ #include <asm/sections.h>
+ #include <asm/sbi.h>
+ #include <asm/smp.h>
+-#include <asm/alternative.h>
+ 
+ #include "head.h"
+ 
+@@ -41,7 +40,6 @@ static DECLARE_COMPLETION(cpu_running);
+ void __init smp_prepare_boot_cpu(void)
+ {
+ 	init_cpu_topology();
+-	apply_boot_alternatives();
+ }
+ 
+ void __init smp_prepare_cpus(unsigned int max_cpus)
 -- 
 2.30.2
 

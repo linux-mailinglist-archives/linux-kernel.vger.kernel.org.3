@@ -2,62 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0C94D0038
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249654D003E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242218AbiCGNjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S235471AbiCGNku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238625AbiCGNjE (ORCPT
+        with ESMTP id S235124AbiCGNkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:39:04 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F30D2E6B5;
-        Mon,  7 Mar 2022 05:38:10 -0800 (PST)
-Received: from [192.168.43.69] (unknown [182.2.38.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 77DCC7E6C3;
-        Mon,  7 Mar 2022 13:38:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646660289;
-        bh=SPrR395Fio1xIoiYPHowYe9I1TFzu6lXoGUk7nXE7MI=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=Jq9W84JzC1kZQIJ+c+L2MvNXQuwzshExfw17fqYYar6573HmdZQIwmp6RV0AhVfwX
-         54XFyno3gpee1rt1KZ9eY1TaRM55VeOQ5s265kdMq0tdydfIOBiZa7VRLRU/NAsZc2
-         MbSJYBzAXJDCi2jQet8EN51Lxp+/MQbXdvzG7uWXeBf6MT37rdyp3sJ3/Db/N/t5TA
-         OQ94E5BY6ZjynVT5KnIu2713KsfsSwMSXJblJVNUnrAzfp/vOGS/RERxa49/n0+xZv
-         56B6k3oFheJ4RdjoXs4axKmvEDN8oLjO5jQhxsZEVLpFyy1C/FrXP0XVBh0znkSsLS
-         LVCiHEYgs+UQg==
-Message-ID: <11dec988-0b4f-00f2-6fa6-8d08be95d106@gnuweeb.org>
-Date:   Mon, 7 Mar 2022 20:37:59 +0700
+        Mon, 7 Mar 2022 08:40:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B81685BE5
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 05:39:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646660394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CtoXzlWdMjEaTdkHRpRbjU16+CzIWpJ5Gk6mnrIwGKc=;
+        b=YL3HMcElSneMp/r9xt782uwEf6IPZUCxf8TnqHY1xWWFpEMDy1yiQqL5Sq5nCsfU3gy/SF
+        99h6K5K8WgFTGA50z1K3TJ+mGa/CPvW+Xl600+5rjMIPsx9tt7Bm+kkIYK+MzrjMc5v1Pl
+        6mSS/1B+we3FTbexyYFEgQAXTTzEWeg=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-YAw7ITtnM4yyxtl2qiJIfQ-1; Mon, 07 Mar 2022 08:39:53 -0500
+X-MC-Unique: YAw7ITtnM4yyxtl2qiJIfQ-1
+Received: by mail-oi1-f198.google.com with SMTP id o2-20020a0568080bc200b002d64d89d460so9555385oik.17
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 05:39:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=CtoXzlWdMjEaTdkHRpRbjU16+CzIWpJ5Gk6mnrIwGKc=;
+        b=vapW52aqUNACIU9TjWONZdYsHFfV/It4/ZxEpG/0+WgSwSU+P4nGTNuzUfuvOkhbyf
+         eHYINbSV9H7D9eavBxenSgnhZx+DLSpTOeFQY8GfpNgdWoIBiwp3BUTVpz4gKBCj60Lp
+         ZPybPm9rbv8OS6te9W/zw23SbMXtErv6YwCa9W422ZEXyOu6Eh6zfpUL8Nx+l4iWBqcm
+         v5/h3Q77IwjTeHcOHxVPWQ441plfat4bmCSNcSi4LZVEFsP4eJ4/KvbYLwnNt1jkQoei
+         2aKsfxSglBCtfFrpdnx0YK8r6553vvr2L3UB0LIkuvhjq39wOURorTYRl3XUMR59fzCO
+         dsVA==
+X-Gm-Message-State: AOAM532q/wnWVpAd5sjlmDj4tEmOvXcrnLTCyRvBg/JEw5FzXqxNRf4X
+        uVou7E+m8wRc/ZduRSYf2T0dmtMHtkLrRPAxtsow7r2DIbqTF+L4MCuJgdle2eJ5jlxEOSpAmZi
+        EKpy0+Kpv2bYtVATFMJl7HQ8hvGewsF7lCa3P50PhUq3FZNrFbFEPlMkzE7by4itsIok2DgE=
+X-Received: by 2002:a05:6830:2646:b0:5b0:29e9:b623 with SMTP id f6-20020a056830264600b005b029e9b623mr5525179otu.266.1646660392550;
+        Mon, 07 Mar 2022 05:39:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzGLrIi2ki38vAlN8pwDU2wa+0EYJY5++5iZgmYWGYscX8JZBaezJHnxs4oMV1319QYnLYyHA==
+X-Received: by 2002:a05:6830:2646:b0:5b0:29e9:b623 with SMTP id f6-20020a056830264600b005b029e9b623mr5525166otu.266.1646660392286;
+        Mon, 07 Mar 2022 05:39:52 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id m26-20020a05680806da00b002d797266870sm6326213oih.9.2022.03.07.05.39.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 05:39:51 -0800 (PST)
+Subject: Re: [PATCH] netfilter: conditionally use ct and ctinfo
+To:     Florian Westphal <fw@strlen.de>
+Cc:     pablo@netfilter.org, kadlec@netfilter.org, davem@davemloft.net,
+        kuba@kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220305180853.696640-1-trix@redhat.com>
+ <20220307124652.GB21350@breakpoint.cc>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <b795685f-6cdb-5493-8280-75749ddb0f6f@redhat.com>
+Date:   Mon, 7 Mar 2022 05:39:49 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Youquan Song <youquan.song@intel.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gwml@vger.gnuweeb.org, x86@kernel.org
-References: <20220307114558.1234494-1-ammarfaizi2@gnuweeb.org>
- <YiX81kD/668UdFBr@nazgul.tnic>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: [PATCH v1 0/2] x86: Avoid using INC and DEC instructions on hot
- paths
-In-Reply-To: <YiX81kD/668UdFBr@nazgul.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220307124652.GB21350@breakpoint.cc>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Language: en-US
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,32 +85,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/22 7:38 PM, Borislav Petkov wrote:
-> On Mon, Mar 07, 2022 at 06:45:56PM +0700, Ammar Faizi wrote:
->> In order to take maximum advantage of out-of-order execution,
->> avoid using INC/DEC instructions when appropriate. INC/DEC only
->> writes to part of the flags register, which can cause a partial
->> flag register stall. This series replaces INC/DEC with ADD/SUB.
-> 
-> "Improvements" like that need to show in benchmark runs - not
-> microbenchmark - that they bring anything. Just by looking at them, I'd
-> say they won't show any difference. But I'm always open to surprises.
 
-OK, thanks for taking a look. I will play a bit more with this. Not sure
-how much the visible improvement. If I can win some numbers (probably can't),
-I will be back to this thread.
+On 3/7/22 4:46 AM, Florian Westphal wrote:
+> trix@redhat.com <trix@redhat.com> wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> The setting ct and ctinfo are controlled by
+>> CONF_NF_CONNTRACK.  So their use should also
+>> be controlled.
+> Any reason for this change?
 
-> Btw, you don't have to send all your patches directly to me - there are
-> other x86 maintainers. IOW, you can use scripts/get_maintainer.pl to
-> figure out who to send them to.
+Define and use are connected. Doing something to one without doing 
+something to the other doesn't make sense.
 
-I did anyway, all CC list here I took from that script. I will try to give
-other maintainers a turn next time.
+Could removing the CONF_NF_CONNTRACK be done for the define side ?
 
-> Also, I'd advise going over Documentation/process/ if you're new to this.
-> Especially Documentation/process/submitting-patches.rst.
-I might've missed the benchmark backup part. Will review those documents again.
+Tom
 
--- 
-Ammar Faizi
+> We try to avoid ifdef where possible, unless it avoids a compiler
+> warning/build/linker issue.
+>
+> This doesn't change generated code for me (NF_CONNTRACK=n) either.
+>
 

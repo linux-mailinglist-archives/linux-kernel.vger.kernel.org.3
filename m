@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B696E4CF603
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD9C4CF9AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237208AbiCGJav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
+        id S239657AbiCGKNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237354AbiCGJ2C (ORCPT
+        with ESMTP id S238970AbiCGJ4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:28:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C825A5A164;
-        Mon,  7 Mar 2022 01:25:15 -0800 (PST)
+        Mon, 7 Mar 2022 04:56:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EC378931;
+        Mon,  7 Mar 2022 01:45:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 360FFB810C0;
-        Mon,  7 Mar 2022 09:25:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F56DC340F3;
-        Mon,  7 Mar 2022 09:25:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EA41B8102B;
+        Mon,  7 Mar 2022 09:45:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3E6C340E9;
+        Mon,  7 Mar 2022 09:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645102;
-        bh=CdbhoOIuBsH1DbMzlzA8mShODwOPYYh3vrMPo75ltZc=;
+        s=korg; t=1646646339;
+        bh=sk02j0fMZ+KjwipNO3fLASesLisB+hWzw3XWFB/DLG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aKWRZv86dhGhp1gAUAaL1tN6OiJmHYN9XM1laBFW2hmgw9YAqjZBdHlaBhTzPs+j8
-         +yJa7k792GyxM0bGN5jaOa7wCKDLRKLKeMoYMh1CmagqI0pIZDCYC2p3pC26aGGU1y
-         NWR22vC9aSfhisuJFg9uSEKOJU3yHpy9/58c7KzM=
+        b=mIcrETy9410ysxHQQ6MTl/Jq82nd54vTbf/ey4aXz85ocAQzSGHkFwMQcK12X2dmc
+         VEbPq+2C7sdg8yVa4RE5jPIVrVHXX6AyFHis89YWKc1mGVTC4tT3Ju3L7X7OfJGOF7
+         J9xx08zFpFw3Y8cYJFXGgzmxO8pspyelZIM6qero=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH 4.19 39/51] arm64: dts: rockchip: Switch RK3399-Gru DP to SPDIF output
+        stable@vger.kernel.org, Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Li Yang <leoyang.li@nxp.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 210/262] soc: fsl: guts: Revert commit 3c0d64e867ed
 Date:   Mon,  7 Mar 2022 10:19:14 +0100
-Message-Id: <20220307091638.104821164@linuxfoundation.org>
+Message-Id: <20220307091708.789658810@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit b5fbaf7d779f5f02b7f75b080e7707222573be2a upstream.
+[ Upstream commit b113737cf12964a20cc3ba1ddabe6229099661c6 ]
 
-Commit b18c6c3c7768 ("ASoC: rockchip: cdn-dp sound output use spdif")
-switched the platform to SPDIF, but we didn't fix up the device tree.
+This reverts commit 3c0d64e867ed
+("soc: fsl: guts: reuse machine name from device tree").
 
-Drop the pinctrl settings, because the 'spdif_bus' pins are either:
- * unused (on kevin, bob), so the settings is ~harmless
- * used by a different function (on scarlet), which causes probe
-   failures (!!)
+A following patch will fix the missing memory allocation failure check
+instead.
 
-Fixes: b18c6c3c7768 ("ASoC: rockchip: cdn-dp sound output use spdif")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Link: https://lore.kernel.org/r/20220114150129.v2.1.I46f64b00508d9dff34abe1c3e8d2defdab4ea1e5@changeid
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Li Yang <leoyang.li@nxp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi |   17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/soc/fsl/guts.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-@@ -287,7 +287,7 @@
+diff --git a/drivers/soc/fsl/guts.c b/drivers/soc/fsl/guts.c
+index d5e9a5f2c087..67b079fc0c8e 100644
+--- a/drivers/soc/fsl/guts.c
++++ b/drivers/soc/fsl/guts.c
+@@ -28,7 +28,6 @@ struct fsl_soc_die_attr {
+ static struct guts *guts;
+ static struct soc_device_attribute soc_dev_attr;
+ static struct soc_device *soc_dev;
+-static struct device_node *root;
  
- 	sound: sound {
- 		compatible = "rockchip,rk3399-gru-sound";
--		rockchip,cpu = <&i2s0 &i2s2>;
-+		rockchip,cpu = <&i2s0 &spdif>;
- 	};
- };
  
-@@ -438,10 +438,6 @@ ap_i2c_audio: &i2c8 {
- 	status = "okay";
- };
+ /* SoC die attribute definition for QorIQ platform */
+@@ -138,7 +137,7 @@ static u32 fsl_guts_get_svr(void)
  
--&i2s2 {
--	status = "okay";
--};
--
- &io_domains {
- 	status = "okay";
+ static int fsl_guts_probe(struct platform_device *pdev)
+ {
+-	struct device_node *np = pdev->dev.of_node;
++	struct device_node *root, *np = pdev->dev.of_node;
+ 	struct device *dev = &pdev->dev;
+ 	struct resource *res;
+ 	const struct fsl_soc_die_attr *soc_die;
+@@ -161,8 +160,9 @@ static int fsl_guts_probe(struct platform_device *pdev)
+ 	root = of_find_node_by_path("/");
+ 	if (of_property_read_string(root, "model", &machine))
+ 		of_property_read_string_index(root, "compatible", 0, &machine);
++	of_node_put(root);
+ 	if (machine)
+-		soc_dev_attr.machine = machine;
++		soc_dev_attr.machine = devm_kstrdup(dev, machine, GFP_KERNEL);
  
-@@ -538,6 +534,17 @@ ap_i2c_audio: &i2c8 {
- 	vqmmc-supply = <&ppvar_sd_card_io>;
- };
+ 	svr = fsl_guts_get_svr();
+ 	soc_die = fsl_soc_die_match(svr, fsl_soc_die);
+@@ -197,7 +197,6 @@ static int fsl_guts_probe(struct platform_device *pdev)
+ static int fsl_guts_remove(struct platform_device *dev)
+ {
+ 	soc_device_unregister(soc_dev);
+-	of_node_put(root);
+ 	return 0;
+ }
  
-+&spdif {
-+	status = "okay";
-+
-+	/*
-+	 * SPDIF is routed internally to DP; we either don't use these pins, or
-+	 * mux them to something else.
-+	 */
-+	/delete-property/ pinctrl-0;
-+	/delete-property/ pinctrl-names;
-+};
-+
- &spi1 {
- 	status = "okay";
- 
+-- 
+2.34.1
+
 
 

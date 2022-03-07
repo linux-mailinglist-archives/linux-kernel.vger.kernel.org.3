@@ -2,171 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC2C4D015C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4ECE4D017E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243258AbiCGOfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S243280AbiCGOgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238679AbiCGOfB (ORCPT
+        with ESMTP id S233330AbiCGOgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:35:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EB2E60AA7
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:34:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646663646;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EFYNbblCnNcuaPx8LOQ1Hn2woAp9Zpf6py8Ud+OJaTY=;
-        b=Xn60WXAy1tH6T0oSpqBYGPvMDcibEK/7ysBsvl+/cVnZW8AO1ZPh8tyz/iA/t/SnbPy6TS
-        +7OCJyqZkLcLvhH6moVM9HCN1kC/37+/6bWZDvbJx84Ety0ZVdQs647o8hD+Bz3/a94QfZ
-        BvmX9XC7ClAGlCwTiYU9bH/plGbsGN4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-63-fO-AOJmqMmiAPIs_kI9ABA-1; Mon, 07 Mar 2022 09:34:03 -0500
-X-MC-Unique: fO-AOJmqMmiAPIs_kI9ABA-1
-Received: by mail-wm1-f72.google.com with SMTP id v125-20020a1cac83000000b0037e3d70e7e1so7953561wme.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:34:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=EFYNbblCnNcuaPx8LOQ1Hn2woAp9Zpf6py8Ud+OJaTY=;
-        b=KpIQg8jD1Bn3hy0DITb0f8XzV/+BldiT8iZ64d1MunsdoCCviJlnC4Jc+XDEDpZRBI
-         4yfFByxVKadpqZqNVxyPEFMHS4/4HULFNcCDFTaotl/o+BDxntu6CdyXsGIqjuT5XdMg
-         FTprnBcjxnVYZkUGIr+aKHcE8PeAnW3aLiNeWsY6kbTajSMLMvdCW6j17MbY7kVRof8d
-         /6bQzpPnP3inCOPPRLIl4YVL+/1J1jcjDdttb+tQbUFw4dKjHZNK9hBE4o5ttIs2d7FI
-         cLyQi9+qfvdHMJ6uBERKThOzrBHau/5Kbb/KYr7OzEgTOJCG0ySC/zbrFwcWot/lSB4a
-         ejjg==
-X-Gm-Message-State: AOAM532IY5nwFEFdU2q11pp3N7MYikDTbEvk8KIWDvORZ6UaMDpXqOE3
-        kuXaVA9PbBKECyrZBbwB0bThiqn1un8vivGK74AtUd6atWJp7K1TR5/3uXq4uB11d6Dxexelz8R
-        1nZkl0ysXaxo8uk7+qtiG8RTe
-X-Received: by 2002:a7b:ca49:0:b0:389:bcde:f7ab with SMTP id m9-20020a7bca49000000b00389bcdef7abmr1185209wml.7.1646663642075;
-        Mon, 07 Mar 2022 06:34:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxPQNqWxZSPrdYEmAfxwtZ3y4N0Kf0xHJe42MVbdVGbGB8hJ9qV6tBxdbfd3Fa3fXlIgu+yCQ==
-X-Received: by 2002:a7b:ca49:0:b0:389:bcde:f7ab with SMTP id m9-20020a7bca49000000b00389bcdef7abmr1185173wml.7.1646663641772;
-        Mon, 07 Mar 2022 06:34:01 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:1e00:8d67:f75a:a8ae:dc02? (p200300cbc7051e008d67f75aa8aedc02.dip0.t-ipconnect.de. [2003:cb:c705:1e00:8d67:f75a:a8ae:dc02])
-        by smtp.gmail.com with ESMTPSA id h12-20020a5d548c000000b001f1f99e7792sm2398939wrv.111.2022.03.07.06.33.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 06:33:54 -0800 (PST)
-Message-ID: <dab25b2d-88f1-7ad5-c28a-15a97b38af03@redhat.com>
-Date:   Mon, 7 Mar 2022 15:33:52 +0100
+        Mon, 7 Mar 2022 09:36:54 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D3B7D01F;
+        Mon,  7 Mar 2022 06:35:59 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8EDBF478;
+        Mon,  7 Mar 2022 15:35:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1646663757;
+        bh=SCTLfi1Xfty9Lg4VEGF2AZggP+lYSWFOBLF0oWztcQw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f57QYuY7iVWUBd6yz9Re15QtkkcV/ETdcVJIxqXbsQoQltXaVvmutjDZdvJsj4Qvq
+         MNsJrWL/rGiJxoJ9+L9GGDM2ODm/5baUgCCS7Gu+hC1GwrOflHn6tIe0zgsgQZZo+o
+         seJpVqWcykhmdPP4a3gh3DVgoOGRn2pG338ohpTM=
+Date:   Mon, 7 Mar 2022 16:35:44 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: max9286: fix kernel oops when removing module
+Message-ID: <YiYYQE4gyGY468Jz@pendragon.ideasonboard.com>
+References: <20220307133750.29708-1-laurentiu.palcu@oss.nxp.com>
+ <164666323196.11309.2192554853786525085@Monstersaurus>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        zhangyiru <zhangyiru3@huawei.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        linux-mips@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
-        linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <20220306053211.135762-1-jarkko@kernel.org>
- <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com> <YiYVHTkS8IsMMw6T@iki.fi>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH RFC 0/3] MAP_POPULATE for device memory
-In-Reply-To: <YiYVHTkS8IsMMw6T@iki.fi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <164666323196.11309.2192554853786525085@Monstersaurus>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.03.22 15:22, Jarkko Sakkinen wrote:
-> On Mon, Mar 07, 2022 at 11:12:44AM +0100, David Hildenbrand wrote:
->> On 06.03.22 06:32, Jarkko Sakkinen wrote:
->>> For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
->>> to use that for initializing the device memory by providing a new callback
->>> f_ops->populate() for the purpose.
->>>
->>> SGX patches are provided to show the callback in context.
->>>
->>> An obvious alternative is a ioctl but it is less elegant and requires
->>> two syscalls (mmap + ioctl) per memory range, instead of just one
->>> (mmap).
->>
->> What about extending MADV_POPULATE_READ | MADV_POPULATE_WRITE to support
->> VM_IO | VM_PFNMAP (as well?) ?
+On Mon, Mar 07, 2022 at 02:27:11PM +0000, Kieran Bingham wrote:
+> Hi Laurentiu,
 > 
-> What would be a proper point to bind that behaviour? For mmap/mprotect it'd
-> be probably populate_vma_page_range() because that would span both mmap()
-> and mprotect() (Dave's suggestion in this thread).
-
-MADV_POPULATE_* ends up in faultin_vma_page_range(), right next to
-populate_vma_page_range(). So it might require a similar way to hook
-into the driver I guess.
-
+> Quoting Laurentiu Palcu (2022-03-07 13:37:50)
+> > When removing the max9286 module we get a kernel oops:
+> > 
+> > Unable to handle kernel paging request at virtual address 000000aa00000094
+> > Mem abort info:
+> >   ESR = 0x96000004
+> >   EC = 0x25: DABT (current EL), IL = 32 bits
+> >   SET = 0, FnV = 0
+> >   EA = 0, S1PTW = 0
+> >   FSC = 0x04: level 0 translation fault
+> > Data abort info:
+> >   ISV = 0, ISS = 0x00000004
+> >   CM = 0, WnR = 0
+> > user pgtable: 4k pages, 48-bit VAs, pgdp=0000000880d85000
+> > [000000aa00000094] pgd=0000000000000000, p4d=0000000000000000
+> > Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> > Modules linked in: fsl_jr_uio caam_jr rng_core libdes caamkeyblob_desc caamhash_desc caamalg_desc crypto_engine max9271 authenc crct10dif_ce mxc_jpeg_encdec
+> > CPU: 2 PID: 713 Comm: rmmod Tainted: G         C        5.15.5-00057-gaebcd29c8ed7-dirty #5
+> > Hardware name: Freescale i.MX8QXP MEK (DT)
+> > pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > pc : i2c_mux_del_adapters+0x24/0xf0
+> > lr : max9286_remove+0x28/0xd0 [max9286]
+> > sp : ffff800013a9bbf0
+> > x29: ffff800013a9bbf0 x28: ffff00080b6da940 x27: 0000000000000000
+> > x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+> > x23: ffff000801a5b970 x22: ffff0008048b0890 x21: ffff800009297000
+> > x20: ffff0008048b0f70 x19: 000000aa00000064 x18: 0000000000000000
+> > x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> > x14: 0000000000000014 x13: 0000000000000000 x12: ffff000802da49e8
+> > x11: ffff000802051918 x10: ffff000802da4920 x9 : ffff000800030098
+> > x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
+> > x5 : 8080808000000000 x4 : 0000000000000000 x3 : 0000000000000000
+> > x2 : ffffffffffffffff x1 : ffff00080b6da940 x0 : 0000000000000000
+> > Call trace:
+> >  i2c_mux_del_adapters+0x24/0xf0
+> >  max9286_remove+0x28/0xd0 [max9286]
+> >  i2c_device_remove+0x40/0x110
+> >  __device_release_driver+0x188/0x234
+> >  driver_detach+0xc4/0x150
+> >  bus_remove_driver+0x60/0xe0
+> >  driver_unregister+0x34/0x64
+> >  i2c_del_driver+0x58/0xa0
+> >  max9286_i2c_driver_exit+0x1c/0x490 [max9286]
+> >  __arm64_sys_delete_module+0x194/0x260
+> >  invoke_syscall+0x48/0x114
+> >  el0_svc_common.constprop.0+0xd4/0xfc
+> >  do_el0_svc+0x2c/0x94
+> >  el0_svc+0x28/0x80
+> >  el0t_64_sync_handler+0xa8/0x130
+> >  el0t_64_sync+0x1a0/0x1a4
+> > 
+> > The Oops happens because the I2C client data does not point to
+> > max9286_priv anymore but to v4l2_subdev. The change happened in
+> > max9286_init() which calls v4l2_i2c_subdev_init() later on...
+> > 
 > 
-> For MAP_POPULATE I did not have hard proof to show that it would be used
-> by other drivers but for madvice() you can find at least a few ioctl
-> based implementations:
+> I think this needs a Fixes tag, but it looks like it happened when we
+> merged the driver. So that makes it:
 > 
-> $ git grep -e madv --and \( -e ioc \)  drivers/
-> drivers/gpu/drm/i915/gem/i915_gem_ioctls.h:int i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
-> drivers/gpu/drm/i915/i915_driver.c:     DRM_IOCTL_DEF_DRV(I915_GEM_MADVISE, i915_gem_madvise_ioctl, DRM_RENDER_ALLOW),
-> drivers/gpu/drm/i915/i915_gem.c:i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
-> drivers/gpu/drm/msm/msm_drv.c:static int msm_ioctl_gem_madvise(struct drm_device *dev, void *data,
-> drivers/gpu/drm/msm/msm_drv.c:  DRM_IOCTL_DEF_DRV(MSM_GEM_MADVISE,  msm_ioctl_gem_madvise,  DRM_RENDER_ALLOW),
-> drivers/gpu/drm/panfrost/panfrost_drv.c:static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
-> drivers/gpu/drm/vc4/vc4_drv.c:  DRM_IOCTL_DEF_DRV(VC4_GEM_MADVISE, vc4_gem_madvise_ioctl, DRM_RENDER_ALLOW),
-> drivers/gpu/drm/vc4/vc4_drv.h:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
-> drivers/gpu/drm/vc4/vc4_gem.c:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
+> Fixes: 66d8c9d2422d ("media: i2c: Add MAX9286 driver")
 > 
-> IMHO this also provides supportive claim for MAP_POPULATE, and yeah, I
-> agree that to be consistent implementation, both madvice() and MAP_POPULATE
-> should work.
+> I see in max9286_probe() we set
+> 	i2c_set_clientdata(client, (struct max9286_priv) priv);
+> 
+> And indeed, then we call 
+> 
+> max9286_init()
+>  max9286_v4l2_register()
+>   v4l2_i2c_subdev_init(&priv->sd, priv->client, &max9286_subdev_ops);
+> 
+> So I think this patch should probably also remove the call to 
+> i2c_set_clientdata() in probe to prevent confusion.
 
-MADV_POPULATE_WRITE + MADV_DONTNEED/FALLOC_FL_PUNCH_HOLE is one way to
-dynamically manage memory consumption inside a sparse memory mapping
-(preallocate/populate via MADV_POPULATE_WRITE, discard via
-MADV_DONTNEED/FALLOC_FL_PUNCH_HOLE).  Extending that whole mechanism to
-deal with VM_IO | VM_PFNMAP mappings as well could be interesting.
+Agreed.
 
-At least I herd about some ideas where we might want to dynamically
-expose memory to a VM (via virtio-mem) inside a sparse memory mapping,
-and the memory in that sparse memory mapping is provided from a
-dedicated memory pool managed by a device driver -- not just using
-ordinary anonymous/file/hugetlb memory as we do right now.
+> > Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+> > ---
+> >  drivers/media/i2c/max9286.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+> > index d2a4915ed9f7..04f5b7e3a9e5 100644
+> > --- a/drivers/media/i2c/max9286.c
+> > +++ b/drivers/media/i2c/max9286.c
+> > @@ -1385,7 +1385,7 @@ static int max9286_probe(struct i2c_client *client)
+> >  
+> >  static int max9286_remove(struct i2c_client *client)
+> >  {
+> > -       struct max9286_priv *priv = i2c_get_clientdata(client);
+> > +       struct max9286_priv *priv = sd_to_max9286(i2c_get_clientdata(client));
+> 
+> What happens if the module load failed before calling max9286_init(), in
+> that case, would the i2c_get_clientdata() return NULL?
+> 
+> If so, should this be checked?
 
-Now, this is certainly stuff for the future, I just wanted to mention it.
+.remove() isn't called if .probe() fails, so it should be fine
+
+> >  
+> >         i2c_mux_del_adapters(priv->mux);
+> >  
 
 -- 
-Thanks,
+Regards,
 
-David / dhildenb
-
+Laurent Pinchart

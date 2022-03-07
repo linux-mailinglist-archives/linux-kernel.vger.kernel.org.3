@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20E94CF8B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AE24CF646
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239574AbiCGJ7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:59:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S237463AbiCGJfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237764AbiCGJgY (ORCPT
+        with ESMTP id S238772AbiCGJ3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:36:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827FF6E2AF;
-        Mon,  7 Mar 2022 01:31:33 -0800 (PST)
+        Mon, 7 Mar 2022 04:29:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163AF1DA6A;
+        Mon,  7 Mar 2022 01:28:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CBAF60FF6;
-        Mon,  7 Mar 2022 09:31:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51478C340F3;
-        Mon,  7 Mar 2022 09:31:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3213B810B2;
+        Mon,  7 Mar 2022 09:28:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C48EC340E9;
+        Mon,  7 Mar 2022 09:28:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645479;
-        bh=qIEtfsXV4mFbk4F56zW+/PD3478NpqG9bicT6hHDAkw=;
+        s=korg; t=1646645314;
+        bh=UX0cSTiXuUImb5J5fbrqY4X0GrbQz0H/DOnt2nvYZ/U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nxSyvD9znO4/8cTy9ep5L14tSRGDSd7s65p3qSJbA7LTvV3c7jFPjkS1sgMOP6ayM
-         zNE7yBIFJf1+Uevm3cn+m5sy0mZVb6V/ntFfKPYmeJLTLnA73d7VbEXTB2LIlF+3Zh
-         zfhWREGBA+rnQsi63+1N5I0F5sqprmsTFYSgd7zU=
+        b=I7ObAXxp+TOOOfttYgOpTYdsaqS2YU6ye17BHct6qkUnzBJF93EZvUdpELb7BTeWN
+         5o3R6kgbdn1I8/Y7ndrmscLlTSARGV8Lp3/oBEYeCOcsL1sLubyCoC06NQ5vI7Ylti
+         mPGJ7PQGyZ+0Il2mbqSBR+cDPC9iLonVQVykMLy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Westphal <fw@strlen.de>
-Subject: [PATCH 5.10 044/105] netfilter: nf_queue: fix possible use-after-free
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 14/64] ata: pata_hpt37x: fix PCI clock detection
 Date:   Mon,  7 Mar 2022 10:18:47 +0100
-Message-Id: <20220307091645.425786626@linuxfoundation.org>
+Message-Id: <20220307091639.547976907@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,104 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit c3873070247d9e3c7a6b0cf9bf9b45e8018427b1 upstream.
+[ Upstream commit 5f6b0f2d037c8864f20ff15311c695f65eb09db5 ]
 
-Eric Dumazet says:
-  The sock_hold() side seems suspect, because there is no guarantee
-  that sk_refcnt is not already 0.
+The f_CNT register (at the PCI config. address 0x78) is 16-bit, not
+8-bit! The bug was there from the very start... :-(
 
-On failure, we cannot queue the packet and need to indicate an
-error.  The packet will be dropped by the caller.
-
-v2: split skb prefetch hunk into separate change
-
-Fixes: 271b72c7fa82c ("udp: RCU handling for Unicast packets.")
-Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Fixes: 669a5db411d8 ("[libata] Add a bunch of PATA drivers.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/netfilter/nf_queue.h |    2 +-
- net/netfilter/nf_queue.c         |   13 +++++++++----
- net/netfilter/nfnetlink_queue.c  |   12 +++++++++---
- 3 files changed, 19 insertions(+), 8 deletions(-)
+ drivers/ata/pata_hpt37x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/include/net/netfilter/nf_queue.h
-+++ b/include/net/netfilter/nf_queue.h
-@@ -37,7 +37,7 @@ void nf_register_queue_handler(struct ne
- void nf_unregister_queue_handler(struct net *net);
- void nf_reinject(struct nf_queue_entry *entry, unsigned int verdict);
+diff --git a/drivers/ata/pata_hpt37x.c b/drivers/ata/pata_hpt37x.c
+index 499a947d56ddb..fef46de2f6b23 100644
+--- a/drivers/ata/pata_hpt37x.c
++++ b/drivers/ata/pata_hpt37x.c
+@@ -962,14 +962,14 @@ static int hpt37x_init_one(struct pci_dev *dev, const struct pci_device_id *id)
  
--void nf_queue_entry_get_refs(struct nf_queue_entry *entry);
-+bool nf_queue_entry_get_refs(struct nf_queue_entry *entry);
- void nf_queue_entry_free(struct nf_queue_entry *entry);
+ 	if ((freq >> 12) != 0xABCDE) {
+ 		int i;
+-		u8 sr;
++		u16 sr;
+ 		u32 total = 0;
  
- static inline void init_hashrandom(u32 *jhash_initval)
---- a/net/netfilter/nf_queue.c
-+++ b/net/netfilter/nf_queue.c
-@@ -100,16 +100,17 @@ static void __nf_queue_entry_init_physde
- }
+ 		pr_warn("BIOS has not set timing clocks\n");
  
- /* Bump dev refs so they don't vanish while packet is out */
--void nf_queue_entry_get_refs(struct nf_queue_entry *entry)
-+bool nf_queue_entry_get_refs(struct nf_queue_entry *entry)
- {
- 	struct nf_hook_state *state = &entry->state;
- 
-+	if (state->sk && !refcount_inc_not_zero(&state->sk->sk_refcnt))
-+		return false;
-+
- 	if (state->in)
- 		dev_hold(state->in);
- 	if (state->out)
- 		dev_hold(state->out);
--	if (state->sk)
--		sock_hold(state->sk);
- 
- #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
- 	if (entry->physin)
-@@ -117,6 +118,7 @@ void nf_queue_entry_get_refs(struct nf_q
- 	if (entry->physout)
- 		dev_hold(entry->physout);
- #endif
-+	return true;
- }
- EXPORT_SYMBOL_GPL(nf_queue_entry_get_refs);
- 
-@@ -205,7 +207,10 @@ static int __nf_queue(struct sk_buff *sk
- 
- 	__nf_queue_entry_init_physdevs(entry);
- 
--	nf_queue_entry_get_refs(entry);
-+	if (!nf_queue_entry_get_refs(entry)) {
-+		kfree(entry);
-+		return -ENOTCONN;
-+	}
- 
- 	switch (entry->state.pf) {
- 	case AF_INET:
---- a/net/netfilter/nfnetlink_queue.c
-+++ b/net/netfilter/nfnetlink_queue.c
-@@ -712,9 +712,15 @@ static struct nf_queue_entry *
- nf_queue_entry_dup(struct nf_queue_entry *e)
- {
- 	struct nf_queue_entry *entry = kmemdup(e, e->size, GFP_ATOMIC);
--	if (entry)
--		nf_queue_entry_get_refs(entry);
--	return entry;
-+
-+	if (!entry)
-+		return NULL;
-+
-+	if (nf_queue_entry_get_refs(entry))
-+		return entry;
-+
-+	kfree(entry);
-+	return NULL;
- }
- 
- #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+ 		/* This is the process the HPT371 BIOS is reported to use */
+ 		for (i = 0; i < 128; i++) {
+-			pci_read_config_byte(dev, 0x78, &sr);
++			pci_read_config_word(dev, 0x78, &sr);
+ 			total += sr & 0x1FF;
+ 			udelay(15);
+ 		}
+-- 
+2.34.1
+
 
 

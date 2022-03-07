@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BA74CF621
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D494CFB50
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237301AbiCGJd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S240127AbiCGKfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238661AbiCGJ3e (ORCPT
+        with ESMTP id S235930AbiCGKMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6935882D;
-        Mon,  7 Mar 2022 01:27:48 -0800 (PST)
+        Mon, 7 Mar 2022 05:12:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75ED8CDB2;
+        Mon,  7 Mar 2022 01:56:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E53A6B810AC;
-        Mon,  7 Mar 2022 09:27:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31DD1C340F3;
-        Mon,  7 Mar 2022 09:27:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFBB460C6D;
+        Mon,  7 Mar 2022 09:56:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F1BC340E9;
+        Mon,  7 Mar 2022 09:56:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645265;
-        bh=JmT9QfBOyZJcBBwWxnPYAC63NAd5BxcKK3R707o9fKY=;
+        s=korg; t=1646646980;
+        bh=XNFfssC4dcywt09vS1FDrDsp4FKO7LtqQ6ia6lOx3UI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BuW1SVrjp3FIclwMAUPxOx+/eBPQwMoDNRyKyzlbOtHquFdmW4KuDNFa0F1UiKP/X
-         5FtUsTW1boE6WRseD1d+MB9CsPKLXNeGwD3VDcm4FrMbAXRSj2ThIx1jOUWiaeobvo
-         Xrs/XDO3v0ngNXNYeMRitEUVd1Z72ntgGsZIIXiQ=
+        b=IzRNsdsDVhHASKCrG+oVu2BZVd/zzf18V7Zh/gkGh9hzJnDMBOyxXvH2LQcVSug/W
+         OwfUSELUge8FgQtC4wHdl3oo3PYAGSUvJ14XfxknOU+IYyTgP8KJD0lBFeHZIZUN9G
+         q6dCrMf8WBR72XqMlhMylY9SrGBBdGeQucPbEwaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 38/64] net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.16 113/186] pinctrl: sunxi: Use unique lockdep classes for IRQs
 Date:   Mon,  7 Mar 2022 10:19:11 +0100
-Message-Id: <20220307091640.227987269@linuxfoundation.org>
+Message-Id: <20220307091657.237365005@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +56,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Samuel Holland <samuel@sholland.org>
 
-commit bd6f1fd5d33dfe5d1b4f2502d3694a7cc13f166d upstream.
+commit bac129dbc6560dfeb634c03f0c08b78024e71915 upstream.
 
-During driver initialization, the pointer of card info, i.e. the
-variable 'ci' is required. However, the definition of
-'com20020pci_id_table' reveals that this field is empty for some
-devices, which will cause null pointer dereference when initializing
-these devices.
+This driver, like several others, uses a chained IRQ for each GPIO bank,
+and forwards .irq_set_wake to the GPIO bank's upstream IRQ. As a result,
+a call to irq_set_irq_wake() needs to lock both the upstream and
+downstream irq_desc's. Lockdep considers this to be a possible deadlock
+when the irq_desc's share lockdep classes, which they do by default:
 
-The following log reveals it:
+ ============================================
+ WARNING: possible recursive locking detected
+ 5.17.0-rc3-00394-gc849047c2473 #1 Not tainted
+ --------------------------------------------
+ init/307 is trying to acquire lock:
+ c2dfe27c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
 
-[    3.973806] KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-[    3.973819] RIP: 0010:com20020pci_probe+0x18d/0x13e0 [com20020_pci]
-[    3.975181] Call Trace:
-[    3.976208]  local_pci_probe+0x13f/0x210
-[    3.977248]  pci_device_probe+0x34c/0x6d0
-[    3.977255]  ? pci_uevent+0x470/0x470
-[    3.978265]  really_probe+0x24c/0x8d0
-[    3.978273]  __driver_probe_device+0x1b3/0x280
-[    3.979288]  driver_probe_device+0x50/0x370
+ but task is already holding lock:
+ c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
 
-Fix this by checking whether the 'ci' is a null pointer first.
+ other info that might help us debug this:
+  Possible unsafe locking scenario:
 
-Fixes: 8c14f9c70327 ("ARCNET: add com20020 PCI IDs with metadata")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+        CPU0
+        ----
+   lock(&irq_desc_lock_class);
+   lock(&irq_desc_lock_class);
+
+  *** DEADLOCK ***
+
+  May be due to missing lock nesting notation
+
+ 4 locks held by init/307:
+  #0: c1f29f18 (system_transition_mutex){+.+.}-{3:3}, at: __do_sys_reboot+0x90/0x23c
+  #1: c20f7760 (&dev->mutex){....}-{3:3}, at: device_shutdown+0xf4/0x224
+  #2: c2e804d8 (&dev->mutex){....}-{3:3}, at: device_shutdown+0x104/0x224
+  #3: c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+
+ stack backtrace:
+ CPU: 0 PID: 307 Comm: init Not tainted 5.17.0-rc3-00394-gc849047c2473 #1
+ Hardware name: Allwinner sun8i Family
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x68/0x90
+  dump_stack_lvl from __lock_acquire+0x1680/0x31a0
+  __lock_acquire from lock_acquire+0x148/0x3dc
+  lock_acquire from _raw_spin_lock_irqsave+0x50/0x6c
+  _raw_spin_lock_irqsave from __irq_get_desc_lock+0x58/0xa0
+  __irq_get_desc_lock from irq_set_irq_wake+0x2c/0x19c
+  irq_set_irq_wake from irq_set_irq_wake+0x13c/0x19c
+    [tail call from sunxi_pinctrl_irq_set_wake]
+  irq_set_irq_wake from gpio_keys_suspend+0x80/0x1a4
+  gpio_keys_suspend from gpio_keys_shutdown+0x10/0x2c
+  gpio_keys_shutdown from device_shutdown+0x180/0x224
+  device_shutdown from __do_sys_reboot+0x134/0x23c
+  __do_sys_reboot from ret_fast_syscall+0x0/0x1c
+
+However, this can never deadlock because the upstream and downstream
+IRQs are never the same (nor do they even involve the same irqchip).
+
+Silence this erroneous lockdep splat by applying what appears to be the
+usual fix of moving the GPIO IRQs to separate lockdep classes.
+
+Fixes: a59c99d9eaf9 ("pinctrl: sunxi: Forward calls to irq_set_irq_wake")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20220216040037.22730-1-samuel@sholland.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/arcnet/com20020-pci.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/pinctrl/sunxi/pinctrl-sunxi.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---- a/drivers/net/arcnet/com20020-pci.c
-+++ b/drivers/net/arcnet/com20020-pci.c
-@@ -136,6 +136,9 @@ static int com20020pci_probe(struct pci_
- 		return -ENOMEM;
+--- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+@@ -36,6 +36,13 @@
+ #include "../core.h"
+ #include "pinctrl-sunxi.h"
  
- 	ci = (struct com20020_pci_card_info *)id->driver_data;
-+	if (!ci)
-+		return -EINVAL;
++/*
++ * These lock classes tell lockdep that GPIO IRQs are in a different
++ * category than their parents, so it won't report false recursion.
++ */
++static struct lock_class_key sunxi_pinctrl_irq_lock_class;
++static struct lock_class_key sunxi_pinctrl_irq_request_class;
 +
- 	priv->ci = ci;
- 	mm = &ci->misc_map;
+ static struct irq_chip sunxi_pinctrl_edge_irq_chip;
+ static struct irq_chip sunxi_pinctrl_level_irq_chip;
  
+@@ -1551,6 +1558,8 @@ int sunxi_pinctrl_init_with_variant(stru
+ 	for (i = 0; i < (pctl->desc->irq_banks * IRQ_PER_BANK); i++) {
+ 		int irqno = irq_create_mapping(pctl->domain, i);
+ 
++		irq_set_lockdep_class(irqno, &sunxi_pinctrl_irq_lock_class,
++				      &sunxi_pinctrl_irq_request_class);
+ 		irq_set_chip_and_handler(irqno, &sunxi_pinctrl_edge_irq_chip,
+ 					 handle_edge_irq);
+ 		irq_set_chip_data(irqno, pctl);
 
 

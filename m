@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9514D0BB9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C584D0BBB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237923AbiCGXKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 18:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S1343896AbiCGXK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 18:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244153AbiCGXKV (ORCPT
+        with ESMTP id S236037AbiCGXKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 18:10:21 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7543625C;
-        Mon,  7 Mar 2022 15:09:26 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so19846061ooa.10;
-        Mon, 07 Mar 2022 15:09:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DEjj6mipEEYLP33vOJE2V/BDkDeTRAuZ0r17MrEk9aE=;
-        b=C6dFjvs6qNiuIISSYPFzunKtmqb1f/HbXEZABXUjVkHZSKI2DlQ4y7rEaZBQXznIBd
-         7sjU/0VsXoitL2hgIFwK5uzp+nRUElHvhpQJKbGUMAIusEp/KjV9BlkHM2Mhp65IKNcH
-         0fG8Yrxph09QYfhQlYMEYxWPPtkj9PeVWNhI4rO8er6duPl8h9xSPReGcA+n9dYuJ31t
-         aH5CKJHZEZ1DSAr+xGJH9LITVCmpJkocF2cJWLpSglaAd3DAJi0/4HnSC665BMV4A6Ud
-         cSuLR6d4o28NunTYR//iI9l4bXUtntZCcPQ87C5hipTkRfFniEXEI6z/F7LPfMVarvW9
-         hNcA==
-X-Gm-Message-State: AOAM531+Pl8i1C/mfOdGQyJEBklfm/zZ5xVMzsEBF0wuMkkxKXbycoXQ
-        ez+pGEgf20ypwyQa6phnuA==
-X-Google-Smtp-Source: ABdhPJyDVQwg3MsMXAkIeGiYt7mgMtzwhkpaixFw/cjv49b8I42KVzQxkNn5uMKaxpWqXbqHoOiGZQ==
-X-Received: by 2002:a05:6870:70a5:b0:da:b3f:2b20 with SMTP id v37-20020a05687070a500b000da0b3f2b20mr753668oae.191.1646694566133;
-        Mon, 07 Mar 2022 15:09:26 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bq3-20020a05680823c300b002d4f8fe4881sm7328738oib.39.2022.03.07.15.09.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 15:09:25 -0800 (PST)
-Received: (nullmailer pid 3432748 invoked by uid 1000);
-        Mon, 07 Mar 2022 23:09:24 -0000
-Date:   Mon, 7 Mar 2022 17:09:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     robh+dt@kernel.org, jassisinghbrar@gmail.com,
-        p.zabel@pengutronix.de, daniel@ffwll.ch,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, matthias.bgg@gmail.com,
-        fparent@baylibre.com, chunkuang.hu@kernel.org,
-        yongqiang.niu@mediatek.com, linux-mediatek@lists.infradead.org,
-        hsinyi@chromium.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [RESEND V6 3/5] dt-bindings: display: mediatek: change to use
- enum for mutex
-Message-ID: <YiaQpKN3JawgEl/A@robh.at.kernel.org>
-References: <20220303065725.23384-1-rex-bc.chen@mediatek.com>
- <20220303065725.23384-4-rex-bc.chen@mediatek.com>
+        Mon, 7 Mar 2022 18:10:25 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC22DFD08;
+        Mon,  7 Mar 2022 15:09:30 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id BCAF992009C; Tue,  8 Mar 2022 00:09:28 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id B5C4A92009B;
+        Mon,  7 Mar 2022 23:09:28 +0000 (GMT)
+Date:   Mon, 7 Mar 2022 23:09:28 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Mike Rapoport <rppt@kernel.org>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] MIPS: Refactor early_parse_mem() to fix mem=
+ parameter
+In-Reply-To: <YiaCH6UsQZSbnNHd@kernel.org>
+Message-ID: <alpine.DEB.2.21.2203072252300.47558@angie.orcam.me.uk>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <1646108941-27919-2-git-send-email-yangtiezhu@loongson.cn> <20220304151052.GA27642@alpha.franken.de> <20220304153517.GA28487@alpha.franken.de> <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
+ <20220307162909.GA18728@alpha.franken.de> <YiaCH6UsQZSbnNHd@kernel.org>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303065725.23384-4-rex-bc.chen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 03 Mar 2022 14:57:23 +0800, Rex-BC Chen wrote:
-> All single entry cases in mutex can be merged as a single enum.
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  .../display/mediatek/mediatek,mutex.yaml      | 24 +++++++------------
->  1 file changed, 9 insertions(+), 15 deletions(-)
-> 
+On Tue, 8 Mar 2022, Mike Rapoport wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> > So can I just limit amount of memory without interfering with normal
+> > memory detection ?
+> 
+> Maybe it's better to add a new encoding to mem= that will have the semantics
+> of limiting amount of memory?
+> 
+> E.g.
+> 
+> mem=384M@
+> 
+> would mean "only use 384M of memory that firmware reported" while
+> 
+> mem=384M would mean "set memory to 0 - 384M" as it does now.
+
+ I think you're going in the right direction, we'd just need to sort out 
+the most reasonable syntax for the new semantics; `mem=384M@' just seems 
+too analogous to me to `mem=384M@0'.  Maybe `mem=384M-'?
+
+ NB that would have to work with the existing overrides, for e.g.:
+
+`mem=192M@0 mem=192M@256M mem=384M-'
+
+to produce the following memory ranges available for use:
+
+  Normal   [mem 0x0000000000000000-0x000000000bffffff]
+  Normal   [mem 0x0000000010000000-0x0000000017ffffff]
+
+(so that you can paste the final cap at some command prompt and still have 
+earlier parameters respected that may have been passed by the firmware or 
+bootloader, or built in).
+
+  Maciej

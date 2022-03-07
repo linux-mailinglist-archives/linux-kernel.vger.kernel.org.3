@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E354CFAFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02524CFA11
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbiCGKY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:24:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S241102AbiCGKJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240825AbiCGKBS (ORCPT
+        with ESMTP id S238193AbiCGJrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9176D383;
-        Mon,  7 Mar 2022 01:50:58 -0800 (PST)
+        Mon, 7 Mar 2022 04:47:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D3F6BDDF;
+        Mon,  7 Mar 2022 01:42:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA68960929;
-        Mon,  7 Mar 2022 09:50:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9591C340F3;
-        Mon,  7 Mar 2022 09:50:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7738B80F9F;
+        Mon,  7 Mar 2022 09:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4140C340F3;
+        Mon,  7 Mar 2022 09:42:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646657;
-        bh=J+/jw8k4zKjtveZbhrOnbT76RkWaWlpLCcmkq5W6CFc=;
+        s=korg; t=1646646134;
+        bh=4b9lc6dNYJNoodIAKdmSZ8H3CH+rild8TcdIru7YDj4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zjc2i/SWH0wbuuFD9OcsMlC0QzHhvoBqv8F9p+yx7mlvaSVmRNrDWHVSIuC0iaYEZ
-         eZp4CpWP1MzW/vMIKjDaLahPT+oeD/yWOiwXUBegWqD/YYdEcigTNcm1K4aCEITM0I
-         TSQAuUsOKAOrhILvL0pp/xykKU/tvOxXrUZLJmSg=
+        b=wJ0fo5z5Mahnj+hDUvQkR61YTNTBzfZzElO0GtUAkMNKh7EhzUxQjKGEamC8T7riq
+         XrqVxv2o8/JogSJD4r7eTcSwto5RL8T1VrRe8vf04I+LGTmzzzH7fZcxAp3UkrvJlK
+         F1Geu+tIIdD+Spty1kGuMVDma3qVl3CPais92xaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        matoro <matoro_bugzilla_kernel@matoro.tk>,
-        matoro <matoro_mailinglist_kernel@matoro.tk>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.16 050/186] binfmt_elf: Avoid total_mapping_size for ET_EXEC
-Date:   Mon,  7 Mar 2022 10:18:08 +0100
-Message-Id: <20220307091655.493807730@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Roper <matthew.d.roper@intel.com>,
+        Vivek Kasireddy <vivek.kasireddy@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Tomas Bzatek <bugs@bzatek.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.15 145/262] drm/i915: s/JSP2/ICP2/ PCH
+Date:   Mon,  7 Mar 2022 10:18:09 +0100
+Message-Id: <20220307091706.537904667@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,98 +57,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit 439a8468242b313486e69b8cc3b45ddcfa898fbf upstream.
+commit 08783aa7693f55619859f4f63f384abf17cb58c5 upstream.
 
-Partially revert commit 5f501d555653 ("binfmt_elf: reintroduce using
-MAP_FIXED_NOREPLACE"), which applied the ET_DYN "total_mapping_size"
-logic also to ET_EXEC.
+This JSP2 PCH actually seems to be some special Apple
+specific ICP variant rather than a JSP. Make it so. Or at
+least all the references to it seem to be some Apple ICL
+machines. Didn't manage to find these PCI IDs in any
+public chipset docs unfortunately.
 
-At least ia64 has ET_EXEC PT_LOAD segments that are not virtual-address
-contiguous (but _are_ file-offset contiguous). This would result in a
-giant mapping attempting to cover the entire span, including the virtual
-address range hole, and well beyond the size of the ELF file itself,
-causing the kernel to refuse to load it. For example:
+The only thing we're losing here with this JSP->ICP change
+is Wa_14011294188, but based on the HSD that isn't actually
+needed on any ICP based design (including JSP), only TGP
+based stuff (including MCC) really need it. The documented
+w/a just never made that distinction because Windows didn't
+want to differentiate between JSP and MCC (not sure how
+they handle hpd/ddc/etc. then though...).
 
-$ readelf -lW /usr/bin/gcc
-...
-Program Headers:
-  Type Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   ...
-...
-  LOAD 0x000000 0x4000000000000000 0x4000000000000000 0x00b5a0 0x00b5a0 ...
-  LOAD 0x00b5a0 0x600000000000b5a0 0x600000000000b5a0 0x0005ac 0x000710 ...
-...
-       ^^^^^^^^ ^^^^^^^^^^^^^^^^^^                    ^^^^^^^^ ^^^^^^^^
-
-File offset range     : 0x000000-0x00bb4c
-			0x00bb4c bytes
-
-Virtual address range : 0x4000000000000000-0x600000000000bcb0
-			0x200000000000bcb0 bytes
-
-Remove the total_mapping_size logic for ET_EXEC, which reduces the
-ET_EXEC MAP_FIXED_NOREPLACE coverage to only the first PT_LOAD (better
-than nothing), and retains it for ET_DYN.
-
-Ironically, this is the reverse of the problem that originally caused
-problems with MAP_FIXED_NOREPLACE: overlapping PT_LOAD segments. Future
-work could restore full coverage if load_elf_binary() were to perform
-mappings in a separate phase from the loading (where it could resolve
-both overlaps and holes).
-
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-mm@kvack.org
-Reported-by: matoro <matoro_bugzilla_kernel@matoro.tk>
-Fixes: 5f501d555653 ("binfmt_elf: reintroduce using MAP_FIXED_NOREPLACE")
-Link: https://lore.kernel.org/r/a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info
-Tested-by: matoro <matoro_mailinglist_kernel@matoro.tk>
-Link: https://lore.kernel.org/lkml/ce8af9c13bcea9230c7689f3c1e0e2cd@matoro.tk
-Tested-By: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Link: https://lore.kernel.org/lkml/49182d0d-708b-4029-da5f-bc18603440a6@physik.fu-berlin.de
 Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Cc: Matt Roper <matthew.d.roper@intel.com>
+Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4226
+Fixes: 943682e3bd19 ("drm/i915: Introduce Jasper Lake PCH")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220224132142.12927-1-ville.syrjala@linux.intel.com
+Acked-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
+Tested-by: Tomas Bzatek <bugs@bzatek.net>
+(cherry picked from commit 53581504a8e216d435f114a4f2596ad0dfd902fc)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/binfmt_elf.c |   25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/i915/intel_pch.c |    2 +-
+ drivers/gpu/drm/i915/intel_pch.h |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1135,14 +1135,25 @@ out_free_interp:
- 			 * is then page aligned.
- 			 */
- 			load_bias = ELF_PAGESTART(load_bias - vaddr);
--		}
- 
--		/*
--		 * Calculate the entire size of the ELF mapping (total_size).
--		 * (Note that load_addr_set is set to true later once the
--		 * initial mapping is performed.)
--		 */
--		if (!load_addr_set) {
-+			/*
-+			 * Calculate the entire size of the ELF mapping
-+			 * (total_size), used for the initial mapping,
-+			 * due to load_addr_set which is set to true later
-+			 * once the initial mapping is performed.
-+			 *
-+			 * Note that this is only sensible when the LOAD
-+			 * segments are contiguous (or overlapping). If
-+			 * used for LOADs that are far apart, this would
-+			 * cause the holes between LOADs to be mapped,
-+			 * running the risk of having the mapping fail,
-+			 * as it would be larger than the ELF file itself.
-+			 *
-+			 * As a result, only ET_DYN does this, since
-+			 * some ET_EXEC (e.g. ia64) may have large virtual
-+			 * memory holes between LOADs.
-+			 *
-+			 */
- 			total_size = total_mapping_size(elf_phdata,
- 							elf_ex->e_phnum);
- 			if (!total_size) {
+--- a/drivers/gpu/drm/i915/intel_pch.c
++++ b/drivers/gpu/drm/i915/intel_pch.c
+@@ -108,6 +108,7 @@ intel_pch_type(const struct drm_i915_pri
+ 		/* Comet Lake V PCH is based on KBP, which is SPT compatible */
+ 		return PCH_SPT;
+ 	case INTEL_PCH_ICP_DEVICE_ID_TYPE:
++	case INTEL_PCH_ICP2_DEVICE_ID_TYPE:
+ 		drm_dbg_kms(&dev_priv->drm, "Found Ice Lake PCH\n");
+ 		drm_WARN_ON(&dev_priv->drm, !IS_ICELAKE(dev_priv));
+ 		return PCH_ICP;
+@@ -123,7 +124,6 @@ intel_pch_type(const struct drm_i915_pri
+ 			    !IS_GEN9_BC(dev_priv));
+ 		return PCH_TGP;
+ 	case INTEL_PCH_JSP_DEVICE_ID_TYPE:
+-	case INTEL_PCH_JSP2_DEVICE_ID_TYPE:
+ 		drm_dbg_kms(&dev_priv->drm, "Found Jasper Lake PCH\n");
+ 		drm_WARN_ON(&dev_priv->drm, !IS_JSL_EHL(dev_priv));
+ 		return PCH_JSP;
+--- a/drivers/gpu/drm/i915/intel_pch.h
++++ b/drivers/gpu/drm/i915/intel_pch.h
+@@ -50,11 +50,11 @@ enum intel_pch {
+ #define INTEL_PCH_CMP2_DEVICE_ID_TYPE		0x0680
+ #define INTEL_PCH_CMP_V_DEVICE_ID_TYPE		0xA380
+ #define INTEL_PCH_ICP_DEVICE_ID_TYPE		0x3480
++#define INTEL_PCH_ICP2_DEVICE_ID_TYPE		0x3880
+ #define INTEL_PCH_MCC_DEVICE_ID_TYPE		0x4B00
+ #define INTEL_PCH_TGP_DEVICE_ID_TYPE		0xA080
+ #define INTEL_PCH_TGP2_DEVICE_ID_TYPE		0x4380
+ #define INTEL_PCH_JSP_DEVICE_ID_TYPE		0x4D80
+-#define INTEL_PCH_JSP2_DEVICE_ID_TYPE		0x3880
+ #define INTEL_PCH_ADP_DEVICE_ID_TYPE		0x7A80
+ #define INTEL_PCH_ADP2_DEVICE_ID_TYPE		0x5180
+ #define INTEL_PCH_P2X_DEVICE_ID_TYPE		0x7100
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BCF4CF551
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D64EE4CF9E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236977AbiCGJ0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:26:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S234827AbiCGKME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237317AbiCGJXn (ORCPT
+        with ESMTP id S238726AbiCGJyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0DF2AE05;
-        Mon,  7 Mar 2022 01:22:34 -0800 (PST)
+        Mon, 7 Mar 2022 04:54:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A515178043;
+        Mon,  7 Mar 2022 01:45:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF99CB810B2;
-        Mon,  7 Mar 2022 09:22:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9C3C340E9;
-        Mon,  7 Mar 2022 09:22:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AEB361052;
+        Mon,  7 Mar 2022 09:45:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64210C340F3;
+        Mon,  7 Mar 2022 09:45:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644951;
-        bh=9w7wfwKPGRpK9zkIDgGWdhu9dqbToz0KVbzKdvjnBHc=;
+        s=korg; t=1646646320;
+        bh=L9DEQvury+XcVkvoyTXNeEmq0xdtPhU4GEYWU4ZrIl0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v6K6d/cLjyOW4L2o1c5a1iajs0ww3I5R60fLNb+3VwwyOuvBiuybuahbsbp3w2KGP
-         QNtQLyD9nbVp/xlnpWTT0C9PDeKwYUgiUFDAfJYH/o2cYMT5/6nwQTqvXz90HA3Hr/
-         WDex5rUoTnhtfJ9WARxyFwSY7yFKThb4tQwrPzT8=
+        b=Msc0qdrxV1MBzLkNi7voeVTjVRwTRmU5ykA9SxIGuC72RMoE3IRnV9M6io73HutEb
+         hd+2LEJI5Z8dptMW3yMVUXpV92rdwpD0+1LpGdKUEX9+Jtg23uE4HqcBmiTIQd3g3C
+         d9by8SKMOAB9fBk1VO+jbFb3ZadqeA7UsngFVokw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.14 33/42] can: gs_usb: change active_channelss type from atomic_t to u8
-Date:   Mon,  7 Mar 2022 10:19:07 +0100
-Message-Id: <20220307091637.116146846@linuxfoundation.org>
+        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 204/262] iommu/amd: Simplify pagetable freeing
+Date:   Mon,  7 Mar 2022 10:19:08 +0100
+Message-Id: <20220307091708.503365189@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +54,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Robin Murphy <robin.murphy@arm.com>
 
-commit 035b0fcf02707d3c9c2890dc1484b11aa5335eb1 upstream.
+[ Upstream commit 6b3106e9ba2de7320a71291cedcefdcf1195ad58 ]
 
-The driver uses an atomic_t variable: gs_usb:active_channels to keep
-track of the number of opened channels in order to only allocate
-memory for the URBs when this count changes from zero to one.
+For reasons unclear, pagetable freeing is an effectively recursive
+method implemented via an elaborate system of templated functions that
+turns out to account for 25% of the object file size. Implementing it
+using regular straightforward recursion makes the code simpler, and
+seems like a good thing to do before we work on it further. As part of
+that, also fix the types to avoid all the needless casting back and
+forth which just gets in the way.
 
-However, the driver does not decrement the counter when an error
-occurs in gs_can_open(). This issue is fixed by changing the type from
-atomic_t to u8 and by simplifying the logic accordingly.
-
-It is safe to use an u8 here because the network stack big kernel lock
-(a.k.a. rtnl_mutex) is being hold. For details, please refer to [1].
-
-[1] https://lore.kernel.org/linux-can/CAMZ6Rq+sHpiw34ijPsmp7vbUpDtJwvVtdV7CvRZJsLixjAFfrg@mail.gmail.com/T/#t
-
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Link: https://lore.kernel.org/all/20220214234814.1321599-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/d3d00c9f3fa0df4756b867072c201e6e82f9ce39.1639753638.git.robin.murphy@arm.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/gs_usb.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/iommu/amd/io_pgtable.c | 82 ++++++++++++++--------------------
+ 1 file changed, 34 insertions(+), 48 deletions(-)
 
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -198,8 +198,8 @@ struct gs_can {
- struct gs_usb {
- 	struct gs_can *canch[GS_MAX_INTF];
- 	struct usb_anchor rx_submitted;
--	atomic_t active_channels;
- 	struct usb_device *udev;
-+	u8 active_channels;
- };
+diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
+index 182c93a43efd..4165e1372b6e 100644
+--- a/drivers/iommu/amd/io_pgtable.c
++++ b/drivers/iommu/amd/io_pgtable.c
+@@ -84,49 +84,45 @@ static void free_page_list(struct page *freelist)
+ 	}
+ }
  
- /* 'allocate' a tx context.
-@@ -596,7 +596,7 @@ static int gs_can_open(struct net_device
- 	if (rc)
- 		return rc;
+-static struct page *free_pt_page(unsigned long pt, struct page *freelist)
++static struct page *free_pt_page(u64 *pt, struct page *freelist)
+ {
+-	struct page *p = virt_to_page((void *)pt);
++	struct page *p = virt_to_page(pt);
  
--	if (atomic_add_return(1, &parent->active_channels) == 1) {
-+	if (!parent->active_channels) {
- 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
- 			struct urb *urb;
- 			u8 *buf;
-@@ -697,6 +697,7 @@ static int gs_can_open(struct net_device
+ 	p->freelist = freelist;
  
- 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 	return p;
+ }
  
-+	parent->active_channels++;
- 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
- 		netif_start_queue(netdev);
+-#define DEFINE_FREE_PT_FN(LVL, FN)						\
+-static struct page *free_pt_##LVL (unsigned long __pt, struct page *freelist)	\
+-{										\
+-	unsigned long p;							\
+-	u64 *pt;								\
+-	int i;									\
+-										\
+-	pt = (u64 *)__pt;							\
+-										\
+-	for (i = 0; i < 512; ++i) {						\
+-		/* PTE present? */						\
+-		if (!IOMMU_PTE_PRESENT(pt[i]))					\
+-			continue;						\
+-										\
+-		/* Large PTE? */						\
+-		if (PM_PTE_LEVEL(pt[i]) == 0 ||					\
+-		    PM_PTE_LEVEL(pt[i]) == 7)					\
+-			continue;						\
+-										\
+-		p = (unsigned long)IOMMU_PTE_PAGE(pt[i]);			\
+-		freelist = FN(p, freelist);					\
+-	}									\
+-										\
+-	return free_pt_page((unsigned long)pt, freelist);			\
+-}
++static struct page *free_pt_lvl(u64 *pt, struct page *freelist, int lvl)
++{
++	u64 *p;
++	int i;
++
++	for (i = 0; i < 512; ++i) {
++		/* PTE present? */
++		if (!IOMMU_PTE_PRESENT(pt[i]))
++			continue;
  
-@@ -712,7 +713,8 @@ static int gs_can_close(struct net_devic
- 	netif_stop_queue(netdev);
+-DEFINE_FREE_PT_FN(l2, free_pt_page)
+-DEFINE_FREE_PT_FN(l3, free_pt_l2)
+-DEFINE_FREE_PT_FN(l4, free_pt_l3)
+-DEFINE_FREE_PT_FN(l5, free_pt_l4)
+-DEFINE_FREE_PT_FN(l6, free_pt_l5)
++		/* Large PTE? */
++		if (PM_PTE_LEVEL(pt[i]) == 0 ||
++		    PM_PTE_LEVEL(pt[i]) == 7)
++			continue;
  
- 	/* Stop polling */
--	if (atomic_dec_and_test(&parent->active_channels))
-+	parent->active_channels--;
-+	if (!parent->active_channels)
- 		usb_kill_anchored_urbs(&parent->rx_submitted);
+-static struct page *free_sub_pt(unsigned long root, int mode,
+-				struct page *freelist)
++		/*
++		 * Free the next level. No need to look at l1 tables here since
++		 * they can only contain leaf PTEs; just free them directly.
++		 */
++		p = IOMMU_PTE_PAGE(pt[i]);
++		if (lvl > 2)
++			freelist = free_pt_lvl(p, freelist, lvl - 1);
++		else
++			freelist = free_pt_page(p, freelist);
++	}
++
++	return free_pt_page(pt, freelist);
++}
++
++static struct page *free_sub_pt(u64 *root, int mode, struct page *freelist)
+ {
+ 	switch (mode) {
+ 	case PAGE_MODE_NONE:
+@@ -136,19 +132,11 @@ static struct page *free_sub_pt(unsigned long root, int mode,
+ 		freelist = free_pt_page(root, freelist);
+ 		break;
+ 	case PAGE_MODE_2_LEVEL:
+-		freelist = free_pt_l2(root, freelist);
+-		break;
+ 	case PAGE_MODE_3_LEVEL:
+-		freelist = free_pt_l3(root, freelist);
+-		break;
+ 	case PAGE_MODE_4_LEVEL:
+-		freelist = free_pt_l4(root, freelist);
+-		break;
+ 	case PAGE_MODE_5_LEVEL:
+-		freelist = free_pt_l5(root, freelist);
+-		break;
+ 	case PAGE_MODE_6_LEVEL:
+-		freelist = free_pt_l6(root, freelist);
++		free_pt_lvl(root, freelist, mode);
+ 		break;
+ 	default:
+ 		BUG();
+@@ -364,7 +352,7 @@ static u64 *fetch_pte(struct amd_io_pgtable *pgtable,
  
- 	/* Stop sending URBs */
-@@ -991,8 +993,6 @@ static int gs_usb_probe(struct usb_inter
+ static struct page *free_clear_pte(u64 *pte, u64 pteval, struct page *freelist)
+ {
+-	unsigned long pt;
++	u64 *pt;
+ 	int mode;
  
- 	init_usb_anchor(&dev->rx_submitted);
+ 	while (cmpxchg64(pte, pteval, 0) != pteval) {
+@@ -375,7 +363,7 @@ static struct page *free_clear_pte(u64 *pte, u64 pteval, struct page *freelist)
+ 	if (!IOMMU_PTE_PRESENT(pteval))
+ 		return freelist;
  
--	atomic_set(&dev->active_channels, 0);
--
- 	usb_set_intfdata(intf, dev);
- 	dev->udev = interface_to_usbdev(intf);
+-	pt   = (unsigned long)IOMMU_PTE_PAGE(pteval);
++	pt   = IOMMU_PTE_PAGE(pteval);
+ 	mode = IOMMU_PTE_MODE(pteval);
  
+ 	return free_sub_pt(pt, mode, freelist);
+@@ -512,7 +500,6 @@ static void v1_free_pgtable(struct io_pgtable *iop)
+ 	struct amd_io_pgtable *pgtable = container_of(iop, struct amd_io_pgtable, iop);
+ 	struct protection_domain *dom;
+ 	struct page *freelist = NULL;
+-	unsigned long root;
+ 
+ 	if (pgtable->mode == PAGE_MODE_NONE)
+ 		return;
+@@ -529,8 +516,7 @@ static void v1_free_pgtable(struct io_pgtable *iop)
+ 	BUG_ON(pgtable->mode < PAGE_MODE_NONE ||
+ 	       pgtable->mode > PAGE_MODE_6_LEVEL);
+ 
+-	root = (unsigned long)pgtable->root;
+-	freelist = free_sub_pt(root, pgtable->mode, freelist);
++	freelist = free_sub_pt(pgtable->root, pgtable->mode, freelist);
+ 
+ 	free_page_list(freelist);
+ }
+-- 
+2.34.1
+
 
 

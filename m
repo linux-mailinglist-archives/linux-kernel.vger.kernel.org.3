@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B5C4CFA70
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545E44CFBAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiCGKRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
+        id S241116AbiCGKmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240427AbiCGKBB (ORCPT
+        with ESMTP id S240101AbiCGK1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAF21EAD3;
-        Mon,  7 Mar 2022 01:48:07 -0800 (PST)
+        Mon, 7 Mar 2022 05:27:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B62B6D4F9;
+        Mon,  7 Mar 2022 02:01:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C68960010;
-        Mon,  7 Mar 2022 09:48:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56163C340E9;
-        Mon,  7 Mar 2022 09:48:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6405AB810C3;
+        Mon,  7 Mar 2022 09:56:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82DAC340E9;
+        Mon,  7 Mar 2022 09:56:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646486;
-        bh=z60zXuYXptNBGJ0tBVZp3+fhv8bqkROWAvgb8COEoY8=;
+        s=korg; t=1646647009;
+        bh=4HZR3FGCDTx2vgRZ0cLmyAQw9TnJRaGdyrSyXvUjbuk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hPpGKoeChhaf4157b3zbDeGN6wRypAODuqgk+Rl3wm0UEFtZfCc/yXKkyTA281LXr
-         5D62YWNTHa4uCuwO2CmtS/YASjahU6Wpyh7S3/ndXpXqbXfdSW/mK7qpbd3d6C4PtT
-         XqBGyN8iNIjZI39T1AxevRc+LaMmEvc9ACRWkLW4=
+        b=NqRUr9OVwyebl2AU4ZOQ21bkyLnnrMFE304nrW+UdwlBQgVHqUA12EANpFP0VX3gT
+         rd3fCSwko3Alb2nun1RORl33EuxuEOdyg6IZxzptFxR8rnpe5Y5ov/MS24EjBeR1lA
+         9y6S483G9TV7j1B7QgZ6dNjIfIODTRHq62eUcmuM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-        Sidong Yang <realwakka@gmail.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 257/262] btrfs: qgroup: fix deadlock between rescan worker and remove qgroup
-Date:   Mon,  7 Mar 2022 10:20:01 +0100
-Message-Id: <20220307091710.984548696@linuxfoundation.org>
+        stable@vger.kernel.org, Amit Cohen <amcohen@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 164/186] selftests: mlxsw: resource_scale: Fix return value
+Date:   Mon,  7 Mar 2022 10:20:02 +0100
+Message-Id: <20220307091658.662396399@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,82 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sidong Yang <realwakka@gmail.com>
+From: Amit Cohen <amcohen@nvidia.com>
 
-commit d4aef1e122d8bbdc15ce3bd0bc813d6b44a7d63a upstream.
+[ Upstream commit 196f9bc050cbc5085b4cbb61cce2efe380bc66d0 ]
 
-The commit e804861bd4e6 ("btrfs: fix deadlock between quota disable and
-qgroup rescan worker") by Kawasaki resolves deadlock between quota
-disable and qgroup rescan worker. But also there is a deadlock case like
-it. It's about enabling or disabling quota and creating or removing
-qgroup. It can be reproduced in simple script below.
+The test runs several test cases and is supposed to return an error in
+case at least one of them failed.
 
-for i in {1..100}
-do
-    btrfs quota enable /mnt &
-    btrfs qgroup create 1/0 /mnt &
-    btrfs qgroup destroy 1/0 /mnt &
-    btrfs quota disable /mnt &
-done
+Currently, the check of the return value of each test case is in the
+wrong place, which can result in the wrong return value. For example:
 
-Here's why the deadlock happens:
+ # TESTS='tc_police' ./resource_scale.sh
+ TEST: 'tc_police' [default] 968                                     [FAIL]
+         tc police offload count failed
+ Error: mlxsw_spectrum: Failed to allocate policer index.
+ We have an error talking to the kernel
+ Command failed /tmp/tmp.i7Oc5HwmXY:969
+ TEST: 'tc_police' [default] overflow 969                            [ OK ]
+ ...
+ TEST: 'tc_police' [ipv4_max] overflow 969                           [ OK ]
 
-1) The quota rescan task is running.
+ $ echo $?
+ 0
 
-2) Task A calls btrfs_quota_disable(), locks the qgroup_ioctl_lock
-   mutex, and then calls btrfs_qgroup_wait_for_completion(), to wait for
-   the quota rescan task to complete.
+Fix this by moving the check to be done after each test case.
 
-3) Task B calls btrfs_remove_qgroup() and it blocks when trying to lock
-   the qgroup_ioctl_lock mutex, because it's being held by task A. At that
-   point task B is holding a transaction handle for the current transaction.
-
-4) The quota rescan task calls btrfs_commit_transaction(). This results
-   in it waiting for all other tasks to release their handles on the
-   transaction, but task B is blocked on the qgroup_ioctl_lock mutex
-   while holding a handle on the transaction, and that mutex is being held
-   by task A, which is waiting for the quota rescan task to complete,
-   resulting in a deadlock between these 3 tasks.
-
-To resolve this issue, the thread disabling quota should unlock
-qgroup_ioctl_lock before waiting rescan completion. Move
-btrfs_qgroup_wait_for_completion() after unlock of qgroup_ioctl_lock.
-
-Fixes: e804861bd4e6 ("btrfs: fix deadlock between quota disable and qgroup rescan worker")
-CC: stable@vger.kernel.org # 5.4+
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Reviewed-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Signed-off-by: Sidong Yang <realwakka@gmail.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 059b18e21c63 ("selftests: mlxsw: Return correct error code in resource scale test")
+Signed-off-by: Amit Cohen <amcohen@nvidia.com>
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/qgroup.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ .../selftests/drivers/net/mlxsw/spectrum/resource_scale.sh      | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/btrfs/qgroup.c
-+++ b/fs/btrfs/qgroup.c
-@@ -1197,13 +1197,20 @@ int btrfs_quota_disable(struct btrfs_fs_
- 		goto out;
- 
- 	/*
-+	 * Unlock the qgroup_ioctl_lock mutex before waiting for the rescan worker to
-+	 * complete. Otherwise we can deadlock because btrfs_remove_qgroup() needs
-+	 * to lock that mutex while holding a transaction handle and the rescan
-+	 * worker needs to commit a transaction.
-+	 */
-+	mutex_unlock(&fs_info->qgroup_ioctl_lock);
-+
-+	/*
- 	 * Request qgroup rescan worker to complete and wait for it. This wait
- 	 * must be done before transaction start for quota disable since it may
- 	 * deadlock with transaction by the qgroup rescan worker.
- 	 */
- 	clear_bit(BTRFS_FS_QUOTA_ENABLED, &fs_info->flags);
- 	btrfs_qgroup_wait_for_completion(fs_info, false);
--	mutex_unlock(&fs_info->qgroup_ioctl_lock);
- 
- 	/*
- 	 * 1 For the root item
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
+index bcb110e830ce..dea33dc93790 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
+@@ -50,8 +50,8 @@ for current_test in ${TESTS:-$ALL_TESTS}; do
+ 			else
+ 				log_test "'$current_test' [$profile] overflow $target"
+ 			fi
++			RET_FIN=$(( RET_FIN || RET ))
+ 		done
+-		RET_FIN=$(( RET_FIN || RET ))
+ 	done
+ done
+ current_test=""
+-- 
+2.34.1
+
 
 

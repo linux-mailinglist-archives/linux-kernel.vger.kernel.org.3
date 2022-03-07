@@ -2,147 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280304CF443
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF5F4CF448
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234213AbiCGJJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
+        id S235128AbiCGJJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiCGJJP (ORCPT
+        with ESMTP id S232755AbiCGJJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:09:15 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2112.outbound.protection.outlook.com [40.107.255.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6437BDF5D;
-        Mon,  7 Mar 2022 01:08:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BvUL/F7NJ8+3HGv8rUHlMtFNaC4r/hWUDitC8uXba/kEu08n8DtnRT34wGDaR3e5NnxcZ7eTGl3yBFyHeB5MUWE1ZYnXMFFnPaZUNcGjbIXD+fSfyuZrGZhtbq3XBHUWoJrEU3xBE4jtVtWF2x5aZkOKPk+Sp5NpUfxnt1rXqZjSJOV5p6PLJF0KRL8fuLFCnuWV5agc/heEWy4YXv9pozpoo0ermYS01iUn3SpKcD4i2/k4evBhGYiuyrv2ybf0ILwETtXvQJKcVAkkiSuV/eGU5t/52BD0+bp8Jir7muXz1FhdAWzqM3aj6YapNHEExsP8rGs9MgOtYE9+FK6+YQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0kzCKBKjzDXrr3m1yppAWw64Ae+3AUT5JtnlTVAcdao=;
- b=Gay1O9VikeEw6ZCiHiVj2v2dMd+MKSWmTImswke9W4YMeh7kY6Ytd+YvmvdN2fjBt5day3rrkMd1ugKtu9pPQN9Tq03+SGz9br8yyf9R2WCXCeBF+U5N30oYcQZXEguWa4ONLw9ahz4ZpUXxpXBbsvnk0OFuPVP/dqmtWhPEezgD5YPKr3q+Pf19L1xeHVQZsgUxv82QGVh5NU0OVHWvEFfIuhLSqRu54wHmXxGSxHqlOkYcc0y44X27PkTyGJ6Wm/fRfm8aG4o/48FU9PYj7WYnxmS3uiFiFjJlq7Hn55yi61ZSB0dPcqXto+4yrcQEwgaimoNHT1O10l5cBVeMOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0kzCKBKjzDXrr3m1yppAWw64Ae+3AUT5JtnlTVAcdao=;
- b=FcWM4BnVDtmAeaIfxJ9rr38ZYU+sydYQzB9h9166bWHlGH/Gi2SgSuUL/q2GOh0N1wRvqEz0Q6dQBJVCyaTycNicAWxC6I4mDgYgdsOUlGU80Dg8KlsN4drsdsHXUU3ULRzQHTjJpxdCQ2gQu55oO5dib3l2IHpex4cBI4UXkIU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
- by TY2PR06MB2559.apcprd06.prod.outlook.com (2603:1096:404:52::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.21; Mon, 7 Mar
- 2022 09:08:18 +0000
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::d924:a610:681d:6d59]) by HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::d924:a610:681d:6d59%5]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
- 09:08:18 +0000
-From:   Guo Zhengkui <guozhengkui@vivo.com>
-To:     Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        Louis Peens <louis.peens@corigine.com>,
-        Yinjun Zhang <yinjun.zhang@corigine.com>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        oss-drivers@corigine.com (open list:NETRONOME ETHERNET DRIVERS),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] nfp: xsk: avoid newline at the end of message in NL_SET_ERR_MSG_MOD
-Date:   Mon,  7 Mar 2022 17:07:59 +0800
-Message-Id: <20220307090804.4821-1-guozhengkui@vivo.com>
-X-Mailer: git-send-email 2.20.1
-Content-Transfer-Encoding: 8bit
+        Mon, 7 Mar 2022 04:09:40 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF2E60DA2;
+        Mon,  7 Mar 2022 01:08:45 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3B5FB5C031E;
+        Mon,  7 Mar 2022 04:08:43 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Mon, 07 Mar 2022 04:08:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; bh=CuD+6UMoHVIR6oldfnrYz19HAfESfe
+        N1v5yLvdZkpkI=; b=HNlRkQNBATVq9XbYKl09SZsmzqhv+DgzkzTZfACXeadb1r
+        jJp5ggogTaKrs5JuQKLV4+QUqRcScoJlo0nPYYz07y+/khiNQHVC0EUyOVEWOzt0
+        FX1HspPIUl+5rjAu4hMZsJqsT2uTgQTbcEfdORQd7pqVJPdm6JxF4YDNS8mRktyE
+        TSITmdatD5x1/jhepkiF/WMt80YtiT5URmjape1KP/T5Xen1iHrtc6iujVyg4seS
+        AgkSYfj2I4m3I8isqSUHOs8lBnKnkw529+XdwN6TeojYKkijX/qZHVnAUIggmaAa
+        WUUj0gUNtc/4QA7VnfhLA7bOfh4MWSiiY/FVJIxw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=CuD+6UMoHVIR6oldf
+        nrYz19HAfESfeN1v5yLvdZkpkI=; b=GbHVdYZl+iMeTFOcCbuo6ObLlJ22l2DtF
+        HxDi+aedjFK4qRHNg+W7RNvauDjN5/uCyEJBsXuQ07CZM/KXpOfpxek/2036uJLM
+        K9Jhf6iG7shFa3WxjfjhAiuzSjN8E4Q/tVLJvSM7VnGp94ebxBu0D65VoE1uF8tm
+        4R6cLP9xMXYzsTOXe1i0PDDKTCbzM/tw/sGk+Z2b9EHXAHpduoFXmJO8MUkrQxNV
+        VydUNmnjhWPlOuTcXsj+mi8OuqgP+FVqTW5RWe/2DwUiymty06ZK3xZPcMK+EC4y
+        HGZK6V0qPJU37O8GZ97a/e+agEUMo2W1wnAqksAfOCENUkUPOuu9w==
+X-ME-Sender: <xms:msslYh52gPkbK5YEtZ5JrLSvL1th7V6kq459B5ojuK0uNEQFzgNd0A>
+    <xme:msslYu5ab9X0T-Vn2Tyi7Odi-6zO3itNjpiCXoull8h0SP9Fg4QSLvEaEYBIngXEo
+    9IBuGtfWg7uJrwc3bg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddufedguddvkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepgfeigeeiffeuhfettdejgfetjeetfeelfefgfefgvddvtdfghfffudeh
+    vdefkeffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:msslYofj4xrqh8ZaRu7d60UWeZH_FOHMKArpzF35MvKpAsvc5gKGWA>
+    <xmx:msslYqKWykj34tZPi26Qu8pudENb6uTNb56LHWIPS-6TxsKvjbNS1A>
+    <xmx:msslYlJzM5f5dxuJkdb9J8nxTuxXq5_sARtKWjoyUFjYr_34ejdr3Q>
+    <xmx:m8slYqp8PXZePl3TkiLI7NvHgN5mJwJSjQ4MelMp1XreknWvYwZC7g>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id ACC0A2740108; Mon,  7 Mar 2022 04:08:42 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
+Mime-Version: 1.0
+Message-Id: <9f43d5db-1476-4505-a9de-b862fbaf2685@www.fastmail.com>
+In-Reply-To: <ab2c0a8d-d27b-0c93-c7bc-2c8bf8ee1036@canonical.com>
+References: <20220306121816.70537-1-sven@svenpeter.dev>
+ <20220306121816.70537-2-sven@svenpeter.dev>
+ <ab2c0a8d-d27b-0c93-c7bc-2c8bf8ee1036@canonical.com>
+Date:   Mon, 07 Mar 2022 10:08:22 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>
+Cc:     "Rob Herring" <robh+dt@kernel.org>,
+        "Joey Gouly" <joey.gouly@arm.com>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Mark Kettenis" <kettenis@openbsd.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] nvmem: Add Apple eFuse driver
 Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0195.apcprd02.prod.outlook.com
- (2603:1096:201:21::31) To HK2PR06MB3492.apcprd06.prod.outlook.com
- (2603:1096:202:2f::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 48eb2a71-7054-4267-a306-08da001a04de
-X-MS-TrafficTypeDiagnostic: TY2PR06MB2559:EE_
-X-Microsoft-Antispam-PRVS: <TY2PR06MB2559B3507F66711EDC2F0131C7089@TY2PR06MB2559.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S6glt8yMq7XSkZaX/6d6F8rdtj64oQZfAJJ91MUhf8WFsLALFxJZ+p5DT8e6Zobfo6/Awcds6ANxEppdW258nNU6kxvnEtcOEWxeaiEoy79y1+ldSW8S2LoJdUiYjn+2X10lXTXgJOrFdcehv2zvB6/jcffxVLvIR9IQ0Rv1bCruCP2n7GqSpBJBkKTE6hKLFcPS27O+3u1BPKhM2dZqHi9aVpsAySNzNwySv16731G1eabvhoq/gr+Z/f4NOkaqpwrmpu58a1xj/VDTzVtueqLTqffQpg36r7Xj+ehVKXkfLPCqULsbZJMg/WJ1FJYtK7gtStql76p9K4kCApymKFF+Y9GaM7olKbu+/bjl/XuKJs701imwEaRXYokBByKNHFao4KHNF401gihKnQ4tvk58w/AxBXcTb2zmehr9A59cHIVdc70/yZA4SbsyDnLyyaSE20m8KQU49UvGWnAJp6LfQVP4MjRfqWCqfgIXjOqgkidVbyDehdUG9M3Skhh/Pp0KloiaDb1+UX1cWCRWbaidbTB6G45U6cSzRJ9zzJiqbq8aWSNyuWgw+ldB6l6knT5qqELCywv585HBRP2TTbsqLnzGVcYgWDMympHJ94CpCAmtAn3a1FBVmGhEkfcifk7XF1tFLIp9XGe61HzLmRrcxT1qlIny9skv8tdaVX6i9qzKK3MNcbL6irjtOZtKiC6fjxLPRx13xVYamNFvDvhQHEm63xjVSZwQzYbzkgM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(6486002)(66946007)(66476007)(8676002)(110136005)(316002)(7416002)(508600001)(83380400001)(4744005)(6512007)(36756003)(5660300002)(2906002)(1076003)(26005)(186003)(2616005)(15650500001)(6666004)(52116002)(8936002)(6506007)(38350700002)(921005)(38100700002)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JHO3W1LLlRTPtJzS2HpBFok37iaN7uTieWY28DQ5LPBdtKFInV6hjfApJ2Ke?=
- =?us-ascii?Q?G5bgnjc8TzQkNAqk9ZnzXAiMH5++wj2nEgTyjU9pKEY7PkcRn8diWnhGyepF?=
- =?us-ascii?Q?AgRApt0tWNrf5x7kHGDWHwrZo4YYncvzpdeo/WA5pyPnXCkf1DUUNiKD0ZUm?=
- =?us-ascii?Q?lkwIB5Nwp2dgSx3SF5Sl/xHyjYKjAglkvw0DTWyhpMPAeGq7TSlwgGC5Wwfx?=
- =?us-ascii?Q?HELnz/YKH5/9v0XJGCFMHXdfSh+ZWoyvU53t+JlY+v7q31CJA+EI2o6Zr9Ng?=
- =?us-ascii?Q?DSBJxBW3037SxhP6N485i1v9jkjX6HHQ/nGAMnxYs7e7jX3XsG4kiJEGw5CJ?=
- =?us-ascii?Q?yvvFUg3Q9+F/DSkkYP9JUHQZI/5kAagLhqHDjAFI/Hr5a99J7jOdAlhrUuEY?=
- =?us-ascii?Q?DY802sYw5GSbij5I2Gw+wTyu9mITkx3Ffvxsxdq266JUVL4wHH/gh2RZDY75?=
- =?us-ascii?Q?d9f5YA02i0Q1slCCu/95XSK8soK0Pg+1mj95e25tFvp/KdWsR+dWvlA20ya4?=
- =?us-ascii?Q?G64/FSSMlaY8d7QjLrjOOpLoB1kCEPHpd1crP/ONAhwM/KguYQsJQSUwRX1o?=
- =?us-ascii?Q?vi4Ac5SAwk+e7CWJCi1FIrxy/qT1oCW/TiARJvoLFnatubEcglT9cHgShrsM?=
- =?us-ascii?Q?t/vAzUiMwJOhhys/QeZCzMmdijK6kVQKvqM4HPcpTI/lxCiSnrIJjvqcaWaq?=
- =?us-ascii?Q?fBzSlD9YMtJoVi8Syc3zJq3oD5vPJcoJmPpd/AkOjT0v24xt+6TsHinn2Fss?=
- =?us-ascii?Q?sqPRH0cgW2Vg5SP5I3Sz7qdmBxrFoEhkbouwMe54DC3LBzMuWhN7c7xZCyJ9?=
- =?us-ascii?Q?IPzzbKyHzMSw7Bl0j7CllygEW+pMwh6KuctiKgc9F5HR4D54Butg8skZR57u?=
- =?us-ascii?Q?ECDR61tM8bEftVriqsqjMcX1Vuo2Y62E/sOlzdcIu2Ua11jyFyMkZbqwRVzE?=
- =?us-ascii?Q?31MWM6zUzghYk/vbuW0ctHgXWKl5A20JGwhYw4raNIz2eD1aDZhPoNULJ5Aq?=
- =?us-ascii?Q?JxMUC8SPp6nZ9eYgnJVuf2hCy8RPZW2tQgJMEQYpUyRONPaOp6nyXWBppD2g?=
- =?us-ascii?Q?h3yvqP2CahMEtLmXvc9d558KaNcUNzU4a6f6TuL2z/vYpzbp8UvjBBZDqcDn?=
- =?us-ascii?Q?5Bo5vPUYotoiaDcsF+TDAGueDTzTixIrcQmwyMtQztC4knGQqlV+Y05agIYn?=
- =?us-ascii?Q?lkJeiNKgF/s0tD4Dpina9fBrG9Rcee6wzYhegkLNcaly6as6k76VV5lRh3lF?=
- =?us-ascii?Q?A7C1vHst6q5oJ4wiz5Hd7LekUPJOfAd7v2i1ir7fNFwIKEh+hkAvQEqYkwDx?=
- =?us-ascii?Q?A13Qr8pH/DjZ9ypOJ//zhzR5zfrAzCmKI9CmgVtsLVtEIspntaYqAkXxGM5e?=
- =?us-ascii?Q?DlZniEDoV4A4bCBTl8Rdtrl9QuOLZ9hQF6tTMfuZRp6mm088zqhR+8Vc5bH7?=
- =?us-ascii?Q?Z1YqMb/6nxfFTFh8SmMZNDOEyKPz4zvOuWyC9p8zxf1txubkIb5wH6SO7G48?=
- =?us-ascii?Q?ohq3JB40zR/wP8ANshZXQDfhhU24JjAjlW1PruJCvbbQojtBRL1rLAHpHMxz?=
- =?us-ascii?Q?BtxQoaHrOd5HycJSglmZV+RQtc7khEPx5lte98D87f9Bh5WhHqOjIlKxOTMo?=
- =?us-ascii?Q?COGZznXqMOC9/eV6BtXjYUk=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48eb2a71-7054-4267-a306-08da001a04de
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:08:18.0945
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0D0rqjyw2ESjRgQ5m9oLtZJWLWbI4BB/i/76Ai44brJ0Kjt+WR9sDzQzC7EDbK35wvmUw6/7PReezv2cMs5/Hw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2559
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
-drivers/net/ethernet/netronome/nfp/nfp_net_common.c:3434:8-48: WARNING
-avoid newline at end of message in NL_SET_ERR_MSG_MOD
 
-Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
----
- drivers/net/ethernet/netronome/nfp/nfp_net_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-index 00a09b9e0aee..d5ff80a62882 100644
---- a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-+++ b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-@@ -3431,7 +3431,7 @@ nfp_net_check_config(struct nfp_net *nn, struct nfp_net_dp *dp,
- 
- 		if (xsk_pool_get_rx_frame_size(dp->xsk_pools[r]) < xsk_min_fl_bufsz) {
- 			NL_SET_ERR_MSG_MOD(extack,
--					   "XSK buffer pool chunk size too small\n");
-+					   "XSK buffer pool chunk size too small");
- 			return -EINVAL;
- 		}
- 	}
--- 
-2.20.1
+On Sun, Mar 6, 2022, at 13:25, Krzysztof Kozlowski wrote:
+> On 06/03/2022 13:18, Sven Peter wrote:
+>> Apple SoCs contain eFuses used to store factory-programmed data such
+>> as calibration values for the PCIe or the Type-C PHY. They are organized
+>> as 32bit values exposed as MMIO.
+>> 
+>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>> ---
+>> v1 -> v2:
+>>   - fixed sparse warning about __iomem by introducing
+>>     struct apple_efuses_priv as done in other nvmem drivers
+>>   - make sure the driver actually works as a module by
+>>     setting .owner to THIS_MODULE and adding MODULE_DEVICE_TABLE
+>>     pointed out by Joey Gouly
+>> 
+>>  MAINTAINERS                  |  1 +
+>>  drivers/nvmem/Kconfig        | 12 ++++++
+>>  drivers/nvmem/Makefile       |  2 +
+>>  drivers/nvmem/apple-efuses.c | 82 ++++++++++++++++++++++++++++++++++++
+>>  4 files changed, 97 insertions(+)
+>>  create mode 100644 drivers/nvmem/apple-efuses.c
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index f70d8525cbd4..e3e973a3f651 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -1781,6 +1781,7 @@ F:	drivers/i2c/busses/i2c-pasemi-core.c
+>>  F:	drivers/i2c/busses/i2c-pasemi-platform.c
+>>  F:	drivers/irqchip/irq-apple-aic.c
+>>  F:	drivers/mailbox/apple-mailbox.c
+>> +F:	drivers/nvmem/apple-efuses.c
+>>  F:	drivers/pinctrl/pinctrl-apple-gpio.c
+>>  F:	drivers/soc/apple/*
+>>  F:	drivers/watchdog/apple_wdt.c
+>> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+>> index da414617a54d..bba29d1aec96 100644
+>> --- a/drivers/nvmem/Kconfig
+>> +++ b/drivers/nvmem/Kconfig
+>> @@ -300,4 +300,16 @@ config NVMEM_BRCM_NVRAM
+>>  	  This driver provides support for Broadcom's NVRAM that can be accessed
+>>  	  using I/O mapping.
+>>  
+>> +config NVMEM_APPLE_EFUSES
+>> +	tristate "Apple eFuse support"
+>> +	depends on ARCH_APPLE || COMPILE_TEST
+>> +	default ARCH_APPLE
+>> +	help
+>> +	  Say y here to enable support for reading eFuses on Apple SoCs
+>> +	  such as the M1. These are e.g. used to store factory programmed
+>> +	  calibration data required for the PCIe or the USB-C PHY.
+>> +
+>> +	  This driver can also be built as a module. If so, the module will
+>> +	  be called nvmem-apple-efuses.
+>> +
+>>  endif
+>> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+>> index dcbbde35b6a8..1a8e54691d3e 100644
+>> --- a/drivers/nvmem/Makefile
+>> +++ b/drivers/nvmem/Makefile
+>> @@ -61,3 +61,5 @@ obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
+>>  nvmem-rmem-y			:= rmem.o
+>>  obj-$(CONFIG_NVMEM_BRCM_NVRAM)	+= nvmem_brcm_nvram.o
+>>  nvmem_brcm_nvram-y		:= brcm_nvram.o
+>> +obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
+>> +nvmem-apple-efuses-y 		:= apple-efuses.o
+>> diff --git a/drivers/nvmem/apple-efuses.c b/drivers/nvmem/apple-efuses.c
+>> new file mode 100644
+>> index 000000000000..dd5576ec5408
+>> --- /dev/null
+>> +++ b/drivers/nvmem/apple-efuses.c
+>> @@ -0,0 +1,82 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Apple SoC eFuse driver
+>> + *
+>> + * Copyright (C) The Asahi Linux Contributors
+>> + */
+>> +
+>> +#include <linux/io.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/module.h>
+>> +#include <linux/nvmem-provider.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +struct apple_efuses_priv {
+>> +	void __iomem *fuses;
+>> +};
+>> +
+>> +static int apple_efuses_read(void *context, unsigned int offset, void *val,
+>> +			     size_t bytes)
+>> +{
+>> +	struct apple_efuses_priv *priv = context;
+>> +	u32 *dst = val;
+>> +
+>> +	while (bytes >= sizeof(u32)) {
+>> +		*dst++ = readl_relaxed(priv->fuses + offset);
+>> +		bytes -= sizeof(u32);
+>> +		offset += sizeof(u32);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int apple_efuses_probe(struct platform_device *pdev)
+>> +{
+>> +	struct apple_efuses_priv *priv;
+>> +	struct resource *res;
+>> +	struct nvmem_config config = {
+>> +		.dev = &pdev->dev,
+>> +		.read_only = true,
+>> +		.reg_read = apple_efuses_read,
+>> +		.stride = sizeof(u32),
+>> +		.word_size = sizeof(u32),
+>> +		.name = "apple_efuses_nvmem",
+>> +		.id = NVMEM_DEVID_AUTO,
+>> +		.owner = THIS_MODULE,
+>> +		.root_only = true,
+>> +	};
+>> +
+>> +	priv = devm_kzalloc(config.dev, sizeof(*priv), GFP_KERNEL);
+>> +	if (!priv)
+>> +		return -ENOMEM;
+>> +
+>> +	priv->fuses = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>> +	if (IS_ERR(priv->fuses))
+>> +		return PTR_ERR(priv->fuses);
+>> +
+>> +	config.priv = priv;
+>> +	config.size = resource_size(res);
+>> +
+>> +	return PTR_ERR_OR_ZERO(devm_nvmem_register(config.dev, &config));
+>> +}
+>> +
+>> +static const struct of_device_id apple_efuses_of_match[] = {
+>> +	{ .compatible = "apple,efuses", },
+>> +	{}
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(of, apple_efuses_of_match);
+>> +
+>> +static struct platform_driver apple_efuses_driver = {
+>> +	.driver = {
+>> +		.name = "apple_efuses",
+>> +		.of_match_table = apple_efuses_of_match,
+>> +		.owner = THIS_MODULE,
+>
+> You wrote it also in changelog, but why do you need it? Doesn't core set
+> it? Coccinelle should complain about this as well.
+>
 
+yeah, you're right. I shouldn't have just blindly followed what Hector and Joey
+had to do for another subsystem to make reference counting work there.
+
+I just checked again and it's neither required here not in struct nvmem_config
+because module_platform_driver -> platform_driver_register ->
+__platform_driver_register will set it in struct platform_driver and the
+nvmem core will take it from there and set it inside nvmem_config.
+
+
+thanks,
+
+
+Sven

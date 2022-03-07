@@ -2,113 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E294CF029
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 04:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F764CF033
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 04:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbiCGDZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 22:25:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S235009AbiCGDaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 22:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiCGDZh (ORCPT
+        with ESMTP id S232195AbiCGDaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 22:25:37 -0500
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630A44C401;
-        Sun,  6 Mar 2022 19:24:44 -0800 (PST)
-Received: by mail-oo1-f52.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so16233653ooi.0;
-        Sun, 06 Mar 2022 19:24:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=d+wQHvIVygqyBwtniWZR0uvXCr9KYxfN8+WYYAjCuSc=;
-        b=GHl0L8oj30HHwTuJp1juEp9o5vW89uMhXgBD/ROK5yESWSR5Q1hnVv7bAlf/IRJhO+
-         qqLBHaSRYT76yM4OiIFot4nhZwkExcpvI1BaLn5PTrFOfm1X7lMmiihSwCdXY2JSPMXv
-         bg+s37LKPOHv2RqDuD9Ib10rRes0ysnr2EMsxECTIDL2oUzyq9y3GEU7i5sXk5CqYrfs
-         goqmJ/f/T+c8/rWcOwG7h+j6ex5PTxuOEIM6F+9+lHMAcnIzsQ8aM6+HV2maL2dFu/aJ
-         +y3GBzSktWw21DF5oMLh6OdPrNCbQ19gtbUfDGrO/UW3aNfhwEuuspLEv/MBgB+GPUAS
-         sSPw==
-X-Gm-Message-State: AOAM530lvFeTEwirctm2SZnEF8VJcWHu6zjqlYeY+augyoo/3XZVZDBY
-        tl+oCuyD/MjU+By1oF0p0w==
-X-Google-Smtp-Source: ABdhPJyo+cVwfftoH3b/RmqIsCrh9wn28oxnbtJzcd9pD8qcd3HGAHqGVSVU1h18cO8sKLG5SldA8A==
-X-Received: by 2002:a05:6870:6085:b0:d9:a258:df59 with SMTP id t5-20020a056870608500b000d9a258df59mr13560336oae.90.1646623483719;
-        Sun, 06 Mar 2022 19:24:43 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f188-20020a4a58c5000000b0031ccb8272f1sm5367939oob.33.2022.03.06.19.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 19:24:43 -0800 (PST)
-Received: (nullmailer pid 1496444 invoked by uid 1000);
-        Mon, 07 Mar 2022 03:24:40 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>, Jan Kotas <jank@cadence.com>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Wei Xu <xuwei5@hisilicon.com>, devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Li Wei <liwei213@huawei.com>, linux-kernel@vger.kernel.org,
-        Stanley Chu <stanley.chu@mediatek.com>
-In-Reply-To: <20220306111125.116455-4-krzysztof.kozlowski@canonical.com>
-References: <20220306111125.116455-1-krzysztof.kozlowski@canonical.com> <20220306111125.116455-4-krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v3 03/12] dt-bindings: ufs: cdns,ufshc: convert to dtschema
-Date:   Sun, 06 Mar 2022 21:24:40 -0600
-Message-Id: <1646623480.209864.1496443.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Sun, 6 Mar 2022 22:30:12 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966D449688;
+        Sun,  6 Mar 2022 19:29:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646623758; x=1678159758;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6xQOf0kATP8C8A35Fbf8Z13oskeZPkNu1nz+qlvE+1I=;
+  b=IBOnpAnGjqo8EmZmg+puo8i6ecovSxsOwKIBmMjzIgul+3Oiw7RUlqFL
+   XhqwnoeIEGXKXa2+fVPo9Otr7ilkcdXGB1RqOX/nKHsQtsbTPKBS63kq7
+   zjopwseBXC+B4tvzzM8wGpIbM8SjskDTcyEvBQSzu5pqxy2Nx+spJrdxQ
+   dlwTwRK/TqwcyvUo+jWOsrk2gtcrmq0eZ7ZDn0Fa3F3hMqEhQfbHyDoUc
+   9ZF4CgIilL5bEcBM+4iaYv+kn4PL5K0YnaPRYMMa0yGvtmR1pNZeCnwr8
+   7RKqavtjT2/YxxBTag26kojRUKC0cbsqiaxCJYURP/3/SRJeTMVgqmPrr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254226748"
+X-IronPort-AV: E=Sophos;i="5.90,160,1643702400"; 
+   d="scan'208";a="254226748"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 19:29:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,160,1643702400"; 
+   d="scan'208";a="687400858"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Mar 2022 19:29:11 -0800
+Message-ID: <b1a5db0a-0373-5ca0-6256-85a96d029ec9@linux.intel.com>
+Date:   Mon, 7 Mar 2022 11:27:35 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, Chaitanya Kulkarni <kch@nvidia.com>,
+        kvm@vger.kernel.org, Stuart Yoder <stuyoder@gmail.com>,
+        rafael@kernel.org, David Airlie <airlied@linux.ie>,
+        linux-pci@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Li Yang <leoyang.li@nxp.com>, Will Deacon <will@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: Re: [PATCH v7 01/11] iommu: Add DMA ownership management interfaces
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>, eric.auger@redhat.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+References: <20220228005056.599595-1-baolu.lu@linux.intel.com>
+ <20220228005056.599595-2-baolu.lu@linux.intel.com>
+ <c75b6e04-bc1b-b9f6-1a44-bf1567a8c19d@redhat.com>
+ <7a3dc977-0c5f-6d88-6d3a-8e49bc717690@linux.intel.com>
+ <1648bc97-a0d3-4051-58d0-e24fa9e9d183@arm.com>
+ <350a8e09-08a9-082b-3ad1-b711c7d98d73@redhat.com>
+ <e2698dbe-18e2-1a82-8a12-fe45bc9be534@arm.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <e2698dbe-18e2-1a82-8a12-fe45bc9be534@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 06 Mar 2022 12:11:16 +0100, Krzysztof Kozlowski wrote:
-> Convert the Cadence Universal Flash Storage (UFS) Controlle to DT schema
-> format.
+Hi Robin,
+
+On 3/4/22 10:10 PM, Robin Murphy wrote:
+> On 2022-03-04 13:55, Eric Auger wrote:
+>> Hi Robin,
+>>
+>> On 3/4/22 1:22 PM, Robin Murphy wrote:
+>>> On 2022-03-04 10:43, Lu Baolu wrote:
+>>>> Hi Eric,
+>>>>
+>>>> On 2022/3/4 18:34, Eric Auger wrote:
+>>>>> I hit a WARN_ON() when unbinding an e1000e driver just after boot:
+>>>>>
+>>>>> sudo modprobe -v vfio-pci
+>>>>> echo vfio-pci | sudo tee -a
+>>>>> /sys/bus/pci/devices/0004:01:00.0/driver_override
+>>>>> vfio-pci
+>>>>> echo 0004:01:00.0 | sudo tee -a  /sys/bus/pci/drivers/e1000e/unbind
+>>>>>
+>>>>>
+>>>>> [  390.042811] ------------[ cut here ]------------
+>>>>> [  390.046468] WARNING: CPU: 42 PID: 5589 at 
+>>>>> drivers/iommu/iommu.c:3123
+>>>>> iommu_device_unuse_default_domain+0x68/0x100
+>>>>> [  390.056710] Modules linked in: vfio_pci vfio_pci_core vfio_virqfd
+>>>>> vfio_iommu_type1 vfio xt_CHECKSUM xt_MASQUERADE xt_conntrack 
+>>>>> ipt_REJECT
+>>>>> nf_reject_ipv4 nft_compat nft_chain_nat nf_nat nf_conntrack
+>>>>> nf_defrag_ipv6 nf_defrag_ipv4 nf_tables nfnetlink bridge stp llc 
+>>>>> rfkill
+>>>>> sunrpc vfat fat mlx5_ib ib_uverbs ib_core acpi_ipmi ipmi_ssif
+>>>>> ipmi_devintf ipmi_msghandler cppc_cpufreq drm xfs libcrc32c
+>>>>> mlx5_core sg
+>>>>> mlxfw crct10dif_ce tls ghash_ce sha2_ce sha256_arm64 sha1_ce sbsa_gwdt
+>>>>> e1000e psample sdhci_acpi ahci_platform sdhci libahci_platform
+>>>>> qcom_emac
+>>>>> mmc_core hdma hdma_mgmt dm_mirror dm_region_hash dm_log dm_mod fuse
+>>>>> [  390.110618] CPU: 42 PID: 5589 Comm: tee Kdump: loaded Not tainted
+>>>>> 5.17.0-rc4-lu-v7-official+ #24
+>>>>> [  390.119384] Hardware name: WIWYNN QDF2400 Reference Evaluation
+>>>>> Platform CV90-LA115-P120/QDF2400 Customer Reference Board, BIOS
+>>>>> 0ACJA570
+>>>>> 11/05/2018
+>>>>> [  390.132492] pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS
+>>>>> BTYPE=--)
+>>>>> [  390.139436] pc : iommu_device_unuse_default_domain+0x68/0x100
+>>>>> [  390.145165] lr : iommu_device_unuse_default_domain+0x38/0x100
+>>>>> [  390.150894] sp : ffff80000fbb3bc0
+>>>>> [  390.154193] x29: ffff80000fbb3bc0 x28: ffff03c0cf6b2400 x27:
+>>>>> 0000000000000000
+>>>>> [  390.161311] x26: 0000000000000000 x25: 0000000000000000 x24:
+>>>>> ffff03c0c7cc5720
+>>>>> [  390.168429] x23: ffff03c0c2b9d150 x22: ffffb4e61df223f8 x21:
+>>>>> ffffb4e61df223f8
+>>>>> [  390.175547] x20: ffff03c7c03c3758 x19: ffff03c7c03c3700 x18:
+>>>>> 0000000000000000
+>>>>> [  390.182665] x17: 0000000000000000 x16: 0000000000000000 x15:
+>>>>> 0000000000000000
+>>>>> [  390.189783] x14: 0000000000000000 x13: 0000000000000030 x12:
+>>>>> ffff03c0d519cd80
+>>>>> [  390.196901] x11: 7f7f7f7f7f7f7f7f x10: 0000000000000dc0 x9 :
+>>>>> ffffb4e620b54f8c
+>>>>> [  390.204019] x8 : ffff03c0cf6b3220 x7 : ffff4ef132bba000 x6 :
+>>>>> 00000000000000ff
+>>>>> [  390.211137] x5 : ffff03c0c2b9f108 x4 : ffff03c0d51f6438 x3 :
+>>>>> 0000000000000000
+>>>>> [  390.218255] x2 : ffff03c0cf6b2400 x1 : 0000000000000000 x0 :
+>>>>> 0000000000000000
+>>>>> [  390.225374] Call trace:
+>>>>> [  390.227804]  iommu_device_unuse_default_domain+0x68/0x100
+>>>>> [  390.233187]  pci_dma_cleanup+0x38/0x44
+>>>>> [  390.236919]  __device_release_driver+0x1a8/0x260
+>>>>> [  390.241519]  device_driver_detach+0x50/0xd0
+>>>>> [  390.245686]  unbind_store+0xf8/0x120
+>>>>> [  390.249245]  drv_attr_store+0x30/0x44
+>>>>> [  390.252891]  sysfs_kf_write+0x50/0x60
+>>>>> [  390.256537]  kernfs_fop_write_iter+0x134/0x1cc
+>>>>> [  390.260964]  new_sync_write+0xf0/0x18c
+>>>>> [  390.264696]  vfs_write+0x230/0x2d0
+>>>>> [  390.268082]  ksys_write+0x74/0x100
+>>>>> [  390.271467]  __arm64_sys_write+0x28/0x3c
+>>>>> [  390.275373]  invoke_syscall.constprop.0+0x58/0xf0
+>>>>> [  390.280061]  el0_svc_common.constprop.0+0x160/0x164
+>>>>> [  390.284922]  do_el0_svc+0x34/0xcc
+>>>>> [  390.288221]  el0_svc+0x30/0x140
+>>>>> [  390.291346]  el0t_64_sync_handler+0xa4/0x130
+>>>>> [  390.295599]  el0t_64_sync+0x1a0/0x1a4
+>>>>> [  390.299245] ---[ end trace 0000000000000000 ]---
+>>>>>
+>>>>>
+>>>>> I put some traces in the code and I can see that
+>>>>> iommu_device_use_default_domain() effectively is called on
+>>>>> 0004:01:00.0 e1000e device on pci_dma_configure() but at that time
+>>>>> the iommu group is NULL:
+>>>>> [   10.569427] e1000e 0004:01:00.0: ------ ENTRY pci_dma_configure
+>>>>> driver_managed_area=0
+>>>>> [   10.569431] e1000e 0004:01:00.0: ****
+>>>>> iommu_device_use_default_domain ENTRY
+>>>>> [   10.569433] e1000e 0004:01:00.0: ****
+>>>>> iommu_device_use_default_domain no group
+>>>>> [   10.569435] e1000e 0004:01:00.0: pci_dma_configure
+>>>>> iommu_device_use_default_domain returned 0
+>>>>> [   10.569492] e1000e 0004:01:00.0: Adding to iommu group 3
+>>>>>
+>>>>> ^^^the group is added after the
+>>>>> iommu_device_use_default_domain() call
+>>>>> So the group->owner_cnt is not incremented as expected.
+>>>>
+>>>> Thank you for reporting this. Do you have any idea why the driver is
+>>>> loaded before iommu_probe_device()?
+>>>
+>>> Urgh, this is the horrible firmware-data-ordering thing again. The
+>>> stuff I've been saying about having to rework the whole .dma_configure
+>>> mechanism in the near future is to fix this properly.
+>>>
+>>> The summary is that in patch #4, calling
+>>> iommu_device_use_default_domain() *before* {of,acpi}_dma_configure is
+>>> currently a problem. As things stand, the IOMMU driver ignored the
+>>> initial iommu_probe_device() call when the device was added, since at
+>>> that point it had no fwspec yet. In this situation,
+>>> {of,acpi}_iommu_configure() are retriggering iommu_probe_device()
+>>> after the IOMMU driver has seen the firmware data via .of_xlate to
+>>> learn that it it actually responsible for the given device.
+>>
+>> thank you for providing the info. Hope this is something Lu can work 
+>> around.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/ufs/cdns,ufshc.txt    | 32 ---------
->  .../devicetree/bindings/ufs/cdns,ufshc.yaml   | 68 +++++++++++++++++++
->  .../devicetree/bindings/ufs/ti,j721e-ufs.yaml |  7 +-
->  3 files changed, 71 insertions(+), 36 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/ufs/cdns,ufshc.txt
->  create mode 100644 Documentation/devicetree/bindings/ufs/cdns,ufshc.yaml
-> 
+> Hopefully it's just a case of flipping the calls around, so that 
+> iommu_use_default_domain() goes at the end, and calls 
+> arch_teardown_dma_ops() if it fails. From a quick skim I *think* that 
+> should still work out to the desired behaviour (or at least close enough 
+> that we can move forward without a circular dependency between fixes...)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This is a reasonable solution to me. Thank you for the information and
+suggestion.
 
-yamllint warnings/errors:
+Eric, I have updated the patch #4 and uploaded a new version here:
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ufs/cdns,ufshc.example.dt.yaml: ufs@fd030000: freq-table-hz: 'anyOf' conditional failed, one must be fixed:
-	[[0, 0], [0, 0]] is too long
-	[0, 0] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/property-units.yaml
+https://github.com/LuBaolu/intel-iommu/commits/iommu-dma-ownership-v8
 
-doc reference errors (make refcheckdocs):
+Can you please give it a try?
 
-See https://patchwork.ozlabs.org/patch/1601674
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Best regards,
+baolu

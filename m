@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8F04CFA42
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6699F4CFAE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241389AbiCGKKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
+        id S240959AbiCGKTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:19:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240018AbiCGJuf (ORCPT
+        with ESMTP id S240588AbiCGKBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:50:35 -0500
+        Mon, 7 Mar 2022 05:01:08 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B6673057;
-        Mon,  7 Mar 2022 01:44:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CB246B0F;
+        Mon,  7 Mar 2022 01:50:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAAFE6136F;
-        Mon,  7 Mar 2022 09:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04ED0C340E9;
-        Mon,  7 Mar 2022 09:43:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF2F609D1;
+        Mon,  7 Mar 2022 09:50:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54116C36AF2;
+        Mon,  7 Mar 2022 09:50:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646231;
-        bh=UBdrsVWMvpEWnpvpGDJX06Kk5StTYHhkGEu8qr1hKtQ=;
+        s=korg; t=1646646629;
+        bh=4nV0Rt1hVSFqqgPnAUQQsOzvV1i7xstj0KiqKOkxUws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fk3fIEW0h7h5DyWu4MgMNNVqqzC/vv9qQMkzEZDQ0Wth6plY5b9dbkG+SHoSAABa3
-         HU7NM2+cdfjBllYxRB4O7GEurfqziwfrtngpcvByeWgX9QQQ3oqxZxFleTvwSm/ZUN
-         r0vYxd9Q8D8p7OR2f96njMjp+BF06X7ROgU360kM=
+        b=w2jzecUVT4oRJVvOQjQf5M19vsVMRhVYgjBKIyDraH/hTTdm5aI9I1KaHdixwXU9I
+         PVK/yehuo1RJGJqg49q/sxAQFrhGJNQphTW2A6a9TvOahl4ZF6YM2kFysoKHb/2yi/
+         JNKVuoOsrL1JlFHB0wivwC/SgMPOM7QPQCo11AQo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 135/262] net: of: fix stub of_net helpers for CONFIG_NET=n
-Date:   Mon,  7 Mar 2022 10:17:59 +0100
-Message-Id: <20220307091706.265997031@linuxfoundation.org>
+Subject: [PATCH 5.16 042/186] ata: pata_hpt37x: fix PCI clock detection
+Date:   Mon,  7 Mar 2022 10:18:00 +0100
+Message-Id: <20220307091655.272826764@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-[ Upstream commit 8b017fbe0bbb98dd71fb4850f6b9cc0e136a26b8 ]
+[ Upstream commit 5f6b0f2d037c8864f20ff15311c695f65eb09db5 ]
 
-Moving the of_net code from drivers/of/ to net/core means we
-no longer stub out the helpers when networking is disabled,
-which leads to a randconfig build failure with at least one
-ARM platform that calls this from non-networking code:
+The f_CNT register (at the PCI config. address 0x78) is 16-bit, not
+8-bit! The bug was there from the very start... :-(
 
-arm-linux-gnueabi-ld: arch/arm/mach-mvebu/kirkwood.o: in function `kirkwood_dt_eth_fixup':
-kirkwood.c:(.init.text+0x54): undefined reference to `of_get_mac_address'
-
-Restore the way this worked before by changing that #ifdef
-check back to testing for both CONFIG_OF and CONFIG_NET.
-
-Fixes: e330fb14590c ("of: net: move of_net under net/")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/r/20211014090055.2058949-1-arnd@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Fixes: 669a5db411d8 ("[libata] Add a bunch of PATA drivers.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/of_net.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/ata/pata_hpt37x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/of_net.h b/include/linux/of_net.h
-index cf31188329b5a..55460ecfa50ad 100644
---- a/include/linux/of_net.h
-+++ b/include/linux/of_net.h
-@@ -8,7 +8,7 @@
+diff --git a/drivers/ata/pata_hpt37x.c b/drivers/ata/pata_hpt37x.c
+index ae8375e9d2681..9d371859e81ed 100644
+--- a/drivers/ata/pata_hpt37x.c
++++ b/drivers/ata/pata_hpt37x.c
+@@ -964,14 +964,14 @@ static int hpt37x_init_one(struct pci_dev *dev, const struct pci_device_id *id)
  
- #include <linux/phy.h>
+ 	if ((freq >> 12) != 0xABCDE) {
+ 		int i;
+-		u8 sr;
++		u16 sr;
+ 		u32 total = 0;
  
--#ifdef CONFIG_OF
-+#if defined(CONFIG_OF) && defined(CONFIG_NET)
- #include <linux/of.h>
+ 		pr_warn("BIOS has not set timing clocks\n");
  
- struct net_device;
+ 		/* This is the process the HPT371 BIOS is reported to use */
+ 		for (i = 0; i < 128; i++) {
+-			pci_read_config_byte(dev, 0x78, &sr);
++			pci_read_config_word(dev, 0x78, &sr);
+ 			total += sr & 0x1FF;
+ 			udelay(15);
+ 		}
 -- 
 2.34.1
 

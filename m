@@ -2,157 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336E04CF64F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6D74CF650
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbiCGJfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S237304AbiCGJfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbiCGJ1o (ORCPT
+        with ESMTP id S237171AbiCGJ1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:27:44 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679B75A085;
-        Mon,  7 Mar 2022 01:24:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1646645089;
-  x=1678181089;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4CmVi/4Nf+c+fLXTqFUvrIaFiJk/ULe4N6+IxCPq3IQ=;
-  b=GC2kH2F+Y2dJTEEI/0VeXF1PrM/7q65pYGHW+mOxqBG5cP9C/3cSKl8c
-   tCmu3/bWfntMP2eNYBv1Zildq1NfifIa/6RzVs6/CKaLtjXdbWfpv+1aM
-   iwL8E5hwb60pu8na6qBbnzDz+xBHcRsXzNPmYSo9dF5YWGch5Oo6EaW1K
-   cXqRHk3nDuAqSeQN+8ueevQ59OO/LHEWi0b+4jLZgfegpwGBr7xXAYiNf
-   oHoU8sq19TBn5DLrMFkWJUoiluZYTj1JYyV1Io9kT9Zm/22I0xrpv0i6h
-   EqylWszECzVtbo7xVt+t2126rtOBa7wmKfPmWAirj3xKUMdAkQGLvBViL
-   w==;
-Date:   Mon, 7 Mar 2022 10:24:37 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-CC:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel <kernel@axis.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH] clocksource/drivers/exynos_mct: Support using only local
- timer
-Message-ID: <20220307092437.GA32457@axis.com>
-References: <20220307083255.1577365-1-vincent.whitchurch@axis.com>
- <08992f48-6cb6-8dc0-33d2-f18f942d2bee@canonical.com>
+        Mon, 7 Mar 2022 04:27:50 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985F15A15C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:24:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5EA74210F4;
+        Mon,  7 Mar 2022 09:24:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646645084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dbesU7tJyBXRg16/sf1QCiyqq4j+TrNZcTyuNDIT7/4=;
+        b=rTLHFWB4bkpJaVJPgKjefViGQ1MW7mGfILnZGnmR/e1uSjeYcrgMulGOd81cy7kQCCew/o
+        qlhKN9armihWCc83R9lwywRfuwL0FTtyI7aqVZNB//zMIUql6X7nqbrnWf4XkQalzVmoXZ
+        DAvljv84jgZXc/4TJZKTzQ6a7ut18xI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646645084;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dbesU7tJyBXRg16/sf1QCiyqq4j+TrNZcTyuNDIT7/4=;
+        b=WmOasQHVSV5ZUWpJlANconS3gOQ1nNinKIGCsJfgVaOl4agm+UAVZ6lwdDagPbLzyexTBT
+        DKCcO82dGtWe4LBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3000E13A84;
+        Mon,  7 Mar 2022 09:24:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id w4wFC1zPJWL+CwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 07 Mar 2022 09:24:44 +0000
+Message-ID: <862170fd-a325-a158-36b8-eb73b15c2629@suse.cz>
+Date:   Mon, 7 Mar 2022 10:24:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <08992f48-6cb6-8dc0-33d2-f18f942d2bee@canonical.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220304170215.1868106-1-eric.dumazet@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2] mm/page_alloc: call check_new_pages() while zone
+ spinlock is not held
+In-Reply-To: <20220304170215.1868106-1-eric.dumazet@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 10:06:26AM +0100, Krzysztof Kozlowski wrote:
-> On 07/03/2022 09:32, Vincent Whitchurch wrote:
-> > The ARTPEC-8 SoC has a quad-core Cortex-A53 and a single-core Cortex-A5
-> > which share one MCT with one global and eight local timers.
-> > 
-> > The Cortex-A53 boots first and starts the global FRC and also registers
-> > a clock events device using the global timer.  (This global timer clock
-> > events is usually replaced by arch timer clock events for each of the
-> > cores.)
-> > 
-> > When the A5 boots, we should not use the global timer interrupts or
-> > write to the global timer registers.  This is because even if there are
-> > four global comparators, the control bits for all four are in the same
-> > registers, and we would need to synchronize between the cpus.  Instead,
-> > the global timer FRC (already started by the A53) should be used as the
-> > clock source, and one of the local timers which are not used by the A53
-> > can be used for clock events on the A5.
-> > 
-> > To support this, add a module param to set the local timer starting
-> > index.  If this parameter is non-zero, the global timer clock events
-> > device is not registered and we don't write to the global FRC if it is
-> > already started.
-> > 
-> > Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> > ---
-> >  drivers/clocksource/exynos_mct.c | 29 ++++++++++++++++++++++++-----
-> >  1 file changed, 24 insertions(+), 5 deletions(-)
+On 3/4/22 18:02, Eric Dumazet wrote:
+> From: Eric Dumazet <edumazet@google.com>
 > 
-> This should not be send separately from the previous patch.
+> For high order pages not using pcp, rmqueue() is currently calling
+> the costly check_new_pages() while zone spinlock is held,
+> and hard irqs masked.
+> 
+> This is not needed, we can release the spinlock sooner to reduce
+> zone spinlock contention.
+> 
+> Note that after this patch, we call __mod_zone_freepage_state()
+> before deciding to leak the page because it is in bad state.
 
-OK, I will put it in a series.
+Which is arguably an accounting fix on its own, because when we remove page
+from the free list, we should decrease the respective counter(s) even if we
+find the page is in bad state and discard (effectively leak) it.
 
 > 
-> > 
-> > diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-> > index f29c812b70c9..7ea2919b1808 100644
-> > --- a/drivers/clocksource/exynos_mct.c
-> > +++ b/drivers/clocksource/exynos_mct.c
-> > @@ -33,7 +33,7 @@
-> >  #define EXYNOS4_MCT_G_INT_ENB		EXYNOS4_MCTREG(0x248)
-> >  #define EXYNOS4_MCT_G_WSTAT		EXYNOS4_MCTREG(0x24C)
-> >  #define _EXYNOS4_MCT_L_BASE		EXYNOS4_MCTREG(0x300)
-> > -#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * x))
-> > +#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * (x)))
-> >  #define EXYNOS4_MCT_L_MASK		(0xffffff00)
-> >  
-> >  #define MCT_L_TCNTB_OFFSET		(0x00)
-> > @@ -77,6 +77,13 @@ static unsigned long clk_rate;
-> >  static unsigned int mct_int_type;
-> >  static int mct_irqs[MCT_NR_IRQS];
-> >  
-> > +/*
-> > + * First local timer index to use.  If non-zero, global
-> > + * timer is not written to.
-> > + */
-> > +static unsigned int mct_local_idx;
-> > +module_param_named(local_idx, mct_local_idx, int, 0);
+> v2: We need to keep interrupts disabled to call __mod_zone_freepage_state()
 > 
-> No, it's a no go. Please use dedicated compatible if you need specific
-> quirks.
+> Signed-off-by: Eric Dumazet <edumazet@google.com>
 
-I could add a compatible, but please note that the hardware itself does
-not have any quirks, it's only the usage of the hardware from one of the
-Linux kernels (see the explanation below) which is different.  Is it
-correct to use a compatible to distinguish between these kind of
-software-determined usage differences?
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: Greg Thelen <gthelen@google.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: David Rientjes <rientjes@google.com>
+> ---
+>  mm/page_alloc.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
 > 
-> > +
-> >  struct mct_clock_event_device {
-> >  	struct clock_event_device evt;
-> >  	unsigned long base;
-> > @@ -157,6 +164,17 @@ static void exynos4_mct_frc_start(void)
-> >  	u32 reg;
-> >  
-> >  	reg = readl_relaxed(reg_base + EXYNOS4_MCT_G_TCON);
-> > +
-> > +	/*
-> > +	 * If the FRC is already running, we don't need to start it again.  We
-> > +	 * could probably just do this on all systems, but, to avoid any risk
-> > +	 * for regressions, we only do it on systems where it's absolutely
-> > +	 * necessary (i.e., on systems where writes to the global registers
-> > +	 * need to be avoided).
-> > +	 */
-> > +	if (mct_local_idx && (reg & MCT_G_TCON_START))
-> > +		return;
-> 
-> I don't get it. exynos4_mct_frc_start() is called exactly only once in
-> the system - during init. Not once per every CPU or cluster (I
-> understood you have two clusters, right?).
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 3589febc6d31928f850ebe5a4015ddc40e0469f3..1804287c1b792b8aa0e964b17eb002b6b1115258 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3706,10 +3706,10 @@ struct page *rmqueue(struct zone *preferred_zone,
+>  	 * allocate greater than order-1 page units with __GFP_NOFAIL.
+>  	 */
+>  	WARN_ON_ONCE((gfp_flags & __GFP_NOFAIL) && (order > 1));
+> -	spin_lock_irqsave(&zone->lock, flags);
+>  
+>  	do {
+>  		page = NULL;
+> +		spin_lock_irqsave(&zone->lock, flags);
+>  		/*
+>  		 * order-0 request can reach here when the pcplist is skipped
+>  		 * due to non-CMA allocation context. HIGHATOMIC area is
+> @@ -3721,15 +3721,15 @@ struct page *rmqueue(struct zone *preferred_zone,
+>  			if (page)
+>  				trace_mm_page_alloc_zone_locked(page, order, migratetype);
+>  		}
+> -		if (!page)
+> +		if (!page) {
+>  			page = __rmqueue(zone, order, migratetype, alloc_flags);
+> -	} while (page && check_new_pages(page, order));
+> -	if (!page)
+> -		goto failed;
+> -
+> -	__mod_zone_freepage_state(zone, -(1 << order),
+> -				  get_pcppage_migratetype(page));
+> -	spin_unlock_irqrestore(&zone->lock, flags);
+> +			if (!page)
+> +				goto failed;
+> +		}
+> +		__mod_zone_freepage_state(zone, -(1 << order),
+> +					  get_pcppage_migratetype(page));
+> +		spin_unlock_irqrestore(&zone->lock, flags);
+> +	} while (check_new_pages(page, order));
+>  
+>  	__count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+>  	zone_statistics(preferred_zone, zone, 1);
 
-Not quite.  The Cortex-A53 and the Cortex-A5 do not have cache-coherency
-between them, so they are not run in an SMP configuration.  From the
-Cortex-A53's perspective, the Cortex-A5 looks like any other hardware
-block.  The Cortex-A5 could just as well have run some other operating
-system, but I run Linux on it.  So there are two separate, independent
-Linux kernels running on the SoC.

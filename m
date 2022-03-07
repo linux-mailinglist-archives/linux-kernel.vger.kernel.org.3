@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901C74CFA60
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBA34CF897
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236783AbiCGKQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S238889AbiCGJ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240028AbiCGKAb (ORCPT
+        with ESMTP id S239200AbiCGJjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:00:31 -0500
+        Mon, 7 Mar 2022 04:39:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB5A7DE02;
-        Mon,  7 Mar 2022 01:46:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB1F70CF6;
+        Mon,  7 Mar 2022 01:34:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A1EF61052;
-        Mon,  7 Mar 2022 09:46:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27947C340E9;
-        Mon,  7 Mar 2022 09:46:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B26561185;
+        Mon,  7 Mar 2022 09:33:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44621C340F3;
+        Mon,  7 Mar 2022 09:33:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646403;
-        bh=+LFM31gspWtXscCtNJZur9wApwtIRx/5VXXQ3tSM4jA=;
+        s=korg; t=1646645636;
+        bh=CpzA/lTh37mJ+O0hu79YTOCucDV/d/WNV37Yg0T0+dI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QwewKmHn1or4vCi1puRmrogS6oVfqYwigPRJwqwqg0CXFmpTuZ2R6eBaj8iZLruMh
-         fOBn1cNbF6ajKoUFNd2oxlKi/qs2cIvQQnXX59ake1PGMXg1ObRksuDaQSO34KaX7Z
-         8okGQmnuc4741RSWEzZmemGk32ps/DMmnA0Lb1Y4=
+        b=NNG8fRc78FrkVMjd21rZ+XaEAuOFdRXOCPGszAtMdrrLglVB5R4s3oLLaWWe7Y27w
+         Gzr5W1A35u+D5e09FwB7IzIk/cwqsGQgt77SJBA2KW+WbqT6W1qtcQJIL8GzuhEHsZ
+         UdZf4Fb+cRONG5PEEnOIT4XnZcDLiVKYhyybaneA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slawomir Laba <slawomirx.laba@intel.com>,
-        Phani Burra <phani.r.burra@intel.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Ido Schimmel <idosch@idosch.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 233/262] iavf: Fix race in init state
+Subject: [PATCH 5.10 094/105] net: dcb: disable softirqs in dcbnl_flush_dev()
 Date:   Mon,  7 Mar 2022 10:19:37 +0100
-Message-Id: <20220307091709.849993819@linuxfoundation.org>
+Message-Id: <20220307091646.821776202@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,49 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slawomir Laba <slawomirx.laba@intel.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit a472eb5cbaebb5774672c565e024336c039e9128 ]
+[ Upstream commit 10b6bb62ae1a49ee818fc479cf57b8900176773e ]
 
-When iavf_init_version_check sends VIRTCHNL_OP_GET_VF_RESOURCES
-message, the driver will wait for the response after requeueing
-the watchdog task in iavf_init_get_resources call stack. The
-logic is implemented this way that iavf_init_get_resources has
-to be called in order to allocate adapter->vf_res. It is polling
-for the AQ response in iavf_get_vf_config function. Expect a
-call trace from kernel when adminq_task worker handles this
-message first. adapter->vf_res will be NULL in
-iavf_virtchnl_completion.
+Ido Schimmel points out that since commit 52cff74eef5d ("dcbnl : Disable
+software interrupts before taking dcb_lock"), the DCB API can be called
+by drivers from softirq context.
 
-Make the watchdog task not queue the adminq_task if the init
-process is not finished yet.
+One such in-tree example is the chelsio cxgb4 driver:
+dcb_rpl
+-> cxgb4_dcb_handle_fw_update
+   -> dcb_ieee_setapp
 
-Fixes: 898ef1cb1cb2 ("iavf: Combine init and watchdog state machines")
-Signed-off-by: Slawomir Laba <slawomirx.laba@intel.com>
-Signed-off-by: Phani Burra <phani.r.burra@intel.com>
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+If the firmware for this driver happened to send an event which resulted
+in a call to dcb_ieee_setapp() at the exact same time as another
+DCB-enabled interface was unregistering on the same CPU, the softirq
+would deadlock, because the interrupted process was already holding the
+dcb_lock in dcbnl_flush_dev().
+
+Fix this unlikely event by using spin_lock_bh() in dcbnl_flush_dev() as
+in the rest of the dcbnl code.
+
+Fixes: 91b0383fef06 ("net: dcb: flush lingering app table entries for unregistered devices")
+Reported-by: Ido Schimmel <idosch@idosch.org>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Link: https://lore.kernel.org/r/20220302193939.1368823-1-vladimir.oltean@nxp.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/dcb/dcbnl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index d11e172252b4..e23a062dc39c 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2125,7 +2125,8 @@ static void iavf_watchdog_task(struct work_struct *work)
- 	schedule_delayed_work(&adapter->client_task, msecs_to_jiffies(5));
- 	mutex_unlock(&adapter->crit_lock);
- restart_watchdog:
--	queue_work(iavf_wq, &adapter->adminq_task);
-+	if (adapter->state >= __IAVF_DOWN)
-+		queue_work(iavf_wq, &adapter->adminq_task);
- 	if (adapter->aq_required)
- 		queue_delayed_work(iavf_wq, &adapter->watchdog_task,
- 				   msecs_to_jiffies(20));
+diff --git a/net/dcb/dcbnl.c b/net/dcb/dcbnl.c
+index 799ff0efcc55..2535d3dfb92c 100644
+--- a/net/dcb/dcbnl.c
++++ b/net/dcb/dcbnl.c
+@@ -2067,7 +2067,7 @@ static void dcbnl_flush_dev(struct net_device *dev)
+ {
+ 	struct dcb_app_type *itr, *tmp;
+ 
+-	spin_lock(&dcb_lock);
++	spin_lock_bh(&dcb_lock);
+ 
+ 	list_for_each_entry_safe(itr, tmp, &dcb_app_list, list) {
+ 		if (itr->ifindex == dev->ifindex) {
+@@ -2076,7 +2076,7 @@ static void dcbnl_flush_dev(struct net_device *dev)
+ 		}
+ 	}
+ 
+-	spin_unlock(&dcb_lock);
++	spin_unlock_bh(&dcb_lock);
+ }
+ 
+ static int dcbnl_netdevice_event(struct notifier_block *nb,
 -- 
 2.34.1
 

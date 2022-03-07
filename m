@@ -2,233 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686554D07E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA114D081A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245163AbiCGTsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        id S245258AbiCGUCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245150AbiCGTsI (ORCPT
+        with ESMTP id S243723AbiCGUCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:48:08 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580395C861;
-        Mon,  7 Mar 2022 11:47:12 -0800 (PST)
+        Mon, 7 Mar 2022 15:02:31 -0500
+Received: from refb01.tmes.trendmicro.eu (refb01.tmes.trendmicro.eu [18.185.115.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0941E8A31F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:01:36 -0800 (PST)
+Received: from 104.47.1.56_.trendmicro.com (unknown [172.21.10.49])
+        by refb01.tmes.trendmicro.eu (Postfix) with ESMTPS id 5D04C1025CC7D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 19:47:56 +0000 (UTC)
+Received: from 104.47.1.56_.trendmicro.com (unknown [172.21.201.50])
+        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id B76D91000008C;
+        Mon,  7 Mar 2022 19:47:53 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1646682472.178000
+X-TM-MAIL-UUID: c1e9ce45-c89d-4ba7-a23c-a578b9c5da7c
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (unknown [104.47.1.56])
+        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 2BC6210000E5E;
+        Mon,  7 Mar 2022 19:47:52 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eCFZIElg0qaJLSxnDwBC8SRIBtcz9fVczwe7OgCs0Rb+2tlnrM1qZTwQzlKToxXerWIXcK2jbQCdKP0oav/oF8Bmw/5Y4Ewbt3/3JB3OPB5F/em8/E9sIvm1IM0PM33VK0i6KRXFuB4j3RGcA/jXTIbszuyk69hKQGSrefEIEFHAY6oIYV4Uw0ruQhw1Td12o7D8PdKYOewnb0h06TkH61wNA8nPFsWtyAgelTTU4WYfnJKRJJBTfmSBu0gh+vqZBXPsjvYKIvrO6e6FQWsUu0/0V+zAVLlG0UxfdAcL4LP6f6Sxmpfr6PastGfKl5CBUZfApYSZkSQFl24HSfHpPg==
+ b=IjR6BgDDy5BbZRfckv0kcyTDxk+nHa/zJYR8IMgw2A2lea0i/+7d1/fd1v9p/T0vpPtId+/nvVkWRlO8EGU0Z/sNo8h6LPLaQMh85737nWUNK0OPq4kkBwORk6TyR+34LYimbrK2bTQ4pLO/1o/J4c+d351EdeHE9e6qq4EojC3TWY5PU5g45OUPuvWtJZid7n9kbR8nfS7dAcToksn5us4iIGcRpojX0qbkR/yzJ41paZRv3oqtuwPGc/Wvyb4DjICHeN+CjwnqJ1uVpQuTKzUwQeIhD65n1I6EUgdbxMFYkVCX8ZI1nXf7rBwBgXnrB2n9DrPsru3+aTfD99rtOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FB2b5SZTSBdFxSxEuPqbjPYALbYjyT2I+WSfJqZCM9M=;
- b=iaEBvRJ6zc9R933gLCpAdhWuB20aboOaxft9/68d1PLnd3wpeHkBw5GXfA8+2aJk+S/b+vuPRo1KMQPLE4G/oeEpKM6Tw+vEz6JQYJ+MHonn8mhx1tAwYWmUgApYgrnlCB3KpGKlRN5LqMofAxYrUeR7ZTbU4N1DP5TgDZ86EcoP1GuFHM7oE0Wzs6e6PKRBdCyI/Csx1e0s07rxUiKPmJaERFRBPxbvFlAMLo0tJfrMyXUHSSPNRtlSeuFfEcVLkteQOvxpZGZ0y9tpazEsJaYiv/80w5y+hRZYcz1ybLAgwLx8i+0ylYunuwrdsTAOelnu45Pcki8comKJpG4sVA==
+ bh=IjUPToFh/OWDiTxKWHg9wYdliPJQ9jNn4VhimQzSkQE=;
+ b=oBQZWnCwvhRBD+9oJA5/ygo6BnReMFwjUA/z997ToFFrCt6IiyzvB4Nuz75Px4D2n91syP0Aer5+o1OhH1nFWJLVB8sF+yVZTFZRd2bZ5FuacGKJp7gf+PxcvIcnBaDtiXo9fIbvpLv3V7SZXFpWQIq0xZppG4crNufM7HDN1g36KD4a+B7H0nb+g/sOeXL81s6tEduMX56J3H4J5LIRAq/y/iyiV28VlmIrgxpMo3DjVuOLSq6fPgMRJH1IQEzQPKtt8hGbNKDtwKCpHq3O3LEQ5HLz2aamCEzfc3/huSs8psRnXMZeT2WHOypocI+QyLRBBvzQKXGuS281lUKgSQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FB2b5SZTSBdFxSxEuPqbjPYALbYjyT2I+WSfJqZCM9M=;
- b=KvUeZ+tJ8hO2BLSgKXzhKa9++C9tuwE7tDDKp62MR6fLhw13lXt9a210iFFj1x28iaVnPLzcgzbqNk+il5E8E/gLWNtjNGk9j5NcSlGaCfGHav5NulB42YtPN1k+JEOe3637tlqTkgDvxmT34OMXR8MMfnixn4j+RJGbFBs5zefeiUdwlu0uWpHcgqmq03K9RPJpAFMcbmirB0SSsveQpptW5WCfX2nqEZlSBReCHbMhD7UUNn+S5vShYbl1yUDwxQzsnnIaNrgLrQFrXBdCDpuWaxuFqPLAKdMismqpFcTHJMcflyKL8GsIFr6fZ3/8b/EmJaj7Ccsx62oiwLhN1Q==
-Received: from SA0PR12MB4349.namprd12.prod.outlook.com (2603:10b6:806:98::21)
- by CY4PR12MB1622.namprd12.prod.outlook.com (2603:10b6:910:f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.19; Mon, 7 Mar
- 2022 19:47:08 +0000
-Received: from SA0PR12MB4349.namprd12.prod.outlook.com
- ([fe80::a57a:37e0:825a:d894]) by SA0PR12MB4349.namprd12.prod.outlook.com
- ([fe80::a57a:37e0:825a:d894%8]) with mapi id 15.20.5038.027; Mon, 7 Mar 2022
- 19:47:08 +0000
-From:   Ashish Mhetre <amhetre@nvidia.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "kbuild@lists.01.org" <kbuild@lists.01.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "digetx@gmail.com" <digetx@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-CC:     "lkp@intel.com" <lkp@intel.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        Krishna Reddy <vdumpa@nvidia.com>,
-        Sachin Nikam <Snikam@nvidia.com>
-Subject: RE: [Patch v4 4/4] memory: tegra: Add MC error logging on tegra186
- onward
-Thread-Topic: [Patch v4 4/4] memory: tegra: Add MC error logging on tegra186
- onward
-Thread-Index: AQHYLhHEvTV8LxjL40qENT0hHpzEZ6ytmQoAgAAI34CABrYm8A==
-Date:   Mon, 7 Mar 2022 19:47:08 +0000
-Message-ID: <SA0PR12MB4349E55BD1968FDC1962DC7ECA089@SA0PR12MB4349.namprd12.prod.outlook.com>
-References: <202203031247.0bBX70B3-lkp@intel.com>
- <a1f26936-6522-a3a5-f812-a80a63003453@canonical.com>
-In-Reply-To: <a1f26936-6522-a3a5-f812-a80a63003453@canonical.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ea12a42e-0b54-4f3e-b356-08da007343c2
-x-ms-traffictypediagnostic: CY4PR12MB1622:EE_
-x-microsoft-antispam-prvs: <CY4PR12MB1622F3FF8EE0C928F3278165CA089@CY4PR12MB1622.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mnMn9iI8VYjgH0CSzfP94jPnvdcWk0+04cQGBAxUJGikDz1rXh7vgtbpCPbW6j1PDeQahWbSz0XS3wCGG03fDEMRIxi0Kn5G3eIj2X/XzyMS+sQXzqZV/tpxXrTKrUzgtqhvDxhygvl4/tTgRQ/e2VfnY3Z/KVzGz9Mkewz1tF8/XHUWTNzD7rMV+xqOwfcWaz+hVRbMZ8+LSFJLYKDxK29kukOSE3ztB5KJVu2pJwbOYPqbVHAdHE70njh7VuNJ7mMSYyLjomRCRLjxPxVOm+ctgLGLG6zTxu4A2XQjQejopsGNyQbIKl8MkLWCYxIGhZYKX19N9ZpG5lRre7EYhmMwwXgSlMR6xnsS8k7Vi+acJh3ADSGXNvYUPnVTk7hiCsVHs6rYwxBVfvzDJJCKS5RFigMvR7rKvhyjaM0BcY7vO0Fa4kHAgz0VHtcismTiBE6TgKSvZuYEeB5kfY1amt76ptDBExyPXvjDjse5gedF1G9R1gdDa06j5+IcSnGKZH/91xX00rH0CKOESDLMIBijeTNh6fTGqnB+7laSQuTK3VW19Kt/nBp2twvrnTtVbxJdd/KF+8igLnTbZGfIoLb0VzErYmkpS1BUWVKtaBS2M9xAZoZ60rrluhKQgWvqnU/WCvTZrhHqkZO1FRnBPcp4cJEP+X43//VJCLeWnRJxBvxcROFQHYFnpkIYAzQGsgzX2EXTO9l9Q1sPSoUGEKKpr4LfdEwhV5jFwDQj2Vh5I/464o2KxO6YQedMmiHhQ1yC6khhW6v+l1dDV9qtowqzNVx8MJVgeRqkF5gyJkwS1U15noR/UaWE/EYpwDc+93NY1HxaNpfVdZVZjTReeRfgTVC/XmWVlR4iuz3/sGI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4349.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(26005)(186003)(38100700002)(8676002)(4326008)(921005)(76116006)(64756008)(107886003)(66446008)(66946007)(66556008)(66476007)(110136005)(8936002)(38070700005)(52536014)(316002)(54906003)(9686003)(86362001)(53546011)(55236004)(55016003)(2906002)(5660300002)(508600001)(45080400002)(83380400001)(966005)(71200400001)(33656002)(7696005)(6506007)(7416002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fTxNkOfBz/9eyWrd85li5XW15wvaaY4pII/QMmVks0ilU1/ygaYJJRKYejpg?=
- =?us-ascii?Q?sz6btUHPHHrh5OXxZydScRAr+2evI9l9ElbPUk//pcLMRf74wejAzu4bFTe3?=
- =?us-ascii?Q?x6R7bGbsQPeNCrkZxmW43E+2wkIS1Wp6rjpf1xuEDEhjq/brzqSMuC/2+fGj?=
- =?us-ascii?Q?fM9qY+SKIbOZx3X+KKV51MqHxzult5blG6gEG4s3PWm//gn8jF0tmUvW3YGP?=
- =?us-ascii?Q?mMewz7f4lspC/jBx71o1JdX8VZ56VlvZTtyLj7/zcwJuFL3vLPTVKkl/sF9Q?=
- =?us-ascii?Q?ay4ZUC0TIh8ZyfLwe7QOH1g3Na5gzGeZIv4SdoRD+QY0hkEetratJ4o+Mqd+?=
- =?us-ascii?Q?Bx7m9Rd9TmGmrsx2ZFWTL4i06vkXRDIEPG1phuSakyR/r9rJbssRxFQ8dWxq?=
- =?us-ascii?Q?b2/Yf1W0UvvyPS/7CRXHtVI+SFOl69Jw/nZv//drYZLkkcqqaCHinmb2MI2A?=
- =?us-ascii?Q?P3qkTL7MCEOpJIrlDXVIMBh7zMAEB0hyf3KY52AGfxIg/JEFTjKvegEs4ADu?=
- =?us-ascii?Q?I38brz+OUBYl0xIaRAVZWUf59GykgH8vQ1M/GRVogvvLqfok0Uxg5QP9ML/A?=
- =?us-ascii?Q?tZJnDOyjXAKVVP2fJ3WRx9HFk5RO1YpiVD8bSRpWyorNfLXBaSk7Z0mnqlOf?=
- =?us-ascii?Q?9TEtBr0LzMfNW3cGptiikb/BQ63+a5PspCkWT1Nh7G+51j87kzrJwk4vIpAG?=
- =?us-ascii?Q?kh7VQdQ7X8W9lMh1NoVxfkZTDDRuY/qM2qJtJ2O5xRmZDH0ONtudEUaXU3PW?=
- =?us-ascii?Q?CQhTPluzWcLp4JRoGhDt+QAgVo3Bb6D5gWuPwnj2tstXv4wjylZmfkwYiPCs?=
- =?us-ascii?Q?7elSj0e4UVQ8bErjqOUQFZz7xZGV6BxFqHC7z0/irRLP9dCz7B7RDRrzgJdx?=
- =?us-ascii?Q?KQu3fzvlqzVAiN7IIuLF511i7/kkwU81Kc4F8+LI+Pf1sa80jri3fMKlyMEi?=
- =?us-ascii?Q?xmZyQLkRka1dBhVuTqgtspaHjgwHOZL0G4S4g7wgVOpfsK2Vh4abtq48xU65?=
- =?us-ascii?Q?1JbvlB6f141dNFqFXTBJ9yO9C5FiFayz12hq64HBGgx3mtBkec2U/ZuG1WaD?=
- =?us-ascii?Q?d5f1glot+Ml3PJ3hEUgngfsSIYFw4tOkjZ0DrCV2kA0dlleU2O697JBFTv6M?=
- =?us-ascii?Q?s4IJxaKj4aB16b2guiL5Su8j3eonILJirPrZN2oFir0GYHSDB3nwYgysFlVT?=
- =?us-ascii?Q?p65i+/l/1TAFEt6lwDt3KM6vtkbrWskrDqYxYx9rQHrZ0K2b750DvZZ7wdOc?=
- =?us-ascii?Q?6MxdutLUtH0ce7BaKCTm6QNRP9CKXKmBpZhXaJCXcdVycBvw05UP+Ic1Pt4x?=
- =?us-ascii?Q?RCqjHKPxtUzBg//Mjhu3C46M1b1+YC1YKcMvAI2d48a27UKpG3AqvSwxGzRd?=
- =?us-ascii?Q?9EIU96Gd90Bg7f24STLJpdpJ7W93HTXvUB2YIBVEpFamIkjGZqJKOUufPjmZ?=
- =?us-ascii?Q?bumgHeh2n40x1/eXeDCnWpFc1O9dntKFfWfSb5O8GzGN8rtqlJe4MOlHsN9q?=
- =?us-ascii?Q?KB669rbAAkNTXuav8m5xcJ211TrpSWPbobkJh+18zvAhfzD9YP7XoXRGyElK?=
- =?us-ascii?Q?Sf6WOfyOQxwLtK6Kguf0UPiASrJpaVt3pPqo982C9sN/2MKw1skEUMrj3oE5?=
- =?us-ascii?Q?lg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ smtp.mailfrom=opensynergy.com; dmarc=pass action=none
+ header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=opensynergy.com;
+From:   Anton Yakovlev <anton.yakovlev@opensynergy.com>
+To:     virtualization@lists.linux-foundation.org,
+        alsa-devel@alsa-project.org, virtio-dev@lists.oasis-open.org
+Cc:     Anton Yakovlev <anton.yakovlev@opensynergy.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] ALSA: virtio: add support for audio controls
+Date:   Mon,  7 Mar 2022 20:47:14 +0100
+Message-Id: <20220307194716.1517565-1-anton.yakovlev@opensynergy.com>
+X-Mailer: git-send-email 2.35.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM5PR1001CA0040.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:206:15::17) To AM0PR04MB5891.eurprd04.prod.outlook.com
+ (2603:10a6:208:12e::28)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c3a9c1d6-ea46-43ba-30bb-08da00735c15
+X-MS-TrafficTypeDiagnostic: HE1PR04MB3210:EE_
+X-Microsoft-Antispam-PRVS: <HE1PR04MB3210E14B964F9079589F7E9E8D089@HE1PR04MB3210.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zo8YluaHGR4gKRjAaFNVkS/oFYDH/EEM1HpyXMOTUxgDvpJRJVrRbNt/toNldolfCF6d1TXCce/T8Gb+lP0/m6QcTbMHeP4PcRBUIxW0IgjFs/mzFC2lewtYFABsRdiFNDwgB1yWjqM1lpo151KRhUWJgAa4o/e4FBd7yy6ALiFboyrEdIpYfCxrEW+UmekHsEleas0S5508ILwh2x+epGMFE+Ff+HaxfFaqx3OcPaIj7F/9xZZMromUhI1ldW/KOq8Vu6Q5nKlYK+ri0SsdQ4U9rihjTaHL/PZslhqEing7hxWmxj9zZbAcT79M0nYcYQONr349+Ld5hE6ktuhvu+kyGCpckxl7jsqHa+Q2IMgWj/uk1PhAQ1KhtWj7cwJ3DwzqSjXXXDUSCRsWpgO8/6hvnFKiIKe1LfXg5gS2L/Iby9kkYW+rQwDPv5z8fnePaPwzSwZEVIY8coSL1rTm2MCWpEnQenjcR7PE3+7XKHHOC792egK7dbPXZvslvc5RpM7zkSyUgAiQS446YJ2tqFCNpe0EPWF9E1oPtKWumIAnpt/gxg5UEnkQeDblRMvnC9L5qVS/BsijlqRYifG4clALF+ZarSadb3OjF1SHD3Q+l6o1lvvBIL998OFoKHT2jRYlk6NmGMKRq5dDC+injwU9cs+LGrmsfO+nTb4CTbB3l4ac9sJhILQj3RIBx8WXbs+gQcGBhWB8Ua3fzMrjScZ1PXaznDN4hOGUla73+8aewjIfvFr7BxrgEjQARMQxVQrj/1fS6H6bUVciwDyeNFTnNrj0xkmvHzWDzJQyL6I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5891.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36756003)(966005)(8936002)(8676002)(4326008)(66946007)(66476007)(66556008)(2906002)(52116002)(86362001)(38100700002)(316002)(42186006)(38350700002)(26005)(1076003)(186003)(508600001)(5660300002)(44832011)(4744005)(2616005)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dWk2K2NEUFhRVzZPYzdkbWJaazJ3cmZ5T3Uzb3lPaHhGcWhXQWpUM1Y5c2J6?=
+ =?utf-8?B?eXdiR0RiWDhKUWdBeExDUVJQLzlidnFOaVNOUVJXVldVTUtkOGNVbnBrM3R1?=
+ =?utf-8?B?VHZpQTRiaGdJMmdxbU10SURMbHhJVlhBOHJmUE1Pa0FXSFJLQ1hqWDB1V1o0?=
+ =?utf-8?B?dXhaREVGQnpuMExHa3cydm9jRXp2Z2FNcCtCMFpxa3JEV1ZsckNxdGhwU3A3?=
+ =?utf-8?B?NTBsUzVLdm5pcmpiOTFObzNaaUM1SGFaTmdWc2IycEtCK0l6anRxQXFmWis0?=
+ =?utf-8?B?US83N1RJam1FT0I2bkNtQ2t0RFM0Ync0dkYrcEY5OXh4T0lrdjZYeGVjU1pQ?=
+ =?utf-8?B?SFJwU1RJUWluZkorR0NSRzVIdVdZc0EySllSbXpKYWE5bXkyNXdCSWVJNUlK?=
+ =?utf-8?B?OEtXNGVRdGZpc3VPZjJ5cG9ZWTBNRlR1ZUk1ejJxOWhWVHQxd3lRcEtFVEtJ?=
+ =?utf-8?B?eGNnTCtOOXNHc1VNRnpQejdHbzdSTXRKc3hSOWI5dkdWand2ejR0ZmtmMmFx?=
+ =?utf-8?B?ZjJqNEt1N1NYc0VORG81N0pLNmxNdTVzNEw2ZzJWSGxQQW85VEt6UXVUWlZk?=
+ =?utf-8?B?RGQzVUV3Y0Y5ZzMreXJjaWpEdVFxa0Y0MlV4aTdMZ0F5cEpaMWhJMmMvL001?=
+ =?utf-8?B?TWYzVmtGbWZRWFJKMVN4ZUd3dGtaTzdKbjNqdlAvQ1J1WSsvZFZIaXoyNysv?=
+ =?utf-8?B?dlZqM2tTbEZaQnRsdkEzMDV2UkdvYlVzY2RvV0ZBN0l5ait5R2pqbUlnQllm?=
+ =?utf-8?B?QXBIVHZFS1pEWm9BTk9MRElWV1N1MGFDZmdISTNOanl6STFuSUlZdGxLWmN4?=
+ =?utf-8?B?YkZ6OWorMDYzVnNDbmUzV1ZPekRzVzRNbDkwbXd5ZlZBbDlRbndhYU9JM0NE?=
+ =?utf-8?B?OXVhM0VJRnlpdkpSVmJhWUxBR2x4WnVQSUJaVmFVeHVsRDRFdVNlamg0Mjc0?=
+ =?utf-8?B?TG9CVnNZUjk4K1k3bm10ZklvMGs0dUN2NFRHRmNoM29VQ2huRE80UHVMUHNU?=
+ =?utf-8?B?ZlpsZi96Ti9BWXc0aXMyVWlDZG90a0w0VStkV1ZUaDlibHFDTS9MNDFmTnh1?=
+ =?utf-8?B?WUh6UjIrcjN1WWJteUFGcDdSY29oUDVTUlJLOWVmaWM2bk0zZG94OS9nRytk?=
+ =?utf-8?B?Z1RlQTAraURHZnJGUW1ZVXhMVnM4VklNaE5RNVlzSkNGeG16TjFxK2NmUnJG?=
+ =?utf-8?B?T2dsL1loWS9qUm1VZDQ3WHlDOFBsbGZWNldBWWRldmhkeHJJVTZKL3NWSmc1?=
+ =?utf-8?B?RzBKZGhoNGNSWWVmdzZvU3RsdEhPbzF3c0JNTXpVOWFqU0xDMGlXLytKNUQ1?=
+ =?utf-8?B?Z2xCeVpCL3dHWTFMY0w1UCtmUnc4UGlmYUhtZHNRUE5qeFhMVkVHbUxKeGpE?=
+ =?utf-8?B?U3NtWUVvWmJkemVQOU1xcFRrbTJUM3ltUUJIeGxPdkdubDVoTGVtci9EZjBP?=
+ =?utf-8?B?N2ZjbTV3WVVaSDVCa1cyMzc0RmpGMjhSeXZ4NTEzRmtJWFBDVGo4ZngxTzdI?=
+ =?utf-8?B?NmphK1hPNWJ3bVRZUWFMQ1JWcDlGZFg5ZnJhcXM0cnR0TGc4bk0xZlE5QSto?=
+ =?utf-8?B?b201VkRhTzdZZEJaZTVNbldETjBMWlplVUpINFptU0F4N09xdWhEc1F6Tng0?=
+ =?utf-8?B?bG9wMElXRWVOR0ZKQmxuTnFKcE5wR3RmeGtGUDhpQ2xZMjlFam1EeFQ5MHlT?=
+ =?utf-8?B?VTNkelNXNHBka2UxbVlwd215L2xGQ0hsN0FKVXBMYVc3QUdsTDRQVEphZVZW?=
+ =?utf-8?B?OUZBc3BPL0xHdFJaQ3FwdUIzcHdYWFVYdE1MTmIrMXl5bkRjVkFTZjZoZkIv?=
+ =?utf-8?B?WEE4aFA1d2Fpa3pHQWxPaHM0UGUxbHpkd3dESjdpaURpaFcxcmh5aWlrZ09l?=
+ =?utf-8?B?dlN6WXVSVytSUnhxeERsTDhSWEZxeFZxRnpjbTQ0ZlkrbGxFY0xhb0phazQ3?=
+ =?utf-8?B?eHBGcWRxc1dmbzA1b2MwQ0hCMWd5aVh5b0NSRGZBYXBzRWdhRDRzek5FQms1?=
+ =?utf-8?B?c0NNOEc5QTlneGZkWVNvc0l2RDN0d3NmcUNsMThLKzN2aElYTm5YeWI3UUlh?=
+ =?utf-8?B?ckNURXA1bC9tRWtDR1RtdUZzZmZCenI2NkJrb1EwekJrQXI4RkxwNkJYd3ZX?=
+ =?utf-8?B?cGh2enZiY3Fjczg4U0k4N0EyajZBRWxEeHRQbGI2cmtQU0crREs2OFllYnAv?=
+ =?utf-8?Q?3SSe9+ct5YfbPa3owo+4t60=3D?=
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3a9c1d6-ea46-43ba-30bb-08da00735c15
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5891.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4349.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea12a42e-0b54-4f3e-b356-08da007343c2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2022 19:47:08.3637
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 19:47:49.6384
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lD/J2KLvQ8GLED6M1yAtWACBOxt+Sbn0UjAiMKN9cOYCeZxy0ASaaqMpN9W7JdPeSpDQQY0bogjNoPr3oZmfRg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1622
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zv9RFFmTUgrF4RLeFn+Sf7GQ6v3DobXJgo6nyMcwV9AADR9o62EaO6GXQxwF/lV+WExHMNef4naOcTv+fYJKkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR04MB3210
+X-TM-AS-ERS: 104.47.1.56-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-8.8.1001-26758.002
+X-TMASE-Result: 10--2.784700-4.000000
+X-TMASE-MatchedRID: 54gb2yeIOXQJjCNolxOpSRFbgtHjUWLyj0jXY9STMgFMotU/QFIFGxdQ
+        uJNGYGeyepwUk+Mcqyzw9R28AIPLSN/K1ikJIsLOnVTWWiNp+v8UifIaLms/Arll+XI+GnGsz6Q
+        Q8NT1Ir7gr0WZ6u+ypaEfeQTpODV8Wjws5pdLmBZ+yskgwrfsC30tCKdnhB581kTfEkyaZdz6C0
+        ePs7A07R/88i/oAaosL4UK21n4bZNGPXbj2YgVSIYcCinNIrsbfq+djo4+I88=
+X-TMASE-XGENCLOUD: 019a98ef-3284-45a8-8ac7-44879e005d8e-0-0-200-0
+X-TM-Deliver-Signature: 7926671C3F134244D7B3EC49FB0C59CE
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+        s=TM-DKIM-20210503141657; t=1646682473;
+        bh=8okE+Q6K/W8wsvu5pO4GARMCWw8koKY+P9+H4M0XCMI=; l=1037;
+        h=From:To:Date;
+        b=Xr9xf5+6rjFcZ9mKXl6ltOIF7ur1l215X4n3eUBACyKmifXRur5CMqV9cdU+RZ2aM
+         +t9XnWBnW4m0pGNtotsg74DGbcuSUSNHC3ciIhMA/V5LVc1v9wdP2tsg8FVHmS6NYX
+         ab1iUaJMHRhpkRxZYTYASnuKKuNVtk6Hv4wuVJ6woPo+gmYrm2gNwtqRsuiKcJoqxA
+         UiavIGn7dhM6scggyaFOLGxf5Q6u47IVLJyTd+oK3CVltlkIt8VrW9B75pkDEASh5w
+         zL+JSdOyLUt9PzDvSjsQaeD4gY+VWHd4DmrNZS4RD8u8dLg0FfBYLineZIIOWk8PiO
+         MYSGgRMJBBeqw==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Sent: Thursday, March 3, 2022 6:33 PM
-> To: Dan Carpenter <dan.carpenter@oracle.com>; kbuild@lists.01.org; Ashish
-> Mhetre <amhetre@nvidia.com>; robh+dt@kernel.org;
-> thierry.reding@gmail.com; Jonathan Hunter <jonathanh@nvidia.com>;
-> digetx@gmail.com; linux-kernel@vger.kernel.org; devicetree@vger.kernel.or=
-g;
-> linux-tegra@vger.kernel.org
-> Cc: lkp@intel.com; kbuild-all@lists.01.org; Krishna Reddy
-> <vdumpa@nvidia.com>; Sachin Nikam <Snikam@nvidia.com>
-> Subject: Re: [Patch v4 4/4] memory: tegra: Add MC error logging on tegra1=
-86
-> onward
->=20
-> External email: Use caution opening links or attachments
->=20
->=20
-> On 03/03/2022 13:31, Dan Carpenter wrote:
-> > Hi Ashish,
-> >
-> > url:
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithu=
-b.
-> com%2F0day-ci%2Flinux%2Fcommits%2FAshish-Mhetre%2Fmemory-tegra-
-> Add-MC-channels-and-error-logging%2F20220302-
-> 164625&amp;data=3D04%7C01%7Camhetre%40nvidia.com%7C448e9570ac274b
-> 7ed2f408d9fd162da7%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C
-> 637819094016979779%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwM
-> DAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3D
-> dzcWTAMPikKWLFc4mkD%2FJPWQckiYrUzI9OOEEGvvDAA%3D&amp;reserved
-> =3D0
-> > base:
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k=
-ern
-> el.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftegra%2Flinux.git&amp;dat
-> a=3D04%7C01%7Camhetre%40nvidia.com%7C448e9570ac274b7ed2f408d9fd162
-> da7%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C63781909401697
-> 9779%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luM
-> zIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DpbpW4cT7C%2Fa
-> qP8FJClKKdG4NdXpEGh0yBZPPk%2FeCSvU%3D&amp;reserved=3D0 for-next
-> > config: openrisc-randconfig-m031-20220302
-> > (https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fdo=
-w
-> > nload.01.org%2F0day-
-> ci%2Farchive%2F20220303%2F202203031247.0bBX70B3-lk
-> >
-> p%40intel.com%2Fconfig&amp;data=3D04%7C01%7Camhetre%40nvidia.com%7C
-> 448e9
-> >
-> 570ac274b7ed2f408d9fd162da7%7C43083d15727340c1b7db39efd9ccc17a%7C
-> 0%7C0
-> >
-> %7C637819094016979779%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjA
-> wMDAiLCJQ
-> >
-> IjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DTO1bX5
-> %2FM
-> > PhUpf%2BnwSuHkB%2ByLEe4Mdn6Or%2BiZUrbeHpY%3D&amp;reserved=3D0)
-> > compiler: or1k-linux-gcc (GCC) 11.2.0
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> >
-> > New smatch warnings:
-> > drivers/memory/tegra/mc.c:593 tegra30_mc_handle_irq() error: uninitiali=
-zed
-> symbol 'channel'.
->=20
-> Ashish,
->=20
-> I mentioned with your v3 that it is expected for submitter to run certain
-> automatic tools:
-> "We not only expect to compile it but also compile with W=3D1, run sparse=
-,
-> smatch and coccicheck. Then also test."
->=20
-> Judging by the output here, it could be that either you used old compiler=
- or did
-> not run the checks.
->=20
-> Can you please confirm that you performed all the activities mentioned be=
-fore?
->=20
-Hi Krzysztof,
+Implementation of support for audio controls in accordance with the
+proposed extension of the virtio sound device specification [1].
 
-I had tested the code and verified that MC errors are getting logged as exp=
-ected
-with my changes.
-I had also compiled kernel with W=3D1, ran sparse and made sure that there
-aren't any warnings/errors with my changes.
-However, I didn't run smatch and coccicheck because I was facing difficulti=
-es
-in setting up these tools.
-I'll make sure that patches in future are scrutinized by all of these tools=
-.
+Design　of virtual audio controls is based on and derived from ALSA
+audio controls. It allows the driver to perform all standard operations,
+such as reading and writing audio control value, as well as working with
+metadata (represented in the TLV form).
 
-> Best regards,
-> Krzysztof
+The driver part was tested on top of the Linux 5.10 kernel.
+
+As a device part was used OpenSynergy proprietary implementation.
+
+[1] https://lists.oasis-open.org/archives/virtio-comment/202104/msg00013.html
+
+
+Anton Yakovlev (1):
+  ALSA: virtio: add support for audio controls
+
+ include/uapi/linux/virtio_snd.h | 154 +++++++++++
+ sound/virtio/Makefile           |   1 +
+ sound/virtio/virtio_card.c      |  21 ++
+ sound/virtio/virtio_card.h      |  22 ++
+ sound/virtio/virtio_kctl.c      | 464 ++++++++++++++++++++++++++++++++
+ 5 files changed, 662 insertions(+)
+ create mode 100644 sound/virtio/virtio_kctl.c
+
+-- 
+2.35.1
+

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF4B4CF54A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC074CFB45
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237028AbiCGJ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
+        id S237489AbiCGKeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:34:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237321AbiCGJXo (ORCPT
+        with ESMTP id S242906AbiCGKMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28AA35861;
-        Mon,  7 Mar 2022 01:22:37 -0800 (PST)
+        Mon, 7 Mar 2022 05:12:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4B38C7DD;
+        Mon,  7 Mar 2022 01:56:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E772B810B2;
-        Mon,  7 Mar 2022 09:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72116C340E9;
-        Mon,  7 Mar 2022 09:22:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 806BEB8102B;
+        Mon,  7 Mar 2022 09:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FCFC340E9;
+        Mon,  7 Mar 2022 09:56:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644954;
-        bh=AhXUlbjfx1RQm61Vv2Eqw9hgtDpyAwoe9JDwySpQJVg=;
+        s=korg; t=1646646971;
+        bh=CaKtX6RI701ZDx4Bn/ja5BTKe+943YPz+gM9MRC0pRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=udkNNWhVFcbSR/LBsl2ggoj1gRMYdD7bWt8119pQcqCRk5Lbz3QofdaTuvCBBMMQ/
-         Mji3fyUf+FwC2aqmtGgxvMqX2eWljgt5zYd2zwXKvyz2CzjF4t+bwpDh7tfAScnbPD
-         VvcXzRlxWrWi7/9f+e18Zs+6OmqSk9AbBWTW2qG0=
+        b=DgFVMygNKQAARiySDYKZufzbXfQm35Ze16rjflPyD7hnm0MA2IZrXmXPVw48nSpWa
+         3FaKxDuM2ULkkCTXQDw94yjjSUq6eioELhzMNU5DmBCLnt9ad1FRzrfh4GA8okJ1IP
+         5CM0tz+Z7XW/7pkqyH7xUq9hoc6NbobyhA54A7nA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         <u.kleine-koenig@pengutronix.de>,
         linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
         "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 4.14 34/42] ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
+Subject: [PATCH 5.16 110/186] ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
 Date:   Mon,  7 Mar 2022 10:19:08 +0100
-Message-Id: <20220307091637.144590799@linuxfoundation.org>
+Message-Id: <20220307091657.154452123@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,7 +86,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/arm/mm/mmu.c
 +++ b/arch/arm/mm/mmu.c
-@@ -230,12 +230,14 @@ early_param("ecc", early_ecc);
+@@ -212,12 +212,14 @@ early_param("ecc", early_ecc);
  static int __init early_cachepolicy(char *p)
  {
  	pr_warn("cachepolicy kernel parameter not supported without cp15\n");

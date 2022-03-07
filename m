@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CAF4CF091
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 05:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C824CF095
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 05:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbiCGEGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 23:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S235112AbiCGEP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 23:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbiCGEGb (ORCPT
+        with ESMTP id S232846AbiCGEP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 23:06:31 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEA23AA77
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 20:05:37 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d07ae0b1c4so149562657b3.11
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 20:05:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Va1ivrfy7pqppqn//1ybfbkoZ8zcsGzxAq5Mdwrg6Oo=;
-        b=CHEpzzbREopfx95f7FHN1MGscUrK2OsB+/98Z2ZAh7A2LQNPljJ3YRSmOdBloiWW88
-         15C9UbCzX63Lt1MJWyGx1K6HiLquJ4C0n7SQFxIYdtDTecDkgueqoOLBFpm8hp3XOJOl
-         fs0q54Wn5Kb/On5x1+rOB1f0ohhmfXewgG9SKpuaW2r/qCcy1CCAwOL/v4wlHr0fOJ6x
-         ImWHjseZvFEC+HKihvtISdH2g5sAuPxTehxNh4zuSMzVIYRmKv8QrLjaR2Cq4fnk1Z7p
-         XCGRjiZuXkkwe1yWiEvsSRVfYN+2WbIB8dzflqDvrNIE/hr8YDc4htKPsHxFvzxBSwdV
-         O9vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Va1ivrfy7pqppqn//1ybfbkoZ8zcsGzxAq5Mdwrg6Oo=;
-        b=bxT+jsce8J5Iuq2H9VKUYaCySp6krz0ZLGqCT5N6MuYpfAcSeu3vhdOXHRxNwVvFZ4
-         5wwyH7DVQ34YfPP2yY70PnSjOs6C33ZXhFyc92Z5AbPF/4VevFY9XEA6U7iM7IOOmZNW
-         RS9Zuq3PhPkdqdUNCmWkgp+YBr3wvPSjVwQS9edhLWXdHbns49tiZ/WniI4IOmaJPcwS
-         4vhKDdtc09EoxNrK9qVtY3V4Tt0m4gzvw1lQltYNTf5FkVQrZVGFCs6k9zMnEzt0Dl8M
-         Uj/zi7CAKaL1sQzdC6KUKShPz+jrOrzjvhZ+pytTcD5I7EpbM/WIV/EAfFIxGjDHG7t6
-         UrxQ==
-X-Gm-Message-State: AOAM531ABn2rHaFdgh8KXbwlO1dTX/vJMPHyg9RbGGvkPy0Z39BR1/qy
-        rETxgxH6eXH1eKBoIL7TrVF5sZoYnCehng1mJJbmaQ==
-X-Google-Smtp-Source: ABdhPJyiizH6e69CmmtKrMh3+m/by+kjMdBmy1n6E4L2QN9IGHXmoGlhozNEiuGWunZQdPzehWbqrluwp1onENNGxPQ=
-X-Received: by 2002:a81:5382:0:b0:2db:81d5:14c3 with SMTP id
- h124-20020a815382000000b002db81d514c3mr6914333ywb.311.1646625936542; Sun, 06
- Mar 2022 20:05:36 -0800 (PST)
+        Sun, 6 Mar 2022 23:15:56 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD1D12AD5;
+        Sun,  6 Mar 2022 20:15:00 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBlV63wQyz4xYy;
+        Mon,  7 Mar 2022 15:14:53 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646626495;
+        bh=41nGrEATh6zLH4eIHRLQ+Ym34K+NcfFps2hKPE69jX8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hy5JQedIIsbQVcG50cI7G+2WnVyia0EYSoHefEHQ4SJWMTzjObV82qWV3SRjDATKt
+         NSmD1T/g0nSGfKM+toB2OPdu0kTx/6B76x6EL7fVw52AzlOF2Jrlf//qnEzpmzPqhr
+         du6AdSlu6cutKIrp7Rcd369iS0ozQ9Hn0Bb5zIaWr8E8gotsNyJb2SBbbkAtTJL/sB
+         iihllhn+bijiT+bKRI1roaKMZ+1rvd6UGdbPeMGC2RWvghtzippf6MSGuJwu3pvPsQ
+         q7SQIHi28KIn1S/LZ7vy7cT8Q4WSJKL7NC2/Ein43J9V/SvwE8jhcvZxkvHibTA4EL
+         VClFeWSuiRljw==
+Date:   Mon, 7 Mar 2022 15:14:52 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: linux-next: manual merge of the scsi tree with the block tree
+Message-ID: <20220307151453.21e0ceab@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220307034358.286657-1-wjack@google.com>
-In-Reply-To: <20220307034358.286657-1-wjack@google.com>
-From:   Jack Wu <wjack@google.com>
-Date:   Mon, 7 Mar 2022 12:05:25 +0800
-Message-ID: <CAHnoD8BTEPeRToRtan7LZJae-K3dv0pvBYQrXkrr3scbjUUcTg@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply: add dock type
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     kernel-team@android.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ken Yang <yangken@google.com>,
-        AleX Pelosi <apelosi@google.com>,
-        Vincent Wang <vincentwang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: multipart/signed; boundary="Sig_/NQfAqqu0.k.ne2d_jmVv=b1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,76 +53,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+--Sig_/NQfAqqu0.k.ne2d_jmVv=b1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Currently, power_supply framework supports only Battery, UPS,
-Mains, USB and WIRELESS power_supply_type. Add dock
-power_supply_type so that the drivers which supports dock can
-register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
+Hi all,
 
-change log
----
-v2: updates to Documentation
+Today's linux-next merge of the scsi tree got a conflict in:
 
-Thanks!
-Jack
+  block/blk-merge.c
 
-Jack Wu <wjack@google.com> =E6=96=BC 2022=E5=B9=B43=E6=9C=887=E6=97=A5 =E9=
-=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:44=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Add dock power_supply_type for the drivers which supports dock can
-> register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
->
-> Signed-off-by: Jack Wu <wjack@google.com>
-> ---
->  Documentation/ABI/testing/sysfs-class-power | 2 +-
->  drivers/power/supply/power_supply_sysfs.c   | 1 +
->  include/linux/power_supply.h                | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
-ABI/testing/sysfs-class-power
-> index 859501366777..0b45d9d3a50f 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -34,7 +34,7 @@ Description:
->                 Describes the main type of the supply.
->
->                 Access: Read
-> -               Valid values: "Battery", "UPS", "Mains", "USB", "Wireless=
-"
-> +               Valid values: "Battery", "UPS", "Mains", "USB", "Wireless=
-", "Dock"
->
->  **Battery and USB properties**
->
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index c0dfcfa33206..2b1f18b7f98c 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -57,6 +57,7 @@ static const char * const POWER_SUPPLY_TYPE_TEXT[] =3D =
-{
->         [POWER_SUPPLY_TYPE_USB_PD_DRP]          =3D "USB_PD_DRP",
->         [POWER_SUPPLY_TYPE_APPLE_BRICK_ID]      =3D "BrickID",
->         [POWER_SUPPLY_TYPE_WIRELESS]            =3D "Wireless",
-> +       [POWER_SUPPLY_TYPE_DOCK]                =3D "Dock",
->  };
->
->  static const char * const POWER_SUPPLY_USB_TYPE_TEXT[] =3D {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index e218041cc000..8f0425f00803 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -189,6 +189,7 @@ enum power_supply_type {
->         POWER_SUPPLY_TYPE_USB_PD_DRP,           /* PD Dual Role Port */
->         POWER_SUPPLY_TYPE_APPLE_BRICK_ID,       /* Apple Charging Method =
-*/
->         POWER_SUPPLY_TYPE_WIRELESS,             /* Wireless */
-> +       POWER_SUPPLY_TYPE_DOCK,                 /* Dock Charging */
->  };
->
->  enum power_supply_usb_type {
-> --
-> 2.35.1.616.g0bdcbb4464-goog
->
+between commit:
+
+  6928b8f7eafa ("block: remove the per-bio/request write hint")
+
+from the block tree and commit:
+
+  73bd66d9c834 ("scsi: block: Remove REQ_OP_WRITE_SAME support")
+
+from the scsi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc block/blk-merge.c
+index 0e871d4e7cb8,87cee7e82ae1..000000000000
+--- a/block/blk-merge.c
++++ b/block/blk-merge.c
+@@@ -778,10 -749,13 +747,6 @@@ static struct request *attempt_merge(st
+  	if (rq_data_dir(req) !=3D rq_data_dir(next))
+  		return NULL;
+ =20
+- 	if (req_op(req) =3D=3D REQ_OP_WRITE_SAME &&
+- 	    !blk_write_same_mergeable(req->bio, next->bio))
+ -	/*
+ -	 * Don't allow merge of different write hints, or for a hint with
+ -	 * non-hint IO.
+ -	 */
+ -	if (req->write_hint !=3D next->write_hint)
+--		return NULL;
+--
+  	if (req->ioprio !=3D next->ioprio)
+  		return NULL;
+ =20
+@@@ -903,11 -877,13 +868,6 @@@ bool blk_rq_merge_ok(struct request *rq
+  	if (!bio_crypt_rq_ctx_compatible(rq, bio))
+  		return false;
+ =20
+- 	/* must be using the same buffer */
+- 	if (req_op(rq) =3D=3D REQ_OP_WRITE_SAME &&
+- 	    !blk_write_same_mergeable(rq->bio, bio))
+ -	/*
+ -	 * Don't allow merge of different write hints, or for a hint with
+ -	 * non-hint IO.
+ -	 */
+ -	if (rq->write_hint !=3D bio->bi_write_hint)
+--		return false;
+--
+  	if (rq->ioprio !=3D bio_prio(bio))
+  		return false;
+ =20
+
+--Sig_/NQfAqqu0.k.ne2d_jmVv=b1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlhr0ACgkQAVBC80lX
+0Gx77Qf8D1j35lZqafHP31jkNZtbtQOBMESdUYogUDn+fH1gebtS+7slyMGGKT5q
+wJSWa7RFsoacdsNpGSlPwWAAY2It7YYMSplQsCaZTJ45mwN5/kI8VUrKlPRIykiX
+JXqnvTMM2XfkGrlawQQgR9qjq0JbXbDYm17kxwTI2LZvYmKNvRhKTVmeYUt+nAGH
+L/RFW+GcGLxBzyx/1r0rs7xAy2n/p9aYOOuAcAGymVJOFTeYYdy4GOMMklp2QZYd
+JDjMSAbJpZ0tl/pMXakLAkSYPIS7nnl5Gxiti/qK0JDCHKT1FJlkZYcNqS38Apyy
+q+iF5HqZc0uubv/s09DkS2I4bS8E0w==
+=xd8r
+-----END PGP SIGNATURE-----
+
+--Sig_/NQfAqqu0.k.ne2d_jmVv=b1--

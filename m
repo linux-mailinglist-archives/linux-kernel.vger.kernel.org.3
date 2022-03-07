@@ -2,51 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D244CF59C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5574CFB7F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237061AbiCGJaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S241186AbiCGKit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237066AbiCGJ1O (ORCPT
+        with ESMTP id S241305AbiCGKKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:27:14 -0500
+        Mon, 7 Mar 2022 05:10:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF87B65145;
-        Mon,  7 Mar 2022 01:24:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE7929CAC;
+        Mon,  7 Mar 2022 01:52:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F72760C00;
-        Mon,  7 Mar 2022 09:24:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B454C340F3;
-        Mon,  7 Mar 2022 09:24:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71D1A60A25;
+        Mon,  7 Mar 2022 09:52:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7BAC340F3;
+        Mon,  7 Mar 2022 09:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645071;
-        bh=BvI6XKS2a6C7yafGKdew4q9Fsz5hDA4ieFJRLYviGN0=;
+        s=korg; t=1646646752;
+        bh=FjR30AB8M1wluAjKILJJaXCGejpbEBNh6lLDeYPU04c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DtETj7rk5uZ8MWpV1nCzkl++G8p1/NBiF6DppXbdi6eaPd//J8BOkhb/o5Y4fjTPs
-         WdkWSPUg4xJfTtqbYF2AU2wlMtITt8D/3PZw0OznoWkT0Wad+jSh7feOQzvd4mR67o
-         2TQWLlV48d16Bims8l8pN7DX0CaokErGFM8OwgwQ=
+        b=te9weEX9zYqeGTrWbD6zTpCYOKqxi2eF3rXhKMrSUkXN2tQIt4TXnxpBrNER8htd0
+         d81NJrZ+0TtoGKlPyuQ8u5vghpv+7GMHJJdape8lKGZFM073vygRlu144Tyy15a1O5
+         5Ig9uLyYZRZD8WCreaJ4QbD5gdxvBingYo49Xx5Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Shuming Fan <shumingf@realtek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 05/51] ASoC: rt5682: do not block workqueue if card is unbound
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Alex Elder <elder@linaro.org>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 082/186] net: ipa: add an interconnect dependency
 Date:   Mon,  7 Mar 2022 10:18:40 +0100
-Message-Id: <20220307091637.147743007@linuxfoundation.org>
+Message-Id: <20220307091656.380149513@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,63 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+From: Alex Elder <elder@linaro.org>
 
-[ Upstream commit 4c33de0673ced9c7c37b3bbd9bfe0fda72340b2a ]
+commit 1dba41c9d2e2dc94b543394974f63d55aa195bfe upstream.
 
-The current rt5682_jack_detect_handler() assumes the component
-and card will always show up and implements an infinite usleep
-loop waiting for them to show up.
+In order to function, the IPA driver very clearly requires the
+interconnect framework to be enabled in the kernel configuration.
+State that dependency in the Kconfig file.
 
-This does not hold true if a codec interrupt (or other
-event) occurs when the card is unbound. The codec driver's
-remove  or shutdown functions cannot cancel the workqueue due
-to the wait loop. As a result, code can either end up blocking
-the workqueue, or hit a kernel oops when the card is freed.
+This became a problem when CONFIG_COMPILE_TEST support was added.
+Non-Qualcomm platforms won't necessarily enable CONFIG_INTERCONNECT.
 
-Fix the issue by rescheduling the jack detect handler in
-case the card is not ready. In case card never shows up,
-the shutdown/remove/suspend calls can now cancel the detect
-task.
-
-Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Shuming Fan <shumingf@realtek.com>
-Link: https://lore.kernel.org/r/20220207153000.3452802-3-kai.vehmanen@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 38a4066f593c5 ("net: ipa: support COMPILE_TEST")
+Signed-off-by: Alex Elder <elder@linaro.org>
+Link: https://lore.kernel.org/r/20220301113440.257916-1-elder@linaro.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/rt5682.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/net/ipa/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/rt5682.c b/sound/soc/codecs/rt5682.c
-index 7a78bb00f874d..5979165ac37cf 100644
---- a/sound/soc/codecs/rt5682.c
-+++ b/sound/soc/codecs/rt5682.c
-@@ -1039,11 +1039,13 @@ static void rt5682_jack_detect_handler(struct work_struct *work)
- 		container_of(work, struct rt5682_priv, jack_detect_work.work);
- 	int val, btn_type;
- 
--	while (!rt5682->component)
--		usleep_range(10000, 15000);
--
--	while (!rt5682->component->card->instantiated)
--		usleep_range(10000, 15000);
-+	if (!rt5682->component || !rt5682->component->card ||
-+	    !rt5682->component->card->instantiated) {
-+		/* card not yet ready, try later */
-+		mod_delayed_work(system_power_efficient_wq,
-+				 &rt5682->jack_detect_work, msecs_to_jiffies(15));
-+		return;
-+	}
- 
- 	mutex_lock(&rt5682->calibrate_mutex);
- 
--- 
-2.34.1
-
+--- a/drivers/net/ipa/Kconfig
++++ b/drivers/net/ipa/Kconfig
+@@ -2,6 +2,7 @@ config QCOM_IPA
+ 	tristate "Qualcomm IPA support"
+ 	depends on NET && QCOM_SMEM
+ 	depends on ARCH_QCOM || COMPILE_TEST
++	depends on INTERCONNECT
+ 	depends on QCOM_RPROC_COMMON || (QCOM_RPROC_COMMON=n && COMPILE_TEST)
+ 	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select QCOM_MDT_LOADER if ARCH_QCOM
 
 

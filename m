@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB404CFE37
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201764CFE39
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242169AbiCGMYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S242218AbiCGMYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242216AbiCGMYC (ORCPT
+        with ESMTP id S242225AbiCGMYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:24:02 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DAA58E52;
-        Mon,  7 Mar 2022 04:23:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646655783; x=1678191783;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yhcV1xA/GCoaV0qxID8U5MSYsK0/vgW50L/YM9WNuBw=;
-  b=QZ/vq7FhEqEGOV83BhAh8KrhQT4Gjf5qsGJ9HA3WZZ8tOB7rXyKYwYlt
-   fZvuNHN/bxyPOZXc0fosd/gzCoBKWiLEJ4Vij/A4upvMf/AiIP9En/C7j
-   iSCo80zFsTRqXj4/LUZL03rBwb0XF+PG/bS//PKR9q/bzu39aWnO5h8Xh
-   tVEkvx4an404tRiZtvN2ijrjU6H2dTUBmrBBjVGa6k1DR4VCz4ytrBOXL
-   J6mFSwHkb6avDCXdiKLBNk8BemgTyngKyu6ATlRDiZ5Fbx8SLdh5lWOAR
-   8WgNfPEZU6XA5ChnIunfEzYOik1USV0iEN0WaGLIyV5QioEfYzc6FM0oa
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,162,1643698800"; 
-   d="scan'208";a="155487952"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2022 05:23:02 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 7 Mar 2022 05:23:00 -0700
-Received: from rob-ult-m19940.amer.actel.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 7 Mar 2022 05:22:58 -0700
-From:   Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-To:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <lars@metafoo.de>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <nicolas.ferre@microchip.com>,
-        "Codrin Ciubotariu" <codrin.ciubotariu@microchip.com>
-Subject: [PATCH v3 6/6] ARM: configs: at91: sama7_defconfig: add MCHP PDMC and DMIC drivers
-Date:   Mon, 7 Mar 2022 14:22:02 +0200
-Message-ID: <20220307122202.2251639-7-codrin.ciubotariu@microchip.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
-References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 07:24:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0300763EF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:23:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BDA7B811B8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:23:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B09C340F5;
+        Mon,  7 Mar 2022 12:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646655805;
+        bh=4FU9MVXnmckZgKV5S9qqzP2l0zaOcBmfWx7Vs1t8lqI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FEyVbZ3OMoFOMHm9xiM2pbQmIdXKk8PQB+ppsCAu2MUeqmRpvHUqFoU/CLCEYw7zR
+         IW187SpKnAxUn/r0+sVcC5P3uqJb8IupAzV2EChROuAsqQmZJTi1s+h+ctBvpcsISR
+         j6E5jRMUTvxdZSsCZNXhABPUzEp4RNauUWVoW7vhkF5FC5JqoRY3mwkZU8c4GexMYD
+         ffbgyPgcFja6Zjep/wIoV2XGW/gynERjEL2UT/BMc9avTRtDttOlYGmrHAFRTN2W0Q
+         2D/60vehzS3COdMqIGoQe8wAS4ZBha4eTi1N1HXoilcsq4UuQWqHu/m1ayNRLSr1Sx
+         9IjrrmlIU4PgQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRCOW-00CmSd-DG; Mon, 07 Mar 2022 12:23:21 +0000
+Date:   Mon, 07 Mar 2022 12:23:20 +0000
+Message-ID: <87bkyi0x53.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, joey.gouly@arm.com,
+        mark.rutland@arm.com, akpm@linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] arm64: improve display about CPU architecture in cpuinfo
+In-Reply-To: <a31431bf-24bb-71ac-8f3c-f9ca19f5c4f0@linux.alibaba.com>
+References: <20220307030417.22974-1-rongwei.wang@linux.alibaba.com>
+        <87h78a178u.wl-maz@kernel.org>
+        <a31431bf-24bb-71ac-8f3c-f9ca19f5c4f0@linux.alibaba.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rongwei.wang@linux.alibaba.com, catalin.marinas@arm.com, will@kernel.org, joey.gouly@arm.com, mark.rutland@arm.com, akpm@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable drivers needed for Microchip's PDMC and PDM microphones.
+On Mon, 07 Mar 2022 12:13:50 +0000,
+Rongwei Wang <rongwei.wang@linux.alibaba.com> wrote:
+> 
+> 
+> 
+> On 3/7/22 4:45 PM, Marc Zyngier wrote:
+> > On Mon, 07 Mar 2022 03:04:17 +0000,
+> > Rongwei Wang <rongwei.wang@linux.alibaba.com> wrote:
+> >> 
+> >> Now, it is unsuitable for both ARMv8 and ARMv9 to show a
+> >> fixed string "CPU architecture: 8" in /proc/cpuinfo.
+> > 
+> > Please read the various threads that have been going on over the past
+> > 10+ years about *why* we don't allow this sort of change (TL;DR: it
+> > breaks userspace, and we don't do that).
+> > 
+> > Also, there is no material difference between v8 and v9 that would be
+> > observable from userspace outside of the "Features:" line. And if that
+> > doesn't convince you, just think of '8' as the number of bytes
+> > used by
 
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
----
+> I got your point. It seems that we can regard '8' as the number of
+> bytes. But what make me do this is that 'CPU architecture: 8' is
+> confusing, especially those responsible for testing.
+> And I believe that most people regard this '8' as ARMv8, maybe not.
 
-Changes in v2,v3:
- - none;
+That was the original intention. But given that there is no userspace
+visible difference between v8, v9 and  whatever comes after it, this
+is a pointless change. My comment about the size of a VA was just a
+joke, and not something to be taken seriously.
 
- arch/arm/configs/sama7_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+> In fact, I'm not sure it has potential ABI implications, so seek your
+> advice.
 
-diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
-index 0368068e04d9..bc29badab890 100644
---- a/arch/arm/configs/sama7_defconfig
-+++ b/arch/arm/configs/sama7_defconfig
-@@ -138,6 +138,8 @@ CONFIG_SND_SOC_MIKROE_PROTO=m
- CONFIG_SND_MCHP_SOC_I2S_MCC=y
- CONFIG_SND_MCHP_SOC_SPDIFTX=y
- CONFIG_SND_MCHP_SOC_SPDIFRX=y
-+CONFIG_SND_MCHP_SOC_PDMC=y
-+CONFIG_SND_SOC_DMIC=y
- CONFIG_SND_SOC_PCM5102A=y
- CONFIG_SND_SOC_SPDIF=y
- CONFIG_SND_SIMPLE_CARD=y
+Plenty of userspace programs parse /proc/cpuinfo. If you replace '8'
+with anything else, they will fail. Which is why although your patch
+makes sense, it comes 10 years too late, and we can't change this
+anymore.
+
+Thanks,
+
+	M.
+
 -- 
-2.32.0
-
+Without deviation from the norm, progress is not possible.

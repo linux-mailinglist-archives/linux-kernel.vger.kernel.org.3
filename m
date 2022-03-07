@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE7E4CF955
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3E04CFAB9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240119AbiCGKFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:05:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
+        id S240539AbiCGKS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236508AbiCGJmC (ORCPT
+        with ESMTP id S240515AbiCGKBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:42:02 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B878422A;
-        Mon,  7 Mar 2022 01:41:08 -0800 (PST)
+        Mon, 7 Mar 2022 05:01:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFEE11A3C;
+        Mon,  7 Mar 2022 01:49:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 306ADCE0EAA;
-        Mon,  7 Mar 2022 09:41:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1194C340E9;
-        Mon,  7 Mar 2022 09:41:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 506CFB8102B;
+        Mon,  7 Mar 2022 09:49:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AB4C340F5;
+        Mon,  7 Mar 2022 09:49:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646065;
-        bh=w3xW6sXuqTAEkeMEks1u2RQfpbj9vS7RE95tWEHFmkY=;
+        s=korg; t=1646646583;
+        bh=QyhkGm7BZkJ84jEEZ+rA3fD7PUKx2VHnXKxa3YJ+l9Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A822l9Ea7/jXUa12UqALbJC5bfmtT4HvWQebdARmsHdi9mgRkEt4ui1ythMajKuFH
-         xDNglMeWvveSDtVm55M6dq4EPeSEXKjZPjMuL/mqtb7rM2ELQhJ+ennoCqwdfiIiOx
-         xz4u/DlDufOqz3dTkFvomr3XUhoowrBbraZWtDTw=
+        b=InbpUh4AnaG1N6N5JjMKq0Us6LWEGxYP8vu4RZSv6QFOlMw9gf4v/59pVqLjD3l2g
+         EBfOWpYOfA9TV6O/PvsJIj1b4XaMvj3ObWDVAikY5X4Tb6+DVI5I4KQhIkTn8u4xXf
+         A99fxI29i1+OFcEw6qYqn3cXNCnYf9OvBv4eQVSE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tao Liu <xliutaox@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 121/262] gve: Recording rx queue before sending to napi
-Date:   Mon,  7 Mar 2022 10:17:45 +0100
-Message-Id: <20220307091705.877888655@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH 5.16 028/186] usb: gadget: dont release an existing dev->buf
+Date:   Mon,  7 Mar 2022 10:17:46 +0100
+Message-Id: <20220307091654.881614236@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tao Liu <xliutaox@google.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 084cbb2ec3af2d23be9de65fcc9493e21e265859 ]
+commit 89f3594d0de58e8a57d92d497dea9fee3d4b9cda upstream.
 
-This caused a significant performance degredation when using generic XDP
-with multiple queues.
+dev->buf does not need to be released if it already exists before
+executing dev_config.
 
-Fixes: f5cedc84a30d2 ("gve: Add transmit and receive support")
-Signed-off-by: Tao Liu <xliutaox@google.com>
-Link: https://lore.kernel.org/r/20220207175901.2486596-1-jeroendb@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20211231172138.7993-2-hbh25y@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/google/gve/gve_rx.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/gadget/legacy/inode.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/google/gve/gve_rx.c b/drivers/net/ethernet/google/gve/gve_rx.c
-index 629d8ed08fc61..97431969a488f 100644
---- a/drivers/net/ethernet/google/gve/gve_rx.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx.c
-@@ -450,6 +450,7 @@ static bool gve_rx(struct gve_rx_ring *rx, struct gve_rx_desc *rx_desc,
- 		skb_set_hash(skb, be32_to_cpu(rx_desc->rss_hash),
- 			     gve_rss_type(rx_desc->flags_seq));
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -1826,8 +1826,9 @@ dev_config (struct file *fd, const char
+ 	spin_lock_irq (&dev->lock);
+ 	value = -EINVAL;
+ 	if (dev->buf) {
++		spin_unlock_irq(&dev->lock);
+ 		kfree(kbuf);
+-		goto fail;
++		return value;
+ 	}
+ 	dev->buf = kbuf;
  
-+	skb_record_rx_queue(skb, rx->q_num);
- 	if (skb_is_nonlinear(skb))
- 		napi_gro_frags(napi);
- 	else
--- 
-2.34.1
-
 
 

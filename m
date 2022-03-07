@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280574CF3A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06044CF3A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbiCGIeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 03:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S235588AbiCGIeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 03:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236203AbiCGIeS (ORCPT
+        with ESMTP id S231217AbiCGIeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 03:34:18 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E2713D26
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:33:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1646642001;
-  x=1678178001;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mhhc4KiuxbavjISsXlMiWu5G1CPhO3zCf6Xz+ptSOuQ=;
-  b=JSRk6HM0syu9KGBVQr2Ht/qUIIYLdf/iFjisceZMBQiAmzeareXoqfy8
-   e3e0XjfvG6ClxVBX2L3t08o/YJPux9NGKgcAMQHzc2qd3TiVbx3WB0pnH
-   3fjwghQLOqmTdR5hP0rxDYi9hkBA3pzufFgtAGwVz03wYOqGUFMRGECcz
-   7+p7k1A4+0EMpHRf7ebC+mBSJDq6Vzb3+UaVOpf+22pNnfy5i7AnzG/C8
-   D0ykAYAY5tH/exwej/ZMhkON0QiX2z+OECGXeFNpBa8yLKYWydz9/2y+G
-   6Dor9/0I944RNmECFxP+tpF9RZDP07tfmR99OHbB+ekdsOBUvDdw1exeN
-   g==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>
-Subject: [PATCH] clocksource/drivers/exynos_mct: Support using only local timer
-Date:   Mon, 7 Mar 2022 09:32:55 +0100
-Message-ID: <20220307083255.1577365-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 7 Mar 2022 03:34:16 -0500
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6200865D9;
+        Mon,  7 Mar 2022 00:33:22 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id o1so17701078edc.3;
+        Mon, 07 Mar 2022 00:33:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5XjBMZm3BOMlJHves0LjGps2D/xDmp5OOs9Q8HXzMWA=;
+        b=mllPxIkcpXTBHjFkV8NafkRN2akSPjlSsO7JRBy0s7xIX1w3vA2M8XG9g2XZELo9cd
+         tSm8RATq/nZZq/wy9yeznpAOPPke5v8KWgZj8Zt3OexOQul08kHSIurRlDbjHDy8JbuM
+         ZqYLV1G/UNB0Fkgz3Fc6eeWk7F9DFz5Zcu2ozg/geEWxj6XclrjaY4nvCtQVWNyziy4y
+         DNPzWKzVsM3x3RcsVcFHWqX5d+G6qEPj1mT7kWTM5kFdmg7Ls/Y+ICG+OmAfkyEjGDck
+         ZRMAqaLXcrogrDcGaVnZXuQBDH0cSthLZuuxWvLMBeH5QUP12gBsAn0K2SJz+7tECDJ+
+         W27Q==
+X-Gm-Message-State: AOAM533inppaNq7v95MqVgJv2k06v5idZDJ81nJKJ8x9r7wce28Ne8zL
+        jw3CjgFdLiQ5T2vFKuIOyac=
+X-Google-Smtp-Source: ABdhPJxZX4jq5ETB6RUWSrtsGt6mSRLj9NeemrHaPEG5IZwX6bD1jcI6KNoxfQTjw2bwuQNulKojjQ==
+X-Received: by 2002:a05:6402:50d2:b0:413:1cd8:e08e with SMTP id h18-20020a05640250d200b004131cd8e08emr10061302edb.276.1646642000886;
+        Mon, 07 Mar 2022 00:33:20 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id y19-20020a1709064b1300b006dabe44a6edsm3248931eju.141.2022.03.07.00.33.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 00:33:20 -0800 (PST)
+Message-ID: <3eecfcea-8eeb-3ea2-566b-704c314af718@kernel.org>
+Date:   Mon, 7 Mar 2022 09:33:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 3/7] tty: serial: samsung: constify
+ s3c24xx_serial_drv_data
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220307080810.53847-1-krzysztof.kozlowski@canonical.com>
+ <20220307080925.54131-2-krzysztof.kozlowski@canonical.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220307080925.54131-2-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,112 +69,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ARTPEC-8 SoC has a quad-core Cortex-A53 and a single-core Cortex-A5
-which share one MCT with one global and eight local timers.
+On 07. 03. 22, 9:09, Krzysztof Kozlowski wrote:
+> The driver data (struct s3c24xx_serial_drv_data) is only used to
+> initialize the driver properly and is not modified.  Make it const.
+...
+> @@ -2755,9 +2755,9 @@ static struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
+>   	},
+>   	.fifosize = { 256, 64, 16, 16 },
+>   };
+> -#define S5PV210_SERIAL_DRV_DATA ((kernel_ulong_t)&s5pv210_serial_drv_data)
+> +#define S5PV210_SERIAL_DRV_DATA (&s5pv210_serial_drv_data)
+>   #else
+> -#define S5PV210_SERIAL_DRV_DATA	(kernel_ulong_t)NULL
+> +#define S5PV210_SERIAL_DRV_DATA	NULL
 
-The Cortex-A53 boots first and starts the global FRC and also registers
-a clock events device using the global timer.  (This global timer clock
-events is usually replaced by arch timer clock events for each of the
-cores.)
+Yet, I still don't see why the switch from ulong->ptr happens in this 
+"constify it" patch?
 
-When the A5 boots, we should not use the global timer interrupts or
-write to the global timer registers.  This is because even if there are
-four global comparators, the control bits for all four are in the same
-registers, and we would need to synchronize between the cpus.  Instead,
-the global timer FRC (already started by the A53) should be used as the
-clock source, and one of the local timers which are not used by the A53
-can be used for clock events on the A5.
-
-To support this, add a module param to set the local timer starting
-index.  If this parameter is non-zero, the global timer clock events
-device is not registered and we don't write to the global FRC if it is
-already started.
-
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- drivers/clocksource/exynos_mct.c | 29 ++++++++++++++++++++++++-----
- 1 file changed, 24 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-index f29c812b70c9..7ea2919b1808 100644
---- a/drivers/clocksource/exynos_mct.c
-+++ b/drivers/clocksource/exynos_mct.c
-@@ -33,7 +33,7 @@
- #define EXYNOS4_MCT_G_INT_ENB		EXYNOS4_MCTREG(0x248)
- #define EXYNOS4_MCT_G_WSTAT		EXYNOS4_MCTREG(0x24C)
- #define _EXYNOS4_MCT_L_BASE		EXYNOS4_MCTREG(0x300)
--#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * x))
-+#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * (x)))
- #define EXYNOS4_MCT_L_MASK		(0xffffff00)
- 
- #define MCT_L_TCNTB_OFFSET		(0x00)
-@@ -77,6 +77,13 @@ static unsigned long clk_rate;
- static unsigned int mct_int_type;
- static int mct_irqs[MCT_NR_IRQS];
- 
-+/*
-+ * First local timer index to use.  If non-zero, global
-+ * timer is not written to.
-+ */
-+static unsigned int mct_local_idx;
-+module_param_named(local_idx, mct_local_idx, int, 0);
-+
- struct mct_clock_event_device {
- 	struct clock_event_device evt;
- 	unsigned long base;
-@@ -157,6 +164,17 @@ static void exynos4_mct_frc_start(void)
- 	u32 reg;
- 
- 	reg = readl_relaxed(reg_base + EXYNOS4_MCT_G_TCON);
-+
-+	/*
-+	 * If the FRC is already running, we don't need to start it again.  We
-+	 * could probably just do this on all systems, but, to avoid any risk
-+	 * for regressions, we only do it on systems where it's absolutely
-+	 * necessary (i.e., on systems where writes to the global registers
-+	 * need to be avoided).
-+	 */
-+	if (mct_local_idx && (reg & MCT_G_TCON_START))
-+		return;
-+
- 	reg |= MCT_G_TCON_START;
- 	exynos4_mct_write(reg, EXYNOS4_MCT_G_TCON);
- }
-@@ -449,7 +467,7 @@ static int exynos4_mct_starting_cpu(unsigned int cpu)
- 		per_cpu_ptr(&percpu_mct_tick, cpu);
- 	struct clock_event_device *evt = &mevt->evt;
- 
--	mevt->base = EXYNOS4_MCT_L_BASE(cpu);
-+	mevt->base = EXYNOS4_MCT_L_BASE(mct_local_idx + cpu);
- 	snprintf(mevt->name, sizeof(mevt->name), "mct_tick%d", cpu);
- 
- 	evt->name = mevt->name;
-@@ -554,13 +572,14 @@ static int __init exynos4_timer_interrupts(struct device_node *np,
- 	} else {
- 		for_each_possible_cpu(cpu) {
- 			int mct_irq;
-+			unsigned int irqidx = MCT_L0_IRQ + mct_local_idx + cpu;
- 			struct mct_clock_event_device *pcpu_mevt =
- 				per_cpu_ptr(&percpu_mct_tick, cpu);
- 
- 			pcpu_mevt->evt.irq = -1;
--			if (MCT_L0_IRQ + cpu >= ARRAY_SIZE(mct_irqs))
-+			if (irqidx >= ARRAY_SIZE(mct_irqs))
- 				break;
--			mct_irq = mct_irqs[MCT_L0_IRQ + cpu];
-+			mct_irq = mct_irqs[irqidx];
- 
- 			irq_set_status_flags(mct_irq, IRQ_NOAUTOEN);
- 			if (request_irq(mct_irq,
-@@ -619,7 +638,7 @@ static int __init mct_init_dt(struct device_node *np, unsigned int int_type)
- 	if (ret)
- 		return ret;
- 
--	return exynos4_clockevent_init();
-+	return (mct_local_idx == 0) ? exynos4_clockevent_init() : ret;
- }
- 
- 
+thanks,
 -- 
-2.34.1
-
+-- 
+js
+suse labs

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B124CF805
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BCF4CF551
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238037AbiCGJrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S236977AbiCGJ0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238586AbiCGJig (ORCPT
+        with ESMTP id S237317AbiCGJXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:38:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC164A3CF;
-        Mon,  7 Mar 2022 01:33:00 -0800 (PST)
+        Mon, 7 Mar 2022 04:23:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0DF2AE05;
+        Mon,  7 Mar 2022 01:22:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3985560C7D;
-        Mon,  7 Mar 2022 09:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4530BC340F3;
-        Mon,  7 Mar 2022 09:32:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF99CB810B2;
+        Mon,  7 Mar 2022 09:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9C3C340E9;
+        Mon,  7 Mar 2022 09:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645563;
-        bh=SaOWSdfpn9CGBVS1B4toCBOUU00mGD5nHWoK8cA+Qkk=;
+        s=korg; t=1646644951;
+        bh=9w7wfwKPGRpK9zkIDgGWdhu9dqbToz0KVbzKdvjnBHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wrxA2oKIpxcZQlmDpb/rZwO6Xsvb+oCN1G39Mm2Jw56M4TKZLJh3UxNXeHFBv/pX+
-         1wWIBp7P/twooS0jOUTdBTLSTiLfEdF8TxBe52NnUuuyDIVWENWwKGgkZCLNMlTupa
-         z9uVueJJiwol3S0dvB5wcNYVOXb/wrc8umVVtDXY=
+        b=v6K6d/cLjyOW4L2o1c5a1iajs0ww3I5R60fLNb+3VwwyOuvBiuybuahbsbp3w2KGP
+         QNtQLyD9nbVp/xlnpWTT0C9PDeKwYUgiUFDAfJYH/o2cYMT5/6nwQTqvXz90HA3Hr/
+         WDex5rUoTnhtfJ9WARxyFwSY7yFKThb4tQwrPzT8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Siva Reddy <siva.kallam@samsung.com>,
-        Girish K S <ks.giri@samsung.com>,
-        Byungho An <bh74.an@samsung.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 064/105] net: sxgbe: fix return value of __setup handler
+        stable@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.14 33/42] can: gs_usb: change active_channelss type from atomic_t to u8
 Date:   Mon,  7 Mar 2022 10:19:07 +0100
-Message-Id: <20220307091645.980440650@linuxfoundation.org>
+Message-Id: <20220307091637.116146846@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,52 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-commit 50e06ddceeea263f57fe92baa677c638ecd65bb6 upstream.
+commit 035b0fcf02707d3c9c2890dc1484b11aa5335eb1 upstream.
 
-__setup() handlers should return 1 on success, i.e., the parameter
-has been handled. A return of 0 causes the "option=value" string to be
-added to init's environment strings, polluting it.
+The driver uses an atomic_t variable: gs_usb:active_channels to keep
+track of the number of opened channels in order to only allocate
+memory for the URBs when this count changes from zero to one.
 
-Fixes: acc18c147b22 ("net: sxgbe: add EEE(Energy Efficient Ethernet) for Samsung sxgbe")
-Fixes: 1edb9ca69e8a ("net: sxgbe: add basic framework for Samsung 10Gb ethernet driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Siva Reddy <siva.kallam@samsung.com>
-Cc: Girish K S <ks.giri@samsung.com>
-Cc: Byungho An <bh74.an@samsung.com>
-Link: https://lore.kernel.org/r/20220224033528.24640-1-rdunlap@infradead.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+However, the driver does not decrement the counter when an error
+occurs in gs_can_open(). This issue is fixed by changing the type from
+atomic_t to u8 and by simplifying the logic accordingly.
+
+It is safe to use an u8 here because the network stack big kernel lock
+(a.k.a. rtnl_mutex) is being hold. For details, please refer to [1].
+
+[1] https://lore.kernel.org/linux-can/CAMZ6Rq+sHpiw34ijPsmp7vbUpDtJwvVtdV7CvRZJsLixjAFfrg@mail.gmail.com/T/#t
+
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Link: https://lore.kernel.org/all/20220214234814.1321599-1-mailhol.vincent@wanadoo.fr
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/can/usb/gs_usb.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c
-+++ b/drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c
-@@ -2282,18 +2282,18 @@ static int __init sxgbe_cmdline_opt(char
- 	char *opt;
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -198,8 +198,8 @@ struct gs_can {
+ struct gs_usb {
+ 	struct gs_can *canch[GS_MAX_INTF];
+ 	struct usb_anchor rx_submitted;
+-	atomic_t active_channels;
+ 	struct usb_device *udev;
++	u8 active_channels;
+ };
  
- 	if (!str || !*str)
--		return -EINVAL;
-+		return 1;
- 	while ((opt = strsep(&str, ",")) != NULL) {
- 		if (!strncmp(opt, "eee_timer:", 10)) {
- 			if (kstrtoint(opt + 10, 0, &eee_timer))
- 				goto err;
- 		}
- 	}
--	return 0;
-+	return 1;
+ /* 'allocate' a tx context.
+@@ -596,7 +596,7 @@ static int gs_can_open(struct net_device
+ 	if (rc)
+ 		return rc;
  
- err:
- 	pr_err("%s: ERROR broken module parameter conversion\n", __func__);
--	return -EINVAL;
-+	return 1;
- }
+-	if (atomic_add_return(1, &parent->active_channels) == 1) {
++	if (!parent->active_channels) {
+ 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
+ 			struct urb *urb;
+ 			u8 *buf;
+@@ -697,6 +697,7 @@ static int gs_can_open(struct net_device
  
- __setup("sxgbeeth=", sxgbe_cmdline_opt);
+ 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 
++	parent->active_channels++;
+ 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+ 		netif_start_queue(netdev);
+ 
+@@ -712,7 +713,8 @@ static int gs_can_close(struct net_devic
+ 	netif_stop_queue(netdev);
+ 
+ 	/* Stop polling */
+-	if (atomic_dec_and_test(&parent->active_channels))
++	parent->active_channels--;
++	if (!parent->active_channels)
+ 		usb_kill_anchored_urbs(&parent->rx_submitted);
+ 
+ 	/* Stop sending URBs */
+@@ -991,8 +993,6 @@ static int gs_usb_probe(struct usb_inter
+ 
+ 	init_usb_anchor(&dev->rx_submitted);
+ 
+-	atomic_set(&dev->active_channels, 0);
+-
+ 	usb_set_intfdata(intf, dev);
+ 	dev->udev = interface_to_usbdev(intf);
+ 
 
 

@@ -2,116 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED05C4D0321
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE234D0325
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243805AbiCGPmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:42:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
+        id S243867AbiCGPnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237594AbiCGPmo (ORCPT
+        with ESMTP id S243927AbiCGPnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:42:44 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5062E73076
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:41:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 078501477;
-        Mon,  7 Mar 2022 07:41:50 -0800 (PST)
-Received: from [10.57.88.173] (unknown [10.57.88.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6ED823F66F;
-        Mon,  7 Mar 2022 07:41:48 -0800 (PST)
-Message-ID: <0aa9553b-b227-a1b5-16ca-b72a8d4be87b@arm.com>
-Date:   Mon, 7 Mar 2022 15:41:46 +0000
+        Mon, 7 Mar 2022 10:43:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F33475E71;
+        Mon,  7 Mar 2022 07:42:10 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D8550210E9;
+        Mon,  7 Mar 2022 15:42:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646667728; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pZUTivFJePfyCz85okn550yujg3K57yIFElsl/vVWig=;
+        b=IZ2X4cEtBAxNFB6H08Ex+X60hrBCSVM4wolqLIm2L2EqydCfRCN7tzlMprpYmfD70fygGL
+        nN7hZnMMfuOwBlKfpmqSCj7zCNUWKA/CwZept5p8b2Xd1JQ0RJMMo5NAIMzuPv2hcMZ0jU
+        lnbZ+1+VErZHURmzu2MXgd6jv2YGpvI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646667728;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pZUTivFJePfyCz85okn550yujg3K57yIFElsl/vVWig=;
+        b=NA4ARugU2jFvmNBk3+44mlkj1m3/UJDpBeSXPl1p02r6/bhVDBxaP2SiDQGGKWjJGCcJIB
+        UY25+RP21PA9Z7BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6D27513B5E;
+        Mon,  7 Mar 2022 15:42:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rvTZGdAnJmKcLwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 07 Mar 2022 15:42:08 +0000
+Message-ID: <9ac9a88f-54b4-a49f-0857-c3094d3e0d2b@suse.cz>
+Date:   Mon, 7 Mar 2022 16:42:08 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [PATCH] cpu/hotplug: Set st->cpu earlier
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
 Content-Language: en-US
-To:     Steven Price <steven.price@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20220225134918.105796-1-steven.price@arm.com>
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-In-Reply-To: <20220225134918.105796-1-steven.price@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <20220118132121.31388-4-chao.p.peng@linux.intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v4 03/12] mm: Introduce memfile_notifier
+In-Reply-To: <20220118132121.31388-4-chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 13:49, Steven Price wrote:
-> Setting the 'cpu' member of struct cpuhp_cpu_state in cpuhp_create() is
-> too late as other callbacks can be made before that point. In particular > if one of the earlier callbacks fails and triggers a rollback that
-> rollback will be done with st->cpu==0 causing CPU0 to be erroneously set
-
-st->cpu is even needed before any cpuhp_step callback has been run 
-(cpuhp_set_state() in _cpu_up()). So despite CPUHP_CREATE_THREADS being 
-the first step, this is indeed not early enough.
-
-> to be dying, causing the scheduler to get mightily confused and throw
-> its toys out of the pram.
+On 1/18/22 14:21, Chao Peng wrote:
+> This patch introduces memfile_notifier facility so existing memory file
+> subsystems (e.g. tmpfs/hugetlbfs) can provide memory pages to allow a
+> third kernel component to make use of memory bookmarked in the memory
+> file and gets notified when the pages in the memory file become
+> allocated/invalidated.
 > 
-> Move the assignment earlier before any callbacks have a chance to run.
-
-Probably needs a
-
-Fixes: 2ea46c6fc945 ("cpumask/hotplug: Fix cpu_dying() state tracking")
-
+> It will be used for KVM to use a file descriptor as the guest memory
+> backing store and KVM will use this memfile_notifier interface to
+> interact with memory file subsystems. In the future there might be other
+> consumers (e.g. VFIO with encrypted device memory).
 > 
-> Signed-off-by: Steven Price <steven.price@arm.com>
-> CC: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> It consists two sets of callbacks:
+>   - memfile_notifier_ops: callbacks for memory backing store to notify
+>     KVM when memory gets allocated/invalidated.
+>   - memfile_pfn_ops: callbacks for KVM to call into memory backing store
+>     to request memory pages for guest private memory.
+> 
+> Userspace is in charge of guest memory lifecycle: it first allocates
+> pages in memory backing store and then passes the fd to KVM and lets KVM
+> register each memory slot to memory backing store via
+> memfile_register_notifier.
+> 
+> The supported memory backing store should maintain a memfile_notifier list
+> and provide routine for memfile_notifier to get the list head address and
+> memfile_pfn_ops callbacks for memfile_register_notifier. It also should call
+> memfile_notifier_fallocate/memfile_notifier_invalidate when the bookmarked
+> memory gets allocated/invalidated.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+
+Process nitpick:
+Here and in patch 4/12 you have Kirill's S-o-b so there should probably be
+also "From: Kirill ..." as was in v3? Or in case you modified the original
+patches so much to become the primary author, you should add
+"Co-developed-by: Kirill ..." here before his S-o-b.
+
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
 > ---
-> This was initially triggered by a VM which didn't have enough memory for
-> its VCPUs, but an easier way of triggering it is to make a change like
-> below in __smpboot_create_thread (as suggested by Dietmar Eggemann) to
-> pretend the memory allocation fails for a particular CPU:
+>  include/linux/memfile_notifier.h | 53 +++++++++++++++++++
+>  mm/Kconfig                       |  4 ++
+>  mm/Makefile                      |  1 +
+>  mm/memfile_notifier.c            | 89 ++++++++++++++++++++++++++++++++
+>  4 files changed, 147 insertions(+)
+>  create mode 100644 include/linux/memfile_notifier.h
+>  create mode 100644 mm/memfile_notifier.c
 > 
->   	td = kzalloc_node(sizeof(*td), GFP_KERNEL, cpu_to_node(cpu));
-> -	if (!td)
-> +	if (!td || cpu == 1)
->   		return -ENOMEM;
-> 
-> I'm not entirely sure quite where the best place to set st->cpu is, so
-> please do let me know if there's a better place to do the assignment.
-> ---
->   kernel/cpu.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 407a2568f35e..49c3ef6067e5 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -720,7 +720,6 @@ static void cpuhp_create(unsigned int cpu)
->   
->   	init_completion(&st->done_up);
->   	init_completion(&st->done_down);
-> -	st->cpu = cpu;
->   }
->   
->   static int cpuhp_should_run(unsigned int cpu)
-> @@ -1333,6 +1332,8 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
->   		goto out;
->   	}
->   
-> +	st->cpu = cpu;
+> diff --git a/include/linux/memfile_notifier.h b/include/linux/memfile_notifier.h
+> new file mode 100644
+> index 000000000000..a03bebdd1322
+> --- /dev/null
+> +++ b/include/linux/memfile_notifier.h
+> @@ -0,0 +1,53 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_MEMFILE_NOTIFIER_H
+> +#define _LINUX_MEMFILE_NOTIFIER_H
 > +
+> +#include <linux/rculist.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/srcu.h>
+> +#include <linux/fs.h>
+> +
+> +struct memfile_notifier;
+> +
+> +struct memfile_notifier_ops {
+> +	void (*invalidate)(struct memfile_notifier *notifier,
+> +			   pgoff_t start, pgoff_t end);
+> +	void (*fallocate)(struct memfile_notifier *notifier,
+> +			  pgoff_t start, pgoff_t end);
+> +};
+> +
+> +struct memfile_pfn_ops {
+> +	long (*get_lock_pfn)(struct inode *inode, pgoff_t offset, int *order);
+> +	void (*put_unlock_pfn)(unsigned long pfn);
+> +};
+> +
+> +struct memfile_notifier {
+> +	struct list_head list;
+> +	struct memfile_notifier_ops *ops;
+> +};
+> +
+> +struct memfile_notifier_list {
+> +	struct list_head head;
+> +	spinlock_t lock;
+> +};
+> +
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +static inline void memfile_notifier_list_init(struct memfile_notifier_list *list)
+> +{
+> +	INIT_LIST_HEAD(&list->head);
+> +	spin_lock_init(&list->lock);
+> +}
+> +
+> +extern void memfile_notifier_invalidate(struct memfile_notifier_list *list,
+> +					pgoff_t start, pgoff_t end);
+> +extern void memfile_notifier_fallocate(struct memfile_notifier_list *list,
+> +				       pgoff_t start, pgoff_t end);
+> +extern int memfile_register_notifier(struct inode *inode,
+> +				     struct memfile_notifier *notifier,
+> +				     struct memfile_pfn_ops **pfn_ops);
+> +extern void memfile_unregister_notifier(struct inode *inode,
+> +					struct memfile_notifier *notifier);
+> +
+> +#endif /* CONFIG_MEMFILE_NOTIFIER */
+> +
+> +#endif /* _LINUX_MEMFILE_NOTIFIER_H */
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 28edafc820ad..fa31eda3c895 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -900,6 +900,10 @@ config IO_MAPPING
+>  config SECRETMEM
+>  	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+>  
+> +config MEMFILE_NOTIFIER
+> +	bool
+> +	select SRCU
+> +
+>  source "mm/damon/Kconfig"
+>  
+>  endmenu
+> diff --git a/mm/Makefile b/mm/Makefile
+> index d6c0042e3aa0..80588f7c3bc2 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -130,3 +130,4 @@ obj-$(CONFIG_PAGE_REPORTING) += page_reporting.o
+>  obj-$(CONFIG_IO_MAPPING) += io-mapping.o
+>  obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) += bootmem_info.o
+>  obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
+> +obj-$(CONFIG_MEMFILE_NOTIFIER) += memfile_notifier.o
+> diff --git a/mm/memfile_notifier.c b/mm/memfile_notifier.c
+> new file mode 100644
+> index 000000000000..8171d4601a04
+> --- /dev/null
+> +++ b/mm/memfile_notifier.c
+> @@ -0,0 +1,89 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + *  linux/mm/memfile_notifier.c
+> + *
+> + *  Copyright (C) 2022  Intel Corporation.
+> + *             Chao Peng <chao.p.peng@linux.intel.com>
+> + */
+> +
+> +#include <linux/memfile_notifier.h>
+> +#include <linux/srcu.h>
+> +
+> +DEFINE_STATIC_SRCU(srcu);
+> +
+> +void memfile_notifier_invalidate(struct memfile_notifier_list *list,
+> +				 pgoff_t start, pgoff_t end)
+> +{
+> +	struct memfile_notifier *notifier;
+> +	int id;
+> +
+> +	id = srcu_read_lock(&srcu);
+> +	list_for_each_entry_srcu(notifier, &list->head, list,
+> +				 srcu_read_lock_held(&srcu)) {
+> +		if (notifier->ops && notifier->ops->invalidate)
+> +			notifier->ops->invalidate(notifier, start, end);
+> +	}
+> +	srcu_read_unlock(&srcu, id);
+> +}
+> +
+> +void memfile_notifier_fallocate(struct memfile_notifier_list *list,
+> +				pgoff_t start, pgoff_t end)
+> +{
+> +	struct memfile_notifier *notifier;
+> +	int id;
+> +
+> +	id = srcu_read_lock(&srcu);
+> +	list_for_each_entry_srcu(notifier, &list->head, list,
+> +				 srcu_read_lock_held(&srcu)) {
+> +		if (notifier->ops && notifier->ops->fallocate)
+> +			notifier->ops->fallocate(notifier, start, end);
+> +	}
+> +	srcu_read_unlock(&srcu, id);
+> +}
+> +
+> +static int memfile_get_notifier_info(struct inode *inode,
+> +				     struct memfile_notifier_list **list,
+> +				     struct memfile_pfn_ops **ops)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +int memfile_register_notifier(struct inode *inode,
+> +			      struct memfile_notifier *notifier,
+> +			      struct memfile_pfn_ops **pfn_ops)
+> +{
+> +	struct memfile_notifier_list *list;
+> +	int ret;
+> +
+> +	if (!inode || !notifier | !pfn_ops)
+> +		return -EINVAL;
+> +
+> +	ret = memfile_get_notifier_info(inode, &list, pfn_ops);
+> +	if (ret)
+> +		return ret;
+> +
+> +	spin_lock(&list->lock);
+> +	list_add_rcu(&notifier->list, &list->head);
+> +	spin_unlock(&list->lock);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(memfile_register_notifier);
+> +
+> +void memfile_unregister_notifier(struct inode *inode,
+> +				 struct memfile_notifier *notifier)
+> +{
+> +	struct memfile_notifier_list *list;
+> +
+> +	if (!inode || !notifier)
+> +		return;
+> +
+> +	BUG_ON(memfile_get_notifier_info(inode, &list, NULL));
+> +
+> +	spin_lock(&list->lock);
+> +	list_del_rcu(&notifier->list);
+> +	spin_unlock(&list->lock);
+> +
+> +	synchronize_srcu(&srcu);
+> +}
+> +EXPORT_SYMBOL_GPL(memfile_unregister_notifier);
 
-Could eventually go just before cpuhp_set_state(), in the same function 
-as this seems to be the first user of st->cpu.
-
->   	/*
->   	 * The caller of cpu_up() might have raced with another
->   	 * caller. Nothing to do.

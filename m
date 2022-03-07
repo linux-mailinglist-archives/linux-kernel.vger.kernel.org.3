@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5B54D02A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 399954D0396
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243715AbiCGPYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S243986AbiCGQAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243574AbiCGPYo (ORCPT
+        with ESMTP id S234875AbiCGQAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:24:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE4E70CC5;
-        Mon,  7 Mar 2022 07:23:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 603CAB815E0;
-        Mon,  7 Mar 2022 15:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957FFC340E9;
-        Mon,  7 Mar 2022 15:23:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646666627;
-        bh=lkV/7UN2kW+KOHRiC8zLasgxJcQG73Hgpx6BBaDabI0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=weaZrAhlIEGAGwfO9Gm6dU/DC8NMLi73mIs2pSbpVQ9besyXaj6lPLjzBLXoLBzmX
-         PVOzepAC6X8w1f1XRscjVD71scLKodXhf5vrhP4ayz5R3qVxgOGXFkHFSfJy813ktm
-         26iAcclWMm3ibESrPW9/rJU8kKpcAgQACB4lLFbo=
-Date:   Mon, 7 Mar 2022 16:23:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 000/262] 5.15.27-rc1 review
-Message-ID: <YiYjgPn8lbsD/dUb@kroah.com>
-References: <20220307091702.378509770@linuxfoundation.org>
- <fe8b46f5-6c24-d749-668f-29ea51fa5d58@applied-asynchrony.com>
- <5e048582-5c63-38c2-bbcb-6a0c20cb47e4@applied-asynchrony.com>
+        Mon, 7 Mar 2022 11:00:12 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132C88118C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:59:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646668758; x=1678204758;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UIQ205em1WrlnAoEopCeQjugklgipYmQxrXTFmaWBqc=;
+  b=htnSgzl3NtHF6CBXLT07Q6v4jrlWThhCt+E8KEs0aaKv1ww2Ao+/4b+4
+   S0EgnGj/JMHED1TzEWFmRzc2khtlUsMh4vYUbh2sKZis3twHQ4Ex2yjdB
+   1ZYCjsHyN73WLfLstHSev8lK/2c9SkGhKsSnwbXQgLyGbFG8oArbnp2rV
+   VdfJz//8sknHsRid9M+Od1C914PslmQmMeg5qhFU5gNm1Zr1BEhXsAuLm
+   AhVe6FVy2P82XIRVC3WWwpPcAqZf9HuToZWBT2VyCvabA18NUbjY1CWfs
+   BwY7GC5T+7vW2o5+kvAdTqiQgNLtsx0SWaIIfnbE9CX31hqPDd/yJlksE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="279128044"
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="279128044"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 07:59:17 -0800
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="643292226"
+Received: from rhack-mobl1.amr.corp.intel.com (HELO [10.209.14.71]) ([10.209.14.71])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 07:59:17 -0800
+Message-ID: <def6807f-5d5d-5d08-7705-70c907b23805@linux.intel.com>
+Date:   Mon, 7 Mar 2022 09:24:03 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5e048582-5c63-38c2-bbcb-6a0c20cb47e4@applied-asynchrony.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH -next] soundwire: stream: Fix error return code in
+ do_bank_switch()
+Content-Language: en-US
+To:     Wang Wensheng <wangwensheng4@huawei.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     xuqiang36@huawei.com
+References: <20220307074039.117488-1-wangwensheng4@huawei.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220307074039.117488-1-wangwensheng4@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 02:41:15PM +0100, Holger Hoffstätte wrote:
-> On 2022-03-07 11:44, Holger Hoffstätte wrote:
-> > On 2022-03-07 10:15, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.15.27 release.
-> > > There are 262 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > 
-> > CC [M]  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn301/dcn301_fpu.o
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn301/dcn301_fpu.c:30:10: fatal error: dml/dcn20/dcn20_fpu.h: No such file or directory
-> >     30 | #include "dml/dcn20/dcn20_fpu.h"
-> >        |          ^~~~~~~~~~~~~~~~~~~~~~~
-> > compilation terminated.
-> > 
-> > Culprit is "drm-amd-display-move-fpu-associated-dcn301-code-to-d.patch"
-> > 
-> > Looking over the git history of the dml/dnc20 directory I think the correct fix would
-> > be to also apply upstream commit ee37341199c61558b73113659695c90bf4736eb2 aka
-> > "drm/amd/display: Re-arrange FPU code structure for dcn2x"
-> > 
-> > CC'ing Qingqing Zhuo for confirmation.
+
+
+On 3/7/22 01:40, Wang Wensheng wrote:
+> Fix to return a negative error code from the error handling case instead
+> of 0, as done elsewhere in this function.
 > 
-> I can confirm that applying a modified ee37341199c6 fixes the issue. \o/
-> The hunk that refers to drivers/gpu/drm/amd/display/dc/dcn201 needs to be removed,
-> since that directory (support for "cyan_skillfish") does not exist in 5.15.x.
+> Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
 
-I'll let you submit a working version, dropping chunks in the middle of
-patches is not exactly obvious at times :)
+Thanks for the patch, sounds good to me.
 
-thanks,
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-greg k-h
+> ---
+>   drivers/soundwire/stream.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
+> index 980f26d49b66..553131597af6 100644
+> --- a/drivers/soundwire/stream.c
+> +++ b/drivers/soundwire/stream.c
+> @@ -822,6 +822,7 @@ static int do_bank_switch(struct sdw_stream_runtime *stream)
+>   		} else if (multi_link) {
+>   			dev_err(bus->dev,
+>   				"Post bank switch ops not implemented\n");
+> +			ret = -EINVAL;
+>   			goto error;
+>   		}
+>   

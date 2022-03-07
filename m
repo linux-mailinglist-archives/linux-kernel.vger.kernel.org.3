@@ -2,118 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990604D0775
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B22074D077B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbiCGTTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S245039AbiCGTT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237059AbiCGTS7 (ORCPT
+        with ESMTP id S237059AbiCGTTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:18:59 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098FE10FC3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:18:00 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg31-20020a05600c3c9f00b00381590dbb33so43118wmb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dbqVSaoeE145ys9uRLEZZR3pFJY2Pmc5WG68rQTUDjk=;
-        b=k5NesdgsXTht6dMH9Zs1gYWtYMsdq2oaoUryBtRQ299vTq+wKnD4nno1egKbIrBVvt
-         u37JkSvL43u/gPcfLHEvrdES3On3K8okyZKtK5x2IaGkdK0XOr7WB7zQ9Zcbj6CmcmdK
-         9Q6QJ9Hpjk2XNo/+94qYcfJQzracg57M/trJW6e8B5gjvzvUh4ypNZwjQtF4ZxhHttPH
-         RY9eQVjhbBd/2+kGoSzknYgZXbhAs5GglyD9L3X75TZDWmEoUhXsoTT0NkLyTmW4h/na
-         S9CvMWfORnMzpWyVUpT8XabV69cJNTthtxd3VRYBNCWPUjkEEJsNFDT0CozCWgfN8F7p
-         NcRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dbqVSaoeE145ys9uRLEZZR3pFJY2Pmc5WG68rQTUDjk=;
-        b=Och0XMCEltDLi4UvougGSUViMpstf/1L77X0qxNRi0Ux3zkVPqgi/mY+mexf1+F6g9
-         EL9lErBqXtOhUNYl5awMAiJmPUtnwGcNuoCnxHbm6qUEisW0uoOd1f+1Edcb+LaZ8GyJ
-         wEz/HOPnKTRSlSi92DCi/zlDp1cwE0yuZ5mMIBWLQzg9WwZL9rvnluywUwBCG+eu5ZAd
-         PSDSOkROIQVPsW/46dd0uOvtEwbgwrVgO26iZXPA8NNTCOondUUnUtT6S9w1NqaN9SP8
-         SNCorv2eSY/w06nJvzr0oRNMoAKKB3GN1oFnkLZ3lLlEizEAduW9ZC+uFpWuSZ3L6VBV
-         H/2Q==
-X-Gm-Message-State: AOAM530b56zXp6y+G/ojvjOkdWJU+7hoJF9y3pupoHqiOmyGu2JdCjkY
-        IOUDU+DfhR/L+7vBsqbY7boY0g==
-X-Google-Smtp-Source: ABdhPJzlJiMYAf08xQYWLIojU4uURtjWC9ZBAz30RgCGZ9HLvlLDJ9lUmbZ5j3Q/JntOftXy/SgAdQ==
-X-Received: by 2002:a05:600c:4615:b0:386:9f67:8c63 with SMTP id m21-20020a05600c461500b003869f678c63mr381658wmo.12.1646680678579;
-        Mon, 07 Mar 2022 11:17:58 -0800 (PST)
-Received: from joneslee.c.googlers.com.com (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
-        by smtp.gmail.com with ESMTPSA id p15-20020a05600c1d8f00b003899d50f01csm200741wms.6.2022.03.07.11.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 11:17:58 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org, mst@redhat.com, jasowang@redhat.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Subject: [PATCH 1/1] vhost: Protect the virtqueue from being cleared whilst still in use
-Date:   Mon,  7 Mar 2022 19:17:57 +0000
-Message-Id: <20220307191757.3177139-1-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+        Mon, 7 Mar 2022 14:19:55 -0500
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DAA193EB;
+        Mon,  7 Mar 2022 11:18:58 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id A9FD9101C0527;
+        Mon,  7 Mar 2022 20:18:54 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 87D06449B49; Mon,  7 Mar 2022 20:18:54 +0100 (CET)
+Date:   Mon, 7 Mar 2022 20:18:54 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Raymond Tan <raymond.tan@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH 1/7] serial: 8250_dwlib: RS485 HW half duplex support
+Message-ID: <20220307191854.GA27748@wunner.de>
+References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
+ <20220302095606.14818-2-ilpo.jarvinen@linux.intel.com>
+ <20220306184857.GA19394@wunner.de>
+ <CAHp75Vdxa_p866t5B7zJ8nHS-v+tu3vLiW0=vaBznnyCGyve_g@mail.gmail.com>
+ <ab82f6a-8d1b-8e89-4ea-77d1a55667d2@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ab82f6a-8d1b-8e89-4ea-77d1a55667d2@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vhost_vsock_handle_tx_kick() already holds the mutex during its call
-to vhost_get_vq_desc().  All we have to do here is take the same lock
-during virtqueue clean-up and we mitigate the reported issues.
+On Mon, Mar 07, 2022 at 11:19:59AM +0200, Ilpo Järvinen wrote:
+> On Mon, 7 Mar 2022, Andy Shevchenko wrote:
+> > On Mon, Mar 7, 2022 at 12:00 AM Lukas Wunner <lukas@wunner.de> wrote:
+> > > On Wed, Mar 02, 2022 at 11:56:00AM +0200, Ilpo Järvinen wrote:
+> > > > +     d->hw_rs485_support = device_property_read_bool(p->dev, "snps,rs485-interface-en");
+> > > > +     if (d->hw_rs485_support)
+> > > > +             p->rs485_config = dw8250_rs485_config;
+> > > > +
+> > >
+> > > You wrote in the commit message that rs485 support is present from
+> > > version 4.0 onward.  Can't we just check the IP version and enable
+> > > rs485 support for >= 4.0?  That would seem more appropriate instead
+> > > of introducing yet another new property.
+> > 
+> > AFAIU this is dependent on the IP syntheses. I.o.w. version 4.0+ is a
+> > prerequisite, but doesn't automatically mean that there is a support.
+> > Unfortunately there is no way to tell this clearly in the IP
+> > configuration register.
+> 
+> And the IP synthesis only part of the picture, in general case, it'd
+> also matter that there's something connected to that RE (i.e.,
+> an RS485 transceiver).
 
-Also WARN() as a precautionary measure.  The purpose of this is to
-capture possible future race conditions which may pop up over time.
+If an RS-485 transceiver is *soldered* to the UART, the devicetree
+is supposed to contain the property "linux,rs485-enabled-at-boot-time"
+under the UART's of_node.  In that case the UART driver can (and should)
+enable rs485 mode already on ->probe.
 
-Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+Of course there's also the possibility to enable RS-485 after ->open
+with the TIOCSRS485 ioctl.  That can be used if the transceiver is
+attached at runtime (which is likely a rare use case) or as a legacy
+enablement method if the driver lacks linux,rs485-enabled-at-boot-time
+support.
 
-Cc: <stable@vger.kernel.org>
-Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/vhost/vhost.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+That's for DT platforms, but I suppose you've got ACPI.  Not sure
+how it's handled there, the ACPI 6.4 spec contains a "UART Serial Bus
+Connection Resource Descriptor" but nothing on RS-485, so I guess
+the only option is to use regular DT properties in a _DSD object?
 
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 59edb5a1ffe28..ef7e371e3e649 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -693,6 +693,15 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
- 	int i;
- 
- 	for (i = 0; i < dev->nvqs; ++i) {
-+		/* No workers should run here by design. However, races have
-+		 * previously occurred where drivers have been unable to flush
-+		 * all work properly prior to clean-up.  Without a successful
-+		 * flush the guest will malfunction, but avoiding host memory
-+		 * corruption in those cases does seem preferable.
-+		 */
-+		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
-+
-+		mutex_lock(&dev->vqs[i]->mutex);
- 		if (dev->vqs[i]->error_ctx)
- 			eventfd_ctx_put(dev->vqs[i]->error_ctx);
- 		if (dev->vqs[i]->kick)
-@@ -700,6 +709,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
- 		if (dev->vqs[i]->call_ctx.ctx)
- 			eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
- 		vhost_vq_reset(dev, dev->vqs[i]);
-+		mutex_unlock(&dev->vqs[i]->mutex);
- 	}
- 	vhost_dev_free_iovecs(dev);
- 	if (dev->log_ctx)
--- 
-2.35.1.616.g0bdcbb4464-goog
 
+> I initially had additional version check here while developing this
+> patch series but it seemed to not provide any added value due those
+> other factors that need to be considered.
+
+Here's another idea:
+
+Read TCR register on ->probe.  It's POR value is 0x6 if RS-485 is
+supported by the chip, else 0x0.  (Page 220 of the 4.01a spec says
+UCV register does not exist if additional features are not implemented
+and reading from this register address returns 0, I suppose the same
+applies to TCR if RS-485 is not implemented.)
+
+Since the driver may change the polarity in the TCR register, be sure
+to write 0x6 to it on ->remove so that you can still correctly detect
+presence of the RS-485 feature after unbind/rebind of the driver.
+
+Thanks,
+
+Lukas

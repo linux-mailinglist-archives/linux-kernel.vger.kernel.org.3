@@ -2,192 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658704D0B15
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1410A4D0B18
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343579AbiCGWbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S1343745AbiCGWc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:32:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241119AbiCGWbe (ORCPT
+        with ESMTP id S236396AbiCGWcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:31:34 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3F9193FE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:30:38 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646692236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JDsxEU9WPk1sgHwX5/LZeqY6i9h0U7lu/oUKMZUs2po=;
-        b=YbhIFyYSmneBNYROTnYFvcF1htsSPfaSz9uV8vdEOpT8DOmfzy1Gbtdss6eRSFJ+ZEpGDY
-        1PnGrjPmzbypjjOD0J6pfi1kgA9jSNzQ+ls0uacayvKWcS9udmMWHps/YNgrncvJVokrmO
-        MF4Hc8Ks6SA5Vq8SvdYBOnPalMyHP7hzpate0MQsrWIdvSwTBsduFakuntX7HzOvQHgZJj
-        fAwtL+GK6aZt35lntMcdsBqeb0E3F8YaGkeAz0MyNkeN0mO8Y81ljR/W/uhRPYVPb/uPrZ
-        +ICCzLQmvGvBVHja0lFeoqphzY4362WsupFAtqIK4l+JiHliyb7/B0R/yYtMyQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646692236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JDsxEU9WPk1sgHwX5/LZeqY6i9h0U7lu/oUKMZUs2po=;
-        b=KXZWI3Vv37Op6bxLy+OKfi+bSBXzCT6bqPzjS4oos0DuQEzR7jFBX5FMH0T2tn/QDX6IDA
-        o+cs4Ni3g6GdVDAw==
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH] x86/split_lock: Make life miserable for split lockers
-In-Reply-To: <20220217012721.9694-1-tony.luck@intel.com>
-References: <20220217012721.9694-1-tony.luck@intel.com>
-Date:   Mon, 07 Mar 2022 23:30:35 +0100
-Message-ID: <877d95l7jo.ffs@tglx>
+        Mon, 7 Mar 2022 17:32:25 -0500
+Received: from v-zimmta03.u-bordeaux.fr (v-zimmta03.u-bordeaux.fr [147.210.215.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7A22DD68;
+        Mon,  7 Mar 2022 14:31:28 -0800 (PST)
+Received: from v-zimmta03.u-bordeaux.fr (localhost [127.0.0.1])
+        by v-zimmta03.u-bordeaux.fr (Postfix) with ESMTP id EBCB818014AC;
+        Mon,  7 Mar 2022 23:31:26 +0100 (CET)
+Received: from begin.home (lfbn-bor-1-255-114.w90-50.abo.wanadoo.fr [90.50.98.114])
+        by v-zimmta03.u-bordeaux.fr (Postfix) with ESMTPSA id B0F3918014A5;
+        Mon,  7 Mar 2022 23:31:26 +0100 (CET)
+Received: from samy by begin.home with local (Exim 4.95)
+        (envelope-from <samuel.thibault@labri.fr>)
+        id 1nRLt0-00C9Ci-8c;
+        Mon, 07 Mar 2022 23:31:26 +0100
+Date:   Mon, 7 Mar 2022 23:31:26 +0100
+From:   Samuel Thibault <samuel.thibault@labri.fr>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>
+Subject: [PATCHv2] SO_ZEROCOPY should return -EOPNOTSUPP rather than -ENOTSUPP
+Message-ID: <20220307223126.djzvg44v2o2jkjsx@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@labri.fr>,
+        davem@davemloft.net, kuba@kernel.org,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-AV-Checked: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tony,
+ENOTSUPP is documented as "should never be seen by user programs",
+and thus not exposed in <errno.h>, and thus applications cannot safely
+check against it (they get "Unknown error 524" as strerror). We should
+rather return the well-known -EOPNOTSUPP.
 
-On Wed, Feb 16 2022 at 17:27, Tony Luck wrote:
-> Questions for this RFC:
->
-> 1) Does this need to be a new option? Maybe just update the
->    existing "warn" mode to add this level of extra pain.
+This is similar to 2230a7ef5198 ("drop_monitor: Use correct error
+code") and 4a5cdc604b9c ("net/tls: Fix return values to avoid
+ENOTSUPP"), which did not seem to cause problems.
 
-That's fine. Warn is the default today, right?
+Signed-off-by: Samuel Thibault <samuel.thibault@labri.fr>
 
-> 2) Under what circumstances will work a function scheduled with
->    schedule_delayed_work() run on different CPU?
+---
+Difference with v1: use -EOPNOTSUPP instead of -ENOPROTOOPT.
 
-Under many...
-
->    I've covered the obvious case of the CPU being taken offline before
->    the work is run. But are there other cases?
-
-scheduled_delayed_work_on() is what you are looking for.
-
-> 3) Should I add even more pain with an msleep() before even trying
->    to get the semaphore?
-
-No objections from me.
-
-> +static void __split_lock_reenable(struct work_struct *work)
-> +{
-> +	sld_update_msr(true);
-> +	up(&buslock_sem);
-> +}
-> +
-> +/*
-> + * If a CPU goes offline with pending delayed work to
-> + * re-enable split lock detection then the delayed work
-> + * will be executed on some other CPU. That handles releasing
-> + * the buslock_sem, but because it executes on a different
-> + * CPU probably won't re-enable split lock detection. This
-> + * is a problem on HT systems since the sibling CPU on the
-> + * same core may then be left running with split lock
-> + * detection disabled.
-> + *
-> + * Unconditionally re-enable detection here.
-
-Had to think twice whether this works under all circumstances. It
-actually works because of how CPU hotunplug works nowadays. It
-guarantees that after the initial CPU down state sched_cpu_deactivate()
-no task which is running or affine to the CPU can get back to user space
-on that CPU. That was not always the case, that's why I had to think
-twice :)
-
-But I'm not yet convinced that this is required at all.
-
-> + */
-> +static int splitlock_cpu_offline(unsigned int cpu)
-> +{
-> +	sld_update_msr(true);
-> +
-> +	return 0;
-> +}
-> +
-> +static DECLARE_DELAYED_WORK(split_lock_reenable, __split_lock_reenable);
-> +
->  static void split_lock_warn(unsigned long ip)
->  {
->  	pr_warn_ratelimited("#AC: %s/%d took a split_lock trap at address: 0x%lx\n",
->  			    current->comm, current->pid, ip);
->  
-> -	/*
-> -	 * Disable the split lock detection for this task so it can make
-> -	 * progress and set TIF_SLD so the detection is re-enabled via
-> -	 * switch_to_sld() when the task is scheduled out.
-> -	 */
-> +	switch (sld_state) {
-> +	case sld_warn:
-> +		/* This task will keep running with split lock disabled */
-> +		set_tsk_thread_flag(current, TIF_SLD);
-> +		break;
-> +	case sld_sequential:
-> +		/* Only allow one buslocked disabled core at a time */
-> +		if (down_interruptible(&buslock_sem) == -EINTR)
-> +			return;
-> +		schedule_delayed_work(&split_lock_reenable, 2);
-
-Hmm. This does not set TIF_SLD. So:
-
- task hits splitlock
-   #AC
-     down(sema);
-     schedule_work();
-     disable_sld();
-
- task is preempted or schedules out voluntarily
-
-   -> SLD stays disabled for the incoming task which is wrong and it
-      stays disabled up to the point where the timer fires or a task
-      switch with TIF_SLD mismatch happens. 
-
-Not what we want, right?
-
-So the right thing to do is to set TIF_SLD also for the sequential
-case. Now how to do that delayed split lock reenable for the task in
-question?
-
-	case sld_sequential:
-		if (down_interruptible(&buslock_sem) == -EINTR)
-			return;
-		set_tsk_thread_flag(current, TIF_SLD);
-                buslock_sequential_task = current;
-                get_task_struct(current);
-		schedule_delayed_work_on(smp_processor_id(), &split_lock_reenable, 2);
-
-and then the work function does:
-
-    clear_tsk_thread_flag(buslock_sequential_task, TIF_SLD);
-    put_task_struct(buslock_sequential_task);
-    buslock_sequential_task = NULL;
-    up(&buslock_sem);
-    
-With that you spare the cpu hotplug callback as well simply because it's
-guaranteed that the SLD state is handled correctly when the task in
-question schedules out. I.e. it does not matter at all on which CPU the
-timer goes off if the CPU on which is was armed is offlined before it
-fires.
-
-But that's nasty too because if the task schedules away from the CPU on
-which it hit the buslock in the first place and then stays on the other
-CPU in user space forever (think NOHZ_FULL) then it can buslock forever
-too.
-
-The question is whether this is something to worry about. If so, then we
-need to go back to the drawing board.
-
-Thanks,
-
-        tglx
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 4ff806d71921..839eb076afee 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1377,9 +1377,9 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
+ 			if (!(sk_is_tcp(sk) ||
+ 			      (sk->sk_type == SOCK_DGRAM &&
+ 			       sk->sk_protocol == IPPROTO_UDP)))
+-				ret = -ENOTSUPP;
++				ret = -EOPNOTSUPP;
+ 		} else if (sk->sk_family != PF_RDS) {
+-			ret = -ENOTSUPP;
++			ret = -EOPNOTSUPP;
+ 		}
+ 		if (!ret) {
+ 			if (val < 0 || val > 1)

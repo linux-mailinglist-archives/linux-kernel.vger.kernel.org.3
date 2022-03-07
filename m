@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877D14CF4C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F3D4CF530
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236519AbiCGJVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S236787AbiCGJZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236433AbiCGJVA (ORCPT
+        with ESMTP id S237059AbiCGJXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:21:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684DC52E41;
-        Mon,  7 Mar 2022 01:20:00 -0800 (PST)
+        Mon, 7 Mar 2022 04:23:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5325C6662A;
+        Mon,  7 Mar 2022 01:21:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 025036102A;
-        Mon,  7 Mar 2022 09:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D698C340E9;
-        Mon,  7 Mar 2022 09:19:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F080FB810C0;
+        Mon,  7 Mar 2022 09:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6482AC340F6;
+        Mon,  7 Mar 2022 09:21:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644799;
-        bh=w/LSniU9HL7T8izO5RIoccVJlyRX4WWQVkesBO8mLoU=;
+        s=korg; t=1646644903;
+        bh=zu22j3tHmE8fVI+T7JaCdg1E5egrF7AQyc/FiqQy8Qg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AK2wbqW10TMccMvsTAaD5wbBQ0MZvJ/5tpjQwsD5X/dqTlz5uZt/a4tLA+4HAqP+O
-         HmFz30XGO66jBOWD9EkuuTlnP0jePpWOm5lLMh3VeAIfjLtZaad8W2hYEMCrJCsq/i
-         HiUTGuKU8wYFkmDCcqExomyD+ZvLJdxZmbhYfV0E=
+        b=SSPn1nOc4013KRM2/+xI7OyHDS0DAMb2A8iZlf3wAo/M+ZtiJMfhrXdSYHAW833dg
+         FczabSDWvFVyS7a4ngHrUiEh3l87zI6lKXDj3xpQdgWGTEFOOjQv6EaHlWzwDlGRb4
+         cSCrDBSiK7WfkTxy8jQOtaw7UuZUnLuGFt+HclX0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 4.9 25/32] ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
+        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Subject: [PATCH 4.14 17/42] xfrm: enforce validity of offload input flags
 Date:   Mon,  7 Mar 2022 10:18:51 +0100
-Message-Id: <20220307091635.153023221@linuxfoundation.org>
+Message-Id: <20220307091636.652610016@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
-References: <20220307091634.434478485@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,48 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-commit 7b83299e5b9385943a857d59e15cba270df20d7e upstream.
+commit 7c76ecd9c99b6e9a771d813ab1aa7fa428b3ade1 upstream.
 
-early_param() handlers should return 0 on success.
-__setup() handlers should return 1 on success, i.e., the parameter
-has been handled. A return of 0 would cause the "option=value" string
-to be added to init's environment strings, polluting it.
+struct xfrm_user_offload has flags variable that received user input,
+but kernel didn't check if valid bits were provided. It caused a situation
+where not sanitized input was forwarded directly to the drivers.
 
-../arch/arm/mm/mmu.c: In function 'test_early_cachepolicy':
-../arch/arm/mm/mmu.c:215:1: error: no return statement in function returning non-void [-Werror=return-type]
-../arch/arm/mm/mmu.c: In function 'test_noalign_setup':
-../arch/arm/mm/mmu.c:221:1: error: no return statement in function returning non-void [-Werror=return-type]
+For example, XFRM_OFFLOAD_IPV6 define that was exposed, was used by
+strongswan, but not implemented in the kernel at all.
 
-Fixes: b849a60e0903 ("ARM: make cr_alignment read-only #ifndef CONFIG_CPU_CP15")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: patches@armlinux.org.uk
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+As a solution, check and sanitize input flags to forward
+XFRM_OFFLOAD_INBOUND to the drivers.
+
+Fixes: d77e38e612a0 ("xfrm: Add an IPsec hardware offloading API")
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mm/mmu.c |    2 ++
- 1 file changed, 2 insertions(+)
+ include/uapi/linux/xfrm.h |    6 ++++++
+ net/xfrm/xfrm_device.c    |    6 +++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
---- a/arch/arm/mm/mmu.c
-+++ b/arch/arm/mm/mmu.c
-@@ -228,12 +228,14 @@ early_param("ecc", early_ecc);
- static int __init early_cachepolicy(char *p)
- {
- 	pr_warn("cachepolicy kernel parameter not supported without cp15\n");
-+	return 0;
- }
- early_param("cachepolicy", early_cachepolicy);
+--- a/include/uapi/linux/xfrm.h
++++ b/include/uapi/linux/xfrm.h
+@@ -501,6 +501,12 @@ struct xfrm_user_offload {
+ 	int				ifindex;
+ 	__u8				flags;
+ };
++/* This flag was exposed without any kernel code that supporting it.
++ * Unfortunately, strongswan has the code that uses sets this flag,
++ * which makes impossible to reuse this bit.
++ *
++ * So leave it here to make sure that it won't be reused by mistake.
++ */
+ #define XFRM_OFFLOAD_IPV6	1
+ #define XFRM_OFFLOAD_INBOUND	2
  
- static int __init noalign_setup(char *__unused)
- {
- 	pr_warn("noalign kernel parameter not supported without cp15\n");
-+	return 1;
- }
- __setup("noalign", noalign_setup);
+--- a/net/xfrm/xfrm_device.c
++++ b/net/xfrm/xfrm_device.c
+@@ -69,6 +69,9 @@ int xfrm_dev_state_add(struct net *net,
+ 	if (x->encap || x->tfcpad || (x->props.flags & XFRM_STATE_ESN))
+ 		return 0;
  
++	if (xuo->flags & ~(XFRM_OFFLOAD_IPV6 | XFRM_OFFLOAD_INBOUND))
++		return -EINVAL;
++
+ 	dev = dev_get_by_index(net, xuo->ifindex);
+ 	if (!dev) {
+ 		if (!(xuo->flags & XFRM_OFFLOAD_INBOUND)) {
+@@ -98,7 +101,8 @@ int xfrm_dev_state_add(struct net *net,
+ 
+ 	xso->dev = dev;
+ 	xso->num_exthdrs = 1;
+-	xso->flags = xuo->flags;
++	/* Don't forward bit that is not implemented */
++	xso->flags = xuo->flags & ~XFRM_OFFLOAD_IPV6;
+ 
+ 	err = dev->xfrmdev_ops->xdo_dev_state_add(x);
+ 	if (err) {
 
 

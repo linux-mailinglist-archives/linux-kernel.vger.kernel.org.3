@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5DC4CF898
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFCD4CF63B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238910AbiCGJ5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S237595AbiCGJdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239247AbiCGJj3 (ORCPT
+        with ESMTP id S237358AbiCGJ2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:39:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76116D393;
-        Mon,  7 Mar 2022 01:35:13 -0800 (PST)
+        Mon, 7 Mar 2022 04:28:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BDE5B3E4;
+        Mon,  7 Mar 2022 01:25:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3DAB61052;
-        Mon,  7 Mar 2022 09:34:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D92C340E9;
-        Mon,  7 Mar 2022 09:34:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 818C16116F;
+        Mon,  7 Mar 2022 09:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB8CC340E9;
+        Mon,  7 Mar 2022 09:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645693;
-        bh=75ZY1WfUHU2Io4whiLfTwywajK/W9695AyieS52ILww=;
+        s=korg; t=1646645105;
+        bh=AhXUlbjfx1RQm61Vv2Eqw9hgtDpyAwoe9JDwySpQJVg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mSiekGOa4+BOUjD1OYwT178EKn7gmUtF4X7+Df/DsvAkbJPY3j/CGiFjqm79fH98E
-         MDTmiRZIrM/B4AqRrQY3o6dcWjlUaMAmDQGwY8XStX8Fa4Vw5zgJqtvSMq72XUDxFl
-         BDLeC5tQ7Ps3KAvy9hadsn29s43RfJ/eUvE9pPDA=
+        b=TcYNqduRcJEYUqtCGrVulAWARHg+quJVMMP9P3wFLUlenU3e/hC+ujPFHc/uEqk4g
+         R//WU58pYjsSSMzSoYMcM0B8tdS4pwLr9IHD8RGPJPSqmz3fbPz5VE9GyxOqMIEfIq
+         KlmwHIGW+zvDnuViW8nvw8bGnD77o/zVbW6YPmAc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH 5.10 072/105] arm64: dts: rockchip: Switch RK3399-Gru DP to SPDIF output
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 4.19 40/51] ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
 Date:   Mon,  7 Mar 2022 10:19:15 +0100
-Message-Id: <20220307091646.203607863@linuxfoundation.org>
+Message-Id: <20220307091638.132975931@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit b5fbaf7d779f5f02b7f75b080e7707222573be2a upstream.
+commit 7b83299e5b9385943a857d59e15cba270df20d7e upstream.
 
-Commit b18c6c3c7768 ("ASoC: rockchip: cdn-dp sound output use spdif")
-switched the platform to SPDIF, but we didn't fix up the device tree.
+early_param() handlers should return 0 on success.
+__setup() handlers should return 1 on success, i.e., the parameter
+has been handled. A return of 0 would cause the "option=value" string
+to be added to init's environment strings, polluting it.
 
-Drop the pinctrl settings, because the 'spdif_bus' pins are either:
- * unused (on kevin, bob), so the settings is ~harmless
- * used by a different function (on scarlet), which causes probe
-   failures (!!)
+../arch/arm/mm/mmu.c: In function 'test_early_cachepolicy':
+../arch/arm/mm/mmu.c:215:1: error: no return statement in function returning non-void [-Werror=return-type]
+../arch/arm/mm/mmu.c: In function 'test_noalign_setup':
+../arch/arm/mm/mmu.c:221:1: error: no return statement in function returning non-void [-Werror=return-type]
 
-Fixes: b18c6c3c7768 ("ASoC: rockchip: cdn-dp sound output use spdif")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Link: https://lore.kernel.org/r/20220114150129.v2.1.I46f64b00508d9dff34abe1c3e8d2defdab4ea1e5@changeid
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Fixes: b849a60e0903 ("ARM: make cr_alignment read-only #ifndef CONFIG_CPU_CP15")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: patches@armlinux.org.uk
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi |   17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ arch/arm/mm/mmu.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-@@ -281,7 +281,7 @@
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -230,12 +230,14 @@ early_param("ecc", early_ecc);
+ static int __init early_cachepolicy(char *p)
+ {
+ 	pr_warn("cachepolicy kernel parameter not supported without cp15\n");
++	return 0;
+ }
+ early_param("cachepolicy", early_cachepolicy);
  
- 	sound: sound {
- 		compatible = "rockchip,rk3399-gru-sound";
--		rockchip,cpu = <&i2s0 &i2s2>;
-+		rockchip,cpu = <&i2s0 &spdif>;
- 	};
- };
- 
-@@ -432,10 +432,6 @@ ap_i2c_audio: &i2c8 {
- 	status = "okay";
- };
- 
--&i2s2 {
--	status = "okay";
--};
--
- &io_domains {
- 	status = "okay";
- 
-@@ -532,6 +528,17 @@ ap_i2c_audio: &i2c8 {
- 	vqmmc-supply = <&ppvar_sd_card_io>;
- };
- 
-+&spdif {
-+	status = "okay";
-+
-+	/*
-+	 * SPDIF is routed internally to DP; we either don't use these pins, or
-+	 * mux them to something else.
-+	 */
-+	/delete-property/ pinctrl-0;
-+	/delete-property/ pinctrl-names;
-+};
-+
- &spi1 {
- 	status = "okay";
+ static int __init noalign_setup(char *__unused)
+ {
+ 	pr_warn("noalign kernel parameter not supported without cp15\n");
++	return 1;
+ }
+ __setup("noalign", noalign_setup);
  
 
 

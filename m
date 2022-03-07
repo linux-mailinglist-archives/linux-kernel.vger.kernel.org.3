@@ -2,93 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413104CFBAC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F19CE4CFBA4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241662AbiCGKnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S232671AbiCGKn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241766AbiCGKbJ (ORCPT
+        with ESMTP id S242986AbiCGKcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:31:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 433571C93C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:02:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646647368;
+        Mon, 7 Mar 2022 05:32:47 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B89D75600
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:04:31 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 55757C0013;
+        Mon,  7 Mar 2022 10:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646647439;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KTrd470wcxPBisnsFiSF74qjbEMVTM3R4oXsFXtsKUk=;
-        b=DW2y8fLKeNbejbIsnWrjdT9FeJxjO0NCTyOwGtpzSA98//qZbnUHkS2MWFA+jV0o6ZCAle
-        y+7U5G7G32wGGbfb2PSH0hTWCrtRrqtCyirUk7eEo0gT3WoUzBOabraWIMpvjL2gW9UgM2
-        8yLznROqV540kJC2efPNL8UWq6J5BM0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-7AZ6kv6cPMKRVjhbEIny0A-1; Mon, 07 Mar 2022 05:02:47 -0500
-X-MC-Unique: 7AZ6kv6cPMKRVjhbEIny0A-1
-Received: by mail-ed1-f72.google.com with SMTP id y26-20020a50ce1a000000b00415e9b35c81so6042715edi.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 02:02:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=KTrd470wcxPBisnsFiSF74qjbEMVTM3R4oXsFXtsKUk=;
-        b=ZzjPx5oC1nlPVk/XCLd04/ED8077FnzujEYYI6dBsDu91XKCa0b6IYlMxKZVUXdRlW
-         N5jNeYD0x1FGteQ2sUfqpzyxHzIv/fdJowXFZcvgljZ3wLHvIOAtEKXilGyopao2/6Rk
-         vE9GdUZFOjPpjoz6n5XMTXtPTv1fsGN+cBbWA0hMvS3Px2uwn2IVKbxsqtiFNo+dYarR
-         6vWoVyFO6NH5qyoweY9e/JjyiKBX3oFl0jHawprQ7xljFjS8c+qV3/6FBbGTvfs5SLYu
-         b9Wq/YBj5JNeJKDRH3eBVS2Pjivvp8Rw6YLE4/3TNz/E6dppeiLvp9M5BzXicOV9RslO
-         lq6A==
-X-Gm-Message-State: AOAM530mMth/xHGQ1Ii+9AXkK/Jh6l5Iaq4fr6BMCMmC4u1g1e1jeTM8
-        F4WMUCzIFHvTUA8OswS3gVKk2KwxMc0FvuyrBFm24rvEvkaTRFHOlbYxAwDdWk+uA7tIH2Ql1a9
-        d+RIL93I41YeR0v8wjBPt92PR
-X-Received: by 2002:a05:6402:51a:b0:415:df45:8206 with SMTP id m26-20020a056402051a00b00415df458206mr10266011edv.301.1646647366143;
-        Mon, 07 Mar 2022 02:02:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyZOjA7QLxmHD10LnQvZ2bpl25S+l6Bu8cOaUKHBhpUfRDA2DDL9mV2qzeAA39iMOSoEZVA0w==
-X-Received: by 2002:a05:6402:51a:b0:415:df45:8206 with SMTP id m26-20020a056402051a00b00415df458206mr10265986edv.301.1646647365801;
-        Mon, 07 Mar 2022 02:02:45 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id z11-20020a50e68b000000b00412ec8b2180sm5971865edm.90.2022.03.07.02.02.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 02:02:45 -0800 (PST)
-Message-ID: <f431fddb-8d19-4b57-5f34-a40c925a74bf@redhat.com>
-Date:   Mon, 7 Mar 2022 11:02:44 +0100
+        bh=b4uHhj1CCnWZRfuCOfp7/fI/39ufjP0eZTALccVmhWQ=;
+        b=MztK9YvLBUH4+wVXdxK6nOXMPfVOI20sAv/B6KNgGuEOTfdLW9NgvtQM8s7PQWRlTvzd0s
+        9msa//FvEya7xsl4NTWSr8mCJBXIbHjgXT7aStZHE9YkwDvdyLy8XVv9uyyU23o0Gf0+9l
+        jzU6l6IClC8p6RZVHmHjIokpclErEf7hGHPkGv3SmEfIVAPCJxWl8nBFTFJAJda7KwVpX/
+        y3xydcno1zLCl4rURCaEEvmM/gd0T495TJRRiRltSsf2AEahBeBqYVm7vG+XDNyxSctMwq
+        RHBl2KE1ilMCzugA0wGKUF1v/rzplhGC1CzeQf0XCcuHUudzKE+E/qxyiWX0iw==
+Date:   Mon, 7 Mar 2022 11:03:57 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        krzysztof.kozlowski@canonical.com, vigneshr@ti.com, nm@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: omap2: Actually prevent invalid
+ configuration and build error
+Message-ID: <20220307110357.20d50176@xps13>
+In-Reply-To: <6c09de15-1ab2-5ca8-7003-69ff3f7c4dc5@kernel.org>
+References: <20220220004415.GA1519274@roeck-us.net>
+        <4bbe337e-8cd8-a4d6-303d-d5aa21bee2e0@infradead.org>
+        <20220304165451.0129012e@xps13>
+        <6c09de15-1ab2-5ca8-7003-69ff3f7c4dc5@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 3/3] x86/PCI: Preserve host bridge windows completely
- covered by E820
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, wse@tuxedocomputers.com
-References: <20220304153245.GA1030861@bhelgaas>
- <86b17447-b285-f6ce-99d8-f2cad01405d5@redhat.com>
- <bfdb214d-b6e7-f0e7-60de-f30204b0aa90@redhat.com>
-In-Reply-To: <bfdb214d-b6e7-f0e7-60de-f30204b0aa90@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,167 +60,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn, Rafael,
+Hi Roger,
 
-On 3/5/22 11:37, Hans de Goede wrote:
-> Hi,
-> 
-> On 3/4/22 16:46, Hans de Goede wrote:
->> Hi,
->>
->> On 3/4/22 16:32, Bjorn Helgaas wrote:
->>> On Fri, Mar 04, 2022 at 03:16:42PM +0100, Hans de Goede wrote:
->>>> Hi Bjorn,
->>>>
->>>> On 3/4/22 04:51, Bjorn Helgaas wrote:
->>>>> From: Bjorn Helgaas <bhelgaas@google.com>
->>>>>
->>>>> Many folks have reported PCI devices not working.  It could affect any
->>>>> device, but most reports are for Thunderbolt controllers on Lenovo Yoga and
->>>>> Clevo Barebone laptops and the touchpad on Lenovo IdeaPads.
->>>>>
->>>>> In every report, a region in the E820 table entirely encloses a PCI host
->>>>> bridge window from _CRS, and because of 4dc2287c1805 ("x86: avoid E820
->>>>> regions when allocating address space"), we ignore the entire window,
->>>>> preventing us from assigning space to PCI devices.
->>>>>
->>>>> For example, the dmesg log [2] from bug report [1] shows:
->>>>>
->>>>>   BIOS-e820: [mem 0x000000004bc50000-0x00000000cfffffff] reserved
->>>>>   pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
->>>>>   pci 0000:00:15.0: BAR 0: no space for [mem size 0x00001000 64bit]
->>>>>
->>>>> The efi=debug dmesg log [3] from the same report shows the EFI memory map
->>>>> entries that created the E820 map:
->>>>>
->>>>>   efi: mem47: [Reserved |   |WB|WT|WC|UC] range=[0x4bc50000-0x5fffffff]
->>>>>   efi: mem48: [Reserved |   |WB|  |  |UC] range=[0x60000000-0x60ffffff]
->>>>>   efi: mem49: [Reserved |   |  |  |  |  ] range=[0x61000000-0x653fffff]
->>>>>   efi: mem50: [MMIO     |RUN|  |  |  |UC] range=[0x65400000-0xcfffffff]
->>>>>
->>>>> 4dc2287c1805 ("x86: avoid E820 regions when allocating address space")
->>>>> works around issues where _CRS contains non-window address space that can't
->>>>> be used for PCI devices.  It does this by removing E820 regions from host
->>>>> bridge windows.  But in these reports, the E820 region covers the entire
->>>>> window, so 4dc2287c1805 makes it completely unusable.
->>>>>
->>>>> Per UEFI v2.8, sec 7.2, the EfiMemoryMappedIO type means:
->>>>>
->>>>>   Used by system firmware to request that a memory-mapped IO region be
->>>>>   mapped by the OS to a virtual address so it can be accessed by EFI
->>>>>   runtime services.
->>>>>
->>>>> A host bridge window is definitely a memory-mapped IO region, and EFI
->>>>> runtime services may need to access it, so I don't think we can argue that
->>>>> this is a firmware defect.
->>>>>
->>>>> Instead, change the 4dc2287c1805 strategy so it only removes E820 regions
->>>>> when they overlap *part* of a host bridge window on the assumption that a
->>>>> partial overlap is really register space, not part of the window proper.
->>>>>
->>>>> If an E820 region covers the entire window from _CRS, assume the _CRS
->>>>> window is correct and do nothing.
->>>>>
->>>>> [1] https://bugzilla.redhat.com/show_bug.cgi?id=1868899
->>>>> [2] https://bugzilla.redhat.com/attachment.cgi?id=1711424
->>>>> [3] https://bugzilla.redhat.com/attachment.cgi?id=1861407
->>>>>
->>>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
->>>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=214259
->>>>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
->>>>> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
->>>>> BugLink: https://bugs.launchpad.net/bugs/1878279
->>>>> BugLink: https://bugs.launchpad.net/bugs/1931715
->>>>> BugLink: https://bugs.launchpad.net/bugs/1932069
->>>>> BugLink: https://bugs.launchpad.net/bugs/1921649
->>>>> Fixes: 4dc2287c1805 ("x86: avoid E820 regions when allocating address space")
->>>>> Link: https://lore.kernel.org/r/20220228105259.230903-1-hdegoede@redhat.com
->>>>> Based-on-patch-by: Hans de Goede <hdegoede@redhat.com>
->>>>> Reported-by: Benoit Grégoire <benoitg@coeus.ca>   # BZ 206459
->>>>> Reported-by: wse@tuxedocomputers.com              # BZ 214259
->>>>> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->>>>> ---
->>>>>  arch/x86/kernel/resource.c | 11 +++++++++++
->>>>>  1 file changed, 11 insertions(+)
->>>>>
->>>>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
->>>>> index 7378ea146976..405f0af53e3d 100644
->>>>> --- a/arch/x86/kernel/resource.c
->>>>> +++ b/arch/x86/kernel/resource.c
->>>>> @@ -39,6 +39,17 @@ void remove_e820_regions(struct device *dev, struct resource *avail)
->>>>>  		e820_start = entry->addr;
->>>>>  		e820_end = entry->addr + entry->size - 1;
->>>>>  
->>>>> +		/*
->>>>> +		 * If an E820 entry covers just part of the resource, we
->>>>> +		 * assume E820 is telling us about something like host
->>>>> +		 * bridge register space that is unavailable for PCI
->>>>> +		 * devices.  But if it covers the *entire* resource, it's
->>>>> +		 * more likely just telling us that this is MMIO space, and
->>>>> +		 * that doesn't need to be removed.
->>>>> +		 */
->>>>> +		if (e820_start <= avail->start && avail->end <= e820_end)
->>>>> +			continue;
->>>>> +
->>>>
->>>> IMHO it would be good to add some logging here, since hitting this is
->>>> somewhat of a special case. For the Fedora test kernels I did I changed
->>>> this to:
->>>>
->>>> 		if (e820_start <= avail->start && avail->end <= e820_end) {
->>>> 			dev_info(dev, "resource %pR fully covered by e820 entry [mem %#010Lx-%#010Lx]\n",
->>>> 				 avail, e820_start, e820_end);
->>>> 			continue;
->>>> 		}
->>>>
->>>> And I expect/hope to see this new info message on the ideapad with the
->>>> touchpad issue.
->>>
->>> Right, I would expect the same.
->>>
->>> We could add something like this.  But both the e820 entry and the
->>> host bridge window are already in the dmesg log, so it doesn't really
->>> add new information
->>
->> Well it adds the information that the workaround (to the workaround)
->> which we added for this case is working as expected and it allows
->> seeing that is the case in a single glance.
-> 
-> So I just got the first report back from the Fedora test 5.16.12 kernel
-> with this series added. Good news on the ideapad this wotks fine to
-> fix the touchpad issue (as expected).
-> 
-> What is interesting is that the above dev_info message which I added
-> triggers *twice*:
-> 
-> [    0.327837] acpi PNP0A08:00: resource [mem 0x000a0000-0x000bffff window] fully covered by e820 entry [mem 0x0009f000-0x000fffff]
-> [    0.327843] acpi PNP0A08:00: resource [mem 0x65400000-0xbfffffff window] fully covered by e820 entry [mem 0x4bc50000-0xcfffffff]
-> 
-> Notice that it also stops from the mem-window for ISA io getting fully
-> clipped, which I did not realize also was a potential issue.
-> 
-> I hope this also shows that having the dev_info here is good,
-> at least IMHO this confirms that having the dev_info for this
-> is a good thing.
-> 
-> I'm still waiting for testing results on the X1C2 which had the
-> suspend/resume regressions with my bios-date based approach.
+rogerq@kernel.org wrote on Sat, 5 Mar 2022 00:50:14 +0200:
 
-I have heard back from the X1C2 user, he does not have access to
-the machine atm he will get back to me in a couple of days.
+> Hi Miquel,
+>=20
+> On 04/03/2022 17:54, Miquel Raynal wrote:
+> > Hi Guenter, Roger,
+> >=20
+> > rdunlap@infradead.org wrote on Sat, 26 Feb 2022 22:55:28 -0800:
+> >  =20
+> >> On 2/19/22 16:44, Guenter Roeck wrote: =20
+> >>> On Sat, Feb 19, 2022 at 09:36:00PM +0200, Roger Quadros wrote:   =20
+> >>>> The root of the problem is that we are selecting symbols that have
+> >>>> dependencies. This can cause random configurations that can fail.
+> >>>> The cleanest solution is to avoid using select.
+> >>>>
+> >>>> This driver uses interfaces from the OMAP_GPMC driver so we have to
+> >>>> depend on it instead.
+> >>>>
+> >>>> Fixes: 4cd335dae3cf ("mtd: rawnand: omap2: Prevent invalid configura=
+tion and build error")
+> >>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>   =20
+> >>>
+> >>> Tested-by: Guenter Roeck <linux@roeck-us.net>   =20
+> >>
+> >> Tested-by: Randy Dunlap <rdunlap@infradead.org> =20
+> >=20
+> > Sorry for noticing that just now, but there is still a problem with
+> > this patch: we now always compile-in the OMAP_GPMC driver whenever we
+> > need the NAND controller, even though it is not needed. This grows the
+> > kernel for no reason. =20
+>=20
+> Sorry, I did not understand what you meant.
+>=20
+> We no longer explicitly enable OMAP_GPMC since we dropped the "select".
+> This fixes all build issues that were reported recently.
+>=20
+> MTD_NAND_OMAP2 will not be enabled if OMAP_GPMC is not since we added
+> the "depends on". This fixes the original build issue that we started to
+> fix with select initially.
 
-I don't really expect any surprises there though, so given where
-we are in the kernel-cycle and that we already have confirmation
-that it fixes the ideapad touchpad issues I think we should move
-forward with this patch-set now.
+Yes, this side is fine.
 
-Rafael, can you drop my variant of this patch?  (this series is
-a cleaner implementation of basically the same method to fix
-things)
+In the initial commit, you proposed:
 
-Bjorn, I assume you will merge this series through your tree?
+--- a/drivers/mtd/nand/raw/Kconfig
++++ b/drivers/mtd/nand/raw/Kconfig
+@@ -42,7 +42,8 @@ config MTD_NAND_OMAP2
+        tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
+        depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TE=
+ST
+        depends on HAS_IOMEM
++       select OMAP_GPMC if ARCH_K3
 
-Regards,
+Which creates a dependency over OMAP_GPMC only for a single
+architecture. Which means that other OMAP platforms do not necessarily
+need OMAP_GPMC for the NAND controller to work. Now, you propose:
 
-Hans
+--- a/drivers/mtd/nand/raw/Kconfig
++++ b/drivers/mtd/nand/raw/Kconfig
+@@ -42,8 +42,7 @@ config MTD_NAND_OMAP2
+ 	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
+ 	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
+ 	depends on HAS_IOMEM
+	depends on OMAP_GPMC
 
+This means any of the other OMAP architectures will compile the GPMC
+driver even though they might not need it, which would unnecessarily
+increase the kernel size.
+
+Am I missing something?
+
+> > In fact, Roger once said:
+> >=20
+> > 	"We will figure out how to enable OMAP_GPMC for K3 architecture
+> > 	some other way."
+> >=20
+> > It turns out this is not what was finally proposed. Could we try yet
+> > another solution? =20
+>=20
+> This issue is still present i.e. we cannot enable MTD_NAND_OMAP2 driver on
+> K3 platform since OMAP_GPMC config is hidden and not select-able
+> by user or defconfig file.
+>=20
+> But it is not yet a deal breaker since NAND on K3 is not yet enabled upst=
+ream.
+>=20
+> For this I think OMAP_GPMC has to be a visible config entry and select-ab=
+le
+> from a defconfig file as I had done initially [1].
+>=20
+> Now we have a lot of explanation to write as to why we need to do it ;)
+
+We certainly do :)
+
+> [1] - https://lore.kernel.org/lkml/20211123102607.13002-3-rogerq@kernel.o=
+rg/
+>=20
+
+Thanks,
+Miqu=C3=A8l

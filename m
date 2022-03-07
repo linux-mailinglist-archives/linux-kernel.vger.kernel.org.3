@@ -2,143 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C73A4CFBEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 864004CFBE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241550AbiCGKvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
+        id S241476AbiCGKu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242465AbiCGKtS (ORCPT
+        with ESMTP id S242287AbiCGKs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:49:18 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51227A0BF5;
-        Mon,  7 Mar 2022 02:09:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646647747; x=1678183747;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8PFTkIqce0rP+0KbEpJbiB9sWz9SBA69Y1zamNvg0f4=;
-  b=cw8u9u7f7159WZzX2d1h+tzfnd0vhsDVxpnRlElCpEucD8u10VhfcM9g
-   3XLWQvqtQKnKXUl/UnKv0AOSbEoC9TMtueLdASsZvJFewv+pTVdS58erB
-   CCzreqxiI3UkBL/2PPI2NMgip79NqzFRPzLffBM2EutS0extYib4ijbjv
-   06387ymMKMMMx4SvATc69V15wgtpv9nA5Ln0B113dgG7tnHhSgJ9laV73
-   GFKjV/Ab4F4jMpG+aTaSxy1S0WogXw8gPX4LzWeaDLalagmqg3/N0Ek8l
-   Ex7Y90MVgvzbdod4rNdKcMdP+1w34qdfLQL9sTcB+IXl4yyU93rGnehsv
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="234961906"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="234961906"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 02:09:06 -0800
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="780273706"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 02:09:04 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nRAHr-00ChaN-5o;
-        Mon, 07 Mar 2022 12:08:19 +0200
-Date:   Mon, 7 Mar 2022 12:08:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 3/7] usb: typec: mux: Check dev_set_name() return value
-Message-ID: <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <20220307034040.1111107-3-bjorn.andersson@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307034040.1111107-3-bjorn.andersson@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 7 Mar 2022 05:48:59 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C8934647;
+        Mon,  7 Mar 2022 02:08:32 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso12781494pjb.0;
+        Mon, 07 Mar 2022 02:08:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=O2coRuhEIrl0a7CkbyCAavU37hnx143W043Ona7gE3w=;
+        b=GXrnHnawlWP/2IB3kP7j/wJD+F+XvE65om3okd0Z2FpN1TG8TyAswl9yUjABqHuESe
+         b1xMjCN5AgSGRvWugCfdrR/a/F/ms3Q+Z4E052GdrC6eYb0WaN/LK2EjKhtQTRXMS9RB
+         4SRPuyuoRl7UGfTlhkFckGCfKAQ8QEJY9w1+Fc+1hyGbNjL1imYSD/3BlbRkx8NIqlkP
+         zDU8e2mBUsU0tOE/G4H+1GgQAimEY5tFqAJFY/+I5Sb8ClgoeyRDlI7ln8SbGLpX59QD
+         6rDFFhR5g+dK69JRgMoYhJjggQw6OczVC/hBYCq6TX3ugt4Ph4LxkT6R2NbkiIBeooVe
+         Se9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=O2coRuhEIrl0a7CkbyCAavU37hnx143W043Ona7gE3w=;
+        b=vjbAYgSCIzej6T2uMlG6+rTgMhSdUagdRQcLXLbqCjCiPTMSbQwdDuqIf3yg1CaYis
+         sZ3l5LO57d02Pb+EPwrQasDX/GrqS9pupFlSYRC/qjE9WpUFe4Lye7CMoz44+xF7o4Bt
+         kt12BYONTIIDwIsFk8rFLYJFHz0bsJEboUoUWEuoctoHwavisL/ZEwk2KBzt2QjhzrvK
+         UjDDZ1FAXhUE6Fx3OEU9EJFZ5pjhgOqldWjt5Z8P0IwFY5TV1MMxIn2iJbyYhD96bVCq
+         NuP4eQ1dAAyymKLWAhVL3dTyJSuUvIC7at1eQw1LSxv4oZO59+xyDXg8/pss1I3yATms
+         yV3A==
+X-Gm-Message-State: AOAM532abK8fMKWBCHLXEwT52bHNmOnAY+U7wh/YBxnyYEsvasYrgWmt
+        49NdvRjBK+ZFOpm8z8VnjdL417yteYA=
+X-Google-Smtp-Source: ABdhPJyevKlg4CVtaU+0dy/Cu2n8fMu1C7KlHxl9ZkPtSNK5oKd9XCUQa/Yhf1vYz1hTeOY9M9eh0g==
+X-Received: by 2002:a17:90a:528b:b0:1bc:c5f9:82a with SMTP id w11-20020a17090a528b00b001bcc5f9082amr24174248pjh.210.1646647712204;
+        Mon, 07 Mar 2022 02:08:32 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:486:4335:5d3f:ee29:17d3:65af])
+        by smtp.gmail.com with ESMTPSA id n22-20020a056a0007d600b004f3ba7c23e2sm15140125pfu.37.2022.03.07.02.08.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 07 Mar 2022 02:08:31 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     broonie@kernel.org, robh+dt@kernel.org
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 0/2] Add Richtek RT5190A PMIC support
+Date:   Mon,  7 Mar 2022 18:08:22 +0800
+Message-Id: <1646647704-2331-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 07:40:36PM -0800, Bjorn Andersson wrote:
-> It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Thanks!
-Shouldn't we have a Fixes tag and be sent separately for this cycle?
+This patch series add Richtek RT5190A PMIC support.
 
-> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> Changes since v3:
-> - New patch
-> 
->  drivers/usb/typec/mux.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> index c8340de0ed49..d2aaf294b649 100644
-> --- a/drivers/usb/typec/mux.c
-> +++ b/drivers/usb/typec/mux.c
-> @@ -131,8 +131,11 @@ typec_switch_register(struct device *parent,
->  	sw->dev.class = &typec_mux_class;
->  	sw->dev.type = &typec_switch_dev_type;
->  	sw->dev.driver_data = desc->drvdata;
-> -	dev_set_name(&sw->dev, "%s-switch",
-> -		     desc->name ? desc->name : dev_name(parent));
-> +	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ? desc->name : dev_name(parent));
+ChiYuan Huang (2):
+  dt-bindings: regulator: Add bindings for Richtek RT5190A PMIC
+  regulator: rt5190a: Add support for Richtek RT5190A PMIC
 
-We may use shorten form of the ternary
-
-	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ?: dev_name(parent));
-
-at the same time, but it's up to you.
-
-Either way code looks good to me,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> +	if (ret) {
-> +		put_device(&sw->dev);
-> +		return ERR_PTR(ret);
-> +	}
->  
->  	ret = device_add(&sw->dev);
->  	if (ret) {
-> @@ -338,8 +341,11 @@ typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
->  	mux->dev.class = &typec_mux_class;
->  	mux->dev.type = &typec_mux_dev_type;
->  	mux->dev.driver_data = desc->drvdata;
-> -	dev_set_name(&mux->dev, "%s-mux",
-> -		     desc->name ? desc->name : dev_name(parent));
-> +	ret = dev_set_name(&mux->dev, "%s-mux", desc->name ? desc->name : dev_name(parent));
-
-Ditto.
-
-> +	if (ret) {
-> +		put_device(&mux->dev);
-> +		return ERR_PTR(ret);
-> +	}
->  
->  	ret = device_add(&mux->dev);
->  	if (ret) {
-> -- 
-> 2.33.1
-> 
+ .../regulator/richtek,rt5190a-regulator.yaml       | 138 ++++++
+ drivers/regulator/Kconfig                          |  10 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/rt5190a-regulator.c              | 461 +++++++++++++++++++++
+ 4 files changed, 610 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt5190a-regulator.yaml
+ create mode 100644 drivers/regulator/rt5190a-regulator.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.7.4
 

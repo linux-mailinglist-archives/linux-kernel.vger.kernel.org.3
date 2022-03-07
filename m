@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F264CF69D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F94C4CF993
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbiCGJmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        id S235947AbiCGKHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237466AbiCGJcu (ORCPT
+        with ESMTP id S238894AbiCGJsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:32:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCE95DE4C;
-        Mon,  7 Mar 2022 01:29:46 -0800 (PST)
+        Mon, 7 Mar 2022 04:48:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539786E341;
+        Mon,  7 Mar 2022 01:42:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FC4EB810B2;
-        Mon,  7 Mar 2022 09:29:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191F0C340E9;
-        Mon,  7 Mar 2022 09:29:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CEC861312;
+        Mon,  7 Mar 2022 09:42:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89014C340F6;
+        Mon,  7 Mar 2022 09:42:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645373;
-        bh=Xs82X3vYzB+vo4Y5ziej9+mfchUN9IptXOlbGV1QJdA=;
+        s=korg; t=1646646150;
+        bh=6gcCmo2niaY1ICfThriAwiWMgJuKdrDVjhBfnsf86Ks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mQIqhdug/HiMi5lWNgj7sIUCx0X3SX4oon6KllTHotIQZkZLbEzVEDy9251Ua6NH5
-         N3XkTwAxNiAyxnQXNsMimvZa+Pa4oqzAiy/sPyfmjIxMzKKIpNLmWNCPqb3lYNotPo
-         uiCfqGahgTl400JvgDb/so3KLpR9gSkyrsSsy76o=
+        b=RJrA5lWB+DEBy2TtmSMrYmAQ6rweIGVaeqhtaqDb0drh/MZDJZ7Y78YZl6EBxST6O
+         7pD5sOdG9Bg2zSOvVpszpu9DbZK3qoI+U02tfiIy6idrIiLVLv+EmNz1U1H4VVcVn0
+         Re2Gv09CubP+rV6rRgPC3T6ZlTl+Hf+10sAy6bJQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 010/105] cifs: fix double free race when mount fails in cifs_get_root()
+        stable@vger.kernel.org, Deren Wu <deren.wu@mediatek.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.15 149/262] mac80211: fix EAPoL rekey fail in 802.3 rx path
 Date:   Mon,  7 Mar 2022 10:18:13 +0100
-Message-Id: <20220307091644.473806523@linuxfoundation.org>
+Message-Id: <20220307091706.647053440@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,95 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
+From: Deren Wu <deren.wu@mediatek.com>
 
-[ Upstream commit 3d6cc9898efdfb062efb74dc18cfc700e082f5d5 ]
+commit 610d086d6df0b15c3732a7b4a5b0f1c3e1b84d4c upstream.
 
-When cifs_get_root() fails during cifs_smb3_do_mount() we call
-deactivate_locked_super() which eventually will call delayed_free() which
-will free the context.
-In this situation we should not proceed to enter the out: section in
-cifs_smb3_do_mount() and free the same resources a second time.
+mac80211 set capability NL80211_EXT_FEATURE_CONTROL_PORT_OVER_NL80211
+to upper layer by default. That means we should pass EAPoL packets through
+nl80211 path only, and should not send the EAPoL skb to netdevice diretly.
+At the meanwhile, wpa_supplicant would not register sock to listen EAPoL
+skb on the netdevice.
 
-[Thu Feb 10 12:59:06 2022] BUG: KASAN: use-after-free in rcu_cblist_dequeue+0x32/0x60
-[Thu Feb 10 12:59:06 2022] Read of size 8 at addr ffff888364f4d110 by task swapper/1/0
+However, there is no control_port_protocol handler in mac80211 for 802.3 RX
+packets, mac80211 driver would pass up the EAPoL rekey frame to netdevice
+and wpa_supplicant would be never interactive with this kind of packets,
+if SUPPORTS_RX_DECAP_OFFLOAD is enabled. This causes STA always rekey fail
+if EAPoL frame go through 802.3 path.
 
-[Thu Feb 10 12:59:06 2022] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G           OE     5.17.0-rc3+ #4
-[Thu Feb 10 12:59:06 2022] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.0 12/17/2019
-[Thu Feb 10 12:59:06 2022] Call Trace:
-[Thu Feb 10 12:59:06 2022]  <IRQ>
-[Thu Feb 10 12:59:06 2022]  dump_stack_lvl+0x5d/0x78
-[Thu Feb 10 12:59:06 2022]  print_address_description.constprop.0+0x24/0x150
-[Thu Feb 10 12:59:06 2022]  ? rcu_cblist_dequeue+0x32/0x60
-[Thu Feb 10 12:59:06 2022]  kasan_report.cold+0x7d/0x117
-[Thu Feb 10 12:59:06 2022]  ? rcu_cblist_dequeue+0x32/0x60
-[Thu Feb 10 12:59:06 2022]  __asan_load8+0x86/0xa0
-[Thu Feb 10 12:59:06 2022]  rcu_cblist_dequeue+0x32/0x60
-[Thu Feb 10 12:59:06 2022]  rcu_core+0x547/0xca0
-[Thu Feb 10 12:59:06 2022]  ? call_rcu+0x3c0/0x3c0
-[Thu Feb 10 12:59:06 2022]  ? __this_cpu_preempt_check+0x13/0x20
-[Thu Feb 10 12:59:06 2022]  ? lock_is_held_type+0xea/0x140
-[Thu Feb 10 12:59:06 2022]  rcu_core_si+0xe/0x10
-[Thu Feb 10 12:59:06 2022]  __do_softirq+0x1d4/0x67b
-[Thu Feb 10 12:59:06 2022]  __irq_exit_rcu+0x100/0x150
-[Thu Feb 10 12:59:06 2022]  irq_exit_rcu+0xe/0x30
-[Thu Feb 10 12:59:06 2022]  sysvec_hyperv_stimer0+0x9d/0xc0
-...
-[Thu Feb 10 12:59:07 2022] Freed by task 58179:
-[Thu Feb 10 12:59:07 2022]  kasan_save_stack+0x26/0x50
-[Thu Feb 10 12:59:07 2022]  kasan_set_track+0x25/0x30
-[Thu Feb 10 12:59:07 2022]  kasan_set_free_info+0x24/0x40
-[Thu Feb 10 12:59:07 2022]  ____kasan_slab_free+0x137/0x170
-[Thu Feb 10 12:59:07 2022]  __kasan_slab_free+0x12/0x20
-[Thu Feb 10 12:59:07 2022]  slab_free_freelist_hook+0xb3/0x1d0
-[Thu Feb 10 12:59:07 2022]  kfree+0xcd/0x520
-[Thu Feb 10 12:59:07 2022]  cifs_smb3_do_mount+0x149/0xbe0 [cifs]
-[Thu Feb 10 12:59:07 2022]  smb3_get_tree+0x1a0/0x2e0 [cifs]
-[Thu Feb 10 12:59:07 2022]  vfs_get_tree+0x52/0x140
-[Thu Feb 10 12:59:07 2022]  path_mount+0x635/0x10c0
-[Thu Feb 10 12:59:07 2022]  __x64_sys_mount+0x1bf/0x210
-[Thu Feb 10 12:59:07 2022]  do_syscall_64+0x5c/0xc0
-[Thu Feb 10 12:59:07 2022]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+To avoid this problem, align the same process as 802.11 type to handle
+this frame before put it into network stack.
 
-[Thu Feb 10 12:59:07 2022] Last potentially related work creation:
-[Thu Feb 10 12:59:07 2022]  kasan_save_stack+0x26/0x50
-[Thu Feb 10 12:59:07 2022]  __kasan_record_aux_stack+0xb6/0xc0
-[Thu Feb 10 12:59:07 2022]  kasan_record_aux_stack_noalloc+0xb/0x10
-[Thu Feb 10 12:59:07 2022]  call_rcu+0x76/0x3c0
-[Thu Feb 10 12:59:07 2022]  cifs_umount+0xce/0xe0 [cifs]
-[Thu Feb 10 12:59:07 2022]  cifs_kill_sb+0xc8/0xe0 [cifs]
-[Thu Feb 10 12:59:07 2022]  deactivate_locked_super+0x5d/0xd0
-[Thu Feb 10 12:59:07 2022]  cifs_smb3_do_mount+0xab9/0xbe0 [cifs]
-[Thu Feb 10 12:59:07 2022]  smb3_get_tree+0x1a0/0x2e0 [cifs]
-[Thu Feb 10 12:59:07 2022]  vfs_get_tree+0x52/0x140
-[Thu Feb 10 12:59:07 2022]  path_mount+0x635/0x10c0
-[Thu Feb 10 12:59:07 2022]  __x64_sys_mount+0x1bf/0x210
-[Thu Feb 10 12:59:07 2022]  do_syscall_64+0x5c/0xc0
-[Thu Feb 10 12:59:07 2022]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+This also addresses a potential security issue in 802.3 RX mode that was
+previously fixed in commit a8c4d76a8dd4 ("mac80211: do not accept/forward
+invalid EAPOL frames").
 
-Reported-by: Shyam Prasad N <sprasad@microsoft.com>
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org # 5.12+
+Fixes: 80a915ec4427 ("mac80211: add rx decapsulation offload support")
+Signed-off-by: Deren Wu <deren.wu@mediatek.com>
+Link: https://lore.kernel.org/r/6889c9fced5859ebb088564035f84fd0fa792a49.1644680751.git.deren.wu@mediatek.com
+[fix typos, update comment and add note about security issue]
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/cifsfs.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/mac80211/rx.c |   10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index f0ed29a9a6f11..aa5a4d759ca23 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -864,6 +864,7 @@ cifs_smb3_do_mount(struct file_system_type *fs_type,
+--- a/net/mac80211/rx.c
++++ b/net/mac80211/rx.c
+@@ -2602,7 +2602,8 @@ static void ieee80211_deliver_skb_to_loc
+ 		 * address, so that the authenticator (e.g. hostapd) will see
+ 		 * the frame, but bridge won't forward it anywhere else. Note
+ 		 * that due to earlier filtering, the only other address can
+-		 * be the PAE group address.
++		 * be the PAE group address, unless the hardware allowed them
++		 * through in 802.3 offloaded mode.
+ 		 */
+ 		if (unlikely(skb->protocol == sdata->control_port_protocol &&
+ 			     !ether_addr_equal(ehdr->h_dest, sdata->vif.addr)))
+@@ -4518,12 +4519,7 @@ static void ieee80211_rx_8023(struct iee
  
- out_super:
- 	deactivate_locked_super(sb);
-+	return root;
- out:
- 	cifs_cleanup_volume_info(volume_info);
- 	return root;
--- 
-2.34.1
-
+ 	/* deliver to local stack */
+ 	skb->protocol = eth_type_trans(skb, fast_rx->dev);
+-	memset(skb->cb, 0, sizeof(skb->cb));
+-	if (rx->list)
+-		list_add_tail(&skb->list, rx->list);
+-	else
+-		netif_receive_skb(skb);
+-
++	ieee80211_deliver_skb_to_local_stack(skb, rx);
+ }
+ 
+ static bool ieee80211_invoke_fast_rx(struct ieee80211_rx_data *rx,
 
 

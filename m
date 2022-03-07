@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0254CF678
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574354CFB52
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237727AbiCGJhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S240218AbiCGKfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238676AbiCGJ3f (ORCPT
+        with ESMTP id S236787AbiCGKMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:35 -0500
+        Mon, 7 Mar 2022 05:12:07 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01E7593A6;
-        Mon,  7 Mar 2022 01:27:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B68CDBE;
+        Mon,  7 Mar 2022 01:56:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B5B161119;
-        Mon,  7 Mar 2022 09:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A047C340F3;
-        Mon,  7 Mar 2022 09:27:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81F8360E9A;
+        Mon,  7 Mar 2022 09:56:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD52C340F3;
+        Mon,  7 Mar 2022 09:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645268;
-        bh=LQXi6+tj6xNyWviwQ4Ff20ElLn5mPIjwO2ZEQlz1n+E=;
+        s=korg; t=1646646983;
+        bh=LhBFBwMc99bqAd96HV/wf7b0senOyYNA5bBK+TFNAmM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WFowhp2izzVlgWjl1NqkwaWawnySJI2sc3VVzAQuHfaN1NqHNJKV6UFdRBsr2ZZVB
-         5hJrqNU3+0JAzvhz9JDk15oXcppHezD/P6afkFSzYB2Dm6aB5KYYNtq3vWPkLt6k3c
-         cqyTXcnobF5qwGMi2xLlj1mEai/JvotQUd3UqLJ8=
+        b=VGC/2oeLsOAGThXAgvaQ4C0Qswjsty/1JjG9pewQoObH1rIGtqFdsywU1eACHZoNS
+         LWYDRwjlSDfwUPbwKNEQq7Vv88bPvdfVQDlYhKlEH138zUAXZ4Vkho981nhzTxilS9
+         LyCX3SBrVKUHk/aKBh2Z3REdGwxRxzVUdSoRjki8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maurice Baijens <maurice.baijens@ellips.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 39/64] ixgbe: xsk: change !netif_carrier_ok() handling in ixgbe_xmit_zc()
+        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Corinna Vinschen <vinschen@redhat.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.16 114/186] igc: igc_write_phy_reg_gpy: drop premature return
 Date:   Mon,  7 Mar 2022 10:19:12 +0100
-Message-Id: <20220307091640.256636889@linuxfoundation.org>
+Message-Id: <20220307091657.266224625@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,50 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-commit 6c7273a266759d9d36f7c862149f248bcdeddc0f upstream.
+commit c4208653a327a09da1e9e7b10299709b6d9b17bf upstream.
 
-Commit c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if
-netif is not OK") addressed the ring transient state when
-MEM_TYPE_XSK_BUFF_POOL was being configured which in turn caused the
-interface to through down/up. Maurice reported that when carrier is not
-ok and xsk_pool is present on ring pair, ksoftirqd will consume 100% CPU
-cycles due to the constant NAPI rescheduling as ixgbe_poll() states that
-there is still some work to be done.
+Similar to "igc_read_phy_reg_gpy: drop premature return" patch.
+igc_write_phy_reg_gpy checks the return value from igc_write_phy_reg_mdic
+and if it's not 0, returns immediately. By doing this, it leaves the HW
+semaphore in the acquired state.
 
-To fix this, do not set work_done to false for a !netif_carrier_ok().
+Drop this premature return statement, the function returns after
+releasing the semaphore immediately anyway.
 
-Fixes: c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if netif is not OK")
-Reported-by: Maurice Baijens <maurice.baijens@ellips.com>
-Tested-by: Maurice Baijens <maurice.baijens@ellips.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
+Fixes: 5586838fe9ce ("igc: Add code for PHY support")
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Reported-by: Corinna Vinschen <vinschen@redhat.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_phy.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-@@ -583,12 +583,14 @@ static bool ixgbe_xmit_zc(struct ixgbe_r
- 	u32 cmd_type;
- 
- 	while (budget-- > 0) {
--		if (unlikely(!ixgbe_desc_unused(xdp_ring)) ||
--		    !netif_carrier_ok(xdp_ring->netdev)) {
-+		if (unlikely(!ixgbe_desc_unused(xdp_ring))) {
- 			work_done = false;
- 			break;
- 		}
- 
-+		if (!netif_carrier_ok(xdp_ring->netdev))
-+			break;
-+
- 		if (!xsk_umem_consume_tx(xdp_ring->xsk_umem, &desc))
- 			break;
- 
+--- a/drivers/net/ethernet/intel/igc/igc_phy.c
++++ b/drivers/net/ethernet/intel/igc/igc_phy.c
+@@ -746,8 +746,6 @@ s32 igc_write_phy_reg_gpy(struct igc_hw
+ 		if (ret_val)
+ 			return ret_val;
+ 		ret_val = igc_write_phy_reg_mdic(hw, offset, data);
+-		if (ret_val)
+-			return ret_val;
+ 		hw->phy.ops.release(hw);
+ 	} else {
+ 		ret_val = igc_write_xmdio_reg(hw, (u16)offset, dev_addr,
 
 

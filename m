@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C3D4CF1DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1F74CF1FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235540AbiCGG1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
+        id S235610AbiCGGjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbiCGG1C (ORCPT
+        with ESMTP id S232301AbiCGGjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:27:02 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A137A3A
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 22:26:08 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V6Qe3PL_1646634356;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V6Qe3PL_1646634356)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 07 Mar 2022 14:26:06 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     boris.ostrovsky@oracle.com
-Cc:     jgross@suse.com, sstabellini@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] x86/xen: Fix kerneldoc warning
-Date:   Mon,  7 Mar 2022 14:25:54 +0800
-Message-Id: <20220307062554.8334-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 7 Mar 2022 01:39:08 -0500
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8B5205FA;
+        Sun,  6 Mar 2022 22:38:14 -0800 (PST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4CF4F201416;
+        Mon,  7 Mar 2022 07:38:13 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 026E82020DF;
+        Mon,  7 Mar 2022 07:38:13 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 38390183AD0B;
+        Mon,  7 Mar 2022 14:38:11 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: [PATCH v1 0/7] Add the iMX8MP PCIe support
+Date:   Mon,  7 Mar 2022 14:29:09 +0800
+Message-Id: <1646634556-23779-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following W=1 kernel warnings:
+Based on the i.MX8MP GPC and blk-ctrl patch-set [1] issued by Lucas.
+This series patches add the i.MX8MP PCIe support.
+- i.MX8MP PCIe PHY has two resets refer to the i.MX8MM PCIe PHY.
+  Add one more PHY reset for i.MX8MP PCIe PHY accordingly.
+- Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
+  And share as much as possible codes with i.MX8MM PCIe PHY.
+- Add the i.MX8MP PCIe support in binding document, DTS files, and PCIe
+  driver.
+Clean up some debug codes, re-send the v1 patch-set.
 
-arch/x86/xen/setup.c:725: warning: expecting prototype for
-machine_specific_memory_setup(). Prototype was for xen_memory_setup()
-instead.
+[1]:https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220228201731.3330192-1-l.stach@pengutronix.de/
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- arch/x86/xen/setup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml    |   1 +
+Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml |   4 +-
+arch/arm64/boot/dts/freescale/imx8mp-evk.dts                 |  55 ++++++++++++++++++
+arch/arm64/boot/dts/freescale/imx8mp.dtsi                    |  46 +++++++++++++++-
+drivers/pci/controller/dwc/pci-imx6.c                        |  19 ++++++-
+drivers/phy/freescale/phy-fsl-imx8m-pcie.c                   | 248 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------
+drivers/reset/reset-imx7.c                                   |   1 +
+7 files changed, 327 insertions(+), 47 deletions(-)
 
-diff --git a/arch/x86/xen/setup.c b/arch/x86/xen/setup.c
-index af216feb63d9..81aa46f770c5 100644
---- a/arch/x86/xen/setup.c
-+++ b/arch/x86/xen/setup.c
-@@ -719,7 +719,7 @@ static void __init xen_reserve_xen_mfnlist(void)
- }
- 
- /**
-- * machine_specific_memory_setup - Hook for machine specific memory setup.
-+ * xen_memory_setup - Hook for machine specific memory setup.
-  **/
- char * __init xen_memory_setup(void)
- {
--- 
-2.20.1.7.g153144c
+[PATCH v1 1/7] reset: imx7: Add the iMX8MP PCIe PHY PERST support
+[PATCH v1 2/7] dt-binding: phy: Add iMX8MP PCIe PHY binding
+[PATCH v1 3/7] phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY
+[PATCH v1 4/7] dt-bindings: imx6q-pcie: Add iMX8MP PCIe compatible
+[PATCH v1 5/7] arm64: dts: imx8mp: add the iMX8MP PCIe support
+[PATCH v1 6/7] arm64: dts: imx8mp-evk: Add PCIe support
+[PATCH v1 7/7] PCI: imx6: Add the iMX8MP PCIe support
 

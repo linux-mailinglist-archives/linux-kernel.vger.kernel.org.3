@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603CF4CFADF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B94B4CF92C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240290AbiCGKSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:18:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S239906AbiCGKDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240488AbiCGKBD (ORCPT
+        with ESMTP id S241133AbiCGJlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E4FB87C;
-        Mon,  7 Mar 2022 01:49:07 -0800 (PST)
+        Mon, 7 Mar 2022 04:41:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854C42BD5;
+        Mon,  7 Mar 2022 01:40:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E725460010;
-        Mon,  7 Mar 2022 09:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDDDEC340E9;
-        Mon,  7 Mar 2022 09:49:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 261D4B810B2;
+        Mon,  7 Mar 2022 09:40:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC60C340E9;
+        Mon,  7 Mar 2022 09:40:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646546;
-        bh=yabrPlc0h4MCHlVlkI59iqVwKE0utlUjLgBBzAKeFUU=;
+        s=korg; t=1646646030;
+        bh=7aK5WAf+nonAj2USSSeA70CH5uGtCo/IGBvok/zj0bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wz5D2lZ6rhOTQtCuULo28+I3L69xx0i9ayaNmpLeeg9m1glz7rS2WqPejJ7ze2Kgi
-         uZf7f0CP3+5kxKv3ck8C9oL+b6AvQxo9+/G6jOgcbrt4Z/jeqSswzxKbeInHkQryNu
-         uw/sl0hXR1kMKuGoCewPniXvnm/92lVkajFt42LM=
+        b=u+s4YIz55NtLeLgjTy7g1R1DFd+xb0N9+g46nzF8I7vb/6o0IyFYig2qrDteJY2sz
+         kh6Qr1Xucm+T123k7Q/30OUnT/R1PGNbdJpupZtWGuvgeioymSvjUg3mau57mWX6RT
+         H+uSKVBI/QKuEch84QnH34UXyypVQX1tz32KB2m8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 016/186] HID: amd_sfh: Add functionality to clear interrupts
-Date:   Mon,  7 Mar 2022 10:17:34 +0100
-Message-Id: <20220307091654.550853726@linuxfoundation.org>
+        stable@vger.kernel.org, Raed Salem <raeds@nvidia.com>,
+        Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 111/262] net/mlx5e: IPsec: Fix crypto offload for non TCP/UDP encapsulated traffic
+Date:   Mon,  7 Mar 2022 10:17:35 +0100
+Message-Id: <20220307091705.604989043@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,108 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+From: Raed Salem <raeds@nvidia.com>
 
-[ Upstream commit fb75a3791a8032848c987db29b622878d8fe2b1c ]
+[ Upstream commit 5352859b3bfa0ca188b2f1d2c1436fddc781e3b6 ]
 
-Newer AMD platforms with SFH may generate interrupts on some events
-which are unwarranted. Until this is cleared the actual MP2 data
-processing maybe stalled in some cases.
+IPsec crypto offload always set the ethernet segment checksum flags with
+the inner L4 header checksum flag enabled for encapsulated IPsec offloaded
+packet regardless of the encapsulated L4 header type, and even if it
+doesn't exists in the first place, this breaks non TCP/UDP traffic as
+such.
 
-Add a mechanism to clear the pending interrupts (if any) during the
-driver initialization and sensor command operations.
+Set the inner L4 checksum flag only when the encapsulated L4 header
+protocol is TCP/UDP using software parser swp_inner_l4_offset field as
+indication.
 
-Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: 5cfb540ef27b ("net/mlx5e: Set IPsec WAs only in IP's non checksum partial case.")
+Signed-off-by: Raed Salem <raeds@nvidia.com>
+Reviewed-by: Maor Dickman <maord@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 25 ++++++++++++++++++++++++-
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.h |  1 +
- 2 files changed, 25 insertions(+), 1 deletion(-)
+ .../ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h    | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-index dacac30a6b27a..c7e17b39704c0 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-@@ -89,6 +89,20 @@ static void amd_stop_all_sensor_v2(struct amd_mp2_dev *privdata)
- 	writel(cmd_base.ul, privdata->mmio + AMD_C2P_MSG0);
- }
- 
-+static void amd_sfh_clear_intr_v2(struct amd_mp2_dev *privdata)
-+{
-+	if (readl(privdata->mmio + AMD_P2C_MSG(4))) {
-+		writel(0, privdata->mmio + AMD_P2C_MSG(4));
-+		writel(0xf, privdata->mmio + AMD_P2C_MSG(5));
-+	}
-+}
-+
-+static void amd_sfh_clear_intr(struct amd_mp2_dev *privdata)
-+{
-+	if (privdata->mp2_ops->clear_intr)
-+		privdata->mp2_ops->clear_intr(privdata);
-+}
-+
- void amd_start_sensor(struct amd_mp2_dev *privdata, struct amd_mp2_sensor_info info)
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h
+index b98db50c3418d..428881e0adcbe 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h
+@@ -131,14 +131,17 @@ static inline bool
+ mlx5e_ipsec_txwqe_build_eseg_csum(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+ 				  struct mlx5_wqe_eth_seg *eseg)
  {
- 	union sfh_cmd_param cmd_param;
-@@ -193,6 +207,7 @@ static void amd_mp2_pci_remove(void *privdata)
- 	struct amd_mp2_dev *mp2 = privdata;
- 	amd_sfh_hid_client_deinit(privdata);
- 	mp2->mp2_ops->stop_all(mp2);
-+	amd_sfh_clear_intr(mp2);
- }
+-	struct xfrm_offload *xo = xfrm_offload(skb);
++	u8 inner_ipproto;
  
- static const struct amd_mp2_ops amd_sfh_ops_v2 = {
-@@ -200,6 +215,7 @@ static const struct amd_mp2_ops amd_sfh_ops_v2 = {
- 	.stop = amd_stop_sensor_v2,
- 	.stop_all = amd_stop_all_sensor_v2,
- 	.response = amd_sfh_wait_response_v2,
-+	.clear_intr = amd_sfh_clear_intr_v2,
- };
+ 	if (!mlx5e_ipsec_eseg_meta(eseg))
+ 		return false;
  
- static const struct amd_mp2_ops amd_sfh_ops = {
-@@ -262,8 +278,13 @@ static int amd_mp2_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
- 	mp2_select_ops(privdata);
- 
- 	rc = amd_sfh_hid_client_init(privdata);
--	if (rc)
-+	if (rc) {
-+		amd_sfh_clear_intr(privdata);
-+		dev_err(&pdev->dev, "amd_sfh_hid_client_init failed\n");
- 		return rc;
-+	}
-+
-+	amd_sfh_clear_intr(privdata);
- 
- 	return devm_add_action_or_reset(&pdev->dev, amd_mp2_pci_remove, privdata);
- }
-@@ -291,6 +312,7 @@ static int __maybe_unused amd_mp2_pci_resume(struct device *dev)
- 	}
- 
- 	schedule_delayed_work(&cl_data->work_buffer, msecs_to_jiffies(AMD_SFH_IDLE_LOOP));
-+	amd_sfh_clear_intr(mp2);
- 
- 	return 0;
- }
-@@ -315,6 +337,7 @@ static int __maybe_unused amd_mp2_pci_suspend(struct device *dev)
- 	}
- 
- 	cancel_delayed_work_sync(&cl_data->work_buffer);
-+	amd_sfh_clear_intr(mp2);
- 
- 	return 0;
- }
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-index 8a9c544c27aef..61de09ba51242 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-@@ -141,5 +141,6 @@ struct amd_mp2_ops {
- 	 void (*stop)(struct amd_mp2_dev *privdata, u16 sensor_idx);
- 	 void (*stop_all)(struct amd_mp2_dev *privdata);
- 	 int (*response)(struct amd_mp2_dev *mp2, u8 sid, u32 sensor_sts);
-+	 void (*clear_intr)(struct amd_mp2_dev *privdata);
- };
- #endif
+ 	eseg->cs_flags = MLX5_ETH_WQE_L3_CSUM;
+-	if (xo->inner_ipproto) {
+-		eseg->cs_flags |= MLX5_ETH_WQE_L4_INNER_CSUM | MLX5_ETH_WQE_L3_INNER_CSUM;
++	inner_ipproto = xfrm_offload(skb)->inner_ipproto;
++	if (inner_ipproto) {
++		eseg->cs_flags |= MLX5_ETH_WQE_L3_INNER_CSUM;
++		if (inner_ipproto == IPPROTO_TCP || inner_ipproto == IPPROTO_UDP)
++			eseg->cs_flags |= MLX5_ETH_WQE_L4_INNER_CSUM;
+ 	} else if (likely(skb->ip_summed == CHECKSUM_PARTIAL)) {
+ 		eseg->cs_flags |= MLX5_ETH_WQE_L4_CSUM;
+ 		sq->stats->csum_partial_inner++;
 -- 
 2.34.1
 

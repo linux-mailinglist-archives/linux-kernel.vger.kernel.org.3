@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4DF4CFB6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8EE4CF767
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbiCGKij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S237933AbiCGJp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241354AbiCGKKI (ORCPT
+        with ESMTP id S237593AbiCGJgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:10:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB0E2BB09;
-        Mon,  7 Mar 2022 01:53:00 -0800 (PST)
+        Mon, 7 Mar 2022 04:36:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ACF66FAA;
+        Mon,  7 Mar 2022 01:31:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1228260A28;
-        Mon,  7 Mar 2022 09:52:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1048BC340F3;
-        Mon,  7 Mar 2022 09:52:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54592611AE;
+        Mon,  7 Mar 2022 09:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571F7C340E9;
+        Mon,  7 Mar 2022 09:31:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646762;
-        bh=UfCYSZXoVnRIB8H8VvbyXpKv1i03FqE5R0QtrAk+uj0=;
+        s=korg; t=1646645467;
+        bh=21YY4NxrrfmPda0r7VTfoipztWCNAl+87mork/YF//A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=evN6I1iFRADj9+NpO+OD7ewwE73FnQ4c35lbSfesV5JZOi1h00hH2WcsTfFQoHEQK
-         NCud95bH5qSfgAUDaZkP8ORapWdIcLxTdHk7H55+RwIfJFBI/vQDK1MI4FlkNp9owz
-         cX2kvRYWBLQ4xYU58xGpED99PQ6GyMCqacngI1DU=
+        b=Hi/jOk6zozW9k1ii7PU9/WZmnZc5OkueblWEubXW4bF0tEwmD/2Vp9P9uH8jpEoDe
+         h3TzCKkVJFDH+c08pzYCFXkRa1/vlw4ew6cNPB/EclHa7iy93glrtitkjwlmyhpyNO
+         szZ9hUt7w4GQg39kds8qQUDxa6jm2m3ATHtYRxnE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "D. Wythe" <alibuda@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 085/186] net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error cause by server
+        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Subject: [PATCH 5.10 040/105] xfrm: enforce validity of offload input flags
 Date:   Mon,  7 Mar 2022 10:18:43 +0100
-Message-Id: <20220307091656.462621250@linuxfoundation.org>
+Message-Id: <20220307091645.315094498@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: D. Wythe <alibuda@linux.alibaba.com>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-commit 4940a1fdf31c39f0806ac831cde333134862030b upstream.
+commit 7c76ecd9c99b6e9a771d813ab1aa7fa428b3ade1 upstream.
 
-The problem of SMC_CLC_DECL_ERR_REGRMB on the server is very clear.
-Based on the fact that whether a new SMC connection can be accepted or
-not depends on not only the limit of conn nums, but also the available
-entries of rtoken. Since the rtoken release is trigger by peer, while
-the conn nums is decrease by local, tons of thing can happen in this
-time difference.
+struct xfrm_user_offload has flags variable that received user input,
+but kernel didn't check if valid bits were provided. It caused a situation
+where not sanitized input was forwarded directly to the drivers.
 
-This only thing that needs to be mentioned is that now all connection
-creations are completely protected by smc_server_lgr_pending lock, it's
-enough to check only the available entries in rtokens_used_mask.
+For example, XFRM_OFFLOAD_IPV6 define that was exposed, was used by
+strongswan, but not implemented in the kernel at all.
 
-Fixes: cd6851f30386 ("smc: remote memory buffers (RMBs)")
-Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+As a solution, check and sanitize input flags to forward
+XFRM_OFFLOAD_INBOUND to the drivers.
+
+Fixes: d77e38e612a0 ("xfrm: Add an IPsec hardware offloading API")
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/smc/smc_core.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/uapi/linux/xfrm.h |    6 ++++++
+ net/xfrm/xfrm_device.c    |    6 +++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -1783,7 +1783,8 @@ int smc_conn_create(struct smc_sock *smc
- 		    (ini->smcd_version == SMC_V2 ||
- 		     lgr->vlan_id == ini->vlan_id) &&
- 		    (role == SMC_CLNT || ini->is_smcd ||
--		     lgr->conns_num < SMC_RMBS_PER_LGR_MAX)) {
-+		    (lgr->conns_num < SMC_RMBS_PER_LGR_MAX &&
-+		      !bitmap_full(lgr->rtokens_used_mask, SMC_RMBS_PER_LGR_MAX)))) {
- 			/* link group found */
- 			ini->first_contact_local = 0;
- 			conn->lgr = lgr;
+--- a/include/uapi/linux/xfrm.h
++++ b/include/uapi/linux/xfrm.h
+@@ -506,6 +506,12 @@ struct xfrm_user_offload {
+ 	int				ifindex;
+ 	__u8				flags;
+ };
++/* This flag was exposed without any kernel code that supporting it.
++ * Unfortunately, strongswan has the code that uses sets this flag,
++ * which makes impossible to reuse this bit.
++ *
++ * So leave it here to make sure that it won't be reused by mistake.
++ */
+ #define XFRM_OFFLOAD_IPV6	1
+ #define XFRM_OFFLOAD_INBOUND	2
+ 
+--- a/net/xfrm/xfrm_device.c
++++ b/net/xfrm/xfrm_device.c
+@@ -223,6 +223,9 @@ int xfrm_dev_state_add(struct net *net,
+ 	if (x->encap || x->tfcpad)
+ 		return -EINVAL;
+ 
++	if (xuo->flags & ~(XFRM_OFFLOAD_IPV6 | XFRM_OFFLOAD_INBOUND))
++		return -EINVAL;
++
+ 	dev = dev_get_by_index(net, xuo->ifindex);
+ 	if (!dev) {
+ 		if (!(xuo->flags & XFRM_OFFLOAD_INBOUND)) {
+@@ -261,7 +264,8 @@ int xfrm_dev_state_add(struct net *net,
+ 	xso->dev = dev;
+ 	xso->real_dev = dev;
+ 	xso->num_exthdrs = 1;
+-	xso->flags = xuo->flags;
++	/* Don't forward bit that is not implemented */
++	xso->flags = xuo->flags & ~XFRM_OFFLOAD_IPV6;
+ 
+ 	err = dev->xfrmdev_ops->xdo_dev_state_add(x);
+ 	if (err) {
 
 

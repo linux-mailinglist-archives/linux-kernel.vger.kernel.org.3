@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C7D4CF550
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7469D4CFB11
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237021AbiCGJ0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
+        id S240142AbiCGK0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237206AbiCGJXc (ORCPT
+        with ESMTP id S240520AbiCGKIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496D152E21;
-        Mon,  7 Mar 2022 01:22:06 -0800 (PST)
+        Mon, 7 Mar 2022 05:08:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D275BC86;
+        Mon,  7 Mar 2022 01:52:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFB93B81054;
-        Mon,  7 Mar 2022 09:22:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E89BC340F3;
-        Mon,  7 Mar 2022 09:22:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9982B810A8;
+        Mon,  7 Mar 2022 09:52:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CEC0C340F4;
+        Mon,  7 Mar 2022 09:52:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644924;
-        bh=N2eSg4cBpi7JwxNmSliSC4Pe8EBDIBV8CNUL9/bYicI=;
+        s=korg; t=1646646746;
+        bh=939F57jTkV6r9LaQ26ldiqNZbd7zamWH3q3bvHXYq7U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z/8rF6npHyfMziy9t0b269kgI8nxUGZ2kpXtyikmyjLOQa4mbUbWk9Bqp/OWZxRcJ
-         28J6pnA+AGs47myQINp5cEjVrZLKu/89QqBfDPVVYMDy7aalRIl0Q3OzyHk/q3bYKd
-         WgpO9QbBr0JNdS2u+fen+cTymO6+iA3cwgAfilZY=
+        b=WC1Ms1jriB++aEdVMhk7Ti8UEU9UH5xVSu9FkgRXQ2HYiiYjAjXyy2ZPc6Lusj4g+
+         +ec9Fe+NQqeKIDQrXHBj1wR4U31+nBHKvYNjl0FvUIZkTk51Im6QZYK04l9Ja5NyIS
+         RUK2GwogZerNqbPzMwYXB9KIslovU7NSVQX7sOFM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 05/42] cifs: fix double free race when mount fails in cifs_get_root()
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Alex Elder <elder@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 081/186] net: ipa: fix a build dependency
 Date:   Mon,  7 Mar 2022 10:18:39 +0100
-Message-Id: <20220307091636.306297212@linuxfoundation.org>
+Message-Id: <20220307091656.352609325@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,95 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
+From: Alex Elder <elder@linaro.org>
 
-[ Upstream commit 3d6cc9898efdfb062efb74dc18cfc700e082f5d5 ]
+commit caef14b7530c065fb85d54492768fa48fdb5093e upstream.
 
-When cifs_get_root() fails during cifs_smb3_do_mount() we call
-deactivate_locked_super() which eventually will call delayed_free() which
-will free the context.
-In this situation we should not proceed to enter the out: section in
-cifs_smb3_do_mount() and free the same resources a second time.
+An IPA build problem arose in the linux-next tree the other day.
+The problem is that a recent commit adds a new dependency on some
+code, and the Kconfig file for IPA doesn't reflect that dependency.
+As a result, some configurations can fail to build (particularly
+when COMPILE_TEST is enabled).
 
-[Thu Feb 10 12:59:06 2022] BUG: KASAN: use-after-free in rcu_cblist_dequeue+0x32/0x60
-[Thu Feb 10 12:59:06 2022] Read of size 8 at addr ffff888364f4d110 by task swapper/1/0
+The recent patch adds calls to qmp_get(), qmp_put(), and qmp_send(),
+and those are built based on the QCOM_AOSS_QMP config option.  If
+that symbol is not defined, stubs are defined, so we just need to
+ensure QCOM_AOSS_QMP is compatible with QCOM_IPA, or it's not
+defined.
 
-[Thu Feb 10 12:59:06 2022] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G           OE     5.17.0-rc3+ #4
-[Thu Feb 10 12:59:06 2022] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.0 12/17/2019
-[Thu Feb 10 12:59:06 2022] Call Trace:
-[Thu Feb 10 12:59:06 2022]  <IRQ>
-[Thu Feb 10 12:59:06 2022]  dump_stack_lvl+0x5d/0x78
-[Thu Feb 10 12:59:06 2022]  print_address_description.constprop.0+0x24/0x150
-[Thu Feb 10 12:59:06 2022]  ? rcu_cblist_dequeue+0x32/0x60
-[Thu Feb 10 12:59:06 2022]  kasan_report.cold+0x7d/0x117
-[Thu Feb 10 12:59:06 2022]  ? rcu_cblist_dequeue+0x32/0x60
-[Thu Feb 10 12:59:06 2022]  __asan_load8+0x86/0xa0
-[Thu Feb 10 12:59:06 2022]  rcu_cblist_dequeue+0x32/0x60
-[Thu Feb 10 12:59:06 2022]  rcu_core+0x547/0xca0
-[Thu Feb 10 12:59:06 2022]  ? call_rcu+0x3c0/0x3c0
-[Thu Feb 10 12:59:06 2022]  ? __this_cpu_preempt_check+0x13/0x20
-[Thu Feb 10 12:59:06 2022]  ? lock_is_held_type+0xea/0x140
-[Thu Feb 10 12:59:06 2022]  rcu_core_si+0xe/0x10
-[Thu Feb 10 12:59:06 2022]  __do_softirq+0x1d4/0x67b
-[Thu Feb 10 12:59:06 2022]  __irq_exit_rcu+0x100/0x150
-[Thu Feb 10 12:59:06 2022]  irq_exit_rcu+0xe/0x30
-[Thu Feb 10 12:59:06 2022]  sysvec_hyperv_stimer0+0x9d/0xc0
-...
-[Thu Feb 10 12:59:07 2022] Freed by task 58179:
-[Thu Feb 10 12:59:07 2022]  kasan_save_stack+0x26/0x50
-[Thu Feb 10 12:59:07 2022]  kasan_set_track+0x25/0x30
-[Thu Feb 10 12:59:07 2022]  kasan_set_free_info+0x24/0x40
-[Thu Feb 10 12:59:07 2022]  ____kasan_slab_free+0x137/0x170
-[Thu Feb 10 12:59:07 2022]  __kasan_slab_free+0x12/0x20
-[Thu Feb 10 12:59:07 2022]  slab_free_freelist_hook+0xb3/0x1d0
-[Thu Feb 10 12:59:07 2022]  kfree+0xcd/0x520
-[Thu Feb 10 12:59:07 2022]  cifs_smb3_do_mount+0x149/0xbe0 [cifs]
-[Thu Feb 10 12:59:07 2022]  smb3_get_tree+0x1a0/0x2e0 [cifs]
-[Thu Feb 10 12:59:07 2022]  vfs_get_tree+0x52/0x140
-[Thu Feb 10 12:59:07 2022]  path_mount+0x635/0x10c0
-[Thu Feb 10 12:59:07 2022]  __x64_sys_mount+0x1bf/0x210
-[Thu Feb 10 12:59:07 2022]  do_syscall_64+0x5c/0xc0
-[Thu Feb 10 12:59:07 2022]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-[Thu Feb 10 12:59:07 2022] Last potentially related work creation:
-[Thu Feb 10 12:59:07 2022]  kasan_save_stack+0x26/0x50
-[Thu Feb 10 12:59:07 2022]  __kasan_record_aux_stack+0xb6/0xc0
-[Thu Feb 10 12:59:07 2022]  kasan_record_aux_stack_noalloc+0xb/0x10
-[Thu Feb 10 12:59:07 2022]  call_rcu+0x76/0x3c0
-[Thu Feb 10 12:59:07 2022]  cifs_umount+0xce/0xe0 [cifs]
-[Thu Feb 10 12:59:07 2022]  cifs_kill_sb+0xc8/0xe0 [cifs]
-[Thu Feb 10 12:59:07 2022]  deactivate_locked_super+0x5d/0xd0
-[Thu Feb 10 12:59:07 2022]  cifs_smb3_do_mount+0xab9/0xbe0 [cifs]
-[Thu Feb 10 12:59:07 2022]  smb3_get_tree+0x1a0/0x2e0 [cifs]
-[Thu Feb 10 12:59:07 2022]  vfs_get_tree+0x52/0x140
-[Thu Feb 10 12:59:07 2022]  path_mount+0x635/0x10c0
-[Thu Feb 10 12:59:07 2022]  __x64_sys_mount+0x1bf/0x210
-[Thu Feb 10 12:59:07 2022]  do_syscall_64+0x5c/0xc0
-[Thu Feb 10 12:59:07 2022]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Reported-by: Shyam Prasad N <sprasad@microsoft.com>
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Fixes: 34a081761e4e3 ("net: ipa: request IPA register values be retained")
+Signed-off-by: Alex Elder <elder@linaro.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/cifsfs.c | 1 +
+ drivers/net/ipa/Kconfig |    1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index 74f405a05efc3..dba0d12c3db19 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -753,6 +753,7 @@ cifs_do_mount(struct file_system_type *fs_type,
- 
- out_super:
- 	deactivate_locked_super(sb);
-+	return root;
- out:
- 	cifs_cleanup_volume_info(volume_info);
- 	return root;
--- 
-2.34.1
-
+--- a/drivers/net/ipa/Kconfig
++++ b/drivers/net/ipa/Kconfig
+@@ -3,6 +3,7 @@ config QCOM_IPA
+ 	depends on NET && QCOM_SMEM
+ 	depends on ARCH_QCOM || COMPILE_TEST
+ 	depends on QCOM_RPROC_COMMON || (QCOM_RPROC_COMMON=n && COMPILE_TEST)
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select QCOM_MDT_LOADER if ARCH_QCOM
+ 	select QCOM_SCM
+ 	select QCOM_QMI_HELPERS
 
 

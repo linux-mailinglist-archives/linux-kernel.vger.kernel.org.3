@@ -2,104 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E7D4D0194
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C154D00ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243314AbiCGOjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S243116AbiCGORU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbiCGOjw (ORCPT
+        with ESMTP id S243082AbiCGORL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:39:52 -0500
-X-Greylist: delayed 1402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Mar 2022 06:38:58 PST
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D76238D94
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:38:58 -0800 (PST)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 345EE321A6C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:15:06 -0600 (CST)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id RE8fnB6kN22u3RE8gnz4Xr; Mon, 07 Mar 2022 08:15:06 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mExfza9Swq8QkIJylEbCbdZzmqYa/N9/7AiymPbUTCM=; b=rYNQMX+01131Q8XdRFTD87aLuD
-        mQZXzvMFnaxxvYTfvBLW+3zKJ601cNRfA4eME2mcxX3PnBhUamllQ0190VDcGE9Mo3JcH767LOBSX
-        xqcGlbUytabfC9WPxJWzEeZ6IOeZ5apKh6C0RnSUqityirORLyr+zV3DVUff2iQ9KxvOgDr1PidcX
-        mPdl0BIU8SMRQdHJuHY7YbTH1JZAGDByoLKNUkLTXFdZt/vRj8nTKwhIvX0ppXAUiTOLeqLAQgg4p
-        pxu6eYuefCBHujZaeoqFzP9O2hJES+nsnPQ8W0rYQLrryM1kPz8bRbcdgo56fsezxuza/eiZiyLEQ
-        yB2N+C1A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38090)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nRE8f-001zAT-7h; Mon, 07 Mar 2022 14:15:05 +0000
-Message-ID: <d71d84d2-5aa2-7d72-9fdb-a0ac203cefb2@roeck-us.net>
-Date:   Mon, 7 Mar 2022 06:15:02 -0800
+        Mon, 7 Mar 2022 09:17:11 -0500
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695838EB44;
+        Mon,  7 Mar 2022 06:16:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1646662575;
+  x=1678198575;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ICzA0DrdXMhOKFRda00jGMuRSZtr/qRb9e8msUmDl9E=;
+  b=qHi/7dFUGGWC3m5upjoZ21XTbq8L8F/Y+zQYwtkAwvXqwRpTznDITA0r
+   VSvdZdrjDKihXwhQ4rsWC+X4Tjctlx/+NCeQGxWPWlBI7uN//CjJnImlw
+   uhhWlwfnzlEFcNrWvF6uxey4E1DuGNeT+wdCgqRUwtlmE4kTAwYPvGk7V
+   xys7u2AyFZLZC52677GxRbigh1xl6RoxqkZvKsxlRag1OE7qQbuhdyYwj
+   pT6XUqpvTjnRnEsiXA5eis1RvGSxZRO/ig0rrM7gflTvUJeSQR96eSeYs
+   r7STMBOKDSeDa+AioGf5HYn7po7u03N7ygX7BHhHY169B6dGhd0R/kYhB
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <vigneshr@ti.com>, <richard@nod.at>, <miquel.raynal@bootlin.com>,
+        <joern@lazybastard.org>
+CC:     <kernel@axis.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <frowand.list@gmail.com>, <krzysztof.kozlowski@canonical.com>,
+        <robh+dt@kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Subject: [PATCH 0/4] mtd: phram improvements
+Date:   Mon, 7 Mar 2022 15:15:45 +0100
+Message-ID: <20220307141549.2732179-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.10 000/105] 5.10.104-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220307091644.179885033@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nRE8f-001zAT-7h
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:38090
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 12
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/22 01:18, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.104 release.
-> There are 105 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
-> Anything received after that time might be too late.
-> 
+The phram driver in the MTD subsystem can be used to allow the kernel to use an
+MTD or (via mtdblock) a block device in RAM (with the contents loaded by a
+bootloader for example).  This series has some improvements to make it more
+usable by adding device tree support and to significantly improve its
+performance by using cached mappings when possible.
 
+Vincent Whitchurch (4):
+  mtd: core: Check devicetree alias for index
+  dt-bindings: reserved-memory: Add phram
+  mtd: phram: Allow probing via reserved-memory
+  mtd: phram: Allow cached mappings
 
-Building powerpc:allmodconfig ... failed
+ .../bindings/reserved-memory/phram.yaml       | 45 +++++++++++
+ drivers/mtd/devices/phram.c                   | 78 +++++++++++++++++--
+ drivers/mtd/mtdcore.c                         | 11 ++-
+ drivers/of/platform.c                         |  1 +
+ 4 files changed, 127 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/phram.yaml
 
-In file included from include/linux/module.h:12,
-                  from drivers/net/ethernet/ibm/ibmvnic.c:35:
-drivers/net/ethernet/ibm/ibmvnic.c: In function 'ibmvnic_reset':
-drivers/net/ethernet/ibm/ibmvnic.c:2349:23: error: 'entry' undeclared
+-- 
+2.34.1
+

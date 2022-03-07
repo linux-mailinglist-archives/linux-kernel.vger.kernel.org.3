@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF21F4CF52F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AC44CF639
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236743AbiCGJZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S238029AbiCGJd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:33:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237330AbiCGJXp (ORCPT
+        with ESMTP id S237295AbiCGJ17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C991647381;
-        Mon,  7 Mar 2022 01:22:49 -0800 (PST)
+        Mon, 7 Mar 2022 04:27:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D664D674CB;
+        Mon,  7 Mar 2022 01:25:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71C38B810AC;
-        Mon,  7 Mar 2022 09:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5C9C340F5;
-        Mon,  7 Mar 2022 09:22:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AECAE61187;
+        Mon,  7 Mar 2022 09:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B794AC340E9;
+        Mon,  7 Mar 2022 09:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644967;
-        bh=Fx8sxKDlicv+ZHV+t6h5Trdm0xpJq9j4m2GOhUsmSgM=;
+        s=korg; t=1646645099;
+        bh=9w7wfwKPGRpK9zkIDgGWdhu9dqbToz0KVbzKdvjnBHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cm1qYX7w1N0f7iyoliVdDKkgjgy2t21RTalM2X1NjU9rjI76Z0OMvgbjDtd8j5z18
-         9r+qBjdkINqJCBrsgBXVktZUHMGukO2uz9pQFsfSg4HqEVOq1EoXtOeJeIP4acFUDK
-         Z/awxcKWS3VNzErgKCDN25Qq8BzlnKzbHj3bYBSE=
+        b=TkuhE6ZmuvIWtD4+lAwqAiTKLmRXnhp/PHzCRsVGEeeIpODmFw8jw/RNeO89xfRpQ
+         s1UVbm34AxHhj9jborReMD7fO6nJunYdNagH7Wjq+THv8QDsl5pX/favGMeNI/IYtF
+         PrzprimrIAU3WsBvo5w5Q9/FprBThKloT4pHH3tE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 4.14 38/42] Input: elan_i2c - move regulator_[en|dis]able() out of elan_[en|dis]able_power()
-Date:   Mon,  7 Mar 2022 10:19:12 +0100
-Message-Id: <20220307091637.262135849@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.19 38/51] can: gs_usb: change active_channelss type from atomic_t to u8
+Date:   Mon,  7 Mar 2022 10:19:13 +0100
+Message-Id: <20220307091638.075805689@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,125 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-commit 81a36d8ce554b82b0a08e2b95d0bd44fcbff339b upstream.
+commit 035b0fcf02707d3c9c2890dc1484b11aa5335eb1 upstream.
 
-elan_disable_power() is called conditionally on suspend, where as
-elan_enable_power() is always called on resume. This leads to
-an imbalance in the regulator's enable count.
+The driver uses an atomic_t variable: gs_usb:active_channels to keep
+track of the number of opened channels in order to only allocate
+memory for the URBs when this count changes from zero to one.
 
-Move the regulator_[en|dis]able() calls out of elan_[en|dis]able_power()
-in preparation of fixing this.
+However, the driver does not decrement the counter when an error
+occurs in gs_can_open(). This issue is fixed by changing the type from
+atomic_t to u8 and by simplifying the logic accordingly.
 
-No functional changes intended.
+It is safe to use an u8 here because the network stack big kernel lock
+(a.k.a. rtnl_mutex) is being hold. For details, please refer to [1].
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220131135436.29638-1-hdegoede@redhat.com
-[dtor: consolidate elan_[en|dis]able() into elan_set_power()]
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+[1] https://lore.kernel.org/linux-can/CAMZ6Rq+sHpiw34ijPsmp7vbUpDtJwvVtdV7CvRZJsLixjAFfrg@mail.gmail.com/T/#t
+
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
+Link: https://lore.kernel.org/all/20220214234814.1321599-1-mailhol.vincent@wanadoo.fr
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/mouse/elan_i2c_core.c |   62 ++++++++++++------------------------
- 1 file changed, 22 insertions(+), 40 deletions(-)
+ drivers/net/can/usb/gs_usb.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/input/mouse/elan_i2c_core.c
-+++ b/drivers/input/mouse/elan_i2c_core.c
-@@ -137,55 +137,21 @@ static int elan_get_fwinfo(u16 ic_type,
- 	return 0;
- }
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -198,8 +198,8 @@ struct gs_can {
+ struct gs_usb {
+ 	struct gs_can *canch[GS_MAX_INTF];
+ 	struct usb_anchor rx_submitted;
+-	atomic_t active_channels;
+ 	struct usb_device *udev;
++	u8 active_channels;
+ };
  
--static int elan_enable_power(struct elan_tp_data *data)
-+static int elan_set_power(struct elan_tp_data *data, bool on)
- {
- 	int repeat = ETP_RETRY_COUNT;
- 	int error;
+ /* 'allocate' a tx context.
+@@ -596,7 +596,7 @@ static int gs_can_open(struct net_device
+ 	if (rc)
+ 		return rc;
  
--	error = regulator_enable(data->vcc);
--	if (error) {
--		dev_err(&data->client->dev,
--			"failed to enable regulator: %d\n", error);
--		return error;
--	}
+-	if (atomic_add_return(1, &parent->active_channels) == 1) {
++	if (!parent->active_channels) {
+ 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
+ 			struct urb *urb;
+ 			u8 *buf;
+@@ -697,6 +697,7 @@ static int gs_can_open(struct net_device
+ 
+ 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 
++	parent->active_channels++;
+ 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
+ 		netif_start_queue(netdev);
+ 
+@@ -712,7 +713,8 @@ static int gs_can_close(struct net_devic
+ 	netif_stop_queue(netdev);
+ 
+ 	/* Stop polling */
+-	if (atomic_dec_and_test(&parent->active_channels))
++	parent->active_channels--;
++	if (!parent->active_channels)
+ 		usb_kill_anchored_urbs(&parent->rx_submitted);
+ 
+ 	/* Stop sending URBs */
+@@ -991,8 +993,6 @@ static int gs_usb_probe(struct usb_inter
+ 
+ 	init_usb_anchor(&dev->rx_submitted);
+ 
+-	atomic_set(&dev->active_channels, 0);
 -
- 	do {
--		error = data->ops->power_control(data->client, true);
-+		error = data->ops->power_control(data->client, on);
- 		if (error >= 0)
- 			return 0;
+ 	usb_set_intfdata(intf, dev);
+ 	dev->udev = interface_to_usbdev(intf);
  
- 		msleep(30);
- 	} while (--repeat > 0);
- 
--	dev_err(&data->client->dev, "failed to enable power: %d\n", error);
--	return error;
--}
--
--static int elan_disable_power(struct elan_tp_data *data)
--{
--	int repeat = ETP_RETRY_COUNT;
--	int error;
--
--	do {
--		error = data->ops->power_control(data->client, false);
--		if (!error) {
--			error = regulator_disable(data->vcc);
--			if (error) {
--				dev_err(&data->client->dev,
--					"failed to disable regulator: %d\n",
--					error);
--				/* Attempt to power the chip back up */
--				data->ops->power_control(data->client, true);
--				break;
--			}
--
--			return 0;
--		}
--
--		msleep(30);
--	} while (--repeat > 0);
--
--	dev_err(&data->client->dev, "failed to disable power: %d\n", error);
-+	dev_err(&data->client->dev, "failed to set power %s: %d\n",
-+		on ? "on" : "off", error);
- 	return error;
- }
- 
-@@ -1206,9 +1172,19 @@ static int __maybe_unused elan_suspend(s
- 		/* Enable wake from IRQ */
- 		data->irq_wake = (enable_irq_wake(client->irq) == 0);
- 	} else {
--		ret = elan_disable_power(data);
-+		ret = elan_set_power(data, false);
-+		if (ret)
-+			goto err;
-+
-+		ret = regulator_disable(data->vcc);
-+		if (ret) {
-+			dev_err(dev, "error %d disabling regulator\n", ret);
-+			/* Attempt to power the chip back up */
-+			elan_set_power(data, true);
-+		}
- 	}
- 
-+err:
- 	mutex_unlock(&data->sysfs_mutex);
- 	return ret;
- }
-@@ -1224,7 +1200,13 @@ static int __maybe_unused elan_resume(st
- 		data->irq_wake = false;
- 	}
- 
--	error = elan_enable_power(data);
-+	error = regulator_enable(data->vcc);
-+	if (error) {
-+		dev_err(dev, "error %d enabling regulator\n", error);
-+		goto err;
-+	}
-+
-+	error = elan_set_power(data, true);
- 	if (error) {
- 		dev_err(dev, "power up when resuming failed: %d\n", error);
- 		goto err;
 
 

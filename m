@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B2E4CFF52
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1134CFF53
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242667AbiCGNAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S237783AbiCGNAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbiCGNAM (ORCPT
+        with ESMTP id S242683AbiCGNAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:00:12 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4848F66FB9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:59:16 -0800 (PST)
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        Mon, 7 Mar 2022 08:00:21 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA769CFA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:59:24 -0800 (PST)
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 347B03F5FC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:59:15 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id ADCE73F5F9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:59:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646657955;
-        bh=IsQNvnrYzFlByVho6HFj26Mu5PXAjpXD97Wru1aaDTM=;
+        s=20210705; t=1646657960;
+        bh=jMtPmKSRUvUYtvTflv22KoBJEK0aUxzC1RIZwVEFX+k=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=e4K3khZ0KvNIrWbfam7wS4gDxTYDdMafvGSrIJIL0MMLUl40U1eXpguFdbBKUJCt3
-         C6BDr6SVqsApKBOEHNmeqzy/NDbzrxLCzLTd7PSeQUkSFpQK0wWHDUREX3OlLXlfVe
-         IE96CfCQhLNdnJ0UF6c7AEdsKijMcfU5ESUNuOUyluRD+WYT0eCWWFgB2vy6U1RjWD
-         Lzb21pSRUfqLyI4WMbAvGVE77G0GQSNTLx4RJLf97iSzUjZN4o+pPQZehByd2tCbOr
-         Ygb8/w8rIs9vJ8UDzRiGSnyliX5lYjLOtfElo7hxcVk9q4WnQoxkpfu10gHfHa36Nd
-         8q+QHLltKjs0Q==
-Received: by mail-pg1-f197.google.com with SMTP id v8-20020a654608000000b0037d5ef9cfa0so4741696pgq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 04:59:15 -0800 (PST)
+        b=IQUzByDbhCwR16i8V6DiRsLPBnKNTB8SU0mBadvb8QCCd+iRwZtlbBQFjSLzempVr
+         +gg/Izl2+xPSDcUwzEs1aRD/Wg5pqsb7Wu/JVfnNDIsxIS4R87dYiR3KITPgQS17Tp
+         CjeMunELuCqCMUUGGsxC9I6ef+unC4BkDDp140Yp2JcjPY0UoMVuZmOJQS/QmQRw3p
+         /8L2Ex7qgPlA6g/Y0Mr0G51YPp1kASeUOek1njpj2DqtkEFpZa6XESk3Vi25u3auQa
+         GVWGPTaTYxoZ64MQfQXWjhU9lfJQiGBHaaVkiPAVc6X6QhzusdollPYipPV78iab5P
+         frsdStHSODJ7w==
+Received: by mail-pl1-f200.google.com with SMTP id l6-20020a170903120600b0014f43ba55f3so7431703plh.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 04:59:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IsQNvnrYzFlByVho6HFj26Mu5PXAjpXD97Wru1aaDTM=;
-        b=hxytgm1Bjcl4q6Q3Gn3C2VMPtyONMAA7KiTgYX7qtZB3KYfztFqHabbJ/dj4nCzaKx
-         Gmzu1WLsHgUyp/ryTyu0TX7x6ksKwu2kfJSWVJAvZFnxGZqFidMAIpMk41drL+9CPT87
-         UsqOAI+HabW6PEFYlkuX5xBUYCDRdMXEYv8nMdbBovo7aX3x264ybHOIPw2LzH7nISKS
-         IlRESVfCHrtis1MQRVz3KitrLyliDEKFOUA7gfAxlqos080sOCPX+JBiV/D4Xhiq/rZF
-         5ftuKHcgTrjRLlppIxOShxh1eLKGYHFpHjtqnrQmLXEfJdUrEQEvoFMxzht4d6ireyTX
-         wjrQ==
-X-Gm-Message-State: AOAM532OlxhnDUjjDzzaPMXtlbmYqrCiIM9XbSy7R/F9vIyDY6Y2oio4
-        PbHtyAAKQZO60EU6rN0Bv7mQbTbcWsljTruiBVKSTuIu7P71IiwsOJkwt/y8kn63bdBifQhAg1z
-        wjgvlvH+buWnSROA+B4324U9DDDyT9K08QBMFLvwSQg==
-X-Received: by 2002:a17:90a:19d5:b0:1bc:a5db:b655 with SMTP id 21-20020a17090a19d500b001bca5dbb655mr25236422pjj.46.1646657953398;
-        Mon, 07 Mar 2022 04:59:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyeisv63taSGAcKFYoPo3kwY7DTxoY58lBoTyjbrXxgaD5HZdiVOhc/XjBuDTTsNSX4B/Rprg==
-X-Received: by 2002:a17:90a:19d5:b0:1bc:a5db:b655 with SMTP id 21-20020a17090a19d500b001bca5dbb655mr25236399pjj.46.1646657953083;
-        Mon, 07 Mar 2022 04:59:13 -0800 (PST)
+        bh=jMtPmKSRUvUYtvTflv22KoBJEK0aUxzC1RIZwVEFX+k=;
+        b=DrlPM95F3iRifVsOKDHSMRMjEKB5dvztMtTNZS66GB7pxW4+fyuFt3ekENi5i9q0S1
+         xMs24lqtEQ5LmXTlUHs+EcRHcfNyNOKJTGn36CXmOSoGH/DnTyuUwwO5+xMmEonBtQ9M
+         AIob+5/qPdFOr7nhyov9YbAhlgDZc1RWaby9EQNvx80Tq531aQkzXSbUiI7Nf1byxHYu
+         aOVq8blmL3d3J1M0mM32g/ZbsYCLLyAVRjHkhsdLev9BcxdNCtkcvR/DytTIebGRxmyM
+         472CnG1W6/B4Gh/2qabj4LsjEi8TkKohONlRDmpXoxS27AMZzE9/qXyL5/UfBRPqpgoB
+         CE4w==
+X-Gm-Message-State: AOAM530pYrX0YyFSROIWMAwBVEaKepgxsQ5xqI/slX5MHYrqrbGqTkdL
+        b+lib38S5wq3Aa4svB7/4aAtUk4enp/+4KicRlpexXXq1/0JC9Q6NNy8G9bgCgc19hgse99hgUf
+        k++rMm0tJ8/aN3BJ/kYLnvK19kSTcsAIsCkDYq2oJVg==
+X-Received: by 2002:a05:6a00:124f:b0:4c0:6242:c14e with SMTP id u15-20020a056a00124f00b004c06242c14emr12392482pfi.83.1646657958309;
+        Mon, 07 Mar 2022 04:59:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwUGtcuE9+d9RFrcMdWxp59VW+xrbfIIprtBnMCCjgc9FCOCuS/oZygQdQTPUWW2SQOzqsgIQ==
+X-Received: by 2002:a05:6a00:124f:b0:4c0:6242:c14e with SMTP id u15-20020a056a00124f00b004c06242c14emr12392447pfi.83.1646657957964;
+        Mon, 07 Mar 2022 04:59:17 -0800 (PST)
 Received: from localhost.localdomain (59-115-216-226.dynamic-ip.hinet.net. [59.115.216.226])
-        by smtp.gmail.com with ESMTPSA id oj2-20020a17090b4d8200b001bef79ea006sm17545682pjb.29.2022.03.07.04.59.10
+        by smtp.gmail.com with ESMTPSA id oj2-20020a17090b4d8200b001bef79ea006sm17545682pjb.29.2022.03.07.04.59.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 04:59:12 -0800 (PST)
+        Mon, 07 Mar 2022 04:59:17 -0800 (PST)
 From:   Chris Chiu <chris.chiu@canonical.com>
 To:     Jes.Sorensen@gmail.com, kvalo@codeaurora.org, davem@davemloft.net,
         kuba@kernel.org
 Cc:     code@reto-schneider.ch, linux-wireless@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Chris Chiu <chris.chiu@canonical.com>
-Subject: [PATCH 1/2] rtl8xxxu: feed antenna information for cfg80211
-Date:   Mon,  7 Mar 2022 20:58:51 +0800
-Message-Id: <20220307125852.13606-2-chris.chiu@canonical.com>
+Subject: [PATCH 2/2] rtl8xxxu: fill up txrate info for gen1 chips
+Date:   Mon,  7 Mar 2022 20:58:52 +0800
+Message-Id: <20220307125852.13606-3-chris.chiu@canonical.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220307125852.13606-1-chris.chiu@canonical.com>
 References: <20220307125852.13606-1-chris.chiu@canonical.com>
@@ -73,7 +73,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,62 +81,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fill up the available TX/RX antenna so the iw commands can show
-correct antenna information for different chips.
+RTL8188CUS/RTL8192CU(gen1) don't support rate adatptive report hence
+no real txrate info can be retrieved. The vendor driver reports the
+highest rate in HT capabilities from the IEs to avoid empty txrate.
+This commit initiates the txrate information with the highest supported
+rate negotiated with AP. The gen2 chip keeps update the txrate from
+the rate adaptive reports, and gen1 chips at least have non-NULL txrate
+after associated.
 
 Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
 ---
- .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c    | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
 diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index 06d59ffb7444..d225a1257530 100644
+index d225a1257530..285acf303e3d 100644
 --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
 +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -1607,6 +1607,7 @@ static void rtl8xxxu_print_chipinfo(struct rtl8xxxu_priv *priv)
- static int rtl8xxxu_identify_chip(struct rtl8xxxu_priv *priv)
- {
- 	struct device *dev = &priv->udev->dev;
-+	struct ieee80211_hw *hw = priv->hw;
- 	u32 val32, bonding;
- 	u16 val16;
- 
-@@ -1684,6 +1685,9 @@ static int rtl8xxxu_identify_chip(struct rtl8xxxu_priv *priv)
- 		priv->has_wifi = 1;
- 	}
- 
-+	hw->wiphy->available_antennas_tx = BIT(priv->tx_paths) - 1;
-+	hw->wiphy->available_antennas_rx = BIT(priv->rx_paths) - 1;
-+
- 	switch (priv->rtl_chip) {
- 	case RTL8188E:
- 	case RTL8192E:
-@@ -4282,6 +4286,17 @@ static void rtl8xxxu_cam_write(struct rtl8xxxu_priv *priv,
- 	rtl8xxxu_debug = tmp_debug;
+@@ -4473,6 +4473,35 @@ void rtl8xxxu_gen1_init_aggregation(struct rtl8xxxu_priv *priv)
+ 	priv->rx_buf_aggregation = 1;
  }
  
-+static
-+int rtl8xxxu_get_antenna(struct ieee80211_hw *hw, u32 *tx_ant, u32 *rx_ant)
++static struct ieee80211_rate rtl8xxxu_legacy_ratetable[] = {
++	{.bitrate = 10, .hw_value = 0x00,},
++	{.bitrate = 20, .hw_value = 0x01,},
++	{.bitrate = 55, .hw_value = 0x02,},
++	{.bitrate = 110, .hw_value = 0x03,},
++	{.bitrate = 60, .hw_value = 0x04,},
++	{.bitrate = 90, .hw_value = 0x05,},
++	{.bitrate = 120, .hw_value = 0x06,},
++	{.bitrate = 180, .hw_value = 0x07,},
++	{.bitrate = 240, .hw_value = 0x08,},
++	{.bitrate = 360, .hw_value = 0x09,},
++	{.bitrate = 480, .hw_value = 0x0a,},
++	{.bitrate = 540, .hw_value = 0x0b,},
++};
++
++static void rtl8xxxu_desc_to_mcsrate(u16 rate, u8 *mcs, u8 *nss)
 +{
-+	struct rtl8xxxu_priv *priv = hw->priv;
++	if (rate <= DESC_RATE_54M)
++		return;
 +
-+	*tx_ant = BIT(priv->tx_paths) - 1;
-+	*rx_ant = BIT(priv->rx_paths) - 1;
-+
-+	return 0;
++	if (rate >= DESC_RATE_MCS0 && rate <= DESC_RATE_MCS15) {
++		if (rate < DESC_RATE_MCS8)
++			*nss = 1;
++		else
++			*nss = 2;
++		*mcs = rate - DESC_RATE_MCS0;
++	}
 +}
 +
- static void rtl8xxxu_sw_scan_start(struct ieee80211_hw *hw,
- 				   struct ieee80211_vif *vif, const u8 *mac)
+ static void rtl8xxxu_set_basic_rates(struct rtl8xxxu_priv *priv, u32 rate_cfg)
  {
-@@ -6472,6 +6487,7 @@ static const struct ieee80211_ops rtl8xxxu_ops = {
- 	.set_key = rtl8xxxu_set_key,
- 	.ampdu_action = rtl8xxxu_ampdu_action,
- 	.sta_statistics = rtl8xxxu_sta_statistics,
-+	.get_antenna = rtl8xxxu_get_antenna,
- };
+ 	struct ieee80211_hw *hw = priv->hw;
+@@ -4534,9 +4563,12 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 	struct rtl8xxxu_priv *priv = hw->priv;
+ 	struct device *dev = &priv->udev->dev;
+ 	struct ieee80211_sta *sta;
++	struct rtl8xxxu_ra_report *rarpt;
+ 	u32 val32;
+ 	u8 val8;
  
- static int rtl8xxxu_parse_usb(struct rtl8xxxu_priv *priv,
++	rarpt = &priv->ra_report;
++
+ 	if (changed & BSS_CHANGED_ASSOC) {
+ 		dev_dbg(dev, "Changed ASSOC: %i!\n", bss_conf->assoc);
+ 
+@@ -4545,6 +4577,10 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 		if (bss_conf->assoc) {
+ 			u32 ramask;
+ 			int sgi = 0;
++			u8 highest_rate;
++			u8 mcs = 0, nss = 0;
++			u32 bit_rate;
++
+ 
+ 			rcu_read_lock();
+ 			sta = ieee80211_find_sta(vif, bss_conf->bssid);
+@@ -4569,6 +4605,29 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 				sgi = 1;
+ 			rcu_read_unlock();
+ 
++			highest_rate = fls(ramask) - 1;
++			if (highest_rate < DESC_RATE_MCS0) {
++				rarpt->txrate.legacy =
++				rtl8xxxu_legacy_ratetable[highest_rate].bitrate;
++			} else {
++				rtl8xxxu_desc_to_mcsrate(highest_rate,
++							 &mcs, &nss);
++				rarpt->txrate.flags |= RATE_INFO_FLAGS_MCS;
++
++				rarpt->txrate.mcs = mcs;
++				rarpt->txrate.nss = nss;
++
++				if (sgi) {
++					rarpt->txrate.flags |=
++						RATE_INFO_FLAGS_SHORT_GI;
++				}
++
++				rarpt->txrate.bw |= RATE_INFO_BW_20;
++			}
++			bit_rate = cfg80211_calculate_bitrate(&rarpt->txrate);
++			rarpt->bit_rate = bit_rate;
++			rarpt->desc_rate = highest_rate;
++
+ 			priv->vif = vif;
+ 			priv->rssi_level = RTL8XXXU_RATR_STA_INIT;
+ 
 -- 
 2.20.1
 

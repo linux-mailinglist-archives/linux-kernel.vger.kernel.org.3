@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531314CFB61
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA0B4CF640
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbiCGKg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:36:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S234908AbiCGJel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:34:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242212AbiCGKLS (ORCPT
+        with ESMTP id S238755AbiCGJ3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C46C888DA;
-        Mon,  7 Mar 2022 01:54:39 -0800 (PST)
+        Mon, 7 Mar 2022 04:29:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286BD59A74;
+        Mon,  7 Mar 2022 01:28:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DF41609D1;
-        Mon,  7 Mar 2022 09:54:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C2BC340E9;
-        Mon,  7 Mar 2022 09:54:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6F8E60C00;
+        Mon,  7 Mar 2022 09:28:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0466C340E9;
+        Mon,  7 Mar 2022 09:28:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646877;
-        bh=huafkLBrnu/F1EmTPPA+2e+YjFdAap1arJHRGX0eidc=;
+        s=korg; t=1646645296;
+        bh=1JdOwzAd4A8p14zKZkL9HsGfoOPkGQsKjtO9nw/zU1c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FpLZtwlnW3Z/41XxSndX1ZOn4+hIQEqfEVRSjCkkCTpjpY2vwt18ucvC/Ak52AEV1
-         0F3TDOwQhbf+83Nz1UZ75CmFTjkx5SlZLpi5DRhPQ4kAzz2KW0xIgyWTHwFF9CB4TY
-         f1FJEJMjnkR87IK5d7deuJ8JiDyiY9oquvFkF3I8=
+        b=Ee0PDt9mXlu89/QRhkblAAiMyl1IdZHDhY3xHJrcgTkJmA/ytXLOakkUocE5GBx/H
+         fpcvrcsT3Jnr18w9lL9i2He33vKTksCfL46P4VBncFHaJcgMHbfa8GuamC7OQckrH+
+         HaqnHeDOnys//DBP/tierad+9E+3soq70lplPsVQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 122/186] arm64: dts: rockchip: fix Quartz64-A ddr regulator voltage
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.4 47/64] ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
 Date:   Mon,  7 Mar 2022 10:19:20 +0100
-Message-Id: <20220307091657.491870743@linuxfoundation.org>
+Message-Id: <20220307091640.486020232@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Geis <pgwipeout@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit ad02776cf8d083e28b1ca4d93d8b1949668c27cc ]
+commit 7b83299e5b9385943a857d59e15cba270df20d7e upstream.
 
-The Quartz64 Model A uses a voltage divider to ensure ddr voltage is
-within specification from the default regulator configuration.
-Adjusting this voltage is detrimental, and currently causes the ddr
-voltage to be about 0.8v.
+early_param() handlers should return 0 on success.
+__setup() handlers should return 1 on success, i.e., the parameter
+has been handled. A return of 0 would cause the "option=value" string
+to be added to init's environment strings, polluting it.
 
-Remove the min and max voltage setpoints for the ddr regulator.
+../arch/arm/mm/mmu.c: In function 'test_early_cachepolicy':
+../arch/arm/mm/mmu.c:215:1: error: no return statement in function returning non-void [-Werror=return-type]
+../arch/arm/mm/mmu.c: In function 'test_noalign_setup':
+../arch/arm/mm/mmu.c:221:1: error: no return statement in function returning non-void [-Werror=return-type]
 
-Fixes: b33a22a1e7c4 ("arm64: dts: rockchip: add basic dts for Pine64 Quartz64-A")
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-Link: https://lore.kernel.org/r/20220128003809.3291407-2-pgwipeout@gmail.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: b849a60e0903 ("ARM: make cr_alignment read-only #ifndef CONFIG_CPU_CP15")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: patches@armlinux.org.uk
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 2 --
- 1 file changed, 2 deletions(-)
+ arch/arm/mm/mmu.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index 4d4b2a301b1a..f6290538c8a4 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -285,8 +285,6 @@
- 			vcc_ddr: DCDC_REG3 {
- 				regulator-always-on;
- 				regulator-boot-on;
--				regulator-min-microvolt = <1100000>;
--				regulator-max-microvolt = <1100000>;
- 				regulator-initial-mode = <0x2>;
- 				regulator-name = "vcc_ddr";
- 				regulator-state-mem {
--- 
-2.34.1
-
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -229,12 +229,14 @@ early_param("ecc", early_ecc);
+ static int __init early_cachepolicy(char *p)
+ {
+ 	pr_warn("cachepolicy kernel parameter not supported without cp15\n");
++	return 0;
+ }
+ early_param("cachepolicy", early_cachepolicy);
+ 
+ static int __init noalign_setup(char *__unused)
+ {
+ 	pr_warn("noalign kernel parameter not supported without cp15\n");
++	return 1;
+ }
+ __setup("noalign", noalign_setup);
+ 
 
 

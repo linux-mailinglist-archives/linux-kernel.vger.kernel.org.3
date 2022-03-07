@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA754CFA2F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 392234CF654
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242045AbiCGKLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S234426AbiCGJfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240577AbiCGJvK (ORCPT
+        with ESMTP id S237849AbiCGJ23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:51:10 -0500
+        Mon, 7 Mar 2022 04:28:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9638E657B5;
-        Mon,  7 Mar 2022 01:44:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA486BDEF;
+        Mon,  7 Mar 2022 01:26:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7607F60F62;
-        Mon,  7 Mar 2022 09:44:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0D8C340F3;
-        Mon,  7 Mar 2022 09:44:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B30426116E;
+        Mon,  7 Mar 2022 09:26:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1ABAC340E9;
+        Mon,  7 Mar 2022 09:26:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646292;
-        bh=+NzAtLObj6uMrptvGTkHCHEAmFeyo5+8E9Db1t+8QB8=;
+        s=korg; t=1646645166;
+        bh=XeQWuE9QS00qsRaIJms6ytgoEPSUO8UYDaaenG9fc9I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ly+GesbPd56nSVAIawB0oPXncZYME1Zipc1Kxrn67yCNf+POamLBDDObyZ3mvCBCI
-         R8bY2XqnqfWhMUhvi7bRuoMvuwsAV5XfkLlRzRTa+QjAWU4+d4146Oe1yT8OYbxCiv
-         gkWebhqyzv+T31HHUot5P+yMz5hFCu/lyCzDcc3w=
+        b=btCnVASBdAB8vPWEZVFG2om6p36/gflqnVHd5BFzmK9bV7/1Zw0cZwpF/QDGWKlu1
+         cbMtGAtW2ojNDrO51CLwyLaBazzLUe/bmFFxPZpL5w2ttHBGd21YDyn5a6Wl2mXjQ2
+         eNTNrNBN6aFGq0ZrP63mjntj7yFT9ViEijo13Ccg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Amit Cohen <amcohen@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 196/262] selftests: mlxsw: tc_police_scale: Make test more robust
-Date:   Mon,  7 Mar 2022 10:19:00 +0100
-Message-Id: <20220307091708.140705665@linuxfoundation.org>
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.19 26/51] net: dcb: flush lingering app table entries for unregistered devices
+Date:   Mon,  7 Mar 2022 10:19:01 +0100
+Message-Id: <20220307091637.737283808@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +54,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amit Cohen <amcohen@nvidia.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-commit dc9752075341e7beb653e37c6f4a3723074dc8bc upstream.
+commit 91b0383fef06f20b847fa9e4f0e3054ead0b1a1b upstream.
 
-The test adds tc filters and checks how many of them were offloaded by
-grepping for 'in_hw'.
+If I'm not mistaken (and I don't think I am), the way in which the
+dcbnl_ops work is that drivers call dcb_ieee_setapp() and this populates
+the application table with dynamically allocated struct dcb_app_type
+entries that are kept in the module-global dcb_app_list.
 
-iproute2 commit f4cd4f127047 ("tc: add skip_hw and skip_sw to control
-action offload") added offload indication to tc actions, producing the
-following output:
+However, nobody keeps exact track of these entries, and although
+dcb_ieee_delapp() is supposed to remove them, nobody does so when the
+interface goes away (example: driver unbinds from device). So the
+dcb_app_list will contain lingering entries with an ifindex that no
+longer matches any device in dcb_app_lookup().
 
- $ tc filter show dev swp2 ingress
- ...
- filter protocol ipv6 pref 1000 flower chain 0 handle 0x7c0
-   eth_type ipv6
-   dst_ip 2001:db8:1::7bf
-   skip_sw
-   in_hw in_hw_count 1
-         action order 1:  police 0x7c0 rate 10Mbit burst 100Kb mtu 2Kb action drop overhead 0b
-         ref 1 bind 1
-         not_in_hw
-         used_hw_stats immediate
+Reclaim the lost memory by listening for the NETDEV_UNREGISTER event and
+flushing the app table entries of interfaces that are now gone.
 
-The current grep expression matches on both 'in_hw' and 'not_in_hw',
-resulting in incorrect results.
+In fact something like this used to be done as part of the initial
+commit (blamed below), but it was done in dcbnl_exit() -> dcb_flushapp(),
+essentially at module_exit time. That became dead code after commit
+7a6b6f515f77 ("DCB: fix kconfig option") which essentially merged
+"tristate config DCB" and "bool config DCBNL" into a single "bool config
+DCB", so net/dcb/dcbnl.c could not be built as a module anymore.
 
-Fix that by using JSON output instead.
+Commit 36b9ad8084bd ("net/dcb: make dcbnl.c explicitly non-modular")
+recognized this and deleted dcbnl_exit() and dcb_flushapp() altogether,
+leaving us with the version we have today.
 
-Fixes: 5061e773264b ("selftests: mlxsw: Add scale test for tc-police")
-Signed-off-by: Amit Cohen <amcohen@nvidia.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Since flushing application table entries can and should be done as soon
+as the netdevice disappears, fundamentally the commit that is to blame
+is the one that introduced the design of this API.
+
+Fixes: 9ab933ab2cc8 ("dcbnl: add appliction tlv handlers")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/dcb/dcbnl.c |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
---- a/tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh
-@@ -60,7 +60,8 @@ __tc_police_test()
- 
- 	tc_police_rules_create $count $should_fail
- 
--	offload_count=$(tc filter show dev $swp1 ingress | grep in_hw | wc -l)
-+	offload_count=$(tc -j filter show dev $swp1 ingress |
-+			jq "[.[] | select(.options.in_hw == true)] | length")
- 	((offload_count == count))
- 	check_err_fail $should_fail $? "tc police offload count"
+--- a/net/dcb/dcbnl.c
++++ b/net/dcb/dcbnl.c
+@@ -2054,10 +2054,54 @@ u8 dcb_ieee_getapp_default_prio_mask(con
  }
+ EXPORT_SYMBOL(dcb_ieee_getapp_default_prio_mask);
+ 
++static void dcbnl_flush_dev(struct net_device *dev)
++{
++	struct dcb_app_type *itr, *tmp;
++
++	spin_lock(&dcb_lock);
++
++	list_for_each_entry_safe(itr, tmp, &dcb_app_list, list) {
++		if (itr->ifindex == dev->ifindex) {
++			list_del(&itr->list);
++			kfree(itr);
++		}
++	}
++
++	spin_unlock(&dcb_lock);
++}
++
++static int dcbnl_netdevice_event(struct notifier_block *nb,
++				 unsigned long event, void *ptr)
++{
++	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
++
++	switch (event) {
++	case NETDEV_UNREGISTER:
++		if (!dev->dcbnl_ops)
++			return NOTIFY_DONE;
++
++		dcbnl_flush_dev(dev);
++
++		return NOTIFY_OK;
++	default:
++		return NOTIFY_DONE;
++	}
++}
++
++static struct notifier_block dcbnl_nb __read_mostly = {
++	.notifier_call  = dcbnl_netdevice_event,
++};
++
+ static int __init dcbnl_init(void)
+ {
++	int err;
++
+ 	INIT_LIST_HEAD(&dcb_app_list);
+ 
++	err = register_netdevice_notifier(&dcbnl_nb);
++	if (err)
++		return err;
++
+ 	rtnl_register(PF_UNSPEC, RTM_GETDCB, dcb_doit, NULL, 0);
+ 	rtnl_register(PF_UNSPEC, RTM_SETDCB, dcb_doit, NULL, 0);
+ 
 
 

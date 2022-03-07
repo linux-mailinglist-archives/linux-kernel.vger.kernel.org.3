@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493844CF54B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9F94CF615
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235084AbiCGJ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S237847AbiCGJdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237305AbiCGJXm (ORCPT
+        with ESMTP id S238511AbiCGJ3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:42 -0500
+        Mon, 7 Mar 2022 04:29:16 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028A1264B;
-        Mon,  7 Mar 2022 01:22:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4871CFCE;
+        Mon,  7 Mar 2022 01:27:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B98D6B81054;
-        Mon,  7 Mar 2022 09:22:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDC2C340E9;
-        Mon,  7 Mar 2022 09:22:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F06A5B810C5;
+        Mon,  7 Mar 2022 09:27:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13EDDC340F6;
+        Mon,  7 Mar 2022 09:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644945;
-        bh=JmT9QfBOyZJcBBwWxnPYAC63NAd5BxcKK3R707o9fKY=;
+        s=korg; t=1646645244;
+        bh=PFk4EjdLYTAF6sqo7VwPI2C4Bb9XL2OGpcAbpcDAZZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oKV2aksphvMiW+MSf2LMgWASp+L58l8lFJ3pS4DS2F6c7q7kCqxOR07BUVrdubhFr
-         57Avw/fJOACLoedrLkYI5t/NTilMRCJSP6cQqODSlSuGl0AXCgMM9K1UNw4fR6nCUJ
-         7xv259Cx5kHkU6fucSD032M5SN3xLJc5tY5zGg6k=
+        b=ZUtVuLCooLDIs6v1QP/7dclzuOcPK8gdXANmLJ47w/nrfSrzq5nIG0EVrcE4JEZEP
+         0YEYuS2e5e0DeWl+25Ain0BtQu0+UfIJr7aepLEO0WysBsBekAQ8UUjtXua6M2MxCN
+         FUAQ9/VdUt6d2Ard2/gpzaFIpt/7vqe0jwRBmdcw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 31/42] net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
+        stable@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        dann frazier <dann.frazier@canonical.com>
+Subject: [PATCH 5.4 32/64] sched/topology: Fix sched_domain_topology_level alloc in sched_init_numa()
 Date:   Mon,  7 Mar 2022 10:19:05 +0100
-Message-Id: <20220307091637.058914754@linuxfoundation.org>
+Message-Id: <20220307091640.056331062@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-commit bd6f1fd5d33dfe5d1b4f2502d3694a7cc13f166d upstream.
+commit 71e5f6644fb2f3304fcb310145ded234a37e7cc1 upstream.
 
-During driver initialization, the pointer of card info, i.e. the
-variable 'ci' is required. However, the definition of
-'com20020pci_id_table' reveals that this field is empty for some
-devices, which will cause null pointer dereference when initializing
-these devices.
+Commit "sched/topology: Make sched_init_numa() use a set for the
+deduplicating sort" allocates 'i + nr_levels (level)' instead of
+'i + nr_levels + 1' sched_domain_topology_level.
 
-The following log reveals it:
+This led to an Oops (on Arm64 juno with CONFIG_SCHED_DEBUG):
 
-[    3.973806] KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-[    3.973819] RIP: 0010:com20020pci_probe+0x18d/0x13e0 [com20020_pci]
-[    3.975181] Call Trace:
-[    3.976208]  local_pci_probe+0x13f/0x210
-[    3.977248]  pci_device_probe+0x34c/0x6d0
-[    3.977255]  ? pci_uevent+0x470/0x470
-[    3.978265]  really_probe+0x24c/0x8d0
-[    3.978273]  __driver_probe_device+0x1b3/0x280
-[    3.979288]  driver_probe_device+0x50/0x370
+sched_init_domains
+  build_sched_domains()
+    __free_domain_allocs()
+      __sdt_free() {
+	...
+        for_each_sd_topology(tl)
+	  ...
+          sd = *per_cpu_ptr(sdd->sd, j); <--
+	  ...
+      }
 
-Fix this by checking whether the 'ci' is a null pointer first.
-
-Fixes: 8c14f9c70327 ("ARCNET: add com20020 PCI IDs with metadata")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+Tested-by: Barry Song <song.bao.hua@hisilicon.com>
+Link: https://lkml.kernel.org/r/6000e39e-7d28-c360-9cd6-8798fd22a9bf@arm.com
+Signed-off-by: dann frazier <dann.frazier@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/arcnet/com20020-pci.c |    3 +++
- 1 file changed, 3 insertions(+)
+ kernel/sched/topology.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/arcnet/com20020-pci.c
-+++ b/drivers/net/arcnet/com20020-pci.c
-@@ -136,6 +136,9 @@ static int com20020pci_probe(struct pci_
- 		return -ENOMEM;
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1658,7 +1658,7 @@ void sched_init_numa(void)
+ 	/* Compute default topology size */
+ 	for (i = 0; sched_domain_topology[i].mask; i++);
  
- 	ci = (struct com20020_pci_card_info *)id->driver_data;
-+	if (!ci)
-+		return -EINVAL;
-+
- 	priv->ci = ci;
- 	mm = &ci->misc_map;
- 
+-	tl = kzalloc((i + nr_levels) *
++	tl = kzalloc((i + nr_levels + 1) *
+ 			sizeof(struct sched_domain_topology_level), GFP_KERNEL);
+ 	if (!tl)
+ 		return;
 
 

@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225044D03C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A12F4D03C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244042AbiCGQPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S240996AbiCGQO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244028AbiCGQPU (ORCPT
+        with ESMTP id S229987AbiCGQO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:15:20 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364193BF9C;
-        Mon,  7 Mar 2022 08:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646669666; x=1678205666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9lxkY6esalBBvJEOAscFPgv2UXaiF/EqM4Jnw+GpDxE=;
-  b=d0ZK+Pr78qIyWV/NwaqPufVWLgofrGExRWNszCkAiDMIAWJUyfdxEIP8
-   nos+onjXTN0/lz6k2tgI0DXOktpyD9Nd2lGMLKI/BnxqanysLpkGsMn6+
-   wXPqVW9JhWUn6XQDM6Zj+pTrJUoKgRFjJEEWqHvVV/BmrNTmV+3yJ2XgT
-   e10p1FZPyzKcUcFKmVYwJXRkJZnvpT6AJWu44xf0ua5PJUVK1pf4maFMc
-   IdMLl1dvzY1ETzPuZztcJ/8oRXhkgT5j02RNV8cl+guA+D7mzKGkIkqLj
-   U6SkQuim9XSbMt3VxE5QDEYW5WCzB5kvw/uaZ8Q21rOI6dcfS7p1DHu+m
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="340861379"
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="340861379"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 08:14:25 -0800
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="643298544"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 08:14:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nRFzN-00CrBy-PE;
-        Mon, 07 Mar 2022 18:13:37 +0200
-Date:   Mon, 7 Mar 2022 18:13:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 7/7] usb: typec: mux: Add On Semi fsa4480 driver
-Message-ID: <YiYvMf5X+S0WZ9lO@smile.fi.intel.com>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <20220307034040.1111107-7-bjorn.andersson@linaro.org>
- <YiXbg4QwgIgLh3LW@smile.fi.intel.com>
- <YiYbOQpX4+fP8S1W@ripper>
+        Mon, 7 Mar 2022 11:14:58 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45AE366B3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:14:03 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 29C22210FE;
+        Mon,  7 Mar 2022 16:14:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646669642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iSqlae7Qt+xrzSg34aB+OB4nZwi3kO0krFdAV9V5I78=;
+        b=izbOwzQbedcyzcbLlYdhu+xgxcM6v0RnrWliXnFT5BQhvXL131t39cNMw/HtozzmOH0V7T
+        teIqtnsH/rsown6KpiVFozLQZ1DQClubh031/eeHZeQOn/Xt43wKGioF67O+1zZvwZGDkN
+        PdIhJR1O9+iPTNZXiygEozR3n7jDcFU=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D046BA3B8C;
+        Mon,  7 Mar 2022 16:14:01 +0000 (UTC)
+Date:   Mon, 7 Mar 2022 17:14:01 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v1 03/13] printk: use percpu flag instead of
+ cpu_online()
+Message-ID: <YiYvSf0FKFyOBF6Z@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-4-john.ogness@linutronix.de>
+ <YgaJZtY+EH9JIGyo@alley>
+ <YgoGNmYER8xni34K@google.com>
+ <YguCuFYeZ52mkr4r@alley>
+ <87zgm8h1tt.fsf@jogness.linutronix.de>
+ <YiI2x6K5IhsADEmK@alley>
+ <YiOYPvleCsTT9vGu@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiYbOQpX4+fP8S1W@ripper>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <YiOYPvleCsTT9vGu@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +65,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 06:48:25AM -0800, Bjorn Andersson wrote:
-> On Mon 07 Mar 02:16 PST 2022, Andy Shevchenko wrote:
-> > On Sun, Mar 06, 2022 at 07:40:40PM -0800, Bjorn Andersson wrote:
-
-...
-
-> > > +		/* 15us to allow the SBU switch to turn off */
-> > > +		usleep_range(15, 1000);
-> > 
-> > This is quite unusual range.
-> > 
-> > If you are fine with the long delay, why to stress the system on it?
-> > Otherwise the use of 1000 is unclear.
-> > 
-> > That said, I would expect one of the below:
-> > 
-> > 		usleep_range(15, 30);
-> > 		usleep_range(500, 1000);
+On Sat 2022-03-05 10:05:02, Jason A. Donenfeld wrote:
+> Hi Petr,
 > 
-> Glad you asked about that, as you say the typical form is to keep the
-> range within 2x of the lower value, or perhaps lower + 5.
+> On Fri, Mar 04, 2022 at 04:56:55PM +0100, Petr Mladek wrote:
 > 
-> But if the purpose is to specify a minimum time and then give a max to
-> give the system some flexibility in it's decision of when to wake up.
-> And in situations such as this, we're talking about someone connecting a
-> cable, so we're in "no rush" and I picked the completely arbitrary 1ms
-> as the max.
+> > Just for record, the right commit ID in the mainline is
+> > 1b710b1b10eff9d466. It used printk_deferred() in _warn_unseeded_randomness():
+> > 
+> > --- a/drivers/char/random.c
+> > +++ b/drivers/char/random.c
+> > @@ -1687,8 +1687,9 @@ static void _warn_unseeded_randomness(const char *func_name, void *caller,
+> >  	print_once = true;
+> >  #endif
+> >  	if (__ratelimit(&unseeded_warning))
+> > -		pr_notice("random: %s called from %pS with crng_init=%d\n",
+> > -			  func_name, caller, crng_init);
+> > +		printk_deferred(KERN_NOTICE "random: %s called from %pS "
+> > +				"with crng_init=%d\n", func_name, caller,
+> > +				crng_init);
+> >  }
 > 
-> Do you see any drawback of this much higher number? (Other than it
-> looking "wrong")
+> Are we able to revert this yet? Or is it still required because of
+> locking issues? Would gladly take a patch to revert that if the
+> non-deferred function is fine for 5.18.
 
-I see the drawback of low number. The 1000 makes not much sense to me with
-the minimum 66x times less. If there is no rush, use some reasonable values,
-what about
+Unfortunately, printk_deferred() will still be needed in 5.18 here.
 
-		usleep_range(100, 1000);
+One thing is that this patchset introducing console kthreads will not
+be ready for 5.18.
 
-? 10x is way better than 66x.
+But more importantly, the kthreads will not be enough to remove the
+cyclic dependency. The legacy synchronous printing will still be used
+during early boot, panic, etc.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Honestly, I am still not sure if we will be able to get rid of
+printk_deferred(). I hope so but some more magic will be necessary.
+Anyway, the kthreads should help to achieve this.
 
-
+Best Regards,
+Petr

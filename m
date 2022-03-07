@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440F04CF970
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2A24CFABF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240166AbiCGKFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:05:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S242233AbiCGKVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbiCGJmv (ORCPT
+        with ESMTP id S240522AbiCGKBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:42:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C0F26ACD;
-        Mon,  7 Mar 2022 01:41:27 -0800 (PST)
+        Mon, 7 Mar 2022 05:01:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B32D1AD86;
+        Mon,  7 Mar 2022 01:50:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E4DBB810B2;
-        Mon,  7 Mar 2022 09:41:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D26C340E9;
-        Mon,  7 Mar 2022 09:41:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 074A5B8102B;
+        Mon,  7 Mar 2022 09:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66FAEC340F3;
+        Mon,  7 Mar 2022 09:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646084;
-        bh=LEOfSxMZuEod8sNoK5GbKy9hMr9peXP/MVpD+L3jJ7g=;
+        s=korg; t=1646646598;
+        bh=pRDJCw/bVvoDBr/puOKhzTpczSKlcPzkG7XLPTMFsF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WN+qQBYgJVlJOsmvcZExNmA6zi7iJoOiqD5hMvTSW+68eM696WN11YrVMHPmmN2je
-         jTmSYPMT83lFFp+d8jtYYcXrwdfqPMYJDy6UjBIDAhBRtONpH2zN7uuLbbTw5KVaOC
-         rmjhLej7A+rnBqA1d0oSmtIv5mJr+ktsbhH7bDNc=
+        b=sDFLMjhagS4Hv66gNwt+BSeIoOLT1IlWkJMEi25UQsvN00uUgHy+G/qw7K4U1ubs6
+         DVyXprKHO1FW8gDyLg3d99zkd+8Vg89B/QnHjVc5N4rdIscxYmG8sBUEql76JoOIVm
+         P5BYoqLtBLFXdD4MdmOPfwPpO3bu6v5NRmoUU7Rc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cai Huoqing <cai.huoqing@linux.dev>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 126/262] net: ethernet: litex: Add the dependency on HAS_IOMEM
-Date:   Mon,  7 Mar 2022 10:17:50 +0100
-Message-Id: <20220307091706.013985836@linuxfoundation.org>
+Subject: [PATCH 5.16 033/186] arm64: Mark start_backtrace() notrace and NOKPROBE_SYMBOL
+Date:   Mon,  7 Mar 2022 10:17:51 +0100
+Message-Id: <20220307091655.020561069@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cai Huoqing <cai.huoqing@linux.dev>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit 2427f03fb42f9dc14c53108f2c9b5563eb37e770 ]
+[ Upstream commit 1e0924bd09916fab795fc2a21ec1d148f24299fd ]
 
-The LiteX driver uses devm io function API which
-needs HAS_IOMEM enabled, so add the dependency on HAS_IOMEM.
+Mark the start_backtrace() as notrace and NOKPROBE_SYMBOL
+because this function is called from ftrace and lockdep to
+get the caller address via return_address(). The lockdep
+is used in kprobes, it should also be NOKPROBE_SYMBOL.
 
-Fixes: ee7da21ac4c3 ("net: Add driver for LiteX's LiteETH network interface")
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-Link: https://lore.kernel.org/r/20220208013308.6563-1-cai.huoqing@linux.dev
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: b07f3499661c ("arm64: stacktrace: Move start_backtrace() out of the header")
+Cc: <stable@vger.kernel.org> # 5.13.x
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/164301227374.1433152.12808232644267107415.stgit@devnote2
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/litex/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/kernel/stacktrace.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/litex/Kconfig b/drivers/net/ethernet/litex/Kconfig
-index f99adbf26ab4e..04345b929d8e5 100644
---- a/drivers/net/ethernet/litex/Kconfig
-+++ b/drivers/net/ethernet/litex/Kconfig
-@@ -17,7 +17,7 @@ if NET_VENDOR_LITEX
+diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+index 94f83cd44e507..0ee6bd390bd09 100644
+--- a/arch/arm64/kernel/stacktrace.c
++++ b/arch/arm64/kernel/stacktrace.c
+@@ -33,7 +33,7 @@
+  */
  
- config LITEX_LITEETH
- 	tristate "LiteX Ethernet support"
--	depends on OF
-+	depends on OF && HAS_IOMEM
- 	help
- 	  If you wish to compile a kernel for hardware with a LiteX LiteEth
- 	  device then you should answer Y to this.
+ 
+-void start_backtrace(struct stackframe *frame, unsigned long fp,
++notrace void start_backtrace(struct stackframe *frame, unsigned long fp,
+ 		     unsigned long pc)
+ {
+ 	frame->fp = fp;
+@@ -55,6 +55,7 @@ void start_backtrace(struct stackframe *frame, unsigned long fp,
+ 	frame->prev_fp = 0;
+ 	frame->prev_type = STACK_TYPE_UNKNOWN;
+ }
++NOKPROBE_SYMBOL(start_backtrace);
+ 
+ /*
+  * Unwind from one frame record (A) to the next frame record (B).
 -- 
 2.34.1
 

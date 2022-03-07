@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404FF4CF88C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A030B4CF619
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238625AbiCGJ4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S237360AbiCGJcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238803AbiCGJiv (ORCPT
+        with ESMTP id S237588AbiCGJ2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:38:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140AE6BDD2;
-        Mon,  7 Mar 2022 01:33:29 -0800 (PST)
+        Mon, 7 Mar 2022 04:28:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7E959A53;
+        Mon,  7 Mar 2022 01:25:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A34B2611E4;
-        Mon,  7 Mar 2022 09:33:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 839C0C340E9;
-        Mon,  7 Mar 2022 09:33:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6902BB810C0;
+        Mon,  7 Mar 2022 09:25:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A746C340F3;
+        Mon,  7 Mar 2022 09:25:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645588;
-        bh=jZhJUgnC00Oi4NxwevCHNXIQrXbw0XYFCaL4YrnILQw=;
+        s=korg; t=1646645136;
+        bh=HWYJjQ/cZgIGMRUPf4mSbGH1m7UM1K6qwwDWI70pjBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JeHNcR9WXl3oCjwxL8805vOXy7WqmC7PJhEQmiScTxdHsKYO9rmX3iT+ewkSJPJHJ
-         UIz8NYj8rTgszYAdoCdq9iVqynbQx8oNQVx0V9vQ/iSvtcZWad/15niZTLVAVZWnRt
-         M2DoUAwh9TAulHdNF/igCNoUGywM3O5tg34qiQKE=
+        b=OoUjF9iYC79AQ2Dz9nSvI5FfsKA3Myq/vwn6JHTIyl2jFla/wyShParQplixZpuJo
+         qv5jRR14yHxlnKb+CWyZfiaRhnHSJtqzvyEInUw6hsM1IEZz3XKNczRxMiM8DHs40U
+         vzcim8sISEVuQETh7HTe1cdz40/6U3dh+J8uQxqo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Zeal Robot <zealci@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        CGEL ZTE <cgel.zte@gmail.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Song Liu <songliubraving@fb.com>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 080/105] memfd: fix F_SEAL_WRITE after shmem huge page allocated
-Date:   Mon,  7 Mar 2022 10:19:23 +0100
-Message-Id: <20220307091646.428770541@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 4.19 49/51] tracing/histogram: Fix sorting on old "cpu" value
+Date:   Mon,  7 Mar 2022 10:19:24 +0100
+Message-Id: <20220307091638.385184567@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,131 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugh Dickins <hughd@google.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-commit f2b277c4d1c63a85127e8aa2588e9cc3bd21cb99 upstream.
+commit 1d1898f65616c4601208963c3376c1d828cbf2c7 upstream.
 
-Wangyong reports: after enabling tmpfs filesystem to support transparent
-hugepage with the following command:
+When trying to add a histogram against an event with the "cpu" field, it
+was impossible due to "cpu" being a keyword to key off of the running CPU.
+So to fix this, it was changed to "common_cpu" to match the other generic
+fields (like "common_pid"). But since some scripts used "cpu" for keying
+off of the CPU (for events that did not have "cpu" as a field, which is
+most of them), a backward compatibility trick was added such that if "cpu"
+was used as a key, and the event did not have "cpu" as a field name, then
+it would fallback and switch over to "common_cpu".
 
-  echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
+This fix has a couple of subtle bugs. One was that when switching over to
+"common_cpu", it did not change the field name, it just set a flag. But
+the code still found a "cpu" field. The "cpu" field is used for filtering
+and is returned when the event does not have a "cpu" field.
 
-the docker program tries to add F_SEAL_WRITE through the following
-command, but it fails unexpectedly with errno EBUSY:
+This was found by:
 
-  fcntl(5, F_ADD_SEALS, F_SEAL_WRITE) = -1.
+  # cd /sys/kernel/tracing
+  # echo hist:key=cpu,pid:sort=cpu > events/sched/sched_wakeup/trigger
+  # cat events/sched/sched_wakeup/hist
 
-That is because memfd_tag_pins() and memfd_wait_for_pins() were never
-updated for shmem huge pages: checking page_mapcount() against
-page_count() is hopeless on THP subpages - they need to check
-total_mapcount() against page_count() on THP heads only.
+Which showed the histogram unsorted:
 
-Make memfd_tag_pins() (compared > 1) as strict as memfd_wait_for_pins()
-(compared != 1): either can be justified, but given the non-atomic
-total_mapcount() calculation, it is better now to be strict.  Bear in
-mind that total_mapcount() itself scans all of the THP subpages, when
-choosing to take an XA_CHECK_SCHED latency break.
+{ cpu:         19, pid:       1175 } hitcount:          1
+{ cpu:          6, pid:        239 } hitcount:          2
+{ cpu:         23, pid:       1186 } hitcount:         14
+{ cpu:         12, pid:        249 } hitcount:          2
+{ cpu:          3, pid:        994 } hitcount:          5
 
-Also fix the unlikely xa_is_value() case in memfd_wait_for_pins(): if a
-page has been swapped out since memfd_tag_pins(), then its refcount must
-have fallen, and so it can safely be untagged.
+Instead of hard coding the "cpu" checks, take advantage of the fact that
+trace_event_field_field() returns a special field for "cpu" and "CPU" if
+the event does not have "cpu" as a field. This special field has the
+"filter_type" of "FILTER_CPU". Check that to test if the returned field is
+of the CPU type instead of doing the string compare.
 
-Link: https://lkml.kernel.org/r/a4f79248-df75-2c8c-3df-ba3317ccb5da@google.com
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Reported-by: wangyong <wang.yong12@zte.com.cn>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: CGEL ZTE <cgel.zte@gmail.com>
-Cc: Kirill A. Shutemov <kirill@shutemov.name>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yang Yang <yang.yang29@zte.com.cn>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Also, fix the sorting bug by testing for the hist_field flag of
+HIST_FIELD_FL_CPU when setting up the sort routine. Otherwise it will use
+the special CPU field to know what compare routine to use, and since that
+special field does not have a size, it returns tracing_map_cmp_none.
+
+Cc: stable@vger.kernel.org
+Fixes: 1e3bac71c505 ("tracing/histogram: Rename "cpu" to "common_cpu"")
+Reported-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/memfd.c |   40 ++++++++++++++++++++++++++++------------
- 1 file changed, 28 insertions(+), 12 deletions(-)
+ kernel/trace/trace_events_hist.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -31,20 +31,28 @@
- static void memfd_tag_pins(struct xa_state *xas)
- {
- 	struct page *page;
--	unsigned int tagged = 0;
-+	int latency = 0;
-+	int cache_count;
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -2635,9 +2635,9 @@ parse_field(struct hist_trigger_data *hi
+ 			/*
+ 			 * For backward compatibility, if field_name
+ 			 * was "cpu", then we treat this the same as
+-			 * common_cpu.
++			 * common_cpu. This also works for "CPU".
+ 			 */
+-			if (strcmp(field_name, "cpu") == 0) {
++			if (field && field->filter_type == FILTER_CPU) {
+ 				*flags |= HIST_FIELD_FL_CPU;
+ 			} else {
+ 				hist_err("Couldn't find field: ", field_name);
+@@ -4642,7 +4642,7 @@ static int create_tracing_map_fields(str
  
- 	lru_add_drain();
- 
- 	xas_lock_irq(xas);
- 	xas_for_each(xas, page, ULONG_MAX) {
--		if (xa_is_value(page))
--			continue;
--		page = find_subpage(page, xas->xa_index);
--		if (page_count(page) - page_mapcount(page) > 1)
-+		cache_count = 1;
-+		if (!xa_is_value(page) &&
-+		    PageTransHuge(page) && !PageHuge(page))
-+			cache_count = HPAGE_PMD_NR;
-+
-+		if (!xa_is_value(page) &&
-+		    page_count(page) - total_mapcount(page) != cache_count)
- 			xas_set_mark(xas, MEMFD_TAG_PINNED);
-+		if (cache_count != 1)
-+			xas_set(xas, page->index + cache_count);
- 
--		if (++tagged % XA_CHECK_SCHED)
-+		latency += cache_count;
-+		if (latency < XA_CHECK_SCHED)
- 			continue;
-+		latency = 0;
- 
- 		xas_pause(xas);
- 		xas_unlock_irq(xas);
-@@ -73,7 +81,8 @@ static int memfd_wait_for_pins(struct ad
- 
- 	error = 0;
- 	for (scan = 0; scan <= LAST_SCAN; scan++) {
--		unsigned int tagged = 0;
-+		int latency = 0;
-+		int cache_count;
- 
- 		if (!xas_marked(&xas, MEMFD_TAG_PINNED))
- 			break;
-@@ -87,10 +96,14 @@ static int memfd_wait_for_pins(struct ad
- 		xas_lock_irq(&xas);
- 		xas_for_each_marked(&xas, page, ULONG_MAX, MEMFD_TAG_PINNED) {
- 			bool clear = true;
--			if (xa_is_value(page))
--				continue;
--			page = find_subpage(page, xas.xa_index);
--			if (page_count(page) - page_mapcount(page) != 1) {
-+
-+			cache_count = 1;
-+			if (!xa_is_value(page) &&
-+			    PageTransHuge(page) && !PageHuge(page))
-+				cache_count = HPAGE_PMD_NR;
-+
-+			if (!xa_is_value(page) && cache_count !=
-+			    page_count(page) - total_mapcount(page)) {
- 				/*
- 				 * On the last scan, we clean up all those tags
- 				 * we inserted; but make a note that we still
-@@ -103,8 +116,11 @@ static int memfd_wait_for_pins(struct ad
- 			}
- 			if (clear)
- 				xas_clear_mark(&xas, MEMFD_TAG_PINNED);
--			if (++tagged % XA_CHECK_SCHED)
-+
-+			latency += cache_count;
-+			if (latency < XA_CHECK_SCHED)
- 				continue;
-+			latency = 0;
- 
- 			xas_pause(&xas);
- 			xas_unlock_irq(&xas);
+ 			if (hist_field->flags & HIST_FIELD_FL_STACKTRACE)
+ 				cmp_fn = tracing_map_cmp_none;
+-			else if (!field)
++			else if (!field || hist_field->flags & HIST_FIELD_FL_CPU)
+ 				cmp_fn = tracing_map_cmp_num(hist_field->size,
+ 							     hist_field->is_signed);
+ 			else if (is_string_field(field))
 
 

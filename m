@@ -2,213 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334724D0BCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79894D0BD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243473AbiCGXOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 18:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S243530AbiCGXP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 18:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236576AbiCGXOH (ORCPT
+        with ESMTP id S242917AbiCGXPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 18:14:07 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E125A1EC77;
-        Mon,  7 Mar 2022 15:13:12 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id z9-20020a05683020c900b005b22bf41872so4211520otq.13;
-        Mon, 07 Mar 2022 15:13:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2/DahnhrrL/jdB0W/TX4PSLrYdtNRildr05b0KSXkCI=;
-        b=WF9PODNO7slZyaOxxW8j3epZMkQzX9oVqQlrDj6d6+iPpEZjBS6gYMSXrguQV4xQpI
-         kOsSFq6Ccq1FLrVFLzLqFNbiCzgGo/uM6V82zSl7UPgUCKJoEKh10jvhfiAOkuCTpKlb
-         18m6ngtig3/VGlwHtDq68WlBAFlwAlcL2wixDCxUvVIRSICOCfHIEiKOxkW8Z9pc4RAP
-         2NQXEqTR0m6osY85kSDJHVIzLV1lYk7wEMUxsRVR1RDzueEh0XIQloTf/LIUjTf6GQHX
-         3spLwmLdBvGMB1U8XT51ABAb2OJQFFBLv4tGy82U4ncySDPnNdG2ItUlk5ojoYSS5hGN
-         02dQ==
-X-Gm-Message-State: AOAM532kOPzrPvULaVM/bQyN1/YQSQwWmOXcVcC51bMz6UUxCW9HaKXW
-        81O4oCstNWlcmGRUyG23Jw==
-X-Google-Smtp-Source: ABdhPJz5YrAJp5ahVdp+farn9/jwvddcBMFpjQ8JynmRqN9lTMELxi2ky9lAb04HsWWkxDZTDgMR3A==
-X-Received: by 2002:a05:6830:165a:b0:5af:12dc:65e5 with SMTP id h26-20020a056830165a00b005af12dc65e5mr6983650otr.30.1646694792187;
-        Mon, 07 Mar 2022 15:13:12 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 69-20020a9d0bcb000000b005af83322c6asm6917909oth.12.2022.03.07.15.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 15:13:11 -0800 (PST)
-Received: (nullmailer pid 3439393 invoked by uid 1000);
-        Mon, 07 Mar 2022 23:13:10 -0000
-Date:   Mon, 7 Mar 2022 17:13:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Bailon <abailon@baylibre.com>
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, robh+dt@kernel.or,
-        matthias.bgg@gmail.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stephane.leprovost@mediatek.com, khilman@baylibre.com
-Subject: Re: [PATCH v4 1/7] dt bindings: remoteproc: Add bindings for the
- MT8183 APU
-Message-ID: <YiaRhu+tSg7+ZH16@robh.at.kernel.org>
-References: <20220304161514.994128-1-abailon@baylibre.com>
- <20220304161514.994128-2-abailon@baylibre.com>
+        Mon, 7 Mar 2022 18:15:24 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2193A33E27;
+        Mon,  7 Mar 2022 15:14:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=1RJl9gPUoZ5r0tpE3KAj5UTUngTysCjGJETPpOzuLSc=; b=VGTbphPW+44xgsldnOtrZRksPu
+        5zkcPB10d7stBVRUgLup1/+ZOqiUvtIR0i/gWWUtg27mYsPGBVQO/v8api9RAOMYi9/6JrrH1hHAF
+        DMWqQrlOEJawA4SrKudJDam5qVxWoj3rc4BA1ynbsUY11vUBk5iN3VMwKlxSPpUUoYxG/s706r5pO
+        GH5gsdudLQ8vOWfKGmnHrIu1e7g7nMu3DVDkrbqa1TpyJsRpiKj+D4hTOmVa00peZ5KqgBG9ZAFo8
+        TRSprjiHqeLkkD8RN18BUr+CfDxfs9t4a4uKRuy61DQfLrVZKYPbF9CrENHACF8akyc3Q7QrHL3aa
+        /KeJgFLw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRMYM-00FdR5-9S; Mon, 07 Mar 2022 23:14:10 +0000
+Message-ID: <9d85050f-33c5-0cd0-3278-ca62f4ca098e@infradead.org>
+Date:   Mon, 7 Mar 2022 15:14:03 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304161514.994128-2-abailon@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: mmotm 2022-03-06-20-33 uploaded (sound/soc/intel/boards/)
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org
+Cc:     Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Keyon Jie <yang.jie@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+References: <20220307043435.251DBC340E9@smtp.kernel.org>
+ <39c76613-3fb4-651b-1838-f460c4f76a17@infradead.org>
+ <178c7536-7b54-5f73-b759-745db4fae2bc@linux.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <178c7536-7b54-5f73-b759-745db4fae2bc@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 05:15:08PM +0100, Alexandre Bailon wrote:
-> This adds dt bindings for the APU present in the MT8183.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> ---
->  .../bindings/remoteproc/mtk,apu.yaml          | 122 ++++++++++++++++++
->  1 file changed, 122 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,apu.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,apu.yaml b/Documentation/devicetree/bindings/remoteproc/mtk,apu.yaml
-> new file mode 100644
-> index 000000000000..b640aa96d678
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/mtk,apu.yaml
-> @@ -0,0 +1,122 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +
-> +---
-> +$id: "http://devicetree.org/schemas/remoteproc/mtk,apu.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Mediatek AI Processor Unit (APU)
-> +
-> +description:
-> +  This document defines the binding for the APU, a co-processor that could
-> +  offload the CPU for machine learning and neural network.
-> +
-> +maintainers:
-> +  - Alexandre Bailon <abailon@bayLibre.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8183-apu
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 3
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    items:
-> +      - const: axi
-> +      - const: ipu
-> +      - const: jtag
-> +
-> +  iommus:
-> +    maxItems: 3
-> +
-> +  memory-region:
-> +    maxItems: 3
-> +
-> +  memory-region-da:
-> +    description:
-> +      Array of APU device address. This is used to map the APU device address
-> +      to a physical address.
-> +    maxItems: 3
 
-'dma-ranges' should work for this.
 
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  pinctrl:
-> +    description: pinctrl handles, required to configure pins for JTAG.
-> +
-> +  pinctrl-names:
-> +    items:
-> +      - const: jtag
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - iommus
-> +  - memory-region
-> +  - memory-region-da
-> +  - power-domains
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt8183-clk.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/memory/mt8183-larb-port.h>
-> +    #include <dt-bindings/power/mt8183-power.h>
-> +
-> +    reserved-memory {
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-> +      ranges;
-> +
-> +      vdev0buffer: vdev0buffer@52900000 {
-> +        compatible = "shared-dma-pool";
-> +        reg = <0x52900000 0x4000>;
-> +        no-map;
-> +      };
-> +
-> +      vdev0vring0: vdev0vring0@52904000 {
-> +        compatible = "shared-dma-pool";
-> +        reg = <0x52904000 0x2000>;
-> +        no-map;
-> +      };
-> +
-> +      vdev0vring1: vdev0vring1@52906000 {
-> +        compatible = "shared-dma-pool";
-> +        reg = <0x52906000 0x2000>;
-> +        no-map;
-> +      };
-> +    };
-> +
-> +    apu0: apu@19100000 {
-> +      compatible = "mediatek,mt8183-apu";
-> +      reg = <0x19180000 0x14000>;
-> +      interrupts = <GIC_SPI 292 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +      iommus = <&iommu M4U_PORT_IMG_IPUO>,
-> +         <&iommu M4U_PORT_IMG_IPU3O>,
-> +         <&iommu M4U_PORT_IMG_IPUI>;
-> +
-> +      clocks = <&ipu_core0 CLK_IPU_CORE0_AXI>,
-> +         <&ipu_core0 CLK_IPU_CORE0_IPU>,
-> +         <&ipu_core0 CLK_IPU_CORE0_JTAG>;
-> +
-> +      clock-names = "axi", "ipu", "jtag";
-> +
-> +      power-domains = <&scpsys MT8183_POWER_DOMAIN_VPU_CORE0>;
-> +      memory-region = <&vdev0buffer>, <&vdev0vring0>, <&vdev0vring1>;
-> +      memory-region-da = <0x6fff8000>, <0x6fffc000>, <0x6fffe000>;
-> +    };
-> +...
-> -- 
-> 2.34.1
+On 3/7/22 13:54, Pierre-Louis Bossart wrote:
 > 
 > 
+> On 3/7/22 15:12, Randy Dunlap wrote:
+>>
+>>
+>> On 3/6/22 20:34, Andrew Morton wrote:
+>>> The mm-of-the-moment snapshot 2022-03-06-20-33 has been uploaded to
+>>>
+>>>     https://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> mmotm-readme.txt says
+>>>
+>>> README for mm-of-the-moment:
+>>>
+>>> https://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>>> more than once a week.
+>>>
+>>> You will need quilt to apply these patches to the latest Linus release (5.x
+>>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+>>> https://ozlabs.org/~akpm/mmotm/series
+>>
+>> on x86_64:
+>>
+>> ERROR: modpost: "sof_dai_get_bclk" [sound/soc/intel/boards/snd-soc-intel-sof-cirrus-common.ko] undefined!
+>> ERROR: modpost: "sof_dai_get_mclk" [sound/soc/intel/boards/snd-soc-intel-sof-realtek-common.ko] undefined!
+>>
+>>
+>> Full randconfig file is attached.
+> 
+> Thanks Randy for the report. Indeed there's a problem with the SND_SOC_INTEL_SOF_SSP_AMP_MACH option. It should be conditional on at least one Intel/SOF platform being selected, as all the other platforms are already.
+> 
+> The following diff makes the problem go away:
+
+Ack. Works for me. (after ignoring the double-spaced lines :)
+
+Thanks.
+
+> 
+> diff --git a/sound/soc/intel/boards/Kconfig b/sound/soc/intel/boards/Kconfig
+> 
+> index 6884ddf9edad..81e012c164b0 100644
+> 
+> --- a/sound/soc/intel/boards/Kconfig
+> 
+> +++ b/sound/soc/intel/boards/Kconfig
+> 
+> @@ -615,6 +615,8 @@ config SND_SOC_INTEL_SOF_DA7219_MAX98373_MACH
+> 
+> 
+> 
+>  endif ## SND_SOC_SOF_JASPERLAKE
+> 
+> 
+> 
+> +if SND_SOC_SOF_HDA_LINK
+> 
+> +
+> 
+>  config SND_SOC_INTEL_SOF_SSP_AMP_MACH
+> 
+>         tristate "SOF with amplifiers in I2S Mode"
+> 
+>         depends on I2C && ACPI
+> 
+> @@ -631,6 +633,7 @@ config SND_SOC_INTEL_SOF_SSP_AMP_MACH
+> 
+>            with RT1308/CS35L41 I2S audio codec.
+> 
+>            Say Y if you have such a device.
+> 
+>            If unsure select "N".
+> 
+> +endif ## SND_SOC_SOF_HDA_LINK
+> 
+> 
+> 
+>  if SND_SOC_SOF_ELKHARTLAKE
+> 
+> 
+> 
+
+-- 
+~Randy

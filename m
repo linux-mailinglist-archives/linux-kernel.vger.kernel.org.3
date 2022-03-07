@@ -2,92 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98194D007F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D694D0081
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242937AbiCGNyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:54:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S241637AbiCGNy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241359AbiCGNyx (ORCPT
+        with ESMTP id S242939AbiCGNyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:54:53 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B27E344CE;
-        Mon,  7 Mar 2022 05:53:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646661239; x=1678197239;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AfhkZU3UC9bKYUCNGyAjLCkAjtrFk65MmiGtIE6ektM=;
-  b=Q66L9hZTo9YHPw16kHNFL959VHtG460ePo9mePN5ZhFBh/JUqonoKcaI
-   KtKxCoLLRHuTnUUoxEzKroX0jne4nyv91dFYmJgVWmZz9QPdhkYv3WLxE
-   4f/+obGKu3CS4QMa6ZgWVBSUF4fA4F+j1fX4AQnFGjH7QIQ3LO0dqO4LC
-   k=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 07 Mar 2022 05:53:58 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 05:53:58 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 7 Mar 2022 05:53:58 -0800
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 7 Mar 2022
- 05:53:57 -0800
-Date:   Mon, 7 Mar 2022 08:53:55 -0500
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-tip-commits@vger.kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, <x86@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [tip: sched/core] sched/numa: Avoid migrating task to CPU-less
- node
-Message-ID: <YiYOc0NFlzJocYt0@qian>
-References: <20220214121553.582248-2-ying.huang@intel.com>
- <164512421264.16921.689831789198253265.tip-bot2@tip-bot2>
- <Yh6H8SPSqpjv1dl7@qian>
- <87v8wx1850.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87wnh648ec.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Mon, 7 Mar 2022 08:54:55 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7985735251;
+        Mon,  7 Mar 2022 05:54:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=6rOIFWhKoDtftsvnwuvPzF/1bQoao+7kYZk3K81OBV4=; b=1PqANxNzfOGdPb/AcfRUQsPbH9
+        L9a4S3nesQKVhaE3zm5GswY2l+3U9XgnuR8zjx0Ynn8FxKhLuH0KcZg1iJ1beL39rItg46O4gEPib
+        BMmb6ykxTA1ZCsJU/Tv8h6uH2gTVNj7rO8bibICg14r4CcFhyN1Sg1gxl0d0tpch7+O8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nRDoF-009cQF-RR; Mon, 07 Mar 2022 14:53:59 +0100
+Date:   Mon, 7 Mar 2022 14:53:59 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [RFC PATCH net-next 2/2] net: phy: lan87xx: use
+ genphy_read_master_slave in read_status
+Message-ID: <YiYOd61DUAJBA08G@lunn.ch>
+References: <20220307101743.8567-1-arun.ramadoss@microchip.com>
+ <20220307101743.8567-3-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87wnh648ec.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220307101743.8567-3-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 01:51:55PM +0800, Huang, Ying wrote:
-> > ---
-> >  kernel/sched/fair.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index a3f0ea216ccb..1fe7a4510cca 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -2405,7 +2405,7 @@ static void task_numa_placement(struct task_struct *p)
-> >  	}
-> >  
-> >  	/* Cannot migrate task to CPU-less node */
-> > -	if (!node_state(max_nid, N_CPU)) {
-> > +	if (max_nid != NUMA_NO_NODE && !node_state(max_nid, N_CPU)) {
-> >  		int near_nid = max_nid;
-> >  		int distance, near_distance = INT_MAX;
+On Mon, Mar 07, 2022 at 03:47:43PM +0530, Arun Ramadoss wrote:
+> To read the master slave configuration of the LAN87xx T1 phy, used the
+> generic phy driver genphy_read_master_slave function. Removed the local
+> lan87xx_read_master_slave function.
 > 
-> Do you have time to give this patch a try?
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
 
-Ah, I thought I has already replied it a while ago. Anyway, it works fine.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+    Andrew

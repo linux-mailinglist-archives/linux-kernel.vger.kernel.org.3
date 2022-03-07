@@ -2,106 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A12F4D03C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B374D03CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240996AbiCGQO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:14:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
+        id S244049AbiCGQQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:16:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiCGQO6 (ORCPT
+        with ESMTP id S231273AbiCGQQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:14:58 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45AE366B3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:14:03 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 29C22210FE;
-        Mon,  7 Mar 2022 16:14:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646669642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iSqlae7Qt+xrzSg34aB+OB4nZwi3kO0krFdAV9V5I78=;
-        b=izbOwzQbedcyzcbLlYdhu+xgxcM6v0RnrWliXnFT5BQhvXL131t39cNMw/HtozzmOH0V7T
-        teIqtnsH/rsown6KpiVFozLQZ1DQClubh031/eeHZeQOn/Xt43wKGioF67O+1zZvwZGDkN
-        PdIhJR1O9+iPTNZXiygEozR3n7jDcFU=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D046BA3B8C;
-        Mon,  7 Mar 2022 16:14:01 +0000 (UTC)
-Date:   Mon, 7 Mar 2022 17:14:01 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 03/13] printk: use percpu flag instead of
- cpu_online()
-Message-ID: <YiYvSf0FKFyOBF6Z@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-4-john.ogness@linutronix.de>
- <YgaJZtY+EH9JIGyo@alley>
- <YgoGNmYER8xni34K@google.com>
- <YguCuFYeZ52mkr4r@alley>
- <87zgm8h1tt.fsf@jogness.linutronix.de>
- <YiI2x6K5IhsADEmK@alley>
- <YiOYPvleCsTT9vGu@zx2c4.com>
+        Mon, 7 Mar 2022 11:16:21 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E66C4199C;
+        Mon,  7 Mar 2022 08:15:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646669726; x=1678205726;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1tgZ7PNrCUFybKd/JLjq33KO6voyiECva9usYrk8k+g=;
+  b=QSKcwE0aJyUjvrX+Vj6/bHTxMka3rOqUsMXZrVBVBqo9sr0lgIFvli0d
+   dcLX89udbqu/VPyyo5qTbEhGD8bjrRzD6C85nBZfPbJPo5DS4DIRsCI7j
+   bDynEB1jP54eT1k/hS4Esn19z92x2jZcgMZDKzwuc4Hzn6vWcpCACWSnn
+   /H4Yq4+k8R67VoKZrELo5projiKjyJA15wMsIc09Va2hu29pNldGZe18T
+   Qo1Tn2asfniSDjnAaNc1N65+z+uTNsOoUPnQgXnTyI+ZuF4vKdzYaOdGx
+   q5JIKYiHsRY2+Ed31wcyalglYYiNFoHEy0/OHuQVprRSoWArWACKPOhuO
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,162,1643698800"; 
+   d="scan'208";a="164796989"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2022 09:15:26 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 7 Mar 2022 09:15:26 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 7 Mar 2022 09:15:22 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        <UNGLinuxDriver@microchip.com>
+Subject: [PATCH net-next 0/2] net: phy: lan87xx: use genphy_read_master_slave function
+Date:   Mon, 7 Mar 2022 21:45:13 +0530
+Message-ID: <20220307161515.14970-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiOYPvleCsTT9vGu@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2022-03-05 10:05:02, Jason A. Donenfeld wrote:
-> Hi Petr,
-> 
-> On Fri, Mar 04, 2022 at 04:56:55PM +0100, Petr Mladek wrote:
-> 
-> > Just for record, the right commit ID in the mainline is
-> > 1b710b1b10eff9d466. It used printk_deferred() in _warn_unseeded_randomness():
-> > 
-> > --- a/drivers/char/random.c
-> > +++ b/drivers/char/random.c
-> > @@ -1687,8 +1687,9 @@ static void _warn_unseeded_randomness(const char *func_name, void *caller,
-> >  	print_once = true;
-> >  #endif
-> >  	if (__ratelimit(&unseeded_warning))
-> > -		pr_notice("random: %s called from %pS with crng_init=%d\n",
-> > -			  func_name, caller, crng_init);
-> > +		printk_deferred(KERN_NOTICE "random: %s called from %pS "
-> > +				"with crng_init=%d\n", func_name, caller,
-> > +				crng_init);
-> >  }
-> 
-> Are we able to revert this yet? Or is it still required because of
-> locking issues? Would gladly take a patch to revert that if the
-> non-deferred function is fine for 5.18.
+LAN87xx T1 Phy has the same register field as gigabit phy for reading the
+master slave configuration. But the genphy_read_master_slave function has a
+check of gigabit phy. So refactored the function in such a way, moved the speed
+check to the genphy_read_status function. Analyzed the nxp-tja11xx function for
+refactoring, but the register for configuring master/slave is nxp specific
+which is not extended phy register.
+And analyzed the reusing genphy_setup_master_slave, but for LAN87xx
+MASTER_ENABLE is always 1 and Preferred state is always 0. So, I didn't try to
+change it.
 
-Unfortunately, printk_deferred() will still be needed in 5.18 here.
+Arun Ramadoss (2):
+  net: phy: exported the genphy_read_master_slave function
+  net: phy: lan87xx: use genphy_read_master_slave in read_status
 
-One thing is that this patchset introducing console kthreads will not
-be ready for 5.18.
+ drivers/net/phy/microchip_t1.c | 30 +-----------------------------
+ drivers/net/phy/phy_device.c   | 19 +++++++++----------
+ include/linux/phy.h            |  1 +
+ 3 files changed, 11 insertions(+), 39 deletions(-)
 
-But more importantly, the kthreads will not be enough to remove the
-cyclic dependency. The legacy synchronous printing will still be used
-during early boot, panic, etc.
 
-Honestly, I am still not sure if we will be able to get rid of
-printk_deferred(). I hope so but some more magic will be necessary.
-Anyway, the kthreads should help to achieve this.
+base-commit: 57d29a2935c9aab0aaef6264bf6a58aad3859e7c
+-- 
+2.33.0
 
-Best Regards,
-Petr

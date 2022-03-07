@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BCE4CFAF8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183DF4CF9CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241384AbiCGKU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
+        id S239805AbiCGKHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241215AbiCGKBq (ORCPT
+        with ESMTP id S239340AbiCGJtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2600E71CAF;
-        Mon,  7 Mar 2022 01:51:36 -0800 (PST)
+        Mon, 7 Mar 2022 04:49:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B619C1D321;
+        Mon,  7 Mar 2022 01:42:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6763460010;
-        Mon,  7 Mar 2022 09:51:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A155C340F4;
-        Mon,  7 Mar 2022 09:51:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB274B80E70;
+        Mon,  7 Mar 2022 09:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2AB6C340F3;
+        Mon,  7 Mar 2022 09:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646690;
-        bh=b0Z3U+tX2ULPBQ9QQh7ChoO4Et5fTz3kCCsOa2OY0XA=;
+        s=korg; t=1646646165;
+        bh=PQnv2p/9jLlnPlV/caiQgOThrifuKFV0ko81jq8bh+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T6yTw8FbaVXLTFqtr07Rv5Ut2l0fDFoJLpRL62f9c2GhCL37l1knlOz7eoibRrakt
-         fQrfHQi8ONCcsl6B8+FdpmF70c61/A7Ab1Lf4WT3K/k34xk+6gjrkjhVWrWmUVVlfJ
-         Y4Pr+85qMsh0JG8lggSQ1HET4KGP07S2tukGwDnQ=
+        b=M/R6A8PS6QN5qhr7SJOJjq348cTrb2+XokumALBgG2u+P/7eSeElnPUpi/670vM84
+         SLnaMeEZ0aB8lhkSvEN60EltyZB0QAl72bVYGhfTVJTuZv3lTJDH/ofjjlm+BI3LwH
+         88AERS6yW5V9eL37AmCnkNHxe5ojzeZaa3gGpCSM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 060/186] xen/netfront: destroy queues before real_num_tx_queues is zeroed
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.15 154/262] netfilter: fix use-after-free in __nf_register_net_hook()
 Date:   Mon,  7 Mar 2022 10:18:18 +0100
-Message-Id: <20220307091655.770141668@linuxfoundation.org>
+Message-Id: <20220307091706.783814432@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,134 +56,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit dcf4ff7a48e7598e6b10126cc02177abb8ae4f3f upstream.
+commit 56763f12b0f02706576a088e85ef856deacc98a0 upstream.
 
-xennet_destroy_queues() relies on info->netdev->real_num_tx_queues to
-delete queues. Since d7dac083414eb5bb99a6d2ed53dc2c1b405224e5
-("net-sysfs: update the queue counts in the unregistration path"),
-unregister_netdev() indirectly sets real_num_tx_queues to 0. Those two
-facts together means, that xennet_destroy_queues() called from
-xennet_remove() cannot do its job, because it's called after
-unregister_netdev(). This results in kfree-ing queues that are still
-linked in napi, which ultimately crashes:
+We must not dereference @new_hooks after nf_hook_mutex has been released,
+because other threads might have freed our allocated hooks already.
 
-    BUG: kernel NULL pointer dereference, address: 0000000000000000
-    #PF: supervisor read access in kernel mode
-    #PF: error_code(0x0000) - not-present page
-    PGD 0 P4D 0
-    Oops: 0000 [#1] PREEMPT SMP PTI
-    CPU: 1 PID: 52 Comm: xenwatch Tainted: G        W         5.16.10-1.32.fc32.qubes.x86_64+ #226
-    RIP: 0010:free_netdev+0xa3/0x1a0
-    Code: ff 48 89 df e8 2e e9 00 00 48 8b 43 50 48 8b 08 48 8d b8 a0 fe ff ff 48 8d a9 a0 fe ff ff 49 39 c4 75 26 eb 47 e8 ed c1 66 ff <48> 8b 85 60 01 00 00 48 8d 95 60 01 00 00 48 89 ef 48 2d 60 01 00
-    RSP: 0000:ffffc90000bcfd00 EFLAGS: 00010286
-    RAX: 0000000000000000 RBX: ffff88800edad000 RCX: 0000000000000000
-    RDX: 0000000000000001 RSI: ffffc90000bcfc30 RDI: 00000000ffffffff
-    RBP: fffffffffffffea0 R08: 0000000000000000 R09: 0000000000000000
-    R10: 0000000000000000 R11: 0000000000000001 R12: ffff88800edad050
-    R13: ffff8880065f8f88 R14: 0000000000000000 R15: ffff8880066c6680
-    FS:  0000000000000000(0000) GS:ffff8880f3300000(0000) knlGS:0000000000000000
-    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-    CR2: 0000000000000000 CR3: 00000000e998c006 CR4: 00000000003706e0
-    Call Trace:
-     <TASK>
-     xennet_remove+0x13d/0x300 [xen_netfront]
-     xenbus_dev_remove+0x6d/0xf0
-     __device_release_driver+0x17a/0x240
-     device_release_driver+0x24/0x30
-     bus_remove_device+0xd8/0x140
-     device_del+0x18b/0x410
-     ? _raw_spin_unlock+0x16/0x30
-     ? klist_iter_exit+0x14/0x20
-     ? xenbus_dev_request_and_reply+0x80/0x80
-     device_unregister+0x13/0x60
-     xenbus_dev_changed+0x18e/0x1f0
-     xenwatch_thread+0xc0/0x1a0
-     ? do_wait_intr_irq+0xa0/0xa0
-     kthread+0x16b/0x190
-     ? set_kthread_struct+0x40/0x40
-     ret_from_fork+0x22/0x30
-     </TASK>
+BUG: KASAN: use-after-free in nf_hook_entries_get_hook_ops include/linux/netfilter.h:130 [inline]
+BUG: KASAN: use-after-free in hooks_validate net/netfilter/core.c:171 [inline]
+BUG: KASAN: use-after-free in __nf_register_net_hook+0x77a/0x820 net/netfilter/core.c:438
+Read of size 2 at addr ffff88801c1a8000 by task syz-executor237/4430
 
-Fix this by calling xennet_destroy_queues() from xennet_uninit(),
-when real_num_tx_queues is still available. This ensures that queues are
-destroyed when real_num_tx_queues is set to 0, regardless of how
-unregister_netdev() was called.
+CPU: 1 PID: 4430 Comm: syz-executor237 Not tainted 5.17.0-rc5-syzkaller-00306-g2293be58d6a1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ nf_hook_entries_get_hook_ops include/linux/netfilter.h:130 [inline]
+ hooks_validate net/netfilter/core.c:171 [inline]
+ __nf_register_net_hook+0x77a/0x820 net/netfilter/core.c:438
+ nf_register_net_hook+0x114/0x170 net/netfilter/core.c:571
+ nf_register_net_hooks+0x59/0xc0 net/netfilter/core.c:587
+ nf_synproxy_ipv6_init+0x85/0xe0 net/netfilter/nf_synproxy_core.c:1218
+ synproxy_tg6_check+0x30d/0x560 net/ipv6/netfilter/ip6t_SYNPROXY.c:81
+ xt_check_target+0x26c/0x9e0 net/netfilter/x_tables.c:1038
+ check_target net/ipv6/netfilter/ip6_tables.c:530 [inline]
+ find_check_entry.constprop.0+0x7f1/0x9e0 net/ipv6/netfilter/ip6_tables.c:573
+ translate_table+0xc8b/0x1750 net/ipv6/netfilter/ip6_tables.c:735
+ do_replace net/ipv6/netfilter/ip6_tables.c:1153 [inline]
+ do_ip6t_set_ctl+0x56e/0xb90 net/ipv6/netfilter/ip6_tables.c:1639
+ nf_setsockopt+0x83/0xe0 net/netfilter/nf_sockopt.c:101
+ ipv6_setsockopt+0x122/0x180 net/ipv6/ipv6_sockglue.c:1024
+ rawv6_setsockopt+0xd3/0x6a0 net/ipv6/raw.c:1084
+ __sys_setsockopt+0x2db/0x610 net/socket.c:2180
+ __do_sys_setsockopt net/socket.c:2191 [inline]
+ __se_sys_setsockopt net/socket.c:2188 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2188
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f65a1ace7d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f65a1a7f308 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 0000000000000006 RCX: 00007f65a1ace7d9
+RDX: 0000000000000040 RSI: 0000000000000029 RDI: 0000000000000003
+RBP: 00007f65a1b574c8 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000020000000 R11: 0000000000000246 R12: 00007f65a1b55130
+R13: 00007f65a1b574c0 R14: 00007f65a1b24090 R15: 0000000000022000
+ </TASK>
 
-Originally reported at
-https://github.com/QubesOS/qubes-issues/issues/7257
+The buggy address belongs to the page:
+page:ffffea0000706a00 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1c1a8
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001c1b108 ffffea000046dd08 0000000000000000
+raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0x52dc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_ZERO), pid 4430, ts 1061781545818, free_ts 1061791488993
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
+ __alloc_pages_node include/linux/gfp.h:572 [inline]
+ alloc_pages_node include/linux/gfp.h:595 [inline]
+ kmalloc_large_node+0x62/0x130 mm/slub.c:4438
+ __kmalloc_node+0x35a/0x4a0 mm/slub.c:4454
+ kmalloc_node include/linux/slab.h:604 [inline]
+ kvmalloc_node+0x97/0x100 mm/util.c:580
+ kvmalloc include/linux/slab.h:731 [inline]
+ kvzalloc include/linux/slab.h:739 [inline]
+ allocate_hook_entries_size net/netfilter/core.c:61 [inline]
+ nf_hook_entries_grow+0x140/0x780 net/netfilter/core.c:128
+ __nf_register_net_hook+0x144/0x820 net/netfilter/core.c:429
+ nf_register_net_hook+0x114/0x170 net/netfilter/core.c:571
+ nf_register_net_hooks+0x59/0xc0 net/netfilter/core.c:587
+ nf_synproxy_ipv6_init+0x85/0xe0 net/netfilter/nf_synproxy_core.c:1218
+ synproxy_tg6_check+0x30d/0x560 net/ipv6/netfilter/ip6t_SYNPROXY.c:81
+ xt_check_target+0x26c/0x9e0 net/netfilter/x_tables.c:1038
+ check_target net/ipv6/netfilter/ip6_tables.c:530 [inline]
+ find_check_entry.constprop.0+0x7f1/0x9e0 net/ipv6/netfilter/ip6_tables.c:573
+ translate_table+0xc8b/0x1750 net/ipv6/netfilter/ip6_tables.c:735
+ do_replace net/ipv6/netfilter/ip6_tables.c:1153 [inline]
+ do_ip6t_set_ctl+0x56e/0xb90 net/ipv6/netfilter/ip6_tables.c:1639
+ nf_setsockopt+0x83/0xe0 net/netfilter/nf_sockopt.c:101
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3404
+ kvfree+0x42/0x50 mm/util.c:613
+ rcu_do_batch kernel/rcu/tree.c:2527 [inline]
+ rcu_core+0x7b1/0x1820 kernel/rcu/tree.c:2778
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
 
-Fixes: d7dac083414eb5bb9 ("net-sysfs: update the queue counts in the unregistration path")
-Cc: stable@vger.kernel.org
-Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Memory state around the buggy address:
+ ffff88801c1a7f00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88801c1a7f80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff88801c1a8000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                   ^
+ ffff88801c1a8080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88801c1a8100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+
+Fixes: 2420b79f8c18 ("netfilter: debug: check for sorted array")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Acked-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/xen-netfront.c |   39 +++++++++++++++++++++++----------------
- 1 file changed, 23 insertions(+), 16 deletions(-)
+ net/netfilter/core.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -842,6 +842,28 @@ static int xennet_close(struct net_devic
- 	return 0;
- }
+--- a/net/netfilter/core.c
++++ b/net/netfilter/core.c
+@@ -406,14 +406,15 @@ static int __nf_register_net_hook(struct
+ 	p = nf_entry_dereference(*pp);
+ 	new_hooks = nf_hook_entries_grow(p, reg);
  
-+static void xennet_destroy_queues(struct netfront_info *info)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < info->netdev->real_num_tx_queues; i++) {
-+		struct netfront_queue *queue = &info->queues[i];
-+
-+		if (netif_running(info->netdev))
-+			napi_disable(&queue->napi);
-+		netif_napi_del(&queue->napi);
+-	if (!IS_ERR(new_hooks))
++	if (!IS_ERR(new_hooks)) {
++		hooks_validate(new_hooks);
+ 		rcu_assign_pointer(*pp, new_hooks);
 +	}
-+
-+	kfree(info->queues);
-+	info->queues = NULL;
-+}
-+
-+static void xennet_uninit(struct net_device *dev)
-+{
-+	struct netfront_info *np = netdev_priv(dev);
-+	xennet_destroy_queues(np);
-+}
-+
- static void xennet_set_rx_rsp_cons(struct netfront_queue *queue, RING_IDX val)
- {
- 	unsigned long flags;
-@@ -1611,6 +1633,7 @@ static int xennet_xdp(struct net_device
- }
  
- static const struct net_device_ops xennet_netdev_ops = {
-+	.ndo_uninit          = xennet_uninit,
- 	.ndo_open            = xennet_open,
- 	.ndo_stop            = xennet_close,
- 	.ndo_start_xmit      = xennet_start_xmit,
-@@ -2103,22 +2126,6 @@ error:
- 	return err;
- }
+ 	mutex_unlock(&nf_hook_mutex);
+ 	if (IS_ERR(new_hooks))
+ 		return PTR_ERR(new_hooks);
  
--static void xennet_destroy_queues(struct netfront_info *info)
--{
--	unsigned int i;
--
--	for (i = 0; i < info->netdev->real_num_tx_queues; i++) {
--		struct netfront_queue *queue = &info->queues[i];
--
--		if (netif_running(info->netdev))
--			napi_disable(&queue->napi);
--		netif_napi_del(&queue->napi);
--	}
--
--	kfree(info->queues);
--	info->queues = NULL;
--}
--
- 
- 
- static int xennet_create_page_pool(struct netfront_queue *queue)
+-	hooks_validate(new_hooks);
+ #ifdef CONFIG_NETFILTER_INGRESS
+ 	if (nf_ingress_hook(reg, pf))
+ 		net_inc_ingress_queue();
 
 

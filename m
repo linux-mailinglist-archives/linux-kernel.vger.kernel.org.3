@@ -2,91 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6B34CF21D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AFC4CF220
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbiCGGpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
+        id S234238AbiCGGqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiCGGpd (ORCPT
+        with ESMTP id S229865AbiCGGqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:45:33 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED633443F9;
-        Sun,  6 Mar 2022 22:44:38 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 4130168AA6; Mon,  7 Mar 2022 07:44:34 +0100 (CET)
-Date:   Mon, 7 Mar 2022 07:44:34 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Zdenek Kabelac <zkabelac@redhat.com>,
-        Lukas Czerner <lczerner@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Borislav Petkov <bp@suse.de>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH mmotm v2] tmpfs: do not allocate pages on read
-Message-ID: <20220307064434.GA31680@lst.de>
-References: <f9c2f38f-5eb8-5d30-40fa-93e88b5fbc51@google.com> <20220306092709.GA22883@lst.de> <90bc5e69-9984-b5fa-a685-be55f2b64b@google.com>
+        Mon, 7 Mar 2022 01:46:22 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236CC443F9
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 22:45:29 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nR77V-0004Cx-NX; Mon, 07 Mar 2022 07:45:25 +0100
+Message-ID: <782a683e-c625-8e68-899b-ce56939afece@leemhuis.info>
+Date:   Mon, 7 Mar 2022 07:45:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <90bc5e69-9984-b5fa-a685-be55f2b64b@google.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Doug Anderson <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220203093922.20754-1-tzimmermann@suse.de>
+ <CAMuHMdWykWR4oKahC2GYF5jG4przRQ+MxNNm1BK7o62OhhGYwA@mail.gmail.com>
+ <CAMuHMdXcRRgn4EMXn9qonnjTTp7EEfwP4F8FeVpLkQMNvB-6mg@mail.gmail.com>
+ <CAD=FV=UbiXx4RBQNFp1htCYsM1YzAgES+mcA6KOJ7ZmydkHnBg@mail.gmail.com>
+ <f9768b09-90a7-1908-0f5b-6474bbb00208@suse.de>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <f9768b09-90a7-1908-0f5b-6474bbb00208@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646635529;83451771;
+X-HE-SMSGID: 1nR77V-0004Cx-NX
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 02:59:05PM -0800, Hugh Dickins wrote:
-> Mikulas asked in
-> https://lore.kernel.org/linux-mm/alpine.LRH.2.02.2007210510230.6959@file01.intranet.prod.int.rdu2.redhat.com/
-> Do we still need a0ee5ec520ed ("tmpfs: allocate on read when stacked")?
-> 
-> Lukas noticed this unusual behavior of loop device backed by tmpfs in
-> https://lore.kernel.org/linux-mm/20211126075100.gd64odg2bcptiqeb@work/
-> 
-> Normally, shmem_file_read_iter() copies the ZERO_PAGE when reading holes;
-> but if it looks like it might be a read for "a stacking filesystem", it
-> allocates actual pages to the page cache, and even marks them as dirty.
-> And reads from the loop device do satisfy the test that is used.
-> 
-> This oddity was added for an old version of unionfs, to help to limit
-> its usage to the limited size of the tmpfs mount involved; but about
-> the same time as the tmpfs mod went in (2.6.25), unionfs was reworked
-> to proceed differently; and the mod kept just in case others needed it.
-> 
-> Do we still need it? I cannot answer with more certainty than "Probably
-> not". It's nasty enough that we really should try to delete it; but if
-> a regression is reported somewhere, then we might have to revert later.
-> 
-> It's not quite as simple as just removing the test (as Mikulas did):
-> xfstests generic/013 hung because splice from tmpfs failed on page not
-> up-to-date and page mapping unset.  That can be fixed just by marking
-> the ZERO_PAGE as Uptodate, which of course it is: do so in
-> pagecache_init() - it might be useful to others than tmpfs.
-> 
-> My intention, though, was to stop using the ZERO_PAGE here altogether:
-> surely iov_iter_zero() is better for this case?  Sadly not: it relies
-> on clear_user(), and the x86 clear_user() is slower than its copy_user():
-> https://lore.kernel.org/lkml/2f5ca5e4-e250-a41c-11fb-a7f4ebc7e1c9@google.com/
-> 
-> But while we are still using the ZERO_PAGE, let's stop dirtying its
-> struct page cacheline with unnecessary get_page() and put_page().
-> 
-> Reported-by: Mikulas Patocka <mpatocka@redhat.com>
-> Reported-by: Lukas Czerner <lczerner@redhat.com>
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+[CCing Dave and Daniel]
 
-I would have split the uptodate setting of ZERO_PAGE into a separate,
-clearly documented patch, but otherwise this looks good:
+Hi, this is your Linux kernel regression tracker.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+On 23.02.22 20:06, Thomas Zimmermann wrote:
+> Am 23.02.22 um 17:11 schrieb Doug Anderson:
+>> On Tue, Feb 22, 2022 at 1:31 AM Geert Uytterhoeven
+>> <geert@linux-m68k.org> wrote:
+>>> On Tue, Feb 8, 2022 at 10:39 AM Geert Uytterhoeven
+>>> <geert@linux-m68k.org> wrote:
+>>>> On Mon, Feb 7, 2022 at 12:31 PM Thomas Zimmermann
+>>>> <tzimmermann@suse.de> wrote:
+>>>>> As reported in [1], DRM_PANEL_EDP depends on DRM_DP_HELPER. Select
+>>>>> the option to fix the build failure. The error message is shown
+>>>>> below.
+>>>>>
+>>>>>    arm-linux-gnueabihf-ld: drivers/gpu/drm/panel/panel-edp.o: in
+>>>>> function
+>>>>>      `panel_edp_probe': panel-edp.c:(.text+0xb74): undefined
+>>>>> reference to
+>>>>>      `drm_panel_dp_aux_backlight'
+>>>>>    make[1]: *** [/builds/linux/Makefile:1222: vmlinux] Error 1
+>>>>>
+>>>>> The issue has been reported before, when DisplayPort helpers were
+>>>>> hidden behind the option CONFIG_DRM_KMS_HELPER. [2]
+>>>>>
+>>>>> v2:
+>>>>>          * fix and expand commit description (Arnd)
+>>>>>
+>>>>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+>>>>
+>>>> Thanks for your patch!
+>>>>
+>>>> This fixes the build errors I'm seeing, so
+>>>> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>>>
+>>> Is this planned to be queued? This is still failing in drm-next.
+>>> Thanks!
+>>
+>> Looks like this has been in drm-misc-next since Feb 4:
+>>
+>> ---
+>>
+>> commit eea89dff4c39a106f98d1cb5e4d626f8c63908b9
+>> Author:     Thomas Zimmermann <tzimmermann@suse.de>
+>> AuthorDate: Thu Feb 3 10:39:22 2022 +0100
+>> Commit:     Thomas Zimmermann <tzimmermann@suse.de>
+>> CommitDate: Fri Feb 4 09:38:47 2022 +0100
+>>
+>>      drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
+>>
+>> ---
+>>
+>> Maybe it needed to land elsewhere, though?
+> 
+> Sorry about the mess. We had some confusion with this cycle's
+> drm-misc-next pull request, which got delayed significantly. There's
+> been a PR today, which should be merged into drm-next any time now. The
+> patch will be part of that.
+
+The patch for this regression late last week finally showed up in
+linux-next, great. But:
+
+I noticed the patch is not in drm-fixes but in drm-next -- and thus
+afaics seems to be on tack to only get merged in the next merge window
+(or am I wrong with that?). That seems wrong to me, as this fixes a
+regression (albeit from the previous cycle, not from the current one)
+and it already took quite a while to get this relative simple fix
+finally on track -- but it's still far away from getting fixed in 5.16
+and thus will make it into 5.17, too. That seems wrong to me, at least
+if the risk is low (which is the case here afaics).
+
+FWIW, this is not the only time where I noticed something like that,
+that's why I wrote documentation that covers this which is on track to
+get merged in the next merge window, unless Linus objects:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/process/handling-regressions.rst#n131
+
+To quote one of the sections relevant in this particular case:
+
+>  * Aim to fix regressions within one week after the culprit was identified, if
+>    the issue was introduced in either:
+> 
+>     * a recent stable/longterm release
+> 
+>     * the development cycle of the latest proper mainline release
+
+Ciao, Thorsten

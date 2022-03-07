@@ -2,144 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1084D0153
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879D34D0151
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243235AbiCGOe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S243228AbiCGOeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243232AbiCGOeX (ORCPT
+        with ESMTP id S237783AbiCGOeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:34:23 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5C73AA4E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:33:28 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id a8so32354038ejc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:33:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gX0VA6G+m/fx1Btx4oSZIKt5x8VtazQqeF2Zzwz+qYc=;
-        b=iJUIDDKLOPdWItQyphmj7LpSXG3tIZGArCCQOTt4CF1F3NN2giBXuKYzQjlJZs7kZ9
-         meBzE/SjbB8h8M/YdAFwDzFL/eYOitVpCEfgCkC224Dgiq61z8wp91/fxMhW7bkJSkdj
-         OBPeEkKgzX/nc+xQcYXesC+k1Uv6lfoShTkYnxReVlKcsEY1ELEj3w7APsQ1Qle7lcAs
-         jGsaRA28GMkAQmsorSXNryFcywNrpHgTAucrKq7t1Sdi8LSsi39lP5phf0+o+72ASTk0
-         qtTbS+7sNhB/dD7bDctWC6ee8LvUecpoLgTpwvpLYTyjeb9D3eHGkLv1D5je4snKxxQ+
-         ZD3w==
+        Mon, 7 Mar 2022 09:34:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30DA539805
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:33:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646663604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BqBsilqCKDCrxnxeJqaARCUBXf202zo2/T5FUy2wzuY=;
+        b=YhG1a/LKoxwSxtbqrRyoyL2pxRPpdPyFeSWNbUEYlP5CLeg3sypO/LxVshhCe6JYX88qCd
+        xPWy5HjDzR99+l+RZsMmOWcv/o6lS/8pZBavaKHyLj7GZchvR1tFla+/X0fpJSo8wA3q1F
+        Sik3U9S6/r7IjlA6BVzs06TJ13m/bXU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-546-C9hErc8FOF-1zNM6ZBn-aA-1; Mon, 07 Mar 2022 09:33:21 -0500
+X-MC-Unique: C9hErc8FOF-1zNM6ZBn-aA-1
+Received: by mail-wr1-f72.google.com with SMTP id a11-20020adffb8b000000b001efe754a488so4618728wrr.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:33:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gX0VA6G+m/fx1Btx4oSZIKt5x8VtazQqeF2Zzwz+qYc=;
-        b=fSt8w13gsfwQzAPR6L7NN4qNOwXDRW78Y7wl1PJPQEghULFwj6/m1vqij6Vfj7aYZw
-         ZDhRkcYJz4F08q73wAaKy5r+he5aOo8duJgIhPgm0GhbIdcRtMcFuzeJef6ruW5h/FGM
-         ur4yfr1LHqvF0H29DlMJ2CJzhBSEthpifyyTmvwDDAXBsUXJ3WW35xqZGvLP+cvn4Qbf
-         BSyxl0OOPJLVmDcpmv2uf+JWNAVZS4Sa+CUSwT5PWVxirKXF7o+eaYirqhNABIm62GmM
-         jkKmcxgnhUaMcMWxJNU3lI9rk6U8BUNbim5fmu+oy3OS0szNSiC1Wj5jUguQv14VqnPW
-         UK7w==
-X-Gm-Message-State: AOAM533mvgMzHAc5HfzupdOd92F7HksybpmdWKiJtAroZofuT5PWh8TH
-        uPR3easQbvUDwQgqSMG6XWMMfVKqqwS9MnVfnzCBsg==
-X-Google-Smtp-Source: ABdhPJzj/3liPkwVOlu1feutaA0UkA9vnyA93ILCkc0CWbYLSnerDF1GMcEzni9G0ChIMAqxXzMw8R2BawsGlDWAVCw=
-X-Received: by 2002:a17:907:72c3:b0:6ce:5256:1125 with SMTP id
- du3-20020a17090772c300b006ce52561125mr9575123ejc.697.1646663607082; Mon, 07
- Mar 2022 06:33:27 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=BqBsilqCKDCrxnxeJqaARCUBXf202zo2/T5FUy2wzuY=;
+        b=iV/Ulzc5Yh0zP6uR07dQuSZed9xN6ERA9aANDDHtYB0tyEgGR/ODjpJ1KKubrM8Cqk
+         w0h2RB05emMpIzO46n9glghC8nk3UFqyBlLcrK5hyK2I+g5SPiMgy7iTqv/jE+SRjuXT
+         mO/p9vssErQhLjM9mqAwLcFarAaym2YZE/WT46oqYXZLIJwvlGgnU6OPoZ1dMvtzrTu5
+         LrHN8bCZ8MhQRt3jxpPn7NY2WOuXuU1DlhqrTB0gNIA67s5Jdq6LFl38qt7fRTwMex67
+         iy5f8K4ejprJct59mmPJBmUx9tYGDtjINqH36/BNDsFVFIW1kH8BnRgfBeodj+5albvi
+         eW5g==
+X-Gm-Message-State: AOAM5305WM2TBoil82CDx+OX38/5HBGo7yaTau3XqbPY/fv/JYMmYdZF
+        yHjhXrWdG1j8esycPvvB1F6n43qWs4g5J1SB0N0HO/cq0ob4AksFWsUNwN5vQxNmLAs/e29A7Kv
+        PcsPkktYYERsj9DJQReVF4u+i
+X-Received: by 2002:a7b:c154:0:b0:388:8e6e:ff76 with SMTP id z20-20020a7bc154000000b003888e6eff76mr9711135wmi.191.1646663600074;
+        Mon, 07 Mar 2022 06:33:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxfRVYkTxAcRn47Pfs4K6l3yvxYBhJf4kPwPZnm8FvG7VYk1WZXxsFh62kxfrGjwDoyNK0tCw==
+X-Received: by 2002:a7b:c154:0:b0:388:8e6e:ff76 with SMTP id z20-20020a7bc154000000b003888e6eff76mr9711104wmi.191.1646663599814;
+        Mon, 07 Mar 2022 06:33:19 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l18-20020adfe592000000b001f064ae9830sm9837404wrm.37.2022.03.07.06.33.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 06:33:19 -0800 (PST)
+Message-ID: <9982c5a7-9715-7cdd-59be-8f27a65f32bf@redhat.com>
+Date:   Mon, 7 Mar 2022 15:33:18 +0100
 MIME-Version: 1.0
-References: <20220307141955.28040-1-alifer.m@variscite.com>
-In-Reply-To: <20220307141955.28040-1-alifer.m@variscite.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 7 Mar 2022 15:33:16 +0100
-Message-ID: <CAMRc=Mf0uBOHe=Ff6_1GcpEPX4d4wYJsnBBE=Mri-Um_sq2nog@mail.gmail.com>
-Subject: Re: [PATCH] driver: pca953x: avoid error message when resuming
-To:     Alifer Moraes <alifer.m@variscite.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        eran.m@variscite.com, Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        pierluigi.p@variscite.com,
-        FrancescoFerraro <francesco.f@variscite.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
+Content-Language: en-US
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
+Cc:     linux-fbdev@vger.kernel.org, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-video@atrey.karlin.mff.cuni.cz,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Mack <daniel@zonque.org>
+References: <20220218093334.24830-1-msuchanek@suse.de>
+ <354f3cfd-bfa0-3ebe-3d67-705423d9294e@suse.de>
+ <20220302193846.GT3113@kunlun.suse.cz>
+ <2ba8497f-ba6d-558b-d782-bb3ee67d23ec@redhat.com>
+ <81f87874-4aa8-265d-a0ed-c8a67708a92a@suse.de>
+ <8d1c3caf-96ad-ae4c-021e-ac38f179dfcb@redhat.com>
+In-Reply-To: <8d1c3caf-96ad-ae4c-021e-ac38f179dfcb@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 3:20 PM Alifer Moraes <alifer.m@variscite.com> wrote:
->
-> From: FrancescoFerraro <francesco.f@variscite.com>
->
-> Avoids the error messages "pca953x 1-0020: failed reading register"
-> when resuming from suspend using gpio-key attached to pca9534.
->
-
-The commit message should read: "gpio: pca953x: ..."
-
-> Signed-off-by: Francesco Ferraro <francesco.f@variscite.com>
-> Signed-off-by: Alifer Moraes <alifer.m@variscite.com>
-> ---
->  drivers/gpio/gpio-pca953x.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-> index d2fe76f3f34f..4f35b75dcbb1 100644
-> --- a/drivers/gpio/gpio-pca953x.c
-> +++ b/drivers/gpio/gpio-pca953x.c
-> @@ -211,6 +211,7 @@ struct pca953x_chip {
->         struct regulator *regulator;
->
->         const struct pca953x_reg_config *regs;
-> +       int is_in_suspend;
-
-Something like this is not needed because we already have
-pm_runtime_status_suspended().
-
->  };
->
->  static int pca953x_bank_shift(struct pca953x_chip *chip)
-> @@ -412,7 +413,8 @@ static int pca953x_read_regs(struct pca953x_chip *chip, int reg, unsigned long *
->
->         ret = regmap_bulk_read(chip->regmap, regaddr, value, NBANK(chip));
->         if (ret < 0) {
-> -               dev_err(&chip->client->dev, "failed reading register\n");
-> +               if (!chip->is_in_suspend)
-> +                       dev_err(&chip->client->dev, "failed reading register\n");
->                 return ret;
->         }
->
-> @@ -954,6 +956,7 @@ static int pca953x_probe(struct i2c_client *client,
->         chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
->         if (chip == NULL)
->                 return -ENOMEM;
-> +       chip->is_in_suspend = 0;
->
->         pdata = dev_get_platdata(&client->dev);
->         if (pdata) {
-> @@ -1161,6 +1164,8 @@ static int pca953x_suspend(struct device *dev)
->         else
->                 regulator_disable(chip->regulator);
->
-> +       chip->is_in_suspend = 1;
-> +
->         return 0;
->  }
->
-> @@ -1189,6 +1194,8 @@ static int pca953x_resume(struct device *dev)
->                 return ret;
->         }
->
-> +       chip->is_in_suspend = 0;
-> +
->         return 0;
->  }
->  #endif
-> --
-> 2.25.1
+On 3/4/22 21:47, Javier Martinez Canillas wrote:
+> Hello Thomas,
+> 
+> On 3/4/22 21:00, Thomas Zimmermann wrote:
+>> Hi,
+>>
+>> I've merged the patches into drm-misc-fixes. Thanks a lot to both of you.
+>>
+> 
+> Ard already picked these through the efi tree:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git/log/
 >
 
-Can you elaborate more on the circumstances in which you're seeing this?
+I talked with Ard and he kindly dropped these patches from the efi
+tree. So everything is fine.
+ 
+>> Best regards
+>> Thomas
+>>
 
-Bart
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

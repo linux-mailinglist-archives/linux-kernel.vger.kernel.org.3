@@ -2,145 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED554D0272
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F634D0274
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236748AbiCGPIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        id S242699AbiCGPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243228AbiCGPH4 (ORCPT
+        with ESMTP id S239155AbiCGPI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:07:56 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63199026A;
-        Mon,  7 Mar 2022 07:07:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646665622; x=1678201622;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6AQwE+jmfCO74IkfUnD2IOLWGBmz47IqloHLSUaMxLU=;
-  b=cx+Yg+bTFB7ymWgycj+3m1rnnidfZhBXHGNocbvs3dlX7uTjhsEVZu7z
-   FoWpJnbk2eU3U2Ol4aORsuiu3nfkN1HiR48o7cyUHZ1zpHyyVPmTt6OB/
-   b5eMxEFnnKXfWwBqE8UazQ/hF+/arld5fHBS2No5fbk8N9kUTve+8/rI6
-   I=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 07 Mar 2022 07:07:02 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 07:07:01 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 7 Mar 2022 07:07:00 -0800
-Received: from [10.216.32.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 7 Mar 2022
- 07:06:53 -0800
-Message-ID: <d73734e8-7ab2-e1bb-540a-3d8252482982@quicinc.com>
-Date:   Mon, 7 Mar 2022 20:36:49 +0530
+        Mon, 7 Mar 2022 10:08:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B296C2DE0
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:07:33 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6F9DC1F394;
+        Mon,  7 Mar 2022 15:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646665652; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=nNqrbcx3hlm6bW5QamgpEPJVajxBuWoj7VtZh9OD3tg=;
+        b=CWa8yZuYAuQBxa6hAXICLsLOPu4OQlApY1SyBAU/aQ35Ne3D0XHbLIiY1VHuJnNggRYYGK
+        qBbNLosXBXkusBFxESZ9q3c9WYUjIU/pz+DI2m6mkn4pOqi9csdAG3N0QKcubzYFJ2pxUX
+        sqB7RjWt+4MrKmuYnXLW2Rdmpcqh5JE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646665652;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=nNqrbcx3hlm6bW5QamgpEPJVajxBuWoj7VtZh9OD3tg=;
+        b=UyvTe/9aUvyUe2vAwXMVy8aojAB+HmE+v6kjDl7sQONxFIKuOXIeeZvWM3amwmgS7n2E9e
+        NiuUOif/kv2p9ABg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6468132BC;
+        Mon,  7 Mar 2022 15:07:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nQaDNbMfJmLrHgAAMHmgww
+        (envelope-from <osalvador@suse.de>); Mon, 07 Mar 2022 15:07:31 +0000
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH 0/3] A minor hotplug refactoring
+Date:   Mon,  7 Mar 2022 16:07:22 +0100
+Message-Id: <20220307150725.6810-1-osalvador@suse.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 0/4] drm/msm: Clear perf counters across context switch
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
-CC:     <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Emma Anholt <emma@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        open list <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>
-References: <20220304005317.776110-1-robdclark@gmail.com>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20220304005317.776110-1-robdclark@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/2022 6:22 AM, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
->
-> Some clever folks figured out a way to use performance counters as a
-> side-channel[1].  But, other than the special case of using the perf
-> counters for system profiling, we can reset the counters across context
-> switches to protect against this.
->
-> This series introduces a SYSPROF param which a sufficiently privilaged
-> userspace (like Mesa's pps-producer, which already must run as root) to
-> opt-out, and makes the default behavior to reset counters on context
-> switches.
->
-> [1] https://dl.acm.org/doi/pdf/10.1145/3503222.3507757
->
-> Rob Clark (4):
->    drm/msm: Update generated headers
->    drm/msm: Add SET_PARAM ioctl
->    drm/msm: Add SYSPROF param (v2)
->    drm/msm/a6xx: Zap counters across context switch
->
->   drivers/gpu/drm/msm/adreno/a2xx.xml.h         |  26 +-
->   drivers/gpu/drm/msm/adreno/a2xx_gpu.c         |   1 +
->   drivers/gpu/drm/msm/adreno/a3xx.xml.h         |  30 +-
->   drivers/gpu/drm/msm/adreno/a3xx_gpu.c         |   1 +
->   drivers/gpu/drm/msm/adreno/a4xx.xml.h         | 112 ++-
->   drivers/gpu/drm/msm/adreno/a4xx_gpu.c         |   1 +
->   drivers/gpu/drm/msm/adreno/a5xx.xml.h         |  63 +-
->   drivers/gpu/drm/msm/adreno/a5xx_gpu.c         |   1 +
->   drivers/gpu/drm/msm/adreno/a6xx.xml.h         | 674 +++++++++++-------
->   drivers/gpu/drm/msm/adreno/a6xx_gmu.xml.h     |  26 +-
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c         |  30 +
->   .../gpu/drm/msm/adreno/adreno_common.xml.h    |  31 +-
->   drivers/gpu/drm/msm/adreno/adreno_gpu.c       |  14 +
->   drivers/gpu/drm/msm/adreno/adreno_gpu.h       |   2 +
->   drivers/gpu/drm/msm/adreno/adreno_pm4.xml.h   |  46 +-
->   drivers/gpu/drm/msm/disp/mdp4/mdp4.xml.h      |  37 +-
->   drivers/gpu/drm/msm/disp/mdp5/mdp5.xml.h      |  37 +-
->   drivers/gpu/drm/msm/disp/mdp_common.xml.h     |  37 +-
->   drivers/gpu/drm/msm/dsi/dsi.xml.h             |  37 +-
->   drivers/gpu/drm/msm/dsi/dsi_phy_10nm.xml.h    |  37 +-
->   drivers/gpu/drm/msm/dsi/dsi_phy_14nm.xml.h    |  37 +-
->   drivers/gpu/drm/msm/dsi/dsi_phy_20nm.xml.h    |  37 +-
->   drivers/gpu/drm/msm/dsi/dsi_phy_28nm.xml.h    |  37 +-
->   .../gpu/drm/msm/dsi/dsi_phy_28nm_8960.xml.h   |  37 +-
->   drivers/gpu/drm/msm/dsi/dsi_phy_5nm.xml.h     | 480 -------------
->   drivers/gpu/drm/msm/dsi/dsi_phy_7nm.xml.h     |  43 +-
->   drivers/gpu/drm/msm/dsi/mmss_cc.xml.h         |  37 +-
->   drivers/gpu/drm/msm/dsi/sfpb.xml.h            |  37 +-
->   drivers/gpu/drm/msm/hdmi/hdmi.xml.h           |  37 +-
->   drivers/gpu/drm/msm/hdmi/qfprom.xml.h         |  37 +-
->   drivers/gpu/drm/msm/msm_drv.c                 |  28 +
->   drivers/gpu/drm/msm/msm_gpu.c                 |   2 +
->   drivers/gpu/drm/msm/msm_gpu.h                 |  29 +
->   drivers/gpu/drm/msm/msm_submitqueue.c         |  39 +
->   include/uapi/drm/msm_drm.h                    |  28 +-
->   35 files changed, 1058 insertions(+), 1130 deletions(-)
->   delete mode 100644 drivers/gpu/drm/msm/dsi/dsi_phy_5nm.xml.h
->
+Hi,
 
-For the whole series except " drm/msm: Update generated headers",
+These are a few cleanups that go on top of Michal's work [1].
 
-Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Thanks
 
--Akhil.
+[1] https://lore.kernel.org/lkml/20220127085305.20890-1-mhocko@kernel.org/
+
+Oscar Salvador (3):
+  mm/page_alloc: Do not calculate node's total pages and memmap pages
+    when empty
+  mm/memory_hotplug: Reset node's state when empty during offline
+  mm/memory_hotplug: Refactor hotadd_init_pgdat and try_online_node
+
+ include/linux/memory_hotplug.h |  2 +-
+ mm/memory_hotplug.c            | 93 ++++++++++++++++++----------------
+ mm/page_alloc.c                | 59 +++++++--------------
+ 3 files changed, 69 insertions(+), 85 deletions(-)
+
+-- 
+2.34.1
 

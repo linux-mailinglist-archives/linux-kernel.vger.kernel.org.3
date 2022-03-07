@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC6B4D0739
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212AD4D073C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244967AbiCGTGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S244962AbiCGTHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237523AbiCGTGS (ORCPT
+        with ESMTP id S237523AbiCGTHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:06:18 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781856E56C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:05:22 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 7 Mar 2022 14:07:40 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734526E7B8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:06:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4C7F23F60B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 19:05:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646679921;
-        bh=QWsOEJGQTvGYoXGyvS888p4a2khm68f4hn/XfD0htMc=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ETWPDv5W3PyPPxol60CCa6adHNxluQSgMWtUnqyGhPnFlg0Nvi0aObrTfzUUlIuYH
-         k3uSet0kduoz8d8jWhqtfE5wz1/jpixC9B+h0F0LcKSIBXfWX/AEGXWHgt78k4XQgH
-         aGwA4u/7+sC205SYuz3M+XX9yaAtaJe7G9GVx0tKbmBgAkSMUu3MfeOS2PpXmOoGzw
-         7up1twsmQQWGRl7gtJ7A8x1fWeJOoD1YO9YQIXPeEE/bMbq2C50IkYG1KFDQWB9DGN
-         ZujSEXHI3j7ye1jWn5hkEqPo36XfQfcUKvp98NkyXMYilPRAPTLcZ/7KijON6Iz0Dw
-         7cDr4jbEwFCDA==
-Received: by mail-ed1-f70.google.com with SMTP id e10-20020a056402190a00b00410f20467abso9162651edz.14
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:05:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QWsOEJGQTvGYoXGyvS888p4a2khm68f4hn/XfD0htMc=;
-        b=Nxu5aoPoS9HrlWPbc97li9uNEzpjlfU+ylWZYw12+8FTcB0FYxqtdfXkeq4JYSwvNd
-         +8m5LA40bHMDsvZ0dS5IEts3/iLdQ3ZYzPo0MriO4VLfDUBFnkKBvKcpWqlv6jO0SBBI
-         A/YskD6X2kseoB4iQvYn8Vm2VpPKdK/2F8yUEHKLRd43LADtnq87MzYa7g6d9UrHSXBN
-         oJc17UwqI2esGKZIfTyhnhobjFfaZb+dOSy7cY7RvnHFMgUI/nPdZ/zuYOxlcSw9eu7A
-         /SSa7F8c3/4e1pqSIww5qvZPhwuuO1b5G33+ehW/LRY5uDaGBrekBxdEoSwvMvrM4s6w
-         PtBg==
-X-Gm-Message-State: AOAM530N+wv9Al9JVcdCMu9WBo5YQ/b7payzl4LdvCcUzmeW20lEwYxz
-        eDXwOa9dbXgSgolXQuju6rrvCPe3XDIuWKkevmu660bn+oY+oEd9sBzCGYafwWpCADDTQpPKMVV
-        NUDwJZsFYCgnjAbJOFv6MrIZKrxcZ0/8fEDjXoIxLTQ==
-X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id nd14-20020a170907628e00b006d9c6fa6168mr10459589ejc.132.1646679920953;
-        Mon, 07 Mar 2022 11:05:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyyN0g0OSLGsRnPf1kRRnBUK5x+6sKF/QCqmI95yBIUFncnGeYZVE8vPiyRQJceikpOJJA+6Q==
-X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id nd14-20020a170907628e00b006d9c6fa6168mr10459566ejc.132.1646679920623;
-        Mon, 07 Mar 2022 11:05:20 -0800 (PST)
-Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id go18-20020a1709070d9200b006d650ff4b26sm4995906ejc.209.2022.03.07.11.05.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 11:05:20 -0800 (PST)
-Message-ID: <7dedd97f-db81-4e72-861b-cf342170b65d@canonical.com>
-Date:   Mon, 7 Mar 2022 20:05:19 +0100
+        by sin.source.kernel.org (Postfix) with ESMTPS id D30F8CE1184
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 19:06:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5584C340E9;
+        Mon,  7 Mar 2022 19:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646680001;
+        bh=XhUorjNUp2ro6l4CdTfTZVWn0r9yRVs9vs9fCjrsIjM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LqvAlHWOTZvvwAZ1hWYS7UpMeLTuh0Hs0pF9I0QokztUB53pzphXWS3ig00bNW80Q
+         6pmLDBnPTCDnkobK8VRx7RX8cxhUcwEDtPUgijVmhmLpzQ2A8zjnflpz4jB1asQ15G
+         Q0RaETofEeWmA+PBwr4/6Ow/MaKzKnxCmqCd70ZtUA7pQx1OtGfwBXhnWRDabNVTdS
+         Vs6ekc3NSHP31qDTFIniN8oQ1IKBUtC9mVV1ZdIYz7DnPAI9MxI07vvBX0PYiozHaB
+         iigGI4UGzq7H26x5rusLQwWtZpkx8jGik7Y5q5WI/CUIpDCVh4GikBsoiFC6XuaEwB
+         h9aH+wFv7LIzg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRIgp-00CsDZ-Eg; Mon, 07 Mar 2022 19:06:39 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        John Garry <john.garry@huawei.com>,
+        David Decotigny <ddecotig@google.com>
+Subject: [PATCH] genirq/msi: Shutdown managed interrupts with unsatifiable affinities
+Date:   Mon,  7 Mar 2022 19:06:25 +0000
+Message-Id: <20220307190625.254426-1-maz@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/6] ASoC: dt-bindings: Document Microchip's PDMC
-Content-Language: en-US
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     lars@metafoo.de, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, robh+dt@kernel.org, nicolas.ferre@microchip.com
-References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
- <20220307122202.2251639-3-codrin.ciubotariu@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307122202.2251639-3-codrin.ciubotariu@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, tglx@linutronix.de, john.garry@huawei.com, ddecotig@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 13:21, Codrin Ciubotariu wrote:
-> Add DT bindings for the new Microchip PDMC embedded in sama7g5 SoCs.
-> 
-> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> ---
-> 
-> Changes in v3:
->  - set line length to 80 characters long
->  - set 'reg' as the second property
-> 
-> Changes in v2:
->  - renamed patch from 'ASoC: add DT bindings for Microchip PDMC' to
->    'ASoC: dt-bindings: Document Microchip's PDMC';
->  - renamed yaml file from 'mchp,pdmc.yaml' to 'microchip,pdmc.yaml';
->  - used imperative mode in commit description;
->  - renamed mchp,pdmc.h to microchip,pdmc.h;
->  - fixed 'title' to represent HW;
->  - made 'compatible' first property;
->  - s/microhpone/microphone
->  - none name in example set to 'sound'
-> 
+When booting with maxcpus=<small number>, interrupt controllers
+such as the GICv3 ITS may not be able to satisfy the affinity of
+some managed interrupts, as some of the HW resources are simply
+not available.
 
+In order to deal with this, do not try to activate such interrupt
+if there is no online CPU capable of handling it. Instead, place
+it in shutdown state. Once a capable CPU shows up, it will be
+activated.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reported-by: John Garry <john.garry@huawei.com>
+Reported-by: David Decotigny <ddecotig@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ kernel/irq/msi.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
+diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+index 2bdfce5edafd..aa84ce84c2ec 100644
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -818,6 +818,18 @@ static int msi_init_virq(struct irq_domain *domain, int virq, unsigned int vflag
+ 		irqd_clr_can_reserve(irqd);
+ 		if (vflags & VIRQ_NOMASK_QUIRK)
+ 			irqd_set_msi_nomask_quirk(irqd);
++
++		/*
++		 * If the interrupt is managed but no CPU is available
++		 * to service it, shut it down until better times.
++		 */
++		if ((vflags & VIRQ_ACTIVATE) &&
++		    irqd_affinity_is_managed(irqd) &&
++		    !cpumask_intersects(irq_data_get_affinity_mask(irqd),
++					cpu_online_mask)) {
++			    irqd_set_managed_shutdown(irqd);
++			    return 0;
++		    }
+ 	}
+ 
+ 	if (!(vflags & VIRQ_ACTIVATE))
+-- 
+2.30.2
 
-Best regards,
-Krzysztof

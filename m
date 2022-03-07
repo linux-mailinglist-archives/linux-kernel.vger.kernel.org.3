@@ -2,127 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9274CFC1C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B404CFC23
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241618AbiCGLAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S241677AbiCGLAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:00:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiCGK5l (ORCPT
+        with ESMTP id S237606AbiCGK5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:57:41 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71C4B1AB1;
-        Mon,  7 Mar 2022 02:18:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646648308; x=1678184308;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MF4bSZAjSpcDs7XroNbwBWFR0D4m2/1zQ1gUexWfA9w=;
-  b=Sft0QAgjBDgieXlDDqukQx7M0j/nfCng60Y8jIj9aYYI9mQoU8I/XVE6
-   nnlHTRw09URQxmyQL23fZHmClckEuF/y/IvDWsdJk0Iya9J3tB/giWWla
-   DT6UazX5CvlmI5k3aKj0qvTQziap0SSBFyJDgrGsPareXxvz6flJumFcE
-   oxIcsITrcK/4CCGRfg4eK1V1USTLE8DRtvCv0GN1fpJ27kF0sE+AjR6Hg
-   V+6MlrDv4B6qMNRJ6bx2RzWJqJjG3momgLwpXucILUHPRwFMe3FbmyAse
-   K6X45Y3BXIAJoApVZ840dfpv8YeQEO27e2yC7jVzV/G6vgbhnX34azWBR
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,161,1643698800"; 
-   d="scan'208";a="155932004"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2022 03:18:28 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 7 Mar 2022 03:18:27 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 7 Mar 2022 03:18:22 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        <UNGLinuxDriver@microchip.com>
-Subject: [RFC PATCH net-next 2/2] net: phy: lan87xx: use genphy_read_master_slave in read_status
-Date:   Mon, 7 Mar 2022 15:47:43 +0530
-Message-ID: <20220307101743.8567-3-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220307101743.8567-1-arun.ramadoss@microchip.com>
-References: <20220307101743.8567-1-arun.ramadoss@microchip.com>
+        Mon, 7 Mar 2022 05:57:43 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AD913D6D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:18:47 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id gb39so30735687ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 02:18:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=t6DcQhfFfmQsTksI9MS4VLvsVDH6vcj7lwbO1DMdjXk=;
+        b=gN/WZ4SG1iuZO1PrFNTgdInO35WIdE03MwgG9h1W4nYVDu+UUMYoUuDbQtsxl105S8
+         onm0rswjQExopt8ZyDFxNgFhOao9/HlSePOv3e9bFN/YNNeRHkuR+HrNtCEbq2RpUoTo
+         uCXY83fNIPolDCobdq1RgBl61RtKlKQ0E84AMCHwp9nd+jGztCgsjbxQb2jhz8cnAZpH
+         ck7BIXB2iL9UcbV60pIsZeigyzYpy1q50GwKOnwpsMRMeB6spG/RiEx0ImDq8wcSc54A
+         dKJQzjjxIWt4PKzZUKMNlEyPGlKcYon8Foe/erPXuzXCGM2OVwibNYhbTxQxfuXHamAy
+         C5Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=t6DcQhfFfmQsTksI9MS4VLvsVDH6vcj7lwbO1DMdjXk=;
+        b=DIp4rbbiw4Z/ZUpNvLR6b8hZAdNN8Xo0XUlxx7qbuGpLqvSmBSRfT6obgBE3YU7+08
+         nuoy1E5RX/h3HmaIuIhpixvU074KjuXdpbbpiuW1wTKaQxClsyEgs/vfuhzY2lEJ4qpM
+         s557Pl3opDMoCH8Wx9WSySnmCnu0FZsoMHP8tm8amGtHM8ZUq/6eI4IpRzOibMPVJtRR
+         HzH3XgAz10Xvf1o55NdrpYi2BZqDBj+wWybhRYSTnKDNLUCrwY+UeyeyDif+VqC16y5I
+         uSFlsa1oWELYaVu+xgi5DiPA0Crnf5Ey6j289TcrApRCQnYwmJZ0tfLDuwrh2kFXiruq
+         J4Ow==
+X-Gm-Message-State: AOAM533gpVL4V5qxR/jg/WrRIMSrO6rdjaWATCTZBqsSH9YiM/Ep5kPi
+        I83thkfiEaH7HGTFg555RKh36TOi1J1yO6odqsU=
+X-Google-Smtp-Source: ABdhPJxF1qDr9htAtIeKGg2EryZobSpEiEX0uCo1aP7Rn8nhlBVeqQF+DO6pZ1w5QzLtAAEFCTXD3SHnbgmuk/4loyE=
+X-Received: by 2002:a17:906:1645:b0:6ce:de9:6eb1 with SMTP id
+ n5-20020a170906164500b006ce0de96eb1mr8344963ejd.616.1646648325617; Mon, 07
+ Mar 2022 02:18:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:907:2d20:b0:6da:73ad:bd17 with HTTP; Mon, 7 Mar 2022
+ 02:18:44 -0800 (PST)
+Reply-To: brookw094@gmail.com
+From:   William Brooks <businessoffer11@gmail.com>
+Date:   Mon, 7 Mar 2022 23:18:44 +1300
+Message-ID: <CAH35tw21qCDoGO2ZKH+8bWr6Ej8uOcXyxk8FHd3x9TOfRGdcdA@mail.gmail.com>
+Subject: Urgent message
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:633 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4209]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [businessoffer11[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [brookw094[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [businessoffer11[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To read the master slave configuration of the LAN87xx T1 phy, used the
-generic phy driver genphy_read_master_slave function. Removed the local
-lan87xx_read_master_slave function.
-
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- drivers/net/phy/microchip_t1.c | 30 +-----------------------------
- 1 file changed, 1 insertion(+), 29 deletions(-)
-
-diff --git a/drivers/net/phy/microchip_t1.c b/drivers/net/phy/microchip_t1.c
-index 8292f7305805..389df3f4293c 100644
---- a/drivers/net/phy/microchip_t1.c
-+++ b/drivers/net/phy/microchip_t1.c
-@@ -674,34 +674,6 @@ static int lan87xx_cable_test_get_status(struct phy_device *phydev,
- 	return 0;
- }
- 
--static int lan87xx_read_master_slave(struct phy_device *phydev)
--{
--	int rc = 0;
--
--	phydev->master_slave_get = MASTER_SLAVE_CFG_UNKNOWN;
--	phydev->master_slave_state = MASTER_SLAVE_STATE_UNKNOWN;
--
--	rc = phy_read(phydev, MII_CTRL1000);
--	if (rc < 0)
--		return rc;
--
--	if (rc & CTL1000_AS_MASTER)
--		phydev->master_slave_get = MASTER_SLAVE_CFG_MASTER_FORCE;
--	else
--		phydev->master_slave_get = MASTER_SLAVE_CFG_SLAVE_FORCE;
--
--	rc = phy_read(phydev, MII_STAT1000);
--	if (rc < 0)
--		return rc;
--
--	if (rc & LPA_1000MSRES)
--		phydev->master_slave_state = MASTER_SLAVE_STATE_MASTER;
--	else
--		phydev->master_slave_state = MASTER_SLAVE_STATE_SLAVE;
--
--	return rc;
--}
--
- static int lan87xx_read_status(struct phy_device *phydev)
- {
- 	int rc = 0;
-@@ -720,7 +692,7 @@ static int lan87xx_read_status(struct phy_device *phydev)
- 	phydev->pause = 0;
- 	phydev->asym_pause = 0;
- 
--	rc = lan87xx_read_master_slave(phydev);
-+	rc = genphy_read_master_slave(phydev);
- 	if (rc < 0)
- 		return rc;
- 
 -- 
-2.33.0
+Hi,
 
+I am a banker working with one of the leading banks here in the United
+States. I write to contact you over a very important  business
+transaction which will be in our interest and of huge benefit to both
+parties. Kindly get back to me for more details.
+
+Thanks.
+Mr. William Brook

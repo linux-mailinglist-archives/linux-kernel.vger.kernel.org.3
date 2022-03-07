@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1844CF5C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC494CFAE7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbiCGJbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S240172AbiCGKSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:18:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237464AbiCGJ2I (ORCPT
+        with ESMTP id S240463AbiCGKBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:28:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6D65AEEF;
-        Mon,  7 Mar 2022 01:25:27 -0800 (PST)
+        Mon, 7 Mar 2022 05:01:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B449635D;
+        Mon,  7 Mar 2022 01:48:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C3EBB810B9;
-        Mon,  7 Mar 2022 09:25:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5472BC36AE2;
-        Mon,  7 Mar 2022 09:25:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6D8BB8102B;
+        Mon,  7 Mar 2022 09:48:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8973C340F3;
+        Mon,  7 Mar 2022 09:48:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645114;
-        bh=aMwMtXs6moMQebat+KZd1RU03CTYTmj44vWgILym86E=;
+        s=korg; t=1646646505;
+        bh=wucGYhU/4fjXHEiYCpmNe9ovLCQpTNtpqblxmIxE1Eg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J4CfGYdgT/aKMWNlVBwqoNL+zAmr1U32juLWxskgdmcyXb10oghQeZRZa63OZxh/K
-         RptbMojUxEiiyx/E6l68CtXuN7PA4aLZW3ieJR6H471q+3umZhrzzxir3C/bDZHucU
-         HTZIo9DTIDnpNzMtH3hEUkeCqbi5dswy8gyZsG48=
+        b=hO2jdL4bnkqWZR0yJegijaomf6EFlPQM4TZKEBWAFSMH7ZWqwhzz+umxByJzRfbwa
+         FVoKQ/q0chK0IsieIYJrx/+6sPT+dgyjVA9+/6k1TZ++KWF4fLEnE7wV4UyjaxZOva
+         8oiMidObUaI/+KZS8K8N6ATIpUt6cB5VVJv+EgJo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 43/51] net: chelsio: cxgb3: check the return value of pci_find_capability()
+Subject: [PATCH 5.15 214/262] ARM: tegra: Move panels to AUX bus
 Date:   Mon,  7 Mar 2022 10:19:18 +0100
-Message-Id: <20220307091638.216605772@linuxfoundation.org>
+Message-Id: <20220307091708.973077975@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +54,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Thierry Reding <treding@nvidia.com>
 
-[ Upstream commit 767b9825ed1765894e569a3d698749d40d83762a ]
+[ Upstream commit 8d3b01e0d4bb54368d73d0984466d72c2eeeac74 ]
 
-The function pci_find_capability() in t3_prep_adapter() can fail, so its
-return value should be checked.
+Move the eDP panel on Venice 2 and Nyan boards into the corresponding
+AUX bus device tree node. This allows us to avoid a nasty circular
+dependency that would otherwise be created between the DPAUX and panel
+nodes via the DDC/I2C phandle.
 
-Fixes: 4d22de3e6cc4 ("Add support for the latest 1G/10G Chelsio adapter, T3")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: eb481f9ac95c ("ARM: tegra: add Acer Chromebook 13 device tree")
+Fixes: 59fe02cb079f ("ARM: tegra: Add DTS for the nyan-blaze board")
+Fixes: 40e231c770a4 ("ARM: tegra: Enable eDP for Venice2")
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/chelsio/cxgb3/t3_hw.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/boot/dts/tegra124-nyan-big.dts   | 15 +++++++++------
+ arch/arm/boot/dts/tegra124-nyan-blaze.dts | 15 +++++++++------
+ arch/arm/boot/dts/tegra124-venice2.dts    | 14 +++++++-------
+ 3 files changed, 25 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c b/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-index 080918af773c..cf563cdd0cb8 100644
---- a/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-+++ b/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-@@ -3677,6 +3677,8 @@ int t3_prep_adapter(struct adapter *adapter, const struct adapter_info *ai,
- 	    MAC_STATS_ACCUM_SECS : (MAC_STATS_ACCUM_SECS * 10);
- 	adapter->params.pci.vpd_cap_addr =
- 	    pci_find_capability(adapter->pdev, PCI_CAP_ID_VPD);
-+	if (!adapter->params.pci.vpd_cap_addr)
-+		return -ENODEV;
- 	ret = get_vpd_params(adapter, &adapter->params.vpd);
- 	if (ret < 0)
- 		return ret;
+diff --git a/arch/arm/boot/dts/tegra124-nyan-big.dts b/arch/arm/boot/dts/tegra124-nyan-big.dts
+index 1d2aac2cb6d0..fdc1d64dfff9 100644
+--- a/arch/arm/boot/dts/tegra124-nyan-big.dts
++++ b/arch/arm/boot/dts/tegra124-nyan-big.dts
+@@ -13,12 +13,15 @@
+ 		     "google,nyan-big-rev1", "google,nyan-big-rev0",
+ 		     "google,nyan-big", "google,nyan", "nvidia,tegra124";
+ 
+-	panel: panel {
+-		compatible = "auo,b133xtn01";
+-
+-		power-supply = <&vdd_3v3_panel>;
+-		backlight = <&backlight>;
+-		ddc-i2c-bus = <&dpaux>;
++	host1x@50000000 {
++		dpaux@545c0000 {
++			aux-bus {
++				panel: panel {
++					compatible = "auo,b133xtn01";
++					backlight = <&backlight>;
++				};
++			};
++		};
+ 	};
+ 
+ 	mmc@700b0400 { /* SD Card on this bus */
+diff --git a/arch/arm/boot/dts/tegra124-nyan-blaze.dts b/arch/arm/boot/dts/tegra124-nyan-blaze.dts
+index 677babde6460..abdf4456826f 100644
+--- a/arch/arm/boot/dts/tegra124-nyan-blaze.dts
++++ b/arch/arm/boot/dts/tegra124-nyan-blaze.dts
+@@ -15,12 +15,15 @@
+ 		     "google,nyan-blaze-rev0", "google,nyan-blaze",
+ 		     "google,nyan", "nvidia,tegra124";
+ 
+-	panel: panel {
+-		compatible = "samsung,ltn140at29-301";
+-
+-		power-supply = <&vdd_3v3_panel>;
+-		backlight = <&backlight>;
+-		ddc-i2c-bus = <&dpaux>;
++	host1x@50000000 {
++		dpaux@545c0000 {
++			aux-bus {
++				panel: panel {
++					compatible = "samsung,ltn140at29-301";
++					backlight = <&backlight>;
++				};
++			};
++		};
+ 	};
+ 
+ 	sound {
+diff --git a/arch/arm/boot/dts/tegra124-venice2.dts b/arch/arm/boot/dts/tegra124-venice2.dts
+index e6b54ac1ebd1..84e2d24065e9 100644
+--- a/arch/arm/boot/dts/tegra124-venice2.dts
++++ b/arch/arm/boot/dts/tegra124-venice2.dts
+@@ -48,6 +48,13 @@
+ 		dpaux@545c0000 {
+ 			vdd-supply = <&vdd_3v3_panel>;
+ 			status = "okay";
++
++			aux-bus {
++				panel: panel {
++					compatible = "lg,lp129qe";
++					backlight = <&backlight>;
++				};
++			};
+ 		};
+ 	};
+ 
+@@ -1079,13 +1086,6 @@
+ 		};
+ 	};
+ 
+-	panel: panel {
+-		compatible = "lg,lp129qe";
+-		power-supply = <&vdd_3v3_panel>;
+-		backlight = <&backlight>;
+-		ddc-i2c-bus = <&dpaux>;
+-	};
+-
+ 	vdd_mux: regulator@0 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "+VDD_MUX";
 -- 
 2.34.1
 

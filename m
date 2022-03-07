@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA804CF980
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 943684CF692
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240248AbiCGKG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S233403AbiCGJmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238343AbiCGJph (ORCPT
+        with ESMTP id S237397AbiCGJcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:45:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E9D13D35;
-        Mon,  7 Mar 2022 01:42:04 -0800 (PST)
+        Mon, 7 Mar 2022 04:32:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2006A025;
+        Mon,  7 Mar 2022 01:29:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0344B810BC;
-        Mon,  7 Mar 2022 09:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1650CC340E9;
-        Mon,  7 Mar 2022 09:41:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A50FB810C2;
+        Mon,  7 Mar 2022 09:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED4BC340F9;
+        Mon,  7 Mar 2022 09:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646115;
-        bh=a3ONiWZbtGmbWMaDBIz7szQySVCi5LFkDtFJQO9O+rU=;
+        s=korg; t=1646645370;
+        bh=z6b3zze1htEs3L7pwMXiihJzPahKJa4TbkzjB9MWkNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q1QR8wuNUJ+U/WPF46ytb1PpbJLUX07qLzWZtnv0QpHtcRKCKyjcOfRYxHBY7Nq4q
-         sCOuSK4pvdbi/2bzUzhUXwBO0me0b/ei2LrBSzY4Gefc/nGWf+5hyDKW5ynmgwPiNu
-         Tfs86oOB2l7UPukjaO8T9LoPzKEYrcj1sY+8av6I=
+        b=dhaR9T2A0p2HvpN9zwxjNv2pLLyOE457TAlp2WJvrB6K6Bujcl6SgoHn8qyfe/GCY
+         j+yQCW/MMgAXK2jyjSdtUu5kmc4d8LSyEeoYqtZKZF/y41QtDtZRqpj2BT61QAkYMj
+         Tq18qetV5Yawrq0qNTNqOo13hjaptmWCSbIKY+TI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.15 139/262] riscv: Fix config KASAN && SPARSEMEM && !SPARSE_VMEMMAP
-Date:   Mon,  7 Mar 2022 10:18:03 +0100
-Message-Id: <20220307091706.374602491@linuxfoundation.org>
+        Benjamin Beichler <benjamin.beichler@uni-rostock.de>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 001/105] mac80211_hwsim: report NOACK frames in tx_status
+Date:   Mon,  7 Mar 2022 10:18:04 +0100
+Message-Id: <20220307091644.223824742@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,39 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+From: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
 
-commit a3d328037846d013bb4c7f3777241e190e4c75e1 upstream.
+[ Upstream commit 42a79960ffa50bfe9e0bf5d6280be89bf563a5dd ]
 
-In order to get the pfn of a struct page* when sparsemem is enabled
-without vmemmap, the mem_section structures need to be initialized which
-happens in sparse_init.
+Add IEEE80211_TX_STAT_NOACK_TRANSMITTED to tx_status flags to have proper
+statistics for non-acked frames.
 
-But kasan_early_init calls pfn_to_page way before sparse_init is called,
-which then tries to dereference a null mem_section pointer.
-
-Fix this by removing the usage of this function in kasan_early_init.
-
-Fixes: 8ad8b72721d0 ("riscv: Add KASAN support")
-Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
+Link: https://lore.kernel.org/r/20220111221327.1499881-1-benjamin.beichler@uni-rostock.de
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/mm/kasan_init.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/wireless/mac80211_hwsim.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/arch/riscv/mm/kasan_init.c
-+++ b/arch/riscv/mm/kasan_init.c
-@@ -22,8 +22,7 @@ asmlinkage void __init kasan_early_init(
- 
- 	for (i = 0; i < PTRS_PER_PTE; ++i)
- 		set_pte(kasan_early_shadow_pte + i,
--			mk_pte(virt_to_page(kasan_early_shadow_page),
--			       PAGE_KERNEL));
-+			pfn_pte(virt_to_pfn(kasan_early_shadow_page), PAGE_KERNEL));
- 
- 	for (i = 0; i < PTRS_PER_PMD; ++i)
- 		set_pmd(kasan_early_shadow_pmd + i,
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index b793d61d15d27..0122585a1e500 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -3567,6 +3567,10 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
+ 		}
+ 		txi->flags |= IEEE80211_TX_STAT_ACK;
+ 	}
++
++	if (hwsim_flags & HWSIM_TX_CTL_NO_ACK)
++		txi->flags |= IEEE80211_TX_STAT_NOACK_TRANSMITTED;
++
+ 	ieee80211_tx_status_irqsafe(data2->hw, skb);
+ 	return 0;
+ out:
+-- 
+2.34.1
+
 
 

@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60D44CFB96
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CE34CFA6D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240812AbiCGKlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S239466AbiCGKQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:16:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241441AbiCGKUd (ORCPT
+        with ESMTP id S240354AbiCGKA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:20:33 -0500
+        Mon, 7 Mar 2022 05:00:58 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D65690CC8;
-        Mon,  7 Mar 2022 01:58:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3355E08D;
+        Mon,  7 Mar 2022 01:47:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D3A60919;
-        Mon,  7 Mar 2022 09:58:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04683C340F3;
-        Mon,  7 Mar 2022 09:58:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4307661220;
+        Mon,  7 Mar 2022 09:47:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E256C340F3;
+        Mon,  7 Mar 2022 09:47:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646647094;
-        bh=OF4LvnZoUsC5SUr3olPBFDXqhqhZWQIc703tv/w6YmM=;
+        s=korg; t=1646646462;
+        bh=jPKRR8dIFhlu9kPqcGVlPxRPIkLrpsKkx8oKm7QWiIA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=amjZPljIJIBfBkS7jiNJd4TZ5M9yZPZLAyGXLqbyLq7k5df5Vl+clXfw2k8kW2Bae
-         2qc8H2qefWcJjxtj656Cy9MQ7e2wu20d6xHXIxKSkGy/JIQG1fHz+owCJPgHaN/t9s
-         bPnUTPfvGFH0JcSVblutpEfyBIue+IGTfB2GfgCM=
+        b=mkIKNFOV1Vebl/YZgMh48buicj/T5sb55/EDWi3X+/lrpvfloxXqKECrOzxyNXXV5
+         738mjCdhFRhQQrH0IvjcgmwCKUTfKCCTpKhQJao3sj3jTrXack08DQeNxB2d6Yzj6A
+         L/5hYjg+1RCscB5Jzy92+beTKD+hw+jqGuZEmMI0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slawomir Laba <slawomirx.laba@intel.com>,
-        Phani Burra <phani.r.burra@intel.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 155/186] iavf: Fix __IAVF_RESETTING state usage
-Date:   Mon,  7 Mar 2022 10:19:53 +0100
-Message-Id: <20220307091658.409862483@linuxfoundation.org>
+        stable@vger.kernel.org, William Mahon <wmahon@chromium.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.15 250/262] HID: add mapping for KEY_DICTATE
+Date:   Mon,  7 Mar 2022 10:19:54 +0100
+Message-Id: <20220307091710.670199798@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,75 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slawomir Laba <slawomirx.laba@intel.com>
+From: William Mahon <wmahon@chromium.org>
 
-[ Upstream commit 14756b2ae265d526b8356e86729090b01778fdf6 ]
+commit bfa26ba343c727e055223be04e08f2ebdd43c293 upstream.
 
-The setup of __IAVF_RESETTING state in watchdog task had no
-effect and could lead to slow resets in the driver as
-the task for __IAVF_RESETTING state only requeues watchdog.
-Till now the __IAVF_RESETTING was interpreted by reset task
-as running state which could lead to errors with allocating
-and resources disposal.
+Numerous keyboards are adding dictate keys which allows for text
+messages to be dictated by a microphone.
 
-Make watchdog_task queue the reset task when it's necessary.
-Do not update the state to __IAVF_RESETTING so the reset task
-knows exactly what is the current state of the adapter.
+This patch adds a new key definition KEY_DICTATE and maps 0x0c/0x0d8
+usage code to this new keycode. Additionally hid-debug is adjusted to
+recognize this new usage code as well.
 
-Fixes: 898ef1cb1cb2 ("iavf: Combine init and watchdog state machines")
-Signed-off-by: Slawomir Laba <slawomirx.laba@intel.com>
-Signed-off-by: Phani Burra <phani.r.burra@intel.com>
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: William Mahon <wmahon@chromium.org>
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20220303021501.1.I5dbf50eb1a7a6734ee727bda4a8573358c6d3ec0@changeid
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/hid/hid-debug.c                |    1 +
+ drivers/hid/hid-input.c                |    1 +
+ include/uapi/linux/input-event-codes.h |    1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 9ed02a8ca7a3..138db07bdfa8 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -1073,8 +1073,7 @@ void iavf_down(struct iavf_adapter *adapter)
- 		rss->state = IAVF_ADV_RSS_DEL_REQUEST;
- 	spin_unlock_bh(&adapter->adv_rss_lock);
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -934,6 +934,7 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[KEY_ASSISTANT] = "Assistant",
+ 	[KEY_KBD_LAYOUT_NEXT] = "KbdLayoutNext",
+ 	[KEY_EMOJI_PICKER] = "EmojiPicker",
++	[KEY_DICTATE] = "Dictate",
+ 	[KEY_BRIGHTNESS_MIN] = "BrightnessMin",
+ 	[KEY_BRIGHTNESS_MAX] = "BrightnessMax",
+ 	[KEY_BRIGHTNESS_AUTO] = "BrightnessAuto",
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -991,6 +991,7 @@ static void hidinput_configure_usage(str
+ 		case 0x0cd: map_key_clear(KEY_PLAYPAUSE);	break;
+ 		case 0x0cf: map_key_clear(KEY_VOICECOMMAND);	break;
  
--	if (!(adapter->flags & IAVF_FLAG_PF_COMMS_FAILED) &&
--	    adapter->state != __IAVF_RESETTING) {
-+	if (!(adapter->flags & IAVF_FLAG_PF_COMMS_FAILED)) {
- 		/* cancel any current operation */
- 		adapter->current_op = VIRTCHNL_OP_UNKNOWN;
- 		/* Schedule operations to close down the HW. Don't wait
-@@ -1992,11 +1991,12 @@ static void iavf_watchdog_task(struct work_struct *work)
- 	if (adapter->flags & IAVF_FLAG_PF_COMMS_FAILED)
- 		iavf_change_state(adapter, __IAVF_COMM_FAILED);
++		case 0x0d8: map_key_clear(KEY_DICTATE);		break;
+ 		case 0x0d9: map_key_clear(KEY_EMOJI_PICKER);	break;
  
--	if (adapter->flags & IAVF_FLAG_RESET_NEEDED &&
--	    adapter->state != __IAVF_RESETTING) {
--		iavf_change_state(adapter, __IAVF_RESETTING);
-+	if (adapter->flags & IAVF_FLAG_RESET_NEEDED) {
- 		adapter->aq_required = 0;
- 		adapter->current_op = VIRTCHNL_OP_UNKNOWN;
-+		mutex_unlock(&adapter->crit_lock);
-+		queue_work(iavf_wq, &adapter->reset_task);
-+		return;
- 	}
+ 		case 0x0e0: map_abs_clear(ABS_VOLUME);		break;
+--- a/include/uapi/linux/input-event-codes.h
++++ b/include/uapi/linux/input-event-codes.h
+@@ -612,6 +612,7 @@
+ #define KEY_ASSISTANT		0x247	/* AL Context-aware desktop assistant */
+ #define KEY_KBD_LAYOUT_NEXT	0x248	/* AC Next Keyboard Layout Select */
+ #define KEY_EMOJI_PICKER	0x249	/* Show/hide emoji picker (HUTRR101) */
++#define KEY_DICTATE		0x24a	/* Start or Stop Voice Dictation Session (HUTRR99) */
  
- 	switch (adapter->state) {
-@@ -2289,8 +2289,7 @@ static void iavf_reset_task(struct work_struct *work)
- 	 * ndo_open() returning, so we can't assume it means all our open
- 	 * tasks have finished, since we're not holding the rtnl_lock here.
- 	 */
--	running = ((adapter->state == __IAVF_RUNNING) ||
--		   (adapter->state == __IAVF_RESETTING));
-+	running = adapter->state == __IAVF_RUNNING;
- 
- 	if (running) {
- 		netdev->flags &= ~IFF_UP;
--- 
-2.34.1
-
+ #define KEY_BRIGHTNESS_MIN		0x250	/* Set Brightness to Minimum */
+ #define KEY_BRIGHTNESS_MAX		0x251	/* Set Brightness to Maximum */
 
 

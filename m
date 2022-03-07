@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94DA4CF9DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A7A4CFA7E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241032AbiCGKJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S241270AbiCGKUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:20:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237660AbiCGJsp (ORCPT
+        with ESMTP id S240970AbiCGKBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:48:45 -0500
+        Mon, 7 Mar 2022 05:01:35 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482CB527EC;
-        Mon,  7 Mar 2022 01:42:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B2B6E4E3;
+        Mon,  7 Mar 2022 01:51:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EC8C61009;
-        Mon,  7 Mar 2022 09:42:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F12EC36AE7;
-        Mon,  7 Mar 2022 09:42:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D36B560A23;
+        Mon,  7 Mar 2022 09:51:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55BAC340F4;
+        Mon,  7 Mar 2022 09:51:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646148;
-        bh=0XM5ZexUMskW4ZkOyUw7cgz87x2gisU6TaKUIornEEs=;
+        s=korg; t=1646646672;
+        bh=J3C58RKqRkdt0Z9ppRxUiMEM8xgTHy1k+NvGXw5NCTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T3Rkw2wVsqZA9IeVvCVS/2uHCzXUGXZ10KiisEfd3zIU4wHcwTNQMymR+mXn2mBl8
-         MFrd4HptJY7dFc7AtVjqAbFXTCredl2/8aUVgPsx+VjoFJm0wzR2rAQN+b6EoGMdv4
-         gBADw4zo+4KMdRAV2I75F6NwwR/4vpsklcx1gnHM=
+        b=EQf0zwO7foI4V5CsScP69zWSYpS7LTJWU23LsES1IsvRqK9diAMlANY7eA6/9bRLq
+         D3qXxqSmr+Ux20LG0XTvWQ9v7rjugQIsmUCLzRHeSpeeNFImA6vFe1KgiDD9uTGaZJ
+         gUo1A+OKNVEjDkABErEo23OQbZNzNrvjNVAZ3Zlo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.15 148/262] thermal: core: Fix TZ_GET_TRIP NULL pointer dereference
-Date:   Mon,  7 Mar 2022 10:18:12 +0100
-Message-Id: <20220307091706.619296213@linuxfoundation.org>
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.16 055/186] ASoC: ops: Shift tested values in snd_soc_put_volsw() by +min
+Date:   Mon,  7 Mar 2022 10:18:13 +0100
+Message-Id: <20220307091655.631688958@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+From: Marek Vasut <marex@denx.de>
 
-commit 5838a14832d447990827d85e90afe17e6fb9c175 upstream.
+commit 9bdd10d57a8807dba0003af0325191f3cec0f11c upstream.
 
-Do not call get_trip_hyst() from thermal_genl_cmd_tz_get_trip() if
-the thermal zone does not define one.
+While the $val/$val2 values passed in from userspace are always >= 0
+integers, the limits of the control can be signed integers and the $min
+can be non-zero and less than zero. To correctly validate $val/$val2
+against platform_max, add the $min offset to val first.
 
-Fixes: 1ce50e7d408e ("thermal: core: genetlink support for events/cmd/sampling")
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Cc: 5.10+ <stable@vger.kernel.org> # 5.10+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 817f7c9335ec0 ("ASoC: ops: Reject out of bounds values in snd_soc_put_volsw()")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220215130645.164025-1-marex@denx.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thermal/thermal_netlink.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ sound/soc/soc-ops.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/thermal/thermal_netlink.c
-+++ b/drivers/thermal/thermal_netlink.c
-@@ -418,11 +418,12 @@ static int thermal_genl_cmd_tz_get_trip(
- 	for (i = 0; i < tz->trips; i++) {
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -317,7 +317,7 @@ int snd_soc_put_volsw(struct snd_kcontro
+ 		mask = BIT(sign_bit + 1) - 1;
  
- 		enum thermal_trip_type type;
--		int temp, hyst;
-+		int temp, hyst = 0;
- 
- 		tz->ops->get_trip_type(tz, i, &type);
- 		tz->ops->get_trip_temp(tz, i, &temp);
--		tz->ops->get_trip_hyst(tz, i, &hyst);
-+		if (tz->ops->get_trip_hyst)
-+			tz->ops->get_trip_hyst(tz, i, &hyst);
- 
- 		if (nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, i) ||
- 		    nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TYPE, type) ||
+ 	val = ucontrol->value.integer.value[0];
+-	if (mc->platform_max && val > mc->platform_max)
++	if (mc->platform_max && ((int)val + min) > mc->platform_max)
+ 		return -EINVAL;
+ 	if (val > max - min)
+ 		return -EINVAL;
+@@ -330,7 +330,7 @@ int snd_soc_put_volsw(struct snd_kcontro
+ 	val = val << shift;
+ 	if (snd_soc_volsw_is_stereo(mc)) {
+ 		val2 = ucontrol->value.integer.value[1];
+-		if (mc->platform_max && val2 > mc->platform_max)
++		if (mc->platform_max && ((int)val2 + min) > mc->platform_max)
+ 			return -EINVAL;
+ 		if (val2 > max - min)
+ 			return -EINVAL;
 
 

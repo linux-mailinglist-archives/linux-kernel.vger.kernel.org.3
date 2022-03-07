@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682624CF5D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01AF4CF63E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237215AbiCGJbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
+        id S237399AbiCGJed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237409AbiCGJ2F (ORCPT
+        with ESMTP id S238749AbiCGJ3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:28:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F412A6A029;
-        Mon,  7 Mar 2022 01:25:22 -0800 (PST)
+        Mon, 7 Mar 2022 04:29:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF03D5BE5B;
+        Mon,  7 Mar 2022 01:28:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BF7460C00;
-        Mon,  7 Mar 2022 09:25:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4148CC340E9;
-        Mon,  7 Mar 2022 09:25:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A30E1B810B6;
+        Mon,  7 Mar 2022 09:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB2AC340F3;
+        Mon,  7 Mar 2022 09:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645111;
-        bh=8HVQ0bK50UVVZlUYGGpvPde5Jchndo2Q57B4WADFTzI=;
+        s=korg; t=1646645287;
+        bh=nE3TURHhz6+7IxE2urKC3IVfVPlbY4QgK6LnP5oCwWQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eJzM/LJjNj35ADtw1nDmYkqdMH82iRqHDjgd54O1AbNI6PHt3C9qgaIFF1B4JUlWf
-         FNqglt/UgSCDAMtmbQSxic+wljz3cA061dqg0AQ+9G6/M8yF1tJRb32bnDivcKfI4J
-         qJMs4YN7rXIWUrv6pYICYpUqKNfn9HHs/s0IvaKo=
+        b=GQXOSocfWiHRTwWMBOr2Dl2XThNOqeJPRiJWS8ilF7cJqUzV060Pmph0Bk55gYv84
+         iduMUzexyBshaZTAhl/KiGW+07ttlq8Qv+YSAzU/3unspdMq1K+hx7Vdet/yhzVc1k
+         6mRmhz047bcpx8LkiebWdXfOmREzlNR+KV8C1zhw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Li Yang <leoyang.li@nxp.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 42/51] soc: fsl: qe: Check of ioremap return value
-Date:   Mon,  7 Mar 2022 10:19:17 +0100
-Message-Id: <20220307091638.188796141@linuxfoundation.org>
+        stable@vger.kernel.org, Corinna Vinschen <vinschen@redhat.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.4 45/64] igc: igc_read_phy_reg_gpy: drop premature return
+Date:   Mon,  7 Mar 2022 10:19:18 +0100
+Message-Id: <20220307091640.430467428@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Corinna Vinschen <vinschen@redhat.com>
 
-[ Upstream commit a222fd8541394b36b13c89d1698d9530afd59a9c ]
+commit fda2635466cd26ad237e1bc5d3f6a60f97ad09b6 upstream.
 
-As the possible failure of the ioremap(), the par_io could be NULL.
-Therefore it should be better to check it and return error in order to
-guarantee the success of the initiation.
-But, I also notice that all the caller like mpc85xx_qe_par_io_init() in
-`arch/powerpc/platforms/85xx/common.c` don't check the return value of
-the par_io_init().
-Actually, par_io_init() needs to check to handle the potential error.
-I will submit another patch to fix that.
-Anyway, par_io_init() itsely should be fixed.
+igc_read_phy_reg_gpy checks the return value from igc_read_phy_reg_mdic
+and if it's not 0, returns immediately. By doing this, it leaves the HW
+semaphore in the acquired state.
 
-Fixes: 7aa1aa6ecec2 ("QE: Move QE from arch/powerpc to drivers/soc")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Drop this premature return statement, the function returns after
+releasing the semaphore immediately anyway.
+
+Fixes: 5586838fe9ce ("igc: Add code for PHY support")
+Signed-off-by: Corinna Vinschen <vinschen@redhat.com>
+Acked-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/soc/fsl/qe/qe_io.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/intel/igc/igc_phy.c |    2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/soc/fsl/qe/qe_io.c b/drivers/soc/fsl/qe/qe_io.c
-index 7ae59abc7863..127a4a836e67 100644
---- a/drivers/soc/fsl/qe/qe_io.c
-+++ b/drivers/soc/fsl/qe/qe_io.c
-@@ -41,6 +41,8 @@ int par_io_init(struct device_node *np)
- 	if (ret)
- 		return ret;
- 	par_io = ioremap(res.start, resource_size(&res));
-+	if (!par_io)
-+		return -ENOMEM;
- 
- 	num_ports = of_get_property(np, "num-ports", NULL);
- 	if (num_ports)
--- 
-2.34.1
-
+--- a/drivers/net/ethernet/intel/igc/igc_phy.c
++++ b/drivers/net/ethernet/intel/igc/igc_phy.c
+@@ -767,8 +767,6 @@ s32 igc_read_phy_reg_gpy(struct igc_hw *
+ 		if (ret_val)
+ 			return ret_val;
+ 		ret_val = igc_read_phy_reg_mdic(hw, offset, data);
+-		if (ret_val)
+-			return ret_val;
+ 		hw->phy.ops.release(hw);
+ 	} else {
+ 		ret_val = igc_read_xmdio_reg(hw, (u16)offset, dev_addr,
 
 

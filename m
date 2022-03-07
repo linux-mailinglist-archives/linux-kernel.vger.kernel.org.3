@@ -2,105 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13024CFFF0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA2D4CFFFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242768AbiCGN0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
+        id S242843AbiCGN1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiCGN0n (ORCPT
+        with ESMTP id S242830AbiCGN1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:26:43 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A083682D03;
-        Mon,  7 Mar 2022 05:25:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1646659542;
-        bh=/O6l7hkL0uaacIQ/iMx/QBKyPp5fhtRwIBhUp3/cTu4=;
-        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
-        b=ccCdse4vpkfQI5F08kiPQ6PbQowNCfVJXRx3NVBLWVYFK1/TGbh+1VUT7+PLyhdh0
-         kYfNIModpIgxB0p3u9eNJuVPS+cjGLiCIvcU0JqCUkWs3yZymyniTBFgJB/uRlL7wv
-         97Xfw2PLCISx4JA55rbKZv5+vJmWe0ppOuCMVLbw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.169.192]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MI5QF-1nLU4g38PX-00F9vK; Mon, 07
- Mar 2022 14:25:41 +0100
-Message-ID: <ea285d28-1b96-984a-b033-4c539c653d11@gmx.de>
-Date:   Mon, 7 Mar 2022 14:25:40 +0100
+        Mon, 7 Mar 2022 08:27:21 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1038A6C2;
+        Mon,  7 Mar 2022 05:26:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646659587; x=1678195587;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=chZdczKRWiX0mygtvCioOFf/nQfwodUEadgTzmKZVhc=;
+  b=Q/xRd2Q7ANifNpgJYHw1g+F0MVM0jDeAU2v+0LFifGNuwdEg7b/+HStQ
+   WQk7VE6n5t491VTN7SmJC0cEOhSOm1A08q1N4RdGhjwylujOOmHDxGTXC
+   DwtBeA3WAJ/A4AP6GB9VGObdXFuLNYLbZEMX4d1n1mdiQoKVSwrpIVFNd
+   sxEVN+6g/FR9zqEGFN60gJilqz08eDGsrPpLATmIMtlzNuhhEFIggo0w+
+   Z1ywOfwxPzArWvgCe7i+5i9kFqaDxRFE4bDW5eiMNnnWyIVotinmsNHcg
+   JR+DqYIfkGKfQEea0Ga9AFDaZjwaAtEA7rN5DAVAPhRbBcu4haKdB96s0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="279090582"
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="279090582"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 05:26:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
+   d="scan'208";a="711103618"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga005.jf.intel.com with ESMTP; 07 Mar 2022 05:26:19 -0800
+Date:   Mon, 7 Mar 2022 21:26:02 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Steven Price <steven.price@arm.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Linux API <linux-api@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v4 01/12] mm/shmem: Introduce F_SEAL_INACCESSIBLE
+Message-ID: <20220307132602.GA58690@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <20220118132121.31388-2-chao.p.peng@linux.intel.com>
+ <619547ad-de96-1be9-036b-a7b4e99b09a6@kernel.org>
+ <20220217130631.GB32679@chaop.bj.intel.com>
+ <2ca78dcb-61d9-4c9d-baa9-955b6f4298bb@www.fastmail.com>
+ <20220223114935.GA53733@chaop.bj.intel.com>
+ <71a06402-6743-bfd2-bbd4-997f8e256554@arm.com>
+ <7cc65bbd-e323-eabb-c576-b5656a3355ac@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] omapfb: Add missing of_node_put() in dvic_probe_of
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>, Rob Clark <robdclark@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Dave Airlie <airlied@gmail.com>, linux-omap@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220307123816.31888-1-linmq006@gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220307123816.31888-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:dZ56hsbY+6HJ6VDAQ/N9tk9Ko4iaHAHR03UaXmJm1eaWw1Mh/vB
- DG+3M82ZwLfE3FHRHEnwXmyUxnbSywthcLabvt57wn7yyuk6JkLuZ/mPez3kzsD0y9yHdSe
- /dq5BcbG3cGaJorKcEbmMX3J8mUatxag7lH4gshRI/XQjUTAUkvfC614OU2YwUkuHz3GttB
- YlT62iyEoYjBzGPrB2N/g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:h2qOqFjmeLA=:i3fGhRnr2uvK9ix8KeR57h
- X0QbM5PNDOIfSdqC7GyG/Klxj44Z1fL06cXkEZoZxyHwmaVycBdYU4N8Wx01WRoBHgNWUZ6Wj
- iM3haxNcSGCG9bSdstRgyFE3raPM4AnFcrZuFsmTAFwSUP6ZeDQa0H+AYkMQAjCqfPkXoTXt5
- J9gh5Foo/hB2BzjBuyDK6fOnA7030yBY4XD7ZXkasmWawF1pj5Xfao++Uf69Q9o2c2CITWzV2
- 1AAppwsNg5YWw40O2/n7WMXfv9p/q06R8yNoMc5aL9AzOECogGikZE+XqwgmkToKLR9Q990QI
- j4jHPE3BU6hUaYwp+EL8ygnoERZbfUZIidtQXAflFbceYGsdK9o7hMKpqHmjwJnDNDitj61q4
- LaHd7WV0meErvwDE9kg/XpVFIxNGXzjUNa15SAb3x25i1c3u7MNXx4DmxcA2/wuL1uMX3XLnp
- alImYClUJPFAPNkEoqfxu0AGLbc8nC3ktvkiUx1MLNe33v68Goh7snI60Sh6o4qcyRUKrHXaG
- AV28nJu9T0qZSCVVve3pzRmagic39ZsUJZuufo38HHBdCimn+a+8+JRfHaDyTIPXqlgaJpMyd
- PVwu4w/TN5cJQC2D4c6XOJ1qD0HwU7zcTmJdM/1iV+IsMPFOuPVTBUHEEaAggtdS74HrvYmDv
- ZX5Q5w4FMgT2JKlubB6D0JJzpKakwQXUNgByYvSuw+sv81CbtAUJ8DIQGQehxSZudyZp+EOKp
- cwjFxgTpdWgF3CF9BzC301ct7GR9dNhMXrF/pLyB4sXJ7YIWk9S4i12NPHytFdddM9DHqOH5K
- pk1mARboHErVK5aFHV12VGdd8pWXYqPhTYRrM9lMRw9/XPYkIWFXdsuA/eiZDd2Snl/TqV5CT
- 3qIKN3CuSV0vqCaqSz2NczdNeYYuQcSmXK6iVaCm1WsRvZFoClcL0AC5oc+ztvsHNiWKhHkoV
- auN2+tvpX0sFki1AEyJNXJzU8ocG5WwG1nt32yB62M3hKzO0wiJDLx1V6a0kZXRj1xWSL5bUT
- 9DUSbFfcTpIIn1SGhvrODlG6TKgL153UIIYI2poQgRM7HyzdiqkiHHvwnM7/Dq/36hqnbUhza
- vfDfrWcHa4PNjs=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7cc65bbd-e323-eabb-c576-b5656a3355ac@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/22 13:38, Miaoqian Lin wrote:
-> The device_node pointer is returned by of_parse_phandle()  with refcount
-> incremented. We should use of_node_put() on it when done.
->
-> Fixes: f76ee892a99e ("omapfb: copy omapdss & displays for omapfb")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On Fri, Mar 04, 2022 at 11:24:30AM -0800, Andy Lutomirski wrote:
+> On 2/23/22 04:05, Steven Price wrote:
+> > On 23/02/2022 11:49, Chao Peng wrote:
+> > > On Thu, Feb 17, 2022 at 11:09:35AM -0800, Andy Lutomirski wrote:
+> > > > On Thu, Feb 17, 2022, at 5:06 AM, Chao Peng wrote:
+> > > > > On Fri, Feb 11, 2022 at 03:33:35PM -0800, Andy Lutomirski wrote:
+> > > > > > On 1/18/22 05:21, Chao Peng wrote:
+> > > > > > > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > > > > > > 
+> > > > > > > Introduce a new seal F_SEAL_INACCESSIBLE indicating the content of
+> > > > > > > the file is inaccessible from userspace through ordinary MMU access
+> > > > > > > (e.g., read/write/mmap). However, the file content can be accessed
+> > > > > > > via a different mechanism (e.g. KVM MMU) indirectly.
+> > > > > > > 
+> > > > > > > It provides semantics required for KVM guest private memory support
+> > > > > > > that a file descriptor with this seal set is going to be used as the
+> > > > > > > source of guest memory in confidential computing environments such
+> > > > > > > as Intel TDX/AMD SEV but may not be accessible from host userspace.
+> > > > > > > 
+> > > > > > > At this time only shmem implements this seal.
+> > > > > > > 
+> > > > > > 
+> > > > > > I don't dislike this *that* much, but I do dislike this. F_SEAL_INACCESSIBLE
+> > > > > > essentially transmutes a memfd into a different type of object.  While this
+> > > > > > can apparently be done successfully and without races (as in this code),
+> > > > > > it's at least awkward.  I think that either creating a special inaccessible
+> > > > > > memfd should be a single operation that create the correct type of object or
+> > > > > > there should be a clear justification for why it's a two-step process.
+> > > > > 
+> > > > > Now one justification maybe from Stever's comment to patch-00: for ARM
+> > > > > usage it can be used with creating a normal memfd, (partially)populate
+> > > > > it with initial guest memory content (e.g. firmware), and then
+> > > > > F_SEAL_INACCESSIBLE it just before the first time lunch of the guest in
+> > > > > KVM (definitely the current code needs to be changed to support that).
+> > > > 
+> > > > Except we don't allow F_SEAL_INACCESSIBLE on a non-empty file, right?  So this won't work.
+> > > 
+> > > Hmm, right, if we set F_SEAL_INACCESSIBLE on a non-empty file, we will
+> > > need to make sure access to existing mmap-ed area should be prevented,
+> > > but that is hard.
+> > > 
+> > > > 
+> > > > In any case, the whole confidential VM initialization story is a bit buddy.  From the earlier emails, it sounds like ARM expects the host to fill in guest memory and measure it.  From my recollection of Intel's scheme (which may well be wrong, and I could easily be confusing it with SGX), TDX instead measures what is essentially a transcript of the series of operations that initializes the VM.  These are fundamentally not the same thing even if they accomplish the same end goal.  For TDX, we unavoidably need an operation (ioctl or similar) that initializes things according to the VM's instructions, and ARM ought to be able to use roughly the same mechanism.
+> > > 
+> > > Yes, TDX requires a ioctl. Steven may comment on the ARM part.
+> > 
+> > The Arm story is evolving so I can't give a definite answer yet. Our
+> > current prototyping works by creating the initial VM content in a
+> > memslot as with a normal VM and then calling an ioctl which throws the
+> > big switch and converts all the (populated) pages to be protected. At
+> > this point the RMM performs a measurement of the data that the VM is
+> > being populated with.
+> > 
+> > The above (in our prototype) suffers from all the expected problems with
+> > a malicious VMM being able to trick the host kernel into accessing those
+> > pages after they have been protected (causing a fault detected by the
+> > hardware).
+> > 
+> > The ideal (from our perspective) approach would be to follow the same
+> > flow but where the VMM populates a memfd rather than normal anonymous
+> > pages. The memfd could then be sealed and the pages converted to
+> > protected ones (with the RMM measuring them in the process).
+> > 
+> > The question becomes how is that memfd populated? It would be nice if
+> > that could be done using normal operations on a memfd (i.e. using
+> > mmap()) and therefore this code could be (relatively) portable. This
+> > would mean that any pages mapped from the memfd would either need to
+> > block the sealing or be revoked at the time of sealing.
+> > 
+> > The other approach is we could of course implement a special ioctl which
+> > effectively does a memcpy into the (created empty and sealed) memfd and
+> > does the necessary dance with the RMM to measure the contents. This
+> > would match the "transcript of the series of operations" described above
+> > - but seems much less ideal from the viewpoint of the VMM.
+> 
+> A VMM that supports Other Vendors will need to understand this sort of model
+> regardless.
+> 
+> I don't particularly mind the idea of having the kernel consume a normal
+> memfd and spit out a new object, but I find the concept of changing the type
+> of the object in place, even if it has other references, and trying to
+> control all the resulting races to be somewhat alarming.
+> 
+> In pseudo-Rust, this is the difference between:
+> 
+> fn convert_to_private(in: &mut Memfd)
+> 
+> and
+> 
+> fn convert_to_private(in: Memfd) -> PrivateMemoryFd
+> 
+> This doesn't map particularly nicely to the kernel, though.
 
-applied to the fbdev for-next tree.
-Thanks!
-Helge
+I understand this Rust semantics and the difficulty to handle races.
+Probably we should not expose F_SEAL_INACCESSIBLE to userspace, instead
+we can use a new in-kernel flag to indicate the same thing. That flag
+should be set only when the memfd is created with MFD_INACCESSIBLE.
 
-> ---
->  drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c b=
-/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-> index 2fa436475b40..c8ad3ef42bd3 100644
-> --- a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-> +++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-> @@ -246,6 +246,7 @@ static int dvic_probe_of(struct platform_device *pde=
-v)
->  	adapter_node =3D of_parse_phandle(node, "ddc-i2c-bus", 0);
->  	if (adapter_node) {
->  		adapter =3D of_get_i2c_adapter_by_node(adapter_node);
-> +		of_node_put(adapter_node);
->  		if (adapter =3D=3D NULL) {
->  			dev_err(&pdev->dev, "failed to parse ddc-i2c-bus\n");
->  			omap_dss_put_device(ddata->in);
-
+Chao
+> 
+> --Andy\

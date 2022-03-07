@@ -2,99 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076C84D0467
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577FC4D0472
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244285AbiCGQpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S244307AbiCGQrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:47:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244279AbiCGQpk (ORCPT
+        with ESMTP id S236119AbiCGQrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:45:40 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E308BF43
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:44:45 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id w1so13744994qtj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 08:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/XL/lMkKaAjZT+R1nP8H0cffa2vVj0nan43syJIwKEM=;
-        b=NGAxo4l6dVw4MjmbICDgizGHfOi4yre3b0pLfDORn6QkKhVCbfHF+rNemWGokfFRxH
-         NtY+yd2RUni7Od++YThC961zb+L5Yk2ElgJ+DYjcJKhNfNR2yIQmfScjlsvMIyDNMYQe
-         AXKXSlou68f/jC4mjOwJ8vmxzk+JY0I2UNLGmLBpfdJ5GRjidPgS/tcNepdp8+ee/Wmk
-         nr/FiTR9dxmfDbfhxRCDvHtnaGF39JYKTcY2bfSB3ZQERE5C1i1Es81mqkd3t5U9xMkN
-         VQwtkviAPHBlrajVClNPPqQ5qArz2i0+t0c+F1W37SpZXYWAeoHUyQ5m6fXR46JVYbnt
-         /Z1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/XL/lMkKaAjZT+R1nP8H0cffa2vVj0nan43syJIwKEM=;
-        b=Aq0SpGzHKpxpT5P0fR9JIdx0lqgB2AHPTvY/VDJ7TieZSxjgG0EHnI0dJBZu2VpYFs
-         C3IqBSDiod8EZNSR8qfWFUHyt+lj9Pp+GZTAsC13y2jkTnYnyLIEQfPUccCo+uqBvAl3
-         kzTVSRNQcbbz/VIt4ymmuIyYcZQchkgwyftMl3wu1ZtELYr1MEGKN4FEbuzxcrw4GYzu
-         TWkQuRve0SZWhs2hUzOYdgiuSW+nugZNgyLrDwGXE4l43QyTJpa22+E8B2CP4VDspq5E
-         X4QdQyHph+GuJxKM3oihhC6/WmILM0mUVJTFGFEP3oD88/3cIM7vK08mq2KwVFvHptdE
-         neBg==
-X-Gm-Message-State: AOAM5339qYPSH5yi04JTGeJgv66IlT7rLjJMtHkpMogA3DK01yAh0C28
-        G3QFaUNW77nldCdQuxjgg2u7gw==
-X-Google-Smtp-Source: ABdhPJxUlGfyQuqHLZdnpfRoANxV+0hXCfHucRHiuTC80Gc6WFLFnVnTTEp8Y7BcKFfazeg0zyoF8A==
-X-Received: by 2002:ac8:5c10:0:b0:2de:2dac:1ea1 with SMTP id i16-20020ac85c10000000b002de2dac1ea1mr10272361qti.600.1646671485033;
-        Mon, 07 Mar 2022 08:44:45 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id u14-20020ac858ce000000b002de89087e7dsm8747493qta.78.2022.03.07.08.44.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 08:44:44 -0800 (PST)
-Date:   Mon, 7 Mar 2022 11:44:39 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-Subject: Re: [next] mips: madvise.c:55:7: error: 'MADV_DONTNEED_LOCKED'
- undeclared
-Message-ID: <YiY2dx5F0pEbsxkU@cmpxchg.org>
-References: <CA+G9fYvPdufo6c3MgPjAMBrkTqoLDO+2LN1PV3V8rTsqN5XSFg@mail.gmail.com>
+        Mon, 7 Mar 2022 11:47:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD26592D09;
+        Mon,  7 Mar 2022 08:46:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F60FB81646;
+        Mon,  7 Mar 2022 16:46:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C27C340EF;
+        Mon,  7 Mar 2022 16:46:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646671563;
+        bh=dduVYNYjI45iLgiaw8xX4aXIMQDDaw0lYUSciMWQNXg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kxU05fg3J5MZMelr0NQfKzQF8u9Vwyj8cJCo5Y7PPZPqxwIeiPvkIxk/NAuUhCQ/V
+         L/zuK+EldtEwS6L0X54H52vquhVDr82NYMKim4VwZBt84/yuD7NHIcRDe7RR5iNwM6
+         PZ0pnDtWUKdu4eYl/ZPs3vogu4nE1JvyffIGTgF00gNDeNZsmkH/IFQIMkiEhazS3u
+         rofAuVSDibFhV9GM16x1zchrShGehY4ZKZyVbOACojaBL6rfETi57GNQYBd2HmwNYQ
+         lcKSUhgcY+WSSVGJNUVNMorYQcLkkMrAO4dP7OuhCKbHuEmE3+12SfHINDlozwwdTF
+         GNf+Ly42ulR4A==
+Date:   Mon, 7 Mar 2022 18:45:22 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Sergey Temerkhanov <s.temerkhanov@gmail.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tpm: Rework open/close/shutdown to avoid races
+Message-ID: <YiY2oqg/X02SnYEl@iki.fi>
+References: <20201215133801.546207-1-s.temerkhanov@gmail.com>
+ <e7566e1e48f5be9dca034b4bfb67683b5d3cb88f.camel@HansenPartnership.com>
+ <YiYnpsryEDlrryzU@iki.fi>
+ <120839d2925750e278810b2ad211f5465638f7b0.camel@HansenPartnership.com>
+ <YiY2X/0W+6aRHioN@iki.fi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYvPdufo6c3MgPjAMBrkTqoLDO+2LN1PV3V8rTsqN5XSFg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YiY2X/0W+6aRHioN@iki.fi>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 09:45:38PM +0530, Naresh Kamboju wrote:
-> Following build regressions errors/warnings noticed on mips architecture on
-> linux next-20220307 build.
+On Mon, Mar 07, 2022 at 06:44:17PM +0200, Jarkko Sakkinen wrote:
+> On Mon, Mar 07, 2022 at 11:22:27AM -0500, James Bottomley wrote:
+> > On Mon, 2022-03-07 at 17:41 +0200, Jarkko Sakkinen wrote:
+> > [...]
+> > > James, would it possible for you to construct a proper patch from
+> > > this and send it so we could include it to the next PR (use my tree
+> > > as baseline)?
+> > 
+> > Sure,  There's not really any identifiable patch for a fixes tag, since
+> > the race really always existed.
+> > 
+> > How about the below.
+> > 
+> > James
+> > 
+> > -------------------8>8>8><8<8<8------------------
+> > 
+> > From 3e0e640e47e5728b68693c5d45bf3cdd0bff48ca Mon Sep 17 00:00:00 2001
+> > From: James Bottomley <James.Bottomley@HansenPartnership.com>
+> > Date: Mon, 7 Mar 2022 11:16:55 -0500
+> > Subject: [PATCH] tpm: use try_get_ops() in tpm-space.c
+> > 
+> > As part of the series conversion to remove nested TPM operations:
+> > 
+> > https://lore.kernel.org/all/20190205224723.19671-1-jarkko.sakkinen@linux.intel.com/
+> > 
+> > exposure of the chip->tpm_mutex was removed from much of the upper
+> > level code.  In this conversion, tpm2_del_space() was missed.  This
+> > didn't matter much because it's usually called closely after a
+> > converted operation, so there's only a very tiny race window where the
+> > chip can be removed before the space flushing is done which causes a
+> > NULL deref on the mutex.  However, there are reports of this window
+> > being hit in practice, so fix this by converting tpm2_del_space() to
+> > use tpm_try_get_ops(), which performs all the teardown checks before
+> > acquring the mutex.
+> > 
+> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> > ---
+> >  drivers/char/tpm/tpm2-space.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> > index 265ec72b1d81..ffb35f0154c1 100644
+> > --- a/drivers/char/tpm/tpm2-space.c
+> > +++ b/drivers/char/tpm/tpm2-space.c
+> > @@ -58,12 +58,12 @@ int tpm2_init_space(struct tpm_space *space, unsigned int buf_size)
+> >  
+> >  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
+> >  {
+> > -	mutex_lock(&chip->tpm_mutex);
+> > -	if (!tpm_chip_start(chip)) {
+> > +
+> > +	if (tpm_try_get_ops(chip) == 0) {
+> >  		tpm2_flush_sessions(chip, space);
+> > -		tpm_chip_stop(chip);
+> > +		tpm_put_ops(chip);
+> >  	}
+> > -	mutex_unlock(&chip->tpm_mutex);
+> > +
+> >  	kfree(space->context_buf);
+> >  	kfree(space->session_buf);
+> >  }
+> > -- 
+> > 2.34.1
+> > 
+> > 
 > 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=mips
-> CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-> 'HOSTCC=sccache gcc'
+> Thank you! LGTM. 
 > 
-> mm/madvise.c: In function 'madvise_need_mmap_write':
-> mm/madvise.c:55:7: error: 'MADV_DONTNEED_LOCKED' undeclared (first use
-> in this function); did you mean 'MADV_DONTNEED'?
->    55 |  case MADV_DONTNEED_LOCKED:
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> BR, Jarkko
 
-Thanks for the report, I sent a fix in reply to Stephen:
+If possible, can you send this an identifiable patch (separate email)
+with my reviewed-by applied, and I'll take it from there (i.e. it's
+then available all trackers such patchwork etc.)?
 
-https://lore.kernel.org/lkml/YiY2KYyjsCaANwo0@cmpxchg.org/T/#m58a9804edb680303b7351fb7cf6d9c93096ccaad
+BR, Jarkko

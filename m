@@ -2,137 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8232E4D0736
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456614D073A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244949AbiCGTGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S244960AbiCGTGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233935AbiCGTGO (ORCPT
+        with ESMTP id S236446AbiCGTGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Mar 2022 14:06:14 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3194ECD6;
-        Mon,  7 Mar 2022 11:05:18 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id y12so1602553edc.13;
-        Mon, 07 Mar 2022 11:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iXQiyusXSHknsabSyew3dw1NkYbYI4nNb8+pTTi1PQI=;
-        b=A0Qm2gzVSL627z/YIsLeTA5SP5E7x2U5Pe29dKLwHmbPEL/WdOL2oAodAGHmZcZpjn
-         JKkq7YdVAzJz4/V5YePclrtVeqaRb3FlmEdYcDTmntzHNErOPkXMN6lHILSMfGmlkTh2
-         oaBQHovjcLuesxDDS5NBnseM7LWCnuzzVOgwWQlGkg9d+MVqS8IGM5vUOQiHEvcZW/6S
-         hqDRJTeuz1h8QjgvPbQm1SQa9XYrv/Q9JLwddI7kp+ynr3928GWZqis41b22wjvOruu8
-         64T3kDN3Q0m46Bwnm3Q4WjMZMAiV/oH7HpPpM9I2eig6JNcTKl9rT5QrRceZDpfzeh72
-         TKjw==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97A526E572
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646679918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wFEWa/6PSx4goDhoAD+s+E7K76HqDwXbpSO9oJJ8Gys=;
+        b=Vw8c5kuOYTCtjjvQC+3n2ckPQcXqnbsF+Eu2J6z7FLaJwurR9iu/MnaJ/pUS7xivDMN9dr
+        l6cB7MKZvbcGD+204YPCzprmhSjwbh6kI1ZYBjQi4JEvkR9Zfuzc+VzqurlpL7f+o93tEr
+        ML5dBGEdtZt/f8u3cfr+QxCYuQv1B1A=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-15-t1PvGD7DPsqlsfSCOx-Wfg-1; Mon, 07 Mar 2022 14:05:17 -0500
+X-MC-Unique: t1PvGD7DPsqlsfSCOx-Wfg-1
+Received: by mail-oo1-f69.google.com with SMTP id p22-20020a4a8e96000000b00320d5a307dfso4165824ook.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:05:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iXQiyusXSHknsabSyew3dw1NkYbYI4nNb8+pTTi1PQI=;
-        b=cx1n/wcT87A/D0FHnUrq+2YOr8cZzmsEZBu33IHAwQaZu8hlJxNaStbVO9VxOXZ05K
-         44TjaWxE0tuHQqAOM2/ukJVqUIPEWTrR26RSUfuGNvTsugHs/8K52COzB1ah4iiKnDEV
-         UxCvhx7HWhxjuLvljwVpLeFpXW/gnwB0qFsonSPiLAT5SqFSXkhyaiXjuwqanZhWq69X
-         2R0QoW5eu7TbCE97M2UeotrYSwdFjveQ1MkPbOETIx50D6bti5k3OkbyBszaBcWjvziV
-         oWsYV0vjuI4LrvsNAf/FD38gE6KCT6QVQXLxnjRX/ElwlF3/3a4zlzV90VJJsj4JHEGF
-         tmVQ==
-X-Gm-Message-State: AOAM531bFf4l0yesVT4uPWFALUuW1kPISymcERQOwUR1n5WDGAG4g4xH
-        J+oU0VgUrsZ6nVmyqKSSU6/FRy/uTLHfZoQy/Xs=
-X-Google-Smtp-Source: ABdhPJxy2ZUaE3jKuxMdHwPTygdRtYs5VUR/hF+JBH/n7tsdurRqjjrqMjRdNeaD2Y6s4TVmSih1gf2kzIRgo8jrXaw=
-X-Received: by 2002:aa7:da93:0:b0:416:4aca:bef7 with SMTP id
- q19-20020aa7da93000000b004164acabef7mr5481099eds.296.1646679916550; Mon, 07
- Mar 2022 11:05:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wFEWa/6PSx4goDhoAD+s+E7K76HqDwXbpSO9oJJ8Gys=;
+        b=SrIasMGDlOa7rWf0CESvkhxyYi2qvIHlWqTgEBWRRAE5mROTE3YQnWhQbBJ1G9uD1n
+         o7pLllNidjdKw+XaaeJ6zLe3o+8Mh4CH/MLTpKROccG/UZ4XPMvNfhuhHbbb6G6dhcY6
+         JM7UjX9t/B2pSNBBsJwoAHUHuwphmm7/ZYny69QeRBSd53WpUFWVwyPGh+PRWrwxOexU
+         MCY5UIUEcCx+rJKORjBY78RiYeU20QtZNIyTJ6jARw9DyIbggUGpQCC5BZwDGJTtteR6
+         Tfn+vegTpuF3eSxifIUhEpePCPUrnS8ikQSoQzWEAKYUm8Yo7uR/McJi/u9HsYExIdkq
+         RCJw==
+X-Gm-Message-State: AOAM530WSlWCPonSv0YbbCveBzyb108mh7kIEJdwbtozMK5iORlsgZ/2
+        XvSOlGLkglO7+bbg1+zsQiGYugITz7Eek7a8rpJykAQDvbBiu3e6JsdyTyVaf6fCW3S9poQYJIX
+        ENom+pICEXIZm3WwwAXAnx+wU
+X-Received: by 2002:a4a:b186:0:b0:320:6fed:ff00 with SMTP id c6-20020a4ab186000000b003206fedff00mr5367547ooo.37.1646679916766;
+        Mon, 07 Mar 2022 11:05:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyCZC9SZR/CfAe0ChYOs3ipoBLwx7pGJ4MxpIqADLw3KrjmiUbv10w8kPX5WmDjXpA1nz8uDQ==
+X-Received: by 2002:a4a:b186:0:b0:320:6fed:ff00 with SMTP id c6-20020a4ab186000000b003206fedff00mr5367525ooo.37.1646679916525;
+        Mon, 07 Mar 2022 11:05:16 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id 68-20020a9d0a4a000000b005ad3287033csm6707612otg.44.2022.03.07.11.05.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 11:05:16 -0800 (PST)
+Date:   Mon, 7 Mar 2022 12:05:13 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org,
+        cohuck@redhat.com, mgurtovoy@nvidia.com, yishaih@nvidia.com,
+        linuxarm@huawei.com, liulongfang@huawei.com,
+        prime.zeng@hisilicon.com, jonathan.cameron@huawei.com,
+        wangzhou1@hisilicon.com
+Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Message-ID: <20220307120513.74743f17.alex.williamson@redhat.com>
+In-Reply-To: <20220304205720.GE219866@nvidia.com>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+        <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
+        <20220304205720.GE219866@nvidia.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
- <20220131151346.45792-6-andriy.shevchenko@linux.intel.com> <20220307192138.10f5fc32@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220307192138.10f5fc32@md1za8fc.ad001.siemens.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 7 Mar 2022 21:03:58 +0200
-Message-ID: <CAHp75Vf71FB_=i2FSoGmPbWikHLq2YLCh_J=oQz7u50hyALm0g@mail.gmail.com>
-Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI system
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 8:21 PM Henning Schild
-<henning.schild@siemens.com> wrote:
+On Fri, 4 Mar 2022 16:57:20 -0400
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Please, do not top-post.
+> On Thu, Mar 03, 2022 at 11:01:30PM +0000, Shameer Kolothum wrote:
+> > From: Longfang Liu <liulongfang@huawei.com>
+> >=20
+> > VMs assigned with HiSilicon ACC VF devices can now perform live migrati=
+on
+> > if the VF devices are bind to the hisi_acc_vfio_pci driver.
+> >=20
+> > Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+> > Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> > ---
+> >  drivers/vfio/pci/hisilicon/Kconfig            |    7 +
+> >  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 1078 ++++++++++++++++-
+> >  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  114 ++
+> >  3 files changed, 1181 insertions(+), 18 deletions(-)
+> >  create mode 100644 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
+> >=20
+> > diff --git a/drivers/vfio/pci/hisilicon/Kconfig b/drivers/vfio/pci/hisi=
+licon/Kconfig
+> > index dc723bad05c2..2a68d39f339f 100644
+> > --- a/drivers/vfio/pci/hisilicon/Kconfig
+> > +++ b/drivers/vfio/pci/hisilicon/Kconfig
+> > @@ -3,6 +3,13 @@ config HISI_ACC_VFIO_PCI
+> >  	tristate "VFIO PCI support for HiSilicon ACC devices"
+> >  	depends on ARM64 || (COMPILE_TEST && 64BIT)
+> >  	depends on VFIO_PCI_CORE
+> > +	depends on PCI && PCI_MSI =20
+>=20
+> PCI is already in the depends from the 2nd line in
+> drivers/vfio/pci/Kconfig, but it is harmless
+>=20
+> > +	depends on UACCE || UACCE=3Dn
+> > +	depends on ACPI =20
+>=20
+> Scratching my head a bit on why we have these
 
-> Can this patch not be proposed separately? Maybe i am wrong but it
-> seems unrelated to the p2sb story.
+Same curiosity from me, each of the CRYPTO_DEV_HISI_* options selected
+also depend on these so they seem redundant.
 
-The entire story happens to begin from this very change. The author
-(you may see that's not me) proposed the change a long time ago and
-AFAIU this is the requirement to have it upstreamed.
+I think we still require acks from Bjorn and Zaibo for select patches
+in this series.
 
-> The whole p2sb base and size discovery is easy and switching the
-> simatic drivers is also. It is an interface change, where the old open
-> coding remains working.
->
-> But having to switch to GPIO in the same series is kind of weird. That
-> is a functional change which even might deserve its own cover letter. I
-> bet there are tons of out-of-tree modules which will stop working on
-> apl after that gets merged.
+=46rom me, I would request a MAINTAINERS entry similar to the one the
+mlx5 folks added for their driver.  This should be in patch 4/9 where
+the driver is originally added.  Thanks,
 
-Upstream rarely, if at all, cares about 3rd party modules. From the
-upstream point of view the thing (whatever the 3rd party module
-supports) wasn't working ("no driver" in upstream) and won't work
-(still "no driver" in upstream) after the change, so there may not be
-any regression.
+Alex
 
-> I still did not understand why apl is special and other boards do not
-> get their pinctrl brought up without ACPI/p2sb-visible.
-
-The platform is being heavily used by one of our departments in such
-configuration with firmwares that may not be fully compatible with
-UEFI.They want to support that along with the case when BIOS has no
-GPIO device being provided.
-
-> I have patches floating around, but still would be happy if we could do
-> one thing at a time.
-
-Either way any new changes must use a pin control driver and the
-previous work was accepted only on this basis.
-
-> Or maybe it is strongly coupled and I do not understand why.
-
-That's the initial requirement by our peer departament.
-
--- 
-With Best Regards,
-Andy Shevchenko

@@ -2,138 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676184CEEE4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 01:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FA34CEEF3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 01:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbiCGAOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 19:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S234452AbiCGA2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 19:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbiCGAOm (ORCPT
+        with ESMTP id S231548AbiCGA2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 19:14:42 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826504B87F;
-        Sun,  6 Mar 2022 16:13:48 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBf7r630bz4xsk;
-        Mon,  7 Mar 2022 11:13:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646612026;
-        bh=OfUQf/emLmUE3ac6PJaQkNyOVOPCgK/lCEyh/+gJ6tA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NR1yJ4g+bwE30i2MCd/3NvchRgxp89qmYuujjfqYkx6ZDmaNniBvCRc3ersqQApDV
-         Y/XfoZsivQCT4CTU0gfZQwt8dI8j/G5jMweDA+tLFgyIYkPGC4GemaOKqP9/J0UNQt
-         L/OB1hkpPantcJpRHbZ/Muqvsrb4vaEL47Q1M9lFA7LWYxicQToZ81WL3/oeAv26sO
-         xwQOSEauCeIh4dNUBaH0SlHsDkp+FZ6tsd5H3U6Jrffz4ZpIQHne7uYSFR0Dya81QU
-         XGf3XPT5ixMYK5NdV3krL4eXiN/y+unX3OsNWJa8cxg3mBDQSOev2mNU5XcMQXVQRa
-         d2gtO5RatWr8g==
-Date:   Mon, 7 Mar 2022 11:13:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Noralf =?UTF-8?B?VHLDuG5uZXM=?= <noralf@tronnes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220307111342.105ce204@canb.auug.org.au>
+        Sun, 6 Mar 2022 19:28:48 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7116A1CB31;
+        Sun,  6 Mar 2022 16:27:54 -0800 (PST)
+Received: from [192.168.43.69] (unknown [182.2.38.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id ACDC47E6B0;
+        Mon,  7 Mar 2022 00:27:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1646612873;
+        bh=6EwZV+kp79HnWRono9OuMB+/b/YqdJWhwy0MRnJZHtY=;
+        h=Date:From:To:Cc:References:Subject:In-Reply-To:From;
+        b=OTuJ6ILo75TBX/uZWnLWFfWoG8Cigsi04UWES0JH2WMsuoWeC548ndDlhZjMiyhhu
+         W6x5ojLiZ/CVxJEi+MEtziuaxgysHmiuI8yL13nOL2HFg5bPTzsBWf6Zr5mIN2Ourq
+         qqZ2FZ58goycAu63b6QJxFuhmoZ2BCg3RW6Nhd2uOWytgIZ3iOY7DmEVmTESIopmaj
+         /yO70vGKO/NmYR4YBmDcveIhNUvDUfvEmXxT+lvuA/fNQnkh1fkOdKUjoYvjgbGux9
+         /QJvwFp1+VZaCjvKU9qmf6KOFTf+KdBJGWRgvIaEOcApwFQvNJhSAwnlUeyeYq9+rp
+         i9cr+nVpPOzyA==
+Message-ID: <b18bac61-a27f-8de5-8aa5-10bda9309ac5@gnuweeb.org>
+Date:   Mon, 7 Mar 2022 07:27:44 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/C4CihK6q6=.LhC.PZI7Q3UD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
+        x86@kernel.org, stable@vger.kernel.org,
+        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
+        Jiri Hladky <hladky.jiri@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+References: <20220301094608.118879-1-ammarfaizi2@gnuweeb.org>
+ <20220301094608.118879-3-ammarfaizi2@gnuweeb.org>
+ <Yh+oyD/5M3TW5ZMM@yaz-ubuntu>
+ <4371a592-6686-c535-4daf-993dedb43cd4@gnuweeb.org>
+ <109a10da-d1d1-c47a-2f04-31796457f6ff@gnuweeb.org>
+ <20220303015826.4176416-1-alviro.iskandar@gnuweeb.org>
+ <49313736-61f8-d001-0fe4-b6166c859585@gnuweeb.org>
+ <9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org>
+Subject: Re: [PATCH v4 2/2] x86/mce/amd: Fix memory leak when
+ `threshold_create_bank()` fails
+In-Reply-To: <9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/C4CihK6q6=.LhC.PZI7Q3UD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 3/3/22 9:32 AM, Ammar Faizi wrote:
+> It looks like this now. Yazen, Alviro, please review the
+> following patch. If you think it looks good, I will submit
+> it for the v5.
+> 
+>  From 91a447f837d502b7a040cd68f333fb98f4b941d9 Mon Sep 17 00:00:00 2001
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> Date: Thu, 3 Mar 2022 09:22:17 +0700
+> Subject: [PATCH v5 2/2] x86/MCE/AMD: Fix memory leak when `threshold_create_bank()` fails
+> 
+> In mce_threshold_create_device(), if threshold_create_bank() fails, the
+> @bp will be leaked, because mce_threshold_remove_device() will not free
+> the @bp. It only frees the @bp when we've already written the @bp to
+> the @threshold_banks per-CPU variable, but at the point, we haven't.
+> 
+> Fix this by extracting the cleanup part into a new static function
+> _mce_threshold_remove_device(), then use it from create/remove device
+> function. Also, eliminate the "goto out_err". Just early return inside
+> the loop if we fail.
+> 
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: stable@vger.kernel.org # v5.8+
+> Fixes: 6458de97fc15 ("x86/mce/amd: Straighten CPU hotplug path")
+> Co-authored-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+> Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+> Co-authored-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Hi all,
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Hi,
 
-drivers/gpu/drm/tiny/panel-mipi-dbi.c:391:19: error: initialization of 'voi=
-d (*)(struct spi_device *)' from incompatible pointer type 'int (*)(struct =
-spi_device *)' [-Werror=3Dincompatible-pointer-types]
-  391 |         .remove =3D panel_mipi_dbi_spi_remove,
-      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+It's Monday morning...
 
-Caused by commit
+Friendly ping for Yazen from AMD. What do you think of this patch? If
+it looks good, I will submit it for the v5 revision. See the ref below
+if you lost track of the full message.
 
-  0e65e2e6abb0 ("drm/tiny: Add MIPI DBI compatible SPI driver")
+Ref: https://lore.kernel.org/lkml/9dfe087a-f941-1bc4-657d-7e7c198888ff@gnuweeb.org/
 
-interacting with commit
+Thanks!
 
-  a0386bba7093 ("spi: make remove callback a void function")
+-- 
+Ammar Faizi
 
-from the spi trees.
-
-I have applied the following merge fix.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 7 Mar 2022 11:01:01 +1100
-Subject: [PATCH] fix up for "spi: make remove callback a void function"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/tiny/panel-mipi-dbi.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/tiny/panel-mipi-dbi.c b/drivers/gpu/drm/tiny/p=
-anel-mipi-dbi.c
-index 7f8c6c51387f..c759ff9c2c87 100644
---- a/drivers/gpu/drm/tiny/panel-mipi-dbi.c
-+++ b/drivers/gpu/drm/tiny/panel-mipi-dbi.c
-@@ -336,14 +336,12 @@ static int panel_mipi_dbi_spi_probe(struct spi_device=
- *spi)
- 	return 0;
- }
-=20
--static int panel_mipi_dbi_spi_remove(struct spi_device *spi)
-+static void panel_mipi_dbi_spi_remove(struct spi_device *spi)
- {
- 	struct drm_device *drm =3D spi_get_drvdata(spi);
-=20
- 	drm_dev_unplug(drm);
- 	drm_atomic_helper_shutdown(drm);
--
--	return 0;
- }
-=20
- static void panel_mipi_dbi_spi_shutdown(struct spi_device *spi)
---=20
-2.34.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/C4CihK6q6=.LhC.PZI7Q3UD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlTjYACgkQAVBC80lX
-0Gya9AgAnf8khqgClzhiCdnkQ72wArvffQGdP9ZzlX50GJ0Dz0fz0dkNytNbA0Jr
-26FAhcX56OTtcWtmWguHcLLMowmzA350EBop3eQM9+wpj382CdMepoOJIfLn0/Ik
-tHv+IjrkHKR+Gzlhhi563J/mx2+lXSapG69FANtK6p5CO1IxCIRx9FT5MbnDa71Z
-mT4pkBkEOGZnaRmmnnKBsrtdTOucAfDRrhtDjj84gHfH8j2G9ggkkPJHv/LhOxz+
-OQItxBl2kkRcpFxp0rhgy9XMrIwtdk5+Nu9jw0a1oKDs59xb7Dp3Drwziq7SikDf
-igJO88twe7Hm3gZwF59s79hPpEI8Og==
-=wta6
------END PGP SIGNATURE-----
-
---Sig_/C4CihK6q6=.LhC.PZI7Q3UD--

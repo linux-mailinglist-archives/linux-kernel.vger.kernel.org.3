@@ -2,164 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D61E4CFCD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4D54CFCE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241912AbiCGL3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
+        id S242076AbiCGLac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242973AbiCGL3O (ORCPT
+        with ESMTP id S241878AbiCGLaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 06:29:14 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DEA57146;
-        Mon,  7 Mar 2022 03:10:45 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E1EA1FF80E;
-        Mon,  7 Mar 2022 11:10:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646651440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=va6hgBVRbtr10BKiH5oDCOu0VwLfnjed/wWRNnb7DUY=;
-        b=gC3ndSWkdul0/O5Y4jHV6jR7MkWuyj436eSHmu6S2Z9kuJJDSUV/+c8Xr4gqjTTzXxPi+e
-        yn8Lz317xPszLkKWTUlDMBkooNHSefTzJUtscXF5RjZ4EQIcZHO31ulyM+57oIEl/H6Mqu
-        iY3E52NJNZNdzNUFaXXfRfr0nTlvpgUqBqlckY7VlUqJ+Lvem3NbcSekMU1w4LIhNRBzkE
-        /jRyqod+8XYQiPJml0/297HhrIfs4htUqbz8dfBWo0IkqRf7CsYNFbOI5wPGWxeF3wa+0e
-        i/yxXJGB8jMuo5CbkqTpqa/UBaJxO4JnO9AnsMj4QhLR6S9cDwXfWzfy1dPIFQ==
-Date:   Mon, 7 Mar 2022 12:10:33 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-iio@vger.kernel.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Ryan Barnett <ryan.barnett@collins.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Subject: Re: [PATCH v6 14/48] mfd: ti_am335x_tscadc: Don't search the tree
- for our clock
-Message-ID: <20220307121033.5630fee7@xps13>
-In-Reply-To: <7336E356-57E3-4BC5-B098-0A791C2CB360@goldelico.com>
-References: <20211015081506.933180-1-miquel.raynal@bootlin.com>
-        <20211015081506.933180-15-miquel.raynal@bootlin.com>
-        <7336E356-57E3-4BC5-B098-0A791C2CB360@goldelico.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 7 Mar 2022 06:30:19 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63A7860A95;
+        Mon,  7 Mar 2022 03:14:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45534ED1;
+        Mon,  7 Mar 2022 03:14:23 -0800 (PST)
+Received: from [10.57.39.47] (unknown [10.57.39.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECF693F73D;
+        Mon,  7 Mar 2022 03:14:21 -0800 (PST)
+Message-ID: <aca4117c-b7a5-f7eb-eb03-4e1f1a93a730@arm.com>
+Date:   Mon, 7 Mar 2022 11:14:16 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [BUG] crypto: ccree: driver does not handle case where cryptlen =
+ authsize =0
+Content-Language: en-GB
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Gilad Ben-Yossef <gilad@benyossef.com>, hch@lst.de,
+        m.szyprowski@samsung.com
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux-foundation.org
+References: <CAOtvUMeoYcVm7OQdqXd1V5iPSXW_BkVxx6TA6nF7zTLVeHe0Ww@mail.gmail.com>
+ <CAOtvUMfy1fF35B2sfbOMui8n9Q4iCke9rgn5TiYMUMjd8gqHsA@mail.gmail.com>
+ <YhKV55t90HWm6bhv@Red>
+ <CAOtvUMdRU4wnRCXsC+U5XBDp+b+u8w7W7JCUKW2+ohuJz3PVhQ@mail.gmail.com>
+ <YhOcEQEjIKBrbMIZ@Red>
+ <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
+ <CAOtvUMeRb=j=NDrc88x8aB-3=D1mxZ_-aA1d4FfvJmj7Jrbi4w@mail.gmail.com>
+ <YiIUXtxd44ut5uzV@Red> <YiUsWosH+MKMF7DQ@gondor.apana.org.au>
+ <CAOtvUMcudG3ySU+VeE7hfneDVWGLKFTnws-xjhq4hgFYSj0qOg@mail.gmail.com>
+ <YiXjCcXXk0f18FDL@Red>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YiXjCcXXk0f18FDL@Red>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikolaus,
+On 2022-03-07 10:48, Corentin Labbe wrote:
+> Le Mon, Mar 07, 2022 at 09:59:29AM +0200, Gilad Ben-Yossef a ï¿½crit :
+>> On Sun, Mar 6, 2022 at 11:49 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>>>
+>>> On Fri, Mar 04, 2022 at 02:30:06PM +0100, Corentin Labbe wrote:
+>>>>
+>>>> Hello
+>>>>
+>>>> I got:
+>>>> [   17.563793] ------------[ cut here ]------------
+>>>> [   17.568492] DMA-API: ccree e6601000.crypto: device driver frees DMA memory with different direction [device address=0x0000000078fe5800] [size=8 bytes] [mapped with DMA_TO_DEVICE] [unmapped with DMA_BIDIRECTIONAL]
+>>>
+>>> The direction argument during unmap must match whatever direction
+>>> you used during the original map call.
+>>
+>>
+>> Yes, of course. I changed one but forgot the other.
+>>
+>> Corentin, could you be kind and check that this solves the original
+>> problem and does not produce new warnings?
+>>
+>> diff --git a/drivers/crypto/ccree/cc_buffer_mgr.c
+>> b/drivers/crypto/ccree/cc_buffer_mgr.c
+>> index 11e0278c8631..31cfe014922e 100644
+>> --- a/drivers/crypto/ccree/cc_buffer_mgr.c
+>> +++ b/drivers/crypto/ccree/cc_buffer_mgr.c
+>> @@ -356,12 +356,14 @@ void cc_unmap_cipher_request(struct device *dev,
+>> void *ctx,
+>>                                req_ctx->mlli_params.mlli_dma_addr);
+>>          }
+>>
+>> -       dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_BIDIRECTIONAL);
+>> -       dev_dbg(dev, "Unmapped req->src=%pK\n", sg_virt(src));
+>> -
+>>          if (src != dst) {
+>> -               dma_unmap_sg(dev, dst, req_ctx->out_nents, DMA_BIDIRECTIONAL);
+>> +               dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_TO_DEVICE);
+>> +               dma_unmap_sg(dev, dst, req_ctx->out_nents, DMA_FROM_DEVICE);
+>>                  dev_dbg(dev, "Unmapped req->dst=%pK\n", sg_virt(dst));
+>> +               dev_dbg(dev, "Unmapped req->src=%pK\n", sg_virt(src));
+>> +       } else {
+>> +               dma_unmap_sg(dev, src, req_ctx->in_nents, DMA_BIDIRECTIONAL);
+>> +               dev_dbg(dev, "Unmapped req->src=%pK\n", sg_virt(src));
+>>          }
+>>   }
+>>
+>> @@ -377,6 +379,7 @@ int cc_map_cipher_request(struct cc_drvdata
+>> *drvdata, void *ctx,
+>>          u32 dummy = 0;
+>>          int rc = 0;
+>>          u32 mapped_nents = 0;
+>> +       int src_direction = (src != dst ? DMA_TO_DEVICE : DMA_BIDIRECTIONAL);
+>>
+>>          req_ctx->dma_buf_type = CC_DMA_BUF_DLLI;
+>>          mlli_params->curr_pool = NULL;
+>> @@ -399,7 +402,7 @@ int cc_map_cipher_request(struct cc_drvdata
+>> *drvdata, void *ctx,
+>>          }
+>>
+>>          /* Map the src SGL */
+>> -       rc = cc_map_sg(dev, src, nbytes, DMA_BIDIRECTIONAL, &req_ctx->in_nents,
+>> +       rc = cc_map_sg(dev, src, nbytes, src_direction, &req_ctx->in_nents,
+>>                         LLI_MAX_NUM_OF_DATA_ENTRIES, &dummy, &mapped_nents);
+>>          if (rc)
+>>                  goto cipher_exit;
+>> @@ -416,7 +419,7 @@ int cc_map_cipher_request(struct cc_drvdata
+>> *drvdata, void *ctx,
+>>                  }
+>>          } else {
+>>                  /* Map the dst sg */
+>> -               rc = cc_map_sg(dev, dst, nbytes, DMA_BIDIRECTIONAL,
+>> +               rc = cc_map_sg(dev, dst, nbytes, DMA_FROM_DEVICE,
+>>                                 &req_ctx->out_nents, LLI_MAX_NUM_OF_DATA_ENTRIES,
+>>                                 &dummy, &mapped_nents);
+>>                  if (rc)
+>>
+>>
+> 
+> Hello
+> 
+> I still get the warning:
+> [  433.406230] ------------[ cut here ]------------
+> [  433.406326] DMA-API: ccree e6601000.crypto: cacheline tracking EEXIST, overlapping mappings aren't supported
+> [  433.406386] WARNING: CPU: 7 PID: 31074 at /home/clabbe/linux-next/kernel/dma/debug.c:571 add_dma_entry+0x1d0/0x288
+> [  433.406434] Modules linked in:
+> [  433.406458] CPU: 7 PID: 31074 Comm: kcapi Not tainted 5.17.0-rc6-next-20220303-00130-g30042e47ee47-dirty #54
+> [  433.406473] Hardware name: Renesas Salvator-X board based on r8a77950 (DT)
+> [  433.406484] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [  433.406498] pc : add_dma_entry+0x1d0/0x288
+> [  433.406510] lr : add_dma_entry+0x1d0/0x288
+> [  433.406522] sp : ffff800015da3690
+> [  433.406531] x29: ffff800015da3690 x28: 0000000000000000 x27: 0000000000000000
+> [  433.406562] x26: 0000000000000000 x25: ffff80000b4c7bc0 x24: ffff80000b4c7000
+> [  433.406593] x23: 0000000000000000 x22: 00000000ffffffef x21: ffff80000a9b6000
+> [  433.406623] x20: ffff0004c0af5c00 x19: ffff80000b420000 x18: ffffffffffffffff
+> [  433.406653] x17: 6c7265766f202c54 x16: 534958454520676e x15: 000000000000022e
+> [  433.406683] x14: ffff800015da3380 x13: 00000000ffffffea x12: ffff80000b4be010
+> [  433.406713] x11: 0000000000000001 x10: 0000000000000001 x9 : ffff80000b4a6028
+> [  433.406743] x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : ffff80000b4a5fd0
+> [  433.406773] x5 : ffff0006ff795c48 x4 : 0000000000000000 x3 : 0000000000000027
+> [  433.406802] x2 : 0000000000000023 x1 : 8ca4e4fbf4b87900 x0 : 0000000000000000
+> [  433.406833] Call trace:
+> [  433.406841]  add_dma_entry+0x1d0/0x288
+> [  433.406854]  debug_dma_map_sg+0x150/0x398
+> [  433.406869]  __dma_map_sg_attrs+0x9c/0x108
+> [  433.406889]  dma_map_sg_attrs+0x10/0x28
+> [  433.406904]  cc_map_sg+0x80/0x100
+> [  433.406924]  cc_map_cipher_request+0x178/0x3c8
+> [  433.406939]  cc_cipher_process+0x210/0xb58
+> [  433.406953]  cc_cipher_encrypt+0x2c/0x38
+> [  433.406967]  crypto_skcipher_encrypt+0x44/0x78
+> [  433.406986]  skcipher_recvmsg+0x36c/0x420
+> [  433.407003]  ____sys_recvmsg+0x90/0x280
+> [  433.407024]  ___sys_recvmsg+0x88/0xd0
+> [  433.407038]  __sys_recvmsg+0x6c/0xd0
+> [  433.407049]  __arm64_sys_recvmsg+0x24/0x30
+> [  433.407061]  invoke_syscall+0x44/0x100
+> [  433.407082]  el0_svc_common.constprop.3+0x90/0x120
+> [  433.407096]  do_el0_svc+0x24/0x88
+> [  433.407110]  el0_svc+0x4c/0x100
+> [  433.407131]  el0t_64_sync_handler+0x90/0xb8
+> [  433.407145]  el0t_64_sync+0x170/0x174
+> [  433.407160] irq event stamp: 5624
+> [  433.407168] hardirqs last  enabled at (5623): [<ffff80000812f6a8>] __up_console_sem+0x60/0x98
+> [  433.407191] hardirqs last disabled at (5624): [<ffff800009c9a060>] el1_dbg+0x28/0x90
+> [  433.407208] softirqs last  enabled at (5570): [<ffff8000097e62f8>] lock_sock_nested+0x80/0xa0
+> [  433.407226] softirqs last disabled at (5568): [<ffff8000097e62d8>] lock_sock_nested+0x60/0xa0
+> [  433.407241] ---[ end trace 0000000000000000 ]---
+> [  433.407381] DMA-API: Mapped at:
+> [  433.407396]  debug_dma_map_sg+0x16c/0x398
+> [  433.407416]  __dma_map_sg_attrs+0x9c/0x108
+> [  433.407436]  dma_map_sg_attrs+0x10/0x28
+> [  433.407455]  cc_map_sg+0x80/0x100
+> [  433.407475]  cc_map_cipher_request+0x178/0x3c8
+> 
+> 
+> BUT I start to thing this is a bug in DMA-API debug.
+> 
+> 
+> My sun8i-ss driver hit the same warning:
+> [  142.458351] WARNING: CPU: 1 PID: 90 at kernel/dma/debug.c:597 add_dma_entry+0x2ec/0x4cc
+> [  142.458429] DMA-API: sun8i-ss 1c15000.crypto: cacheline tracking EEXIST, overlapping mappings aren't supported
+> [  142.458455] Modules linked in: ccm algif_aead xts cmac
+> [  142.458563] CPU: 1 PID: 90 Comm: 1c15000.crypto- Not tainted 5.17.0-rc6-next-20220307-00132-g39dad568d20a-dirty #223
+> [  142.458581] Hardware name: Allwinner A83t board
+> [  142.458596]  unwind_backtrace from show_stack+0x10/0x14
+> [  142.458627]  show_stack from 0xf0abdd1c
+> [  142.458646] irq event stamp: 31747
+> [  142.458660] hardirqs last  enabled at (31753): [<c019316c>] __up_console_sem+0x50/0x60
+> [  142.458688] hardirqs last disabled at (31758): [<c0193158>] __up_console_sem+0x3c/0x60
+> [  142.458710] softirqs last  enabled at (31600): [<c06990c8>] sun8i_ss_handle_cipher_request+0x300/0x8b8
+> [  142.458738] softirqs last disabled at (31580): [<c06990c8>] sun8i_ss_handle_cipher_request+0x300/0x8b8
+> [  142.458758] ---[ end trace 0000000000000000 ]---
+> [  142.458771] DMA-API: Mapped at:
+> 
+> Yes the mapped at is empty just after.
+> 
+> And the sequence of DMA operations in my driver is simple, so I cannot see how any overlap could occur.
 
-hns@goldelico.com wrote on Fri, 4 Mar 2022 23:38:25 +0100:
+The "overlap" is in the sense of having more than one mapping within the 
+same cacheline:
 
-> Hi Miquel,
-> I recently found that our BeagleBoneBlack with external touch screen stop=
-ped
-> to find it.
->=20
-> A git bisect revealed this patch (merged into v5.16-rc1) as the first bad:
->=20
-> > Am 15.10.2021 um 10:14 schrieb Miquel Raynal <miquel.raynal@bootlin.com=
->:
-> >=20
-> > There is a single clock available in our node, which is named
-> > "fck". The clock handler then points to adc_tsc_fck but no need to point
-> > directly to it and do a full tree search.
-> >=20
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> > drivers/mfd/ti_am335x_tscadc.c | 2 +-
-> > 1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/mfd/ti_am335x_tscadc.c b/drivers/mfd/ti_am335x_tsc=
-adc.c
-> > index e2c4416f192d..8af44c08d925 100644
-> > --- a/drivers/mfd/ti_am335x_tscadc.c
-> > +++ b/drivers/mfd/ti_am335x_tscadc.c
-> > @@ -206,7 +206,7 @@ static	int ti_tscadc_probe(struct platform_device *=
-pdev)
-> > 	 * This frequency is valid since TSC_ADC_SS controller design
-> > 	 * assumes the OCP clock is at least 6x faster than the ADC clock.
-> > 	 */
-> > -	clk =3D devm_clk_get(&pdev->dev, "adc_tsc_fck");
-> > +	clk =3D devm_clk_get(&pdev->dev, NULL);
-> > 	if (IS_ERR(clk)) {
-> > 		dev_err(&pdev->dev, "failed to get TSC fck\n");
-> > 		err =3D PTR_ERR(clk);
-> > --=20
-> > 2.27.0
-> >  =20
->=20
-> While I understand the reasons for this change there seems to be something
-> missing now in the device tree because the clock isn't found any more.
->=20
-> After knowing about the problem I could also locate the log entry:
->=20
-> [    4.456680] ti_am3359-tscadc 44e0d000.tscadc: failed to get TSC fck
->=20
-> Reverting your patch makes it work again.
+[  142.458120] DMA-API: add_dma_entry start P=ba79f200 N=ba79f 
+D=ba79f200 L=10 DMA_FROM_DEVICE attrs=0
+[  142.458156] DMA-API: add_dma_entry start P=445dc010 N=445dc 
+D=445dc010 L=10 DMA_TO_DEVICE attrs=0
+[  142.458178] sun8i-ss 1c15000.crypto: SRC 0/1/1 445dc000 len=16 bi=0
+[  142.458215] sun8i-ss 1c15000.crypto: DST 0/1/1 ba79f200 len=16 bi=0
+[  142.458234] DMA-API: add_dma_entry start P=ba79f210 N=ba79f 
+D=ba79f210 L=10 DMA_FROM_DEVICE attrs=0
 
-Sorry for the wrong behavior on your side and thanks for the
-investigation.
+This actually illustrates exactly the reason why this is unsupportable. 
+ba79f200 is mapped for DMA_FROM_DEVICE, therefore subsequently mapping 
+ba79f210 for DMA_TO_DEVICE may cause the cacheline covering the range 
+ba79f200-ba79f23f to be written back over the top of data that the 
+device has already started to write to memory. Hello data corruption.
 
-> Is there missing a change in the am335x-boneblack or am335x DTS?
-
-I've looked at the code and indeed the am33xx-clock.dtsi file defines
-the touchscreen clock, but unfortunately the am33xx-l4.dtsi file which
-defines the touchscreen node does not reference the clock. The bindings
-clearly require the clocks to be referenced but I believe this was not
-noticed until now because the clock exist and clk_get() did a lookup
-across the tree.
-
-On my side I tested it with an am437x SoC which uses another base
-device tree, which properly references the touchscreen clock where it's
-needed.
-
-I will send a patch (untested), can you give it a try and report if it
-fixes your issue?
-
->=20
-> Our (private) DTS looks like this, i.e. we don't play with clocks inherit=
-ed
-> from mainline tree:
->=20
-> #include "am335x-boneblack.dts"
->=20
-> ...
->=20
-> &tscadc {
->         status =3D "okay";
->=20
->         tsc {
->                 ti,wires =3D <4>;
->                 ti,x-plate-resistance =3D <600>;
->                 ti,coordinate-readouts =3D <5>;
->                 ti,wire-config =3D <0x00 0x11 0x22 0x33>;
->         };
->=20
->         adc {
->                 ti,adc-channels =3D <4 5 6 7>;
->         };
-> };
->=20
-> BR and thanks,
-> Nikolaus
+Separate DMA mappings should be from separate memory allocations, 
+respecting ARCH_DMA_MINALIGN.
 
 Thanks,
-Miqu=C3=A8l
+Robin.

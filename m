@@ -2,184 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76254D04FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831054D0501
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244372AbiCGRLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        id S244397AbiCGRLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbiCGRLe (ORCPT
+        with ESMTP id S243195AbiCGRLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:11:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2C48301E;
-        Mon,  7 Mar 2022 09:10:39 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 227FIcK1006300;
-        Mon, 7 Mar 2022 17:10:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=nPp+FBrbOyhOFp4k8E3F3lZ4Ca6JUG3oR4oBk3awDZw=;
- b=EGoWmJK5IFUI05HF97e/PHdWkRw9oPCfRNVC0DiF83UHObYk/hmWr4csMz4albrY9U++
- gdEDYgEq94s0ZQ6h64IaC9z3b2OMd97Lji4hP8mD+2IJ8qausl5t8A3SAFyarNkyB/7u
- zQS+PYqVAFpUIoOJdxQrxn19wlWTz6OhFNILPI59FUWRdZLs7Bz7W1xDLCjrCm461RuX
- /Ugw8dXC+Q1B5hj8rZ5lUyKzHSkceFBMT7rgnTmURn2gLOFsdOkU+Guyul7BGoI6WIxx
- gRgAT21cRoSVMm6TWoy4D6NC5Cr9RWPI+cHd5QB3mxdzfXaC6wjXI+ovXoeKp5MEcp/d oA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3end6g43rd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Mar 2022 17:10:37 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 227GVUGU001674;
-        Mon, 7 Mar 2022 17:10:37 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3end6g43qq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Mar 2022 17:10:36 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 227H35JE017003;
-        Mon, 7 Mar 2022 17:10:34 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 3ekyg94gt0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Mar 2022 17:10:34 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 227HAVrV43647318
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Mar 2022 17:10:31 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 062564C040;
-        Mon,  7 Mar 2022 17:10:31 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5E58F4C044;
-        Mon,  7 Mar 2022 17:10:30 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.73.209])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Mon,  7 Mar 2022 17:10:30 +0000 (GMT)
-Date:   Mon, 7 Mar 2022 18:10:27 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
-        kwankhede@nvidia.com, fiuczy@linux.ibm.com,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH v18 08/18] s390/vfio-ap: allow assignment of unavailable
- AP queues to mdev device
-Message-ID: <20220307181027.29c821b6.pasic@linux.ibm.com>
-In-Reply-To: <151241e6-3099-4be2-da54-1f0e5cb3a705@linux.ibm.com>
-References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
-        <20220215005040.52697-9-akrowiak@linux.ibm.com>
-        <97681738-50a1-976d-9f0f-be326eab7202@linux.ibm.com>
-        <9ac3908e-06da-6276-d1df-94898918fc5b@linux.ibm.com>
-        <20220307142711.5af33ece.pasic@linux.ibm.com>
-        <151241e6-3099-4be2-da54-1f0e5cb3a705@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Mon, 7 Mar 2022 12:11:53 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4ED883039;
+        Mon,  7 Mar 2022 09:10:58 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 65AC951C;
+        Mon,  7 Mar 2022 18:10:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1646673056;
+        bh=hPqdb7olEWnqiNRqjAujSZ3gHfvXUdS7jjQtpXwqhxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E+M5NqeW5SnGfeR2GkHOwFbrK8C1VrUVBjiYg5RH2kljzGFf5zIUGesuVPjiLumi/
+         sGJ5NyJqqA2kxXYIG44zO2M5doFnYrr8wvYEughyBVEuxLOJ6yRSq1bRmXIaSUqNRb
+         W3Mg7BiY3QMhJK+pBQ7bl7XbkV8AaRe6zgS10+18=
+Date:   Mon, 7 Mar 2022 19:10:42 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>, airlied@linux.ie, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, xji@analogixsemi.com, hsinyi@chromium.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v1 1/2] Revert "dt-bindings:drm/bridge:anx7625:add vendor
+ define"
+Message-ID: <YiY8ko5WX3mQfDLY@pendragon.ideasonboard.com>
+References: <20220307154558.2505734-1-robert.foss@linaro.org>
+ <20220307154558.2505734-2-robert.foss@linaro.org>
+ <YiY1CP6DkfgU4re/@robh.at.kernel.org>
+ <CAG3jFyssPxuRXzZsZkVHWrSS8b6pRHRRmpZCTvLmDV-t2CDA1g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 8ESeYzpXOab-qYbc1klVDE9pxrJgcCK7
-X-Proofpoint-GUID: q3QEZXEdGxdwolAbq1CXYupZ3dbEbiBr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-07_08,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
- spamscore=0 suspectscore=0 clxscore=1015 malwarescore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203070093
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAG3jFyssPxuRXzZsZkVHWrSS8b6pRHRRmpZCTvLmDV-t2CDA1g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 09:10:29 -0500
-Tony Krowiak <akrowiak@linux.ibm.com> wrote:
-
-> On 3/7/22 08:27, Halil Pasic wrote:
-> > On Mon, 7 Mar 2022 07:31:21 -0500
-> > Tony Krowiak <akrowiak@linux.ibm.com> wrote:
-> >  
-> >> On 3/3/22 10:39, Jason J. Herne wrote:  
-> >>> On 2/14/22 19:50, Tony Krowiak wrote:  
-> >>>>    /**
-> >>>> - * vfio_ap_mdev_verify_no_sharing - verifies that the AP matrix is
-> >>>> not configured
-> >>>> + * vfio_ap_mdev_verify_no_sharing - verify APQNs are not shared by
-> >>>> matrix mdevs
-> >>>>     *
-> >>>> - * @matrix_mdev: the mediated matrix device
-> >>>> + * @mdev_apm: mask indicating the APIDs of the APQNs to be verified
-> >>>> + * @mdev_aqm: mask indicating the APQIs of the APQNs to be verified
-> >>>>     *
-> >>>> - * Verifies that the APQNs derived from the cross product of the AP
-> >>>> adapter IDs
-> >>>> - * and AP queue indexes comprising the AP matrix are not configured
-> >>>> for another
-> >>>> + * Verifies that each APQN derived from the Cartesian product of a
-> >>>> bitmap of
-> >>>> + * AP adapter IDs and AP queue indexes is not configured for any matrix
-> >>>>     * mediated device. AP queue sharing is not allowed.
-> >>>>     *
-> >>>> - * Return: 0 if the APQNs are not shared; otherwise returns
-> >>>> -EADDRINUSE.
-> >>>> + * Return: 0 if the APQNs are not shared; otherwise return -EADDRINUSE.
-> >>>>     */
-> >>>> -static int vfio_ap_mdev_verify_no_sharing(struct ap_matrix_mdev
-> >>>> *matrix_mdev)
-> >>>> +static int vfio_ap_mdev_verify_no_sharing(unsigned long *mdev_apm,
-> >>>> +                      unsigned long *mdev_aqm)
-> >>>>    {
-> >>>> -    struct ap_matrix_mdev *lstdev;
-> >>>> +    struct ap_matrix_mdev *matrix_mdev;
-> >>>>        DECLARE_BITMAP(apm, AP_DEVICES);
-> >>>>        DECLARE_BITMAP(aqm, AP_DOMAINS);
-> >>>>    -    list_for_each_entry(lstdev, &matrix_dev->mdev_list, node) {
-> >>>> -        if (matrix_mdev == lstdev)
-> >>>> +    list_for_each_entry(matrix_mdev, &matrix_dev->mdev_list, node) {
-> >>>> +        /*
-> >>>> +         * If the input apm and aqm belong to the matrix_mdev's matrix,  
-> > How about:
+On Mon, Mar 07, 2022 at 05:57:47PM +0100, Robert Foss wrote:
+> On Mon, 7 Mar 2022 at 17:38, Rob Herring <robh@kernel.org> wrote:
 > >
-> > s/belong to the matrix_mdev's matrix/are fields of the matrix_mdev
-> > object/  
+> > On Mon, Mar 07, 2022 at 04:45:57PM +0100, Robert Foss wrote:
+> > > This reverts commit a43661e7e819b100e1f833a35018560a1d9abb39.
+> >
+> > S-o-b and reason for the revert?
+> >
+> > > ---
+> > >  .../display/bridge/analogix,anx7625.yaml      | 65 +------------------
+> > >  1 file changed, 2 insertions(+), 63 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > > index 1d3e88daca041..ab48ab2f4240d 100644
+> > > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > > @@ -43,70 +43,14 @@ properties:
+> > >    vdd33-supply:
+> > >      description: Regulator that provides the supply 3.3V power.
+> > >
+> > > -  analogix,lane0-swing:
+> > > -    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > > -    minItems: 1
+> > > -    maxItems: 20
+> > > -    description:
+> > > -      an array of swing register setting for DP tx lane0 PHY.
+> > > -      Registers 0~9 are Swing0_Pre0, Swing1_Pre0, Swing2_Pre0,
+> > > -      Swing3_Pre0, Swing0_Pre1, Swing1_Pre1, Swing2_Pre1, Swing0_Pre2,
+> > > -      Swing1_Pre2, Swing0_Pre3, they are for [Boost control] and
+> > > -      [Swing control] setting.
+> > > -      Registers 0~9, bit 3:0 is [Boost control], these bits control
+> > > -      post cursor manual, increase the [Boost control] to increase
+> > > -      Pre-emphasis value.
+> > > -      Registers 0~9, bit 6:4 is [Swing control], these bits control
+> > > -      swing manual, increase [Swing control] setting to add Vp-p value
+> > > -      for each Swing, Pre.
+> > > -      Registers 10~19 are Swing0_Pre0, Swing1_Pre0, Swing2_Pre0,
+> > > -      Swing3_Pre0, Swing0_Pre1, Swing1_Pre1, Swing2_Pre1, Swing0_Pre2,
+> > > -      Swing1_Pre2, Swing0_Pre3, they are for [R select control] and
+> > > -      [R Termination control] setting.
+> > > -      Registers 10~19, bit 4:0 is [R select control], these bits are
+> > > -      compensation manual, increase it can enhance IO driven strength
+> > > -      and Vp-p.
+> > > -      Registers 10~19, bit 5:6 is [R termination control], these bits
+> > > -      adjust 50ohm impedance of DP tx termination. 00:55 ohm,
+> > > -      01:50 ohm(default), 10:45 ohm, 11:40 ohm.
+> > > -
+> > > -  analogix,lane1-swing:
+> > > -    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > > -    minItems: 1
+> > > -    maxItems: 20
+> > > -    description:
+> > > -      an array of swing register setting for DP tx lane1 PHY.
+> > > -      DP TX lane1 swing register setting same with lane0
+> > > -      swing, please refer lane0-swing property description.
+> >
+> > These apply to the DP side, so no need to revert this part.
 > 
-> This is the comment I wrote:
+> Ack.
 > 
->          /*
->           * Comparing an mdev's newly updated apm/aqm with itself would
->           * result in a false positive when verifying whether any APQNs
->           * are shared; so, if the input apm and aqm belong to the
->           * matrix_mdev's matrix, then move on to the next one.
->           */
+> >
+> > > -
+> > > -  analogix,audio-enable:
+> > > -    type: boolean
+> > > -    description: let the driver enable audio HDMI codec function or not.
+> > > -
+> >
+> > Not sure on this one...
 > 
-> However, I'd be happy to change it to whatever either of you want.
+> These additions are independent from my reading of this, would you
+> like a v2 with only the bus-type related changes reverted?
+> 
+> >
+> > >    ports:
+> > >      $ref: /schemas/graph.yaml#/properties/ports
+> > >
+> > >      properties:
+> > >        port@0:
+> > > -        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > -        unevaluatedProperties: false
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > >          description:
+> > > -          MIPI DSI/DPI input.
+> > > -
+> > > -        properties:
+> > > -          endpoint:
+> > > -            $ref: /schemas/media/video-interfaces.yaml#
+> > > -            type: object
+> > > -            additionalProperties: false
+> > > -
+> > > -            properties:
+> > > -              remote-endpoint: true
+> > > -
+> > > -              bus-type:
+> > > -                enum: [1, 5]
+> >
+> > I think the error here is really 1 should be 4 which corresponds to
+> > D-PHY which is used by both CSI and DSI. Otherwise, I don't really see
+> > the issue with bus-type being shared between CSI and DSI.
+> 
+> I think that would be a correct solution. And ignoring everything
+> else, the range of this property is something that should be fixed.
+> 
+> But that would mean that CPI (camera parallel interface) and DPI
+> (display parallel interface) would share the
+> V4L2_FWNODE_BUS_TYPE_PARALLEL enum. I think that would be perfectly
+> functional, but it is not what V4L2_FWNODE_BUS_TYPE_PARALLEL is
+> documented to represent. As far as I can see it's only intended to
+> represent CPI.
 
-What ain't obvious for the comment is that "belong to" actually means
-composition and not association. In other words, there there is no
-pointer/indirection involved, a pointer that would tell us what matrix
-does belong to what matrix_mdev, but rather the matrix is just a part
-of the matrix_mdev object.
+Are you aware of any standard documenting camera parallel interfaces
+with separate sync signals ? I was looking for that the other day, and
+couldn't find much. CPI seems to be an old MIPI standard, but I couldn't
+find any public document, I'not not sure if it actually matches.
 
-I don't like 'false positive' either, and whether the apm/aqm is
-newly updated or not is also redundant and confusing in my opinion. When
-we check because of inuse there is not updated whatever. IMHO the old
-message was better than this one.
+Another common parallel interface in SoCs is AXI4 Stream, which we will
+likely need a bus type for. We'll then have to decide on how to handle
+on-SoC custom parallel buses.
 
-Just my opinion, if you two agree, that this is the way to go, I'm fine
-with that.
+> Instead of having V4L2_FWNODE_BUS_TYPE_PARALLEL represent two
+> standards, I think they should be split. And possibly
+> V4L2_FWNODE_BUS_TYPE_PARALLEL should be renamed for CPI, but that is a
+> separate story. This would provide for the neatest and most legible
+> solution. If this solution is implemented, this range would be
+> incorrect. Additionally the snippet reverted in 2/2 of this series
+> would no longer be valid.
+> 
+> As it stands V4L2_FWNODE_BUS_TYPE_PARALLEL was used to represent DPI
+> due to not being caught in the review process.
 
+We may end up using those values, but I think it should be discussed and
+not rushed in v5.17 if possible.
+
+> > > -                default: 1
+> > > -
+> > > -              data-lanes: true
+> > > +          Video port for MIPI DSI input.
+> > >
+> > >        port@1:
+> > >          $ref: /schemas/graph.yaml#/properties/port
+> > > @@ -143,9 +87,6 @@ examples:
+> > >              vdd10-supply = <&pp1000_mipibrdg>;
+> > >              vdd18-supply = <&pp1800_mipibrdg>;
+> > >              vdd33-supply = <&pp3300_mipibrdg>;
+> > > -            analogix,audio-enable;
+> > > -            analogix,lane0-swing = /bits/ 8 <0x14 0x54 0x64 0x74>;
+> > > -            analogix,lane1-swing = /bits/ 8 <0x14 0x54 0x64 0x74>;
+> > >
+> > >              ports {
+> > >                  #address-cells = <1>;
+> > > @@ -155,8 +96,6 @@ examples:
+> > >                      reg = <0>;
+> > >                      anx7625_in: endpoint {
+> > >                          remote-endpoint = <&mipi_dsi>;
+> > > -                        bus-type = <5>;
+> > > -                        data-lanes = <0 1 2 3>;
+> > >                      };
+> > >                  };
+> > >
+> > > --
+> > > 2.32.0
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+
+-- 
 Regards,
-Halil
 
-
+Laurent Pinchart

@@ -2,105 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A100C4D0B06
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 236314D0B08
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343664AbiCGWZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S1343736AbiCGW0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241302AbiCGWZ1 (ORCPT
+        with ESMTP id S236293AbiCGW0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:25:27 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A7B6FA00;
-        Mon,  7 Mar 2022 14:24:31 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id j26so15201077wrb.1;
-        Mon, 07 Mar 2022 14:24:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zbMZsIhYJ+77vvsPZqt2FUvbmhqeDxMePb3nZB4cAlI=;
-        b=qk/46LPOyKRdvec+MKolVbUYO/E7hTEJpciHXRhBVUmmNAyo2C/8d97ZqVaKPsuFQR
-         g28XiQxVe2sCZP1J4om1F2VAvaHjlN/A2tbJdm+zmnUPpCGWKbq/BnCGY54cDizS2sXh
-         DLljZlhxEuuZ5m1bXGEl69acOJ4W+UjX66CaqOXniK4WwpzQvxJ1hcO7bd5TxzkBfT+h
-         xYU0X44s5t62Q1FwkakwfyYhu3oOR2xcNYRsAVzer1zydacqroMozijJcMVywovCq/tF
-         g7gYlW0Hi5PIkn+Cq66Jbm3y7aHTCF7jCpU0NH0egwL9p84eecVwb01d9H0Fj+dRhmP1
-         aCOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zbMZsIhYJ+77vvsPZqt2FUvbmhqeDxMePb3nZB4cAlI=;
-        b=FoBUoTOCx7kWbyazQOEyVGyQJPuz3JXkXLtJPZgjltZhdHDSE2bBCx6ngUdqqBUcdk
-         IQBb3s0c1vcZNGgf3cfo8gG6wAsfhZq2nWgSwxDjJFWLe31D08Pus/CwFYEm7ToHAi2S
-         1qtOluoGOH9HzS8qFzAuL1btX6djFSufhiAQr8PBVIkInjTtpTNmOoWhwvr8QYMlukEL
-         1MJjVkk9FTp0VvFzY4Pab++i2w3QCxw1NwfejuLKribGXmoeLx9ygnqtfbG3QJZoLN5f
-         eVpjqcdyyKYnNOYYlm7FbHr/kwSGDiLDaQCLK8K4fKcVjW+QrbeGJOFw7d5D5xWzKzhK
-         2bhQ==
-X-Gm-Message-State: AOAM530sHMDTOGgrSUN3Z4bh0Vi8xroETEIXrYP9+QEIDoM+4jm1Gv56
-        I7YqkxzVyov6mYJrBsRKU08=
-X-Google-Smtp-Source: ABdhPJwqSNvyS4GjI+QGP/a7FIEfmDb8n8qMgSIZbujBF1i1aTX14o3KbErC3DQHg6WB2p2+k3Yong==
-X-Received: by 2002:adf:e98d:0:b0:1f1:5d2b:eee6 with SMTP id h13-20020adfe98d000000b001f15d2beee6mr9674551wrm.143.1646691870231;
-        Mon, 07 Mar 2022 14:24:30 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id u10-20020a05600c19ca00b00389860c6d3asm543321wmq.23.2022.03.07.14.24.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 14:24:29 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mt76: connac: make read-only array ba_range static const
-Date:   Mon,  7 Mar 2022 22:24:29 +0000
-Message-Id: <20220307222429.165336-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 7 Mar 2022 17:26:08 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F686FA13
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646691912; x=1678227912;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=D6hPuoC/9QbAs+rzQu5ijfARPFJafeaiiIve7UWwUMc=;
+  b=Wvc9JB914PEZcfR6ZxcQEEDkHPblyZCPfquUF+5D66TC2yma3flavsSu
+   nvvakORn1ONsyMhfzEdWzMyQYD+q3SS0I8lzq3L7zY2GBi/fy46G0nMJ1
+   SKh0ZeqZBQFzjrSZqs/LVjSnShEkL/ODyCVNqigk1Wc6bpxhGOHEagZeJ
+   kytTdptdnTVWVqrtUkULoyWbkRUlPOTp9pNsVj7Mgcn+QVYBQpMFSzPwb
+   ebKQ0IiVi7zwsM+lQlvY8xCFLXwBYpQxur1mUQzbh46Gw6gWpJGDr19gM
+   6b6BoBPH/GRmXDv+o+hUIJ071rXTSJQhflxK4IheFc9UliSCnVUZfdFNp
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="279234191"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="279234191"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 14:25:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="595665973"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Mar 2022 14:25:05 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 01E091D6; Tue,  8 Mar 2022 00:25:23 +0200 (EET)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     bp@alien8.de
+Cc:     aarcange@redhat.com, ak@linux.intel.com, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@intel.com,
+        dave.hansen@linux.intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Subject: [PATCHv5.1 01/30] x86/tdx: Detect running as a TDX guest in early boot
+Date:   Tue,  8 Mar 2022 01:24:56 +0300
+Message-Id: <20220307222456.2275-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <YiI4GXQt5YOXr4qW@nazgul.tnic>
+References: <YiI4GXQt5YOXr4qW@nazgul.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the read-only array ba_range on the stack but
-instead make it static const. Also makes the object code a little
-smaller.
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+In preparation of extending cc_platform_has() API to support TDX guest,
+use CPUID instruction to detect support for TDX guests in the early
+boot code (via tdx_early_init()). Since copy_bootdata() is the first
+user of cc_platform_has() API, detect the TDX guest status before it.
+
+Define a synthetic feature flag (X86_FEATURE_TDX_GUEST) and set this
+bit in a valid TDX guest platform.
+
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 ---
- drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ v5.1:
+   - Drop BUILD_BUG_ON()
+---
+ arch/x86/Kconfig                         | 12 ++++++++++++
+ arch/x86/coco/Makefile                   |  2 ++
+ arch/x86/coco/tdx.c                      | 22 ++++++++++++++++++++++
+ arch/x86/include/asm/cpufeatures.h       |  1 +
+ arch/x86/include/asm/disabled-features.h |  8 +++++++-
+ arch/x86/include/asm/tdx.h               | 21 +++++++++++++++++++++
+ arch/x86/kernel/head64.c                 |  4 ++++
+ 7 files changed, 69 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/coco/tdx.c
+ create mode 100644 arch/x86/include/asm/tdx.h
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-index 0a646ae51c8d..fb44fc6c78f3 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-@@ -1044,7 +1044,7 @@ void mt76_connac_mcu_wtbl_ba_tlv(struct mt76_dev *dev, struct sk_buff *skb,
- 	}
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 57a4e0285a80..c346d66b51fc 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -880,6 +880,18 @@ config ACRN_GUEST
+ 	  IOT with small footprint and real-time features. More details can be
+ 	  found in https://projectacrn.org/.
  
- 	if (enable && tx) {
--		u8 ba_range[] = { 4, 8, 12, 24, 36, 48, 54, 64 };
-+		static const u8 ba_range[] = { 4, 8, 12, 24, 36, 48, 54, 64 };
- 		int i;
++config INTEL_TDX_GUEST
++	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
++	depends on X86_64 && CPU_SUP_INTEL
++	depends on X86_X2APIC
++	help
++	  Support running as a guest under Intel TDX.  Without this support,
++	  the guest kernel can not boot or run under TDX.
++	  TDX includes memory encryption and integrity capabilities
++	  which protect the confidentiality and integrity of guest
++	  memory contents and CPU state. TDX guests are protected from
++	  some attacks from the VMM.
++
+ endif #HYPERVISOR_GUEST
  
- 		for (i = 7; i > 0; i--) {
+ source "arch/x86/Kconfig.cpu"
+diff --git a/arch/x86/coco/Makefile b/arch/x86/coco/Makefile
+index c1ead00017a7..32f4c6e6f199 100644
+--- a/arch/x86/coco/Makefile
++++ b/arch/x86/coco/Makefile
+@@ -4,3 +4,5 @@ KASAN_SANITIZE_core.o	:= n
+ CFLAGS_core.o		+= -fno-stack-protector
+ 
+ obj-y += core.o
++
++obj-$(CONFIG_INTEL_TDX_GUEST)	+= tdx.o
+diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
+new file mode 100644
+index 000000000000..97674471fd1e
+--- /dev/null
++++ b/arch/x86/coco/tdx.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2021-2022 Intel Corporation */
++
++#undef pr_fmt
++#define pr_fmt(fmt)     "tdx: " fmt
++
++#include <linux/cpufeature.h>
++#include <asm/tdx.h>
++
++void __init tdx_early_init(void)
++{
++	u32 eax, sig[3];
++
++	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
++
++	if (memcmp(TDX_IDENT, sig, sizeof(sig)))
++		return;
++
++	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
++
++	pr_info("Guest detected\n");
++}
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 5cd22090e53d..cacc8dde854b 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -238,6 +238,7 @@
+ #define X86_FEATURE_VMW_VMMCALL		( 8*32+19) /* "" VMware prefers VMMCALL hypercall instruction */
+ #define X86_FEATURE_PVUNLOCK		( 8*32+20) /* "" PV unlock function */
+ #define X86_FEATURE_VCPUPREEMPT		( 8*32+21) /* "" PV vcpu_is_preempted function */
++#define X86_FEATURE_TDX_GUEST		( 8*32+22) /* Intel Trust Domain Extensions Guest */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:0 (EBX), word 9 */
+ #define X86_FEATURE_FSGSBASE		( 9*32+ 0) /* RDFSBASE, WRFSBASE, RDGSBASE, WRGSBASE instructions*/
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index 1231d63f836d..b37de8268c9a 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -68,6 +68,12 @@
+ # define DISABLE_SGX	(1 << (X86_FEATURE_SGX & 31))
+ #endif
+ 
++#ifdef CONFIG_INTEL_TDX_GUEST
++# define DISABLE_TDX_GUEST	0
++#else
++# define DISABLE_TDX_GUEST	(1 << (X86_FEATURE_TDX_GUEST & 31))
++#endif
++
+ /*
+  * Make sure to add features to the correct mask
+  */
+@@ -79,7 +85,7 @@
+ #define DISABLED_MASK5	0
+ #define DISABLED_MASK6	0
+ #define DISABLED_MASK7	(DISABLE_PTI)
+-#define DISABLED_MASK8	0
++#define DISABLED_MASK8	(DISABLE_TDX_GUEST)
+ #define DISABLED_MASK9	(DISABLE_SMAP|DISABLE_SGX)
+ #define DISABLED_MASK10	0
+ #define DISABLED_MASK11	0
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+new file mode 100644
+index 000000000000..ba8042ce61c2
+--- /dev/null
++++ b/arch/x86/include/asm/tdx.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (C) 2021-2022 Intel Corporation */
++#ifndef _ASM_X86_TDX_H
++#define _ASM_X86_TDX_H
++
++#include <linux/init.h>
++
++#define TDX_CPUID_LEAF_ID	0x21
++#define TDX_IDENT		"IntelTDX    "
++
++#ifdef CONFIG_INTEL_TDX_GUEST
++
++void __init tdx_early_init(void);
++
++#else
++
++static inline void tdx_early_init(void) { };
++
++#endif /* CONFIG_INTEL_TDX_GUEST */
++
++#endif /* _ASM_X86_TDX_H */
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 4f5ecbbaae77..6dff50c3edd6 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -40,6 +40,7 @@
+ #include <asm/extable.h>
+ #include <asm/trapnr.h>
+ #include <asm/sev.h>
++#include <asm/tdx.h>
+ 
+ /*
+  * Manage page tables very early on.
+@@ -514,6 +515,9 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
+ 
+ 	idt_setup_early_handler();
+ 
++	/* Needed before cc_platform_has() can be used for TDX */
++	tdx_early_init();
++
+ 	copy_bootdata(__va(real_mode_data));
+ 
+ 	/*
 -- 
-2.35.1
+2.34.1
 

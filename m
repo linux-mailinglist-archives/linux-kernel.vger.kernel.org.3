@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7CD4CF756
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F26B44CFA10
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238249AbiCGJpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        id S240569AbiCGKIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237545AbiCGJgM (ORCPT
+        with ESMTP id S239401AbiCGJtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:36:12 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78BE6C1CA;
-        Mon,  7 Mar 2022 01:31:22 -0800 (PST)
+        Mon, 7 Mar 2022 04:49:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9026E570;
+        Mon,  7 Mar 2022 01:43:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 936A2CE0E97;
-        Mon,  7 Mar 2022 09:31:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BF0C340F3;
-        Mon,  7 Mar 2022 09:31:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC082B810B9;
+        Mon,  7 Mar 2022 09:43:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ACE0C36AE7;
+        Mon,  7 Mar 2022 09:43:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645461;
-        bh=1Bl2ar5Dxwk0F+m00os++GOOiJ+ZMgRAWAFAKEAioZk=;
+        s=korg; t=1646646189;
+        bh=w/ntj/P8FjG0egwwy9HfVWJPl4ZMUNQq0IVluBcr0ME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gy3DmEOKZlboRrBzx5NMA8WE+ijEPZlR/+WWaeosz07V23Hpp8/6GOpC7+cdk6JQg
-         3nWtTKIRecHGhgKq1xAoLrvQoPhJuDEX9wNH1fdDzp0y3sEZ3e7cPwyegK0wG43N+z
-         97+XczsnKr4UUte/gg/kgMIz8WrYGmoRLuw9P3rs=
+        b=WadR+2slMiEsH4rp8GFQUyL4nHMOjrdalrw+8zUjbdnqYS+VVC3lNiaNY9PQAW32z
+         wLZRt1t56kio0lOwsgymyjTi8c+TttgVekDVgYsbx1EkfsNn4WMqhp1dzcXnGkhq2Q
+         1+MBkVIHijRYiQJeXbTaIiUJQlNS5Szi0HmpA36w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Valentin Caron <valentin.caron@foss.st.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 021/105] serial: stm32: prevent TDR register overwrite when sending x_char
-Date:   Mon,  7 Mar 2022 10:18:24 +0100
-Message-Id: <20220307091644.780354581@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>
+Subject: [PATCH 5.15 161/262] netfilter: nf_queue: fix possible use-after-free
+Date:   Mon,  7 Mar 2022 10:18:25 +0100
+Message-Id: <20220307091706.975653645@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Caron <valentin.caron@foss.st.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit d3d079bde07e1b7deaeb57506dc0b86010121d17 ]
+commit c3873070247d9e3c7a6b0cf9bf9b45e8018427b1 upstream.
 
-When sending x_char in stm32_usart_transmit_chars(), driver can overwrite
-the value of TDR register by the value of x_char. If this happens, the
-previous value that was present in TDR register will not be sent through
-uart.
+Eric Dumazet says:
+  The sock_hold() side seems suspect, because there is no guarantee
+  that sk_refcnt is not already 0.
 
-This code checks if the previous value in TDR register is sent before
-writing the x_char value into register.
+On failure, we cannot queue the packet and need to indicate an
+error.  The packet will be dropped by the caller.
 
-Fixes: 48a6092fb41f ("serial: stm32-usart: Add STM32 USART Driver")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
-Link: https://lore.kernel.org/r/20220111164441.6178-2-valentin.caron@foss.st.com
+v2: split skb prefetch hunk into separate change
+
+Fixes: 271b72c7fa82c ("udp: RCU handling for Unicast packets.")
+Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/stm32-usart.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ include/net/netfilter/nf_queue.h |    2 +-
+ net/netfilter/nf_queue.c         |   13 +++++++++----
+ net/netfilter/nfnetlink_queue.c  |   12 +++++++++---
+ 3 files changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 0eadf0547175c..6afae051ba8d1 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -420,10 +420,22 @@ static void stm32_usart_transmit_chars(struct uart_port *port)
- 	struct stm32_port *stm32_port = to_stm32_port(port);
- 	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
- 	struct circ_buf *xmit = &port->state->xmit;
-+	u32 isr;
-+	int ret;
+--- a/include/net/netfilter/nf_queue.h
++++ b/include/net/netfilter/nf_queue.h
+@@ -37,7 +37,7 @@ void nf_register_queue_handler(const str
+ void nf_unregister_queue_handler(void);
+ void nf_reinject(struct nf_queue_entry *entry, unsigned int verdict);
  
- 	if (port->x_char) {
- 		if (stm32_port->tx_dma_busy)
- 			stm32_usart_clr_bits(port, ofs->cr3, USART_CR3_DMAT);
+-void nf_queue_entry_get_refs(struct nf_queue_entry *entry);
++bool nf_queue_entry_get_refs(struct nf_queue_entry *entry);
+ void nf_queue_entry_free(struct nf_queue_entry *entry);
+ 
+ static inline void init_hashrandom(u32 *jhash_initval)
+--- a/net/netfilter/nf_queue.c
++++ b/net/netfilter/nf_queue.c
+@@ -96,19 +96,21 @@ static void __nf_queue_entry_init_physde
+ }
+ 
+ /* Bump dev refs so they don't vanish while packet is out */
+-void nf_queue_entry_get_refs(struct nf_queue_entry *entry)
++bool nf_queue_entry_get_refs(struct nf_queue_entry *entry)
+ {
+ 	struct nf_hook_state *state = &entry->state;
+ 
++	if (state->sk && !refcount_inc_not_zero(&state->sk->sk_refcnt))
++		return false;
 +
-+		/* Check that TDR is empty before filling FIFO */
-+		ret =
-+		readl_relaxed_poll_timeout_atomic(port->membase + ofs->isr,
-+						  isr,
-+						  (isr & USART_SR_TXE),
-+						  10, 1000);
-+		if (ret)
-+			dev_warn(port->dev, "1 character may be erased\n");
+ 	dev_hold(state->in);
+ 	dev_hold(state->out);
+-	if (state->sk)
+-		sock_hold(state->sk);
+ 
+ #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+ 	dev_hold(entry->physin);
+ 	dev_hold(entry->physout);
+ #endif
++	return true;
+ }
+ EXPORT_SYMBOL_GPL(nf_queue_entry_get_refs);
+ 
+@@ -196,7 +198,10 @@ static int __nf_queue(struct sk_buff *sk
+ 
+ 	__nf_queue_entry_init_physdevs(entry);
+ 
+-	nf_queue_entry_get_refs(entry);
++	if (!nf_queue_entry_get_refs(entry)) {
++		kfree(entry);
++		return -ENOTCONN;
++	}
+ 
+ 	switch (entry->state.pf) {
+ 	case AF_INET:
+--- a/net/netfilter/nfnetlink_queue.c
++++ b/net/netfilter/nfnetlink_queue.c
+@@ -710,9 +710,15 @@ static struct nf_queue_entry *
+ nf_queue_entry_dup(struct nf_queue_entry *e)
+ {
+ 	struct nf_queue_entry *entry = kmemdup(e, e->size, GFP_ATOMIC);
+-	if (entry)
+-		nf_queue_entry_get_refs(entry);
+-	return entry;
 +
- 		writel_relaxed(port->x_char, port->membase + ofs->tdr);
- 		port->x_char = 0;
- 		port->icount.tx++;
--- 
-2.34.1
-
++	if (!entry)
++		return NULL;
++
++	if (nf_queue_entry_get_refs(entry))
++		return entry;
++
++	kfree(entry);
++	return NULL;
+ }
+ 
+ #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
 
 

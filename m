@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BCC4CF700
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930B64CFABC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237849AbiCGJoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S235224AbiCGKXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237838AbiCGJdP (ORCPT
+        with ESMTP id S240892AbiCGKBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:33:15 -0500
+        Mon, 7 Mar 2022 05:01:30 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEE16B0B7;
-        Mon,  7 Mar 2022 01:30:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB6C6E2BA;
+        Mon,  7 Mar 2022 01:51:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AC04611D3;
-        Mon,  7 Mar 2022 09:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F12AEC340E9;
-        Mon,  7 Mar 2022 09:30:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1E4260929;
+        Mon,  7 Mar 2022 09:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEC1C340F6;
+        Mon,  7 Mar 2022 09:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645412;
-        bh=S8+fvjACVMr0G7mDmqfilSIpGPjj3mkokKpLMNa4BWg=;
+        s=korg; t=1646646663;
+        bh=a3ONiWZbtGmbWMaDBIz7szQySVCi5LFkDtFJQO9O+rU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W/A4XOgiOmR3kVl7u/WZxrJwWc/Phw0wf+QoBA/4q4s00QOc36mBMm5Q4C4r8gFt9
-         kzkyoc0scnMmugFwsWigiMdThj6MjbEg/5euF9XPZVCyqXzgjmAY4B2LhJ5zipqvBa
-         3ae0vib9l6Dlpf2mSKegMp3kwnobUKCsDs10fQww=
+        b=2s/iESb6AJsWJlS9KebLimMbsP466dJWrQmBuwLpKPGj/tbjpV28nDE+ZbruQQYyy
+         zrw0ZRi3faFd+3Wo/erNNZjoUzVhaymIOtUmmQO2JzAw2sWj1TzleRjHRk7UAE7EYN
+         AqtZ2V48dAd2ynED8qj2bhhg/LKl/Fu7usSot0dY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Barta <oliver.barta@aptiv.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 006/105] regulator: core: fix false positive in regulator_late_cleanup()
-Date:   Mon,  7 Mar 2022 10:18:09 +0100
-Message-Id: <20220307091644.363434127@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.16 052/186] riscv: Fix config KASAN && SPARSEMEM && !SPARSE_VMEMMAP
+Date:   Mon,  7 Mar 2022 10:18:10 +0100
+Message-Id: <20220307091655.548686128@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Barta <oliver.barta@aptiv.com>
+From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 
-[ Upstream commit 4e2a354e3775870ca823f1fb29bbbffbe11059a6 ]
+commit a3d328037846d013bb4c7f3777241e190e4c75e1 upstream.
 
-The check done by regulator_late_cleanup() to detect whether a regulator
-is on was inconsistent with the check done by _regulator_is_enabled().
-While _regulator_is_enabled() takes the enable GPIO into account,
-regulator_late_cleanup() was not doing that.
+In order to get the pfn of a struct page* when sparsemem is enabled
+without vmemmap, the mem_section structures need to be initialized which
+happens in sparse_init.
 
-This resulted in a false positive, e.g. when a GPIO-controlled fixed
-regulator was used, which was not enabled at boot time, e.g.
+But kasan_early_init calls pfn_to_page way before sparse_init is called,
+which then tries to dereference a null mem_section pointer.
 
-reg_disp_1v2: reg_disp_1v2 {
-	compatible = "regulator-fixed";
-	regulator-name = "display_1v2";
-	regulator-min-microvolt = <1200000>;
-	regulator-max-microvolt = <1200000>;
-	gpio = <&tlmm 148 0>;
-	enable-active-high;
-};
+Fix this by removing the usage of this function in kasan_early_init.
 
-Such regulator doesn't have an is_enabled() operation. Nevertheless
-it's state can be determined based on the enable GPIO. The check in
-regulator_late_cleanup() wrongly assumed that the regulator is on and
-tried to disable it.
-
-Signed-off-by: Oliver Barta <oliver.barta@aptiv.com>
-Link: https://lore.kernel.org/r/20220208084645.8686-1-oliver.barta@aptiv.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8ad8b72721d0 ("riscv: Add KASAN support")
+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/regulator/core.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ arch/riscv/mm/kasan_init.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 043b5f63b94a1..2c48e55c4104e 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -5862,9 +5862,8 @@ core_initcall(regulator_init);
- static int regulator_late_cleanup(struct device *dev, void *data)
- {
- 	struct regulator_dev *rdev = dev_to_rdev(dev);
--	const struct regulator_ops *ops = rdev->desc->ops;
- 	struct regulation_constraints *c = rdev->constraints;
--	int enabled, ret;
-+	int ret;
+--- a/arch/riscv/mm/kasan_init.c
++++ b/arch/riscv/mm/kasan_init.c
+@@ -22,8 +22,7 @@ asmlinkage void __init kasan_early_init(
  
- 	if (c && c->always_on)
- 		return 0;
-@@ -5877,14 +5876,8 @@ static int regulator_late_cleanup(struct device *dev, void *data)
- 	if (rdev->use_count)
- 		goto unlock;
+ 	for (i = 0; i < PTRS_PER_PTE; ++i)
+ 		set_pte(kasan_early_shadow_pte + i,
+-			mk_pte(virt_to_page(kasan_early_shadow_page),
+-			       PAGE_KERNEL));
++			pfn_pte(virt_to_pfn(kasan_early_shadow_page), PAGE_KERNEL));
  
--	/* If we can't read the status assume it's always on. */
--	if (ops->is_enabled)
--		enabled = ops->is_enabled(rdev);
--	else
--		enabled = 1;
--
--	/* But if reading the status failed, assume that it's off. */
--	if (enabled <= 0)
-+	/* If reading the status failed, assume that it's off. */
-+	if (_regulator_is_enabled(rdev) <= 0)
- 		goto unlock;
- 
- 	if (have_full_constraints()) {
--- 
-2.34.1
-
+ 	for (i = 0; i < PTRS_PER_PMD; ++i)
+ 		set_pmd(kasan_early_shadow_pmd + i,
 
 

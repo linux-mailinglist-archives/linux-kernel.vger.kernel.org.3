@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D968F4CF53F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6324CF552
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237033AbiCGJ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S237060AbiCGJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236691AbiCGJY0 (ORCPT
+        with ESMTP id S237143AbiCGJX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:24:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FC4593BF;
-        Mon,  7 Mar 2022 01:23:31 -0800 (PST)
+        Mon, 7 Mar 2022 04:23:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A81674F0;
+        Mon,  7 Mar 2022 01:21:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5B9861132;
-        Mon,  7 Mar 2022 09:23:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A3CC340F5;
-        Mon,  7 Mar 2022 09:23:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09A40B81054;
+        Mon,  7 Mar 2022 09:21:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49482C340E9;
+        Mon,  7 Mar 2022 09:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645010;
-        bh=17QqH72kUFnUkJZ4j1HejBtx6GgW1dduu5IUz82at2E=;
+        s=korg; t=1646644912;
+        bh=UgKQ9cNGkty3xwnvfNTkiGfr/Fg+lnlS4rwHrsaA3To=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gqj8SYi8Jbs/OSZsb6IST3Uvlx2lDMFKsG2Hugscir5+XncR1y8CLvbHPw3bpL0f0
-         jpuSYLsaGeu1bL8BtVs6gN8MPSLyEsFdNyqEnYmlVUjZ8aR1T8IOsHj7EMRH5bzyRr
-         yCdJFJAKWXzTYwxDfU257zr0gCh3jDbrziL+3Ozw=
+        b=s27szqTzWomqTfZziKFlAR8Ot9qLkg1HNoUtfe89g2e/TYkBQtkPshalKHA2V0+4M
+         y9wkzXlgjsUhUrmX5uQQdDZQ88d2maR6iG8v8AkHT38K4JNJiWeZ9Nt7LJAaeshG7y
+         kYigk6+6/KJ+mhJjmSy0ZyoFGJR+/mmXJ/25oeL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Beichler <benjamin.beichler@uni-rostock.de>,
+        stable@vger.kernel.org, JaeMan Park <jaeman@google.com>,
         Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 01/51] mac80211_hwsim: report NOACK frames in tx_status
+Subject: [PATCH 4.14 02/42] mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work
 Date:   Mon,  7 Mar 2022 10:18:36 +0100
-Message-Id: <20220307091637.032868130@linuxfoundation.org>
+Message-Id: <20220307091636.219436504@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,36 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
+From: JaeMan Park <jaeman@google.com>
 
-[ Upstream commit 42a79960ffa50bfe9e0bf5d6280be89bf563a5dd ]
+[ Upstream commit cacfddf82baf1470e5741edeecb187260868f195 ]
 
-Add IEEE80211_TX_STAT_NOACK_TRANSMITTED to tx_status flags to have proper
-statistics for non-acked frames.
+In mac80211_hwsim, the probe_req frame is created and sent while
+scanning. It is sent with ieee80211_tx_info which is not initialized.
+Uninitialized ieee80211_tx_info can cause problems when using
+mac80211_hwsim with wmediumd. wmediumd checks the tx_rates field of
+ieee80211_tx_info and doesn't relay probe_req frame to other clients
+even if it is a broadcasting message.
 
-Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
-Link: https://lore.kernel.org/r/20220111221327.1499881-1-benjamin.beichler@uni-rostock.de
+Call ieee80211_tx_prepare_skb() to initialize ieee80211_tx_info for
+the probe_req that is created by hw_scan_work in mac80211_hwsim.
+
+Signed-off-by: JaeMan Park <jaeman@google.com>
+Link: https://lore.kernel.org/r/20220113060235.546107-1-jaeman@google.com
+[fix memory leak]
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mac80211_hwsim.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/wireless/mac80211_hwsim.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
-index 3564f5869b444..6cd9a8b610107 100644
+index b19d19c4be272..ee1eb14ae8fc9 100644
 --- a/drivers/net/wireless/mac80211_hwsim.c
 +++ b/drivers/net/wireless/mac80211_hwsim.c
-@@ -3176,6 +3176,10 @@ static int hwsim_tx_info_frame_received_nl(struct sk_buff *skb_2,
- 		}
- 		txi->flags |= IEEE80211_TX_STAT_ACK;
- 	}
+@@ -2025,6 +2025,15 @@ static void hw_scan_work(struct work_struct *work)
+ 			if (req->ie_len)
+ 				skb_put_data(probe, req->ie, req->ie_len);
+ 
++			if (!ieee80211_tx_prepare_skb(hwsim->hw,
++						      hwsim->hw_scan_vif,
++						      probe,
++						      hwsim->tmp_chan->band,
++						      NULL)) {
++				kfree_skb(probe);
++				continue;
++			}
 +
-+	if (hwsim_flags & HWSIM_TX_CTL_NO_ACK)
-+		txi->flags |= IEEE80211_TX_STAT_NOACK_TRANSMITTED;
-+
- 	ieee80211_tx_status_irqsafe(data2->hw, skb);
- 	return 0;
- out:
+ 			local_bh_disable();
+ 			mac80211_hwsim_tx_frame(hwsim->hw, probe,
+ 						hwsim->tmp_chan);
 -- 
 2.34.1
 

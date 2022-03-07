@@ -2,52 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39684CF8B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434954CF484
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239553AbiCGJ7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
+        id S230224AbiCGJRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240364AbiCGJk4 (ORCPT
+        with ESMTP id S236369AbiCGJRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:40:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15E12D1D5;
-        Mon,  7 Mar 2022 01:37:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CCCF60F63;
-        Mon,  7 Mar 2022 09:37:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0729EC340E9;
-        Mon,  7 Mar 2022 09:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645852;
-        bh=UMz2txwKo30Dyf7QnStl7t4dAxLp9RmLZ4ZsAfzY8d8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LS15UwDrFAU+y2WXNOjLV2+SYWBhc8wC/T+6LmDXSaXtkkO4L/4RyCeQzdEr17lJ6
-         xEkRw6bXXRD2KgecKvszsfMQQfYMpZKSFjiSxSee0rqP3X4bbrz6JuCSE1RigQCJB5
-         d1o/Tt/pUDPdxZ+yEMOguO+YRq9fEN4G1uNCmWyA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 057/262] KVM: VMX: Read Posted Interrupt "control" exactly once per loop iteration
-Date:   Mon,  7 Mar 2022 10:16:41 +0100
-Message-Id: <20220307091704.121672878@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 7 Mar 2022 04:17:42 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC1652E4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:16:46 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id 19so8483344wmy.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:16:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uGD0AznMPULr9/ADv56wNfWTzUyQ3OazhFS/p3ygy5E=;
+        b=pwyUaw0ILKRgOjztCGvamksWmJ0ZPFcmF/3c9GBy97o2+lgD0923QsRvpXQni5mcPy
+         xo+u2jlQRKZuue76ppcjOeHvdhkMehK0eNIZx3E5WiklQs5czwaiP1tvwcucHFlKp5aw
+         qXNMSzG40iyGG3+kv8mBaT6wF4tVAm0wDmtMF6NYnBHTtF7DXfW/f6yxGHv2Q11dZNLy
+         ECARApJp6vbJl4ejMR/siE8oA2X0c9tsA4YyxaK5By7GoyIvQ9kHGu38q22Ka4n/pHq+
+         MMFlnNPTVbVDHSip/3iSo3QXgzPVSkpwsBeiBKrVZqS/c7wILZ8QJy8Zz6BoYF6f6aMw
+         a9MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uGD0AznMPULr9/ADv56wNfWTzUyQ3OazhFS/p3ygy5E=;
+        b=rrb22KicBs/0O6GDfh5//Feq2awxO6xuK0XDLCkJWKc49AKDfBn2tq9CAcMZQXz+sP
+         F8GcajVCjt2aYq31YdcooppfMT+UzD6rgFxgVx8Va8uiZxmn2VAWc4D3HJ8yHcXOCaZX
+         6Q/LvceWCQYL35IeWiIsgHoBQ572zKxPvnVOJNi1DHGuynh6FdKVrGbizb249be+0A5Y
+         tJxcCMbpWO4Q8Q0/++8jxgw3kD7mQkQTg4QhGk/mLMCGpcBUz5UDHvDFsv2x0cbQG53L
+         GGdpvQZcSayaE3lT3HaopzkeQjqNNxZn6uDqOMOXUtXfbXW31aLA552MNwCp396u9P4e
+         PPfg==
+X-Gm-Message-State: AOAM530G55xdsTJ0ncfRcBtheRaEmQe7+inZzVQLjjxQ3BlkFKoY6QNS
+        cTTNTZD8o1SVp80s2/CiVvVcUwD3ZZisvQ==
+X-Google-Smtp-Source: ABdhPJyTzicxUG+rkJP2G1eUqPc8CWKy4HBwoZ6UGxDL3nTPbcTk/4aZ4yNREW7ahY2El22rA6OgnA==
+X-Received: by 2002:a05:600c:4fd6:b0:37f:2a37:87a3 with SMTP id o22-20020a05600c4fd600b0037f2a3787a3mr8206865wmq.152.1646644605303;
+        Mon, 07 Mar 2022 01:16:45 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id p22-20020a1c5456000000b00389a558670fsm2199704wmi.11.2022.03.07.01.16.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 01:16:44 -0800 (PST)
+Date:   Mon, 7 Mar 2022 09:16:42 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] MAINTAINERS: mfd: cover MAX77843 by Maxim
+ PMIC/MUIC for Exynos boards entry
+Message-ID: <YiXNejk+Y7DJ3x99@google.com>
+References: <20220111174805.223732-1-krzysztof.kozlowski@canonical.com>
+ <20220111174805.223732-6-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220111174805.223732-6-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,57 +79,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+On Tue, 11 Jan 2022, Krzysztof Kozlowski wrote:
 
-[ Upstream commit cfb0e1306a3790eb055ebf7cdb7b0ee8a23e9b6e ]
+> The MAX77843 is used in Exynos5433-based TM2 boards and shares some
+> parts of code with MAX77693 (regulator and haptic motor drivers).
+> Include all MAX77843 drivers in the entry for Maxim PMIC/MUIC drivers
+> for Exynos boards, so they will receive some dedicated review coverage.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  MAINTAINERS | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Use READ_ONCE() when loading the posted interrupt descriptor control
-field to ensure "old" and "new" have the same base value.  If the
-compiler emits separate loads, and loads into "new" before "old", KVM
-could theoretically drop the ON bit if it were set between the loads.
+Applied, thanks.
 
-Fixes: 28b835d60fcc ("KVM: Update Posted-Interrupts Descriptor when vCPU is preempted")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211009021236.4122790-27-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/kvm/vmx/posted_intr.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-index 696ad48ab5daa..46fb83d6a286e 100644
---- a/arch/x86/kvm/vmx/posted_intr.c
-+++ b/arch/x86/kvm/vmx/posted_intr.c
-@@ -51,7 +51,7 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
- 
- 	/* The full case.  */
- 	do {
--		old.control = new.control = pi_desc->control;
-+		old.control = new.control = READ_ONCE(pi_desc->control);
- 
- 		dest = cpu_physical_id(cpu);
- 
-@@ -104,7 +104,7 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
- 	unsigned int dest;
- 
- 	do {
--		old.control = new.control = pi_desc->control;
-+		old.control = new.control = READ_ONCE(pi_desc->control);
- 		WARN(old.nv != POSTED_INTR_WAKEUP_VECTOR,
- 		     "Wakeup handler not enabled while the VCPU is blocked\n");
- 
-@@ -163,7 +163,7 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
- 	}
- 
- 	do {
--		old.control = new.control = pi_desc->control;
-+		old.control = new.control = READ_ONCE(pi_desc->control);
- 
- 		WARN((pi_desc->sn == 1),
- 		     "Warning: SN field of posted-interrupts "
 -- 
-2.34.1
-
-
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

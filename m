@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AFC4CF220
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA80D4CF227
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbiCGGqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S234828AbiCGGqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiCGGqW (ORCPT
+        with ESMTP id S234325AbiCGGqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:46:22 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236CC443F9
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 22:45:29 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nR77V-0004Cx-NX; Mon, 07 Mar 2022 07:45:25 +0100
-Message-ID: <782a683e-c625-8e68-899b-ce56939afece@leemhuis.info>
-Date:   Mon, 7 Mar 2022 07:45:24 +0100
+        Mon, 7 Mar 2022 01:46:37 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2414A60048
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 22:45:43 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so10372407pjb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 22:45:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wVn4uRZg+YKMfOFAeldUGJ/LiriTwdJu0U1lZacIdDM=;
+        b=hzTSvFPxpPwjQyJ0VHtasLUo5yjoprO+oZRWY2rlqxyjk6wBrS5NqxKNGzgj/Ml5vN
+         UFfes1wlgu42sm4Nwo9hISosEBtYjOA6jjc2UcWPVyufUymbwnRUF/8aWqgN0G1P/dkK
+         AIPcGN6BBwRATGAS8aVyvEWiQIpwDy4pkb6K6fIdvIpZStBh6HXtYrg3Vk599w9dzU2C
+         PquWW2v+jTNwxox2jj7QUtKRGLiMdymXdPfpkYQWeTz0plfhQrkWk2pykzGcuGFhnZ3+
+         Zz68MCoSP+IosX7xlT//nEZTyhIRH88mu298OaqUBVnF9ldZVYmCpwM8x3ABJdkhIPjR
+         W8SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wVn4uRZg+YKMfOFAeldUGJ/LiriTwdJu0U1lZacIdDM=;
+        b=Y8XT2F1Vjt/sYD3wR/gZrD3KRi3K7DD1idcFKTFfvLBf66xwGbYaUY60b4iT55BZ/1
+         C1nigWk+1yYq7dI8hz1z+P2nndtA/i7Dv3KNykIIYGLEADQYLp11tsdoJVgrFBitTGBA
+         NX4uozeX3FmUKj/dOjRC29JfLZt2DZCXBTNucTBV774yfxXmzW2xDuM4UQQbXgeOmkun
+         DteKAcrmdTxWPzTZn/KnrexgnJFWDNQ8hiVi4u39rtWmQ+ciZ22nrfq5obpPuLB/Ssja
+         bdLYpyEf0WRSHr46xy4UAEY1aUWDpf50ewIYGCK10zRWuNgd7Me4guYK5/GBtM9XYHKi
+         VxrQ==
+X-Gm-Message-State: AOAM530Fpdj2KCuqIesfCwU614OViQw7v/V5Qs2+LE0jDsEWxn3vt1+3
+        zXl7OW/dEYmwjrP47xX2ebgK
+X-Google-Smtp-Source: ABdhPJyzWieNmuO9fHFMVJFZ9QSFUaen3fJwQ2r0++wW5LU0X1MofBMi6GvvZxI9PjVUoFCkR+/nlg==
+X-Received: by 2002:a17:90b:1052:b0:1bf:5024:c2a7 with SMTP id gq18-20020a17090b105200b001bf5024c2a7mr6473564pjb.218.1646635542531;
+        Sun, 06 Mar 2022 22:45:42 -0800 (PST)
+Received: from localhost.localdomain ([117.207.25.157])
+        by smtp.gmail.com with ESMTPSA id s7-20020a056a00178700b004e1a15e7928sm15841940pfg.145.2022.03.06.22.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 22:45:42 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org
+Cc:     bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        angelogioacchino.delregno@somainline.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 0/2] Convert Qcom CPUFREQ HW binding to YAML
+Date:   Mon,  7 Mar 2022 12:15:29 +0530
+Message-Id: <20220307064531.47678-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Doug Anderson <dianders@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <20220203093922.20754-1-tzimmermann@suse.de>
- <CAMuHMdWykWR4oKahC2GYF5jG4przRQ+MxNNm1BK7o62OhhGYwA@mail.gmail.com>
- <CAMuHMdXcRRgn4EMXn9qonnjTTp7EEfwP4F8FeVpLkQMNvB-6mg@mail.gmail.com>
- <CAD=FV=UbiXx4RBQNFp1htCYsM1YzAgES+mcA6KOJ7ZmydkHnBg@mail.gmail.com>
- <f9768b09-90a7-1908-0f5b-6474bbb00208@suse.de>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <f9768b09-90a7-1908-0f5b-6474bbb00208@suse.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646635529;83451771;
-X-HE-SMSGID: 1nR77V-0004Cx-NX
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,91 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing Dave and Daniel]
+Hi,
 
-Hi, this is your Linux kernel regression tracker.
+Patch 1/2 was submitted separately [1] but Rob's bot reported errors related to
+the performance domain binding that used Qcom CPUFREQ as an example. But Qcom
+CPUFREQ driver doesn't support the generic performance domains yet.
 
-On 23.02.22 20:06, Thomas Zimmermann wrote:
-> Am 23.02.22 um 17:11 schrieb Doug Anderson:
->> On Tue, Feb 22, 2022 at 1:31 AM Geert Uytterhoeven
->> <geert@linux-m68k.org> wrote:
->>> On Tue, Feb 8, 2022 at 10:39 AM Geert Uytterhoeven
->>> <geert@linux-m68k.org> wrote:
->>>> On Mon, Feb 7, 2022 at 12:31 PM Thomas Zimmermann
->>>> <tzimmermann@suse.de> wrote:
->>>>> As reported in [1], DRM_PANEL_EDP depends on DRM_DP_HELPER. Select
->>>>> the option to fix the build failure. The error message is shown
->>>>> below.
->>>>>
->>>>>    arm-linux-gnueabihf-ld: drivers/gpu/drm/panel/panel-edp.o: in
->>>>> function
->>>>>      `panel_edp_probe': panel-edp.c:(.text+0xb74): undefined
->>>>> reference to
->>>>>      `drm_panel_dp_aux_backlight'
->>>>>    make[1]: *** [/builds/linux/Makefile:1222: vmlinux] Error 1
->>>>>
->>>>> The issue has been reported before, when DisplayPort helpers were
->>>>> hidden behind the option CONFIG_DRM_KMS_HELPER. [2]
->>>>>
->>>>> v2:
->>>>>          * fix and expand commit description (Arnd)
->>>>>
->>>>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->>>>
->>>> Thanks for your patch!
->>>>
->>>> This fixes the build errors I'm seeing, so
->>>> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>>
->>> Is this planned to be queued? This is still failing in drm-next.
->>> Thanks!
->>
->> Looks like this has been in drm-misc-next since Feb 4:
->>
->> ---
->>
->> commit eea89dff4c39a106f98d1cb5e4d626f8c63908b9
->> Author:     Thomas Zimmermann <tzimmermann@suse.de>
->> AuthorDate: Thu Feb 3 10:39:22 2022 +0100
->> Commit:     Thomas Zimmermann <tzimmermann@suse.de>
->> CommitDate: Fri Feb 4 09:38:47 2022 +0100
->>
->>      drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
->>
->> ---
->>
->> Maybe it needed to land elsewhere, though?
-> 
-> Sorry about the mess. We had some confusion with this cycle's
-> drm-misc-next pull request, which got delayed significantly. There's
-> been a PR today, which should be merged into drm-next any time now. The
-> patch will be part of that.
+So I've added a patch 2/2 that fixes the warning by using MediaTek CPUFREQ as
+the example and added both patches to this series.
 
-The patch for this regression late last week finally showed up in
-linux-next, great. But:
+Thanks,
+Mani
 
-I noticed the patch is not in drm-fixes but in drm-next -- and thus
-afaics seems to be on tack to only get merged in the next merge window
-(or am I wrong with that?). That seems wrong to me, as this fixes a
-regression (albeit from the previous cycle, not from the current one)
-and it already took quite a while to get this relative simple fix
-finally on track -- but it's still far away from getting fixed in 5.16
-and thus will make it into 5.17, too. That seems wrong to me, at least
-if the risk is low (which is the case here afaics).
+[1] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20211005044920.78544-1-manivannan.sadhasivam@linaro.org/
 
-FWIW, this is not the only time where I noticed something like that,
-that's why I wrote documentation that covers this which is on track to
-get merged in the next merge window, unless Linus objects:
+Manivannan Sadhasivam (2):
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings
+  dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an example
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/process/handling-regressions.rst#n131
+ .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 172 ---------------
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 201 ++++++++++++++++++
+ .../bindings/dvfs/performance-domain.yaml     |  14 +-
+ 3 files changed, 211 insertions(+), 176 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
 
-To quote one of the sections relevant in this particular case:
+-- 
+2.25.1
 
->  * Aim to fix regressions within one week after the culprit was identified, if
->    the issue was introduced in either:
-> 
->     * a recent stable/longterm release
-> 
->     * the development cycle of the latest proper mainline release
-
-Ciao, Thorsten

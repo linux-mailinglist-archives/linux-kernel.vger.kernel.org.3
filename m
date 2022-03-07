@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050AF4D072F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8232E4D0736
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244938AbiCGTE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:04:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S244949AbiCGTGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237523AbiCGTEy (ORCPT
+        with ESMTP id S233935AbiCGTGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:04:54 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447EA6E56D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:03:59 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 21C6C3F613
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 19:03:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646679838;
-        bh=J4AWHeY6kJDoGGWSDU0TUvtoqIxvWQeYEQ4e5H5diOY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=hfwauzVEnqFSTqovwMDhWrtwwPu3wIMljO/FaNvTtg0C4ZLbbFFXvolHwx74dAWSg
-         zpFOK+NbWsMKBUptMutpwJhMO5C1O5HOW1nri1zgnHYo/YSwQM1HyW9AruHjSWPIn1
-         UrSjathh7hGP2APHBb3yYfH44XkGtgQKpkGURlZwqklAJYX2Oea1Dj5roArdYYa6RX
-         BjxKprh1gwhQNBeiCKv2ZRlUeNnTz3AcWXtAZvhMd59mhQaqXLBC9jmvBeqLdpS8RK
-         0r30OGbmiVEvFV6UHF9nogVjDvZRH6PamoDjSCwdZraU/ncmUOFEzDjEUctdOdreLq
-         /QtJfcVpDBl8Q==
-Received: by mail-ed1-f71.google.com with SMTP id h17-20020a05640250d100b004133863d836so9199156edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:03:58 -0800 (PST)
+        Mon, 7 Mar 2022 14:06:14 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3194ECD6;
+        Mon,  7 Mar 2022 11:05:18 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id y12so1602553edc.13;
+        Mon, 07 Mar 2022 11:05:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iXQiyusXSHknsabSyew3dw1NkYbYI4nNb8+pTTi1PQI=;
+        b=A0Qm2gzVSL627z/YIsLeTA5SP5E7x2U5Pe29dKLwHmbPEL/WdOL2oAodAGHmZcZpjn
+         JKkq7YdVAzJz4/V5YePclrtVeqaRb3FlmEdYcDTmntzHNErOPkXMN6lHILSMfGmlkTh2
+         oaBQHovjcLuesxDDS5NBnseM7LWCnuzzVOgwWQlGkg9d+MVqS8IGM5vUOQiHEvcZW/6S
+         hqDRJTeuz1h8QjgvPbQm1SQa9XYrv/Q9JLwddI7kp+ynr3928GWZqis41b22wjvOruu8
+         64T3kDN3Q0m46Bwnm3Q4WjMZMAiV/oH7HpPpM9I2eig6JNcTKl9rT5QrRceZDpfzeh72
+         TKjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J4AWHeY6kJDoGGWSDU0TUvtoqIxvWQeYEQ4e5H5diOY=;
-        b=7S5/aXE8rGDoXQF6l/TmoMKFXKoEpdLYHHZc37aXQO8BDWzbSkE1T3yWYYeh7JhT+7
-         2ic6sI9cySOm2xbbcf9tWNNnkwgTczYbve/Htu28bHh3b5U7vN0Ykz602JosYIHK3IfO
-         WdyILOt0wszcEFn/+lhWbQYhL8wUaOwGwXpCH8IqrXKV2cKwSWBJiPqznAB7jP2tdcB6
-         qW+CItPXSadoukRaK5kAfF9JogJN9p+rSmVQAOmAKRsWVBHbpJ9phOn2kecesbo7cYSQ
-         rzL+cFwewe2euMrvNuJm8uhqSDkaQlmLlmo6dm+7Y4nN7JfeV0CTvxIwUw46i4cpTLcQ
-         tu8Q==
-X-Gm-Message-State: AOAM530YLIn+jTbJ0rRjhCfUUsm1vPfdCjY+w6FtoTIuE7k+2oeimyAZ
-        4YM80i5+dIrnJrzxlhnxxiBDtR5LD73oizbaDvn5l+39vpa4pbc8upNtlLEqGqRAPGKm6+U9KuX
-        6cvam9O01BLjiIopcaSF8mIWhxEt2TZa1GfDHMBfpTA==
-X-Received: by 2002:a50:aa87:0:b0:40f:28a0:d0d6 with SMTP id q7-20020a50aa87000000b0040f28a0d0d6mr12475413edc.368.1646679837656;
-        Mon, 07 Mar 2022 11:03:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKC+brW6i/AxkVvgIwi5JIxVP90rh2B8pfzbYSF4MakKIPVSeOvoB5oYLiqCOs67+OJ+fNaA==
-X-Received: by 2002:a50:aa87:0:b0:40f:28a0:d0d6 with SMTP id q7-20020a50aa87000000b0040f28a0d0d6mr12475384edc.368.1646679837477;
-        Mon, 07 Mar 2022 11:03:57 -0800 (PST)
-Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05640206cf00b0041655b577f1sm1268973edy.25.2022.03.07.11.03.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 11:03:56 -0800 (PST)
-Message-ID: <a728aaa0-bde9-b9a9-971a-2e4b52f2b7bf@canonical.com>
-Date:   Mon, 7 Mar 2022 20:03:55 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iXQiyusXSHknsabSyew3dw1NkYbYI4nNb8+pTTi1PQI=;
+        b=cx1n/wcT87A/D0FHnUrq+2YOr8cZzmsEZBu33IHAwQaZu8hlJxNaStbVO9VxOXZ05K
+         44TjaWxE0tuHQqAOM2/ukJVqUIPEWTrR26RSUfuGNvTsugHs/8K52COzB1ah4iiKnDEV
+         UxCvhx7HWhxjuLvljwVpLeFpXW/gnwB0qFsonSPiLAT5SqFSXkhyaiXjuwqanZhWq69X
+         2R0QoW5eu7TbCE97M2UeotrYSwdFjveQ1MkPbOETIx50D6bti5k3OkbyBszaBcWjvziV
+         oWsYV0vjuI4LrvsNAf/FD38gE6KCT6QVQXLxnjRX/ElwlF3/3a4zlzV90VJJsj4JHEGF
+         tmVQ==
+X-Gm-Message-State: AOAM531bFf4l0yesVT4uPWFALUuW1kPISymcERQOwUR1n5WDGAG4g4xH
+        J+oU0VgUrsZ6nVmyqKSSU6/FRy/uTLHfZoQy/Xs=
+X-Google-Smtp-Source: ABdhPJxy2ZUaE3jKuxMdHwPTygdRtYs5VUR/hF+JBH/n7tsdurRqjjrqMjRdNeaD2Y6s4TVmSih1gf2kzIRgo8jrXaw=
+X-Received: by 2002:aa7:da93:0:b0:416:4aca:bef7 with SMTP id
+ q19-20020aa7da93000000b004164acabef7mr5481099eds.296.1646679916550; Mon, 07
+ Mar 2022 11:05:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4/4] cpufreq: mediatek: add platform data and clean up
- voltage tracking logic
-Content-Language: en-US
-To:     Tim Chang <jia-wei.chang@mediatek.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, fan.chen@mediatek.com,
-        louis.yu@mediatek.com, roger.lu@mediatek.com,
-        Allen-yy.Lin@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
- <20220307122151.11666-5-jia-wei.chang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307122151.11666-5-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220131151346.45792-6-andriy.shevchenko@linux.intel.com> <20220307192138.10f5fc32@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220307192138.10f5fc32@md1za8fc.ad001.siemens.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 7 Mar 2022 21:03:58 +0200
+Message-ID: <CAHp75Vf71FB_=i2FSoGmPbWikHLq2YLCh_J=oQz7u50hyALm0g@mail.gmail.com>
+Subject: Re: [PATCH v4 5/8] mfd: lpc_ich: Add support for pinctrl in non-ACPI system
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 13:21, Tim Chang wrote:
-> 1. add required header files and remove unnecessary header files.
-> 2. some soc needs different min/max voltage shift and voltage tracking
->    attributes. make these variables into platform data to support
->    future soc.
-> 3. add need_voltage_tracking variable to platforma data. if true, it
->    indicates soc is required to realize the voltage tracking between
->    voltage of sram and voltage of cpu by software approach. otherwise,
->    the voltage tracking is realized by hardware approach.
-> 4. add opp frequency look-up function as mtk_cpufreq_get() and
->    registered in cpufreq framework.
-> 5. update voltage_tracking() logic and drv_init(). in drv_init(), it
->    always sets highest opp voltage before return. it could prevent from
->    high-freqeuncy-low-voltage issue if two or more clients using the
->    same regulator.
+On Mon, Mar 7, 2022 at 8:21 PM Henning Schild
+<henning.schild@siemens.com> wrote:
 
-One change at a time.
+Please, do not top-post.
 
-> 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+> Can this patch not be proposed separately? Maybe i am wrong but it
+> seems unrelated to the p2sb story.
 
-Your SoB does not match from field.
+The entire story happens to begin from this very change. The author
+(you may see that's not me) proposed the change a long time ago and
+AFAIU this is the requirement to have it upstreamed.
 
-Best regards,
-Krzysztof
+> The whole p2sb base and size discovery is easy and switching the
+> simatic drivers is also. It is an interface change, where the old open
+> coding remains working.
+>
+> But having to switch to GPIO in the same series is kind of weird. That
+> is a functional change which even might deserve its own cover letter. I
+> bet there are tons of out-of-tree modules which will stop working on
+> apl after that gets merged.
+
+Upstream rarely, if at all, cares about 3rd party modules. From the
+upstream point of view the thing (whatever the 3rd party module
+supports) wasn't working ("no driver" in upstream) and won't work
+(still "no driver" in upstream) after the change, so there may not be
+any regression.
+
+> I still did not understand why apl is special and other boards do not
+> get their pinctrl brought up without ACPI/p2sb-visible.
+
+The platform is being heavily used by one of our departments in such
+configuration with firmwares that may not be fully compatible with
+UEFI.They want to support that along with the case when BIOS has no
+GPIO device being provided.
+
+> I have patches floating around, but still would be happy if we could do
+> one thing at a time.
+
+Either way any new changes must use a pin control driver and the
+previous work was accepted only on this basis.
+
+> Or maybe it is strongly coupled and I do not understand why.
+
+That's the initial requirement by our peer departament.
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0F74CFB37
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A30A4CF9BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237114AbiCGKdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S240459AbiCGKIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:08:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242099AbiCGKLO (ORCPT
+        with ESMTP id S239407AbiCGJtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8826F8878C;
-        Mon,  7 Mar 2022 01:54:26 -0800 (PST)
+        Mon, 7 Mar 2022 04:49:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C946E7A1;
+        Mon,  7 Mar 2022 01:43:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA4D2B80E70;
-        Mon,  7 Mar 2022 09:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44501C340F3;
-        Mon,  7 Mar 2022 09:53:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CB0E612CA;
+        Mon,  7 Mar 2022 09:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B303C340E9;
+        Mon,  7 Mar 2022 09:43:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646833;
-        bh=CwRWz1iT0e8U+3QDeSULEs/jxlFAROz4A7uwq2PHYqA=;
+        s=korg; t=1646646195;
+        bh=ubYZLPsvSjt4wj0ebdsKZ/CA5idFgv8UFzuCxWiQYVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dwdfiGh/9KGU2yHLDJ1ZiecIoE8n0lxTzSOyS+wgjf6jaBkfuDcNJ2UvvVoccZZMe
-         wRbNxPu3DtGA66A5UsWSiIsBJPPzXTVtfLuROHDNAVUWBFzPTqAefUismbdsCx4F/1
-         6vT4vGTNKxaKXz5K6c5UbvD+iw1mJSjloPb8/gys=
+        b=blb/sWwVMKItjSv1synZkqMjO94s6857ckzZ8kzkMWZS1BVEP9ujAt0kX5Gav8CC9
+         OJks9FHIs/97DFyjOPncIDqmpaPYP0wVFmpk5T5lo7qVJr41IfoZXGfguGMbeB3ZBr
+         xnJXYDUZg8m2cVLhsr/DQ3A0L5hlZjM9A8VGEHPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 068/186] bpf, sockmap: Do not ignore orig_len parameter
-Date:   Mon,  7 Mar 2022 10:18:26 +0100
-Message-Id: <20220307091655.993706630@linuxfoundation.org>
+        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>
+Subject: [PATCH 5.15 163/262] batman-adv: Request iflink once in batadv-on-batadv check
+Date:   Mon,  7 Mar 2022 10:18:27 +0100
+Message-Id: <20220307091707.031642024@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,43 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Sven Eckelmann <sven@narfation.org>
 
-commit 60ce37b03917e593d8e5d8bcc7ec820773daf81d upstream.
+commit 690bb6fb64f5dc7437317153902573ecad67593d upstream.
 
-Currently, sk_psock_verdict_recv() returns skb->len
+There is no need to call dev_get_iflink multiple times for the same
+net_device in batadv_is_on_batman_iface. And since some of the
+.ndo_get_iflink callbacks are dynamic (for example via RCUs like in
+vxcan_get_iflink), it could easily happen that the returned values are not
+stable. The pre-checks before __dev_get_by_index are then of course bogus.
 
-This is problematic because tcp_read_sock() might have
-passed orig_len < skb->len, due to the presence of TCP urgent data.
-
-This causes an infinite loop from tcp_read_sock()
-
-Followup patch will make tcp_read_sock() more robust vs bad actors.
-
-Fixes: ef5659280eb1 ("bpf, sockmap: Allow skipping sk_skb parser program")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
-Tested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/r/20220302161723.3910001-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: b7eddd0b3950 ("batman-adv: prevent using any virtual device created on batman-adv as hard-interface")
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/skmsg.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/batman-adv/hard-interface.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -1153,7 +1153,7 @@ static int sk_psock_verdict_recv(read_de
- 	struct sk_psock *psock;
- 	struct bpf_prog *prog;
- 	int ret = __SK_DROP;
--	int len = skb->len;
-+	int len = orig_len;
+--- a/net/batman-adv/hard-interface.c
++++ b/net/batman-adv/hard-interface.c
+@@ -149,22 +149,23 @@ static bool batadv_is_on_batman_iface(co
+ 	struct net *net = dev_net(net_dev);
+ 	struct net_device *parent_dev;
+ 	struct net *parent_net;
++	int iflink;
+ 	bool ret;
  
- 	/* clone here so sk_eat_skb() in tcp_read_sock does not drop our data */
- 	skb = skb_clone(skb, GFP_ATOMIC);
+ 	/* check if this is a batman-adv mesh interface */
+ 	if (batadv_softif_is_valid(net_dev))
+ 		return true;
+ 
++	iflink = dev_get_iflink(net_dev);
++
+ 	/* no more parents..stop recursion */
+-	if (dev_get_iflink(net_dev) == 0 ||
+-	    dev_get_iflink(net_dev) == net_dev->ifindex)
++	if (iflink == 0 || iflink == net_dev->ifindex)
+ 		return false;
+ 
+ 	parent_net = batadv_getlink_net(net_dev, net);
+ 
+ 	/* recurse over the parent device */
+-	parent_dev = __dev_get_by_index((struct net *)parent_net,
+-					dev_get_iflink(net_dev));
++	parent_dev = __dev_get_by_index((struct net *)parent_net, iflink);
+ 	/* if we got a NULL parent_dev there is something broken.. */
+ 	if (!parent_dev) {
+ 		pr_err("Cannot find parent device\n");
 
 

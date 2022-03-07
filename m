@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360E34CFB5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678024CF808
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240461AbiCGKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S238484AbiCGJry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242342AbiCGKL0 (ORCPT
+        with ESMTP id S238722AbiCGJin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AD38A304;
-        Mon,  7 Mar 2022 01:54:57 -0800 (PST)
+        Mon, 7 Mar 2022 04:38:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2C84E3AE;
+        Mon,  7 Mar 2022 01:33:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F77B60A23;
-        Mon,  7 Mar 2022 09:54:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C52CC340E9;
-        Mon,  7 Mar 2022 09:54:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62387B810BF;
+        Mon,  7 Mar 2022 09:33:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E1B6C340F3;
+        Mon,  7 Mar 2022 09:33:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646896;
-        bh=x+/m0XSob4i8XhaSbKnkLEgxtn13mwwPLD6Br4nANn4=;
+        s=korg; t=1646645594;
+        bh=B67qt1s9/yhVlYKNjUE5sEKW8kaB1jXEWKvNU9m/iuw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gzcLiA7Gc/P1kWMvwxbL6rrB6C4qXdm0L+Jtnj5qCrBdWM7Pt+KoBcY6am/cvIvdB
-         53ISOGtHvVtuhzju+ZDJrYLng9hEIOq8ogbmbCBM1pBaKYSwj7F9xSvEJr2jxhMIFR
-         +IzJcu9qXkPFQjAWiJe5y6A70nX5g4/+84ZT8w7g=
+        b=im6knJVWgwqkBPAFw22OBYwd8HhEhxZL9671xDId4bGHMX0QWdH8x4pIV7iNkwWsz
+         lrI7vmeG9TfUxMQVbSvHePcizVEl+I5+3gm1uA9HLcW1k8TyJGdNAbMMaD1AEq/j8P
+         GfrDNKjLkMCPhtBeTRPGx+JS6UlbZGPUU2QUPrJY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rui Salvaterra <rsalvaterra@gmail.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org,
+        Anthoine Bourgeois <anthoine.bourgeois@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 127/186] MIPS: ralink: mt7621: do memory detection on KSEG1
+Subject: [PATCH 5.10 082/105] ARM: dts: switch timer config to common devkit8000 devicetree
 Date:   Mon,  7 Mar 2022 10:19:25 +0100
-Message-Id: <20220307091657.630682691@linuxfoundation.org>
+Message-Id: <20220307091646.485585151@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,93 +56,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuanhong Guo <gch981213@gmail.com>
+From: Anthoine Bourgeois <anthoine.bourgeois@gmail.com>
 
-[ Upstream commit cc19db8b312a6c75645645f5cc1b45166b109006 ]
+[ Upstream commit 64324ef337d0caa5798fa8fa3f6bbfbd3245868a ]
 
-It's reported that current memory detection code occasionally detects
-larger memory under some bootloaders.
-Current memory detection code tests whether address space wraps around
-on KSEG0, which is unreliable because it's cached.
+This patch allow lcd43 and lcd70 flavors to benefit from timer
+evolution.
 
-Rewrite memory size detection to perform the same test on KSEG1 instead.
-While at it, this patch also does the following two things:
-1. use a fixed pattern instead of a random function pointer as the magic
-   value.
-2. add an additional memory write and a second comparison as part of the
-   test to prevent possible smaller memory detection result due to
-   leftover values in memory.
-
-Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
-Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: e428e250fde6 ("ARM: dts: Configure system timers for omap3")
+Signed-off-by: Anthoine Bourgeois <anthoine.bourgeois@gmail.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
- 1 file changed, 23 insertions(+), 13 deletions(-)
+ .../arm/boot/dts/omap3-devkit8000-common.dtsi | 33 +++++++++++++++++++
+ arch/arm/boot/dts/omap3-devkit8000.dts        | 33 -------------------
+ 2 files changed, 33 insertions(+), 33 deletions(-)
 
-diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-index bd71f5b14238..fd9a872d5713 100644
---- a/arch/mips/ralink/mt7621.c
-+++ b/arch/mips/ralink/mt7621.c
-@@ -20,31 +20,41 @@
+diff --git a/arch/arm/boot/dts/omap3-devkit8000-common.dtsi b/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
+index 2c19d6e255bd..0df2b1dd07f6 100644
+--- a/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
++++ b/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
+@@ -158,6 +158,39 @@
+ 	status = "disabled";
+ };
  
- #include "common.h"
- 
--static void *detect_magic __initdata = detect_memory_region;
-+#define MT7621_MEM_TEST_PATTERN         0xaa5555aa
++/* Unusable as clocksource because of unreliable oscillator */
++&counter32k {
++	status = "disabled";
++};
 +
-+static u32 detect_magic __initdata;
- 
- phys_addr_t mips_cpc_default_phys_base(void)
- {
- 	panic("Cannot detect cpc address");
- }
- 
-+static bool __init mt7621_addr_wraparound_test(phys_addr_t size)
-+{
-+	void *dm = (void *)KSEG1ADDR(&detect_magic);
++/* Unusable as clockevent because if unreliable oscillator, allow to idle */
++&timer1_target {
++	/delete-property/ti,no-reset-on-init;
++	/delete-property/ti,no-idle;
++	timer@0 {
++		/delete-property/ti,timer-alwon;
++	};
++};
 +
-+	if (CPHYSADDR(dm + size) >= MT7621_LOWMEM_MAX_SIZE)
-+		return true;
-+	__raw_writel(MT7621_MEM_TEST_PATTERN, dm);
-+	if (__raw_readl(dm) != __raw_readl(dm + size))
-+		return false;
-+	__raw_writel(!MT7621_MEM_TEST_PATTERN, dm);
-+	return __raw_readl(dm) == __raw_readl(dm + size);
-+}
++/* Preferred always-on timer for clocksource */
++&timer12_target {
++	ti,no-reset-on-init;
++	ti,no-idle;
++	timer@0 {
++		/* Always clocked by secure_32k_fck */
++	};
++};
 +
- static void __init mt7621_memory_detect(void)
- {
--	void *dm = &detect_magic;
- 	phys_addr_t size;
- 
--	for (size = 32 * SZ_1M; size < 256 * SZ_1M; size <<= 1) {
--		if (!__builtin_memcmp(dm, dm + size, sizeof(detect_magic)))
--			break;
-+	for (size = 32 * SZ_1M; size <= 256 * SZ_1M; size <<= 1) {
-+		if (mt7621_addr_wraparound_test(size)) {
-+			memblock_add(MT7621_LOWMEM_BASE, size);
-+			return;
-+		}
- 	}
- 
--	if ((size == 256 * SZ_1M) &&
--	    (CPHYSADDR(dm + size) < MT7621_LOWMEM_MAX_SIZE) &&
--	    __builtin_memcmp(dm, dm + size, sizeof(detect_magic))) {
--		memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
--		memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
--	} else {
--		memblock_add(MT7621_LOWMEM_BASE, size);
--	}
-+	memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
-+	memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
- }
- 
- void __init ralink_of_remap(void)
++/* Preferred timer for clockevent */
++&timer2_target {
++	ti,no-reset-on-init;
++	ti,no-idle;
++	timer@0 {
++		assigned-clocks = <&gpt2_fck>;
++		assigned-clock-parents = <&sys_ck>;
++	};
++};
++
+ &twl_gpio {
+ 	ti,use-leds;
+ 	/*
+diff --git a/arch/arm/boot/dts/omap3-devkit8000.dts b/arch/arm/boot/dts/omap3-devkit8000.dts
+index c2995a280729..162d0726b008 100644
+--- a/arch/arm/boot/dts/omap3-devkit8000.dts
++++ b/arch/arm/boot/dts/omap3-devkit8000.dts
+@@ -14,36 +14,3 @@
+ 		display2 = &tv0;
+ 	};
+ };
+-
+-/* Unusable as clocksource because of unreliable oscillator */
+-&counter32k {
+-	status = "disabled";
+-};
+-
+-/* Unusable as clockevent because if unreliable oscillator, allow to idle */
+-&timer1_target {
+-	/delete-property/ti,no-reset-on-init;
+-	/delete-property/ti,no-idle;
+-	timer@0 {
+-		/delete-property/ti,timer-alwon;
+-	};
+-};
+-
+-/* Preferred always-on timer for clocksource */
+-&timer12_target {
+-	ti,no-reset-on-init;
+-	ti,no-idle;
+-	timer@0 {
+-		/* Always clocked by secure_32k_fck */
+-	};
+-};
+-
+-/* Preferred timer for clockevent */
+-&timer2_target {
+-	ti,no-reset-on-init;
+-	ti,no-idle;
+-	timer@0 {
+-		assigned-clocks = <&gpt2_fck>;
+-		assigned-clock-parents = <&sys_ck>;
+-	};
+-};
 -- 
 2.34.1
 

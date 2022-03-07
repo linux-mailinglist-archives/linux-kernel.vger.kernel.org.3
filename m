@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5974CFA13
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E41B74CF658
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241947AbiCGKLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:11:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S237250AbiCGJf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240295AbiCGJus (ORCPT
+        with ESMTP id S238077AbiCGJ2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:50:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB6E74DDC;
-        Mon,  7 Mar 2022 01:44:26 -0800 (PST)
+        Mon, 7 Mar 2022 04:28:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D134A6D186;
+        Mon,  7 Mar 2022 01:26:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D7360F62;
-        Mon,  7 Mar 2022 09:44:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4688AC36AE5;
-        Mon,  7 Mar 2022 09:44:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D59961052;
+        Mon,  7 Mar 2022 09:26:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC31C340E9;
+        Mon,  7 Mar 2022 09:26:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646259;
-        bh=VfEIdLUz6bH6L/JeAHwklQGWBPhkXIBpMuMn3x4wokQ=;
+        s=korg; t=1646645195;
+        bh=vGEorF7ZRDC5ExCYoUtecOvjQ7MZEXKKS0DTbOo26NE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X8ZABe0ZSzjE5t86wqkCZ1jLSorT47nHhXUwzEU75X6oWMYeA+/SrtGM3VAf7BuCo
-         4Pwq8Q7jW5cisRumP3r/MaDlTp0NF1VmplHdvISDF6HmkaAFf+qWMBpylFsI3ScfUS
-         BFC0NvlHlOz0AUlnI0RECduZ04yLCIsPKokE087Q=
+        b=i9PTX3cxhY3+GHjIdOg9ZN6aLesWpjOtGW6U1KIg4KwqwxecajAQbmJhbtreT9pWa
+         nlkOcdTK4HH0H5Le1OX+kGUVKN/5B8xReCQSkPYMpOKIlgigNw1MF+PHK1FWx5b8uB
+         iALn6U9VoTHfYh4PqMyTObkZ7zg3vEtz/nUxEatY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lars Poeschel <poeschel@lemonage.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: [PATCH 5.15 186/262] auxdisplay: lcd2s: Fix memory leak in ->remove()
+        stable@vger.kernel.org, Jiri Bohac <jbohac@suse.cz>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Subject: [PATCH 5.4 17/64] xfrm: fix MTU regression
 Date:   Mon,  7 Mar 2022 10:18:50 +0100
-Message-Id: <20220307091707.695840636@linuxfoundation.org>
+Message-Id: <20220307091639.634611209@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Jiri Bohac <jbohac@suse.cz>
 
-commit 898c0a15425a5bcaa8d44bd436eae5afd2483796 upstream.
+commit 6596a0229541270fb8d38d989f91b78838e5e9da upstream.
 
-Once allocated the struct lcd2s_data is never freed.
-Fix the memory leak by switching to devm_kzalloc().
+Commit 749439bfac6e1a2932c582e2699f91d329658196 ("ipv6: fix udpv6
+sendmsg crash caused by too small MTU") breaks PMTU for xfrm.
 
-Fixes: 8c9108d014c5 ("auxdisplay: add a driver for lcd2s character display")
-Cc: Lars Poeschel <poeschel@lemonage.de>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+A Packet Too Big ICMPv6 message received in response to an ESP
+packet will prevent all further communication through the tunnel
+if the reported MTU minus the ESP overhead is smaller than 1280.
+
+E.g. in a case of a tunnel-mode ESP with sha256/aes the overhead
+is 92 bytes. Receiving a PTB with MTU of 1371 or less will result
+in all further packets in the tunnel dropped. A ping through the
+tunnel fails with "ping: sendmsg: Invalid argument".
+
+Apparently the MTU on the xfrm route is smaller than 1280 and
+fails the check inside ip6_setup_cork() added by 749439bf.
+
+We found this by debugging USGv6/ipv6ready failures. Failing
+tests are: "Phase-2 Interoperability Test Scenario IPsec" /
+5.3.11 and 5.4.11 (Tunnel Mode: Fragmentation).
+
+Commit b515d2637276a3810d6595e10ab02c13bfd0b63a ("xfrm:
+xfrm_state_mtu should return at least 1280 for ipv6") attempted
+to fix this but caused another regression in TCP MSS calculations
+and had to be reverted.
+
+The patch below fixes the situation by dropping the MTU
+check and instead checking for the underflows described in the
+749439bf commit message.
+
+Signed-off-by: Jiri Bohac <jbohac@suse.cz>
+Fixes: 749439bfac6e ("ipv6: fix udpv6 sendmsg crash caused by too small MTU")
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/auxdisplay/lcd2s.c |   18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ net/ipv6/ip6_output.c |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/drivers/auxdisplay/lcd2s.c
-+++ b/drivers/auxdisplay/lcd2s.c
-@@ -298,6 +298,10 @@ static int lcd2s_i2c_probe(struct i2c_cl
- 			I2C_FUNC_SMBUS_WRITE_BLOCK_DATA))
- 		return -EIO;
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -1361,8 +1361,6 @@ static int ip6_setup_cork(struct sock *s
+ 		if (np->frag_size)
+ 			mtu = np->frag_size;
+ 	}
+-	if (mtu < IPV6_MIN_MTU)
+-		return -EINVAL;
+ 	cork->base.fragsize = mtu;
+ 	cork->base.gso_size = ipc6->gso_size;
+ 	cork->base.tx_flags = 0;
+@@ -1424,8 +1422,6 @@ static int __ip6_append_data(struct sock
  
-+	lcd2s = devm_kzalloc(&i2c->dev, sizeof(*lcd2s), GFP_KERNEL);
-+	if (!lcd2s)
-+		return -ENOMEM;
+ 	fragheaderlen = sizeof(struct ipv6hdr) + rt->rt6i_nfheader_len +
+ 			(opt ? opt->opt_nflen : 0);
+-	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
+-		     sizeof(struct frag_hdr);
+ 
+ 	headersize = sizeof(struct ipv6hdr) +
+ 		     (opt ? opt->opt_flen + opt->opt_nflen : 0) +
+@@ -1433,6 +1429,13 @@ static int __ip6_append_data(struct sock
+ 		      sizeof(struct frag_hdr) : 0) +
+ 		     rt->rt6i_nfheader_len;
+ 
++	if (mtu < fragheaderlen ||
++	    ((mtu - fragheaderlen) & ~7) + fragheaderlen < sizeof(struct frag_hdr))
++		goto emsgsize;
 +
- 	/* Test, if the display is responding */
- 	err = lcd2s_i2c_smbus_write_byte(i2c, LCD2S_CMD_DISPLAY_OFF);
- 	if (err < 0)
-@@ -307,12 +311,6 @@ static int lcd2s_i2c_probe(struct i2c_cl
- 	if (!lcd)
- 		return -ENOMEM;
- 
--	lcd2s = kzalloc(sizeof(struct lcd2s_data), GFP_KERNEL);
--	if (!lcd2s) {
--		err = -ENOMEM;
--		goto fail1;
--	}
--
- 	lcd->drvdata = lcd2s;
- 	lcd2s->i2c = i2c;
- 	lcd2s->charlcd = lcd;
-@@ -321,24 +319,22 @@ static int lcd2s_i2c_probe(struct i2c_cl
- 	err = device_property_read_u32(&i2c->dev, "display-height-chars",
- 			&lcd->height);
- 	if (err)
--		goto fail2;
-+		goto fail1;
- 
- 	err = device_property_read_u32(&i2c->dev, "display-width-chars",
- 			&lcd->width);
- 	if (err)
--		goto fail2;
-+		goto fail1;
- 
- 	lcd->ops = &lcd2s_ops;
- 
- 	err = charlcd_register(lcd2s->charlcd);
- 	if (err)
--		goto fail2;
-+		goto fail1;
- 
- 	i2c_set_clientdata(i2c, lcd2s);
- 	return 0;
- 
--fail2:
--	kfree(lcd2s);
- fail1:
- 	kfree(lcd);
- 	return err;
++	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
++		     sizeof(struct frag_hdr);
++
+ 	/* as per RFC 7112 section 5, the entire IPv6 Header Chain must fit
+ 	 * the first fragment
+ 	 */
 
 

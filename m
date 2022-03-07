@@ -2,161 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3629F4D04F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242B94D04FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244388AbiCGRJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S240612AbiCGRLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiCGRJC (ORCPT
+        with ESMTP id S244399AbiCGRLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:09:02 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D6431DEC;
-        Mon,  7 Mar 2022 09:08:07 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 227DNCK5010083;
-        Mon, 7 Mar 2022 09:07:50 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=BPav4V5tC+JFnlhVXpIKicn0huC/C/iW0swT1SwzuS8=;
- b=b/2dBknSgKTD+4bouYbDU4I1DVBrB5u6vXU/v9eRY9aHtJoXe8LsybDDv2OGhOxQr6Nd
- 3IT2QPv8lboS3d49afbesTxbSqgvGC80vvcioAwnwxTLK4vPtsB4nI8CbzgT13M/mbkk
- 2anUgD1XeLCJC/E2oOW6hcUeGiCI/vS5gwQ= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3em6esb7yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Mar 2022 09:07:49 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lItUig+ieNVei3h9dHVPuehKfYDGKs0TSEsFFekA4NBgB7CPLpa5rGXo5QcePNoyN9AbjvD7tu76QgwLvUaA0CBeCXHSm2fTH8hbGauHWH42/4btRZ2Mout/UfUD99Q7TeZKUlKIoTPuhDZS2li7d1ztr9Wgv8mhuAmhQQrEdnOU6EpOtv1RCXPbUWbDA/VW2Ld4tacP6YCwiHRLR9LVqL68akWwKstuEhtIv/1Io8BzwH66nDVPnGbnUsKbNtdvwB09LroalRtle9VjsyiaCUeH2ogCslBfTxE3N4joRZZ3W8/bfO6AR9S7iVddZYgIKacklZiBgaU1LdofUwoRbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BPav4V5tC+JFnlhVXpIKicn0huC/C/iW0swT1SwzuS8=;
- b=hvSvf/oVIzR0aFbN491rCPlM9ansNtBt7BeMzNPqW6ZWz3IM07SZtBipcD1QF4aGG4AX0GfyrmqfGh6a/BIplIxXbcBWeyncTMlxPLIcBUdc9aUQPaPvHyoqSPP6rCSqIwur9H1aM9ueSksE6aiJorTouyKEWHHdTZo2NAbcohxzV2dqNisn+y8RkcTcY8EWic5PPsjtaZBGvqOSxLmy3PpffCNbCJ9b4BfpvB2X00owqsV7aHnuL+pr2CJkp+4Wv4m70mtOZgY56NaYLKP0jfZcJ7pWKUzbVQtExf6G57lj23qAgKaZ2co/ls8i21BfVxHxRCCx0YJEgGpUrEFxug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BY3PR15MB4883.namprd15.prod.outlook.com (2603:10b6:a03:3c2::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Mon, 7 Mar
- 2022 17:07:47 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::91dd:facd:e7a5:a8d1]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::91dd:facd:e7a5:a8d1%3]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
- 17:07:47 +0000
-Message-ID: <b4f443bc-665c-379b-b73c-a6ca1ce5d701@fb.com>
-Date:   Mon, 7 Mar 2022 09:07:43 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [PATCH bpf-next] bpf: determine buf_info inside
- check_buffer_access()
-Content-Language: en-US
-To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org,
+        Mon, 7 Mar 2022 12:11:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1216E8303A;
+        Mon,  7 Mar 2022 09:10:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5010CB81654;
+        Mon,  7 Mar 2022 17:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B055BC340E9;
+        Mon,  7 Mar 2022 17:10:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646673045;
+        bh=WfnjANlT5lGcW3Udfb5Osn8F8WN9292KBLELi1nOxY8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iajm5Xf/e8NYPYKJYBzTIkRWCESEBNGX3DrcqL9LBhC5nh1mQAey1aIJJt6Sj3YLa
+         wtC/BPZoKjqqA7XfsDSlFXwx52+XinXA8+S0aQy0cLiVZMI52NQI8sWWLXnLkwOWMH
+         0/PsPIWK62BAHTqm6Mq4pZkPChQuxsJIo9uHs6ygJRiFl0i3vZ/obvc52wJeUi8R1M
+         WhcyCM3Adc3twLujqpl3g60578yTpMGk3YwupG1iH90tiLn9Ah7y/DSdt8SyEeL1lc
+         IxqlXzm2tqTzbeQXtU2qB6RB0YktqRetxspySq6qAFjDDaMCXOa2sXPzvNnYTi6T/3
+         slIWBTwohtogw==
+Date:   Mon, 7 Mar 2022 19:10:04 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org
-References: <YiWYLnAkEZXBP/gH@syu-laptop>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <YiWYLnAkEZXBP/gH@syu-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0095.namprd04.prod.outlook.com
- (2603:10b6:303:83::10) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+Subject: Re: [PATCH V2 06/32] x86/sgx: Support VMA permissions more relaxed
+ than enclave permissions
+Message-ID: <YiY8bD/QcmcHH8dz@iki.fi>
+References: <cover.1644274683.git.reinette.chatre@intel.com>
+ <0555a4b4a5e8879eb8f879ab3d9908302000f11c.1644274683.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b7f5b7a5-1468-4856-b2a1-08da005d0108
-X-MS-TrafficTypeDiagnostic: BY3PR15MB4883:EE_
-X-Microsoft-Antispam-PRVS: <BY3PR15MB4883915E08A77BB116444A01D3089@BY3PR15MB4883.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UguSrihsrQEPFH6t6VK/bWVaJA8ptc/94zEK/KbQWKIaXOQASqmVdfzydjQ9i4ZIp6ax30Wtz3+mWHx05m5JHno/nru4RNGTvgmWZbPbx1OTaBRcghak/k7JeyH86dTK0KLffDiaPxgvJTXZdYMf9+rstP2XFifJzpbpky4vRdcqCHvgy8wb5wDNZspjRw+fP42gSXo4U5mzyJu3LnPUTSB2nbMbj8D/0opI7n/SG2/O7roYE2ma9lAdkyTUy8Fs+I09LvaXuOgXNN2QQvNMX0yCybidUKQnFPZy8A5EueB0sjcKBWBgAvQ6VGb28bmrDYMzVmNM2vP/ckE0FsqbH7fMOwEl9ENBF4UE7NeVmbOS9f+W6+1i3ZcmvMO1HSauJr4aZZ5fVxUwAZURJL/psT+DcL3wcNzFZuO6ZnWYM0/ivnPziBpPoYBNbqXOZ2D2ASTVPfbhF8judDLIyPpuAa2kpasOzK7RvVLFs9TsARYJdWEbCn0wWqKm8KmaUdkITodWw0+S7+Xi16xF/rukcMS1GS6RDbgvwdH5enmeFYUPWjkINYbR6RP0GEDycGwStp4XT4jcuBemE1PxsuRCNtvQptuX2WSWp9fjSUS23rSHkFhAg4pc2shDVpq7S57XkLs9S7riuoVMAzyNF8g5ZY7n2BYjpzgo9YKbiOgPLfNald6aueHfVY52Z5dQYBq/exFgPd42xnPnjsZ+Q9pu2C2d2aGnf7F0V2OlQoYdSn4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(52116002)(53546011)(36756003)(38100700002)(2616005)(31686004)(83380400001)(2906002)(66946007)(5660300002)(316002)(54906003)(66556008)(6512007)(8936002)(4744005)(31696002)(6486002)(86362001)(186003)(6666004)(8676002)(4326008)(508600001)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V3ZZWE1qcVFjOEs5cG45cStaMTFUMFQ2Yk05dmJ2QTBhcDBwRDVCVkRwZEVG?=
- =?utf-8?B?Snhob2MzQ0pLd1czNGlhZFZrdVpobXA4RGdlT29MQnhYQ0dYN0tGcEZyWEIw?=
- =?utf-8?B?QWFsRVdsT0dJbGhtS2twRDNjTnV2K0R2L3dpN1JBcTdIbi9tVExKZjJYUlcy?=
- =?utf-8?B?SktKSWZ3WTA5cjd2T3BSa0VXTXc1TFVqZmZoTWVvRHYvSk1GNk82S01GMVUw?=
- =?utf-8?B?SGU0SllkMkx6Ujd4amlWYk11OWxOYkJUbVY3M1pOdVZKVUNYaDl5UHVYazJE?=
- =?utf-8?B?c3B0QzVPdVpTS0NmNis5TnYrbFk1eDdPd01LaFptRHhMeXJUV0Q2S0pmYmdp?=
- =?utf-8?B?UE1OVTJkNEVTY0x5YnpGdkpEZDYxcVJ2U2NwQUdlZk0xM3JGZEtTY2ZXSjBP?=
- =?utf-8?B?WnJZd0V1M3p1Y242QUxndHVUc3o0MjRwYWJyZDhHeFRMSjNFQ2dtZmRHZS81?=
- =?utf-8?B?R0JnRWtPRUtUaWVLMUIybkE1QjZDZU95WlFWTXdJbFZGaFBXQWI0QUM5QW5P?=
- =?utf-8?B?SlkwNUVJSW1iNkhsR1A2akgrNktYdStvV1gra3dSU0g0YkZoNVlsVjdpdU1T?=
- =?utf-8?B?YW1NVkhFUUJHeUFiZ08vWk1rT2RrKzgwOEdodm84SC9vOEE1bmd4KzVtKzdZ?=
- =?utf-8?B?aysxT1pvT1IxL01xUFc3ZFUzM0QvWHgzbTRSczJRdGxDMGUxZ05jRXVZamVK?=
- =?utf-8?B?dEhWZFhQY2xMYUN6UWZjRWpOVk15RHp1TGxpTndQTUtWOU05STIrTzRZQUQx?=
- =?utf-8?B?NHhzOW1va0RFdXFVMnBsTmhPZDkxT3VsaW1XZCtSVjdlWFRHMk5Rd0lyVUU1?=
- =?utf-8?B?R1NyOVBOdzkvYWdLV2xyWFJhYkFzUE1uMW13R0ZmSXVCUCs0UkdnaHhqdXdV?=
- =?utf-8?B?RjhLVHNhNm5tWEo3UHdCdXNFWE1SV1hlZ0ROSDd0TFlxcndTT0pOUlh2VkU5?=
- =?utf-8?B?RStvVGhxd0FTNUR1NHFYaEhLb3lQdHF0ZDJUejlYYkZmbEh5dU9YWVJPdXR4?=
- =?utf-8?B?SUZ5emtHR084MEhLQWZ6WkM0cHRRME9DNzhaRU9QK3E1Z2M2VjNyc2FZS2RR?=
- =?utf-8?B?dmJYZ0J0RFRvYVZtdmhpMFZjYXhmYjZNZzVCSm5sQ1ptVG9vbHU3cXVFNS9J?=
- =?utf-8?B?eFY5Q3VWaiswMlFMZWtLU1ZaN2JTN0tPMXVzdjFmdTdQZ29wdVlFR1pDc0Jk?=
- =?utf-8?B?ZUQvUFpDWlBqUWowNXBpVEZwMmVoMnk2Z1dvb1pWWnppbmJ6OW90MU5OalBI?=
- =?utf-8?B?ekorb3RESmtDWTRzbi9zQm0zbFVqdlZEOVg4YW5mSHBUV1c5M3hpd0RBWnRx?=
- =?utf-8?B?MVREVEtnQ2pNV2tkMEorT3ZrU1lHcVorc3FZUTZvMXZUY0R4UytWZ0tKa0ww?=
- =?utf-8?B?cnZ1d2gyT2RKSVpZK1p6MXhzTTE0aEJzSFBoTHIxYWE1OExlZXNNMU4xYUpm?=
- =?utf-8?B?c2dQc2lFSmtLWU5kQkczRGQycEFzcXpFTlJsMEVTMm54Mk9PV1B0ZVA2NmlR?=
- =?utf-8?B?dVhjeG42aWpPK3lCMXdoeDNyendCT3RvNUNrczNxb3VoNUR0Z0VJU3NoRHFn?=
- =?utf-8?B?cENsT0gwNGUwOVZibE9mbkF6dWlXdUNsUXNEUlpONENhSDZkUVRmazM1bXkr?=
- =?utf-8?B?SVZ1b3R2U1dHRUI1MlEvSHhvcy90T3ZDZ2dXTHh1MHJMcU5TbkU5dnM3SmUz?=
- =?utf-8?B?dXpUUEgrUDRrVnpGdTE1VXl5RlFpenFhNk1qVjlLTFFsQjFVcWRGQThqbkJB?=
- =?utf-8?B?T0xwbDY4dnUzMUtTcThqYnJuaExhTDM0SjlUV3lod01teEQ3MG5RSzJZNllK?=
- =?utf-8?B?K1pPK2NjNXlkOEkzWkV0aDhiSDdCeGFjaHRNVVdPQmEraVpuSzRoclo2WnZO?=
- =?utf-8?B?SUxaVmVSMVA2UytCd2taUFMzcG54em1rT3RGc2NPSld6Q09HTlJsTndmazZj?=
- =?utf-8?B?UE03ckJmVUhCSTFIcGRrUTRUc0t4ZXFLTU5sR1RLdHVxTTQvY3B2UzJBY1Fu?=
- =?utf-8?B?ZG41cjF4QVo2QnJoaFVhODlJdEg4TTd1cWJHNVllc25sVWdtaTJtd1hWNkpZ?=
- =?utf-8?B?YjVLbVRNcmxjNWkzVzA1dm5PaVl6dEFCM1ZqdjBwakRWK2h4Yi9IQWdiTmQy?=
- =?utf-8?Q?ZyvzjzfWqrKEQ3SIYgyBGxaQU?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7f5b7a5-1468-4856-b2a1-08da005d0108
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 17:07:47.7839
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Tix4Ydb2g/FGdc5QsGjhv1d7oPYfxNqWIM7UpH4//UMH5EGqP7NZQqWNjVsx/rDh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR15MB4883
-X-Proofpoint-ORIG-GUID: NwSH6XRZT92_yGKlKUuBCIZ_rsLPgqEF
-X-Proofpoint-GUID: NwSH6XRZT92_yGKlKUuBCIZ_rsLPgqEF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-07_09,2022-03-04_01,2022-02-23_01
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0555a4b4a5e8879eb8f879ab3d9908302000f11c.1644274683.git.reinette.chatre@intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/6/22 9:29 PM, Shung-Hsi Yu wrote:
-> Instead of determining buf_info string in the caller of
-> check_buffer_access(), we can determine whether the register type is read-only
-> through type_is_rdonly_mem() helper inside check_buffer_access() and construct
-> buf_info, making the code slightly cleaner.
+On Mon, Feb 07, 2022 at 04:45:28PM -0800, Reinette Chatre wrote:
+> === Summary ===
 > 
-> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> An SGX VMA can only be created if its permissions are the same or
+> weaker than the Enclave Page Cache Map (EPCM) permissions. After VMA
+> creation this same rule is again enforced by the page fault handler:
+> faulted enclave pages are required to have equal or more relaxed
+> EPCM permissions than the VMA permissions.
+> 
+> On SGX1 systems the additional enforcement in the page fault handler
+> is redundant and on SGX2 systems it incorrectly prevents access.
+> On SGX1 systems it is unnecessary to repeat the enforcement of the
+> permission rule. The rule used during original VMA creation will
+> ensure that any access attempt will use correct permissions.
+> With SGX2 the EPCM permissions of a page can change after VMA
+> creation resulting in the VMA permissions potentially being more
+> relaxed than the EPCM permissions and the page fault handler
+> incorrectly blocking valid access attempts.
+> 
+> Enable the VMA's pages to remain accessible while ensuring that
+> the PTEs are installed to match the EPCM permissions but not be
+> more relaxed than the VMA permissions.
+> 
+> === Full Changelog ===
+> 
+> An SGX enclave is an area of memory where parts of an application
+> can reside. First an enclave is created and loaded (from
+> non-enclave memory) with the code and data of an application,
+> then user space can map (mmap()) the enclave memory to
+> be able to enter the enclave at its defined entry points for
+> execution within it.
+> 
+> The hardware maintains a secure structure, the Enclave Page Cache Map
+> (EPCM), that tracks the contents of the enclave. Of interest here is
+> its tracking of the enclave page permissions. When a page is loaded
+> into the enclave its permissions are specified and recorded in the
+> EPCM. In parallel the kernel maintains permissions within the
+> page table entries (PTEs) and the rule is that PTE permissions
+> are not allowed to be more relaxed than the EPCM permissions.
+> 
+> A new mapping (mmap()) of enclave memory can only succeed if the
+> mapping has the same or weaker permissions than the permissions that
+> were vetted during enclave creation. This is enforced by
+> sgx_encl_may_map() that is called on the mmap() as well as mprotect()
+> paths. This rule remains.
+> 
+> One feature of SGX2 is to support the modification of EPCM permissions
+> after enclave initialization. Enclave pages may thus already be part
+> of a VMA at the time their EPCM permissions are changed resulting
+> in the VMA's permissions potentially being more relaxed than the EPCM
+> permissions.
+> 
+> Allow permissions of existing VMAs to be more relaxed than EPCM
+> permissions in preparation for dynamic EPCM permission changes
+> made possible in SGX2.  New VMAs that attempt to have more relaxed
+> permissions than EPCM permissions continue to be unsupported.
+> 
+> Reasons why permissions of existing VMAs are allowed to be more relaxed
+> than EPCM permissions instead of dynamically changing VMA permissions
+> when EPCM permissions change are:
+> 1) Changing VMA permissions involve splitting VMAs which is an
+>    operation that can fail. Additionally changing EPCM permissions of
+>    a range of pages could also fail on any of the pages involved.
+>    Handling these error cases causes problems. For example, if an
+>    EPCM permission change fails and the VMA has already been split
+>    then it is not possible to undo the VMA split nor possible to
+>    undo the EPCM permission changes that did succeed before the
+>    failure.
+> 2) The kernel has little insight into the user space where EPCM
+>    permissions are controlled from. For example, a RW page may
+>    be made RO just before it is made RX and splitting the VMAs
+>    while the VMAs may change soon is unnecessary.
+> 
+> Remove the extra permission check called on a page fault
+> (vm_operations_struct->fault) or during debugging
+> (vm_operations_struct->access) when loading the enclave page from swap
+> that ensures that the VMA permissions are not more relaxed than the
+> EPCM permissions. Since a VMA could only exist if it passed the
+> original permission checks during mmap() and a VMA may indeed
+> have more relaxed permissions than the EPCM permissions this extra
+> permission check is no longer appropriate.
+> 
+> With the permission check removed, ensure that PTEs do
+> not blindly inherit the VMA permissions but instead the permissions
+> that the VMA and EPCM agree on. PTEs for writable pages (from VMA
+> and enclave perspective) are installed with the writable bit set,
+> reducing the need for this additional flow to the permission mismatch
+> cases handled next.
+> 
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> ---
+> Changes since V1:
+> - Reword commit message (Jarkko).
+> - Use "relax" instead of "exceed" when referring to permissions (Dave).
+> - Add snippet to Documentation/x86/sgx.rst that highlights the
+>   relationship between VMA, EPCM, and PTE permissions on SGX
+>   systems (Andy).
+> 
+>  Documentation/x86/sgx.rst      | 10 +++++++++
+>  arch/x86/kernel/cpu/sgx/encl.c | 38 ++++++++++++++++++----------------
+>  2 files changed, 30 insertions(+), 18 deletions(-)
+> 
+> diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
+> index 89ff924b1480..5659932728a5 100644
+> --- a/Documentation/x86/sgx.rst
+> +++ b/Documentation/x86/sgx.rst
+> @@ -99,6 +99,16 @@ The relationships between the different permission masks are:
+>  * PTEs are installed to match the EPCM permissions, but not be more
+>    relaxed than the VMA permissions.
+>  
+> +On systems supporting SGX2 EPCM permissions may change while the
+> +enclave page belongs to a VMA without impacting the VMA permissions.
+> +This means that a running VMA may appear to allow access to an enclave
+> +page that is not allowed by its EPCM permissions. For example, when an
+> +enclave page with RW EPCM permissions is mapped by a RW VMA but is
+> +subsequently changed to have read-only EPCM permissions. The kernel
+> +continues to maintain correct access to the enclave page through the
+> +PTE that will ensure that only access allowed by both the VMA
+> +and EPCM permissions are permitted.
+> +
+>  Application interface
+>  =====================
+>  
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+> index 48afe96ae0f0..b6105d9e7c46 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.c
+> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> @@ -91,10 +91,8 @@ static struct sgx_epc_page *sgx_encl_eldu(struct sgx_encl_page *encl_page,
+>  }
+>  
+>  static struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
+> -						unsigned long addr,
+> -						unsigned long vm_flags)
+> +						unsigned long addr)
+>  {
+> -	unsigned long vm_prot_bits = vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
+>  	struct sgx_epc_page *epc_page;
+>  	struct sgx_encl_page *entry;
+>  
+> @@ -102,14 +100,6 @@ static struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
+>  	if (!entry)
+>  		return ERR_PTR(-EFAULT);
+>  
+> -	/*
+> -	 * Verify that the faulted page has equal or higher build time
+> -	 * permissions than the VMA permissions (i.e. the subset of {VM_READ,
+> -	 * VM_WRITE, VM_EXECUTE} in vma->vm_flags).
+> -	 */
+> -	if ((entry->vm_max_prot_bits & vm_prot_bits) != vm_prot_bits)
+> -		return ERR_PTR(-EFAULT);
+> -
+>  	/* Entry successfully located. */
+>  	if (entry->epc_page) {
+>  		if (entry->desc & SGX_ENCL_PAGE_BEING_RECLAIMED)
+> @@ -138,7 +128,9 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
+>  {
+>  	unsigned long addr = (unsigned long)vmf->address;
+>  	struct vm_area_struct *vma = vmf->vma;
+> +	unsigned long page_prot_bits;
+>  	struct sgx_encl_page *entry;
+> +	unsigned long vm_prot_bits;
+>  	unsigned long phys_addr;
+>  	struct sgx_encl *encl;
+>  	vm_fault_t ret;
+> @@ -155,7 +147,7 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
+>  
+>  	mutex_lock(&encl->lock);
+>  
+> -	entry = sgx_encl_load_page(encl, addr, vma->vm_flags);
+> +	entry = sgx_encl_load_page(encl, addr);
+>  	if (IS_ERR(entry)) {
+>  		mutex_unlock(&encl->lock);
+  
+> @@ -167,7 +159,19 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
+>  
+>  	phys_addr = sgx_get_epc_phys_addr(entry->epc_page);
+>  
+> -	ret = vmf_insert_pfn(vma, addr, PFN_DOWN(phys_addr));
+> +	/*
+> +	 * Insert PTE to match the EPCM page permissions ensured to not
+> +	 * exceed the VMA permissions.
+> +	 */
+> +	vm_prot_bits = vma->vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
+> +	page_prot_bits = entry->vm_max_prot_bits & vm_prot_bits;
+> +	/*
+> +	 * Add VM_SHARED so that PTE is made writable right away if VMA
+> +	 * and EPCM are writable (no COW in SGX).
+> +	 */
+> +	page_prot_bits |= (vma->vm_flags & VM_SHARED);
+> +	ret = vmf_insert_pfn_prot(vma, addr, PFN_DOWN(phys_addr),
+> +				  vm_get_page_prot(page_prot_bits));
+>  	if (ret != VM_FAULT_NOPAGE) {
+>  		mutex_unlock(&encl->lock);
+>  
+> @@ -295,15 +299,14 @@ static int sgx_encl_debug_write(struct sgx_encl *encl, struct sgx_encl_page *pag
+>   * Load an enclave page to EPC if required, and take encl->lock.
+>   */
+>  static struct sgx_encl_page *sgx_encl_reserve_page(struct sgx_encl *encl,
+> -						   unsigned long addr,
+> -						   unsigned long vm_flags)
+> +						   unsigned long addr)
+>  {
+>  	struct sgx_encl_page *entry;
+>  
+>  	for ( ; ; ) {
+>  		mutex_lock(&encl->lock);
+>  
+> -		entry = sgx_encl_load_page(encl, addr, vm_flags);
+> +		entry = sgx_encl_load_page(encl, addr);
+>  		if (PTR_ERR(entry) != -EBUSY)
+>  			break;
+>  
+> @@ -339,8 +342,7 @@ static int sgx_vma_access(struct vm_area_struct *vma, unsigned long addr,
+>  		return -EFAULT;
+>  
+>  	for (i = 0; i < len; i += cnt) {
+> -		entry = sgx_encl_reserve_page(encl, (addr + i) & PAGE_MASK,
+> -					      vma->vm_flags);
+> +		entry = sgx_encl_reserve_page(encl, (addr + i) & PAGE_MASK);
+>  		if (IS_ERR(entry)) {
+>  			ret = PTR_ERR(entry);
+>  			break;
+> -- 
+> 2.25.1
+> 
 
-LGTM. Thanks.
+If you unconditionally set vm_max_prot_bits to RWX for dynamically created
+pags, you would not need to do this.
 
-Acked-by: Yonghong Song <yhs@fb.com>
+These patches could be then safely dropped then:
+
+- [PATCH V2 06/32] x86/sgx: Support VMA permissions more relaxed than enclave permissions 
+- [PATCH V2 08/32] x86/sgx: x86/sgx: Add sgx_encl_page->vm_run_prot_bits for dynamic permission changes
+- [PATCH V2 15/32] x86/sgx: Support relaxing of enclave page permissions
+
+And that would also keep full ABI compatibility without exceptions to the
+existing mainline code.
+
+BR, Jarkko

@@ -2,173 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C2B4D07D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7884D07D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245124AbiCGTlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S245131AbiCGTmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiCGTlo (ORCPT
+        with ESMTP id S231883AbiCGTmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:41:44 -0500
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5347324F0D;
-        Mon,  7 Mar 2022 11:40:49 -0800 (PST)
-Received: from 1nRJDr-0004sP-UY by out3d.electric.net with emc1-ok (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nRJDs-0004vZ-V8; Mon, 07 Mar 2022 11:40:48 -0800
-Received: by emcmailer; Mon, 07 Mar 2022 11:40:48 -0800
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3d.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nRJDr-0004sP-UY; Mon, 07 Mar 2022 11:40:47 -0800
-Received: from tsdebian (_gateway [192.168.0.64])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id B5B713D392;
-        Mon,  7 Mar 2022 12:40:46 -0700 (MST)
-Message-ID: <1646682026.7444.2.camel@embeddedTS.com>
-Subject: Re: [PATCH] gpio: ts4900: Do not set DAT and OE together
-From:   Kris Bahnsen <kris@embeddedTS.com>
-Reply-To: kris@embeddedTS.com
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Featherston <mark@embeddedts.com>
-Date:   Mon, 07 Mar 2022 11:40:26 -0800
-In-Reply-To: <CAMRc=MeHT4pX1ZRbOz0owDDec5rv+FE84rp464ugffbH5PuS5w@mail.gmail.com>
-References: <20220304221517.30213-1-kris@embeddedTS.com>
-         <CAMRc=MeHT4pX1ZRbOz0owDDec5rv+FE84rp464ugffbH5PuS5w@mail.gmail.com>
-Organization: embeddedTS
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
+        Mon, 7 Mar 2022 14:42:03 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5F22AC67;
+        Mon,  7 Mar 2022 11:41:08 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id e13so14962587plh.3;
+        Mon, 07 Mar 2022 11:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=G6/SEA3VCDdTTdgFNwQqU6r2THdOql9huhoycTgbW+M=;
+        b=Pkx7wq+ioK+v2YCTnpFtEDXnp3tF24+lDVZZdeRROu7FZXGRFrsT2pbxSbWjqGnTP3
+         qdp+0ody5XwJA0Yv+3XHz4468LWDymK44IibjiLpSUhR+IwrZCMC91Fpcffpv0WqDNN2
+         KAIuykf7iAmJPZqHT4F+VvfMF3e890FpWX3KVmp7gJW0wg1TjCWQBMZ+62R76VLbCnMI
+         oOYYLlrNsK9VDd3DX2Ig3GFWHuQcXZUWnOjBNluoT5t6TnVF9vQzcL+Znjc9VOb9ZsJ3
+         Q0jpb7gYCkRawwxaluLMe8FC2M5j5Xg1W7XrCE0BbZ/rXrXC1eyyGRwd0Lurg/PLqBs2
+         3ZLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=G6/SEA3VCDdTTdgFNwQqU6r2THdOql9huhoycTgbW+M=;
+        b=w0QuYLXcgZrTKiUbp4D/7NF5cSNH+qxmZ5a3hoqOwEM0JKdL0V4Lyr/EeWFCfINdtC
+         8TiI8meY6f6Izrk2qksuyNO3NEZfoGAk5J1lG6Gdavtkj8gKCvyI7Cu8C8mMDqPdCEvw
+         aCGRKvJA56sVlpPL5+zrWQkxDkhnCE4d8uAS8x0ZftNSR1gBoXPDBAsFz+1MSlvX6uXH
+         AABMxpZoI54MSI1GjYoZbYJ9cYGiVahK4ASD3DlFobB7rBFsOoWwAO0lhjhYkUOi9rzd
+         +NOJAzQegLqS+uAxAFatcgXFwKOnMW8Vo2XDQ0D040f0uiI801wZtytT7kjDNCUuCOCR
+         3xaA==
+X-Gm-Message-State: AOAM533rG1yN5QU584rrqpnL7nXKrukMDs0cr0IVwRlc2YqhoLz3Zljd
+        k8ZbjPbAGlsxyGnUIrno0rY=
+X-Google-Smtp-Source: ABdhPJzeFoQcTtshzwwxjeu6QZ9II2PAplNY0yKUZSE0W974Uk8kW6hhdwpuuwNKbEUCRSAX3unlYg==
+X-Received: by 2002:a17:90b:4c44:b0:1be:f4be:d69e with SMTP id np4-20020a17090b4c4400b001bef4bed69emr580812pjb.163.1646682068208;
+        Mon, 07 Mar 2022 11:41:08 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id i128-20020a626d86000000b004f3f2929d7asm15936947pfc.217.2022.03.07.11.41.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 11:41:07 -0800 (PST)
+Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220307162207.188028559@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <66e161cf-1b12-7090-a8d2-558258ec403d@gmail.com>
+Date:   Mon, 7 Mar 2022 11:41:04 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220307162207.188028559@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
-X-Authenticated_ID: 
-X-Virus-Status: Scanned by VirusSMART (c)
-X-Virus-Status: Scanned by VirusSMART (b)
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=zG3JQ1AtPaZKEqLY1Uf3Ei4t09ru1Q8ncGgjkOed1xA=;b=a5Nry+bDgsbHj8ZkLQ13zOHYJy9PlkqOyK3VzKPvp9GvbxkGqkF9M5XJochGRVa0POQuQsMm+g1i82Igi3c8XviHa04a/fwtTrfj4aNG0v8qX80fgarJGJ6IvXQJobGGmd+Syfh6j3dWUQsekOPthkpP9K5mgiO1anagP57VCpPPFsTTjhrLXWDDeur0cILn8gGtr3L6jpAHEkQ13p1CO/huVthOK1/G0UmM9QbhNfniiGHCUSBWJH/m0WS/uPZotODG8quSX6k1cbB6iG+kFflkTrRTN+1QyxLIRQ6UyiSgScxEFWFHGZolsXuvJqFr80ABuJ2E45MON7W9o9bLrg==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-07 at 10:13 +0100, Bartosz Golaszewski wrote:
-> On Fri, Mar 4, 2022 at 11:15 PM Kris Bahnsen <kris@embeddedts.com> wrote:
-> > 
-> > From: Mark Featherston <mark@embeddedTS.com>
-> > 
-> > This works around an issue with the hardware where both OE and
-> > DAT are exposed in the same register. If both are updated
-> > simultaneously, the harware makes no guarantees that OE or DAT
-> > will actually change in any given order and may result in a
-> > glitch of a few ns on a GPIO pin when changing direction and value
-> > in a single write.
-> > 
-> > Setting direction to input now only affects OE bit. Setting
-> > direction to output updates DAT first, then OE.
-> > 
-> > Signed-off-by: Mark Featherston <mark@embeddedTS.com>
-> > Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
-> > ---
-> >  drivers/gpio/gpio-ts4900.c | 25 ++++++++++++++++++++-----
-> >  1 file changed, 20 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
-> > index d885032cf814..fbabfca030c0 100644
-> > --- a/drivers/gpio/gpio-ts4900.c
-> > +++ b/drivers/gpio/gpio-ts4900.c
-> > @@ -1,7 +1,8 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> >  /*
-> >   * Digital I/O driver for Technologic Systems I2C FPGA Core
-> >   *
-> > - * Copyright (C) 2015 Technologic Systems
-> > + * Copyright (C) 2015-2018 Technologic Systems
-> >   * Copyright (C) 2016 Savoir-Faire Linux
-> >   *
-> >   * This program is free software; you can redistribute it and/or
-> > @@ -55,19 +56,33 @@ static int ts4900_gpio_direction_input(struct gpio_chip *chip,
-> >  {
-> >         struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
-> > 
-> > -       /*
-> > -        * This will clear the output enable bit, the other bits are
-> > -        * dontcare when this is cleared
-> > +       /* Only clear the OE bit here, requires a RMW. Prevents potential issue
-> > +        * with OE and data getting to the physical pin at different times.
-> >          */
-> > -       return regmap_write(priv->regmap, offset, 0);
-> > +       return regmap_update_bits(priv->regmap, offset, TS4900_GPIO_OE, 0);
-> >  }
-> > 
-> >  static int ts4900_gpio_direction_output(struct gpio_chip *chip,
-> >                                         unsigned int offset, int value)
-> >  {
-> >         struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
-> > +       unsigned int reg;
-> >         int ret;
-> > 
-> > +       /* If changing from an input to an output, we need to first set the
-> > +        * proper data bit to what is requested and then set OE bit. This
-> > +        * prevents a glitch that can occur on the IO line
-> > +        */
-> > +       regmap_read(priv->regmap, offset, &reg);
-> > +       if (!(reg & TS4900_GPIO_OE)) {
-> > +               if (value)
-> > +                       reg = TS4900_GPIO_OUT;
-> > +               else
-> > +                       reg &= ~TS4900_GPIO_OUT;
-> > +
-> > +               regmap_write(priv->regmap, offset, reg);
-> > +       }
-> > +
-> >         if (value)
-> >                 ret = regmap_write(priv->regmap, offset, TS4900_GPIO_OE |
-> >                                                          TS4900_GPIO_OUT);
-> > --
-> > 2.11.0
-> > 
+On 3/7/22 8:28 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.27 release.
+> There are 256 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This looks like a fix, can you add a Fixes tag?
+> Responses should be made by Wed, 09 Mar 2022 16:21:31 +0000.
+> Anything received after that time might be too late.
 > 
-> Bart
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.27-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 > 
+> thanks,
+> 
+> greg k-h
 
-Please excuse my ignorance (and email client issues) I am still learning the
-submission process. I'm not sure what kind of Fixes tag to add in this scenario.
 
-This GPIO issue has existed since the driver's inception. It is a quirk of
-hardware that has always existed on this platform. The driver was originally
-implemented by Savoir-faire Linux. We discovered the issue and have had it
-patched in our trees for years and wanted to push it upstream.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-There is no public discussion on it, it was found and patched. And, aside from
-the first commit of this driver, there is no commit that introduced any issue.
-
-Can you please advise what kind of Fixes tag is appropriate in this situation?
-
-Additionally, if I do add a Fixes tag, would that warrant a v2 patch? Or would
-it just need to be an email response that includes it?
-
-Kris
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

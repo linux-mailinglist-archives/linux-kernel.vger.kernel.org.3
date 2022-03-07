@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FD24CFA37
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239684CFB80
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240878AbiCGKJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        id S241245AbiCGKi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240100AbiCGJuk (ORCPT
+        with ESMTP id S241303AbiCGKKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:50:40 -0500
+        Mon, 7 Mar 2022 05:10:06 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47044B420;
-        Mon,  7 Mar 2022 01:44:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED0329CBD;
+        Mon,  7 Mar 2022 01:52:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07626B80E70;
-        Mon,  7 Mar 2022 09:44:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65109C340F3;
-        Mon,  7 Mar 2022 09:44:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E958CB810A8;
+        Mon,  7 Mar 2022 09:52:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5C0C340F3;
+        Mon,  7 Mar 2022 09:52:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646246;
-        bh=R8uY/zTXdHSzjpLIxZlJhb0hQIo+MzsaqToLbh99yeY=;
+        s=korg; t=1646646771;
+        bh=u//V4rLROZ+2Eueqd7C40Ei0MbMJtazySQEOq/suhPw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wUytfzgN1qKkjg/pbwEM0/tQWa/Xv0wJh74MK66dzzpUR7HEH83QD9bUOjUxQ8+0N
-         qc1akUZXyzjVICs8LBFOLksO57u/goI1hG/Dgh5n8h5XR2CxeKQ6d+vvNUS0RexEBU
-         J3XrsbsV4+ze74QhwuLKxY6tE1yCr5+5n1Qxwjv4=
+        b=ZefrhKD4FS12r4QIgQ8IKI1JO7z8C8O/d7WUJuXWLKxVXzA4W4KTztg7UKgvIDR64
+         jzq33geoukdPwigWTK5KaNpewkCPhLYwRQs8kFNbwx2rLIT16uaOCsMFNDQAglKhHj
+         1bBNXNk9IEQKHS5V7OTaX01uxjKXKdErraPINnpg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 5.15 182/262] efivars: Respect "block" flag in efivar_entry_set_safe()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Svenning=20S=C3=B8rensen?= <sss@secomea.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 088/186] net: dsa: microchip: fix bridging with more than two member ports
 Date:   Mon,  7 Mar 2022 10:18:46 +0100
-Message-Id: <20220307091707.550528025@linuxfoundation.org>
+Message-Id: <20220307091656.545913586@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Svenning Sørensen <sss@secomea.com>
 
-commit 258dd902022cb10c83671176688074879517fd21 upstream.
+commit 3d00827a90db6f79abc7cdc553887f89a2e0a184 upstream.
 
-When the "block" flag is false, the old code would sometimes still call
-check_var_size(), which wrongly tells ->query_variable_store() that it can
-block.
+Commit b3612ccdf284 ("net: dsa: microchip: implement multi-bridge support")
+plugged a packet leak between ports that were members of different bridges.
+Unfortunately, this broke another use case, namely that of more than two
+ports that are members of the same bridge.
 
-As far as I can tell, this can't really materialize as a bug at the moment,
-because ->query_variable_store only does something on X86 with generic EFI,
-and in that configuration we always take the efivar_entry_set_nonblocking()
-path.
+After that commit, when a port is added to a bridge, hardware bridging
+between other member ports of that bridge will be cleared, preventing
+packet exchange between them.
 
-Fixes: ca0e30dcaa53 ("efi: Add nonblocking option to efi_query_variable_store()")
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Link: https://lore.kernel.org/r/20220218180559.1432559-1-jannh@google.com
+Fix by ensuring that the Port VLAN Membership bitmap includes any existing
+ports in the bridge, not just the port being added.
+
+Fixes: b3612ccdf284 ("net: dsa: microchip: implement multi-bridge support")
+Signed-off-by: Svenning Sørensen <sss@secomea.com>
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/efi/vars.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/dsa/microchip/ksz_common.c |   26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
 
---- a/drivers/firmware/efi/vars.c
-+++ b/drivers/firmware/efi/vars.c
-@@ -742,6 +742,7 @@ int efivar_entry_set_safe(efi_char16_t *
- {
- 	const struct efivar_operations *ops;
- 	efi_status_t status;
-+	unsigned long varsize;
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -26,7 +26,7 @@ void ksz_update_port_member(struct ksz_d
+ 	struct dsa_switch *ds = dev->ds;
+ 	u8 port_member = 0, cpu_port;
+ 	const struct dsa_port *dp;
+-	int i;
++	int i, j;
  
- 	if (!__efivars)
- 		return -EINVAL;
-@@ -764,15 +765,17 @@ int efivar_entry_set_safe(efi_char16_t *
- 		return efivar_entry_set_nonblocking(name, vendor, attributes,
- 						    size, data);
+ 	if (!dsa_is_user_port(ds, port))
+ 		return;
+@@ -45,13 +45,33 @@ void ksz_update_port_member(struct ksz_d
+ 			continue;
+ 		if (!dp->bridge_dev || dp->bridge_dev != other_dp->bridge_dev)
+ 			continue;
++		if (other_p->stp_state != BR_STATE_FORWARDING)
++			continue;
  
-+	varsize = size + ucs2_strsize(name, 1024);
- 	if (!block) {
- 		if (down_trylock(&efivars_lock))
- 			return -EBUSY;
-+		status = check_var_size_nonblocking(attributes, varsize);
- 	} else {
- 		if (down_interruptible(&efivars_lock))
- 			return -EINTR;
-+		status = check_var_size(attributes, varsize);
+-		if (other_p->stp_state == BR_STATE_FORWARDING &&
+-		    p->stp_state == BR_STATE_FORWARDING) {
++		if (p->stp_state == BR_STATE_FORWARDING) {
+ 			val |= BIT(port);
+ 			port_member |= BIT(i);
+ 		}
+ 
++		/* Retain port [i]'s relationship to other ports than [port] */
++		for (j = 0; j < ds->num_ports; j++) {
++			const struct dsa_port *third_dp;
++			struct ksz_port *third_p;
++
++			if (j == i)
++				continue;
++			if (j == port)
++				continue;
++			if (!dsa_is_user_port(ds, j))
++				continue;
++			third_p = &dev->ports[j];
++			if (third_p->stp_state != BR_STATE_FORWARDING)
++				continue;
++			third_dp = dsa_to_port(ds, j);
++			if (third_dp->bridge_dev == dp->bridge_dev)
++				val |= BIT(j);
++		}
++
+ 		dev->dev_ops->cfg_port_member(dev, i, val | cpu_port);
  	}
  
--	status = check_var_size(attributes, size + ucs2_strsize(name, 1024));
- 	if (status != EFI_SUCCESS) {
- 		up(&efivars_lock);
- 		return -ENOSPC;
 
 

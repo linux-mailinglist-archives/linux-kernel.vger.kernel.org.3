@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031704CF419
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1714CF427
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236228AbiCGI4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 03:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
+        id S232896AbiCGI70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 03:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbiCGI4K (ORCPT
+        with ESMTP id S231444AbiCGI7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 03:56:10 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CBC1BEA7;
-        Mon,  7 Mar 2022 00:55:15 -0800 (PST)
-Date:   Mon, 7 Mar 2022 09:55:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646643312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JoVzBf1uXNcTzGiPbR/fg/8odB0x/Dhp0N0m6GdxpLc=;
-        b=41o4gWkezgvWk2XDLJwhHNQd6xE5gchpopyr67bC28C+0MAqDQU5Q+J/CYaqkDucEHKu5P
-        j7QCHtamiLiAGWTuOIWB3S+i49YXDYtFniewiIr/ydSxb8cBGfotgNF2m3mEOpx73MMcPR
-        GrwVjWiyr/tpjaJpf4fI0Nkx9053gTZBh+1IYrIdN5TkgxCf2FrJ6U5CtWxrZxuOVFfYzw
-        Yhh8LzkHg2j8HrEZVTsbcO7RkYhzyRX1ZvfcASdd87cFpIfp+yN8M9xZ9GzOvDQyWkSabP
-        AemowUH/V58vsQEjl3ulifi/opRG9zcLSumiIrE5MTO6VLAmC2RIA0GJfto9iQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646643312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JoVzBf1uXNcTzGiPbR/fg/8odB0x/Dhp0N0m6GdxpLc=;
-        b=md/CxHPZCzL2m9kymyQ2UtneZu8bff63noOjI8mU80fRT5BDsn+PxWkt3keVIigL1h0u9g
-        +JTvhpl/d4aVXRBw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Yunhao Tian <t123yh.xyz@gmail.com>
-Cc:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: PREEMPT_RT causes scheduling errors with f_rndis USB gadget
-Message-ID: <YiXIb43PR4bayMHw@linutronix.de>
-References: <CAFQXTv2B10=i6DMV1iJpOT-Mj9F93hOi_415cn49N6X_yDFw2g@mail.gmail.com>
+        Mon, 7 Mar 2022 03:59:22 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1992180D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:58:28 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6AB303F614
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646643506;
+        bh=tXVanxy7+7Oc5O3WLbsohtPsqU2ukLOIpjIWEofC+MQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=bBOrvOLfG9019V6oJZkPLllCzqkQGBuAMuWwJ/Qedsgo3I9uMF0fu+gd8ziA/TzVX
+         axzMSkG/3KMQZhxS1Y8Tja+3PuzPXUWlaG7Ro31TdiYUPANc17HLhGpxzRyPUwz+rG
+         ZImxCMX3e7933YX6z5KT86rMwg7x4jRTob00E6cUa0ZuemUXh7DSzm8aJHVw0XAYs9
+         8Y0e1MnOruqZ6ABghLRh8b4pPIuVu2YpnmGcMJYIABXnMVrAc6pBo79LzxDc+Ibi+I
+         4CiTs0Ca+NgLNeYLo0r93FOiF4OeRHuA/rJELTzw1a5jMCmL9YvrUY/UXG1/DEiZqv
+         WzxUQtkU9Ew4w==
+Received: by mail-ed1-f72.google.com with SMTP id l24-20020a056402231800b00410f19a3103so8227119eda.5
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 00:58:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tXVanxy7+7Oc5O3WLbsohtPsqU2ukLOIpjIWEofC+MQ=;
+        b=Yh+fWgRVRnPN48HmgfAyD7X8ipq3VkryxJaVEuYscGFYFgfy+2mlqtBb7b17RMkygR
+         HMH9nBCQTkQKDGpc5w20EVrqXuPb71XfLPdgcdWT5O/nJulPgkf4Sz/L9KTBFTtEhSrb
+         90Fylh7ai78b1pFpRDYwPA+WlB+Ox9vd7uKOhuuYqrA/5AwX5bm++6y3U1a7UQZKc6Gr
+         y9EcgrnbrdeszLx6KpCTI6OD15ZMgciZYsZukooWJcjoYDTOFNbfKhVon8CPrwqPo7qZ
+         A4mnCRbEjPv3Yuk+zZnURFbrAB9zMBEFSUOqs5IlCW/JnjEyE3ieDx1+7t9hNwWwwsXw
+         NakA==
+X-Gm-Message-State: AOAM530ZGYwj3dIZoJW3yTu+fZYWcjBpKeaAF65Q+XhMM5zK6bh412jR
+        ungqEX6JNfUA9+W0/YZMtZamWuS0S7jQ+U+f2INuAF6aFWLMs9o62wCfDEM0dFB5JTsRmC+xgqV
+        /4Ah5dwasaKbO85zKcv48OyodFvVqmY9ia45q4br3nA==
+X-Received: by 2002:a05:6402:27cb:b0:412:124:e0db with SMTP id c11-20020a05640227cb00b004120124e0dbmr10188611ede.72.1646643505348;
+        Mon, 07 Mar 2022 00:58:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy3ZMJrDKrVAyAS7Dzh3dQbNGgwVfhPijtSj0p1tH4keGdzqgbfHCWsGgoYJFegl75f4/Ns8g==
+X-Received: by 2002:a05:6402:27cb:b0:412:124:e0db with SMTP id c11-20020a05640227cb00b004120124e0dbmr10188597ede.72.1646643505198;
+        Mon, 07 Mar 2022 00:58:25 -0800 (PST)
+Received: from [192.168.0.140] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id fs6-20020a170907600600b006da8ec6e4a6sm4485847ejc.26.2022.03.07.00.58.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 00:58:24 -0800 (PST)
+Message-ID: <3b4b5fd3-6642-baf4-2c21-930b70ab0d63@canonical.com>
+Date:   Mon, 7 Mar 2022 09:58:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAFQXTv2B10=i6DMV1iJpOT-Mj9F93hOi_415cn49N6X_yDFw2g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] dt-bindings: serial: samsung: Add ARTPEC-8 UART
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     kernel@axis.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+        alim.akhtar@samsung.com
+References: <20220307085053.1636475-1-vincent.whitchurch@axis.com>
+ <20220307085053.1636475-2-vincent.whitchurch@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307085053.1636475-2-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-06 18:17:54 [+0800], Yunhao Tian wrote:
-> Hi everyone,
-Hi,
+On 07/03/2022 09:50, Vincent Whitchurch wrote:
+> Add a compatible for the UART on the ARTPEC-8 SoC.
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> index 6aceba4a5f79..6f11f2c92f64 100644
+> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> @@ -20,6 +20,7 @@ properties:
+>      items:
+>        - enum:
+>            - apple,s5l-uart
+> +          - axis,artpec8-uart
+>            - samsung,s3c2410-uart
+>            - samsung,s3c2412-uart
+>            - samsung,s3c2440-uart
 
-> I'm using Linux 5.15.24-rt31 kernel with PREEMPT_RT enabled, on my
-> RK3308 board. I set up f_rndis gadget with the following script, and
-> plugged my board to a x86 Linux computer running 5.15.25 kernel:
+You need to define clocks - see the allOf part.
 
-Is this 5.15.24-rt31 as-is or are there other patches involved?
-What UDC is used here?
-
-=E2=80=A6
-> [ 25.993834] NOHZ tick-stop error: Non-RCU local softirq work is
-> pending, handler #80!!!
-that is sched
-
-=E2=80=A6
-> [ 25.995885] NOHZ tick-stop error: Non-RCU local softirq work is
-> pending, handler #180!!!
-
-that is additionally hrtimer.
-I did touch hrtimer but I did not yet touch sched so I account myself as
-50% innocent.
-You don't have by chance change the thread affinity of tasks/ interrupt
-threads? The SoC has 4 cores if I see this right.
-
-> If I turn off PREEMPT_RT, there won't be any errors while downloading.
->=20
-> I believe this problem is not tied to any specific board, and anyone
-> can reproduce this problem using a Raspberry Pi (Although I didn't try
-> because I don't have one). I would like to ask for assistance
-> regarding this problem.
-
-Let me try dummy_udc=E2=80=A6
-
-Sebastian
+Best regards,
+Krzysztof

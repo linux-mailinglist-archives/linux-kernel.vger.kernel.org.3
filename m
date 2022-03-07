@@ -2,272 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAD74D0B0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E15B4D0B13
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343579AbiCGW2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S235918AbiCGWab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241174AbiCGW2k (ORCPT
+        with ESMTP id S241119AbiCGWa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:28:40 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011FD2715A
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646692064; x=1678228064;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0MdClp/QeOgyvufdvQeF8M9rZ7ABzB7YXW6LninCo+E=;
-  b=SYlL85AJrdtm5slalt4db/wR+BzvYpRmCyV78JNut3OSrItv5xOVBM6i
-   DS6cBqCXUvIY0Z3DhZNZ2PQNHVdZvZ5TZoNBLGm1BuGBO5c601UdvLsde
-   xDgcbR49DzQtKgvjweCM7bL8j6KxmNksO6jJF56l4SCpaTNJ2OqtyvZET
-   i0A+wzBmSu/ryQsnI62T2wuNjLInkNb05sMAzaW8FbDVjQA5UMgFhwGbs
-   sochFZTcfQqJVLDH9L3yRqQz8wX+/F3ZPADaXdgq9TuGM1yw2uqQ2uVae
-   XiS5/1+bmAu/ko9N0/xhqRfkNmNZrt/pX56cuzMXphPl5+fvDdWzWUDa9
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="317754877"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="317754877"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 14:27:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="641504713"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Mar 2022 14:27:37 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id C627B1D6; Tue,  8 Mar 2022 00:27:55 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     kirill.shutemov@linux.intel.com
-Cc:     aarcange@redhat.com, ak@linux.intel.com, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@intel.com, dave.hansen@linux.intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Subject: [PATCHv5.1 12/30] x86/tdx: Detect TDX at early kernel decompression time
-Date:   Tue,  8 Mar 2022 01:27:48 +0300
-Message-Id: <20220307222748.2318-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220302142806.51844-13-kirill.shutemov@linux.intel.com>
-References: <20220302142806.51844-13-kirill.shutemov@linux.intel.com>
+        Mon, 7 Mar 2022 17:30:26 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2122.outbound.protection.outlook.com [40.107.94.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7A8193FE;
+        Mon,  7 Mar 2022 14:29:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dC2DdcL7SJlriOiHV3pAenrACZ6udaO6GkAY/JQ7rZUVoab8wJ9mvC4Cx65hZ44Q5EIt+4qmOguTjR7bFBwS41uPUGo836HEl861vTK5MpPp5QMSfR1H2foMV54nnOUYTdRV6at70K4LRom/VypBOGqOHogzvurFUyOaUIoZsDGzbyx+j8R+jaZlh4MVAPF9iNf09ea3vHyw7NQFlzeBXTpvRmP1ezIuerUDD2kHugLXSTFv5LAhBK5BvO9ixz/qi7ccF+W8oBwedP0qe/G2STl1/VnmNeVI+O73WRse+lSu/Uyl8PXk/O68gCmexwrGakgS6CB6hTYHv+HuEcOmrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RXwVX0Wb/Ws2rqAPIGgIITm05ZhNc3uLLxXM8/yw1L0=;
+ b=dEShK2y7ytgPEd2FYQWt6qwWvvUFqaLWT9SZmYoM92JIl1nZtHx4yuwuAyOJtc+KnZEr+eWHuMO/ul3/3GVmbNj86Fn7Qze+Bz5fbrPvfZBsj4IfNGxVyGcNWIfSIzuNimnUTopu5AMgVX+m9rMAHbXc9c4xmlh/K/wPh8WpKwjlSbXnVT6d4MxhUIor0nsL60odWsGCMvh4CFl4kcxlX0G5X5jK4yHZBkObQ5s0Kzh09m4u5Zm8fCHZZpy4DXcZ6fgzP2rnZTiOySd/6PpebDUJ3Bu3YqcHqTVGrL7mX0clVYlO2J+VG+ctYZypZLG0n9ik5BzxawppyeP4/Un+lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RXwVX0Wb/Ws2rqAPIGgIITm05ZhNc3uLLxXM8/yw1L0=;
+ b=ucVFwPOaY2n/0PFON8pCeBKfNbLX9YNFGB25f7ylD2PvpsGg9ZgKRsAPWliTNCuSnqtRRJkVHR2XmibAcL7Jovwcqn27QJ6YRr7ibXkpU8pHjXAD2LVcnKsp5K12jZHn5tLHOgB7HgbWYgGBNR4lol+Rj8gDjh6/i74dG+Swwc4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
+ BN6PR01MB3268.prod.exchangelabs.com (2603:10b6:404:db::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.14; Mon, 7 Mar 2022 22:29:27 +0000
+Received: from DM5PR0102MB3590.prod.exchangelabs.com
+ ([fe80::181b:1522:26bc:c243]) by DM5PR0102MB3590.prod.exchangelabs.com
+ ([fe80::181b:1522:26bc:c243%4]) with mapi id 15.20.5038.017; Mon, 7 Mar 2022
+ 22:29:27 +0000
+Date:   Mon, 7 Mar 2022 14:29:10 -0800 (PST)
+From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
+X-X-Sender: ikoskine@ubuntu200401
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
+        linux@armlinux.org.uk, lenb@kernel.org, robert.moore@intel.com,
+        james.morse@arm.com, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@amperecomputing.com, scott@os.amperecomputing.com,
+        darren@os.amperecomputing.com
+Subject: Re: [PATCH v5 RESEND 0/2] ACPI: Arm Generic Diagnostic Dump and
+ Reset device
+In-Reply-To: <YiIsYzGeeYWPQKsp@lpieralisi>
+Message-ID: <alpine.DEB.2.22.394.2203071424290.3354@ubuntu200401>
+References: <20220304054003.152319-1-ilkka@os.amperecomputing.com> <YiIsYzGeeYWPQKsp@lpieralisi>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-ClientProxiedBy: MW4PR03CA0026.namprd03.prod.outlook.com
+ (2603:10b6:303:8f::31) To DM5PR0102MB3590.prod.exchangelabs.com
+ (2603:10b6:4:a4::25)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2b0f78fa-9c20-44b5-c3b8-08da0089f004
+X-MS-TrafficTypeDiagnostic: BN6PR01MB3268:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR01MB3268767BE799DDC09548B1579D089@BN6PR01MB3268.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ME9C4ePp0OHwy01TCMZEzVxguktTjVSFgiS89j1GFTkfBx3W/5nlRA4tJ/rw7DwnQDCRzZ56wEE7KTbCbiyfz6WVl9lx+SxV5jOOywvus1tpdFdAdA4O4VHGJSMk+fHTkvm0kbaG3CnkcGW6v+X9+K30ckwFPqqr855sUG8ZEnfvPC+cpJo6xlDfanXaU/DpPSp5SKXHBGkaba7Q7tguci4Wo1USIV9qOD5iWjm9MNgLoqCtd9mGSMs9buBb0LUdNjMavQA5bWi6AlCrQ1Dzl84C0Es2Z0F8BN0Y7J9WHCkfYid83HpiRRfPfuBGLD9oA25mL0QeJ4KoX0C4hausNGdTfm985BbX1Q4xbKfyRwVNdHQJY5jgz2bnBlqIG8aDt/LTRhD1kHxNKNV0/OMjrSNxu1LQM1sXJcbosH5ASQmVCS/rVJ57D/wX3092TGQNxOy8wfjIrIrrdcGu+SxkRf4s076fGHV1jJXcHZYrzZcLS0b6ltyXMxnrigY9KqQltxxmgXYVf+04r9CexKbpUkwCPbDjBVWLwY2JxzZJFId+OnHhJzRtPyt7nP30pIks3f/p7veyzu1Y+CLS1Y9Ogg9RGQE40CQaKu+9y+kLgVsebSU3qnOmFg0fa1JR4+WWlb0fJIObV0KRroPwOzCzpCK1Y9LFcRAJv7ArW1qPheAH1wr984fHl7XnFJ4UZ4//nsq783b/RSA8qE0V9VApReIEvJtQ1B/RFeD03GMgB6teSggxc0aAbvIxkSZdsB9n9HqTh+3MN4QH/W/AHnFnjD9DVFHekcRfqmo1biIWw6bBa9O8qRFzvd2WXo2+a7cS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(6506007)(38350700002)(33716001)(38100700002)(52116002)(966005)(2906002)(83380400001)(107886003)(5660300002)(7416002)(316002)(26005)(8936002)(6512007)(9686003)(66556008)(66946007)(6486002)(86362001)(6916009)(186003)(6666004)(4326008)(8676002)(508600001)(66476007)(41533002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7O4QJs7ntWe1XuWWW3hEEISCby7bAAFh1k6kgIknw76lIi14HQCk1HkVqoxP?=
+ =?us-ascii?Q?wIEmIOen+NbHsg9A5kanG5bAzgqdL6mozRuL8ja4JhZXqwVAjN5xwXYyqPf3?=
+ =?us-ascii?Q?AgT0Ls4Fezit/kwnW33Jx2jUzqjo/sQgWnuHXyCrlvvw6So8J53V3iCsJ7qO?=
+ =?us-ascii?Q?YidEJdTE1DtDE0UJ68nSw4T+llY7+h7S9BZ2cteCeBO6i8M8dIpui5d/oWAB?=
+ =?us-ascii?Q?b0azhsdJVxjTr657Dna/Y0GpiQDriWEXq5mfTNOrLUy1DKDcCPN2S82ZkLuJ?=
+ =?us-ascii?Q?2HwhY+6bnHT7uisBNRwSTl7s1jfw3aK2uB8a6nuQTQPuc5B2puUngbpXvrY+?=
+ =?us-ascii?Q?1dJ5t5CTl2QBHNA75j8N8Q/oLDSMdfzeyoBIGkyVvb7Z2pX/GYxhA1dptbD+?=
+ =?us-ascii?Q?SKDiNPxgaEDgWN1EEwN4TAMvPSHWWqr0vEvsrR8CYlWDzIp5yT8W3MWtu6Xt?=
+ =?us-ascii?Q?+2AUIgLufaCywba6rgZwsxbNf74NxeuksikEQdh/hEW+b8lW66wyLcbUeaxx?=
+ =?us-ascii?Q?BVI3elsRTrXUAG05XHnGAQeXP3BNKI1/tgEYJgcZdkd5FoB7VJGbEeuPtYQg?=
+ =?us-ascii?Q?PgGpOYHTQ41eL6CoduEUMLhPhT3j8Y8RI8CrMb521HLa7in0aefVBvUtmbE0?=
+ =?us-ascii?Q?+Eqgf15vSpoU6TdCczFSap7U5+n8LNZQmrKV9l/TYUNOlhWE6+WoPXnHEail?=
+ =?us-ascii?Q?vR97m2v3e+tY7vJnn7pGQ5APxxBZkNgCHOlNvugI8RFTkQBV8b6kaIpOnitn?=
+ =?us-ascii?Q?tsIeSYlwJEJAs8oDbOOwLM+fychp3lw/9sPO4eUgUSavlU2TeqeDjOXl1rNv?=
+ =?us-ascii?Q?t5SoxI8UTTOLuxEQQ2scH8Qb1py779OwkVCJowH+UrwOZMmfWAK+WI6uaik3?=
+ =?us-ascii?Q?cxiy/dMRLr04nwIrFArdFgH4EDxzBG54EP60K5jMLU9Yeg006x4G8ys2xCEH?=
+ =?us-ascii?Q?JCWkXDD179Xx0fTPnLvDa02Z4yPPjjHTDfWjkxAtNWbA+MDksuYF1p156zYf?=
+ =?us-ascii?Q?nuk5+/gquj2X/IKoPGxmbEzznDk1HSmkVku33AfWfXESZ/tXYU/2FiYqh6/5?=
+ =?us-ascii?Q?Qb+bx9ycsk2i+qZcZAz6No7Q7Qa8fMSuDYFUFJqNcDxpCqBdh3DZZUvFNou2?=
+ =?us-ascii?Q?LVTusFWkTxO1XcXwkiyJneIvOHX6PVr297xaV3AB4n31ShP0/ZcYPXNkbuZ3?=
+ =?us-ascii?Q?qrqAfSAMpPULx1ieqBUH/Tj7Ne6niWmkJoB9fDEn/F6H/prQ1bkIjCsvfeB6?=
+ =?us-ascii?Q?gaZbEe36MVDkzDxbfihoKphFfZSCF6Zg2YURl7jOXd7kgomm1gecYco2rZoO?=
+ =?us-ascii?Q?HS3aMEKBDd9D8dRmwY1CoOsytipSgXzQkMVlFI2dklxDqc2namHNBWfjBLGe?=
+ =?us-ascii?Q?kFqBgGRiwOyffocQFi6LoAS+zLCWgUQeF2LFb2aaerX8GuzxT1WPIUTQxJGx?=
+ =?us-ascii?Q?f8tamX1WQcw4m2ISDGoC7SJjOLCKZ8HRy0gVqj1ss7zJuO63ujCtzjbTzOY5?=
+ =?us-ascii?Q?bsTU19kZvXuD9zp+XrKmAvZnr2816E9AOPsE2MFpyltxjgpQ33wVeSMHAk3g?=
+ =?us-ascii?Q?G1WUv6SZ/swHZJUm5O8QLCbxtcjYe3Of4vS5HKzHgn5N2s4TjG3fZUGwywEQ?=
+ =?us-ascii?Q?wfBevNiVY7soRBJoC2Mv92Xx9WYUnh4LfMxlt+zlk/iWwPCpNSYGMP8oH4Z+?=
+ =?us-ascii?Q?0WlrqwhTcaACn+OFp4Hic/iZ3gEUJwXgfqGyutZDYJnVQ8cNWQ7d61yn6FgI?=
+ =?us-ascii?Q?6br9IMIeRw=3D=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b0f78fa-9c20-44b5-c3b8-08da0089f004
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 22:29:26.9022
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IkhhtJpLqUbV0yHlqXEQSgPHADzbtZyy/5cQlXV7et0gwUHxsBk7D46z2fv5Y6LbfYQUoEsp9R/AZerzKRE1ERUd7oBV/tFfPHLOp5Wkkz4Cy8Mq1xdC9DGUhR07cPqz
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR01MB3268
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-The early decompression code does port I/O for its console output. But,
-handling the decompression-time port I/O demands a different approach
-from normal runtime because the IDT required to support #VE based port
-I/O emulation is not yet set up. Paravirtualizing I/O calls during
-the decompression step is acceptable because the decompression code
-doesn't have a lot of call sites to IO instruction.
 
-To support port I/O in decompression code, TDX must be detected before
-the decompression code might do port I/O. Detect whether the kernel runs
-in a TDX guest.
+On Fri, 4 Mar 2022, Lorenzo Pieralisi wrote:
+> On Thu, Mar 03, 2022 at 09:40:01PM -0800, Ilkka Koskinen wrote:
+>> Hi Lorenzo,
+>>
+>> Would you prefer this version, which doesn't have platform
+>> device/driver any more?
+>
+> I thought about that and in order to keep consistency it is better to
+> keep the platform device model, so please resend the latest version
+> platform device based and I will ACK it (hopefully it is not too late
+> for v5.18).
 
-Add an early_is_tdx_guest() interface to query the cached TDX guest
-status in the decompression code.
+Sure, I can do that. Just one question, do you still prefer agdi_init() 
+getting called from acpi_init() or via device_initcall()?
 
-TDX is detected with CPUID. Make cpuid_count() accessible outside
-boot/cpuflags.c.
+> Please note before resending it that sdei_event_unregister() requires a
+> retry loop since it can return -EINPROGRESS (see sdei_unregister_ghes()).
 
-TDX detection in the main kernel is very similar. Move common bits
-into <asm/shared/tdx.h>.
+Thanks for pointing out, I'll fix it.
 
-The actual port I/O paravirtualization will come later in the series.
+Cheers, Ilkka
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
----
- v5.1:
-  - Drop BUILD_BUG_ON()
----
- arch/x86/boot/compressed/Makefile |  1 +
- arch/x86/boot/compressed/misc.c   |  8 ++++++++
- arch/x86/boot/compressed/misc.h   |  2 ++
- arch/x86/boot/compressed/tdx.c    | 26 ++++++++++++++++++++++++++
- arch/x86/boot/compressed/tdx.h    | 15 +++++++++++++++
- arch/x86/boot/cpuflags.c          |  3 +--
- arch/x86/boot/cpuflags.h          |  1 +
- arch/x86/include/asm/shared/tdx.h |  8 ++++++++
- arch/x86/include/asm/tdx.h        |  4 +---
- 9 files changed, 63 insertions(+), 5 deletions(-)
- create mode 100644 arch/x86/boot/compressed/tdx.c
- create mode 100644 arch/x86/boot/compressed/tdx.h
- create mode 100644 arch/x86/include/asm/shared/tdx.h
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 6115274fe10f..732f6b21ecbd 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -101,6 +101,7 @@ ifdef CONFIG_X86_64
- endif
- 
- vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
-+vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o
- 
- vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
- efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
-diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
-index a4339cb2d247..2b1169869b96 100644
---- a/arch/x86/boot/compressed/misc.c
-+++ b/arch/x86/boot/compressed/misc.c
-@@ -370,6 +370,14 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
- 	lines = boot_params->screen_info.orig_video_lines;
- 	cols = boot_params->screen_info.orig_video_cols;
- 
-+	/*
-+	 * Detect TDX guest environment.
-+	 *
-+	 * It has to be done before console_init() in order to use
-+	 * paravirtualized port I/O operations if needed.
-+	 */
-+	early_tdx_detect();
-+
- 	console_init();
- 
- 	/*
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index 16ed360b6692..0d8e275a9d96 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -28,6 +28,8 @@
- #include <asm/bootparam.h>
- #include <asm/desc_defs.h>
- 
-+#include "tdx.h"
-+
- #define BOOT_CTYPE_H
- #include <linux/acpi.h>
- 
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-new file mode 100644
-index 000000000000..d4f195e9d1ef
---- /dev/null
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include "../cpuflags.h"
-+#include "../string.h"
-+
-+#include <asm/shared/tdx.h>
-+
-+static bool tdx_guest_detected;
-+
-+bool early_is_tdx_guest(void)
-+{
-+	return tdx_guest_detected;
-+}
-+
-+void early_tdx_detect(void)
-+{
-+	u32 eax, sig[3];
-+
-+	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
-+
-+	if (memcmp(TDX_IDENT, sig, sizeof(sig)))
-+		return;
-+
-+	/* Cache TDX guest feature status */
-+	tdx_guest_detected = true;
-+}
-diff --git a/arch/x86/boot/compressed/tdx.h b/arch/x86/boot/compressed/tdx.h
-new file mode 100644
-index 000000000000..a7bff6ae002e
---- /dev/null
-+++ b/arch/x86/boot/compressed/tdx.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef BOOT_COMPRESSED_TDX_H
-+#define BOOT_COMPRESSED_TDX_H
-+
-+#include <linux/types.h>
-+
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+void early_tdx_detect(void);
-+bool early_is_tdx_guest(void);
-+#else
-+static inline void early_tdx_detect(void) { };
-+static inline bool early_is_tdx_guest(void) { return false; }
-+#endif
-+
-+#endif /* BOOT_COMPRESSED_TDX_H */
-diff --git a/arch/x86/boot/cpuflags.c b/arch/x86/boot/cpuflags.c
-index a0b75f73dc63..a83d67ec627d 100644
---- a/arch/x86/boot/cpuflags.c
-+++ b/arch/x86/boot/cpuflags.c
-@@ -71,8 +71,7 @@ int has_eflag(unsigned long mask)
- # define EBX_REG "=b"
- #endif
- 
--static inline void cpuid_count(u32 id, u32 count,
--		u32 *a, u32 *b, u32 *c, u32 *d)
-+void cpuid_count(u32 id, u32 count, u32 *a, u32 *b, u32 *c, u32 *d)
- {
- 	asm volatile(".ifnc %%ebx,%3 ; movl  %%ebx,%3 ; .endif	\n\t"
- 		     "cpuid					\n\t"
-diff --git a/arch/x86/boot/cpuflags.h b/arch/x86/boot/cpuflags.h
-index 2e20814d3ce3..475b8fde90f7 100644
---- a/arch/x86/boot/cpuflags.h
-+++ b/arch/x86/boot/cpuflags.h
-@@ -17,5 +17,6 @@ extern u32 cpu_vendor[3];
- 
- int has_eflag(unsigned long mask);
- void get_cpuflags(void);
-+void cpuid_count(u32 id, u32 count, u32 *a, u32 *b, u32 *c, u32 *d);
- 
- #endif
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-new file mode 100644
-index 000000000000..8209ba9ffe1a
---- /dev/null
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_SHARED_TDX_H
-+#define _ASM_X86_SHARED_TDX_H
-+
-+#define TDX_CPUID_LEAF_ID	0x21
-+#define TDX_IDENT		"IntelTDX    "
-+
-+#endif /* _ASM_X86_SHARED_TDX_H */
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 1f150e7a2f8f..76cffbda0e79 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -6,9 +6,7 @@
- #include <linux/bits.h>
- #include <linux/init.h>
- #include <asm/ptrace.h>
--
--#define TDX_CPUID_LEAF_ID	0x21
--#define TDX_IDENT		"IntelTDX    "
-+#include <asm/shared/tdx.h>
- 
- #define TDX_HYPERCALL_STANDARD  0
- 
--- 
-2.34.1
-
+>
+> Thanks,
+> Lorenzo
+>
+>>
+>> --Ilkka
+>>
+>>
+>> ----
+>>
+>> Arm Generic Diagnostic Dump and Reset device enables a maintainer to
+>> request OS to perform a diagnostic dump and reset a system via SDEI
+>> event or an interrupt. This patchset adds support for the SDEI path.
+>>
+>> I do have a patch to enable the interrupt path as well but I'm holding
+>> it back since AGDI table is missing interrupt configuration fields
+>> (trigger type etc.).
+>>
+>> The recently published specification is available at
+>> https://developer.arm.com/documentation/den0093/latest
+>>
+>> The patchset was tested on Ampere Altra/Mt. Jade.
+>>
+>> The patchset applies on top of
+>>   git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm bleeding-edge (9db71e8e3027)
+>>
+>> I also tested it works on top of Shuai Xue's new patches in bleeding-edge branch (c6f4ba2d2b9a)
+>>
+>> From v1:
+>>      * Moved pdata to the stack and dropped unnecessary kzalloc() in agdi_init()
+>>      * Changed the ACPICA patch upstreaming order comment in the paragraph above
+>>
+>> From v2:
+>>      * The first patch was split. The most of it was merged to ACPICA project
+>>        at first and later ported to linux-acpi
+>>        (fd919e37cb15914c6fe13e13d530a4f732407c6d). The rest are in the first
+>>        patch.
+>>
+>> From v3:
+>>      Fixed:
+>> 	* Moved header files in alphabetical order and removed unnecessary ones
+>>
+>> From v4:
+>> 	* Platform device/driver stuff removed
+>> 	* acpi_agdi_init() call moved from device_initcall to acpi_init()
+>> 	* Slightly modified Kconfig text to keep checkpatch happy
+>>
+>> Ilkka Koskinen (2):
+>>   ACPI: tables: Add AGDI to the list of known table signatures
+>>   ACPI: AGDI: Add support for Arm Generic Diagnostic Dump and Reset
+>>     device
+>>
+>>  drivers/acpi/arm64/Kconfig  | 10 +++++++
+>>  drivers/acpi/arm64/Makefile |  1 +
+>>  drivers/acpi/arm64/agdi.c   | 52 +++++++++++++++++++++++++++++++++++++
+>>  drivers/acpi/bus.c          |  2 ++
+>>  drivers/acpi/tables.c       |  2 +-
+>>  include/linux/acpi_agdi.h   | 13 ++++++++++
+>>  6 files changed, 79 insertions(+), 1 deletion(-)
+>>  create mode 100644 drivers/acpi/arm64/agdi.c
+>>  create mode 100644 include/linux/acpi_agdi.h
+>>
+>> --
+>> 2.17.1
+>>
+>

@@ -2,108 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589C24CFDEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DACF4CFDF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237571AbiCGMQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        id S236868AbiCGMSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:18:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiCGMQy (ORCPT
+        with ESMTP id S241695AbiCGMSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:16:54 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7290F7F6C9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:15:58 -0800 (PST)
-Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MEFnP-1nGyzo1WRZ-00AD3o for <linux-kernel@vger.kernel.org>; Mon, 07 Mar
- 2022 13:15:57 +0100
-Received: by mail-wr1-f49.google.com with SMTP id j17so23015229wrc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 04:15:57 -0800 (PST)
-X-Gm-Message-State: AOAM533d7G2hr0e29uMTux1Z91h14yGRxU9qE9e7IsLtXos6T7OEvcsw
-        RkHU6k6XWSVi6MQwwSa3tNQQ5sE5O1lE4Ed4xps=
-X-Google-Smtp-Source: ABdhPJzNbCW5MCgkAEc6w/6rfhakKXY2iokn4ld+TrSCnF0MZ5rMVpS6zuPqmGXxamU+wmw9I/jafDo9KFHWltyWkzQ=
-X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
- y1-20020adfd081000000b001ef9378b7ccmr8504005wrh.407.1646655356966; Mon, 07
- Mar 2022 04:15:56 -0800 (PST)
+        Mon, 7 Mar 2022 07:18:01 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9356C7F6CA;
+        Mon,  7 Mar 2022 04:17:06 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 4B4442223A;
+        Mon,  7 Mar 2022 13:17:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1646655424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0Gpr1Xg6QkwtyGAbSKHyjlK5VgUrvEjiF2wzRKT1dYs=;
+        b=gll/rzRQe4/Bc0sN3O41kZBJi7z3WEQ54AgWH3/ox48A+LkbvKnm65Pd/OCFehW1BSwkXm
+        dUclOG2Gg1I6/Am39yTyLw48rujxrWKqZhV7JwqYp2kyjLgOtv1/zcherediBmzyrC4ohY
+        1BKkmU5XB2m8Lu871EFK6wdCTmE7HxE=
 MIME-Version: 1.0
-References: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
- <CAHp75VeT3LbdbSaiwcC2YW40LnA2h8ADtGva-CKU_xh8Edi0nw@mail.gmail.com> <20220307105810.1747024-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220307105810.1747024-1-alexandr.lobakin@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 7 Mar 2022 13:15:41 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a07uXLTpNz3t1oMwz_imZOTs+1Fw5hhELjUrJ8Zs=8bpQ@mail.gmail.com>
-Message-ID: <CAK8P3a07uXLTpNz3t1oMwz_imZOTs+1Fw5hhELjUrJ8Zs=8bpQ@mail.gmail.com>
-Subject: Re: [PATCH] linux/bits.h: fix -Wtype-limits warnings in GENMASK_INPUT_CHECK()
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:s6FhnVSjMfCR5LY1hgq/PM1SP9EEH/EC8vHPsFUzg3jfVOQS9UY
- ZZa7cOm4F+d0UBUdnSE/0iD7j23rORaGmkrZzpvEld4lwD2oMN+8ihIpxXVNBjqwB0ls51s
- 9aFJkI87hJjpA+qejnabOIwZVJaN+JN7q2/OfZ9mMpRETjKafRSYh+7vHfPknZ5LOsAwaff
- b+eScCEdgwFJJGOwyVSAg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:p7XKEH2FvJY=:DePrBHXQ8zafj7WAME18xR
- 8sHcHAwaLaaPIOky1AppLHo2ZitX2cAQSVFaftaYz+tM+NgcKJ+0iLaV/v5cD3NGeR5Un8iRH
- 1r0VYghsSWsZIaTtSYf7mwWpafPLuW7Cz6UXcXv0pqPySbhuE6BrB+DjOAFogUJibcJR1jIp6
- 9c71LWsw2gDOjC45xCxgqz8fTsWdBbEP8DwntZoR5kuI7DYqfZmXsrUl7ABdMRY+y1EMtKdeq
- tOJxceWZpNomYaXeweyc8RBsGQmErSFzJQziz65Embw55LyShyP+PCBGetC9PBPxcWrBfL0LY
- Lp48hni4X4hoqPiEGZTFNvwWcdNo9rRnmwo/iS/bgHMA+h3ds0bKiYTt7ihV/vnclIll6xwjW
- ekz3KyDs3V8cMqevd0urabK4s/0rYgJ+U8OT+fbrej8g9vTHL6TypIDBx039Am+Pp9BWMeBxm
- Mso4FAd3gpVupKvnnWQvYh1O5CjGDaB/DHSDlcIaJTHHoTzwglQI85BiKBLjWtg9b106sBWHs
- /yyRBkgCCibvM9eh8sCGR2YDmSw/Cdi9RiMSBWoNKJxuHv4WMXQUkM3tustuSFius8SAk885B
- juhws2nIF+122SYopS7C+9Sa3/HV+IHtGMWHzSKEV0jBQ6pArAOJZrGv+yBMn2k9W6sX8Ybhw
- /DUl1edfxM1ajTyM4sBZWdEDWjHQdvFcj0xjIMqheg/IN9rLb3aoWnkkHVMFZeEqeMVP7R07p
- b6ewOTtRBdak5FVBOWvb6lmZXy4Zwqp82BVy1Ce2JxC48ZeXxhlAgOAcoQyIIKjuNOHI9+7ib
- IvQUNTFieFwWz4WozJctK6t2Dz58pWqgt1+en3VtVBXLrGyMl0=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 07 Mar 2022 13:17:04 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Claudiu.Beznea@microchip.com
+Cc:     Kavyasree.Kotagiri@microchip.com, Nicolas.Ferre@microchip.com,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com, alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v1 6/6] ARM: dts: lan966x: add basic Kontron KSwitch D10
+ support
+In-Reply-To: <1098e023-afb7-5453-cd3a-8b81b3d48f4f@microchip.com>
+References: <20220303160323.3316317-1-michael@walle.cc>
+ <20220303160323.3316317-7-michael@walle.cc>
+ <b4aca5f1-38c0-8197-6914-0a39b7755180@microchip.com>
+ <900be5239b96cd77493fbcfbe220989f@walle.cc>
+ <1098e023-afb7-5453-cd3a-8b81b3d48f4f@microchip.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <f8c115a1358305b9d190d2417e55f73c@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 11:58 AM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
-> From: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Have you fixed W=1 warnings?
-> > Without fixing W=1 (which makes much more sense, when used with
-> > WERROR=y && COMPILE_TEST=y) this has no value.
->
-> How is this connected?
-> When I do `make W=2 path/to/my/code`, I want to see the actual code
-> problems, not something that comes from the include files.
-> When I do `make W=2 path/to/new/code/from/lkml`, I want to see the
-> actual new warnings, not something coming from the includes.
-> It's much easier to overlook or miss some real warnings when the
-> stderr is being flooded by the warnings from the include files.
-> I'm aware there are some scripts to compare before/after, but I
-> don't want to use them just because "this has to value".
-> I don't want to do `make W=2 KCFLAGS='-Wno-shadow -Wno-type-limits'`
-> because then I'm not able to spot the actual shadow or type limit
-> problems in my/new code.
-> I fixed several `-Wshadow` warnings previously in the include files
-> related to networking, and *nobody* said "this has no value" or
-> NAKed it. And `-Wshadow` has always been in W=2.
+Am 2022-03-07 13:07, schrieb Claudiu.Beznea@microchip.com:
+> On 04.03.2022 13:15, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the
+>> content is safe
+>> 
+>> Am 2022-03-04 09:31, schrieb Claudiu.Beznea@microchip.com:
+>>> On 03.03.2022 18:03, Michael Walle wrote:
+>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
+>>>> know
+>>>> the content is safe
+>>>> 
+>>>> Add basic support for the Kontron KSwitch D10 MMT 6G-2GS which
+>>>> features 6 Gigabit copper ports and two SFP cages. For now the
+>>>> following is working:
+>>>>  - Kernel console
+>>>>  - SFP cages I2C bus and mux
+>>>>  - SPI
+>>>>  - SGPIO
+>>>>  - Watchdog
+>>>> 
+>>>> Signed-off-by: Michael Walle <michael@walle.cc>
+>>>> ---
+>>>>  arch/arm/boot/dts/Makefile                    |   3 +-
+>>>>  ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 159
+>>>> ++++++++++++++++++
+>>>>  2 files changed, 161 insertions(+), 1 deletion(-)
+>>>>  create mode 100644
+>>>> arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>>>> 
+>>>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+>>>> index 085c43649d44..86dd0f9804ee 100644
+>>>> --- a/arch/arm/boot/dts/Makefile
+>>>> +++ b/arch/arm/boot/dts/Makefile
+>>>> @@ -739,7 +739,8 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
+>>>>         imx7ulp-com.dtb \
+>>>>         imx7ulp-evk.dtb
+>>>>  dtb-$(CONFIG_SOC_LAN966) += \
+>>>> -       lan966x-pcb8291.dtb
+>>>> +       lan966x-pcb8291.dtb \
+>>>> +       lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+>>>>  dtb-$(CONFIG_SOC_LS1021A) += \
+>>>>         ls1021a-moxa-uc-8410a.dtb \
+>>>>         ls1021a-qds.dtb \
+>>>> diff --git
+>>>> a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>>>> b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>>>> new file mode 100644
+>>>> index 000000000000..958678dec7ad
+>>>> --- /dev/null
+>>>> +++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>>>> @@ -0,0 +1,159 @@
+>>>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>>>> +/*
+>>>> + * Device Tree file for the Kontron KSwitch D10 MMT 6G-2GS
+>>>> + */
+>>>> +
+>>>> +/dts-v1/;
+>>>> +#include "lan966x.dtsi"
+>>>> +
+>>>> +/ {
+>>>> +       model = "Kontron KSwitch D10 MMT 6G-2GS";
+>>>> +       compatible = "kontron,kswitch-d10-mmt-6g-2gs",
+>>>> "kontron,s1921",
+>>>> +                    "microchip,lan9668", "microchip,lan966";
+>>>> +
+>>>> +       aliases {
+>>>> +               serial0 = &usart0;
+>>>> +       };
+>>>> +
+>>>> +       chosen {
+>>>> +               stdout-path = "serial0:115200n8";
+>>>> +       };
+>>>> +
+>>>> +       gpio-restart {
+>>>> +               compatible = "gpio-restart";
+>>>> +               gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
+>>>> +               priority = <200>;
+>>>> +       };
+>>>> +
+>>>> +       i2cmux {
+>>>> +               compatible = "i2c-mux-gpio";
+>>>> +               #address-cells = <1>;
+>>>> +               #size-cells = <0>;
+>>>> +               mux-gpios = <&sgpio_out 3 2 GPIO_ACTIVE_HIGH>,
+>>>> +                           <&sgpio_out 3 3 GPIO_ACTIVE_HIGH>;
+>>>> +               i2c-parent = <&i2c4>;
+>>>> +
+>>>> +               i2c4_0: i2c@1 {
+>>>> +                       reg = <1>;
+>>>> +                       #address-cells = <1>;
+>>>> +                       #size-cells = <0>;
+>>>> +               };
+>>>> +
+>>>> +               i2c4_1: i2c@2 {
+>>>> +                       reg = <2>;
+>>>> +                       #address-cells = <1>;
+>>>> +                       #size-cells = <0>;
+>>>> +               };
+>>>> +       };
+>>>> +
+>>>> +       sfp0: sfp0 {
+>>>> +               compatible = "sff,sfp";
+>>>> +               i2c-bus = <&i2c4_0>;
+>>>> +               los-gpios = <&sgpio_in 1 0 GPIO_ACTIVE_HIGH>;
+>>>> +               mod-def0-gpios = <&sgpio_in 1 1 GPIO_ACTIVE_LOW>;
+>>>> +               maximum-power-milliwatt = <2500>;
+>>>> +               tx-disable-gpios = <&sgpio_out 3 0 GPIO_ACTIVE_LOW>;
+>>>> +               tx-fault-gpios = <&sgpio_in 0 2 GPIO_ACTIVE_HIGH>;
+>>>> +               rate-select0-gpios = <&sgpio_out 2 0
+>>>> GPIO_ACTIVE_HIGH>;
+>>>> +               rate-select1-gpios = <&sgpio_out 2 1
+>>>> GPIO_ACTIVE_HIGH>;
+>>>> +       };
+>>>> +
+>>>> +       sfp1: sfp1 {
+>>>> +               compatible = "sff,sfp";
+>>>> +               i2c-bus = <&i2c4_1>;
+>>>> +               los-gpios = <&sgpio_in 1 2 GPIO_ACTIVE_HIGH>;
+>>>> +               mod-def0-gpios = <&sgpio_in 1 3 GPIO_ACTIVE_LOW>;
+>>>> +               maximum-power-milliwatt = <2500>;
+>>>> +               tx-disable-gpios = <&sgpio_out 3 1 GPIO_ACTIVE_LOW>;
+>>>> +               tx-fault-gpios = <&sgpio_in 0 3 GPIO_ACTIVE_HIGH>;
+>>>> +               rate-select0-gpios = <&sgpio_out 2 2
+>>>> GPIO_ACTIVE_HIGH>;
+>>>> +               rate-select1-gpios = <&sgpio_out 2 3
+>>>> GPIO_ACTIVE_HIGH>;
+>>>> +       };
+>>>> +};
+>>>> +
+>>>> +&flx0 {
+>>>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+>>>> +       status = "okay";
+>>>> +};
+>>>> +
+>>>> +&flx3 {
+>>>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
+>>>> +       status = "okay";
+>>>> +};
+>>>> +
+>>>> +&flx4 {
+>>>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+>>>> +       status = "okay";
+>>>> +};
+>>> 
+>>> Although there is 1:1 mapping b/w ids of flexcoms and the embedded
+>>> blocks
+>>> (flxX has usartX, i2cX, spiX) and there is nothing wrong with the
+>>> approach
+>>> here I found a bit hard to follow if the correspondent embedded block
+>>> (i2c, spi, usart) is enabled or not.
+>> 
+>> I know and I had the same feeling, but I don't want to have the
+>> subnodes (matched by name) in these nodes.  I.e. I want to avoid
+>> something like:
+>> 
+>> &flx4 {
+>>        atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+>>        status = "okay";
+>> 
+>>        i2c@600 {
+>>               pinctrl-0 = <&fc4_b_pins>;
+>>               pinctrl-names = "default";
+>>               status = "okay";
+>>        };
+>> };
+> 
+> All the other AT91 DTs are using the above format + the specific label 
+> in
+> front of the subnode, e.g:
+> 
+> 	i2cX: i2c@600 {
+> 
+>> 
+>> If someone renames the subnode in the dtsi, it might easily be
+>> overlooked in the board files. Having the handle will raise an
+>> error.
+> 
+> If using label + node name as pointed above there will be an error 
+> thrown
+> for your scenario.
 
-I agree: if we decide that W=2 warnings are completely useless, we should
-either remove the option to build a W=2 kernel or remove some of the warning
-flags that go into it. My feeling is that both W=2 in general, and the
-Wtype-limits have some value, and that reducing the number of W=2 by
-30% as this patch does is a useful goal by itself.
+Fair enough. You'll get a duplicate reference error as long as
+the reference itself isn't renamed either.
 
-A different question is whether this particular patch is the best
-workaround for the warnings, or if a nicer alternative can be found,
-such as moving -Wtype-limits to W=3, or using an open-coded variant
-of __is_constexpr() that includes the comparison in a way that avoids the
-warning.
+But to make it short, unless you force me too, I'd like
+to keep the child node as is and not as a subnode of
+the flexcom. I just don't want to repeat the name if
+there is no reason and I live with the fact that they
+are not near each other :)
 
-       Arnd
+That flexcom-mode could also be deduced from the enabled
+children, btw.
+
+>> And because the node references should be sorted alphabetically
+>> it will be cluttered around in the file. You could rename the
+>> references to flx4_i2c though. But I don't know it its worth
+>> the efforts. Let me know what you think.
+
+-michael

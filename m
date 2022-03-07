@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97634CFB46
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B8F4CFA03
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbiCGKeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S238193AbiCGKMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242946AbiCGKMC (ORCPT
+        with ESMTP id S238764AbiCGJyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:12:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12D18CD86;
-        Mon,  7 Mar 2022 01:56:17 -0800 (PST)
+        Mon, 7 Mar 2022 04:54:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD2378055;
+        Mon,  7 Mar 2022 01:45:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E218C60BB9;
-        Mon,  7 Mar 2022 09:56:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF564C340E9;
-        Mon,  7 Mar 2022 09:56:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 306766137D;
+        Mon,  7 Mar 2022 09:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD7CC340E9;
+        Mon,  7 Mar 2022 09:45:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646974;
-        bh=hYrHolxhejP1P56cX192JntSs5k6cVUspjS5k2gajVI=;
+        s=korg; t=1646646323;
+        bh=IiS7yHaWm4QOG2+YIP3ZKm2D0uUzYZnty3HNZZCfhAo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tMg5EZklbW5NES4Fp3xA230Zl3p0fjPKoVsHnaTbrsXgNsWNvZb+/HycXNnne/HXX
-         9R2VHxgjV254eSo0Vd84t76wY6D3Mq4ZwKtlzXnCDL8ZQKeB1Q1cjgJKIJTVzNEFQ/
-         rGzlxvf5EAwEqQrG7rw4zTqVzmvOSyEdjSJRhJZE=
+        b=TCISR3ApkT7K7m92tXZzSRAGvb8gl9HOjlUe8Fcot5THt/yKa+vpEtcP8BnMtyHmX
+         XK9AM569VI3SWSVmD8lF5hbniqgjGT4l9KGNzCa6f0RFajw0vu78jDHC47ERY/amRf
+         rbmHCpVaXhCG2FYRmWc14KR2vXksKs1a8/fCG+BA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 111/186] mptcp: Correctly set DATA_FIN timeout when number of retransmits is large
+        stable@vger.kernel.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 205/262] iommu/amd: Use put_pages_list
 Date:   Mon,  7 Mar 2022 10:19:09 +0100
-Message-Id: <20220307091657.182305927@linuxfoundation.org>
+Message-Id: <20220307091708.549722003@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +56,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mat Martineau <mathew.j.martineau@linux.intel.com>
+From: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-commit 877d11f0332cd2160e19e3313e262754c321fa36 upstream.
+[ Upstream commit ce00eece6909c266da123fd147172d745a4f14a0 ]
 
-Syzkaller with UBSAN uncovered a scenario where a large number of
-DATA_FIN retransmits caused a shift-out-of-bounds in the DATA_FIN
-timeout calculation:
+page->freelist is for the use of slab.  We already have the ability
+to free a list of pages in the core mm, but it requires the use of a
+list_head and for the pages to be chained together through page->lru.
+Switch the AMD IOMMU code over to using free_pages_list().
 
-================================================================================
-UBSAN: shift-out-of-bounds in net/mptcp/protocol.c:470:29
-shift exponent 32 is too large for 32-bit type 'unsigned int'
-CPU: 1 PID: 13059 Comm: kworker/1:0 Not tainted 5.17.0-rc2-00630-g5fbf21c90c60 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: events mptcp_worker
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- ubsan_epilogue+0xb/0x5a lib/ubsan.c:151
- __ubsan_handle_shift_out_of_bounds.cold+0xb2/0x20e lib/ubsan.c:330
- mptcp_set_datafin_timeout net/mptcp/protocol.c:470 [inline]
- __mptcp_retrans.cold+0x72/0x77 net/mptcp/protocol.c:2445
- mptcp_worker+0x58a/0xa70 net/mptcp/protocol.c:2528
- process_one_work+0x9df/0x16d0 kernel/workqueue.c:2307
- worker_thread+0x95/0xe10 kernel/workqueue.c:2454
- kthread+0x2f4/0x3b0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-================================================================================
-
-This change limits the maximum timeout by limiting the size of the
-shift, which keeps all intermediate values in-bounds.
-
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/259
-Fixes: 6477dd39e62c ("mptcp: Retransmit DATA_FIN")
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+[rm: split from original patch, cosmetic tweaks]
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/73af128f651aaa1f38f69e586c66765a88ad2de0.1639753638.git.robin.murphy@arm.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/protocol.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/iommu/amd/io_pgtable.c | 50 ++++++++++++----------------------
+ 1 file changed, 18 insertions(+), 32 deletions(-)
 
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -464,9 +464,12 @@ static bool mptcp_pending_data_fin(struc
- static void mptcp_set_datafin_timeout(const struct sock *sk)
- {
- 	struct inet_connection_sock *icsk = inet_csk(sk);
-+	u32 retransmits;
+diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
+index 4165e1372b6e..b1bf4125b0f7 100644
+--- a/drivers/iommu/amd/io_pgtable.c
++++ b/drivers/iommu/amd/io_pgtable.c
+@@ -74,26 +74,14 @@ static u64 *first_pte_l7(u64 *pte, unsigned long *page_size,
+  *
+  ****************************************************************************/
  
--	mptcp_sk(sk)->timer_ival = min(TCP_RTO_MAX,
--				       TCP_RTO_MIN << icsk->icsk_retransmits);
-+	retransmits = min_t(u32, icsk->icsk_retransmits,
-+			    ilog2(TCP_RTO_MAX / TCP_RTO_MIN));
-+
-+	mptcp_sk(sk)->timer_ival = TCP_RTO_MIN << retransmits;
+-static void free_page_list(struct page *freelist)
+-{
+-	while (freelist != NULL) {
+-		unsigned long p = (unsigned long)page_address(freelist);
+-
+-		freelist = freelist->freelist;
+-		free_page(p);
+-	}
+-}
+-
+-static struct page *free_pt_page(u64 *pt, struct page *freelist)
++static void free_pt_page(u64 *pt, struct list_head *freelist)
+ {
+ 	struct page *p = virt_to_page(pt);
+ 
+-	p->freelist = freelist;
+-
+-	return p;
++	list_add_tail(&p->lru, freelist);
  }
  
- static void __mptcp_set_timeout(struct sock *sk, long tout)
+-static struct page *free_pt_lvl(u64 *pt, struct page *freelist, int lvl)
++static void free_pt_lvl(u64 *pt, struct list_head *freelist, int lvl)
+ {
+ 	u64 *p;
+ 	int i;
+@@ -114,22 +102,22 @@ static struct page *free_pt_lvl(u64 *pt, struct page *freelist, int lvl)
+ 		 */
+ 		p = IOMMU_PTE_PAGE(pt[i]);
+ 		if (lvl > 2)
+-			freelist = free_pt_lvl(p, freelist, lvl - 1);
++			free_pt_lvl(p, freelist, lvl - 1);
+ 		else
+-			freelist = free_pt_page(p, freelist);
++			free_pt_page(p, freelist);
+ 	}
+ 
+-	return free_pt_page(pt, freelist);
++	free_pt_page(pt, freelist);
+ }
+ 
+-static struct page *free_sub_pt(u64 *root, int mode, struct page *freelist)
++static void free_sub_pt(u64 *root, int mode, struct list_head *freelist)
+ {
+ 	switch (mode) {
+ 	case PAGE_MODE_NONE:
+ 	case PAGE_MODE_7_LEVEL:
+ 		break;
+ 	case PAGE_MODE_1_LEVEL:
+-		freelist = free_pt_page(root, freelist);
++		free_pt_page(root, freelist);
+ 		break;
+ 	case PAGE_MODE_2_LEVEL:
+ 	case PAGE_MODE_3_LEVEL:
+@@ -141,8 +129,6 @@ static struct page *free_sub_pt(u64 *root, int mode, struct page *freelist)
+ 	default:
+ 		BUG();
+ 	}
+-
+-	return freelist;
+ }
+ 
+ void amd_iommu_domain_set_pgtable(struct protection_domain *domain,
+@@ -350,7 +336,7 @@ static u64 *fetch_pte(struct amd_io_pgtable *pgtable,
+ 	return pte;
+ }
+ 
+-static struct page *free_clear_pte(u64 *pte, u64 pteval, struct page *freelist)
++static void free_clear_pte(u64 *pte, u64 pteval, struct list_head *freelist)
+ {
+ 	u64 *pt;
+ 	int mode;
+@@ -361,12 +347,12 @@ static struct page *free_clear_pte(u64 *pte, u64 pteval, struct page *freelist)
+ 	}
+ 
+ 	if (!IOMMU_PTE_PRESENT(pteval))
+-		return freelist;
++		return;
+ 
+ 	pt   = IOMMU_PTE_PAGE(pteval);
+ 	mode = IOMMU_PTE_MODE(pteval);
+ 
+-	return free_sub_pt(pt, mode, freelist);
++	free_sub_pt(pt, mode, freelist);
+ }
+ 
+ /*
+@@ -380,7 +366,7 @@ static int iommu_v1_map_page(struct io_pgtable_ops *ops, unsigned long iova,
+ 			  phys_addr_t paddr, size_t size, int prot, gfp_t gfp)
+ {
+ 	struct protection_domain *dom = io_pgtable_ops_to_domain(ops);
+-	struct page *freelist = NULL;
++	LIST_HEAD(freelist);
+ 	bool updated = false;
+ 	u64 __pte, *pte;
+ 	int ret, i, count;
+@@ -400,9 +386,9 @@ static int iommu_v1_map_page(struct io_pgtable_ops *ops, unsigned long iova,
+ 		goto out;
+ 
+ 	for (i = 0; i < count; ++i)
+-		freelist = free_clear_pte(&pte[i], pte[i], freelist);
++		free_clear_pte(&pte[i], pte[i], &freelist);
+ 
+-	if (freelist != NULL)
++	if (!list_empty(&freelist))
+ 		updated = true;
+ 
+ 	if (count > 1) {
+@@ -437,7 +423,7 @@ static int iommu_v1_map_page(struct io_pgtable_ops *ops, unsigned long iova,
+ 	}
+ 
+ 	/* Everything flushed out, free pages now */
+-	free_page_list(freelist);
++	put_pages_list(&freelist);
+ 
+ 	return ret;
+ }
+@@ -499,7 +485,7 @@ static void v1_free_pgtable(struct io_pgtable *iop)
+ {
+ 	struct amd_io_pgtable *pgtable = container_of(iop, struct amd_io_pgtable, iop);
+ 	struct protection_domain *dom;
+-	struct page *freelist = NULL;
++	LIST_HEAD(freelist);
+ 
+ 	if (pgtable->mode == PAGE_MODE_NONE)
+ 		return;
+@@ -516,9 +502,9 @@ static void v1_free_pgtable(struct io_pgtable *iop)
+ 	BUG_ON(pgtable->mode < PAGE_MODE_NONE ||
+ 	       pgtable->mode > PAGE_MODE_6_LEVEL);
+ 
+-	freelist = free_sub_pt(pgtable->root, pgtable->mode, freelist);
++	free_sub_pt(pgtable->root, pgtable->mode, &freelist);
+ 
+-	free_page_list(freelist);
++	put_pages_list(&freelist);
+ }
+ 
+ static struct io_pgtable *v1_alloc_pgtable(struct io_pgtable_cfg *cfg, void *cookie)
+-- 
+2.34.1
+
 
 

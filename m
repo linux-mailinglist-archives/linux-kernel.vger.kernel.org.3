@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E12D4D037C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C6E4D0380
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241613AbiCGPyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S242696AbiCGP4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238588AbiCGPyf (ORCPT
+        with ESMTP id S231715AbiCGP4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:54:35 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF32866610;
-        Mon,  7 Mar 2022 07:53:40 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id b5so24052114wrr.2;
-        Mon, 07 Mar 2022 07:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VCMF7JOePAGAD2TRuJoonUYYB1mQc1S3qSAF6RtOJWY=;
-        b=mqvy472H4fpcBOM1bST+j5DbuOBj4z4Zd8s+2YSbdcQo6ChrFa6JapwmdFDuwZtvnd
-         IMXCTSOD3UH8W3dh4affMWFJeG9t7zLBnzCseOxGwss+RhRaTMPJi9+Gh/LG+7NLJGwz
-         09JtCCYz55HcoePAc8CIjItO5FFk01yWi1dhcVUJ6AVHygAdvQvYB4p1ugGTP4w3MwTb
-         uaIOxR6/gl74GqxZlO3G2wzbCZNNDD641IE/0tc61jLvsgDmPQ3grbRpXBOgemIw45iZ
-         p7rSjpQctaEvD9aDhcAvIOZS6aSSsxsjQcgomCvaIa8xTfhX6dc2wsFEEMmI+tYTrjEf
-         r31w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VCMF7JOePAGAD2TRuJoonUYYB1mQc1S3qSAF6RtOJWY=;
-        b=Ct/L2FQwvOSYXvAeNejwJm70MKdZNRXOOsrx8CdMuyIAzF9ZT7kl0L+epIn9V1qRpx
-         8rEK0gP7ndHcyqDS37S8vRT2t4qm9IDkN7lAwoP5dMY6uhRV5mzwRds+vHw00sNPXAJ6
-         VPRk+GluitJb+TKMQrKNkh2vocly5Ei2YgvXi+i2JN68S0jZELnmOb8lRsjufdggHOp6
-         PnNM7f5vuD7EfsWMYYPTSS4uczyfeMc7jZuyXGLo/qr3XpJeseivMnB0RkqsrOqK5y1O
-         i0KweFECenlOA3b95DE2qEs9FQfNIA7ezqysktr3n0EM94178wOf5mikbMk6yoROfzpm
-         v4hQ==
-X-Gm-Message-State: AOAM532J1bEVlUx2NF6XGeOfvj/HsPIZDzxCucb0FlSP1m9MPUhIy2CP
-        F+mDiBJms1siIOuEkIvJZtttR8s9sXcPvQ==
-X-Google-Smtp-Source: ABdhPJx9tp6UqpNijYut2CQMscnG37GHYd0RtPgRD/hiGSg3Txqamr2jn3+qrxh5a0lI0idxw+ZDGg==
-X-Received: by 2002:a5d:6a47:0:b0:1f1:e562:bef9 with SMTP id t7-20020a5d6a47000000b001f1e562bef9mr7183983wrw.445.1646668419347;
-        Mon, 07 Mar 2022 07:53:39 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id g17-20020adff411000000b001f03426827csm11727167wro.71.2022.03.07.07.53.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 07:53:39 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] Bluetooth: mgmt: remove redundant assignment to variable cur_len
-Date:   Mon,  7 Mar 2022 15:53:38 +0000
-Message-Id: <20220307155338.140860-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 10:56:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501FB7D007;
+        Mon,  7 Mar 2022 07:55:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBC7160A20;
+        Mon,  7 Mar 2022 15:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49769C340EB;
+        Mon,  7 Mar 2022 15:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646668547;
+        bh=aVLhNCf5hrMjPL7JDmyueIwlbRUgBoYxzLRoIl+RLYk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=myX9e1ypm7GnGg1V9fumjZnegDmHdNoYeSrwbwq2WP0AgwwosEveFiTr9MLoHcTHS
+         5ZHY2aoDnZbgSGSOfIkhAJbqIrxPKINOUjUJZoBoc8pySSabKHnS2obNCOM2bqa5DS
+         xcF8O7Jfm9nxky0c2HAoAvdaRuWegfT7hYWAh6QXNRdaBoy/ACEPmV9Mx9s0BXNG0N
+         oOE497w3Of5Vr6iT5qcw3NAImtBXLAMH3Fcrl1Bv03jmuIxTPkMC7RTdz6Xlm9tJpa
+         N/A75QMnNobqHfJfLDpQ8g0fvo1pxudipd+ltgvMxnEk84Ejw07guKW8QrgGFA75aO
+         4N/q3zK8ZZTrg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRFi4-00Cpho-QR; Mon, 07 Mar 2022 15:55:44 +0000
+Date:   Mon, 07 Mar 2022 15:55:44 +0000
+Message-ID: <875yop21vj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dougall <dougallj@gmail.com>, kernel-team@android.com
+Subject: Re: [PATCH v5 00/10] drivers/perf: CPU PMU driver for Apple M1
+In-Reply-To: <20220208185604.1097957-1-maz@kernel.org>
+References: <20220208185604.1097957-1-maz@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: will@kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, mark.rutland@arm.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, tglx@linutronix.de, dougallj@gmail.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable cur_len is being ininitialized with a value in the start of
-a for-loop but this is never read, it is being re-assigned a new value
-on the first statement in the for-loop.  The initialization is redundant
-and can be removed.
+On Tue, 08 Feb 2022 18:55:54 +0000,
+Marc Zyngier <maz@kernel.org> wrote:
+> 
+> The M1 SoC embeds a per-CPU PMU that has a very different programming
+> interface compared to the architected PMUv3 that is normally present
+> on standard implementations.
+> 
+> This small series adds a driver for this HW by leveraging the arm_pmu
+> infrastructure, resulting in a rather simple driver.
+> 
+> Of course, we know next to nothing about the actual events this PMU
+> counts, aside from CPU cycles and instructions. Everything else is
+> undocumented (though as Dougall pointed out, someone could extract the
+> relevant information from a macOS install if they wanted -- I don't).
+> I'm looking at allowing the perf userspace tool to load the event
+> descriptions at runtime, which would probably help.
 
-Cleans up clang scan build warning:
-net/bluetooth/mgmt.c:7958:14: warning: Although the value stored to 'cur_len'
-is used in the enclosing expression, the value is never actually read
-from 'cur_len' [deadcode.DeadStores]
+[...]
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- net/bluetooth/mgmt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+FWIW, I have created two branches:
 
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 8101a6a31841..e0137bc1080e 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -7955,7 +7955,7 @@ static bool tlv_data_is_valid(struct hci_dev *hdev, u32 adv_flags, u8 *data,
- 		return false;
- 
- 	/* Make sure that the data is correctly formatted. */
--	for (i = 0, cur_len = 0; i < len; i += (cur_len + 1)) {
-+	for (i = 0; i < len; i += (cur_len + 1)) {
- 		cur_len = data[i];
- 
- 		if (!cur_len)
+- [1] has the full series
+- [2] has the irqchip/DT prefix of [1]
+
+Both branches are stable, and I expect [2] to be used as a shared
+branch between the irqchip and perf trees.
+
+Thanks,
+
+	M.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=hack/m1-pmu
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/aic-pmu
+
 -- 
-2.35.1
-
+Without deviation from the norm, progress is not possible.

@@ -2,114 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1714CF427
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8417B4CF42B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbiCGI70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 03:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        id S233464AbiCGJBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:01:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiCGI7W (ORCPT
+        with ESMTP id S231402AbiCGJBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 03:59:22 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1992180D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 00:58:28 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6AB303F614
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646643506;
-        bh=tXVanxy7+7Oc5O3WLbsohtPsqU2ukLOIpjIWEofC+MQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=bBOrvOLfG9019V6oJZkPLllCzqkQGBuAMuWwJ/Qedsgo3I9uMF0fu+gd8ziA/TzVX
-         axzMSkG/3KMQZhxS1Y8Tja+3PuzPXUWlaG7Ro31TdiYUPANc17HLhGpxzRyPUwz+rG
-         ZImxCMX3e7933YX6z5KT86rMwg7x4jRTob00E6cUa0ZuemUXh7DSzm8aJHVw0XAYs9
-         8Y0e1MnOruqZ6ABghLRh8b4pPIuVu2YpnmGcMJYIABXnMVrAc6pBo79LzxDc+Ibi+I
-         4CiTs0Ca+NgLNeYLo0r93FOiF4OeRHuA/rJELTzw1a5jMCmL9YvrUY/UXG1/DEiZqv
-         WzxUQtkU9Ew4w==
-Received: by mail-ed1-f72.google.com with SMTP id l24-20020a056402231800b00410f19a3103so8227119eda.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 00:58:26 -0800 (PST)
+        Mon, 7 Mar 2022 04:01:06 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D81C60CFB;
+        Mon,  7 Mar 2022 01:00:13 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso15993946pjj.2;
+        Mon, 07 Mar 2022 01:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iuFL9uyQNAriGpCD2xLghLhBAOHEFGsgHrDh4RbTasA=;
+        b=ZzeHWjwIaLjKsIEZ4QMsy1kuD3HrAsBrDCnWrcwZ2oqTafI6oShTU9AKAUeJ/hK2sU
+         QoJLXuDw+6vzkSqqpzylNl1VHxlPCD0/bEezuEDgEpaRbPbm7q61jzB4g4VxmrjYAdVz
+         nIpNzrokm5D0iynm2xjip5CzSVQIQzCaCdvoe5ONDGKxbaFdmJarW4XOYihRZrYCyPlW
+         X2BVI+/sHj4IUgNLJsA65RpHLa9GCxJ9caxONNQ+VyuPZjngLuXzxHYrIeWtrfKt6KgK
+         rn+W2cZO87kQi/Mi1O4JPbxQVUomsfRfoAcd78XXNMJENI62WzyN6bZjJFSGYwIe1LYf
+         Co8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tXVanxy7+7Oc5O3WLbsohtPsqU2ukLOIpjIWEofC+MQ=;
-        b=Yh+fWgRVRnPN48HmgfAyD7X8ipq3VkryxJaVEuYscGFYFgfy+2mlqtBb7b17RMkygR
-         HMH9nBCQTkQKDGpc5w20EVrqXuPb71XfLPdgcdWT5O/nJulPgkf4Sz/L9KTBFTtEhSrb
-         90Fylh7ai78b1pFpRDYwPA+WlB+Ox9vd7uKOhuuYqrA/5AwX5bm++6y3U1a7UQZKc6Gr
-         y9EcgrnbrdeszLx6KpCTI6OD15ZMgciZYsZukooWJcjoYDTOFNbfKhVon8CPrwqPo7qZ
-         A4mnCRbEjPv3Yuk+zZnURFbrAB9zMBEFSUOqs5IlCW/JnjEyE3ieDx1+7t9hNwWwwsXw
-         NakA==
-X-Gm-Message-State: AOAM530ZGYwj3dIZoJW3yTu+fZYWcjBpKeaAF65Q+XhMM5zK6bh412jR
-        ungqEX6JNfUA9+W0/YZMtZamWuS0S7jQ+U+f2INuAF6aFWLMs9o62wCfDEM0dFB5JTsRmC+xgqV
-        /4Ah5dwasaKbO85zKcv48OyodFvVqmY9ia45q4br3nA==
-X-Received: by 2002:a05:6402:27cb:b0:412:124:e0db with SMTP id c11-20020a05640227cb00b004120124e0dbmr10188611ede.72.1646643505348;
-        Mon, 07 Mar 2022 00:58:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy3ZMJrDKrVAyAS7Dzh3dQbNGgwVfhPijtSj0p1tH4keGdzqgbfHCWsGgoYJFegl75f4/Ns8g==
-X-Received: by 2002:a05:6402:27cb:b0:412:124:e0db with SMTP id c11-20020a05640227cb00b004120124e0dbmr10188597ede.72.1646643505198;
-        Mon, 07 Mar 2022 00:58:25 -0800 (PST)
-Received: from [192.168.0.140] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id fs6-20020a170907600600b006da8ec6e4a6sm4485847ejc.26.2022.03.07.00.58.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 00:58:24 -0800 (PST)
-Message-ID: <3b4b5fd3-6642-baf4-2c21-930b70ab0d63@canonical.com>
-Date:   Mon, 7 Mar 2022 09:58:24 +0100
+        bh=iuFL9uyQNAriGpCD2xLghLhBAOHEFGsgHrDh4RbTasA=;
+        b=v6bvcwELteOiQgoOiWC9ZCINJznoZP84dwtWaakqhhVQr9NMHTr5xAT3D0KhjgQiCY
+         wR02rWgKcVtjMiXiXTvbWFEBDI3uPFl5EzQmPO8PPQtpTr9yoY0e9W48a5U14OzSo7SW
+         duxPZnBostptxprErINiVfvFv+Fac3yik3EFl7gx7PKW6TX6N0HGU2wNabRc91LbmDWK
+         UwF8Fh14maGGwNWITjfxXc38b8YmcfuhwHPw41/xhsV0QEqCQqEx1JefaTsa20kDMLGO
+         Lvq5AeOkDV65o1kxiwGtfI6/yXUJ47PK4N3mmaKpsz+Zs4WqoI20z2NETLXz+ngIYfz/
+         f3iQ==
+X-Gm-Message-State: AOAM533XklZ8+4ZSWsSb6BKoCAGPTbOYmlJlap2xJwfaeqph1WrddEVY
+        cxDg5PuNVXupp9sFayTD9g+IYLd5u7E=
+X-Google-Smtp-Source: ABdhPJyPbv0WV5jxysEeKV5zDfDKHAqcALuZc09O/FfmMHAGIOFJcb8LidS157pEeKWugq6cvJgPYw==
+X-Received: by 2002:a17:902:8c8c:b0:150:739b:8ab1 with SMTP id t12-20020a1709028c8c00b00150739b8ab1mr10747897plo.3.1646643612702;
+        Mon, 07 Mar 2022 01:00:12 -0800 (PST)
+Received: from arch-pc.genesyslogic.com.tw (60-251-58-169.hinet-ip.hinet.net. [60.251.58.169])
+        by smtp.gmail.com with ESMTPSA id c30-20020a63725e000000b0037c8bf5b630sm8981840pgn.12.2022.03.07.01.00.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 01:00:11 -0800 (PST)
+From:   Ben Chuang <benchuanggli@gmail.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greg.tu@genesyslogic.com.tw, ben.chuang@genesyslogic.com.tw,
+        SeanHY.Chen@genesyslogic.com.tw, hl.liu@genesyslogic.com.tw,
+        Ben Chuang <benchuanggli@gmail.com>,
+        Kevin Chang <kevin.chang@lcfuturecenter.com>
+Subject: [PATCH V2] mmc: sdhci-pci-gli: Add runtime PM for GL9763E
+Date:   Mon,  7 Mar 2022 17:00:09 +0800
+Message-Id: <20220307090009.1386876-1-benchuanggli@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: serial: samsung: Add ARTPEC-8 UART
-Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     kernel@axis.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        alim.akhtar@samsung.com
-References: <20220307085053.1636475-1-vincent.whitchurch@axis.com>
- <20220307085053.1636475-2-vincent.whitchurch@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307085053.1636475-2-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 09:50, Vincent Whitchurch wrote:
-> Add a compatible for the UART on the ARTPEC-8 SoC.
-> 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> index 6aceba4a5f79..6f11f2c92f64 100644
-> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> @@ -20,6 +20,7 @@ properties:
->      items:
->        - enum:
->            - apple,s5l-uart
-> +          - axis,artpec8-uart
->            - samsung,s3c2410-uart
->            - samsung,s3c2412-uart
->            - samsung,s3c2440-uart
+From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 
-You need to define clocks - see the allOf part.
+Add runtime PM for GL9763E and disable PLL in runtime suspend. So power
+gated of upstream port can be enabled. GL9763E has an auxiliary power
+so it keep states in runtime suspend. In runtime resume, PLL is enabled
+and waits for it to stabilize.
 
-Best regards,
-Krzysztof
+Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+Tested-by: Kevin Chang <kevin.chang@lcfuturecenter.com>
+---
+Changes in v2:
+* modify commit messages
+* Use read_poll_timeout() instead of while loop
+---
+ drivers/mmc/host/sdhci-pci-gli.c | 47 ++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+
+diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+index 97035d77c18c..c854c8db32e4 100644
+--- a/drivers/mmc/host/sdhci-pci-gli.c
++++ b/drivers/mmc/host/sdhci-pci-gli.c
+@@ -13,6 +13,7 @@
+ #include <linux/mmc/mmc.h>
+ #include <linux/delay.h>
+ #include <linux/of.h>
++#include <linux/iopoll.h>
+ #include "sdhci.h"
+ #include "sdhci-pci.h"
+ #include "cqhci.h"
+@@ -873,6 +874,47 @@ static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
+ 	pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
+ }
+ 
++#ifdef CONFIG_PM
++static int gl9763e_runtime_suspend(struct sdhci_pci_chip *chip)
++{
++	struct sdhci_pci_slot *slot = chip->slots[0];
++	struct sdhci_host *host = slot->host;
++	u16 clock;
++
++	clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++	clock &= ~(SDHCI_CLOCK_PLL_EN | SDHCI_CLOCK_CARD_EN);
++	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
++
++	return 0;
++}
++
++static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
++{
++	struct sdhci_pci_slot *slot = chip->slots[0];
++	struct sdhci_host *host = slot->host;
++	u16 clock;
++
++	clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++
++	clock |= SDHCI_CLOCK_PLL_EN;
++	clock &= ~SDHCI_CLOCK_INT_STABLE;
++	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
++
++	/* Wait max 150 ms */
++	if (read_poll_timeout(sdhci_readw, clock, (clock & SDHCI_CLOCK_INT_STABLE),
++			      1000, 150000, false, host, SDHCI_CLOCK_CONTROL)) {
++		pr_err("%s: PLL clock never stabilised.\n",
++		       mmc_hostname(host->mmc));
++		sdhci_dumpregs(host);
++	}
++
++	clock |= SDHCI_CLOCK_CARD_EN;
++	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
++
++	return 0;
++}
++#endif
++
+ static int gli_probe_slot_gl9763e(struct sdhci_pci_slot *slot)
+ {
+ 	struct pci_dev *pdev = slot->chip->pdev;
+@@ -982,6 +1024,11 @@ const struct sdhci_pci_fixes sdhci_gl9763e = {
+ #ifdef CONFIG_PM_SLEEP
+ 	.resume		= sdhci_cqhci_gli_resume,
+ 	.suspend	= sdhci_cqhci_gli_suspend,
++#endif
++#ifdef CONFIG_PM
++	.runtime_suspend = gl9763e_runtime_suspend,
++	.runtime_resume  = gl9763e_runtime_resume,
++	.allow_runtime_pm = true,
+ #endif
+ 	.add_host       = gl9763e_add_host,
+ };
+-- 
+2.35.1
+

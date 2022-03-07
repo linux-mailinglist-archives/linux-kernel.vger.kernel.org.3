@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E8C4D03A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A3B4D03A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243998AbiCGQDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S243977AbiCGQFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243977AbiCGQDt (ORCPT
+        with ESMTP id S232418AbiCGQFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:03:49 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C9E366B6
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:02:54 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id f38so31942908ybi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 08:02:54 -0800 (PST)
+        Mon, 7 Mar 2022 11:05:33 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECF590CF4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:04:37 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id z66so12267557qke.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 08:04:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=oUiS8St9u6jfbDcvn7O2xYzrVRnsblDuTr18hd0OKbY=;
-        b=yknKkgg36doSZGb9bSrwwPi/ng2twjs+DjuXJ4ZenpwNzMJFZMROdi7E2liiIp8hkC
-         hq/qjT6U0AvPIiqaIt7whbyh+wcdM0THyTzYXufY6GJxLvGfV00FKniLs+SqodA6XZpA
-         f7bKXe9DI+xE45O8Gfy2alVuKydBPoffnPLCgCnVhc3CWDq6sGTbN/fc+93eWr42yJVC
-         2aqQQ33rGSVAIbwH2LkMXG+QNoeEZNiAF0xNRCugNtWLXqubaXYFxG/kyTT3G959o/tH
-         d+s1k0ob4NbaGm0Oo6R+WRup6oSu1xmNmnWDFkrV1huVhJ7cyMvXPZIJhYU6B8AzMRp6
-         7FEw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=OjzcdCTb99taAtaL6GPlFbWqi+FhjWVkGB4/e556R4U=;
+        b=ox6tPta8YwL2Xk8xDu6PuHGwEzuqo1lzn0J4GWisxTzmj43LGUC6tUivThWgTSSSB8
+         5/+hWpvh+oULOA21bIx2EGLbrTePahI5laqCzObnIeBq7JGkjhIE5B7ikWHw/+lZsGjg
+         GaGVc9HICE+7+FHzmgw3/2IFgvM31rp+4urN5sQUolgLvUWhHyo2dkD4yOe+s71DJuF1
+         tjTKJGEflPBfHN7ouI5TwhCBzPaiqCiWn7fGbJOS+peNt6bVpW1VZWfmZj8HTkwGf07n
+         MjLhPtQ1s9MV0HirqdbCuYkXqdfcuJdx7fXKyWYzYavA4LHYcf2lSf0i4AZw7Vdcat9D
+         9TrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=oUiS8St9u6jfbDcvn7O2xYzrVRnsblDuTr18hd0OKbY=;
-        b=BEyosr3nyJpSI0i0C1k8GQA8/QLJxlmOGv4rkFdwljPcjYqwaaoCLl+nPrdic7mrVd
-         TpjtRx5R0u3hRFavAvxHXXMr145fKBJjUqcTu4to/heuBfLU7kIkODr4ookLBCJ/XMPD
-         eI1PKv+g75/r5mSueBaO1I2TEJ7YZErO/YuY0aDRt6deMI5L5+zau3zyWu9qQfhODCvd
-         xIngacer/RkigxsJAzVPj+8UavskCGfONjmPBBn3soiJ3fGzAiVGV36mjLMxf71AGhZF
-         LQ7sLMtSbCzf6K1/M+U0Ze0Z/5cRCJ20gVGCU6Rd8/y+SCpaqsyohVqlfCx67N/Vm+ya
-         6TCQ==
-X-Gm-Message-State: AOAM533PYZBUepTgEHqbwm+GFYh/lthKExvLg9kvICUuJWBkvx9hb9IE
-        MB0BNuIEKEQZqWwFpkSY/ww5suxIJtn4now4mAwFuw==
-X-Google-Smtp-Source: ABdhPJyqM5A9UkFfdBHih/0XUOqLmHjU2A+XzqehBH1mnkInSaZgB3rPF8qGTvQxZ/UiC/DWz9MJ7QkmOYnkHHZ/gQ0=
-X-Received: by 2002:a25:be05:0:b0:629:1f49:b782 with SMTP id
- h5-20020a25be05000000b006291f49b782mr6723180ybk.88.1646668972845; Mon, 07 Mar
- 2022 08:02:52 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=OjzcdCTb99taAtaL6GPlFbWqi+FhjWVkGB4/e556R4U=;
+        b=CjTaZ3TAa99cZvU8WzEJX4Quf8kBMrYfhnrAJFIuPgJi5zgRUQTVrIrZ0ATkl8XG8t
+         tPOQ+6wTXhxO6fFcfodqYefpQ3/7jnuHEyZNJME8CopKl7RI2NOnb6TkE1b+xNE/Fzwr
+         rP8AME1AoOpiWATWLTT5OAzUAVheJ2TbzCuPTirej+K+YqFwDkpF6aqArsQV2opyz2TW
+         zXR12p0tXsgySlUfhQBxC23xweFjhLYLBE8hl7RyVcrCey/vTrJyPE6UkxeDjJVqlqHA
+         cOTiruCGBvp8HkCCGsswrPd1oe9puIA2y1nF8NtZOkdLWvhqmA7BqXlv5l2jZiW9dAM/
+         LAEA==
+X-Gm-Message-State: AOAM530tvm8fUjxgmQuMr6pLOLYOdjMhyZ8eua6oKPP8gz+UKvXBhGS1
+        DVtA1fbWToP+fyiZPE7zZc+T/EBJ/SU=
+X-Google-Smtp-Source: ABdhPJzoJOkWoY4V58wJCr9j+N3yxEAXmoI6vyCNgqZCZ8KZ+c1JQzvLoHqq0iK3s6znaLXJAFcBkw==
+X-Received: by 2002:a37:a845:0:b0:63b:b65c:ad11 with SMTP id r66-20020a37a845000000b0063bb65cad11mr7124568qke.574.1646669075871;
+        Mon, 07 Mar 2022 08:04:35 -0800 (PST)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm462989qkg.60.2022.03.07.08.04.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 08:04:35 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2dc0364d2ceso169718407b3.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 08:04:34 -0800 (PST)
+X-Received: by 2002:a0d:e288:0:b0:2db:f50a:9d10 with SMTP id
+ l130-20020a0de288000000b002dbf50a9d10mr8936379ywe.419.1646669074230; Mon, 07
+ Mar 2022 08:04:34 -0800 (PST)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 7 Mar 2022 21:32:41 +0530
-Message-ID: <CA+G9fYtGP6Mj3P4fbzTVQdtMrdN-6un+HBSXQCnkGFhpOSBLQw@mail.gmail.com>
-Subject: [next] LTP mm thp04 timeouted after 15 minutes
-To:     LTP List <ltp@lists.linux.it>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, Cyril Hrubis <chrubis@suse.cz>,
-        Petr Vorel <pvorel@suse.cz>, Li Wang <liwang@redhat.com>,
-        Anders Roxell <anders.roxell@linaro.org>
+References: <20220301144453.snstwdjy3kmpi4zf@begin> <CA+FuTSfi1aXiBr-fOQ+8XJPjCCTnqTicW2A3OUVfNHurfDL3jA@mail.gmail.com>
+ <20220301150028.romzjw2b4aczl7kf@begin> <CA+FuTSeZw228fsDj+YoSpu5sLaXsp+uR+N+qHrzZ4e3yMWhPKw@mail.gmail.com>
+ <20220301152017.jkx7amcbfqkoojin@begin> <CA+FuTSfVBVr_q6p+HcBL4NAX4z2BS0ZNaSfFF0yxO3QqeNX75Q@mail.gmail.com>
+ <20220306192238.fbvp2t32fsemqssf@begin>
+In-Reply-To: <20220306192238.fbvp2t32fsemqssf@begin>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Mon, 7 Mar 2022 11:03:56 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSf9UoEC0aZOXzh8jdhxXMXftxv8icdns5auObAJiB+jzw@mail.gmail.com>
+Message-ID: <CA+FuTSf9UoEC0aZOXzh8jdhxXMXftxv8icdns5auObAJiB+jzw@mail.gmail.com>
+Subject: Re: [PATCH] SO_ZEROCOPY should rather return -ENOPROTOOPT
+To:     Samuel Thibault <samuel.thibault@labri.fr>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        willemb@google.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LTP mm thp04 timeouted after 15 minutes on Linux next-20220307 on all the
-available devices.
+On Sun, Mar 6, 2022 at 2:22 PM Samuel Thibault <samuel.thibault@labri.fr> wrote:
+>
+> Hello,
+>
+> Willem de Bruijn, le mar. 01 mars 2022 10:21:41 -0500, a ecrit:
+> > > > > > > @@ -1377,9 +1377,9 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
+> > > > > > >                         if (!(sk_is_tcp(sk) ||
+> > > > > > >                               (sk->sk_type == SOCK_DGRAM &&
+> > > > > > >                                sk->sk_protocol == IPPROTO_UDP)))
+> > > > > > > -                               ret = -ENOTSUPP;
+> > > > > > > +                               ret = -ENOPROTOOPT;
+> > > > > > >                 } else if (sk->sk_family != PF_RDS) {
+> > > > > > > -                       ret = -ENOTSUPP;
+> > > > > > > +                       ret = -ENOPROTOOPT;
+> > > > > > >                 }
+> > > > > > >                 if (!ret) {
+> > > > > > >                         if (val < 0 || val > 1)
+> > > > > >
+> > > > > > That should have been a public error code. Perhaps rather EOPNOTSUPP.
+> > > > > >
+> > > > > > The problem with a change now is that it will confuse existing
+> > > > > > applications that check for -524 (ENOTSUPP).
+> > > > >
+> > > > > They were not supposed to hardcord -524...
+> > > > >
+> > > > > Actually, they already had to check against EOPNOTSUPP to support older
+> > > > > kernels, so EOPNOTSUPP is not supposed to pose a problem.
+> > > >
+> > > > Which older kernels returned EOPNOTSUPP on SO_ZEROCOPY?
+> > >
+> > > Sorry, bad copy/paste, I meant ENOPROTOOPT.
+> >
+> > Same point though, right? These are not legacy concerns, but specific
+> > to applications written to SO_ZEROCOPY.
+> >
+> > I expect that most will just ignore the exact error code and will work
+> > with either.
+>
+> Ok, so, is this an Acked-by: you? :)
 
-Following two tests regressed.
-    - LTP mm: thp04 (timed out after 15 minutes)
-    - LTP cve : cve-2017-1000405 (timed out after 5 minutes)
+I did not touch this code on purpose, due to the small risk of legacy
+users that expect 524.
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 519dd6c19986696f59847ff8bf930436ccffd9a1
-  git_describe: next-20220307
-  kernel-config: https://builds.tuxbuild.com/2639Ukfjo4gbqTYIT0qtQgX1a5J/config
+If you think the benefit outweighs the risk --the same conclusion
+reached in the commits I mentioned, 2230a7ef5198 ("drop_monitor: Use
+correct
+error code") and commit 4a5cdc604b9c ("net/tls: Fix return values to
+avoid ENOTSUPP")-- then I can support that.
 
-
-tst_test.c:1433: TINFO: Timeout per run is 0h 15m 00s
-thp03.c:76: TPASS: system didn't crash, pass.
-Summary:
-passed   1
-failed   0
-broken   0
-skipped  0
-warnings 0
-tst_test.c:1433: TINFO: Timeout per run is 0h 15m 00s
-[  989.498742] kworker/dying (36) used greatest stack depth: 11352 bytes left
-Test timeouted, sending SIGKILL!
-tst_test.c:1479: TINFO: If you are running on slow machine, try
-exporting LTP_TIMEOUT_MUL > 1
-tst_test.c:1480: TBROK: Test killed! (timeout?)
-Summary:
-passed   0
-failed   0
-broken   1
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Test log [1].
-LKFT test results comparision [2] & [3].
-
---
-Linaro LKFT
-https://lkft.linaro.org
-[1] https://lkft.validation.linaro.org/scheduler/job/4664637#L22900
-[2] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220307/testrun/8280389/suite/ltp-mm-tests/test/thp04/history/
-[3] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220307/testrun/8285821/suite/ltp-cve-tests/test/cve-2017-1000405/history/
+But like those, I think the correct error code then is EOPNOTSUPP. And
+the commit message would be stronger by explicitly referencing that
+prior art, and the fact that those changes did not seem to cause problems.

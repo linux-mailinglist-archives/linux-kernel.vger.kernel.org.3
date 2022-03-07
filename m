@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2818A4CF607
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CA54CF89E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237203AbiCGJb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:31:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
+        id S238651AbiCGJ5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:57:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237984AbiCGJ2h (ORCPT
+        with ESMTP id S239261AbiCGJjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:28:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573486C928;
-        Mon,  7 Mar 2022 01:26:26 -0800 (PST)
+        Mon, 7 Mar 2022 04:39:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B849970CD7;
+        Mon,  7 Mar 2022 01:35:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0932961147;
-        Mon,  7 Mar 2022 09:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E82DDC340E9;
-        Mon,  7 Mar 2022 09:26:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 68DEECE0B91;
+        Mon,  7 Mar 2022 09:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFCEC340E9;
+        Mon,  7 Mar 2022 09:34:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645163;
-        bh=JmT9QfBOyZJcBBwWxnPYAC63NAd5BxcKK3R707o9fKY=;
+        s=korg; t=1646645663;
+        bh=6crrs/elwQ8b0hU87CPZNpOETc1cgMCnScdjzdtuKdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bGXuMun5KxJaPfGmXtfsrh4Tlc5crgYFsulI8sChD034FpBeQy5bqRCjST7D4Ryt0
-         1vl78rqd5lY9NCSWRb9aiHWhaKh6tSK8lxzdT7HrAvH1CslHm8E8fFXG7vwHFTX4Jv
-         D19j2u2fX8sdMgA0dUxqXaK69ZZ9gvhD1pdz1yns=
+        b=wXPn/1GFjd8dI/jAkTirUWu2IxnYl8k3jk46VTlI51An4B1kE9pz82y9dwr3gv9AC
+         sX4QgVZlkWAPTGLgY2lG3nzD9yu4XAz4dgCNKq5f6jhxbl2JK1t1OO34on0DK4OeoG
+         pfaP1NdSPgp+KS3WSxEnkYaayQUJefLpovaHI7KQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 35/51] net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
+        stable@vger.kernel.org,
+        Maurice Baijens <maurice.baijens@ellips.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 067/105] ixgbe: xsk: change !netif_carrier_ok() handling in ixgbe_xmit_zc()
 Date:   Mon,  7 Mar 2022 10:19:10 +0100
-Message-Id: <20220307091637.991047322@linuxfoundation.org>
+Message-Id: <20220307091646.062759142@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-commit bd6f1fd5d33dfe5d1b4f2502d3694a7cc13f166d upstream.
+commit 6c7273a266759d9d36f7c862149f248bcdeddc0f upstream.
 
-During driver initialization, the pointer of card info, i.e. the
-variable 'ci' is required. However, the definition of
-'com20020pci_id_table' reveals that this field is empty for some
-devices, which will cause null pointer dereference when initializing
-these devices.
+Commit c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if
+netif is not OK") addressed the ring transient state when
+MEM_TYPE_XSK_BUFF_POOL was being configured which in turn caused the
+interface to through down/up. Maurice reported that when carrier is not
+ok and xsk_pool is present on ring pair, ksoftirqd will consume 100% CPU
+cycles due to the constant NAPI rescheduling as ixgbe_poll() states that
+there is still some work to be done.
 
-The following log reveals it:
+To fix this, do not set work_done to false for a !netif_carrier_ok().
 
-[    3.973806] KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-[    3.973819] RIP: 0010:com20020pci_probe+0x18d/0x13e0 [com20020_pci]
-[    3.975181] Call Trace:
-[    3.976208]  local_pci_probe+0x13f/0x210
-[    3.977248]  pci_device_probe+0x34c/0x6d0
-[    3.977255]  ? pci_uevent+0x470/0x470
-[    3.978265]  really_probe+0x24c/0x8d0
-[    3.978273]  __driver_probe_device+0x1b3/0x280
-[    3.979288]  driver_probe_device+0x50/0x370
-
-Fix this by checking whether the 'ci' is a null pointer first.
-
-Fixes: 8c14f9c70327 ("ARCNET: add com20020 PCI IDs with metadata")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if netif is not OK")
+Reported-by: Maurice Baijens <maurice.baijens@ellips.com>
+Tested-by: Maurice Baijens <maurice.baijens@ellips.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/arcnet/com20020-pci.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/net/arcnet/com20020-pci.c
-+++ b/drivers/net/arcnet/com20020-pci.c
-@@ -136,6 +136,9 @@ static int com20020pci_probe(struct pci_
- 		return -ENOMEM;
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@ -391,12 +391,14 @@ static bool ixgbe_xmit_zc(struct ixgbe_r
+ 	u32 cmd_type;
  
- 	ci = (struct com20020_pci_card_info *)id->driver_data;
-+	if (!ci)
-+		return -EINVAL;
+ 	while (budget-- > 0) {
+-		if (unlikely(!ixgbe_desc_unused(xdp_ring)) ||
+-		    !netif_carrier_ok(xdp_ring->netdev)) {
++		if (unlikely(!ixgbe_desc_unused(xdp_ring))) {
+ 			work_done = false;
+ 			break;
+ 		}
+ 
++		if (!netif_carrier_ok(xdp_ring->netdev))
++			break;
 +
- 	priv->ci = ci;
- 	mm = &ci->misc_map;
+ 		if (!xsk_tx_peek_desc(pool, &desc))
+ 			break;
  
 
 

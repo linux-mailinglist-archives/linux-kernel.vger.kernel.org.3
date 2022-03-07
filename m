@@ -2,87 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6AF4CF078
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 04:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F264CF046
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 04:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235227AbiCGDki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 22:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S235029AbiCGDgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 22:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235135AbiCGDkd (ORCPT
+        with ESMTP id S231285AbiCGDgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 22:40:33 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025255D196;
-        Sun,  6 Mar 2022 19:39:07 -0800 (PST)
-X-UUID: f7e21676e1fd457d8434de712293e217-20220307
-X-UUID: f7e21676e1fd457d8434de712293e217-20220307
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 801078150; Mon, 07 Mar 2022 11:39:03 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 7 Mar 2022 11:39:01 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 7 Mar 2022 11:38:47 +0800
-From:   <yf.wang@mediatek.com>
-To:     <robin.murphy@arm.com>
-CC:     <Libo.Kang@mediatek.com>, <Ning.Li@mediatek.com>,
-        <iommu@lists.linux-foundation.org>, <joro@8bytes.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <stable@vger.kernel.org>, <will@kernel.org>,
-        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>
-Subject: RE: [PATCH] iommu/iova: Free all CPU rcache for retry when iova alloc failure
-Date:   Mon, 7 Mar 2022 11:32:46 +0800
-Message-ID: <20220307033246.23051-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <906a446e-3e25-5813-d380-de699a84b6f4@arm.com>
-References: <906a446e-3e25-5813-d380-de699a84b6f4@arm.com>
+        Sun, 6 Mar 2022 22:36:49 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500305E15B;
+        Sun,  6 Mar 2022 19:35:56 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id d3so11131334qvb.5;
+        Sun, 06 Mar 2022 19:35:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R5XBkGbLpwKeBtWV3nxW7T3iRe3e2U7dNRaaKdhMqyg=;
+        b=aCj15Rfu3s9zAggB/tbruIRc88f/jJ82tAjsZGPQys8b+IPg06+lO1UlsqNnW74Vhs
+         g1Ix/vZVtZqqOtVxfBBcwDuzRIRCQ8nbr9N0P+8GduTzXi5uAYodSYccfFgAUVmEUzpn
+         XN3NqsJe9iaH/uJjf4eCqZigG1X/+hYGNxGsWsXBk9wIUy0XHgJ+CJkKwt7kW+wekakG
+         MBXaqGic42TIRee4pneOjeXYsV3kUwht9RXj2s0PQkfH00Wso7h6MRFRPZvPkWCwcWyQ
+         jqZp1N6C0vtTN6itM6Fa9ZPMirfuHRn5IUhGNbIuLesxCTwbhBU+FJCuhbq3/hto2pZ6
+         m9Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R5XBkGbLpwKeBtWV3nxW7T3iRe3e2U7dNRaaKdhMqyg=;
+        b=GsxXbD56ERKTrNRjeL9AUT3UaE/xOktbt05IETsS6CdW1pz0qF1P3heUVINr/1XTXD
+         KJh3dXF7NzTb34LJiTQrXBlcTNmmnrB10qxEHQA+cYvaB/4GE29uTqHzG3pgf6+iRFYV
+         s8OnuE3oCB8sBBBbvwjH5dXw7XCjqm+CVFuZOLRLSjZnnoUB4MnnjDgZYdYoD97LtHQK
+         0AckC8rcnfUpy1jMcEcTp2INMDp/7IVWo/qr2vTcD/G+PNaA3QntW4lsnPF+NFUpc5GC
+         dzr/QnHp9tv3q27VR6/DI2wB/GDe5tTJkYaQdKU+/R4Nc71KcukCdzbuQLK2n6kQR1vd
+         BxWw==
+X-Gm-Message-State: AOAM5334pS9ZC/fr+UwTAU5JkC/hO36DrDK6hHWItf8b+DseZ4GO+0vQ
+        psE8CUfUDItpeo4G/00FBxw=
+X-Google-Smtp-Source: ABdhPJzu52klhBnRGqJo8805Vg4DIQqWlUEGypeXh4aucC3h7ef9+QM9aYDTXGGTP96FVPbl2pMHVQ==
+X-Received: by 2002:a05:6214:104b:b0:435:17bf:da07 with SMTP id l11-20020a056214104b00b0043517bfda07mr6749274qvr.91.1646624155436;
+        Sun, 06 Mar 2022 19:35:55 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id i192-20020a379fc9000000b0067b314c0ff3sm616867qke.43.2022.03.06.19.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 19:35:54 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     s.nawrocki@samsung.com
+Cc:     tomasz.figa@gmail.com, cw00.choi@samsung.com,
+        alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
+        krzysztof.kozlowski@canonical.com,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>
+Subject: [PATCH V2] clk/samsung: Use of_device_get_match_data()
+Date:   Mon,  7 Mar 2022 03:35:46 +0000
+Message-Id: <20220307033546.2075097-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 14:03 +0000, Robin Murphy wrote:
-> 
-> OK, so either there's a mystery bug where IOVAs somehow get freed on 
-> offline CPUs, or the hotplug notifier isn't working correctly, or
-> you've 
-> contrived a situation where alloc_iova_fast() is actually racing
-> against 
-> iova_cpuhp_dead(). In the latter case, the solution is "don't do
-> that".
-> 
-> This change should not be necessary.
-> 
-> Thanks,
-> Robin.
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-Hi Robin,
+Use of_device_get_match_data() to simplify the code.
 
-1.As long as iova domain is not destroyed, the cached iovas will always
-exist, the only chance to free the cache is the retry flushing
-mechanism when alloc fail, but not free cached iova of not online CPU.
+v1->v2:
+  Add a judgment for returning variant to NULL
 
-2.Iova rcache mechanism is by cpu, but there is no free rcache
-mechanism when the CPU state switch.
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+---
+ drivers/clk/samsung/clk-exynos-clkout.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-3.iova.c does not know about CPU state switching, eg.online <--> offline.
+diff --git a/drivers/clk/samsung/clk-exynos-clkout.c b/drivers/clk/samsung/clk-exynos-clkout.c
+index e6d6cbf8c4e6..273f77d54dab 100644
+--- a/drivers/clk/samsung/clk-exynos-clkout.c
++++ b/drivers/clk/samsung/clk-exynos-clkout.c
+@@ -81,19 +81,17 @@ MODULE_DEVICE_TABLE(of, exynos_clkout_ids);
+ static int exynos_clkout_match_parent_dev(struct device *dev, u32 *mux_mask)
+ {
+ 	const struct exynos_clkout_variant *variant;
+-	const struct of_device_id *match;
+ 
+ 	if (!dev->parent) {
+ 		dev_err(dev, "not instantiated from MFD\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	match = of_match_device(exynos_clkout_ids, dev->parent);
+-	if (!match) {
++	variant = of_device_get_match_data(dev->parent);
++	if (!variant) {
+ 		dev_err(dev, "cannot match parent device\n");
+ 		return -EINVAL;
+ 	}
+-	variant = match->data;
+ 
+ 	*mux_mask = variant->mux_mask;
+ 
+-- 
+2.25.1
 
-Based on the above basic information, this is not a user bug, it is
-more like a defect of the iova rcache mechanism.
-
-Thanks,
-Yunfei.

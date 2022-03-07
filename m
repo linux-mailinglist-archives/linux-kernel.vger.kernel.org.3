@@ -2,98 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37A64CFE0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8234F4CFE0E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241189AbiCGMUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        id S241811AbiCGMUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:20:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbiCGMUG (ORCPT
+        with ESMTP id S233829AbiCGMU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:20:06 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B5A3E0F5;
-        Mon,  7 Mar 2022 04:19:07 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id i1so11375477ila.7;
-        Mon, 07 Mar 2022 04:19:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=CxRERgirGnLDrVdYflXCvy2HBelraq/vQz0ZO4WiAz8=;
-        b=UPmIGJ2dpVy4r5X84CfHwdUVEvmAtgTM6i4wfwBvVCxzhlKUdZgAPPk9wA1WzZXcVl
-         Q+ap1qlB5YGh2j6FFY36aFh6e9BY/KozP7l2ph8xXXa/+tVTq1Pq9hJOt0BSplrGyUKo
-         aYTg4j2JSreA63lOkBkDSiSrz2fPBF8IqRE1lmEf79m/mcGdGbf6lRJjicyFZScNPZIs
-         G8rdCGrEA4wPQxGNQbqv7RJ7Z7eI05gYoiOispfHVOR3GMTxUtBsATagUcO2uqfVYT7z
-         gNTNDgsH3bemctmFpB9+K7x7MWhojKUPdeDoD3ByligupDAgI3Epx1wyJlw9oUKhwTeq
-         HEXQ==
+        Mon, 7 Mar 2022 07:20:28 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7309C4507D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:19:34 -0800 (PST)
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DC5D63F1C5
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:19:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646655572;
+        bh=+KCTSBW6pFEjmloS4eWdJPVt5+ZQog9npEec5fTl3gE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=VMsAkBuY+el2OBmh6ZD3EN2cHyK4IWmlJZaackVjbWYr+ssg0QCSLwzq/pglXjljW
+         qPA41VF6kLLc/6MsPYhg5GY0jDbN+XlPouioY2nhwdm8KRpe+ayvHM3XiMl+2XXpEY
+         snGoFroJgx/zyQZwRw6iejUaZExLoxDJyydDnKeD1lLvf7t5yPW5hxhRU3xlClr70/
+         lmJoSqisg8Pdu7awrDOXkkRhT4HRpEncyHMB3BJVkR/CvHTk69QQni63NHf51dwceQ
+         F+hOuW03Uy5qRjrVzpvR+srSSREh8WlstSO0ExcmPhmjCHulvDlfuMeKZoMRaQViyV
+         2mhNNmizS+YKQ==
+Received: by mail-ot1-f70.google.com with SMTP id m12-20020a9d7acc000000b005b21f450ed2so5392385otn.20
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 04:19:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=CxRERgirGnLDrVdYflXCvy2HBelraq/vQz0ZO4WiAz8=;
-        b=qEoxHHi6a5wx9lFiYWBFiV1q1g6uXZoQdrUAhgPj7Tg88RTlP4K4Ks57KQ8WqYEuUz
-         x1S2NHlsREVAOg5YKglvwMJHqjq9cKVYBTJCg7TOnoYlR7WatNGI2gX8xwxTLHyYFddk
-         EZH8GM5cLf3bQsAqwVLga0uKIeqAR7G0NsggtUnESSiSaRVO6soRDA1f5IJU8bu3iVS7
-         vXYuYeS333Lv3qYYYETBZLPt3K2Va4DLJ64w6/c65Z0PBuxzddNaKrDGaqgVy0lYG1VY
-         pCdTPjt1VQl132m0XsJXWTJKXuEPN5cc+I5yNITHNs6D0RKezI8W85e/LerjP79aGjZB
-         RpoQ==
-X-Gm-Message-State: AOAM530PT7r9yBkoIUA85AStsGtCqrpj35Z7zvBW96JTJqtSi+6v99v2
-        ezPR871xFgtZMsDb0/1KZvqpfmkGPac6FienOVIYKA==
-X-Google-Smtp-Source: ABdhPJxJ5bWvUNeIEltERNvPwJqsjjmJpmEEa28rT4FSXHcuhgfzzRwjT3IuhsHzo1cu7PyWNwCn+Q==
-X-Received: by 2002:a05:6e02:b25:b0:2c6:2043:5862 with SMTP id e5-20020a056e020b2500b002c620435862mr11601093ilu.217.1646655545841;
-        Mon, 07 Mar 2022 04:19:05 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id f5-20020a5d8785000000b00604cdf69dc8sm9267686ion.13.2022.03.07.04.19.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 04:19:05 -0800 (PST)
-Message-ID: <6225f839.1c69fb81.2b2af.0387@mx.google.com>
-Date:   Mon, 07 Mar 2022 04:19:05 -0800 (PST)
-X-Google-Original-Date: Mon, 07 Mar 2022 12:19:03 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 000/105] 5.10.104-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+KCTSBW6pFEjmloS4eWdJPVt5+ZQog9npEec5fTl3gE=;
+        b=7/XOsMFryb/Y8bVoDebcYpOR5j1S2lfTuowUzV4igtwM40FAfb1awl2QeXJrwHBebZ
+         WXWr1lKFkK7JmBhzYadRUv0R2LIxCRnLZPAGZy8QleVtmVagRi16+8wT4ubnB9e+oaCI
+         lv/H1PwPU90xEZrpBKvBXgWKEqdqaKFIH0Kht9bzBuJgHHUEUvzmGVut5lAhlA5sjnSC
+         AkHRycl+Kzm71SW3Qx1El9gIzOaquF6/LyX6Iyg8buzcdHVZXd77ajxRwss8MwHkD7X+
+         EivnAJKIiyUCP6K+CAYXYNbKdvPwtrNlUmhy40HFaUV5v1u89HuKJN1n35JCNUCrLV1B
+         +U9Q==
+X-Gm-Message-State: AOAM5324E2SPM7wWnU2t4cXimzyR24o1lhRgvPtYesu/XPNC0ZhcXALC
+        Q0PoeTGMcNEzRLVZyZGpERZb3rSEBbVp+AEnR5QjcuOTutHapzJse/S6IPl8VNlIKfPPmHk02mp
+        dWuy7n0FzL9SnoEmAXKzNe6Qe6dUOABtVkKgohj1E1ZcD+KV22XHmwtXDFw==
+X-Received: by 2002:a05:6870:14c3:b0:da:3703:329b with SMTP id l3-20020a05687014c300b000da3703329bmr3786484oab.54.1646655571408;
+        Mon, 07 Mar 2022 04:19:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz0BauCYXUUtV8NW70lSCdhxqJhNg/9xRdwnGXnEFZMiy9VS3n4OvNo9dbPPyEE7RHVfdYiF9oRCjrHiODIwkk=
+X-Received: by 2002:a05:6870:14c3:b0:da:3703:329b with SMTP id
+ l3-20020a05687014c300b000da3703329bmr3786467oab.54.1646655571116; Mon, 07 Mar
+ 2022 04:19:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20220307115623.37492-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220307115623.37492-1-andriy.shevchenko@linux.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 7 Mar 2022 20:19:20 +0800
+Message-ID: <CAAd53p6UvOqGkhGuwtZ0hvEAQFb4DR-RUd7R1uZuR+Duhf72EQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpiolib: acpi: Convert ACPI value of debounce to microseconds
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  7 Mar 2022 10:18:03 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.104 release.
-> There are 105 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.104-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Mon, Mar 7, 2022 at 7:56 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> It appears that GPIO ACPI library uses ACPI debounce values directly.
+> However, the GPIO library APIs expect the debounce timeout to be in
+> microseconds.
+>
+> Convert ACPI value of debounce to microseconds.
+>
+> While at it, document this detail where it is appropriate.
+>
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215664
+> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Fixes: 8dcb7a15a585 ("gpiolib: acpi: Take into account debounce settings")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-5.10.104-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+This works for me. Thanks!
 
+Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+> ---
+>  drivers/gpio/gpiolib-acpi.c |  6 ++++--
+>  drivers/gpio/gpiolib.c      | 10 ++++++++++
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> index c0f6a25c3279..a5495ad31c9c 100644
+> --- a/drivers/gpio/gpiolib-acpi.c
+> +++ b/drivers/gpio/gpiolib-acpi.c
+> @@ -307,7 +307,8 @@ static struct gpio_desc *acpi_request_own_gpiod(struct gpio_chip *chip,
+>         if (IS_ERR(desc))
+>                 return desc;
+>
+> -       ret = gpio_set_debounce_timeout(desc, agpio->debounce_timeout);
+> +       /* ACPI uses hundredths of milliseconds units */
+> +       ret = gpio_set_debounce_timeout(desc, agpio->debounce_timeout * 10);
+>         if (ret)
+>                 dev_warn(chip->parent,
+>                          "Failed to set debounce-timeout for pin 0x%04X, err %d\n",
+> @@ -1035,7 +1036,8 @@ int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int ind
+>                         if (ret < 0)
+>                                 return ret;
+>
+> -                       ret = gpio_set_debounce_timeout(desc, info.debounce);
+> +                       /* ACPI uses hundredths of milliseconds units */
+> +                       ret = gpio_set_debounce_timeout(desc, info.debounce * 10);
+>                         if (ret)
+>                                 return ret;
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index f5e7443208d4..f956c533f218 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -2223,6 +2223,16 @@ static int gpio_set_bias(struct gpio_desc *desc)
+>         return gpio_set_config_with_argument_optional(desc, bias, arg);
+>  }
+>
+> +/**
+> + * gpio_set_debounce_timeout() - Set debounce timeout
+> + * @desc:      GPIO descriptor to set the debounce timeout
+> + * @debounce:  Debounce timeout in microseconds
+> + *
+> + * The function calls the certain GPIO driver to set debounce timeout
+> + * in the hardware.
+> + *
+> + * Returns 0 on success, or negative error code otherwise.
+> + */
+>  int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce)
+>  {
+>         return gpio_set_config_with_argument_optional(desc,
+> --
+> 2.34.1
+>

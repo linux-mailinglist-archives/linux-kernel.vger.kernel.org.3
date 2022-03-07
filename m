@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41C64CF663
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E254CFB70
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237389AbiCGJgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S241216AbiCGKiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238279AbiCGJ3C (ORCPT
+        with ESMTP id S241304AbiCGKKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72C866AEF;
-        Mon,  7 Mar 2022 01:27:05 -0800 (PST)
+        Mon, 7 Mar 2022 05:10:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137522AC47;
+        Mon,  7 Mar 2022 01:52:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 196E8B810AC;
-        Mon,  7 Mar 2022 09:27:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE20C340F4;
-        Mon,  7 Mar 2022 09:27:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B11C608C0;
+        Mon,  7 Mar 2022 09:52:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76791C340F3;
+        Mon,  7 Mar 2022 09:52:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645222;
-        bh=mrV6dQUlm23eEo1U+VXCrk3Sau7WDOBqJMKBwzUVdnY=;
+        s=korg; t=1646646756;
+        bh=QQZwPD84De21H+ZMZh51DFOVaela8nB1SraDpxQmZU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2JU1V73ZCqOsBCPlg2PxnnFQpnq94eoNyBO5m6YObQj3RxxeGbN9mMrivPYvLdW6K
-         NBz2IyAmwvTXceNI4mhhm6WefjCH4vNUnC4WBB9auNhl8d4y3wWfFU3tWfHIcKl02o
-         oUQEzs88rhHFDsSzsm7Mzlz6hdmE5xSB3iDLlJ+M=
+        b=WHFtMG0R3GbcaAdX2Nm93JP+4WQdaiXxYLyrlxucBmW2qP/9ReBvcQK1mjuY2ZRD0
+         KoWrrNvcZwKOovRaL8bg7Ehj5dMRDkC6ULq9DNC9b6pUbo0D6ekmK+z8cnm4/jYirM
+         M4h6nA53fImqLRidAFExnosfz6XOSPhWsUkCrz4Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 08/64] dmaengine: shdma: Fix runtime PM imbalance on error
+        stable@vger.kernel.org, "D. Wythe" <alibuda@linux.alibaba.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 083/186] net/smc: fix connection leak
 Date:   Mon,  7 Mar 2022 10:18:41 +0100
-Message-Id: <20220307091639.379452870@linuxfoundation.org>
+Message-Id: <20220307091656.407302327@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongzhi Liu <lyz_cs@pku.edu.cn>
+From: D. Wythe <alibuda@linux.alibaba.com>
 
-[ Upstream commit 455896c53d5b803733ddd84e1bf8a430644439b6 ]
+commit 9f1c50cf39167ff71dc5953a3234f3f6eeb8fcb5 upstream.
 
-pm_runtime_get_() increments the runtime PM usage counter even
-when it returns an error code, thus a matching decrement is needed on
-the error handling path to keep the counter balanced.
+There's a potential leak issue under following execution sequence :
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-Link: https://lore.kernel.org/r/1642311296-87020-1-git-send-email-lyz_cs@pku.edu.cn
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+smc_release  				smc_connect_work
+if (sk->sk_state == SMC_INIT)
+					send_clc_confirim
+	tcp_abort();
+					...
+					sk.sk_state = SMC_ACTIVE
+smc_close_active
+switch(sk->sk_state) {
+...
+case SMC_ACTIVE:
+	smc_close_final()
+	// then wait peer closed
+
+Unfortunately, tcp_abort() may discard CLC CONFIRM messages that are
+still in the tcp send buffer, in which case our connection token cannot
+be delivered to the server side, which means that we cannot get a
+passive close message at all. Therefore, it is impossible for the to be
+disconnected at all.
+
+This patch tries a very simple way to avoid this issue, once the state
+has changed to SMC_ACTIVE after tcp_abort(), we can actively abort the
+smc connection, considering that the state is SMC_INIT before
+tcp_abort(), abandoning the complete disconnection process should not
+cause too much problem.
+
+In fact, this problem may exist as long as the CLC CONFIRM message is
+not received by the server. Whether a timer should be added after
+smc_close_final() needs to be discussed in the future. But even so, this
+patch provides a faster release for connection in above case, it should
+also be valuable.
+
+Fixes: 39f41f367b08 ("net/smc: common release code for non-accepted sockets")
+Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/sh/shdma-base.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/smc/af_smc.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma/sh/shdma-base.c b/drivers/dma/sh/shdma-base.c
-index c51de498b5b4b..19eee3d0900b0 100644
---- a/drivers/dma/sh/shdma-base.c
-+++ b/drivers/dma/sh/shdma-base.c
-@@ -115,8 +115,10 @@ static dma_cookie_t shdma_tx_submit(struct dma_async_tx_descriptor *tx)
- 		ret = pm_runtime_get(schan->dev);
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -183,7 +183,7 @@ static int smc_release(struct socket *so
+ {
+ 	struct sock *sk = sock->sk;
+ 	struct smc_sock *smc;
+-	int rc = 0;
++	int old_state, rc = 0;
  
- 		spin_unlock_irq(&schan->chan_lock);
--		if (ret < 0)
-+		if (ret < 0) {
- 			dev_err(schan->dev, "%s(): GET = %d\n", __func__, ret);
-+			pm_runtime_put(schan->dev);
-+		}
+ 	if (!sk)
+ 		goto out;
+@@ -191,8 +191,10 @@ static int smc_release(struct socket *so
+ 	sock_hold(sk); /* sock_put below */
+ 	smc = smc_sk(sk);
  
- 		pm_runtime_barrier(schan->dev);
++	old_state = sk->sk_state;
++
+ 	/* cleanup for a dangling non-blocking connect */
+-	if (smc->connect_nonblock && sk->sk_state == SMC_INIT)
++	if (smc->connect_nonblock && old_state == SMC_INIT)
+ 		tcp_abort(smc->clcsock->sk, ECONNABORTED);
  
--- 
-2.34.1
-
+ 	if (cancel_work_sync(&smc->connect_work))
+@@ -206,6 +208,10 @@ static int smc_release(struct socket *so
+ 	else
+ 		lock_sock(sk);
+ 
++	if (old_state == SMC_INIT && sk->sk_state == SMC_ACTIVE &&
++	    !smc->use_fallback)
++		smc_close_active_abort(smc);
++
+ 	rc = __smc_release(smc);
+ 
+ 	/* detach socket */
 
 

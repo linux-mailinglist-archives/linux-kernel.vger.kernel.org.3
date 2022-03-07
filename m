@@ -2,88 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B48D4D030D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E397E4D0326
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243842AbiCGPi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S243849AbiCGPnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240008AbiCGPiT (ORCPT
+        with ESMTP id S243924AbiCGPnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:38:19 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C6591AF6;
-        Mon,  7 Mar 2022 07:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646667443; x=1678203443;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TrTmRDWS002Fs0oH2HQhyZPSCME9/cyHeGCKtKiJKfo=;
-  b=ZRyBoHmNCWWmmWmfKHZSrQ37E4nWJoTVG6su0GCzilRg+C6ltAg0RnNz
-   UUSV8OZlCRRbn/eFM1Z+KMYnDXZkAeH/NIo1GiFBwLWggnuaKK7bST/9O
-   H8Eq49RGrtY9Jj9ZGJmJ7vKZkcaUoEMi4hFjDFaFIJEfkFcE7rAJ3eMhH
-   RiTc0CaF4y3q6ddZZLEWJo9i+w6IKt7zPn8fsDnRQhnjOmbtrSo4v0IWp
-   8+QigtYKfFgRFyF+6s0WIkerN2QJQqQuyFZskUsSmIBGovAc8eQe9EB2e
-   3j5iOJPpiwqjek7RP+ErgRfjau9Lkc9LMdTNgPEp4orgVPKZG4LfOGXFV
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,162,1643698800"; 
-   d="scan'208";a="151110204"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2022 08:37:23 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 7 Mar 2022 08:37:23 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 7 Mar 2022 08:37:21 -0700
-From:   <conor.dooley@microchip.com>
-To:     <mpm@selenic.com>, <herbert@gondor.apana.org.au>
-CC:     <lewis.hanly@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Conor Dooley" <conor.dooley@microchip.com>
-Subject: [PATCH 2/2] MAINTAINERS: update PolarFire SoC support
-Date:   Mon, 7 Mar 2022 15:40:24 +0000
-Message-ID: <20220307154023.813158-3-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307154023.813158-1-conor.dooley@microchip.com>
-References: <20220307154023.813158-1-conor.dooley@microchip.com>
+        Mon, 7 Mar 2022 10:43:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AC176652;
+        Mon,  7 Mar 2022 07:42:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 689B461479;
+        Mon,  7 Mar 2022 15:42:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B34C340EB;
+        Mon,  7 Mar 2022 15:42:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646667727;
+        bh=vwimokoLmujACAs7ILvplWTc17PHeX1/UInnu8gaKw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IWGX3p+743ArJ22T83/9Z72NRV0Bgp+PWTHxZ+tGuKxnKIvXYX4lEN4ZyEiyCFhRc
+         aVlKCRmHsEbLkPGUorJmFixVg6ri1DTyKti3DlmA8EIbRrjJrghfCtDw3vTC+FOxx/
+         3uv3QU4Uc4UY0fBo3fftbiKxCrElM0u5KRWhk1csSDptwopQinmbLr8ojn7lmhOBoO
+         QR+b3ZwJNO1sOXYEMLzQZ+2sfg3IPbCdQSHrJZ45GZSS1CpbE+XKkwMsyhd9ED6CLf
+         t8dM14PHbJ2yFh5LXe+9zNEu2EZvkw7ovZCY1lZL6gvobR0HXt4+M27AyTKz68xVWe
+         t5Rdnboa6AhiA==
+Date:   Mon, 7 Mar 2022 17:41:26 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Sergey Temerkhanov <s.temerkhanov@gmail.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tpm: Rework open/close/shutdown to avoid races
+Message-ID: <YiYnpsryEDlrryzU@iki.fi>
+References: <20201215133801.546207-1-s.temerkhanov@gmail.com>
+ <e7566e1e48f5be9dca034b4bfb67683b5d3cb88f.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7566e1e48f5be9dca034b4bfb67683b5d3cb88f.camel@HansenPartnership.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Tue, Dec 15, 2020 at 10:51:43AM -0800, James Bottomley wrote:
+> On Tue, 2020-12-15 at 16:38 +0300, Sergey Temerkhanov wrote:
+> > Avoid race condition at shutdown by shutting downn the TPM 2.0
+> > devices synchronously. This eliminates the condition when the
+> > shutdown sequence sets chip->ops to NULL leading to the following:
+> > 
+> > [ 1586.593561][ T8669] tpm2_del_space+0x28/0x73
+> > [ 1586.598718][ T8669] tpmrm_release+0x27/0x33wq
+> > [ 1586.603774][ T8669] __fput+0x109/0x1d
+> > [ 1586.608380][ T8669] task_work_run+0x7c/0x90
+> > [ 1586.613414][ T8669] prepare_exit_to_usermode+0xb8/0x128
+> > [ 1586.619522][ T8669] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> > [ 1586.626068][ T8669] RIP: 0033:0x4cb4bb
+> 
+> An actual bug report would have been helpful.  However, from this trace
+> it's easy to deduce that tpm2_del_space() didn't get converted to the
+> get/put of the chip ops ... it's still trying to do its own half arsed
+> thing with tpm_chip_start() and the mutex.  So isn't a much simpler fix
+> simply to convert it as below?  compile tested only, but if you can
+> test it out I'll send a proper patch.
+> 
+> James
+> 
+> ---
+> 
+> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> index 784b8b3cb903..0c0cd225046f 100644
+> --- a/drivers/char/tpm/tpm2-space.c
+> +++ b/drivers/char/tpm/tpm2-space.c
+> @@ -58,12 +58,12 @@ int tpm2_init_space(struct tpm_space *space, unsigned int buf_size)
+>  
+>  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
+>  {
+> -	mutex_lock(&chip->tpm_mutex);
+> -	if (!tpm_chip_start(chip)) {
+> +
+> +	if (tpm_try_get_ops(chip) == 0) {
+>  		tpm2_flush_sessions(chip, space);
+> -		tpm_chip_stop(chip);
+> +		tpm_put_ops(chip);
+>  	}
+> -	mutex_unlock(&chip->tpm_mutex);
+> +
+>  	kfree(space->context_buf);
+>  	kfree(space->session_buf);
+>  }
+> 
 
-Add mpfs-rng to the list of files included in PolarFire SoC support.
+James, would it possible for you to construct a proper patch from this and
+send it so we could include it to the next PR (use my tree as baseline)?
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 573e5ee54162..dfbd076bddb6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16589,6 +16589,7 @@ RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
- M:	Lewis Hanly <lewis.hanly@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
-+F:	drivers/char/hw_random/mpfs-rng.c
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
--- 
-2.35.1
-
+BR, Jarkko

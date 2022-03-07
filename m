@@ -2,220 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4584D0755
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 219674D076C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235488AbiCGTMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
+        id S245009AbiCGTQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234144AbiCGTMl (ORCPT
+        with ESMTP id S245038AbiCGTQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:12:41 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AE35641B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:11:46 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id w17-20020a056830111100b005b22c584b93so3624660otq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:11:46 -0800 (PST)
+        Mon, 7 Mar 2022 14:16:39 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279527CDF9
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:15:40 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id bn33so21951442ljb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:15:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jb3LOlMf5pk1D9PjLVHGSfg0goBFbrUHnygCupUhgZI=;
-        b=iNQpsc5C47zsL+rwea5Gp9oqE5D8fpUxVHM/oEeqnouFvmu3EH516OlUb2UAnzE9j7
-         0fKrEb4VlNgNhBDOxV3WTDoN9IjJv7auS6de717hqUuXbO8rfTXzlEGqnVyfSBYs4TRo
-         JbHNYrXbasfzo6mbe5OoZ43yxlqsM24sjqZeKJddKqh+lHn/8ULKrgyJODzAudqWEF2M
-         dZQJtvb/W71PecwPK8ychQ5EwhbpQfCJL6Yz3j/4KX4p5jnGKQKdzSlKW5WRYZOJA82r
-         SQi+26rzzx5f0ztSOvpa211LBscQiorvpyq+3U7Wca8GeWz9ACEhPQLS8pKIgqhbMLjM
-         9itg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TwTcsRMn5VZVrmgXZDV1J6sFeJgAdw8S2EoV6iZ5xnc=;
+        b=dlpUNu5q4CyzmXtBLA/gOu0GC/00SF7ttDAollAbHZtk5bw2xAtIqb7CwTopnt8lf3
+         AbfnSVPq9xulj/tw8AvoPmKfCZDzXeZNEVEEDbHlLhh/I5bp+zk8upvRu1BNSASuquhE
+         pUQrRqiHujQApoBOt9qnNksqqhPlFfAR59MXs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jb3LOlMf5pk1D9PjLVHGSfg0goBFbrUHnygCupUhgZI=;
-        b=YJiYLklzSmyIORJCDgpC/DjWciLckXgBICxfhFB8+QafHm9/mgbNJAuPvGK68sX2xz
-         it+AlX/ng23qwgJt7JDrrbXXdxipaF8zPOLD9YFYDYLXqgZP9+Fp1d9uctIzRhN+q61y
-         LkAeAM9CQP6JpxPyRjIAf/vTeEP2wYdkzXnIZlciNQp9VPECbRiby6up52ATnJkG+heT
-         DKvHh9fl60lKyV67ci1WW4gtx6xSdnB4duoKEECFTnhCZuaH3fXP5nHQxf7PLi5dqyYh
-         7TRXd8CGGrnO7JNcH9trYNpsP5x2sqKpGKyeIQ3r0+w8de1oTPVY6CYlGfTnqq8rnIot
-         d47Q==
-X-Gm-Message-State: AOAM533rksMR1laniYeYK5WgriW9IJXTcstts2opMT3n0HWtzbU/228j
-        2qzby4G9z+txkYZYzmKpKZJnxQ==
-X-Google-Smtp-Source: ABdhPJyrQkhnOMlIjCfuY6r6deiMNn2tGrB6tFf9VgrnJ7SyMmVsaBZWntgAitDk2cHkCVeXVdDvAQ==
-X-Received: by 2002:a9d:2045:0:b0:5b2:1052:93fd with SMTP id n63-20020a9d2045000000b005b2105293fdmr6358924ota.259.1646680305167;
-        Mon, 07 Mar 2022 11:11:45 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id k15-20020a056808068f00b002d91362e56esm6764310oig.1.2022.03.07.11.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 11:11:44 -0800 (PST)
-Date:   Mon, 7 Mar 2022 11:13:28 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 1/7] device property: Helper to match multiple
- connections
-Message-ID: <YiZZWN1FgnWxBCuN@ripper>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <YiXZBMG7cK6Cm7wP@smile.fi.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TwTcsRMn5VZVrmgXZDV1J6sFeJgAdw8S2EoV6iZ5xnc=;
+        b=CtsiwRjIj5w6N4+QZxjFAe4Ct58sHt7MhbscnizbDaqncdMABUHJh7/Zk2BGws09MZ
+         H/2MG25ylnNf2NAYum3Bm0MI7dXd1LC9Bd0T4CPdEGIBauYQ/M7G/fHubWeHfE7H0/J7
+         1LFn0kRF6i+GpfQmeR90wSbXkzeba6cC+acDP3d4Q7NJw1QVzkBYYyWNMWOdoWqf70rl
+         0o73zAfmqSppNcr3SS7dYCueS3QNH44ejsgbhTjefmLk+QH+R4Lm9BhyttPKV1Bj+HEe
+         q9WAXVPzqm8z2iheQE6JS05WFSm0GzgX4sLhHug5EozWFrfNANgoMFt4vRpx1Hgxzjpw
+         h4pg==
+X-Gm-Message-State: AOAM531vWGZEIrdjKkussEuW9D0nF0lpaQyQV7DwOFZSL/y0+vm0Je3Z
+        0/s3hk4ADmg6awF7xUJZGMiYhWOazAtrjwhdVbA=
+X-Google-Smtp-Source: ABdhPJz45EfGv+Kzy28FY0mnsMPFsBLlWPDT862n6r2+qARtdNVHBc+zDsUa1DqugFQN+kTocTqODw==
+X-Received: by 2002:a2e:9147:0:b0:246:1379:2cd4 with SMTP id q7-20020a2e9147000000b0024613792cd4mr8555170ljg.418.1646680536986;
+        Mon, 07 Mar 2022 11:15:36 -0800 (PST)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id n13-20020a056512388d00b00443ecf806c5sm3000780lft.104.2022.03.07.11.15.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 11:15:36 -0800 (PST)
+Received: by mail-lf1-f46.google.com with SMTP id n19so6914982lfh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:15:35 -0800 (PST)
+X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
+ i19-20020a05651c121300b00247e2d9cddamr5310350lja.443.1646680524503; Mon, 07
+ Mar 2022 11:15:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiXZBMG7cK6Cm7wP@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220307150037.GD3293@kadam> <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
+In-Reply-To: <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 7 Mar 2022 11:15:07 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjnsmmGdh-SZzaPD=e1rKhoBkQAF3JeVhGvpa=Gax--7g@mail.gmail.com>
+Message-ID: <CAHk-=wjnsmmGdh-SZzaPD=e1rKhoBkQAF3JeVhGvpa=Gax--7g@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Remove usage of list iterator past the loop body
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jason Gunthorpe <jgg@ziepe.ca>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 07 Mar 02:05 PST 2022, Andy Shevchenko wrote:
+On Mon, Mar 7, 2022 at 7:26 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> I'd write the following new defines (but I might be using
+> the old names here):
 
-> On Sun, Mar 06, 2022 at 07:40:34PM -0800, Bjorn Andersson wrote:
-> > In some cases multiple connections with the same connection id
-> > needs to be resolved from a fwnode graph.
-> > 
-> > One such example is when separate hardware is used for performing muxing
-> > and/or orientation switching of the SuperSpeed and SBU lines in a USB
-> > Type-C connector. In this case the connector needs to belong to a graph
-> > with multiple matching remote endpoints, and the Type-C controller needs
-> > to be able to resolve them both.
-> > 
-> > Add a new API that allows this kind of lookup.
-> 
-> Thanks for the update!
-> 
-> First of all, I have noticed that subject misses the verb, something like Add
-> or Introduce.
-> 
+See my email at
 
-Will update accordingly.
+  https://lore.kernel.org/all/CAHk-=wiacQM76xec=Hr7cLchVZ8Mo9VDHmXRJzJ_EX4sOsApEA@mail.gmail.com/
 
-> ...
-> 
-> > +/**
-> > + * fwnode_connection_find_matches - Find connections from a device node
-> > + * @fwnode: Device node with the connection
-> > + * @con_id: Identifier for the connection
-> > + * @data: Data for the match function
-> > + * @match: Function to check and convert the connection description
-> > + * @matches: Array of pointers to fill with matches
-> 
-> (Optional) array...
-> 
+for what I think is the way forward if we want to do new defines and
+clean up the situation.
 
-Ditto.
+It's really just an example (and converts two list cases and one
+single file that uses them), so it's not in any way complete.
 
-> > + * @matches_len: Length of @matches
-> > + *
-> > + * Find up to @matches_len connections with unique identifier @con_id between
-> > + * @fwnode and other device nodes. @match will be used to convert the
-> > + * connection description to data the caller is expecting to be returned
-> > + * through the @matches array.
-> 
-> > + * If @matches is NULL @matches_len is ignored and the total number of resolved
-> > + * matches is returned.
-> 
-> I would require matches_len to be 0, see below.
-> 
-> > + * Return: Number of matches resolved, or negative errno.
-> > + */
-> > +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
-> > +				   const char *con_id, void *data,
-> > +				   devcon_match_fn_t match,
-> > +				   void **matches, unsigned int matches_len)
-> > +{
-> > +	unsigned int count_graph;
-> > +	unsigned int count_ref;
-> > +
-> > +	if (!fwnode || !match)
-> > +		return -EINVAL;
-> > +
-> > +	count_graph = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
-> > +						  matches, matches_len);
-> 
-> > +	if (matches) {
-> > +		matches += count_graph;
-> > +		matches_len -= count_graph;
-> > +	}
-> 
-> So, the valid case is matches != NULL and matches_len == 0. For example, when
-> we have run something previously on the buffer and it becomes full.
-> 
-> In this case we have carefully handle this case.
-> 
-> 	if (matches) {
-> 		matches += count_graph;
-> 		if (matches_len)
-> 			matches_len -= count_graph;
+I also has that "-std=gnu11" in the patch so that you can use the
+loop-declared variables - but without the other small fixups for some
+of the things that exposed.
 
-When matches is non-NULL, both the sub-functions are limited by
-matches_len and as such count_graph <= matches_len.
+I'll merge the proper version of the "update C standard version" from
+Arnd early in the 5.18 merge window, but for testing that one file
+example change I sent out the patch like that.
 
-As such matches_len >= 0.
-
-In the event that the originally passed matches_len was 0, then
-count_graph will be 0 and matches_len will remain 0.
-
-I therefor don't see that this additional check changes things.
-
-> 	}
-> 
-> Seems it can be also
-> 
-> 	if (matches)
-> 		matches += count_graph;
-> 
-> 	if (matches_len)
-> 		matches_len -= count_graph;
-
-We covered the case of matches && (matches_len || !matches_len) above.
-
-For the case of !matches && matches_len, this added conditional would
-cause matches_len to be extra ignored by keeping it at 0, but per
-kernel-doc and implementation we ignore all other values already.
-
-
-Note that this is in contrast from vsnprintf() where the code will
-continue to produce results, only store the first "matches_len"
-entires and return the final count.
-
-Unfortunately we can't follow such semantics here, instead it is clearly
-documented in the kernel-doc that @matches_len is ignored when @matches
-is NULL.
-
-
-So unless I'm missing something I don't see what you gain over keeping
-the check on only matches.
-
-> 
-> That said, do we have a test cases for this?
-> 
-
-I looked briefly at adding some kunit tests for this, but was discourage
-by the prospect of building up the graphs to run the tests against.
-
-Regards,
-Bjorn
-
-> > +	count_ref = fwnode_devcon_matches(fwnode, con_id, data, match,
-> > +					  matches, matches_len);
-> > +
-> > +	return count_graph + count_ref;
-> > +}
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+          Linus

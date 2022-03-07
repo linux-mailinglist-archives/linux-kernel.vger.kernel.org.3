@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6984D00A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF384D00A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237572AbiCGOD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S239893AbiCGOES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbiCGOD4 (ORCPT
+        with ESMTP id S233549AbiCGOEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:03:56 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AD7522DE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:03:01 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id q14so7894912wrc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:03:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=3vpCUXjcTswDRStl3MzweD4Aro2/agAY5dQepL0dC1U=;
-        b=x22eO+NgQwSt2pJFQ47yB6UStu1dgm9un5bOnmT6bZT8XT2GQfgdf7n/cAUN21kTtE
-         zuI/lQWVM4o93eHQI3j7OhUb81LPWdBQjr7eUPlnEP7joGkCL5gHHr6RaauiKH6OjcK3
-         uNh6Q1JpYKKGNcbYFZppkobG57Pz4G9KYjtpO+9AFcAn8EahLZwD12Kkc9ytxErS1x3W
-         vC+MrdocY32J/Uh7ZJOcP+6WMPx88ALbewSY5DaYUCSToOoouUedydt1P9OHsCo+6PvO
-         mxSE32FQI4pNZFGTAsrR/3AVG46R8gbWeOoAytBnzckd+8ALrO+b6xuMCh9K9FwCb15I
-         WOig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3vpCUXjcTswDRStl3MzweD4Aro2/agAY5dQepL0dC1U=;
-        b=bXLrx/4rBVAmWGaWYxtkNZCkMnAR/zDAQt+Whj3kR3k1rj9fcjn707oEKJ/7EkB8bg
-         xC2vBWvjXKiqQNpX1k97OdNwFEfCqTuh72tNdm3h2c7w1N4DXc1/DF4Arp/SBamGRLvG
-         Rh3cXRQXj3hHqqAWPX0/1dgvH9qxh4C9qm7ctlHaBFUmifwdDie9iwIbQOqZOKmVJGIJ
-         6O7GzOkzgSlXAH6alkIze7a2NhlYw+xvNjsDeqqgdoSZ8g3xuPDTeDztZqqvls3QEgFl
-         zKJHeopwgMrUb5LHKhGDoM8eno+0UN6lv3+Rr9R+rwBGW1M9arN2INwM5ESews/DSy2n
-         veJA==
-X-Gm-Message-State: AOAM531nLw6UBN5OZ39A2VwK9EdcUrpvoKVXB/aNq07dF/lF2SEqSyNo
-        Fwnln6xgpru1gg2O5r3AQqi6xQ==
-X-Google-Smtp-Source: ABdhPJxmOu4d6SmZt+3tWywr84hP+oV0Bdo1xJ0jXq5SXyxRVfDaE4pjwOF+c2dXu+y0o/So/xiPLA==
-X-Received: by 2002:adf:9123:0:b0:1ef:9b6d:60c1 with SMTP id j32-20020adf9123000000b001ef9b6d60c1mr8402184wrj.169.1646661779812;
-        Mon, 07 Mar 2022 06:02:59 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm13008346wmh.31.2022.03.07.06.02.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 06:02:59 -0800 (PST)
-Date:   Mon, 7 Mar 2022 14:02:57 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH] dt-bindings: mfd: brcm,cru: rename pinctrl node
-Message-ID: <YiYQkSsHrdbWzfMq@google.com>
-References: <20220216112928.5330-1-zajec5@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220216112928.5330-1-zajec5@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 7 Mar 2022 09:04:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F2D54FA2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:03:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ABCB61251
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:03:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B64B4C340E9;
+        Mon,  7 Mar 2022 14:03:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646661800;
+        bh=2MTHBOFgVYCKlqpzzYVqArZRrCFQzXTxroUgqZcLwg0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L5lab8TcPHl+culCD+ohjt8V/uvg8GpMHWHpPbMzLem9XE6sY0KEbu0AvyldMVXDX
+         Pke5UHNol8t4mRMfDnHz+DQW7Hey21pLrKPrPc0yQSLFejRQBp2v0bYmaxkXCFCHvX
+         l71g+rUQGRlpGcyuNwgchWvQ+lhsOPmfaTU2AWIezadLRqwfAZsM6CqePU3f/MbqvZ
+         JNz8mByEfoNW4F78V6yx1h4mQ/2u5cktZcUtFNuZ0obDRzvwDcWshopDbOTNlTomnT
+         QF237oPjvYjuSTz4YuLNqdsUHnYMzZZD7sBgqIb8FmY0wNps400GXhuHhke6byLy5g
+         /8C8EKYeFiHyg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRDxG-00CnuT-7q; Mon, 07 Mar 2022 14:03:18 +0000
+Date:   Mon, 07 Mar 2022 14:03:17 +0000
+Message-ID: <878rtl272y.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuqi (BA)" <liuqi115@huawei.com>, <wangxiongfeng2@huawei.com>,
+        David Decotigny <decot@google.com>
+Subject: Re: PCI MSI issue for maxcpus=1
+In-Reply-To: <87a6e1276p.wl-maz@kernel.org>
+References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+        <87a6g8vp8k.wl-maz@kernel.org>
+        <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
+        <87v8yjyjc0.wl-maz@kernel.org>
+        <87k0ey9122.wl-maz@kernel.org>
+        <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
+        <1cbe7daa-8003-562b-06fa-5a50f7ee6ed2@huawei.com>
+        <87a6e4tnkm.wl-maz@kernel.org>
+        <452d97ed-459f-7936-99e4-600380608615@huawei.com>
+        <87a6e1276p.wl-maz@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: john.garry@huawei.com, tglx@linutronix.de, chenxiang66@hisilicon.com, shameerali.kolothum.thodi@huawei.com, linux-kernel@vger.kernel.org, liuqi115@huawei.com, wangxiongfeng2@huawei.com, decot@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,24 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022, Rafał Miłecki wrote:
+On Mon, 07 Mar 2022 14:01:02 +0000,
+Marc Zyngier <maz@kernel.org> wrote:
+> 
+> Hi John,
+> 
+> On Mon, 07 Mar 2022 13:48:11 +0000,
+> John Garry <john.garry@huawei.com> wrote:
+> > 
+> > Hi Marc,
+> > 
+> > > 
+> > > diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+> > > index 2bdfce5edafd..97e9eb9aecc6 100644
+> > > --- a/kernel/irq/msi.c
+> > > +++ b/kernel/irq/msi.c
+> > > @@ -823,6 +823,19 @@ static int msi_init_virq(struct irq_domain *domain, int virq, unsigned int vflag
+> > >   	if (!(vflags & VIRQ_ACTIVATE))
+> > >   		return 0;
+> > >   +	if (!(vflags & VIRQ_CAN_RESERVE)) {
+> > > +		/*
+> > > +		 * If the interrupt is managed but no CPU is available
+> > > +		 * to service it, shut it down until better times.
+> > > +		 */
+> > > +		if (irqd_affinity_is_managed(irqd) &&
+> > > +		    !cpumask_intersects(irq_data_get_affinity_mask(irqd),
+> > > +					cpu_online_mask)) {
+> > > +			irqd_set_managed_shutdown(irqd);
+> > > +			return 0;
+> > > +		}
+> > > +	}
+> > > +
+> > >   	ret = irq_domain_activate_irq(irqd, vflags & VIRQ_CAN_RESERVE);
+> > >   	if (ret)
+> > >   		return ret;
+> > > 
+> > 
+> > Yeah, that seems to solve the issue. I will test it a bit more.
+> 
+> Thanks. For the record, I have pushed a branch at [1]. The patch is
+> extremely similar, just moved up a tiny bit to avoid duplicating the
+> !VIRQ_CAN_RESERVE case.
 
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> This matches pinctrl.yaml requirement and fixes:
-> 
-> Documentation/devicetree/bindings/mfd/brcm,cru.example.dt.yaml: pin-controller@1c0: $nodename:0: 'pin-controller@1c0' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
->         From schema: Documentation/devicetree/bindings/pinctrl/brcm,ns-pinmux.yaml
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
->  Documentation/devicetree/bindings/mfd/brcm,cru.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-Applied, thanks.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/msi-shutdown-on-init
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Without deviation from the norm, progress is not possible.

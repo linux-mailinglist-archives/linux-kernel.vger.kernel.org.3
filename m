@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F624CF4D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEE14CF4E6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236631AbiCGJW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S236534AbiCGJYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236630AbiCGJWE (ORCPT
+        with ESMTP id S237298AbiCGJXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:22:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88AB6621E;
-        Mon,  7 Mar 2022 01:20:24 -0800 (PST)
+        Mon, 7 Mar 2022 04:23:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCD451E47;
+        Mon,  7 Mar 2022 01:22:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96ECAB810BD;
-        Mon,  7 Mar 2022 09:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0001FC340E9;
-        Mon,  7 Mar 2022 09:20:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C48C860F63;
+        Mon,  7 Mar 2022 09:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0A9C340E9;
+        Mon,  7 Mar 2022 09:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644822;
-        bh=3nyyhG8mEedFzdLoB7Y/fMxZd+KD3iJrmNB4FdbsMic=;
+        s=korg; t=1646644942;
+        bh=8hpKamfxg1T8JN9vzi7VHlfE8PZstfB+AUhGlZlHYc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L3eIsGRjjE2EJ9ku4oW45++LRZ8KIbMCSN1VW6HimcA61nnV69M3I2Zurs4OuY+cl
-         QLtaSrVIWRweITsPR4/gY/TtOlkOu8++pM8LKVWD36tKuyDondLxMr+esKi2yg5n1x
-         4dt+zLMb9XU0p1X9TPQaSdWoFlRISsSEe5jS854o=
+        b=1IF8x0qHVMYgiesb3RR+ynhplGGS/tFYDc+ymZ2Uejf++BFnLaHoi9gcrJ8nlk4q2
+         aFUmEsLBj34JNqtrzeJ0svUPEPAVIqRk9OP5xeLRFxx6SpzgzYoCea5raR7tQx1E4D
+         EjqqMqbivuKepJorBBzSUh7VTeDk9q8Ef9NIrcfk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, William Mahon <wmahon@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 4.9 30/32] HID: add mapping for KEY_ALL_APPLICATIONS
+        stable@vger.kernel.org, Sabrina Dubroca <sd@queasysnail.net>,
+        Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>
+Subject: [PATCH 4.14 22/42] batman-adv: Dont expect inter-netns unique iflink indices
 Date:   Mon,  7 Mar 2022 10:18:56 +0100
-Message-Id: <20220307091635.292689667@linuxfoundation.org>
+Message-Id: <20220307091636.796307669@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
-References: <20220307091634.434478485@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Mahon <wmahon@chromium.org>
+From: Sven Eckelmann <sven@narfation.org>
 
-commit 327b89f0acc4c20a06ed59e4d9af7f6d804dc2e2 upstream.
+commit 6c1f41afc1dbe59d9d3c8bb0d80b749c119aa334 upstream.
 
-This patch adds a new key definition for KEY_ALL_APPLICATIONS
-and aliases KEY_DASHBOARD to it.
+The ifindex doesn't have to be unique for multiple network namespaces on
+the same machine.
 
-It also maps the 0x0c/0x2a2 usage code to KEY_ALL_APPLICATIONS.
+  $ ip netns add test1
+  $ ip -net test1 link add dummy1 type dummy
+  $ ip netns add test2
+  $ ip -net test2 link add dummy2 type dummy
 
-Signed-off-by: William Mahon <wmahon@chromium.org>
-Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Link: https://lore.kernel.org/r/20220303035618.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+  $ ip -net test1 link show dev dummy1
+  6: dummy1: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+      link/ether 96:81:55:1e:dd:85 brd ff:ff:ff:ff:ff:ff
+  $ ip -net test2 link show dev dummy2
+  6: dummy2: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+      link/ether 5a:3c:af:35:07:c3 brd ff:ff:ff:ff:ff:ff
+
+But the batman-adv code to walk through the various layers of virtual
+interfaces uses this assumption because dev_get_iflink handles it
+internally and doesn't return the actual netns of the iflink. And
+dev_get_iflink only documents the situation where ifindex == iflink for
+physical devices.
+
+But only checking for dev->netdev_ops->ndo_get_iflink is also not an option
+because ipoib_get_iflink implements it even when it sometimes returns an
+iflink != ifindex and sometimes iflink == ifindex. The caller must
+therefore make sure itself to check both netns and iflink + ifindex for
+equality. Only when they are equal, a "physical" interface was detected
+which should stop the traversal. On the other hand, vxcan_get_iflink can
+also return 0 in case there was currently no valid peer. In this case, it
+is still necessary to stop.
+
+Fixes: b7eddd0b3950 ("batman-adv: prevent using any virtual device created on batman-adv as hard-interface")
+Fixes: 5ed4a460a1d3 ("batman-adv: additional checks for virtual interfaces on top of WiFi")
+Reported-by: Sabrina Dubroca <sd@queasysnail.net>
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-debug.c                |    4 +++-
- drivers/hid/hid-input.c                |    2 ++
- include/uapi/linux/input-event-codes.h |    3 ++-
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ net/batman-adv/hard-interface.c |   19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
---- a/drivers/hid/hid-debug.c
-+++ b/drivers/hid/hid-debug.c
-@@ -833,7 +833,9 @@ static const char *keys[KEY_MAX + 1] = {
- 	[KEY_F22] = "F22",			[KEY_F23] = "F23",
- 	[KEY_F24] = "F24",			[KEY_PLAYCD] = "PlayCD",
- 	[KEY_PAUSECD] = "PauseCD",		[KEY_PROG3] = "Prog3",
--	[KEY_PROG4] = "Prog4",			[KEY_SUSPEND] = "Suspend",
-+	[KEY_PROG4] = "Prog4",
-+	[KEY_ALL_APPLICATIONS] = "AllApplications",
-+	[KEY_SUSPEND] = "Suspend",
- 	[KEY_CLOSE] = "Close",			[KEY_PLAY] = "Play",
- 	[KEY_FASTFORWARD] = "FastForward",	[KEY_BASSBOOST] = "BassBoost",
- 	[KEY_PRINT] = "Print",			[KEY_HP] = "HP",
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -937,6 +937,8 @@ static void hidinput_configure_usage(str
- 		case 0x28b: map_key_clear(KEY_FORWARDMAIL);	break;
- 		case 0x28c: map_key_clear(KEY_SEND);		break;
+--- a/net/batman-adv/hard-interface.c
++++ b/net/batman-adv/hard-interface.c
+@@ -163,13 +163,15 @@ static bool batadv_is_on_batman_iface(co
+ 		return true;
  
-+		case 0x2a2: map_key_clear(KEY_ALL_APPLICATIONS);	break;
+ 	iflink = dev_get_iflink(net_dev);
+-
+-	/* no more parents..stop recursion */
+-	if (iflink == 0 || iflink == net_dev->ifindex)
++	if (iflink == 0)
+ 		return false;
+ 
+ 	parent_net = batadv_getlink_net(net_dev, net);
+ 
++	/* iflink to itself, most likely physical device */
++	if (net == parent_net && iflink == net_dev->ifindex)
++		return false;
 +
- 		case 0x2c7: map_key_clear(KEY_KBDINPUTASSIST_PREV);		break;
- 		case 0x2c8: map_key_clear(KEY_KBDINPUTASSIST_NEXT);		break;
- 		case 0x2c9: map_key_clear(KEY_KBDINPUTASSIST_PREVGROUP);		break;
---- a/include/uapi/linux/input-event-codes.h
-+++ b/include/uapi/linux/input-event-codes.h
-@@ -277,7 +277,8 @@
- #define KEY_PAUSECD		201
- #define KEY_PROG3		202
- #define KEY_PROG4		203
--#define KEY_DASHBOARD		204	/* AL Dashboard */
-+#define KEY_ALL_APPLICATIONS	204	/* AC Desktop Show All Applications */
-+#define KEY_DASHBOARD		KEY_ALL_APPLICATIONS
- #define KEY_SUSPEND		205
- #define KEY_CLOSE		206	/* AC Close */
- #define KEY_PLAY		207
+ 	/* recurse over the parent device */
+ 	parent_dev = __dev_get_by_index((struct net *)parent_net, iflink);
+ 	/* if we got a NULL parent_dev there is something broken.. */
+@@ -229,8 +231,7 @@ static struct net_device *batadv_get_rea
+ 		return NULL;
+ 
+ 	iflink = dev_get_iflink(netdev);
+-
+-	if (netdev->ifindex == iflink) {
++	if (iflink == 0) {
+ 		dev_hold(netdev);
+ 		return netdev;
+ 	}
+@@ -241,6 +242,14 @@ static struct net_device *batadv_get_rea
+ 
+ 	net = dev_net(hard_iface->soft_iface);
+ 	real_net = batadv_getlink_net(netdev, net);
++
++	/* iflink to itself, most likely physical device */
++	if (net == real_net && netdev->ifindex == iflink) {
++		real_netdev = netdev;
++		dev_hold(real_netdev);
++		goto out;
++	}
++
+ 	real_netdev = dev_get_by_index(real_net, iflink);
+ 
+ out:
 
 

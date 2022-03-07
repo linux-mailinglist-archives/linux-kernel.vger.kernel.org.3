@@ -2,155 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614FE4D07B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAED4D07B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245054AbiCGTaH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Mar 2022 14:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S245109AbiCGTaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbiCGTaF (ORCPT
+        with ESMTP id S229747AbiCGTa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:30:05 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C39B6D1B9;
-        Mon,  7 Mar 2022 11:29:09 -0800 (PST)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KC7mX3YJtz67KPP;
-        Tue,  8 Mar 2022 03:28:44 +0800 (CST)
-Received: from lhreml714-chm.china.huawei.com (10.201.108.65) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Mar 2022 20:29:07 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml714-chm.china.huawei.com (10.201.108.65) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Mar 2022 19:29:06 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Mon, 7 Mar 2022 19:29:06 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
-        Xu Zaibo <xuzaibo@huawei.com>
-Subject: RE: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Topic: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Index: AQHYL1LUtVDDY2S/e06nk5NDxfriXKyvtjsAgASXq4CAAAQkEA==
-Date:   Mon, 7 Mar 2022 19:29:06 +0000
-Message-ID: <aac9a26dc27140d9a1ce56ebdec393a6@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
-        <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
-        <20220304205720.GE219866@nvidia.com>
- <20220307120513.74743f17.alex.williamson@redhat.com>
-In-Reply-To: <20220307120513.74743f17.alex.williamson@redhat.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.93.8]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 7 Mar 2022 14:30:28 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6917DE22;
+        Mon,  7 Mar 2022 11:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646681374; x=1678217374;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=b7kO3iWm15EvapePA/ECt2i9qYdGIfAsX2tQXFI7Sds=;
+  b=GkmOoIJExJ5lbkB2TkhF32YtEZ5MCevCO/IXEG+Cwza2OF8Qq26h7KPF
+   JOSxvIlS/N3OdiwSyxjVIIpD7gIKk8pEWEfte/qm3wpdrcFRvd30uTR0O
+   j+55xSQ1gyW1gdtEixITrdPKAOVa272buQHtg7lqOf0EbwRH6xlXxRKhR
+   U=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 07 Mar 2022 11:29:33 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 11:29:33 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 7 Mar 2022 11:29:32 -0800
+Received: from [10.110.30.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 7 Mar 2022
+ 11:29:31 -0800
+Message-ID: <c60ce488-44b0-89cf-4dd5-5f178b004254@quicinc.com>
+Date:   Mon, 7 Mar 2022 11:29:30 -0800
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] i2c: add tracepoints for I2C slave events
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     Wolfram Sang <wsa@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+References: <20220307182049.3790905-1-quic_jaehyoo@quicinc.com>
+ <20220307141305.18f0c20b@gandalf.local.home>
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+In-Reply-To: <20220307141305.18f0c20b@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Steven,
 
-
-> -----Original Message-----
-> From: Alex Williamson [mailto:alex.williamson@redhat.com]
-> Sent: 07 March 2022 19:05
-> To: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
-> kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org; cohuck@redhat.com;
-> mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
-> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> <prime.zeng@hisilicon.com>; Jonathan Cameron
-> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
-> migration
+On 3/7/2022 11:13 AM, Steven Rostedt wrote:
+> On Mon, 7 Mar 2022 10:20:49 -0800
+> Jae Hyun Yoo <quic_jaehyoo@quicinc.com> wrote:
 > 
-> On Fri, 4 Mar 2022 16:57:20 -0400
-> Jason Gunthorpe <jgg@nvidia.com> wrote:
+>> I2C slave events tracepoints can be enabled by:
+>>
+>> 	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
+>>
+>> and logs in /sys/kernel/tracing/trace will look like:
+>>
+>> 	... i2c_slave: i2c-0 a=010 WR_REQ []
+>> 	... i2c_slave: i2c-0 a=010 WR_RCV [02]
+>> 	... i2c_slave: i2c-0 a=010 WR_RCV [0c]
+>> 	... i2c_slave: i2c-0 a=010   STOP []
+>> 	... i2c_slave: i2c-0 a=010 RD_REQ [04]
+>> 	... i2c_slave: i2c-0 a=010 RD_PRO [b4]
+>> 	... i2c_slave: i2c-0 a=010   STOP []
+>>
+>> formatted as:
+>>
+>> 	i2c-<adapter-nr>
+>> 	a=<addr>
+>> 	<event>
+>> 	[<data>]
+>>
+>> trace printings can be selected by adding a filter like:
+>>
+>> 	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
+>>
+>> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+>> ---
+>>   drivers/i2c/i2c-core-slave.c     | 15 +++++++++
+>>   include/linux/i2c.h              |  8 ++---
+>>   include/trace/events/i2c_slave.h | 57 ++++++++++++++++++++++++++++++++
+>>   3 files changed, 74 insertions(+), 6 deletions(-)
+>>   create mode 100644 include/trace/events/i2c_slave.h
+>>
+>> diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
+>> index 1589179d5eb9..4968a17328b3 100644
+>> --- a/drivers/i2c/i2c-core-slave.c
+>> +++ b/drivers/i2c/i2c-core-slave.c
+>> @@ -14,6 +14,9 @@
+>>   
+>>   #include "i2c-core.h"
+>>   
+>> +#define CREATE_TRACE_POINTS
+>> +#include <trace/events/i2c_slave.h>
+>> +
+>>   int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
+>>   {
+>>   	int ret;
+>> @@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
+>>   }
+>>   EXPORT_SYMBOL_GPL(i2c_slave_unregister);
+>>   
+>> +int i2c_slave_event(struct i2c_client *client,
+>> +		    enum i2c_slave_event event, u8 *val)
+>> +{
+>> +	int ret = client->slave_cb(client, event, val);
+>> +
+>> +	if (!ret)
 > 
-> > On Thu, Mar 03, 2022 at 11:01:30PM +0000, Shameer Kolothum wrote:
-> > > From: Longfang Liu <liulongfang@huawei.com>
-> > >
-> > > VMs assigned with HiSilicon ACC VF devices can now perform live
-> migration
-> > > if the VF devices are bind to the hisi_acc_vfio_pci driver.
-> > >
-> > > Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> > > Signed-off-by: Shameer Kolothum
-> <shameerali.kolothum.thodi@huawei.com>
-> > > ---
-> > >  drivers/vfio/pci/hisilicon/Kconfig            |    7 +
-> > >  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 1078 ++++++++++++++++-
-> > >  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  114 ++
-> > >  3 files changed, 1181 insertions(+), 18 deletions(-)
-> > >  create mode 100644 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
-> > >
-> > > diff --git a/drivers/vfio/pci/hisilicon/Kconfig
-> b/drivers/vfio/pci/hisilicon/Kconfig
-> > > index dc723bad05c2..2a68d39f339f 100644
-> > > --- a/drivers/vfio/pci/hisilicon/Kconfig
-> > > +++ b/drivers/vfio/pci/hisilicon/Kconfig
-> > > @@ -3,6 +3,13 @@ config HISI_ACC_VFIO_PCI
-> > >  	tristate "VFIO PCI support for HiSilicon ACC devices"
-> > >  	depends on ARM64 || (COMPILE_TEST && 64BIT)
-> > >  	depends on VFIO_PCI_CORE
-> > > +	depends on PCI && PCI_MSI
-> >
-> > PCI is already in the depends from the 2nd line in
-> > drivers/vfio/pci/Kconfig, but it is harmless
-> >
-> > > +	depends on UACCE || UACCE=n
-> > > +	depends on ACPI
-> >
-> > Scratching my head a bit on why we have these
+> You can make the above into:
 > 
-> Same curiosity from me, each of the CRYPTO_DEV_HISI_* options selected
-> also depend on these so they seem redundant.
-
-Yes, they are redundant now since we have added CRYPTO_DEV_HISI_ drivers
-as "depends" now. I will remove that.
- 
-> I think we still require acks from Bjorn and Zaibo for select patches
-> in this series.
-
-I checked with Ziabo. He moved projects and is no longer looking into crypto stuff.
-Wangzhou and LiuLongfang now take care of this. Received acks from Wangzhou
-already and I will request Longfang to provide his. Hope that's ok.
-
+> 	if (trace_i2c_slave_enabled() && !ret)
 > 
-> From me, I would request a MAINTAINERS entry similar to the one the
-> mlx5 folks added for their driver.  This should be in patch 4/9 where
-> the driver is originally added.  Thanks,
+> to make this conditional compare only happen if the tracepoint is enabled.
+> As the trace_i2c_slave_enabled() is a static branch (non-conditional jump).
 
-Ok I will do that. I will pick up the R-by tags as well and send out v9 by
-tomorrow.
+Right, that's better. I'll fix it in the next spin.
 
-Thanks,
-Shameer 
+>> +		trace_i2c_slave(client, event, val);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(i2c_slave_event);
+>> +
+>>   /**
+>>    * i2c_detect_slave_mode - detect operation mode
+>>    * @dev: The device owning the bus
+>> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+>> index 7d4f52ceb7b5..fbda5ada2afc 100644
+>> --- a/include/linux/i2c.h
+>> +++ b/include/linux/i2c.h
+>> @@ -392,12 +392,8 @@ enum i2c_slave_event {
+>>   int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
+>>   int i2c_slave_unregister(struct i2c_client *client);
+>>   bool i2c_detect_slave_mode(struct device *dev);
+>> -
+>> -static inline int i2c_slave_event(struct i2c_client *client,
+>> -				  enum i2c_slave_event event, u8 *val)
+>> -{
+>> -	return client->slave_cb(client, event, val);
+>> -}
+>> +int i2c_slave_event(struct i2c_client *client,
+>> +		    enum i2c_slave_event event, u8 *val);
+>>   #else
+>>   static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
+>>   #endif
+>> diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
+>> new file mode 100644
+>> index 000000000000..1f0c1cfbf2ef
+>> --- /dev/null
+>> +++ b/include/trace/events/i2c_slave.h
+>> @@ -0,0 +1,57 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>> +/*
+>> + * I2C slave tracepoints
+>> + *
+>> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +#undef TRACE_SYSTEM
+>> +#define TRACE_SYSTEM i2c_slave
+>> +
+>> +#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
+>> +#define _TRACE_I2C_SLAVE_H
+>> +
+>> +#include <linux/i2c.h>
+>> +#include <linux/tracepoint.h>
+>> +
+>> +TRACE_EVENT(i2c_slave,
+>> +	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
+>> +		 __u8 *val),
+>> +	TP_ARGS(client, event, val),
+>> +	TP_STRUCT__entry(
+>> +		__field(int,				adapter_nr	)
+>> +		__field(__u16,				addr		)
+>> +		__field(enum i2c_slave_event,		event		)
+>> +		__field(__u16,				len		)
+> 
+> I would keep the u16 together:
+> 
+> 		__field(int,				adapter_nr	)
+> 		__field(__u16,				addr		)
+> 		__field(__u16,				len		)
+> 		__field(enum i2c_slave_event,		event		)
+> 
+> Otherwise you will likely have a hole in the event, which wastes space on
+> the ring buffer.
 
+Thanks for your pointing it out. I'll fix it too in v2.
+
+>> +		__dynamic_array(__u8, buf, 1)				),
+>> +
+>> +	TP_fast_assign(
+>> +		__entry->adapter_nr = client->adapter->nr;
+>> +		__entry->addr = client->addr;
+>> +		__entry->event = event;
+>> +		switch (event) {
+>> +		case I2C_SLAVE_READ_REQUESTED:
+>> +		case I2C_SLAVE_READ_PROCESSED:
+>> +		case I2C_SLAVE_WRITE_RECEIVED:
+>> +			__entry->len = 1;
+>> +			memcpy(__get_dynamic_array(buf), val, __entry->len);
+> 
+> Why the dynamic event, if it is always the size of 1? Why not make it an
+> array. It will save space, as the dynamic meta data has to live on the
+> event which is 4 bytes big. Just make it:
+> 
+> 		__array(__u8, buf, 1);
+> 
+> It's faster and saves space.
+
+Yes, the data length is always 1. I'll fix it too.
+
+Thanks a lot for your review and suggestions! I'll address all your
+comments in the next spin.
+
+-Jae
+
+
+> -- Steve
+> 
+>> +			break;
+>> +		default:
+>> +			__entry->len = 0;
+>> +			break;
+>> +		}
+>> +		),
+>> +	TP_printk("i2c-%d a=%03x %s [%*phD]",
+>> +		__entry->adapter_nr, __entry->addr,
+>> +		__print_symbolic(__entry->event,
+>> +				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
+>> +				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
+>> +				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
+>> +				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
+>> +				 { I2C_SLAVE_STOP,		"  STOP" }),
+>> +		__entry->len, __get_dynamic_array(buf)
+>> +		));
+>> +
+>> +#endif /* _TRACE_I2C_SLAVE_H */
+>> +
+>> +/* This part must be outside protection */
+>> +#include <trace/define_trace.h>
+> 

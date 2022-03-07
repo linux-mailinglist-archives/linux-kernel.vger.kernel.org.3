@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F89B4D07BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF39C4D07BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242024AbiCGTbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S245117AbiCGTb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiCGTbV (ORCPT
+        with ESMTP id S245110AbiCGTbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:31:21 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B747E0B1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:30:25 -0800 (PST)
-Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MUGyh-1nZnVL1k71-00RGq6 for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022
- 20:30:24 +0100
-Received: by mail-wm1-f41.google.com with SMTP id q7-20020a7bce87000000b00382255f4ca9so60574wmj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:30:24 -0800 (PST)
-X-Gm-Message-State: AOAM532En22fH5PNz366ORVcC9+Gn+xCCZZdvqFeRTuy+CPtuQmDGOxB
-        06j1HC8RY3hQV3gtqjmwziMrjOCKCpuJHkgHPXQ=
-X-Google-Smtp-Source: ABdhPJzwC1wafOrUrTN/FBcdX42lDRV/UD3rLIDTmZkYmHfojBK4j4wA8OQjMpEjQg43idU7UECI7Znv7Jm7JU3wl5Y=
-X-Received: by 2002:a7b:c001:0:b0:381:1afd:5caa with SMTP id
- c1-20020a7bc001000000b003811afd5caamr392661wmb.35.1646681424068; Mon, 07 Mar
- 2022 11:30:24 -0800 (PST)
+        Mon, 7 Mar 2022 14:31:22 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C127E0B1
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:30:28 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id s18so1682967plp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:30:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=q9MIZw6teCffW6Igi7yqKRQRmAst7rY6bxwkmUE9mhs=;
+        b=bZD8Y3SqOgghrjCIHTeGTF6y6uqzsnVMF4L6I6oOWCeeoTHF94gaNNfuDiAr11u+qa
+         M+fjbH8BA93m9z4YCAZ1qs+tII+HXl7jmhJf9EFLpNy/zuGf0prGeo7Ba0dnTt5JxiCN
+         9/5N2y2e4zqUHuOOgZ4rz2Q4HnUK+2M5MrVfIyKBFGIFsYzj6wxWB5syvmVxBSP4NUxk
+         r3xQuoFO0F4eCOaFmTBQVV9t6tIbhMH6Oc1MvsC1jJffUHd5jOLs+ntjvfh6ylYTm1Ff
+         snO7v4AJlAOzYvTfXCpISPyvw6RKAnTkeVXNoQ5DnQvl9fxQ7RurPKRpiQoipSNIHK4B
+         T+CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q9MIZw6teCffW6Igi7yqKRQRmAst7rY6bxwkmUE9mhs=;
+        b=qjiBBAhYroGrRL8Za0+uywHdkdT3qOaueJ/2JWAfq5WdR+5Y1Nrrqp/B0udjINGTN9
+         XXnTf+A5kyzADvMey4XNQKBo3YV/RL76Q1mBb6bRQuQ71L1ci+ZsFJOOcu4EA58FCMla
+         UTNKf1KlzxGTTDhiItmL+LLmUifw2oEWh6WcxJ/rusGjJ57gV+x2kIPPbG/au0u138OE
+         slOIuszx1HozIXRoIP7rPwZCcbfBrEh2nk/xkF7f4xpwNonVD9opEA5wR7MAJX2oBjqW
+         cxGVzLLBlJiPxBQAw+F5TU1ZGHv3h6cEFXHp51/SgKO5fh2TUR40pdJFT0flrwl+E8qx
+         EfeQ==
+X-Gm-Message-State: AOAM530e6930vgXn8Pyt/cVVbGQWnlk6yjff5fgEHcgWCRB7kt1X33s5
+        9axz0Cosr3utipLK729PnvUPoA==
+X-Google-Smtp-Source: ABdhPJyueplzty6iTaelh4axK7ODYO1cjiZs/oKOKz7W6sQIdDdh6KDUi0nMOLA3BiyTcV+lPPH0aw==
+X-Received: by 2002:a17:90a:ba10:b0:1bf:6900:2c5d with SMTP id s16-20020a17090aba1000b001bf69002c5dmr601274pjr.36.1646681427476;
+        Mon, 07 Mar 2022 11:30:27 -0800 (PST)
+Received: from google.com ([2620:15c:211:202:ed1d:9a92:2389:76be])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056a001a0600b004f2a4316a0asm16426990pfv.60.2022.03.07.11.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 11:30:26 -0800 (PST)
+Date:   Mon, 7 Mar 2022 11:30:18 -0800
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 6/8] compiler_types.h: Add unified
+ __diag_ignore_all for GCC/LLVM
+Message-ID: <YiZdSoNcaESkzvBs@google.com>
+References: <20220304224645.3677453-1-memxor@gmail.com>
+ <20220304224645.3677453-7-memxor@gmail.com>
 MIME-Version: 1.0
-References: <20220307030417.22974-1-rongwei.wang@linux.alibaba.com>
- <87h78a178u.wl-maz@kernel.org> <a31431bf-24bb-71ac-8f3c-f9ca19f5c4f0@linux.alibaba.com>
- <87bkyi0x53.wl-maz@kernel.org> <1b94af8b-a294-5765-4e1e-896f70db621f@arm.com>
-In-Reply-To: <1b94af8b-a294-5765-4e1e-896f70db621f@arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 7 Mar 2022 20:30:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3zA25=iZkVGPc=V+9tqqsWgQjoD9BSS60foGZtDwsujA@mail.gmail.com>
-Message-ID: <CAK8P3a3zA25=iZkVGPc=V+9tqqsWgQjoD9BSS60foGZtDwsujA@mail.gmail.com>
-Subject: Re: [PATCH RFC] arm64: improve display about CPU architecture in cpuinfo
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, joey.gouly@arm.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:jIto1kmAU7AjCjgGfwQNyUHLzpWXB9392WQFKNchcgIC07lV8Al
- Khbs2YMdgiaxK8SYfZOk4AXzngKil+VxJism4YD+vFd7wD03/HbWfKsUfUE2WVS0FTvOZb8
- k5VGpZrkpqEPejIuKXCkFJyDHAJtglKDWvfCvJQtSkTol3CYUgJTXljkbNLTHTsxhx/zUfA
- 4FTmjc+K/JyyMbKQjqsHA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:N/BjVbJHkLo=:Qg4ADRpPYB6iVHgWyKxi7P
- LA89GNKUZ032lThLi67kqi10pOz4j5lxc3iA/2sMPytKHu4SDe4cfPsq8lkDsrlJKHG/R3I+v
- xq6LN2WIp5E7fib/bfjd9fEylMxehkHVgkBePi1Pp7ipNy120g+oDuHZux7kY3MWASMsJu1CT
- Eld06ZrdaBXMNDkrweBYYlq5pwg8SgUHcH3M0N4ugeexlrSufwUNh77cQYNPrRvn0oHEIB3YL
- aozFx4t2SrWILi+m89oC1Z3WQMfdkbwrpJxQi0LV2gKr8F+Cdeq9nzKhBqGot0gsw7pMKtyWI
- XZKTnczFY5uFu7mGAl4BISK4aLfpNmQDk9FqWUTQNWY1liuU4D1bg23hntkwv2R4Eokce5bsW
- SXrR2f04c3fJ4NnbsErEiY3U6V47LZTbYJh6A22WcsgWBLBkAhhtznSZ4Qdi3yfsFw/Usn7DN
- bvskl4OYfcv3Rm2JLoD1aG7VnJWQ05gkobD2DDHX7IDkNKN8SitrQp9ef4HUDeQuR5v2BrCdS
- rvg8SFQA2VarZGajbsOG4GIatqf+4HxVHrWHgBPitDj/H5zdh/Y/dZPo8fTXMIYZutXtJrQot
- F/LXWOIViAyHUKodTmMTx80LoW+HpjU1VxPLNF1EOjwmgKqSv6FDIy5cTE1Fj6eA0gI6T501Z
- NQFBQE4YNmYwGqZ00V0Mqe6XvvSYCts7J6MI59lQtAObAz95e5f8rCcO3uC9QT4zRXNWgAQgH
- 1TZorE8t5CyzKVnjRdHbx0I+vQqAl7AB01TXAIoxZqv3ca7oCYwNLNlAEB/Vz9xDq2REtHeac
- Pnp+Yg4dRDHnShiGAfWu1tFyYKe7/qBwCoiO4368TGlmERYAE4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304224645.3677453-7-memxor@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,26 +75,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 5:48 PM Robin Murphy <robin.murphy@arm.com> wrote:
+On Sat, Mar 05, 2022 at 04:16:43AM +0530, Kumar Kartikeya Dwivedi wrote:
+> Add a __diag_ignore_all macro, to ignore warnings for both GCC and LLVM,
+> without having to specify the compiler type and version. By default, GCC
+> 8 and clang 11 are used. This will be used by bpf subsystem to ignore
+> -Wmissing-prototypes warning for functions that are meant to be global
+> functions so that they are in vmlinux BTF, but don't have a prototype.
+> 
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  include/linux/compiler-clang.h | 3 +++
+>  include/linux/compiler-gcc.h   | 3 +++
+>  include/linux/compiler_types.h | 4 ++++
+>  3 files changed, 10 insertions(+)
+> 
+> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+> index f1aa41d520bd..babb1347148c 100644
+> --- a/include/linux/compiler-clang.h
+> +++ b/include/linux/compiler-clang.h
+> @@ -90,3 +90,6 @@
+>  #else
+>  #define __diag_clang_11(s)
+>  #endif
+> +
+> +#define __diag_ignore_all(option, comment) \
+> +	__diag_clang(11, ignore, option)
+> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> index ccbbd31b3aae..d364c98a4a80 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -151,6 +151,9 @@
+>  #define __diag_GCC_8(s)
+>  #endif
+>  
+> +#define __diag_ignore_all(option, comment) \
+> +	__diag_GCC(8, ignore, option)
 
-> And arguably it's not even too late, because 10 years ago this *did* say
-> "AArch64". I don't remember all the exact details behind commit
-> 44b82b7700d0 ("arm64: Fix up /proc/cpuinfo") - this just tickled enough
-> of a memory to go and look up the git history - but I don't think we
-> changed any of those fields without a real reason.
->
+While this approach will work for clang, it doesn't seem scalable for
+GCC. Documentation/process/changes.rst documents that we support gcc
+5.1+. This approach will only disable diagnostics for gcc 8+.
 
-The patch description does state that this was done for compatibility with
-32-bit architectures, which does make some sense. I suppose for similar
-reasons, the arch/arm/ version of /proc/cpuinfo is now stuck at
-'CPU architecture: 7', even for ARMv8 or higher in aarch32 mode.
-
-The part that I find more annoying is how we leave out the one bit
-of information that people are generally looking for in /proc/cpuinfo:
-the name of the processor. Even though we already know the
-exact processor type in order to handle the CPU errata, this is
-always "model name\t: ARMv7 Processor rev %d (v7l)" on 32-bit,
-and "model name\t: ARMv8 Processor rev %d (%s)" on 64-bit,
-with the revision being the least important bit of information here...
-
-        Arnd
+> +
+>  /*
+>   * Prior to 9.1, -Wno-alloc-size-larger-than (and therefore the "alloc_size"
+>   * attribute) do not work, and must be disabled.
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 3f31ff400432..8e5d2f50f951 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -371,4 +371,8 @@ struct ftrace_likely_data {
+>  #define __diag_error(compiler, version, option, comment) \
+>  	__diag_ ## compiler(version, error, option)
+>  
+> +#ifndef __diag_ignore_all
+> +#define __diag_ignore_all(option, comment)
+> +#endif
+> +
+>  #endif /* __LINUX_COMPILER_TYPES_H */
+> -- 
+> 2.35.1
+> 

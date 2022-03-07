@@ -2,228 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BE94D001B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8054D0026
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242880AbiCGNcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S238615AbiCGNgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:36:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242881AbiCGNcS (ORCPT
+        with ESMTP id S233373AbiCGNgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:32:18 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6E68A6DC;
-        Mon,  7 Mar 2022 05:31:24 -0800 (PST)
-Received: from nazgul.tnic (nat0.nue.suse.com [IPv6:2001:67c:2178:4000::1111])
+        Mon, 7 Mar 2022 08:36:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844237CDC7;
+        Mon,  7 Mar 2022 05:35:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 014F71EC0537;
-        Mon,  7 Mar 2022 14:31:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1646659879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=GpGI0D4rD+Njmm+Q0184SgW1CbMNN6ew2JNcrhmR7Qo=;
-        b=cYMMGvCr2WaSqdw9nHWCfXg02fvlat1g6Cw1dlTHtTS6pvmi3qgNblwGhUKTg1BG1WacfG
-        hKx88JPixa97PIS0C5q17k5IfTC0sue0nsvvOZIAO8s3zchJqEENNoOslj5WDbIkGJIHed
-        1Ui9fDiX/uFv7wOB9lUAUPl7BnJbUfM=
-Date:   Mon, 7 Mar 2022 14:31:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH 2/2] x86/mce: Add per-bank CMCI storm mitigation
-Message-ID: <YiYJGKGmgUx9gAXv@nazgul.tnic>
-References: <20220217141609.119453-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220217141609.119453-2-Smita.KoralahalliChannabasappa@amd.com>
- <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
- <Yg6Hst4Ocg7UNNG9@agluck-desk3.sc.intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22F1BB81243;
+        Mon,  7 Mar 2022 13:35:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A20C340F6;
+        Mon,  7 Mar 2022 13:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646660104;
+        bh=o+SD1cUlsYrZv26Wn6nQ+JaPM+ZNKL19sVgBMH450zM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a6vgOPrc22ssJhNR/R2TvrMVz82ctGntauMqM18HVgmWudfpPhb15lQTebVYFF/ww
+         gKAv72rD0CB77CDK44cnmG9awNUb3C0KjtkTOlU+bQNhXusETL7tlvrywpG+ZC7y6K
+         eagWJ1rYYBuLqeAwD51lhoK/1KjFHXNuJZS1ktelNtnJyagcRuNAQtb1ZIBCXf2yGS
+         LZ9kpRvFI5kjT+l7B3SpCv0Jnukcsx71Q0IAluQnD8M0kLEHEAWqwNXH8IOmZ+908l
+         ZKmdDHh/fL1MSuuTzUnYlnEzjohV5NVQrnfDEd7dr1/pu+RJJVuSRtvPc+5qLre+n6
+         JoeIvm/AScQXA==
+Received: by mail-ej1-f42.google.com with SMTP id d10so31932971eje.10;
+        Mon, 07 Mar 2022 05:35:04 -0800 (PST)
+X-Gm-Message-State: AOAM531o+5lUN/Afb/mF8KUl4M+ru7ULabyuo/RHUzE17oRbhV4KsSIk
+        ekPvNFyM9VXOH0autgdaRmIWHXJ0B9Dhx+OxSg==
+X-Google-Smtp-Source: ABdhPJxptrtnZf/+9J2q0LL+bGJVCspIpX4l4HtvBxUxmFH6Wwcxw4rGqs98Gg9PPjVDwPXszI++IRx4tvIh7LtQSt0=
+X-Received: by 2002:a17:906:a38e:b0:6da:a1f9:f9ee with SMTP id
+ k14-20020a170906a38e00b006daa1f9f9eemr8679535ejz.27.1646660102959; Mon, 07
+ Mar 2022 05:35:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yg6Hst4Ocg7UNNG9@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <164659571791.547857.13375280613389065406@leemhuis.info>
+ <CAHk-=wgYjH_GMvdnNdVOn8m81eBXVykMAZvv_nfh8v_qdyQNvA@mail.gmail.com> <4a28b83b-37ef-1533-563a-39b66c5ff158@leemhuis.info>
+In-Reply-To: <4a28b83b-37ef-1533-563a-39b66c5ff158@leemhuis.info>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 7 Mar 2022 07:34:50 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLHun+X4jMwTbVMmjjETfbP73j52XCwWBj9MJCkpQ41mA@mail.gmail.com>
+Message-ID: <CAL_JsqLHun+X4jMwTbVMmjjETfbP73j52XCwWBj9MJCkpQ41mA@mail.gmail.com>
+Subject: Re: Linux regressions report for mainline [2022-03-06]
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 09:36:50AM -0800, Luck, Tony wrote:
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 4f9abb66520d..1f3e7c074182 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -714,6 +714,8 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
->  		barrier();
->  		m.status = mce_rdmsrl(mca_msr_reg(i, MCA_STATUS));
->  
-> +		mce_intel_storm_tracker(i, m.status);
+On Mon, Mar 7, 2022 at 1:32 AM Thorsten Leemhuis
+<regressions@leemhuis.info> wrote:
+>
+> On 06.03.22 22:33, Linus Torvalds wrote:
+> > On Sun, Mar 6, 2022 at 11:58 AM Regzbot (on behalf of Thorsten
+> > Leemhuis) <regressions@leemhuis.info> wrote:
+> >>
+> >> ========================================================
+> >> current cycle (v5.16.. aka v5.17-rc), culprit identified
+> >> ========================================================
+> >>
+> >> Follow-up error for the commit fixing "PCIe regression on APM Merlin (aarch64 dev platform) preventing NVME initialization"
+> >> ---------------------------------------------------------------------------------------------------------------------------
+> >> https://linux-regtracking.leemhuis.info/regzbot/regression/Yf2wTLjmcRj+AbDv@xps13.dannf/
+> >> https://lore.kernel.org/stable/Yf2wTLjmcRj%2BAbDv@xps13.dannf/
+> >>
+> >> By dann frazier, 29 days ago; 7 activities, latest 23 days ago; poked 13 days ago.
+> >> Introduced in c7a75d07827a (v5.17-rc1)
 
-Why is this called before the VALID bit check?
+Actually, it was introduced over a year ago in 6dce5aa59e0b. It was
+fixed in c7a75d07827a for XGene2, but that *further* broke XGene1
+which was just reported this cycle.
 
-Because you want to still run the tracker on each polling - not only
-when it sees a valid error?
+> > Hmm. The culprit may be identified, but it looks like we don't have a
+> > fix for it, so this may be one of those "left for later" things. It
+> > being Xgene, there's a limited number of people who care, I'm afraid.
+> >
+> > Alternatively, maybe 6dce5aa59e0b ("PCI: xgene: Use inbound resources
+> > for setup") should just be reverted as broken?
+>
+> I don't care much, I just hope someone once again will look into this,
+> as this (and the previous) regression are on my list for quite a while
+> already and process once again seems to have slowed down. :-/
 
-> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
-> index cee9d989f791..2ed5634ec277 100644
-> --- a/arch/x86/kernel/cpu/mce/intel.c
-> +++ b/arch/x86/kernel/cpu/mce/intel.c
-> @@ -47,8 +47,48 @@ static DEFINE_PER_CPU(mce_banks_t, mce_banks_owned);
->   */
->  static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
->  
-> +/*
-> + * CMCI storm tracking state
-> + */
+It's going to take some more debug patches from me as what's been
+tried so far didn't work and I'm not ready to give up and revert this
+cleanup.
 
-Those could use some comments explaining what is tracking what:
-
-> +static DEFINE_PER_CPU(int, stormy_bank_count);
-> +static DEFINE_PER_CPU(u64 [MAX_NR_BANKS], bank_history);
-> +static DEFINE_PER_CPU(bool [MAX_NR_BANKS], bank_storm);
-
-AFAICT, this says whether a bank is in storm mode?
-
-> +static DEFINE_PER_CPU(unsigned long [MAX_NR_BANKS], bank_time_stamp);
-
-This looks like it collects the jiffies when the bank was looked at in
-the storm tracker.
-
-> +static int cmci_threshold[MAX_NR_BANKS];
-> +
->  #define CMCI_THRESHOLD		1
->  
-> +/*
-> + * High threshold to limit CMCI rate during storms. Max supported is
-> + * 0x7FFF. Use this slightly smaller value so it has a distinctive
-> + * signature when some asks "Why am I not seeing all corrected errors?"
-> + */
-> +#define CMCI_STORM_THRESHOLD	0x7FED
-
-Why is a "threshold" in hex?
-
-> +
-> +/*
-> + * How many errors within the history buffer mark the start of a storm
-> + */
-> +#define STORM_BEGIN	5
-
-That looks like a STORM_BEGIN_THRESHOLD to me.
-
-> +
-> +/*
-> + * How many polls of machine check bank without an error before declaring
-> + * the storm is over
-> + */
-> +#define STORM_END	30
-
-Similarly:
-
-STORM_END_POLL_THRESHOLD
-
-> +
-> +/*
-> + * If there is no poll data for a bank for this amount of time, just
-> + * discard the history.
-> + */
-> +#define STORM_INTERVAL (1 * HZ)
-
-That looks unused.
-
-> +static void cmci_storm_begin(int bank)
-> +{
-> +	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
-> +	this_cpu_write(bank_storm[bank], true);
-> +	if (this_cpu_inc_return(stormy_bank_count) == 1)
-
-s/ == 1//
-
-> +		mce_timer_kick(true);
-> +}
-> +
-> +static void cmci_storm_end(int bank)
-> +{
-> +	__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
-> +	this_cpu_write(bank_history[bank], 0ull);
-> +	this_cpu_write(bank_storm[bank], false);
-> +	if (this_cpu_dec_return(stormy_bank_count) == 0)
-
-	if (!...
-
-> +		mce_timer_kick(false);
-> +}
-> +
-> +void mce_intel_storm_tracker(int bank, u64 status)
-
-Function name needs a verb.
-
-> +{
-> +	unsigned long now = jiffies, delta;
-> +	unsigned int shift;
-> +	u64 history;
-> +
-> +	delta = now - this_cpu_read(bank_time_stamp[bank]);
-> +	shift = this_cpu_read(bank_storm[bank]) ? 1 : (delta + HZBITS) / HZBITS;
-
-Do
-
-	shift = 1;
-
-on function entry to simplify this assignment.
-
-Also, I'm having trouble with this shift calculation. The laptop here has
-HZ=250. Let's say delta is 2000 jiffies.
-
-So if this bank wasn't in storm mode, I'd have
-
-shift = (2000 + (250 / 64)) / (250 / 64) = 513
-
-...
-
-Aaaha, so only when the diff is < 250 in my case, i.e., it polls the
-same bank within a second, only then it would shift the history. I.e.,
-what you mean with that "The 64 bit width corresponds to about one
-second."
-
-> +	history = (shift < 64) ? this_cpu_read(bank_history[bank]) << shift : 0;
-> +	this_cpu_write(bank_time_stamp[bank], now);
-> +
-> +	if ((status & (MCI_STATUS_VAL | MCI_STATUS_UC)) == MCI_STATUS_VAL)
-> +		history |= 1;
-> +	this_cpu_write(bank_history[bank], history);
-> +
-> +	if (this_cpu_read(bank_storm[bank])) {
-> +		if (history & GENMASK_ULL(STORM_END - 1, 0))
-> +			return;
-
-Aha, under STORM_END polls you don't declare the storm as being over.
-
-> +		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
-> +		cmci_set_threshold(bank, cmci_threshold[bank]);
-> +		cmci_storm_end(bank);
-> +	} else {
-> +		if (hweight64(history) < STORM_BEGIN)
-> +			return;
-
-Aha, so you need STORM_BEGIN errors within the last second to cause the
-storm polling. Ok I guess.
-
-So all in all I can't find anything eeewy in this - it would need to
-have a lot more documentation, though, as this is not the most trivial
-thing to stare at.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Rob

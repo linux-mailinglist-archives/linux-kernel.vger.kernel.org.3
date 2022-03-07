@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587584CF9EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 812244CFB32
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239838AbiCGKNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S240672AbiCGK2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238971AbiCGJ4l (ORCPT
+        with ESMTP id S242477AbiCGKLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:56:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085C57892A;
-        Mon,  7 Mar 2022 01:45:48 -0800 (PST)
+        Mon, 7 Mar 2022 05:11:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410C08A336;
+        Mon,  7 Mar 2022 01:55:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B172B6116E;
-        Mon,  7 Mar 2022 09:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC576C340E9;
-        Mon,  7 Mar 2022 09:45:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C98D0B8102B;
+        Mon,  7 Mar 2022 09:54:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18FB2C340F3;
+        Mon,  7 Mar 2022 09:54:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646345;
-        bh=lA1UPH5y1HxaCRDqKeMKCobJhTqi7g8S5SnadOXS1QE=;
+        s=korg; t=1646646862;
+        bh=vAzPU0RMvCJ3eQY+a9D1Cl8N9paMO2XcoBFihnqbTq8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z/xi1eDXw0YvDLMmO33d3D7fHASemKMMu0NfCfMo6gpL60jZLW2WDVjUwuCHuFo0j
-         u8KM8pZjCpZzFcAYV23okU+9rLxF0ZSWyEEuwnQiXxiB3MJvO2Ki4xevm7Ab25UNHx
-         nLRzBqOcoD3uYvNdq/PtaeiPbEuGOaQaexSzD8Mw=
+        b=I9fZRb8Q0AsL5pgjGCsaxnzjp2JoRe62GEgx+vuxx6eDhtQQXcBnsSzxahujC3Mrc
+         yhpLrwTFUiAIYX4HsnxZ9kiq2BsVnPtVWTZTFIvEYXh0KjpH6L7kjdUz0piy2Jaq6P
+         0jMVGUW/ckIwmG2/NvV9h2+z1pHgk0MyU5nCnUEw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Li Yang <leoyang.li@nxp.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 211/262] soc: fsl: guts: Add a missing memory allocation failure check
+        stable@vger.kernel.org,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH 5.16 117/186] s390/setup: preserve memory at OLDMEM_BASE and OLDMEM_SIZE
 Date:   Mon,  7 Mar 2022 10:19:15 +0100
-Message-Id: <20220307091708.839277782@linuxfoundation.org>
+Message-Id: <20220307091657.349928177@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
 
-[ Upstream commit b9abe942cda43a1d46a0fd96efb54f1aa909f757 ]
+commit 6b4b54c7ca347bcb4aa7a3cc01aa16e84ac7fbe4 upstream.
 
-If 'devm_kstrdup()' fails, we should return -ENOMEM.
+We need to preserve the values at OLDMEM_BASE and OLDMEM_SIZE which are
+used by zgetdump in case when kdump crashes. In that case zgetdump will
+attempt to read OLDMEM_BASE and OLDMEM_SIZE in order to find out where
+the memory range [0 - OLDMEM_SIZE] belonging to the production kernel is.
 
-While at it, move the 'of_node_put()' call in the error handling path and
-after the 'machine' has been copied.
-Better safe than sorry.
-
-Fixes: a6fc3b698130 ("soc: fsl: add GUTS driver for QorIQ platforms")
-Depends-on: fddacc7ff4dd ("soc: fsl: guts: Revert commit 3c0d64e867ed")
-Suggested-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: f1a546947431 ("s390/setup: don't reserve memory that occupied decompressor's head")
+Cc: stable@vger.kernel.org # 5.15+
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Acked-by: Vasily Gorbik <gor@linux.ibm.com>
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/soc/fsl/guts.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/s390/kernel/setup.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/soc/fsl/guts.c b/drivers/soc/fsl/guts.c
-index 67b079fc0c8e..75eabfb916cb 100644
---- a/drivers/soc/fsl/guts.c
-+++ b/drivers/soc/fsl/guts.c
-@@ -160,9 +160,14 @@ static int fsl_guts_probe(struct platform_device *pdev)
- 	root = of_find_node_by_path("/");
- 	if (of_property_read_string(root, "model", &machine))
- 		of_property_read_string_index(root, "compatible", 0, &machine);
--	of_node_put(root);
--	if (machine)
-+	if (machine) {
- 		soc_dev_attr.machine = devm_kstrdup(dev, machine, GFP_KERNEL);
-+		if (!soc_dev_attr.machine) {
-+			of_node_put(root);
-+			return -ENOMEM;
-+		}
-+	}
-+	of_node_put(root);
- 
- 	svr = fsl_guts_get_svr();
- 	soc_die = fsl_soc_die_match(svr, fsl_soc_die);
--- 
-2.34.1
-
+--- a/arch/s390/kernel/setup.c
++++ b/arch/s390/kernel/setup.c
+@@ -800,6 +800,8 @@ static void __init check_initrd(void)
+ static void __init reserve_kernel(void)
+ {
+ 	memblock_reserve(0, STARTUP_NORMAL_OFFSET);
++	memblock_reserve(OLDMEM_BASE, sizeof(unsigned long));
++	memblock_reserve(OLDMEM_SIZE, sizeof(unsigned long));
+ 	memblock_reserve(__amode31_base, __eamode31 - __samode31);
+ 	memblock_reserve(__pa(sclp_early_sccb), EXT_SCCB_READ_SCP);
+ 	memblock_reserve(__pa(_stext), _end - _stext);
 
 

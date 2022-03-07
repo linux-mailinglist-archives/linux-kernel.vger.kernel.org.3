@@ -2,122 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3824D01CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 736414D01CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243383AbiCGOug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S243392AbiCGOv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235518AbiCGOue (ORCPT
+        with ESMTP id S234136AbiCGOv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:50:34 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9059B85978;
-        Mon,  7 Mar 2022 06:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646664580; x=1678200580;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=kCiyL7LJ6ect9V6yfLMZQN25/a2tH3wxzb1kcI/nvYo=;
-  b=BeRLvvrnYp7syq5iTbEtMVDhgb5/du1NRqlFX4ixi/YwG56pzw89hp7Q
-   ftLLikXy82Lb63qz0m2XAwl1x6yuptjmQYtFy4g5M442vsXwrxP1QrDHj
-   kJGDBGaIjYHcy2QbP2laLWHGOjXRGo9BPwyfq2exRBttamHs/euSIuiSJ
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 07 Mar 2022 06:49:40 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 06:49:40 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 7 Mar 2022 06:49:40 -0800
-Received: from [10.216.48.106] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 7 Mar 2022
- 06:49:35 -0800
-Subject: Re: [PATCH V7 5/5] arm64: dts: qcom: sc7280: Add pm8008 support for
- sc7280-idp
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
-        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
-References: <1645182064-15843-1-git-send-email-quic_c_skakit@quicinc.com>
- <1645182064-15843-6-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n509bg6RzieOtYuUvicU14D7bmgH-u02F1TB+hBZ+xH4CA@mail.gmail.com>
- <42570508-ed62-af26-220e-c776418a722e@quicinc.com>
- <CAE-0n50J=4qrkR9ycEGxbKVHwm9Om8S2YSJR_Y71_iErR-wAHw@mail.gmail.com>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Message-ID: <7e3d1ff3-f1a0-3a4d-a056-e3dce1a9a28d@quicinc.com>
-Date:   Mon, 7 Mar 2022 20:19:31 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 7 Mar 2022 09:51:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A73385BD7
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:50:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646664632;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hRD/+JUqgxTPFFOSXMLWgiYACum/dExxe7SlZGhyQ9A=;
+        b=Gb97/QdyUr5bAhewkDecwb6zr6YMwdk2K8cAiXZf8VKYZayZp3T7CjRNY+dY0Rs0QEtP+v
+        eUTKMgYvQzEdLvdwZs437e+Gnz3x/GnJZy8HdWjq8VT5j+U3x5HaqM4S2tIpeOlR9yTAMu
+        Jb2aShUXBbU2WD2vurVOZpdvOvbfpLQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-xyCHlIzBNVa87SuhJjKrfA-1; Mon, 07 Mar 2022 09:50:29 -0500
+X-MC-Unique: xyCHlIzBNVa87SuhJjKrfA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9BAF61854E26;
+        Mon,  7 Mar 2022 14:50:27 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.193.244])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 23231797E7;
+        Mon,  7 Mar 2022 14:50:24 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-hyperv@vger.kernel.org,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RFC 00/19] KVM: x86: hyper-v: Fine-grained TLB flush + Direct TLB flush feature
+Date:   Mon,  7 Mar 2022 15:50:04 +0100
+Message-Id: <20220307145023.1913205-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n50J=4qrkR9ycEGxbKVHwm9Om8S2YSJR_Y71_iErR-wAHw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, KVM handles HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} requests
+by flushing the whole VPID and this is sub-optimal. This series introduces
+the required mechanism to make handling of these requests more 
+fine-grained by flushing individual GVAs only (when requested). On this
+foundation, "Direct Virtual Flush" Hyper-V feature is implemented. The 
+feature allows L0 to handle Hyper-V TLB flush hypercalls directly at
+L0 without the need to reflect the exit to L1. This has at least two
+benefits: reflecting vmexit and the consequent vmenter are avoided + L0
+has precise information whether the target vCPU is actually running (and
+thus requires a kick).
 
-On 3/1/2022 2:06 AM, Stephen Boyd wrote:
-> Quoting Satya Priya Kakitapalli (Temp) (2022-02-28 06:25:06)
->> On 2/19/2022 7:31 AM, Stephen Boyd wrote:
->>> Quoting Satya Priya (2022-02-18 03:01:03)
->>>> +               pins = "gpio4";
->>>> +               function = "normal";
->>>> +               bias-disable;
->>>> +               output-high;
->>> Is this a reset signal? Should the driver be deasserting the reset when
->>> it is ready? That could be the same time the gpio is acquired.
->>
->> I didn't get your question exactly.. hope this answers your query
->>
->> The pm8008 chip needs this gpio to be toggled , in order to come out of
->> reset and start any transactions..
->>
->> Please let me know if you have more queries
-> Yes that answers it for me. Thanks.
->
-> This is a reset gpio and should be a DT property like
->
-> 	reset-gpios = <&pm8350c_gpios 4 GPIO_ACTIVE_HIGH>
->
-> in the pm8008 node. When the driver probes it should get the gpio and
-> do any toggling to take it out of reset. It shouldn't be done through
-> pinconf settings.
+RFC part:
+- The series is poorly tested. I've only smoke-tested WS2019 and Win11+WSL2
+on VMX and AMD harware to the point that no immediate issues are observed
+on boot. We certainly need something added to selftests/kvm-unit-tests.
 
+Vitaly Kuznetsov (19):
+  KVM: x86: hyper-v: Resurrect dedicated KVM_REQ_HV_TLB_FLUSH flag
+  KVM: x86: hyper-v: Introduce TLB flush ring
+  KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls
+    gently
+  KVM: x86: hyper-v: Expose support for extended gva ranges for flush
+    hypercalls
+  KVM: x86: Prepare kvm_hv_flush_tlb() to handle L2's GPAs
+  KVM: x86: hyper-v: Don't use sparse_set_to_vcpu_mask() in
+    kvm_hv_send_ipi()
+  KVM: x86: hyper-v: Create a separate ring for Direct TLB flush
+  KVM: x86: hyper-v: Use preallocated buffer in 'struct kvm_vcpu_hv'
+    instead of on-stack 'sparse_banks'
+  KVM: nVMX: Keep track of hv_vm_id/hv_vp_id when eVMCS is in use
+  KVM: nSVM: Keep track of Hyper-V hv_vm_id/hv_vp_id
+  KVM: x86: Introduce .post_hv_direct_flush() nested hook
+  KVM: x86: hyper-v: Introduce kvm_hv_is_tlb_flush_hcall()
+  KVM: x86: hyper-v: Direct TLB flush
+  KVM: x86: hyper-v: Introduce fast kvm_hv_direct_tlb_flush_exposed()
+    check
+  x86/hyperv: Fix 'struct hv_enlightened_vmcs' definition
+  KVM: nVMX: hyper-v: Direct TLB flush
+  KVM: x86: KVM_REQ_TLB_FLUSH_CURRENT is a superset of
+    KVM_REQ_HV_TLB_FLUSH too
+  KVM: nSVM: hyper-v: Direct TLB flush
+  KVM: x86: Expose Hyper-V Direct TLB flush feature
 
-Okay, IIUC,  I have to remove the output-high here and add reset-gpios 
-in pm8008 DT node. And then add below code in pm8008 mfd driver probe
+ arch/x86/include/asm/hyperv-tlfs.h |   6 +-
+ arch/x86/include/asm/kvm_host.h    |  30 +++
+ arch/x86/kvm/Makefile              |   3 +-
+ arch/x86/kvm/hyperv.c              | 305 ++++++++++++++++++++++++++---
+ arch/x86/kvm/hyperv.h              |  55 ++++++
+ arch/x86/kvm/svm/hyperv.c          |  18 ++
+ arch/x86/kvm/svm/hyperv.h          |  37 ++++
+ arch/x86/kvm/svm/nested.c          |  25 ++-
+ arch/x86/kvm/trace.h               |  21 +-
+ arch/x86/kvm/vmx/evmcs.c           |  24 +++
+ arch/x86/kvm/vmx/evmcs.h           |   4 +
+ arch/x86/kvm/vmx/nested.c          |  41 +++-
+ arch/x86/kvm/x86.c                 |  15 +-
+ arch/x86/kvm/x86.h                 |   1 +
+ 14 files changed, 539 insertions(+), 46 deletions(-)
+ create mode 100644 arch/x86/kvm/svm/hyperv.c
 
-+               chip->reset_gpio = devm_gpiod_get(chip->dev, "reset", 
-GPIOD_OUT_HIGH);
-+               if (IS_ERR(chip->reset_gpio)) {
-+                       dev_err(chip->dev, "failed to acquire reset 
-gpio\n");
-+                       return PTR_ERR(chip->reset_gpio);
-+               }
-+               gpiod_set_value(chip->reset_gpio, 1);
-
-This is working for me, Please let me know if I'm  missing something.
+-- 
+2.35.1
 

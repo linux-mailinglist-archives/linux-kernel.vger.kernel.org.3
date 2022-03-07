@@ -2,1782 +2,856 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA57F4CF456
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D254CF451
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236203AbiCGJLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S236135AbiCGJLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:11:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiCGJLn (ORCPT
+        with ESMTP id S232049AbiCGJLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:11:43 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2093.outbound.protection.outlook.com [40.107.223.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C449765145;
-        Mon,  7 Mar 2022 01:10:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lqqRWZ0ZpnwdIwJCfF47f8fhS35pTcPu2nqTCzgUkiIJPTWBMOA1AmFesj9I3isj2koKhrqXWGBDe5ljqydpyCZsUagTkwy1ZJa133AYZ3JAFAsS4ruSEIvYRqtPQl6N/D3rY+m/dmfGDW1HYApvRDrSnkAgEquxW5Szc3cePYMQV/wtjhez7U1BYFE+qJuM4KfRk8Am0PB87Gvlcq1KBFKWGe0bx2w+dFRyMVDnwpfCyxTR/BjeeYlWNyxc26GH0Hi93RoDu6weWfSIVax7pUgLkirAdKIAdi1O5hkyaZHSWu9MecHQbItZVC1qumiHwVfyc+fBLyiWPLvRy0IgQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LYEx3Tu1Hg4Rorq07Gkb0C7cKaSO2/hcArP3aCov894=;
- b=XmGbjgpQgwAVahgU6osVpYEOv/xNlxHuqLqveJJU+T5lypjly3VKamsAKag1mUmmQKCT91NVxpjDqwF1y177IPkcBGJ5IlWaYdbEJJYKf3N9rTqkCqOG4UXyEbzXuXB9RfLvcXoqsK+zfj4fw9f3KODnNll8QDXi48DW9tD5b12ri4RFmj0BQrHZ0YA3O9Odpb5BKlI1lSAeRSvCJg8Nrrh3rnooC84aejxUzItGkXoEyhLvuRBGXKzuDKMj5GoWbsL6Qw69zWCTZoSOPuSAVizzvniPq0FgU3S3TVfWjO17pbbs7CA7v8LTRe4QnheTJA3PemvvYX8Bb+1EluYsGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LYEx3Tu1Hg4Rorq07Gkb0C7cKaSO2/hcArP3aCov894=;
- b=z8WXxU6eQJgWMX8UJwz71OSWrb4vZLgHOnvfmnz5jVSbTdgunXKa9B9Jd747p3xyRYFSosdI46r+k2Dbvguzin0yEgq07XeapxQMgbnms/GQpIR+KxlsS4Qgefy6B2Ji9FLOpyc4ufnuaL3HmmJISQtT5dUvxjba9ejd0OGyt5Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by DM5PR04MB0173.namprd04.prod.outlook.com (2603:10b6:3:75::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Mon, 7 Mar
- 2022 09:10:39 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5038.027; Mon, 7 Mar 2022
- 09:10:38 +0000
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, Xin Ji <xji@analogixsemi.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v7 3/3] usb: typec: anx7411: Add Analogix PD ANX7411 support
-Date:   Mon,  7 Mar 2022 17:09:28 +0800
-Message-Id: <20220307090929.701137-3-xji@analogixsemi.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220307090929.701137-1-xji@analogixsemi.com>
-References: <20220307090929.701137-1-xji@analogixsemi.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR0601CA0023.apcprd06.prod.outlook.com (2603:1096:3::33)
- To BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+        Mon, 7 Mar 2022 04:11:30 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A780D38DBA;
+        Mon,  7 Mar 2022 01:10:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBt390rn3z4xRB;
+        Mon,  7 Mar 2022 20:10:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646644229;
+        bh=STB0w0RWHhxSre1f12rlrn1zvhwcjsewWitXFXYXO94=;
+        h=Date:From:To:Cc:Subject:From;
+        b=s34i2/mIy6GtKtx9Y73sCMffdrMW3b39eeabBt9Um96FNRHdSN0WAaJYN8Ml6cAWj
+         Yzudk7719itAA4RCtMgLsFcgCvekDcg+SP8C/XdfL3/ImGsk2m6z9ymJxy4MdpvHvd
+         cAfp8gMu1ok+GQo4pyaYGcui3i5cu6bvC+1lSY4IuLSXtSqvAF94YlYI1xwEINSNV3
+         rhjqTZFwtuIsd4aapobHc9wLlxGrl4lVMoUbvFj/v6HIj8hWQvY+2iW0QqorGFYNNG
+         X3GOsuBZjiuwy283XDJiJ/IkoJ4+Q8di8VswjJeQ71D9fwkOkao94ntgn6hF/GtBBt
+         b4Hj2x4vfRQUw==
+Date:   Mon, 7 Mar 2022 20:10:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Mar 7
+Message-ID: <20220307201025.18d2a892@canb.auug.org.au>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7c916596-bde8-46b1-9c94-08da001a58ce
-X-MS-TrafficTypeDiagnostic: DM5PR04MB0173:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR04MB01732D1BDEE09C2A654FC405C7089@DM5PR04MB0173.namprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oeLlnP9ZA0p3dxnVMzpjNuSBiq2qOzz7NiwE4C92TU7LnhTnUYlr79BB7FCjMgk3/+PgvKgZEvjS7/vfiCPUWzoWTz89dOvlQ4Qs23QGZNyNsiOfS47Y2FyWnocGOtKE1Gb42EC5vwX+IA+gxZbV9/4rbI+T02uWdSD3g8k7ciIih0Nv45/P7jp3gGFfuUm3fhqlP2yj3fvpo8OoapLPcd0O63/i/pb6ZPnA5aqq2mzKEIrcfgH14THHHiMQMymEJTIC30WnW+1oEf5Gq2zWIFkHwdVfYnj3VaTwk98OxdzZlhHK4r73g0UU4btyP+EiAiiosSC/R++4QguOYFwXORTHPLZBURujUkd/sG4yBJ9auGwT66r7RB7c4qSiVZ/jzVMPXK8cmp3aALHRAuNqs4kZd0rIz+PipxD6GZjdpZsjbRs4Z3Or47wOAz/JXP2I4gdOaxTr18tJnHowIBDD8jmZYOPIGWAa9sBUNVtcx5v1SucMRbpDYtDaEHNSOLCRvEKLnZPqAXepZEFaPLwJ1DVy9HmgApgvEJNWcOPO1c+kKpThu2DKYVzCPiDyV1XRG4Fzgmp4mMBJLhGwE+9dhLj0CyvLJ7pmQWmIZi7J/ENkgVXdjJQIs9RZhYbZvAFh/yVS+03vcdMiTdXJoOhnM08GM5ewwW08EffE+4fBzh8AbUxWs3k+wPgY3ZyYAPDdGgVxXvJgFWMjQt1P3/ZdrQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(30864003)(110136005)(26005)(6506007)(6512007)(55236004)(52116002)(8936002)(66946007)(6486002)(2616005)(38350700002)(38100700002)(6666004)(83380400001)(86362001)(1076003)(36756003)(498600001)(4326008)(8676002)(5660300002)(66476007)(66556008)(2906002)(579004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AkwbzalfoWPP5u+W9Z9ONIriKjT+8ZJFa+wX5T0U1KzEqNN7FPoZui+ld989?=
- =?us-ascii?Q?+zk2Ggmk7dthrQXQC488ZNTXXMTm/qE4jcEgGc/YnFxUsUwFTqQ0HxQ4F5Vo?=
- =?us-ascii?Q?A4p8NITFguTpYq6XmdIv240m2qjDyzOx7bRFuUT6LCVEk6Kh1lejeqogIb/P?=
- =?us-ascii?Q?h5y1kKi8xevO9KtmrErRpY8k6dRLQPn/NZhqX1HBKPdbeSck+xQMJdA47dPc?=
- =?us-ascii?Q?Rg+i9hUth/1en+qubVlBAlx0ArDUM8goD5Gl9NJV2d2RIG3OhCnnY79/NocK?=
- =?us-ascii?Q?rTTnQ1FtGgm5CbAF4kXOQL8Nkmg9IatQ01j0r0cIRlcEPtyYBdSDENA1faeC?=
- =?us-ascii?Q?1kS+60wj3BizjIIbrCgWetD6n4PUlGnHxilJX50DjRej4a/INYPp3itEUVZi?=
- =?us-ascii?Q?xR9WXyBamCBlKdFuJWHpsp9rQo6s7rfMA4dD63nMkb5463Fe24pxWFFZ3AH6?=
- =?us-ascii?Q?n1nt7/jH/8+HHNuRRlcvxizjQGf6iXQuVEA168vVogxc3//98pWvl6Fo8L70?=
- =?us-ascii?Q?6ZIefGsYAwDPdpkEHKrW40mBhykH1mY8yvoM8Er2U8BI/AYNP2HbgHt6vdjT?=
- =?us-ascii?Q?ozgyz19fwHsKzd8pZezNr1zaS7gndfUG96iNz47UFlPb7h3XG8GLgvdRO/Fc?=
- =?us-ascii?Q?65wTr4JDf8Hq7uY3K7e0MWG+lMCjEqXhlIginjrEsxYHyLi7Cc/1Owh6oa6N?=
- =?us-ascii?Q?OXl6ikrNRA0fjdCH8UQJhtVPMd5SDd6Ju1aw3TaK6g2Yel9+fmNj0qGTpVJp?=
- =?us-ascii?Q?9H2paK9JSI0TY5OHIYpAB/XR0EQszUZ6DKigYgYShHMEO0GXCzwYxe7pLxJU?=
- =?us-ascii?Q?XRhuG34P43wBhj9CO7pwWZ54T86TXX/phsE7DAeBX0QT3Nn5t/Rx06T0oUYm?=
- =?us-ascii?Q?aUuamqbkAXVzqgYCPo6LQiu2Ce8CiqspFcWj6i428ks+eeOuEn6zcXtH3jtW?=
- =?us-ascii?Q?8oeVK8zKvUbLJRDIBfZ8f8o7BpQkcVueNtSZAhHfiabGLSM7bPHUnFSZ+sPW?=
- =?us-ascii?Q?HMlRj6+GjPiONzLVoQL3RePqtDZLmec+IBQTGN347o9d3ZZLSut8SN6rg3zP?=
- =?us-ascii?Q?HXm6sr1BQrg5HcSxPX/QLT2T7NfxOeaiASvlXdqtFDcgAIyQIrryXOGijUOX?=
- =?us-ascii?Q?TD5Nz3ybuR5EZIdB4YEnCnDQhIrd1HuLTc6kU3FRXRGvH1NOVZwhJ9OPc9sg?=
- =?us-ascii?Q?FhHJXfLLJJdqQrM1En4WLA/Ga+cPf/dImasblybwfgwY+MGJb+h/61ObmfuB?=
- =?us-ascii?Q?8z0BwjFPnKCCa2kcWM1vkSzsrW2jY8XC5vWzb+lOVAVj5i5mzg9e5e3ofcVi?=
- =?us-ascii?Q?zTbAl8hlKHvZO1V3N3rElfoGO5svWT5g00ZStExRs+7r0t2rE0NxH4Iu3vWc?=
- =?us-ascii?Q?C2UshSUtqpn5DDoxZg2FBgkFUcT4PZKYFTllXfwrTKUO+JMuD9p0g9qNIUkP?=
- =?us-ascii?Q?bQW4ZNUesfEpwfXxWgx9tFgeiYA8SMGjc4onBsessRKjevMyqoDHbz0UdmrT?=
- =?us-ascii?Q?E6yuwUmCxWV4rFltPbkZ9UJl81Zac86eLAsjebkmqb7mf9wiiimxd7JM4ASq?=
- =?us-ascii?Q?DxImYzlWl14DUj8CCLVTvXg1m9z0b7iyXzaBQvpFtwu02SVLa6tLDgHONpWE?=
- =?us-ascii?Q?8HIbmrrl6hgvToEGyzM7rts=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c916596-bde8-46b1-9c94-08da001a58ce
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:10:38.8545
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: blgN00/bP/KAIMLxddJcFI7aAMnJIKY06kH3rzgaBOAJBqbTwmh6au/WcsBYz8sQk5QjJA/tkd5giB0Xbs7yxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0173
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ifDTcMX700MvmTJ4CbUktRx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for analogix ANX7411 USB Type-C DRP port controller.
+--Sig_/ifDTcMX700MvmTJ4CbUktRx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Xin Ji <xji@analogixsemi.com>
----
-V6 -> V7: Fix Heikki's comment
-    Rebase on Greg's latest usb-next branch.
-    Move tcpci.h to include/linux/usb/ and fix compiling warning.
-    Remove double definition.
-V5 -> V6: Fix Heikki's comment.
-V4 -> V5: Fix Greg h-k comment, remove DEBUG define
-V3 -> V4: Fix compiling waring
-V2 -> V3: Add changelog history
-V1 -> V2: Fix compiling warning issue
+Hi all,
 
-Signed-off-by: Xin Ji <xji@analogixsemi.com>
----
- drivers/usb/typec/Kconfig   |   11 +
- drivers/usb/typec/Makefile  |    1 +
- drivers/usb/typec/anx7411.c | 1327 +++++++++++++++++++++++++++++++++++
- drivers/usb/typec/anx7411.h |  265 +++++++
- 4 files changed, 1604 insertions(+)
- create mode 100644 drivers/usb/typec/anx7411.c
- create mode 100644 drivers/usb/typec/anx7411.h
+Changes since 20220304:
 
-diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-index 8f921213b17d..eaa4c088aafa 100644
---- a/drivers/usb/typec/Kconfig
-+++ b/drivers/usb/typec/Kconfig
-@@ -52,6 +52,17 @@ source "drivers/usb/typec/ucsi/Kconfig"
- 
- source "drivers/usb/typec/tipd/Kconfig"
- 
-+config TYPEC_ANX7411
-+	tristate "Analogix ANX7411 Type-C DRP Port controller driver"
-+	depends on I2C
-+	depends on USB_ROLE_SWITCH
-+	help
-+	  Say Y or M here if your system has Analogix ANX7411 Type-C DRP Port
-+	  controller driver.
-+
-+	  If you choose to build this driver as a dynamically linked module, the
-+	  module will be called anx7411.ko.
-+
- config TYPEC_RT1719
- 	tristate "Richtek RT1719 Sink Only Type-C controller driver"
- 	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
-diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-index 43626acc0aaf..e4e4db55a55d 100644
---- a/drivers/usb/typec/Makefile
-+++ b/drivers/usb/typec/Makefile
-@@ -6,6 +6,7 @@ obj-$(CONFIG_TYPEC)		+= altmodes/
- obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
- obj-$(CONFIG_TYPEC_UCSI)	+= ucsi/
- obj-$(CONFIG_TYPEC_TPS6598X)	+= tipd/
-+obj-$(CONFIG_TYPEC_ANX7411)	+= anx7411.o
- obj-$(CONFIG_TYPEC_HD3SS3220)	+= hd3ss3220.o
- obj-$(CONFIG_TYPEC_QCOM_PMIC)	+= qcom-pmic-typec.o
- obj-$(CONFIG_TYPEC_STUSB160X) 	+= stusb160x.o
-diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
-new file mode 100644
-index 000000000000..ede39dea8366
---- /dev/null
-+++ b/drivers/usb/typec/anx7411.c
-@@ -0,0 +1,1327 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright(c) 2022, Analogix Semiconductor. All rights reserved.
-+ *
-+ */
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of_graph.h>
-+#include <linux/of_platform.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/usb/pd.h>
-+#include <linux/usb/role.h>
-+#include <linux/usb/tcpci.h>
-+#include <linux/usb/typec.h>
-+#include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_mux.h>
-+#include <linux/workqueue.h>
-+#include <linux/power_supply.h>
-+
-+#include "anx7411.h"
-+
-+static u8 snk_identity[] = {
-+	LOBYTE(VID_ANALOGIX), HIBYTE(VID_ANALOGIX), 0x00, 0x82, /* snk_id_hdr */
-+	0x00, 0x00, 0x00, 0x00,                                 /* snk_cert */
-+	0x00, 0x00, LOBYTE(PID_ANALOGIX), HIBYTE(PID_ANALOGIX), /* 5snk_ama */
-+};
-+
-+static u8 dp_caps[4] = {0xC6, 0x00, 0x00, 0x00};
-+
-+static int anx7411_reg_read(struct i2c_client *client,
-+			    u8 reg_addr)
-+{
-+	return i2c_smbus_read_byte_data(client, reg_addr);
-+}
-+
-+static int anx7411_reg_block_read(struct i2c_client *client,
-+				  u8 reg_addr, u8 len, u8 *buf)
-+{
-+	return i2c_smbus_read_i2c_block_data(client, reg_addr, len, buf);
-+}
-+
-+static int anx7411_reg_write(struct i2c_client *client,
-+			     u8 reg_addr, u8 reg_val)
-+{
-+	return i2c_smbus_write_byte_data(client, reg_addr, reg_val);
-+}
-+
-+static int anx7411_reg_block_write(struct i2c_client *client,
-+				   u8 reg_addr, u8 len, u8 *buf)
-+{
-+	return i2c_smbus_write_i2c_block_data(client, reg_addr, len, buf);
-+}
-+
-+static struct anx7411_i2c_select anx7411_i2c_addr[] = {
-+	{TCPC_ADDRESS1, SPI_ADDRESS1},
-+	{TCPC_ADDRESS2, SPI_ADDRESS2},
-+	{TCPC_ADDRESS3, SPI_ADDRESS3},
-+	{TCPC_ADDRESS4, SPI_ADDRESS4},
-+};
-+
-+static int anx7411_detect_power_mode(struct anx7411_data *ctx)
-+{
-+	int ret;
-+	int mode;
-+
-+	ret = anx7411_reg_read(ctx->spi_client, REQUEST_CURRENT);
-+	if (ret < 0)
-+		return ret;
-+
-+	ctx->typec.request_current = ret * CURRENT_UNIT; /* 50ma per unit */
-+
-+	ret = anx7411_reg_read(ctx->spi_client, REQUEST_VOLTAGE);
-+	if (ret < 0)
-+		return ret;
-+
-+	ctx->typec.request_voltage = ret * VOLTAGE_UNIT; /* 100mv per unit */
-+
-+	if (ctx->psy_online == ANX7411_PSY_OFFLINE) {
-+		ctx->psy_online = ANX7411_PSY_FIXED_ONLINE;
-+		ctx->usb_type = POWER_SUPPLY_USB_TYPE_PD;
-+		power_supply_changed(ctx->psy);
-+	}
-+
-+	if (!ctx->typec.cc_orientation_valid)
-+		return 0;
-+
-+	if (ctx->typec.cc_connect == CC1_CONNECTED)
-+		mode = CC1_RP(ctx->typec.cc_status);
-+	else
-+		mode = CC2_RP(ctx->typec.cc_status);
-+	if (mode) {
-+		typec_set_pwr_opmode(ctx->typec.port, mode - 1);
-+		return 0;
-+	}
-+
-+	typec_set_pwr_opmode(ctx->typec.port, TYPEC_PWR_MODE_PD);
-+
-+	return 0;
-+}
-+
-+static int anx7411_register_partner(struct anx7411_data *ctx,
-+				    int pd, int accessory)
-+{
-+	struct typec_partner_desc desc;
-+
-+	if (ctx->typec.partner)
-+		return 0;
-+
-+	desc.usb_pd = pd;
-+	desc.accessory = accessory;
-+	desc.identity = NULL;
-+	ctx->typec.partner = typec_register_partner(ctx->typec.port, &desc);
-+	if (IS_ERR(ctx->typec.partner)) {
-+		ctx->typec.partner = NULL;
-+		return PTR_ERR(ctx->typec.partner);
-+	}
-+
-+	return 0;
-+}
-+
-+static int anx7411_detect_cc_orientation(struct anx7411_data *ctx)
-+{
-+	int ret;
-+	int cc1_rd, cc2_rd;
-+	int cc1_ra, cc2_ra;
-+	int cc1_rp, cc2_rp;
-+
-+	ret = anx7411_reg_read(ctx->spi_client, CC_STATUS);
-+	if (ret < 0)
-+		return ret;
-+
-+	ctx->typec.cc_status = ret;
-+
-+	cc1_rd = ret & CC1_RD ? 1 : 0;
-+	cc2_rd = ret & CC2_RD ? 1 : 0;
-+	cc1_ra = ret & CC1_RA ? 1 : 0;
-+	cc2_ra = ret & CC2_RA ? 1 : 0;
-+	cc1_rp = CC1_RP(ret);
-+	cc2_rp = CC2_RP(ret);
-+
-+	/* Debug cable, nothing to do */
-+	if (cc1_rd && cc2_rd) {
-+		ctx->typec.cc_orientation_valid = 0;
-+		anx7411_register_partner(ctx, 0, TYPEC_ACCESSORY_DEBUG);
-+		return 0;
-+	}
-+
-+	if (cc1_ra && cc2_ra) {
-+		ctx->typec.cc_orientation_valid = 0;
-+		anx7411_register_partner(ctx, 0, TYPEC_ACCESSORY_AUDIO);
-+		return 0;
-+	}
-+
-+	ctx->typec.cc_orientation_valid = 1;
-+
-+	anx7411_register_partner(ctx, 1, TYPEC_ACCESSORY_NONE);
-+
-+	if (cc1_rd || cc1_rp) {
-+		typec_set_orientation(ctx->typec.port,
-+				      TYPEC_ORIENTATION_NORMAL);
-+		ctx->typec.cc_connect = CC1_CONNECTED;
-+	}
-+
-+	if (cc2_rd || cc2_rp) {
-+		typec_set_orientation(ctx->typec.port,
-+				      TYPEC_ORIENTATION_REVERSE);
-+		ctx->typec.cc_connect = CC2_CONNECTED;
-+	}
-+
-+	return 0;
-+}
-+
-+static int anx7411_set_mux(struct anx7411_data *ctx, int pin_assignment)
-+{
-+	int mode = TYPEC_STATE_SAFE;
-+
-+	switch (pin_assignment) {
-+	case SELECT_PIN_ASSIGMENT_U:
-+		/* default 4 line USB 3.1 */
-+		mode = TYPEC_STATE_MODAL;
-+		break;
-+	case SELECT_PIN_ASSIGMENT_C:
-+	case SELECT_PIN_ASSIGMENT_E:
-+		/* 4 line DP */
-+		mode = TYPEC_STATE_SAFE;
-+		break;
-+	case SELECT_PIN_ASSIGMENT_D:
-+		/* 2 line DP, 2 line USB */
-+		mode = TYPEC_MODE_USB3;
-+		break;
-+	default:
-+		mode = TYPEC_STATE_SAFE;
-+		break;
-+	}
-+
-+	ctx->typec.pin_assignment = pin_assignment;
-+
-+	return typec_set_mode(ctx->typec.port, mode);
-+}
-+
-+static void anx7411_set_usb_role(struct anx7411_data *ctx, enum usb_role role)
-+{
-+	if (!ctx->typec.role_sw)
-+		return;
-+
-+	usb_role_switch_set_role(ctx->typec.role_sw, role);
-+}
-+
-+static int anx7411_data_role_detect(struct anx7411_data *ctx)
-+{
-+	int ret;
-+
-+	ret = anx7411_reg_read(ctx->spi_client, SYSTEM_STSTUS);
-+	if (ret < 0)
-+		return ret;
-+
-+	ctx->typec.data_role = (ret & DATA_ROLE) ? TYPEC_HOST : TYPEC_DEVICE;
-+	ctx->typec.vconn_role = (ret & VCONN_STATUS) ? TYPEC_SOURCE : TYPEC_SINK;
-+
-+	typec_set_data_role(ctx->typec.port, ctx->typec.data_role);
-+	typec_set_vconn_role(ctx->typec.port, ctx->typec.vconn_role);
-+
-+	if (ctx->typec.data_role == TYPEC_HOST)
-+		anx7411_set_usb_role(ctx, USB_ROLE_HOST);
-+	else
-+		anx7411_set_usb_role(ctx, USB_ROLE_DEVICE);
-+
-+	return 0;
-+}
-+
-+static int anx7411_power_role_detect(struct anx7411_data *ctx)
-+{
-+	int ret;
-+
-+	ret = anx7411_reg_read(ctx->spi_client, SYSTEM_STSTUS);
-+	if (ret < 0)
-+		return ret;
-+
-+	ctx->typec.power_role = (ret & SINK_STATUS) ? TYPEC_SINK : TYPEC_SOURCE;
-+
-+	if (ctx->typec.power_role == TYPEC_SOURCE) {
-+		ctx->typec.request_current = DEF_1_5A;
-+		ctx->typec.request_voltage = DEF_5V;
-+	}
-+
-+	typec_set_pwr_role(ctx->typec.port, ctx->typec.power_role);
-+
-+	return 0;
-+}
-+
-+static int anx7411_cc_status_detect(struct anx7411_data *ctx)
-+{
-+	anx7411_detect_cc_orientation(ctx);
-+	anx7411_detect_power_mode(ctx);
-+
-+	return 0;
-+}
-+
-+static int anx7411_partner_unregister_altmode(struct anx7411_data *ctx)
-+{
-+	int i;
-+
-+	ctx->typec.dp_altmode_enter = 0;
-+	ctx->typec.cust_altmode_enter = 0;
-+
-+	for (i = 0; i < MAX_ALTMODE; i++)
-+		if (ctx->typec.amode[i]) {
-+			typec_unregister_altmode(ctx->typec.amode[i]);
-+			ctx->typec.amode[i] = NULL;
-+		}
-+
-+	ctx->typec.pin_assignment = 0;
-+	return 0;
-+}
-+
-+static int anx7411_typec_register_altmode(struct anx7411_data *ctx,
-+					  int svid, int vdo)
-+{
-+	struct device *dev = &ctx->spi_client->dev;
-+	struct typec_altmode_desc desc;
-+	int i;
-+
-+	desc.svid = svid;
-+	desc.vdo = vdo;
-+
-+	for (i = 0; i < MAX_ALTMODE; i++)
-+		if (!ctx->typec.amode[i])
-+			break;
-+
-+	desc.mode = i + 1; /* start with 1 */
-+
-+	if (i >= MAX_ALTMODE) {
-+		dev_err(dev, "no altmode space for registering\n");
-+		return -ENOMEM;
-+	}
-+
-+	ctx->typec.amode[i] = typec_partner_register_altmode(ctx->typec.partner,
-+							     &desc);
-+	if (IS_ERR(ctx->typec.amode[i])) {
-+		dev_err(dev, "failed to register altmode\n");
-+		ctx->typec.amode[i] = NULL;
-+		return PTR_ERR(ctx->typec.amode);
-+	}
-+
-+	return 0;
-+}
-+
-+static int anx7411_unregister_partner(struct anx7411_data *ctx)
-+{
-+	if (ctx->typec.partner) {
-+		typec_unregister_partner(ctx->typec.partner);
-+		ctx->typec.partner = NULL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int anx7411_update_altmode(struct anx7411_data *ctx, int svid)
-+{
-+	int i;
-+
-+	if (svid == DP_SVID)
-+		ctx->typec.dp_altmode_enter = 1;
-+	else
-+		ctx->typec.cust_altmode_enter = 1;
-+
-+	for (i = 0; i < MAX_ALTMODE; i++) {
-+		if (!ctx->typec.amode[i])
-+			continue;
-+
-+		if (ctx->typec.amode[i]->svid == svid) {
-+			typec_altmode_update_active(ctx->typec.amode[i], true);
-+			typec_altmode_notify(ctx->typec.amode[i],
-+					     ctx->typec.pin_assignment,
-+					     &ctx->typec.data);
-+			break;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int anx7411_register_altmode(struct anx7411_data *ctx,
-+				    bool dp_altmode, u8 *buf)
-+{
-+	int ret;
-+	int svid;
-+	int mid;
-+
-+	if (!ctx->typec.partner)
-+		return 0;
-+
-+	svid = DP_SVID;
-+	if (dp_altmode) {
-+		mid = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
-+
-+		return anx7411_typec_register_altmode(ctx, svid, mid);
-+	}
-+
-+	svid = (buf[3] << 8) | buf[2];
-+	if ((buf[0] & VDM_CMD_AND_ACK_MASK) != (VDM_ACK | VDM_CMD_ENTER_MODE))
-+		return anx7411_update_altmode(ctx, svid);
-+
-+	if ((buf[0] & VDM_CMD_AND_ACK_MASK) != (VDM_ACK | VDM_CMD_DIS_MOD))
-+		return 0;
-+
-+	mid = buf[4] | (buf[5] << 8) | (buf[6] << 16) | (buf[7] << 24);
-+
-+	ret = anx7411_typec_register_altmode(ctx, svid, mid);
-+	if (ctx->typec.cust_altmode_enter)
-+		ret |= anx7411_update_altmode(ctx, svid);
-+
-+	return ret;
-+}
-+
-+static int anx7411_parse_cmd(struct anx7411_data *ctx, u8 type, u8 *buf, u8 len)
-+{
-+	struct device *dev = &ctx->spi_client->dev;
-+	u8 cur_50ma, vol_100mv;
-+
-+	dev_info(dev, "received message: type:0x%.02x, len:%d, buf[0]:%d\n",
-+		 type, len, buf[0]);
-+
-+	switch (type) {
-+	case TYPE_SRC_CAP:
-+		cur_50ma = anx7411_reg_read(ctx->spi_client, REQUEST_CURRENT);
-+		vol_100mv = anx7411_reg_read(ctx->spi_client, REQUEST_VOLTAGE);
-+		dev_info(dev, "get current(%dma), voltage(%dmv), power(%dmw)\n",
-+			 cur_50ma * CURRENT_UNIT, vol_100mv * VOLTAGE_UNIT,
-+			 cur_50ma * vol_100mv * 5);
-+
-+		ctx->typec.request_voltage = vol_100mv * VOLTAGE_UNIT;
-+		ctx->typec.request_current = cur_50ma * CURRENT_UNIT;
-+
-+		ctx->psy_online = ANX7411_PSY_FIXED_ONLINE;
-+		ctx->usb_type = POWER_SUPPLY_USB_TYPE_PD;
-+		power_supply_changed(ctx->psy);
-+		break;
-+	case TYPE_SNK_CAP:
-+		break;
-+	case TYPE_SVID:
-+		break;
-+	case TYPE_SNK_IDENTITY:
-+		break;
-+	case TYPE_GET_DP_ALT_ENTER:
-+		/* DP alt mode enter success */
-+		if (buf[0])
-+			anx7411_update_altmode(ctx, DP_SVID);
-+		break;
-+	case TYPE_DP_ALT_ENTER:
-+		/* Update DP altmode */
-+		anx7411_update_altmode(ctx, DP_SVID);
-+		break;
-+	case TYPE_OBJ_REQ:
-+		anx7411_detect_power_mode(ctx);
-+		break;
-+	case TYPE_DP_CONFIGURE:
-+		anx7411_set_mux(ctx, buf[1]);
-+		break;
-+	case TYPE_DP_DISCOVER_MODES_INFO:
-+		/* Make sure discover modes valid */
-+		if (buf[0] | buf[1])
-+			/* Register DP Altmode */
-+			anx7411_register_altmode(ctx, 1, buf);
-+		break;
-+	case TYPE_VDM:
-+		/* Register other altmode */
-+		anx7411_register_altmode(ctx, 0, buf);
-+		break;
-+	default:
-+		dev_err(dev, "ignore message(0x%.02x).\n", type);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static u8 checksum(struct device *dev, u8 *buf, u8 len)
-+{
-+	u8 ret = 0;
-+	u8 i;
-+
-+	for (i = 0; i < len; i++)
-+		ret += buf[i];
-+
-+	return ret;
-+}
-+
-+static int anx7411_read_msg_ctrl_status(struct i2c_client *client)
-+{
-+	return anx7411_reg_read(client, CMD_SEND_BUF);
-+}
-+
-+static int anx7411_wait_msg_empty(struct i2c_client *client)
-+{
-+	int val;
-+
-+	return readx_poll_timeout(anx7411_read_msg_ctrl_status,
-+				  client, val, (val < 0) || (val == 0),
-+				  2000, 2000 * 150);
-+}
-+
-+static int anx7411_send_msg(struct anx7411_data *ctx, u8 type, u8 *buf, u8 size)
-+{
-+	struct device *dev = &ctx->spi_client->dev;
-+	u8 msg[MSG_LEN];
-+	u8 crc;
-+	int ret;
-+
-+	if (size)
-+		memcpy(&msg[MSG_RAWDATA], buf, size);
-+	msg[MSG_TYPE] = type;
-+	msg[MSG_HEADER] = size + 1;
-+
-+	crc = checksum(dev, msg, size + HEADER_LEN);
-+	msg[size + HEADER_LEN] = 0 - crc;
-+
-+	ret = anx7411_wait_msg_empty(ctx->spi_client);
-+	if (ret)
-+		return ret;
-+
-+	anx7411_reg_block_write(ctx->spi_client,
-+				CMD_SEND_BUF + 1, size + HEADER_LEN,
-+				&msg[MSG_TYPE]);
-+	return anx7411_reg_write(ctx->spi_client, CMD_SEND_BUF,
-+				 msg[MSG_HEADER]);
-+}
-+
-+static int anx7411_process_cmd(struct anx7411_data *ctx)
-+{
-+	struct device *dev = &ctx->spi_client->dev;
-+	u8 msg[MSG_LEN];
-+	u8 len;
-+	u8 crc;
-+
-+	/* Read message from firmware */
-+	anx7411_reg_block_read(ctx->spi_client, CMD_RECV_BUF, MSG_LEN, msg);
-+	anx7411_reg_write(ctx->spi_client, CMD_RECV_BUF, 0);
-+
-+	if (!msg[MSG_HEADER])
-+		return 0;
-+
-+	len = msg[MSG_HEADER] & MSG_LEN_MASK;
-+	crc = checksum(dev, msg, len + HEADER_LEN);
-+	if (crc) {
-+		dev_err(dev, "message error crc(0x%.02x)\n", crc);
-+		return -ERANGE;
-+	}
-+
-+	return anx7411_parse_cmd(ctx, msg[MSG_TYPE],
-+				 &msg[MSG_RAWDATA], len - 1);
-+}
-+
-+static void anx7411_translate_payload(struct device *dev, __le32 *payload,
-+				      u32 *pdo, int nr, const char *type)
-+{
-+	int i;
-+
-+	if (nr > PDO_MAX_OBJECTS) {
-+		dev_err(dev, "nr(%d) exceed PDO_MAX_OBJECTS(%d)\n",
-+			nr, PDO_MAX_OBJECTS);
-+
-+		return;
-+	}
-+
-+	for (i = 0; i < nr; i++)
-+		payload[i] = cpu_to_le32(pdo[i]);
-+}
-+
-+static void anx7411_config(struct anx7411_data *ctx)
-+{
-+	struct device *dev = &ctx->spi_client->dev;
-+	struct typec_params *typecp = &ctx->typec;
-+	__le32 payload[PDO_MAX_OBJECTS];
-+
-+	/* Config PD FW work under PD 2.0 */
-+	anx7411_reg_write(ctx->spi_client, PD_REV_INIT, PD_REV20);
-+	anx7411_reg_write(ctx->tcpc_client, FW_CTRL_0,
-+			  UNSTRUCT_VDM_EN | DELAY_200MS |
-+			  VSAFE1 | FRS_EN);
-+	anx7411_reg_write(ctx->spi_client, FW_CTRL_1,
-+			  AUTO_PD_EN | FORCE_SEND_RDO);
-+
-+	/* Set VBUS current threshold */
-+	anx7411_reg_write(ctx->tcpc_client, VBUS_THRESHOLD_H, 0xff);
-+	anx7411_reg_write(ctx->tcpc_client, VBUS_THRESHOLD_L, 0x03);
-+
-+	/* Fix dongle compatible issue */
-+	anx7411_reg_write(ctx->tcpc_client, FW_PARAM,
-+			  anx7411_reg_read(ctx->tcpc_client, FW_PARAM) |
-+			  DONGLE_IOP);
-+	anx7411_reg_write(ctx->spi_client, INT_MASK, 0);
-+
-+	anx7411_reg_write(ctx->spi_client, PD_EXT_MSG_CTRL, 0xFF);
-+
-+	if (typecp->caps_flags & HAS_SOURCE_CAP) {
-+		anx7411_translate_payload(dev, payload, typecp->src_pdo,
-+					  typecp->src_pdo_nr, "source");
-+		anx7411_send_msg(ctx, TYPE_SRC_CAP, (u8 *)&payload,
-+				 typecp->src_pdo_nr * 4);
-+		anx7411_send_msg(ctx, TYPE_SNK_IDENTITY, snk_identity,
-+				 sizeof(snk_identity));
-+		anx7411_send_msg(ctx, TYPE_SET_SNK_DP_CAP, dp_caps,
-+				 sizeof(dp_caps));
-+	}
-+
-+	if (typecp->caps_flags & HAS_SINK_CAP) {
-+		anx7411_translate_payload(dev, payload, typecp->sink_pdo,
-+					  typecp->sink_pdo_nr, "sink");
-+		anx7411_send_msg(ctx, TYPE_SNK_CAP, (u8 *)&payload,
-+				 typecp->sink_pdo_nr * 4);
-+	}
-+
-+	if (typecp->caps_flags & HAS_SINK_WATT) {
-+		if (typecp->sink_watt) {
-+			anx7411_reg_write(ctx->spi_client, MAX_POWER,
-+					  typecp->sink_watt);
-+			/* Set min power to 1W */
-+			anx7411_reg_write(ctx->spi_client, MIN_POWER, 2);
-+		}
-+
-+		if (typecp->sink_voltage)
-+			anx7411_reg_write(ctx->spi_client, MAX_VOLTAGE,
-+					  typecp->sink_voltage);
-+	}
-+
-+	if (!typecp->caps_flags)
-+		usleep_range(5000, 6000);
-+
-+	ctx->fw_version = anx7411_reg_read(ctx->spi_client, FW_VER);
-+	ctx->fw_subversion = anx7411_reg_read(ctx->spi_client,
-+					      FW_SUBVER);
-+}
-+
-+static void anx7411_chip_standby(struct anx7411_data *ctx)
-+{
-+	anx7411_reg_write(ctx->spi_client, OCM_CTRL_0,
-+			  anx7411_reg_read(ctx->spi_client, OCM_CTRL_0) |
-+			  OCM_RESET);
-+	anx7411_reg_write(ctx->tcpc_client, ANALOG_CTRL_10, 0x80);
-+	/* Set TCPC to RD and DRP enable */
-+	anx7411_reg_write(ctx->tcpc_client,
-+			  TCPC_ROLE_CTRL,
-+			  TCPC_ROLE_CTRL_DRP |
-+			  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC1_SHIFT) |
-+			  (TCPC_ROLE_CTRL_CC_RD << TCPC_ROLE_CTRL_CC2_SHIFT));
-+
-+	/* Send DRP toggle command */
-+	anx7411_reg_write(ctx->tcpc_client, TCPC_COMMAND,
-+			  TCPC_CMD_LOOK4CONNECTION);
-+
-+	/* Send TCPC enter standby command */
-+	anx7411_reg_write(ctx->tcpc_client, TCPC_COMMAND, TCPC_CMD_I2C_IDLE);
-+}
-+
-+static void anx7411_work_func(struct work_struct *work)
-+{
-+	int ret;
-+	u8 buf[STATUS_LEN];
-+	u8 int_change; /* Interrupt change */
-+	u8 int_status; /* Firmware status update */
-+	u8 alert0, alert1; /* Interrupt alert source */
-+	struct anx7411_data *ctx = container_of(work, struct anx7411_data, work);
-+
-+	mutex_lock(&ctx->lock);
-+
-+	/* Read interrupt change status */
-+	ret = anx7411_reg_block_read(ctx->spi_client, INT_STS, STATUS_LEN, buf);
-+	if (ret < 0) {
-+		/* Power standby mode, just return */
-+		goto unlock;
-+	}
-+	int_change = buf[0];
-+	int_status = buf[1];
-+
-+	/* Read alert register */
-+	ret = anx7411_reg_block_read(ctx->tcpc_client, ALERT_0, STATUS_LEN, buf);
-+	if (ret < 0)
-+		goto unlock;
-+
-+	alert0 = buf[0];
-+	alert1 = buf[1];
-+
-+	/* Clear interrupt and alert status */
-+	anx7411_reg_write(ctx->spi_client, INT_STS, 0);
-+	anx7411_reg_write(ctx->tcpc_client, ALERT_0, alert0);
-+	anx7411_reg_write(ctx->tcpc_client, ALERT_1, alert1);
-+
-+	if (alert1 & INTP_POW_OFF) {
-+		anx7411_partner_unregister_altmode(ctx);
-+		anx7411_set_usb_role(ctx, USB_ROLE_NONE);
-+		anx7411_unregister_partner(ctx);
-+		ctx->psy_online = ANX7411_PSY_OFFLINE;
-+		ctx->usb_type = POWER_SUPPLY_USB_TYPE_C;
-+		ctx->typec.request_voltage = 0;
-+		ctx->typec.request_current = 0;
-+		power_supply_changed(ctx->psy);
-+		anx7411_chip_standby(ctx);
-+		goto unlock;
-+	}
-+
-+	if ((alert0 & SOFTWARE_INT) && (int_change & OCM_BOOT_UP)) {
-+		anx7411_config(ctx);
-+		anx7411_data_role_detect(ctx);
-+		anx7411_power_role_detect(ctx);
-+		anx7411_set_mux(ctx, SELECT_PIN_ASSIGMENT_C);
-+	}
-+
-+	if (alert0 & RECEIVED_MSG)
-+		anx7411_process_cmd(ctx);
-+
-+	ret = (int_status & DATA_ROLE) ? TYPEC_HOST : TYPEC_DEVICE;
-+	if (ctx->typec.data_role != ret)
-+		anx7411_data_role_detect(ctx);
-+
-+	ret = (int_status & SINK_STATUS) ? TYPEC_SINK : TYPEC_SOURCE;
-+	if (ctx->typec.power_role != ret)
-+		anx7411_power_role_detect(ctx);
-+
-+	if ((alert0 & SOFTWARE_INT) && (int_change & CC_STATUS_CHANGE))
-+		anx7411_cc_status_detect(ctx);
-+
-+unlock:
-+	mutex_unlock(&ctx->lock);
-+}
-+
-+static irqreturn_t anx7411_intr_isr(int irq, void *data)
-+{
-+	struct anx7411_data *ctx = (struct anx7411_data *)data;
-+
-+	queue_work(ctx->workqueue, &ctx->work);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int anx7411_register_i2c_dummy_clients(struct anx7411_data *ctx,
-+					      struct i2c_client *client)
-+{
-+	int i;
-+	u8 spi_addr;
-+
-+	for (i = 0; i < sizeof(anx7411_i2c_addr); i++) {
-+		if (client->addr == (anx7411_i2c_addr[i].tcpc_address >> 1)) {
-+			spi_addr = anx7411_i2c_addr[i].spi_address >> 1;
-+			ctx->spi_client = i2c_new_dummy_device(client->adapter,
-+							       spi_addr);
-+			if (ctx->spi_client)
-+				return 0;
-+		}
-+	}
-+
-+	dev_err(&client->dev, "unable to get SPI slave\n");
-+	return -ENOMEM;
-+}
-+
-+static void anx7411_port_unregister_altmodes(struct typec_altmode **adev)
-+{
-+	int i;
-+
-+	for (i = 0; i < MAX_ALTMODE; i++)
-+		if (adev[i]) {
-+			typec_unregister_altmode(adev[i]);
-+			adev[i] = NULL;
-+		}
-+}
-+
-+static int anx7411_usb_mux_set(struct typec_mux *mux,
-+			       struct typec_mux_state *state)
-+{
-+	struct anx7411_data *ctx = typec_mux_get_drvdata(mux);
-+	struct device *dev = &ctx->spi_client->dev;
-+	int has_dp;
-+
-+	has_dp = (state->alt && state->alt->svid == USB_TYPEC_DP_SID &&
-+		  state->alt->mode == USB_TYPEC_DP_MODE);
-+	if (!has_dp)
-+		dev_err(dev, "dp altmode not register\n");
-+
-+	return 0;
-+}
-+
-+static int anx7411_usb_set_orientation(struct typec_switch *sw,
-+				       enum typec_orientation orientation)
-+{
-+	/* No need set */
-+
-+	return 0;
-+}
-+
-+static int anx7411_register_switch(struct anx7411_data *ctx,
-+				   struct device *dev,
-+				   struct fwnode_handle *fwnode)
-+{
-+	struct typec_switch_desc sw_desc = { };
-+
-+	sw_desc.fwnode = fwnode;
-+	sw_desc.drvdata = ctx;
-+	sw_desc.name = fwnode_get_name(fwnode);
-+	sw_desc.set = anx7411_usb_set_orientation;
-+
-+	ctx->typec.typec_switch = typec_switch_register(dev, &sw_desc);
-+	if (IS_ERR(ctx->typec.typec_switch)) {
-+		dev_err(dev, "switch register failed\n");
-+		return PTR_ERR(ctx->typec.typec_switch);
-+	}
-+
-+	return 0;
-+}
-+
-+static int anx7411_register_mux(struct anx7411_data *ctx,
-+				struct device *dev,
-+				struct fwnode_handle *fwnode)
-+{
-+	struct typec_mux_desc mux_desc = { };
-+
-+	mux_desc.fwnode = fwnode;
-+	mux_desc.drvdata = ctx;
-+	mux_desc.name = fwnode_get_name(fwnode);
-+	mux_desc.set = anx7411_usb_mux_set;
-+
-+	ctx->typec.typec_mux = typec_mux_register(dev, &mux_desc);
-+	if (IS_ERR(ctx->typec.typec_mux)) {
-+		dev_err(dev, "mux register failed\n");
-+		return PTR_ERR(ctx->typec.typec_mux);
-+	}
-+
-+	return 0;
-+}
-+
-+static void anx7411_unregister_mux(struct anx7411_data *ctx)
-+{
-+	if (ctx->typec.typec_mux) {
-+		typec_mux_unregister(ctx->typec.typec_mux);
-+		ctx->typec.typec_mux = NULL;
-+	}
-+}
-+
-+static void anx7411_unregister_switch(struct anx7411_data *ctx)
-+{
-+	if (ctx->typec.typec_switch) {
-+		typec_switch_unregister(ctx->typec.typec_switch);
-+		ctx->typec.typec_switch = NULL;
-+	}
-+}
-+
-+static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
-+				      struct device *dev)
-+{
-+	int ret;
-+	struct device_node *node;
-+
-+	node = of_find_node_by_name(dev->of_node, "orientation_switch");
-+	if (!node) {
-+		dev_info(dev, "no typec switch exist\n");
-+		return 0;
-+	}
-+
-+	ret = anx7411_register_switch(ctx, dev, &node->fwnode);
-+	if (ret) {
-+		dev_err(dev, "failed register switch");
-+		return ret;
-+	}
-+
-+	node = of_find_node_by_name(dev->of_node, "mode_switch");
-+	if (!node) {
-+		dev_err(dev, "no typec mux exist");
-+		ret = -ENODEV;
-+		goto unregister_switch;
-+	}
-+
-+	ret = anx7411_register_mux(ctx, dev, &node->fwnode);
-+	if (ret) {
-+		dev_err(dev, "failed register mode switch");
-+		ret = -ENODEV;
-+		goto unregister_switch;
-+	}
-+
-+	return 0;
-+
-+unregister_switch:
-+	anx7411_unregister_switch(ctx);
-+
-+	return ret;
-+}
-+
-+static int anx7411_typec_port_probe(struct anx7411_data *ctx,
-+				    struct device *dev)
-+{
-+	struct typec_capability *cap = &ctx->typec.caps;
-+	struct typec_params *typecp = &ctx->typec;
-+	struct fwnode_handle *fwnode;
-+	const char *buf;
-+	int ret, i;
-+
-+	fwnode = device_get_named_child_node(dev, "connector");
-+	if (!fwnode)
-+		return -EINVAL;
-+
-+	ret = fwnode_property_read_string(fwnode, "power-role", &buf);
-+	if (ret) {
-+		dev_err(dev, "power-role not found: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = typec_find_port_power_role(buf);
-+	if (ret < 0)
-+		return ret;
-+	cap->type = ret;
-+
-+	ret = fwnode_property_read_string(fwnode, "data-role", &buf);
-+	if (ret) {
-+		dev_err(dev, "data-role not found: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = typec_find_port_data_role(buf);
-+	if (ret < 0)
-+		return ret;
-+	cap->data = ret;
-+
-+	ret = fwnode_property_read_string(fwnode, "try-power-role", &buf);
-+	if (ret) {
-+		dev_err(dev, "try-power-role not found: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = typec_find_power_role(buf);
-+	if (ret < 0)
-+		return ret;
-+	cap->prefer_role = ret;
-+
-+	/* Get source pdos */
-+	ret = fwnode_property_count_u32(fwnode, "source-pdos");
-+	if (ret > 0) {
-+		dev_info(dev, "%d source-pdos found\n", ret);
-+		typecp->src_pdo_nr = min(ret, PDO_MAX_OBJECTS);
-+		ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
-+						     typecp->src_pdo,
-+						     typecp->src_pdo_nr);
-+		if (ret < 0) {
-+			dev_err(dev, "source cap validate failed: %d\n", ret);
-+			return -EINVAL;
-+		}
-+
-+		typecp->caps_flags |= HAS_SOURCE_CAP;
-+	}
-+
-+	ret = fwnode_property_count_u32(fwnode, "sink-pdos");
-+	if (ret > 0) {
-+		dev_info(dev, "%d sink-pdos found\n", ret);
-+		typecp->sink_pdo_nr = min(ret, PDO_MAX_OBJECTS);
-+		ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
-+						     typecp->sink_pdo,
-+						     typecp->sink_pdo_nr);
-+		if (ret < 0) {
-+			dev_err(dev, "sink cap validate failed: %d\n", ret);
-+			return -EINVAL;
-+		}
-+
-+		for (i = 0; i < typecp->sink_pdo_nr; i++) {
-+			ret = 0;
-+			switch (pdo_type(typecp->sink_pdo[i])) {
-+			case PDO_TYPE_FIXED:
-+				ret = pdo_fixed_voltage(typecp->sink_pdo[i]);
-+				break;
-+			case PDO_TYPE_BATT:
-+			case PDO_TYPE_VAR:
-+				ret = pdo_max_voltage(typecp->sink_pdo[i]);
-+				break;
-+			case PDO_TYPE_APDO:
-+			default:
-+				ret = 0;
-+				break;
-+			}
-+
-+			/* 100mv per unit */
-+			typecp->sink_voltage = max(5000, ret) / 100;
-+		}
-+
-+		typecp->caps_flags |= HAS_SINK_CAP;
-+	}
-+
-+	if (!fwnode_property_read_u32(fwnode, "op-sink-microwatt", &ret)) {
-+		dev_info(dev, "%d sink-microwat found\n", ret);
-+		typecp->sink_watt = ret / 500000; /* 500mw per unit */
-+		typecp->caps_flags |= HAS_SINK_WATT;
-+	}
-+
-+	cap->fwnode = fwnode;
-+
-+	ctx->typec.role_sw = usb_role_switch_get(dev);
-+	if (IS_ERR(ctx->typec.role_sw)) {
-+		dev_err(dev, "USB role switch not found.\n");
-+		ctx->typec.role_sw = NULL;
-+	}
-+
-+	ctx->typec.port = typec_register_port(dev, cap);
-+	if (IS_ERR(ctx->typec.port)) {
-+		ret = PTR_ERR(ctx->typec.port);
-+		ctx->typec.port = NULL;
-+		dev_err(dev, "Failed to register type c port %d\n", ret);
-+		return ret;
-+	}
-+
-+	typec_port_register_altmodes(ctx->typec.port, NULL, ctx,
-+				     ctx->typec.port_amode,
-+				     MAX_ALTMODE);
-+
-+	return 0;
-+}
-+
-+static int anx7411_typec_check_connection(struct anx7411_data *ctx)
-+{
-+	int ret;
-+
-+	ret = anx7411_reg_read(ctx->spi_client, FW_VER);
-+	if (ret < 0)
-+		return 0; /* No device attached in typec port */
-+
-+	/* Clear interrupt and alert status */
-+	anx7411_reg_write(ctx->spi_client, INT_STS, 0);
-+	anx7411_reg_write(ctx->tcpc_client, ALERT_0, 0xFF);
-+	anx7411_reg_write(ctx->tcpc_client, ALERT_1, 0xFF);
-+
-+	anx7411_cc_status_detect(ctx);
-+	anx7411_power_role_detect(ctx);
-+	anx7411_data_role_detect(ctx);
-+	anx7411_set_mux(ctx, SELECT_PIN_ASSIGMENT_C);
-+
-+	anx7411_send_msg(ctx, TYPE_GET_DP_ALT_ENTER, NULL, 0);
-+	anx7411_send_msg(ctx, TYPE_GET_DP_DISCOVER_MODES_INFO, NULL, 0);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused anx7411_runtime_pm_suspend(struct device *dev)
-+{
-+	struct anx7411_data *ctx = dev_get_drvdata(dev);
-+
-+	mutex_lock(&ctx->lock);
-+
-+	anx7411_partner_unregister_altmode(ctx);
-+
-+	if (ctx->typec.partner)
-+		anx7411_unregister_partner(ctx);
-+
-+	mutex_unlock(&ctx->lock);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused anx7411_runtime_pm_resume(struct device *dev)
-+{
-+	struct anx7411_data *ctx = dev_get_drvdata(dev);
-+
-+	mutex_lock(&ctx->lock);
-+	/* Detect PD connection */
-+	anx7411_typec_check_connection(ctx);
-+
-+	mutex_unlock(&ctx->lock);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops anx7411_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-+				pm_runtime_force_resume)
-+	SET_RUNTIME_PM_OPS(anx7411_runtime_pm_suspend,
-+			   anx7411_runtime_pm_resume, NULL)
-+};
-+
-+static void anx7411_get_gpio_irq(struct anx7411_data *ctx)
-+{
-+	struct device *dev = &ctx->tcpc_client->dev;
-+
-+	ctx->intp_gpiod = devm_gpiod_get_optional(dev, "interrupt", GPIOD_IN);
-+	if (!ctx->intp_gpiod) {
-+		dev_err(dev, "no interrupt gpio property\n");
-+		return;
-+	}
-+
-+	ctx->intp_irq = gpiod_to_irq(ctx->intp_gpiod);
-+	dev_info(dev, "request gpio(%d) irq(%d)\n",
-+		 desc_to_gpio(ctx->intp_gpiod), ctx->intp_irq);
-+
-+	if (!ctx->intp_irq)
-+		dev_err(dev, "failed to get GPIO IRQ\n");
-+}
-+
-+static const char *anx7411_psy_name_prefix = "anx7411-source-psy-";
-+
-+static enum power_supply_usb_type anx7411_psy_usb_types[] = {
-+	POWER_SUPPLY_USB_TYPE_C,
-+	POWER_SUPPLY_USB_TYPE_PD,
-+	POWER_SUPPLY_USB_TYPE_PD_PPS,
-+};
-+
-+static enum power_supply_property anx7411_psy_props[] = {
-+	POWER_SUPPLY_PROP_USB_TYPE,
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_VOLTAGE_MIN,
-+	POWER_SUPPLY_PROP_VOLTAGE_MAX,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_MAX,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+};
-+
-+static int anx7411_psy_set_prop(struct power_supply *psy,
-+				enum power_supply_property psp,
-+				const union power_supply_propval *val)
-+{
-+	struct anx7411_data *ctx = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	if (psp == POWER_SUPPLY_PROP_ONLINE)
-+		ctx->psy_online = val->intval;
-+	else
-+		ret = -EINVAL;
-+
-+	power_supply_changed(ctx->psy);
-+	return ret;
-+}
-+
-+static int anx7411_psy_prop_writeable(struct power_supply *psy,
-+				      enum power_supply_property psp)
-+{
-+	return psp == POWER_SUPPLY_PROP_ONLINE;
-+}
-+
-+static int anx7411_psy_get_prop(struct power_supply *psy,
-+				enum power_supply_property psp,
-+				union power_supply_propval *val)
-+{
-+	struct anx7411_data *ctx = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_USB_TYPE:
-+		val->intval = ctx->usb_type;
-+		break;
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = ctx->psy_online;
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+	case POWER_SUPPLY_PROP_VOLTAGE_MIN:
-+	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
-+		val->intval = (ctx->psy_online) ?
-+			ctx->typec.request_voltage * 1000 : 0;
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+	case POWER_SUPPLY_PROP_CURRENT_MAX:
-+		val->intval = (ctx->psy_online) ?
-+			ctx->typec.request_current * 1000 : 0;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static int anx7411_psy_register(struct anx7411_data *ctx)
-+{
-+	struct power_supply_config psy_cfg = {};
-+	const char *port_dev_name = dev_name(ctx->dev);
-+	size_t psy_name_len = strlen(anx7411_psy_name_prefix) +
-+				     strlen(port_dev_name) + 1;
-+	char *psy_name;
-+	struct power_supply_desc *psy_desc = &ctx->psy_desc;
-+
-+	psy_cfg.drv_data = ctx;
-+	psy_cfg.fwnode = dev_fwnode(ctx->dev);
-+	psy_name = devm_kzalloc(ctx->dev, psy_name_len, GFP_KERNEL);
-+	if (!psy_name) {
-+		dev_warn(ctx->dev, "unable to alloc psy memory\n");
-+		return -ENOMEM;
-+	}
-+
-+	snprintf(psy_name, psy_name_len, "%s%s", anx7411_psy_name_prefix,
-+		 port_dev_name);
-+
-+	psy_desc->name = psy_name;
-+	psy_desc->type = POWER_SUPPLY_TYPE_USB;
-+	psy_desc->usb_types = anx7411_psy_usb_types;
-+	psy_desc->num_usb_types = ARRAY_SIZE(anx7411_psy_usb_types);
-+	psy_desc->properties = anx7411_psy_props,
-+	psy_desc->num_properties = ARRAY_SIZE(anx7411_psy_props),
-+
-+	psy_desc->get_property = anx7411_psy_get_prop,
-+	psy_desc->set_property = anx7411_psy_set_prop,
-+	psy_desc->property_is_writeable = anx7411_psy_prop_writeable,
-+
-+	ctx->usb_type = POWER_SUPPLY_USB_TYPE_C;
-+	ctx->psy = devm_power_supply_register(ctx->dev, psy_desc, &psy_cfg);
-+
-+	if (IS_ERR(ctx->psy))
-+		dev_warn(ctx->dev, "unable to register psy\n");
-+
-+	return PTR_ERR_OR_ZERO(ctx->psy);
-+}
-+
-+static int anx7411_i2c_probe(struct i2c_client *client,
-+			     const struct i2c_device_id *id)
-+{
-+	struct anx7411_data *plat;
-+	struct device *dev = &client->dev;
-+	int ret;
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_I2C_BLOCK))
-+		return -ENODEV;
-+
-+	plat = devm_kzalloc(dev, sizeof(*plat), GFP_KERNEL);
-+	if (!plat)
-+		return -ENOMEM;
-+
-+	plat->tcpc_client = client;
-+	i2c_set_clientdata(client, plat);
-+
-+	mutex_init(&plat->lock);
-+
-+	ret = anx7411_register_i2c_dummy_clients(plat, client);
-+	if (ret) {
-+		dev_err(dev, "fail to reserve I2C bus\n");
-+		return ret;
-+	}
-+
-+	ret = anx7411_typec_switch_probe(plat, dev);
-+	if (ret) {
-+		dev_err(dev, "fail to probe typec switch\n");
-+		goto free_i2c_dummy;
-+	}
-+
-+	ret = anx7411_typec_port_probe(plat, dev);
-+	if (ret) {
-+		dev_err(dev, "fail to probe typec property.\n");
-+		ret = -ENODEV;
-+		goto free_typec_switch;
-+	}
-+
-+	plat->intp_irq = client->irq;
-+	if (!client->irq) {
-+		dev_warn(dev, "no default interrupt IRQ, probe GPIO interrupt");
-+		anx7411_get_gpio_irq(plat);
-+	}
-+
-+	if (!plat->intp_irq) {
-+		dev_err(dev, "fail to get interrupt IRQ\n");
-+		goto free_typec_port;
-+	}
-+
-+	plat->dev = dev;
-+	plat->psy_online = ANX7411_PSY_OFFLINE;
-+	anx7411_psy_register(plat);
-+
-+	if (plat->intp_irq) {
-+		INIT_WORK(&plat->work, anx7411_work_func);
-+		plat->workqueue = alloc_workqueue("anx7411_work",
-+						  WQ_FREEZABLE |
-+						  WQ_MEM_RECLAIM,
-+						  1);
-+		if (!plat->workqueue) {
-+			dev_err(dev, "fail to create work queue\n");
-+			ret = -ENOMEM;
-+			goto free_typec_port;
-+		}
-+
-+		ret = devm_request_threaded_irq(dev, plat->intp_irq,
-+						NULL, anx7411_intr_isr,
-+						IRQF_TRIGGER_FALLING |
-+						IRQF_ONESHOT,
-+						"anx7411-intp", plat);
-+		if (ret) {
-+			dev_err(dev, "fail to request irq\n");
-+			goto free_wq;
-+		}
-+	}
-+
-+	anx7411_typec_check_connection(plat);
-+
-+	pm_runtime_enable(dev);
-+
-+	return 0;
-+
-+free_wq:
-+	destroy_workqueue(plat->workqueue);
-+
-+free_typec_port:
-+	typec_unregister_port(plat->typec.port);
-+	anx7411_port_unregister_altmodes(plat->typec.port_amode);
-+
-+free_typec_switch:
-+	anx7411_unregister_switch(plat);
-+	anx7411_unregister_mux(plat);
-+
-+free_i2c_dummy:
-+	i2c_unregister_device(plat->spi_client);
-+
-+	return ret;
-+}
-+
-+static int anx7411_i2c_remove(struct i2c_client *client)
-+{
-+	struct anx7411_data *plat = i2c_get_clientdata(client);
-+
-+	anx7411_partner_unregister_altmode(plat);
-+	anx7411_unregister_partner(plat);
-+
-+	if (plat->workqueue)
-+		destroy_workqueue(plat->workqueue);
-+
-+	if (plat->spi_client)
-+		i2c_unregister_device(plat->spi_client);
-+
-+	if (plat->typec.role_sw)
-+		usb_role_switch_put(plat->typec.role_sw);
-+
-+	anx7411_unregister_mux(plat);
-+
-+	anx7411_unregister_switch(plat);
-+
-+	if (plat->typec.port)
-+		typec_unregister_port(plat->typec.port);
-+
-+	anx7411_port_unregister_altmodes(plat->typec.port_amode);
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id anx7411_id[] = {
-+	{"anx7411", 0},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, anx7411_id);
-+
-+static const struct of_device_id anx_match_table[] = {
-+	{.compatible = "analogix,anx7411",},
-+	{},
-+};
-+
-+static struct i2c_driver anx7411_driver = {
-+	.driver = {
-+		.name = "anx7411",
-+		.of_match_table = anx_match_table,
-+		.pm = &anx7411_pm_ops,
-+	},
-+	.probe = anx7411_i2c_probe,
-+	.remove = anx7411_i2c_remove,
-+
-+	.id_table = anx7411_id,
-+};
-+
-+module_i2c_driver(anx7411_driver);
-+
-+MODULE_DESCRIPTION("Anx7411 USB Type-C PD driver");
-+MODULE_AUTHOR("Xin Ji <xji@analogixsemi.com>");
-+MODULE_LICENSE("GPL v2");
-+MODULE_VERSION("0.1.5");
-diff --git a/drivers/usb/typec/anx7411.h b/drivers/usb/typec/anx7411.h
-new file mode 100644
-index 000000000000..11f972756e0d
---- /dev/null
-+++ b/drivers/usb/typec/anx7411.h
-@@ -0,0 +1,265 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+/*
-+ * Copyright(c) 2022, Analogix Semiconductor. All rights reserved.
-+ *
-+ */
-+
-+#ifndef __ANX7411_H__
-+#define __ANX7411_H__
-+
-+#define TCPC_ADDRESS1		0x58
-+#define TCPC_ADDRESS2		0x56
-+#define TCPC_ADDRESS3		0x54
-+#define TCPC_ADDRESS4		0x52
-+#define SPI_ADDRESS1		0x7e
-+#define SPI_ADDRESS2		0x6e
-+#define SPI_ADDRESS3		0x64
-+#define SPI_ADDRESS4		0x62
-+
-+struct anx7411_i2c_select {
-+	u8 tcpc_address;
-+	u8 spi_address;
-+};
-+
-+#define VID_ANALOGIX		0x1F29
-+#define PID_ANALOGIX		0x7411
-+
-+/* TCPC register define */
-+
-+#define ANALOG_CTRL_10		0xAA
-+
-+#define STATUS_LEN		2
-+#define ALERT_0			0xCB
-+#define RECEIVED_MSG		BIT(7)
-+#define SOFTWARE_INT		BIT(6)
-+#define MSG_LEN			32
-+#define HEADER_LEN		2
-+#define MSG_HEADER		0x00
-+#define MSG_TYPE		0x01
-+#define MSG_RAWDATA		0x02
-+#define MSG_LEN_MASK		0x1F
-+
-+#define ALERT_1			0xCC
-+#define INTP_POW_ON		BIT(7)
-+#define INTP_POW_OFF		BIT(6)
-+
-+#define VBUS_THRESHOLD_H	0xDD
-+#define VBUS_THRESHOLD_L	0xDE
-+
-+#define FW_CTRL_0		0xF0
-+#define UNSTRUCT_VDM_EN		BIT(0)
-+#define DELAY_200MS		BIT(1)
-+#define VSAFE0			0
-+#define VSAFE1			BIT(2)
-+#define VSAFE2			BIT(3)
-+#define VSAFE3			(BIT(2) | BIT(3))
-+#define FRS_EN			BIT(7)
-+
-+#define FW_PARAM		0xF1
-+#define DONGLE_IOP		BIT(0)
-+
-+#define FW_CTRL_2		0xF7
-+#define SINK_CTRL_DIS_FLAG	BIT(5)
-+
-+/* SPI register define */
-+#define OCM_CTRL_0		0x6E
-+#define OCM_RESET		BIT(6)
-+
-+#define MAX_VOLTAGE		0xAC
-+#define MAX_POWER		0xAD
-+#define MIN_POWER		0xAE
-+
-+#define REQUEST_VOLTAGE		0xAF
-+#define VOLTAGE_UNIT		100 /* mV per unit */
-+
-+#define REQUEST_CURRENT		0xB1
-+#define CURRENT_UNIT		50 /* mA per unit */
-+
-+#define CMD_SEND_BUF		0xC0
-+#define CMD_RECV_BUF		0xE0
-+
-+#define REQ_VOL_20V_IN_100MV	0xC8
-+#define REQ_CUR_2_25A_IN_50MA	0x2D
-+#define REQ_CUR_3_25A_IN_50MA	0x41
-+
-+#define DEF_5V			5000
-+#define DEF_1_5A		1500
-+
-+#define LOBYTE(w)		((u8)(w) & 0xFF)
-+#define HIBYTE(w)		((u8)(((u16)(w) >> 8) & 0xFF))
-+
-+enum anx7411_typec_message_type {
-+	TYPE_SRC_CAP = 0x00,
-+	TYPE_SNK_CAP = 0x01,
-+	TYPE_SNK_IDENTITY = 0x02,
-+	TYPE_SVID = 0x03,
-+	TYPE_SET_SNK_DP_CAP = 0x08,
-+	TYPE_PSWAP_REQ = 0x10,
-+	TYPE_DSWAP_REQ = 0x11,
-+	TYPE_VDM = 0x14,
-+	TYPE_OBJ_REQ = 0x16,
-+	TYPE_DP_ALT_ENTER = 0x19,
-+	TYPE_DP_DISCOVER_MODES_INFO = 0x27,
-+	TYPE_GET_DP_CONFIG = 0x29,
-+	TYPE_DP_CONFIGURE = 0x2A,
-+	TYPE_GET_DP_DISCOVER_MODES_INFO = 0x2E,
-+	TYPE_GET_DP_ALT_ENTER = 0x2F,
-+};
-+
-+#define FW_CTRL_1		0xB2
-+#define AUTO_PD_EN		BIT(1)
-+#define TRYSRC_EN		BIT(2)
-+#define TRYSNK_EN		BIT(3)
-+#define FORCE_SEND_RDO		BIT(6)
-+
-+#define FW_VER			0xB4
-+#define FW_SUBVER		0xB5
-+
-+#define INT_MASK		0xB6
-+#define INT_STS			0xB7
-+#define OCM_BOOT_UP		BIT(0)
-+#define OC_OV_EVENT		BIT(1)
-+#define VCONN_CHANGE		BIT(2)
-+#define VBUS_CHANGE		BIT(3)
-+#define CC_STATUS_CHANGE	BIT(4)
-+#define DATA_ROLE_CHANGE	BIT(5)
-+#define PR_CONSUMER_GOT_POWER	BIT(6)
-+#define HPD_STATUS_CHANGE	BIT(7)
-+
-+#define SYSTEM_STSTUS		0xB8
-+/* 0: SINK off; 1: SINK on */
-+#define SINK_STATUS		BIT(1)
-+/* 0: VCONN off; 1: VCONN on*/
-+#define VCONN_STATUS		BIT(2)
-+/* 0: vbus off; 1: vbus on*/
-+#define VBUS_STATUS		BIT(3)
-+/* 1: host; 0:device*/
-+#define DATA_ROLE		BIT(5)
-+/* 0: Chunking; 1: Unchunked*/
-+#define SUPPORT_UNCHUNKING	BIT(6)
-+/* 0: HPD low; 1: HPD high*/
-+#define HPD_STATUS		BIT(7)
-+
-+#define DATA_DFP		1
-+#define DATA_UFP		2
-+#define POWER_SOURCE		1
-+#define POWER_SINK		2
-+
-+#define CC_STATUS		0xB9
-+#define CC1_RD			BIT(0)
-+#define CC2_RD			BIT(4)
-+#define CC1_RA			BIT(1)
-+#define CC2_RA			BIT(5)
-+#define CC1_RD			BIT(0)
-+#define CC1_RP(cc)		(((cc) >> 2) & 0x03)
-+#define CC2_RP(cc)		(((cc) >> 6) & 0x03)
-+
-+#define PD_REV_INIT		0xBA
-+
-+#define PD_EXT_MSG_CTRL		0xBB
-+#define SRC_CAP_EXT_REPLY	BIT(0)
-+#define MANUFACTURER_INFO_REPLY	BIT(1)
-+#define BATTERY_STS_REPLY	BIT(2)
-+#define BATTERY_CAP_REPLY	BIT(3)
-+#define ALERT_REPLY		BIT(4)
-+#define STATUS_REPLY		BIT(5)
-+#define PPS_STATUS_REPLY	BIT(6)
-+#define SNK_CAP_EXT_REPLY	BIT(7)
-+
-+#define NO_CONNECT		0x00
-+#define USB3_1_CONNECTED	0x01
-+#define DP_ALT_4LANES		0x02
-+#define USB3_1_DP_2LANES	0x03
-+#define CC1_CONNECTED		0x01
-+#define CC2_CONNECTED		0x02
-+#define SELECT_PIN_ASSIGMENT_C	0x04
-+#define SELECT_PIN_ASSIGMENT_D	0x08
-+#define SELECT_PIN_ASSIGMENT_E	0x10
-+#define SELECT_PIN_ASSIGMENT_U	0x00
-+#define REDRIVER_ADDRESS	0x20
-+#define REDRIVER_OFFSET		0x00
-+
-+#define DP_SVID			0xFF01
-+#define VDM_ACK			0x40
-+#define VDM_CMD_RES		0x00
-+#define VDM_CMD_DIS_ID		0x01
-+#define VDM_CMD_DIS_SVID	0x02
-+#define VDM_CMD_DIS_MOD		0x03
-+#define VDM_CMD_ENTER_MODE	0x04
-+#define VDM_CMD_EXIT_MODE	0x05
-+#define VDM_CMD_ATTENTION	0x06
-+#define VDM_CMD_GET_STS		0x10
-+#define VDM_CMD_AND_ACK_MASK	0x5F
-+
-+#define MAX_ALTMODE		2
-+
-+#define HAS_SOURCE_CAP		BIT(0)
-+#define HAS_SINK_CAP		BIT(1)
-+#define HAS_SINK_WATT		BIT(2)
-+
-+enum anx7411_psy_state {
-+	/* copy from drivers/usb/typec/tcpm */
-+	ANX7411_PSY_OFFLINE = 0,
-+	ANX7411_PSY_FIXED_ONLINE,
-+
-+	/* private */
-+	/* PD keep in, but disconnct power to bq25700,
-+	 * this state can be active when higher capacity adapter plug in,
-+	 * and change to ONLINE state when higher capacity adapter plug out
-+	 */
-+	ANX7411_PSY_HANG = 0xff,
-+};
-+
-+struct typec_params {
-+	int request_current; /* ma */
-+	int request_voltage; /* mv */
-+	int cc_connect;
-+	int cc_orientation_valid;
-+	int cc_status;
-+	int data_role;
-+	int power_role;
-+	int vconn_role;
-+	int dp_altmode_enter;
-+	int cust_altmode_enter;
-+	struct usb_role_switch *role_sw;
-+	struct typec_port *port;
-+	struct typec_partner *partner;
-+	struct typec_mux *typec_mux;
-+	struct typec_switch *typec_switch;
-+	struct typec_altmode *amode[MAX_ALTMODE];
-+	struct typec_altmode *port_amode[MAX_ALTMODE];
-+	struct typec_displayport_data data;
-+	int pin_assignment;
-+	struct typec_capability caps;
-+	u32 src_pdo[PDO_MAX_OBJECTS];
-+	u32 sink_pdo[PDO_MAX_OBJECTS];
-+	u8 caps_flags;
-+	u8 src_pdo_nr;
-+	u8 sink_pdo_nr;
-+	u8 sink_watt;
-+	u8 sink_voltage;
-+};
-+
-+struct anx7411_data {
-+	int fw_version;
-+	int fw_subversion;
-+	struct i2c_client *tcpc_client;
-+	struct i2c_client *spi_client;
-+	struct gpio_desc *intp_gpiod;
-+	struct fwnode_handle *connector_fwnode;
-+	struct typec_params typec;
-+	int intp_irq;
-+	struct work_struct work;
-+	struct workqueue_struct *workqueue;
-+	/* Lock for interrupt work queue */
-+	struct mutex lock;
-+
-+	enum anx7411_psy_state psy_online;
-+	enum power_supply_usb_type usb_type;
-+	struct power_supply *psy;
-+	struct power_supply_desc psy_desc;
-+	struct device *dev;
-+};
-+
-+#endif /* __ANX7411_H__ */
--- 
-2.25.1
+The net-next tree gained a conflict against the net tree.
 
+The amdgpu tree gained a semantic conflict against the spi tree.
+
+The tip tree gained a conflict against the iommu tree.
+
+The scsi tree gained conflicts against the block tree.
+
+The vhost tree gained a conflict against the block tree.
+
+The kspp tree still had its build failure so I applied three upcoming
+DRM patches.
+
+Non-merge commits (relative to Linus' tree): 10072
+ 10143 files changed, 905348 insertions(+), 236805 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After
+the final fixups (if any), I do an x86_64 modules_install followed by
+builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
+arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
+boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
+without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 346 trees (counting Linus' and 94 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+$ git checkout master
+$ git reset --hard stable
+Merging origin/master (3ee65c0f0778 Merge tag 'for-5.17-rc6-tag' of git://g=
+it.kernel.org/pub/scm/linux/kernel/git/kdave/linux)
+Merging fixes/fixes (d06c942efea4 Merge tag 'for_linus' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/mst/vhost)
+Merging kbuild-current/fixes (754e0b0e3560 Linux 5.17-rc4)
+Merging arc-current/for-curr (e783362eb54c Linux 5.17-rc1)
+Merging arm-current/fixes (7b83299e5b93 ARM: 9182/1: mmu: fix returns from =
+early_param() and __setup() functions)
+Merging arm64-fixes/for-next/fixes (4f6de676d94e arm64: Correct wrong label=
+ in macro __init_el2_gicv3)
+Merging arm-soc-fixes/arm/fixes (a0e897d1b367 arm64: dts: armada-3720-turri=
+s-mox: Add missing ethernet0 alias)
+Merging drivers-memory-fixes/fixes (e783362eb54c Linux 5.17-rc1)
+Merging tee-fixes/fixes (6d8df1f9e8ae Merge tag 'optee-fix2-for-v5.17' into=
+ fixes)
+Merging m68k-current/for-linus (1a0ae068bf6b m68k: defconfig: Update defcon=
+figs for v5.16-rc1)
+Merging powerpc-fixes/fixes (58dbe9b373df powerpc/64s: Fix build failure wh=
+en CONFIG_PPC_64S_HASH_MMU is not set)
+Merging s390-fixes/fixes (c194dad21025 s390/extable: fix exception table so=
+rting)
+Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
+x/kernel/git/netdev/net)
+Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
+ger overflow with i_size near S64_MAX)
+Merging net/master (afb3cc1a397d net: dsa: unlock the rtnl_mutex when dsa_m=
+aster_setup() fails)
+Merging bpf/master (18b1ab7aa76b xsk: Fix race at socket teardown)
+Merging ipsec/master (4ff2980b6bd2 xfrm: fix tunnel model fragmentation beh=
+avior)
+Merging netfilter/master (f8e9bd34cedd Merge branch 'smc-fix')
+Merging ipvs/master (277f2bb14361 ibmvnic: schedule failover only if vioctl=
+ fails)
+Merging wireless/main (e6e91ec966db iwlwifi: mvm: return value for request_=
+ownership)
+Merging rdma-fixes/for-rc (7e57714cd0ad Linux 5.17-rc6)
+Merging sound-current/for-linus (cd94df179541 ALSA: usb-audio: add mapping =
+for new Corsair Virtuoso SE)
+Merging sound-asoc-fixes/for-linus (b7fb0ae09009 ASoC: SOF: Intel: Fix NULL=
+ ptr dereference when ENOMEM)
+Merging regmap-fixes/for-linus (d04ad245d67a regmap-irq: Update interrupt c=
+lear register for proper reset)
+Merging regulator-fixes/for-linus (48fdc1fa4d93 Merge remote-tracking branc=
+h 'regulator/for-5.16' into regulator-linus)
+Merging spi-fixes/for-linus (a7c76d3f0787 Merge remote-tracking branch 'spi=
+/for-5.16' into spi-linus)
+Merging pci-current/for-linus (3f1271b54edc PCI: Mark all AMD Navi10 and Na=
+vi14 GPU ATS as broken)
+Merging driver-core.current/driver-core-linus (7e57714cd0ad Linux 5.17-rc6)
+Merging tty.current/tty-linus (7e57714cd0ad Linux 5.17-rc6)
+Merging usb.current/usb-linus (7e57714cd0ad Linux 5.17-rc6)
+Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
+Merging usb-serial-fixes/usb-linus (cfc4442c642d USB: serial: option: add T=
+elit LE910R1 compositions)
+Merging usb-chipidea-fixes/for-usb-fixes (f130d08a8d79 usb: chipidea: ci_hd=
+rc_imx: Also search for 'phys' phandle)
+CONFLICT (content): Merge conflict in drivers/usb/chipidea/ci_hdrc_imx.c
+Merging phy/fixes (9a8406ba1a9a phy: dphy: Correct clk_pre parameter)
+Merging staging.current/staging-linus (342e7c6ea582 staging: rtl8723bs: Imp=
+rove the comment explaining the locking rules)
+Merging iio-fixes/fixes-togreg (123d838c4e7d iio: adc: xilinx-ams: Fix sing=
+le channel switching sequence)
+Merging counter-fixes/fixes-togreg (4a14311a3b93 counter: Stop using dev_ge=
+t_drvdata() to get the counter device)
+Merging char-misc.current/char-misc-linus (7e57714cd0ad Linux 5.17-rc6)
+Merging soundwire-fixes/fixes (e783362eb54c Linux 5.17-rc1)
+Merging thunderbolt-fixes/fixes (7e57714cd0ad Linux 5.17-rc6)
+Merging input-current/for-linus (327b89f0acc4 HID: add mapping for KEY_ALL_=
+APPLICATIONS)
+Merging crypto-current/master (c6ce9c5831ca crypto: api - Move cryptomgr so=
+ft dependency into algapi)
+Merging vfio-fixes/for-linus (8704e8934908 vfio/pci: Fix OpRegion read)
+Merging kselftest-fixes/fixes (6fec1ab67f8d selftests/ftrace: Do not trace =
+do_softirq because of PREEMPT_RT)
+Merging modules-fixes/modules-linus (a8e8f851e829 module: fix building with=
+ sysfs disabled)
+Merging dmaengine-fixes/fixes (cfb92440ee71 Linux 5.17-rc5)
+Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
+Merging mtd-fixes/mtd/fixes (7cf1de957a98 mtd: rawnand: omap2: Actually pre=
+vent invalid configuration and build error)
+Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
+vert "Constify static struct resources")
+Merging v4l-dvb-fixes/fixes (d40f0b133b44 media: meson-ir-tx: remove incorr=
+ect doc comment)
+Merging reset-fixes/reset/fixes (92c959bae2e5 reset: renesas: Fix Runtime P=
+M usage)
+Merging mips-fixes/mips-fixes (5d8965704fe5 MIPS: ralink: mt7621: use bitwi=
+se NOT instead of logical)
+Merging at91-fixes/at91-fixes (26077968f838 dt-bindings: ARM: at91: update =
+maintainers entry)
+Merging omap-fixes/fixes (8840f5460a23 ARM: dts: Use 32KiHz oscillator on d=
+evkit8000)
+Merging kvm-fixes/master (8d25b7beca7e KVM: x86: pull kvm->srcu read-side t=
+o kvm_arch_vcpu_ioctl_run)
+Merging kvms390-fixes/master (0e9ff65f455d KVM: s390: preserve deliverable_=
+mask in __airqs_kick_single_vcpu)
+Merging hwmon-fixes/hwmon (686d303ee630 hwmon: (pmbus) Add mutex to regulat=
+or ops)
+Merging nvdimm-fixes/libnvdimm-fixes (3dd60fb9d95d nvdimm/pmem: stop using =
+q_usage_count as external pgmap refcount)
+Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
+robing)
+Merging btrfs-fixes/next-fixes (e3727c6aef80 Merge branch 'misc-5.17' into =
+next-fixes)
+Merging vfs-fixes/fixes (9d2231c5d74e lib/iov_iter: initialize "flags" in n=
+ew pipe_buffer)
+Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
+git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
+Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
+Merging drivers-x86-fixes/fixes (21d90aaee8d5 surface: surface3_power: Fix =
+battery readings on batteries without a serial number)
+Merging samsung-krzk-fixes/fixes (442b0c08db7e soc: samsung: Fix typo in CO=
+NFIG_EXYNOS_USI description)
+Merging pinctrl-samsung-fixes/fixes (e783362eb54c Linux 5.17-rc1)
+Merging devicetree-fixes/dt/linus (0c0822bcb73f dt-bindings: update Roger Q=
+uadros email)
+Merging scsi-fixes/fixes (10af11564617 scsi: ufs: core: Fix divide by zero =
+in ufshcd_map_queues())
+Merging drm-fixes/drm-fixes (8fdb19679722 Merge tag 'drm-misc-fixes-2022-03=
+-03' of git://anongit.freedesktop.org/drm/drm-misc into drm-fixes)
+Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
+cac() failed issue)
+Merging drm-intel-fixes/for-linux-next-fixes (08783aa7693f drm/i915: s/JSP2=
+/ICP2/ PCH)
+Merging mmc-fixes/fixes (f0d2f15362f0 mmc: meson: Fix usage of meson_mmc_po=
+st_req())
+Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
+ect invocation of cmos_interrupt())
+Merging gnss-fixes/gnss-linus (e783362eb54c Linux 5.17-rc1)
+Merging hyperv-fixes/hyperv-fixes (ffc58bc4af93 Drivers: hv: utils: Make us=
+e of the helper macro LIST_HEAD())
+Merging soc-fsl-fixes/fix (a222fd854139 soc: fsl: qe: Check of ioremap retu=
+rn value)
+Merging risc-v-fixes/fixes (74583f1b92cb riscv: dts: k210: fix broken IRQs =
+on hart1)
+Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
+ge())
+Merging fpga-fixes/fixes (8bb7eca972ad Linux 5.15)
+Merging spdx/spdx-linus (d8152cfe2f21 Merge tag 'pci-v5.17-fixes-5' of git:=
+//git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci)
+Merging gpio-brgl-fixes/gpio/for-current (ae42f9288846 gpio: Return EPROBE_=
+DEFER if gc->to_irq is NULL)
+Merging gpio-intel-fixes/fixes (e783362eb54c Linux 5.17-rc1)
+Merging pinctrl-intel-fixes/fixes (6f66db29e241 pinctrl: tigerlake: Revert =
+"Add Alder Lake-M ACPI ID")
+Merging erofs-fixes/fixes (24331050a3e6 erofs: fix small compressed files i=
+nlining)
+Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
+esc())
+Merging kunit-fixes/kunit-fixes (92a68053c346 Documentation: KUnit: Fix usa=
+ge bug)
+Merging ubifs-fixes/fixes (c3c07fc25f37 ubi: fastmap: Return error code if =
+memory allocation fails in add_aeb())
+Merging memblock-fixes/fixes (c94afc46cae7 memblock: use kfree() to release=
+ kmalloced memblock regions)
+Merging cel-fixes/for-rc (c306d737691e NFSD: Deprecate NFS_OFFSET_MAX)
+Merging irqchip-fixes/irq/irqchip-fixes (1d4df649cbb4 irqchip/sifive-plic: =
+Add missing thead,c900-plic match string)
+Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
+ graphical consoles)
+Merging perf-current/perf/urgent (ac84e82f78cb Merge tag 'block-5.17-2022-0=
+3-04' of git://git.kernel.dk/linux-block)
+Merging efi-fixes/urgent (9feaf8b387ee efi: fix return value of __setup han=
+dlers)
+Merging zstd-fixes/zstd-linus (88a309465b3f lib: zstd: clean up double word=
+ in comment.)
+Merging drm-misc-fixes/for-linux-next-fixes (62929726ef0e drm/vrr: Set VRR =
+capable prop only if it is attached to connector)
+Merging kbuild/for-next (d4c858643263 kallsyms: ignore all local labels pre=
+fixed by '.L')
+Merging perf/perf/core (56dce868198c libperf: Add API for allocating new th=
+read map array)
+Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
+s: mark __compiletime_assert failure as __noreturn)
+Merging dma-mapping/for-next (80e439098161 dma-debug: fix return value of _=
+_setup handlers)
+Merging asm-generic/master (9f15ac318b83 nds32: Remove the architecture)
+Merging arc/for-next (6880fa6c5660 Linux 5.15-rc1)
+Merging arm/for-next (d5b493b066ca Merge branch 'devel-stable' into for-nex=
+t)
+Merging arm64/for-next/core (fe500628a097 Merge branch 'for-next/fpsimd' in=
+to for-next/core)
+Merging arm-perf/for-next/perf (602c873eb52e perf: Replace acpi_bus_get_dev=
+ice())
+Merging arm-soc/for-next (1c9566edd537 Revert "soc: mediatek: mmsys: add mm=
+sys reset control for MT8186")
+CONFLICT (content): Merge conflict in arch/arm/Kconfig
+Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
+ATC2603C PMIC)
+Merging amlogic/for-next (39369380e729 Merge branch 'v5.18/dt64' into for-n=
+ext)
+Merging aspeed/for-next (d9540eeaa3d1 Merge branches 'nuvoton-dt-for-v5.18'=
+ and 'dt-for-v5.18' into for-next)
+Merging at91/at91-next (d355edef55ee soc: microchip: make mpfs_sys_controll=
+er_put static)
+Merging drivers-memory/for-next (560f9d092a9d Merge branch 'mem-ctrl-next' =
+into for-next)
+Merging imx-mxs/for-next (45550ada88f0 Merge branch 'imx/defconfig' into fo=
+r-next)
+Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
+o next)
+Merging mediatek/for-next (6ceb6a96db4e Merge branch 'v5.17-fixes' into for=
+-next)
+Merging mvebu/for-next (89756932b780 Merge branch 'mvebu/dt64' into mvebu/f=
+or-next)
+Merging omap/for-next (f9ecc209330a Merge branch 'omap-for-v5.18/dt' into f=
+or-next)
+Merging qcom/for-next (22139a9091fd Merge branches 'arm64-defconfig-for-5.1=
+8', 'arm64-for-5.18', 'clk-for-5.18', 'defconfig-for-5.18', 'drivers-for-5.=
+18', 'dts-for-5.18', 'arm64-fixes-for-5.17' and 'dts-fixes-for-5.17' into f=
+or-next)
+CONFLICT (content): Merge conflict in arch/arm/configs/multi_v7_defconfig
+CONFLICT (content): Merge conflict in arch/arm64/configs/defconfig
+Merging raspberrypi/for-next (c5915b53d4c2 dt-bindings: soc: bcm: Convert b=
+rcm,bcm2835-vchiq to json-schema)
+Merging renesas/next (dff7b84b4d2a Merge branch 'renesas-arm-dt-for-v5.18' =
+into renesas-next)
+Merging reset/reset/next (89e7a6698fdd reset: uniphier-glue: Use devm_add_a=
+ction_or_reset())
+Merging rockchip/for-next (ea80f22c4edd Merge branch 'v5.18-armsoc/dts64' i=
+nto for-next)
+CONFLICT (content): Merge conflict in arch/arm64/boot/dts/rockchip/rk356x.d=
+tsi
+Merging samsung-krzk/for-next (b2d5c4016a34 Merge branch 'for-v5.18/dt-clea=
+nup' into for-next)
+Merging scmi/for-linux-next (210b966b7e2f Merge tag 'scmi-updates-5.18' of =
+git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-l=
+inux-next)
+Merging stm32/stm32-next (74fa56279651 ARM: dts: stm32: Switch DWMAC RMII c=
+lock to MCO2 on DHCOM)
+Merging sunxi/sunxi/for-next (f25c47c67629 Merge branch 'sunxi/dt-for-5.18'=
+ into sunxi/for-next)
+Merging tee/next (3e53bb2bd87b Merge branch 'tee_shm_vmalloc_for_v5.19' int=
+o next)
+Merging tegra/for-next (6d746e1eb2f6 Merge branch for-5.18/arm64/defconfig =
+into for-next)
+Merging ti/ti-next (183a6f5c6e1e Merge branches 'ti-k3-dts-next' and 'ti-dr=
+ivers-soc-next' into ti-next)
+Merging xilinx/for-next (3a14f0e61408 arm64: zynqmp: Rename dma to dma-cont=
+roller)
+Merging clk/clk-next (7da5e77a1b5f Merge branch 'clk-fixes' into clk-next)
+Merging clk-imx/for-next (b09c68dc57c9 clk: imx: pll14xx: Support dynamic r=
+ates)
+Merging clk-renesas/renesas-clk (73421f2a48e6 clk: renesas: r8a779f0: Add P=
+FC clock)
+Merging clk-samsung/for-next (45bd8166a1d8 clk: samsung: Add initial Exynos=
+7885 clock driver)
+Merging csky/linux-next (a0793fdad9a1 csky: fix typo of fpu config macro)
+Merging h8300/h8300-next (1ec10274d436 h8300: don't implement set_fs)
+CONFLICT (modify/delete): arch/h8300/mm/memory.c deleted in h8300/h8300-nex=
+t and modified in HEAD.  Version HEAD of arch/h8300/mm/memory.c left in tre=
+e.
+$ git rm -f arch/h8300/mm/memory.c
+Merging m68k/for-next (0d52a01a266b m68k: defconfig: Disable fbdev on Sun3/=
+3x)
+Merging m68knommu/for-next (244e6c2d4e4d m68k: m5441x: remove erroneous clo=
+ck disable)
+Merging microblaze/next (fcc619621df5 microblaze/PCI: Remove pci_phys_mem_a=
+ccess_prot() dead code)
+Merging mips/mips-next (4a0a1436053b mips: ralink: fix a refcount leak in i=
+ll_acc_of_setup())
+Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
+min_low_pfn)
+Merging openrisc/for-next (862cf8d5fd98 openrisc/boot: Remove unnecessary i=
+nitialisation in memcpy().)
+Merging parisc-hd/for-next (d21d3f34cf6e parisc/unaligned: Enhance user-spa=
+ce visible output)
+CONFLICT (content): Merge conflict in arch/parisc/lib/memcpy.c
+Merging powerpc/next (8219d31effa7 powerpc/lib/sstep: Fix build errors with=
+ newer binutils)
+Merging soc-fsl/next (1ce93cb102e7 soc: fsl: qe: Check of ioremap return va=
+lue)
+Merging risc-v/for-next (d56201d9440d riscv: defconfig: enable hugetlbfs op=
+tion)
+Merging s390/for-next (5225811009e5 Merge branch 'features' into for-next)
+Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
+rom integer of different size)
+Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
+://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
+Merging uml/linux-next (db0dd9cee822 um: virtio_uml: Allow probing from dev=
+icetree)
+Merging xtensa/xtensa-for-next (26791d481907 xtensa: use XCHAL_NUM_AREGS as=
+ pt_regs::areg size)
+Merging pidfd/for-next (d52c14f5f9b3 Merge branch 'pidfd.fd_install' into f=
+or-next)
+Merging fscrypt/master (cdaa1b1941f6 fscrypt: update documentation for dire=
+ct I/O support)
+Merging fscache/fscache-next (b47a5fca3209 cachefiles: Fix incorrect length=
+ to fallocate())
+Merging afs/afs-next (26291c54e111 Linux 5.17-rc2)
+Merging btrfs/for-next (28a7327d99dc Merge branch 'for-next-next-v5.17-2022=
+0304' into for-next-20220304)
+Merging ceph/master (ad5255c1ea9c ceph: misc fix for code style and logs)
+Merging cifs/for-next (c9e745fc495d cifs: fix handlecache and multiuser)
+Merging configfs/for-next (84ec758fb2da configfs: fix a race in configfs_{,=
+un}register_subsystem())
+Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
+f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
+Merging erofs/dev (22ba5e99b96f erofs: fix ztailpacking on > 4GiB filesyste=
+ms)
+Merging exfat/dev (dd81e1c7d5fb Merge tag 'powerpc-5.17-2' of git://git.ker=
+nel.org/pub/scm/linux/kernel/git/powerpc/linux)
+Merging ext3/for_next (487606687984 Merge reiserfs deprecation patch.)
+Merging ext4/dev (cc5095747edf ext4: don't BUG if someone dirty pages witho=
+ut asking ext4 first)
+Merging f2fs/dev (6c4d1a169863 f2fs: introduce F2FS_UNFAIR_RWSEM to support=
+ unfair rwsem)
+Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
+e with ioctl)
+Merging fuse/for-next (c086df490257 fuse: move FUSE_SUPER_MAGIC definition =
+to magic.h)
+Merging gfs2/for-next (b2963932346f gfs2: Remove return value for gfs2_indi=
+rect_init)
+Merging jfs/jfs-next (c48a14dca2cb JFS: fix memleak in jfs_mount)
+Merging ksmbd/ksmbd-for-next (1a927cda94ac Documentation: ksmbd: update Fea=
+ture Status table)
+Merging nfs/linux-next (6c984083ec24 NFS: Use of mapping_set_error() result=
+s in spurious errors)
+Merging nfs-anna/linux-next (d19e0183a883 NFS: Do not report writeback erro=
+rs in nfs_getattr())
+Merging nfsd/for-next (bf27a962851b fs/lock: only call lm_breaker_owns_leas=
+e if there is conflict.)
+Merging ntfs3/master (52e00ea6b26e fs/ntfs3: Update valid size if -EIOCBQUE=
+UED)
+Merging orangefs/for-next (40a74870b2d1 orangefs: Fix the size of a memory =
+allocation in orangefs_bufmap_alloc())
+Merging overlayfs/overlayfs-next (94fd19752b28 ovl: don't fail copy up if n=
+o fileattr support on upper)
+Merging ubifs/next (aa39cc675799 jffs2: GC deadlock reading a page that is =
+used in jffs2_write_begin())
+Merging v9fs/9p-next (22e424feb665 Revert "fs/9p: search open fids first")
+Merging xfs/for-next (b97cca3ba909 xfs: only bother with sync_filesystem du=
+ring readonly remount)
+Merging zonefs/for-next (95b115332a83 zonefs: remove redundant null bio che=
+ck)
+Merging iomap/iomap-for-next (ebb7fb1557b1 xfs, iomap: limit individual ioe=
+nd chain lengths in writeback)
+Merging djw-vfs/vfs-for-next (2d86293c7075 xfs: return errors in xfs_fs_syn=
+c_fs)
+Merging file-locks/locks-next (80d8e4d3f313 fs/locks: fix fcntl_getlk64/fcn=
+tl_setlk64 stub prototypes)
+Merging vfs/for-next (124f75f864f3 clean overflow checks in count_mounts() =
+a bit)
+CONFLICT (content): Merge conflict in arch/x86/um/Kconfig
+Merging printk/for-next (c5f75d490fc2 Merge branch 'for-5.18' into for-next)
+Merging pci/next (b3c57902bef6 Merge branch 'remotes/lorenzo/pci/uniphier')
+Merging pstore/for-next/pstore (023bbde3db41 pstore: Add prefix to ECC mess=
+ages)
+Merging hid/for-next (cde4b57a1c51 Merge branch 'for-5.17/upstream-fixes' i=
+nto for-next)
+Merging i2c/i2c/for-next (867dfe1041a0 Merge branch 'i2c/for-mergewindow' i=
+nto i2c/for-next)
+Merging i3c/i3c/next (72a4501b5d08 i3c: support dynamically added i2c devic=
+es)
+Merging dmi/dmi-for-next (f97a2103f1a7 firmware: dmi: Move product_sku info=
+ to the end of the modalias)
+Merging hwmon-staging/hwmon-next (007e433cf037 hwmon: Add driver for Texas =
+Instruments TMP464 and TMP468)
+Merging jc_docs/docs-next (0d6356d6cdd0 docs: fix 'make htmldocs' warning i=
+n perf)
+Merging v4l-dvb/master (2b891d3980f6 media: xilinx: csi2rxss: Use mipi-csi2=
+.h)
+Merging v4l-dvb-next/master (2881ca629984 media: Makefiles: sort entries wh=
+ere it fits)
+Merging pm/linux-next (87852f90dc5a Merge branches 'acpi-apei' and 'acpi-do=
+cs' into linux-next)
+Merging cpufreq-arm/cpufreq/arm/linux-next (72951a77c00f cpufreq: blocklist=
+ Qualcomm sc8280xp and sa8540p in cpufreq-dt-platdev)
+Merging cpupower/cpupower (8382dce5e483 cpupower: Add "perf" option to prin=
+t AMD P-State information)
+Merging devfreq/devfreq-next (26291c54e111 Linux 5.17-rc2)
+Merging opp/opp/linux-next (f48a0c475c2a Documentation: EM: Describe new re=
+gistration method using DT)
+Merging thermal/thermal/linux-next (cef4b473c499 thermal/drivers/brcmstb_th=
+ermal: Interrupt is optional)
+Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
+to 'dma_' API)
+Merging dlm/next (feae43f8aa88 fs: dlm: print cluster addr if non-cluster n=
+ode connects)
+Merging rdma/for-next (73f7e05609ec RDMA/hns: Refactor the alloc_cqc())
+Merging net-next/master (669b258a793d bonding: helper macro __ATTR_RO to ma=
+ke code more clear)
+CONFLICT (content): Merge conflict in drivers/hwmon/adt7310.c
+CONFLICT (content): Merge conflict in net/dsa/dsa2.c
+Merging bpf-next/for-next (c344b9fc2108 Merge branch 'bpf: add __percpu tag=
+ging in vmlinux BTF')
+Merging ipsec-next/master (2ecda181682e xfrm: delete duplicated functions t=
+hat calls same xfrm_api_check())
+Merging mlx5-next/mlx5-next (45fee8edb4b3 net/mlx5: Add clarification on sy=
+nc reset failure)
+Merging netfilter-next/master (c828414ac935 netfilter: nft_compat: suppress=
+ comment match)
+Merging ipvs-next/master (c828414ac935 netfilter: nft_compat: suppress comm=
+ent match)
+Merging bluetooth/master (669b258a793d bonding: helper macro __ATTR_RO to m=
+ake code more clear)
+Merging wireless-next/main (e715f10f3d05 rtw89: get channel parameters of 1=
+60MHz bandwidth)
+CONFLICT (content): Merge conflict in net/mac80211/mlme.c
+Merging mtd/mtd/next (2365f91c861c mtd: parsers: trx: allow to use on Media=
+Tek MIPS SoCs)
+Merging nand/nand/next (ffb16c1c4267 mtd: rawnand: stm32_fmc2: Add NAND Wri=
+te Protect support)
+CONFLICT (content): Merge conflict in Documentation/devicetree/bindings/mtd=
+/nand-controller.yaml
+Merging spi-nor/spi-nor/next (3c552889e431 mtd: spi-nor: renumber flags)
+Merging crypto/master (280ee3c3aaa8 crypto: octeontx2 - fix missing unlock)
+Merging drm/drm-next (6de7e4f02640 Merge tag 'drm-msm-next-2022-03-01' of h=
+ttps://gitlab.freedesktop.org/drm/msm into drm-next)
+CONFLICT (modify/delete): Documentation/devicetree/bindings/display/mediate=
+k/mediatek,disp.txt deleted in drm/drm-next and modified in HEAD.  Version =
+HEAD of Documentation/devicetree/bindings/display/mediatek/mediatek,disp.tx=
+t left in tree.
+$ git rm -f Documentation/devicetree/bindings/display/mediatek/mediatek,dis=
+p.txt
+Applying: fix up for "media: dt-binding: mediatek: Get rid of mediatek,larb=
+ for multimedia HW"
+Merging drm-misc/for-linux-next (07f380da3ebd drm/panel: simple: Fix Innolu=
+x G070Y2-L01 BPP settings)
+Merging amdgpu/drm-next (0f3dfaeec830 drm/radeon: Add HD-audio component no=
+tifier support (v2))
+Merging drm-intel/for-linux-next (6de7e4f02640 Merge tag 'drm-msm-next-2022=
+-03-01' of https://gitlab.freedesktop.org/drm/msm into drm-next)
+Merging drm-tegra/drm/tegra/for-next (b53c24f69199 drm/tegra: Support YVYU,=
+ VYUY and YU24 formats)
+Merging drm-msm/msm-next (5f9ffe898033 drm/msm/a6xx: Zap counters across co=
+ntext switch)
+Merging imx-drm/imx-drm/next (20fbfc81e390 drm/imx: imx-tve: Make use of th=
+e helper function devm_platform_ioremap_resource())
+Merging etnaviv/etnaviv/next (cdd156955f94 drm/etnaviv: consider completed =
+fence seqno in hang check)
+Applying: fix up for "spi: make remove callback a void function"
+Merging fbdev/for-next (4f01d09b2bbf video: fbdev: sm712fb: Fix crash in sm=
+tcfb_write())
+Merging regmap/for-next (2d2329787ba2 regmap: irq: cleanup comments)
+Merging sound/for-next (fc4cf4293f0d ALSA: x86: Use standard mmap helper fo=
+r Intel HDMI LPE audio)
+Merging sound-asoc/for-next (6984974883ca Merge remote-tracking branch 'aso=
+c/for-5.18' into asoc-next)
+Merging modules/modules-next (719fce7539cd Merge tag 'soc-fixes-5.17-2' of =
+git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc)
+Merging input/next (f28af984e771 Input: mt6779-keypad - add MediaTek keypad=
+ driver)
+Merging block/for-next (bf5c73617cf0 Merge branch 'for-5.18/drivers' into f=
+or-next)
+CONFLICT (content): Merge conflict in fs/iomap/direct-io.c
+Merging device-mapper/for-next (c4fdab6d5c6b dm: support bio polling)
+Merging libata/for-next (4dd4d3deb502 ata: ahci: Rename CONFIG_SATA_LPM_MOB=
+ILE_POLICY configuration item)
+Merging pcmcia/pcmcia-next (3928cf08334e pcmcia: db1xxx_ss: restrict to MIP=
+S_DB1XXX boards)
+Merging mmc/next (1f311c94aabd mmc: rtsx: add 74 Clocks in power on flow)
+Merging mfd/for-mfd-next (7a69f34ab44d mfd: atmel-flexcom: fix compilation =
+warning)
+Merging backlight/for-backlight-next (ec961cf32411 backlight: qcom-wled: Re=
+spect enabled-strings in set_brightness)
+Merging battery/for-next (75853406fa27 power: supply: Add a driver for Injo=
+inic power bank ICs)
+Merging regulator/for-next (29bfeed6be0c Merge remote-tracking branch 'regu=
+lator/for-5.18' into regulator-next)
+Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
+ into next-testing)
+Merging apparmor/apparmor-next (c2489617b3b9 apparmor: Fix undefined refere=
+nce to `zlib_deflate_workspacesize')
+Merging integrity/next-integrity (cd3bc044af48 KEYS: encrypted: Instantiate=
+ key with user-provided decrypted data)
+Merging keys/keys-next (2d743660786e Merge branch 'fixes' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/viro/vfs)
+Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
+id_initialized as __initdata)
+Merging selinux/next (cdbec3ede0b8 selinux: shorten the policy capability e=
+num names)
+Merging smack/next (a5cd1ab7ab67 Fix incorrect type in assignment of ipv6 p=
+ort for audit)
+Merging tomoyo/master (b9c20da356db workqueue: Warn flushing of kernel-glob=
+al workqueues)
+Merging tpmdd/next (998cfca72638 KEYS: asymmetric: properly validate hash_a=
+lgo and encoding)
+Merging watchdog/master (cfb92440ee71 Linux 5.17-rc5)
+Merging iommu/next (963d0c21c009 Merge branches 'arm/mediatek', 'arm/msm', =
+'arm/renesas', 'arm/rockchip', 'iommu/fixes', 'x86/vt-d', 'core' and 'x86/a=
+md' into next)
+Merging audit/next (272ceeaea355 audit: log AUDIT_TIME_* records only from =
+rules)
+Merging devicetree/for-next (dca669354e6f dt-bindings: Another pass removin=
+g cases of 'allOf' containing a '$ref')
+Merging mailbox/mailbox-for-next (869b6ca39c08 dt-bindings: mailbox: Add mo=
+re protocol and client ID)
+Merging spi/for-next (a3d3c11c0424 Merge remote-tracking branch 'spi/for-5.=
+18' into spi-next)
+CONFLICT (modify/delete): arch/arm/mach-pxa/stargate2.c deleted in HEAD and=
+ modified in spi/for-next.  Version spi/for-next of arch/arm/mach-pxa/starg=
+ate2.c left in tree.
+$ git rm -f arch/arm/mach-pxa/stargate2.c
+Merging tip/auto-latest (a66320f04160 Merge branch into tip/master: 'core/c=
+ore')
+CONFLICT (content): Merge conflict in drivers/iommu/intel/iommu.c
+Merging clockevents/timers/drivers/next (e39a56013171 clocksource/drivers/i=
+mx-tpm: Move tpm_read_sched_clock() under CONFIG_ARM)
+Merging edac/edac-for-next (1e2e0e53092b Merge branch 'edac-amd64' into eda=
+c-for-next)
+Merging irqchip/irq/irqchip-next (97dcde2a5279 Merge branch irq/meson-gpio =
+into irq/irqchip-next)
+CONFLICT (content): Merge conflict in drivers/pinctrl/pinctrl-starfive.c
+Merging ftrace/for-next (864ea0e10cc9 user_events: Add documentation file)
+Merging rcu/rcu/next (1498a74770d7 torture: Enable CSD-lock stall reports f=
+or scftorture)
+CONFLICT (content): Merge conflict in kernel/rcu/tree_plugin.h
+Merging kvm/next (0564eeb71bbb Merge branch 'kvm-bugfixes' into HEAD)
+Merging kvm-arm/next (947a4a402d9d Merge branch kvm-arm64/misc-5.18 into kv=
+marm-master/next)
+Merging kvms390/next (ee6a569d3bf6 KVM: s390: pv: make use of ultravisor AI=
+V support)
+Merging xen-tip/linux-next (f66edf684edc xen/pci: Make use of the helper ma=
+cro LIST_HEAD())
+Merging percpu/for-next (4e1f82dce05b Merge branch 'for-5.16-fixes' into fo=
+r-next)
+Merging workqueues/for-next (bc35f7ef9628 workqueue: Convert the type of po=
+ol->nr_running to int)
+Merging drivers-x86/for-next (cb18448bbf1c platform/x86: x86-android-tablet=
+s: Lenovo Yoga Tablet 2 830/1050 sound support)
+CONFLICT (content): Merge conflict in drivers/platform/x86/thinkpad_acpi.c
+Merging chrome-platform/for-next (b579f139e470 platform/chrome: cros_ec_typ=
+ec: Update mux flags during partner removal)
+Merging hsi/for-next (e783362eb54c Linux 5.17-rc1)
+Merging leds/for-next (e26557a0aa68 leds: pca955x: Allow zero LEDs to be sp=
+ecified)
+Merging ipmi/for-next (f4676c8ec396 ipmi: kcs: aspeed: Remove old bindings =
+support)
+Merging driver-core/driver-core-next (4a248f85b3dd Merge 5.17-rc6 into driv=
+er-core-next)
+CONFLICT (content): Merge conflict in drivers/power/supply/ab8500_chargalg.c
+Merging usb/usb-next (98d107b84614 usb: host: xhci: Remove some unnecessary=
+ return value initializations)
+CONFLICT (content): Merge conflict in arch/arm64/boot/dts/qcom/ipq6018.dtsi
+CONFLICT (content): Merge conflict in arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
+Merging usb-serial/usb-next (e1d15646565b USB: serial: pl2303: add IBM devi=
+ce IDs)
+Merging usb-chipidea-next/for-usb-next (78665f57c3fa usb: chipidea: udc: ma=
+ke controller hardware endpoint primed)
+Merging tty/tty-next (3631e48df0db serial: samsung: Add samsung_early_read =
+to support early kgdboc)
+CONFLICT (content): Merge conflict in MAINTAINERS
+Merging char-misc/char-misc-next (3dd9a926ec23 mmc: rtsx: Fix build errors/=
+warnings for unused variable)
+CONFLICT (content): Merge conflict in MAINTAINERS
+Merging extcon/extcon-next (b26c5f03a645 extcon: Fix some kernel-doc commen=
+ts)
+CONFLICT (content): Merge conflict in drivers/power/supply/max8997_charger.c
+Merging gnss/gnss-next (26291c54e111 Linux 5.17-rc2)
+Merging phy-next/next (c6455af54899 phy: qcom-qmp: add sc8280xp UFS PHY)
+CONFLICT (modify/delete): Documentation/devicetree/bindings/phy/qcom,usb-hs=
+-phy.txt deleted in phy-next/next and modified in HEAD.  Version HEAD of Do=
+cumentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt left in tree.
+$ git rm -f Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
+Applying: merge fix for "dt-bindings: phy: qcom,usb-hs-phy: add MSM8226 com=
+patible"
+Merging soundwire/next (266fa94673d3 soundwire: qcom: use __maybe_unused fo=
+r swrm_runtime_resume())
+Merging thunderbolt/next (144c4a77a3e1 thunderbolt: Rename EEPROM handling =
+bits to match USB4 spec)
+Merging vfio/next (f8a665b15947 Merge branches 'v5.18/vfio/next/mlx5-migrat=
+ion-v10', 'v5.18/vfio/next/pm-fixes' and 'v5.18/vfio/next/uml-build-fix' in=
+to v5.18/vfio/next/next)
+Merging staging/staging-next (b25c7dc13fb8 staging: rts5208: fix Lines shou=
+ld not end with a '('.)
+CONFLICT (content): Merge conflict in drivers/staging/fbtft/fbtft.h
+Merging iio/togreg (0bf126163c3e iio: adc: xilinx-ams: Fix single channel s=
+witching sequence)
+CONFLICT (content): Merge conflict in .mailmap
+CONFLICT (content): Merge conflict in drivers/iio/accel/fxls8962af-core.c
+Merging mux/for-next (0fcfb00b28c0 Linux 5.16-rc4)
+Merging icc/icc-next (52c85167e413 Merge branch 'icc-msm8939' into icc-next)
+Merging dmaengine/next (ea7c8f598c32 dmaengine: idxd: restore traffic class=
+ defaults after wq reset)
+Merging cgroup/for-next (88ea791b5665 Merge branch 'for-5.17-fixes' into fo=
+r-next)
+Merging scsi/for-next (f6de306274ab Merge branch 'misc' into for-next)
+CONFLICT (content): Merge conflict in block/blk-lib.c
+CONFLICT (content): Merge conflict in block/blk-merge.c
+CONFLICT (content): Merge conflict in drivers/block/drbd/drbd_worker.c
+CONFLICT (content): Merge conflict in drivers/block/rnbd/rnbd-clt.c
+Merging scsi-mkp/for-next (f2ddbbea7780 scsi: lpfc: Copyright updates for 1=
+4.2.0.0 patches)
+Merging vhost/linux-next (797e2683c561 tools/virtio: fix after premapped bu=
+f support)
+CONFLICT (content): Merge conflict in drivers/block/virtio_blk.c
+Merging rpmsg/for-next (c060cc0014c9 Merge branch 'rproc-next' into for-nex=
+t)
+Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
+isting file)
+Merging gpio-brgl/gpio/for-next (37db988c3629 Merge tag 'intel-gpio-v5.18-1=
+' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel int=
+o gpio/for-next)
+Merging gpio-intel/for-next (a1ce76e89907 gpio: tps68470: Allow building as=
+ module)
+Merging gpio-sim/gpio/gpio-sim (0fcfb00b28c0 Linux 5.16-rc4)
+Merging pinctrl/for-next (842366d7cb68 Merge branch 'devel' into for-next)
+Merging pinctrl-intel/for-next (d25478e1d8f9 pinctrl: icelake: Add Ice Lake=
+-N PCH pin controller support)
+Merging pinctrl-renesas/renesas-pinctrl (babe298e9caa pinctrl: renesas: r8a=
+779f0: Add Ethernet pins, groups, and functions)
+Merging pinctrl-samsung/for-next (3652dc070bad pinctrl: samsung: improve wa=
+ke irq info on console)
+Merging pwm/for-next (ed14d36498c8 pwm: rcar: Simplify multiplication/shift=
+ logic)
+Merging userns/for-next (0ac983f51203 ucounts: Fix systemd LimitNPROC with =
+private users regression)
+Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
+ the size of the log file for email)
+Merging kselftest/next (f6d344cd5fa6 selftests: Fix build when $(O) points =
+to a relative path)
+Merging livepatching/for-next (b44a7f076ce1 Merge branch 'for-5.18/selftest=
+s-fixes' into for-next)
+Merging coresight/next (b54f53bc11a5 coresight: Drop unused 'none' enum val=
+ue for each component)
+Merging rtc/rtc-next (73ce05302007 rtc: pcf2127: fix bug when reading alarm=
+ registers)
+Merging nvdimm/libnvdimm-for-next (2166a9974902 dax: make sure inodes are f=
+lushed before destroy cache)
+Merging at24/at24/for-next (e783362eb54c Linux 5.17-rc1)
+Merging ntb/ntb-next (d2bda1500aa8 IDT: Fix Build warnings on some 32bit ar=
+chitectures.)
+Merging seccomp/for-next/seccomp (eed09ad26182 samples/seccomp: Adjust samp=
+le to also provide kill option)
+Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
+Merging fsi/next (f2af60bb7ce2 fsi: Add trace events in initialization path)
+Merging slimbus/for-next (e783362eb54c Linux 5.17-rc1)
+Merging nvmem/for-next (bdf79b27260b dt-bindings: nvmem: brcm,nvram: add ba=
+sic NVMEM cells)
+CONFLICT (add/add): Merge conflict in Documentation/devicetree/bindings/nvm=
+em/sunplus,sp7021-ocotp.yaml
+CONFLICT (content): Merge conflict in MAINTAINERS
+Merging xarray/main (22f56b8e890d XArray: Include bitmap.h from xarray.h)
+Merging hyperv/hyperv-next (1d7286729aa6 hv_balloon: rate-limit "Unhandled =
+message" warning)
+Merging auxdisplay/auxdisplay (9ed331f8a0fb auxdisplay: lcd2s: Use proper A=
+PI to free the instance of charlcd object)
+Merging kgdb/kgdb/for-next (b77dbc86d604 kdb: Adopt scheduler's task classi=
+fication)
+Merging hmm/hmm (6880fa6c5660 Linux 5.15-rc1)
+Merging fpga/for-next (21f0a239ecab fpga: dfl: pci: Remove usage of the dep=
+recated "pci-dma-compat.h" API)
+Merging kunit/test (e783362eb54c Linux 5.17-rc1)
+Merging cfi/cfi/next (e783362eb54c Linux 5.17-rc1)
+Merging kunit-next/kunit (5debe5bfa02c list: test: Add a test for list_entr=
+y_is_head())
+Merging trivial/for-next (081c8919b02b Documentation: remove trivial tree)
+Merging mhi/mhi-next (0d02ea60ea13 bus: mhi: ep: Add uevent support for mod=
+ule autoloading)
+Merging memblock/for-next (2a7ceac9e581 memblock tests: Fix testing with 32=
+-bit physical addresses)
+Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
+do_copy)
+Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
+Merging cxl/next (e6e17cc6ed75 cxl/core: Fix cxl_device_lock() class detect=
+ion)
+Merging folio-iomap/folio-iomap (4d7bd0eb72e5 iomap: Inline __iomap_zero_it=
+er into its caller)
+Merging zstd/zstd-next (88a309465b3f lib: zstd: clean up double word in com=
+ment.)
+Merging efi/next (2baa81c83f6f efifb: Remove redundant efifb_setup_from_dmi=
+ stub)
+Merging unicode/for-next (5298d4bfe80f unicode: clean up the Kconfig symbol=
+ confusion)
+Merging slab/for-next (d3d59937afdf Merge branch 'for-5.18/trivial' into fo=
+r-next)
+Merging random/master (d0d793c28700 random: use SipHash as interrupt entrop=
+y accumulator)
+Merging landlock/next (7325fd5614aa Merge Landlock fixes into next)
+Merging rust/rust-next (847245fe812e init/Kconfig: Specify the interpreter =
+for rust-is-available.sh)
+Merging sysctl/sysctl-next (fc12aa67daba kernel/do_mount_initrd: move real_=
+root_dev sysctls to its own file)
+CONFLICT (content): Merge conflict in include/linux/sched/sysctl.h
+CONFLICT (content): Merge conflict in kernel/sysctl.c
+Merging folio/for-next (0488343ba3dd selftests/vm/transhuge-stress: Support=
+ file-backed PMD folios)
+CONFLICT (modify/delete): arch/nds32/include/asm/pgtable.h deleted in HEAD =
+and modified in folio/for-next.  Version folio/for-next of arch/nds32/inclu=
+de/asm/pgtable.h left in tree.
+CONFLICT (content): Merge conflict in drivers/gpu/drm/drm_cache.c
+$ git rm -f arch/nds32/include/asm/pgtable.h
+Merging execve/for-next/execve (9e1a3ce0a952 binfmt_elf: Introduce KUnit te=
+st)
+Merging kspp/for-next/kspp (1b01a23d9a48 Merge branch 'for-next/hardening' =
+into for-next/kspp)
+Applying: drm/bridge: it6505: Fix the read buffer array bound
+Applying: drm/dp: Fix OOB read when handling Post Cursor2 register
+Applying: drm/dp: Fix off-by-one in register cache size
+Merging kspp-gustavo/for-next/kspp (91adfbb14c00 Merge branch 'for-next/ksp=
+p-fam0' into for-next/kspp)
+Merging akpm-current/current (a36f330518af ipc/mqueue: use get_tree_nodev()=
+ in mqueue_get_tree())
+CONFLICT (content): Merge conflict in Documentation/admin-guide/sysctl/kern=
+el.rst
+CONFLICT (modify/delete): arch/nds32/mm/init.c deleted in HEAD and modified=
+ in akpm-current/current.  Version akpm-current/current of arch/nds32/mm/in=
+it.c left in tree.
+CONFLICT (content): Merge conflict in include/linux/sched/sysctl.h
+CONFLICT (content): Merge conflict in lib/Kconfig.debug
+CONFLICT (content): Merge conflict in mm/Kconfig
+CONFLICT (content): Merge conflict in mm/huge_memory.c
+CONFLICT (content): Merge conflict in mm/internal.h
+CONFLICT (content): Merge conflict in mm/memcontrol.c
+CONFLICT (content): Merge conflict in mm/memory-failure.c
+CONFLICT (content): Merge conflict in mm/memory.c
+CONFLICT (content): Merge conflict in mm/memremap.c
+CONFLICT (content): Merge conflict in mm/rmap.c
+CONFLICT (content): Merge conflict in mm/vmscan.c
+CONFLICT (modify/delete): tools/testing/radix-tree/linux/gfp.h deleted in H=
+EAD and modified in akpm-current/current.  Version akpm-current/current of =
+tools/testing/radix-tree/linux/gfp.h left in tree.
+$ git rm -f tools/testing/radix-tree/linux/gfp.h arch/nds32/mm/init.c
+Applying: fix up for "tools: Move gfp.h and slab.h from radix-tree to lib"
+$ git checkout -b akpm remotes/origin/akpm/master
+$ git rebase --onto master remotes/origin/akpm/master-base
+Merging akpm/master (709d3cc300d4 kselftest/vm: override TARGETS from argum=
+ents)
+
+--Sig_/ifDTcMX700MvmTJ4CbUktRx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlzAEACgkQAVBC80lX
+0GyYjwf+MwFdTE1aVM0NzYkrt1pVN11Xn6Q58KhW2pxGVpfLv+v57TMPJHsnr70l
+c0i/qU1cWGgY5/2hetuhcX80xG+LM2V5LvtFGx8TRI1jFCR/qI/vWWZri2lr2Z6S
+xvEuWjaLFOWzF3FJHolJA1nYad0HiALCxae2EzJhVaM1UJqGG8adV+O2Zh89/HXh
+W4UDPMnRFvlHSI9UI8sZq9eCxQPfSXQ21QBhmA6ls+kyOt3SrYGvN+gDjtQeHuYP
+MoOEGjktLB/4NI/AOCP0WEvivf24S8jyhV4hhmRYrP+tZYyLutPBE6LSA+Vwi0sq
+Opc7PfCQTmMrHf9Ld7W8lc0yJyZUhw==
+=Fupq
+-----END PGP SIGNATURE-----
+
+--Sig_/ifDTcMX700MvmTJ4CbUktRx--

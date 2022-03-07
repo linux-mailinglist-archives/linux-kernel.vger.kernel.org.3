@@ -2,87 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795C94D188F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E970C4D19F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241484AbiCHNBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        id S1347265AbiCHOF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235812AbiCHNB3 (ORCPT
+        with ESMTP id S232904AbiCHOF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:01:29 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9072BB36;
-        Tue,  8 Mar 2022 05:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646744422;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=VtDYvUnQRbgLODj+rX79mLvwKSW8TYtJTAsBlNabCFw=;
-    b=rafLf+uUZEtqViDhU6H6lF3wCMqQdZHfkaZ9B3xnaIeBK+1vLLLm3piTpF+rIVy1bB
-    QwigEkw39QsCqnackRhQS2N5SAeMEQ7qfu0XmmiDAlPiFC+cnD7iSnuU1rbrHjRLPZgC
-    asH/4prv8EySixlwtOT1kZm8oYH9C1P/OhAP0HzGlWyqZBzzbF4qDA1ucxFyFnx1bsUQ
-    WFucOqejH0svlG83BoOz9tPGSCvtqIbDxrrK9hcNH78zd4ieEnNQ9DUDgiMQPs7bMQZR
-    UuUZ4deah2JueGccJGipdAxJQKxrOmXw9m8Jd0zn5ejfYstnqAWSLaJVycAZIqPjQomE
-    zP9Q==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVbpc9Y="
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
-    with ESMTPSA id n729cey28D0LSJD
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 8 Mar 2022 14:00:21 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH] ARM: dts: Fix mmc order for omap3-gta04
-Date:   Tue,  8 Mar 2022 14:00:20 +0100
-Message-Id: <dc9173ee3d391d9e92b7ab8ed4f84b29f0a21c83.1646744420.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.33.0
+        Tue, 8 Mar 2022 09:05:56 -0500
+X-Greylist: delayed 61730 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 06:04:56 PST
+Received: from zkmu.kz (unknown [185.234.114.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA99F49F35
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:04:56 -0800 (PST)
+Received: from zkgmu by zkmu.kz with local (Exim 4.94.2)
+        (envelope-from <test@test.kz>)
+        id 1nRKOh-00BIVm-19
+        for linux-kernel@vger.kernel.org; Tue, 08 Mar 2022 02:56:03 +0600
+To:     linux-kernel@vger.kernel.org
+Subject: =?utf-8?B?8J+NkyBTaGVpbGEgd2FudCB0byBtZWV0IHlvdSEgQ2xpY2s=?=  =?utf-8?B?IGhlcmU6IGh0dHA6Ly9pbngubHYvMDRwUT9zeHhoYiA=?=  =?utf-8?B?8J+NkyDSr9GI0ZbQvSDQnNC10LTQuNC6INCz0LDQt9C10YLRliDRgdCw0Lk=?=  =?utf-8?B?0YLRi9C90LTQsNKT0Ysg0YLRltGA0LrQtdGDINC20LDQt9Cx0LDRgdGL0L0=?=  =?utf-8?B?0YvSoyDQv9Cw0YDQsNC80LXRgtGA0LvQtdGA0ZY=?=
+X-PHP-Originating-Script: 1001:phpmailer.php
+Date:   Tue, 8 Mar 2022 02:56:03 +0600
+From:   =?utf-8?B?0KHQvtC30LDSmyDSr9C90ZY=?= <test@test.kz>
+Reply-to: =?utf-8?B?0KHQvtC30LDSmyDSr9C90ZY=?= <test@test.kz>
+Message-ID: <438b4be4276bfcaef7b1256882dc0d73@medic.zkgmu.kz>
+X-Priority: 3
+X-Mailer: PHPMailer 5.2 (http://code.google.com/a/apache-extras.org/p/phpmailer/)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_50,DATE_IN_PAST_12_24,
+        GB_FAKE_RF_SHORT,PLING_QUERY,RDNS_NONE,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
+Сәлеметсіз бе, 🍓 Sheila want to meet you! Click here: http://inx.lv/04pQ?sxxhb 🍓,
 
-introduces general mmc aliases. Let's tailor them to the need
-of the GTA04 board which does not make use of mmc2 and mmc3 interfaces.
+ «Медик газеті» сайтында тіркелгеніңіз үшін рақмет. Сіздің тіркелу жазбаңыз сайтта тіркелді, бірақ та оны қолдану үшін белсенді ету қажет.
+Тіркелу жазбасын белсенді ету үшін төмендегі сілтеме бойынша өтіңіз немесе оны браузердің мекен-жай жолына көшіріп қойыңыз:
+http://medic.zkgmu.kz/index.php?option=com_users&task=registration.activate&token=38a9ccca95cf6b938bdafe8de5683a68 
 
-Fixes: commit a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/arm/boot/dts/omap3-gta04.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Тіркелу жазбасы белсенді болғаннан кейін сіз «http://medic.zkgmu.kz/» сайтына төмендегі логин мен құпия сөзді қолдану арқылы кіре алатын боласыз:
 
-diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
-index 7e3d8147e2c1..0365f06165e9 100644
---- a/arch/arm/boot/dts/omap3-gta04.dtsi
-+++ b/arch/arm/boot/dts/omap3-gta04.dtsi
-@@ -31,6 +31,8 @@ chosen {
- 	aliases {
- 		display0 = &lcd;
- 		display1 = &tv0;
-+		/delete-property/ mmc2;
-+		/delete-property/ mmc3;
- 	};
- 
- 	ldo_3v3: fixedregulator {
--- 
-2.33.0
+Логин: n1q0hr6
+Құпия сөз: bjeOuHCsT2jU
 

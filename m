@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BB64CF990
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B044CF986
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240202AbiCGKGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S240331AbiCGKGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238506AbiCGJrL (ORCPT
+        with ESMTP id S238505AbiCGJrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Mar 2022 04:47:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1446AA50;
-        Mon,  7 Mar 2022 01:42:19 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB1F6B086;
+        Mon,  7 Mar 2022 01:42:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16890B8102B;
-        Mon,  7 Mar 2022 09:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF32C340E9;
-        Mon,  7 Mar 2022 09:42:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 919D360F63;
+        Mon,  7 Mar 2022 09:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0DD6C340E9;
+        Mon,  7 Mar 2022 09:42:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646127;
-        bh=YRjYEaWzYusuyuXIIJXKvhkyuK9jCowa3OGLHVUI8kg=;
+        s=korg; t=1646646131;
+        bh=UACtXFZvc0MXgSbo6CfRxf5JX/bHK5FHgT+BESiJvds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VU53HN7sy0/jO4tXushZCsPUj310RDMtevh20sRfNU5wKcb0XYxSxKBWf/vGUqiGy
-         j+caFO6JK7PgFg0hNmZiceZ/ZSgKSrfRSzWZ2ujpH4r2ZGejTpcarD3B5qF/8J66PW
-         lpXjZE9dn07+08od8eP46vAw7CFEUaeSH4g2lAyc=
+        b=T+nrEmX6dx1x32AePjXsywcUnd0uwjyenSkw4CmJTbnfARiy9kzoS8PhrPoS1gpZ/
+         3eH9Qui0E3Dj9eoCtOivkoLeOM+UheO6Ig7E+rMGXX/ss1CCwGKsdLHtwmxzUQD9N9
+         hxjWpoDm8F2ERIIroLFJM3ZCbeMwhu1oQA4sEgLo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Huang <ahuang12@lenovo.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
+        stable@vger.kernel.org, Lennert Buytenhek <buytenh@arista.com>,
         Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.15 143/262] iommu/vt-d: Fix double list_add when enabling VMD in scalable mode
-Date:   Mon,  7 Mar 2022 10:18:07 +0100
-Message-Id: <20220307091706.483350050@linuxfoundation.org>
+Subject: [PATCH 5.15 144/262] iommu/amd: Recover from event log overflow
+Date:   Mon,  7 Mar 2022 10:18:08 +0100
+Message-Id: <20220307091706.511255356@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
 References: <20220307091702.378509770@linuxfoundation.org>
@@ -55,170 +54,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Huang <ahuang12@lenovo.com>
+From: Lennert Buytenhek <buytenh@wantstofly.org>
 
-commit b00833768e170a31af09268f7ab96aecfcca9623 upstream.
+commit 5ce97f4ec5e0f8726a5dda1710727b1ee9badcac upstream.
 
-When enabling VMD and IOMMU scalable mode, the following kernel panic
-call trace/kernel log is shown in Eagle Stream platform (Sapphire Rapids
-CPU) during booting:
+The AMD IOMMU logs I/O page faults and such to a ring buffer in
+system memory, and this ring buffer can overflow.  The AMD IOMMU
+spec has the following to say about the interrupt status bit that
+signals this overflow condition:
 
-pci 0000:59:00.5: Adding to iommu group 42
-...
-vmd 0000:59:00.5: PCI host bridge to bus 10000:80
-pci 10000:80:01.0: [8086:352a] type 01 class 0x060400
-pci 10000:80:01.0: reg 0x10: [mem 0x00000000-0x0001ffff 64bit]
-pci 10000:80:01.0: enabling Extended Tags
-pci 10000:80:01.0: PME# supported from D0 D3hot D3cold
-pci 10000:80:01.0: DMAR: Setup RID2PASID failed
-pci 10000:80:01.0: Failed to add to iommu group 42: -16
-pci 10000:80:03.0: [8086:352b] type 01 class 0x060400
-pci 10000:80:03.0: reg 0x10: [mem 0x00000000-0x0001ffff 64bit]
-pci 10000:80:03.0: enabling Extended Tags
-pci 10000:80:03.0: PME# supported from D0 D3hot D3cold
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:29!
-invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.17.0-rc3+ #7
-Hardware name: Lenovo ThinkSystem SR650V3/SB27A86647, BIOS ESE101Y-1.00 01/13/2022
-Workqueue: events work_for_cpu_fn
-RIP: 0010:__list_add_valid.cold+0x26/0x3f
-Code: 9a 4a ab ff 4c 89 c1 48 c7 c7 40 0c d9 9e e8 b9 b1 fe ff 0f
-      0b 48 89 f2 4c 89 c1 48 89 fe 48 c7 c7 f0 0c d9 9e e8 a2 b1
-      fe ff <0f> 0b 48 89 d1 4c 89 c6 4c 89 ca 48 c7 c7 98 0c d9
-      9e e8 8b b1 fe
-RSP: 0000:ff5ad434865b3a40 EFLAGS: 00010246
-RAX: 0000000000000058 RBX: ff4d61160b74b880 RCX: ff4d61255e1fffa8
-RDX: 0000000000000000 RSI: 00000000fffeffff RDI: ffffffff9fd34f20
-RBP: ff4d611d8e245c00 R08: 0000000000000000 R09: ff5ad434865b3888
-R10: ff5ad434865b3880 R11: ff4d61257fdc6fe8 R12: ff4d61160b74b8a0
-R13: ff4d61160b74b8a0 R14: ff4d611d8e245c10 R15: ff4d611d8001ba70
-FS:  0000000000000000(0000) GS:ff4d611d5ea00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ff4d611fa1401000 CR3: 0000000aa0210001 CR4: 0000000000771ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- <TASK>
- intel_pasid_alloc_table+0x9c/0x1d0
- dmar_insert_one_dev_info+0x423/0x540
- ? device_to_iommu+0x12d/0x2f0
- intel_iommu_attach_device+0x116/0x290
- __iommu_attach_device+0x1a/0x90
- iommu_group_add_device+0x190/0x2c0
- __iommu_probe_device+0x13e/0x250
- iommu_probe_device+0x24/0x150
- iommu_bus_notifier+0x69/0x90
- blocking_notifier_call_chain+0x5a/0x80
- device_add+0x3db/0x7b0
- ? arch_memremap_can_ram_remap+0x19/0x50
- ? memremap+0x75/0x140
- pci_device_add+0x193/0x1d0
- pci_scan_single_device+0xb9/0xf0
- pci_scan_slot+0x4c/0x110
- pci_scan_child_bus_extend+0x3a/0x290
- vmd_enable_domain.constprop.0+0x63e/0x820
- vmd_probe+0x163/0x190
- local_pci_probe+0x42/0x80
- work_for_cpu_fn+0x13/0x20
- process_one_work+0x1e2/0x3b0
- worker_thread+0x1c4/0x3a0
- ? rescuer_thread+0x370/0x370
- kthread+0xc7/0xf0
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x1f/0x30
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-...
-Kernel panic - not syncing: Fatal exception
-Kernel Offset: 0x1ca00000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
----[ end Kernel panic - not syncing: Fatal exception ]---
+	EventOverflow: Event log overflow. RW1C. Reset 0b. 1 = IOMMU
+	event log overflow has occurred. This bit is set when a new
+	event is to be written to the event log and there is no usable
+	entry in the event log, causing the new event information to
+	be discarded. An interrupt is generated when EventOverflow = 1b
+	and MMIO Offset 0018h[EventIntEn] = 1b. No new event log
+	entries are written while this bit is set. Software Note: To
+	resume logging, clear EventOverflow (W1C), and write a 1 to
+	MMIO Offset 0018h[EventLogEn].
 
-The following 'lspci' output shows devices '10000:80:*' are subdevices of
-the VMD device 0000:59:00.5:
+The AMD IOMMU driver doesn't currently implement this recovery
+sequence, meaning that if a ring buffer overflow occurs, logging
+of EVT/PPR/GA events will cease entirely.
 
-  $ lspci
-  ...
-  0000:59:00.5 RAID bus controller: Intel Corporation Volume Management Device NVMe RAID Controller (rev 20)
-  ...
-  10000:80:01.0 PCI bridge: Intel Corporation Device 352a (rev 03)
-  10000:80:03.0 PCI bridge: Intel Corporation Device 352b (rev 03)
-  10000:80:05.0 PCI bridge: Intel Corporation Device 352c (rev 03)
-  10000:80:07.0 PCI bridge: Intel Corporation Device 352d (rev 03)
-  10000:81:00.0 Non-Volatile memory controller: Intel Corporation NVMe Datacenter SSD [3DNAND, Beta Rock Controller]
-  10000:82:00.0 Non-Volatile memory controller: Intel Corporation NVMe Datacenter SSD [3DNAND, Beta Rock Controller]
+This patch implements the spec-mandated reset sequence, with the
+minor tweak that the hardware seems to want to have a 0 written to
+MMIO Offset 0018h[EventLogEn] first, before writing an 1 into this
+field, or the IOMMU won't actually resume logging events.
 
-The symptom 'list_add double add' is caused by the following failure
-message:
-
-  pci 10000:80:01.0: DMAR: Setup RID2PASID failed
-  pci 10000:80:01.0: Failed to add to iommu group 42: -16
-  pci 10000:80:03.0: [8086:352b] type 01 class 0x060400
-
-Device 10000:80:01.0 is the subdevice of the VMD device 0000:59:00.5,
-so invoking intel_pasid_alloc_table() gets the pasid_table of the VMD
-device 0000:59:00.5. Here is call path:
-
-  intel_pasid_alloc_table
-    pci_for_each_dma_alias
-     get_alias_pasid_table
-       search_pasid_table
-
-pci_real_dma_dev() in pci_for_each_dma_alias() gets the real dma device
-which is the VMD device 0000:59:00.5. However, pte of the VMD device
-0000:59:00.5 has been configured during this message "pci 0000:59:00.5:
-Adding to iommu group 42". So, the status -EBUSY is returned when
-configuring pasid entry for device 10000:80:01.0.
-
-It then invokes dmar_remove_one_dev_info() to release
-'struct device_domain_info *' from iommu_devinfo_cache. But, the pasid
-table is not released because of the following statement in
-__dmar_remove_one_dev_info():
-
-	if (info->dev && !dev_is_real_dma_subdevice(info->dev)) {
-		...
-		intel_pasid_free_table(info->dev);
-        }
-
-The subsequent dmar_insert_one_dev_info() operation of device
-10000:80:03.0 allocates 'struct device_domain_info *' from
-iommu_devinfo_cache. The allocated address is the same address that
-is released previously for device 10000:80:01.0. Finally, invoking
-device_attach_pasid_table() causes the issue.
-
-`git bisect` points to the offending commit 474dd1c65064 ("iommu/vt-d:
-Fix clearing real DMA device's scalable-mode context entries"), which
-releases the pasid table if the device is not the subdevice by
-checking the returned status of dev_is_real_dma_subdevice().
-Reverting the offending commit can work around the issue.
-
-The solution is to prevent from allocating pasid table if those
-devices are subdevices of the VMD device.
-
-Fixes: 474dd1c65064 ("iommu/vt-d: Fix clearing real DMA device's scalable-mode context entries")
-Cc: stable@vger.kernel.org # v5.14+
-Signed-off-by: Adrian Huang <ahuang12@lenovo.com>
-Link: https://lore.kernel.org/r/20220216091307.703-1-adrianhuang0701@gmail.com
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Link: https://lore.kernel.org/r/20220221053348.262724-2-baolu.lu@linux.intel.com
+Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/YVrSXEdW2rzEfOvk@wantstofly.org
 Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/intel/iommu.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iommu/amd/amd_iommu.h       |    1 +
+ drivers/iommu/amd/amd_iommu_types.h |    1 +
+ drivers/iommu/amd/init.c            |   10 ++++++++++
+ drivers/iommu/amd/iommu.c           |   10 ++++++++--
+ 4 files changed, 20 insertions(+), 2 deletions(-)
 
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -2651,7 +2651,7 @@ static struct dmar_domain *dmar_insert_o
- 	spin_unlock_irqrestore(&device_domain_lock, flags);
+--- a/drivers/iommu/amd/amd_iommu.h
++++ b/drivers/iommu/amd/amd_iommu.h
+@@ -14,6 +14,7 @@
+ extern irqreturn_t amd_iommu_int_thread(int irq, void *data);
+ extern irqreturn_t amd_iommu_int_handler(int irq, void *data);
+ extern void amd_iommu_apply_erratum_63(u16 devid);
++extern void amd_iommu_restart_event_logging(struct amd_iommu *iommu);
+ extern void amd_iommu_reset_cmd_buffer(struct amd_iommu *iommu);
+ extern int amd_iommu_init_devices(void);
+ extern void amd_iommu_uninit_devices(void);
+--- a/drivers/iommu/amd/amd_iommu_types.h
++++ b/drivers/iommu/amd/amd_iommu_types.h
+@@ -110,6 +110,7 @@
+ #define PASID_MASK		0x0000ffff
  
- 	/* PASID table is mandatory for a PCI device in scalable mode. */
--	if (dev && dev_is_pci(dev) && sm_supported(iommu)) {
-+	if (sm_supported(iommu) && !dev_is_real_dma_subdevice(dev)) {
- 		ret = intel_pasid_alloc_table(dev);
- 		if (ret) {
- 			dev_err(dev, "PASID table allocation failed\n");
+ /* MMIO status bits */
++#define MMIO_STATUS_EVT_OVERFLOW_INT_MASK	(1 << 0)
+ #define MMIO_STATUS_EVT_INT_MASK	(1 << 1)
+ #define MMIO_STATUS_COM_WAIT_INT_MASK	(1 << 2)
+ #define MMIO_STATUS_PPR_INT_MASK	(1 << 6)
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -656,6 +656,16 @@ static int __init alloc_command_buffer(s
+ }
+ 
+ /*
++ * This function restarts event logging in case the IOMMU experienced
++ * an event log buffer overflow.
++ */
++void amd_iommu_restart_event_logging(struct amd_iommu *iommu)
++{
++	iommu_feature_disable(iommu, CONTROL_EVT_LOG_EN);
++	iommu_feature_enable(iommu, CONTROL_EVT_LOG_EN);
++}
++
++/*
+  * This function resets the command buffer if the IOMMU stopped fetching
+  * commands from it.
+  */
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -742,7 +742,8 @@ amd_iommu_set_pci_msi_domain(struct devi
+ #endif /* !CONFIG_IRQ_REMAP */
+ 
+ #define AMD_IOMMU_INT_MASK	\
+-	(MMIO_STATUS_EVT_INT_MASK | \
++	(MMIO_STATUS_EVT_OVERFLOW_INT_MASK | \
++	 MMIO_STATUS_EVT_INT_MASK | \
+ 	 MMIO_STATUS_PPR_INT_MASK | \
+ 	 MMIO_STATUS_GALOG_INT_MASK)
+ 
+@@ -752,7 +753,7 @@ irqreturn_t amd_iommu_int_thread(int irq
+ 	u32 status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
+ 
+ 	while (status & AMD_IOMMU_INT_MASK) {
+-		/* Enable EVT and PPR and GA interrupts again */
++		/* Enable interrupt sources again */
+ 		writel(AMD_IOMMU_INT_MASK,
+ 			iommu->mmio_base + MMIO_STATUS_OFFSET);
+ 
+@@ -773,6 +774,11 @@ irqreturn_t amd_iommu_int_thread(int irq
+ 		}
+ #endif
+ 
++		if (status & MMIO_STATUS_EVT_OVERFLOW_INT_MASK) {
++			pr_info_ratelimited("IOMMU event log overflow\n");
++			amd_iommu_restart_event_logging(iommu);
++		}
++
+ 		/*
+ 		 * Hardware bug: ERBT1312
+ 		 * When re-enabling interrupt (by writing 1
 
 

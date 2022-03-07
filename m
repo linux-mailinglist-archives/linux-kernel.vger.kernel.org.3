@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AC44CF639
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A15E4CFA3F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238029AbiCGJd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:33:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S235554AbiCGKMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237295AbiCGJ17 (ORCPT
+        with ESMTP id S238752AbiCGJzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:27:59 -0500
+        Mon, 7 Mar 2022 04:55:54 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D664D674CB;
-        Mon,  7 Mar 2022 01:25:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19D479394;
+        Mon,  7 Mar 2022 01:45:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AECAE61187;
-        Mon,  7 Mar 2022 09:24:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B794AC340E9;
-        Mon,  7 Mar 2022 09:24:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACE9861374;
+        Mon,  7 Mar 2022 09:45:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB05FC36AF9;
+        Mon,  7 Mar 2022 09:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645099;
-        bh=9w7wfwKPGRpK9zkIDgGWdhu9dqbToz0KVbzKdvjnBHc=;
+        s=korg; t=1646646336;
+        bh=vlwTNAYAgE8F9s04cHSroX9szAOlz5Ksx8YUDyM/b/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TkuhE6ZmuvIWtD4+lAwqAiTKLmRXnhp/PHzCRsVGEeeIpODmFw8jw/RNeO89xfRpQ
-         s1UVbm34AxHhj9jborReMD7fO6nJunYdNagH7Wjq+THv8QDsl5pX/favGMeNI/IYtF
-         PrzprimrIAU3WsBvo5w5Q9/FprBThKloT4pHH3tE=
+        b=EYrrIcXwid/no8KQUyKfBbrYIdaykNagHV9mIIQSVwLmuNmXQ3vhsDu95XWpViYz/
+         RXVVvGkSzErNgroWuNd2z/X6MlXf8spCKFFfDbn/qgoQ9OcWUQl6WBv92Ofu9k3u4a
+         /kQ3FDuCBo02nQMnTS/CEpHJYCeJTO3sA/8HlrBQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.19 38/51] can: gs_usb: change active_channelss type from atomic_t to u8
+        Anthoine Bourgeois <anthoine.bourgeois@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 209/262] ARM: dts: Use 32KiHz oscillator on devkit8000
 Date:   Mon,  7 Mar 2022 10:19:13 +0100
-Message-Id: <20220307091638.075805689@linuxfoundation.org>
+Message-Id: <20220307091708.739826971@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +56,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Anthoine Bourgeois <anthoine.bourgeois@gmail.com>
 
-commit 035b0fcf02707d3c9c2890dc1484b11aa5335eb1 upstream.
+[ Upstream commit 8840f5460a23759403f1f2860429dcbcc2f04a65 ]
 
-The driver uses an atomic_t variable: gs_usb:active_channels to keep
-track of the number of opened channels in order to only allocate
-memory for the URBs when this count changes from zero to one.
+Devkit8000 board seems to always used 32k_counter as clocksource.
+Restore this behavior.
 
-However, the driver does not decrement the counter when an error
-occurs in gs_can_open(). This issue is fixed by changing the type from
-atomic_t to u8 and by simplifying the logic accordingly.
+If clocksource is back to 32k_counter, timer12 is now the clockevent
+source (as before) and timer2 is not longer needed here.
 
-It is safe to use an u8 here because the network stack big kernel lock
-(a.k.a. rtnl_mutex) is being hold. For details, please refer to [1].
+This commit fixes the same issue observed with commit 23885389dbbb
+("ARM: dts: Fix timer regression for beagleboard revision c") when sleep
+is blocked until hitting keys over serial console.
 
-[1] https://lore.kernel.org/linux-can/CAMZ6Rq+sHpiw34ijPsmp7vbUpDtJwvVtdV7CvRZJsLixjAFfrg@mail.gmail.com/T/#t
-
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Link: https://lore.kernel.org/all/20220214234814.1321599-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: aba1ad05da08 ("clocksource/drivers/timer-ti-dm: Add clockevent and clocksource support")
+Fixes: e428e250fde6 ("ARM: dts: Configure system timers for omap3")
+Signed-off-by: Anthoine Bourgeois <anthoine.bourgeois@gmail.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/gs_usb.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/arm/boot/dts/omap3-devkit8000-common.dtsi | 17 +----------------
+ drivers/clocksource/timer-ti-dm-systimer.c     |  3 +--
+ 2 files changed, 2 insertions(+), 18 deletions(-)
 
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -198,8 +198,8 @@ struct gs_can {
- struct gs_usb {
- 	struct gs_can *canch[GS_MAX_INTF];
- 	struct usb_anchor rx_submitted;
--	atomic_t active_channels;
- 	struct usb_device *udev;
-+	u8 active_channels;
+diff --git a/arch/arm/boot/dts/omap3-devkit8000-common.dtsi b/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
+index 0df2b1dd07f6..6883ccb45600 100644
+--- a/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
++++ b/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
+@@ -158,11 +158,6 @@
+ 	status = "disabled";
  };
  
- /* 'allocate' a tx context.
-@@ -596,7 +596,7 @@ static int gs_can_open(struct net_device
- 	if (rc)
- 		return rc;
- 
--	if (atomic_add_return(1, &parent->active_channels) == 1) {
-+	if (!parent->active_channels) {
- 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
- 			struct urb *urb;
- 			u8 *buf;
-@@ -697,6 +697,7 @@ static int gs_can_open(struct net_device
- 
- 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
- 
-+	parent->active_channels++;
- 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
- 		netif_start_queue(netdev);
- 
-@@ -712,7 +713,8 @@ static int gs_can_close(struct net_devic
- 	netif_stop_queue(netdev);
- 
- 	/* Stop polling */
--	if (atomic_dec_and_test(&parent->active_channels))
-+	parent->active_channels--;
-+	if (!parent->active_channels)
- 		usb_kill_anchored_urbs(&parent->rx_submitted);
- 
- 	/* Stop sending URBs */
-@@ -991,8 +993,6 @@ static int gs_usb_probe(struct usb_inter
- 
- 	init_usb_anchor(&dev->rx_submitted);
- 
--	atomic_set(&dev->active_channels, 0);
+-/* Unusable as clocksource because of unreliable oscillator */
+-&counter32k {
+-	status = "disabled";
+-};
 -
- 	usb_set_intfdata(intf, dev);
- 	dev->udev = interface_to_usbdev(intf);
+ /* Unusable as clockevent because if unreliable oscillator, allow to idle */
+ &timer1_target {
+ 	/delete-property/ti,no-reset-on-init;
+@@ -172,7 +167,7 @@
+ 	};
+ };
  
+-/* Preferred always-on timer for clocksource */
++/* Preferred timer for clockevent */
+ &timer12_target {
+ 	ti,no-reset-on-init;
+ 	ti,no-idle;
+@@ -181,16 +176,6 @@
+ 	};
+ };
+ 
+-/* Preferred timer for clockevent */
+-&timer2_target {
+-	ti,no-reset-on-init;
+-	ti,no-idle;
+-	timer@0 {
+-		assigned-clocks = <&gpt2_fck>;
+-		assigned-clock-parents = <&sys_ck>;
+-	};
+-};
+-
+ &twl_gpio {
+ 	ti,use-leds;
+ 	/*
+diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
+index 5c40ca1d4740..1fccb457fcc5 100644
+--- a/drivers/clocksource/timer-ti-dm-systimer.c
++++ b/drivers/clocksource/timer-ti-dm-systimer.c
+@@ -241,8 +241,7 @@ static void __init dmtimer_systimer_assign_alwon(void)
+ 	bool quirk_unreliable_oscillator = false;
+ 
+ 	/* Quirk unreliable 32 KiHz oscillator with incomplete dts */
+-	if (of_machine_is_compatible("ti,omap3-beagle-ab4") ||
+-	    of_machine_is_compatible("timll,omap3-devkit8000")) {
++	if (of_machine_is_compatible("ti,omap3-beagle-ab4")) {
+ 		quirk_unreliable_oscillator = true;
+ 		counter_32k = -ENODEV;
+ 	}
+-- 
+2.34.1
+
 
 

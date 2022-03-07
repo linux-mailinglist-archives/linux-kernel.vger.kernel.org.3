@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBA14CFFCB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8DC4CFFD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242784AbiCGNSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
+        id S242803AbiCGNTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236361AbiCGNSc (ORCPT
+        with ESMTP id S242797AbiCGNTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:18:32 -0500
+        Mon, 7 Mar 2022 08:19:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9486A2649;
-        Mon,  7 Mar 2022 05:17:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BE027B13
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 05:18:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25CA3611FE;
-        Mon,  7 Mar 2022 13:17:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09884C340E9;
-        Mon,  7 Mar 2022 13:17:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C80661202
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 13:18:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA8EC36AEC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 13:18:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646659055;
-        bh=KXqVJsDGXLlSnyeaHKWpPIVZqxg9O3xVmH+wFrsgfeg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hCpGcO8HZcqQApVVZm6OEvQrrIR4vyEHePNnzVROHw1K1NkFuEfNdTu1I59Pj136m
-         4rX6fL04mPPpcVfgqfegolGRx6CRsxOiRqFeONVkYWTB6X9EcC5pWRk7rEUGXwdqU6
-         OvEMg+WzhEBC6xQTzvpMuPW0Z7aAedCqClhox8xbo/mIon3gdW3d/6JNZjCYFLY4FS
-         10pjlBodTW1xrm6ejzkguCe+Ekh4JJCoJJ2mSCIq0lgnb+KYirBLVYOdxv5JfFOaTJ
-         0Fzo4KQ6CulRfULGVd4l8OZP4WX94xCRchBbHGrVpM8g8sXszWhkjT9Jfz9c+lUM6v
-         8PJS0P6GeVloQ==
-Date:   Mon, 7 Mar 2022 15:16:54 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        zhangyiru <zhangyiru3@huawei.com>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        Alexey Gladkov <legion@kernel.org>, linux-mips@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        codalist@coda.cs.cmu.edu, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH RFC 1/3] mm: Add f_ops->populate()
-Message-ID: <YiYFxq87p2WVkZcz@iki.fi>
-References: <20220306053211.135762-1-jarkko@kernel.org>
- <20220306053211.135762-2-jarkko@kernel.org>
- <YiSGgCV9u9NglYsM@kroah.com>
- <YiTpQTM+V6rlDy6G@iki.fi>
- <YiU5E6qqYAI+WPw9@casper.infradead.org>
+        s=k20201202; t=1646659088;
+        bh=0x9avxE1QuPb1xRSPHVfHgo20smbkC0ezQPHmsX583Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fdfnW2FlS2s/NtI9OIEPoL3friIZhn4gB+q9ykNTwU5vvuw+nEflebKpQ3V3Pf4Lq
+         z1BWhCICYLQtHghvBBeeuVJezZ3Hf6PZ3w+svus4UbBeUsvAyA0WgXS5q6PEXrcohQ
+         U23e8nTBn7HGvs9ksItlQIjmC62kxSbWB5GB4c5VWjL7CJVUNiioReQrUB0b+B0izG
+         3192CzMmcsmDuN9waHQVmNKjgENwZ5u7B40kB4aazoknGByseLS7kWkeZnji6uljzW
+         qp6gKFVNXu3ojloMsNRa7sUIp/hh1PyEtMUFyfS2vflRdTLJz7zczBt/r6E6axLPhR
+         2anp04mEGAqyA==
+Received: by mail-ej1-f53.google.com with SMTP id kt27so31982180ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 05:18:08 -0800 (PST)
+X-Gm-Message-State: AOAM5332dFgoGB3DE2xz3JMlpRbd1i3urPLP7IHoPZMs/wg5jBUdVHDz
+        BbGy+XGGkY0cydHaAWnoAQSXEDbq+/sxwuYKGa64Mg==
+X-Google-Smtp-Source: ABdhPJxvgCXjgHPF1PjOKJm57sEpqWrgNtbAss/mIVzf2hdDQwOt3w5GqYZan1KufyCv5U1e45adv0v2fXT5T3kQmJk=
+X-Received: by 2002:a17:906:a1c8:b0:6da:a635:e402 with SMTP id
+ bx8-20020a170906a1c800b006daa635e402mr9441257ejb.598.1646659086280; Mon, 07
+ Mar 2022 05:18:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiU5E6qqYAI+WPw9@casper.infradead.org>
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
+ <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
+ <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
+ <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
+ <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
+ <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
+ <b6bf8463c1b370a5b5c9987ae1312fd930d36785.camel@linux.ibm.com>
+ <CAADnVQKfh3Z1DXJ3PEjFheQWEDFOKQjuyx+pkvqe6MXEmo7YHQ@mail.gmail.com> <40db9f74fd3c9c7b660e3a203c5a6eda08736d5b.camel@linux.ibm.com>
+In-Reply-To: <40db9f74fd3c9c7b660e3a203c5a6eda08736d5b.camel@linux.ibm.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Mon, 7 Mar 2022 14:17:55 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ65D2OZKrEbrCS32+FsQ3BVzs1zQcRQSLnaNQHYTjZFBA@mail.gmail.com>
+Message-ID: <CACYkzJ65D2OZKrEbrCS32+FsQ3BVzs1zQcRQSLnaNQHYTjZFBA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Florent Revest <revest@google.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,41 +84,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 10:43:31PM +0000, Matthew Wilcox wrote:
-> On Sun, Mar 06, 2022 at 07:02:57PM +0200, Jarkko Sakkinen wrote:
-> > So can I conclude from this that in general having populate available for
-> > device memory is something horrid, or just the implementation path?
-> 
-> You haven't even attempted to explain what the problem is you're trying
-> to solve.  You've shown up with some terrible code and said "Hey, is
-> this a good idea".  No, no, it's not.
+On Mon, Mar 7, 2022 at 3:57 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Thu, 2022-03-03 at 14:39 -0800, Alexei Starovoitov wrote:
+>
+> > . There is no such thing as "eBPF modules". There are BPF programs.
+> > They cannot be signed the same way as kernel modules.
+> > We've been working on providing a way to sign them for more
+> > than a year now. That work is still ongoing.
+> >
+> > . IMA cannot be used for integrity check of BPF programs for the same
+> > reasons why kernel module like signing cannot be used.
+>
+> I assume the issue isn't where the signature is stored (e.g. appended,
+> xattr), but of calculating the hash.  Where is the discussion taking
 
-The problem is that in order to include memory to enclave, which is
-essentially a reserved address range processes virtual address space
-there's two steps into it:
+This has the relevant background: https://lwn.net/Articles/853489/
 
-1. Host side (kernel) does ENCLS[EAUG] to request a new page to be
-   added to the enclave.
-2. Enclave accepts request with ENCLU[EACCEPT] or ENCLU[EACCEPTCOPY].
+We had some more discussions in one of our BSC meeting:
 
-In the current SGX2 patch set this taken care by the page fault
-handler. I.e. the enclave calls ENCLU[EACCEPT] for an empty address
-and the #PF handler then does EAUG for a single page.
+https://github.com/ebpf-io/bsc/blob/master/minutes.md
 
-So if you want to process a batch of pages this generates O(n)
-round-trips.
+and we expect the discussions to continue over conferences this year
+ (e.g. LSF/MM/BPF, Linux Plumbers). As I mentioned on another thread
+we don't have to wait for conferences and we can discuss this in the BPF
+office hours. Please feel free to add an agenda at:
 
-So if there was a way pre-do a batch of EAUG's, that would allow
-to load data to the enclave without causing page faults happening
-constantly.
+https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU/edit#gid=0
 
-One solution for this simply add ioctl:
+(best is to give some notice so that interested folks can join).
 
-https://lore.kernel.org/linux-sgx/YiLRBglTEbu8cHP9@iki.fi/T/#m195ec84bf85614a140abeee245c5118c22ace8f3
+> place?   Are there any summaries of what has been discussed?
+>
+> FYI, IMA isn't limited to measuring files.  Support was added for
+> buffer measurements (e.g kexec boot command line, certificates) and
+> measuring kernel critical data (e.g. SELinux in memory policy & state,
+> device mapper).
 
-But in practice when you wanted to use it, you would setup the
-parameters so that they match the mmap() range. So for pratical
-user space API having mmap() take care of this would be much more
-lean option.
+Nice. I need to look at how this is implemented.
 
-BR, Jarkko
+- KP
+
+>
+> thanks,
+>
+> Mimi
+>

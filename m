@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908CF4CFA16
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3428F4CF672
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240285AbiCGKNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S237841AbiCGJhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238954AbiCGJ5t (ORCPT
+        with ESMTP id S238587AbiCGJ3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:57:49 -0500
+        Mon, 7 Mar 2022 04:29:24 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970FD7B567;
-        Mon,  7 Mar 2022 01:46:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA4403FE;
+        Mon,  7 Mar 2022 01:27:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C353AB8102B;
-        Mon,  7 Mar 2022 09:46:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4CFC340E9;
-        Mon,  7 Mar 2022 09:45:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD703B810C0;
+        Mon,  7 Mar 2022 09:27:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD47C340E9;
+        Mon,  7 Mar 2022 09:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646360;
-        bh=VTKM/YwKoGj9z/Ij5f3LgJGLGD6A7h4ZU75WjylvML8=;
+        s=korg; t=1646645256;
+        bh=4Zek1ADwo7OcWm8ziM0C/gyY0rWG7TG2aclFo9XHMtE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0qJHOthlOyaBlz5BwHTss8cQM9+GQwzpkXpQtr/1m/8PETR6W5LBDJniCD1khMUxu
-         ecW1moiKrdJ25oPboEiPE90KxK0n3a3kdsDmETB+wFp5FQLP/cDCPnxhUMZS4Bi/KQ
-         OEeKIbrXuSjvmW6DkpZcSnDd90eZKqVdmU+8y68c=
+        b=shoLanCqLqV2ILHWAL0ZBYvQ6urEgXElpr1SxZtB+LZaU3NwZFCxXUdR8YFrwTff3
+         66EV1Ct539mkLDJc7sbmQUpOQWBEbrz0Q3hmAxhXgaWgddQIDiNTrfCywI6wsxPML2
+         F83W8zol/TG6yYw6RdSE3uDRkj1z0Ey6y1xEdWCk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 178/262] ibmvnic: register netdev after init of adapter
+        stable@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 09/64] i2c: cadence: allow COMPILE_TEST
 Date:   Mon,  7 Mar 2022 10:18:42 +0100
-Message-Id: <20220307091707.441491438@linuxfoundation.org>
+Message-Id: <20220307091639.408332988@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+From: Wolfram Sang <wsa@kernel.org>
 
-commit 570425f8c7c18b14fa8a2a58a0adb431968ad118 upstream.
+[ Upstream commit 0b0dcb3882c8f08bdeafa03adb4487e104d26050 ]
 
-Finish initializing the adapter before registering netdev so state
-is consistent.
+Driver builds fine with COMPILE_TEST. Enable it for wider test coverage
+and easier maintenance.
 
-Fixes: c26eba03e407 ("ibmvnic: Update reset infrastructure to support tunable parameters")
-Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/ibm/ibmvnic.c |   14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/ibm/ibmvnic.c
-+++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@ -5632,12 +5632,6 @@ static int ibmvnic_probe(struct vio_dev
- 		goto ibmvnic_dev_file_err;
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 2d08a8719506c..94c78329f841c 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -483,7 +483,7 @@ config I2C_BRCMSTB
  
- 	netif_carrier_off(netdev);
--	rc = register_netdev(netdev);
--	if (rc) {
--		dev_err(&dev->dev, "failed to register netdev rc=%d\n", rc);
--		goto ibmvnic_register_fail;
--	}
--	dev_info(&dev->dev, "ibmvnic registered\n");
- 
- 	if (init_success) {
- 		adapter->state = VNIC_PROBED;
-@@ -5650,6 +5644,14 @@ static int ibmvnic_probe(struct vio_dev
- 
- 	adapter->wait_for_reset = false;
- 	adapter->last_reset_time = jiffies;
-+
-+	rc = register_netdev(netdev);
-+	if (rc) {
-+		dev_err(&dev->dev, "failed to register netdev rc=%d\n", rc);
-+		goto ibmvnic_register_fail;
-+	}
-+	dev_info(&dev->dev, "ibmvnic registered\n");
-+
- 	return 0;
- 
- ibmvnic_register_fail:
+ config I2C_CADENCE
+ 	tristate "Cadence I2C Controller"
+-	depends on ARCH_ZYNQ || ARM64 || XTENSA
++	depends on ARCH_ZYNQ || ARM64 || XTENSA || COMPILE_TEST
+ 	help
+ 	  Say yes here to select Cadence I2C Host Controller. This controller is
+ 	  e.g. used by Xilinx Zynq.
+-- 
+2.34.1
+
 
 

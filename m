@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA32E4CF27B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C554CF27F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235782AbiCGHSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 02:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
+        id S235790AbiCGHSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 02:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235759AbiCGHSG (ORCPT
+        with ESMTP id S235784AbiCGHSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 02:18:06 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9886260CC2
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:17:12 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nR7c0-0000b2-F2; Mon, 07 Mar 2022 08:16:56 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nR7bz-003AYQ-6s; Mon, 07 Mar 2022 08:16:54 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nR7bx-007VVp-Pt; Mon, 07 Mar 2022 08:16:53 +0100
-Date:   Mon, 7 Mar 2022 08:16:53 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220307071653.o347jhcu4oeb5mc3@pengutronix.de>
-References: <20220307111342.105ce204@canb.auug.org.au>
+        Mon, 7 Mar 2022 02:18:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E692E5FFB;
+        Sun,  6 Mar 2022 23:17:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F351C6006F;
+        Mon,  7 Mar 2022 07:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C3AEC340EF;
+        Mon,  7 Mar 2022 07:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646637465;
+        bh=TkHkM64a9L8Z2y7tGG61/lkDEv6OkN2dyJrok5MXSIY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ReMT9ZScMy6S16biad+kyX70EkPfO5keb1jA05y/SLl7+zmMweTh64m7Kk12+F8d0
+         G/26iR/nAdkqySXi2a8cyfwYAGwNKg41ciZ2X1wP8WAwLGE/gRj2e7VeDcevDipoZ8
+         8eNEfrPWhBodwdnjtxpP6rqJr/9zqV31N6DEXQOsBsPz4FEDBQQdo8VDAglt8+Wyt8
+         rXMSu5+btoWv7YI7hjztUmVMF4QDX9/AvSF1z4kcmRWtYKqdHXA4iLR6o/EqJhy6wC
+         stRQQKpdydFWDMvlcMUgkm/grjLXBuJbVIISt58rgKTT3kFLbdOP/Lbt2EglOk0pwd
+         yMhr0M8o8nKFQ==
+Date:   Mon, 7 Mar 2022 12:47:39 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     hemantk@codeaurora.org, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] bus: mhi: ep: Fix an ignored error return from
+ ida_alloc()
+Message-ID: <20220307071739.GM12451@workstation>
+References: <20220304001139.95082-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nrvgrr32lc6wsnhe"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307111342.105ce204@canb.auug.org.au>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220304001139.95082-1-yang.lee@linux.alibaba.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,88 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 04, 2022 at 08:11:39AM +0800, Yang Li wrote:
+> The return from the call to ida_alloc() is int, it can be a negative
+> error code, however this is being assigned to an unsigned int variable
+> 'mhi_cntrl->index', so assign the value to 'ret' concurrently to solve
+> this problem without affecting other functions.
+> 
+> Eliminate the following coccicheck warning:
+> ./drivers/bus/mhi/ep/main.c:1422:5-21: WARNING: Unsigned expression
+> compared with zero: mhi_cntrl -> index < 0
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
---nrvgrr32lc6wsnhe
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the fix. Since the MHI EP series is under development, I've
+squashed this patch with the original patch that added the offending code.
 
-Hello Stephen,
+I'll make a note about this in changelog.
 
-On Mon, Mar 07, 2022 at 11:13:42AM +1100, Stephen Rothwell wrote:
-> After merging the amdgpu tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/gpu/drm/tiny/panel-mipi-dbi.c:391:19: error: initialization of 'v=
-oid (*)(struct spi_device *)' from incompatible pointer type 'int (*)(struc=
-t spi_device *)' [-Werror=3Dincompatible-pointer-types]
->   391 |         .remove =3D panel_mipi_dbi_spi_remove,
->       |                   ^~~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   0e65e2e6abb0 ("drm/tiny: Add MIPI DBI compatible SPI driver")
->=20
-> interacting with commit
->=20
->   a0386bba7093 ("spi: make remove callback a void function")
->=20
-> from the spi trees.
->=20
-> I have applied the following merge fix.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 7 Mar 2022 11:01:01 +1100
-> Subject: [PATCH] fix up for "spi: make remove callback a void function"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
->  drivers/gpu/drm/tiny/panel-mipi-dbi.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/tiny/panel-mipi-dbi.c b/drivers/gpu/drm/tiny=
-/panel-mipi-dbi.c
-> index 7f8c6c51387f..c759ff9c2c87 100644
-> --- a/drivers/gpu/drm/tiny/panel-mipi-dbi.c
-> +++ b/drivers/gpu/drm/tiny/panel-mipi-dbi.c
-> @@ -336,14 +336,12 @@ static int panel_mipi_dbi_spi_probe(struct spi_devi=
-ce *spi)
->  	return 0;
->  }
-> =20
-> -static int panel_mipi_dbi_spi_remove(struct spi_device *spi)
-> +static void panel_mipi_dbi_spi_remove(struct spi_device *spi)
->  {
->  	struct drm_device *drm =3D spi_get_drvdata(spi);
-> =20
->  	drm_dev_unplug(drm);
->  	drm_atomic_helper_shutdown(drm);
-> -
-> -	return 0;
->  }
-> =20
->  static void panel_mipi_dbi_spi_shutdown(struct spi_device *spi)
+>  drivers/bus/mhi/ep/main.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> index 3e98107f08c4..b27e90d97029 100644
+> --- a/drivers/bus/mhi/ep/main.c
+> +++ b/drivers/bus/mhi/ep/main.c
+> @@ -1418,11 +1418,9 @@ int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
+>  	mhi_ep_mmio_set_env(mhi_cntrl, MHI_EE_AMSS);
+>  
+>  	/* Set controller index */
+> -	mhi_cntrl->index = ida_alloc(&mhi_ep_cntrl_ida, GFP_KERNEL);
+> -	if (mhi_cntrl->index < 0) {
+> -		ret = mhi_cntrl->index;
+> +	mhi_cntrl->index = ret = ida_alloc(&mhi_ep_cntrl_ida, GFP_KERNEL);
+> +	if (ret < 0)
+>  		goto err_destroy_wq;
+> -	}
 
-Looks right, thanks
-Uwe
+I've just used "ret" for catching the ida_alloc() and assigned it to
+index after success.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---nrvgrr32lc6wsnhe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIlsWIACgkQwfwUeK3K
-7AmXugf+IS3BWYnSbtvGqQHTIQK6N2dS67rvC7ktTVb3FyfVt1LNgfpM/IIrQuv/
-SFpYiVkXogp7du/NonbwVHY6ZtRunRlw6ghY9PRun8usJovc698Nwic/69v2qjIh
-bH8NihnA9Ar/QdiioOH5eO69LYnW1OCrelrMhV93G96eFWwwbucd6nAAvkn3sN/N
-pKMfMEt3IhmpYmwZcCK3wsaylfPmVUAH6JnWhnx8gzwUeuWyucJN3D6afzS/sR1p
-PQBo3aEVWk6fnEM2Vq382WEjO6RLMr4hFSON4AWAsBOBX9+HNblGRtZBSq8+SXuV
-reP0Ow1/P3Onb+QF2mPYQYKEWSuzfg==
-=EtK9
------END PGP SIGNATURE-----
-
---nrvgrr32lc6wsnhe--
+Thanks,
+Mani
+>  
+>  	irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
+>  	ret = request_irq(mhi_cntrl->irq, mhi_ep_irq, IRQF_TRIGGER_HIGH,
+> -- 
+> 2.20.1.7.g153144c
+> 

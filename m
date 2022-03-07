@@ -2,163 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19CE4CFBA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291714CFBB1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiCGKn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S241158AbiCGKoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242986AbiCGKcr (ORCPT
+        with ESMTP id S240451AbiCGKgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:32:47 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B89D75600
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:04:31 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 55757C0013;
-        Mon,  7 Mar 2022 10:03:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646647439;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=b4uHhj1CCnWZRfuCOfp7/fI/39ufjP0eZTALccVmhWQ=;
-        b=MztK9YvLBUH4+wVXdxK6nOXMPfVOI20sAv/B6KNgGuEOTfdLW9NgvtQM8s7PQWRlTvzd0s
-        9msa//FvEya7xsl4NTWSr8mCJBXIbHjgXT7aStZHE9YkwDvdyLy8XVv9uyyU23o0Gf0+9l
-        jzU6l6IClC8p6RZVHmHjIokpclErEf7hGHPkGv3SmEfIVAPCJxWl8nBFTFJAJda7KwVpX/
-        y3xydcno1zLCl4rURCaEEvmM/gd0T495TJRRiRltSsf2AEahBeBqYVm7vG+XDNyxSctMwq
-        RHBl2KE1ilMCzugA0wGKUF1v/rzplhGC1CzeQf0XCcuHUudzKE+E/qxyiWX0iw==
-Date:   Mon, 7 Mar 2022 11:03:57 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        krzysztof.kozlowski@canonical.com, vigneshr@ti.com, nm@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: rawnand: omap2: Actually prevent invalid
- configuration and build error
-Message-ID: <20220307110357.20d50176@xps13>
-In-Reply-To: <6c09de15-1ab2-5ca8-7003-69ff3f7c4dc5@kernel.org>
-References: <20220220004415.GA1519274@roeck-us.net>
-        <4bbe337e-8cd8-a4d6-303d-d5aa21bee2e0@infradead.org>
-        <20220304165451.0129012e@xps13>
-        <6c09de15-1ab2-5ca8-7003-69ff3f7c4dc5@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 7 Mar 2022 05:36:23 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6326E972B2;
+        Mon,  7 Mar 2022 02:05:06 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 672A61F438C7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646647463;
+        bh=vkE1dGmQ2i4mat5nimDDteTG2DySI3ffFGm0QSlU+rA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Rd8+GreErGoiKBLD+XzcSgcSayXG1eGW1o0pnS9WbP1Mwj5cbL36JkEWxWMyOY1p2
+         tdKbXphTVjPxk5PUZv+ku4rKBfMhWsKB8sF3cGjL+rSurUATaqQcPtnQoQ5Wimxd6v
+         a91PZz96kkxZIwJsG9UuKeToMGjIKb82pmLDTYgsBnDfBYA1yeYoGDHPKtxqan3Cet
+         yQItBSLS6K59hN7fVPMXTWw8osrHw4P0/wjVH/z6XVQpxTLoghAQ5J8FhamAOWbA4v
+         6cQ0j9IRrnS/fm2GZczNMtChTiWD/T7L7M5sagQV3tXlYHN0/1USSBZSplM1fFk8d6
+         I7JdYrEP+lrZQ==
+Message-ID: <cfab8fcc-3cb6-dc20-2c88-63884a2f7a6d@collabora.com>
+Date:   Mon, 7 Mar 2022 11:04:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v16 3/8] dt-bindings: arm: mediatek: mmsys: add mt8195 SoC
+ binding
+Content-Language: en-US
+To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        hsinyi@chromium.org, fshao@chromium.org, moudy.ho@mediatek.com,
+        roy-cw.yeh@mediatek.com, CK Hu <ck.hu@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>, nancy.lin@mediatek.com,
+        singo.chang@mediatek.com, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220307032859.3275-1-jason-jh.lin@mediatek.com>
+ <20220307032859.3275-4-jason-jh.lin@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220307032859.3275-4-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+Il 07/03/22 04:28, jason-jh.lin ha scritto:
+> There are 2 mmsys, namely vdosys0 and vdosys1 in mt8195.
+> Each of them is bound to a display pipeline, so add their
+> definition in mtk-mmsys documentation with 2 compatibles.
+> 
+> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
 
-rogerq@kernel.org wrote on Sat, 5 Mar 2022 00:50:14 +0200:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> Hi Miquel,
->=20
-> On 04/03/2022 17:54, Miquel Raynal wrote:
-> > Hi Guenter, Roger,
-> >=20
-> > rdunlap@infradead.org wrote on Sat, 26 Feb 2022 22:55:28 -0800:
-> >  =20
-> >> On 2/19/22 16:44, Guenter Roeck wrote: =20
-> >>> On Sat, Feb 19, 2022 at 09:36:00PM +0200, Roger Quadros wrote:   =20
-> >>>> The root of the problem is that we are selecting symbols that have
-> >>>> dependencies. This can cause random configurations that can fail.
-> >>>> The cleanest solution is to avoid using select.
-> >>>>
-> >>>> This driver uses interfaces from the OMAP_GPMC driver so we have to
-> >>>> depend on it instead.
-> >>>>
-> >>>> Fixes: 4cd335dae3cf ("mtd: rawnand: omap2: Prevent invalid configura=
-tion and build error")
-> >>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>   =20
-> >>>
-> >>> Tested-by: Guenter Roeck <linux@roeck-us.net>   =20
-> >>
-> >> Tested-by: Randy Dunlap <rdunlap@infradead.org> =20
-> >=20
-> > Sorry for noticing that just now, but there is still a problem with
-> > this patch: we now always compile-in the OMAP_GPMC driver whenever we
-> > need the NAND controller, even though it is not needed. This grows the
-> > kernel for no reason. =20
->=20
-> Sorry, I did not understand what you meant.
->=20
-> We no longer explicitly enable OMAP_GPMC since we dropped the "select".
-> This fixes all build issues that were reported recently.
->=20
-> MTD_NAND_OMAP2 will not be enabled if OMAP_GPMC is not since we added
-> the "depends on". This fixes the original build issue that we started to
-> fix with select initially.
+> ---
+>   .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml        | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> index 6c2c3edcd443..c5ba515cb0d7 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> @@ -32,6 +32,8 @@ properties:
+>                 - mediatek,mt8186-mmsys
+>                 - mediatek,mt8192-mmsys
+>                 - mediatek,mt8365-mmsys
+> +              - mediatek,mt8195-vdosys0
+> +              - mediatek,mt8195-vdosys1
+>             - const: syscon
+>         - items:
+>             - const: mediatek,mt7623-mmsys
 
-Yes, this side is fine.
 
-In the initial commit, you proposed:
-
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -42,7 +42,8 @@ config MTD_NAND_OMAP2
-        tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
-        depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TE=
-ST
-        depends on HAS_IOMEM
-+       select OMAP_GPMC if ARCH_K3
-
-Which creates a dependency over OMAP_GPMC only for a single
-architecture. Which means that other OMAP platforms do not necessarily
-need OMAP_GPMC for the NAND controller to work. Now, you propose:
-
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -42,8 +42,7 @@ config MTD_NAND_OMAP2
- 	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
- 	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
- 	depends on HAS_IOMEM
-	depends on OMAP_GPMC
-
-This means any of the other OMAP architectures will compile the GPMC
-driver even though they might not need it, which would unnecessarily
-increase the kernel size.
-
-Am I missing something?
-
-> > In fact, Roger once said:
-> >=20
-> > 	"We will figure out how to enable OMAP_GPMC for K3 architecture
-> > 	some other way."
-> >=20
-> > It turns out this is not what was finally proposed. Could we try yet
-> > another solution? =20
->=20
-> This issue is still present i.e. we cannot enable MTD_NAND_OMAP2 driver on
-> K3 platform since OMAP_GPMC config is hidden and not select-able
-> by user or defconfig file.
->=20
-> But it is not yet a deal breaker since NAND on K3 is not yet enabled upst=
-ream.
->=20
-> For this I think OMAP_GPMC has to be a visible config entry and select-ab=
-le
-> from a defconfig file as I had done initially [1].
->=20
-> Now we have a lot of explanation to write as to why we need to do it ;)
-
-We certainly do :)
-
-> [1] - https://lore.kernel.org/lkml/20211123102607.13002-3-rogerq@kernel.o=
-rg/
->=20
-
-Thanks,
-Miqu=C3=A8l

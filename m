@@ -2,201 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182B14CF1A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5605A4CF1AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbiCGGKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S235435AbiCGGN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbiCGGKi (ORCPT
+        with ESMTP id S234977AbiCGGNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:10:38 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796401CFFA;
-        Sun,  6 Mar 2022 22:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646633384; x=1678169384;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vTvCJC12tOY0Rg3fomaST4NiFG83EXsDZ5ajgyCHhlQ=;
-  b=bm2Lmrpk9+HVgLWrDSr5b4vrQpjFBpfqNzDFEUrb+p2y9jDmuJOem56h
-   ZYXdicKIniKcDuJSdODy8JtD82UlQz1YkNQCYunBoF1F+8zzCwyZCF6Bb
-   VuRxPPaeUoOp4Nh2TFhIEQBiGEWdbT12AYCJyC7l8psSquNM0unUwGti0
-   xFJ0ZZhUWDnfGkbLzQzRa/ZwxDbzUvW3z/SfdgoGMZmWVj2s1xMz5cgUs
-   lzQy5lYAe3t9pCfhOqMSUIWamzrIdTVLiNnavOG4riTxDnkzGCJnl5nf8
-   xUTJhrzlOK/FKDdVK93NmH+71anBig4GgHBwxR/4D+sHEOebZuwTIgWxo
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="251886040"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="251886040"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 22:09:44 -0800
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="536981981"
-Received: from cqiang-mobl.ccr.corp.intel.com (HELO [10.249.173.92]) ([10.249.173.92])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 22:09:40 -0800
-Message-ID: <ca4a728c-6ec0-afab-935c-b45d73f6fc9c@intel.com>
-Date:   Mon, 7 Mar 2022 14:09:34 +0800
+        Mon, 7 Mar 2022 01:13:49 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD3A6419
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 22:12:56 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id o23so12699141pgk.13
+        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 22:12:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nphVZGk3IRt95221bT7nfSyXQcqcrjz0Ux2hJDzPmMw=;
+        b=ifi3tEd+jUJc9itlg1Xoweu6CKrVulnxsqqlasH2SskzDA+aIdNk7OLrpFeGdVti39
+         ICRKw31jdbcyCePqW8r/u9kG021jyloq1SQ5LsyS6jm6YYfXPc4nzwpP+vjvkAj3QfQ6
+         I8bKLZKELQ52QHAZQBYhCRqgAcKejZjKTfjC8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nphVZGk3IRt95221bT7nfSyXQcqcrjz0Ux2hJDzPmMw=;
+        b=ijcSjHod74S7pHA6bO31OFVjJ7eiiZiNpoCCJdep8gxTR+ve7lyus6x6gDCRHSQXiN
+         YIq+g3RQzuqB0eOVJ8awMQEg/ru9O0GKQm7XSWKYc2T7F4wx+cT+3Lm3axbHI4iki3Zz
+         UIBmukMzlOAOfqfucPRry2mQI1bni3o1mua+A46HVknsxYvP4cW2Vr1B2r+e7xqoOCLS
+         B/HywWlD1YF/oE6VmC/adLlk3zeGpUfhwDAXuGorebOaUDLgHONL9Du4T/kyWlRURyZA
+         ToUX0AolN9R3hx/dDShrIDvDcjVVs1owWPBLcAUA4lPCGrHjvNUEromSvReR2GvQ5a87
+         DYow==
+X-Gm-Message-State: AOAM531gNGvEatgAmdHodsPGobaB/Coj8lSTBpdlXSB1Ouf6ybVbtr8N
+        626vBGBK1w1B10dDaQAkbLFEYA==
+X-Google-Smtp-Source: ABdhPJwbS4tHwgK4DS3o62V8oPKsTJMVUVN3CHN8/+075fpx4MAoYZjrJmfkAUcQfL8G/bf+YYFFhw==
+X-Received: by 2002:a63:1c8:0:b0:380:189b:1e66 with SMTP id 191-20020a6301c8000000b00380189b1e66mr5916458pgb.71.1646633575694;
+        Sun, 06 Mar 2022 22:12:55 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:40e5:90aa:d4b:2ad9])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090aa38600b001bce781ce03sm11488297pjp.18.2022.03.06.22.12.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 22:12:55 -0800 (PST)
+Date:   Mon, 7 Mar 2022 14:12:50 +0800
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Xin Ji <xji@analogixsemi.com>, a.hajda@samsung.com,
+        narmstrong@baylibre.com, dan.carpenter@oracle.com,
+        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, sam@ravnborg.org,
+        pihsun@chromium.org, tzungbi@google.com, maxime@cerno.tech,
+        drinkcat@google.com, hsinyi@chromium.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        bliang@analogixsemi.com, qwen@analogixsemi.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v12 3/4] drm/bridge: anx7625: add MIPI DPI input feature
+Message-ID: <YiWiYpEfTOOqgyAN@google.com>
+References: <20211105031904.2641088-1-xji@analogixsemi.com>
+ <20211105031904.2641088-3-xji@analogixsemi.com>
+ <YiTruiCIkyxs3jTC@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.1
-Subject: Re: [PATCH v6 0/7] KVM: PKS Virtualization support
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220221080840.7369-1-chenyi.qiang@intel.com>
-From:   Chenyi Qiang <chenyi.qiang@intel.com>
-In-Reply-To: <20220221080840.7369-1-chenyi.qiang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiTruiCIkyxs3jTC@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kindly ping for comments.
+On Sun, Mar 06, 2022 at 07:13:30PM +0200, Laurent Pinchart wrote:
+> Hello Xin,
+> 
+> (Question for Rob below, and I'm afraid this is urgent as we need to
+> merge a fix in v5.17).
+> 
+> On Fri, Nov 05, 2021 at 11:19:03AM +0800, Xin Ji wrote:
+> > The basic anx7625 driver only support MIPI DSI rx signal input.
+> > This patch add MIPI DPI rx input configuration support, after apply
+> > this patch, the driver can support DSI rx or DPI rx by adding
+> > 'bus-type' in DT.
+> > 
+> > Reviewed-by: Robert Foss <robert.foss@linaro.org>
+> > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > ---
+> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 247 ++++++++++++++++------
+> >  drivers/gpu/drm/bridge/analogix/anx7625.h |  18 +-
+> >  2 files changed, 205 insertions(+), 60 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > index f48e91134c20..f7c3386c8929 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
 
-On 2/21/2022 4:08 PM, Chenyi Qiang wrote:
-> This patch series is based on top of v8 PKS core support kernel patchset:
-> https://lore.kernel.org/lkml/20220127175505.851391-1-ira.weiny@intel.com/
+[...]
+
+> >  static int anx7625_parse_dt(struct device *dev,
+> >  			    struct anx7625_platform_data *pdata)
+> >  {
+> > -	struct device_node *np = dev->of_node;
+> > +	struct device_node *np = dev->of_node, *ep0;
+> >  	struct drm_panel *panel;
+> >  	int ret;
+> > +	int bus_type, mipi_lanes;
+> > +
+> > +	anx7625_get_swing_setting(dev, pdata);
+> >  
+> > +	pdata->is_dpi = 1; /* default dpi mode */
+> >  	pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
+> >  	if (!pdata->mipi_host_node) {
+> >  		DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
+> >  		return -ENODEV;
+> >  	}
+> >  
+> > -	DRM_DEV_DEBUG_DRIVER(dev, "found dsi host node.\n");
+> > +	bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
+> > +	mipi_lanes = MAX_LANES_SUPPORT;
+> > +	ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
+> > +	if (ep0) {
+> > +		if (of_property_read_u32(ep0, "bus-type", &bus_type))
+> > +			bus_type = 0;
+> > +
+> > +		mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
+> > +	}
+> > +
+> > +	if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
 > 
-> Note: If you read the SDM section 4.6.1 and has some confusion about the
-> statement of Data writes to supervisor-mode address:
+> This is not correct *at all*. V4L2_FWNODE_BUS_TYPE_PARALLEL has nothing
+> to do with DSI. DSI stands for Digital *Serial* Interface. If anything,
+> the V4L2_FWNODE_BUS_TYPE_PARALLEL type would map better to DPI, even if
+> it's not an exact match.
 > 
->    If CR0.WP = 0, data may be written to any supervisor-mode address with
->    a protection key for which write access is permitted.
+> This patch has landed in v5.17-rc1, along with the corresponding
+> bindings. As DT bindings are an ABI, we should really fix this before
+> v5.17 is released. There is no DSI bus types defined in DT, and adding
+> one as a fix so late in the v5.17-rc cycle seems a bit of a stretch to
+> me (unless Rob disagrees).
 > 
-> Which may seems a little conflict with 4.6.2:
-> 
->    if WDi = 1, write accesses are not permitted if CR0.WP = 1. (If CR0.WP
->    = 0, IA32_PKRS.WDi does not affect write accesses to supervisor-mode
->    address with protection key i.)
-> 
-> In fact, the statement in 4.6.1 doesn't say "a protection key with the
-> appropriate WDi bit set." The reader should instead refer to Section
-> 4.6.2 to find the definition of what that means. We will follow up
-> this with someone internally to make it more clear in SDM.
-> 
-> ---
-> 
-> Protection Keys for Supervisor Pages(PKS) is a feature that extends the
-> Protection Keys architecture to support thread-specific permission
-> restrictions on supervisor pages.
-> 
-> PKS works similar to an existing feature named PKU(protecting user pages).
-> They both perform an additional check after normal paging permission
-> checks are done. Access or Writes can be disabled via a MSR update
-> without TLB flushes when permissions changes. If violating this
-> addional check, #PF occurs and PFEC.PK bit will be set.
-> 
-> PKS introduces MSR IA32_PKRS to manage supervisor protection key
-> rights. The MSR contains 16 pairs of ADi and WDi bits. Each pair
-> advertises on a group of pages with the same key which is set in the
-> leaf paging-structure entries(bits[62:59]). Currently, IA32_PKRS is not
-> supported by XSAVES architecture.
-> 
-> This patchset aims to add the virtualization of PKS in KVM. It
-> implemented PKS CPUID enumeration, vmentry/vmexit configuration, MSR
-> exposure, nested supported etc. Currently, PKS is not yet supported for
-> shadow paging.
-> 
-> Detailed information about PKS can be found in the latest Intel 64 and
-> IA-32 Architectures Software Developer's Manual.
-> 
-> ---
-> 
-> Changelogs:
-> 
-> v5->v6
-> - PKRS is preserved on INIT. Add the PKRS reset operation in kvm_vcpu_reset.
->    (Sean)
-> - Track the pkrs as u32. Add the code WARN on bits 64:32 being set in VMCS field.
->    (Sean)
-> - Adjust the MSR intercept and entry/exit control in VMCS according to
->    guest CPUID. This resolve the issue when userspace re-enable this feature.
->    (Sean)
-> - Split VMX restriction on PKS support(entry/exit load controls) out of
->    common x86. And put tdp restriction together with PKU in common x86.
->    (Sean)
-> - Thanks for Sean to revise the comments in mmu.c related to
->    update_pkr_bitmap, which make it more clear for pkr bitmask cache usage.
-> - v5: https://lore.kernel.org/lkml/20210811101126.8973-1-chenyi.qiang@intel.com/
-> 
-> v4->v5
-> - Make setting of MSR intercept/vmcs control bits not dependent on guest.CR4.PKS.
->    And set them if PKS is exposed to guest. (Suggested by Sean)
-> - Add pkrs to standard register caching mechanism to help update
->    vcpu->arch.pkrs on demand. Add related helper functions. (Suggested by Sean)
-> - Do the real pkrs update in VMCS field in vmx_vcpu_reset and
->    vmx_sync_vmcs_host_state(). (Sean)
-> - Add a new mmu_role cr4_pks instead of smushing PKU and PKS together.
->    (Sean & Paolo)
-> - v4: https://lore.kernel.org/lkml/20210205083706.14146-1-chenyi.qiang@intel.com/
-> 
-> v3->v4
-> - Make the MSR intercept and load-controls setting depend on CR4.PKS value
-> - shadow the guest pkrs and make it usable in PKS emultion
-> - add the cr4_pke and cr4_pks check in pkr_mask update
-> - squash PATCH 2 and PATCH 5 to make the dependencies read more clear
-> - v3: https://lore.kernel.org/lkml/20201105081805.5674-1-chenyi.qiang@intel.com/
-> 
-> v2->v3:
-> - No function changes since last submit
-> - rebase on the latest PKS kernel support:
->    https://lore.kernel.org/lkml/20201102205320.1458656-1-ira.weiny@intel.com/
-> - add MSR_IA32_PKRS to the vmx_possible_passthrough_msrs[]
-> - RFC v2: https://lore.kernel.org/lkml/20201014021157.18022-1-chenyi.qiang@intel.com/
-> 
-> v1->v2:
-> - rebase on the latest PKS kernel support:
->    https://github.com/weiny2/linux-kernel/tree/pks-rfc-v3
-> - add a kvm-unit-tests for PKS
-> - add the check in kvm_init_msr_list for PKRS
-> - place the X86_CR4_PKS in mmu_role_bits in kvm_set_cr4
-> - add the support to expose VM_{ENTRY, EXIT}_LOAD_IA32_PKRS in nested
->    VMX MSR
-> - RFC v1: https://lore.kernel.org/lkml/20200807084841.7112-1-chenyi.qiang@intel.com/
-> 
-> ---
-> 
-> Chenyi Qiang (7):
->    KVM: VMX: Introduce PKS VMCS fields
->    KVM: VMX: Add proper cache tracking for PKRS
->    KVM: X86: Expose IA32_PKRS MSR
->    KVM: MMU: Rename the pkru to pkr
->    KVM: MMU: Add support for PKS emulation
->    KVM: VMX: Expose PKS to guest
->    KVM: VMX: Enable PKS for nested VM
-> 
->   arch/x86/include/asm/kvm_host.h |  17 ++++--
->   arch/x86/include/asm/vmx.h      |   6 ++
->   arch/x86/kvm/cpuid.c            |  13 ++--
->   arch/x86/kvm/kvm_cache_regs.h   |   7 +++
->   arch/x86/kvm/mmu.h              |  27 +++++----
->   arch/x86/kvm/mmu/mmu.c          | 101 ++++++++++++++++++++------------
->   arch/x86/kvm/vmx/capabilities.h |   6 ++
->   arch/x86/kvm/vmx/nested.c       |  38 +++++++++++-
->   arch/x86/kvm/vmx/vmcs.h         |   1 +
->   arch/x86/kvm/vmx/vmcs12.c       |   2 +
->   arch/x86/kvm/vmx/vmcs12.h       |   4 ++
->   arch/x86/kvm/vmx/vmx.c          |  92 ++++++++++++++++++++++++++---
->   arch/x86/kvm/vmx/vmx.h          |   7 ++-
->   arch/x86/kvm/x86.c              |  10 +++-
->   arch/x86/kvm/x86.h              |   8 +++
->   arch/x86/mm/pkeys.c             |   6 ++
->   include/linux/pkeys.h           |   6 ++
->   17 files changed, 280 insertions(+), 71 deletions(-)
-> 
+> It would seem best to revert this series and the corresponding bindings,
+> and retry in v5.18.
+
+There is a DT patch using this property that is already queued up for 5.17
+in the soc tree:
+
+https://lore.kernel.org/all/20220214200507.2500693-1-nfraprado@collabora.com/
+
+merged here:
+
+http://git.kernel.org/soc/soc/c/32568ae37596b529628ac09b875f4874e614f63f
+
+We will need to revert that one as well.
+
+ChenYu

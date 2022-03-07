@@ -2,185 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906124D0101
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 172404D010D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241110AbiCGOWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S243053AbiCGOXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiCGOWf (ORCPT
+        with ESMTP id S243168AbiCGOWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:22:35 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8DA3BBDE;
-        Mon,  7 Mar 2022 06:21:40 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id r4so803755lfr.1;
-        Mon, 07 Mar 2022 06:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+EMKFR4Q/6JagJvPZA+Y3lne0ZDGNjl+Y24aj5XlI+g=;
-        b=mNVN8TpOFToRMpQZSAfJ3Q9YDhKpwQbh7Eb000Lsa7R3ADs5pkF3XEuG5/faRw/HgL
-         iZqJId505MP6qAlyykGSnWHRk5s3DSl4yVhct3y9/LuUgPQrF+S9WhEaiVxdgDkDx/Ps
-         0biOIfrJYmjQTnzcNhiafnE66v9PFAyPVZZvkpOMYZmjcYA/q/Euf+ZM8OLgcxr5vahf
-         VkokSjETyosJCFjfcgUonTzqrc6utwQ6Xh8nRnOTs7Oc/HySxqM5EgcmoL8l/n52VJZm
-         +zV8XdSIOZ3Uf53NpJTHXp18m1wc4mNtghrWPRXCiMJaNbcy2cI7GdYpveQ00IB/Rwfr
-         +Law==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+EMKFR4Q/6JagJvPZA+Y3lne0ZDGNjl+Y24aj5XlI+g=;
-        b=XGShvBaE1zsU6nuKMCLpgaSKY0Gb70eP5tKV1ItMx3+Cw0OfOqosgQW2ja4vRBgQta
-         JQbYBBFBHtTuZB2jqmJaTKdWpFLF2ROCZOcASz3+pmOmHLoK6tDd/JB4l1aRNB7Rl9W4
-         T1D+KipRsKgcEmsnXLUn1MLeMLg1WP4tbzqkABHfU7uqQtpfsDxzZBRN70RZaXMmWRrH
-         l89TUrXkc8O/w/HcCzwk9UwReLPBEEKbP9Cw36MPgnacafJJN7SSD3TPS4Z+lBAYAkAu
-         n900o6t7NIWhcAJRLqmxKHqMe/NcqycTeNAn2ni9e/7HpWCwGZfaHJ1m5wJqcDQXAty0
-         SLmQ==
-X-Gm-Message-State: AOAM532rxNk5eXSM8buEIKjTSehycf7IoMrPV1HIzTGv+kMKq5XtOYi8
-        LxavWL8TvPBjWIqnCzc1JckBZeXCsn7BJAPp+qk=
-X-Google-Smtp-Source: ABdhPJwhYrILSZVlae/ab5TOFV1Bk9yUjAsz7MCaHYhmcLagRPPeZ+Ac5SmOgfXvHOIii+waUkHtVPewRX0rJWrG4BQ=
-X-Received: by 2002:a05:6512:228a:b0:443:4cd1:1bcc with SMTP id
- f10-20020a056512228a00b004434cd11bccmr7805283lfu.133.1646662896641; Mon, 07
- Mar 2022 06:21:36 -0800 (PST)
+        Mon, 7 Mar 2022 09:22:54 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5769886E08
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:22:00 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 07F65C0012;
+        Mon,  7 Mar 2022 14:21:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646662919;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rDhYU9kvWroYD/F21ltVejyktD0sL5FzrRSfr3+TnaM=;
+        b=OWLO1mSmci0YG7DcPy81g6xKKrj2yrcBihwhkUp8cihoZ5v3HRmw2x3SaT57wgzvek5iHR
+        wWvpAvyGly17r+IIMfuZqkj55cw7UeG1/a2e3nWuLdNr72981Hd9tO0x+0XE1Pgj0z81Po
+        kmzMQ1mggjYxz7MU6cxbCeEOWw4r42jXIKDEs5uM4cPWp9WuSxssW0JXAr2F3/SDT1/yoQ
+        NV9KCbJwXhd9DHH3Qmbe47guoapx8k4ZmsXm7EojrMb5zKyzOMEap2yXhoLhMd/E7KvLq1
+        FS3dnu4sw66Hov+kzLepHD3cTVWKT4YP1bYxkSY2jJvy+x/AE+JCMkJH4KZ9Rg==
+Date:   Mon, 7 Mar 2022 15:21:56 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        krzysztof.kozlowski@canonical.com, vigneshr@ti.com, nm@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: omap2: Actually prevent invalid
+ configuration and build error
+Message-ID: <20220307152156.1d6fb01b@xps13>
+In-Reply-To: <c39d64f0-deef-4cae-fab7-555a48e31811@kernel.org>
+References: <20220220004415.GA1519274@roeck-us.net>
+        <4bbe337e-8cd8-a4d6-303d-d5aa21bee2e0@infradead.org>
+        <20220304165451.0129012e@xps13>
+        <6c09de15-1ab2-5ca8-7003-69ff3f7c4dc5@kernel.org>
+        <20220307110357.20d50176@xps13>
+        <c39d64f0-deef-4cae-fab7-555a48e31811@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <1646647704-2331-1-git-send-email-u0084500@gmail.com>
- <1646647704-2331-2-git-send-email-u0084500@gmail.com> <1e6893ca-69f4-a2ed-6ecc-23507c04002b@canonical.com>
- <CADiBU3_jC_+P4d-gjMRGpP0uBejUkCY-axNd4nh1Y_=95iav3A@mail.gmail.com> <060968dc-9460-1b75-12a7-cb0bbe9563cc@canonical.com>
-In-Reply-To: <060968dc-9460-1b75-12a7-cb0bbe9563cc@canonical.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Mon, 7 Mar 2022 22:21:25 +0800
-Message-ID: <CADiBU387CFZNGoxu1G_8P8a6oFE-QLMTiDDXKTc0rkOsgbi4bw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add bindings for Richtek
- RT5190A PMIC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        cy_huang <cy_huang@richtek.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI, Krzysztof:
+Hi Roger,
 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
-=B9=B43=E6=9C=887=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=889:27=E5=AF=
-=AB=E9=81=93=EF=BC=9A
->
-> On 07/03/2022 14:21, ChiYuan Huang wrote:
-> > Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=
-=E5=B9=B43=E6=9C=887=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:14=E5=
-=AF=AB=E9=81=93=EF=BC=9A
+rogerq@kernel.org wrote on Mon, 7 Mar 2022 14:25:48 +0200:
+
+> Hi Miquel,
+>=20
+> On 07/03/2022 12:03, Miquel Raynal wrote:
+> > Hi Roger,
+> >=20
+> > rogerq@kernel.org wrote on Sat, 5 Mar 2022 00:50:14 +0200:
+> >  =20
+> >> Hi Miquel,
 > >>
-> >> On 07/03/2022 11:08, cy_huang wrote:
-> >>> From: ChiYuan Huang <cy_huang@richtek.com>
+> >> On 04/03/2022 17:54, Miquel Raynal wrote: =20
+> >>> Hi Guenter, Roger,
 > >>>
-> >>> Add bindings for Richtek RT5190A PMIC.
+> >>> rdunlap@infradead.org wrote on Sat, 26 Feb 2022 22:55:28 -0800:
+> >>>    =20
+> >>>> On 2/19/22 16:44, Guenter Roeck wrote:   =20
+> >>>>> On Sat, Feb 19, 2022 at 09:36:00PM +0200, Roger Quadros wrote:     =
+=20
+> >>>>>> The root of the problem is that we are selecting symbols that have
+> >>>>>> dependencies. This can cause random configurations that can fail.
+> >>>>>> The cleanest solution is to avoid using select.
+> >>>>>>
+> >>>>>> This driver uses interfaces from the OMAP_GPMC driver so we have to
+> >>>>>> depend on it instead.
+> >>>>>>
+> >>>>>> Fixes: 4cd335dae3cf ("mtd: rawnand: omap2: Prevent invalid configu=
+ration and build error")
+> >>>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>     =20
+> >>>>>
+> >>>>> Tested-by: Guenter Roeck <linux@roeck-us.net>     =20
+> >>>>
+> >>>> Tested-by: Randy Dunlap <rdunlap@infradead.org>   =20
 > >>>
-> >>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> >>> ---
-> >>>  .../regulator/richtek,rt5190a-regulator.yaml       | 138 +++++++++++=
-++++++++++
-> >>>  1 file changed, 138 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/regulator/richt=
-ek,rt5190a-regulator.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt51=
-90a-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt=
-5190a-regulator.yaml
-> >>> new file mode 100644
-> >>> index 00000000..b9f5836
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt5190a-reg=
-ulator.yaml
-> >>> @@ -0,0 +1,138 @@
-> >>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/regulator/richtek,rt5190a-regulat=
-or.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: Richtek RT5190A PMIC Regulator
-> >>> +
-> >>> +maintainers:
-> >>> +  - ChiYuan Huang <cy_huang@richtek.com>
-> >>> +
-> >>> +description: |
-> >>> +  The RT5190A integrates 1 channel buck controller, 3 channels high =
-efficiency
-> >>> +  synchronous buck converters, 1 LDO, I2C control interface and peri=
-pherial
-> >>> +  logical control.
-> >>> +
-> >>> +  It also supports mute AC OFF depop sound and quick setting storage=
- while
-> >>> +  input power is removed.
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    enum:
-> >>> +      - richtek,rt5190a
-> >>> +
-> >>> +  reg:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  interrupts:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  vin2-supply:
-> >>> +    description: phandle to buck2 input voltage.
-> >>> +
-> >>> +  vin3-supply:
-> >>> +    description: phandle to buck3 input voltage.
-> >>> +
-> >>> +  vin4-supply:
-> >>> +    description: phandle to buck4 input voltage.
-> >>> +
-> >>> +  vinldo-supply:
-> >>> +    description: phandle to ldo input voltage
-> >>> +
-> >>> +  richtek,buck1-fixed-microvolt:
-> >>> +    description: buck1 fixed voltage that depends on the external re=
-sistor.
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> >>> Sorry for noticing that just now, but there is still a problem with
+> >>> this patch: we now always compile-in the OMAP_GPMC driver whenever we
+> >>> need the NAND controller, even though it is not needed. This grows the
+> >>> kernel for no reason.   =20
 > >>
-> >> You should use standard bindings for it.
+> >> Sorry, I did not understand what you meant.
 > >>
-> > Sorry, I didn't get the point for the meaning 'standard binding'.
-> > Do you mean to change 'richtek,buck1-fixed-microvolt' or 'uint32' defin=
-ition?
-> > This voltage depends on the external resistor selection. It's 'fixed'
-> > by the application.
->
-> I meant that you should not have dedicated binding to set regulator
-> voltage, but use regulator-min/max-microvolt instead, within one
-> regulator node. Just set min/max to same level and handle it in the
-> driver. See for example:
-> drivers/regulator/scmi-regulator.c
->
-As I know, regulator-min/max-microvolt is used as the usage constraint.
+> >> We no longer explicitly enable OMAP_GPMC since we dropped the "select".
+> >> This fixes all build issues that were reported recently.
+> >>
+> >> MTD_NAND_OMAP2 will not be enabled if OMAP_GPMC is not since we added
+> >> the "depends on". This fixes the original build issue that we started =
+to
+> >> fix with select initially. =20
+> >=20
+> > Yes, this side is fine.
+> >=20
+> > In the initial commit, you proposed:
+> >=20
+> > --- a/drivers/mtd/nand/raw/Kconfig
+> > +++ b/drivers/mtd/nand/raw/Kconfig
+> > @@ -42,7 +42,8 @@ config MTD_NAND_OMAP2
+> >         tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
+> >         depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPIL=
+E_TEST
+> >         depends on HAS_IOMEM
+> > +       select OMAP_GPMC if ARCH_K3
+> >=20
+> > Which creates a dependency over OMAP_GPMC only for a single
+> > architecture. Which means that other OMAP platforms do not necessarily
+> > need OMAP_GPMC for the NAND controller to work. Now, you propose: =20
+>=20
+> No that is not true. Other platforms that need MTD_NAND_OMAP2 are
+> explicitly selecting OMAP_GPMC
+> i.e. in arch/arm/mach-omap2/Kconfig
 
-But out buck1/buck4/ldo vout is defined by
-Vout =3D VFb * (1 + R1/R2) where R1/R2 is chosen by the circuit design.
+Ok, in this case the fix is legit, but as you said there is certainly
+some clean up to do on this side in a second time.
 
-It seems not similar with the scmi-regulator.
+> > --- a/drivers/mtd/nand/raw/Kconfig
+> > +++ b/drivers/mtd/nand/raw/Kconfig
+> > @@ -42,8 +42,7 @@ config MTD_NAND_OMAP2
+> >  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
+> >  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
+> >  	depends on HAS_IOMEM
+> > 	depends on OMAP_GPMC
+> >=20
+> > This means any of the other OMAP architectures will compile the GPMC
+> > driver even though they might not need it, which would unnecessarily
+> > increase the kernel size.
+> >=20
+> > Am I missing something? =20
+>=20
+> MTD_NAND_OMAP2 NAND controller is a submodule of the OMAP GPMC IP. So it
+> cannot work without OMAP_GPMC driver.
+>=20
+> Hope this clarifies the doubts.
 
-Do you really suggest to use regulator-min/max-microvolt????
+I was not sure anymore if there was a proper hardware dependency here
+because of the "select GPMC if ARCH_K3" addition. But your
+clarification make this more understandable now.
 
->
-> Best regards,
-> Krzysztof
+I will send the fix to Linus.
+
+Cheers,
+Miqu=C3=A8l
+
+> >>> In fact, Roger once said:
+> >>>
+> >>> 	"We will figure out how to enable OMAP_GPMC for K3 architecture
+> >>> 	some other way."
+> >>>
+> >>> It turns out this is not what was finally proposed. Could we try yet
+> >>> another solution?   =20
+> >>
+> >> This issue is still present i.e. we cannot enable MTD_NAND_OMAP2 drive=
+r on
+> >> K3 platform since OMAP_GPMC config is hidden and not select-able
+> >> by user or defconfig file.
+> >>
+> >> But it is not yet a deal breaker since NAND on K3 is not yet enabled u=
+pstream.
+> >>
+> >> For this I think OMAP_GPMC has to be a visible config entry and select=
+-able
+> >> from a defconfig file as I had done initially [1].
+> >>
+> >> Now we have a lot of explanation to write as to why we need to do it ;=
+) =20
+> >=20
+> > We certainly do :)
+> >  =20
+> >> [1] - https://lore.kernel.org/lkml/20211123102607.13002-3-rogerq@kerne=
+l.org/
+> >> =20
+> >=20
+> > Thanks,
+> > Miqu=C3=A8l =20
+>=20
+> cheers,
+> -roger

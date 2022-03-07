@@ -2,206 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EA04D060A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772A94D0610
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244629AbiCGSNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:13:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S241416AbiCGSN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241596AbiCGSM6 (ORCPT
+        with ESMTP id S238310AbiCGSN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:12:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA5265813;
-        Mon,  7 Mar 2022 10:12:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B154612D8;
-        Mon,  7 Mar 2022 18:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4755C340EF;
-        Mon,  7 Mar 2022 18:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646676722;
-        bh=7SnCPkdwsxJGwpkdFqlHuUuDSdeXpOUHPBz01VNaJaE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uEGbH611keqViMtcvSDFfr04yicHxU+HboFesqdEiydQBak3alHEjkzuKTxpzPGla
-         3pMmSIxsb3NxypO7rjoFWjjTNLHIX6nmFSkkH4wZXmF7ZB028kTBBdqOJ/rMbHu+X+
-         BDbhxVhTw8AGyjKAR6vBiPFFfjjzfIMp5ULo9OY1abxANhVz9xryZY0QLs8zNnKN9V
-         g4+k7MheWv5Mt6jQFMEG7lhWbTjj4OG/527rGF+IB1Ll7I+W7w9eaXRQg64lkN748R
-         GXmM4mZyVp82jCm841EXGRBQrdm306+l67gXeZxnBMfLznjcwMshImBfm9vQ0HxsaL
-         +a4fVodNPsHvA==
-Received: by mail-yb1-f170.google.com with SMTP id l2so13190233ybe.8;
-        Mon, 07 Mar 2022 10:12:02 -0800 (PST)
-X-Gm-Message-State: AOAM532L66tU+k/9qKud/syfLhoVLo3D3RjqxA5KEFWSCh0nEWYtBDPV
-        knhJ7ETIHq1kHbQhtaJpk204SoJI3BpcfSI+XoQ=
-X-Google-Smtp-Source: ABdhPJwILUMoOgkBhUjC+vc910B4Xeebwa3HBZyw9YZNJbz9I1ydBkpMbaTWiwiyIzw/MiTvG/mOEQeCZrB2btDc64E=
-X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
- j1-20020a258b81000000b0062917d568c1mr8199079ybl.449.1646676721862; Mon, 07
- Mar 2022 10:12:01 -0800 (PST)
+        Mon, 7 Mar 2022 13:13:57 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0A24DF68;
+        Mon,  7 Mar 2022 10:13:02 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id t14so14298620pgr.3;
+        Mon, 07 Mar 2022 10:13:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=B6TsA2XdiYCsVCW3zF/aw39LpYtkoWg4fApwKJ6gmVw=;
+        b=NPI9cJpZJGsl1RRJXCbjypAIObWaZrfLdzSTVP4Hl8FLRMVmD8hxJvJveN331QcppE
+         qPQW4nt53HD/7XlOdvP7Wxi74RUHnFCJ5/gWZEp97N8iOKA2kh6WcINEwXJqcjo03jt6
+         g3nH8X5TAifEYgahdO+5cjwPEbnOfcMtE7wKUACGy1hLYJqq7IXBB0O3gLS9YwQVRTV3
+         5PDuMjV/QgR3r0XdnDzs7YZ7VM3bMu2O6lxtmJHubNz5fDqVw/lhAaIGulJQBoFcsh8B
+         5RMuIPLgYcjn0V9iE2h6EvMy/G9I6xtWuYeKXYPY/4jdeMTLpMzD2aXMatk4vKnbao+G
+         PLvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=B6TsA2XdiYCsVCW3zF/aw39LpYtkoWg4fApwKJ6gmVw=;
+        b=zWxVtnMz9E3Y54yKz24P6hvBL/4V3gNbFcd/gvCAM2fCE/5ulzLEuIolbGPGY4lof+
+         6uVz89gFNdtAdkJXK6tEsUxJH/r6sYEFKYFntd7eBPELaMQA5IcwzV9FOYpTKpa3rjEH
+         Ywwcla2w9yst9sUKeBGEGOCRD/rVrCfZUREZKDwbE7NkVYzls0CMzkX5NTaU5lnV6P8v
+         7ihDjaAfrJLP/Odgqv5d0eOPiUj/eGMPdqnxXdAYd7sNeoIJnL8917cEEtGSyb8Z3Cuh
+         DpxXnpyjBdzwXOeyfnS+chsTkaYOks+9/P6hzP4xSI56sgt8ezugeyu4TzOxuTcKKxP1
+         Ec7Q==
+X-Gm-Message-State: AOAM530KolIFZZGmIfXKbY7Fnsv8p/c7gPSnzzC6GtFMtbGtc7S1jX2a
+        DiE+6/67rI2TljGpntWWa4lUBWykz/r0Kux/s8U=
+X-Google-Smtp-Source: ABdhPJwv8Oq73LsXdfaVk3NJmFp9gR6Y6EpdkcLPgyA9p4k18Xc3iMqj44R+bhPSTRJjFK2FsUjccNownQ2eZaZAYG4=
+X-Received: by 2002:a63:c011:0:b0:378:74a6:9c31 with SMTP id
+ h17-20020a63c011000000b0037874a69c31mr10811098pgg.585.1646676781529; Mon, 07
+ Mar 2022 10:13:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <CAPhsuW5APYjoZWKDkZ9CBZzaF0NfSQQ-OeZSJgDa=wB-5O+Wng@mail.gmail.com> <CAO-hwJJkhxDAhT_cwo=Tkx8_=B-MuS=_enByj1t6GEuXD9Lj5Q@mail.gmail.com>
-In-Reply-To: <CAO-hwJJkhxDAhT_cwo=Tkx8_=B-MuS=_enByj1t6GEuXD9Lj5Q@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 7 Mar 2022 10:11:51 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW54ytOFrpW8+2kTuxNxu+-7JNmybCpbU=uG+un+-Xpw4A@mail.gmail.com>
-Message-ID: <CAPhsuW54ytOFrpW8+2kTuxNxu+-7JNmybCpbU=uG+un+-Xpw4A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 00/28] Introduce eBPF support for HID devices
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
+References: <20220301153122.20660-1-cbranchereau@gmail.com>
+ <20220301153122.20660-4-cbranchereau@gmail.com> <VM548R.0I9BAN681OS83@crapouillou.net>
+In-Reply-To: <VM548R.0I9BAN681OS83@crapouillou.net>
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+Date:   Mon, 7 Mar 2022 19:12:49 +0100
+Message-ID: <CAFsFa85Wb7HcxCqGCYQoSOHOTLJY9xtUHc85PoxO3XTbr=HN4g@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] drm/panel : innolux-ej030na and abt-y030xx067a :
+ add .enable and .disable
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 5, 2022 at 2:23 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
-> > >
-> >
-> > The set looks good so far. I will review the rest later.
-> >
-> > [...]
-> >
-> > A quick note about how we organize these patches. Maybe we can
-> > merge some of these patches like:
->
-> Just to be sure we are talking about the same thing: you mean squash
-> the patch together?
+Hi Paul, it should in theory, but doesn't work in practice, the
+display doesn't like having that bit set outside of the init sequence.
 
-Right, squash some patches together.
+Feel free to experiment if you think you can make it work though, you
+should have that panel on 1 or 2 devices I think.
 
+KR
+CB
+
+On Wed, Mar 2, 2022 at 12:22 PM Paul Cercueil <paul@crapouillou.net> wrote:
 >
+> Hi Christophe,
+>
+> Le mar., mars 1 2022 at 16:31:22 +0100, Christophe Branchereau
+> <cbranchereau@gmail.com> a =C3=A9crit :
+> > Following the introduction of bridge_atomic_enable in the ingenic
+> > drm driver, the crtc is enabled between .prepare and .enable, if
+> > it exists.
 > >
-> > >   bpf: introduce hid program type
-> > >   bpf/hid: add a new attach type to change the report descriptor
-> > >   bpf/hid: add new BPF type to trigger commands from userspace
-> > I guess the three can merge into one.
+> > Add it so the backlight is only enabled after the crtc is, to avoid
+> > graphical issues.
 > >
-> > >   HID: hook up with bpf
-> > >   HID: allow to change the report descriptor from an eBPF program
-> > >   HID: bpf: compute only the required buffer size for the device
-> > >   HID: bpf: only call hid_bpf_raw_event() if a ctx is available
-> > I haven't read through all of them, but I guess they can probably merge
-> > as well.
->
-> There are certainly patches that we could squash together (3 and 4
-> from this list into the previous ones), but I'd like to keep some sort
-> of granularity here to not have a patch bomb that gets harder to come
-> back later.
-
-Totally agreed with the granularity of patches. I am not a big fan of patch
-bombs either. :)
-
-I guess the problem I have with the current version is that I don't have a
-big picture of the design while reading through relatively big patches. A
-overview with the following information in the cover letter would be really
-help here:
-  1. How different types of programs are triggered (IRQ, user input, etc.);
-  2. What are the operations and/or outcomes of these programs;
-  3. How would programs of different types (or attach types) interact
-   with each other (via bpf maps? chaining?)
-  4. What's the new uapi;
-  5. New helpers and other logistics
-
-Sometimes, I find the changes to uapi are the key for me to understand the
-patches, and I would like to see one or two patches with all the UAPI
-changes (i.e. bpf_hid_attach_type). However, that may or may not apply to
-this set due to granularity concerns.
-
-Does this make sense?
-
-Thanks,
-Song
-
-
-
-
->
+> > Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+> > ---
+> >  drivers/gpu/drm/panel/panel-abt-y030xx067a.c  | 23 ++++++++++++--
+> >  drivers/gpu/drm/panel/panel-innolux-ej030na.c | 31
+> > ++++++++++++++++---
+> >  2 files changed, 48 insertions(+), 6 deletions(-)
 > >
-> > >   libbpf: add HID program type and API
-> > >   libbpf: add new attach type BPF_HID_RDESC_FIXUP
-> > >   libbpf: add new attach type BPF_HID_USER_EVENT
-> > There 3 can merge, and maybe also the one below
-> > >   libbpf: add handling for BPF_F_INSERT_HEAD in HID programs
->
-> Yeah, the libbpf changes are small enough to not really justify
-> separate patches.
->
+> > diff --git a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
+> > b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
+> > index f043b484055b..b5736344e3ec 100644
+> > --- a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
+> > +++ b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
+> > @@ -183,8 +183,6 @@ static int y030xx067a_prepare(struct drm_panel
+> > *panel)
+> >               goto err_disable_regulator;
+> >       }
 > >
-> > >   samples/bpf: add new hid_mouse example
-> > >   samples/bpf: add a report descriptor fixup
-> > >   samples/bpf: fix bpf_program__attach_hid() api change
-> > Maybe it makes sense to merge these 3?
->
-> Sure, why not.
->
+> > -     msleep(120);
+> > -
+> >       return 0;
 > >
-> > >   bpf/hid: add hid_{get|set}_data helpers
-> > >   HID: bpf: implement hid_bpf_get|set_data
-> > >   bpf/hid: add bpf_hid_raw_request helper function
-> > >   HID: add implementation of bpf_hid_raw_request
-> > We can have 1 or 2 patches for these helpers
->
-> OK, the patches should be self-contained enough.
->
+> >  err_disable_regulator:
+> > @@ -202,6 +200,25 @@ static int y030xx067a_unprepare(struct drm_panel
+> > *panel)
+> >       return 0;
+> >  }
 > >
-> > >   selftests/bpf: add tests for the HID-bpf initial implementation
-> > >   selftests/bpf: add report descriptor fixup tests
-> > >   selftests/bpf: add tests for hid_{get|set}_data helpers
-> > >   selftests/bpf: add test for user call of HID bpf programs
-> > >   selftests/bpf: hid: rely on uhid event to know if a test device is
-> > >     ready
-> > >   selftests/bpf: add tests for bpf_hid_hw_request
-> > >   selftests/bpf: Add a test for BPF_F_INSERT_HEAD
-> > These selftests could also merge into 1 or 2 patches I guess.
+> > +static int y030xx067a_enable(struct drm_panel *panel)
+> > +{
+> > +     if (panel->backlight) {
+> > +             /* Wait for the picture to be ready before enabling backl=
+ight */
+> > +             msleep(120);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int y030xx067a_disable(struct drm_panel *panel)
+> > +{
+> > +     struct y030xx067a *priv =3D to_y030xx067a(panel);
+> > +
+> > +     regmap_clear_bits(priv->map, 0x06, REG06_XPSAVE);
 >
-> I'd still like to link them to the granularity of the bpf changes, so
-> I can refer a selftest change to a specific commit/functionality
-> added. But that's just my personal taste, and I can be convinced
-> otherwise. This should give us maybe 4 patches instead of 7.
->
-> >
-> > I understand rearranging these patches may take quite some effort.
-> > But I do feel that's a cleaner approach (from someone doesn't know
-> > much about HID). If you really hate it that way, we can discuss...
-> >
->
-> No worries. I don't mind iterating on the series. IIRC I already
-> rewrote it twice from scratch, and that's when the selftests I
-> introduced in the second rewrite were tremendously helpful :) And
-> honestly I don't think it'll be too much effort to reorder/squash the
-> patches given that the v2 is *very* granular.
->
-> Anyway, I prefer having the reviewers happy so we can have a solid
-> rock API from day 1 than keeping it obscure for everyone and having to
-> deal with design issues forever. So if it takes 10 or 20 revisions to
-> have everybody on the same page, that's fine with me (not that I want
-> to have that many revisions, just that I won't be afraid of the
-> bikeshedding we might have at some point).
+> Shouldn't that be balanced by a regmap_set_bits() in the .enable()
+> function?
 >
 > Cheers,
-> Benjamin
+> -Paul
+>
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static int y030xx067a_get_modes(struct drm_panel *panel,
+> >                               struct drm_connector *connector)
+> >  {
+> > @@ -239,6 +256,8 @@ static int y030xx067a_get_modes(struct drm_panel
+> > *panel,
+> >  static const struct drm_panel_funcs y030xx067a_funcs =3D {
+> >       .prepare        =3D y030xx067a_prepare,
+> >       .unprepare      =3D y030xx067a_unprepare,
+> > +     .enable         =3D y030xx067a_enable,
+> > +     .disable        =3D y030xx067a_disable,
+> >       .get_modes      =3D y030xx067a_get_modes,
+> >  };
+> >
+> > diff --git a/drivers/gpu/drm/panel/panel-innolux-ej030na.c
+> > b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
+> > index c558de3f99be..6de7370185cd 100644
+> > --- a/drivers/gpu/drm/panel/panel-innolux-ej030na.c
+> > +++ b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
+> > @@ -80,8 +80,6 @@ static const struct reg_sequence
+> > ej030na_init_sequence[] =3D {
+> >       { 0x47, 0x08 },
+> >       { 0x48, 0x0f },
+> >       { 0x49, 0x0f },
+> > -
+> > -     { 0x2b, 0x01 },
+> >  };
+> >
+> >  static int ej030na_prepare(struct drm_panel *panel)
+> > @@ -109,8 +107,6 @@ static int ej030na_prepare(struct drm_panel
+> > *panel)
+> >               goto err_disable_regulator;
+> >       }
+> >
+> > -     msleep(120);
+> > -
+> >       return 0;
+> >
+> >  err_disable_regulator:
+> > @@ -128,6 +124,31 @@ static int ej030na_unprepare(struct drm_panel
+> > *panel)
+> >       return 0;
+> >  }
+> >
+> > +static int ej030na_enable(struct drm_panel *panel)
+> > +{
+> > +     struct ej030na *priv =3D to_ej030na(panel);
+> > +
+> > +     /* standby off */
+> > +     regmap_write(priv->map, 0x2b, 0x01);
+> > +
+> > +     if (panel->backlight) {
+> > +             /* Wait for the picture to be ready before enabling backl=
+ight */
+> > +             msleep(120);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int ej030na_disable(struct drm_panel *panel)
+> > +{
+> > +     struct ej030na *priv =3D to_ej030na(panel);
+> > +
+> > +     /* standby on */
+> > +     regmap_write(priv->map, 0x2b, 0x00);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static int ej030na_get_modes(struct drm_panel *panel,
+> >                            struct drm_connector *connector)
+> >  {
+> > @@ -165,6 +186,8 @@ static int ej030na_get_modes(struct drm_panel
+> > *panel,
+> >  static const struct drm_panel_funcs ej030na_funcs =3D {
+> >       .prepare        =3D ej030na_prepare,
+> >       .unprepare      =3D ej030na_unprepare,
+> > +     .enable         =3D ej030na_enable,
+> > +     .disable        =3D ej030na_disable,
+> >       .get_modes      =3D ej030na_get_modes,
+> >  };
+> >
+> > --
+> > 2.34.1
+> >
+>
 >

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2114CF577
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930D14CFB14
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237349AbiCGJ2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S235206AbiCGK0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236870AbiCGJZR (ORCPT
+        with ESMTP id S241500AbiCGKKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:25:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9D55A593;
-        Mon,  7 Mar 2022 01:23:48 -0800 (PST)
+        Mon, 7 Mar 2022 05:10:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D766E32989;
+        Mon,  7 Mar 2022 01:53:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8F44B80E70;
-        Mon,  7 Mar 2022 09:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C0F3C36AEA;
-        Mon,  7 Mar 2022 09:23:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7022260B70;
+        Mon,  7 Mar 2022 09:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63134C340F9;
+        Mon,  7 Mar 2022 09:53:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645025;
-        bh=I/CZhYcswzxFP5JWwkk4QtmoOh8KYiYVgm8fatcfLp4=;
+        s=korg; t=1646646780;
+        bh=huYpV3kJDyw1NWyRR1gpLkRho9l+6kbGwW5Ybc0vW+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LpVzTNQRiQj6elh7jnP5vsXO9USucYTGCvtS2eTikIjBpUjTJsslbBue3Op+LLCLL
-         2+1/etXYwV9aBVN+yDvQUQoII2Q0AlGWC6z4T5MkBiS7yVnT2fYakoCWSPapkUHg0v
-         WLtzoj74bFCwAGtVZhjIdcdw+xTEHO30Zlo0wttQ=
+        b=WEeecSoYAGWgs1hts8fwrMF7zke62zmTbCiPIl3cVtbu5CIR3pPucztmfaB+KUcQW
+         D2ifYiK9sJVzngmy3A8os1RRNHohRJpHHfxS7e8luF6BEUjnkHk/SPKaN97hZbpJTa
+         h5XrFoPpUYTPXm2tyzMqXtFCLg8Y+YOZJelnl7is=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 14/51] ata: pata_hpt37x: fix PCI clock detection
+        stable@vger.kernel.org, Jouni Malinen <j@w1.fi>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.16 091/186] mac80211: treat some SAE auth steps as final
 Date:   Mon,  7 Mar 2022 10:18:49 +0100
-Message-Id: <20220307091637.399112183@linuxfoundation.org>
+Message-Id: <20220307091656.628631329@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 5f6b0f2d037c8864f20ff15311c695f65eb09db5 ]
+commit 94d9864cc86f572f881db9b842a78e9d075493ae upstream.
 
-The f_CNT register (at the PCI config. address 0x78) is 16-bit, not
-8-bit! The bug was there from the very start... :-(
+When we get anti-clogging token required (added by the commit
+mentioned below), or the other status codes added by the later
+commit 4e56cde15f7d ("mac80211: Handle special status codes in
+SAE commit") we currently just pretend (towards the internal
+state machine of authentication) that we didn't receive anything.
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Fixes: 669a5db411d8 ("[libata] Add a bunch of PATA drivers.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This has the undesirable consequence of retransmitting the prior
+frame, which is not expected, because the timer is still armed.
+
+If we just disarm the timer at that point, it would result in
+the undesirable side effect of being in this state indefinitely
+if userspace crashes, or so.
+
+So to fix this, reset the timer and set a new auth_data->waiting
+in order to have no more retransmissions, but to have the data
+destroyed when the timer actually fires, which will only happen
+if userspace didn't continue (i.e. crashed or abandoned it.)
+
+Fixes: a4055e74a2ff ("mac80211: Don't destroy auth data in case of anti-clogging")
+Reported-by: Jouni Malinen <j@w1.fi>
+Link: https://lore.kernel.org/r/20220224103932.75964e1d7932.Ia487f91556f29daae734bf61f8181404642e1eec@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/pata_hpt37x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/mac80211/ieee80211_i.h |    2 +-
+ net/mac80211/mlme.c        |   16 ++++++++++++----
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/ata/pata_hpt37x.c b/drivers/ata/pata_hpt37x.c
-index f44136a3a1635..c2ee0ba2fbc67 100644
---- a/drivers/ata/pata_hpt37x.c
-+++ b/drivers/ata/pata_hpt37x.c
-@@ -961,14 +961,14 @@ static int hpt37x_init_one(struct pci_dev *dev, const struct pci_device_id *id)
+--- a/net/mac80211/ieee80211_i.h
++++ b/net/mac80211/ieee80211_i.h
+@@ -376,7 +376,7 @@ struct ieee80211_mgd_auth_data {
  
- 	if ((freq >> 12) != 0xABCDE) {
- 		int i;
--		u8 sr;
-+		u16 sr;
- 		u32 total = 0;
+ 	u8 key[WLAN_KEY_LEN_WEP104];
+ 	u8 key_len, key_idx;
+-	bool done;
++	bool done, waiting;
+ 	bool peer_confirmed;
+ 	bool timeout_started;
  
- 		pr_warn("BIOS has not set timing clocks\n");
+--- a/net/mac80211/mlme.c
++++ b/net/mac80211/mlme.c
+@@ -37,6 +37,7 @@
+ #define IEEE80211_AUTH_TIMEOUT_SAE	(HZ * 2)
+ #define IEEE80211_AUTH_MAX_TRIES	3
+ #define IEEE80211_AUTH_WAIT_ASSOC	(HZ * 5)
++#define IEEE80211_AUTH_WAIT_SAE_RETRY	(HZ * 2)
+ #define IEEE80211_ASSOC_TIMEOUT		(HZ / 5)
+ #define IEEE80211_ASSOC_TIMEOUT_LONG	(HZ / 2)
+ #define IEEE80211_ASSOC_TIMEOUT_SHORT	(HZ / 10)
+@@ -3009,8 +3010,15 @@ static void ieee80211_rx_mgmt_auth(struc
+ 		    (status_code == WLAN_STATUS_ANTI_CLOG_REQUIRED ||
+ 		     (auth_transaction == 1 &&
+ 		      (status_code == WLAN_STATUS_SAE_HASH_TO_ELEMENT ||
+-		       status_code == WLAN_STATUS_SAE_PK))))
++		       status_code == WLAN_STATUS_SAE_PK)))) {
++			/* waiting for userspace now */
++			ifmgd->auth_data->waiting = true;
++			ifmgd->auth_data->timeout =
++				jiffies + IEEE80211_AUTH_WAIT_SAE_RETRY;
++			ifmgd->auth_data->timeout_started = true;
++			run_again(sdata, ifmgd->auth_data->timeout);
+ 			goto notify_driver;
++		}
  
- 		/* This is the process the HPT371 BIOS is reported to use */
- 		for (i = 0; i < 128; i++) {
--			pci_read_config_byte(dev, 0x78, &sr);
-+			pci_read_config_word(dev, 0x78, &sr);
- 			total += sr & 0x1FF;
- 			udelay(15);
- 		}
--- 
-2.34.1
-
+ 		sdata_info(sdata, "%pM denied authentication (status %d)\n",
+ 			   mgmt->sa, status_code);
+@@ -4597,10 +4605,10 @@ void ieee80211_sta_work(struct ieee80211
+ 
+ 	if (ifmgd->auth_data && ifmgd->auth_data->timeout_started &&
+ 	    time_after(jiffies, ifmgd->auth_data->timeout)) {
+-		if (ifmgd->auth_data->done) {
++		if (ifmgd->auth_data->done || ifmgd->auth_data->waiting) {
+ 			/*
+-			 * ok ... we waited for assoc but userspace didn't,
+-			 * so let's just kill the auth data
++			 * ok ... we waited for assoc or continuation but
++			 * userspace didn't do it, so kill the auth data
+ 			 */
+ 			ieee80211_destroy_auth_data(sdata, false);
+ 		} else if (ieee80211_auth(sdata)) {
 
 

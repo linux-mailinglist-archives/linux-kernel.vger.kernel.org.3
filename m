@@ -2,122 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBCB4CF4C9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02334CFB87
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236483AbiCGJWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S241387AbiCGKjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:39:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236562AbiCGJVk (ORCPT
+        with ESMTP id S239298AbiCGKPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:21:40 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4992E541AA;
-        Mon,  7 Mar 2022 01:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646644808; x=1678180808;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=wGeDKaASQDCyWy0awRd7jeAVQdDX7gR/VgWstKH88gA=;
-  b=bRdsM6TncrMoQcN60/Ak8xegmd7mcKX+Pqa8Kyc82ckHH9l7VZxyrdXi
-   Qy+zUsRJuFFR+cK9tox0P3uCJsH7FSOyacQUOynSSMYX8jASZqHYYEgCZ
-   9PhlRRdkCXmJ8VTHsPYhUnaDmdcaTDEwgx0BAaXraBCGOnDcrhcSpvt9c
-   8FzO/VaNY6odrH64Hv4W0Z+BJXFD381Aa044QfYUSVRYkivDfYpyLTDv6
-   vMK3OYXohgaLAONqF7burNZKksnfgphTb4PUVb/m7BONykTYRvRzDI5l4
-   GOGN528riicFYlgTCZezfw1SQu07sr2hTZcp1Qn/lza2jNgBSw3yfsYE/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254536717"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="254536717"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:20:07 -0800
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="537042104"
-Received: from rabl-mobl2.ger.corp.intel.com ([10.252.54.114])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:20:04 -0800
-Date:   Mon, 7 Mar 2022 11:19:59 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     Lukas Wunner <lukas@wunner.de>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH 1/7] serial: 8250_dwlib: RS485 HW half duplex support
-In-Reply-To: <CAHp75Vdxa_p866t5B7zJ8nHS-v+tu3vLiW0=vaBznnyCGyve_g@mail.gmail.com>
-Message-ID: <ab82f6a-8d1b-8e89-4ea-77d1a55667d2@linux.intel.com>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com> <20220302095606.14818-2-ilpo.jarvinen@linux.intel.com> <20220306184857.GA19394@wunner.de> <CAHp75Vdxa_p866t5B7zJ8nHS-v+tu3vLiW0=vaBznnyCGyve_g@mail.gmail.com>
+        Mon, 7 Mar 2022 05:15:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4B7C145;
+        Mon,  7 Mar 2022 01:57:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5123460A23;
+        Mon,  7 Mar 2022 09:56:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414CEC340E9;
+        Mon,  7 Mar 2022 09:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646646999;
+        bh=5F5auzfzkdMpSUKFR4bTjbWgfqjhnAg35Vq0NJ55ko8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=m0rxXZcetrxZGoMye9mP4K9WMGkikbjOBuiX70RcbcIfcj1l8YvdMTivYT8YB3hpl
+         Qv19zXJIJX9B3CGMx9u+svKIghZpN30inRuuLJ3hxOfw4K2Ts055C3EihrZoFN1mzj
+         g2VmZFXvEzVUMkteQNHMb/w+3MSah59XELImTxCY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 161/186] ptp: ocp: Add ptp_ocp_adjtime_coarse for large adjustments
+Date:   Mon,  7 Mar 2022 10:19:59 +0100
+Message-Id: <20220307091658.577485153@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1881166460-1646644807=:1677"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Jonathan Lemon <jonathan.lemon@gmail.com>
 
---8323329-1881166460-1646644807=:1677
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+[ Upstream commit 90f8f4c0e3cebd541deaa45cf0e470bb9810dd4f ]
 
-On Mon, 7 Mar 2022, Andy Shevchenko wrote:
+In ("ptp: ocp: Have FPGA fold in ns adjustment for adjtime."), the
+ns adjustment was written to the FPGA register, so the clock could
+accurately perform adjustments.
 
-> On Mon, Mar 7, 2022 at 12:00 AM Lukas Wunner <lukas@wunner.de> wrote:
-> > On Wed, Mar 02, 2022 at 11:56:00AM +0200, Ilpo Järvinen wrote:
-> 
-> ...
-> 
-> > Does the DesignWare UART use dedicated DE and RE pins instead of
-> > the RTS pin?  That would be quite unusual.
-> 
-> They are muxed with other UART pins on SoC level, but I don't remember
-> by heart which ones. According to the Synopsys datasheet they are
-> separate signals. It might be that I'm missing something, since the
-> last time I looked was last year.
+However, the adjtime() call passes in a s64, while the clock adjustment
+registers use a s32.  When trying to perform adjustments with a large
+value (37 sec), things fail.
 
-Unusual or not, there is a pin for both DE and RE. DE is muxed with RTS.
+Examine the incoming delta, and if larger than 1 sec, use the original
+(coarse) adjustment method.  If smaller than 1 sec, then allow the
+FPGA to fold in the changes over a 1 second window.
 
-> > > +     d->hw_rs485_support = device_property_read_bool(p->dev, "snps,rs485-interface-en");
-> > > +     if (d->hw_rs485_support)
-> > > +             p->rs485_config = dw8250_rs485_config;
-> > > +
-> >
-> > You wrote in the commit message that rs485 support is present from
-> > version 4.0 onward.  Can't we just check the IP version and enable
-> > rs485 support for >= 4.0?  That would seem more appropriate instead
-> > of introducing yet another new property.
-> 
-> AFAIU this is dependent on the IP syntheses. I.o.w. version 4.0+ is a
-> prerequisite, but doesn't automatically mean that there is a support.
-> Unfortunately there is no way to tell this clearly in the IP
-> configuration register.
+Fixes: 6d59d4fa1789 ("ptp: ocp: Have FPGA fold in ns adjustment for adjtime.")
+Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+Acked-by: Richard Cochran <richardcochran@gmail.com>
+Link: https://lore.kernel.org/r/20220228203957.367371-1-jonathan.lemon@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/ptp/ptp_ocp.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-And the IP synthesis only part of the picture, in general case, it'd
-also matter that there's something connected to that RE (i.e.,
-an RS485 transceiver).
-
-On the board I'm testing with, I can also turn RS485 on/off from BIOS
-which makes the pins (mainly RE) behave differently.
-
-I initially had additional version check here while developing this
-patch series but it seemed to not provide any added value due those
-other factors that need to be considered.
-
-
+diff --git a/drivers/ptp/ptp_ocp.c b/drivers/ptp/ptp_ocp.c
+index 0f1b5a7d2a89..17ad5f0d13b2 100644
+--- a/drivers/ptp/ptp_ocp.c
++++ b/drivers/ptp/ptp_ocp.c
+@@ -607,7 +607,7 @@ ptp_ocp_settime(struct ptp_clock_info *ptp_info, const struct timespec64 *ts)
+ }
+ 
+ static void
+-__ptp_ocp_adjtime_locked(struct ptp_ocp *bp, u64 adj_val)
++__ptp_ocp_adjtime_locked(struct ptp_ocp *bp, u32 adj_val)
+ {
+ 	u32 select, ctrl;
+ 
+@@ -615,7 +615,7 @@ __ptp_ocp_adjtime_locked(struct ptp_ocp *bp, u64 adj_val)
+ 	iowrite32(OCP_SELECT_CLK_REG, &bp->reg->select);
+ 
+ 	iowrite32(adj_val, &bp->reg->offset_ns);
+-	iowrite32(adj_val & 0x7f, &bp->reg->offset_window_ns);
++	iowrite32(NSEC_PER_SEC, &bp->reg->offset_window_ns);
+ 
+ 	ctrl = OCP_CTRL_ADJUST_OFFSET | OCP_CTRL_ENABLE;
+ 	iowrite32(ctrl, &bp->reg->ctrl);
+@@ -624,6 +624,22 @@ __ptp_ocp_adjtime_locked(struct ptp_ocp *bp, u64 adj_val)
+ 	iowrite32(select >> 16, &bp->reg->select);
+ }
+ 
++static void
++ptp_ocp_adjtime_coarse(struct ptp_ocp *bp, u64 delta_ns)
++{
++	struct timespec64 ts;
++	unsigned long flags;
++	int err;
++
++	spin_lock_irqsave(&bp->lock, flags);
++	err = __ptp_ocp_gettime_locked(bp, &ts, NULL);
++	if (likely(!err)) {
++		timespec64_add_ns(&ts, delta_ns);
++		__ptp_ocp_settime_locked(bp, &ts);
++	}
++	spin_unlock_irqrestore(&bp->lock, flags);
++}
++
+ static int
+ ptp_ocp_adjtime(struct ptp_clock_info *ptp_info, s64 delta_ns)
+ {
+@@ -631,6 +647,11 @@ ptp_ocp_adjtime(struct ptp_clock_info *ptp_info, s64 delta_ns)
+ 	unsigned long flags;
+ 	u32 adj_ns, sign;
+ 
++	if (delta_ns > NSEC_PER_SEC || -delta_ns > NSEC_PER_SEC) {
++		ptp_ocp_adjtime_coarse(bp, delta_ns);
++		return 0;
++	}
++
+ 	sign = delta_ns < 0 ? BIT(31) : 0;
+ 	adj_ns = sign ? -delta_ns : delta_ns;
+ 
 -- 
- i.
+2.34.1
 
---8323329-1881166460-1646644807=:1677--
+
+

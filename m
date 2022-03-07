@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAFF4CFAB3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8418B4CFAFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240486AbiCGKSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S232476AbiCGKY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:24:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240517AbiCGKBE (ORCPT
+        with ESMTP id S241202AbiCGKBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:04 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A631E2559D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:49:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646646591; x=1678182591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zuM8kRheDPx8x/ZAANh8fV7Si9//wAZ0JIyjesygWcA=;
-  b=hLLztc9lh4ezVr3zE5RQwkkMnX85Mgos3A/COIt4sjj4ITZ25tztUDSb
-   fq2Y3TPM1AKQ5dgMbshUfJdW1YM1y3NrorbFVe129CzSuA1udkvJpRRtS
-   qHSc9QRKb0YK5CkCsh+W6mN4eYE4bL2xgYhjvS17jODXkzy5b+ivRSb1E
-   F5VO0UvZsi/Ivp3iJs5ZcMM7gG41/oALgfHhvppCtyCZnk0nhC9eChIA2
-   47ANEhm391ZNITDzuBv/XsS937gr7w8wCzN7yYtA2QMZglEQXmkEdJzd8
-   3BDdU2nhcE8RDhppBT5yLJfngYtIgQDHcXWnrctWnaMPNeQbAqqceeDAV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254542061"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="254542061"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:49:51 -0800
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="512620311"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:49:48 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nR9zE-00Ch8F-0q;
-        Mon, 07 Mar 2022 11:49:04 +0200
-Date:   Mon, 7 Mar 2022 11:49:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH] list: always set pos in list_prepare_entry()
-Message-ID: <YiXVD8O3qyDEOGni@smile.fi.intel.com>
-References: <20220306162635.2930407-1-jakobkoschel@gmail.com>
+        Mon, 7 Mar 2022 05:01:46 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE53171C9F;
+        Mon,  7 Mar 2022 01:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=F33OJew4f+X9EGyrX9UFDzNmD+8SJD5GlTnGdBvVako=; b=l29VVU0vNjudQfmRlD//2Ai5r4
+        Rb+GvW9iJclOfRU4GCvEkvP37BglXQGkWNdbR9UtqNDH7Bd7uNMQTzk6GQO/3RrgBAK92YJPN+Gxz
+        hmdhnmemQGbjdAakq68Sl3xDp2W7oSx7yoYDF+U55QRcn1hqpaDZX/h1Zyw3Sv7rLP/+rdGyTBYZA
+        irmfqZgm8l2HmkKiZZ31K7VhEMil+fheol+qvc06hlmbEo4d8FiIGMLtmGd3lA47z7T/HYJz48Sge
+        QILp/zYvt2fLhpl9YQcEH7SYyGRpLEYHP4sDoMdMnAg5VRIOhIN4hykzWAtmP/fB3VicXW0j1V6fh
+        ioJsNaJw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRA16-00F53J-8g; Mon, 07 Mar 2022 09:51:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 513993002BE;
+        Mon,  7 Mar 2022 10:50:57 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EC3C92BA7BE19; Mon,  7 Mar 2022 10:50:56 +0100 (CET)
+Date:   Mon, 7 Mar 2022 10:50:56 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>, jgross@suse.com,
+        sdeep@vmware.com, pv-drivers@vmware.com, pbonzini@redhat.com,
+        seanjc@google.com, kys@microsoft.com, sthemmin@microsoft.com,
+        virtualization@lists.linux-foundation.org,
+        Andrew.Cooper3@citrix.com
+Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
+ a perf event clock
+Message-ID: <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
+References: <20220214110914.268126-1-adrian.hunter@intel.com>
+ <20220214110914.268126-4-adrian.hunter@intel.com>
+ <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
+ <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220306162635.2930407-1-jakobkoschel@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+In-Reply-To: <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,31 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 05:26:35PM +0100, Jakob Koschel wrote:
-> In order to assign the result from list_prepare_entry() to another
-> variable, it should also be set when pos != NULL.
+On Fri, Mar 04, 2022 at 08:27:45PM +0200, Adrian Hunter wrote:
+> On 04/03/2022 15:41, Peter Zijlstra wrote:
+> > On Mon, Feb 14, 2022 at 01:09:06PM +0200, Adrian Hunter wrote:
+> >> Currently, when Intel PT is used within a VM guest, it is not possible to
+> >> make use of TSC because perf clock is subject to paravirtualization.
+> > 
+> > Yeah, so how much of that still makes sense, or ever did? AFAIK the
+> > whole pv_clock thing is utter crazy. Should we not fix that instead?
 > 
-> This will be useful once the list iterator is no longer used after
-> the loop.
+> Presumably pv_clock must work with different host operating systems.
+> Similarly, KVM must work with different guest operating systems.
+> Perhaps I'm wrong, but I imagine re-engineering time virtualization
+> might be a pretty big deal,  far exceeding the scope of these patches.
 
-...
+I think not; on both counts. That is, I don't think it's going to be
+hard, and even it if were, it would still be the right thing to do.
 
->  #define list_prepare_entry(pos, head, member) \
-> -	((pos) ? : list_entry(head, typeof(*pos), member))
-> +	((pos) ? pos : list_entry(head, typeof(*pos), member))
+We're not going to add interface just to work around a known broken
+piece of crap just because we don't want to fix it.
 
-I'm not sure why then we have () surrounding first pos.
+So I'm thinking we should do the below and simply ignore any paravirt
+sched clock offered when there's ART on.
 
-Am I right that the original is an equivalent to
-
-	((pos) ? (pos) : list_entry(head, typeof(*pos), member))
-
-?
-
-Then what the difference is made by not using parentheses?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+---
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index 4420499f7bb4..a1f179ed39bf 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -145,6 +145,15 @@ DEFINE_STATIC_CALL(pv_sched_clock, native_sched_clock);
+ 
+ void paravirt_set_sched_clock(u64 (*func)(void))
+ {
++	/*
++	 * Anything with ART on promises to have sane TSC, otherwise the whole
++	 * ART thing is useless. In order to make ART useful for guests, we
++	 * should continue to use the TSC. As such, ignore any paravirt
++	 * muckery.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_ART))
++		return;
++
+ 	static_call_update(pv_sched_clock, func);
+ }
+ 

@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333894CF287
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 980DF4CF42D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbiCGHXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 02:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
+        id S232029AbiCGJDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiCGHXm (ORCPT
+        with ESMTP id S231402AbiCGJDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 02:23:42 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A155FAC;
-        Sun,  6 Mar 2022 23:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646637769; x=1678173769;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bU6exYqGnTwB5vvdEZLW2SQGHSrLLH83oJPg1oIJrr0=;
-  b=Dx5b9UK7JBTv+zJ8QskfeJqhrEH8dJnT/yq/xdGNsGg2AZk2bKSSwrd9
-   6zse010L/X+bm9RIOswuEWnLgwXjRd7jCRE6UvfLRsuS70B41VtTpBbpW
-   fm6zSigS46XYvJ2DUNfzTk4QYlgc7050uD8ELRR21OIcerKBbDbsoI7YF
-   snI0hn2Krhao2PIE1Cza6BAHc1c31JUUfNmZpraWqOUKdRWyoqWDhTivo
-   SaLP4e5RYevD8sWtW5L4iKsecwhxEuYCXVJtjIMpeyceotpcRYBJ8N3eL
-   tCmVCEkXqCR6Oib0lfuCiuHlWaohmqLE1yBRqp82yILWIpJCrwylha8HL
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="241753779"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="241753779"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 23:22:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="537004537"
-Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by orsmga007.jf.intel.com with ESMTP; 06 Mar 2022 23:22:45 -0800
-From:   zhengjun.xing@linux.intel.com
-To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
-Subject: [PATCH] perf parse: Fix event parser error for hybrid systems
-Date:   Mon,  7 Mar 2022 23:16:27 +0800
-Message-Id: <20220307151627.30049-1-zhengjun.xing@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Mon, 7 Mar 2022 04:03:30 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07066168
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:02:35 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id n2so3666270plf.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:02:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id;
+        bh=T9sNyGPslu7pePFJSRIoI7XN6IK0Rl/U6UawibuUj8w=;
+        b=kKYdGsJROD4OCCbZLJfSbXDMuUvSumWj8d/pHxsMdlNQJH0c43xdLeVuIhK/9jkAh9
+         I/had2q6jkKGNqwPXv2Q2kJ8q1/9lX+z92l3zRzcoUDnXBkuv7vmkyiZz2Tu+srNfcTI
+         zqzK+uNoiv9VvRd6zw/sAXbTUf8KfY8LboKMENE/cdvNF2R4HqOqAMQ87X5EIHDFY0tR
+         DdakT5HIykvDSRe/c1Ls15g/HzYEurN7pH/ysDj7aYBgDYwnGM6i0EWEPx7G5/OFU9t+
+         vSDvBcYM1ZBcHC6Oo8wbjfPGS1j0YIde0h7zzLs4gPVPYfY5/dJJxY3MuWtO9XpOiUif
+         biAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=T9sNyGPslu7pePFJSRIoI7XN6IK0Rl/U6UawibuUj8w=;
+        b=m8HmqUCMZNZwzgKT9LY+gQ/oqOB9qhSu3oQ3fTBzuWJaVtOrLU1ZwFMmuixDimm/Y3
+         YZ0fq1noDitAc42UxCTAYS2uWd176B5RdpCpEXk+D3sCEqcB8scIEnIMbLnWj1toaS1V
+         bIulBVL2T0/nQdBii97oBfm0nG126u1gynW5rSHl3FLA7z/Vq8Wza4ZTN7t82LqyPjmZ
+         HEe84GewBJ5mdA4ep5n36OYkU5gF/jTdgHLHWGSlreqn0NLCwhAEVwq6zlrIBjdTwRil
+         agqVz97QftQE+hxGVB+so1QE3TXJ5Mj/CHAdiSDUzE53PXPrkxna64HCQUnIEbaLHHap
+         h5+g==
+X-Gm-Message-State: AOAM532Gvd7rzbmmXtftI/ZzJMA6foJAoGBMLh815O6W0fXk8s7Sd5SE
+        fPWGKidFOgpth53cocOXkTE=
+X-Google-Smtp-Source: ABdhPJzkVOsSJAkFEiNUwUFAsy1730LBS8+OzwMcXGSseI3J/C0zrMKB8QafKzTl3vzqGryZ2R83uQ==
+X-Received: by 2002:a17:902:8b87:b0:14d:7920:e54a with SMTP id ay7-20020a1709028b8700b0014d7920e54amr10915799plb.140.1646643755176;
+        Mon, 07 Mar 2022 01:02:35 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id u10-20020a6540ca000000b0037445e95c93sm11177939pgp.15.2022.03.07.01.02.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 01:02:34 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: rk817: Fix missing clk_disable_unprepare() in rk817_platform_probe
+Date:   Mon,  7 Mar 2022 09:01:30 +0000
+Message-Id: <20220307090146.4104-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,104 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Fix the missing clk_disable_unprepare() before return
+from rk817_platform_probe() in the error handling case.
 
-This bug happened on hybrid systems when both cpu_core and cpu_atom
-have the same event name such as "UOPS_RETIRED.MS" while their event
-terms are different, then during perf stat, the event for cpu_atom
-will parse fail and then no output for cpu_atom.
-
-UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
-UOPS_RETIRED.MS -> cpu_atom/period=0x1e8483,umask=0x1,event=0xc2/
-
-It is because event terms in the "head" of parse_events_multi_pmu_add
-will be changed to event terms for cpu_core after parsing UOPS_RETIRED.MS
-for cpu_core, then when parsing the same event for cpu_atom, it still
-uses the event terms for cpu_core, but event terms for cpu_atom are
-different with cpu_core, the event parses for cpu_atom will fail. This
-patch fixes it, the event terms should be parsed from the original
-event.
-
-This patch can work for the hybrid systems that have the same event
-in more than 2 PMUs. It also can work in non-hybrid systems.
-
-Before:
-
- #perf stat -v  -e  UOPS_RETIRED.MS  -a sleep 1
-
-Using CPUID GenuineIntel-6-97-1
-UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
-Control descriptor is not initialized
-UOPS_RETIRED.MS: 2737845 16068518485 16068518485
-
- Performance counter stats for 'system wide':
-
-         2,737,845      cpu_core/UOPS_RETIRED.MS/
-
-       1.002553850 seconds time elapsed
-
-After:
-
- #perf stat -v  -e  UOPS_RETIRED.MS  -a sleep 1
-
-Using CPUID GenuineIntel-6-97-1
-UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
-UOPS_RETIRED.MS -> cpu_atom/period=0x1e8483,umask=0x1,event=0xc2/
-Control descriptor is not initialized
-UOPS_RETIRED.MS: 1977555 16076950711 16076950711
-UOPS_RETIRED.MS: 568684 8038694234 8038694234
-
- Performance counter stats for 'system wide':
-
-         1,977,555      cpu_core/UOPS_RETIRED.MS/
-           568,684      cpu_atom/UOPS_RETIRED.MS/
-
-       1.004758259 seconds time elapsed
-
-Fixes: fb0811535e92c6c1 ("perf parse-events: Allow config on kernel PMU events")
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Fixes: 0d6a04da9b25 ("ASoC: Add Rockchip rk817 audio CODEC support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- tools/perf/util/parse-events.c | 6 ++++--
+ sound/soc/codecs/rk817_codec.c | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 9739b05b999e..8bf7f914ea0e 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1648,6 +1648,7 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
- {
- 	struct parse_events_term *term;
- 	struct list_head *list = NULL;
-+	struct list_head *orig_head = NULL;
- 	struct perf_pmu *pmu = NULL;
- 	int ok = 0;
- 	char *config;
-@@ -1674,7 +1675,6 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
+diff --git a/sound/soc/codecs/rk817_codec.c b/sound/soc/codecs/rk817_codec.c
+index 03f24edfe4f6..8fffe378618d 100644
+--- a/sound/soc/codecs/rk817_codec.c
++++ b/sound/soc/codecs/rk817_codec.c
+@@ -508,12 +508,14 @@ static int rk817_platform_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "%s() register codec error %d\n",
+ 			__func__, ret);
+-		goto err_;
++		goto err_clk;
  	}
- 	list_add_tail(&term->list, head);
  
--
- 	/* Add it for all PMUs that support the alias */
- 	list = malloc(sizeof(struct list_head));
- 	if (!list)
-@@ -1687,13 +1687,15 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
+ 	return 0;
+-err_:
  
- 		list_for_each_entry(alias, &pmu->aliases, list) {
- 			if (!strcasecmp(alias->name, str)) {
-+				parse_events_copy_term_list(head, &orig_head);
- 				if (!parse_events_add_pmu(parse_state, list,
--							  pmu->name, head,
-+							  pmu->name, orig_head,
- 							  true, true)) {
- 					pr_debug("%s -> %s/%s/\n", str,
- 						 pmu->name, alias->str);
- 					ok++;
- 				}
-+				parse_events_terms__delete(orig_head);
- 			}
- 		}
- 	}
++err_clk:
++	clk_disable_unprepare(rk817_codec_data->mclk);
++err_:
+ 	return ret;
+ }
+ 
 -- 
-2.25.1
+2.17.1
 

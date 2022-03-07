@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131BE4CF576
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945514CF8B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbiCGJ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S239639AbiCGJ7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236842AbiCGJZQ (ORCPT
+        with ESMTP id S237492AbiCGJgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:25:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9740C593A0;
-        Mon,  7 Mar 2022 01:23:45 -0800 (PST)
+        Mon, 7 Mar 2022 04:36:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337236E341;
+        Mon,  7 Mar 2022 01:31:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C938EB810CB;
-        Mon,  7 Mar 2022 09:23:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA0AC340F4;
-        Mon,  7 Mar 2022 09:23:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C710261119;
+        Mon,  7 Mar 2022 09:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B9A5C340E9;
+        Mon,  7 Mar 2022 09:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645022;
-        bh=jo5Gvut9YDqJqTgsI46hJz07obo5/+wBj08YYrZKZRc=;
+        s=korg; t=1646645483;
+        bh=8XZ+BPtqFWNxqj7jFe97w03KpviOdTmNni0N36TjqxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YMaxBKwEfaYGkRVPz+4iLW3MAFSnJxwTv8jtrtX1nsx0JRQa2qNx1ursHaUvQP3dy
-         e2MhgsZJego/DFVOOaljuwEUTuBPqo1YrEtn90h/C2/pGM+vl/L4rQ/dLlkq+eRz/W
-         0haUr/mFTkc+x20l2ou6NXk6v1vzwEkShFDITY+M=
+        b=qiZmvLPqbuhwFvL+xnlY0Xi6iWBSusUbDRoG9JnzeAbaMZ0FeVfOUoaAF0vPFlIU0
+         S5a12T+qbZQERAPv4kw9g7CDoQlMpRHT++CRbX6dQzAmL0pLaIT9l8QmJb0bn7pK6s
+         Z0tbAfYqzu5qbPAB73pvqjF/j3vY86w4OxaJ+lMM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH 4.19 13/51] usb: gadget: clear related members when goto fail
+        stable@vger.kernel.org, Joe Stringer <joe@cilium.io>,
+        Florian Westphal <fw@strlen.de>
+Subject: [PATCH 5.10 045/105] netfilter: nf_queue: handle socket prefetch
 Date:   Mon,  7 Mar 2022 10:18:48 +0100
-Message-Id: <20220307091637.371067305@linuxfoundation.org>
+Message-Id: <20220307091645.453234294@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Florian Westphal <fw@strlen.de>
 
-commit 501e38a5531efbd77d5c73c0ba838a889bfc1d74 upstream.
+commit 3b836da4081fa585cf6c392f62557496f2cb0efe upstream.
 
-dev->config and dev->hs_config and dev->dev need to be cleaned if
-dev_config fails to avoid UAF.
+In case someone combines bpf socket assign and nf_queue, then we will
+queue an skb who references a struct sock that did not have its
+reference count incremented.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20211231172138.7993-3-hbh25y@gmail.com
+As we leave rcu protection, there is no guarantee that skb->sk is still
+valid.
+
+For refcount-less skb->sk case, try to increment the reference count
+and then override the destructor.
+
+In case of failure we have two choices: orphan the skb and 'delete'
+preselect or let nf_queue() drop the packet.
+
+Do the latter, it should not happen during normal operation.
+
+Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+Acked-by: Joe Stringer <joe@cilium.io>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/legacy/inode.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ net/netfilter/nf_queue.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1877,8 +1877,8 @@ dev_config (struct file *fd, const char
+--- a/net/netfilter/nf_queue.c
++++ b/net/netfilter/nf_queue.c
+@@ -189,6 +189,18 @@ static int __nf_queue(struct sk_buff *sk
+ 		break;
+ 	}
  
- 	value = usb_gadget_probe_driver(&gadgetfs_driver);
- 	if (value != 0) {
--		kfree (dev->buf);
--		dev->buf = NULL;
-+		spin_lock_irq(&dev->lock);
-+		goto fail;
- 	} else {
- 		/* at this point "good" hardware has for the first time
- 		 * let the USB the host see us.  alternatively, if users
-@@ -1895,6 +1895,9 @@ dev_config (struct file *fd, const char
- 	return value;
- 
- fail:
-+	dev->config = NULL;
-+	dev->hs_config = NULL;
-+	dev->dev = NULL;
- 	spin_unlock_irq (&dev->lock);
- 	pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev);
- 	kfree (dev->buf);
++	if (skb_sk_is_prefetched(skb)) {
++		struct sock *sk = skb->sk;
++
++		if (!sk_is_refcounted(sk)) {
++			if (!refcount_inc_not_zero(&sk->sk_refcnt))
++				return -ENOTCONN;
++
++			/* drop refcount on skb_orphan */
++			skb->destructor = sock_edemux;
++		}
++	}
++
+ 	entry = kmalloc(sizeof(*entry) + route_key_size, GFP_ATOMIC);
+ 	if (!entry)
+ 		return -ENOMEM;
 
 

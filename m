@@ -2,103 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6CE4CFA46
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BAC4CF9C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240678AbiCGKIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S240853AbiCGKJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239642AbiCGJuA (ORCPT
+        with ESMTP id S239988AbiCGJud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:50:00 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B002F70CE3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:43:35 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id k24so12762971wrd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:43:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ugg4XGWVUXpbeAl2y1u2+LRB3knUhhhT929Udmcfnxw=;
-        b=exKdO2J+hIZRUdYN7OrGtFmqY+dgHS3xWv51ANASwLF8TJTAMnj8jWVw4qgA5v59/1
-         zNCirwKKJCmHzZBZWDraq096zx3q40zAilZAK7rDItkZwjePeBZcEBPboCBfhfeQW6Xx
-         e0Z90SvPJ1z+KxpqTs/ftmb1+0D0MkFhmvmRvpGitu6vvaDc5nd+Gs34qjE/kkNmbn0W
-         su0Rd0u3ETvPQ9iutbin2uJHIJvFmXABc32o6XDtEEtiG4WU85DZcGKDxi4GvAN8YPGx
-         UXxfgS+TJjH6g6M+JiZLxZz8yN7WAlIAEiF5hgMdZirOxpbOWwezp1WhfdFMPIS6Rspe
-         dxnQ==
+        Mon, 7 Mar 2022 04:50:33 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53551723FD
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:44:00 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E02C83F5F5
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:43:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646646225;
+        bh=iBR4PX+oGP38NiU1odaqND+HsFxr+kkdimwXNBXKUU0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=n65FgNQ5101qIZGsWMW8O0sr4foc3eeVw6C/mjxQniErzaxq7RbpJ1AL3dTLb0cD7
+         2wt2rwDpTLojT5Ct1okkuk4OJ4R0MDEc2N4g/dIQ73MGMrQKbpeWbO4NVQxRRvBg8P
+         goI6qK6bEz0CKqNxQ/Sdz7hPUzaPXOAO16ytU6v0Mz6KOnanDpetZIsLnjKkOa59rh
+         UmQlajPNg5TIpOpc8Fc381wqzYLkGXJib6fHWdcV3Q5aB2OkQMx4Odn5vsWnC8xcfB
+         dzoLsVBe47RkVXZ49E3NmiCzoly2++52KWg9NcV84GKP96U0rANv22k898TB7vJDZH
+         ad00O1fiG5YHg==
+Received: by mail-ed1-f71.google.com with SMTP id u28-20020a50d51c000000b004159ffb8f24so8308042edi.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:43:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ugg4XGWVUXpbeAl2y1u2+LRB3knUhhhT929Udmcfnxw=;
-        b=Vq7PfudBofdEtst6WVwPRQjlObJpRDdKmQHU/dL01GgJOkZdjBL87H6bKT2tWDT39T
-         5rUJBe6QF0enishKUvON867OkpD+yaO4Va2S4iUqutU3FM8HoJPLnKKb8uzj2+7jjufO
-         ZNuEwRAwuuUWoEzLoMXiSop7oLGLwKFOiZH/6QA1n/jPUbRvVDqw6maOHf3nEsuP1Lm+
-         WVbm/lds0QyQ95KD19AeLXH0XMLtUHnqiaMfLA0/to/qKnfnJgYzjazdnKNYWSHCbpso
-         56Nt4tqdJgHcqqQzO7F1SnY8ZXtlR6ZBoiRwHuknStZJx4sd9Ko9gm1HC+OnWMlMH642
-         2Qtg==
-X-Gm-Message-State: AOAM531k7KGbsUAREucrAVmpZIQfOhfgvMFreJ/ilcX+/YorBgpTwo7G
-        XRYWdULy7MFzA1QuZ1Jv7YCoBA==
-X-Google-Smtp-Source: ABdhPJxpSSMI9U5vy143F1/C37KcqeEO0zVmayvf+I6JKymMnOxargGVQm1psOEOhIGu3cuIa6qEHw==
-X-Received: by 2002:a05:6000:18a4:b0:1f0:5f19:152c with SMTP id b4-20020a05600018a400b001f05f19152cmr7649534wri.414.1646646212304;
-        Mon, 07 Mar 2022 01:43:32 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id s8-20020adfc548000000b001f07639a704sm8087577wrf.7.2022.03.07.01.43.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 01:43:31 -0800 (PST)
-Date:   Mon, 7 Mar 2022 09:43:29 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: Re: [PATCH v3 2/2] dt-bindings: mfd: maxim,max77802: convert to
- dtschema
-Message-ID: <YiXTwfxILy+V4OVI@google.com>
-References: <20220215075344.31421-1-krzysztof.kozlowski@canonical.com>
- <20220215075344.31421-3-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iBR4PX+oGP38NiU1odaqND+HsFxr+kkdimwXNBXKUU0=;
+        b=ie4JjvImlqIwDbBKJPR/BXCz0LVXINdM87kRsirOAu266NIddfi8xZY7Pz6qmAhxa3
+         hTxymGJd4PLLGaEoWO1dWf3+akLHh4BEtfFkRywfFEwhluk+jlJJeeoG3XMhlVfETfdo
+         IATCd0t/idqjB3rKLGdIXiHddxCVVWmoPABhbUQoq3cbP2rbI7QN9ncyE/DAA0QTeDpL
+         sor6Q3bkJZZNdgfQo0KoOPZKAUCgFXKFdSVX1reayZeOCy6Ft3BwC4ZRqk7oUuKwO6Ib
+         KdvI5GsA44bCJEJ8xp4SBTrZyR3NpS5OWPhjPOh+6RcIE/ViCgw+sp+QVtV73HawsZaW
+         nxrg==
+X-Gm-Message-State: AOAM531hrFT/J6/gkVfoO50nIOhQ/b4s3VgEh1nuPss5okcdZVjWBRuq
+        vKdCDgEFq6DWkG4MXNvLCSXtykKjvuA+OKbl3QQDLMFzcGBSnRwXH9wOD+ORtGMMQMfrSS5oiFh
+        1PQi8vvBgbg8Pu6l1JKSgxn5JKqrkSLijQCu+pwDCBw==
+X-Received: by 2002:a17:907:3ea3:b0:6da:6f16:bd9b with SMTP id hs35-20020a1709073ea300b006da6f16bd9bmr8484392ejc.308.1646646224516;
+        Mon, 07 Mar 2022 01:43:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzvFkrpQ2abZZeyYkoh/uqZU+SVmzZg0o9SDWnyA32nfxIrSpfTRWoUGqWl5FxqsWOJFmS2Cw==
+X-Received: by 2002:a17:907:3ea3:b0:6da:6f16:bd9b with SMTP id hs35-20020a1709073ea300b006da6f16bd9bmr8484380ejc.308.1646646224286;
+        Mon, 07 Mar 2022 01:43:44 -0800 (PST)
+Received: from [192.168.0.141] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05640205c900b00415fbbdabbbsm4758620edx.9.2022.03.07.01.43.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 01:43:43 -0800 (PST)
+Message-ID: <71f2c22b-e037-3bb4-e7e1-e226d3243536@canonical.com>
+Date:   Mon, 7 Mar 2022 10:43:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220215075344.31421-3-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] clocksource/drivers/exynos_mct: Support using only local
+ timer
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>, kernel <kernel@axis.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>
+References: <20220307083255.1577365-1-vincent.whitchurch@axis.com>
+ <08992f48-6cb6-8dc0-33d2-f18f942d2bee@canonical.com>
+ <20220307092437.GA32457@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307092437.GA32457@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022, Krzysztof Kozlowski wrote:
+On 07/03/2022 10:24, Vincent Whitchurch wrote:
+> On Mon, Mar 07, 2022 at 10:06:26AM +0100, Krzysztof Kozlowski wrote:
+>> On 07/03/2022 09:32, Vincent Whitchurch wrote:
+>>> The ARTPEC-8 SoC has a quad-core Cortex-A53 and a single-core Cortex-A5
+>>> which share one MCT with one global and eight local timers.
 
-> Convert the MFD part of Maxim MAX77802 PMIC to DT schema format.  The
-> example DTS was copied from existing DTS (exynos5800-peach-pi.dts), so
-> keep the license as GPL-2.0-only.
+Please mention that this is a two-OS case (or without cache coherency),
+because usual design is different - two clusters being cache coherent.
+
+>>>
+>>> The Cortex-A53 boots first and starts the global FRC and also registers
+>>> a clock events device using the global timer.  (This global timer clock
+>>> events is usually replaced by arch timer clock events for each of the
+>>> cores.)
+>>>
+>>> When the A5 boots, we should not use the global timer interrupts or
+>>> write to the global timer registers.  This is because even if there are
+>>> four global comparators, the control bits for all four are in the same
+>>> registers, and we would need to synchronize between the cpus.  Instead,
+>>> the global timer FRC (already started by the A53) should be used as the
+>>> clock source, and one of the local timers which are not used by the A53
+>>> can be used for clock events on the A5.
+>>>
+>>> To support this, add a module param to set the local timer starting
+>>> index.  If this parameter is non-zero, the global timer clock events
+>>> device is not registered and we don't write to the global FRC if it is
+>>> already started.
+>>>
+>>> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+>>> ---
+>>>  drivers/clocksource/exynos_mct.c | 29 ++++++++++++++++++++++++-----
+>>>  1 file changed, 24 insertions(+), 5 deletions(-)
+>>
+>> This should not be send separately from the previous patch.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
->  .../devicetree/bindings/mfd/max77802.txt      |  25 ---
->  .../bindings/mfd/maxim,max77802.yaml          | 194 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 195 insertions(+), 26 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/max77802.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77802.yaml
+> OK, I will put it in a series.
+> 
+>>
+>>>
+>>> diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
+>>> index f29c812b70c9..7ea2919b1808 100644
+>>> --- a/drivers/clocksource/exynos_mct.c
+>>> +++ b/drivers/clocksource/exynos_mct.c
+>>> @@ -33,7 +33,7 @@
+>>>  #define EXYNOS4_MCT_G_INT_ENB		EXYNOS4_MCTREG(0x248)
+>>>  #define EXYNOS4_MCT_G_WSTAT		EXYNOS4_MCTREG(0x24C)
+>>>  #define _EXYNOS4_MCT_L_BASE		EXYNOS4_MCTREG(0x300)
+>>> -#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * x))
+>>> +#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * (x)))
+>>>  #define EXYNOS4_MCT_L_MASK		(0xffffff00)
+>>>  
+>>>  #define MCT_L_TCNTB_OFFSET		(0x00)
+>>> @@ -77,6 +77,13 @@ static unsigned long clk_rate;
+>>>  static unsigned int mct_int_type;
+>>>  static int mct_irqs[MCT_NR_IRQS];
+>>>  
+>>> +/*
+>>> + * First local timer index to use.  If non-zero, global
+>>> + * timer is not written to.
+>>> + */
+>>> +static unsigned int mct_local_idx;
+>>> +module_param_named(local_idx, mct_local_idx, int, 0);
+>>
+>> No, it's a no go. Please use dedicated compatible if you need specific
+>> quirks.
+> 
+> I could add a compatible, but please note that the hardware itself does
+> not have any quirks, it's only the usage of the hardware from one of the
+> Linux kernels (see the explanation below) which is different.  Is it
+> correct to use a compatible to distinguish between these kind of
+> software-determined usage differences?
+> 
+>>
+>>> +
+>>>  struct mct_clock_event_device {
+>>>  	struct clock_event_device evt;
+>>>  	unsigned long base;
+>>> @@ -157,6 +164,17 @@ static void exynos4_mct_frc_start(void)
+>>>  	u32 reg;
+>>>  
+>>>  	reg = readl_relaxed(reg_base + EXYNOS4_MCT_G_TCON);
+>>> +
+>>> +	/*
+>>> +	 * If the FRC is already running, we don't need to start it again.  We
+>>> +	 * could probably just do this on all systems, but, to avoid any risk
+>>> +	 * for regressions, we only do it on systems where it's absolutely
+>>> +	 * necessary (i.e., on systems where writes to the global registers
+>>> +	 * need to be avoided).
+>>> +	 */
+>>> +	if (mct_local_idx && (reg & MCT_G_TCON_START))
+>>> +		return;
+>>
+>> I don't get it. exynos4_mct_frc_start() is called exactly only once in
+>> the system - during init. Not once per every CPU or cluster (I
+>> understood you have two clusters, right?).
+> 
+> Not quite.  The Cortex-A53 and the Cortex-A5 do not have cache-coherency
+> between them, so they are not run in an SMP configuration.  From the
+> Cortex-A53's perspective, the Cortex-A5 looks like any other hardware
+> block.  The Cortex-A5 could just as well have run some other operating
+> system, but I run Linux on it.  So there are two separate, independent
+> Linux kernels running on the SoC.
 
-Applied, thanks.
+I see, thanks for explanation. In such case it might not be a separate
+compatible (programming model is the same) but rather dedicated property
+or properties in DTS to indicate that some parts are shared with other
+system. If property is present, you skip FRC initialization and use
+local timers. You actually might need two properties - one for A53 and
+one for A5. Or some kind of map to assign subset of local interrupts to
+each of the systems.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+I think still that DTS is the right place for it because it is a
+property of hardware and it's too early in system boot to use some
+remote-proc or mailbox...
+
+Best regards,
+Krzysztof

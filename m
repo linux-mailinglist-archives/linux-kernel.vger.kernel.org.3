@@ -2,285 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5314D05BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EB34D05BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244496AbiCGRys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S244579AbiCGRzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233014AbiCGRyp (ORCPT
+        with ESMTP id S244070AbiCGRy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:54:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 192806C1CF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646675630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Phzvk5ZfdwXL86R1Ll1kGCmrMjBQ5JPq3LvWiDPj4HI=;
-        b=jQ7nj1YftwEr6vNriH8nSE4Aeg0KxhurbWbAvIE+qf5Sn+prFf24BMpU1rczAizA/JXjpp
-        SC3m1ESZh0ITbYAa4bk0OLj9weKNeOd0yNhOiKNLrpZ2OdiRivYGp1iJ6fsgGUNkio6fZV
-        lNj2YqK9tgCvWxphF4Avz1Ed+7ikIOc=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-394-Sqge77haPfevidoN-T80EA-1; Mon, 07 Mar 2022 12:53:49 -0500
-X-MC-Unique: Sqge77haPfevidoN-T80EA-1
-Received: by mail-oi1-f200.google.com with SMTP id j1-20020a544801000000b002d9c824806dso2329862oij.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:53:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Phzvk5ZfdwXL86R1Ll1kGCmrMjBQ5JPq3LvWiDPj4HI=;
-        b=ujRRfdVF4ZyHxwG+qoCaI7QHk7E8b/GYZrQp7IS4Z+84jkt48z9n0e3xGUKG/s2mUG
-         Dak3k66rknnhPfCD30cxIIMOFSOBv+Qr0eMVdKJdKeA9NaYP98Ay7658oXPNqQoJYewQ
-         lYlNyPpUsErbXEzDm7lLc1i1K0ifJRq2obouxtaR99AoEr6TMj+ARQewm3LxCq43oStv
-         q7rHs3TB0lZEFUhbaFH/BMRAIFM4oPbhzl6ZDSGggR6bOee+XkUzZROpjBvowhQ2C0Th
-         0evIDDO2zqfohJQXCp9/obLvEaNIGXDCRLDhXkgoAXYdAoYrLmn7CDp7yUEFpeP1CW/a
-         4uJQ==
-X-Gm-Message-State: AOAM531SN1yb+6kYNxnok/3jevpMttxmSDAkrTK+WCYFcyOwe6EXE+nQ
-        nDh7SzkzLddMNeT0slp7DI7P+EqnrC58YQXpr+YXfFfH9JFZN+4T6DK6trjcnfuvOpmniqsrLHm
-        TE2q3yoDlDk2roPj9HNmUpbCO
-X-Received: by 2002:a05:6870:d250:b0:da:b3f:2b29 with SMTP id h16-20020a056870d25000b000da0b3f2b29mr59760oac.200.1646675626337;
-        Mon, 07 Mar 2022 09:53:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyxkd31qGYNfbok3dPK+eneOXrzS9JbQt5xfLAP9lippOgfoNtXjovLUd0XVAZ13GsGSiD+fg==
-X-Received: by 2002:a05:6870:d250:b0:da:b3f:2b29 with SMTP id h16-20020a056870d25000b000da0b3f2b29mr59738oac.200.1646675626068;
-        Mon, 07 Mar 2022 09:53:46 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id l3-20020a056830268300b005b21c30a3c5sm3512451otu.29.2022.03.07.09.53.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 09:53:45 -0800 (PST)
-Date:   Mon, 7 Mar 2022 10:53:44 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
-        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
-        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v8 3/9] hisi_acc_qm: Move VF PCI device IDs to common
- header
-Message-ID: <20220307105344.171b4621.alex.williamson@redhat.com>
-In-Reply-To: <20220303230131.2103-4-shameerali.kolothum.thodi@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
-        <20220303230131.2103-4-shameerali.kolothum.thodi@huawei.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Mon, 7 Mar 2022 12:54:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B3C70917;
+        Mon,  7 Mar 2022 09:54:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61DA7B81654;
+        Mon,  7 Mar 2022 17:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2CEFC340EB;
+        Mon,  7 Mar 2022 17:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646675641;
+        bh=SYv38mIqyJ/kUbZba218Eg6gzm9gAmX2mF5NRxwBAu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uF3ao08msPIYvAyDOUwnmcq6PJqWBBRJcE4FTCDOAHBSSt4GFTMvgqXbQI34K3TzN
+         /xpRo29FuAEzEzQZc9mU5lBM5PndqpCzr47nWgg4MIS92vlRKvsOzivGM44LlojJFz
+         EzrTzAB4I3+KtqyYmu+vphiGFI4JSv/Jfsshu0hRSrmnT8GLIa54Or/C5p6QNC7eKK
+         rIkIBn10pWLsTTBt3+GT9SbjDEQBGHaTTQkJs5JakGVxwnZwW3TlbyLYgT5DiiKQTf
+         /3jqkQ4hvmP5TAzhxbHXrDzRjD+DwFbc638yywb6FM8QxSAG5Ugpix5lOYCUGbZ0cY
+         Z8EPeFRiaz0xw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0C746403C8; Mon,  7 Mar 2022 14:53:57 -0300 (-03)
+Date:   Mon, 7 Mar 2022 14:53:56 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users@vger.kernel.org, anshuman.khandual@arm.com,
+        german.gomez@arm.com, leo.yan@linaro.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] Branch stack improvements
+Message-ID: <YiZGtCptGtphNasv@kernel.org>
+References: <20220307171917.2555829-1-james.clark@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307171917.2555829-1-james.clark@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-Here's the respin of this patch that adds only the VF device IDs to
-pci_ids.h.  The next patch in the series[1] adds a consumer of these
-IDs as a vfio-pci vendor driver.  Thanks,
-
-Alex
-
-[1]https://lore.kernel.org/all/20220303230131.2103-5-shameerali.kolothum.thodi@huawei.com/
-
-On Thu, 3 Mar 2022 23:01:25 +0000
-Shameer Kolothum <shameerali.kolothum.thodi@huawei.com> wrote:
-
-> Move the PCI Device IDs of HiSilicon ACC VF devices to a common header
-> and also use a uniform naming convention.
+Em Mon, Mar 07, 2022 at 05:19:13PM +0000, James Clark escreveu:
+> I came across a few generic non-Arm issues when reviewing Anshuman's new
+> support for branch record buffers on Arm [1].
 > 
-> This will be useful when we introduce the vfio PCI HiSilicon ACC live
-> migration driver in subsequent patches.
+> The first one is a fix to an error message which is misleading if the
+> feature is unavailable and the remaining ones make the branch type field
+> visible in perf report and perf script so that it can be debugged or used
+> by other tools.
 > 
-> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-> ---
->  drivers/crypto/hisilicon/hpre/hpre_main.c | 13 ++++++-------
->  drivers/crypto/hisilicon/sec2/sec_main.c  | 15 +++++++--------
->  drivers/crypto/hisilicon/zip/zip_main.c   | 11 +++++------
->  include/linux/pci_ids.h                   |  3 +++
->  4 files changed, 21 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> index ebfab3e14499..3589d8879b5e 100644
-> --- a/drivers/crypto/hisilicon/hpre/hpre_main.c
-> +++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> @@ -68,8 +68,7 @@
->  #define HPRE_REG_RD_INTVRL_US		10
->  #define HPRE_REG_RD_TMOUT_US		1000
->  #define HPRE_DBGFS_VAL_MAX_LEN		20
-> -#define HPRE_PCI_DEVICE_ID		0xa258
-> -#define HPRE_PCI_VF_DEVICE_ID		0xa259
-> +#define PCI_DEVICE_ID_HUAWEI_HPRE_PF	0xa258
->  #define HPRE_QM_USR_CFG_MASK		GENMASK(31, 1)
->  #define HPRE_QM_AXI_CFG_MASK		GENMASK(15, 0)
->  #define HPRE_QM_VFG_AX_MASK		GENMASK(7, 0)
-> @@ -111,8 +110,8 @@
->  static const char hpre_name[] = "hisi_hpre";
->  static struct dentry *hpre_debugfs_root;
->  static const struct pci_device_id hpre_dev_ids[] = {
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, HPRE_PCI_DEVICE_ID) },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, HPRE_PCI_VF_DEVICE_ID) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_HPRE_PF) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_HPRE_VF) },
->  	{ 0, }
->  };
->  
-> @@ -242,7 +241,7 @@ MODULE_PARM_DESC(uacce_mode, UACCE_MODE_DESC);
->  
->  static int pf_q_num_set(const char *val, const struct kernel_param *kp)
->  {
-> -	return q_num_set(val, kp, HPRE_PCI_DEVICE_ID);
-> +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_HPRE_PF);
->  }
->  
->  static const struct kernel_param_ops hpre_pf_q_num_ops = {
-> @@ -921,7 +920,7 @@ static int hpre_debugfs_init(struct hisi_qm *qm)
->  	qm->debug.sqe_mask_len = HPRE_SQE_MASK_LEN;
->  	hisi_qm_debug_init(qm);
->  
-> -	if (qm->pdev->device == HPRE_PCI_DEVICE_ID) {
-> +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_HPRE_PF) {
->  		ret = hpre_ctrl_debug_init(qm);
->  		if (ret)
->  			goto failed_to_create;
-> @@ -958,7 +957,7 @@ static int hpre_qm_init(struct hisi_qm *qm, struct pci_dev *pdev)
->  	qm->sqe_size = HPRE_SQE_SIZE;
->  	qm->dev_name = hpre_name;
->  
-> -	qm->fun_type = (pdev->device == HPRE_PCI_DEVICE_ID) ?
-> +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_HPRE_PF) ?
->  			QM_HW_PF : QM_HW_VF;
->  	if (qm->fun_type == QM_HW_PF) {
->  		qm->qp_base = HPRE_PF_DEF_Q_BASE;
-> diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
-> index 26d3ab1d308b..311a8747b5bf 100644
-> --- a/drivers/crypto/hisilicon/sec2/sec_main.c
-> +++ b/drivers/crypto/hisilicon/sec2/sec_main.c
-> @@ -20,8 +20,7 @@
->  
->  #define SEC_VF_NUM			63
->  #define SEC_QUEUE_NUM_V1		4096
-> -#define SEC_PF_PCI_DEVICE_ID		0xa255
-> -#define SEC_VF_PCI_DEVICE_ID		0xa256
-> +#define PCI_DEVICE_ID_HUAWEI_SEC_PF	0xa255
->  
->  #define SEC_BD_ERR_CHK_EN0		0xEFFFFFFF
->  #define SEC_BD_ERR_CHK_EN1		0x7ffff7fd
-> @@ -225,7 +224,7 @@ static const struct debugfs_reg32 sec_dfx_regs[] = {
->  
->  static int sec_pf_q_num_set(const char *val, const struct kernel_param *kp)
->  {
-> -	return q_num_set(val, kp, SEC_PF_PCI_DEVICE_ID);
-> +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_SEC_PF);
->  }
->  
->  static const struct kernel_param_ops sec_pf_q_num_ops = {
-> @@ -313,8 +312,8 @@ module_param_cb(uacce_mode, &sec_uacce_mode_ops, &uacce_mode, 0444);
->  MODULE_PARM_DESC(uacce_mode, UACCE_MODE_DESC);
->  
->  static const struct pci_device_id sec_dev_ids[] = {
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, SEC_PF_PCI_DEVICE_ID) },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, SEC_VF_PCI_DEVICE_ID) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_SEC_PF) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_SEC_VF) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, sec_dev_ids);
-> @@ -717,7 +716,7 @@ static int sec_core_debug_init(struct hisi_qm *qm)
->  	regset->base = qm->io_base;
->  	regset->dev = dev;
->  
-> -	if (qm->pdev->device == SEC_PF_PCI_DEVICE_ID)
-> +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF)
->  		debugfs_create_file("regs", 0444, tmp_d, regset, &sec_regs_fops);
->  
->  	for (i = 0; i < ARRAY_SIZE(sec_dfx_labels); i++) {
-> @@ -735,7 +734,7 @@ static int sec_debug_init(struct hisi_qm *qm)
->  	struct sec_dev *sec = container_of(qm, struct sec_dev, qm);
->  	int i;
->  
-> -	if (qm->pdev->device == SEC_PF_PCI_DEVICE_ID) {
-> +	if (qm->pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF) {
->  		for (i = SEC_CLEAR_ENABLE; i < SEC_DEBUG_FILE_NUM; i++) {
->  			spin_lock_init(&sec->debug.files[i].lock);
->  			sec->debug.files[i].index = i;
-> @@ -877,7 +876,7 @@ static int sec_qm_init(struct hisi_qm *qm, struct pci_dev *pdev)
->  	qm->sqe_size = SEC_SQE_SIZE;
->  	qm->dev_name = sec_name;
->  
-> -	qm->fun_type = (pdev->device == SEC_PF_PCI_DEVICE_ID) ?
-> +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_SEC_PF) ?
->  			QM_HW_PF : QM_HW_VF;
->  	if (qm->fun_type == QM_HW_PF) {
->  		qm->qp_base = SEC_PF_DEF_Q_BASE;
-> diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
-> index 678f8b58ec42..66decfe07282 100644
-> --- a/drivers/crypto/hisilicon/zip/zip_main.c
-> +++ b/drivers/crypto/hisilicon/zip/zip_main.c
-> @@ -15,8 +15,7 @@
->  #include <linux/uacce.h>
->  #include "zip.h"
->  
-> -#define PCI_DEVICE_ID_ZIP_PF		0xa250
-> -#define PCI_DEVICE_ID_ZIP_VF		0xa251
-> +#define PCI_DEVICE_ID_HUAWEI_ZIP_PF	0xa250
->  
->  #define HZIP_QUEUE_NUM_V1		4096
->  
-> @@ -246,7 +245,7 @@ MODULE_PARM_DESC(uacce_mode, UACCE_MODE_DESC);
->  
->  static int pf_q_num_set(const char *val, const struct kernel_param *kp)
->  {
-> -	return q_num_set(val, kp, PCI_DEVICE_ID_ZIP_PF);
-> +	return q_num_set(val, kp, PCI_DEVICE_ID_HUAWEI_ZIP_PF);
->  }
->  
->  static const struct kernel_param_ops pf_q_num_ops = {
-> @@ -268,8 +267,8 @@ module_param_cb(vfs_num, &vfs_num_ops, &vfs_num, 0444);
->  MODULE_PARM_DESC(vfs_num, "Number of VFs to enable(1-63), 0(default)");
->  
->  static const struct pci_device_id hisi_zip_dev_ids[] = {
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_ZIP_PF) },
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_ZIP_VF) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_ZIP_PF) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_HUAWEI, PCI_DEVICE_ID_HUAWEI_ZIP_VF) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, hisi_zip_dev_ids);
-> @@ -838,7 +837,7 @@ static int hisi_zip_qm_init(struct hisi_qm *qm, struct pci_dev *pdev)
->  	qm->sqe_size = HZIP_SQE_SIZE;
->  	qm->dev_name = hisi_zip_name;
->  
-> -	qm->fun_type = (pdev->device == PCI_DEVICE_ID_ZIP_PF) ?
-> +	qm->fun_type = (pdev->device == PCI_DEVICE_ID_HUAWEI_ZIP_PF) ?
->  			QM_HW_PF : QM_HW_VF;
->  	if (qm->fun_type == QM_HW_PF) {
->  		qm->qp_base = HZIP_PF_DEF_Q_BASE;
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index aad54c666407..31dee2b65a62 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -2529,6 +2529,9 @@
->  #define PCI_DEVICE_ID_KORENIX_JETCARDF3	0x17ff
->  
->  #define PCI_VENDOR_ID_HUAWEI		0x19e5
-> +#define PCI_DEVICE_ID_HUAWEI_ZIP_VF	0xa251
-> +#define PCI_DEVICE_ID_HUAWEI_SEC_VF	0xa256
-> +#define PCI_DEVICE_ID_HUAWEI_HPRE_VF	0xa259
->  
->  #define PCI_VENDOR_ID_NETRONOME		0x19ee
->  #define PCI_DEVICE_ID_NETRONOME_NFP4000	0x4000
+> Applies to perf/core (56dce86819)
 
+Thanks, applied to tmp.perf/core, locally, if someone spots some
+problem, there is some time till I run tests and move it to perf/core.
+
+- Arnaldo
+ 
+> Thanks
+> James
+> 
+> [1] https://lore.kernel.org/lkml/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> James Clark (4):
+>   perf: Add error message for unsupported branch stack cases
+>   perf: Print branch stack entry type in --dump-raw-trace
+>   perf: Refactor perf script branch stack printing
+>   perf script: Output branch sample type
+> 
+>  tools/perf/builtin-script.c | 28 +++++++++++++---------------
+>  tools/perf/util/evsel.c     |  4 ++++
+>  tools/perf/util/session.c   |  5 +++--
+>  3 files changed, 20 insertions(+), 17 deletions(-)
+> 
+> -- 
+> 2.28.0
+
+-- 
+
+- Arnaldo

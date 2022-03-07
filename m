@@ -2,189 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B824D081C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0510D4D0818
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245202AbiCGUCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S245253AbiCGUCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245224AbiCGUB6 (ORCPT
+        with ESMTP id S236183AbiCGUCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:01:58 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B727C8933D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:01:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646683263; x=1678219263;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XatpkQCUgwTKz/y5tYMLZcuQD7A0FmaT7uHI50aOOig=;
-  b=Va4Mwe8qbota6YeZd0FJZjZWFeciTGUolS0m9gpw516y+Gu3/MwbXYlm
-   TtjnECDJEd7vV12fL9kQtI2QqYmziDA/svkJitlgvmb4sof8T6A9uWY1v
-   DrQARLbyDGME1XgPjI09YuL5OEBs3091Q0+mEhJuw6SJgqXrTr4dfxgpq
-   yF4h8F5C+EKzU26MdEykiAbgfheYo2YFwiazsAhZOyGKha7k9QnbiHkvP
-   KWfgbgvxHLcAvXNMg2nKVGv5t1KwZ0r7Sr311fun5Zmm2l423dV+zOwf3
-   iFtCUH0YeZkKVGgCClw+pXEk8XfILvdEsjDShbnFLSJrFaU0t+Am3MAXh
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234445955"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="234445955"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 12:01:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="780441966"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Mar 2022 12:01:02 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRJXR-0000f9-Ne; Mon, 07 Mar 2022 20:01:01 +0000
-Date:   Tue, 08 Mar 2022 04:00:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:core/core] BUILD SUCCESS
- bf9ad37dc8a30cce22ae95d6c2ca6abf8731d305
-Message-ID: <6226644a.7d8moH9PhsNjJtNr%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 7 Mar 2022 15:02:14 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766D58A6DC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:01:19 -0800 (PST)
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D575C3F7DE
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 20:01:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646683277;
+        bh=MYa3HOnxdRf4zgP873BwgLR5fhhIJBKgyitcscinRGs=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=iKcSvaTX5CezgRFwv9CXSk4lj8kJImaIxunT+dxJmlePwWO5irFdEpM4svRRuw0+g
+         iLUXgTjAfK+I/xXr+QToAkzCcKg2uTG7AO7hVTDLK/eReP1DYbvVmW0MaKxmP2/nwY
+         EAGLLXwwKO2Rtm53791dH22qCDnUyMzzKSmOIS77BZN8ExyggUFQqiMWTVF7gELLy0
+         N1V5T7+IqaD8yjS1S52cwWeJkb9WIKKRwG9N9523e75tQiZv2NiBZViC9Ab0cWzhZ1
+         MEPt9WJGXsybniRTb3ePxmbX1kB3uyqyH1SiFATpwK4el/yQowPZmdg5v8QSoIHr3H
+         xJau3zRLRjbxQ==
+Received: by mail-il1-f200.google.com with SMTP id m17-20020a923f11000000b002c10e8f4c44so11056197ila.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 12:01:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MYa3HOnxdRf4zgP873BwgLR5fhhIJBKgyitcscinRGs=;
+        b=XVI8fb+EUjFI5bZFStz4g+/Y0SGPewexf5+4kPy0nVjpYpeIUVFAB+NQ3dLbt7RXdB
+         rTAs/j3FyWzkc2gjc5pRUYTuKIPqUOZANd7ZYXNoN/6dPw5UpnH7mY+G2FqNMEsvt+8B
+         2JLCjAZSZrQdPBNTHj/2yGGbBvltd5Y7lADfn3xDV/BeJQSvUJjLRb8HBtv+Pa/AGZF2
+         kGSyfDpF2+RBDxgrQZuDQRfAjsoqmCAKTLDJqqgGJgjbh3Jn2OBYVh2E6WzrDmu2mSMJ
+         bp9DEO/XlccRJMVnw8F2Nu5Ej+tNLq8KcHBlhzee0NAHasVVbl3/mV5AvoVA1n/78ipo
+         p2iA==
+X-Gm-Message-State: AOAM531pd7M5AgME8lLopg9il7DCrBRAPWXm2R6I5gtag21Y0o2fMDnz
+        QJFHYV1B8MMdnZJt9Z1RrGRudhb1Yu7Zyw7OGjWtgl4aymltjpW6wJIC1huq65UfAnz2IV8ffEC
+        BAFNTbVFnQUWw1Melb6T+jxOzq9lwgNiYu27MrpFOnA==
+X-Received: by 2002:a05:6e02:12c8:b0:2c6:343f:b38d with SMTP id i8-20020a056e0212c800b002c6343fb38dmr9044941ilm.191.1646683276042;
+        Mon, 07 Mar 2022 12:01:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy96vcAbo82iuBKo9tD9gfr0H6HRXTec4IyY9lWSXwZ/FMfpgnRmWgQl1B4puiYokwT6kHEiA==
+X-Received: by 2002:a05:6e02:12c8:b0:2c6:343f:b38d with SMTP id i8-20020a056e0212c800b002c6343fb38dmr9044912ilm.191.1646683275731;
+        Mon, 07 Mar 2022 12:01:15 -0800 (PST)
+Received: from localhost (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
+        by smtp.gmail.com with ESMTPSA id q4-20020a056e0215c400b002c5fdff3087sm12302924ilu.29.2022.03.07.12.01.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 12:01:14 -0800 (PST)
+From:   dann frazier <dann.frazier@canonical.com>
+To:     stable@vger.kernel.org
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Sergei Trofimovich <slyfox@gentoo.org>,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 4.19 3/3] ia64: ensure proper NUMA distance and possible map initialization
+Date:   Mon,  7 Mar 2022 13:01:09 -0700
+Message-Id: <20220307200109.459214-1-dann.frazier@canonical.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220307195941.459076-1-dann.frazier@canonical.com>
+References: <20220307195941.459076-1-dann.frazier@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/core
-branch HEAD: bf9ad37dc8a30cce22ae95d6c2ca6abf8731d305  signal, x86: Delay calling signals in atomic on RT enabled kernels
+From: Valentin Schneider <valentin.schneider@arm.com>
 
-elapsed time: 770m
+commit b22a8f7b4bde4e4ab73b64908ffd5d90ecdcdbfd upstream.
 
-configs tested: 104
-configs skipped: 3
+John Paul reported a warning about bogus NUMA distance values spurred by
+commit:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+  620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220307
-powerpc                     pq2fads_defconfig
-um                             i386_defconfig
-ia64                          tiger_defconfig
-m68k                        m5272c3_defconfig
-arm                        multi_v7_defconfig
-powerpc                    amigaone_defconfig
-sh                           se7724_defconfig
-arm                           tegra_defconfig
-xtensa                         virt_defconfig
-mips                         db1xxx_defconfig
-arm                      jornada720_defconfig
-powerpc                    klondike_defconfig
-arm                         vf610m4_defconfig
-arm                          exynos_defconfig
-arm                  randconfig-c002-20220307
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20220307
-x86_64               randconfig-a004-20220307
-x86_64               randconfig-a005-20220307
-x86_64               randconfig-a001-20220307
-x86_64               randconfig-a003-20220307
-x86_64               randconfig-a002-20220307
-i386                 randconfig-a005-20220307
-i386                 randconfig-a004-20220307
-i386                 randconfig-a003-20220307
-i386                 randconfig-a006-20220307
-i386                 randconfig-a002-20220307
-i386                 randconfig-a001-20220307
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
+In this case, the afflicted machine comes up with a reported 256 possible
+nodes, all of which are 0 distance away from one another.  This was
+previously silently ignored, but is now caught by the aforementioned
+commit.
 
-clang tested configs:
-x86_64               randconfig-c007-20220307
-i386                 randconfig-c001-20220307
-powerpc              randconfig-c003-20220307
-riscv                randconfig-c006-20220307
-mips                 randconfig-c004-20220307
-arm                  randconfig-c002-20220307
-s390                 randconfig-c005-20220307
-arm                       imx_v4_v5_defconfig
-x86_64                           allyesconfig
-mips                     cu1000-neo_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                   microwatt_defconfig
-powerpc                          allmodconfig
-mips                           rs90_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                      ppc64e_defconfig
-i386                 randconfig-a012-20220307
-i386                 randconfig-a013-20220307
-i386                 randconfig-a015-20220307
-i386                 randconfig-a011-20220307
-i386                 randconfig-a014-20220307
-i386                 randconfig-a016-20220307
-hexagon              randconfig-r045-20220307
-riscv                randconfig-r042-20220307
-hexagon              randconfig-r041-20220307
+The culprit is ia64's node_possible_map which remains unchanged from its
+initialization value of NODE_MASK_ALL.  In John's case, the machine
+doesn't have any SRAT nor SLIT table, but AIUI the possible map remains
+untouched regardless of what ACPI tables end up being parsed.  Thus,
+!online && possible nodes remain with a bogus distance of 0 (distances \in
+[0, 9] are "reserved and have no meaning" as per the ACPI spec).
 
+Follow x86 / drivers/base/arch_numa's example and set the possible map to
+the parsed map, which in this case seems to be the online map.
+
+Link: http://lore.kernel.org/r/255d6b5d-194e-eb0e-ecdd-97477a534441@physik.fu-berlin.de
+Link: https://lkml.kernel.org/r/20210318130617.896309-1-valentin.schneider@arm.com
+Fixes: 620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Tested-by: Sergei Trofimovich <slyfox@gentoo.org>
+Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Anatoly Pugachev <matorola@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+[ dannf: minor context adjustment in arch/ia64/kernel/acpi.c ]
+Signed-off-by: dann frazier <dann.frazier@canonical.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/ia64/kernel/acpi.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/ia64/kernel/acpi.c b/arch/ia64/kernel/acpi.c
+index 1dacbf5e9e09..3856894e86b8 100644
+--- a/arch/ia64/kernel/acpi.c
++++ b/arch/ia64/kernel/acpi.c
+@@ -537,7 +537,8 @@ void __init acpi_numa_fixup(void)
+ 	if (srat_num_cpus == 0) {
+ 		node_set_online(0);
+ 		node_cpuid[0].phys_id = hard_smp_processor_id();
+-		return;
++		slit_distance(0, 0) = LOCAL_DISTANCE;
++		goto out;
+ 	}
+ 
+ 	/*
+@@ -580,7 +581,7 @@ void __init acpi_numa_fixup(void)
+ 			for (j = 0; j < MAX_NUMNODES; j++)
+ 				node_distance(i, j) = i == j ? LOCAL_DISTANCE :
+ 							REMOTE_DISTANCE;
+-		return;
++		goto out;
+ 	}
+ 
+ 	memset(numa_slit, -1, sizeof(numa_slit));
+@@ -605,6 +606,8 @@ void __init acpi_numa_fixup(void)
+ 		printk("\n");
+ 	}
+ #endif
++out:
++	node_possible_map = node_online_map;
+ }
+ #endif				/* CONFIG_ACPI_NUMA */
+ 
+-- 
+2.25.1
+

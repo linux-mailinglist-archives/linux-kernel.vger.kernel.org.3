@@ -2,199 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE454D0C2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C974D0C32
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343951AbiCGXo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 18:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S243800AbiCGXqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 18:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243825AbiCGXoY (ORCPT
+        with ESMTP id S243084AbiCGXqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 18:44:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E156ADE93
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 15:43:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 451A8611BD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 23:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D90C340E9;
-        Mon,  7 Mar 2022 23:43:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1646696607;
-        bh=K+xM2GYxG+Lby5uXP6tawrxb1rgWkjnt9Wizwmuhnv0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nD0MAVoJBfgAsY2ADPp/+vQL+L/fwENBHD3KiA5kTcTB8Txh9Ff6CJ7CVy8HGM04O
-         2aeTOjSgrkwybDFVMmXX+WTp1pv83XQfbwNDLeTOARSHgexEqSqCz7u/ro92chBKWh
-         4Svlb+OkVq8Dlfs29jPS3fj1L7jpqmeS+dQKKJ84=
-Date:   Mon, 7 Mar 2022 15:43:26 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH] mm: thp: don't have to lock page anymore when splitting
- PMD
-Message-Id: <20220307154326.6494f7fca7def491a23e5df1@linux-foundation.org>
-In-Reply-To: <84a6c9c1-d18f-6955-2666-0a2d7bce6094@redhat.com>
-References: <20220303222014.517033-1-shy828301@gmail.com>
-        <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
-        <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com>
-        <13ad4ba1-2a88-9459-3995-70af36aba33e@redhat.com>
-        <20220306180718.6d4e6233130b94fdad98df88@linux-foundation.org>
-        <84a6c9c1-d18f-6955-2666-0a2d7bce6094@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 18:46:46 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E42294;
+        Mon,  7 Mar 2022 15:45:51 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 227MxUpk017724;
+        Mon, 7 Mar 2022 23:45:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=uyIxG5y1JBocl+WfqDrffowhHyfi3AUk9e3P3tvDBO8=;
+ b=LDwB9axiQ+eDZ9zf8v2DQbjEI8JBnsfJordlyh7t8PcZAQWmZlpjbVbBcABBWg5Q7F5P
+ +AGbNUo+LwrEzFyC32o5cxN+csBb5iYSacva0mc4In9gHow9vodw7MJvU8FRu2pQiQHJ
+ zPZ3RCZ9s0vkNPxKzHNo13gc1GKSN/k6LXklKkkpY4QDTN1uQv4TBtZ/1UWFaahPSvHy
+ 4TQqK7l610vf4hqMtk+1YLWk6JboD2TaER29Q4fMxNk+PgRUqCCmWOU/ceEeuHjqJXSK
+ hijjKk1ZDakj+HgMVGCbKuiI+Mko+SUsNFrzg+HZdxsMHFc98wHRxE1KPEnScKWCOTBY NA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3enndrqxah-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Mar 2022 23:45:49 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 227Ne90A032589;
+        Mon, 7 Mar 2022 23:45:49 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3enndrqxaa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Mar 2022 23:45:49 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 227NT2iM003994;
+        Mon, 7 Mar 2022 23:45:48 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma02dal.us.ibm.com with ESMTP id 3ekyg9wfjk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Mar 2022 23:45:48 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 227NjloW55902506
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Mar 2022 23:45:47 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A009124053;
+        Mon,  7 Mar 2022 23:45:47 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5800612405A;
+        Mon,  7 Mar 2022 23:45:46 +0000 (GMT)
+Received: from [9.160.116.147] (unknown [9.160.116.147])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Mar 2022 23:45:46 +0000 (GMT)
+Message-ID: <eb30a519-5707-717a-ff22-cc3a8e65dc7e@linux.ibm.com>
+Date:   Mon, 7 Mar 2022 18:45:45 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v18 08/18] s390/vfio-ap: allow assignment of unavailable
+ AP queues to mdev device
+Content-Language: en-US
+To:     Halil Pasic <pasic@linux.ibm.com>
+Cc:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
+        kwankhede@nvidia.com, fiuczy@linux.ibm.com
+References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
+ <20220215005040.52697-9-akrowiak@linux.ibm.com>
+ <97681738-50a1-976d-9f0f-be326eab7202@linux.ibm.com>
+ <9ac3908e-06da-6276-d1df-94898918fc5b@linux.ibm.com>
+ <20220307142711.5af33ece.pasic@linux.ibm.com>
+ <151241e6-3099-4be2-da54-1f0e5cb3a705@linux.ibm.com>
+ <20220307181027.29c821b6.pasic@linux.ibm.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <20220307181027.29c821b6.pasic@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: JM6_2fVlWDg6C5D_slv-iLlRmtVzKvjk
+X-Proofpoint-GUID: zLOsl1U_XwxSOis-IU6ZNJdSREpIfF1h
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-07_12,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ clxscore=1015 priorityscore=1501 bulkscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203070119
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 09:24:58 +0100 David Hildenbrand <david@redhat.com> wrote:
-
-> On 07.03.22 03:07, Andrew Morton wrote:
-> > On Fri, 4 Mar 2022 19:50:08 +0100 David Hildenbrand <david@redhat.com> wrote:
-> > 
-> >> @Andrew, the last mail I received was
-> >>
-> >> + mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
-> >> added to -mm tree
-> >>
-> >> The patch shows up in mmotm as
-> >>
-> >> #[merged]mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
-> >>
-> >> ... which shouldn't be true.
-> > 
-> > I guess I mislabelled the reason for dropping it.  Should have been to-be-updated, 
-> > due to https://lkml.kernel.org/r/CAHbLzkpbnQyHRckoRtbZoaLvANu92MY4kEsbKudaQ8MDUA3nVg@mail.gmail.com
-> > 
-> 
-> Let me clarify.
-> 
-> 1. I sent [1] (9 patches)
-> 
-> 2. You queued the 9 patches
-> 
-> E.g., in "mmotm 2022-02-15-20-22 uploaded"
-> 
-> * mm-optimize-do_wp_page-for-exclusive-pages-in-the-swapcache.patch
-> * mm-optimize-do_wp_page-for-fresh-pages-in-local-lru-pagevecs.patch
-> * mm-slightly-clarify-ksm-logic-in-do_swap_page.patch
-> * mm-streamline-cow-logic-in-do_swap_page.patch
-> * mm-huge_memory-streamline-cow-logic-in-do_huge_pmd_wp_page.patch
-> * mm-khugepaged-remove-reuse_swap_page-usage.patch
-> * mm-swapfile-remove-stale-reuse_swap_page.patch
-> * mm-huge_memory-remove-stale-page_trans_huge_mapcount.patch
-> * mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
-> 
-> 3. The last patch in the series was dropped. What remains are 8 patches.
-> 
-> E.g., in "mmotm 2022-02-24-22-38 uploaded"
-> 
-> * mm-optimize-do_wp_page-for-exclusive-pages-in-the-swapcache.patch
-> * mm-optimize-do_wp_page-for-fresh-pages-in-local-lru-pagevecs.patch
-> * mm-slightly-clarify-ksm-logic-in-do_swap_page.patch
-> * mm-streamline-cow-logic-in-do_swap_page.patch
-> * mm-huge_memory-streamline-cow-logic-in-do_huge_pmd_wp_page.patch
-> * mm-khugepaged-remove-reuse_swap_page-usage.patch
-> * mm-swapfile-remove-stale-reuse_swap_page.patch
-> * mm-huge_memory-remove-stale-page_trans_huge_mapcount.patch
-> 
-> 4. Yang Shi sent his patch (the one we're replying to)
-> 
-> 5. You picked his patch and dropped it again due to [2]
-> 
-> 
-> I'm wondering why 3 happened and why
-> https://www.ozlabs.org/~akpm/mmotm/series contains:
-> 
-> 
-> mm-optimize-do_wp_page-for-exclusive-pages-in-the-swapcache.patch
-> mm-optimize-do_wp_page-for-fresh-pages-in-local-lru-pagevecs.patch
-> mm-slightly-clarify-ksm-logic-in-do_swap_page.patch
-> mm-streamline-cow-logic-in-do_swap_page.patch
-> mm-huge_memory-streamline-cow-logic-in-do_huge_pmd_wp_page.patch
-> mm-khugepaged-remove-reuse_swap_page-usage.patch
-> mm-swapfile-remove-stale-reuse_swap_page.patch
-> mm-huge_memory-remove-stale-page_trans_huge_mapcount.patch
-> ...
-> #[merged]mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
-
-OK, thanks.  I guess it was me seeing 100% rejects when merging onto
-the folio changes then incorrectly deciding the patch was now in
-linux-next via some other tree.
-
-I restored it and fixed things up.  Please check.
 
 
---- a/mm/huge_memory.c~mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd
-+++ a/mm/huge_memory.c
-@@ -2133,8 +2133,6 @@ void __split_huge_pmd(struct vm_area_str
- {
- 	spinlock_t *ptl;
- 	struct mmu_notifier_range range;
--	bool do_unlock_folio = false;
--	pmd_t _pmd;
- 
- 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
- 				address & HPAGE_PMD_MASK,
-@@ -2153,42 +2151,14 @@ void __split_huge_pmd(struct vm_area_str
- 			goto out;
- 	}
- 
--repeat:
- 	if (pmd_trans_huge(*pmd)) {
--		if (!folio) {
-+		if (!folio)
- 			folio = page_folio(pmd_page(*pmd));
--			/*
--			 * An anonymous page must be locked, to ensure that a
--			 * concurrent reuse_swap_page() sees stable mapcount;
--			 * but reuse_swap_page() is not used on shmem or file,
--			 * and page lock must not be taken when zap_pmd_range()
--			 * calls __split_huge_pmd() while i_mmap_lock is held.
--			 */
--			if (folio_test_anon(folio)) {
--				if (unlikely(!folio_trylock(folio))) {
--					folio_get(folio);
--					_pmd = *pmd;
--					spin_unlock(ptl);
--					folio_lock(folio);
--					spin_lock(ptl);
--					if (unlikely(!pmd_same(*pmd, _pmd))) {
--						folio_unlock(folio);
--						folio_put(folio);
--						folio = NULL;
--						goto repeat;
--					}
--					folio_put(folio);
--				}
--				do_unlock_folio = true;
--			}
--		}
- 	} else if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
- 		goto out;
- 	__split_huge_pmd_locked(vma, pmd, range.start, freeze);
- out:
- 	spin_unlock(ptl);
--	if (do_unlock_folio)
--		folio_unlock(folio);
- 	/*
- 	 * No need to double call mmu_notifier->invalidate_range() callback.
- 	 * They are 3 cases to consider inside __split_huge_pmd_locked():
-_
+On 3/7/22 12:10, Halil Pasic wrote:
+> On Mon, 7 Mar 2022 09:10:29 -0500
+> Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+>
+>> On 3/7/22 08:27, Halil Pasic wrote:
+>>> On Mon, 7 Mar 2022 07:31:21 -0500
+>>> Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+>>>   
+>>>> On 3/3/22 10:39, Jason J. Herne wrote:
+>>>>> On 2/14/22 19:50, Tony Krowiak wrote:
+>>>>>>     /**
+>>>>>> - * vfio_ap_mdev_verify_no_sharing - verifies that the AP matrix is
+>>>>>> not configured
+>>>>>> + * vfio_ap_mdev_verify_no_sharing - verify APQNs are not shared by
+>>>>>> matrix mdevs
+>>>>>>      *
+>>>>>> - * @matrix_mdev: the mediated matrix device
+>>>>>> + * @mdev_apm: mask indicating the APIDs of the APQNs to be verified
+>>>>>> + * @mdev_aqm: mask indicating the APQIs of the APQNs to be verified
+>>>>>>      *
+>>>>>> - * Verifies that the APQNs derived from the cross product of the AP
+>>>>>> adapter IDs
+>>>>>> - * and AP queue indexes comprising the AP matrix are not configured
+>>>>>> for another
+>>>>>> + * Verifies that each APQN derived from the Cartesian product of a
+>>>>>> bitmap of
+>>>>>> + * AP adapter IDs and AP queue indexes is not configured for any matrix
+>>>>>>      * mediated device. AP queue sharing is not allowed.
+>>>>>>      *
+>>>>>> - * Return: 0 if the APQNs are not shared; otherwise returns
+>>>>>> -EADDRINUSE.
+>>>>>> + * Return: 0 if the APQNs are not shared; otherwise return -EADDRINUSE.
+>>>>>>      */
+>>>>>> -static int vfio_ap_mdev_verify_no_sharing(struct ap_matrix_mdev
+>>>>>> *matrix_mdev)
+>>>>>> +static int vfio_ap_mdev_verify_no_sharing(unsigned long *mdev_apm,
+>>>>>> +                      unsigned long *mdev_aqm)
+>>>>>>     {
+>>>>>> -    struct ap_matrix_mdev *lstdev;
+>>>>>> +    struct ap_matrix_mdev *matrix_mdev;
+>>>>>>         DECLARE_BITMAP(apm, AP_DEVICES);
+>>>>>>         DECLARE_BITMAP(aqm, AP_DOMAINS);
+>>>>>>     -    list_for_each_entry(lstdev, &matrix_dev->mdev_list, node) {
+>>>>>> -        if (matrix_mdev == lstdev)
+>>>>>> +    list_for_each_entry(matrix_mdev, &matrix_dev->mdev_list, node) {
+>>>>>> +        /*
+>>>>>> +         * If the input apm and aqm belong to the matrix_mdev's matrix,
+>>> How about:
+>>>
+>>> s/belong to the matrix_mdev's matrix/are fields of the matrix_mdev
+>>> object/
+>> This is the comment I wrote:
+>>
+>>           /*
+>>            * Comparing an mdev's newly updated apm/aqm with itself would
+>>            * result in a false positive when verifying whether any APQNs
+>>            * are shared; so, if the input apm and aqm belong to the
+>>            * matrix_mdev's matrix, then move on to the next one.
+>>            */
+>>
+>> However, I'd be happy to change it to whatever either of you want.
+> What ain't obvious for the comment is that "belong to" actually means
+> composition and not association. In other words, there there is no
+> pointer/indirection involved, a pointer that would tell us what matrix
+> does belong to what matrix_mdev, but rather the matrix is just a part
+> of the matrix_mdev object.
+>
+> I don't like 'false positive' either, and whether the apm/aqm is
+> newly updated or not is also redundant and confusing in my opinion. When
+> we check because of inuse there is not updated whatever. IMHO the old
+> message was better than this one.
+>
+> Just my opinion, if you two agree, that this is the way to go, I'm fine
+> with that.
+>
+> Regards,
+> Halil
+
+Feel free to recommend the verbiage for this comment. I'm not married
+to my comments and am open to anything that helps others to
+understand what is going on here. It seems obvious to me, but I wrote
+the code. Obviously, it is not so obvious based on Jason's comments,
+so maybe someone else can compose a better comment.
+
+>
+>
 

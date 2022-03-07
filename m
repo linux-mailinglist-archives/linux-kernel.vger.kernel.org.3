@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C9A4D0892
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF874D0895
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245317AbiCGUku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S245332AbiCGUkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245368AbiCGUke (ORCPT
+        with ESMTP id S245375AbiCGUkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:40:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B73E7CDEA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:39:37 -0800 (PST)
+        Mon, 7 Mar 2022 15:40:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00E7793BE;
+        Mon,  7 Mar 2022 12:39:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8A8FB8170A
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 20:39:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 052D9C340E9;
-        Mon,  7 Mar 2022 20:39:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78A1A614F9;
+        Mon,  7 Mar 2022 20:39:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45C3C340E9;
+        Mon,  7 Mar 2022 20:39:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646685574;
-        bh=g2m2wVkjCPJzMz6bubs3Rutz89zigBWuWRzbVnPrdBg=;
+        s=k20201202; t=1646685579;
+        bh=KN9yxE31a5svK2aTQL4rOTd36S8lUFGws5bJTk0xiWQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=lJ07MYEPtWwqVdTufBosjQJbJ7a6QE2+ZqletNyQ5FW477ZS1rcDGXWpO3q5xYZAc
-         uqQRy5puabZ39yCmIJpyxcK9ShYfazyr4Dj5/iHxHRWO5MGVHpeWhzs65YMCeliFb5
-         CBiH7EC+zwsLbhplWpH8LA/u2aE++ZFBivu42Wba+q1lQHPUZEkR2C253e1e8oVo6g
-         2BMFXkRaQ7dFUCTXmvZoGjPs0P+533hi76mIzYDWOKedUSBZ/XEZxdOLK8Cc5LBdk5
-         9eagQhumm+5mw/mm6RA8ld/44LLF1QN0D6vNaKX4g1F+9qgNgkJT000kFkz1FSXDSG
-         uiEQWmsnki3fA==
+        b=slNCXCaeDC4jT9VEPW1UY69kzV36HL12zqsQgLqXDZMDgQPKZ0I53rxwE/DN0sBPS
+         trF8fGd3rn+Z5suybMQq2Se+jJVVQ65E4wcTBTpa476yY7Fknw9+Le5shohZS8pSdl
+         QxMIof7Tj3mXsh+znlYWUcKCWusHC+EsbYdQp3UUEht88KVs+MweMnJNdcKNm7WtDf
+         tf3n+Popxwfhcsrr6mgSdzRZ3gA4e9gzT0JiGyOz4rzLUYrK6S0Bxa1UHEMs7sQOwP
+         suyphoVhLw8n2PwwwQCYvnMRRgTqKsPudiovHBgI94xNe1fGFOg+0fH7kYWcwyGMGL
+         7vyCtNczIUDXg==
 From:   Mark Brown <broonie@kernel.org>
-To:     zhang.lyra@gmail.com, orsonzhai@gmail.com, lgirdwood@gmail.com,
-        trix@redhat.com, baolin.wang7@gmail.com
-Cc:     linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-In-Reply-To: <20220305162438.689442-1-trix@redhat.com>
-References: <20220305162438.689442-1-trix@redhat.com>
-Subject: Re: [PATCH] regulator: cleanup comments
-Message-Id: <164668557274.3137513.14672957811652545659.b4-ty@kernel.org>
-Date:   Mon, 07 Mar 2022 20:39:32 +0000
+To:     Xingbang Liu <liu.airalert@gmail.com>, bjorn.andersson@linaro.org,
+        agross@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220302071521.6638-1-liu.airalert@gmail.com>
+References: <20220302071521.6638-1-liu.airalert@gmail.com>
+Subject: Re: [PATCH] spi: qup: replace spin_lock_irqsave by spin_lock in hard IRQ
+Message-Id: <164668557835.3137564.7060095667175202829.b4-ty@kernel.org>
+Date:   Mon, 07 Mar 2022 20:39:38 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,29 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 5 Mar 2022 08:24:38 -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Wed, 2 Mar 2022 15:15:21 +0800, Xingbang Liu wrote:
+> The code has been in a irq-disabled context since it is hard IRQ. There
+> is no necessity to do it again.
 > 
-> For spdx
-> Remove leading space, add space after //
 > 
-> Replacements
-> overriden to overridden
-> Calulate to Calculate
-> addional to additional
-> regulatior to regulator
-> devive to device
-> 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] regulator: cleanup comments
-      commit: bbc7ba0fa06ab4aee26969a9454ca32e4a8fcb1c
+[1/1] spi: qup: replace spin_lock_irqsave by spin_lock in hard IRQ
+      commit: fa0f3db49e10ac61774e1c90167ec79429d6fd56
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

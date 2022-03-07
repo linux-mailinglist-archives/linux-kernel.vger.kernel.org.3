@@ -2,46 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D184CF481
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448724CF441
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236361AbiCGJRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S234008AbiCGJIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236353AbiCGJRg (ORCPT
+        with ESMTP id S233162AbiCGJIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:17:36 -0500
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2876F652C0;
-        Mon,  7 Mar 2022 01:16:42 -0800 (PST)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CED3C200095;
-        Mon,  7 Mar 2022 10:16:40 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 47249200078;
-        Mon,  7 Mar 2022 10:16:40 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 3CB31183AC94;
-        Mon,  7 Mar 2022 17:16:38 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, vkoul@kernel.org,
-        alexander.stein@ew.tq-group.com
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [PATCH v2 7/7] PCI: imx6: Add the iMX8MP PCIe support
-Date:   Mon,  7 Mar 2022 17:07:34 +0800
-Message-Id: <1646644054-24421-8-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 7 Mar 2022 04:08:45 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4D6DF55;
+        Mon,  7 Mar 2022 01:07:50 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 2631B1F43859
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646644069;
+        bh=mKuKc24peBTHJq96oPXVMVEPFG1UMKdTfUdLfSGxtH0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=S+nr6l6ud+gdKu5ahDRDne/nb8H6YRD77OPWBF4KsxIFPSWoe0DszZrrWihtjWXaT
+         KIcAbqgmYkYHkpqe6Z6JIVmXD00hmusob2Umsc2496UYcKdboInRXDfzCggoz19RLR
+         yUcKjJLTR5n9L4ijWAvo0cXjEp1LFJ2idl8PREEPXlHFCtEDOHQS3xaoyiRnW2c6Is
+         Tx6TPN7W1wrUrHC8GJH3UPzLbd3U+G4/vlXNJyg0fofeJG/E+3SOzatheWUZxcRDZa
+         SK2WUgGituRC1LNkpgBKcCC0WJyGTNKbC2Oj4PfAu+ykatmh19xUR76VCfEYLa1aZ8
+         g2zwcLTBmrPYA==
+Message-ID: <e2299a96-9f91-0ca3-1617-18029b3940d2@collabora.com>
+Date:   Mon, 7 Mar 2022 10:07:45 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [v2 01/17] ASoC: mediatek: mt6366: add codec driver
+Content-Language: en-US
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
+        geert+renesas@glider.be, trevor.wu@mediatek.com,
+        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
+ <20220217134205.15400-2-jiaxin.yu@mediatek.com>
+ <b22976ee-6426-cabf-f153-fbe093611e97@collabora.com>
+ <6555d89deb9087825f865b9d4265f07465e7ae09.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <6555d89deb9087825f865b9d4265f07465e7ae09.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,134 +62,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the i.MX8MP PCIe support.
+Il 05/03/22 05:24, Jiaxin Yu ha scritto:
+> On Fri, 2022-02-18 at 15:54 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 17/02/22 14:41, Jiaxin Yu ha scritto:
+>>> Mt6366 is a new version of mt6358, and they are same about audio
+>>> part.
+>>> So we can reuse the driver of mt6358.
+>>>
+>>> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+>>
+>> Hello Jiaxin,
+>> I'm sorry but this commit makes very little sense.
+>>
+>> If you want to advertise MT6366 support, please write a note and/or
+>> a new compatible string inside of the mt6358 driver (and dt-
+>> bindings),
+>> then, please drop this commit.
+>>
+> 
+> Hello angelogioacchino,
+> 
+> Thank you for your advice.
+> 
+> If I add a new compatible string inside of the mt6358 driver and dt-
+> bindings, then the machine driver which want to use mt6366 should
+> select SND_SOC_MT6358.
+> 
+> like below:
+> 
+> config SND_SOC_MT8186_MT6366_DA7219_MAX98357
+> 	tristate "ASoC Audio driver for MT8186 with DA7219 MAX98357A
+> codec"
+>   	depends on I2C && GPIOLIB
+>   	depends on SND_SOC_MT8186 && MTK_PMIC_WRAP
+>   	select SND_SOC_MT6366   ==> SND_SOC_MT6358
+> 	...
+> 
+> I just doubt it's enough to make sense. I originally wanted to put this
+> relationship in the sound/soc/codecs layer. So that this relationship
+> is not perceived by users(machine driver).
+> However, if the general practice is like this, I will adopt your
+> suggestion. Thank you again.
+> 
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
----
- drivers/pci/controller/dwc/pci-imx6.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+Yes this is acceptable, please do it like that.
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index bb662f90d4f3..4d34f0c88550 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -51,6 +51,7 @@ enum imx6_pcie_variants {
- 	IMX7D,
- 	IMX8MQ,
- 	IMX8MM,
-+	IMX8MP,
- };
- 
- #define IMX6_PCIE_FLAG_IMX6_PHY			BIT(0)
-@@ -379,6 +380,7 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
- 		reset_control_assert(imx6_pcie->pciephy_reset);
- 		fallthrough;
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_assert(imx6_pcie->apps_reset);
- 		break;
- 	case IMX6SX:
-@@ -407,7 +409,8 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
- static unsigned int imx6_pcie_grp_offset(const struct imx6_pcie *imx6_pcie)
- {
- 	WARN_ON(imx6_pcie->drvdata->variant != IMX8MQ &&
--		imx6_pcie->drvdata->variant != IMX8MM);
-+		imx6_pcie->drvdata->variant != IMX8MM &&
-+		imx6_pcie->drvdata->variant != IMX8MP);
- 	return imx6_pcie->controller_id == 1 ? IOMUXC_GPR16 : IOMUXC_GPR14;
- }
- 
-@@ -448,6 +451,7 @@ static int imx6_pcie_enable_ref_clk(struct imx6_pcie *imx6_pcie)
- 		break;
- 	case IMX8MM:
- 	case IMX8MQ:
-+	case IMX8MP:
- 		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
- 		if (ret) {
- 			dev_err(dev, "unable to enable pcie_aux clock\n");
-@@ -503,6 +507,7 @@ static int imx6_pcie_clk_enable(struct imx6_pcie *imx6_pcie)
- 
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MM:
-+	case IMX8MP:
- 		if (phy_power_on(imx6_pcie->phy))
- 			dev_err(dev, "unable to power on PHY\n");
- 		break;
-@@ -603,6 +608,7 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
- 		reset_control_deassert(imx6_pcie->pciephy_reset);
- 		break;
- 	case IMX8MM:
-+	case IMX8MP:
- 		if (phy_init(imx6_pcie->phy))
- 			dev_err(dev, "waiting for phy ready timeout!\n");
- 		break;
-@@ -678,6 +684,7 @@ static void imx6_pcie_init_phy(struct imx6_pcie *imx6_pcie)
- {
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MM:
-+	case IMX8MP:
- 		/*
- 		 * The PHY initialization had been done in the PHY
- 		 * driver, break here directly.
-@@ -823,6 +830,7 @@ static void imx6_pcie_ltssm_enable(struct device *dev)
- 	case IMX7D:
- 	case IMX8MQ:
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_deassert(imx6_pcie->apps_reset);
- 		break;
- 	}
-@@ -938,6 +946,7 @@ static void imx6_pcie_host_exit(struct pcie_port *pp)
- 		imx6_pcie_clk_disable(imx6_pcie);
- 		switch (imx6_pcie->drvdata->variant) {
- 		case IMX8MM:
-+		case IMX8MP:
- 			if (phy_power_off(imx6_pcie->phy))
- 				dev_err(dev, "unable to power off phy\n");
- 			phy_exit(imx6_pcie->phy);
-@@ -972,6 +981,7 @@ static void imx6_pcie_ltssm_disable(struct device *dev)
- 		break;
- 	case IMX7D:
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_assert(imx6_pcie->apps_reset);
- 		break;
- 	default:
-@@ -1028,6 +1038,7 @@ static int imx6_pcie_suspend_noirq(struct device *dev)
- 	imx6_pcie_clk_disable(imx6_pcie);
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MM:
-+	case IMX8MP:
- 		if (phy_power_off(imx6_pcie->phy))
- 			dev_err(dev, "unable to power off PHY\n");
- 		phy_exit(imx6_pcie->phy);
-@@ -1177,6 +1188,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
- 		}
- 		break;
- 	case IMX8MM:
-+	case IMX8MP:
- 		imx6_pcie->pcie_aux = devm_clk_get(dev, "pcie_aux");
- 		if (IS_ERR(imx6_pcie->pcie_aux))
- 			return dev_err_probe(dev, PTR_ERR(imx6_pcie->pcie_aux),
-@@ -1327,6 +1339,10 @@ static const struct imx6_pcie_drvdata drvdata[] = {
- 		.variant = IMX8MM,
- 		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
- 	},
-+	[IMX8MP] = {
-+		.variant = IMX8MP,
-+		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
-+	},
- };
- 
- static const struct of_device_id imx6_pcie_of_match[] = {
-@@ -1336,6 +1352,7 @@ static const struct of_device_id imx6_pcie_of_match[] = {
- 	{ .compatible = "fsl,imx7d-pcie",  .data = &drvdata[IMX7D],  },
- 	{ .compatible = "fsl,imx8mq-pcie", .data = &drvdata[IMX8MQ], },
- 	{ .compatible = "fsl,imx8mm-pcie", .data = &drvdata[IMX8MM], },
-+	{ .compatible = "fsl,imx8mp-pcie", .data = &drvdata[IMX8MP], },
- 	{},
- };
- 
--- 
-2.25.1
+Thanks,
+Angelo
+
+>>
+>>> ---
+>>>    sound/soc/codecs/Kconfig  | 8 ++++++++
+>>>    sound/soc/codecs/Makefile | 1 +
+>>>    2 files changed, 9 insertions(+)
+>>>
+>>> diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+>>> index 8fa24783ce01..6631094678f5 100644
+>>> --- a/sound/soc/codecs/Kconfig
+>>> +++ b/sound/soc/codecs/Kconfig
+>>> @@ -132,6 +132,7 @@ config SND_SOC_ALL_CODECS
+>>>    	imply SND_SOC_MT6351
+>>>    	imply SND_SOC_MT6358
+>>>    	imply SND_SOC_MT6359
+>>> +	imply SND_SOC_MT6366
+>>>    	imply SND_SOC_MT6660
+>>>    	imply SND_SOC_NAU8315
+>>>    	imply SND_SOC_NAU8540
+>>> @@ -1888,6 +1889,13 @@ config SND_SOC_MT6359_ACCDET
+>>>    	  for ASoC codec soc-jack detection mechanism.
+>>>    	  Select N if you don't have jack on board.
+>>>    
+>>> +config SND_SOC_MT6366
+>>> +	tristate "MediaTek MT6366 Codec"
+>>> +	depends on MTK_PMIC_WRAP
+>>> +	help
+>>> +	  Enable support for the platform which uses MT6366 as
+>>> +	  external codec device.
+>>> +
+>>>    config SND_SOC_MT6660
+>>>    	tristate "Mediatek MT6660 Speaker Amplifier"
+>>>    	depends on I2C
+>>> diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
+>>> index 42d00aa4ee46..1279684feaf0 100644
+>>> --- a/sound/soc/codecs/Makefile
+>>> +++ b/sound/soc/codecs/Makefile
+>>> @@ -465,6 +465,7 @@ obj-$(CONFIG_SND_SOC_MT6351)	+= snd-soc-
+>>> mt6351.o
+>>>    obj-$(CONFIG_SND_SOC_MT6358)	+= snd-soc-mt6358.o
+>>>    obj-$(CONFIG_SND_SOC_MT6359)	+= snd-soc-mt6359.o
+>>>    obj-$(CONFIG_SND_SOC_MT6359_ACCDET) += mt6359-accdet.o
+>>> +obj-$(CONFIG_SND_SOC_MT6366)	+= snd-soc-mt6358.o
+>>>    obj-$(CONFIG_SND_SOC_MT6660)	+= snd-soc-mt6660.o
+>>>    obj-$(CONFIG_SND_SOC_NAU8315)   += snd-soc-nau8315.o
+>>>    obj-$(CONFIG_SND_SOC_NAU8540)   += snd-soc-nau8540.o
+>>
+>>
+> 
 

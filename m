@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C0D4CF5B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9624CFA0C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237173AbiCGJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
+        id S242274AbiCGKLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237210AbiCGJ1w (ORCPT
+        with ESMTP id S240054AbiCGJuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:27:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65E766CBE;
-        Mon,  7 Mar 2022 01:24:56 -0800 (PST)
+        Mon, 7 Mar 2022 04:50:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26DA73052;
+        Mon,  7 Mar 2022 01:44:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DBFCCB810C3;
-        Mon,  7 Mar 2022 09:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4B5C340F3;
-        Mon,  7 Mar 2022 09:24:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A034B810B2;
+        Mon,  7 Mar 2022 09:44:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF0D4C340E9;
+        Mon,  7 Mar 2022 09:43:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645086;
-        bh=oMim++ni5oOA3MTAgyxuWZ1ohy1hqlImQ013Z6OtWYc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CVcRIB/i2xGkMVbR7/DoRhWyzIaoSjWpPPJ6IoRvRL0OGzmHBCZ5GMVSB7ooxADiG
-         AtRTkgL/V3nirI68EylASl5ghWxe09v4br+gNoZTI60Wa1oyUnXOQ2tDVpgJ1oIm65
-         jjfYUCZ+UVsHUwU2TqvknWt9HI9W9Ph0qbraXou0=
+        s=korg; t=1646646240;
+        bh=xALdneTlso1QEjaL6Uacxm+MI5zbasQ9+HURUtcCeQk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=yrlKvgJ5RrunnA546Jc2VrPIq4cpbAhONvHvV3fq86g4Kr9i9nee7s8xIYTKSeSHj
+         8pUWnV4NgkWy+EKyT6p4RhPd0u/DQM2YlhAN+xWO/SeLi4SgD0Wv5RDr9XasSklp0n
+         g4tX18bRj0o2o9WuNboNfatFHbqmeuj5RntTZdnU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.19 00/51] 4.19.233-rc1 review
-Date:   Mon,  7 Mar 2022 10:18:35 +0100
-Message-Id: <20220307091636.988950823@linuxfoundation.org>
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>,
+        Anand Jain <anand.jain@oracle.com>
+Subject: [PATCH 5.15 172/262] btrfs: fix ENOSPC failure when attempting direct IO write into NOCOW range
+Date:   Mon,  7 Mar 2022 10:18:36 +0100
+Message-Id: <20220307091707.277494732@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.233-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.19.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.19.233-rc1
-X-KernelTest-Deadline: 2022-03-09T09:16+00:00
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,236 +56,311 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.19.233 release.
-There are 51 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Filipe Manana <fdmanana@suse.com>
 
-Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
-Anything received after that time might be too late.
+commit f0bfa76a11e93d0fe2c896fcb566568c5e8b5d3f upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.233-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-and the diffstat can be found below.
+When doing a direct IO write against a file range that either has
+preallocated extents in that range or has regular extents and the file
+has the NOCOW attribute set, the write fails with -ENOSPC when all of
+the following conditions are met:
 
-thanks,
+1) There are no data blocks groups with enough free space matching
+   the size of the write;
 
-greg k-h
+2) There's not enough unallocated space for allocating a new data block
+   group;
 
--------------
-Pseudo-Shortlog of commits:
+3) The extents in the target file range are not shared, neither through
+   snapshots nor through reflinks.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.19.233-rc1
+This is wrong because a NOCOW write can be done in such case, and in fact
+it's possible to do it using a buffered IO write, since when failing to
+allocate data space, the buffered IO path checks if a NOCOW write is
+possible.
 
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: dcb: disable softirqs in dcbnl_flush_dev()
+The failure in direct IO write path comes from the fact that early on,
+at btrfs_dio_iomap_begin(), we try to allocate data space for the write
+and if it that fails we return the error and stop - we never check if we
+can do NOCOW. But later, at btrfs_get_blocks_direct_write(), we check
+if we can do a NOCOW write into the range, or a subset of the range, and
+then release the previously reserved data space.
 
-Filipe Manana <fdmanana@suse.com>
-    btrfs: add missing run of delayed items after unlink during log replay
+Fix this by doing the data reservation only if needed, when we must COW,
+at btrfs_get_blocks_direct_write() instead of doing it at
+btrfs_dio_iomap_begin(). This also simplifies a bit the logic and removes
+the inneficiency of doing unnecessary data reservations.
 
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    tracing/histogram: Fix sorting on old "cpu" value
+The following example test script reproduces the problem:
 
-Hugh Dickins <hughd@google.com>
-    memfd: fix F_SEAL_WRITE after shmem huge page allocated
+  $ cat dio-nocow-enospc.sh
+  #!/bin/bash
 
-William Mahon <wmahon@chromium.org>
-    HID: add mapping for KEY_ALL_APPLICATIONS
+  DEV=/dev/sdj
+  MNT=/mnt/sdj
 
-Hans de Goede <hdegoede@redhat.com>
-    Input: elan_i2c - fix regulator enable count imbalance after suspend/resume
+  # Use a small fixed size (1G) filesystem so that it's quick to fill
+  # it up.
+  # Make sure the mixed block groups feature is not enabled because we
+  # later want to not have more space available for allocating data
+  # extents but still have enough metadata space free for the file writes.
+  mkfs.btrfs -f -b $((1024 * 1024 * 1024)) -O ^mixed-bg $DEV
+  mount $DEV $MNT
 
-Hans de Goede <hdegoede@redhat.com>
-    Input: elan_i2c - move regulator_[en|dis]able() out of elan_[en|dis]able_power()
+  # Create our test file with the NOCOW attribute set.
+  touch $MNT/foobar
+  chattr +C $MNT/foobar
 
-Jiasheng Jiang <jiasheng@iscas.ac.cn>
-    nl80211: Handle nla_memdup failures in handle_nan_filter
+  # Now fill in all unallocated space with data for our test file.
+  # This will allocate a data block group that will be full and leave
+  # no (or a very small amount of) unallocated space in the device, so
+  # that it will not be possible to allocate a new block group later.
+  echo
+  echo "Creating test file with initial data..."
+  xfs_io -c "pwrite -S 0xab -b 1M 0 900M" $MNT/foobar
 
-Jia-Ju Bai <baijiaju1990@gmail.com>
-    net: chelsio: cxgb3: check the return value of pci_find_capability()
+  # Now try a direct IO write against file range [0, 10M[.
+  # This should succeed since this is a NOCOW file and an extent for the
+  # range was previously allocated.
+  echo
+  echo "Trying direct IO write over allocated space..."
+  xfs_io -d -c "pwrite -S 0xcd -b 10M 0 10M" $MNT/foobar
 
-Jiasheng Jiang <jiasheng@iscas.ac.cn>
-    soc: fsl: qe: Check of ioremap return value
+  umount $MNT
 
-Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-    ibmvnic: free reset-work-item when flushing
+When running the test:
 
-Randy Dunlap <rdunlap@infradead.org>
-    ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
+  $ ./dio-nocow-enospc.sh
+  (...)
 
-Brian Norris <briannorris@chromium.org>
-    arm64: dts: rockchip: Switch RK3399-Gru DP to SPDIF output
+  Creating test file with initial data...
+  wrote 943718400/943718400 bytes at offset 0
+  900 MiB, 900 ops; 0:00:01.43 (625.526 MiB/sec and 625.5265 ops/sec)
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-    can: gs_usb: change active_channels's type from atomic_t to u8
+  Trying direct IO write over allocated space...
+  pwrite: No space left on device
 
-Alyssa Ross <hi@alyssa.is>
-    firmware: arm_scmi: Remove space in MODULE_ALIAS name
+A test case for fstests will follow, testing both this direct IO write
+scenario as well as the buffered IO write scenario to make it less likely
+to get future regressions on the buffered IO case.
 
-Jann Horn <jannh@google.com>
-    efivars: Respect "block" flag in efivar_entry_set_safe()
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Anand Jain <anand.jain@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ fs/btrfs/inode.c |  142 ++++++++++++++++++++++++++++++-------------------------
+ 1 file changed, 78 insertions(+), 64 deletions(-)
 
-Zheyu Ma <zheyuma97@gmail.com>
-    net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
-
-Randy Dunlap <rdunlap@infradead.org>
-    net: sxgbe: fix return value of __setup handler
-
-Randy Dunlap <rdunlap@infradead.org>
-    net: stmmac: fix return value of __setup handler
-
-Nicolas Escande <nico.escande@gmail.com>
-    mac80211: fix forwarded mesh frames AC & queue selection
-
-Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-    xen/netfront: destroy queues before real_num_tx_queues is zeroed
-
-Lukas Wunner <lukas@wunner.de>
-    PCI: pciehp: Fix infinite loop in IRQ handler upon power fault
-
-Ye Bin <yebin10@huawei.com>
-    block: Fix fsync always failed if once failed
-
-D. Wythe <alibuda@linux.alibaba.com>
-    net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error cause by server
-
-D. Wythe <alibuda@linux.alibaba.com>
-    net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error generated by client
-
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: dcb: flush lingering app table entries for unregistered devices
-
-Sven Eckelmann <sven@narfation.org>
-    batman-adv: Don't expect inter-netns unique iflink indices
-
-Sven Eckelmann <sven@narfation.org>
-    batman-adv: Request iflink once in batadv_get_real_netdevice
-
-Sven Eckelmann <sven@narfation.org>
-    batman-adv: Request iflink once in batadv-on-batadv check
-
-Florian Westphal <fw@strlen.de>
-    netfilter: nf_queue: fix possible use-after-free
-
-Florian Westphal <fw@strlen.de>
-    netfilter: nf_queue: don't assume sk is full socket
-
-Leon Romanovsky <leonro@nvidia.com>
-    xfrm: enforce validity of offload input flags
-
-Antony Antony <antony.antony@secunet.com>
-    xfrm: fix the if_id check in changelink
-
-Eric Dumazet <edumazet@google.com>
-    netfilter: fix use-after-free in __nf_register_net_hook()
-
-Jiri Bohac <jbohac@suse.cz>
-    xfrm: fix MTU regression
-
-Marek Vasut <marex@denx.de>
-    ASoC: ops: Shift tested values in snd_soc_put_volsw() by +min
-
-Zhen Ni <nizhen@uniontech.com>
-    ALSA: intel_hdmi: Fix reference to PCM buffer address
-
-Sergey Shtylyov <s.shtylyov@omp.ru>
-    ata: pata_hpt37x: fix PCI clock detection
-
-Hangyu Hua <hbh25y@gmail.com>
-    usb: gadget: clear related members when goto fail
-
-Hangyu Hua <hbh25y@gmail.com>
-    usb: gadget: don't release an existing dev->buf
-
-Daniele Palmas <dnlplm@gmail.com>
-    net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
-
-Wolfram Sang <wsa@kernel.org>
-    i2c: qup: allow COMPILE_TEST
-
-Wolfram Sang <wsa@kernel.org>
-    i2c: cadence: allow COMPILE_TEST
-
-Yongzhi Liu <lyz_cs@pku.edu.cn>
-    dmaengine: shdma: Fix runtime PM imbalance on error
-
-Ronnie Sahlberg <lsahlber@redhat.com>
-    cifs: fix double free race when mount fails in cifs_get_root()
-
-José Expósito <jose.exposito89@gmail.com>
-    Input: clear BTN_RIGHT/MIDDLE on buttonpads
-
-Kai Vehmanen <kai.vehmanen@linux.intel.com>
-    ASoC: rt5682: do not block workqueue if card is unbound
-
-Kai Vehmanen <kai.vehmanen@linux.intel.com>
-    ASoC: rt5668: do not block workqueue if card is unbound
-
-Eric Anholt <eric@anholt.net>
-    i2c: bcm2835: Avoid clock stretching timeouts
-
-JaeMan Park <jaeman@google.com>
-    mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work
-
-Benjamin Beichler <benjamin.beichler@uni-rostock.de>
-    mac80211_hwsim: report NOACK frames in tx_status
-
-
--------------
-
-Diffstat:
-
- Makefile                                          |  4 +-
- arch/arm/mm/mmu.c                                 |  2 +
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi      | 17 ++++--
- block/blk-flush.c                                 |  4 +-
- drivers/ata/pata_hpt37x.c                         |  4 +-
- drivers/dma/sh/shdma-base.c                       |  4 +-
- drivers/firmware/arm_scmi/driver.c                |  2 +-
- drivers/firmware/efi/vars.c                       |  5 +-
- drivers/hid/hid-debug.c                           |  4 +-
- drivers/hid/hid-input.c                           |  2 +
- drivers/i2c/busses/Kconfig                        |  4 +-
- drivers/i2c/busses/i2c-bcm2835.c                  | 11 ++++
- drivers/input/input.c                             |  6 +++
- drivers/input/mouse/elan_i2c_core.c               | 64 ++++++++---------------
- drivers/net/arcnet/com20020-pci.c                 |  3 ++
- drivers/net/can/usb/gs_usb.c                      | 10 ++--
- drivers/net/ethernet/chelsio/cxgb3/t3_hw.c        |  2 +
- drivers/net/ethernet/ibm/ibmvnic.c                |  4 +-
- drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c   |  6 +--
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |  6 +--
- drivers/net/usb/cdc_mbim.c                        |  5 ++
- drivers/net/wireless/mac80211_hwsim.c             | 13 +++++
- drivers/net/xen-netfront.c                        | 39 ++++++++------
- drivers/pci/hotplug/pciehp_hpc.c                  |  7 +--
- drivers/soc/fsl/qe/qe_io.c                        |  2 +
- drivers/usb/gadget/legacy/inode.c                 | 10 ++--
- fs/btrfs/tree-log.c                               | 18 +++++++
- fs/cifs/cifsfs.c                                  |  1 +
- include/net/netfilter/nf_queue.h                  |  2 +-
- include/uapi/linux/input-event-codes.h            |  3 +-
- include/uapi/linux/xfrm.h                         |  6 +++
- kernel/trace/trace_events_hist.c                  |  6 +--
- mm/memfd.c                                        | 30 ++++++++---
- net/batman-adv/hard-interface.c                   | 29 ++++++----
- net/dcb/dcbnl.c                                   | 44 ++++++++++++++++
- net/ipv6/ip6_output.c                             | 11 ++--
- net/mac80211/rx.c                                 |  4 +-
- net/netfilter/core.c                              |  5 +-
- net/netfilter/nf_queue.c                          | 22 ++++++--
- net/netfilter/nfnetlink_queue.c                   | 12 +++--
- net/smc/smc_core.c                                |  5 +-
- net/wireless/nl80211.c                            | 12 +++++
- net/xfrm/xfrm_device.c                            |  6 ++-
- net/xfrm/xfrm_interface.c                         |  2 +-
- sound/soc/codecs/rt5668.c                         | 12 +++--
- sound/soc/codecs/rt5682.c                         | 12 +++--
- sound/soc/soc-ops.c                               |  4 +-
- sound/x86/intel_hdmi_audio.c                      |  2 +-
- 48 files changed, 344 insertions(+), 144 deletions(-)
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -60,8 +60,6 @@ struct btrfs_iget_args {
+ };
+ 
+ struct btrfs_dio_data {
+-	u64 reserve;
+-	loff_t length;
+ 	ssize_t submitted;
+ 	struct extent_changeset *data_reserved;
+ };
+@@ -7763,6 +7761,10 @@ static int btrfs_get_blocks_direct_write
+ {
+ 	struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
+ 	struct extent_map *em = *map;
++	int type;
++	u64 block_start, orig_start, orig_block_len, ram_bytes;
++	bool can_nocow = false;
++	bool space_reserved = false;
+ 	int ret = 0;
+ 
+ 	/*
+@@ -7777,9 +7779,6 @@ static int btrfs_get_blocks_direct_write
+ 	if (test_bit(EXTENT_FLAG_PREALLOC, &em->flags) ||
+ 	    ((BTRFS_I(inode)->flags & BTRFS_INODE_NODATACOW) &&
+ 	     em->block_start != EXTENT_MAP_HOLE)) {
+-		int type;
+-		u64 block_start, orig_start, orig_block_len, ram_bytes;
+-
+ 		if (test_bit(EXTENT_FLAG_PREALLOC, &em->flags))
+ 			type = BTRFS_ORDERED_PREALLOC;
+ 		else
+@@ -7789,53 +7788,92 @@ static int btrfs_get_blocks_direct_write
+ 
+ 		if (can_nocow_extent(inode, start, &len, &orig_start,
+ 				     &orig_block_len, &ram_bytes, false) == 1 &&
+-		    btrfs_inc_nocow_writers(fs_info, block_start)) {
+-			struct extent_map *em2;
++		    btrfs_inc_nocow_writers(fs_info, block_start))
++			can_nocow = true;
++	}
+ 
+-			em2 = btrfs_create_dio_extent(BTRFS_I(inode), start, len,
+-						      orig_start, block_start,
+-						      len, orig_block_len,
+-						      ram_bytes, type);
++	if (can_nocow) {
++		struct extent_map *em2;
++
++		/* We can NOCOW, so only need to reserve metadata space. */
++		ret = btrfs_delalloc_reserve_metadata(BTRFS_I(inode), len);
++		if (ret < 0) {
++			/* Our caller expects us to free the input extent map. */
++			free_extent_map(em);
++			*map = NULL;
+ 			btrfs_dec_nocow_writers(fs_info, block_start);
+-			if (type == BTRFS_ORDERED_PREALLOC) {
+-				free_extent_map(em);
+-				*map = em = em2;
+-			}
++			goto out;
++		}
++		space_reserved = true;
+ 
+-			if (em2 && IS_ERR(em2)) {
+-				ret = PTR_ERR(em2);
+-				goto out;
+-			}
+-			/*
+-			 * For inode marked NODATACOW or extent marked PREALLOC,
+-			 * use the existing or preallocated extent, so does not
+-			 * need to adjust btrfs_space_info's bytes_may_use.
+-			 */
+-			btrfs_free_reserved_data_space_noquota(fs_info, len);
+-			goto skip_cow;
++		em2 = btrfs_create_dio_extent(BTRFS_I(inode), start, len,
++					      orig_start, block_start,
++					      len, orig_block_len,
++					      ram_bytes, type);
++		btrfs_dec_nocow_writers(fs_info, block_start);
++		if (type == BTRFS_ORDERED_PREALLOC) {
++			free_extent_map(em);
++			*map = em = em2;
+ 		}
+-	}
+ 
+-	/* this will cow the extent */
+-	free_extent_map(em);
+-	*map = em = btrfs_new_extent_direct(BTRFS_I(inode), start, len);
+-	if (IS_ERR(em)) {
+-		ret = PTR_ERR(em);
+-		goto out;
++		if (IS_ERR(em2)) {
++			ret = PTR_ERR(em2);
++			goto out;
++		}
++	} else {
++		const u64 prev_len = len;
++
++		/* Our caller expects us to free the input extent map. */
++		free_extent_map(em);
++		*map = NULL;
++
++		/* We have to COW, so need to reserve metadata and data space. */
++		ret = btrfs_delalloc_reserve_space(BTRFS_I(inode),
++						   &dio_data->data_reserved,
++						   start, len);
++		if (ret < 0)
++			goto out;
++		space_reserved = true;
++
++		em = btrfs_new_extent_direct(BTRFS_I(inode), start, len);
++		if (IS_ERR(em)) {
++			ret = PTR_ERR(em);
++			goto out;
++		}
++		*map = em;
++		len = min(len, em->len - (start - em->start));
++		if (len < prev_len)
++			btrfs_delalloc_release_space(BTRFS_I(inode),
++						     dio_data->data_reserved,
++						     start + len, prev_len - len,
++						     true);
+ 	}
+ 
+-	len = min(len, em->len - (start - em->start));
++	/*
++	 * We have created our ordered extent, so we can now release our reservation
++	 * for an outstanding extent.
++	 */
++	btrfs_delalloc_release_extents(BTRFS_I(inode), len);
+ 
+-skip_cow:
+ 	/*
+ 	 * Need to update the i_size under the extent lock so buffered
+ 	 * readers will get the updated i_size when we unlock.
+ 	 */
+ 	if (start + len > i_size_read(inode))
+ 		i_size_write(inode, start + len);
+-
+-	dio_data->reserve -= len;
+ out:
++	if (ret && space_reserved) {
++		btrfs_delalloc_release_extents(BTRFS_I(inode), len);
++		if (can_nocow) {
++			btrfs_delalloc_release_metadata(BTRFS_I(inode), len, true);
++		} else {
++			btrfs_delalloc_release_space(BTRFS_I(inode),
++						     dio_data->data_reserved,
++						     start, len, true);
++			extent_changeset_free(dio_data->data_reserved);
++			dio_data->data_reserved = NULL;
++		}
++	}
+ 	return ret;
+ }
+ 
+@@ -7877,18 +7915,6 @@ static int btrfs_dio_iomap_begin(struct
+ 	if (!dio_data)
+ 		return -ENOMEM;
+ 
+-	dio_data->length = length;
+-	if (write) {
+-		dio_data->reserve = round_up(length, fs_info->sectorsize);
+-		ret = btrfs_delalloc_reserve_space(BTRFS_I(inode),
+-				&dio_data->data_reserved,
+-				start, dio_data->reserve);
+-		if (ret) {
+-			extent_changeset_free(dio_data->data_reserved);
+-			kfree(dio_data);
+-			return ret;
+-		}
+-	}
+ 	iomap->private = dio_data;
+ 
+ 
+@@ -7981,14 +8007,8 @@ unlock_err:
+ 	unlock_extent_cached(&BTRFS_I(inode)->io_tree, lockstart, lockend,
+ 			     &cached_state);
+ err:
+-	if (dio_data) {
+-		btrfs_delalloc_release_space(BTRFS_I(inode),
+-				dio_data->data_reserved, start,
+-				dio_data->reserve, true);
+-		btrfs_delalloc_release_extents(BTRFS_I(inode), dio_data->reserve);
+-		extent_changeset_free(dio_data->data_reserved);
+-		kfree(dio_data);
+-	}
++	kfree(dio_data);
++
+ 	return ret;
+ }
+ 
+@@ -8018,14 +8038,8 @@ static int btrfs_dio_iomap_end(struct in
+ 		ret = -ENOTBLK;
+ 	}
+ 
+-	if (write) {
+-		if (dio_data->reserve)
+-			btrfs_delalloc_release_space(BTRFS_I(inode),
+-					dio_data->data_reserved, pos,
+-					dio_data->reserve, true);
+-		btrfs_delalloc_release_extents(BTRFS_I(inode), dio_data->length);
++	if (write)
+ 		extent_changeset_free(dio_data->data_reserved);
+-	}
+ out:
+ 	kfree(dio_data);
+ 	iomap->private = NULL;
 
 

@@ -2,85 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0510D4D0818
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5564D081E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245253AbiCGUCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S240157AbiCGUFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236183AbiCGUCO (ORCPT
+        with ESMTP id S234597AbiCGUFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:02:14 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766D58A6DC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:01:19 -0800 (PST)
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D575C3F7DE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 20:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646683277;
-        bh=MYa3HOnxdRf4zgP873BwgLR5fhhIJBKgyitcscinRGs=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=iKcSvaTX5CezgRFwv9CXSk4lj8kJImaIxunT+dxJmlePwWO5irFdEpM4svRRuw0+g
-         iLUXgTjAfK+I/xXr+QToAkzCcKg2uTG7AO7hVTDLK/eReP1DYbvVmW0MaKxmP2/nwY
-         EAGLLXwwKO2Rtm53791dH22qCDnUyMzzKSmOIS77BZN8ExyggUFQqiMWTVF7gELLy0
-         N1V5T7+IqaD8yjS1S52cwWeJkb9WIKKRwG9N9523e75tQiZv2NiBZViC9Ab0cWzhZ1
-         MEPt9WJGXsybniRTb3ePxmbX1kB3uyqyH1SiFATpwK4el/yQowPZmdg5v8QSoIHr3H
-         xJau3zRLRjbxQ==
-Received: by mail-il1-f200.google.com with SMTP id m17-20020a923f11000000b002c10e8f4c44so11056197ila.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 12:01:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MYa3HOnxdRf4zgP873BwgLR5fhhIJBKgyitcscinRGs=;
-        b=XVI8fb+EUjFI5bZFStz4g+/Y0SGPewexf5+4kPy0nVjpYpeIUVFAB+NQ3dLbt7RXdB
-         rTAs/j3FyWzkc2gjc5pRUYTuKIPqUOZANd7ZYXNoN/6dPw5UpnH7mY+G2FqNMEsvt+8B
-         2JLCjAZSZrQdPBNTHj/2yGGbBvltd5Y7lADfn3xDV/BeJQSvUJjLRb8HBtv+Pa/AGZF2
-         kGSyfDpF2+RBDxgrQZuDQRfAjsoqmCAKTLDJqqgGJgjbh3Jn2OBYVh2E6WzrDmu2mSMJ
-         bp9DEO/XlccRJMVnw8F2Nu5Ej+tNLq8KcHBlhzee0NAHasVVbl3/mV5AvoVA1n/78ipo
-         p2iA==
-X-Gm-Message-State: AOAM531pd7M5AgME8lLopg9il7DCrBRAPWXm2R6I5gtag21Y0o2fMDnz
-        QJFHYV1B8MMdnZJt9Z1RrGRudhb1Yu7Zyw7OGjWtgl4aymltjpW6wJIC1huq65UfAnz2IV8ffEC
-        BAFNTbVFnQUWw1Melb6T+jxOzq9lwgNiYu27MrpFOnA==
-X-Received: by 2002:a05:6e02:12c8:b0:2c6:343f:b38d with SMTP id i8-20020a056e0212c800b002c6343fb38dmr9044941ilm.191.1646683276042;
-        Mon, 07 Mar 2022 12:01:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy96vcAbo82iuBKo9tD9gfr0H6HRXTec4IyY9lWSXwZ/FMfpgnRmWgQl1B4puiYokwT6kHEiA==
-X-Received: by 2002:a05:6e02:12c8:b0:2c6:343f:b38d with SMTP id i8-20020a056e0212c800b002c6343fb38dmr9044912ilm.191.1646683275731;
-        Mon, 07 Mar 2022 12:01:15 -0800 (PST)
-Received: from localhost (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
-        by smtp.gmail.com with ESMTPSA id q4-20020a056e0215c400b002c5fdff3087sm12302924ilu.29.2022.03.07.12.01.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 12:01:14 -0800 (PST)
-From:   dann frazier <dann.frazier@canonical.com>
-To:     stable@vger.kernel.org
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sergei Trofimovich <slyfox@gentoo.org>,
-        Anatoly Pugachev <matorola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4.19 3/3] ia64: ensure proper NUMA distance and possible map initialization
-Date:   Mon,  7 Mar 2022 13:01:09 -0700
-Message-Id: <20220307200109.459214-1-dann.frazier@canonical.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307195941.459076-1-dann.frazier@canonical.com>
-References: <20220307195941.459076-1-dann.frazier@canonical.com>
+        Mon, 7 Mar 2022 15:05:35 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C68710ED;
+        Mon,  7 Mar 2022 12:04:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646683480; x=1678219480;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CCspBBZZJuTW58iCt27emX56f2pFoXaQE2eIGa1lhbY=;
+  b=BzZau6t6A6ZDGmGKx+TE1J9z8h7ibN01VrO1DJ37TDhJ/FImsOezgtPR
+   hv7XdqQABXKW9sutAK+nWCHA6VePMRt3NdF3PXxshiQWlylWSy1te9Xl3
+   ISFkjUrVBJL5uD6vsL9QEHEI/Jhoso59u/0DPpgBH+1o7dGO9Yz8HeOzS
+   zsw148jjZB4RnrP9aiR7j07KzBYxWU1hUvHMuCMlTp1LIAWr5fYc81mAC
+   vID4YKXtGIf8oEJJ0lKi7XoLOCq6vZZ2/QEg3MnoSckHPyTDMolhihxBV
+   j/jauCk4V5SMURlSAyrD84w8Winfi5SnLMDtZoYSMm45LNNZCnOCNmjH4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="340925983"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="340925983"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 12:04:37 -0800
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="711239141"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 12:04:35 -0800
+Date:   Mon, 7 Mar 2022 12:04:34 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH 2/2] x86/mce: Add per-bank CMCI storm mitigation
+Message-ID: <YiZlUgbYtd2DUTOQ@agluck-desk3.sc.intel.com>
+References: <20220217141609.119453-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220217141609.119453-2-Smita.KoralahalliChannabasappa@amd.com>
+ <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
+ <Yg6Hst4Ocg7UNNG9@agluck-desk3.sc.intel.com>
+ <YiYJGKGmgUx9gAXv@nazgul.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiYJGKGmgUx9gAXv@nazgul.tnic>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,82 +66,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+On Mon, Mar 07, 2022 at 02:31:21PM +0100, Borislav Petkov wrote:
 
-commit b22a8f7b4bde4e4ab73b64908ffd5d90ecdcdbfd upstream.
+> So all in all I can't find anything eeewy in this - it would need to
+> have a lot more documentation, though, as this is not the most trivial
+> thing to stare at.
 
-John Paul reported a warning about bogus NUMA distance values spurred by
-commit:
+Thanks for the review. I'll see about re-naming things and adding comments
+to make this easier to read.
 
-  620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
+> >  		m.status = mce_rdmsrl(mca_msr_reg(i, MCA_STATUS));
+> >  
+> > +		mce_intel_storm_tracker(i, m.status);
+> 
+> Why is this called before the VALID bit check?
+> 
+> Because you want to still run the tracker on each polling - not only
+> when it sees a valid error?
 
-In this case, the afflicted machine comes up with a reported 256 possible
-nodes, all of which are 0 distance away from one another.  This was
-previously silently ignored, but is now caught by the aforementioned
-commit.
+Yes. The tracker cares both about polls that find errors, and polls
+that don't. Storm detection is triggered with some threshold of positive
+scans, even if they are mixed in with some negative ones. End of storm
+is determined by a number of consecutive negative polls.
 
-The culprit is ia64's node_possible_map which remains unchanged from its
-initialization value of NODE_MASK_ALL.  In John's case, the machine
-doesn't have any SRAT nor SLIT table, but AIUI the possible map remains
-untouched regardless of what ACPI tables end up being parsed.  Thus,
-!online && possible nodes remain with a bogus distance of 0 (distances \in
-[0, 9] are "reserved and have no meaning" as per the ACPI spec).
+> > diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+> > index cee9d989f791..2ed5634ec277 100644
+> > --- a/arch/x86/kernel/cpu/mce/intel.c
+> > +++ b/arch/x86/kernel/cpu/mce/intel.c
+> > @@ -47,8 +47,48 @@ static DEFINE_PER_CPU(mce_banks_t, mce_banks_owned);
+> >   */
+> >  static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
+> >  
+> > +/*
+> > + * CMCI storm tracking state
+> > + */
+> 
+> Those could use some comments explaining what is tracking what:
+> 
+> > +static DEFINE_PER_CPU(int, stormy_bank_count);
 
-Follow x86 / drivers/base/arch_numa's example and set the possible map to
-the parsed map, which in this case seems to be the online map.
+This one is a count of how many banks on this CPU are in storm mode.
 
-Link: http://lore.kernel.org/r/255d6b5d-194e-eb0e-ecdd-97477a534441@physik.fu-berlin.de
-Link: https://lkml.kernel.org/r/20210318130617.896309-1-valentin.schneider@arm.com
-Fixes: 620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: Sergei Trofimovich <slyfox@gentoo.org>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Anatoly Pugachev <matorola@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-[ dannf: minor context adjustment in arch/ia64/kernel/acpi.c ]
-Signed-off-by: dann frazier <dann.frazier@canonical.com>
----
- arch/ia64/kernel/acpi.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+> > +static DEFINE_PER_CPU(u64 [MAX_NR_BANKS], bank_history);
 
-diff --git a/arch/ia64/kernel/acpi.c b/arch/ia64/kernel/acpi.c
-index 1dacbf5e9e09..3856894e86b8 100644
---- a/arch/ia64/kernel/acpi.c
-+++ b/arch/ia64/kernel/acpi.c
-@@ -537,7 +537,8 @@ void __init acpi_numa_fixup(void)
- 	if (srat_num_cpus == 0) {
- 		node_set_online(0);
- 		node_cpuid[0].phys_id = hard_smp_processor_id();
--		return;
-+		slit_distance(0, 0) = LOCAL_DISTANCE;
-+		goto out;
- 	}
- 
- 	/*
-@@ -580,7 +581,7 @@ void __init acpi_numa_fixup(void)
- 			for (j = 0; j < MAX_NUMNODES; j++)
- 				node_distance(i, j) = i == j ? LOCAL_DISTANCE :
- 							REMOTE_DISTANCE;
--		return;
-+		goto out;
- 	}
- 
- 	memset(numa_slit, -1, sizeof(numa_slit));
-@@ -605,6 +606,8 @@ void __init acpi_numa_fixup(void)
- 		printk("\n");
- 	}
- #endif
-+out:
-+	node_possible_map = node_online_map;
- }
- #endif				/* CONFIG_ACPI_NUMA */
- 
--- 
-2.25.1
+Bitmask history of the most recent 64 polls for each bank.
 
+> > +static DEFINE_PER_CPU(bool [MAX_NR_BANKS], bank_storm);
+> 
+> AFAICT, this says whether a bank is in storm mode?
+
+Yes.
+
+> > +static DEFINE_PER_CPU(unsigned long [MAX_NR_BANKS], bank_time_stamp);
+> 
+> This looks like it collects the jiffies when the bank was looked at in
+> the storm tracker.
+
+Yes.
+
+> > +static int cmci_threshold[MAX_NR_BANKS];
+> > +
+> >  #define CMCI_THRESHOLD		1
+> >  
+> > +/*
+> > + * High threshold to limit CMCI rate during storms. Max supported is
+> > + * 0x7FFF. Use this slightly smaller value so it has a distinctive
+> > + * signature when some asks "Why am I not seeing all corrected errors?"
+> > + */
+> > +#define CMCI_STORM_THRESHOLD	0x7FED
+> 
+> Why is a "threshold" in hex?
+
+For debugging ... I was using rdmsr tool to read the MCi_CTL2 machine
+check bank MSRs. It could be defined in decimal.
+
+> > +
+> > +/*
+> > + * How many errors within the history buffer mark the start of a storm
+> > + */
+> > +#define STORM_BEGIN	5
+> 
+> That looks like a STORM_BEGIN_THRESHOLD to me.
+
+Yes.
+
+> > +
+> > +/*
+> > + * How many polls of machine check bank without an error before declaring
+> > + * the storm is over
+> > + */
+> > +#define STORM_END	30
+> 
+> Similarly:
+> 
+> STORM_END_POLL_THRESHOLD
+
+Ditto yes.
+
+> > +
+> > +/*
+> > + * If there is no poll data for a bank for this amount of time, just
+> > + * discard the history.
+> > + */
+> > +#define STORM_INTERVAL (1 * HZ)
+> 
+> That looks unused.
+
+It was at one point a replacement for CMCI_STORM_INTERVAL deleted
+in patch 0001. But I must have dropped the place it was used. Will
+delete.
+
+> > +static void cmci_storm_begin(int bank)
+> > +{
+> > +	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
+> > +	this_cpu_write(bank_storm[bank], true);
+> > +	if (this_cpu_inc_return(stormy_bank_count) == 1)
+> 
+> s/ == 1//
+
+Not sure about this. The stormy_bank_count variable keeps
+track of how many banks on this CPU are in storm mode. So
+the transition from zero to one is significant. Need to start
+polling. But for 1->2, 2->3 etc. nothing needs to happen. The
+CPU is already polling.
+
+> > +		mce_timer_kick(true);
+> > +}
+> > +
+> > +static void cmci_storm_end(int bank)
+> > +{
+> > +	__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
+> > +	this_cpu_write(bank_history[bank], 0ull);
+> > +	this_cpu_write(bank_storm[bank], false);
+> > +	if (this_cpu_dec_return(stormy_bank_count) == 0)
+> 
+> 	if (!...
+
+OK.
+
+> > +		mce_timer_kick(false);
+> > +}
+> > +
+> > +void mce_intel_storm_tracker(int bank, u64 status)
+> 
+> Function name needs a verb.
+
+How about: track_cmci_storm(int bank, u64 status) ?
+
+> > +{
+> > +	unsigned long now = jiffies, delta;
+> > +	unsigned int shift;
+> > +	u64 history;
+> > +
+> > +	delta = now - this_cpu_read(bank_time_stamp[bank]);
+> > +	shift = this_cpu_read(bank_storm[bank]) ? 1 : (delta + HZBITS) / HZBITS;
+> 
+> Do
+> 
+> 	shift = 1;
+> 
+> on function entry to simplify this assignment.
+
+
+Yes. That will be easier to read.
+
+> Also, I'm having trouble with this shift calculation. The laptop here has
+> HZ=250. Let's say delta is 2000 jiffies.
+> 
+> So if this bank wasn't in storm mode, I'd have
+> 
+> shift = (2000 + (250 / 64)) / (250 / 64) = 513
+> 
+> ...
+> 
+> Aaaha, so only when the diff is < 250 in my case, i.e., it polls the
+> same bank within a second, only then it would shift the history. I.e.,
+> what you mean with that "The 64 bit width corresponds to about one
+> second."
+
+Yes, you got it ... but I'll add a comment so code readers don't have
+to redo that deduction every time.
+
+> > +	history = (shift < 64) ? this_cpu_read(bank_history[bank]) << shift : 0;
+> > +	this_cpu_write(bank_time_stamp[bank], now);
+> > +
+> > +	if ((status & (MCI_STATUS_VAL | MCI_STATUS_UC)) == MCI_STATUS_VAL)
+> > +		history |= 1;
+> > +	this_cpu_write(bank_history[bank], history);
+> > +
+> > +	if (this_cpu_read(bank_storm[bank])) {
+> > +		if (history & GENMASK_ULL(STORM_END - 1, 0))
+> > +			return;
+> 
+> Aha, under STORM_END polls you don't declare the storm as being over.
+> 
+> > +		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
+> > +		cmci_set_threshold(bank, cmci_threshold[bank]);
+> > +		cmci_storm_end(bank);
+> > +	} else {
+> > +		if (hweight64(history) < STORM_BEGIN)
+> > +			return;
+> 
+> Aha, so you need STORM_BEGIN errors within the last second to cause the
+> storm polling. Ok I guess.
+
+Agreed. This needs comments to explain what is going on.
+
+> So all in all I can't find anything eeewy in this - it would need to
+> have a lot more documentation, though, as this is not the most trivial
+> thing to stare at.
+
+Thanks again for the review.
+
+-Tony

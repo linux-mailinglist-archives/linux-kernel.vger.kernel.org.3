@@ -2,110 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3134CFD3D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D954CFD46
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241593AbiCGLpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
+        id S235895AbiCGLqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239663AbiCGLpH (ORCPT
+        with ESMTP id S231160AbiCGLqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 06:45:07 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2956757B33
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 03:44:10 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 7 Mar 2022 06:46:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3571865D3D;
+        Mon,  7 Mar 2022 03:45:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 434D13F5F5
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646653449;
-        bh=7K92x3leOgbA5D2Deikx6J1ja1DW43dq73YDI+O/z/4=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=WQMI8vZMMLJQ97J731i/63zkIyIDqvqpzVBKZQvEKQnD7IhOxqJS+XClAQjp0PlHq
-         /KTsHbXwpapUEnhcDmlSzdiiVKrXL5vWUC3uNy9FJsA9teWtazIzCVD6XyZyR3lSKr
-         cLF/PrmTHFemlcRO49grMOMP+MJQH3OQJmND9/DW8i2veGAfAoeOXi9anVoNgZbrfd
-         6wAfhrrb8sWVzyIqX1J3LWaH6cwmpu1SfLJ/J8aR42DyKanpxP4nSyjHWWyNUEsB9w
-         rzkB8keWtDJrBhW2Imsd2qz8ZQFqeYNfwDPvneej13F+GsVJqT2fy7Se8hsHW/LAap
-         mWGaHuo8drDFQ==
-Received: by mail-ed1-f71.google.com with SMTP id y26-20020a50ce1a000000b00415e9b35c81so6177061edi.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 03:44:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7K92x3leOgbA5D2Deikx6J1ja1DW43dq73YDI+O/z/4=;
-        b=KcsVNOvpPwFRZBF3hC7bSaN4WsOd8QG8EDTKvJDFatz9FPirNrTaxtA/bOxWz3Xq9X
-         uAyLQzD2RGk2lyzIiVdakSCaqx+lU/SF5IwHwRMK/FP3Z3TOPGkIctQh2Il88QFeNHI+
-         KyNxaIDKgLBCgksrynvK/Ise+yBrTRjFcTNxOrc7QncoWxhHkjVJBdpOekCYSbXLYp2O
-         JgptzdgPv1XDPfUSTX1qXiN75Iou+HGOrrVkeAhUhrwMtTzQKWR7nW9SZ5GJ++P3ydZp
-         /O4R0xVGnUbeDG3/qpAG7HXHaAiFiFODoYUc43oOdEiEO/XKmmn5HZpqWHhp7CMdD7qA
-         z3Ng==
-X-Gm-Message-State: AOAM532Gt5gHsewmA+tIByx85hUsK3FPMrH3j04ATngWhxUgENARlfWy
-        9uPL+r4XmxtIIfHDqcMCuVeu1dEfK78pswhbeFlEEswGTGklWElxufzkavNDZL86LQCNJKtF7Ce
-        d5WDK7gkTGzpXNarJ/3AdCHZlH+18X4vIr18t00GDZg==
-X-Received: by 2002:a17:907:608f:b0:6da:8d84:e272 with SMTP id ht15-20020a170907608f00b006da8d84e272mr8959400ejc.559.1646653448158;
-        Mon, 07 Mar 2022 03:44:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx7CquB49ISr7Cb3Um7I9XdJ9HGKHMsRL215XarEZGvF2Bjnl7tyullhjBdnRCd/oaHDZEQ6A==
-X-Received: by 2002:a17:907:608f:b0:6da:8d84:e272 with SMTP id ht15-20020a170907608f00b006da8d84e272mr8959392ejc.559.1646653448011;
-        Mon, 07 Mar 2022 03:44:08 -0800 (PST)
-Received: from [192.168.0.142] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id dx10-20020a170906a84a00b006da8608e09fsm4624043ejb.9.2022.03.07.03.44.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 03:44:07 -0800 (PST)
-Message-ID: <ff33d3a5-d2f3-8a7d-204e-0ab7205b932d@canonical.com>
-Date:   Mon, 7 Mar 2022 12:44:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/6] ASoC: dt-bindings: Document Microchip's PDMC
-Content-Language: en-US
-To:     Codrin.Ciubotariu@microchip.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     lars@metafoo.de, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, robh+dt@kernel.org, Nicolas.Ferre@microchip.com
-References: <20220307100428.2227511-1-codrin.ciubotariu@microchip.com>
- <20220307100428.2227511-3-codrin.ciubotariu@microchip.com>
- <73c49f2b-ef2e-5ed8-f3d5-aa696f9af9e6@canonical.com>
- <38975dd7-2f54-8920-af28-0a002f0faf5e@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <38975dd7-2f54-8920-af28-0a002f0faf5e@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9BBD60C1D;
+        Mon,  7 Mar 2022 11:45:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044E0C340E9;
+        Mon,  7 Mar 2022 11:45:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646653547;
+        bh=HuiySr2XK/xcf/nv6byy2sSmP0H0uimJUGFICGPJW+M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P84h5fUDcTZEXt4/p4iUbrTKpxkZ6eLgBJ0hOY3fIXpHeeXaVpP0wD2Zspi0RCS18
+         F1OKsCSWrJxFwwIymuTpGR2YtQG8QXTRQX3Jm9hVPU/cFCxgCSCh05doMa7qhrG0R5
+         /R+zMuHUVbO/qr24jqiztWN5mg0s1gqUkDXqoDj1B6o63HBXMrzSuxGsVCXeCeigTN
+         xKOhXxdvvkEPGeSs6EWqlbVMi2vFC47Io0nr79HDm679hRJaT0Th5iyqOjqty6Q+D4
+         vwwrRBaaAJq1Cx4O5VOXysb02iFDqSmXEgKIZLqNxHWZ0cGXAIQ/EVMnZvCTYew3wd
+         yC6CiCmcxtXyw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRBo8-00Clmr-N8; Mon, 07 Mar 2022 11:45:44 +0000
+Date:   Mon, 07 Mar 2022 11:45:44 +0000
+Message-ID: <87cziy0yvr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] irqchip: Add Qualcomm MPM controller driver
+In-Reply-To: <20220306125710.GQ269879@dragon>
+References: <20220302084028.GL269879@dragon>
+        <877d9c3b2u.wl-maz@kernel.org>
+        <20220302133441.GM269879@dragon>
+        <875yow31a0.wl-maz@kernel.org>
+        <20220303040229.GN269879@dragon>
+        <87fsnytagc.wl-maz@kernel.org>
+        <20220304082342.GO269879@dragon>
+        <87lexp211g.wl-maz@kernel.org>
+        <20220305092420.GP269879@dragon>
+        <87czj0u0bg.wl-maz@kernel.org>
+        <20220306125710.GQ269879@dragon>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, bjorn.andersson@linaro.org, sudeep.holla@arm.com, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 12:34, Codrin.Ciubotariu@microchip.com wrote:
-> On 07.03.2022 13:18, Krzysztof Kozlowski wrote:
->> On 07/03/2022 11:04, Codrin Ciubotariu wrote:
->>> +description:
->>> +  The Microchip Pulse Density Microphone Controller (PDMC) interfaces up to 4 digital microphones
->>> +  having Pulse Density Modulated (PDM) outputs.
->>
->> This exceeds 80 characters.
+On Sun, 06 Mar 2022 12:57:10 +0000,
+Shawn Guo <shawn.guo@linaro.org> wrote:
 > 
-> I thought it was raised to 100. checkpatch doesn't report anything also.
+> On Sat, Mar 05, 2022 at 11:05:07AM +0000, Marc Zyngier wrote:
+> > On Sat, 05 Mar 2022 09:24:20 +0000,
+> > Shawn Guo <shawn.guo@linaro.org> wrote:
+> > > 
+> > > On Fri, Mar 04, 2022 at 03:24:43PM +0000, Marc Zyngier wrote:
+> > > > On Fri, 04 Mar 2022 08:23:42 +0000,
+> > > > Shawn Guo <shawn.guo@linaro.org> wrote:
+> > > > > 
+> > > > > On Fri, Mar 04, 2022 at 07:59:15AM +0000, Marc Zyngier wrote:
+> > > > > > On Thu, 03 Mar 2022 04:02:29 +0000,
+> > > > > > Shawn Guo <shawn.guo@linaro.org> wrote:
+> > > > > > > 
+> > > > > > > On Wed, Mar 02, 2022 at 01:57:27PM +0000, Marc Zyngier wrote:
+> > > > > > > > This code actually makes me ask more questions. Why is it programming
+> > > > > > > > 2 'pins' for each IRQ?
+> > > > > > > 
+> > > > > > > The mapping between MPM pin and GIC IRQ is not strictly 1-1.  There are
+> > > > > > > some rare case that up to 2 MPM pins map to a single GIC IRQ, for
+> > > > > > > example the last two in QC2290 'qcom,mpm-pin-map' below.
+> > > > > > > 
+> > > > > > > 	qcom,mpm-pin-map = <2 275>,     /* tsens0_tsens_upper_lower_int */
+> > > > > > > 			   <5 296>,     /* lpass_irq_out_sdc */
+> > > > > > > 			   <12 422>,    /* b3_lfps_rxterm_irq */
+> > > > > > > 			   <24 79>,     /* bi_px_lpi_1_aoss_mx */
+> > > > > > > 			   <86 183>,    /* mpm_wake,spmi_m */
+> > > > > > > 			   <90 260>,    /* eud_p0_dpse_int_mx */
+> > > > > > > 			   <91 260>;    /* eud_p0_dmse_int_mx */
+> > > > > > > 
+> > > > > > > 
+> > > > > > > The downstream uses a DT bindings that specifies GIC hwirq number in
+> > > > > > > client device nodes.  In that case, d->hwirq in the driver is GIC IRQ
+> > > > > > > number, and the driver will need to query mapping table, find out the
+> > > > > > > possible 2 MPM pins, and set them up.
+> > > > > > > 
+> > > > > > > The patches I'm posting here use a different bindings that specifies MPM
+> > > > > > > pin instead in client device nodes.  Thus the driver can simply get the
+> > > > > > > MPM pin from d->hwirq, so that the whole look-up procedure can be saved.
+> > > > > > 
+> > > > > > It still remains that there is no 1:1 mapping between input and
+> > > > > > output, which is the rule #1 to be able to use a hierarchical setup.
+> > > > > 
+> > > > > For direction of MPM pin -> GIC interrupt, it's a 1:1 mapping, i.e. for
+> > > > > given MPM pin, there is only one GIC interrupt.  And that's the
+> > > > > mapping MPM driver relies on.  For GIC interrupt -> MPM pin, it's not
+> > > > > a strict 1:1 mapping.
+> > > > 
+> > > > Then this isn't a 1:1 mapping *AT ALL*. The hierarchical setup
+> > > > mandates that the mapping is a bijective function, and that's exactly
+> > > > what 1:1 means. There is no such thing a 1:1 in a single
+> > > > direction. When you take an interrupt, all you see is the GIC
+> > > > interrupt. How do you know which of the *two* pins interrupted you? Oh
+> > > > wait, you *can't* know. You end-up never servicing one of the two
+> > > > interrupts
+> > > 
+> > > Yes, you are right!  But that might be a problem only in theory.  I
+> > > checked all the Qualcomm platforms I know built on MPM, and found that
+> > > the only 2:1 case is USB DP & DM sensing pins.  Since these two pins
+> > > will be handled by USB driver with a single interrupt handler, it should
+> > > not cause any problem in practice.  That said, the 2:1 mapping is just
+> > > a special case specific to USB, and MPM driver can be implemented as if
+> > > it's just a 1:1 mapping.
+> > >
+> > > Shawn
+> > > 
+> > > > (and I suspect this results in memory corruption if you
+> > > > tear a hierarchy down).
+> > 
+> > Key point here ^^^^^^^^^^
+> > 
+> > You can't have *any* interrupt that fits this 2:1 model if the irqchip
+> > implements 1:1. Think about the data structures for a second:
+> > 
+> > Pins x and y and routed to GIC interrupt z. This results in the
+> > following irq_data structures:
+> > 
+> >    MPM-x ---\
+> >              GIC-z
+> >    MPM-y ---/
+> > 
+> > Now, the driver using these interrupts is being removed, and the
+> > hierarchies is being freed. Tearing down the interrupt with pin x will
+> > result in z being also freed. And then you'll process pin y, which
+> > will just explode.
+> 
+> I tested with manually unbinding the USB driver and didn't run into any
+> memory corruption.  If I read irq_domain code right, it seems that
+> irq_domain_alloc_irq_data() will call into irq_domain_insert_irq_data()
+> to allocate z irq_data in context of virq x and y respectively.  So x
+> and y do not share a single parent (z) irq_data but have their own copy
+> of z irq_data, no?
 
-https://elixir.bootlin.com/linux/v5.17-rc7/source/Documentation/process/coding-style.rst#L104
+Which is just another bug you are relying on. Maybe you're OK with
+that, but I'm not (and I intend to fix this bug).
 
-The hard-constraint was lifted, but still 80 is preferred, unless
-readability is increased with 100. That's not the case - readability is
-the same, so keep 80.
+I'm not taking this driver until you either:
 
+- prevent a pin sharing a GIC interrupt from triggering an interrupt
+  allocation in the driver
 
+- or turn this driver into something that isn't a hierarchical setup
 
-Best regards,
-Krzysztof
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,182 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E668C4D0626
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ADB4D062D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240807AbiCGSRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S241357AbiCGSSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241357AbiCGSRT (ORCPT
+        with ESMTP id S244730AbiCGSSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:17:19 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7549F75E69
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:16:22 -0800 (PST)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220307181616epoutp01e3bca416dde6cb17c0719f5d95a651c4~aK-xQgEZf0767007670epoutp01D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:16:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220307181616epoutp01e3bca416dde6cb17c0719f5d95a651c4~aK-xQgEZf0767007670epoutp01D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646676976;
-        bh=+DoYqIP57CK30qeEszS0FSuPgQHsdE9AmjYT9fqaiY8=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=VUtydj3bNltVpXLs+6lpqVbi1uFYaA6EYA//vyrvac2hVd2m+9ni801l2KipbLcU+
-         hDz0jLG9WALzMtaYG1/6/cdMmxDXoHGQ2AsSq/ZkS87t6YCUb5lPyaVIEx/Ap7gjAP
-         8sZLX1lNDjzSPnvYw+MmxqueIgNJSXu4BFxTdqEs=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220307181615epcas5p342477b57f086c1d54502b559c5b55440~aK-wr4shN0547805478epcas5p36;
-        Mon,  7 Mar 2022 18:16:15 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4KC68p3h7kz4x9Pq; Mon,  7 Mar
-        2022 18:16:10 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E5.BC.46822.93946226; Tue,  8 Mar 2022 03:04:41 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220307181609epcas5p1dee884f7f426b64ee5915f507c1fb696~aK-qjlWmv0140301403epcas5p1b;
-        Mon,  7 Mar 2022 18:16:09 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220307181609epsmtrp2c90c3afdfefa8eedbdb3c0d001bd3d0e~aK-qix9hX3020530205epsmtrp2z;
-        Mon,  7 Mar 2022 18:16:09 +0000 (GMT)
-X-AuditID: b6c32a4a-de5ff7000000b6e6-fa-6226493981c0
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9F.C1.29871.9EB46226; Tue,  8 Mar 2022 03:16:09 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220307181607epsmtip150e77f72df12ff26f43123b50e3d891b~aK-pYRZNs2332523325epsmtip19;
-        Mon,  7 Mar 2022 18:16:07 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        "'Jiri Slaby'" <jirislaby@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20220307080925.54131-6-krzysztof.kozlowski@canonical.com>
-Subject: RE: [PATCH v2 7/7] tty: serial: samsung: simplify getting OF match
- data
-Date:   Mon, 7 Mar 2022 23:46:06 +0530
-Message-ID: <000001d8324f$6b2c9a40$4185cec0$@samsung.com>
+        Mon, 7 Mar 2022 13:18:01 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF08675E47;
+        Mon,  7 Mar 2022 10:17:06 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id k29-20020a05600c1c9d00b003817fdc0f00so9804421wms.4;
+        Mon, 07 Mar 2022 10:17:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sayrSIk+NDM65AKvFJGH6QJQ+sc3l62Epi/p4rWp0co=;
+        b=oax+5ZR4uPTHvguofbQbtcUO/6gTvB/BultTtgRVppN+Esz2DDuKovZi47mRi4VUab
+         voCR7Gz7m8k+D6WiKFDW3fubOt1z2EDvArL67+T8JgyD66xpEXqa/Toqn6f/pbrOJrcF
+         ETUjSWPZgFa4LgVcFGzB51T78/WUfxACryDkxzAEaDnCyAh+gQU9Nww5E78NzHrPbPx7
+         BWxccytxW3SW0v5bf85gZrIkwmECGTbOepkjvCgh7A7f9x46chlArdPVMQfq7+55wTtk
+         xW18sa01nWH81gCf828GYjkClQEkYyP0WHjSMrXK60GYrwDbNx8GqV65ygerkdG0lx0C
+         KGyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sayrSIk+NDM65AKvFJGH6QJQ+sc3l62Epi/p4rWp0co=;
+        b=YKz67wbCqRYiC+kUh5MHUlRV6e1nkWmFx+7oLeYL6EOqwexcblaMGqGMnqgcW36k/b
+         V720LXbGX3AwpQS50kSZZW5gebGuyInF1fqh2bQsj5N37EUFmFatVoQBR9cOFrLqxd73
+         4ELTBzckIWbEU1qXkzBq+fvHmRmrh5EiSSmssYeSd7Anpr04ow7Dvg08HBOsKPDUEB8h
+         Xe0TNdlnNNu3WAOI2IuSW7cFDnF+HWI8QXMTMscrInB7978iEy+YhhAO7bSiDnicEfa8
+         siGGf77TxtBedTuMEgHfcqDnA3QwxhDTAbYLCTpICGpoyEf2ku01AA21Uz+6w9pWielI
+         jP8A==
+X-Gm-Message-State: AOAM531mZjOcbiYu5g8GGTVu6ddX+SldRD0XipGtxbJNuJpAAoqqpaoB
+        /GdWiwY2odrJ7Uv0wm6SAIaYF8qzChNgEg==
+X-Google-Smtp-Source: ABdhPJxdUz78okhuvUq7H9aHqcb9xUZ5Eomn4OM9KtxAU3Wo+/Qd9m5moXVVdWEcWCu0X3A31wQ3Ow==
+X-Received: by 2002:a7b:c8cf:0:b0:389:a5f5:5b0 with SMTP id f15-20020a7bc8cf000000b00389a5f505b0mr145235wml.37.1646677025308;
+        Mon, 07 Mar 2022 10:17:05 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a10-20020a7bc1ca000000b00389bc87db45sm66515wmj.7.2022.03.07.10.17.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 10:17:04 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sandy Huang <hjc@rock-chips.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] drm/rockchip: remove redundant assignment to pointer connector
+Date:   Mon,  7 Mar 2022 18:17:04 +0000
+Message-Id: <20220307181704.149076-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQGoAYk8Q04rU2h+MYSS22x/2RnCswLpcBE3AkLWjums6zlaEA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJJsWRmVeSWpSXmKPExsWy7bCmhq6lp1qSQX87t0Xz4vVsFu/mylhs
-        fPuDyWLT42usFpd3zWGzmHF+H5PFmcW97A7sHrMaetk8Nq3qZPPYP3cNu8fmJfUenzfJBbBG
-        ZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2hpFCW
-        mFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwKdArTswtLs1L18tLLbEyNDAwMgUqTMjO
-        WP98MUvBLb6K6av/sDUwPuHpYuTkkBAwkTi4cR1LFyMXh5DAbkaJi8t3MEE4nxglFq18zQjh
-        fGOU2HrgORNMy/Pj69ghEnsZJS5s/QLlvGSUaJn2hg2kik1AV2LH4jY2kISIwAYmiUv3poK1
-        cwq4SzS0bmAEsYUFgiR2Nj9jAbFZBFQkvu08xg5i8wpYSry8cJcFwhaUODnzCZjNLCAvsf3t
-        HGaIMxQkfj5dxgpiiwg4Sdz8eZEZokZc4uXRI2AXSQi0ckhcX/iXFaLBReJc+y6oH4QlXh3f
-        wg5hS0l8frcX6FIOIDtbomeXMUS4RmLpvGMsELa9xIErc1hASpgFNCXW79KHWMUn0fv7CRNE
-        J69ER5sQRLWqRPO7q1Cd0hITu7tZIUo8JH7c0YME1XVGie6Ln5knMCrMQvLkLCRPzkLyzCyE
-        xQsYWVYxSqYWFOempxabFhjlpZbDIzw5P3cTIziNanntYHz44IPeIUYmDsZDjBIczEoivPfP
-        qyQJ8aYkVlalFuXHF5XmpBYfYjQFhvxEZinR5HxgIs8riTc0sTQwMTMzM7E0NjNUEuc9nb4h
-        UUggPbEkNTs1tSC1CKaPiYNTqoFJddPuxMVnpT43KyzN6Di1t8XPsiJNeX26sKFUifhSjUuX
-        pv4Kel0mJvFyt91nrZ9Lz7PdPbX2vKHitbf13mK2E2MEp316fTtRMikuw2nGPYWNDP+r6hae
-        WFkpcej5CdUL3D+Psyt9Ee7TEVyScOZHeEyeyiXOGZvyj729w6Tz2EVQwy8jZv2uqesPCr9g
-        4k5t2e4easW/aa7JznKm1smm/oaqf58t/PQ+/e8tHo/E+QHtLcpTpS75NnlURP4pslP18uY9
-        9v5/wY+uaUdjnz3T9Nm5qpq/zfnv9QvbnarSl8bznjH1+rVgv+i0RrE0Waenz1RPczYviLBw
-        uX2fyV5E4e6fTxG13wTO1z5eqP9XiaU4I9FQi7moOBEA+elMTywEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCLMWRmVeSWpSXmKPExsWy7bCSnO5Lb7UkgzmbWS2aF69ns3g3V8Zi
-        49sfTBabHl9jtbi8aw6bxYzz+5gszizuZXdg95jV0MvmsWlVJ5vH/rlr2D02L6n3+LxJLoA1
-        issmJTUnsyy1SN8ugStj/fPFLAW3+Cqmr/7D1sD4hKeLkZNDQsBE4vnxdexdjFwcQgK7GSX6
-        nixghEhIS1zfOIEdwhaWWPnvOVTRc0aJ1ytegCXYBHQldixuYwOxRQS2MEks+hYHUXSZUWJd
-        wysWkASngLtEQ+sGsKnCAgESs86sA2tmEVCR+LbzGJjNK2Ap8fLCXRYIW1Di5MwnQDYHB7OA
-        nkTbRrBWZgF5ie1v5zBDHKQg8fPpMlaIvU4SN39eZIaoEZd4efQI+wRGoVlIJs1CmDQLyaRZ
-        SDoWMLKsYpRMLSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQIjhgtzR2M21d90DvEyMTBeIhR
-        goNZSYT3/nmVJCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4
-        pRqYqlncAvdu7Q6Yxyt7qF7CiaHYz+d+0qZHLzNFE2qKjrI+rt2z/2+eS/HGrZW1u2vV1ZfP
-        2XXZb9u9eqe4XW7ddS57W0X5pqcefLrMI3Cqfan9X7m0pYqRd9UOZPAvuq9w7/d6p2t+/7pO
-        LPqXyDLriUZQi0hIDfvHm2tmlfzddPtZ00dGvS8J85Tcdy3bu6appvi7XIHuMzOG3Fep079b
-        57585ihV2nxr6Y/XkWtfXbO58vi7dI/2Dv+8WSrSL8r0WOa0v1si77mpuedOm2ZUxyLVg979
-        XT8f2lu8X/74mePCPR8/CNQtlDfxk1/OeDv3ntF2XznRNxv5jI6tOLjIvXYbm/N66ytvLjKI
-        3jlmrcRSnJFoqMVcVJwIAEZVzAcHAwAA
-X-CMS-MailID: 20220307181609epcas5p1dee884f7f426b64ee5915f507c1fb696
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220307080948epcas5p2cfb6ad93e628461366b03203a884e0e6
-References: <20220307080810.53847-1-krzysztof.kozlowski@canonical.com>
-        <CGME20220307080948epcas5p2cfb6ad93e628461366b03203a884e0e6@epcas5p2.samsung.com>
-        <20220307080925.54131-6-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pointer connector is being assigned a value that is never read,
+it is being re-assigned in the following statement. The assignment
+is redundant and can be removed.
 
+Cleans up clang scan build warning:
+drivers/gpu/drm/rockchip/rockchip_rgb.c:153:2: warning: Value stored
+to 'connector' is never read [deadcode.DeadStores]
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
->Sent: Monday, March 7, 2022 1:39 PM
->To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Alim Akhtar
-><alim.akhtar@samsung.com>; Greg Kroah-Hartman
-><gregkh@linuxfoundation.org>; Jiri Slaby <jirislaby@kernel.org>; linux-arm-
->kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
->serial@vger.kernel.org; linux-kernel@vger.kernel.org
->Subject: [PATCH v2 7/7] tty: serial: samsung: simplify getting OF match
-data
->
->Simplify the code with of_device_get_match_data().
->
->Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->---
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/rockchip/rockchip_rgb.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-
-
-> drivers/tty/serial/samsung_tty.c | 13 +++----------
-> 1 file changed, 3 insertions(+), 10 deletions(-)
->
->diff --git a/drivers/tty/serial/samsung_tty.c
->b/drivers/tty/serial/samsung_tty.c
->index 3ffae912217c..61c530bb377f 100644
->--- a/drivers/tty/serial/samsung_tty.c
->+++ b/drivers/tty/serial/samsung_tty.c
->@@ -2150,23 +2150,16 @@ static int s3c24xx_serial_init_port(struct
->s3c24xx_uart_port *ourport,
->
-> /* Device driver serial port probe */
->
->-#ifdef CONFIG_OF
->-static const struct of_device_id s3c24xx_uart_dt_match[]; -#endif
->-
-> static int probe_index;
->
-> static inline const struct s3c24xx_serial_drv_data *
->s3c24xx_get_driver_data(struct platform_device *pdev)  {  #ifdef CONFIG_OF
->-	if (pdev->dev.of_node) {
->-		const struct of_device_id *match;
->-
->-		match = of_match_node(s3c24xx_uart_dt_match, pdev-
->>dev.of_node);
->-		return (struct s3c24xx_serial_drv_data *)match->data;
->-	}
->+	if (pdev->dev.of_node)
->+		return of_device_get_match_data(&pdev->dev);
-> #endif
->+
-> 	return (struct s3c24xx_serial_drv_data *)
-> 			platform_get_device_id(pdev)->driver_data;
-> }
->--
->2.32.0
-
+diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+index 2494b079489d..92a727931a49 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
++++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+@@ -150,7 +150,6 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
+ 	if (ret)
+ 		goto err_free_encoder;
+ 
+-	connector = &rgb->connector;
+ 	connector = drm_bridge_connector_init(rgb->drm_dev, encoder);
+ 	if (IS_ERR(connector)) {
+ 		DRM_DEV_ERROR(drm_dev->dev,
+-- 
+2.35.1
 

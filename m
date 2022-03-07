@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CA54CF89E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7AE4CF894
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238651AbiCGJ5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S238814AbiCGJ5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239261AbiCGJjd (ORCPT
+        with ESMTP id S239150AbiCGJjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:39:33 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B849970CD7;
-        Mon,  7 Mar 2022 01:35:15 -0800 (PST)
+        Mon, 7 Mar 2022 04:39:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351766D399;
+        Mon,  7 Mar 2022 01:34:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 68DEECE0B91;
-        Mon,  7 Mar 2022 09:34:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFCEC340E9;
-        Mon,  7 Mar 2022 09:34:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3DF9B810D9;
+        Mon,  7 Mar 2022 09:34:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432AFC340F3;
+        Mon,  7 Mar 2022 09:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645663;
-        bh=6crrs/elwQ8b0hU87CPZNpOETc1cgMCnScdjzdtuKdo=;
+        s=korg; t=1646645675;
+        bh=R8uY/zTXdHSzjpLIxZlJhb0hQIo+MzsaqToLbh99yeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wXPn/1GFjd8dI/jAkTirUWu2IxnYl8k3jk46VTlI51An4B1kE9pz82y9dwr3gv9AC
-         sX4QgVZlkWAPTGLgY2lG3nzD9yu4XAz4dgCNKq5f6jhxbl2JK1t1OO34on0DK4OeoG
-         pfaP1NdSPgp+KS3WSxEnkYaayQUJefLpovaHI7KQ=
+        b=WNUeL62bvIll1gPeiubB7Bo8thH0/PA3r1y+FyI3mCPQJ9thGDqrqsSKDsm4s1fkU
+         Ri43i+pvXU4x79wF60mQp4bzWZTJyIHibeTUUoBTLkJ82kuOtgrbOrFSlL1Q36MMqm
+         FPquGPHR3B10sw0b+/I2IBu3KjnFD7CYPMRlNFxQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maurice Baijens <maurice.baijens@ellips.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 067/105] ixgbe: xsk: change !netif_carrier_ok() handling in ixgbe_xmit_zc()
-Date:   Mon,  7 Mar 2022 10:19:10 +0100
-Message-Id: <20220307091646.062759142@linuxfoundation.org>
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 5.10 068/105] efivars: Respect "block" flag in efivar_entry_set_safe()
+Date:   Mon,  7 Mar 2022 10:19:11 +0100
+Message-Id: <20220307091646.090969071@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
 References: <20220307091644.179885033@linuxfoundation.org>
@@ -50,7 +46,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,50 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Jann Horn <jannh@google.com>
 
-commit 6c7273a266759d9d36f7c862149f248bcdeddc0f upstream.
+commit 258dd902022cb10c83671176688074879517fd21 upstream.
 
-Commit c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if
-netif is not OK") addressed the ring transient state when
-MEM_TYPE_XSK_BUFF_POOL was being configured which in turn caused the
-interface to through down/up. Maurice reported that when carrier is not
-ok and xsk_pool is present on ring pair, ksoftirqd will consume 100% CPU
-cycles due to the constant NAPI rescheduling as ixgbe_poll() states that
-there is still some work to be done.
+When the "block" flag is false, the old code would sometimes still call
+check_var_size(), which wrongly tells ->query_variable_store() that it can
+block.
 
-To fix this, do not set work_done to false for a !netif_carrier_ok().
+As far as I can tell, this can't really materialize as a bug at the moment,
+because ->query_variable_store only does something on X86 with generic EFI,
+and in that configuration we always take the efivar_entry_set_nonblocking()
+path.
 
-Fixes: c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if netif is not OK")
-Reported-by: Maurice Baijens <maurice.baijens@ellips.com>
-Tested-by: Maurice Baijens <maurice.baijens@ellips.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: ca0e30dcaa53 ("efi: Add nonblocking option to efi_query_variable_store()")
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Link: https://lore.kernel.org/r/20220218180559.1432559-1-jannh@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/firmware/efi/vars.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-@@ -391,12 +391,14 @@ static bool ixgbe_xmit_zc(struct ixgbe_r
- 	u32 cmd_type;
+--- a/drivers/firmware/efi/vars.c
++++ b/drivers/firmware/efi/vars.c
+@@ -742,6 +742,7 @@ int efivar_entry_set_safe(efi_char16_t *
+ {
+ 	const struct efivar_operations *ops;
+ 	efi_status_t status;
++	unsigned long varsize;
  
- 	while (budget-- > 0) {
--		if (unlikely(!ixgbe_desc_unused(xdp_ring)) ||
--		    !netif_carrier_ok(xdp_ring->netdev)) {
-+		if (unlikely(!ixgbe_desc_unused(xdp_ring))) {
- 			work_done = false;
- 			break;
- 		}
+ 	if (!__efivars)
+ 		return -EINVAL;
+@@ -764,15 +765,17 @@ int efivar_entry_set_safe(efi_char16_t *
+ 		return efivar_entry_set_nonblocking(name, vendor, attributes,
+ 						    size, data);
  
-+		if (!netif_carrier_ok(xdp_ring->netdev))
-+			break;
-+
- 		if (!xsk_tx_peek_desc(pool, &desc))
- 			break;
++	varsize = size + ucs2_strsize(name, 1024);
+ 	if (!block) {
+ 		if (down_trylock(&efivars_lock))
+ 			return -EBUSY;
++		status = check_var_size_nonblocking(attributes, varsize);
+ 	} else {
+ 		if (down_interruptible(&efivars_lock))
+ 			return -EINTR;
++		status = check_var_size(attributes, varsize);
+ 	}
  
+-	status = check_var_size(attributes, size + ucs2_strsize(name, 1024));
+ 	if (status != EFI_SUCCESS) {
+ 		up(&efivars_lock);
+ 		return -ENOSPC;
 
 

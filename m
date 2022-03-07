@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913434CFD14
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8129B4CFD17
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236850AbiCGLgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
+        id S238537AbiCGLg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiCGLgM (ORCPT
+        with ESMTP id S237562AbiCGLgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 06:36:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E884160B;
-        Mon,  7 Mar 2022 03:35:18 -0800 (PST)
+        Mon, 7 Mar 2022 06:36:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921B346B28;
+        Mon,  7 Mar 2022 03:35:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B082E60AE3;
-        Mon,  7 Mar 2022 11:35:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B7CC340E9;
-        Mon,  7 Mar 2022 11:35:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 429BDB81110;
+        Mon,  7 Mar 2022 11:35:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E3BC340E9;
+        Mon,  7 Mar 2022 11:35:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646652917;
-        bh=Osz8sllZUSrLQqMcpk13nTc3kdPqrqmd1TJr5Spr3g4=;
+        s=k20201202; t=1646652927;
+        bh=XesjCGCYyHWHzaubvKO2gJQuUaId9Ngm3lB1IF+KmP4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eajbeZsnGmvzhIDQnG0aWaPTMjtUp9jyo8k7jDEnQzBq2abOCF65hye22JZILw3Tj
-         JPmyjEGkMUweaWu5KWKUm6kTYzySF1f0/3bPYUAIhsMMWDnS5twzTrpqTCShtxvAsf
-         jV5BnXAHkjEkJNwO81hosH5wbw+2uM+EbLrNy3pab/EjI5Mq67dIlSa1EZ8kGH6uBm
-         7dp6Ql1MIWcvYenz81Pz1r/MxWXLudQWAEKq//J870tMN0X/gqE60q2zrGenk20hRg
-         jbX8hTrXwUIxg5HLADPxxr0r6RwKvW0jzH/qXXnP3ACdRucJetvf24SF/CFSGh+YY9
-         zWu5E9JV5PvhA==
+        b=clkaUN2BKYGX0SNVJU44XC8FxDV/cz4zZ4z3w0WKRSDu0jKuujVggjzG+02suY4Eq
+         xRUPaSDLPTVKM1Ot1/zFbrd36et2UuIqxtfHqsnnSaJsPtotJOyol4pvt3GJ8VaXrd
+         7N0k1BdQCkbUPTO6pKB1UjpWWrMR9891+z3RIQgwzB4pRZIx+7ycPesVH2zbr2YlXd
+         x7KvZlAaZe5QzZkTMirmMjZN5A8yu0xryZxmhuD7GLbHWJLG+Q8Uf+B2wPu27HOsIl
+         OVesmbIeJdwm+iPNp59GdiQ6R0m60+jUA1spry7WDBowaLWjWgRrBRCyCzQD1ATf8e
+         u0eXGri4KT5bA==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nRBdy-00ClcM-L0; Mon, 07 Mar 2022 11:35:14 +0000
-Date:   Mon, 07 Mar 2022 11:35:14 +0000
-Message-ID: <87fsnu0zd9.wl-maz@kernel.org>
+        id 1nRBe8-00ClcT-Uj; Mon, 07 Mar 2022 11:35:25 +0000
+Date:   Mon, 07 Mar 2022 11:35:24 +0000
+Message-ID: <87ee3e0zcz.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Hector Martin <marcan@marcan.st>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Rob Herring <robh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Mark Kettenis <mark.kettenis@xs4all.nl>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/7] irqchip/apple-aic: Add Fast IPI support
-In-Reply-To: <d0e2a08e-79d6-03e8-09a2-bb634fa3c23c@marcan.st>
+Subject: Re: [PATCH v2 2/7] dt-bindings: interrupt-controller: apple,aic2: New binding for AICv2
+In-Reply-To: <67171c2a-7601-6dfb-92b3-24c1ca971995@marcan.st>
 References: <20220224130741.63924-1-marcan@marcan.st>
-        <20220224130741.63924-4-marcan@marcan.st>
-        <87mtif2eoz.wl-maz@kernel.org>
-        <d0e2a08e-79d6-03e8-09a2-bb634fa3c23c@marcan.st>
+        <20220224130741.63924-3-marcan@marcan.st>
+        <Yhk54H989MfhGMcu@robh.at.kernel.org>
+        <67171c2a-7601-6dfb-92b3-24c1ca971995@marcan.st>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: marcan@marcan.st, tglx@linutronix.de, robh+dt@kernel.org, sven@svenpeter.dev, alyssa@rosenzweig.io, mark.kettenis@xs4all.nl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Rcpt-To: marcan@marcan.st, robh@kernel.org, tglx@linutronix.de, sven@svenpeter.dev, alyssa@rosenzweig.io, mark.kettenis@xs4all.nl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,29 +73,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Feb 2022 15:33:54 +0000,
+On Fri, 25 Feb 2022 21:58:34 +0000,
 Hector Martin <marcan@marcan.st> wrote:
 > 
-> On 25/02/2022 23.39, Marc Zyngier wrote:
-> > On Thu, 24 Feb 2022 13:07:37 +0000,
-> >>  		if (!(pending & irq_bit) &&
-> >> -		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit))
-> >> -			send |= AIC_IPI_SEND_CPU(cpu);
-> >> +		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit)) {
-> >> +			if (static_branch_likely(&use_fast_ipi))
-> >> +				aic_ipi_send_fast(cpu);
+> On 26/02/2022 05.19, Rob Herring wrote:
+> >> +properties:
+> >> +  compatible:
+> >> +    items:
+> >> +      - const: apple,t6000-aic
+> >> +      - const: apple,aic2
 > > 
-> > OK, this is suffering from the same issue that GICv3 has, which is
-> > that memory barriers don't provide order against sysregs. You need a
-> > DSB for that, which is a pain. Something like this:
+> > I feel I was sold on Apple doesn't change h/w and we're the 2nd chip in 
+> > and the h/w changed. Just my musings, but aic3 will be rejected. :(
 > 
-> Doesn't the control flow here guarantee the ordering? atomic_read() must
-> complete before the sysreg is written since there is a control flow
-> dependency, and the prior atomic/barrier dance ensures that read is
-> ordered properly with everything that comes before it.
+> Well yes, after not changing hardware for N phone/tablet generations,
+> they figured out they *finally* had to make some changes for real
+> desktop chips... (t8103 was a tablet chip they shoehorned into laptops;
+> t6000 is the first real laptop/desktop chip). This isn't the 2nd chip
+> in, this is the 26th chip in or so, and yet it's called AIC2 (by Apple
+> even)... We aren't starting from chip #1, just the first chip they
+> decided to *let* us put Linux on.
+> 
+> It's pretty clear that the t6000 changes were made with future-proofing
+> in mind. I guess we'll find out in a couple weeks, since the rumor mill
+> says M2 is coming. If I'm right and we end up needing *zero* kernel
+> changes to boot on M2, will you be happy? ;-)
+> 
+> >> +  apple,event-reg:
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    description:
+> >> +      Specifies the offset of the event register, which lies after all the
+> >> +      implemented die register sets, page aligned. This is not computable from
+> >> +      capability register values, so we have to specify it explicitly.
+> > 
+> > If this is last, then couldn't it be a 2nd 'reg' entry?
+> > 
+> > 'page aligned' is ambiguous. I assume that means 16K since that's what 
+> > Apple uses, but I might assume 4K not knowing that.
+> 
+> 16K, and yeah, it could be a 2nd reg entry if you think that works
+> better. Makes sense.
 
-Yes, you're right. Mixing memory ordering and control dependency hurts
-my head badly, but hey, why not.
+Do you plan to respin this? If I'm going to that this series for 5.18,
+it needs to be this week.
+
+Thanks,
 
 	M.
 

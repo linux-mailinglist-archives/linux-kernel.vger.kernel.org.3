@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C1C4CF575
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF0A4CF79D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237895AbiCGJ2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S238298AbiCGJqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236996AbiCGJ0b (ORCPT
+        with ESMTP id S238196AbiCGJiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:26:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F02459392;
-        Mon,  7 Mar 2022 01:24:24 -0800 (PST)
+        Mon, 7 Mar 2022 04:38:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD12269499;
+        Mon,  7 Mar 2022 01:32:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1CFAB810BF;
-        Mon,  7 Mar 2022 09:24:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E355CC340E9;
-        Mon,  7 Mar 2022 09:24:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDB48B810B9;
+        Mon,  7 Mar 2022 09:32:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36123C340E9;
+        Mon,  7 Mar 2022 09:32:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645059;
-        bh=Yk+pDMgLT5V/AY4reUaCFCWuiZim70mksUsnxzQDr4I=;
+        s=korg; t=1646645523;
+        bh=DeMar8t9f7DYucQnhsRo3qcn0K5Nqm0+jw01kZLYUpQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RWSCLaqXSX89n6q0OXGclQnJnJ2imJji5Xakqreen7JGjsvp1BQoB5JP9O62JKHSj
-         /yNGNX1V8itXTHl46i8S2lcIXfT4vRN0Vrj9ATuu/6qYFxZkmb2WGsN+hSyy31az+s
-         blsT9I/2nPULlke3gkyx6ef3Tw/dEgLgQiKA7IPE=
+        b=wGA7StfMSESN1qOM7y7SUD2PxDZzpK/cMC0k1ym//HxQDNN8h62yyIvqBAjffI6Vf
+         pSLDgVFaACKuqR8oCSRFfjJbbORSMh/idiDOjHPTECgZlvIaANpCnvfr2hFmPs/zaj
+         R5N2ZHLSaqw6KrmtRuSM6JALmUvNXYIg64ZjHvMc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>,
-        Simon Wunderlich <sw@simonwunderlich.de>
-Subject: [PATCH 4.19 24/51] batman-adv: Request iflink once in batadv_get_real_netdevice
-Date:   Mon,  7 Mar 2022 10:18:59 +0100
-Message-Id: <20220307091637.680870706@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        dann frazier <dann.frazier@canonical.com>
+Subject: [PATCH 5.10 057/105] sched/topology: Make sched_init_numa() use a set for the deduplicating sort
+Date:   Mon,  7 Mar 2022 10:19:00 +0100
+Message-Id: <20220307091645.785834550@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +56,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Eckelmann <sven@narfation.org>
+From: Valentin Schneider <valentin.schneider@arm.com>
 
-commit 6116ba09423f7d140f0460be6a1644dceaad00da upstream.
+commit 620a6dc40754dc218f5b6389b5d335e9a107fd29 upstream.
 
-There is no need to call dev_get_iflink multiple times for the same
-net_device in batadv_get_real_netdevice. And since some of the
-ndo_get_iflink callbacks are dynamic (for example via RCUs like in
-vxcan_get_iflink), it could easily happen that the returned values are not
-stable. The pre-checks before __dev_get_by_index are then of course bogus.
+The deduplicating sort in sched_init_numa() assumes that the first line in
+the distance table contains all unique values in the entire table. I've
+been trying to pen what this exactly means for the topology, but it's not
+straightforward. For instance, topology.c uses this example:
 
-Fixes: 5ed4a460a1d3 ("batman-adv: additional checks for virtual interfaces on top of WiFi")
-Signed-off-by: Sven Eckelmann <sven@narfation.org>
-Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
+  node   0   1   2   3
+    0:  10  20  20  30
+    1:  20  10  20  20
+    2:  20  20  10  20
+    3:  30  20  20  10
+
+  0 ----- 1
+  |     / |
+  |   /   |
+  | /     |
+  2 ----- 3
+
+Which works out just fine. However, if we swap nodes 0 and 1:
+
+  1 ----- 0
+  |     / |
+  |   /   |
+  | /     |
+  2 ----- 3
+
+we get this distance table:
+
+  node   0  1  2  3
+    0:  10 20 20 20
+    1:  20 10 20 30
+    2:  20 20 10 20
+    3:  20 30 20 10
+
+Which breaks the deduplicating sort (non-representative first line). In
+this case this would just be a renumbering exercise, but it so happens that
+we can have a deduplicating sort that goes through the whole table in O(n²)
+at the extra cost of a temporary memory allocation (i.e. any form of set).
+
+The ACPI spec (SLIT) mentions distances are encoded on 8 bits. Following
+this, implement the set as a 256-bits bitmap. Should this not be
+satisfactory (i.e. we want to support 32-bit values), then we'll have to go
+for some other sparse set implementation.
+
+This has the added benefit of letting us allocate just the right amount of
+memory for sched_domains_numa_distance[], rather than an arbitrary
+(nr_node_ids + 1).
+
+Note: DT binding equivalent (distance-map) decodes distances as 32-bit
+values.
+
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20210122123943.1217-2-valentin.schneider@arm.com
+Signed-off-by: dann frazier <dann.frazier@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/batman-adv/hard-interface.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ include/linux/topology.h |    1 
+ kernel/sched/topology.c  |   99 ++++++++++++++++++++++-------------------------
+ 2 files changed, 49 insertions(+), 51 deletions(-)
 
---- a/net/batman-adv/hard-interface.c
-+++ b/net/batman-adv/hard-interface.c
-@@ -228,14 +228,16 @@ static struct net_device *batadv_get_rea
- 	struct net_device *real_netdev = NULL;
- 	struct net *real_net;
- 	struct net *net;
--	int ifindex;
-+	int iflink;
- 
- 	ASSERT_RTNL();
- 
- 	if (!netdev)
- 		return NULL;
- 
--	if (netdev->ifindex == dev_get_iflink(netdev)) {
-+	iflink = dev_get_iflink(netdev);
-+
-+	if (netdev->ifindex == iflink) {
- 		dev_hold(netdev);
- 		return netdev;
+--- a/include/linux/topology.h
++++ b/include/linux/topology.h
+@@ -48,6 +48,7 @@ int arch_update_cpu_topology(void);
+ /* Conform to ACPI 2.0 SLIT distance definitions */
+ #define LOCAL_DISTANCE		10
+ #define REMOTE_DISTANCE		20
++#define DISTANCE_BITS           8
+ #ifndef node_distance
+ #define node_distance(from,to)	((from) == (to) ? LOCAL_DISTANCE : REMOTE_DISTANCE)
+ #endif
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1549,66 +1549,58 @@ static void init_numa_topology_type(void
  	}
-@@ -245,9 +247,8 @@ static struct net_device *batadv_get_rea
- 		goto out;
+ }
  
- 	net = dev_net(hard_iface->soft_iface);
--	ifindex = dev_get_iflink(netdev);
- 	real_net = batadv_getlink_net(netdev, net);
--	real_netdev = dev_get_by_index(real_net, ifindex);
-+	real_netdev = dev_get_by_index(real_net, iflink);
++
++#define NR_DISTANCE_VALUES (1 << DISTANCE_BITS)
++
+ void sched_init_numa(void)
+ {
+-	int next_distance, curr_distance = node_distance(0, 0);
+ 	struct sched_domain_topology_level *tl;
+-	int level = 0;
+-	int i, j, k;
+-
+-	sched_domains_numa_distance = kzalloc(sizeof(int) * (nr_node_ids + 1), GFP_KERNEL);
+-	if (!sched_domains_numa_distance)
+-		return;
+-
+-	/* Includes NUMA identity node at level 0. */
+-	sched_domains_numa_distance[level++] = curr_distance;
+-	sched_domains_numa_levels = level;
++	unsigned long *distance_map;
++	int nr_levels = 0;
++	int i, j;
  
- out:
- 	if (hard_iface)
+ 	/*
+ 	 * O(nr_nodes^2) deduplicating selection sort -- in order to find the
+ 	 * unique distances in the node_distance() table.
+-	 *
+-	 * Assumes node_distance(0,j) includes all distances in
+-	 * node_distance(i,j) in order to avoid cubic time.
+ 	 */
+-	next_distance = curr_distance;
++	distance_map = bitmap_alloc(NR_DISTANCE_VALUES, GFP_KERNEL);
++	if (!distance_map)
++		return;
++
++	bitmap_zero(distance_map, NR_DISTANCE_VALUES);
+ 	for (i = 0; i < nr_node_ids; i++) {
+ 		for (j = 0; j < nr_node_ids; j++) {
+-			for (k = 0; k < nr_node_ids; k++) {
+-				int distance = node_distance(i, k);
++			int distance = node_distance(i, j);
+ 
+-				if (distance > curr_distance &&
+-				    (distance < next_distance ||
+-				     next_distance == curr_distance))
+-					next_distance = distance;
+-
+-				/*
+-				 * While not a strong assumption it would be nice to know
+-				 * about cases where if node A is connected to B, B is not
+-				 * equally connected to A.
+-				 */
+-				if (sched_debug() && node_distance(k, i) != distance)
+-					sched_numa_warn("Node-distance not symmetric");
+-
+-				if (sched_debug() && i && !find_numa_distance(distance))
+-					sched_numa_warn("Node-0 not representative");
++			if (distance < LOCAL_DISTANCE || distance >= NR_DISTANCE_VALUES) {
++				sched_numa_warn("Invalid distance value range");
++				return;
+ 			}
+-			if (next_distance != curr_distance) {
+-				sched_domains_numa_distance[level++] = next_distance;
+-				sched_domains_numa_levels = level;
+-				curr_distance = next_distance;
+-			} else break;
++
++			bitmap_set(distance_map, distance, 1);
+ 		}
++	}
++	/*
++	 * We can now figure out how many unique distance values there are and
++	 * allocate memory accordingly.
++	 */
++	nr_levels = bitmap_weight(distance_map, NR_DISTANCE_VALUES);
+ 
+-		/*
+-		 * In case of sched_debug() we verify the above assumption.
+-		 */
+-		if (!sched_debug())
+-			break;
++	sched_domains_numa_distance = kcalloc(nr_levels, sizeof(int), GFP_KERNEL);
++	if (!sched_domains_numa_distance) {
++		bitmap_free(distance_map);
++		return;
+ 	}
+ 
++	for (i = 0, j = 0; i < nr_levels; i++, j++) {
++		j = find_next_bit(distance_map, NR_DISTANCE_VALUES, j);
++		sched_domains_numa_distance[i] = j;
++	}
++
++	bitmap_free(distance_map);
++
+ 	/*
+-	 * 'level' contains the number of unique distances
++	 * 'nr_levels' contains the number of unique distances
+ 	 *
+ 	 * The sched_domains_numa_distance[] array includes the actual distance
+ 	 * numbers.
+@@ -1617,15 +1609,15 @@ void sched_init_numa(void)
+ 	/*
+ 	 * Here, we should temporarily reset sched_domains_numa_levels to 0.
+ 	 * If it fails to allocate memory for array sched_domains_numa_masks[][],
+-	 * the array will contain less then 'level' members. This could be
++	 * the array will contain less then 'nr_levels' members. This could be
+ 	 * dangerous when we use it to iterate array sched_domains_numa_masks[][]
+ 	 * in other functions.
+ 	 *
+-	 * We reset it to 'level' at the end of this function.
++	 * We reset it to 'nr_levels' at the end of this function.
+ 	 */
+ 	sched_domains_numa_levels = 0;
+ 
+-	sched_domains_numa_masks = kzalloc(sizeof(void *) * level, GFP_KERNEL);
++	sched_domains_numa_masks = kzalloc(sizeof(void *) * nr_levels, GFP_KERNEL);
+ 	if (!sched_domains_numa_masks)
+ 		return;
+ 
+@@ -1633,7 +1625,7 @@ void sched_init_numa(void)
+ 	 * Now for each level, construct a mask per node which contains all
+ 	 * CPUs of nodes that are that many hops away from us.
+ 	 */
+-	for (i = 0; i < level; i++) {
++	for (i = 0; i < nr_levels; i++) {
+ 		sched_domains_numa_masks[i] =
+ 			kzalloc(nr_node_ids * sizeof(void *), GFP_KERNEL);
+ 		if (!sched_domains_numa_masks[i])
+@@ -1641,12 +1633,17 @@ void sched_init_numa(void)
+ 
+ 		for (j = 0; j < nr_node_ids; j++) {
+ 			struct cpumask *mask = kzalloc(cpumask_size(), GFP_KERNEL);
++			int k;
++
+ 			if (!mask)
+ 				return;
+ 
+ 			sched_domains_numa_masks[i][j] = mask;
+ 
+ 			for_each_node(k) {
++				if (sched_debug() && (node_distance(j, k) != node_distance(k, j)))
++					sched_numa_warn("Node-distance not symmetric");
++
+ 				if (node_distance(j, k) > sched_domains_numa_distance[i])
+ 					continue;
+ 
+@@ -1658,7 +1655,7 @@ void sched_init_numa(void)
+ 	/* Compute default topology size */
+ 	for (i = 0; sched_domain_topology[i].mask; i++);
+ 
+-	tl = kzalloc((i + level + 1) *
++	tl = kzalloc((i + nr_levels) *
+ 			sizeof(struct sched_domain_topology_level), GFP_KERNEL);
+ 	if (!tl)
+ 		return;
+@@ -1681,7 +1678,7 @@ void sched_init_numa(void)
+ 	/*
+ 	 * .. and append 'j' levels of NUMA goodness.
+ 	 */
+-	for (j = 1; j < level; i++, j++) {
++	for (j = 1; j < nr_levels; i++, j++) {
+ 		tl[i] = (struct sched_domain_topology_level){
+ 			.mask = sd_numa_mask,
+ 			.sd_flags = cpu_numa_flags,
+@@ -1693,8 +1690,8 @@ void sched_init_numa(void)
+ 
+ 	sched_domain_topology = tl;
+ 
+-	sched_domains_numa_levels = level;
+-	sched_max_numa_distance = sched_domains_numa_distance[level - 1];
++	sched_domains_numa_levels = nr_levels;
++	sched_max_numa_distance = sched_domains_numa_distance[nr_levels - 1];
+ 
+ 	init_numa_topology_type();
+ }
 
 

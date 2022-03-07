@@ -2,301 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCC44D0558
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848B84D0553
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243884AbiCGRiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
+        id S239106AbiCGRhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237800AbiCGRiG (ORCPT
+        with ESMTP id S231509AbiCGRhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:38:06 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319808F9AD;
-        Mon,  7 Mar 2022 09:37:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1646674626; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3VPg7tVTG05IVaRuXCwoMmbPC0+mZEfleGOuxTVt05Y=;
-        b=Na7NNibdC0c9uW7eYGWqOvj4PxyVc428EVT7lTAxooru/aikh/BqEWfQ3KoUjJW6Qjomnc
-        MqBvJoM6QJKK5d6BwfiMGNoupypbCyS9n2T3Ch2wKRKN+Z9CFb+wl16XndliCIOTHy7KQv
-        ulZ3caZG8mgChvbd6UayiyslfhBaPwk=
-Date:   Mon, 07 Mar 2022 17:35:45 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2] pinctrl: ingenic: Fix regmap on X series SoCs
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <L7YD8R.AHQE1WAT7PG92@crapouillou.net>
-In-Reply-To: <20220224145821.518835-1-aidanmacdonald.0x0@gmail.com>
-References: <20220224145821.518835-1-aidanmacdonald.0x0@gmail.com>
+        Mon, 7 Mar 2022 12:37:15 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453238F993
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:36:21 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DA7003F1AF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646674579;
+        bh=3HG+K+k5QA/B8ff7N43iW1x5z1qS4k2KKhb2cegl518=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=vHTP3IIeNp0CCnFLLGeTicQpH3qwvQ59tlc47kKynVmO/+qI1/QuZQnDKr0xc3ikK
+         wp2mCTD/r5EclH/77ZhrB7gQNroYCQG4GUNcv/N58aeoj9gL/3l20McXeEq/UJBCCl
+         SKYcsGl80L/7vAmNs2KJ7JNc9PVZWPmxP3YIWgGfq5hg1HRmaSfSPQFWEaizlHucpQ
+         tuXalP+EZuiVeotyWf1IoBvRzAOR4NLX9bMiKC/PxE3/+0IgbAFO+ouagnUOFgbSzC
+         bd8xnir0EeSBfM3A4O7r6MVLu+6D8UzPLJi9I+Jr5p3r14xC2TrgUmR7QbEcrmbZw4
+         q1P4t4bfGrqdw==
+Received: by mail-ej1-f69.google.com with SMTP id i14-20020a17090639ce00b006dabe6a112fso3571866eje.13
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:36:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3HG+K+k5QA/B8ff7N43iW1x5z1qS4k2KKhb2cegl518=;
+        b=sRQDithPgNpuMOXCyrkZ1xbqhiUKXrQK+i5kb1Et69Zm5SW+7cLedFw0z18EbMnwuz
+         IIRxpbQRQuwV07i0igiFkfBHS+jgz6HXkIWsaXPT6sG2WJj4iyUoCk44GFAjK6bKLPky
+         POHEBr+3l3UKIboNi4mh2jRpMexWJBy16Lai+cY0m0lmrnpM9gtpyBuaJzGJLu9mQgvx
+         Opljv/6oGpRj88ZRfpByTapgR4mpJ13fMh3U1aguzukVPrkGK+zkgh2YjycJhQ0w+avA
+         GYvAhCuSOsBQiS9OJRRPdImDro/aELXSEbm03caqJB7MY2mvHoK0L/Ge+wOXLkezrapK
+         MhbA==
+X-Gm-Message-State: AOAM5331lRF1G8R3f3lG+MYcxRriiTu9Q8db3bh8uux2SAShhdKJvwWv
+        qNsHChXl/tKLSsdmriIwfJeoHkEI0jEH3lJdjr32EgEFlkaO+U0czBA0JoT3puFt9ZjDJMBQVOC
+        rpnhgPng5ZxIJHPxf2+mUpTx1Yvhi+hEV6hY3X1QYkw==
+X-Received: by 2002:a17:906:585b:b0:6b7:73bc:5395 with SMTP id h27-20020a170906585b00b006b773bc5395mr10109317ejs.519.1646674579334;
+        Mon, 07 Mar 2022 09:36:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzKjiixge1fWdZzZQpMZjyr+5Ie33xOV4IY4yStu5Ftd/B2YpKtjTs3nermPtLrgHBcoNxM1w==
+X-Received: by 2002:a17:906:585b:b0:6b7:73bc:5395 with SMTP id h27-20020a170906585b00b006b773bc5395mr10109307ejs.519.1646674579149;
+        Mon, 07 Mar 2022 09:36:19 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id i6-20020a17090685c600b006daecf0b350sm3284875ejy.75.2022.03.07.09.36.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 09:36:18 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Chanho Min <chanho.min@lge.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [GIT PULL] arm64: dts: various cleanup for v5.18
+Date:   Mon,  7 Mar 2022 18:36:14 +0100
+Message-Id: <20220307173614.157884-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
+Hi Arnd and Olof,
 
-Le jeu., f=E9vr. 24 2022 at 14:58:22 +0000, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> The X series Ingenic SoCs have a shadow GPIO group which is at a=20
-> higher
-> offset than the other groups, and is used for all GPIO configuration.
-> The regmap did not take this offset into account and set max_register
-> too low, so the regmap API blocked writes to the shadow group, which
-> made the pinctrl driver unable to configure any pins.
->=20
-> Fix this by adding regmap access tables to the chip info.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
-> v1:=20
-> https://lore.kernel.org/linux-mips/20220209230452.19535-1-aidanmacdonald.=
-0x0@gmail.com/
->=20
->  drivers/pinctrl/pinctrl-ingenic.c | 53=20
-> ++++++++++++++++++++++++++++++-
->  1 file changed, 52 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 2712f51eb238..074c94edd90b 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -119,6 +119,9 @@ struct ingenic_chip_info {
->  	unsigned int num_functions;
->=20
->  	const u32 *pull_ups, *pull_downs;
-> +
-> +	unsigned int max_register;
-> +	const struct regmap_access_table* access_table;
->  };
->=20
->  struct ingenic_pinctrl {
-> @@ -228,6 +231,7 @@ static const struct ingenic_chip_info=20
-> jz4730_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4730_functions),
->  	.pull_ups =3D jz4730_pull_ups,
->  	.pull_downs =3D jz4730_pull_downs,
-> +	.max_register =3D 4 * 0x30 - 4,
->  };
->=20
->  static const u32 jz4740_pull_ups[4] =3D {
-> @@ -337,6 +341,7 @@ static const struct ingenic_chip_info=20
-> jz4740_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4740_functions),
->  	.pull_ups =3D jz4740_pull_ups,
->  	.pull_downs =3D jz4740_pull_downs,
-> +	.max_register =3D 4 * 0x100 - 4,
->  };
->=20
->  static int jz4725b_mmc0_1bit_pins[] =3D { 0x48, 0x49, 0x5c, };
-> @@ -439,6 +444,7 @@ static const struct ingenic_chip_info=20
-> jz4725b_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4725b_functions),
->  	.pull_ups =3D jz4740_pull_ups,
->  	.pull_downs =3D jz4740_pull_downs,
-> +	.max_register =3D 4 * 0x100 - 4,
->  };
->=20
->  static const u32 jz4750_pull_ups[6] =3D {
-> @@ -576,6 +582,7 @@ static const struct ingenic_chip_info=20
-> jz4750_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4750_functions),
->  	.pull_ups =3D jz4750_pull_ups,
->  	.pull_downs =3D jz4750_pull_downs,
-> +	.max_register =3D 6 * 0x100 - 4,
->  };
->=20
->  static const u32 jz4755_pull_ups[6] =3D {
-> @@ -741,6 +748,7 @@ static const struct ingenic_chip_info=20
-> jz4755_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4755_functions),
->  	.pull_ups =3D jz4755_pull_ups,
->  	.pull_downs =3D jz4755_pull_downs,
-> +	.max_register =3D 6 * 0x100 - 4,
->  };
->=20
->  static const u32 jz4760_pull_ups[6] =3D {
-> @@ -1089,6 +1097,7 @@ static const struct ingenic_chip_info=20
-> jz4760_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4760_functions),
->  	.pull_ups =3D jz4760_pull_ups,
->  	.pull_downs =3D jz4760_pull_downs,
-> +	.max_register =3D 6 * 0x100 - 4,
->  };
->=20
->  static const u32 jz4770_pull_ups[6] =3D {
-> @@ -1429,6 +1438,7 @@ static const struct ingenic_chip_info=20
-> jz4770_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4770_functions),
->  	.pull_ups =3D jz4770_pull_ups,
->  	.pull_downs =3D jz4770_pull_downs,
-> +	.max_register =3D 6 * 0x100 - 4,
->  };
->=20
->  static const u32 jz4775_pull_ups[7] =3D {
-> @@ -1702,6 +1712,7 @@ static const struct ingenic_chip_info=20
-> jz4775_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4775_functions),
->  	.pull_ups =3D jz4775_pull_ups,
->  	.pull_downs =3D jz4775_pull_downs,
-> +	.max_register =3D 7 * 0x100 - 4,
->  };
->=20
->  static const u32 jz4780_pull_ups[6] =3D {
-> @@ -1966,6 +1977,7 @@ static const struct ingenic_chip_info=20
-> jz4780_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(jz4780_functions),
->  	.pull_ups =3D jz4780_pull_ups,
->  	.pull_downs =3D jz4780_pull_downs,
-> +	.max_register =3D 6 * 0x100 - 4,
->  };
->=20
->  static const u32 x1000_pull_ups[4] =3D {
-> @@ -2179,6 +2191,17 @@ static const struct function_desc=20
-> x1000_functions[] =3D {
->  	{ "mac", x1000_mac_groups, ARRAY_SIZE(x1000_mac_groups), },
->  };
->=20
-> +static const struct regmap_range x1000_access_ranges[] =3D {
-> +	regmap_reg_range(0x000, 0x400 - 4),
-> +	regmap_reg_range(0x700, 0x800 - 4),
-> +};
-> +
-> +/* shared with X1500 */
-> +static const struct regmap_access_table x1000_access_table =3D {
-> +	.yes_ranges =3D x1000_access_ranges,
-> +	.n_yes_ranges =3D ARRAY_SIZE(x1000_access_ranges),
-> +};
-> +
->  static const struct ingenic_chip_info x1000_chip_info =3D {
->  	.num_chips =3D 4,
->  	.reg_offset =3D 0x100,
-> @@ -2189,6 +2212,7 @@ static const struct ingenic_chip_info=20
-> x1000_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x1000_functions),
->  	.pull_ups =3D x1000_pull_ups,
->  	.pull_downs =3D x1000_pull_downs,
-> +	.access_table =3D &x1000_access_table,
->  };
->=20
->  static int x1500_uart0_data_pins[] =3D { 0x4a, 0x4b, };
-> @@ -2300,6 +2324,7 @@ static const struct ingenic_chip_info=20
-> x1500_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x1500_functions),
->  	.pull_ups =3D x1000_pull_ups,
->  	.pull_downs =3D x1000_pull_downs,
-> +	.access_table =3D &x1000_access_table,
->  };
->=20
->  static const u32 x1830_pull_ups[4] =3D {
-> @@ -2506,6 +2531,16 @@ static const struct function_desc=20
-> x1830_functions[] =3D {
->  	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
->  };
->=20
-> +static const struct regmap_range x1830_access_ranges[] =3D {
-> +	regmap_reg_range(0x0000, 0x4000 - 4),
-> +	regmap_reg_range(0x7000, 0x8000 - 4),
-> +};
-> +
-> +static const struct regmap_access_table x1830_access_table =3D {
-> +	.yes_ranges =3D x1830_access_ranges,
-> +	.n_yes_ranges =3D ARRAY_SIZE(x1830_access_ranges),
-> +};
-> +
->  static const struct ingenic_chip_info x1830_chip_info =3D {
->  	.num_chips =3D 4,
->  	.reg_offset =3D 0x1000,
-> @@ -2516,6 +2551,7 @@ static const struct ingenic_chip_info=20
-> x1830_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x1830_functions),
->  	.pull_ups =3D x1830_pull_ups,
->  	.pull_downs =3D x1830_pull_downs,
-> +	.access_table =3D &x1830_access_table,
->  };
->=20
->  static const u32 x2000_pull_ups[5] =3D {
-> @@ -2969,6 +3005,17 @@ static const struct function_desc=20
-> x2000_functions[] =3D {
->  	{ "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
->  };
->=20
-> +static const struct regmap_range x2000_access_ranges[] =3D {
-> +	regmap_reg_range(0x000, 0x500 - 4),
-> +	regmap_reg_range(0x700, 0x800 - 4),
-> +};
-> +
-> +/* shared with X2100 */
-> +static const struct regmap_access_table x2000_access_table =3D {
-> +	.yes_ranges =3D x2000_access_ranges,
-> +	.n_yes_ranges =3D ARRAY_SIZE(x2000_access_ranges),
-> +};
-> +
->  static const struct ingenic_chip_info x2000_chip_info =3D {
->  	.num_chips =3D 5,
->  	.reg_offset =3D 0x100,
-> @@ -2979,6 +3026,7 @@ static const struct ingenic_chip_info=20
-> x2000_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x2000_functions),
->  	.pull_ups =3D x2000_pull_ups,
->  	.pull_downs =3D x2000_pull_downs,
-> +	.access_table =3D &x2000_access_table,
->  };
->=20
->  static const u32 x2100_pull_ups[5] =3D {
-> @@ -3189,6 +3237,7 @@ static const struct ingenic_chip_info=20
-> x2100_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x2100_functions),
->  	.pull_ups =3D x2100_pull_ups,
->  	.pull_downs =3D x2100_pull_downs,
-> +	.access_table =3D &x2000_access_table,
->  };
->=20
->  static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8=20
-> reg)
-> @@ -4168,7 +4217,9 @@ static int __init ingenic_pinctrl_probe(struct=20
-> platform_device *pdev)
->  		return PTR_ERR(base);
->=20
->  	regmap_config =3D ingenic_pinctrl_regmap_config;
-> -	regmap_config.max_register =3D chip_info->num_chips *=20
-> chip_info->reg_offset;
-> +	regmap_config.rd_table =3D chip_info->access_table;
-> +	regmap_config.wr_table =3D chip_info->access_table;
-> +	regmap_config.max_register =3D chip_info->max_register;
+These patches were for very long time on the mailing list, but they were not
+picked up. LG maintainer acked the LG part, ARM Juno remains unanswered.
 
-You could do something like this:
-if (chip_info->access_table) {
-    regmap_config.rd_table =3D chip_info->access_table;
-    regmap_config.wr_table =3D chip_info->access_table;
-} else {
-    regmap_config.max_register =3D chip_info->num_chips *=20
-chip_info->reg_offset;
-}
+These are considered cleanups, not fixes, although they fix real
+dt_bindings_check warnings.
 
-Then you wouldn't need to add a .max_register field for every other SoC.
+Could you pick them up for v5.18?
 
-Cheers,
--Paul
-
->=20
->  	jzpc->map =3D devm_regmap_init_mmio(dev, base, &regmap_config);
->  	if (IS_ERR(jzpc->map)) {
-> --
-> 2.34.1
->=20
+Best regards,
+Krzysztof
 
 
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/dt64-cleanup-5.18
+
+for you to fetch changes up to ad3c72b0c6b912a0e917ae8010c62cc98012ab1e:
+
+  arm64: dts: lg: align pl330 node name with dtschema (2022-03-02 20:25:14 +0100)
+
+----------------------------------------------------------------
+Minor cleanup of ARM64 DTS for v5.18
+
+The DT schema expects DMA controller nodes to follow certain node naming
+and having dma-cells property.  Adjust the DTS files to pass DT schema
+checks.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (3):
+      arm64: dts: juno: align pl330 node name with dtschema
+      arm64: dts: lg: add dma-cells to pl330 node
+      arm64: dts: lg: align pl330 node name with dtschema
+
+ arch/arm64/boot/dts/arm/juno-base.dtsi | 2 +-
+ arch/arm64/boot/dts/lg/lg1312.dtsi     | 3 ++-
+ arch/arm64/boot/dts/lg/lg1313.dtsi     | 3 ++-
+ 3 files changed, 5 insertions(+), 3 deletions(-)

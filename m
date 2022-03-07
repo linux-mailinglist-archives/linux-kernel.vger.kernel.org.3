@@ -2,140 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6579A4CF375
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:20:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A55294CF379
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 09:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236035AbiCGIUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 03:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
+        id S236109AbiCGIYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 03:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231434AbiCGIUu (ORCPT
+        with ESMTP id S229864AbiCGIYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 03:20:50 -0500
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20052.outbound.protection.outlook.com [40.107.2.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048DD62114;
-        Mon,  7 Mar 2022 00:19:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cDyk2Bzfan1JuSbXgs6i7t/Sg/85lTtT6HWsunZ1qnU+6d3HAbHZhMF+BK3ib4xJBTWa1MBimK+BohyeG08VUgi4dJvGUh0jCEpwTIAreInbPQdLjeNny/hONVp9yAS0rKy+AD2rxQZQT4u5s7rHsxXRynW20yFWHWKhoqxUSPshSqh03J6Pjm0Ob8DhKNYlxgVYpYB9HOtsXIlVIlr9pbytf1hxwYE6YCp8N4cPnR/rdyGAZjDiCgLsnbUTBE05zv+O4rlj4/5pq3RZcVy8FEVw+qbJ969YtTn35i8RmpOx7u1bC8yI7cjY3xPrlMY1Mt4xBtZgvr0FiDllNxQYkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=isUqIRXR050WFpGxorVt+qv5KpBEpf+VnqVTTaHU9hQ=;
- b=QMhCCE6bj9vZzhYc/4uWPYfewZlD2lwQ7n/+w1InD0rFBXZFEBDxsLz91UAjEZC0f4J959d3jzoAkoATUrzNeXW49qYeJIa9Z0OJ2qDfTj4f5V97I4/33cOEH9odvs5sqqMLea0ii1O+FC+QKdXf1GetYogEehY11p3lEJwCMz4NC48JcWO4LDUslEZR/x8/gigMuBaXmOFigdj1vAne7vSHVquP+DHupvqKYrzlLHhUf4AVMxwGHN5SXLb6x7LiZApDvDHyhPMr7y+ERgC4ued15/yR1rS7lz8bRSy6LmwepeEHWGFfEFvG2WVSuq7gmuvw+80kSXPSPj37AhBKvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=isUqIRXR050WFpGxorVt+qv5KpBEpf+VnqVTTaHU9hQ=;
- b=NYJwOfSKGjKoAgWA4YiEElnOQz6Xh5IkJtLve0tUahZ+Rzrdy9o/jTql1S3YU9mIEzIZPzGfy8Ks2aBgbWm1cLgZkmF0sh/JQ1YNp74RjIn3m6eaj+FmMON9dvZ9bApG51T/3X6mDrmuFLwlkRR0/L9ymeyWBVgc6VKWRKLE314=
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
- by AS8PR04MB7831.eurprd04.prod.outlook.com (2603:10a6:20b:2a8::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Mon, 7 Mar
- 2022 08:19:52 +0000
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::f4f1:fe49:d19e:4770]) by AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::f4f1:fe49:d19e:4770%8]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
- 08:19:52 +0000
-From:   Hongxing Zhu <hongxing.zhu@nxp.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: (EXT) [PATCH v1 4/7] dt-bindings: imx6q-pcie: Add iMX8MP PCIe
- compatible string
-Thread-Topic: (EXT) [PATCH v1 4/7] dt-bindings: imx6q-pcie: Add iMX8MP PCIe
- compatible string
-Thread-Index: AQHYMe3vPeeuNBAhAUGzu2iza7Hki6yzj6gAgAAAO6A=
-Date:   Mon, 7 Mar 2022 08:19:52 +0000
-Message-ID: <AS8PR04MB8676905699E85011E625BFE68C089@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1646634556-23779-1-git-send-email-hongxing.zhu@nxp.com>
- <1646634556-23779-5-git-send-email-hongxing.zhu@nxp.com>
- <11939148.O9o76ZdvQC@steina-w>
-In-Reply-To: <11939148.O9o76ZdvQC@steina-w>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d78db1cd-f918-47ec-ee7d-08da0013415f
-x-ms-traffictypediagnostic: AS8PR04MB7831:EE_
-x-microsoft-antispam-prvs: <AS8PR04MB783162837BFB71D7E788D8D88C089@AS8PR04MB7831.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: efhCut369onzauYxu4PpZvw7w4zZuvlucZG+dyb4K8ndnYaxjCh/8cu2IFJqzPM4cEcCKCq17563zZ4tUiErWBwHSdTqKibgW5GNACpeMVVIFpTMsznJeIE5rIjJtmkVRKqAbFu3NrPKN+ADNYA4oYOERYbHtwyerc2Fy8yBtS5ioGgVKZg+8aao/O2NFBpoDWXrBkJ3VXghTvkdk3ZDsgvVoXsED1UuCvLDf7EwSe9wO2CLR6V9Xi5NtZKWKyoXI4gVXDR1jJIimA8UxbOsUxEm/jSrT9SIRgkeenTt2rnPgC7Yq7j9Tv4oGjtV/oiysnS8vlC5VLXswhu9SuCDdUyehP6XadhXdOiKXHatn+r8/jtk7M5C7TAETvcWEmMR8Gr8X/u52tSUurNMLAkanlVQ+H21NeO5OErfz8dF8GCLEby82/eTyPW9+pWZ8BvceEiaF9X5SyCWhsk9O2CbBxNi8YIJ3jVi0/+TQSZFhrwzssZ5BxjsThh2S1G/Ry5kTphd9o0Zf0xD6W07UAnmRqSPYx4prxyz0PnTaK39QaloLu9auLY6tJF6eIQsdH8FrK1mWzir1MJ+ySN0IabJhqFpEaAmE7gEwrV4G/j3tpwQb6a0dEsbwsHoSl+pxqnC4gqCwSG8bK2/ELPk0DVIKvrAixwM6Qx7psSF5ETKfw2NkNlpg7WRztKtzEptaKXMmNpvbxpH4giKzr3pFkx06LLqgcgI+qFGiQymIscDNxTMJlUfqqCYitAXfqR2fAhWUIwroK1yf+2zkA5frEjg9Mc/lJaUU2lab9kqme0LNSGglAailfwPN/MSvdyuc7GiVouib0iAiznpOp+IeII3Pzh9fqcolwC533UWBmeKDqE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(966005)(71200400001)(8936002)(52536014)(33656002)(4326008)(8676002)(2906002)(66556008)(64756008)(66446008)(66476007)(5660300002)(76116006)(83380400001)(7416002)(86362001)(55016003)(508600001)(38100700002)(316002)(9686003)(122000001)(6506007)(186003)(7696005)(26005)(54906003)(38070700005)(44832011)(6916009)(53546011)(66946007)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c1NjVnNTeWdJb0FnR2czR3VHanc5a1dqUjhPazlueHUzL2U4WUF0NnI1TGxv?=
- =?utf-8?B?MnhaSFE1WXpKN0tmS0dodmJ6T2VKZ3NPSDVnNHNqK0QvS0hHWVcxOXZGUk9V?=
- =?utf-8?B?SGovMmdxQVJNNEZLV2FhRDBwenV0OG9kai9VRVdQWDhoNkF0ZlRFZEhZZEY2?=
- =?utf-8?B?Kzg3ZkIyTDZTMHpEU3MwSGNFbFNoNGxDUXRTZ1JhRWJuZXIwZEhsYnc2dWlt?=
- =?utf-8?B?RVhsOWZBL3B4N2Z6NUVrOHVVd3ZNaTVvRnRNY2xyLzFBSTRzay9kYkhxQXNY?=
- =?utf-8?B?RGJNeXVnQ2lBaHVGRGFjSHQ2TVhHcjUrbm4vMktrMXhzdGJLa0ZodHNtTEhv?=
- =?utf-8?B?RlVTYit6S0FqTmo3a2FLc21DZ0xwN3h4dUF1NEhJTWhHa3lORXcvRmFHeU5O?=
- =?utf-8?B?MkVBZWM0dUNvcWJpNGNwZmYrdDdQZ3B2cmxMR3B4TWpTL2g1d2dqR056YXNV?=
- =?utf-8?B?LzVkT3pkaXc2ZFpHcCtEWE1yWnBlbmRZZm9BdnEyRkZiYUw4OTNIUHFPSzEx?=
- =?utf-8?B?Z0hOOHlaTWRjTUI3NXgxMXNwampqWFk2RHRPQVR3TFhqQXdKd2FkOVRBb1NU?=
- =?utf-8?B?d3laNFJXR0QxNW9rbVQ2RDRDUnZKazJPaHlHcVR4NUVOb0psZGl1L2gvWDhV?=
- =?utf-8?B?SlVSc3d4Nzc1aWZtUTVyNk5Kd3dKbDMwdmpWTnpyT1NvSDNxV1FBTTVIOHRM?=
- =?utf-8?B?N2QrS0NXZmxJZmlZU1k3cmNYZXpibVdRa1VycUNabERrU284YkVGQWRySWpY?=
- =?utf-8?B?anhYWFQxZE5kUkg5eGUrY3lXRlI5SjgwZ2kxZFJkbDZwNGdNZzZCVk1kUlpU?=
- =?utf-8?B?QXdUMHZHNVFXTjhxQVhvTXlzcXZJS202WkZkazYvK0xCYnVKcUVlYmluZ3li?=
- =?utf-8?B?RWlXTWNIZlczMGc3MCswYjB4R1hSaTF0b21QTGdmTnVuUmdGZzg3clA2bDZ1?=
- =?utf-8?B?UnBqdDIyOXZIdDR5TExpeE83b3B5YkR3NHlRT3NnbHNUbmJzS3h2OVVwbVNh?=
- =?utf-8?B?SUE2bC9CTUVwMytxS1lGWVo4MTBkbVBoalJ6SjZvZUFYUm9Wc1pHTjlUNmtm?=
- =?utf-8?B?MktGS2t5TElYYUtjSUhPNDcvSEN1WWREa3Z3a21sc3JRb2x4M3lNbHpDdjY1?=
- =?utf-8?B?dmh1SW5OdWlqN2Z6TStyNVppcnRBUkJFL3RXVE9XU0w1QXgyRFJjWkk3S1JP?=
- =?utf-8?B?VGhBTlh2SnBqQmdzUVAyU2RVbnhKUXBVWVJlSk9MMkt4WkhyTXppV2tjVHhM?=
- =?utf-8?B?UlZ2aWorRlFKRnQxQzlRQnZ4NExQdzlMY0EzaHJQZ1A1ZnhNSWFJTlJ3Q0po?=
- =?utf-8?B?V2U2M1I4SWIyOFpLdjhXVEx6UXJEQXZUazd1UitFdUhlMUpqMFB3bmxGazA2?=
- =?utf-8?B?K1NwRmFwR3lURDZvYjNrWjJNSlVxdWE4RWhRVjQ3T2o1UkVESmJTbUZuU3hW?=
- =?utf-8?B?VnEzUmxBYXhBekhSRVlLRlkySHp5S09nZThMQkE4bFg1NjdPK2ZuM1Y5c202?=
- =?utf-8?B?NUIwV0Y2dlJCMmdoSngwWmxlczVJOXlxMXpUZkxTWVZHSm1JcXFyUTRuekVB?=
- =?utf-8?B?MUlWZGZrallDWjdKOEE2ay83RzdzSHA2eE1SNEZUV0pWTFRnM0VDNHozL3lj?=
- =?utf-8?B?OGVIc3UzL0lpS2FnYmpubThLRitwTVRwMTNqSkZSRHdJck8yRzR3cFJpWkxC?=
- =?utf-8?B?eE5QRmkzd0hPZFpvb2RraUdtUEptYzFrYmRQS1pwOU9nTnBaeDBtczczUmN0?=
- =?utf-8?B?N1FiSElaUW9VL1lUd0kzdmVNWWMxaUp4RXUwNm9TRmp1MHpkU0ZPbkhFWWRZ?=
- =?utf-8?B?bHRaYXVQZ2w2NVJ0K05WMUZFdURxems4YStjd0lJSE1hbWFiY0VaWEhrVjRI?=
- =?utf-8?B?VzFrNjloQ2tWeE9MTWJoUFMxNEhjYitUbU14aWl0MlRFaExYR1g4WXl6aFNT?=
- =?utf-8?B?c05QVncydGVZVlVxVTlucW95UUJZVFgwWFRLV1dGSlZHNFh2Szl0elcwT2FC?=
- =?utf-8?B?eHVwNG1naCtSRFhBajFWMzVGeStzM1VvRk9meTRaTnVxT2NKZnFrOFJnTHZ4?=
- =?utf-8?B?R3V3MVV3MEJ0SGdIcG55UkxMTG1pTnBJMDB0VE1SUldpNXdRaklJcU5jQ1BR?=
- =?utf-8?B?SEdiK1JpekVwMmREMDJtNUFaNmdaYWpSK2NaMXl5YkxDZnp6OERDZ3dDL21D?=
- =?utf-8?B?bGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 7 Mar 2022 03:24:09 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123A9329BE;
+        Mon,  7 Mar 2022 00:23:15 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id l1-20020a05600c4f0100b00389645443d2so5929437wmq.2;
+        Mon, 07 Mar 2022 00:23:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8cKT/1dr2+xKuQJ1Vz6xwOwRtkb0/MEs5jCMptCWDMo=;
+        b=J5fAGTwGnB/kolKDKE/OvpYt3yxiunGyzMPExKPEaS/WHQbKueEN1jbpNN41YHWwAg
+         0fkWNEWLh+sEpRDvpouBsRTjx+dYxPibW7ftz3vRg7uzNst/YqjjmyVPM3DLo7ViDRPI
+         8NBxGrQOb3Z/vd7evYbjY4eftApTRcsfbn+oJS0vOtVXWD2Xx2DVJkxkt4pMXM27IEXQ
+         HL2VJwt+5aOKW7CBt5v+Mc4EM1UJf89766XMJn7zQIBhLFfIyOqaNG+GC/yOdM+zI/Vd
+         +2V0kmOXrlnkLN6sN39+btM7Eb5DuI3joP2/DqXySv+/X8NA0TdyY5SVkrewhZcSFYAI
+         ALnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8cKT/1dr2+xKuQJ1Vz6xwOwRtkb0/MEs5jCMptCWDMo=;
+        b=PDhUPvkXrofLTZpF06FFe6Bvf/OwjHOFjOn2PPRt/iaO2DsZdX6/GQDKbCG4lYm1aE
+         FFL/LM+sUkk4EcFu9U4VNXdmmlyqCelpfnKBQLsbNAF1Vh0bhVO8olyzxxwd6NPIawjD
+         iAahIzQcPVmmfJGF1MccaJlU1gc+YORAsCGfAiWrDt9ZTTWjPKcB1QEK7eccZD4adt52
+         ufOYI9wkcKg/ZkhiOfaCcXr+n/WvzwGvj9kYc1vFujH+QB3kOIOAn/Fwygi6Eurs3cO3
+         KC0ba1ux8mbGldy6Mi+bVY7EFqDyy8iHO9NpoPHqiVaSMr3G6N3VaId6ZLAJByr+PAnz
+         9L6w==
+X-Gm-Message-State: AOAM5310IyGboxaJBxqgcAsTk0nnnApPrFfb10tZ7kLS8Zu+EHlBs3Gx
+        wlL61Y3BTfKlE+tQnkPYR0M=
+X-Google-Smtp-Source: ABdhPJwHe86+JdMQtbw+MzMFqmMZSqJvWkmQwxYT1IUaRM5F0YbE4cXQ8TsbeLQ2UNwIPtytvasRXQ==
+X-Received: by 2002:a05:600c:ac5:b0:389:a170:c34 with SMTP id c5-20020a05600c0ac500b00389a1700c34mr4886407wmr.100.1646641393404;
+        Mon, 07 Mar 2022 00:23:13 -0800 (PST)
+Received: from localhost.localdomain (cpc110361-king13-2-0-cust623.19-1.cable.virginm.net. [92.238.50.112])
+        by smtp.gmail.com with ESMTPSA id o7-20020a5d6707000000b001f067c7b47fsm15055067wru.27.2022.03.07.00.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 00:23:13 -0800 (PST)
+From:   Salih MSA <salihmahmoudsahmed@gmail.com>
+X-Google-Original-From: Salih MSA <salih.msa@outlook.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        linux-kernel@vger.kernel.org, Salih MSA <salih.msa@outlook.com>
+Subject: [PATCH] fs: aio: fixed purely styling errors
+Date:   Mon,  7 Mar 2022 08:22:57 +0000
+Message-Id: <20220307082257.582466-1-salih.msa@outlook.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d78db1cd-f918-47ec-ee7d-08da0013415f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2022 08:19:52.7062
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3gwVMVVcVosHKeASbEC4pxOIgCqAb67xjFOHVTtXXKAnBbZXTRmwxxn+yL3nfAFvjYv6EumfnS0E6pcsJ99wlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7831
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,54 +69,305 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBbGV4YW5kZXIgU3RlaW4gPGFs
-ZXhhbmRlci5zdGVpbkBldy50cS1ncm91cC5jb20+DQo+IFNlbnQ6IDIwMjLlubQz5pyIN+aXpSAx
-NjowMw0KPiBUbzogSG9uZ3hpbmcgWmh1IDxob25neGluZy56aHVAbnhwLmNvbT4NCj4gQ2M6IHAu
-emFiZWxAcGVuZ3V0cm9uaXguZGU7IGwuc3RhY2hAcGVuZ3V0cm9uaXguZGU7IGJoZWxnYWFzQGdv
-b2dsZS5jb207DQo+IGxvcmVuem8ucGllcmFsaXNpQGFybS5jb207IHJvYmhAa2VybmVsLm9yZzsg
-c2hhd25ndW9Aa2VybmVsLm9yZzsNCj4gbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQu
-b3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgtcGNpQHZnZXIua2VybmVs
-Lm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOw0KPiBsaW51eC1rZXJu
-ZWxAdmdlci5rZXJuZWwub3JnOyBrZXJuZWxAcGVuZ3V0cm9uaXguZGU7IGRsLWxpbnV4LWlteA0K
-PiA8bGludXgtaW14QG54cC5jb20+OyBIb25neGluZyBaaHUgPGhvbmd4aW5nLnpodUBueHAuY29t
-Pg0KPiBTdWJqZWN0OiBSZTogKEVYVCkgW1BBVENIIHYxIDQvN10gZHQtYmluZGluZ3M6IGlteDZx
-LXBjaWU6IEFkZCBpTVg4TVAgUENJZQ0KPiBjb21wYXRpYmxlIHN0cmluZw0KPiANCj4gSGkgUmlj
-aGFyZCwNCj4gDQo+IHRoYW5rcyBmb3IgcHJvdmlkaW5nIGEgcGF0Y2ggc3VwcG9ydGluZyBQQ2ll
-IG9uIGlNWDhNUC4NCj4gDQo+IEFtIE1vbnRhZywgNy4gTcOkcnogMjAyMiwgMDc6Mjk6MTMgQ0VU
-IHNjaHJpZWIgUmljaGFyZCBaaHU6DQo+ID4gQWRkIGkuTVg4TVAgUENJZSBjb21wYXRpYmxlIHN0
-cmluZy4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFJpY2hhcmQgWmh1IDxob25neGluZy56aHVA
-bnhwLmNvbT4NCj4gPiAtLS0NCj4gPiAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L3BjaS9mc2wsaW14NnEtcGNpZS55YW1sIHwgMSArDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
-c2VydGlvbigrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy9wY2kvZnNsLGlteDZxLXBjaWUueWFtbA0KPiA+IGIvRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL3BjaS9mc2wsaW14NnEtcGNpZS55YW1sIGluZGV4DQo+ID4gMzZj
-OGEwNmQxN2EwLi4yNTJlNWI3MmFlZTAgMTAwNjQ0DQo+ID4gLS0tIGEvRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL3BjaS9mc2wsaW14NnEtcGNpZS55YW1sDQo+ID4gKysrIGIvRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3BjaS9mc2wsaW14NnEtcGNpZS55YW1sDQo+
-ID4gQEAgLTI2LDYgKzI2LDcgQEAgcHJvcGVydGllczoNCj4gPiAgICAgICAgLSBmc2wsaW14N2Qt
-cGNpZQ0KPiA+ICAgICAgICAtIGZzbCxpbXg4bXEtcGNpZQ0KPiA+ICAgICAgICAtIGZzbCxpbXg4
-bW0tcGNpZQ0KPiA+ICsgICAgICAtIGZzbCxpbXg4bXAtcGNpZQ0KPiA+DQo+ID4gICAgcmVnOg0K
-PiA+ICAgICAgaXRlbXM6DQo+IA0KPiBXaGljaCBicmFuY2ggaXMgdGhpcyBiYXNlZCBvbj8gSSBk
-b24ndCBoYXZlICdmc2wsaW14OG1tLXBjaWUnIGVudHJ5IGluIG15IHRyZWUuDQo+IEFub3RoZXIg
-cGF0Y2ggNyBhbHNvIGRvZXNuJ3QgYXBwbHkgY2xlYW5seS4NCj4gDQpIaSBBbGV4YW5kZXI6DQpU
-aGFua3MgZm9yIHlvdXIgcXVpY2sgcmVwbHkuDQpJbiB0aGUgcGFzdCBkYXlzLCBJIGhhZCBzdW1t
-aXQgc29tZSBwYXRjaGVzLCBhbmQgd2FpdCBmb3IgYWNrIG9yIHJldmlld2VkIHRhZ3MuDQpCdXQg
-dGhleSBtaWdodCBoYXZlIHNvbWUgY29uZmxpY3Rpb25zIHdoZW4gZG8gdGhlIGNvZGVzIG1lcmdl
-Lg0KSSdtIHdhaXRpbmcgZm9yIHRoZSBhY2ssIGFuZCB3aWxsIHJlLWJhc2UgdGhlbSBpbiBhIHBy
-b3BlciBzZXF1ZW5jZSBsYXRlci4NCg0KQWJvdXQgdGhlICM0IHBhdGNoIGFwcGx5LCBpdCdzIGJl
-dHRlciB0byBwaWNrIHRoZSBmb2xsb3dpbmcgY29tbWl0LCBzaW5jZSBpdCBoYWQNCiBMdWNhcycg
-UmV2aWV3ZWQtYnkgdGFnLCBhbmQgd2FpdCBmb3IgbWVyZ2UuDQpodHRwczovL3BhdGNod29yay5v
-emxhYnMub3JnL3Byb2plY3QvbGludXgtcGNpL3BhdGNoLzE2NDYyOTM4MDUtMTgyNDgtMS1naXQt
-c2VuZC1lbWFpbC1ob25neGluZy56aHVAbnhwLmNvbS8NCg0KQWJvdXQgdGhlICM3IHBhdGNoLCBJ
-IGRvIHRoZSBjaGFuZ2VzIGJhc2VkIG9uIHRoZSBmb2xsb3dpbmcgcGF0Y2gtc2V0Lg0KaHR0cHM6
-Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4LXBjaS9jb3Zlci8xNjQ1NzYwNjY3
-LTEwNTEwLTEtZ2l0LXNlbmQtZW1haWwtaG9uZ3hpbmcuemh1QG54cC5jb20vDQoNCkkgd291bGQg
-YWRkIHRoZSBkZXBlbmRlbmN5IHBhdGNoLXNldCBsYXRlciBpbiB0aGUgY292ZXItbGV0dGVyIGxh
-dGVyLg0KU29ycnkgdG8gYnJpbmcgaW4tY29udmVuaWVuY3kgdG8geW91Lg0KDQpCVFcsIElmIHlv
-dSB3YW50IHRvIHRlc3RzIFBDSWUgb24gaS5NWDhNTSBFVksgYm9hcmQgdG9vLCB0aGUgZm9sbG93
-aW5nIGR0cw0KY2hhbmdlcyBzaG91bGQgYmUgY2hlcnJ5LXBpY2tlZCBmcm9tIFNoYXduJ3MgZ2l0
-Lg0KYjRkMzZjMTBiZjE3IGFybTY0OiBkdHM6IGlteDhtbS1ldms6IEFkZCB0aGUgcGNpZSBzdXBw
-b3J0IG9uIGlteDhtbSBldmsgYm9hcmQNCmFhZWJhNmE4ZTIyNiBhcm02NDogZHRzOiBpbXg4bW06
-IEFkZCB0aGUgcGNpZSBzdXBwb3J0DQpjZmM1MDc4NDMyY2EgYXJtNjQ6IGR0czogaW14OG1tOiBB
-ZGQgdGhlIHBjaWUgcGh5IHN1cHBvcnQNCg0KQmVzdCBSZWdhcmRzDQpSaWNoYXJkIFpodQ0KDQo+
-IFJlZ2FyZHMNCj4gQWxleGFuZGVyDQo+IA0KDQo=
+Mostly clarified unsigned -> unsigned int.
+Also separated declarations from functionality.
+
+Signed-off-by: Salih MSA <salih.msa@outlook.com>
+---
+ fs/aio.c | 84 +++++++++++++++++++++++++++++---------------------------
+ 1 file changed, 43 insertions(+), 41 deletions(-)
+
+diff --git a/fs/aio.c b/fs/aio.c
+index 4ceba13a7db0..1c2bc6654159 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -54,16 +54,16 @@
+ #define AIO_RING_COMPAT_FEATURES	1
+ #define AIO_RING_INCOMPAT_FEATURES	0
+ struct aio_ring {
+-	unsigned	id;	/* kernel internal index number */
+-	unsigned	nr;	/* number of io_events */
+-	unsigned	head;	/* Written to by userland or under ring_lock
++	unsigned int	id;	/* kernel internal index number */
++	unsigned int	nr;	/* number of io_events */
++	unsigned int	head;	/* Written to by userland or under ring_lock
+ 				 * mutex by aio_read_events_ring(). */
+-	unsigned	tail;
++	unsigned int	tail;
+ 
+-	unsigned	magic;
+-	unsigned	compat_features;
+-	unsigned	incompat_features;
+-	unsigned	header_length;	/* size of aio_ring */
++	unsigned int	magic;
++	unsigned int	compat_features;
++	unsigned int	incompat_features;
++	unsigned int	header_length;	/* size of aio_ring */
+ 
+ 
+ 	struct io_event		io_events[];
+@@ -79,12 +79,12 @@ struct aio_ring {
+ 
+ struct kioctx_table {
+ 	struct rcu_head		rcu;
+-	unsigned		nr;
++	unsigned int		nr;
+ 	struct kioctx __rcu	*table[];
+ };
+ 
+ struct kioctx_cpu {
+-	unsigned		reqs_available;
++	unsigned int		reqs_available;
+ };
+ 
+ struct ctx_rq_wait {
+@@ -106,7 +106,7 @@ struct kioctx {
+ 	 * For percpu reqs_available, number of slots we move to/from global
+ 	 * counter at a time:
+ 	 */
+-	unsigned		req_batch;
++	unsigned int		req_batch;
+ 	/*
+ 	 * This is what userspace passed to io_setup(), it's not used for
+ 	 * anything but counting against the global max_reqs quota.
+@@ -114,10 +114,10 @@ struct kioctx {
+ 	 * The real limit is nr_events - 1, which will be larger (see
+ 	 * aio_setup_ring())
+ 	 */
+-	unsigned		max_reqs;
++	unsigned int		max_reqs;
+ 
+ 	/* Size of ringbuffer, in units of struct io_event */
+-	unsigned		nr_events;
++	unsigned int		nr_events;
+ 
+ 	unsigned long		mmap_base;
+ 	unsigned long		mmap_size;
+@@ -155,15 +155,15 @@ struct kioctx {
+ 	} ____cacheline_aligned_in_smp;
+ 
+ 	struct {
+-		unsigned	tail;
+-		unsigned	completed_events;
++		unsigned int	tail;
++		unsigned int	completed_events;
+ 		spinlock_t	completion_lock;
+ 	} ____cacheline_aligned_in_smp;
+ 
+ 	struct page		*internal_pages[AIO_RING_PAGES];
+ 	struct file		*aio_ring_file;
+ 
+-	unsigned		id;
++	unsigned int		id;
+ };
+ 
+ /*
+@@ -262,6 +262,7 @@ static struct file *aio_private_file(struct kioctx *ctx, loff_t nr_pages)
+ {
+ 	struct file *file;
+ 	struct inode *inode = alloc_anon_inode(aio_mnt->mnt_sb);
++
+ 	if (IS_ERR(inode))
+ 		return ERR_CAST(inode);
+ 
+@@ -300,7 +301,7 @@ static int __init aio_setup(void)
+ 		panic("Failed to create aio fs mount.");
+ 
+ 	kiocb_cachep = KMEM_CACHE(aio_kiocb, SLAB_HWCACHE_ALIGN|SLAB_PANIC);
+-	kioctx_cachep = KMEM_CACHE(kioctx,SLAB_HWCACHE_ALIGN|SLAB_PANIC);
++	kioctx_cachep = KMEM_CACHE(kioctx, SLAB_HWCACHE_ALIGN|SLAB_PANIC);
+ 	aio_sysctl_init();
+ 	return 0;
+ }
+@@ -336,6 +337,7 @@ static void aio_free_ring(struct kioctx *ctx)
+ 
+ 	for (i = 0; i < ctx->nr_pages; i++) {
+ 		struct page *page;
++
+ 		pr_debug("pid(%d) [%d] page->count=%d\n", current->pid, i,
+ 				page_count(ctx->ring_pages[i]));
+ 		page = ctx->ring_pages[i];
+@@ -525,6 +527,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
+ 
+ 	for (i = 0; i < nr_pages; i++) {
+ 		struct page *page;
++
+ 		page = find_or_create_page(file->f_mapping,
+ 					   i, GFP_HIGHUSER | __GFP_ZERO);
+ 		if (!page)
+@@ -659,7 +662,7 @@ static void free_ioctx_users(struct percpu_ref *ref)
+ 
+ static int ioctx_add_table(struct kioctx *ctx, struct mm_struct *mm)
+ {
+-	unsigned i, new_nr;
++	unsigned int i, new_nr;
+ 	struct kioctx_table *table, *old;
+ 	struct aio_ring *ring;
+ 
+@@ -711,7 +714,7 @@ static int ioctx_add_table(struct kioctx *ctx, struct mm_struct *mm)
+ 	}
+ }
+ 
+-static void aio_nr_sub(unsigned nr)
++static void aio_nr_sub(unsigned int nr)
+ {
+ 	spin_lock(&aio_nr_lock);
+ 	if (WARN_ON(aio_nr - nr > aio_nr))
+@@ -724,7 +727,7 @@ static void aio_nr_sub(unsigned nr)
+ /* ioctx_alloc
+  *	Allocates and initializes an ioctx.  Returns an ERR_PTR if it failed.
+  */
+-static struct kioctx *ioctx_alloc(unsigned nr_events)
++static struct kioctx *ioctx_alloc(unsigned int nr_events)
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	struct kioctx *ctx;
+@@ -925,7 +928,7 @@ void exit_aio(struct mm_struct *mm)
+ 	kfree(table);
+ }
+ 
+-static void put_reqs_available(struct kioctx *ctx, unsigned nr)
++static void put_reqs_available(struct kioctx *ctx, unsigned int nr)
+ {
+ 	struct kioctx_cpu *kcpu;
+ 	unsigned long flags;
+@@ -979,10 +982,10 @@ static bool __get_reqs_available(struct kioctx *ctx)
+  *	from aio_get_req() (the we're out of events case).  It must be
+  *	called holding ctx->completion_lock.
+  */
+-static void refill_reqs_available(struct kioctx *ctx, unsigned head,
+-                                  unsigned tail)
++static void refill_reqs_available(struct kioctx *ctx, unsigned int head,
++				  unsigned int tail)
+ {
+-	unsigned events_in_ring, completed;
++	unsigned int events_in_ring, completed;
+ 
+ 	/* Clamp head since userland can write to it. */
+ 	head %= ctx->nr_events;
+@@ -1013,7 +1016,7 @@ static void user_refill_reqs_available(struct kioctx *ctx)
+ 	spin_lock_irq(&ctx->completion_lock);
+ 	if (ctx->completed_events) {
+ 		struct aio_ring *ring;
+-		unsigned head;
++		unsigned int head;
+ 
+ 		/* Access of ring->head may race with aio_read_events_ring()
+ 		 * here, but that's okay since whether we read the old version
+@@ -1076,7 +1079,7 @@ static struct kioctx *lookup_ioctx(unsigned long ctx_id)
+ 	struct mm_struct *mm = current->mm;
+ 	struct kioctx *ctx, *ret = NULL;
+ 	struct kioctx_table *table;
+-	unsigned id;
++	unsigned int id;
+ 
+ 	if (get_user(id, &ring->id))
+ 		return NULL;
+@@ -1116,7 +1119,7 @@ static void aio_complete(struct aio_kiocb *iocb)
+ 	struct kioctx	*ctx = iocb->ki_ctx;
+ 	struct aio_ring	*ring;
+ 	struct io_event	*ev_page, *event;
+-	unsigned tail, pos, head;
++	unsigned int tail, pos, head;
+ 	unsigned long	flags;
+ 
+ 	/*
+@@ -1140,7 +1143,7 @@ static void aio_complete(struct aio_kiocb *iocb)
+ 	kunmap_atomic(ev_page);
+ 	flush_dcache_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
+ 
+-	pr_debug("%p[%u]: %p: %p %Lx %Lx %Lx\n", ctx, tail, iocb,
++	pr_debug("%p[%u]: %p: %p %llx %llx %llx\n", ctx, tail, iocb,
+ 		 (void __user *)(unsigned long)iocb->ki_res.obj,
+ 		 iocb->ki_res.data, iocb->ki_res.res, iocb->ki_res.res2);
+ 
+@@ -1200,7 +1203,7 @@ static long aio_read_events_ring(struct kioctx *ctx,
+ 				 struct io_event __user *event, long nr)
+ {
+ 	struct aio_ring *ring;
+-	unsigned head, tail, pos;
++	unsigned int head, tail, pos;
+ 	long ret = 0;
+ 	int copy_ret;
+ 
+@@ -1326,16 +1329,16 @@ static long read_events(struct kioctx *ctx, long min_nr, long nr,
+  *	Create an aio_context capable of receiving at least nr_events.
+  *	ctxp must not point to an aio_context that already exists, and
+  *	must be initialized to 0 prior to the call.  On successful
+- *	creation of the aio_context, *ctxp is filled in with the resulting 
++ *	creation of the aio_context, *ctxp is filled in with the resulting
+  *	handle.  May fail with -EINVAL if *ctxp is not initialized,
+- *	if the specified nr_events exceeds internal limits.  May fail 
+- *	with -EAGAIN if the specified nr_events exceeds the user's limit 
++ *	if the specified nr_events exceeds internal limits.  May fail
++ *	with -EAGAIN if the specified nr_events exceeds the user's limit
+  *	of available events.  May fail with -ENOMEM if insufficient kernel
+  *	resources are available.  May fail with -EFAULT if an invalid
+  *	pointer is passed for ctxp.  Will fail with -ENOSYS if not
+  *	implemented.
+  */
+-SYSCALL_DEFINE2(io_setup, unsigned, nr_events, aio_context_t __user *, ctxp)
++SYSCALL_DEFINE2(io_setup, unsigned int, nr_events, aio_context_t __user *, ctxp)
+ {
+ 	struct kioctx *ioctx = NULL;
+ 	unsigned long ctx;
+@@ -1347,8 +1350,7 @@ SYSCALL_DEFINE2(io_setup, unsigned, nr_events, aio_context_t __user *, ctxp)
+ 
+ 	ret = -EINVAL;
+ 	if (unlikely(ctx || nr_events == 0)) {
+-		pr_debug("EINVAL: ctx %lu nr_events %u\n",
+-		         ctx, nr_events);
++		pr_debug("EINVAL: ctx %lu nr_events %u\n", ctx, nr_events);
+ 		goto out;
+ 	}
+ 
+@@ -1366,7 +1368,7 @@ SYSCALL_DEFINE2(io_setup, unsigned, nr_events, aio_context_t __user *, ctxp)
+ }
+ 
+ #ifdef CONFIG_COMPAT
+-COMPAT_SYSCALL_DEFINE2(io_setup, unsigned, nr_events, u32 __user *, ctx32p)
++COMPAT_SYSCALL_DEFINE2(io_setup, unsigned int, nr_events, u32 __user *, ctx32p)
+ {
+ 	struct kioctx *ioctx = NULL;
+ 	unsigned long ctx;
+@@ -1378,8 +1380,7 @@ COMPAT_SYSCALL_DEFINE2(io_setup, unsigned, nr_events, u32 __user *, ctx32p)
+ 
+ 	ret = -EINVAL;
+ 	if (unlikely(ctx || nr_events == 0)) {
+-		pr_debug("EINVAL: ctx %lu nr_events %u\n",
+-		         ctx, nr_events);
++		pr_debug("EINVAL: ctx %lu nr_events %u\n", ctx, nr_events);
+ 		goto out;
+ 	}
+ 
+@@ -1399,7 +1400,7 @@ COMPAT_SYSCALL_DEFINE2(io_setup, unsigned, nr_events, u32 __user *, ctx32p)
+ #endif
+ 
+ /* sys_io_destroy:
+- *	Destroy the aio_context specified.  May cancel any outstanding 
++ *	Destroy the aio_context specified.  May cancel any outstanding
+  *	AIOs and block on completion.  Will fail with -ENOSYS if not
+  *	implemented.  May fail with -EINVAL if the context pointed to
+  *	is invalid.
+@@ -1407,7 +1408,8 @@ COMPAT_SYSCALL_DEFINE2(io_setup, unsigned, nr_events, u32 __user *, ctx32p)
+ SYSCALL_DEFINE1(io_destroy, aio_context_t, ctx)
+ {
+ 	struct kioctx *ioctx = lookup_ioctx(ctx);
+-	if (likely(NULL != ioctx)) {
++
++	if (likely(ioctx != NULL)) {
+ 		struct ctx_rq_wait wait;
+ 		int ret;
+ 
+@@ -1755,7 +1757,7 @@ static int aio_poll_cancel(struct kiocb *iocb)
+ 	return 0;
+ }
+ 
+-static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
++static int aio_poll_wake(struct wait_queue_entry *wait, unsigned int mode, int sync,
+ 		void *key)
+ {
+ 	struct poll_iocb *req = container_of(wait, struct poll_iocb, wait);
+-- 
+2.25.1
+

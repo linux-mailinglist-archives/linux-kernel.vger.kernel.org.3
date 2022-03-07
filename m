@@ -2,242 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4BB4D0613
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E668C4D0626
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244664AbiCGSOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S240807AbiCGSRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244665AbiCGSOH (ORCPT
+        with ESMTP id S241357AbiCGSRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:14:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C62554BA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:13:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6DB361295
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:13:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A541C340EB;
-        Mon,  7 Mar 2022 18:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646676791;
-        bh=rZCSmb5w6EjObQAjA2q/+2HByQVaObBOrVzAVdxTAwI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RbSrrjiCSTm30CYM9iCXRDS++RD2YfGGbAjyd8WXPAHxEF0Hjkus9LXqh3d3dBuiz
-         lsjhtQJRcsOyTONk1i3zmUfMS1jpbvC/nB4lHq44AEU+uukeJxB+anUyLdsRpcw91w
-         01dtSbsmo1qEWYFhoD7jIubEcSGFrSKY2KxiiQEGoFwvypkEAdRnW2b3OD+5CJWzKE
-         GF8CCjNW3JMcq6voBunZWSj0eGbCyWd6ZUy0dah3ur9vveGaUzs1gDJWrE/iRbcArX
-         HYc/dFiKygm2AXXl6E2G34ba+TNRa1Qgho4JckQT/1+VMQMGx/oRnx1ZGtAgUesERY
-         qtMNIRIwrUcdw==
-Date:   Mon, 7 Mar 2022 20:13:03 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Karolina Drobnik <karolinadrobnik@gmail.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 9/9] memblock tests: Add TODO and README files
-Message-ID: <YiZLL6gVQUd5v+N+@kernel.org>
-References: <cover.1646055639.git.karolinadrobnik@gmail.com>
- <d5e39b9f7dcef177ebc14282727447bc21e3b38f.1646055639.git.karolinadrobnik@gmail.com>
+        Mon, 7 Mar 2022 13:17:19 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7549F75E69
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:16:22 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220307181616epoutp01e3bca416dde6cb17c0719f5d95a651c4~aK-xQgEZf0767007670epoutp01D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:16:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220307181616epoutp01e3bca416dde6cb17c0719f5d95a651c4~aK-xQgEZf0767007670epoutp01D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646676976;
+        bh=+DoYqIP57CK30qeEszS0FSuPgQHsdE9AmjYT9fqaiY8=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=VUtydj3bNltVpXLs+6lpqVbi1uFYaA6EYA//vyrvac2hVd2m+9ni801l2KipbLcU+
+         hDz0jLG9WALzMtaYG1/6/cdMmxDXoHGQ2AsSq/ZkS87t6YCUb5lPyaVIEx/Ap7gjAP
+         8sZLX1lNDjzSPnvYw+MmxqueIgNJSXu4BFxTdqEs=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220307181615epcas5p342477b57f086c1d54502b559c5b55440~aK-wr4shN0547805478epcas5p36;
+        Mon,  7 Mar 2022 18:16:15 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4KC68p3h7kz4x9Pq; Mon,  7 Mar
+        2022 18:16:10 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E5.BC.46822.93946226; Tue,  8 Mar 2022 03:04:41 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220307181609epcas5p1dee884f7f426b64ee5915f507c1fb696~aK-qjlWmv0140301403epcas5p1b;
+        Mon,  7 Mar 2022 18:16:09 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220307181609epsmtrp2c90c3afdfefa8eedbdb3c0d001bd3d0e~aK-qix9hX3020530205epsmtrp2z;
+        Mon,  7 Mar 2022 18:16:09 +0000 (GMT)
+X-AuditID: b6c32a4a-de5ff7000000b6e6-fa-6226493981c0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9F.C1.29871.9EB46226; Tue,  8 Mar 2022 03:16:09 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220307181607epsmtip150e77f72df12ff26f43123b50e3d891b~aK-pYRZNs2332523325epsmtip19;
+        Mon,  7 Mar 2022 18:16:07 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        "'Jiri Slaby'" <jirislaby@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20220307080925.54131-6-krzysztof.kozlowski@canonical.com>
+Subject: RE: [PATCH v2 7/7] tty: serial: samsung: simplify getting OF match
+ data
+Date:   Mon, 7 Mar 2022 23:46:06 +0530
+Message-ID: <000001d8324f$6b2c9a40$4185cec0$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5e39b9f7dcef177ebc14282727447bc21e3b38f.1646055639.git.karolinadrobnik@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGoAYk8Q04rU2h+MYSS22x/2RnCswLpcBE3AkLWjums6zlaEA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJJsWRmVeSWpSXmKPExsWy7bCmhq6lp1qSQX87t0Xz4vVsFu/mylhs
+        fPuDyWLT42usFpd3zWGzmHF+H5PFmcW97A7sHrMaetk8Nq3qZPPYP3cNu8fmJfUenzfJBbBG
+        ZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2hpFCW
+        mFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwKdArTswtLs1L18tLLbEyNDAwMgUqTMjO
+        WP98MUvBLb6K6av/sDUwPuHpYuTkkBAwkTi4cR1LFyMXh5DAbkaJi8t3MEE4nxglFq18zQjh
+        fGOU2HrgORNMy/Pj69ghEnsZJS5s/QLlvGSUaJn2hg2kik1AV2LH4jY2kISIwAYmiUv3poK1
+        cwq4SzS0bmAEsYUFgiR2Nj9jAbFZBFQkvu08xg5i8wpYSry8cJcFwhaUODnzCZjNLCAvsf3t
+        HGaIMxQkfj5dxgpiiwg4Sdz8eZEZokZc4uXRI2AXSQi0ckhcX/iXFaLBReJc+y6oH4QlXh3f
+        wg5hS0l8frcX6FIOIDtbomeXMUS4RmLpvGMsELa9xIErc1hASpgFNCXW79KHWMUn0fv7CRNE
+        J69ER5sQRLWqRPO7q1Cd0hITu7tZIUo8JH7c0YME1XVGie6Ln5knMCrMQvLkLCRPzkLyzCyE
+        xQsYWVYxSqYWFOempxabFhjlpZbDIzw5P3cTIziNanntYHz44IPeIUYmDsZDjBIczEoivPfP
+        qyQJ8aYkVlalFuXHF5XmpBYfYjQFhvxEZinR5HxgIs8riTc0sTQwMTMzM7E0NjNUEuc9nb4h
+        UUggPbEkNTs1tSC1CKaPiYNTqoFJddPuxMVnpT43KyzN6Di1t8XPsiJNeX26sKFUifhSjUuX
+        pv4Kel0mJvFyt91nrZ9Lz7PdPbX2vKHitbf13mK2E2MEp316fTtRMikuw2nGPYWNDP+r6hae
+        WFkpcej5CdUL3D+Psyt9Ee7TEVyScOZHeEyeyiXOGZvyj729w6Tz2EVQwy8jZv2uqesPCr9g
+        4k5t2e4easW/aa7JznKm1smm/oaqf58t/PQ+/e8tHo/E+QHtLcpTpS75NnlURP4pslP18uY9
+        9v5/wY+uaUdjnz3T9Nm5qpq/zfnv9QvbnarSl8bznjH1+rVgv+i0RrE0Waenz1RPczYviLBw
+        uX2fyV5E4e6fTxG13wTO1z5eqP9XiaU4I9FQi7moOBEA+elMTywEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCLMWRmVeSWpSXmKPExsWy7bCSnO5Lb7UkgzmbWS2aF69ns3g3V8Zi
+        49sfTBabHl9jtbi8aw6bxYzz+5gszizuZXdg95jV0MvmsWlVJ5vH/rlr2D02L6n3+LxJLoA1
+        issmJTUnsyy1SN8ugStj/fPFLAW3+Cqmr/7D1sD4hKeLkZNDQsBE4vnxdexdjFwcQgK7GSX6
+        nixghEhIS1zfOIEdwhaWWPnvOVTRc0aJ1ytegCXYBHQldixuYwOxRQS2MEks+hYHUXSZUWJd
+        wysWkASngLtEQ+sGsKnCAgESs86sA2tmEVCR+LbzGJjNK2Ap8fLCXRYIW1Di5MwnQDYHB7OA
+        nkTbRrBWZgF5ie1v5zBDHKQg8fPpMlaIvU4SN39eZIaoEZd4efQI+wRGoVlIJs1CmDQLyaRZ
+        SDoWMLKsYpRMLSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQIjhgtzR2M21d90DvEyMTBeIhR
+        goNZSYT3/nmVJCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4
+        pRqYqlncAvdu7Q6Yxyt7qF7CiaHYz+d+0qZHLzNFE2qKjrI+rt2z/2+eS/HGrZW1u2vV1ZfP
+        2XXZb9u9eqe4XW7ddS57W0X5pqcefLrMI3Cqfan9X7m0pYqRd9UOZPAvuq9w7/d6p2t+/7pO
+        LPqXyDLriUZQi0hIDfvHm2tmlfzddPtZ00dGvS8J85Tcdy3bu6appvi7XIHuMzOG3Fep079b
+        57585ihV2nxr6Y/XkWtfXbO58vi7dI/2Dv+8WSrSL8r0WOa0v1si77mpuedOm2ZUxyLVg979
+        XT8f2lu8X/74mePCPR8/CNQtlDfxk1/OeDv3ntF2XznRNxv5jI6tOLjIvXYbm/N66ytvLjKI
+        3jlmrcRSnJFoqMVcVJwIAEZVzAcHAwAA
+X-CMS-MailID: 20220307181609epcas5p1dee884f7f426b64ee5915f507c1fb696
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220307080948epcas5p2cfb6ad93e628461366b03203a884e0e6
+References: <20220307080810.53847-1-krzysztof.kozlowski@canonical.com>
+        <CGME20220307080948epcas5p2cfb6ad93e628461366b03203a884e0e6@epcas5p2.samsung.com>
+        <20220307080925.54131-6-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 03:46:51PM +0100, Karolina Drobnik wrote:
-> Add description of the project, its structure and how to run it.
-> List what is left to implement and what the known issues are.
-> 
-> Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
-> ---
->  tools/testing/memblock/README | 114 ++++++++++++++++++++++++++++++++++
->  tools/testing/memblock/TODO   |  28 +++++++++
->  2 files changed, 142 insertions(+)
->  create mode 100644 tools/testing/memblock/README
->  create mode 100644 tools/testing/memblock/TODO
-> 
-> diff --git a/tools/testing/memblock/README b/tools/testing/memblock/README
-> new file mode 100644
-> index 000000000000..40c0ce50e7c2
-> --- /dev/null
-> +++ b/tools/testing/memblock/README
-> @@ -0,0 +1,114 @@
-> +=========================
-> +   Memblock simulator
-> +=========================
-> +
-> +
-> +Introduction
-> +---------------------
 
-Please make shorten the underline to match section title
 
-> +Memblock is a boot time memory allocator[1] that manages memory regions before
-> +the actual memory management is initialized. Its APIs allow to register physical
-> +memory regions, mark them as available or reserved, allocate a block of memory
-> +within the requested range and/or in specific NUMA node, and many more.
-> +
-> +Because it is used so early in the booting process, testing and debugging it is
-> +difficult. This test suite, usually referred as memblock simulator, is
-> +an attempt at testing the memblock mechanism. It runs one monolithic test that
-> +consist of a series of checks that exercise both the basic operations and
-> +allocation functionalities of memblock. The main data structure of the boot time
-> +memory allocator is initialized at the build time, so the checks here reuse its
-> +instance throughout the duration of the test. To ensure that tests don't affect
-> +each other, region arrays are reset in between.
-> +
-> +As this project uses the actual memblock code and has to run in user space, some
-> +of the kernel definitions were stubbed in the introductory patch[2]. Most of
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+>Sent: Monday, March 7, 2022 1:39 PM
+>To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Alim Akhtar
+><alim.akhtar@samsung.com>; Greg Kroah-Hartman
+><gregkh@linuxfoundation.org>; Jiri Slaby <jirislaby@kernel.org>; linux-arm-
+>kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+>serial@vger.kernel.org; linux-kernel@vger.kernel.org
+>Subject: [PATCH v2 7/7] tty: serial: samsung: simplify getting OF match
+data
+>
+>Simplify the code with of_device_get_match_data().
+>
+>Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>---
 
-The patch commit sha in memblock/for-next is stable, please use that.
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-> +them don't match the kernel implementation, so one should consult them first
-> +before making any significant changes to the project.
-> +
-> +
-> +Usage
-> +---------------------
-> +
-> +To run the tests, build the main target and run it:
-> +
-> +$ make; ./main
 
-I'd rather use
+> drivers/tty/serial/samsung_tty.c | 13 +++----------
+> 1 file changed, 3 insertions(+), 10 deletions(-)
+>
+>diff --git a/drivers/tty/serial/samsung_tty.c
+>b/drivers/tty/serial/samsung_tty.c
+>index 3ffae912217c..61c530bb377f 100644
+>--- a/drivers/tty/serial/samsung_tty.c
+>+++ b/drivers/tty/serial/samsung_tty.c
+>@@ -2150,23 +2150,16 @@ static int s3c24xx_serial_init_port(struct
+>s3c24xx_uart_port *ourport,
+>
+> /* Device driver serial port probe */
+>
+>-#ifdef CONFIG_OF
+>-static const struct of_device_id s3c24xx_uart_dt_match[]; -#endif
+>-
+> static int probe_index;
+>
+> static inline const struct s3c24xx_serial_drv_data *
+>s3c24xx_get_driver_data(struct platform_device *pdev)  {  #ifdef CONFIG_OF
+>-	if (pdev->dev.of_node) {
+>-		const struct of_device_id *match;
+>-
+>-		match = of_match_node(s3c24xx_uart_dt_match, pdev-
+>>dev.of_node);
+>-		return (struct s3c24xx_serial_drv_data *)match->data;
+>-	}
+>+	if (pdev->dev.of_node)
+>+		return of_device_get_match_data(&pdev->dev);
+> #endif
+>+
+> 	return (struct s3c24xx_serial_drv_data *)
+> 			platform_get_device_id(pdev)->driver_data;
+> }
+>--
+>2.32.0
 
-	make && ./make
 
-> +
-> +A successful run produces no output. It is also possible to override different
-> +configuration parameters. For example, to simulate enabled NUMA, use:
-> +
-> +$ make NUMA=1
-> +
-> +For the full list of options, see `make help`.
-> +
-> +
-> +Project structure
-> +---------------------
-> +
-> +The project has one target, main, which calls a group of checks for basic and
-> +allocation functions. Tests for each group are defined in dedicated files, as it
-> +can be seen here:
-> +
-> +memblock
-> +|-- asm       ------------------,
-> +|-- lib                         |-- implement function and struct stubs
-> +|-- linux     ------------------'
-> +|-- scripts
-> +|    |-- Makefile.include        -- handles `make` parameters
-> +|-- tests
-> +|    |-- alloc_api.(c|h)         -- memblock_alloc tests
-> +|    |-- alloc_helpers_api.(c|h) -- memblock_alloc_from tests
-> +|    |-- alloc_nid_api.(c|h)     -- memblock_alloc_try_nid tests
-> +|    |-- basic_api.(c|h)         -- memblock_add/memblock_reserve/... tests
-> +|    |-- common.(c|h)            -- helper functions for resetting memblock;
-> +|-- main.c        --------------.   dummy physical memory definition
-> +|-- Makefile                     `- test runner
-> +|-- README
-> +|-- TODO
-> +|-- .gitignore
-> +
-> +
-> +Simulating physical memory
-> +--------------------------
-> +
-> +Some allocation functions clear the memory in the process, so it is required for
-> +memblock to track valid memory ranges. To achieve this, the test suite registers
-> +with memblock memory stored by test_memory struct. It is a small wrapper that
-> +points to a block of memory allocated via malloc. For each group of allocation
-> +tests, dummy physical memory is allocated, added to memblock, and then released
-> +at the end of the test run. The structure of a test runner checking allocation
-> +functions is as follows:
-> +
-> +int memblock_alloc_foo_checks(void)
-> +{
-> +	reset_memblock_attributes();     /* data structure reset */
-> +	dummy_physical_memory_init();    /* allocate and register memory */
-> +
-> +	(...allocation checks...)
-> +
-> +	dummy_physical_memory_cleanup(); /* free the memory */
-> +}
-> +
-> +There's no need to explicitly free the dummy memory from memblock via
-> +memblock_free() call. The entry will be erased by reset_memblock_regions(),
-> +called at the beginning of each test.
-> +
-> +
-> +Known issues
-> +---------------------
-> +
-> +1. Requesting a specific NUMA node via memblock_alloc_node() does not work as
-> +   intended. Once the fix is in place, tests for this function can be added.
-> +
-> +2. Tests for memblock_alloc_low() can't be easily implemented. The function uses
-> +   ARCH_LOW_ADDRESS_LIMIT marco, which can't be changed to point at the low
-> +   memory of the memory_block.
-> +
-> +
-> +References
-> +---------------------
-> +
-> +1. Boot time memory management documentation page:
-> +   https://www.kernel.org/doc/html/latest/core-api/boot-time-mm.html
-> +
-> +2. Introduce memblock simulator, lore link:
-> +https://lore.kernel.org/linux-mm/cover.1643796665.git.karolinadrobnik@gmail.com/
-> diff --git a/tools/testing/memblock/TODO b/tools/testing/memblock/TODO
-> new file mode 100644
-> index 000000000000..c25b2fdec45e
-> --- /dev/null
-> +++ b/tools/testing/memblock/TODO
-> @@ -0,0 +1,28 @@
-> +TODO
-> +=====
-> +
-> +1. Add verbose output (e.g., what is being tested and how many tests cases are
-> +   passing)
-> +
-> +2. Add flags to Makefile:
-> +   + verbosity level
-> +   + enable memblock_dbg() messages (i.e. pass "-D CONFIG_DEBUG_MEMORY_INIT"
-> +     flag)
-> +
-> +3. Add tests trying to memblock_add() or memblock_reserve() 129th region.
-
-s/129th/more than INIT_MEMBLOCK_REGIONS/
-
-> +   This will trigger memblock_double_array(), make sure it succeeds.
-> +   *Important:* These tests require valid memory ranges, use dummy physical
-> +                memory block from common.c to implement them. It is also very
-> +                likely that the current MEM_SIZE won't be enough for these
-> +                test cases. Use realloc to adjust the size accordingly.
-> +
-> +4. Add test cases using this functions (implement them for both directions):
-> +   + memblock_alloc_raw()
-> +   + memblock_alloc_exact_nid_raw()
-> +   + memblock_alloc_try_nid_raw()
-> +
-> +5. Add tests for memblock_alloc_node() to check if the correct NUMA node is set
-> +   for the new region
-> +
-> +6. Update comments in tests/basic_api.c to match the style used in
-> +   tests/alloc_*.c
-> --
-> 2.30.2
-> 
-
--- 
-Sincerely yours,
-Mike.

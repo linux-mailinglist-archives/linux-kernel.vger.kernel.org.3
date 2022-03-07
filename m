@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941B84CF54C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D2F4CF4B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236903AbiCGJ0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:26:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S236553AbiCGJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236950AbiCGJXP (ORCPT
+        with ESMTP id S236477AbiCGJUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:15 -0500
+        Mon, 7 Mar 2022 04:20:50 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8343865830;
-        Mon,  7 Mar 2022 01:21:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A78522CC;
+        Mon,  7 Mar 2022 01:19:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D470B810BD;
-        Mon,  7 Mar 2022 09:21:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B826C340F5;
-        Mon,  7 Mar 2022 09:21:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17D04B810C2;
+        Mon,  7 Mar 2022 09:19:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D843C340F6;
+        Mon,  7 Mar 2022 09:19:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644885;
-        bh=0Q2WVn2wAh2H+CtyxAHWdQFdZ4PNcyjRU4u5dhDfKhU=;
+        s=korg; t=1646644783;
+        bh=y9KA5wwVId2J/79PmTHLJjOXo7qU9HSGK1698oX2Oug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oFlIO2VGTvSeTK6qui5Ra5ww1tkxwwLO8pgmr7HnUxM4nwdZTadfT/YqOzUmgv/eI
-         HYtwWpwz/OnMjOdlHCGh9fDy/u4ryRZXjdOJAgz2/6Q1iAK1UscS6ExarhQyR9LRop
-         mO51fuXefVgwmLZkOs0+18OqIUIJXVgSmZm6fJk4=
+        b=vIjpe4eTfpDj7/sMqOk5LL8KOCFIuHhqxObOH+6vgElFj7W15G/qS/tqeC23BDmTZ
+         5mgVMjxlgU1iDROn7urPcKC04seylGNQY7E1Jbz0PhYQMEXmzvY+sLLbYFZTMc0VUX
+         eKBFwzaxkCF3KCgcxO4/nVzLISiP0e0gWQXLbeHo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH 4.14 11/42] usb: gadget: clear related members when goto fail
-Date:   Mon,  7 Mar 2022 10:18:45 +0100
-Message-Id: <20220307091636.478364799@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 20/32] net: stmmac: fix return value of __setup handler
+Date:   Mon,  7 Mar 2022 10:18:46 +0100
+Message-Id: <20220307091635.013218557@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
+References: <20220307091634.434478485@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 501e38a5531efbd77d5c73c0ba838a889bfc1d74 upstream.
+commit e01b042e580f1fbf4fd8da467442451da00c7a90 upstream.
 
-dev->config and dev->hs_config and dev->dev need to be cleaned if
-dev_config fails to avoid UAF.
+__setup() handlers should return 1 on success, i.e., the parameter
+has been handled. A return of 0 causes the "option=value" string to be
+added to init's environment strings, polluting it.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20211231172138.7993-3-hbh25y@gmail.com
+Fixes: 47dd7a540b8a ("net: add support for STMicroelectronics Ethernet controllers.")
+Fixes: f3240e2811f0 ("stmmac: remove warning when compile as built-in (V2)")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Jose Abreu <joabreu@synopsys.com>
+Link: https://lore.kernel.org/r/20220224033536.25056-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/legacy/inode.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1882,8 +1882,8 @@ dev_config (struct file *fd, const char
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3608,7 +3608,7 @@ static int __init stmmac_cmdline_opt(cha
+ 	char *opt;
  
- 	value = usb_gadget_probe_driver(&gadgetfs_driver);
- 	if (value != 0) {
--		kfree (dev->buf);
--		dev->buf = NULL;
-+		spin_lock_irq(&dev->lock);
-+		goto fail;
- 	} else {
- 		/* at this point "good" hardware has for the first time
- 		 * let the USB the host see us.  alternatively, if users
-@@ -1900,6 +1900,9 @@ dev_config (struct file *fd, const char
- 	return value;
+ 	if (!str || !*str)
+-		return -EINVAL;
++		return 1;
+ 	while ((opt = strsep(&str, ",")) != NULL) {
+ 		if (!strncmp(opt, "debug:", 6)) {
+ 			if (kstrtoint(opt + 6, 0, &debug))
+@@ -3639,11 +3639,11 @@ static int __init stmmac_cmdline_opt(cha
+ 				goto err;
+ 		}
+ 	}
+-	return 0;
++	return 1;
  
- fail:
-+	dev->config = NULL;
-+	dev->hs_config = NULL;
-+	dev->dev = NULL;
- 	spin_unlock_irq (&dev->lock);
- 	pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev);
- 	kfree (dev->buf);
+ err:
+ 	pr_err("%s: ERROR broken module parameter conversion", __func__);
+-	return -EINVAL;
++	return 1;
+ }
+ 
+ __setup("stmmaceth=", stmmac_cmdline_opt);
 
 

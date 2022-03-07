@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DAD4CF585
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC904CF49F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236937AbiCGJaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:30:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S236395AbiCGJU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236833AbiCGJ1D (ORCPT
+        with ESMTP id S236374AbiCGJUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:27:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E784F66ACB;
-        Mon,  7 Mar 2022 01:24:35 -0800 (PST)
+        Mon, 7 Mar 2022 04:20:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C7A4BB9E;
+        Mon,  7 Mar 2022 01:19:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5D0B61052;
-        Mon,  7 Mar 2022 09:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D888FC340E9;
-        Mon,  7 Mar 2022 09:24:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30013B810B2;
+        Mon,  7 Mar 2022 09:19:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC2FC340F5;
+        Mon,  7 Mar 2022 09:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645065;
-        bh=p3NpOOloCl+up0CATJ/0J6lmGf3pYfYwJI3ux1MhqfE=;
+        s=korg; t=1646644759;
+        bh=j6TUN0r8UfveiHMI6u6iwnzfl6vV6ocFAP0/ty86B9I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K0GQ8mN7bKJNanHXTQGig19FrvtL0hNMcx2eyqebel0jz/67C98tRk4GjcQjoqhIv
-         pm+U9X1KNjzACOXRqOkPFZh3Jo0Y5WMx2BAjy3qM/QF1oXWhPxtquwMO3A0LlVjYyu
-         R4Wxj12xruC3nre/i+agct18KHosLiB2nY+G5by4=
+        b=q+9+jEmgBiNV+bcbMWnb+L9tA1jP5hfjt/2jQ0qMUG2BHbjGB6MQ8RMHor7BVal+G
+         7mkKva4T3YHeaiD/nSq/7GXY1nyc+jVO9DALeEkihgrxkB4FHAkagdzctvqjLSZvst
+         4dLCRkXmiqoeeVjjsQFfSYWpPagCX6KqhGt8Zs7g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Anholt <eric@anholt.net>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 03/51] i2c: bcm2835: Avoid clock stretching timeouts
-Date:   Mon,  7 Mar 2022 10:18:38 +0100
-Message-Id: <20220307091637.090940010@linuxfoundation.org>
+        stable@vger.kernel.org, Jiri Bohac <jbohac@suse.cz>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Subject: [PATCH 4.9 13/32] xfrm: fix MTU regression
+Date:   Mon,  7 Mar 2022 10:18:39 +0100
+Message-Id: <20220307091634.818002970@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
+References: <20220307091634.434478485@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Anholt <eric@anholt.net>
+From: Jiri Bohac <jbohac@suse.cz>
 
-[ Upstream commit 9495b9b31abe525ebd93da58de2c88b9f66d3a0e ]
+commit 6596a0229541270fb8d38d989f91b78838e5e9da upstream.
 
-The CLKT register contains at poweron 0x40, which at our typical 100kHz
-bus rate means .64ms. But there is no specified limit to how long devices
-should be able to stretch the clocks, so just disable the timeout. We
-still have a timeout wrapping the entire transfer.
+Commit 749439bfac6e1a2932c582e2699f91d329658196 ("ipv6: fix udpv6
+sendmsg crash caused by too small MTU") breaks PMTU for xfrm.
 
-Signed-off-by: Eric Anholt <eric@anholt.net>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-BugLink: https://github.com/raspberrypi/linux/issues/3064
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+A Packet Too Big ICMPv6 message received in response to an ESP
+packet will prevent all further communication through the tunnel
+if the reported MTU minus the ESP overhead is smaller than 1280.
+
+E.g. in a case of a tunnel-mode ESP with sha256/aes the overhead
+is 92 bytes. Receiving a PTB with MTU of 1371 or less will result
+in all further packets in the tunnel dropped. A ping through the
+tunnel fails with "ping: sendmsg: Invalid argument".
+
+Apparently the MTU on the xfrm route is smaller than 1280 and
+fails the check inside ip6_setup_cork() added by 749439bf.
+
+We found this by debugging USGv6/ipv6ready failures. Failing
+tests are: "Phase-2 Interoperability Test Scenario IPsec" /
+5.3.11 and 5.4.11 (Tunnel Mode: Fragmentation).
+
+Commit b515d2637276a3810d6595e10ab02c13bfd0b63a ("xfrm:
+xfrm_state_mtu should return at least 1280 for ipv6") attempted
+to fix this but caused another regression in TCP MSS calculations
+and had to be reverted.
+
+The patch below fixes the situation by dropping the MTU
+check and instead checking for the underflows described in the
+749439bf commit message.
+
+Signed-off-by: Jiri Bohac <jbohac@suse.cz>
+Fixes: 749439bfac6e ("ipv6: fix udpv6 sendmsg crash caused by too small MTU")
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-bcm2835.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ net/ipv6/ip6_output.c |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 4d19254f78c8a..db1ab9ccc30e7 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -28,6 +28,11 @@
- #define BCM2835_I2C_FIFO	0x10
- #define BCM2835_I2C_DIV		0x14
- #define BCM2835_I2C_DEL		0x18
-+/*
-+ * 16-bit field for the number of SCL cycles to wait after rising SCL
-+ * before deciding the slave is not responding. 0 disables the
-+ * timeout detection.
-+ */
- #define BCM2835_I2C_CLKT	0x1c
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -1274,8 +1274,6 @@ static int ip6_setup_cork(struct sock *s
+ 		if (np->frag_size)
+ 			mtu = np->frag_size;
+ 	}
+-	if (mtu < IPV6_MIN_MTU)
+-		return -EINVAL;
+ 	cork->base.fragsize = mtu;
+ 	if (dst_allfrag(rt->dst.path))
+ 		cork->base.flags |= IPCORK_ALLFRAG;
+@@ -1324,8 +1322,6 @@ static int __ip6_append_data(struct sock
  
- #define BCM2835_I2C_C_READ	BIT(0)
-@@ -398,6 +403,12 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 	adap->dev.of_node = pdev->dev.of_node;
- 	adap->quirks = &bcm2835_i2c_quirks;
+ 	fragheaderlen = sizeof(struct ipv6hdr) + rt->rt6i_nfheader_len +
+ 			(opt ? opt->opt_nflen : 0);
+-	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
+-		     sizeof(struct frag_hdr);
  
-+	/*
-+	 * Disable the hardware clock stretching timeout. SMBUS
-+	 * specifies a limit for how long the device can stretch the
-+	 * clock, but core I2C doesn't.
-+	 */
-+	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_CLKT, 0);
- 	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_C, 0);
+ 	headersize = sizeof(struct ipv6hdr) +
+ 		     (opt ? opt->opt_flen + opt->opt_nflen : 0) +
+@@ -1333,6 +1329,13 @@ static int __ip6_append_data(struct sock
+ 		      sizeof(struct frag_hdr) : 0) +
+ 		     rt->rt6i_nfheader_len;
  
- 	ret = i2c_add_adapter(adap);
--- 
-2.34.1
-
++	if (mtu < fragheaderlen ||
++	    ((mtu - fragheaderlen) & ~7) + fragheaderlen < sizeof(struct frag_hdr))
++		goto emsgsize;
++
++	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
++		     sizeof(struct frag_hdr);
++
+ 	/* as per RFC 7112 section 5, the entire IPv6 Header Chain must fit
+ 	 * the first fragment
+ 	 */
 
 

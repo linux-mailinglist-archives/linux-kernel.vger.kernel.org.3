@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7BC4CFA47
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A43E94CFB4D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238407AbiCGKO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
+        id S239806AbiCGKe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239961AbiCGKA2 (ORCPT
+        with ESMTP id S242641AbiCGKLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:00:28 -0500
+        Mon, 7 Mar 2022 05:11:42 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588B57CDDE;
-        Mon,  7 Mar 2022 01:46:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F09E8BF14;
+        Mon,  7 Mar 2022 01:55:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49A396116E;
-        Mon,  7 Mar 2022 09:46:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F97C340F6;
-        Mon,  7 Mar 2022 09:46:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77BB460929;
+        Mon,  7 Mar 2022 09:55:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809DCC340F4;
+        Mon,  7 Mar 2022 09:55:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646396;
-        bh=x1xfJ+eyXvadcqqgQp61+DU5rlvWMNQZMb/dMecAW5E=;
+        s=korg; t=1646646934;
+        bh=L7RKs74ysQEn+9s6AjvZhS1X91Rg/qbUhMXlbmV99dg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UjWWaxHxLGhjOCxBffWDy6tdYhluV2ulH3PkUIiaM8o2eh/g0aKtT4p2neBqMedDh
-         5JEeKeZK2E5zsFfg8B6HNC6155jxPKxNKoMXABNK6l9BP93yefIZ8EEYNBsl2lKc+j
-         OyATe24TKHP0FJBWv7M/9Mv74iZfqluPnU2t2mhA=
+        b=U+Ir1urEYVolOt44Nb9MQmqmfpv1IIrTMyisDeX6JUfRtte2hYCwW0sJLt9+gdLil
+         QMVMkN02NE2Y8iAZ7yy/MfNfCD93mD155PVTNSUZv60QTT+DgnwPP5DXPz82lFRbBD
+         wJv6QYCL0xZDiqLKScNnz/LKaTElj+TrWtAcm9w4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slawomir Laba <slawomirx.laba@intel.com>,
-        Phani Burra <phani.r.burra@intel.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Kurt Kanzenbach <kurt@linutronix.de>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 231/262] iavf: Fix init state closure on remove
-Date:   Mon,  7 Mar 2022 10:19:35 +0100
-Message-Id: <20220307091709.758025370@linuxfoundation.org>
+Subject: [PATCH 5.16 138/186] net: stmmac: enhance XDP ZC driver level switching performance
+Date:   Mon,  7 Mar 2022 10:19:36 +0100
+Message-Id: <20220307091657.936928509@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,118 +56,253 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slawomir Laba <slawomirx.laba@intel.com>
+From: Ong Boon Leong <boon.leong.ong@intel.com>
 
-[ Upstream commit 3ccd54ef44ebfa0792c5441b6d9c86618f3378d1 ]
+[ Upstream commit ac746c8520d9d056b6963ecca8ff1da9929d02f1 ]
 
-When init states of the adapter work, the errors like lack
-of communication with the PF might hop in. If such events
-occur the driver restores previous states in order to retry
-initialization in a proper way. When remove task kicks in,
-this situation could lead to races with unregistering the
-netdevice as well as resources cleanup. With the commit
-introducing the waiting in remove for init to complete,
-this problem turns into an endless waiting if init never
-recovers from errors.
+The previous stmmac_xdp_set_prog() implementation uses stmmac_release()
+and stmmac_open() which tear down the PHY device and causes undesirable
+autonegotiation which causes a delay whenever AFXDP ZC is setup.
 
-Introduce __IAVF_IN_REMOVE_TASK bit to indicate that the
-remove thread has started.
+This patch introduces two new functions that just sufficiently tear
+down DMA descriptors, buffer, NAPI process, and IRQs and reestablish
+them accordingly in both stmmac_xdp_release() and stammac_xdp_open().
 
-Make __IAVF_COMM_FAILED adapter state respect the
-__IAVF_IN_REMOVE_TASK bit and set the __IAVF_INIT_FAILED
-state and return without any action instead of trying to
-recover.
+As the results of this enhancement, we get rid of transient state
+introduced by the link auto-negotiation:
 
-Make __IAVF_INIT_FAILED adapter state respect the
-__IAVF_IN_REMOVE_TASK bit and return without any further
-actions.
+$ ./xdpsock -i eth0 -t -z
 
-Make the loop in the remove handler break when adapter has
-__IAVF_INIT_FAILED state set.
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 634444         634560
 
-Fixes: 898ef1cb1cb2 ("iavf: Combine init and watchdog state machines")
-Signed-off-by: Slawomir Laba <slawomirx.laba@intel.com>
-Signed-off-by: Phani Burra <phani.r.burra@intel.com>
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 632330         1267072
+
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 632438         1899584
+
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 632502         2532160
+
+Reported-by: Kurt Kanzenbach <kurt@linutronix.de>
+Signed-off-by: Ong Boon Leong <boon.leong.ong@intel.com>
+Tested-by: Kurt Kanzenbach <kurt@linutronix.de>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf.h      |  4 ++++
- drivers/net/ethernet/intel/iavf/iavf_main.c | 24 ++++++++++++++++++++-
- 2 files changed, 27 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |   4 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 137 +++++++++++++++++-
+ .../net/ethernet/stmicro/stmmac/stmmac_xdp.c  |   4 +-
+ 3 files changed, 139 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf.h b/drivers/net/ethernet/intel/iavf/iavf.h
-index 21e0f3361560..ffc61993019b 100644
---- a/drivers/net/ethernet/intel/iavf/iavf.h
-+++ b/drivers/net/ethernet/intel/iavf/iavf.h
-@@ -188,6 +188,10 @@ enum iavf_state_t {
- 	__IAVF_RUNNING,		/* opened, working */
- };
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+index 873b9e3e5da2..05b5371ca036 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+@@ -334,8 +334,8 @@ void stmmac_set_ethtool_ops(struct net_device *netdev);
+ int stmmac_init_tstamp_counter(struct stmmac_priv *priv, u32 systime_flags);
+ void stmmac_ptp_register(struct stmmac_priv *priv);
+ void stmmac_ptp_unregister(struct stmmac_priv *priv);
+-int stmmac_open(struct net_device *dev);
+-int stmmac_release(struct net_device *dev);
++int stmmac_xdp_open(struct net_device *dev);
++void stmmac_xdp_release(struct net_device *dev);
+ int stmmac_resume(struct device *dev);
+ int stmmac_suspend(struct device *dev);
+ int stmmac_dvr_remove(struct device *dev);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 240dffe20fc3..2b3752bd1ac9 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3679,7 +3679,7 @@ static int stmmac_request_irq(struct net_device *dev)
+  *  0 on success and an appropriate (-)ve integer as defined in errno.h
+  *  file on failure.
+  */
+-int stmmac_open(struct net_device *dev)
++static int stmmac_open(struct net_device *dev)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+ 	int mode = priv->plat->phy_interface;
+@@ -3803,7 +3803,7 @@ static void stmmac_fpe_stop_wq(struct stmmac_priv *priv)
+  *  Description:
+  *  This is the stop entry point of the driver.
+  */
+-int stmmac_release(struct net_device *dev)
++static int stmmac_release(struct net_device *dev)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+ 	u32 chan;
+@@ -6473,6 +6473,139 @@ void stmmac_enable_tx_queue(struct stmmac_priv *priv, u32 queue)
+ 	spin_unlock_irqrestore(&ch->lock, flags);
+ }
  
-+enum iavf_critical_section_t {
-+	__IAVF_IN_REMOVE_TASK,	/* device being removed */
-+};
++void stmmac_xdp_release(struct net_device *dev)
++{
++	struct stmmac_priv *priv = netdev_priv(dev);
++	u32 chan;
 +
- #define IAVF_CLOUD_FIELD_OMAC		0x01
- #define IAVF_CLOUD_FIELD_IMAC		0x02
- #define IAVF_CLOUD_FIELD_IVLAN	0x04
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 60e6f55c6dc5..57ecdff870a1 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2019,6 +2019,15 @@ static void iavf_watchdog_task(struct work_struct *work)
- 				   msecs_to_jiffies(1));
- 		return;
- 	case __IAVF_INIT_FAILED:
-+		if (test_bit(__IAVF_IN_REMOVE_TASK,
-+			     &adapter->crit_section)) {
-+			/* Do not update the state and do not reschedule
-+			 * watchdog task, iavf_remove should handle this state
-+			 * as it can loop forever
-+			 */
-+			mutex_unlock(&adapter->crit_lock);
-+			return;
++	/* Disable NAPI process */
++	stmmac_disable_all_queues(priv);
++
++	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
++		hrtimer_cancel(&priv->tx_queue[chan].txtimer);
++
++	/* Free the IRQ lines */
++	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
++
++	/* Stop TX/RX DMA channels */
++	stmmac_stop_all_dma(priv);
++
++	/* Release and free the Rx/Tx resources */
++	free_dma_desc_resources(priv);
++
++	/* Disable the MAC Rx/Tx */
++	stmmac_mac_set(priv, priv->ioaddr, false);
++
++	/* set trans_start so we don't get spurious
++	 * watchdogs during reset
++	 */
++	netif_trans_update(dev);
++	netif_carrier_off(dev);
++}
++
++int stmmac_xdp_open(struct net_device *dev)
++{
++	struct stmmac_priv *priv = netdev_priv(dev);
++	u32 rx_cnt = priv->plat->rx_queues_to_use;
++	u32 tx_cnt = priv->plat->tx_queues_to_use;
++	u32 dma_csr_ch = max(rx_cnt, tx_cnt);
++	struct stmmac_rx_queue *rx_q;
++	struct stmmac_tx_queue *tx_q;
++	u32 buf_size;
++	bool sph_en;
++	u32 chan;
++	int ret;
++
++	ret = alloc_dma_desc_resources(priv);
++	if (ret < 0) {
++		netdev_err(dev, "%s: DMA descriptors allocation failed\n",
++			   __func__);
++		goto dma_desc_error;
++	}
++
++	ret = init_dma_desc_rings(dev, GFP_KERNEL);
++	if (ret < 0) {
++		netdev_err(dev, "%s: DMA descriptors initialization failed\n",
++			   __func__);
++		goto init_error;
++	}
++
++	/* DMA CSR Channel configuration */
++	for (chan = 0; chan < dma_csr_ch; chan++)
++		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
++
++	/* Adjust Split header */
++	sph_en = (priv->hw->rx_csum > 0) && priv->sph;
++
++	/* DMA RX Channel Configuration */
++	for (chan = 0; chan < rx_cnt; chan++) {
++		rx_q = &priv->rx_queue[chan];
++
++		stmmac_init_rx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
++				    rx_q->dma_rx_phy, chan);
++
++		rx_q->rx_tail_addr = rx_q->dma_rx_phy +
++				     (rx_q->buf_alloc_num *
++				      sizeof(struct dma_desc));
++		stmmac_set_rx_tail_ptr(priv, priv->ioaddr,
++				       rx_q->rx_tail_addr, chan);
++
++		if (rx_q->xsk_pool && rx_q->buf_alloc_num) {
++			buf_size = xsk_pool_get_rx_frame_size(rx_q->xsk_pool);
++			stmmac_set_dma_bfsize(priv, priv->ioaddr,
++					      buf_size,
++					      rx_q->queue_index);
++		} else {
++			stmmac_set_dma_bfsize(priv, priv->ioaddr,
++					      priv->dma_buf_sz,
++					      rx_q->queue_index);
 +		}
- 		if (++adapter->aq_wait_count > IAVF_AQ_MAX_ERR) {
- 			dev_err(&adapter->pdev->dev,
- 				"Failed to communicate with PF; waiting before retry\n");
-@@ -2035,6 +2044,17 @@ static void iavf_watchdog_task(struct work_struct *work)
- 		queue_delayed_work(iavf_wq, &adapter->watchdog_task, HZ);
- 		return;
- 	case __IAVF_COMM_FAILED:
-+		if (test_bit(__IAVF_IN_REMOVE_TASK,
-+			     &adapter->crit_section)) {
-+			/* Set state to __IAVF_INIT_FAILED and perform remove
-+			 * steps. Remove IAVF_FLAG_PF_COMMS_FAILED so the task
-+			 * doesn't bring the state back to __IAVF_COMM_FAILED.
-+			 */
-+			iavf_change_state(adapter, __IAVF_INIT_FAILED);
-+			adapter->flags &= ~IAVF_FLAG_PF_COMMS_FAILED;
-+			mutex_unlock(&adapter->crit_lock);
-+			return;
-+		}
- 		reg_val = rd32(hw, IAVF_VFGEN_RSTAT) &
- 			  IAVF_VFGEN_RSTAT_VFR_STATE_MASK;
- 		if (reg_val == VIRTCHNL_VFR_VFACTIVE ||
-@@ -3988,13 +4008,15 @@ static void iavf_remove(struct pci_dev *pdev)
- 	struct iavf_hw *hw = &adapter->hw;
- 	int err;
++
++		stmmac_enable_sph(priv, priv->ioaddr, sph_en, chan);
++	}
++
++	/* DMA TX Channel Configuration */
++	for (chan = 0; chan < tx_cnt; chan++) {
++		tx_q = &priv->tx_queue[chan];
++
++		stmmac_init_tx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
++				    tx_q->dma_tx_phy, chan);
++
++		tx_q->tx_tail_addr = tx_q->dma_tx_phy;
++		stmmac_set_tx_tail_ptr(priv, priv->ioaddr,
++				       tx_q->tx_tail_addr, chan);
++	}
++
++	/* Enable the MAC Rx/Tx */
++	stmmac_mac_set(priv, priv->ioaddr, true);
++
++	/* Start Rx & Tx DMA Channels */
++	stmmac_start_all_dma(priv);
++
++	stmmac_init_coalesce(priv);
++
++	ret = stmmac_request_irq(dev);
++	if (ret)
++		goto irq_error;
++
++	/* Enable NAPI process*/
++	stmmac_enable_all_queues(priv);
++	netif_carrier_on(dev);
++	netif_tx_start_all_queues(dev);
++
++	return 0;
++
++irq_error:
++	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
++		hrtimer_cancel(&priv->tx_queue[chan].txtimer);
++
++	stmmac_hw_teardown(dev);
++init_error:
++	free_dma_desc_resources(priv);
++dma_desc_error:
++	return ret;
++}
++
+ int stmmac_xsk_wakeup(struct net_device *dev, u32 queue, u32 flags)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+index 2a616c6f7cd0..9d4d8c3dad0a 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+@@ -119,7 +119,7 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
  
-+	set_bit(__IAVF_IN_REMOVE_TASK, &adapter->crit_section);
- 	/* Wait until port initialization is complete.
- 	 * There are flows where register/unregister netdev may race.
- 	 */
- 	while (1) {
- 		mutex_lock(&adapter->crit_lock);
- 		if (adapter->state == __IAVF_RUNNING ||
--		    adapter->state == __IAVF_DOWN) {
-+		    adapter->state == __IAVF_DOWN ||
-+		    adapter->state == __IAVF_INIT_FAILED) {
- 			mutex_unlock(&adapter->crit_lock);
- 			break;
- 		}
+ 	need_update = !!priv->xdp_prog != !!prog;
+ 	if (if_running && need_update)
+-		stmmac_release(dev);
++		stmmac_xdp_release(dev);
+ 
+ 	old_prog = xchg(&priv->xdp_prog, prog);
+ 	if (old_prog)
+@@ -129,7 +129,7 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
+ 	priv->sph = priv->sph_cap && !stmmac_xdp_is_enabled(priv);
+ 
+ 	if (if_running && need_update)
+-		stmmac_open(dev);
++		stmmac_xdp_open(dev);
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 

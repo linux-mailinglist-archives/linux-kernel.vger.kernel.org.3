@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392234CF654
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2682D4CFB17
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiCGJfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S239066AbiCGK10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237849AbiCGJ23 (ORCPT
+        with ESMTP id S241768AbiCGKKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:28:29 -0500
+        Mon, 7 Mar 2022 05:10:33 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA486BDEF;
-        Mon,  7 Mar 2022 01:26:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7EE6D3A2;
+        Mon,  7 Mar 2022 01:53:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B30426116E;
-        Mon,  7 Mar 2022 09:26:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1ABAC340E9;
-        Mon,  7 Mar 2022 09:26:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27E4D609D1;
+        Mon,  7 Mar 2022 09:53:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E78C340F3;
+        Mon,  7 Mar 2022 09:53:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645166;
-        bh=XeQWuE9QS00qsRaIJms6ytgoEPSUO8UYDaaenG9fc9I=;
+        s=korg; t=1646646824;
+        bh=7op5MFowyiInE3pMmlvDncVgyDPHUsh9zGiv/8ME6CU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=btCnVASBdAB8vPWEZVFG2om6p36/gflqnVHd5BFzmK9bV7/1Zw0cZwpF/QDGWKlu1
-         cbMtGAtW2ojNDrO51CLwyLaBazzLUe/bmFFxPZpL5w2ttHBGd21YDyn5a6Wl2mXjQ2
-         eNTNrNBN6aFGq0ZrP63mjntj7yFT9ViEijo13Ccg=
+        b=1EX4nIUUWtZ8r/UglYldrTjvmBpsf7ecWaG/UqQ8g0J6Aa6W5HwV0kyaaHDPxxA1U
+         kKiTy4S7G1lksP+NZ50L+QyCu9eeoFmUG5SenVB/m4m+GmWbeT5Ph0AbhO9BzB8xMA
+         wtiBpC8SteZKQpSF/Z4sFlBo80pzBQjuOpbITBRA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 26/51] net: dcb: flush lingering app table entries for unregistered devices
+        stable@vger.kernel.org, Lars Poeschel <poeschel@lemonage.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+Subject: [PATCH 5.16 103/186] auxdisplay: lcd2s: Use proper API to free the instance of charlcd object
 Date:   Mon,  7 Mar 2022 10:19:01 +0100
-Message-Id: <20220307091637.737283808@linuxfoundation.org>
+Message-Id: <20220307091656.960336802@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,103 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit 91b0383fef06f20b847fa9e4f0e3054ead0b1a1b upstream.
+commit 9ed331f8a0fb674f4f06edf05a1687bf755af27b upstream.
 
-If I'm not mistaken (and I don't think I am), the way in which the
-dcbnl_ops work is that drivers call dcb_ieee_setapp() and this populates
-the application table with dynamically allocated struct dcb_app_type
-entries that are kept in the module-global dcb_app_list.
+While it might work, the current approach is fragile in a few ways:
+- whenever members in the structure are shuffled, the pointer will be wrong
+- the resource freeing may include more than covered by kfree()
 
-However, nobody keeps exact track of these entries, and although
-dcb_ieee_delapp() is supposed to remove them, nobody does so when the
-interface goes away (example: driver unbinds from device). So the
-dcb_app_list will contain lingering entries with an ifindex that no
-longer matches any device in dcb_app_lookup().
+Fix this by using charlcd_free() call instead of kfree().
 
-Reclaim the lost memory by listening for the NETDEV_UNREGISTER event and
-flushing the app table entries of interfaces that are now gone.
-
-In fact something like this used to be done as part of the initial
-commit (blamed below), but it was done in dcbnl_exit() -> dcb_flushapp(),
-essentially at module_exit time. That became dead code after commit
-7a6b6f515f77 ("DCB: fix kconfig option") which essentially merged
-"tristate config DCB" and "bool config DCBNL" into a single "bool config
-DCB", so net/dcb/dcbnl.c could not be built as a module anymore.
-
-Commit 36b9ad8084bd ("net/dcb: make dcbnl.c explicitly non-modular")
-recognized this and deleted dcbnl_exit() and dcb_flushapp() altogether,
-leaving us with the version we have today.
-
-Since flushing application table entries can and should be done as soon
-as the netdevice disappears, fundamentally the commit that is to blame
-is the one that introduced the design of this API.
-
-Fixes: 9ab933ab2cc8 ("dcbnl: add appliction tlv handlers")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 8c9108d014c5 ("auxdisplay: add a driver for lcd2s character display")
+Cc: Lars Poeschel <poeschel@lemonage.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/dcb/dcbnl.c |   44 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ drivers/auxdisplay/lcd2s.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/dcb/dcbnl.c
-+++ b/net/dcb/dcbnl.c
-@@ -2054,10 +2054,54 @@ u8 dcb_ieee_getapp_default_prio_mask(con
+--- a/drivers/auxdisplay/lcd2s.c
++++ b/drivers/auxdisplay/lcd2s.c
+@@ -336,7 +336,7 @@ static int lcd2s_i2c_probe(struct i2c_cl
+ 	return 0;
+ 
+ fail1:
+-	kfree(lcd);
++	charlcd_free(lcd2s->charlcd);
+ 	return err;
  }
- EXPORT_SYMBOL(dcb_ieee_getapp_default_prio_mask);
  
-+static void dcbnl_flush_dev(struct net_device *dev)
-+{
-+	struct dcb_app_type *itr, *tmp;
-+
-+	spin_lock(&dcb_lock);
-+
-+	list_for_each_entry_safe(itr, tmp, &dcb_app_list, list) {
-+		if (itr->ifindex == dev->ifindex) {
-+			list_del(&itr->list);
-+			kfree(itr);
-+		}
-+	}
-+
-+	spin_unlock(&dcb_lock);
-+}
-+
-+static int dcbnl_netdevice_event(struct notifier_block *nb,
-+				 unsigned long event, void *ptr)
-+{
-+	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-+
-+	switch (event) {
-+	case NETDEV_UNREGISTER:
-+		if (!dev->dcbnl_ops)
-+			return NOTIFY_DONE;
-+
-+		dcbnl_flush_dev(dev);
-+
-+		return NOTIFY_OK;
-+	default:
-+		return NOTIFY_DONE;
-+	}
-+}
-+
-+static struct notifier_block dcbnl_nb __read_mostly = {
-+	.notifier_call  = dcbnl_netdevice_event,
-+};
-+
- static int __init dcbnl_init(void)
- {
-+	int err;
-+
- 	INIT_LIST_HEAD(&dcb_app_list);
+@@ -345,7 +345,7 @@ static int lcd2s_i2c_remove(struct i2c_c
+ 	struct lcd2s_data *lcd2s = i2c_get_clientdata(i2c);
  
-+	err = register_netdevice_notifier(&dcbnl_nb);
-+	if (err)
-+		return err;
-+
- 	rtnl_register(PF_UNSPEC, RTM_GETDCB, dcb_doit, NULL, 0);
- 	rtnl_register(PF_UNSPEC, RTM_SETDCB, dcb_doit, NULL, 0);
+ 	charlcd_unregister(lcd2s->charlcd);
+-	kfree(lcd2s->charlcd);
++	charlcd_free(lcd2s->charlcd);
+ 	return 0;
+ }
  
 
 

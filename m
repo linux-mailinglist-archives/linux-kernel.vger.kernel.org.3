@@ -2,78 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41DF4D044E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 877474D0453
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244275AbiCGQlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S232992AbiCGQm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240217AbiCGQlj (ORCPT
+        with ESMTP id S229591AbiCGQm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:41:39 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3FC506D8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:40:44 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 7 Mar 2022 11:42:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79522DAAD;
+        Mon,  7 Mar 2022 08:42:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4F4D1210FF;
-        Mon,  7 Mar 2022 16:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1646671243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W8dh4GyWsuZQpOUWJYTNSBAILVfnH4W50m69Zy0f1yw=;
-        b=OhPUMq1oOMBQ0yE+CkJlnQyTUyTCss65Ch7/ZNRSTi8a4fkUBir4gF62DX+dMYyjPAFpaN
-        qpap3cgJ1Z7tG/XySu/OVwVDm5jc0msQWKtkhLToWiap2ElHVxQbZQSwmQAq+Q9A9YQ7nC
-        ILDMcFOYDurqIARM75bLM98WEvblAVE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1646671243;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W8dh4GyWsuZQpOUWJYTNSBAILVfnH4W50m69Zy0f1yw=;
-        b=kKUob1H/wHo1YPnI8AbQcGpzs8kDJVK720KguYQ8y0I73thjpupeRcYOq5X4JCfo/AeSxK
-        JfKfQk81OE2aX4CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26DD813B93;
-        Mon,  7 Mar 2022 16:40:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uBS0CIs1JmKYTAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 07 Mar 2022 16:40:43 +0000
-Message-ID: <07d4f687-544f-17d4-51cd-7b86aa23fb21@suse.cz>
-Date:   Mon, 7 Mar 2022 17:40:42 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52D4060FFD;
+        Mon,  7 Mar 2022 16:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C7AC340EF;
+        Mon,  7 Mar 2022 16:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646671322;
+        bh=cCeFcTKoA0HdFbg50sKHYVPHLCgp/zrKFa5N/0XGs3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nAVxDee35AASEIEtky1C9I/DubZYctIAJpp05hvPqjBtN73TaKDo+3j8mZc0yegqe
+         15r++axCcsInReG+C4hshNfZZ8K2qeEe3bDifuVsqmRqhCcLlnkjTBvwpIcuYrAww+
+         D7zbZ08oxOkX5xzUB8xgGXDpCevZXEFAVK7y4EHI=
+Date:   Mon, 7 Mar 2022 17:41:59 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/262] 5.15.27-rc1 review
+Message-ID: <YiY1151bYrq+AvHM@kroah.com>
+References: <20220307091702.378509770@linuxfoundation.org>
+ <24c54a05-bb80-a128-d0ba-a78c6d5d101c@roeck-us.net>
+ <YiYw3hV2r8DTa7fb@kroah.com>
+ <e23ebf8b-5227-cc97-d166-797a4e852cd2@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org
-References: <20220307074057.902222-1-42.hyeyoo@gmail.com>
- <20220307074057.902222-3-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v3 2/2] mm/slub: refactor deactivate_slab()
-In-Reply-To: <20220307074057.902222-3-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e23ebf8b-5227-cc97-d166-797a4e852cd2@roeck-us.net>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,126 +58,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/22 08:40, Hyeonggon Yoo wrote:
-> Simplify deactivate_slab() by unlocking n->list_lock and retrying
-> cmpxchg_double() when cmpxchg_double() fails, and perform
-> add_{partial,full} only when it succeed.
+On Mon, Mar 07, 2022 at 08:34:48AM -0800, Guenter Roeck wrote:
+> On 3/7/22 08:20, Greg Kroah-Hartman wrote:
+> > On Mon, Mar 07, 2022 at 06:36:22AM -0800, Guenter Roeck wrote:
+> > > On 3/7/22 01:15, Greg Kroah-Hartman wrote:
+> > > > This is the start of the stable review cycle for the 5.15.27 release.
+> > > > There are 262 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > > 
+> > > > Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
+> > > > Anything received after that time might be too late.
+> > > > 
+> > > 
+> > > In addition to other reported build errors:
+> > > 
+> > > Building mips:allmodconfig ... failed
+> > > --------------
+> > > Error log:
+> > > drivers/net/hamradio/mkiss.c:35: error: "END" redefined
+> > 
+> > That is odd, I don't see any changes to that driver, nor any MIPS
+> > changes that touch "END".
+> > 
+> > I don't even see "END" in the diff anywhere.
+> > 
+> > Any chance you can bisect?
+> > 
 > 
-> Releasing and taking n->list_lock again here is not harmful as SLUB
-> avoids deactivating slabs as much as possible.
+> git bisect start 'HEAD' 'v5.15.26'
+> # bad: [20ab3ebe56f306d821cf1c6858cf29f4d2e0075a] drm/amd/display: Fix stream->link_enc unassigned during stream removal
+> git bisect bad 20ab3ebe56f306d821cf1c6858cf29f4d2e0075a
+> # bad: [2f01eec30992529350bae197f73d71136b35e3b1] Input: ti_am335x_tsc - fix STEPCONFIG setup for Z2
+> git bisect bad 2f01eec30992529350bae197f73d71136b35e3b1
+> # good: [d369b344b4fb5a6ab9f72bacece674526761b885] arm64: Mark start_backtrace() notrace and NOKPROBE_SYMBOL
+> git bisect good d369b344b4fb5a6ab9f72bacece674526761b885
+> # good: [46f46f14bd45acdabcfb1d9f3b648f4a27d18c08] bpf, arm64: Use emit_addr_mov_i64() for BPF_PSEUDO_FUNC
+> git bisect good 46f46f14bd45acdabcfb1d9f3b648f4a27d18c08
+> # bad: [5b0c543b875e976e74c347b2d009c6519a6d2939] KVM: s390: Ensure kvm_arch_no_poll() is read once when blocking vCPU
+> git bisect bad 5b0c543b875e976e74c347b2d009c6519a6d2939
+> # bad: [58452f46ddb11fbe5b5f31d93a979d57efdad4b1] PCI: rcar: Check if device is runtime suspended instead of __clk_is_enabled()
+> git bisect bad 58452f46ddb11fbe5b5f31d93a979d57efdad4b1
+> # bad: [d6ab8da0cb6234fbc4fd240b9d7470b4c03d5df9] signal: In get_signal test for signal_group_exit every time through the loop
+> git bisect bad d6ab8da0cb6234fbc4fd240b9d7470b4c03d5df9
+> # bad: [53863a048566989e87f8bb306e835f940a10ed73] MIPS: fix local_{add,sub}_return on MIPS64
+> git bisect bad 53863a048566989e87f8bb306e835f940a10ed73
+> # first bad commit: [53863a048566989e87f8bb306e835f940a10ed73] MIPS: fix local_{add,sub}_return on MIPS64
 > 
-> [ vbabka@suse.cz: perform add_{partial,full} when cmpxchg_double()
->   succeed.
+> The problem is the innocent looking
 > 
->   count deactivating full slabs even if debugging flag is not set. ]
+>  #include <linux/atomic.h>
+> +#include <asm/asm.h>
+>  #include <asm/cmpxchg.h>
 > 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> in that patch. Reverting it fixes the problem. Alternatively, you could apply
+> commit 16517829f2e0 ("hamradio: fix macro redefine warning").
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Ah, that works better, I'll go queue that one up, thanks!
 
-adding both to slab-next. Fixed up some nits myself, see below:
-
->  
-> @@ -2420,61 +2416,50 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
->  	new.frozen = 0;
->  
->  	if (!new.inuse && n->nr_partial >= s->min_partial)
-> -		m = M_FREE;
-> +		mode = M_FREE;
->  	else if (new.freelist) {
-
-This was against kernel style even before the patch - we use { } in the
-'else if' branch, thus all branches should use { } even if one-line.
-
-> -		m = M_PARTIAL;
-> -		if (!lock) {
-> -			lock = 1;
-> -			/*
-> -			 * Taking the spinlock removes the possibility that
-> -			 * acquire_slab() will see a slab that is frozen
-> -			 */
-> -			spin_lock_irqsave(&n->list_lock, flags);
-> -		}
-> -	} else {
-> -		m = M_FULL;
-> -		if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
-> -			lock = 1;
-> -			/*
-> -			 * This also ensures that the scanning of full
-> -			 * slabs from diagnostic functions will not see
-> -			 * any frozen slabs.
-> -			 */
-> -			spin_lock_irqsave(&n->list_lock, flags);
-> -		}
-> -	}
-> -
-> -	if (l != m) {
-> -		if (l == M_PARTIAL)
-> -			remove_partial(n, slab);
-> -		else if (l == M_FULL)
-> -			remove_full(s, n, slab);
-> +		mode = M_PARTIAL;
-> +		/*
-> +		 * Taking the spinlock removes the possibility that
-> +		 * acquire_slab() will see a slab that is frozen
-> +		 */
-> +		spin_lock_irqsave(&n->list_lock, flags);
-> +	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
-> +		mode = M_FULL;
-> +		/*
-> +		 * This also ensures that the scanning of full
-> +		 * slabs from diagnostic functions will not see
-> +		 * any frozen slabs.
-> +		 */
-> +		spin_lock_irqsave(&n->list_lock, flags);
-> +	} else
-> +		mode = M_FULL_NOLIST;
-
-Ditto here (this is new).
-
-> -		if (m == M_PARTIAL)
-> -			add_partial(n, slab, tail);
-> -		else if (m == M_FULL)
-> -			add_full(s, n, slab);
-> -	}
->  
-> -	l = m;
->  	if (!cmpxchg_double_slab(s, slab,
->  				old.freelist, old.counters,
->  				new.freelist, new.counters,
-> -				"unfreezing slab"))
-> +				"unfreezing slab")) {
-> +		if (mode == M_PARTIAL || mode == M_FULL)
-> +			spin_unlock_irqrestore(&n->list_lock, flags);
->  		goto redo;
-> +	}
->  
-> -	if (lock)
-> -		spin_unlock_irqrestore(&n->list_lock, flags);
->  
-> -	if (m == M_PARTIAL)
-> +	if (mode == M_PARTIAL) {
-> +		add_partial(n, slab, tail);
-> +		spin_unlock_irqrestore(&n->list_lock, flags);
->  		stat(s, tail);
-> -	else if (m == M_FULL)
-> -		stat(s, DEACTIVATE_FULL);
-> -	else if (m == M_FREE) {
-> +	} else if (mode == M_FREE) {
->  		stat(s, DEACTIVATE_EMPTY);
->  		discard_slab(s, slab);
->  		stat(s, FREE_SLAB);
-> -	}
-> +	} else if (mode == M_FULL) {
-> +		add_full(s, n, slab);
-> +		spin_unlock_irqrestore(&n->list_lock, flags);
-> +		stat(s, DEACTIVATE_FULL);
-> +	} else if (mode == M_FULL_NOLIST)
-> +		stat(s, DEACTIVATE_FULL);
-
-And here.
-
->  }
->  
->  #ifdef CONFIG_SLUB_CPU_PARTIAL
-
+greg k-h

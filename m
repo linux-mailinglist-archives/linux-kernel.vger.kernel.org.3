@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4B84CF0CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 06:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6025A4CF0CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 06:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiCGFDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 00:03:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S234389AbiCGFIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 00:08:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235246AbiCGFDo (ORCPT
+        with ESMTP id S230215AbiCGFI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 00:03:44 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB405F82
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 21:02:49 -0800 (PST)
+        Mon, 7 Mar 2022 00:08:28 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B393010E9
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 21:07:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646629369; x=1678165369;
+  t=1646629653; x=1678165653;
   h=from:to:cc:subject:references:date:in-reply-to:
    message-id:mime-version;
-  bh=fSzZifNYct0Has80OHs9poHqh4YGD9Xak8s4xLdqB7U=;
-  b=XVWncK0WA8LJy4CGclOg8eGM8bGoskNxinkaOvAXPbho1MCmHlXSMPoU
-   dj8++DaRN4++DPKzxrUqTdrgRljzrLCBxch2wUtlSGuFFzF009k+LNVTk
-   EjQXE7X20MOuu1y1anbrCSm0UykxMWfkYUR1ha28RfAyPhuXUrfivh1SB
-   unWP7SQnbZdAXAmn6+v4fbWTPlTjsFXKxISX31bBQMYjGv0jWb6axNhKG
-   4nVZbt3/CYlL6jsdoCgn+53Wo7+cm7puU2P5BwoDG1zppj9jEulkJzaji
-   txEi0w+EHpOorEfTWj0hJhJOFP63SpQ5IXyas/AUo6t4v26DFIaCTDtSi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254028485"
+  bh=Dp9grBEsh9qgvv8Wpxg4ToQAypx/TtvNKWPX6UIX9cc=;
+  b=hQ/5CMXoCW4ESju1Llc3WmnpuJ83NKHnre/zPLSb67w5ZXVbBlsXxvXj
+   L19i8ZR4eYwOIv3klLqOCY1EyVtuBufG29gM9/UShVoCSxvQSEO2CwlbP
+   OQ0k0WIiCREzDLLeagQTiitPkH1d4s9i3PWzwcPRvuvKXFdGDkR7ctpkh
+   IVHz3lTE+SUsWMKYEBEMnq6ctn9M9OtnvqY0YwTpgE+p70xsu7HRioMZU
+   Za0VUCVdhmmO+MYFece2vBaQvzv4uc4VIDeujjI+b9crON8H8fRrB8yJU
+   WOMkiT1lsBa8nMnhhsTPFmmgVktQXnttOpu3vRC/4+TQxx5PTPd1/jUoC
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="251875220"
 X-IronPort-AV: E=Sophos;i="5.90,160,1643702400"; 
-   d="scan'208";a="254028485"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 21:02:38 -0800
+   d="scan'208";a="251875220"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 21:07:33 -0800
 X-IronPort-AV: E=Sophos;i="5.90,160,1643702400"; 
-   d="scan'208";a="512535412"
+   d="scan'208";a="536962197"
 Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 21:02:33 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 21:07:28 -0800
 From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>, <akpm@linux-foundation.org>,
-        <mike.kravetz@oracle.com>, <shy828301@gmail.com>,
-        <willy@infradead.org>, <ziy@nvidia.com>, <minchan@kernel.org>,
-        <apopple@nvidia.com>, <ave.hansen@linux.intel.com>,
-        <o451686892@gmail.com>, <almasrymina@google.com>,
-        <jhubbard@nvidia.com>, <rcampbell@nvidia.com>, <peterx@redhat.com>,
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
+        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
+        <minchan@kernel.org>, <apopple@nvidia.com>,
+        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
+        <almasrymina@google.com>, <jhubbard@nvidia.com>,
+        <rcampbell@nvidia.com>, <peterx@redhat.com>,
         <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 12/16] mm/migration: fix potential page refcounts leak
- in migrate_pages
+Subject: Re: [PATCH 13/16] mm/migration: return errno when isolate_huge_page
+ failed
 References: <20220304093409.25829-1-linmiaohe@huawei.com>
-        <20220304093409.25829-13-linmiaohe@huawei.com>
-        <20f47ec9-3b5b-5326-b1c3-4b1a0c38ef46@linux.alibaba.com>
-Date:   Mon, 07 Mar 2022 13:02:27 +0800
-In-Reply-To: <20f47ec9-3b5b-5326-b1c3-4b1a0c38ef46@linux.alibaba.com> (Baolin
-        Wang's message of "Mon, 7 Mar 2022 09:57:30 +0800")
-Message-ID: <87mti25p98.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <20220304093409.25829-14-linmiaohe@huawei.com>
+Date:   Mon, 07 Mar 2022 13:07:26 +0800
+In-Reply-To: <20220304093409.25829-14-linmiaohe@huawei.com> (Miaohe Lin's
+        message of "Fri, 4 Mar 2022 17:34:06 +0800")
+Message-ID: <87ilsq5p0x.fsf@yhuang6-desk2.ccr.corp.intel.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+Miaohe Lin <linmiaohe@huawei.com> writes:
 
-> Hi Miaohe,
+> We should return errno (-EBUSY here) when failed to isolate the huge page
+> rather than always return 1 which could confuse the user.
 >
-> On 3/4/2022 5:34 PM, Miaohe Lin wrote:
->> In -ENOMEM case, there might be some subpages of fail-to-migrate THPs
->> left in thp_split_pages list. We should move them back to migration
->> list so that they could be put back to the right list by the caller
->> otherwise the page refcnt will be leaked here. Also adjust nr_failed
->> and nr_thp_failed accordingly to make vm events account more accurate.
->> Fixes: b5bade978e9b ("mm: migrate: fix the return value of
->> migrate_pages()")
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>   mm/migrate.c | 9 +++++++++
->>   1 file changed, 9 insertions(+)
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index e0db06927f02..6c2dfed2ddb8 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1422,6 +1422,15 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>   				}
->>     				nr_failed_pages += nr_subpages;
->> +				/*
->> +				 * There might be some subpages of fail-to-migrate THPs
->> +				 * left in thp_split_pages list. Move them back to migration
->> +				 * list so that they could be put back to the right list by
->> +				 * the caller otherwise the page refcnt will be leaked.
->> +				 */
->> +				list_splice_init(&thp_split_pages, from);
->> +				nr_failed += retry;
->> +				nr_thp_failed += thp_retry;
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/migrate.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 >
-> Yes, I think we missed this case before, and your patch looks
-> right. But we should also update the 'rc' to return the correct number
-> of pages that were not migrated, right?
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 6c2dfed2ddb8..279940c0c064 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1618,10 +1618,8 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
+>  		goto out_putpage;
+>  
+>  	if (PageHuge(page)) {
+> -		if (PageHead(page)) {
+> -			isolate_huge_page(page, pagelist);
+> -			err = 1;
+> -		}
+> +		if (PageHead(page))
+> +			err = isolate_huge_page(page, pagelist) ? 1 : -EBUSY;
 
-Per my understanding, -ENOMEM should be returned to indicate an fatal
-error.
+IMHO, it's better to determine the proper errno inside
+isolate_huge_page() instead of in the caller.  If you think it's
+necessary to get errno here.  How about change isolate_huge_page()
+instead?
 
 Best Regards,
 Huang, Ying
+
+>  	} else {
+>  		struct page *head;

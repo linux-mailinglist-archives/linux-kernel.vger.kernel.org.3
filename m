@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52244CF635
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744CD4CFB55
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235856AbiCGJdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S239988AbiCGKfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238613AbiCGJ30 (ORCPT
+        with ESMTP id S234901AbiCGKMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EB95006A;
-        Mon,  7 Mar 2022 01:27:43 -0800 (PST)
+        Mon, 7 Mar 2022 05:12:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5895979C62;
+        Mon,  7 Mar 2022 01:56:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A55611D3;
-        Mon,  7 Mar 2022 09:27:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1857CC340F4;
-        Mon,  7 Mar 2022 09:27:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DA6FCCE0E4A;
+        Mon,  7 Mar 2022 09:56:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74BFC340E9;
+        Mon,  7 Mar 2022 09:56:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645262;
-        bh=FKvTTEBao31SKcjzFo6+6D96WRSaBo5k2SaYQUzlVlk=;
+        s=korg; t=1646646977;
+        bh=+NzAtLObj6uMrptvGTkHCHEAmFeyo5+8E9Db1t+8QB8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2DD4V2ufK1cQvQemiC2b/6QQXuj3+Z3smmUSGnKeYiJLTyM22qK1ztjmK4Ut4Aqnv
-         Nm+x94xSpPwyK5BGk8H1VpqRUsjuuR+nMtZk1L4821XQOenm93BKn0b5l01ZUlw560
-         g5uvcJf1aCAH9KlXh6XFRARI//WzIdjFFewXals8=
+        b=eFrS5Fglxy7gf5JJGraQNahGv16upCQIyibp0L3kDwMg8eNqwpzUPI2Qh+ZDzFcQ5
+         iXAPGwUP4SnQZhOmelllYBncllkO6O1a9wz4/Gg1W6K8q/cOEU2r/5sdaMK1rAmMaX
+         aFQkdpAurcDCy2IXLY9oZ4L+pakmTkBWGh5hg9vE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Siva Reddy <siva.kallam@samsung.com>,
-        Girish K S <ks.giri@samsung.com>,
-        Byungho An <bh74.an@samsung.com>,
+        stable@vger.kernel.org, Amit Cohen <amcohen@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 37/64] net: sxgbe: fix return value of __setup handler
+Subject: [PATCH 5.16 112/186] selftests: mlxsw: tc_police_scale: Make test more robust
 Date:   Mon,  7 Mar 2022 10:19:10 +0100
-Message-Id: <20220307091640.199721643@linuxfoundation.org>
+Message-Id: <20220307091657.209641108@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,52 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Amit Cohen <amcohen@nvidia.com>
 
-commit 50e06ddceeea263f57fe92baa677c638ecd65bb6 upstream.
+commit dc9752075341e7beb653e37c6f4a3723074dc8bc upstream.
 
-__setup() handlers should return 1 on success, i.e., the parameter
-has been handled. A return of 0 causes the "option=value" string to be
-added to init's environment strings, polluting it.
+The test adds tc filters and checks how many of them were offloaded by
+grepping for 'in_hw'.
 
-Fixes: acc18c147b22 ("net: sxgbe: add EEE(Energy Efficient Ethernet) for Samsung sxgbe")
-Fixes: 1edb9ca69e8a ("net: sxgbe: add basic framework for Samsung 10Gb ethernet driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Siva Reddy <siva.kallam@samsung.com>
-Cc: Girish K S <ks.giri@samsung.com>
-Cc: Byungho An <bh74.an@samsung.com>
-Link: https://lore.kernel.org/r/20220224033528.24640-1-rdunlap@infradead.org
+iproute2 commit f4cd4f127047 ("tc: add skip_hw and skip_sw to control
+action offload") added offload indication to tc actions, producing the
+following output:
+
+ $ tc filter show dev swp2 ingress
+ ...
+ filter protocol ipv6 pref 1000 flower chain 0 handle 0x7c0
+   eth_type ipv6
+   dst_ip 2001:db8:1::7bf
+   skip_sw
+   in_hw in_hw_count 1
+         action order 1:  police 0x7c0 rate 10Mbit burst 100Kb mtu 2Kb action drop overhead 0b
+         ref 1 bind 1
+         not_in_hw
+         used_hw_stats immediate
+
+The current grep expression matches on both 'in_hw' and 'not_in_hw',
+resulting in incorrect results.
+
+Fix that by using JSON output instead.
+
+Fixes: 5061e773264b ("selftests: mlxsw: Add scale test for tc-police")
+Signed-off-by: Amit Cohen <amcohen@nvidia.com>
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c
-+++ b/drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c
-@@ -2277,18 +2277,18 @@ static int __init sxgbe_cmdline_opt(char
- 	char *opt;
+--- a/tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh
+@@ -60,7 +60,8 @@ __tc_police_test()
  
- 	if (!str || !*str)
--		return -EINVAL;
-+		return 1;
- 	while ((opt = strsep(&str, ",")) != NULL) {
- 		if (!strncmp(opt, "eee_timer:", 10)) {
- 			if (kstrtoint(opt + 10, 0, &eee_timer))
- 				goto err;
- 		}
- 	}
--	return 0;
-+	return 1;
+ 	tc_police_rules_create $count $should_fail
  
- err:
- 	pr_err("%s: ERROR broken module parameter conversion\n", __func__);
--	return -EINVAL;
-+	return 1;
+-	offload_count=$(tc filter show dev $swp1 ingress | grep in_hw | wc -l)
++	offload_count=$(tc -j filter show dev $swp1 ingress |
++			jq "[.[] | select(.options.in_hw == true)] | length")
+ 	((offload_count == count))
+ 	check_err_fail $should_fail $? "tc police offload count"
  }
- 
- __setup("sxgbeeth=", sxgbe_cmdline_opt);
 
 

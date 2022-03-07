@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E994CF804
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908CF4CFA16
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239313AbiCGJtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S240285AbiCGKNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238066AbiCGJh6 (ORCPT
+        with ESMTP id S238954AbiCGJ5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:37:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4008C5BE4A;
-        Mon,  7 Mar 2022 01:31:58 -0800 (PST)
+        Mon, 7 Mar 2022 04:57:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970FD7B567;
+        Mon,  7 Mar 2022 01:46:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B31261215;
-        Mon,  7 Mar 2022 09:31:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83DA6C340F3;
-        Mon,  7 Mar 2022 09:31:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C353AB8102B;
+        Mon,  7 Mar 2022 09:46:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4CFC340E9;
+        Mon,  7 Mar 2022 09:45:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645464;
-        bh=Fy7glTcXyXkGE6AUYyq5Dk0BcADG9nAA+8EYBPyqi10=;
+        s=korg; t=1646646360;
+        bh=VTKM/YwKoGj9z/Ij5f3LgJGLGD6A7h4ZU75WjylvML8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P8Zn+EQQ+jBHW4sGCmAKVRsCD1j+lDxrxcVSWHz+OZ+Fohf8ovtTWr6ZTZ1XodNeH
-         A2FI83k+Be4P71sdgpFyUCRJV9qRNnT09ndZtbd4O0km89uHcWVpxwraObUcpuea45
-         y/iszJtB0VBbqpfM7ReDWBGfYuoh3T6h1xaxoPKU=
+        b=0qJHOthlOyaBlz5BwHTss8cQM9+GQwzpkXpQtr/1m/8PETR6W5LBDJniCD1khMUxu
+         ecW1moiKrdJ25oPboEiPE90KxK0n3a3kdsDmETB+wFp5FQLP/cDCPnxhUMZS4Bi/KQ
+         OEeKIbrXuSjvmW6DkpZcSnDd90eZKqVdmU+8y68c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        Antony Antony <antony.antony@secunet.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 5.10 039/105] xfrm: fix the if_id check in changelink
+        stable@vger.kernel.org,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 178/262] ibmvnic: register netdev after init of adapter
 Date:   Mon,  7 Mar 2022 10:18:42 +0100
-Message-Id: <20220307091645.287172677@linuxfoundation.org>
+Message-Id: <20220307091707.441491438@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antony Antony <antony.antony@secunet.com>
+From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
 
-commit 6d0d95a1c2b07270870e7be16575c513c29af3f1 upstream.
+commit 570425f8c7c18b14fa8a2a58a0adb431968ad118 upstream.
 
-if_id will be always 0, because it was not yet initialized.
+Finish initializing the adapter before registering netdev so state
+is consistent.
 
-Fixes: 8dce43919566 ("xfrm: interface with if_id 0 should return error")
-Reported-by: Pavel Machek <pavel@denx.de>
-Signed-off-by: Antony Antony <antony.antony@secunet.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Fixes: c26eba03e407 ("ibmvnic: Update reset infrastructure to support tunable parameters")
+Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/xfrm/xfrm_interface.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/ibm/ibmvnic.c |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
---- a/net/xfrm/xfrm_interface.c
-+++ b/net/xfrm/xfrm_interface.c
-@@ -679,12 +679,12 @@ static int xfrmi_changelink(struct net_d
- 	struct net *net = xi->net;
- 	struct xfrm_if_parms p = {};
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -5632,12 +5632,6 @@ static int ibmvnic_probe(struct vio_dev
+ 		goto ibmvnic_dev_file_err;
  
-+	xfrmi_netlink_parms(data, &p);
- 	if (!p.if_id) {
- 		NL_SET_ERR_MSG(extack, "if_id must be non zero");
- 		return -EINVAL;
- 	}
+ 	netif_carrier_off(netdev);
+-	rc = register_netdev(netdev);
+-	if (rc) {
+-		dev_err(&dev->dev, "failed to register netdev rc=%d\n", rc);
+-		goto ibmvnic_register_fail;
+-	}
+-	dev_info(&dev->dev, "ibmvnic registered\n");
  
--	xfrmi_netlink_parms(data, &p);
- 	xi = xfrmi_locate(net, &p);
- 	if (!xi) {
- 		xi = netdev_priv(dev);
+ 	if (init_success) {
+ 		adapter->state = VNIC_PROBED;
+@@ -5650,6 +5644,14 @@ static int ibmvnic_probe(struct vio_dev
+ 
+ 	adapter->wait_for_reset = false;
+ 	adapter->last_reset_time = jiffies;
++
++	rc = register_netdev(netdev);
++	if (rc) {
++		dev_err(&dev->dev, "failed to register netdev rc=%d\n", rc);
++		goto ibmvnic_register_fail;
++	}
++	dev_info(&dev->dev, "ibmvnic registered\n");
++
+ 	return 0;
+ 
+ ibmvnic_register_fail:
 
 

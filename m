@@ -2,122 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F2C4D00B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0184D00BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236783AbiCGOHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S240035AbiCGOJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236976AbiCGOHN (ORCPT
+        with ESMTP id S233551AbiCGOJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:07:13 -0500
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A188D695
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:06:18 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2dbd97f9bfcso164962497b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:06:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=st/f+0iO0UDzjkNWhcsOsygYrvFCRtgzkkkSRKcKsWc=;
-        b=EGmGbR6QJchstZuNcWhdV6v0l9ElqdRUhuBVbso6eeBWcGLJYHwPCncrIYkpRxhme8
-         CgCjYctVv1lA50pWihpweYJNR3JT5FzJwAg82x3xAQ7Iwy5WdxrPY6F94WeRX4MNxO+L
-         dqPxYihg41OO0JNOMZE5C6Ce9QsNFVwMFI4IwHhFxeVWwSvKj6uSh3ni+Ys2axD/edPU
-         q4kqgkOS0q6EMUYdz88l01kY0kqssT9ZmzkHQYmgVHHTJ4mSFc+uOo2hw9wWfJSZZJAc
-         Bq6FEyqbRC8UaUeV1HzGyTK1ESX8QnR6wBOfzoCHvAnzp2YwTQ8zraN7kJlKGV4WvUqe
-         DX8Q==
-X-Gm-Message-State: AOAM532cOiXm0gxNX21+f/zOZODpdF69nko1F1RUehiF9o9QzykEjhUo
-        s9nMbmFpMD5UPe7+GaIgvCWwLHc3faid/6kImbQ=
-X-Google-Smtp-Source: ABdhPJyYfadWONCgpTahtOhc3za7pA4oZ0BDgV1sMzwEWBAzo4HcHDww/j8AJoYj+y74RlwFvKAKH1QpFd33er5+Row=
-X-Received: by 2002:a81:6bc6:0:b0:2db:fe24:d5ee with SMTP id
- g189-20020a816bc6000000b002dbfe24d5eemr8306756ywc.392.1646661977922; Mon, 07
- Mar 2022 06:06:17 -0800 (PST)
+        Mon, 7 Mar 2022 09:09:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CA64F9F9;
+        Mon,  7 Mar 2022 06:08:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08ED9B81597;
+        Mon,  7 Mar 2022 14:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69539C340F6;
+        Mon,  7 Mar 2022 14:08:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646662089;
+        bh=xwPfd4oUhK0TVFJjZo+icYnrwgPQRppqm/ixqy4gIXI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=m0rwrj7qlWY/EyMdyBJDNDEXDikR7zso2HjNnW2bUT9o1A26Z6NnUbCPYSVY1RmPf
+         mGLDda0SKzo3lVxS7xagvMe2G1eaiWjq2BhjmBPcGekL8DLRK7IJhXYVgBXgFLt9Ck
+         R9wqRIsgMmZkxmZkfjt6rADhYIiG7lg9XJcEWOHIAW7ryAoeX1DBuSCa3qM3MIN3xm
+         I/joxteK4oZIZKHgO1MOXDCAK3E4ASHeK3vTzy0pIecSTGa4hFGS/te+bynMH4/D64
+         eLY3+8pz/lNH8B3i8y3RZLki77q3sGh6go+bkBa4nW/1D96msiY+BEy58B+mWbU3b4
+         p8In8A0fCdEIA==
+Received: by mail-ej1-f47.google.com with SMTP id gb39so32160956ejc.1;
+        Mon, 07 Mar 2022 06:08:09 -0800 (PST)
+X-Gm-Message-State: AOAM531JljW453JfrmNmnVLPB0//iT+fzdc1Vopd3m7/ZBVQK++j3vcT
+        xzgNGhVETwIP9bGuG18mjJprEBd7VjOeXCs7gA==
+X-Google-Smtp-Source: ABdhPJzMof6nh2tIW5O1gtyTBMRNuW0EC9U2ehitf8RLTVsZTMRoiK03mrkYD78lkZPwnTij7Nwt3mVGPNKa945XkG4=
+X-Received: by 2002:a17:906:a38e:b0:6da:a1f9:f9ee with SMTP id
+ k14-20020a170906a38e00b006daa1f9f9eemr8781198ejz.27.1646662087585; Mon, 07
+ Mar 2022 06:08:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
- <CAHp75VeT3LbdbSaiwcC2YW40LnA2h8ADtGva-CKU_xh8Edi0nw@mail.gmail.com>
- <20220307105810.1747024-1-alexandr.lobakin@intel.com> <CAHp75Vcht_T5kUJu5zjmsUvn+mN+8D5vWBUvRXKTfo+2ocHOTg@mail.gmail.com>
-In-Reply-To: <CAHp75Vcht_T5kUJu5zjmsUvn+mN+8D5vWBUvRXKTfo+2ocHOTg@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 7 Mar 2022 23:06:06 +0900
-Message-ID: <CAMZ6RqK=yxLwVnotZuGRiao4Vu4eFEfVXfPaZV1r4rEOmQARig@mail.gmail.com>
-Subject: Re: [PATCH] linux/bits.h: fix -Wtype-limits warnings in GENMASK_INPUT_CHECK()
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>
+References: <20220305052304.726050-1-lizhi.hou@xilinx.com> <20220305052304.726050-3-lizhi.hou@xilinx.com>
+ <e4c058e9-6549-4ce2-be05-d09d5b1a9fc9@redhat.com>
+In-Reply-To: <e4c058e9-6549-4ce2-be05-d09d5b1a9fc9@redhat.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 7 Mar 2022 08:07:55 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKzxq8T=obPQwXeNyqedQOKkmm8hwHdfVgKr15EyAgBnQ@mail.gmail.com>
+Message-ID: <CAL_JsqKzxq8T=obPQwXeNyqedQOKkmm8hwHdfVgKr15EyAgBnQ@mail.gmail.com>
+Subject: Re: [PATCH V1 RESEND 2/4] Documentation: devicetree: bindings: add
+ binding for PCIe endpoint bus
+To:     Tom Rix <trix@redhat.com>, Lizhi Hou <lizhi.hou@xilinx.com>
+Cc:     PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
+        Xu Yilun <yilun.xu@intel.com>, Max Zhen <maxz@xilinx.com>,
+        Sonal Santan <sonal.santan@xilinx.com>,
+        Yu Liu <yliu@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Max Zhen <max.zhen@xilinx.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon. 7 Mar 2022 at 22:40, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> On Mon, Mar 7, 2022 at 1:00 PM Alexander Lobakin
-> <alexandr.lobakin@intel.com> wrote:
-> > From: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Date: Fri, 4 Mar 2022 20:46:08 +0200
-> > > On Fri, Mar 4, 2022 at 7:36 PM Vincent Mailhol
-> > > <mailhol.vincent@wanadoo.fr> wrote:
-> > >
-> > > > This pattern is harmless but because it occurs in header files
-> > > > (example find_first_bit() from linux/find.h [1]) and because of the
-> > > > include hell, the macro GENMASK_INPUT_CHECK() is accountable for 31%
-> > > > (164714/532484) of all warnings when compiling all modules at W=2
-> > > > level.
+On Sun, Mar 6, 2022 at 9:37 AM Tom Rix <trix@redhat.com> wrote:
+>
+> Lizhi,
+>
+> Sorry for the delay, I am fighting with checking this with 'make
+> dt_binding_check'
+>
+> There is a recent failure in linux-next around display/mediatek,*
+> between next-20220301 and next-20220302 that I am bisecting.
+
+There's already patches for that posted.
+
+Just use 'make -k'.
+
+>
+> There are a couple of checkpatch --strict warnings for this set, the
+> obvious one is adding to the MAINTAINERS for new files.
+>
+> Tom
+>
+> On 3/4/22 9:23 PM, Lizhi Hou wrote:
+> > Create device tree binding document for PCIe endpoint bus.
 > >
-> > Nice catch, thanks! I wanted to submit the very same fix, but
-> > postponed it for some reason, and now here we are.
+> > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> > Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+> > ---
+> >   .../devicetree/bindings/bus/pci-ep-bus.yaml   | 72 +++++++++++++++++++
+> >   1 file changed, 72 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
 > >
-> > > Have you fixed W=1 warnings?
-> > > Without fixing W=1 (which makes much more sense, when used with
-> > > WERROR=y && COMPILE_TEST=y) this has no value.
-> >
-> > How is this connected?
->
-> By priorities.
-> I don't see much value in fixing W=2 per se if the code doesn't compile for W=1.
-
-*My code* compiles for W=1. For me, fixing this W=2 in the next in line
-if speaking of priorities.
-
-I do not understand why I should be forbidden to fix a W=2 in the
-file which I am maintaining on the grounds that some code to which
-I do not care still has some W=1.
-
-> > When I do `make W=2 path/to/my/code`, I want to see the actual code
-> > problems, not something that comes from the include files.
-> > When I do `make W=2 path/to/new/code/from/lkml`, I want to see the
-> > actual new warnings, not something coming from the includes.
-> > It's much easier to overlook or miss some real warnings when the
-> > stderr is being flooded by the warnings from the include files.
-> > I'm aware there are some scripts to compare before/after, but I
-> > don't want to use them just because "this has to value".
->
-> I rephrased above.
->
-> > I don't want to do `make W=2 KCFLAGS='-Wno-shadow -Wno-type-limits'`
-> > because then I'm not able to spot the actual shadow or type limit
-> > problems in my/new code.
-> > I fixed several `-Wshadow` warnings previously in the include files
-> > related to networking, and *nobody* said "this has no value" or
-> > NAKed it. And `-Wshadow` has always been in W=2.
->
-> Yes, because people rarely enable COMPILE_TEST + WERROR.
-> To be clear, my comment is given in that scope.
-
-And my comments are given in a different scope: a developer who
-wants to solve the issue for his *own* file without being spammed.
+> > diff --git a/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+> > new file mode 100644
+> > index 000000000000..0ca96298db6f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
+> > @@ -0,0 +1,72 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/bus/pci-ep-bus.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: PCIe Endpoint Bus binding
+> > +
+> > +description: |
+> > +  PCIe device may use flattened device tree to describe apertures in its
+> > +  PCIe BARs. The Bus PCIe endpoint node is created and attached under the
+> > +  device tree root node for this kind of device. Then the flatten device
+> > +  tree overlay for this device is attached under the endpoint node.
+> > +
+> > +  The aperture address which is under the endpoint node consists of BAR
+> > +  index and offset. It uses the following encoding:
+> > +
+> > +    0xIooooooo 0xoooooooo
+> > +
+> > +  Where:
+> > +
+> > +    I = BAR index
+> > +    oooooo oooooooo = BAR offset
+> > +
+> > +  The endpoint is compatible with 'simple-bus' and contains 'ranges'
+> > +  property for translating aperture address to CPU address.
 
 
-Yours sincerely,
-Vincent Mailhol
+This binding is completely confusing because 'PCIe endpoint' is
+generally used (in context of bindings and Linux) for describing the
+endpoint's system (i.e. the internal structure of a PCIe device (e.g.
+add-in card) from the view of its own processor (not the host
+system)). This binding seems to be describing the host system's view
+of a PCIe device. We already have that! That's just the PCI bus
+binding[1] which has existed for ~25 years.
+
+For a non-DT system, what you are going to need here is some way to
+create DT nodes of the PCI bus hierarchy or at least from your device
+back up to the host bridge. I would suggest you solve that problem
+separately from implementing the FPGA driver by making it work first
+on a DT based system.
+
+Rob
+
+[1] https://www.devicetree.org/open-firmware/bindings/pci/pci2_1.pdf

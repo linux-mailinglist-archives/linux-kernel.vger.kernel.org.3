@@ -2,138 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD254CFD0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913434CFD14
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238620AbiCGLfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:35:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S236850AbiCGLgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237482AbiCGLfj (ORCPT
+        with ESMTP id S229854AbiCGLgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 06:35:39 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78407193D5;
-        Mon,  7 Mar 2022 03:34:45 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id g1so13505161pfv.1;
-        Mon, 07 Mar 2022 03:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=o2TUOqL7Gj4mlejca+dXKhqX+S5Wl6c+nk3MzcmnOGU=;
-        b=UKARoSukGsSQA8t8WZtHWUTlKTCrxkNh5fCDeTQ6DDqzOk+Bt0BCvIzdh8g0siSdH3
-         0jVoyD/2BcWpvUeyduyX0TmdrIlsGxOCXLNboiGcXybpBl0hDDy1/S0xEL/bOQ6jDbRD
-         UtDR07ypIbHutUZg3amRq38Rx/wRrQWiGx0SHbzKKV381/7xR4oU58tlF3fn3vFowwmY
-         /5My+QqLOnTx/R54m7bPzpZAsL3Ezco0GajmD7ZMTnwyS2fHDu1ScDYjpaWoTuBNmR1o
-         r0KcZ207pO1lpoxKreNxna/CQ7SUmOLdoFkVAOw+QEhpozDKz1yOQl0gH8Z6vOVm2JOk
-         qZ8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=o2TUOqL7Gj4mlejca+dXKhqX+S5Wl6c+nk3MzcmnOGU=;
-        b=Q6RP08Y+X5U/6NP4fw6Gut+6DJwPfpkHck7bRztwWCJe/F+swxqHLg3FcGiudbYDnP
-         +dwJEcrDvRzABU8pNHXJLAsj81N7V4iWLTzy1Wq6gnFH0m6pduRJHTj52nHElfF6KzRa
-         tkWL+SdYl4cQHJZyqVezYARuoa3/xl6YEs9UuG5/uYAQv12GBPspEF71psNYALg8CMp0
-         C/JnGucg4QULbAOdh5RfJbM6QXNqdG57+a+b7qAnq7ZGXXPZzRnMNTX/lKLQ+hvJ0C6V
-         n7hZDOJ8cACwdCSbyuITp1gXMSGj3nWDwxJk87T/bEA6QAx96G7T9hW99XSAMunUCQPr
-         jYQQ==
-X-Gm-Message-State: AOAM530DD1WwhzV87jxp7JLLIhD8fdTs+E6d0DPdb3Xy6b564MG+GkyF
-        1Z6x61Y9lMS97OvAGEgQvnBQmmW2GOiyxOPqYFsMbg==
-X-Google-Smtp-Source: ABdhPJwRHD21H7N+UUvk56LAoC2esABvsT2VtSSXPkhLlpf/fO3yhYxj12yO58zjYMhjnjOHdr8NYw==
-X-Received: by 2002:a65:5bce:0:b0:372:cada:865d with SMTP id o14-20020a655bce000000b00372cada865dmr9263748pgr.199.1646652885036;
-        Mon, 07 Mar 2022 03:34:45 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id q12-20020a17090a178c00b001bd036e11fdsm18522965pja.42.2022.03.07.03.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 03:34:44 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Henry Yen <henry.yen@mediatek.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] thermal: mediatek: Fix some leaks in mtk_thermal_probe
-Date:   Mon,  7 Mar 2022 11:34:38 +0000
-Message-Id: <20220307113438.21338-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 06:36:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E884160B;
+        Mon,  7 Mar 2022 03:35:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B082E60AE3;
+        Mon,  7 Mar 2022 11:35:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B7CC340E9;
+        Mon,  7 Mar 2022 11:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646652917;
+        bh=Osz8sllZUSrLQqMcpk13nTc3kdPqrqmd1TJr5Spr3g4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eajbeZsnGmvzhIDQnG0aWaPTMjtUp9jyo8k7jDEnQzBq2abOCF65hye22JZILw3Tj
+         JPmyjEGkMUweaWu5KWKUm6kTYzySF1f0/3bPYUAIhsMMWDnS5twzTrpqTCShtxvAsf
+         jV5BnXAHkjEkJNwO81hosH5wbw+2uM+EbLrNy3pab/EjI5Mq67dIlSa1EZ8kGH6uBm
+         7dp6Ql1MIWcvYenz81Pz1r/MxWXLudQWAEKq//J870tMN0X/gqE60q2zrGenk20hRg
+         jbX8hTrXwUIxg5HLADPxxr0r6RwKvW0jzH/qXXnP3ACdRucJetvf24SF/CFSGh+YY9
+         zWu5E9JV5PvhA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRBdy-00ClcM-L0; Mon, 07 Mar 2022 11:35:14 +0000
+Date:   Mon, 07 Mar 2022 11:35:14 +0000
+Message-ID: <87fsnu0zd9.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] irqchip/apple-aic: Add Fast IPI support
+In-Reply-To: <d0e2a08e-79d6-03e8-09a2-bb634fa3c23c@marcan.st>
+References: <20220224130741.63924-1-marcan@marcan.st>
+        <20220224130741.63924-4-marcan@marcan.st>
+        <87mtif2eoz.wl-maz@kernel.org>
+        <d0e2a08e-79d6-03e8-09a2-bb634fa3c23c@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, tglx@linutronix.de, robh+dt@kernel.org, sven@svenpeter.dev, alyssa@rosenzweig.io, mark.kettenis@xs4all.nl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error occurs after a successful 'of_iomap()' call, it must be undone
-by a corresponding 'iounmap()' call
+On Sun, 27 Feb 2022 15:33:54 +0000,
+Hector Martin <marcan@marcan.st> wrote:
+> 
+> On 25/02/2022 23.39, Marc Zyngier wrote:
+> > On Thu, 24 Feb 2022 13:07:37 +0000,
+> >>  		if (!(pending & irq_bit) &&
+> >> -		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit))
+> >> -			send |= AIC_IPI_SEND_CPU(cpu);
+> >> +		    (atomic_read(per_cpu_ptr(&aic_vipi_enable, cpu)) & irq_bit)) {
+> >> +			if (static_branch_likely(&use_fast_ipi))
+> >> +				aic_ipi_send_fast(cpu);
+> > 
+> > OK, this is suffering from the same issue that GICv3 has, which is
+> > that memory barriers don't provide order against sysregs. You need a
+> > DSB for that, which is a pain. Something like this:
+> 
+> Doesn't the control flow here guarantee the ordering? atomic_read() must
+> complete before the sysreg is written since there is a control flow
+> dependency, and the prior atomic/barrier dance ensures that read is
+> ordered properly with everything that comes before it.
 
-Fixes: 89945047b166 ("thermal: mediatek: Add tsensor support for V2 thermal system")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/thermal/mtk_thermal.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+Yes, you're right. Mixing memory ordering and control dependency hurts
+my head badly, but hey, why not.
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index ede94eadddda..9d7461a5c2c1 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -1035,13 +1035,15 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	if (auxadc_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_umap_auxadc;
- 	}
- 
- 	apmixedsys = of_parse_phandle(np, "mediatek,apmixedsys", 0);
- 	if (!apmixedsys) {
- 		dev_err(&pdev->dev, "missing apmixedsys node\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto err_umap_auxadc;
- 	}
- 
- 	apmixed_base = of_iomap(apmixedsys, 0);
-@@ -1051,17 +1053,18 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 
- 	if (apmixed_phys_base == OF_BAD_ADDR) {
- 		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto  err_umap_apmixed;
- 	}
- 
- 	ret = device_reset_optional(&pdev->dev);
- 	if (ret)
--		return ret;
-+		goto err_umap_apmixed;
- 
- 	ret = clk_prepare_enable(mt->clk_auxadc);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n", ret);
--		return ret;
-+		goto err_umap_apmixed;
- 	}
- 
- 	ret = clk_prepare_enable(mt->clk_peri_therm);
-@@ -1099,6 +1102,10 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	clk_disable_unprepare(mt->clk_peri_therm);
- err_disable_clk_auxadc:
- 	clk_disable_unprepare(mt->clk_auxadc);
-+err_umap_apmixed:
-+	iounmap(apmixed_base);
-+err_umap_auxadc:
-+	iounmap(auxadc_base);
- 
- 	return ret;
- }
+	M.
+
 -- 
-2.17.1
-
+Without deviation from the norm, progress is not possible.

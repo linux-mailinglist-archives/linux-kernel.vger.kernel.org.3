@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46084D0449
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E41DF4D044E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244258AbiCGQky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
+        id S244275AbiCGQlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244253AbiCGQku (ORCPT
+        with ESMTP id S240217AbiCGQlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:40:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B89D52B08;
-        Mon,  7 Mar 2022 08:39:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 7 Mar 2022 11:41:39 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3FC506D8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:40:44 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29630610A3;
-        Mon,  7 Mar 2022 16:39:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 521C3C340EB;
-        Mon,  7 Mar 2022 16:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646671194;
-        bh=CR3H+PJ5LIHoZfHg5BxqH2Z0JF+bZ+Y8Zs1kn0/J9aE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DcHkb6q0B5fScFbjad4R1HhhdrOUswR1p4UPLjOVRwyGrUYm5HQEkgagTPrYWiUJ2
-         gMoLHedwj1S/SADqicNmtAMS5t59ap/fOSDd71auy288Ju+16EyMOqUUGSoy0IDvpQ
-         ++OoE4oNrhuEZamrT+s3RiJIMekFXbQRdPZYDW0X3VyirmvVsLIq3Ul4qJFZ4citzU
-         yXSX4outrAL24CIG5thqyS6Fdz111qy63793pHyNTJYsst1PXjTuLxSeZPc5pDqJpe
-         ly5bh4YolEqsnzTHmoHUQMhfJwM81XwyL3X6ZHI83IU97/LK+e2c1B5SG/RD+PJB/9
-         MJq+Y0NmEW5MQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E619B403C8; Mon,  7 Mar 2022 13:39:50 -0300 (-03)
-Date:   Mon, 7 Mar 2022 13:39:50 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>, zhengjun.xing@linux.intel.com
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com
-Subject: Re: [PATCH] perf parse: Fix event parser error for hybrid systems
-Message-ID: <YiY1VnHi4VnLMaCi@kernel.org>
-References: <20220307151627.30049-1-zhengjun.xing@linux.intel.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4F4D1210FF;
+        Mon,  7 Mar 2022 16:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646671243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W8dh4GyWsuZQpOUWJYTNSBAILVfnH4W50m69Zy0f1yw=;
+        b=OhPUMq1oOMBQ0yE+CkJlnQyTUyTCss65Ch7/ZNRSTi8a4fkUBir4gF62DX+dMYyjPAFpaN
+        qpap3cgJ1Z7tG/XySu/OVwVDm5jc0msQWKtkhLToWiap2ElHVxQbZQSwmQAq+Q9A9YQ7nC
+        ILDMcFOYDurqIARM75bLM98WEvblAVE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646671243;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W8dh4GyWsuZQpOUWJYTNSBAILVfnH4W50m69Zy0f1yw=;
+        b=kKUob1H/wHo1YPnI8AbQcGpzs8kDJVK720KguYQ8y0I73thjpupeRcYOq5X4JCfo/AeSxK
+        JfKfQk81OE2aX4CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26DD813B93;
+        Mon,  7 Mar 2022 16:40:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uBS0CIs1JmKYTAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 07 Mar 2022 16:40:43 +0000
+Message-ID: <07d4f687-544f-17d4-51cd-7b86aa23fb21@suse.cz>
+Date:   Mon, 7 Mar 2022 17:40:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307151627.30049-1-zhengjun.xing@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        linux-kernel@vger.kernel.org
+References: <20220307074057.902222-1-42.hyeyoo@gmail.com>
+ <20220307074057.902222-3-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v3 2/2] mm/slub: refactor deactivate_slab()
+In-Reply-To: <20220307074057.902222-3-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,114 +82,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Mar 07, 2022 at 11:16:27PM +0800, zhengjun.xing@linux.intel.com escreveu:
-> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+On 3/7/22 08:40, Hyeonggon Yoo wrote:
+> Simplify deactivate_slab() by unlocking n->list_lock and retrying
+> cmpxchg_double() when cmpxchg_double() fails, and perform
+> add_{partial,full} only when it succeed.
 > 
-> This bug happened on hybrid systems when both cpu_core and cpu_atom
-> have the same event name such as "UOPS_RETIRED.MS" while their event
-> terms are different, then during perf stat, the event for cpu_atom
-> will parse fail and then no output for cpu_atom.
+> Releasing and taking n->list_lock again here is not harmful as SLUB
+> avoids deactivating slabs as much as possible.
+> 
+> [ vbabka@suse.cz: perform add_{partial,full} when cmpxchg_double()
+>   succeed.
+> 
+>   count deactivating full slabs even if debugging flag is not set. ]
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Ian,
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-	since this patch fixes a patch from you, can you take a look?
+adding both to slab-next. Fixed up some nits myself, see below:
 
-- Arnaldo
- 
-> UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
-> UOPS_RETIRED.MS -> cpu_atom/period=0x1e8483,umask=0x1,event=0xc2/
-> 
-> It is because event terms in the "head" of parse_events_multi_pmu_add
-> will be changed to event terms for cpu_core after parsing UOPS_RETIRED.MS
-> for cpu_core, then when parsing the same event for cpu_atom, it still
-> uses the event terms for cpu_core, but event terms for cpu_atom are
-> different with cpu_core, the event parses for cpu_atom will fail. This
-> patch fixes it, the event terms should be parsed from the original
-> event.
-> 
-> This patch can work for the hybrid systems that have the same event
-> in more than 2 PMUs. It also can work in non-hybrid systems.
-> 
-> Before:
-> 
->  #perf stat -v  -e  UOPS_RETIRED.MS  -a sleep 1
-> 
-> Using CPUID GenuineIntel-6-97-1
-> UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
-> Control descriptor is not initialized
-> UOPS_RETIRED.MS: 2737845 16068518485 16068518485
-> 
->  Performance counter stats for 'system wide':
-> 
->          2,737,845      cpu_core/UOPS_RETIRED.MS/
-> 
->        1.002553850 seconds time elapsed
-> 
-> After:
-> 
->  #perf stat -v  -e  UOPS_RETIRED.MS  -a sleep 1
-> 
-> Using CPUID GenuineIntel-6-97-1
-> UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
-> UOPS_RETIRED.MS -> cpu_atom/period=0x1e8483,umask=0x1,event=0xc2/
-> Control descriptor is not initialized
-> UOPS_RETIRED.MS: 1977555 16076950711 16076950711
-> UOPS_RETIRED.MS: 568684 8038694234 8038694234
-> 
->  Performance counter stats for 'system wide':
-> 
->          1,977,555      cpu_core/UOPS_RETIRED.MS/
->            568,684      cpu_atom/UOPS_RETIRED.MS/
-> 
->        1.004758259 seconds time elapsed
-> 
-> Fixes: fb0811535e92c6c1 ("perf parse-events: Allow config on kernel PMU events")
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> ---
->  tools/perf/util/parse-events.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-> index 9739b05b999e..8bf7f914ea0e 100644
-> --- a/tools/perf/util/parse-events.c
-> +++ b/tools/perf/util/parse-events.c
-> @@ -1648,6 +1648,7 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
->  {
->  	struct parse_events_term *term;
->  	struct list_head *list = NULL;
-> +	struct list_head *orig_head = NULL;
->  	struct perf_pmu *pmu = NULL;
->  	int ok = 0;
->  	char *config;
-> @@ -1674,7 +1675,6 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
->  	}
->  	list_add_tail(&term->list, head);
 >  
+> @@ -2420,61 +2416,50 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>  	new.frozen = 0;
+>  
+>  	if (!new.inuse && n->nr_partial >= s->min_partial)
+> -		m = M_FREE;
+> +		mode = M_FREE;
+>  	else if (new.freelist) {
+
+This was against kernel style even before the patch - we use { } in the
+'else if' branch, thus all branches should use { } even if one-line.
+
+> -		m = M_PARTIAL;
+> -		if (!lock) {
+> -			lock = 1;
+> -			/*
+> -			 * Taking the spinlock removes the possibility that
+> -			 * acquire_slab() will see a slab that is frozen
+> -			 */
+> -			spin_lock_irqsave(&n->list_lock, flags);
+> -		}
+> -	} else {
+> -		m = M_FULL;
+> -		if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
+> -			lock = 1;
+> -			/*
+> -			 * This also ensures that the scanning of full
+> -			 * slabs from diagnostic functions will not see
+> -			 * any frozen slabs.
+> -			 */
+> -			spin_lock_irqsave(&n->list_lock, flags);
+> -		}
+> -	}
 > -
->  	/* Add it for all PMUs that support the alias */
->  	list = malloc(sizeof(struct list_head));
->  	if (!list)
-> @@ -1687,13 +1687,15 @@ int parse_events_multi_pmu_add(struct parse_events_state *parse_state,
+> -	if (l != m) {
+> -		if (l == M_PARTIAL)
+> -			remove_partial(n, slab);
+> -		else if (l == M_FULL)
+> -			remove_full(s, n, slab);
+> +		mode = M_PARTIAL;
+> +		/*
+> +		 * Taking the spinlock removes the possibility that
+> +		 * acquire_slab() will see a slab that is frozen
+> +		 */
+> +		spin_lock_irqsave(&n->list_lock, flags);
+> +	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
+> +		mode = M_FULL;
+> +		/*
+> +		 * This also ensures that the scanning of full
+> +		 * slabs from diagnostic functions will not see
+> +		 * any frozen slabs.
+> +		 */
+> +		spin_lock_irqsave(&n->list_lock, flags);
+> +	} else
+> +		mode = M_FULL_NOLIST;
+
+Ditto here (this is new).
+
+> -		if (m == M_PARTIAL)
+> -			add_partial(n, slab, tail);
+> -		else if (m == M_FULL)
+> -			add_full(s, n, slab);
+> -	}
 >  
->  		list_for_each_entry(alias, &pmu->aliases, list) {
->  			if (!strcasecmp(alias->name, str)) {
-> +				parse_events_copy_term_list(head, &orig_head);
->  				if (!parse_events_add_pmu(parse_state, list,
-> -							  pmu->name, head,
-> +							  pmu->name, orig_head,
->  							  true, true)) {
->  					pr_debug("%s -> %s/%s/\n", str,
->  						 pmu->name, alias->str);
->  					ok++;
->  				}
-> +				parse_events_terms__delete(orig_head);
->  			}
->  		}
->  	}
-> -- 
-> 2.25.1
+> -	l = m;
+>  	if (!cmpxchg_double_slab(s, slab,
+>  				old.freelist, old.counters,
+>  				new.freelist, new.counters,
+> -				"unfreezing slab"))
+> +				"unfreezing slab")) {
+> +		if (mode == M_PARTIAL || mode == M_FULL)
+> +			spin_unlock_irqrestore(&n->list_lock, flags);
+>  		goto redo;
+> +	}
+>  
+> -	if (lock)
+> -		spin_unlock_irqrestore(&n->list_lock, flags);
+>  
+> -	if (m == M_PARTIAL)
+> +	if (mode == M_PARTIAL) {
+> +		add_partial(n, slab, tail);
+> +		spin_unlock_irqrestore(&n->list_lock, flags);
+>  		stat(s, tail);
+> -	else if (m == M_FULL)
+> -		stat(s, DEACTIVATE_FULL);
+> -	else if (m == M_FREE) {
+> +	} else if (mode == M_FREE) {
+>  		stat(s, DEACTIVATE_EMPTY);
+>  		discard_slab(s, slab);
+>  		stat(s, FREE_SLAB);
+> -	}
+> +	} else if (mode == M_FULL) {
+> +		add_full(s, n, slab);
+> +		spin_unlock_irqrestore(&n->list_lock, flags);
+> +		stat(s, DEACTIVATE_FULL);
+> +	} else if (mode == M_FULL_NOLIST)
+> +		stat(s, DEACTIVATE_FULL);
 
--- 
+And here.
 
-- Arnaldo
+>  }
+>  
+>  #ifdef CONFIG_SLUB_CPU_PARTIAL
+

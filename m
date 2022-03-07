@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F21B4CFD8F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5900C4CFD96
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240872AbiCGMAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S239938AbiCGMBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:01:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240078AbiCGMAd (ORCPT
+        with ESMTP id S242062AbiCGMBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:00:33 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1B566AC0;
-        Mon,  7 Mar 2022 03:59:38 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id bc27so13372417pgb.4;
-        Mon, 07 Mar 2022 03:59:38 -0800 (PST)
+        Mon, 7 Mar 2022 07:01:15 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BF4723EA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:00:09 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id t5so13550296pfg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 04:00:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TNnPRy1cmbOAFkP5qd6ZOC7OMQvSH+mBx5Z1HHbtWiY=;
-        b=WO0i27nVHFtDUv3vLN/FwV4XMdL32nKhchFUrtGHgPUcz6viAQwpwMeYkyuMiL79ps
-         bfQS/EuCYHH1bvnUdc1nZ0azWuN977UMqPUfC9SzM8WEKCqcxFuLMH73wASqxfaxr/xr
-         YVcdiTCtwp/htRgw9q6GFSe03HX7SNZT72H58X5RR660zaaWzDItWbNOx8NkAaTzbh7+
-         qNFI4+uPlCdXRqnz+kevL6RiE3sxSadBwcGyVOwBSZ6ZZTldkqx8oNwjc5QSw4ua3JgR
-         oHSPZtk3NBGDd+htVCmbY9wXmGEywZfnd3+eNS8FGtQfLWWjghf9LuLsJvGR7diF8cCX
-         ZrIQ==
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:from:to:cc
+         :references:in-reply-to;
+        bh=hUiUZw3u/vmFrVsjNLfhaOMDcScqqYG5KTpTWWFPlZc=;
+        b=M5eyFEauKTqdrzE2kMdl/60TZBvzXo61t5Ljhe8gyk2odDqdqnzWWUHYJKvmt5VetA
+         xblmzkPQOvw16z9uowzjoA/QkcJ8IxrHIEvlV+BWiT6QPomu5NeQS+yTUsV23wOLhMww
+         Ttnd4Mo24NFbgpVGwo65r7M3vkRhT9NuYL9Ec=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TNnPRy1cmbOAFkP5qd6ZOC7OMQvSH+mBx5Z1HHbtWiY=;
-        b=tNnAGRcsghrDLA5v4zUW+0i3sZSPoFF/2hCo14KEkDFXEmpQ58CdP3lGkNjKRUETng
-         4X/gdgtSXQQ65lQochAbR11utgl6kSgknCFgTTPX7rYwwxY+VuU6TbESNgwETYvaGCy5
-         csNKMfFxf20mOGcUByJGd/XqTK8KU8MTe15bq7FqpPzcuRHDpVfBSnGlnP8P5uZEL1dS
-         1GzzsODWrNKBzln5azpjUAJON2t97LUYWc0XGcKDAZGUR6s5mbbFKa4zBfttf0gkpejT
-         RxSQtaL4CfDOstBxJUNpbf0zfoDXV93GBh59CEp7diZqo2NZkzw1fAa0DCVjxNwaDzM1
-         YXVQ==
-X-Gm-Message-State: AOAM530s290NsjMQI1DstFUVuYiVKpLC+Rk8qi14tS9/4hxtS3NK7HN+
-        /WXmOSY51zgePhssDeRVSLA=
-X-Google-Smtp-Source: ABdhPJwszxmxW04C0jZh7AqSlnvLnVQ2vYxMQmnHELnRexRcG7uZRs8HekEmaya5OVseC7JGCoudWg==
-X-Received: by 2002:a63:8543:0:b0:380:3079:dffd with SMTP id u64-20020a638543000000b003803079dffdmr5112741pgd.106.1646654378069;
-        Mon, 07 Mar 2022 03:59:38 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id m6-20020a62f206000000b004e152bc0527sm15323164pfh.153.2022.03.07.03.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 03:59:37 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] KVM: x86: Use static calls to reduce kvm_pmu_ops overhead
-Date:   Mon,  7 Mar 2022 19:59:20 +0800
-Message-Id: <20220307115920.51099-5-likexu@tencent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307115920.51099-1-likexu@tencent.com>
-References: <20220307115920.51099-1-likexu@tencent.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :from:to:cc:references:in-reply-to;
+        bh=hUiUZw3u/vmFrVsjNLfhaOMDcScqqYG5KTpTWWFPlZc=;
+        b=2yxW5xXul8L9i6CRyYoFMaSQZCleD3486Xz40PokSY28Fb+BYCqToioab0naux4qs+
+         MQXD2hPNzS4vupgBpp+lZY8MAeBuxuuyZeWDk8f4wJNMQJ5q2tnz3ntuFtFkqkwmhYdw
+         RReKEHoR9yUj/mx25xEKXoc3cdHZSb4bUH+M1Rw5PaS1oTHoC2OKRuBY0AFoHSTwHM+6
+         dj3Zmnkn+wbeg2H2LJ0XJnQFhmEldMgthyweyf+hj2f6ORPve1VxaVlkl7Mgcfw0pivZ
+         MuaHaNzjGwqvEHgZN3edQ9ITyEM9lyZZguh/LMsd/EAtLkhVTLY7NvRN7Qa81834fv+N
+         hjXA==
+X-Gm-Message-State: AOAM531FgnJwrE6DAJmZ7ZzXepfKPfCp40Cy91TBLwKtm58VVnNM9Bnc
+        1cDqjMxwtZ8io9/6wlYfN4wjGEYVz8zVxlQX
+X-Google-Smtp-Source: ABdhPJxqVTN1h6FcSx4Svb0toYyLoMmN3SHT8RTKHaOfY0jzeEftuWIh9xXvAdYboGHhNC+6ZkEbjQ==
+X-Received: by 2002:a63:5014:0:b0:380:132:6b25 with SMTP id e20-20020a635014000000b0038001326b25mr8283057pgb.211.1646654408640;
+        Mon, 07 Mar 2022 04:00:08 -0800 (PST)
+Received: from [10.176.68.61] ([192.19.148.250])
+        by smtp.gmail.com with ESMTPSA id nn10-20020a17090b38ca00b001bc3a60b324sm12658244pjb.46.2022.03.07.04.00.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 04:00:08 -0800 (PST)
+Message-ID: <8bf3ddb5-e9fc-dcc9-ad7d-1677334f6386@broadcom.com>
+Date:   Mon, 7 Mar 2022 13:00:05 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: ftrace bug
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <9a86b2c9-1009-1683-442e-61c5a7dc8cf3@broadcom.com>
+In-Reply-To: <9a86b2c9-1009-1683-442e-61c5a7dc8cf3@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001c83a305d99f9b27"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,291 +69,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+--0000000000001c83a305d99f9b27
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Use static calls to improve kvm_pmu_ops performance. Introduce the
-definitions that will be used by a subsequent patch to actualize the
-savings. Add a new kvm-x86-pmu-ops.h header that can be used for the
-definition of static calls. This header is also intended to be
-used to simplify the defition of amd_pmu_ops and intel_pmu_ops.
+On 3/7/2022 12:26 PM, Arend van Spriel wrote:
+> Hi Steven,
+> 
+> I wanted to use FTRACE on an ARM platform and I hit the following 
+> warning which results in ftrace bug. This happens upon loading a module. 
+> Looking up the warning I suspect the branch target is too far off. The 
+> module is quite large and therefor not loaded in the modules section. Is 
+> there a way to exclude a module. In ftrace_module_init I see a check for 
+> !mod->num_ftrace_callsites. Is there a way to avoid creating ftrace 
+> callsites in a module?
 
-Here are the worst fenced_rdtsc() cycles numbers for the kvm_pmu_ops
-functions that is most often called (up to 7 digits of calls) when running
-a single perf test case in a guest on an ICX 2.70GHz host (mitigations=on):
+Could it be accomplished by this?
 
-		|	legacy	|	static call
-------------------------------------------------------------
-.pmc_idx_to_pmc	|	1304840	|	994872 (+23%)
-.pmc_is_enabled	|	978670	|	1011750 (-3%)
-.msr_idx_to_pmc	|	47828	|	41690 (+12%)
-.is_valid_msr	|	28786	|	30108 (-4%)
+CFLAGS_REMOVE_lockdep.o = $(CC_FLAGS_FTRACE)
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/include/asm/kvm-x86-pmu-ops.h | 31 +++++++++++++++++
- arch/x86/kvm/pmu.c                     | 46 ++++++++++++++------------
- arch/x86/kvm/pmu.h                     |  7 +++-
- arch/x86/kvm/x86.c                     |  8 +++++
- 4 files changed, 70 insertions(+), 22 deletions(-)
- create mode 100644 arch/x86/include/asm/kvm-x86-pmu-ops.h
+Regards,
+Arend
 
-diff --git a/arch/x86/include/asm/kvm-x86-pmu-ops.h b/arch/x86/include/asm/kvm-x86-pmu-ops.h
-new file mode 100644
-index 000000000000..fdfd8e06fee6
---- /dev/null
-+++ b/arch/x86/include/asm/kvm-x86-pmu-ops.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#if !defined(KVM_X86_PMU_OP) || !defined(KVM_X86_PMU_OP_OPTIONAL)
-+BUILD_BUG_ON(1)
-+#endif
-+
-+/*
-+ * KVM_X86_PMU_OP() and KVM_X86_PMU_OP_OPTIONAL() are used to help generate
-+ * both DECLARE/DEFINE_STATIC_CALL() invocations and
-+ * "static_call_update()" calls.
-+ *
-+ * KVM_X86_PMU_OP_OPTIONAL() can be used for those functions that can have
-+ * a NULL definition, for example if "static_call_cond()" will be used
-+ * at the call sites.
-+ */
-+KVM_X86_PMU_OP(pmc_perf_hw_id)
-+KVM_X86_PMU_OP(pmc_is_enabled)
-+KVM_X86_PMU_OP(pmc_idx_to_pmc)
-+KVM_X86_PMU_OP(rdpmc_ecx_to_pmc)
-+KVM_X86_PMU_OP(msr_idx_to_pmc)
-+KVM_X86_PMU_OP(is_valid_rdpmc_ecx)
-+KVM_X86_PMU_OP(is_valid_msr)
-+KVM_X86_PMU_OP(get_msr)
-+KVM_X86_PMU_OP(set_msr)
-+KVM_X86_PMU_OP(refresh)
-+KVM_X86_PMU_OP(init)
-+KVM_X86_PMU_OP(reset)
-+KVM_X86_PMU_OP_OPTIONAL(deliver_pmi)
-+KVM_X86_PMU_OP_OPTIONAL(cleanup)
-+
-+#undef KVM_X86_PMU_OP
-+#undef KVM_X86_PMU_OP_OPTIONAL
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 771edc4f4494..4146be236506 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -51,6 +51,12 @@
- 
- struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
- 
-+#define KVM_X86_PMU_OP(func)					     \
-+	DEFINE_STATIC_CALL_NULL(kvm_x86_pmu_##func,			     \
-+				*(((struct kvm_pmu_ops *)0)->func));
-+#define KVM_X86_PMU_OP_OPTIONAL KVM_X86_PMU_OP
-+#include <asm/kvm-x86-pmu-ops.h>
-+
- static void kvm_pmi_trigger_fn(struct irq_work *irq_work)
- {
- 	struct kvm_pmu *pmu = container_of(irq_work, struct kvm_pmu, irq_work);
-@@ -217,7 +223,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
- 			  ARCH_PERFMON_EVENTSEL_CMASK |
- 			  HSW_IN_TX |
- 			  HSW_IN_TX_CHECKPOINTED))) {
--		config = kvm_pmu_ops.pmc_perf_hw_id(pmc);
-+		config = static_call(kvm_x86_pmu_pmc_perf_hw_id)(pmc);
- 		if (config != PERF_COUNT_HW_MAX)
- 			type = PERF_TYPE_HARDWARE;
- 	}
-@@ -269,7 +275,7 @@ void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int idx)
- 
- 	pmc->current_config = (u64)ctrl;
- 	pmc_reprogram_counter(pmc, PERF_TYPE_HARDWARE,
--			      kvm_pmu_ops.pmc_perf_hw_id(pmc),
-+			      static_call(kvm_x86_pmu_pmc_perf_hw_id)(pmc),
- 			      !(en_field & 0x2), /* exclude user */
- 			      !(en_field & 0x1), /* exclude kernel */
- 			      pmi, false, false);
-@@ -278,7 +284,7 @@ EXPORT_SYMBOL_GPL(reprogram_fixed_counter);
- 
- void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx)
- {
--	struct kvm_pmc *pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, pmc_idx);
-+	struct kvm_pmc *pmc = static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, pmc_idx);
- 
- 	if (!pmc)
- 		return;
-@@ -300,7 +306,7 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
- 	int bit;
- 
- 	for_each_set_bit(bit, pmu->reprogram_pmi, X86_PMC_IDX_MAX) {
--		struct kvm_pmc *pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, bit);
-+		struct kvm_pmc *pmc = static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, bit);
- 
- 		if (unlikely(!pmc || !pmc->perf_event)) {
- 			clear_bit(bit, pmu->reprogram_pmi);
-@@ -322,7 +328,7 @@ void kvm_pmu_handle_event(struct kvm_vcpu *vcpu)
- /* check if idx is a valid index to access PMU */
- bool kvm_pmu_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
- {
--	return kvm_pmu_ops.is_valid_rdpmc_ecx(vcpu, idx);
-+	return static_call(kvm_x86_pmu_is_valid_rdpmc_ecx)(vcpu, idx);
- }
- 
- bool is_vmware_backdoor_pmc(u32 pmc_idx)
-@@ -372,7 +378,7 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
- 	if (is_vmware_backdoor_pmc(idx))
- 		return kvm_pmu_rdpmc_vmware(vcpu, idx, data);
- 
--	pmc = kvm_pmu_ops.rdpmc_ecx_to_pmc(vcpu, idx, &mask);
-+	pmc = static_call(kvm_x86_pmu_rdpmc_ecx_to_pmc)(vcpu, idx, &mask);
- 	if (!pmc)
- 		return 1;
- 
-@@ -388,22 +394,21 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
- void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
- {
- 	if (lapic_in_kernel(vcpu)) {
--		if (kvm_pmu_ops.deliver_pmi)
--			kvm_pmu_ops.deliver_pmi(vcpu);
-+		static_call_cond(kvm_x86_pmu_deliver_pmi)(vcpu);
- 		kvm_apic_local_deliver(vcpu->arch.apic, APIC_LVTPC);
- 	}
- }
- 
- bool kvm_pmu_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
- {
--	return kvm_pmu_ops.msr_idx_to_pmc(vcpu, msr) ||
--		kvm_pmu_ops.is_valid_msr(vcpu, msr);
-+	return static_call(kvm_x86_pmu_msr_idx_to_pmc)(vcpu, msr) ||
-+		static_call(kvm_x86_pmu_is_valid_msr)(vcpu, msr);
- }
- 
- static void kvm_pmu_mark_pmc_in_use(struct kvm_vcpu *vcpu, u32 msr)
- {
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
--	struct kvm_pmc *pmc = kvm_pmu_ops.msr_idx_to_pmc(vcpu, msr);
-+	struct kvm_pmc *pmc = static_call(kvm_x86_pmu_msr_idx_to_pmc)(vcpu, msr);
- 
- 	if (pmc)
- 		__set_bit(pmc->idx, pmu->pmc_in_use);
-@@ -411,13 +416,13 @@ static void kvm_pmu_mark_pmc_in_use(struct kvm_vcpu *vcpu, u32 msr)
- 
- int kvm_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- {
--	return kvm_pmu_ops.get_msr(vcpu, msr_info);
-+	return static_call(kvm_x86_pmu_get_msr)(vcpu, msr_info);
- }
- 
- int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- {
- 	kvm_pmu_mark_pmc_in_use(vcpu, msr_info->index);
--	return kvm_pmu_ops.set_msr(vcpu, msr_info);
-+	return static_call(kvm_x86_pmu_set_msr)(vcpu, msr_info);
- }
- 
- /* refresh PMU settings. This function generally is called when underlying
-@@ -426,7 +431,7 @@ int kvm_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-  */
- void kvm_pmu_refresh(struct kvm_vcpu *vcpu)
- {
--	kvm_pmu_ops.refresh(vcpu);
-+	static_call(kvm_x86_pmu_refresh)(vcpu);
- }
- 
- void kvm_pmu_reset(struct kvm_vcpu *vcpu)
-@@ -434,7 +439,7 @@ void kvm_pmu_reset(struct kvm_vcpu *vcpu)
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
- 
- 	irq_work_sync(&pmu->irq_work);
--	kvm_pmu_ops.reset(vcpu);
-+	static_call(kvm_x86_pmu_reset)(vcpu);
- }
- 
- void kvm_pmu_init(struct kvm_vcpu *vcpu)
-@@ -442,7 +447,7 @@ void kvm_pmu_init(struct kvm_vcpu *vcpu)
- 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
- 
- 	memset(pmu, 0, sizeof(*pmu));
--	kvm_pmu_ops.init(vcpu);
-+	static_call(kvm_x86_pmu_init)(vcpu);
- 	init_irq_work(&pmu->irq_work, kvm_pmi_trigger_fn);
- 	pmu->event_count = 0;
- 	pmu->need_cleanup = false;
-@@ -474,14 +479,13 @@ void kvm_pmu_cleanup(struct kvm_vcpu *vcpu)
- 		      pmu->pmc_in_use, X86_PMC_IDX_MAX);
- 
- 	for_each_set_bit(i, bitmask, X86_PMC_IDX_MAX) {
--		pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, i);
-+		pmc = static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, i);
- 
- 		if (pmc && pmc->perf_event && !pmc_speculative_in_use(pmc))
- 			pmc_stop_counter(pmc);
- 	}
- 
--	if (kvm_pmu_ops.cleanup)
--		kvm_pmu_ops.cleanup(vcpu);
-+	static_call_cond(kvm_x86_pmu_cleanup)(vcpu);
- 
- 	bitmap_zero(pmu->pmc_in_use, X86_PMC_IDX_MAX);
- }
-@@ -511,7 +515,7 @@ static inline bool eventsel_match_perf_hw_id(struct kvm_pmc *pmc,
- 	unsigned int config;
- 
- 	pmc->eventsel &= (ARCH_PERFMON_EVENTSEL_EVENT | ARCH_PERFMON_EVENTSEL_UMASK);
--	config = kvm_pmu_ops.pmc_perf_hw_id(pmc);
-+	config = static_call(kvm_x86_pmu_pmc_perf_hw_id)(pmc);
- 	pmc->eventsel = old_eventsel;
- 	return config == perf_hw_id;
- }
-@@ -539,7 +543,7 @@ void kvm_pmu_trigger_event(struct kvm_vcpu *vcpu, u64 perf_hw_id)
- 	int i;
- 
- 	for_each_set_bit(i, pmu->all_valid_pmc_idx, X86_PMC_IDX_MAX) {
--		pmc = kvm_pmu_ops.pmc_idx_to_pmc(pmu, i);
-+		pmc = static_call(kvm_x86_pmu_pmc_idx_to_pmc)(pmu, i);
- 
- 		if (!pmc || !pmc_is_enabled(pmc) || !pmc_speculative_in_use(pmc))
- 			continue;
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index 7032d3ebf8f4..9ccdfb4e838e 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -43,6 +43,11 @@ struct kvm_pmu_ops {
- 	void (*cleanup)(struct kvm_vcpu *vcpu);
- };
- 
-+#define KVM_X86_PMU_OP(func) \
-+	DECLARE_STATIC_CALL(kvm_x86_pmu_##func, *(((struct kvm_pmu_ops *)0)->func));
-+#define KVM_X86_PMU_OP_OPTIONAL KVM_X86_PMU_OP
-+#include <asm/kvm-x86-pmu-ops.h>
-+
- static inline u64 pmc_bitmask(struct kvm_pmc *pmc)
- {
- 	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-@@ -92,7 +97,7 @@ static inline bool pmc_is_fixed(struct kvm_pmc *pmc)
- 
- static inline bool pmc_is_enabled(struct kvm_pmc *pmc)
- {
--	return kvm_pmu_ops.pmc_is_enabled(pmc);
-+	return static_call(kvm_x86_pmu_pmc_is_enabled)(pmc);
- }
- 
- static inline bool kvm_valid_perf_global_ctrl(struct kvm_pmu *pmu,
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 0a76f7281e74..ffa0b219c13e 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11519,6 +11519,14 @@ static inline void kvm_ops_static_call_update(void)
- 					   (void *)__static_call_return0);
- #include <asm/kvm-x86-ops.h>
- #undef __KVM_X86_OP
-+
-+#define __KVM_X86_PMU_OP(func) \
-+	static_call_update(kvm_x86_pmu_##func, kvm_pmu_ops.func);
-+#define KVM_X86_PMU_OP(func) \
-+	WARN_ON(!kvm_pmu_ops.func); __KVM_X86_PMU_OP(func)
-+#define KVM_X86_PMU_OP_OPTIONAL __KVM_X86_PMU_OP
-+#include <asm/kvm-x86-pmu-ops.h>
-+#undef __KVM_X86_PMU_OP
- }
- 
- int kvm_arch_hardware_setup(void *opaque)
--- 
-2.35.1
+--0000000000001c83a305d99f9b27
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCKxi0D6ywxBuK8LvY5
+p6PGJxyBdhJ7lxE5WQ01544v4DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAzMDcxMjAwMDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEARsoyEEAasEhgoVwf1Dc28yS6RhoxEXEn2/NU
+T1xtpbAL8szE0N3+jDjKibzX7bf8tKb5ZVOKLw8zgoLXJNzn7dZlBO77NlM7yQW45JNyyGJllH1R
+2RyyDue06pAv/I+5PasgeV5opNYOifAFbVXOcc8Rr8cJw5s0LPMhIXz1tqL8ofJktJ/lXOPBDvit
+d+74+jvcxQnSXCsWo7A/i2QWAwHGIoDIIh8fNThsZGYJon2iDd2OOFj3FInh75/O+pjdzVDHOgva
+HRq/cXtPJa8OBPKdN9TnykZMh+O2yFit5Y6xF/dhVUJ+NdZ9OmF30w57O7BxKSaS9RMbxgKMdBs5
+Rw==
+--0000000000001c83a305d99f9b27--

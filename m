@@ -2,101 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6AE4CF9E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6704CF9B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240436AbiCGKIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:08:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S240954AbiCGKJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239386AbiCGJtj (ORCPT
+        with ESMTP id S240380AbiCGJu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:49:39 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6B06E568
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:43:12 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so10978669wmj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:43:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jUnpa9JbqR6HAnUfa1Lcq9v1yG1shY5AgIzMl2mBcFE=;
-        b=t9Wtlo+r0Pn5tPQdeD022pbjZvaPxMQo0hdjv8++mgad+O2gXdBf/i85tX9TWq3kTG
-         RtfnUhGKxlTTSWAXEI2eZb23JU29B9mIjEXGCdLBWM496P11Rr9XYDAG9roenwZghBRq
-         FsHWGBojuuXWSgs2/WNgQZeaZahkUJNI2eoLatAsGNS/9BbooHQvHhsV0GLnBmpmU9bq
-         HrizOTTs5T7N1kefnHSmfz9iW75HjNkOUujNqb9U1TwwL+l1qbiOgSg8OiGHTG2EM1zL
-         PlR75pXbszJIkTCeDAHgBpZHliJQgSiPNTXmvh48AGbOfSug17BixFbXF9RI8TNMM9be
-         WEyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jUnpa9JbqR6HAnUfa1Lcq9v1yG1shY5AgIzMl2mBcFE=;
-        b=wiFZ2ij5Tm6yLvObMrWmpDwRqB05s5CE15HeNMyDRtGd8d5z9TFEvSOC6LxCSlqqIX
-         yElM7JurKHZOd1pt501pDvfKw5zjpSMZ9jC73Jfj1My/8UUVpSQSaHLr+4+KIFRr3jft
-         3iDSkJSEsMPOBzfI5tSdqPbG1llsS+6DGvd3T1XA3hmbsO4m2Bdg+OrIDsdUqTn7DEDj
-         hyN+OjuXelxxxdg9+Ei7kGnrvz/lSXhrv//li59nAfJYCl3+Chyz3ZrdnspB5JSNACgf
-         Bc5MUj8BbPWjbzlMwniv5Fzi5TxbfKG5xBOi86i/pM+k1wkPgJTcCwdHO1VYtOdLIdUM
-         C4Qw==
-X-Gm-Message-State: AOAM531xougrY2qPWoseq2sowodQt2QFR0Q8quo7TtkfhVXGddSaoLuD
-        YDiVefnsdnj47LInQxbkhE3mHA==
-X-Google-Smtp-Source: ABdhPJxMwUg9F7Yyw/Mvr1bBZ99wmak82idN666DkfF2sR4hkKMm/3BdId5wfHRxVmDD6jFd6t/xxQ==
-X-Received: by 2002:a05:600c:4f55:b0:381:7386:ed68 with SMTP id m21-20020a05600c4f5500b003817386ed68mr17571401wmq.36.1646646189308;
-        Mon, 07 Mar 2022 01:43:09 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id a10-20020a7bc1ca000000b00389bc87db45sm576607wmj.7.2022.03.07.01.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 01:43:08 -0800 (PST)
-Date:   Mon, 7 Mar 2022 09:43:07 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: Re: [PATCH v3 1/2] regulator: dt-bindings: maxim,max77802: convert
- to dtschema
-Message-ID: <YiXTq6QojkzqvgHB@google.com>
-References: <20220215075344.31421-1-krzysztof.kozlowski@canonical.com>
- <20220215075344.31421-2-krzysztof.kozlowski@canonical.com>
+        Mon, 7 Mar 2022 04:50:58 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1E661A3B;
+        Mon,  7 Mar 2022 01:44:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=guLVFBWwsdaV3lNFAMJxo4Aikamhb6ldFeHSTPb5pELOZSRribzytVQ/d+1RvD0O8NJ/8PwF4MKuK+vE1JwvHSwOUK7zOg1VfxM2EVzVypIdqgqDl1Xi3eE/cw7wqkNSm7deoZeJbxsvVkwI6SfUSIgcJjUfgZWHrkHuCss4Nn+XXP31up1CMTcwGzKRYnw6L0rXatUbF+vZypj/tMbjwYsy13EckHplB7JMVOVEKztTUYdSpVbl02X8ufiTsRBTELz89HaiKv2fRyai0UbWNRKN8x5+6XxSs3ZZH1fQvr1Rz8z7X3lbjhzCVhVt85Y+g6qO6/CtCaXqz/aM13MBiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7pow5pQn20Bk40GvH2a4BuZ0BZMAnvGe2VBix6ZWbMs=;
+ b=A2qrigPyJGBsui2zSuBTwArvtHZ388Lhyxu50Grw8BSRw0TNWqe5dz4Fmzqw4FMbJ5CmV/XNyMx1qfFp4822+cALR4ncG9uo8aEqKG9zKIrTZyMIApOL9wtEa2eL/xCsBbPkda8xSrzQXOqYgktMnPbfqZLApPDXQr/Hu0GsEn4orizoH1zzKLD1iAzm2dz6y8Z/HmWKOBIowNNw/lfm0n0vr/6P4Lg79+8a0ASTj5tN398JUzos32ovR3AxOBFO0+nGiFwRVWfm1d90tp3xV9e5edb13gGxJdkMbFh/YVaGv0IGRFi03oIz4jZzaLfAWSKQ4gZZFegp0x3kvYPUTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7pow5pQn20Bk40GvH2a4BuZ0BZMAnvGe2VBix6ZWbMs=;
+ b=bmdFmPA8wGSyFy/AV0J6P4j1/7q0OKQYnSybV1HKmB5J6hKh7SbOEA1ciMgjxwpwFL367IS+LwJjjWfyKf/tT8wZjAIBNUFxMmqCFSvrESiMV2iorMCVdx0rNtT7FMw1T/rEsZkEOANfufcf/GtQTyKcZiMJNXTeOSBKn41A51hObI4OPHEAP/wK9DffqvkSuiZmABgUfb/PGrDV5hw93/DCBqXCkiPTHDUe8L1UyX768zfmg/9wE7AXfmOenF1l9c/b/qk31xaWlZGfoOMdti5PjLsiEy8amxestWMRVzfloY/Bo1pdCuXFMN0VEB1czzlCcme0Sdzr1ltCi8tEtQ==
+Received: from DS7PR05CA0065.namprd05.prod.outlook.com (2603:10b6:8:57::10) by
+ BN7PR12MB2708.namprd12.prod.outlook.com (2603:10b6:408:21::25) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.15; Mon, 7 Mar 2022 09:44:21 +0000
+Received: from DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:57:cafe::20) by DS7PR05CA0065.outlook.office365.com
+ (2603:10b6:8:57::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.17 via Frontend
+ Transport; Mon, 7 Mar 2022 09:44:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ DM6NAM11FT005.mail.protection.outlook.com (10.13.172.238) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5038.14 via Frontend Transport; Mon, 7 Mar 2022 09:44:21 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 7 Mar
+ 2022 09:44:18 +0000
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Mon, 7 Mar 2022
+ 01:44:14 -0800
+References: <20220305181346.697365-1-trix@redhat.com>
+User-agent: mu4e 1.6.6; emacs 27.2
+From:   Petr Machata <petrm@nvidia.com>
+To:     <trix@redhat.com>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <idosch@nvidia.com>, <petrm@nvidia.com>,
+        <edumazet@google.com>, <avagin@gmail.com>, <yajun.deng@linux.dev>,
+        <johannes.berg@intel.com>, <cong.wang@bytedance.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+Subject: Re: [PATCH] net: rtnetlink: fix error handling in
+ rtnl_fill_statsinfo()
+Date:   Mon, 7 Mar 2022 10:43:28 +0100
+In-Reply-To: <20220305181346.697365-1-trix@redhat.com>
+Message-ID: <87sfru9jwz.fsf@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220215075344.31421-2-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a1c68a1a-30ab-4467-4d72-08da001f0e73
+X-MS-TrafficTypeDiagnostic: BN7PR12MB2708:EE_
+X-Microsoft-Antispam-PRVS: <BN7PR12MB27083BD979E894CD984111B4D6089@BN7PR12MB2708.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fhHb2C3DS4Ccsfv7qQ46y4f61mp3DktlD2TTG9TBjFQPptoegfAJjWRRZBNhxSuliF5YyshYYJRcg//9rZRgMgBg5dig0lPmT60vaNPd6itq+2KAPnmfSdu3EGfoP48FgMa6IodoqVEWDqFWxOFcEOxxIu0R4ssITbtPn/UVIvKNTJbbS+LTwH6SXyt3dEDg++MCPjbdyFnACqNl8MAN+OTBKlsg6oL7SoL4x2voEUWH28noWSZVcGWiZc+yY7Qyn3tSZDmJdQlPAFBBeEVqW5/WZQfyG+plMw0ddzM/orKbUr8ppVieGYK8chFyO9GXA9RvFgRfVPG+bM4BsW5Hg1NxkQd0kHmU0v55d9u0lM26BftobSfuSpz3dZz2jSeNYnVAaXzJtfkRxlpzaK+/kce6g3h9v1SVOWId4Qrl4eiaMCD5ZvETwfNZ3H70WERzdSczg6szxbPzmNM4OijM0PyXbclRu4NMc+W/6Qf/BlZ4pmQ3L1zHnX60uuajkmCKMUgosZfS3CfKHjEFa19SJw9KQ4onfYVUcv2mYCXZW8w+9gb8QBlB//DTEbmnT8AibDt+DxrfxYr5ny80UNzftbHGBRYp2MkEqS4BecPv1NjIyhU9Bnm39eNqtdVQclY3YlyxRnyMWRhHvTVRyxIgWhKyKKfb/QizLI/ICdIej06bzCrT6j5BbhFfKlV9CCQsl0dQ8V0asW4mu6n74T+9sA==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(26005)(186003)(4744005)(36860700001)(54906003)(6916009)(16526019)(508600001)(316002)(47076005)(40460700003)(82310400004)(70586007)(356005)(81166007)(336012)(426003)(8936002)(2616005)(6666004)(83380400001)(86362001)(36756003)(7416002)(4326008)(8676002)(70206006)(5660300002)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:44:21.1207
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1c68a1a-30ab-4467-4d72-08da001f0e73
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2708
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022, Krzysztof Kozlowski wrote:
 
-> Convert the regulators of Maxim MAX77802 PMIC to DT schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> ---
->  .../bindings/regulator/max77802.txt           | 111 ------------------
->  .../bindings/regulator/maxim,max77802.yaml    |  85 ++++++++++++++
->  2 files changed, 85 insertions(+), 111 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/regulator/max77802.txt
->  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
+trix@redhat.com writes:
 
-Applied, thanks.
+> From: Tom Rix <trix@redhat.com>
+>
+> The clang static analyzer reports this issue
+> rtnetlink.c:5481:2: warning: Undefined or garbage
+>   value returned to caller
+>   return err;
+>   ^~~~~~~~~~
+>
+> There is a function level err variable, in the
+> list_for_each_entry_rcu block there is a shadow
+> err.  Remove the shadow.
+>
+> In the same block, the call to nla_nest_start_noflag()
+> can fail without setting an err.  Set the err
+> to -EMSGSIZE.
+>
+> Fixes: 216e690631f5 ("net: rtnetlink: rtnl_fill_statsinfo(): Permit non-EMSGSIZE error returns")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+
+Thanks!

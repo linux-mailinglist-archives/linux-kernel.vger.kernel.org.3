@@ -2,59 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5E94CF129
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 06:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE9E4CF259
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 08:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235325AbiCGFb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 00:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S232509AbiCGHCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 02:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiCGFbx (ORCPT
+        with ESMTP id S230121AbiCGHCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 00:31:53 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853545E767;
-        Sun,  6 Mar 2022 21:30:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646631059; x=1678167059;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rtVWdeENGDYy0fPY0xGwqkHTK1NhN5kIkGzb+raiRkM=;
-  b=gd5tHCY+P8M92Ey7L9XWnBTfPUsTRxyrCTqyYnfqDqewfaPp7mmAafCV
-   cxD3NbBaA87DpSc6OHOcIjjRpdSPGzWMXnQXQArdrK0vrYe+gkvxBHaob
-   2M16yYDlrhQeUaEnfuXhEutW6yfvXJ0FkJQ14+06VRMtCB7ulkHVvZwrp
-   cAbHuXojFGCfmJDLBWh6DyH7UyKFY+IYfiwChRo9DekkaqnvDPV6rmwdV
-   0z0UKQBDUqj9uYkB4rxGgRyMpKzFkgTN0Yv1dEIdkM+i3btP8jdn2jZEw
-   hYy1XXm78qmAbr/djuBiZYDdZ7KvTwmdWkA+DR2jFJrNnmyGPUZgHgSgl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="315018935"
-X-IronPort-AV: E=Sophos;i="5.90,160,1643702400"; 
-   d="scan'208";a="315018935"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 21:30:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,160,1643702400"; 
-   d="scan'208";a="710973312"
-Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by orsmga005.jf.intel.com with ESMTP; 06 Mar 2022 21:30:55 -0800
-From:   zhengjun.xing@linux.intel.com
-To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
-Subject: [PATCH v4 2/2] perf vendor events intel: Add uncore event list for Alderlake
-Date:   Mon,  7 Mar 2022 21:23:53 +0800
-Message-Id: <20220307132353.19611-2-zhengjun.xing@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220307132353.19611-1-zhengjun.xing@linux.intel.com>
-References: <20220307132353.19611-1-zhengjun.xing@linux.intel.com>
+        Mon, 7 Mar 2022 02:02:15 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF0710B0
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 23:01:20 -0800 (PST)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22767c0e011330;
+        Mon, 7 Mar 2022 07:00:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=RoarqwVzHJy3ek8Ku3QJJyHMkiD0U44gHZOE+zK1q9c=;
+ b=cl/If73D4MATm9n7/ZSu1wGiyNIdRGFfU71LTX5LhNyhwLKTSDJoyUnY1yflqQrI1SVw
+ yclIlhEeGYz3YXL+/pVfCIZWnQJ7rV7I7XnPmjoAdh5G5nifKxHQjJbc6oPZjIMGm1Ln
+ Ml9hPNflM8J13tdDpMFeL9DpI13d2hfCTt5xT5GbvoBYBxLDpTXi8SgxFmqI86C/yIjZ
+ w+yew6IeYUI8kGScHcvXUumdpzz7H5UvqNGMhAIZgmB4HKQ9X+8zOVTKtkMz2c/owMsG
+ zKRxfxZtTOKsWl9i8ia8RvZ0LZqB/QRvE4qRxlVYZS5G5iiSI5ouQCTocIfoD297XPS5 qA== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3emr0jfhmv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Mar 2022 07:00:09 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2276meoa010791;
+        Mon, 7 Mar 2022 07:00:08 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma04wdc.us.ibm.com with ESMTP id 3ekyg93v90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Mar 2022 07:00:08 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 227708mr48366002
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Mar 2022 07:00:08 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 05A63B2079;
+        Mon,  7 Mar 2022 07:00:08 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 06966B2068;
+        Mon,  7 Mar 2022 07:00:06 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.89.15])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Mar 2022 07:00:05 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     ira.weiny@intel.com, Michael Ellerman <mpe@ellerman.id.au>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pkeys: Make pkey unsigned in arch_set_user_pkey_access()
+In-Reply-To: <20220304210543.3490880-1-ira.weiny@intel.com>
+References: <20220304210543.3490880-1-ira.weiny@intel.com>
+Date:   Mon, 07 Mar 2022 12:30:03 +0530
+Message-ID: <878rtmtfgs.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: c7fH1oFo6lnSnaXsgViphcgNdJqCCtP8
+X-Proofpoint-GUID: c7fH1oFo6lnSnaXsgViphcgNdJqCCtP8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-07_01,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
+ malwarescore=0 priorityscore=1501 impostorscore=0 clxscore=1011
+ phishscore=0 mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203070039
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,305 +84,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+ira.weiny@intel.com writes:
 
-Add JSON uncore events for Alderlake to perf.
+> From: Ira Weiny <ira.weiny@intel.com>
+>
+> The WARN_ON check in arch_set_user_pkey_access() in the x86 architecture
+> fails to check for an invalid negative value.
+>
+> A simple check for less than 0 would fix this issue however, in the call
+> stack below arch_set_user_pkey_access() the pkey should never be
+> negative on any architecture.  It is always best to use correct types
+> when possible.  x86 only supports 16 keys while ppc supports 32, u8 is
+> therefore large enough for all current architectures and likely those in
+> the future.
 
-Based on JSON list v1.06:
+Should we do that as a separate patch? ie, now convert the variable to
+unsigned int and later switch all the variables to u8? because what we
+now have is confusing.
 
-https://download.01.org/perfmon/ADL/
+static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
+		unsigned long pkey)
+static inline u64 pkey_to_vmflag_bits(u16 pkey)
 
-Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Acked-by: Ian Rogers <irogers@google.com>
----
-Change log:
- v4:
-    * code no change, fix the patch thread issue.
- v3:
-    * No change since v2
- v2:
-    * Add Acked-by tag
 
- .../arch/x86/alderlake/uncore-memory.json     | 222 ++++++++++++++++++
- .../arch/x86/alderlake/uncore-other.json      |  40 ++++
- 2 files changed, 262 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
- create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
 
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
-new file mode 100644
-index 000000000000..d82d6f62a6fb
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
-@@ -0,0 +1,222 @@
-+[
-+    {
-+        "BriefDescription": "Number of clocks",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x01",
-+        "EventName": "UNC_M_CLOCKTICKS",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming VC0 read request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x02",
-+        "EventName": "UNC_M_VC0_REQUESTS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming VC0 write request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x03",
-+        "EventName": "UNC_M_VC0_REQUESTS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming VC1 read request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x04",
-+        "EventName": "UNC_M_VC1_REQUESTS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming VC1 write request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x05",
-+        "EventName": "UNC_M_VC1_REQUESTS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming read prefetch request from IA",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x0A",
-+        "EventName": "UNC_M_PREFETCH_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Any Rank at Hot state",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x19",
-+        "EventName": "UNC_M_DRAM_THERMAL_HOT",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Any Rank at Warm state",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1A",
-+        "EventName": "UNC_M_DRAM_THERMAL_WARM",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming read request page status is Page Hit",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1C",
-+        "EventName": "UNC_M_DRAM_PAGE_HIT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming read request page status is Page Empty",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1D",
-+        "EventName": "UNC_M_DRAM_PAGE_EMPTY_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming read request page status is Page Miss",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1E",
-+        "EventName": "UNC_M_DRAM_PAGE_MISS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming write request page status is Page Hit",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1F",
-+        "EventName": "UNC_M_DRAM_PAGE_HIT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming write request page status is Page Empty",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x20",
-+        "EventName": "UNC_M_DRAM_PAGE_EMPTY_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming write request page status is Page Miss",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x21",
-+        "EventName": "UNC_M_DRAM_PAGE_MISS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Read CAS command sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x22",
-+        "EventName": "UNC_M_CAS_COUNT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Write CAS command sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x23",
-+        "EventName": "UNC_M_CAS_COUNT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "ACT command for a read request sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x24",
-+        "EventName": "UNC_M_ACT_COUNT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "ACT command for a write request sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x25",
-+        "EventName": "UNC_M_ACT_COUNT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "ACT command sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x26",
-+        "EventName": "UNC_M_ACT_COUNT_TOTAL",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "PRE command sent to DRAM for a read/write request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x27",
-+        "EventName": "UNC_M_PRE_COUNT_PAGE_MISS",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "PRE command sent to DRAM due to page table idle timer expiration",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x28",
-+        "EventName": "UNC_M_PRE_COUNT_IDLE",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Counts every 64B read  request entering the Memory Controller 0 to DRAM (sum of all channels)",
-+        "CounterType": "FREERUN",
-+        "EventName": "UNC_MC0_RDCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Counts every 64B read request entering the Memory Controller 1 to DRAM (sum of all channels)",
-+        "Counter": "3",
-+        "CounterType": "FREERUN",
-+        "EventName": "UNC_MC1_RDCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Counts every 64B write request entering the Memory Controller 0 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM",
-+        "Counter": "1",
-+        "CounterType": "FREERUN",
-+        "EventName": "UNC_MC0_WRCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Counts every 64B write request entering the Memory Controller 1 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM",
-+        "Counter": "4",
-+        "CounterType": "FREERUN",
-+        "EventName": "UNC_MC1_WRCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json b/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-new file mode 100644
-index 000000000000..50de82c29944
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-@@ -0,0 +1,40 @@
-+[
-+    {
-+        "BriefDescription": "This 48-bit fixed counter counts the UCLK cycles",
-+        "Counter": "Fixed",
-+        "CounterType": "PGMABLE",
-+	"EventCode": "0xff",
-+        "EventName": "UNC_CLOCK.SOCKET",
-+        "PerPkg": "1",
-+        "Unit": "CLOCK"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of coherent and in-coherent requests initiated by IA cores, processor graphic units, or LLC",
-+        "Counter": "0,1",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x81",
-+        "EventName": "UNC_ARB_TRK_REQUESTS.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x01",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Number of requests allocated in Coherency Tracker",
-+        "Counter": "0,1",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x84",
-+        "EventName": "UNC_ARB_COH_TRK_REQUESTS.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x01",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Each cycle counts number of all outgoing valid entries in ReqTrk. Such entry is defined as valid from its allocation in ReqTrk till deallocation. Accounts for Coherent and non-coherent traffic",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x80",
-+        "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x01",
-+        "Unit": "ARB"
-+    }
-+]
--- 
-2.25.1
+>
+> Change the type of the pkey passed to arch_set_user_pkey_access() to u8.
+>
+> To: Dave Hansen <dave.hansen@linux.intel.com>
+> To: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> ---
+>  arch/powerpc/include/asm/pkeys.h | 4 ++--
+>  arch/powerpc/mm/book3s64/pkeys.c | 2 +-
+>  arch/x86/include/asm/pkeys.h     | 4 ++--
+>  arch/x86/kernel/fpu/xstate.c     | 2 +-
+>  include/linux/pkeys.h            | 2 +-
+>  5 files changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/powerpc/include/asm/pkeys.h b/arch/powerpc/include/asm/pkeys.h
+> index 59a2c7dbc78f..e70615a1da9b 100644
+> --- a/arch/powerpc/include/asm/pkeys.h
+> +++ b/arch/powerpc/include/asm/pkeys.h
+> @@ -143,9 +143,9 @@ static inline int arch_override_mprotect_pkey(struct vm_area_struct *vma,
+>  	return __arch_override_mprotect_pkey(vma, prot, pkey);
+>  }
+>  
+> -extern int __arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+> +extern int __arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+>  				       unsigned long init_val);
 
+
+> -static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+> +static inline int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+>  					    unsigned long init_val)
+>  {
+>  	if (!mmu_has_feature(MMU_FTR_PKEY))
+> diff --git a/arch/powerpc/mm/book3s64/pkeys.c b/arch/powerpc/mm/book3s64/pkeys.c
+> index 753e62ba67af..c048467669df 100644
+> --- a/arch/powerpc/mm/book3s64/pkeys.c
+> +++ b/arch/powerpc/mm/book3s64/pkeys.c
+> @@ -333,7 +333,7 @@ static inline void init_iamr(int pkey, u8 init_bits)
+>   * Set the access rights in AMR IAMR and UAMOR registers for @pkey to that
+>   * specified in @init_val.
+>   */
+> -int __arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+> +int __arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+>  				unsigned long init_val)
+>  {
+>  	u64 new_amr_bits = 0x0ul;
+> diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
+> index 5292e6dfe2a7..48efb81f6cc6 100644
+> --- a/arch/x86/include/asm/pkeys.h
+> +++ b/arch/x86/include/asm/pkeys.h
+> @@ -9,7 +9,7 @@
+>   */
+>  #define arch_max_pkey() (cpu_feature_enabled(X86_FEATURE_OSPKE) ? 16 : 1)
+>  
+> -extern int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+> +extern int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+>  		unsigned long init_val);
+>  
+>  static inline bool arch_pkeys_enabled(void)
+> @@ -115,7 +115,7 @@ int mm_pkey_free(struct mm_struct *mm, int pkey)
+>  	return 0;
+>  }
+>  
+> -extern int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+> +extern int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+>  		unsigned long init_val);
+>  
+>  static inline int vma_pkey(struct vm_area_struct *vma)
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index 7c7824ae7862..db511bec57e5 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1068,7 +1068,7 @@ void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
+>   * This will go out and modify PKRU register to set the access
+>   * rights for @pkey to @init_val.
+>   */
+> -int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+> +int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+>  			      unsigned long init_val)
+>  {
+>  	u32 old_pkru, new_pkru_bits = 0;
+> diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
+> index 86be8bf27b41..aa40ed2fb0fc 100644
+> --- a/include/linux/pkeys.h
+> +++ b/include/linux/pkeys.h
+> @@ -35,7 +35,7 @@ static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
+>  	return -EINVAL;
+>  }
+>  
+> -static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+> +static inline int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
+>  			unsigned long init_val)
+>  {
+>  	return 0;
+> -- 
+> 2.35.1

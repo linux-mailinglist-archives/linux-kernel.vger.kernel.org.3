@@ -2,248 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BF24D0532
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E934D0535
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244439AbiCGR2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S244445AbiCGR3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239259AbiCGR2p (ORCPT
+        with ESMTP id S244443AbiCGR3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:28:45 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2047.outbound.protection.outlook.com [40.107.20.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64E02251C;
-        Mon,  7 Mar 2022 09:27:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WUFnU+KsaEQyOYOxa50PcdcigK1VRmKoDJqgt7b7knVdaZAhhW3ZOmv0S9Z6+UO5u6rR3rdjYv2E+j6pvcOUOXTJYs37pUu/9EInQckXoUIMxVrWvYaibLHmteDIjzv/z5kfsYNZC5rtu8p3gFZn+XHjeyh6FYKzwWuMgePP6JdUg5GUqrD8JH96GeMVtHFjZ4ywvvgQRFqA4AoQz/OZy5kdJBZHKoMMfRUqb/FxxL+bA/q12p1GGeWddsWtr6rMG9FdSHHushqJUdbdHX6h7b3nov4mg0IeePejkB9JNB1K64A6TvCx2/Ljgw4xFPCSVEpKQ0t0+LWaIxS6qI9eqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hgJY0fKefCFYKRI7bk1w274tk/w2DcZqkzct3PQ2Xsw=;
- b=NpU06qdGwM94aa0zD0VZCC0+gUmoys37bkCEqd3iv68GGb+bAYoBhJGuvcsXPKoS+YiCmaXWzmF9zEV5PF4qc5GJLXi8OpL3hjE1ZvX3iHcXPlPtrKmkpVlIlNtIHY+2Dpb549Wda3c2ACKAEApOQoUnsbUPV1EYIJakAxbble5o6D0QzuNJpH6Ok+UmhUiU6moD7eZGu9FPBy7OTyqktXZuanABSnNJNIsKvZSA5lgOU3Ex7tg7tqO7dPex40tbPzsbN7KnBpgJVEXfhCbJWRobWTZrP7/VV9j4Y2KD/gh9LHBvyqlvNahz1Mo0g/2CfVYHXxhv3DND5DfdHnRI+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hgJY0fKefCFYKRI7bk1w274tk/w2DcZqkzct3PQ2Xsw=;
- b=KeqItT6V+JqhDAIoL2RWDSQ0iw5EGuHRIWMZx6F6UxE1J1zOuZGZEGvlffHXndcvw/QdSNFMMJkhNNic/g86HuSlF0axbGvoYiqfi78Ea+Wr46dDXzVs7Vt1Q0VxWBpDADd0bfvFYwVts/tR79VN+PJPPrpLSAcy8GMg5MUpoUbma4MXWeNRpj4sXUlWptwfs2X4bf/n99adchSU8Spx7rV6icFtfJ1L9a8XishYNivTGhvBa95BqN3IADVguDrqU5pBnG4OFHEFIYxZCpRWLtFErAXPszmHMxIwDk1gV1vjWoUKx427qLm5a8LWjBs05ukb7MlhlHSmZ/lVqguTiQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AM0PR10MB3459.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:155::20)
- by DB8PR10MB3658.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:132::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.13; Mon, 7 Mar
- 2022 17:27:45 +0000
-Received: from AM0PR10MB3459.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::d433:79c4:958b:1551]) by AM0PR10MB3459.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::d433:79c4:958b:1551%7]) with mapi id 15.20.5038.027; Mon, 7 Mar 2022
- 17:27:45 +0000
-Date:   Mon, 7 Mar 2022 18:27:40 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v4 0/8] platform/x86: introduce p2sb_bar() helper
-Message-ID: <20220307182740.78ad0a75@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
-References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6P194CA0096.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:209:8f::37) To AM0PR10MB3459.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:155::20)
+        Mon, 7 Mar 2022 12:29:16 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C1431DFC
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:28:20 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 78FCE3F605
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646674099;
+        bh=zWqkAeekz2GA5fDk4zNgeAU/W+NGxH0bY9P4VqyG+q4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=h4nys6dARqH1HOAALE3Fwwh8ziSOds/uvfoNsZIrxfsEPewbGLOhjUz3GCCIfLt9H
+         0qpqFxYEnGWgp8FdkwOGMPDGXbB16/TIID3OR/nTEHx9J8Ayx8JKiLLASVF0HeyjSb
+         GbIJFVCeiRBvVgc0D2anaRExn7Z3ZBh4/98LjkSbaj9tOCaFZX3soThIWgfDFPaw5s
+         tHKyhEkC2sHVO+IqsKVTqvYAund9bDaai8ruSiX7QUlsSgsKxf5XfbungTFjABdUQ4
+         s+A9J7/5234SMyqv9RZRQ9vVDLitb7IeqCwUrzmWSTn5VNxwuc2YAZT4JYJWoeyVaH
+         wdRiaOQqWSCQw==
+Received: by mail-ej1-f71.google.com with SMTP id le4-20020a170907170400b006dab546bc40so4053565ejc.15
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:28:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zWqkAeekz2GA5fDk4zNgeAU/W+NGxH0bY9P4VqyG+q4=;
+        b=PONTReE03jNToNCZvcBjdUD9wvcU5hVLd/5oLv7dN6NEL/C39q0paGNpdeApqXj/6v
+         g0HuWZ0jGVwBO1MDQkoeZpahTBpLrn98ADfeMIebKa1Tl56G7M+SjRBT+5oRFZ/DM8Y9
+         GWGttwlE+AMuNT3axZJ2xm9l8fHSvKY47/NkvGDQ0YtS9nx78QJ7uX10iScijmvc6d3U
+         7D8Z/AokjIrXbGZ1amWZ6gdCRbvIs8/rPVq+pdbO07WWSt/nwHB+B692oOpTxg/uC0Cw
+         A+oob2bXKvLeAp4ywYH1VjvWrfiqJuCaVboUFQX7Y3W2dkJF9clPBvrHq76jkXD5qSra
+         YHiQ==
+X-Gm-Message-State: AOAM5312DoVZQ1SbFKdHMJXdv/BpljM0xoAURZael/OKiBRvD1H2BqWN
+        RhkQPt/IKKlxDaKYPwxx7+DEW6TB+dGK+C6bxi3zDvIL57iVvzK54DuZmhfCl5CciYSsvt9WlGr
+        FABukhn3mlJvgf0tTVg2t8SvNjI4g9LIN60VU8SB6og==
+X-Received: by 2002:a17:907:1c0f:b0:6db:fb2:ff94 with SMTP id nc15-20020a1709071c0f00b006db0fb2ff94mr6386429ejc.581.1646674099021;
+        Mon, 07 Mar 2022 09:28:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxFsbDaiR0foKLH8GCD7HHZMCXBWAvQszk0lRq624IFRdPIjSR6SL8eJwUWJp7owpT4k6uG1g==
+X-Received: by 2002:a17:907:1c0f:b0:6db:fb2:ff94 with SMTP id nc15-20020a1709071c0f00b006db0fb2ff94mr6386406ejc.581.1646674098773;
+        Mon, 07 Mar 2022 09:28:18 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id g13-20020a50bf4d000000b00410d407da2esm6557971edk.13.2022.03.07.09.28.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 09:28:18 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH] MAINTAINERS: update Krzysztof Kozlowski's email
+Date:   Mon,  7 Mar 2022 18:28:05 +0100
+Message-Id: <20220307172805.156760-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c47d59a9-26af-4930-44ce-08da005fcae9
-X-MS-TrafficTypeDiagnostic: DB8PR10MB3658:EE_
-X-Microsoft-Antispam-PRVS: <DB8PR10MB365891356D448A0B1EB5C88D85089@DB8PR10MB3658.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vv0Zu8dQNUQirRb4KUrpdRhnZS1NshSEHbWjSaH6ZKqNlP3FHCuxleIT2BWDQQnpQqcxrA3ld1AQTolXOowjRMVyNvUWPiIgwEotGyfnP7nf23R3itPZEe2dGoL0t3n9GDdnjogFRiggpeJA7EPirDJ1PSf8hukgmeIKyWasL+Kbvc7kWn777ntSsMVkj2uRshAAe8DC/N1LvqCD00n73L3R5lhIATjUJukHNfpf17gBWTddMq25HEJkdxYj3iV+5H3jhnyRhwh9Qe+sMqOsVCneNhItj11hSdSFMKyKPA6IOB3sZAYWPtXb0u8l6ali+Ip4i6bnRPzqQUSZzWoi5qUp0McCRN4cGrvHE3YAFpEHu6vel2z4ShmE4PHCHil0nYlOPZaZ3NESsfSNGUUALxPewOoE9OerUIxNN8jSQEqsb9DyPo93JHWh08Zvt2LJh+DDCF/KVXHQTj/ggW0JE06qtNow9FfI7CbVif+6SorGf9JeawcJLam9yObgpM6keZUdrJixSDzcV04zKI6LFhundAmzG9HnU3RSZXsKO9Lo4f8i3/GPWIGlgJCcML6IBKxUJzpIVMUWE0SCF4V2IQIfpAY2yNoG443RN9RsfL1RbIfZogEq1SLCYfRpTYxiw2iYok1bNFkJsNIXK60beg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB3459.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(6512007)(9686003)(66476007)(66946007)(54906003)(1076003)(6506007)(186003)(26005)(6666004)(86362001)(83380400001)(6916009)(7416002)(44832011)(4326008)(8676002)(6486002)(5660300002)(8936002)(2906002)(82960400001)(316002)(508600001)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?efe1VJrTk9IziE9/DXcRNuu1aCWgIaXArYF75eMldoCRATN4KHFx1Dy/m24W?=
- =?us-ascii?Q?ZfSsGeNq1c852u7nRiEODlntzKgMOyYF/x7XYOqfWn6rxT56vO4H6e1WjiUZ?=
- =?us-ascii?Q?sCxaQpjQga8TSN8prsUV3Hl15DN/ztmt0z4PkzLIdXeVPkq3aZmGxYeu0WQE?=
- =?us-ascii?Q?tDeoWnDpayRptEP+u1mutD01Ytf2eU49Oe2u5GgrYdArrZzBSABt8J3VTqlX?=
- =?us-ascii?Q?mQm/YIBT9l6GL09/QrpikM9a+m6RrKY0HhJvbivROcCUd/1PUCXI1IZtAhkX?=
- =?us-ascii?Q?JyPA93EtFzKMRewFz6srr3V4WsKI0SUAdl6C2VCQiY/jDto2q2xvm2bvTdeS?=
- =?us-ascii?Q?ZCGuvg9Arv75Dq4m2HkkAgOHhafXJ5KA/sqP2Agz41DcEdDgls9uCqonldpg?=
- =?us-ascii?Q?/Dx+83RsXNaivFIsZlelyDjwXLkuE+ik+4/pDylxW9JmJr9K1ya4sFBR9mwG?=
- =?us-ascii?Q?kB1AckS55bP43wfPp52mkJUQgmuEtr/fMAqT0ULC4+A0/EyjbBJL0pY1Eeqg?=
- =?us-ascii?Q?NGtVHLF6pDbnplv7BxGyuPHCakvEnzmUncqKjcxHNiATCwCSEf29jb8CgNpY?=
- =?us-ascii?Q?ggo7YTS48pEa4ezkUYsLiLHtlBOqPwVdPAswaDvy4iAhRvF+PbA+VrFbr2a3?=
- =?us-ascii?Q?xQu1/8HVYIjmqiLZEU28rgzN+w5aBt2nS6lx4Njsv7pjaFXLQpyysgkXaiCl?=
- =?us-ascii?Q?zoxwaiuqoZ4ye2b6uyA9FYYwG4TdDV9HtgSIzB0o9R6eJM/5BvSYTv7xUj/Z?=
- =?us-ascii?Q?83LNq3wEdEvevTEOEEswFwBlR17S0YiNrJrusUYjFEi2YNO1ob8v91iNgBzQ?=
- =?us-ascii?Q?A0rVOu1GoBtr7e5XJQ296fb+IwXoiFegrOANfVT2wpzCCZZWSJ+6GdFBpRS7?=
- =?us-ascii?Q?Mn5VsXBiXV+Y6eC9qNWWeaTBTo0cmWhP48K6LzmCiYaJIrZFgL7y62nPou27?=
- =?us-ascii?Q?cN3W0LpqCUByQfYndOMa56FVIIC4AR0jdYmclJVreyv82XCgoGInuvzVXOL5?=
- =?us-ascii?Q?uVVJrabNWH0ZRK2gzKOQGT6nw66fuKxU3qNLj9dyOoXs/SkZtY3s6A2u8Iwa?=
- =?us-ascii?Q?bw2Asm0GCI4e05tWmixPv4NqWgIXoK/mf6j7PACCUtAo7n5EwXQVYXhQxTvl?=
- =?us-ascii?Q?lTYZFuc0lYpa9hNekNl9WjCpFovA8OCkkpaQqQXRzJ73C35ttZGGkshKA/vI?=
- =?us-ascii?Q?vdbZsPoWXZAPnp+W/8jcmOEE3wbskJTDTUaTqoab6M4yt+VtF2KYj/y06vZK?=
- =?us-ascii?Q?esgNC9ipthto6ufp33fB6Lp41yXCbBwcP6e6u5grvvmQq4DPdqCGufhHBIEy?=
- =?us-ascii?Q?oBadK9zMQwAa+oTNPg5OuDBO3EtwC5vbTrS9mzH7yn/RNnKDjgvTuYy/5hHw?=
- =?us-ascii?Q?l8E4+n/Xhz4+iQSzT9JpwgPUB8UiW33vcG8Nfj+yIx2xWEL7ZviVfKML43kf?=
- =?us-ascii?Q?9bLd96Cwlr+k6OOVG3yff2jhJZy59/5+1BtcTF+mBBdOTHfWerwBzhNJgRE5?=
- =?us-ascii?Q?IfwechTkXDEDb/o4F2JUl/DpkQgYSASEEIocZS1B/CcYne0e6YF7NT6zNIWu?=
- =?us-ascii?Q?peBONYLtCq0/tR9qaKxAxMBZUqZe+8J4ipD3WY/vyQ2TXGL9FjMTNMzUiEeJ?=
- =?us-ascii?Q?neWsxcg5T58skf10Fj7V2igq2inXFClOzpgXz10VGBYHo2vqvCQFQo+geYCm?=
- =?us-ascii?Q?+/+1juGz6s3DKCdjF6waK8Bxk24=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c47d59a9-26af-4930-44ce-08da005fcae9
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB3459.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 17:27:45.5024
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZMwLDuvwtc12+jPhNQ4XzRLLICvP4iWslSM022xq4TwoX3wI/K6ljBIhtf/T+dXI8Yee8YX1thQOIQwusyaoHPp3hMYD5cOIb5GClIxlzVQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3658
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mon, 31 Jan 2022 17:13:38 +0200
-schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+Use Krzysztof Kozlowski's @kernel.org account in maintainer entries.
 
-> There are a few users and at least one more is coming (*) that would
-> like to utilize P2SB mechanism of hiding and unhiding a device from
-> the PCI configuration space.
-> 
-> Here is the series to consolidate p2sb handling code for existing
-> users and provide a generic way for new comer(s).
-> 
-> It also includes a patch to enable GPIO controllers on Apollo Lake
-> when it's used with ABL bootloader w/o ACPI support.
-> 
-> The patch that bring the helper ("platform/x86/intel: Add Primary
-> to Sideband (P2SB) bridge support") has a commit message that
-> sheds a light on what the P2SB is and why this is needed.
-> 
-> The changes made in v2 do not change the main idea and the
-> functionality in a big scale. What we need is probably one more
-> (RE-)test done by Henning. 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Just actually read all this the first time, sorry for that! Will take
-care of testing on a few of those Simatic IPCs and write patches to
-switch to P2SB ... possibly pinctrl where that might pop up without
-ACPI.
+---
 
-I guess p5 will make pinctrl show up on what i would call a 127E ...
-apollo lake.
+Hi Arnd and Olof,
 
-> I hope to have it merged to v5.18-rc1 that
-> Siemens can develop their changes based on this series.
+Could you take this one directly for fixes?
 
-Will do.
+My email address also appears in the bindings. For now mailmap will
+handle it. I will change it after merge window, because some of the
+bindings are in separate for-next branches.
+---
+ .mailmap                            |  1 +
+ MAINTAINERS                         | 34 ++++++++++++++---------------
+ drivers/soc/samsung/exynos-chipid.c |  2 +-
+ 3 files changed, 19 insertions(+), 18 deletions(-)
 
-Sorry for the delay after having passed you i now seem to slow you down.
-
-Henning
+diff --git a/.mailmap b/.mailmap
+index 29a45c106dfb..f9781674e7e7 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -217,6 +217,7 @@ Koushik <raghavendra.koushik@neterion.com>
+ Krishna Manikandan <quic_mkrishn@quicinc.com> <mkrishn@codeaurora.org>
+ Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski.k@gmail.com>
+ Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski@samsung.com>
++Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@canonical.com>
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+ Kuogee Hsieh <quic_khsieh@quicinc.com> <khsieh@codeaurora.org>
+ Leonardo Bras <leobras.c@gmail.com> <leonardo@linux.ibm.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d7ea92ce1b1d..4e88b4e17e35 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2627,7 +2627,7 @@ F:	sound/soc/rockchip/
+ N:	rockchip
  
-> I have tested this on Apollo Lake platform (I'm able to see SPI NOR
-> and since we have an ACPI device for GPIO I do not see any attempts
-> to recreate one).
-> 
-> *) One in this series, and one is a due after merge in the Simatic
-> IPC drivers
-> 
-> The series may be routed either via MFD (and I guess Lee would prefer
-> that) or via PDx86, whichever seems better for you, folks. As of
-> today patches are ACKed by the respective maintainers, but I2C one
-> and one of the MFD.
-> 
-> Wolfram, can you ACK the patch against i2c-i801 driver, if you have no
-> objections?
-> 
-> Changes in v4:
-> - added tag to the entire series (Hans)
-> - added tag to pin control patch (Mika)
-> - dropped PCI core changes (PCI core doesn't want modifications to be
-> made)
-> - as a consequence of the above merged necessary bits into p2sb.c
-> - added a check that p2sb is really hidden (Hans)
-> - added EDAC patches (reviewed by maintainer internally)
-> 
-> Changes in v3:
-> - resent with cover letter
-> 
-> Changes in v2:
-> - added parentheses around bus in macros (Joe)
-> - added tag (Jean)
-> - fixed indentation and wrapping in the header (Christoph)
-> - moved out of PCI realm to PDx86 as the best common denominator
-> (Bjorn)
-> - added a verbose commit message to explain P2SB thingy (Bjorn)
-> - converted first parameter from pci_dev to pci_bus
-> - made first two parameters (bus and devfn) optional (Henning, Lee)
-> - added Intel pin control patch to the series (Henning, Mika)
-> - fixed English style in the commit message of one of MFD patch (Lee)
-> - added tags to my MFD LPC ICH patches (Lee)
-> - used consistently (c) (Lee)
-> - made indexing for MFD cell and resource arrays (Lee)
-> - fixed the resource size in i801 (Jean)
-> 
-> Andy Shevchenko (6):
->   pinctrl: intel: Check against matching data instead of ACPI
-> companion mfd: lpc_ich: Factor out lpc_ich_enable_spi_write()
->   mfd: lpc_ich: Switch to generic p2sb_bar()
->   i2c: i801: convert to use common P2SB accessor
->   EDAC, pnd2: Use proper I/O accessors and address space annotation
->   EDAC, pnd2: convert to use common P2SB accessor
-> 
-> Jonathan Yong (1):
->   platform/x86/intel: Add Primary to Sideband (P2SB) bridge support
-> 
-> Tan Jui Nee (1):
->   mfd: lpc_ich: Add support for pinctrl in non-ACPI system
-> 
->  drivers/edac/Kconfig                   |   1 +
->  drivers/edac/pnd2_edac.c               |  62 ++---
->  drivers/i2c/busses/Kconfig             |   1 +
->  drivers/i2c/busses/i2c-i801.c          |  39 +---
->  drivers/mfd/Kconfig                    |   1 +
->  drivers/mfd/lpc_ich.c                  | 136 +++++++++--
->  drivers/pinctrl/intel/pinctrl-intel.c  |  14 +-
->  drivers/platform/x86/intel/Kconfig     |  12 +
->  drivers/platform/x86/intel/Makefile    |   1 +
->  drivers/platform/x86/intel/p2sb.c      | 305
-> +++++++++++++++++++++++++ include/linux/platform_data/x86/p2sb.h |
-> 27 +++ 11 files changed, 500 insertions(+), 99 deletions(-)
->  create mode 100644 drivers/platform/x86/intel/p2sb.c
->  create mode 100644 include/linux/platform_data/x86/p2sb.h
-> 
+ ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ R:	Alim Akhtar <alim.akhtar@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-samsung-soc@vger.kernel.org
+@@ -11852,7 +11852,7 @@ F:	drivers/iio/proximity/mb1232.c
+ 
+ MAXIM MAX17040 FAMILY FUEL GAUGE DRIVERS
+ R:	Iskren Chernev <iskren.chernev@gmail.com>
+-R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++R:	Krzysztof Kozlowski <krzk@kernel.org>
+ R:	Marek Szyprowski <m.szyprowski@samsung.com>
+ R:	Matheus Castello <matheus@castello.eng.br>
+ L:	linux-pm@vger.kernel.org
+@@ -11862,7 +11862,7 @@ F:	drivers/power/supply/max17040_battery.c
+ 
+ MAXIM MAX17042 FAMILY FUEL GAUGE DRIVERS
+ R:	Hans de Goede <hdegoede@redhat.com>
+-R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++R:	Krzysztof Kozlowski <krzk@kernel.org>
+ R:	Marek Szyprowski <m.szyprowski@samsung.com>
+ R:	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+ R:	Purism Kernel Team <kernel@puri.sm>
+@@ -11907,7 +11907,7 @@ F:	Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
+ F:	drivers/power/supply/max77976_charger.c
+ 
+ MAXIM MUIC CHARGER DRIVERS FOR EXYNOS BASED BOARDS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+ L:	linux-pm@vger.kernel.org
+ S:	Supported
+@@ -11917,7 +11917,7 @@ F:	drivers/power/supply/max77693_charger.c
+ 
+ MAXIM PMIC AND MUIC DRIVERS FOR EXYNOS BASED BOARDS
+ M:	Chanwoo Choi <cw00.choi@samsung.com>
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+ L:	linux-kernel@vger.kernel.org
+ S:	Supported
+@@ -12607,7 +12607,7 @@ F:	mm/memblock.c
+ F:	tools/testing/memblock/
+ 
+ MEMORY CONTROLLER DRIVERS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git
+@@ -13748,7 +13748,7 @@ F:	include/uapi/linux/nexthop.h
+ F:	net/ipv4/nexthop.c
+ 
+ NFC SUBSYSTEM
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-nfc@lists.01.org (subscribers-only)
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+@@ -14062,7 +14062,7 @@ F:	Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
+ F:	drivers/regulator/pf8x00-regulator.c
+ 
+ NXP PTN5150A CC LOGIC AND EXTCON DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/extcon/extcon-ptn5150.yaml
+@@ -15515,7 +15515,7 @@ F:	drivers/pinctrl/renesas/
+ 
+ PIN CONTROLLER - SAMSUNG
+ M:	Tomasz Figa <tomasz.figa@gmail.com>
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ R:	Alim Akhtar <alim.akhtar@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -17193,7 +17193,7 @@ W:	http://www.ibm.com/developerworks/linux/linux390/
+ F:	drivers/s390/scsi/zfcp_*
+ 
+ S3C ADC BATTERY DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Odd Fixes
+ F:	drivers/power/supply/s3c_adc_battery.c
+@@ -17238,7 +17238,7 @@ F:	Documentation/admin-guide/LSM/SafeSetID.rst
+ F:	security/safesetid/
+ 
+ SAMSUNG AUDIO (ASoC) DRIVERS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ S:	Supported
+@@ -17246,7 +17246,7 @@ F:	Documentation/devicetree/bindings/sound/samsung*
+ F:	sound/soc/samsung/
+ 
+ SAMSUNG EXYNOS PSEUDO RANDOM NUMBER GENERATOR (RNG) DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-crypto@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
+@@ -17281,7 +17281,7 @@ S:	Maintained
+ F:	drivers/platform/x86/samsung-laptop.c
+ 
+ SAMSUNG MULTIFUNCTION PMIC DEVICE DRIVERS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+ L:	linux-kernel@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+@@ -17307,7 +17307,7 @@ F:	drivers/media/platform/s3c-camif/
+ F:	include/media/drv-intf/s3c_camif.h
+ 
+ SAMSUNG S3FWRN5 NFC DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Krzysztof Opasiak <k.opasiak@samsung.com>
+ L:	linux-nfc@lists.01.org (subscribers-only)
+ S:	Maintained
+@@ -17329,7 +17329,7 @@ S:	Supported
+ F:	drivers/media/i2c/s5k5baf.c
+ 
+ SAMSUNG S5P Security SubSystem (SSS) DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Vladimir Zapolskiy <vz@mleia.com>
+ L:	linux-crypto@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+@@ -17364,7 +17364,7 @@ F:	include/linux/clk/samsung.h
+ F:	include/linux/platform_data/clk-s3c2410.h
+ 
+ SAMSUNG SPI DRIVERS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Andi Shyti <andi@etezian.org>
+ L:	linux-spi@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+@@ -17382,7 +17382,7 @@ F:	drivers/net/ethernet/samsung/sxgbe/
+ 
+ SAMSUNG THERMAL DRIVER
+ M:	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
+diff --git a/drivers/soc/samsung/exynos-chipid.c b/drivers/soc/samsung/exynos-chipid.c
+index 2746d05936d3..0fb3631e7346 100644
+--- a/drivers/soc/samsung/exynos-chipid.c
++++ b/drivers/soc/samsung/exynos-chipid.c
+@@ -204,7 +204,7 @@ module_platform_driver(exynos_chipid_driver);
+ 
+ MODULE_DESCRIPTION("Samsung Exynos ChipID controller and ASV driver");
+ MODULE_AUTHOR("Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>");
+-MODULE_AUTHOR("Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>");
++MODULE_AUTHOR("Krzysztof Kozlowski <krzk@kernel.org>");
+ MODULE_AUTHOR("Pankaj Dubey <pankaj.dubey@samsung.com>");
+ MODULE_AUTHOR("Sylwester Nawrocki <s.nawrocki@samsung.com>");
+ MODULE_LICENSE("GPL");
+-- 
+2.32.0
 

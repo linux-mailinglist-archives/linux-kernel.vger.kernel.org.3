@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B28D4CFA3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FB64CF591
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239965AbiCGKNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S236988AbiCGJaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238690AbiCGJ44 (ORCPT
+        with ESMTP id S237046AbiCGJ1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:56:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B8012743;
-        Mon,  7 Mar 2022 01:45:54 -0800 (PST)
+        Mon, 7 Mar 2022 04:27:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF9B66AD8;
+        Mon,  7 Mar 2022 01:24:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C50D4612D0;
-        Mon,  7 Mar 2022 09:45:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0C1CC340E9;
-        Mon,  7 Mar 2022 09:45:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AED13B810C2;
+        Mon,  7 Mar 2022 09:24:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF46AC340E9;
+        Mon,  7 Mar 2022 09:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646342;
-        bh=QUdh0uVObcrhkGuVsczLW+N7CVD1Iz/YmeTIiOq53Jw=;
+        s=korg; t=1646645068;
+        bh=sf9844s4+RfBNvu17v2FMF1O0UV5AKN1+qYmWBy8O38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OSiP9SfOjGw1Pji77Odr0FGyqAOelZuRxOuiRefGKMEcuAcleLY+mtZCNaL/uXgNl
-         xUwQVDPtoHxR2Wc/j6DvDyS1zJ5rxLpV8YonNq0sR6z84xQbhX8+f/I58HGibapU+a
-         29SpYTkPG2fOex1Ny1u3BC7PDVrubX1m541hxiFQ=
+        b=x4Vr8PyaJOnHjlpPw9KVwVf2BPhvYgymgtoTmsjXBudXQjPtdpUMoFh4V6NP9vLDH
+         +QmfoP45v43ofeW2D/xPvofXT8iyKzIQi3mpgVmlVl8Dv6FNHY7LkTxBMAPlyTybka
+         yNNig02w3K4sj5oqzxxr7S0SITiCeANOpOyMOv7E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jouni Malinen <j@w1.fi>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.15 175/262] mac80211: treat some SAE auth steps as final
+        stable@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Shuming Fan <shumingf@realtek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 04/51] ASoC: rt5668: do not block workqueue if card is unbound
 Date:   Mon,  7 Mar 2022 10:18:39 +0100
-Message-Id: <20220307091707.359310522@linuxfoundation.org>
+Message-Id: <20220307091637.119374763@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,89 +61,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 
-commit 94d9864cc86f572f881db9b842a78e9d075493ae upstream.
+[ Upstream commit a6d78661dc903d90a327892bbc34268f3a5f4b9c ]
 
-When we get anti-clogging token required (added by the commit
-mentioned below), or the other status codes added by the later
-commit 4e56cde15f7d ("mac80211: Handle special status codes in
-SAE commit") we currently just pretend (towards the internal
-state machine of authentication) that we didn't receive anything.
+The current rt5668_jack_detect_handler() assumes the component
+and card will always show up and implements an infinite usleep
+loop waiting for them to show up.
 
-This has the undesirable consequence of retransmitting the prior
-frame, which is not expected, because the timer is still armed.
+This does not hold true if a codec interrupt (or other
+event) occurs when the card is unbound. The codec driver's
+remove  or shutdown functions cannot cancel the workqueue due
+to the wait loop. As a result, code can either end up blocking
+the workqueue, or hit a kernel oops when the card is freed.
 
-If we just disarm the timer at that point, it would result in
-the undesirable side effect of being in this state indefinitely
-if userspace crashes, or so.
+Fix the issue by rescheduling the jack detect handler in
+case the card is not ready. In case card never shows up,
+the shutdown/remove/suspend calls can now cancel the detect
+task.
 
-So to fix this, reset the timer and set a new auth_data->waiting
-in order to have no more retransmissions, but to have the data
-destroyed when the timer actually fires, which will only happen
-if userspace didn't continue (i.e. crashed or abandoned it.)
-
-Fixes: a4055e74a2ff ("mac80211: Don't destroy auth data in case of anti-clogging")
-Reported-by: Jouni Malinen <j@w1.fi>
-Link: https://lore.kernel.org/r/20220224103932.75964e1d7932.Ia487f91556f29daae734bf61f8181404642e1eec@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Reviewed-by: Shuming Fan <shumingf@realtek.com>
+Link: https://lore.kernel.org/r/20220207153000.3452802-2-kai.vehmanen@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/ieee80211_i.h |    2 +-
- net/mac80211/mlme.c        |   16 ++++++++++++----
- 2 files changed, 13 insertions(+), 5 deletions(-)
+ sound/soc/codecs/rt5668.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/net/mac80211/ieee80211_i.h
-+++ b/net/mac80211/ieee80211_i.h
-@@ -376,7 +376,7 @@ struct ieee80211_mgd_auth_data {
+diff --git a/sound/soc/codecs/rt5668.c b/sound/soc/codecs/rt5668.c
+index 3c19d03f2446b..a78503f24aa8a 100644
+--- a/sound/soc/codecs/rt5668.c
++++ b/sound/soc/codecs/rt5668.c
+@@ -1025,11 +1025,13 @@ static void rt5668_jack_detect_handler(struct work_struct *work)
+ 		container_of(work, struct rt5668_priv, jack_detect_work.work);
+ 	int val, btn_type;
  
- 	u8 key[WLAN_KEY_LEN_WEP104];
- 	u8 key_len, key_idx;
--	bool done;
-+	bool done, waiting;
- 	bool peer_confirmed;
- 	bool timeout_started;
+-	while (!rt5668->component)
+-		usleep_range(10000, 15000);
+-
+-	while (!rt5668->component->card->instantiated)
+-		usleep_range(10000, 15000);
++	if (!rt5668->component || !rt5668->component->card ||
++	    !rt5668->component->card->instantiated) {
++		/* card not yet ready, try later */
++		mod_delayed_work(system_power_efficient_wq,
++				 &rt5668->jack_detect_work, msecs_to_jiffies(15));
++		return;
++	}
  
---- a/net/mac80211/mlme.c
-+++ b/net/mac80211/mlme.c
-@@ -37,6 +37,7 @@
- #define IEEE80211_AUTH_TIMEOUT_SAE	(HZ * 2)
- #define IEEE80211_AUTH_MAX_TRIES	3
- #define IEEE80211_AUTH_WAIT_ASSOC	(HZ * 5)
-+#define IEEE80211_AUTH_WAIT_SAE_RETRY	(HZ * 2)
- #define IEEE80211_ASSOC_TIMEOUT		(HZ / 5)
- #define IEEE80211_ASSOC_TIMEOUT_LONG	(HZ / 2)
- #define IEEE80211_ASSOC_TIMEOUT_SHORT	(HZ / 10)
-@@ -2994,8 +2995,15 @@ static void ieee80211_rx_mgmt_auth(struc
- 		    (status_code == WLAN_STATUS_ANTI_CLOG_REQUIRED ||
- 		     (auth_transaction == 1 &&
- 		      (status_code == WLAN_STATUS_SAE_HASH_TO_ELEMENT ||
--		       status_code == WLAN_STATUS_SAE_PK))))
-+		       status_code == WLAN_STATUS_SAE_PK)))) {
-+			/* waiting for userspace now */
-+			ifmgd->auth_data->waiting = true;
-+			ifmgd->auth_data->timeout =
-+				jiffies + IEEE80211_AUTH_WAIT_SAE_RETRY;
-+			ifmgd->auth_data->timeout_started = true;
-+			run_again(sdata, ifmgd->auth_data->timeout);
- 			goto notify_driver;
-+		}
+ 	mutex_lock(&rt5668->calibrate_mutex);
  
- 		sdata_info(sdata, "%pM denied authentication (status %d)\n",
- 			   mgmt->sa, status_code);
-@@ -4557,10 +4565,10 @@ void ieee80211_sta_work(struct ieee80211
- 
- 	if (ifmgd->auth_data && ifmgd->auth_data->timeout_started &&
- 	    time_after(jiffies, ifmgd->auth_data->timeout)) {
--		if (ifmgd->auth_data->done) {
-+		if (ifmgd->auth_data->done || ifmgd->auth_data->waiting) {
- 			/*
--			 * ok ... we waited for assoc but userspace didn't,
--			 * so let's just kill the auth data
-+			 * ok ... we waited for assoc or continuation but
-+			 * userspace didn't do it, so kill the auth data
- 			 */
- 			ieee80211_destroy_auth_data(sdata, false);
- 		} else if (ieee80211_auth(sdata)) {
+-- 
+2.34.1
+
 
 

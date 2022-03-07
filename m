@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64704CF527
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E53C74CF571
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236781AbiCGJZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:25:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S237648AbiCGJ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237171AbiCGJX3 (ORCPT
+        with ESMTP id S236881AbiCGJZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF4551327;
-        Mon,  7 Mar 2022 01:22:01 -0800 (PST)
+        Mon, 7 Mar 2022 04:25:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2610D5BD24;
+        Mon,  7 Mar 2022 01:24:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9367B810BC;
-        Mon,  7 Mar 2022 09:21:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 524E1C340E9;
-        Mon,  7 Mar 2022 09:21:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADD3A60C00;
+        Mon,  7 Mar 2022 09:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82ABC36AE3;
+        Mon,  7 Mar 2022 09:24:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644918;
-        bh=p3NpOOloCl+up0CATJ/0J6lmGf3pYfYwJI3ux1MhqfE=;
+        s=korg; t=1646645044;
+        bh=i5VHI7JTDFpPs3+CFF91y+xv8PC264aoBXGF5EYIqL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IoftWsXUwxzLimZdYJC4r9IZ1Dp7TqXZaMGhd+jT4NEZpxLnAsLnXPbOVr3b5WoD8
-         WczGHKkCOZXyJ80xRocgnquHJmuFwGVzGnK9keUqjyEwKJkG9r6qgZGCdKPoWj/H6J
-         v/KHBGKHqz1eJ8SRAuY6UUe3/n5EzmBFQ3lKfRaA=
+        b=lTa8ATha4LGNoRTldEhsVqqCErUJdyV1Rtpxs9ynbbg4yAH2ZKSGHLgiqXdXB9g6K
+         yoL+w3iA16QGJyeZqJtci4UKBuo0qEc8x+Chl10WsMO5o6//8W6l24ucehU+hs3u7L
+         4hng52gVC6/UrUhZMntcxhsfDNnXMjIepJNw0JrM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Anholt <eric@anholt.net>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 03/42] i2c: bcm2835: Avoid clock stretching timeouts
+        stable@vger.kernel.org, JaeMan Park <jaeman@google.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 02/51] mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work
 Date:   Mon,  7 Mar 2022 10:18:37 +0100
-Message-Id: <20220307091636.248501558@linuxfoundation.org>
+Message-Id: <20220307091637.062630665@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Anholt <eric@anholt.net>
+From: JaeMan Park <jaeman@google.com>
 
-[ Upstream commit 9495b9b31abe525ebd93da58de2c88b9f66d3a0e ]
+[ Upstream commit cacfddf82baf1470e5741edeecb187260868f195 ]
 
-The CLKT register contains at poweron 0x40, which at our typical 100kHz
-bus rate means .64ms. But there is no specified limit to how long devices
-should be able to stretch the clocks, so just disable the timeout. We
-still have a timeout wrapping the entire transfer.
+In mac80211_hwsim, the probe_req frame is created and sent while
+scanning. It is sent with ieee80211_tx_info which is not initialized.
+Uninitialized ieee80211_tx_info can cause problems when using
+mac80211_hwsim with wmediumd. wmediumd checks the tx_rates field of
+ieee80211_tx_info and doesn't relay probe_req frame to other clients
+even if it is a broadcasting message.
 
-Signed-off-by: Eric Anholt <eric@anholt.net>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-BugLink: https://github.com/raspberrypi/linux/issues/3064
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Call ieee80211_tx_prepare_skb() to initialize ieee80211_tx_info for
+the probe_req that is created by hw_scan_work in mac80211_hwsim.
+
+Signed-off-by: JaeMan Park <jaeman@google.com>
+Link: https://lore.kernel.org/r/20220113060235.546107-1-jaeman@google.com
+[fix memory leak]
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-bcm2835.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/net/wireless/mac80211_hwsim.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 4d19254f78c8a..db1ab9ccc30e7 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -28,6 +28,11 @@
- #define BCM2835_I2C_FIFO	0x10
- #define BCM2835_I2C_DIV		0x14
- #define BCM2835_I2C_DEL		0x18
-+/*
-+ * 16-bit field for the number of SCL cycles to wait after rising SCL
-+ * before deciding the slave is not responding. 0 disables the
-+ * timeout detection.
-+ */
- #define BCM2835_I2C_CLKT	0x1c
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index 6cd9a8b610107..c84ee5ba53812 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -2082,6 +2082,15 @@ static void hw_scan_work(struct work_struct *work)
+ 			if (req->ie_len)
+ 				skb_put_data(probe, req->ie, req->ie_len);
  
- #define BCM2835_I2C_C_READ	BIT(0)
-@@ -398,6 +403,12 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 	adap->dev.of_node = pdev->dev.of_node;
- 	adap->quirks = &bcm2835_i2c_quirks;
- 
-+	/*
-+	 * Disable the hardware clock stretching timeout. SMBUS
-+	 * specifies a limit for how long the device can stretch the
-+	 * clock, but core I2C doesn't.
-+	 */
-+	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_CLKT, 0);
- 	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_C, 0);
- 
- 	ret = i2c_add_adapter(adap);
++			if (!ieee80211_tx_prepare_skb(hwsim->hw,
++						      hwsim->hw_scan_vif,
++						      probe,
++						      hwsim->tmp_chan->band,
++						      NULL)) {
++				kfree_skb(probe);
++				continue;
++			}
++
+ 			local_bh_disable();
+ 			mac80211_hwsim_tx_frame(hwsim->hw, probe,
+ 						hwsim->tmp_chan);
 -- 
 2.34.1
 

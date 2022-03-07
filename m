@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744CD4CFB55
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2818A4CF607
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239988AbiCGKfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S237203AbiCGJb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234901AbiCGKMF (ORCPT
+        with ESMTP id S237984AbiCGJ2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:12:05 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5895979C62;
-        Mon,  7 Mar 2022 01:56:27 -0800 (PST)
+        Mon, 7 Mar 2022 04:28:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573486C928;
+        Mon,  7 Mar 2022 01:26:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DA6FCCE0E4A;
-        Mon,  7 Mar 2022 09:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74BFC340E9;
-        Mon,  7 Mar 2022 09:56:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0932961147;
+        Mon,  7 Mar 2022 09:26:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E82DDC340E9;
+        Mon,  7 Mar 2022 09:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646977;
-        bh=+NzAtLObj6uMrptvGTkHCHEAmFeyo5+8E9Db1t+8QB8=;
+        s=korg; t=1646645163;
+        bh=JmT9QfBOyZJcBBwWxnPYAC63NAd5BxcKK3R707o9fKY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eFrS5Fglxy7gf5JJGraQNahGv16upCQIyibp0L3kDwMg8eNqwpzUPI2Qh+ZDzFcQ5
-         iXAPGwUP4SnQZhOmelllYBncllkO6O1a9wz4/Gg1W6K8q/cOEU2r/5sdaMK1rAmMaX
-         aFQkdpAurcDCy2IXLY9oZ4L+pakmTkBWGh5hg9vE=
+        b=bGXuMun5KxJaPfGmXtfsrh4Tlc5crgYFsulI8sChD034FpBeQy5bqRCjST7D4Ryt0
+         1vl78rqd5lY9NCSWRb9aiHWhaKh6tSK8lxzdT7HrAvH1CslHm8E8fFXG7vwHFTX4Jv
+         D19j2u2fX8sdMgA0dUxqXaK69ZZ9gvhD1pdz1yns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Amit Cohen <amcohen@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 112/186] selftests: mlxsw: tc_police_scale: Make test more robust
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.19 35/51] net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
 Date:   Mon,  7 Mar 2022 10:19:10 +0100
-Message-Id: <20220307091657.209641108@linuxfoundation.org>
+Message-Id: <20220307091637.991047322@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amit Cohen <amcohen@nvidia.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-commit dc9752075341e7beb653e37c6f4a3723074dc8bc upstream.
+commit bd6f1fd5d33dfe5d1b4f2502d3694a7cc13f166d upstream.
 
-The test adds tc filters and checks how many of them were offloaded by
-grepping for 'in_hw'.
+During driver initialization, the pointer of card info, i.e. the
+variable 'ci' is required. However, the definition of
+'com20020pci_id_table' reveals that this field is empty for some
+devices, which will cause null pointer dereference when initializing
+these devices.
 
-iproute2 commit f4cd4f127047 ("tc: add skip_hw and skip_sw to control
-action offload") added offload indication to tc actions, producing the
-following output:
+The following log reveals it:
 
- $ tc filter show dev swp2 ingress
- ...
- filter protocol ipv6 pref 1000 flower chain 0 handle 0x7c0
-   eth_type ipv6
-   dst_ip 2001:db8:1::7bf
-   skip_sw
-   in_hw in_hw_count 1
-         action order 1:  police 0x7c0 rate 10Mbit burst 100Kb mtu 2Kb action drop overhead 0b
-         ref 1 bind 1
-         not_in_hw
-         used_hw_stats immediate
+[    3.973806] KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+[    3.973819] RIP: 0010:com20020pci_probe+0x18d/0x13e0 [com20020_pci]
+[    3.975181] Call Trace:
+[    3.976208]  local_pci_probe+0x13f/0x210
+[    3.977248]  pci_device_probe+0x34c/0x6d0
+[    3.977255]  ? pci_uevent+0x470/0x470
+[    3.978265]  really_probe+0x24c/0x8d0
+[    3.978273]  __driver_probe_device+0x1b3/0x280
+[    3.979288]  driver_probe_device+0x50/0x370
 
-The current grep expression matches on both 'in_hw' and 'not_in_hw',
-resulting in incorrect results.
+Fix this by checking whether the 'ci' is a null pointer first.
 
-Fix that by using JSON output instead.
-
-Fixes: 5061e773264b ("selftests: mlxsw: Add scale test for tc-police")
-Signed-off-by: Amit Cohen <amcohen@nvidia.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 8c14f9c70327 ("ARCNET: add com20020 PCI IDs with metadata")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/arcnet/com20020-pci.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/tc_police_scale.sh
-@@ -60,7 +60,8 @@ __tc_police_test()
+--- a/drivers/net/arcnet/com20020-pci.c
++++ b/drivers/net/arcnet/com20020-pci.c
+@@ -136,6 +136,9 @@ static int com20020pci_probe(struct pci_
+ 		return -ENOMEM;
  
- 	tc_police_rules_create $count $should_fail
+ 	ci = (struct com20020_pci_card_info *)id->driver_data;
++	if (!ci)
++		return -EINVAL;
++
+ 	priv->ci = ci;
+ 	mm = &ci->misc_map;
  
--	offload_count=$(tc filter show dev $swp1 ingress | grep in_hw | wc -l)
-+	offload_count=$(tc -j filter show dev $swp1 ingress |
-+			jq "[.[] | select(.options.in_hw == true)] | length")
- 	((offload_count == count))
- 	check_err_fail $should_fail $? "tc police offload count"
- }
 
 

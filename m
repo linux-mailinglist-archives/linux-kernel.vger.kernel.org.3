@@ -2,95 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788CD4D0821
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C02DF4D082F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245230AbiCGUGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S240010AbiCGUPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241848AbiCGUGL (ORCPT
+        with ESMTP id S229793AbiCGUPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:06:11 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC013710EF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:05:15 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 61740153B;
-        Mon,  7 Mar 2022 12:05:15 -0800 (PST)
-Received: from [10.57.41.254] (unknown [10.57.41.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE4783FA35;
-        Mon,  7 Mar 2022 12:05:13 -0800 (PST)
-Message-ID: <9296f97c-f894-001c-53e6-41bbfe36ce71@arm.com>
-Date:   Mon, 7 Mar 2022 20:05:06 +0000
+        Mon, 7 Mar 2022 15:15:19 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB17B65413
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:14:24 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id g1so15330937pfv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 12:14:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dycwIoHQQBpDUhGIcot+r2addV8RXGwwuqgAYCsn264=;
+        b=LbQTPEr4GnSNUitRf6YHBcjjyEcTfY5oVmBVldrI+eP4dK39SoiuHRz4wJDw0T2GDF
+         dGvQflpnc18+LT44cLUY50mKKHjpvitNupfE2lICFsw3eNAZFCsuQVUPV8cOfb1wi8oX
+         mOvUl7MUE5i1PMOUNbLsRBlMnM6VFcyOOplUIxu6ed7U//e41WkhCLuQvT1fvxEsXJFQ
+         FA1yd8NnLRCl075oI40PwVQ/xYdTdfcMeBZGFl21GxAsbFIjppyEBEOTgxcHQpWpk25c
+         eQ1ybcJpAMRMCVDksE3Q+cuG6woxdyT5uT2LAfqAYGbzUG1Vr4p9HpRWfEToTnWRyFNn
+         mdtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dycwIoHQQBpDUhGIcot+r2addV8RXGwwuqgAYCsn264=;
+        b=wrT0O93Rppm+p/eDSslf/KiVsyOGNAgRInJ87kITztM7deI+GNOciSKs6m5uQ2ykfG
+         C1jHl4kpKoXeNV+GYgEEeuRh/y0bCXst5ljwHOA+z1wEeU2jseNXp1ITaNOOEK21hHic
+         5CIy9RoAsVfxdjOYneGIvnjQRamEAvt1qcIQMrIX/fIQVriFvmxjBqqoEu0sZSpmgbwB
+         vU1s+NSQL131aE96o/dy/FvbC6jWdPsjPus6cJ+OqCVVAIJYX22q9WD1zJBOQSOTG+k9
+         hqoZNm4Zdu8jm9RPdfDT3JRng7l0gI4XvzpzZJ9R4OsvtDoFpiJsceSLR5F+0ukO4Znb
+         oKuw==
+X-Gm-Message-State: AOAM5325UI1PD1Icpf0eyllITWzGL8B+SJAysk6hyR1NCT8wkW4Txtvo
+        5lZOGOy/V/7K2jYkcrZIT91T77Bi4Bxii9BQCSA=
+X-Google-Smtp-Source: ABdhPJy8ieSKKcRoMUisC467i7PrAyALIIcy4JgaaFqJp6Y7+F4/Mjg9B/Qh64xxPxRu9hYkHBAxK0/kLKMeEwKHOpo=
+X-Received: by 2002:a63:571e:0:b0:378:9f08:129b with SMTP id
+ l30-20020a63571e000000b003789f08129bmr11159688pgb.75.1646684064515; Mon, 07
+ Mar 2022 12:14:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH RFC] arm64: improve display about CPU architecture in
- cpuinfo
-Content-Language: en-GB
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, joey.gouly@arm.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220307030417.22974-1-rongwei.wang@linux.alibaba.com>
- <87h78a178u.wl-maz@kernel.org>
- <a31431bf-24bb-71ac-8f3c-f9ca19f5c4f0@linux.alibaba.com>
- <87bkyi0x53.wl-maz@kernel.org> <1b94af8b-a294-5765-4e1e-896f70db621f@arm.com>
- <CAK8P3a3zA25=iZkVGPc=V+9tqqsWgQjoD9BSS60foGZtDwsujA@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAK8P3a3zA25=iZkVGPc=V+9tqqsWgQjoD9BSS60foGZtDwsujA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220228140245.24552-1-linmiaohe@huawei.com> <20220228140245.24552-3-linmiaohe@huawei.com>
+ <20220304082714.GB3778609@hori.linux.bs1.fc.nec.co.jp> <227af111-9264-02fd-9e46-744d39ecfed0@huawei.com>
+In-Reply-To: <227af111-9264-02fd-9e46-744d39ecfed0@huawei.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 7 Mar 2022 12:14:12 -0800
+Message-ID: <CAHbLzkom__59_RCpJCZDA+ray-t5qAWatujXWha8BX2-x8GiMA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] mm/memory-failure.c: fix wrong user reference report
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-07 19:30, Arnd Bergmann wrote:
-> On Mon, Mar 7, 2022 at 5:48 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> 
->> And arguably it's not even too late, because 10 years ago this *did* say
->> "AArch64". I don't remember all the exact details behind commit
->> 44b82b7700d0 ("arm64: Fix up /proc/cpuinfo") - this just tickled enough
->> of a memory to go and look up the git history - but I don't think we
->> changed any of those fields without a real reason.
->>
-> 
-> The patch description does state that this was done for compatibility with
-> 32-bit architectures, which does make some sense. I suppose for similar
-> reasons, the arch/arm/ version of /proc/cpuinfo is now stuck at
-> 'CPU architecture: 7', even for ARMv8 or higher in aarch32 mode.
-> 
-> The part that I find more annoying is how we leave out the one bit
-> of information that people are generally looking for in /proc/cpuinfo:
-> the name of the processor. Even though we already know the
-> exact processor type in order to handle the CPU errata, this is
-> always "model name\t: ARMv7 Processor rev %d (v7l)" on 32-bit,
-> and "model name\t: ARMv8 Processor rev %d (%s)" on 64-bit,
-> with the revision being the least important bit of information here...
+On Mon, Mar 7, 2022 at 3:26 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> On 2022/3/4 16:27, HORIGUCHI NAOYA(=E5=A0=80=E5=8F=A3 =E7=9B=B4=E4=B9=9F)=
+ wrote:
+> > On Mon, Feb 28, 2022 at 10:02:43PM +0800, Miaohe Lin wrote:
+> >> The dirty swapcache page is still residing in the swap cache after it'=
+s
+> >> hwpoisoned. So there is always one extra refcount for swap cache.
+> >
+> > The diff seems fine at a glance, but let me have a few question to
+> > understand the issue more.
+> >
+> > - Is the behavior described above the effect of recent change on shmem =
+where
+> >   dirty pagecache is pinned on hwpoison (commit a76054266661 ("mm: shme=
+m:
+> >   don't truncate page if memory failure happens"). Or the older kernels
+> >   behave as the same?
+> >
+> > - Is the behavior true for normal anonymous pages (not shmem pages)?
+> >
+>
+> The behavior described above is aimed at swapcache not pagecache. So it s=
+hould be
+> irrelevant with the recent change on shmem.
+>
+> What I try to fix here is that me_swapcache_dirty holds one extra pin via=
+ SwapCache
+> regardless of the return value of delete_from_lru_cache. We should try to=
+ report more
+> accurate extra refcount for debugging purpose.
 
-Eh, it's hardly impossible to recompose a MIDR value from the 
-implementer, part, variant and revision fields if one actually needs to. 
-Maybe we could null-terminate the raw MIDR value and print it as a 
-string of largely-unprintable characters in the "model name" field... I 
-guess that might satisfy the crowd who want parity* with x86 CPUID, at 
-least :)
+I think you misunderstood the code. The delete_from_lru_cache()
+returning 0 means the page was on LRU and isolated from LRU
+successfully now. Returning -EIO means the page was not on LRU, so it
+should have at least an extra pin on it.
 
-Robin.
+So MF_DELAYED means there is no other pin other than hwpoison and
+swapcache which is expected, MF_FAILED means there might be extra
+pins.
 
+The has_extra_refcount() raised error then there is *unexpected* refcount.
 
-* Of course this is a complete lie, because every time that comes up 
-it's always really about the microarchitecture (which Arm's CPU core 
-marketing names represent), where x86 is perfectly on par with arm64 
-with its equivalently-inscrutable "cpu family" and "model" numbers, 
-rather than cool microarchitecture names like "Sausage Lake" or whatever...
+>
+> > I'm trying to test hwpoison hitting the dirty swapcache, but it seems t=
+hat
+> > in my testing memory_faliure() fails with "hwpoison: unhandlable page"
+>
+> Maybe memory_faliure is racing with page reclaim where page is isolated?
+>
+> > warning at get_any_page().  So I'm still not sure that me_pagecache_dir=
+ty()
+> > fixes any visible problem.
+>
+> IIUC, me_pagecache_dirty can't do much except for the corresponding addre=
+ss_space supporting
+> error_remove_page which can truncate the dirty pagecache page. But this m=
+ay cause silent data
+> loss. It's better to keep the page stay in the pagecache until the file i=
+s truncated, hole
+> punched or removed as commit a76054266661 pointed out.
+>
+> Thanks.
+>
+> > > Thanks,
+> > Naoya Horiguchi
+> >
+> >>
+> >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> >> ---
+> >>  mm/memory-failure.c | 6 +-----
+> >>  1 file changed, 1 insertion(+), 5 deletions(-)
+> >>
+> >> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> >> index 0d7c58340a98..5f9503573263 100644
+> >> --- a/mm/memory-failure.c
+> >> +++ b/mm/memory-failure.c
+> >> @@ -984,7 +984,6 @@ static int me_pagecache_dirty(struct page_state *p=
+s, struct page *p)
+> >>  static int me_swapcache_dirty(struct page_state *ps, struct page *p)
+> >>  {
+> >>      int ret;
+> >> -    bool extra_pins =3D false;
+> >>
+> >>      ClearPageDirty(p);
+> >>      /* Trigger EIO in shmem: */
+> >> @@ -993,10 +992,7 @@ static int me_swapcache_dirty(struct page_state *=
+ps, struct page *p)
+> >>      ret =3D delete_from_lru_cache(p) ? MF_FAILED : MF_DELAYED;
+> >>      unlock_page(p);
+> >>
+> >> -    if (ret =3D=3D MF_DELAYED)
+> >> -            extra_pins =3D true;
+> >> -
+> >> -    if (has_extra_refcount(ps, p, extra_pins))
+> >> +    if (has_extra_refcount(ps, p, true))
+> >>              ret =3D MF_FAILED;
+> >>
+> >>      return ret;
+> >> --
+> >> 2.23.0
+>
+>

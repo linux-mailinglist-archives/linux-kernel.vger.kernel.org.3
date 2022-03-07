@@ -2,170 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A37F4CF43C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CD24CF46F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233874AbiCGJH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S236306AbiCGJR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbiCGJHX (ORCPT
+        with ESMTP id S236297AbiCGJR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:07:23 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B8E60D9E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:06:30 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 050433F60B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646643989;
-        bh=G51+HVosbAlITb0w/6sHZUM0ANYY++zOL8WxDgsCYfY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=BmXG8bZOWlwrTC9pwSogufCz4Bp0DgYlIB0o6EkbeHT9KdHetT3T3TXsf0zpz1cEn
-         /uGAGpsOiinWUuiVvCRH2dGl6AvtItVsfSY/1cl5MD9ngyPzlXgDxVvyk0wAQzNM5x
-         aHqnNGQOvu8tn3epf+e6rcR2QfKG8s0l5xfa7ZYj8hKrYccVBkRu6/EEZn48gksWGR
-         /SaWu9b/o6ZQgVIFnXRxB0eejyBJ+sthLiz/iCrcXuh1Zy4fO+6Ftec1d35ZsUDgUr
-         U746Z0+lMn368VajdHFwId7L0Yq2Ov/3Ua1LS6ZPkq8Ry+9Te+3EhiZIaIOd1B7PQK
-         xwze9p0E4P6Ig==
-Received: by mail-ej1-f72.google.com with SMTP id m4-20020a170906160400b006be3f85906eso6688993ejd.23
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:06:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G51+HVosbAlITb0w/6sHZUM0ANYY++zOL8WxDgsCYfY=;
-        b=oELLT9cpMkAN6ysGHJRINB2o5E6U7hlS2OqOrGChqn3I+bneLhd0NqD34jkjc9Z60k
-         Ag8GPTr8E4FZ2il9+3clQ852Ej+CnboqPD0nfY1SV48v2eocYGz2PQeChcZo9jKj32o1
-         sHiPhi9QLUAIfDnsiXf22tA0sl0ilTivYnJfxFISv89hHPAuEfULhwedOG7j9fToI3vm
-         nIdX0ACtkOsSpXSC2aFis8WPVsAQNjdTviNMx0M3Hot88KFqynP7WsCkRe+iUglQMOsh
-         CrbewzmmUAUYrIBL6AnZEjgGIHuix2CGqspckGBLX2ve2TLAk7iAoIYDthX0JftIeuCH
-         jT7g==
-X-Gm-Message-State: AOAM530y5w644u7ujBZc/j0sgKlKiPF+bFYR6N0clhiI6tX+Bq0gtdkN
-        etND3+NY5ScmiuRJJNnfMGe6VH3H9EPnX2sap+gdyA9PMW1uqkaNT4VTjj/J3C6AZaVM1wDCJu9
-        IKCMsl/Nk9lCLaVQRqLAuS04mLZ6ipmY2iS/eg2uAqA==
-X-Received: by 2002:a17:907:2a53:b0:6ce:e4fe:3f92 with SMTP id fe19-20020a1709072a5300b006cee4fe3f92mr8082883ejc.389.1646643988272;
-        Mon, 07 Mar 2022 01:06:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxi1G8DMQgsmoK6atV2WQRzLw7W9EhtbGU1zQQMO5T3xle7xKCpGd4S3PplzpSJImoDfIfUbQ==
-X-Received: by 2002:a17:907:2a53:b0:6ce:e4fe:3f92 with SMTP id fe19-20020a1709072a5300b006cee4fe3f92mr8082873ejc.389.1646643988071;
-        Mon, 07 Mar 2022 01:06:28 -0800 (PST)
-Received: from [192.168.0.141] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id p14-20020aa7cc8e000000b0040f13865fa9sm5909820edt.3.2022.03.07.01.06.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 01:06:27 -0800 (PST)
-Message-ID: <08992f48-6cb6-8dc0-33d2-f18f942d2bee@canonical.com>
-Date:   Mon, 7 Mar 2022 10:06:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] clocksource/drivers/exynos_mct: Support using only local
- timer
-Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     kernel@axis.com, Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220307083255.1577365-1-vincent.whitchurch@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307083255.1577365-1-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 04:17:27 -0500
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FA86515F;
+        Mon,  7 Mar 2022 01:16:32 -0800 (PST)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 0D7011A21DF;
+        Mon,  7 Mar 2022 10:16:31 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B80421A005F;
+        Mon,  7 Mar 2022 10:16:30 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id BF67B183AD67;
+        Mon,  7 Mar 2022 17:16:28 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, vkoul@kernel.org,
+        alexander.stein@ew.tq-group.com
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: [PATCH v2 0/7] Add the iMX8MP PCIe support
+Date:   Mon,  7 Mar 2022 17:07:27 +0800
+Message-Id: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 09:32, Vincent Whitchurch wrote:
-> The ARTPEC-8 SoC has a quad-core Cortex-A53 and a single-core Cortex-A5
-> which share one MCT with one global and eight local timers.
-> 
-> The Cortex-A53 boots first and starts the global FRC and also registers
-> a clock events device using the global timer.  (This global timer clock
-> events is usually replaced by arch timer clock events for each of the
-> cores.)
-> 
-> When the A5 boots, we should not use the global timer interrupts or
-> write to the global timer registers.  This is because even if there are
-> four global comparators, the control bits for all four are in the same
-> registers, and we would need to synchronize between the cpus.  Instead,
-> the global timer FRC (already started by the A53) should be used as the
-> clock source, and one of the local timers which are not used by the A53
-> can be used for clock events on the A5.
-> 
-> To support this, add a module param to set the local timer starting
-> index.  If this parameter is non-zero, the global timer clock events
-> device is not registered and we don't write to the global FRC if it is
-> already started.
-> 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  drivers/clocksource/exynos_mct.c | 29 ++++++++++++++++++++++++-----
->  1 file changed, 24 insertions(+), 5 deletions(-)
+Based on the i.MX8MP GPC and blk-ctrl patch-set[1] issued by Lucas and the
+following commits.
+  - one codes refine patch-set[5].
+  - two Fixes[2],[3].
+  - one binding commit[4].
+  - some dts changes in Shawn's git if you want to test PCIe on i.MX8MM EVK.
+    b4d36c10bf17 arm64: dts: imx8mm-evk: Add the pcie support on imx8mm evk board
+    aaeba6a8e226 arm64: dts: imx8mm: Add the pcie support
+    cfc5078432ca arm64: dts: imx8mm: Add the pcie phy support
 
-This should not be send separately from the previous patch.
+Sorry about that there may be some conflictions when do the codes merge.
+I'm waiting for the ack now, and will re-base them in a proper sequence later.
 
-> 
-> diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-> index f29c812b70c9..7ea2919b1808 100644
-> --- a/drivers/clocksource/exynos_mct.c
-> +++ b/drivers/clocksource/exynos_mct.c
-> @@ -33,7 +33,7 @@
->  #define EXYNOS4_MCT_G_INT_ENB		EXYNOS4_MCTREG(0x248)
->  #define EXYNOS4_MCT_G_WSTAT		EXYNOS4_MCTREG(0x24C)
->  #define _EXYNOS4_MCT_L_BASE		EXYNOS4_MCTREG(0x300)
-> -#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * x))
-> +#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * (x)))
->  #define EXYNOS4_MCT_L_MASK		(0xffffff00)
->  
->  #define MCT_L_TCNTB_OFFSET		(0x00)
-> @@ -77,6 +77,13 @@ static unsigned long clk_rate;
->  static unsigned int mct_int_type;
->  static int mct_irqs[MCT_NR_IRQS];
->  
-> +/*
-> + * First local timer index to use.  If non-zero, global
-> + * timer is not written to.
-> + */
-> +static unsigned int mct_local_idx;
-> +module_param_named(local_idx, mct_local_idx, int, 0);
+This series patches add the i.MX8MP PCIe support and tested on i.MX8MM EVK and
+i.MX8MP EVk boards. The PCIe NVME works fine on both boards.
 
-No, it's a no go. Please use dedicated compatible if you need specific
-quirks.
+- i.MX8MP PCIe PHY has two resets refer to the i.MX8MM PCIe PHY.
+  Add one more PHY reset for i.MX8MP PCIe PHY accordingly.
+- Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
+  And share as much as possible codes with i.MX8MM PCIe PHY.
+- Add the i.MX8MP PCIe support in binding document, DTS files, and PCIe
+  driver.
 
-> +
->  struct mct_clock_event_device {
->  	struct clock_event_device evt;
->  	unsigned long base;
-> @@ -157,6 +164,17 @@ static void exynos4_mct_frc_start(void)
->  	u32 reg;
->  
->  	reg = readl_relaxed(reg_base + EXYNOS4_MCT_G_TCON);
-> +
-> +	/*
-> +	 * If the FRC is already running, we don't need to start it again.  We
-> +	 * could probably just do this on all systems, but, to avoid any risk
-> +	 * for regressions, we only do it on systems where it's absolutely
-> +	 * necessary (i.e., on systems where writes to the global registers
-> +	 * need to be avoided).
-> +	 */
-> +	if (mct_local_idx && (reg & MCT_G_TCON_START))
-> +		return;
+Main changes v1-->v2:
+- It's my fault forget including Vinod, re-send v2 after include Vinod
+  and linux-phy@lists.infradead.org.
+- List the basements of this patch-set. The branch, codes changes and so on.
+- Clean up some useless register and bit definitions in #3 patch.
 
-I don't get it. exynos4_mct_frc_start() is called exactly only once in
-the system - during init. Not once per every CPU or cluster (I
-understood you have two clusters, right?).
+[1]https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220228201731.3330192-1-l.stach@pengutronix.de/
+[2]https://patchwork.ozlabs.org/project/linux-pci/patch/1646289275-17813-1-git-send-email-hongxing.zhu@nxp.com/
+[3]https://patchwork.ozlabs.org/project/linux-pci/patch/1645672013-8949-1-git-send-email-hongxing.zhu@nxp.com/
+[4]https://patchwork.ozlabs.org/project/linux-pci/patch/1646293805-18248-1-git-send-email-hongxing.zhu@nxp.com/
+[5]https://patchwork.ozlabs.org/project/linux-pci/cover/1645760667-10510-1-git-send-email-hongxing.zhu@nxp.com/
 
-Best regards,
-Krzysztof
+NOTE:
+Based git <git://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git>
+Based branch <pci/imx6>
+
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml    |   1 +
+Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml |   4 +-
+arch/arm64/boot/dts/freescale/imx8mp-evk.dts                 |  55 ++++++++++++++++++++++
+arch/arm64/boot/dts/freescale/imx8mp.dtsi                    |  46 ++++++++++++++++++-
+drivers/pci/controller/dwc/pci-imx6.c                        |  19 +++++++-
+drivers/phy/freescale/phy-fsl-imx8m-pcie.c                   | 205 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
+drivers/reset/reset-imx7.c                                   |   1 +
+7 files changed, 286 insertions(+), 45 deletions(-)
+
+[PATCH v2 1/7] reset: imx7: Add the iMX8MP PCIe PHY PERST support
+[PATCH v2 2/7] dt-binding: phy: Add iMX8MP PCIe PHY binding
+[PATCH v2 3/7] phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY
+[PATCH v2 4/7] dt-bindings: imx6q-pcie: Add iMX8MP PCIe compatible
+[PATCH v2 5/7] arm64: dts: imx8mp: add the iMX8MP PCIe support
+[PATCH v2 6/7] arm64: dts: imx8mp-evk: Add PCIe support
+[PATCH v2 7/7] PCI: imx6: Add the iMX8MP PCIe support

@@ -2,104 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94C84D0156
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC93F4D0146
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243247AbiCGOex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:34:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S243212AbiCGOc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238679AbiCGOev (ORCPT
+        with ESMTP id S234087AbiCGOc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:34:51 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0A04EA3E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:33:55 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id w4so17663028edc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:33:55 -0800 (PST)
+        Mon, 7 Mar 2022 09:32:58 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EC27938F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:32:03 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id 12so15307663oix.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:32:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j+XALL1alS+FEu3fkIAo9R70z8bB6COUmfVlfGVppAY=;
-        b=ReM5bztlsxSXLgfYaVI3yXxo8CxNvQpLXNma54gX7iLagqzDtMUrBbexeh2ck+kEfQ
-         rflq3MIZV3EIwnGZlUJsrqsXdGaME2SP+ZwtfNCFZvwisH7pEoeQHKYTMhrS2DSs297D
-         y1T9OwoBPZt0miCMIDlYFKBEo04ZfXNnUkcivZ2gfwFbZVVm5aZ3e7eHSDHuMenQsAsQ
-         dMmExYLTc244fVdQvR2sdw4FpflWvCjl8fnS7i51k+diEfeWFItD4VvPrz/kopHr5xGw
-         rBs/Hjtq7+3ZeF66H7O+78hiNeGeaPzQ2H33YA0bMLh3Fd4RQZE1mlGGTnVfkHV2qPzF
-         89Zw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jAOEfcrHxWTEhg7BxTnoFSoh64ur+frJb+7Etlx9rtQ=;
+        b=GJ/zew/2c/T7gmBh99VfzZLRMIr1lWxgtwiRGpln7n6kXctT05678TBF1YPo8K/nyU
+         xOL/GNqnsexBZCu2VL/N3mTeUDMxf6kTPDvrzocCn/XswBlLdtp+GJzmpSxz7sqo4KXt
+         4wr7xC63ca5frxTj5uJRTgnPWTe6M+mGV6zRZ5vAST0uEDv9m+LWK0h2mFrEPzjBt1Yt
+         /X9IYwbSusvVKxyEyVqgZsa1ageF3DyBQDHldMq/hndd38A4zi/b6Iqeqx6a4+T4eW9U
+         S8DmT71hgMF8+wgDwfhNOqN3TjxkzV0ImuTqjRWVDS5YjPGK9jGaPbiZxzs0TVQ8sY7R
+         7MFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j+XALL1alS+FEu3fkIAo9R70z8bB6COUmfVlfGVppAY=;
-        b=Q53mbSLrqFen6b+D++CuBsVygU2L+xAh5IUWqZ7EnJ9oTYDhvS9C4nreGM9bPKqgtz
-         0BOQnDOnuNEJ2K8JRXkmJCNdgHHe34K8i6RztdLvVujkF8SixsQ/m3lkPka5JG8cILCI
-         TQJPYGodo2+5fGK6qorCshubOwUxlx/5iJpEMKMFqGpxW/+V9hSIYoEIQcw6EMc7F/lz
-         A1YSLrKTmCNHHuz3waQWPEv+40UA0eqUz48R/lsTYWz/oOj1IZB0Ktmf4oZQSE69glul
-         YTx0NlSSi2Erpg+n9QiU4p0f8EGdiSFE9aytgZB2kKN09jXAT3avnQzjEMOeSb6EQpE9
-         50/w==
-X-Gm-Message-State: AOAM530qNzQdenJfIsS+QVfjPdm/Rr/218eKLZVCC8Yh/tnJK68OQyvX
-        XoXenaYb6Qs9kH9w4U4yXxHd3n3PrqKS+WJnx6kj3A==
-X-Google-Smtp-Source: ABdhPJwmgyegI3NvOMY0wCmCLVBPSIB2uo/s/Rqay9LDREpbmXsCKeVho/SZQEYawDmhY5iV7FKM1UjF4GDiFlF55rA=
-X-Received: by 2002:a05:6402:5cb:b0:415:e04a:5230 with SMTP id
- n11-20020a05640205cb00b00415e04a5230mr11426603edx.352.1646663634426; Mon, 07
- Mar 2022 06:33:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20220307115623.37492-1-andriy.shevchenko@linux.intel.com>
- <CAMRc=Md3_W49Wq5-zaxdNzELW87OogEN5wW6XQnF9aMpZrRvBA@mail.gmail.com> <YiYNPhUoXH8XakKO@smile.fi.intel.com>
-In-Reply-To: <YiYNPhUoXH8XakKO@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 7 Mar 2022 15:33:43 +0100
-Message-ID: <CAMRc=Mcp5YeVYJn1FCK+0=72HhJ2haTU02wd9MK7O7fxgXyj4Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: acpi: Convert ACPI value of debounce to microseconds
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jAOEfcrHxWTEhg7BxTnoFSoh64ur+frJb+7Etlx9rtQ=;
+        b=JJ+ke/EcAgTY7uZQzRdOqQ/9LQ5nxU3XLO8niYqWiSARFuDj9XgGa8k0VWS5zaPioT
+         TJbefLICRtngiO7fMnCtipVR4rPVz+skmnQj/7M8t4DjNzZ9ogI/fAj7cD2LkwBek4+v
+         HRnBVlJPWVGu6OzhVmtH5M0gxxfoL+SGFGzOsUNYRQbaihAi3O3e59SDXEmDCzx3oa6+
+         7wRVdwx/8MsNlqkBORzVy1hZ+3MSrusti3ZsHjSiDpNZV2z2qWsxJ+iU7ahaiLglewce
+         1NnChxY3+WforE2yT2Ls4WA1LCGA57e2Fo5Vo0dzbVZgvHfzcwnPEv549GYUkylVIqu9
+         Ez9w==
+X-Gm-Message-State: AOAM532PwtX3gG9PrsNw0bDudW24q6YXQ4POwEO4IcKdyrz3kle7tGKU
+        5oYFlfengelt16IlZBFrLOuDBw==
+X-Google-Smtp-Source: ABdhPJzqOXx5kooaXG2dVnX2vpjZX9hB4LZw1mzfujLDchjIhcK0otseZB2nycRu3BZ28DFHpurG6A==
+X-Received: by 2002:a05:6808:23ca:b0:2d9:bb42:81e with SMTP id bq10-20020a05680823ca00b002d9bb42081emr5269110oib.141.1646663523111;
+        Mon, 07 Mar 2022 06:32:03 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id o10-20020a0568080f8a00b002d726c76b77sm6442939oiw.15.2022.03.07.06.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 06:32:02 -0800 (PST)
+Date:   Mon, 7 Mar 2022 06:33:47 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v4 3/7] usb: typec: mux: Check dev_set_name() return value
+Message-ID: <YiYXywEEz7WZQhfd@ripper>
+References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
+ <20220307034040.1111107-3-bjorn.andersson@linaro.org>
+ <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 2:49 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Mar 07, 2022 at 01:48:10PM +0100, Bartosz Golaszewski wrote:
-> > On Mon, Mar 7, 2022 at 12:56 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > It appears that GPIO ACPI library uses ACPI debounce values directly.
-> > > However, the GPIO library APIs expect the debounce timeout to be in
-> > > microseconds.
-> > >
-> > > Convert ACPI value of debounce to microseconds.
-> > >
-> > > While at it, document this detail where it is appropriate.
->
-> > Do you have some more stuff coming up for fixes
->
-> I don't think so.
->
-> > or do you want me to queue it directly?
->
-> Yes, please take it directly, thanks!
->
-> --
+On Mon 07 Mar 02:08 PST 2022, Andy Shevchenko wrote:
+
+> On Sun, Mar 06, 2022 at 07:40:36PM -0800, Bjorn Andersson wrote:
+> > It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
+> 
+> Thanks!
+> Shouldn't we have a Fixes tag and be sent separately for this cycle?
+> 
+
+It seems appropriate to add:
+
+Fixes: 3370db35193b ("usb: typec: Registering real device entries for the muxes")
+
+
+If the maintainer would prefer to get this into v5.18, it could either
+be picked ahead of the rest of the series, or I can resubmit it on its
+own. I don't think it's a critical fix though.
+
+> > Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> > 
+> > Changes since v3:
+> > - New patch
+> > 
+> >  drivers/usb/typec/mux.c | 14 ++++++++++----
+> >  1 file changed, 10 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+> > index c8340de0ed49..d2aaf294b649 100644
+> > --- a/drivers/usb/typec/mux.c
+> > +++ b/drivers/usb/typec/mux.c
+> > @@ -131,8 +131,11 @@ typec_switch_register(struct device *parent,
+> >  	sw->dev.class = &typec_mux_class;
+> >  	sw->dev.type = &typec_switch_dev_type;
+> >  	sw->dev.driver_data = desc->drvdata;
+> > -	dev_set_name(&sw->dev, "%s-switch",
+> > -		     desc->name ? desc->name : dev_name(parent));
+> > +	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ? desc->name : dev_name(parent));
+> 
+> We may use shorten form of the ternary
+> 
+> 	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ?: dev_name(parent));
+> 
+> at the same time, but it's up to you.
+> 
+
+I looked at it, but felt it was an unrelated change and decided to leave
+it as is.
+
+> Either way code looks good to me,
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+
+Thanks,
+Bjorn
+
+> > +	if (ret) {
+> > +		put_device(&sw->dev);
+> > +		return ERR_PTR(ret);
+> > +	}
+> >  
+> >  	ret = device_add(&sw->dev);
+> >  	if (ret) {
+> > @@ -338,8 +341,11 @@ typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
+> >  	mux->dev.class = &typec_mux_class;
+> >  	mux->dev.type = &typec_mux_dev_type;
+> >  	mux->dev.driver_data = desc->drvdata;
+> > -	dev_set_name(&mux->dev, "%s-mux",
+> > -		     desc->name ? desc->name : dev_name(parent));
+> > +	ret = dev_set_name(&mux->dev, "%s-mux", desc->name ? desc->name : dev_name(parent));
+> 
+> Ditto.
+> 
+> > +	if (ret) {
+> > +		put_device(&mux->dev);
+> > +		return ERR_PTR(ret);
+> > +	}
+> >  
+> >  	ret = device_add(&mux->dev);
+> >  	if (ret) {
+> > -- 
+> > 2.33.1
+> > 
+> 
+> -- 
 > With Best Regards,
 > Andy Shevchenko
->
->
-
-Applied, thanks!
-
-Bart
+> 
+> 

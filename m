@@ -2,196 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940D24D00E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75724D00BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243067AbiCGORC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S243021AbiCGOJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237544AbiCGORB (ORCPT
+        with ESMTP id S233551AbiCGOJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:17:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4526C71CBF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:16:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE4FF612C3
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:16:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA35C340E9;
-        Mon,  7 Mar 2022 14:16:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646662566;
-        bh=e56qHnE/crraAFadekrO9GdXE8m+dDcJ1YGP+JayrC4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GLHpAPatZyjvshLTeZBOdovrLRsU0vP6W/fVBeJvZigGpzCIcS8sxMCU0ZbleGBpg
-         4Ew2NmlQJfO2pA1SX+uOZPAFPbat/bbAhGBKNiC0/uQ0pgPOHr4LJ4sfQY3GF3wW7w
-         d9tlhg8sYy7immPFqvZrS2O91zJrydGx1p2earByys2ehO1xghgHBMmlj14mQ7lpX3
-         eUujHGZTImI+5Ak7G/PIordXEDAT7OIk+j3JJ4ywb2j13GBQ1X41w0Fn7E3mMjfuvc
-         okpQ6t3fiNNNdmFphdhOxRCmyzGIVuAcLd/o+Ft4TpefzLccDZN9NLNrdI2hrfq2zQ
-         9AgOWBnPz9cDw==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] riscv: add irq stack support
-Date:   Mon,  7 Mar 2022 22:08:04 +0800
-Message-Id: <20220307140804.1400-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 7 Mar 2022 09:09:54 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AFE66F8D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:09:00 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id g26so31116199ybj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:09:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0yk9BdGE0P4qhl7kTJOlzN4O3c8JJe4T1InJDUcBabo=;
+        b=B4g1MvdpCEJjzUCjLv5igLIdZpjRxA9oIdPFfJRLD3JitCxFQCJ8h2ZzUK+yhrvVD7
+         tpaANJLSgE0iz66eompeUXkipYphAGsLoffZPRvxsgpqFT/k15FXqu0eJKYhaRSgoL2J
+         juS8mtIPNt5KjOMwJ+E0nxt9mQtwiATlRz4Eoe/KtomcN/fPcf8d1e2i0Tfq8OmWauz9
+         cFS7+UN8tfMabPzzvp3psLtC4lN6ixS0XfJXdVj+R8/KJyamIM2GP4jp7eJypBqWlmG4
+         ARxusBD+GeaszzXh7b6iGIoKB/wF7lXozJOaWyxx9rmKpElGj4PGuovTFxEPk9cVzg5/
+         8vQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0yk9BdGE0P4qhl7kTJOlzN4O3c8JJe4T1InJDUcBabo=;
+        b=gHTkqdMsQTQ4kPxlDcit+cpzG7WlaQsj2zQq/tPjM9FbF4WiUb/A7rt4XOMI+u5Q7i
+         uPHhCnBVV93iwt+b31QCM4yIuyGKMcAZdgDJIGuyDdgkYcTRZu2EGBLFdcNV4Xjjlx66
+         O2IyyczSVsKZ6HKlSOvU+89ubxOnhorHeArIeRJ4yd0YlSfPmaauNNg0bwuoKIe84nl9
+         VlYjKmqVIMq/9rYgBAiJgv8e75SdLi5jgswknwP6752uBQav1nClI5xwoFWdwAooHoyc
+         IY3FwvF9G+hEoivHjqUBN4AuhomUMh1sj8kmcpP4f06xRUOlman2OX8dJfUIdTat/1ZT
+         s+2g==
+X-Gm-Message-State: AOAM5335iOHAG/OKxTlA04C45pz0awvLvawXvDkCmIRRxpT52hBPfIZk
+        C5+RDOMUvU0fDdjzENrMlspGiotLkzXh2Klt8BqAOg==
+X-Google-Smtp-Source: ABdhPJx254W9rRRb0U/Y3PdIOLgfsiCQQVMMPYuUynQoKnS4kFv+mwwwzWrUnqWtgqvZfcdq+VDkLc293umr+/lxW8Y=
+X-Received: by 2002:a05:6902:203:b0:628:7b6f:2845 with SMTP id
+ j3-20020a056902020300b006287b6f2845mr8118330ybs.533.1646662139111; Mon, 07
+ Mar 2022 06:08:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220307074516.6920-1-dtcccc@linux.alibaba.com> <20220307074516.6920-3-dtcccc@linux.alibaba.com>
+In-Reply-To: <20220307074516.6920-3-dtcccc@linux.alibaba.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 7 Mar 2022 15:08:22 +0100
+Message-ID: <CANpmjNPu+4VohTfFn6H-jBgL4zE2uexU3dqmks3LJy_chu34pg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] kfence: Alloc kfence_pool after system startup
+To:     Tianchen Ding <dtcccc@linux.alibaba.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, IRQs are still handled on the kernel stack of the current
-task on riscv platforms. If the task has a deep call stack at the time
-of interrupt, and handling the interrupt also requires a deep stack,
-it's possible to see stack overflow.
+On Mon, 7 Mar 2022 at 08:45, Tianchen Ding <dtcccc@linux.alibaba.com> wrote:
+>
+> Allow enabling KFENCE after system startup by allocating its pool via the
+> page allocator. This provides the flexibility to enable KFENCE even if it
+> wasn't enabled at boot time.
+>
+> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
 
-Before this patch, the stack_max_size of a v5.17-rc1 kernel running on
-a lichee RV board gave:
-~ # cat /sys/kernel/debug/tracing/stack_max_size
-3736
+This looks good, thanks!
 
-After this patch,
-~ # cat /sys/kernel/debug/tracing/stack_max_size
-3176
+Reviewed-by: Marco Elver <elver@google.com>
+Tested-by: Marco Elver <elver@google.com>
 
-We reduce the max kernel stack usage by 560 bytes!
 
-From another side, after this patch, it's possible to reduce the
-THREAD_SIZE to 8KB for RV64 platforms. This is especially useful for
-those systems with small memory size, e.g the Allwinner D1S platform
-which is RV64 but only has 64MB DDR.
-
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
-since v1:
- - add __ro_after_init to the irq_stack[] array.
-
- arch/riscv/include/asm/thread_info.h |  1 +
- arch/riscv/kernel/asm-offsets.c      |  2 ++
- arch/riscv/kernel/entry.S            | 33 +++++++++++++++++++++++++---
- arch/riscv/kernel/irq.c              | 16 ++++++++++++++
- 4 files changed, 49 insertions(+), 3 deletions(-)
-
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 60da0dcacf14..67387a8bcb34 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -19,6 +19,7 @@
- #endif
- #define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
- 
-+#define IRQ_STACK_SIZE		THREAD_SIZE
- /*
-  * By aligning VMAP'd stacks to 2 * THREAD_SIZE, we can detect overflow by
-  * checking sp & (1 << THREAD_SHIFT), which we can do cheaply in the entry
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index df0519a64eaf..9619398a69e1 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -36,6 +36,8 @@ void asm_offsets(void)
- 	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
- 	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
- 	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
-+	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
-+	OFFSET(TASK_STACK, task_struct, stack);
- 
- 	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
- 	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index ed29e9c8f660..57c9b64e16a5 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -126,12 +126,39 @@ skip_context_tracking:
- 	 */
- 	bge s4, zero, 1f
- 
--	la ra, ret_from_exception
-+	/* preserve the sp */
-+	move s0, sp
- 
--	/* Handle interrupts */
- 	move a0, sp /* pt_regs */
-+
-+	/*
-+	 * Compare sp with the base of the task stack.
-+	 * If the top ~(THREAD_SIZE - 1) bits match, we are on a task stack,
-+	 * and should switch to the irq stack.
-+	 */
-+	REG_L t0, TASK_STACK(tp)
-+	xor t0, t0, s0
-+	li t1, ~(THREAD_SIZE - 1)
-+	and t0, t0, t1
-+	bnez t0, 2f
-+
-+	la t1, irq_stack
-+	REG_L t2, TASK_TI_CPU(tp)
-+	slli t2, t2, RISCV_LGPTR
-+	add t1, t1, t2
-+	REG_L t2, 0(t1)
-+	li t1, IRQ_STACK_SIZE
-+	/* switch to the irq stack */
-+	add sp, t2, t1
-+
-+2:
-+	/* Handle interrupts */
- 	la a1, generic_handle_arch_irq
--	jr a1
-+	jalr a1
-+
-+	/* Restore sp */
-+	move sp, s0
-+	j ret_from_exception
- 1:
- 	/*
- 	 * Exceptions run with interrupts enabled or disabled depending on the
-diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-index 7207fa08d78f..f20cbfd42e82 100644
---- a/arch/riscv/kernel/irq.c
-+++ b/arch/riscv/kernel/irq.c
-@@ -10,6 +10,8 @@
- #include <linux/seq_file.h>
- #include <asm/smp.h>
- 
-+void *irq_stack[NR_CPUS] __ro_after_init;
-+
- int arch_show_interrupts(struct seq_file *p, int prec)
- {
- 	show_ipi_stats(p, prec);
-@@ -18,7 +20,21 @@ int arch_show_interrupts(struct seq_file *p, int prec)
- 
- void __init init_IRQ(void)
- {
-+	int cpu;
-+
- 	irqchip_init();
- 	if (!handle_arch_irq)
- 		panic("No interrupt controller found.");
-+
-+	for_each_possible_cpu(cpu) {
-+#ifdef CONFIG_VMAP_STACK
-+		void *s = __vmalloc_node(IRQ_STACK_SIZE, THREAD_ALIGN,
-+					 THREADINFO_GFP, cpu_to_node(cpu),
-+					 __builtin_return_address(0));
-+#else
-+		void *s = (void *)__get_free_pages(GFP_KERNEL, get_order(IRQ_STACK_SIZE));
-+#endif
-+
-+		irq_stack[cpu] = s;
-+	}
- }
--- 
-2.34.1
-
+> ---
+>  mm/kfence/core.c | 111 ++++++++++++++++++++++++++++++++++++++---------
+>  1 file changed, 90 insertions(+), 21 deletions(-)
+>
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index caa4e84c8b79..f126b53b9b85 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -96,7 +96,7 @@ static unsigned long kfence_skip_covered_thresh __read_mostly = 75;
+>  module_param_named(skip_covered_thresh, kfence_skip_covered_thresh, ulong, 0644);
+>
+>  /* The pool of pages used for guard pages and objects. */
+> -char *__kfence_pool __ro_after_init;
+> +char *__kfence_pool __read_mostly;
+>  EXPORT_SYMBOL(__kfence_pool); /* Export for test modules. */
+>
+>  /*
+> @@ -537,17 +537,19 @@ static void rcu_guarded_free(struct rcu_head *h)
+>         kfence_guarded_free((void *)meta->addr, meta, false);
+>  }
+>
+> -static bool __init kfence_init_pool(void)
+> +/*
+> + * Initialization of the KFENCE pool after its allocation.
+> + * Returns 0 on success; otherwise returns the address up to
+> + * which partial initialization succeeded.
+> + */
+> +static unsigned long kfence_init_pool(void)
+>  {
+>         unsigned long addr = (unsigned long)__kfence_pool;
+>         struct page *pages;
+>         int i;
+>
+> -       if (!__kfence_pool)
+> -               return false;
+> -
+>         if (!arch_kfence_init_pool())
+> -               goto err;
+> +               return addr;
+>
+>         pages = virt_to_page(addr);
+>
+> @@ -565,7 +567,7 @@ static bool __init kfence_init_pool(void)
+>
+>                 /* Verify we do not have a compound head page. */
+>                 if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
+> -                       goto err;
+> +                       return addr;
+>
+>                 __SetPageSlab(&pages[i]);
+>         }
+> @@ -578,7 +580,7 @@ static bool __init kfence_init_pool(void)
+>          */
+>         for (i = 0; i < 2; i++) {
+>                 if (unlikely(!kfence_protect(addr)))
+> -                       goto err;
+> +                       return addr;
+>
+>                 addr += PAGE_SIZE;
+>         }
+> @@ -595,7 +597,7 @@ static bool __init kfence_init_pool(void)
+>
+>                 /* Protect the right redzone. */
+>                 if (unlikely(!kfence_protect(addr + PAGE_SIZE)))
+> -                       goto err;
+> +                       return addr;
+>
+>                 addr += 2 * PAGE_SIZE;
+>         }
+> @@ -608,9 +610,21 @@ static bool __init kfence_init_pool(void)
+>          */
+>         kmemleak_free(__kfence_pool);
+>
+> -       return true;
+> +       return 0;
+> +}
+> +
+> +static bool __init kfence_init_pool_early(void)
+> +{
+> +       unsigned long addr;
+> +
+> +       if (!__kfence_pool)
+> +               return false;
+> +
+> +       addr = kfence_init_pool();
+> +
+> +       if (!addr)
+> +               return true;
+>
+> -err:
+>         /*
+>          * Only release unprotected pages, and do not try to go back and change
+>          * page attributes due to risk of failing to do so as well. If changing
+> @@ -623,6 +637,26 @@ static bool __init kfence_init_pool(void)
+>         return false;
+>  }
+>
+> +static bool kfence_init_pool_late(void)
+> +{
+> +       unsigned long addr, free_size;
+> +
+> +       addr = kfence_init_pool();
+> +
+> +       if (!addr)
+> +               return true;
+> +
+> +       /* Same as above. */
+> +       free_size = KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool);
+> +#ifdef CONFIG_CONTIG_ALLOC
+> +       free_contig_range(page_to_pfn(virt_to_page(addr)), free_size / PAGE_SIZE);
+> +#else
+> +       free_pages_exact((void *)addr, free_size);
+> +#endif
+> +       __kfence_pool = NULL;
+> +       return false;
+> +}
+> +
+>  /* === DebugFS Interface ==================================================== */
+>
+>  static int stats_show(struct seq_file *seq, void *v)
+> @@ -771,31 +805,66 @@ void __init kfence_alloc_pool(void)
+>                 pr_err("failed to allocate pool\n");
+>  }
+>
+> +static void kfence_init_enable(void)
+> +{
+> +       if (!IS_ENABLED(CONFIG_KFENCE_STATIC_KEYS))
+> +               static_branch_enable(&kfence_allocation_key);
+> +       WRITE_ONCE(kfence_enabled, true);
+> +       queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
+> +       pr_info("initialized - using %lu bytes for %d objects at 0x%p-0x%p\n", KFENCE_POOL_SIZE,
+> +               CONFIG_KFENCE_NUM_OBJECTS, (void *)__kfence_pool,
+> +               (void *)(__kfence_pool + KFENCE_POOL_SIZE));
+> +}
+> +
+>  void __init kfence_init(void)
+>  {
+> +       stack_hash_seed = (u32)random_get_entropy();
+> +
+>         /* Setting kfence_sample_interval to 0 on boot disables KFENCE. */
+>         if (!kfence_sample_interval)
+>                 return;
+>
+> -       stack_hash_seed = (u32)random_get_entropy();
+> -       if (!kfence_init_pool()) {
+> +       if (!kfence_init_pool_early()) {
+>                 pr_err("%s failed\n", __func__);
+>                 return;
+>         }
+>
+> -       if (!IS_ENABLED(CONFIG_KFENCE_STATIC_KEYS))
+> -               static_branch_enable(&kfence_allocation_key);
+> -       WRITE_ONCE(kfence_enabled, true);
+> -       queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
+> -       pr_info("initialized - using %lu bytes for %d objects at 0x%p-0x%p\n", KFENCE_POOL_SIZE,
+> -               CONFIG_KFENCE_NUM_OBJECTS, (void *)__kfence_pool,
+> -               (void *)(__kfence_pool + KFENCE_POOL_SIZE));
+> +       kfence_init_enable();
+> +}
+> +
+> +static int kfence_init_late(void)
+> +{
+> +       const unsigned long nr_pages = KFENCE_POOL_SIZE / PAGE_SIZE;
+> +#ifdef CONFIG_CONTIG_ALLOC
+> +       struct page *pages;
+> +
+> +       pages = alloc_contig_pages(nr_pages, GFP_KERNEL, first_online_node, NULL);
+> +       if (!pages)
+> +               return -ENOMEM;
+> +       __kfence_pool = page_to_virt(pages);
+> +#else
+> +       if (nr_pages > MAX_ORDER_NR_PAGES) {
+> +               pr_warn("KFENCE_NUM_OBJECTS too large for buddy allocator\n");
+> +               return -EINVAL;
+> +       }
+> +       __kfence_pool = alloc_pages_exact(KFENCE_POOL_SIZE, GFP_KERNEL);
+> +       if (!__kfence_pool)
+> +               return -ENOMEM;
+> +#endif
+> +
+> +       if (!kfence_init_pool_late()) {
+> +               pr_err("%s failed\n", __func__);
+> +               return -EBUSY;
+> +       }
+> +
+> +       kfence_init_enable();
+> +       return 0;
+>  }
+>
+>  static int kfence_enable_late(void)
+>  {
+>         if (!__kfence_pool)
+> -               return -EINVAL;
+> +               return kfence_init_late();
+>
+>         WRITE_ONCE(kfence_enabled, true);
+>         queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
+> --
+> 2.27.0
+>

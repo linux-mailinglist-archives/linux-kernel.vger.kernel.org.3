@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E3D4CF7E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 606FC4CF673
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238647AbiCGJsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S233718AbiCGJhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:37:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238928AbiCGJjB (ORCPT
+        with ESMTP id S238637AbiCGJ3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:39:01 -0500
+        Mon, 7 Mar 2022 04:29:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9FB6F49A;
-        Mon,  7 Mar 2022 01:33:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E167F554BA;
+        Mon,  7 Mar 2022 01:27:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBB7B60FF6;
-        Mon,  7 Mar 2022 09:33:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE577C36AE5;
-        Mon,  7 Mar 2022 09:33:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35C3D61140;
+        Mon,  7 Mar 2022 09:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48FD0C340E9;
+        Mon,  7 Mar 2022 09:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645597;
-        bh=70FazzljlNlduRTWOkMcv6aw843eOYsSOelHFwwLpLU=;
+        s=korg; t=1646645253;
+        bh=W7tVRALc0QU94LUNoLaedH0lkYHTyXn8cpbe04tngn8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=thxbDtiWVAHvXEoi1ryR/w4xj9soCEJQCt59fO6yZobTonXJu9c1l/DnYqXSRqzBO
-         zCGvhWR0Ik/FDTlCusRRRAG0Dfgw+toW7jhkHZpFvTjcDifj8oCkthCySF53jJ6xdU
-         dZwUQIaHdQo5MfznpMKFqG8RsigJ878wjxIXGdy0=
+        b=1+/GjFk0NlU8IbxjRhCA1zYqyz2dpP4RsEs6U1Xh26iu2w2zI9wYNR21xV0GmFZdd
+         krhlpKWHbGueMI8MgL/W/Fzq2+GJVV+l9mK9vftzGgA2MFEcMjCmxSWpe96TXfpd0i
+         988P1incJSXOlu10FxTYVUr/Fwq6e8ePgBZwL4So=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 065/105] ibmvnic: register netdev after init of adapter
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 35/64] net: stmmac: fix return value of __setup handler
 Date:   Mon,  7 Mar 2022 10:19:08 +0100
-Message-Id: <20220307091646.008120724@linuxfoundation.org>
+Message-Id: <20220307091640.143914262@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,46 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 570425f8c7c18b14fa8a2a58a0adb431968ad118 upstream.
+commit e01b042e580f1fbf4fd8da467442451da00c7a90 upstream.
 
-Finish initializing the adapter before registering netdev so state
-is consistent.
+__setup() handlers should return 1 on success, i.e., the parameter
+has been handled. A return of 0 causes the "option=value" string to be
+added to init's environment strings, polluting it.
 
-Fixes: c26eba03e407 ("ibmvnic: Update reset infrastructure to support tunable parameters")
-Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 47dd7a540b8a ("net: add support for STMicroelectronics Ethernet controllers.")
+Fixes: f3240e2811f0 ("stmmac: remove warning when compile as built-in (V2)")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Jose Abreu <joabreu@synopsys.com>
+Link: https://lore.kernel.org/r/20220224033536.25056-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/ibm/ibmvnic.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/ibm/ibmvnic.c
-+++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@ -5383,6 +5383,12 @@ static int ibmvnic_probe(struct vio_dev
- 		goto ibmvnic_dev_file_err;
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -4890,7 +4890,7 @@ static int __init stmmac_cmdline_opt(cha
+ 	char *opt;
  
- 	netif_carrier_off(netdev);
-+
-+	adapter->state = VNIC_PROBED;
-+
-+	adapter->wait_for_reset = false;
-+	adapter->last_reset_time = jiffies;
-+
- 	rc = register_netdev(netdev);
- 	if (rc) {
- 		dev_err(&dev->dev, "failed to register netdev rc=%d\n", rc);
-@@ -5390,10 +5396,6 @@ static int ibmvnic_probe(struct vio_dev
+ 	if (!str || !*str)
+-		return -EINVAL;
++		return 1;
+ 	while ((opt = strsep(&str, ",")) != NULL) {
+ 		if (!strncmp(opt, "debug:", 6)) {
+ 			if (kstrtoint(opt + 6, 0, &debug))
+@@ -4921,11 +4921,11 @@ static int __init stmmac_cmdline_opt(cha
+ 				goto err;
+ 		}
  	}
- 	dev_info(&dev->dev, "ibmvnic registered\n");
+-	return 0;
++	return 1;
  
--	adapter->state = VNIC_PROBED;
--
--	adapter->wait_for_reset = false;
--	adapter->last_reset_time = jiffies;
- 	return 0;
+ err:
+ 	pr_err("%s: ERROR broken module parameter conversion", __func__);
+-	return -EINVAL;
++	return 1;
+ }
  
- ibmvnic_register_fail:
+ __setup("stmmaceth=", stmmac_cmdline_opt);
 
 

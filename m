@@ -2,82 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15DA4D02E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C504D02E8
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbiCGPa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        id S243799AbiCGPbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiCGPaX (ORCPT
+        with ESMTP id S232666AbiCGPbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:30:23 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E9C49930;
-        Mon,  7 Mar 2022 07:29:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646666969; x=1678202969;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=+Ryh1cggbQNBN3ci8CirZd3kAvv6BbXwKIEkPSgvYgY=;
-  b=JMxTF1fSCVM8W57maYuXQGwAw1E8Godzt4FHpwgklmGDsgDWWtvFpSwG
-   adYr9f76bUJXWs8XNCtfWqohPB4glgULKg+h4ln0WkdSitUlUO/cygBOQ
-   EBkDGhy6QpvZZR/y0Zs2IL3mqd0XIEqf8ZpIGx7S+LSE9+uTVHrb9OCnI
-   ZezShSjTIukEEWy/cKk/wPsjP2jYlYcAaLdkw7sm7qxdbTcYJOYeCjkg6
-   Qfd3r701DeheGHzAkTZgnhxRdBt2qX3pDkLlyvkzzkv2Ir+WMiU6BxWiF
-   fhsi7p0SPe6edFVkx85MUM3kR+O70q1VZt6WNX+7xtZlaggcLi7MyAfXi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="241850201"
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="241850201"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 07:29:28 -0800
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="643281164"
-Received: from mshipman-mobl5.amr.corp.intel.com (HELO [10.251.12.40]) ([10.251.12.40])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 07:29:28 -0800
-Message-ID: <3c974f25-ece6-102b-01c3-bd7e6274f613@intel.com>
-Date:   Mon, 7 Mar 2022 07:29:22 -0800
+        Mon, 7 Mar 2022 10:31:44 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123075749E;
+        Mon,  7 Mar 2022 07:30:50 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id e24so10921233wrc.10;
+        Mon, 07 Mar 2022 07:30:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VEUtjRWw8hcXPx8ISHtvMs+ktqj0awQxQ1FmrJuTsp0=;
+        b=MNpHF7Pxg9BKJiM7fXtwr+H0qiQHTO5YaiWRpoj8JeGPvWbNy27/PM68jvK4QSBRoS
+         eJV84YLL7LY0Kx+2dttq4o8BSGVJnTkTkSVrSQ6jqym1hnTU/KN1tiaQ4HT3YxHnGaep
+         l/BgDYpY9h1dRuCJcH3/sPXiySIO+U6vefOR+F4+6/wYeky7WPYEoZhJjDMIx0OvJUnr
+         rJpIGYuHLOeHT93rWf+ikiIQTOzZMcEJeJjTV+qPGfz/r4iAqH5VCVB98b/FMsXQJZQT
+         bPAklAmCoO81z7iPKi3IVku0QUFChskh487B2KlaehvDU0EI0uy5Gq33vkGC5FnOYU2C
+         YW9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VEUtjRWw8hcXPx8ISHtvMs+ktqj0awQxQ1FmrJuTsp0=;
+        b=6gCUcgdLxzXXsPIx7rX6oQXVwrtHf7Hlt32yokXmdktU9yWzLXYX2eZh5F6xTfmdV1
+         LttieduH0Yo7DZB7Fc1jFUvQQLcxETn1Sy0N695ei9ijYFXGbAavTkaK1raBtJie65eu
+         ox8MDb1FSWYDbJCKny5vL7Gvd6r9dxxtl/gC2bugoDSDb0bccTY+XPNtRs6Ge9LoZ7At
+         mVJEzOiRw/6YoZEIbA2FM8pBW+ia0n2bL0rCtXrGXfCzjqBnvTjLa1J/2QmlX47wfkXr
+         vXBOAcpL7zcd4Sqf5lGi1wF/V7YnRoSQu8tt8SFTOZetr7aYtS9Cyqdqbn0+KHz9g97Q
+         hkBQ==
+X-Gm-Message-State: AOAM532CuK1t3+xGdeBRu5I7Sm/3tqzsZ61CPbl3u34VURz7OFURYs1W
+        lyaEBRETQ6Ps/yeLAqpDtAM=
+X-Google-Smtp-Source: ABdhPJybfHSo0eCkjaEOHXAgaY8b9TUr8U9Fg4tG5GiMhl+kF2PHHrRNJApWZg0ccl+N6LMTkzuvSA==
+X-Received: by 2002:a5d:64ac:0:b0:1e7:1415:2548 with SMTP id m12-20020a5d64ac000000b001e714152548mr8834834wrp.267.1646667048657;
+        Mon, 07 Mar 2022 07:30:48 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m13-20020a05600c4f4d00b00386744cb31bsm15673525wmq.35.2022.03.07.07.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 07:30:48 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] tty: serial: jsm: remove redundant assignments to variable linestatus
+Date:   Mon,  7 Mar 2022 15:30:47 +0000
+Message-Id: <20220307153047.139639-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        linux-sgx@vger.kernel.org, jaharkes@cs.cmu.edu,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        codalist@telemann.coda.cs.cmu.edu, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-References: <20220306032655.97863-1-jarkko@kernel.org>
- <20220306152456.2649b1c56da2a4ce4f487be4@linux-foundation.org>
- <c3083144-bfc1-3260-164c-e59b2d110df8@intel.com> <YiXsJRE8CWOvFNWH@iki.fi>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH RFC v2] mm: Add f_ops->populate()
-In-Reply-To: <YiXsJRE8CWOvFNWH@iki.fi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/22 03:27, Jarkko Sakkinen wrote:
-> But e.g. in __mm_populate() anything with (VM_IO | VM_PFNMAP) gets
-> filtered out and never reach that function.
-> 
-> I don't know unorthodox that'd be but could we perhaps have a VM
-> flag for SGX?
+Variable linestatus is being assigned values that are never read, the
+assignments are redundant and can be removed.
 
-SGX only works on a subset of the chips from one vendor on one
-architecture.  That doesn't seem worth burning a VM flag.
+Cleans up clang scan warnings:
+drivers/tty/serial/jsm/jsm_cls.c:369:2: warning: Value stored to
+'linestatus' is never read [deadcode.DeadStores]
+drivers/tty/serial/jsm/jsm_cls.c:400:4: warning: Value stored to
+'linestatus' is never read [deadcode.DeadStores]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/tty/serial/jsm/jsm_cls.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/jsm/jsm_cls.c b/drivers/tty/serial/jsm/jsm_cls.c
+index b280da50290c..444f233ebd1f 100644
+--- a/drivers/tty/serial/jsm/jsm_cls.c
++++ b/drivers/tty/serial/jsm/jsm_cls.c
+@@ -350,7 +350,7 @@ static void cls_assert_modem_signals(struct jsm_channel *ch)
+ static void cls_copy_data_from_uart_to_queue(struct jsm_channel *ch)
+ {
+ 	int qleft = 0;
+-	u8 linestatus = 0;
++	u8 linestatus;
+ 	u8 error_mask = 0;
+ 	u16 head;
+ 	u16 tail;
+@@ -365,8 +365,6 @@ static void cls_copy_data_from_uart_to_queue(struct jsm_channel *ch)
+ 	head = ch->ch_r_head & RQUEUEMASK;
+ 	tail = ch->ch_r_tail & RQUEUEMASK;
+ 
+-	/* Get our cached LSR */
+-	linestatus = ch->ch_cached_lsr;
+ 	ch->ch_cached_lsr = 0;
+ 
+ 	/* Store how much space we have left in the queue */
+-- 
+2.35.1
+

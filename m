@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBED4CF53E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52244CF635
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236962AbiCGJ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S235856AbiCGJdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237329AbiCGJXo (ORCPT
+        with ESMTP id S238613AbiCGJ30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C166C44760;
-        Mon,  7 Mar 2022 01:22:41 -0800 (PST)
+        Mon, 7 Mar 2022 04:29:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EB95006A;
+        Mon,  7 Mar 2022 01:27:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 564FA60F63;
-        Mon,  7 Mar 2022 09:22:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 630FEC340E9;
-        Mon,  7 Mar 2022 09:22:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A55611D3;
+        Mon,  7 Mar 2022 09:27:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1857CC340F4;
+        Mon,  7 Mar 2022 09:27:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644960;
-        bh=H4TVj+cf/uNrpTzIJj6dLxFemyB75Dl783yOAYEYQhQ=;
+        s=korg; t=1646645262;
+        bh=FKvTTEBao31SKcjzFo6+6D96WRSaBo5k2SaYQUzlVlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hlDYGFNmZsiPqoWUXJ3QDT9Fl9IFgc4F8RO+P/CaeoA+5s8iGQbaWRevR/ShHvu7U
-         oUpixdKCyCw9Ve2sKNNrc1NqYppIOIZQ+W/OjbVEuRl1hVYeublyzAg+GZ0O8W7ZBy
-         7Y9ITU2LpGoBCNPuKhG0F9vtPzMmkphWC+DMs9q0=
+        b=2DD4V2ufK1cQvQemiC2b/6QQXuj3+Z3smmUSGnKeYiJLTyM22qK1ztjmK4Ut4Aqnv
+         Nm+x94xSpPwyK5BGk8H1VpqRUsjuuR+nMtZk1L4821XQOenm93BKn0b5l01ZUlw560
+         g5uvcJf1aCAH9KlXh6XFRARI//WzIdjFFewXals8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 36/42] net: chelsio: cxgb3: check the return value of pci_find_capability()
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Siva Reddy <siva.kallam@samsung.com>,
+        Girish K S <ks.giri@samsung.com>,
+        Byungho An <bh74.an@samsung.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 37/64] net: sxgbe: fix return value of __setup handler
 Date:   Mon,  7 Mar 2022 10:19:10 +0100
-Message-Id: <20220307091637.203299930@linuxfoundation.org>
+Message-Id: <20220307091640.199721643@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 767b9825ed1765894e569a3d698749d40d83762a ]
+commit 50e06ddceeea263f57fe92baa677c638ecd65bb6 upstream.
 
-The function pci_find_capability() in t3_prep_adapter() can fail, so its
-return value should be checked.
+__setup() handlers should return 1 on success, i.e., the parameter
+has been handled. A return of 0 causes the "option=value" string to be
+added to init's environment strings, polluting it.
 
-Fixes: 4d22de3e6cc4 ("Add support for the latest 1G/10G Chelsio adapter, T3")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: acc18c147b22 ("net: sxgbe: add EEE(Energy Efficient Ethernet) for Samsung sxgbe")
+Fixes: 1edb9ca69e8a ("net: sxgbe: add basic framework for Samsung 10Gb ethernet driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Siva Reddy <siva.kallam@samsung.com>
+Cc: Girish K S <ks.giri@samsung.com>
+Cc: Byungho An <bh74.an@samsung.com>
+Link: https://lore.kernel.org/r/20220224033528.24640-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/chelsio/cxgb3/t3_hw.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c b/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-index a89721fad633..29220141e4e4 100644
---- a/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-+++ b/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-@@ -3677,6 +3677,8 @@ int t3_prep_adapter(struct adapter *adapter, const struct adapter_info *ai,
- 	    MAC_STATS_ACCUM_SECS : (MAC_STATS_ACCUM_SECS * 10);
- 	adapter->params.pci.vpd_cap_addr =
- 	    pci_find_capability(adapter->pdev, PCI_CAP_ID_VPD);
-+	if (!adapter->params.pci.vpd_cap_addr)
-+		return -ENODEV;
- 	ret = get_vpd_params(adapter, &adapter->params.vpd);
- 	if (ret < 0)
- 		return ret;
--- 
-2.34.1
-
+--- a/drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c
++++ b/drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c
+@@ -2277,18 +2277,18 @@ static int __init sxgbe_cmdline_opt(char
+ 	char *opt;
+ 
+ 	if (!str || !*str)
+-		return -EINVAL;
++		return 1;
+ 	while ((opt = strsep(&str, ",")) != NULL) {
+ 		if (!strncmp(opt, "eee_timer:", 10)) {
+ 			if (kstrtoint(opt + 10, 0, &eee_timer))
+ 				goto err;
+ 		}
+ 	}
+-	return 0;
++	return 1;
+ 
+ err:
+ 	pr_err("%s: ERROR broken module parameter conversion\n", __func__);
+-	return -EINVAL;
++	return 1;
+ }
+ 
+ __setup("sxgbeeth=", sxgbe_cmdline_opt);
 
 

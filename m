@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234584CF4FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7414F4CF608
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236596AbiCGJYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
+        id S232779AbiCGJcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237002AbiCGJXR (ORCPT
+        with ESMTP id S238048AbiCGJ2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7944673FE;
-        Mon,  7 Mar 2022 01:21:37 -0800 (PST)
+        Mon, 7 Mar 2022 04:28:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE056CA64;
+        Mon,  7 Mar 2022 01:26:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7113AB810BC;
-        Mon,  7 Mar 2022 09:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA493C340E9;
-        Mon,  7 Mar 2022 09:21:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3750CB810CB;
+        Mon,  7 Mar 2022 09:26:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75FB5C340E9;
+        Mon,  7 Mar 2022 09:26:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644895;
-        bh=FiohOt7NoQYLxo5ix/ERErfoSi8NWtSUiMdB3zj+G9Y=;
+        s=korg; t=1646645191;
+        bh=tozq4ciK0IC+DMbSMOvqSOpHdPePfpNxa67dMJWlD/Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TzUVpcfCxhpRKiRBd8h6WNDE0QZpV1O+3g3J+ujfM1pvt7x+RNuwGB0Z0447+DMys
-         Vsds+bSVeKchDK1Zdvs9fSFCBXP7v2VnaswPNGneAHgvRG20tObYItnAVDzfwAqGZV
-         Z3AyH00aDsJXOp8aS/edlvwpHmQPnXYkfWEWKSKQ=
+        b=SvlW3OqhTV+URHdkKgyrU1DUajTn9I7S/gOJUbdUG4TPhLTWSFLuy+jWpb3xmr8yi
+         s4X54b/6SBZPJlX+HSIW6rc8CUyVMZWf/n8RNVqYTLbKxQ+4DuU+RRt+7SQeXjakNg
+         BUk+ncTv3m+c5kxLXFBxKP5auI+ra5Z+DH0SArsE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.14 14/42] ASoC: ops: Shift tested values in snd_soc_put_volsw() by +min
-Date:   Mon,  7 Mar 2022 10:18:48 +0100
-Message-Id: <20220307091636.565053278@linuxfoundation.org>
+Subject: [PATCH 5.4 16/64] ASoC: ops: Shift tested values in snd_soc_put_volsw() by +min
+Date:   Mon,  7 Mar 2022 10:18:49 +0100
+Message-Id: <20220307091639.605718032@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -76,7 +76,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/sound/soc/soc-ops.c
 +++ b/sound/soc/soc-ops.c
-@@ -328,7 +328,7 @@ int snd_soc_put_volsw(struct snd_kcontro
+@@ -323,7 +323,7 @@ int snd_soc_put_volsw(struct snd_kcontro
  		mask = BIT(sign_bit + 1) - 1;
  
  	val = ucontrol->value.integer.value[0];
@@ -85,7 +85,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  		return -EINVAL;
  	if (val > max - min)
  		return -EINVAL;
-@@ -341,7 +341,7 @@ int snd_soc_put_volsw(struct snd_kcontro
+@@ -336,7 +336,7 @@ int snd_soc_put_volsw(struct snd_kcontro
  	val = val << shift;
  	if (snd_soc_volsw_is_stereo(mc)) {
  		val2 = ucontrol->value.integer.value[1];

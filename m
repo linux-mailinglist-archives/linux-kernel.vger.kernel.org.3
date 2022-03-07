@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0584CF681
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072184CF5E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238330AbiCGJiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S237196AbiCGJb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiCGJaH (ORCPT
+        with ESMTP id S237712AbiCGJ2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:30:07 -0500
+        Mon, 7 Mar 2022 04:28:22 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E968593A6;
-        Mon,  7 Mar 2022 01:29:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F01B5C84E;
+        Mon,  7 Mar 2022 01:25:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7FAE61119;
-        Mon,  7 Mar 2022 09:29:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AD0C340E9;
-        Mon,  7 Mar 2022 09:29:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECBE46114D;
+        Mon,  7 Mar 2022 09:25:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E63F1C340F4;
+        Mon,  7 Mar 2022 09:25:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645343;
-        bh=9/hY6KOQxNGmcFPrb7ue5KAfX84rmPATCgx/s4tbcxs=;
+        s=korg; t=1646645139;
+        bh=yTOllWjCgOoc5lILcUbRa5RKg2Cr4i89zGrd/HAZhkc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b8MSRJRLIyhPlcSXD9pWDP9bsGGlnn8MPijuGY84xmIa8FGYwQ1lG8zWoFE7J0HZv
-         oen0BT2ye5/iTV1QvNBJYP5G/1BAOmbeF0WGge0IuW3vjxwuqYU3fj2ZKfjIt1njnN
-         8nvirZ68fSZCc2do04HBFh7LJ3FqlX7iFkhKFrAk=
+        b=kdgKUt3CnmmXhiJU68xc1D2l/zeRPWfqsdo1sxbm21JVt4EHKkGmE0jhVvXnL2llw
+         2wX3wpSX78pjIbDPforXeEMKIcTeIvhybZ7oKsnGsJHznxf95r0l1Ol6MYtw1wzfv2
+         WX2oILQqjyun/DrpO4rmXRqTMrOSW3PkHSB2SZTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 52/64] net: chelsio: cxgb3: check the return value of pci_find_capability()
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 4.19 50/51] btrfs: add missing run of delayed items after unlink during log replay
 Date:   Mon,  7 Mar 2022 10:19:25 +0100
-Message-Id: <20220307091640.627830784@linuxfoundation.org>
+Message-Id: <20220307091638.412482256@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Filipe Manana <fdmanana@suse.com>
 
-[ Upstream commit 767b9825ed1765894e569a3d698749d40d83762a ]
+commit 4751dc99627e4d1465c5bfa8cb7ab31ed418eff5 upstream.
 
-The function pci_find_capability() in t3_prep_adapter() can fail, so its
-return value should be checked.
+During log replay, whenever we need to check if a name (dentry) exists in
+a directory we do searches on the subvolume tree for inode references or
+or directory entries (BTRFS_DIR_INDEX_KEY keys, and BTRFS_DIR_ITEM_KEY
+keys as well, before kernel 5.17). However when during log replay we
+unlink a name, through btrfs_unlink_inode(), we may not delete inode
+references and dir index keys from a subvolume tree and instead just add
+the deletions to the delayed inode's delayed items, which will only be
+run when we commit the transaction used for log replay. This means that
+after an unlink operation during log replay, if we attempt to search for
+the same name during log replay, we will not see that the name was already
+deleted, since the deletion is recorded only on the delayed items.
 
-Fixes: 4d22de3e6cc4 ("Add support for the latest 1G/10G Chelsio adapter, T3")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+We run delayed items after every unlink operation during log replay,
+except at unlink_old_inode_refs() and at add_inode_ref(). This was due
+to an overlook, as delayed items should be run after evert unlink, for
+the reasons stated above.
+
+So fix those two cases.
+
+Fixes: 0d836392cadd5 ("Btrfs: fix mount failure after fsync due to hard link recreation")
+Fixes: 1f250e929a9c9 ("Btrfs: fix log replay failure after unlink and link combination")
+CC: stable@vger.kernel.org # 4.19+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/chelsio/cxgb3/t3_hw.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/btrfs/tree-log.c |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c b/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-index 0a9f2c596624..d3e11fe1eabc 100644
---- a/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-+++ b/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
-@@ -3677,6 +3677,8 @@ int t3_prep_adapter(struct adapter *adapter, const struct adapter_info *ai,
- 	    MAC_STATS_ACCUM_SECS : (MAC_STATS_ACCUM_SECS * 10);
- 	adapter->params.pci.vpd_cap_addr =
- 	    pci_find_capability(adapter->pdev, PCI_CAP_ID_VPD);
-+	if (!adapter->params.pci.vpd_cap_addr)
-+		return -ENODEV;
- 	ret = get_vpd_params(adapter, &adapter->params.vpd);
- 	if (ret < 0)
- 		return ret;
--- 
-2.34.1
-
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -1289,6 +1289,15 @@ again:
+ 						 inode, name, namelen);
+ 			kfree(name);
+ 			iput(dir);
++			/*
++			 * Whenever we need to check if a name exists or not, we
++			 * check the subvolume tree. So after an unlink we must
++			 * run delayed items, so that future checks for a name
++			 * during log replay see that the name does not exists
++			 * anymore.
++			 */
++			if (!ret)
++				ret = btrfs_run_delayed_items(trans);
+ 			if (ret)
+ 				goto out;
+ 			goto again;
+@@ -1480,6 +1489,15 @@ static noinline int add_inode_ref(struct
+ 				 */
+ 				if (!ret && inode->i_nlink == 0)
+ 					inc_nlink(inode);
++				/*
++				 * Whenever we need to check if a name exists or
++				 * not, we check the subvolume tree. So after an
++				 * unlink we must run delayed items, so that future
++				 * checks for a name during log replay see that the
++				 * name does not exists anymore.
++				 */
++				if (!ret)
++					ret = btrfs_run_delayed_items(trans);
+ 			}
+ 			if (ret < 0)
+ 				goto out;
 
 

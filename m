@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5184CF88E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4094CFB49
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiCGJ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S239330AbiCGKej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238972AbiCGJjF (ORCPT
+        with ESMTP id S242729AbiCGKLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:39:05 -0500
+        Mon, 7 Mar 2022 05:11:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FFD6FA21;
-        Mon,  7 Mar 2022 01:34:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8252E77A9D;
+        Mon,  7 Mar 2022 01:55:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AA5B61242;
-        Mon,  7 Mar 2022 09:34:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46447C340E9;
-        Mon,  7 Mar 2022 09:34:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6581660E88;
+        Mon,  7 Mar 2022 09:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76568C340F3;
+        Mon,  7 Mar 2022 09:55:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645642;
-        bh=LydUzxEddffRdPdzyFHDey7x8ww+fSYm6ME5m9que+I=;
+        s=korg; t=1646646946;
+        bh=GfPXcg5jHccKntDEWNH0wepVlina7+j0X/yRTDyoBJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DsnVLi1OVXRYyLGWIWODbiXqOrIVATScmGz9NkfU7tFgLphJze/ueEW/BGGLApaDu
-         9dltOYwOxaospz+EZwAMAMqR2PKWIQwNplfoANm2C84R4ihAvVRV6u9p/Drl7Jc3k1
-         15Uk7T3eJKEejm8K8z/2lHKVjuNdQSi4do/344g4=
+        b=pZA8FKzn40tHG4BCWqvky9P2aoc8KyGFsA43qyr16NMMYu0VStXevcusygVBpsbu5
+         +8KABRMEH+/nIsHct+WqGQANMmBbGzWbT9ck063Lajp99Jv10zwwQFEclk7puQfSiW
+         kWDIzHPDYVW0NB8A2ZuHAQ45tEe8xzz9R3aUQlEM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 5.10 096/105] Input: elan_i2c - fix regulator enable count imbalance after suspend/resume
-Date:   Mon,  7 Mar 2022 10:19:39 +0100
-Message-Id: <20220307091646.878594982@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 142/186] ibmvnic: complete init_done on transport events
+Date:   Mon,  7 Mar 2022 10:19:40 +0100
+Message-Id: <20220307091658.047570817@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
 
-commit 04b7762e37c95d9b965d16bb0e18dbd1fa2e2861 upstream.
+[ Upstream commit 36491f2df9ad2501e5a4ec25d3d95d72bafd2781 ]
 
-Before these changes elan_suspend() would only disable the regulator
-when device_may_wakeup() returns false; whereas elan_resume() would
-unconditionally enable it, leading to an enable count imbalance when
-device_may_wakeup() returns true.
+If we get a transport event, set the error and mark the init as
+complete so the attempt to send crq-init or login fail sooner
+rather than wait for the timeout.
 
-This triggers the "WARN_ON(regulator->enable_count)" in regulator_put()
-when the elan_i2c driver gets unbound, this happens e.g. with the
-hot-plugable dock with Elan I2C touchpad for the Asus TF103C 2-in-1.
-
-Fix this by making the regulator_enable() call also be conditional
-on device_may_wakeup() returning false.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220131135436.29638-2-hdegoede@redhat.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: bbd669a868bb ("ibmvnic: Fix completion structure initialization")
+Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/mouse/elan_i2c_core.c |   14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/ibm/ibmvnic.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/input/mouse/elan_i2c_core.c
-+++ b/drivers/input/mouse/elan_i2c_core.c
-@@ -1350,17 +1350,17 @@ static int __maybe_unused elan_resume(st
- 	struct elan_tp_data *data = i2c_get_clientdata(client);
- 	int error;
- 
--	if (device_may_wakeup(dev) && data->irq_wake) {
-+	if (!device_may_wakeup(dev)) {
-+		error = regulator_enable(data->vcc);
-+		if (error) {
-+			dev_err(dev, "error %d enabling regulator\n", error);
-+			goto err;
+diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
+index 5c8264e3979a..16e772f80ec5 100644
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -5352,6 +5352,13 @@ static void ibmvnic_handle_crq(union ibmvnic_crq *crq,
+ 			adapter->fw_done_rc = -EIO;
+ 			complete(&adapter->fw_done);
+ 		}
++
++		/* if we got here during crq-init, retry crq-init */
++		if (!completion_done(&adapter->init_done)) {
++			adapter->init_done_rc = -EAGAIN;
++			complete(&adapter->init_done);
 +		}
-+	} else if (data->irq_wake) {
- 		disable_irq_wake(client->irq);
- 		data->irq_wake = false;
- 	}
- 
--	error = regulator_enable(data->vcc);
--	if (error) {
--		dev_err(dev, "error %d enabling regulator\n", error);
--		goto err;
--	}
--
- 	error = elan_set_power(data, true);
- 	if (error) {
- 		dev_err(dev, "power up when resuming failed: %d\n", error);
++
+ 		if (!completion_done(&adapter->stats_done))
+ 			complete(&adapter->stats_done);
+ 		if (test_bit(0, &adapter->resetting))
+-- 
+2.34.1
+
 
 

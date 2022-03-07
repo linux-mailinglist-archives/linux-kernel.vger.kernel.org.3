@@ -2,138 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456614D073A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC6B4D0739
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244960AbiCGTGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S244967AbiCGTGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236446AbiCGTGO (ORCPT
+        with ESMTP id S237523AbiCGTGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:06:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97A526E572
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:05:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646679918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wFEWa/6PSx4goDhoAD+s+E7K76HqDwXbpSO9oJJ8Gys=;
-        b=Vw8c5kuOYTCtjjvQC+3n2ckPQcXqnbsF+Eu2J6z7FLaJwurR9iu/MnaJ/pUS7xivDMN9dr
-        l6cB7MKZvbcGD+204YPCzprmhSjwbh6kI1ZYBjQi4JEvkR9Zfuzc+VzqurlpL7f+o93tEr
-        ML5dBGEdtZt/f8u3cfr+QxCYuQv1B1A=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-t1PvGD7DPsqlsfSCOx-Wfg-1; Mon, 07 Mar 2022 14:05:17 -0500
-X-MC-Unique: t1PvGD7DPsqlsfSCOx-Wfg-1
-Received: by mail-oo1-f69.google.com with SMTP id p22-20020a4a8e96000000b00320d5a307dfso4165824ook.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:05:17 -0800 (PST)
+        Mon, 7 Mar 2022 14:06:18 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781856E56C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:05:22 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4C7F23F60B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 19:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646679921;
+        bh=QWsOEJGQTvGYoXGyvS888p4a2khm68f4hn/XfD0htMc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ETWPDv5W3PyPPxol60CCa6adHNxluQSgMWtUnqyGhPnFlg0Nvi0aObrTfzUUlIuYH
+         k3uSet0kduoz8d8jWhqtfE5wz1/jpixC9B+h0F0LcKSIBXfWX/AEGXWHgt78k4XQgH
+         aGwA4u/7+sC205SYuz3M+XX9yaAtaJe7G9GVx0tKbmBgAkSMUu3MfeOS2PpXmOoGzw
+         7up1twsmQQWGRl7gtJ7A8x1fWeJOoD1YO9YQIXPeEE/bMbq2C50IkYG1KFDQWB9DGN
+         ZujSEXHI3j7ye1jWn5hkEqPo36XfQfcUKvp98NkyXMYilPRAPTLcZ/7KijON6Iz0Dw
+         7cDr4jbEwFCDA==
+Received: by mail-ed1-f70.google.com with SMTP id e10-20020a056402190a00b00410f20467abso9162651edz.14
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:05:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wFEWa/6PSx4goDhoAD+s+E7K76HqDwXbpSO9oJJ8Gys=;
-        b=SrIasMGDlOa7rWf0CESvkhxyYi2qvIHlWqTgEBWRRAE5mROTE3YQnWhQbBJ1G9uD1n
-         o7pLllNidjdKw+XaaeJ6zLe3o+8Mh4CH/MLTpKROccG/UZ4XPMvNfhuhHbbb6G6dhcY6
-         JM7UjX9t/B2pSNBBsJwoAHUHuwphmm7/ZYny69QeRBSd53WpUFWVwyPGh+PRWrwxOexU
-         MCY5UIUEcCx+rJKORjBY78RiYeU20QtZNIyTJ6jARw9DyIbggUGpQCC5BZwDGJTtteR6
-         Tfn+vegTpuF3eSxifIUhEpePCPUrnS8ikQSoQzWEAKYUm8Yo7uR/McJi/u9HsYExIdkq
-         RCJw==
-X-Gm-Message-State: AOAM530WSlWCPonSv0YbbCveBzyb108mh7kIEJdwbtozMK5iORlsgZ/2
-        XvSOlGLkglO7+bbg1+zsQiGYugITz7Eek7a8rpJykAQDvbBiu3e6JsdyTyVaf6fCW3S9poQYJIX
-        ENom+pICEXIZm3WwwAXAnx+wU
-X-Received: by 2002:a4a:b186:0:b0:320:6fed:ff00 with SMTP id c6-20020a4ab186000000b003206fedff00mr5367547ooo.37.1646679916766;
-        Mon, 07 Mar 2022 11:05:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyCZC9SZR/CfAe0ChYOs3ipoBLwx7pGJ4MxpIqADLw3KrjmiUbv10w8kPX5WmDjXpA1nz8uDQ==
-X-Received: by 2002:a4a:b186:0:b0:320:6fed:ff00 with SMTP id c6-20020a4ab186000000b003206fedff00mr5367525ooo.37.1646679916525;
-        Mon, 07 Mar 2022 11:05:16 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id 68-20020a9d0a4a000000b005ad3287033csm6707612otg.44.2022.03.07.11.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 11:05:16 -0800 (PST)
-Date:   Mon, 7 Mar 2022 12:05:13 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org,
-        cohuck@redhat.com, mgurtovoy@nvidia.com, yishaih@nvidia.com,
-        linuxarm@huawei.com, liulongfang@huawei.com,
-        prime.zeng@hisilicon.com, jonathan.cameron@huawei.com,
-        wangzhou1@hisilicon.com
-Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Message-ID: <20220307120513.74743f17.alex.williamson@redhat.com>
-In-Reply-To: <20220304205720.GE219866@nvidia.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
-        <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
-        <20220304205720.GE219866@nvidia.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QWsOEJGQTvGYoXGyvS888p4a2khm68f4hn/XfD0htMc=;
+        b=Nxu5aoPoS9HrlWPbc97li9uNEzpjlfU+ylWZYw12+8FTcB0FYxqtdfXkeq4JYSwvNd
+         +8m5LA40bHMDsvZ0dS5IEts3/iLdQ3ZYzPo0MriO4VLfDUBFnkKBvKcpWqlv6jO0SBBI
+         A/YskD6X2kseoB4iQvYn8Vm2VpPKdK/2F8yUEHKLRd43LADtnq87MzYa7g6d9UrHSXBN
+         oJc17UwqI2esGKZIfTyhnhobjFfaZb+dOSy7cY7RvnHFMgUI/nPdZ/zuYOxlcSw9eu7A
+         /SSa7F8c3/4e1pqSIww5qvZPhwuuO1b5G33+ehW/LRY5uDaGBrekBxdEoSwvMvrM4s6w
+         PtBg==
+X-Gm-Message-State: AOAM530N+wv9Al9JVcdCMu9WBo5YQ/b7payzl4LdvCcUzmeW20lEwYxz
+        eDXwOa9dbXgSgolXQuju6rrvCPe3XDIuWKkevmu660bn+oY+oEd9sBzCGYafwWpCADDTQpPKMVV
+        NUDwJZsFYCgnjAbJOFv6MrIZKrxcZ0/8fEDjXoIxLTQ==
+X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id nd14-20020a170907628e00b006d9c6fa6168mr10459589ejc.132.1646679920953;
+        Mon, 07 Mar 2022 11:05:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyyN0g0OSLGsRnPf1kRRnBUK5x+6sKF/QCqmI95yBIUFncnGeYZVE8vPiyRQJceikpOJJA+6Q==
+X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id nd14-20020a170907628e00b006d9c6fa6168mr10459566ejc.132.1646679920623;
+        Mon, 07 Mar 2022 11:05:20 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id go18-20020a1709070d9200b006d650ff4b26sm4995906ejc.209.2022.03.07.11.05.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 11:05:20 -0800 (PST)
+Message-ID: <7dedd97f-db81-4e72-861b-cf342170b65d@canonical.com>
+Date:   Mon, 7 Mar 2022 20:05:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/6] ASoC: dt-bindings: Document Microchip's PDMC
+Content-Language: en-US
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     lars@metafoo.de, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, robh+dt@kernel.org, nicolas.ferre@microchip.com
+References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
+ <20220307122202.2251639-3-codrin.ciubotariu@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307122202.2251639-3-codrin.ciubotariu@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 16:57:20 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+On 07/03/2022 13:21, Codrin Ciubotariu wrote:
+> Add DT bindings for the new Microchip PDMC embedded in sama7g5 SoCs.
+> 
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> ---
+> 
+> Changes in v3:
+>  - set line length to 80 characters long
+>  - set 'reg' as the second property
+> 
+> Changes in v2:
+>  - renamed patch from 'ASoC: add DT bindings for Microchip PDMC' to
+>    'ASoC: dt-bindings: Document Microchip's PDMC';
+>  - renamed yaml file from 'mchp,pdmc.yaml' to 'microchip,pdmc.yaml';
+>  - used imperative mode in commit description;
+>  - renamed mchp,pdmc.h to microchip,pdmc.h;
+>  - fixed 'title' to represent HW;
+>  - made 'compatible' first property;
+>  - s/microhpone/microphone
+>  - none name in example set to 'sound'
+> 
 
-> On Thu, Mar 03, 2022 at 11:01:30PM +0000, Shameer Kolothum wrote:
-> > From: Longfang Liu <liulongfang@huawei.com>
-> >=20
-> > VMs assigned with HiSilicon ACC VF devices can now perform live migrati=
-on
-> > if the VF devices are bind to the hisi_acc_vfio_pci driver.
-> >=20
-> > Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> > Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-> > ---
-> >  drivers/vfio/pci/hisilicon/Kconfig            |    7 +
-> >  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 1078 ++++++++++++++++-
-> >  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  114 ++
-> >  3 files changed, 1181 insertions(+), 18 deletions(-)
-> >  create mode 100644 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
-> >=20
-> > diff --git a/drivers/vfio/pci/hisilicon/Kconfig b/drivers/vfio/pci/hisi=
-licon/Kconfig
-> > index dc723bad05c2..2a68d39f339f 100644
-> > --- a/drivers/vfio/pci/hisilicon/Kconfig
-> > +++ b/drivers/vfio/pci/hisilicon/Kconfig
-> > @@ -3,6 +3,13 @@ config HISI_ACC_VFIO_PCI
-> >  	tristate "VFIO PCI support for HiSilicon ACC devices"
-> >  	depends on ARM64 || (COMPILE_TEST && 64BIT)
-> >  	depends on VFIO_PCI_CORE
-> > +	depends on PCI && PCI_MSI =20
->=20
-> PCI is already in the depends from the 2nd line in
-> drivers/vfio/pci/Kconfig, but it is harmless
->=20
-> > +	depends on UACCE || UACCE=3Dn
-> > +	depends on ACPI =20
->=20
-> Scratching my head a bit on why we have these
 
-Same curiosity from me, each of the CRYPTO_DEV_HISI_* options selected
-also depend on these so they seem redundant.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-I think we still require acks from Bjorn and Zaibo for select patches
-in this series.
 
-=46rom me, I would request a MAINTAINERS entry similar to the one the
-mlx5 folks added for their driver.  This should be in patch 4/9 where
-the driver is originally added.  Thanks,
-
-Alex
-
+Best regards,
+Krzysztof

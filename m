@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB55C4CF5A8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0884CFA28
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236994AbiCGJaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S233551AbiCGKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237137AbiCGJ1s (ORCPT
+        with ESMTP id S239060AbiCGJ6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:27:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFC458E4B;
-        Mon,  7 Mar 2022 01:24:50 -0800 (PST)
+        Mon, 7 Mar 2022 04:58:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231377C160;
+        Mon,  7 Mar 2022 01:46:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E02061009;
-        Mon,  7 Mar 2022 09:24:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C9ABC340E9;
-        Mon,  7 Mar 2022 09:24:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E63EB80F9F;
+        Mon,  7 Mar 2022 09:46:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B44A4C340F5;
+        Mon,  7 Mar 2022 09:46:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645083;
-        bh=jLKMO32rA0KjtQgvheUPI/dFWNoxa++1fZrLUNzJ5aw=;
+        s=korg; t=1646646366;
+        bh=aJiMtZDEzYoL9IK8Ld/F52RoqRogDvXyrBRCMv7st+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eNOs5zRdCPpwjWTKv7iYVNa9/gOIlIJ6dUk1nk3NidITRUHM/vz5a2QahhlYMUPx9
-         LQuVPfD5PyK/o4n09+U40kfhcF/GyZGLSEOeWoOseaqngabju7CMm7Te3M708I8Lq0
-         l6pn1+NUHcvmnK7k9vK2aqBQhtfOeXfpxEJF9ujk=
+        b=1pSOpyQ2fTqUDGzQhvx9xyZUAFELAU7JdScOUXGTMujIT1ADAMfInBlm0wyIUVRRt
+         /JNnpomS+bemBpzhKQKVxxemzptiq1Pi9gLJPbGtx+znBr/io8l+5DQG/+JWgCtw51
+         feh0GsNlXkuiJr2D8gCkNMyrBCTR2pmfzMQLFOOk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 09/51] i2c: cadence: allow COMPILE_TEST
+        stable@vger.kernel.org,
+        Maurice Baijens <maurice.baijens@ellips.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 180/262] ixgbe: xsk: change !netif_carrier_ok() handling in ixgbe_xmit_zc()
 Date:   Mon,  7 Mar 2022 10:18:44 +0100
-Message-Id: <20220307091637.259399865@linuxfoundation.org>
+Message-Id: <20220307091707.496512150@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wolfram Sang <wsa@kernel.org>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit 0b0dcb3882c8f08bdeafa03adb4487e104d26050 ]
+commit 6c7273a266759d9d36f7c862149f248bcdeddc0f upstream.
 
-Driver builds fine with COMPILE_TEST. Enable it for wider test coverage
-and easier maintenance.
+Commit c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if
+netif is not OK") addressed the ring transient state when
+MEM_TYPE_XSK_BUFF_POOL was being configured which in turn caused the
+interface to through down/up. Maurice reported that when carrier is not
+ok and xsk_pool is present on ring pair, ksoftirqd will consume 100% CPU
+cycles due to the constant NAPI rescheduling as ixgbe_poll() states that
+there is still some work to be done.
 
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To fix this, do not set work_done to false for a !netif_carrier_ok().
+
+Fixes: c685c69fba71 ("ixgbe: don't do any AF_XDP zero-copy transmit if netif is not OK")
+Reported-by: Maurice Baijens <maurice.baijens@ellips.com>
+Tested-by: Maurice Baijens <maurice.baijens@ellips.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 017aec34a238d..3a2f85d811f75 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -445,7 +445,7 @@ config I2C_BRCMSTB
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@ -388,12 +388,14 @@ static bool ixgbe_xmit_zc(struct ixgbe_r
+ 	u32 cmd_type;
  
- config I2C_CADENCE
- 	tristate "Cadence I2C Controller"
--	depends on ARCH_ZYNQ || ARM64 || XTENSA
-+	depends on ARCH_ZYNQ || ARM64 || XTENSA || COMPILE_TEST
- 	help
- 	  Say yes here to select Cadence I2C Host Controller. This controller is
- 	  e.g. used by Xilinx Zynq.
--- 
-2.34.1
-
+ 	while (budget-- > 0) {
+-		if (unlikely(!ixgbe_desc_unused(xdp_ring)) ||
+-		    !netif_carrier_ok(xdp_ring->netdev)) {
++		if (unlikely(!ixgbe_desc_unused(xdp_ring))) {
+ 			work_done = false;
+ 			break;
+ 		}
+ 
++		if (!netif_carrier_ok(xdp_ring->netdev))
++			break;
++
+ 		if (!xsk_tx_peek_desc(pool, &desc))
+ 			break;
+ 
 
 

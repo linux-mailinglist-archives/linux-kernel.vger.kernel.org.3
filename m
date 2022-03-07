@@ -2,218 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9854D0653
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505894D064B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244732AbiCGSWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S244727AbiCGSWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:22:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236052AbiCGSWa (ORCPT
+        with ESMTP id S230115AbiCGSWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:22:30 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32A882D08;
-        Mon,  7 Mar 2022 10:21:35 -0800 (PST)
+        Mon, 7 Mar 2022 13:22:03 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026D811AC;
+        Mon,  7 Mar 2022 10:21:09 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 132so14308514pga.5;
+        Mon, 07 Mar 2022 10:21:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646677295; x=1678213295;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3LQ0B6lHtp/iHliRWS/KHEmauspBEfzknxmYTnH13Bk=;
-  b=Jrl1mEom2jIti5Rcl/euFLNE5KXVTXlBzo3NR7g2uq1Z0jQdigRwsSUe
-   mhMOOJSyq44S4mPQENCBiLXLZw9Mhz9odvDRNSnyKkRi7pWGNe/BXu5/+
-   brjNp1Kg3fRqsRc4oHuP1XCb21Ysp+4Xnxny9jN8EgaDaCabEKUl7gd/f
-   E=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 07 Mar 2022 10:21:35 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 10:21:35 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 7 Mar 2022 10:21:35 -0800
-Received: from maru.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 7 Mar 2022
- 10:21:34 -0800
-From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-CC:     Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Subject: [PATCH] i2c: add tracepoints for I2C slave events
-Date:   Mon, 7 Mar 2022 10:20:49 -0800
-Message-ID: <20220307182049.3790905-1-quic_jaehyoo@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DS2qv/sbCHqoLMCgOnfUdla2dw7bnIePwmkfx7decsw=;
+        b=W9Gg5GyxMVII/LvqUsfW3gjfBZEdfgm8xv8ik/Z9siuo7Pqo4MulN5oQQB8so6ryAN
+         mYtizLZIPZ71DYS2mXy7Dh5KJnIAXBypw/RIUQESQRb/31LCLjwtTPJyGbHKBh6YXmZA
+         mORLiFaCUuG+7VS1Z8/itd8HbhJmQR4xyP+0G878i3pwc2TCVyy+GCMVYZc0rPNwl3EP
+         2Dwzd6322CLGiJSqLjRbqGaWW3mMheT4+HXRfF4HqP+jg14uyoe7OvHUW3K0tdV9kgNw
+         hHxRqlD2FOEl6jAdC2drnovLuGbpB6vGEJcA9K1aCPW6bUng7/La+LKeUPJIDSKM1QjM
+         cs5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DS2qv/sbCHqoLMCgOnfUdla2dw7bnIePwmkfx7decsw=;
+        b=f+q0chNf/rRVN/3uM52MKL4ept0XPTTl8jDi4j/1Enm9ejP3xFUnkdhnY38eunQxav
+         wx99+fLZ49ptCeALtDxpmtcIj2Dzfalu6tvkMdPV9rs873MjFw3HApoZ7O/m39PaAgoZ
+         A5GsrSsVKHGBjK10Cz4QsePZrlvF0VbDVYAi7gFM135s5kmad5hKVqLbzuHsFI5k82cD
+         GvtIpsIUOo61V0m9cqNjwFF4A252QraPUqLIPfSM9FNeXkaobsgoMC2veH+Kq0IQ5tJD
+         cJ1BqYyDcHMuJYPiC0jaz7GgWHs1x+N+UzJsIY2LUAHznszWYuCqzJquTrKMgmsZHJyb
+         H8Rw==
+X-Gm-Message-State: AOAM531ihYsgl2Jw/MD9MnradQOBqS7YlxFiDK7sCPhWGW3xlHLwxQVX
+        8/zY55C519Hk6BEASf6h+rk=
+X-Google-Smtp-Source: ABdhPJwuISSrdr2UftD1PKRqdTuR1a5SMMrV6QtwGPZRsPdtrDfRcGN6R2dbmjM4JwA8i/KgK85S6w==
+X-Received: by 2002:a63:445c:0:b0:375:9c0c:c360 with SMTP id t28-20020a63445c000000b003759c0cc360mr10744430pgk.588.1646677268440;
+        Mon, 07 Mar 2022 10:21:08 -0800 (PST)
+Received: from localhost.localdomain ([122.161.53.68])
+        by smtp.gmail.com with ESMTPSA id t190-20020a632dc7000000b003759f87f38csm12245809pgt.17.2022.03.07.10.21.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 10:21:08 -0800 (PST)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Cc:     Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>
+Subject: [PATCH 1/3] MAINTAINERS: Update git tree for broadcom IPROC boards
+Date:   Mon,  7 Mar 2022 23:50:59 +0530
+Message-Id: <20220307182101.84730-1-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I2C slave events tracepoints can be enabled by:
+Current git tree for broadcom boards is pretty outdated as it's not
+updated for a long time. Fix the reference.
 
-	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
-
-and logs in /sys/kernel/tracing/trace will look like:
-
-	... i2c_slave: i2c-0 a=010 WR_REQ []
-	... i2c_slave: i2c-0 a=010 WR_RCV [02]
-	... i2c_slave: i2c-0 a=010 WR_RCV [0c]
-	... i2c_slave: i2c-0 a=010   STOP []
-	... i2c_slave: i2c-0 a=010 RD_REQ [04]
-	... i2c_slave: i2c-0 a=010 RD_PRO [b4]
-	... i2c_slave: i2c-0 a=010   STOP []
-
-formatted as:
-
-	i2c-<adapter-nr>
-	a=<addr>
-	<event>
-	[<data>]
-
-trace printings can be selected by adding a filter like:
-
-	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
-
-Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 ---
- drivers/i2c/i2c-core-slave.c     | 15 +++++++++
- include/linux/i2c.h              |  8 ++---
- include/trace/events/i2c_slave.h | 57 ++++++++++++++++++++++++++++++++
- 3 files changed, 74 insertions(+), 6 deletions(-)
- create mode 100644 include/trace/events/i2c_slave.h
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
-index 1589179d5eb9..4968a17328b3 100644
---- a/drivers/i2c/i2c-core-slave.c
-+++ b/drivers/i2c/i2c-core-slave.c
-@@ -14,6 +14,9 @@
- 
- #include "i2c-core.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/i2c_slave.h>
-+
- int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
- {
- 	int ret;
-@@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
- }
- EXPORT_SYMBOL_GPL(i2c_slave_unregister);
- 
-+int i2c_slave_event(struct i2c_client *client,
-+		    enum i2c_slave_event event, u8 *val)
-+{
-+	int ret = client->slave_cb(client, event, val);
-+
-+	if (!ret)
-+		trace_i2c_slave(client, event, val);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(i2c_slave_event);
-+
- /**
-  * i2c_detect_slave_mode - detect operation mode
-  * @dev: The device owning the bus
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 7d4f52ceb7b5..fbda5ada2afc 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -392,12 +392,8 @@ enum i2c_slave_event {
- int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
- int i2c_slave_unregister(struct i2c_client *client);
- bool i2c_detect_slave_mode(struct device *dev);
--
--static inline int i2c_slave_event(struct i2c_client *client,
--				  enum i2c_slave_event event, u8 *val)
--{
--	return client->slave_cb(client, event, val);
--}
-+int i2c_slave_event(struct i2c_client *client,
-+		    enum i2c_slave_event event, u8 *val);
- #else
- static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
- #endif
-diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
-new file mode 100644
-index 000000000000..1f0c1cfbf2ef
---- /dev/null
-+++ b/include/trace/events/i2c_slave.h
-@@ -0,0 +1,57 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * I2C slave tracepoints
-+ *
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM i2c_slave
-+
-+#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_I2C_SLAVE_H
-+
-+#include <linux/i2c.h>
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(i2c_slave,
-+	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
-+		 __u8 *val),
-+	TP_ARGS(client, event, val),
-+	TP_STRUCT__entry(
-+		__field(int,				adapter_nr	)
-+		__field(__u16,				addr		)
-+		__field(enum i2c_slave_event,		event		)
-+		__field(__u16,				len		)
-+		__dynamic_array(__u8, buf, 1)				),
-+
-+	TP_fast_assign(
-+		__entry->adapter_nr = client->adapter->nr;
-+		__entry->addr = client->addr;
-+		__entry->event = event;
-+		switch (event) {
-+		case I2C_SLAVE_READ_REQUESTED:
-+		case I2C_SLAVE_READ_PROCESSED:
-+		case I2C_SLAVE_WRITE_RECEIVED:
-+			__entry->len = 1;
-+			memcpy(__get_dynamic_array(buf), val, __entry->len);
-+			break;
-+		default:
-+			__entry->len = 0;
-+			break;
-+		}
-+		),
-+	TP_printk("i2c-%d a=%03x %s [%*phD]",
-+		__entry->adapter_nr, __entry->addr,
-+		__print_symbolic(__entry->event,
-+				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
-+				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
-+				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
-+				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
-+				 { I2C_SLAVE_STOP,		"  STOP" }),
-+		__entry->len, __get_dynamic_array(buf)
-+		));
-+
-+#endif /* _TRACE_I2C_SLAVE_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ea3e6c914384..5d627156efd9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3900,7 +3900,7 @@ M:	Scott Branden <sbranden@broadcom.com>
+ M:	bcm-kernel-feedback-list@broadcom.com
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+-T:	git git://github.com/broadcom/cygnus-linux.git
++T:	git git://github.com/broadcom/stblinux.git
+ F:	arch/arm64/boot/dts/broadcom/northstar2/*
+ F:	arch/arm64/boot/dts/broadcom/stingray/*
+ F:	drivers/clk/bcm/clk-ns*
 -- 
 2.25.1
 

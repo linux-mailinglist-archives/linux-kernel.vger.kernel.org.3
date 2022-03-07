@@ -2,247 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015944D0496
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B9D4D04A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241589AbiCGQxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S244329AbiCGQ42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239265AbiCGQxt (ORCPT
+        with ESMTP id S239265AbiCGQ40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:53:49 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C742DD75
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:52:54 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id q11so14321623pln.11
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 08:52:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vL4YwE7tYa3Y01MHIJ9wMqV9n4oV1xcyqck3EB7a8Uw=;
-        b=ODOS8TaRivkbMrCQdxGZB9ku05H2tP3eQzrcHIjQprhEE6RkiQRJo+B6SpabdFrO1K
-         cuIDFVVuRQBiXGM2cvBLLXkBs/ktz/H/VAE+/SxgAemWvAlFhjWJwiSoCcbhlpTMvdGi
-         qMMf8LM/LNeDF0iuw2aydULDwhUlvAEiZpTXR+UphXx0whGm+vKQrmY3ttkWesIZR3qp
-         11lVdUK4U/gYBeipOIfMo0GTXeLYAEJSxBSQgfi4CWmwDrv/Co2SQmwLki74fUTk8QCD
-         fUZGxM2YiQpwm0+M8B9oc81+br1oZB1BxJC+mUB5FMxv1WLkr+pLeorpnubUJ1U1E9hj
-         BxDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vL4YwE7tYa3Y01MHIJ9wMqV9n4oV1xcyqck3EB7a8Uw=;
-        b=t/SsjDs3XgrbiqnxKIJrNMkrn1EZKnKQDwfKi4VQHS1bYHFzL1nZ/DW8Hn2Y6yyL2k
-         wCxuBZW3YK64MJDx4ER+KUsVAZgjktvceRaBREVMbANUs7zOHUFDi260F1WFd8BpCHGL
-         fXTHQ4xnyDyVevK6Le/ApJ+JTIJMSNFSDf+1bdr9g5fHM+7aZS3wAM7SCYNBI2x5fuPw
-         ETvJUV8wK1amXJRC1JqVM+sbRUPFnz1+6P5gJrL1yoIxjQaemMt0v0kvioqOmjyJKvgZ
-         6DYzzRfdBc2O5y+S8ta4JoOfDWvdvca/0Rn/twy+ffHIn4IFGC6+xlqyeW+PU5opy7zf
-         34Lw==
-X-Gm-Message-State: AOAM531usGvy38yH46kntI/UXQhLnxDwFDkKW6ymY1Tsj3/FJL8ctVEH
-        iuf8xHX+0+4WoHYw3vXSX66Nutq+CGQOATcLY2SGIA==
-X-Google-Smtp-Source: ABdhPJywcchzxpEjs8LqsQz7iZ/kl4FGjgJE/a56/donerPGzTzg3QGeaPTZBHhugLSS8UedUrGOIaTESfJpqP4Y3Y0=
-X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
- d22-20020a170902729600b0014b4bc60e81mr13029503pll.132.1646671973397; Mon, 07
- Mar 2022 08:52:53 -0800 (PST)
+        Mon, 7 Mar 2022 11:56:26 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2066.outbound.protection.outlook.com [40.107.236.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AF82DD7C;
+        Mon,  7 Mar 2022 08:55:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LebmS8wvAF5kqM4AQpgDOT3QlM2gE8Nyy5/JgEzgP/1dB6iHdpWAuta6PDjkEatyEswpeJmZhGIl0BZZyDXWDtJYxCiELUxkhjYjQUMFLkuVUwAVyn59a7tuTRXWH+tF8AXti95z3OHiMm9ZVzgN4zvUfT1eyt37PHl5cA6qrj2mHlEbS01ildmSGzqnrLXtlsVTqsG5ODIdNfttj+PMJdfjXzjkMhByxYhrYT/HYmerajjoZmPQyN/JkUQkXasUaKf+NHs7zWtz/SEO5YwVrzCOH1hBlhiNtFlxM22DfTMyNWno4ZMgETJ7weCbkKqWJD/sKBKV3ftEHz3aMwlkEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=slBoERK2AHmUJWNUzkEuC9d9KKE4C54N2Nm+Tze5zCY=;
+ b=eG1ffvdBh60XaGERNdSsaiN5pykB+nKleyLZRartHmeXC5qsGyqw/aukiq8J/TEYnhp/G/X8VPtDIg3eTKp9wwasSvdpJhLN9eh2f42gnI28WYZPmMuoHVHN6inWkHSc2GGH4WZ0V4lrGwjRhzaVoQ8CgJuC6eKjVdg65A9iS+Ev2IPuuYqHDm97Yn5vNImzjT9bY2I6gpNYlBRlEPHP3sY23gftUqk5ByOh2Aqr1XnOg9NpAoCkMWFQNKYu4cH2LyrrOGpo4vP7Bz7UpwXSFXPEQqdkoEbkgL7YPmw7w1Hb/4HhV8XsOmCpmcOyYSLpLTXoPB5QJe39G0Drog7I8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=slBoERK2AHmUJWNUzkEuC9d9KKE4C54N2Nm+Tze5zCY=;
+ b=fiGZsiLSP1RWRKde9QAxAd7fA9kw0CK9Jf0MMAuC0F7MoxyDDechLSIsAlEbprkIO8yFLRAguLGxjBTTMpnzcc7RTpO3T+0tDRroAETxZtPK++FRDXdhbpPiE7F/5Iwu776s00As2WftUPhF8SEKLXVGEoOxPZUOO1zHuMlnLDWUxwkgAdmnIfVSnnEnQ8fzNkK4m62cvoT40OLrH9geiQ/EaTnblSQM1nS/8sW4P0aFQiMQ2bnpcnRdtauTFIgOV5Wy1D3yxIaLztTcOWAq5t3PcHkeTOK+VvVbUTE9VY/rrDhCuCpK7pNWBX39oS/tVWcMAHPLY/md8TtjYOphig==
+Received: from DM6PR07CA0101.namprd07.prod.outlook.com (2603:10b6:5:337::34)
+ by SN1PR12MB2574.namprd12.prod.outlook.com (2603:10b6:802:26::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.13; Mon, 7 Mar
+ 2022 16:55:29 +0000
+Received: from DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:337:cafe::7a) by DM6PR07CA0101.outlook.office365.com
+ (2603:10b6:5:337::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.13 via Frontend
+ Transport; Mon, 7 Mar 2022 16:55:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT062.mail.protection.outlook.com (10.13.173.40) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5038.14 via Frontend Transport; Mon, 7 Mar 2022 16:55:28 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 7 Mar
+ 2022 16:55:28 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Mon, 7 Mar 2022
+ 08:55:27 -0800
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Mon, 7 Mar 2022 08:55:23 -0800
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <broonie@kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-spi@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <ashishsingha@nvidia.com>
+CC:     <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <p.zabel@pengutronix.de>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: [PATCH v3 0/3] Tegra QUAD SPI combined sequence mode
+Date:   Mon, 7 Mar 2022 22:25:16 +0530
+Message-ID: <20220307165519.38380-1-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <20220301195457.21152-1-jithu.joseph@intel.com>
- <20220301195457.21152-8-jithu.joseph@intel.com> <09b5b05018a8600ca8fab896790ab16827c80e4e.camel@intel.com>
- <e282377b-8ee4-99fc-432f-2aa3441b2989@intel.com>
-In-Reply-To: <e282377b-8ee4-99fc-432f-2aa3441b2989@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 7 Mar 2022 08:52:45 -0800
-Message-ID: <CAPcyv4gcfMZu38EAGBq59A-RPUmR3fFiamRiR6QaP=D1gPS+6A@mail.gmail.com>
-Subject: Re: [RFC 07/10] platform/x86/intel/ifs: Create kthreads for online
- cpus for scan test
-To:     "Joseph, Jithu" <jithu.joseph@intel.com>
-Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de" <bp@alien8.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ccbe8083-fd94-480f-c140-08da005b48d2
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2574:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB25746A8E599637790AF2D58AC3089@SN1PR12MB2574.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0QcAtJae/geOmE2onvMNJ890/AR/vMa9tO5d6POXK+autfII2m/LqL2OqhQSEHHcgk8jfUj85LubepQUfTOdBnc72aW7PQZkgmMlXuI1kxX6kkKRLAcFuaKXedNo2d6LwCGous9m6F9jTR3L5PuLj0g0q42Wt6AXZfXnbxEMUObnVWrWK6tZqf0Xzy2DSWvBUdTToqRIBHEwmL2XmqE7R89WJZnWhSjoV+3KblkC0yqFnCbbF8cfJpig7Palie0ccGa0Wqd7jWwWDRAuM8FpkcRchnE4eqNBtSdh7r3Ab5vKaycJ+eqrZ+7XVridg9lTWjrKSvE9YHPKP91P3M4jpCOHvV2HpJ4NCT7/uRxRq0wAE/E2jiiOBS5SwtYm0VTh3tx+A6LZbsmOdA7szdxJzLS8E56lBJHlElL+SX3IhL9A0tLAXxdhv8TBnTLbFPlR4BubqbIRBUsDIYonuNpq7BMNNO3JwDJzPwZTjFlx9jy/U3oRhg5zMluZP2Q9T69V1vkhvOJiIvBa3JCsKJ3IMqzKwbpNgdPEMqryqzZEjXJ8CguwGPv2vkn2o3/1gHVHICCjvCINuoOt4+YNTOdnSliPVhjrbS/o5ttZIbJS2h00w19oSxzi6Cucso/d8RThqvzwQBmsejC1f89F3g/c/8VdSGy/BM8l5QinNsSBrbVwACF52P0WPiIW9RxDN5WRyYk51eQWSWsYVBuQXEML8w==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(70206006)(8936002)(81166007)(426003)(356005)(336012)(4744005)(70586007)(40460700003)(316002)(5660300002)(82310400004)(26005)(54906003)(508600001)(8676002)(4326008)(110136005)(86362001)(6636002)(186003)(1076003)(6666004)(36756003)(7696005)(36860700001)(47076005)(107886003)(83380400001)(2906002)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 16:55:28.8735
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ccbe8083-fd94-480f-c140-08da005b48d2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT062.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2574
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 11:20 AM Joseph, Jithu <jithu.joseph@intel.com> wrote:
->
->
->
-> On 3/2/2022 8:17 PM, Williams, Dan J wrote:
-> > On Tue, 2022-03-01 at 11:54 -0800, Jithu Joseph wrote:
-> >> Create scan kthreads for online logical cpus. Once scan test is triggered,
-> >> it wakes up the corresponding thread and its sibling threads to execute
-> >> the test. Once the scan test is done, the threads go back to thread wait
-> >> for next signal to start a new scan.
-> >>
-> ...
-> >> +
-> >> +static int retry = 5;
-> >> +module_param_cb(retry, &ifs_retry_ops, &retry, 0644);
-> >> +
-> >> +MODULE_PARM_DESC(retry, "Maximum retry count when the test is not executed");
-> >
-> > Why does this retry need to be in the kernel? Can't the test runner
-> > retry the test if they want? If it stays in the kernel, why a module
-> > parameter and not a sysfs attribute?
->
-> A core is tested by writing 1 to "runtest" file.  When user writes  a 1 to run_test file it tests all the subtests (chunks) on a core.
-> Distinct from this, retry parameter describes the autoretry driver would do at  "chunk" granularity (bit more on why, is available in the doc)
->
-> Why not a sysfs attribute: good qn,  Our earlier prototype had this as a percpu sysfs attribute, however this was removed to keep the sysfs entries simple/minimal and less confusing.
-> (and tunable options which are not strictly needed in the normal course of use were moved to module parameters)
-> In the percpu sysfs we now only have the essential stuff i.e  run_test , status , and details making it simpler for user who wants to test the core.
+Add ACPI support for Tegra210 QUAD SPI driver
+Support new Tegra194 feature, combined sequence mode.
+Add Tegra234 bindings.
 
-...but you are putting it in sysfs, just in a different directory:
+v3 changes:
+- document runtime pm disabled in ACPI
+- clear cmb register for non combined sequence
+- fixes for errors reported by kernel test robot
+- skip approved patches
+v2 changes:
+- use combined sequence mode as default
+- remove property to switch transfer modes
+- fix compilation warnings
 
-/sys/module/ifs/parameters
+Ashish Singhal (1):
+  arm64: tegra: Add QSPI controllers on Tegra234
 
-vs
+Krishna Yarlagadda (2):
+  spi: tegra210-quad: add acpi support
+  spi: tegra210-quad: combined sequence mode
 
-/sys/devices/{system/cpu/,platform}/ifs
+ .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  |  12 +
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |  28 ++
+ drivers/spi/spi-tegra210-quad.c               | 290 +++++++++++++++++-
+ include/dt-bindings/clock/tegra234-clock.h    |   8 +
+ include/dt-bindings/reset/tegra234-reset.h    |   2 +
+ 5 files changed, 324 insertions(+), 16 deletions(-)
 
-Just unify it all in one place, otherwise, I fail to see the
-simplification for the user over spreading settings over multiple
-locations.
+-- 
+2.17.1
 
->
->
-> >
-> >> +
-> >> +static bool noint = 1;
-> >> +module_param(noint, bool, 0644);
-> >> +MODULE_PARM_DESC(noint, "Option to enable/disable interrupt during test");
-> >
-> > Same sysfs vs module parameter question...
->
-> Same as above
-
-Same multiple sysfs ABI location concern.
-
->
-> >
->
-> >> +
-> >> +static const char * const scan_test_status[] = {
-> >> +       "SCAN no error",
-> >> +       "Other thread could not join.",
-> >> +       "Interrupt occurred prior to SCAN coordination.",
-> >> +       "Core Abort SCAN Response due to power management condition.",
-> >> +       "Non valid chunks in the range",
-> >> +       "Mismatch in arguments between threads T0/T1.",
-> >> +       "Core not capable of performing SCAN currently",
-> >> +       "Unassigned error code 0x7",
-> >> +       "Exceeded number of Logical Processors (LP) allowed to run Scan-At-Field concurrently",
-> >> +       "Interrupt occurred prior to SCAN start",
-> >
-> > This looks unmaintainable...
-> >
-> > /me finds large comment block around IFS_* error codes and suggests
-> > killing 2 birds with one stone, i.e. delete that comment and make this
-> > self documenting:
-> >
-> > static const char * const scan_test_status[] = {
-> >     [IFS_NO_ERROR] = "SCAN no error",
-> >     [IFS_OTHER_THREAD_DID_NOT_JOIN] = "Other thread could not join.",
-> >     ...etc...
-> > };
->
-> Will use this format.
->
-> >
-> > Btw, which is it "did not join" and "could not join"? If the symbol
-> > name is going to be that long might as well make it match the log
-> > message verbatim.
->
-> Will make them identical. Thanks for pointing this out.
->
-> >
-> > That way you can add / delete error codes without wondering if you
-> > managed to match the code number to the right position in the array.
-> >
-> > Even better would be to kick this out of the kernel and let the user
-> > tool translate the error codes to test result log messages.
-> >
-> >> +};
-> >> +
-> >> +static void message_not_tested(int cpu, union ifs_status status)
-> >> +{
-> >> +       if (status.error_code < ARRAY_SIZE(scan_test_status))
-> >> +               pr_warn("CPU %d: SCAN operation did not start. %s\n", cpu,
-> >> +                       scan_test_status[status.error_code]);
-> >> +       else if (status.error_code == IFS_SW_TIMEOUT)
-> >> +               pr_warn("CPU %d: software timeout during scan\n", cpu);
-> >> +       else if (status.error_code == IFS_SW_PARTIAL_COMPLETION)
-> >> +               pr_warn("CPU %d: %s\n", cpu,
-> >> +                       "Not all scan chunks were executed. Maximum forward progress retries exceeded");
-> >
-> > Why are these codes not in the scan_test_status set? I see that
-> > IFS_SW_PARTIAL_COMPLETION and IFS_SW_TIMEOUT are defined with larger
-> > values, but why?
->
-> These are software(driver) defined error codes. Rest of the error codes are supplied by
-> the hardware. Software defined error codes were kept at the other end to provide ample space
-> in case (future) hardware decides to provide extend error codes.
-
-Why put them in the same number space? Separate software results from
-the raw hardware results and have a separate mechanism to convey each.
-
->
-> >
-> >> +       else
-> >> +               pr_warn("CPU %d: SCAN unknown status %llx\n", cpu, status.data);
-> >> +}
-> >> +
-> >> +static void message_fail(int cpu, union ifs_status status)
-> >> +{
-> >> +       if (status.control_error) {
-> >> +               pr_err("CPU %d: scan failed. %s\n", cpu,
-> >> +                      "Suggest reload scan file: # echo 1 > /sys/devices/system/cpu/ifs/reload");
-> >> +       }
-> >> +       if (status.signature_error) {
-> >> +               pr_err("CPU %d: test signature incorrect. %s\n", cpu,
-> >> +                      "Suggest retry scan to check if problem is transient");
-> >> +       }
-> >
-> > This looks and feels more like tools/testing/selftests/ style code
-> > printing information for a kernel developer to read. For a production
-> > capability I would expect these debug messages to be elided and have an
-> > ifs user tool that knows when to "Suggest reload scan file". Otherwise,
-> > it's not scalable to use the kernel log buffer like a utility's stdout.
->
-> The two pr_err here are for really really grave errors and warrants being displayed to console,
-> possibly indicating some fault with the particular core. They are never expected to come in normal
-> course of testing on a working core.
-
-Kernel log messages with user action recommendations belong in a user tool.
-
-> But I see your larger point. We will convert all the pr_warn preceeding this (in message_not_tested())
-> to pr_dbg so that they dont normally take up the kernel log buffer. (they are not as grave a scenario as the earlier one).
->
-> The same information is also available from percpu sysfs/cpu#/ifs/status for user spaces tools to operate on
-
-"Suggest retry" does not seem like "grave error" to me. User feedback
-belongs in a user tool.

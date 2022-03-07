@@ -2,158 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13D14D0AC5
+	by mail.lfdr.de (Postfix) with ESMTP id 658234D0AC4
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343702AbiCGWO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S1343680AbiCGWOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:14:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343673AbiCGWOy (ORCPT
+        with ESMTP id S1343673AbiCGWOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:14:54 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5A1574BA;
-        Mon,  7 Mar 2022 14:14:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646691240; x=1678227240;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W4J0Ww48+Y6RMho2RZiFW1MiMdw4OpBGixlfQLH7Sec=;
-  b=d/00p/7mXufry9AiP+JWNWPngCq6GT7A6h1zSvKSWAGbyGU4fSXTfY7a
-   ZF7w1cMy7P/btzNwMAFmEqPzSCjnEeSsXulQ7vkNyUj9AoUH197QBgs5E
-   4SvJUwBSD8fX1ijQwQ4B27sHq+5tYajjvSGY82U64XVXCts//3IWTNa9L
-   ai5oAZAgoeT+grGwxORMvsoDq++Aon2SoI+j19cNGy6aQdNsQI5OjCSy3
-   7Pj773ur+7k5wsCssfrJsCCCPvksaptNlX9/LgDhK75qEfkhI+prT5PHc
-   6eL/X6fLBc23YgAIczPK6cWbFKzQD/Ybs4he09Kd/ESJM71txnaCUxHVa
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="315234971"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="315234971"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 14:13:59 -0800
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="509867463"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 14:13:56 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nRLbM-00D1zP-80;
-        Tue, 08 Mar 2022 00:13:12 +0200
-Date:   Tue, 8 Mar 2022 00:13:11 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 7/7] usb: typec: mux: Add On Semi fsa4480 driver
-Message-ID: <YiaDd+quwXgbuz5D@smile.fi.intel.com>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <20220307034040.1111107-7-bjorn.andersson@linaro.org>
- <YiXbg4QwgIgLh3LW@smile.fi.intel.com>
- <YiYbOQpX4+fP8S1W@ripper>
- <YiYvMf5X+S0WZ9lO@smile.fi.intel.com>
- <YiZzco76Nrxbxz95@ripper>
+        Mon, 7 Mar 2022 17:14:47 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8F3580C3;
+        Mon,  7 Mar 2022 14:13:51 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id u10so23906845wra.9;
+        Mon, 07 Mar 2022 14:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S4KRc2JPrzXRUzhnhouVf6rWLnTNsy7QJgg90N+SFgg=;
+        b=OJtwXtXx5Eannq7k//Jp5ML1sR9bjgU0QhTwDhoiYjGHJzvyWMKCjsL6808BvtzLX7
+         MsCm1kwWhic6uQ2XcyfXFmqa0/UI0qPdcdwqiu3Q+jCCsbmRv4pdtgatzOZ3qkBkDdSK
+         M62qT+tJqC7J/4A91+1QBiosBt66dMVGT0lNc/NBJ1QO3wKDdUm22UbmqOh0+EX/3CMg
+         IdtfFVzSgrYJyZhXrzvjRa3RD7MyWNiAW0yQlzWHxhPsuxFrUjIxz1ubrg8oRy1hlURO
+         yLJTC9J4X9bIXlj3+yRkucOed8eOecV5OfSJdP2xpJpveTN8hFSgJFJvtKMTDOkZfXUQ
+         kdMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S4KRc2JPrzXRUzhnhouVf6rWLnTNsy7QJgg90N+SFgg=;
+        b=edQ1riKNDLM3hSPhHy1mq15+WYXnAO6sPO3l4wHGo+TMgCWXNmR/FP8rNo3bm08JTW
+         49nwtms0eMumoaImm2zsO44TYzBCrVyl7/LS/9uHBdTQHoJuneqrovtZUT0VUBSuWrt4
+         E/fvXeQ0GTcqTV6xLJb60O22Kn6VhP25VLzIwZlvWHxAiiArfvl3I9BajDtDTsmTEoou
+         +T879qGFHKl2Fnjyesqu8H0hg9fAYdp0uMzj4hQrWKisH92rQuHjhu86LLa8qnw3agXf
+         BVuZ0zpR0EOI7bas7eiOl9jO+9V/GYLiqxBadZcQ0GYND5Ekli91Dc6oTHBIljtHMll1
+         9sFA==
+X-Gm-Message-State: AOAM530Afh5s2UNz7nPdBfpcpVyIuYAbPhxulX1H11fP3pN3RwuI0OXe
+        gexncZO+mx22ICa45+lgjG0=
+X-Google-Smtp-Source: ABdhPJxuX46N8YfLziPqQK5LGqqqEsE4uEjlh6AByOvMMDk5DZJk92B96+DWQv3THo8a6V4GBZOjJg==
+X-Received: by 2002:adf:eb4d:0:b0:1ed:c1f7:a951 with SMTP id u13-20020adfeb4d000000b001edc1f7a951mr9484235wrn.454.1646691230225;
+        Mon, 07 Mar 2022 14:13:50 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056000170400b001f1fefa429bsm2741564wrc.8.2022.03.07.14.13.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 14:13:49 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Taras Chornyi <tchornyi@marvell.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] net: prestera: acl: make read-only array client_map static const
+Date:   Mon,  7 Mar 2022 22:13:49 +0000
+Message-Id: <20220307221349.164585-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiZzco76Nrxbxz95@ripper>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 01:04:50PM -0800, Bjorn Andersson wrote:
-> On Mon 07 Mar 08:13 PST 2022, Andy Shevchenko wrote:
-> > On Mon, Mar 07, 2022 at 06:48:25AM -0800, Bjorn Andersson wrote:
-> > > On Mon 07 Mar 02:16 PST 2022, Andy Shevchenko wrote:
-> > > > On Sun, Mar 06, 2022 at 07:40:40PM -0800, Bjorn Andersson wrote:
+Don't populate the read-only array client_map  on the stack but
+instead make it static const. Also makes the object code a little
+smaller.
 
-...
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/ethernet/marvell/prestera/prestera_acl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > > > > +		/* 15us to allow the SBU switch to turn off */
-> > > > > +		usleep_range(15, 1000);
-> > > > 
-> > > > This is quite unusual range.
-> > > > 
-> > > > If you are fine with the long delay, why to stress the system on it?
-> > > > Otherwise the use of 1000 is unclear.
-> > > > 
-> > > > That said, I would expect one of the below:
-> > > > 
-> > > > 		usleep_range(15, 30);
-> > > > 		usleep_range(500, 1000);
-> > > 
-> > > Glad you asked about that, as you say the typical form is to keep the
-> > > range within 2x of the lower value, or perhaps lower + 5.
-> > > 
-> > > But if the purpose is to specify a minimum time and then give a max to
-> > > give the system some flexibility in it's decision of when to wake up.
-> > > And in situations such as this, we're talking about someone connecting a
-> > > cable, so we're in "no rush" and I picked the completely arbitrary 1ms
-> > > as the max.
-> > > 
-> > > Do you see any drawback of this much higher number? (Other than it
-> > > looking "wrong")
-> > 
-> > I see the drawback of low number.
-> 
-> 15us is based on the data sheet and if the kernel is ready to serve us
-> after 15us then let's do that.
-> 
-> > The 1000 makes not much sense to me with the minimum 66x times less.
-> > If there is no rush, use some reasonable values,
-> > what about
-> > 
-> > 		usleep_range(100, 1000);
-> > 
-> > ? 10x is way better than 66x.
-> 
-> I don't agree, and in particular putting 100 here because it's 1/10 of
-> the number I just made up doesn't sounds like a good reason. The
-> datasheet says 15us, so that is at least based on something real.
-> 
-> In https://www.kernel.org/doc/Documentation/timers/timers-howto.txt
-> I find the following:
-> 
->     With the introduction of a range, the scheduler is
->     free to coalesce your wakeup with any other wakeup
->     that may have happened for other reasons, or at the
->     worst case, fire an interrupt for your upper bound.
-> 
->     The larger a range you supply, the greater a chance
->     that you will not trigger an interrupt; this should
->     be balanced with what is an acceptable upper bound on
->     delay / performance for your specific code path. Exact
->     tolerances here are very situation specific, thus it
->     is left to the caller to determine a reasonable range.
-> 
-> Which to me says that the wider range is perfectly reasonable. In
-> particular 15, 30 (which seems to be quite common) makes the available
-> range to the scheduler unnecessarily narrow.
-> 
-> And it's clear that whatever the upper bound it's going to be some
-> arbitrary number, but 1ms should ensure that there are other hrtimer
-> interrupts to piggy back on.
-
-Okay, I have grepped for usleep_range(x[x], yyyy) and there are 9 modules
-use it. A few commit messages call 1000 as "reasonable upper limit".
-
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_acl.c b/drivers/net/ethernet/marvell/prestera/prestera_acl.c
+index e4af8a503277..47c899c08951 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_acl.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_acl.c
+@@ -91,7 +91,7 @@ static const struct rhashtable_params __prestera_acl_rule_entry_ht_params = {
+ 
+ int prestera_acl_chain_to_client(u32 chain_index, u32 *client)
+ {
+-	u32 client_map[] = {
++	static const u32 client_map[] = {
+ 		PRESTERA_HW_COUNTER_CLIENT_LOOKUP_0,
+ 		PRESTERA_HW_COUNTER_CLIENT_LOOKUP_1,
+ 		PRESTERA_HW_COUNTER_CLIENT_LOOKUP_2
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 

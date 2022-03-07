@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F264CF046
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 04:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B834CF048
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 04:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbiCGDgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 22:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S235039AbiCGDhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 22:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiCGDgt (ORCPT
+        with ESMTP id S231285AbiCGDhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 22:36:49 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500305E15B;
-        Sun,  6 Mar 2022 19:35:56 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id d3so11131334qvb.5;
-        Sun, 06 Mar 2022 19:35:56 -0800 (PST)
+        Sun, 6 Mar 2022 22:37:32 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057785E155;
+        Sun,  6 Mar 2022 19:36:39 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id t28so12244288qtc.7;
+        Sun, 06 Mar 2022 19:36:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=R5XBkGbLpwKeBtWV3nxW7T3iRe3e2U7dNRaaKdhMqyg=;
-        b=aCj15Rfu3s9zAggB/tbruIRc88f/jJ82tAjsZGPQys8b+IPg06+lO1UlsqNnW74Vhs
-         g1Ix/vZVtZqqOtVxfBBcwDuzRIRCQ8nbr9N0P+8GduTzXi5uAYodSYccfFgAUVmEUzpn
-         XN3NqsJe9iaH/uJjf4eCqZigG1X/+hYGNxGsWsXBk9wIUy0XHgJ+CJkKwt7kW+wekakG
-         MBXaqGic42TIRee4pneOjeXYsV3kUwht9RXj2s0PQkfH00Wso7h6MRFRPZvPkWCwcWyQ
-         jqZp1N6C0vtTN6itM6Fa9ZPMirfuHRn5IUhGNbIuLesxCTwbhBU+FJCuhbq3/hto2pZ6
-         m9Nw==
+        bh=82smPzrd64J4jzkvd+yj19VF5/h1TZU7TJD+nXhzeao=;
+        b=EB52k5R1jCqgYGxUBEzfQwSS27kJTyQxieIz8/Sk76Hdvgl7HvRBvZnYsB6zrB8iOU
+         bD4u20Uq8qaoDU9Zkk2RaYAkMbvLvWz3s++zcy4Zbf7i52UBWehzqZagVjOFQp8e5Ov9
+         cAENGzuF4njRdgshvzQ00LubouM31bVWhS8MsmGTGLtoCLFB6tyXZG41wmzvGy6GojM8
+         ZOQEO6BX0EHxsXg5oavlPw7ypBY/2ND5MqSgfESBXcOr9oj/ofmZKpdJOlinZe1zS/kq
+         xAr9SA0ULBig8C1WN+zj0VLt/+UOz6AvlR2Heoi+RtpvR03UgZiTzsFG/KaalcsnZB/V
+         KyfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=R5XBkGbLpwKeBtWV3nxW7T3iRe3e2U7dNRaaKdhMqyg=;
-        b=GsxXbD56ERKTrNRjeL9AUT3UaE/xOktbt05IETsS6CdW1pz0qF1P3heUVINr/1XTXD
-         KJh3dXF7NzTb34LJiTQrXBlcTNmmnrB10qxEHQA+cYvaB/4GE29uTqHzG3pgf6+iRFYV
-         s8OnuE3oCB8sBBBbvwjH5dXw7XCjqm+CVFuZOLRLSjZnnoUB4MnnjDgZYdYoD97LtHQK
-         0AckC8rcnfUpy1jMcEcTp2INMDp/7IVWo/qr2vTcD/G+PNaA3QntW4lsnPF+NFUpc5GC
-         dzr/QnHp9tv3q27VR6/DI2wB/GDe5tTJkYaQdKU+/R4Nc71KcukCdzbuQLK2n6kQR1vd
-         BxWw==
-X-Gm-Message-State: AOAM5334pS9ZC/fr+UwTAU5JkC/hO36DrDK6hHWItf8b+DseZ4GO+0vQ
-        psE8CUfUDItpeo4G/00FBxw=
-X-Google-Smtp-Source: ABdhPJzu52klhBnRGqJo8805Vg4DIQqWlUEGypeXh4aucC3h7ef9+QM9aYDTXGGTP96FVPbl2pMHVQ==
-X-Received: by 2002:a05:6214:104b:b0:435:17bf:da07 with SMTP id l11-20020a056214104b00b0043517bfda07mr6749274qvr.91.1646624155436;
-        Sun, 06 Mar 2022 19:35:55 -0800 (PST)
+        bh=82smPzrd64J4jzkvd+yj19VF5/h1TZU7TJD+nXhzeao=;
+        b=nr9GXy6AHTpBHchlpjLd4enjl1QfOncFXl1eEWio1ONxRoL0sGHl+xPq5KLvpPxDTD
+         adJDHs6td63GCQyFtrKnl5fzEGJ11sjmxM1Xve7YpU5uh/MoZiloZPt+7T1BER+8h2iu
+         EXltZmEZmTlcppK0toogm0ze4OmQHbr6vMCn+roCRb1XZwdeqWmBOvxt6M7tki8nvjqd
+         ETXN9gfixMs6Z3v0puqE4GEUXtLW5PkaHViLRJweN63vk0q4R8nm/ahuFlz1wJEeCsdz
+         EC2EsLU5c9SCFYglc8afjVpHCYSVoyetWshVetRDtnBS0K1RMKPG1pVp9NGFLZzTmHw/
+         cWdg==
+X-Gm-Message-State: AOAM530pw15TZpccxQpeQNIy5DRQv/Pm48Z0FRXf8gsbKDebqepmpUjl
+        1hCt2EM/d7JdBiNGlq94ioU=
+X-Google-Smtp-Source: ABdhPJyx+HrJ/v0m+NvujWpkdlALDPsI5utM6IpKvzEADyhwjfVMTm679Qa1jNal9keTg1lRHRWDFw==
+X-Received: by 2002:ac8:4e82:0:b0:2dd:e5a1:3b2a with SMTP id 2-20020ac84e82000000b002dde5a13b2amr8010971qtp.196.1646624198218;
+        Sun, 06 Mar 2022 19:36:38 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i192-20020a379fc9000000b0067b314c0ff3sm616867qke.43.2022.03.06.19.35.51
+        by smtp.gmail.com with ESMTPSA id t2-20020a05622a01c200b002de5098fbaesm8180122qtw.26.2022.03.06.19.36.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 19:35:54 -0800 (PST)
+        Sun, 06 Mar 2022 19:36:37 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     s.nawrocki@samsung.com
-Cc:     tomasz.figa@gmail.com, cw00.choi@samsung.com,
-        alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
-        krzysztof.kozlowski@canonical.com,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>
-Subject: [PATCH V2] clk/samsung: Use of_device_get_match_data()
-Date:   Mon,  7 Mar 2022 03:35:46 +0000
-Message-Id: <20220307033546.2075097-1-chi.minghao@zte.com.cn>
+To:     jdelvare@suse.com
+Cc:     linux@roeck-us.net, liviu.dudau@arm.com, sudeep.holla@arm.com,
+        lorenzo.pieralisi@arm.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drivers/hwmon: Use of_device_get_match_data()
+Date:   Mon,  7 Mar 2022 03:36:31 +0000
+Message-Id: <20220307033631.2075160-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,40 +76,37 @@ From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
 Use of_device_get_match_data() to simplify the code.
 
-v1->v2:
-  Add a judgment for returning variant to NULL
-
+Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 ---
- drivers/clk/samsung/clk-exynos-clkout.c | 6 ++----
+ drivers/hwmon/vexpress-hwmon.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/samsung/clk-exynos-clkout.c b/drivers/clk/samsung/clk-exynos-clkout.c
-index e6d6cbf8c4e6..273f77d54dab 100644
---- a/drivers/clk/samsung/clk-exynos-clkout.c
-+++ b/drivers/clk/samsung/clk-exynos-clkout.c
-@@ -81,19 +81,17 @@ MODULE_DEVICE_TABLE(of, exynos_clkout_ids);
- static int exynos_clkout_match_parent_dev(struct device *dev, u32 *mux_mask)
+diff --git a/drivers/hwmon/vexpress-hwmon.c b/drivers/hwmon/vexpress-hwmon.c
+index 44d798be3d59..2ac5fb96bba4 100644
+--- a/drivers/hwmon/vexpress-hwmon.c
++++ b/drivers/hwmon/vexpress-hwmon.c
+@@ -207,7 +207,6 @@ MODULE_DEVICE_TABLE(of, vexpress_hwmon_of_match);
+ 
+ static int vexpress_hwmon_probe(struct platform_device *pdev)
  {
- 	const struct exynos_clkout_variant *variant;
 -	const struct of_device_id *match;
+ 	struct vexpress_hwmon_data *data;
+ 	const struct vexpress_hwmon_type *type;
  
- 	if (!dev->parent) {
- 		dev_err(dev, "not instantiated from MFD\n");
- 		return -EINVAL;
- 	}
+@@ -216,10 +215,9 @@ static int vexpress_hwmon_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 	platform_set_drvdata(pdev, data);
  
--	match = of_match_device(exynos_clkout_ids, dev->parent);
--	if (!match) {
-+	variant = of_device_get_match_data(dev->parent);
-+	if (!variant) {
- 		dev_err(dev, "cannot match parent device\n");
- 		return -EINVAL;
- 	}
--	variant = match->data;
+-	match = of_match_device(vexpress_hwmon_of_match, &pdev->dev);
+-	if (!match)
++	type = of_device_get_match_data(&pdev->dev);
++	if (!type)
+ 		return -ENODEV;
+-	type = match->data;
  
- 	*mux_mask = variant->mux_mask;
- 
+ 	data->reg = devm_regmap_init_vexpress_config(&pdev->dev);
+ 	if (IS_ERR(data->reg))
 -- 
 2.25.1
 

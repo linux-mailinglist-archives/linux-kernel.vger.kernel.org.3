@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678024CF808
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57A14CF686
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238484AbiCGJry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S238381AbiCGJiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238722AbiCGJin (ORCPT
+        with ESMTP id S237141AbiCGJaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:38:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2C84E3AE;
-        Mon,  7 Mar 2022 01:33:17 -0800 (PST)
+        Mon, 7 Mar 2022 04:30:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CA65DE4E;
+        Mon,  7 Mar 2022 01:29:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62387B810BF;
-        Mon,  7 Mar 2022 09:33:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E1B6C340F3;
-        Mon,  7 Mar 2022 09:33:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58E41B810B6;
+        Mon,  7 Mar 2022 09:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CF2C340F5;
+        Mon,  7 Mar 2022 09:29:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645594;
-        bh=B67qt1s9/yhVlYKNjUE5sEKW8kaB1jXEWKvNU9m/iuw=;
+        s=korg; t=1646645346;
+        bh=Sg/Ah47SA+zJdKoMGWdbk0fBXg3xkvIT4eCWhWp4Log=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=im6knJVWgwqkBPAFw22OBYwd8HhEhxZL9671xDId4bGHMX0QWdH8x4pIV7iNkwWsz
-         lrI7vmeG9TfUxMQVbSvHePcizVEl+I5+3gm1uA9HLcW1k8TyJGdNAbMMaD1AEq/j8P
-         GfrDNKjLkMCPhtBeTRPGx+JS6UlbZGPUU2QUPrJY=
+        b=BHFhbhuO+aLEmJlnhcHiXVxycyx7oMrQKAT6CKhoHKay4mO0CIE73R57lfovgMlBw
+         KYPlwYmUUPkd47PhMYShSKjrwH5Ka0Hx1n4T1pazLNqE1VV4aaNgTUFVdlskj9PAme
+         Nq4fqGhWJNL9XXXBT2ieGrQiraCYJEGUB6p60llQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Anthoine Bourgeois <anthoine.bourgeois@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 082/105] ARM: dts: switch timer config to common devkit8000 devicetree
-Date:   Mon,  7 Mar 2022 10:19:25 +0100
-Message-Id: <20220307091646.485585151@linuxfoundation.org>
+Subject: [PATCH 5.4 53/64] nl80211: Handle nla_memdup failures in handle_nan_filter
+Date:   Mon,  7 Mar 2022 10:19:26 +0100
+Message-Id: <20220307091640.656254748@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,107 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anthoine Bourgeois <anthoine.bourgeois@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 64324ef337d0caa5798fa8fa3f6bbfbd3245868a ]
+[ Upstream commit 6ad27f522cb3b210476daf63ce6ddb6568c0508b ]
 
-This patch allow lcd43 and lcd70 flavors to benefit from timer
-evolution.
+As there's potential for failure of the nla_memdup(),
+check the return value.
 
-Fixes: e428e250fde6 ("ARM: dts: Configure system timers for omap3")
-Signed-off-by: Anthoine Bourgeois <anthoine.bourgeois@gmail.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+Fixes: a442b761b24b ("cfg80211: add add_nan_func / del_nan_func")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220301100020.3801187-1-jiasheng@iscas.ac.cn
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../arm/boot/dts/omap3-devkit8000-common.dtsi | 33 +++++++++++++++++++
- arch/arm/boot/dts/omap3-devkit8000.dts        | 33 -------------------
- 2 files changed, 33 insertions(+), 33 deletions(-)
+ net/wireless/nl80211.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/omap3-devkit8000-common.dtsi b/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
-index 2c19d6e255bd..0df2b1dd07f6 100644
---- a/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
-+++ b/arch/arm/boot/dts/omap3-devkit8000-common.dtsi
-@@ -158,6 +158,39 @@
- 	status = "disabled";
- };
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 7633d6a74bc2..f2bc465de284 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -12320,6 +12320,9 @@ static int handle_nan_filter(struct nlattr *attr_filter,
+ 	i = 0;
+ 	nla_for_each_nested(attr, attr_filter, rem) {
+ 		filter[i].filter = nla_memdup(attr, GFP_KERNEL);
++		if (!filter[i].filter)
++			goto err;
++
+ 		filter[i].len = nla_len(attr);
+ 		i++;
+ 	}
+@@ -12332,6 +12335,15 @@ static int handle_nan_filter(struct nlattr *attr_filter,
+ 	}
  
-+/* Unusable as clocksource because of unreliable oscillator */
-+&counter32k {
-+	status = "disabled";
-+};
+ 	return 0;
 +
-+/* Unusable as clockevent because if unreliable oscillator, allow to idle */
-+&timer1_target {
-+	/delete-property/ti,no-reset-on-init;
-+	/delete-property/ti,no-idle;
-+	timer@0 {
-+		/delete-property/ti,timer-alwon;
-+	};
-+};
-+
-+/* Preferred always-on timer for clocksource */
-+&timer12_target {
-+	ti,no-reset-on-init;
-+	ti,no-idle;
-+	timer@0 {
-+		/* Always clocked by secure_32k_fck */
-+	};
-+};
-+
-+/* Preferred timer for clockevent */
-+&timer2_target {
-+	ti,no-reset-on-init;
-+	ti,no-idle;
-+	timer@0 {
-+		assigned-clocks = <&gpt2_fck>;
-+		assigned-clock-parents = <&sys_ck>;
-+	};
-+};
-+
- &twl_gpio {
- 	ti,use-leds;
- 	/*
-diff --git a/arch/arm/boot/dts/omap3-devkit8000.dts b/arch/arm/boot/dts/omap3-devkit8000.dts
-index c2995a280729..162d0726b008 100644
---- a/arch/arm/boot/dts/omap3-devkit8000.dts
-+++ b/arch/arm/boot/dts/omap3-devkit8000.dts
-@@ -14,36 +14,3 @@
- 		display2 = &tv0;
- 	};
- };
--
--/* Unusable as clocksource because of unreliable oscillator */
--&counter32k {
--	status = "disabled";
--};
--
--/* Unusable as clockevent because if unreliable oscillator, allow to idle */
--&timer1_target {
--	/delete-property/ti,no-reset-on-init;
--	/delete-property/ti,no-idle;
--	timer@0 {
--		/delete-property/ti,timer-alwon;
--	};
--};
--
--/* Preferred always-on timer for clocksource */
--&timer12_target {
--	ti,no-reset-on-init;
--	ti,no-idle;
--	timer@0 {
--		/* Always clocked by secure_32k_fck */
--	};
--};
--
--/* Preferred timer for clockevent */
--&timer2_target {
--	ti,no-reset-on-init;
--	ti,no-idle;
--	timer@0 {
--		assigned-clocks = <&gpt2_fck>;
--		assigned-clock-parents = <&sys_ck>;
--	};
--};
++err:
++	i = 0;
++	nla_for_each_nested(attr, attr_filter, rem) {
++		kfree(filter[i].filter);
++		i++;
++	}
++	kfree(filter);
++	return -ENOMEM;
+ }
+ 
+ static int nl80211_nan_add_func(struct sk_buff *skb,
 -- 
 2.34.1
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4B14CF9BC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BEC4CF81E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241464AbiCGKKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S239827AbiCGJuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240259AbiCGJur (ORCPT
+        with ESMTP id S237843AbiCGJhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:50:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500677486D;
-        Mon,  7 Mar 2022 01:44:22 -0800 (PST)
+        Mon, 7 Mar 2022 04:37:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AD06E4C1;
+        Mon,  7 Mar 2022 01:31:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3843961224;
-        Mon,  7 Mar 2022 09:44:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36288C340F3;
-        Mon,  7 Mar 2022 09:44:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57013B80F9F;
+        Mon,  7 Mar 2022 09:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE822C340E9;
+        Mon,  7 Mar 2022 09:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646256;
-        bh=ho+1fk4JbqUuOdumvMPIOqALlMHuN+23rs2JHlchIaA=;
+        s=korg; t=1646645486;
+        bh=HIvLy0yJIAmswdOY7HiiFoaeqJ0zxBGgTZ9SQwULyQg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gvE2MjsblHnSYtuKfV7/9Gh+av8POK1qlJjTMn3kXjqAJV6owEsaFYK62Vypqu4DL
-         3zonPFIvwz6jqVM3egx/cM2lTFxR4BR/AkhiXCJQZrmi+07JtrN6M6PcTxQziIhOXq
-         nudpWgqniUlKcP1EBSpC03kPb38G5kfTyYcXV1h8=
+        b=fVSXrMAysrGHtkouyRxXFRQb/t1it2EKATt5sqcQ7m1JynbrW5bjwHANaRI2JrxJV
+         Puc/t31PwI3GLo+MNkBEwYsFjAQawSojP+3AHYOPiAndmrVa5ocqFMeIDy2hHrQumH
+         ErbCeVnhVrZH6mpfDpDyBRxZ/HHT15BqCXsc99r0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 185/262] ASoC: cs4265: Fix the duplicated control name
+        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>
+Subject: [PATCH 5.10 046/105] batman-adv: Request iflink once in batadv-on-batadv check
 Date:   Mon,  7 Mar 2022 10:18:49 +0100
-Message-Id: <20220307091707.649234735@linuxfoundation.org>
+Message-Id: <20220307091645.480919377@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Sven Eckelmann <sven@narfation.org>
 
-commit c5487b9cdea5c1ede38a7ec94db0fc59963c8e86 upstream.
+commit 690bb6fb64f5dc7437317153902573ecad67593d upstream.
 
-Currently, the following error messages are seen during boot:
+There is no need to call dev_get_iflink multiple times for the same
+net_device in batadv_is_on_batman_iface. And since some of the
+.ndo_get_iflink callbacks are dynamic (for example via RCUs like in
+vxcan_get_iflink), it could easily happen that the returned values are not
+stable. The pre-checks before __dev_get_by_index are then of course bogus.
 
-asoc-simple-card sound: control 2:0:0:SPDIF Switch:0 is already present
-cs4265 1-004f: ASoC: failed to add widget SPDIF dapm kcontrol SPDIF Switch: -16
-
-Quoting Mark Brown:
-
-"The driver is just plain buggy, it defines both a regular SPIDF Switch
-control and a SND_SOC_DAPM_SWITCH() called SPDIF both of which will
-create an identically named control, it can never have loaded without
-error.  One or both of those has to be renamed or they need to be
-merged into one thing."
-
-Fix the duplicated control name by combining the two SPDIF controls here
-and move the register bits onto the DAPM widget and have DAPM control them.
-
-Fixes: f853d6b3ba34 ("ASoC: cs4265: Add a S/PDIF enable switch")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220215120514.1760628-1-festevam@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: b7eddd0b3950 ("batman-adv: prevent using any virtual device created on batman-adv as hard-interface")
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/cs4265.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/batman-adv/hard-interface.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
---- a/sound/soc/codecs/cs4265.c
-+++ b/sound/soc/codecs/cs4265.c
-@@ -150,7 +150,6 @@ static const struct snd_kcontrol_new cs4
- 	SOC_SINGLE("E to F Buffer Disable Switch", CS4265_SPDIF_CTL1,
- 				6, 1, 0),
- 	SOC_ENUM("C Data Access", cam_mode_enum),
--	SOC_SINGLE("SPDIF Switch", CS4265_SPDIF_CTL2, 5, 1, 1),
- 	SOC_SINGLE("Validity Bit Control Switch", CS4265_SPDIF_CTL2,
- 				3, 1, 0),
- 	SOC_ENUM("SPDIF Mono/Stereo", spdif_mono_stereo_enum),
-@@ -186,7 +185,7 @@ static const struct snd_soc_dapm_widget
+--- a/net/batman-adv/hard-interface.c
++++ b/net/batman-adv/hard-interface.c
+@@ -151,22 +151,23 @@ static bool batadv_is_on_batman_iface(co
+ 	struct net *net = dev_net(net_dev);
+ 	struct net_device *parent_dev;
+ 	struct net *parent_net;
++	int iflink;
+ 	bool ret;
  
- 	SND_SOC_DAPM_SWITCH("Loopback", SND_SOC_NOPM, 0, 0,
- 			&loopback_ctl),
--	SND_SOC_DAPM_SWITCH("SPDIF", SND_SOC_NOPM, 0, 0,
-+	SND_SOC_DAPM_SWITCH("SPDIF", CS4265_SPDIF_CTL2, 5, 1,
- 			&spdif_switch),
- 	SND_SOC_DAPM_SWITCH("DAC", CS4265_PWRCTL, 1, 1,
- 			&dac_switch),
+ 	/* check if this is a batman-adv mesh interface */
+ 	if (batadv_softif_is_valid(net_dev))
+ 		return true;
+ 
++	iflink = dev_get_iflink(net_dev);
++
+ 	/* no more parents..stop recursion */
+-	if (dev_get_iflink(net_dev) == 0 ||
+-	    dev_get_iflink(net_dev) == net_dev->ifindex)
++	if (iflink == 0 || iflink == net_dev->ifindex)
+ 		return false;
+ 
+ 	parent_net = batadv_getlink_net(net_dev, net);
+ 
+ 	/* recurse over the parent device */
+-	parent_dev = __dev_get_by_index((struct net *)parent_net,
+-					dev_get_iflink(net_dev));
++	parent_dev = __dev_get_by_index((struct net *)parent_net, iflink);
+ 	/* if we got a NULL parent_dev there is something broken.. */
+ 	if (!parent_dev) {
+ 		pr_err("Cannot find parent device\n");
 
 

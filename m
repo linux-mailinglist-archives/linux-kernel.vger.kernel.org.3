@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6016E4CF9CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBED4CF53E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238987AbiCGKMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S236962AbiCGJ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238807AbiCGJyh (ORCPT
+        with ESMTP id S237329AbiCGJXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:54:37 -0500
+        Mon, 7 Mar 2022 04:23:44 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8E97807A;
-        Mon,  7 Mar 2022 01:45:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C166C44760;
+        Mon,  7 Mar 2022 01:22:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8556861365;
-        Mon,  7 Mar 2022 09:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F23C340E9;
-        Mon,  7 Mar 2022 09:45:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 564FA60F63;
+        Mon,  7 Mar 2022 09:22:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 630FEC340E9;
+        Mon,  7 Mar 2022 09:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646326;
-        bh=6eaBAaiTx6z1KDKJ9qfmaLGoCODvGB//OB2/h1VZiFI=;
+        s=korg; t=1646644960;
+        bh=H4TVj+cf/uNrpTzIJj6dLxFemyB75Dl783yOAYEYQhQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r/u+ZJ6TwGX7Y0ON9ZQPqjP0mwWLBCamoW15Ci7MK43cb2nDynb8q4vTdoJZDxO3L
-         AAho/dsz3YCaGfFVaAOhj88XAFLdjvbQh/AXQpSyGyRdpr1wxmfaIsgh8i0uYT03+2
-         nZP7vmi8VNJHbeDgitX5nrUsKfAZRAUXbMoJz6N4=
+        b=hlDYGFNmZsiPqoWUXJ3QDT9Fl9IFgc4F8RO+P/CaeoA+5s8iGQbaWRevR/ShHvu7U
+         oUpixdKCyCw9Ve2sKNNrc1NqYppIOIZQ+W/OjbVEuRl1hVYeublyzAg+GZ0O8W7ZBy
+         7Y9ITU2LpGoBCNPuKhG0F9vtPzMmkphWC+DMs9q0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 206/262] iommu/amd: Fix I/O page table memory leak
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 36/42] net: chelsio: cxgb3: check the return value of pci_find_capability()
 Date:   Mon,  7 Mar 2022 10:19:10 +0100
-Message-Id: <20220307091708.595648414@linuxfoundation.org>
+Message-Id: <20220307091637.203299930@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit 6b0b2d9a6a308bcd9300c2d83000a82812c56cea ]
+[ Upstream commit 767b9825ed1765894e569a3d698749d40d83762a ]
 
-The current logic updates the I/O page table mode for the domain
-before calling the logic to free memory used for the page table.
-This results in IOMMU page table memory leak, and can be observed
-when launching VM w/ pass-through devices.
+The function pci_find_capability() in t3_prep_adapter() can fail, so its
+return value should be checked.
 
-Fix by freeing the memory used for page table before updating the mode.
-
-Cc: Joerg Roedel <joro@8bytes.org>
-Reported-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-Tested-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Fixes: e42ba0633064 ("iommu/amd: Restructure code for freeing page table")
-Link: https://lore.kernel.org/all/20220118194720.urjgi73b7c3tq2o6@oracle.com/
-Link: https://lore.kernel.org/r/20220210154745.11524-1-suravee.suthikulpanit@amd.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fixes: 4d22de3e6cc4 ("Add support for the latest 1G/10G Chelsio adapter, T3")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/amd/io_pgtable.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/chelsio/cxgb3/t3_hw.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
-index b1bf4125b0f7..6608d1717574 100644
---- a/drivers/iommu/amd/io_pgtable.c
-+++ b/drivers/iommu/amd/io_pgtable.c
-@@ -492,18 +492,18 @@ static void v1_free_pgtable(struct io_pgtable *iop)
- 
- 	dom = container_of(pgtable, struct protection_domain, iop);
- 
--	/* Update data structure */
--	amd_iommu_domain_clr_pt_root(dom);
--
--	/* Make changes visible to IOMMUs */
--	amd_iommu_domain_update(dom);
--
- 	/* Page-table is not visible to IOMMU anymore, so free it */
- 	BUG_ON(pgtable->mode < PAGE_MODE_NONE ||
- 	       pgtable->mode > PAGE_MODE_6_LEVEL);
- 
- 	free_sub_pt(pgtable->root, pgtable->mode, &freelist);
- 
-+	/* Update data structure */
-+	amd_iommu_domain_clr_pt_root(dom);
-+
-+	/* Make changes visible to IOMMUs */
-+	amd_iommu_domain_update(dom);
-+
- 	put_pages_list(&freelist);
- }
- 
+diff --git a/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c b/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
+index a89721fad633..29220141e4e4 100644
+--- a/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
++++ b/drivers/net/ethernet/chelsio/cxgb3/t3_hw.c
+@@ -3677,6 +3677,8 @@ int t3_prep_adapter(struct adapter *adapter, const struct adapter_info *ai,
+ 	    MAC_STATS_ACCUM_SECS : (MAC_STATS_ACCUM_SECS * 10);
+ 	adapter->params.pci.vpd_cap_addr =
+ 	    pci_find_capability(adapter->pdev, PCI_CAP_ID_VPD);
++	if (!adapter->params.pci.vpd_cap_addr)
++		return -ENODEV;
+ 	ret = get_vpd_params(adapter, &adapter->params.vpd);
+ 	if (ret < 0)
+ 		return ret;
 -- 
 2.34.1
 

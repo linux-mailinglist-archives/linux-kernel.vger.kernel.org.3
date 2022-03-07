@@ -2,187 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A234D0838
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9A84D083A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240573AbiCGUSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S240809AbiCGUTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239153AbiCGUSm (ORCPT
+        with ESMTP id S235730AbiCGUTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:18:42 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C1713F77
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:17:46 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id o26so14520791pgb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 12:17:46 -0800 (PST)
+        Mon, 7 Mar 2022 15:19:17 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91975237DC;
+        Mon,  7 Mar 2022 12:18:22 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id w7so18529699ioj.5;
+        Mon, 07 Mar 2022 12:18:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IE33MNFmcLiUfT2SeIR7Z5A5TrPI+9cgpazyT5PX0I0=;
-        b=eOE+cxc6Xuwvo/+Q/JI3RL1AAJ0ynlHNo7aZOoZlcDphD//vTauuwndlbyD+2auxNi
-         8dF4w1Qgur+7hWFsJRzL3svUsN/5W6WURdwEbGeoF9IGq9/IpR1XpliFS3DACsmNVnTD
-         DjazJfNsoCwKbjLF48asNgmK92mT8btEb01LqyW63vHlXS2q6bdR/0xI1kT7PehWFjUR
-         jJ1CnyX6GzJqXWKvppEt/vuX/+Zw6Cp3O6gnUTDZp1tk+myp6mww0FksXYQguRzRsej/
-         S6adSSbrjdYeEi3JJyPQV/N6BqkK4aPX2NiUb4vJuzr8aja4HBNx+4N+Ja2rGKY0D3Nq
-         vxQA==
+        bh=5l3UAGfn2yojhkDVEl66TcaHwe8kO2LQUshlIpeT5is=;
+        b=Fbvb4NJoKsDaGHUnPT6NY+keUsrq9nA2L9Tkoi0NX+mqk7OZnF7pQgXzdtK1zmvsNh
+         Vztv8HvKsBLZu4rsZSpsa6GUEFEcd6QZXfSTyG99H5OLRyWR6smiPEg7Ytr5EbWjkDMq
+         vWWvz9etDW9t//sqfDGwPL9z6jC5rYw/gdcex7QHRmDTZR3SMFV8Hrb/zi57p+fw0d3U
+         DmPLBPDfdpE4PbGxljm35ZPN4vw3LZJBnA1elVGQk0Ls0AyjL5nmMoBfcZ/Ml51QVEB0
+         1YYRX/2Hu65EvvMAZiNdzC2Jy6/6CghxUAlyfdLTUOM51cN9K31aXKG0qpqV8TvUcx3L
+         TjyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IE33MNFmcLiUfT2SeIR7Z5A5TrPI+9cgpazyT5PX0I0=;
-        b=zLv0yy5vGf+1UctmNOyLAz6F/m9u+4QawiBM0WysVxrijatzfvOJ1Yr3b+pe0hBK78
-         Nm33XFtE9I+z5OCW3ApNwLA7Pi4UH484Izbg7aULQbJFgx1TClRX+xjc1shuyE4AyUlv
-         nZT4RDKhulyOKYdPWiXxWmSRIIAHsim0AxlqAMTXGHtt6GwqtmhdaFiTtIHlvqQ7C5hO
-         p8+LeMtL6u651R6yg3m1ZPHSGBJwP5HxjQIMwPuBrRZiINsa9epWz1X98wl5dGYpXOHJ
-         lIL2/rz7q0IUGV0WIfjJKxhN9ieBIfBgvKg37lbxYmxySD/cw0PQncoqgLxgvyeG95aX
-         lxoQ==
-X-Gm-Message-State: AOAM530ngx44NfGQz/JbMsFDL1lPnEGKD+TAfI5nlkzn+DHRueBVJ2PS
-        pi/SnwaZTzT8vhek1+201sWQHi6+sFSOtJKeEYA=
-X-Google-Smtp-Source: ABdhPJwKfUQp7AdXNaIKZ0xvrWClL+7EBzqrC5z1DqpF0HBrOa+twOzmmANBNj4/M2wVkJ9NkWyQzngBA5G47/dcsvE=
-X-Received: by 2002:a63:571e:0:b0:378:9f08:129b with SMTP id
- l30-20020a63571e000000b003789f08129bmr11170307pgb.75.1646684266434; Mon, 07
- Mar 2022 12:17:46 -0800 (PST)
+        bh=5l3UAGfn2yojhkDVEl66TcaHwe8kO2LQUshlIpeT5is=;
+        b=DY1n1JSN2uWyBD0U8eelf+1XuihjkicRDIYDWiJczirfIlf07cnRM/WZbAZG2K4l9e
+         QoI9KFhAHDQ+kJpWcYIBUyuTxZAoE6kOi28+s6xy0ZyBV3QZTsDiFSRlUmn0imdrqsyv
+         VBWpbY4XFe3piKiIbaPv5nhhfpXG1kuEM9qsHFKycajf+inOcilLK8Q1aV4PPwFkmL2I
+         X3FI101fi8ABYUVWSXQwQ+maDdLYlCJeFu+Wblrjg2MPepvyeG+7Yu5SUy5x0C9tfmrk
+         ijg47GhoGcLtcPMBR+O7ZsAiZo7XvmYZq+508BWV1a8gbp0f1CmSJkQZFygyYyaHVMQl
+         APgQ==
+X-Gm-Message-State: AOAM530t8jMFiKnXG53KExHyEqbQt0osUBHHmqxCQdx92Qn57BHVIXuI
+        MW4aCOyuD3C/ngCNrMoJkRoq781ZgcwVmcHvrs1yNctKEHk=
+X-Google-Smtp-Source: ABdhPJyVaxmi9dXXo9xF0Q+2ESHuVOitLHtzcSM/qhFhY3mc/JOqOk1c9NrIpAMbesSLO4rhNTVuFEe/+Z+cRUUYvLQ=
+X-Received: by 2002:a02:cd82:0:b0:317:d38c:eda8 with SMTP id
+ l2-20020a02cd82000000b00317d38ceda8mr1500309jap.82.1646684302064; Mon, 07 Mar
+ 2022 12:18:22 -0800 (PST)
 MIME-Version: 1.0
-References: <351df0af-78f2-c20-2a6d-e5f978e5ca1@google.com>
- <a2f6aa01-8003-6791-718d-3898f77ef643@redhat.com> <9dda55d5-eafa-3177-2a4c-32ccb7e146e3@google.com>
- <90aafe84-fe7d-c70e-8e15-c222869f30fc@redhat.com> <6e5262ff-8596-a86-7388-eddb2b2c53c@google.com>
- <3eafa969-5b1a-accf-88fe-318784c791a@google.com>
-In-Reply-To: <3eafa969-5b1a-accf-88fe-318784c791a@google.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 7 Mar 2022 12:17:34 -0800
-Message-ID: <CAHbLzkprkQM3g8R_1EYSR07y-NZdRA-Kh=BJa_mMxAL91P8XUg@mail.gmail.com>
-Subject: Re: [PATCH mmotm v2] mm: delete __ClearPageWaiters()
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Yu Zhao <yuzhao@google.com>, Michal Hocko <mhocko@suse.com>,
+References: <20220302022522.1789588-1-peng.fan@oss.nxp.com> <20220302022522.1789588-5-peng.fan@oss.nxp.com>
+In-Reply-To: <20220302022522.1789588-5-peng.fan@oss.nxp.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Mon, 7 Mar 2022 14:18:11 -0600
+Message-ID: <CABb+yY0-fkRX7W2ju2C4HbrceM0pd-E8pAF53nABpuXZrd3XNg@mail.gmail.com>
+Subject: Re: [PATCH V6 4/5] mailbox: imx: support dual interrupts
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        ", Sascha Hauer" <kernel@pengutronix.de>, festevam@gmail.com,
+        dl-linux-imx <linux-imx@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
+        Devicetree List <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 4, 2022 at 1:25 PM Hugh Dickins <hughd@google.com> wrote:
->
-> The PG_waiters bit is not included in PAGE_FLAGS_CHECK_AT_FREE, and
-> vmscan.c's free_unref_page_list() callers rely on that not to generate
-> bad_page() alerts.  So __page_cache_release(), put_pages_list() and
-> release_pages() (and presumably copy-and-pasted free_zone_device_page())
-> are redundant and misleading to make a special point of clearing it (as
-> the "__" implies, it could only safely be used on the freeing path).
->
-> Delete __ClearPageWaiters().  Remark on this in one of the "possible"
-> comments in folio_wake_bit(), and delete the superfluous comments.
->
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> Tested-by: Yu Zhao <yuzhao@google.com>
-> ---
-> v2: Add Tested-by from Yu Zhao.
->     Update to latest function names in the commit message.
->     Reword comment in folio_wake_bit() per David Hildenbrand.
+Hi,
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
+On Tue, Mar 1, 2022 at 8:23 PM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> i.MX93 S401 MU support two interrupts: tx empty and rx full.
+>
+>  - Introduce a new flag IMX_MU_V2_IRQ for the dual interrupt case
+>  - Update author and Copyright
+>
+Copyright update is fair.
+However, I am not sure adding an extra interrupt warrants
+co-authorship, otherwise people submit far bigger changes to drivers.
+And you didn't even CC the original author Oleksij Rempel. At least
+please seek his ACK.
 
+> diff --git a/drivers/mailbox/imx-mailbox.c b/drivers/mailbox/imx-mailbox.c
+> index 03699843a6fd..4bc59a6cad20 100644
+> --- a/drivers/mailbox/imx-mailbox.c
+> +++ b/drivers/mailbox/imx-mailbox.c
+....
 >
->  include/linux/page-flags.h |  2 +-
->  mm/filemap.c               | 23 ++++++++---------------
->  mm/memremap.c              |  2 --
->  mm/swap.c                  |  4 ----
->  4 files changed, 9 insertions(+), 22 deletions(-)
+> +/* Please not change TX & RX */
+>  enum imx_mu_chan_type {
+>         IMX_MU_TYPE_TX,         /* Tx */
+>         IMX_MU_TYPE_RX,         /* Rx */
 >
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -481,7 +481,7 @@ static unsigned long *folio_flags(struct folio *folio, unsigned n)
->         TESTSETFLAG_FALSE(uname, lname) TESTCLEARFLAG_FALSE(uname, lname)
+You want to hard-code the values to make it clearer
+      IMX_MU_TYPE_TX = 0,
+      IMX_MU_TYPE_RX = 1,
+
+
+> @@ -536,7 +539,8 @@ static int imx_mu_startup(struct mbox_chan *chan)
+>  {
+>         struct imx_mu_priv *priv = to_imx_mu_priv(chan->mbox);
+>         struct imx_mu_con_priv *cp = chan->con_priv;
+> -       unsigned long irq_flag = IRQF_SHARED;
+> +       unsigned long irq_flag = 0;
+> +       int irq;
+>         int ret;
 >
->  __PAGEFLAG(Locked, locked, PF_NO_TAIL)
-> -PAGEFLAG(Waiters, waiters, PF_ONLY_HEAD) __CLEARPAGEFLAG(Waiters, waiters, PF_ONLY_HEAD)
-> +PAGEFLAG(Waiters, waiters, PF_ONLY_HEAD)
->  PAGEFLAG(Error, error, PF_NO_TAIL) TESTCLEARFLAG(Error, error, PF_NO_TAIL)
->  PAGEFLAG(Referenced, referenced, PF_HEAD)
->         TESTCLEARFLAG(Referenced, referenced, PF_HEAD)
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -1179,24 +1179,17 @@ static void folio_wake_bit(struct folio *folio, int bit_nr)
->         }
+>         pm_runtime_get_sync(priv->dev);
+> @@ -551,11 +555,16 @@ static int imx_mu_startup(struct mbox_chan *chan)
+>         if (!priv->dev->pm_domain)
+>                 irq_flag |= IRQF_NO_SUSPEND;
 >
->         /*
-> -        * It is possible for other pages to have collided on the waitqueue
-> -        * hash, so in that case check for a page match. That prevents a long-
-> -        * term waiter
-> +        * It's possible to miss clearing waiters here, when we woke our page
-> +        * waiters, but the hashed waitqueue has waiters for other pages on it.
-> +        * That's okay, it's a rare case. The next waker will clear it.
->          *
-> -        * It is still possible to miss a case here, when we woke page waiters
-> -        * and removed them from the waitqueue, but there are still other
-> -        * page waiters.
-> +        * Note that, depending on the page pool (buddy, hugetlb, ZONE_DEVICE,
-> +        * other), the flag may be cleared in the course of freeing the page;
-> +        * but that is not required for correctness.
->          */
-> -       if (!waitqueue_active(q) || !key.page_match) {
-> +       if (!waitqueue_active(q) || !key.page_match)
->                 folio_clear_waiters(folio);
-> -               /*
-> -                * It's possible to miss clearing Waiters here, when we woke
-> -                * our page waiters, but the hashed waitqueue has waiters for
-> -                * other pages on it.
-> -                *
-> -                * That's okay, it's a rare case. The next waker will clear it.
-> -                */
-> -       }
-> +
->         spin_unlock_irqrestore(&q->lock, flags);
->  }
+> -       ret = request_irq(priv->irq[0], imx_mu_isr, irq_flag,
+> -                         cp->irq_desc, chan);
+> +       if (priv->dcfg->type & IMX_MU_V2_IRQ) {
+> +               irq = priv->irq[cp->type];
+> +       } else {
+> +               irq = priv->irq[0];
 >
-> --- a/mm/memremap.c
-> +++ b/mm/memremap.c
-> @@ -487,8 +487,6 @@ void free_zone_device_page(struct page *page)
->         if (WARN_ON_ONCE(!page->pgmap->ops || !page->pgmap->ops->page_free))
->                 return;
->
-> -       __ClearPageWaiters(page);
-> -
->         mem_cgroup_uncharge(page_folio(page));
->
->         /*
-> --- a/mm/swap.c
-> +++ b/mm/swap.c
-> @@ -97,7 +97,6 @@ static void __page_cache_release(struct page *page)
->                 mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
->                 count_vm_events(UNEVICTABLE_PGCLEARED, nr_pages);
->         }
-> -       __ClearPageWaiters(page);
->  }
->
->  static void __put_single_page(struct page *page)
-> @@ -152,7 +151,6 @@ void put_pages_list(struct list_head *pages)
->                         continue;
->                 }
->                 /* Cannot be PageLRU because it's passed to us using the lru */
-> -               __ClearPageWaiters(page);
->         }
->
->         free_unref_page_list(pages);
-> @@ -966,8 +964,6 @@ void release_pages(struct page **pages, int nr)
->                         count_vm_event(UNEVICTABLE_PGCLEARED);
->                 }
->
-> -               __ClearPageWaiters(page);
-> -
->                 list_add(&page->lru, &pages_to_free);
->         }
->         if (lruvec)
+Please use some verbose define instead of the magic 0.
+
+Thanks.

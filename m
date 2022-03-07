@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AECD4CFB65
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DC14CF9FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240599AbiCGKhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S240156AbiCGKN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242112AbiCGKLP (ORCPT
+        with ESMTP id S238746AbiCGJ4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CB18878F;
-        Mon,  7 Mar 2022 01:54:27 -0800 (PST)
+        Mon, 7 Mar 2022 04:56:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5BF793AB;
+        Mon,  7 Mar 2022 01:45:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D38CEB810AA;
-        Mon,  7 Mar 2022 09:54:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10BA4C340E9;
-        Mon,  7 Mar 2022 09:54:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9C80612D2;
+        Mon,  7 Mar 2022 09:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4105C340F6;
+        Mon,  7 Mar 2022 09:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646865;
-        bh=J2IJqSVavxlY4rZ2bGBmDCSa/4rvdwBbNFQjq4mtJSw=;
+        s=korg; t=1646646348;
+        bh=pQlJEJDvqtDu+suvKnjHMbbeU6Qxo+vHXTUbe6fe3vk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=11lKayyoHupNT5wvR7/jXoyz/JekWaiCExOdtiBvZBaUxlV18dYhp5Iim5VzC7UYJ
-         SzpsaFIYUwz+gNeR0joR3CZaE6Q/HzIIt0FEqKQfBlHoZPXrsV5S9NVzRDFrphtZZL
-         ECtb1ikyrLXc8bhXnYaXd5UOPl5CPw04LsDJUuag=
+        b=d5dPDdmGYMhQmBRq9tVcmfibdWOj8X8Ia1yLjEMs040ys+vKc8si76eEQGuyhD67S
+         iWjglMV8yzmamujncjoV7xI7RvMABpfiavHADFC74iQT0xR7Zv0KXqstWSCuFWTgwR
+         MzPFMjtuEZcB6VfXVEkpNiqCMcYMwYwe8RQhYz3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH 5.16 118/186] s390/extable: fix exception table sorting
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Li Yang <leoyang.li@nxp.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 212/262] soc: fsl: qe: Check of ioremap return value
 Date:   Mon,  7 Mar 2022 10:19:16 +0100
-Message-Id: <20220307091657.378683319@linuxfoundation.org>
+Message-Id: <20220307091708.884646150@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Carstens <hca@linux.ibm.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit c194dad21025dfd043210912653baab823bdff67 upstream.
+[ Upstream commit a222fd8541394b36b13c89d1698d9530afd59a9c ]
 
-s390 has a swap_ex_entry_fixup function, however it is not being used
-since common code expects a swap_ex_entry_fixup define. If it is not
-defined the default implementation will be used. So fix this by adding
-a proper define.
-However also the implementation of the function must be fixed, since a
-NULL value for handler has a special meaning and must not be adjusted.
+As the possible failure of the ioremap(), the par_io could be NULL.
+Therefore it should be better to check it and return error in order to
+guarantee the success of the initiation.
+But, I also notice that all the caller like mpc85xx_qe_par_io_init() in
+`arch/powerpc/platforms/85xx/common.c` don't check the return value of
+the par_io_init().
+Actually, par_io_init() needs to check to handle the potential error.
+I will submit another patch to fix that.
+Anyway, par_io_init() itsely should be fixed.
 
-Luckily all of this doesn't fix a real bug currently: the main extable
-is correctly sorted during build time, and for runtime sorting there
-is currently no case where the handler field is not NULL.
-
-Fixes: 05a68e892e89 ("s390/kernel: expand exception table logic to allow new handling options")
-Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7aa1aa6ecec2 ("QE: Move QE from arch/powerpc to drivers/soc")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Li Yang <leoyang.li@nxp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/include/asm/extable.h |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/soc/fsl/qe/qe_io.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/s390/include/asm/extable.h
-+++ b/arch/s390/include/asm/extable.h
-@@ -69,8 +69,13 @@ static inline void swap_ex_entry_fixup(s
- {
- 	a->fixup = b->fixup + delta;
- 	b->fixup = tmp.fixup - delta;
--	a->handler = b->handler + delta;
--	b->handler = tmp.handler - delta;
-+	a->handler = b->handler;
-+	if (a->handler)
-+		a->handler += delta;
-+	b->handler = tmp.handler;
-+	if (b->handler)
-+		b->handler -= delta;
- }
-+#define swap_ex_entry_fixup swap_ex_entry_fixup
+diff --git a/drivers/soc/fsl/qe/qe_io.c b/drivers/soc/fsl/qe/qe_io.c
+index e277c827bdf3..a5e2d0e5ab51 100644
+--- a/drivers/soc/fsl/qe/qe_io.c
++++ b/drivers/soc/fsl/qe/qe_io.c
+@@ -35,6 +35,8 @@ int par_io_init(struct device_node *np)
+ 	if (ret)
+ 		return ret;
+ 	par_io = ioremap(res.start, resource_size(&res));
++	if (!par_io)
++		return -ENOMEM;
  
- #endif
+ 	if (!of_property_read_u32(np, "num-ports", &num_ports))
+ 		num_par_io_ports = num_ports;
+-- 
+2.34.1
+
 
 

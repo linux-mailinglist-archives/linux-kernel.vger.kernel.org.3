@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2739F4CF730
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA714CFB0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238172AbiCGJo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S240028AbiCGK00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:26:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238108AbiCGJde (ORCPT
+        with ESMTP id S240236AbiCGKGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:33:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7686D180;
-        Mon,  7 Mar 2022 01:30:49 -0800 (PST)
+        Mon, 7 Mar 2022 05:06:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB89D75633;
+        Mon,  7 Mar 2022 01:52:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 029A6B810BD;
-        Mon,  7 Mar 2022 09:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263AFC340E9;
-        Mon,  7 Mar 2022 09:30:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98A56B80E70;
+        Mon,  7 Mar 2022 09:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18D8C340F3;
+        Mon,  7 Mar 2022 09:52:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645433;
-        bh=U0NBSGGAAiB5RuM+ha/CczSgoW4P8pJ0p++3T5GdVUA=;
+        s=korg; t=1646646728;
+        bh=G9AhXJMncP9M8uGCSalT39DSnLh5dH33AtDnouCfyEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BBJlxc2io+asrpTNvwDiGDQ2zMRHVzuNe5YKZWTTezH7C5mTuyHzc5n58cKIMeYdG
-         1Xk2pJ7jxJaONCWvYVT1AGYysMa2+eXvg4sB9bpSF4CjOQ59zrKHTKps7Z+wcc+xvl
-         BInyyu3Zu/QcBuYr9WSjlmzuWE5xuadZNPjcubrw=
+        b=Z5lnlKliJzF2gTo1aAg8UAo9pc9LMzaiPEPRW2OLljX9vPzyWRGZrpfQ5BnVLtACc
+         cVd+AxrcU1v1ymSS07TOGUCk9/QRPKkwktlQhnC5lPyeDZ+TuuUBL4cho1Y7oQAPo5
+         61Q4h1DgyltWpzr7ZOSSpCY9607Clep41JsZm+9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lennert Buytenhek <buytenh@arista.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.10 030/105] iommu/amd: Recover from event log overflow
+        stable@vger.kernel.org, Joe Stringer <joe@cilium.io>,
+        Florian Westphal <fw@strlen.de>
+Subject: [PATCH 5.16 075/186] netfilter: nf_queue: handle socket prefetch
 Date:   Mon,  7 Mar 2022 10:18:33 +0100
-Message-Id: <20220307091645.031593223@linuxfoundation.org>
+Message-Id: <20220307091656.186460618@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,117 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lennert Buytenhek <buytenh@wantstofly.org>
+From: Florian Westphal <fw@strlen.de>
 
-commit 5ce97f4ec5e0f8726a5dda1710727b1ee9badcac upstream.
+commit 3b836da4081fa585cf6c392f62557496f2cb0efe upstream.
 
-The AMD IOMMU logs I/O page faults and such to a ring buffer in
-system memory, and this ring buffer can overflow.  The AMD IOMMU
-spec has the following to say about the interrupt status bit that
-signals this overflow condition:
+In case someone combines bpf socket assign and nf_queue, then we will
+queue an skb who references a struct sock that did not have its
+reference count incremented.
 
-	EventOverflow: Event log overflow. RW1C. Reset 0b. 1 = IOMMU
-	event log overflow has occurred. This bit is set when a new
-	event is to be written to the event log and there is no usable
-	entry in the event log, causing the new event information to
-	be discarded. An interrupt is generated when EventOverflow = 1b
-	and MMIO Offset 0018h[EventIntEn] = 1b. No new event log
-	entries are written while this bit is set. Software Note: To
-	resume logging, clear EventOverflow (W1C), and write a 1 to
-	MMIO Offset 0018h[EventLogEn].
+As we leave rcu protection, there is no guarantee that skb->sk is still
+valid.
 
-The AMD IOMMU driver doesn't currently implement this recovery
-sequence, meaning that if a ring buffer overflow occurs, logging
-of EVT/PPR/GA events will cease entirely.
+For refcount-less skb->sk case, try to increment the reference count
+and then override the destructor.
 
-This patch implements the spec-mandated reset sequence, with the
-minor tweak that the hardware seems to want to have a 0 written to
-MMIO Offset 0018h[EventLogEn] first, before writing an 1 into this
-field, or the IOMMU won't actually resume logging events.
+In case of failure we have two choices: orphan the skb and 'delete'
+preselect or let nf_queue() drop the packet.
 
-Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/YVrSXEdW2rzEfOvk@wantstofly.org
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Do the latter, it should not happen during normal operation.
+
+Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+Acked-by: Joe Stringer <joe@cilium.io>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/amd/amd_iommu.h       |    1 +
- drivers/iommu/amd/amd_iommu_types.h |    1 +
- drivers/iommu/amd/init.c            |   10 ++++++++++
- drivers/iommu/amd/iommu.c           |   10 ++++++++--
- 4 files changed, 20 insertions(+), 2 deletions(-)
+ net/netfilter/nf_queue.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/drivers/iommu/amd/amd_iommu.h
-+++ b/drivers/iommu/amd/amd_iommu.h
-@@ -17,6 +17,7 @@ extern int amd_iommu_init_passthrough(vo
- extern irqreturn_t amd_iommu_int_thread(int irq, void *data);
- extern irqreturn_t amd_iommu_int_handler(int irq, void *data);
- extern void amd_iommu_apply_erratum_63(u16 devid);
-+extern void amd_iommu_restart_event_logging(struct amd_iommu *iommu);
- extern void amd_iommu_reset_cmd_buffer(struct amd_iommu *iommu);
- extern int amd_iommu_init_devices(void);
- extern void amd_iommu_uninit_devices(void);
---- a/drivers/iommu/amd/amd_iommu_types.h
-+++ b/drivers/iommu/amd/amd_iommu_types.h
-@@ -109,6 +109,7 @@
- #define PASID_MASK		0x0000ffff
+--- a/net/netfilter/nf_queue.c
++++ b/net/netfilter/nf_queue.c
+@@ -180,6 +180,18 @@ static int __nf_queue(struct sk_buff *sk
+ 		break;
+ 	}
  
- /* MMIO status bits */
-+#define MMIO_STATUS_EVT_OVERFLOW_INT_MASK	(1 << 0)
- #define MMIO_STATUS_EVT_INT_MASK	(1 << 1)
- #define MMIO_STATUS_COM_WAIT_INT_MASK	(1 << 2)
- #define MMIO_STATUS_PPR_INT_MASK	(1 << 6)
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -657,6 +657,16 @@ static int __init alloc_command_buffer(s
- }
- 
- /*
-+ * This function restarts event logging in case the IOMMU experienced
-+ * an event log buffer overflow.
-+ */
-+void amd_iommu_restart_event_logging(struct amd_iommu *iommu)
-+{
-+	iommu_feature_disable(iommu, CONTROL_EVT_LOG_EN);
-+	iommu_feature_enable(iommu, CONTROL_EVT_LOG_EN);
-+}
++	if (skb_sk_is_prefetched(skb)) {
++		struct sock *sk = skb->sk;
 +
-+/*
-  * This function resets the command buffer if the IOMMU stopped fetching
-  * commands from it.
-  */
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -813,7 +813,8 @@ amd_iommu_set_pci_msi_domain(struct devi
- #endif /* !CONFIG_IRQ_REMAP */
- 
- #define AMD_IOMMU_INT_MASK	\
--	(MMIO_STATUS_EVT_INT_MASK | \
-+	(MMIO_STATUS_EVT_OVERFLOW_INT_MASK | \
-+	 MMIO_STATUS_EVT_INT_MASK | \
- 	 MMIO_STATUS_PPR_INT_MASK | \
- 	 MMIO_STATUS_GALOG_INT_MASK)
- 
-@@ -823,7 +824,7 @@ irqreturn_t amd_iommu_int_thread(int irq
- 	u32 status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
- 
- 	while (status & AMD_IOMMU_INT_MASK) {
--		/* Enable EVT and PPR and GA interrupts again */
-+		/* Enable interrupt sources again */
- 		writel(AMD_IOMMU_INT_MASK,
- 			iommu->mmio_base + MMIO_STATUS_OFFSET);
- 
-@@ -844,6 +845,11 @@ irqreturn_t amd_iommu_int_thread(int irq
- 		}
- #endif
- 
-+		if (status & MMIO_STATUS_EVT_OVERFLOW_INT_MASK) {
-+			pr_info_ratelimited("IOMMU event log overflow\n");
-+			amd_iommu_restart_event_logging(iommu);
++		if (!sk_is_refcounted(sk)) {
++			if (!refcount_inc_not_zero(&sk->sk_refcnt))
++				return -ENOTCONN;
++
++			/* drop refcount on skb_orphan */
++			skb->destructor = sock_edemux;
 +		}
++	}
 +
- 		/*
- 		 * Hardware bug: ERBT1312
- 		 * When re-enabling interrupt (by writing 1
+ 	entry = kmalloc(sizeof(*entry) + route_key_size, GFP_ATOMIC);
+ 	if (!entry)
+ 		return -ENOMEM;
 
 

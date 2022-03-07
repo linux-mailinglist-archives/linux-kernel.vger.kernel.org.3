@@ -2,155 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0184D00BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6FD4D00BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240035AbiCGOJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
+        id S242995AbiCGOJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiCGOJH (ORCPT
+        with ESMTP id S233551AbiCGOJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:09:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CA64F9F9;
-        Mon,  7 Mar 2022 06:08:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08ED9B81597;
-        Mon,  7 Mar 2022 14:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69539C340F6;
-        Mon,  7 Mar 2022 14:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646662089;
-        bh=xwPfd4oUhK0TVFJjZo+icYnrwgPQRppqm/ixqy4gIXI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=m0rwrj7qlWY/EyMdyBJDNDEXDikR7zso2HjNnW2bUT9o1A26Z6NnUbCPYSVY1RmPf
-         mGLDda0SKzo3lVxS7xagvMe2G1eaiWjq2BhjmBPcGekL8DLRK7IJhXYVgBXgFLt9Ck
-         R9wqRIsgMmZkxmZkfjt6rADhYIiG7lg9XJcEWOHIAW7ryAoeX1DBuSCa3qM3MIN3xm
-         I/joxteK4oZIZKHgO1MOXDCAK3E4ASHeK3vTzy0pIecSTGa4hFGS/te+bynMH4/D64
-         eLY3+8pz/lNH8B3i8y3RZLki77q3sGh6go+bkBa4nW/1D96msiY+BEy58B+mWbU3b4
-         p8In8A0fCdEIA==
-Received: by mail-ej1-f47.google.com with SMTP id gb39so32160956ejc.1;
-        Mon, 07 Mar 2022 06:08:09 -0800 (PST)
-X-Gm-Message-State: AOAM531JljW453JfrmNmnVLPB0//iT+fzdc1Vopd3m7/ZBVQK++j3vcT
-        xzgNGhVETwIP9bGuG18mjJprEBd7VjOeXCs7gA==
-X-Google-Smtp-Source: ABdhPJzMof6nh2tIW5O1gtyTBMRNuW0EC9U2ehitf8RLTVsZTMRoiK03mrkYD78lkZPwnTij7Nwt3mVGPNKa945XkG4=
-X-Received: by 2002:a17:906:a38e:b0:6da:a1f9:f9ee with SMTP id
- k14-20020a170906a38e00b006daa1f9f9eemr8781198ejz.27.1646662087585; Mon, 07
- Mar 2022 06:08:07 -0800 (PST)
+        Mon, 7 Mar 2022 09:09:35 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110BE50069
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:08:41 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id w16so31133556ybi.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:08:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mfdVxCs2eXbpyZ6nxJcq9Zy4MImVpxL60Izt6BU+nxo=;
+        b=SmeiVRFmQ8g7mSnedUz1LcG/NOWQj6Gt+IojkiZXTmkmrvv0y6aAlFY0bQO/Y/Axp7
+         AGgdTaDFjm9G4t+WmfSjT5YXjWkvZgNF7Mrc55Y76TQ3jyiyeKByVXQtiX7UrpvgOw/K
+         u8TmLiQw25oUjFD4KCsaD9eF9eYkQDDINBAuAJsLb2RZJVhByasnu4eFWAQJw+0nk1U2
+         dOH7LXlBtQY5+mCaiSNtmOxYnWU6RDwLMfgieAE7jqfV17jRdDJJ5fiPNfaXjmnyTwDa
+         XGXauRoPpOA9sxkfpvSavIN7wG2rkAubrwXldxomdxpuXIKuTpvoSxaHIRfXUf5SE3sR
+         1E1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mfdVxCs2eXbpyZ6nxJcq9Zy4MImVpxL60Izt6BU+nxo=;
+        b=fWxcm8Xzp+NyEENBOFQ9V2/KeNd7CBJzNC0SySvGa7S9CY70l4PIzJDhmKfeoJj3Pp
+         2hkT9tfD8ZIyRhAOev5LTq0bUV419mIKXYSwzicsjdEmkSVGtYdANhaSDWc4JgwBn81K
+         SedJihqNYQWOQrdjirRBUPW6ENn6/LhWpbhno4Nw05Q4bHjv9P2PCqtbwsH9POSeZMDu
+         Z7hpwwdx4jQDHjowuHwCA8zzgccL7mg80JhCq0qf0Y8xVoOc97LmvVNB3jTQtwcVJUVl
+         TY48mUFUMI/NwPZiruExnc8+C+ylyuBTyGYqbeXCDu0Z+BOtFu6uoSGGpRT3VCU4wPTS
+         zUeA==
+X-Gm-Message-State: AOAM533SvIWbO4ryibu5ezZjH0IvlvDvH1UitnsxQJxLndOrxBGx48Ij
+        0mK7QPLpuCxGifDFR31X2/+0fusf0xF4TeaWNabIHOD/O40=
+X-Google-Smtp-Source: ABdhPJx8r4SJMNl3A3gjJ+Oa5BbJgBlKte3tJgN1vRtLq3MCGTlNTu41PJNq1jmWd1EGf3FDC2heiu51uE6dpwP3Z4M=
+X-Received: by 2002:a25:d50c:0:b0:627:660c:1874 with SMTP id
+ r12-20020a25d50c000000b00627660c1874mr7642377ybe.625.1646662120116; Mon, 07
+ Mar 2022 06:08:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20220305052304.726050-1-lizhi.hou@xilinx.com> <20220305052304.726050-3-lizhi.hou@xilinx.com>
- <e4c058e9-6549-4ce2-be05-d09d5b1a9fc9@redhat.com>
-In-Reply-To: <e4c058e9-6549-4ce2-be05-d09d5b1a9fc9@redhat.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 7 Mar 2022 08:07:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKzxq8T=obPQwXeNyqedQOKkmm8hwHdfVgKr15EyAgBnQ@mail.gmail.com>
-Message-ID: <CAL_JsqKzxq8T=obPQwXeNyqedQOKkmm8hwHdfVgKr15EyAgBnQ@mail.gmail.com>
-Subject: Re: [PATCH V1 RESEND 2/4] Documentation: devicetree: bindings: add
- binding for PCIe endpoint bus
-To:     Tom Rix <trix@redhat.com>, Lizhi Hou <lizhi.hou@xilinx.com>
-Cc:     PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
-        Xu Yilun <yilun.xu@intel.com>, Max Zhen <maxz@xilinx.com>,
-        Sonal Santan <sonal.santan@xilinx.com>,
-        Yu Liu <yliu@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Max Zhen <max.zhen@xilinx.com>
+References: <20220307074516.6920-1-dtcccc@linux.alibaba.com> <20220307074516.6920-2-dtcccc@linux.alibaba.com>
+In-Reply-To: <20220307074516.6920-2-dtcccc@linux.alibaba.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 7 Mar 2022 15:08:03 +0100
+Message-ID: <CANpmjNNMQNd8LnCOaL0JXqS3r3Gv-DHrcw7Q6YvD6uWqnCz03Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] kfence: Allow re-enabling KFENCE after system startup
+To:     Tianchen Ding <dtcccc@linux.alibaba.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 6, 2022 at 9:37 AM Tom Rix <trix@redhat.com> wrote:
+On Mon, 7 Mar 2022 at 08:45, Tianchen Ding <dtcccc@linux.alibaba.com> wrote:
 >
-> Lizhi,
+> If once KFENCE is disabled by:
+> echo 0 > /sys/module/kfence/parameters/sample_interval
+> KFENCE could never be re-enabled until next rebooting.
 >
-> Sorry for the delay, I am fighting with checking this with 'make
-> dt_binding_check'
+> Allow re-enabling it by writing a positive num to sample_interval.
 >
-> There is a recent failure in linux-next around display/mediatek,*
-> between next-20220301 and next-20220302 that I am bisecting.
+> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
 
-There's already patches for that posted.
+Reviewed-by: Marco Elver <elver@google.com>
 
-Just use 'make -k'.
 
+> ---
+>  mm/kfence/core.c | 21 ++++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
 >
-> There are a couple of checkpatch --strict warnings for this set, the
-> obvious one is adding to the MAINTAINERS for new files.
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index 13128fa13062..caa4e84c8b79 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -38,14 +38,17 @@
+>  #define KFENCE_WARN_ON(cond)                                                   \
+>         ({                                                                     \
+>                 const bool __cond = WARN_ON(cond);                             \
+> -               if (unlikely(__cond))                                          \
+> +               if (unlikely(__cond)) {                                        \
+>                         WRITE_ONCE(kfence_enabled, false);                     \
+> +                       disabled_by_warn = true;                               \
+> +               }                                                              \
+>                 __cond;                                                        \
+>         })
 >
-> Tom
+>  /* === Data ================================================================= */
 >
-> On 3/4/22 9:23 PM, Lizhi Hou wrote:
-> > Create device tree binding document for PCIe endpoint bus.
-> >
-> > Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> > Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> > Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
-> > ---
-> >   .../devicetree/bindings/bus/pci-ep-bus.yaml   | 72 +++++++++++++++++++
-> >   1 file changed, 72 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
-> > new file mode 100644
-> > index 000000000000..0ca96298db6f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/bus/pci-ep-bus.yaml
-> > @@ -0,0 +1,72 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/bus/pci-ep-bus.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: PCIe Endpoint Bus binding
-> > +
-> > +description: |
-> > +  PCIe device may use flattened device tree to describe apertures in its
-> > +  PCIe BARs. The Bus PCIe endpoint node is created and attached under the
-> > +  device tree root node for this kind of device. Then the flatten device
-> > +  tree overlay for this device is attached under the endpoint node.
-> > +
-> > +  The aperture address which is under the endpoint node consists of BAR
-> > +  index and offset. It uses the following encoding:
-> > +
-> > +    0xIooooooo 0xoooooooo
-> > +
-> > +  Where:
-> > +
-> > +    I = BAR index
-> > +    oooooo oooooooo = BAR offset
-> > +
-> > +  The endpoint is compatible with 'simple-bus' and contains 'ranges'
-> > +  property for translating aperture address to CPU address.
-
-
-This binding is completely confusing because 'PCIe endpoint' is
-generally used (in context of bindings and Linux) for describing the
-endpoint's system (i.e. the internal structure of a PCIe device (e.g.
-add-in card) from the view of its own processor (not the host
-system)). This binding seems to be describing the host system's view
-of a PCIe device. We already have that! That's just the PCI bus
-binding[1] which has existed for ~25 years.
-
-For a non-DT system, what you are going to need here is some way to
-create DT nodes of the PCI bus hierarchy or at least from your device
-back up to the host bridge. I would suggest you solve that problem
-separately from implementing the FPGA driver by making it work first
-on a DT based system.
-
-Rob
-
-[1] https://www.devicetree.org/open-firmware/bindings/pci/pci2_1.pdf
+>  static bool kfence_enabled __read_mostly;
+> +static bool disabled_by_warn __read_mostly;
+>
+>  unsigned long kfence_sample_interval __read_mostly = CONFIG_KFENCE_SAMPLE_INTERVAL;
+>  EXPORT_SYMBOL_GPL(kfence_sample_interval); /* Export for test modules. */
+> @@ -55,6 +58,7 @@ EXPORT_SYMBOL_GPL(kfence_sample_interval); /* Export for test modules. */
+>  #endif
+>  #define MODULE_PARAM_PREFIX "kfence."
+>
+> +static int kfence_enable_late(void);
+>  static int param_set_sample_interval(const char *val, const struct kernel_param *kp)
+>  {
+>         unsigned long num;
+> @@ -65,10 +69,11 @@ static int param_set_sample_interval(const char *val, const struct kernel_param
+>
+>         if (!num) /* Using 0 to indicate KFENCE is disabled. */
+>                 WRITE_ONCE(kfence_enabled, false);
+> -       else if (!READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
+> -               return -EINVAL; /* Cannot (re-)enable KFENCE on-the-fly. */
+>
+>         *((unsigned long *)kp->arg) = num;
+> +
+> +       if (num && !READ_ONCE(kfence_enabled) && system_state != SYSTEM_BOOTING)
+> +               return disabled_by_warn ? -EINVAL : kfence_enable_late();
+>         return 0;
+>  }
+>
+> @@ -787,6 +792,16 @@ void __init kfence_init(void)
+>                 (void *)(__kfence_pool + KFENCE_POOL_SIZE));
+>  }
+>
+> +static int kfence_enable_late(void)
+> +{
+> +       if (!__kfence_pool)
+> +               return -EINVAL;
+> +
+> +       WRITE_ONCE(kfence_enabled, true);
+> +       queue_delayed_work(system_unbound_wq, &kfence_timer, 0);
+> +       return 0;
+> +}
+> +
+>  void kfence_shutdown_cache(struct kmem_cache *s)
+>  {
+>         unsigned long flags;
+> --
+> 2.27.0
+>

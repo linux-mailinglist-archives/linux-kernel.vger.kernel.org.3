@@ -2,184 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5AD4D0550
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCC44D0558
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243808AbiCGRfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:35:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S243884AbiCGRiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:38:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbiCGRfS (ORCPT
+        with ESMTP id S237800AbiCGRiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:35:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA76F580FC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:34:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646674462;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 7 Mar 2022 12:38:06 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319808F9AD;
+        Mon,  7 Mar 2022 09:37:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1646674626; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FbdNSKrGS4JCoM1jH1uzcLnG2rPnhs6mYtyt0Arre8w=;
-        b=dv8iAeCrVmJmr4WFBvR6/WTFT1ecr7zUJzGkCHLofsnkm9ikdojxCmuOogIiCTJcOWYjDr
-        O2ILdUaX5Z//pxYkctVf+HNwv6K/R3QhgjxUiqcWlEvMebogE8wyEzsy5ZgMpf+8WUm6DJ
-        l8/ptS5WO6TFC5FM+8XvXTEFDOl/Rkc=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149--CFLNOgeNyO7Vzv0KSE2LQ-1; Mon, 07 Mar 2022 12:34:21 -0500
-X-MC-Unique: -CFLNOgeNyO7Vzv0KSE2LQ-1
-Received: by mail-ed1-f71.google.com with SMTP id y10-20020a056402358a00b00410deddea4cso9048449edc.16
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:34:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FbdNSKrGS4JCoM1jH1uzcLnG2rPnhs6mYtyt0Arre8w=;
-        b=JoTIlwanJYqK65U0t+Mby7CeZaeay0JbGNt2t5fmLE0Ltk1rQDbipa3Zv8nlBY3brK
-         7zya8IjUineul7I0/6yVARbax9NiKIBekQhUtagEo6Fwr24tT/NjEQjXEKaaiLSZy2uV
-         hUnYD/MHYvi5qwx+GMniEfrO3bvsGyUudtvqMISRR+i6w7Hf+8cG/3cLuxATJHVGSp4l
-         ypJ2XZwUeguJMiXXEX7FMPnT/cz89Zr/zewwOFmeFTOhrl0TPi+0f3jIyEZLkuSheQJ+
-         34P3LR1b41RbYqoW7CxH4/gtLB+Xkz5NEh+FxZd2nXM8GsPQdl0syLFhTd7iH0CQFAoR
-         X9WQ==
-X-Gm-Message-State: AOAM53050M8ua7ep0IHaKDjGX3UPEyZGUwq8efn93E02+88DMNNvyjF7
-        GvbFChqJ7DL7LsvjaQ/zBIEdgYlnBJvc4fJQZovvCjlUUDoRjWEIOM3qO+ryNTUJghnUElHOtLR
-        iOhyrjesBO6iaDogRBjrY0nyQ
-X-Received: by 2002:a05:6402:292c:b0:416:8eb:3fc4 with SMTP id ee44-20020a056402292c00b0041608eb3fc4mr12030111edb.2.1646674460479;
-        Mon, 07 Mar 2022 09:34:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwWa96UGbyv2h0LnPbaGrA8o8YFfAmGRjN5CFcGQ22V5m7lS0/DD1p/0fxHylTw7f/14YG/Jg==
-X-Received: by 2002:a05:6402:292c:b0:416:8eb:3fc4 with SMTP id ee44-20020a056402292c00b0041608eb3fc4mr12030095edb.2.1646674460257;
-        Mon, 07 Mar 2022 09:34:20 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id fs6-20020a170907600600b006da8ec6e4a6sm4940420ejc.26.2022.03.07.09.34.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 09:34:19 -0800 (PST)
-Message-ID: <743f08ed-1a26-8cc0-4f7a-32e41f5040f1@redhat.com>
-Date:   Mon, 7 Mar 2022 18:34:19 +0100
+        bh=3VPg7tVTG05IVaRuXCwoMmbPC0+mZEfleGOuxTVt05Y=;
+        b=Na7NNibdC0c9uW7eYGWqOvj4PxyVc428EVT7lTAxooru/aikh/BqEWfQ3KoUjJW6Qjomnc
+        MqBvJoM6QJKK5d6BwfiMGNoupypbCyS9n2T3Ch2wKRKN+Z9CFb+wl16XndliCIOTHy7KQv
+        ulZ3caZG8mgChvbd6UayiyslfhBaPwk=
+Date:   Mon, 07 Mar 2022 17:35:45 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2] pinctrl: ingenic: Fix regmap on X series SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <L7YD8R.AHQE1WAT7PG92@crapouillou.net>
+In-Reply-To: <20220224145821.518835-1-aidanmacdonald.0x0@gmail.com>
+References: <20220224145821.518835-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 2/2] mfd: arizona-spi: Add Android board ACPI table
- handling
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-References: <20220223134222.730886-1-hdegoede@redhat.com>
- <20220223134222.730886-2-hdegoede@redhat.com> <YiYb+Ea7aKO99gXL@google.com>
- <ac21f173-2cba-0ddc-67db-27e06950c2d4@redhat.com>
- <YiYicoaSc7KYTbvj@google.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YiYicoaSc7KYTbvj@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Aidan,
 
-On 3/7/22 16:19, Lee Jones wrote:
-> On Mon, 07 Mar 2022, Hans de Goede wrote:
-> 
->> Hi,
->>
->> On 3/7/22 15:51, Lee Jones wrote:
->>> On Wed, 23 Feb 2022, Hans de Goede wrote:
->>>
->>>> x86/ACPI boards with an arizona WM5102 codec ship with either Windows or
->>>> Android as factory installed OS.
->>>>
->>>> The ACPI fwnode for the codec on Android boards misses 2 things compared
->>>> to the Windows boards (this is hardcoded in the Android board kernels):
->>>>
->>>> 1. There is no CLKE ACPI method to enabe the 32 KHz clock the codec needs
->>>>    for jack-detection.
->>>>
->>>> 2. The GPIOs used by the codec are not listed in the fwnode for the codec.
->>>>
->>>> The ACPI tables on x86/ACPI boards shipped with Android being incomplete
->>>> happens a lot. The special drivers/platform/x86/x86-android-tablets.c
->>>> module contains DMI based per model handling to compensate for this.
->>>>
->>>> This module will enable the 32KHz clock through the pinctrl framework
->>>> to fix 1. and it will also register a gpio-lookup table for all GPIOs
->>>> needed by the codec + machine driver, including the GPIOs coming from
->>>> the codec itself.
->>>>
->>>> Add an arizona_spi_acpi_android_probe() function which waits for the
->>>> x86-android-tablets to have set things up before continue with probing
->>>> the arizona WM5102 codec.
->>>>
->>>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->>>> ---
->>>>  drivers/mfd/arizona-spi.c | 34 +++++++++++++++++++++++++++++++++-
->>>>  1 file changed, 33 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/mfd/arizona-spi.c b/drivers/mfd/arizona-spi.c
->>>> index 238355542ab1..2c686e71db21 100644
->>>> --- a/drivers/mfd/arizona-spi.c
->>>> +++ b/drivers/mfd/arizona-spi.c
->>>> @@ -81,6 +81,29 @@ static int arizona_spi_acpi_windows_probe(struct arizona *arizona)
->>>>  	return 0;
->>>>  }
->>>>  
->>>> +/* For ACPI tables from boards which ship with Android as factory OS */
->>>> +static int arizona_spi_acpi_android_probe(struct arizona *arizona)
->>>> +{
->>>> +	int ret;
->>>> +
->>>> +	/*
->>>> +	 * Get the reset GPIO, treating -ENOENT as -EPROBE_DEFER to wait for
->>>> +	 * the x86-android-tablets module to register the board specific GPIO
->>>> +	 * lookup table.
->>>> +	 */
->>>> +	arizona->pdata.reset = devm_gpiod_get(arizona->dev, "reset", GPIOD_OUT_LOW);
->>>> +	if (IS_ERR(arizona->pdata.reset)) {
->>>> +		ret = PTR_ERR(arizona->pdata.reset);
->>>> +		if (ret == -ENOENT) {
->>>> +			dev_info_once(arizona->dev, "Deferring probe till GPIO lookup is registered\n");
->>>
->>> Nit: How many chars is this?
->>
->> 105.
->>
->>> I thought we were drawing the line at 100 these days?
->>
->> We have an exception for log lines, since we don't want to break them
->> up because that makes grepping for them impossible.
->>
->>> Does this patch pass checkpatch.pl?
->>
->> Yes because of the exception for log lines:
->>
->> [hans@x1 linux]$ scripts/checkpatch.pl 0001-mfd-arizona-spi-Add-Android-board-ACPI-table-handlin.patch 
->> total: 0 errors, 0 warnings, 54 lines checked
->>
->> 0001-mfd-arizona-spi-Add-Android-board-ACPI-table-handlin.patch has no obvious style problems and is ready for submission.
-> 
-> What do you mean by long lines?
+Le jeu., f=E9vr. 24 2022 at 14:58:22 +0000, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The X series Ingenic SoCs have a shadow GPIO group which is at a=20
+> higher
+> offset than the other groups, and is used for all GPIO configuration.
+> The regmap did not take this offset into account and set max_register
+> too low, so the regmap API blocked writes to the shadow group, which
+> made the pinctrl driver unable to configure any pins.
+>=20
+> Fix this by adding regmap access tables to the chip info.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+> v1:=20
+> https://lore.kernel.org/linux-mips/20220209230452.19535-1-aidanmacdonald.=
+0x0@gmail.com/
+>=20
+>  drivers/pinctrl/pinctrl-ingenic.c | 53=20
+> ++++++++++++++++++++++++++++++-
+>  1 file changed, 52 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
+> b/drivers/pinctrl/pinctrl-ingenic.c
+> index 2712f51eb238..074c94edd90b 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -119,6 +119,9 @@ struct ingenic_chip_info {
+>  	unsigned int num_functions;
+>=20
+>  	const u32 *pull_ups, *pull_downs;
+> +
+> +	unsigned int max_register;
+> +	const struct regmap_access_table* access_table;
+>  };
+>=20
+>  struct ingenic_pinctrl {
+> @@ -228,6 +231,7 @@ static const struct ingenic_chip_info=20
+> jz4730_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4730_functions),
+>  	.pull_ups =3D jz4730_pull_ups,
+>  	.pull_downs =3D jz4730_pull_downs,
+> +	.max_register =3D 4 * 0x30 - 4,
+>  };
+>=20
+>  static const u32 jz4740_pull_ups[4] =3D {
+> @@ -337,6 +341,7 @@ static const struct ingenic_chip_info=20
+> jz4740_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4740_functions),
+>  	.pull_ups =3D jz4740_pull_ups,
+>  	.pull_downs =3D jz4740_pull_downs,
+> +	.max_register =3D 4 * 0x100 - 4,
+>  };
+>=20
+>  static int jz4725b_mmc0_1bit_pins[] =3D { 0x48, 0x49, 0x5c, };
+> @@ -439,6 +444,7 @@ static const struct ingenic_chip_info=20
+> jz4725b_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4725b_functions),
+>  	.pull_ups =3D jz4740_pull_ups,
+>  	.pull_downs =3D jz4740_pull_downs,
+> +	.max_register =3D 4 * 0x100 - 4,
+>  };
+>=20
+>  static const u32 jz4750_pull_ups[6] =3D {
+> @@ -576,6 +582,7 @@ static const struct ingenic_chip_info=20
+> jz4750_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4750_functions),
+>  	.pull_ups =3D jz4750_pull_ups,
+>  	.pull_downs =3D jz4750_pull_downs,
+> +	.max_register =3D 6 * 0x100 - 4,
+>  };
+>=20
+>  static const u32 jz4755_pull_ups[6] =3D {
+> @@ -741,6 +748,7 @@ static const struct ingenic_chip_info=20
+> jz4755_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4755_functions),
+>  	.pull_ups =3D jz4755_pull_ups,
+>  	.pull_downs =3D jz4755_pull_downs,
+> +	.max_register =3D 6 * 0x100 - 4,
+>  };
+>=20
+>  static const u32 jz4760_pull_ups[6] =3D {
+> @@ -1089,6 +1097,7 @@ static const struct ingenic_chip_info=20
+> jz4760_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4760_functions),
+>  	.pull_ups =3D jz4760_pull_ups,
+>  	.pull_downs =3D jz4760_pull_downs,
+> +	.max_register =3D 6 * 0x100 - 4,
+>  };
+>=20
+>  static const u32 jz4770_pull_ups[6] =3D {
+> @@ -1429,6 +1438,7 @@ static const struct ingenic_chip_info=20
+> jz4770_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4770_functions),
+>  	.pull_ups =3D jz4770_pull_ups,
+>  	.pull_downs =3D jz4770_pull_downs,
+> +	.max_register =3D 6 * 0x100 - 4,
+>  };
+>=20
+>  static const u32 jz4775_pull_ups[7] =3D {
+> @@ -1702,6 +1712,7 @@ static const struct ingenic_chip_info=20
+> jz4775_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4775_functions),
+>  	.pull_ups =3D jz4775_pull_ups,
+>  	.pull_downs =3D jz4775_pull_downs,
+> +	.max_register =3D 7 * 0x100 - 4,
+>  };
+>=20
+>  static const u32 jz4780_pull_ups[6] =3D {
+> @@ -1966,6 +1977,7 @@ static const struct ingenic_chip_info=20
+> jz4780_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(jz4780_functions),
+>  	.pull_ups =3D jz4780_pull_ups,
+>  	.pull_downs =3D jz4780_pull_downs,
+> +	.max_register =3D 6 * 0x100 - 4,
+>  };
+>=20
+>  static const u32 x1000_pull_ups[4] =3D {
+> @@ -2179,6 +2191,17 @@ static const struct function_desc=20
+> x1000_functions[] =3D {
+>  	{ "mac", x1000_mac_groups, ARRAY_SIZE(x1000_mac_groups), },
+>  };
+>=20
+> +static const struct regmap_range x1000_access_ranges[] =3D {
+> +	regmap_reg_range(0x000, 0x400 - 4),
+> +	regmap_reg_range(0x700, 0x800 - 4),
+> +};
+> +
+> +/* shared with X1500 */
+> +static const struct regmap_access_table x1000_access_table =3D {
+> +	.yes_ranges =3D x1000_access_ranges,
+> +	.n_yes_ranges =3D ARRAY_SIZE(x1000_access_ranges),
+> +};
+> +
+>  static const struct ingenic_chip_info x1000_chip_info =3D {
+>  	.num_chips =3D 4,
+>  	.reg_offset =3D 0x100,
+> @@ -2189,6 +2212,7 @@ static const struct ingenic_chip_info=20
+> x1000_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x1000_functions),
+>  	.pull_ups =3D x1000_pull_ups,
+>  	.pull_downs =3D x1000_pull_downs,
+> +	.access_table =3D &x1000_access_table,
+>  };
+>=20
+>  static int x1500_uart0_data_pins[] =3D { 0x4a, 0x4b, };
+> @@ -2300,6 +2324,7 @@ static const struct ingenic_chip_info=20
+> x1500_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x1500_functions),
+>  	.pull_ups =3D x1000_pull_ups,
+>  	.pull_downs =3D x1000_pull_downs,
+> +	.access_table =3D &x1000_access_table,
+>  };
+>=20
+>  static const u32 x1830_pull_ups[4] =3D {
+> @@ -2506,6 +2531,16 @@ static const struct function_desc=20
+> x1830_functions[] =3D {
+>  	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
+>  };
+>=20
+> +static const struct regmap_range x1830_access_ranges[] =3D {
+> +	regmap_reg_range(0x0000, 0x4000 - 4),
+> +	regmap_reg_range(0x7000, 0x8000 - 4),
+> +};
+> +
+> +static const struct regmap_access_table x1830_access_table =3D {
+> +	.yes_ranges =3D x1830_access_ranges,
+> +	.n_yes_ranges =3D ARRAY_SIZE(x1830_access_ranges),
+> +};
+> +
+>  static const struct ingenic_chip_info x1830_chip_info =3D {
+>  	.num_chips =3D 4,
+>  	.reg_offset =3D 0x1000,
+> @@ -2516,6 +2551,7 @@ static const struct ingenic_chip_info=20
+> x1830_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x1830_functions),
+>  	.pull_ups =3D x1830_pull_ups,
+>  	.pull_downs =3D x1830_pull_downs,
+> +	.access_table =3D &x1830_access_table,
+>  };
+>=20
+>  static const u32 x2000_pull_ups[5] =3D {
+> @@ -2969,6 +3005,17 @@ static const struct function_desc=20
+> x2000_functions[] =3D {
+>  	{ "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
+>  };
+>=20
+> +static const struct regmap_range x2000_access_ranges[] =3D {
+> +	regmap_reg_range(0x000, 0x500 - 4),
+> +	regmap_reg_range(0x700, 0x800 - 4),
+> +};
+> +
+> +/* shared with X2100 */
+> +static const struct regmap_access_table x2000_access_table =3D {
+> +	.yes_ranges =3D x2000_access_ranges,
+> +	.n_yes_ranges =3D ARRAY_SIZE(x2000_access_ranges),
+> +};
+> +
+>  static const struct ingenic_chip_info x2000_chip_info =3D {
+>  	.num_chips =3D 5,
+>  	.reg_offset =3D 0x100,
+> @@ -2979,6 +3026,7 @@ static const struct ingenic_chip_info=20
+> x2000_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x2000_functions),
+>  	.pull_ups =3D x2000_pull_ups,
+>  	.pull_downs =3D x2000_pull_downs,
+> +	.access_table =3D &x2000_access_table,
+>  };
+>=20
+>  static const u32 x2100_pull_ups[5] =3D {
+> @@ -3189,6 +3237,7 @@ static const struct ingenic_chip_info=20
+> x2100_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x2100_functions),
+>  	.pull_ups =3D x2100_pull_ups,
+>  	.pull_downs =3D x2100_pull_downs,
+> +	.access_table =3D &x2000_access_table,
+>  };
+>=20
+>  static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8=20
+> reg)
+> @@ -4168,7 +4217,9 @@ static int __init ingenic_pinctrl_probe(struct=20
+> platform_device *pdev)
+>  		return PTR_ERR(base);
+>=20
+>  	regmap_config =3D ingenic_pinctrl_regmap_config;
+> -	regmap_config.max_register =3D chip_info->num_chips *=20
+> chip_info->reg_offset;
+> +	regmap_config.rd_table =3D chip_info->access_table;
+> +	regmap_config.wr_table =3D chip_info->access_table;
+> +	regmap_config.max_register =3D chip_info->max_register;
 
-Not long lines, log lines, as in lines logging a message,
-sorry if that was unclear.
+You could do something like this:
+if (chip_info->access_table) {
+    regmap_config.rd_table =3D chip_info->access_table;
+    regmap_config.wr_table =3D chip_info->access_table;
+} else {
+    regmap_config.max_register =3D chip_info->num_chips *=20
+chip_info->reg_offset;
+}
 
-> I'm aware of the exception for long strings.
-> 
-> Not sure why anyone would grep for "dev_info_once(arizona->dev, ".
-> 
-> I would break this after the first comma.
+Then you wouldn't need to add a .max_register field for every other SoC.
 
-Ok, I'll send a v2 with a break after the first comma.
+Cheers,
+-Paul
 
-Regards,
+>=20
+>  	jzpc->map =3D devm_regmap_init_mmio(dev, base, &regmap_config);
+>  	if (IS_ERR(jzpc->map)) {
+> --
+> 2.34.1
+>=20
 
-Hans
 

@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330E84CF66C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879B64CF882
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237791AbiCGJhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S238926AbiCGJ4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237433AbiCGJ2G (ORCPT
+        with ESMTP id S238627AbiCGJih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:28:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B79868F95;
-        Mon,  7 Mar 2022 01:25:21 -0800 (PST)
+        Mon, 7 Mar 2022 04:38:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E069B6AA63;
+        Mon,  7 Mar 2022 01:33:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96B6461140;
-        Mon,  7 Mar 2022 09:25:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED7FC340F3;
-        Mon,  7 Mar 2022 09:25:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E454B810B2;
+        Mon,  7 Mar 2022 09:33:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90367C340E9;
+        Mon,  7 Mar 2022 09:33:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645121;
-        bh=jtwMzeNb78knVTbeNrlFvDJhAnF3KLfvN0mUgzlUg0I=;
+        s=korg; t=1646645582;
+        bh=OcR+9qlz15eimPQbyCxWEM0Wu7g7xKWsQpnOXV18XTE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gzWScMgAr1Dr8Hpg0OVaz5yDbXGWh7Vh6cI9vhAtoOFfWj+tN4H+atuYxJbZiPDvt
-         3FyOLORru5dXgTf0tuqqCdI/2cspI8UFtcyn1lwsq4ItVkFcbFALka1ilZlkCGt29N
-         snxWf3ard2aVrs+R3WjrqPznpwdSjrGwtfVS0FCg=
+        b=BYNyjHxLESAXGwmO/6Crx/LvCppC4XTY1Ah6bfimsBdEh4mOn5EL0zQLVdoYSh9KO
+         V2AE9ocD7vf3BF9fKaggyWvS1UMeTXn1jErWo2VAdzC1NwlKlgo9QPbKr5RpMoWSRD
+         t0H/x9B8H8Xw+O0Wi/ORgLkfIDjTDyA0ofVDBzLM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 4.19 45/51] Input: elan_i2c - move regulator_[en|dis]able() out of elan_[en|dis]able_power()
-Date:   Mon,  7 Mar 2022 10:19:20 +0100
-Message-Id: <20220307091638.272215684@linuxfoundation.org>
+        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Corinna Vinschen <vinschen@redhat.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.10 078/105] igc: igc_write_phy_reg_gpy: drop premature return
+Date:   Mon,  7 Mar 2022 10:19:21 +0100
+Message-Id: <20220307091646.372057209@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,125 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-commit 81a36d8ce554b82b0a08e2b95d0bd44fcbff339b upstream.
+commit c4208653a327a09da1e9e7b10299709b6d9b17bf upstream.
 
-elan_disable_power() is called conditionally on suspend, where as
-elan_enable_power() is always called on resume. This leads to
-an imbalance in the regulator's enable count.
+Similar to "igc_read_phy_reg_gpy: drop premature return" patch.
+igc_write_phy_reg_gpy checks the return value from igc_write_phy_reg_mdic
+and if it's not 0, returns immediately. By doing this, it leaves the HW
+semaphore in the acquired state.
 
-Move the regulator_[en|dis]able() calls out of elan_[en|dis]able_power()
-in preparation of fixing this.
+Drop this premature return statement, the function returns after
+releasing the semaphore immediately anyway.
 
-No functional changes intended.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220131135436.29638-1-hdegoede@redhat.com
-[dtor: consolidate elan_[en|dis]able() into elan_set_power()]
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Fixes: 5586838fe9ce ("igc: Add code for PHY support")
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Reported-by: Corinna Vinschen <vinschen@redhat.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/mouse/elan_i2c_core.c |   62 ++++++++++++------------------------
- 1 file changed, 22 insertions(+), 40 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_phy.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/input/mouse/elan_i2c_core.c
-+++ b/drivers/input/mouse/elan_i2c_core.c
-@@ -140,55 +140,21 @@ static int elan_get_fwinfo(u16 ic_type,
- 	return 0;
- }
- 
--static int elan_enable_power(struct elan_tp_data *data)
-+static int elan_set_power(struct elan_tp_data *data, bool on)
- {
- 	int repeat = ETP_RETRY_COUNT;
- 	int error;
- 
--	error = regulator_enable(data->vcc);
--	if (error) {
--		dev_err(&data->client->dev,
--			"failed to enable regulator: %d\n", error);
--		return error;
--	}
--
- 	do {
--		error = data->ops->power_control(data->client, true);
-+		error = data->ops->power_control(data->client, on);
- 		if (error >= 0)
- 			return 0;
- 
- 		msleep(30);
- 	} while (--repeat > 0);
- 
--	dev_err(&data->client->dev, "failed to enable power: %d\n", error);
--	return error;
--}
--
--static int elan_disable_power(struct elan_tp_data *data)
--{
--	int repeat = ETP_RETRY_COUNT;
--	int error;
--
--	do {
--		error = data->ops->power_control(data->client, false);
--		if (!error) {
--			error = regulator_disable(data->vcc);
--			if (error) {
--				dev_err(&data->client->dev,
--					"failed to disable regulator: %d\n",
--					error);
--				/* Attempt to power the chip back up */
--				data->ops->power_control(data->client, true);
--				break;
--			}
--
--			return 0;
--		}
--
--		msleep(30);
--	} while (--repeat > 0);
--
--	dev_err(&data->client->dev, "failed to disable power: %d\n", error);
-+	dev_err(&data->client->dev, "failed to set power %s: %d\n",
-+		on ? "on" : "off", error);
- 	return error;
- }
- 
-@@ -1291,9 +1257,19 @@ static int __maybe_unused elan_suspend(s
- 		/* Enable wake from IRQ */
- 		data->irq_wake = (enable_irq_wake(client->irq) == 0);
+--- a/drivers/net/ethernet/intel/igc/igc_phy.c
++++ b/drivers/net/ethernet/intel/igc/igc_phy.c
+@@ -748,8 +748,6 @@ s32 igc_write_phy_reg_gpy(struct igc_hw
+ 		if (ret_val)
+ 			return ret_val;
+ 		ret_val = igc_write_phy_reg_mdic(hw, offset, data);
+-		if (ret_val)
+-			return ret_val;
+ 		hw->phy.ops.release(hw);
  	} else {
--		ret = elan_disable_power(data);
-+		ret = elan_set_power(data, false);
-+		if (ret)
-+			goto err;
-+
-+		ret = regulator_disable(data->vcc);
-+		if (ret) {
-+			dev_err(dev, "error %d disabling regulator\n", ret);
-+			/* Attempt to power the chip back up */
-+			elan_set_power(data, true);
-+		}
- 	}
- 
-+err:
- 	mutex_unlock(&data->sysfs_mutex);
- 	return ret;
- }
-@@ -1309,7 +1285,13 @@ static int __maybe_unused elan_resume(st
- 		data->irq_wake = false;
- 	}
- 
--	error = elan_enable_power(data);
-+	error = regulator_enable(data->vcc);
-+	if (error) {
-+		dev_err(dev, "error %d enabling regulator\n", error);
-+		goto err;
-+	}
-+
-+	error = elan_set_power(data, true);
- 	if (error) {
- 		dev_err(dev, "power up when resuming failed: %d\n", error);
- 		goto err;
+ 		ret_val = igc_write_xmdio_reg(hw, (u16)offset, dev_addr,
 
 

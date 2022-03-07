@@ -2,125 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E534CF09B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 05:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BB74CF09E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 05:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235149AbiCGES7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 23:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S235159AbiCGETh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 23:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbiCGES4 (ORCPT
+        with ESMTP id S231947AbiCGETd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 23:18:56 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45538201AA;
-        Sun,  6 Mar 2022 20:18:02 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBlYh5f8jz4xYy;
-        Mon,  7 Mar 2022 15:18:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646626680;
-        bh=w/kZuaG75G/nOsIW4P4LPNLuypol+n96hKvXUKsbCAQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QKrb9MX6CDhy2blKdNBiYvLoh3uITG2ih9mzs7W8itBbh/+Y/vcq/6ILJTMXclZqe
-         Sh5McKCANFRK7Td+c9BUWGxq25BAhauPo9MdFfs8Q37/hU5z4Vc6O0SHgBD++1C+2+
-         tSHbI6FWp/B4af+YiFeDFXppAvdlqTZvrOcRv6/IsefhbpZ4OJD4JaLuC1iuS5iqK4
-         sBN1m9dP8sBzolMikZkgunpNt91q3iHnO5UAyEBUtqICV5x/DPcfpi/CD2W/tmPmiH
-         sCvfvMfZUmcLrfIRbZ0l3qHmIfxVRJ+jxez2My7WxFPJaTkalbWX8xnAVrOD90Z525
-         0O8+pma2w2JLQ==
-Date:   Mon, 7 Mar 2022 15:18:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: linux-next: manual merge of the scsi tree with the block tree
-Message-ID: <20220307151800.311dfe54@canb.auug.org.au>
+        Sun, 6 Mar 2022 23:19:33 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791E120F40;
+        Sun,  6 Mar 2022 20:18:39 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id u61so28479574ybi.11;
+        Sun, 06 Mar 2022 20:18:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=70QANHuilS/DlNxXzeIJU0v7aYUQYFYcd/4PORiu+uY=;
+        b=Rfkg5uXdxfhsC2SowUbgLkhAxsUQJPxW6TxbLfbGeQzbEpaduiyaXYCxHPSUp1dSzS
+         mKEcqEgK8DiBhNJgIicaA4WqVJaEtYukMYaeFwwigVKKg2m9a9OpEmseSmFwUIxRmeks
+         2zFUwxlditEuf4BdMXjLC//Hi2AOcbq2fny4YuTvYjpxhzMuje7B/g3uskDkGP0b9az2
+         L5eUyzf6DursWQcam2ME8qfQbt2kaUAMlAEkv7A2RKkgEgIQ4b4G0gveGHV0M8Kp52R4
+         6xMcgaT5iweciEUVvk2F2JjGFyVwR58gtOQk6vwnbeINGjlmFGho8k3r/87to+B/pJaO
+         +y0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=70QANHuilS/DlNxXzeIJU0v7aYUQYFYcd/4PORiu+uY=;
+        b=rMjVjimQbKPqB4RdNsq4sbwXLshMv73cmKUxUdmJYbkTJOiNi5rbPXOlBOzsDWJkfm
+         CFLs4fr2MIUgd3tS5EThS9qZ4eJu/LgVWragP0Jf+lSxUbtP9yYFefNm66fOM/v4xqbH
+         wBMc8HtbZl7snKUyEbEjLR2YIeX92b5HI+hVIoENdhIhE8IrRSjDDMS6cjIXt7T86G/z
+         Ru0/j43LIiYv/RpGel4n8jQAek62tI5IWSXZdReQZil6SbNRjqSIhbaVkQC8WzxnRYpT
+         Iod8f/oFLHAFExdlEXdeXBDRmqm4H4biQmP8kmUFkCDjkyVWDoVGy7EAlmCBWMLpuW5T
+         UD4Q==
+X-Gm-Message-State: AOAM533sEdwpKsIlXtfCPgRWyHPbm74y4FRwnEn0n7U+QUhyEjdIFZKs
+        XyDBJ4BglFrpEH7jNUDp231MUrF5ftxU3FzStgY=
+X-Google-Smtp-Source: ABdhPJw7BijN/ynaHoEV5vwHawxOUNKoamH/zSoxJcsIt541xlSgaj1LP3N2cCntuQmBAgX0TLkhqF2P7dEoq/TmXnw=
+X-Received: by 2002:a25:e697:0:b0:629:1f4a:5a3c with SMTP id
+ d145-20020a25e697000000b006291f4a5a3cmr4998993ybh.228.1646626718685; Sun, 06
+ Mar 2022 20:18:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/./cI0clFVjA1biqxnYb+Rdr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1646374812-2988-1-git-send-email-hammerh0314@gmail.com>
+ <1646374812-2988-2-git-send-email-hammerh0314@gmail.com> <9113e319-58a2-fd90-6887-fb32eb21fd18@canonical.com>
+In-Reply-To: <9113e319-58a2-fd90-6887-fb32eb21fd18@canonical.com>
+From:   hammer hsieh <hammerh0314@gmail.com>
+Date:   Mon, 7 Mar 2022 12:18:56 +0800
+Message-ID: <CAOX-t55sXVg8Fj_G_xzxWTStxZXOwKo46=_R0LkfHnMS051KaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings:pwm:Add bindings doc for Sunplus SoC
+ PWM Driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     thierry.reding@gmail.com,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, lee.jones@linaro.org,
+        robh+dt@kernel.org, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/./cI0clFVjA1biqxnYb+Rdr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
+=B9=B43=E6=9C=884=E6=97=A5 =E9=80=B1=E4=BA=94
+=E4=B8=8B=E5=8D=8811:01=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 04/03/2022 07:20, Hammer Hsieh wrote:
+> > Add bindings doc for Sunplus SoC PWM Driver
+>
+> You miss spaces in the subject.
+>
 
-Hi all,
+ok, will modify it.
 
-Today's linux-next merge of the scsi tree got a conflict in:
+> >
+> > Signed-off-by: Hammer Hsieh <hammerh0314@gmail.com>
+> > ---
+> > Changes in v2:
+> >  - Addressed all comments from Rob Herring.
+> >    modify author's mail match Signed-off-by.
+> >  - rebase kernel to 5.17 rc5
+> >
+> >  .../devicetree/bindings/pwm/pwm-sunplus.yaml       | 40 ++++++++++++++=
+++++++++
+> >  MAINTAINERS                                        |  5 +++
+> >  2 files changed, 45 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/pwm/pwm-sunplus.y=
+aml
+> >
+> > diff --git a/Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml b/D=
+ocumentation/devicetree/bindings/pwm/pwm-sunplus.yaml
+> > new file mode 100644
+> > index 0000000..19fe5d5
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/pwm/pwm-sunplus.yaml
+> > @@ -0,0 +1,40 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright (C) Sunplus Co., Ltd. 2021
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/pwm/pwm-sunplus.yaml#
+>
+> Is it going to be one binding for all Sunplus SoCs? Existing and future?
+>
 
-  drivers/block/drbd/drbd_worker.c
+yes, that was my first plan.
+but not all sunplus SoCs use the same IP-based,
+so I will change file name form 'pwm-sunplus.yaml' to
+'sunplus,sp7021-pwm.yaml' in  next patch.
 
-between commit:
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Sunplus SoC PWM Controller
+> > +
+> > +maintainers:
+> > +  - Hammer Hsieh <hammerh0314@gmail.com>
+> > +
+>
+> allOf with pwm.yaml
+> Then unevaluatedProperties instead of additionalProperties.
+>
 
-  472278508dce ("drbd: use bvec_kmap_local in drbd_csum_bio")
+ok , will add it.
 
-from the block tree and commit:
+>
+> > +properties:
+> > +  '#pwm-cells':
+> > +    const: 2
+> > +
+> > +  compatible:
+>
+> Commpatible goes first. Rest of properties you could order
+> alphabetically. Similar approach in required.
+>
+>
 
-  a34592ff6b78 ("scsi: drbd: Remove WRITE_SAME support")
+ok, will modify it.
 
-from the scsi tree.
+> > +    items:
+> > +      - const: sunplus,sp7021-pwm
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +required:
+>
+> compatible
+>
+> > +  - reg
+> > +  - clocks
+>
+>
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    pwm: pwm@9c007a00 {
+> > +      #pwm-cells =3D <2>;
+> > +      compatible =3D "sunplus,sp7021-pwm";
+>
+> compatible goes first, then reg.
+>
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+ok, will modify it.
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/block/drbd/drbd_worker.c
-index 1b48c8172a07,934bfb5d98d0..000000000000
---- a/drivers/block/drbd/drbd_worker.c
-+++ b/drivers/block/drbd/drbd_worker.c
-@@@ -326,14 -326,9 +326,9 @@@ void drbd_csum_bio(struct crypto_shash=20
-  	bio_for_each_segment(bvec, bio, iter) {
-  		u8 *src;
- =20
- -		src =3D kmap_atomic(bvec.bv_page);
- -		crypto_shash_update(desc, src + bvec.bv_offset, bvec.bv_len);
- -		kunmap_atomic(src);
- +		src =3D bvec_kmap_local(&bvec);
- +		crypto_shash_update(desc, src, bvec.bv_len);
- +		kunmap_local(src);
--=20
-- 		/* REQ_OP_WRITE_SAME has only one segment,
-- 		 * checksum the payload only once. */
-- 		if (bio_op(bio) =3D=3D REQ_OP_WRITE_SAME)
-- 			break;
-  	}
-  	crypto_shash_final(desc, digest);
-  	shash_desc_zero(desc);
-
---Sig_/./cI0clFVjA1biqxnYb+Rdr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlh3gACgkQAVBC80lX
-0GyUogf9G3PXmrTuzrjwZy2uB7YNCnwxUfs/i/Y61K5hnP+JpA+5p903NaSoS2eh
-u8/xVLZUyarg39x8Gh/YDkVJFsGMMo9xcwHpCmNEURH6IttAklXECDsK08g6Ivrm
-+EC3y17S8Z8nGxcOH7x0QBroGrAq3gXT2sRMGgCyoKyHOEhYgAW/xhFUg1WiVQby
-8RHwYVbTQd+cPhvtHlKCoh+n5yas1K5MX5ixu+jF6EnddJa6ZaHQ+mt+jtwjzQGP
-BLcQ3BKT+ade3pKHv5pziIJJY5h2WDZwF7NqxDme5kL03aTn5y2eGAnfB+4Tv7A8
-XMCTvc9vbE8LCb+iYcs4ZOR0rCwLUA==
-=jY7g
------END PGP SIGNATURE-----
-
---Sig_/./cI0clFVjA1biqxnYb+Rdr--
+>
+> Best regards,
+> Krzysztof

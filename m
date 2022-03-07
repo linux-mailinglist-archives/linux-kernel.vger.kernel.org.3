@@ -2,194 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9544D00FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906124D0101
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240619AbiCGOV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S241110AbiCGOWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:22:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiCGOVY (ORCPT
+        with ESMTP id S232301AbiCGOWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:21:24 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA064FC46;
-        Mon,  7 Mar 2022 06:20:30 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BEED81F394;
-        Mon,  7 Mar 2022 14:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646662828; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TTJgLLKxkZ6Y3UwRG+LjMmdZQI1eA90Se6Y6fXAhHGE=;
-        b=1JSDp5aGb6BLPshhe6iloyGeUSSqP+BOQnffu2VWjbIDkDBitGhft/hFRY64EGxksWTeZS
-        ZYqQCLWrOyx61gW2JGo2hAUtYmbadQwWwTGdG56+qXArfXgVOS1ZPQaOO8CUMVVAEGDP2S
-        U9inRRYwjtKK2kTOYqelYoRMZU22vcE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646662828;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TTJgLLKxkZ6Y3UwRG+LjMmdZQI1eA90Se6Y6fXAhHGE=;
-        b=nuNVwf3tGbQ0PxS1uuA4gumzUsCo2nShv0pbSxHom/cJgqwWrPy12lsWM89+m32nmpzUmX
-        l+r1ZBnPqUYp2nBw==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 61C7413943;
-        Mon,  7 Mar 2022 14:20:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id utwBFawUJmK0GgAAGKfGzw
-        (envelope-from <lhenriques@suse.de>); Mon, 07 Mar 2022 14:20:28 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 706166e7;
-        Mon, 7 Mar 2022 14:20:34 +0000 (UTC)
-From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] ceph: minor fixes and encrypted snapshot names
-References: <20220304161403.19295-1-lhenriques@suse.de>
-        <87fsnx4rb3.fsf@brahms.olymp>
-        <e7f91d0be0f41320e5a4f38ded1bde166626a17f.camel@kernel.org>
-        <878rtoo3bi.fsf@brahms.olymp>
-        <66d31a84-2774-3fa1-2a0e-e9125c484755@redhat.com>
-Date:   Mon, 07 Mar 2022 14:20:34 +0000
-In-Reply-To: <66d31a84-2774-3fa1-2a0e-e9125c484755@redhat.com> (Xiubo Li's
-        message of "Mon, 7 Mar 2022 08:49:54 +0800")
-Message-ID: <87pmmxu9n1.fsf@brahms.olymp>
+        Mon, 7 Mar 2022 09:22:35 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8DA3BBDE;
+        Mon,  7 Mar 2022 06:21:40 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id r4so803755lfr.1;
+        Mon, 07 Mar 2022 06:21:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+EMKFR4Q/6JagJvPZA+Y3lne0ZDGNjl+Y24aj5XlI+g=;
+        b=mNVN8TpOFToRMpQZSAfJ3Q9YDhKpwQbh7Eb000Lsa7R3ADs5pkF3XEuG5/faRw/HgL
+         iZqJId505MP6qAlyykGSnWHRk5s3DSl4yVhct3y9/LuUgPQrF+S9WhEaiVxdgDkDx/Ps
+         0biOIfrJYmjQTnzcNhiafnE66v9PFAyPVZZvkpOMYZmjcYA/q/Euf+ZM8OLgcxr5vahf
+         VkokSjETyosJCFjfcgUonTzqrc6utwQ6Xh8nRnOTs7Oc/HySxqM5EgcmoL8l/n52VJZm
+         +zV8XdSIOZ3Uf53NpJTHXp18m1wc4mNtghrWPRXCiMJaNbcy2cI7GdYpveQ00IB/Rwfr
+         +Law==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+EMKFR4Q/6JagJvPZA+Y3lne0ZDGNjl+Y24aj5XlI+g=;
+        b=XGShvBaE1zsU6nuKMCLpgaSKY0Gb70eP5tKV1ItMx3+Cw0OfOqosgQW2ja4vRBgQta
+         JQbYBBFBHtTuZB2jqmJaTKdWpFLF2ROCZOcASz3+pmOmHLoK6tDd/JB4l1aRNB7Rl9W4
+         T1D+KipRsKgcEmsnXLUn1MLeMLg1WP4tbzqkABHfU7uqQtpfsDxzZBRN70RZaXMmWRrH
+         l89TUrXkc8O/w/HcCzwk9UwReLPBEEKbP9Cw36MPgnacafJJN7SSD3TPS4Z+lBAYAkAu
+         n900o6t7NIWhcAJRLqmxKHqMe/NcqycTeNAn2ni9e/7HpWCwGZfaHJ1m5wJqcDQXAty0
+         SLmQ==
+X-Gm-Message-State: AOAM532rxNk5eXSM8buEIKjTSehycf7IoMrPV1HIzTGv+kMKq5XtOYi8
+        LxavWL8TvPBjWIqnCzc1JckBZeXCsn7BJAPp+qk=
+X-Google-Smtp-Source: ABdhPJwhYrILSZVlae/ab5TOFV1Bk9yUjAsz7MCaHYhmcLagRPPeZ+Ac5SmOgfXvHOIii+waUkHtVPewRX0rJWrG4BQ=
+X-Received: by 2002:a05:6512:228a:b0:443:4cd1:1bcc with SMTP id
+ f10-20020a056512228a00b004434cd11bccmr7805283lfu.133.1646662896641; Mon, 07
+ Mar 2022 06:21:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <1646647704-2331-1-git-send-email-u0084500@gmail.com>
+ <1646647704-2331-2-git-send-email-u0084500@gmail.com> <1e6893ca-69f4-a2ed-6ecc-23507c04002b@canonical.com>
+ <CADiBU3_jC_+P4d-gjMRGpP0uBejUkCY-axNd4nh1Y_=95iav3A@mail.gmail.com> <060968dc-9460-1b75-12a7-cb0bbe9563cc@canonical.com>
+In-Reply-To: <060968dc-9460-1b75-12a7-cb0bbe9563cc@canonical.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Mon, 7 Mar 2022 22:21:25 +0800
+Message-ID: <CADiBU387CFZNGoxu1G_8P8a6oFE-QLMTiDDXKTc0rkOsgbi4bw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add bindings for Richtek
+ RT5190A PMIC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> writes:
+HI, Krzysztof:
 
-> On 3/5/22 10:56 PM, Lu=C3=ADs Henriques wrote:
->> Jeff Layton <jlayton@kernel.org> writes:
->>
->>> On Fri, 2022-03-04 at 16:26 +0000, Lu=C3=ADs Henriques wrote:
->>>> Lu=C3=ADs Henriques <lhenriques@suse.de> writes:
->>>>
->>>>> Hi!
->>>>>
->>>>> I'm sending another iteration of the encrypted snapshot names patch. =
- This
->>>>> patch assumes PR#45224 [1] to be merged as it adds support for the
->>>>> alternate names.
->>>>>
->>>>> Two notes:
->>>>>
->>>>> 1. Patch 0001 is just a small fix from another fscrypt patch.  It's
->>>>>     probably better to simply squash it.
->>>>>
->>>>> 2. I'm not sure how easy it is to hit the UAF fixed by patch 0002.  I=
- can
->>>>>     reproduce it easily by commenting the code that adds the
->>>>>     DCACHE_NOKEY_NAME flag in patch 0003.
->>>> Obviously, immediately after sending this patchset I realized I failed=
- to
->>>> mention a very (*VERY*) important note:
->>>>
->>>> Snapshot names can not start with a '_'.  I think the reason is related
->>>> with the 'long snapshot names', but I can't really remember the details
->>>> anymore.  The point is that an encrypted snapshot name base64-encoded
->>>> *may* end-up starting with an '_' as we're using the base64-url varian=
-t.
->>>>
->>>> I really don't know if it's possible to fix that.  I guess that in that
->>>> case the user will get an error and fail to create the snapshot but he=
-'ll
->>>> be clueless because the reason.  Probably a warning can be added to the
->>>> kernel logs, but maybe there are other ideas.
->>>>
->>>
->>> Ouch. Is that imposed by the MDS? It'd be best if we could remove that
->>> limitation from it altogether if we can.
->> I do remember hitting this limitation in the past, but a quick grep didn=
-'t
->> show anything in the documentation about it.  This seems to have been
->> added to the MDS a *long* time ago, with commit 068553473c82 ("mds: adju=
-st
->> trace encoding, clean up snap naming") but (as usual) there aren't a lot
->> of details.
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
+=B9=B43=E6=9C=887=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=889:27=E5=AF=
+=AB=E9=81=93=EF=BC=9A
 >
-> When making a snapshot and in MDS code:
+> On 07/03/2022 14:21, ChiYuan Huang wrote:
+> > Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=
+=E5=B9=B43=E6=9C=887=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:14=E5=
+=AF=AB=E9=81=93=EF=BC=9A
+> >>
+> >> On 07/03/2022 11:08, cy_huang wrote:
+> >>> From: ChiYuan Huang <cy_huang@richtek.com>
+> >>>
+> >>> Add bindings for Richtek RT5190A PMIC.
+> >>>
+> >>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> >>> ---
+> >>>  .../regulator/richtek,rt5190a-regulator.yaml       | 138 +++++++++++=
+++++++++++
+> >>>  1 file changed, 138 insertions(+)
+> >>>  create mode 100644 Documentation/devicetree/bindings/regulator/richt=
+ek,rt5190a-regulator.yaml
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt51=
+90a-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt=
+5190a-regulator.yaml
+> >>> new file mode 100644
+> >>> index 00000000..b9f5836
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt5190a-reg=
+ulator.yaml
+> >>> @@ -0,0 +1,138 @@
+> >>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/regulator/richtek,rt5190a-regulat=
+or.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: Richtek RT5190A PMIC Regulator
+> >>> +
+> >>> +maintainers:
+> >>> +  - ChiYuan Huang <cy_huang@richtek.com>
+> >>> +
+> >>> +description: |
+> >>> +  The RT5190A integrates 1 channel buck controller, 3 channels high =
+efficiency
+> >>> +  synchronous buck converters, 1 LDO, I2C control interface and peri=
+pherial
+> >>> +  logical control.
+> >>> +
+> >>> +  It also supports mute AC OFF depop sound and quick setting storage=
+ while
+> >>> +  input power is removed.
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - richtek,rt5190a
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  interrupts:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  vin2-supply:
+> >>> +    description: phandle to buck2 input voltage.
+> >>> +
+> >>> +  vin3-supply:
+> >>> +    description: phandle to buck3 input voltage.
+> >>> +
+> >>> +  vin4-supply:
+> >>> +    description: phandle to buck4 input voltage.
+> >>> +
+> >>> +  vinldo-supply:
+> >>> +    description: phandle to ldo input voltage
+> >>> +
+> >>> +  richtek,buck1-fixed-microvolt:
+> >>> +    description: buck1 fixed voltage that depends on the external re=
+sistor.
+> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> >>
+> >> You should use standard bindings for it.
+> >>
+> > Sorry, I didn't get the point for the meaning 'standard binding'.
+> > Do you mean to change 'richtek,buck1-fixed-microvolt' or 'uint32' defin=
+ition?
+> > This voltage depends on the external resistor selection. It's 'fixed'
+> > by the application.
 >
-> 10458=C2=A0=C2=A0 if (snapname.length() =3D=3D 0 ||
-> 10459=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 snapname[0] =3D=3D '_') {
-> 10460=C2=A0=C2=A0=C2=A0=C2=A0 respond_to_request(mdr, -CEPHFS_EINVAL);
-> 10461=C2=A0=C2=A0=C2=A0=C2=A0 return;
-> 10462=C2=A0=C2=A0 }
+> I meant that you should not have dedicated binding to set regulator
+> voltage, but use regulator-min/max-microvolt instead, within one
+> regulator node. Just set min/max to same level and handle it in the
+> driver. See for example:
+> drivers/regulator/scmi-regulator.c
 >
->
->>> If we can't, then we might be able to get away with prepending all the
->>> encrypted names with some legal characte. Then when we go to decrypt it
->>> we just strip that off.
->> This is probably the best way to fix it, but it's worth trying to find
->> out the origins of this limitation.  I do seem to remember some obscure
->> reasons, related with the long snap names (for which Xiubo has a patch),
->> which will start with '_'.  But yeah I'll have to go dig deeper.
->
-> It will recognize the encrypted "_XYZ_${DIGIT}" snapshot name as the long
-> snapshot name inherited from its parent snap realm, and will parse the
-> "${DIGIT}" as an ino in other places.
->
-> Maybe in MDS we should fail the request only when snapshot name is in typ=
-e of
-> "_XYZ_${DIGIT}" instead of only "_XYZ", and in client side should also pr=
-int one
-> error or warn log about this ?
+As I know, regulator-min/max-microvolt is used as the usage constraint.
 
-I think this will only make the encrypted snapshot creation less likely to
-fail, but it's still possible that the base64 encoded of the encrypted
-snapshot name to start with '_' and end with '_${DIGIT}'.  Or have I
-misunderstood your suggestion?
+But out buck1/buck4/ldo vout is defined by
+Vout =3D VFb * (1 + R1/R2) where R1/R2 is chosen by the circuit design.
 
-> This why added the ceph PR[1] to tell the kclient current snapshot name i=
-s a
-> long snap name in lssnap. So if we can forbid the snap shot name begin wi=
-th '_'
-> it will simple in kclient code to handle the long snap name, or it will be
-> complex in both MDS and kclient.
+It seems not similar with the scmi-regulator.
 
-Yeah, that PR doesn't look too bad, but I'm still looking into your
-kernel-side patch.  Which adds a *lot* of complexity to this.  This whole
-fscrypt thing is really getting on my nerves -- every single step that
-seems simple ends up being a huge pain :-/
-
-Xiubo, have you tested your PR (and corresponding kernel changes) with my
-patch?  Do they work correctly?  (I'm about to start looking into doing
-that myself, so no worries if you didn't tried that.)
-
-Cheers,
---=20
-Lu=C3=ADs
+Do you really suggest to use regulator-min/max-microvolt????
 
 >
-> [1] https://github.com/ceph/ceph/pull/45208
->
-> -- Xiubo
->
->
->>> We could also consider changing the base64 routine to use something else
->>> in lieu of '_' but that's more of a hassle.
->> Cheers,
->
+> Best regards,
+> Krzysztof

@@ -2,103 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A484CFDD9
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065BC4CFDDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236534AbiCGMJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
+        id S238032AbiCGMLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241989AbiCGMJH (ORCPT
+        with ESMTP id S233149AbiCGMLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:09:07 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587BB21E39
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:08:03 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 7 Mar 2022 07:11:04 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E8C7B553;
+        Mon,  7 Mar 2022 04:10:10 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B528E210ED;
+        Mon,  7 Mar 2022 12:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1646655008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dkb4ct3SBLHYHDLXIznK3mCTy5dmP6jO5tiTvWElxZI=;
+        b=WWwAUv6gva+yJu5ZRvAXYMvY/1LnxcAfv31J5iAQvncwwz+lDi6Fi9x+aKj4Kr7QvvdlqU
+        J5KaPs9OnoVW0kSs92Ctqj49e9Rf2Qkc5L9hdXyOBuxGRps8xpbcPG6Ek7nOZE8qLuBqUA
+        nZu1D0kmrrBEmDWbQ7NLAq4oUXucWG4=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8345D3F5F5
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646654882;
-        bh=SscxEwLtn9PbvAHFFvVc1pe8Q22Jf93pqrW7gUvO01I=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=QMno0OImdh6pJucm1E+XESX120IXOV7isfqvUfk0f/z0Pgz3svbXI2UowGM8Mya82
-         IpqJdwvPmjgn4WVs5R1uIy2aYfq0toWY+AKA6+CsNxXnEVIsnEitnkwYJIrHgeOUe3
-         dTfE3jX3ULjChux5Nl+7Trv8ATj4QXoMi51HfLb2iI6ayByi1erouAgAW1Uh0GcsdO
-         n8jojhcxwmPqTeqnQR41suU6iU2VF9T+VCFNsQP4mJ/oqbHfQTkpxYIQE4FJSHGtiF
-         PHv0UuNhatbQIH+T/WYGU313Tg2/OMsL8FgaTF0lr/E1IGhzdCzk9bUKBjtitXzORG
-         E7BQxAIPVJYoQ==
-Received: by mail-ed1-f71.google.com with SMTP id y10-20020a056402358a00b00410deddea4cso8487960edc.16
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 04:08:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SscxEwLtn9PbvAHFFvVc1pe8Q22Jf93pqrW7gUvO01I=;
-        b=ejclIWGqAbP4/LldP/pKQZPAxYSEyRzA6avLe9wdofHg0Z0XPP1V8RqaxAVT0WOV5O
-         EtZmQMIEnSlM71miqTrvDS9FGuDiXsTd11H/SnWFO7ib13DXVQtR3g27uQKBKwID3Xox
-         mLaXEZU3yP/JCU3wH3g5GfdpHNoRfpuSiQMrQh2ah/8KzXW3tsJxXPfG2pCVhl/yay/W
-         EWfeocxH2gIogMmOdj1ZQNMqh7HVhKgveF/yEX+E0uBuCufqf3k1dQa4YMMnwLpVg40d
-         GKeAsPDnjoSF4XDsmwSU2l5GnmibQtWQ8fr7T+dSriaJAgv2QBdf2vHnN1wZHQWsTtUi
-         1TDQ==
-X-Gm-Message-State: AOAM5325p0xIZnZT9i3Yfil219ZF3kUzmUHsFtK5se+TblXHgr0K/Q4M
-        //iRvyUQO69t/CMdKlSNYHgZiVqQ2mFLvTHmKmByZ7QrGT6uDDEpipExrnEmOoV6MQrEJmlM5tB
-        pHCE6JsJxWdmadLFmGkS5efEWsm4uEhTzWWvUOfwDFg==
-X-Received: by 2002:a05:6402:2142:b0:413:6531:bd9e with SMTP id bq2-20020a056402214200b004136531bd9emr10668101edb.5.1646654882108;
-        Mon, 07 Mar 2022 04:08:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyeYcv2RExIUxa4m6LYCf109OdSC39ae7tloduW06t1udVnhgFmzNLZ7nIj+qIN66EcU/FmYA==
-X-Received: by 2002:a05:6402:2142:b0:413:6531:bd9e with SMTP id bq2-20020a056402214200b004136531bd9emr10668084edb.5.1646654881932;
-        Mon, 07 Mar 2022 04:08:01 -0800 (PST)
-Received: from [192.168.0.142] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id m19-20020a1709062ad300b006d1289becc7sm4598993eje.167.2022.03.07.04.08.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 04:08:01 -0800 (PST)
-Message-ID: <87c050a4-6f82-08ba-e06b-168e43efce15@canonical.com>
-Date:   Mon, 7 Mar 2022 13:08:00 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 2EA08A3B81;
+        Mon,  7 Mar 2022 12:10:08 +0000 (UTC)
+Date:   Mon, 7 Mar 2022 13:10:05 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Ivan Teterevkov <ivan.teterevkov@nutanix.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-api@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Tim Murray <timmurray@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Suren Baghdasaryan <surenb@google.com>, dancol@google.com,
+        Shakeel Butt <shakeelb@google.com>, sonnyrao@google.com,
+        oleksandr@redhat.com, Hillf Danton <hdanton@sina.com>,
+        lizeb@google.com, Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: Regression of madvise(MADV_COLD) on shmem?
+Message-ID: <YiX2HcF5o2IjfX1H@dhcp22.suse.cz>
+References: <dd620dbd-6d71-7553-d1e9-95676ff12c82@nutanix.com>
+ <YiKsUr1FQwmDP7V0@google.com>
+ <CAOUHufZyrLrkEvFay+FddN5Ve3v_-JvNROHo9hEhsoVuCpwh0Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2] clk/samsung: Use of_device_get_match_data()
-Content-Language: en-US
-To:     cgel.zte@gmail.com, s.nawrocki@samsung.com
-Cc:     tomasz.figa@gmail.com, cw00.choi@samsung.com,
-        alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>
-References: <20220307033546.2075097-1-chi.minghao@zte.com.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307033546.2075097-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOUHufZyrLrkEvFay+FddN5Ve3v_-JvNROHo9hEhsoVuCpwh0Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 04:35, cgel.zte@gmail.com wrote:
-> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+On Sat 05-03-22 02:17:37, Yu Zhao wrote:
+[...]
+> diff --git a/mm/swap.c b/mm/swap.c
+> index bcf3ac288b56..7fd99f037ca7 100644
+> --- a/mm/swap.c
+> +++ b/mm/swap.c
+> @@ -563,7 +559,7 @@ static void lru_deactivate_file_fn(struct page
+> *page, struct lruvec *lruvec)
 > 
-> Use of_device_get_match_data() to simplify the code.
+>  static void lru_deactivate_fn(struct page *page, struct lruvec *lruvec)
+>  {
+> -       if (PageActive(page) && !PageUnevictable(page)) {
+> +       if (!PageUnevictable(page)) {
+>                 int nr_pages = thp_nr_pages(page);
 > 
-> v1->v2:
->   Add a judgment for returning variant to NULL
+>                 del_page_from_lru_list(page, lruvec);
+> @@ -677,7 +673,7 @@ void deactivate_file_page(struct page *page)
+>   */
+>  void deactivate_page(struct page *page)
+>  {
+> -       if (PageLRU(page) && PageActive(page) && !PageUnevictable(page)) {
+> +       if (PageLRU(page) && !PageUnevictable(page)) {
+>                 struct pagevec *pvec;
+> 
+>                 local_lock(&lru_pvecs.lock);
+> 
+> I'll leave it to Minchan to decide whether this is worth fixing,
+> together with this one:
 
-Changelog goes after ---, not inside the commit message.
-
-With commit fix above:
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+There doesn't seem to be any dependency on the PageActive anymore. I do
+remember we have relied on the PageActive to move from the active list
+to the inactive. This is not the case anymore but I am wondering whether
+above is really sufficient. If you are deactivating an inactive page
+then I would expect you want to move that page in the LRU as well. In
+other words don't you want
+	if (page_active)
+		add_page_to_lru_list
+	else
+		add_page_to_lru_list_tail
+-- 
+Michal Hocko
+SUSE Labs

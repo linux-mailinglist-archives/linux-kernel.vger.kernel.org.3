@@ -2,119 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219674D076C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50974D0761
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245009AbiCGTQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S236829AbiCGTQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245038AbiCGTQj (ORCPT
+        with ESMTP id S230143AbiCGTQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:16:39 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279527CDF9
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 11:15:40 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id bn33so21951442ljb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:15:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TwTcsRMn5VZVrmgXZDV1J6sFeJgAdw8S2EoV6iZ5xnc=;
-        b=dlpUNu5q4CyzmXtBLA/gOu0GC/00SF7ttDAollAbHZtk5bw2xAtIqb7CwTopnt8lf3
-         AbfnSVPq9xulj/tw8AvoPmKfCZDzXeZNEVEEDbHlLhh/I5bp+zk8upvRu1BNSASuquhE
-         pUQrRqiHujQApoBOt9qnNksqqhPlFfAR59MXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TwTcsRMn5VZVrmgXZDV1J6sFeJgAdw8S2EoV6iZ5xnc=;
-        b=CtsiwRjIj5w6N4+QZxjFAe4Ct58sHt7MhbscnizbDaqncdMABUHJh7/Zk2BGws09MZ
-         H/2MG25ylnNf2NAYum3Bm0MI7dXd1LC9Bd0T4CPdEGIBauYQ/M7G/fHubWeHfE7H0/J7
-         1LFn0kRF6i+GpfQmeR90wSbXkzeba6cC+acDP3d4Q7NJw1QVzkBYYyWNMWOdoWqf70rl
-         0o73zAfmqSppNcr3SS7dYCueS3QNH44ejsgbhTjefmLk+QH+R4Lm9BhyttPKV1Bj+HEe
-         q9WAXVPzqm8z2iheQE6JS05WFSm0GzgX4sLhHug5EozWFrfNANgoMFt4vRpx1Hgxzjpw
-         h4pg==
-X-Gm-Message-State: AOAM531vWGZEIrdjKkussEuW9D0nF0lpaQyQV7DwOFZSL/y0+vm0Je3Z
-        0/s3hk4ADmg6awF7xUJZGMiYhWOazAtrjwhdVbA=
-X-Google-Smtp-Source: ABdhPJz45EfGv+Kzy28FY0mnsMPFsBLlWPDT862n6r2+qARtdNVHBc+zDsUa1DqugFQN+kTocTqODw==
-X-Received: by 2002:a2e:9147:0:b0:246:1379:2cd4 with SMTP id q7-20020a2e9147000000b0024613792cd4mr8555170ljg.418.1646680536986;
-        Mon, 07 Mar 2022 11:15:36 -0800 (PST)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id n13-20020a056512388d00b00443ecf806c5sm3000780lft.104.2022.03.07.11.15.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 11:15:36 -0800 (PST)
-Received: by mail-lf1-f46.google.com with SMTP id n19so6914982lfh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 11:15:35 -0800 (PST)
-X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
- i19-20020a05651c121300b00247e2d9cddamr5310350lja.443.1646680524503; Mon, 07
- Mar 2022 11:15:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220307150037.GD3293@kadam> <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
-In-Reply-To: <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 7 Mar 2022 11:15:07 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjnsmmGdh-SZzaPD=e1rKhoBkQAF3JeVhGvpa=Gax--7g@mail.gmail.com>
-Message-ID: <CAHk-=wjnsmmGdh-SZzaPD=e1rKhoBkQAF3JeVhGvpa=Gax--7g@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Remove usage of list iterator past the loop body
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jason Gunthorpe <jgg@ziepe.ca>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Mon, 7 Mar 2022 14:16:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9AB7CDCA;
+        Mon,  7 Mar 2022 11:15:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4646B8167A;
+        Mon,  7 Mar 2022 19:15:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42696C340EB;
+        Mon,  7 Mar 2022 19:15:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646680513;
+        bh=td5XA/vasPQzk2dJn/2PdCjukKMBaa8j+bLAS4+mKCk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=YYUCqr68s2efIf+qL+Ov/nYK3ID7rndO+/BzWZHEFEbH/vNmfXqBlPQ94F70Phi+X
+         6654CSGtwy1huUQfFeTpRK3H2ltjd49oX6wMHzXzyKH9d5bbzSmaSbSziJgYcuqdnC
+         tRdS1fgQ1gXcU9SM+mk/ST/NCrWVw0GiBNhpecYdbMWw5mpSz7EOf6boWRy6SAFaPd
+         Sj0jsy3CNCWdZwVOzPTAl17vnNKeIz16/O0t0Nsaui8A6hftRN+YzUqOmziWBXZSfP
+         /3HCcaPc4DRjQRDq7nP2LfRQgZr9avKOKM+qsBagBFLyKNsguSXtvwDfn7y7l5uTJf
+         0NB/vQGOavZFQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E44925C0260; Mon,  7 Mar 2022 11:15:12 -0800 (PST)
+Date:   Mon, 7 Mar 2022 11:15:12 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "frederic@kernel.org" <frederic@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        rcu@vger.kernel.org, bigeasy@linutronix.de
+Subject: Re: [PATCH] rcu: Only boost rcu reader tasks with lower priority
+ than boost kthreads
+Message-ID: <20220307191512.GN4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220304092631.4123188-1-qiang1.zhang@intel.com>
+ <81f69dd4-6ca9-760c-bec5-5cb27afbe788@quicinc.com>
+ <PH0PR11MB5880026EBBE3E195549E2245DA089@PH0PR11MB5880.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5880026EBBE3E195549E2245DA089@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 7:26 AM David Laight <David.Laight@aculab.com> wrote:
->
-> I'd write the following new defines (but I might be using
-> the old names here):
+On Mon, Mar 07, 2022 at 02:03:17AM +0000, Zhang, Qiang1 wrote:
+> On 3/4/2022 2:56 PM, Zqiang wrote:
+> > When RCU_BOOST is enabled, the boost kthreads will boosting readers
+> > who are blocking a given grace period, if the current reader tasks
+> > have a higher priority than boost kthreads(the boost kthreads priority
+> > not always 1, if the kthread_prio is set), boosting is useless, skip
+> > current task and select next task to boosting, reduce the time for a
+> > given grace period.
+> > 
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-See my email at
+Adding to CC to get more eyes on this.  I am not necessarily opposed to
+it, but I don't do that much RT work myself these days.
 
-  https://lore.kernel.org/all/CAHk-=wiacQM76xec=Hr7cLchVZ8Mo9VDHmXRJzJ_EX4sOsApEA@mail.gmail.com/
+							Thanx, Paul
 
-for what I think is the way forward if we want to do new defines and
-clean up the situation.
-
-It's really just an example (and converts two list cases and one
-single file that uses them), so it's not in any way complete.
-
-I also has that "-std=gnu11" in the patch so that you can use the
-loop-declared variables - but without the other small fixups for some
-of the things that exposed.
-
-I'll merge the proper version of the "update C standard version" from
-Arnd early in the 5.18 merge window, but for testing that one file
-example change I sent out the patch like that.
-
-          Linus
+> > ---
+> >   kernel/rcu/tree_plugin.h | 10 +++++++++-
+> >   1 file changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> > index c3d212bc5338..d35b6da66bbd 100644
+> > --- a/kernel/rcu/tree_plugin.h
+> > +++ b/kernel/rcu/tree_plugin.h
+> > @@ -12,6 +12,7 @@
+> >    */
+> >   
+> >   #include "../locking/rtmutex_common.h"
+> > +#include <linux/sched/deadline.h>
+> >   
+> >   static bool rcu_rdp_is_offloaded(struct rcu_data *rdp)
+> >   {
+> > @@ -1065,13 +1066,20 @@ static int rcu_boost(struct rcu_node *rnp)
+> >   	 * section.
+> >   	 */
+> >   	t = container_of(tb, struct task_struct, rcu_node_entry);
+> > +	if (!rnp->exp_tasks && (dl_task(t) || t->prio <= current->prio)) {
+> > +		tb = rcu_next_node_entry(t, rnp);
+> > +		WRITE_ONCE(rnp->boost_tasks, tb);
+> > +		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> > +		goto end;
+> > +	}
+> > +
+> >   	rt_mutex_init_proxy_locked(&rnp->boost_mtx.rtmutex, t);
+> >   	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> >   	/* Lock only for side effect: boosts task t's priority. */
+> >   	rt_mutex_lock(&rnp->boost_mtx);
+> >   	rt_mutex_unlock(&rnp->boost_mtx);  /* Then keep lockdep happy. */
+> >   	rnp->n_boosts++;
+> > -
+> > +end:
+> >>
+> >>Nit: maybe rename the label to "skip_boost:" ?
+> >>
+> >>Code looks fine; however, out of curiosity; given that the higher 
+> >>priority tasks, in general, would exit their read side critical section
+> >>quickly and boost the next blocking reader on exiting their read side 
+> >>section; do you see noticeable reduction in grace period timings with 
+> >>the change for certain type of workloads?
+> 
+> Thanks for feedback ,  In preempt-RT systems, there will be many real-time threads (most
+> of them are created by users themselves ),  their priority is higher or lower than boost kthreads
+> (kthread_prio is set),  for rt tasks  with higher priority than boost kthreads, maybe it will exit
+> read side critical quickly,  maybe not, if it is preempted by a higher priority task,  If try to boost operation, 
+> this increases the boosts kthread waiting time, as a result, the next blkd tasks cannot be
+> boosted in time.  of course, I don't deny it,  there are also reasons that user priority setting is inappropriate.
+> 
+> Thanks
+> Zqiang
+> 
+> >>
+> >>
+> >>Thanks
+> >>Neeraj
+> 
+> >   	return READ_ONCE(rnp->exp_tasks) != NULL ||
+> >   	       READ_ONCE(rnp->boost_tasks) != NULL;
+> >   }

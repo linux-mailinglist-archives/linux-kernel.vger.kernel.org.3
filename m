@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7016E4CF562
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6302D4CF64D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236838AbiCGJ1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:27:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        id S237583AbiCGJfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237239AbiCGJXf (ORCPT
+        with ESMTP id S237069AbiCGJ1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:35 -0500
+        Mon, 7 Mar 2022 04:27:15 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830CF53E2F;
-        Mon,  7 Mar 2022 01:22:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D628966C82;
+        Mon,  7 Mar 2022 01:24:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F1A56103D;
-        Mon,  7 Mar 2022 09:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0451CC340E9;
-        Mon,  7 Mar 2022 09:22:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4797E61141;
+        Mon,  7 Mar 2022 09:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A4FC340E9;
+        Mon,  7 Mar 2022 09:24:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644930;
-        bh=94F1j0DiZ7qJpTyWsfI+MmjhV156Q0ciHj/koAEnTgk=;
+        s=korg; t=1646645074;
+        bh=TXqZ+EChSCl0LpdGhIFv0gP/aMj5q1dIexiP5V1RYC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1r7a3Y32YbpL5/NHS62mQLjOnlcGl5PgkhWEVnASBu3Uqn3OmQQ3WwCXAdBzvuuMP
-         GyMtwb0vC7v+qea3oXW7tu1ONlBD8YI4TZB6jFwb7utQ1+yI4HXHQ14MlSO9wQ5TQO
-         l62vcutigLZi1qPKf6SsEKAnUep0dDODSjfhEIVk=
+        b=dz/9B8m7rK4zzQLljQVvL0bucLe65N4pvbYtuDxTaJPGcp9eczBsAN+N74rOgq1iQ
+         uIA8zV1KkcVjcVSTiitivFbC7PjANEdrdYjskCCl62z8aqJ2KwlTokwR830HGPuXtH
+         wpMBEQAfqKw0JCJP7qJyE3LViPgNT4/dypn83FLs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
+        stable@vger.kernel.org, Peter Hutterer <peter.hutterer@who-t.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 07/42] i2c: cadence: allow COMPILE_TEST
+Subject: [PATCH 4.19 06/51] Input: clear BTN_RIGHT/MIDDLE on buttonpads
 Date:   Mon,  7 Mar 2022 10:18:41 +0100
-Message-Id: <20220307091636.364610917@linuxfoundation.org>
+Message-Id: <20220307091637.175319221@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +58,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wolfram Sang <wsa@kernel.org>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit 0b0dcb3882c8f08bdeafa03adb4487e104d26050 ]
+[ Upstream commit 37ef4c19b4c659926ce65a7ac709ceaefb211c40 ]
 
-Driver builds fine with COMPILE_TEST. Enable it for wider test coverage
-and easier maintenance.
+Buttonpads are expected to map the INPUT_PROP_BUTTONPAD property bit
+and the BTN_LEFT key bit.
 
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
+As explained in the specification, where a device has a button type
+value of 0 (click-pad) or 1 (pressure-pad) there should not be
+discrete buttons:
+https://docs.microsoft.com/en-us/windows-hardware/design/component-guidelines/touchpad-windows-precision-touchpad-collection#device-capabilities-feature-report
+
+However, some drivers map the BTN_RIGHT and/or BTN_MIDDLE key bits even
+though the device is a buttonpad and therefore does not have those
+buttons.
+
+This behavior has forced userspace applications like libinput to
+implement different workarounds and quirks to detect buttonpads and
+offer to the user the right set of features and configuration options.
+For more information:
+https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/726
+
+In order to avoid this issue clear the BTN_RIGHT and BTN_MIDDLE key
+bits when the input device is register if the INPUT_PROP_BUTTONPAD
+property bit is set.
+
+Notice that this change will not affect udev because it does not check
+for buttons. See systemd/src/udev/udev-builtin-input_id.c.
+
+List of known affected hardware:
+
+ - Chuwi AeroBook Plus
+ - Chuwi Gemibook
+ - Framework Laptop
+ - GPD Win Max
+ - Huawei MateBook 2020
+ - Prestigio Smartbook 141 C2
+ - Purism Librem 14v1
+ - StarLite Mk II   - AMI firmware
+ - StarLite Mk II   - Coreboot firmware
+ - StarLite Mk III  - AMI firmware
+ - StarLite Mk III  - Coreboot firmware
+ - StarLabTop Mk IV - AMI firmware
+ - StarLabTop Mk IV - Coreboot firmware
+ - StarBook Mk V
+
+Acked-by: Peter Hutterer <peter.hutterer@who-t.net>
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Acked-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Link: https://lore.kernel.org/r/20220208174806.17183-1-jose.exposito89@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/input.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index c457f65136f83..ab9c7f2f1f79b 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -459,7 +459,7 @@ config I2C_BLACKFIN_TWI_CLK_KHZ
+diff --git a/drivers/input/input.c b/drivers/input/input.c
+index a0d90022fcf73..b031174c8d7f7 100644
+--- a/drivers/input/input.c
++++ b/drivers/input/input.c
+@@ -2118,6 +2118,12 @@ int input_register_device(struct input_dev *dev)
+ 	/* KEY_RESERVED is not supposed to be transmitted to userspace. */
+ 	__clear_bit(KEY_RESERVED, dev->keybit);
  
- config I2C_CADENCE
- 	tristate "Cadence I2C Controller"
--	depends on ARCH_ZYNQ || ARM64 || XTENSA
-+	depends on ARCH_ZYNQ || ARM64 || XTENSA || COMPILE_TEST
- 	help
- 	  Say yes here to select Cadence I2C Host Controller. This controller is
- 	  e.g. used by Xilinx Zynq.
++	/* Buttonpads should not map BTN_RIGHT and/or BTN_MIDDLE. */
++	if (test_bit(INPUT_PROP_BUTTONPAD, dev->propbit)) {
++		__clear_bit(BTN_RIGHT, dev->keybit);
++		__clear_bit(BTN_MIDDLE, dev->keybit);
++	}
++
+ 	/* Make sure that bitmasks not mentioned in dev->evbit are clean. */
+ 	input_cleanse_bitmasks(dev);
+ 
 -- 
 2.34.1
 

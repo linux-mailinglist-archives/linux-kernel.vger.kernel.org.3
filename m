@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1324CFCFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E514CFD00
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242122AbiCGLeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S242061AbiCGLeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238919AbiCGLdp (ORCPT
+        with ESMTP id S240972AbiCGLdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 06:33:45 -0500
+        Mon, 7 Mar 2022 06:33:49 -0500
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAB738BD;
-        Mon,  7 Mar 2022 03:31:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A0EC07;
+        Mon,  7 Mar 2022 03:31:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646652712; x=1678188712;
-  h=from:to:cc:subject:date:message-id;
-  bh=taJVbOkbq4815jJx0zsLc1Ta5cZzXXrOBZt48RQsYOI=;
-  b=NC4esr4QQHrJAR7Ku6N2vY8Zo/7VJ0X7nUNfzNCEZ+m6r9uM/BKQAcvC
-   2dPlAWF9sHkyAi6b+g1lDdIBlYBjN7yph1IqYQaNRnVVyQZYBjGMtQR2t
-   CTWuVcVPhrNEuFd3XHuv0Ta4agiM/iJuZ3gKFRK++mSfExVIcAl6hw0bG
-   RYRSpg6rem7ZyKRyTXa7i3wJGm/jH4/we3m4skVmF85/j3yUnScp+dzqB
-   8mqOG4ij4pr78KJMFI13LLW6K9iNV8wj9HBg9GwKjhsnTYr9YqAH87TdK
-   4+Dh/AaCL3ypLINtJc54lXNJOJE6BYrd5JrFmu5NbrA5cce+MXSC90b7g
+  t=1646652715; x=1678188715;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=cx3ne0GM/fbTd3gNnz8RFI9E54C9dp2Ly8Gey+pcpSs=;
+  b=Te1u32JhRUEn6gZfCWjdDymlFVhlkHNjBd8CCYUGMYnXGC62DEPt4Ypp
+   IlwIiwxUJY1rYAnq1Lvv1J1pSkJLLMbcvPn8VED1Uf0hihaUoJVi20bjB
+   8lxRoYw1XetJv7Q6IZU0phFbhWY/RQMwJmHdxeMdx9eo/K+wSGaNm8zMr
+   E0je3GbCL1xfQJasAdOEbgjqECe+2+pNeRabnDuEmChfAvq0z0TeRn1Jh
+   S252vJfUTT/ivsLoduULAd+RmhLrDFIEZmuBCnnZ1z7EfVWMNbXj6OXLS
+   0cqEr6ClR8EOLm42kAx80X4ZeYXNymDOGTCKOwupNO+b7Q50SzLnZyIz8
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="234324453"
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="234324460"
 X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="234324453"
+   d="scan'208";a="234324460"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 03:31:51 -0800
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 03:31:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="643212644"
+   d="scan'208";a="643212676"
 Received: from gio-01395267462.iind.intel.com ([10.49.4.124])
-  by orsmga004.jf.intel.com with ESMTP; 07 Mar 2022 03:31:48 -0800
+  by orsmga004.jf.intel.com with ESMTP; 07 Mar 2022 03:31:51 -0800
 From:   shruthi.sanil@intel.com
 To:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     andriy.shevchenko@linux.intel.com, mgross@linux.intel.com,
         srikanth.thokala@intel.com, lakshmi.bai.raja.subramanian@intel.com,
         mallikarjunappa.sangannavar@intel.com, shruthi.sanil@intel.com
-Subject: [PATCH v9 0/2] Add the driver for Intel Keem Bay SoC timer block
-Date:   Mon,  7 Mar 2022 17:01:45 +0530
-Message-Id: <20220307113147.19496-1-shruthi.sanil@intel.com>
+Subject: [PATCH v9 1/2] dt-bindings: timer: Add bindings for Intel Keem Bay SoC Timer
+Date:   Mon,  7 Mar 2022 17:01:46 +0530
+Message-Id: <20220307113147.19496-2-shruthi.sanil@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220307113147.19496-1-shruthi.sanil@intel.com>
+References: <20220307113147.19496-1-shruthi.sanil@intel.com>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,78 +62,147 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Shruthi Sanil <shruthi.sanil@intel.com>
 
-The timer block supports 1 64-bit free running counter
-and 8 32-bit general purpose timers.
+Add Device Tree bindings for the Timer IP, which can be used as
+clocksource and clockevent device in the Intel Keem Bay SoC.
 
-Patch 1 holds the device tree binding documentation.
-Patch 2 holds the device driver.
-
-This driver is tested on the Keem Bay evaluation module board.
-
-Changes since v8:
-- The clockevent stucture has been declared as a global static variable,
-  rather than allocating memory using kzalloc during probing.
-- Updated the print statement indicating the configuration missing as the FW Bug.
-- Updated the comments in the function keembay_timer_isr().
-- Updated the dt-binding to remove 'oneOf' as there is only 1 entry.
-- Updated the dt-binding description clearly indicating that
-  the descrption is about the undelying HW.
-
-Changes since v7:
-- Added back the compatible string "intel,keembay-gpt-creg"
-  as an enum to the mfd device node in the device tree bindings.
-- As the timer is used as a broadcast timer during CPU idle,
-  only one timer is needed. Hence updated the driver accordingly
-  incorporating the review comments.
-
-Changes since v6:
-- Removed the unused compatible string from the mfd device node
-  to fix the error thrown by the make dt-binding command.
-
-Changes since v5:
-- Created a MFD device for the common configuration register
-  in the device tree bindings.
-- Updated the timer driver with the MFD framework to access the
-  common configuration register.
-
-Changes since v4:
-- Updated the description in the device tree bindings.
-- Updated the unit address of all the timers and counter
-  in the device tree binding.
-
-Changes since v3:
-- Update in KConfig file to support COMPILE_TEST for Keem Bay timer.
-- Update in device tree bindings to remove status field.
-- Update in device tree bindings to remove 64-bit address space for
-  the child nodes by using non-empty ranges.
-
-Changes since v2:
-- Add multi timer support.
-- Update in the device tree binding to support multi timers.
-- Code optimization.
-
-Changes since v1:
-- Add support for KEEMBAY_TIMER to get selected through Kconfig.platforms.
-- Add CLOCK_EVT_FEAT_DYNIRQ as part of clockevent feature.
-- Avoid overlapping reg regions across 2 device nodes.
-- Simplify 2 device nodes as 1 because both are from same IP block.
-- Adapt the driver code according to the new simplified devicetree.
-
-Shruthi Sanil (2):
-  dt-bindings: timer: Add bindings for Intel Keem Bay SoC Timer
-  clocksource: Add Intel Keem Bay timer support
-
- .../bindings/timer/intel,keembay-timer.yaml   | 125 ++++++++++
- MAINTAINERS                                   |   6 +
- drivers/clocksource/Kconfig                   |  11 +
- drivers/clocksource/Makefile                  |   1 +
- drivers/clocksource/timer-keembay.c           | 227 ++++++++++++++++++
- 5 files changed, 370 insertions(+)
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Signed-off-by: Shruthi Sanil <shruthi.sanil@intel.com>
+---
+ .../bindings/timer/intel,keembay-timer.yaml   | 125 ++++++++++++++++++
+ 1 file changed, 125 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/timer/intel,keembay-timer.yaml
- create mode 100644 drivers/clocksource/timer-keembay.c
 
-
-base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
+diff --git a/Documentation/devicetree/bindings/timer/intel,keembay-timer.yaml b/Documentation/devicetree/bindings/timer/intel,keembay-timer.yaml
+new file mode 100644
+index 000000000000..333f137e39e0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/timer/intel,keembay-timer.yaml
+@@ -0,0 +1,125 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/timer/intel,keembay-timer.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Intel Keem Bay SoC Timers
++
++maintainers:
++  - Shruthi Sanil <shruthi.sanil@intel.com>
++
++description: |
++  The Intel Keem Bay timer IP supports 1 free running counter and 8 timers.
++  Each timer is capable of generating inividual interrupt.
++  Both the features are enabled through the timer general config register.
++
++  The parent node represents the common general configuration details and
++  the child nodes represents the counter and timers.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - intel,keembay-gpt-creg
++      - const: simple-mfd
++
++  reg:
++    description: General configuration register address and length.
++    maxItems: 1
++
++  ranges: true
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - ranges
++  - "#address-cells"
++  - "#size-cells"
++
++patternProperties:
++  "^counter@[0-9a-f]+$":
++    description: Properties for Intel Keem Bay counter.
++    type: object
++    properties:
++      compatible:
++        items:
++          - enum:
++              - intel,keembay-counter
++
++      reg:
++        maxItems: 1
++
++      clocks:
++        maxItems: 1
++
++    required:
++      - compatible
++      - reg
++      - clocks
++
++  "^timer@[0-9a-f]+$":
++    description: Properties for Intel Keem Bay timer
++    type: object
++    properties:
++      compatible:
++        items:
++          - enum:
++              - intel,keembay-timer
++
++      reg:
++        maxItems: 1
++
++      interrupts:
++        maxItems: 1
++
++      clocks:
++        maxItems: 1
++
++    required:
++      - compatible
++      - reg
++      - interrupts
++      - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #define KEEM_BAY_A53_TIM
++
++    soc {
++        #address-cells = <0x2>;
++        #size-cells = <0x2>;
++
++        gpt@20331000 {
++            compatible = "intel,keembay-gpt-creg", "simple-mfd";
++            reg = <0x0 0x20331000 0x0 0xc>;
++            ranges = <0x0 0x0 0x20330000 0xF0>;
++            #address-cells = <0x1>;
++            #size-cells = <0x1>;
++
++            counter@e8 {
++                compatible = "intel,keembay-counter";
++                reg = <0xe8 0x8>;
++                clocks = <&scmi_clk KEEM_BAY_A53_TIM>;
++            };
++
++            timer@30 {
++                compatible = "intel,keembay-timer";
++                reg = <0x30 0xc>;
++                interrupts = <GIC_SPI 0x5 IRQ_TYPE_LEVEL_HIGH>;
++                clocks = <&scmi_clk KEEM_BAY_A53_TIM>;
++            };
++        };
++    };
++
++...
 -- 
 2.17.1
 

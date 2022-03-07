@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFB34CFB04
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE7E4CF955
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239614AbiCGKZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
+        id S240119AbiCGKFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238803AbiCGKC2 (ORCPT
+        with ESMTP id S236508AbiCGJmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:02:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1447486F;
-        Mon,  7 Mar 2022 01:51:52 -0800 (PST)
+        Mon, 7 Mar 2022 04:42:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B878422A;
+        Mon,  7 Mar 2022 01:41:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87EACB80F9F;
-        Mon,  7 Mar 2022 09:51:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21BFC340F4;
-        Mon,  7 Mar 2022 09:51:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 306ADCE0EAA;
+        Mon,  7 Mar 2022 09:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1194C340E9;
+        Mon,  7 Mar 2022 09:41:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646709;
-        bh=Y0ydCJdLcvb/muRQhxCjXoK2Jvm2kqf39/xsowfr3bs=;
+        s=korg; t=1646646065;
+        bh=w3xW6sXuqTAEkeMEks1u2RQfpbj9vS7RE95tWEHFmkY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EhKIsnwaEEFZkjJ+DTcXt3jOm1SFibm9b0az7LEh8JRz0acgcojdLBs5o5wlhTr6T
-         8uw2jt8IuAaBxGSuuXdtfEzvkx7hsQcqIjTGkWBnILTMqW0XS9EJ0ePadiB3YMaycO
-         Hh9ajOZCEPhLiP0yH4gRP+H2eHQOGup1MCPdJYZ4=
+        b=A822l9Ea7/jXUa12UqALbJC5bfmtT4HvWQebdARmsHdi9mgRkEt4ui1ythMajKuFH
+         xDNglMeWvveSDtVm55M6dq4EPeSEXKjZPjMuL/mqtb7rM2ELQhJ+ennoCqwdfiIiOx
+         xz4u/DlDufOqz3dTkFvomr3XUhoowrBbraZWtDTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haimin Zhang <tcs.kernel@gmail.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Tao Liu <xliutaox@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 027/186] block-map: add __GFP_ZERO flag for alloc_page in function bio_copy_kern
+Subject: [PATCH 5.15 121/262] gve: Recording rx queue before sending to napi
 Date:   Mon,  7 Mar 2022 10:17:45 +0100
-Message-Id: <20220307091654.854214847@linuxfoundation.org>
+Message-Id: <20220307091705.877888655@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haimin Zhang <tcs.kernel@gmail.com>
+From: Tao Liu <xliutaox@google.com>
 
-[ Upstream commit cc8f7fe1f5eab010191aa4570f27641876fa1267 ]
+[ Upstream commit 084cbb2ec3af2d23be9de65fcc9493e21e265859 ]
 
-Add __GFP_ZERO flag for alloc_page in function bio_copy_kern to initialize
-the buffer of a bio.
+This caused a significant performance degredation when using generic XDP
+with multiple queues.
 
-Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220216084038.15635-1-tcs.kernel@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: f5cedc84a30d2 ("gve: Add transmit and receive support")
+Signed-off-by: Tao Liu <xliutaox@google.com>
+Link: https://lore.kernel.org/r/20220207175901.2486596-1-jeroendb@google.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-map.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/google/gve/gve_rx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 4526adde01564..c7f71d83eff18 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -446,7 +446,7 @@ static struct bio *bio_copy_kern(struct request_queue *q, void *data,
- 		if (bytes > len)
- 			bytes = len;
+diff --git a/drivers/net/ethernet/google/gve/gve_rx.c b/drivers/net/ethernet/google/gve/gve_rx.c
+index 629d8ed08fc61..97431969a488f 100644
+--- a/drivers/net/ethernet/google/gve/gve_rx.c
++++ b/drivers/net/ethernet/google/gve/gve_rx.c
+@@ -450,6 +450,7 @@ static bool gve_rx(struct gve_rx_ring *rx, struct gve_rx_desc *rx_desc,
+ 		skb_set_hash(skb, be32_to_cpu(rx_desc->rss_hash),
+ 			     gve_rss_type(rx_desc->flags_seq));
  
--		page = alloc_page(GFP_NOIO | gfp_mask);
-+		page = alloc_page(GFP_NOIO | __GFP_ZERO | gfp_mask);
- 		if (!page)
- 			goto cleanup;
- 
++	skb_record_rx_queue(skb, rx->q_num);
+ 	if (skb_is_nonlinear(skb))
+ 		napi_gro_frags(napi);
+ 	else
 -- 
 2.34.1
 

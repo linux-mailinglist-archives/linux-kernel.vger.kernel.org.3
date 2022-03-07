@@ -2,54 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E6E4D0718
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F16374D071A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244910AbiCGTAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S236446AbiCGTAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:00:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234880AbiCGTAL (ORCPT
+        with ESMTP id S233700AbiCGTA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:00:11 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F944E388;
-        Mon,  7 Mar 2022 10:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646679557; x=1678215557;
-  h=from:to:cc:subject:date:message-id;
-  bh=qctIyTYqs9f3ukRf6gbzWZSCRaC9dudhKd5TcrRHiT4=;
-  b=R5UBOZ9NzFvczuaYprPdnNS/IBkmJ1PeOELkv8J3LwuK+DEU9SkLdj/L
-   1FO1gRJPHoWZmpSWy1Xbelps76kHcQrphp+/hk6BML3sr3TA+LHeNGzku
-   tLNa2YCvsy1+hBFbZPKDQVuOEqAdbfkztEk6a0fWl6ZJAzuDx8Ip8I1w+
-   s=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 07 Mar 2022 10:59:17 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 07 Mar 2022 10:59:15 -0800
-X-QCInternal: smtphost
-Received: from pmaliset-linux.qualcomm.com ([10.206.64.233])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 08 Mar 2022 00:29:12 +0530
-Received: by pmaliset-linux.qualcomm.com (Postfix, from userid 3848298)
-        id D8D9D21422; Tue,  8 Mar 2022 00:29:10 +0530 (IST)
-From:   Prasad Malisetty <quic_pmaliset@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajatja@google.com, refactormyself@gmail.com
-Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>
-Subject: [PATCH v2] [RFC PATCH] PCI: Update LTR threshold based on LTRME bit
-Date:   Tue,  8 Mar 2022 00:29:09 +0530
-Message-Id: <1646679549-12494-1-git-send-email-quic_pmaliset@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Mon, 7 Mar 2022 14:00:29 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2E64ECD6
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:59:33 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 766623F4C2
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646679571;
+        bh=sFr5I+WRledcILsCjq370DCSnN0kDkpnKS2SgkWGsqU=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Y2VnIPLntQWUq9HR5fT7xTpWPLNSrbU2iLvnsC05r6EJWc/9ToyJL74SXvuDZ96G9
+         qA13T/Sk9gFHRH4sczIS7JbfI6qo7Ezj5VDi8XzX6wc6j9F1bMJZmMt9ao+Yauyzks
+         vkXZKMp/z46ZoZklzfbS+otMKNxs03D2FRI8KoKtZvKgL332v7cmN7VS+M/PMWx9iD
+         6ogL89oQCZuMHKM3cW6kYzoGS4+/DHVMcqsTNC/PIzVFslt3DNTqRsMZW6VEibeSMG
+         jZGTEYDj3UOKU8eOetAdRInQRepYMTBI4aVtZH8wpvbd982AcP6WuLvgoVoET8oP0B
+         2qk/v4QKj+d8g==
+Received: by mail-ed1-f72.google.com with SMTP id y26-20020a50ce1a000000b00415e9b35c81so6887928edi.9
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 10:59:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sFr5I+WRledcILsCjq370DCSnN0kDkpnKS2SgkWGsqU=;
+        b=ZmNtU8G79GjZsayXyWJ5vU3qeCKSVDfDNkNRtm//odtqwQaLz2EQi5n3TMulwMXkHT
+         FhZBRdPsI57oD4fXhwZQoMratHp5M5n+qIFHG7BZGj4u84ZOM61U9WxC/Zs/eMsEzo2v
+         hoYPO69nsXQLwIjSi2Sd7iV9UaITTo6JvExeF5FcKM/sSaTQaUnCsfhAA6Ilpr5o/Zc+
+         cSkvkh3zCcOaG9CvDqI6N0BrcXK6NpgCZm++Btsw6mBvOjz7ccEzUQlCoKxH9pvpAXzQ
+         P0tmy5Vf2FhMNWmbw87J4eGwa2ERjcAQI/y5gg9266kqNOIO9O6O7ZXSe6l7ommJrD9Y
+         VRWg==
+X-Gm-Message-State: AOAM533yBe2v/YTosBOuZ/+DHUpkAJ3P/FmfneElja0VCcMfW3ZAm0Vk
+        1smU7e1jTdPZrHc0txElRzWqKUKmOxbf3G45C+0tWga1quXXB4/9fgFKvVnru2XxN1PygwbwbW5
+        7qYPou3vQAx+JnrZo9nVMkZ9ZQJprpEmm1Z/L1VNVlQ==
+X-Received: by 2002:a50:d550:0:b0:416:2ac8:b98e with SMTP id f16-20020a50d550000000b004162ac8b98emr10828121edj.236.1646679571168;
+        Mon, 07 Mar 2022 10:59:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzXu0txwJE4+P5FIEK6e4oUCg8E1spjxcK+3rVXWuN/ncPvZuceRX30s52MHzZGh58AtN0qkg==
+X-Received: by 2002:a50:d550:0:b0:416:2ac8:b98e with SMTP id f16-20020a50d550000000b004162ac8b98emr10828096edj.236.1646679570975;
+        Mon, 07 Mar 2022 10:59:30 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id p24-20020a1709061b5800b006da6435cedcsm5016329ejg.132.2022.03.07.10.59.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 10:59:30 -0800 (PST)
+Message-ID: <d5c5e3f7-7f50-6c57-f82a-41d5494ea514@canonical.com>
+Date:   Mon, 7 Mar 2022 19:59:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/4] dt-bindings: cpufreq: mediatek: add mt8186 cpufreq
+ dt-bindings
+Content-Language: en-US
+To:     Tim Chang <jia-wei.chang@mediatek.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, fan.chen@mediatek.com,
+        louis.yu@mediatek.com, roger.lu@mediatek.com,
+        Allen-yy.Lin@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        hsinyi@google.com,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
+ <20220307122151.11666-3-jia-wei.chang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307122151.11666-3-jia-wei.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,58 +97,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update LTR threshold scale and value based on LTRME (Latency
-Tolenrance Reporting Mechanism) from device capabilities.
+On 07/03/2022 13:21, Tim Chang wrote:
+> 1. add cci property.
+> 2. add example of MT8186.
 
-In ASPM driver, LTR threshold scale and value is updating
-based on tcommon_mode and t_poweron values. In kioxia NVMe,
-L1.2 is failing due to LTR threshold scale and value is
-greater values than max snoop/non snoop value.
+One logical change at a time. Are these related? Why entirely new
+example just for "cci" node? Maybe this should be part of existing example?
 
-In general, updated LTR threshold scale and value should be
-less than max snoop/non snoop value to enter the device
-into L1.2 state.
+> 
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+> ---
+>  .../bindings/cpufreq/cpufreq-mediatek.yaml    | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.yaml
+> index 584946eb3790..d3ce17fd8fcf 100644
+> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.yaml
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.yaml
+> @@ -48,6 +48,10 @@ properties:
+>        When absent, the voltage scaling flow is handled by hardware, hence no
+>        software "voltage tracking" is needed.
+>  
+> +  cci:
+> +    description:
+> +      Phandle of the cci to be linked with the phandle of CPU if present.
 
-Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
+This does not look like a standard type, so you need type.
 
----
-Changes since v1:
-	- Added missing variable declaration in v1 patch.
----
- drivers/pci/pcie/aspm.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index a96b742..a67746c 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -463,6 +463,7 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
- 	u32 val1, val2, scale1, scale2;
- 	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
- 	u32 ctl1 = 0, ctl2 = 0;
-+	u32 cap;
- 	u32 pctl1, pctl2, cctl1, cctl2;
- 	u32 pl1_2_enables, cl1_2_enables;
- 
-@@ -499,9 +500,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
- 	 * Table 5-11.  T(POWER_OFF) is at most 2us and T(L1.2) is at
- 	 * least 4us.
- 	 */
--	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
--	encode_l12_threshold(l1_2_threshold, &scale, &value);
--	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
-+	pcie_capability_read_dword(child, PCI_EXP_DEVCAP2, &cap);
-+	if (!(cap & PCI_EXP_DEVCAP2_LTR)) {
-+		l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
-+		encode_l12_threshold(l1_2_threshold, &scale, &value);
-+		ctl1 |= scale << 29 | value << 16;
-+	}
-+
-+	ctl1 |= t_common_mode;
- 
- 	/* Some broken devices only support dword access to L1 SS */
- 	pci_read_config_dword(parent, parent->l1ss + PCI_L1SS_CTL1, &pctl1);
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
 
+Best regards,
+Krzysztof

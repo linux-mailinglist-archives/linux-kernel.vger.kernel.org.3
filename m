@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA394CF55C
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6016E4CF9CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236894AbiCGJ0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:26:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S238987AbiCGKMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237325AbiCGJXo (ORCPT
+        with ESMTP id S238807AbiCGJyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B7E3AA63;
-        Mon,  7 Mar 2022 01:22:38 -0800 (PST)
+        Mon, 7 Mar 2022 04:54:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8E97807A;
+        Mon,  7 Mar 2022 01:45:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 845E261027;
-        Mon,  7 Mar 2022 09:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC55C340F3;
-        Mon,  7 Mar 2022 09:22:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8556861365;
+        Mon,  7 Mar 2022 09:45:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F23C340E9;
+        Mon,  7 Mar 2022 09:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644958;
-        bh=8HVQ0bK50UVVZlUYGGpvPde5Jchndo2Q57B4WADFTzI=;
+        s=korg; t=1646646326;
+        bh=6eaBAaiTx6z1KDKJ9qfmaLGoCODvGB//OB2/h1VZiFI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jT4a5GEADtID+u7evbBD1QQojYcW/jdnQaRYP1hHCjp9FpbbtfW0P0LTXWoJ4qyt5
-         SsqVxcbPPU3UOIB91vIlYNabFC4Bj+8po45kCwhV4+Htmjp4d06Ev6kl9goSpSzg1R
-         UR3Eyc/wIQ6myr5ePmBxWfP0jlYdpp5Hbpq2IKuU=
+        b=r/u+ZJ6TwGX7Y0ON9ZQPqjP0mwWLBCamoW15Ci7MK43cb2nDynb8q4vTdoJZDxO3L
+         AAho/dsz3YCaGfFVaAOhj88XAFLdjvbQh/AXQpSyGyRdpr1wxmfaIsgh8i0uYT03+2
+         nZP7vmi8VNJHbeDgitX5nrUsKfAZRAUXbMoJz6N4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Li Yang <leoyang.li@nxp.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 35/42] soc: fsl: qe: Check of ioremap return value
-Date:   Mon,  7 Mar 2022 10:19:09 +0100
-Message-Id: <20220307091637.174000208@linuxfoundation.org>
+        stable@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 206/262] iommu/amd: Fix I/O page table memory leak
+Date:   Mon,  7 Mar 2022 10:19:10 +0100
+Message-Id: <20220307091708.595648414@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 
-[ Upstream commit a222fd8541394b36b13c89d1698d9530afd59a9c ]
+[ Upstream commit 6b0b2d9a6a308bcd9300c2d83000a82812c56cea ]
 
-As the possible failure of the ioremap(), the par_io could be NULL.
-Therefore it should be better to check it and return error in order to
-guarantee the success of the initiation.
-But, I also notice that all the caller like mpc85xx_qe_par_io_init() in
-`arch/powerpc/platforms/85xx/common.c` don't check the return value of
-the par_io_init().
-Actually, par_io_init() needs to check to handle the potential error.
-I will submit another patch to fix that.
-Anyway, par_io_init() itsely should be fixed.
+The current logic updates the I/O page table mode for the domain
+before calling the logic to free memory used for the page table.
+This results in IOMMU page table memory leak, and can be observed
+when launching VM w/ pass-through devices.
 
-Fixes: 7aa1aa6ecec2 ("QE: Move QE from arch/powerpc to drivers/soc")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
+Fix by freeing the memory used for page table before updating the mode.
+
+Cc: Joerg Roedel <joro@8bytes.org>
+Reported-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Tested-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Fixes: e42ba0633064 ("iommu/amd: Restructure code for freeing page table")
+Link: https://lore.kernel.org/all/20220118194720.urjgi73b7c3tq2o6@oracle.com/
+Link: https://lore.kernel.org/r/20220210154745.11524-1-suravee.suthikulpanit@amd.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/fsl/qe/qe_io.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/iommu/amd/io_pgtable.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/soc/fsl/qe/qe_io.c b/drivers/soc/fsl/qe/qe_io.c
-index 7ae59abc7863..127a4a836e67 100644
---- a/drivers/soc/fsl/qe/qe_io.c
-+++ b/drivers/soc/fsl/qe/qe_io.c
-@@ -41,6 +41,8 @@ int par_io_init(struct device_node *np)
- 	if (ret)
- 		return ret;
- 	par_io = ioremap(res.start, resource_size(&res));
-+	if (!par_io)
-+		return -ENOMEM;
+diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
+index b1bf4125b0f7..6608d1717574 100644
+--- a/drivers/iommu/amd/io_pgtable.c
++++ b/drivers/iommu/amd/io_pgtable.c
+@@ -492,18 +492,18 @@ static void v1_free_pgtable(struct io_pgtable *iop)
  
- 	num_ports = of_get_property(np, "num-ports", NULL);
- 	if (num_ports)
+ 	dom = container_of(pgtable, struct protection_domain, iop);
+ 
+-	/* Update data structure */
+-	amd_iommu_domain_clr_pt_root(dom);
+-
+-	/* Make changes visible to IOMMUs */
+-	amd_iommu_domain_update(dom);
+-
+ 	/* Page-table is not visible to IOMMU anymore, so free it */
+ 	BUG_ON(pgtable->mode < PAGE_MODE_NONE ||
+ 	       pgtable->mode > PAGE_MODE_6_LEVEL);
+ 
+ 	free_sub_pt(pgtable->root, pgtable->mode, &freelist);
+ 
++	/* Update data structure */
++	amd_iommu_domain_clr_pt_root(dom);
++
++	/* Make changes visible to IOMMUs */
++	amd_iommu_domain_update(dom);
++
+ 	put_pages_list(&freelist);
+ }
+ 
 -- 
 2.34.1
 

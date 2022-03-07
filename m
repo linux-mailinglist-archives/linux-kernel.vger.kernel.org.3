@@ -2,183 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE02C4CF1D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710C94CF1BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbiCGGYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        id S235489AbiCGGRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234270AbiCGGYg (ORCPT
+        with ESMTP id S233321AbiCGGRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:24:36 -0500
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA9934649;
-        Sun,  6 Mar 2022 22:23:42 -0800 (PST)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 30AFF1A1427;
-        Mon,  7 Mar 2022 07:23:41 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 9F7F51A004C;
-        Mon,  7 Mar 2022 07:23:40 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id C81A1183AC94;
-        Mon,  7 Mar 2022 14:23:38 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [RFC 7/7] PCI: imx6: Add the iMX8MP PCIe support
-Date:   Mon,  7 Mar 2022 14:14:36 +0800
-Message-Id: <1646633676-23535-8-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1646633676-23535-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1646633676-23535-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 01:17:43 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4E23BBD3;
+        Sun,  6 Mar 2022 22:16:47 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V6Qe1nO_1646633802;
+Received: from 30.240.113.233(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V6Qe1nO_1646633802)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 07 Mar 2022 14:16:44 +0800
+Message-ID: <2005e3f7-ce30-bf36-4787-c503f0e7d6ce@linux.alibaba.com>
+Date:   Mon, 7 Mar 2022 14:16:42 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+Subject: Re: [PATCH v6 2/2] EDAC/ghes: use cper functions to avoid code
+ duplication
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220303122626.99740-3-xueshuai@linux.alibaba.com>
+ <YiHm1WHwO6HigCZx@nazgul.tnic>
+Content-Language: en-US
+In-Reply-To: <YiHm1WHwO6HigCZx@nazgul.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the i.MX8MP PCIe support.
+Hi, Borislav,
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
----
- drivers/pci/controller/dwc/pci-imx6.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+在 2022/3/4 PM6:16, Borislav Petkov 写道:
+> On Thu, Mar 03, 2022 at 08:26:26PM +0800, Shuai Xue wrote:
+>> To Borislav: Sorry, I only delete the format change summary in this commit
+>> log in this version. If I missed any comments, could you please point out
+>> clearly? Thank you very much.
+> 
+> I can't be more clear than the below - I simply took your patch and
+> heavily massaged it because it is a lot quicker this way.
+> 
+> You can compare it with your version and see what needed to be changed.
+> And you can of course ask questios why, if it is not clear. But it
+> should be - a shortlog of what I did is also in the commit message.
+> 
+> Now, when you look at the resulting patch you can see what the change
+> does. Yours did more than one logical thing - which a patch should never
+> do.
+> 
+> Also, I'd really really urge you to read
+> 
+> Documentation/process/submitting-patches.rst
+> 
+> carefully before sending other patches. I won't do this heavy editing
+> in the future so you're going to have to read review comments and
+> *incorporate* them into your patches before submitting them again.
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index bb662f90d4f3..fcf7638d5071 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -51,6 +51,7 @@ enum imx6_pcie_variants {
- 	IMX7D,
- 	IMX8MQ,
- 	IMX8MM,
-+	IMX8MP,
- };
- 
- #define IMX6_PCIE_FLAG_IMX6_PHY			BIT(0)
-@@ -379,6 +380,7 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
- 		reset_control_assert(imx6_pcie->pciephy_reset);
- 		fallthrough;
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_assert(imx6_pcie->apps_reset);
- 		break;
- 	case IMX6SX:
-@@ -407,7 +409,8 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
- static unsigned int imx6_pcie_grp_offset(const struct imx6_pcie *imx6_pcie)
- {
- 	WARN_ON(imx6_pcie->drvdata->variant != IMX8MQ &&
--		imx6_pcie->drvdata->variant != IMX8MM);
-+		imx6_pcie->drvdata->variant != IMX8MM &&
-+		imx6_pcie->drvdata->variant != IMX8MP);
- 	return imx6_pcie->controller_id == 1 ? IOMUXC_GPR16 : IOMUXC_GPR14;
- }
- 
-@@ -448,6 +451,7 @@ static int imx6_pcie_enable_ref_clk(struct imx6_pcie *imx6_pcie)
- 		break;
- 	case IMX8MM:
- 	case IMX8MQ:
-+	case IMX8MP:
- 		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
- 		if (ret) {
- 			dev_err(dev, "unable to enable pcie_aux clock\n");
-@@ -503,6 +507,7 @@ static int imx6_pcie_clk_enable(struct imx6_pcie *imx6_pcie)
- 
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MM:
-+	case IMX8MP:
- 		if (phy_power_on(imx6_pcie->phy))
- 			dev_err(dev, "unable to power on PHY\n");
- 		break;
-@@ -603,8 +608,10 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
- 		reset_control_deassert(imx6_pcie->pciephy_reset);
- 		break;
- 	case IMX8MM:
-+	case IMX8MP:
- 		if (phy_init(imx6_pcie->phy))
- 			dev_err(dev, "waiting for phy ready timeout!\n");
-+		return -ENODEV;
- 		break;
- 	case IMX7D:
- 		reset_control_deassert(imx6_pcie->pciephy_reset);
-@@ -678,6 +685,7 @@ static void imx6_pcie_init_phy(struct imx6_pcie *imx6_pcie)
- {
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MM:
-+	case IMX8MP:
- 		/*
- 		 * The PHY initialization had been done in the PHY
- 		 * driver, break here directly.
-@@ -823,6 +831,7 @@ static void imx6_pcie_ltssm_enable(struct device *dev)
- 	case IMX7D:
- 	case IMX8MQ:
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_deassert(imx6_pcie->apps_reset);
- 		break;
- 	}
-@@ -938,6 +947,7 @@ static void imx6_pcie_host_exit(struct pcie_port *pp)
- 		imx6_pcie_clk_disable(imx6_pcie);
- 		switch (imx6_pcie->drvdata->variant) {
- 		case IMX8MM:
-+		case IMX8MP:
- 			if (phy_power_off(imx6_pcie->phy))
- 				dev_err(dev, "unable to power off phy\n");
- 			phy_exit(imx6_pcie->phy);
-@@ -972,6 +982,7 @@ static void imx6_pcie_ltssm_disable(struct device *dev)
- 		break;
- 	case IMX7D:
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_assert(imx6_pcie->apps_reset);
- 		break;
- 	default:
-@@ -1028,6 +1039,7 @@ static int imx6_pcie_suspend_noirq(struct device *dev)
- 	imx6_pcie_clk_disable(imx6_pcie);
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MM:
-+	case IMX8MP:
- 		if (phy_power_off(imx6_pcie->phy))
- 			dev_err(dev, "unable to power off PHY\n");
- 		phy_exit(imx6_pcie->phy);
-@@ -1177,6 +1189,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
- 		}
- 		break;
- 	case IMX8MM:
-+	case IMX8MP:
- 		imx6_pcie->pcie_aux = devm_clk_get(dev, "pcie_aux");
- 		if (IS_ERR(imx6_pcie->pcie_aux))
- 			return dev_err_probe(dev, PTR_ERR(imx6_pcie->pcie_aux),
-@@ -1327,6 +1340,10 @@ static const struct imx6_pcie_drvdata drvdata[] = {
- 		.variant = IMX8MM,
- 		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
- 	},
-+	[IMX8MP] = {
-+		.variant = IMX8MP,
-+		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
-+	},
- };
- 
- static const struct of_device_id imx6_pcie_of_match[] = {
-@@ -1336,6 +1353,7 @@ static const struct of_device_id imx6_pcie_of_match[] = {
- 	{ .compatible = "fsl,imx7d-pcie",  .data = &drvdata[IMX7D],  },
- 	{ .compatible = "fsl,imx8mq-pcie", .data = &drvdata[IMX8MQ], },
- 	{ .compatible = "fsl,imx8mm-pcie", .data = &drvdata[IMX8MM], },
-+	{ .compatible = "fsl,imx8mp-pcie", .data = &drvdata[IMX8MP], },
- 	{},
- };
- 
--- 
-2.25.1
+Thank you very much for your valuable reworking. I see your concerns.
 
+> You can test the below on your machine now to make sure it still
+> performs as expected.
+
+I have test this patch, it works well.
+
+>       - rip out useless reformatting
+
+I have a question about the format after this patch:
+
+	[ 4578.277035] EDAC MC0: 1 CE single-symbol chipkill ECC on unknown memory (node: 0 card: 0 rank: 0 bank: 256 row: 11098 column: 1032 page:0x95ad2e offset:0x20 grain:1 syndrome:0x0 - APEI location: node: 0 card: 0 rank: 0 bank: 256 row: 11098 column: 1032)
+
+Should we add a new patch to remove the 'space' delimiter after the colon?
+
+Best Regards,
+Shuai
+
+
+> ---
+> From: Shuai Xue <xueshuai@linux.alibaba.com>
+> Date: Thu, 3 Mar 2022 20:26:26 +0800
+> Subject: [PATCH] EDAC/ghes: Unify CPER memory error location reporting
+> 
+> Switch the GHES EDAC memory error reporting functions to use the common
+> CPER ones and get rid of code duplication.
+> 
+>   [ bp:
+>       - rewrite commit message, remove useless text
+>       - rip out useless reformatting
+>       - align function params on the opening brace
+>       - rename function to a more descriptive name
+>       - drop useless function exports
+>       - handle buffer lengths properly when printing other detail
+>       - remove useless casting
+>   ]
+> 
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Link: https://lore.kernel.org/r/20220303122626.99740-3-xueshuai@linux.alibaba.com
+> ---
+>  drivers/edac/Kconfig        |   1 +
+>  drivers/edac/ghes_edac.c    | 200 +++++++-----------------------------
+>  drivers/firmware/efi/cper.c |   4 +-
+>  include/linux/cper.h        |   2 +
+>  4 files changed, 42 insertions(+), 165 deletions(-)
+> 
+> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+> index 58ab63642e72..23f11554f400 100644
+> --- a/drivers/edac/Kconfig
+> +++ b/drivers/edac/Kconfig
+> @@ -55,6 +55,7 @@ config EDAC_DECODE_MCE
+>  config EDAC_GHES
+>  	bool "Output ACPI APEI/GHES BIOS detected errors via EDAC"
+>  	depends on ACPI_APEI_GHES && (EDAC=y)
+> +	select UEFI_CPER
+>  	help
+>  	  Not all machines support hardware-driven error report. Some of those
+>  	  provide a BIOS-driven error report mechanism via ACPI, using the
+> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+> index 6d1ddecbf0da..2805d5610300 100644
+> --- a/drivers/edac/ghes_edac.c
+> +++ b/drivers/edac/ghes_edac.c
+> @@ -15,11 +15,13 @@
+>  #include "edac_module.h"
+>  #include <ras/ras_event.h>
+>  
+> +#define OTHER_DETAIL_LEN	400
+> +
+>  struct ghes_pvt {
+>  	struct mem_ctl_info *mci;
+>  
+>  	/* Buffers for the error handling routine */
+> -	char other_detail[400];
+> +	char other_detail[OTHER_DETAIL_LEN];
+>  	char msg[80];
+>  };
+>  
+> @@ -235,8 +237,34 @@ static void ghes_scan_system(void)
+>  	system_scanned = true;
+>  }
+>  
+> +static int print_mem_error_other_detail(const struct cper_sec_mem_err *mem, char *msg,
+> +					const char *location, unsigned int len)
+> +{
+> +	u32 n;
+> +
+> +	if (!msg)
+> +		return 0;
+> +
+> +	n = 0;
+> +	len -= 1;
+> +
+> +	n += scnprintf(msg + n, len - n, "APEI location: %s ", location);
+> +
+> +	if (!(mem->validation_bits & CPER_MEM_VALID_ERROR_STATUS))
+> +		goto out;
+> +
+> +	n += scnprintf(msg + n, len - n, "status(0x%016llx): ", mem->error_status);
+> +	n += scnprintf(msg + n, len - n, "%s ", cper_mem_err_status_str(mem->error_status));
+> +
+> +out:
+> +	msg[n] = '\0';
+> +
+> +	return n;
+> +}
+> +
+>  void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  {
+> +	struct cper_mem_err_compact cmem;
+>  	struct edac_raw_error_desc *e;
+>  	struct mem_ctl_info *mci;
+>  	struct ghes_pvt *pvt;
+> @@ -292,60 +320,10 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  
+>  	/* Error type, mapped on e->msg */
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_TYPE) {
+> +		u8 etype = mem_err->error_type;
+> +
+>  		p = pvt->msg;
+> -		switch (mem_err->error_type) {
+> -		case 0:
+> -			p += sprintf(p, "Unknown");
+> -			break;
+> -		case 1:
+> -			p += sprintf(p, "No error");
+> -			break;
+> -		case 2:
+> -			p += sprintf(p, "Single-bit ECC");
+> -			break;
+> -		case 3:
+> -			p += sprintf(p, "Multi-bit ECC");
+> -			break;
+> -		case 4:
+> -			p += sprintf(p, "Single-symbol ChipKill ECC");
+> -			break;
+> -		case 5:
+> -			p += sprintf(p, "Multi-symbol ChipKill ECC");
+> -			break;
+> -		case 6:
+> -			p += sprintf(p, "Master abort");
+> -			break;
+> -		case 7:
+> -			p += sprintf(p, "Target abort");
+> -			break;
+> -		case 8:
+> -			p += sprintf(p, "Parity Error");
+> -			break;
+> -		case 9:
+> -			p += sprintf(p, "Watchdog timeout");
+> -			break;
+> -		case 10:
+> -			p += sprintf(p, "Invalid address");
+> -			break;
+> -		case 11:
+> -			p += sprintf(p, "Mirror Broken");
+> -			break;
+> -		case 12:
+> -			p += sprintf(p, "Memory Sparing");
+> -			break;
+> -		case 13:
+> -			p += sprintf(p, "Scrub corrected error");
+> -			break;
+> -		case 14:
+> -			p += sprintf(p, "Scrub uncorrected error");
+> -			break;
+> -		case 15:
+> -			p += sprintf(p, "Physical Memory Map-out event");
+> -			break;
+> -		default:
+> -			p += sprintf(p, "reserved error (%d)",
+> -				     mem_err->error_type);
+> -		}
+> +		p += snprintf(p, sizeof(pvt->msg), "%s", cper_mem_err_type_str(etype));
+>  	} else {
+>  		strcpy(pvt->msg, "unknown error");
+>  	}
+> @@ -362,52 +340,19 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  
+>  	/* Memory error location, mapped on e->location */
+>  	p = e->location;
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_NODE)
+> -		p += sprintf(p, "node:%d ", mem_err->node);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_CARD)
+> -		p += sprintf(p, "card:%d ", mem_err->card);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_MODULE)
+> -		p += sprintf(p, "module:%d ", mem_err->module);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_RANK_NUMBER)
+> -		p += sprintf(p, "rank:%d ", mem_err->rank);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_BANK)
+> -		p += sprintf(p, "bank:%d ", mem_err->bank);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_GROUP)
+> -		p += sprintf(p, "bank_group:%d ",
+> -			     mem_err->bank >> CPER_MEM_BANK_GROUP_SHIFT);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
+> -		p += sprintf(p, "bank_address:%d ",
+> -			     mem_err->bank & CPER_MEM_BANK_ADDRESS_MASK);
+> -	if (mem_err->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
+> -		u32 row = mem_err->row;
+> -
+> -		row |= cper_get_mem_extension(mem_err->validation_bits, mem_err->extended);
+> -		p += sprintf(p, "row:%d ", row);
+> -	}
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_COLUMN)
+> -		p += sprintf(p, "col:%d ", mem_err->column);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_BIT_POSITION)
+> -		p += sprintf(p, "bit_pos:%d ", mem_err->bit_pos);
+> +	cper_mem_err_pack(mem_err, &cmem);
+> +	p += cper_mem_err_location(&cmem, p);
+> +
+>  	if (mem_err->validation_bits & CPER_MEM_VALID_MODULE_HANDLE) {
+> -		const char *bank = NULL, *device = NULL;
+>  		struct dimm_info *dimm;
+>  
+> -		dmi_memdev_name(mem_err->mem_dev_handle, &bank, &device);
+> -		if (bank != NULL && device != NULL)
+> -			p += sprintf(p, "DIMM location:%s %s ", bank, device);
+> -		else
+> -			p += sprintf(p, "DIMM DMI handle: 0x%.4x ",
+> -				     mem_err->mem_dev_handle);
+> -
+> +		p += cper_dimm_err_location(&cmem, p);
+>  		dimm = find_dimm_by_handle(mci, mem_err->mem_dev_handle);
+>  		if (dimm) {
+>  			e->top_layer = dimm->idx;
+>  			strcpy(e->label, dimm->label);
+>  		}
+>  	}
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_CHIP_ID)
+> -		p += sprintf(p, "chipID: %d ",
+> -			     mem_err->extended >> CPER_MEM_CHIP_ID_SHIFT);
+>  	if (p > e->location)
+>  		*(p - 1) = '\0';
+>  
+> @@ -416,78 +361,7 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
+>  
+>  	/* All other fields are mapped on e->other_detail */
+>  	p = pvt->other_detail;
+> -	p += snprintf(p, sizeof(pvt->other_detail),
+> -		"APEI location: %s ", e->location);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_ERROR_STATUS) {
+> -		u64 status = mem_err->error_status;
+> -
+> -		p += sprintf(p, "status(0x%016llx): ", (long long)status);
+> -		switch ((status >> 8) & 0xff) {
+> -		case 1:
+> -			p += sprintf(p, "Error detected internal to the component ");
+> -			break;
+> -		case 16:
+> -			p += sprintf(p, "Error detected in the bus ");
+> -			break;
+> -		case 4:
+> -			p += sprintf(p, "Storage error in DRAM memory ");
+> -			break;
+> -		case 5:
+> -			p += sprintf(p, "Storage error in TLB ");
+> -			break;
+> -		case 6:
+> -			p += sprintf(p, "Storage error in cache ");
+> -			break;
+> -		case 7:
+> -			p += sprintf(p, "Error in one or more functional units ");
+> -			break;
+> -		case 8:
+> -			p += sprintf(p, "component failed self test ");
+> -			break;
+> -		case 9:
+> -			p += sprintf(p, "Overflow or undervalue of internal queue ");
+> -			break;
+> -		case 17:
+> -			p += sprintf(p, "Virtual address not found on IO-TLB or IO-PDIR ");
+> -			break;
+> -		case 18:
+> -			p += sprintf(p, "Improper access error ");
+> -			break;
+> -		case 19:
+> -			p += sprintf(p, "Access to a memory address which is not mapped to any component ");
+> -			break;
+> -		case 20:
+> -			p += sprintf(p, "Loss of Lockstep ");
+> -			break;
+> -		case 21:
+> -			p += sprintf(p, "Response not associated with a request ");
+> -			break;
+> -		case 22:
+> -			p += sprintf(p, "Bus parity error - must also set the A, C, or D Bits ");
+> -			break;
+> -		case 23:
+> -			p += sprintf(p, "Detection of a PATH_ERROR ");
+> -			break;
+> -		case 25:
+> -			p += sprintf(p, "Bus operation timeout ");
+> -			break;
+> -		case 26:
+> -			p += sprintf(p, "A read was issued to data that has been poisoned ");
+> -			break;
+> -		default:
+> -			p += sprintf(p, "reserved ");
+> -			break;
+> -		}
+> -	}
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_REQUESTOR_ID)
+> -		p += sprintf(p, "requestorID: 0x%016llx ",
+> -			     (long long)mem_err->requestor_id);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_RESPONDER_ID)
+> -		p += sprintf(p, "responderID: 0x%016llx ",
+> -			     (long long)mem_err->responder_id);
+> -	if (mem_err->validation_bits & CPER_MEM_VALID_TARGET_ID)
+> -		p += sprintf(p, "targetID: 0x%016llx ",
+> -			     (long long)mem_err->responder_id);
+> +	p += print_mem_error_other_detail(mem_err, p, e->location, OTHER_DETAIL_LEN);
+>  	if (p > pvt->other_detail)
+>  		*(p - 1) = '\0';
+>  
+> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+> index 34eeaa59f04a..215c778fb33c 100644
+> --- a/drivers/firmware/efi/cper.c
+> +++ b/drivers/firmware/efi/cper.c
+> @@ -237,7 +237,7 @@ const char *cper_mem_err_status_str(u64 status)
+>  }
+>  EXPORT_SYMBOL_GPL(cper_mem_err_status_str);
+>  
+> -static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
+> +int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
+>  {
+>  	u32 len, n;
+>  
+> @@ -291,7 +291,7 @@ static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
+>  	return n;
+>  }
+>  
+> -static int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
+> +int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg)
+>  {
+>  	u32 len, n;
+>  	const char *bank = NULL, *device = NULL;
+> diff --git a/include/linux/cper.h b/include/linux/cper.h
+> index 5b1dd27b317d..eacb7dd7b3af 100644
+> --- a/include/linux/cper.h
+> +++ b/include/linux/cper.h
+> @@ -569,5 +569,7 @@ void cper_print_proc_arm(const char *pfx,
+>  			 const struct cper_sec_proc_arm *proc);
+>  void cper_print_proc_ia(const char *pfx,
+>  			const struct cper_sec_proc_ia *proc);
+> +int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg);
+> +int cper_dimm_err_location(struct cper_mem_err_compact *mem, char *msg);
+>  
+>  #endif

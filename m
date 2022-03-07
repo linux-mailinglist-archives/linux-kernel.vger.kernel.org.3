@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9230D4CFE10
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C721F4CFE12
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236135AbiCGMVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:21:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S239230AbiCGMVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbiCGMVO (ORCPT
+        with ESMTP id S231656AbiCGMVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:21:14 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C992080203
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:20:19 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KBy8g0p0mz1GC9j;
-        Mon,  7 Mar 2022 20:15:31 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Mar 2022 20:20:16 +0800
-Subject: Re: [PATCH 13/16] mm/migration: return errno when isolate_huge_page
- failed
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        <akpm@linux-foundation.org>
-CC:     <mike.kravetz@oracle.com>, <shy828301@gmail.com>,
-        <willy@infradead.org>, <ying.huang@intel.com>, <ziy@nvidia.com>,
-        <minchan@kernel.org>, <apopple@nvidia.com>,
-        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
-        <almasrymina@google.com>, <jhubbard@nvidia.com>,
-        <rcampbell@nvidia.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
- <20220304093409.25829-14-linmiaohe@huawei.com>
- <c84c1a0a-66aa-915f-87d2-013ff0ac343c@linux.alibaba.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <c6b117ba-948a-7f84-58f4-f0e3c5bd0a9c@huawei.com>
-Date:   Mon, 7 Mar 2022 20:20:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 7 Mar 2022 07:21:20 -0500
+Received: from out199-6.us.a.mail.aliyun.com (out199-6.us.a.mail.aliyun.com [47.90.199.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AAC8020C
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:20:25 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=hao.xiang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V6VlVhH_1646655619;
+Received: from 30.43.105.113(mailfrom:hao.xiang@linux.alibaba.com fp:SMTPD_---0V6VlVhH_1646655619)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 07 Mar 2022 20:20:20 +0800
+Message-ID: <98d5a389-6856-0cec-b730-65f609ff15db@linux.alibaba.com>
+Date:   Mon, 7 Mar 2022 20:20:19 +0800
 MIME-Version: 1.0
-In-Reply-To: <c84c1a0a-66aa-915f-87d2-013ff0ac343c@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+To:     chang.seok.bae@intel.com
+Cc:     bp@alien8.de, dave.hansen@linux.intel.com,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        ravi.v.shankar@intel.com, tglx@linutronix.de, x86@kernel.org,
+        yang.zhong@intel.com
+References: <20220129173647.27981-2-chang.seok.bae@intel.com>
+Subject: Re: [PATCH v4 1/2] x86/arch_prctl: Fix the ARCH_REQ_XCOMP_PERM
+ implementation
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Hao Xiang <hao.xiang@linux.alibaba.com>
+In-Reply-To: <20220129173647.27981-2-chang.seok.bae@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/7 10:14, Baolin Wang wrote:
-> Hi Miaohe,
-> 
-> On 3/4/2022 5:34 PM, Miaohe Lin wrote:
->> We should return errno (-EBUSY here) when failed to isolate the huge page
->> rather than always return 1 which could confuse the user.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>   mm/migrate.c | 6 ++----
->>   1 file changed, 2 insertions(+), 4 deletions(-)
->>
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index 6c2dfed2ddb8..279940c0c064 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1618,10 +1618,8 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
->>           goto out_putpage;
->>         if (PageHuge(page)) {
->> -        if (PageHead(page)) {
->> -            isolate_huge_page(page, pagelist);
->> -            err = 1;
->> -        }
->> +        if (PageHead(page))
->> +            err = isolate_huge_page(page, pagelist) ? 1 : -EBUSY;
-> 
-> Could you elaborate on which case the huge page isolation can be failed in this case? Or you met a real problem? Cause now we've got this head huge page refcnt, I can not see why we'll fail to isolate this huge page.
+x86/arch_prctl: Fix the ARCH_REQ_XCOMP_PERM implementation
 
-IIUC, this could happen when hugepage is under migration which cleared HPageMigratable. Page refcnt cannot
-prevent isolate_huge_page from happening. Or am I miss something?
+If WRITE_ONCE(perm->__state_perm, requested) is modified to
+WRITE_ONCE(perm->__state_perm, mask), When the qemu process does not 
+request the XFEATURE_MASK_XTILE_DATA xsave state permission, there may 
+be a gp error (kvm: kvm_set_xcr line 1091 inject gp fault with cpl 0) 
+because __kvm_set_xcr return 1.
 
-Many thanks.
+static int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr){
+     ...
+     // xcr0 includes XFEATURE_MASK_XTILE_CFG by default.
+     if ((xcr0 & XFEATURE_MASK_XTILE) &&
+         ((xcr0 & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE))
+         return 1;
+     ...
+}
 
-> .
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 02b3dda..2d4363e 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1636,7 +1636,7 @@ static int __xstate_request_perm(u64 permitted, 
+u64 requested, bool guest)
+
+         perm = guest ? &fpu->guest_perm : &fpu->perm;
+         /* Pairs with the READ_ONCE() in xstate_get_group_perm() */
+-       WRITE_ONCE(perm->__state_perm, requested);
++       WRITE_ONCE(perm->__state_perm, mask);
+         /* Protected by sighand lock */
+         perm->__state_size = ksize;
+         perm->__user_state_size = usize;
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 494d4d3..e8704568 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -908,6 +908,9 @@ static inline int __do_cpuid_func(struct 
+kvm_cpuid_array *array, u32 function)
+                 break;
+         case 0xd: {
+                 u64 permitted_xcr0 = supported_xcr0 & 
+xstate_get_guest_group_perm();
++               permitted_xcr0 = ((permitted_xcr0 & 
+XFEATURES_MASK_XTILE) != XFEATURES_MASK_XTILE)
++                               ? permitted_xcr0
++                               : permitted_xcr0 & ~XFEATURES_MASK_XTILE;
+                 u64 permitted_xss = supported_xss;
+
+                 entry->eax &= permitted_xcr0;
 

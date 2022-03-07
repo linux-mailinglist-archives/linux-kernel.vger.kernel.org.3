@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1C14CFCD3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FE44CFCD0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 12:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237661AbiCGL3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 06:29:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
+        id S241927AbiCGL3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 06:29:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242098AbiCGL15 (ORCPT
+        with ESMTP id S242204AbiCGL2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 06:27:57 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADB824F3E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 03:06:39 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id v28so19812940ljv.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 03:06:39 -0800 (PST)
+        Mon, 7 Mar 2022 06:28:00 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D6ADF2;
+        Mon,  7 Mar 2022 03:07:33 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id e2so13422275pls.10;
+        Mon, 07 Mar 2022 03:07:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version:organization
-         :content-transfer-encoding;
-        bh=WifnMpfCywQgn9v4uMmELkW8tbTMccZxaKxLll5l1aQ=;
-        b=eAnQsrE7cV3O7z0DfiC9M6ePQ7R6Wf/NTn5yUiSvOOMRMEVAWu1841E+H9xmJgYPrg
-         tN2F6ST9n6LKoA9AdoZq0J5wpjIVEfWp3vnZTc/UrhuyKQ2vU7Akwg+8dUTszWGoFo3Q
-         u6Iv51ux37VgNJ9yli65JXJxItOuPM+mZ/sSaxmiUBEhMe8tt50kgxpAW7we+GJM85Z5
-         3sugu20i0n6gsNifr+SyQ2EMmIHwA6hSkAuIkqJHlQQDWEHF763LAYsBeanN/XaPcaOz
-         V9WF8LEUFSw3IkKo8nwFBNzDspCYMH8X9I5uuG5OYg+5+h1vZeQB2BrwKa8zWf27kFtb
-         gl6w==
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id;
+        bh=wtN3Z4hu9DNNZsfVCCWCUX7EPIjeuOZMz8lPtSM94AA=;
+        b=JVKWDWuGuWf8NOgIhnT7t6MzO2VBqqigFqsTn47zX1sjFQ2OZJZyGIl6bU7oVya5wO
+         fcIUNsnJs9CQ0EXft03h5g/13d7GQlFxIUayP6atyXPJrXGTovx674hQaizBLhuPGjb5
+         iTsUaNiwBrOA7Bl3trfN8boQLEnBdnGZE5YQMSTlKplHMW50usJ1KtIESfzHkvsWFHz7
+         uuNlVUkeJ2bjcgRyYn6lXXYUuNku5kBMTNr8Ij+hwBAApXN+wWu7qcTDPUc2HX0hL/5n
+         0hecOfpWPyDyJVyyHAhOApoCbCZrHQvQGlGCn5W5Bv/ZYLHPNjkit/Qq81AtgzMGF+cX
+         U68Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :organization:content-transfer-encoding;
-        bh=WifnMpfCywQgn9v4uMmELkW8tbTMccZxaKxLll5l1aQ=;
-        b=DUxLejxnIFsLrDU6GH6PQKF+XKSBVJCXif/OfNsLwkO8Dt477Y947OE1NTTpfDHoka
-         G4O/4l69xzlzAunCngYaiV6BXxPpBuPeJsEBBK8Zuiz6ec25/wdlho4XHBRK5pZQAW9s
-         We6wduDrNC/3xxelRJ7wu84YcuNy/M9na+CNqroXTvoSGp/q033QvdTDUJYgEZ5MI5UW
-         4CYNSTYsxjBaEWWRFaBUa5R0494pGh99brQjxAluM3I9kqE3+szl2bt/6oIQVsnYynBa
-         4qeUwS5RGfWr4Y+o2MSZZTEdEvMXSkTPcD042soEQfCr0gAOEqx9IonIod2fhJZQsRzg
-         bzBw==
-X-Gm-Message-State: AOAM532NnOBCgg8/yEsY26/GIFdETjpKMJL4QuDd/03YMw34j3DYHQ8v
-        uMNqWd0ETafaudqgzj7eb9YVCg==
-X-Google-Smtp-Source: ABdhPJys6R6uyln+J9vxt+xgmUASyxV+ZscA/tTaibo7IdkPflGPTlBL6k5RdlSFPyBwtDa+ZGzI+g==
-X-Received: by 2002:a2e:9f0e:0:b0:244:ddb5:8685 with SMTP id u14-20020a2e9f0e000000b00244ddb58685mr7474369ljk.151.1646651197442;
-        Mon, 07 Mar 2022 03:06:37 -0800 (PST)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id u17-20020a056512095100b0044381f00805sm2793765lft.139.2022.03.07.03.06.33
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=wtN3Z4hu9DNNZsfVCCWCUX7EPIjeuOZMz8lPtSM94AA=;
+        b=r+UI3tpGCx52Le6vvattU9+zbeP7PgqPTqFXLmXEdmYkhyo2f66qnuB1T1EmfpHkDP
+         VtB5x6sb4mynpNSixAVeBTitpg/NwYVN1DbfCsFovZa58KIokXr84t/EGMloqwizenLd
+         EYm0noPU2nwCqLQa/a7kuf/Mv1jR/i8H0yUbQ7e8yqlXiZ80cWixqptdUEVOAto1dxP4
+         dNTHxp+VtMfdbz0mMhpQSN/vqeuiICdiztIiKM0LfNGFgQoJlGsulnzQgr3a/QdDHUGb
+         LbTpZzTulD8Psacbj0UrwcJGyGEM9LGx6oSEApWRbNqivR5HmLadK3BasazPBAUbhVPw
+         jCsw==
+X-Gm-Message-State: AOAM532p4Rzyi/p+ezY8VLrhOJ+p9w+z98u2kX1ll6AVse/C9UXAWbMV
+        2bRIzxnqLTB0dXjeENjtmic=
+X-Google-Smtp-Source: ABdhPJxJlr2TmxJIPSEAagsB9lKMYvMjMJKCv7dNT+TRvwB+QyldjyevwGf/Fvb1qbTU3aNXCpGG7Q==
+X-Received: by 2002:a17:903:1209:b0:14e:e31c:b8c4 with SMTP id l9-20020a170903120900b0014ee31cb8c4mr11655809plh.153.1646651253190;
+        Mon, 07 Mar 2022 03:07:33 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id a22-20020a056a000c9600b004f10137a096sm16363458pfv.50.2022.03.07.03.07.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 03:06:36 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: dsa: tag_dsa: Fix tx from VLAN uppers on non-filtering bridges
-Date:   Mon,  7 Mar 2022 12:05:48 +0100
-Message-Id: <20220307110548.812455-1-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Organization: Westermo
-Content-Transfer-Encoding: 8bit
+        Mon, 07 Mar 2022 03:07:33 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwrng: nomadik: Change clk_disable to clk_disable_unprepare
+Date:   Mon,  7 Mar 2022 11:07:24 +0000
+Message-Id: <20220307110728.15635-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,78 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this situation (VLAN filtering disabled on br0):
+The corresponding API for clk_prepare_enable is clk_disable_unprepare,
+other than clk_disable_unprepare.
 
-    br0.10
-     /
-   br0
-   / \
-swp0 swp1
+Fix this by changing clk_disable to clk_disable_unprepare.
 
-When a frame is transmitted from the VLAN upper, the bridge will send
-it down to one of the switch ports with forward offloading
-enabled. This will cause tag_dsa to generate a FORWARD tag. Before
-this change, that tag would have it's VID set to 10, even though VID
-10 is not loaded in the VTU.
-
-Before the blamed commit, the frame would trigger a VTU miss and be
-forwarded according to the PVT configuration. Now that all fabric
-ports are in 802.1Q secure mode, the frame is dropped instead.
-
-Therefore, restrict the condition under which we rewrite an 802.1Q tag
-to a DSA tag. On standalone port's, reuse is always safe since we will
-always generate FROM_CPU tags in that case. For bridged ports though,
-we must ensure that VLAN filtering is enabled, which in turn
-guarantees that the VID in question is loaded into the VTU.
-
-Fixes: d352b20f4174 ("net: dsa: mv88e6xxx: Improve multichip isolation of standalone ports")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Fixes: beca35d05cc2 ("hwrng: nomadik - use clk_prepare_enable()")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- net/dsa/tag_dsa.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/char/hw_random/nomadik-rng.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/dsa/tag_dsa.c b/net/dsa/tag_dsa.c
-index c8b4bbd46191..e4b6e3f2a3db 100644
---- a/net/dsa/tag_dsa.c
-+++ b/net/dsa/tag_dsa.c
-@@ -127,6 +127,7 @@ static struct sk_buff *dsa_xmit_ll(struct sk_buff *skb, struct net_device *dev,
- 				   u8 extra)
+diff --git a/drivers/char/hw_random/nomadik-rng.c b/drivers/char/hw_random/nomadik-rng.c
+index 67947a19aa22..e8f9621e7954 100644
+--- a/drivers/char/hw_random/nomadik-rng.c
++++ b/drivers/char/hw_random/nomadik-rng.c
+@@ -65,14 +65,14 @@ static int nmk_rng_probe(struct amba_device *dev, const struct amba_id *id)
+ out_release:
+ 	amba_release_regions(dev);
+ out_clk:
+-	clk_disable(rng_clk);
++	clk_disable_unprepare(rng_clk);
+ 	return ret;
+ }
+ 
+ static void nmk_rng_remove(struct amba_device *dev)
  {
- 	struct dsa_port *dp = dsa_slave_to_port(dev);
-+	struct net_device *br_dev;
- 	u8 tag_dev, tag_port;
- 	enum dsa_cmd cmd;
- 	u8 *dsa_header;
-@@ -149,7 +150,16 @@ static struct sk_buff *dsa_xmit_ll(struct sk_buff *skb, struct net_device *dev,
- 		tag_port = dp->index;
- 	}
+ 	amba_release_regions(dev);
+-	clk_disable(rng_clk);
++	clk_disable_unprepare(rng_clk);
+ }
  
--	if (skb->protocol == htons(ETH_P_8021Q)) {
-+	br_dev = dsa_port_bridge_dev_get(dp);
-+
-+	/* If frame is already 802.1Q tagged, we can convert it to a DSA
-+	 * tag (avoiding a memmove), but only if the port is standalone
-+	 * (in which case we always send FROM_CPU) or if the port's
-+	 * bridge has VLAN filtering enabled (in which case the CPU port
-+	 * will be a member of the VLAN).
-+	 */
-+	if (skb->protocol == htons(ETH_P_8021Q) &&
-+	    (!br_dev || br_vlan_enabled(br_dev))) {
- 		if (extra) {
- 			skb_push(skb, extra);
- 			dsa_alloc_etype_header(skb, extra);
-@@ -166,10 +176,9 @@ static struct sk_buff *dsa_xmit_ll(struct sk_buff *skb, struct net_device *dev,
- 			dsa_header[2] &= ~0x10;
- 		}
- 	} else {
--		struct net_device *br = dsa_port_bridge_dev_get(dp);
- 		u16 vid;
- 
--		vid = br ? MV88E6XXX_VID_BRIDGED : MV88E6XXX_VID_STANDALONE;
-+		vid = br_dev ? MV88E6XXX_VID_BRIDGED : MV88E6XXX_VID_STANDALONE;
- 
- 		skb_push(skb, DSA_HLEN + extra);
- 		dsa_alloc_etype_header(skb, DSA_HLEN + extra);
+ static const struct amba_id nmk_rng_ids[] = {
 -- 
-2.25.1
+2.17.1
 

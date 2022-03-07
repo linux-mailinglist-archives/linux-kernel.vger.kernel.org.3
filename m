@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767BE4CF7ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B25E4CF64A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238664AbiCGJsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
+        id S237571AbiCGJfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238939AbiCGJjB (ORCPT
+        with ESMTP id S238820AbiCGJ3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:39:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33FB6F497;
-        Mon,  7 Mar 2022 01:33:49 -0800 (PST)
+        Mon, 7 Mar 2022 04:29:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99574DEF;
+        Mon,  7 Mar 2022 01:28:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4930A6112D;
-        Mon,  7 Mar 2022 09:33:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5203AC340E9;
-        Mon,  7 Mar 2022 09:33:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3181C60C00;
+        Mon,  7 Mar 2022 09:28:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23728C340F4;
+        Mon,  7 Mar 2022 09:28:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645627;
-        bh=/JrGYYlRVSlwF13yn3rkv1ymypqZju2Z3HICRek2zkM=;
+        s=korg; t=1646645333;
+        bh=3hTRPYILVHFgwkPuAGP/+yznlxcvOHyMJhbXkvArwJc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DW7TS+lb17pGqn+Rv4epf9TFdq3Essz4ppie/u69y4wQ4hEnbIL7rqUg05lphcjPj
-         LsX6OSC02uCsPJKwvLdLD9BJUMc1+6R2Jp/wYiRlq+aGCmf8NacYH/6uCCzIktGK4K
-         2HGIidv9YPyHvqgFATVte79Hhn6sAl4JCQUwv57o=
+        b=yYubcIeVa2phAcGmbpGU8PpyysMQ1RY5mp3qi3bQtBGWSDx9k8iYxCM815DB3vtpJ
+         8eGo0rlI8t9+GnA2WfP2QXjIuv6aqrXbSLw15oDSuV8fxUay6A69ulP1SixGgCq5x2
+         P690/KiwFC8JUleXkRK5oiKkjC9E6uuPj86CpYUA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 092/105] nl80211: Handle nla_memdup failures in handle_nan_filter
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.4 62/64] btrfs: add missing run of delayed items after unlink during log replay
 Date:   Mon,  7 Mar 2022 10:19:35 +0100
-Message-Id: <20220307091646.766274785@linuxfoundation.org>
+Message-Id: <20220307091640.909500764@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Filipe Manana <fdmanana@suse.com>
 
-[ Upstream commit 6ad27f522cb3b210476daf63ce6ddb6568c0508b ]
+commit 4751dc99627e4d1465c5bfa8cb7ab31ed418eff5 upstream.
 
-As there's potential for failure of the nla_memdup(),
-check the return value.
+During log replay, whenever we need to check if a name (dentry) exists in
+a directory we do searches on the subvolume tree for inode references or
+or directory entries (BTRFS_DIR_INDEX_KEY keys, and BTRFS_DIR_ITEM_KEY
+keys as well, before kernel 5.17). However when during log replay we
+unlink a name, through btrfs_unlink_inode(), we may not delete inode
+references and dir index keys from a subvolume tree and instead just add
+the deletions to the delayed inode's delayed items, which will only be
+run when we commit the transaction used for log replay. This means that
+after an unlink operation during log replay, if we attempt to search for
+the same name during log replay, we will not see that the name was already
+deleted, since the deletion is recorded only on the delayed items.
 
-Fixes: a442b761b24b ("cfg80211: add add_nan_func / del_nan_func")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220301100020.3801187-1-jiasheng@iscas.ac.cn
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+We run delayed items after every unlink operation during log replay,
+except at unlink_old_inode_refs() and at add_inode_ref(). This was due
+to an overlook, as delayed items should be run after evert unlink, for
+the reasons stated above.
+
+So fix those two cases.
+
+Fixes: 0d836392cadd5 ("Btrfs: fix mount failure after fsync due to hard link recreation")
+Fixes: 1f250e929a9c9 ("Btrfs: fix log replay failure after unlink and link combination")
+CC: stable@vger.kernel.org # 4.19+
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/wireless/nl80211.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ fs/btrfs/tree-log.c |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index 8fb0478888fb..07bd7b00b56d 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -12930,6 +12930,9 @@ static int handle_nan_filter(struct nlattr *attr_filter,
- 	i = 0;
- 	nla_for_each_nested(attr, attr_filter, rem) {
- 		filter[i].filter = nla_memdup(attr, GFP_KERNEL);
-+		if (!filter[i].filter)
-+			goto err;
-+
- 		filter[i].len = nla_len(attr);
- 		i++;
- 	}
-@@ -12942,6 +12945,15 @@ static int handle_nan_filter(struct nlattr *attr_filter,
- 	}
- 
- 	return 0;
-+
-+err:
-+	i = 0;
-+	nla_for_each_nested(attr, attr_filter, rem) {
-+		kfree(filter[i].filter);
-+		i++;
-+	}
-+	kfree(filter);
-+	return -ENOMEM;
- }
- 
- static int nl80211_nan_add_func(struct sk_buff *skb,
--- 
-2.34.1
-
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -1308,6 +1308,15 @@ again:
+ 						 inode, name, namelen);
+ 			kfree(name);
+ 			iput(dir);
++			/*
++			 * Whenever we need to check if a name exists or not, we
++			 * check the subvolume tree. So after an unlink we must
++			 * run delayed items, so that future checks for a name
++			 * during log replay see that the name does not exists
++			 * anymore.
++			 */
++			if (!ret)
++				ret = btrfs_run_delayed_items(trans);
+ 			if (ret)
+ 				goto out;
+ 			goto again;
+@@ -1559,6 +1568,15 @@ static noinline int add_inode_ref(struct
+ 				 */
+ 				if (!ret && inode->i_nlink == 0)
+ 					inc_nlink(inode);
++				/*
++				 * Whenever we need to check if a name exists or
++				 * not, we check the subvolume tree. So after an
++				 * unlink we must run delayed items, so that future
++				 * checks for a name during log replay see that the
++				 * name does not exists anymore.
++				 */
++				if (!ret)
++					ret = btrfs_run_delayed_items(trans);
+ 			}
+ 			if (ret < 0)
+ 				goto out;
 
 

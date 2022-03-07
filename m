@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6324CF552
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1A14CF4A0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237060AbiCGJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S236344AbiCGJUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237143AbiCGJX1 (ORCPT
+        with ESMTP id S233897AbiCGJUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A81674F0;
-        Mon,  7 Mar 2022 01:21:55 -0800 (PST)
+        Mon, 7 Mar 2022 04:20:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F903D1FD;
+        Mon,  7 Mar 2022 01:19:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09A40B81054;
-        Mon,  7 Mar 2022 09:21:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49482C340E9;
-        Mon,  7 Mar 2022 09:21:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 615A5B81054;
+        Mon,  7 Mar 2022 09:19:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BBBC340E9;
+        Mon,  7 Mar 2022 09:19:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644912;
-        bh=UgKQ9cNGkty3xwnvfNTkiGfr/Fg+lnlS4rwHrsaA3To=;
+        s=korg; t=1646644753;
+        bh=71sl323eS025K3hQqxRUXxE4Bl6X+RJEAawq5oEERzk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s27szqTzWomqTfZziKFlAR8Ot9qLkg1HNoUtfe89g2e/TYkBQtkPshalKHA2V0+4M
-         y9wkzXlgjsUhUrmX5uQQdDZQ88d2maR6iG8v8AkHT38K4JNJiWeZ9Nt7LJAaeshG7y
-         kYigk6+6/KJ+mhJjmSy0ZyoFGJR+/mmXJ/25oeL0=
+        b=br/bHE10kfWr5HerhbRzqlQW1HXcOK/F2il779uFdnF0MVeuJnF8kfSUYEKM0/uyd
+         jhcbrZkCnZfIh0rwqkHfAZndSnpy/bfC40gDUWTeJ3JpXK2t8MI9NQUf0rddyGAV23
+         3Y0u0KpAF/Pu00BzpvbzPwpjEWMyr1ZRVaGuK4Lg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, JaeMan Park <jaeman@google.com>,
-        Johannes Berg <johannes.berg@intel.com>,
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 02/42] mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work
-Date:   Mon,  7 Mar 2022 10:18:36 +0100
-Message-Id: <20220307091636.219436504@linuxfoundation.org>
+Subject: [PATCH 4.9 11/32] ata: pata_hpt37x: fix PCI clock detection
+Date:   Mon,  7 Mar 2022 10:18:37 +0100
+Message-Id: <20220307091634.763233497@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
+References: <20220307091634.434478485@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: JaeMan Park <jaeman@google.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-[ Upstream commit cacfddf82baf1470e5741edeecb187260868f195 ]
+[ Upstream commit 5f6b0f2d037c8864f20ff15311c695f65eb09db5 ]
 
-In mac80211_hwsim, the probe_req frame is created and sent while
-scanning. It is sent with ieee80211_tx_info which is not initialized.
-Uninitialized ieee80211_tx_info can cause problems when using
-mac80211_hwsim with wmediumd. wmediumd checks the tx_rates field of
-ieee80211_tx_info and doesn't relay probe_req frame to other clients
-even if it is a broadcasting message.
+The f_CNT register (at the PCI config. address 0x78) is 16-bit, not
+8-bit! The bug was there from the very start... :-(
 
-Call ieee80211_tx_prepare_skb() to initialize ieee80211_tx_info for
-the probe_req that is created by hw_scan_work in mac80211_hwsim.
-
-Signed-off-by: JaeMan Park <jaeman@google.com>
-Link: https://lore.kernel.org/r/20220113060235.546107-1-jaeman@google.com
-[fix memory leak]
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Fixes: 669a5db411d8 ("[libata] Add a bunch of PATA drivers.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mac80211_hwsim.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/ata/pata_hpt37x.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
-index b19d19c4be272..ee1eb14ae8fc9 100644
---- a/drivers/net/wireless/mac80211_hwsim.c
-+++ b/drivers/net/wireless/mac80211_hwsim.c
-@@ -2025,6 +2025,15 @@ static void hw_scan_work(struct work_struct *work)
- 			if (req->ie_len)
- 				skb_put_data(probe, req->ie, req->ie_len);
+--- a/drivers/ata/pata_hpt37x.c
++++ b/drivers/ata/pata_hpt37x.c
+@@ -964,14 +964,14 @@ static int hpt37x_init_one(struct pci_de
  
-+			if (!ieee80211_tx_prepare_skb(hwsim->hw,
-+						      hwsim->hw_scan_vif,
-+						      probe,
-+						      hwsim->tmp_chan->band,
-+						      NULL)) {
-+				kfree_skb(probe);
-+				continue;
-+			}
-+
- 			local_bh_disable();
- 			mac80211_hwsim_tx_frame(hwsim->hw, probe,
- 						hwsim->tmp_chan);
--- 
-2.34.1
-
+ 	if ((freq >> 12) != 0xABCDE) {
+ 		int i;
+-		u8 sr;
++		u16 sr;
+ 		u32 total = 0;
+ 
+ 		pr_warn("BIOS has not set timing clocks\n");
+ 
+ 		/* This is the process the HPT371 BIOS is reported to use */
+ 		for (i = 0; i < 128; i++) {
+-			pci_read_config_byte(dev, 0x78, &sr);
++			pci_read_config_word(dev, 0x78, &sr);
+ 			total += sr & 0x1FF;
+ 			udelay(15);
+ 		}
 
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1447C4CF9C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0725B4CFB60
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238730AbiCGKOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S240437AbiCGKgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239168AbiCGJ6K (ORCPT
+        with ESMTP id S242450AbiCGKLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:58:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573C07C792;
-        Mon,  7 Mar 2022 01:46:15 -0800 (PST)
+        Mon, 7 Mar 2022 05:11:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2EB8A313;
+        Mon,  7 Mar 2022 01:55:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FE76B80E70;
-        Mon,  7 Mar 2022 09:46:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6CDDC36AF4;
-        Mon,  7 Mar 2022 09:46:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 381F660A27;
+        Mon,  7 Mar 2022 09:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38222C340E9;
+        Mon,  7 Mar 2022 09:54:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646372;
-        bh=3HFDnw0Np8rruklzhkK/ONablS11EjiUf/++xtFh2sc=;
+        s=korg; t=1646646874;
+        bh=7ZaHIqiLhEKHT66BkWo+qr1fJJ6/m4DqN31xrBv38I4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OxCX+yMLm8oC/PBX7j2kngelIjmZ7WugU4FunqwHSH/CsUi7CoEW5RVShnpRZGloT
-         I3rEki+WIenzKgjYDMDv+oZkoG0sf4e4PGiHGG3Zq/38MsmTk/G0HIn/gyYUG4kEmO
-         IZr0HvOpGr6/9dv/TsAPvhh//yY7Unvj3Zx8TD14=
+        b=lwJu5JvXvyNFvQwyWP/MHiSEAurIbqs8uVAMfbJzmTTxdZxt9xX0pKW284QpHYkM7
+         YW7dQY7M+3EWzfDP4qsJlnX7DDyeh/NzliWaMc9Sx3qJRrbdTKFcAI2ETde7rztztI
+         J/QhavTKXuQzykX1ykL+oWjNM89GYuo4fzhZk4bg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Anders Roxell <anders.roxell@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 215/262] can: etas_es58x: change opened_channel_cnts type from atomic_t to u8
+Subject: [PATCH 5.16 121/186] arm64: dts: juno: Remove GICv2m dma-range
 Date:   Mon,  7 Mar 2022 10:19:19 +0100
-Message-Id: <20220307091709.020578085@linuxfoundation.org>
+Message-Id: <20220307091657.463588854@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,143 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Robin Murphy <robin.murphy@arm.com>
 
-[ Upstream commit f4896248e9025ff744b4147e6758274a1cb8cbae ]
+[ Upstream commit 31eeb6b09f4053f32a30ce9fbcdfca31f713028d ]
 
-The driver uses an atomic_t variable: struct
-es58x_device::opened_channel_cnt to keep track of the number of opened
-channels in order to only allocate memory for the URBs when this count
-changes from zero to one.
+Although it is painstakingly honest to describe all 3 PCI windows in
+"dma-ranges", it misses the the subtle distinction that the window for
+the GICv2m range is normally programmed for Device memory attributes
+rather than Normal Cacheable like the DRAM windows. Since MMU-401 only
+offers stage 2 translation, this means that when the PCI SMMU is
+enabled, accesses through that IPA range unexpectedly lose coherency if
+mapped as cacheable at the SMMU, due to the attribute combining rules.
+Since an extra 256KB is neither here nor there when we still have 10GB
+worth of usable address space, rather than attempting to describe and
+cope with this detail let's just remove the offending range. If the SMMU
+is not used then it makes no difference anyway.
 
-While the intent was to prevent race conditions, the choice of an
-atomic_t turns out to be a bad idea for several reasons:
-
-- implementation is incorrect and fails to decrement
-  opened_channel_cnt when the URB allocation fails as reported in
-  [1].
-
-- even if opened_channel_cnt were to be correctly decremented,
-  atomic_t is insufficient to cover edge cases: there can be a race
-  condition in which 1/ a first process fails to allocate URBs
-  memory 2/ a second process enters es58x_open() before the first
-  process does its cleanup and decrements opened_channed_cnt. In
-  which case, the second process would successfully return despite
-  the URBs memory not being allocated.
-
-- actually, any kind of locking mechanism was useless here because
-  it is redundant with the network stack big kernel lock
-  (a.k.a. rtnl_lock) which is being hold by all the callers of
-  net_device_ops:ndo_open() and net_device_ops:ndo_close(). c.f. the
-  ASSERST_RTNL() calls in __dev_open() [2] and __dev_close_many()
-  [3].
-
-The atmomic_t is thus replaced by a simple u8 type and the logic to
-increment and decrement es58x_device:opened_channel_cnt is simplified
-accordingly fixing the bug reported in [1]. We do not check again for
-ASSERST_RTNL() as this is already done by the callers.
-
-[1] https://lore.kernel.org/linux-can/20220201140351.GA2548@kili/T/#u
-[2] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1463
-[3] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1541
-
-Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
-Link: https://lore.kernel.org/all/20220212112713.577957-1-mailhol.vincent@wanadoo.fr
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Link: https://lore.kernel.org/r/856c3f7192c6c3ce545ba67462f2ce9c86ed6b0c.1643046936.git.robin.murphy@arm.com
+Fixes: 4ac4d146cb63 ("arm64: dts: juno: Describe PCI dma-ranges")
+Reported-by: Anders Roxell <anders.roxell@linaro.org>
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/etas_es58x/es58x_core.c | 9 +++++----
- drivers/net/can/usb/etas_es58x/es58x_core.h | 8 +++++---
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ arch/arm64/boot/dts/arm/juno-base.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 24627ab14626..cd4e7f356e48 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -1794,7 +1794,7 @@ static int es58x_open(struct net_device *netdev)
- 	struct es58x_device *es58x_dev = es58x_priv(netdev)->es58x_dev;
- 	int ret;
- 
--	if (atomic_inc_return(&es58x_dev->opened_channel_cnt) == 1) {
-+	if (!es58x_dev->opened_channel_cnt) {
- 		ret = es58x_alloc_rx_urbs(es58x_dev);
- 		if (ret)
- 			return ret;
-@@ -1812,12 +1812,13 @@ static int es58x_open(struct net_device *netdev)
- 	if (ret)
- 		goto free_urbs;
- 
-+	es58x_dev->opened_channel_cnt++;
- 	netif_start_queue(netdev);
- 
- 	return ret;
- 
-  free_urbs:
--	if (atomic_dec_and_test(&es58x_dev->opened_channel_cnt))
-+	if (!es58x_dev->opened_channel_cnt)
- 		es58x_free_urbs(es58x_dev);
- 	netdev_err(netdev, "%s: Could not open the network device: %pe\n",
- 		   __func__, ERR_PTR(ret));
-@@ -1852,7 +1853,8 @@ static int es58x_stop(struct net_device *netdev)
- 
- 	es58x_flush_pending_tx_msg(netdev);
- 
--	if (atomic_dec_and_test(&es58x_dev->opened_channel_cnt))
-+	es58x_dev->opened_channel_cnt--;
-+	if (!es58x_dev->opened_channel_cnt)
- 		es58x_free_urbs(es58x_dev);
- 
- 	return 0;
-@@ -2221,7 +2223,6 @@ static struct es58x_device *es58x_init_es58x_dev(struct usb_interface *intf,
- 	init_usb_anchor(&es58x_dev->tx_urbs_idle);
- 	init_usb_anchor(&es58x_dev->tx_urbs_busy);
- 	atomic_set(&es58x_dev->tx_urbs_idle_cnt, 0);
--	atomic_set(&es58x_dev->opened_channel_cnt, 0);
- 	usb_set_intfdata(intf, es58x_dev);
- 
- 	es58x_dev->rx_pipe = usb_rcvbulkpipe(es58x_dev->udev,
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
-index 826a15871573..e5033cb5e695 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
-@@ -373,8 +373,6 @@ struct es58x_operators {
-  *	queue wake/stop logic should prevent this URB from getting
-  *	empty. Please refer to es58x_get_tx_urb() for more details.
-  * @tx_urbs_idle_cnt: number of urbs in @tx_urbs_idle.
-- * @opened_channel_cnt: number of channels opened (c.f. es58x_open()
-- *	and es58x_stop()).
-  * @ktime_req_ns: kernel timestamp when es58x_set_realtime_diff_ns()
-  *	was called.
-  * @realtime_diff_ns: difference in nanoseconds between the clocks of
-@@ -384,6 +382,10 @@ struct es58x_operators {
-  *	in RX branches.
-  * @rx_max_packet_size: Maximum length of bulk-in URB.
-  * @num_can_ch: Number of CAN channel (i.e. number of elements of @netdev).
-+ * @opened_channel_cnt: number of channels opened. Free of race
-+ *	conditions because its two users (net_device_ops:ndo_open()
-+ *	and net_device_ops:ndo_close()) guarantee that the network
-+ *	stack big kernel lock (a.k.a. rtnl_mutex) is being hold.
-  * @rx_cmd_buf_len: Length of @rx_cmd_buf.
-  * @rx_cmd_buf: The device might split the URB commands in an
-  *	arbitrary amount of pieces. This buffer is used to concatenate
-@@ -406,7 +408,6 @@ struct es58x_device {
- 	struct usb_anchor tx_urbs_busy;
- 	struct usb_anchor tx_urbs_idle;
- 	atomic_t tx_urbs_idle_cnt;
--	atomic_t opened_channel_cnt;
- 
- 	u64 ktime_req_ns;
- 	s64 realtime_diff_ns;
-@@ -415,6 +416,7 @@ struct es58x_device {
- 
- 	u16 rx_max_packet_size;
- 	u8 num_can_ch;
-+	u8 opened_channel_cnt;
- 
- 	u16 rx_cmd_buf_len;
- 	union es58x_urb_cmd rx_cmd_buf;
+diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
+index 6288e104a089..a2635b14da30 100644
+--- a/arch/arm64/boot/dts/arm/juno-base.dtsi
++++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
+@@ -543,8 +543,7 @@
+ 			 <0x02000000 0x00 0x50000000 0x00 0x50000000 0x0 0x08000000>,
+ 			 <0x42000000 0x40 0x00000000 0x40 0x00000000 0x1 0x00000000>;
+ 		/* Standard AXI Translation entries as programmed by EDK2 */
+-		dma-ranges = <0x02000000 0x0 0x2c1c0000 0x0 0x2c1c0000 0x0 0x00040000>,
+-			     <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
++		dma-ranges = <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
+ 			     <0x43000000 0x8 0x00000000 0x8 0x00000000 0x2 0x00000000>;
+ 		#interrupt-cells = <1>;
+ 		interrupt-map-mask = <0 0 0 7>;
 -- 
 2.34.1
 

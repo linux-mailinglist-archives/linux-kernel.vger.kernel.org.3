@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6E94CFB5A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B434CF67B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235898AbiCGKgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S237926AbiCGJhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242484AbiCGKLg (ORCPT
+        with ESMTP id S238754AbiCGJ3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D8E8B6D2;
-        Mon,  7 Mar 2022 01:55:16 -0800 (PST)
+        Mon, 7 Mar 2022 04:29:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61BC593A0;
+        Mon,  7 Mar 2022 01:28:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89EF560929;
-        Mon,  7 Mar 2022 09:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADAEC340E9;
-        Mon,  7 Mar 2022 09:54:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51480B810B2;
+        Mon,  7 Mar 2022 09:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1081C340E9;
+        Mon,  7 Mar 2022 09:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646881;
-        bh=xLtXi2r7Swk2EOyZzNZ8cnYnHDBA0m7pMboTMPh5HAw=;
+        s=korg; t=1646645299;
+        bh=4bogtauP+dXN3w5q+VDJQ5ObyCFM+VUzcU91RdfMZ3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cvLFM+zYfUVyRTCmN7I7hzpHAV1UqOIQWfHD/qdonE8eBpAR8EahAMMUDZnudb1Up
-         xmwann4dPB0dvnaDuMZFazXRtxgikxFO5m86ugFfb11ayOyltOJzqlymSXC1k5xVXw
-         3rjO0rX07xZWAyPgNHrULYwvvm/OazRXUGHdUmYU=
+        b=S4wWdwth0m92ieS7rafU5ksoI867sUDpZGrx9kr9GN5i1Tr5jNzUBET7hV9JbpthG
+         ByAobG2vPFWCjGRNX61SlExhwo/OlnH3+1F0SbZn9D0IRDQ5ifYho6vsSoU35vNhRB
+         UzgftUAuhRGnWpAhggkmCEq/qvjkJGrsGZ1paMxE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adam Ford <aford173@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 123/186] arm64: dts: imx8mm: Fix VPU Hanging
+        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Corinna Vinschen <vinschen@redhat.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.4 48/64] igc: igc_write_phy_reg_gpy: drop premature return
 Date:   Mon,  7 Mar 2022 10:19:21 +0100
-Message-Id: <20220307091657.520117102@linuxfoundation.org>
+Message-Id: <20220307091640.514491865@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Ford <aford173@gmail.com>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-[ Upstream commit ef3075d6638d3d5353a97fcc7bb0338fc85675f5 ]
+commit c4208653a327a09da1e9e7b10299709b6d9b17bf upstream.
 
-The vpumix power domain has a reset assigned to it, however
-when used, it causes a system hang.  Testing has shown that
-it does not appear to be needed anywhere.
+Similar to "igc_read_phy_reg_gpy: drop premature return" patch.
+igc_write_phy_reg_gpy checks the return value from igc_write_phy_reg_mdic
+and if it's not 0, returns immediately. By doing this, it leaves the HW
+semaphore in the acquired state.
 
-Fixes: d39d4bb15310 ("arm64: dts: imx8mm: add GPC node")
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Drop this premature return statement, the function returns after
+releasing the semaphore immediately anyway.
+
+Fixes: 5586838fe9ce ("igc: Add code for PHY support")
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Reported-by: Corinna Vinschen <vinschen@redhat.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mm.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/ethernet/intel/igc/igc_phy.c |    2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index c2f3f118f82e..f13d31ebfcbd 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -681,7 +681,6 @@
- 						clocks = <&clk IMX8MM_CLK_VPU_DEC_ROOT>;
- 						assigned-clocks = <&clk IMX8MM_CLK_VPU_BUS>;
- 						assigned-clock-parents = <&clk IMX8MM_SYS_PLL1_800M>;
--						resets = <&src IMX8MQ_RESET_VPU_RESET>;
- 					};
- 
- 					pgc_vpu_g1: power-domain@7 {
--- 
-2.34.1
-
+--- a/drivers/net/ethernet/intel/igc/igc_phy.c
++++ b/drivers/net/ethernet/intel/igc/igc_phy.c
+@@ -734,8 +734,6 @@ s32 igc_write_phy_reg_gpy(struct igc_hw
+ 		if (ret_val)
+ 			return ret_val;
+ 		ret_val = igc_write_phy_reg_mdic(hw, offset, data);
+-		if (ret_val)
+-			return ret_val;
+ 		hw->phy.ops.release(hw);
+ 	} else {
+ 		ret_val = igc_write_xmdio_reg(hw, (u16)offset, dev_addr,
 
 

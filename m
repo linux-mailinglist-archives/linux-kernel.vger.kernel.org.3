@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08014CF887
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3884CFB5D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiCGJ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
+        id S239818AbiCGKgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238697AbiCGJim (ORCPT
+        with ESMTP id S242318AbiCGKLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:38:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73C54EA2E;
-        Mon,  7 Mar 2022 01:33:13 -0800 (PST)
+        Mon, 7 Mar 2022 05:11:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7353989CD8;
+        Mon,  7 Mar 2022 01:54:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5884DB810BD;
-        Mon,  7 Mar 2022 09:33:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD981C340F3;
-        Mon,  7 Mar 2022 09:33:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5421B60B6F;
+        Mon,  7 Mar 2022 09:54:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E5CC340E9;
+        Mon,  7 Mar 2022 09:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645591;
-        bh=J2IJqSVavxlY4rZ2bGBmDCSa/4rvdwBbNFQjq4mtJSw=;
+        s=korg; t=1646646893;
+        bh=6eaBAaiTx6z1KDKJ9qfmaLGoCODvGB//OB2/h1VZiFI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lv0OaVKHVfIlA36qOfonnVquY0AHXY8RaJaKMhybJQSONoIopEBjpGqPn0qmMCPHM
-         EHbGnk/+LxKQLjkXhdqbLfnaZ1SuiS02EKAD+hCH+4a5+p/8aKe5bPdDWbnQPlVPpr
-         Fan/RBpswdVp8LJDTHMIhIhb7NxxhMfuFh8zom2U=
+        b=RFNg7jewZZkHlnx238aQE5RJrzie7cNc0fXU/oMhJHps3KrZxoQ+oWSfr15H9SOjx
+         NNqtcPNsK+OG3VNk59rufE22Zn5jOGeVO8tIOhPLA+NKNFq2UJC8NiMSHFeqcgZgrU
+         7XgOk2/KjyBbPtK++0R2csFrpU0g8gXHmoeA9IG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH 5.10 081/105] s390/extable: fix exception table sorting
+        stable@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 126/186] iommu/amd: Fix I/O page table memory leak
 Date:   Mon,  7 Mar 2022 10:19:24 +0100
-Message-Id: <20220307091646.456727351@linuxfoundation.org>
+Message-Id: <20220307091657.603212231@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Carstens <hca@linux.ibm.com>
+From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 
-commit c194dad21025dfd043210912653baab823bdff67 upstream.
+[ Upstream commit 6b0b2d9a6a308bcd9300c2d83000a82812c56cea ]
 
-s390 has a swap_ex_entry_fixup function, however it is not being used
-since common code expects a swap_ex_entry_fixup define. If it is not
-defined the default implementation will be used. So fix this by adding
-a proper define.
-However also the implementation of the function must be fixed, since a
-NULL value for handler has a special meaning and must not be adjusted.
+The current logic updates the I/O page table mode for the domain
+before calling the logic to free memory used for the page table.
+This results in IOMMU page table memory leak, and can be observed
+when launching VM w/ pass-through devices.
 
-Luckily all of this doesn't fix a real bug currently: the main extable
-is correctly sorted during build time, and for runtime sorting there
-is currently no case where the handler field is not NULL.
+Fix by freeing the memory used for page table before updating the mode.
 
-Fixes: 05a68e892e89 ("s390/kernel: expand exception table logic to allow new handling options")
-Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Joerg Roedel <joro@8bytes.org>
+Reported-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Tested-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Fixes: e42ba0633064 ("iommu/amd: Restructure code for freeing page table")
+Link: https://lore.kernel.org/all/20220118194720.urjgi73b7c3tq2o6@oracle.com/
+Link: https://lore.kernel.org/r/20220210154745.11524-1-suravee.suthikulpanit@amd.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/include/asm/extable.h |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/iommu/amd/io_pgtable.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/arch/s390/include/asm/extable.h
-+++ b/arch/s390/include/asm/extable.h
-@@ -69,8 +69,13 @@ static inline void swap_ex_entry_fixup(s
- {
- 	a->fixup = b->fixup + delta;
- 	b->fixup = tmp.fixup - delta;
--	a->handler = b->handler + delta;
--	b->handler = tmp.handler - delta;
-+	a->handler = b->handler;
-+	if (a->handler)
-+		a->handler += delta;
-+	b->handler = tmp.handler;
-+	if (b->handler)
-+		b->handler -= delta;
- }
-+#define swap_ex_entry_fixup swap_ex_entry_fixup
+diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
+index b1bf4125b0f7..6608d1717574 100644
+--- a/drivers/iommu/amd/io_pgtable.c
++++ b/drivers/iommu/amd/io_pgtable.c
+@@ -492,18 +492,18 @@ static void v1_free_pgtable(struct io_pgtable *iop)
  
- #endif
+ 	dom = container_of(pgtable, struct protection_domain, iop);
+ 
+-	/* Update data structure */
+-	amd_iommu_domain_clr_pt_root(dom);
+-
+-	/* Make changes visible to IOMMUs */
+-	amd_iommu_domain_update(dom);
+-
+ 	/* Page-table is not visible to IOMMU anymore, so free it */
+ 	BUG_ON(pgtable->mode < PAGE_MODE_NONE ||
+ 	       pgtable->mode > PAGE_MODE_6_LEVEL);
+ 
+ 	free_sub_pt(pgtable->root, pgtable->mode, &freelist);
+ 
++	/* Update data structure */
++	amd_iommu_domain_clr_pt_root(dom);
++
++	/* Make changes visible to IOMMUs */
++	amd_iommu_domain_update(dom);
++
+ 	put_pages_list(&freelist);
+ }
+ 
+-- 
+2.34.1
+
 
 

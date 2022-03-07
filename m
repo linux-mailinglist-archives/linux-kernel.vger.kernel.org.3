@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CB14CFAB7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96FD4CF96F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240567AbiCGKS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
+        id S240035AbiCGKFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240512AbiCGKBE (ORCPT
+        with ESMTP id S238096AbiCGJmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA1120F58;
-        Mon,  7 Mar 2022 01:49:50 -0800 (PST)
+        Mon, 7 Mar 2022 04:42:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD8C15A18;
+        Mon,  7 Mar 2022 01:41:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF1EB60010;
-        Mon,  7 Mar 2022 09:49:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2EC6C340F5;
-        Mon,  7 Mar 2022 09:49:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65A30B80F9F;
+        Mon,  7 Mar 2022 09:41:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A74A7C340F3;
+        Mon,  7 Mar 2022 09:41:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646589;
-        bh=PxzTc57IQdrmDgTvi0EtjhOekh9QUtO7TK6zL07Nh+g=;
+        s=korg; t=1646646081;
+        bh=Wt7B/bnSJ1P0KwmJ/NMxbKs0Pkrp1FbTdd1lziXU4UY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LxxINoID4ZZwd/gIkzldZpiioQdA+ZoU+Nvpp19MZjiAD3Q6mzoYWmJBFsDD3L+y2
-         ykxAzEjU8eCOj2cj1I2C3RSAd5SjT2A3tatjEZnr6HgrtT4YtnCr5KeyVFER+Vgy30
-         zjVixJ5h4ssw8nknLrZVgpoHfaMaO+IPdXpWJtnk=
+        b=rw3PMJiydzWuf8Nf5zWqeN+ROkTHZgS+qO9mu7+K7HrasMlyiAM08GZ0l4zw3CFwy
+         kRX1fa2JfTUR05GrmqeS0XLXGPjzg2A0rEfMZuuOKf1DmazOjpzL+EUTGjKruEewju
+         TSqqrk72W95IkHTNIhdsyFmZRcnMLKB74Z5HLXc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe Vu-Brugier <christophe.vu-brugier@seagate.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 030/186] exfat: reuse exfat_inode_info variable instead of calling EXFAT_I()
-Date:   Mon,  7 Mar 2022 10:17:48 +0100
-Message-Id: <20220307091654.936386507@linuxfoundation.org>
+Subject: [PATCH 5.15 125/262] of: net: move of_net under net/
+Date:   Mon,  7 Mar 2022 10:17:49 +0100
+Message-Id: <20220307091705.986552104@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,132 +56,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Vu-Brugier <christophe.vu-brugier@seagate.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 7dee6f57d7f22a89dd214518c778aec448270d4c ]
+[ Upstream commit e330fb14590c5c80f7195c3d8c9b4bcf79e1a5cd ]
 
-Also add a local "struct exfat_inode_info *ei" variable to
-exfat_truncate() to simplify the code.
+Rob suggests to move of_net.c from under drivers/of/ somewhere
+to the networking code.
 
-Signed-off-by: Christophe Vu-Brugier <christophe.vu-brugier@seagate.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Suggested-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/exfat/file.c  | 14 +++++++-------
- fs/exfat/inode.c |  9 ++++-----
- fs/exfat/namei.c |  6 +++---
- fs/exfat/super.c |  6 +++---
- 4 files changed, 17 insertions(+), 18 deletions(-)
+ drivers/net/ethernet/amd/Kconfig    | 2 +-
+ drivers/net/ethernet/arc/Kconfig    | 4 ++--
+ drivers/net/ethernet/ezchip/Kconfig | 2 +-
+ drivers/net/ethernet/litex/Kconfig  | 2 +-
+ drivers/net/ethernet/mscc/Kconfig   | 2 +-
+ drivers/of/Kconfig                  | 4 ----
+ drivers/of/Makefile                 | 1 -
+ include/linux/of_net.h              | 2 +-
+ net/core/Makefile                   | 1 +
+ net/core/net-sysfs.c                | 2 +-
+ {drivers/of => net/core}/of_net.c   | 0
+ 11 files changed, 9 insertions(+), 13 deletions(-)
+ rename {drivers/of => net/core}/of_net.c (100%)
 
-diff --git a/fs/exfat/file.c b/fs/exfat/file.c
-index 6af0191b648f1..848166d6d5e9d 100644
---- a/fs/exfat/file.c
-+++ b/fs/exfat/file.c
-@@ -110,8 +110,7 @@ int __exfat_truncate(struct inode *inode, loff_t new_size)
- 	exfat_set_volume_dirty(sb);
+diff --git a/drivers/net/ethernet/amd/Kconfig b/drivers/net/ethernet/amd/Kconfig
+index 4786f0504691d..899c8a2a34b6b 100644
+--- a/drivers/net/ethernet/amd/Kconfig
++++ b/drivers/net/ethernet/amd/Kconfig
+@@ -168,7 +168,7 @@ config SUNLANCE
  
- 	num_clusters_new = EXFAT_B_TO_CLU_ROUND_UP(i_size_read(inode), sbi);
--	num_clusters_phys =
--		EXFAT_B_TO_CLU_ROUND_UP(EXFAT_I(inode)->i_size_ondisk, sbi);
-+	num_clusters_phys = EXFAT_B_TO_CLU_ROUND_UP(ei->i_size_ondisk, sbi);
+ config AMD_XGBE
+ 	tristate "AMD 10GbE Ethernet driver"
+-	depends on ((OF_NET && OF_ADDRESS) || ACPI || PCI) && HAS_IOMEM
++	depends on (OF_ADDRESS || ACPI || PCI) && HAS_IOMEM
+ 	depends on X86 || ARM64 || COMPILE_TEST
+ 	depends on PTP_1588_CLOCK_OPTIONAL
+ 	select BITREVERSE
+diff --git a/drivers/net/ethernet/arc/Kconfig b/drivers/net/ethernet/arc/Kconfig
+index 92a79c4ffa2c7..0a67612af2281 100644
+--- a/drivers/net/ethernet/arc/Kconfig
++++ b/drivers/net/ethernet/arc/Kconfig
+@@ -26,7 +26,7 @@ config ARC_EMAC_CORE
+ config ARC_EMAC
+ 	tristate "ARC EMAC support"
+ 	select ARC_EMAC_CORE
+-	depends on OF_IRQ && OF_NET
++	depends on OF_IRQ
+ 	depends on ARC || COMPILE_TEST
+ 	help
+ 	  On some legacy ARC (Synopsys) FPGA boards such as ARCAngel4/ML50x
+@@ -36,7 +36,7 @@ config ARC_EMAC
+ config EMAC_ROCKCHIP
+ 	tristate "Rockchip EMAC support"
+ 	select ARC_EMAC_CORE
+-	depends on OF_IRQ && OF_NET && REGULATOR
++	depends on OF_IRQ && REGULATOR
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	help
+ 	  Support for Rockchip RK3036/RK3066/RK3188 EMAC ethernet controllers.
+diff --git a/drivers/net/ethernet/ezchip/Kconfig b/drivers/net/ethernet/ezchip/Kconfig
+index 38aa824efb25d..9241b9b1c7a36 100644
+--- a/drivers/net/ethernet/ezchip/Kconfig
++++ b/drivers/net/ethernet/ezchip/Kconfig
+@@ -18,7 +18,7 @@ if NET_VENDOR_EZCHIP
  
- 	exfat_chain_set(&clu, ei->start_clu, num_clusters_phys, ei->flags);
+ config EZCHIP_NPS_MANAGEMENT_ENET
+ 	tristate "EZchip NPS management enet support"
+-	depends on OF_IRQ && OF_NET
++	depends on OF_IRQ
+ 	depends on HAS_IOMEM
+ 	help
+ 	  Simple LAN device for debug or management purposes.
+diff --git a/drivers/net/ethernet/litex/Kconfig b/drivers/net/ethernet/litex/Kconfig
+index 63bf01d28f0cf..f99adbf26ab4e 100644
+--- a/drivers/net/ethernet/litex/Kconfig
++++ b/drivers/net/ethernet/litex/Kconfig
+@@ -17,7 +17,7 @@ if NET_VENDOR_LITEX
  
-@@ -228,12 +227,13 @@ void exfat_truncate(struct inode *inode, loff_t size)
+ config LITEX_LITEETH
+ 	tristate "LiteX Ethernet support"
+-	depends on OF_NET
++	depends on OF
+ 	help
+ 	  If you wish to compile a kernel for hardware with a LiteX LiteEth
+ 	  device then you should answer Y to this.
+diff --git a/drivers/net/ethernet/mscc/Kconfig b/drivers/net/ethernet/mscc/Kconfig
+index b6a73d151dec1..8dd8c7f425d2c 100644
+--- a/drivers/net/ethernet/mscc/Kconfig
++++ b/drivers/net/ethernet/mscc/Kconfig
+@@ -28,7 +28,7 @@ config MSCC_OCELOT_SWITCH
+ 	depends on BRIDGE || BRIDGE=n
+ 	depends on NET_SWITCHDEV
+ 	depends on HAS_IOMEM
+-	depends on OF_NET
++	depends on OF
+ 	select MSCC_OCELOT_SWITCH_LIB
+ 	select GENERIC_PHY
+ 	help
+diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+index 3dfeae8912dfc..80b5fd44ab1c7 100644
+--- a/drivers/of/Kconfig
++++ b/drivers/of/Kconfig
+@@ -70,10 +70,6 @@ config OF_IRQ
+ 	def_bool y
+ 	depends on !SPARC && IRQ_DOMAIN
+ 
+-config OF_NET
+-	depends on NETDEVICES
+-	def_bool y
+-
+ config OF_RESERVED_MEM
+ 	def_bool OF_EARLY_FLATTREE
+ 
+diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+index c13b982084a3a..e0360a44306e2 100644
+--- a/drivers/of/Makefile
++++ b/drivers/of/Makefile
+@@ -7,7 +7,6 @@ obj-$(CONFIG_OF_EARLY_FLATTREE) += fdt_address.o
+ obj-$(CONFIG_OF_PROMTREE) += pdt.o
+ obj-$(CONFIG_OF_ADDRESS)  += address.o
+ obj-$(CONFIG_OF_IRQ)    += irq.o
+-obj-$(CONFIG_OF_NET)	+= of_net.o
+ obj-$(CONFIG_OF_UNITTEST) += unittest.o
+ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
+ obj-$(CONFIG_OF_RESOLVE)  += resolver.o
+diff --git a/include/linux/of_net.h b/include/linux/of_net.h
+index daef3b0d9270d..cf31188329b5a 100644
+--- a/include/linux/of_net.h
++++ b/include/linux/of_net.h
+@@ -8,7 +8,7 @@
+ 
+ #include <linux/phy.h>
+ 
+-#ifdef CONFIG_OF_NET
++#ifdef CONFIG_OF
+ #include <linux/of.h>
+ 
+ struct net_device;
+diff --git a/net/core/Makefile b/net/core/Makefile
+index 35ced6201814c..4268846f2f475 100644
+--- a/net/core/Makefile
++++ b/net/core/Makefile
+@@ -36,3 +36,4 @@ obj-$(CONFIG_FAILOVER) += failover.o
+ obj-$(CONFIG_NET_SOCK_MSG) += skmsg.o
+ obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
++obj-$(CONFIG_OF)	+= of_net.o
+diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
+index a4ae652633844..d7f9ee830d34c 100644
+--- a/net/core/net-sysfs.c
++++ b/net/core/net-sysfs.c
+@@ -1927,7 +1927,7 @@ static struct class net_class __ro_after_init = {
+ 	.get_ownership = net_get_ownership,
+ };
+ 
+-#ifdef CONFIG_OF_NET
++#ifdef CONFIG_OF
+ static int of_dev_node_match(struct device *dev, const void *data)
  {
- 	struct super_block *sb = inode->i_sb;
- 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
-+	struct exfat_inode_info *ei = EXFAT_I(inode);
- 	unsigned int blocksize = i_blocksize(inode);
- 	loff_t aligned_size;
- 	int err;
- 
- 	mutex_lock(&sbi->s_lock);
--	if (EXFAT_I(inode)->start_clu == 0) {
-+	if (ei->start_clu == 0) {
- 		/*
- 		 * Empty start_clu != ~0 (not allocated)
- 		 */
-@@ -260,11 +260,11 @@ void exfat_truncate(struct inode *inode, loff_t size)
- 		aligned_size++;
- 	}
- 
--	if (EXFAT_I(inode)->i_size_ondisk > i_size_read(inode))
--		EXFAT_I(inode)->i_size_ondisk = aligned_size;
-+	if (ei->i_size_ondisk > i_size_read(inode))
-+		ei->i_size_ondisk = aligned_size;
- 
--	if (EXFAT_I(inode)->i_size_aligned > i_size_read(inode))
--		EXFAT_I(inode)->i_size_aligned = aligned_size;
-+	if (ei->i_size_aligned > i_size_read(inode))
-+		ei->i_size_aligned = aligned_size;
- 	mutex_unlock(&sbi->s_lock);
- }
- 
-diff --git a/fs/exfat/inode.c b/fs/exfat/inode.c
-index 1c7aa1ea4724c..aca2e64d045b6 100644
---- a/fs/exfat/inode.c
-+++ b/fs/exfat/inode.c
-@@ -114,10 +114,9 @@ static int exfat_map_cluster(struct inode *inode, unsigned int clu_offset,
- 	unsigned int local_clu_offset = clu_offset;
- 	unsigned int num_to_be_allocated = 0, num_clusters = 0;
- 
--	if (EXFAT_I(inode)->i_size_ondisk > 0)
-+	if (ei->i_size_ondisk > 0)
- 		num_clusters =
--			EXFAT_B_TO_CLU_ROUND_UP(EXFAT_I(inode)->i_size_ondisk,
--			sbi);
-+			EXFAT_B_TO_CLU_ROUND_UP(ei->i_size_ondisk, sbi);
- 
- 	if (clu_offset >= num_clusters)
- 		num_to_be_allocated = clu_offset - num_clusters + 1;
-@@ -416,10 +415,10 @@ static int exfat_write_end(struct file *file, struct address_space *mapping,
- 
- 	err = generic_write_end(file, mapping, pos, len, copied, pagep, fsdata);
- 
--	if (EXFAT_I(inode)->i_size_aligned < i_size_read(inode)) {
-+	if (ei->i_size_aligned < i_size_read(inode)) {
- 		exfat_fs_error(inode->i_sb,
- 			"invalid size(size(%llu) > aligned(%llu)\n",
--			i_size_read(inode), EXFAT_I(inode)->i_size_aligned);
-+			i_size_read(inode), ei->i_size_aligned);
- 		return -EIO;
- 	}
- 
-diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
-index 24b41103d1cc0..9d8ada781250b 100644
---- a/fs/exfat/namei.c
-+++ b/fs/exfat/namei.c
-@@ -395,9 +395,9 @@ static int exfat_find_empty_entry(struct inode *inode,
- 
- 		/* directory inode should be updated in here */
- 		i_size_write(inode, size);
--		EXFAT_I(inode)->i_size_ondisk += sbi->cluster_size;
--		EXFAT_I(inode)->i_size_aligned += sbi->cluster_size;
--		EXFAT_I(inode)->flags = p_dir->flags;
-+		ei->i_size_ondisk += sbi->cluster_size;
-+		ei->i_size_aligned += sbi->cluster_size;
-+		ei->flags = p_dir->flags;
- 		inode->i_blocks += 1 << sbi->sect_per_clus_bits;
- 	}
- 
-diff --git a/fs/exfat/super.c b/fs/exfat/super.c
-index 5539ffc20d164..1a2115d73a48a 100644
---- a/fs/exfat/super.c
-+++ b/fs/exfat/super.c
-@@ -366,9 +366,9 @@ static int exfat_read_root(struct inode *inode)
- 
- 	inode->i_blocks = ((i_size_read(inode) + (sbi->cluster_size - 1))
- 			& ~(sbi->cluster_size - 1)) >> inode->i_blkbits;
--	EXFAT_I(inode)->i_pos = ((loff_t)sbi->root_dir << 32) | 0xffffffff;
--	EXFAT_I(inode)->i_size_aligned = i_size_read(inode);
--	EXFAT_I(inode)->i_size_ondisk = i_size_read(inode);
-+	ei->i_pos = ((loff_t)sbi->root_dir << 32) | 0xffffffff;
-+	ei->i_size_aligned = i_size_read(inode);
-+	ei->i_size_ondisk = i_size_read(inode);
- 
- 	exfat_save_attr(inode, ATTR_SUBDIR);
- 	inode->i_mtime = inode->i_atime = inode->i_ctime = ei->i_crtime =
+ 	for (; dev; dev = dev->parent) {
+diff --git a/drivers/of/of_net.c b/net/core/of_net.c
+similarity index 100%
+rename from drivers/of/of_net.c
+rename to net/core/of_net.c
 -- 
 2.34.1
 

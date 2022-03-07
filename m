@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294F34D01BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3824D01CA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243363AbiCGOrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S243383AbiCGOug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243340AbiCGOri (ORCPT
+        with ESMTP id S235518AbiCGOue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:47:38 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7E07DA82
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:46:43 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so17948598oos.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:46:43 -0800 (PST)
+        Mon, 7 Mar 2022 09:50:34 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9059B85978;
+        Mon,  7 Mar 2022 06:49:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KDUUimts6AqirSdFxQZxJc3Z8d63h2WyuY2dc6ec1xM=;
-        b=v0oPXHKPdG97ZiajP9+g855l62P2OtPqchjCprouvcANCLm0sAYzyhvtfEfDaaeEtp
-         I2gUVvRRRwamr5QX5UJyVLMUgDAhMUV/qDPOlCzdrYNNGhwUWxMYQ0knBtln9ryIMznJ
-         jNv8zmgV+lQHtlyUKb0y0JBPZXFmklYBfvsg2FKsq82eiRS28yQ/FPkyz5b3Vqy3WEdQ
-         y/zc9at6u/VIFLL7SKT/q06kDEukdWXcudtgPXiSnb2oF9ZVWClc192CSJ2M1Ztsz1By
-         5CpKGCxpckbpGiN6cSbWNnOzfKRiHMLR2BaPrR+fpsR9zOZD80vuUUCjymTbAi/yRdaZ
-         v0PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KDUUimts6AqirSdFxQZxJc3Z8d63h2WyuY2dc6ec1xM=;
-        b=ogTsXRdsgZj6xoeQRvH+529o9gOBCg2GlJTyKu3mqdM8qiBeDSqkDs3PFJZlSmDHJQ
-         guCvOFASXAfFiVrp5pD3VdgUNL3RJqm6R576xYYHh6ZtQoI/hOXP10e0nNLg3w+rptXu
-         pxwidBndXJpqSWnvTer8TLoRdEDDQ0TrkH4N8BqhEcFjqBsaNqY4YPKwjIGM9AXBL6US
-         EpPtYY2Tcgs9jkO+bzhFY80usvd5f5nzfzuBd9zeSM0JqXKpQpyPrXmUB8IO+sWh+mYT
-         kNd42occT5lJB/sU7eIzSAWIDA9hYiWiy4g9vpHCvgBvYwLrd36NGWK8M2A5Fv8bmrjH
-         SE8A==
-X-Gm-Message-State: AOAM5305+u16TMURw1pAt/NDSR0t5agfEbW1KmjVoP+pmBB/62NKsmWa
-        bIh1m5sCYCleghQZVoPh+qBDNg==
-X-Google-Smtp-Source: ABdhPJyhwg8VQ2NoQPu24oSN1H1Xsf1l7yrTZwrLXKHeFCrr/teOAsQ82MtY6y4LP4tvH/pSaxsJfA==
-X-Received: by 2002:a05:6870:d250:b0:da:b3f:2b29 with SMTP id h16-20020a056870d25000b000da0b3f2b29mr5976338oac.200.1646664402377;
-        Mon, 07 Mar 2022 06:46:42 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id s62-20020aca4541000000b002d7823c8328sm6465095oia.4.2022.03.07.06.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 06:46:41 -0800 (PST)
-Date:   Mon, 7 Mar 2022 06:48:25 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 7/7] usb: typec: mux: Add On Semi fsa4480 driver
-Message-ID: <YiYbOQpX4+fP8S1W@ripper>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <20220307034040.1111107-7-bjorn.andersson@linaro.org>
- <YiXbg4QwgIgLh3LW@smile.fi.intel.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646664580; x=1678200580;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=kCiyL7LJ6ect9V6yfLMZQN25/a2tH3wxzb1kcI/nvYo=;
+  b=BeRLvvrnYp7syq5iTbEtMVDhgb5/du1NRqlFX4ixi/YwG56pzw89hp7Q
+   ftLLikXy82Lb63qz0m2XAwl1x6yuptjmQYtFy4g5M442vsXwrxP1QrDHj
+   kJGDBGaIjYHcy2QbP2laLWHGOjXRGo9BPwyfq2exRBttamHs/euSIuiSJ
+   g=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 07 Mar 2022 06:49:40 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 06:49:40 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 7 Mar 2022 06:49:40 -0800
+Received: from [10.216.48.106] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 7 Mar 2022
+ 06:49:35 -0800
+Subject: Re: [PATCH V7 5/5] arm64: dts: qcom: sc7280: Add pm8008 support for
+ sc7280-idp
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1645182064-15843-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1645182064-15843-6-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n509bg6RzieOtYuUvicU14D7bmgH-u02F1TB+hBZ+xH4CA@mail.gmail.com>
+ <42570508-ed62-af26-220e-c776418a722e@quicinc.com>
+ <CAE-0n50J=4qrkR9ycEGxbKVHwm9Om8S2YSJR_Y71_iErR-wAHw@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <7e3d1ff3-f1a0-3a4d-a056-e3dce1a9a28d@quicinc.com>
+Date:   Mon, 7 Mar 2022 20:19:31 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiXbg4QwgIgLh3LW@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <CAE-0n50J=4qrkR9ycEGxbKVHwm9Om8S2YSJR_Y71_iErR-wAHw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,83 +78,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 07 Mar 02:16 PST 2022, Andy Shevchenko wrote:
 
-> On Sun, Mar 06, 2022 at 07:40:40PM -0800, Bjorn Andersson wrote:
-> > The ON Semiconductor FSA4480 is a USB Type-C port multimedia switch with
-> > support for analog audio headsets. It allows sharing a common USB Type-C
-> > port to pass USB2.0 signal, analog audio, sideband use wires and analog
-> > microphone signal.
-> > 
-> > Due to lacking upstream audio support for testing, the audio muxing is
-> > left untouched, but implementation of muxing the SBU lines is provided
-> > as a pair of Type-C mux and switch devices. This provides the necessary
-> > support for enabling the DisplayPort altmode on devices with this
-> > circuit.
-> 
-> ...
-> 
-> > +static const struct regmap_config fsa4480_regmap_config = {
-> > +	.reg_bits = 8,
-> > +	.val_bits = 8,
-> > +	.max_register = FSA4480_MAX_REGISTER,
-> > +};
-> 
-> You are using mutex for accessing hardware. Do you still need a regmap lock?
-> If so, add a comment to explain why.
-> 
+On 3/1/2022 2:06 AM, Stephen Boyd wrote:
+> Quoting Satya Priya Kakitapalli (Temp) (2022-02-28 06:25:06)
+>> On 2/19/2022 7:31 AM, Stephen Boyd wrote:
+>>> Quoting Satya Priya (2022-02-18 03:01:03)
+>>>> +               pins = "gpio4";
+>>>> +               function = "normal";
+>>>> +               bias-disable;
+>>>> +               output-high;
+>>> Is this a reset signal? Should the driver be deasserting the reset when
+>>> it is ready? That could be the same time the gpio is acquired.
+>>
+>> I didn't get your question exactly.. hope this answers your query
+>>
+>> The pm8008 chip needs this gpio to be toggled , in order to come out of
+>> reset and start any transactions..
+>>
+>> Please let me know if you have more queries
+> Yes that answers it for me. Thanks.
+>
+> This is a reset gpio and should be a DT property like
+>
+> 	reset-gpios = <&pm8350c_gpios 4 GPIO_ACTIVE_HIGH>
+>
+> in the pm8008 node. When the driver probes it should get the gpio and
+> do any toggling to take it out of reset. It shouldn't be done through
+> pinconf settings.
 
-I've not considered that before, but you're right, there doesn't seem to
-be any reason to keep the locking in the regmap.
 
-> ...
-> 
-> > +		/* 15us to allow the SBU switch to turn off */
-> > +		usleep_range(15, 1000);
-> 
-> This is quite unusual range.
-> 
-> If you are fine with the long delay, why to stress the system on it?
-> Otherwise the use of 1000 is unclear.
-> 
-> That said, I would expect one of the below:
-> 
-> 		usleep_range(15, 30);
-> 		usleep_range(500, 1000);
-> 
+Okay, IIUC,  I have to remove the output-high here and add reset-gpios 
+in pm8008 DT node. And then add below code in pm8008 mfd driver probe
 
-Glad you asked about that, as you say the typical form is to keep the
-range within 2x of the lower value, or perhaps lower + 5.
++               chip->reset_gpio = devm_gpiod_get(chip->dev, "reset", 
+GPIOD_OUT_HIGH);
++               if (IS_ERR(chip->reset_gpio)) {
++                       dev_err(chip->dev, "failed to acquire reset 
+gpio\n");
++                       return PTR_ERR(chip->reset_gpio);
++               }
++               gpiod_set_value(chip->reset_gpio, 1);
 
-But if the purpose is to specify a minimum time and then give a max to
-give the system some flexibility in it's decision of when to wake up.
-And in situations such as this, we're talking about someone connecting a
-cable, so we're in "no rush" and I picked the completely arbitrary 1ms
-as the max.
+This is working for me, Please let me know if I'm  missing something.
 
-Do you see any drawback of this much higher number? (Other than it
-looking "wrong")
-
-> ...
-> 
-> > +	sw_desc.fwnode = dev->fwnode;
-> 
-> Please, don't dereference for fwnode explicitly. Use dev_fwnode().
-> 
-
-Okay, will update accordingly.
-
-Thanks,
-Bjorn
-
-> ...
-> 
-> > +	mux_desc.fwnode = dev->fwnode;
-> 
-> Ditto.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 

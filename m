@@ -2,106 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23AB4D07D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C2B4D07D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 20:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241557AbiCGTlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 14:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S245124AbiCGTlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 14:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiCGTlR (ORCPT
+        with ESMTP id S231883AbiCGTlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 14:41:17 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B53A13DE2;
-        Mon,  7 Mar 2022 11:40:22 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254217114"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="254217114"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 11:40:22 -0800
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="711233447"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 11:40:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1nRJCg-00CxVa-V8;
-        Mon, 07 Mar 2022 21:39:34 +0200
-Date:   Mon, 7 Mar 2022 21:39:34 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mon, 7 Mar 2022 14:41:44 -0500
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5347324F0D;
+        Mon,  7 Mar 2022 11:40:49 -0800 (PST)
+Received: from 1nRJDr-0004sP-UY by out3d.electric.net with emc1-ok (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nRJDs-0004vZ-V8; Mon, 07 Mar 2022 11:40:48 -0800
+Received: by emcmailer; Mon, 07 Mar 2022 11:40:48 -0800
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+        by out3d.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nRJDr-0004sP-UY; Mon, 07 Mar 2022 11:40:47 -0800
+Received: from tsdebian (_gateway [192.168.0.64])
+        by mail.embeddedts.com (Postfix) with ESMTPSA id B5B713D392;
+        Mon,  7 Mar 2022 12:40:46 -0700 (MST)
+Message-ID: <1646682026.7444.2.camel@embeddedTS.com>
+Subject: Re: [PATCH] gpio: ts4900: Do not set DAT and OE together
+From:   Kris Bahnsen <kris@embeddedTS.com>
+Reply-To: kris@embeddedTS.com
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH 1/7] serial: 8250_dwlib: RS485 HW half duplex support
-Message-ID: <YiZfdlw0A75cojCx@smile.fi.intel.com>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
- <20220302095606.14818-2-ilpo.jarvinen@linux.intel.com>
- <20220306184857.GA19394@wunner.de>
- <CAHp75Vdxa_p866t5B7zJ8nHS-v+tu3vLiW0=vaBznnyCGyve_g@mail.gmail.com>
- <ab82f6a-8d1b-8e89-4ea-77d1a55667d2@linux.intel.com>
- <20220307191854.GA27748@wunner.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220307191854.GA27748@wunner.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Mark Featherston <mark@embeddedts.com>
+Date:   Mon, 07 Mar 2022 11:40:26 -0800
+In-Reply-To: <CAMRc=MeHT4pX1ZRbOz0owDDec5rv+FE84rp464ugffbH5PuS5w@mail.gmail.com>
+References: <20220304221517.30213-1-kris@embeddedTS.com>
+         <CAMRc=MeHT4pX1ZRbOz0owDDec5rv+FE84rp464ugffbH5PuS5w@mail.gmail.com>
+Organization: embeddedTS
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-Virus-Status: Scanned by VirusSMART (c)
+X-Virus-Status: Scanned by VirusSMART (b)
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=zG3JQ1AtPaZKEqLY1Uf3Ei4t09ru1Q8ncGgjkOed1xA=;b=a5Nry+bDgsbHj8ZkLQ13zOHYJy9PlkqOyK3VzKPvp9GvbxkGqkF9M5XJochGRVa0POQuQsMm+g1i82Igi3c8XviHa04a/fwtTrfj4aNG0v8qX80fgarJGJ6IvXQJobGGmd+Syfh6j3dWUQsekOPthkpP9K5mgiO1anagP57VCpPPFsTTjhrLXWDDeur0cILn8gGtr3L6jpAHEkQ13p1CO/huVthOK1/G0UmM9QbhNfniiGHCUSBWJH/m0WS/uPZotODG8quSX6k1cbB6iG+kFflkTrRTN+1QyxLIRQ6UyiSgScxEFWFHGZolsXuvJqFr80ABuJ2E45MON7W9o9bLrg==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 08:18:54PM +0100, Lukas Wunner wrote:
-> On Mon, Mar 07, 2022 at 11:19:59AM +0200, Ilpo Järvinen wrote:
-> > On Mon, 7 Mar 2022, Andy Shevchenko wrote:
-
-...
-
-> That's for DT platforms, but I suppose you've got ACPI.  Not sure
-> how it's handled there, the ACPI 6.4 spec contains a "UART Serial Bus
-> Connection Resource Descriptor" but nothing on RS-485, so I guess
-> the only option is to use regular DT properties in a _DSD object?
-
-Which make me think that this series needs an additional patch to
-describe RS485 enumeration for ACPI case (somewhere in
-Documentation/firmware-guide/acpi/enumeration.rst IIRC the filename).
-
-...
-
-> > I initially had additional version check here while developing this
-> > patch series but it seemed to not provide any added value due those
-> > other factors that need to be considered.
+On Mon, 2022-03-07 at 10:13 +0100, Bartosz Golaszewski wrote:
+> On Fri, Mar 4, 2022 at 11:15 PM Kris Bahnsen <kris@embeddedts.com> wrote:
+> > 
+> > From: Mark Featherston <mark@embeddedTS.com>
+> > 
+> > This works around an issue with the hardware where both OE and
+> > DAT are exposed in the same register. If both are updated
+> > simultaneously, the harware makes no guarantees that OE or DAT
+> > will actually change in any given order and may result in a
+> > glitch of a few ns on a GPIO pin when changing direction and value
+> > in a single write.
+> > 
+> > Setting direction to input now only affects OE bit. Setting
+> > direction to output updates DAT first, then OE.
+> > 
+> > Signed-off-by: Mark Featherston <mark@embeddedTS.com>
+> > Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+> > ---
+> >  drivers/gpio/gpio-ts4900.c | 25 ++++++++++++++++++++-----
+> >  1 file changed, 20 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
+> > index d885032cf814..fbabfca030c0 100644
+> > --- a/drivers/gpio/gpio-ts4900.c
+> > +++ b/drivers/gpio/gpio-ts4900.c
+> > @@ -1,7 +1,8 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> >  /*
+> >   * Digital I/O driver for Technologic Systems I2C FPGA Core
+> >   *
+> > - * Copyright (C) 2015 Technologic Systems
+> > + * Copyright (C) 2015-2018 Technologic Systems
+> >   * Copyright (C) 2016 Savoir-Faire Linux
+> >   *
+> >   * This program is free software; you can redistribute it and/or
+> > @@ -55,19 +56,33 @@ static int ts4900_gpio_direction_input(struct gpio_chip *chip,
+> >  {
+> >         struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
+> > 
+> > -       /*
+> > -        * This will clear the output enable bit, the other bits are
+> > -        * dontcare when this is cleared
+> > +       /* Only clear the OE bit here, requires a RMW. Prevents potential issue
+> > +        * with OE and data getting to the physical pin at different times.
+> >          */
+> > -       return regmap_write(priv->regmap, offset, 0);
+> > +       return regmap_update_bits(priv->regmap, offset, TS4900_GPIO_OE, 0);
+> >  }
+> > 
+> >  static int ts4900_gpio_direction_output(struct gpio_chip *chip,
+> >                                         unsigned int offset, int value)
+> >  {
+> >         struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
+> > +       unsigned int reg;
+> >         int ret;
+> > 
+> > +       /* If changing from an input to an output, we need to first set the
+> > +        * proper data bit to what is requested and then set OE bit. This
+> > +        * prevents a glitch that can occur on the IO line
+> > +        */
+> > +       regmap_read(priv->regmap, offset, &reg);
+> > +       if (!(reg & TS4900_GPIO_OE)) {
+> > +               if (value)
+> > +                       reg = TS4900_GPIO_OUT;
+> > +               else
+> > +                       reg &= ~TS4900_GPIO_OUT;
+> > +
+> > +               regmap_write(priv->regmap, offset, reg);
+> > +       }
+> > +
+> >         if (value)
+> >                 ret = regmap_write(priv->regmap, offset, TS4900_GPIO_OE |
+> >                                                          TS4900_GPIO_OUT);
+> > --
+> > 2.11.0
+> > 
 > 
-> Here's another idea:
+> This looks like a fix, can you add a Fixes tag?
 > 
-> Read TCR register on ->probe.  It's POR value is 0x6 if RS-485 is
-> supported by the chip, else 0x0.  (Page 220 of the 4.01a spec says
-> UCV register does not exist if additional features are not implemented
-> and reading from this register address returns 0, I suppose the same
-> applies to TCR if RS-485 is not implemented.)
+> Bart
 > 
-> Since the driver may change the polarity in the TCR register, be sure
-> to write 0x6 to it on ->remove so that you can still correctly detect
-> presence of the RS-485 feature after unbind/rebind of the driver.
 
-What to do in the case when DE pin is muxed to RTS and locked in pin control
-IP by firmware (no possibility to change the muxing in the OS)?
+Please excuse my ignorance (and email client issues) I am still learning the
+submission process. I'm not sure what kind of Fixes tag to add in this scenario.
 
--- 
-With Best Regards,
-Andy Shevchenko
+This GPIO issue has existed since the driver's inception. It is a quirk of
+hardware that has always existed on this platform. The driver was originally
+implemented by Savoir-faire Linux. We discovered the issue and have had it
+patched in our trees for years and wanted to push it upstream.
 
+There is no public discussion on it, it was found and patched. And, aside from
+the first commit of this driver, there is no commit that introduced any issue.
 
+Can you please advise what kind of Fixes tag is appropriate in this situation?
+
+Additionally, if I do add a Fixes tag, would that warrant a v2 patch? Or would
+it just need to be an email response that includes it?
+
+Kris

@@ -2,76 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E034CF48F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FD54CF531
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiCGJTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S236735AbiCGJZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiCGJTw (ORCPT
+        with ESMTP id S237044AbiCGJXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:19:52 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31F21EEFB
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:18:55 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id j26so11752404wrb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:18:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=aW0p0zs1Z1ISg8Q6VMocuL2pI3OI7Xnu+rh+9BkWcvU=;
-        b=XkMi54+kZh8TYyNDE7ePB8GHqReiPX6zSWu2PEnHtpSC2tbZhe/ImHgzssdsFTbkPd
-         1u97FZFXAnhdHxkugaXfxvjQPsBxafOIMWttkTKKeE08o+DFoCXFYCipXD9TQAAwqD5W
-         wppO5lKrLRFDsox8hpjI+VE1BptkEigRWeWME0pWjpcPI6NkHW5sYuG3Iu1dnq7ZS7vZ
-         GBaATIzzLg4z5DYOszgR47ydBkEta5JT0H6AD2+e/NgvbqHQePT5qg/s7SHGoidEc7Og
-         VUZEggaRyzLcVki0dSRSn5Kky7Z9YxcJOayGn5AFC08sFlwG/CG3YogPsKtfRtL6xgp0
-         vjyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=aW0p0zs1Z1ISg8Q6VMocuL2pI3OI7Xnu+rh+9BkWcvU=;
-        b=znyS6gaL2WqGkGvslZzn3aMIXH9+RHCNNRAxMsahbG1YLKTCwCv2ybq/Xk4Mxgjx01
-         JuZOcMVPQHO829tE857fgnN/tANI7y6tb1b0vI7WRtR0GJvcUruxfG/hmxOYyxXqE+qa
-         WvPh1nkdAYBe6VzleSYjMQPhNQWj1yUB589nJZD6Asz4b4L6uX4ca9gHduyx6pckeZBE
-         FlZwrZM1xK9vUDapbfnlA0zNf/HR5jqQB/4bD7mCqJILvmMzRHQUBhB0Jlr7/eMthyHm
-         1WUFFcgEW8ueFug3zmFHYRAjojs+JI+v0qRoibTt4QRlz2P0dMnzPcRBiRRLLukJd5va
-         CSnQ==
-X-Gm-Message-State: AOAM53309O7PHE7XlSP4q+Pp/gNf9nfS5p0cAmGAWeKC3upI01FZkBPU
-        N96pgufYazIMnKBoN3FYfBUyXQ==
-X-Google-Smtp-Source: ABdhPJwjJh3IaiveZrTEJzRL0aeIiET1nrgVql7GDTOmHCb/GyNxfJk1gfLXh3fy7IZBkd14WBbj0g==
-X-Received: by 2002:a05:6000:2a5:b0:1f6:7c28:6b83 with SMTP id l5-20020a05600002a500b001f67c286b83mr892650wry.324.1646644734147;
-        Mon, 07 Mar 2022 01:18:54 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g17-20020adff411000000b001f03426827csm10774220wro.71.2022.03.07.01.18.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 01:18:53 -0800 (PST)
-Date:   Mon, 7 Mar 2022 09:18:50 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] regulator: dt-bindings: maxim,max77802: convert
- to dtschema
-Message-ID: <YiXN+kYsvUDbz3wX@google.com>
-References: <20220111175430.224421-1-krzysztof.kozlowski@canonical.com>
- <20220111175430.224421-2-krzysztof.kozlowski@canonical.com>
+        Mon, 7 Mar 2022 04:23:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B266527C7;
+        Mon,  7 Mar 2022 01:21:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2ABB1B810B2;
+        Mon,  7 Mar 2022 09:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6572CC340E9;
+        Mon,  7 Mar 2022 09:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646644900;
+        bh=LDLbxVW01HG22SAbfX+zS+GmVV2jM0oTEeD1nau4TPE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zNg4HHEpNjoVBI4TN8DW2MyDg4cwK6RTH5LNX5dARZIXuJeI+TRaRR0K4u2ebQ+4Y
+         3J0xoazTsowvFLL4d/1X4jHdvwSHMYeX/ckdrAKVzhhMSb64C7gHnSSSn00s17Bm2z
+         cKxIiwOdXeWq8T1cHbr7AehWgbytzB9bFkph4+tE=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 4.14 16/42] netfilter: fix use-after-free in __nf_register_net_hook()
+Date:   Mon,  7 Mar 2022 10:18:50 +0100
+Message-Id: <20220307091636.623427323@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220111175430.224421-2-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,22 +56,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022, Krzysztof Kozlowski wrote:
+From: Eric Dumazet <edumazet@google.com>
 
-> Convert the regulators of Maxim MAX77802 PMIC to DT schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/regulator/max77802.txt           | 111 ------------------
->  .../bindings/regulator/maxim,max77802.yaml    |  97 +++++++++++++++
->  2 files changed, 97 insertions(+), 111 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/regulator/max77802.txt
->  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77802.yaml
+commit 56763f12b0f02706576a088e85ef856deacc98a0 upstream.
 
-Applied, thanks.
+We must not dereference @new_hooks after nf_hook_mutex has been released,
+because other threads might have freed our allocated hooks already.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+BUG: KASAN: use-after-free in nf_hook_entries_get_hook_ops include/linux/netfilter.h:130 [inline]
+BUG: KASAN: use-after-free in hooks_validate net/netfilter/core.c:171 [inline]
+BUG: KASAN: use-after-free in __nf_register_net_hook+0x77a/0x820 net/netfilter/core.c:438
+Read of size 2 at addr ffff88801c1a8000 by task syz-executor237/4430
+
+CPU: 1 PID: 4430 Comm: syz-executor237 Not tainted 5.17.0-rc5-syzkaller-00306-g2293be58d6a1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ nf_hook_entries_get_hook_ops include/linux/netfilter.h:130 [inline]
+ hooks_validate net/netfilter/core.c:171 [inline]
+ __nf_register_net_hook+0x77a/0x820 net/netfilter/core.c:438
+ nf_register_net_hook+0x114/0x170 net/netfilter/core.c:571
+ nf_register_net_hooks+0x59/0xc0 net/netfilter/core.c:587
+ nf_synproxy_ipv6_init+0x85/0xe0 net/netfilter/nf_synproxy_core.c:1218
+ synproxy_tg6_check+0x30d/0x560 net/ipv6/netfilter/ip6t_SYNPROXY.c:81
+ xt_check_target+0x26c/0x9e0 net/netfilter/x_tables.c:1038
+ check_target net/ipv6/netfilter/ip6_tables.c:530 [inline]
+ find_check_entry.constprop.0+0x7f1/0x9e0 net/ipv6/netfilter/ip6_tables.c:573
+ translate_table+0xc8b/0x1750 net/ipv6/netfilter/ip6_tables.c:735
+ do_replace net/ipv6/netfilter/ip6_tables.c:1153 [inline]
+ do_ip6t_set_ctl+0x56e/0xb90 net/ipv6/netfilter/ip6_tables.c:1639
+ nf_setsockopt+0x83/0xe0 net/netfilter/nf_sockopt.c:101
+ ipv6_setsockopt+0x122/0x180 net/ipv6/ipv6_sockglue.c:1024
+ rawv6_setsockopt+0xd3/0x6a0 net/ipv6/raw.c:1084
+ __sys_setsockopt+0x2db/0x610 net/socket.c:2180
+ __do_sys_setsockopt net/socket.c:2191 [inline]
+ __se_sys_setsockopt net/socket.c:2188 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2188
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f65a1ace7d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f65a1a7f308 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 0000000000000006 RCX: 00007f65a1ace7d9
+RDX: 0000000000000040 RSI: 0000000000000029 RDI: 0000000000000003
+RBP: 00007f65a1b574c8 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000020000000 R11: 0000000000000246 R12: 00007f65a1b55130
+R13: 00007f65a1b574c0 R14: 00007f65a1b24090 R15: 0000000000022000
+ </TASK>
+
+The buggy address belongs to the page:
+page:ffffea0000706a00 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1c1a8
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001c1b108 ffffea000046dd08 0000000000000000
+raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0x52dc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_ZERO), pid 4430, ts 1061781545818, free_ts 1061791488993
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
+ __alloc_pages_node include/linux/gfp.h:572 [inline]
+ alloc_pages_node include/linux/gfp.h:595 [inline]
+ kmalloc_large_node+0x62/0x130 mm/slub.c:4438
+ __kmalloc_node+0x35a/0x4a0 mm/slub.c:4454
+ kmalloc_node include/linux/slab.h:604 [inline]
+ kvmalloc_node+0x97/0x100 mm/util.c:580
+ kvmalloc include/linux/slab.h:731 [inline]
+ kvzalloc include/linux/slab.h:739 [inline]
+ allocate_hook_entries_size net/netfilter/core.c:61 [inline]
+ nf_hook_entries_grow+0x140/0x780 net/netfilter/core.c:128
+ __nf_register_net_hook+0x144/0x820 net/netfilter/core.c:429
+ nf_register_net_hook+0x114/0x170 net/netfilter/core.c:571
+ nf_register_net_hooks+0x59/0xc0 net/netfilter/core.c:587
+ nf_synproxy_ipv6_init+0x85/0xe0 net/netfilter/nf_synproxy_core.c:1218
+ synproxy_tg6_check+0x30d/0x560 net/ipv6/netfilter/ip6t_SYNPROXY.c:81
+ xt_check_target+0x26c/0x9e0 net/netfilter/x_tables.c:1038
+ check_target net/ipv6/netfilter/ip6_tables.c:530 [inline]
+ find_check_entry.constprop.0+0x7f1/0x9e0 net/ipv6/netfilter/ip6_tables.c:573
+ translate_table+0xc8b/0x1750 net/ipv6/netfilter/ip6_tables.c:735
+ do_replace net/ipv6/netfilter/ip6_tables.c:1153 [inline]
+ do_ip6t_set_ctl+0x56e/0xb90 net/ipv6/netfilter/ip6_tables.c:1639
+ nf_setsockopt+0x83/0xe0 net/netfilter/nf_sockopt.c:101
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3404
+ kvfree+0x42/0x50 mm/util.c:613
+ rcu_do_batch kernel/rcu/tree.c:2527 [inline]
+ rcu_core+0x7b1/0x1820 kernel/rcu/tree.c:2778
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+
+Memory state around the buggy address:
+ ffff88801c1a7f00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88801c1a7f80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff88801c1a8000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                   ^
+ ffff88801c1a8080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88801c1a8100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+
+Fixes: 2420b79f8c18 ("netfilter: debug: check for sorted array")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Acked-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ net/netfilter/core.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+--- a/net/netfilter/core.c
++++ b/net/netfilter/core.c
+@@ -276,14 +276,15 @@ int nf_register_net_hook(struct net *net
+ 	p = nf_entry_dereference(*pp);
+ 	new_hooks = nf_hook_entries_grow(p, reg);
+ 
+-	if (!IS_ERR(new_hooks))
++	if (!IS_ERR(new_hooks)) {
++		hooks_validate(new_hooks);
+ 		rcu_assign_pointer(*pp, new_hooks);
++	}
+ 
+ 	mutex_unlock(&nf_hook_mutex);
+ 	if (IS_ERR(new_hooks))
+ 		return PTR_ERR(new_hooks);
+ 
+-	hooks_validate(new_hooks);
+ #ifdef CONFIG_NETFILTER_INGRESS
+ 	if (reg->pf == NFPROTO_NETDEV && reg->hooknum == NF_NETDEV_INGRESS)
+ 		net_inc_ingress_queue();
+
+

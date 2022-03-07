@@ -2,58 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF814D0676
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97ED84D068A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241334AbiCGS1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S244503AbiCGSaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234218AbiCGS1J (ORCPT
+        with ESMTP id S239445AbiCGSa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:27:09 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5D3939A8
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:26:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646677574; x=1678213574;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5qzlM+F2KLwaOV5DOusddqPgYoFFoImJzYDRDku6N50=;
-  b=nzMqpy0QBf7aC2utAcDtfOzFhdYJtnU9dmXWPDqnjveplOtFoo/5TOwl
-   4ptA1PE3/g5OxLvWOg5hUhlJ95wAoZ75Pv5to+EydidflviXiie7pXEmH
-   sSXaMKsrf2Bqm8gnRwmrBa10YP7ghVF/19k6IExKNhu6LySwhTfcLmbPa
-   oRhO4GItumOE6UDDvQnFoLmzZeEgKeXjkh/nPFafrlPMYK5svePjeWjRu
-   gd/nwLwwntrZwMhXU1YPsrtjq/0+Plqd1DH7s1feZFR5PGfKjjQPfzBMX
-   i2aWGhljp36WIKGJZVn3vqKv+4kXiEJlnNaCcDANrbFj8xllw/Mk8TyJ3
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254404728"
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="254404728"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 10:26:13 -0800
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="641428749"
-Received: from sonalsha-mobl.amr.corp.intel.com (HELO localhost) ([10.212.67.25])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 10:26:13 -0800
-Date:   Mon, 7 Mar 2022 10:26:12 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pkeys: Make pkey unsigned in arch_set_user_pkey_access()
-Message-ID: <YiZORNusRg4UTv45@iweiny-desk3>
-References: <20220304210543.3490880-1-ira.weiny@intel.com>
- <878rtmtfgs.fsf@linux.ibm.com>
+        Mon, 7 Mar 2022 13:30:27 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACECB29CAE;
+        Mon,  7 Mar 2022 10:29:31 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C01F153B;
+        Mon,  7 Mar 2022 10:29:31 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F0793FA45;
+        Mon,  7 Mar 2022 10:29:30 -0800 (PST)
+Date:   Mon, 7 Mar 2022 18:29:28 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: juno: align pl330 node name with dtschema
+Message-ID: <YiZPCHtpmzNPEKt3@bogus>
+References: <20220129175621.299254-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <878rtmtfgs.fsf@linux.ibm.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220129175621.299254-1-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,160 +46,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 12:30:03PM +0530, Aneesh Kumar K.V wrote:
-> ira.weiny@intel.com writes:
+On Sat, Jan 29, 2022 at 06:56:21PM +0100, Krzysztof Kozlowski wrote:
+> Fixes dtbs_check warning:
 > 
-> > From: Ira Weiny <ira.weiny@intel.com>
-> >
-> > The WARN_ON check in arch_set_user_pkey_access() in the x86 architecture
-> > fails to check for an invalid negative value.
-> >
-> > A simple check for less than 0 would fix this issue however, in the call
-> > stack below arch_set_user_pkey_access() the pkey should never be
-> > negative on any architecture.  It is always best to use correct types
-> > when possible.  x86 only supports 16 keys while ppc supports 32, u8 is
-> > therefore large enough for all current architectures and likely those in
-> > the future.
-> 
-> Should we do that as a separate patch? ie, now convert the variable to
-> unsigned int and later switch all the variables to u8?
+>   dma@7ff00000: $nodename:0: 'dma@7ff00000' does not match '^dma-controller(@.*)?$'
+>
 
-Maybe.
+Sorry for the delay, obviously I missed this. Looks fine for me.
+I see you have already sent pull request which is good as I don't
+have any other juno DTS patch at the moment.
 
-> because what we
-> now have is confusing.
-> 
-> static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
-> 		unsigned long pkey)
-> static inline u64 pkey_to_vmflag_bits(u16 pkey)
-> 
+Just in case it helps SoC team to pull you PR,
 
-This looks like a good cleanup as well.  Why not convert
-arch_calc_vm_prot_bits() and pkey_to_vmflag_bits() to u8?  (In another patch.)
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-This is all a result of this PKS conversation:
-
-https://lore.kernel.org/lkml/Yg8C6UkgfBmQlPSq@iweiny-desk3/
-
-That started me down the path of trying to figure out why 'int' was used for
-PKRU and I realized that negative values had meaning there which did not apply
-to me with PKS.  So at some point a conversion needs to be made between a
-'conceptual pkey' (int) and a real pkey (unsigned) IHMO.
-
-It's no bit deal to split this patch into one which converts to unsigned and
-then another to u8 (or u16 if there is some arch which may need it that big).
-
-However, digging more:
-
-Is there a reason u16 was used in pkey_to_vmflag_bits()?  How about in
-__pkru_allows_read() in the x86 code?  If possible I think u8 should be
-standardized but I'm ok with u16 if that is preferred.
-
-Also, am I missing something in init_amr() and init_iamr()?  I think I could
-have gone farther and changed init_amr() and init_iamr() right?
-
-From what I can see the argument to use unsigned long vs u8 (or u16) is some
-expectation that pkeys will grow beyond 256 in number.  From what I can see I
-don't think that is going to happen.
-
-So do we need to do this in two steps?
-
-Ira
-
-> 
-> >
-> > Change the type of the pkey passed to arch_set_user_pkey_access() to u8.
-> >
-> > To: Dave Hansen <dave.hansen@linux.intel.com>
-> > To: Michael Ellerman <mpe@ellerman.id.au>
-> > Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > ---
-> >  arch/powerpc/include/asm/pkeys.h | 4 ++--
-> >  arch/powerpc/mm/book3s64/pkeys.c | 2 +-
-> >  arch/x86/include/asm/pkeys.h     | 4 ++--
-> >  arch/x86/kernel/fpu/xstate.c     | 2 +-
-> >  include/linux/pkeys.h            | 2 +-
-> >  5 files changed, 7 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/arch/powerpc/include/asm/pkeys.h b/arch/powerpc/include/asm/pkeys.h
-> > index 59a2c7dbc78f..e70615a1da9b 100644
-> > --- a/arch/powerpc/include/asm/pkeys.h
-> > +++ b/arch/powerpc/include/asm/pkeys.h
-> > @@ -143,9 +143,9 @@ static inline int arch_override_mprotect_pkey(struct vm_area_struct *vma,
-> >  	return __arch_override_mprotect_pkey(vma, prot, pkey);
-> >  }
-> >  
-> > -extern int __arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
-> > +extern int __arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
-> >  				       unsigned long init_val);
-> 
-> 
-> > -static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
-> > +static inline int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
-> >  					    unsigned long init_val)
-> >  {
-> >  	if (!mmu_has_feature(MMU_FTR_PKEY))
-> > diff --git a/arch/powerpc/mm/book3s64/pkeys.c b/arch/powerpc/mm/book3s64/pkeys.c
-> > index 753e62ba67af..c048467669df 100644
-> > --- a/arch/powerpc/mm/book3s64/pkeys.c
-> > +++ b/arch/powerpc/mm/book3s64/pkeys.c
-> > @@ -333,7 +333,7 @@ static inline void init_iamr(int pkey, u8 init_bits)
-> >   * Set the access rights in AMR IAMR and UAMOR registers for @pkey to that
-> >   * specified in @init_val.
-> >   */
-> > -int __arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
-> > +int __arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
-> >  				unsigned long init_val)
-> >  {
-> >  	u64 new_amr_bits = 0x0ul;
-> > diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
-> > index 5292e6dfe2a7..48efb81f6cc6 100644
-> > --- a/arch/x86/include/asm/pkeys.h
-> > +++ b/arch/x86/include/asm/pkeys.h
-> > @@ -9,7 +9,7 @@
-> >   */
-> >  #define arch_max_pkey() (cpu_feature_enabled(X86_FEATURE_OSPKE) ? 16 : 1)
-> >  
-> > -extern int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
-> > +extern int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
-> >  		unsigned long init_val);
-> >  
-> >  static inline bool arch_pkeys_enabled(void)
-> > @@ -115,7 +115,7 @@ int mm_pkey_free(struct mm_struct *mm, int pkey)
-> >  	return 0;
-> >  }
-> >  
-> > -extern int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
-> > +extern int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
-> >  		unsigned long init_val);
-> >  
-> >  static inline int vma_pkey(struct vm_area_struct *vma)
-> > diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> > index 7c7824ae7862..db511bec57e5 100644
-> > --- a/arch/x86/kernel/fpu/xstate.c
-> > +++ b/arch/x86/kernel/fpu/xstate.c
-> > @@ -1068,7 +1068,7 @@ void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
-> >   * This will go out and modify PKRU register to set the access
-> >   * rights for @pkey to @init_val.
-> >   */
-> > -int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
-> > +int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
-> >  			      unsigned long init_val)
-> >  {
-> >  	u32 old_pkru, new_pkru_bits = 0;
-> > diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
-> > index 86be8bf27b41..aa40ed2fb0fc 100644
-> > --- a/include/linux/pkeys.h
-> > +++ b/include/linux/pkeys.h
-> > @@ -35,7 +35,7 @@ static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
-> >  	return -EINVAL;
-> >  }
-> >  
-> > -static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
-> > +static inline int arch_set_user_pkey_access(struct task_struct *tsk, u8 pkey,
-> >  			unsigned long init_val)
-> >  {
-> >  	return 0;
-> > -- 
-> > 2.35.1
+--
+Regards,
+Sudeep

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65F64CFBA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0916D4CFAF5
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbiCGKm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S241690AbiCGKVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241663AbiCGKU5 (ORCPT
+        with ESMTP id S240360AbiCGKA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:20:57 -0500
+        Mon, 7 Mar 2022 05:00:58 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C43A90CFD;
-        Mon,  7 Mar 2022 01:58:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00C7140A2;
+        Mon,  7 Mar 2022 01:47:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DF6A60929;
-        Mon,  7 Mar 2022 09:58:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F417C340F3;
-        Mon,  7 Mar 2022 09:58:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F94E60FB3;
+        Mon,  7 Mar 2022 09:47:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A376C340E9;
+        Mon,  7 Mar 2022 09:47:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646647097;
-        bh=aU0Y04APZ85P1rnfe0lrNNhe9t5kaVF9E89VwKMrJ18=;
+        s=korg; t=1646646465;
+        bh=igfJvNVfCrUaBjyCAbRfQsvYSmOThCSr/ZM/OJv2Zss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCNKqfRbHJE5GAk7K6xIw2DCxX7m33aCSc6gzlnPUQ8gV1fOeKSg0RxyTTY0bgKvc
-         wtgvx7utSAjruQVwraQGuo3WjYhkbV35Mr0hhi7aWjCXWS8sHCQVFA4PCHZTs+lFfK
-         IAPwCKirvk3oTO3X/6HTxEPLuqVxiuJsL5pXXRzw=
+        b=fggn6gi3mUXmix12agHvjPilsmlyY06orY9l7I/03BQVEZZ4Vij1YHO8v1aJ6T9HW
+         DKKi5ZaIFmUzMmduqelewqDsAXgEw0emAcWlI/dRGS7UmBzbpVgIGnC1gDe5GGpWDh
+         B8Pg10dcQ1/ZSIH9H+jQwVpjtgJ9ghfu/r5hCGk0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-        Vinay Belgaumkar <vinay.belgaumkar@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 156/186] drm/i915/guc/slpc: Correct the param count for unset param
-Date:   Mon,  7 Mar 2022 10:19:54 +0100
-Message-Id: <20220307091658.438179941@linuxfoundation.org>
+        stable@vger.kernel.org, William Mahon <wmahon@chromium.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.15 251/262] HID: add mapping for KEY_ALL_APPLICATIONS
+Date:   Mon,  7 Mar 2022 10:19:55 +0100
+Message-Id: <20220307091710.716883909@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,42 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vinay Belgaumkar <vinay.belgaumkar@intel.com>
+From: William Mahon <wmahon@chromium.org>
 
-[ Upstream commit 1b279f6ad467535c3b8a66b4edefaca2cdd5bdc3 ]
+commit 327b89f0acc4c20a06ed59e4d9af7f6d804dc2e2 upstream.
 
-SLPC unset param H2G only needs one parameter - the id of the
-param.
+This patch adds a new key definition for KEY_ALL_APPLICATIONS
+and aliases KEY_DASHBOARD to it.
 
-Fixes: 025cb07bebfa ("drm/i915/guc/slpc: Cache platform frequency limits")
+It also maps the 0x0c/0x2a2 usage code to KEY_ALL_APPLICATIONS.
 
-Suggested-by: Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
-Signed-off-by: Vinay Belgaumkar <vinay.belgaumkar@intel.com>
-Reviewed-by: Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
-Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220216181504.7155-1-vinay.belgaumkar@intel.com
-(cherry picked from commit 9648f1c3739505557d94ff749a4f32192ea81fe3)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: William Mahon <wmahon@chromium.org>
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20220303035618.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/hid-debug.c                |    4 +++-
+ drivers/hid/hid-input.c                |    2 ++
+ include/uapi/linux/input-event-codes.h |    3 ++-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c
-index 65a3e7fdb2b2..95ff630157b9 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_slpc.c
-@@ -133,7 +133,7 @@ static int guc_action_slpc_unset_param(struct intel_guc *guc, u8 id)
- {
- 	u32 request[] = {
- 		GUC_ACTION_HOST2GUC_PC_SLPC_REQUEST,
--		SLPC_EVENT(SLPC_EVENT_PARAMETER_UNSET, 2),
-+		SLPC_EVENT(SLPC_EVENT_PARAMETER_UNSET, 1),
- 		id,
- 	};
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -825,7 +825,9 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[KEY_F22] = "F22",			[KEY_F23] = "F23",
+ 	[KEY_F24] = "F24",			[KEY_PLAYCD] = "PlayCD",
+ 	[KEY_PAUSECD] = "PauseCD",		[KEY_PROG3] = "Prog3",
+-	[KEY_PROG4] = "Prog4",			[KEY_SUSPEND] = "Suspend",
++	[KEY_PROG4] = "Prog4",
++	[KEY_ALL_APPLICATIONS] = "AllApplications",
++	[KEY_SUSPEND] = "Suspend",
+ 	[KEY_CLOSE] = "Close",			[KEY_PLAY] = "Play",
+ 	[KEY_FASTFORWARD] = "FastForward",	[KEY_BASSBOOST] = "BassBoost",
+ 	[KEY_PRINT] = "Print",			[KEY_HP] = "HP",
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -1083,6 +1083,8 @@ static void hidinput_configure_usage(str
  
--- 
-2.34.1
-
+ 		case 0x29d: map_key_clear(KEY_KBD_LAYOUT_NEXT);	break;
+ 
++		case 0x2a2: map_key_clear(KEY_ALL_APPLICATIONS);	break;
++
+ 		case 0x2c7: map_key_clear(KEY_KBDINPUTASSIST_PREV);		break;
+ 		case 0x2c8: map_key_clear(KEY_KBDINPUTASSIST_NEXT);		break;
+ 		case 0x2c9: map_key_clear(KEY_KBDINPUTASSIST_PREVGROUP);		break;
+--- a/include/uapi/linux/input-event-codes.h
++++ b/include/uapi/linux/input-event-codes.h
+@@ -278,7 +278,8 @@
+ #define KEY_PAUSECD		201
+ #define KEY_PROG3		202
+ #define KEY_PROG4		203
+-#define KEY_DASHBOARD		204	/* AL Dashboard */
++#define KEY_ALL_APPLICATIONS	204	/* AC Desktop Show All Applications */
++#define KEY_DASHBOARD		KEY_ALL_APPLICATIONS
+ #define KEY_SUSPEND		205
+ #define KEY_CLOSE		206	/* AC Close */
+ #define KEY_PLAY		207
 
 

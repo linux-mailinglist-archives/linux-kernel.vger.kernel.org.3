@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CD84CF668
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8551E4CF556
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237134AbiCGJg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
+        id S237087AbiCGJ12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237452AbiCGJ2H (ORCPT
+        with ESMTP id S236699AbiCGJYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:28:07 -0500
+        Mon, 7 Mar 2022 04:24:25 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2285AEE7;
-        Mon,  7 Mar 2022 01:25:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DDD58806;
+        Mon,  7 Mar 2022 01:23:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9ED361150;
-        Mon,  7 Mar 2022 09:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3082C340E9;
-        Mon,  7 Mar 2022 09:25:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56FB761146;
+        Mon,  7 Mar 2022 09:23:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AFE2C340F4;
+        Mon,  7 Mar 2022 09:23:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645124;
-        bh=fWF0zr88aLR5/eYRbmN2pjGVjZ4Y0TtYS7lCtnAOpzQ=;
+        s=korg; t=1646645003;
+        bh=SaOWSdfpn9CGBVS1B4toCBOUU00mGD5nHWoK8cA+Qkk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qHt3otFs078D0Iu6xiXns1Fc+TUSmRldOOpQEJ8UNo8C86ExjDV/BwCeQ73KdiZTu
-         Yv21mjqruBRmOrpNZdPgX+y/2qleKLUGCMR1GrGzAVaW+umEGVlc7ILOyLMjaN82/s
-         cQ+Jb/+qeErgOwAQH0uAhVlHggo+8fG+IX60v7FY=
+        b=fGVjRV11OoUlkfUXarpi689VxaNlTTBfYVtd2b0NBRLPGzmQlU5tSMLtUmP2G+Ctm
+         bczT877njZRnxi78HnmFXHdjEUK58YVJcTypwNb3lzU4vRmE84S6oYZnJNAw9PCmWS
+         FvQ/KVRUQ5Mg2IOzDUlSCVmA1FxDpY0WI2xvWXRQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "D. Wythe" <alibuda@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 28/51] net/smc: fix unexpected SMC_CLC_DECL_ERR_REGRMB error cause by server
-Date:   Mon,  7 Mar 2022 10:19:03 +0100
-Message-Id: <20220307091637.792801662@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Siva Reddy <siva.kallam@samsung.com>,
+        Girish K S <ks.giri@samsung.com>,
+        Byungho An <bh74.an@samsung.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 30/42] net: sxgbe: fix return value of __setup handler
+Date:   Mon,  7 Mar 2022 10:19:04 +0100
+Message-Id: <20220307091637.029989429@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: D. Wythe <alibuda@linux.alibaba.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 4940a1fdf31c39f0806ac831cde333134862030b upstream.
+commit 50e06ddceeea263f57fe92baa677c638ecd65bb6 upstream.
 
-The problem of SMC_CLC_DECL_ERR_REGRMB on the server is very clear.
-Based on the fact that whether a new SMC connection can be accepted or
-not depends on not only the limit of conn nums, but also the available
-entries of rtoken. Since the rtoken release is trigger by peer, while
-the conn nums is decrease by local, tons of thing can happen in this
-time difference.
+__setup() handlers should return 1 on success, i.e., the parameter
+has been handled. A return of 0 causes the "option=value" string to be
+added to init's environment strings, polluting it.
 
-This only thing that needs to be mentioned is that now all connection
-creations are completely protected by smc_server_lgr_pending lock, it's
-enough to check only the available entries in rtokens_used_mask.
-
-Fixes: cd6851f30386 ("smc: remote memory buffers (RMBs)")
-Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: acc18c147b22 ("net: sxgbe: add EEE(Energy Efficient Ethernet) for Samsung sxgbe")
+Fixes: 1edb9ca69e8a ("net: sxgbe: add basic framework for Samsung 10Gb ethernet driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Siva Reddy <siva.kallam@samsung.com>
+Cc: Girish K S <ks.giri@samsung.com>
+Cc: Byungho An <bh74.an@samsung.com>
+Link: https://lore.kernel.org/r/20220224033528.24640-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/smc/smc_core.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -609,7 +609,8 @@ int smc_conn_create(struct smc_sock *smc
- 		    !lgr->sync_err &&
- 		    lgr->vlan_id == vlan_id &&
- 		    (role == SMC_CLNT ||
--		     lgr->conns_num < SMC_RMBS_PER_LGR_MAX)) {
-+		    (lgr->conns_num < SMC_RMBS_PER_LGR_MAX &&
-+		      !bitmap_full(lgr->rtokens_used_mask, SMC_RMBS_PER_LGR_MAX)))) {
- 			/* link group found */
- 			local_contact = SMC_REUSE_CONTACT;
- 			conn->lgr = lgr;
+--- a/drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c
++++ b/drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c
+@@ -2282,18 +2282,18 @@ static int __init sxgbe_cmdline_opt(char
+ 	char *opt;
+ 
+ 	if (!str || !*str)
+-		return -EINVAL;
++		return 1;
+ 	while ((opt = strsep(&str, ",")) != NULL) {
+ 		if (!strncmp(opt, "eee_timer:", 10)) {
+ 			if (kstrtoint(opt + 10, 0, &eee_timer))
+ 				goto err;
+ 		}
+ 	}
+-	return 0;
++	return 1;
+ 
+ err:
+ 	pr_err("%s: ERROR broken module parameter conversion\n", __func__);
+-	return -EINVAL;
++	return 1;
+ }
+ 
+ __setup("sxgbeeth=", sxgbe_cmdline_opt);
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3EE4CF54D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFD04CF9CE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbiCGJ0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S241907AbiCGKKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbiCGJX2 (ORCPT
+        with ESMTP id S240426AbiCGJvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:23:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2FD66ADE;
-        Mon,  7 Mar 2022 01:21:58 -0800 (PST)
+        Mon, 7 Mar 2022 04:51:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14967522B;
+        Mon,  7 Mar 2022 01:44:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E76A1B810C0;
-        Mon,  7 Mar 2022 09:21:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3548EC340FC;
-        Mon,  7 Mar 2022 09:21:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27C4661374;
+        Mon,  7 Mar 2022 09:44:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23A88C340E9;
+        Mon,  7 Mar 2022 09:44:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644915;
-        bh=7CwRksKJml/9QpQn0cdYH6brkoQJtb4mCcNbBsPHmvw=;
+        s=korg; t=1646646271;
+        bh=q+N6qQHHbewH0S9LAj4Ur73Dl++E5J0JYWwl7aZW/7g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KSYa9elC87gzUm5uKrw/S6N4DG60Z9zdX/19St3oyOe+qLmhmiThFktVuocxOkjC2
-         teP+DawSQy9fRDxmcJDggkv+MpkTBr7VnATcxEq4it6+DEhmRBBqCT8LD310fpQX9Z
-         x289XK3BQ503hP3DiL1PQdn/wkkCHYeM1Yj6Sp6w=
+        b=sa9d34Bxuvatg8qEOlNeBZGKchOZ2pGUGKRd7Nn6MJrxg26f3Remme9JpMOpWIDmu
+         rdZQcmmwBTjbCW2rgvFpvNHjl5P2mc2bsElVLmIfqFHq7HmcJ4g33XVJryyKhhgWAE
+         DxEHqtRhhOYIXeoJzkOhvxIyZzgqMbuc1ckvgUqk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>,
-        Simon Wunderlich <sw@simonwunderlich.de>
-Subject: [PATCH 4.14 20/42] batman-adv: Request iflink once in batadv-on-batadv check
+        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH 5.15 190/262] arm64: dts: rockchip: Switch RK3399-Gru DP to SPDIF output
 Date:   Mon,  7 Mar 2022 10:18:54 +0100
-Message-Id: <20220307091636.738398248@linuxfoundation.org>
+Message-Id: <20220307091707.872730955@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
-References: <20220307091636.146155347@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Eckelmann <sven@narfation.org>
+From: Brian Norris <briannorris@chromium.org>
 
-commit 690bb6fb64f5dc7437317153902573ecad67593d upstream.
+commit b5fbaf7d779f5f02b7f75b080e7707222573be2a upstream.
 
-There is no need to call dev_get_iflink multiple times for the same
-net_device in batadv_is_on_batman_iface. And since some of the
-.ndo_get_iflink callbacks are dynamic (for example via RCUs like in
-vxcan_get_iflink), it could easily happen that the returned values are not
-stable. The pre-checks before __dev_get_by_index are then of course bogus.
+Commit b18c6c3c7768 ("ASoC: rockchip: cdn-dp sound output use spdif")
+switched the platform to SPDIF, but we didn't fix up the device tree.
 
-Fixes: b7eddd0b3950 ("batman-adv: prevent using any virtual device created on batman-adv as hard-interface")
-Signed-off-by: Sven Eckelmann <sven@narfation.org>
-Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
+Drop the pinctrl settings, because the 'spdif_bus' pins are either:
+ * unused (on kevin, bob), so the settings is ~harmless
+ * used by a different function (on scarlet), which causes probe
+   failures (!!)
+
+Fixes: b18c6c3c7768 ("ASoC: rockchip: cdn-dp sound output use spdif")
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Link: https://lore.kernel.org/r/20220114150129.v2.1.I46f64b00508d9dff34abe1c3e8d2defdab4ea1e5@changeid
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/batman-adv/hard-interface.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi |   17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
---- a/net/batman-adv/hard-interface.c
-+++ b/net/batman-adv/hard-interface.c
-@@ -155,22 +155,23 @@ static bool batadv_is_on_batman_iface(co
- 	struct net *net = dev_net(net_dev);
- 	struct net_device *parent_dev;
- 	struct net *parent_net;
-+	int iflink;
- 	bool ret;
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
+@@ -286,7 +286,7 @@
  
- 	/* check if this is a batman-adv mesh interface */
- 	if (batadv_softif_is_valid(net_dev))
- 		return true;
+ 	sound: sound {
+ 		compatible = "rockchip,rk3399-gru-sound";
+-		rockchip,cpu = <&i2s0 &i2s2>;
++		rockchip,cpu = <&i2s0 &spdif>;
+ 	};
+ };
  
-+	iflink = dev_get_iflink(net_dev);
+@@ -437,10 +437,6 @@ ap_i2c_audio: &i2c8 {
+ 	status = "okay";
+ };
+ 
+-&i2s2 {
+-	status = "okay";
+-};
+-
+ &io_domains {
+ 	status = "okay";
+ 
+@@ -537,6 +533,17 @@ ap_i2c_audio: &i2c8 {
+ 	vqmmc-supply = <&ppvar_sd_card_io>;
+ };
+ 
++&spdif {
++	status = "okay";
 +
- 	/* no more parents..stop recursion */
--	if (dev_get_iflink(net_dev) == 0 ||
--	    dev_get_iflink(net_dev) == net_dev->ifindex)
-+	if (iflink == 0 || iflink == net_dev->ifindex)
- 		return false;
++	/*
++	 * SPDIF is routed internally to DP; we either don't use these pins, or
++	 * mux them to something else.
++	 */
++	/delete-property/ pinctrl-0;
++	/delete-property/ pinctrl-names;
++};
++
+ &spi1 {
+ 	status = "okay";
  
- 	parent_net = batadv_getlink_net(net_dev, net);
- 
- 	/* recurse over the parent device */
--	parent_dev = __dev_get_by_index((struct net *)parent_net,
--					dev_get_iflink(net_dev));
-+	parent_dev = __dev_get_by_index((struct net *)parent_net, iflink);
- 	/* if we got a NULL parent_dev there is something broken.. */
- 	if (!parent_dev) {
- 		pr_err("Cannot find parent device\n");
 
 

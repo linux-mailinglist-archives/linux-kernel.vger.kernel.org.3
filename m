@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114454CF611
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D614F4CF7D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237975AbiCGJd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
+        id S239236AbiCGJtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238516AbiCGJ3Q (ORCPT
+        with ESMTP id S239501AbiCGJjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AD317ABF;
-        Mon,  7 Mar 2022 01:27:32 -0800 (PST)
+        Mon, 7 Mar 2022 04:39:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EDC71ED7;
+        Mon,  7 Mar 2022 01:35:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E129CB810CB;
-        Mon,  7 Mar 2022 09:27:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF03C340E9;
-        Mon,  7 Mar 2022 09:27:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EE7A6112D;
+        Mon,  7 Mar 2022 09:34:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43B2C340E9;
+        Mon,  7 Mar 2022 09:34:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645247;
-        bh=pwaHIUkFVkwyCUOWpenqiulA9JSxoyj9bjJ4aO3JWNE=;
+        s=korg; t=1646645696;
+        bh=pd5FHJ2XVl+8PlV+dOhaAoN4Pt20CrlB4vG0n/3ZJYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=14Y4fGmGwPHq/YHvFPgexL+OrpAkfgy4XrAKkGUTVaw6lL8qcfqasiwP7+FvoTzNc
-         tVLBK1JkRaTO0LUbKSyodWHJnBcf19DADaT5PecjnF5qRf22/kbFAAdI5Z7o6khDWU
-         kgkaI/u5uD441750D0RG0CXKB/eZLjhMSvQArtA4=
+        b=dWhsf4bgper7iTObegTjs8rgJRXhweenTax5Kp6XuzM+MEN9/FbbYZ6lMetClAy+j
+         UyZhhSguM4ytz021OziONpEsJYAVsLbTUuM1ZThsvnbiCa/gHLNN87c3rBVbN2T2sH
+         kYSDsXbZ35mm2+Swj38zf+xl5P5SXkhUiGXLrvRQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sergei Trofimovich <slyfox@gentoo.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Anatoly Pugachev <matorola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dann frazier <dann.frazier@canonical.com>
-Subject: [PATCH 5.4 33/64] ia64: ensure proper NUMA distance and possible map initialization
+        stable@vger.kernel.org, Slawomir Laba <slawomirx.laba@intel.com>,
+        Phani Burra <phani.r.burra@intel.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.10 063/105] iavf: Fix missing check for running netdev
 Date:   Mon,  7 Mar 2022 10:19:06 +0100
-Message-Id: <20220307091640.084798925@linuxfoundation.org>
+Message-Id: <20220307091645.952463049@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,79 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+From: Slawomir Laba <slawomirx.laba@intel.com>
 
-commit b22a8f7b4bde4e4ab73b64908ffd5d90ecdcdbfd upstream.
+commit d2c0f45fcceb0995f208c441d9c9a453623f9ccf upstream.
 
-John Paul reported a warning about bogus NUMA distance values spurred by
-commit:
+The driver was queueing reset_task regardless of the netdev
+state.
 
-  620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
+Do not queue the reset task in iavf_change_mtu if netdev
+is not running.
 
-In this case, the afflicted machine comes up with a reported 256 possible
-nodes, all of which are 0 distance away from one another.  This was
-previously silently ignored, but is now caught by the aforementioned
-commit.
-
-The culprit is ia64's node_possible_map which remains unchanged from its
-initialization value of NODE_MASK_ALL.  In John's case, the machine
-doesn't have any SRAT nor SLIT table, but AIUI the possible map remains
-untouched regardless of what ACPI tables end up being parsed.  Thus,
-!online && possible nodes remain with a bogus distance of 0 (distances \in
-[0, 9] are "reserved and have no meaning" as per the ACPI spec).
-
-Follow x86 / drivers/base/arch_numa's example and set the possible map to
-the parsed map, which in this case seems to be the online map.
-
-Link: http://lore.kernel.org/r/255d6b5d-194e-eb0e-ecdd-97477a534441@physik.fu-berlin.de
-Link: https://lkml.kernel.org/r/20210318130617.896309-1-valentin.schneider@arm.com
-Fixes: 620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: Sergei Trofimovich <slyfox@gentoo.org>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Anatoly Pugachev <matorola@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: dann frazier <dann.frazier@canonical.com>
+Fixes: fdd4044ffdc8 ("iavf: Remove timer for work triggering, use delaying work instead")
+Signed-off-by: Slawomir Laba <slawomirx.laba@intel.com>
+Signed-off-by: Phani Burra <phani.r.burra@intel.com>
+Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/ia64/kernel/acpi.c |    7 +++++--
+ drivers/net/ethernet/intel/iavf/iavf_main.c |    7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/arch/ia64/kernel/acpi.c
-+++ b/arch/ia64/kernel/acpi.c
-@@ -448,7 +448,8 @@ void __init acpi_numa_fixup(void)
- 	if (srat_num_cpus == 0) {
- 		node_set_online(0);
- 		node_cpuid[0].phys_id = hard_smp_processor_id();
--		return;
-+		slit_distance(0, 0) = LOCAL_DISTANCE;
-+		goto out;
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -3317,8 +3317,11 @@ static int iavf_change_mtu(struct net_de
+ 		iavf_notify_client_l2_params(&adapter->vsi);
+ 		adapter->flags |= IAVF_FLAG_SERVICE_CLIENT_REQUESTED;
  	}
+-	adapter->flags |= IAVF_FLAG_RESET_NEEDED;
+-	queue_work(iavf_wq, &adapter->reset_task);
++
++	if (netif_running(netdev)) {
++		adapter->flags |= IAVF_FLAG_RESET_NEEDED;
++		queue_work(iavf_wq, &adapter->reset_task);
++	}
  
- 	/*
-@@ -491,7 +492,7 @@ void __init acpi_numa_fixup(void)
- 			for (j = 0; j < MAX_NUMNODES; j++)
- 				slit_distance(i, j) = i == j ?
- 					LOCAL_DISTANCE : REMOTE_DISTANCE;
--		return;
-+		goto out;
- 	}
- 
- 	memset(numa_slit, -1, sizeof(numa_slit));
-@@ -516,6 +517,8 @@ void __init acpi_numa_fixup(void)
- 		printk("\n");
- 	}
- #endif
-+out:
-+	node_possible_map = node_online_map;
+ 	return 0;
  }
- #endif				/* CONFIG_ACPI_NUMA */
- 
 
 

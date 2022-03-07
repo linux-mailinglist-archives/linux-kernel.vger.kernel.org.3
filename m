@@ -2,170 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58664D02C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941E84D02D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiCGP16 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Mar 2022 10:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
+        id S240959AbiCGP2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243755AbiCGP1u (ORCPT
+        with ESMTP id S243824AbiCGP2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:27:50 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4429692D06
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:26:55 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-85-dcBRBPURPaqNT771jbYVzw-1; Mon, 07 Mar 2022 15:26:52 +0000
-X-MC-Unique: dcBRBPURPaqNT771jbYVzw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 7 Mar 2022 15:26:48 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 7 Mar 2022 15:26:48 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dan Carpenter' <dan.carpenter@oracle.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>
-CC:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jason Gunthorpe <jgg@ziepe.ca>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Arnd Bergman" <arnd@arndb.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: RE: [PATCH 0/6] Remove usage of list iterator past the loop body
-Thread-Topic: [PATCH 0/6] Remove usage of list iterator past the loop body
-Thread-Index: AQHYMjRtYqIeET2JD0yO+p9PX3jHEKy0Bmqg
-Date:   Mon, 7 Mar 2022 15:26:48 +0000
-Message-ID: <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220307150037.GD3293@kadam>
-In-Reply-To: <20220307150037.GD3293@kadam>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 7 Mar 2022 10:28:31 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAD9630D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:27:33 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id e24so10904805wrc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 07:27:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jaYKUyHTSA7NJB35LAiYvBbaB9ao0d9w011LT+nuUm4=;
+        b=I24QTCqFvFoh7ihUG6Nrnh0U6I7FrXodb2oPjmTPrG+TsmBEC5V9FhCJxfr9cWkIKO
+         1T/clYRnUgJeytYtdBqRLwJJrcK9Br37wh8lLef8hEECFb9WIg25klf374BTbpusGGyG
+         qLcMl3eEcA9SZpaT06fqSQ+3ZrAmK0QSVknTvss1FNBLeIsLSH+hWapV+mOqWPVwz+g0
+         NjPm9suyQf2EfBx1u95grF7ENkM3KMXv9Wh5UEjPdPgJcX4zZcpzWsA64q7eALo98dbu
+         XbvYMPSWfiviEflexKrFN3iJKtnoCuOyc4NfQs0x7+RYuyTo8rVqOyNlANSUyg5x5RKz
+         vMtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jaYKUyHTSA7NJB35LAiYvBbaB9ao0d9w011LT+nuUm4=;
+        b=7BVLWKCVAGyKl/KxPoQ4fjSHNkDquOSB5Vl5dmGUmi9Etqv5atCYYQBp7q9Z13Jf2d
+         1ar9x2cP0tiJT7Nc5m4MCBEqEiyi/5J9e2wAbzVo/rBD4L6hspa1k+sYYo1SV0FOeonG
+         HBH0vdaDR9Eo2KhrbELE4T5MhVg6yhTSom32IrWkptOl1bWyUFOmRJHF8Xc1haMhzCVO
+         LwN0jPanfLOTeuiaRS6lD+7FFHcaNz8JDjJJI14l5xh8Vv+aizjfS2rgegpc2e6OVixn
+         WQoxM1W7TNJssVyKd2cRoctbXaZp3pc/N7sWp6lcAwEMcmgXWqFNWIeK+3yT4VS4ekMl
+         DQuA==
+X-Gm-Message-State: AOAM5334VRHGSD5nkna/9tz1fOZyeKfsYY2ggNwdGztE7Cm0CY6ahd37
+        hYKg/0NfO3FeiNud+iBLtYDapA==
+X-Google-Smtp-Source: ABdhPJwxDd5egt0DySXxFusLdNc/Aj/TuHpfZ+WsZIIHRSt4kpBS45As0tN5J1pfwjSW3/ajE3hgXA==
+X-Received: by 2002:a05:6000:1446:b0:1e9:e378:71c5 with SMTP id v6-20020a056000144600b001e9e37871c5mr8561036wrx.128.1646666851656;
+        Mon, 07 Mar 2022 07:27:31 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id k12-20020adfb34c000000b001f1e13df54dsm6210417wrd.89.2022.03.07.07.27.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 07:27:31 -0800 (PST)
+Date:   Mon, 7 Mar 2022 15:27:29 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [GIT PULL] Immutable branch between MFD, RTC and Watchdog due for
+ the v5.18 merge window
+Message-ID: <YiYkYZjGsRIeklfh@google.com>
+References: <20220223175908.191618-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220223175908.191618-1-luca@lucaceresoli.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter
-> Sent: 07 March 2022 15:01
-> 
-> Updating this API is risky because some places rely on the old behavior
-> and not all of them have been updated.  Here are some additional places
-> you might want to change.
+Enjoy!
 
-I really can't help thinking that trying to merge this patch is
-actually impossible.
-It affects far too many different parts of the tree.
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-Since (I believe) this is a doubly linked list with forwards and
-backwards pointers that point to a 'node' (not that there is a
-nice comment to that effect in the header - and there are lots of
-ways to do linked lists) the 'head' pretty much has to be a 'node'.
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-I'd write the following new defines (but I might be using
-the old names here):
+are available in the Git repository at:
 
-list_first(head, field) First item, NULL if empty.
-list_last(head, field) Last item NULL if empty.
-list_next(head, item, field) Item after 'item', NULL if last.
-list_prev(head, item. field) Item before 'item', NULL if first.
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-rtc-watchdog-v5.18
 
-You get (something like):
-#define list_first(head, field) \
-	head->next == &head ? NULL : list_item(head->next, field)
-(probably needs typeof(item) from somewhere).
+for you to fetch changes up to c58e496311a50c087eeeaaae81083cd643fe5128:
 
-The iterator loop is then just:
-#define loop_iterate(item, head, field) \
-	for (item = list_first(head, field); item; \
-		item = list_next(head, item, field)
+  rtc: max77686: Add MAX77714 support (2022-03-07 13:55:04 +0000)
 
-I'm not sure, but making the 'head' be a structure that contains
-a single member that is a 'node' might help type checking.
+----------------------------------------------------------------
+Immutable branch between MFD, RTC and Watchdog due for the v5.18 merge window
 
-Then all the code that uses the current defines can slowly be
-moved over (probably a couple of releases) before the existing
-defines are deleted.
+----------------------------------------------------------------
+Luca Ceresoli (8):
+      rtc: max77686: Convert comments to kernel-doc format
+      rtc: max77686: Rename day-of-month defines
+      rtc: max77686: Remove unused code to read in 12-hour mode
+      dt-bindings: mfd: Add Maxim MAX77714 PMIC
+      mfd: max77714: Add driver for Maxim MAX77714 PMIC
+      watchdog: max77620: Add support for the max77714 variant
+      watchdog: max77620: Add comment to clarify set_timeout procedure
+      rtc: max77686: Add MAX77714 support
 
-That should simplify all the open-coded search loops that are
-just as likely to be buggy (possibly more so).
+ .../devicetree/bindings/mfd/maxim,max77714.yaml    |  68 +++++++++
+ MAINTAINERS                                        |   7 +
+ drivers/mfd/Kconfig                                |  14 ++
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/max77686.c                             |   2 +-
+ drivers/mfd/max77714.c                             | 152 +++++++++++++++++++++
+ drivers/rtc/Kconfig                                |   2 +-
+ drivers/rtc/rtc-max77686.c                         |  75 ++++++----
+ drivers/watchdog/Kconfig                           |   2 +-
+ drivers/watchdog/max77620_wdt.c                    |  85 +++++++++---
+ include/linux/mfd/max77686-private.h               |   4 +-
+ include/linux/mfd/max77714.h                       |  60 ++++++++
+ 12 files changed, 421 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 include/linux/mfd/max77714.h
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

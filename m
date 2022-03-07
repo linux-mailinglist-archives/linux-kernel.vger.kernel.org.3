@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AF04CF9C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B9A4CF820
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238919AbiCGKOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:14:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S238731AbiCGJsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239485AbiCGJ7Q (ORCPT
+        with ESMTP id S239012AbiCGJjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:59:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CBD13D20;
-        Mon,  7 Mar 2022 01:46:20 -0800 (PST)
+        Mon, 7 Mar 2022 04:39:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B494E70332;
+        Mon,  7 Mar 2022 01:34:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7057261375;
-        Mon,  7 Mar 2022 09:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46132C340F3;
-        Mon,  7 Mar 2022 09:46:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4091CB810B6;
+        Mon,  7 Mar 2022 09:33:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F85BC340F3;
+        Mon,  7 Mar 2022 09:33:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646375;
-        bh=a7gVExX97sJqof1a6d/tmWW5ytlV1Ml6aUzLWHpgyl8=;
+        s=korg; t=1646645606;
+        bh=1zPQ1h+JVqvtBMyT8pf3fIRvne3QVF7gguqyCR2aGf4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jmCnchUtYv99tGHfcPEmpx3awoVKpxJtG1X5rx8h8UlksgaAVWO7zRxSCEN+zozpG
-         NY7WuiDCSyalVXBlC44TjmoEbtzejHIrNInTNi3AoeX67Yz7qT6LER4uRo+4iiljFh
-         mlXK/zfvPl/3T3fEwbjoDcGADFPWBPHYPKnYeuHg=
+        b=AD/w47Aj1HDLoaaY8OAUvsKz2jtbFjvHcunDipJPDrgdnWzkKSwCmyQIlbPCKoaVt
+         K0RvMsaxgyenWhKe+hKxoDrCFF8Gti9Djnbq3Q0a5ISSDGsanpP3UCJf3H380Om66b
+         szrUdP1Jw83c6bLFvLV2SRDzGWHJutPAoqcMKTgQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Pawlak <jakub.pawlak@intel.com>,
-        Jan Sokolowski <jan.sokolowski@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 224/262] iavf: Add __IAVF_INIT_FAILED state
+        stable@vger.kernel.org, Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Li Yang <leoyang.li@nxp.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 085/105] soc: fsl: guts: Add a missing memory allocation failure check
 Date:   Mon,  7 Mar 2022 10:19:28 +0100
-Message-Id: <20220307091709.429515667@linuxfoundation.org>
+Message-Id: <20220307091646.571002433@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,158 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mateusz Palczewski <mateusz.palczewski@intel.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 59756ad6948be91d66867ce458083b820c59b8ba ]
+[ Upstream commit b9abe942cda43a1d46a0fd96efb54f1aa909f757 ]
 
-This commit adds a new state, __IAVF_INIT_FAILED to the state machine.
->From now on initialization functions report errors not by returning an
-error value, but by changing the state to indicate that something went
-wrong.
+If 'devm_kstrdup()' fails, we should return -ENOMEM.
 
-Signed-off-by: Jakub Pawlak <jakub.pawlak@intel.com>
-Signed-off-by: Jan Sokolowski <jan.sokolowski@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+While at it, move the 'of_node_put()' call in the error handling path and
+after the 'machine' has been copied.
+Better safe than sorry.
+
+Fixes: a6fc3b698130 ("soc: fsl: add GUTS driver for QorIQ platforms")
+Depends-on: fddacc7ff4dd ("soc: fsl: guts: Revert commit 3c0d64e867ed")
+Suggested-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Li Yang <leoyang.li@nxp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf.h      |  1 +
- drivers/net/ethernet/intel/iavf/iavf_main.c | 35 ++++++++++++---------
- 2 files changed, 21 insertions(+), 15 deletions(-)
+ drivers/soc/fsl/guts.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf.h b/drivers/net/ethernet/intel/iavf/iavf.h
-index 20d6c157bcb2..9eb86c86f454 100644
---- a/drivers/net/ethernet/intel/iavf/iavf.h
-+++ b/drivers/net/ethernet/intel/iavf/iavf.h
-@@ -178,6 +178,7 @@ enum iavf_state_t {
- 	__IAVF_INIT_VERSION_CHECK,	/* aq msg sent, awaiting reply */
- 	__IAVF_INIT_GET_RESOURCES,	/* aq msg sent, awaiting reply */
- 	__IAVF_INIT_SW,		/* got resources, setting up structs */
-+	__IAVF_INIT_FAILED,	/* init failed, restarting procedure */
- 	__IAVF_RESETTING,		/* in reset */
- 	__IAVF_COMM_FAILED,		/* communication with PF failed */
- 	/* Below here, watchdog is running */
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 3e60eb9045c3..181d17945bbe 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -14,7 +14,7 @@
- static int iavf_setup_all_tx_resources(struct iavf_adapter *adapter);
- static int iavf_setup_all_rx_resources(struct iavf_adapter *adapter);
- static int iavf_close(struct net_device *netdev);
--static int iavf_init_get_resources(struct iavf_adapter *adapter);
-+static void iavf_init_get_resources(struct iavf_adapter *adapter);
- static int iavf_check_reset_complete(struct iavf_hw *hw);
+diff --git a/drivers/soc/fsl/guts.c b/drivers/soc/fsl/guts.c
+index 6d7465afd6fd..091e94c04f30 100644
+--- a/drivers/soc/fsl/guts.c
++++ b/drivers/soc/fsl/guts.c
+@@ -160,9 +160,14 @@ static int fsl_guts_probe(struct platform_device *pdev)
+ 	root = of_find_node_by_path("/");
+ 	if (of_property_read_string(root, "model", &machine))
+ 		of_property_read_string_index(root, "compatible", 0, &machine);
+-	of_node_put(root);
+-	if (machine)
++	if (machine) {
+ 		soc_dev_attr.machine = devm_kstrdup(dev, machine, GFP_KERNEL);
++		if (!soc_dev_attr.machine) {
++			of_node_put(root);
++			return -ENOMEM;
++		}
++	}
++	of_node_put(root);
  
- char iavf_driver_name[] = "iavf";
-@@ -1722,9 +1722,9 @@ static int iavf_process_aq_command(struct iavf_adapter *adapter)
-  *
-  * Function process __IAVF_STARTUP driver state.
-  * When success the state is changed to __IAVF_INIT_VERSION_CHECK
-- * when fails it returns -EAGAIN
-+ * when fails the state is changed to __IAVF_INIT_FAILED
-  **/
--static int iavf_startup(struct iavf_adapter *adapter)
-+static void iavf_startup(struct iavf_adapter *adapter)
- {
- 	struct pci_dev *pdev = adapter->pdev;
- 	struct iavf_hw *hw = &adapter->hw;
-@@ -1764,8 +1764,9 @@ static int iavf_startup(struct iavf_adapter *adapter)
- 		goto err;
- 	}
- 	iavf_change_state(adapter, __IAVF_INIT_VERSION_CHECK);
-+	return;
- err:
--	return err;
-+	iavf_change_state(adapter, __IAVF_INIT_FAILED);
- }
- 
- /**
-@@ -1774,9 +1775,9 @@ static int iavf_startup(struct iavf_adapter *adapter)
-  *
-  * Function process __IAVF_INIT_VERSION_CHECK driver state.
-  * When success the state is changed to __IAVF_INIT_GET_RESOURCES
-- * when fails it returns -EAGAIN
-+ * when fails the state is changed to __IAVF_INIT_FAILED
-  **/
--static int iavf_init_version_check(struct iavf_adapter *adapter)
-+static void iavf_init_version_check(struct iavf_adapter *adapter)
- {
- 	struct pci_dev *pdev = adapter->pdev;
- 	struct iavf_hw *hw = &adapter->hw;
-@@ -1811,8 +1812,9 @@ static int iavf_init_version_check(struct iavf_adapter *adapter)
- 		goto err;
- 	}
- 	iavf_change_state(adapter, __IAVF_INIT_GET_RESOURCES);
-+	return;
- err:
--	return err;
-+	iavf_change_state(adapter, __IAVF_INIT_FAILED);
- }
- 
- /**
-@@ -1822,9 +1824,9 @@ static int iavf_init_version_check(struct iavf_adapter *adapter)
-  * Function process __IAVF_INIT_GET_RESOURCES driver state and
-  * finishes driver initialization procedure.
-  * When success the state is changed to __IAVF_DOWN
-- * when fails it returns -EAGAIN
-+ * when fails the state is changed to __IAVF_INIT_FAILED
-  **/
--static int iavf_init_get_resources(struct iavf_adapter *adapter)
-+static void iavf_init_get_resources(struct iavf_adapter *adapter)
- {
- 	struct net_device *netdev = adapter->netdev;
- 	struct pci_dev *pdev = adapter->pdev;
-@@ -1852,7 +1854,7 @@ static int iavf_init_get_resources(struct iavf_adapter *adapter)
- 		 */
- 		iavf_shutdown_adminq(hw);
- 		dev_err(&pdev->dev, "Unable to get VF config due to PF error condition, not retrying\n");
--		return 0;
-+		return;
- 	}
- 	if (err) {
- 		dev_err(&pdev->dev, "Unable to get VF config (%d)\n", err);
-@@ -1944,7 +1946,7 @@ static int iavf_init_get_resources(struct iavf_adapter *adapter)
- 	else
- 		iavf_init_rss(adapter);
- 
--	return err;
-+	return;
- err_mem:
- 	iavf_free_rss(adapter);
- err_register:
-@@ -1955,7 +1957,7 @@ static int iavf_init_get_resources(struct iavf_adapter *adapter)
- 	kfree(adapter->vf_res);
- 	adapter->vf_res = NULL;
- err:
--	return err;
-+	iavf_change_state(adapter, __IAVF_INIT_FAILED);
- }
- 
- /**
-@@ -3704,15 +3706,18 @@ static void iavf_init_task(struct work_struct *work)
- 	}
- 	switch (adapter->state) {
- 	case __IAVF_STARTUP:
--		if (iavf_startup(adapter) < 0)
-+		iavf_startup(adapter);
-+		if (adapter->state == __IAVF_INIT_FAILED)
- 			goto init_failed;
- 		break;
- 	case __IAVF_INIT_VERSION_CHECK:
--		if (iavf_init_version_check(adapter) < 0)
-+		iavf_init_version_check(adapter);
-+		if (adapter->state == __IAVF_INIT_FAILED)
- 			goto init_failed;
- 		break;
- 	case __IAVF_INIT_GET_RESOURCES:
--		if (iavf_init_get_resources(adapter) < 0)
-+		iavf_init_get_resources(adapter);
-+		if (adapter->state == __IAVF_INIT_FAILED)
- 			goto init_failed;
- 		goto out;
- 	default:
+ 	svr = fsl_guts_get_svr();
+ 	soc_die = fsl_soc_die_match(svr, fsl_soc_die);
 -- 
 2.34.1
 

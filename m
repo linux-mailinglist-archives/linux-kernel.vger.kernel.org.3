@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0A44CFB0B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DEE4CF746
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240078AbiCGK0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S237633AbiCGJpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240276AbiCGKGk (ORCPT
+        with ESMTP id S237500AbiCGJfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:06:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5E7EB30;
-        Mon,  7 Mar 2022 01:52:23 -0800 (PST)
+        Mon, 7 Mar 2022 04:35:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E0B6582A;
+        Mon,  7 Mar 2022 01:31:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C2A2B8102B;
-        Mon,  7 Mar 2022 09:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09AACC340F4;
-        Mon,  7 Mar 2022 09:52:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EC4561135;
+        Mon,  7 Mar 2022 09:30:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFFDC340F3;
+        Mon,  7 Mar 2022 09:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646740;
-        bh=utN3Mg+TcaVZU78y1E4spj9075o+Spo/CeMcNVraL58=;
+        s=korg; t=1646645445;
+        bh=vP1+hxL2O9UZlM/is+4AjvFkyQYkgUsNa8SRsa9kfxg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g1+vdAPwcuBfB3wzjGHMeGhXLbQW9N++LvjL4v2A0kVBY4kZdBVEpFPJsujs6MwpL
-         Hmx+sPyZ0VWhE2mNWo1hFEiVI+T1hyzfS98yEs1EFWsvIrtdyIKw6GnE1Hww5QiWuE
-         cDW1DUWKL1QfFiPox3sRe2xWMqKVoMSJpv+NADB4=
+        b=SPtVmZJY0aATA7/hB1oPB756vXw9S1xwKoPxJhgY6o9NfQv0jiMhwNLwFDgdGg81l
+         1dFAN1ePQ4u6xLuq00esd+Ji2lWOFqaegceARUzqMH1tzmtLcMzrJWVbi4mFTVNqNY
+         HQyHqCZEvi1TvxSDzR+jVGeen/Peu+jGgLpmFKwQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Nixdorf <j.nixdorf@avm.de>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 079/186] net: ipv6: ensure we call ipv6_mc_down() at most once
+        stable@vger.kernel.org, Jerry Dai <jerry.dai@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, Jon Mason <jdmason@kudzu.us>
+Subject: [PATCH 5.10 034/105] ntb: intel: fix port config status offset for SPR
 Date:   Mon,  7 Mar 2022 10:18:37 +0100
-Message-Id: <20220307091656.296838128@linuxfoundation.org>
+Message-Id: <20220307091645.144863046@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,93 +54,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: j.nixdorf@avm.de <j.nixdorf@avm.de>
+From: Dave Jiang <dave.jiang@intel.com>
 
-commit 9995b408f17ff8c7f11bc725c8aa225ba3a63b1c upstream.
+commit d5081bf5dcfb1cb83fb538708b0ac07a10a79cc4 upstream.
 
-There are two reasons for addrconf_notify() to be called with NETDEV_DOWN:
-either the network device is actually going down, or IPv6 was disabled
-on the interface.
+The field offset for port configuration status on SPR has been changed to
+bit 14 from ICX where it resides at bit 12. By chance link status detection
+continued to work on SPR. This is due to bit 12 being a configuration bit
+which is in sync with the status bit. Fix this by checking for a SPR device
+and checking correct status bit.
 
-If either of them stays down while the other is toggled, we repeatedly
-call the code for NETDEV_DOWN, including ipv6_mc_down(), while never
-calling the corresponding ipv6_mc_up() in between. This will cause a
-new entry in idev->mc_tomb to be allocated for each multicast group
-the interface is subscribed to, which in turn leaks one struct ifmcaddr6
-per nontrivial multicast group the interface is subscribed to.
-
-The following reproducer will leak at least $n objects:
-
-ip addr add ff2e::4242/32 dev eth0 autojoin
-sysctl -w net.ipv6.conf.eth0.disable_ipv6=1
-for i in $(seq 1 $n); do
-	ip link set up eth0; ip link set down eth0
-done
-
-Joining groups with IPV6_ADD_MEMBERSHIP (unprivileged) or setting the
-sysctl net.ipv6.conf.eth0.forwarding to 1 (=> subscribing to ff02::2)
-can also be used to create a nontrivial idev->mc_list, which will the
-leak objects with the right up-down-sequence.
-
-Based on both sources for NETDEV_DOWN events the interface IPv6 state
-should be considered:
-
- - not ready if the network interface is not ready OR IPv6 is disabled
-   for it
- - ready if the network interface is ready AND IPv6 is enabled for it
-
-The functions ipv6_mc_up() and ipv6_down() should only be run when this
-state changes.
-
-Implement this by remembering when the IPv6 state is ready, and only
-run ipv6_mc_down() if it actually changed from ready to not ready.
-
-The other direction (not ready -> ready) already works correctly, as:
-
- - the interface notification triggered codepath for NETDEV_UP /
-   NETDEV_CHANGE returns early if ipv6 is disabled, and
- - the disable_ipv6=0 triggered codepath skips fully initializing the
-   interface as long as addrconf_link_ready(dev) returns false
- - calling ipv6_mc_up() repeatedly does not leak anything
-
-Fixes: 3ce62a84d53c ("ipv6: exit early in addrconf_notify() if IPv6 is disabled")
-Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 26bfe3d0b227 ("ntb: intel: Add Icelake (gen4) support for Intel NTB")
+Tested-by: Jerry Dai <jerry.dai@intel.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Jon Mason <jdmason@kudzu.us>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/addrconf.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/ntb/hw/intel/ntb_hw_gen4.c |   17 ++++++++++++++++-
+ drivers/ntb/hw/intel/ntb_hw_gen4.h |   16 ++++++++++++++++
+ 2 files changed, 32 insertions(+), 1 deletion(-)
 
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -3732,6 +3732,7 @@ static int addrconf_ifdown(struct net_de
- 	struct inet6_dev *idev;
- 	struct inet6_ifaddr *ifa, *tmp;
- 	bool keep_addr = false;
-+	bool was_ready;
- 	int state, i;
+--- a/drivers/ntb/hw/intel/ntb_hw_gen4.c
++++ b/drivers/ntb/hw/intel/ntb_hw_gen4.c
+@@ -168,6 +168,18 @@ static enum ntb_topo gen4_ppd_topo(struc
+ 	return NTB_TOPO_NONE;
+ }
  
- 	ASSERT_RTNL();
-@@ -3797,7 +3798,10 @@ restart:
++static enum ntb_topo spr_ppd_topo(struct intel_ntb_dev *ndev, u32 ppd)
++{
++	switch (ppd & SPR_PPD_TOPO_MASK) {
++	case SPR_PPD_TOPO_B2B_USD:
++		return NTB_TOPO_B2B_USD;
++	case SPR_PPD_TOPO_B2B_DSD:
++		return NTB_TOPO_B2B_DSD;
++	}
++
++	return NTB_TOPO_NONE;
++}
++
+ int gen4_init_dev(struct intel_ntb_dev *ndev)
+ {
+ 	struct pci_dev *pdev = ndev->ntb.pdev;
+@@ -181,7 +193,10 @@ int gen4_init_dev(struct intel_ntb_dev *
+ 		ndev->hwerr_flags |= NTB_HWERR_BAR_ALIGN;
  
- 	addrconf_del_rs_timer(idev);
+ 	ppd1 = ioread32(ndev->self_mmio + GEN4_PPD1_OFFSET);
+-	ndev->ntb.topo = gen4_ppd_topo(ndev, ppd1);
++	if (pdev_is_ICX(pdev))
++		ndev->ntb.topo = gen4_ppd_topo(ndev, ppd1);
++	else if (pdev_is_SPR(pdev))
++		ndev->ntb.topo = spr_ppd_topo(ndev, ppd1);
+ 	dev_dbg(&pdev->dev, "ppd %#x topo %s\n", ppd1,
+ 		ntb_topo_string(ndev->ntb.topo));
+ 	if (ndev->ntb.topo == NTB_TOPO_NONE)
+--- a/drivers/ntb/hw/intel/ntb_hw_gen4.h
++++ b/drivers/ntb/hw/intel/ntb_hw_gen4.h
+@@ -46,10 +46,14 @@
+ #define GEN4_PPD_CLEAR_TRN		0x0001
+ #define GEN4_PPD_LINKTRN		0x0008
+ #define GEN4_PPD_CONN_MASK		0x0300
++#define SPR_PPD_CONN_MASK		0x0700
+ #define GEN4_PPD_CONN_B2B		0x0200
+ #define GEN4_PPD_DEV_MASK		0x1000
+ #define GEN4_PPD_DEV_DSD		0x1000
+ #define GEN4_PPD_DEV_USD		0x0000
++#define SPR_PPD_DEV_MASK		0x4000
++#define SPR_PPD_DEV_DSD 		0x4000
++#define SPR_PPD_DEV_USD 		0x0000
+ #define GEN4_LINK_CTRL_LINK_DISABLE	0x0010
  
--	/* Step 2: clear flags for stateless addrconf */
-+	/* Step 2: clear flags for stateless addrconf, repeated down
-+	 *         detection
-+	 */
-+	was_ready = idev->if_flags & IF_READY;
- 	if (!unregister)
- 		idev->if_flags &= ~(IF_RS_SENT|IF_RA_RCVD|IF_READY);
+ #define GEN4_SLOTSTS			0xb05a
+@@ -59,6 +63,10 @@
+ #define GEN4_PPD_TOPO_B2B_USD	(GEN4_PPD_CONN_B2B | GEN4_PPD_DEV_USD)
+ #define GEN4_PPD_TOPO_B2B_DSD	(GEN4_PPD_CONN_B2B | GEN4_PPD_DEV_DSD)
  
-@@ -3871,7 +3875,7 @@ restart:
- 	if (unregister) {
- 		ipv6_ac_destroy_dev(idev);
- 		ipv6_mc_destroy_dev(idev);
--	} else {
-+	} else if (was_ready) {
- 		ipv6_mc_down(idev);
- 	}
++#define SPR_PPD_TOPO_MASK	(SPR_PPD_CONN_MASK | SPR_PPD_DEV_MASK)
++#define SPR_PPD_TOPO_B2B_USD	(GEN4_PPD_CONN_B2B | SPR_PPD_DEV_USD)
++#define SPR_PPD_TOPO_B2B_DSD	(GEN4_PPD_CONN_B2B | SPR_PPD_DEV_DSD)
++
+ #define GEN4_DB_COUNT			32
+ #define GEN4_DB_LINK			32
+ #define GEN4_DB_LINK_BIT		BIT_ULL(GEN4_DB_LINK)
+@@ -96,5 +104,13 @@ static inline int pdev_is_ICX(struct pci
+ 		return 1;
+ 	return 0;
+ }
++
++static inline int pdev_is_SPR(struct pci_dev *pdev)
++{
++	if (pdev_is_gen4(pdev) &&
++	    pdev->revision > PCI_DEVICE_REVISION_ICX_MAX)
++		return 1;
++	return 0;
++}
  
+ #endif
 
 

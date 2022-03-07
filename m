@@ -2,144 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A914CEFA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 03:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9634CEFA7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 03:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbiCGCdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 21:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S234746AbiCGCer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 21:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbiCGCdI (ORCPT
+        with ESMTP id S233163AbiCGCeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 21:33:08 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A455D1B9
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 18:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646620335; x=1678156335;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=SXGeXglSX4APogB18NQWD6xuQzy9t/El59W1w6Dfh40=;
-  b=O7PMS+vdXUuGq8EAI6ywU45o6LDgnWY2JqPK7rhqRsbI9EA0Sy0q5Ogu
-   +nyrnbCoUBTcX8Is3lFzfwo9dTv9lRsFYr7PFMF2f75z4LHkguJpHh5ta
-   vbJmsC3ObBGzGZzHK45sW1T2Ja20kilaiVDdn7bQkQ8gBjZgvIf9Cjcff
-   XYzD7s58WRPKOTPnVtg9V4z1N1hZWrxWKVCbP2tZk8SHOQX+Us6n5bP2c
-   deUfzhX852lqp4GHD17D7AZ3U+9zsxun5VWvcNtqdBnED7GPX1a7re2D7
-   nGxyoMPgxQivtSlmkzrC4lDJCD2FC4RhHVvu7wmWHcROedLrnqIRe0sML
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="340714298"
-X-IronPort-AV: E=Sophos;i="5.90,160,1643702400"; 
-   d="scan'208";a="340714298"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 18:32:14 -0800
-X-IronPort-AV: E=Sophos;i="5.90,160,1643702400"; 
-   d="scan'208";a="643070548"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2022 18:32:08 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
-        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
-        <minchan@kernel.org>, <apopple@nvidia.com>,
-        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
-        <almasrymina@google.com>, <jhubbard@nvidia.com>,
-        <rcampbell@nvidia.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 04/16] mm/migration: reduce the rcu lock duration
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
-        <20220304093409.25829-5-linmiaohe@huawei.com>
-Date:   Mon, 07 Mar 2022 10:32:06 +0800
-In-Reply-To: <20220304093409.25829-5-linmiaohe@huawei.com> (Miaohe Lin's
-        message of "Fri, 4 Mar 2022 17:33:57 +0800")
-Message-ID: <8735ju7as9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 6 Mar 2022 21:34:46 -0500
+Received: from EUR03-DB5-obe.outbound.protection.outlook.com (mail-eopbgr40078.outbound.protection.outlook.com [40.107.4.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8029B50E05
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 18:33:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KRYBzs3+IviMIxMJCQccojJCCHOcu/EWT3plkRT8OBY0F2WxbSD8xn37ZBrQe7kxdSlKkR3tRVXG+FAxkKIH06/MpmpCdISBZe0PymFiFZATNVejL73HVieDmYdjRNjZ1nBK5vYNiM4g3zGBz6Jzk+O92DZoo5fbslLsllUNprLQ9FrlGgGJOq2OYzyq2fb4t7YI+96UiW2tL82hKPl7I9v9XUNMni6n339WtjoW+/NxacBVheWcGFDxner5kG6x5a0jLtz7HDRmgaz7fNyh8nb1Y8Yk4npRpz0tC64K7zc7faxh7mr7EDHY6LVaN1jdLWh36D0QQLrWHtH3KTP1EQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y26M5nx/fY+YMNAHRfqQZm1EZfr/r1P+2DPFObWjD/s=;
+ b=gjvVp5GvH2NcZhzc1f5iHDLulNRyVuFWr7bmxN/T+EkIwiZ04k42U6jcoQkZAOQY5/ohNgVfkY/JPV0ivupT6+/g+36Z/GPYE6Tu6+ZX5/pc452Fs0B/v5GhlOHhOGOSxVTHtE0qQttqZDxvYtRgAhP71fVkItf3NgvmQf+SV5YOhDmW2XAGZjrL+xohYjsxuq/DLqK7/WhWW//4zjIQZHvuB9i7LIV7hw5no+xlTaVeQVhFHhbFA2Wio5u0KizT3YWI5dwF42T2lmVMc6hYtOYjn5U3jVYJX5iCYvaG7nqT//IMdsVDptu6rG5UWhlS+O5vhPXRjP/8REUgayl1YA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y26M5nx/fY+YMNAHRfqQZm1EZfr/r1P+2DPFObWjD/s=;
+ b=J2CMZjGAg4bVLniaUbzu39VhcGoCTFoaeRgZzzh8BDeXaxO4/VxkqgsztEByTu5+Y8lXdnclb48l4J3Z8S7UAUIe4jItNoqYQCXgFmFdCqLZi+pFmV3kh8R8qK2mKidlHuS2TTStIXuFb7qCMcQ44MUaclcwnQtjZcNYs6CnFQ0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM5PR0402MB2785.eurprd04.prod.outlook.com (2603:10a6:203:98::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.18; Mon, 7 Mar
+ 2022 02:33:50 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::6117:74ed:7550:b3b3]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::6117:74ed:7550:b3b3%6]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
+ 02:33:50 +0000
+Message-ID: <9ac021dcf3c6a7a3dfa3d88dfcde18fac8a74243.camel@nxp.com>
+Subject: Re: [PATCH RESEND] drm/self_refresh: Don't trigger the entry timer
+ for self refresh work if CRTC state is inactive
+From:   Liu Ying <victor.liu@nxp.com>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     linux-imx@nxp.com, Rob Clark <robdclark@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Zain Wang <wzz@rock-chips.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Date:   Mon, 07 Mar 2022 10:33:41 +0800
+In-Reply-To: <20220207054617.987811-1-victor.liu@nxp.com>
+References: <20220207054617.987811-1-victor.liu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.4-0ubuntu1 
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR04CA0202.apcprd04.prod.outlook.com
+ (2603:1096:4:187::20) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9b0c4ecf-74d7-4814-fc86-08d9ffe2e9ce
+X-MS-TrafficTypeDiagnostic: AM5PR0402MB2785:EE_
+X-Microsoft-Antispam-PRVS: <AM5PR0402MB2785930799CE54C729D66B0198089@AM5PR0402MB2785.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uMJU45enmlp8gxAJn5y59Sh6H9GNqF7SViAHd17WRjfKCTMEPyXzVwfyfL+gWgoTsC00afcP+dqnwXjp7VcoivdVox+MWsu/f8aS95NQ2x1+L1NmhMSFlaBfLPtHIwdXRGDQXmbyoceqhTFRDsIoLvgoGl/RoFCn1EX76jHJ5ol2mtcyKnmPXKTvjxY/IZEel5w8vB4mr3bxoSN6jr0lxHZv81PTffRImDnl5YyC5roA+hD6Vad8yMqzcmJlHRIHXUgnT8wByeGAdnBOvyNLFG82d2z0/tafBvj2aBUIzAjJ6lDQM2cesm+0E1CiZPcblqxfdt0uL1RvSkGXcGat6G9gemu0KCEqvkkcGMkhdasu1XrmwVIRtK9q7s0bxk/8zJlcUhywQemeGOIOa9kako/FXFu9txq7ZQrGIerqv/qJrf1xfVFbvVXT3Wq+Wowxp6Lp8XcxBwdYwNEQaPmfAQ8EhUT1oSM5GqURl2TB781jD/k4IKcXfezk7suLStWWaIq2nTmqobxSQ/+CWHxbcSU43qWPZqb9e9zBod546fDoIfEbz2RaBmJSFSwoM9jbkzJz+q2TFxgvUXosTc9gqLeweyH8ocgtLwCP1gvjKMpr9c6Cb/sd/ssN8mNq3SISD5kzFyXWSypPxZU96ItfISSNE8NuRGScW1T9uxwEkKjX40808NssoLajiy1DUPadUKwnzB2t4c8Oa0z8wRxBSA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66556008)(6486002)(36756003)(4326008)(8676002)(83380400001)(66946007)(8936002)(498600001)(54906003)(7416002)(6506007)(38100700002)(86362001)(186003)(6512007)(38350700002)(2616005)(26005)(2906002)(5660300002)(6666004)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q2l6bEZtMDJmL05LUUlsQ1ArTXVwOTJRRy9WSVJDeE9jMGRMQlNUQUFKdU1z?=
+ =?utf-8?B?VDY5RzhZRVVxUFY1N3VJWkJ0dXUxcDg4ZlZvbmNJMkNBQ0ttQWhLazN1U1I3?=
+ =?utf-8?B?WW1vUVRUeENFWHBETW5Qak9Oc2d4OUNITFQ2TUs5QnlncSt6c09hZFN5bkhq?=
+ =?utf-8?B?bHMrU3JhOFgxTXdrRy9vWVBYZlBWMGsrZWd0eTF3TTBhSEdXM2UyRWlqQTRM?=
+ =?utf-8?B?eG5mOVBZL0tCcTBEWmZRV2grUUZjMDVsdm4ybUhSdmlwcVZMZW5ZVVpkVVhD?=
+ =?utf-8?B?YlZNdC9iemlvVFBVQVhMcHZyeVNSVnZlUW00VExQeHEzbmdXNktlbWxwbk5o?=
+ =?utf-8?B?Y05EZmRsdnpseXpuU1lUNDhPbUJhK0NoRzNVVUU0TVpKRDlFNFdtSDZVYkhG?=
+ =?utf-8?B?WStsa2VFM0djR05mZmc5bXZCSDNxTWtLdGU2SEI5ckFDcUpXY2haelAzaUdl?=
+ =?utf-8?B?TXZCSkNvbXRacGpYenhTTVYzS21KUzA0eTh2YU1OZTdsZ0ZCR3E2WlF6VFhl?=
+ =?utf-8?B?cmxIWThreXo0S3VVUDlZRTRqOFJCaW45Zm1DSkhhb2NBS3NNdnZucjI4a0FC?=
+ =?utf-8?B?T25UbDFQR1hJNDVoSUFyb3cwRW5MS3JtYXM4TlVCNURESlU5NWlkVEZoQmJI?=
+ =?utf-8?B?eDN5YVN1WHpIMGVvQjNKbXBMOFRIUTJoZ0w1WTZnUFVGUXpWUEZ4MDU2SWRh?=
+ =?utf-8?B?TmpLdkI4VXlaZloyMEU5WDJMdmRwMU1hRko3Zk5wSjBpOTJYcHE5RFJPRDRS?=
+ =?utf-8?B?TDlBY1ZMaVhTKzgwejI0ZWp1K3pjeEpTUWxQVnVyZnF6WVdQZWE3WEErQmVy?=
+ =?utf-8?B?blpwOVpaSHFTWjJ0UVhtMTlXYWZJYzE5aXBxcTZuYUU1SElSd3Vmc2JoWWh2?=
+ =?utf-8?B?UHR6ZklRanl5ZVFWZnJPSktyMlpwRDZFdStGWFNXb0lvQk1ZWERQV0tEaUk1?=
+ =?utf-8?B?OUd2cXR3V1dXL2xFZWNYVmxPYXNTM1RnR0tzTEs5cUM0OVhmc0lWMHh0MUk1?=
+ =?utf-8?B?VkNQdmZxNDVvcDRxUS83TVpqb052NElBM1ByemZyeEh5eXB4VWVVR3ZvbnNL?=
+ =?utf-8?B?TUhranovOTdBM094SEo5V0V6R0VlVTVxUmpPZldyS0RsOVc3VnkzWDhiWjMv?=
+ =?utf-8?B?QUJhblNnRGhWODQ3R1VMOXRMaTlHVE9tRFZJcGJVNDVyVlBjeUVnb1o4WUxD?=
+ =?utf-8?B?QlR0V0QzLzNsNlpnUDRPVjAyRkJtSFlqdHZhb2RJTklJbXlBTzByUzlnQWNU?=
+ =?utf-8?B?eURwQmhOUGxIZGRLS3l0dVZqOGxIVjRlYTRnWnRqQWVtRzhrUURlRk05MjV0?=
+ =?utf-8?B?R3RmSTVlTzZsVWw3QUZVT3IxSGp2N2dvUW42RStKMEQzc1o4UGR6OWpLWHpT?=
+ =?utf-8?B?WGs3SFd1T0FGQldKQnc4OFV6QzdVdG5rdjl4M1NXelVIenNVYUNKZTBIeWUy?=
+ =?utf-8?B?d1MySVl6OXBzM0hGR29qbEZnQ0VMQktYanJORGhZU2IyTXlDYUwrZ0IwV1lo?=
+ =?utf-8?B?eTArS1lVL0FQMlIxclpHTDhEelZlY1FUTUpYUDdZRFVLZDhselZZcWNGcGx0?=
+ =?utf-8?B?T0VpT0pLbmFDWHJFQmF6NlgxUVpqRWM5QVJERGxQMk5GVUZJM0xTd2F6UnJM?=
+ =?utf-8?B?YW9LNXdOUXhFanV0OVpOdzIzQzh1ZzhkUDV4QmNzUlU5LzBja3J3MHJieE9J?=
+ =?utf-8?B?N3U1N3JWdHUxaE5XZitsQjV2cVpKTjRNOXc0b0xTY3VlNTdYTG9xYUNjcU5r?=
+ =?utf-8?B?U3JVdlpvUk1VQVpFcU9nNUNUeGxKT0k4ZURYay9KVk5zazhzUG5qU01wZk91?=
+ =?utf-8?B?M0dEdXhla3VJb25EZmVXYlZLemYrYVVwRzl2dTNTRCtZbEE0VDZ3SXNBajhi?=
+ =?utf-8?B?WVhVK2NLSWd2VDRQMHJkU0FzR1NxUE1xaGliVFJTaGgreWp2MjdTYmkyZ1Bp?=
+ =?utf-8?B?TCtqZHV2YVJad0NVSzlCaldIUmQ0WWE0a2lkUzA1cEJiRXZwVm5LRXB3UDd2?=
+ =?utf-8?B?Vmd0akw2a2FQY1ppRDdmazlxb29oakZPVFNQTFM1d1UyZDlEZlJNSXViTk9D?=
+ =?utf-8?B?cXVjNFA3NVJGTitiU2pYQ05Tb2Z0aXhVeFEzdUd2bmNCYWlmdlRlL3YydXE3?=
+ =?utf-8?B?NWJrUDJFMEMxb09SMU9GRitMWGdvYlBxL3lmNkRhTGpvSlhnSnZFVWtUdUVm?=
+ =?utf-8?Q?m0SLLtjaNZnnUFg3o5s+qHs=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b0c4ecf-74d7-4814-fc86-08d9ffe2e9ce
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 02:33:50.1702
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FfBlBwKO6usX1F3ku0bVOA1TtgcPQbyYt2am15wODYIhVsW4Js17JmkOxSvereipPxkkOF8DHro3Utvxk+3lzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2785
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miaohe Lin <linmiaohe@huawei.com> writes:
+On Mon, 2022-02-07 at 13:46 +0800, Liu Ying wrote:
+> If the CRTC state is already inactive, it doesn't make sense to trigger
+> the entry timer for self refresh work to make the display enter self
+> refresh mode, because the disabled CRTC hints that either the entire
+> display pipeline is disabled or the previous atomic commit is triggered
+> by the self refresh work(the CRTC is disabled, while the relevant encoder
+> and bridges could be disabled or not depending on the drivers).
+> 
+> Cc: Rob Clark <robdclark@chromium.org>
+> Cc: Sean Paul <seanpaul@chromium.org>
+> Cc: Zain Wang <wzz@rock-chips.com>
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
 
-> rcu_read_lock is required by grabbing the task refcount but it's not
-> needed for ptrace_may_access. So we could release the rcu lock after
-> task refcount is successfully grabbed to reduce the rcu holding time.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Gentle ping...
+
+Thanks,
+Liu Ying
+
 > ---
->  mm/migrate.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index da5a81052468..26943bd819e8 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1907,17 +1907,16 @@ static struct mm_struct *find_mm_struct(pid_t pid, nodemask_t *mem_nodes)
->  		return ERR_PTR(-ESRCH);
->  	}
->  	get_task_struct(task);
-> +	rcu_read_unlock();
+>  drivers/gpu/drm/drm_self_refresh_helper.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_self_refresh_helper.c b/drivers/gpu/drm/drm_self_refresh_helper.c
+> index dd33fec5aabd..e76eb3cd22c7 100644
+> --- a/drivers/gpu/drm/drm_self_refresh_helper.c
+> +++ b/drivers/gpu/drm/drm_self_refresh_helper.c
+> @@ -204,8 +204,12 @@ void drm_self_refresh_helper_alter_state(struct drm_atomic_state *state)
+>  		struct drm_self_refresh_data *sr_data;
+>  		unsigned int delay;
 >  
->  	/*
->  	 * Check if this process has the right to modify the specified
->  	 * process. Use the regular "ptrace_may_access()" checks.
->  	 */
->  	if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
-> -		rcu_read_unlock();
->  		mm = ERR_PTR(-EPERM);
->  		goto out;
->  	}
-> -	rcu_read_unlock();
+> -		/* Don't trigger the entry timer when we're already in SR */
+> -		if (crtc_state->self_refresh_active)
+> +		/*
+> +		 * Don't trigger the entry timer when we're already inactive.
+> +		 * Note that the inactive state hints that either we're already
+> +		 * in SR or the entire display pipeline is already disabled.
+> +		 */
+> +		if (!crtc_state->active)
+>  			continue;
 >  
->  	mm = ERR_PTR(security_task_movememory(task));
->  	if (IS_ERR(mm))
+>  		sr_data = crtc->self_refresh_data;
 
-Digged some history via `git blame`, found that the RCU read lock is
-extended in the following commit,
-
-"
-3268c63eded4612a3d07b56d1e02ce7731e6608e
-Author:     Christoph Lameter <cl@linux.com>
-AuthorDate: Wed Mar 21 16:34:06 2012 -0700
-Commit:     Linus Torvalds <torvalds@linux-foundation.org>
-CommitDate: Wed Mar 21 17:54:58 2012 -0700
-
-mm: fix move/migrate_pages() race on task struct
-
-Migration functions perform the rcu_read_unlock too early.  As a result
-the task pointed to may change from under us.  This can result in an oops,
-as reported by Dave Hansen in https://lkml.org/lkml/2012/2/23/302.
-
-The following patch extend the period of the rcu_read_lock until after the
-permissions checks are done.  We also take a refcount so that the task
-reference is stable when calling security check functions and performing
-cpuset node validation (which takes a mutex).
-
-The refcount is dropped before actual page migration occurs so there is no
-change to the refcounts held during page migration.
-
-Also move the determination of the mm of the task struct to immediately
-before the do_migrate*() calls so that it is clear that we switch from
-handling the task during permission checks to the mm for the actual
-migration.  Since the determination is only done once and we then no
-longer use the task_struct we can be sure that we operate on a specific
-address space that will not change from under us.
-"
-
-After that, the permission checking has been changed from __task_cred()
-to ptrace_may_access().  So the situation may change somewhat.  Cced
-some names found in git history to verify.
-
-Best Regards,
-Huang, Ying

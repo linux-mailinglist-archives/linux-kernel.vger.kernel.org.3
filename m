@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8994CF665
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2E84CF9B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237651AbiCGJgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
+        id S242438AbiCGKLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238399AbiCGJ3J (ORCPT
+        with ESMTP id S240652AbiCGJvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882AE66F87;
-        Mon,  7 Mar 2022 01:27:18 -0800 (PST)
+        Mon, 7 Mar 2022 04:51:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E52875E71;
+        Mon,  7 Mar 2022 01:45:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C80AB810AC;
-        Mon,  7 Mar 2022 09:27:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E9EC340F3;
-        Mon,  7 Mar 2022 09:27:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92C82B810AA;
+        Mon,  7 Mar 2022 09:45:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF0BC340E9;
+        Mon,  7 Mar 2022 09:44:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645235;
-        bh=6IjUGTiW8p4e+fU2RmYZBwhQ+7d4bpZmupWB9zHQXDQ=;
+        s=korg; t=1646646299;
+        bh=LhBFBwMc99bqAd96HV/wf7b0senOyYNA5bBK+TFNAmM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nu410yVuTdIQTHyVP1dX08A8WZXfMB8ZySEJkeTuLTZq/k/dRRbcLhFISCRnPKWc1
-         496AV3d/w+BWjm/ofZd6H2/ajmauwvR9HIX+8BSa0cep3ydK8TiWF4E9gVQh6PqlGh
-         HFc1MkzBfSwoBKLyNtiZtmCF+9qFZJnnvWceRVsU=
+        b=N6zG5aB86NCjoSFnN5FtIMNN1P4Wx2vdiP5oe4dlZ0LLajVLglKBhmbvPtaCEJ28h
+         sQIFvck6SChJ/ZdI1m9qWBZCSxoSijyLst/0W1e8Xm5jIKz83AjcYcVope9I7uNe9X
+         wkpRwN/HzTFUajRfRWXwrOmAk43DRsSx/UeQtxnk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 5.4 29/64] block: Fix fsync always failed if once failed
+        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Corinna Vinschen <vinschen@redhat.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.15 198/262] igc: igc_write_phy_reg_gpy: drop premature return
 Date:   Mon,  7 Mar 2022 10:19:02 +0100
-Message-Id: <20220307091639.971939559@linuxfoundation.org>
+Message-Id: <20220307091708.233964236@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-commit 8a7518931baa8ea023700987f3db31cb0a80610b upstream.
+commit c4208653a327a09da1e9e7b10299709b6d9b17bf upstream.
 
-We do test with inject error fault base on v4.19, after test some time we found
-sync /dev/sda always failed.
-[root@localhost] sync /dev/sda
-sync: error syncing '/dev/sda': Input/output error
+Similar to "igc_read_phy_reg_gpy: drop premature return" patch.
+igc_write_phy_reg_gpy checks the return value from igc_write_phy_reg_mdic
+and if it's not 0, returns immediately. By doing this, it leaves the HW
+semaphore in the acquired state.
 
-scsi log as follows:
-[19069.812296] sd 0:0:0:0: [sda] tag#64 Send: scmd 0x00000000d03a0b6b
-[19069.812302] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
-[19069.812533] sd 0:0:0:0: [sda] tag#64 Done: SUCCESS Result: hostbyte=DID_OK driverbyte=DRIVER_OK
-[19069.812536] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
-[19069.812539] sd 0:0:0:0: [sda] tag#64 scsi host busy 1 failed 0
-[19069.812542] sd 0:0:0:0: Notifying upper driver of completion (result 0)
-[19069.812546] sd 0:0:0:0: [sda] tag#64 sd_done: completed 0 of 0 bytes
-[19069.812549] sd 0:0:0:0: [sda] tag#64 0 sectors total, 0 bytes done.
-[19069.812564] print_req_error: I/O error, dev sda, sector 0
+Drop this premature return statement, the function returns after
+releasing the semaphore immediately anyway.
 
-ftrace log as follows:
- rep-306069 [007] .... 19654.923315: block_bio_queue: 8,0 FWS 0 + 0 [rep]
- rep-306069 [007] .... 19654.923333: block_getrq: 8,0 FWS 0 + 0 [rep]
- kworker/7:1H-250   [007] .... 19654.923352: block_rq_issue: 8,0 FF 0 () 0 + 0 [kworker/7:1H]
- <idle>-0     [007] ..s. 19654.923562: block_rq_complete: 8,0 FF () 18446744073709551615 + 0 [0]
- <idle>-0     [007] d.s. 19654.923576: block_rq_complete: 8,0 WS () 0 + 0 [-5]
-
-As 8d6996630c03 introduce 'fq->rq_status', this data only update when 'flush_rq'
-reference count isn't zero. If flush request once failed and record error code
-in 'fq->rq_status'. If there is no chance to update 'fq->rq_status',then do fsync
-will always failed.
-To address this issue reset 'fq->rq_status' after return error code to upper layer.
-
-Fixes: 8d6996630c03("block: fix null pointer dereference in blk_mq_rq_timed_out()")
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20211129012659.1553733-1-yebin10@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Fixes: 5586838fe9ce ("igc: Add code for PHY support")
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Reported-by: Corinna Vinschen <vinschen@redhat.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-flush.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/igc/igc_phy.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/block/blk-flush.c
-+++ b/block/blk-flush.c
-@@ -222,8 +222,10 @@ static void flush_end_io(struct request
- 		return;
- 	}
- 
--	if (fq->rq_status != BLK_STS_OK)
-+	if (fq->rq_status != BLK_STS_OK) {
- 		error = fq->rq_status;
-+		fq->rq_status = BLK_STS_OK;
-+	}
- 
- 	hctx = flush_rq->mq_hctx;
- 	if (!q->elevator) {
+--- a/drivers/net/ethernet/intel/igc/igc_phy.c
++++ b/drivers/net/ethernet/intel/igc/igc_phy.c
+@@ -746,8 +746,6 @@ s32 igc_write_phy_reg_gpy(struct igc_hw
+ 		if (ret_val)
+ 			return ret_val;
+ 		ret_val = igc_write_phy_reg_mdic(hw, offset, data);
+-		if (ret_val)
+-			return ret_val;
+ 		hw->phy.ops.release(hw);
+ 	} else {
+ 		ret_val = igc_write_xmdio_reg(hw, (u16)offset, dev_addr,
 
 

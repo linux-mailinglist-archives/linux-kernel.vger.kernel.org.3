@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B25E4CF64A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FEE4CFB53
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237571AbiCGJfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:35:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S237615AbiCGKfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238820AbiCGJ3s (ORCPT
+        with ESMTP id S242613AbiCGKLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:48 -0500
+        Mon, 7 Mar 2022 05:11:42 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99574DEF;
-        Mon,  7 Mar 2022 01:28:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E58C8BE33;
+        Mon,  7 Mar 2022 01:55:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3181C60C00;
-        Mon,  7 Mar 2022 09:28:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23728C340F4;
-        Mon,  7 Mar 2022 09:28:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5762360A27;
+        Mon,  7 Mar 2022 09:55:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32EE8C340E9;
+        Mon,  7 Mar 2022 09:55:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645333;
-        bh=3hTRPYILVHFgwkPuAGP/+yznlxcvOHyMJhbXkvArwJc=;
+        s=korg; t=1646646931;
+        bh=AbS0plN3wl9M/BBk2Eh0BdNxchcCA1b1qetcw+4wI9E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yYubcIeVa2phAcGmbpGU8PpyysMQ1RY5mp3qi3bQtBGWSDx9k8iYxCM815DB3vtpJ
-         8eGo0rlI8t9+GnA2WfP2QXjIuv6aqrXbSLw15oDSuV8fxUay6A69ulP1SixGgCq5x2
-         P690/KiwFC8JUleXkRK5oiKkjC9E6uuPj86CpYUA=
+        b=gvl+N00H9lStVBIMcIfSHejlfEEs0PydRiphLCVSTvz49e2yMdngRzi4FTEchyKuk
+         CZ/flVNu0irfb1AYLDbJyyL7RwfO+kWVE6ndHY5jfIUkuzki/3k3qBSP1O54GjRYvZ
+         qsq/1H7VUkmR1eFW1csSCNJe9VDeMY7aUh2UDqGk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.4 62/64] btrfs: add missing run of delayed items after unlink during log replay
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 137/186] can: etas_es58x: change opened_channel_cnts type from atomic_t to u8
 Date:   Mon,  7 Mar 2022 10:19:35 +0100
-Message-Id: <20220307091640.909500764@linuxfoundation.org>
+Message-Id: <20220307091657.909256173@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,72 +56,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-commit 4751dc99627e4d1465c5bfa8cb7ab31ed418eff5 upstream.
+[ Upstream commit f4896248e9025ff744b4147e6758274a1cb8cbae ]
 
-During log replay, whenever we need to check if a name (dentry) exists in
-a directory we do searches on the subvolume tree for inode references or
-or directory entries (BTRFS_DIR_INDEX_KEY keys, and BTRFS_DIR_ITEM_KEY
-keys as well, before kernel 5.17). However when during log replay we
-unlink a name, through btrfs_unlink_inode(), we may not delete inode
-references and dir index keys from a subvolume tree and instead just add
-the deletions to the delayed inode's delayed items, which will only be
-run when we commit the transaction used for log replay. This means that
-after an unlink operation during log replay, if we attempt to search for
-the same name during log replay, we will not see that the name was already
-deleted, since the deletion is recorded only on the delayed items.
+The driver uses an atomic_t variable: struct
+es58x_device::opened_channel_cnt to keep track of the number of opened
+channels in order to only allocate memory for the URBs when this count
+changes from zero to one.
 
-We run delayed items after every unlink operation during log replay,
-except at unlink_old_inode_refs() and at add_inode_ref(). This was due
-to an overlook, as delayed items should be run after evert unlink, for
-the reasons stated above.
+While the intent was to prevent race conditions, the choice of an
+atomic_t turns out to be a bad idea for several reasons:
 
-So fix those two cases.
+- implementation is incorrect and fails to decrement
+  opened_channel_cnt when the URB allocation fails as reported in
+  [1].
 
-Fixes: 0d836392cadd5 ("Btrfs: fix mount failure after fsync due to hard link recreation")
-Fixes: 1f250e929a9c9 ("Btrfs: fix log replay failure after unlink and link combination")
-CC: stable@vger.kernel.org # 4.19+
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+- even if opened_channel_cnt were to be correctly decremented,
+  atomic_t is insufficient to cover edge cases: there can be a race
+  condition in which 1/ a first process fails to allocate URBs
+  memory 2/ a second process enters es58x_open() before the first
+  process does its cleanup and decrements opened_channed_cnt. In
+  which case, the second process would successfully return despite
+  the URBs memory not being allocated.
+
+- actually, any kind of locking mechanism was useless here because
+  it is redundant with the network stack big kernel lock
+  (a.k.a. rtnl_lock) which is being hold by all the callers of
+  net_device_ops:ndo_open() and net_device_ops:ndo_close(). c.f. the
+  ASSERST_RTNL() calls in __dev_open() [2] and __dev_close_many()
+  [3].
+
+The atmomic_t is thus replaced by a simple u8 type and the logic to
+increment and decrement es58x_device:opened_channel_cnt is simplified
+accordingly fixing the bug reported in [1]. We do not check again for
+ASSERST_RTNL() as this is already done by the callers.
+
+[1] https://lore.kernel.org/linux-can/20220201140351.GA2548@kili/T/#u
+[2] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1463
+[3] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1541
+
+Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
+Link: https://lore.kernel.org/all/20220212112713.577957-1-mailhol.vincent@wanadoo.fr
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/tree-log.c |   18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 9 +++++----
+ drivers/net/can/usb/etas_es58x/es58x_core.h | 8 +++++---
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -1308,6 +1308,15 @@ again:
- 						 inode, name, namelen);
- 			kfree(name);
- 			iput(dir);
-+			/*
-+			 * Whenever we need to check if a name exists or not, we
-+			 * check the subvolume tree. So after an unlink we must
-+			 * run delayed items, so that future checks for a name
-+			 * during log replay see that the name does not exists
-+			 * anymore.
-+			 */
-+			if (!ret)
-+				ret = btrfs_run_delayed_items(trans);
- 			if (ret)
- 				goto out;
- 			goto again;
-@@ -1559,6 +1568,15 @@ static noinline int add_inode_ref(struct
- 				 */
- 				if (!ret && inode->i_nlink == 0)
- 					inc_nlink(inode);
-+				/*
-+				 * Whenever we need to check if a name exists or
-+				 * not, we check the subvolume tree. So after an
-+				 * unlink we must run delayed items, so that future
-+				 * checks for a name during log replay see that the
-+				 * name does not exists anymore.
-+				 */
-+				if (!ret)
-+					ret = btrfs_run_delayed_items(trans);
- 			}
- 			if (ret < 0)
- 				goto out;
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index fb07c33ba0c3..78d0a5947ba1 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -1787,7 +1787,7 @@ static int es58x_open(struct net_device *netdev)
+ 	struct es58x_device *es58x_dev = es58x_priv(netdev)->es58x_dev;
+ 	int ret;
+ 
+-	if (atomic_inc_return(&es58x_dev->opened_channel_cnt) == 1) {
++	if (!es58x_dev->opened_channel_cnt) {
+ 		ret = es58x_alloc_rx_urbs(es58x_dev);
+ 		if (ret)
+ 			return ret;
+@@ -1805,12 +1805,13 @@ static int es58x_open(struct net_device *netdev)
+ 	if (ret)
+ 		goto free_urbs;
+ 
++	es58x_dev->opened_channel_cnt++;
+ 	netif_start_queue(netdev);
+ 
+ 	return ret;
+ 
+  free_urbs:
+-	if (atomic_dec_and_test(&es58x_dev->opened_channel_cnt))
++	if (!es58x_dev->opened_channel_cnt)
+ 		es58x_free_urbs(es58x_dev);
+ 	netdev_err(netdev, "%s: Could not open the network device: %pe\n",
+ 		   __func__, ERR_PTR(ret));
+@@ -1845,7 +1846,8 @@ static int es58x_stop(struct net_device *netdev)
+ 
+ 	es58x_flush_pending_tx_msg(netdev);
+ 
+-	if (atomic_dec_and_test(&es58x_dev->opened_channel_cnt))
++	es58x_dev->opened_channel_cnt--;
++	if (!es58x_dev->opened_channel_cnt)
+ 		es58x_free_urbs(es58x_dev);
+ 
+ 	return 0;
+@@ -2214,7 +2216,6 @@ static struct es58x_device *es58x_init_es58x_dev(struct usb_interface *intf,
+ 	init_usb_anchor(&es58x_dev->tx_urbs_idle);
+ 	init_usb_anchor(&es58x_dev->tx_urbs_busy);
+ 	atomic_set(&es58x_dev->tx_urbs_idle_cnt, 0);
+-	atomic_set(&es58x_dev->opened_channel_cnt, 0);
+ 	usb_set_intfdata(intf, es58x_dev);
+ 
+ 	es58x_dev->rx_pipe = usb_rcvbulkpipe(es58x_dev->udev,
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
+index 826a15871573..e5033cb5e695 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.h
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
+@@ -373,8 +373,6 @@ struct es58x_operators {
+  *	queue wake/stop logic should prevent this URB from getting
+  *	empty. Please refer to es58x_get_tx_urb() for more details.
+  * @tx_urbs_idle_cnt: number of urbs in @tx_urbs_idle.
+- * @opened_channel_cnt: number of channels opened (c.f. es58x_open()
+- *	and es58x_stop()).
+  * @ktime_req_ns: kernel timestamp when es58x_set_realtime_diff_ns()
+  *	was called.
+  * @realtime_diff_ns: difference in nanoseconds between the clocks of
+@@ -384,6 +382,10 @@ struct es58x_operators {
+  *	in RX branches.
+  * @rx_max_packet_size: Maximum length of bulk-in URB.
+  * @num_can_ch: Number of CAN channel (i.e. number of elements of @netdev).
++ * @opened_channel_cnt: number of channels opened. Free of race
++ *	conditions because its two users (net_device_ops:ndo_open()
++ *	and net_device_ops:ndo_close()) guarantee that the network
++ *	stack big kernel lock (a.k.a. rtnl_mutex) is being hold.
+  * @rx_cmd_buf_len: Length of @rx_cmd_buf.
+  * @rx_cmd_buf: The device might split the URB commands in an
+  *	arbitrary amount of pieces. This buffer is used to concatenate
+@@ -406,7 +408,6 @@ struct es58x_device {
+ 	struct usb_anchor tx_urbs_busy;
+ 	struct usb_anchor tx_urbs_idle;
+ 	atomic_t tx_urbs_idle_cnt;
+-	atomic_t opened_channel_cnt;
+ 
+ 	u64 ktime_req_ns;
+ 	s64 realtime_diff_ns;
+@@ -415,6 +416,7 @@ struct es58x_device {
+ 
+ 	u16 rx_max_packet_size;
+ 	u8 num_can_ch;
++	u8 opened_channel_cnt;
+ 
+ 	u16 rx_cmd_buf_len;
+ 	union es58x_urb_cmd rx_cmd_buf;
+-- 
+2.34.1
+
 
 

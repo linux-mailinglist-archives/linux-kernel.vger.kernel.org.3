@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748BE4CF1F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D854CF1F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235594AbiCGGhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:37:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
+        id S235602AbiCGGhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbiCGGhB (ORCPT
+        with ESMTP id S233804AbiCGGhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:37:01 -0500
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F765523D;
-        Sun,  6 Mar 2022 22:36:07 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id bi12so16499446ejb.3;
-        Sun, 06 Mar 2022 22:36:07 -0800 (PST)
+        Mon, 7 Mar 2022 01:37:23 -0500
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AD659A56;
+        Sun,  6 Mar 2022 22:36:29 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id a8so29594200ejc.8;
+        Sun, 06 Mar 2022 22:36:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=CLWBvEKY0bZFqdu8keT0kKq+r86IcfvnbkU0z1432mo=;
-        b=1Oj/Q2dD8xBFE2ITh/pgIK4sZZ1C4HqN1y0Zi+H68qV/Fj4Gd8QDXTAFczdZKzZMCa
-         umScqz7CdrmOHKaavYe84+L5P/x1ubBJAOqJEgoAbLenhYvHiH9fE8ojZjm7420at/lE
-         9I9L9yc8hZ8oJ/Y836xLQz6IETK+MiqjC0nS2xtpf42YClc7+JWxDP/bL4Jk8Zw6r5/n
-         XMD6/2a56HJuWyTtR4iBn3uXT1oATWb06rmHtd9k5EUJyUSNWEOiFe33rF3UYu2vslln
-         KAgFT0157GXk35/qW7S9GP4gYjhma8HglS6l3y8DXVNO5Yb9QmdHeNJz/bhlgdx6q4Sf
-         d56w==
-X-Gm-Message-State: AOAM533fEnucljcsK2hjAcK3EZPX7yKgS4lyxsJnlg5EKM0Bsay9LXJu
-        ypJYnRpcBC81ADloF7xZh5Wn0ppbg/U=
-X-Google-Smtp-Source: ABdhPJyghdxWDdZZiQiAA3A7jAfnXkNCsCEMdJbKxV9nI2lKjSqvi1c13Wt3y029SncPbA34DLhP5g==
-X-Received: by 2002:a17:907:1c0e:b0:6da:a5cc:95a9 with SMTP id nc14-20020a1709071c0e00b006daa5cc95a9mr8026023ejc.631.1646634966342;
-        Sun, 06 Mar 2022 22:36:06 -0800 (PST)
+        bh=9Q9gynFpJyzCLfhH7rD1M3nIchFd0uYBoT2DS2g4prE=;
+        b=dvaH8mLVgeQbAyAKh8R7wuD8VXwO28plTiG1Y/ejJ63USE3PxKdW6n/kXtuCPSsgMM
+         w/fXw34KsmKfDjPJwIvTAFUkt41qS0tSelFwEqImEJuDt4ojNc7wvYMRpeLqk0odAs9I
+         HouW4iMnCj+Woqh4Zno6QN+UHo33/qU/At25oywhpkEZDD5Gh6vPP9NhnD7xzvFKyK7e
+         oTFXoSRJXhzDqFD9dSqeAWC5rKTTeIHxFXVnPmCznB1hKToUnJgMVqNKBnB1POE3otX3
+         Kabef8Gazyy1Dd6wjraMTeUo41c960rfbC7Evil90dnowCegK3gph6XCT44rPaOkOZpT
+         MA9g==
+X-Gm-Message-State: AOAM532e8qT62Cg2r6dBcirPqS1Dlh+lQ/vB0Bpkj+y+So0QKoZDSg+H
+        BazdloARxnw0e/vGQ6+uD+c=
+X-Google-Smtp-Source: ABdhPJycmMq9LDywM4G25QPlA9PQF5v5YnSLQSQBcdwVxV9cGcgmj8sEOJ3Pf6/1+SLhZ76BmIhmNg==
+X-Received: by 2002:a17:906:d555:b0:6da:ac8c:f66b with SMTP id cr21-20020a170906d55500b006daac8cf66bmr7765786ejc.107.1646634988517;
+        Sun, 06 Mar 2022 22:36:28 -0800 (PST)
 Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id p14-20020a05640210ce00b00413211746d4sm5696583edu.51.2022.03.06.22.36.05
+        by smtp.gmail.com with ESMTPSA id s15-20020a170906c30f00b006da81e2bd21sm4558268ejz.172.2022.03.06.22.36.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 22:36:05 -0800 (PST)
-Message-ID: <ba2a4504-b886-09b6-71ea-528c99a869f6@kernel.org>
-Date:   Mon, 7 Mar 2022 07:36:04 +0100
+        Sun, 06 Mar 2022 22:36:28 -0800 (PST)
+Message-ID: <25128bad-08a6-83a9-b554-ab32869538e3@kernel.org>
+Date:   Mon, 7 Mar 2022 07:36:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.0
-Subject: Re: [PATCH 3/7] tty: serial: samsung: constify
- s3c24xx_serial_drv_data
+Subject: Re: [PATCH 4/7] tty: serial: samsung: constify UART name
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
@@ -53,9 +52,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220304080348.218581-1-krzysztof.kozlowski@canonical.com>
- <20220304080348.218581-3-krzysztof.kozlowski@canonical.com>
+ <20220304080348.218581-4-krzysztof.kozlowski@canonical.com>
 From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220304080348.218581-3-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220304080348.218581-4-krzysztof.kozlowski@canonical.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -70,53 +69,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 04. 03. 22, 9:03, Krzysztof Kozlowski wrote:
-> The driver data (struct s3c24xx_serial_drv_data) is only used to
-> initialize the driver properly and is not modified.  Make it const.
+> The UART name from driver data holds only string literals.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-...
-> @@ -2726,13 +2726,13 @@ static struct s3c24xx_serial_drv_data s3c6400_serial_drv_data = {
->   		.ufcon		= S3C2410_UFCON_DEFAULT,
->   	},
+
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+
+> ---
+>   drivers/tty/serial/samsung_tty.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index 0b4f40044e87..279c413f2300 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -63,7 +63,7 @@ enum s3c24xx_port_type {
 >   };
-> -#define S3C6400_SERIAL_DRV_DATA ((kernel_ulong_t)&s3c6400_serial_drv_data)
-> +#define S3C6400_SERIAL_DRV_DATA (&s3c6400_serial_drv_data)
->   #else
-> -#define S3C6400_SERIAL_DRV_DATA (kernel_ulong_t)NULL
-> +#define S3C6400_SERIAL_DRV_DATA (NULL)
->   #endif
 >   
->   #ifdef CONFIG_CPU_S5PV210
-> -static struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
-> +static const struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
->   	.info = {
->   		.name		= "Samsung S5PV210 UART",
->   		.type		= TYPE_S3C6400,
-> @@ -2755,9 +2755,9 @@ static struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
->   	},
->   	.fifosize = { 256, 64, 16, 16 },
->   };
-> -#define S5PV210_SERIAL_DRV_DATA ((kernel_ulong_t)&s5pv210_serial_drv_data)
-> +#define S5PV210_SERIAL_DRV_DATA (&s5pv210_serial_drv_data)
->   #else
-> -#define S5PV210_SERIAL_DRV_DATA	(kernel_ulong_t)NULL
-> +#define S5PV210_SERIAL_DRV_DATA	(NULL)
+>   struct s3c24xx_uart_info {
+> -	char			*name;
+> +	const char		*name;
+>   	enum s3c24xx_port_type	type;
+>   	unsigned int		port_type;
+>   	unsigned int		fifosize;
 
 
-All these changes are somehow irrelevant to the subject/to this patch. 
-Care to put them into a separate patch?
-
-There is no need to put NULL into parentheses.
-
-> @@ -3062,7 +3062,6 @@ static int __init apple_s5l_early_console_setup(struct earlycon_device *device,
->   OF_EARLYCON_DECLARE(s5l, "apple,s5l-uart", apple_s5l_early_console_setup);
->   #endif
->   
-> -MODULE_ALIAS("platform:samsung-uart");
-
-This is as well a different change to what is claimed.
-
-thanks,
 -- 
 js
 suse labs

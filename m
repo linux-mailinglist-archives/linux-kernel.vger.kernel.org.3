@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05034CFA4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184BD4CF90E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235196AbiCGKPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
+        id S239591AbiCGKDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240139AbiCGKAq (ORCPT
+        with ESMTP id S241015AbiCGJlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:00:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7E37E096;
-        Mon,  7 Mar 2022 01:46:56 -0800 (PST)
+        Mon, 7 Mar 2022 04:41:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C767D6D39D;
+        Mon,  7 Mar 2022 01:39:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D7AC6122D;
-        Mon,  7 Mar 2022 09:46:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C88C340E9;
-        Mon,  7 Mar 2022 09:46:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3086AB810C3;
+        Mon,  7 Mar 2022 09:34:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74DD1C340E9;
+        Mon,  7 Mar 2022 09:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646416;
-        bh=KqGqrntkRFA4FtfAJBGO3M6K/SUpm6NYj4q/F3xOyfk=;
+        s=korg; t=1646645645;
+        bh=Ob/qNd3VHsSqymcYuL8emr4oc6bdPm38KbcwkhBrKsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AGoLA54T1aOz4v6O8pCNyX2YAzlRT1vdKpB9QNcqoHw4uydGGeMZEg9TCjZ7n4kzk
-         JzKuY6GTrh+PVyWYmWt8E0dR/sxobqoc66L3D2mp9Aeq/QZih4tl6eHVQHt43CBGrj
-         aty6QDrv4cvSSGJae3JOB2W6xrpQXeKrAbUTHgS0=
+        b=W3NoA6g06B50h/rwz6dAFXPaGzI/HW7NaERZqZiqNVSmBwvfo0C2Q8q7R82F4bgb9
+         cQXStFifILJeHyNVmnACXm22nIVeekl0SsYGywNKE6zRppn+AlLy6AwlMS24c+oeZA
+         996Jmgtm16dH36mfl/DCEwKmH0V3YSHT56XyVqrg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 236/262] drm/bridge: ti-sn65dsi86: Properly undo autosuspend
+        stable@vger.kernel.org, David Gow <davidgow@google.com>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.10 097/105] Input: samsung-keypad - properly state IOMEM dependency
 Date:   Mon,  7 Mar 2022 10:19:40 +0100
-Message-Id: <20220307091709.992393880@linuxfoundation.org>
+Message-Id: <20220307091646.906230487@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Anderson <dianders@chromium.org>
+From: David Gow <davidgow@google.com>
 
-[ Upstream commit 26d3474348293dc752c55fe6d41282199f73714c ]
+commit ba115adf61b36b8c167126425a62b0efc23f72c0 upstream.
 
-The PM Runtime docs say:
-  Drivers in ->remove() callback should undo the runtime PM changes done
-  in ->probe(). Usually this means calling pm_runtime_disable(),
-  pm_runtime_dont_use_autosuspend() etc.
+Make the samsung-keypad driver explicitly depend on CONFIG_HAS_IOMEM, as it
+calls devm_ioremap(). This prevents compile errors in some configs (e.g,
+allyesconfig/randconfig under UML):
 
-We weren't doing that for autosuspend. Let's do it.
+/usr/bin/ld: drivers/input/keyboard/samsung-keypad.o: in function `samsung_keypad_probe':
+samsung-keypad.c:(.text+0xc60): undefined reference to `devm_ioremap'
 
-Fixes: 9bede63127c6 ("drm/bridge: ti-sn65dsi86: Use pm_runtime autosuspend")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220222141838.1.If784ba19e875e8ded4ec4931601ce6d255845245@changeid
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: David Gow <davidgow@google.com>
+Acked-by: anton ivanov <anton.ivanov@cambridgegreys.com>
+Link: https://lore.kernel.org/r/20220225041727.1902850-1-davidgow@google.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/bridge/ti-sn65dsi86.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/input/keyboard/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-index 4d08246f930c..45a5f1e48f0e 100644
---- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-+++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-@@ -1473,6 +1473,7 @@ static inline void ti_sn_gpio_unregister(void) {}
+--- a/drivers/input/keyboard/Kconfig
++++ b/drivers/input/keyboard/Kconfig
+@@ -556,7 +556,7 @@ config KEYBOARD_PMIC8XXX
  
- static void ti_sn65dsi86_runtime_disable(void *data)
- {
-+	pm_runtime_dont_use_autosuspend(data);
- 	pm_runtime_disable(data);
- }
- 
-@@ -1532,11 +1533,11 @@ static int ti_sn65dsi86_probe(struct i2c_client *client,
- 				     "failed to get reference clock\n");
- 
- 	pm_runtime_enable(dev);
-+	pm_runtime_set_autosuspend_delay(pdata->dev, 500);
-+	pm_runtime_use_autosuspend(pdata->dev);
- 	ret = devm_add_action_or_reset(dev, ti_sn65dsi86_runtime_disable, dev);
- 	if (ret)
- 		return ret;
--	pm_runtime_set_autosuspend_delay(pdata->dev, 500);
--	pm_runtime_use_autosuspend(pdata->dev);
- 
- 	ti_sn65dsi86_debugfs_init(pdata);
- 
--- 
-2.34.1
-
+ config KEYBOARD_SAMSUNG
+ 	tristate "Samsung keypad support"
+-	depends on HAVE_CLK
++	depends on HAS_IOMEM && HAVE_CLK
+ 	select INPUT_MATRIXKMAP
+ 	help
+ 	  Say Y here if you want to use the keypad on your Samsung mobile
 
 

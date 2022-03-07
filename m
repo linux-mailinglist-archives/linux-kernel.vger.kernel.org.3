@@ -2,321 +2,524 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672334CF0AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 05:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F724CF0AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 05:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235171AbiCGEfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 23:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S235182AbiCGEfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 23:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiCGEfP (ORCPT
+        with ESMTP id S235181AbiCGEfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 23:35:15 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43314B1C3
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 20:34:21 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id e13so12709463plh.3
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 20:34:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bjv6LCJxAZSQQFHnal+Fzv3rUjp0Qsile4meIkT81UU=;
-        b=FXa4P7CgQyiStvvjzNbUa9zlUSzG0kwdzgejIP7/H2nRyc8KWONAsh4s9FuoVfpubg
-         kFK0musktYKhp/HQa1k+wsbRrO4G348ExOyZosojG+BPITxRcxWt+zhn1aWSfaUC60JI
-         BCo0+oihApJeKMeQ6ugAz0YNiQ0Z97gkbLlTI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bjv6LCJxAZSQQFHnal+Fzv3rUjp0Qsile4meIkT81UU=;
-        b=5ufOkgpaI9m+N06RgEg38WzrvBTGc+io7CiE1QreR8C89q4n4Gc7adqknL81hRRVFx
-         YhcYnVhq+T4Exv/yo7zht1LQSGtmKdE8LNYCy6Bw0srfP7ewQEEpSp6ehQHS7UEso8Dm
-         qvWm0T0t4HFkVp8mT+qVHce72/Boj5DkQzN6Q3bPp5LjWrtj0PfHk2llcSItrJW2h118
-         JUoGLymtvhaOXJVY3jzTEva2OzrsMdluQfr7ui3D8HcifIfwXo8QAAuDKrSPYDrWbO4H
-         VpfcT4k2JxM52kGmEE8YzRPFQn8BZ1VCXm2DOzfCHd+hfAWgeRHStAaGphBxS267z8iJ
-         nNiQ==
-X-Gm-Message-State: AOAM531a80EnsPwLoczGNMDk5Ed3yfaX/5VQD0NG/3VfGsvVwvIewNmr
-        qKKkNh6SWOAzAdFcLQSSdyaHS23KQz+A8A==
-X-Google-Smtp-Source: ABdhPJxe2Ylzu9uNuao7RxmMQrlG1LhLg7EHFzCR51sxhnQqNkvysBcBdO9faoKdFnT4866vtaFB2A==
-X-Received: by 2002:a17:90b:4d0f:b0:1bf:6a2:5637 with SMTP id mw15-20020a17090b4d0f00b001bf06a25637mr11124544pjb.106.1646627661027;
-        Sun, 06 Mar 2022 20:34:21 -0800 (PST)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com. [209.85.215.179])
-        by smtp.gmail.com with ESMTPSA id nk5-20020a17090b194500b001bf01e6e558sm11115295pjb.29.2022.03.06.20.34.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 20:34:20 -0800 (PST)
-Received: by mail-pg1-f179.google.com with SMTP id bc27so12570824pgb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 20:34:20 -0800 (PST)
-X-Received: by 2002:a05:6e02:128b:b0:2c6:49a4:ad23 with SMTP id
- y11-20020a056e02128b00b002c649a4ad23mr1158525ilq.251.1646627648731; Sun, 06
- Mar 2022 20:34:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20220307032859.3275-1-jason-jh.lin@mediatek.com> <20220307032859.3275-5-jason-jh.lin@mediatek.com>
-In-Reply-To: <20220307032859.3275-5-jason-jh.lin@mediatek.com>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Mon, 7 Mar 2022 12:33:30 +0800
-X-Gmail-Original-Message-ID: <CAC=S1ngHthMe8oOQksf34OPvX071uT=AHnvjAoSs3-oReNynvA@mail.gmail.com>
-Message-ID: <CAC=S1ngHthMe8oOQksf34OPvX071uT=AHnvjAoSs3-oReNynvA@mail.gmail.com>
-Subject: Re: [PATCH v16 4/8] soc: mediatek: add mtk-mmsys support for mt8195 vdosys0
-To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, moudy.ho@mediatek.com,
-        roy-cw.yeh@mediatek.com, CK Hu <ck.hu@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Nancy Lin <nancy.lin@mediatek.com>, singo.chang@mediatek.com,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+        Sun, 6 Mar 2022 23:35:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671EC4B1DA;
+        Sun,  6 Mar 2022 20:34:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CED52611D7;
+        Mon,  7 Mar 2022 04:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251DBC340E9;
+        Mon,  7 Mar 2022 04:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1646627675;
+        bh=sUMCv0VtKvZwdiUgj+Z4qXUOyxFlmy8qbZPgRPJsZQo=;
+        h=Date:To:From:Subject:From;
+        b=F6dHvoDcta4PnYB+B/8NKyHRGjCx78CGYfhli+VsnlehBwe1tMjAz0bX2/CHjitFz
+         2k/3iG5jw3OOm6Of6AZ5xBlG4CCg0cVCGBYq27L0Qi9LSX+tstPQ4wBmnFQ3UY3MNL
+         mkgPCgDkbvin/3jNv4YJZUZ7I7M60onTFAsArKGo=
+Date:   Sun, 06 Mar 2022 20:34:34 -0800
+To:     broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, akpm@linux-foundation.org
+From:   Andrew Morton <akpm@linux-foundation.org>
+Subject: mmotm 2022-03-06-20-33 uploaded
+Message-Id: <20220307043435.251DBC340E9@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 11:30 AM jason-jh.lin <jason-jh.lin@mediatek.com> wrote:
->
-> Add mt8195 vdosys0 clock driver name and routing table to
-> the driver data of mtk-mmsys.
->
-> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
-> Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The mm-of-the-moment snapshot 2022-03-06-20-33 has been uploaded to
 
-We've verified this on MT8195 on our end, so
-Tested-by: Fei Shao <fshao@chromium.org>
+   https://www.ozlabs.org/~akpm/mmotm/
+
+mmotm-readme.txt says
+
+README for mm-of-the-moment:
+
+https://www.ozlabs.org/~akpm/mmotm/
+
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
+
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+https://ozlabs.org/~akpm/mmotm/series
+
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
+
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
 
-> ---
-> Impelmentation patch of vdosys1 can be refered to [1]
->
-> [1] soc: mediatek: add mtk-mmsys support for mt8195 vdosys1
-> - https://patchwork.kernel.org/project/linux-mediatek/patch/20220222100741.30138-6-nancy.lin@mediatek.com/
-> ---
->
->  drivers/soc/mediatek/mt8195-mmsys.h    | 130 +++++++++++++++++++++++++
->  drivers/soc/mediatek/mtk-mmsys.c       |  11 +++
->  include/linux/soc/mediatek/mtk-mmsys.h |   9 ++
->  3 files changed, 150 insertions(+)
->  create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
->
-> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
-> new file mode 100644
-> index 000000000000..24a3afe23bc8
-> --- /dev/null
-> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
-> @@ -0,0 +1,130 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#ifndef __SOC_MEDIATEK_MT8195_MMSYS_H
-> +#define __SOC_MEDIATEK_MT8195_MMSYS_H
-> +
-> +#define MT8195_VDO0_OVL_MOUT_EN                                        0xf14
-> +#define MT8195_MOUT_DISP_OVL0_TO_DISP_RDMA0                    BIT(0)
-> +#define MT8195_MOUT_DISP_OVL0_TO_DISP_WDMA0                    BIT(1)
-> +#define MT8195_MOUT_DISP_OVL0_TO_DISP_OVL1                     BIT(2)
-> +#define MT8195_MOUT_DISP_OVL1_TO_DISP_RDMA1                    BIT(4)
-> +#define MT8195_MOUT_DISP_OVL1_TO_DISP_WDMA1                    BIT(5)
-> +#define MT8195_MOUT_DISP_OVL1_TO_DISP_OVL0                     BIT(6)
-> +
-> +#define MT8195_VDO0_SEL_IN                                     0xf34
-> +#define MT8195_SEL_IN_VPP_MERGE_FROM_MASK                      GENMASK(1, 0)
-> +#define MT8195_SEL_IN_VPP_MERGE_FROM_DSC_WRAP0_OUT             (0 << 0)
-> +#define MT8195_SEL_IN_VPP_MERGE_FROM_DISP_DITHER1              (1 << 0)
-> +#define MT8195_SEL_IN_VPP_MERGE_FROM_VDO1_VIRTUAL0             (2 << 0)
-> +#define MT8195_SEL_IN_DSC_WRAP0_IN_FROM_MASK                   GENMASK(4, 4)
-> +#define MT8195_SEL_IN_DSC_WRAP0_IN_FROM_DISP_DITHER0           (0 << 4)
-> +#define MT8195_SEL_IN_DSC_WRAP0_IN_FROM_VPP_MERGE              (1 << 4)
-> +#define MT8195_SEL_IN_DSC_WRAP1_IN_FROM_MASK                   GENMASK(5, 5)
-> +#define MT8195_SEL_IN_DSC_WRAP1_IN_FROM_DISP_DITHER1           (0 << 5)
-> +#define MT8195_SEL_IN_DSC_WRAP1_IN_FROM_VPP_MERGE              (1 << 5)
-> +#define MT8195_SEL_IN_SINA_VIRTUAL0_FROM_MASK                  GENMASK(8, 8)
-> +#define MT8195_SEL_IN_SINA_VIRTUAL0_FROM_VPP_MERGE             (0 << 8)
-> +#define MT8195_SEL_IN_SINA_VIRTUAL0_FROM_DSC_WRAP1_OUT         (1 << 8)
-> +#define MT8195_SEL_IN_SINB_VIRTUAL0_FROM_MASK                  GENMASK(9, 9)
-> +#define MT8195_SEL_IN_SINB_VIRTUAL0_FROM_DSC_WRAP0_OUT         (0 << 9)
-> +#define MT8195_SEL_IN_DP_INTF0_FROM_MASK                       GENMASK(13, 12)
-> +#define MT8195_SEL_IN_DP_INTF0_FROM_DSC_WRAP1_OUT              (0 << 0)
-> +#define MT8195_SEL_IN_DP_INTF0_FROM_VPP_MERGE                  (1 << 12)
-> +#define MT8195_SEL_IN_DP_INTF0_FROM_VDO1_VIRTUAL0              (2 << 12)
-> +#define MT8195_SEL_IN_DSI0_FROM_MASK                           GENMASK(16, 16)
-> +#define MT8195_SEL_IN_DSI0_FROM_DSC_WRAP0_OUT                  (0 << 16)
-> +#define MT8195_SEL_IN_DSI0_FROM_DISP_DITHER0                   (1 << 16)
-> +#define MT8195_SEL_IN_DSI1_FROM_MASK                           GENMASK(17, 17)
-> +#define MT8195_SEL_IN_DSI1_FROM_DSC_WRAP1_OUT                  (0 << 17)
-> +#define MT8195_SEL_IN_DSI1_FROM_VPP_MERGE                      (1 << 17)
-> +#define MT8195_SEL_IN_DISP_WDMA1_FROM_MASK                     GENMASK(20, 20)
-> +#define MT8195_SEL_IN_DISP_WDMA1_FROM_DISP_OVL1                        (0 << 20)
-> +#define MT8195_SEL_IN_DISP_WDMA1_FROM_VPP_MERGE                        (1 << 20)
-> +#define MT8195_SEL_IN_DSC_WRAP1_FROM_MASK                      GENMASK(21, 21)
-> +#define MT8195_SEL_IN_DSC_WRAP1_OUT_FROM_DSC_WRAP1_IN          (0 << 21)
-> +#define MT8195_SEL_IN_DSC_WRAP1_OUT_FROM_DISP_DITHER1          (1 << 21)
-> +#define MT8195_SEL_IN_DISP_WDMA0_FROM_MASK                     GENMASK(22, 22)
-> +#define MT8195_SEL_IN_DISP_WDMA0_FROM_DISP_OVL0                        (0 << 22)
-> +
-> +#define MT8195_VDO0_SEL_OUT                                    0xf38
-> +#define MT8195_SOUT_DISP_DITHER0_TO_MASK                       BIT(0)
-> +#define MT8195_SOUT_DISP_DITHER0_TO_DSC_WRAP0_IN               (0 << 0)
-> +#define MT8195_SOUT_DISP_DITHER0_TO_DSI0                       (1 << 0)
-> +#define MT8195_SOUT_DISP_DITHER1_TO_MASK                       GENMASK(2, 1)
-> +#define MT8195_SOUT_DISP_DITHER1_TO_DSC_WRAP1_IN               (0 << 1)
-> +#define MT8195_SOUT_DISP_DITHER1_TO_VPP_MERGE                  (1 << 1)
-> +#define MT8195_SOUT_DISP_DITHER1_TO_DSC_WRAP1_OUT              (2 << 1)
-> +#define MT8195_SOUT_VDO1_VIRTUAL0_TO_MASK                      GENMASK(4, 4)
-> +#define MT8195_SOUT_VDO1_VIRTUAL0_TO_VPP_MERGE                 (0 << 4)
-> +#define MT8195_SOUT_VDO1_VIRTUAL0_TO_DP_INTF0                  (1 << 4)
-> +#define MT8195_SOUT_VPP_MERGE_TO_MASK                          GENMASK(10, 8)
-> +#define MT8195_SOUT_VPP_MERGE_TO_DSI1                          (0 << 8)
-> +#define MT8195_SOUT_VPP_MERGE_TO_DP_INTF0                      (1 << 8)
-> +#define MT8195_SOUT_VPP_MERGE_TO_SINA_VIRTUAL0                 (2 << 8)
-> +#define MT8195_SOUT_VPP_MERGE_TO_DISP_WDMA1                    (3 << 8)
-> +#define MT8195_SOUT_VPP_MERGE_TO_DSC_WRAP0_IN                  (4 << 8)
-> +#define MT8195_SOUT_VPP_MERGE_TO_DSC_WRAP1_IN_MASK             GENMASK(11, 11)
-> +#define MT8195_SOUT_VPP_MERGE_TO_DSC_WRAP1_IN                  (0 << 11)
-> +#define MT8195_SOUT_DSC_WRAP0_OUT_TO_MASK                      GENMASK(13, 12)
-> +#define MT8195_SOUT_DSC_WRAP0_OUT_TO_DSI0                      (0 << 12)
-> +#define MT8195_SOUT_DSC_WRAP0_OUT_TO_SINB_VIRTUAL0             (1 << 12)
-> +#define MT8195_SOUT_DSC_WRAP0_OUT_TO_VPP_MERGE                 (2 << 12)
-> +#define MT8195_SOUT_DSC_WRAP1_OUT_TO_MASK                      GENMASK(17, 16)
-> +#define MT8195_SOUT_DSC_WRAP1_OUT_TO_DSI1                      (0 << 16)
-> +#define MT8195_SOUT_DSC_WRAP1_OUT_TO_DP_INTF0                  (1 << 16)
-> +#define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0             (2 << 16)
-> +#define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE                 (3 << 16)
-> +
-> +static const struct mtk_mmsys_routes mmsys_mt8195_routing_table[] = {
-> +       {
-> +               DDP_COMPONENT_OVL0, DDP_COMPONENT_RDMA0,
-> +               MT8195_VDO0_OVL_MOUT_EN, MT8195_MOUT_DISP_OVL0_TO_DISP_RDMA0,
-> +               MT8195_MOUT_DISP_OVL0_TO_DISP_RDMA0
-> +       }, {
-> +               DDP_COMPONENT_OVL1, DDP_COMPONENT_RDMA1,
-> +               MT8195_VDO0_OVL_MOUT_EN, MT8195_MOUT_DISP_OVL1_TO_DISP_RDMA1,
-> +               MT8195_MOUT_DISP_OVL1_TO_DISP_RDMA1
-> +       }, {
-> +               DDP_COMPONENT_DSC0, DDP_COMPONENT_MERGE0,
-> +               MT8195_VDO0_SEL_IN, MT8195_SEL_IN_VPP_MERGE_FROM_MASK,
-> +               MT8195_SEL_IN_VPP_MERGE_FROM_DSC_WRAP0_OUT
-> +       }, {
-> +               DDP_COMPONENT_MERGE0, DDP_COMPONENT_DP_INTF0,
-> +               MT8195_VDO0_SEL_IN, MT8195_SEL_IN_DP_INTF0_FROM_MASK,
-> +               MT8195_SEL_IN_DP_INTF0_FROM_VPP_MERGE
-> +       }, {
-> +               DDP_COMPONENT_DITHER, DDP_COMPONENT_DSC0,
-> +               MT8195_VDO0_SEL_IN, MT8195_SEL_IN_DSC_WRAP0_IN_FROM_MASK,
-> +               MT8195_SEL_IN_DSC_WRAP0_IN_FROM_DISP_DITHER0
-> +       }, {
-> +               DDP_COMPONENT_DSC0, DDP_COMPONENT_DSI0,
-> +               MT8195_VDO0_SEL_IN, MT8195_SEL_IN_DSI0_FROM_MASK,
-> +               MT8195_SEL_IN_DSI0_FROM_DSC_WRAP0_OUT
-> +       }, {
-> +               DDP_COMPONENT_DITHER, DDP_COMPONENT_DSI0,
-> +               MT8195_VDO0_SEL_IN, MT8195_SEL_IN_DSI0_FROM_MASK,
-> +               MT8195_SEL_IN_DSI0_FROM_DISP_DITHER0
-> +       }, {
-> +               DDP_COMPONENT_DITHER, DDP_COMPONENT_DSC0,
-> +               MT8195_VDO0_SEL_OUT, MT8195_SOUT_DISP_DITHER0_TO_MASK,
-> +               MT8195_SOUT_DISP_DITHER0_TO_DSC_WRAP0_IN
-> +       }, {
-> +               DDP_COMPONENT_DITHER, DDP_COMPONENT_DSI0,
-> +               MT8195_VDO0_SEL_OUT, MT8195_SOUT_DISP_DITHER0_TO_MASK,
-> +               MT8195_SOUT_DISP_DITHER0_TO_DSI0
-> +       }, {
-> +               DDP_COMPONENT_DSC0, DDP_COMPONENT_DSI0,
-> +               MT8195_VDO0_SEL_OUT, MT8195_SOUT_DSC_WRAP0_OUT_TO_MASK,
-> +               MT8195_SOUT_DSC_WRAP0_OUT_TO_DSI0
-> +       }, {
-> +               DDP_COMPONENT_DSC0, DDP_COMPONENT_MERGE0,
-> +               MT8195_VDO0_SEL_OUT, MT8195_SOUT_DSC_WRAP0_OUT_TO_MASK,
-> +               MT8195_SOUT_DSC_WRAP0_OUT_TO_VPP_MERGE
-> +       }, {
-> +               DDP_COMPONENT_MERGE0, DDP_COMPONENT_DP_INTF0,
-> +               MT8195_VDO0_SEL_OUT, MT8195_SOUT_VPP_MERGE_TO_MASK,
-> +               MT8195_SOUT_VPP_MERGE_TO_DP_INTF0
-> +       }
-> +};
-> +
-> +#endif /* __SOC_MEDIATEK_MT8195_MMSYS_H */
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-> index 4fc4c2c9ea20..dc5c51f0ccc8 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -17,6 +17,7 @@
->  #include "mt8183-mmsys.h"
->  #include "mt8186-mmsys.h"
->  #include "mt8192-mmsys.h"
-> +#include "mt8195-mmsys.h"
->  #include "mt8365-mmsys.h"
->
->  static const struct mtk_mmsys_driver_data mt2701_mmsys_driver_data = {
-> @@ -72,6 +73,12 @@ static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
->         .num_routes = ARRAY_SIZE(mmsys_mt8192_routing_table),
->  };
->
-> +static const struct mtk_mmsys_driver_data mt8195_vdosys0_driver_data = {
-> +       .clk_driver = "clk-mt8195-vdo0",
-> +       .routes = mmsys_mt8195_routing_table,
-> +       .num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
-> +};
-> +
->  static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
->         .clk_driver = "clk-mt8365-mm",
->         .routes = mt8365_mmsys_routing_table,
-> @@ -260,6 +267,10 @@ static const struct of_device_id of_match_mtk_mmsys[] = {
->                 .compatible = "mediatek,mt8192-mmsys",
->                 .data = &mt8192_mmsys_driver_data,
->         },
-> +       {
-> +               .compatible = "mediatek,mt8195-vdosys0",
-> +               .data = &mt8195_vdosys0_driver_data,
-> +       },
->         {
->                 .compatible = "mediatek,mt8365-mmsys",
->                 .data = &mt8365_mmsys_driver_data,
-> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
-> index 4bba275e235a..64c77c4a6c56 100644
-> --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> @@ -17,13 +17,22 @@ enum mtk_ddp_comp_id {
->         DDP_COMPONENT_COLOR0,
->         DDP_COMPONENT_COLOR1,
->         DDP_COMPONENT_DITHER,
-> +       DDP_COMPONENT_DP_INTF0,
->         DDP_COMPONENT_DPI0,
->         DDP_COMPONENT_DPI1,
-> +       DDP_COMPONENT_DSC0,
-> +       DDP_COMPONENT_DSC1,
->         DDP_COMPONENT_DSI0,
->         DDP_COMPONENT_DSI1,
->         DDP_COMPONENT_DSI2,
->         DDP_COMPONENT_DSI3,
->         DDP_COMPONENT_GAMMA,
-> +       DDP_COMPONENT_MERGE0,
-> +       DDP_COMPONENT_MERGE1,
-> +       DDP_COMPONENT_MERGE2,
-> +       DDP_COMPONENT_MERGE3,
-> +       DDP_COMPONENT_MERGE4,
-> +       DDP_COMPONENT_MERGE5,
->         DDP_COMPONENT_OD0,
->         DDP_COMPONENT_OD1,
->         DDP_COMPONENT_OVL0,
-> --
-> 2.18.0
->
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
+
+	https://github.com/hnaz/linux-mm
+
+The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
+
+A git copy of this tree is also available at
+
+	https://github.com/hnaz/linux-mm
+
+
+
+This mmotm tree contains the following patches against 5.17-rc6:
+(patches marked "*" will be included in linux-next)
+
+  origin.patch
+* mm-fix-panic-in-__alloc_pages.patch
+* userfaultfd-mark-uffd_wp-regardless-of-vm_write-flag.patch
+* mm-swap-get-rid-of-deadloop-in-swapin-readahead.patch
+* selftests-vm-fix-clang-build-error-multiple-output-files.patch
+* mm-page_alloc-add-scheduling-point-to-free_unref_page_list.patch
+* memcg-sync-flush-only-if-periodic-flush-is-delayed.patch
+* memcg-sync-flush-only-if-periodic-flush-is-delayed-fix.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* procfs-prevent-unpriveleged-processes-accessing-fdinfo-dir.patch
+* scripts-spellingtxt-add-more-spellings-to-spellingtxt.patch
+* ntfs-add-sanity-check-on-allocation-size.patch
+* ocfs2-cleanup-some-return-variables.patch
+* fs-ocfs2-fix-comments-mentioning-i_mutex.patch
+* ocfs2-reflink-deadlock-when-clone-file-to-the-same-directory-simultaneously.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+* doc-convert-subsection-to-section-in-gfph.patch
+* mm-document-and-polish-read-ahead-code.patch
+* mm-improve-cleanup-when-readpages-doesnt-process-all-pages.patch
+* fuse-remove-reliance-on-bdi-congestion.patch
+* nfs-remove-reliance-on-bdi-congestion.patch
+* ceph-remove-reliance-on-bdi-congestion.patch
+* remove-inode_congested.patch
+* remove-bdi_congested-and-wb_congested-and-related-functions.patch
+* remove-bdi_congested-and-wb_congested-and-related-functions-fix.patch
+* f2fs-replace-congestion_wait-calls-with-io_schedule_timeout.patch
+* block-bfq-ioschedc-use-false-rather-than-blk_rw_async.patch
+* remove-congestion-tracking-framework.patch
+* mm-fs-delete-pf_swapwrite.patch
+* mm-__isolate_lru_page_prepare-in-isolate_migratepages_block.patch
+* mount-warn-only-once-about-timestamp-range-expiration.patch
+  mm.patch
+* mm-memremap-avoid-calling-kasan_remove_zero_shadow-for-device-private-memory.patch
+* tools-vm-page_owner_sortc-sort-by-stacktrace-before-culling.patch
+* tools-vm-page_owner_sortc-sort-by-stacktrace-before-culling-fix.patch
+* tools-vm-page_owner_sortc-support-sorting-by-stack-trace.patch
+* tools-vm-page_owner_sortc-add-switch-between-culling-by-stacktrace-and-txt.patch
+* tools-vm-page_owner_sortc-support-sorting-pid-and-time.patch
+* tools-vm-page_owner_sortc-two-trivial-fixes.patch
+* tools-vm-page_owner_sortc-delete-invalid-duplicate-code.patch
+* documentation-vm-page_ownerrst-update-the-documentation.patch
+* documentation-vm-page_ownerrst-update-the-documentation-fix.patch
+* docs-vm-fix-unexpected-indentation-warns-in-page_owner.patch
+* documentation-vm-page_ownerrst-fix-commends.patch
+* lib-vsprintf-avoid-redundant-work-with-0-size.patch
+* mm-page_owner-use-scnprintf-to-avoid-excessive-buffer-overrun-check.patch
+* mm-page_owner-print-memcg-information.patch
+* mm-page_owner-record-task-command-name.patch
+* mm-page_ownerc-record-tgid.patch
+* tools-vm-page_owner_sortc-fix-the-instructions-for-use.patch
+* mm-unexport-page_init_poison.patch
+* tools-vm-page_owner_sortc-fix-comments.patch
+* tools-vm-page_owner_sortc-add-a-security-check.patch
+* tools-vm-page_owner_sortc-support-sorting-by-tgid-and-update-documentation.patch
+* tools-vm-page_owner_sort-fix-three-trivival-places.patch
+* tools-vm-page_owner_sort-support-for-sorting-by-task-command-name.patch
+* filemap-remove-find_get_pages.patch
+* mm-writeback-minor-clean-up-for-highmem_dirtyable_memory.patch
+* mm-fix-invalid-page-pointer-returned-with-foll_pin-gups.patch
+* mm-gup-follow_pfn_pte-eexist-cleanup.patch
+* mm-gup-remove-unused-pin_user_pages_locked.patch
+* mm-change-lookup_node-to-use-get_user_pages_fast.patch
+* mm-gup-remove-unused-get_user_pages_locked.patch
+* tmpfs-support-for-file-creation-time.patch
+* tmpfs-support-for-file-creation-time-fix.patch
+* shmem-mapping_set_exiting-to-help-mapped-resilience.patch
+* tmpfs-do-not-allocate-pages-on-read.patch
+* memcg-replace-in_interrupt-with-in_task.patch
+* memcg-add-per-memcg-total-kernel-memory-stat.patch
+* mm-memcg-mem_cgroup_per_node-is-already-set-to-0-on-allocation.patch
+* mm-memcg-retrieve-parent-memcg-from-cssparent.patch
+* memcg-refactor-mem_cgroup_oom.patch
+* memcg-unify-force-charging-conditions.patch
+* selftests-memcg-test-high-limit-for-single-entry-allocation.patch
+* memcg-synchronously-enforce-memoryhigh-for-large-overcharges.patch
+* mm-memcontrol-return-1-from-cgroupmemory-__setup-handler.patch
+* mm-memcg-set-memcg-after-css-verified-and-got-reference.patch
+* mm-memcg-set-pos-to-prev-unconditionally.patch
+* mm-memcg-move-generation-assignment-and-comparison-together.patch
+* mm-memcg-revert-mm-memcg-optimize-user-context-object-stock-access.patch
+* mm-memcg-disable-threshold-event-handlers-on-preempt_rt.patch
+* mm-memcg-protect-per-cpu-counter-by-disabling-preemption-on-preempt_rt-where-needed.patch
+* mm-memcg-opencode-the-inner-part-of-obj_cgroup_uncharge_pages-in-drain_obj_stock.patch
+* mm-memcg-protect-memcg_stock-with-a-local_lock_t.patch
+* mm-memcg-disable-migration-instead-of-preemption-in-drain_all_stock.patch
+* mm-list_lru-transpose-the-array-of-per-node-per-memcg-lru-lists.patch
+* mm-introduce-kmem_cache_alloc_lru.patch
+* fs-introduce-alloc_inode_sb-to-allocate-filesystems-specific-inode.patch
+* fs-allocate-inode-by-using-alloc_inode_sb.patch
+* f2fs-allocate-inode-by-using-alloc_inode_sb.patch
+* mm-dcache-use-kmem_cache_alloc_lru-to-allocate-dentry.patch
+* xarray-use-kmem_cache_alloc_lru-to-allocate-xa_node.patch
+* mm-memcontrol-move-memcg_online_kmem-to-mem_cgroup_css_online.patch
+* mm-list_lru-allocate-list_lru_one-only-when-needed.patch
+* mm-list_lru-rename-memcg_drain_all_list_lrus-to-memcg_reparent_list_lrus.patch
+* mm-list_lru-replace-linear-array-with-xarray.patch
+* mm-list_lru-replace-linear-array-with-xarray-fix.patch
+* mm-memcontrol-reuse-memory-cgroup-id-for-kmem-id.patch
+* mm-memcontrol-fix-cannot-alloc-the-maximum-memcg-id.patch
+* mm-list_lru-rename-list_lru_per_memcg-to-list_lru_memcg.patch
+* mm-memcontrol-rename-memcg_cache_id-to-memcg_kmem_id.patch
+* memcg-enable-accounting-for-tty-related-objects.patch
+* mm-generalize-arch_has_filter_pgprot.patch
+* mm-merge-pte_mkhuge-call-into-arch_make_huge_pte.patch
+* mm-remove-mmu_gathers-storage-from-remaining-architectures.patch
+* mm-thp-fix-wrong-cache-flush-in-remove_migration_pmd.patch
+* mm-fix-missing-cache-flush-for-all-tail-pages-of-compound-page.patch
+* mm-hugetlb-fix-missing-cache-flush-in-copy_huge_page_from_user.patch
+* mm-hugetlb-fix-missing-cache-flush-in-hugetlb_mcopy_atomic_pte.patch
+* mm-shmem-fix-missing-cache-flush-in-shmem_mfill_atomic_pte.patch
+* mm-userfaultfd-fix-missing-cache-flush-in-mcopy_atomic_pte-and-__mcopy_atomic.patch
+* mm-replace-multiple-dcache-flush-with-flush_dcache_folio.patch
+* mm-dont-skip-swap-entry-even-if-zap_details-specified.patch
+* mm-dont-skip-swap-entry-even-if-zap_details-specified-v5.patch
+* mm-rename-zap_skip_check_mapping-to-should_zap_page.patch
+* mm-change-zap_detailszap_mapping-into-even_cows.patch
+* mm-rework-swap-handling-of-zap_pte_range.patch
+* mm-mmap-return-1-from-stack_guard_gap-__setup-handler.patch
+* mm-use-helper-function-range_in_vma.patch
+* mm-use-helper-macro-min-and-max-in-unmap_mapping_range_tree.patch
+* mm-_install_special_mapping-apply-vm_locked_clear_mask.patch
+* mm-sparse-make-mminit_validate_memmodel_limits-static.patch
+* mm-vmalloc-remove-unneeded-function-forward-declaration.patch
+* mm-vmalloc-move-draining-areas-out-of-caller-context.patch
+* mm-vmalloc-add-adjust_search_size-parameter.patch
+* mm-vmalloc-eliminate-an-extra-orig_gfp_mask.patch
+* mm-vmallocc-fix-unused-function-warning.patch
+* vmap-dont-allow-invalid-pages.patch
+* mm-vmalloc-fix-comments-about-vmap_area-struct.patch
+* mm-page_alloc-avoid-merging-non-fallbackable-pageblocks-with-others.patch
+* mm-page_alloc-add-same-penalty-is-enough-to-get-round-robin-order.patch
+* mm-page_alloc-add-penalty-to-local_node.patch
+* mm-mmzonec-use-try_cmpxchg-in-page_cpupid_xchg_last.patch
+* mm-discard-__gfp_atomic.patch
+* mm-mmzoneh-remove-unused-macros.patch
+* mm-page_alloc-dont-pass-pfn-to-free_unref_page_commit.patch
+* cma-factor-out-minimum-alignment-requirement.patch
+* mm-enforce-pageblock_order-max_order.patch
+* mm-page_alloc-mark-pagesets-as-__maybe_unused.patch
+* mm-pages_allocc-dont-create-zone_movable-beyond-the-end-of-a-node.patch
+* mm-page_alloc-fetch-the-correct-pcp-buddy-during-bulk-free.patch
+* mm-page_alloc-track-range-of-active-pcp-lists-during-bulk-free.patch
+* mm-page_alloc-simplify-how-many-pages-are-selected-per-pcp-list-during-bulk-free.patch
+* mm-page_alloc-drain-the-requested-list-first-during-bulk-free.patch
+* mm-page_alloc-free-pages-in-a-single-pass-during-bulk-free.patch
+* mm-page_alloc-limit-number-of-high-order-pages-on-pcp-during-bulk-free.patch
+* mm-page_alloc-do-not-prefetch-buddies-during-bulk-free.patch
+* arch-x86-mm-numa-do-not-initialize-nodes-twice.patch
+* arch-x86-mm-numa-do-not-initialize-nodes-twice-v2.patch
+* mm-count-time-in-drain_all_pages-during-direct-reclaim-as-memory-pressure.patch
+* mm-page_alloc-call-check_new_pages-while-zone-spinlock-is-not-held.patch
+* mm-hwpoison-remove-obsolete-comment.patch
+* mm-hwpoison-fix-error-page-recovered-but-reported-not-recovered.patch
+* mm-clean-up-hwpoison-page-cache-page-in-fault-path.patch
+* mm-memory-failurec-minor-clean-up-for-memory_failure_dev_pagemap.patch
+* mm-memory-failurec-catch-unexpected-efault-from-vma_address.patch
+* mm-memory-failurec-rework-the-signaling-logic-in-kill_proc.patch
+* mm-memory-failurec-fix-race-with-changing-page-more-robustly.patch
+* mm-memory-failurec-remove-pageslab-check-in-hwpoison_filter_dev.patch
+* mm-memory-failurec-rework-the-try_to_unmap-logic-in-hwpoison_user_mappings.patch
+* mm-memory-failurec-remove-obsolete-comment-in-__soft_offline_page.patch
+* mm-memory-failurec-remove-unnecessary-pagetranstail-check.patch
+* mm-hwpoison-inject-support-injecting-hwpoison-to-free-page.patch
+* mm-hwpoison-inject-support-injecting-hwpoison-to-free-page-fix.patch
+* mm-hwpoison-avoid-the-impact-of-hwpoison_filter-return-value-on-mce-handler.patch
+* mm-hwpoison-add-in-use-hugepage-hwpoison-filter-judgement.patch
+* mm-hugetlb-free-the-2nd-vmemmap-page-associated-with-each-hugetlb-page.patch
+* mm-hugetlb-replace-hugetlb_free_vmemmap_enabled-with-a-static_key.patch
+* mm-sparsemem-use-page-table-lock-to-protect-kernel-pmd-operations.patch
+* selftests-vm-add-a-hugetlb-test-case.patch
+* mm-sparsemem-move-vmemmap-related-to-hugetlb-to-config_hugetlb_page_free_vmemmap.patch
+* mm-hugetlb-generalize-arch_want_general_hugetlb.patch
+* hugetlb-clean-up-potential-spectre-issue-warnings.patch
+* hugetlb-clean-up-potential-spectre-issue-warnings-v2.patch
+* mm-hugetlb-use-helper-macro-__attr_rw.patch
+* mm-export-pageheadhuge.patch
+* mm-export-pageheadhuge-fix.patch
+* userfaultfd-provide-unmasked-address-on-page-fault.patch
+* userfaultfd-provide-unmasked-address-on-page-fault-v3.patch
+* userfaultfd-provide-unmasked-address-on-page-fault-v3-fix.patch
+* userfaultfd-selftests-fix-uninitialized_varcocci-warning.patch
+* mm-workingset-replace-irq-off-check-with-a-lockdep-assert.patch
+* mempolicy-mbind_range-set_policy-after-vma_merge.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt-fix.patch
+* mm-oom_kill-remove-unneeded-is_memcg_oom-check.patch
+* mmmigrate-fix-establishing-demotion-target.patch
+* mm-thp-refix-__split_huge_pmd_locked-for-migration-pmd.patch
+* mm-cma-provide-option-to-opt-out-from-exposing-pages-on-activation-failure.patch
+* powerpc-fadump-opt-out-from-freeing-pages-on-cma-activation-failure.patch
+* numa-balancing-add-page-promotion-counter.patch
+* numa-balancing-optimize-page-placement-for-memory-tiering-system.patch
+* memory-tiering-skip-to-scan-fast-memory.patch
+* mm-page_io-fix-psi-memory-pressure-error-on-cold-swapins.patch
+* mm-vmstat-add-event-for-ksm-swapping-in-copy.patch
+* mm-ksm-use-helper-macro-__attr_rw.patch
+* mm-hwpoison-check-the-subpage-not-the-head-page.patch
+* mm-balloon_compaction-make-balloon-page-compaction-callbacks-static.patch
+* mm-memory_hotplug-make-arch_alloc_nodedata-independent-on-config_memory_hotplug.patch
+* mm-handle-uninitialized-numa-nodes-gracefully.patch
+* mm-handle-uninitialized-numa-nodes-gracefully-fix.patch
+* mm-memory_hotplug-drop-arch_free_nodedata.patch
+* mm-memory_hotplug-reorganize-new-pgdat-initialization.patch
+* mm-make-free_area_init_node-aware-of-memory-less-nodes.patch
+* memcg-do-not-tweak-node-in-alloc_mem_cgroup_per_node_info.patch
+* drivers-base-memory-add-memory-block-to-memory-group-after-registration-succeeded.patch
+* drivers-base-node-consolidate-node-device-subsystem-initialization-in-node_dev_init.patch
+* mm-memory_hotplug-remove-obsolete-comment-of-__add_pages.patch
+* mm-memory_hotplug-remove-obsolete-comment-of-__add_pages-fix.patch
+* mm-memory_hotplug-avoid-calling-zone_intersects-for-zone_normal.patch
+* mm-memory_hotplug-clean-up-try_offline_node.patch
+* mm-memory_hotplug-fix-misplaced-comment-in-offline_pages.patch
+* drivers-base-node-rename-link_mem_sections-to-register_memory_block_under_node.patch
+* drivers-base-memory-determine-and-store-zone-for-single-zone-memory-blocks.patch
+* drivers-base-memory-clarify-adding-and-removing-of-memory-blocks.patch
+* mm-rmap-convert-from-atomic_t-to-refcount_t-on-anon_vma-refcount.patch
+* mm-thp-clearpagedoublemap-in-first-page_add_file_rmap.patch
+* mm-zswapc-allow-handling-just-same-value-filled-pages.patch
+* mm-remove-usercopy_warn.patch
+* mm-uninline-copy_overflow.patch
+* mm-usercopy-return-1-from-hardened_usercopy-__setup-handler.patch
+* highmem-document-kunmap_local.patch
+* highmem-document-kunmap_local-v2.patch
+* mm-highmem-remove-unnecessary-done-label.patch
+* mm-use-strtobool-for-param-parsing.patch
+* mm-kfence-remove-unnecessary-config_kfence-option.patch
+* mm-hmmc-remove-unneeded-local-variable-ret.patch
+* mm-damon-dbgfs-init_regions-use-target-index-instead-of-target-id.patch
+* docs-admin-guide-mm-damon-usage-update-for-changed-initail_regions-file-input.patch
+* mm-damon-core-move-damon_set_targets-into-dbgfs.patch
+* mm-damon-remove-the-target-id-concept.patch
+* mm-damon-remove-redundant-page-validation.patch
+* mm-damon-rename-damon_primitives-to-damon_operations.patch
+* mm-damon-let-monitoring-operations-can-be-registered-and-selected.patch
+* mm-damon-paddrvaddr-register-themselves-to-damon-in-subsys_initcall.patch
+* mm-damon-reclaim-use-damon_select_ops-instead-of-damon_vpa_set_operations.patch
+* mm-damon-dbgfs-use-damon_select_ops-instead-of-damon_vpa_set_operations.patch
+* mm-damon-dbgfs-use-operations-id-for-knowing-if-the-target-has-pid.patch
+* mm-damon-dbgfs-test-fix-is_target_id-change.patch
+* mm-damon-paddrvaddr-remove-damon_pva_target_validset_operations.patch
+* mm-damon-remove-unnecessary-config_damon-option.patch
+* docs-vm-damon-call-low-level-monitoring-primitives-the-operations.patch
+* docs-vm-damon-design-update-damon-idle-page-tracking-interference-handling.patch
+* docs-damon-update-outdated-term-regions-update-interval.patch
+* mm-damon-core-allow-non-exclusive-damon-start-stop.patch
+* mm-damon-core-add-number-of-each-enum-type-values.patch
+* mm-damon-implement-a-minimal-stub-for-sysfs-based-damon-interface.patch
+* mm-damon-implement-a-minimal-stub-for-sysfs-based-damon-interface-fix.patch
+* mm-damon-sysfs-link-damon-for-virtual-address-spaces-monitoring.patch
+* mm-damon-sysfs-support-the-physical-address-space-monitoring.patch
+* mm-damon-sysfs-support-damon-based-operation-schemes.patch
+* mm-damon-sysfs-support-damos-quotas.patch
+* mm-damon-sysfs-support-schemes-prioritization.patch
+* mm-damon-sysfs-support-damos-watermarks.patch
+* mm-damon-sysfs-support-damos-watermarks-fix.patch
+* mm-damon-sysfs-support-damos-stats.patch
+* selftests-damon-add-a-test-for-damon-sysfs-interface.patch
+* docs-admin-guide-mm-damon-usage-document-damon-sysfs-interface.patch
+* docs-abi-testing-add-damon-sysfs-interface-abi-document.patch
+* mm-damon-sysfs-remove-repeat-container_of-in-damon_sysfs_kdamond_release.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* proc-alloc-path_max-bytes-for-proc-pid-fd-symlinks.patch
+* proc-alloc-path_max-bytes-for-proc-pid-fd-symlinks-fix.patch
+* proc-vmcore-fix-possible-deadlock-on-concurrent-mmap-and-read.patch
+* proc-vmcore-fix-vmcore_alloc_buf-kernel-doc-comment.patch
+* proc-sysctl-make-protected_-world-readable.patch
+* kernel-ksysfsc-use-helper-macro-__attr_rw.patch
+* kconfigdebug-make-debug_info-selectable-from-a-choice.patch
+* kconfigdebug-make-debug_info-selectable-from-a-choice-fix.patch
+* include-drop-pointless-__compiler_offsetof-indirection.patch
+* ilog2-force-inlining-of-__ilog2_u32-and-__ilog2_u64.patch
+* bitfield-add-explicit-inclusions-to-the-example.patch
+* lib-kconfigdebug-add-arch-dependency-for-function_align-option.patch
+* lib-bitmap-fix-many-kernel-doc-warnings.patch
+* lz4-fix-lz4_decompress_safe_partial-read-out-of-bound.patch
+* checkpatch-prefer-module_licensegpl-over-module_licensegpl-v2.patch
+* checkpatch-add-fix-option-for-some-trailing_statements.patch
+* checkpatch-add-early_param-exception-to-blank-line-after-struct-function-test.patch
+* kallsyms-print-module-name-in-%ps-s-case-when-kallsyms-is-disabled.patch
+* init-use-ktime_us_delta-to-make-initcall_debug-log-more-precise.patch
+* inith-improve-__setup-and-early_param-documentation.patch
+* init-mainc-return-1-from-handled-__setup-functions.patch
+* init-mainc-silence-some-wunused-parameter-warnings.patch
+* fs-pipe-use-kvcalloc-to-allocate-a-pipe_buffer-array.patch
+* fs-pipe-local-vars-has-to-match-types-of-proper-pipe_inode_info-fields.patch
+* minix-fix-bug-when-opening-a-file-with-o_direct.patch
+* fat-use-pointer-to-simple-type-in-put_user.patch
+* cgroup-use-irqsave-in-cgroup_rstat_flush_locked.patch
+* cgroup-use-irqsave-in-cgroup_rstat_flush_locked-fix.patch
+* kexec-make-crashk_res-crashk_low_res-and-crash_notes-symbols-always-visible.patch
+* riscv-mm-init-use-is_enabledconfig_kexec_core-instead-of-ifdef.patch
+* x86-setup-use-is_enabledconfig_kexec_core-instead-of-ifdef.patch
+* arm64-mm-use-is_enabledconfig_kexec_core-instead-of-ifdef.patch
+* docs-kdump-update-description-about-sysfs-file-system-support.patch
+* docs-kdump-add-scp-example-to-write-out-the-dump-file.patch
+* panic-unset-panic_on_warn-inside-panic.patch
+* ubsan-no-need-to-unset-panic_on_warn-in-ubsan_epilogue.patch
+* kasan-no-need-to-unset-panic_on_warn-in-end_report.patch
+* docs-sysctl-kernel-add-missing-bit-to-panic_print.patch
+* docs-sysctl-kernel-add-missing-bit-to-panic_print-fix.patch
+* panic-add-option-to-dump-all-cpus-backtraces-in-panic_print.patch
+* panic-move-panic_print-before-kmsg-dumpers.patch
+* kcov-split-ioctl-handling-into-locked-and-unlocked-parts.patch
+* kcov-properly-handle-subsequent-mmap-calls.patch
+* kernel-resource-fix-kfree-of-bootmem-memory-again.patch
+* revert-ubsan-kcsan-dont-combine-sanitizer-with-kcov-on-clang.patch
+* ipc-mqueue-use-get_tree_nodev-in-mqueue_get_tree.patch
+  linux-next.patch
+  linux-next-rejects.patch
+  linux-next-git-rejects.patch
+* arch-x86-kernel-resourcec-needs-spinlockh.patch
+* mm-oom_killc-fix-vm_oom_kill_table-ifdeffery.patch
+* mm-delete-__clearpagewaiters.patch
+* mm-filemap_unaccount_folio-large-skip-mapcount-fixup.patch
+* mm-thp-fix-nr_file_mapped-accounting-in-page__file_rmap.patch
+* mm-thp-dont-have-to-lock-page-anymore-when-splitting-pmd.patch
+* mm-rmap-fix-cache-flush-on-thp-pages.patch
+* dax-fix-cache-flush-on-pmd-mapped-pages.patch
+* mm-rmap-introduce-pfn_mkclean_range-to-cleans-ptes.patch
+* mm-pvmw-add-support-for-walking-devmap-pages.patch
+* dax-fix-missing-writeprotect-the-pte-entry.patch
+* mm-remove-range-parameter-from-follow_invalidate_pte.patch
+* mm-migration-add-trace-events-for-thp-migrations.patch
+* mm-migration-add-trace-events-for-base-page-and-hugetlb-migrations.patch
+* kasan-page_alloc-deduplicate-should_skip_kasan_poison.patch
+* kasan-page_alloc-move-tag_clear_highpage-out-of-kernel_init_free_pages.patch
+* kasan-page_alloc-merge-kasan_free_pages-into-free_pages_prepare.patch
+* kasan-page_alloc-simplify-kasan_poison_pages-call-site.patch
+* kasan-page_alloc-init-memory-of-skipped-pages-on-free.patch
+* kasan-drop-skip_kasan_poison-variable-in-free_pages_prepare.patch
+* mm-clarify-__gfp_zerotags-comment.patch
+* kasan-only-apply-__gfp_zerotags-when-memory-is-zeroed.patch
+* kasan-page_alloc-refactor-init-checks-in-post_alloc_hook.patch
+* kasan-page_alloc-merge-kasan_alloc_pages-into-post_alloc_hook.patch
+* kasan-page_alloc-combine-tag_clear_highpage-calls-in-post_alloc_hook.patch
+* kasan-page_alloc-move-setpageskipkasanpoison-in-post_alloc_hook.patch
+* kasan-page_alloc-move-kernel_init_free_pages-in-post_alloc_hook.patch
+* kasan-page_alloc-rework-kasan_unpoison_pages-call-site.patch
+* kasan-clean-up-metadata-byte-definitions.patch
+* kasan-define-kasan_vmalloc_invalid-for-sw_tags.patch
+* kasan-x86-arm64-s390-rename-functions-for-modules-shadow.patch
+* kasan-vmalloc-drop-outdated-vm_kasan-comment.patch
+* kasan-reorder-vmalloc-hooks.patch
+* kasan-add-wrappers-for-vmalloc-hooks.patch
+* kasan-vmalloc-reset-tags-in-vmalloc-functions.patch
+* kasan-fork-reset-pointer-tags-of-vmapped-stacks.patch
+* kasan-arm64-reset-pointer-tags-of-vmapped-stacks.patch
+* kasan-fork-reset-pointer-tags-of-vmapped-stacks-fix.patch
+* kasan-fork-reset-pointer-tags-of-vmapped-stacks-fix-2.patch
+* kasan-vmalloc-add-vmalloc-tagging-for-sw_tags.patch
+* kasan-vmalloc-arm64-mark-vmalloc-mappings-as-pgprot_tagged.patch
+* kasan-vmalloc-unpoison-vm_alloc-pages-after-mapping.patch
+* kasan-mm-only-define-___gfp_skip_kasan_poison-with-hw_tags.patch
+* kasan-page_alloc-allow-skipping-unpoisoning-for-hw_tags.patch
+* kasan-page_alloc-allow-skipping-memory-init-for-hw_tags.patch
+* kasan-vmalloc-add-vmalloc-tagging-for-hw_tags.patch
+* kasan-vmalloc-only-tag-normal-vmalloc-allocations.patch
+* kasan-vmalloc-only-tag-normal-vmalloc-allocations-fix.patch
+* kasan-vmalloc-only-tag-normal-vmalloc-allocations-fix-fix.patch
+* kasan-arm64-dont-tag-executable-vmalloc-allocations.patch
+* kasan-mark-kasan_arg_stacktrace-as-__initdata.patch
+* kasan-clean-up-feature-flags-for-hw_tags-mode.patch
+* kasan-add-kasanvmalloc-command-line-flag.patch
+* kasan-allow-enabling-kasan_vmalloc-and-sw-hw_tags.patch
+* arm64-select-kasan_vmalloc-for-sw-hw_tags-modes.patch
+* kasan-documentation-updates.patch
+* kasan-improve-vmalloc-tests.patch
+* kasan-improve-vmalloc-tests-fix.patch
+* kasan-improve-vmalloc-tests-fix-2.patch
+* kasan-improve-vmalloc-tests-fix-3.patch
+* kasan-improve-vmalloc-tests-fix-3-fix.patch
+* kasan-test-support-async-again-and-asymm-modes-for-hw_tags.patch
+* mm-kasan-remove-unnecessary-config_kasan-option.patch
+* kasan-update-function-name-in-comments.patch
+* kasan-print-virtual-mapping-info-in-reports.patch
+* kasan-drop-addr-check-from-describe_object_addr.patch
+* kasan-more-line-breaks-in-reports.patch
+* kasan-rearrange-stack-frame-info-in-reports.patch
+* kasan-improve-stack-frame-info-in-reports.patch
+* kasan-print-basic-stack-frame-info-for-sw_tags.patch
+* kasan-simplify-async-check-in-end_report.patch
+* kasan-simplify-kasan_update_kunit_status-and-call-sites.patch
+* kasan-check-config_kasan_kunit_test-instead-of-config_kunit.patch
+* kasan-move-update_kunit_status-to-start_report.patch
+* kasan-move-disable_trace_on_warning-to-start_report.patch
+* kasan-split-out-print_report-from-__kasan_report.patch
+* kasan-simplify-kasan_find_first_bad_addr-call-sites.patch
+* kasan-restructure-kasan_report.patch
+* kasan-merge-__kasan_report-into-kasan_report.patch
+* kasan-call-print_report-from-kasan_report_invalid_free.patch
+* kasan-move-and-simplify-kasan_report_async.patch
+* kasan-rename-kasan_access_info-to-kasan_report_info.patch
+* kasan-add-comment-about-uaccess-regions-to-kasan_report.patch
+* kasan-respect-kasan_bit_reported-in-all-reporting-routines.patch
+* kasan-reorder-reporting-functions.patch
+* kasan-move-and-hide-kasan_save_enable-restore_multi_shot.patch
+* kasan-disable-lockdep-when-printing-reports.patch
+* mm-enable-madv_dontneed-for-hugetlb-mappings.patch
+* selftests-vm-add-hugetlb-madvise-madv_dontneed-madv_remove-test.patch
+* userfaultfd-selftests-enable-hugetlb-remap-and-remove-event-testing.patch
+* mm-huge_memory-make-is_transparent_hugepage-static.patch
+* mm-optimize-do_wp_page-for-exclusive-pages-in-the-swapcache.patch
+* mm-optimize-do_wp_page-for-fresh-pages-in-local-lru-pagevecs.patch
+* mm-slightly-clarify-ksm-logic-in-do_swap_page.patch
+* mm-streamline-cow-logic-in-do_swap_page.patch
+* mm-huge_memory-streamline-cow-logic-in-do_huge_pmd_wp_page.patch
+* mm-khugepaged-remove-reuse_swap_page-usage.patch
+* mm-swapfile-remove-stale-reuse_swap_page.patch
+* mm-huge_memory-remove-stale-page_trans_huge_mapcount.patch
+* mm-warn-on-deleting-redirtied-only-if-accounted.patch
+* mm-unmap_mapping_range_tree-with-i_mmap_rwsem-shared.patch
+* mm-fix-race-between-madv_free-reclaim-and-blkdev-direct-io-read.patch
+* mm-fix-race-between-madv_free-reclaim-and-blkdev-direct-io-read-v4.patch
+* mm-madvise-madv_dontneed_locked.patch
+* selftests-vm-remove-dependecy-from-internal-kernel-macros.patch
+* selftests-kselftest-framework-provide-finished-helper.patch
+* selftests-vm-add-test-for-soft-dirty-pte-bit.patch
+* kselftest-vm-override-targets-from-arguments.patch
+  make-sure-nobodys-leaking-resources.patch
+  releasing-resources-with-children.patch
+  mutex-subsystem-synchro-test-module.patch
+  mutex-subsystem-synchro-test-module-fix.patch
+  kernel-forkc-export-kernel_thread-to-modules.patch
+  workaround-for-a-pci-restoring-bug.patch

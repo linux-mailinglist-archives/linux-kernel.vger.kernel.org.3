@@ -2,125 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174B34CFF54
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0465E4CFF60
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242686AbiCGNA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S235487AbiCGNB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242676AbiCGNAU (ORCPT
+        with ESMTP id S239938AbiCGNBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:00:20 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411A169CC5
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:59:23 -0800 (PST)
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M8QBa-1nVcoD1ZdQ-004QPD for <linux-kernel@vger.kernel.org>; Mon, 07 Mar
- 2022 13:59:21 +0100
-Received: by mail-wr1-f42.google.com with SMTP id u10so21504746wra.9
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 04:59:21 -0800 (PST)
-X-Gm-Message-State: AOAM5322wUHBPXxQnyDOlZKvC+SbJPL9FYCv0QqHssQ0tu8Qz1Pq4JJr
-        F5AcJPhCCTE/je2UJwmShSdK7qYeunepH6UpTrw=
-X-Google-Smtp-Source: ABdhPJwEW97XP1aD5oJu/V+lw6FoSmidRGJeCDciCJq7QxuUReTn9FhvaXLdAhA7WRC8L+q7Z58VJuoxjg1ktWcYWfM=
-X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
- y1-20020adfd081000000b001ef9378b7ccmr8649943wrh.407.1646657960939; Mon, 07
- Mar 2022 04:59:20 -0800 (PST)
+        Mon, 7 Mar 2022 08:01:25 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BA68A32B
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 05:00:30 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id h126so30777403ybc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 05:00:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cV/iRWpEISoBT8RqYrC9Loyzy60WPxJLdJrpUBpn9N4=;
+        b=LVb++RVBZfne8vu4GpNufR3TESTWg0xLaPgW4a8mWdgu+RsfCq0eSp7KjWLVehEZMi
+         Nqc9VQ04sWEuTzePC1BAc92teVEUvdGyPyD24J9VgfOlza/1uyEZeVS4Rz+ev0Kg+g+w
+         mVMXXPm1QDuom6dMCjngUykQ4yCV1nwKEqJwjVs8PmDIVYk7pJ+0X9Fc1Ucm82OLgzKY
+         rFrdY08sjABSAp4mH5xB7Jz6UfirJs2eorbxcisS7cxmYySScStHT7AH6YMGEz0Mv4jA
+         x4/UXhyzWP0afg9vP2AQLMwR4es9LiI26n22K0Fn0iAsm4g/NOcto86FXEk64Rn1bgyX
+         7uHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cV/iRWpEISoBT8RqYrC9Loyzy60WPxJLdJrpUBpn9N4=;
+        b=C1yW012ZNsSZtD6tI9s8uiKgW8R6IE+lL6l89zsx1DIOHyBLizbhQMjiRypKLn3H86
+         MrlZQiGbuS1Kfy59wR5RBkqYHXONhSCme2JgH3k12kxpMfsWGUpNwjeLGJAU6o6JDBR2
+         ZNRtYG5RS8MGwF5ozoFr9dIDfPgTJAPJHvi0C8EBFGfbwJm5Xt4iLfK+qo8ZgDH9hhBS
+         05ki+21dpxcBWBliwPMyqYFM1tzVDhSf0/HwOshQ4k8tXhjOk/Upqe0uJ5i9kAP7cO/D
+         PNgFXXMV0dZmwGLempGX2qenq0Xp18SF0CFi3/CWF/A4vt19+wICY/BRHBH3q0q9FNGl
+         qGfA==
+X-Gm-Message-State: AOAM531g4xp96JMZudhuROz63W4EmmBTTevV9d15H+0hDmkwpCAhPlNi
+        ssmXdQeuB6qLuamdbauSu7VeMxfTNfUaAG7+xLmJ5Q==
+X-Google-Smtp-Source: ABdhPJz7y/I54piNlQLkLmG1TBL8cO2TtZqqA/3TeporXhO/Ll4av+9Oeyrz2ZsqrqwcxxAf9U2afKUDEFHXjPyXHVY=
+X-Received: by 2002:a25:5090:0:b0:628:b76b:b9d3 with SMTP id
+ e138-20020a255090000000b00628b76bb9d3mr7938482ybb.128.1646658029569; Mon, 07
+ Mar 2022 05:00:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220302074245.257153-1-alankao@andestech.com> <CAK8P3a2s34a0gcuZ31ns8mZx2Ve-DF8+z_EhURwbOeOth2ayKw@mail.gmail.com>
-In-Reply-To: <CAK8P3a2s34a0gcuZ31ns8mZx2Ve-DF8+z_EhURwbOeOth2ayKw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 7 Mar 2022 13:59:05 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2WihTrGCw-4peuVOOXjygSCHu=Ar8cnabQspzdJ1WuNA@mail.gmail.com>
-Message-ID: <CAK8P3a2WihTrGCw-4peuVOOXjygSCHu=Ar8cnabQspzdJ1WuNA@mail.gmail.com>
-Subject: Re: [PATCH] nds32: Remove the architecture
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Alan Kao <alankao@andestech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greentime Hu <green.hu@gmail.com>
+References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 7 Mar 2022 18:30:18 +0530
+Message-ID: <CA+G9fYtXE1TvxtXZPw++ZkGAUZ4f1rD1tBkMsDb33jsm-C1OZw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/262] 5.15.27-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Netdev <netdev@vger.kernel.org>, dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Hou Tao <houtao1@huawei.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:vwhfWHsEwZKIcA2NJxJD/BNRcBv0seIbqwo9+DVXpzLHYDOcZh8
- ehWe2HY5wZPBZYzb986+I14cD2zybmXqDEYRDWPXAVjiQJrTTphyLOTGlmhGfT9QHzLf+ZH
- H+6ghrijoomytpiZqnNniai5j8AxSb3OO53/e8C2UubLMYQHKIOUuipUqoBsvXDkZ76qduA
- 8zpG8rwVWMo1709Em2pmw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0UbAyYqfSmU=:7qRrQVAXVDBKFX3NDdbpCK
- PZVruX4p6IPEqFva9JTlgj0feUvNBkUeaFKKsjS9+rhwsDHS0u6d5jY1gg98fTKMtEtHbFRa/
- F5R2tAWIOfLyt+yeEK4vJvVrx0KRxGkJcFIAG1jZnY3EWamBu+hMjJTkpTjG75KQJT7OhETI/
- E8updbi0NzgOAkY8GlF/FByc9IqowBwG894jmzYAUsprMJwojrjQjf/T0jySMLT0Bh4Ykrkvf
- aWjAf6nlGeN0WFIXGT5EAeeEXZsxM2WKwO2huF0nKWO7SNXE+VoRhhdjoWO2/6ZiOMLPlQVTj
- Wkm4nuxbRjBykVWU3seKevADsRP1fIf+CyCcsoUlmzWaMeK6OBRDNt0QY/w1RKB0S+Wp93482
- b2hSkkc8q9e5JNZcAi4W4cLSRUfMobQ2Pl9J0dBDF2PfXX5KGf2FQldWNXRf1AxxeA9axPpK4
- +qltbdNofZclutxbiKHjuzuLdjJ1kMCIIlUXDdIX+1eRlVIQmO/Z+jxluUPBuFP48tljMtKYK
- w8WoAD9Df0HWy4bKKoQQXw8o9KDBDcYCvUkmrSzxsFfc7q9tNg3z2lvD1BCJhthRAQlTgbx2g
- z1FscTZ09vWm7EbyFpNjiIKA6cyF2JH8Uzqd9LbKe23P0UDszp3fhIAI9lE/7s6UFCgkNVR2P
- 4LQPOw05k9F3ZQ9N7bplew8qKNwB8N1Hw1oC0Bju84XQzRsRB9OfBEROGLm2emnRMHtM9Amqv
- qEvmr/ShawzPgTpkoM0v4murlkBTcQTrL0/HIe/QhZXKRlN0IZLZqG4RU0qrVl4faCkU7Idhe
- 7XHdJvo+9OKlbDm7w/PcEhYqaoU0UT4XGO3iE81tXacY4F+0OQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 8:50 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> n Wed, Mar 2, 2022 at 8:42 AM Alan Kao <alankao@andestech.com> wrote:
+On Mon, 7 Mar 2022 at 15:07, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Applied to the  asm-generic tree now, thanks for taking care of it.
+> This is the start of the stable review cycle for the 5.15.27 release.
+> There are 262 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> I'll probably amend the commit to have a more detailed changelog when
-> I'm back in the office next week.
-
-This is now the modified changelog text:
-
-8<---
-nds32: Remove the architecture
-
-The nds32 architecture, also known as AndeStar V3, is a custom 32-bit
-RISC target designed by Andes Technologies. Support was added to the
-kernel in 2016 as the replacement RISC-V based V5 processors were
-already announced, and maintained by (current or former) Andes
-employees.
-
-As explained by Alan Kao, new customers are now all using RISC-V,
-and all known nds32 users are already on longterm stable kernels
-provided by Andes, with no development work going into mainline
-support any more.
-
-While the port is still in a reasonably good shape, it only gets
-worse over time without active maintainers, so it seems best
-to remove it before it becomes unusable. As always, if it turns
-out that there are mainline users after all, and they volunteer
-to maintain the port in the future, the removal can be reverted.
-
-Link: https://lore.kernel.org/linux-mm/YhdWNLUhk+x9RAzU@yamatobi.andestech.com/
-Link: https://lore.kernel.org/lkml/20220302065213.82702-1-alankao@andestech.com/
-Link: https://www.andestech.com/en/products-solutions/andestar-architecture/
-Signed-off-by: Alan Kao <alankao@andestech.com>
-[arnd: rewrite changelog to provide more background]
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
------>8
-
-I also checked all removed Kconfig symbols and header files to see if any
-remaining references were left behind. I found this oneline change missing,
-and included it in your patch now:
-
-diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
-index fa5f624eadb6..9c85ee2bb373 100644
---- a/drivers/clocksource/Makefile
-+++ b/drivers/clocksource/Makefile
-@@ -81,7 +81,6 @@ obj-$(CONFIG_INGENIC_SYSOST)  += ingenic-sysost.o
- obj-$(CONFIG_INGENIC_TIMER)            += ingenic-timer.o
- obj-$(CONFIG_CLKSRC_ST_LPC)            += clksrc_st_lpc.o
- obj-$(CONFIG_X86_NUMACHIP)             += numachip.o
--obj-$(CONFIG_ATCPIT100_TIMER)          += timer-atcpit100.o
- obj-$(CONFIG_RISCV_TIMER)              += timer-riscv.o
- obj-$(CONFIG_CLINT_TIMER)              += timer-clint.o
- obj-$(CONFIG_CSKY_MP_TIMER)            += timer-mp-csky.o
+> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.27-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-       Arnd
+Following build errors/warnings noticed on arm64.
+
+
+arch/arm64/net/bpf_jit_comp.c: In function 'build_insn':
+arch/arm64/net/bpf_jit_comp.c:791:21: error: implicit declaration of
+function 'bpf_pseudo_func' [-Werror=implicit-function-declaration]
+  791 |                 if (bpf_pseudo_func(insn))
+      |                     ^~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+
+
+drivers/gpu/drm/mediatek/mtk_dsi.c: In function 'mtk_dsi_host_attach':
+drivers/gpu/drm/mediatek/mtk_dsi.c:858:28: error: implicit declaration
+of function 'devm_drm_of_get_bridge'; did you mean
+'devm_drm_panel_bridge_add'? [-Werror=implicit-function-declaration]
+  858 |         dsi->next_bridge = devm_drm_of_get_bridge(dev,
+dev->of_node, 0, 0);
+      |                            ^~~~~~~~~~~~~~~~~~~~~~
+      |                            devm_drm_panel_bridge_add
+drivers/gpu/drm/mediatek/mtk_dsi.c:858:26: warning: assignment to
+'struct drm_bridge *' from 'int' makes pointer from integer without a
+cast [-Wint-conversion]
+  858 |         dsi->next_bridge = devm_drm_of_get_bridge(dev,
+dev->of_node, 0, 0);
+      |                          ^
+cc1: some warnings being treated as errors
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Build log [1].
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://builds.tuxbuild.com/263ZKyWWLLcPGRbiZwIEZw3wvXX/

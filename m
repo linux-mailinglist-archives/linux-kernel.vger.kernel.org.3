@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25584D0885
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B42414D0888
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245307AbiCGUkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S245315AbiCGUkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245298AbiCGUkQ (ORCPT
+        with ESMTP id S245322AbiCGUkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:40:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6104075618
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:39:18 -0800 (PST)
+        Mon, 7 Mar 2022 15:40:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C387522E
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:39:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F34CFB8170D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 20:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFAC3C340EF;
-        Mon,  7 Mar 2022 20:39:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CF2861520
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 20:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 015F6C36AEB;
+        Mon,  7 Mar 2022 20:39:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646685555;
-        bh=BXpes14VYfngOaWXmh7Ky4YKpFjhJAvPaUR5cUr5tYg=;
+        s=k20201202; t=1646685556;
+        bh=0Cv5vxXicRFXtF41SUF86JorRsvlrBPG16Z1OipQCFY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=IPULQSXuBuFE6e3zunx7f6HoQOCc3DaFIrTLbdGtWfU7ttGGA3SvpwTcORZFarNlH
-         OX+H9zF5ubtbQ2RosycbHh2NNndoxR82Vn9el7/R3uB1G6xuMFi/OKKnbB/uPwbHDE
-         /D79MzooOWXU/YitHfScbEP9RIPTGt/BwWdMQ+HwWSO4nuqpkHllzmXOSADCPVwx+H
-         9hCjj+RUDNE5RZtlHx4uK9SMTGKEcu8Ao4FIzHewPXb3/OEQw67AleGGP9MWNDTDDL
-         bpdVlHOkf7Lm+XTG9G31MRZl+0kzWd4ufY1BC289hiOlvIfll4KZ+fY7s7NqAerfqU
-         nkONoD+BQ7/fQ==
+        b=GXICFvko+7lCN6j/JEWFGf/TCOSFpNoXmvZFEL4W8HNoeng2ozIrEjxEOzpgBKAmZ
+         SYnEaNSHfOtfw8nitbgpigzL6rQWb/CMHG8RHxX2K6XLKNtCMNEmubD5by/K6RFlJQ
+         lPKTDiXx0spXrhKYUvjP2UrOheNacI7Po4C9p9cxZGCB0HEFV1kRyj9xYpyFM+Zp1i
+         63ySRHC3bMDqwSviMmNe85L5QdMkmJl9+2vakW1441KUh7q1IBHksx6ucgUnnQPBr3
+         S0L2ii6LG83hQNlBUshk785Y7A6Lsam20y3Gv6DcuNZzDcS59VtzxRJzAP/HVAxgne
+         fbDXz0mfflt5g==
 From:   Mark Brown <broonie@kernel.org>
-To:     ckeepax@opensource.cirrus.com,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, tiwai@suse.com,
-        alsa-devel@alsa-project.org, perex@perex.cz
-In-Reply-To: <20220304023821.391936-1-jiasheng@iscas.ac.cn>
-References: <20220304023821.391936-1-jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH v2] ASoC: wm8350: Handle error for wm8350_register_irq
-Message-Id: <164668555349.3137316.17429422601485375594.b4-ty@kernel.org>
-Date:   Mon, 07 Mar 2022 20:39:13 +0000
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org
+In-Reply-To: <20220304144015.398656-1-rf@opensource.cirrus.com>
+References: <20220304144015.398656-1-rf@opensource.cirrus.com>
+Subject: Re: [PATCH] ASoC: cs42l42: Add warnings about DETECT_MODE and PLL_START
+Message-Id: <164668555573.3137316.14425492431771518376.b4-ty@kernel.org>
+Date:   Mon, 07 Mar 2022 20:39:15 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,12 +54,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 10:38:21 +0800, Jiasheng Jiang wrote:
-> As the potential failure of the wm8350_register_irq(),
-> it should be better to check it and return error if fails.
-> Also, use 'free_' in order to avoid the same code.
+On Fri, 4 Mar 2022 14:40:15 +0000, Richard Fitzgerald wrote:
+> DETECT_MODE and PLL_START must be zero while HP_PDN and ADC_PDN are
+> both 1. If this condition is broken it can discharge FILT+ and it
+> can then take up to 1 second for FILT+ to recharge.
 > 
+> There is no workaround required for this, simply avoiding settings
+> and sequences that would break the requirement. The driver already
+> meets the requirement.
 > 
+> [...]
 
 Applied to
 
@@ -69,8 +71,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: wm8350: Handle error for wm8350_register_irq
-      commit: db0350da8084ad549bca16cc0486c11cc70a1f9b
+[1/1] ASoC: cs42l42: Add warnings about DETECT_MODE and PLL_START
+      commit: 71a6254c8b8aa3dcac3a5cb1d1cc2a2d3a840bfb
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

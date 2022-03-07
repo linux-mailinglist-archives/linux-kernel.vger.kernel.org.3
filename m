@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D494CFB50
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6409E4CF52E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240127AbiCGKfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S236819AbiCGJZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235930AbiCGKMG (ORCPT
+        with ESMTP id S237331AbiCGJXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:12:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75ED8CDB2;
-        Mon,  7 Mar 2022 01:56:29 -0800 (PST)
+        Mon, 7 Mar 2022 04:23:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D252B41F9D;
+        Mon,  7 Mar 2022 01:22:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFBB460C6D;
-        Mon,  7 Mar 2022 09:56:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F1BC340E9;
-        Mon,  7 Mar 2022 09:56:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BF196112D;
+        Mon,  7 Mar 2022 09:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77235C340F3;
+        Mon,  7 Mar 2022 09:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646980;
-        bh=XNFfssC4dcywt09vS1FDrDsp4FKO7LtqQ6ia6lOx3UI=;
+        s=korg; t=1646644963;
+        bh=21DyHoJWypXmQyJ2NJWEq5dGsoSvsOayLI1yONg1z8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IzRNsdsDVhHASKCrG+oVu2BZVd/zzf18V7Zh/gkGh9hzJnDMBOyxXvH2LQcVSug/W
-         OwfUSELUge8FgQtC4wHdl3oo3PYAGSUvJ14XfxknOU+IYyTgP8KJD0lBFeHZIZUN9G
-         q6dCrMf8WBR72XqMlhMylY9SrGBBdGeQucPbEwaE=
+        b=m1m6OR+sVgJ6O1u9FISdd4AjMFO8o+JZZ/Jw3oXU9urE2AidLJSaNR55N2lu/b5hJ
+         6SrpXtFX9kASdvUIuQ8t+fkJqL8KaYEg7iNhUe0NuHTj3G/YyJlDfGy8K7h6bQPzAV
+         9kW4YEE7uw85gnwevKz0EhEdibcQWqf+GF5H2lfg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.16 113/186] pinctrl: sunxi: Use unique lockdep classes for IRQs
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 37/42] nl80211: Handle nla_memdup failures in handle_nan_filter
 Date:   Mon,  7 Mar 2022 10:19:11 +0100
-Message-Id: <20220307091657.237365005@linuxfoundation.org>
+Message-Id: <20220307091637.232978926@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,104 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit bac129dbc6560dfeb634c03f0c08b78024e71915 upstream.
+[ Upstream commit 6ad27f522cb3b210476daf63ce6ddb6568c0508b ]
 
-This driver, like several others, uses a chained IRQ for each GPIO bank,
-and forwards .irq_set_wake to the GPIO bank's upstream IRQ. As a result,
-a call to irq_set_irq_wake() needs to lock both the upstream and
-downstream irq_desc's. Lockdep considers this to be a possible deadlock
-when the irq_desc's share lockdep classes, which they do by default:
+As there's potential for failure of the nla_memdup(),
+check the return value.
 
- ============================================
- WARNING: possible recursive locking detected
- 5.17.0-rc3-00394-gc849047c2473 #1 Not tainted
- --------------------------------------------
- init/307 is trying to acquire lock:
- c2dfe27c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
-
- but task is already holding lock:
- c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
-
- other info that might help us debug this:
-  Possible unsafe locking scenario:
-
-        CPU0
-        ----
-   lock(&irq_desc_lock_class);
-   lock(&irq_desc_lock_class);
-
-  *** DEADLOCK ***
-
-  May be due to missing lock nesting notation
-
- 4 locks held by init/307:
-  #0: c1f29f18 (system_transition_mutex){+.+.}-{3:3}, at: __do_sys_reboot+0x90/0x23c
-  #1: c20f7760 (&dev->mutex){....}-{3:3}, at: device_shutdown+0xf4/0x224
-  #2: c2e804d8 (&dev->mutex){....}-{3:3}, at: device_shutdown+0x104/0x224
-  #3: c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
-
- stack backtrace:
- CPU: 0 PID: 307 Comm: init Not tainted 5.17.0-rc3-00394-gc849047c2473 #1
- Hardware name: Allwinner sun8i Family
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x68/0x90
-  dump_stack_lvl from __lock_acquire+0x1680/0x31a0
-  __lock_acquire from lock_acquire+0x148/0x3dc
-  lock_acquire from _raw_spin_lock_irqsave+0x50/0x6c
-  _raw_spin_lock_irqsave from __irq_get_desc_lock+0x58/0xa0
-  __irq_get_desc_lock from irq_set_irq_wake+0x2c/0x19c
-  irq_set_irq_wake from irq_set_irq_wake+0x13c/0x19c
-    [tail call from sunxi_pinctrl_irq_set_wake]
-  irq_set_irq_wake from gpio_keys_suspend+0x80/0x1a4
-  gpio_keys_suspend from gpio_keys_shutdown+0x10/0x2c
-  gpio_keys_shutdown from device_shutdown+0x180/0x224
-  device_shutdown from __do_sys_reboot+0x134/0x23c
-  __do_sys_reboot from ret_fast_syscall+0x0/0x1c
-
-However, this can never deadlock because the upstream and downstream
-IRQs are never the same (nor do they even involve the same irqchip).
-
-Silence this erroneous lockdep splat by applying what appears to be the
-usual fix of moving the GPIO IRQs to separate lockdep classes.
-
-Fixes: a59c99d9eaf9 ("pinctrl: sunxi: Forward calls to irq_set_irq_wake")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220216040037.22730-1-samuel@sholland.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a442b761b24b ("cfg80211: add add_nan_func / del_nan_func")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220301100020.3801187-1-jiasheng@iscas.ac.cn
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-sunxi.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ net/wireless/nl80211.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-@@ -36,6 +36,13 @@
- #include "../core.h"
- #include "pinctrl-sunxi.h"
- 
-+/*
-+ * These lock classes tell lockdep that GPIO IRQs are in a different
-+ * category than their parents, so it won't report false recursion.
-+ */
-+static struct lock_class_key sunxi_pinctrl_irq_lock_class;
-+static struct lock_class_key sunxi_pinctrl_irq_request_class;
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index f630fa2e3164..bbc3c876a5d8 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -11257,6 +11257,9 @@ static int handle_nan_filter(struct nlattr *attr_filter,
+ 	i = 0;
+ 	nla_for_each_nested(attr, attr_filter, rem) {
+ 		filter[i].filter = nla_memdup(attr, GFP_KERNEL);
++		if (!filter[i].filter)
++			goto err;
 +
- static struct irq_chip sunxi_pinctrl_edge_irq_chip;
- static struct irq_chip sunxi_pinctrl_level_irq_chip;
+ 		filter[i].len = nla_len(attr);
+ 		i++;
+ 	}
+@@ -11269,6 +11272,15 @@ static int handle_nan_filter(struct nlattr *attr_filter,
+ 	}
  
-@@ -1551,6 +1558,8 @@ int sunxi_pinctrl_init_with_variant(stru
- 	for (i = 0; i < (pctl->desc->irq_banks * IRQ_PER_BANK); i++) {
- 		int irqno = irq_create_mapping(pctl->domain, i);
+ 	return 0;
++
++err:
++	i = 0;
++	nla_for_each_nested(attr, attr_filter, rem) {
++		kfree(filter[i].filter);
++		i++;
++	}
++	kfree(filter);
++	return -ENOMEM;
+ }
  
-+		irq_set_lockdep_class(irqno, &sunxi_pinctrl_irq_lock_class,
-+				      &sunxi_pinctrl_irq_request_class);
- 		irq_set_chip_and_handler(irqno, &sunxi_pinctrl_edge_irq_chip,
- 					 handle_edge_irq);
- 		irq_set_chip_data(irqno, pctl);
+ static int nl80211_nan_add_func(struct sk_buff *skb,
+-- 
+2.34.1
+
 
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5E74CFB03
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFB34CFB04
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239282AbiCGKZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S239614AbiCGKZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:25:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241368AbiCGKBz (ORCPT
+        with ESMTP id S238803AbiCGKC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA8C7462F;
-        Mon,  7 Mar 2022 01:51:48 -0800 (PST)
+        Mon, 7 Mar 2022 05:02:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1447486F;
+        Mon,  7 Mar 2022 01:51:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8142609D1;
-        Mon,  7 Mar 2022 09:51:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28E2C36AE9;
-        Mon,  7 Mar 2022 09:51:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87EACB80F9F;
+        Mon,  7 Mar 2022 09:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21BFC340F4;
+        Mon,  7 Mar 2022 09:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646706;
-        bh=zu9GGypCn49npQPsC4pSb6zw7vWim0NA15BG2j6ZpXw=;
+        s=korg; t=1646646709;
+        bh=Y0ydCJdLcvb/muRQhxCjXoK2Jvm2kqf39/xsowfr3bs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y/WE216Ve7kqj/BRfst3ilwl6CX2QsT9cyd5fiK5srqotK1ulhQsIqGgYj0lu9ZAy
-         bp1J7ZfjeSZP0a2k6xy2xB9SZDFpBpA6SnYB9e1AXj8engZ1j0SSHbCj8AjWCP38up
-         6Ohm2bfBr+N4aeHjKTN7ZOU24OUJPTRdTY/pQ+og=
+        b=EhKIsnwaEEFZkjJ+DTcXt3jOm1SFibm9b0az7LEh8JRz0acgcojdLBs5o5wlhTr6T
+         8uw2jt8IuAaBxGSuuXdtfEzvkx7hsQcqIjTGkWBnILTMqW0XS9EJ0ePadiB3YMaycO
+         Hh9ajOZCEPhLiP0yH4gRP+H2eHQOGup1MCPdJYZ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Haimin Zhang <tcs.kernel@gmail.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 026/186] net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
-Date:   Mon,  7 Mar 2022 10:17:44 +0100
-Message-Id: <20220307091654.826719029@linuxfoundation.org>
+Subject: [PATCH 5.16 027/186] block-map: add __GFP_ZERO flag for alloc_page in function bio_copy_kern
+Date:   Mon,  7 Mar 2022 10:17:45 +0100
+Message-Id: <20220307091654.854214847@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
 References: <20220307091654.092878898@linuxfoundation.org>
@@ -55,36 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: Haimin Zhang <tcs.kernel@gmail.com>
 
-[ Upstream commit 21e8a96377e6b6debae42164605bf9dcbe5720c5 ]
+[ Upstream commit cc8f7fe1f5eab010191aa4570f27641876fa1267 ]
 
-Add quirk CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE for Telit FN990
-0x1071 composition in order to avoid bind error.
+Add __GFP_ZERO flag for alloc_page in function bio_copy_kern to initialize
+the buffer of a bio.
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220216084038.15635-1-tcs.kernel@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/cdc_mbim.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ block/blk-map.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
-index 82bb5ed94c485..c0b8b4aa78f37 100644
---- a/drivers/net/usb/cdc_mbim.c
-+++ b/drivers/net/usb/cdc_mbim.c
-@@ -659,6 +659,11 @@ static const struct usb_device_id mbim_devs[] = {
- 	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
- 	},
+diff --git a/block/blk-map.c b/block/blk-map.c
+index 4526adde01564..c7f71d83eff18 100644
+--- a/block/blk-map.c
++++ b/block/blk-map.c
+@@ -446,7 +446,7 @@ static struct bio *bio_copy_kern(struct request_queue *q, void *data,
+ 		if (bytes > len)
+ 			bytes = len;
  
-+	/* Telit FN990 */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x1bc7, 0x1071, USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
-+	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
-+	},
-+
- 	/* default entry */
- 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
- 	  .driver_info = (unsigned long)&cdc_mbim_info_zlp,
+-		page = alloc_page(GFP_NOIO | gfp_mask);
++		page = alloc_page(GFP_NOIO | __GFP_ZERO | gfp_mask);
+ 		if (!page)
+ 			goto cleanup;
+ 
 -- 
 2.34.1
 

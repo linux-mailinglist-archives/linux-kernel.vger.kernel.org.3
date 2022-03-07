@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DEE4CF746
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3964CF5DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237633AbiCGJpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        id S237365AbiCGJbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237500AbiCGJfU (ORCPT
+        with ESMTP id S237951AbiCGJ2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:35:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E0B6582A;
-        Mon,  7 Mar 2022 01:31:05 -0800 (PST)
+        Mon, 7 Mar 2022 04:28:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E331657B5;
+        Mon,  7 Mar 2022 01:26:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EC4561135;
-        Mon,  7 Mar 2022 09:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFFDC340F3;
-        Mon,  7 Mar 2022 09:30:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 156FFB810C3;
+        Mon,  7 Mar 2022 09:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323DCC340F3;
+        Mon,  7 Mar 2022 09:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645445;
-        bh=vP1+hxL2O9UZlM/is+4AjvFkyQYkgUsNa8SRsa9kfxg=;
+        s=korg; t=1646645178;
+        bh=x8fJSb9IKlcqvRl4YJcfYG9sKVjOS3ECVVnLLeHY8RQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SPtVmZJY0aATA7/hB1oPB756vXw9S1xwKoPxJhgY6o9NfQv0jiMhwNLwFDgdGg81l
-         1dFAN1ePQ4u6xLuq00esd+Ji2lWOFqaegceARUzqMH1tzmtLcMzrJWVbi4mFTVNqNY
-         HQyHqCZEvi1TvxSDzR+jVGeen/Peu+jGgLpmFKwQ=
+        b=o+SLLW57F3PdtQ4pb00v1JJ7FRrmiCWz9ikz54MmRNmwGN3NoBN/d+VBzUxQxGoa5
+         /80UK1N2XalV7TnYmU/b5YxWkTb+9SUQ4PYgQAGc5CUbmXHBC6NfbJLLOyXZbqafzG
+         lUvKwTvP/z0MV23to0aBw6HFbFMmk5q9c6H+xqWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jerry Dai <jerry.dai@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Jon Mason <jdmason@kudzu.us>
-Subject: [PATCH 5.10 034/105] ntb: intel: fix port config status offset for SPR
+        stable@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Shuming Fan <shumingf@realtek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 04/64] ASoC: rt5668: do not block workqueue if card is unbound
 Date:   Mon,  7 Mar 2022 10:18:37 +0100
-Message-Id: <20220307091645.144863046@linuxfoundation.org>
+Message-Id: <20220307091639.265431590@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,100 +61,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Jiang <dave.jiang@intel.com>
+From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 
-commit d5081bf5dcfb1cb83fb538708b0ac07a10a79cc4 upstream.
+[ Upstream commit a6d78661dc903d90a327892bbc34268f3a5f4b9c ]
 
-The field offset for port configuration status on SPR has been changed to
-bit 14 from ICX where it resides at bit 12. By chance link status detection
-continued to work on SPR. This is due to bit 12 being a configuration bit
-which is in sync with the status bit. Fix this by checking for a SPR device
-and checking correct status bit.
+The current rt5668_jack_detect_handler() assumes the component
+and card will always show up and implements an infinite usleep
+loop waiting for them to show up.
 
-Fixes: 26bfe3d0b227 ("ntb: intel: Add Icelake (gen4) support for Intel NTB")
-Tested-by: Jerry Dai <jerry.dai@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Jon Mason <jdmason@kudzu.us>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This does not hold true if a codec interrupt (or other
+event) occurs when the card is unbound. The codec driver's
+remove  or shutdown functions cannot cancel the workqueue due
+to the wait loop. As a result, code can either end up blocking
+the workqueue, or hit a kernel oops when the card is freed.
+
+Fix the issue by rescheduling the jack detect handler in
+case the card is not ready. In case card never shows up,
+the shutdown/remove/suspend calls can now cancel the detect
+task.
+
+Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Reviewed-by: Shuming Fan <shumingf@realtek.com>
+Link: https://lore.kernel.org/r/20220207153000.3452802-2-kai.vehmanen@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ntb/hw/intel/ntb_hw_gen4.c |   17 ++++++++++++++++-
- drivers/ntb/hw/intel/ntb_hw_gen4.h |   16 ++++++++++++++++
- 2 files changed, 32 insertions(+), 1 deletion(-)
+ sound/soc/codecs/rt5668.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/drivers/ntb/hw/intel/ntb_hw_gen4.c
-+++ b/drivers/ntb/hw/intel/ntb_hw_gen4.c
-@@ -168,6 +168,18 @@ static enum ntb_topo gen4_ppd_topo(struc
- 	return NTB_TOPO_NONE;
- }
+diff --git a/sound/soc/codecs/rt5668.c b/sound/soc/codecs/rt5668.c
+index 5716cede99cb4..acc2b34ca334a 100644
+--- a/sound/soc/codecs/rt5668.c
++++ b/sound/soc/codecs/rt5668.c
+@@ -1022,11 +1022,13 @@ static void rt5668_jack_detect_handler(struct work_struct *work)
+ 		container_of(work, struct rt5668_priv, jack_detect_work.work);
+ 	int val, btn_type;
  
-+static enum ntb_topo spr_ppd_topo(struct intel_ntb_dev *ndev, u32 ppd)
-+{
-+	switch (ppd & SPR_PPD_TOPO_MASK) {
-+	case SPR_PPD_TOPO_B2B_USD:
-+		return NTB_TOPO_B2B_USD;
-+	case SPR_PPD_TOPO_B2B_DSD:
-+		return NTB_TOPO_B2B_DSD;
+-	while (!rt5668->component)
+-		usleep_range(10000, 15000);
+-
+-	while (!rt5668->component->card->instantiated)
+-		usleep_range(10000, 15000);
++	if (!rt5668->component || !rt5668->component->card ||
++	    !rt5668->component->card->instantiated) {
++		/* card not yet ready, try later */
++		mod_delayed_work(system_power_efficient_wq,
++				 &rt5668->jack_detect_work, msecs_to_jiffies(15));
++		return;
 +	}
-+
-+	return NTB_TOPO_NONE;
-+}
-+
- int gen4_init_dev(struct intel_ntb_dev *ndev)
- {
- 	struct pci_dev *pdev = ndev->ntb.pdev;
-@@ -181,7 +193,10 @@ int gen4_init_dev(struct intel_ntb_dev *
- 		ndev->hwerr_flags |= NTB_HWERR_BAR_ALIGN;
  
- 	ppd1 = ioread32(ndev->self_mmio + GEN4_PPD1_OFFSET);
--	ndev->ntb.topo = gen4_ppd_topo(ndev, ppd1);
-+	if (pdev_is_ICX(pdev))
-+		ndev->ntb.topo = gen4_ppd_topo(ndev, ppd1);
-+	else if (pdev_is_SPR(pdev))
-+		ndev->ntb.topo = spr_ppd_topo(ndev, ppd1);
- 	dev_dbg(&pdev->dev, "ppd %#x topo %s\n", ppd1,
- 		ntb_topo_string(ndev->ntb.topo));
- 	if (ndev->ntb.topo == NTB_TOPO_NONE)
---- a/drivers/ntb/hw/intel/ntb_hw_gen4.h
-+++ b/drivers/ntb/hw/intel/ntb_hw_gen4.h
-@@ -46,10 +46,14 @@
- #define GEN4_PPD_CLEAR_TRN		0x0001
- #define GEN4_PPD_LINKTRN		0x0008
- #define GEN4_PPD_CONN_MASK		0x0300
-+#define SPR_PPD_CONN_MASK		0x0700
- #define GEN4_PPD_CONN_B2B		0x0200
- #define GEN4_PPD_DEV_MASK		0x1000
- #define GEN4_PPD_DEV_DSD		0x1000
- #define GEN4_PPD_DEV_USD		0x0000
-+#define SPR_PPD_DEV_MASK		0x4000
-+#define SPR_PPD_DEV_DSD 		0x4000
-+#define SPR_PPD_DEV_USD 		0x0000
- #define GEN4_LINK_CTRL_LINK_DISABLE	0x0010
+ 	mutex_lock(&rt5668->calibrate_mutex);
  
- #define GEN4_SLOTSTS			0xb05a
-@@ -59,6 +63,10 @@
- #define GEN4_PPD_TOPO_B2B_USD	(GEN4_PPD_CONN_B2B | GEN4_PPD_DEV_USD)
- #define GEN4_PPD_TOPO_B2B_DSD	(GEN4_PPD_CONN_B2B | GEN4_PPD_DEV_DSD)
- 
-+#define SPR_PPD_TOPO_MASK	(SPR_PPD_CONN_MASK | SPR_PPD_DEV_MASK)
-+#define SPR_PPD_TOPO_B2B_USD	(GEN4_PPD_CONN_B2B | SPR_PPD_DEV_USD)
-+#define SPR_PPD_TOPO_B2B_DSD	(GEN4_PPD_CONN_B2B | SPR_PPD_DEV_DSD)
-+
- #define GEN4_DB_COUNT			32
- #define GEN4_DB_LINK			32
- #define GEN4_DB_LINK_BIT		BIT_ULL(GEN4_DB_LINK)
-@@ -96,5 +104,13 @@ static inline int pdev_is_ICX(struct pci
- 		return 1;
- 	return 0;
- }
-+
-+static inline int pdev_is_SPR(struct pci_dev *pdev)
-+{
-+	if (pdev_is_gen4(pdev) &&
-+	    pdev->revision > PCI_DEVICE_REVISION_ICX_MAX)
-+		return 1;
-+	return 0;
-+}
- 
- #endif
+-- 
+2.34.1
+
 
 

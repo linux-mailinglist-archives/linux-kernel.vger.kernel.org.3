@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153084D087D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA334D0883
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 21:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245295AbiCGUkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 15:40:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S245308AbiCGUkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 15:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245287AbiCGUkA (ORCPT
+        with ESMTP id S245305AbiCGUkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 15:40:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469CA66CB8;
-        Mon,  7 Mar 2022 12:39:04 -0800 (PST)
+        Mon, 7 Mar 2022 15:40:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472F470849;
+        Mon,  7 Mar 2022 12:39:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C28CF61520;
-        Mon,  7 Mar 2022 20:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C49B9C340EF;
-        Mon,  7 Mar 2022 20:39:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 005ACB81706;
+        Mon,  7 Mar 2022 20:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B852C340FF;
+        Mon,  7 Mar 2022 20:39:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646685543;
-        bh=1tPC7Vjo747OpXcH2m5vzgTDvgtK+G4DbkC9Mgxsp8Q=;
+        s=k20201202; t=1646685548;
+        bh=2AJXQfaXAVGMfsXh7g2oy6EAKDefCtmzA26vSc+eQ2E=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Vts6hToDphdrAOTX3rEMyPPPiFWDKk10FZNzS70wvL7IMup0nQMPAhHSKHR20XPLO
-         pCzTnRiZsNan8RiU+KMsm4a22qaDZHNPJA9uKESneezSIozRjDV4T03PnbcFx8fh1A
-         H+wlnPYgGWfCWauVVrHKYG/gq0HdbTKw/RUyB9yVS+F7LGg4/5dMHcvZCS+GmCgePO
-         JZ+/ZZO5bPWu3UrmMPq4TIrvsy++9PaPfulkc3vIMUKloqtjLQTxaZqE/DAMfa4jUM
-         h9R5cVvm11hEdZIqozyqltdnMg6BlL2HYXAw2IQN2vWcYVTQ4G3AbKUSqo/VqrkRXd
-         9f6MLQvI/oKJw==
+        b=dpuYYw1i4ooZDW0rFRlF7JnE6b/MvLRIK6HG6LsUQ1FvxFdwzOXmCi8mB4FRhZd/b
+         44CiaGrvcl273QzJilYHOJPErc+iWys3knkYpuoXZ4JaMqMyJyM8twGOQtgm+He+dx
+         EeU57aROywzhEu2YrOiWMOnGHQjQs+g2rDYPiAfKG0RawHqUI2mpu9cqxMlSbANswh
+         81ebZrZ4OYNOyMvbIVwzcPDtpveoPaJ985h9NGgUtYQM9eLDgnIGM43r9KdTd2kp+m
+         fmbtOgqdwejdVpsSXM2onxr2j+lYppHU+JOB1WKD0yrsiUHNMiwnV+5tqQ5xL2qp6U
+         Ec5CewIrT2hFg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        kuninori.morimoto.gx@renesas.com, robh+dt@kernel.org
-Cc:     linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220228172754.453783-1-rf@opensource.cirrus.com>
-References: <20220228172754.453783-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH V3 0/2] ASoC: audio_graph_card2: Support variable slot widths
-Message-Id: <164668554153.3137316.2454343353845940191.b4-ty@kernel.org>
-Date:   Mon, 07 Mar 2022 20:39:01 +0000
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        kuninori.morimoto.gx@renesas.com
+Cc:     ast@kernel.org, f.suligoi@asem.it, songliubraving@fb.com,
+        kafai@fb.com, lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        kpsingh@kernel.org, yhs@fb.com, netdev@vger.kernel.org,
+        andrii@kernel.org, tiwai@suse.com, alsa-devel@alsa-project.org,
+        john.fastabend@gmail.com, daniel@iogearbox.net,
+        bpf@vger.kernel.org, perex@perex.cz
+In-Reply-To: <20220302062844.46869-1-jiasheng@iscas.ac.cn>
+References: <20220302062844.46869-1-jiasheng@iscas.ac.cn>
+Subject: Re: [PATCH v3] ASoC: fsi: Add check for clk_enable
+Message-Id: <164668554489.3137316.16865303001337424021.b4-ty@kernel.org>
+Date:   Mon, 07 Mar 2022 20:39:04 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,17 +59,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 28 Feb 2022 17:27:52 +0000, Richard Fitzgerald wrote:
-> This adds support for I2S/TDM links where the slot width varies
-> depending on the sample width, in a way that cannot be guessed by
-> component hw_params().
+On Wed, 2 Mar 2022 14:28:44 +0800, Jiasheng Jiang wrote:
+> As the potential failure of the clk_enable(),
+> it should be better to check it and return error
+> if fails.
 > 
-> A typical example is:
 > 
-> - 16-bit samples use 16-bit slots
-> - 24-bit samples use 32-bit slots
-> 
-> [...]
 
 Applied to
 
@@ -73,10 +72,8 @@ Applied to
 
 Thanks!
 
-[1/2] ASoC: dt-bindings: audio-graph-port: Add dai-tdm-slot-width-map
-      commit: 26e5366dd30569a469e1a87998b866b814deccf8
-[2/2] ASoC: audio_graph_card2: Add support for variable slot widths
-      commit: 1e974e5b82b3d75069b50445cd248cee0199654e
+[1/1] ASoC: fsi: Add check for clk_enable
+      commit: 405afed8a728f23cfaa02f75bbc8bdd6b7322123
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

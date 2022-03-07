@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72484CF892
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B084CFB7C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238093AbiCGJ5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
+        id S241520AbiCGKji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:39:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239057AbiCGJjL (ORCPT
+        with ESMTP id S239381AbiCGKQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:39:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819227090B;
-        Mon,  7 Mar 2022 01:34:22 -0800 (PST)
+        Mon, 7 Mar 2022 05:16:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC258F994;
+        Mon,  7 Mar 2022 01:57:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC7AAB80F9F;
-        Mon,  7 Mar 2022 09:34:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0D5C340F4;
-        Mon,  7 Mar 2022 09:34:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B7D260B6F;
+        Mon,  7 Mar 2022 09:56:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B10C340E9;
+        Mon,  7 Mar 2022 09:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645660;
-        bh=yLMggVWrw2CvWPwrPuMOkNZreJCpGwnFTi/CCPfek6Q=;
+        s=korg; t=1646646968;
+        bh=s2eekJYXb2Eohk+dVatEAsJSSu7Uj3FGTmgAXy0tyKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h6pyDIvNeDYvMkr022DWeu88A3Y69JdlE5Y3ZsoLIGQSAMi22/opPzmtQt6c7mz53
-         OLYSlX8Vb1vzyZl768BvUq6HeLdkEXUQkeRJmlPZqnNI7gdBNgzdO5WBz96KWk3gs8
-         nmCpS/7M9lEL98QLjXe+wqrCne9Uc2rHMg4BV0T8=
+        b=BOX7ny+S2RAK1FnGLrhs3GhY6X8iJKlRKlYpzF1tnx2bfmTlyUnpZ3JMoCVLHTJQw
+         tGYSqHu4hzlILb0w2iA3gytLpHX4diRQAlwxiRZOiw9oSjEk+IQkUihwiaQZczPeOP
+         DmqQAoBsOHVyNU2vEv3Kc6j3q+1enHJP4/FXPWf4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.10 102/105] btrfs: fix lost prealloc extents beyond eof after full fsync
-Date:   Mon,  7 Mar 2022 10:19:45 +0100
-Message-Id: <20220307091647.045618197@linuxfoundation.org>
+        stable@vger.kernel.org, Casper Andersson <casper.casan@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 148/186] net: sparx5: Fix add vlan when invalid operation
+Date:   Mon,  7 Mar 2022 10:19:46 +0100
+Message-Id: <20220307091658.213575209@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,175 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Casper Andersson <casper.casan@gmail.com>
 
-commit d99478874355d3a7b9d86dfb5d7590d5b1754b1f upstream.
+[ Upstream commit b3a34dc362c03215031b268fcc0b988e69490231 ]
 
-When doing a full fsync, if we have prealloc extents beyond (or at) eof,
-and the leaves that contain them were not modified in the current
-transaction, we end up not logging them. This results in losing those
-extents when we replay the log after a power failure, since the inode is
-truncated to the current value of the logged i_size.
+Check if operation is valid before changing any
+settings in hardware. Otherwise it results in
+changes being made despite it not being a valid
+operation.
 
-Just like for the fast fsync path, we need to always log all prealloc
-extents starting at or beyond i_size. The fast fsync case was fixed in
-commit 471d557afed155 ("Btrfs: fix loss of prealloc extents past i_size
-after fsync log replay") but it missed the full fsync path. The problem
-exists since the very early days, when the log tree was added by
-commit e02119d5a7b439 ("Btrfs: Add a write ahead tree log to optimize
-synchronous operations").
+Fixes: 78eab33bb68b ("net: sparx5: add vlan support")
 
-Example reproducer:
-
-  $ mkfs.btrfs -f /dev/sdc
-  $ mount /dev/sdc /mnt
-
-  # Create our test file with many file extent items, so that they span
-  # several leaves of metadata, even if the node/page size is 64K. Use
-  # direct IO and not fsync/O_SYNC because it's both faster and it avoids
-  # clearing the full sync flag from the inode - we want the fsync below
-  # to trigger the slow full sync code path.
-  $ xfs_io -f -d -c "pwrite -b 4K 0 16M" /mnt/foo
-
-  # Now add two preallocated extents to our file without extending the
-  # file's size. One right at i_size, and another further beyond, leaving
-  # a gap between the two prealloc extents.
-  $ xfs_io -c "falloc -k 16M 1M" /mnt/foo
-  $ xfs_io -c "falloc -k 20M 1M" /mnt/foo
-
-  # Make sure everything is durably persisted and the transaction is
-  # committed. This makes all created extents to have a generation lower
-  # than the generation of the transaction used by the next write and
-  # fsync.
-  sync
-
-  # Now overwrite only the first extent, which will result in modifying
-  # only the first leaf of metadata for our inode. Then fsync it. This
-  # fsync will use the slow code path (inode full sync bit is set) because
-  # it's the first fsync since the inode was created/loaded.
-  $ xfs_io -c "pwrite 0 4K" -c "fsync" /mnt/foo
-
-  # Extent list before power failure.
-  $ xfs_io -c "fiemap -v" /mnt/foo
-  /mnt/foo:
-   EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
-     0: [0..7]:          2178048..2178055     8   0x0
-     1: [8..16383]:      26632..43007     16376   0x0
-     2: [16384..32767]:  2156544..2172927 16384   0x0
-     3: [32768..34815]:  2172928..2174975  2048 0x800
-     4: [34816..40959]:  hole              6144
-     5: [40960..43007]:  2174976..2177023  2048 0x801
-
-  <power fail>
-
-  # Mount fs again, trigger log replay.
-  $ mount /dev/sdc /mnt
-
-  # Extent list after power failure and log replay.
-  $ xfs_io -c "fiemap -v" /mnt/foo
-  /mnt/foo:
-   EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
-     0: [0..7]:          2178048..2178055     8   0x0
-     1: [8..16383]:      26632..43007     16376   0x0
-     2: [16384..32767]:  2156544..2172927 16384   0x1
-
-  # The prealloc extents at file offsets 16M and 20M are missing.
-
-So fix this by calling btrfs_log_prealloc_extents() when we are doing a
-full fsync, so that we always log all prealloc extents beyond eof.
-
-A test case for fstests will follow soon.
-
-CC: stable@vger.kernel.org # 4.19+
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Casper Andersson <casper.casan@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/tree-log.c |   43 +++++++++++++++++++++++++++++++------------
- 1 file changed, 31 insertions(+), 12 deletions(-)
+ .../ethernet/microchip/sparx5/sparx5_vlan.c   | 20 +++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -4297,7 +4297,7 @@ static int log_one_extent(struct btrfs_t
+diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_vlan.c b/drivers/net/ethernet/microchip/sparx5/sparx5_vlan.c
+index 4ce490a25f33..8e56ffa1c4f7 100644
+--- a/drivers/net/ethernet/microchip/sparx5/sparx5_vlan.c
++++ b/drivers/net/ethernet/microchip/sparx5/sparx5_vlan.c
+@@ -58,16 +58,6 @@ int sparx5_vlan_vid_add(struct sparx5_port *port, u16 vid, bool pvid,
+ 	struct sparx5 *sparx5 = port->sparx5;
+ 	int ret;
  
- /*
-  * Log all prealloc extents beyond the inode's i_size to make sure we do not
-- * lose them after doing a fast fsync and replaying the log. We scan the
-+ * lose them after doing a full/fast fsync and replaying the log. We scan the
-  * subvolume's root instead of iterating the inode's extent map tree because
-  * otherwise we can log incorrect extent items based on extent map conversion.
-  * That can happen due to the fact that extent maps are merged when they
-@@ -5084,6 +5084,7 @@ static int copy_inode_items_to_log(struc
- 				   struct btrfs_log_ctx *ctx,
- 				   bool *need_log_inode_item)
- {
-+	const u64 i_size = i_size_read(&inode->vfs_inode);
- 	struct btrfs_root *root = inode->root;
- 	int ins_start_slot = 0;
- 	int ins_nr = 0;
-@@ -5104,13 +5105,21 @@ again:
- 		if (min_key->type > max_key->type)
- 			break;
- 
--		if (min_key->type == BTRFS_INODE_ITEM_KEY)
-+		if (min_key->type == BTRFS_INODE_ITEM_KEY) {
- 			*need_log_inode_item = false;
+-	/* Make the port a member of the VLAN */
+-	set_bit(port->portno, sparx5->vlan_mask[vid]);
+-	ret = sparx5_vlant_set_mask(sparx5, vid);
+-	if (ret)
+-		return ret;
 -
--		if ((min_key->type == BTRFS_INODE_REF_KEY ||
--		     min_key->type == BTRFS_INODE_EXTREF_KEY) &&
--		    inode->generation == trans->transid &&
--		    !recursive_logging) {
-+		} else if (min_key->type == BTRFS_EXTENT_DATA_KEY &&
-+			   min_key->offset >= i_size) {
-+			/*
-+			 * Extents at and beyond eof are logged with
-+			 * btrfs_log_prealloc_extents().
-+			 * Only regular files have BTRFS_EXTENT_DATA_KEY keys,
-+			 * and no keys greater than that, so bail out.
-+			 */
-+			break;
-+		} else if ((min_key->type == BTRFS_INODE_REF_KEY ||
-+			    min_key->type == BTRFS_INODE_EXTREF_KEY) &&
-+			   inode->generation == trans->transid &&
-+			   !recursive_logging) {
- 			u64 other_ino = 0;
- 			u64 other_parent = 0;
- 
-@@ -5141,10 +5150,8 @@ again:
- 				btrfs_release_path(path);
- 				goto next_key;
- 			}
--		}
+-	/* Default ingress vlan classification */
+-	if (pvid)
+-		port->pvid = vid;
 -
--		/* Skip xattrs, we log them later with btrfs_log_all_xattrs() */
--		if (min_key->type == BTRFS_XATTR_ITEM_KEY) {
-+		} else if (min_key->type == BTRFS_XATTR_ITEM_KEY) {
-+			/* Skip xattrs, logged later with btrfs_log_all_xattrs() */
- 			if (ins_nr == 0)
- 				goto next_slot;
- 			ret = copy_items(trans, inode, dst_path, path,
-@@ -5197,9 +5204,21 @@ next_key:
- 			break;
- 		}
+ 	/* Untagged egress vlan classification */
+ 	if (untagged && port->vid != vid) {
+ 		if (port->vid) {
+@@ -79,6 +69,16 @@ int sparx5_vlan_vid_add(struct sparx5_port *port, u16 vid, bool pvid,
+ 		port->vid = vid;
  	}
--	if (ins_nr)
-+	if (ins_nr) {
- 		ret = copy_items(trans, inode, dst_path, path, ins_start_slot,
- 				 ins_nr, inode_only, logged_isize);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (inode_only == LOG_INODE_ALL && S_ISREG(inode->vfs_inode.i_mode)) {
-+		/*
-+		 * Release the path because otherwise we might attempt to double
-+		 * lock the same leaf with btrfs_log_prealloc_extents() below.
-+		 */
-+		btrfs_release_path(path);
-+		ret = btrfs_log_prealloc_extents(trans, inode, dst_path);
-+	}
  
- 	return ret;
- }
++	/* Make the port a member of the VLAN */
++	set_bit(port->portno, sparx5->vlan_mask[vid]);
++	ret = sparx5_vlant_set_mask(sparx5, vid);
++	if (ret)
++		return ret;
++
++	/* Default ingress vlan classification */
++	if (pvid)
++		port->pvid = vid;
++
+ 	sparx5_vlan_port_apply(sparx5, port);
+ 
+ 	return 0;
+-- 
+2.34.1
+
 
 

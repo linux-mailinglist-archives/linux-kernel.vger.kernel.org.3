@@ -2,123 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0F44CFBF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9474CFBFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiCGKx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S235914AbiCGKzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241706AbiCGKwz (ORCPT
+        with ESMTP id S241465AbiCGKz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:52:55 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615003E0DE;
-        Mon,  7 Mar 2022 02:13:00 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBvQz09nXz4y0c;
-        Mon,  7 Mar 2022 21:12:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646647963;
-        bh=43avDFrDr9aMk2gpa2YriZ716cDuLQIlsBGqwkqyvng=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hKpt6FyD9K1wiajWtnGGwLYg7bCUmiDyEFL9SJlUuHRm/sgfTYJlD7sfhJtEFMsZ7
-         m3ApyphiC5n51R6j8Z8L6hu7DBVa1CWQku2cNTGhJOGar3XMRc/0II4c/cU+4z7oAD
-         6sFa+IMJWMYjOJ4NYhQxqxv9xMfvdzcv7YADczfM//DVl9l+9QB6nT62KQMQnFIaMu
-         guGBaheOJKWy0V0/qmfitMR4QWwvG5s8DOIDNa8vJJX8kodaVSZmyb5lS/GzTGZsUV
-         Z0D/kmKPHosGsVEPBmpr5AQX+bt1z9pmPSE0gQ+rE2PkIbd5cnAFnlxAM/GqLhMeYI
-         g5S69gcevt1Kw==
-Date:   Mon, 7 Mar 2022 21:12:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: Re: linux-next: build warning after merge of the vhost tree
-Message-ID: <20220307211242.59fc0f0e@canb.auug.org.au>
-In-Reply-To: <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
-References: <20220307154011.6d456f28@canb.auug.org.au>
-        <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
+        Mon, 7 Mar 2022 05:55:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87B6E8F604
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:15:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646647968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EAtJPNtZqQT+pzIC8Y0yY8ijMFQMxHJn+7uAlJm9E2A=;
+        b=UZ+SDSnDZF+VsXQQefNOfVqNhUYEVXSyB5COW9cgKPDjqCDYYi63cbRm5MbY8glNzzlGYa
+        x4DgPQWgUDEb/WE8ygjXLrXp0XGKTG+QHqXsj4YK3Y7s5SIJSsqIRDU2oEoAaqI/kFN7Ow
+        YhYnq6VcqsKznBAzdBvLP4T1gcK9vzM=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-175-Xabuc03uMLiSHmv6gbDAhQ-1; Mon, 07 Mar 2022 05:12:47 -0500
+X-MC-Unique: Xabuc03uMLiSHmv6gbDAhQ-1
+Received: by mail-wr1-f69.google.com with SMTP id o9-20020adfca09000000b001ea79f7edf8so4357388wrh.16
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 02:12:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=EAtJPNtZqQT+pzIC8Y0yY8ijMFQMxHJn+7uAlJm9E2A=;
+        b=Ho+F1rCPzkhezlykqXWL+J6WnETYbJ6IkxW64IpULzhe0mKPTxcPlhaQoQRDPcfn8W
+         0uMp5dutkfVjh4uRIx6COH6bGlrk/yPWXmP2zwr3moat78V874amfELtKGOM1gv9SXhR
+         tYi1zvSBvZlp0BuZD6q6v7gnlxQcWuejWWKw/UDHDXr/JSXe/4gw/LfPsIwcNnUflbIM
+         O4Qke0c3HvrKqbe7CMP/+aBDsPbe7cXqpoK0wDyV9f33wcizqsToySVXcWNBetTdpYs1
+         M2uI6oQgy0GTX7gvf3hU1czTRd0trByGwX5GshsMRdRI4eZZsrvU1eDuV7iHcshchLtO
+         ng3A==
+X-Gm-Message-State: AOAM533nu7r+1zk5YG1PHX7DtT4ICmpt2aZuqluDzYPpzuIQoHeWrtWJ
+        8f0YK+58+1WhK0xcIyD68c+rz1ZLav5zX88hA6o+VEqgkTafgZ558UAMQHlND1D6bHZ2SWp0Bdc
+        qNS0yamY6GG3oXtJto7LL9pdi
+X-Received: by 2002:a5d:6046:0:b0:1f0:4973:142f with SMTP id j6-20020a5d6046000000b001f04973142fmr7674917wrt.538.1646647966510;
+        Mon, 07 Mar 2022 02:12:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwEV99RC6J+Vin5f1sKjrk/pcIneCd29UN8hGV1eMibccSf0NvkVF1D5zaL4pxEGhCcclmMGQ==
+X-Received: by 2002:a5d:6046:0:b0:1f0:4973:142f with SMTP id j6-20020a5d6046000000b001f04973142fmr7674887wrt.538.1646647966292;
+        Mon, 07 Mar 2022 02:12:46 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:1e00:8d67:f75a:a8ae:dc02? (p200300cbc7051e008d67f75aa8aedc02.dip0.t-ipconnect.de. [2003:cb:c705:1e00:8d67:f75a:a8ae:dc02])
+        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm14954074wmb.3.2022.03.07.02.12.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 02:12:45 -0800 (PST)
+Message-ID: <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com>
+Date:   Mon, 7 Mar 2022 11:12:44 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T5RRt1xHG.xnLDS8d/AyZoI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RFC 0/3] MAP_POPULATE for device memory
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>, linux-mm@kvack.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        zhangyiru <zhangyiru3@huawei.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        linux-mips@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
+        linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20220306053211.135762-1-jarkko@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220306053211.135762-1-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/T5RRt1xHG.xnLDS8d/AyZoI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 06.03.22 06:32, Jarkko Sakkinen wrote:
+> For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
+> to use that for initializing the device memory by providing a new callback
+> f_ops->populate() for the purpose.
+> 
+> SGX patches are provided to show the callback in context.
+> 
+> An obvious alternative is a ioctl but it is less elegant and requires
+> two syscalls (mmap + ioctl) per memory range, instead of just one
+> (mmap).
 
-Hi,
+What about extending MADV_POPULATE_READ | MADV_POPULATE_WRITE to support
+VM_IO | VM_PFNMAP (as well?) ?
 
-On Mon, 7 Mar 2022 14:46:40 +0800 Xuan Zhuo <xuanzhuo@linux.alibaba.com> wr=
-ote:
->
-> Can you help me test this patch? I don't have an arm environment around m=
-e.
->=20
-> Thanks
->=20
->=20
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 1fa2d632a994..4d629d1ea894 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1820,7 +1820,7 @@ static int virtnet_rx_vq_reset(struct virtnet_info =
-*vi,
->=20
->  err:
->         netdev_err(vi->dev,
-> -                  "reset rx reset vq fail: rx queue index: %ld err: %d\n=
-",
-> +                  "reset rx reset vq fail: rx queue index: %td err: %d\n=
-",
->                    rq - vi->rq, err);
->         virtnet_napi_enable(rq->vq, &rq->napi);
->         return err;
-> @@ -1870,7 +1870,7 @@ static int virtnet_tx_vq_reset(struct virtnet_info =
-*vi,
->=20
->  err:
->         netdev_err(vi->dev,
-> -                  "reset tx reset vq fail: tx queue index: %ld err: %d\n=
-",
-> +                  "reset tx reset vq fail: tx queue index: %td err: %d\n=
-",
->                    sq - vi->sq, err);
->         virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
->         return err;
 
-I had to apply that by hand, but it does work.
+-- 
+Thanks,
 
-Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
---=20
-Cheers,
-Stephen Rothwell
+David / dhildenb
 
---Sig_/T5RRt1xHG.xnLDS8d/AyZoI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIl2poACgkQAVBC80lX
-0Gxhwwf/Yoy/Fx2MA3XKvHLKbSEO4haeLV/jiLTn33CCDtpIM0xqcZHR4Vdrx/iC
-eQeqrko2lzE9eH63myQI9aIrd8xpLBovdfuUlRzC9HpVlkhrrqf6+f70Y9RVSKa1
-alh98ccERL91LF1163puCeDJFaEHZb8ImHjqK7C1BjNssjnkOD62uGnajm8wFARu
-zPv054ntn9F2IIHKAntn4L5gEiMjlB7LAhoziVSWINvh9fjsQBgkv2UPXWcq46LM
-YGbHkKepzS+LANbKJ+Oiw3mgFD8+p6UxuToz6KtG5Qd7H0ZJRDs17tXi9WLSKmhB
-w9kWMEPual3nH7Np64LDGxCuTjhOBg==
-=Jcmj
------END PGP SIGNATURE-----
-
---Sig_/T5RRt1xHG.xnLDS8d/AyZoI--

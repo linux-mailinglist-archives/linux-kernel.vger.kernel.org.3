@@ -2,53 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5A94CF4D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB924CF661
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236582AbiCGJWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S232840AbiCGJgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbiCGJWG (ORCPT
+        with ESMTP id S238230AbiCGJ26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:22:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5041F66608;
-        Mon,  7 Mar 2022 01:20:28 -0800 (PST)
+        Mon, 7 Mar 2022 04:28:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293AE66ADC;
+        Mon,  7 Mar 2022 01:27:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BC14B810C2;
-        Mon,  7 Mar 2022 09:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E97BFC340E9;
-        Mon,  7 Mar 2022 09:20:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5036C61147;
+        Mon,  7 Mar 2022 09:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D174C340F4;
+        Mon,  7 Mar 2022 09:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646644825;
-        bh=PZvMsgCi9WxB8C/9nmbvpKu+4Ec0qTUjUX+o2X8/BsQ=;
+        s=korg; t=1646645219;
+        bh=zm7X+mczjZZVjYf1HfHRRL5vRFs3/Yfw66muXvDoBRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h7Kh8aWht0RgJ2Jke/CMaRj8JIyoZXkhom0WyXEIV/wiGtAZ4wg/7SxgWkadLnQ/u
-         lAEo5/amyvM32wF+7Mk8hjwKBJTs87hK6MZ33Q9dAyap/Kt/jiz1YUo90JlNwkFLga
-         ZuIdg35GcaoXtPzxGQXDkJExt6mDuS1oTvyfUAXI=
+        b=ATV1TvNKwIDB4HrnqJh4dWmBy69END4ZtacPO9oweW7YOvYvdGUv99RXsuvib/SfW
+         yu2d8EK16yZhOfwysIZ10wTU84vQrP5UvCKcckZENTF9Wpmpcgczi7cYf34Z6u+ZTT
+         TYSTiFr3orB8+423Aixh29mk7muNtRj/471MptkA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Zeal Robot <zealci@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        CGEL ZTE <cgel.zte@gmail.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Song Liu <songliubraving@fb.com>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.9 31/32] memfd: fix F_SEAL_WRITE after shmem huge page allocated
-Date:   Mon,  7 Mar 2022 10:18:57 +0100
-Message-Id: <20220307091635.323434658@linuxfoundation.org>
+        stable@vger.kernel.org, Sabrina Dubroca <sd@queasysnail.net>,
+        Sven Eckelmann <sven@narfation.org>,
+        Simon Wunderlich <sw@simonwunderlich.de>
+Subject: [PATCH 5.4 25/64] batman-adv: Dont expect inter-netns unique iflink indices
+Date:   Mon,  7 Mar 2022 10:18:58 +0100
+Message-Id: <20220307091639.860509666@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091634.434478485@linuxfoundation.org>
-References: <20220307091634.434478485@linuxfoundation.org>
+In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
+References: <20220307091639.136830784@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,75 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugh Dickins <hughd@google.com>
+From: Sven Eckelmann <sven@narfation.org>
 
-commit f2b277c4d1c63a85127e8aa2588e9cc3bd21cb99 upstream.
+commit 6c1f41afc1dbe59d9d3c8bb0d80b749c119aa334 upstream.
 
-Wangyong reports: after enabling tmpfs filesystem to support transparent
-hugepage with the following command:
+The ifindex doesn't have to be unique for multiple network namespaces on
+the same machine.
 
-  echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
+  $ ip netns add test1
+  $ ip -net test1 link add dummy1 type dummy
+  $ ip netns add test2
+  $ ip -net test2 link add dummy2 type dummy
 
-the docker program tries to add F_SEAL_WRITE through the following
-command, but it fails unexpectedly with errno EBUSY:
+  $ ip -net test1 link show dev dummy1
+  6: dummy1: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+      link/ether 96:81:55:1e:dd:85 brd ff:ff:ff:ff:ff:ff
+  $ ip -net test2 link show dev dummy2
+  6: dummy2: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+      link/ether 5a:3c:af:35:07:c3 brd ff:ff:ff:ff:ff:ff
 
-  fcntl(5, F_ADD_SEALS, F_SEAL_WRITE) = -1.
+But the batman-adv code to walk through the various layers of virtual
+interfaces uses this assumption because dev_get_iflink handles it
+internally and doesn't return the actual netns of the iflink. And
+dev_get_iflink only documents the situation where ifindex == iflink for
+physical devices.
 
-That is because memfd_tag_pins() and memfd_wait_for_pins() were never
-updated for shmem huge pages: checking page_mapcount() against
-page_count() is hopeless on THP subpages - they need to check
-total_mapcount() against page_count() on THP heads only.
+But only checking for dev->netdev_ops->ndo_get_iflink is also not an option
+because ipoib_get_iflink implements it even when it sometimes returns an
+iflink != ifindex and sometimes iflink == ifindex. The caller must
+therefore make sure itself to check both netns and iflink + ifindex for
+equality. Only when they are equal, a "physical" interface was detected
+which should stop the traversal. On the other hand, vxcan_get_iflink can
+also return 0 in case there was currently no valid peer. In this case, it
+is still necessary to stop.
 
-Make memfd_tag_pins() (compared > 1) as strict as memfd_wait_for_pins()
-(compared != 1): either can be justified, but given the non-atomic
-total_mapcount() calculation, it is better now to be strict.  Bear in
-mind that total_mapcount() itself scans all of the THP subpages, when
-choosing to take an XA_CHECK_SCHED latency break.
-
-Also fix the unlikely xa_is_value() case in memfd_wait_for_pins(): if a
-page has been swapped out since memfd_tag_pins(), then its refcount must
-have fallen, and so it can safely be untagged.
-
-Link: https://lkml.kernel.org/r/a4f79248-df75-2c8c-3df-ba3317ccb5da@google.com
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Reported-by: wangyong <wang.yong12@zte.com.cn>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: CGEL ZTE <cgel.zte@gmail.com>
-Cc: Kirill A. Shutemov <kirill@shutemov.name>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Yang Yang <yang.yang29@zte.com.cn>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: b7eddd0b3950 ("batman-adv: prevent using any virtual device created on batman-adv as hard-interface")
+Fixes: 5ed4a460a1d3 ("batman-adv: additional checks for virtual interfaces on top of WiFi")
+Reported-by: Sabrina Dubroca <sd@queasysnail.net>
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Simon Wunderlich <sw@simonwunderlich.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/shmem.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ net/batman-adv/hard-interface.c |   19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2478,7 +2478,8 @@ static void shmem_tag_pins(struct addres
- 				slot = radix_tree_iter_retry(&iter);
- 				continue;
- 			}
--		} else if (page_count(page) - page_mapcount(page) > 1) {
-+		} else if (!PageTail(page) && page_count(page) !=
-+			   hpage_nr_pages(page) + total_mapcount(page)) {
- 			radix_tree_tag_set(&mapping->page_tree, iter.index,
- 					   SHMEM_TAG_PINNED);
- 		}
-@@ -2538,8 +2539,8 @@ static int shmem_wait_for_pins(struct ad
- 				page = NULL;
- 			}
+--- a/net/batman-adv/hard-interface.c
++++ b/net/batman-adv/hard-interface.c
+@@ -159,13 +159,15 @@ static bool batadv_is_on_batman_iface(co
+ 		return true;
  
--			if (page &&
--			    page_count(page) - page_mapcount(page) != 1) {
-+			if (page && page_count(page) !=
-+			    hpage_nr_pages(page) + total_mapcount(page)) {
- 				if (scan < LAST_SCAN)
- 					goto continue_resched;
+ 	iflink = dev_get_iflink(net_dev);
+-
+-	/* no more parents..stop recursion */
+-	if (iflink == 0 || iflink == net_dev->ifindex)
++	if (iflink == 0)
+ 		return false;
  
+ 	parent_net = batadv_getlink_net(net_dev, net);
+ 
++	/* iflink to itself, most likely physical device */
++	if (net == parent_net && iflink == net_dev->ifindex)
++		return false;
++
+ 	/* recurse over the parent device */
+ 	parent_dev = __dev_get_by_index((struct net *)parent_net, iflink);
+ 	/* if we got a NULL parent_dev there is something broken.. */
+@@ -225,8 +227,7 @@ static struct net_device *batadv_get_rea
+ 		return NULL;
+ 
+ 	iflink = dev_get_iflink(netdev);
+-
+-	if (netdev->ifindex == iflink) {
++	if (iflink == 0) {
+ 		dev_hold(netdev);
+ 		return netdev;
+ 	}
+@@ -237,6 +238,14 @@ static struct net_device *batadv_get_rea
+ 
+ 	net = dev_net(hard_iface->soft_iface);
+ 	real_net = batadv_getlink_net(netdev, net);
++
++	/* iflink to itself, most likely physical device */
++	if (net == real_net && netdev->ifindex == iflink) {
++		real_netdev = netdev;
++		dev_hold(real_netdev);
++		goto out;
++	}
++
+ 	real_netdev = dev_get_by_index(real_net, iflink);
+ 
+ out:
 
 

@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AFA4CFB21
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A4D4CFAC7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240418AbiCGK2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S241503AbiCGKUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242131AbiCGKLP (ORCPT
+        with ESMTP id S238784AbiCGJ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:15 -0500
+        Mon, 7 Mar 2022 04:56:56 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FAB887A4;
-        Mon,  7 Mar 2022 01:54:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5992D7A997;
+        Mon,  7 Mar 2022 01:45:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E6176092A;
-        Mon,  7 Mar 2022 09:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 256F5C340E9;
-        Mon,  7 Mar 2022 09:54:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC44661380;
+        Mon,  7 Mar 2022 09:45:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84AFC340E9;
+        Mon,  7 Mar 2022 09:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646868;
-        bh=/P+khQUCz1gjLADcUzL6/3+TSXlLSdClqooalGmBoUk=;
+        s=korg; t=1646646351;
+        bh=qj+6Zq47nzRvlAhK7B+0w7NYRpn+RlKjgo26dVjP3W4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b/d+3JD2V7GVBJqJf5Trxw6xuzxbJdFR0rDUQfhGIY73iobBvTUGD1Kkl6b0mommG
-         ypGN2rDWUVLWLJZb9fT7WCemkEgzkB2TrrKazLVJ5OOtJ+LfoHzJUDVcah26MVaIf/
-         RLuSWPW30JpVC4zY3uJzEUxNB/+iaGYGGgpjWjQc=
+        b=DtXiylEk6QyS/JujNylBWHJDwEl7JSlLJfZpHY7YvKZzsjMZMljG3jG5JapdIoTtF
+         LJkJSW5mBndC2TD0v3a4haXmWEezVYgtScQRfSlu/Q9Kt1nSv+KQefAnsWnY39hrkZ
+         2jnGzzote00AecV7t2OcI45qeURF+AmA6HOkPW/o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: [PATCH 5.16 119/186] sched: Fix yet more sched_fork() races
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 213/262] netfilter: nf_tables: prefer kfree_rcu(ptr, rcu) variant
 Date:   Mon,  7 Mar 2022 10:19:17 +0100
-Message-Id: <20220307091657.406205277@linuxfoundation.org>
+Message-Id: <20220307091708.929533453@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,173 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Eric Dumazet <edumazet@google.com>
 
-commit b1e8206582f9d680cff7d04828708c8b6ab32957 upstream.
+[ Upstream commit ae089831ff28a115908b8d796f667c2dadef1637 ]
 
-Where commit 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an
-invalid sched_task_group") fixed a fork race vs cgroup, it opened up a
-race vs syscalls by not placing the task on the runqueue before it
-gets exposed through the pidhash.
+While kfree_rcu(ptr) _is_ supported, it has some limitations.
 
-Commit 13765de8148f ("sched/fair: Fix fault in reweight_entity") is
-trying to fix a single instance of this, instead fix the whole class
-of issues, effectively reverting this commit.
+Given that 99.99% of kfree_rcu() users [1] use the legacy
+two parameters variant, and @catchall objects do have an rcu head,
+simply use it.
 
-Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Tested-by: Zhang Qiao <zhangqiao22@huawei.com>
-Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Link: https://lkml.kernel.org/r/YgoeCbwj5mbCR0qA@hirez.programming.kicks-ass.net
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Choice of kfree_rcu(ptr) variant was probably not intentional.
+
+[1] including calls from net/netfilter/nf_tables_api.c
+
+Fixes: aaa31047a6d2 ("netfilter: nftables: add catch-all set element support")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/sched/task.h |    4 ++--
- kernel/fork.c              |   13 ++++++++++++-
- kernel/sched/core.c        |   34 +++++++++++++++++++++-------------
- 3 files changed, 35 insertions(+), 16 deletions(-)
+ net/netfilter/nf_tables_api.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -54,8 +54,8 @@ extern asmlinkage void schedule_tail(str
- extern void init_idle(struct task_struct *idle, int cpu);
- 
- extern int sched_fork(unsigned long clone_flags, struct task_struct *p);
--extern void sched_post_fork(struct task_struct *p,
--			    struct kernel_clone_args *kargs);
-+extern void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs);
-+extern void sched_post_fork(struct task_struct *p);
- extern void sched_dead(struct task_struct *p);
- 
- void __noreturn do_task_dead(void);
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2294,6 +2294,17 @@ static __latent_entropy struct task_stru
- 		goto bad_fork_put_pidfd;
- 
- 	/*
-+	 * Now that the cgroups are pinned, re-clone the parent cgroup and put
-+	 * the new task on the correct runqueue. All this *before* the task
-+	 * becomes visible.
-+	 *
-+	 * This isn't part of ->can_fork() because while the re-cloning is
-+	 * cgroup specific, it unconditionally needs to place the task on a
-+	 * runqueue.
-+	 */
-+	sched_cgroup_fork(p, args);
-+
-+	/*
- 	 * From this point on we must avoid any synchronous user-space
- 	 * communication until we take the tasklist-lock. In particular, we do
- 	 * not want user-space to be able to predict the process start-time by
-@@ -2402,7 +2413,7 @@ static __latent_entropy struct task_stru
- 		fd_install(pidfd, pidfile);
- 
- 	proc_fork_connector(p);
--	sched_post_fork(p, args);
-+	sched_post_fork(p);
- 	cgroup_post_fork(p, args);
- 	perf_event_fork(p);
- 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1203,9 +1203,8 @@ int tg_nop(struct task_group *tg, void *
- }
- #endif
- 
--static void set_load_weight(struct task_struct *p)
-+static void set_load_weight(struct task_struct *p, bool update_load)
- {
--	bool update_load = !(READ_ONCE(p->__state) & TASK_NEW);
- 	int prio = p->static_prio - MAX_RT_PRIO;
- 	struct load_weight *load = &p->se.load;
- 
-@@ -4393,7 +4392,7 @@ int sched_fork(unsigned long clone_flags
- 			p->static_prio = NICE_TO_PRIO(0);
- 
- 		p->prio = p->normal_prio = p->static_prio;
--		set_load_weight(p);
-+		set_load_weight(p, false);
- 
- 		/*
- 		 * We don't need the reset flag anymore after the fork. It has
-@@ -4411,6 +4410,7 @@ int sched_fork(unsigned long clone_flags
- 
- 	init_entity_runnable_average(&p->se);
- 
-+
- #ifdef CONFIG_SCHED_INFO
- 	if (likely(sched_info_on()))
- 		memset(&p->sched_info, 0, sizeof(p->sched_info));
-@@ -4426,18 +4426,23 @@ int sched_fork(unsigned long clone_flags
- 	return 0;
- }
- 
--void sched_post_fork(struct task_struct *p, struct kernel_clone_args *kargs)
-+void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
- {
- 	unsigned long flags;
--#ifdef CONFIG_CGROUP_SCHED
--	struct task_group *tg;
--#endif
- 
-+	/*
-+	 * Because we're not yet on the pid-hash, p->pi_lock isn't strictly
-+	 * required yet, but lockdep gets upset if rules are violated.
-+	 */
- 	raw_spin_lock_irqsave(&p->pi_lock, flags);
- #ifdef CONFIG_CGROUP_SCHED
--	tg = container_of(kargs->cset->subsys[cpu_cgrp_id],
--			  struct task_group, css);
--	p->sched_task_group = autogroup_task_group(p, tg);
-+	if (1) {
-+		struct task_group *tg;
-+		tg = container_of(kargs->cset->subsys[cpu_cgrp_id],
-+				  struct task_group, css);
-+		tg = autogroup_task_group(p, tg);
-+		p->sched_task_group = tg;
-+	}
- #endif
- 	rseq_migrate(p);
- 	/*
-@@ -4448,7 +4453,10 @@ void sched_post_fork(struct task_struct
- 	if (p->sched_class->task_fork)
- 		p->sched_class->task_fork(p);
- 	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-+}
- 
-+void sched_post_fork(struct task_struct *p)
-+{
- 	uclamp_post_fork(p);
- }
- 
-@@ -6880,7 +6888,7 @@ void set_user_nice(struct task_struct *p
- 		put_prev_task(rq, p);
- 
- 	p->static_prio = NICE_TO_PRIO(nice);
--	set_load_weight(p);
-+	set_load_weight(p, true);
- 	old_prio = p->prio;
- 	p->prio = effective_prio(p);
- 
-@@ -7171,7 +7179,7 @@ static void __setscheduler_params(struct
- 	 */
- 	p->rt_priority = attr->sched_priority;
- 	p->normal_prio = normal_prio(p);
--	set_load_weight(p);
-+	set_load_weight(p, true);
- }
- 
- /*
-@@ -9410,7 +9418,7 @@ void __init sched_init(void)
- #endif
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index a65b530975f5..2b2e0210a7f9 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -4486,7 +4486,7 @@ static void nft_set_catchall_destroy(const struct nft_ctx *ctx,
+ 	list_for_each_entry_safe(catchall, next, &set->catchall_list, list) {
+ 		list_del_rcu(&catchall->list);
+ 		nft_set_elem_destroy(set, catchall->elem, true);
+-		kfree_rcu(catchall);
++		kfree_rcu(catchall, rcu);
  	}
+ }
  
--	set_load_weight(&init_task);
-+	set_load_weight(&init_task, false);
- 
- 	/*
- 	 * The boot idle thread does lazy MMU switching as well:
+@@ -5653,7 +5653,7 @@ static void nft_setelem_catchall_remove(const struct net *net,
+ 	list_for_each_entry_safe(catchall, next, &set->catchall_list, list) {
+ 		if (catchall->elem == elem->priv) {
+ 			list_del_rcu(&catchall->list);
+-			kfree_rcu(catchall);
++			kfree_rcu(catchall, rcu);
+ 			break;
+ 		}
+ 	}
+-- 
+2.34.1
+
 
 

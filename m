@@ -2,221 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6814F4D04AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318254D04BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 17:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244352AbiCGQ4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 11:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S242639AbiCGQ65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 11:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244344AbiCGQ4j (ORCPT
+        with ESMTP id S237432AbiCGQ6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 11:56:39 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2054.outbound.protection.outlook.com [40.107.100.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822477E0AA;
-        Mon,  7 Mar 2022 08:55:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FMePbEfYCzmF7aUSZIPP27QzMna2sOlZmLw2vbvYg+n2tzACVLBMS/AAPGe6sjqlePD1vV2r35NsuRZQSyuRM+ky7DNdX/KsX5mCe/9ibBhR2TuHe6qOHPNQ6mnrlgPPZDxN25SjE3WgRaPMa9HD7Bthz0mmNXrvcrwz5irHT0z0KAKBBidsViAlcg6uG0KFt0UZ8ve7iwBv3/y4r8mp4erMfGXZqWP7HmtEho8Q0hnJfnZ4LgCLWlZrCnk4BrUz2WOZv3rBXcg67FnDpZ156Z+rJvrB76WaJSC0IthUllDeh7MlGTEJP3XXJ/6WKDyY9NP+GPmGxdO1MStpz0nzHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xm4JSVI64PJrZxwZRKB1bugq8YJK6qzHc2PTByHzUvI=;
- b=AvOnrvfJIAUeaAf3doW46sfawkfLZPefJwwUAFU8/IDGcEHRzQVPT/gSjJLSU3ypWlRmOqTGXX+1160GJ4iqdMwc/L+xreKRAra6/ABTCoUhN151Ow+X2l/S+AnquAXqqJrZ6/jXYpU4lM9thH/IXWVKTamoxBwMisYuIQXkis64KMBowwtjH8JcqJNmvOYE96RclJWmNIM9oAiDMHlTk43aRvelF+Civl5xAx2rQXBMjCJULN2ULIj6qMK8mSp3xEKi5npwC+LqpTzrSTFOBf5TiP7tb9rmwDZwUwXW7AxWaUrvcch47qTU6fgAxEfyCMzORz/7vqnCQZhI/2DTQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xm4JSVI64PJrZxwZRKB1bugq8YJK6qzHc2PTByHzUvI=;
- b=EwypUWtl4cpDgdmOheiXnlfRK8gK5/c6r4zOuvtQTMnxd204Kkeb1PP+u11SpphD2CANspZxU3ateLfE+ekIgu1uI0HrK6Y7AELn0PA2qBOiY5CJE52lZt4Ej+hjDcBlq+1r5Npn+2O4z6kX04u9JzRA+hOxn6wHbUWrZUgrFTGq5K/W91iTgyvzWktbBwmV/HD9m3eoNQ+4AdFE1Vp8e25GzgMhmy5FDojK4Cg8meAan1jwzyw4YL15qAzsRstWVc4fceO/SwqBACNtsEnbzSubagD428i/zb8KHehOH3HVReO3hXxyT9YKVvQtyZkTduQFoKTavmkC8bC92Q1Z6A==
-Received: from MW4PR04CA0270.namprd04.prod.outlook.com (2603:10b6:303:88::35)
- by DM6PR12MB3324.namprd12.prod.outlook.com (2603:10b6:5:11e::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Mon, 7 Mar
- 2022 16:55:41 +0000
-Received: from CO1NAM11FT007.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:88:cafe::d5) by MW4PR04CA0270.outlook.office365.com
- (2603:10b6:303:88::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.13 via Frontend
- Transport; Mon, 7 Mar 2022 16:55:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- CO1NAM11FT007.mail.protection.outlook.com (10.13.174.131) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5038.14 via Frontend Transport; Mon, 7 Mar 2022 16:55:40 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 7 Mar
- 2022 16:55:40 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Mon, 7 Mar 2022
- 08:55:39 -0800
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Mon, 7 Mar 2022 08:55:35 -0800
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <broonie@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <ashishsingha@nvidia.com>
-CC:     <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
-        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <p.zabel@pengutronix.de>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [PATCH v3 3/3] arm64: tegra: Add QSPI controllers on Tegra234
-Date:   Mon, 7 Mar 2022 22:25:19 +0530
-Message-ID: <20220307165519.38380-4-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220307165519.38380-1-kyarlagadda@nvidia.com>
-References: <20220307165519.38380-1-kyarlagadda@nvidia.com>
-X-NVConfidentiality: public
+        Mon, 7 Mar 2022 11:58:54 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97645193F7
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 08:57:59 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id cx5so14277162pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 08:57:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tIhXGZLVpZ9gpPB8Y0IEDVl0g8sNd0sXb4aXiUdZXd0=;
+        b=YP2FNy86W7N8nKMNMqM2YUGV/GbODjCGqey24vRQhOQVk5clrTz+DAxqejvidakQBI
+         9TtFA05SljyJ4KDFxjiN0umUq+/62+jga/bbaQdWUCLFfYvljIcv4m9X07eYaYh0Nadd
+         DQuK/PW1H4wFsAybKEPfJVLdPlSP3bAmsH1B3AbYFXJSnSoGSKcjtg9OJUWvYtY3JuFR
+         nUOmT0BkXOrKM/WQSvWbp9PZTq2KswXC8vo4U+i925uXsuuaZkdSAV4S3wC2QQBiR+ra
+         amwbzwb/jnl2ZttKE0v8nzwzkmsCIX0ezC7DO1vPG97dlUA+tsLIOXhpelHcLD5a3Fzj
+         6vpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tIhXGZLVpZ9gpPB8Y0IEDVl0g8sNd0sXb4aXiUdZXd0=;
+        b=xEbqaqTbfomiq+8rBXBb2vPZ+DIOP3FLNVM/Sdk1Mq+X2yx/ZOdgVcSnzZZgkqjQnX
+         PvifocduadbUiRcUjjqYaA2BsFxCx+Qt1cy9gq51N5R9eJVOS7XeicCrTA53Sq1YNUpG
+         W+drvLTrTBCecxWx6MILA7Pp+pPMgHhHpLROekxvDSzKu3kNqye6EgTt9yr/U2vf08m+
+         Vif4VEDQhaHgijJ7axrdoCIxXn7gMFae73+gCkkeltKjY7kGIXBFokmefxqpsDXqr4mX
+         PpCdDjaj2n9+yLbiUY0xZWSPapV9A7eIpzbuY84d8C+4FQ/lm01ZVKEUgjoHTbPBUAWu
+         qSzQ==
+X-Gm-Message-State: AOAM533REAHP06FiBU3muNPjvBq7cNiA2Kj2xxTk/CzwrZIco099DtKc
+        9Goa+JMilAWUwF20gv3KRHvZdeMCasQ5Ih1XT3x8Og==
+X-Google-Smtp-Source: ABdhPJx8XmL3ynHyeduH/5RI2S24f5ccnfYE5r4H7NIQr7UVkGE6yqNch4rjeZxEKJVjLao5GJVTFGn1w108kteXJF8=
+X-Received: by 2002:a17:902:7044:b0:14e:e1b1:bb0e with SMTP id
+ h4-20020a170902704400b0014ee1b1bb0emr12959564plt.65.1646672279034; Mon, 07
+ Mar 2022 08:57:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d48e371f-f64d-4b48-0a13-08da005b4ff4
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3324:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3324942DFF3BABF2279CD2C2C3089@DM6PR12MB3324.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aySHxCVeDfOL22284h8S14QIeaO8SsueIbGjWtmn348NGIStf5iFsNQ18Vi0p5MPzrG2Gdcjmx0G1ZPxlvY72MO9QASm1cBII55f6K0t6B8AXOuCfzWn3lqwdq3+npVt7MjJOOJ/Ve69fnU6xrP6Hodr4UfHmOJorwdYT2l+GGc1PSDHMpIoixmA4QKBKFN0gLodY+ylotYmLLunmby0Bwb6JCEkEyEOZToHChqp7pe2iLI/w+GPoeZaeIHr678C0P7oxhmV9yINIcLtYvuDEPuXwM5ImaGwGrkRxHDfHDh9ksHC6Yx4zxnktA+jt1Un1tnJBzo3UlsGRU6fk0+oWKjx8G4+SR+drc+j04STW0OA3khH0VaSiSGtwcp+WDoZHW/P9fiyXQVAip0akTCZMFQlK28mzxG1fFXea9xuVrkDzohjsnHL+5VDenpZMZ+RxXQfu1UJaseEi1+baUhwRJKQLGZBt3ZVF4JSefRadi8d7dLXvFtbmBTC7GA66HZqCaVDnfvb7CVKawh00lF6iVhehtrk+RQw+MMd8BkhK7acpfrQP2w/b6Bp/8Z9RmFi1uAv1mIKBdbbqER01V8yHMf+0kISDIvVLpVFFzdEiqwUDorbMs7a8/ggKsrlas6uExiOOBnwhgwL+pqmfd26ntES5Akuara1oKOKAs4ZZJKW6hUxuMNngNseeqkPaNcIvhr9KnbYQbKOnQ9qGMWK2A==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(70206006)(316002)(54906003)(40460700003)(6636002)(82310400004)(8676002)(4326008)(86362001)(110136005)(8936002)(356005)(81166007)(2906002)(5660300002)(2616005)(336012)(426003)(70586007)(186003)(26005)(1076003)(508600001)(107886003)(7696005)(6666004)(36860700001)(83380400001)(47076005)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 16:55:40.8357
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d48e371f-f64d-4b48-0a13-08da005b4ff4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT007.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3324
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220307154558.2505734-1-robert.foss@linaro.org>
+ <20220307154558.2505734-2-robert.foss@linaro.org> <YiY1CP6DkfgU4re/@robh.at.kernel.org>
+In-Reply-To: <YiY1CP6DkfgU4re/@robh.at.kernel.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 7 Mar 2022 17:57:47 +0100
+Message-ID: <CAG3jFyssPxuRXzZsZkVHWrSS8b6pRHRRmpZCTvLmDV-t2CDA1g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] Revert "dt-bindings:drm/bridge:anx7625:add vendor define"
+To:     Rob Herring <robh@kernel.org>
+Cc:     airlied@linux.ie, daniel@ffwll.ch, matthias.bgg@gmail.com,
+        xji@analogixsemi.com, hsinyi@chromium.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ashish Singhal <ashishsingha@nvidia.com>
+On Mon, 7 Mar 2022 at 17:38, Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Mar 07, 2022 at 04:45:57PM +0100, Robert Foss wrote:
+> > This reverts commit a43661e7e819b100e1f833a35018560a1d9abb39.
+>
+> S-o-b and reason for the revert?
+>
+> > ---
+> >  .../display/bridge/analogix,anx7625.yaml      | 65 +------------------
+> >  1 file changed, 2 insertions(+), 63 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > index 1d3e88daca041..ab48ab2f4240d 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > @@ -43,70 +43,14 @@ properties:
+> >    vdd33-supply:
+> >      description: Regulator that provides the supply 3.3V power.
+> >
+> > -  analogix,lane0-swing:
+> > -    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > -    minItems: 1
+> > -    maxItems: 20
+> > -    description:
+> > -      an array of swing register setting for DP tx lane0 PHY.
+> > -      Registers 0~9 are Swing0_Pre0, Swing1_Pre0, Swing2_Pre0,
+> > -      Swing3_Pre0, Swing0_Pre1, Swing1_Pre1, Swing2_Pre1, Swing0_Pre2,
+> > -      Swing1_Pre2, Swing0_Pre3, they are for [Boost control] and
+> > -      [Swing control] setting.
+> > -      Registers 0~9, bit 3:0 is [Boost control], these bits control
+> > -      post cursor manual, increase the [Boost control] to increase
+> > -      Pre-emphasis value.
+> > -      Registers 0~9, bit 6:4 is [Swing control], these bits control
+> > -      swing manual, increase [Swing control] setting to add Vp-p value
+> > -      for each Swing, Pre.
+> > -      Registers 10~19 are Swing0_Pre0, Swing1_Pre0, Swing2_Pre0,
+> > -      Swing3_Pre0, Swing0_Pre1, Swing1_Pre1, Swing2_Pre1, Swing0_Pre2,
+> > -      Swing1_Pre2, Swing0_Pre3, they are for [R select control] and
+> > -      [R Termination control] setting.
+> > -      Registers 10~19, bit 4:0 is [R select control], these bits are
+> > -      compensation manual, increase it can enhance IO driven strength
+> > -      and Vp-p.
+> > -      Registers 10~19, bit 5:6 is [R termination control], these bits
+> > -      adjust 50ohm impedance of DP tx termination. 00:55 ohm,
+> > -      01:50 ohm(default), 10:45 ohm, 11:40 ohm.
+> > -
+> > -  analogix,lane1-swing:
+> > -    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > -    minItems: 1
+> > -    maxItems: 20
+> > -    description:
+> > -      an array of swing register setting for DP tx lane1 PHY.
+> > -      DP TX lane1 swing register setting same with lane0
+> > -      swing, please refer lane0-swing property description.
+>
+> These apply to the DP side, so no need to revert this part.
 
-This adds the QSPI controllers on the Tegra234 SoC and populates the
-SPI NOR flash device for the Jetson AGX Orin platform.
+Ack.
 
-Signed-off-by: Ashish Singhal <ashishsingha@nvidia.com>
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  | 12 ++++++++
- arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 28 +++++++++++++++++++
- include/dt-bindings/clock/tegra234-clock.h    |  8 ++++++
- include/dt-bindings/reset/tegra234-reset.h    |  2 ++
- 4 files changed, 50 insertions(+)
+>
+> > -
+> > -  analogix,audio-enable:
+> > -    type: boolean
+> > -    description: let the driver enable audio HDMI codec function or not.
+> > -
+>
+> Not sure on this one...
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
-index d95a542c0bca..798de9226ba5 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
-@@ -7,6 +7,18 @@
- 	compatible = "nvidia,p3701-0000", "nvidia,tegra234";
- 
- 	bus@0 {
-+		spi@3270000 {
-+			status = "okay";
-+
-+			flash@0 {
-+				compatible = "jedec,spi-nor";
-+				reg = <0>;
-+				spi-max-frequency = <102000000>;
-+				spi-tx-bus-width = <4>;
-+				spi-rx-bus-width = <4>;
-+			};
-+		};
-+
- 		mmc@3460000 {
- 			status = "okay";
- 			bus-width = <8>;
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index aaace605bdaa..bd82b324703f 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -666,6 +666,34 @@
- 			#pwm-cells = <2>;
- 		};
- 
-+		spi@3270000 {
-+			compatible = "nvidia,tegra234-qspi";
-+			reg = <0x3270000 0x1000>;
-+			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			clocks = <&bpmp TEGRA234_CLK_QSPI0_2X_PM>,
-+				 <&bpmp TEGRA234_CLK_QSPI0_PM>;
-+			clock-names = "qspi", "qspi_out";
-+			resets = <&bpmp TEGRA234_RESET_QSPI0>;
-+			reset-names = "qspi";
-+			status = "disabled";
-+		};
-+
-+		spi@3300000 {
-+			compatible = "nvidia,tegra234-qspi";
-+			reg = <0x3300000 0x1000>;
-+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			clocks = <&bpmp TEGRA234_CLK_QSPI1_2X_PM>,
-+				 <&bpmp TEGRA234_CLK_QSPI1_PM>;
-+			clock-names = "qspi", "qspi_out";
-+			resets = <&bpmp TEGRA234_RESET_QSPI1>;
-+			reset-names = "qspi";
-+			status = "disabled";
-+		};
-+
- 		mmc@3460000 {
- 			compatible = "nvidia,tegra234-sdhci", "nvidia,tegra186-sdhci";
- 			reg = <0x03460000 0x20000>;
-diff --git a/include/dt-bindings/clock/tegra234-clock.h b/include/dt-bindings/clock/tegra234-clock.h
-index 8cae969e8cba..bd4c3086a2da 100644
---- a/include/dt-bindings/clock/tegra234-clock.h
-+++ b/include/dt-bindings/clock/tegra234-clock.h
-@@ -140,6 +140,14 @@
- #define TEGRA234_CLK_PEX2_C9_CORE		173U
- /** @brief output of gate CLK_ENB_PEX2_CORE_10 */
- #define TEGRA234_CLK_PEX2_C10_CORE		187U
-+/** @brief CLK_RST_CONTROLLER_CLK_SOURCE_QSPI0 switch divider output */
-+#define TEGRA234_CLK_QSPI0_2X_PM		192U
-+/** @brief CLK_RST_CONTROLLER_CLK_SOURCE_QSPI1 switch divider output */
-+#define TEGRA234_CLK_QSPI1_2X_PM		193U
-+/** @brief output of the divider QSPI_CLK_DIV2_SEL in CLK_RST_CONTROLLER_CLK_SOURCE_QSPI0 */
-+#define TEGRA234_CLK_QSPI0_PM			194U
-+/** @brief output of the divider QSPI_CLK_DIV2_SEL in CLK_RST_CONTROLLER_CLK_SOURCE_QSPI1 */
-+#define TEGRA234_CLK_QSPI1_PM			195U
- /** @brief CLK_RST_CONTROLLER_CLK_SOURCE_SDMMC_LEGACY_TM switch divider output */
- #define TEGRA234_CLK_SDMMC_LEGACY_TM		219U
- /** @brief output of gate CLK_ENB_PEX0_CORE_0 */
-diff --git a/include/dt-bindings/reset/tegra234-reset.h b/include/dt-bindings/reset/tegra234-reset.h
-index 1362cd5e03f0..1652d8d9e106 100644
---- a/include/dt-bindings/reset/tegra234-reset.h
-+++ b/include/dt-bindings/reset/tegra234-reset.h
-@@ -41,6 +41,8 @@
- #define TEGRA234_RESET_PWM7			74U
- #define TEGRA234_RESET_PWM8			75U
- #define TEGRA234_RESET_SDMMC4			85U
-+#define TEGRA234_RESET_QSPI0			76U
-+#define TEGRA234_RESET_QSPI1			77U
- #define TEGRA234_RESET_UARTA			100U
- #define TEGRA234_RESET_PEX0_CORE_0		116U
- #define TEGRA234_RESET_PEX0_CORE_1		117U
--- 
-2.17.1
+These additions are independent from my reading of this, would you
+like a v2 with only the bus-type related changes reverted?
 
+>
+> >    ports:
+> >      $ref: /schemas/graph.yaml#/properties/ports
+> >
+> >      properties:
+> >        port@0:
+> > -        $ref: /schemas/graph.yaml#/$defs/port-base
+> > -        unevaluatedProperties: false
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> >          description:
+> > -          MIPI DSI/DPI input.
+> > -
+> > -        properties:
+> > -          endpoint:
+> > -            $ref: /schemas/media/video-interfaces.yaml#
+> > -            type: object
+> > -            additionalProperties: false
+> > -
+> > -            properties:
+> > -              remote-endpoint: true
+> > -
+> > -              bus-type:
+> > -                enum: [1, 5]
+>
+> I think the error here is really 1 should be 4 which corresponds to
+> D-PHY which is used by both CSI and DSI. Otherwise, I don't really see
+> the issue with bus-type being shared between CSI and DSI.
+
+I think that would be a correct solution. And ignoring everything
+else, the range of this property is something that should be fixed.
+
+But that would mean that CPI (camera parallel interface) and DPI
+(display parallel interface) would share the
+V4L2_FWNODE_BUS_TYPE_PARALLEL enum. I think that would be perfectly
+functional, but it is not what V4L2_FWNODE_BUS_TYPE_PARALLEL is
+documented to represent. As far as I can see it's only intended to
+represent CPI.
+
+Instead of having V4L2_FWNODE_BUS_TYPE_PARALLEL represent two
+standards, I think they should be split. And possibly
+V4L2_FWNODE_BUS_TYPE_PARALLEL should be renamed for CPI, but that is a
+separate story. This would provide for the neatest and most legible
+solution. If this solution is implemented, this range would be
+incorrect. Additionally the snippet reverted in 2/2 of this series
+would no longer be valid.
+
+As it stands V4L2_FWNODE_BUS_TYPE_PARALLEL was used to represent DPI
+due to not being caught in the review process.
+
+>
+> > -                default: 1
+> > -
+> > -              data-lanes: true
+> > +          Video port for MIPI DSI input.
+> >
+> >        port@1:
+> >          $ref: /schemas/graph.yaml#/properties/port
+> > @@ -143,9 +87,6 @@ examples:
+> >              vdd10-supply = <&pp1000_mipibrdg>;
+> >              vdd18-supply = <&pp1800_mipibrdg>;
+> >              vdd33-supply = <&pp3300_mipibrdg>;
+> > -            analogix,audio-enable;
+> > -            analogix,lane0-swing = /bits/ 8 <0x14 0x54 0x64 0x74>;
+> > -            analogix,lane1-swing = /bits/ 8 <0x14 0x54 0x64 0x74>;
+> >
+> >              ports {
+> >                  #address-cells = <1>;
+> > @@ -155,8 +96,6 @@ examples:
+> >                      reg = <0>;
+> >                      anx7625_in: endpoint {
+> >                          remote-endpoint = <&mipi_dsi>;
+> > -                        bus-type = <5>;
+> > -                        data-lanes = <0 1 2 3>;
+> >                      };
+> >                  };
+> >
+> > --
+> > 2.32.0
+
+Signed-off-by: Robert Foss <robert.foss@linaro.org>

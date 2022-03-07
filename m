@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9275A4D0019
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BE94D001B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242841AbiCGNcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:32:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S242880AbiCGNcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236126AbiCGNcM (ORCPT
+        with ESMTP id S242881AbiCGNcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:32:12 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FA37F6E0;
-        Mon,  7 Mar 2022 05:31:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646659878; x=1678195878;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=l9ZDDygtV9eTZlD+iB+RzUt4U861wykPbQbF0/vstGE=;
-  b=FxnyhXbAfwnWiCtlZVXWOwphDm9MtqdN71iqvvIEgRpXyAuhegBAuohF
-   S44++fj2LI99RSYsWwHdaLP+NE4EZklDbg4eGk4Sw1M00SVJdph8GLEPv
-   xIn+UzNmMHeCw83OyNIQ+sBCgqGIwIcM0GTFT7N2Tt7qNhh5/jIN8+KNd
-   AgdaF7wXNY9gf2I33f1+dVCA7vwO2yEAC3xa+BG1RtojNa21mHe2bLyga
-   1hopUzy8H5633lrSr2VbR1vu01xsmP/yW/oyZr8rONcVUdDx5AmtIt/R0
-   yKqTgbqw4V0mrwmq1ejjQUwes9ynhwIV7BW27vBR7XigVc5rKodjkcH52
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="251962370"
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="251962370"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 05:31:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,162,1643702400"; 
-   d="scan'208";a="553152904"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga008.jf.intel.com with ESMTP; 07 Mar 2022 05:31:14 -0800
-Message-ID: <74cade30-6dde-c5f7-e009-b34423d22c12@intel.com>
-Date:   Mon, 7 Mar 2022 15:31:13 +0200
+        Mon, 7 Mar 2022 08:32:18 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6E68A6DC;
+        Mon,  7 Mar 2022 05:31:24 -0800 (PST)
+Received: from nazgul.tnic (nat0.nue.suse.com [IPv6:2001:67c:2178:4000::1111])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 014F71EC0537;
+        Mon,  7 Mar 2022 14:31:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1646659879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=GpGI0D4rD+Njmm+Q0184SgW1CbMNN6ew2JNcrhmR7Qo=;
+        b=cYMMGvCr2WaSqdw9nHWCfXg02fvlat1g6Cw1dlTHtTS6pvmi3qgNblwGhUKTg1BG1WacfG
+        hKx88JPixa97PIS0C5q17k5IfTC0sue0nsvvOZIAO8s3zchJqEENNoOslj5WDbIkGJIHed
+        1Ui9fDiX/uFv7wOB9lUAUPl7BnJbUfM=
+Date:   Mon, 7 Mar 2022 14:31:21 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH 2/2] x86/mce: Add per-bank CMCI storm mitigation
+Message-ID: <YiYJGKGmgUx9gAXv@nazgul.tnic>
+References: <20220217141609.119453-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220217141609.119453-2-Smita.KoralahalliChannabasappa@amd.com>
+ <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
+ <Yg6Hst4Ocg7UNNG9@agluck-desk3.sc.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH] scsi: ufs: move shutting_down back to ufshcd_shutdown
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>
-Cc:     stable@vger.kernel.org
-References: <20220224235629.3804227-1-jaegeuk@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220224235629.3804227-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yg6Hst4Ocg7UNNG9@agluck-desk3.sc.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,78 +56,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/02/2022 01:56, Jaegeuk Kim wrote:
-> The commit b294ff3e3449 ("scsi: ufs: core: Enable power management for wlun")
-> moved hba->shutting_down from ufshcd_shutdown to ufshcd_wl_shutdown, which
-> introduced regression as belows.
-> 
-> ufshcd_err_handler started; HBA state eh_non_fatal; powered 1; shutting down 1; saved_err = 4; saved_uic_err = 64; force_reset = 0
-> ...
-> task:init            state:D stack:    0 pid:    1 ppid:     0 flags:0x04000008
-> Call trace:
->  __switch_to+0x25c/0x5e0
->  __schedule+0x68c/0xaa8
->  schedule+0x12c/0x24c
->  schedule_timeout+0x98/0x138
->  wait_for_common_io+0x13c/0x30c
->  blk_execute_rq+0xb0/0x10c
->  __scsi_execute+0x100/0x27c
->  ufshcd_set_dev_pwr_mode+0x1c8/0x408
->  __ufshcd_wl_suspend+0x564/0x688
->  ufshcd_wl_shutdown+0xa8/0xc0
->  device_shutdown+0x234/0x578
->  kernel_restart+0x4c/0x140
->  __arm64_sys_reboot+0x3a0/0x414
->  el0_svc_common+0xd0/0x1e4
->  el0_svc+0x28/0x88
->  el0_sync_handler+0x8c/0xf0
->  el0_sync+0x1c0/0x200
-> 
-> The init for reboot was stuck, since ufshcd_err_hanlder was skipped when
-> shutting down WLUN. This patch allows to run the error handler and let
-> disable it during final ufshcd_shutdown only.
-
-I do not understand why it is stuck?  If there was a non-fatal error, the
-request should complete anyway, or at least timeout.
-
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: b294ff3e3449 ("scsi: ufs: core: Enable power management for wlun")
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> ---
->  drivers/scsi/ufs/ufshcd.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 460d2b440d2e..a37813b474d0 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -9178,10 +9178,6 @@ static void ufshcd_wl_shutdown(struct device *dev)
+On Thu, Feb 17, 2022 at 09:36:50AM -0800, Luck, Tony wrote:
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index 4f9abb66520d..1f3e7c074182 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -714,6 +714,8 @@ bool machine_check_poll(enum mcp_flags flags, mce_banks_t *b)
+>  		barrier();
+>  		m.status = mce_rdmsrl(mca_msr_reg(i, MCA_STATUS));
 >  
->  	hba = shost_priv(sdev->host);
->  
-> -	down(&hba->host_sem);
-> -	hba->shutting_down = true;
-> -	up(&hba->host_sem);
-> -
->  	/* Turn on everything while shutting down */
->  	ufshcd_rpm_get_sync(hba);
->  	scsi_device_quiesce(sdev);
-> @@ -9387,6 +9383,10 @@ EXPORT_SYMBOL(ufshcd_runtime_resume);
+> +		mce_intel_storm_tracker(i, m.status);
+
+Why is this called before the VALID bit check?
+
+Because you want to still run the tracker on each polling - not only
+when it sees a valid error?
+
+> diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+> index cee9d989f791..2ed5634ec277 100644
+> --- a/arch/x86/kernel/cpu/mce/intel.c
+> +++ b/arch/x86/kernel/cpu/mce/intel.c
+> @@ -47,8 +47,48 @@ static DEFINE_PER_CPU(mce_banks_t, mce_banks_owned);
 >   */
->  int ufshcd_shutdown(struct ufs_hba *hba)
->  {
-> +	down(&hba->host_sem);
-> +	hba->shutting_down = true;
-> +	up(&hba->host_sem);
+>  static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
+>  
+> +/*
+> + * CMCI storm tracking state
+> + */
 
-This does not seem right because the device is not accessible after
-__ufshcd_wl_suspend(hba, UFS_SHUTDOWN_PM), so shutting_down needs to
-be set before.
+Those could use some comments explaining what is tracking what:
 
+> +static DEFINE_PER_CPU(int, stormy_bank_count);
+> +static DEFINE_PER_CPU(u64 [MAX_NR_BANKS], bank_history);
+> +static DEFINE_PER_CPU(bool [MAX_NR_BANKS], bank_storm);
+
+AFAICT, this says whether a bank is in storm mode?
+
+> +static DEFINE_PER_CPU(unsigned long [MAX_NR_BANKS], bank_time_stamp);
+
+This looks like it collects the jiffies when the bank was looked at in
+the storm tracker.
+
+> +static int cmci_threshold[MAX_NR_BANKS];
+> +
+>  #define CMCI_THRESHOLD		1
+>  
+> +/*
+> + * High threshold to limit CMCI rate during storms. Max supported is
+> + * 0x7FFF. Use this slightly smaller value so it has a distinctive
+> + * signature when some asks "Why am I not seeing all corrected errors?"
+> + */
+> +#define CMCI_STORM_THRESHOLD	0x7FED
+
+Why is a "threshold" in hex?
 
 > +
->  	if (ufshcd_is_ufs_dev_poweroff(hba) && ufshcd_is_link_off(hba))
->  		goto out;
->  
+> +/*
+> + * How many errors within the history buffer mark the start of a storm
+> + */
+> +#define STORM_BEGIN	5
 
+That looks like a STORM_BEGIN_THRESHOLD to me.
+
+> +
+> +/*
+> + * How many polls of machine check bank without an error before declaring
+> + * the storm is over
+> + */
+> +#define STORM_END	30
+
+Similarly:
+
+STORM_END_POLL_THRESHOLD
+
+> +
+> +/*
+> + * If there is no poll data for a bank for this amount of time, just
+> + * discard the history.
+> + */
+> +#define STORM_INTERVAL (1 * HZ)
+
+That looks unused.
+
+> +static void cmci_storm_begin(int bank)
+> +{
+> +	__set_bit(bank, this_cpu_ptr(mce_poll_banks));
+> +	this_cpu_write(bank_storm[bank], true);
+> +	if (this_cpu_inc_return(stormy_bank_count) == 1)
+
+s/ == 1//
+
+> +		mce_timer_kick(true);
+> +}
+> +
+> +static void cmci_storm_end(int bank)
+> +{
+> +	__clear_bit(bank, this_cpu_ptr(mce_poll_banks));
+> +	this_cpu_write(bank_history[bank], 0ull);
+> +	this_cpu_write(bank_storm[bank], false);
+> +	if (this_cpu_dec_return(stormy_bank_count) == 0)
+
+	if (!...
+
+> +		mce_timer_kick(false);
+> +}
+> +
+> +void mce_intel_storm_tracker(int bank, u64 status)
+
+Function name needs a verb.
+
+> +{
+> +	unsigned long now = jiffies, delta;
+> +	unsigned int shift;
+> +	u64 history;
+> +
+> +	delta = now - this_cpu_read(bank_time_stamp[bank]);
+> +	shift = this_cpu_read(bank_storm[bank]) ? 1 : (delta + HZBITS) / HZBITS;
+
+Do
+
+	shift = 1;
+
+on function entry to simplify this assignment.
+
+Also, I'm having trouble with this shift calculation. The laptop here has
+HZ=250. Let's say delta is 2000 jiffies.
+
+So if this bank wasn't in storm mode, I'd have
+
+shift = (2000 + (250 / 64)) / (250 / 64) = 513
+
+...
+
+Aaaha, so only when the diff is < 250 in my case, i.e., it polls the
+same bank within a second, only then it would shift the history. I.e.,
+what you mean with that "The 64 bit width corresponds to about one
+second."
+
+> +	history = (shift < 64) ? this_cpu_read(bank_history[bank]) << shift : 0;
+> +	this_cpu_write(bank_time_stamp[bank], now);
+> +
+> +	if ((status & (MCI_STATUS_VAL | MCI_STATUS_UC)) == MCI_STATUS_VAL)
+> +		history |= 1;
+> +	this_cpu_write(bank_history[bank], history);
+> +
+> +	if (this_cpu_read(bank_storm[bank])) {
+> +		if (history & GENMASK_ULL(STORM_END - 1, 0))
+> +			return;
+
+Aha, under STORM_END polls you don't declare the storm as being over.
+
+> +		pr_notice("CPU%d BANK%d CMCI storm subsided\n", smp_processor_id(), bank);
+> +		cmci_set_threshold(bank, cmci_threshold[bank]);
+> +		cmci_storm_end(bank);
+> +	} else {
+> +		if (hweight64(history) < STORM_BEGIN)
+> +			return;
+
+Aha, so you need STORM_BEGIN errors within the last second to cause the
+storm polling. Ok I guess.
+
+So all in all I can't find anything eeewy in this - it would need to
+have a lot more documentation, though, as this is not the most trivial
+thing to stare at.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

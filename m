@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF644CFB27
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFDC4CF7B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240581AbiCGK2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:28:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
+        id S238144AbiCGJr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242282AbiCGKLY (ORCPT
+        with ESMTP id S238484AbiCGJi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:11:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFB989300;
-        Mon,  7 Mar 2022 01:54:48 -0800 (PST)
+        Mon, 7 Mar 2022 04:38:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08D8DEB4;
+        Mon,  7 Mar 2022 01:32:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B926BB80F9F;
-        Mon,  7 Mar 2022 09:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B92C340F3;
-        Mon,  7 Mar 2022 09:53:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DB626116E;
+        Mon,  7 Mar 2022 09:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 718E7C340F4;
+        Mon,  7 Mar 2022 09:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646839;
-        bh=Oo8c0T73WwRUB0tlUJ77/gdoT2ejqRUeLYuZyye5QNA=;
+        s=korg; t=1646645548;
+        bh=fix1Ic/MVIZyCd2ZMrJfuzWmXa+3o2U4zW3oE7H2cfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u11wlCZxIckC46I/di5jDi3LB0wCdyGmWOI40ia7xHif5tnmR0Tbb/M6ugWJb46jp
-         vP//i8aiyEEieCOnJ7bzulq5mvXGLHmp7EOQGkxfmNvHRjLWma0eKy5bm5GFbnwoVB
-         ppWkaLTU6RzKQGuFnrr2nfSRpRj4Nglxus5FxGcw=
+        b=EnBdxbA6RlieUUl2+JNKam/IVYTYYLnmJa5cRIGCedZ8+WMaoPLIo/uuOH9iIKeVY
+         huW7jRLvlQRPFJKqkEZQefiI2jd5NOqBVC+ZfanEN6aqtb5aA4RanfoUm2ApexOw6U
+         MqmNOn656CwE0770SRD/ufSnlu8tRwA9UVn5Eo+8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 5.16 070/186] xfrm: enforce validity of offload input flags
+        stable@vger.kernel.org, Zhen Ni <nizhen@uniontech.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 025/105] ALSA: intel_hdmi: Fix reference to PCM buffer address
 Date:   Mon,  7 Mar 2022 10:18:28 +0100
-Message-Id: <20220307091656.048648948@linuxfoundation.org>
+Message-Id: <20220307091644.889542619@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Zhen Ni <nizhen@uniontech.com>
 
-commit 7c76ecd9c99b6e9a771d813ab1aa7fa428b3ade1 upstream.
+commit 0aa6b294b312d9710804679abd2c0c8ca52cc2bc upstream.
 
-struct xfrm_user_offload has flags variable that received user input,
-but kernel didn't check if valid bits were provided. It caused a situation
-where not sanitized input was forwarded directly to the drivers.
+PCM buffers might be allocated dynamically when the buffer
+preallocation failed or a larger buffer is requested, and it's not
+guaranteed that substream->dma_buffer points to the actually used
+buffer.  The driver needs to refer to substream->runtime->dma_addr
+instead for the buffer address.
 
-For example, XFRM_OFFLOAD_IPV6 define that was exposed, was used by
-strongswan, but not implemented in the kernel at all.
-
-As a solution, check and sanitize input flags to forward
-XFRM_OFFLOAD_INBOUND to the drivers.
-
-Fixes: d77e38e612a0 ("xfrm: Add an IPsec hardware offloading API")
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220302074241.30469-1-nizhen@uniontech.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/xfrm.h |    6 ++++++
- net/xfrm/xfrm_device.c    |    6 +++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ sound/x86/intel_hdmi_audio.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/uapi/linux/xfrm.h
-+++ b/include/uapi/linux/xfrm.h
-@@ -511,6 +511,12 @@ struct xfrm_user_offload {
- 	int				ifindex;
- 	__u8				flags;
- };
-+/* This flag was exposed without any kernel code that supporting it.
-+ * Unfortunately, strongswan has the code that uses sets this flag,
-+ * which makes impossible to reuse this bit.
-+ *
-+ * So leave it here to make sure that it won't be reused by mistake.
-+ */
- #define XFRM_OFFLOAD_IPV6	1
- #define XFRM_OFFLOAD_INBOUND	2
+--- a/sound/x86/intel_hdmi_audio.c
++++ b/sound/x86/intel_hdmi_audio.c
+@@ -1276,7 +1276,7 @@ static int had_pcm_mmap(struct snd_pcm_s
+ {
+ 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+ 	return remap_pfn_range(vma, vma->vm_start,
+-			substream->dma_buffer.addr >> PAGE_SHIFT,
++			substream->runtime->dma_addr >> PAGE_SHIFT,
+ 			vma->vm_end - vma->vm_start, vma->vm_page_prot);
+ }
  
---- a/net/xfrm/xfrm_device.c
-+++ b/net/xfrm/xfrm_device.c
-@@ -223,6 +223,9 @@ int xfrm_dev_state_add(struct net *net,
- 	if (x->encap || x->tfcpad)
- 		return -EINVAL;
- 
-+	if (xuo->flags & ~(XFRM_OFFLOAD_IPV6 | XFRM_OFFLOAD_INBOUND))
-+		return -EINVAL;
-+
- 	dev = dev_get_by_index(net, xuo->ifindex);
- 	if (!dev) {
- 		if (!(xuo->flags & XFRM_OFFLOAD_INBOUND)) {
-@@ -261,7 +264,8 @@ int xfrm_dev_state_add(struct net *net,
- 	xso->dev = dev;
- 	xso->real_dev = dev;
- 	xso->num_exthdrs = 1;
--	xso->flags = xuo->flags;
-+	/* Don't forward bit that is not implemented */
-+	xso->flags = xuo->flags & ~XFRM_OFFLOAD_IPV6;
- 
- 	err = dev->xfrmdev_ops->xdo_dev_state_add(x);
- 	if (err) {
 
 

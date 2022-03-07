@@ -2,286 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E934D0535
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 655A44D0538
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244445AbiCGR3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:29:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S239493AbiCGR3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244443AbiCGR3Q (ORCPT
+        with ESMTP id S232999AbiCGR3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:29:16 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C1431DFC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:28:20 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 78FCE3F605
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646674099;
-        bh=zWqkAeekz2GA5fDk4zNgeAU/W+NGxH0bY9P4VqyG+q4=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=h4nys6dARqH1HOAALE3Fwwh8ziSOds/uvfoNsZIrxfsEPewbGLOhjUz3GCCIfLt9H
-         0qpqFxYEnGWgp8FdkwOGMPDGXbB16/TIID3OR/nTEHx9J8Ayx8JKiLLASVF0HeyjSb
-         GbIJFVCeiRBvVgc0D2anaRExn7Z3ZBh4/98LjkSbaj9tOCaFZX3soThIWgfDFPaw5s
-         tHKyhEkC2sHVO+IqsKVTqvYAund9bDaai8ruSiX7QUlsSgsKxf5XfbungTFjABdUQ4
-         s+A9J7/5234SMyqv9RZRQ9vVDLitb7IeqCwUrzmWSTn5VNxwuc2YAZT4JYJWoeyVaH
-         wdRiaOQqWSCQw==
-Received: by mail-ej1-f71.google.com with SMTP id le4-20020a170907170400b006dab546bc40so4053565ejc.15
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:28:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zWqkAeekz2GA5fDk4zNgeAU/W+NGxH0bY9P4VqyG+q4=;
-        b=PONTReE03jNToNCZvcBjdUD9wvcU5hVLd/5oLv7dN6NEL/C39q0paGNpdeApqXj/6v
-         g0HuWZ0jGVwBO1MDQkoeZpahTBpLrn98ADfeMIebKa1Tl56G7M+SjRBT+5oRFZ/DM8Y9
-         GWGttwlE+AMuNT3axZJ2xm9l8fHSvKY47/NkvGDQ0YtS9nx78QJ7uX10iScijmvc6d3U
-         7D8Z/AokjIrXbGZ1amWZ6gdCRbvIs8/rPVq+pdbO07WWSt/nwHB+B692oOpTxg/uC0Cw
-         A+oob2bXKvLeAp4ywYH1VjvWrfiqJuCaVboUFQX7Y3W2dkJF9clPBvrHq76jkXD5qSra
-         YHiQ==
-X-Gm-Message-State: AOAM5312DoVZQ1SbFKdHMJXdv/BpljM0xoAURZael/OKiBRvD1H2BqWN
-        RhkQPt/IKKlxDaKYPwxx7+DEW6TB+dGK+C6bxi3zDvIL57iVvzK54DuZmhfCl5CciYSsvt9WlGr
-        FABukhn3mlJvgf0tTVg2t8SvNjI4g9LIN60VU8SB6og==
-X-Received: by 2002:a17:907:1c0f:b0:6db:fb2:ff94 with SMTP id nc15-20020a1709071c0f00b006db0fb2ff94mr6386429ejc.581.1646674099021;
-        Mon, 07 Mar 2022 09:28:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxFsbDaiR0foKLH8GCD7HHZMCXBWAvQszk0lRq624IFRdPIjSR6SL8eJwUWJp7owpT4k6uG1g==
-X-Received: by 2002:a17:907:1c0f:b0:6db:fb2:ff94 with SMTP id nc15-20020a1709071c0f00b006db0fb2ff94mr6386406ejc.581.1646674098773;
-        Mon, 07 Mar 2022 09:28:18 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id g13-20020a50bf4d000000b00410d407da2esm6557971edk.13.2022.03.07.09.28.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 09:28:18 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH] MAINTAINERS: update Krzysztof Kozlowski's email
-Date:   Mon,  7 Mar 2022 18:28:05 +0100
-Message-Id: <20220307172805.156760-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 7 Mar 2022 12:29:33 -0500
+Received: from out29-73.mail.aliyun.com (out29-73.mail.aliyun.com [115.124.29.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DFD24F22;
+        Mon,  7 Mar 2022 09:28:37 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07437934|-1;BR=01201311R671S35rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0132764-0.000628198-0.986095;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.N.Iespb_1646674114;
+Received: from 192.168.10.154(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.N.Iespb_1646674114)
+          by smtp.aliyun-inc.com(33.37.68.185);
+          Tue, 08 Mar 2022 01:28:35 +0800
+Subject: Re: [PATCH v2] pinctrl: ingenic: Fix regmap on X series SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        paul@crapouillou.net, linus.walleij@linaro.org
+Cc:     linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220224145821.518835-1-aidanmacdonald.0x0@gmail.com>
+From:   Zhou Yanjie <zhouyu@wanyeetech.com>
+Message-ID: <a8322347-602b-ce48-6b58-4ed77df8951c@wanyeetech.com>
+Date:   Tue, 8 Mar 2022 01:28:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <20220224145821.518835-1-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use Krzysztof Kozlowski's @kernel.org account in maintainer entries.
+Hi Aidan,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+On 2022/2/24 下午10:58, Aidan MacDonald wrote:
+> The X series Ingenic SoCs have a shadow GPIO group which is at a higher
+> offset than the other groups, and is used for all GPIO configuration.
+> The regmap did not take this offset into account and set max_register
+> too low, so the regmap API blocked writes to the shadow group, which
+> made the pinctrl driver unable to configure any pins.
+>
+> Fix this by adding regmap access tables to the chip info.
+>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+> v1: https://lore.kernel.org/linux-mips/20220209230452.19535-1-aidanmacdonald.0x0@gmail.com/
+>
+>   drivers/pinctrl/pinctrl-ingenic.c | 53 ++++++++++++++++++++++++++++++-
+>   1 file changed, 52 insertions(+), 1 deletion(-)
 
----
 
-Hi Arnd and Olof,
+Tested-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 
-Could you take this one directly for fixes?
 
-My email address also appears in the bindings. For now mailmap will
-handle it. I will change it after merge window, because some of the
-bindings are in separate for-next branches.
----
- .mailmap                            |  1 +
- MAINTAINERS                         | 34 ++++++++++++++---------------
- drivers/soc/samsung/exynos-chipid.c |  2 +-
- 3 files changed, 19 insertions(+), 18 deletions(-)
-
-diff --git a/.mailmap b/.mailmap
-index 29a45c106dfb..f9781674e7e7 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -217,6 +217,7 @@ Koushik <raghavendra.koushik@neterion.com>
- Krishna Manikandan <quic_mkrishn@quicinc.com> <mkrishn@codeaurora.org>
- Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski.k@gmail.com>
- Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski@samsung.com>
-+Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@canonical.com>
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
- Kuogee Hsieh <quic_khsieh@quicinc.com> <khsieh@codeaurora.org>
- Leonardo Bras <leobras.c@gmail.com> <leonardo@linux.ibm.com>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d7ea92ce1b1d..4e88b4e17e35 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2627,7 +2627,7 @@ F:	sound/soc/rockchip/
- N:	rockchip
- 
- ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- R:	Alim Akhtar <alim.akhtar@samsung.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-samsung-soc@vger.kernel.org
-@@ -11852,7 +11852,7 @@ F:	drivers/iio/proximity/mb1232.c
- 
- MAXIM MAX17040 FAMILY FUEL GAUGE DRIVERS
- R:	Iskren Chernev <iskren.chernev@gmail.com>
--R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+R:	Krzysztof Kozlowski <krzk@kernel.org>
- R:	Marek Szyprowski <m.szyprowski@samsung.com>
- R:	Matheus Castello <matheus@castello.eng.br>
- L:	linux-pm@vger.kernel.org
-@@ -11862,7 +11862,7 @@ F:	drivers/power/supply/max17040_battery.c
- 
- MAXIM MAX17042 FAMILY FUEL GAUGE DRIVERS
- R:	Hans de Goede <hdegoede@redhat.com>
--R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+R:	Krzysztof Kozlowski <krzk@kernel.org>
- R:	Marek Szyprowski <m.szyprowski@samsung.com>
- R:	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
- R:	Purism Kernel Team <kernel@puri.sm>
-@@ -11907,7 +11907,7 @@ F:	Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
- F:	drivers/power/supply/max77976_charger.c
- 
- MAXIM MUIC CHARGER DRIVERS FOR EXYNOS BASED BOARDS
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-pm@vger.kernel.org
- S:	Supported
-@@ -11917,7 +11917,7 @@ F:	drivers/power/supply/max77693_charger.c
- 
- MAXIM PMIC AND MUIC DRIVERS FOR EXYNOS BASED BOARDS
- M:	Chanwoo Choi <cw00.choi@samsung.com>
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
-@@ -12607,7 +12607,7 @@ F:	mm/memblock.c
- F:	tools/testing/memblock/
- 
- MEMORY CONTROLLER DRIVERS
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git
-@@ -13748,7 +13748,7 @@ F:	include/uapi/linux/nexthop.h
- F:	net/ipv4/nexthop.c
- 
- NFC SUBSYSTEM
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-nfc@lists.01.org (subscribers-only)
- L:	netdev@vger.kernel.org
- S:	Maintained
-@@ -14062,7 +14062,7 @@ F:	Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
- F:	drivers/regulator/pf8x00-regulator.c
- 
- NXP PTN5150A CC LOGIC AND EXTCON DRIVER
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/extcon/extcon-ptn5150.yaml
-@@ -15515,7 +15515,7 @@ F:	drivers/pinctrl/renesas/
- 
- PIN CONTROLLER - SAMSUNG
- M:	Tomasz Figa <tomasz.figa@gmail.com>
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
- R:	Alim Akhtar <alim.akhtar@samsung.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -17193,7 +17193,7 @@ W:	http://www.ibm.com/developerworks/linux/linux390/
- F:	drivers/s390/scsi/zfcp_*
- 
- S3C ADC BATTERY DRIVER
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-samsung-soc@vger.kernel.org
- S:	Odd Fixes
- F:	drivers/power/supply/s3c_adc_battery.c
-@@ -17238,7 +17238,7 @@ F:	Documentation/admin-guide/LSM/SafeSetID.rst
- F:	security/safesetid/
- 
- SAMSUNG AUDIO (ASoC) DRIVERS
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Supported
-@@ -17246,7 +17246,7 @@ F:	Documentation/devicetree/bindings/sound/samsung*
- F:	sound/soc/samsung/
- 
- SAMSUNG EXYNOS PSEUDO RANDOM NUMBER GENERATOR (RNG) DRIVER
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-crypto@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
-@@ -17281,7 +17281,7 @@ S:	Maintained
- F:	drivers/platform/x86/samsung-laptop.c
- 
- SAMSUNG MULTIFUNCTION PMIC DEVICE DRIVERS
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-kernel@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
-@@ -17307,7 +17307,7 @@ F:	drivers/media/platform/s3c-camif/
- F:	include/media/drv-intf/s3c_camif.h
- 
- SAMSUNG S3FWRN5 NFC DRIVER
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- M:	Krzysztof Opasiak <k.opasiak@samsung.com>
- L:	linux-nfc@lists.01.org (subscribers-only)
- S:	Maintained
-@@ -17329,7 +17329,7 @@ S:	Supported
- F:	drivers/media/i2c/s5k5baf.c
- 
- SAMSUNG S5P Security SubSystem (SSS) DRIVER
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- M:	Vladimir Zapolskiy <vz@mleia.com>
- L:	linux-crypto@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
-@@ -17364,7 +17364,7 @@ F:	include/linux/clk/samsung.h
- F:	include/linux/platform_data/clk-s3c2410.h
- 
- SAMSUNG SPI DRIVERS
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- M:	Andi Shyti <andi@etezian.org>
- L:	linux-spi@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
-@@ -17382,7 +17382,7 @@ F:	drivers/net/ethernet/samsung/sxgbe/
- 
- SAMSUNG THERMAL DRIVER
- M:	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-pm@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
-diff --git a/drivers/soc/samsung/exynos-chipid.c b/drivers/soc/samsung/exynos-chipid.c
-index 2746d05936d3..0fb3631e7346 100644
---- a/drivers/soc/samsung/exynos-chipid.c
-+++ b/drivers/soc/samsung/exynos-chipid.c
-@@ -204,7 +204,7 @@ module_platform_driver(exynos_chipid_driver);
- 
- MODULE_DESCRIPTION("Samsung Exynos ChipID controller and ASV driver");
- MODULE_AUTHOR("Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>");
--MODULE_AUTHOR("Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>");
-+MODULE_AUTHOR("Krzysztof Kozlowski <krzk@kernel.org>");
- MODULE_AUTHOR("Pankaj Dubey <pankaj.dubey@samsung.com>");
- MODULE_AUTHOR("Sylwester Nawrocki <s.nawrocki@samsung.com>");
- MODULE_LICENSE("GPL");
--- 
-2.32.0
-
+>
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+> index 2712f51eb238..074c94edd90b 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -119,6 +119,9 @@ struct ingenic_chip_info {
+>   	unsigned int num_functions;
+>   
+>   	const u32 *pull_ups, *pull_downs;
+> +
+> +	unsigned int max_register;
+> +	const struct regmap_access_table* access_table;
+>   };
+>   
+>   struct ingenic_pinctrl {
+> @@ -228,6 +231,7 @@ static const struct ingenic_chip_info jz4730_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4730_functions),
+>   	.pull_ups = jz4730_pull_ups,
+>   	.pull_downs = jz4730_pull_downs,
+> +	.max_register = 4 * 0x30 - 4,
+>   };
+>   
+>   static const u32 jz4740_pull_ups[4] = {
+> @@ -337,6 +341,7 @@ static const struct ingenic_chip_info jz4740_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4740_functions),
+>   	.pull_ups = jz4740_pull_ups,
+>   	.pull_downs = jz4740_pull_downs,
+> +	.max_register = 4 * 0x100 - 4,
+>   };
+>   
+>   static int jz4725b_mmc0_1bit_pins[] = { 0x48, 0x49, 0x5c, };
+> @@ -439,6 +444,7 @@ static const struct ingenic_chip_info jz4725b_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4725b_functions),
+>   	.pull_ups = jz4740_pull_ups,
+>   	.pull_downs = jz4740_pull_downs,
+> +	.max_register = 4 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4750_pull_ups[6] = {
+> @@ -576,6 +582,7 @@ static const struct ingenic_chip_info jz4750_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4750_functions),
+>   	.pull_ups = jz4750_pull_ups,
+>   	.pull_downs = jz4750_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4755_pull_ups[6] = {
+> @@ -741,6 +748,7 @@ static const struct ingenic_chip_info jz4755_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4755_functions),
+>   	.pull_ups = jz4755_pull_ups,
+>   	.pull_downs = jz4755_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4760_pull_ups[6] = {
+> @@ -1089,6 +1097,7 @@ static const struct ingenic_chip_info jz4760_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4760_functions),
+>   	.pull_ups = jz4760_pull_ups,
+>   	.pull_downs = jz4760_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4770_pull_ups[6] = {
+> @@ -1429,6 +1438,7 @@ static const struct ingenic_chip_info jz4770_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4770_functions),
+>   	.pull_ups = jz4770_pull_ups,
+>   	.pull_downs = jz4770_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4775_pull_ups[7] = {
+> @@ -1702,6 +1712,7 @@ static const struct ingenic_chip_info jz4775_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4775_functions),
+>   	.pull_ups = jz4775_pull_ups,
+>   	.pull_downs = jz4775_pull_downs,
+> +	.max_register = 7 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4780_pull_ups[6] = {
+> @@ -1966,6 +1977,7 @@ static const struct ingenic_chip_info jz4780_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4780_functions),
+>   	.pull_ups = jz4780_pull_ups,
+>   	.pull_downs = jz4780_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 x1000_pull_ups[4] = {
+> @@ -2179,6 +2191,17 @@ static const struct function_desc x1000_functions[] = {
+>   	{ "mac", x1000_mac_groups, ARRAY_SIZE(x1000_mac_groups), },
+>   };
+>   
+> +static const struct regmap_range x1000_access_ranges[] = {
+> +	regmap_reg_range(0x000, 0x400 - 4),
+> +	regmap_reg_range(0x700, 0x800 - 4),
+> +};
+> +
+> +/* shared with X1500 */
+> +static const struct regmap_access_table x1000_access_table = {
+> +	.yes_ranges = x1000_access_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(x1000_access_ranges),
+> +};
+> +
+>   static const struct ingenic_chip_info x1000_chip_info = {
+>   	.num_chips = 4,
+>   	.reg_offset = 0x100,
+> @@ -2189,6 +2212,7 @@ static const struct ingenic_chip_info x1000_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x1000_functions),
+>   	.pull_ups = x1000_pull_ups,
+>   	.pull_downs = x1000_pull_downs,
+> +	.access_table = &x1000_access_table,
+>   };
+>   
+>   static int x1500_uart0_data_pins[] = { 0x4a, 0x4b, };
+> @@ -2300,6 +2324,7 @@ static const struct ingenic_chip_info x1500_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x1500_functions),
+>   	.pull_ups = x1000_pull_ups,
+>   	.pull_downs = x1000_pull_downs,
+> +	.access_table = &x1000_access_table,
+>   };
+>   
+>   static const u32 x1830_pull_ups[4] = {
+> @@ -2506,6 +2531,16 @@ static const struct function_desc x1830_functions[] = {
+>   	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
+>   };
+>   
+> +static const struct regmap_range x1830_access_ranges[] = {
+> +	regmap_reg_range(0x0000, 0x4000 - 4),
+> +	regmap_reg_range(0x7000, 0x8000 - 4),
+> +};
+> +
+> +static const struct regmap_access_table x1830_access_table = {
+> +	.yes_ranges = x1830_access_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(x1830_access_ranges),
+> +};
+> +
+>   static const struct ingenic_chip_info x1830_chip_info = {
+>   	.num_chips = 4,
+>   	.reg_offset = 0x1000,
+> @@ -2516,6 +2551,7 @@ static const struct ingenic_chip_info x1830_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x1830_functions),
+>   	.pull_ups = x1830_pull_ups,
+>   	.pull_downs = x1830_pull_downs,
+> +	.access_table = &x1830_access_table,
+>   };
+>   
+>   static const u32 x2000_pull_ups[5] = {
+> @@ -2969,6 +3005,17 @@ static const struct function_desc x2000_functions[] = {
+>   	{ "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
+>   };
+>   
+> +static const struct regmap_range x2000_access_ranges[] = {
+> +	regmap_reg_range(0x000, 0x500 - 4),
+> +	regmap_reg_range(0x700, 0x800 - 4),
+> +};
+> +
+> +/* shared with X2100 */
+> +static const struct regmap_access_table x2000_access_table = {
+> +	.yes_ranges = x2000_access_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(x2000_access_ranges),
+> +};
+> +
+>   static const struct ingenic_chip_info x2000_chip_info = {
+>   	.num_chips = 5,
+>   	.reg_offset = 0x100,
+> @@ -2979,6 +3026,7 @@ static const struct ingenic_chip_info x2000_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x2000_functions),
+>   	.pull_ups = x2000_pull_ups,
+>   	.pull_downs = x2000_pull_downs,
+> +	.access_table = &x2000_access_table,
+>   };
+>   
+>   static const u32 x2100_pull_ups[5] = {
+> @@ -3189,6 +3237,7 @@ static const struct ingenic_chip_info x2100_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x2100_functions),
+>   	.pull_ups = x2100_pull_ups,
+>   	.pull_downs = x2100_pull_downs,
+> +	.access_table = &x2000_access_table,
+>   };
+>   
+>   static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8 reg)
+> @@ -4168,7 +4217,9 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
+>   		return PTR_ERR(base);
+>   
+>   	regmap_config = ingenic_pinctrl_regmap_config;
+> -	regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
+> +	regmap_config.rd_table = chip_info->access_table;
+> +	regmap_config.wr_table = chip_info->access_table;
+> +	regmap_config.max_register = chip_info->max_register;
+>   
+>   	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
+>   	if (IS_ERR(jzpc->map)) {

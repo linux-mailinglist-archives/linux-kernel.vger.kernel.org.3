@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E284CF9FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941B84CF54C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242226AbiCGKLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S236903AbiCGJ0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:26:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240064AbiCGJuh (ORCPT
+        with ESMTP id S236950AbiCGJXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:50:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB9846B24;
-        Mon,  7 Mar 2022 01:44:06 -0800 (PST)
+        Mon, 7 Mar 2022 04:23:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8343865830;
+        Mon,  7 Mar 2022 01:21:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28C8961052;
-        Mon,  7 Mar 2022 09:44:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15661C340F3;
-        Mon,  7 Mar 2022 09:44:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D470B810BD;
+        Mon,  7 Mar 2022 09:21:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B826C340F5;
+        Mon,  7 Mar 2022 09:21:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646243;
-        bh=UVM/XEc3dj/uRbWktOGGecRDab/qgjKpsicqFCWm4Js=;
+        s=korg; t=1646644885;
+        bh=0Q2WVn2wAh2H+CtyxAHWdQFdZ4PNcyjRU4u5dhDfKhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UNRKGJCfCK53Elh/3OYrKFJ+W4CWAEKRWRvz0Pl7QiK1u8w1GmlTXbxL2p3z3H0Pa
-         nzgeQnhyeblC1KOrm7ESUk7aTU5Os5GQk2RZ1v5/KBysEHBv5HU+uS/oaF5DuVi3Tq
-         C8xNj1zSXzOj0/pKK17XBoHNzUZuW22dDpajRoj0=
+        b=oFlIO2VGTvSeTK6qui5Ra5ww1tkxwwLO8pgmr7HnUxM4nwdZTadfT/YqOzUmgv/eI
+         HYtwWpwz/OnMjOdlHCGh9fDy/u4ryRZXjdOJAgz2/6Q1iAK1UscS6ExarhQyR9LRop
+         mO51fuXefVgwmLZkOs0+18OqIUIJXVgSmZm6fJk4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slawomir Laba <slawomirx.laba@intel.com>,
-        Phani Burra <phani.r.burra@intel.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.15 181/262] iavf: Fix deadlock in iavf_reset_task
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH 4.14 11/42] usb: gadget: clear related members when goto fail
 Date:   Mon,  7 Mar 2022 10:18:45 +0100
-Message-Id: <20220307091707.523317030@linuxfoundation.org>
+Message-Id: <20220307091636.478364799@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,36 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slawomir Laba <slawomirx.laba@intel.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit e85ff9c631e1bf109ce8428848dfc8e8b0041f48 upstream.
+commit 501e38a5531efbd77d5c73c0ba838a889bfc1d74 upstream.
 
-There exists a missing mutex_unlock call on crit_lock in
-iavf_reset_task call path.
+dev->config and dev->hs_config and dev->dev need to be cleaned if
+dev_config fails to avoid UAF.
 
-Unlock the crit_lock before returning from reset task.
-
-Fixes: 5ac49f3c2702 ("iavf: use mutexes for locking of critical sections")
-Signed-off-by: Slawomir Laba <slawomirx.laba@intel.com>
-Signed-off-by: Phani Burra <phani.r.burra@intel.com>
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20211231172138.7993-3-hbh25y@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/gadget/legacy/inode.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2206,6 +2206,7 @@ static void iavf_reset_task(struct work_
- 			reg_val);
- 		iavf_disable_vf(adapter);
- 		mutex_unlock(&adapter->client_lock);
-+		mutex_unlock(&adapter->crit_lock);
- 		return; /* Do not attempt to reinit. It's dead, Jim. */
- 	}
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -1882,8 +1882,8 @@ dev_config (struct file *fd, const char
  
+ 	value = usb_gadget_probe_driver(&gadgetfs_driver);
+ 	if (value != 0) {
+-		kfree (dev->buf);
+-		dev->buf = NULL;
++		spin_lock_irq(&dev->lock);
++		goto fail;
+ 	} else {
+ 		/* at this point "good" hardware has for the first time
+ 		 * let the USB the host see us.  alternatively, if users
+@@ -1900,6 +1900,9 @@ dev_config (struct file *fd, const char
+ 	return value;
+ 
+ fail:
++	dev->config = NULL;
++	dev->hs_config = NULL;
++	dev->dev = NULL;
+ 	spin_unlock_irq (&dev->lock);
+ 	pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev);
+ 	kfree (dev->buf);
 
 

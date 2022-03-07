@@ -2,210 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BAC4CF9C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615B94CF9BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240853AbiCGKJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
+        id S241836AbiCGKKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:10:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239988AbiCGJud (ORCPT
+        with ESMTP id S240505AbiCGJvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:50:33 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53551723FD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 01:44:00 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E02C83F5F5
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646646225;
-        bh=iBR4PX+oGP38NiU1odaqND+HsFxr+kkdimwXNBXKUU0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=n65FgNQ5101qIZGsWMW8O0sr4foc3eeVw6C/mjxQniErzaxq7RbpJ1AL3dTLb0cD7
-         2wt2rwDpTLojT5Ct1okkuk4OJ4R0MDEc2N4g/dIQ73MGMrQKbpeWbO4NVQxRRvBg8P
-         goI6qK6bEz0CKqNxQ/Sdz7hPUzaPXOAO16ytU6v0Mz6KOnanDpetZIsLnjKkOa59rh
-         UmQlajPNg5TIpOpc8Fc381wqzYLkGXJib6fHWdcV3Q5aB2OkQMx4Odn5vsWnC8xcfB
-         dzoLsVBe47RkVXZ49E3NmiCzoly2++52KWg9NcV84GKP96U0rANv22k898TB7vJDZH
-         ad00O1fiG5YHg==
-Received: by mail-ed1-f71.google.com with SMTP id u28-20020a50d51c000000b004159ffb8f24so8308042edi.4
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 01:43:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iBR4PX+oGP38NiU1odaqND+HsFxr+kkdimwXNBXKUU0=;
-        b=ie4JjvImlqIwDbBKJPR/BXCz0LVXINdM87kRsirOAu266NIddfi8xZY7Pz6qmAhxa3
-         hTxymGJd4PLLGaEoWO1dWf3+akLHh4BEtfFkRywfFEwhluk+jlJJeeoG3XMhlVfETfdo
-         IATCd0t/idqjB3rKLGdIXiHddxCVVWmoPABhbUQoq3cbP2rbI7QN9ncyE/DAA0QTeDpL
-         sor6Q3bkJZZNdgfQo0KoOPZKAUCgFXKFdSVX1reayZeOCy6Ft3BwC4ZRqk7oUuKwO6Ib
-         KdvI5GsA44bCJEJ8xp4SBTrZyR3NpS5OWPhjPOh+6RcIE/ViCgw+sp+QVtV73HawsZaW
-         nxrg==
-X-Gm-Message-State: AOAM531hrFT/J6/gkVfoO50nIOhQ/b4s3VgEh1nuPss5okcdZVjWBRuq
-        vKdCDgEFq6DWkG4MXNvLCSXtykKjvuA+OKbl3QQDLMFzcGBSnRwXH9wOD+ORtGMMQMfrSS5oiFh
-        1PQi8vvBgbg8Pu6l1JKSgxn5JKqrkSLijQCu+pwDCBw==
-X-Received: by 2002:a17:907:3ea3:b0:6da:6f16:bd9b with SMTP id hs35-20020a1709073ea300b006da6f16bd9bmr8484392ejc.308.1646646224516;
-        Mon, 07 Mar 2022 01:43:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzvFkrpQ2abZZeyYkoh/uqZU+SVmzZg0o9SDWnyA32nfxIrSpfTRWoUGqWl5FxqsWOJFmS2Cw==
-X-Received: by 2002:a17:907:3ea3:b0:6da:6f16:bd9b with SMTP id hs35-20020a1709073ea300b006da6f16bd9bmr8484380ejc.308.1646646224286;
-        Mon, 07 Mar 2022 01:43:44 -0800 (PST)
-Received: from [192.168.0.141] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05640205c900b00415fbbdabbbsm4758620edx.9.2022.03.07.01.43.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 01:43:43 -0800 (PST)
-Message-ID: <71f2c22b-e037-3bb4-e7e1-e226d3243536@canonical.com>
-Date:   Mon, 7 Mar 2022 10:43:42 +0100
+        Mon, 7 Mar 2022 04:51:04 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767787562C;
+        Mon,  7 Mar 2022 01:44:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646646286; x=1678182286;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iYmh9KvmrAN/9n49jwIZ1qbV8GdSrmGWQVFa5C6rxI4=;
+  b=amwK989APox6E/AfbAd0YUDGIOOPLjF8xKh4zmJgdz1NOS3F+trbAizf
+   M0Xi1Gb7xwz12Dn2u9lJV8G5sV3n2eUM6ywdPtzhWow5toqbUoy7ZlG92
+   09dFqh2wCNUwBxjGuYf6nhq2phKDYdmTeHBLawX75UdJXjZFk+vfC4idi
+   ErGGN/AvNy6HNsPEmBGoRXDMZhNeiYa1fzjoZbanCbW50M1C0+1pSK+Gm
+   Rl/HXN/shXUN9xCl0j5AP1z0m7xxsj4OL1CDYmPSBUn6d6tSVz5oyOBZl
+   8NimXjo2+Hzc7OFCn9LqU37eOz8migoBOb8fRxF+MTIV1XxKfhkZToeou
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="254541218"
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="254541218"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:44:40 -0800
+X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
+   d="scan'208";a="495003939"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:44:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nR9u8-00Ch1M-IP;
+        Mon, 07 Mar 2022 11:43:48 +0200
+Date:   Mon, 7 Mar 2022 11:43:48 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Tali Perry <tali.perry1@gmail.com>,
+        Tyrone Ting <warp5tw@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu, lukas.bulwahn@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        Tomer Maimon <tomer.maimon@nuvoton.com>, KWLIU@nuvoton.com,
+        JJLIU0@nuvoton.com, kfting@nuvoton.com,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 11/11] i2c: npcm: Support NPCM845
+Message-ID: <YiXT1JX5A7Ez7C6G@smile.fi.intel.com>
+References: <20220303083141.8742-1-warp5tw@gmail.com>
+ <20220303083141.8742-12-warp5tw@gmail.com>
+ <YiCb7LNY9tmMCZx7@smile.fi.intel.com>
+ <CAHb3i=tWhtXK+c5GGbp6m23AHoyy=4woT_+n3a_N-6CqKUYb=g@mail.gmail.com>
+ <YiDMX7pUqs/rLJUU@smile.fi.intel.com>
+ <CAP6Zq1iy0yNMemqDjrLu1F0rrRSDFhZ+SqdoOa9FyJDNL0ENXA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] clocksource/drivers/exynos_mct: Support using only local
- timer
-Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel <kernel@axis.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>
-References: <20220307083255.1577365-1-vincent.whitchurch@axis.com>
- <08992f48-6cb6-8dc0-33d2-f18f942d2bee@canonical.com>
- <20220307092437.GA32457@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307092437.GA32457@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP6Zq1iy0yNMemqDjrLu1F0rrRSDFhZ+SqdoOa9FyJDNL0ENXA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 10:24, Vincent Whitchurch wrote:
-> On Mon, Mar 07, 2022 at 10:06:26AM +0100, Krzysztof Kozlowski wrote:
->> On 07/03/2022 09:32, Vincent Whitchurch wrote:
->>> The ARTPEC-8 SoC has a quad-core Cortex-A53 and a single-core Cortex-A5
->>> which share one MCT with one global and eight local timers.
+On Sun, Mar 06, 2022 at 03:33:20PM +0200, Tomer Maimon wrote:
+> On Thu, 3 Mar 2022 at 16:11, Andy Shevchenko <
+> andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, Mar 03, 2022 at 02:35:58PM +0200, Tali Perry wrote:
+> > > > On Thu, Mar 3, 2022 at 12:45 PM Andy Shevchenko <
+> > andriy.shevchenko@linux.intel.com> wrote:
 
-Please mention that this is a two-OS case (or without cache coherency),
-because usual design is different - two clusters being cache coherent.
+...
 
->>>
->>> The Cortex-A53 boots first and starts the global FRC and also registers
->>> a clock events device using the global timer.  (This global timer clock
->>> events is usually replaced by arch timer clock events for each of the
->>> cores.)
->>>
->>> When the A5 boots, we should not use the global timer interrupts or
->>> write to the global timer registers.  This is because even if there are
->>> four global comparators, the control bits for all four are in the same
->>> registers, and we would need to synchronize between the cpus.  Instead,
->>> the global timer FRC (already started by the A53) should be used as the
->>> clock source, and one of the local timers which are not used by the A53
->>> can be used for clock events on the A5.
->>>
->>> To support this, add a module param to set the local timer starting
->>> index.  If this parameter is non-zero, the global timer clock events
->>> device is not registered and we don't write to the global FRC if it is
->>> already started.
->>>
->>> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
->>> ---
->>>  drivers/clocksource/exynos_mct.c | 29 ++++++++++++++++++++++++-----
->>>  1 file changed, 24 insertions(+), 5 deletions(-)
->>
->> This should not be send separately from the previous patch.
+> > But hold on and read set of questions below.
+> >
+> > Previously it was a fixed field with the NPCM_I2CTXF_STS_TX_BYTES mask
+> > applied,
+> > right? From above I have got that FIFO is growing twice. Is it correct?
 > 
-> OK, I will put it in a series.
-> 
->>
->>>
->>> diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
->>> index f29c812b70c9..7ea2919b1808 100644
->>> --- a/drivers/clocksource/exynos_mct.c
->>> +++ b/drivers/clocksource/exynos_mct.c
->>> @@ -33,7 +33,7 @@
->>>  #define EXYNOS4_MCT_G_INT_ENB		EXYNOS4_MCTREG(0x248)
->>>  #define EXYNOS4_MCT_G_WSTAT		EXYNOS4_MCTREG(0x24C)
->>>  #define _EXYNOS4_MCT_L_BASE		EXYNOS4_MCTREG(0x300)
->>> -#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * x))
->>> +#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * (x)))
->>>  #define EXYNOS4_MCT_L_MASK		(0xffffff00)
->>>  
->>>  #define MCT_L_TCNTB_OFFSET		(0x00)
->>> @@ -77,6 +77,13 @@ static unsigned long clk_rate;
->>>  static unsigned int mct_int_type;
->>>  static int mct_irqs[MCT_NR_IRQS];
->>>  
->>> +/*
->>> + * First local timer index to use.  If non-zero, global
->>> + * timer is not written to.
->>> + */
->>> +static unsigned int mct_local_idx;
->>> +module_param_named(local_idx, mct_local_idx, int, 0);
->>
->> No, it's a no go. Please use dedicated compatible if you need specific
->> quirks.
-> 
-> I could add a compatible, but please note that the hardware itself does
-> not have any quirks, it's only the usage of the hardware from one of the
-> Linux kernels (see the explanation below) which is different.  Is it
-> correct to use a compatible to distinguish between these kind of
-> software-determined usage differences?
-> 
->>
->>> +
->>>  struct mct_clock_event_device {
->>>  	struct clock_event_device evt;
->>>  	unsigned long base;
->>> @@ -157,6 +164,17 @@ static void exynos4_mct_frc_start(void)
->>>  	u32 reg;
->>>  
->>>  	reg = readl_relaxed(reg_base + EXYNOS4_MCT_G_TCON);
->>> +
->>> +	/*
->>> +	 * If the FRC is already running, we don't need to start it again.  We
->>> +	 * could probably just do this on all systems, but, to avoid any risk
->>> +	 * for regressions, we only do it on systems where it's absolutely
->>> +	 * necessary (i.e., on systems where writes to the global registers
->>> +	 * need to be avoided).
->>> +	 */
->>> +	if (mct_local_idx && (reg & MCT_G_TCON_START))
->>> +		return;
->>
->> I don't get it. exynos4_mct_frc_start() is called exactly only once in
->> the system - during init. Not once per every CPU or cluster (I
->> understood you have two clusters, right?).
-> 
-> Not quite.  The Cortex-A53 and the Cortex-A5 do not have cache-coherency
-> between them, so they are not run in an SMP configuration.  From the
-> Cortex-A53's perspective, the Cortex-A5 looks like any other hardware
-> block.  The Cortex-A5 could just as well have run some other operating
-> system, but I run Linux on it.  So there are two separate, independent
-> Linux kernels running on the SoC.
+> What do you mean by growing twice? TX and RX?
 
-I see, thanks for explanation. In such case it might not be a separate
-compatible (programming model is the same) but rather dedicated property
-or properties in DTS to indicate that some parts are shared with other
-system. If property is present, you skip FRC initialization and use
-local timers. You actually might need two properties - one for A53 and
-one for A5. Or some kind of map to assign subset of local interrupts to
-each of the systems.
+I meant from 16 bytes to 32 bytes.
 
-I think still that DTS is the right place for it because it is a
-property of hardware and it's too early in system boot to use some
-remote-proc or mailbox...
+> > Does the LSB stay at the same offset? What is the meaning of the MSB in 32
+> > byte
+> > case? If it's reserved then why not to always use 32 byte approach?
+> 
+> Yes, the LSB stays in the same place, and bit 5 is reserved in the NPCM7XX
+> SoC.
+> Unfortunately, the I2C test failed when we tried to use the 32 bytes
+> approach at NPCM7XX Soc, this is why we added NPCM_I2CTXF_STS_TX_BYTES and
+> NPCM_I2C_STSRXF_RX_BYTES to the data structure.
+> 
+> The device tree data structure pass data for each specific device, so I
+> don't understand why not use device tree data for supporting the I2C
+> specific device? this is not the case here?
 
-Best regards,
-Krzysztof
+Basically we use compatible strings for that, but in any case if something
+can be autodetected from hardware, it's better to use autodetection.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,212 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8321B4D09E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 22:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 469334D0963
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 22:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343641AbiCGVkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 16:40:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S244883AbiCGVeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 16:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343637AbiCGVhu (ORCPT
+        with ESMTP id S232501AbiCGVen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 16:37:50 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E38C8B6C4;
-        Mon,  7 Mar 2022 13:35:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XYfPwc2OTVi5cDqm1U/TN+BsBWd9UDl0yAzN1JZWSBlXo+o6jeiDQqKp9u0/FF42NChXwVPsErz1rE9J6hYFbjj8nqVIiVwepfOely8CeyOOyyyEH0At+qkRcYRvYShIP0fH8CJAM/Gwj27B+k/mSHOQoCUifing88Zb5a5ekV3vGZhNgsS5VUEgBakGTjiAxPMZgmJqYY7gXaaz5Bt5A+FJ0x5JUheIgAU7Bq4mRN6C7iptnqSVsl8g/cLgjys4KM9syNdd8yIazWu+xQERJyQvATW6HM58huN9k1EYn0nnM0O2CTRja2YSujN75uR+ivx38Vy49GqXwpzK7IHPGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fbYtPu/R4hZSC0fOc8BmZk5t0+Odd/LLecFlmc4pxCo=;
- b=f2+EOjJ/QPwFjN7KSMffSEbNpJ83UUqFPuSQNckREkygtShPrYGDFWqeNz/OvbWM1XIRCOaxqp/3sHORjC5zC/TDiqTma9R7J7iN1VILaD6NuK3+TwlLV0reqe3SEt24EJtGFGxlgEKVl7CGImJY+ysUGFZfxzpPnbaSDQ6Pux3nmhA6vAKzklrFABZEPg3TceopLGESGhC5uIdOSixPEBggHiC195N8o2IDvtv7RYk5OfVxTK4K2kD2MJzZkwARr3dwFkGnzEikFFpTwhHn979uNGESsPUNbQgxP3E6QD02lZQUuOolfFVGLpIrkSulFE6i86QmnqQ7CcPchqBaeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fbYtPu/R4hZSC0fOc8BmZk5t0+Odd/LLecFlmc4pxCo=;
- b=uoBIUFiZIxJuNDC5IhVzkWpWdqRxmD3GCsQWMczWdl2JRxUdbuMmi146HrJnYTVjfi+QH8KmsPg/gnuBZ6kOjJodp7fuVU/nZvGv8FE1Ag17thvLZR76swOhnMCLAxJ1AbXUZltxlLQXsMrmXV22Odju9Xj9T/SVfI3lvDAh9Tc=
-Received: from BN9PR03CA0098.namprd03.prod.outlook.com (2603:10b6:408:fd::13)
- by DM5PR12MB1433.namprd12.prod.outlook.com (2603:10b6:3:73::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Mon, 7 Mar
- 2022 21:35:24 +0000
-Received: from BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fd:cafe::57) by BN9PR03CA0098.outlook.office365.com
- (2603:10b6:408:fd::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
- Transport; Mon, 7 Mar 2022 21:35:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT005.mail.protection.outlook.com (10.13.176.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5038.14 via Frontend Transport; Mon, 7 Mar 2022 21:35:24 +0000
-Received: from sbrijesh-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 7 Mar
- 2022 15:35:18 -0600
-From:   Brijesh Singh <brijesh.singh@amd.com>
-To:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-efi@vger.kernel.org>,
+        Mon, 7 Mar 2022 16:34:43 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0547450457;
+        Mon,  7 Mar 2022 13:33:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646688829; x=1678224829;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=P7fA5VAziyLx4eErnIxNtk976YKxMu7dfIcAeyiLxV0=;
+  b=CtRBnAEk995hrpSLj8dkq0b8//iZBcS4hN5Heu9La8xxk/4tW+uY62er
+   rmIKDt1Grhv+JE/SjhNmGNdOe00YefpNdEQeKVaSl7g4+6ijBu2q1k9Si
+   lLOlVaVFvSgo7+0UGNW/RASGE6LjBoMxSLM8iqu3iYEWHNes7O0Z6wDQQ
+   LDPLKsBMMRoB/p3j1sYwuT0tExMXkeVMip3u7KhxoPml5v4t8P4bwfkqM
+   vfwZ2qvPVvstaS0gLKbGdsvI5rlwNLjdhN1qo7P82nK7Ht5K2t6UuoGkx
+   ouLRXhCrYATESwtgw/vuFvf61qEjrfqD0R3GmnD74NU+ICjrxOomzEQ03
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="317743362"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="317743362"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 13:33:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="687687259"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Mar 2022 13:33:48 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 7 Mar 2022 13:33:47 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 7 Mar 2022 13:33:46 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.021;
+ Mon, 7 Mar 2022 13:33:46 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>
+CC:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "platform-driver-x86@vger.kernel.org" 
         <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
-        <marcorr@google.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Subject: [PATCH v12 35/46] x86/compressed: Use firmware-validated CPUID leaves for SEV-SNP guests
-Date:   Mon, 7 Mar 2022 15:33:45 -0600
-Message-ID: <20220307213356.2797205-36-brijesh.singh@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220307213356.2797205-1-brijesh.singh@amd.com>
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de" <bp@alien8.de>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [RFC 08/10] platform/x86/intel/ifs: Add IFS sysfs interface
+Thread-Topic: [RFC 08/10] platform/x86/intel/ifs: Add IFS sysfs interface
+Thread-Index: AQHYLaZd5d+yEBuhdEqmhIRDOkET6qyu6T6AgAFSX4CABIOMgIAAGXcAgAABjACAAAs3AIAACG0AgAAIiACAAAmQgP//ejMg
+Date:   Mon, 7 Mar 2022 21:33:46 +0000
+Message-ID: <5129ec667d734f3da4043ce1b7df0439@intel.com>
+References: <20220301195457.21152-1-jithu.joseph@intel.com>
+ <20220301195457.21152-9-jithu.joseph@intel.com>
+ <188492dc80c017375da76d444347b1d00c2031f6.camel@intel.com>
+ <7b9c788e-21dc-eedc-a1b4-9c6877fa48fe@intel.com>
+ <CAPcyv4h=qPFrP+mRqaZhkh5ZmYjuQawsqvf+-R036ZJVKBNK4Q@mail.gmail.com>
+ <33d0e764-86d9-8504-17fa-14b31c87de4e@intel.com>
+ <CAPcyv4g5bq9+u0iLjhpeJw8bkbCREUw60H2z_KfDz4hHCrKdFQ@mail.gmail.com>
+ <7c620f8a-189e-5ac4-30fe-1fa14ba799ea@intel.com>
+ <CAPcyv4iUuZ0aAWckWvwbxJJgt5tDJRpeonfE4DegWS6KPtJq8A@mail.gmail.com>
+ <eab8177d-eb73-ec64-ec1f-4f2a51be8aee@intel.com> <YiZ5bYPvssUFYGZj@kroah.com>
+In-Reply-To: <YiZ5bYPvssUFYGZj@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cce0c59b-1a89-45c5-a63f-08da0082638e
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1433:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1433D58830DDBBD4CB5D877AE5089@DM5PR12MB1433.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aD0UhYngMyrTyhoVnHCrC2WZUlYRq8JMEqZZ7yYe8TR5/sOCJdB0metYvu6U3HgAc6XOUX/lr7v2CaV0yQh3AR1PXJiboz9N2afnlF+hiRHhprB6IotW+3U82evP9MJMTsW8yI9LEmIgCPG/CQdpK1JsjpioAVLO2Av2XCeywsZyrtbipaRCb7NbTIhu7RoJVIkWLudjh39yvecygrbLt1FZqveumCTTYwiEO3uSf4oGmS7kvDexTgPaGPCOCp2Ih8UJaQ6Le89HChvxS5CfcYRad2pqRQsOcqHvtsdGX743blnV3Hl0BhQBrfVcDGVuKhnJvkv1Wz75NSr7TjRr9JGOWeN4HT0V1m0u8VE+i7wDahDtBY8LrS5hK/rMnf+MAbrdNeIWFuUzge4nSykjKTguh5dtKCmhR/Mmhv/RxmEtQbRstvOmFYghV5i5ThCQLH1LxeM0OqtDIYTspaiyz8s6H+34xAfZutNarfYgIp7lFQRjEF5wgsQfQ8SMlUNfeSCTvASHtdcL2kqOhTXPqC0xLMNDDGaQ5/d4crZzKS9tXLy9zipQX2zB13fAz6mthlQQK5wfRCrU0JJVWWuglTaV/bhxow7x4ioeGKeDmhgmixVFSzvrYn9+1KMw2m80fBcnQJ4ekCNpV3TWqQ9wJmlFJvIDHTppiMpFd6TnkH2frX5b4TQkoFIh2TyvW6GJzU/SRX+nmJVZnrmhELZBr28Nn0WJnoX6X92JYwPhsHU=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(356005)(2906002)(82310400004)(81166007)(7696005)(36860700001)(2616005)(86362001)(316002)(47076005)(70586007)(508600001)(70206006)(1076003)(8676002)(4326008)(6666004)(15650500001)(16526019)(336012)(26005)(8936002)(5660300002)(186003)(83380400001)(110136005)(36756003)(426003)(40460700003)(7416002)(7406005)(54906003)(44832011)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 21:35:24.1763
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cce0c59b-1a89-45c5-a63f-08da0082638e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1433
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Roth <michael.roth@amd.com>
+> > Also some context on test frequency: Hardware has  strict rate limiting=
+ of tests.
+> > Every core can be tested only once in every 30 minutes. So it is pointl=
+ess to test at high frequency.
+>
+> What limits this, the kernel?
 
-SEV-SNP guests will be provided the location of special 'secrets'
-'CPUID' pages via the Confidential Computing blob. This blob is
-provided to the boot kernel either through an EFI config table entry,
-or via a setup_data structure as defined by the Linux Boot Protocol.
+Microcode enforces the per-core repeat rate on the first implementation.
 
-Locate the Confidential Computing from these sources and, if found,
-use the provided CPUID page/table address to create a copy that the
-boot kernel will use when servicing cpuid instructions via a #VC CPUID
-handler.
+But this limit isn't architectural. Future implementations may not have
+the same, or perhaps any, limit.
 
-Signed-off-by: Michael Roth <michael.roth@amd.com>
-Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
----
- arch/x86/boot/compressed/sev.c | 46 ++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
-
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index 9e281e89037a..42cc41c9cd86 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -408,6 +408,43 @@ static struct cc_blob_sev_info *find_cc_blob(struct boot_params *bp)
- 	return cc_info;
- }
- 
-+/*
-+ * Initialize the kernel's copy of the SNP CPUID table, and set up the
-+ * pointer that will be used to access it.
-+ *
-+ * Maintaining a direct mapping of the SNP CPUID table used by firmware would
-+ * be possible as an alternative, but the approach is brittle since the
-+ * mapping needs to be updated in sync with all the changes to virtual memory
-+ * layout and related mapping facilities throughout the boot process.
-+ */
-+static void setup_cpuid_table(const struct cc_blob_sev_info *cc_info)
-+{
-+	const struct snp_cpuid_table *cpuid_table_fw, *cpuid_table;
-+	int i;
-+
-+	if (!cc_info || !cc_info->cpuid_phys || cc_info->cpuid_len < PAGE_SIZE)
-+		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_CPUID);
-+
-+	cpuid_table_fw = (const struct snp_cpuid_table *)cc_info->cpuid_phys;
-+	if (!cpuid_table_fw->count || cpuid_table_fw->count > SNP_CPUID_COUNT_MAX)
-+		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_CPUID);
-+
-+	cpuid_table = snp_cpuid_get_table();
-+	memcpy((void *)cpuid_table, cpuid_table_fw, sizeof(*cpuid_table));
-+
-+	/* Initialize CPUID ranges for range-checking. */
-+	for (i = 0; i < cpuid_table->count; i++) {
-+		const struct snp_cpuid_fn *fn = &cpuid_table->fn[i];
-+
-+		if (fn->eax_in == 0x0)
-+			cpuid_std_range_max = fn->eax;
-+		else if (fn->eax_in == 0x40000000)
-+			cpuid_hyp_range_max = fn->eax;
-+		else if (fn->eax_in == 0x80000000)
-+			cpuid_ext_range_max = fn->eax;
-+	}
-+}
-+
- /*
-  * Indicate SNP based on presence of SNP-specific CC blob. Subsequent checks
-  * will verify the SNP CPUID/MSR bits.
-@@ -423,6 +460,15 @@ bool snp_init(struct boot_params *bp)
- 	if (!cc_info)
- 		return false;
- 
-+	/*
-+	 * If a SNP-specific Confidential Computing blob is present, then
-+	 * firmware/bootloader have indicated SNP support. Verifying this
-+	 * involves CPUID checks which will be more reliable if the SNP
-+	 * CPUID table is used. See comments over snp_setup_cpuid_table() for
-+	 * more details.
-+	 */
-+	setup_cpuid_table(cc_info);
-+
- 	/*
- 	 * Pass run-time kernel a pointer to CC info via boot_params so EFI
- 	 * config table doesn't need to be searched again during early startup
--- 
-2.25.1
-
+-Tony

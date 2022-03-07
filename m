@@ -2,200 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172404D010D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6264A4D0115
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243053AbiCGOXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
+        id S243132AbiCGOYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243168AbiCGOWy (ORCPT
+        with ESMTP id S236077AbiCGOYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:22:54 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5769886E08
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:22:00 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 07F65C0012;
-        Mon,  7 Mar 2022 14:21:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646662919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rDhYU9kvWroYD/F21ltVejyktD0sL5FzrRSfr3+TnaM=;
-        b=OWLO1mSmci0YG7DcPy81g6xKKrj2yrcBihwhkUp8cihoZ5v3HRmw2x3SaT57wgzvek5iHR
-        wWvpAvyGly17r+IIMfuZqkj55cw7UeG1/a2e3nWuLdNr72981Hd9tO0x+0XE1Pgj0z81Po
-        kmzMQ1mggjYxz7MU6cxbCeEOWw4r42jXIKDEs5uM4cPWp9WuSxssW0JXAr2F3/SDT1/yoQ
-        NV9KCbJwXhd9DHH3Qmbe47guoapx8k4ZmsXm7EojrMb5zKyzOMEap2yXhoLhMd/E7KvLq1
-        FS3dnu4sw66Hov+kzLepHD3cTVWKT4YP1bYxkSY2jJvy+x/AE+JCMkJH4KZ9Rg==
-Date:   Mon, 7 Mar 2022 15:21:56 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        krzysztof.kozlowski@canonical.com, vigneshr@ti.com, nm@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: rawnand: omap2: Actually prevent invalid
- configuration and build error
-Message-ID: <20220307152156.1d6fb01b@xps13>
-In-Reply-To: <c39d64f0-deef-4cae-fab7-555a48e31811@kernel.org>
-References: <20220220004415.GA1519274@roeck-us.net>
-        <4bbe337e-8cd8-a4d6-303d-d5aa21bee2e0@infradead.org>
-        <20220304165451.0129012e@xps13>
-        <6c09de15-1ab2-5ca8-7003-69ff3f7c4dc5@kernel.org>
-        <20220307110357.20d50176@xps13>
-        <c39d64f0-deef-4cae-fab7-555a48e31811@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 7 Mar 2022 09:24:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A9532F5;
+        Mon,  7 Mar 2022 06:23:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F791B81252;
+        Mon,  7 Mar 2022 14:23:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC2EC340E9;
+        Mon,  7 Mar 2022 14:23:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646662982;
+        bh=0Qn7igLK4+VBbSp7gLFhF/fhKeQP55ogIhfNSw2/WLE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cb3j8+IWzXN37rJiLWqQUGEVD4ii6/Oemo4DTwTpiEA4V+gXQjRM4GYfsht+kwvCv
+         vkJFpF1Y8Pg+GuNd2qQ+eew6sU/XDArFADYPsScLC8eEggcTV4tGCGKuzP6Qy2e+Nm
+         8MpMnjvXXS57bXAShOoZPh7yoFANSySevMH1tJOyg5/bAUisWebkjLlfSpcg/EnJBj
+         oyhvWTqMuoUsjTFLX0FkvNwQkf4lsrtYbzNriqlb3hba7r94ECnZbn+REMGSzfW/CT
+         V2S6AFBScxSzf4ndu3c4N9itn+XJ+SP9+zowaHjtzJ2J0llO4qZf8qNCIXpl85oQ0b
+         7rNZHKbPfu+sA==
+Date:   Mon, 7 Mar 2022 16:22:21 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        zhangyiru <zhangyiru3@huawei.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        linux-mips@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
+        linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/3] MAP_POPULATE for device memory
+Message-ID: <YiYVHTkS8IsMMw6T@iki.fi>
+References: <20220306053211.135762-1-jarkko@kernel.org>
+ <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+On Mon, Mar 07, 2022 at 11:12:44AM +0100, David Hildenbrand wrote:
+> On 06.03.22 06:32, Jarkko Sakkinen wrote:
+> > For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
+> > to use that for initializing the device memory by providing a new callback
+> > f_ops->populate() for the purpose.
+> > 
+> > SGX patches are provided to show the callback in context.
+> > 
+> > An obvious alternative is a ioctl but it is less elegant and requires
+> > two syscalls (mmap + ioctl) per memory range, instead of just one
+> > (mmap).
+> 
+> What about extending MADV_POPULATE_READ | MADV_POPULATE_WRITE to support
+> VM_IO | VM_PFNMAP (as well?) ?
 
-rogerq@kernel.org wrote on Mon, 7 Mar 2022 14:25:48 +0200:
+What would be a proper point to bind that behaviour? For mmap/mprotect it'd
+be probably populate_vma_page_range() because that would span both mmap()
+and mprotect() (Dave's suggestion in this thread).
 
-> Hi Miquel,
->=20
-> On 07/03/2022 12:03, Miquel Raynal wrote:
-> > Hi Roger,
-> >=20
-> > rogerq@kernel.org wrote on Sat, 5 Mar 2022 00:50:14 +0200:
-> >  =20
-> >> Hi Miquel,
-> >>
-> >> On 04/03/2022 17:54, Miquel Raynal wrote: =20
-> >>> Hi Guenter, Roger,
-> >>>
-> >>> rdunlap@infradead.org wrote on Sat, 26 Feb 2022 22:55:28 -0800:
-> >>>    =20
-> >>>> On 2/19/22 16:44, Guenter Roeck wrote:   =20
-> >>>>> On Sat, Feb 19, 2022 at 09:36:00PM +0200, Roger Quadros wrote:     =
-=20
-> >>>>>> The root of the problem is that we are selecting symbols that have
-> >>>>>> dependencies. This can cause random configurations that can fail.
-> >>>>>> The cleanest solution is to avoid using select.
-> >>>>>>
-> >>>>>> This driver uses interfaces from the OMAP_GPMC driver so we have to
-> >>>>>> depend on it instead.
-> >>>>>>
-> >>>>>> Fixes: 4cd335dae3cf ("mtd: rawnand: omap2: Prevent invalid configu=
-ration and build error")
-> >>>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>     =20
-> >>>>>
-> >>>>> Tested-by: Guenter Roeck <linux@roeck-us.net>     =20
-> >>>>
-> >>>> Tested-by: Randy Dunlap <rdunlap@infradead.org>   =20
-> >>>
-> >>> Sorry for noticing that just now, but there is still a problem with
-> >>> this patch: we now always compile-in the OMAP_GPMC driver whenever we
-> >>> need the NAND controller, even though it is not needed. This grows the
-> >>> kernel for no reason.   =20
-> >>
-> >> Sorry, I did not understand what you meant.
-> >>
-> >> We no longer explicitly enable OMAP_GPMC since we dropped the "select".
-> >> This fixes all build issues that were reported recently.
-> >>
-> >> MTD_NAND_OMAP2 will not be enabled if OMAP_GPMC is not since we added
-> >> the "depends on". This fixes the original build issue that we started =
-to
-> >> fix with select initially. =20
-> >=20
-> > Yes, this side is fine.
-> >=20
-> > In the initial commit, you proposed:
-> >=20
-> > --- a/drivers/mtd/nand/raw/Kconfig
-> > +++ b/drivers/mtd/nand/raw/Kconfig
-> > @@ -42,7 +42,8 @@ config MTD_NAND_OMAP2
-> >         tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
-> >         depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPIL=
-E_TEST
-> >         depends on HAS_IOMEM
-> > +       select OMAP_GPMC if ARCH_K3
-> >=20
-> > Which creates a dependency over OMAP_GPMC only for a single
-> > architecture. Which means that other OMAP platforms do not necessarily
-> > need OMAP_GPMC for the NAND controller to work. Now, you propose: =20
->=20
-> No that is not true. Other platforms that need MTD_NAND_OMAP2 are
-> explicitly selecting OMAP_GPMC
-> i.e. in arch/arm/mach-omap2/Kconfig
+For MAP_POPULATE I did not have hard proof to show that it would be used
+by other drivers but for madvice() you can find at least a few ioctl
+based implementations:
 
-Ok, in this case the fix is legit, but as you said there is certainly
-some clean up to do on this side in a second time.
+$ git grep -e madv --and \( -e ioc \)  drivers/
+drivers/gpu/drm/i915/gem/i915_gem_ioctls.h:int i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
+drivers/gpu/drm/i915/i915_driver.c:     DRM_IOCTL_DEF_DRV(I915_GEM_MADVISE, i915_gem_madvise_ioctl, DRM_RENDER_ALLOW),
+drivers/gpu/drm/i915/i915_gem.c:i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
+drivers/gpu/drm/msm/msm_drv.c:static int msm_ioctl_gem_madvise(struct drm_device *dev, void *data,
+drivers/gpu/drm/msm/msm_drv.c:  DRM_IOCTL_DEF_DRV(MSM_GEM_MADVISE,  msm_ioctl_gem_madvise,  DRM_RENDER_ALLOW),
+drivers/gpu/drm/panfrost/panfrost_drv.c:static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+drivers/gpu/drm/vc4/vc4_drv.c:  DRM_IOCTL_DEF_DRV(VC4_GEM_MADVISE, vc4_gem_madvise_ioctl, DRM_RENDER_ALLOW),
+drivers/gpu/drm/vc4/vc4_drv.h:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
+drivers/gpu/drm/vc4/vc4_gem.c:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
 
-> > --- a/drivers/mtd/nand/raw/Kconfig
-> > +++ b/drivers/mtd/nand/raw/Kconfig
-> > @@ -42,8 +42,7 @@ config MTD_NAND_OMAP2
-> >  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
-> >  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
-> >  	depends on HAS_IOMEM
-> > 	depends on OMAP_GPMC
-> >=20
-> > This means any of the other OMAP architectures will compile the GPMC
-> > driver even though they might not need it, which would unnecessarily
-> > increase the kernel size.
-> >=20
-> > Am I missing something? =20
->=20
-> MTD_NAND_OMAP2 NAND controller is a submodule of the OMAP GPMC IP. So it
-> cannot work without OMAP_GPMC driver.
->=20
-> Hope this clarifies the doubts.
+IMHO this also provides supportive claim for MAP_POPULATE, and yeah, I
+agree that to be consistent implementation, both madvice() and MAP_POPULATE
+should work.
 
-I was not sure anymore if there was a proper hardware dependency here
-because of the "select GPMC if ARCH_K3" addition. But your
-clarification make this more understandable now.
+> -- 
+> Thanks,
+> 
+> David / dhildenb
 
-I will send the fix to Linus.
-
-Cheers,
-Miqu=C3=A8l
-
-> >>> In fact, Roger once said:
-> >>>
-> >>> 	"We will figure out how to enable OMAP_GPMC for K3 architecture
-> >>> 	some other way."
-> >>>
-> >>> It turns out this is not what was finally proposed. Could we try yet
-> >>> another solution?   =20
-> >>
-> >> This issue is still present i.e. we cannot enable MTD_NAND_OMAP2 drive=
-r on
-> >> K3 platform since OMAP_GPMC config is hidden and not select-able
-> >> by user or defconfig file.
-> >>
-> >> But it is not yet a deal breaker since NAND on K3 is not yet enabled u=
-pstream.
-> >>
-> >> For this I think OMAP_GPMC has to be a visible config entry and select=
--able
-> >> from a defconfig file as I had done initially [1].
-> >>
-> >> Now we have a lot of explanation to write as to why we need to do it ;=
-) =20
-> >=20
-> > We certainly do :)
-> >  =20
-> >> [1] - https://lore.kernel.org/lkml/20211123102607.13002-3-rogerq@kerne=
-l.org/
-> >> =20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l =20
->=20
-> cheers,
-> -roger
+BR, Jarkko

@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA0B4CF640
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4AE4CFA51
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiCGJel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:34:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
+        id S236850AbiCGKPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238755AbiCGJ3k (ORCPT
+        with ESMTP id S240131AbiCGKAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:40 -0500
+        Mon, 7 Mar 2022 05:00:46 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286BD59A74;
-        Mon,  7 Mar 2022 01:28:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499247E088;
+        Mon,  7 Mar 2022 01:46:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6F8E60C00;
-        Mon,  7 Mar 2022 09:28:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0466C340E9;
-        Mon,  7 Mar 2022 09:28:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7060C6140F;
+        Mon,  7 Mar 2022 09:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4A4C340E9;
+        Mon,  7 Mar 2022 09:46:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645296;
-        bh=1JdOwzAd4A8p14zKZkL9HsGfoOPkGQsKjtO9nw/zU1c=;
+        s=korg; t=1646646406;
+        bh=7KQRv1FfgU2XIE+SAZ6yifWu7VmFH81QrLCx9gkQp4Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ee0PDt9mXlu89/QRhkblAAiMyl1IdZHDhY3xHJrcgTkJmA/ytXLOakkUocE5GBx/H
-         fpcvrcsT3Jnr18w9lL9i2He33vKTksCfL46P4VBncFHaJcgMHbfa8GuamC7OQckrH+
-         HaqnHeDOnys//DBP/tierad+9E+3soq70lplPsVQ=
+        b=kuSdoKNL/lKvzstawHwL/4wxLarohAVDFRc0qhIQ2CJjRRbJ88yOPRPxdB84LLwD1
+         aWBhzLSnbBp/UZhd8HrnP/+aAUK9z5Wdf2q4CrZ9e/0m5ociyr1JGI9VUa7AAkhrBf
+         Zf395Rwl1AwcdK66Y+QCPz0liiOu4gZDgoObt17Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 5.4 47/64] ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
+        stable@vger.kernel.org, Kurt Kanzenbach <kurt@linutronix.de>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 216/262] net: stmmac: enhance XDP ZC driver level switching performance
 Date:   Mon,  7 Mar 2022 10:19:20 +0100
-Message-Id: <20220307091640.486020232@linuxfoundation.org>
+Message-Id: <20220307091709.064311513@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,48 +56,255 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Ong Boon Leong <boon.leong.ong@intel.com>
 
-commit 7b83299e5b9385943a857d59e15cba270df20d7e upstream.
+[ Upstream commit ac746c8520d9d056b6963ecca8ff1da9929d02f1 ]
 
-early_param() handlers should return 0 on success.
-__setup() handlers should return 1 on success, i.e., the parameter
-has been handled. A return of 0 would cause the "option=value" string
-to be added to init's environment strings, polluting it.
+The previous stmmac_xdp_set_prog() implementation uses stmmac_release()
+and stmmac_open() which tear down the PHY device and causes undesirable
+autonegotiation which causes a delay whenever AFXDP ZC is setup.
 
-../arch/arm/mm/mmu.c: In function 'test_early_cachepolicy':
-../arch/arm/mm/mmu.c:215:1: error: no return statement in function returning non-void [-Werror=return-type]
-../arch/arm/mm/mmu.c: In function 'test_noalign_setup':
-../arch/arm/mm/mmu.c:221:1: error: no return statement in function returning non-void [-Werror=return-type]
+This patch introduces two new functions that just sufficiently tear
+down DMA descriptors, buffer, NAPI process, and IRQs and reestablish
+them accordingly in both stmmac_xdp_release() and stammac_xdp_open().
 
-Fixes: b849a60e0903 ("ARM: make cr_alignment read-only #ifndef CONFIG_CPU_CP15")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: patches@armlinux.org.uk
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+As the results of this enhancement, we get rid of transient state
+introduced by the link auto-negotiation:
+
+$ ./xdpsock -i eth0 -t -z
+
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 634444         634560
+
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 632330         1267072
+
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 632438         1899584
+
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 632502         2532160
+
+Reported-by: Kurt Kanzenbach <kurt@linutronix.de>
+Signed-off-by: Ong Boon Leong <boon.leong.ong@intel.com>
+Tested-by: Kurt Kanzenbach <kurt@linutronix.de>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mm/mmu.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |   4 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 137 +++++++++++++++++-
+ .../net/ethernet/stmicro/stmmac/stmmac_xdp.c  |   4 +-
+ 3 files changed, 139 insertions(+), 6 deletions(-)
 
---- a/arch/arm/mm/mmu.c
-+++ b/arch/arm/mm/mmu.c
-@@ -229,12 +229,14 @@ early_param("ecc", early_ecc);
- static int __init early_cachepolicy(char *p)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+index 873b9e3e5da2..05b5371ca036 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+@@ -334,8 +334,8 @@ void stmmac_set_ethtool_ops(struct net_device *netdev);
+ int stmmac_init_tstamp_counter(struct stmmac_priv *priv, u32 systime_flags);
+ void stmmac_ptp_register(struct stmmac_priv *priv);
+ void stmmac_ptp_unregister(struct stmmac_priv *priv);
+-int stmmac_open(struct net_device *dev);
+-int stmmac_release(struct net_device *dev);
++int stmmac_xdp_open(struct net_device *dev);
++void stmmac_xdp_release(struct net_device *dev);
+ int stmmac_resume(struct device *dev);
+ int stmmac_suspend(struct device *dev);
+ int stmmac_dvr_remove(struct device *dev);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index c6e3b0c1f1e8..4595282a9790 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3667,7 +3667,7 @@ static int stmmac_request_irq(struct net_device *dev)
+  *  0 on success and an appropriate (-)ve integer as defined in errno.h
+  *  file on failure.
+  */
+-int stmmac_open(struct net_device *dev)
++static int stmmac_open(struct net_device *dev)
  {
- 	pr_warn("cachepolicy kernel parameter not supported without cp15\n");
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+ 	int mode = priv->plat->phy_interface;
+@@ -3791,7 +3791,7 @@ static void stmmac_fpe_stop_wq(struct stmmac_priv *priv)
+  *  Description:
+  *  This is the stop entry point of the driver.
+  */
+-int stmmac_release(struct net_device *dev)
++static int stmmac_release(struct net_device *dev)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+ 	u32 chan;
+@@ -6456,6 +6456,139 @@ void stmmac_enable_tx_queue(struct stmmac_priv *priv, u32 queue)
+ 	spin_unlock_irqrestore(&ch->lock, flags);
+ }
+ 
++void stmmac_xdp_release(struct net_device *dev)
++{
++	struct stmmac_priv *priv = netdev_priv(dev);
++	u32 chan;
++
++	/* Disable NAPI process */
++	stmmac_disable_all_queues(priv);
++
++	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
++		hrtimer_cancel(&priv->tx_queue[chan].txtimer);
++
++	/* Free the IRQ lines */
++	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
++
++	/* Stop TX/RX DMA channels */
++	stmmac_stop_all_dma(priv);
++
++	/* Release and free the Rx/Tx resources */
++	free_dma_desc_resources(priv);
++
++	/* Disable the MAC Rx/Tx */
++	stmmac_mac_set(priv, priv->ioaddr, false);
++
++	/* set trans_start so we don't get spurious
++	 * watchdogs during reset
++	 */
++	netif_trans_update(dev);
++	netif_carrier_off(dev);
++}
++
++int stmmac_xdp_open(struct net_device *dev)
++{
++	struct stmmac_priv *priv = netdev_priv(dev);
++	u32 rx_cnt = priv->plat->rx_queues_to_use;
++	u32 tx_cnt = priv->plat->tx_queues_to_use;
++	u32 dma_csr_ch = max(rx_cnt, tx_cnt);
++	struct stmmac_rx_queue *rx_q;
++	struct stmmac_tx_queue *tx_q;
++	u32 buf_size;
++	bool sph_en;
++	u32 chan;
++	int ret;
++
++	ret = alloc_dma_desc_resources(priv);
++	if (ret < 0) {
++		netdev_err(dev, "%s: DMA descriptors allocation failed\n",
++			   __func__);
++		goto dma_desc_error;
++	}
++
++	ret = init_dma_desc_rings(dev, GFP_KERNEL);
++	if (ret < 0) {
++		netdev_err(dev, "%s: DMA descriptors initialization failed\n",
++			   __func__);
++		goto init_error;
++	}
++
++	/* DMA CSR Channel configuration */
++	for (chan = 0; chan < dma_csr_ch; chan++)
++		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
++
++	/* Adjust Split header */
++	sph_en = (priv->hw->rx_csum > 0) && priv->sph;
++
++	/* DMA RX Channel Configuration */
++	for (chan = 0; chan < rx_cnt; chan++) {
++		rx_q = &priv->rx_queue[chan];
++
++		stmmac_init_rx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
++				    rx_q->dma_rx_phy, chan);
++
++		rx_q->rx_tail_addr = rx_q->dma_rx_phy +
++				     (rx_q->buf_alloc_num *
++				      sizeof(struct dma_desc));
++		stmmac_set_rx_tail_ptr(priv, priv->ioaddr,
++				       rx_q->rx_tail_addr, chan);
++
++		if (rx_q->xsk_pool && rx_q->buf_alloc_num) {
++			buf_size = xsk_pool_get_rx_frame_size(rx_q->xsk_pool);
++			stmmac_set_dma_bfsize(priv, priv->ioaddr,
++					      buf_size,
++					      rx_q->queue_index);
++		} else {
++			stmmac_set_dma_bfsize(priv, priv->ioaddr,
++					      priv->dma_buf_sz,
++					      rx_q->queue_index);
++		}
++
++		stmmac_enable_sph(priv, priv->ioaddr, sph_en, chan);
++	}
++
++	/* DMA TX Channel Configuration */
++	for (chan = 0; chan < tx_cnt; chan++) {
++		tx_q = &priv->tx_queue[chan];
++
++		stmmac_init_tx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
++				    tx_q->dma_tx_phy, chan);
++
++		tx_q->tx_tail_addr = tx_q->dma_tx_phy;
++		stmmac_set_tx_tail_ptr(priv, priv->ioaddr,
++				       tx_q->tx_tail_addr, chan);
++	}
++
++	/* Enable the MAC Rx/Tx */
++	stmmac_mac_set(priv, priv->ioaddr, true);
++
++	/* Start Rx & Tx DMA Channels */
++	stmmac_start_all_dma(priv);
++
++	stmmac_init_coalesce(priv);
++
++	ret = stmmac_request_irq(dev);
++	if (ret)
++		goto irq_error;
++
++	/* Enable NAPI process*/
++	stmmac_enable_all_queues(priv);
++	netif_carrier_on(dev);
++	netif_tx_start_all_queues(dev);
++
 +	return 0;
- }
- early_param("cachepolicy", early_cachepolicy);
- 
- static int __init noalign_setup(char *__unused)
++
++irq_error:
++	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
++		hrtimer_cancel(&priv->tx_queue[chan].txtimer);
++
++	stmmac_hw_teardown(dev);
++init_error:
++	free_dma_desc_resources(priv);
++dma_desc_error:
++	return ret;
++}
++
+ int stmmac_xsk_wakeup(struct net_device *dev, u32 queue, u32 flags)
  {
- 	pr_warn("noalign kernel parameter not supported without cp15\n");
-+	return 1;
- }
- __setup("noalign", noalign_setup);
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+index 2a616c6f7cd0..9d4d8c3dad0a 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+@@ -119,7 +119,7 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
  
+ 	need_update = !!priv->xdp_prog != !!prog;
+ 	if (if_running && need_update)
+-		stmmac_release(dev);
++		stmmac_xdp_release(dev);
+ 
+ 	old_prog = xchg(&priv->xdp_prog, prog);
+ 	if (old_prog)
+@@ -129,7 +129,7 @@ int stmmac_xdp_set_prog(struct stmmac_priv *priv, struct bpf_prog *prog,
+ 	priv->sph = priv->sph_cap && !stmmac_xdp_is_enabled(priv);
+ 
+ 	if (if_running && need_update)
+-		stmmac_open(dev);
++		stmmac_xdp_open(dev);
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
+
 
 

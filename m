@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23EC4CFC13
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E86884CFC18
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241727AbiCGK6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
+        id S241789AbiCGK7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:59:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238576AbiCGK5n (ORCPT
+        with ESMTP id S241640AbiCGK5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Mar 2022 05:57:43 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EB81B78B
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:18:55 -0800 (PST)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220307101854epoutp02217d124597cfe02ee8a5ef5d17a1d045~aEe_MbQuy2659526595epoutp02S
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CC51EAE3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:18:56 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220307101854epoutp045f9fad4664987408761e31f13b7f9f68~aEe_qExQc0483004830epoutp04a
         for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:18:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220307101854epoutp02217d124597cfe02ee8a5ef5d17a1d045~aEe_MbQuy2659526595epoutp02S
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220307101854epoutp045f9fad4664987408761e31f13b7f9f68~aEe_qExQc0483004830epoutp04a
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1646648334;
-        bh=gBkRa9oyvlGi4TXhpuLV+ga0eBimnmJJi9TO6A9hnjA=;
+        bh=RF4TiedEEbBa0PmOpJq3jeBUFdTOgIuaimKCB38qlmg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qYhRBp8B0oDtB4y840YxhdEU3aeEkXJL8j960dZPEJYD1AIs6H9394s8Fyvyp76cB
-         nAhrvG3YYUIGfoXXfgnVY+8672TYJygbWyol1ZOHKQsBZWvJYYBYNcDdE5s+yXXI9X
-         VscNloP2JXhUWZCe59KwIPO0IcJnfWMiFqQPZCJk=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        b=Fcz2/CKOOAx/7cvK/Mrjq0OZuH5xmPdGIbD0F739znsDP4fCTfWD4uDT2OUNJyVxB
+         6rZQze4b/QJf7KXb7RlXndMmxXHetzuFceoFrWczV12uL2hZ7MeieMO6FNVcLRwJZ/
+         FvPmB/jTTqYXPS1BT3KbYVFjD9tAbgRhDXR6MVn4=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
         epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220307101853epcas2p10f2e5a89f5d549ceafb7c45db88017d7~aEe9bWTGl2100421004epcas2p1B;
+        20220307101853epcas2p195ab187554dd8a37f1615eba3e3f46f4~aEe9wG3Fs3042230422epcas2p1R;
         Mon,  7 Mar 2022 10:18:53 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.70]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4KBvZ24ZWGz4x9Q2; Mon,  7 Mar
-        2022 10:18:50 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4KBvZ33vJcz4x9Q9; Mon,  7 Mar
+        2022 10:18:51 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
         epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6D.AC.51767.A0CD5226; Mon,  7 Mar 2022 19:18:50 +0900 (KST)
+        3E.AC.51767.B0CD5226; Mon,  7 Mar 2022 19:18:51 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220307101850epcas2p4ac4158cd821031464cd3aa6eb4e5d2a7~aEe6WTaLm2631426314epcas2p4P;
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220307101850epcas2p3e944ac6a7d1ef0b96c3777b87731d02f~aEe7ALH7K2526025260epcas2p3K;
         Mon,  7 Mar 2022 10:18:50 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220307101850epsmtrp13eb08abc38b2094bb1922873416214b4~aEe6VKy753178231782epsmtrp1S;
+        20220307101850epsmtrp1beec8b9de78cbb7c0bc27b22079b4079~aEe6-E8LV3119831198epsmtrp1-;
         Mon,  7 Mar 2022 10:18:50 +0000 (GMT)
-X-AuditID: b6c32a45-45dff7000000ca37-10-6225dc0a047d
+X-AuditID: b6c32a45-45dff7000000ca37-12-6225dc0b0a5e
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3A.81.29871.90CD5226; Mon,  7 Mar 2022 19:18:50 +0900 (KST)
+        0B.81.29871.A0CD5226; Mon,  7 Mar 2022 19:18:50 +0900 (KST)
 Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220307101849epsmtip25765e3a1d1d8baef7d07e61ae83b1939~aEe6HLGD-0474804748epsmtip2Z;
-        Mon,  7 Mar 2022 10:18:49 +0000 (GMT)
+        20220307101850epsmtip236f022471bc8cb95235cc92bf25507c8~aEe6wOMiS0102401024epsmtip26;
+        Mon,  7 Mar 2022 10:18:50 +0000 (GMT)
 From:   Daehwan Jung <dh10.jung@samsung.com>
 To:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -63,44 +63,44 @@ Cc:     linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
         "J . Avila" <elavila@google.com>,
         Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com,
         cpgs@samsung.com, cpgsproxy5@samsung.com
-Subject: [PATCH v2 1/4] usb: host: export symbols for xhci hooks usage
-Date:   Mon,  7 Mar 2022 19:17:33 +0900
-Message-Id: <1646648256-105214-2-git-send-email-dh10.jung@samsung.com>
+Subject: [PATCH v2 2/4] usb: host: add xhci hooks for USB offload
+Date:   Mon,  7 Mar 2022 19:17:34 +0900
+Message-Id: <1646648256-105214-3-git-send-email-dh10.jung@samsung.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1646648256-105214-1-git-send-email-dh10.jung@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkk+LIzCtJLcpLzFFi42LZdljTTJfrjmqSwcouBYuXhzQtNj+8wmZx
-        Z8E0JosnRxaxWzQvXs9mcf3Pe0aL9ucX2Cwu75rDZrFoWSuzRfOmKawWM9cqW3TdvcHowONx
-        ua+XyWPBplKPxXteMnnsn7uG3aNvyypGj8+b5ALYorJtMlITU1KLFFLzkvNTMvPSbZW8g+Od
-        403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4AuVFIoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fY
-        KqUWpOQUmBfoFSfmFpfmpevlpZZYGRoYGJkCFSZkZ8y6cpO9YENMxZyGlcwNjId8uhg5OSQE
-        TCR+bO1lArGFBHYwSvz5n9fFyAVkf2KUuPNgMQuE841R4uStu2wwHX+Xbofq2Mso8euKC0TR
-        D0aJrRd2M3YxcnCwCWhJfF/ICFIjIhAnsbTzEhNIDbPAVSaJJRuOsYMkhAXcJGY9ncsMYrMI
-        qEo0nr7GCmLzAsVfT53JDLFMTuLmuU4wm1PAXeLblF6wQRICH9kl/u88xgJR5CJx9MQedghb
-        WOLV8S1QtpTEy/42KLtYYtenVqjmBkaJxgcnoDYYS8x61g52NbOApsT6XfogpoSAssSRW1Dj
-        eSUaNv4GG8MswCfRcfgvO0QJr0RHmxBEibLE9MsTWCFsSYmDr89BDfeQ2PtwLyskrGYxSqx9
-        FzWBUX4Wwq4FjIyrGMVSC4pz01OLjQoM4XGXnJ+7iRGcFrVcdzBOfvtB7xAjEwfjIUYJDmYl
-        Ed7751WShHhTEiurUovy44tKc1KLDzGaAsNxIrOUaHI+MDHnlcQbmlgamJiZGZobmRqYK4nz
-        eqVsSBQSSE8sSc1OTS1ILYLpY+LglGpgUol9/WGyR63v0ehqpYhLoYZ7PSoMr7Le071huGeV
-        cmaO2HSxdxvezt4gfnZuXOf9e2/M88Tm3GeWir5WxDjFhCP36f3v9bt2HF5heEma2+f+/8MJ
-        F10K1t92upX3evadz453s/WnLmwyZl32rP/pbpZ3vBs6mrzrF+9SnXik2JpRsO5D+7ekiY3Z
-        Lz11Lu1WYtsmpnJo3ZwncYryP5i9GycJP024zNZRI6d2m3vH/0fzZ4tv0Vi1n+uRyJd52kp3
-        wkUO14pfklrGeyh85dm52/8bLPdbkBRzWkyx/iDbn2ta4Wb3hef8lKqvPbPoNLumqsJljgn/
-        oy88C3qwK+RWfltU5sfMHVu9V2202esQIqvEUpyRaKjFXFScCACYHo6EFAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrELMWRmVeSWpSXmKPExsWy7bCSvC7XHdUkg/P3mCxeHtK02PzwCpvF
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpik+LIzCtJLcpLzFFi42LZdljTQpf7jmqSwa55EhYvD2labH54hc3i
+        zoJpTBZPjixit2hevJ7N4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgcfj
+        cl8vk8eCTaUei/e8ZPLYP3cNu0ffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7
+        x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gBdqKRQlphTChQKSCwuVtK3synKLy1JVcjILy6x
+        VUotSMkpMC/QK07MLS7NS9fLSy2xMjQwMDIFKkzIzpj9Zy9bwd1NjBWHl91ibmC8NIWxi5GT
+        Q0LAROLm+1YWEFtIYAejRP8T4S5GLiD7E6PEhG2PWSCcb4wSr3e8BergAOs4Nt0MIr6XUeLD
+        xP2sEM4PRolNPy8ygxSxCWhJfF8ItkFEIE5iaeclJpAaZoGrTBJLNhxjB0kICzhKNO06ALaa
+        RUBV4t/joywgvbwCbhKdM/MgrpOTuHmukxnE5hRwl/g2pZcJIv6XXeLWLDMI20Xi6K67bBC2
+        sMSr41vYIWwpiZf9bVB2scSuT61gN0gINDBKND44wQyRMJaY9awd7DFmAU2J9bv0IX5Uljhy
+        iwWigleiYeNvsDHMAnwSHYf/skOU8Ep0tAlBlChLTL88gRXClpQ4+Poc1HAPiaYNN6BBOItR
+        om/HLuYJjPKzEJYtYGRcxSiWWlCcm55abFRgCI+85PzcTYzgxKjluoNx8tsPeocYmTgYDzFK
+        cDArifDeP6+SJMSbklhZlVqUH19UmpNafIjRFBiME5mlRJPzgak5ryTe0MTSwMTMzNDcyNTA
+        XEmc1ytlQ6KQQHpiSWp2ampBahFMHxMHp1QDU/bjoycObBNVyKtuNYn9srxVN/hXRdnOZfUP
+        tk0+vaWZN0NyCnOGyo9D3Hlif9iVm8PjXq9TjtSMOeu2PHHTmXSOLZtTX/WmXf8vr9psUvji
+        5MVGh00171+dYzvPyMpv9Ykvyrb68uzAsJilYp9Dz01Q+nQ8r/bKVUats32LpW+Hu5323LP/
+        2PTb18Pvbn9yQm3Oy92aRjx60iYhysdWGKds+6tS8Ppi3xF1pmNW9wqsN/+qFpsgxHPArG3D
+        OzlRpr+7i/IVn3ilFG1bv/Wo6ewmKaFQ43fcOyN3nHH5arW7+sFC4a87mE9qaK9iyiop/Hbo
+        wNUkheszXsyI9Dr3de3qdNd070ajf+v39zml7VViKc5INNRiLipOBABd2krFFQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrELMWRmVeSWpSXmKPExsWy7bCSvC7XHdUkg/+/dSxeHtK02PzwCpvF
         nQXTmCyeHFnEbtG8eD2bxfU/7xkt2p9fYLO4vGsOm8WiZa3MFs2bprBazFyrbNF19wajA4/H
-        5b5eJo8Fm0o9Fu95yeSxf+4ado++LasYPT5vkgtgi+KySUnNySxLLdK3S+DKmHXlJnvBhpiK
-        OQ0rmRsYD/l0MXJySAiYSPxdup2pi5GLQ0hgN6NE477zbBAJSYmlc2+wQ9jCEvdbjrBCFH1j
-        lGg+1QhUxMHBJqAl8X0hI0iNiECcxIrLe1hAapgF7jNJnH/3nRUkISzgJjHr6VxmEJtFQFWi
-        8fQ1sDgvUPz11JnMEAvkJG6e6wSzOQXcJb5N6WUCsYWAai6euMo0gZFvASPDKkbJ1ILi3PTc
-        YsMCw7zUcr3ixNzi0rx0veT83E2M4GDV0tzBuH3VB71DjEwcjIcYJTiYlUR4759XSRLiTUms
-        rEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomDU6qBKfr0v2+b7PW9yxTP
-        tFemrNkrwH+0UiFS++n04Lg6GfGnm72kVtZanzY5pq/+oOKYwJGSGp32dBV3k5n8SlvCZ7+3
-        lNBUeGh4d+6dw267nskEW9xuOGm6b9Gl/UZBwrurNkmUn5F917jf+2rh103mj0Mn2Nls3vn2
-        9def7dcD7mbZT5jD2rxSf2nN7YcvsoTjN78//GJzo8Xp9e7pk65+dVodEs7gxl3xq+XzMpYp
-        wo+Ofy7QX2h2NZqVeV3TUs7FeY/T3V1vycw7wJP0pVdQM1X1ljX76aMCL2pmLS7+usiLd63W
-        F8Vr7Q5TuXh/ponNCXaQvrvp4sEMo/3itZJGqh6LzM2/urkGzZDR6bklo8RSnJFoqMVcVJwI
-        ALgtBmnFAgAA
-X-CMS-MailID: 20220307101850epcas2p4ac4158cd821031464cd3aa6eb4e5d2a7
+        5b5eJo8Fm0o9Fu95yeSxf+4ado++LasYPT5vkgtgi+KySUnNySxLLdK3S+DKmP1nL1vB3U2M
+        FYeX3WJuYLw0hbGLkYNDQsBE4th0sy5GLg4hgd2MEktmHWfuYuQEiktKLJ17gx3CFpa433KE
+        FaLoG6PE+Wu32UGa2QS0JL4vZASpERGIk1hxeQ8LSA2zwH0mifPvvrOCJIQFHCWadh1gAbFZ
+        BFQl/j0+ygLSyyvgJtE5Mw9ivpzEzXOdYHs5Bdwlvk3pZQKxhYBKLp64yjSBkW8BI8MqRsnU
+        guLc9NxiwwLDvNRyveLE3OLSvHS95PzcTYzgYNXS3MG4fdUHvUOMTByMhxglOJiVRHjvn1dJ
+        EuJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyWiYNTqoFJeeneVLVv
+        +1aKx22X5mtRy328c6W3RJD6zuvr5v+tebGeTeNvwbG4nxNCJSZPnJe0aIJtxJLjE/tW7Qhb
+        mH2pctHSqyf+Hb60TVmKddkRgzKHl1a7lDuq99hZa2h/lVF+6ld4VmYWU9n+RlftLYtObqtZ
+        uGf5y+071OT+P3WscGJh/P7/2HzH4uW8CY8Lmp9cYZim+2j+om1HV2gplHqr6jkbaqwpvDp9
+        q9uDpWrb1U+/cmD+HNvsufpZvcP1/zNuL9/46+8F0/2vLrk1Nby+sm6m9dv+IqPGvWUrVt/k
+        MbrAESZYn/Q/ta1H6m2krKKK0OrrLtNz3+p+D1tcZNfGeJxx79zJOd/Oxz+RCltwYroSS3FG
+        oqEWc1FxIgDUIK6QxQIAAA==
+X-CMS-MailID: 20220307101850epcas2p3e944ac6a7d1ef0b96c3777b87731d02f
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
@@ -108,367 +108,679 @@ X-CPGSPASS: Y
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220307101850epcas2p4ac4158cd821031464cd3aa6eb4e5d2a7
+X-CMS-RootMailID: 20220307101850epcas2p3e944ac6a7d1ef0b96c3777b87731d02f
 References: <1646648256-105214-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220307101850epcas2p4ac4158cd821031464cd3aa6eb4e5d2a7@epcas2p4.samsung.com>
+        <CGME20220307101850epcas2p3e944ac6a7d1ef0b96c3777b87731d02f@epcas2p3.samsung.com>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export symbols for xhci hooks usage:
-	xhci_ring_free
-	- Allow xhci hook to free xhci_ring.
+To enable supporting for USB offload, define "offload" in usb controller
+node of device tree. "offload" value can be used to determine which type
+of offload was been enabled in the SoC.
 
-	xhci_get_slot_ctx
-	- Allow xhci hook to get slot_ctx from the xhci_container_ctx
-	  for getting the slot_ctx information to know which slot is
-	  offloading and compare the context in remote subsystem memory
-	  if needed.
+For example:
 
-	xhci_get_ep_ctx
-	- Allow xhci hook to get ep_ctx from the xhci_container_ctx for
-	  getting the ep_ctx information to know which ep is offloading and
-	  comparing the context in remote subsystem memory if needed.
+&usbdrd_dwc3 {
+	...
+	/* support usb offloading, 0: disabled, 1: audio */
+	offload = <1>;
+	...
+};
 
-	xhci_handle_event
-	- Allow xhci hook to handle the xhci events from the USB
-	  controller.
+There are several vendor_ops introduced by this patch:
 
-	xhci_update_erst_dequeue
-	- If xhci events was handle by xhci hook, it needs to update
-	  the erst dequeue pointer to let the USB controller know the
-	  events was handled.
+struct xhci_vendor_ops - function callbacks for vendor specific operations
+{
+	@vendor_init:
+		- called for vendor init process during xhci-plat-hcd
+		  probe.
+	@vendor_cleanup:
+		- called for vendor cleanup process during xhci-plat-hcd
+		  remove.
+	@is_usb_offload_enabled:
+		- called to check if usb offload enabled.
+	@queue_irq_work:
+		- called to queue vendor specific irq work.
+	@alloc_dcbaa:
+		- called when allocating vendor specific dcbaa during
+		  memory initializtion.
+	@free_dcbaa:
+		- called to free vendor specific dcbaa when cleanup the
+		  memory.
+	@alloc_transfer_ring:
+		- called when vendor specific transfer ring allocation is required
+	@free_transfer_ring:
+		- called to free vendor specific transfer ring
+	@sync_dev_ctx:
+		- called when synchronization for device context is required
+	@alloc_container_ctx
+		- called when allocating vendor specific container context
+	@free_container_ctx:
+		- called to free vendor specific container context
+}
 
-	xhci_ring_alloc
-	- Allocate a struct xhci_ring.
-
-	xhci_alloc_erst
-	xhci_free_erst
-	- Allocate and free event ring segment tables.
-
-	xhci_trb_virt_to_dma
-	- Used to retrieve the DMA address of a TRB
-
-	xhci_ring_cmd_db
-	- Notify the controller when a new command is issued
-
-	xhci_alloc_command
-	xhci_free_command
-	- Allocate and free a struct xhci_command
-
-	xhci_queue_stop_endpoint
-	- Issue a stop endpoint command to the controller
-
-	xhci_segment_free
-	- Free a segment struct.
-
-	xhci_link_segments
-	- Make the prev segment point to the next segment.
-
-	xhci_initialize_ring_info
-	- Initialize a ring struct.
-
-	xhci_check_trb_in_td_math
-	- Check TRB math for validation.
-
-	xhci_get_endpoint_address
-	- Get endpoint address from endpoint index.
-
-	xhci_address_device
-	- Issue an address device command
-
-	xhci_bus_suspend
-	xhci_bus_resume
-	- Suspend and resume for power scenario
-
-	xhci_remove_stream_mapping
-	- Remove stream mapping in stream endpoint
-
-	xhci_remove_segment_mapping
-	- Remove segment mapping
+The xhci hooks with prefix "xhci_vendor_" on the ops in xhci_vendor_ops.
+For example, vendor_init ops will be invoked by xhci_vendor_init() hook,
+is_usb_offload_enabled ops will be invoked by
+xhci_vendor_is_usb_offload_enabled(), and so on.
 
 Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
+Signed-off-by: J. Avila <elavila@google.com>
+Signed-off-by: Puma Hsu <pumahsu@google.com>
 Signed-off-by: Howard Yen <howardyen@google.com>
 ---
- drivers/usb/host/xhci-hub.c  |  2 ++
- drivers/usb/host/xhci-mem.c  | 29 +++++++++++++++++++++--------
- drivers/usb/host/xhci-ring.c |  9 +++++++--
- drivers/usb/host/xhci.c      |  4 +++-
- 4 files changed, 33 insertions(+), 11 deletions(-)
+ drivers/usb/host/xhci-hub.c  |   5 ++
+ drivers/usb/host/xhci-mem.c  | 131 +++++++++++++++++++++++++++++++----
+ drivers/usb/host/xhci-plat.c |  43 +++++++++++-
+ drivers/usb/host/xhci-plat.h |   8 +++
+ drivers/usb/host/xhci-ring.c |  13 ++++
+ drivers/usb/host/xhci.c      |  94 ++++++++++++++++++++++++-
+ drivers/usb/host/xhci.h      |  50 +++++++++++++
+ 7 files changed, 327 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 1e7dc130c39a..56546aaa93c7 100644
+index 56546aaa93c7..aea72ffce820 100644
 --- a/drivers/usb/host/xhci-hub.c
 +++ b/drivers/usb/host/xhci-hub.c
-@@ -1812,6 +1812,7 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
+@@ -535,8 +535,13 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
+ 	    cmd->status == COMP_COMMAND_RING_STOPPED) {
+ 		xhci_warn(xhci, "Timeout while waiting for stop endpoint command\n");
+ 		ret = -ETIME;
++		goto cmd_cleanup;
+ 	}
  
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(xhci_bus_suspend);
- 
- /*
-  * Workaround for missing Cold Attach Status (CAS) if device re-plugged in S3.
-@@ -1956,6 +1957,7 @@ int xhci_bus_resume(struct usb_hcd *hcd)
- 	spin_unlock_irqrestore(&xhci->lock, flags);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(xhci_bus_resume);
- 
- unsigned long xhci_get_resuming_ports(struct usb_hcd *hcd)
- {
++	ret = xhci_vendor_sync_dev_ctx(xhci, slot_id);
++	if (ret)
++		xhci_warn(xhci, "Sync device context failed, ret=%d\n", ret);
++
+ cmd_cleanup:
+ 	xhci_free_command(xhci, cmd);
+ 	return ret;
 diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index bbb27ee2c6a3..45be6732eb89 100644
+index 45be6732eb89..ef531007fd50 100644
 --- a/drivers/usb/host/xhci-mem.c
 +++ b/drivers/usb/host/xhci-mem.c
-@@ -65,7 +65,7 @@ static struct xhci_segment *xhci_segment_alloc(struct xhci_hcd *xhci,
- 	return seg;
- }
- 
--static void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
-+void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
- {
- 	if (seg->trbs) {
- 		dma_pool_free(xhci->segment_pool, seg->trbs, seg->dma);
-@@ -74,8 +74,9 @@ static void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
- 	kfree(seg->bounce_buf);
- 	kfree(seg);
- }
-+EXPORT_SYMBOL_GPL(xhci_segment_free);
- 
--static void xhci_free_segments_for_ring(struct xhci_hcd *xhci,
-+void xhci_free_segments_for_ring(struct xhci_hcd *xhci,
- 				struct xhci_segment *first)
- {
- 	struct xhci_segment *seg;
-@@ -96,9 +97,9 @@ static void xhci_free_segments_for_ring(struct xhci_hcd *xhci,
-  * DMA address of the next segment.  The caller needs to set any Link TRB
-  * related flags, such as End TRB, Toggle Cycle, and no snoop.
-  */
--static void xhci_link_segments(struct xhci_segment *prev,
--			       struct xhci_segment *next,
--			       enum xhci_ring_type type, bool chain_links)
-+void xhci_link_segments(struct xhci_segment *prev,
-+			struct xhci_segment *next,
-+			enum xhci_ring_type type, bool chain_links)
- {
- 	u32 val;
- 
-@@ -118,6 +119,7 @@ static void xhci_link_segments(struct xhci_segment *prev,
- 		prev->trbs[TRBS_PER_SEGMENT-1].link.control = cpu_to_le32(val);
- 	}
- }
-+EXPORT_SYMBOL_GPL(xhci_link_segments);
- 
- /*
-  * Link the ring to the new segments.
-@@ -206,7 +208,7 @@ static int xhci_insert_segment_mapping(struct radix_tree_root *trb_address_map,
- 	return ret;
- }
- 
--static void xhci_remove_segment_mapping(struct radix_tree_root *trb_address_map,
-+void xhci_remove_segment_mapping(struct radix_tree_root *trb_address_map,
- 		struct xhci_segment *seg)
- {
- 	unsigned long key;
-@@ -215,6 +217,7 @@ static void xhci_remove_segment_mapping(struct radix_tree_root *trb_address_map,
- 	if (radix_tree_lookup(trb_address_map, key))
- 		radix_tree_delete(trb_address_map, key);
- }
-+EXPORT_SYMBOL_GPL(xhci_remove_segment_mapping);
- 
- static int xhci_update_stream_segment_mapping(
- 		struct radix_tree_root *trb_address_map,
-@@ -256,7 +259,7 @@ static int xhci_update_stream_segment_mapping(
- 	return ret;
- }
- 
--static void xhci_remove_stream_mapping(struct xhci_ring *ring)
-+void xhci_remove_stream_mapping(struct xhci_ring *ring)
- {
- 	struct xhci_segment *seg;
- 
-@@ -269,6 +272,7 @@ static void xhci_remove_stream_mapping(struct xhci_ring *ring)
- 		seg = seg->next;
- 	} while (seg != ring->first_seg);
- }
-+EXPORT_SYMBOL_GPL(xhci_remove_stream_mapping);
- 
- static int xhci_update_stream_mapping(struct xhci_ring *ring, gfp_t mem_flags)
- {
-@@ -292,6 +296,7 @@ void xhci_ring_free(struct xhci_hcd *xhci, struct xhci_ring *ring)
- 
- 	kfree(ring);
- }
-+EXPORT_SYMBOL_GPL(xhci_ring_free);
- 
- void xhci_initialize_ring_info(struct xhci_ring *ring,
- 			       unsigned int cycle_state)
-@@ -316,6 +321,7 @@ void xhci_initialize_ring_info(struct xhci_ring *ring,
- 	 */
- 	ring->num_trbs_free = ring->num_segs * (TRBS_PER_SEGMENT - 1) - 1;
- }
-+EXPORT_SYMBOL_GPL(xhci_initialize_ring_info);
- 
- /* Allocate segments and link them for a ring */
- static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
-@@ -407,6 +413,7 @@ struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci,
- 	kfree(ring);
- 	return NULL;
- }
-+EXPORT_SYMBOL_GPL(xhci_ring_alloc);
- 
- void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
- 		struct xhci_virt_device *virt_dev,
-@@ -518,6 +525,7 @@ struct xhci_slot_ctx *xhci_get_slot_ctx(struct xhci_hcd *xhci,
- 	return (struct xhci_slot_ctx *)
- 		(ctx->bytes + CTX_SIZE(xhci->hcc_params));
- }
-+EXPORT_SYMBOL_GPL(xhci_get_slot_ctx);
- 
- struct xhci_ep_ctx *xhci_get_ep_ctx(struct xhci_hcd *xhci,
- 				    struct xhci_container_ctx *ctx,
-@@ -1754,6 +1762,7 @@ struct xhci_command *xhci_alloc_command(struct xhci_hcd *xhci,
- 	INIT_LIST_HEAD(&command->cmd_list);
- 	return command;
- }
-+EXPORT_SYMBOL_GPL(xhci_alloc_command);
- 
- struct xhci_command *xhci_alloc_command_with_ctx(struct xhci_hcd *xhci,
- 		bool allocate_completion, gfp_t mem_flags)
-@@ -1787,6 +1796,7 @@ void xhci_free_command(struct xhci_hcd *xhci,
- 	kfree(command->completion);
- 	kfree(command);
- }
-+EXPORT_SYMBOL_GPL(xhci_free_command);
- 
- int xhci_alloc_erst(struct xhci_hcd *xhci,
- 		    struct xhci_ring *evt_ring,
-@@ -1817,6 +1827,7 @@ int xhci_alloc_erst(struct xhci_hcd *xhci,
- 
+@@ -367,6 +367,54 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
  	return 0;
  }
-+EXPORT_SYMBOL_GPL(xhci_alloc_erst);
  
- void xhci_free_erst(struct xhci_hcd *xhci, struct xhci_erst *erst)
++static void xhci_vendor_free_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->free_container_ctx)
++		ops->free_container_ctx(xhci, ctx);
++}
++
++static void xhci_vendor_alloc_container_ctx(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx,
++					    int type, gfp_t flags)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->alloc_container_ctx)
++		ops->alloc_container_ctx(xhci, ctx, type, flags);
++}
++
++static struct xhci_ring *xhci_vendor_alloc_transfer_ring(struct xhci_hcd *xhci,
++		u32 endpoint_type, enum xhci_ring_type ring_type,
++		unsigned int max_packet, gfp_t mem_flags)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->alloc_transfer_ring)
++		return ops->alloc_transfer_ring(xhci, endpoint_type, ring_type,
++				max_packet, mem_flags);
++	return 0;
++}
++
++void xhci_vendor_free_transfer_ring(struct xhci_hcd *xhci,
++		struct xhci_ring *ring, unsigned int ep_index)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->free_transfer_ring)
++		ops->free_transfer_ring(xhci, ring, ep_index);
++}
++
++bool xhci_vendor_is_usb_offload_enabled(struct xhci_hcd *xhci,
++		struct xhci_virt_device *virt_dev, unsigned int ep_index)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->is_usb_offload_enabled)
++		return ops->is_usb_offload_enabled(xhci, virt_dev, ep_index);
++	return false;
++}
++
+ /*
+  * Create a new ring with zero or more segments.
+  *
+@@ -419,7 +467,11 @@ void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
+ 		struct xhci_virt_device *virt_dev,
+ 		unsigned int ep_index)
  {
-@@ -1830,6 +1841,7 @@ void xhci_free_erst(struct xhci_hcd *xhci, struct xhci_erst *erst)
- 				erst->erst_dma_addr);
- 	erst->entries = NULL;
+-	xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
++	if (xhci_vendor_is_usb_offload_enabled(xhci, virt_dev, ep_index))
++		xhci_vendor_free_transfer_ring(xhci, virt_dev->eps[ep_index].ring, ep_index);
++	else
++		xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
++
+ 	virt_dev->eps[ep_index].ring = NULL;
  }
-+EXPORT_SYMBOL_GPL(xhci_free_erst);
  
+@@ -477,6 +529,7 @@ struct xhci_container_ctx *xhci_alloc_container_ctx(struct xhci_hcd *xhci,
+ {
+ 	struct xhci_container_ctx *ctx;
+ 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
+ 
+ 	if ((type != XHCI_CTX_TYPE_DEVICE) && (type != XHCI_CTX_TYPE_INPUT))
+ 		return NULL;
+@@ -490,7 +543,12 @@ struct xhci_container_ctx *xhci_alloc_container_ctx(struct xhci_hcd *xhci,
+ 	if (type == XHCI_CTX_TYPE_INPUT)
+ 		ctx->size += CTX_SIZE(xhci->hcc_params);
+ 
+-	ctx->bytes = dma_pool_zalloc(xhci->device_pool, flags, &ctx->dma);
++	if (xhci_vendor_is_usb_offload_enabled(xhci, NULL, 0) &&
++	    (ops && ops->alloc_container_ctx))
++		xhci_vendor_alloc_container_ctx(xhci, ctx, type, flags);
++	else
++		ctx->bytes = dma_pool_zalloc(xhci->device_pool, flags, &ctx->dma);
++
+ 	if (!ctx->bytes) {
+ 		kfree(ctx);
+ 		return NULL;
+@@ -501,9 +559,16 @@ struct xhci_container_ctx *xhci_alloc_container_ctx(struct xhci_hcd *xhci,
+ void xhci_free_container_ctx(struct xhci_hcd *xhci,
+ 			     struct xhci_container_ctx *ctx)
+ {
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
+ 	if (!ctx)
+ 		return;
+-	dma_pool_free(xhci->device_pool, ctx->bytes, ctx->dma);
++	if (xhci_vendor_is_usb_offload_enabled(xhci, NULL, 0) &&
++	    (ops && ops->free_container_ctx))
++		xhci_vendor_free_container_ctx(xhci, ctx);
++	else
++		dma_pool_free(xhci->device_pool, ctx->bytes, ctx->dma);
++
+ 	kfree(ctx);
+ }
+ 
+@@ -896,7 +961,7 @@ void xhci_free_virt_device(struct xhci_hcd *xhci, int slot_id)
+ 
+ 	for (i = 0; i < 31; i++) {
+ 		if (dev->eps[i].ring)
+-			xhci_ring_free(xhci, dev->eps[i].ring);
++			xhci_free_endpoint_ring(xhci, dev, i);
+ 		if (dev->eps[i].stream_info)
+ 			xhci_free_stream_info(xhci,
+ 					dev->eps[i].stream_info);
+@@ -1494,8 +1559,16 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
+ 		mult = 0;
+ 
+ 	/* Set up the endpoint ring */
+-	virt_dev->eps[ep_index].new_ring =
+-		xhci_ring_alloc(xhci, 2, 1, ring_type, max_packet, mem_flags);
++	if (xhci_vendor_is_usb_offload_enabled(xhci, virt_dev, ep_index) &&
++	    usb_endpoint_xfer_isoc(&ep->desc)) {
++		virt_dev->eps[ep_index].new_ring =
++			xhci_vendor_alloc_transfer_ring(xhci, endpoint_type, ring_type,
++							max_packet, mem_flags);
++	} else {
++		virt_dev->eps[ep_index].new_ring =
++			xhci_ring_alloc(xhci, 2, 1, ring_type, max_packet, mem_flags);
++	}
++
+ 	if (!virt_dev->eps[ep_index].new_ring)
+ 		return -ENOMEM;
+ 
+@@ -1843,6 +1916,24 @@ void xhci_free_erst(struct xhci_hcd *xhci, struct xhci_erst *erst)
+ }
+ EXPORT_SYMBOL_GPL(xhci_free_erst);
+ 
++static struct xhci_device_context_array *xhci_vendor_alloc_dcbaa(
++		struct xhci_hcd *xhci, gfp_t flags)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->alloc_dcbaa)
++		return ops->alloc_dcbaa(xhci, flags);
++	return 0;
++}
++
++static void xhci_vendor_free_dcbaa(struct xhci_hcd *xhci)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->free_dcbaa)
++		ops->free_dcbaa(xhci);
++}
++
  void xhci_mem_cleanup(struct xhci_hcd *xhci)
  {
-@@ -1965,7 +1977,7 @@ static int xhci_test_trb_in_td(struct xhci_hcd *xhci,
- }
+ 	struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
+@@ -1894,9 +1985,13 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+ 			"Freed medium stream array pool");
  
- /* TRB math checks for xhci_trb_in_td(), using the command and event rings. */
--static int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
-+int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
- {
- 	struct {
- 		dma_addr_t		input_dma;
-@@ -2085,6 +2097,7 @@ static int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
- 	xhci_dbg(xhci, "TRB math tests passed.\n");
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(xhci_check_trb_in_td_math);
+-	if (xhci->dcbaa)
+-		dma_free_coherent(dev, sizeof(*xhci->dcbaa),
+-				xhci->dcbaa, xhci->dcbaa->dma);
++	if (xhci_vendor_is_usb_offload_enabled(xhci, NULL, 0)) {
++		xhci_vendor_free_dcbaa(xhci);
++	} else {
++		if (xhci->dcbaa)
++			dma_free_coherent(dev, sizeof(*xhci->dcbaa),
++					xhci->dcbaa, xhci->dcbaa->dma);
++	}
+ 	xhci->dcbaa = NULL;
  
- static void xhci_set_hc_event_deq(struct xhci_hcd *xhci)
+ 	scratchpad_free(xhci);
+@@ -2433,15 +2528,21 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 	 * xHCI section 5.4.6 - Device Context array must be
+ 	 * "physically contiguous and 64-byte (cache line) aligned".
+ 	 */
+-	xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa), &dma,
+-			flags);
+-	if (!xhci->dcbaa)
+-		goto fail;
+-	xhci->dcbaa->dma = dma;
++	if (xhci_vendor_is_usb_offload_enabled(xhci, NULL, 0)) {
++		xhci->dcbaa = xhci_vendor_alloc_dcbaa(xhci, flags);
++		if (!xhci->dcbaa)
++			goto fail;
++	} else {
++		xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa), &dma,
++				flags);
++		if (!xhci->dcbaa)
++			goto fail;
++		xhci->dcbaa->dma = dma;
++	}
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+ 			"// Device context base array address = 0x%llx (DMA), %p (virt)",
+ 			(unsigned long long)xhci->dcbaa->dma, xhci->dcbaa);
+-	xhci_write_64(xhci, dma, &xhci->op_regs->dcbaa_ptr);
++	xhci_write_64(xhci, xhci->dcbaa->dma, &xhci->op_regs->dcbaa_ptr);
+ 
+ 	/*
+ 	 * Initialize the ring segment pool.  The ring must be a contiguous
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 649ffd861b44..3d2fe4d77f38 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -173,6 +173,41 @@ static const struct of_device_id usb_xhci_of_match[] = {
+ MODULE_DEVICE_TABLE(of, usb_xhci_of_match);
+ #endif
+ 
++static struct xhci_plat_priv_overwrite xhci_plat_vendor_overwrite;
++
++int xhci_plat_register_vendor_ops(struct xhci_vendor_ops *vendor_ops)
++{
++	if (vendor_ops == NULL)
++		return -EINVAL;
++
++	xhci_plat_vendor_overwrite.vendor_ops = vendor_ops;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xhci_plat_register_vendor_ops);
++
++static int xhci_vendor_init(struct xhci_hcd *xhci)
++{
++	struct xhci_vendor_ops *ops = NULL;
++
++	if (xhci_plat_vendor_overwrite.vendor_ops)
++		ops = xhci->vendor_ops = xhci_plat_vendor_overwrite.vendor_ops;
++
++	if (ops && ops->vendor_init)
++		return ops->vendor_init(xhci);
++	return 0;
++}
++
++static void xhci_vendor_cleanup(struct xhci_hcd *xhci)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->vendor_cleanup)
++		ops->vendor_cleanup(xhci);
++
++	xhci->vendor_ops = NULL;
++}
++
+ static int xhci_plat_probe(struct platform_device *pdev)
  {
+ 	const struct xhci_plat_priv *priv_match;
+@@ -321,6 +356,10 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 			goto put_usb3_hcd;
+ 	}
+ 
++	ret = xhci_vendor_init(xhci);
++	if (ret)
++		goto disable_usb_phy;
++
+ 	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
+ 	xhci->shared_hcd->tpl_support = hcd->tpl_support;
+ 	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
+@@ -393,8 +432,10 @@ static int xhci_plat_remove(struct platform_device *dev)
+ 	usb_phy_shutdown(hcd->usb_phy);
+ 
+ 	usb_remove_hcd(hcd);
+-	usb_put_hcd(shared_hcd);
+ 
++	xhci_vendor_cleanup(xhci);
++
++	usb_put_hcd(shared_hcd);
+ 	clk_disable_unprepare(clk);
+ 	clk_disable_unprepare(reg_clk);
+ 	usb_put_hcd(hcd);
+diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
+index 1fb149d1fbce..658589bbf2da 100644
+--- a/drivers/usb/host/xhci-plat.h
++++ b/drivers/usb/host/xhci-plat.h
+@@ -13,6 +13,7 @@
+ struct xhci_plat_priv {
+ 	const char *firmware_name;
+ 	unsigned long long quirks;
++	struct xhci_vendor_data *vendor_data;
+ 	void (*plat_start)(struct usb_hcd *);
+ 	int (*init_quirk)(struct usb_hcd *);
+ 	int (*suspend_quirk)(struct usb_hcd *);
+@@ -21,4 +22,11 @@ struct xhci_plat_priv {
+ 
+ #define hcd_to_xhci_priv(h) ((struct xhci_plat_priv *)hcd_to_xhci(h)->priv)
+ #define xhci_to_priv(x) ((struct xhci_plat_priv *)(x)->priv)
++
++struct xhci_plat_priv_overwrite {
++	struct xhci_vendor_ops *vendor_ops;
++};
++
++int xhci_plat_register_vendor_ops(struct xhci_vendor_ops *vendor_ops);
++
+ #endif	/* _XHCI_PLAT_H */
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index d0b6806275e0..2e99393560e5 100644
+index 2e99393560e5..e611f8d7d587 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -79,6 +79,7 @@ dma_addr_t xhci_trb_virt_to_dma(struct xhci_segment *seg,
- 		return 0;
- 	return seg->dma + (segment_offset * sizeof(*trb));
+@@ -3075,6 +3075,15 @@ void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
  }
-+EXPORT_SYMBOL_GPL(xhci_trb_virt_to_dma);
+ EXPORT_SYMBOL_GPL(xhci_update_erst_dequeue);
  
- static bool trb_is_noop(union xhci_trb *trb)
- {
-@@ -311,6 +312,7 @@ void xhci_ring_cmd_db(struct xhci_hcd *xhci)
- 	/* Flush PCI posted writes */
- 	readl(&xhci->dba->doorbell[0]);
- }
-+EXPORT_SYMBOL_GPL(xhci_ring_cmd_db);
- 
- static bool xhci_mod_cmd_timer(struct xhci_hcd *xhci, unsigned long delay)
- {
-@@ -2965,7 +2967,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
-  * Returns >0 for "possibly more events to process" (caller should call again),
-  * otherwise 0 if done.  In future, <0 returns should indicate error code.
-  */
--static int xhci_handle_event(struct xhci_hcd *xhci)
-+int xhci_handle_event(struct xhci_hcd *xhci)
- {
- 	union xhci_trb *event;
- 	int update_ptrs = 1;
-@@ -3034,13 +3036,14 @@ static int xhci_handle_event(struct xhci_hcd *xhci)
- 	 */
- 	return 1;
- }
-+EXPORT_SYMBOL_GPL(xhci_handle_event);
- 
- /*
-  * Update Event Ring Dequeue Pointer:
-  * - When all events have finished
-  * - To avoid "Event Ring Full Error" condition
-  */
--static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
-+void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
- 		union xhci_trb *event_ring_deq)
- {
- 	u64 temp_64;
-@@ -3070,6 +3073,7 @@ static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
- 	temp_64 |= ERST_EHB;
- 	xhci_write_64(xhci, temp_64, &xhci->ir_set->erst_dequeue);
- }
-+EXPORT_SYMBOL_GPL(xhci_update_erst_dequeue);
- 
++static irqreturn_t xhci_vendor_queue_irq_work(struct xhci_hcd *xhci)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->queue_irq_work)
++		return ops->queue_irq_work(xhci);
++	return IRQ_NONE;
++}
++
  /*
   * xHCI spec says we can get an interrupt, and if the HC has an error condition,
-@@ -4420,6 +4424,7 @@ int xhci_queue_stop_endpoint(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 	return queue_command(xhci, cmd, 0, 0, 0,
- 			trb_slot_id | trb_ep_index | type | trb_suspend, false);
- }
-+EXPORT_SYMBOL_GPL(xhci_queue_stop_endpoint);
+  * we might get bad data out of the event ring.  Section 4.10.2.7 has a list of
+@@ -3108,6 +3117,10 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 		goto out;
+ 	}
  
- int xhci_queue_reset_ep(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 			int slot_id, unsigned int ep_index,
++	ret = xhci_vendor_queue_irq_work(xhci);
++	if (ret == IRQ_HANDLED)
++		goto out;
++
+ 	/*
+ 	 * Clear the op reg interrupt status first,
+ 	 * so we can receive interrupts from other MSI-X interrupters.
 diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 642610c78f58..8f53672dcd97 100644
+index 8f53672dcd97..3f82df2c5be1 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -1457,6 +1457,7 @@ unsigned int xhci_get_endpoint_address(unsigned int ep_index)
- 	unsigned int direction = ep_index % 2 ? USB_DIR_OUT : USB_DIR_IN;
- 	return direction | number;
- }
-+EXPORT_SYMBOL_GPL(xhci_get_endpoint_address);
+@@ -1632,6 +1632,11 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 		return -ENODEV;
+ 	}
  
- /* Find the flag for this endpoint (for use in the control context).  Use the
-  * endpoint index to create a bitmask.  The slot context is bit 0, endpoint 0 is
-@@ -4313,10 +4314,11 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
++	if (xhci_vendor_usb_offload_skip_urb(xhci, urb)) {
++		xhci_dbg(xhci, "skip urb for usb offload\n");
++		return -EOPNOTSUPP;
++	}
++
+ 	if (usb_endpoint_xfer_isoc(&urb->ep->desc))
+ 		num_tds = urb->number_of_packets;
+ 	else if (usb_endpoint_is_bulk_out(&urb->ep->desc) &&
+@@ -2975,6 +2980,14 @@ static int xhci_configure_endpoint(struct xhci_hcd *xhci,
+ 			xhci_finish_resource_reservation(xhci, ctrl_ctx);
+ 		spin_unlock_irqrestore(&xhci->lock, flags);
+ 	}
++	if (ret)
++		goto failed;
++
++	ret = xhci_vendor_sync_dev_ctx(xhci, udev->slot_id);
++	if (ret)
++		xhci_warn(xhci, "sync device context failed, ret=%d", ret);
++
++failed:
  	return ret;
  }
  
--static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
-+int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
- {
- 	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS);
- }
-+EXPORT_SYMBOL_GPL(xhci_address_device);
+@@ -3118,7 +3131,11 @@ void xhci_reset_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
+ 	for (i = 0; i < 31; i++) {
+ 		if (virt_dev->eps[i].new_ring) {
+ 			xhci_debugfs_remove_endpoint(xhci, virt_dev, i);
+-			xhci_ring_free(xhci, virt_dev->eps[i].new_ring);
++			if (xhci_vendor_is_usb_offload_enabled(xhci, virt_dev, i))
++				xhci_vendor_free_transfer_ring(xhci, virt_dev->eps[i].new_ring, i);
++			else
++				xhci_ring_free(xhci, virt_dev->eps[i].new_ring);
++
+ 			virt_dev->eps[i].new_ring = NULL;
+ 		}
+ 	}
+@@ -3279,6 +3296,13 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
  
- static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
- {
+ 	wait_for_completion(stop_cmd->completion);
+ 
++	err = xhci_vendor_sync_dev_ctx(xhci, udev->slot_id);
++	if (err) {
++		xhci_warn(xhci, "%s: Failed to sync device context failed, err=%d",
++			  __func__, err);
++		goto cleanup;
++	}
++
+ 	spin_lock_irqsave(&xhci->lock, flags);
+ 
+ 	/* config ep command clears toggle if add and drop ep flags are set */
+@@ -3310,6 +3334,11 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+ 
+ 	wait_for_completion(cfg_cmd->completion);
+ 
++	err = xhci_vendor_sync_dev_ctx(xhci, udev->slot_id);
++	if (err)
++		xhci_warn(xhci, "%s: Failed to sync device context failed, err=%d",
++			  __func__, err);
++
+ 	xhci_free_command(xhci, cfg_cmd);
+ cleanup:
+ 	xhci_free_command(xhci, stop_cmd);
+@@ -3855,6 +3884,13 @@ static int xhci_discover_or_reset_device(struct usb_hcd *hcd,
+ 	/* Wait for the Reset Device command to finish */
+ 	wait_for_completion(reset_device_cmd->completion);
+ 
++	ret = xhci_vendor_sync_dev_ctx(xhci, slot_id);
++	if (ret) {
++		xhci_warn(xhci, "%s: Failed to sync device context failed, err=%d",
++			  __func__, ret);
++		goto command_cleanup;
++	}
++
+ 	/* The Reset Device command can't fail, according to the 0.95/0.96 spec,
+ 	 * unless we tried to reset a slot ID that wasn't enabled,
+ 	 * or the device wasn't in the addressed or configured state.
+@@ -4100,6 +4136,14 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+ 		xhci_warn(xhci, "Could not allocate xHCI USB device data structures\n");
+ 		goto disable_slot;
+ 	}
++
++	ret = xhci_vendor_sync_dev_ctx(xhci, slot_id);
++	if (ret) {
++		xhci_warn(xhci, "%s: Failed to sync device context failed, err=%d",
++			  __func__, ret);
++		goto disable_slot;
++	}
++
+ 	vdev = xhci->devs[slot_id];
+ 	slot_ctx = xhci_get_slot_ctx(xhci, vdev->out_ctx);
+ 	trace_xhci_alloc_dev(slot_ctx);
+@@ -4230,6 +4274,13 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+ 	/* ctrl tx can take up to 5 sec; XXX: need more time for xHC? */
+ 	wait_for_completion(command->completion);
+ 
++	ret = xhci_vendor_sync_dev_ctx(xhci, udev->slot_id);
++	if (ret) {
++		xhci_warn(xhci, "%s: Failed to sync device context failed, err=%d",
++			  __func__, ret);
++		goto out;
++	}
++
+ 	/* FIXME: From section 4.3.4: "Software shall be responsible for timing
+ 	 * the SetAddress() "recovery interval" required by USB and aborting the
+ 	 * command on a timeout.
+@@ -4382,6 +4433,14 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
+ 		return -ENOMEM;
+ 	}
+ 
++	ret = xhci_vendor_sync_dev_ctx(xhci, udev->slot_id);
++	if (ret) {
++		spin_unlock_irqrestore(&xhci->lock, flags);
++		xhci_warn(xhci, "%s: Failed to sync device context failed, err=%d",
++			  __func__, ret);
++		return ret;
++	}
++
+ 	xhci_slot_copy(xhci, command->in_ctx, virt_dev->out_ctx);
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+ 
+@@ -4409,6 +4468,30 @@ static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
+ 	return ret;
+ }
+ 
++struct xhci_vendor_ops *xhci_vendor_get_ops(struct xhci_hcd *xhci)
++{
++	return xhci->vendor_ops;
++}
++EXPORT_SYMBOL_GPL(xhci_vendor_get_ops);
++
++int xhci_vendor_sync_dev_ctx(struct xhci_hcd *xhci, unsigned int slot_id)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->sync_dev_ctx)
++		return ops->sync_dev_ctx(xhci, slot_id);
++	return 0;
++}
++
++bool xhci_vendor_usb_offload_skip_urb(struct xhci_hcd *xhci, struct urb *urb)
++{
++	struct xhci_vendor_ops *ops = xhci_vendor_get_ops(xhci);
++
++	if (ops && ops->usb_offload_skip_urb)
++		return ops->usb_offload_skip_urb(xhci, urb);
++	return false;
++}
++
+ #ifdef CONFIG_PM
+ 
+ /* BESL to HIRD Encoding array for USB2 LPM */
+@@ -5133,6 +5216,15 @@ static int xhci_update_hub_device(struct usb_hcd *hcd, struct usb_device *hdev,
+ 		return -ENOMEM;
+ 	}
+ 
++	ret = xhci_vendor_sync_dev_ctx(xhci, hdev->slot_id);
++	if (ret) {
++		xhci_warn(xhci, "%s: Failed to sync device context failed, err=%d",
++			  __func__, ret);
++		xhci_free_command(xhci, config_cmd);
++		spin_unlock_irqrestore(&xhci->lock, flags);
++		return ret;
++	}
++
+ 	xhci_slot_copy(xhci, config_cmd->in_ctx, vdev->out_ctx);
+ 	ctrl_ctx->add_flags |= cpu_to_le32(SLOT_FLAG);
+ 	slot_ctx = xhci_get_slot_ctx(xhci, config_cmd->in_ctx);
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 473a33ce299e..e2ed4f88ae4b 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1929,6 +1929,9 @@ struct xhci_hcd {
+ 	struct list_head	regset_list;
+ 
+ 	void			*dbc;
++
++	struct xhci_vendor_ops *vendor_ops;
++
+ 	/* platform-specific data -- must come last */
+ 	unsigned long		priv[] __aligned(sizeof(s64));
+ };
+@@ -2207,6 +2210,53 @@ static inline struct xhci_ring *xhci_urb_to_transfer_ring(struct xhci_hcd *xhci,
+ 					urb->stream_id);
+ }
+ 
++/**
++ * struct xhci_vendor_ops - function callbacks for vendor specific operations
++ * @vendor_init: called for vendor init process
++ * @vendor_cleanup: called for vendor cleanup process
++ * @is_usb_offload_enabled: called to check if usb offload enabled
++ * @queue_irq_work: called to queue vendor specific irq work
++ * @alloc_dcbaa: called when allocating vendor specific dcbaa
++ * @free_dcbaa: called to free vendor specific dcbaa
++ * @alloc_transfer_ring: called when remote transfer ring allocation is required
++ * @free_transfer_ring: called to free vendor specific transfer ring
++ * @sync_dev_ctx: called when synchronization for device context is required
++ * @alloc_container_ctx: called when allocating vendor specific container context
++ * @free_container_ctx: called to free vendor specific container context
++ */
++struct xhci_vendor_ops {
++	int (*vendor_init)(struct xhci_hcd *xhci);
++	void (*vendor_cleanup)(struct xhci_hcd *xhci);
++	bool (*is_usb_offload_enabled)(struct xhci_hcd *xhci,
++				       struct xhci_virt_device *vdev,
++				       unsigned int ep_index);
++	irqreturn_t (*queue_irq_work)(struct xhci_hcd *xhci);
++
++	struct xhci_device_context_array *(*alloc_dcbaa)(struct xhci_hcd *xhci,
++							 gfp_t flags);
++	void (*free_dcbaa)(struct xhci_hcd *xhci);
++
++	struct xhci_ring *(*alloc_transfer_ring)(struct xhci_hcd *xhci,
++			u32 endpoint_type, enum xhci_ring_type ring_type,
++			unsigned int max_packet, gfp_t mem_flags);
++	void (*free_transfer_ring)(struct xhci_hcd *xhci,
++			struct xhci_ring *ring, unsigned int ep_index);
++	int (*sync_dev_ctx)(struct xhci_hcd *xhci, unsigned int slot_id);
++	bool (*usb_offload_skip_urb)(struct xhci_hcd *xhci, struct urb *urb);
++	void (*alloc_container_ctx)(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx,
++				    int type, gfp_t flags);
++	void (*free_container_ctx)(struct xhci_hcd *xhci, struct xhci_container_ctx *ctx);
++};
++
++struct xhci_vendor_ops *xhci_vendor_get_ops(struct xhci_hcd *xhci);
++
++int xhci_vendor_sync_dev_ctx(struct xhci_hcd *xhci, unsigned int slot_id);
++bool xhci_vendor_usb_offload_skip_urb(struct xhci_hcd *xhci, struct urb *urb);
++void xhci_vendor_free_transfer_ring(struct xhci_hcd *xhci,
++		struct xhci_ring *ring, unsigned int ep_index);
++bool xhci_vendor_is_usb_offload_enabled(struct xhci_hcd *xhci,
++		struct xhci_virt_device *virt_dev, unsigned int ep_index);
++
+ /*
+  * TODO: As per spec Isochronous IDT transmissions are supported. We bypass
+  * them anyways as we where unable to find a device that matches the
 -- 
 2.31.1
 

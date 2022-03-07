@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820674CFACF
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5405F4CF6F1
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241289AbiCGKUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:20:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S229529AbiCGJnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241063AbiCGKBk (ORCPT
+        with ESMTP id S237663AbiCGJdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:01:40 -0500
+        Mon, 7 Mar 2022 04:33:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7343F70CF0;
-        Mon,  7 Mar 2022 01:51:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7EC6660A;
+        Mon,  7 Mar 2022 01:30:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAF26609E9;
-        Mon,  7 Mar 2022 09:51:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9055C340F3;
-        Mon,  7 Mar 2022 09:51:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 089CD61147;
+        Mon,  7 Mar 2022 09:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07DADC340E9;
+        Mon,  7 Mar 2022 09:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646678;
-        bh=zkLJNs8O2CCSa0+qdjEJ0wIH1AngXqnd3Wz7sPQS0m0=;
+        s=korg; t=1646645379;
+        bh=3Q6HfLvnyk20c5KteC9b+hLzCTbQ2st3hb44bFNMDzQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vCTbom9RqWpXfr+5cakHFvugVvYfbCz6muGl/J0paRnA/01f2vdVaqYpgDwNee2ka
-         OfNMCrOh9Y69G7Jf+GzyGYSZW3jgULgvczyd+JvcG+2UuyzvBYk7lH9yn6xHyNJCqv
-         a5wCCvoX3GAEI9qyrTdAJwby5LsB/Katklv2QOSg=
+        b=qbI0ZVvD/U1igvQbS62pBa1kydhWzYkvYDZe+fXiJSDaKayN5gCOGZWEKSaCezE2x
+         QmSiSX1dBUvLNSmc4Q8zvrx8vGqpJw+jcWSwbIWuWjpeXDPSgsWlknBT6l9vAxC6rA
+         6j1X2vn9qPGtX24fDe9elEJrZ4NWWxy4GlBKwm/Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lennert Buytenhek <buytenh@arista.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.16 057/186] iommu/amd: Recover from event log overflow
+        stable@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 012/105] dmaengine: shdma: Fix runtime PM imbalance on error
 Date:   Mon,  7 Mar 2022 10:18:15 +0100
-Message-Id: <20220307091655.687642912@linuxfoundation.org>
+Message-Id: <20220307091644.529997660@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
+References: <20220307091644.179885033@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,117 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lennert Buytenhek <buytenh@wantstofly.org>
+From: Yongzhi Liu <lyz_cs@pku.edu.cn>
 
-commit 5ce97f4ec5e0f8726a5dda1710727b1ee9badcac upstream.
+[ Upstream commit 455896c53d5b803733ddd84e1bf8a430644439b6 ]
 
-The AMD IOMMU logs I/O page faults and such to a ring buffer in
-system memory, and this ring buffer can overflow.  The AMD IOMMU
-spec has the following to say about the interrupt status bit that
-signals this overflow condition:
+pm_runtime_get_() increments the runtime PM usage counter even
+when it returns an error code, thus a matching decrement is needed on
+the error handling path to keep the counter balanced.
 
-	EventOverflow: Event log overflow. RW1C. Reset 0b. 1 = IOMMU
-	event log overflow has occurred. This bit is set when a new
-	event is to be written to the event log and there is no usable
-	entry in the event log, causing the new event information to
-	be discarded. An interrupt is generated when EventOverflow = 1b
-	and MMIO Offset 0018h[EventIntEn] = 1b. No new event log
-	entries are written while this bit is set. Software Note: To
-	resume logging, clear EventOverflow (W1C), and write a 1 to
-	MMIO Offset 0018h[EventLogEn].
-
-The AMD IOMMU driver doesn't currently implement this recovery
-sequence, meaning that if a ring buffer overflow occurs, logging
-of EVT/PPR/GA events will cease entirely.
-
-This patch implements the spec-mandated reset sequence, with the
-minor tweak that the hardware seems to want to have a 0 written to
-MMIO Offset 0018h[EventLogEn] first, before writing an 1 into this
-field, or the IOMMU won't actually resume logging events.
-
-Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/YVrSXEdW2rzEfOvk@wantstofly.org
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+Link: https://lore.kernel.org/r/1642311296-87020-1-git-send-email-lyz_cs@pku.edu.cn
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/amd/amd_iommu.h       |    1 +
- drivers/iommu/amd/amd_iommu_types.h |    1 +
- drivers/iommu/amd/init.c            |   10 ++++++++++
- drivers/iommu/amd/iommu.c           |   10 ++++++++--
- 4 files changed, 20 insertions(+), 2 deletions(-)
+ drivers/dma/sh/shdma-base.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/iommu/amd/amd_iommu.h
-+++ b/drivers/iommu/amd/amd_iommu.h
-@@ -14,6 +14,7 @@
- extern irqreturn_t amd_iommu_int_thread(int irq, void *data);
- extern irqreturn_t amd_iommu_int_handler(int irq, void *data);
- extern void amd_iommu_apply_erratum_63(u16 devid);
-+extern void amd_iommu_restart_event_logging(struct amd_iommu *iommu);
- extern void amd_iommu_reset_cmd_buffer(struct amd_iommu *iommu);
- extern int amd_iommu_init_devices(void);
- extern void amd_iommu_uninit_devices(void);
---- a/drivers/iommu/amd/amd_iommu_types.h
-+++ b/drivers/iommu/amd/amd_iommu_types.h
-@@ -110,6 +110,7 @@
- #define PASID_MASK		0x0000ffff
+diff --git a/drivers/dma/sh/shdma-base.c b/drivers/dma/sh/shdma-base.c
+index 7f72b3f4cd1ae..19ac95c0098f0 100644
+--- a/drivers/dma/sh/shdma-base.c
++++ b/drivers/dma/sh/shdma-base.c
+@@ -115,8 +115,10 @@ static dma_cookie_t shdma_tx_submit(struct dma_async_tx_descriptor *tx)
+ 		ret = pm_runtime_get(schan->dev);
  
- /* MMIO status bits */
-+#define MMIO_STATUS_EVT_OVERFLOW_INT_MASK	(1 << 0)
- #define MMIO_STATUS_EVT_INT_MASK	(1 << 1)
- #define MMIO_STATUS_COM_WAIT_INT_MASK	(1 << 2)
- #define MMIO_STATUS_PPR_INT_MASK	(1 << 6)
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -658,6 +658,16 @@ static int __init alloc_command_buffer(s
- }
- 
- /*
-+ * This function restarts event logging in case the IOMMU experienced
-+ * an event log buffer overflow.
-+ */
-+void amd_iommu_restart_event_logging(struct amd_iommu *iommu)
-+{
-+	iommu_feature_disable(iommu, CONTROL_EVT_LOG_EN);
-+	iommu_feature_enable(iommu, CONTROL_EVT_LOG_EN);
-+}
-+
-+/*
-  * This function resets the command buffer if the IOMMU stopped fetching
-  * commands from it.
-  */
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -764,7 +764,8 @@ amd_iommu_set_pci_msi_domain(struct devi
- #endif /* !CONFIG_IRQ_REMAP */
- 
- #define AMD_IOMMU_INT_MASK	\
--	(MMIO_STATUS_EVT_INT_MASK | \
-+	(MMIO_STATUS_EVT_OVERFLOW_INT_MASK | \
-+	 MMIO_STATUS_EVT_INT_MASK | \
- 	 MMIO_STATUS_PPR_INT_MASK | \
- 	 MMIO_STATUS_GALOG_INT_MASK)
- 
-@@ -774,7 +775,7 @@ irqreturn_t amd_iommu_int_thread(int irq
- 	u32 status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
- 
- 	while (status & AMD_IOMMU_INT_MASK) {
--		/* Enable EVT and PPR and GA interrupts again */
-+		/* Enable interrupt sources again */
- 		writel(AMD_IOMMU_INT_MASK,
- 			iommu->mmio_base + MMIO_STATUS_OFFSET);
- 
-@@ -795,6 +796,11 @@ irqreturn_t amd_iommu_int_thread(int irq
- 		}
- #endif
- 
-+		if (status & MMIO_STATUS_EVT_OVERFLOW_INT_MASK) {
-+			pr_info_ratelimited("IOMMU event log overflow\n");
-+			amd_iommu_restart_event_logging(iommu);
+ 		spin_unlock_irq(&schan->chan_lock);
+-		if (ret < 0)
++		if (ret < 0) {
+ 			dev_err(schan->dev, "%s(): GET = %d\n", __func__, ret);
++			pm_runtime_put(schan->dev);
 +		}
-+
- 		/*
- 		 * Hardware bug: ERBT1312
- 		 * When re-enabling interrupt (by writing 1
+ 
+ 		pm_runtime_barrier(schan->dev);
+ 
+-- 
+2.34.1
+
 
 

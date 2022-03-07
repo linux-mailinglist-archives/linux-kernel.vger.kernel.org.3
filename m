@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505894D064B
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7337F4D064F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244727AbiCGSWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
+        id S244740AbiCGSWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiCGSWD (ORCPT
+        with ESMTP id S230115AbiCGSWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:22:03 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026D811AC;
-        Mon,  7 Mar 2022 10:21:09 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 132so14308514pga.5;
-        Mon, 07 Mar 2022 10:21:09 -0800 (PST)
+        Mon, 7 Mar 2022 13:22:06 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6C78188F;
+        Mon,  7 Mar 2022 10:21:11 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id s11so14773094pfu.13;
+        Mon, 07 Mar 2022 10:21:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DS2qv/sbCHqoLMCgOnfUdla2dw7bnIePwmkfx7decsw=;
-        b=W9Gg5GyxMVII/LvqUsfW3gjfBZEdfgm8xv8ik/Z9siuo7Pqo4MulN5oQQB8so6ryAN
-         mYtizLZIPZ71DYS2mXy7Dh5KJnIAXBypw/RIUQESQRb/31LCLjwtTPJyGbHKBh6YXmZA
-         mORLiFaCUuG+7VS1Z8/itd8HbhJmQR4xyP+0G878i3pwc2TCVyy+GCMVYZc0rPNwl3EP
-         2Dwzd6322CLGiJSqLjRbqGaWW3mMheT4+HXRfF4HqP+jg14uyoe7OvHUW3K0tdV9kgNw
-         hHxRqlD2FOEl6jAdC2drnovLuGbpB6vGEJcA9K1aCPW6bUng7/La+LKeUPJIDSKM1QjM
-         cs5w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FBiRd+ga9tcDeGEmH3o6MmE8o/gJeN3HNLPViDcjgfU=;
+        b=fi8TJHQfLKdt0uij9sOenGzc+tXogDxjL134kPYUvhvj5m+WIETwjCALuQpWf6r1k0
+         YihnkAz6JI1LDtOunISdjU4CLL2nrzUwKX9U9CmOcMONVI9Or6iDxPQ1GyZiXR62j5Mj
+         wOcZF8AQz+uezW/pNAVhL9v+NK9n9OMKwqGvjvwJpd9/h+U5eILX00d1rAxVfseeiKgE
+         QQC897aIExLzwjOmGV4UsV0w6oWvsQfykET3YcmMnEeXUKp5A8AvIjG20GI4Hqm2vPex
+         MnETq70WrEXC6hZVQ1ZfzmwZyGOFSxZJiK4rchc+bXSFeaA1oLRaJrsb7LnkcYyxsLZE
+         HN7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DS2qv/sbCHqoLMCgOnfUdla2dw7bnIePwmkfx7decsw=;
-        b=f+q0chNf/rRVN/3uM52MKL4ept0XPTTl8jDi4j/1Enm9ejP3xFUnkdhnY38eunQxav
-         wx99+fLZ49ptCeALtDxpmtcIj2Dzfalu6tvkMdPV9rs873MjFw3HApoZ7O/m39PaAgoZ
-         A5GsrSsVKHGBjK10Cz4QsePZrlvF0VbDVYAi7gFM135s5kmad5hKVqLbzuHsFI5k82cD
-         GvtIpsIUOo61V0m9cqNjwFF4A252QraPUqLIPfSM9FNeXkaobsgoMC2veH+Kq0IQ5tJD
-         cJ1BqYyDcHMuJYPiC0jaz7GgWHs1x+N+UzJsIY2LUAHznszWYuCqzJquTrKMgmsZHJyb
-         H8Rw==
-X-Gm-Message-State: AOAM531ihYsgl2Jw/MD9MnradQOBqS7YlxFiDK7sCPhWGW3xlHLwxQVX
-        8/zY55C519Hk6BEASf6h+rk=
-X-Google-Smtp-Source: ABdhPJwuISSrdr2UftD1PKRqdTuR1a5SMMrV6QtwGPZRsPdtrDfRcGN6R2dbmjM4JwA8i/KgK85S6w==
-X-Received: by 2002:a63:445c:0:b0:375:9c0c:c360 with SMTP id t28-20020a63445c000000b003759c0cc360mr10744430pgk.588.1646677268440;
-        Mon, 07 Mar 2022 10:21:08 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FBiRd+ga9tcDeGEmH3o6MmE8o/gJeN3HNLPViDcjgfU=;
+        b=oSHWiullYQrEp7K5wQ9iZcgg1jt7E+D5VzgU88MqGytI/WYEkY5FDBaINP6MWryCXs
+         VUD/U3X1TnEhky9RAe/Dpt1PO40M8OuImRD+JLHdjKeBJfFAG/uyAFXXC/SM3uJ0bWfE
+         gWmCNYJh+mLFiuGnzfGYnA0QDtTCTPcViWo2gpLw30mqSN8zXzDZ1bVRI4ETHAYfvlkr
+         LM6Bewga2MfBuCd/i6e3CWmtj3JjMheV5frRi5gLCpdaEHDofIaCPUE/SMOcKPMQ9Ai+
+         Mo2sK5/qU6WKBGFyf8h3fmbMoc/+YSPrEuJKBBFfY4+SL5PSFTOGvmY9eTZl8IsytIkf
+         yxnw==
+X-Gm-Message-State: AOAM53284+4gwxyd3k7WAvEXjYBcKMLkEMKixTawjFWnW99IXy5TNsfe
+        wH6qhPwVfS0IVf6mUNUCnhc=
+X-Google-Smtp-Source: ABdhPJyKplUciEN0F5nUTMpL14fmI/J5n3s9O+zynyGBtmt+zWS5cirNNP3d/EPPgzQphCqoa1uWYQ==
+X-Received: by 2002:a65:4845:0:b0:325:c147:146d with SMTP id i5-20020a654845000000b00325c147146dmr10993228pgs.140.1646677271115;
+        Mon, 07 Mar 2022 10:21:11 -0800 (PST)
 Received: from localhost.localdomain ([122.161.53.68])
-        by smtp.gmail.com with ESMTPSA id t190-20020a632dc7000000b003759f87f38csm12245809pgt.17.2022.03.07.10.21.06
+        by smtp.gmail.com with ESMTPSA id t190-20020a632dc7000000b003759f87f38csm12245809pgt.17.2022.03.07.10.21.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 10:21:08 -0800 (PST)
+        Mon, 07 Mar 2022 10:21:10 -0800 (PST)
 From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
 To:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org
 Cc:     Scott Branden <sbranden@broadcom.com>, Ray Jui <rjui@broadcom.com>
-Subject: [PATCH 1/3] MAINTAINERS: Update git tree for broadcom IPROC boards
-Date:   Mon,  7 Mar 2022 23:50:59 +0530
-Message-Id: <20220307182101.84730-1-singh.kuldeep87k@gmail.com>
+Subject: [PATCH 2/3] arm64: dts: ns2: Fix spi clock name
+Date:   Mon,  7 Mar 2022 23:51:00 +0530
+Message-Id: <20220307182101.84730-2-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220307182101.84730-1-singh.kuldeep87k@gmail.com>
+References: <20220307182101.84730-1-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,27 +71,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current git tree for broadcom boards is pretty outdated as it's not
-updated for a long time. Fix the reference.
+SPI clock name for pl022 is "sspclk" and not "spiclk".
+Also fix below dtc warning:
+clock-names:0: 'spiclk' is not one of ['SSPCLK', 'sspclk']
 
 Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 ---
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ea3e6c914384..5d627156efd9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3900,7 +3900,7 @@ M:	Scott Branden <sbranden@broadcom.com>
- M:	bcm-kernel-feedback-list@broadcom.com
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
--T:	git git://github.com/broadcom/cygnus-linux.git
-+T:	git git://github.com/broadcom/stblinux.git
- F:	arch/arm64/boot/dts/broadcom/northstar2/*
- F:	arch/arm64/boot/dts/broadcom/stingray/*
- F:	drivers/clk/bcm/clk-ns*
+diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
+index 6da38ac317f2..4ef1817a4f7a 100644
+--- a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
++++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
+@@ -644,7 +644,7 @@ ssp0: spi@66180000 {
+ 			reg = <0x66180000 0x1000>;
+ 			interrupts = <GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&iprocslow>, <&iprocslow>;
+-			clock-names = "spiclk", "apb_pclk";
++			clock-names = "sspclk", "apb_pclk";
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 			status = "disabled";
+@@ -655,7 +655,7 @@ ssp1: spi@66190000 {
+ 			reg = <0x66190000 0x1000>;
+ 			interrupts = <GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&iprocslow>, <&iprocslow>;
+-			clock-names = "spiclk", "apb_pclk";
++			clock-names = "sspclk", "apb_pclk";
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 			status = "disabled";
 -- 
 2.25.1
 

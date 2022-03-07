@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C2D4CFB8A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225074CF553
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240994AbiCGKiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S236831AbiCGJ0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241514AbiCGKKS (ORCPT
+        with ESMTP id S237098AbiCGJXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 05:10:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA41338B1;
-        Mon,  7 Mar 2022 01:53:17 -0800 (PST)
+        Mon, 7 Mar 2022 04:23:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C063B65821;
+        Mon,  7 Mar 2022 01:21:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 395F9B810BC;
-        Mon,  7 Mar 2022 09:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87034C340F3;
-        Mon,  7 Mar 2022 09:53:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4823E61027;
+        Mon,  7 Mar 2022 09:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5915DC340F3;
+        Mon,  7 Mar 2022 09:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646792;
-        bh=Qf0pMOyeqKrwzeWEyzg94zwj7+R6q9P1xaVjSePZBdM=;
+        s=korg; t=1646644909;
+        bh=Fi3GZLIsbutc8SXukSmt00AA/xd56Py1HYugwVIKGAg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NxWKYORZX/bAXiuVtuSwuHhQQ9rZlIzh0VMDRdg/h00GtaZlRsQk5YOZHzl5K4UZt
-         IcaR4UjGPg88fEbMSd9ONlr8DmV9W1HUa+zKMq29Jmqu6y88WoY4XLaSFylxRWTVUx
-         9qFKfSDrL4vn4OYRd3BSEbZXPGS+G5zcmDaR1kTQ=
+        b=KrLqE4V9wxPTSV4IRlyFmYMdluadsHOIgaGg1SNS+taPXettuL6bg+78rdx9Pea9i
+         STZBrQmVxzK0Ma9WsHPVjyvOBgL3DcZdTiswHTBLxtRTAaEQou4oBf24q+FDvb4+ON
+         c++xJJeDPf9UPLZkwx9HT4zoOX11r5gJUb8q1YrA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 094/186] ibmvnic: register netdev after init of adapter
-Date:   Mon,  7 Mar 2022 10:18:52 +0100
-Message-Id: <20220307091656.711747658@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>
+Subject: [PATCH 4.14 19/42] netfilter: nf_queue: fix possible use-after-free
+Date:   Mon,  7 Mar 2022 10:18:53 +0100
+Message-Id: <20220307091636.710014074@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
-References: <20220307091654.092878898@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+From: Florian Westphal <fw@strlen.de>
 
-commit 570425f8c7c18b14fa8a2a58a0adb431968ad118 upstream.
+commit c3873070247d9e3c7a6b0cf9bf9b45e8018427b1 upstream.
 
-Finish initializing the adapter before registering netdev so state
-is consistent.
+Eric Dumazet says:
+  The sock_hold() side seems suspect, because there is no guarantee
+  that sk_refcnt is not already 0.
 
-Fixes: c26eba03e407 ("ibmvnic: Update reset infrastructure to support tunable parameters")
-Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+On failure, we cannot queue the packet and need to indicate an
+error.  The packet will be dropped by the caller.
+
+v2: split skb prefetch hunk into separate change
+
+Fixes: 271b72c7fa82c ("udp: RCU handling for Unicast packets.")
+Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/ibm/ibmvnic.c |   14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ include/net/netfilter/nf_queue.h |    2 +-
+ net/netfilter/nf_queue.c         |   12 ++++++++++--
+ net/netfilter/nfnetlink_queue.c  |   12 +++++++++---
+ 3 files changed, 20 insertions(+), 6 deletions(-)
 
---- a/drivers/net/ethernet/ibm/ibmvnic.c
-+++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@ -5811,12 +5811,6 @@ static int ibmvnic_probe(struct vio_dev
- 		goto ibmvnic_dev_file_err;
+--- a/include/net/netfilter/nf_queue.h
++++ b/include/net/netfilter/nf_queue.h
+@@ -32,7 +32,7 @@ void nf_register_queue_handler(struct ne
+ void nf_unregister_queue_handler(struct net *net);
+ void nf_reinject(struct nf_queue_entry *entry, unsigned int verdict);
  
- 	netif_carrier_off(netdev);
--	rc = register_netdev(netdev);
--	if (rc) {
--		dev_err(&dev->dev, "failed to register netdev rc=%d\n", rc);
--		goto ibmvnic_register_fail;
--	}
--	dev_info(&dev->dev, "ibmvnic registered\n");
+-void nf_queue_entry_get_refs(struct nf_queue_entry *entry);
++bool nf_queue_entry_get_refs(struct nf_queue_entry *entry);
+ void nf_queue_entry_release_refs(struct nf_queue_entry *entry);
  
- 	if (init_success) {
- 		adapter->state = VNIC_PROBED;
-@@ -5829,6 +5823,14 @@ static int ibmvnic_probe(struct vio_dev
+ static inline void init_hashrandom(u32 *jhash_initval)
+--- a/net/netfilter/nf_queue.c
++++ b/net/netfilter/nf_queue.c
+@@ -80,10 +80,13 @@ void nf_queue_entry_release_refs(struct
+ EXPORT_SYMBOL_GPL(nf_queue_entry_release_refs);
  
- 	adapter->wait_for_reset = false;
- 	adapter->last_reset_time = jiffies;
+ /* Bump dev refs so they don't vanish while packet is out */
+-void nf_queue_entry_get_refs(struct nf_queue_entry *entry)
++bool nf_queue_entry_get_refs(struct nf_queue_entry *entry)
+ {
+ 	struct nf_hook_state *state = &entry->state;
+ 
++	if (state->sk && !refcount_inc_not_zero(&state->sk->sk_refcnt))
++		return false;
 +
-+	rc = register_netdev(netdev);
-+	if (rc) {
-+		dev_err(&dev->dev, "failed to register netdev rc=%d\n", rc);
-+		goto ibmvnic_register_fail;
+ 	if (state->in)
+ 		dev_hold(state->in);
+ 	if (state->out)
+@@ -102,6 +105,7 @@ void nf_queue_entry_get_refs(struct nf_q
+ 			dev_hold(physdev);
+ 	}
+ #endif
++	return true;
+ }
+ EXPORT_SYMBOL_GPL(nf_queue_entry_get_refs);
+ 
+@@ -159,7 +163,11 @@ static int __nf_queue(struct sk_buff *sk
+ 		.size	= sizeof(*entry) + afinfo->route_key_size,
+ 	};
+ 
+-	nf_queue_entry_get_refs(entry);
++	if (!nf_queue_entry_get_refs(entry)) {
++		kfree(entry);
++		return -ENOTCONN;
 +	}
-+	dev_info(&dev->dev, "ibmvnic registered\n");
 +
- 	return 0;
+ 	afinfo->saveroute(skb, entry);
+ 	status = qh->outfn(entry, queuenum);
  
- ibmvnic_register_fail:
+--- a/net/netfilter/nfnetlink_queue.c
++++ b/net/netfilter/nfnetlink_queue.c
+@@ -693,9 +693,15 @@ static struct nf_queue_entry *
+ nf_queue_entry_dup(struct nf_queue_entry *e)
+ {
+ 	struct nf_queue_entry *entry = kmemdup(e, e->size, GFP_ATOMIC);
+-	if (entry)
+-		nf_queue_entry_get_refs(entry);
+-	return entry;
++
++	if (!entry)
++		return NULL;
++
++	if (nf_queue_entry_get_refs(entry))
++		return entry;
++
++	kfree(entry);
++	return NULL;
+ }
+ 
+ #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
 
 

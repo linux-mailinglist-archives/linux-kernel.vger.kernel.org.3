@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAF24CFA97
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A37984CFA9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240313AbiCGKS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:18:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S242058AbiCGKVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240479AbiCGKBD (ORCPT
+        with ESMTP id S240481AbiCGKBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Mar 2022 05:01:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065AA9FF0;
-        Mon,  7 Mar 2022 01:48:54 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2329FEB;
+        Mon,  7 Mar 2022 01:48:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2C07B80F9F;
-        Mon,  7 Mar 2022 09:48:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0663DC340F5;
-        Mon,  7 Mar 2022 09:48:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D801F60919;
+        Mon,  7 Mar 2022 09:48:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F17C340E9;
+        Mon,  7 Mar 2022 09:48:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646531;
-        bh=goSQsIx1vr5XuNPvESDGISMoMw1wJOGeLiM+1mNyTJE=;
+        s=korg; t=1646646534;
+        bh=+oaw10vcsziuPG1r4+KJScrE4s0dXjQd4Jd7dTVsJvg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ilw9B6sGtHsyGSFYpTIX20ZGkX814SH1NpkqgSHXCV7jHyelVw6gxeEp6Z+X015lA
-         9I4MtMLnmVtVd8q/oTG/7NjdqPMCnt5kx05+bivkZBdbFdGb0uuOOeZdclrZ5nlfg6
-         gA9l49jrZxm5GcYbV+Zr6As2FYj6U8sMZuYFR9a4=
+        b=r4ZdqJOWMwIWaZ796ObWx387URZ/a4jKYjIm5fPwzcm1XEcw1zYzqGZUQwQ+7qqWA
+         jHCretO/3rEiSCJB+JoCxy8Oer5pd6kC3mx/opkxrFFXcnqRLhb+WwyPfr2SuIp1nd
+         bdjWmJ7EAZ2yHlkBbtKpx7AU6Wcy0VJS0D3IKeoI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Pei Zhang <pezhang@redhat.com>, Ming Lei <ming.lei@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 011/186] block: loop:use kstatfs.f_bsize of backing file to set discard granularity
-Date:   Mon,  7 Mar 2022 10:17:29 +0100
-Message-Id: <20220307091654.412940249@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 012/186] tipc: fix a bit overflow in tipc_crypto_key_rcv()
+Date:   Mon,  7 Mar 2022 10:17:30 +0100
+Message-Id: <20220307091654.440538716@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
 References: <20220307091654.092878898@linuxfoundation.org>
@@ -56,62 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit 06582bc86d7f48d35cd044098ca1e246e8c7c52e ]
+[ Upstream commit 143de8d97d79316590475dc2a84513c63c863ddf ]
 
-If backing file's filesystem has implemented ->fallocate(), we think the
-loop device can support discard, then pass sb->s_blocksize as
-discard_granularity. However, some underlying FS, such as overlayfs,
-doesn't set sb->s_blocksize, and causes discard_granularity to be set as
-zero, then the warning in __blkdev_issue_discard() is triggered.
+msg_data_sz return a 32bit value, but size is 16bit. This may lead to a
+bit overflow.
 
-Christoph suggested to pass kstatfs.f_bsize as discard granularity, and
-this way is fine because kstatfs.f_bsize means 'Optimal transfer block
-size', which still matches with definition of discard granularity.
-
-So fix the issue by setting discard_granularity as kstatfs.f_bsize if it
-is available, otherwise claims discard isn't supported.
-
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Vivek Goyal <vgoyal@redhat.com>
-Reported-by: Pei Zhang <pezhang@redhat.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220126035830.296465-1-ming.lei@redhat.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/loop.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ net/tipc/crypto.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index c3a36cfaa855a..fdb4798cb0065 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -79,6 +79,7 @@
- #include <linux/ioprio.h>
- #include <linux/blk-cgroup.h>
- #include <linux/sched/mm.h>
-+#include <linux/statfs.h>
+diff --git a/net/tipc/crypto.c b/net/tipc/crypto.c
+index d293614d5fc65..b5074957e8812 100644
+--- a/net/tipc/crypto.c
++++ b/net/tipc/crypto.c
+@@ -2287,7 +2287,7 @@ static bool tipc_crypto_key_rcv(struct tipc_crypto *rx, struct tipc_msg *hdr)
+ 	struct tipc_crypto *tx = tipc_net(rx->net)->crypto_tx;
+ 	struct tipc_aead_key *skey = NULL;
+ 	u16 key_gen = msg_key_gen(hdr);
+-	u16 size = msg_data_sz(hdr);
++	u32 size = msg_data_sz(hdr);
+ 	u8 *data = msg_data(hdr);
+ 	unsigned int keylen;
  
- #include "loop.h"
- 
-@@ -774,8 +775,13 @@ static void loop_config_discard(struct loop_device *lo)
- 		granularity = 0;
- 
- 	} else {
-+		struct kstatfs sbuf;
-+
- 		max_discard_sectors = UINT_MAX >> 9;
--		granularity = inode->i_sb->s_blocksize;
-+		if (!vfs_statfs(&file->f_path, &sbuf))
-+			granularity = sbuf.f_bsize;
-+		else
-+			max_discard_sectors = 0;
- 	}
- 
- 	if (max_discard_sectors) {
 -- 
 2.34.1
 

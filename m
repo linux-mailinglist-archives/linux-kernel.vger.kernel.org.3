@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E434CF881
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8D24CF5F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238920AbiCGJ4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:56:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S235853AbiCGJbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238442AbiCGJi1 (ORCPT
+        with ESMTP id S237813AbiCGJ21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:38:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158F066AE6;
-        Mon,  7 Mar 2022 01:32:41 -0800 (PST)
+        Mon, 7 Mar 2022 04:28:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9D66B082;
+        Mon,  7 Mar 2022 01:26:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94FE161135;
-        Mon,  7 Mar 2022 09:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A102C340E9;
-        Mon,  7 Mar 2022 09:32:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFF7AB810BF;
+        Mon,  7 Mar 2022 09:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29B15C340F3;
+        Mon,  7 Mar 2022 09:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645539;
-        bh=jzZC1uWKyDCc+QWQpLxk98sw8g071/4PiEMS44n3Md4=;
+        s=korg; t=1646645148;
+        bh=4Do5akYphTBtPcYBc/ozTHbz6rGCD1xHyIWyKYfRseI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fTtE/wDlm1sHl0dMnqroei8BMoNeltjGIrUFebuGLvAQcmYenCYP55m2CTs2RwWmv
-         tsylKhcmlLxf+PvRDL0LRcggu+TybuStJMofBgbTRgFWUFClEGEKUGvrCj/ZIf2zBp
-         Is5SkhoZkihBqEIT+UuwDH/KQeHrToBt8Fxk853U=
+        b=tFc7jhmHZ7XRiyTra2Yxt06C/XvhVlU8UzmYJc2WXVabRIULIpLrrEJqzgVAwrdNa
+         41+oHLp1IZmoRwhOF+cvac17OOUe/xCvzXXEC9mC04kNi3urfDDXZOvC9zNEBOWP2z
+         3t4m3rrzWDNtd/iRvevD1S2+eVpGjbLvey8TUtfw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 061/105] net: stmmac: fix return value of __setup handler
-Date:   Mon,  7 Mar 2022 10:19:04 +0100
-Message-Id: <20220307091645.896285971@linuxfoundation.org>
+        stable@vger.kernel.org, Joseph Bao <joseph.bao@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4.19 30/51] PCI: pciehp: Fix infinite loop in IRQ handler upon power fault
+Date:   Mon,  7 Mar 2022 10:19:05 +0100
+Message-Id: <20220307091637.848544322@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091644.179885033@linuxfoundation.org>
-References: <20220307091644.179885033@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+References: <20220307091636.988950823@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,53 +57,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Lukas Wunner <lukas@wunner.de>
 
-commit e01b042e580f1fbf4fd8da467442451da00c7a90 upstream.
+commit 23584c1ed3e15a6f4bfab8dc5a88d94ab929ee12 upstream.
 
-__setup() handlers should return 1 on success, i.e., the parameter
-has been handled. A return of 0 causes the "option=value" string to be
-added to init's environment strings, polluting it.
+The Power Fault Detected bit in the Slot Status register differs from
+all other hotplug events in that it is sticky:  It can only be cleared
+after turning off slot power.  Per PCIe r5.0, sec. 6.7.1.8:
 
-Fixes: 47dd7a540b8a ("net: add support for STMicroelectronics Ethernet controllers.")
-Fixes: f3240e2811f0 ("stmmac: remove warning when compile as built-in (V2)")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Jose Abreu <joabreu@synopsys.com>
-Link: https://lore.kernel.org/r/20220224033536.25056-1-rdunlap@infradead.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+  If a power controller detects a main power fault on the hot-plug slot,
+  it must automatically set its internal main power fault latch [...].
+  The main power fault latch is cleared when software turns off power to
+  the hot-plug slot.
+
+The stickiness used to cause interrupt storms and infinite loops which
+were fixed in 2009 by commits 5651c48cfafe ("PCI pciehp: fix power fault
+interrupt storm problem") and 99f0169c17f3 ("PCI: pciehp: enable
+software notification on empty slots").
+
+Unfortunately in 2020 the infinite loop issue was inadvertently
+reintroduced by commit 8edf5332c393 ("PCI: pciehp: Fix MSI interrupt
+race"):  The hardirq handler pciehp_isr() clears the PFD bit until
+pciehp's power_fault_detected flag is set.  That happens in the IRQ
+thread pciehp_ist(), which never learns of the event because the hardirq
+handler is stuck in an infinite loop.  Fix by setting the
+power_fault_detected flag already in the hardirq handler.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=214989
+Link: https://lore.kernel.org/linux-pci/DM8PR11MB5702255A6A92F735D90A4446868B9@DM8PR11MB5702.namprd11.prod.outlook.com
+Fixes: 8edf5332c393 ("PCI: pciehp: Fix MSI interrupt race")
+Link: https://lore.kernel.org/r/66eaeef31d4997ceea357ad93259f290ededecfd.1637187226.git.lukas@wunner.de
+Reported-by: Joseph Bao <joseph.bao@intel.com>
+Tested-by: Joseph Bao <joseph.bao@intel.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Cc: stable@vger.kernel.org # v4.19+
+Cc: Stuart Hayes <stuart.w.hayes@gmail.com>
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/pci/hotplug/pciehp_hpc.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5428,7 +5428,7 @@ static int __init stmmac_cmdline_opt(cha
- 	char *opt;
+--- a/drivers/pci/hotplug/pciehp_hpc.c
++++ b/drivers/pci/hotplug/pciehp_hpc.c
+@@ -576,6 +576,8 @@ read_status:
+ 	 */
+ 	if (ctrl->power_fault_detected)
+ 		status &= ~PCI_EXP_SLTSTA_PFD;
++	else if (status & PCI_EXP_SLTSTA_PFD)
++		ctrl->power_fault_detected = true;
  
- 	if (!str || !*str)
--		return -EINVAL;
-+		return 1;
- 	while ((opt = strsep(&str, ",")) != NULL) {
- 		if (!strncmp(opt, "debug:", 6)) {
- 			if (kstrtoint(opt + 6, 0, &debug))
-@@ -5459,11 +5459,11 @@ static int __init stmmac_cmdline_opt(cha
- 				goto err;
- 		}
+ 	events |= status;
+ 	if (!events) {
+@@ -585,7 +587,7 @@ read_status:
  	}
--	return 0;
-+	return 1;
  
- err:
- 	pr_err("%s: ERROR broken module parameter conversion", __func__);
--	return -EINVAL;
-+	return 1;
- }
+ 	if (status) {
+-		pcie_capability_write_word(pdev, PCI_EXP_SLTSTA, events);
++		pcie_capability_write_word(pdev, PCI_EXP_SLTSTA, status);
  
- __setup("stmmaceth=", stmmac_cmdline_opt);
+ 		/*
+ 		 * In MSI mode, all event bits must be zero before the port
+@@ -660,8 +662,7 @@ static irqreturn_t pciehp_ist(int irq, v
+ 	}
+ 
+ 	/* Check Power Fault Detected */
+-	if ((events & PCI_EXP_SLTSTA_PFD) && !ctrl->power_fault_detected) {
+-		ctrl->power_fault_detected = 1;
++	if (events & PCI_EXP_SLTSTA_PFD) {
+ 		ctrl_err(ctrl, "Slot(%s): Power fault\n", slot_name(slot));
+ 		pciehp_set_attention_status(slot, 1);
+ 		pciehp_green_led_off(slot);
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403C94CF679
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3124CF563
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237868AbiCGJho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:37:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
+        id S237004AbiCGJ0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 04:26:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238715AbiCGJ3h (ORCPT
+        with ESMTP id S237346AbiCGJXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:29:37 -0500
+        Mon, 7 Mar 2022 04:23:48 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E0C5B8BE;
-        Mon,  7 Mar 2022 01:27:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2530753702;
+        Mon,  7 Mar 2022 01:22:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B309A60C00;
-        Mon,  7 Mar 2022 09:27:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A44C340E9;
-        Mon,  7 Mar 2022 09:27:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B40D26112D;
+        Mon,  7 Mar 2022 09:22:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C186CC340E9;
+        Mon,  7 Mar 2022 09:22:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645275;
-        bh=f4g8xhcP711CTJtA/JNIAJ1Z6B3hMC8yWnMW76UYusA=;
+        s=korg; t=1646644973;
+        bh=2hD2Zy8q0u/gvLIiemZem1RJ9k1fcEV26TC5ytos6DE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vsxCgzYh0rgCpQDMg4EIkp5559XEaHOY0osgLhOdNzFZyHq//7oKR7S+NfXSR7GhN
-         x7mQoK3cbLSAaZ/vzixkddpGXK850Znjhh4Af9/pJOsIAqlxd/tqioxEahAXz5Qy7/
-         oK8BhuvFiwLmZHmJQjmlDdCNdkWxSI1gcHPClIvY=
+        b=t8s+1UfFUXPEs9CfGCyN4eh6+UWwIKh6dD3YF6L18CjHVU3fnWNsCoLSQlf4fPLe6
+         vTPmeM1DHCusR50t/8rAfebjPvpLsj5fUZB2Rd2PSyUIt2dz9oz1ZABA+iJ7nTQfa0
+         SUN7uKmBvHowQo3VQ7ddDii03zVzTiahGzWI1KwA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Alyssa Ross <hi@alyssa.is>, Sudeep Holla <sudeep.holla@arm.com>
-Subject: [PATCH 5.4 41/64] firmware: arm_scmi: Remove space in MODULE_ALIAS name
+        stable@vger.kernel.org, William Mahon <wmahon@chromium.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 4.14 40/42] HID: add mapping for KEY_ALL_APPLICATIONS
 Date:   Mon,  7 Mar 2022 10:19:14 +0100
-Message-Id: <20220307091640.313149941@linuxfoundation.org>
+Message-Id: <20220307091637.319648176@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-References: <20220307091639.136830784@linuxfoundation.org>
+In-Reply-To: <20220307091636.146155347@linuxfoundation.org>
+References: <20220307091636.146155347@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alyssa Ross <hi@alyssa.is>
+From: William Mahon <wmahon@chromium.org>
 
-commit 1ba603f56568c3b4c2542dfba07afa25f21dcff3 upstream.
+commit 327b89f0acc4c20a06ed59e4d9af7f6d804dc2e2 upstream.
 
-modprobe can't handle spaces in aliases. Get rid of it to fix the issue.
+This patch adds a new key definition for KEY_ALL_APPLICATIONS
+and aliases KEY_DASHBOARD to it.
 
-Link: https://lore.kernel.org/r/20220211102704.128354-1-sudeep.holla@arm.com
-Fixes: aa4f886f3893 ("firmware: arm_scmi: add basic driver infrastructure for SCMI")
-Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+It also maps the 0x0c/0x2a2 usage code to KEY_ALL_APPLICATIONS.
+
+Signed-off-by: William Mahon <wmahon@chromium.org>
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20220303035618.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/arm_scmi/driver.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/hid-debug.c                |    4 +++-
+ drivers/hid/hid-input.c                |    2 ++
+ include/uapi/linux/input-event-codes.h |    3 ++-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/firmware/arm_scmi/driver.c
-+++ b/drivers/firmware/arm_scmi/driver.c
-@@ -983,7 +983,7 @@ static struct platform_driver scmi_drive
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -835,7 +835,9 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[KEY_F22] = "F22",			[KEY_F23] = "F23",
+ 	[KEY_F24] = "F24",			[KEY_PLAYCD] = "PlayCD",
+ 	[KEY_PAUSECD] = "PauseCD",		[KEY_PROG3] = "Prog3",
+-	[KEY_PROG4] = "Prog4",			[KEY_SUSPEND] = "Suspend",
++	[KEY_PROG4] = "Prog4",
++	[KEY_ALL_APPLICATIONS] = "AllApplications",
++	[KEY_SUSPEND] = "Suspend",
+ 	[KEY_CLOSE] = "Close",			[KEY_PLAY] = "Play",
+ 	[KEY_FASTFORWARD] = "FastForward",	[KEY_BASSBOOST] = "BassBoost",
+ 	[KEY_PRINT] = "Print",			[KEY_HP] = "HP",
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -1026,6 +1026,8 @@ static void hidinput_configure_usage(str
+ 		case 0x28b: map_key_clear(KEY_FORWARDMAIL);	break;
+ 		case 0x28c: map_key_clear(KEY_SEND);		break;
  
- module_platform_driver(scmi_driver);
- 
--MODULE_ALIAS("platform: arm-scmi");
-+MODULE_ALIAS("platform:arm-scmi");
- MODULE_AUTHOR("Sudeep Holla <sudeep.holla@arm.com>");
- MODULE_DESCRIPTION("ARM SCMI protocol driver");
- MODULE_LICENSE("GPL v2");
++		case 0x2a2: map_key_clear(KEY_ALL_APPLICATIONS);	break;
++
+ 		case 0x2c7: map_key_clear(KEY_KBDINPUTASSIST_PREV);		break;
+ 		case 0x2c8: map_key_clear(KEY_KBDINPUTASSIST_NEXT);		break;
+ 		case 0x2c9: map_key_clear(KEY_KBDINPUTASSIST_PREVGROUP);		break;
+--- a/include/uapi/linux/input-event-codes.h
++++ b/include/uapi/linux/input-event-codes.h
+@@ -278,7 +278,8 @@
+ #define KEY_PAUSECD		201
+ #define KEY_PROG3		202
+ #define KEY_PROG4		203
+-#define KEY_DASHBOARD		204	/* AL Dashboard */
++#define KEY_ALL_APPLICATIONS	204	/* AC Desktop Show All Applications */
++#define KEY_DASHBOARD		KEY_ALL_APPLICATIONS
+ #define KEY_SUSPEND		205
+ #define KEY_CLOSE		206	/* AC Close */
+ #define KEY_PLAY		207
 
 

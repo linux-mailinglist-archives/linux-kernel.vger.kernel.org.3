@@ -2,61 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FD34CFE65
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13ABA4CFE6F
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242254AbiCGM1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S242295AbiCGM1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242301AbiCGM0x (ORCPT
+        with ESMTP id S240808AbiCGM1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:26:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A9582D34
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:25:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55D8461119
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 12:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD6BCC340E9;
-        Mon,  7 Mar 2022 12:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646655952;
-        bh=Ghs63fYthC1CW9AbnkUpsxT3KRIqjn2YMnqNPVu9Z9A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Cfvm4qBjvVqDUD41LgVmaVdXePN17HbVw1cNKxXHi+koU8FzymcIF5bA3seLlGXJ+
-         hHp31fad1v5ZmIsUFvjJB80HpsldqY85UEpMkZOeRvJKC9vzKwRXzwBVy0sW3WzLUf
-         vL/PkjV+B2MFgfR0LeRa25VErcNN7bu9KharV2rgU+awTgtz8f5SWpvYLF7VYjye8z
-         WWUR7ZxCAA2ciBBSoIpNk2w2fPGWqB2XpjCJ+LRoOBmU2/GWafDxQttxcBTNi2xDXc
-         XJA4LMNQcAqRGvejYstDkd8Rd9hRKP2FNZ6/TFHBOVJ71yCGyqYM6U8GsyKPwJMq65
-         vbWwtFvr5WuVQ==
-Message-ID: <c39d64f0-deef-4cae-fab7-555a48e31811@kernel.org>
-Date:   Mon, 7 Mar 2022 14:25:48 +0200
+        Mon, 7 Mar 2022 07:27:37 -0500
+Received: from out0-129.mail.aliyun.com (out0-129.mail.aliyun.com [140.205.0.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E181199;
+        Mon,  7 Mar 2022 04:26:41 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047209;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---.N.AWOLN_1646655994;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.N.AWOLN_1646655994)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 07 Mar 2022 20:26:35 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] KVM: x86: Only do MSR filtering when access MSR by rdmsr/wrmsr
+Date:   Mon, 07 Mar 2022 20:26:33 +0800
+Message-Id: <2b2774154f7532c96a6f04d71c82a8bec7d9e80b.1646655860.git.houwenlong.hwl@antgroup.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <1dfd46ae5b76d3ed87bde3154d51c64ea64c99c1.1646226788.git.houwenlong.hwl@antgroup.com>
+References: <1dfd46ae5b76d3ed87bde3154d51c64ea64c99c1.1646226788.git.houwenlong.hwl@antgroup.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mtd: rawnand: omap2: Actually prevent invalid
- configuration and build error
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        krzysztof.kozlowski@canonical.com, vigneshr@ti.com, nm@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220220004415.GA1519274@roeck-us.net>
- <4bbe337e-8cd8-a4d6-303d-d5aa21bee2e0@infradead.org>
- <20220304165451.0129012e@xps13>
- <6c09de15-1ab2-5ca8-7003-69ff3f7c4dc5@kernel.org>
- <20220307110357.20d50176@xps13>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20220307110357.20d50176@xps13>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,117 +48,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquel,
+If MSR access is rejected by MSR filtering,
+kvm_set_msr()/kvm_get_msr() would return KVM_MSR_RET_FILTERED,
+and the return value is only handled well for rdmsr/wrmsr.
+However, some instruction emulation and state transition also
+use kvm_set_msr()/kvm_get_msr() to do msr access but may trigger
+some unexpected results if MSR access is rejected, E.g. RDPID
+emulation would inject a #UD but RDPID wouldn't cause a exit
+when RDPID is supported in hardware and ENABLE_RDTSCP is set.
+And it would also cause failure when load MSR at nested entry/exit.
+Since msr filtering is based on MSR bitmap, it is better to only
+do MSR filtering for rdmsr/wrmsr.
 
-On 07/03/2022 12:03, Miquel Raynal wrote:
-> Hi Roger,
-> 
-> rogerq@kernel.org wrote on Sat, 5 Mar 2022 00:50:14 +0200:
-> 
->> Hi Miquel,
->>
->> On 04/03/2022 17:54, Miquel Raynal wrote:
->>> Hi Guenter, Roger,
->>>
->>> rdunlap@infradead.org wrote on Sat, 26 Feb 2022 22:55:28 -0800:
->>>   
->>>> On 2/19/22 16:44, Guenter Roeck wrote:  
->>>>> On Sat, Feb 19, 2022 at 09:36:00PM +0200, Roger Quadros wrote:    
->>>>>> The root of the problem is that we are selecting symbols that have
->>>>>> dependencies. This can cause random configurations that can fail.
->>>>>> The cleanest solution is to avoid using select.
->>>>>>
->>>>>> This driver uses interfaces from the OMAP_GPMC driver so we have to
->>>>>> depend on it instead.
->>>>>>
->>>>>> Fixes: 4cd335dae3cf ("mtd: rawnand: omap2: Prevent invalid configuration and build error")
->>>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>    
->>>>>
->>>>> Tested-by: Guenter Roeck <linux@roeck-us.net>    
->>>>
->>>> Tested-by: Randy Dunlap <rdunlap@infradead.org>  
->>>
->>> Sorry for noticing that just now, but there is still a problem with
->>> this patch: we now always compile-in the OMAP_GPMC driver whenever we
->>> need the NAND controller, even though it is not needed. This grows the
->>> kernel for no reason.  
->>
->> Sorry, I did not understand what you meant.
->>
->> We no longer explicitly enable OMAP_GPMC since we dropped the "select".
->> This fixes all build issues that were reported recently.
->>
->> MTD_NAND_OMAP2 will not be enabled if OMAP_GPMC is not since we added
->> the "depends on". This fixes the original build issue that we started to
->> fix with select initially.
-> 
-> Yes, this side is fine.
-> 
-> In the initial commit, you proposed:
-> 
-> --- a/drivers/mtd/nand/raw/Kconfig
-> +++ b/drivers/mtd/nand/raw/Kconfig
-> @@ -42,7 +42,8 @@ config MTD_NAND_OMAP2
->         tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
->         depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
->         depends on HAS_IOMEM
-> +       select OMAP_GPMC if ARCH_K3
-> 
-> Which creates a dependency over OMAP_GPMC only for a single
-> architecture. Which means that other OMAP platforms do not necessarily
-> need OMAP_GPMC for the NAND controller to work. Now, you propose:
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+---
+ arch/x86/kvm/emulate.c     |  4 +--
+ arch/x86/kvm/kvm_emulate.h |  2 ++
+ arch/x86/kvm/x86.c         | 50 +++++++++++++++++++++++++++-----------
+ 3 files changed, 40 insertions(+), 16 deletions(-)
 
-No that is not true. Other platforms that need MTD_NAND_OMAP2 are
-explicitly selecting OMAP_GPMC
-i.e. in arch/arm/mach-omap2/Kconfig
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index a60b4d20b309..3497a35bd085 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -3623,7 +3623,7 @@ static int em_wrmsr(struct x86_emulate_ctxt *ctxt)
+ 
+ 	msr_data = (u32)reg_read(ctxt, VCPU_REGS_RAX)
+ 		| ((u64)reg_read(ctxt, VCPU_REGS_RDX) << 32);
+-	r = ctxt->ops->set_msr(ctxt, msr_index, msr_data);
++	r = ctxt->ops->set_msr_with_filter(ctxt, msr_index, msr_data);
+ 
+ 	if (r == X86EMUL_IO_NEEDED)
+ 		return r;
+@@ -3640,7 +3640,7 @@ static int em_rdmsr(struct x86_emulate_ctxt *ctxt)
+ 	u64 msr_data;
+ 	int r;
+ 
+-	r = ctxt->ops->get_msr(ctxt, msr_index, &msr_data);
++	r = ctxt->ops->get_msr_with_filter(ctxt, msr_index, &msr_data);
+ 
+ 	if (r == X86EMUL_IO_NEEDED)
+ 		return r;
+diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+index 39eded2426ff..29ac5a9679e5 100644
+--- a/arch/x86/kvm/kvm_emulate.h
++++ b/arch/x86/kvm/kvm_emulate.h
+@@ -210,6 +210,8 @@ struct x86_emulate_ops {
+ 	int (*set_dr)(struct x86_emulate_ctxt *ctxt, int dr, ulong value);
+ 	u64 (*get_smbase)(struct x86_emulate_ctxt *ctxt);
+ 	void (*set_smbase)(struct x86_emulate_ctxt *ctxt, u64 smbase);
++	int (*set_msr_with_filter)(struct x86_emulate_ctxt *ctxt, u32 msr_index, u64 data);
++	int (*get_msr_with_filter)(struct x86_emulate_ctxt *ctxt, u32 msr_index, u64 *pdata);
+ 	int (*set_msr)(struct x86_emulate_ctxt *ctxt, u32 msr_index, u64 data);
+ 	int (*get_msr)(struct x86_emulate_ctxt *ctxt, u32 msr_index, u64 *pdata);
+ 	int (*check_pmc)(struct x86_emulate_ctxt *ctxt, u32 pmc);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index cf17af4d6904..09c5677f4186 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1736,9 +1736,6 @@ static int __kvm_set_msr(struct kvm_vcpu *vcpu, u32 index, u64 data,
+ {
+ 	struct msr_data msr;
+ 
+-	if (!host_initiated && !kvm_msr_allowed(vcpu, index, KVM_MSR_FILTER_WRITE))
+-		return KVM_MSR_RET_FILTERED;
+-
+ 	switch (index) {
+ 	case MSR_FS_BASE:
+ 	case MSR_GS_BASE:
+@@ -1820,9 +1817,6 @@ int __kvm_get_msr(struct kvm_vcpu *vcpu, u32 index, u64 *data,
+ 	struct msr_data msr;
+ 	int ret;
+ 
+-	if (!host_initiated && !kvm_msr_allowed(vcpu, index, KVM_MSR_FILTER_READ))
+-		return KVM_MSR_RET_FILTERED;
+-
+ 	switch (index) {
+ 	case MSR_TSC_AUX:
+ 		if (!kvm_is_supported_user_return_msr(MSR_TSC_AUX))
+@@ -1859,6 +1853,20 @@ static int kvm_get_msr_ignored_check(struct kvm_vcpu *vcpu,
+ 	return ret;
+ }
+ 
++static int kvm_get_msr_with_filter(struct kvm_vcpu *vcpu, u32 index, u64 *data)
++{
++	if (!kvm_msr_allowed(vcpu, index, KVM_MSR_FILTER_READ))
++		return KVM_MSR_RET_FILTERED;
++	return kvm_get_msr_ignored_check(vcpu, index, data, false);
++}
++
++static int kvm_set_msr_with_filter(struct kvm_vcpu *vcpu, u32 index, u64 data)
++{
++	if (!kvm_msr_allowed(vcpu, index, KVM_MSR_FILTER_WRITE))
++		return KVM_MSR_RET_FILTERED;
++	return kvm_set_msr_ignored_check(vcpu, index, data, false);
++}
++
+ int kvm_get_msr(struct kvm_vcpu *vcpu, u32 index, u64 *data)
+ {
+ 	return kvm_get_msr_ignored_check(vcpu, index, data, false);
+@@ -1941,7 +1949,7 @@ int kvm_emulate_rdmsr(struct kvm_vcpu *vcpu)
+ 	u64 data;
+ 	int r;
+ 
+-	r = kvm_get_msr(vcpu, ecx, &data);
++	r = kvm_get_msr_with_filter(vcpu, ecx, &data);
+ 
+ 	if (!r) {
+ 		trace_kvm_msr_read(ecx, data);
+@@ -1966,7 +1974,7 @@ int kvm_emulate_wrmsr(struct kvm_vcpu *vcpu)
+ 	u64 data = kvm_read_edx_eax(vcpu);
+ 	int r;
+ 
+-	r = kvm_set_msr(vcpu, ecx, data);
++	r = kvm_set_msr_with_filter(vcpu, ecx, data);
+ 
+ 	if (!r) {
+ 		trace_kvm_msr_write(ecx, data);
+@@ -7606,13 +7614,13 @@ static void emulator_set_segment(struct x86_emulate_ctxt *ctxt, u16 selector,
+ 	return;
+ }
+ 
+-static int emulator_get_msr(struct x86_emulate_ctxt *ctxt,
+-			    u32 msr_index, u64 *pdata)
++static int emulator_get_msr_with_filter(struct x86_emulate_ctxt *ctxt,
++					u32 msr_index, u64 *pdata)
+ {
+ 	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
+ 	int r;
+ 
+-	r = kvm_get_msr(vcpu, msr_index, pdata);
++	r = kvm_get_msr_with_filter(vcpu, msr_index, pdata);
+ 
+ 	if (r && kvm_msr_user_space(vcpu, msr_index, KVM_EXIT_X86_RDMSR, 0,
+ 				    complete_emulated_rdmsr, r)) {
+@@ -7623,13 +7631,13 @@ static int emulator_get_msr(struct x86_emulate_ctxt *ctxt,
+ 	return r;
+ }
+ 
+-static int emulator_set_msr(struct x86_emulate_ctxt *ctxt,
+-			    u32 msr_index, u64 data)
++static int emulator_set_msr_with_filter(struct x86_emulate_ctxt *ctxt,
++					u32 msr_index, u64 data)
+ {
+ 	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
+ 	int r;
+ 
+-	r = kvm_set_msr(vcpu, msr_index, data);
++	r = kvm_set_msr_with_filter(vcpu, msr_index, data);
+ 
+ 	if (r && kvm_msr_user_space(vcpu, msr_index, KVM_EXIT_X86_WRMSR, data,
+ 				    complete_emulated_msr_access, r)) {
+@@ -7640,6 +7648,18 @@ static int emulator_set_msr(struct x86_emulate_ctxt *ctxt,
+ 	return r;
+ }
+ 
++static int emulator_get_msr(struct x86_emulate_ctxt *ctxt,
++			    u32 msr_index, u64 *pdata)
++{
++	return kvm_get_msr(emul_to_vcpu(ctxt), msr_index, pdata);
++}
++
++static int emulator_set_msr(struct x86_emulate_ctxt *ctxt,
++			    u32 msr_index, u64 data)
++{
++	return kvm_set_msr(emul_to_vcpu(ctxt), msr_index, data);
++}
++
+ static u64 emulator_get_smbase(struct x86_emulate_ctxt *ctxt)
+ {
+ 	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
+@@ -7773,6 +7793,8 @@ static const struct x86_emulate_ops emulate_ops = {
+ 	.set_dr              = emulator_set_dr,
+ 	.get_smbase          = emulator_get_smbase,
+ 	.set_smbase          = emulator_set_smbase,
++	.set_msr_with_filter = emulator_set_msr_with_filter,
++	.get_msr_with_filter = emulator_get_msr_with_filter,
+ 	.set_msr             = emulator_set_msr,
+ 	.get_msr             = emulator_get_msr,
+ 	.check_pmc	     = emulator_check_pmc,
+-- 
+2.31.1
 
-> 
-> --- a/drivers/mtd/nand/raw/Kconfig
-> +++ b/drivers/mtd/nand/raw/Kconfig
-> @@ -42,8 +42,7 @@ config MTD_NAND_OMAP2
->  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
->  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
->  	depends on HAS_IOMEM
-> 	depends on OMAP_GPMC
-> 
-> This means any of the other OMAP architectures will compile the GPMC
-> driver even though they might not need it, which would unnecessarily
-> increase the kernel size.
-> 
-> Am I missing something?
-
-MTD_NAND_OMAP2 NAND controller is a submodule of the OMAP GPMC IP. So it
-cannot work without OMAP_GPMC driver.
-
-Hope this clarifies the doubts.
-
-> 
->>> In fact, Roger once said:
->>>
->>> 	"We will figure out how to enable OMAP_GPMC for K3 architecture
->>> 	some other way."
->>>
->>> It turns out this is not what was finally proposed. Could we try yet
->>> another solution?  
->>
->> This issue is still present i.e. we cannot enable MTD_NAND_OMAP2 driver on
->> K3 platform since OMAP_GPMC config is hidden and not select-able
->> by user or defconfig file.
->>
->> But it is not yet a deal breaker since NAND on K3 is not yet enabled upstream.
->>
->> For this I think OMAP_GPMC has to be a visible config entry and select-able
->> from a defconfig file as I had done initially [1].
->>
->> Now we have a lot of explanation to write as to why we need to do it ;)
-> 
-> We certainly do :)
-> 
->> [1] - https://lore.kernel.org/lkml/20211123102607.13002-3-rogerq@kernel.org/
->>
-> 
-> Thanks,
-> Miquèl
-
-cheers,
--roger

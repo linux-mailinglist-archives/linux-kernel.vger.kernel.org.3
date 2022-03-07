@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DBD4D0A77
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 147EA4D0A7A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 23:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240418AbiCGWE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 17:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
+        id S243802AbiCGWFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 17:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237976AbiCGWE5 (ORCPT
+        with ESMTP id S239563AbiCGWFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:04:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5525B3EBB1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 14:04:02 -0800 (PST)
+        Mon, 7 Mar 2022 17:05:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523744133C;
+        Mon,  7 Mar 2022 14:04:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3B1160E86
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 22:04:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A11FC340F4;
-        Mon,  7 Mar 2022 22:03:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED510B81730;
+        Mon,  7 Mar 2022 22:04:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7548C340E9;
+        Mon,  7 Mar 2022 22:04:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646690641;
-        bh=eML+mXbrz8NqDLgzfhQWImuhtIydF79CzMrKHyuarBw=;
+        s=k20201202; t=1646690649;
+        bh=80sSZy0v9CGIexq/sLoM7qKCulVTxrOS+c2Ba+rXYTY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DKw1hmd2i4Hy/pKIAWmbC3480zZj4YrqS2hm2Tc4yB1Od+q549vbL71GCwQTcEJjW
-         FBF9H1O8OFL+rIcE7sa408ICMJQM/3VH1NOPqxGmfu8Q4xcQY+9LnTEEBOI8K+jwJS
-         OsZmnOiJ9sqHIhzenth4Be8iKCeTY1chCfXUatH4jtvy9r75tQ/74/1VAdfzv/E0uX
-         jQgjRUwDbFHPQabaV1O1VKgbO35fIh7xdCZ2JRsX7zsAVf+cAgUVzA+HUVTXkYU/mp
-         UdGlU1IjtDxJs6N2EFzWaKWPtyD1cmld+5FijS5uOiX/m81yKqGNTejlY/BEJBiK0S
-         jJwRoNccbOf+A==
+        b=gsuN6EJexJRxbOKjVSaxFYl5qHCCp+6djLMUd3LDpk3lFLljU+RGdwNI/YF5XXbzs
+         Yc0xTjkxTVLo8WoHqSUWushKx8AmvMymmVcdey7DMFgZFlooOfbREFaPM5jYTypHtg
+         M3QR+q2A6qJXnBp4Hw1t7ONitxvzAzagxT7ErLE9JUCuztgccwu6hrp6jirJCXx5LB
+         561dxjjSN84Y3hd+YrpdJ6PAa2Vb9B+jedjhxpp7Ifbuzlym94abeHroB2qSx2vj2z
+         M428PY5i7got8K755jPVll/qc+QMWSFOhidy+lOWFLjK2TwMJsFZMdyw/F6wiLh1ut
+         h1st+/oUCBxTg==
 From:   Will Deacon <will@kernel.org>
-To:     catalin.marinas@arm.com, Linu Cherian <lcherian@marvell.com>,
-        maz@kernel.org, tglx@linutronix.de
+To:     Huang Shijie <shijie@os.amperecomputing.com>,
+        catalin.marinas@arm.com
 Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        linuc.decode@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
-Date:   Mon,  7 Mar 2022 22:03:32 +0000
-Message-Id: <164668950224.3277206.2552145973830842260.b4-ty@kernel.org>
+        vgoyal@redhat.com, darren@os.amperecomputing.com,
+        linux-arm-kernel@lists.infradead.org, dyoung@redhat.com,
+        zwang@amperecomputing.com, kexec@lists.infradead.org,
+        bhe@redhat.com, corbet@lwn.net, linux-kernel@vger.kernel.org,
+        patches@amperecomputing.com, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] arm64: crash_core: Export MODULES, VMALLOC, and VMEMMAP ranges
+Date:   Mon,  7 Mar 2022 22:03:35 +0000
+Message-Id: <164668834766.3268493.2965341441709965895.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220307143014.22758-1-lcherian@marvell.com>
-References: <20220307143014.22758-1-lcherian@marvell.com>
+In-Reply-To: <20220209092642.9181-1-shijie@os.amperecomputing.com>
+References: <20220209092642.9181-1-shijie@os.amperecomputing.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,20 +60,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 20:00:14 +0530, Linu Cherian wrote:
-> When a IAR register read races with a GIC interrupt RELEASE event,
-> GIC-CPU interface could wrongly return a valid INTID to the CPU
-> for an interrupt that is already released(non activated) instead of 0x3ff.
+On Wed, 9 Feb 2022 09:26:42 +0000, Huang Shijie wrote:
+> The following interrelated ranges are needed by the kdump crash tool:
+> 	MODULES_VADDR ~ MODULES_END,
+> 	VMALLOC_START ~ VMALLOC_END,
+> 	VMEMMAP_START ~ VMEMMAP_END
 > 
-> As a side effect, an interrupt handler could run twice, once with
-> interrupt priority and then with idle priority.
+> Since these values change from time to time, it is preferable to export
+> them via vmcoreinfo than to change the crash's code frequently.
 > 
 > [...]
 
-Applied to arm64 (for-next/errata), thanks!
+Applied to arm64 (for-next/mm), thanks!
 
-[1/1] irqchip/gic-v3: Workaround Marvell erratum 38545 when reading IAR
-      https://git.kernel.org/arm64/c/24a147bcef8c
+[1/1] arm64: crash_core: Export MODULES, VMALLOC, and VMEMMAP ranges
+      https://git.kernel.org/arm64/c/2369f171d5c5
 
 Cheers,
 -- 

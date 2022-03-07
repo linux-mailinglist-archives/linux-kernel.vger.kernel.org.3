@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD314CEF98
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 03:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F794CEF9A
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 03:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbiCGCZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 21:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S234759AbiCGCZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 21:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbiCGCZO (ORCPT
+        with ESMTP id S234742AbiCGCZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 21:25:14 -0500
+        Sun, 6 Mar 2022 21:25:28 -0500
 Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D155B887
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 18:24:19 -0800 (PST)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220307022417epoutp04afb60b921506cfde5c37396bc718c401~Z_Aku3lU43025830258epoutp04C
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:24:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220307022417epoutp04afb60b921506cfde5c37396bc718c401~Z_Aku3lU43025830258epoutp04C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091405B8B9
+        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 18:24:34 -0800 (PST)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220307022432epoutp04d4b90a95fd483ed1a04bf442bbd98425~Z_Ay-UjWy3026430264epoutp04M
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 02:24:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220307022432epoutp04d4b90a95fd483ed1a04bf442bbd98425~Z_Ay-UjWy3026430264epoutp04M
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646619857;
-        bh=G8q/Umh2vObZldto5+JDObwZYzuCpopDseh7c0F8fuo=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=hwsx5Q51D5DfXf8LEw0oyJe9GqvZ84Kn3VqYbsaQ7Mr3TAiZwsQw+ULK03n2ntQwA
-         6/oNxLkFXw4DDlDvGyrx0IMKfN5u0MEQoPRyunuxyKCanzqb7upI0Wyg6irLYCps7t
-         nc11hzv1UQ6SMIIENxcmUUv45U5cx+yMjAiyWUCY=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220307022416epcas2p2c38b97b861c10aee392f0da26d24a651~Z_AkI1baZ0054200542epcas2p2t;
-        Mon,  7 Mar 2022 02:24:16 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.102]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KBj2M2V24z4x9Q2; Mon,  7 Mar
-        2022 02:24:11 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4D.6F.25540.83A65226; Mon,  7 Mar 2022 11:13:12 +0900 (KST)
+        s=mail20170921; t=1646619872;
+        bh=+RIzp4jVjDc1Eu24ddfYbcp5A5wycc7JP/1zMmUQDQM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Dalfez9h3vN5su8pZUfnxCplMTE7nFt5drKoEuJAWHSDmXxulKVyZw9V1z+49Vc7S
+         RXWAf6opZM3UXCbDwdQ2Iy3vNGFOKAGCqmKTFBS5svgpkIVd1uJmI4KaLm1KUIFf3D
+         i8aJW20BdmE+CHGB+39xf0pdVc+EtIKo+zvpCfi4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220307022430epcas2p35c7c8e5994dcd6588f04cd78ee347236~Z_AxeSAeB0807208072epcas2p3q;
+        Mon,  7 Mar 2022 02:24:30 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KBj2f2ClXz4x9Q9; Mon,  7 Mar
+        2022 02:24:26 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F5.E1.33036.34A65226; Mon,  7 Mar 2022 11:13:23 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220307022409epcas2p4a2955a746c87d66564556e18ab94845f~Z_AdtxZd50597405974epcas2p4Q;
-        Mon,  7 Mar 2022 02:24:09 +0000 (GMT)
+        20220307022421epcas2p4fe01bb594b97591480149a686ab2a39a~Z_Aot1OEC1505015050epcas2p4L;
+        Mon,  7 Mar 2022 02:24:21 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220307022409epsmtrp2ecf8955bf8d9cee6a2a8ba785d323a6c~Z_Adsy6O72162921629epsmtrp2R;
-        Mon,  7 Mar 2022 02:24:09 +0000 (GMT)
-X-AuditID: b6c32a47-81bff700000063c4-52-62256a38bcd1
+        20220307022421epsmtrp2758a0579f5809b0bb6126ec11d4396fa~Z_Aos_Cvc2100821008epsmtrp2W;
+        Mon,  7 Mar 2022 02:24:21 +0000 (GMT)
+X-AuditID: b6c32a48-4fbff7000000810c-0b-62256a43973e
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.D2.29871.9CC65226; Mon,  7 Mar 2022 11:24:09 +0900 (KST)
+        18.D2.29871.5DC65226; Mon,  7 Mar 2022 11:24:21 +0900 (KST)
 Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220307022409epsmtip2836fbdc1baffef14253813093f509cc7~Z_Add9EU02591225912epsmtip2t;
-        Mon,  7 Mar 2022 02:24:09 +0000 (GMT)
+        20220307022421epsmtip283191d5bc41d0615d32f796ceff6d982~Z_AoiAYh_2591225912epsmtip20;
+        Mon,  7 Mar 2022 02:24:21 +0000 (GMT)
 From:   Oh Eomji <eomji.oh@samsung.com>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org (open list),
         alsa-devel@alsa-project.org, Leon Romanovsky <leon@kernel.org>,
         Pavel Skripkin <paskripkin@gmail.com>,
-        Oh Eomji <eomji.oh@samsung.com>,
-        JaeHun Jung <jh0801.jung@samsung.com>
-Subject: [PATCH 1/2] sound: usb: Add vendor's hooking interface
-Date:   Mon,  7 Mar 2022 11:21:59 +0900
-Message-Id: <1646619720-97113-1-git-send-email-eomji.oh@samsung.com>
+        Oh Eomji <eomji.oh@samsung.com>
+Subject: [PATCH 2/2] sound: usb: Calling vendor's call-back function within
+ usb audio operation.
+Date:   Mon,  7 Mar 2022 11:22:00 +0900
+Message-Id: <1646619720-97113-2-git-send-email-eomji.oh@samsung.com>
 X-Mailer: git-send-email 2.7.4
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOKsWRmVeSWpSXmKPExsWy7bCmua5FlmqSQcsTDosrFw8xWZxavpDJ
-        onnxejaLuw9/sFhM+bWU2eLyrjlsFgf+LGaz6NzVz2qx4ftaRgdOjw2fm9g8ds66y+6xaVUn
-        m8f+uWvYPfa9Xcbm0bdlFaPH+i1XWTw+b5IL4IjKtslITUxJLVJIzUvOT8nMS7dV8g6Od443
-        NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBuk9JoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquU
-        WpCSU2BeoFecmFtcmpeul5daYmVoYGBkClSYkJ0xY+sl9oLjThV37yQ3MK4x62Lk5JAQMJE4
-        cvUjexcjF4eQwA5GiePzz7BAOJ8YJfqfrmCFcL4xSjxsf84M0/JsxWUmiMReRol3n2cxQjg/
-        GCVO3T/KDlLFJqAqMX3ZdqAEB4eIQJnEsumWIDXMAvcZJbrXXWIDqREWsJdouzwPbCoLUP3k
-        letYQWxeAReJnguHWSC2yUncPNfJDNIsIXCJXeJ702I2iISLxPOl16FOEpZ4dXwLO4QtJfH5
-        3V6ommKJgwueQ9k1Em8PtkLVGEvMetYOdhyzgKbE+l36IKaEgLLEkVtga5kF+CQ6Dv9lhwjz
-        SnS0CUE0KklMaupkgrAlJFZ8boKyPST6z84Eu15IIFaie9cD1gmMsrMQ5i9gZFzFKJZaUJyb
-        nlpsVGAMj6Pk/NxNjOAUp+W+g3HG2w96hxiZOBgPMUpwMCuJ8N4/r5IkxJuSWFmVWpQfX1Sa
-        k1p8iNEUGFwTmaVEk/OBSTavJN7QxNLAxMzM0NzI1MBcSZzXK2VDopBAemJJanZqakFqEUwf
-        EwenVAOT2d7NM1uznoWv/p9me3zJxvcr1/+Wck3bOvGF2BJTpy8R894HfdUQ2Pfh4dZwtnrr
-        jChlHr4vz9ctS1fw2Wz8+Hb9JTauaUfLkvhjK2cdl7byummlpJDB6bRQ9O40h8UtkYZ6U7v/
-        THvz+EJmxczOS7aZ0zsCi8XXPC+dFZdy2ofzhnuS+ROtf7tTG2rfLlH62DjtuFXkbbFZ2l87
-        X3/tTlijrPbcd1rY5jTN/l/KU3zlt9gx8/YKJArsDZ/UckN2m0rZV//HlR47jmRrnTT6mZTL
-        rrck6tr5Mxt1W19LeCrnzVv78EnC8fz8i/N15rJu5utdEPqE4ezLivQVNT1Oefki038uuaZ3
-        leXferP7SizFGYmGWsxFxYkAcFetnPoDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBLMWRmVeSWpSXmKPExsWy7bCSvO7JHNUkg4l3JS2uXDzEZHFq+UIm
-        i+bF69ks7j78wWIx5ddSZovLu+awWRz4s5jNonNXP6vFhu9rGR04PTZ8bmLz2DnrLrvHplWd
-        bB77565h99j3dhmbR9+WVYwe67dcZfH4vEkugCOKyyYlNSezLLVI3y6BK2PG1kvsBcedKu7e
-        SW5gXGPWxcjJISFgIvFsxWWmLkYuDiGB3YwSKx5vZ4NISEgs6HrNDGELS9xvOcIKUfSNUWLq
-        4T4mkASbgKrE9GXbGUFsEYEKiVtftzODFDELPGWUWDjhBli3sIC9RNvleWA2C1DD5JXrWEFs
-        XgEXiZ4Lh1kgNshJ3DzXyTyBkWcBI8MqRsnUguLc9NxiwwLDvNRyveLE3OLSvHS95PzcTYzg
-        wNPS3MG4fdUHvUOMTByMhxglOJiVRHjvn1dJEuJNSaysSi3Kjy8qzUktPsQozcGiJM57oetk
-        vJBAemJJanZqakFqEUyWiYNTqoFpxk5VZYZdRXnHrE5+at+QdLFM/ljqThWtHhb29nLPFJlr
-        2x5KCB34YuAR/bpgvoz9/9x5LFeWi1ZUR6q7bZ1R/FUsMt1M/HZ68aby2idSu4vmKMwVn7bd
-        t172WcUGjZSTl3/+aDDc6MorqDSlZ14Y87oO387k5RaL3N+/nH5O+vH0p7eMxLzvT+e1F5k5
-        LfmXp+ILzfIzaTaiE6U8xbnPTrNd3uO9K/VlyBrnuvnHzUUTzpdX39r8Mjvm7O9cC4akZQf2
-        Hay8XnrFSle4dWmYv5zJo7fBF2W/HNgkWWqqzjUh+VCYDXfJtX8cz4zMnUN2y5zIELxcd5p7
-        S23FZ/Xmi0KGc+/X53Q5urP0/VJiKc5INNRiLipOBADRWfFiqwIAAA==
-X-CMS-MailID: 20220307022409epcas2p4a2955a746c87d66564556e18ab94845f
+In-Reply-To: <1646619720-97113-1-git-send-email-eomji.oh@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPKsWRmVeSWpSXmKPExsWy7bCmha5zlmqSwc65mhZXLh5isji1fCGT
+        RfPi9WwWU34tZba4vGsOm8WBP4vZLDp39bNabPi+ltGBw2PD5yY2j52z7rJ7bFrVyeaxf+4a
+        do99b5exefRtWcXosX7LVRaPz5vkAjiism0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUN
+        LS3MlRTyEnNTbZVcfAJ03TJzgE5TUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSY
+        F+gVJ+YWl+al6+WlllgZGhgYmQIVJmRn/Ji+i7FgtVzF31M9LA2MHyS6GDk5JARMJHo2LGHr
+        YuTiEBLYwSixcucqRgjnE6PEtG+HWCGcb4wSk9bdZ4dpmTvrOVRiL6PEya4rUP0/GCX63sxj
+        AaliE1CVmL5sO9AsDg4RgTKJZdMtQWqYQXY8ebcUbJKwQJLEu28/wepZgOpXLNkOFucVcJH4
+        eXY/C8Q2OYmb5zqZQeZwCrhKTDwXCzJHQuARu8Taff+halwkPny6zQZhC0u8Or4F6lIpic/v
+        9kLFiyUOLngOZddIvD3YClVjLDHrWTvYncwCmhLrd+mDmBICyhJHboFNZxbgk+g4/JcdIswr
+        0dEmBNGoJDGpqZMJwpaQWPG5Ccr2kNi1dBk0RGYwSjT9+sU8gVFuFsKCBYyMqxjFUguKc9NT
+        i40KTOARlpyfu4kRnPK0PHYwzn77Qe8QIxMH4yFGCQ5mJRHe++dVkoR4UxIrq1KL8uOLSnNS
+        iw8xmgKDbiKzlGhyPjDp5pXEG5pYGpiYmRmaG5kamCuJ83qlbEgUEkhPLEnNTk0tSC2C6WPi
+        4JRqYEqbPK3/emNyb6DmKc4X3KfeJ+TZ3WvY/pxF0Z5r077lj1c/3FTz1/62W96rMi/dY+9f
+        P1C6cJTNp4Fp39/lLs+a4j5OdkjaeX+bbo1I4SUhj5iljSrrXtzj1XFO4PN/eMpW4/znsFA+
+        95NVp9NX9cxjnq1b/e5ZG2fWlMBdwQHLZr94Z7np+K8oY/V1WqKLf+9pZhR49Em//utGjXY2
+        w73nnrFs3B3/fL6dX+/LH2d71Ze8/bOrfkYD09YkWwbZJ72s0/cZKNy/GnDrwwVO+Sn9Hxx1
+        DnV/cGJ66XnW99ePFTt2OR7l0Qi49GFWSe2ameELbNK23igUDDawFz/2b0NW1dRrRw/3rlvq
+        MGOnE8cTJZbijERDLeai4kQAmPNl7wIEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNLMWRmVeSWpSXmKPExsWy7bCSvO7VHNUkgwuLBS2uXDzEZHFq+UIm
+        i+bF69kspvxaymxxedccNosDfxazWXTu6me12PB9LaMDh8eGz01sHjtn3WX32LSqk81j/9w1
+        7B773i5j8+jbsorRY/2WqywenzfJBXBEcdmkpOZklqUW6dslcGX8mL6LsWC1XMXfUz0sDYwf
+        JLoYOTkkBEwk5s56ztrFyMUhJLCbUeLIm+VMEAkJiQVdr5khbGGJ+y1HoIq+ARXN+gyWYBNQ
+        lZi+bDsjiC0iUCFx6+t2ZpAiZoE9jBJNR5vBioQFEiS+3vkNNpUFqGHFku3sIDavgIvEz7P7
+        WSA2yEncPNcJVM/BwSngKjHxXCxIWAio5PzOjWwTGPkWMDKsYpRMLSjOTc8tNiwwzEst1ytO
+        zC0uzUvXS87P3cQIDk8tzR2M21d90DvEyMTBeIhRgoNZSYT3/nmVJCHelMTKqtSi/Pii0pzU
+        4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqYmF7b5zaken4zqVfYtfexrmHqrJBT
+        P+JlVd78X3wy7xD3pnvXfCO3SdrG/3347f82nXdHP9Smiex+OJvb5uzBspu/b4QqiQSdO8oc
+        9fjenoLrO9V1t137n+Ny3OnT6lNzJmxdIH874pp05eol99ZePcm2WVbSJu3lGY/gQvfDst3p
+        ghZugoxTClyuu89lze9gTZV5tpLplFkH9xuehRcLHt7piE1UUIo/+EJt8uzCc9+dS9335eU1
+        +Nh1/VHTyz03O6JCepGdZetp9TI/GZ4i8c2nQz90WX0/8uKCgKhuU/ZK83mhglnsj1uvajb2
+        NBZVyten7Tv0cLNfufBJo5KWLM3LRxz/T6ntvc/J131LiaU4I9FQi7moOBEAdE3Qd74CAAA=
+X-CMS-MailID: 20220307022421epcas2p4fe01bb594b97591480149a686ab2a39a
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220307022409epcas2p4a2955a746c87d66564556e18ab94845f
-References: <CGME20220307022409epcas2p4a2955a746c87d66564556e18ab94845f@epcas2p4.samsung.com>
+X-CMS-RootMailID: 20220307022421epcas2p4fe01bb594b97591480149a686ab2a39a
+References: <1646619720-97113-1-git-send-email-eomji.oh@samsung.com>
+        <CGME20220307022421epcas2p4fe01bb594b97591480149a686ab2a39a@epcas2p4.samsung.com>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -114,270 +116,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mobile, a co-processor can be used with USB audio to improve power
-consumption.  To support this type of hardware, hooks need to be added
-to the USB audio subsystem to be able to call into the hardware when
-needed.
+When a new interface is connected or removed, the call-back functions
+are called to transmit a command to the hardware.
 
-The main operation of the call-backs are:
-  - Initialize the co-processor by transmitting data when initializing.
-  - Change the co-processor setting value through the interface
-    function.
-  - Configure sampling rate
-  - pcm open/close
-  - other housekeeping
-
-Known issues:
-  - This only supports one set of callback hooks, meaning that this only
-    works if there is one type of USB controller in the system.  This
-    should be changed to be a per-host-controller interface instead of
-    one global set of callbacks.
-
-Signed-off-by: JaeHun Jung <jh0801.jung@samsung.com>
 Signed-off-by: Oh Eomji <eomji.oh@samsung.com>
 ---
- sound/usb/card.c     | 120 +++++++++++++++++++++++++++++++++++++++++++++++++++
- sound/usb/card.h     |  21 +++++++++
- sound/usb/usbaudio.h |  46 ++++++++++++++++++++
- 3 files changed, 187 insertions(+)
+ sound/usb/pcm.c    | 40 ++++++++++++++++++++++++++++++++++++++++
+ sound/usb/stream.c |  2 ++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/sound/usb/card.c b/sound/usb/card.c
-index 3769622..ac81c5f 100644
---- a/sound/usb/card.c
-+++ b/sound/usb/card.c
-@@ -117,6 +117,118 @@ MODULE_PARM_DESC(skip_validation, "Skip unit descriptor validation (default: no)
- static DEFINE_MUTEX(register_mutex);
- static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
- static struct usb_driver usb_audio_driver;
-+static struct snd_usb_audio_vendor_ops *usb_vendor_ops;
+diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
+index cec6e91a..92e5e82 100644
+--- a/sound/usb/pcm.c
++++ b/sound/usb/pcm.c
+@@ -144,6 +144,8 @@ find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
+ 			found = fp;
+ 			cur_attr = attr;
+ 		}
 +
-+int snd_vendor_set_ops(struct snd_usb_audio_vendor_ops *ops)
-+{
-+	if ((!ops->connect) ||
-+	    (!ops->disconnect) ||
-+	    (!ops->set_interface) ||
-+	    (!ops->set_rate) ||
-+	    (!ops->set_pcm_buf) ||
-+	    (!ops->set_pcm_intf) ||
-+	    (!ops->set_pcm_connection) ||
-+	    (!ops->set_pcm_binterval) ||
-+	    (!ops->usb_add_ctls))
-+		return -EINVAL;
-+
-+	usb_vendor_ops = ops;
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(snd_vendor_set_ops);
-+
-+struct snd_usb_audio_vendor_ops *snd_vendor_get_ops(void)
-+{
-+	return usb_vendor_ops;
-+}
-+
-+static int snd_vendor_connect(struct usb_interface *intf)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		return ops->connect(intf);
-+	return 0;
-+}
-+
-+static void snd_vendor_disconnect(struct usb_interface *intf)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		ops->disconnect(intf);
-+}
-+
-+int snd_vendor_set_interface(struct usb_device *udev,
-+			     struct usb_host_interface *intf,
-+			     int iface, int alt)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		return ops->set_interface(udev, intf, iface, alt);
-+	return 0;
-+}
-+
-+int snd_vendor_set_rate(struct usb_interface *intf, int iface, int rate,
-+			int alt)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		return ops->set_rate(intf, iface, rate, alt);
-+	return 0;
-+}
-+
-+int snd_vendor_set_pcm_buf(struct usb_device *udev, int iface)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		ops->set_pcm_buf(udev, iface);
-+	return 0;
-+}
-+
-+int snd_vendor_set_pcm_intf(struct usb_interface *intf, int iface, int alt,
-+			    int direction)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		return ops->set_pcm_intf(intf, iface, alt, direction);
-+	return 0;
-+}
-+
-+int snd_vendor_set_pcm_connection(struct usb_device *udev,
-+				  enum snd_vendor_pcm_open_close onoff,
-+				  int direction)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		return ops->set_pcm_connection(udev, onoff, direction);
-+	return 0;
-+}
-+
-+int snd_vendor_set_pcm_binterval(const struct audioformat *fp,
-+				 const struct audioformat *found,
-+				 int *cur_attr, int *attr)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		return ops->set_pcm_binterval(fp, found, cur_attr, attr);
-+	return 0;
-+}
-+
-+static int snd_vendor_usb_add_ctls(struct snd_usb_audio *chip)
-+{
-+	struct snd_usb_audio_vendor_ops *ops = snd_vendor_get_ops();
-+
-+	if (ops)
-+		return ops->usb_add_ctls(chip);
-+	return 0;
-+}
++		snd_vendor_set_pcm_binterval(fp, found, &cur_attr, &attr);
+ 	}
+ 	return found;
+ }
+@@ -434,6 +436,7 @@ static int configure_endpoints(struct snd_usb_audio *chip,
+ 			       struct snd_usb_substream *subs)
+ {
+ 	int err;
++	struct usb_interface *iface;
  
- /*
-  * disconnect streams
-@@ -753,6 +865,10 @@ static int usb_audio_probe(struct usb_interface *intf,
- 	if (err < 0)
- 		return err;
+ 	if (subs->data_endpoint->need_setup) {
+ 		/* stop any running stream beforehand */
+@@ -442,6 +445,13 @@ static int configure_endpoints(struct snd_usb_audio *chip,
+ 		err = snd_usb_endpoint_configure(chip, subs->data_endpoint);
+ 		if (err < 0)
+ 			return err;
++
++		iface = usb_ifnum_to_if(chip->dev, subs->data_endpoint->iface);
++		err = snd_vendor_set_pcm_intf(iface, subs->data_endpoint->iface,
++				subs->data_endpoint->altsetting, subs->direction);
++		if (err < 0)
++			return err;
++
+ 		snd_usb_set_format_quirk(subs, subs->cur_audiofmt);
+ 	}
  
-+	err = snd_vendor_connect(intf);
-+	if (err)
-+		return err;
-+
- 	/*
- 	 * found a config.  now register to ALSA
- 	 */
-@@ -820,6 +936,8 @@ static int usb_audio_probe(struct usb_interface *intf,
- 	if (chip->quirk_flags & QUIRK_FLAG_DISABLE_AUTOSUSPEND)
- 		usb_disable_autosuspend(interface_to_usbdev(intf));
+@@ -616,8 +626,19 @@ static int snd_usb_pcm_prepare(struct snd_pcm_substream *substream)
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	struct snd_usb_substream *subs = runtime->private_data;
+ 	struct snd_usb_audio *chip = subs->stream->chip;
++	struct snd_usb_endpoint *ep = subs->data_endpoint;
++	struct usb_interface *iface;
+ 	int ret;
  
-+	snd_vendor_usb_add_ctls(chip);
++	ret = snd_vendor_set_pcm_buf(subs->dev, subs->cur_audiofmt->iface);
++	if (ret)
++		return ret;
 +
- 	/*
- 	 * For devices with more than one control interface, we assume the
- 	 * first contains the audio controls. We might need a more specific
-@@ -907,6 +1025,8 @@ static void usb_audio_disconnect(struct usb_interface *intf)
++	if (!subs->cur_audiofmt) {
++		dev_err(&subs->dev->dev, "no format is specified\n");
++		return -ENXIO;
++	}
++
+ 	ret = snd_usb_lock_shutdown(chip);
+ 	if (ret < 0)
+ 		return ret;
+@@ -630,6 +651,15 @@ static int snd_usb_pcm_prepare(struct snd_pcm_substream *substream)
+ 	if (ret < 0)
+ 		goto unlock;
  
- 	card = chip->card;
++	iface = usb_ifnum_to_if(chip->dev, ep->cur_audiofmt->iface);
++
++	if (snd_vendor_get_ops()) {
++		ret = snd_vendor_set_rate(iface, ep->cur_audiofmt->iface,
++					ep->cur_rate, ep->cur_audiofmt->altsetting);
++		if (!ret)
++			goto unlock;
++	}
++
+ 	/* reset the pointer */
+ 	subs->buffer_bytes = frames_to_bytes(runtime, runtime->buffer_size);
+ 	subs->inflight_bytes = 0;
+@@ -1104,6 +1134,11 @@ static int snd_usb_pcm_open(struct snd_pcm_substream *substream)
+ 	struct snd_usb_substream *subs = &as->substream[direction];
+ 	int ret;
  
-+	snd_vendor_disconnect(intf);
++	ret = snd_vendor_set_pcm_connection(subs->dev, SOUND_PCM_OPEN,
++					    direction);
++	if (ret)
++		return ret;
 +
- 	mutex_lock(&register_mutex);
- 	if (atomic_inc_return(&chip->shutdown) == 1) {
- 		struct snd_usb_stream *as;
-diff --git a/sound/usb/card.h b/sound/usb/card.h
-index 87f042d..2b686e4 100644
---- a/sound/usb/card.h
-+++ b/sound/usb/card.h
-@@ -204,4 +204,25 @@ struct snd_usb_stream {
- 	struct list_head list;
- };
+ 	runtime->hw = snd_usb_hardware;
+ 	/* need an explicit sync to catch applptr update in low-latency mode */
+ 	if (direction == SNDRV_PCM_STREAM_PLAYBACK &&
+@@ -1137,6 +1172,11 @@ static int snd_usb_pcm_close(struct snd_pcm_substream *substream)
+ 	struct snd_usb_substream *subs = &as->substream[direction];
+ 	int ret;
  
-+struct snd_usb_substream *find_snd_usb_substream(unsigned int card_num,
-+	unsigned int pcm_idx, unsigned int direction, struct snd_usb_audio
-+	**uchip, void (*disconnect_cb)(struct snd_usb_audio *chip));
++	ret = snd_vendor_set_pcm_connection(subs->dev, SOUND_PCM_CLOSE,
++					    direction);
++	if (ret)
++		return ret;
 +
-+int snd_vendor_set_ops(struct snd_usb_audio_vendor_ops *vendor_ops);
-+struct snd_usb_audio_vendor_ops *snd_vendor_get_ops(void);
-+int snd_vendor_set_interface(struct usb_device *udev,
-+			     struct usb_host_interface *alts,
-+			     int iface, int alt);
-+int snd_vendor_set_rate(struct usb_interface *intf, int iface, int rate,
-+			int alt);
-+int snd_vendor_set_pcm_buf(struct usb_device *udev, int iface);
-+int snd_vendor_set_pcm_intf(struct usb_interface *intf, int iface, int alt,
-+			    int direction);
-+int snd_vendor_set_pcm_connection(struct usb_device *udev,
-+				  enum snd_vendor_pcm_open_close onoff,
-+				  int direction);
-+int snd_vendor_set_pcm_binterval(const struct audioformat *fp,
-+				 const struct audioformat *found,
-+				 int *cur_attr, int *attr);
-+
- #endif /* __USBAUDIO_CARD_H */
-diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
-index 1678341..edcb5a3 100644
---- a/sound/usb/usbaudio.h
-+++ b/sound/usb/usbaudio.h
-@@ -184,4 +184,50 @@ extern bool snd_usb_skip_validation;
- #define QUIRK_FLAG_DSD_RAW		(1U << 15)
- #define QUIRK_FLAG_SET_IFACE_FIRST	(1U << 16)
+ 	snd_media_stop_pipeline(subs);
  
-+struct audioformat;
-+
-+enum snd_vendor_pcm_open_close {
-+	SOUND_PCM_CLOSE = 0,
-+	SOUND_PCM_OPEN,
-+};
-+
-+/**
-+ * struct snd_usb_audio_vendor_ops - function callbacks for USB audio accelerators
-+ * @connect: called when a new interface is found
-+ * @disconnect: called when an interface is removed
-+ * @set_interface: called when an interface is initialized
-+ * @set_rate: called when the rate is set
-+ * @set_pcm_buf: called when the pcm buffer is set
-+ * @set_pcm_intf: called when the pcm interface is set
-+ * @set_pcm_connection: called when pcm is opened/closed
-+ * @set_pcm_binterval: called when the pcm binterval is set
-+ * @usb_add_ctls: called when USB controls are added
-+ *
-+ * Set of callbacks for some accelerated USB audio streaming hardware.
-+ *
-+ * TODO: make this USB host-controller specific, right now this only works for
-+ * one USB controller in the system at a time, which is only realistic for
-+ * self-contained systems like phones.
-+ */
-+struct snd_usb_audio_vendor_ops {
-+	int (*connect)(struct usb_interface *intf);
-+	void (*disconnect)(struct usb_interface *intf);
-+
-+	int (*set_interface)(struct usb_device *udev,
-+			     struct usb_host_interface *alts,
-+			     int iface, int alt);
-+	int (*set_rate)(struct usb_interface *intf, int iface, int rate,
-+			int alt);
-+	int (*set_pcm_buf)(struct usb_device *udev, int iface);
-+	int (*set_pcm_intf)(struct usb_interface *intf, int iface, int alt,
-+			    int direction);
-+	int (*set_pcm_connection)(struct usb_device *udev,
-+				  enum snd_vendor_pcm_open_close onoff,
-+				  int direction);
-+	int (*set_pcm_binterval)(const struct audioformat *fp,
-+				 const struct audioformat *found,
-+				 int *cur_attr, int *attr);
-+	int (*usb_add_ctls)(struct snd_usb_audio *chip);
-+};
-+
- #endif /* __USBAUDIO_H */
+ 	if (!snd_usb_lock_shutdown(subs->stream->chip)) {
+diff --git a/sound/usb/stream.c b/sound/usb/stream.c
+index ceb93d7..26ca696 100644
+--- a/sound/usb/stream.c
++++ b/sound/usb/stream.c
+@@ -1227,6 +1227,8 @@ static int __snd_usb_parse_audio_interface(struct snd_usb_audio *chip,
+ 		snd_usb_init_pitch(chip, fp);
+ 		snd_usb_init_sample_rate(chip, fp, fp->rate_max);
+ 		usb_set_interface(chip->dev, iface_no, altno);
++		if (protocol > UAC_VERSION_1)
++			snd_vendor_set_interface(chip->dev, alts, iface_no, 0);
+ 	}
+ 	return 0;
+ }
 -- 
 2.7.4
 

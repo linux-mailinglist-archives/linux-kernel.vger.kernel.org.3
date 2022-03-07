@@ -2,178 +2,614 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A568C4CF0A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 05:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2E54CF0A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 05:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234827AbiCGE3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 6 Mar 2022 23:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S235163AbiCGEd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 6 Mar 2022 23:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiCGE3V (ORCPT
+        with ESMTP id S229823AbiCGEd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 6 Mar 2022 23:29:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93A08DFDA
-        for <linux-kernel@vger.kernel.org>; Sun,  6 Mar 2022 20:28:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646627305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9tbExO3BDZat3L0Mr6cR1o35ZQT83FwaaZZrCN3AvXs=;
-        b=YNSZ0XbYf4DUUgEb0nyG3fm7GUkr+MxP4ku5vEqwv35OQxdWYO6p0ibq1SrPwmye2wvSSc
-        MXLcOtm0WH+yY/I2+6cRPNXFkV2DZM9LPRQkd6fdFsm2qLI96E1sGX422OAP61rw/1enGm
-        B3QJV6OyRaCtIRIRA93QlOEwQ4/JBuk=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-167-n7ic0avbPneSPlcPwKUREw-1; Sun, 06 Mar 2022 23:28:24 -0500
-X-MC-Unique: n7ic0avbPneSPlcPwKUREw-1
-Received: by mail-lj1-f200.google.com with SMTP id a5-20020a2eb545000000b002462b5eddb3so5951751ljn.14
-        for <linux-kernel@vger.kernel.org>; Sun, 06 Mar 2022 20:28:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9tbExO3BDZat3L0Mr6cR1o35ZQT83FwaaZZrCN3AvXs=;
-        b=KZuJ7JxBoflc48PTqTkjBKD6WRpd0h8kY9/sMBm8ooU/dV4CATdLHdHODBc5BvUaiz
-         9r38f70FVmtX2ZHcKbcM8h26CzE2w0N2T92cE28G9hktHCe6QWxkwCyTB1yb4nfWe3Yx
-         eFs6lhh+xC7bKczYwIpuBOQ2ZN7JG4Hi+l/rf2rhmcsYLB8gsewRcAfjwWwdemfTDa+d
-         aQMMZEjZcZokX4mOYt7Gff4nSeRCKPPeH+cg+ls9Cw0xpuew7NCoOVCyzymSG4nsHutf
-         /zztfouL1/nP2UdA3koAJh33YRPw95rpY5iibCZktoi2yoNNCv7+gi1sJwqRzat7Xthw
-         lV5g==
-X-Gm-Message-State: AOAM533n0p8sGTCTc9IpqqKmFoyZaf9zEaaTSaZs4kAelzqrdUCkul0B
-        xhkvKQT/1Hu0EaXEshUd8IguFL0siLG7EsXgKJ4/Pm1cXAQ3w0oOGwpg0hiPLH8ThCpvNeLfs4i
-        ngHp8lij9P02yisbX9xJxUTI3z/u48JRM3oHFidz6
-X-Received: by 2002:a2e:b004:0:b0:247:e29f:fbd4 with SMTP id y4-20020a2eb004000000b00247e29ffbd4mr3315717ljk.315.1646627302466;
-        Sun, 06 Mar 2022 20:28:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw7t/FmOlAHsaca3+vPWPLkhh6GrRRORwyNVIv0iuzGeDQK5UazN9tjcM5HcXUU0LViwU9VgxZDMfLowP80K9M=
-X-Received: by 2002:a2e:b004:0:b0:247:e29f:fbd4 with SMTP id
- y4-20020a2eb004000000b00247e29ffbd4mr3315706ljk.315.1646627302185; Sun, 06
- Mar 2022 20:28:22 -0800 (PST)
+        Sun, 6 Mar 2022 23:33:57 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2124.outbound.protection.outlook.com [40.107.100.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3D12250D;
+        Sun,  6 Mar 2022 20:32:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CGqpypnIrt3wvt4b22pIp7sk9WRHWPnVczRccorMJhKCZxMWFlFfWUBte8HfFNxzWcpucyy+xui0FY/Grz6KC6Zbhx/1bbphjncXSo/KuqOHQWySfFqKVM4OTFlBGaHLhUiG+nAbcPNXz4UcgYuD2H28MBmJOL6eGiWwnVRgpA/MjZqQE8CyF8C6f/gaCh8zzuC+rYLaxDVt/jmh0phxUMXeNtA/TGfzUikpeEfVAhEHkRj1yUzwotXM+qEyKlPBXNZhbnYHdqJfu+1TUE9dNEWsFRYt89gVKrY7FFmMuHdE5W6wRlc5nd+v8g+JAbnAW6A/FS+gs2jDbTES4E/O5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oZEwTMe4Dvwaqad0Vyi5bi0yJJvPcEB51uDl93z9pjE=;
+ b=Gfm7BeQlnoMvtS1+r9ASSwRVSI2HwPidIqENhbnNqQIG/GMxmP7EbHD1d2xT9VG74vhD6B+0k0VWAtndE8gv96BaVw60MKb7KUhtmWcxZXJoxO13yoyBWmX9Z8yGgcSzt9kugfhN6x1Iw5aXdeQlFcVWonASJBMx13hL+fbeQgv7ArSGGxk3rATHy6f5uH9NGNE3pPvafbrpmH3ExvGPMD8G5/hpl2ZC3h96Hd9WSH6/OEQiNSnLngQ7ifvWyUef1k661c4v6fq6eeRNW+8w43J4OSqpy2ShjLvXfLstuN88UBKVYRwNkaIryOzK7DIkEy4shgaIqG8G5xpp31rhBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oZEwTMe4Dvwaqad0Vyi5bi0yJJvPcEB51uDl93z9pjE=;
+ b=UyTf54V3i4puN4ZYgb3uKrHqUzKX9+LgelgVn1I/ZOibJbrqi2E9oqf8Rf4bFR+Q6+xrn0fYpkrpbLJ78sWI8CSKiLSplA8/exUDaF5QwDJIzsMX1KH4K6ZukCY5KIPJ4cWI70BlHKK92S+xBH71mrVfnkIEqgUrnwCYNSAY8Ss=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by SN6PR04MB4832.namprd04.prod.outlook.com (2603:10b6:805:ac::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Mon, 7 Mar
+ 2022 04:32:54 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
+ 04:32:54 +0000
+Date:   Mon, 7 Mar 2022 12:32:49 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     a.hajda@samsung.com, narmstrong@baylibre.com,
+        dan.carpenter@oracle.com, robert.foss@linaro.org, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        sam@ravnborg.org, pihsun@chromium.org, tzungbi@google.com,
+        maxime@cerno.tech, drinkcat@google.com, hsinyi@chromium.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        bliang@analogixsemi.com, qwen@analogixsemi.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v12 3/4] drm/bridge: anx7625: add MIPI DPI input feature
+Message-ID: <20220307043249.GA4174029@anxtwsw-Precision-3640-Tower>
+References: <20211105031904.2641088-1-xji@analogixsemi.com>
+ <20211105031904.2641088-3-xji@analogixsemi.com>
+ <YiTruiCIkyxs3jTC@pendragon.ideasonboard.com>
+ <20220307032248.GA4173850@anxtwsw-Precision-3640-Tower>
+ <YiV8QX+9jszI1uEO@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YiV8QX+9jszI1uEO@pendragon.ideasonboard.com>
+X-ClientProxiedBy: HK2PR02CA0221.apcprd02.prod.outlook.com
+ (2603:1096:201:20::33) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-References: <20220305095525.5145-1-mail@anirudhrb.com>
-In-Reply-To: <20220305095525.5145-1-mail@anirudhrb.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 7 Mar 2022 12:28:10 +0800
-Message-ID: <CACGkMEtb6qSq2=WXWeaDZknw77C7pQwSgxP0-KxCCVhTyM-HwQ@mail.gmail.com>
-Subject: Re: [PATCH v3] vhost: fix hung thread due to erroneous iotlb entries
-To:     Anirudh Rayabharam <mail@anirudhrb.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
-        kvm <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f3a8531a-7dee-45fe-0851-08d9fff38beb
+X-MS-TrafficTypeDiagnostic: SN6PR04MB4832:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR04MB48322A6855934B2641DE61C9C7089@SN6PR04MB4832.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bcL3bBOU1uLSwuoylkQEKWPUVD6CJ3EX79cFmHXmNpfPapXL3CADhkM6lSD31xuKikT9Fggv2pHIYkkZMxl3EBHpfz78Ixj/PaxO2xUgJrLmttNBC8M7b4rlAya6Z8uCcpfJOaebMZ5NNEm9MiXJstlJOILTrrtOnCaMXnWccKifMFMbFEqA1puyO0WTLv361qFWHHOLeSDtV7z+qg58s7Smjb12Qgu+EJDQPeiGOI20seN9dpTi03TqXZA3B+tiBS3W5yaKDgsYCHR+/JhsOft1M8MC/ZM5N7ZJtc8oSC2FcLd5Q9h0k+cjuABvhroo8OCjnmtRPdzwMTQF+RQpRcl/8jmK99xHnhAdAjtAA55HAUcTdnOjKvt4+Zmn795VePBKc5MNgdIG7i+o48uG4Txtg2H+FEamcYDa11hjAaa745RkO6cDcG5AlFKgcZITxdGYijpY3wW1H/HEDiLbAgbvMqOnpNIxcwUYYaPdwHbe3y9Cup9yc+tlwRtoXdexSsOG9sfLNZnRmW6TGVYmLLUM7cN6BUPHINVFKJnML9UMxbwUHuea0KrtP6APYMaD+Xpx5qP0/6xjDZksyoRoFRrKOKwz2/SbeX5nVsh8UrI2d1xF18O+lZLIyNG1nxOnejjp11DEcJRSvTmpNyHUA0mBjcmbCFwZg8BYlUFxL8oKqNc2hVYs8GyISZseq3OG6Q3ZAQI0A0kGaaINBiciWg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(2906002)(498600001)(66476007)(66946007)(66556008)(8676002)(4326008)(30864003)(52116002)(7416002)(6666004)(8936002)(6486002)(6512007)(9686003)(38100700002)(38350700002)(6506007)(55236004)(86362001)(33656002)(6916009)(186003)(26005)(83380400001)(33716001)(1076003)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Q78pLmYJcPYWXQpiZPB/RvS/vGb69hUuE3SFiZY/AyDxYC4/IZx0RME/TeEH?=
+ =?us-ascii?Q?/dYTeHXOCLInnUGN5lOCV6GsmcZjfoBVZX/NjQkcZ7ph/GC1T9gGDs7FC7Fv?=
+ =?us-ascii?Q?62oCnWabcuGNOcpeUX3zZopQpjOaEgQxs4d/EmkE4er5u7iy6Z654ksNRHNB?=
+ =?us-ascii?Q?tZN/BFCsDKVVxNUEcwxvkFYkj1ESzGOWAR12bR/MFHddDUCB6n/2z5Cp7VVg?=
+ =?us-ascii?Q?IFHq/be4ShORygA8T65/mjqZWsAZfbtnhQnNEKuIhFzHVKCkhs8aH9KxTguj?=
+ =?us-ascii?Q?qsO5jBtPqtCaJfwJuqGBb2r62uRasNjYnzs+9Hq7D4cw3eFZp/+6ejICEB3C?=
+ =?us-ascii?Q?92iV0I/av99IjZ7VRXhDe628AdPjdmMAlXwJxZiyu9OIopThMGgb85NJ0sLV?=
+ =?us-ascii?Q?eLdnYKAYJEzrmZk7MSQ9iGmuVDCfmWgHoBiGbCDHhJtSEUwpL1foKUhh2KzA?=
+ =?us-ascii?Q?N5RNFexqDEJSN8s7drXMhPIvgkGbBDtrxp/y52WnHk8A3H7j0U8qfre9cRsH?=
+ =?us-ascii?Q?Php+9NXuLjGbT7i59Vc7Jm1N95iD3Kh2LsTregb5HqwdC3+7gfpOvae2DOWC?=
+ =?us-ascii?Q?81Xskwf7cxjXZUHXTsvGxIolbtsGKeFrF0yHy3mg+GouPWG0NWr+FSrjlquM?=
+ =?us-ascii?Q?wmswixXTSmwpQ7OXiD/exyPxRCwXWY72j7QwfyaZ7WH+uCHLiT5AueywOoSN?=
+ =?us-ascii?Q?gPND3alttrtmp6untCriKGI4xjnQxK1JzFFhWEgxckQCZ1YCMv6bw6XbYYFX?=
+ =?us-ascii?Q?norU+X3oMy7Wkq7rh2nIBD8iUnRr3iElj5IxUJwoOYlMb4/4rVIR9OFPfE89?=
+ =?us-ascii?Q?ONP6sE/q19Xto35gS2o4+afWfZFapcknXWZ6EwDlLS5cS1zilPWTOzdEllEr?=
+ =?us-ascii?Q?tDx05g/2tGKOHNF63uxViyyv9Ivj0FYSvMvaQSbk4EWKpY0SnQZVKDPivD/d?=
+ =?us-ascii?Q?6/V+qXMbw7XuUw3GeG9w7uoL+eErCQTtgGjwOYguF8Seyc9EngmX10hhIWpl?=
+ =?us-ascii?Q?EANnT91ZLRdGtfjAn7nPpe4Fi18fA19JG+Cj/2i/nZe2LJjpzBs+Rfb4+av6?=
+ =?us-ascii?Q?7zCemOSkID3OeBwj0rrZttq+PL0ZcY4VMRPMVvHbKaGHtGqy3g8rvRV6w2+l?=
+ =?us-ascii?Q?7+uBUzgy26Ypi2+eSmjV0nlYiJx1P1YlZqq6WqwQg9qf2gjixerczA1ihjjc?=
+ =?us-ascii?Q?AhzV3eRUmRgriXKkYASX07rLQjU1jX8ly/gQKQY8sDY5bFZAkL/F6oKmT50c?=
+ =?us-ascii?Q?fuv2Noy/KUb7FR0Q4cubfgjaCTsszejkhJeCdVad+lE44nkkeXscTSdU3xiF?=
+ =?us-ascii?Q?dRBdo2fnlrswr6eqqnsXDC0OdYIDzGETmd1SJLXmeb4av6q8+ZbIbZGPymh/?=
+ =?us-ascii?Q?uQjpFxK+UFfqywN6+RrikCYEDjSNlDsWCDTOGe1kslRXTwPBefMj/baYh51N?=
+ =?us-ascii?Q?UoLfFdpUZsxl2ak0SDo2QKoff0ydOqBPg9dc0quDXErrXAy0fjBNkAyfI8MR?=
+ =?us-ascii?Q?6FXhT4RjDbKVgiCYdYPAKW9NivhIYwynovCprkz18JM2srb9zVauvJJaVu0F?=
+ =?us-ascii?Q?xdzRfhzNAAhpFoXVdgfH72JJXLPOzW/UmE2RGfQ6QJ9G6icyAydkF1jlZSzS?=
+ =?us-ascii?Q?Nd5PhYMkiOc1DwHxkktGDrE=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3a8531a-7dee-45fe-0851-08d9fff38beb
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 04:32:54.3894
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d8hKkuFaaMfYAimLuYO6PGHIBNC7eTKdkUxsI5w0dw4VwatJR2obkbh8HhDwBBlLh22KhhTgA5I3hL4Oy4aNxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4832
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 5, 2022 at 5:56 PM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
->
-> In vhost_iotlb_add_range_ctx(), range size can overflow to 0 when
-> start is 0 and last is ULONG_MAX. One instance where it can happen
-> is when userspace sends an IOTLB message with iova=size=uaddr=0
-> (vhost_process_iotlb_msg). So, an entry with size = 0, start = 0,
-> last = ULONG_MAX ends up in the iotlb. Next time a packet is sent,
-> iotlb_access_ok() loops indefinitely due to that erroneous entry.
->
->         Call Trace:
->          <TASK>
->          iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
->          vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
->          vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
->          vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
->          kthread+0x2e9/0x3a0 kernel/kthread.c:377
->          ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
->          </TASK>
->
-> Reported by syzbot at:
->         https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
->
-> To fix this, do two things:
->
-> 1. Return -EINVAL in vhost_chr_write_iter() when userspace asks to map
->    a range with size 0.
-> 2. Fix vhost_iotlb_add_range_ctx() to handle the range [0, ULONG_MAX]
->    by splitting it into two entries.
->
-> Fixes: 0bbe30668d89e ("vhost: factor out IOTLB")
-> Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-> ---
-> Changes in v3:
-> 1. Simplify expression since start is always 0
-> 2. Fix checkpatch issue
-> 3. Add Fixes tag
->
-> v2: https://lore.kernel.org/kvm/20220224143320.3751-1-mail@anirudhrb.com/
-> Changes in v2:
-> 1. Don't reject range [0, ULONG_MAX], split it instead.
-> 2. Validate msg.size in vhost_chr_write_iter().
->
-> v1: https://lore.kernel.org/lkml/20220221195303.13560-1-mail@anirudhrb.com/
->
-> ---
->  drivers/vhost/iotlb.c | 11 +++++++++++
->  drivers/vhost/vhost.c |  5 +++++
->  2 files changed, 16 insertions(+)
->
-> diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
-> index 670d56c879e5..40b098320b2a 100644
-> --- a/drivers/vhost/iotlb.c
-> +++ b/drivers/vhost/iotlb.c
-> @@ -57,6 +57,17 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
->         if (last < start)
->                 return -EFAULT;
->
-> +       /* If the range being mapped is [0, ULONG_MAX], split it into two entries
-> +        * otherwise its size would overflow u64.
-> +        */
-> +       if (start == 0 && last == ULONG_MAX) {
-> +               u64 mid = last / 2;
-> +
-> +               vhost_iotlb_add_range_ctx(iotlb, start, mid, addr, perm, opaque);
+On Mon, Mar 07, 2022 at 05:30:09AM +0200, Laurent Pinchart wrote:
+> Hello Xin,
+> 
+> On Mon, Mar 07, 2022 at 11:22:48AM +0800, Xin Ji wrote:
+> > On Sun, Mar 06, 2022 at 07:13:30PM +0200, Laurent Pinchart wrote:
+> > > Hello Xin,
+> > > 
+> > > (Question for Rob below, and I'm afraid this is urgent as we need to
+> > > merge a fix in v5.17).
+> > > 
+> > > On Fri, Nov 05, 2021 at 11:19:03AM +0800, Xin Ji wrote:
+> > > > The basic anx7625 driver only support MIPI DSI rx signal input.
+> > > > This patch add MIPI DPI rx input configuration support, after apply
+> > > > this patch, the driver can support DSI rx or DPI rx by adding
+> > > > 'bus-type' in DT.
+> > > > 
+> > > > Reviewed-by: Robert Foss <robert.foss@linaro.org>
+> > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > > > ---
+> > > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 247 ++++++++++++++++------
+> > > >  drivers/gpu/drm/bridge/analogix/anx7625.h |  18 +-
+> > > >  2 files changed, 205 insertions(+), 60 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > index f48e91134c20..f7c3386c8929 100644
+> > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > > > @@ -32,6 +32,7 @@
+> > > >  #include <drm/drm_print.h>
+> > > >  #include <drm/drm_probe_helper.h>
+> > > >  
+> > > > +#include <media/v4l2-fwnode.h>
+> > > >  #include <video/display_timing.h>
+> > > >  
+> > > >  #include "anx7625.h"
+> > > > @@ -152,18 +153,18 @@ static int anx7625_write_and(struct anx7625_data *ctx,
+> > > >  	return anx7625_reg_write(ctx, client, offset, (val & (mask)));
+> > > >  }
+> > > >  
+> > > > -static int anx7625_write_and_or(struct anx7625_data *ctx,
+> > > > -				struct i2c_client *client,
+> > > > -				u8 offset, u8 and_mask, u8 or_mask)
+> > > > +static int anx7625_config_bit_matrix(struct anx7625_data *ctx)
+> > > >  {
+> > > > -	int val;
+> > > > +	int i, ret;
+> > > >  
+> > > > -	val = anx7625_reg_read(ctx, client, offset);
+> > > > -	if (val < 0)
+> > > > -		return val;
+> > > > +	ret = anx7625_write_or(ctx, ctx->i2c.tx_p2_client,
+> > > > +			       AUDIO_CONTROL_REGISTER, 0x80);
+> > > > +	for (i = 0; i < 13; i++)
+> > > > +		ret |= anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
+> > > > +					 VIDEO_BIT_MATRIX_12 + i,
+> > > > +					 0x18 + i);
+> > > >  
+> > > > -	return anx7625_reg_write(ctx, client,
+> > > > -				 offset, (val & and_mask) | (or_mask));
+> > > > +	return ret;
+> > > >  }
+> > > >  
+> > > >  static int anx7625_read_ctrl_status_p0(struct anx7625_data *ctx)
+> > > > @@ -221,38 +222,6 @@ static int anx7625_video_mute_control(struct anx7625_data *ctx,
+> > > >  	return ret;
+> > > >  }
+> > > >  
+> > > > -static int anx7625_config_audio_input(struct anx7625_data *ctx)
+> > > > -{
+> > > > -	struct device *dev = &ctx->client->dev;
+> > > > -	int ret;
+> > > > -
+> > > > -	/* Channel num */
+> > > > -	ret = anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
+> > > > -				AUDIO_CHANNEL_STATUS_6, I2S_CH_2 << 5);
+> > > > -
+> > > > -	/* FS */
+> > > > -	ret |= anx7625_write_and_or(ctx, ctx->i2c.tx_p2_client,
+> > > > -				    AUDIO_CHANNEL_STATUS_4,
+> > > > -				    0xf0, AUDIO_FS_48K);
+> > > > -	/* Word length */
+> > > > -	ret |= anx7625_write_and_or(ctx, ctx->i2c.tx_p2_client,
+> > > > -				    AUDIO_CHANNEL_STATUS_5,
+> > > > -				    0xf0, AUDIO_W_LEN_24_24MAX);
+> > > > -	/* I2S */
+> > > > -	ret |= anx7625_write_or(ctx, ctx->i2c.tx_p2_client,
+> > > > -				AUDIO_CHANNEL_STATUS_6, I2S_SLAVE_MODE);
+> > > > -	ret |= anx7625_write_and(ctx, ctx->i2c.tx_p2_client,
+> > > > -				 AUDIO_CONTROL_REGISTER, ~TDM_TIMING_MODE);
+> > > > -	/* Audio change flag */
+> > > > -	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
+> > > > -				AP_AV_STATUS, AP_AUDIO_CHG);
+> > > > -
+> > > > -	if (ret < 0)
+> > > > -		DRM_DEV_ERROR(dev, "fail to config audio.\n");
+> > > > -
+> > > > -	return ret;
+> > > > -}
+> > > > -
+> > > >  /* Reduction of fraction a/b */
+> > > >  static void anx7625_reduction_of_a_fraction(unsigned long *a, unsigned long *b)
+> > > >  {
+> > > > @@ -431,7 +400,7 @@ static int anx7625_dsi_video_timing_config(struct anx7625_data *ctx)
+> > > >  	ret |= anx7625_write_and(ctx, ctx->i2c.rx_p1_client,
+> > > >  			MIPI_LANE_CTRL_0, 0xfc);
+> > > >  	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p1_client,
+> > > > -				MIPI_LANE_CTRL_0, 3);
+> > > > +				MIPI_LANE_CTRL_0, ctx->pdata.mipi_lanes - 1);
+> > > >  
+> > > >  	/* Htotal */
+> > > >  	htotal = ctx->dt.hactive.min + ctx->dt.hfront_porch.min +
+> > > > @@ -615,6 +584,76 @@ static int anx7625_dsi_config(struct anx7625_data *ctx)
+> > > >  	return ret;
+> > > >  }
+> > > >  
+> > > > +static int anx7625_api_dpi_config(struct anx7625_data *ctx)
+> > > > +{
+> > > > +	struct device *dev = &ctx->client->dev;
+> > > > +	u16 freq = ctx->dt.pixelclock.min / 1000;
+> > > > +	int ret;
+> > > > +
+> > > > +	/* configure pixel clock */
+> > > > +	ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+> > > > +				PIXEL_CLOCK_L, freq & 0xFF);
+> > > > +	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+> > > > +				 PIXEL_CLOCK_H, (freq >> 8));
+> > > > +
+> > > > +	/* set DPI mode */
+> > > > +	/* set to DPI PLL module sel */
+> > > > +	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p1_client,
+> > > > +				 MIPI_DIGITAL_PLL_9, 0x20);
+> > > > +	/* power down MIPI */
+> > > > +	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p1_client,
+> > > > +				 MIPI_LANE_CTRL_10, 0x08);
+> > > > +	/* enable DPI mode */
+> > > > +	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p1_client,
+> > > > +				 MIPI_DIGITAL_PLL_18, 0x1C);
+> > > > +	/* set first edge */
+> > > > +	ret |= anx7625_reg_write(ctx, ctx->i2c.tx_p2_client,
+> > > > +				 VIDEO_CONTROL_0, 0x06);
+> > > > +	if (ret < 0)
+> > > > +		DRM_DEV_ERROR(dev, "IO error : dpi phy set failed.\n");
+> > > > +
+> > > > +	return ret;
+> > > > +}
+> > > > +
+> > > > +static int anx7625_dpi_config(struct anx7625_data *ctx)
+> > > > +{
+> > > > +	struct device *dev = &ctx->client->dev;
+> > > > +	int ret;
+> > > > +
+> > > > +	DRM_DEV_DEBUG_DRIVER(dev, "config dpi\n");
+> > > > +
+> > > > +	/* DSC disable */
+> > > > +	ret = anx7625_write_and(ctx, ctx->i2c.rx_p0_client,
+> > > > +				R_DSC_CTRL_0, ~DSC_EN);
+> > > > +	if (ret < 0) {
+> > > > +		DRM_DEV_ERROR(dev, "IO error : disable dsc failed.\n");
+> > > > +		return ret;
+> > > > +	}
+> > > > +
+> > > > +	ret = anx7625_config_bit_matrix(ctx);
+> > > > +	if (ret < 0) {
+> > > > +		DRM_DEV_ERROR(dev, "config bit matrix failed.\n");
+> > > > +		return ret;
+> > > > +	}
+> > > > +
+> > > > +	ret = anx7625_api_dpi_config(ctx);
+> > > > +	if (ret < 0) {
+> > > > +		DRM_DEV_ERROR(dev, "mipi phy(dpi) setup failed.\n");
+> > > > +		return ret;
+> > > > +	}
+> > > > +
+> > > > +	/* set MIPI RX EN */
+> > > > +	ret = anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
+> > > > +			       AP_AV_STATUS, AP_MIPI_RX_EN);
+> > > > +	/* clear mute flag */
+> > > > +	ret |= anx7625_write_and(ctx, ctx->i2c.rx_p0_client,
+> > > > +				 AP_AV_STATUS, (u8)~AP_MIPI_MUTE);
+> > > > +	if (ret < 0)
+> > > > +		DRM_DEV_ERROR(dev, "IO error : enable mipi rx failed.\n");
+> > > > +
+> > > > +	return ret;
+> > > > +}
+> > > > +
+> > > >  static void anx7625_dp_start(struct anx7625_data *ctx)
+> > > >  {
+> > > >  	int ret;
+> > > > @@ -625,9 +664,10 @@ static void anx7625_dp_start(struct anx7625_data *ctx)
+> > > >  		return;
+> > > >  	}
+> > > >  
+> > > > -	anx7625_config_audio_input(ctx);
+> > > > -
+> > > > -	ret = anx7625_dsi_config(ctx);
+> > > > +	if (ctx->pdata.is_dpi)
+> > > > +		ret = anx7625_dpi_config(ctx);
+> > > > +	else
+> > > > +		ret = anx7625_dsi_config(ctx);
+> > > >  
+> > > >  	if (ret < 0)
+> > > >  		DRM_DEV_ERROR(dev, "MIPI phy setup error.\n");
+> > > > @@ -1075,6 +1115,7 @@ static void anx7625_start_dp_work(struct anx7625_data *ctx)
+> > > >  		return;
+> > > >  	}
+> > > >  
+> > > > +	ctx->hpd_status = 1;
+> > > >  	ctx->hpd_high_cnt++;
+> > > >  
+> > > >  	/* Not support HDCP */
+> > > > @@ -1084,8 +1125,10 @@ static void anx7625_start_dp_work(struct anx7625_data *ctx)
+> > > >  	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p1_client, 0xec, 0x10);
+> > > >  	/* Interrupt for DRM */
+> > > >  	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p1_client, 0xff, 0x01);
+> > > > -	if (ret < 0)
+> > > > +	if (ret < 0) {
+> > > > +		DRM_DEV_ERROR(dev, "fail to setting HDCP/auth\n");
+> > > >  		return;
+> > > > +	}
+> > > >  
+> > > >  	ret = anx7625_reg_read(ctx, ctx->i2c.rx_p1_client, 0x86);
+> > > >  	if (ret < 0)
+> > > > @@ -1104,6 +1147,10 @@ static void anx7625_hpd_polling(struct anx7625_data *ctx)
+> > > >  	int ret, val;
+> > > >  	struct device *dev = &ctx->client->dev;
+> > > >  
+> > > > +	/* Interrupt mode, no need poll HPD status, just return */
+> > > > +	if (ctx->pdata.intp_irq)
+> > > > +		return;
+> > > > +
+> > > >  	ret = readx_poll_timeout(anx7625_read_hpd_status_p0,
+> > > >  				 ctx, val,
+> > > >  				 ((val & HPD_STATUS) || (val < 0)),
+> > > > @@ -1131,6 +1178,21 @@ static void anx7625_remove_edid(struct anx7625_data *ctx)
+> > > >  	ctx->slimport_edid_p.edid_block_num = -1;
+> > > >  }
+> > > >  
+> > > > +static void anx7625_dp_adjust_swing(struct anx7625_data *ctx)
+> > > > +{
+> > > > +	int i;
+> > > > +
+> > > > +	for (i = 0; i < ctx->pdata.dp_lane0_swing_reg_cnt; i++)
+> > > > +		anx7625_reg_write(ctx, ctx->i2c.tx_p1_client,
+> > > > +				  DP_TX_LANE0_SWING_REG0 + i,
+> > > > +				  ctx->pdata.lane0_reg_data[i] & 0xFF);
+> > > > +
+> > > > +	for (i = 0; i < ctx->pdata.dp_lane1_swing_reg_cnt; i++)
+> > > > +		anx7625_reg_write(ctx, ctx->i2c.tx_p1_client,
+> > > > +				  DP_TX_LANE1_SWING_REG0 + i,
+> > > > +				  ctx->pdata.lane1_reg_data[i] & 0xFF);
+> > > > +}
+> > > > +
+> > > >  static void dp_hpd_change_handler(struct anx7625_data *ctx, bool on)
+> > > >  {
+> > > >  	struct device *dev = &ctx->client->dev;
+> > > > @@ -1146,9 +1208,8 @@ static void dp_hpd_change_handler(struct anx7625_data *ctx, bool on)
+> > > >  	} else {
+> > > >  		DRM_DEV_DEBUG_DRIVER(dev, " HPD high\n");
+> > > >  		anx7625_start_dp_work(ctx);
+> > > > +		anx7625_dp_adjust_swing(ctx);
+> > > >  	}
+> > > > -
+> > > > -	ctx->hpd_status = 1;
+> > > >  }
+> > > >  
+> > > >  static int anx7625_hpd_change_detect(struct anx7625_data *ctx)
+> > > > @@ -1225,20 +1286,72 @@ static irqreturn_t anx7625_intr_hpd_isr(int irq, void *data)
+> > > >  	return IRQ_HANDLED;
+> > > >  }
+> > > >  
+> > > > +static int anx7625_get_swing_setting(struct device *dev,
+> > > > +				     struct anx7625_platform_data *pdata)
+> > > > +{
+> > > > +	int num_regs;
+> > > > +
+> > > > +	if (of_get_property(dev->of_node,
+> > > > +			    "analogix,lane0-swing", &num_regs)) {
+> > > > +		if (num_regs > DP_TX_SWING_REG_CNT)
+> > > > +			num_regs = DP_TX_SWING_REG_CNT;
+> > > > +
+> > > > +		pdata->dp_lane0_swing_reg_cnt = num_regs;
+> > > > +		of_property_read_u32_array(dev->of_node, "analogix,lane0-swing",
+> > > > +					   pdata->lane0_reg_data, num_regs);
+> > > > +	}
+> > > > +
+> > > > +	if (of_get_property(dev->of_node,
+> > > > +			    "analogix,lane1-swing", &num_regs)) {
+> > > > +		if (num_regs > DP_TX_SWING_REG_CNT)
+> > > > +			num_regs = DP_TX_SWING_REG_CNT;
+> > > > +
+> > > > +		pdata->dp_lane1_swing_reg_cnt = num_regs;
+> > > > +		of_property_read_u32_array(dev->of_node, "analogix,lane1-swing",
+> > > > +					   pdata->lane1_reg_data, num_regs);
+> > > > +	}
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > >  static int anx7625_parse_dt(struct device *dev,
+> > > >  			    struct anx7625_platform_data *pdata)
+> > > >  {
+> > > > -	struct device_node *np = dev->of_node;
+> > > > +	struct device_node *np = dev->of_node, *ep0;
+> > > >  	struct drm_panel *panel;
+> > > >  	int ret;
+> > > > +	int bus_type, mipi_lanes;
+> > > > +
+> > > > +	anx7625_get_swing_setting(dev, pdata);
+> > > >  
+> > > > +	pdata->is_dpi = 1; /* default dpi mode */
+> > > >  	pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
+> > > >  	if (!pdata->mipi_host_node) {
+> > > >  		DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
+> > > >  		return -ENODEV;
+> > > >  	}
+> > > >  
+> > > > -	DRM_DEV_DEBUG_DRIVER(dev, "found dsi host node.\n");
+> > > > +	bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
+> > > > +	mipi_lanes = MAX_LANES_SUPPORT;
+> > > > +	ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
+> > > > +	if (ep0) {
+> > > > +		if (of_property_read_u32(ep0, "bus-type", &bus_type))
+> > > > +			bus_type = 0;
+> > > > +
+> > > > +		mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
+> > > > +	}
+> > > > +
+> > > > +	if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
+> > > 
+> > > This is not correct *at all*. V4L2_FWNODE_BUS_TYPE_PARALLEL has nothing
+> > > to do with DSI. DSI stands for Digital *Serial* Interface. If anything,
+> > > the V4L2_FWNODE_BUS_TYPE_PARALLEL type would map better to DPI, even if
+> > > it's not an exact match.
+> > > 
+> > > This patch has landed in v5.17-rc1, along with the corresponding
+> > > bindings. As DT bindings are an ABI, we should really fix this before
+> > > v5.17 is released. There is no DSI bus types defined in DT, and adding
+> > > one as a fix so late in the v5.17-rc cycle seems a bit of a stretch to
+> > > me (unless Rob disagrees).
+> > > 
+> > > It would seem best to revert this series and the corresponding bindings,
+> > > and retry in v5.18.
+> >
+> > Hi, what about make a patch to change this line to:
+> > if (bus_type != V4L2_FWNODE_BUS_TYPE_PARALLEL), and then change the DTS
+> > file?
+> 
+> We could possibly use V4L2_FWNODE_BUS_TYPE_PARALLEL (5) for MIPI DPI
+> (although it's not a very accurate match, so a different type may be
+> better, this should be discussed), but V4L2_FWNODE_BUS_TYPE_CCP2 (1) is
+> definitely not appropriate for DSI. For that we need a new type, and I
+> don't think it should be rushed in v5.17.
+Hi Laurent Pinchart, what should I do now? Do you mean upload a bug fix
+patch after kernel defined a new type(DPI and DSI) in new kernel?
 
-Do we need to check the errors and fail?
+Thanks,
+Xin
 
-Others look good.
-
-Thanks
-
-> +               addr += mid + 1;
-> +               start = mid + 1;
-> +       }
-> +
->         if (iotlb->limit &&
->             iotlb->nmaps == iotlb->limit &&
->             iotlb->flags & VHOST_IOTLB_FLAG_RETIRE) {
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 59edb5a1ffe2..55475fd59fb7 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -1170,6 +1170,11 @@ ssize_t vhost_chr_write_iter(struct vhost_dev *dev,
->                 goto done;
->         }
->
-> +       if (msg.size == 0) {
-> +               ret = -EINVAL;
-> +               goto done;
-> +       }
-> +
->         if (dev->msg_handler)
->                 ret = dev->msg_handler(dev, &msg);
->         else
-> --
-> 2.35.1
->
-
+> 
+> > > > +		pdata->is_dpi = 0;
+> > > > +
+> > > > +	pdata->mipi_lanes = mipi_lanes;
+> > > > +	if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
+> > > > +		pdata->mipi_lanes = MAX_LANES_SUPPORT;
+> > > > +
+> > > > +	if (pdata->is_dpi)
+> > > > +		DRM_DEV_DEBUG_DRIVER(dev, "found MIPI DPI host node.\n");
+> > > > +	else
+> > > > +		DRM_DEV_DEBUG_DRIVER(dev, "found MIPI DSI host node.\n");
+> > > >  
+> > > >  	ret = drm_of_find_panel_or_bridge(np, 1, 0, &panel, NULL);
+> > > >  	if (ret < 0) {
+> > > > @@ -1301,9 +1414,13 @@ static enum drm_connector_status anx7625_sink_detect(struct anx7625_data *ctx)
+> > > >  {
+> > > >  	struct device *dev = &ctx->client->dev;
+> > > >  
+> > > > -	DRM_DEV_DEBUG_DRIVER(dev, "sink detect, return connected\n");
+> > > > +	DRM_DEV_DEBUG_DRIVER(dev, "sink detect\n");
+> > > >  
+> > > > -	return connector_status_connected;
+> > > > +	if (ctx->pdata.panel_bridge)
+> > > > +		return connector_status_connected;
+> > > > +
+> > > > +	return ctx->hpd_status ? connector_status_connected :
+> > > > +				     connector_status_disconnected;
+> > > >  }
+> > > >  
+> > > >  static int anx7625_attach_dsi(struct anx7625_data *ctx)
+> > > > @@ -1332,7 +1449,7 @@ static int anx7625_attach_dsi(struct anx7625_data *ctx)
+> > > >  		return -EINVAL;
+> > > >  	}
+> > > >  
+> > > > -	dsi->lanes = 4;
+> > > > +	dsi->lanes = ctx->pdata.mipi_lanes;
+> > > >  	dsi->format = MIPI_DSI_FMT_RGB888;
+> > > >  	dsi->mode_flags = MIPI_DSI_MODE_VIDEO	|
+> > > >  		MIPI_DSI_MODE_VIDEO_SYNC_PULSE	|
+> > > > @@ -1460,6 +1577,10 @@ static bool anx7625_bridge_mode_fixup(struct drm_bridge *bridge,
+> > > >  
+> > > >  	DRM_DEV_DEBUG_DRIVER(dev, "drm mode fixup set\n");
+> > > >  
+> > > > +	/* No need fixup for external monitor */
+> > > > +	if (!ctx->pdata.panel_bridge)
+> > > > +		return true;
+> > > > +
+> > > >  	hsync = mode->hsync_end - mode->hsync_start;
+> > > >  	hfp = mode->hsync_start - mode->hdisplay;
+> > > >  	hbp = mode->htotal - mode->hsync_end;
+> > > > @@ -1835,14 +1956,22 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+> > > >  
+> > > >  	platform->bridge.funcs = &anx7625_bridge_funcs;
+> > > >  	platform->bridge.of_node = client->dev.of_node;
+> > > > -	platform->bridge.ops = DRM_BRIDGE_OP_EDID | DRM_BRIDGE_OP_HPD;
+> > > > -	platform->bridge.type = DRM_MODE_CONNECTOR_eDP;
+> > > > +	platform->bridge.ops = DRM_BRIDGE_OP_EDID;
+> > > > +	if (!platform->pdata.panel_bridge)
+> > > > +		platform->bridge.ops |= DRM_BRIDGE_OP_HPD |
+> > > > +					DRM_BRIDGE_OP_DETECT;
+> > > > +	platform->bridge.type = platform->pdata.panel_bridge ?
+> > > > +				    DRM_MODE_CONNECTOR_eDP :
+> > > > +				    DRM_MODE_CONNECTOR_DisplayPort;
+> > > > +
+> > > >  	drm_bridge_add(&platform->bridge);
+> > > >  
+> > > > -	ret = anx7625_attach_dsi(platform);
+> > > > -	if (ret) {
+> > > > -		DRM_DEV_ERROR(dev, "Fail to attach to dsi : %d\n", ret);
+> > > > -		goto unregister_bridge;
+> > > > +	if (!platform->pdata.is_dpi) {
+> > > > +		ret = anx7625_attach_dsi(platform);
+> > > > +		if (ret) {
+> > > > +			DRM_DEV_ERROR(dev, "Fail to attach to dsi : %d\n", ret);
+> > > > +			goto unregister_bridge;
+> > > > +		}
+> > > >  	}
+> > > >  
+> > > >  	DRM_DEV_DEBUG_DRIVER(dev, "probe done\n");
+> > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> > > > index 6dcf64c703f9..3ef1d8f4e575 100644
+> > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.h
+> > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+> > > > @@ -141,12 +141,20 @@
+> > > >  #define  HORIZONTAL_BACK_PORCH_H      0x22  /* Bit[7:4] are reserved */
+> > > >  
+> > > >  /******** END of I2C Address 0x72 *********/
+> > > > +
+> > > > +/***************************************************************/
+> > > > +/* Register definition of device address 0x7a */
+> > > > +#define DP_TX_SWING_REG_CNT		0x14
+> > > > +#define DP_TX_LANE0_SWING_REG0		0x00
+> > > > +#define DP_TX_LANE1_SWING_REG0		0x14
+> > > > +/******** END of I2C Address 0x7a *********/
+> > > > +
+> > > >  /***************************************************************/
+> > > >  /* Register definition of device address 0x7e */
+> > > >  
+> > > >  #define  I2C_ADDR_7E_FLASH_CONTROLLER  0x7E
+> > > >  
+> > > > -#define FLASH_LOAD_STA 0x05
+> > > > +#define FLASH_LOAD_STA          0x05
+> > > >  #define FLASH_LOAD_STA_CHK	BIT(7)
+> > > >  
+> > > >  #define  XTAL_FRQ_SEL    0x3F
+> > > > @@ -349,12 +357,20 @@ struct s_edid_data {
+> > > >  
+> > > >  /***************** Display End *****************/
+> > > >  
+> > > > +#define MAX_LANES_SUPPORT	4
+> > > > +
+> > > >  struct anx7625_platform_data {
+> > > >  	struct gpio_desc *gpio_p_on;
+> > > >  	struct gpio_desc *gpio_reset;
+> > > >  	struct regulator_bulk_data supplies[3];
+> > > >  	struct drm_bridge *panel_bridge;
+> > > >  	int intp_irq;
+> > > > +	int is_dpi;
+> > > > +	int mipi_lanes;
+> > > > +	int dp_lane0_swing_reg_cnt;
+> > > > +	int lane0_reg_data[DP_TX_SWING_REG_CNT];
+> > > > +	int dp_lane1_swing_reg_cnt;
+> > > > +	int lane1_reg_data[DP_TX_SWING_REG_CNT];
+> > > >  	u32 low_power_mode;
+> > > >  	struct device_node *mipi_host_node;
+> > > >  };
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart

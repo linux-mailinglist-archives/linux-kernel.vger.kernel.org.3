@@ -2,158 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90CE4D05A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C8F4D05A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244537AbiCGRsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:48:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S244527AbiCGRs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237825AbiCGRsf (ORCPT
+        with ESMTP id S244524AbiCGRsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:48:35 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB75DEF1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:47:39 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DF5CF3F613
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:47:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646675257;
-        bh=gTUG1OTofQBqLGH5jr70EzskQgnPGihE88XHWWMxRM8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=lf8TRcSLhO+bS1ThPmie481JxgpdSEVXJiDI6lTpjuIF0BZHwn2S0E6h5tRpCVd9B
-         9XgIBWHAb8WXOkP0UrtGs2SFNSHAwl/7P17hcnrBCV00WGg09IX73+P9C4Bp2bWL5L
-         zbSIn0K7Zww/41f15iMMhWxHVdGKg2bqQmazfkfMLNpEfiiSOL0oZfp/+vLO6++SaC
-         a/O+U5YCIWvM6UTy0ZLUrYf13mvMXPOHANGX8UmKP9xCOSVVBwRDNgH+G5KqJ3u7wr
-         TLEwp8Wua6QZb35mt3yU9nJTVj9KZCxqHtjK9F9/qOONaHaPg8RrEm5fhVwDvuF2/T
-         +8oYKsMO50P7A==
-Received: by mail-ej1-f70.google.com with SMTP id x2-20020a1709065ac200b006d9b316257fso7358749ejs.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:47:37 -0800 (PST)
+        Mon, 7 Mar 2022 12:48:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B20E1D33F
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 09:47:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646675265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XzDd/KuuRgH8He0fXa6WBPwvyUAPEEoXAXfWyEFzqbI=;
+        b=Qnuj53J1cpNOG1B/VnTjxhW23FM9JapkhvwLvm6thvZ7oPhVhTszj5GQXA0WQfDC4nXkMg
+        veJLVXdcZIkn/tGP6nYlAk9rVCKxr9ftWtfer/ojcVmtpboqdRUKO1bBMGBAgty9hZ07jr
+        b24MJ5J27AxjD1/e67jOdRgZzJsvuaQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-672-D36QSkokNRqMyFuUQYCe6w-1; Mon, 07 Mar 2022 12:47:44 -0500
+X-MC-Unique: D36QSkokNRqMyFuUQYCe6w-1
+Received: by mail-wr1-f71.google.com with SMTP id f9-20020a5d58e9000000b001f0247e5e96so4823179wrd.15
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 09:47:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gTUG1OTofQBqLGH5jr70EzskQgnPGihE88XHWWMxRM8=;
-        b=PQ3HLkCM08Bv8J//VTbSzuFgalPX7uzPdLUT1z8Y1NgGpVVR4f1N4guf59krFs+M9q
-         W8NuviLVi3yyLFG+5sWvmG2fhIqXS0Dry8eRCXPFbePJwdz3LXf/0K9bLeSM61vOnYa6
-         v29E7tC33vlsa9YCo0PUS1sdQmgVVN7fzA8DNA3pFWe4pTpFgkdQsuMMM9I3Bb/fn/oZ
-         MsFzeonvFat33W5lPTOsd9QuMmLl37tRYwQKyyRhLHCBPgAM2r7uz/VoXey76WWHwz33
-         F3q8XRfiGtB6bW+aqhYTeCpW3DTjwTyfbzhI0APuy2btmxlvMZl/PR8L5XwunhTTMij6
-         aQTQ==
-X-Gm-Message-State: AOAM533uJaw65za3SyYfZMSjXnTz2zeHaGaxeYGHWurh5tcsJ6iQecEk
-        HVnCbMHcVTWjbm7I4iipJQ6SceCdLoLOh8XQeOdlW7Ysmv1aiPWtMncMCuHFV9+6VzqYAmlHvgB
-        koLT2kC45S3gw/t/P1f2TSzNQJi+s22tF3zXnZw3UFg==
-X-Received: by 2002:a17:907:6d0e:b0:6d7:c85:5bf5 with SMTP id sa14-20020a1709076d0e00b006d70c855bf5mr9948795ejc.31.1646675257525;
-        Mon, 07 Mar 2022 09:47:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw9M5dMPsi5MKepY8dS9wOPTh8x1ZtnMj54rZ1pD4rAdYCgeFDf0Br8WQjd2Pjp+ziQJ7gGaQ==
-X-Received: by 2002:a17:907:6d0e:b0:6d7:c85:5bf5 with SMTP id sa14-20020a1709076d0e00b006d70c855bf5mr9948781ejc.31.1646675257319;
-        Mon, 07 Mar 2022 09:47:37 -0800 (PST)
-Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id p14-20020aa7cc8e000000b0040f13865fa9sm6544264edt.3.2022.03.07.09.47.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 09:47:36 -0800 (PST)
-Message-ID: <8078e6af-034f-d705-c14d-49f86495f86b@canonical.com>
-Date:   Mon, 7 Mar 2022 18:47:35 +0100
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XzDd/KuuRgH8He0fXa6WBPwvyUAPEEoXAXfWyEFzqbI=;
+        b=Eg4IkgOBppgnzxsc2e27FZrMnBTzRskILL4MOGuAnz0XL1M20WK2p42ZApTY02+CpJ
+         a+RsB4IAcVpmoDq81FNWrnX6jxgwknl1cBPQC9dD4w8HXowZave7uTYO/jkyVeawkxp2
+         dHOREQY+ahpM3FYg0v3czPjGX5RvKtqGagYff3zVKexctVZS8rqRF4g+sK07valSfq+2
+         N6PWz9nBPag7fOZUeNSId/+fiAnt2xWNmn16G2LV6Tb41Ix0oqYlI6fbnVvbMocjT6b5
+         3xMIfiSGPIc1IayJb2PR7tO0FoqXYURpRhSI95G5GWIQFv1WY74elIWgkneH2GpvX0d8
+         rnFQ==
+X-Gm-Message-State: AOAM530VeputRRfjG4g8VhpKX3TuFVH+ImMb3NVolPOAVVGlwYApCPsR
+        B5b1ceO+wya9st1Qfy3MtBF0LxV1nNjeTE+Wrg3KIP1kazgxTUeU5EuE6+TCNvDj22KareAzNir
+        SmaK5GNjo+7AMqrgpGEOlyfo=
+X-Received: by 2002:a5d:68d2:0:b0:1f0:653f:108d with SMTP id p18-20020a5d68d2000000b001f0653f108dmr8978766wrw.283.1646675263229;
+        Mon, 07 Mar 2022 09:47:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxVk4tcMQi5mW47Ahdmqg2rUqP8i7z7pOFRgPMY0DeuLvwNEa+sw6CpAJbavkC1217W0I2MNQ==
+X-Received: by 2002:a5d:68d2:0:b0:1f0:653f:108d with SMTP id p18-20020a5d68d2000000b001f0653f108dmr8978741wrw.283.1646675263015;
+        Mon, 07 Mar 2022 09:47:43 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id n9-20020a1c7209000000b00389a616615csm359383wmc.2.2022.03.07.09.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 09:47:42 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
+Cc:     cl@linux.com, mbenes@suse.cz, akpm@linux-foundation.org,
+        jeyu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, void@manifault.com,
+        atomlin@atomlin.com, allen.lkml@gmail.com, joe@perches.com,
+        msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        hch@infradead.org, pmladek@suse.com
+Subject: [PATCH v10 13/14] module: Move kdb module related code out of main kdb code
+Date:   Mon,  7 Mar 2022 17:47:41 +0000
+Message-Id: <20220307174741.2889588-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220307174509.2887714-1-atomlin@redhat.com>
+References: <20220307174509.2887714-1-atomlin@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH] memory: renesas-rpc-if: Correct QSPI data transfer in
- Manual mode
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Duc Nguyen <duc.nguyen.ub@renesas.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>
-References: <20210922091007.5516-1-wsa+renesas@sang-engineering.com>
- <163282533892.34438.1878675609177525004.b4-ty@canonical.com>
- <CAMuHMdUqQLo7=NFaNEukqniTJbx-mSZv7eQNB9eCT=L28y3u=A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAMuHMdUqQLo7=NFaNEukqniTJbx-mSZv7eQNB9eCT=L28y3u=A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 17:44, Geert Uytterhoeven wrote:
-> Hi Krzysztof and Wolfram,
-> 
-> CC Sergey, Prabhakar, Andrew,
-> 
-> On Tue, Sep 28, 2021 at 12:36 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->> On Wed, 22 Sep 2021 11:10:06 +0200, Wolfram Sang wrote:
->>> This patch fixes 2 problems:
->>> [1] The output warning logs and data loss when performing
->>> mount/umount then remount the device with jffs2 format.
->>> [2] The access width of SMWDR[0:1]/SMRDR[0:1] register is wrong.
->>>
->>> This is the sample warning logs when performing mount/umount then
->>> remount the device with jffs2 format:
->>> jffs2: jffs2_scan_inode_node(): CRC failed on node at 0x031c51d4:
->>> Read 0x00034e00, calculated 0xadb272a7
->>>
->>> [...]
->>
->> Applied, thanks!
->>
->> [1/1] memory: renesas-rpc-if: Correct QSPI data transfer in Manual mode
->>       commit: fff53a551db50f5edecaa0b29a64056ab8d2bbca
-> 
-> While trying to enable support for RPC on Salvator-X(S)[*], I
-> discovered HyperFLASH detection is broken:
-> 
->     rpc-if-hyperflash rpc-if-hyperflash: probing of hyperbus device failed
-> 
-> Reverting all commits to the RPC driver since Sergey's original
-> commit 5de15b610f785f0e ("mtd: hyperbus: add Renesas RPC-IF driver")
-> fixed probing:
-> 
->     rpc-if-hyperflash: Found 1 x16 devices at 0x0 in 16-bit bank.
-> Manufacturer ID 0x000001 Chip ID 0x007000
->     Amd/Fujitsu Extended Query Table at 0x0040
->       Amd/Fujitsu Extended Query version 1.5.
->     rpc-if-hyperflash: CFI contains unrecognised boot bank location
-> (0). Assuming bottom.
->     number of CFI chips: 1
->     10 fixed-partitions partitions found on MTD device rpc-if-hyperflash
->     Creating 10 MTD partitions on "rpc-if-hyperflash":
->     0x000000000000-0x000000040000 : "bootparam"
->     [...]
-> 
-> However, there's still something wrong, as all HyperFLASH contents read
-> back as zeros, while the FLASH contains the full boot loader stack.
-> Bisecting the reverts pointed to this patch, and just reverting this
-> patch (small whitespace conflict) fixes probing, too. Still, all zeros.
-> 
-> Summary: needs more investigation ;-)
-> 
-> Wolfram: which platform did you use for QSPI testing, so I don't
-> break that again?
-> 
-> [*] Firmware compiled with RCAR_RPC_HYPERFLASH_LOCKED=0 of course.
->     Without that (e.g. old H3 R-Car ES1.0), it crashes with an
->     Asynchronous SError Interrupt during driver initialization.
+No functional change.
 
-Thanks for letting me know. This patch is already in mainline, so the
-solution is either to revert it or fix it. I will wait for it from you
-(as in plural "you" :) ).
+This patch migrates the kdb 'lsmod' command support out of main
+kdb code into its own file under kernel/module. In addition to
+the above, a minor style warning i.e. missing a blank line after
+declarations, was resolved too. The new file was added to
+MAINTAINERS.
 
-Best regards,
-Krzysztof
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+---
+ MAINTAINERS                 |  1 +
+ include/linux/kdb.h         |  1 +
+ kernel/debug/kdb/kdb_main.c | 49 ---------------------------------
+ kernel/module/Makefile      |  1 +
+ kernel/module/kdb.c         | 55 +++++++++++++++++++++++++++++++++++++
+ kernel/module/main.c        |  4 ---
+ 6 files changed, 58 insertions(+), 53 deletions(-)
+ create mode 100644 kernel/module/kdb.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 195cf1ac2ee8..40c717f93c1a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10689,6 +10689,7 @@ F:	drivers/tty/serial/kgdboc.c
+ F:	include/linux/kdb.h
+ F:	include/linux/kgdb.h
+ F:	kernel/debug/
++F:	kernel/module/kdb.c
+ 
+ KHADAS MCU MFD DRIVER
+ M:	Neil Armstrong <narmstrong@baylibre.com>
+diff --git a/include/linux/kdb.h b/include/linux/kdb.h
+index ea0f5e580fac..07dfb6a20a1c 100644
+--- a/include/linux/kdb.h
++++ b/include/linux/kdb.h
+@@ -222,5 +222,6 @@ enum {
+ 
+ extern int kdbgetintenv(const char *, int *);
+ extern int kdb_set(int, const char **);
++int kdb_lsmod(int argc, const char **argv);
+ 
+ #endif	/* !_KDB_H */
+diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
+index 0852a537dad4..f3a30cd5037f 100644
+--- a/kernel/debug/kdb/kdb_main.c
++++ b/kernel/debug/kdb/kdb_main.c
+@@ -26,7 +26,6 @@
+ #include <linux/utsname.h>
+ #include <linux/vmalloc.h>
+ #include <linux/atomic.h>
+-#include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/mm.h>
+ #include <linux/init.h>
+@@ -2004,54 +2003,6 @@ static int kdb_ef(int argc, const char **argv)
+ 	return 0;
+ }
+ 
+-#if defined(CONFIG_MODULES)
+-/*
+- * kdb_lsmod - This function implements the 'lsmod' command.  Lists
+- *	currently loaded kernel modules.
+- *	Mostly taken from userland lsmod.
+- */
+-static int kdb_lsmod(int argc, const char **argv)
+-{
+-	struct module *mod;
+-
+-	if (argc != 0)
+-		return KDB_ARGCOUNT;
+-
+-	kdb_printf("Module                  Size  modstruct     Used by\n");
+-	list_for_each_entry(mod, kdb_modules, list) {
+-		if (mod->state == MODULE_STATE_UNFORMED)
+-			continue;
+-
+-		kdb_printf("%-20s%8u  0x%px ", mod->name,
+-			   mod->core_layout.size, (void *)mod);
+-#ifdef CONFIG_MODULE_UNLOAD
+-		kdb_printf("%4d ", module_refcount(mod));
+-#endif
+-		if (mod->state == MODULE_STATE_GOING)
+-			kdb_printf(" (Unloading)");
+-		else if (mod->state == MODULE_STATE_COMING)
+-			kdb_printf(" (Loading)");
+-		else
+-			kdb_printf(" (Live)");
+-		kdb_printf(" 0x%px", mod->core_layout.base);
+-
+-#ifdef CONFIG_MODULE_UNLOAD
+-		{
+-			struct module_use *use;
+-			kdb_printf(" [ ");
+-			list_for_each_entry(use, &mod->source_list,
+-					    source_list)
+-				kdb_printf("%s ", use->target->name);
+-			kdb_printf("]\n");
+-		}
+-#endif
+-	}
+-
+-	return 0;
+-}
+-
+-#endif	/* CONFIG_MODULES */
+-
+ /*
+  * kdb_env - This function implements the 'env' command.  Display the
+  *	current environment variables.
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index cf8dcdc6b55f..88f5cdcdb067 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -17,3 +17,4 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
+ obj-$(CONFIG_PROC_FS) += procfs.o
+ obj-$(CONFIG_SYSFS) += sysfs.o
++obj-$(CONFIG_KGDB_KDB) += kdb.o
+diff --git a/kernel/module/kdb.c b/kernel/module/kdb.c
+new file mode 100644
+index 000000000000..60baeebea3e0
+--- /dev/null
++++ b/kernel/module/kdb.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Module kdb support
++ *
++ * Copyright (C) 2010 Jason Wessel
++ */
++
++#include <linux/module.h>
++#include <linux/kdb.h>
++#include "internal.h"
++
++/*
++ * kdb_lsmod - This function implements the 'lsmod' command.  Lists
++ *	currently loaded kernel modules.
++ *	Mostly taken from userland lsmod.
++ */
++int kdb_lsmod(int argc, const char **argv)
++{
++	struct module *mod;
++
++	if (argc != 0)
++		return KDB_ARGCOUNT;
++
++	kdb_printf("Module                  Size  modstruct     Used by\n");
++	list_for_each_entry(mod, &modules, list) {
++		if (mod->state == MODULE_STATE_UNFORMED)
++			continue;
++
++		kdb_printf("%-20s%8u  0x%px ", mod->name,
++			   mod->core_layout.size, (void *)mod);
++#ifdef CONFIG_MODULE_UNLOAD
++		kdb_printf("%4d ", module_refcount(mod));
++#endif
++		if (mod->state == MODULE_STATE_GOING)
++			kdb_printf(" (Unloading)");
++		else if (mod->state == MODULE_STATE_COMING)
++			kdb_printf(" (Loading)");
++		else
++			kdb_printf(" (Live)");
++		kdb_printf(" 0x%px", mod->core_layout.base);
++
++#ifdef CONFIG_MODULE_UNLOAD
++		{
++			struct module_use *use;
++			kdb_printf(" [ ");
++			list_for_each_entry(use, &mod->source_list,
++					    source_list)
++				kdb_printf("%s ", use->target->name);
++			kdb_printf("]\n");
++		}
++#endif
++	}
++
++	return 0;
++}
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index b8a59b5c3e3a..bcc4f7a82649 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -108,10 +108,6 @@ static void mod_update_bounds(struct module *mod)
+ 		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size);
+ }
+ 
+-#ifdef CONFIG_KGDB_KDB
+-struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
+-#endif /* CONFIG_KGDB_KDB */
+-
+ static void module_assert_mutex_or_preempt(void)
+ {
+ #ifdef CONFIG_LOCKDEP
+-- 
+2.34.1
+

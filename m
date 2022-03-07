@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0994CF928
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A7D4CF93C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239887AbiCGKDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
+        id S234575AbiCGKEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241126AbiCGJly (ORCPT
+        with ESMTP id S241130AbiCGJlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:41:54 -0500
+        Mon, 7 Mar 2022 04:41:55 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EDCB93;
-        Mon,  7 Mar 2022 01:40:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2232717;
+        Mon,  7 Mar 2022 01:40:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD482B80F9F;
-        Mon,  7 Mar 2022 09:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30218C340E9;
-        Mon,  7 Mar 2022 09:40:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05B23B810BC;
+        Mon,  7 Mar 2022 09:40:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C4A9C340E9;
+        Mon,  7 Mar 2022 09:40:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646024;
-        bh=C2gY0yc/aIldAiiZrv3qT9aP3F8xRf8X+lBHt1DXKzE=;
+        s=korg; t=1646646027;
+        bh=8HHHIc/6dYPATmHRJwYrCr2nnQqxKaoscnZMWOcTvso=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uUTyM/IELB05h9gbToCrCFkj85as8lYiAyfJesff7SzRxHcoZJLA+R2eQivXe19ca
-         OGgbp7r23ouVuc3neCeDQvJFenNK3diQWBEHrDbR9c/uH01aS/kck2gX2pAOxBJcaF
-         1M3XyfW+G2r8CJ8oVf6+zXiQMaEegjBJIWklxyX0=
+        b=mnMgWn4R6yfj4tdoSN9enAvjy4clynQ+nQdVF2Y603b3QXNtTvdS8rORiHDrFMyAf
+         d/EPvL+xDvE8Bq0ktyt/t9NJWTVoNN011i4LiZH1htLRcYPfC8DfXCRL/q/ZTAR/bg
+         g8SzKnB+ZAamLjCrWCNor8quKZWSK27sYgDj//LY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kiran Kumar K <kirankumark@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Raed Salem <raeds@nvidia.com>,
+        Emeel Hakim <ehakim@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 109/262] octeontx2-af: Add KPU changes to parse NGIO as separate layer
-Date:   Mon,  7 Mar 2022 10:17:33 +0100
-Message-Id: <20220307091705.549988903@linuxfoundation.org>
+Subject: [PATCH 5.15 110/262] net/mlx5e: IPsec: Refactor checksum code in tx data path
+Date:   Mon,  7 Mar 2022 10:17:34 +0100
+Message-Id: <20220307091705.577114699@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
 References: <20220307091702.378509770@linuxfoundation.org>
@@ -57,169 +56,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kiran Kumar K <kirankumark@marvell.com>
+From: Raed Salem <raeds@nvidia.com>
 
-[ Upstream commit 745166fcf01cecc4f5ff3defc6586868349a43f9 ]
+[ Upstream commit 428ffea0711a11efa0c1c4ee1fac27903ed091be ]
 
-With current KPU profile NGIO is being parsed along with CTAG as
-a single layer. Because of this MCAM/ntuple rules installed with
-ethertype as 0x8842 are not being hit. Adding KPU profile changes
-to parse NGIO in separate ltype and CTAG in separate ltype.
+Part of code that is related solely to IPsec is always compiled in the
+driver code regardless if the IPsec functionality is enabled or disabled
+in the driver code, this will add unnecessary branch in case IPsec is
+disabled at Tx data path.
 
-Fixes: f9c49be90c05 ("octeontx2-af: Update the default KPU profile and fixes")
-Signed-off-by: Kiran Kumar K <kirankumark@marvell.com>
-Signed-off-by: Subbaraya Sundeep <sbhatta@marvell.com>
-Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Move IPsec related code to IPsec related file such that in case of IPsec
+is disabled and because of unlikely macro the compiler should be able to
+optimize and omit the checksum IPsec code all together from Tx data path
+
+Signed-off-by: Raed Salem <raeds@nvidia.com>
+Reviewed-by: Emeel Hakim <ehakim@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../marvell/octeontx2/af/npc_profile.h        | 70 +++++++++----------
- 1 file changed, 35 insertions(+), 35 deletions(-)
+ .../mellanox/mlx5/core/en_accel/ipsec_rxtx.h  | 26 +++++++++++++++++++
+ .../net/ethernet/mellanox/mlx5/core/en_tx.c   | 20 ++------------
+ 2 files changed, 28 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/npc_profile.h b/drivers/net/ethernet/marvell/octeontx2/af/npc_profile.h
-index fad5ecda4e647..695123e32ba85 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/npc_profile.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/npc_profile.h
-@@ -186,7 +186,6 @@ enum npc_kpu_parser_state {
- 	NPC_S_KPU2_ETAG,
- 	NPC_S_KPU2_PREHEADER,
- 	NPC_S_KPU2_EXDSA,
--	NPC_S_KPU2_NGIO,
- 	NPC_S_KPU2_CPT_CTAG,
- 	NPC_S_KPU2_CPT_QINQ,
- 	NPC_S_KPU3_CTAG,
-@@ -213,6 +212,7 @@ enum npc_kpu_parser_state {
- 	NPC_S_KPU5_NSH,
- 	NPC_S_KPU5_CPT_IP,
- 	NPC_S_KPU5_CPT_IP6,
-+	NPC_S_KPU5_NGIO,
- 	NPC_S_KPU6_IP6_EXT,
- 	NPC_S_KPU6_IP6_HOP_DEST,
- 	NPC_S_KPU6_IP6_ROUT,
-@@ -1117,15 +1117,6 @@ static struct npc_kpu_profile_cam kpu1_cam_entries[] = {
- 		0x0000,
- 		0x0000,
- 	},
--	{
--		NPC_S_KPU1_ETHER, 0xff,
--		NPC_ETYPE_CTAG,
--		0xffff,
--		NPC_ETYPE_NGIO,
--		0xffff,
--		0x0000,
--		0x0000,
--	},
- 	{
- 		NPC_S_KPU1_ETHER, 0xff,
- 		NPC_ETYPE_CTAG,
-@@ -1986,6 +1977,15 @@ static struct npc_kpu_profile_cam kpu2_cam_entries[] = {
- 		0x0000,
- 		0x0000,
- 	},
-+	{
-+		NPC_S_KPU2_CTAG, 0xff,
-+		NPC_ETYPE_NGIO,
-+		0xffff,
-+		0x0000,
-+		0x0000,
-+		0x0000,
-+		0x0000,
-+	},
- 	{
- 		NPC_S_KPU2_CTAG, 0xff,
- 		NPC_ETYPE_PPPOE,
-@@ -2877,15 +2877,6 @@ static struct npc_kpu_profile_cam kpu2_cam_entries[] = {
- 		0x0000,
- 		0x0000,
- 	},
--	{
--		NPC_S_KPU2_NGIO, 0xff,
--		0x0000,
--		0x0000,
--		0x0000,
--		0x0000,
--		0x0000,
--		0x0000,
--	},
- 	{
- 		NPC_S_KPU2_CPT_CTAG, 0xff,
- 		NPC_ETYPE_IP,
-@@ -5205,6 +5196,15 @@ static struct npc_kpu_profile_cam kpu5_cam_entries[] = {
- 		0x0000,
- 		0x0000,
- 	},
-+	{
-+		NPC_S_KPU5_NGIO, 0xff,
-+		0x0000,
-+		0x0000,
-+		0x0000,
-+		0x0000,
-+		0x0000,
-+		0x0000,
-+	},
- 	{
- 		NPC_S_NA, 0X00,
- 		0x0000,
-@@ -8499,14 +8499,6 @@ static struct npc_kpu_profile_action kpu1_action_entries[] = {
- 		0,
- 		0, 0, 0, 0,
- 	},
--	{
--		NPC_ERRLEV_RE, NPC_EC_NOERR,
--		8, 12, 0, 0, 0,
--		NPC_S_KPU2_NGIO, 12, 1,
--		NPC_LID_LA, NPC_LT_LA_ETHER,
--		0,
--		0, 0, 0, 0,
--	},
- 	{
- 		NPC_ERRLEV_RE, NPC_EC_NOERR,
- 		8, 12, 0, 0, 0,
-@@ -9291,6 +9283,14 @@ static struct npc_kpu_profile_action kpu2_action_entries[] = {
- 		0,
- 		0, 0, 0, 0,
- 	},
-+	{
-+		NPC_ERRLEV_RE, NPC_EC_NOERR,
-+		0, 0, 0, 2, 0,
-+		NPC_S_KPU5_NGIO, 6, 1,
-+		NPC_LID_LB, NPC_LT_LB_CTAG,
-+		0,
-+		0, 0, 0, 0,
-+	},
- 	{
- 		NPC_ERRLEV_RE, NPC_EC_NOERR,
- 		8, 0, 6, 2, 0,
-@@ -10083,14 +10083,6 @@ static struct npc_kpu_profile_action kpu2_action_entries[] = {
- 		NPC_F_LB_U_UNK_ETYPE | NPC_F_LB_L_EXDSA,
- 		0, 0, 0, 0,
- 	},
--	{
--		NPC_ERRLEV_RE, NPC_EC_NOERR,
--		0, 0, 0, 0, 1,
--		NPC_S_NA, 0, 1,
--		NPC_LID_LC, NPC_LT_LC_NGIO,
--		0,
--		0, 0, 0, 0,
--	},
- 	{
- 		NPC_ERRLEV_RE, NPC_EC_NOERR,
- 		8, 0, 6, 2, 0,
-@@ -12154,6 +12146,14 @@ static struct npc_kpu_profile_action kpu5_action_entries[] = {
- 		0,
- 		0, 0, 0, 0,
- 	},
-+	{
-+		NPC_ERRLEV_RE, NPC_EC_NOERR,
-+		0, 0, 0, 0, 1,
-+		NPC_S_NA, 0, 1,
-+		NPC_LID_LC, NPC_LT_LC_NGIO,
-+		0,
-+		0, 0, 0, 0,
-+	},
- 	{
- 		NPC_ERRLEV_LC, NPC_EC_UNK,
- 		0, 0, 0, 0, 1,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h
+index 5120a59361e6a..b98db50c3418d 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec_rxtx.h
+@@ -127,6 +127,25 @@ mlx5e_ipsec_feature_check(struct sk_buff *skb, netdev_features_t features)
+ 	return features & ~(NETIF_F_CSUM_MASK | NETIF_F_GSO_MASK);
+ }
+ 
++static inline bool
++mlx5e_ipsec_txwqe_build_eseg_csum(struct mlx5e_txqsq *sq, struct sk_buff *skb,
++				  struct mlx5_wqe_eth_seg *eseg)
++{
++	struct xfrm_offload *xo = xfrm_offload(skb);
++
++	if (!mlx5e_ipsec_eseg_meta(eseg))
++		return false;
++
++	eseg->cs_flags = MLX5_ETH_WQE_L3_CSUM;
++	if (xo->inner_ipproto) {
++		eseg->cs_flags |= MLX5_ETH_WQE_L4_INNER_CSUM | MLX5_ETH_WQE_L3_INNER_CSUM;
++	} else if (likely(skb->ip_summed == CHECKSUM_PARTIAL)) {
++		eseg->cs_flags |= MLX5_ETH_WQE_L4_CSUM;
++		sq->stats->csum_partial_inner++;
++	}
++
++	return true;
++}
+ #else
+ static inline
+ void mlx5e_ipsec_offload_handle_rx_skb(struct net_device *netdev,
+@@ -143,6 +162,13 @@ static inline bool mlx5_ipsec_is_rx_flow(struct mlx5_cqe64 *cqe) { return false;
+ static inline netdev_features_t
+ mlx5e_ipsec_feature_check(struct sk_buff *skb, netdev_features_t features)
+ { return features & ~(NETIF_F_CSUM_MASK | NETIF_F_GSO_MASK); }
++
++static inline bool
++mlx5e_ipsec_txwqe_build_eseg_csum(struct mlx5e_txqsq *sq, struct sk_buff *skb,
++				  struct mlx5_wqe_eth_seg *eseg)
++{
++	return false;
++}
+ #endif /* CONFIG_MLX5_EN_IPSEC */
+ 
+ #endif /* __MLX5E_IPSEC_RXTX_H__ */
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+index 188994d091c54..7fd33b356cc8d 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+@@ -38,6 +38,7 @@
+ #include "en/txrx.h"
+ #include "ipoib/ipoib.h"
+ #include "en_accel/en_accel.h"
++#include "en_accel/ipsec_rxtx.h"
+ #include "en/ptp.h"
+ 
+ static void mlx5e_dma_unmap_wqe_err(struct mlx5e_txqsq *sq, u8 num_dma)
+@@ -213,30 +214,13 @@ static inline void mlx5e_insert_vlan(void *start, struct sk_buff *skb, u16 ihs)
+ 	memcpy(&vhdr->h_vlan_encapsulated_proto, skb->data + cpy1_sz, cpy2_sz);
+ }
+ 
+-static void
+-ipsec_txwqe_build_eseg_csum(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+-			    struct mlx5_wqe_eth_seg *eseg)
+-{
+-	struct xfrm_offload *xo = xfrm_offload(skb);
+-
+-	eseg->cs_flags = MLX5_ETH_WQE_L3_CSUM;
+-	if (xo->inner_ipproto) {
+-		eseg->cs_flags |= MLX5_ETH_WQE_L4_INNER_CSUM | MLX5_ETH_WQE_L3_INNER_CSUM;
+-	} else if (likely(skb->ip_summed == CHECKSUM_PARTIAL)) {
+-		eseg->cs_flags |= MLX5_ETH_WQE_L4_CSUM;
+-		sq->stats->csum_partial_inner++;
+-	}
+-}
+-
+ static inline void
+ mlx5e_txwqe_build_eseg_csum(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+ 			    struct mlx5e_accel_tx_state *accel,
+ 			    struct mlx5_wqe_eth_seg *eseg)
+ {
+-	if (unlikely(mlx5e_ipsec_eseg_meta(eseg))) {
+-		ipsec_txwqe_build_eseg_csum(sq, skb, eseg);
++	if (unlikely(mlx5e_ipsec_txwqe_build_eseg_csum(sq, skb, eseg)))
+ 		return;
+-	}
+ 
+ 	if (likely(skb->ip_summed == CHECKSUM_PARTIAL)) {
+ 		eseg->cs_flags = MLX5_ETH_WQE_L3_CSUM;
 -- 
 2.34.1
 

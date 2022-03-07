@@ -2,170 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0571A4D0277
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B774D027B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 16:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243650AbiCGPIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 10:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S243691AbiCGPIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 10:08:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242498AbiCGPIc (ORCPT
+        with ESMTP id S241606AbiCGPIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 10:08:32 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934C41260E
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 07:07:38 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 451591F396;
-        Mon,  7 Mar 2022 15:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646665657; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3P7bIRLrBlFDijrCRgEyPsvaDPLZQ9uN0q/x7eaR+p0=;
-        b=Ey7TZ3RtHRDRJfjlRvqYGfgCeXP6f2e/zRCCnY0fgKG+lWYsIszX1S0JeOD0iI27d9FANs
-        tuAtcOnnQkyna/xA02xRXWVx8vqENll2LjOAKLAhL+6nmVki01Um8UZ6XeCpBYpoOs4YJy
-        MpxRC9LshIBY1+5Sm80cxTgxfftE1Uw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646665657;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3P7bIRLrBlFDijrCRgEyPsvaDPLZQ9uN0q/x7eaR+p0=;
-        b=bk0rwY2cBrRtaQPiDVmNf/T1xTP4vhye4JE996PHCMKFUBCfYkvXZ+ODoldNb+f4Gr+V34
-        YBZ0mSifN2993CBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C38FB132BC;
-        Mon,  7 Mar 2022 15:07:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gIoJLbgfJmLrHgAAMHmgww
-        (envelope-from <osalvador@suse.de>); Mon, 07 Mar 2022 15:07:36 +0000
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH 3/3] mm/memory_hotplug: Refactor hotadd_init_pgdat and try_online_node
-Date:   Mon,  7 Mar 2022 16:07:25 +0100
-Message-Id: <20220307150725.6810-4-osalvador@suse.de>
+        Mon, 7 Mar 2022 10:08:39 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01D32FFC7;
+        Mon,  7 Mar 2022 07:07:44 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id n33-20020a05600c3ba100b003832caf7f3aso71239wms.0;
+        Mon, 07 Mar 2022 07:07:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N/KGskNCElFlx9hP2T2sOELL9k2U6uGlQbATzaJwwdo=;
+        b=k80UYM+tUm816dF5wxKmo1tLClMuSsc93kymU/e7vEIS+9XTutUIdalNnLVCV+q6CI
+         zHxQcAXWvyBntZu1oIJGpwV6VUgit72aFs1htSxIWietf4hmhzGZSdBq7JiVkIMjTwW8
+         2Kme7AdBvF67RYrPk4R8ULCv02zRXq6D4ubTURAfSP/jNzAUtUzZ+Enq24O+MFUiyYVS
+         PRxBQl3TbP+k9LmUDSEfY9mNAvOdOrRfPn1oZE8yFjEC0GzpoA4I5/2mYG82QEKDkWlL
+         ow36AXr/xKHEFVYRSL2NK62iqZUFBof0+H3RC60XMf0yjFBjyCdNNtWTY3LFTpT+vfNF
+         f/7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N/KGskNCElFlx9hP2T2sOELL9k2U6uGlQbATzaJwwdo=;
+        b=xboaccij19UzN5PB6C5N/3XCwfq3o6w/SJv9y6rVrfR4xsrOgggc8PztifoOuy4oKU
+         25k+jdCb5beZonnCju04cZYVpsqin2MvwgjQaiq/rPoPtryfIIO722wGAfYBB/TvyMSs
+         EsCmEpqpC24nEufr4b7OaOM0X0X1Kh/ZDrQBt+hqNwvtKz/tGWdgmAtIYUrwq4d0CSrW
+         N9QzURh+Dusx4Y81pyZX37sHk5aBa1YNuf+L43MtbR1FCj5U8eoXXOx3nd2NmAdrj8Do
+         +3yejU3znMjARCt4+W2PK3L3XNTEHask444HUPphuWfMTjjIOahWe38QucTKf69vYWey
+         kYtA==
+X-Gm-Message-State: AOAM530i17kUY8D2Vw4WNTQuJEZxFUEwRhJVsdjpnExPGTinF7byV56Y
+        AtS1j+1e8PVVaotphP/pZHbPltXVFmc=
+X-Google-Smtp-Source: ABdhPJy+VPLJ4gytCHsbhvLHzMzxNmYwK+e15gs5Cf90dhSycACJdfehjDEF98JWYsD5UlKHqM1U4w==
+X-Received: by 2002:a05:600c:3486:b0:381:65ec:f8ed with SMTP id a6-20020a05600c348600b0038165ecf8edmr9344371wmq.68.1646665663605;
+        Mon, 07 Mar 2022 07:07:43 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g11-20020a5d554b000000b001f0326a23ddsm11802127wrw.70.2022.03.07.07.07.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 07:07:43 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     David Sterba <dsterba@suse.com>, linux-fsdevel@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fs/affs: remove redundant assignment to ch
+Date:   Mon,  7 Mar 2022 15:07:42 +0000
+Message-Id: <20220307150742.137873-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307150725.6810-1-osalvador@suse.de>
-References: <20220307150725.6810-1-osalvador@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since we pre-allocate all nodes now, hotadd_init_pgdat() does
-not need to return a pgdat struct, as that was meant for
-__try_online_node() to check whether the node was succesfully
-allocated.
+The assignment of ch after subtracting ('a' - 'A') is redundant and
+can be removed. Fix this by replacing the -= operator with just -
+to remove the assignment.
 
-Also get rid of the __ref as all functions hotadd_init_pgdat()
-calls fall within the same section.
-
-Also try to make more clear the return codes from __try_online_node().
-__try_online_node() can return either 0, 1 or -errno (the latter not really
-as the BUG_ON() would catch it before we return) but depending on the caller
-that has different meanings.
-For add_memory_resource(), when __try_online_node() returns non-zero,
-it means that the node was already allocated and it does not need to bring
-it up. It is fine not to check for -errno values because we do not
-get to call register_one_node() when !set_node_online.
-For those who call try_online_node(), so set_node_online is true, a value
-other than zero means a failure (e.g: cpu_up() or find_and_online_cpu_nid()).
-
-Signed-off-by: Oscar Salvador <osalvador@suse.de>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- mm/memory_hotplug.c | 35 ++++++++++++++---------------------
- 1 file changed, 14 insertions(+), 21 deletions(-)
+ fs/affs/namei.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 07cece9e22e4..5c92ac81a399 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1161,8 +1161,7 @@ static void reset_node_present_pages(pg_data_t *pgdat)
- 	pgdat->node_present_pages = 0;
- }
- 
--/* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
--static pg_data_t __ref *hotadd_init_pgdat(int nid)
-+static void hotadd_init_pgdat(int nid)
+diff --git a/fs/affs/namei.c b/fs/affs/namei.c
+index bcab18956b4f..a1270deba908 100644
+--- a/fs/affs/namei.c
++++ b/fs/affs/namei.c
+@@ -19,7 +19,7 @@ typedef int (*toupper_t)(int);
+ static int
+ affs_toupper(int ch)
  {
- 	struct pglist_data *pgdat = NODE_DATA(nid);
- 
-@@ -1182,8 +1181,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
- 	 * to access not-initialized zonelist, build here.
- 	 */
- 	build_all_zonelists(pgdat);
--
--	return pgdat;
+-	return ch >= 'a' && ch <= 'z' ? ch -= ('a' - 'A') : ch;
++	return ch >= 'a' && ch <= 'z' ? ch - ('a' - 'A') : ch;
  }
  
- /*
-@@ -1193,31 +1190,27 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
-  * called by cpu_up() to online a node without onlined memory.
-  *
-  * Returns:
-- * 1 -> a new node has been allocated
-- * 0 -> the node is already online
-- * -ENOMEM -> the node could not be allocated
-+ * 1 -> The node has been initialized.
-+ * 0 -> Either the node was already online, or we succesfully registered a new
-+ *      one.
-+ * -errno -> register_one_node() failed.
-  */
- static int __try_online_node(int nid, bool set_node_online)
- {
--	pg_data_t *pgdat;
--	int ret = 1;
-+	int ret;
- 
- 	if (node_online(nid))
- 		return 0;
- 
--	pgdat = hotadd_init_pgdat(nid);
--	if (!pgdat) {
--		pr_err("Cannot online node %d due to NULL pgdat\n", nid);
--		ret = -ENOMEM;
--		goto out;
--	}
-+	hotadd_init_pgdat(nid);
-+
-+	if (!set_node_online)
-+		return 1;
-+
-+	node_set_online(nid);
-+	ret = register_one_node(nid);
-+	BUG_ON(ret);
- 
--	if (set_node_online) {
--		node_set_online(nid);
--		ret = register_one_node(nid);
--		BUG_ON(ret);
--	}
--out:
- 	return ret;
- }
- 
+ /* International toupper() for DOS\3 ("international") */
 -- 
-2.34.1
+2.35.1
 

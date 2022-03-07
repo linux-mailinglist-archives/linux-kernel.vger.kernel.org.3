@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53C74CF571
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A214CF9E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237648AbiCGJ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S242771AbiCGKLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbiCGJZr (ORCPT
+        with ESMTP id S238353AbiCGJwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:25:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2610D5BD24;
-        Mon,  7 Mar 2022 01:24:05 -0800 (PST)
+        Mon, 7 Mar 2022 04:52:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B73476E1B;
+        Mon,  7 Mar 2022 01:45:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADD3A60C00;
-        Mon,  7 Mar 2022 09:24:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82ABC36AE3;
-        Mon,  7 Mar 2022 09:24:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 003D8B810DC;
+        Mon,  7 Mar 2022 09:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A51AC340F3;
+        Mon,  7 Mar 2022 09:45:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645044;
-        bh=i5VHI7JTDFpPs3+CFF91y+xv8PC264aoBXGF5EYIqL8=;
+        s=korg; t=1646646308;
+        bh=Ze5YpmdfbkD+ctYC9WHtwTW/hAo0ubYIkD6RkbQ0swI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lTa8ATha4LGNoRTldEhsVqqCErUJdyV1Rtpxs9ynbbg4yAH2ZKSGHLgiqXdXB9g6K
-         yoL+w3iA16QGJyeZqJtci4UKBuo0qEc8x+Chl10WsMO5o6//8W6l24ucehU+hs3u7L
-         4hng52gVC6/UrUhZMntcxhsfDNnXMjIepJNw0JrM=
+        b=dSgCavVse7Aad/1WE4fxUBaY27s6j8KVmLpEVVKDcQSeq1SGVy93dENQl5hfcCNDZ
+         Niz9aYJzTSdyhuqdjKtv8v1D7AI+bk6Y2nGV54OL3pAppstfyrsoYXzhdAkI5bnG4J
+         M00PPivC+1LboWbwjtCxb4R1LBTIow88ECrgfbgU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, JaeMan Park <jaeman@google.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 02/51] mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work
-Date:   Mon,  7 Mar 2022 10:18:37 +0100
-Message-Id: <20220307091637.062630665@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 174/262] net: stmmac: fix return value of __setup handler
+Date:   Mon,  7 Mar 2022 10:18:38 +0100
+Message-Id: <20220307091707.331847241@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: JaeMan Park <jaeman@google.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit cacfddf82baf1470e5741edeecb187260868f195 ]
+commit e01b042e580f1fbf4fd8da467442451da00c7a90 upstream.
 
-In mac80211_hwsim, the probe_req frame is created and sent while
-scanning. It is sent with ieee80211_tx_info which is not initialized.
-Uninitialized ieee80211_tx_info can cause problems when using
-mac80211_hwsim with wmediumd. wmediumd checks the tx_rates field of
-ieee80211_tx_info and doesn't relay probe_req frame to other clients
-even if it is a broadcasting message.
+__setup() handlers should return 1 on success, i.e., the parameter
+has been handled. A return of 0 causes the "option=value" string to be
+added to init's environment strings, polluting it.
 
-Call ieee80211_tx_prepare_skb() to initialize ieee80211_tx_info for
-the probe_req that is created by hw_scan_work in mac80211_hwsim.
-
-Signed-off-by: JaeMan Park <jaeman@google.com>
-Link: https://lore.kernel.org/r/20220113060235.546107-1-jaeman@google.com
-[fix memory leak]
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 47dd7a540b8a ("net: add support for STMicroelectronics Ethernet controllers.")
+Fixes: f3240e2811f0 ("stmmac: remove warning when compile as built-in (V2)")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Jose Abreu <joabreu@synopsys.com>
+Link: https://lore.kernel.org/r/20220224033536.25056-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/mac80211_hwsim.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
-index 6cd9a8b610107..c84ee5ba53812 100644
---- a/drivers/net/wireless/mac80211_hwsim.c
-+++ b/drivers/net/wireless/mac80211_hwsim.c
-@@ -2082,6 +2082,15 @@ static void hw_scan_work(struct work_struct *work)
- 			if (req->ie_len)
- 				skb_put_data(probe, req->ie, req->ie_len);
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7336,7 +7336,7 @@ static int __init stmmac_cmdline_opt(cha
+ 	char *opt;
  
-+			if (!ieee80211_tx_prepare_skb(hwsim->hw,
-+						      hwsim->hw_scan_vif,
-+						      probe,
-+						      hwsim->tmp_chan->band,
-+						      NULL)) {
-+				kfree_skb(probe);
-+				continue;
-+			}
-+
- 			local_bh_disable();
- 			mac80211_hwsim_tx_frame(hwsim->hw, probe,
- 						hwsim->tmp_chan);
--- 
-2.34.1
-
+ 	if (!str || !*str)
+-		return -EINVAL;
++		return 1;
+ 	while ((opt = strsep(&str, ",")) != NULL) {
+ 		if (!strncmp(opt, "debug:", 6)) {
+ 			if (kstrtoint(opt + 6, 0, &debug))
+@@ -7367,11 +7367,11 @@ static int __init stmmac_cmdline_opt(cha
+ 				goto err;
+ 		}
+ 	}
+-	return 0;
++	return 1;
+ 
+ err:
+ 	pr_err("%s: ERROR broken module parameter conversion", __func__);
+-	return -EINVAL;
++	return 1;
+ }
+ 
+ __setup("stmmaceth=", stmmac_cmdline_opt);
 
 

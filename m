@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEA54CF0E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 06:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3186B4CF0E6
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 06:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbiCGFZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 00:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S235304AbiCGFZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 00:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235280AbiCGFZo (ORCPT
+        with ESMTP id S231923AbiCGFZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 00:25:44 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E837713F1F;
-        Sun,  6 Mar 2022 21:24:50 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id o26so12637436pgb.8;
-        Sun, 06 Mar 2022 21:24:50 -0800 (PST)
+        Mon, 7 Mar 2022 00:25:46 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4439913F35;
+        Sun,  6 Mar 2022 21:24:53 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id d187so12749170pfa.10;
+        Sun, 06 Mar 2022 21:24:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=sBs0g7c3eiiRDzIn9OKXg+84akXNbU5YGA45uOIsBGI=;
-        b=SRY61KTFSOEutOMsOj0yyqdSkKS73lXb98tEFQ+u0In4fmQvBF5XApot+Xe61C0J8Q
-         NO42Jd6zJsunH959LMMHnjr1Vs7zIfZPDKIVBGNFbzlnzrnibnrLRuoXCuDVBZiTLAZJ
-         d2iE6zxPZRzjSc4Tn6zHNCo/dHYSW5NGfxIFVxZNAYlZUykYmrwq5j10/yX2hMyd5cIC
-         KaL0QUdLxf9HtgnC42ErNWj+FYeQhxUznHZ15pnWZnkw7+ngnPbAXIbXe7QSM3EZXMzs
-         FQo/BAptgzL+tTFVaFHnuaupDrKmx574KCXeVWind79qf60Vq9jZwmTz1QFEQIUgQo6F
-         drwg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :in-reply-to:references;
+        bh=8I2/8nvosmtRl+beVC0+BuqGr1AZuni8ODmoavP7CwY=;
+        b=IQhcd7Oaf3TcdDi77/pJUHONWk0xCmhBlng7zjfO6lkfJ/QYYxGsVZ36R9BoslPAkO
+         Tp7YncgvDCsqkDQo5qA1A9HQAtrSo0bf9AL7YGM/m4fTRKiUKptApVqsOGWxGDTVnkW0
+         7TyZbteIuAmQRsMDAYuqFUxl/c3Xq18lmCfLbV6bcxqNviA++Ldx+ud2TqyMiOufB1Xd
+         iuQSQ4Did+uTyaUH/guN4gmYELvhr7RPKA+vTaFlqKb5SusEIqHk3cDk3MO+jMpSZHEr
+         NJmLc6AlIoP4US65ITfaRPDiSTQNgHgSBIam8WGpTlLmewS4QpbHHlG37eyxtyeMUcg/
+         OikQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=sBs0g7c3eiiRDzIn9OKXg+84akXNbU5YGA45uOIsBGI=;
-        b=NyCWSJg9zphDO4ZwKuz9uzZhb3O38LDrZSwsHHFsa/m7xezn8QM80w0kATs3SAEyuI
-         sd8F/9b5qSajcfTyiejCdfBk/A1X0ZmleEpXZ+xhnl1heL1fxcN05XVrgFOvsbmTtm3T
-         7v8XD8lRZnP7AU0juVyknQFjN9Hw+ixbQdIE/puYqHYPNlDhSYJsbI4Kr1xvC0IcoOEK
-         JWp6hXlrRrKXzUV+1d6oy9SHlIEDaGA8R1AcbTz7JDTj7V0OqpH4++Rro7rHz+CnEAp/
-         z8mAwJHreXagx+ee5wl6fDDCRM3wrk8OtH+hAOAFYdf6l74GnXI/6TrPRN4fc9c2oW6n
-         Sb7w==
-X-Gm-Message-State: AOAM532cRf60NCnqnzegwrYvoCSFvpwF0NiqZqBl51MZ2snKAuSopFss
-        b7aYHZPEbFHu0OTh7R0jvVzz4i8yM18=
-X-Google-Smtp-Source: ABdhPJzzyVmlGJTfQnhHokej1K13burAVM1KEVsIusj8kJyzQ8+NI4ZAgrNyAm7qq2ziSwc0nanfSg==
-X-Received: by 2002:a63:90c4:0:b0:37c:7f95:2fb9 with SMTP id a187-20020a6390c4000000b0037c7f952fb9mr8375675pge.267.1646630690419;
-        Sun, 06 Mar 2022 21:24:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:in-reply-to:references;
+        bh=8I2/8nvosmtRl+beVC0+BuqGr1AZuni8ODmoavP7CwY=;
+        b=22WT5xdGwcy/klM6DCImCiQJM0U7DGR+MEYVY/tfGuTnAptbwd6ez3EPgPg86vnRJ2
+         CJZGhjxwgWOFko5sfEOvmjYOkDRGdbRkorAnM/oxh+KYQoiuvFSj5EuBdi76XRUIs1K0
+         TWWj37xNKYkLGix54V2McLAbH8Bb8iZurqJTa8CXVwNP9/pkXX05Uw0uY3ryPY6S2jPA
+         8o9L4F7ybpB36IpaOF8VEfNsBwIQwArRRCLlRFDtPGM0DNlEAmA5nK4fjSr3HepRGkRt
+         DSmSv7/sCvF7EqrudW13+Q7d7Tl6CMv+ve47AluJwLzcCr6+CM+b+KcJGifSmkA+Jw5c
+         T2jQ==
+X-Gm-Message-State: AOAM530PVslt2eXG0sNqUqM8SakqbEcqIHad8mQxZpvE1+C9t00oXc4M
+        6ElZSeHuZxCZ8hu98BmNSZU=
+X-Google-Smtp-Source: ABdhPJwW1ztPy8LWSk6lN/usFrpo2CA2G7U0OZmu/52IKai9A0YguZ1Iu4V4F7fhkWpYSDLE4pL3YQ==
+X-Received: by 2002:a62:7c03:0:b0:4f7:6a0:6835 with SMTP id x3-20020a627c03000000b004f706a06835mr2357571pfc.72.1646630692767;
+        Sun, 06 Mar 2022 21:24:52 -0800 (PST)
 Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id z2-20020a17090a170200b001bf2d530d64sm9767170pjd.2.2022.03.06.21.24.48
+        by smtp.googlemail.com with ESMTPSA id z2-20020a17090a170200b001bf2d530d64sm9767170pjd.2.2022.03.06.21.24.50
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 06 Mar 2022 21:24:49 -0800 (PST)
+        Sun, 06 Mar 2022 21:24:52 -0800 (PST)
 From:   Tony Huang <tonyhuang.sunplus@gmail.com>
 To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, derek.kiernan@xilinx.com,
         Dragan.cvetic@xilinx.com, arnd@arndb.de, gregkh@linuxfoundation.org
 Cc:     wells.lu@sunplus.com, tony.huang@sunplus.com,
         Tony Huang <tonyhuang.sunplus@gmail.com>
-Subject: [PATCH v10 0/2] Add iop driver for Sunplus SP7021
-Date:   Mon,  7 Mar 2022 13:25:07 +0800
-Message-Id: <cover.1646629400.git.tonyhuang.sunplus@gmail.com>
+Subject: [PATCH v10 1/2] dt-binding: misc: Add iop yaml file for Sunplus SP7021
+Date:   Mon,  7 Mar 2022 13:25:08 +0800
+Message-Id: <57d8c6d8ce52e7152156f2fcc4b61bfd2fed1c40.1646629400.git.tonyhuang.sunplus@gmail.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1646629400.git.tonyhuang.sunplus@gmail.com>
+References: <cover.1646629400.git.tonyhuang.sunplus@gmail.com>
+In-Reply-To: <cover.1646629400.git.tonyhuang.sunplus@gmail.com>
+References: <cover.1646629400.git.tonyhuang.sunplus@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -66,31 +72,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add iop driver for Sunplus SP7021 SOC
+Add iop yaml file for Sunplus SP7021
 
-This is a patch series for iop driver for Sunplus SP7021 SOC.
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
+---
+Changes in v10:
+ -No change
 
-Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
-many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
-etc.) into a single chip. It is designed for industrial control.
-
-Refer to:
-https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-https://tibbo.com/store/plus1.html
-
-Tony Huang (2):
-  dt-binding: misc: Add iop yaml file for Sunplus SP7021
-  misc: Add iop driver for Sunplus SP7021
-
- .../devicetree/bindings/misc/sunplus-iop.yaml      |  76 ++++
- MAINTAINERS                                        |   6 +
- drivers/misc/Kconfig                               |  36 ++
- drivers/misc/Makefile                              |   1 +
- drivers/misc/sunplus_iop.c                         | 438 +++++++++++++++++++++
- 5 files changed, 557 insertions(+)
+ .../devicetree/bindings/misc/sunplus-iop.yaml      | 76 ++++++++++++++++++++++
+ MAINTAINERS                                        |  5 ++
+ 2 files changed, 81 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/misc/sunplus-iop.yaml
- create mode 100644 drivers/misc/sunplus_iop.c
 
+diff --git a/Documentation/devicetree/bindings/misc/sunplus-iop.yaml b/Documentation/devicetree/bindings/misc/sunplus-iop.yaml
+new file mode 100644
+index 0000000..b37e697
+--- /dev/null
++++ b/Documentation/devicetree/bindings/misc/sunplus-iop.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) Sunplus Ltd. Co. 2021
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/misc/sunplus-iop.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sunplus IOP(8051) controller
++
++maintainers:
++  - Tony Huang <tonyhuang.sunplus@gmail.com>
++
++description: |
++  Processor for I/O control, RTC wake-up procedure management,
++  and cooperation with CPU&PMC in power management.
++
++properties:
++  compatible:
++    enum:
++      - sunplus,sp7021-iop
++
++  reg:
++    items:
++      - description: IOP registers regions
++      - description: PMC registers regions
++      - description: MOON0 registers regions
++
++  reg-names:
++    items:
++      - const: iop
++      - const: iop_pmc
++      - const: moon0
++
++  interrupts:
++    items:
++      - description: IOP_INT0. IOP to system Interrupt 0.
++                     Sent by IOP to system RISC.
++      - description: IOP_INT1. IOP to System Interrupt 1.
++                     Sent by IOP to system RISC.
++
++  memory-region:
++    maxItems: 1
++
++  wakeup-gpios:
++    description: When the linux kernel system is powered off.
++      8051 is always powered. 8051 cand receive external signals
++      according to this gpio pin. 8051 receives external signal
++      through gpio pin. 8051 can power on linux kernel system.
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - memory-region
++  - wakeup-gpios
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/gpio/gpio.h>
++    iop: iop@9c000400 {
++        compatible = "sunplus,sp7021-iop";
++        reg = <0x9c000400 0x80>, <0x9c003100 0x80>, <0x9c000000 0x80>;
++        reg-names = "iop", "iop_pmc", "moon0";
++        interrupt-parent = <&intc>;
++        interrupts = <41 IRQ_TYPE_LEVEL_HIGH>, <42 IRQ_TYPE_LEVEL_HIGH>;
++        memory-region = <&iop_reserve>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&iop_pins>;
++        wakeup-gpios = <&pctl 1 GPIO_ACTIVE_HIGH>;
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fb18ce7..6f336c9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18242,6 +18242,11 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/ethernet/dlink/sundance.c
+ 
++SUNPLUS IOP DRIVER
++M:	Tony Huang <tonyhuang.sunplus@gmail.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/misc/sunplu-iop.yaml
++
+ SUPERH
+ M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+ M:	Rich Felker <dalias@libc.org>
 -- 
 2.7.4
 

@@ -2,181 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22934CFEDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146DC4CFEEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242536AbiCGMff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S230162AbiCGMhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234422AbiCGMfI (ORCPT
+        with ESMTP id S238124AbiCGMh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:35:08 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17444A3FF;
-        Mon,  7 Mar 2022 04:33:41 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V6WFbID_1646656416;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V6WFbID_1646656416)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 07 Mar 2022 20:33:37 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 21/21] erofs: add 'uuid' mount option
-Date:   Mon,  7 Mar 2022 20:33:05 +0800
-Message-Id: <20220307123305.79520-22-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220307123305.79520-1-jefflexu@linux.alibaba.com>
-References: <20220307123305.79520-1-jefflexu@linux.alibaba.com>
+        Mon, 7 Mar 2022 07:37:26 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B8E240A2B;
+        Mon,  7 Mar 2022 04:35:59 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 360A81FB;
+        Mon,  7 Mar 2022 04:35:59 -0800 (PST)
+Received: from [10.57.39.47] (unknown [10.57.39.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D2CE03F766;
+        Mon,  7 Mar 2022 04:35:57 -0800 (PST)
+Message-ID: <6cf91f43-df23-3ac9-e9b5-958d99d37422@arm.com>
+Date:   Mon, 7 Mar 2022 12:35:51 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [BUG] crypto: ccree: driver does not handle case where cryptlen =
+ authsize =0
+Content-Language: en-GB
+To:     Gilad Ben-Yossef <gilad@benyossef.com>
+Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux-foundation.org
+References: <CAOtvUMeoYcVm7OQdqXd1V5iPSXW_BkVxx6TA6nF7zTLVeHe0Ww@mail.gmail.com>
+ <CAOtvUMfy1fF35B2sfbOMui8n9Q4iCke9rgn5TiYMUMjd8gqHsA@mail.gmail.com>
+ <YhKV55t90HWm6bhv@Red>
+ <CAOtvUMdRU4wnRCXsC+U5XBDp+b+u8w7W7JCUKW2+ohuJz3PVhQ@mail.gmail.com>
+ <YhOcEQEjIKBrbMIZ@Red>
+ <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
+ <CAOtvUMeRb=j=NDrc88x8aB-3=D1mxZ_-aA1d4FfvJmj7Jrbi4w@mail.gmail.com>
+ <YiIUXtxd44ut5uzV@Red> <YiUsWosH+MKMF7DQ@gondor.apana.org.au>
+ <CAOtvUMcudG3ySU+VeE7hfneDVWGLKFTnws-xjhq4hgFYSj0qOg@mail.gmail.com>
+ <YiXjCcXXk0f18FDL@Red> <aca4117c-b7a5-f7eb-eb03-4e1f1a93a730@arm.com>
+ <CAOtvUMePFR4e2jgHZKOvs3J3Xt4NzRbzD_=vr_49Qgs5HTrvHw@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAOtvUMePFR4e2jgHZKOvs3J3Xt4NzRbzD_=vr_49Qgs5HTrvHw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce 'uuid' mount option to enable on-demand read sementics. In
-this case, erofs could be mounted from blob files instead of blkdev.
-By then users could specify the path of bootstrap blob file containing
-the complete erofs image.
+On 2022-03-07 12:17, Gilad Ben-Yossef wrote:
+> On Mon, Mar 7, 2022 at 1:14 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> 
+>> The "overlap" is in the sense of having more than one mapping within the
+>> same cacheline:
+>>
+>> [  142.458120] DMA-API: add_dma_entry start P=ba79f200 N=ba79f
+>> D=ba79f200 L=10 DMA_FROM_DEVICE attrs=0
+>> [  142.458156] DMA-API: add_dma_entry start P=445dc010 N=445dc
+>> D=445dc010 L=10 DMA_TO_DEVICE attrs=0
+>> [  142.458178] sun8i-ss 1c15000.crypto: SRC 0/1/1 445dc000 len=16 bi=0
+>> [  142.458215] sun8i-ss 1c15000.crypto: DST 0/1/1 ba79f200 len=16 bi=0
+>> [  142.458234] DMA-API: add_dma_entry start P=ba79f210 N=ba79f
+>> D=ba79f210 L=10 DMA_FROM_DEVICE attrs=0
+>>
+>> This actually illustrates exactly the reason why this is unsupportable.
+>> ba79f200 is mapped for DMA_FROM_DEVICE, therefore subsequently mapping
+>> ba79f210 for DMA_TO_DEVICE may cause the cacheline covering the range
+>> ba79f200-ba79f23f to be written back over the top of data that the
+>> device has already started to write to memory. Hello data corruption.
+>>
+>> Separate DMA mappings should be from separate memory allocations,
+>> respecting ARCH_DMA_MINALIGN.
+> 
+> hmm... I know I'm missing something here, but how does this align with
+> the following from active_cacheline_insert() in kernel/dma/debug.c ?
+> 
+>          /* If the device is not writing memory then we don't have any
+>           * concerns about the cpu consuming stale data.  This mitigates
+>           * legitimate usages of overlapping mappings.
+>           */
+>          if (entry->direction == DMA_TO_DEVICE)
+>                  return 0;
 
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/super.c | 44 +++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 37 insertions(+), 7 deletions(-)
+It's OK to have multiple mappings that are *all* DMA_TO_DEVICE, which 
+looks to be the case that this check was intended to allow. However I 
+think you're right that it should still actually check for conflicting 
+directions between the new entry and any existing ones, otherwise it 
+ends up a bit too lenient.
 
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 2942029a7049..8bc4b782f9a9 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -400,6 +400,7 @@ enum {
- 	Opt_dax,
- 	Opt_dax_enum,
- 	Opt_device,
-+	Opt_uuid,
- 	Opt_err
- };
- 
-@@ -424,6 +425,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
- 	fsparam_flag("dax",             Opt_dax),
- 	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
- 	fsparam_string("device",	Opt_device),
-+	fsparam_string("uuid",		Opt_uuid),
- 	{}
- };
- 
-@@ -519,6 +521,12 @@ static int erofs_fc_parse_param(struct fs_context *fc,
- 		}
- 		++ctx->devs->extra_devices;
- 		break;
-+	case Opt_uuid:
-+		kfree(ctx->opt.uuid);
-+		ctx->opt.uuid = kstrdup(param->string, GFP_KERNEL);
-+		if (!ctx->opt.uuid)
-+			return -ENOMEM;
-+		break;
- 	default:
- 		return -ENOPARAM;
- 	}
-@@ -593,9 +601,14 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sb->s_magic = EROFS_SUPER_MAGIC;
- 
--	if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
--		erofs_err(sb, "failed to set erofs blksize");
--		return -EINVAL;
-+	if (erofs_bdev_mode(sb)) {
-+		if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
-+			erofs_err(sb, "failed to set erofs blksize");
-+			return -EINVAL;
-+		}
-+	} else {
-+		sb->s_blocksize = EROFS_BLKSIZ;
-+		sb->s_blocksize_bits = LOG_BLOCK_SIZE;
- 	}
- 
- 	sbi = kzalloc(sizeof(*sbi), GFP_KERNEL);
-@@ -604,11 +617,12 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sb->s_fs_info = sbi;
- 	sbi->opt = ctx->opt;
--	sbi->dax_dev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->dax_part_off);
- 	sbi->devs = ctx->devs;
- 	ctx->devs = NULL;
- 
--	if (!erofs_bdev_mode(sb)) {
-+	if (erofs_bdev_mode(sb)) {
-+		sbi->dax_dev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->dax_part_off);
-+	} else {
- 		struct erofs_fscache_context *bootstrap;
- 
- 		bootstrap = erofs_fscache_get_ctx(sb, ctx->opt.uuid, true);
-@@ -620,6 +634,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 		err = super_setup_bdi(sb);
- 		if (err)
- 			return err;
-+
-+		sbi->dax_dev = NULL;
- 	}
- 
- 	err = erofs_read_superblock(sb);
-@@ -682,6 +698,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- static int erofs_fc_get_tree(struct fs_context *fc)
- {
-+	struct erofs_fs_context *ctx = fc->fs_private;
-+
-+	if (ctx->opt.uuid)
-+		return get_tree_nodev(fc, erofs_fc_fill_super);
-+
- 	return get_tree_bdev(fc, erofs_fc_fill_super);
- }
- 
-@@ -731,6 +752,7 @@ static void erofs_fc_free(struct fs_context *fc)
- 	struct erofs_fs_context *ctx = fc->fs_private;
- 
- 	erofs_free_dev_context(ctx->devs);
-+	kfree(ctx->opt.uuid);
- 	kfree(ctx);
- }
- 
-@@ -771,7 +793,10 @@ static void erofs_kill_sb(struct super_block *sb)
- 
- 	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
- 
--	kill_block_super(sb);
-+	if (erofs_bdev_mode(sb))
-+		kill_block_super(sb);
-+	else
-+		generic_shutdown_super(sb);
- 
- 	sbi = EROFS_SB(sb);
- 	if (!sbi)
-@@ -889,7 +914,12 @@ static int erofs_statfs(struct dentry *dentry, struct kstatfs *buf)
- {
- 	struct super_block *sb = dentry->d_sb;
- 	struct erofs_sb_info *sbi = EROFS_SB(sb);
--	u64 id = huge_encode_dev(sb->s_bdev->bd_dev);
-+	u64 id;
-+
-+	if (erofs_bdev_mode(sb))
-+		id = huge_encode_dev(sb->s_bdev->bd_dev);
-+	else
-+		id = 0; /* TODO */
- 
- 	buf->f_type = sb->s_magic;
- 	buf->f_bsize = EROFS_BLKSIZ;
--- 
-2.27.0
-
+Cheers,
+Robin.

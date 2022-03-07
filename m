@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB57A4CF94F
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA8D4CF96D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234983AbiCGKFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S238826AbiCGKFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbiCGJmH (ORCPT
+        with ESMTP id S235301AbiCGJm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:42:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCEEDED7;
-        Mon,  7 Mar 2022 01:41:12 -0800 (PST)
+        Mon, 7 Mar 2022 04:42:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF93F10FE5;
+        Mon,  7 Mar 2022 01:41:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C6CF61354;
-        Mon,  7 Mar 2022 09:41:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108EDC340FF;
-        Mon,  7 Mar 2022 09:41:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 591876128E;
+        Mon,  7 Mar 2022 09:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6595FC340E9;
+        Mon,  7 Mar 2022 09:41:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646071;
-        bh=kRf2+Neh77iSMJt5sEjQ41gXstfFY7Iu39R7lcfHym4=;
+        s=korg; t=1646646077;
+        bh=FDzh0ZHeyKx2upDiIZLBZOLXmyWGOvmDhGV6edFVnBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eRSO8yPNB8e5XTqrtWExOIShYPSl/8PN1tOuo/kqrqIiLymL5p6pIsIWeSw5ZiT0q
-         eGiu2eyaTGbDFexQiclnwfG0t5cUcXFnhgTuu2nYS+mBoS0Qa4Zz0nj8SPy+5o6lui
-         zbUjrHyHz7c/f6RVvNQJEPqSvntW/W7T5bEC1VVQ=
+        b=g2nGW+8wjxXbpLcY0JG1mmnPWd7FmhdxrVQKS9FagbDiSyETVg0okxKZF0eyyRLzK
+         Z129sCZsnnpRQo+NJ8oN1JvzB0lVZ6Z5qIV4K9bBsXbcUi7FusgLh9Qzf1pr+RHoob
+         A1ImySt8iejKJmTkZ0jo4UgJ3iEiTIkQKPNPybW8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
+        Dany Madden <drt@linux.ibm.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 123/262] net: dsa: seville: register the mdiobus under devres
-Date:   Mon,  7 Mar 2022 10:17:47 +0100
-Message-Id: <20220307091705.932468911@linuxfoundation.org>
+Subject: [PATCH 5.15 124/262] ibmvnic: dont release napi in __ibmvnic_open()
+Date:   Mon,  7 Mar 2022 10:17:48 +0100
+Message-Id: <20220307091705.959547578@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
 References: <20220307091702.378509770@linuxfoundation.org>
@@ -56,73 +57,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
 
-[ Upstream commit bd488afc3b39e045ba71aab472233f2a78726e7b ]
+[ Upstream commit 61772b0908c640d0309c40f7d41d062ca4e979fa ]
 
-As explained in commits:
-74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
-5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
+If __ibmvnic_open() encounters an error such as when setting link state,
+it calls release_resources() which frees the napi structures needlessly.
+Instead, have __ibmvnic_open() only clean up the work it did so far (i.e.
+disable napi and irqs) and leave the rest to the callers.
 
-mdiobus_free() will panic when called from devm_mdiobus_free() <-
-devres_release_all() <- __device_release_driver(), and that mdiobus was
-not previously unregistered.
+If caller of __ibmvnic_open() is ibmvnic_open(), it should release the
+resources immediately. If the caller is do_reset() or do_hard_reset(),
+they will release the resources on the next reset.
 
-The Seville VSC9959 switch is a platform device, so the initial set of
-constraints that I thought would cause this (I2C or SPI buses which call
-->remove on ->shutdown) do not apply. But there is one more which
-applies here.
+This fixes following crash that occurred when running the drmgr command
+several times to add/remove a vnic interface:
 
-If the DSA master itself is on a bus that calls ->remove from ->shutdown
-(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
-between the switch and the DSA master, and device_links_unbind_consumers()
-will unbind the seville switch driver on shutdown.
+	[102056] ibmvnic 30000003 env3: Disabling rx_scrq[6] irq
+	[102056] ibmvnic 30000003 env3: Disabling rx_scrq[7] irq
+	[102056] ibmvnic 30000003 env3: Replenished 8 pools
+	Kernel attempted to read user page (10) - exploit attempt? (uid: 0)
+	BUG: Kernel NULL pointer dereference on read at 0x00000010
+	Faulting instruction address: 0xc000000000a3c840
+	Oops: Kernel access of bad area, sig: 11 [#1]
+	LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
+	...
+	CPU: 9 PID: 102056 Comm: kworker/9:2 Kdump: loaded Not tainted 5.16.0-rc5-autotest-g6441998e2e37 #1
+	Workqueue: events_long __ibmvnic_reset [ibmvnic]
+	NIP:  c000000000a3c840 LR: c0080000029b5378 CTR: c000000000a3c820
+	REGS: c0000000548e37e0 TRAP: 0300   Not tainted  (5.16.0-rc5-autotest-g6441998e2e37)
+	MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 28248484  XER: 00000004
+	CFAR: c0080000029bdd24 DAR: 0000000000000010 DSISR: 40000000 IRQMASK: 0
+	GPR00: c0080000029b55d0 c0000000548e3a80 c0000000028f0200 0000000000000000
+	...
+	NIP [c000000000a3c840] napi_enable+0x20/0xc0
+	LR [c0080000029b5378] __ibmvnic_open+0xf0/0x430 [ibmvnic]
+	Call Trace:
+	[c0000000548e3a80] [0000000000000006] 0x6 (unreliable)
+	[c0000000548e3ab0] [c0080000029b55d0] __ibmvnic_open+0x348/0x430 [ibmvnic]
+	[c0000000548e3b40] [c0080000029bcc28] __ibmvnic_reset+0x500/0xdf0 [ibmvnic]
+	[c0000000548e3c60] [c000000000176228] process_one_work+0x288/0x570
+	[c0000000548e3d00] [c000000000176588] worker_thread+0x78/0x660
+	[c0000000548e3da0] [c0000000001822f0] kthread+0x1c0/0x1d0
+	[c0000000548e3e10] [c00000000000cf64] ret_from_kernel_thread+0x5c/0x64
+	Instruction dump:
+	7d2948f8 792307e0 4e800020 60000000 3c4c01eb 384239e0 f821ffd1 39430010
+	38a0fff6 e92d1100 f9210028 39200000 <e9030010> f9010020 60420000 e9210020
+	---[ end trace 5f8033b08fd27706 ]---
 
-So the same treatment must be applied to all DSA switch drivers, which
-is: either use devres for both the mdiobus allocation and registration,
-or don't use devres at all.
-
-The seville driver has a code structure that could accommodate both the
-mdiobus_unregister and mdiobus_free calls, but it has an external
-dependency upon mscc_miim_setup() from mdio-mscc-miim.c, which calls
-devm_mdiobus_alloc_size() on its behalf. So rather than restructuring
-that, and exporting yet one more symbol mscc_miim_teardown(), let's work
-with devres and replace of_mdiobus_register with the devres variant.
-When we use all-devres, we can ensure that devres doesn't free a
-still-registered bus (it either runs both callbacks, or none).
-
-Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: ed651a10875f ("ibmvnic: Updated reset handling")
+Reported-by: Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+Reviewed-by: Dany Madden <drt@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220208001918.900602-1-sukadev@linux.ibm.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/ocelot/seville_vsc9953.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/ibm/ibmvnic.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/dsa/ocelot/seville_vsc9953.c b/drivers/net/dsa/ocelot/seville_vsc9953.c
-index ca8c003b99bc5..05e4e75c01076 100644
---- a/drivers/net/dsa/ocelot/seville_vsc9953.c
-+++ b/drivers/net/dsa/ocelot/seville_vsc9953.c
-@@ -1111,7 +1111,7 @@ static int vsc9953_mdio_bus_alloc(struct ocelot *ocelot)
- 	snprintf(bus->id, MII_BUS_ID_SIZE, "%s-imdio", dev_name(dev));
+diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
+index 14a729ba737a8..cc5ab66a81850 100644
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -108,6 +108,7 @@ static int init_crq_queue(struct ibmvnic_adapter *adapter);
+ static int send_query_phys_parms(struct ibmvnic_adapter *adapter);
+ static void ibmvnic_tx_scrq_clean_buffer(struct ibmvnic_adapter *adapter,
+ 					 struct ibmvnic_sub_crq_queue *tx_scrq);
++static void ibmvnic_disable_irqs(struct ibmvnic_adapter *adapter);
  
- 	/* Needed in order to initialize the bus mutex lock */
--	rc = of_mdiobus_register(bus, NULL);
-+	rc = devm_of_mdiobus_register(dev, bus, NULL);
- 	if (rc < 0) {
- 		dev_err(dev, "failed to register MDIO bus\n");
+ struct ibmvnic_stat {
+ 	char name[ETH_GSTRING_LEN];
+@@ -1245,7 +1246,7 @@ static int __ibmvnic_open(struct net_device *netdev)
+ 	rc = set_link_state(adapter, IBMVNIC_LOGICAL_LNK_UP);
+ 	if (rc) {
+ 		ibmvnic_napi_disable(adapter);
+-		release_resources(adapter);
++		ibmvnic_disable_irqs(adapter);
  		return rc;
-@@ -1163,7 +1163,8 @@ static void vsc9953_mdio_bus_free(struct ocelot *ocelot)
- 		mdio_device_free(pcs->mdio);
- 		lynx_pcs_destroy(pcs);
  	}
--	mdiobus_unregister(felix->imdio);
+ 
+@@ -1295,7 +1296,6 @@ static int ibmvnic_open(struct net_device *netdev)
+ 		rc = init_resources(adapter);
+ 		if (rc) {
+ 			netdev_err(netdev, "failed to initialize resources\n");
+-			release_resources(adapter);
+ 			goto out;
+ 		}
+ 	}
+@@ -1312,6 +1312,11 @@ static int ibmvnic_open(struct net_device *netdev)
+ 		adapter->state = VNIC_OPEN;
+ 		rc = 0;
+ 	}
 +
-+	/* mdiobus_unregister and mdiobus_free handled by devres */
++	if (rc) {
++		release_resources(adapter);
++	}
++
+ 	return rc;
  }
  
- static const struct felix_info seville_info_vsc9953 = {
 -- 
 2.34.1
 

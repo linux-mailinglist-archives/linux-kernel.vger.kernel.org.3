@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFEF4CF57A
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 10:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6994CFA1C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237677AbiCGJ2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 04:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S241673AbiCGKK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236868AbiCGJZv (ORCPT
+        with ESMTP id S240476AbiCGJvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:25:51 -0500
+        Mon, 7 Mar 2022 04:51:03 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E505BE47;
-        Mon,  7 Mar 2022 01:24:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6D566233;
+        Mon,  7 Mar 2022 01:44:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 803DB6114E;
-        Mon,  7 Mar 2022 09:24:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BEA3C340E9;
-        Mon,  7 Mar 2022 09:24:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42B1D6116E;
+        Mon,  7 Mar 2022 09:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E73C340F3;
+        Mon,  7 Mar 2022 09:44:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646645046;
-        bh=kAINjm5pGm6Wwf2aRhnQzFP+7D9QNyq/bQgVTYYsAvo=;
+        s=korg; t=1646646277;
+        bh=fAJ+2iTmDQUbFg4aEvBcEPJGVGLafgqcagohjH7lv44=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IZYze5aSFu+COn8OKSqA4iV8tSvTURZnf/+q/ON77KN+YPxvE35NBS77V15xxeeoU
-         ca662nxUg6loBiES53MmUN4Wwo51WWqhfZA+8w9EKsab31lMnO98/iDL++HEJbaLi+
-         Gw/65Xl4ZIm1uUuasYEaly8C+ChfrlLFPg6FAOIc=
+        b=FgsFor4dr4n8rJbSuMUeEo450KkYNNGGLKaachF7ZK9o/9p47QDtxLvA8tjjTCpA8
+         KJCKwXbbFgqi00xkWLNlSNHkDLtMcN8P2skmLSK1cP1J/8qY5bI1nfepW75W8FaGZy
+         zx+SnwP7jLxgpwUO6HLHA9kTLcTtfmP9wPx73qS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 4.19 20/51] xfrm: enforce validity of offload input flags
+        stable@vger.kernel.org, Corinna Vinschen <vinschen@redhat.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.15 191/262] igc: igc_read_phy_reg_gpy: drop premature return
 Date:   Mon,  7 Mar 2022 10:18:55 +0100
-Message-Id: <20220307091637.564998502@linuxfoundation.org>
+Message-Id: <20220307091707.914540928@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
+References: <20220307091702.378509770@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Corinna Vinschen <vinschen@redhat.com>
 
-commit 7c76ecd9c99b6e9a771d813ab1aa7fa428b3ade1 upstream.
+commit fda2635466cd26ad237e1bc5d3f6a60f97ad09b6 upstream.
 
-struct xfrm_user_offload has flags variable that received user input,
-but kernel didn't check if valid bits were provided. It caused a situation
-where not sanitized input was forwarded directly to the drivers.
+igc_read_phy_reg_gpy checks the return value from igc_read_phy_reg_mdic
+and if it's not 0, returns immediately. By doing this, it leaves the HW
+semaphore in the acquired state.
 
-For example, XFRM_OFFLOAD_IPV6 define that was exposed, was used by
-strongswan, but not implemented in the kernel at all.
+Drop this premature return statement, the function returns after
+releasing the semaphore immediately anyway.
 
-As a solution, check and sanitize input flags to forward
-XFRM_OFFLOAD_INBOUND to the drivers.
-
-Fixes: d77e38e612a0 ("xfrm: Add an IPsec hardware offloading API")
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Fixes: 5586838fe9ce ("igc: Add code for PHY support")
+Signed-off-by: Corinna Vinschen <vinschen@redhat.com>
+Acked-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/xfrm.h |    6 ++++++
- net/xfrm/xfrm_device.c    |    6 +++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/igc/igc_phy.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/include/uapi/linux/xfrm.h
-+++ b/include/uapi/linux/xfrm.h
-@@ -504,6 +504,12 @@ struct xfrm_user_offload {
- 	int				ifindex;
- 	__u8				flags;
- };
-+/* This flag was exposed without any kernel code that supporting it.
-+ * Unfortunately, strongswan has the code that uses sets this flag,
-+ * which makes impossible to reuse this bit.
-+ *
-+ * So leave it here to make sure that it won't be reused by mistake.
-+ */
- #define XFRM_OFFLOAD_IPV6	1
- #define XFRM_OFFLOAD_INBOUND	2
- 
---- a/net/xfrm/xfrm_device.c
-+++ b/net/xfrm/xfrm_device.c
-@@ -153,6 +153,9 @@ int xfrm_dev_state_add(struct net *net,
- 	if (x->encap || x->tfcpad)
- 		return -EINVAL;
- 
-+	if (xuo->flags & ~(XFRM_OFFLOAD_IPV6 | XFRM_OFFLOAD_INBOUND))
-+		return -EINVAL;
-+
- 	dev = dev_get_by_index(net, xuo->ifindex);
- 	if (!dev) {
- 		if (!(xuo->flags & XFRM_OFFLOAD_INBOUND)) {
-@@ -190,7 +193,8 @@ int xfrm_dev_state_add(struct net *net,
- 
- 	xso->dev = dev;
- 	xso->num_exthdrs = 1;
--	xso->flags = xuo->flags;
-+	/* Don't forward bit that is not implemented */
-+	xso->flags = xuo->flags & ~XFRM_OFFLOAD_IPV6;
- 
- 	err = dev->xfrmdev_ops->xdo_dev_state_add(x);
- 	if (err) {
+--- a/drivers/net/ethernet/intel/igc/igc_phy.c
++++ b/drivers/net/ethernet/intel/igc/igc_phy.c
+@@ -779,8 +779,6 @@ s32 igc_read_phy_reg_gpy(struct igc_hw *
+ 		if (ret_val)
+ 			return ret_val;
+ 		ret_val = igc_read_phy_reg_mdic(hw, offset, data);
+-		if (ret_val)
+-			return ret_val;
+ 		hw->phy.ops.release(hw);
+ 	} else {
+ 		ret_val = igc_read_xmdio_reg(hw, (u16)offset, dev_addr,
 
 

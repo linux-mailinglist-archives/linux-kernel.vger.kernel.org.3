@@ -2,125 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE9C4CFFB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DFA4CFFB4
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 14:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238484AbiCGNNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 08:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
+        id S242780AbiCGNNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 08:13:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242837AbiCGNNG (ORCPT
+        with ESMTP id S241410AbiCGNN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:13:06 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B6F7C161;
-        Mon,  7 Mar 2022 05:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zdVOZSv8Dl1mXAQ3jsdVs/VHAcNFaHrMfeEDreIacvk=; b=AgoOurRk63K06dWCs+e44Y8/jF
-        eM9yU2YU08p7svHM8ZN8XgB7VLuYYVdQVo/NoVQXbilOJ/vd1K5HIj2BN5yrXIhM8tGDdy+9nmjl6
-        eIaM8XID73hFthDCP4PitHZ76yy0LAbr/st0TiMPnmFSEph/4i4WSYgy8p9gGKs8GLmED2oXWOnk2
-        rbTvNiZvjbhSjeFwKR+MJbJB4mWCi2Dl1tTq7oYtVZbCqJqSmoUUAdd8BVaWidg3czLC16cnuc79d
-        aC5TrhcJVC3KKNyxA79zZzkklPIsG0ZtcEbAWmNmM3E1a96IPONUXm0b2exw/3Vy+boowfZSlfaNA
-        WQe5VZiQ==;
-Received: from [187.56.66.217] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nRD9Z-0008j1-DB; Mon, 07 Mar 2022 14:11:57 +0100
-Message-ID: <e1033adc-46ff-5dbc-e739-1bf725b6fed0@igalia.com>
-Date:   Mon, 7 Mar 2022 10:11:41 -0300
+        Mon, 7 Mar 2022 08:13:29 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C931B26AF0;
+        Mon,  7 Mar 2022 05:12:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74BC6D6E;
+        Mon,  7 Mar 2022 05:12:34 -0800 (PST)
+Received: from [10.57.39.47] (unknown [10.57.39.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 574253F66F;
+        Mon,  7 Mar 2022 05:12:33 -0800 (PST)
+Message-ID: <b7a3e828-c848-2d42-9f91-d282b9c1ac9e@arm.com>
+Date:   Mon, 7 Mar 2022 13:12:29 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
-Content-Language: en-US
-To:     "bhe@redhat.com" <bhe@redhat.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        "d.hatayama@fujitsu.com" <d.hatayama@fujitsu.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
- <TYAPR01MB6507D06BA6D32218F6E88198955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
- <fda509a5-ea0d-4d1d-a1c1-ca5e80010fc0@igalia.com>
- <TYAPR01MB6507D9747647685B554B8F8F955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
- <fb5e66b6-049a-22ab-5913-a04cc302b629@igalia.com> <YfPxvzSzDLjO5ldp@alley>
- <73011b6f-084b-43f5-cc01-1818a8a57e56@igalia.com>
- <YiV/HbXftVF2iAvU@MiWiFi-R3L-srv>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YiV/HbXftVF2iAvU@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [BUG] crypto: ccree: driver does not handle case where cryptlen =
+ authsize =0
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     Gilad Ben-Yossef <gilad@benyossef.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux-foundation.org,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <CAOtvUMeoYcVm7OQdqXd1V5iPSXW_BkVxx6TA6nF7zTLVeHe0Ww@mail.gmail.com>
+ <CAOtvUMfy1fF35B2sfbOMui8n9Q4iCke9rgn5TiYMUMjd8gqHsA@mail.gmail.com>
+ <YhKV55t90HWm6bhv@Red>
+ <CAOtvUMdRU4wnRCXsC+U5XBDp+b+u8w7W7JCUKW2+ohuJz3PVhQ@mail.gmail.com>
+ <YhOcEQEjIKBrbMIZ@Red>
+ <CAOtvUMfN8U4+eG-TEVW4bSE6kOzuOSsJE4dOYGXYuWQKNzv7wQ@mail.gmail.com>
+ <CAOtvUMeRb=j=NDrc88x8aB-3=D1mxZ_-aA1d4FfvJmj7Jrbi4w@mail.gmail.com>
+ <YiIUXtxd44ut5uzV@Red> <YiUsWosH+MKMF7DQ@gondor.apana.org.au>
+ <CAOtvUMcudG3ySU+VeE7hfneDVWGLKFTnws-xjhq4hgFYSj0qOg@mail.gmail.com>
+ <YiXjCcXXk0f18FDL@Red> <aca4117c-b7a5-f7eb-eb03-4e1f1a93a730@arm.com>
+ <CAOtvUMePFR4e2jgHZKOvs3J3Xt4NzRbzD_=vr_49Qgs5HTrvHw@mail.gmail.com>
+ <6cf91f43-df23-3ac9-e9b5-958d99d37422@arm.com>
+ <CAOtvUMedqSNKx9Aah0R_aAyjKO0pn4K75MrCnbh_zX+Zw9vRQA@mail.gmail.com>
+ <371ef3f2-883d-91ab-ed96-da8921efb465@arm.com>
+In-Reply-To: <371ef3f2-883d-91ab-ed96-da8921efb465@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 00:42, bhe@redhat.com wrote:
-> [...]
->> Let me know your thoughts Petr / Baoquan - it would add slightly more
->> code / complexity, but in my opinion the payback is very good.
->> Cheers,
+On 2022-03-07 13:03, Robin Murphy wrote:
+> On 2022-03-07 12:47, Gilad Ben-Yossef wrote:
+>> On Mon, Mar 7, 2022 at 2:36 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>>>
+>>> On 2022-03-07 12:17, Gilad Ben-Yossef wrote:
+>>>> On Mon, Mar 7, 2022 at 1:14 PM Robin Murphy <robin.murphy@arm.com> 
+>>>> wrote:
+>>>>
+>>>>> The "overlap" is in the sense of having more than one mapping 
+>>>>> within the
+>>>>> same cacheline:
+>>>>>
+>>>>> [  142.458120] DMA-API: add_dma_entry start P=ba79f200 N=ba79f
+>>>>> D=ba79f200 L=10 DMA_FROM_DEVICE attrs=0
+>>>>> [  142.458156] DMA-API: add_dma_entry start P=445dc010 N=445dc
+>>>>> D=445dc010 L=10 DMA_TO_DEVICE attrs=0
+>>>>> [  142.458178] sun8i-ss 1c15000.crypto: SRC 0/1/1 445dc000 len=16 bi=0
+>>>>> [  142.458215] sun8i-ss 1c15000.crypto: DST 0/1/1 ba79f200 len=16 bi=0
+>>>>> [  142.458234] DMA-API: add_dma_entry start P=ba79f210 N=ba79f
+>>>>> D=ba79f210 L=10 DMA_FROM_DEVICE attrs=0
+>>>>>
+>>>>> This actually illustrates exactly the reason why this is 
+>>>>> unsupportable.
+>>>>> ba79f200 is mapped for DMA_FROM_DEVICE, therefore subsequently mapping
+>>>>> ba79f210 for DMA_TO_DEVICE may cause the cacheline covering the range
+>>>>> ba79f200-ba79f23f to be written back over the top of data that the
+>>>>> device has already started to write to memory. Hello data corruption.
+>>>>>
+>>>>> Separate DMA mappings should be from separate memory allocations,
+>>>>> respecting ARCH_DMA_MINALIGN.
+>>>>
+>>>> hmm... I know I'm missing something here, but how does this align with
+>>>> the following from active_cacheline_insert() in kernel/dma/debug.c ?
+>>>>
+>>>>           /* If the device is not writing memory then we don't have any
+>>>>            * concerns about the cpu consuming stale data.  This 
+>>>> mitigates
+>>>>            * legitimate usages of overlapping mappings.
+>>>>            */
+>>>>           if (entry->direction == DMA_TO_DEVICE)
+>>>>                   return 0;
+>>>
+>>> It's OK to have multiple mappings that are *all* DMA_TO_DEVICE, which
+>>> looks to be the case that this check was intended to allow. However I
+>>> think you're right that it should still actually check for conflicting
+>>> directions between the new entry and any existing ones, otherwise it
+>>> ends up a bit too lenient.
+>>>
+>>> Cheers,
+>>> Robin.
+>>
+>> I understand what you are saying about why checking for conflicting
+>> directions may be a good thing, but given that the code is as it is
+>> right now, how are we seeing the warning for two mapping that one of
+>> them is DMA_TO_DEVICE?
 > 
-> The ideal situation is each panic notifier has an order or index to
-> indicate its priority. Wondering how to make it. What I think of is
-> copying initcall. We have several priorities, at the same priority,
-> execution sequence is not important. Not sure if I get your point.
-> 
-> ~~~~~~~
-> #define core_initcall(fn)               __define_initcall(fn, 1)
-> #define core_initcall_sync(fn)          __define_initcall(fn, 1s)
-> ......
-> #define late_initcall(fn)               __define_initcall(fn, 7)
-> #define late_initcall_sync(fn)          __define_initcall(fn, 7s)
-> 
+> Because it's the second one that isn't. The warning is triggered by 
+> adding the DMA_FROM_DEVICE entry, which *is* checked, and finds the 
+> DMA_TO_DEVICE entry already present. What's not great is that if those 
+> two mappings happened to be made in the opposite order then it would be 
+> missed entirely.
 
-Hi Baoquan, thanks for you consideration! In fact, the notifiers
-infrastructure already have a mechanism of ordering, my idea is to make
-use of that. It's not that different from the initcall system...
+Urgh, no, sorry, that's some imaginary conflation of the cacheline radix 
+tree with the entry hash bucket...
 
-For instance, the code in the notifier register function checks for the
-priority field in the notifier block:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/notifier.c#n31
-.
+What's actually happened here is that I've failed to read the log 
+properly and they're both DMA_FROM_DEVICE. But the potential problem of 
+mixed-direction mappings being missed does still stand in general.
 
-For example, the Xen panic notifier is one of the few blocks that make
-use of that, currently:
-
-static struct notifier_block xen_panic_block = {
-	.notifier_call = xen_panic_event,
-	.priority = INT_MIN
-};
-
-(see
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/xen/enlighten.c#n286)
-
-In this case, xen_panic_event() will be the latest one to run. My idea
-is to make use of that in *all* panic notifiers, having a table/list on
-panic_notifier.h (defines or enum, I'll think about that when writing
-this part) so all notifiers are documented and the ordering is clear and
-enforced.
-
-Makes sense to you?
-Cheers,
-
-
-Guilherme
+Robin.

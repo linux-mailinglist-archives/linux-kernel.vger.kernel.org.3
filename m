@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C584D0BBB
+	by mail.lfdr.de (Postfix) with ESMTP id 6121E4D0BBC
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 00:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343896AbiCGXK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 18:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S239464AbiCGXKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 18:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236037AbiCGXKZ (ORCPT
+        with ESMTP id S245702AbiCGXKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 18:10:25 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC22DFD08;
-        Mon,  7 Mar 2022 15:09:30 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id BCAF992009C; Tue,  8 Mar 2022 00:09:28 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B5C4A92009B;
-        Mon,  7 Mar 2022 23:09:28 +0000 (GMT)
-Date:   Mon, 7 Mar 2022 23:09:28 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Mike Rapoport <rppt@kernel.org>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] MIPS: Refactor early_parse_mem() to fix mem=
- parameter
-In-Reply-To: <YiaCH6UsQZSbnNHd@kernel.org>
-Message-ID: <alpine.DEB.2.21.2203072252300.47558@angie.orcam.me.uk>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <1646108941-27919-2-git-send-email-yangtiezhu@loongson.cn> <20220304151052.GA27642@alpha.franken.de> <20220304153517.GA28487@alpha.franken.de> <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
- <20220307162909.GA18728@alpha.franken.de> <YiaCH6UsQZSbnNHd@kernel.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Mon, 7 Mar 2022 18:10:37 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72EB31526;
+        Mon,  7 Mar 2022 15:09:42 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id k8-20020a05600c1c8800b003899c7ac55dso342372wms.1;
+        Mon, 07 Mar 2022 15:09:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Irknw6RQZUFdI9aXxc+3L26hKyaP/zkHhWNuLVXeO0o=;
+        b=dfbKY+mnDGP4mJ8Za885HhOBk9DHTkBTNOFC/iNhyD8vE9thA6b2Mw/2+K5Pw5Bn4i
+         qyaFa02sE9zEqane//Kv7zLPm3r5D50IUnPtc9BaBPKTT8nn1a5wlJaAuljWmZHGBBlR
+         4wIPjzPRcKY3USfEdPZbtbkeFjmHmY13aSLPP8xOOl72d2XaWk4D+YU7co/9214pyqBg
+         VYZ/XwyKJlGuPrYpyaGFXuJQ0rKd/SXI9ILBjHZUQfKCsqLCGBms/OHKOPH+jWuHSMgb
+         WmwQWkIhwO2/NzY5fRpucmVGOdZV+2cndyJVfVJAZqNOn52a0lT6sDvzEhNOT7C59s6G
+         /VQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Irknw6RQZUFdI9aXxc+3L26hKyaP/zkHhWNuLVXeO0o=;
+        b=6YL7xuD4N5UlTak/V5dJi2J+8ciAZNuOxrmdmoEts/EIkYXgmdBJX3/ml7BxhFPPKv
+         5n1SGtBUuXJfxmlmwAMQy+X+EIJ0jLbiNN7EGsnmHRe6g6YW+0y4GN6A8xS204Da5Qx1
+         kMBPbXSrE5p9VIkdF2nLaoPbimdXYRN5kYlsRPAQOpK0J/kmQ+QIkjUrq5y/6OgtF3bn
+         SDpjHV8+gQJ9gSIpFAfCBxLJF6+e8NHabSfIe7sJBun4irUFsuKO6ZB3wXhtCiyCZX0b
+         +6U9YhpmC9/6pbr+2ONvgorP4LNtsU+grnPSUMv1PSZUDcEtXzAX9uetCi410tWbNxV1
+         wC9g==
+X-Gm-Message-State: AOAM5333GAFcKVYfKBDQ69jbfagJMuX3YGlVHarcH1hmjRBYgihOtKsX
+        olvIBTWaSZ6Ele8EbUKD13s=
+X-Google-Smtp-Source: ABdhPJyUVoSvxkCc+Dedh2m8q/S7kd59ABqP8cYxYRUUL2GD9oC3GwI2gz1/0P2Mqn1+Cwj2/nC1+Q==
+X-Received: by 2002:a1c:35c9:0:b0:37b:edec:4d88 with SMTP id c192-20020a1c35c9000000b0037bedec4d88mr1015533wma.159.1646694581283;
+        Mon, 07 Mar 2022 15:09:41 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a14-20020a05600c348e00b00389ab74c033sm566569wmq.4.2022.03.07.15.09.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 15:09:40 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] mtd: nand: mxic-ecc: make two read-only arrays static const
+Date:   Mon,  7 Mar 2022 23:09:40 +0000
+Message-Id: <20220307230940.169235-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022, Mike Rapoport wrote:
+Don't populate the read-only arrays possible_strength and
+spare_size on the stack but instead make them static
+const. Also makes the object code a little smaller.
 
-> > So can I just limit amount of memory without interfering with normal
-> > memory detection ?
-> 
-> Maybe it's better to add a new encoding to mem= that will have the semantics
-> of limiting amount of memory?
-> 
-> E.g.
-> 
-> mem=384M@
-> 
-> would mean "only use 384M of memory that firmware reported" while
-> 
-> mem=384M would mean "set memory to 0 - 384M" as it does now.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/mtd/nand/ecc-mxic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- I think you're going in the right direction, we'd just need to sort out 
-the most reasonable syntax for the new semantics; `mem=384M@' just seems 
-too analogous to me to `mem=384M@0'.  Maybe `mem=384M-'?
+diff --git a/drivers/mtd/nand/ecc-mxic.c b/drivers/mtd/nand/ecc-mxic.c
+index c122139255e5..8afdca731b87 100644
+--- a/drivers/mtd/nand/ecc-mxic.c
++++ b/drivers/mtd/nand/ecc-mxic.c
+@@ -224,8 +224,8 @@ static int mxic_ecc_init_ctx(struct nand_device *nand, struct device *dev)
+ 	struct nand_ecc_props *user = &nand->ecc.user_conf;
+ 	struct mtd_info *mtd = nanddev_to_mtd(nand);
+ 	int step_size = 0, strength = 0, desired_correction = 0, steps, idx;
+-	int possible_strength[] = {4, 8, 40, 48};
+-	int spare_size[] = {32, 32, 96, 96};
++	static const int possible_strength[] = {4, 8, 40, 48};
++	static const int spare_size[] = {32, 32, 96, 96};
+ 	struct mxic_ecc_ctx *ctx;
+ 	u32 spare_reg;
+ 	int ret;
+-- 
+2.35.1
 
- NB that would have to work with the existing overrides, for e.g.:
-
-`mem=192M@0 mem=192M@256M mem=384M-'
-
-to produce the following memory ranges available for use:
-
-  Normal   [mem 0x0000000000000000-0x000000000bffffff]
-  Normal   [mem 0x0000000010000000-0x0000000017ffffff]
-
-(so that you can paste the final cap at some command prompt and still have 
-earlier parameters respected that may have been passed by the firmware or 
-bootloader, or built in).
-
-  Maciej

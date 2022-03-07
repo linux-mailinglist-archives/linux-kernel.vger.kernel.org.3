@@ -2,229 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A954D06B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1074D06BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 19:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244820AbiCGSkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 13:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
+        id S241272AbiCGSlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 13:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238835AbiCGSku (ORCPT
+        with ESMTP id S241217AbiCGSlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:40:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E14024D632
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:39:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646678394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ZYITTVdz5E4+MP8QXGV8rdQvoNIDdLo/xFs/aMEjrI=;
-        b=Ue/uiHYWByMxQmXTJK1ir1dy3J1MVsGs8DTYJDRpYuwGfXV3nZpvipfQZ5Vdf0gg6zCSju
-        UQeVzTcd7cKPfdR993gSVnF8ttzXlFU8hciIKqDltvWXbiltvSD0mbqQHdqHrZTtosqqOH
-        86chIa6SZv/0sCtlP8hE+vW7p+1Qbwc=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-etA_oSiFMu60eqM6T6YIpA-1; Mon, 07 Mar 2022 13:39:53 -0500
-X-MC-Unique: etA_oSiFMu60eqM6T6YIpA-1
-Received: by mail-pl1-f197.google.com with SMTP id e7-20020a170902ef4700b00151de30039bso2229044plx.17
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 10:39:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9ZYITTVdz5E4+MP8QXGV8rdQvoNIDdLo/xFs/aMEjrI=;
-        b=0rgl4NP5r+vs44QDyMs81MJjdl2Rix/CGz48B7y3GTZagJLRLsu6JdkqujKShF9zhl
-         GYi0hMnuxnPn7Hp9SqMbn5PRXQ1arY3l76TqCPtyjgW6CDu/fcy/O3eLFVBmjHRRe/wq
-         VYxpsXMprb8vaqxkouifU0VPbW2rJCoUyJ6j6DNWLYqTLFz6IEK6ULSaB8gjqQZWdjoJ
-         2YrwqN3aV3jFCKyQy8mWfYKBbrCHJSoLp0IRDgfvg2pX2yyBeVFTV/PDfcQQ3t03MrrT
-         nzy+Fv7+NX1d82nrQ30GNHCSg23dmj2rrFJlnIjr2+yZQJ8IC5ikA6L8I7L5kJNUSQzM
-         sHvw==
-X-Gm-Message-State: AOAM532Ju4I8saAvLsB02wPstE5jQMiIwM+w5/HId12OLjpUXqbcI3rS
-        02z8e9xWsNtGErPJ7IbF1cslirQjHR5qqejWoC53JrgqtBhJMsm1c6jpUhTJWoNcz+M3LMnL8m7
-        1WTOJHihLXQD1T0r1hThODTHyn2GbDvhg4YHDuT4Y
-X-Received: by 2002:a17:90a:dac2:b0:1bd:fecf:6bd1 with SMTP id g2-20020a17090adac200b001bdfecf6bd1mr301663pjx.113.1646678391742;
-        Mon, 07 Mar 2022 10:39:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzDDHIBz07WN3CzLDgk3mGB0kBAncDY+MW2K8mom6cbKR7neISU8OXSB6QzhoWCCgjgI/vefNzYDogresVc6J4=
-X-Received: by 2002:a17:90a:dac2:b0:1bd:fecf:6bd1 with SMTP id
- g2-20020a17090adac200b001bdfecf6bd1mr301626pjx.113.1646678391376; Mon, 07 Mar
- 2022 10:39:51 -0800 (PST)
+        Mon, 7 Mar 2022 13:41:04 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2EC74848
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 10:40:09 -0800 (PST)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220307184007epoutp02b547532c67d58767a862c3376beac517~aLUmPqaz81277812778epoutp02m
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:40:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220307184007epoutp02b547532c67d58767a862c3376beac517~aLUmPqaz81277812778epoutp02m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646678407;
+        bh=eiDqlXkyLxJk7tUavFB6NBVRulB8atwBogOljjBUCeI=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=kcmFqyEZA54asLw4qnDChdVqZpyesCNpmNLlS/xHvKGPW85ozW5rcE+tfjxnb1z9A
+         prj+oYY/QFIbzW+atb1MmzTYBGJ9w1cW8MERDDQkGGcWdyyLrXQsGida08ZvbvbmYv
+         ZU3aHon++MMr94JO31p0z68ivW/T0ejf4gdsAWq0=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220307184006epcas5p435cd41207507bc414337f86a13ef33ac~aLUlYqroB1486114861epcas5p4C;
+        Mon,  7 Mar 2022 18:40:06 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4KC6hK2Kycz4x9Pt; Mon,  7 Mar
+        2022 18:40:01 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        75.DD.46822.FCE46226; Tue,  8 Mar 2022 03:28:31 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220307184000epcas5p4e57a7bc3e82124d1018167e63c3960d0~aLUfI-jfF2748727487epcas5p43;
+        Mon,  7 Mar 2022 18:40:00 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220307184000epsmtrp2f4368f8a7c713a60fdf675c9c3c5d4cc~aLUfIEoRQ1421214212epsmtrp2d;
+        Mon,  7 Mar 2022 18:40:00 +0000 (GMT)
+X-AuditID: b6c32a4a-dfbff7000000b6e6-a9-62264ecf32c0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.17.03370.F7156226; Tue,  8 Mar 2022 03:39:59 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220307183957epsmtip1d83677fad9d10a49385889fb09c9081f~aLUck0svH1520315203epsmtip1U;
+        Mon,  7 Mar 2022 18:39:57 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Avri Altman'" <avri.altman@wdc.com>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Andy Gross'" <agross@kernel.org>,
+        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
+        "'Wei Xu'" <xuwei5@hisilicon.com>,
+        "'Matthias Brugger'" <matthias.bgg@gmail.com>,
+        "'Jan Kotas'" <jank@cadence.com>, "'Li Wei'" <liwei213@huawei.com>,
+        "'Stanley Chu'" <stanley.chu@mediatek.com>,
+        "'Vignesh Raghavendra'" <vigneshr@ti.com>,
+        <linux-scsi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Cc:     "'Rob Herring'" <robh@kernel.org>
+In-Reply-To: <20220306111125.116455-3-krzysztof.kozlowski@canonical.com>
+Subject: RE: [PATCH v3 02/12] dt-bindings: ufs: samsung,exynos-ufs: use
+ common bindings
+Date:   Tue, 8 Mar 2022 00:09:56 +0530
+Message-ID: <000501d83252$c0094650$401bd2f0$@samsung.com>
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-3-benjamin.tissoires@redhat.com> <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
-In-Reply-To: <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 7 Mar 2022 19:39:40 +0100
-Message-ID: <CAO-hwJKFE4Ps962BBubn8=1K0k9mC2qi8VerFbZo1sqpp6yekg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/28] bpf: introduce hid program type
-To:     Song Liu <song@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHMSLK+HcMgkjgstDaV74uAa2rDeQFlagdDAil/trGsr5wPEA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCJsWRmVeSWpSXmKPExsWy7bCmuu55P7Ukg2e3uCzOPf7NYvHy51U2
+        i9P737FYzD9yjtWi+3imxca3P5gsNj2+xmoxcf9ZdovLu+awWVxuvshoMeP8PiaL7us72Cz+
+        zjnCaNHUYmzRuvcIu8X/PTvYLZZuvclo8f/sB3aLJ0enMDsIe6zpfM3kMauhl81j56y77B6P
+        525k92g58pbVY9OqTjaPO9f2sHlsXlLv0XJyP4vH8RvbmTw+b5LzaD/QzRTAE5Vtk5GamJJa
+        pJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQP0opJCWWJOKVAoILG4
+        WEnfzqYov7QkVSEjv7jEVim1ICWnwKRArzgxt7g0L10vL7XEytDAwMgUqDAhO2PRxn1sBdNE
+        Km7NZ21g7BbsYuTkkBAwkbi4rY+pi5GLQ0hgN6PEr90X2CCcT4wSSx7eZ4FwPjNKHLj0jx2m
+        ZeeOecwgtpDALkaJL5OjIIpeMko8mPGBESTBJqArsWNxGxuILSJwkVXi3kl9EJtZQFVizp9f
+        YM2cAh4Sl85+B6sXFoiUOP1pMlg9i4CKxORVs1hAbF4BS4lVm/6wQ9iCEidnPmGBmCMvsf3t
+        HGaIgxQkfj5dxgqxy0liRdMiNogacYmXR4+wgxwnITCfU2LvmqOsEA0uEpvfHWKBsIUlXh3f
+        AvWZlMTnd3uBmjmA7GyJnl3GEOEaiaXzjkGV20scuDKHBaSEWUBTYv0uqLf4JHp/P2GC6OSV
+        6GgTgqhWlWh+dxWqU1piYnc31AEeEkcnr2aewKg4C8ljs5A8NgvJA7MQli1gZFnFKJlaUJyb
+        nlpsWmCUl1oOj+3k/NxNjODkr+W1g/Hhgw96hxiZOBgPMUpwMCuJ8N4/r5IkxJuSWFmVWpQf
+        X1Sak1p8iNEUGNoTmaVEk/OB+SevJN7QxNLAxMzMzMTS2MxQSZz3dPqGRCGB9MSS1OzU1ILU
+        Ipg+Jg5OqQamHQZ/2WeUf018EBpzwFrt/ZeqJa8OHHVfbP2Ae2Fmp/C0huP1RqkMsUEzFz4/
+        vs7gnt7UZU6LH9xQPJietO/tdkfmYr6F+oFOkpf67s07L3clKOxXbZOu/MSw2THHwxMSbzMs
+        XRzAEMbg9XWeCmtDBLtqQRqLX0nI06eLy3Wvf7wi8K7O0vvnA+/WQ4++LVouw/h4g9AUY40a
+        DYePa1Qyolr8XPhXdqZM2BPPf27zijsWe77Z9V8Oa1seX6UVGVW8Yh73K1VBg8d2X4v9TkQu
+        PbV5ysvStdM2zV+fZf74fIjb9/PcaiY1/gtKTh073DyN9zirCE/TjmknJz1tr9h0P93l7MaY
+        w8kscQe2Xo3yU2Ipzkg01GIuKk4EAC0hLGCHBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLIsWRmVeSWpSXmKPExsWy7bCSnG59oFqSwaltVhbnHv9msXj58yqb
+        xen971gs5h85x2rRfTzTYuPbH0wWmx5fY7WYuP8su8XlXXPYLC43X2S0mHF+H5NF9/UdbBZ/
+        5xxhtGhqMbZo3XuE3eL/nh3sFku33mS0+H/2A7vFk6NTmB2EPdZ0vmbymNXQy+axc9Zddo/H
+        czeye7QcecvqsWlVJ5vHnWt72Dw2L6n3aDm5n8Xj+I3tTB6fN8l5tB/oZgrgieKySUnNySxL
+        LdK3S+DKWLRxH1vBNJGKW/NZGxi7BbsYOTkkBEwkdu6Yx9zFyMUhJLCDUWL2ybWMEAlpiesb
+        J7BD2MISK/89B7OFBJ4zSpw7UwliswnoSuxY3MYG0iwi8JBVYuXVWSwgCWYBVYk5f35BTb3K
+        KPFm/0Kwbk4BD4lLZ7+DbRAWCJfY+XYNK4jNIqAiMXkVRDOvgKXEqk1/2CFsQYmTM58AxTmA
+        hupJtG1khJgvL7H97RxmiOMUJH4+XQY2RkTASWJF0yI2iBpxiZdHj7BPYBSehWTSLIRJs5BM
+        moWkYwEjyypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k/NxNjOAUoKW1g3HPqg96hxiZOBgP
+        MUpwMCuJ8N4/r5IkxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwT
+        B6dUA1PWJ5VXPpnbLvT1uzLtVz4Vdvu5jsen2xuCXQwYoiufPJhgXav59+FDrcOdL/WiZnKx
+        yWQtPSboWvvYTqnJSYNRfoIYk9BfzcfvNrQ3qlxdXzIxkpf9gMqvmpl8zGentGxgu1Ly4HBA
+        9c3ghadu9G2U+V8nxPzQSfjHlilbdzI9qHt11itm9s5zP9IENP7HGbf7nXK58CBLXkW08fzz
+        orTwibYXkt+Zb9tY8i3gTqb7eenF98MLu6vOGj7/z+X5e23SnqhzbipZR0O/tvI470//tWTV
+        w6Nljz6m8bW92ctif3zvi3Op+lsDP5s/CZv2a0dPyKqVByKCuLtZOU/HnzZksM7XqetvWHyn
+        75xPcKwSS3FGoqEWc1FxIgCA8KoHcAMAAA==
+X-CMS-MailID: 20220307184000epcas5p4e57a7bc3e82124d1018167e63c3960d0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220306111139epcas5p17c8aa66853ef371e7486aa64ea89b484
+References: <20220306111125.116455-1-krzysztof.kozlowski@canonical.com>
+        <CGME20220306111139epcas5p17c8aa66853ef371e7486aa64ea89b484@epcas5p1.samsung.com>
+        <20220306111125.116455-3-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 5, 2022 at 1:03 AM Song Liu <song@kernel.org> wrote:
+
+
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+>Sent: Sunday, March 6, 2022 4:41 PM
+>To: Alim Akhtar <alim.akhtar@samsung.com>; Avri Altman
+><avri.altman@wdc.com>; Rob Herring <robh+dt@kernel.org>; Krzysztof
+>Kozlowski <krzysztof.kozlowski@canonical.com>; Andy Gross
+><agross@kernel.org>; Bjorn Andersson <bjorn.andersson@linaro.org>; Wei
+>Xu <xuwei5@hisilicon.com>; Matthias Brugger <matthias.bgg@gmail.com>;
+>Jan Kotas <jank@cadence.com>; Li Wei <liwei213@huawei.com>; Stanley Chu
+><stanley.chu@mediatek.com>; Vignesh Raghavendra <vigneshr@ti.com>;
+>linux-scsi@vger.kernel.org; devicetree@vger.kernel.org; linux-
+>kernel@vger.kernel.org; linux-arm-msm@vger.kernel.org; linux-arm-
+>kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+>mediatek@lists.infradead.org
+>Cc: Rob Herring <robh@kernel.org>
+>Subject: [PATCH v3 02/12] dt-bindings: ufs: samsung,exynos-ufs: use common
+>bindings
 >
-> On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > HID is a protocol that could benefit from using BPF too.
+>Use common UFS bindings in Samsung Exynos UFS to cover generic/common
+>properties in DTS.
 >
-> [...]
+>Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>Reviewed-by: Rob Herring <robh@kernel.org>
+>---
+
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+> .../devicetree/bindings/ufs/samsung,exynos-ufs.yaml | 13 ++++---------
+> 1 file changed, 4 insertions(+), 9 deletions(-)
 >
-> > +#include <linux/list.h>
-> > +#include <linux/slab.h>
-> > +
-> > +struct bpf_prog;
-> > +struct bpf_prog_array;
-> > +struct hid_device;
-> > +
-> > +enum bpf_hid_attach_type {
-> > +       BPF_HID_ATTACH_INVALID = -1,
-> > +       BPF_HID_ATTACH_DEVICE_EVENT = 0,
-> > +       MAX_BPF_HID_ATTACH_TYPE
+>diff --git a/Documentation/devicetree/bindings/ufs/samsung,exynos-
+>ufs.yaml b/Documentation/devicetree/bindings/ufs/samsung,exynos-
+>ufs.yaml
+>index 95ac1c18334d..c949eb617313 100644
+>--- a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+>+++ b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+>@@ -11,12 +11,11 @@ maintainers:
 >
-> Is it typical to have different BPF programs for different attach types?
-> Otherwise, (different types may have similar BPF programs), maybe
-> we can pass type as an argument to the program (shared among
-> different types)?
-
-Not quite sure I am entirely following you, but I consider the various
-attach types to be quite different and thus you can not really reuse
-the same BPF program with 2 different attach types.
-
-In my view, we have 4 attach types:
-- BPF_HID_ATTACH_DEVICE_EVENT: called whenever we receive an IRQ from
-the given device (so this is net-like event stream)
-- BPF_HID_ATTACH_RDESC_FIXUP: there can be only one of this type, and
-this is called to change the device capabilities. So you can not reuse
-the other programs for this one
-- BPF_HID_ATTACH_USER_EVENT: called explicitly by the userspace
-process owning the program. There we can use functions that are
-sleeping (we are not in IRQ context), so this is also fundamentally
-different from the 3 others.
-- BPF_HID_ATTACH_DRIVER_EVENT: whenever the driver gets called into,
-we get a bpf program run. This can be suspend/resume, or even specific
-request to the device (change a feature on the device or get its
-current state). Again, IMO fundamentally different from the others.
-
-So I'm open to any suggestions, but if we can keep the userspace API
-being defined with different SEC in libbpf, that would be the best.
-
+> description: |
+>   Each Samsung UFS host controller instance should have its own node.
+>-  This binding define Samsung specific binding other then what is used
+>-  in the common ufshcd bindings
+>-  [1] Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
 >
-> [...]
+>-properties:
+>+allOf:
+>+  - $ref: ufs-common.yaml
 >
-> > +struct hid_device;
-> > +
-> > +enum hid_bpf_event {
-> > +       HID_BPF_UNDEF = 0,
-> > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
-> > +};
-> > +
-> > +struct hid_bpf_ctx {
-> > +       enum hid_bpf_event type;        /* read-only */
-> > +       __u16 allocated_size;           /* the allocated size of data below (RO) */
+>+properties:
+>   compatible:
+>     enum:
+>       - samsung,exynos7-ufs
+>@@ -47,9 +46,6 @@ properties:
+>       - const: core_clk
+>       - const: sclk_unipro_main
 >
-> There is a (6-byte?) hole here.
+>-  interrupts:
+>-    maxItems: 1
+>-
+>   phys:
+>     maxItems: 1
 >
-> > +       struct hid_device *hdev;        /* read-only */
-> > +
-> > +       __u16 size;                     /* used size in data (RW) */
-> > +       __u8 data[];                    /* data buffer (RW) */
-> > +};
+>@@ -67,13 +63,12 @@ properties:
+> required:
+>   - compatible
+>   - reg
+>-  - interrupts
+>   - phys
+>   - phy-names
+>   - clocks
+>   - clock-names
 >
-> Do we really need hit_bpf_ctx in uapi? Maybe we can just use it
-> from vmlinuxh?
-
-I had a thought at this context today, and I think I am getting to the
-limit of what I understand.
-
-My first worry is that the way I wrote it there, with a variable data
-field length is that this is not forward compatible. Unless BTF and
-CORE are making magic, this will bite me in the long run IMO.
-
-But then, you are talking about not using uapi, and I am starting to
-wonder: am I doing the things correctly?
-
-To solve my first issue (and the weird API I had to introduce in the
-bpf_hid_get/set_data), I came up to the following:
-instead of exporting the data directly in the context, I could create
-a helper bpf_hid_get_data_buf(ctx, const uint size) that returns a
-RET_PTR_TO_ALLOC_MEM_OR_NULL in the same way bpf_ringbuf_reserve()
-does.
-
-This way, I can directly access the fields within the bpf program
-without having to worry about the size.
-
-But now, I am wondering whether the uapi I defined here is correct in
-the way CORE works.
-
-My goal is to have HID-BPF programs to be CORE compatible, and not
-have to recompile them depending on the underlying kernel.
-
-I can not understand right now if I need to add some other BTF helpers
-in the same way the access to struct xdp_md and struct xdp_buff are
-converted between one and other, or if defining a forward compatible
-struct hid_bpf_ctx is enough.
-As far as I understand, .convert_ctx_access allows to export a stable
-uapi to the bpf prog users with the verifier doing the conversion
-between the structs for me. But is this really required for all the
-BPF programs if we want them to be CORE?
-
-Also, I am starting to wonder if I should not hide fields in the
-context to the users. The .data field could be a pointer and only
-accessed through the helper I mentioned above. This would be forward
-compatible, and also allows to use whatever available memory in the
-kernel to be forwarded to the BPF program. This way I can skip the
-memcpy part and work directly with the incoming dma data buffer from
-the IRQ.
-
-But is it best practice to do such a thing?
-
-Cheers,
-Benjamin
-
+>-additionalProperties: false
+>+unevaluatedProperties: false
 >
-> [...]
->
-> > +
-> > +static bool hid_is_valid_access(int off, int size,
-> > +                               enum bpf_access_type access_type,
-> > +                               const struct bpf_prog *prog,
-> > +                               struct bpf_insn_access_aux *info)
-> > +{
-> > +       /* everything not in ctx is prohibited */
-> > +       if (off < 0 || off + size > sizeof(struct hid_bpf_ctx) + HID_BPF_MIN_BUFFER_SIZE)
-> > +               return false;
->
-> Mabe add the following here to fail unaligned accesses
->
->         if (off % size != 0)
->                 return false;
-> [...]
->
+> examples:
+>   - |
+>--
+>2.32.0
+
 

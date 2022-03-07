@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAC54CF9EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0A44CFB0B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240975AbiCGKJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:09:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S240078AbiCGK0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240434AbiCGJvB (ORCPT
+        with ESMTP id S240276AbiCGKGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:51:01 -0500
+        Mon, 7 Mar 2022 05:06:40 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B5075601;
-        Mon,  7 Mar 2022 01:44:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5E7EB30;
+        Mon,  7 Mar 2022 01:52:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1197B80F9F;
-        Mon,  7 Mar 2022 09:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212B1C340E9;
-        Mon,  7 Mar 2022 09:44:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C2A2B8102B;
+        Mon,  7 Mar 2022 09:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09AACC340F4;
+        Mon,  7 Mar 2022 09:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646274;
-        bh=153pYkbNtQ6uMiWjTVZzDEHbjE1/6jBFe2d7OnN+QNo=;
+        s=korg; t=1646646740;
+        bh=utN3Mg+TcaVZU78y1E4spj9075o+Spo/CeMcNVraL58=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BR3AqG2/hCy/Ue0katcBtD5aRWOdp/zEWGfFpy3Q5cjGmc71Ik4i53VZrB0a54M80
-         rnhf6b3AU8NFpqDZd0Qeq3UglSocNxZ5XlElWMBEHbSdPJv12m1ltSfuQvY9N01p2C
-         LDLO/eHPEjwf2FEU3+61kIfEtwtyhKFU6yjfVoms=
+        b=g1+vdAPwcuBfB3wzjGHMeGhXLbQW9N++LvjL4v2A0kVBY4kZdBVEpFPJsujs6MwpL
+         Hmx+sPyZ0VWhE2mNWo1hFEiVI+T1hyzfS98yEs1EFWsvIrtdyIKw6GnE1Hww5QiWuE
+         cDW1DUWKL1QfFiPox3sRe2xWMqKVoMSJpv+NADB4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Remi Pommarel <repk@triplefau.lt>,
-        Nicolas Escande <nico.escande@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.15 173/262] mac80211: fix forwarded mesh frames AC & queue selection
+        stable@vger.kernel.org, Johannes Nixdorf <j.nixdorf@avm.de>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 079/186] net: ipv6: ensure we call ipv6_mc_down() at most once
 Date:   Mon,  7 Mar 2022 10:18:37 +0100
-Message-Id: <20220307091707.304983012@linuxfoundation.org>
+Message-Id: <20220307091656.296838128@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +54,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Escande <nico.escande@gmail.com>
+From: j.nixdorf@avm.de <j.nixdorf@avm.de>
 
-commit 859ae7018316daa4adbc496012dcbbb458d7e510 upstream.
+commit 9995b408f17ff8c7f11bc725c8aa225ba3a63b1c upstream.
 
-There are two problems with the current code that have been highlighted
-with the AQL feature that is now enbaled by default.
+There are two reasons for addrconf_notify() to be called with NETDEV_DOWN:
+either the network device is actually going down, or IPv6 was disabled
+on the interface.
 
-First problem is in ieee80211_rx_h_mesh_fwding(),
-ieee80211_select_queue_80211() is used on received packets to choose
-the sending AC queue of the forwarding packet although this function
-should only be called on TX packet (it uses ieee80211_tx_info).
-This ends with forwarded mesh packets been sent on unrelated random AC
-queue. To fix that, AC queue can directly be infered from skb->priority
-which has been extracted from QOS info (see ieee80211_parse_qos()).
+If either of them stays down while the other is toggled, we repeatedly
+call the code for NETDEV_DOWN, including ipv6_mc_down(), while never
+calling the corresponding ipv6_mc_up() in between. This will cause a
+new entry in idev->mc_tomb to be allocated for each multicast group
+the interface is subscribed to, which in turn leaks one struct ifmcaddr6
+per nontrivial multicast group the interface is subscribed to.
 
-Second problem is the value of queue_mapping set on forwarded mesh
-frames via skb_set_queue_mapping() is not the AC of the packet but a
-hardware queue index. This may or may not work depending on AC to HW
-queue mapping which is driver specific.
+The following reproducer will leak at least $n objects:
 
-Both of these issues lead to improper AC selection while forwarding
-mesh packets but more importantly due to improper airtime accounting
-(which is done on a per STA, per AC basis) caused traffic stall with
-the introduction of AQL.
+ip addr add ff2e::4242/32 dev eth0 autojoin
+sysctl -w net.ipv6.conf.eth0.disable_ipv6=1
+for i in $(seq 1 $n); do
+	ip link set up eth0; ip link set down eth0
+done
 
-Fixes: cf44012810cc ("mac80211: fix unnecessary frame drops in mesh fwding")
-Fixes: d3c1597b8d1b ("mac80211: fix forwarded mesh frame queue mapping")
-Co-developed-by: Remi Pommarel <repk@triplefau.lt>
-Signed-off-by: Remi Pommarel <repk@triplefau.lt>
-Signed-off-by: Nicolas Escande <nico.escande@gmail.com>
-Link: https://lore.kernel.org/r/20220214173214.368862-1-nico.escande@gmail.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Joining groups with IPV6_ADD_MEMBERSHIP (unprivileged) or setting the
+sysctl net.ipv6.conf.eth0.forwarding to 1 (=> subscribing to ff02::2)
+can also be used to create a nontrivial idev->mc_list, which will the
+leak objects with the right up-down-sequence.
+
+Based on both sources for NETDEV_DOWN events the interface IPv6 state
+should be considered:
+
+ - not ready if the network interface is not ready OR IPv6 is disabled
+   for it
+ - ready if the network interface is ready AND IPv6 is enabled for it
+
+The functions ipv6_mc_up() and ipv6_down() should only be run when this
+state changes.
+
+Implement this by remembering when the IPv6 state is ready, and only
+run ipv6_mc_down() if it actually changed from ready to not ready.
+
+The other direction (not ready -> ready) already works correctly, as:
+
+ - the interface notification triggered codepath for NETDEV_UP /
+   NETDEV_CHANGE returns early if ipv6 is disabled, and
+ - the disable_ipv6=0 triggered codepath skips fully initializing the
+   interface as long as addrconf_link_ready(dev) returns false
+ - calling ipv6_mc_up() repeatedly does not leak anything
+
+Fixes: 3ce62a84d53c ("ipv6: exit early in addrconf_notify() if IPv6 is disabled")
+Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/rx.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/ipv6/addrconf.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/net/mac80211/rx.c
-+++ b/net/mac80211/rx.c
-@@ -2918,13 +2918,13 @@ ieee80211_rx_h_mesh_fwding(struct ieee80
- 	    ether_addr_equal(sdata->vif.addr, hdr->addr3))
- 		return RX_CONTINUE;
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -3732,6 +3732,7 @@ static int addrconf_ifdown(struct net_de
+ 	struct inet6_dev *idev;
+ 	struct inet6_ifaddr *ifa, *tmp;
+ 	bool keep_addr = false;
++	bool was_ready;
+ 	int state, i;
  
--	ac = ieee80211_select_queue_80211(sdata, skb, hdr);
-+	ac = ieee802_1d_to_ac[skb->priority];
- 	q = sdata->vif.hw_queue[ac];
- 	if (ieee80211_queue_stopped(&local->hw, q)) {
- 		IEEE80211_IFSTA_MESH_CTR_INC(ifmsh, dropped_frames_congestion);
- 		return RX_DROP_MONITOR;
+ 	ASSERT_RTNL();
+@@ -3797,7 +3798,10 @@ restart:
+ 
+ 	addrconf_del_rs_timer(idev);
+ 
+-	/* Step 2: clear flags for stateless addrconf */
++	/* Step 2: clear flags for stateless addrconf, repeated down
++	 *         detection
++	 */
++	was_ready = idev->if_flags & IF_READY;
+ 	if (!unregister)
+ 		idev->if_flags &= ~(IF_RS_SENT|IF_RA_RCVD|IF_READY);
+ 
+@@ -3871,7 +3875,7 @@ restart:
+ 	if (unregister) {
+ 		ipv6_ac_destroy_dev(idev);
+ 		ipv6_mc_destroy_dev(idev);
+-	} else {
++	} else if (was_ready) {
+ 		ipv6_mc_down(idev);
  	}
--	skb_set_queue_mapping(skb, q);
-+	skb_set_queue_mapping(skb, ac);
  
- 	if (!--mesh_hdr->ttl) {
- 		if (!is_multicast_ether_addr(hdr->addr1))
 
 

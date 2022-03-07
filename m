@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D1D4CF218
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6B34CF21D
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 07:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbiCGGmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 01:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
+        id S233770AbiCGGpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 01:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiCGGmn (ORCPT
+        with ESMTP id S229865AbiCGGpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 01:42:43 -0500
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B5438189;
-        Sun,  6 Mar 2022 22:41:50 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id qt6so29594758ejb.11;
-        Sun, 06 Mar 2022 22:41:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J7DC1Vzn2L5a72N66qdsn8mPgbxF2/NaUgybTaQB4J4=;
-        b=oTwxVBaGorMjnUXba2XiGt45qtmYW9qFWItGNwcrJpG4grN5N43ss4S12B98ncaG6Y
-         /g6+d9A8426MqgqSMjJmjLGI4yX8qMgUYz61bon6DD9UiBekZ2+qx/+8C6zTRwlr/SxW
-         82o+Opmk///sWrBobAI201uC9oPuuPiBQdDKG66feZYgdJmrGfchBryhlUoygluVznm2
-         NFd1prx7QlBIxcGtiOiVcj4iRQffyJb3GtSDB4K/WBleN7I6n6W6qqrPUMfNWi1m8pf3
-         9MKy4jOWvZOzkfL2JxYtRQ1EMECdwQ8wmelkRJkEGp61s7lNSI5ntksWJtQYesiLLP3S
-         D9Qw==
-X-Gm-Message-State: AOAM530Uzd3oQ5KcpEGL6Td0MwU+OLNqEpctPNmLJKYXVaw8MKrVjc2B
-        Kcn/WVwY5GpvRJ23IPXfYS1OdomF8AA=
-X-Google-Smtp-Source: ABdhPJw7dZa0tv9xj0VQVou4oKFiZULTaWLDsEJ478Yot9VphVBdeR51NxVCUqWrCbUIWKn1Oala3Q==
-X-Received: by 2002:a17:907:970e:b0:6da:9204:1d3a with SMTP id jg14-20020a170907970e00b006da92041d3amr7731948ejc.687.1646635308739;
-        Sun, 06 Mar 2022 22:41:48 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id k7-20020aa7c047000000b004132d3b60aasm5708170edo.78.2022.03.06.22.41.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 22:41:48 -0800 (PST)
-Message-ID: <f48dcaba-8015-380f-ac3b-54818c48350d@kernel.org>
-Date:   Mon, 7 Mar 2022 07:41:47 +0100
+        Mon, 7 Mar 2022 01:45:33 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED633443F9;
+        Sun,  6 Mar 2022 22:44:38 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 4130168AA6; Mon,  7 Mar 2022 07:44:34 +0100 (CET)
+Date:   Mon, 7 Mar 2022 07:44:34 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Zdenek Kabelac <zkabelac@redhat.com>,
+        Lukas Czerner <lczerner@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Borislav Petkov <bp@suse.de>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH mmotm v2] tmpfs: do not allocate pages on read
+Message-ID: <20220307064434.GA31680@lst.de>
+References: <f9c2f38f-5eb8-5d30-40fa-93e88b5fbc51@google.com> <20220306092709.GA22883@lst.de> <90bc5e69-9984-b5fa-a685-be55f2b64b@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] docs: serial: fix a reference file name in driver.rst
-Content-Language: en-US
-To:     Wan Jiabing <wanjiabing@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kael_w@qq.com
-References: <20220304100315.6732-1-wanjiabing@vivo.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220304100315.6732-1-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90bc5e69-9984-b5fa-a685-be55f2b64b@google.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04. 03. 22, 11:03, Wan Jiabing wrote:
-> Fix the following 'make refcheckdocs' warning:
-> Warning: Documentation/driver-api/serial/driver.rst references a file
-> that doesn't exist: Documentation/driver-api/serial/tty.rst
+On Sun, Mar 06, 2022 at 02:59:05PM -0800, Hugh Dickins wrote:
+> Mikulas asked in
+> https://lore.kernel.org/linux-mm/alpine.LRH.2.02.2007210510230.6959@file01.intranet.prod.int.rdu2.redhat.com/
+> Do we still need a0ee5ec520ed ("tmpfs: allocate on read when stacked")?
 > 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-
-> ---
->   Documentation/driver-api/serial/driver.rst | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Lukas noticed this unusual behavior of loop device backed by tmpfs in
+> https://lore.kernel.org/linux-mm/20211126075100.gd64odg2bcptiqeb@work/
 > 
-> diff --git a/Documentation/driver-api/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
-> index 31bd4e16fb1f..06ec04ba086f 100644
-> --- a/Documentation/driver-api/serial/driver.rst
-> +++ b/Documentation/driver-api/serial/driver.rst
-> @@ -311,7 +311,7 @@ hardware.
->   	This call must not sleep
->   
->     set_ldisc(port,termios)
-> -	Notifier for discipline change. See Documentation/driver-api/serial/tty.rst.
-> +	Notifier for discipline change. See Documentation/tty/tty_ldisc.rst.
->   
->   	Locking: caller holds tty_port->mutex
->   
+> Normally, shmem_file_read_iter() copies the ZERO_PAGE when reading holes;
+> but if it looks like it might be a read for "a stacking filesystem", it
+> allocates actual pages to the page cache, and even marks them as dirty.
+> And reads from the loop device do satisfy the test that is used.
+> 
+> This oddity was added for an old version of unionfs, to help to limit
+> its usage to the limited size of the tmpfs mount involved; but about
+> the same time as the tmpfs mod went in (2.6.25), unionfs was reworked
+> to proceed differently; and the mod kept just in case others needed it.
+> 
+> Do we still need it? I cannot answer with more certainty than "Probably
+> not". It's nasty enough that we really should try to delete it; but if
+> a regression is reported somewhere, then we might have to revert later.
+> 
+> It's not quite as simple as just removing the test (as Mikulas did):
+> xfstests generic/013 hung because splice from tmpfs failed on page not
+> up-to-date and page mapping unset.  That can be fixed just by marking
+> the ZERO_PAGE as Uptodate, which of course it is: do so in
+> pagecache_init() - it might be useful to others than tmpfs.
+> 
+> My intention, though, was to stop using the ZERO_PAGE here altogether:
+> surely iov_iter_zero() is better for this case?  Sadly not: it relies
+> on clear_user(), and the x86 clear_user() is slower than its copy_user():
+> https://lore.kernel.org/lkml/2f5ca5e4-e250-a41c-11fb-a7f4ebc7e1c9@google.com/
+> 
+> But while we are still using the ZERO_PAGE, let's stop dirtying its
+> struct page cacheline with unnecessary get_page() and put_page().
+> 
+> Reported-by: Mikulas Patocka <mpatocka@redhat.com>
+> Reported-by: Lukas Czerner <lczerner@redhat.com>
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-thanks,
--- 
-js
-suse labs
+I would have split the uptodate setting of ZERO_PAGE into a separate,
+clearly documented patch, but otherwise this looks good:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>

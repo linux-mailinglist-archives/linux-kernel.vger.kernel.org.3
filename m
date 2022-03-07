@@ -2,116 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A344CFD9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D96D14CFDA7
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 13:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236850AbiCGMFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 07:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S237633AbiCGMF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 07:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232575AbiCGME5 (ORCPT
+        with ESMTP id S237738AbiCGMFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 07:04:57 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28116E280
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 04:04:02 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KBxsr1shRzdb05;
-        Mon,  7 Mar 2022 20:02:40 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+        Mon, 7 Mar 2022 07:05:52 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FF46EB28;
+        Mon,  7 Mar 2022 04:04:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646654696; x=1678190696;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ADxjblmvouljyvbG8C2f+H370jdyVZUvau7Hsxu26P0=;
+  b=tO9F8QVh1vXtum4W/IENiiLhvtypfcB3i5o1FPYWTbIZ2Q2qRg644Ubc
+   02DpAvKdZ1HPCLx7+ow9seukQLHZAeFvEVN7tGALuoMT8/xBoviCfjdtY
+   ZMQAN4PxwKjPGzsvCp61P6eahF809Q/vFfGafzBi4CPr5rFwsmFXt9wUX
+   nH1x89WOXS2iKyg7LAiGTARrLGSgAFG1dcIOo2M1WSmYV0YGTOn91S7ox
+   GAQ/YgL5CMImAsCPFpr+c3Aa4dYjVZW/EFitqVuLrd2TZbG2mzGKU3Swq
+   F4uhcdhrzu5oqFzD3PTcE+Sh5/h9ckmuCg5V5mtQJiCdEQFJR2ZBNfXgw
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,162,1643698800"; 
+   d="scan'208";a="164765120"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2022 05:04:56 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 7 Mar 2022 20:04:00 +0800
-Subject: Re: [PATCH 12/16] mm/migration: fix potential page refcounts leak in
- migrate_pages
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Huang, Ying" <ying.huang@intel.com>
-CC:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
-        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
-        <minchan@kernel.org>, <apopple@nvidia.com>,
-        <dave.hansen@linux.intel.com>, <o451686892@gmail.com>,
-        <almasrymina@google.com>, <jhubbard@nvidia.com>,
-        <rcampbell@nvidia.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
- <20220304093409.25829-13-linmiaohe@huawei.com>
- <20f47ec9-3b5b-5326-b1c3-4b1a0c38ef46@linux.alibaba.com>
- <87mti25p98.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <6c65c8b7-9a62-c027-e2b9-7d1531e43dfa@linux.alibaba.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <d0ff1de4-c6a3-d004-1d0f-86de999fe7c5@huawei.com>
-Date:   Mon, 7 Mar 2022 20:03:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ 15.1.2375.17; Mon, 7 Mar 2022 05:04:56 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 7 Mar 2022 05:04:50 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <claudiu.beznea@microchip.com>, <hverkuil-cisco@xs4all.nl>,
+        <nicolas.ferre@microchip.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v7 00/13] media: atmel: atmel-isc: implement media controller
+Date:   Mon, 7 Mar 2022 14:04:10 +0200
+Message-ID: <20220307120423.2427631-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <6c65c8b7-9a62-c027-e2b9-7d1531e43dfa@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/7 14:00, Baolin Wang wrote:
-> 
-> 
-> On 3/7/2022 1:02 PM, Huang, Ying wrote:
->> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
->>
->>> Hi Miaohe,
->>>
->>> On 3/4/2022 5:34 PM, Miaohe Lin wrote:
->>>> In -ENOMEM case, there might be some subpages of fail-to-migrate THPs
->>>> left in thp_split_pages list. We should move them back to migration
->>>> list so that they could be put back to the right list by the caller
->>>> otherwise the page refcnt will be leaked here. Also adjust nr_failed
->>>> and nr_thp_failed accordingly to make vm events account more accurate.
->>>> Fixes: b5bade978e9b ("mm: migrate: fix the return value of
->>>> migrate_pages()")
->>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>>> ---
->>>>    mm/migrate.c | 9 +++++++++
->>>>    1 file changed, 9 insertions(+)
->>>> diff --git a/mm/migrate.c b/mm/migrate.c
->>>> index e0db06927f02..6c2dfed2ddb8 100644
->>>> --- a/mm/migrate.c
->>>> +++ b/mm/migrate.c
->>>> @@ -1422,6 +1422,15 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>                    }
->>>>                      nr_failed_pages += nr_subpages;
->>>> +                /*
->>>> +                 * There might be some subpages of fail-to-migrate THPs
->>>> +                 * left in thp_split_pages list. Move them back to migration
->>>> +                 * list so that they could be put back to the right list by
->>>> +                 * the caller otherwise the page refcnt will be leaked.
->>>> +                 */
->>>> +                list_splice_init(&thp_split_pages, from);
->>>> +                nr_failed += retry;
->>>> +                nr_thp_failed += thp_retry;
->>>
->>> Yes, I think we missed this case before, and your patch looks
->>> right. But we should also update the 'rc' to return the correct number
->>> of pages that were not migrated, right?
->>
->> Per my understanding, -ENOMEM should be returned to indicate an fatal
->> error.
->>
-> 
-> Ah, right. Sorry for noise.
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-Oh, I missed this email. So we should return -ENOMEM in this case. Many thanks for both of you.
+This series is the v7 series that attempts to support media controller in the
+atmel ISC and XISC drivers.
+The CSI2DC driver was accepted thus removed from the patch series, together with
+other patches.
 
-> .
+Important note: this series applies on top of current media_staging tree, as it
+relies on previous patches in the series which were accepted.
+
+Thanks to everyone who reviewed my work !
+
+Eugen
+
+Changes in v7:
+-> scaler: modified crop bounds to have maximum isc size
+-> format propagation: did small changes as per Jacopo review
+
+
+Changes in v6:
+-> worked a bit on scaler, added try crop and other changes as per Jacopo review
+-> worked on isc-base enum_fmt , reworked as per Jacopo review
+
+Changes in v5:
+-> removed patch that removed the 'stop' variable as it was still required
+-> added two new trivial patches
+-> reworked some parts of the scaler and format propagation after discussions with Jacopo
+
+
+Changes in v4:
+-> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
+one patch that was using it
+-> as reviewed by Jacopo, reworked some parts of the media controller implementation
+
+
+Changes in v3:
+- change in bindings, small fixes in csi2dc driver and conversion to mc
+for the isc-base.
+- removed some MAINTAINERS patches and used patterns in MAINTAINERS
+
+Changes in v2:
+- integrated many changes suggested by Jacopo in the review of the v1 series.
+- add a few new patches
+
+
+Eugen Hristev (13):
+  media: atmel: atmel-isc-base: use streaming status when queueing
+    buffers
+  media: atmel: atmel-isc-base: replace is_streaming call in
+    s_fmt_vid_cap
+  media: atmel: atmel-isc: remove redundant comments
+  media: atmel: atmel-isc: implement media controller
+  media: atmel: atmel-sama5d2-isc: fix wrong mask in YUYV format check
+  media: atmel: atmel-isc-base: use mutex to lock awb workqueue from
+    streaming
+  media: atmel: atmel-isc: compact the controller formats list
+  media: atmel: atmel-isc: change format propagation to subdev into only
+    verification
+  media: atmel: atmel-sama7g5-isc: remove stray line
+  dt-bindings: media: microchip,xisc: add bus-width of 14
+  ARM: dts: at91: sama7g5: add nodes for video capture
+  ARM: configs: at91: sama7: add xisc and csi2dc
+  ARM: multi_v7_defconfig: add atmel video pipeline modules
+
+ .../bindings/media/microchip,xisc.yaml        |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |  49 ++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/configs/sama7_defconfig              |   2 +
+ drivers/media/platform/atmel/Makefile         |   2 +-
+ drivers/media/platform/atmel/atmel-isc-base.c | 518 ++++++++++--------
+ .../media/platform/atmel/atmel-isc-scaler.c   | 276 ++++++++++
+ drivers/media/platform/atmel/atmel-isc.h      |  58 +-
+ .../media/platform/atmel/atmel-sama5d2-isc.c  |  87 +--
+ .../media/platform/atmel/atmel-sama7g5-isc.c  |  93 ++--
+ 10 files changed, 763 insertions(+), 327 deletions(-)
+ create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
+
+-- 
+2.25.1
 

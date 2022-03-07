@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA9B4D051E
+	by mail.lfdr.de (Postfix) with ESMTP id 966214D051F
 	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 18:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244420AbiCGRUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 12:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S244431AbiCGRUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 12:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240304AbiCGRUV (ORCPT
+        with ESMTP id S244414AbiCGRUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 12:20:21 -0500
+        Mon, 7 Mar 2022 12:20:23 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB17774847;
-        Mon,  7 Mar 2022 09:19:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 429B677AB9;
+        Mon,  7 Mar 2022 09:19:29 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADB0C153B;
-        Mon,  7 Mar 2022 09:19:26 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 13695153B;
+        Mon,  7 Mar 2022 09:19:29 -0800 (PST)
 Received: from e121896.arm.com (unknown [10.57.41.31])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E7FA53FA45;
-        Mon,  7 Mar 2022 09:19:24 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4E1673FA45;
+        Mon,  7 Mar 2022 09:19:27 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     acme@kernel.org, linux-perf-users@vger.kernel.org,
         anshuman.khandual@arm.com
@@ -31,9 +31,9 @@ Cc:     german.gomez@arm.com, leo.yan@linaro.com,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] perf: Add error message for unsupported branch stack cases
-Date:   Mon,  7 Mar 2022 17:19:14 +0000
-Message-Id: <20220307171917.2555829-2-james.clark@arm.com>
+Subject: [PATCH 2/4] perf: Print branch stack entry type in --dump-raw-trace
+Date:   Mon,  7 Mar 2022 17:19:15 +0000
+Message-Id: <20220307171917.2555829-3-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20220307171917.2555829-1-james.clark@arm.com>
 References: <20220307171917.2555829-1-james.clark@arm.com>
@@ -48,48 +48,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-EOPNOTSUPP is a possible return value when branch stacks are requested
-but they aren't enabled in the kernel or hardware. It's also returned if
-they aren't supported on the specific event type. The currently printed
-error message about sampling/overflow-interrupts is not correct in this
-case.
+This can help with debugging issues. It only prints when -j save_type
+is used otherwise an empty string is printed.
 
-Add a check for branch stacks before sample_period is checked because
-sample_period is also set (to the default value) when using branch
-stacks.
+Before the change:
 
-Before this change (when branch stacks aren't supported):
+  101603801707130 0xa70 [0x630]: PERF_RECORD_SAMPLE(IP, 0x2): 1108/1108: 0xffff9c1df24c period: 10694 addr: 0
+  ... branch stack: nr:64
+  .....  0: 0000ffff9c26029c -> 0000ffff9c26f340 0 cycles  P   0
+  .....  1: 0000ffff9c2601bc -> 0000ffff9c26f340 0 cycles  P   0
 
-  perf record -j any
-  Error:
-  cycles: PMU Hardware doesn't support sampling/overflow-interrupts. Try 'perf stat'
+After the change:
 
-After this change:
-
-  perf record -j any
-  Error:
-  cycles: PMU Hardware or event type doesn't support branch stack sampling.
+  101603801707130 0xa70 [0x630]: PERF_RECORD_SAMPLE(IP, 0x2): 1108/1108: 0xffff9c1df24c period: 10694 addr: 0
+  ... branch stack: nr:64
+  .....  0: 0000ffff9c26029c -> 0000ffff9c26f340 0 cycles  P   0 CALL
+  .....  1: 0000ffff9c2601bc -> 0000ffff9c26f340 0 cycles  P   0 IND_CALL
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- tools/perf/util/evsel.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/perf/util/session.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 22d3267ce294..4e10a4ec11c7 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -2909,6 +2909,10 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
- 	 "No such device - did you specify an out-of-range profile CPU?");
- 		break;
- 	case EOPNOTSUPP:
-+		if (evsel->core.attr.sample_type & PERF_SAMPLE_BRANCH_STACK)
-+			return scnprintf(msg, size,
-+	"%s: PMU Hardware or event type doesn't support branch stack sampling.",
-+					 evsel__name(evsel));
- 		if (evsel->core.attr.aux_output)
- 			return scnprintf(msg, size,
- 	"%s: PMU Hardware doesn't support 'aux_output' feature",
+diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+index f54282d5c648..3b8dfe603e50 100644
+--- a/tools/perf/util/session.c
++++ b/tools/perf/util/session.c
+@@ -1159,14 +1159,15 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
+ 		struct branch_entry *e = &entries[i];
+ 
+ 		if (!callstack) {
+-			printf("..... %2"PRIu64": %016" PRIx64 " -> %016" PRIx64 " %hu cycles %s%s%s%s %x\n",
++			printf("..... %2"PRIu64": %016" PRIx64 " -> %016" PRIx64 " %hu cycles %s%s%s%s %x %s\n",
+ 				i, e->from, e->to,
+ 				(unsigned short)e->flags.cycles,
+ 				e->flags.mispred ? "M" : " ",
+ 				e->flags.predicted ? "P" : " ",
+ 				e->flags.abort ? "A" : " ",
+ 				e->flags.in_tx ? "T" : " ",
+-				(unsigned)e->flags.reserved);
++				(unsigned)e->flags.reserved,
++				e->flags.type ? branch_type_name(e->flags.type) : "");
+ 		} else {
+ 			printf("..... %2"PRIu64": %016" PRIx64 "\n",
+ 				i, i > 0 ? e->from : e->to);
 -- 
 2.28.0
 

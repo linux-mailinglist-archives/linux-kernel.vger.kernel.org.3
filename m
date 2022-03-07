@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF634CF987
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D544CFA9B
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 11:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240367AbiCGKHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 05:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
+        id S241334AbiCGKUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 05:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238839AbiCGJsr (ORCPT
+        with ESMTP id S241166AbiCGKBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 04:48:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E3C6D4CD;
-        Mon,  7 Mar 2022 01:42:37 -0800 (PST)
+        Mon, 7 Mar 2022 05:01:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E64710F4;
+        Mon,  7 Mar 2022 01:51:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 345AB61224;
-        Mon,  7 Mar 2022 09:42:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37104C36AE9;
-        Mon,  7 Mar 2022 09:42:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA390B80F9F;
+        Mon,  7 Mar 2022 09:51:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51692C340F4;
+        Mon,  7 Mar 2022 09:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646646156;
-        bh=ZFa5qGU/Bx44asH0ijJeAVEBfCBxgDdBxw9ajPLlLR0=;
+        s=korg; t=1646646684;
+        bh=4b9lc6dNYJNoodIAKdmSZ8H3CH+rild8TcdIru7YDj4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wI7uR24pKni/lt3CzfJ4iH1z98M19BLZZawx454EvyUWzn2NARtiVXO9Kdej3eHOm
-         OL3aBm6+65pcjhAoZTbJmPBMgC7CkeM0DEp//nfXdVJYX9lk69N1RgRbsBjr0kH+Nv
-         m8EUd5yabrpwMAk3bmMKv+q5g/o3NaCXrqWKzuLY=
+        b=B2IIyZ7ptewm4EsSk2k9uDsXoV+6BwWY75SUC0eY257eUxjzezo6LEH9SzL3hWBhM
+         uI8UW8Yn85GNAxQi03+kVKNjVKkYErK40ZuatxelQ5/hLi00n0bxD+frBG0pJIMwzd
+         DOifpOuOIZ2N7FLmG8zk+uPyceAkojY1bpvSF1Cs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jerry Dai <jerry.dai@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Jon Mason <jdmason@kudzu.us>
-Subject: [PATCH 5.15 151/262] ntb: intel: fix port config status offset for SPR
-Date:   Mon,  7 Mar 2022 10:18:15 +0100
-Message-Id: <20220307091706.701856383@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Roper <matthew.d.roper@intel.com>,
+        Vivek Kasireddy <vivek.kasireddy@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Tomas Bzatek <bugs@bzatek.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.16 058/186] drm/i915: s/JSP2/ICP2/ PCH
+Date:   Mon,  7 Mar 2022 10:18:16 +0100
+Message-Id: <20220307091655.714836945@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220307091702.378509770@linuxfoundation.org>
-References: <20220307091702.378509770@linuxfoundation.org>
+In-Reply-To: <20220307091654.092878898@linuxfoundation.org>
+References: <20220307091654.092878898@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,100 +57,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Jiang <dave.jiang@intel.com>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit d5081bf5dcfb1cb83fb538708b0ac07a10a79cc4 upstream.
+commit 08783aa7693f55619859f4f63f384abf17cb58c5 upstream.
 
-The field offset for port configuration status on SPR has been changed to
-bit 14 from ICX where it resides at bit 12. By chance link status detection
-continued to work on SPR. This is due to bit 12 being a configuration bit
-which is in sync with the status bit. Fix this by checking for a SPR device
-and checking correct status bit.
+This JSP2 PCH actually seems to be some special Apple
+specific ICP variant rather than a JSP. Make it so. Or at
+least all the references to it seem to be some Apple ICL
+machines. Didn't manage to find these PCI IDs in any
+public chipset docs unfortunately.
 
-Fixes: 26bfe3d0b227 ("ntb: intel: Add Icelake (gen4) support for Intel NTB")
-Tested-by: Jerry Dai <jerry.dai@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Jon Mason <jdmason@kudzu.us>
+The only thing we're losing here with this JSP->ICP change
+is Wa_14011294188, but based on the HSD that isn't actually
+needed on any ICP based design (including JSP), only TGP
+based stuff (including MCC) really need it. The documented
+w/a just never made that distinction because Windows didn't
+want to differentiate between JSP and MCC (not sure how
+they handle hpd/ddc/etc. then though...).
+
+Cc: stable@vger.kernel.org
+Cc: Matt Roper <matthew.d.roper@intel.com>
+Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4226
+Fixes: 943682e3bd19 ("drm/i915: Introduce Jasper Lake PCH")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220224132142.12927-1-ville.syrjala@linux.intel.com
+Acked-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
+Tested-by: Tomas Bzatek <bugs@bzatek.net>
+(cherry picked from commit 53581504a8e216d435f114a4f2596ad0dfd902fc)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ntb/hw/intel/ntb_hw_gen4.c |   17 ++++++++++++++++-
- drivers/ntb/hw/intel/ntb_hw_gen4.h |   16 ++++++++++++++++
- 2 files changed, 32 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/intel_pch.c |    2 +-
+ drivers/gpu/drm/i915/intel_pch.h |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/ntb/hw/intel/ntb_hw_gen4.c
-+++ b/drivers/ntb/hw/intel/ntb_hw_gen4.c
-@@ -168,6 +168,18 @@ static enum ntb_topo gen4_ppd_topo(struc
- 	return NTB_TOPO_NONE;
- }
- 
-+static enum ntb_topo spr_ppd_topo(struct intel_ntb_dev *ndev, u32 ppd)
-+{
-+	switch (ppd & SPR_PPD_TOPO_MASK) {
-+	case SPR_PPD_TOPO_B2B_USD:
-+		return NTB_TOPO_B2B_USD;
-+	case SPR_PPD_TOPO_B2B_DSD:
-+		return NTB_TOPO_B2B_DSD;
-+	}
-+
-+	return NTB_TOPO_NONE;
-+}
-+
- int gen4_init_dev(struct intel_ntb_dev *ndev)
- {
- 	struct pci_dev *pdev = ndev->ntb.pdev;
-@@ -183,7 +195,10 @@ int gen4_init_dev(struct intel_ntb_dev *
- 	}
- 
- 	ppd1 = ioread32(ndev->self_mmio + GEN4_PPD1_OFFSET);
--	ndev->ntb.topo = gen4_ppd_topo(ndev, ppd1);
-+	if (pdev_is_ICX(pdev))
-+		ndev->ntb.topo = gen4_ppd_topo(ndev, ppd1);
-+	else if (pdev_is_SPR(pdev))
-+		ndev->ntb.topo = spr_ppd_topo(ndev, ppd1);
- 	dev_dbg(&pdev->dev, "ppd %#x topo %s\n", ppd1,
- 		ntb_topo_string(ndev->ntb.topo));
- 	if (ndev->ntb.topo == NTB_TOPO_NONE)
---- a/drivers/ntb/hw/intel/ntb_hw_gen4.h
-+++ b/drivers/ntb/hw/intel/ntb_hw_gen4.h
-@@ -49,10 +49,14 @@
- #define GEN4_PPD_CLEAR_TRN		0x0001
- #define GEN4_PPD_LINKTRN		0x0008
- #define GEN4_PPD_CONN_MASK		0x0300
-+#define SPR_PPD_CONN_MASK		0x0700
- #define GEN4_PPD_CONN_B2B		0x0200
- #define GEN4_PPD_DEV_MASK		0x1000
- #define GEN4_PPD_DEV_DSD		0x1000
- #define GEN4_PPD_DEV_USD		0x0000
-+#define SPR_PPD_DEV_MASK		0x4000
-+#define SPR_PPD_DEV_DSD 		0x4000
-+#define SPR_PPD_DEV_USD 		0x0000
- #define GEN4_LINK_CTRL_LINK_DISABLE	0x0010
- 
- #define GEN4_SLOTSTS			0xb05a
-@@ -62,6 +66,10 @@
- #define GEN4_PPD_TOPO_B2B_USD	(GEN4_PPD_CONN_B2B | GEN4_PPD_DEV_USD)
- #define GEN4_PPD_TOPO_B2B_DSD	(GEN4_PPD_CONN_B2B | GEN4_PPD_DEV_DSD)
- 
-+#define SPR_PPD_TOPO_MASK	(SPR_PPD_CONN_MASK | SPR_PPD_DEV_MASK)
-+#define SPR_PPD_TOPO_B2B_USD	(GEN4_PPD_CONN_B2B | SPR_PPD_DEV_USD)
-+#define SPR_PPD_TOPO_B2B_DSD	(GEN4_PPD_CONN_B2B | SPR_PPD_DEV_DSD)
-+
- #define GEN4_DB_COUNT			32
- #define GEN4_DB_LINK			32
- #define GEN4_DB_LINK_BIT		BIT_ULL(GEN4_DB_LINK)
-@@ -111,5 +119,13 @@ static inline int pdev_is_ICX(struct pci
- 		return 1;
- 	return 0;
- }
-+
-+static inline int pdev_is_SPR(struct pci_dev *pdev)
-+{
-+	if (pdev_is_gen4(pdev) &&
-+	    pdev->revision > PCI_DEVICE_REVISION_ICX_MAX)
-+		return 1;
-+	return 0;
-+}
- 
- #endif
+--- a/drivers/gpu/drm/i915/intel_pch.c
++++ b/drivers/gpu/drm/i915/intel_pch.c
+@@ -108,6 +108,7 @@ intel_pch_type(const struct drm_i915_pri
+ 		/* Comet Lake V PCH is based on KBP, which is SPT compatible */
+ 		return PCH_SPT;
+ 	case INTEL_PCH_ICP_DEVICE_ID_TYPE:
++	case INTEL_PCH_ICP2_DEVICE_ID_TYPE:
+ 		drm_dbg_kms(&dev_priv->drm, "Found Ice Lake PCH\n");
+ 		drm_WARN_ON(&dev_priv->drm, !IS_ICELAKE(dev_priv));
+ 		return PCH_ICP;
+@@ -123,7 +124,6 @@ intel_pch_type(const struct drm_i915_pri
+ 			    !IS_GEN9_BC(dev_priv));
+ 		return PCH_TGP;
+ 	case INTEL_PCH_JSP_DEVICE_ID_TYPE:
+-	case INTEL_PCH_JSP2_DEVICE_ID_TYPE:
+ 		drm_dbg_kms(&dev_priv->drm, "Found Jasper Lake PCH\n");
+ 		drm_WARN_ON(&dev_priv->drm, !IS_JSL_EHL(dev_priv));
+ 		return PCH_JSP;
+--- a/drivers/gpu/drm/i915/intel_pch.h
++++ b/drivers/gpu/drm/i915/intel_pch.h
+@@ -50,11 +50,11 @@ enum intel_pch {
+ #define INTEL_PCH_CMP2_DEVICE_ID_TYPE		0x0680
+ #define INTEL_PCH_CMP_V_DEVICE_ID_TYPE		0xA380
+ #define INTEL_PCH_ICP_DEVICE_ID_TYPE		0x3480
++#define INTEL_PCH_ICP2_DEVICE_ID_TYPE		0x3880
+ #define INTEL_PCH_MCC_DEVICE_ID_TYPE		0x4B00
+ #define INTEL_PCH_TGP_DEVICE_ID_TYPE		0xA080
+ #define INTEL_PCH_TGP2_DEVICE_ID_TYPE		0x4380
+ #define INTEL_PCH_JSP_DEVICE_ID_TYPE		0x4D80
+-#define INTEL_PCH_JSP2_DEVICE_ID_TYPE		0x3880
+ #define INTEL_PCH_ADP_DEVICE_ID_TYPE		0x7A80
+ #define INTEL_PCH_ADP2_DEVICE_ID_TYPE		0x5180
+ #define INTEL_PCH_P2X_DEVICE_ID_TYPE		0x7100
 
 

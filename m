@@ -2,170 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC93F4D0146
-	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC2C4D015C
+	for <lists+linux-kernel@lfdr.de>; Mon,  7 Mar 2022 15:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243212AbiCGOc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 09:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S243258AbiCGOfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 09:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbiCGOc6 (ORCPT
+        with ESMTP id S238679AbiCGOfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 09:32:58 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EC27938F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:32:03 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id 12so15307663oix.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:32:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jAOEfcrHxWTEhg7BxTnoFSoh64ur+frJb+7Etlx9rtQ=;
-        b=GJ/zew/2c/T7gmBh99VfzZLRMIr1lWxgtwiRGpln7n6kXctT05678TBF1YPo8K/nyU
-         xOL/GNqnsexBZCu2VL/N3mTeUDMxf6kTPDvrzocCn/XswBlLdtp+GJzmpSxz7sqo4KXt
-         4wr7xC63ca5frxTj5uJRTgnPWTe6M+mGV6zRZ5vAST0uEDv9m+LWK0h2mFrEPzjBt1Yt
-         /X9IYwbSusvVKxyEyVqgZsa1ageF3DyBQDHldMq/hndd38A4zi/b6Iqeqx6a4+T4eW9U
-         S8DmT71hgMF8+wgDwfhNOqN3TjxkzV0ImuTqjRWVDS5YjPGK9jGaPbiZxzs0TVQ8sY7R
-         7MFg==
+        Mon, 7 Mar 2022 09:35:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EB2E60AA7
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 06:34:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646663646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EFYNbblCnNcuaPx8LOQ1Hn2woAp9Zpf6py8Ud+OJaTY=;
+        b=Xn60WXAy1tH6T0oSpqBYGPvMDcibEK/7ysBsvl+/cVnZW8AO1ZPh8tyz/iA/t/SnbPy6TS
+        +7OCJyqZkLcLvhH6moVM9HCN1kC/37+/6bWZDvbJx84Ety0ZVdQs647o8hD+Bz3/a94QfZ
+        BvmX9XC7ClAGlCwTiYU9bH/plGbsGN4=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-63-fO-AOJmqMmiAPIs_kI9ABA-1; Mon, 07 Mar 2022 09:34:03 -0500
+X-MC-Unique: fO-AOJmqMmiAPIs_kI9ABA-1
+Received: by mail-wm1-f72.google.com with SMTP id v125-20020a1cac83000000b0037e3d70e7e1so7953561wme.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 06:34:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jAOEfcrHxWTEhg7BxTnoFSoh64ur+frJb+7Etlx9rtQ=;
-        b=JJ+ke/EcAgTY7uZQzRdOqQ/9LQ5nxU3XLO8niYqWiSARFuDj9XgGa8k0VWS5zaPioT
-         TJbefLICRtngiO7fMnCtipVR4rPVz+skmnQj/7M8t4DjNzZ9ogI/fAj7cD2LkwBek4+v
-         HRnBVlJPWVGu6OzhVmtH5M0gxxfoL+SGFGzOsUNYRQbaihAi3O3e59SDXEmDCzx3oa6+
-         7wRVdwx/8MsNlqkBORzVy1hZ+3MSrusti3ZsHjSiDpNZV2z2qWsxJ+iU7ahaiLglewce
-         1NnChxY3+WforE2yT2Ls4WA1LCGA57e2Fo5Vo0dzbVZgvHfzcwnPEv549GYUkylVIqu9
-         Ez9w==
-X-Gm-Message-State: AOAM532PwtX3gG9PrsNw0bDudW24q6YXQ4POwEO4IcKdyrz3kle7tGKU
-        5oYFlfengelt16IlZBFrLOuDBw==
-X-Google-Smtp-Source: ABdhPJzqOXx5kooaXG2dVnX2vpjZX9hB4LZw1mzfujLDchjIhcK0otseZB2nycRu3BZ28DFHpurG6A==
-X-Received: by 2002:a05:6808:23ca:b0:2d9:bb42:81e with SMTP id bq10-20020a05680823ca00b002d9bb42081emr5269110oib.141.1646663523111;
-        Mon, 07 Mar 2022 06:32:03 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id o10-20020a0568080f8a00b002d726c76b77sm6442939oiw.15.2022.03.07.06.32.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 06:32:02 -0800 (PST)
-Date:   Mon, 7 Mar 2022 06:33:47 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4 3/7] usb: typec: mux: Check dev_set_name() return value
-Message-ID: <YiYXywEEz7WZQhfd@ripper>
-References: <20220307034040.1111107-1-bjorn.andersson@linaro.org>
- <20220307034040.1111107-3-bjorn.andersson@linaro.org>
- <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=EFYNbblCnNcuaPx8LOQ1Hn2woAp9Zpf6py8Ud+OJaTY=;
+        b=KpIQg8jD1Bn3hy0DITb0f8XzV/+BldiT8iZ64d1MunsdoCCviJlnC4Jc+XDEDpZRBI
+         4yfFByxVKadpqZqNVxyPEFMHS4/4HULFNcCDFTaotl/o+BDxntu6CdyXsGIqjuT5XdMg
+         FTprnBcjxnVYZkUGIr+aKHcE8PeAnW3aLiNeWsY6kbTajSMLMvdCW6j17MbY7kVRof8d
+         /6bQzpPnP3inCOPPRLIl4YVL+/1J1jcjDdttb+tQbUFw4dKjHZNK9hBE4o5ttIs2d7FI
+         cLyQi9+qfvdHMJ6uBERKThOzrBHau/5Kbb/KYr7OzEgTOJCG0ySC/zbrFwcWot/lSB4a
+         ejjg==
+X-Gm-Message-State: AOAM532IY5nwFEFdU2q11pp3N7MYikDTbEvk8KIWDvORZ6UaMDpXqOE3
+        kuXaVA9PbBKECyrZBbwB0bThiqn1un8vivGK74AtUd6atWJp7K1TR5/3uXq4uB11d6Dxexelz8R
+        1nZkl0ysXaxo8uk7+qtiG8RTe
+X-Received: by 2002:a7b:ca49:0:b0:389:bcde:f7ab with SMTP id m9-20020a7bca49000000b00389bcdef7abmr1185209wml.7.1646663642075;
+        Mon, 07 Mar 2022 06:34:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxPQNqWxZSPrdYEmAfxwtZ3y4N0Kf0xHJe42MVbdVGbGB8hJ9qV6tBxdbfd3Fa3fXlIgu+yCQ==
+X-Received: by 2002:a7b:ca49:0:b0:389:bcde:f7ab with SMTP id m9-20020a7bca49000000b00389bcdef7abmr1185173wml.7.1646663641772;
+        Mon, 07 Mar 2022 06:34:01 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:1e00:8d67:f75a:a8ae:dc02? (p200300cbc7051e008d67f75aa8aedc02.dip0.t-ipconnect.de. [2003:cb:c705:1e00:8d67:f75a:a8ae:dc02])
+        by smtp.gmail.com with ESMTPSA id h12-20020a5d548c000000b001f1f99e7792sm2398939wrv.111.2022.03.07.06.33.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 06:33:54 -0800 (PST)
+Message-ID: <dab25b2d-88f1-7ad5-c28a-15a97b38af03@redhat.com>
+Date:   Mon, 7 Mar 2022 15:33:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiXZkqPQxqQ9I0VH@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        zhangyiru <zhangyiru3@huawei.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        linux-mips@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
+        linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20220306053211.135762-1-jarkko@kernel.org>
+ <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com> <YiYVHTkS8IsMMw6T@iki.fi>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC 0/3] MAP_POPULATE for device memory
+In-Reply-To: <YiYVHTkS8IsMMw6T@iki.fi>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 07 Mar 02:08 PST 2022, Andy Shevchenko wrote:
-
-> On Sun, Mar 06, 2022 at 07:40:36PM -0800, Bjorn Andersson wrote:
-> > It's possible that dev_set_name() returns -ENOMEM, catch and handle this.
+On 07.03.22 15:22, Jarkko Sakkinen wrote:
+> On Mon, Mar 07, 2022 at 11:12:44AM +0100, David Hildenbrand wrote:
+>> On 06.03.22 06:32, Jarkko Sakkinen wrote:
+>>> For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
+>>> to use that for initializing the device memory by providing a new callback
+>>> f_ops->populate() for the purpose.
+>>>
+>>> SGX patches are provided to show the callback in context.
+>>>
+>>> An obvious alternative is a ioctl but it is less elegant and requires
+>>> two syscalls (mmap + ioctl) per memory range, instead of just one
+>>> (mmap).
+>>
+>> What about extending MADV_POPULATE_READ | MADV_POPULATE_WRITE to support
+>> VM_IO | VM_PFNMAP (as well?) ?
 > 
-> Thanks!
-> Shouldn't we have a Fixes tag and be sent separately for this cycle?
+> What would be a proper point to bind that behaviour? For mmap/mprotect it'd
+> be probably populate_vma_page_range() because that would span both mmap()
+> and mprotect() (Dave's suggestion in this thread).
+
+MADV_POPULATE_* ends up in faultin_vma_page_range(), right next to
+populate_vma_page_range(). So it might require a similar way to hook
+into the driver I guess.
+
 > 
-
-It seems appropriate to add:
-
-Fixes: 3370db35193b ("usb: typec: Registering real device entries for the muxes")
-
-
-If the maintainer would prefer to get this into v5.18, it could either
-be picked ahead of the rest of the series, or I can resubmit it on its
-own. I don't think it's a critical fix though.
-
-> > Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> > 
-> > Changes since v3:
-> > - New patch
-> > 
-> >  drivers/usb/typec/mux.c | 14 ++++++++++----
-> >  1 file changed, 10 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> > index c8340de0ed49..d2aaf294b649 100644
-> > --- a/drivers/usb/typec/mux.c
-> > +++ b/drivers/usb/typec/mux.c
-> > @@ -131,8 +131,11 @@ typec_switch_register(struct device *parent,
-> >  	sw->dev.class = &typec_mux_class;
-> >  	sw->dev.type = &typec_switch_dev_type;
-> >  	sw->dev.driver_data = desc->drvdata;
-> > -	dev_set_name(&sw->dev, "%s-switch",
-> > -		     desc->name ? desc->name : dev_name(parent));
-> > +	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ? desc->name : dev_name(parent));
+> For MAP_POPULATE I did not have hard proof to show that it would be used
+> by other drivers but for madvice() you can find at least a few ioctl
+> based implementations:
 > 
-> We may use shorten form of the ternary
+> $ git grep -e madv --and \( -e ioc \)  drivers/
+> drivers/gpu/drm/i915/gem/i915_gem_ioctls.h:int i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
+> drivers/gpu/drm/i915/i915_driver.c:     DRM_IOCTL_DEF_DRV(I915_GEM_MADVISE, i915_gem_madvise_ioctl, DRM_RENDER_ALLOW),
+> drivers/gpu/drm/i915/i915_gem.c:i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
+> drivers/gpu/drm/msm/msm_drv.c:static int msm_ioctl_gem_madvise(struct drm_device *dev, void *data,
+> drivers/gpu/drm/msm/msm_drv.c:  DRM_IOCTL_DEF_DRV(MSM_GEM_MADVISE,  msm_ioctl_gem_madvise,  DRM_RENDER_ALLOW),
+> drivers/gpu/drm/panfrost/panfrost_drv.c:static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+> drivers/gpu/drm/vc4/vc4_drv.c:  DRM_IOCTL_DEF_DRV(VC4_GEM_MADVISE, vc4_gem_madvise_ioctl, DRM_RENDER_ALLOW),
+> drivers/gpu/drm/vc4/vc4_drv.h:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
+> drivers/gpu/drm/vc4/vc4_gem.c:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
 > 
-> 	ret = dev_set_name(&sw->dev, "%s-switch", desc->name ?: dev_name(parent));
-> 
-> at the same time, but it's up to you.
-> 
+> IMHO this also provides supportive claim for MAP_POPULATE, and yeah, I
+> agree that to be consistent implementation, both madvice() and MAP_POPULATE
+> should work.
 
-I looked at it, but felt it was an unrelated change and decided to leave
-it as is.
+MADV_POPULATE_WRITE + MADV_DONTNEED/FALLOC_FL_PUNCH_HOLE is one way to
+dynamically manage memory consumption inside a sparse memory mapping
+(preallocate/populate via MADV_POPULATE_WRITE, discard via
+MADV_DONTNEED/FALLOC_FL_PUNCH_HOLE).  Extending that whole mechanism to
+deal with VM_IO | VM_PFNMAP mappings as well could be interesting.
 
-> Either way code looks good to me,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
+At least I herd about some ideas where we might want to dynamically
+expose memory to a VM (via virtio-mem) inside a sparse memory mapping,
+and the memory in that sparse memory mapping is provided from a
+dedicated memory pool managed by a device driver -- not just using
+ordinary anonymous/file/hugetlb memory as we do right now.
 
+Now, this is certainly stuff for the future, I just wanted to mention it.
+
+-- 
 Thanks,
-Bjorn
 
-> > +	if (ret) {
-> > +		put_device(&sw->dev);
-> > +		return ERR_PTR(ret);
-> > +	}
-> >  
-> >  	ret = device_add(&sw->dev);
-> >  	if (ret) {
-> > @@ -338,8 +341,11 @@ typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-> >  	mux->dev.class = &typec_mux_class;
-> >  	mux->dev.type = &typec_mux_dev_type;
-> >  	mux->dev.driver_data = desc->drvdata;
-> > -	dev_set_name(&mux->dev, "%s-mux",
-> > -		     desc->name ? desc->name : dev_name(parent));
-> > +	ret = dev_set_name(&mux->dev, "%s-mux", desc->name ? desc->name : dev_name(parent));
-> 
-> Ditto.
-> 
-> > +	if (ret) {
-> > +		put_device(&mux->dev);
-> > +		return ERR_PTR(ret);
-> > +	}
-> >  
-> >  	ret = device_add(&mux->dev);
-> >  	if (ret) {
-> > -- 
-> > 2.33.1
-> > 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+David / dhildenb
+

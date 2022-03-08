@@ -2,110 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AE14D1E48
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F5C4D1E47
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348683AbiCHROl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S1348666AbiCHROf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348670AbiCHROj (ORCPT
+        with ESMTP id S1348641AbiCHROd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:14:39 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22F828996
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:13:38 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id s42so5263368pfg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:13:38 -0800 (PST)
+        Tue, 8 Mar 2022 12:14:33 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8B822515;
+        Tue,  8 Mar 2022 09:13:36 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id o26so17017322pgb.8;
+        Tue, 08 Mar 2022 09:13:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=yX/dqRRjbY7VPqIb5T+iQdlEaEwAOCFRzujlbgFA4Fs=;
-        b=ioFeXfXAO5oHOxqQT2Z34H4YMKf90sMolbArQpELVX7APj6xqRx78jAUXwiXQNDTvb
-         sTaUe+9lr1Fgx7jzvEfMeeqpMhVTgETLUhugLZjgWbmTpNdt9HNqrRK1WHXFgEQiw4LW
-         nRoIEpM70fjUP13UeSjA4n92nOt67IZRZWEnLvX3mKsDfua/BoTMIGv0Q+ztVATlU6H1
-         75lKHADKwCJgL8ohSF6WE0IdZhrwj864Sq6/Zs5qTqAptK+pBrc6K9CmJNLLjqbP4koG
-         KKqKpKeKrUvQjeTj7igMZg2SNqWaG7pZeo93JwAQDc1ItdEuGknnF0aNCcCnRYvyxbrj
-         +FVg==
+        bh=uo3YhUMbdaePnU6cb6jJ/A2E7AHW+1jZYWhnJKd7Sk8=;
+        b=P4W2XgegdlmpihJbSspGRSZg95TKVpuUFPXs2xm3bmYsLkzpnCFD8V8AYKzsxGW0cP
+         S/IhhZBfcKVEKOCNK9ws2cYY5BQWpxdtRmP8AKvfjdKBGiZ71RZpuiWmvd1aWOL9/Lae
+         A2NMN5Mb9mVCnq9PoDhT5+9VSSLzlFatI1X/QSlVO4CBeCM8a/K+z02OsYDIcw9OxUfa
+         8/vSQ00ge8dPW0NM/TF2EuUNOqDKggkq4SbDQ21FnDAPSEe750WzGf8E7Jq+zVGDu1GX
+         YDw+Lwg3Pwxx+/hNBD7B0irfd+nWC/JyJJJAI5YuDEQZOZSTLHXcJyz+RInJzu7RlRAI
+         IBAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yX/dqRRjbY7VPqIb5T+iQdlEaEwAOCFRzujlbgFA4Fs=;
-        b=1S+ShW3M0mhATlLUBI8sxD62Hv/TDzt+PxNpEIL2DJhuKjH/yco85IU6ZnfRAwkObU
-         S1+MftbKaoI1nAwcLnEuSibNi/ODcANo1TaaPrrnSdxzf2pzkR9FtttyQxERk52BFfrG
-         mX9crcbEtfIbHFQDa+5zqjC4hkgmMfm2BgGhuD70Oi8Fmr06Zk3HBvOK0D/ZQIRj08Up
-         /5iEvW0+I7XTg4mVWrgCmdMBihgGbj+gha0Sq3C/3LPCA9A1okXIzoD34m2meJM4pV27
-         XRTiDgqWxV1MLiXHR0T8aG+IgHgRJMDx/7JugPYi9iJmhdOcFU2qieQ/fEZJyFMZy72v
-         qH1g==
-X-Gm-Message-State: AOAM532MRYUa4bNlGpd1o6hxfowDezlTFKWh7mzeRA/CV0AOBTI2NYl1
-        vaJ40VoJZxrDTJlXEdCC/u49rA==
-X-Google-Smtp-Source: ABdhPJw6GQ7DePuKOwS9PpsUCiCf3+8HmEtbSA+wwc3EpIYHgbQ9BFe5V/L5cVV/sEQZ+czKLi68PA==
-X-Received: by 2002:a05:6a00:1591:b0:4f0:ef0b:dc24 with SMTP id u17-20020a056a00159100b004f0ef0bdc24mr19322358pfk.2.1646759618268;
-        Tue, 08 Mar 2022 09:13:38 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id mn3-20020a17090b188300b001bf3ac6c7e3sm3472044pjb.19.2022.03.08.09.13.37
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=uo3YhUMbdaePnU6cb6jJ/A2E7AHW+1jZYWhnJKd7Sk8=;
+        b=bPP0Rz8eWb17k97ASUxEIcr3ydfKGOJTwtOYBh22egxTkisqIYZTXaqYMUdviTVw+N
+         UWEG+cBx77w5esfXkHSLpliIvuj1J8SfzkfRsp+qz/fvJ3aq0osuue9lFS0i+HZKMU2R
+         FoXvdvbPK+R/lAt4J04I1UOYTaNqoTnulYmuE7et0rx8mctmofIl9UlW1XND/vpdgolI
+         wczNv5ggzfFnalpomA5JbbbJoPTQJ6x41IvWb8mWaWaYSPz2AALaMujfL8Q4yLAI8KSd
+         APlSvf7tT+16l8QCJmKVXSrcTorvRDvB16u9iICCmAhIeO0fdFSugCPjHvr05I39OMXN
+         tFgA==
+X-Gm-Message-State: AOAM5335XOGD3jhhjLVbeZYJs5JTv6oZ8yq1MlpjB12psdzcbvusf31m
+        sXvOBagD5lgka/unhRpI9uw=
+X-Google-Smtp-Source: ABdhPJwiD4bS9auZXfFq1SaSTK4AukkNRczlbBRrL9XVoGcs96/LK3AH+2ndsakyBnrYsnMICnGAcA==
+X-Received: by 2002:a63:114:0:b0:380:29f7:a97a with SMTP id 20-20020a630114000000b0038029f7a97amr11133349pgb.361.1646759616090;
+        Tue, 08 Mar 2022 09:13:36 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id b5-20020a056a000cc500b004f6ff0f51f4sm8336121pfv.5.2022.03.08.09.13.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:13:37 -0800 (PST)
-Date:   Tue, 8 Mar 2022 17:13:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-Subject: Re: [PATCH v2 06/25] KVM: nVMX/nSVM: do not monkey-patch
- inject_page_fault callback
-Message-ID: <YieOvca6qbCDgrMl@google.com>
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-7-pbonzini@redhat.com>
+        Tue, 08 Mar 2022 09:13:34 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 8 Mar 2022 07:13:33 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Tianchen Ding <dtcccc@linux.alibaba.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michael Wang <yun.wang@linux.alibaba.com>,
+        Cruz Zhao <cruzzhao@linux.alibaba.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Chris Down <chris@chrisdown.name>,
+        Vipin Sharma <vipinsh@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/4] Introduce group balancer
+Message-ID: <YieOvaqJeEW2lta/@slm.duckdns.org>
+References: <20220308092629.40431-1-dtcccc@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221162243.683208-7-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220308092629.40431-1-dtcccc@linux.alibaba.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> Currently, vendor code is patching the inject_page_fault and later, on
-> vmexit, expecting kvm_init_mmu to restore the inject_page_fault callback.
+Hello,
+
+On Tue, Mar 08, 2022 at 05:26:25PM +0800, Tianchen Ding wrote:
+> Modern platform are growing fast on CPU numbers. To achieve better
+> utility of CPU resource, multiple apps are starting to sharing the CPUs.
 > 
-> This is brittle, as exposed by the fact that SVM KVM_SET_NESTED_STATE
-> forgets to do it.  Instead, do the check at the time a page fault actually
-> has to be injected.  This does incur the cost of an extra retpoline
-> for nested vmexits when TDP is disabled, but is overall much cleaner.
-> While at it, add a comment that explains why the different behavior
-> is needed in this case.
+> What we need is a way to ease confliction in share mode,
+> make groups as exclusive as possible, to gain both performance
+> and resource efficiency.
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+> The main idea of group balancer is to fulfill this requirement
+> by balancing groups of tasks among groups of CPUs, consider this
+> as a dynamic demi-exclusive mode. Task trigger work to settle it's
+> group into a proper partition (minimum predicted load), then try
+> migrate itself into it. To gradually settle groups into the most
+> exclusively partition.
+> 
+> GB can be seen as an optimize policy based on load balance,
+> it obeys the main idea of load balance and makes adjustment
+> based on that.
+> 
+> Our test on ARM64 platform with 128 CPUs shows that,
+> throughput of sysbench memory is improved about 25%,
+> and redis-benchmark is improved up to about 10%.
 
-If I have NAK powers, NAK NAK NAK NAK NAK :-)
+The motivation makes sense to me but I'm not sure this is the right way to
+architecture it. We already have the framework to do all these - the sched
+domains and the load balancer. Architecturally, what the suggested patchset
+is doing is building a separate load balancer on top of cpuset after using
+cpuset to disable the existing load balancer, which is rather obviously
+convoluted.
 
-Forcing a VM-Exit is a hack, e.g. it's the entire reason inject_emulated_exception()
-returns a bool.  Even worse, it's confusing and misleading due to being incomplete.
+* AFAICS, none of what the suggested code does is all that complicated or
+  needs a lot of input from userspace. it should be possible to parametrize
+  the existing load balancer to behave better.
 
-The need hack for the hack is not unique to !tdp_enabled, the #DF can be triggered
-any time L0 is intercepting #PF.  Hello, allow_smaller_maxphyaddr.
+* If, for some reason, you need more customizable behavior in terms of cpu
+  allocation, which is what cpuset is for, maybe it'd be better to build the
+  load balancer in userspace. That'd fit way better with how cgroup is used
+  in general and with threaded cgroups, it should fit nicely with everything
+  else.
 
-And while I think allow_smaller_maxphyaddr should be burned with fire, architecturally
-it's still incomplete.  Any exception that is injected by KVM needs to be subjected
-to nested interception checks, not just #PF.  E.g. a #GP while vectoring a different
-fault should also be routed to L1.  KVM (mostly) gets away with special casing #PF
-because that's the only common scenario where L1 wants to intercept _and fix_ a fault
-that can occur while vectoring an exception.  E.g. in the #GP => #DF case, odds are
-very good that L1 will inject a #DF too, but that doesn't make KVM's behavior correct.
+Thanks.
 
-I have a series to handle this by performing the interception checks when an exception
-is queued, instead of when KVM injects the excepiton, and using a second kvm_queued_exception
-field to track exceptions that are queued for VM-Exit (so as not to lose the injected
-exception, which needs to be saved into vmc*12.  It's functional, though I haven't
-tested migration (requires minor shenanigans to perform interception checks for pending
-exceptions coming in from userspace).
+-- 
+tejun

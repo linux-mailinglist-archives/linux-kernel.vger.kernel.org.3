@@ -2,212 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C643A4D190C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5473A4D191A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347100AbiCHNVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S1347128AbiCHNZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233857AbiCHNVd (ORCPT
+        with ESMTP id S1347076AbiCHNZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:21:33 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845AE4968D;
-        Tue,  8 Mar 2022 05:20:36 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KCbW35fxwzBrbM;
-        Tue,  8 Mar 2022 21:18:39 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 21:20:34 +0800
-CC:     <yangyicong@hisilicon.com>, <gregkh@linuxfoundation.org>,
-        <helgaas@kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <lorenzo.pieralisi@arm.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>,
-        <leo.yan@linaro.org>, <daniel.thompson@linaro.org>,
-        <joro@8bytes.org>, <john.garry@huawei.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <robin.murphy@arm.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
-        <linuxarm@huawei.com>, <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH v5 3/8] hisi_ptt: Register PMU device for PTT trace
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-References: <20220308084930.5142-1-yangyicong@hisilicon.com>
- <20220308084930.5142-4-yangyicong@hisilicon.com>
- <20220308102157.00003725@Huawei.com>
- <d3b555c1-ed7e-f668-7d81-9cc2dbe6ffba@huawei.com>
- <20220308120607.000064e6@Huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <a8476fe5-2802-4788-b877-58a5e4fe898a@huawei.com>
-Date:   Tue, 8 Mar 2022 21:20:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 8 Mar 2022 08:25:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B284419BA;
+        Tue,  8 Mar 2022 05:24:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 921C861021;
+        Tue,  8 Mar 2022 13:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB05C340EB;
+        Tue,  8 Mar 2022 13:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646745857;
+        bh=2OP/eO/kKD41zP+nPYneJuXvy2X1h4oBHVDkq7AXBHk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VDSjQmdkbKuyhd+55xQKCz4GtjwszGiCDUkEuKpCSR8hE5cqNfiCrTop7XwCOqgAN
+         1DCg6OGXKqMBYmljJfaAAW2B3cr9nfxT+8pG4AQerKxBIT3qNnPAOlQ6wSvNTLS9Qz
+         GjOquXI0OsKXbaeHE2DYJgV+JoIgeZm6TZPqUAinV86ccj3ZP0p3v3iJc1tLU4gqBO
+         gHQ3ERipbupWZyPgSGU4gGB8+1wrOKyctli+bCj7yRBOnbCjOi5YeGtaSJ7Zqdz+4W
+         eGCnciKbDn0s/hrMjzwmTKWj4yC/VuxFgh8MdLMHLH268MbIt9bsKM6g/r2kSzN7If
+         0GYYGJ4Szwjgg==
+Date:   Tue, 8 Mar 2022 13:24:10 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Alim Akhtar <alim.akhtar@samsung.com>, lee.jones@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        andi@etezian.org, linux-spi@vger.kernel.org, lee.jones@linaro.org,
+        linux-fsd@tesla.com, Adithya K V <adithya.kv@samsung.com>
+Subject: Re: [RESEND PATCH v3 1/2] spi: dt-bindings: samsung: Add fsd spi
+ compatible
+Message-ID: <YidY+ncMVhp7bBvh@sirena.org.uk>
+References: <CGME20220308120701epcas5p3d3d2f5c01055e8c1721ae0ec6c2aa681@epcas5p3.samsung.com>
+ <20220308121640.27344-1-alim.akhtar@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20220308120607.000064e6@Huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ay8euQKf9LBmoJfJ"
+Content-Disposition: inline
+In-Reply-To: <20220308121640.27344-1-alim.akhtar@samsung.com>
+X-Cookie: Dental health is next to mental health.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/8 20:06, Jonathan Cameron wrote:
-> On Tue, 8 Mar 2022 19:13:08 +0800
-> Yicong Yang <yangyicong@huawei.com> wrote:
-> 
->> On 2022/3/8 18:21, Jonathan Cameron wrote:
->>> On Tue, 8 Mar 2022 16:49:25 +0800
->>> Yicong Yang <yangyicong@hisilicon.com> wrote:
->>>   
->>>> Register PMU device of PTT trace, then users can use trace through perf
->>>> command. The driver makes use of perf AUX trace and support following
->>>> events to configure the trace:
->>>>
->>>> - filter: select Root port or Endpoint to trace
->>>> - type: select the type of traced TLP headers
->>>> - direction: select the direction of traced TLP headers
->>>> - format: select the data format of the traced TLP headers
->>>>
->>>> This patch adds the PMU driver part of PTT trace. The perf command support
->>>> of PTT trace is added in the following patch.
->>>>
->>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>  
->>>
->>> It seems to me that you ended up doing both suggestions for
->>> how to clean up the remove order when it was meant to be
->>> a question of picking one or the other.
->>>
->>> Otherwise this looks good to me - so with that tidied up
->>>   
->>
->> Hi Jonathan,
->>
->> Thanks for the comments. I'd like to illustrate the reason why I decide to
->> manually unregister the PMU device.
->>
->> The DMA buffers are devm allocated when necessary. They're only allocated
->> when user is going to use the PTT in the first time after the driver's probe,
->> so when driver removal the buffers are released prior to the PMU device's
->> unregistration. I think there's a race condition.
->>
->> IIUC, The PMU device(as the user interface) should be unregistered first then
->> we're safe to free the DMA buffers. But unregister the PMU device by devm
->> cannot keep that order.
-> 
-> Ok. Please add a comment in the remove() giving this reasoning.
-> 
 
-Sure will add a comment for the reason why we need this manual unregistration in remove().
+--Ay8euQKf9LBmoJfJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Jonathan
-> 
->>
->> Thanks,
->> Yicong
->>
->>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>>   
->>>> ---  
->>>   
->>>> +
->>>> +static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
->>>> +{
->>>> +	u16 core_id, sicl_id;
->>>> +	char *pmu_name;
->>>> +	u32 reg;
->>>> +
->>>> +	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
->>>> +		.module		= THIS_MODULE,
->>>> +		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
->>>> +		.task_ctx_nr	= perf_sw_context,
->>>> +		.attr_groups	= hisi_ptt_pmu_groups,
->>>> +		.event_init	= hisi_ptt_pmu_event_init,
->>>> +		.setup_aux	= hisi_ptt_pmu_setup_aux,
->>>> +		.free_aux	= hisi_ptt_pmu_free_aux,
->>>> +		.start		= hisi_ptt_pmu_start,
->>>> +		.stop		= hisi_ptt_pmu_stop,
->>>> +		.add		= hisi_ptt_pmu_add,
->>>> +		.del		= hisi_ptt_pmu_del,
->>>> +	};
->>>> +
->>>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_LOCATION);
->>>> +	core_id = FIELD_GET(HISI_PTT_CORE_ID, reg);
->>>> +	sicl_id = FIELD_GET(HISI_PTT_SICL_ID, reg);
->>>> +
->>>> +	pmu_name = devm_kasprintf(&hisi_ptt->pdev->dev, GFP_KERNEL, "hisi_ptt%u_%u",
->>>> +				  sicl_id, core_id);
->>>> +	if (!pmu_name)
->>>> +		return -ENOMEM;
->>>> +
->>>> +	return perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);  
->>>
->>> As below, you can put back the devm cleanup that you had in v4 now you
->>> have modified how the filter cleanup is done to also be devm managed.
->>>   
->>>> +}
->>>> +
->>>>  /*
->>>>   * The DMA of PTT trace can only use direct mapping, due to some
->>>>   * hardware restriction. Check whether there is an IOMMU or the
->>>> @@ -303,15 +825,32 @@ static int hisi_ptt_probe(struct pci_dev *pdev,
->>>>  
->>>>  	pci_set_master(pdev);
->>>>  
->>>> +	ret = hisi_ptt_register_irq(hisi_ptt);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>>  	ret = hisi_ptt_init_ctrls(hisi_ptt);
->>>>  	if (ret) {
->>>>  		pci_err(pdev, "failed to init controls, ret = %d.\n", ret);
->>>>  		return ret;
->>>>  	}
->>>>  
->>>> +	ret = hisi_ptt_register_pmu(hisi_ptt);
->>>> +	if (ret) {
->>>> +		pci_err(pdev, "failed to register pmu device, ret = %d", ret);
->>>> +		return ret;
->>>> +	}
->>>> +
->>>>  	return 0;
->>>>  }
->>>>  
->>>> +void hisi_ptt_remove(struct pci_dev *pdev)
->>>> +{
->>>> +	struct hisi_ptt *hisi_ptt = pci_get_drvdata(pdev);
->>>> +
->>>> +	perf_pmu_unregister(&hisi_ptt->hisi_ptt_pmu);  
->>>
->>> Now you have the filter cleanup occurring using a devm_add_action_or_reset()
->>> there is no need to have a manual cleanup of this - you can
->>> use the approach of a devm_add_action_or_reset like you had in v4.
->>>
->>> As it is the last call in the probe() order it will be the first one
->>> called in the device managed cleanup.
->>>   
->>>> +}
->>>> +  
->>>
->>>
->>> .
->>>   
-> 
-> .
-> 
+On Tue, Mar 08, 2022 at 05:46:39PM +0530, Alim Akhtar wrote:
+
+> - Resend of FSD SPI support patches as the dependencies has landed in MFD
+>   tree, hope this will go via MFD tree (as there are dependency between
+> MFD, SPI and DT)
+
+I either need a pull request for the MFD changes or to wait until those
+changes have come in via Linus' tree.
+
+--Ay8euQKf9LBmoJfJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmInWPkACgkQJNaLcl1U
+h9CUfwf/Qzn9eCU7vhJ5e9qENOzG4TrHBFrMB0oR7Ps/0JjlDi5kpsuIw0h8uWUB
+kkOSVcSj+z0SjLkdRc3/hJrHOQhnUfVM/XWdBwD4O2PZyvof2jzedOWnktKxihh2
+NdVl+aYTWEv8PZKwMrSzGfdCS2vucqpekU5qzqa0Xls0sHcv8pBq/tWhVBlKHGGj
+SXcmdagwZ444x9lCPYoz8rF4L2+kv5tmW8RX1AXOyP8r//ZI1IGvZXXBle0exhgk
+KJAioG9R+eE9NroiaFLojLlLLc2SOvcH15KYSQy+xVURr4SZg3xwrvNSBkcaSTkj
+sbAKgQabKLFPE1QDvtsmaGfxqMcRaw==
+=IP6W
+-----END PGP SIGNATURE-----
+
+--Ay8euQKf9LBmoJfJ--

@@ -2,89 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3DC4D1ED0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0382E4D1E88
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349106AbiCHRWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S1348824AbiCHRUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:20:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348982AbiCHRUw (ORCPT
+        with ESMTP id S1348898AbiCHRUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:20:52 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D71B54684;
-        Tue,  8 Mar 2022 09:19:43 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id hw13so40608497ejc.9;
-        Tue, 08 Mar 2022 09:19:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aqxR4IBXZYNnThtWgqyRIE5yTni2priLEgPy6w83o+Q=;
-        b=kgTAP8XGpVlUPOF/8Z1AY41u1JN3iLbKcygsYP+oBsccD1GWF+nAWpghgMyp72H+Qj
-         L1y7kTy86rEUTIK2dNmSSFN72ROpe1dz8CaETW1pnHrZoVy1fShKLMGoRpWR1EylKUwd
-         z5GaJzt8eGncFkPGiVdEaYegad+cPaKy842xY9ILXR81ZlU7w4U8+R93HfiduKFTEylV
-         FdylLD9bjZURw96QJo6jao6VG2uLtmK2OakXe6URFFqCWnbG/ps4PYJfyYjtg1VE1Pht
-         7gpoFEi2mm5Fhmnxt0WuyM2l3yht46dRtZZtGZukOpAEY495gcQgCo6LGhMrfVNTH+8U
-         rHNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aqxR4IBXZYNnThtWgqyRIE5yTni2priLEgPy6w83o+Q=;
-        b=DLn05XSWmJ98PP5g8FanUH41ysvbfG+qoiaQbgQRRLZsqt3GZj9PZbV2nPDF1qErrF
-         fMBw+75famDQn4ogVl5ikYvCvk0jSwI545paLNPTgOK919L5cT8tQSnOtUO+5WijPlbY
-         tmM1+OQq8xoN9/uCYtCLzuCACMBtycpdmHAAjeVj+0M3VgPlm8OexxjrM6ZIcBqJ8eAr
-         /W7g80W2w/SqmCjpm1XMOkHHjSQD8BZcAh7c/H9iglBC739zoAQHrYTrsVnkLqzM7o9w
-         7YFMws74sXmVfZGffZ1Ts0I7+PolbLP6XvnsAU3ean9vKOAdzxHC9WwdlKRIhOLiTWwy
-         5jhQ==
-X-Gm-Message-State: AOAM5334BC8LEUYzkyoYFoxgChcc7Ox6naG9Qr2vwjuHsLieRQeEe9uv
-        Ue76C+nhx2MpvpgRV/Xf95k=
-X-Google-Smtp-Source: ABdhPJz0t2lt1ecx6E29WZrWRYHg3uEddwUclWaXx43v3UwYgxUGqsHyyVae+6Yj68CK4uozjNPtvQ==
-X-Received: by 2002:a17:907:6d0e:b0:6d7:c85:5bf5 with SMTP id sa14-20020a1709076d0e00b006d70c855bf5mr14214634ejc.31.1646759980757;
-        Tue, 08 Mar 2022 09:19:40 -0800 (PST)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id rv11-20020a17090710cb00b006d5c0cd5e0dsm6085044ejb.82.2022.03.08.09.19.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:19:40 -0800 (PST)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Greg Kroah-Hartman <greg@kroah.com>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-usb@vger.kernel.org (open list:USB GADGET/PERIPHERAL SUBSYSTEM),
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH v2 26/26] usb: gadget: udc: s3c2410: remove usage of list iterator past the loop body
-Date:   Tue,  8 Mar 2022 18:18:18 +0100
-Message-Id: <20220308171818.384491-27-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220308171818.384491-1-jakobkoschel@gmail.com>
-References: <20220308171818.384491-1-jakobkoschel@gmail.com>
+        Tue, 8 Mar 2022 12:20:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CECE53B51
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:18:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14819B81B8B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59BCEC340EB;
+        Tue,  8 Mar 2022 17:18:55 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BiuKkS0j"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646759933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AZ+d5tFFjQ1rNjN45rdxTOo6PPrAddVrmZAsuxSqFck=;
+        b=BiuKkS0j8xqotj6mFNIf7r/lkKm0JyJSrUJKyckxpjJPW9FNuvEqdj3dVtHlBIFTyWo1jE
+        P05CokGXeCz2hz5tn8XQY4UYavumtAgD8urzDuN0328r4mGvk0nj8HdfSd1PcbanRlTWGJ
+        q/5985/J7MGtA/X2b/IlMbHQIiGyAwQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dfec7c9e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 8 Mar 2022 17:18:53 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: [PATCH] random: check for signal and try earlier when generating entropy
+Date:   Tue,  8 Mar 2022 10:18:49 -0700
+Message-Id: <20220308171849.242534-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,54 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+We call try_to_generate_entropy() from wait_for_random_bytes().
+wait_for_random_bytes() always uses wait_event_interruptible_timeout()
+when waiting, since it's called by userspace code in restartable
+contexts, where signals can pend. When entering a busy loop in
+try_to_generate_entropy(), we should therefore also check to see if any
+signals are pending, so that a process doesn't get stuck in that loop
+longer than expected. As well, there's no point in waiting for a full
+second before trying to generate entropy; instead do it in the opposite
+order, where we try to generate, and then go into the waitable.
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable [1].
-
-Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- drivers/usb/gadget/udc/s3c2410_udc.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ drivers/char/random.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
-index e3931da24277..c6625aeb7bca 100644
---- a/drivers/usb/gadget/udc/s3c2410_udc.c
-+++ b/drivers/usb/gadget/udc/s3c2410_udc.c
-@@ -1265,7 +1265,7 @@ static int s3c2410_udc_dequeue(struct usb_ep *_ep, struct usb_request *_req)
- 	struct s3c2410_ep	*ep = to_s3c2410_ep(_ep);
- 	int			retval = -EINVAL;
- 	unsigned long		flags;
--	struct s3c2410_request	*req = NULL;
-+	struct s3c2410_request	*req = NULL, *iter;
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index edb5b06544da..4c5f515b6080 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -128,11 +128,12 @@ int wait_for_random_bytes(void)
  
- 	dprintk(DEBUG_VERBOSE, "%s(%p,%p)\n", __func__, _ep, _req);
+ 	do {
+ 		int ret;
++
++		try_to_generate_entropy();
+ 		ret = wait_event_interruptible_timeout(crng_init_wait, crng_ready(), HZ);
+ 		if (ret)
+ 			return ret > 0 ? 0 : ret;
  
-@@ -1277,13 +1277,14 @@ static int s3c2410_udc_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+-		try_to_generate_entropy();
+ 	} while (!crng_ready());
  
- 	local_irq_save(flags);
+ 	return 0;
+@@ -1374,7 +1375,7 @@ static void try_to_generate_entropy(void)
+ 		return;
  
--	list_for_each_entry(req, &ep->queue, queue) {
--		if (&req->req == _req) {
--			list_del_init(&req->queue);
--			_req->status = -ECONNRESET;
--			retval = 0;
--			break;
--		}
-+	list_for_each_entry(iter, &ep->queue, queue) {
-+		if (&iter->req != _req)
-+			continue;
-+		list_del_init(&iter->queue);
-+		_req->status = -ECONNRESET;
-+		req = iter;
-+		retval = 0;
-+		break;
- 	}
- 
- 	if (retval == 0) {
+ 	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
+-	while (!crng_ready()) {
++	while (!crng_ready() && !signal_pending(current)) {
+ 		if (!timer_pending(&stack.timer))
+ 			mod_timer(&stack.timer, jiffies + 1);
+ 		mix_pool_bytes(&stack.cycles, sizeof(stack.cycles));
 -- 
-2.25.1
+2.35.1
 

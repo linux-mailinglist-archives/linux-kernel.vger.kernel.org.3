@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5394D22F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68A64D22FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349886AbiCHU5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S1347326AbiCHU7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:59:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbiCHU5g (ORCPT
+        with ESMTP id S236472AbiCHU7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:57:36 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F8851E5B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:56:39 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id e3so302401pjm.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:56:39 -0800 (PST)
+        Tue, 8 Mar 2022 15:59:49 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9DA36E26
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:58:52 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so434775pjl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:58:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8S8Qc5du8q8iXMWiizollg+y08pSQtHFMISLIZOfmxc=;
-        b=VPn6oa8gpFPLYzoFh6lAN+Q0LDFSvXnFJLDHEdn24xbm3GWzY6nSpFNCkr0/2+r7FL
-         1uhF9J6esX5X0oXfvW4I5l9XXVivOPcu5aKFtAdZ5B8TprMil8oTxWbd8ZSnE5Rg/+5p
-         vdPtGVWt6c1ZwpOM4tCsilm4f8PsaTmue19y08QuSZF+YmB7BUqWGDGgl/L7wSVvRiGA
-         WkMFiaJGzPYQ/l4UrsVg7KSMK9lQ/pLTDid2Kw4nRCHFgbw9Hxb9y7DiY+H1+bbwVFRZ
-         9/HVtGHsal5+1RezHWUgPmHLJ+ZMDhN1SxMVhCmvHvyCWZLnQEOpdO0alEMYmuMj14dP
-         IPNQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4IJlKs/eE7gOdCe8Uo/1nseLilbVaX3nge4KCMKFs8Y=;
+        b=N0+jpquqL/hxyaQ0I1FgFKidEJ2yASLqYqJ0hc5KUR9wg1RNj7O+QVffH++TpA9fjH
+         B6pJ866PkdsaWGmVFr1uyE+A1Oa0cYGdbNfy3cj8f2UurWk2TD/FCFm3J22/A9TZWOw4
+         aMgUlSSgTPD7e7k+yzLS7wEHykfmENrFPUirljCd/jbS3bSZ1nFUxvb2HuqNaczvTzYR
+         1yVvrkp+8xtuZ9wiViDuGcqgyabMmzoKZUcp2VxJ6tQhq9E08f5QcsoO4JoLL143Xnd2
+         WbyGml8Bs4YTU1l26Kb4zsZCnIZ3MTGsfEacsqsosOXMKsUD4N237QkKZDXvtLROcEkX
+         ywsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8S8Qc5du8q8iXMWiizollg+y08pSQtHFMISLIZOfmxc=;
-        b=pnyI15tfw1o0fkf9xeqBcRNUkp6lQVO4uncmSbcx9oqsGU9u0fxLVx7JSfV+GLgx/x
-         mO84HtAO/dPSrrzNYq6noFJJDaG+M0jSL63PVzn1owGQMZXAwnb/9S2NKYIJDTldoF6e
-         992ZsEgxmQtgJtMNQVr1Qr2hqch6fQiuZBpkULYJiJMAg6f3tzqedjAYsuCFO4uS9h2Y
-         zUaRMRHYXAcmm0wuUoZ0ZXFqFVJkTAU2HVCSOj7fzgmnZ12oFtByvj22VHEFWoOVpOF+
-         nXvN2S7ux/RJGlCGFeFcIv80KAVtuZewQI6SSNj0p0jHnXuOijGDS+DI0j3mpIdOz2bd
-         3XJQ==
-X-Gm-Message-State: AOAM532KQ3HNk89sSft6zi/CPpK4oFEYHRTuLI7CFayBrMcYSMbsH9g8
-        RERWGcyeSuYMRczg9+lGEjHupzH1qoa3Ew==
-X-Google-Smtp-Source: ABdhPJxTU+k8VbUnz5FYJtFfhaPn5ce7zc55gBOelRp6kTIdZdSvcy4Ex9fCg73Wm4h/VFOmMUuhSA==
-X-Received: by 2002:a17:90b:3807:b0:1bf:6c8e:f9d1 with SMTP id mq7-20020a17090b380700b001bf6c8ef9d1mr6651514pjb.186.1646772998682;
-        Tue, 08 Mar 2022 12:56:38 -0800 (PST)
-Received: from localhost.localdomain ([103.85.9.4])
-        by smtp.gmail.com with ESMTPSA id u10-20020a056a00124a00b004f741eb11d0sm1252661pfi.149.2022.03.08.12.56.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4IJlKs/eE7gOdCe8Uo/1nseLilbVaX3nge4KCMKFs8Y=;
+        b=bZayB9NOU9/iz+vBEbM3I5RxV568sVbtAc9N52pcR5ChOLB7P9emUwBhelhpvUc6Oh
+         UxeMLWzJCNew26v00+D4hvb319fn/bvuF+mQSwUMk47++50LSy5Ug/onIdb/U8qJZKVi
+         OxrH7T1TRLUbzXotMSVlOIWGiCq5ep3RW9vceyLZztS62iLl66bfc/5KTesUZGtkeoMd
+         sv4/tvv+SdbsNroHSJQyXhR3burx+sB0bRFEbQoPm9AnGVMvoaNgruFWQB5p/xMiPbc2
+         LzhHf0Cvn9xdG0YwQv3WRg88nkuKhRYbyPIVYE63RayAk5jmx6dKPssUb+ErPoqPSB48
+         lHlA==
+X-Gm-Message-State: AOAM530Mac84uymCgdgGuU5P/g/wFRGvymfmdr3brmtT7F5nyXCIoRZ6
+        eAYDvUpGLY0gScyjcMGUaHzTjw==
+X-Google-Smtp-Source: ABdhPJxGbK1SRRxGSOI4FdNaDa7/E8DXoy3todVz0eyJ4jsqnLgHBN0UoUeyS60nfAIgbqNGcg7brg==
+X-Received: by 2002:a17:90b:3b46:b0:1bf:b1f:588f with SMTP id ot6-20020a17090b3b4600b001bf0b1f588fmr6768417pjb.182.1646773131400;
+        Tue, 08 Mar 2022 12:58:51 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h13-20020a056a00230d00b004f427ffd485sm22364255pfh.143.2022.03.08.12.58.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 12:56:38 -0800 (PST)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH 2/2] staging: r8188eu: proper error handling in rtw_init_drv_sw
-Date:   Wed,  9 Mar 2022 02:25:10 +0530
-Message-Id: <20220308205510.48431-3-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220308205510.48431-1-makvihas@gmail.com>
-References: <20220308205510.48431-1-makvihas@gmail.com>
+        Tue, 08 Mar 2022 12:58:50 -0800 (PST)
+Date:   Tue, 8 Mar 2022 20:58:47 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+Subject: Re: [PATCH v2 24/25] KVM: x86/mmu: initialize constant-value fields
+ just once
+Message-ID: <YifDh5E63lAkJraV@google.com>
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-25-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221162243.683208-25-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,118 +73,345 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code inside rtw_init_drv_sw() calls various init functions to
-populate the padapter structure and checks for their return values
-respectively.
-But if one of the functions in middle fails then it simply returns 
-_FAIL instead of proper logging and calling freeing counterparts
-of previous init functions.
-This leads to various memory leaks and can be found in 
-/sys/kernel/debug/kmemleak if kernel is compiled with DEBUG_KMEMLEAK=y.
+On Mon, Feb 21, 2022, Paolo Bonzini wrote:
+>  
+> +	vcpu->arch.root_mmu.get_guest_pgd = kvm_get_guest_cr3;
+> +	vcpu->arch.root_mmu.get_pdptr = kvm_pdptr_read;
+> +
+> +	if (tdp_enabled) {
 
-Fix this and keep the success and error separate.
+Putting all this code is in a separate helper reduces line-lengths via early
+returns.  And it'll allow us to do the same for the nested specific MMUs if we
+ever get smart and move "nested" to x86.c (preferably as enable_nested or
+nested_enabled).
+
+> +		vcpu->arch.root_mmu.inject_page_fault = kvm_inject_page_fault;
+> +		vcpu->arch.root_mmu.page_fault = kvm_tdp_page_fault;
+> +		vcpu->arch.root_mmu.sync_page = nonpaging_sync_page;
+> +		vcpu->arch.root_mmu.invlpg = NULL;
+> +		reset_tdp_shadow_zero_bits_mask(&vcpu->arch.root_mmu);
+> +
+> +		vcpu->arch.guest_mmu.get_guest_pgd = kvm_x86_ops.nested_ops->get_nested_pgd;
+> +		vcpu->arch.guest_mmu.get_pdptr = kvm_x86_ops.nested_ops->get_nested_pdptr;
+> +		vcpu->arch.guest_mmu.inject_page_fault = kvm_x86_ops.nested_ops->inject_nested_tdp_vmexit;
+
+Using nested_ops is clever, but IMO unnecessary, especially since we can go even
+further by adding a nEPT specific hook to initialize its constant shadow paging
+stuff.
+
+Here's what I had written spliced in with your code.  Compile tested only for
+this version.
 
 
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Date: Mon, 21 Feb 2022 11:22:42 -0500
+Subject: [PATCH] KVM: x86/mmu: initialize constant-value fields just once
+
+The get_guest_pgd, get_pdptr and inject_page_fault pointers are constant
+for all three of root_mmu, guest_mmu and nested_mmu.  The guest_mmu
+function pointers depend on the processor vendor, but are otherwise
+constant.
+
+Opportunistically stop initializing get_pdptr for nested EPT, since it
+does not have PDPTRs.
+
+Opportunistically change kvm_mmu_create() to return '0' unconditionally
+in its happy path to make it obvious that it's a happy path.
+
+Co-developed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
-Tested on Comfast CF-WU810N RTL8188EUS wireless adapter.
-This patch depends on "[PATCH 1/2] staging: r8188eu: call _cancel_timer_ex from
- _rtw_free_recv_priv"
----
- drivers/staging/r8188eu/os_dep/os_intfs.c | 60 ++++++++++++++++++-----
- 1 file changed, 47 insertions(+), 13 deletions(-)
+ arch/x86/kvm/mmu.h        |  1 +
+ arch/x86/kvm/mmu/mmu.c    | 85 ++++++++++++++++++++++++---------------
+ arch/x86/kvm/svm/nested.c | 15 +++++--
+ arch/x86/kvm/svm/svm.c    |  3 ++
+ arch/x86/kvm/svm/svm.h    |  1 +
+ arch/x86/kvm/vmx/nested.c | 13 ++++--
+ arch/x86/kvm/vmx/nested.h |  1 +
+ arch/x86/kvm/vmx/vmx.c    |  3 ++
+ 8 files changed, 82 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
-index 197568422..6279bba07 100644
---- a/drivers/staging/r8188eu/os_dep/os_intfs.c
-+++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
-@@ -469,32 +469,46 @@ u8 rtw_reset_drv_sw(struct adapter *padapter)
- 
- u8 rtw_init_drv_sw(struct adapter *padapter)
- {
--	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL)
-+	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL) {
-+		pr_err("rtw_init_cmd_priv failed\n");
- 		return _FAIL;
-+	}
- 
- 	padapter->cmdpriv.padapter = padapter;
- 
--	if ((rtw_init_evt_priv(&padapter->evtpriv)) == _FAIL)
--		return _FAIL;
-+	if ((rtw_init_evt_priv(&padapter->evtpriv)) == _FAIL) {
-+		pr_err("rtw_init_evt_priv failed\n");
-+		goto free_cmd_priv;
-+	}
- 
--	if (rtw_init_mlme_priv(padapter) == _FAIL)
--		return _FAIL;
-+	if (rtw_init_mlme_priv(padapter) == _FAIL) {
-+		pr_err("rtw_init_mlme_priv failed\n");
-+		goto free_evt_priv;
-+	}
- 
- 	rtw_init_wifidirect_timers(padapter);
- 	init_wifidirect_info(padapter, P2P_ROLE_DISABLE);
- 	reset_global_wifidirect_info(padapter);
- 
--	if (init_mlme_ext_priv(padapter) == _FAIL)
--		return _FAIL;
-+	if (init_mlme_ext_priv(padapter) == _FAIL) {
-+		pr_err("init_mlme_ext_priv failed\n");
-+		goto free_mlme_priv;
-+	}
- 
--	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL)
--		return _FAIL;
-+	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
-+		pr_err("_rtw_init_xmit_priv failed\n");
-+		goto free_mlme_ext;
-+	}
- 
--	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL)
--		return _FAIL;
-+	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL) {
-+		pr_err("_rtw_init_recv_priv failed\n");
-+		goto free_xmit_priv;
-+	}
- 
--	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
--		return _FAIL;
-+	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL) {
-+		pr_err("_rtw_init_sta_priv failed\n");
-+		goto free_recv_priv;
-+	}
- 
- 	padapter->stapriv.padapter = padapter;
- 
-@@ -510,6 +524,26 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
- 	spin_lock_init(&padapter->br_ext_lock);
- 
- 	return _SUCCESS;
-+
-+free_recv_priv:
-+	_rtw_free_recv_priv(&padapter->recvpriv);
-+
-+free_xmit_priv:
-+	_rtw_free_xmit_priv(&padapter->xmitpriv);
-+
-+free_mlme_ext:
-+	free_mlme_ext_priv(&padapter->mlmeextpriv);
-+
-+free_mlme_priv:
-+	rtw_free_mlme_priv(&padapter->mlmepriv);
-+
-+free_evt_priv:
-+	rtw_free_evt_priv(&padapter->evtpriv);
-+
-+free_cmd_priv:
-+	rtw_free_cmd_priv(&padapter->cmdpriv);
-+
-+	return _FAIL;
+diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+index 9517e56a0da1..bd2a6e20307c 100644
+--- a/arch/x86/kvm/mmu.h
++++ b/arch/x86/kvm/mmu.h
+@@ -71,6 +71,7 @@ void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only);
+ void kvm_init_mmu(struct kvm_vcpu *vcpu);
+ void kvm_init_shadow_npt_mmu(struct kvm_vcpu *vcpu, unsigned long cr0,
+ 			     unsigned long cr4, u64 efer, gpa_t nested_cr3);
++void kvm_init_shadow_ept_mmu_constants(struct kvm_vcpu *vcpu);
+ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+ 			     int huge_page_level, bool accessed_dirty,
+ 			     gpa_t new_eptp);
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 8c388add95cb..db2d88c59198 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4778,12 +4778,6 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
+
+ 	context->cpu_mode.as_u64 = cpu_mode.as_u64;
+ 	context->root_role.word = root_role.word;
+-	context->page_fault = kvm_tdp_page_fault;
+-	context->sync_page = nonpaging_sync_page;
+-	context->invlpg = NULL;
+-	context->get_guest_pgd = kvm_get_guest_cr3;
+-	context->get_pdptr = kvm_pdptr_read;
+-	context->inject_page_fault = kvm_inject_page_fault;
+
+ 	if (!is_cr0_pg(context))
+ 		context->gva_to_gpa = nonpaging_gva_to_gpa;
+@@ -4793,7 +4787,6 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
+ 		context->gva_to_gpa = paging32_gva_to_gpa;
+
+ 	reset_guest_paging_metadata(vcpu, context);
+-	reset_tdp_shadow_zero_bits_mask(context);
  }
- 
- void rtw_cancel_all_timer(struct adapter *padapter)
--- 
-2.30.2
+
+ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *context,
+@@ -4818,8 +4811,8 @@ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *conte
+ 	reset_shadow_zero_bits_mask(vcpu, context);
+ }
+
+-static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
+-				union kvm_mmu_paging_mode cpu_mode)
++static void init_kvm_softmmu(struct kvm_vcpu *vcpu,
++			     union kvm_mmu_paging_mode cpu_mode)
+ {
+ 	struct kvm_mmu *context = &vcpu->arch.root_mmu;
+ 	union kvm_mmu_page_role root_role;
+@@ -4891,6 +4884,17 @@ kvm_calc_shadow_ept_root_page_role(struct kvm_vcpu *vcpu, bool accessed_dirty,
+ 	return role;
+ }
+
++void kvm_init_shadow_ept_mmu_constants(struct kvm_vcpu *vcpu)
++{
++	struct kvm_mmu *guest_mmu = &vcpu->arch.guest_mmu;
++
++	guest_mmu->page_fault = ept_page_fault;
++	guest_mmu->gva_to_gpa = ept_gva_to_gpa;
++	guest_mmu->sync_page  = ept_sync_page;
++	guest_mmu->invlpg     = ept_invlpg;
++}
++EXPORT_SYMBOL_GPL(kvm_init_shadow_ept_mmu_constants);
++
+ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+ 			     int huge_page_level, bool accessed_dirty,
+ 			     gpa_t new_eptp)
+@@ -4912,7 +4916,6 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+ 		context->invlpg = ept_invlpg;
+
+ 		update_permission_bitmask(context, true);
+-		context->pkru_mask = 0;
+ 		reset_rsvds_bits_mask_ept(vcpu, context, execonly, huge_page_level);
+ 		reset_ept_shadow_zero_bits_mask(context, execonly);
+ 	}
+@@ -4921,18 +4924,6 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+ }
+ EXPORT_SYMBOL_GPL(kvm_init_shadow_ept_mmu);
+
+-static void init_kvm_softmmu(struct kvm_vcpu *vcpu,
+-			     union kvm_mmu_paging_mode cpu_mode)
+-{
+-	struct kvm_mmu *context = &vcpu->arch.root_mmu;
+-
+-	kvm_init_shadow_mmu(vcpu, cpu_mode);
+-
+-	context->get_guest_pgd	   = kvm_get_guest_cr3;
+-	context->get_pdptr         = kvm_pdptr_read;
+-	context->inject_page_fault = kvm_inject_page_fault;
+-}
+-
+ static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu,
+ 				union kvm_mmu_paging_mode new_mode)
+ {
+@@ -4941,16 +4932,7 @@ static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu,
+ 	if (new_mode.as_u64 == g_context->cpu_mode.as_u64)
+ 		return;
+
+-	g_context->cpu_mode.as_u64   = new_mode.as_u64;
+-	g_context->get_guest_pgd     = kvm_get_guest_cr3;
+-	g_context->get_pdptr         = kvm_pdptr_read;
+-	g_context->inject_page_fault = kvm_inject_page_fault;
+-
+-	/*
+-	 * L2 page tables are never shadowed, so there is no need to sync
+-	 * SPTEs.
+-	 */
+-	g_context->invlpg            = NULL;
++	g_context->cpu_mode.as_u64 = new_mode.as_u64;
+
+ 	/*
+ 	 * Note that arch.mmu->gva_to_gpa translates l2_gpa to l1_gpa using
+@@ -5499,6 +5481,40 @@ static void free_mmu_pages(struct kvm_mmu *mmu)
+ 	free_page((unsigned long)mmu->pml5_root);
+ }
+
++static void kvm_init_mmu_constants(struct kvm_vcpu *vcpu)
++{
++	struct kvm_mmu *nested_mmu = &vcpu->arch.nested_mmu;
++	struct kvm_mmu *root_mmu = &vcpu->arch.root_mmu;
++
++	root_mmu->get_guest_pgd	    = kvm_get_guest_cr3;
++	root_mmu->get_pdptr	    = kvm_pdptr_read;
++	root_mmu->inject_page_fault = kvm_inject_page_fault;
++
++	/*
++	 * When shadowing IA32 page tables, all other callbacks various based
++	 * on paging mode, and the guest+nested MMUs are unused.
++	 */
++	if (!tdp_enabled)
++		return;
++
++	root_mmu->page_fault = kvm_tdp_page_fault;
++	root_mmu->sync_page  = nonpaging_sync_page;
++	root_mmu->invlpg     = NULL;
++	reset_tdp_shadow_zero_bits_mask(&vcpu->arch.root_mmu);
++
++	/*
++	 * Nested TDP MMU callbacks that are constant are vendor specific due
++	 * to the vast differences between EPT and NPT.  NPT in particular is
++	 * nasty because L1 may use 32-bit and/or 64-bit paging.
++	 */
++	nested_mmu->get_guest_pgd     = kvm_get_guest_cr3;
++	nested_mmu->get_pdptr         = kvm_pdptr_read;
++	nested_mmu->inject_page_fault = kvm_inject_page_fault;
++
++	/* L2 page tables are never shadowed, there's no need to sync SPTEs. */
++	nested_mmu->invlpg            = NULL;
++}
++
+ static int __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
+ {
+ 	struct page *page;
+@@ -5575,7 +5591,10 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+ 	if (ret)
+ 		goto fail_allocate_root;
+
+-	return ret;
++	kvm_init_mmu_constants(vcpu);
++
++	return 0;
++
+  fail_allocate_root:
+ 	free_mmu_pages(&vcpu->arch.guest_mmu);
+ 	return ret;
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index dd942c719cf6..c58c9d876a6c 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -96,6 +96,15 @@ static unsigned long nested_svm_get_tdp_cr3(struct kvm_vcpu *vcpu)
+ 	return svm->nested.ctl.nested_cr3;
+ }
+
++void nested_svm_init_mmu_constants(struct kvm_vcpu *vcpu)
++{
++	struct kvm_mmu *guest_mmu = &vcpu->arch.guest_mmu;
++
++	guest_mmu->get_guest_pgd     = nested_svm_get_tdp_cr3;
++	guest_mmu->get_pdptr         = nested_svm_get_tdp_pdptr;
++	guest_mmu->inject_page_fault = nested_svm_inject_npf_exit;
++}
++
+ static void nested_svm_init_mmu_context(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+@@ -112,10 +121,8 @@ static void nested_svm_init_mmu_context(struct kvm_vcpu *vcpu)
+ 	kvm_init_shadow_npt_mmu(vcpu, X86_CR0_PG, svm->vmcb01.ptr->save.cr4,
+ 				svm->vmcb01.ptr->save.efer,
+ 				svm->nested.ctl.nested_cr3);
+-	vcpu->arch.mmu->get_guest_pgd     = nested_svm_get_tdp_cr3;
+-	vcpu->arch.mmu->get_pdptr         = nested_svm_get_tdp_pdptr;
+-	vcpu->arch.mmu->inject_page_fault = nested_svm_inject_npf_exit;
+-	vcpu->arch.walk_mmu              = &vcpu->arch.nested_mmu;
++
++	vcpu->arch.walk_mmu = &vcpu->arch.nested_mmu;
+ }
+
+ static void nested_svm_uninit_mmu_context(struct kvm_vcpu *vcpu)
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index a8ee949b2403..db62b3e88317 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1228,6 +1228,9 @@ static int svm_vcpu_create(struct kvm_vcpu *vcpu)
+
+ 	svm->guest_state_loaded = false;
+
++	if (npt_enabled && nested)
++		nested_svm_init_mmu_constants(vcpu);
++
+ 	return 0;
+
+ error_free_vmsa_page:
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index e45b5645d5e0..99c5a57ab5dd 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -564,6 +564,7 @@ void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
+ void nested_sync_control_from_vmcb02(struct vcpu_svm *svm);
+ void nested_vmcb02_compute_g_pat(struct vcpu_svm *svm);
+ void svm_switch_vmcb(struct vcpu_svm *svm, struct kvm_vmcb_info *target_vmcb);
++void nested_svm_init_mmu_constants(struct kvm_vcpu *vcpu);
+
+ extern struct kvm_x86_nested_ops svm_nested_ops;
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index cc4c74339d35..385f60305555 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -407,15 +407,22 @@ static void nested_ept_new_eptp(struct kvm_vcpu *vcpu)
+ 				nested_ept_get_eptp(vcpu));
+ }
+
++void nested_ept_init_mmu_constants(struct kvm_vcpu *vcpu)
++{
++	struct kvm_mmu *mmu = &vcpu->arch.guest_mmu;
++
++	mmu->get_guest_pgd	= nested_ept_get_eptp;
++	mmu->inject_page_fault	= nested_ept_inject_page_fault;
++
++	kvm_init_shadow_ept_mmu_constants(vcpu);
++}
++
+ static void nested_ept_init_mmu_context(struct kvm_vcpu *vcpu)
+ {
+ 	WARN_ON(mmu_is_nested(vcpu));
+
+ 	vcpu->arch.mmu = &vcpu->arch.guest_mmu;
+ 	nested_ept_new_eptp(vcpu);
+-	vcpu->arch.mmu->get_guest_pgd     = nested_ept_get_eptp;
+-	vcpu->arch.mmu->inject_page_fault = nested_ept_inject_page_fault;
+-	vcpu->arch.mmu->get_pdptr         = kvm_pdptr_read;
+
+ 	vcpu->arch.walk_mmu              = &vcpu->arch.nested_mmu;
+ }
+diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
+index c92cea0b8ccc..78e6d9ba5839 100644
+--- a/arch/x86/kvm/vmx/nested.h
++++ b/arch/x86/kvm/vmx/nested.h
+@@ -37,6 +37,7 @@ void nested_vmx_pmu_refresh(struct kvm_vcpu *vcpu,
+ void nested_mark_vmcs12_pages_dirty(struct kvm_vcpu *vcpu);
+ bool nested_vmx_check_io_bitmaps(struct kvm_vcpu *vcpu, unsigned int port,
+ 				 int size);
++void nested_ept_init_mmu_constants(struct kvm_vcpu *vcpu);
+
+ static inline struct vmcs12 *get_vmcs12(struct kvm_vcpu *vcpu)
+ {
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 40e015e9b260..04edb8a761a8 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7081,6 +7081,9 @@ static int vmx_vcpu_create(struct kvm_vcpu *vcpu)
+ 			goto free_vmcs;
+ 	}
+
++	if (enable_ept && nested)
++		nested_ept_init_mmu_constants(vcpu);
++
+ 	return 0;
+
+ free_vmcs:
+
+base-commit: 94fd8078bd4f838cf9ced265e6ac4237cbcba7a1
+--
 

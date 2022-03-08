@@ -2,128 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81984D213F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAD74D2149
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349463AbiCHTUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S1349940AbiCHTVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241169AbiCHTUF (ORCPT
+        with ESMTP id S1346395AbiCHTVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:20:05 -0500
-Received: from post.munsonfam.org (post.munsonfam.org [172.104.17.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46CF4BBA6;
-        Tue,  8 Mar 2022 11:19:07 -0800 (PST)
-X-Virus-Scanned: Debian amavisd-new at munsonfam.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=munsonfam.org;
-        s=20211029; t=1646767146;
-        bh=WUDUq32+avV6AuvvB00/SiKeDAyjsl+E+09hOXUIlG8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nPlof2j+MkJzBhl0+6G8Np+VGzF2OkilZCdyG5jnY0vZ7fdBnrDOkjoEsKsOgjsu7
-         JAVIDuc4OlFwcdaLBEYLqLWK+Ldu0ACLQhelvm5QUZFjbl1bddKmW18GU+ULZ4JsL6
-         BdtD/I5WOe2UIobPWDf0lUl2C6BXj0X6M5us/yvHhladfaTsP2m4E7SfH1MY4cjitg
-         JFiqFGpIkyny8qlrk8HViQFufwaUfpfkMjnEoeG/fS8b2XzU4jwHMg+0bdIg/SuPYh
-         TipU7iL45fGIXO8f0yuoTHefu3p2Nu4NvhGwpa/zaqZk+e+jlY5wQU/DK6Pn+AOAAz
-         PiGv9nCKzp/gA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=munsonfam.org;
- s=20211029; t=1646767146;
- bh=WUDUq32+avV6AuvvB00/SiKeDAyjsl+E+09hOXUIlG8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nPlof2j+MkJzBhl0+6G8Np+VGzF2OkilZCdyG5jnY0vZ7fdBnrDOkjoEsKsOgjsu7
- JAVIDuc4OlFwcdaLBEYLqLWK+Ldu0ACLQhelvm5QUZFjbl1bddKmW18GU+ULZ4JsL6
- BdtD/I5WOe2UIobPWDf0lUl2C6BXj0X6M5us/yvHhladfaTsP2m4E7SfH1MY4cjitg
- JFiqFGpIkyny8qlrk8HViQFufwaUfpfkMjnEoeG/fS8b2XzU4jwHMg+0bdIg/SuPYh
- TipU7iL45fGIXO8f0yuoTHefu3p2Nu4NvhGwpa/zaqZk+e+jlY5wQU/DK6Pn+AOAAz
- PiGv9nCKzp/gA==
-Received: by lappy-486.munsonfam.org (Postfix, from userid 1000)
- id 64F009E010E; Tue,  8 Mar 2022 14:19:03 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=munsonfam.org;
- s=20211029; t=1646767145;
- bh=WUDUq32+avV6AuvvB00/SiKeDAyjsl+E+09hOXUIlG8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ZwjMrn6NAsHhSfg1/pTnEuCPuMWoBs7PQuU+vyf/u5jeSqEQa4ZZrUMaeoHr+NLVs
- auu6qlkuMUqdzTnWeYJXiNxIAGIc/4nRpJGTsXKfO/MP+aJl+PO6Rh+KM/ZfVPkcxe
- +njgSqYg+41OxdvqWKeaMyntLvzjEfp7XqXDde9piosKg3vkR6+cOZPYOa5kdv5DOU
- wMnoB2u7NFgU2kSYRHp+U9UjtYYd+aoWnaol/rvp33W3IWaPC6+pO7/8/b6VemY0Z4
- TXkn4NKescgF1Ri6bH5UGST40krqjpVIALxN/MsJ/4VyBsQvMOnyJ7NhTkaziaFam8
- ItYA3HL2nZ94w==
-Date:   Tue, 8 Mar 2022 14:19:03 -0500
-From:   Eric B Munson <eric@munsonfam.org>
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Problem: Bluetooth stops connecting to paired devices after
- commit 6a98e3836fa207
-Message-ID: <YiesJ4sLv010CpsA@munsonfam.org>
-References: <Yh/HKSW05IfXCGbR@munsonfam.org>
+        Tue, 8 Mar 2022 14:21:42 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5330C52E10
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:20:45 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KClXk24Fgz9sSk;
+        Tue,  8 Mar 2022 20:20:38 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Q21GJ4Dap7cE; Tue,  8 Mar 2022 20:20:38 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KClXh6Dc4z9sSX;
+        Tue,  8 Mar 2022 20:20:36 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD9188B77E;
+        Tue,  8 Mar 2022 20:20:36 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id tkujhpM5_J9Z; Tue,  8 Mar 2022 20:20:36 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.9])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 427B88B783;
+        Tue,  8 Mar 2022 20:20:36 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 228JKS8j3553839
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 8 Mar 2022 20:20:28 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 228JKPeT3553838;
+        Tue, 8 Mar 2022 20:20:25 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v1 1/6] powerpc/64: Move pci_device_from_OF_node() out of asm/pci-bridge.h
+Date:   Tue,  8 Mar 2022 20:20:20 +0100
+Message-Id: <3c88286b55413730d7784133993a46ef4a3607ce.1646767214.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature"; boundary="+OQ+VktpKdL07tFC"
-Content-Disposition: inline
-In-Reply-To: <Yh/HKSW05IfXCGbR@munsonfam.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1646767223; l=2027; s=20211009; h=from:subject:message-id; bh=mAJX7N3vTZPKixeL2cCTPk4O2NDIuRL15HeHkjweej8=; b=ndIrWl2AXaYMAxQITZB1EIAwT73MFbQK/J17ktE+hWXpsv9PDxN4cpp4yC9tfMHb9ghEDBZavAvm Gkc+Wrx9CHqYdfdK4bR1gDvHgRGdVONgvryo1MU/8Zc5qiA/yVxR
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Move pci_device_from_OF_node() in pci64.c because it needs definition
+of struct device_node and is not worth inlining.
 
---+OQ+VktpKdL07tFC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ppc32.c already has it in pci32.c.
 
-On Wed, 02 Mar 2022, Eric B Munson wrote:
+That way pci-bridge.h doesn't need linux/of.h (Brought by asm/prom.h
+via asm/pci.h)
 
-> Hi,
->=20
-> When testing the latest upstream this morning, my bluetooth mouse
-> stopped working. Further inspection showed that my laptop is failing to
-> connect, but I didn't see anything relevant in dmesg, the driver seemed
-> to load firmware and intialize fine.
->=20
-> A bisect turned up commit 6a98e3836fa207 as the first bad one, but
-> unfortunately there was another problem discovered during the bisect
-> where my bluetooth radio failed to come up at all.
->=20
-> I am using a 5 year old Lenovo X1 carbon which is using the Intel
-> Wireless 8265 / 8275 card and the btintel driver.
->=20
-> I can easily reproduce, and would be happy to test patches or help
-> diagnose if I can. Is this a known issue?
->=20
-> Regards,
-> Eric
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/pci-bridge.h | 14 ++------------
+ arch/powerpc/kernel/pci_64.c          |  9 +++++++++
+ 2 files changed, 11 insertions(+), 12 deletions(-)
 
-This problem remains with the latest 5.17-rc7 kernel. Is there anything
-I can offer to help pinpoint what the cause is?
+diff --git a/arch/powerpc/include/asm/pci-bridge.h b/arch/powerpc/include/asm/pci-bridge.h
+index 90f488fa4c17..c85f901227c9 100644
+--- a/arch/powerpc/include/asm/pci-bridge.h
++++ b/arch/powerpc/include/asm/pci-bridge.h
+@@ -170,10 +170,10 @@ static inline struct pci_controller *pci_bus_to_host(const struct pci_bus *bus)
+ 	return bus->sysdata;
+ }
+ 
+-#ifndef CONFIG_PPC64
+-
+ extern int pci_device_from_OF_node(struct device_node *node,
+ 				   u8 *bus, u8 *devfn);
++#ifndef CONFIG_PPC64
++
+ extern void pci_create_OF_bus_map(void);
+ 
+ #else	/* CONFIG_PPC64 */
+@@ -235,16 +235,6 @@ struct pci_dn *add_sriov_vf_pdns(struct pci_dev *pdev);
+ void remove_sriov_vf_pdns(struct pci_dev *pdev);
+ #endif
+ 
+-static inline int pci_device_from_OF_node(struct device_node *np,
+-					  u8 *bus, u8 *devfn)
+-{
+-	if (!PCI_DN(np))
+-		return -ENODEV;
+-	*bus = PCI_DN(np)->busno;
+-	*devfn = PCI_DN(np)->devfn;
+-	return 0;
+-}
+-
+ #if defined(CONFIG_EEH)
+ static inline struct eeh_dev *pdn_to_eeh_dev(struct pci_dn *pdn)
+ {
+diff --git a/arch/powerpc/kernel/pci_64.c b/arch/powerpc/kernel/pci_64.c
+index 3fb7e572abed..81f84e71ab93 100644
+--- a/arch/powerpc/kernel/pci_64.c
++++ b/arch/powerpc/kernel/pci_64.c
+@@ -285,3 +285,12 @@ int pcibus_to_node(struct pci_bus *bus)
+ }
+ EXPORT_SYMBOL(pcibus_to_node);
+ #endif
++
++int pci_device_from_OF_node(struct device_node *np, u8 *bus, u8 *devfn)
++{
++	if (!PCI_DN(np))
++		return -ENODEV;
++	*bus = PCI_DN(np)->busno;
++	*devfn = PCI_DN(np)->devfn;
++	return 0;
++}
+-- 
+2.34.1
 
-Regards,
-Eric
-
---+OQ+VktpKdL07tFC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEZ71cx3bfGX4kMtFBqEb2cZzVukkFAmInrB4ACgkQqEb2cZzV
-ukkveQ//YkLwFAz9um8O0Zth3ajoyVf5iD34ftR9Tyx1IS7c6QHijhRCYhvDpsHm
-h9B1aVk0e7vN9GRCZuZx06MgVrv0Iv8iCVX/vbfJrHuKM+nv4uu92b3Vzbwq7u6D
-fxOFrtrbbyPBTzSSCb2YkNnvfX8NbkK9CoaP2quYflsOtxUGunJ3gtEcmuVC+f03
-qPeRFIor/TOldxacj1Y8hewDo1wr4Wzk+EAio7FVlnk4QJ7vZ5pM3HJ1DpKCtIX+
-rj5uWt/yyNVU89Af+woHECJIfRrgTrTGFpqcc2PIJBGSn1k4oOOfKD2JO8E0sfxp
-C+D40fIlQ3Y/cVH+TcvyD0Si4CJ9IwhuFk22D/izoIGdkZgHW9Hjx4Gc6VFOaBIb
-KYTnog/KDJGZNe3zfOqB4DXOw4ADWLE7QuL0E75oICj0Nb6oQJUsv3EKVKwzZfuG
-Qi+yIdgrPf+xtTt4+IiWbq52sgFO6CCqMjoHS94LhdspYqcUrVkVJTCwtrzQ0S0v
-RkIISpbauVezANNu7BXPq5xz3rSLVeUXEcDzIGbYeR1s9/Nt3LEfFnkwSdAlXz95
-+P/kGSes/ZfZOZcKMGwFgfJVonuR8RjKeTzHkTFQJGSlgntcusR18TxlbaZF7P7+
-KyiM5Q0CLSQSqfzpIbZAPxjTgoUBIdeqQTZ7EutvVMHFi2fCkIA=
-=eAcx
------END PGP SIGNATURE-----
-
---+OQ+VktpKdL07tFC--

@@ -2,102 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0CE4D257C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624E24D25BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiCIBHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S229963AbiCIBIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:08:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiCIBHP (ORCPT
+        with ESMTP id S230005AbiCIBHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:07:15 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06F5D2240;
-        Tue,  8 Mar 2022 16:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=PXnF7xsg0OHmYSnSkaojnPw+kchBbwd7FnMF7nPOl9U=; b=hxwj8ZfHgideD0FeK4cxhmnIKt
-        CcfdqsPVOJh+YEuqUrIx25ppVNhTORh3V3ZxpkhD0b6V83+Op77NqDLRHo+35Cr6swl0+/doQY6Y3
-        ukV059i3641PXzTfxJpy0ycHHiNelFPQ+5lw5kL+fwxYK6pYAa464nFXn1qjsLoNxB1I=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nRjNu-009sFO-3G; Wed, 09 Mar 2022 00:36:54 +0100
-Date:   Wed, 9 Mar 2022 00:36:54 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     Divya.Koppera@microchip.com, netdev@vger.kernel.org,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        kuba@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        richardcochran@gmail.com, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Madhuri.Sripada@microchip.com,
-        Manohar.Puri@microchip.com
-Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Message-ID: <YifoltDp4/Fs+9op@lunn.ch>
-References: <20220304093418.31645-1-Divya.Koppera@microchip.com>
- <20220304093418.31645-3-Divya.Koppera@microchip.com>
- <YiILJ3tXs9Sba42B@lunn.ch>
- <CO1PR11MB4771237FE3F53EBE43B614F6E2089@CO1PR11MB4771.namprd11.prod.outlook.com>
- <YiYD2kAFq5EZhU+q@lunn.ch>
- <CO1PR11MB4771F7C1819E033EC613E262E2099@CO1PR11MB4771.namprd11.prod.outlook.com>
- <YidgHT8CLWrmhbTW@lunn.ch>
- <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
- <YiecBKGhVui1Gtb/@lunn.ch>
- <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
+        Tue, 8 Mar 2022 20:07:49 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A05D13DE13
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:48:02 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id g1so870516pfv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:48:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2kU1A0mZ+Yf718gi2yxK3phVn7nYLq00SbSALiBBt2c=;
+        b=a3wxXsXXiZ50ZckVfXFMr8KdVU78K5T3RLsMnlj3KUTmsXr2mTTchwj6lfSmoIW6Jw
+         Xxcj7nT6ioNm+beNeT7w/gpTTEoesAjFfDTQkbfIWQwfq91ifPoOm3HZ8d5QpMlRFFmu
+         /SvS/C3P+W10CB6HG+SZCcWMlW7qlD0MjWDZHoph8a3b1v7eqS2BfyKguOEWwdkttbdX
+         RqHb2uCJ+bspxUluBYFhwxvdHNOj0fFpnkuHxLzLPAlkPVyOzDfrRkJ8/tz488d1UDi3
+         MOfKNkuD4sJ9Xv7tvkhmywY4CjEK6CRMke81P29RSspDH8NnokaenIYa9TIs71rPiZ4j
+         hzYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2kU1A0mZ+Yf718gi2yxK3phVn7nYLq00SbSALiBBt2c=;
+        b=ftXHmJUp58ZqjO+zjN2JUkPq0FGkbd094Nq50iF0oYyaUmyrGZ9mkbYzq0S95Cli81
+         7iH0lSsddrBSkOBemWrBrlZN32hjEaLuz2Q1qYPunp7hKcPp/ZxCAGvO9U8f561NB4xX
+         IXl0DveodelRfuZS/1G3lMCg/r+VK6IADig16Y1OM9ACQC+Azf5TSf81MfF2sm9KYWPU
+         RbHA1sDhoaTWa2FKP4UdiFXjw6EhDBFYRMwrjklEegyT0FjxYfScZnMuoDGoUoMux2xQ
+         QeUOBXwciRcZeRAw1P8OtxN8JKweYBYg7BK2fNiH9elZ/X2zfvbWb6tV0rcEkgqNwkHZ
+         j9Uw==
+X-Gm-Message-State: AOAM531CXZG5twOgxMyRboHlNLcr2GwfkMfa06fIoGXmyQxHLYN3LHW/
+        cANzWli4/dtkGF9KUMiHKZg1CCZfyjnDlw==
+X-Google-Smtp-Source: ABdhPJxu5BNOL66aUTFVR0ibkfjQAJZxN1/5Jln5I65fELTDrubmqTQaTFywu9mFnXzUzDH+EMVzEQ==
+X-Received: by 2002:a17:902:b602:b0:14f:e42b:d547 with SMTP id b2-20020a170902b60200b0014fe42bd547mr19779057pls.91.1646782670904;
+        Tue, 08 Mar 2022 15:37:50 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e13-20020a056a001a8d00b004f0f28910cdsm185636pfv.42.2022.03.08.15.37.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 15:37:50 -0800 (PST)
+Date:   Tue, 8 Mar 2022 23:37:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Kieran Bingham <kbingham@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH v3 2/6] KVM: x86: add force_intercept_exceptions_mask
+Message-ID: <YifoysEvfnQgq59A@google.com>
+References: <20210811122927.900604-1-mlevitsk@redhat.com>
+ <20210811122927.900604-3-mlevitsk@redhat.com>
+ <YTECUaPa9kySQxRX@google.com>
+ <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 11:14:04PM +0100, Horatiu Vultur wrote:
-> The 03/08/2022 19:10, Andrew Lunn wrote:
+On Tue, Feb 08, 2022, Maxim Levitsky wrote:
+> On Thu, 2021-09-02 at 16:56 +0000, Sean Christopherson wrote:
+> > Assuming this hasn't been abandoned...
 > > 
-> > > > So this is a function of the track length between the MAC and the PHY?
-> > >
-> > > Nope.
-> > > This latency represents the time it takes for the frame to travel from RJ45
-> > > module to the timestamping unit inside the PHY. To be more precisely,
-> > > the timestamping unit will do the timestamp when it detects the end of
-> > > the start of the frame. So it represents the time from when the frame
-> > > reaches the RJ45 to when the end of start of the frame reaches the
-> > > timestamping unit inside the PHY.
+> > On Wed, Aug 11, 2021, Maxim Levitsky wrote:
+> > > This parameter will be used by VMX and SVM code to force
+> > > interception of a set of exceptions, given by a bitmask
+> > > for guest debug and/or kvm debug.
+> > > 
+> > > This is based on an idea first shown here:
+> > > https://patchwork.kernel.org/project/kvm/patch/20160301192822.GD22677@pd.tnic/
+> > > 
+> > > CC: Borislav Petkov <bp@suse.de>
+> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > ---
+> > >  arch/x86/kvm/x86.c | 3 +++
+> > >  arch/x86/kvm/x86.h | 2 ++
+> > >  2 files changed, 5 insertions(+)
+> > > 
+> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > index fdc0c18339fb..092e2fad3c0d 100644
+> > > --- a/arch/x86/kvm/x86.c
+> > > +++ b/arch/x86/kvm/x86.c
+> > > @@ -184,6 +184,9 @@ module_param(force_emulation_prefix, bool, S_IRUGO);
+> > >  int __read_mostly pi_inject_timer = -1;
+> > >  module_param(pi_inject_timer, bint, S_IRUGO | S_IWUSR);
+> > >  
+> > > +uint force_intercept_exceptions_mask;
+> > > +module_param(force_intercept_exceptions_mask, uint, S_IRUGO | S_IWUSR);
 > > 
-> > I must be missing something here. How do you measure the latency
-> > difference for a 1 meter cable vs a 100m cable?
+> > Use octal permissions.  This also can't be a simple writable param, at least not
+> > without a well-documented disclaimer, as there's no guarantee a vCPU will update
+> > its exception bitmap in a timely fashion.  An alternative to a module param would
+> > be to extend/add a per-VM ioctl(), e.g. maybe KVM_SET_GUEST_DEBUG?  The downside
+> > of an ioctl() is that it would require userspace enabling :-/
+> > 
 > 
-> In the same way because the end result will be the same.
-
-The latency from the RJ45 to the PHY will be the same. But the latency
-from the link peer PHY to the local PHY will be much more, 500ns. In
-order for this RJ45 to PHY delay to be meaningful, don't you also need
-to know the length of the cable? Is there a configuration knob
-somewhere for the cable length?
-
-I'm assuming the ptp protocol does not try to measure the cable delay,
-since if it did, there would be no need to know the RJ45-PHY delay, it
-would be part of that.
-
-> > Isn't this error all just in the noise?
+> All other module params in this file use macros for permissions, that is why
+> I used them too.
 > 
-> I am not sure I follow this question.
+> I'll add a comment with a disclaimer here - this is only for debug.
+> I strongly don't want to have this as ioctl as that will indeed need qemu patches,
+> not to mention things like unit tests and which don't even always use qemu.
+> 
+> Or I can make this parameter read-only. I don't mind reloading kvm module when
+> I change this parameter.
 
-At minimum, you expect to have a 1m cable. The RJ45-PHY track length
-is maybe 2cm? So 2% of the overall length. So you are trying to
-correct the error this 2% causes. If you have a 100m cable, 0.02% is
-RJ45-PHY part that you are trying to correct the error on. These
-numbers seem so small, it seems pointless. It only seems to make sense
-if you know the length of the cable, and to an accuracy of a few cm.
+Oh!  We can force an update, a la nx_huge_pages, where the setter loops through
+all VMs and does a kvm_make_all_cpus_request() to instruct vCPUs to update their
+bitmaps.  Requires a new request, but that doesn't seem like a huge deal, and it
+might help pave the way for adding more debug hooks for developers.
 
-   Andrew
+The param should also be "unsafe".
+
+E.g. something like
+
+static const struct kernel_param_ops force_ex_intercepts_ops = {
+	.set = set_force_exception_intercepts,
+	.get = get_force_exception_intercepts,
+};
+module_param_cb_unsafe(force_exception_intercepts, &force_ex_intercepts_ops,
+		       &force_exception_intercepts, 0644);

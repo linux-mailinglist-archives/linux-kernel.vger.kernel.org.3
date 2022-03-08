@@ -2,298 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513E94D2399
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE4E4D23A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350591AbiCHVvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
+        id S1350537AbiCHVue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350559AbiCHVuj (ORCPT
+        with ESMTP id S230304AbiCHVud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:50:39 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A596655BC3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:49:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646776181; x=1678312181;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FZ/ybwXSKTVeE31D+sksw3hOpY4mhpv0+x5U06HGPoE=;
-  b=TUCvam39Qp/G33jBnwed81y99CBxyA9+z7QizYEHJey9H5UFBa+JmkwR
-   EczMd07Iy91emeQ0M/rXFGEwcBTCu3OVY7y1J8N2xS9f7Sp35wGMyub5X
-   jxKt0A+xjNgjziC1hTXM0bEco9LdueZXyzAUlLXSWfOxUi4ZiBJBzr6v2
-   9k/pM3Uk5YIFh68YDUYX83r+MzwuK/KeOYSVvWAtI/GFZCBrg7mimzw1h
-   1/BEIdoEthhXK11LO3usTXM6vUldMT1obuTtkOi9snWmasAmNem6iKxRv
-   kIW67udaSdL2cmi5JndlB3edyl5ekfIbzyI829L4EJItAlp3ZIlnZ0d4x
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254553239"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="254553239"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:49:39 -0800
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="495612848"
-Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.212.239.204])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:49:39 -0800
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mcgrof@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
-        hao.wu@intel.com, matthew.gerlach@intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v1 7/8] test_firmware: Error injection for firmware upload
-Date:   Tue,  8 Mar 2022 13:49:31 -0800
-Message-Id: <20220308214932.24477-8-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220308214932.24477-1-russell.h.weight@intel.com>
-References: <20220308214932.24477-1-russell.h.weight@intel.com>
+        Tue, 8 Mar 2022 16:50:33 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F837F69
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:49:34 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id o23so253880pgk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:49:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UvxhNuo1pWdGPwLc6pa1lU2igYRccw9Zy2lYHKm+tqE=;
+        b=j3BGSMMz077x39VXI5WDuz3dGrSNFzeWRbnGPrs2GZisCmwxX9g0KzulKe1XNjsdch
+         DNc1a0DMv+yuJBSmE/+3xjeVF6tB1II9fDiI2//2HE2XHm686I1b0MtOirbUcqSfj0wL
+         xhGHDCHOBY5aSxDB2n47oB9IvUh1AhDK91068=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UvxhNuo1pWdGPwLc6pa1lU2igYRccw9Zy2lYHKm+tqE=;
+        b=SR+tFp+2hwAEGhjvyW5prXJyHLrAden5E07YbWlTsOUPHTTGHLntfTvbu4W+c4IGuR
+         +9pKj3dWEujKiUETK9F5Qy5ZzL93YqzPpFlYEOvLIsHr/DObJCDkcItvDp0q6i6pVDCl
+         NstI8MiOIoo+rf94i/vDIKqn7/etwwWrfVfAhN+Vz/aQgFQAECter0Xzlh8Q73rRUYhX
+         J8iyv7QBgwHAT44r/lsJ/Azl87xE1Tb+1eGpBm9eVQ1rH1Grh/Q9BwzXakugV9MO1aUC
+         wRxPl0/luIFS22gL1G8I5mt8JlHGH5KcrfVrP7pWMSuXgDKwFQucoa6Gtgjj2vQfrBCM
+         ICug==
+X-Gm-Message-State: AOAM5324nRhmPu8U5Jtdnwyhp+MnSayUNaXzXrwC+j6L15MsR3WVUoWx
+        YeZudMILgLof7kUKMDH3hAKAgQ==
+X-Google-Smtp-Source: ABdhPJyVVvRyodq7F3sMaUkYdwCNFcxDicKQF/KDk5+fJ3EqXw9JtUH3m/BtiPyz2eanpjv6m7yKaw==
+X-Received: by 2002:a63:8bc4:0:b0:380:af7d:4c7a with SMTP id j187-20020a638bc4000000b00380af7d4c7amr1155825pge.162.1646776173626;
+        Tue, 08 Mar 2022 13:49:33 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d10-20020a056a00198a00b004f72d2c024asm18620pfl.185.2022.03.08.13.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 13:49:33 -0800 (PST)
+Date:   Tue, 8 Mar 2022 13:49:32 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Denys Vlasenko <vda.linux@googlemail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <liam.howlett@oracle.com>,
+        Jann Horn <jannh@google.com>, linux-mm@kvack.org
+Subject: Re: [GIT PULL] Fix fill_files_note
+Message-ID: <202203081342.1924AD9@keescook>
+References: <20220131153740.2396974-1-willy@infradead.org>
+ <871r0nriy4.fsf@email.froward.int.ebiederm.org>
+ <YfgKw5z2uswzMVRQ@casper.infradead.org>
+ <877dafq3bw.fsf@email.froward.int.ebiederm.org>
+ <YfgPwPvopO1aqcVC@casper.infradead.org>
+ <CAG48ez3MCs8d8hjBfRSQxwUTW3o64iaSwxF=UEVtk+SEme0chQ@mail.gmail.com>
+ <87bkzroica.fsf_-_@email.froward.int.ebiederm.org>
+ <87h788fdaw.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h788fdaw.fsf_-_@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add error injection capability to the test_firmware module specifically
-for firmware upload testing. Error injection instructions are transferred
-as the first part of the firmware payload. The format of an error
-injection string is similar to the error strings that may be read from
-the error sysfs node.
+On Tue, Mar 08, 2022 at 01:35:03PM -0600, Eric W. Biederman wrote:
+> 
+> Kees,
+> 
+> Please pull the coredump-vma-snapshot-fix branch from the git tree:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git coredump-vma-snapshot-fix
+> 
+>   HEAD: 390031c942116d4733310f0684beb8db19885fe6 coredump: Use the vma snapshot in fill_files_note
+> 
+> Matthew Wilcox has reported that a missing mmap_lock in file_files_note,
+> which could cause trouble.
+> 
+> Refactor the code and clean it up so that the vma snapshot makes
+> it to fill_files_note, and then use the vma snapshot in fill_files_note.
+> 
+> Eric W. Biederman (5):
+>       coredump: Move definition of struct coredump_params into coredump.h
+>       coredump: Snapshot the vmas in do_coredump
+>       coredump: Remove the WARN_ON in dump_vma_snapshot
+>       coredump/elf: Pass coredump_params into fill_note_info
+>       coredump: Use the vma snapshot in fill_files_note
+> 
+>  fs/binfmt_elf.c          | 66 ++++++++++++++++++++++--------------------------
+>  fs/binfmt_elf_fdpic.c    | 18 +++++--------
+>  fs/binfmt_flat.c         |  1 +
+>  fs/coredump.c            | 59 ++++++++++++++++++++++++++++---------------
+>  include/linux/binfmts.h  | 13 +---------
+>  include/linux/coredump.h | 20 ++++++++++++---
+>  6 files changed, 93 insertions(+), 84 deletions(-)
+> 
+> ---
+> 
+> Kees I realized I needed to rebase this on Jann Horn's commit
+> 84158b7f6a06 ("coredump: Also dump first pages of non-executable ELF
+> libraries").  Unfortunately before I got that done I got distracted and
+> these changes have been sitting in limbo for most of the development
+> cycle.  Since you are running a tree that is including changes like this
+> including Jann's can you please pull these changes into your tree.
 
-To inject the error "programming:hw-error", one would use the error
-injection string "inject:programming:hw-error" as the firmware payload:
+Sure! Can you make a signed tag for this pull?
 
-$ echo 1 > loading
-$ echo inject:programming:hw-error > data
-$ echo 0 > loading
-$ cat status
-idle
-$ cat error
-programming:hw-error
 
-The first part of the error string is the progress state of the upload at
-the time of the error. The progress state would be one of the following:
-"preparing", "transferring", or "programming". The second part of the
-error string is one of the following: "hw-error", "timeout", "device-busy",
-"invalid-file-size", "read-write-error", "flash-wearout", and "user-abort".
+If it helps, my workflow look like this, though I assume there might be
+better ways. (tl;dr: "git tag -s TAG BRANCH")
 
-Note that all of the error strings except "user-abort" will fail without
-delay. The "user-abort" error will cause the firmware upload to stall at
-the requested progress state for up to 5 minutes to allow you to echo 1
-to the cancel sysfs node. It is this cancellation that causes the
-'user-abort" error. If the upload is not cancelled within the 5 minute
-time period, then the upload will complete without an error.
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
----
- lib/test_firmware.c | 127 ++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 122 insertions(+), 5 deletions(-)
+PULL_BRANCH=name-of-branch
+BASE=sha-of-base
+FOR=someone
+TOPIC=topic-name
 
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index d6fe00c4972f..e9f9deeb3a2f 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -117,12 +117,18 @@ struct test_config {
- 			    struct device *device);
- };
- 
-+struct upload_inject_err {
-+	const char *prog;
-+	enum fw_upload_err err_code;
-+};
-+
- struct test_firmware_upload {
- 	char *name;
- 	struct list_head node;
- 	char *buf;
- 	size_t size;
- 	bool cancel_request;
-+	struct upload_inject_err inject;
- 	struct fw_upload *fwl;
- };
- 
-@@ -1067,20 +1073,105 @@ static void upload_release_all(void)
- 	test_fw_config->upload_name = NULL;
- }
- 
-+/*
-+ * This table is replicated from .../firmware_loader/sysfs_upload.c
-+ * and needs to be kept in sync.
-+ */
-+static const char * const fw_upload_err_str[] = {
-+	[FW_UPLOAD_ERR_NONE]	     = "none",
-+	[FW_UPLOAD_ERR_HW_ERROR]     = "hw-error",
-+	[FW_UPLOAD_ERR_TIMEOUT]	     = "timeout",
-+	[FW_UPLOAD_ERR_CANCELED]     = "user-abort",
-+	[FW_UPLOAD_ERR_BUSY]	     = "device-busy",
-+	[FW_UPLOAD_ERR_INVALID_SIZE] = "invalid-file-size",
-+	[FW_UPLOAD_ERR_RW_ERROR]     = "read-write-error",
-+	[FW_UPLOAD_ERR_WEAROUT]	     = "flash-wearout",
-+};
-+
-+static void upload_err_inject_error(struct test_firmware_upload *tst,
-+				    const u8 *p, const char *prog)
-+{
-+	enum fw_upload_err err;
-+
-+	for (err = FW_UPLOAD_ERR_NONE + 1; err < FW_UPLOAD_ERR_MAX; err++) {
-+		if (strncmp(p, fw_upload_err_str[err],
-+			    strlen(fw_upload_err_str[err])) == 0) {
-+			tst->inject.prog = prog;
-+			tst->inject.err_code = err;
-+			return;
-+		}
-+	}
-+}
-+
-+static void upload_err_inject_prog(struct test_firmware_upload *tst,
-+				   const u8 *p)
-+{
-+	static const char * const progs[] = {
-+		"preparing:", "transferring:", "programming:"
-+	};
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(progs); i++) {
-+		if (strncmp(p, progs[i], strlen(progs[i])) == 0) {
-+			upload_err_inject_error(tst, p + strlen(progs[i]),
-+						progs[i]);
-+			return;
-+		}
-+	}
-+}
-+
-+#define FIVE_MINUTES_MS	(5 * 60 * 1000)
-+static enum fw_upload_err
-+fw_upload_wait_on_cancel(struct test_firmware_upload *tst)
-+{
-+	int ms_delay;
-+
-+	for (ms_delay = 0; ms_delay < FIVE_MINUTES_MS; ms_delay += 100) {
-+		msleep(100);
-+		if (tst->cancel_request)
-+			return FW_UPLOAD_ERR_CANCELED;
-+	}
-+	return FW_UPLOAD_ERR_NONE;
-+}
-+
- static enum fw_upload_err test_fw_upload_prepare(struct fw_upload *fwl,
- 						 const u8 *data, u32 size)
- {
- 	struct test_firmware_upload *tst = fwl->dd_handle;
-+	enum fw_upload_err ret = FW_UPLOAD_ERR_NONE;
-+	const char *progress = "preparing:";
- 
- 	tst->cancel_request = false;
- 
--	if (!size || size > TEST_UPLOAD_MAX_SIZE)
--		return FW_UPLOAD_ERR_INVALID_SIZE;
-+	if (!size || size > TEST_UPLOAD_MAX_SIZE) {
-+		ret = FW_UPLOAD_ERR_INVALID_SIZE;
-+		goto err_out;
-+	}
-+
-+	if (strncmp(data, "inject:", strlen("inject:")) == 0)
-+		upload_err_inject_prog(tst, data + strlen("inject:"));
- 
- 	memset(tst->buf, 0, TEST_UPLOAD_MAX_SIZE);
- 	tst->size = size;
- 
--	return FW_UPLOAD_ERR_NONE;
-+	if (tst->inject.err_code == FW_UPLOAD_ERR_NONE ||
-+	    strncmp(tst->inject.prog, progress, strlen(progress)) != 0)
-+		return FW_UPLOAD_ERR_NONE;
-+
-+	if (tst->inject.err_code == FW_UPLOAD_ERR_CANCELED)
-+		ret = fw_upload_wait_on_cancel(tst);
-+	else
-+		ret = tst->inject.err_code;
-+
-+err_out:
-+	/*
-+	 * The cleanup op only executes if the prepare op succeeds.
-+	 * If the prepare op fails, it must do it's own clean-up.
-+	 */
-+	tst->inject.err_code = FW_UPLOAD_ERR_NONE;
-+	tst->inject.prog = NULL;
-+
-+	return ret;
- }
- 
- static enum fw_upload_err test_fw_upload_write(struct fw_upload *fwl,
-@@ -1088,6 +1179,7 @@ static enum fw_upload_err test_fw_upload_write(struct fw_upload *fwl,
- 					       u32 size, u32 *written)
- {
- 	struct test_firmware_upload *tst = fwl->dd_handle;
-+	const char *progress = "transferring:";
- 	u32 blk_size;
- 
- 	if (tst->cancel_request)
-@@ -1097,17 +1189,33 @@ static enum fw_upload_err test_fw_upload_write(struct fw_upload *fwl,
- 	memcpy(tst->buf + offset, data + offset, blk_size);
- 
- 	*written = blk_size;
--	return FW_UPLOAD_ERR_NONE;
-+
-+	if (tst->inject.err_code == FW_UPLOAD_ERR_NONE ||
-+	    strncmp(tst->inject.prog, progress, strlen(progress)) != 0)
-+		return FW_UPLOAD_ERR_NONE;
-+
-+	if (tst->inject.err_code == FW_UPLOAD_ERR_CANCELED)
-+		return fw_upload_wait_on_cancel(tst);
-+
-+	return tst->inject.err_code;
- }
- 
- static enum fw_upload_err test_fw_upload_complete(struct fw_upload *fwl)
- {
- 	struct test_firmware_upload *tst = fwl->dd_handle;
-+	const char *progress = "programming:";
- 
- 	if (tst->cancel_request)
- 		return FW_UPLOAD_ERR_CANCELED;
- 
--	return FW_UPLOAD_ERR_NONE;
-+	if (tst->inject.err_code == FW_UPLOAD_ERR_NONE ||
-+	    strncmp(tst->inject.prog, progress, strlen(progress)) != 0)
-+		return FW_UPLOAD_ERR_NONE;
-+
-+	if (tst->inject.err_code == FW_UPLOAD_ERR_CANCELED)
-+		return fw_upload_wait_on_cancel(tst);
-+
-+	return tst->inject.err_code;
- }
- 
- static void test_fw_upload_cancel(struct fw_upload *fwl)
-@@ -1117,11 +1225,20 @@ static void test_fw_upload_cancel(struct fw_upload *fwl)
- 	tst->cancel_request = true;
- }
- 
-+static void test_fw_cleanup(struct fw_upload *fwl)
-+{
-+	struct test_firmware_upload *tst = fwl->dd_handle;
-+
-+	tst->inject.err_code = FW_UPLOAD_ERR_NONE;
-+	tst->inject.prog = NULL;
-+}
-+
- static const struct fw_upload_ops upload_test_ops = {
- 	.prepare = test_fw_upload_prepare,
- 	.write = test_fw_upload_write,
- 	.poll_complete = test_fw_upload_complete,
- 	.cancel = test_fw_upload_cancel,
-+	.cleanup = test_fw_cleanup
- };
- 
- static ssize_t upload_register_store(struct device *dev,
+TAG="for-$FOR/$TOPIC"
+SIGNED=~/.pull-request-signed-"$TAG"
+echo "$TOPIC update" > "$SIGNED"
+git request-pull "$BASE" git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git "$PULL_BRANCH" | awk '{print "# " $0}' >> "$SIGNED"
+vi "$SIGNED"
+
+git tag -sF "$SIGNED" "$TAG" "$PULL_BRANCH"
+git push origin "$PULL_BRANCH"
+git push origin +"$TAG"
+
+
 -- 
-2.25.1
-
+Kees Cook

@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41E74D1BA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732034D1BA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347786AbiCHP1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S1347811AbiCHP1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:27:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbiCHP11 (ORCPT
+        with ESMTP id S234931AbiCHP1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:27:27 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D694754D;
-        Tue,  8 Mar 2022 07:26:30 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id F132B1F380;
-        Tue,  8 Mar 2022 15:26:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646753188; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m2m+Ogcvgk7zAck8lJL9y5rOuyf0bq56RUWhNvKb8gE=;
-        b=OFDOb0EX8vyJa+0LJDX7Xt+dj6BWiRqgtFSXsPFEiYkQ6sdEw/loo4IXxjnn4hrfyZx4nu
-        xtvYdMNA0TmRGdgQCsrBvDWK+/YB3GNo5U1S690uSfCWm1EOUwu+z/F/Fl1e8LfoiK7zg1
-        decbmKM6dxZOdt3C97MlG/yD3bCKPZY=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 80421A3B83;
-        Tue,  8 Mar 2022 15:26:26 +0000 (UTC)
-Date:   Tue, 8 Mar 2022 16:26:26 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/3] mm: vmalloc: introduce array allocation functions
-Message-ID: <Yid1orgE/Yf56WSV@dhcp22.suse.cz>
-References: <20220308105918.615575-1-pbonzini@redhat.com>
- <20220308105918.615575-2-pbonzini@redhat.com>
- <Yidefp4G/Hk2Twfy@dhcp22.suse.cz>
- <77a34051-2672-88cf-99dd-60f5acfb905e@redhat.com>
+        Tue, 8 Mar 2022 10:27:43 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA8A49F18
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:26:47 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2db2add4516so205824437b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BDg83KmxExGv2FTVzKSEUkIFPafp8SLQqggPFQR6FYo=;
+        b=i57L6Z+tbb7HROJlg+BbVrHHFL+dr6ZTQym4TJ1LIhKfteG/s4OkwFbOkBRqfS20+W
+         Uk+h5tB3/gb4V9xAXo0nr8EDXvCGyWb9ES6bLCNWr9IcFfhgrYwOrVd/TnY+dKIVbwsM
+         W8YH4JqK1fYahcX8d5Q3KaTgozihTANwCFeYfHfEw2t7ZjfIjtwFqp3KuQW5nJvXo/CG
+         JrLHkgDQjz1Ks88fc21Pf62HB4li084AMgHs33PuzW3KG3aJbdvUXniwB3WsPlMEGjmH
+         Zw1z4XHSrlpgBy+BmcQuuhrn0/pqh3D60f3Zn6UIyPM83YBBW5enm31VcSYI859ljPEG
+         5EAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BDg83KmxExGv2FTVzKSEUkIFPafp8SLQqggPFQR6FYo=;
+        b=dlcawh0zvdxYQfQPmvZlzxoTFpkNaPlwOsjUNaMeVw1jAK+p2il5Axftxk4wyryxzs
+         uXhaUymVTfNHnxOYC+3m9l5vC1bl4SCOWunrOwO+aygH8bBhnUqmhzYnQW3G2YDXWQRA
+         T/jqu2nDeENoQqFd4A8lKdpPV3MOt5i88MoGRuFw1X3S/YAzbq4k1rMwMR2IcnuLOi+g
+         GhNzJQCUB3kZV0y8Awax7xIIB2RnrDllTE848oNipLlHMtq0V97gbABGHuZLa0yX3xuH
+         VKv0fi15HzhzGZEuyQ52CLHBRFU6yNyov6GVbXRRpyqoebEQsrBAhN6HT8K5zdVhRwjK
+         hEgQ==
+X-Gm-Message-State: AOAM532TcMS0d+AW3rs2CUEtEHM5AvT6VW5ON+hG64WuJCmCm1k59DCS
+        3IdLMgJJ4L+BaWCM3OMoDCYpfeCQLwgFuU+HgekbCw==
+X-Google-Smtp-Source: ABdhPJxLlp5No+qYWJ6byYFHq0gYnFD75Zl8qKyzpnp75MjksryAO9rMKbI2ZtH9mya7XknA9Tix8MROT4Q2zzrd3oI=
+X-Received: by 2002:a81:9c47:0:b0:2db:9e18:6e75 with SMTP id
+ n7-20020a819c47000000b002db9e186e75mr13379232ywa.437.1646753206417; Tue, 08
+ Mar 2022 07:26:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77a34051-2672-88cf-99dd-60f5acfb905e@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220308103027.32191-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220308103027.32191-1-lukas.bulwahn@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 8 Mar 2022 16:26:35 +0100
+Message-ID: <CACRpkdZJYVRQKWDkp95pF8cdokBw3C0gx1ckmHq=F3tDiV3FvQ@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: rectify entry for REALTEK RTL83xx SMI DSA
+ ROUTER CHIPS
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 08-03-22 14:55:39, Paolo Bonzini wrote:
-> On 3/8/22 14:47, Michal Hocko wrote:
-> > Seems useful
-> > Acked-by: Michal Hocko<mhocko@suse.com>
-> > 
-> > Is there any reason you haven't used __alloc_size(1, 2) annotation?
-> 
-> It's enough to have them in the header:
-> 
-> > > +extern void *__vmalloc_array(size_t n, size_t size, gfp_t flags) __alloc_size(1, 2);
-> > > +extern void *vmalloc_array(size_t n, size_t size) __alloc_size(1, 2);
-> > > +extern void *__vcalloc(size_t n, size_t size, gfp_t flags) __alloc_size(1, 2);
-> > > +extern void *vcalloc(size_t n, size_t size) __alloc_size(1, 2);
+On Tue, Mar 8, 2022 at 11:30 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 
-My bad, I have expected __alloc_size before the function name and simply
-haven't noticed it at the end.
--- 
-Michal Hocko
-SUSE Labs
+> Commit 429c83c78ab2 ("dt-bindings: net: dsa: realtek: convert to YAML
+> schema, add MDIO") converts realtek-smi.txt to realtek.yaml, but missed to
+> adjust its reference in MAINTAINERS.
+>
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken reference.
+>
+> Repair this file reference in REALTEK RTL83xx SMI DSA ROUTER CHIPS.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij

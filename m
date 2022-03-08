@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBDB4D1EEE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680B34D1F00
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349092AbiCHRYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S1349211AbiCHRZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349256AbiCHRW4 (ORCPT
+        with ESMTP id S1349268AbiCHRW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Mar 2022 12:22:56 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC7D546B6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:20:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEED954BD0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:21:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F9EAB81B8D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:20:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 007AFC340EF;
-        Tue,  8 Mar 2022 17:20:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF060B81BA8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D19F2C340EB;
+        Tue,  8 Mar 2022 17:20:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646760045;
-        bh=A2JRK1Xb/G2itzNwQZPzjojQTUPrqMvKMuhH5+ILS2U=;
+        s=k20201202; t=1646760047;
+        bh=tvhfJPi0JmcP0R6mjk8i1krTBkEIDDxpDLNaiuGZXAg=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=n1Jofltwu+9VxqUvhulofFMk9/UkknZgQu4CIbkNyXa/webp7A4ylA/zAZddpHUai
-         vMZM/25k2S4snDH0iraBV9z8odUyJx2ZIfc17BuTwlaQF8j+jRxE6sch5gfEQJKh43
-         B4VaydEJJxGqfeV1vKJqAxZAlasHgOX+tzqXeWKdvA2xKYCnmrs7kDcNuf1nP2OFRC
-         Fc89IU3PXKeBB0UbMPFraE1oHKoyIERc9/q12w50tAWUmgjXeSbNI2BjUXf0ZNqnAX
-         1Z5QV+0xOV/lzu42NVL1eJFLx+DD+/X/jtdeLa3o6wZCuHwACONOFRxHO47os0IRA6
-         qO2vcyp3fLJ8w==
+        b=A2CddHZy94LgbRB8wjPn4KVlKWYk1NDrVhKp0CIX/+QAwBncvNRbwmdNwaO+WHDZ+
+         fdKdOr8DXoDjh6w1EKb7IYzeAvtRsm7Fd+fv/ECFQTCMaKAoIWVnlLed8oh7X32hmz
+         YbBZFeXtJ/P9ISZfpeWhaRCQRcl3dDiTUoQYUAa+waYwvX0QQOKBHw4NQCW5kLRJ1n
+         NfihRcGXeY9tZI33DudkI+Otibn5UO5QtJASoERVTP3w7dAjVQRUp1epcd6cAN3Gjc
+         9BUkoP4b10ghjC0cJ9B6dXZhXdbdebwEDrkiiUy1Jg4v2w4jYRu87BAzyZBl3Zmq/O
+         8us52rkdvwiAA==
 From:   Mark Brown <broonie@kernel.org>
 To:     tiwai@suse.com, perex@perex.cz, tangmeng@uniontech.com,
-        YueHaibing <yuehaibing@huawei.com>, lgirdwood@gmail.com
+        YueHaibing <yuehaibing@huawei.com>, lgirdwood@gmail.com,
+        Vijendar.Mukunda@amd.com, pierre-louis.bossart@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220305123613.6324-1-yuehaibing@huawei.com>
-References: <20220305123613.6324-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH -next] ASoC: amd: acp3x: Fix signedness bug in acp3x
-Message-Id: <164676004367.54315.10724194420698765448.b4-ty@kernel.org>
-Date:   Tue, 08 Mar 2022 17:20:43 +0000
+In-Reply-To: <20220305123705.3708-1-yuehaibing@huawei.com>
+References: <20220305123705.3708-1-yuehaibing@huawei.com>
+Subject: Re: [PATCH -next] ASoC: amd: acp5x-pcm-dma: Fix signedness bug
+Message-Id: <164676004557.54315.464423816098781060.b4-ty@kernel.org>
+Date:   Tue, 08 Mar 2022 17:20:45 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,8 +55,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 5 Mar 2022 20:36:13 +0800, YueHaibing wrote:
-> In acp3x_audio_probe() platform_get_irq() may return error, but i2s_irq now
+On Sat, 5 Mar 2022 20:37:05 +0800, YueHaibing wrote:
+> In acp5x_audio_probe() platform_get_irq() may return error, but i2s_irq now
 > is unsigned int so the error handling is never triggered.
 > 
 > 
@@ -66,8 +67,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: amd: acp3x: Fix signedness bug in acp3x
-      commit: 6f6f28bf5d8e070c1e4a10d62d2a1af264683042
+[1/1] ASoC: amd: acp5x-pcm-dma: Fix signedness bug
+      commit: 954e615497cc95cd918bdfe6590abdfbaa068842
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

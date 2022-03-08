@@ -2,141 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1D44D0D26
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40E74D0D29
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344163AbiCHBAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 20:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S1344172AbiCHBAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 20:00:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiCHBAe (ORCPT
+        with ESMTP id S231624AbiCHBAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 20:00:34 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3899E23A
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:59:39 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id e2so15597955pls.10
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 16:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xtN9yLTb/VZCQMriln/ieL7U3maXDlCZhw7+/x2Xd10=;
-        b=kWJbaJfnC0JDoYimBwsSOto5UcIg5mJnsY6qxfTPBsNjiH2w1G5NxXKodifNnqltja
-         sxBnvWB4V4FAWJXxEgFeFhsutPb5156Mq1zlkWBTsBsj/AS2Cu256gmqEEDshX5+KtV6
-         +8v5eJ5I3LL8/4rg81rOfunj/sx0fFyqzgOu580RV+GtYWcPGR+H4PSBlXTtsFDt3E57
-         SQ3Ga8/3YTi/ufb/1eITkEjw3P1ZWo5dmfG/olKbkS/KFwvKZ96oGcE6rRE0hx2DuKtm
-         0lT2pJuTLwNMJM1eM6+JZNadOOfE91LS/favvKQLY3snFxvJV7hgFdTCZcEcSNvwZaRt
-         i3Bg==
+        Mon, 7 Mar 2022 20:00:37 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEAC2AE36;
+        Mon,  7 Mar 2022 16:59:42 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so20159576ooa.10;
+        Mon, 07 Mar 2022 16:59:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xtN9yLTb/VZCQMriln/ieL7U3maXDlCZhw7+/x2Xd10=;
-        b=FSdYafeD3aCjz5jHTrwvpV3RUR1sUE+DV21WC4v3fX/lhMUZIpEZ38YBjRV7SQ0UfS
-         sgWoWfoqyDkjk0do6XelHz7ATLcpdfvT17SnYhCWsScz6x7N3RqUV4znnCgQM3dXJQuH
-         6uwlWtQuWmVhacZjqjH2O/og8cXTsdIlTXm41xPLkv979n0cPlBnF7aPZKaqowTqWfoy
-         xuwba6QvSb3I2xZxgp/FZsqZGvQDU9mgGHbEPTTixks9OxTxbJLyENKxZbklXF1tIPFQ
-         lY6YW4N1NRqgNjdQCIIVqL9QtKJAI3xoJ8AgZ52ak8zrDE4jf5ZcM32eQ4kp7JZhMyXA
-         EDvg==
-X-Gm-Message-State: AOAM531SB5MXof1+5bXOM1r6wqVsGPPTd2jNtek9utlgvDd81MkQiMv8
-        4X4jWcQduJU3vxEyl06OIM9/1flYMtpikVlFh7IxkKV+
-X-Google-Smtp-Source: ABdhPJy3/4uzjpeSlfbyOXX5UtMgEdRa+7VpX8bfuIbEafQh+pPDwE6yq08SMaeOqwsaSJBeRZvA43BPFw2ucMqqJvA=
-X-Received: by 2002:a17:90b:1b0e:b0:1bf:1c4f:2bc4 with SMTP id
- nu14-20020a17090b1b0e00b001bf1c4f2bc4mr1846234pjb.200.1646701178737; Mon, 07
- Mar 2022 16:59:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QpxfH7e2TQR8IJnD//5HUxcZE39rTUeMoOOPilGn61U=;
+        b=YRquIIbs1vJKLvcX2N0fxD2arO02d0HXwNVGUsa0i1159/FuWxMA33XQKA0SN+dZhv
+         /rRbjXcTpSE60vu5zyX7/vLoqGvetjBbRJrAfd/qfXbmR8VQrzfpRSqYB07FiUl8h+DT
+         W/YskEfN6Kt+K0jJBYrqaznUXyy1cuLGTejW9snePU9TFR5WsR2QNWbFmgaOA0qUAOMB
+         s1Yy75+mVMdbt03+MK6dyLXvb9lnrRQ3sSYn/NrEJA5gGya1KKBCOpGgnfSXCeHAG6IY
+         o4WAbR3Yfeo7WVRpRwydZlAB2cI9P6eaZa6pkw3IIz3m0lYKqylLylmM47z71FPYixp0
+         MW6w==
+X-Gm-Message-State: AOAM533KjtN2EQGjipl07pI10cz6yc88tRGbk3wAxIv4RnACi52EIiTL
+        j5z7TKwkU2ZFHxgQwJyzaBf0jdb0qA==
+X-Google-Smtp-Source: ABdhPJxxLIyVApb2bbIkJlzE7/74k5UfQFnqrIV9ohK+cJpAbHO8Y/FgFwzR+5U/Uuj0ur5Ol3MZnA==
+X-Received: by 2002:a05:6870:b303:b0:d6:f4d1:990d with SMTP id a3-20020a056870b30300b000d6f4d1990dmr943623oao.53.1646701181615;
+        Mon, 07 Mar 2022 16:59:41 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm2799060oov.3.2022.03.07.16.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 16:59:40 -0800 (PST)
+Received: (nullmailer pid 3610656 invoked by uid 1000);
+        Tue, 08 Mar 2022 00:59:39 -0000
+Date:   Mon, 7 Mar 2022 18:59:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: timer: exynos4210-mct: describe
+ known hardware and its interrupts
+Message-ID: <Yiaqe5wjKW5NkiW9@robh.at.kernel.org>
+References: <20220304122424.307885-1-krzysztof.kozlowski@canonical.com>
+ <20220304122424.307885-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-References: <20220303222014.517033-1-shy828301@gmail.com> <CADFyXm6W9CVkO4XPYep-tHg55c8m8NES783kcVYrdjSMbzYoDA@mail.gmail.com>
- <CAHbLzkriyBy2HqjssurLSnhoyuUzpJRZjMPNx34MTgxeO0dddg@mail.gmail.com>
- <13ad4ba1-2a88-9459-3995-70af36aba33e@redhat.com> <20220306180718.6d4e6233130b94fdad98df88@linux-foundation.org>
- <84a6c9c1-d18f-6955-2666-0a2d7bce6094@redhat.com> <20220307154326.6494f7fca7def491a23e5df1@linux-foundation.org>
- <CAHbLzkqY69nFniK+ckQaeu117Q+OqZ2hvFEdVbZaW2C_zAzDbg@mail.gmail.com> <20220307165015.77fbcbe9e1fa2fe15f3eb239@linux-foundation.org>
-In-Reply-To: <20220307165015.77fbcbe9e1fa2fe15f3eb239@linux-foundation.org>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 7 Mar 2022 16:59:27 -0800
-Message-ID: <CAHbLzkrHWjDk5PHJPep=KVHmHtktJana9FtAWZoT196Rg9utJA@mail.gmail.com>
-Subject: Re: [PATCH] mm: thp: don't have to lock page anymore when splitting PMD
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304122424.307885-2-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 4:50 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Mon, 7 Mar 2022 16:03:12 -0800 Yang Shi <shy828301@gmail.com> wrote:
->
-> > On Mon, Mar 7, 2022 at 3:43 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > @@ -2133,8 +2133,6 @@ void __split_huge_pmd(struct vm_area_str
-> > >  {
-> > >         spinlock_t *ptl;
-> > >         struct mmu_notifier_range range;
-> > > -       bool do_unlock_folio = false;
-> > > -       pmd_t _pmd;
-> > >
-> > >         mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
-> > >                                 address & HPAGE_PMD_MASK,
-> > > @@ -2153,42 +2151,14 @@ void __split_huge_pmd(struct vm_area_str
-> > >                         goto out;
-> > >         }
-> > >
-> > > -repeat:
-> > >         if (pmd_trans_huge(*pmd)) {
-> > > -               if (!folio) {
-> > > +               if (!folio)
-> > >                         folio = page_folio(pmd_page(*pmd));
-> >
-> > We could remove the "if (pmd_trans_huge(*pmd))" section since folio is
-> > actually not used afterward at all.
->
-> >
-> > ...
-> >
-> >
-> > With the above if removed, this could be changed to:
-> >
-> > if (pmd_trans_huge(*pmd) || pmd_devmap(*pmd) ||
-> >             is_pmd_migration_entry(*pmd))
-> >                 __split_huge_pmd_locked(vma, pmd, range.start, freeze);
-> >
->
-> OK, looks sane.  Can someone please test all this?
+On Fri, 04 Mar 2022 13:24:21 +0100, Krzysztof Kozlowski wrote:
+> Most of the Samsung Exynos SoCs use almost the same Multi-Core Timer
+> block, so only two compatibles were used so far (for Exynos4210 and
+> Exynos4412 flavors) with Exynos4210-one being used in most of the SoCs.
+> However the Exynos4210 flavor actually differs by number of interrupts.
+> 
+> Add new compatibles, maintaining backward compatibility with Exynos4210,
+> and constraints for number of interrupts.  This allows to exactly match
+> the Exynos MCT hardware.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../timer/samsung,exynos4210-mct.yaml         | 67 ++++++++++++++++++-
+>  1 file changed, 64 insertions(+), 3 deletions(-)
+> 
 
-Build test? I had the exact same change in my tree, it worked for me.
-
-
->
-> --- a/mm/huge_memory.c~mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd-fix
-> +++ a/mm/huge_memory.c
-> @@ -2151,12 +2151,10 @@ void __split_huge_pmd(struct vm_area_str
->                         goto out;
->         }
->
-> -       if (pmd_trans_huge(*pmd)) {
-> -               if (!folio)
-> -                       folio = page_folio(pmd_page(*pmd));
-> -       } else if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
-> -               goto out;
-> -       __split_huge_pmd_locked(vma, pmd, range.start, freeze);
-> +       if (pmd_trans_huge(*pmd) || pmd_devmap(*pmd) ||
-> +           is_pmd_migration_entry(*pmd)))
-> +               __split_huge_pmd_locked(vma, pmd, range.start, freeze);
-> +
->  out:
->         spin_unlock(ptl);
->         /*
-> _
->
+Reviewed-by: Rob Herring <robh@kernel.org>

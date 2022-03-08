@@ -2,155 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270974D1E2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6B44D1E31
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348614AbiCHRKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S1348651AbiCHRKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348421AbiCHRKe (ORCPT
+        with ESMTP id S1348622AbiCHRKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:10:34 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FFA36E1A;
-        Tue,  8 Mar 2022 09:09:37 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id d10so40679852eje.10;
-        Tue, 08 Mar 2022 09:09:37 -0800 (PST)
+        Tue, 8 Mar 2022 12:10:44 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96973FDB3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:09:47 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id x3so15130465qvd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:09:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DOdGQeqCpYXaPiv3FTiB/YOqJ4lEo750BpQvbc/UAeI=;
-        b=bMbwrDBcaXwa367L6NIq1Dx+ubrnoNm0OZbFllsIFAivPdFLc923Lvjdhdg9Mz7m0P
-         vZt2s7jx/4SdeOXuZ53+J/AbTQ2aJuUIdSN+rpNTqdmr0R71la2saasNcju++Ll4SeEz
-         7Dzb1wxygwgg7tA1J2GNjyfrj//kkM4AleeFoPI8R/fk/SvpFYxUapLyHicPewphSMoi
-         5mQ1/F/dHmklwz4rhozdYGlFDaD67Nn+35oyXwVq0HI7RMIG4s1X15blUfgGjsXFbXT9
-         0u83L2R4njw62ySrlwy7p2wNdkSYmyxmJu3HEvXW6n6A1BuuwpKcSm8RrfQGKAvi9NTy
-         +ACw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UQsloRHTSaGiGetdbDWoxqQEJYsHpKTImpl+EXTJaU0=;
+        b=H2042iFn8zbvVMiOulmTBRC55hfhpLFhLPRiEwvUGuLHJeAjSulrbb/dnZ+gGOGpdx
+         z+nEoUPsD5v9kA7aLyUd3mh/+c+OPht0WtwZz7SUgG5EpIxXKtD33/rrpjJgBRLOZ+Wc
+         +w4Ng70uS1XwbnLD2GxLQoEqEPlzd/G0Nj4DbBPsF4RU+8mYeOajlGGlmH85BpFpMHq4
+         V9pj+HOsO1K0j7YJzSI1eVB8yORUl7FQ0K4fuwqcZEq2hj4nu6kvqSciK8Z1UvqSgnGX
+         2Gg1wU8u+siIqzrk0fumIX8gcdhjob0cCaqDCKEe8NWqBvwoktmRCHASmW+vII/XTqBi
+         SkNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DOdGQeqCpYXaPiv3FTiB/YOqJ4lEo750BpQvbc/UAeI=;
-        b=U6Q1ZvXLLn/oTftzdgcd2zsWupBHD9M3aY7Y7lWL2jMXpR91yRHtMusZZPYeGOZDDB
-         ph0+rh1kkB6T6KEPbDhWh0z5L8+aiWPSXmrnF5K9Gx40efs5IdEahwE4zSYs2dwCyy7d
-         TkcoIJ68DBF07vf9Qt341CHnjqo4C4wBRU4OffnoJN4dgbzX8/LQmr3U7IsIcvcoNwOl
-         NGcTZSjDikcQWP+lqYwNBMvPIMZXfcB2ZaGsy9sNhx3iNO2yVVMA4MAnGnVOC3EvWa9J
-         7hklsWaHQgFsmmT8vODYJ+WaEQbFKpY16lsPfCGpD6ez5/DfWpMJRWY0DwxH/yNSOTQq
-         Qgjw==
-X-Gm-Message-State: AOAM531cJ+wyd1BIZmW5qZ35C+HFEKT+BqR29fdvgu1AgmeWePN8wMyE
-        tX/J1NyDPWbagiJu6aQCRoDT9Sd+mn8Jwg==
-X-Google-Smtp-Source: ABdhPJyeNwSfLyxrgPkLjbw5ubx2q+bLyD0P6+SR9bXANfjYj7eUmKomlYuskiRclYhx/J1WfTiwIA==
-X-Received: by 2002:a17:906:2b97:b0:6cd:6d67:ab5d with SMTP id m23-20020a1709062b9700b006cd6d67ab5dmr14406385ejg.723.1646759375991;
-        Tue, 08 Mar 2022 09:09:35 -0800 (PST)
-Received: from debianHome.localdomain (dynamic-077-006-252-105.77.6.pool.telefonica.de. [77.6.252.105])
-        by smtp.gmail.com with ESMTPSA id f6-20020a056402354600b004167d09f418sm443751edd.55.2022.03.08.09.09.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:09:35 -0800 (PST)
-From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-To:     selinux@vger.kernel.org
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [PATCH v2] selinux: log anon inode class name
-Date:   Tue,  8 Mar 2022 18:09:26 +0100
-Message-Id: <20220308170928.58040-1-cgzones@googlemail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220217143457.75229-1-cgzones@googlemail.com>
-References: <20220217143457.75229-1-cgzones@googlemail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UQsloRHTSaGiGetdbDWoxqQEJYsHpKTImpl+EXTJaU0=;
+        b=UU0qv1wZsf2FJ/rWV0YEJh6frVcDgC5jMXImMKda5ErXlhKEwG3CC5mpiZawW+5YPt
+         4+cassmXGjpO6xfAR/Glf/B9PMAzmnV8/UljQq/iMuky851HMnTugBVnBofizK971s21
+         ebsRG+VMarrXcRmdYIc/etGwGJE3GrMn5V8pq64KDSKheCOqCr4TdJAL7reia+LV3OVN
+         rnSIMlQVWgxSxbeSb2k02vg+ozrHvLLcQ9BZDvvgl+xWLRqJz+fsTAdl5FVNyeDviET3
+         CvJHtidfvuZmubvyH9k2g458AWuXYSqXGSsKrcm4vTP3QBQjtgKaT6XqZpNaA9MfSLO6
+         80Sg==
+X-Gm-Message-State: AOAM531k9hgGb2g6Y72SUurzkgKsM6zpQpTEZF2rlrgjIXbQNwg+V5rT
+        zTQURJ0l2GR5LxjaWvt31GsYpNa7hBqjvt5mnTbvaaJisLQ=
+X-Google-Smtp-Source: ABdhPJziwHM3mwjCjwO4Ib9qlCcqXaMHab7YQ1KRTIBpOJvcb8c3ZW4vgDTtKRTvbt8UU9j7WWhqwP7KKAN7SmM4acc=
+X-Received: by 2002:a05:6214:1bcf:b0:435:4c86:607a with SMTP id
+ m15-20020a0562141bcf00b004354c86607amr12909937qvc.122.1646759386744; Tue, 08
+ Mar 2022 09:09:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <1646758500-3776-1-git-send-email-quic_vpolimer@quicinc.com> <1646758500-3776-6-git-send-email-quic_vpolimer@quicinc.com>
+In-Reply-To: <1646758500-3776-6-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 8 Mar 2022 20:09:35 +0300
+Message-ID: <CAA8EJprgJvOGCU_PvAHCNoMvSam8QV4x9N2ZEm+oer5d7B-cPA@mail.gmail.com>
+Subject: Re: [PATCH v5 5/5] drm/msm/disp/dpu1: set mdp clk to the maximum
+ frequency in opp table during probe
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Log the anonymous inode class name in the security hook
-inode_init_security_anon.  This name is the key for name based type
-transitions on the anon_inode security class on creation.  Example:
+On Tue, 8 Mar 2022 at 19:55, Vinod Polimera <quic_vpolimer@quicinc.com> wrote:
+>
+> use max clock during probe/bind sequence from the opp table.
+> The clock will be scaled down when framework sends an update.
+>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index d550f90..d9922b9 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -1221,6 +1221,7 @@ static int dpu_bind(struct device *dev, struct device *master, void *data)
+>         struct dpu_kms *dpu_kms;
+>         struct dss_module_power *mp;
+>         int ret = 0;
+> +       unsigned long max_freq = ULONG_MAX;
+>
+>         dpu_kms = devm_kzalloc(&pdev->dev, sizeof(*dpu_kms), GFP_KERNEL);
+>         if (!dpu_kms)
+> @@ -1243,6 +1244,8 @@ static int dpu_bind(struct device *dev, struct device *master, void *data)
+>                 return ret;
+>         }
+>
+> +       dev_pm_opp_find_freq_floor(dev, &max_freq);
 
-    type=AVC msg=audit(02/16/22 22:02:50.585:216) : avc:  granted \
-        { create } for  pid=2136 comm=mariadbd anonclass="[io_uring]" \
-        scontext=system_u:system_r:mysqld_t:s0 \
-        tcontext=system_u:system_r:mysqld_iouring_t:s0 tclass=anon_inode
+You leak a reference to the opp here. The function returns a value,
+which should be dev_pm_opp_put().
+Moreover judging from the dev_pm_opp_set_rate() code I think you don't
+have to find an exact frequency, as it will call
+clk_round_rate()/_find_freq_ceil() anyway.
+Could you please check that it works?
 
-Add a new LSM audit data type holding the inode and the class name.
+> +       dev_pm_opp_set_rate(dev, max_freq);
+>         platform_set_drvdata(pdev, dpu_kms);
+>
+>         ret = msm_kms_init(&dpu_kms->base, &kms_funcs);
+> --
+> 2.7.4
+>
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 
----
-v2:
-  - drop dev= and name= output for anonymous inodes, and hence simplify
-    the common_audit_data union member.
-  - drop WARN_ON() on empty name passed to inode_init_security_anon hook
----
- include/linux/lsm_audit.h | 2 ++
- security/lsm_audit.c      | 4 ++++
- security/selinux/hooks.c  | 4 ++--
- 3 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
-index 17d02eda9538..97a8b21eb033 100644
---- a/include/linux/lsm_audit.h
-+++ b/include/linux/lsm_audit.h
-@@ -76,6 +76,7 @@ struct common_audit_data {
- #define LSM_AUDIT_DATA_IBENDPORT 14
- #define LSM_AUDIT_DATA_LOCKDOWN 15
- #define LSM_AUDIT_DATA_NOTIFICATION 16
-+#define LSM_AUDIT_DATA_ANONINODE	17
- 	union 	{
- 		struct path path;
- 		struct dentry *dentry;
-@@ -96,6 +97,7 @@ struct common_audit_data {
- 		struct lsm_ibpkey_audit *ibpkey;
- 		struct lsm_ibendport_audit *ibendport;
- 		int reason;
-+		const char *anonclass;
- 	} u;
- 	/* this union contains LSM specific data */
- 	union {
-diff --git a/security/lsm_audit.c b/security/lsm_audit.c
-index 1897cbf6fc69..981f6a4e4590 100644
---- a/security/lsm_audit.c
-+++ b/security/lsm_audit.c
-@@ -433,6 +433,10 @@ static void dump_common_audit_data(struct audit_buffer *ab,
- 		audit_log_format(ab, " lockdown_reason=\"%s\"",
- 				 lockdown_reasons[a->u.reason]);
- 		break;
-+	case LSM_AUDIT_DATA_ANONINODE:
-+		audit_log_format(ab, " anonclass=");
-+		audit_log_untrustedstring(ab, a->u.anonclass);
-+		break;
- 	} /* switch (a->type) */
- }
- 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index b12e14b2797b..49c0abfd2f6a 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -2965,8 +2965,8 @@ static int selinux_inode_init_security_anon(struct inode *inode,
- 	 * allowed to actually create this type of anonymous inode.
- 	 */
- 
--	ad.type = LSM_AUDIT_DATA_INODE;
--	ad.u.inode = inode;
-+	ad.type = LSM_AUDIT_DATA_ANONINODE;
-+	ad.u.anonclass = name ? (const char *)name->name : "?";
- 
- 	return avc_has_perm(&selinux_state,
- 			    tsec->sid,
 -- 
-2.35.1
-
+With best wishes
+Dmitry

@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234174D2116
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4D74D212C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349931AbiCHTKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:10:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53852 "EHLO
+        id S237729AbiCHTOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349886AbiCHTKT (ORCPT
+        with ESMTP id S232050AbiCHTOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:10:19 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A595649276
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:09:21 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C69A1516;
-        Tue,  8 Mar 2022 11:09:21 -0800 (PST)
-Received: from [10.57.41.254] (unknown [10.57.41.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 931F93FA45;
-        Tue,  8 Mar 2022 11:09:19 -0800 (PST)
-Message-ID: <1dcfc5a8-e344-0bf2-95ea-862aac747b92@arm.com>
-Date:   Tue, 8 Mar 2022 19:09:14 +0000
+        Tue, 8 Mar 2022 14:14:19 -0500
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B9335865;
+        Tue,  8 Mar 2022 11:13:22 -0800 (PST)
+Received: by mail-oi1-f179.google.com with SMTP id 12so231921oix.12;
+        Tue, 08 Mar 2022 11:13:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=s2AXhz92YfR+Z3ouxiGrl7g4uvz8SgJwXLDdDVT50eA=;
+        b=u/Ovl9yFxqp8pvkBf6gWzdYHyeYhsHO1tlDdvG4epBB8ExjvPQTWxEfAVFstMiJD8B
+         Jb4Wc8rgzw7UZo9TgeKS1fbEa6laXjog9pJUwTFc4nX6ZbHdzmw1KElIhDUjUIthd1P/
+         saRw9MWsfqvNGPDuVaLsrxGuZM93oBTBLpnMpLhdHv/OKbygQjz/pNTzadV8n6UnWpFM
+         mOlM2J8srsmQ8j7NgBK5DLqCHAqgy8i5jGvA2yekk3SYA5h+UcXKIEZUnesOOZIxa6x4
+         uUKBfEfNDKT2Rxzqm+cK7bt0NjvkSHqoKxMwvUmDN9yrUQHlFRo7fV01+Etf/m8abwXt
+         H0Hg==
+X-Gm-Message-State: AOAM530rBORSvv2rCgdIPXIbHwfiL6qtrn+grn8X3xI1p1I3mc6mTQ+9
+        Qvp8sYqv2UGuaoKeG3Z3ckZl0jf8rw==
+X-Google-Smtp-Source: ABdhPJxSqF6A2iPPt+15Fi7jqUAwkgGGJAYqtBG4RbU/Z4k9M1jC6z/duFCKHJbTU6EKbB10t/f7BQ==
+X-Received: by 2002:a05:6808:181c:b0:2d5:8e6a:31cc with SMTP id bh28-20020a056808181c00b002d58e6a31ccmr3669102oib.15.1646766801853;
+        Tue, 08 Mar 2022 11:13:21 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t4-20020a056870048400b000da4412b3d8sm3335276oam.51.2022.03.08.11.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 11:13:21 -0800 (PST)
+Received: (nullmailer pid 1164118 invoked by uid 1000);
+        Tue, 08 Mar 2022 19:13:20 -0000
+Date:   Tue, 8 Mar 2022 13:13:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: firmware: arm,scpi: Add missing maxItems
+ to mboxes/shmem
+Message-ID: <Yieq0JGAJtNM978J@robh.at.kernel.org>
+References: <58b7c706f259f88a61bfe82d9106fe0a93a9838d.1646761693.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH RFC] arm64: improve display about CPU architecture in
- cpuinfo
-Content-Language: en-GB
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
-        Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, joey.gouly@arm.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220307030417.22974-1-rongwei.wang@linux.alibaba.com>
- <87h78a178u.wl-maz@kernel.org>
- <a31431bf-24bb-71ac-8f3c-f9ca19f5c4f0@linux.alibaba.com>
- <87bkyi0x53.wl-maz@kernel.org> <1b94af8b-a294-5765-4e1e-896f70db621f@arm.com>
- <CAK8P3a3zA25=iZkVGPc=V+9tqqsWgQjoD9BSS60foGZtDwsujA@mail.gmail.com>
- <9296f97c-f894-001c-53e6-41bbfe36ce71@arm.com>
- <YieZGoV+XR2kdHix@shell.armlinux.org.uk>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YieZGoV+XR2kdHix@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58b7c706f259f88a61bfe82d9106fe0a93a9838d.1646761693.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-08 17:57, Russell King (Oracle) wrote:
-> On Mon, Mar 07, 2022 at 08:05:06PM +0000, Robin Murphy wrote:
->> On 2022-03-07 19:30, Arnd Bergmann wrote:
->>> On Mon, Mar 7, 2022 at 5:48 PM Robin Murphy <robin.murphy@arm.com> wrote:
->>>
->>>> And arguably it's not even too late, because 10 years ago this *did* say
->>>> "AArch64". I don't remember all the exact details behind commit
->>>> 44b82b7700d0 ("arm64: Fix up /proc/cpuinfo") - this just tickled enough
->>>> of a memory to go and look up the git history - but I don't think we
->>>> changed any of those fields without a real reason.
->>>>
->>>
->>> The patch description does state that this was done for compatibility with
->>> 32-bit architectures, which does make some sense. I suppose for similar
->>> reasons, the arch/arm/ version of /proc/cpuinfo is now stuck at
->>> 'CPU architecture: 7', even for ARMv8 or higher in aarch32 mode.
->>>
->>> The part that I find more annoying is how we leave out the one bit
->>> of information that people are generally looking for in /proc/cpuinfo:
->>> the name of the processor. Even though we already know the
->>> exact processor type in order to handle the CPU errata, this is
->>> always "model name\t: ARMv7 Processor rev %d (v7l)" on 32-bit,
->>> and "model name\t: ARMv8 Processor rev %d (%s)" on 64-bit,
->>> with the revision being the least important bit of information here...
->>
->> Eh, it's hardly impossible to recompose a MIDR value from the implementer,
->> part, variant and revision fields if one actually needs to. Maybe we could
->> null-terminate the raw MIDR value and print it as a string of
->> largely-unprintable characters in the "model name" field... I guess that
->> might satisfy the crowd who want parity* with x86 CPUID, at least :)
+On Tue, Mar 08, 2022 at 06:49:02PM +0100, Geert Uytterhoeven wrote:
+> "make dt_binding_check":
 > 
-> Actually, it is impossible to do it reliably. I won't expand on this,
-> except what I said in my other reply - there are cases where the MIDR
-> value is not unique.
+>     Documentation/devicetree/bindings/firmware/arm,scpi.example.dt.yaml: scpi: shmem: [[2], [1]] is too long
+> 
+> Fix this by adding a proper maxItems value to the shmem property,
+> and to the related mboxes property.
+> 
+> Fix the grouping of the "mboxes" property in the example.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+> Exposed by commit 39bd2b6a3783b899 ("dt-bindings: Improve phandle-array
+> schemas").
+> 
+> v2:
+>   - Change limit from 2 to 4, as requested by Sudeep,
+>   - Add Acked-by,
+>   - Add maxItems to mboxes properties,
+>   - Group mboxes in example.
+> ---
+>  Documentation/devicetree/bindings/firmware/arm,scpi.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Sorry, I was assuming the given context of CPUs which report as v7 or 
-v8, where one can safely and unambiguously infer that the missing 
-original MIDR.Architecture value was 0xf. No implication was intended 
-that it was possible for everything in general.
+Applied, thanks!
 
-Robin.
+Rob

@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C904D0EF3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A7C4D0EF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240602AbiCHFQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S241178AbiCHFR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiCHFQa (ORCPT
+        with ESMTP id S234381AbiCHFRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:16:30 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C908036B41;
-        Mon,  7 Mar 2022 21:15:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646716534; x=1678252534;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=gG7N1W4Kxhwbbk1jZERSsHzsE69OmsTBNUffQnkDmK8=;
-  b=nLvLdwXuSa3pb74zDIuEUmUelkSu7nMD3fCqbVhdzeJsdPjUHcVc7T1T
-   fjG+kNLzb4r3V8CUdywpRmQf4jjreu8Zjt0SHPyX68DYfkuHfVuG2KGEU
-   JGOtl2eSlt7+UmmAe5CiTUASjS19LBSfVIPGEJyD4POyyC5Men5vyWwXy
-   s7VdEAHL2Dkgm5ZRHnxdM8htoz/tbjIhMRZYmdHgihK+rd5PTCAqSo40U
-   uLHUn3Owsf+Y1oeKoavYvqfpExt8mR0/uKDSzUo7m46SbqAYRztEp95UP
-   4sipcE4dTnY4ZeAQqQAU+NKIOgFps3gcPZxTuBaccSJHzQiVU2fTuynUd
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="242030981"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="242030981"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 21:15:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="553475743"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga008.jf.intel.com with ESMTP; 07 Mar 2022 21:15:29 -0800
-Message-ID: <52bbbd92-17d4-a5ea-150e-28cf56bb0a67@intel.com>
-Date:   Tue, 8 Mar 2022 07:15:28 +0200
+        Tue, 8 Mar 2022 00:17:55 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A2436B41
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:16:58 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=dust.li@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V6cdbhs_1646716615;
+Received: from localhost(mailfrom:dust.li@linux.alibaba.com fp:SMTPD_---0V6cdbhs_1646716615)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 08 Mar 2022 13:16:56 +0800
+Date:   Tue, 8 Mar 2022 13:16:55 +0800
+From:   "dust.li" <dust.li@linux.alibaba.com>
+To:     kernel test robot <lkp@intel.com>, kuba@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [saeed:net-next 154/185] net/smc/smc_sysctl.h:23:16: warning: no
+ previous prototype for 'smc_sysctl_net_init'
+Message-ID: <20220308051655.GF35207@linux.alibaba.com>
+Reply-To: dust.li@linux.alibaba.com
+References: <202203081012.KgONXWsS-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [RESEND PATCH v1] scsi: ufs: exclude UECxx from SFR dump list
-Content-Language: en-US
-To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        cang@codeaurora.org, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com,
-        vkumar.1997@samsung.com
-References: <CGME20220307024436epcas2p1cb5b07d5149b37610819fa3d70af59ea@epcas2p1.samsung.com>
- <1646621010-118886-1-git-send-email-kwmad.kim@samsung.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <1646621010-118886-1-git-send-email-kwmad.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202203081012.KgONXWsS-lkp@intel.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 04:43, Kiwoong Kim wrote:
-> These are ROC type things that means their values
-> are cleared when the SFRs are read.
-> They are usually read in ISR when an UIC error occur.
-> Thus, their values would be zero at many cases. And
-> there might be a little bit risky when they are read to
-> be cleared before the ISR reads them, e.g. the case that
-> a command is timed-out, ufshcd_dump_regs is called in
-> ufshcd_abort and an UIC error occurs at the nearly
-> same time. In this case, ISR will be called but UFS error handler
-> will not be scheduled.
-> This patch is to make UFS driver not read those SFRs in the
-> dump function, i.e. ufshcd_dump_regs.
-> 
-> Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
-> ---
->  drivers/scsi/ufs/ufshcd.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 460d2b4..8b65c081 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -115,8 +115,12 @@ int ufshcd_dump_regs(struct ufs_hba *hba, size_t offset, size_t len,
->  	if (!regs)
->  		return -ENOMEM;
->  
-> -	for (pos = 0; pos < len; pos += 4)
-> +	for (pos = 0; pos < len; pos += 4) {
-> +		if (pos >= REG_UIC_ERROR_CODE_PHY_ADAPTER_LAYER	&&
-> +		    pos <= REG_UIC_ERROR_CODE_DME)
+On Tue, Mar 08, 2022 at 10:43:56AM +0800, kernel test robot wrote:
+>tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git net-next
+>head:   03200f4a126b1a08c0f16dea7f67e6bff9c83c90
+>commit: 7de8eb0d9039f16e1122d7aa524a1502a160c4ff [154/185] net/smc: fix compile warning for smc_sysctl
+>config: arc-randconfig-r016-20220308 (https://download.01.org/0day-ci/archive/20220308/202203081012.KgONXWsS-lkp@intel.com/config)
+>compiler: arceb-elf-gcc (GCC) 11.2.0
+>reproduce (this is a W=1 build):
+>        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>        chmod +x ~/bin/make.cross
+>        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=7de8eb0d9039f16e1122d7aa524a1502a160c4ff
+>        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
+>        git fetch --no-tags saeed net-next
+>        git checkout 7de8eb0d9039f16e1122d7aa524a1502a160c4ff
+>        # save the config file to linux build tree
+>        mkdir build_dir
+>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash net/
+>
+>If you fix the issue, kindly add following tag as appropriate
+>Reported-by: kernel test robot <lkp@intel.com>
+>
+>All warnings (new ones prefixed by >>):
+>
+>   In file included from net/smc/af_smc.c:54:
+>>> net/smc/smc_sysctl.h:23:16: warning: no previous prototype for 'smc_sysctl_net_init' [-Wmissing-prototypes]
+>      23 | int __net_init smc_sysctl_net_init(struct net *net)
+>         |                ^~~~~~~~~~~~~~~~~~~
+>>> net/smc/smc_sysctl.h:29:17: warning: no previous prototype for 'smc_sysctl_net_exit' [-Wmissing-prototypes]
+>      29 | void __net_exit smc_sysctl_net_exit(struct net *net) { }
+>         |                 ^~~~~~~~~~~~~~~~~~~
 
-Doesn't that need to be 'pos + offset' not just 'pos'
+I found this -Wmissing-prototypes is added to the compiler if W=1 is set.
+I didn't check W=1 before because I found there are lots of warnings with
+the current code.
 
-> +			continue;
->  		regs[pos / 4] = ufshcd_readl(hba, offset + pos);
-> +	}
->  
->  	ufshcd_hex_dump(prefix, regs, len);
->  	kfree(regs);
+I will add this W=1 to my checking script and make sure no warnings introduced
+by my patch next time.
 
+>
+>
+>vim +/smc_sysctl_net_init +23 net/smc/smc_sysctl.h
+>
+>    22	
+>  > 23	int __net_init smc_sysctl_net_init(struct net *net)
+>    24	{
+>    25		net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
+>    26		return 0;
+>    27	}
+>    28	
+>  > 29	void __net_exit smc_sysctl_net_exit(struct net *net) { }
+>    30	
+
+Hi Jakub:
+
+Sorry to bother again on this !
+Looks like we still need to add 'static inline' or add an extra
+declaration for these 2 functions if we want to get rid of these warnings.
+What do you think ?
+
+Thanks
+
+>
+>---
+>0-DAY CI Kernel Test Service, Intel Corporation
+>https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

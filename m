@@ -2,216 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0274A4D152E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117BA4D1532
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346001AbiCHKwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S1346018AbiCHKxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345997AbiCHKwg (ORCPT
+        with ESMTP id S1346010AbiCHKxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:52:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DD2143490
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:51:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646736699;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fGHP5u/Zbzx5j7Gfciio1oHVz6AOtI5jro8ptGHtKdI=;
-        b=Zg3DndeUqWJNKnhowS59Li0F/IKyKtngexcuoTu1YjAjpLJbXnKNicXj2A2qVFa7Hk8SfE
-        uFOIUKshFpeW4E0CNCEvKcr73l0649Kta97B5KSrG2Pi9X9H8abJq2zgBZMy2UVWRbL4vU
-        y5qUnWz877Zaakb08ETR+mCEcynyC+Y=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-Ax-GgOVdPzWRJzDK4E_IYg-1; Tue, 08 Mar 2022 05:51:38 -0500
-X-MC-Unique: Ax-GgOVdPzWRJzDK4E_IYg-1
-Received: by mail-wm1-f72.google.com with SMTP id 10-20020a1c020a000000b0037fae68fcc2so992204wmc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 02:51:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=fGHP5u/Zbzx5j7Gfciio1oHVz6AOtI5jro8ptGHtKdI=;
-        b=2B7FPCx62lnp1epl4a6Y8UF4q1sUZ47qkbP2T8F3M+d4qLR6AVVa4vIgfEXDR4LZ8+
-         HpzG8FZZNugKbPVLXMaI7RS6LCQD6bL5r3i16l7+v34nmvCplHfFxn7FX7eHDY4UrOow
-         vpIqB0Mg1WZc+ur+5FOmYrFnKbT9PVUGIN2VtEewKgl76jn8Ha8Eq9hUqGsBD/O38hfl
-         FjiWip0CDBAX82OqetfAGl6moxore+AYyGrWixTrScZhPDQIE3wKzXiSGqlvBfnZq564
-         qP8JYhwf4De0aPuBojd7a6axY0euY/buKfDOFNmYkD1Bw64fBkWUcNo7Qg8uhqU3ghPv
-         HSTQ==
-X-Gm-Message-State: AOAM533MUC1sXumJgccZsJ6QL5mHVDTS90mKorcoFL2JHvCsW5M1POTz
-        w217BjXv/nPCsRPN7egzWS/ZN5Z1iSWGcfyIqJYb1j7CD4zf4yWvugKX6qzZROTW5LwQoZ+RISG
-        VZwbwT6/aEmkSpFbOJ6XN7c4=
-X-Received: by 2002:a5d:64c4:0:b0:202:29d7:2a4d with SMTP id f4-20020a5d64c4000000b0020229d72a4dmr3768574wri.624.1646736697571;
-        Tue, 08 Mar 2022 02:51:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzwRhOUg7FHvhHegjJXE7PwqmhXPJn4/LEToYlVXfLbXUBneGnbrYsN4lbqVGGq08DoadiCuw==
-X-Received: by 2002:a5d:64c4:0:b0:202:29d7:2a4d with SMTP id f4-20020a5d64c4000000b0020229d72a4dmr3768548wri.624.1646736697263;
-        Tue, 08 Mar 2022 02:51:37 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id v14-20020a7bcb4e000000b0034492fa24c6sm1801207wmj.34.2022.03.08.02.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 02:51:36 -0800 (PST)
-Date:   Tue, 8 Mar 2022 10:51:35 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>, "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "pmladek@suse.com" <pmladek@suse.com>
-Subject: Re: [PATCH v10 13/14] module: Move kdb module related code out of
- main kdb code
-Message-ID: <20220308105135.hvs6qqfvrxkpzykx@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220307174509.2887714-1-atomlin@redhat.com>
- <20220307174741.2889588-1-atomlin@redhat.com>
- <82088b20-6129-aecc-c43c-1c78171717c4@csgroup.eu>
+        Tue, 8 Mar 2022 05:53:19 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAD143AD0;
+        Tue,  8 Mar 2022 02:52:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646736743; x=1678272743;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Zk3clbFlUlJ7Oe1mWROvit8ti6FKGIp6FYYxamndiUE=;
+  b=HHKKWMrZGlr863qtuzsoFM5ZJPvRJF2EXPJqKJUyVk33XGlSe9y0X9l5
+   I8uc1Aq0mzUyx6mOrcfNibzCFIdZb0Vl+2WJO0jv0BXZ518WABbd0QogF
+   gDkHyECUZqP10kN5OIn7V5kP/0BFylLefEvBWdufsAAHnIvxZb8kDRFOr
+   YS6pI17EblnG5GMQxESDBsH9yyqlgK/oweZw+3zqcWE88qKeWTyub+juu
+   lboDY6vRTyx+X3+cgA9F891Aq634R0yVjtN/aZq2N7wOu4s0E+THSvIMa
+   CDBslh3gw73Q9prGJ4/HYA2ojLkp+BhluArWUygqGP1Xmr+mwQpNlmWDv
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254845101"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="254845101"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:52:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="632195958"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2022 02:52:19 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRXRy-0001I5-Vm; Tue, 08 Mar 2022 10:52:18 +0000
+Date:   Tue, 8 Mar 2022 18:51:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        "chihhao . chen" <chihhao.chen@mediatek.com>,
+        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+Subject: Re: [PATCH v1 2/4] usb: host: add xhci hooks for USB offload
+Message-ID: <202203081848.5KEiXYSo-lkp@intel.com>
+References: <891095110.61646375404257.JavaMail.epsvc@epcpadp3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <82088b20-6129-aecc-c43c-1c78171717c4@csgroup.eu>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <891095110.61646375404257.JavaMail.epsvc@epcpadp3>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-03-08 08:36 +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 07/03/2022 à 18:47, Aaron Tomlin a écrit :
-> > diff --git a/kernel/debug/kdb/kdb_main.c b/kernel/debug/kdb/kdb_main.c
-> > index 0852a537dad4..f3a30cd5037f 100644
-> > --- a/kernel/debug/kdb/kdb_main.c
-> > +++ b/kernel/debug/kdb/kdb_main.c
-> > @@ -26,7 +26,6 @@
-> >   #include <linux/utsname.h>
-> >   #include <linux/vmalloc.h>
-> >   #include <linux/atomic.h>
-> > -#include <linux/module.h>
-> >   #include <linux/moduleparam.h>
-> >   #include <linux/mm.h>
-> >   #include <linux/init.h>
-> No need of linux/module.h here anymore ?
+Hi Daehwan,
 
-Hi Christophe,
+Thank you for the patch! Yet something to improve:
 
-Correct.
+[auto build test ERROR on krzk/for-next]
+[also build test ERROR on char-misc/char-misc-testing v5.17-rc7]
+[cannot apply to usb/usb-testing next-20220308]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> In that case, I see several other files in kernel/debug/kdb/ that 
-> include linux/module.h
-> 
-> Should it be removed in those files as well ?
+url:    https://github.com/0day-ci/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220304-143406
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+config: arm-hisi_defconfig (https://download.01.org/0day-ci/archive/20220308/202203081848.5KEiXYSo-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/2b6a5d700c2bbb0a3ccfcd6e83a7f7b2ea049db9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220304-143406
+        git checkout 2b6a5d700c2bbb0a3ccfcd6e83a7f7b2ea049db9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/host/
 
-I did not review the other kernel/debug/kdb/.*c files.
-Anyhow, yes it can be removed from each, since it is entirely redundant.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > diff --git a/kernel/module/kdb.c b/kernel/module/kdb.c
-> > new file mode 100644
-> > index 000000000000..60baeebea3e0
-> > --- /dev/null
-> > +++ b/kernel/module/kdb.c
-> > @@ -0,0 +1,55 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Module kdb support
-> > + *
-> > + * Copyright (C) 2010 Jason Wessel
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/kdb.h>
-> > +#include "internal.h"
-> > +
-> > +/*
-> > + * kdb_lsmod - This function implements the 'lsmod' command.  Lists
-> > + *	currently loaded kernel modules.
-> > + *	Mostly taken from userland lsmod.
-> > + */
-> > +int kdb_lsmod(int argc, const char **argv)
-> > +{
-> > +	struct module *mod;
-> > +
-> > +	if (argc != 0)
-> > +		return KDB_ARGCOUNT;
-> > +
-> > +	kdb_printf("Module                  Size  modstruct     Used by\n");
-> > +	list_for_each_entry(mod, &modules, list) {
-> > +		if (mod->state == MODULE_STATE_UNFORMED)
-> > +			continue;
-> > +
-> > +		kdb_printf("%-20s%8u  0x%px ", mod->name,
-> > +			   mod->core_layout.size, (void *)mod);
-> > +#ifdef CONFIG_MODULE_UNLOAD
-> > +		kdb_printf("%4d ", module_refcount(mod));
-> > +#endif
-> > +		if (mod->state == MODULE_STATE_GOING)
-> > +			kdb_printf(" (Unloading)");
-> > +		else if (mod->state == MODULE_STATE_COMING)
-> > +			kdb_printf(" (Loading)");
-> > +		else
-> > +			kdb_printf(" (Live)");
-> > +		kdb_printf(" 0x%px", mod->core_layout.base);
-> > +
-> > +#ifdef CONFIG_MODULE_UNLOAD
-> > +		{
-> > +			struct module_use *use;
-> > +			kdb_printf(" [ ");
-> > +			list_for_each_entry(use, &mod->source_list,
-> > +					    source_list)
-> > +				kdb_printf("%s ", use->target->name);
-> > +			kdb_printf("]\n");
-> > +		}
-> > +#endif
-> 
-> That's a ugly construct. Could it be a function instead that you call 
-> from this loop,
+All errors (new ones prefixed by >>):
 
-Fair enough and I agree; albeit, as you know, this was simply a migration
-to kernel/module/kdb.c. We could indeed address this format/or style
-concern later.
+   drivers/usb/host/xhci.c:4361:5: warning: no previous prototype for 'xhci_address_device' [-Wmissing-prototypes]
+    4361 | int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
+         |     ^~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci.c: In function 'xhci_vendor_get_ops':
+>> drivers/usb/host/xhci.c:4459:20: error: 'struct xhci_hcd' has no member named 'vendor_ops'
+    4459 |         return xhci->vendor_ops;
+         |                    ^~
+   drivers/usb/host/xhci.c:4460:1: error: control reaches end of non-void function [-Werror=return-type]
+    4460 | }
+         | ^
+   cc1: some warnings being treated as errors
 
 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index b8a59b5c3e3a..bcc4f7a82649 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -108,10 +108,6 @@ static void mod_update_bounds(struct module *mod)
-> >   		__mod_update_bounds(mod->init_layout.base, mod->init_layout.size);
-> >   }
-> >   
-> > -#ifdef CONFIG_KGDB_KDB
-> > -struct list_head *kdb_modules = &modules; /* kdb needs the list of modules */
-> 
-> It should be removed from kernel/debug/kdb/kdb_private.h as well.
+vim +4459 drivers/usb/host/xhci.c
 
-Agreed - this was missed.
+  4360	
+> 4361	int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
+  4362	{
+  4363		return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS);
+  4364	}
+  4365	EXPORT_SYMBOL_GPL(xhci_address_device);
+  4366	
+  4367	static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
+  4368	{
+  4369		return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
+  4370	}
+  4371	
+  4372	/*
+  4373	 * Transfer the port index into real index in the HW port status
+  4374	 * registers. Caculate offset between the port's PORTSC register
+  4375	 * and port status base. Divide the number of per port register
+  4376	 * to get the real index. The raw port number bases 1.
+  4377	 */
+  4378	int xhci_find_raw_port_number(struct usb_hcd *hcd, int port1)
+  4379	{
+  4380		struct xhci_hub *rhub;
+  4381	
+  4382		rhub = xhci_get_rhub(hcd);
+  4383		return rhub->ports[port1 - 1]->hw_portnum + 1;
+  4384	}
+  4385	
+  4386	/*
+  4387	 * Issue an Evaluate Context command to change the Maximum Exit Latency in the
+  4388	 * slot context.  If that succeeds, store the new MEL in the xhci_virt_device.
+  4389	 */
+  4390	static int __maybe_unused xhci_change_max_exit_latency(struct xhci_hcd *xhci,
+  4391				struct usb_device *udev, u16 max_exit_latency)
+  4392	{
+  4393		struct xhci_virt_device *virt_dev;
+  4394		struct xhci_command *command;
+  4395		struct xhci_input_control_ctx *ctrl_ctx;
+  4396		struct xhci_slot_ctx *slot_ctx;
+  4397		unsigned long flags;
+  4398		int ret;
+  4399	
+  4400		spin_lock_irqsave(&xhci->lock, flags);
+  4401	
+  4402		virt_dev = xhci->devs[udev->slot_id];
+  4403	
+  4404		/*
+  4405		 * virt_dev might not exists yet if xHC resumed from hibernate (S4) and
+  4406		 * xHC was re-initialized. Exit latency will be set later after
+  4407		 * hub_port_finish_reset() is done and xhci->devs[] are re-allocated
+  4408		 */
+  4409	
+  4410		if (!virt_dev || max_exit_latency == virt_dev->current_mel) {
+  4411			spin_unlock_irqrestore(&xhci->lock, flags);
+  4412			return 0;
+  4413		}
+  4414	
+  4415		/* Attempt to issue an Evaluate Context command to change the MEL. */
+  4416		command = xhci->lpm_command;
+  4417		ctrl_ctx = xhci_get_input_control_ctx(command->in_ctx);
+  4418		if (!ctrl_ctx) {
+  4419			spin_unlock_irqrestore(&xhci->lock, flags);
+  4420			xhci_warn(xhci, "%s: Could not get input context, bad type.\n",
+  4421					__func__);
+  4422			return -ENOMEM;
+  4423		}
+  4424	
+  4425		ret = xhci_vendor_sync_dev_ctx(xhci, udev->slot_id);
+  4426		if (ret) {
+  4427			spin_unlock_irqrestore(&xhci->lock, flags);
+  4428			xhci_warn(xhci, "%s: Failed to sync device context failed, err=%d",
+  4429				  __func__, ret);
+  4430			return ret;
+  4431		}
+  4432	
+  4433		xhci_slot_copy(xhci, command->in_ctx, virt_dev->out_ctx);
+  4434		spin_unlock_irqrestore(&xhci->lock, flags);
+  4435	
+  4436		ctrl_ctx->add_flags |= cpu_to_le32(SLOT_FLAG);
+  4437		slot_ctx = xhci_get_slot_ctx(xhci, command->in_ctx);
+  4438		slot_ctx->dev_info2 &= cpu_to_le32(~((u32) MAX_EXIT));
+  4439		slot_ctx->dev_info2 |= cpu_to_le32(max_exit_latency);
+  4440		slot_ctx->dev_state = 0;
+  4441	
+  4442		xhci_dbg_trace(xhci, trace_xhci_dbg_context_change,
+  4443				"Set up evaluate context for LPM MEL change.");
+  4444	
+  4445		/* Issue and wait for the evaluate context command. */
+  4446		ret = xhci_configure_endpoint(xhci, udev, command,
+  4447				true, true);
+  4448	
+  4449		if (!ret) {
+  4450			spin_lock_irqsave(&xhci->lock, flags);
+  4451			virt_dev->current_mel = max_exit_latency;
+  4452			spin_unlock_irqrestore(&xhci->lock, flags);
+  4453		}
+  4454		return ret;
+  4455	}
+  4456	
+  4457	struct xhci_vendor_ops *xhci_vendor_get_ops(struct xhci_hcd *xhci)
+  4458	{
+> 4459		return xhci->vendor_ops;
+  4460	}
+  4461	EXPORT_SYMBOL_GPL(xhci_vendor_get_ops);
+  4462	
 
-
-Thanks,
-
--- 
-Aaron Tomlin
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

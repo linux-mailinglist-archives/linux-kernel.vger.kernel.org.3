@@ -2,220 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC2E4D1CD5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EA84D1CDE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348213AbiCHQLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:11:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S1348225AbiCHQMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234940AbiCHQLG (ORCPT
+        with ESMTP id S232999AbiCHQL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:11:06 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD245046F;
-        Tue,  8 Mar 2022 08:10:09 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id ay7so19308302oib.8;
-        Tue, 08 Mar 2022 08:10:09 -0800 (PST)
+        Tue, 8 Mar 2022 11:11:58 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A3550B04
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:11:02 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id 19so11198080wmy.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:11:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5O1imAWZVdMyV+q57qh16bTvNuecO9mwzzUYs+YBqWU=;
-        b=KO+bSPR1W20jFFXnZzcF2bPOkRsBW4DSjh8CdK39vyINQGS+JiT95bNA1wQfSZ31ZC
-         zu7HOoLYhOV9IM5sDyK8Gmlmlzja5bJorLjgPIXSyKSve3tIHt05JZ4ktW/6O68s8l1R
-         vFgYtFhSE55YvaHgm9NcSX9IvIFQRk0IDpjvMUPvulpb88mf3984D1nHV74ulK/MJlb9
-         O49V7ytXgR5QqgquHg0WiEf0J/oznALGr4iGMtmqEU8hqWzZh9+Cd8UVi3BzQrTtBrAR
-         5u90pWgLi/G31/6Y47UcOIbW/qIwRxrry2fNiLAxrAkB6pLqUDmGjKII2MpcDHyybndb
-         hM3w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oR1I0j29FD7B60ybG21a3xvyI7Hv4VggErPMrErL0E0=;
+        b=EtnJXIsNFwmVdSvAfZyYisQ2B9NsK+NizivkiRQROrcDMSlbkKyKE8R2Cq0mQ0wDfC
+         G8KSNyWxz4AC431rn/c3ItQumYk+gODZDtVGht6izSdzp+Yb4Wy495QFImTB1Bs/XOV/
+         sfm5TnVEn5n0xIGq1c60XskQyW53uLtQecCs8LENwhJpJ/kBz73auyIe7sN/Gf4r8UWC
+         YYo3WtzaJt5A58txAorvFi1TC3EU9RfZOTn9kYsHlAWgA7bmuMC38UjwlWR3zjXUsds4
+         0nPG+gzxGyEe7jTWFAfc7nZSYHnBztEcpcssYVCR/cE/Aqp+OK0OfPPmb+Zs8T7JaAGL
+         D8ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5O1imAWZVdMyV+q57qh16bTvNuecO9mwzzUYs+YBqWU=;
-        b=7CssoATwmKMZvQgd8ExFIK5rlD6J0SGIAD1gvSQdf3hG7A0THgfZv/f0ampbGIcNWh
-         08Uz3hoJZEu0dXaqLt7qgCiDfcM7x15EabPw3FM5PxI+QDzpGoKBF0c7wboBHGGZ1iA9
-         s7drBWV3fsfP1vK8rAA7jVAlfVs4jLNM+gGqrQ1k47MQh9ZBcHxiJ/6QxIepdIM+hvM2
-         i1cXSIdT6f5SF1VNBFJuzJIQ4Dz1NUkwaJ8tRK3kZAZ3ouIlM3GOX6oUDqGstwtba73+
-         kkEYGzlJLIsQhGtq8/CCrifNKSoLvdu9THF1/CIiCn479BJdE/BqeIZIiBCFQVflFqnU
-         7Zfg==
-X-Gm-Message-State: AOAM530uB8wzwgrkLHi9aTdakY8aHTR0JNRZwRxPYG654jJHb01kQ3/i
-        Mc2ZYnNQoopH3C1Z/LPoFsNadHwxIUc1QManVl4=
-X-Google-Smtp-Source: ABdhPJw3M9r/GuIu6pvif5A7WP40yGexb4Vwc2H2Qq4vIMCja1rYYA0sn1nHOxSb/sA1AhQERfyHmNbY50vYG3jomSA=
-X-Received: by 2002:a05:6808:11cc:b0:2d9:a01a:4ba6 with SMTP id
- p12-20020a05680811cc00b002d9a01a4ba6mr3107703oiv.205.1646755808836; Tue, 08
- Mar 2022 08:10:08 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oR1I0j29FD7B60ybG21a3xvyI7Hv4VggErPMrErL0E0=;
+        b=t9WiZlNBEIuNveBw/JlUBaiBOm0tgsG5ebpNqwuMfhDwLw9Mr03TrmgqAGDNRLIAOa
+         sH5r/ABnC0wzKdw5uG1tvlAjvZCq8Uvi+FcXNnl+TiuUirekf+mP8nRG2qaM9z+sWdUE
+         M7L7eEegMJfLhOCdRy9eQiMcSLfU1UUE63T/ic7zqO36eYHTQBq3YRWDfbw6LdQYTZpa
+         06/QPjlLmX7j+UncoFWyvmznmefKcn/Lp8LKM/m9+fhcAtsVJ0P4eA3gq2Xj/DJuiw0u
+         tCpnz2QF6zO9A7i8z+ed8tzLTYgBRs2HCsm+Ww7d7sUu38unJkTAx2QlNy5wt/pAKADh
+         Ztow==
+X-Gm-Message-State: AOAM533AkcBsXiE5fTG0b+rjZqRE2NPEnre7TYdVWivU/QJLRthaMzD8
+        TgXjx/orALHy58/tPsljf3VyOw==
+X-Google-Smtp-Source: ABdhPJzAve1LVkuh6cQToviXcGeCSgvLcohwkWt1xoYUKo0PaVMt1yJXrSASyYYPQWyiU7Nur3M3sg==
+X-Received: by 2002:a1c:f315:0:b0:381:1f6d:6ca6 with SMTP id q21-20020a1cf315000000b003811f6d6ca6mr4211928wmq.25.1646755860806;
+        Tue, 08 Mar 2022 08:11:00 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id x14-20020adfffce000000b001f1dfee4867sm14817258wrs.99.2022.03.08.08.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 08:11:00 -0800 (PST)
+Date:   Tue, 8 Mar 2022 16:10:58 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] configs/debug: Restore DEBUG_INFO=y for overriding
+Message-ID: <20220308161058.zuuze2jvhbiq53xy@maple.lan>
+References: <20220308153524.8618-1-quic_qiancai@quicinc.com>
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com>
- <20220217142133.72205-4-cgzones@googlemail.com> <CAKwvOdkNZ3W9amcQKHOEfQLbdWC=4VDtrBdbOVHtWruipQnyKg@mail.gmail.com>
-In-Reply-To: <CAKwvOdkNZ3W9amcQKHOEfQLbdWC=4VDtrBdbOVHtWruipQnyKg@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Date:   Tue, 8 Mar 2022 17:09:58 +0100
-Message-ID: <CAJ2a_DcY3=jz_zBQ7QZ_gycsvL1mn=TxKaWqWr3gGLhEAXTcQA@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     SElinux list <selinux@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Austin Kim <austin.kim@lge.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308153524.8618-1-quic_qiancai@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 at 18:31, Nick Desaulniers <ndesaulniers@google.com> wr=
-ote:
->
-> On Thu, Feb 17, 2022 at 6:22 AM Christian G=C3=B6ttsche
-> <cgzones@googlemail.com> wrote:
-> >
-> > Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
-> > introduced a NULL check on the context after a successful call to
-> > security_sid_to_context().  This is on the one hand redundant after
-> > checking for success and on the other hand insufficient on an actual
-> > NULL pointer, since the context is passed to seq_escape() leading to a
-> > call of strlen() on it.
-> >
-> > Reported by Clang analyzer:
-> >
-> >     In file included from security/selinux/hooks.c:28:
-> >     In file included from ./include/linux/tracehook.h:50:
-> >     In file included from ./include/linux/memcontrol.h:13:
-> >     In file included from ./include/linux/cgroup.h:18:
-> >     ./include/linux/seq_file.h:136:25: warning: Null pointer passed as =
-1st argument to string length function [unix.cstring.NullArg]
-> >             seq_escape_mem(m, src, strlen(src), flags, esc);
-> >                                    ^~~~~~~~~~~
->
-> I'm guessing there was more to this trace for this instance of this warni=
-ng?
+On Tue, Mar 08, 2022 at 10:35:24AM -0500, Qian Cai wrote:
+> Previously, I failed to realize that Kees' patch [1] has not been merged
+> into the mainline yet, and dropped DEBUG_INFO=y too eagerly from the
+> mainline. As the results, "make debug.config" won't be able to flip
+> DEBUG_INFO=n from the existing .config. This should close the gaps of a
+> few weeks before Kees' patch is there, and work regardless of their
+> merging status anyway.
+> 
+> [1] https://lore.kernel.org/all/20220125075126.891825-1-keescook@chromium.org/
+> 
+> Reported-by: Daniel Thompson <daniel.thompson@linaro.org>
+> Signed-off-by: Qian Cai <quic_qiancai@quicinc.com>
 
-Yes, complete output appended at the end.
-
->
-> >
-> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> > ---
-> >  security/selinux/hooks.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> > index 1e69f88eb326..ac802b99d36c 100644
-> > --- a/security/selinux/hooks.c
-> > +++ b/security/selinux/hooks.c
-> > @@ -1020,7 +1020,7 @@ static int show_sid(struct seq_file *m, u32 sid)
-> >         rc =3D security_sid_to_context(&selinux_state, sid,
-> >                                              &context, &len);
-> >         if (!rc) {
->
-> ^ perhaps changing this condition to:
->
-> if (!rc && context) {
->
-> It might be nice to retain the null ptr check should the semantics of
-> security_sid_to_context ever change.
-
-If I read the implementation of security_sid_to_context() and its callees
-correctly it should never return 0 (success) and not have populated its 3
-argument, unless the passed pointer was zero, which by passing the address
-of a stack variable - &context - is not the case).
-
->
-> > -               bool has_comma =3D context && strchr(context, ',');
-> > +               bool has_comma =3D strchr(context, ',');
-> >
-> >                 seq_putc(m, '=3D');
-> >                 if (has_comma)
-> > --
-> > 2.35.1
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 
-clang-tidy report:
+Daniel.
 
-./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1st
-argument to string length function
-[clang-analyzer-unix.cstring.NullArg]
-        seq_escape_mem(m, src, strlen(src), flags, esc);
-                               ^
-./security/selinux/hooks.c:1041:6: note: Assuming the condition is false
-        if (!(sbsec->flags & SE_SBINITIALIZED))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./security/selinux/hooks.c:1041:2: note: Taking false branch
-        if (!(sbsec->flags & SE_SBINITIALIZED))
-        ^
-./security/selinux/hooks.c:1044:6: note: Assuming the condition is false
-        if (!selinux_initialized(&selinux_state))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./security/selinux/hooks.c:1044:2: note: Taking false branch
-        if (!selinux_initialized(&selinux_state))
-        ^
-./security/selinux/hooks.c:1047:6: note: Assuming the condition is true
-        if (sbsec->flags & FSCONTEXT_MNT) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./security/selinux/hooks.c:1047:2: note: Taking true branch
-        if (sbsec->flags & FSCONTEXT_MNT) {
-        ^
-./security/selinux/hooks.c:1050:8: note: Calling 'show_sid'
-                rc =3D show_sid(m, sbsec->sid);
-                     ^~~~~~~~~~~~~~~~~~~~~~~
-./security/selinux/hooks.c:1020:7: note: Value assigned to 'context'
-        rc =3D security_sid_to_context(&selinux_state, sid,
-             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./security/selinux/hooks.c:1022:6: note: Assuming 'rc' is 0
-        if (!rc) {
-            ^~~
-./security/selinux/hooks.c:1022:2: note: Taking true branch
-        if (!rc) {
-        ^
-./security/selinux/hooks.c:1023:20: note: Assuming 'context' is null
-                bool has_comma =3D context && strchr(context, ',');
-                                 ^~~~~~~
-./security/selinux/hooks.c:1023:28: note: Left side of '&&' is false
-                bool has_comma =3D context && strchr(context, ',');
-                                         ^
-./security/selinux/hooks.c:1026:7: note: 'has_comma' is false
-                if (has_comma)
-                    ^~~~~~~~~
-./security/selinux/hooks.c:1026:3: note: Taking false branch
-                if (has_comma)
-                ^
-./security/selinux/hooks.c:1028:17: note: Passing null pointer value
-via 2nd parameter 's'
-                seq_escape(m, context, "\"\n\\");
-                              ^~~~~~~
-./security/selinux/hooks.c:1028:3: note: Calling 'seq_escape'
-                seq_escape(m, context, "\"\n\\");
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-././include/linux/seq_file.h:152:20: note: Passing null pointer value
-via 2nd parameter 'src'
-        seq_escape_str(m, s, ESCAPE_OCTAL, esc);
-                          ^
-././include/linux/seq_file.h:152:2: note: Calling 'seq_escape_str'
-        seq_escape_str(m, s, ESCAPE_OCTAL, esc);
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-././include/linux/seq_file.h:136:25: note: Null pointer passed as 1st
-argument to string length function
-        seq_escape_mem(m, src, strlen(src), flags, esc);
-                               ^      ~~~
+
+> ---
+>  kernel/configs/debug.config | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/configs/debug.config b/kernel/configs/debug.config
+> index 07df6d93c4df..e8db8d938661 100644
+> --- a/kernel/configs/debug.config
+> +++ b/kernel/configs/debug.config
+> @@ -16,6 +16,7 @@ CONFIG_SYMBOLIC_ERRNAME=y
+>  #
+>  # Compile-time checks and compiler options
+>  #
+> +CONFIG_DEBUG_INFO=y
+>  CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+>  CONFIG_DEBUG_SECTION_MISMATCH=y
+>  CONFIG_FRAME_WARN=2048
+> -- 
+> 2.30.2
+> 

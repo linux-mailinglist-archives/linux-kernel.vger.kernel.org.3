@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAA24D0D4F
+	by mail.lfdr.de (Postfix) with ESMTP id 5789A4D0D50
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 02:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344228AbiCHBJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 20:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S1344214AbiCHBI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 20:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344204AbiCHBIr (ORCPT
+        with ESMTP id S231221AbiCHBIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Mar 2022 20:08:47 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5582C139;
-        Mon,  7 Mar 2022 17:07:47 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id j3-20020a9d7683000000b005aeed94f4e9so14358840otl.6;
-        Mon, 07 Mar 2022 17:07:47 -0800 (PST)
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976422CC80;
+        Mon,  7 Mar 2022 17:07:50 -0800 (PST)
+Received: by mail-oi1-f182.google.com with SMTP id x193so17290312oix.0;
+        Mon, 07 Mar 2022 17:07:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=12XEWrfJJHySa9ucL9RV1LRbnMaoGn2lDS/BPBwPCdA=;
-        b=oyCV5pYIffvCOSztct8FhFe0CtPc8n7o8N+7iUMQclafWzJchwElG2yIkvi7iEMA5I
-         M6XodMntztfzMWY9UrBYyOg7hmhI9oZWqic5cmUwwlOmPNXTwSZwJshiyFTgK71NldLO
-         XoaGdJFUbBQhTmkd/z+8Cl/OK/5mZnTNOQOjJMJapWzu10O9mHQuQ/KBbaGK4qnjeyiZ
-         hl8tidevVlX+X8YjC5BZFriKf3lDfQmgvYjQ2GNDqbU7hcjMAeCG7m0KyOmnzOxCNmPO
-         +5ykN4LpiA33Zh1xkvuL3anKpBRzgeZ9HDtrNAsFfXcYnPoSiuwtSHIKnq5iYObNKSRf
-         2P0A==
-X-Gm-Message-State: AOAM532gJxnW/xqoDW6um5oqJUI9A0+L7rEubYOjoGO74TtFci8bByhh
-        9WQjjMforLb6ldkKQfCF2Q==
-X-Google-Smtp-Source: ABdhPJxoKDNYYs7TzAhFqVTY+CLyhokQvtKcTTgQtR/V+xGGld1FpDXFhldfCDGd6NVMb+Yz67QBJA==
-X-Received: by 2002:a05:6830:2aa7:b0:5b2:2086:d608 with SMTP id s39-20020a0568302aa700b005b22086d608mr6099000otu.159.1646701667031;
-        Mon, 07 Mar 2022 17:07:47 -0800 (PST)
+        bh=4Vh0skU/TpnaqVycF2Gk7ec7Z9iE5PhyKRGG3sXCJBg=;
+        b=IzzfGnauhUxQaaQdsK7A5xAaArzRgja09UERKryKqQmii0HogCjjH77xoNWvjtgd6s
+         k7hE1EOs+0vnGXO2KmSCjVy3SsMjUjvEzq0HMIUT4WAj0KajXZgGiC915VlbXu0q3oEI
+         M1/coqzSS3KTqEoCkSNSVzmDI2aPjbsut8ku3H89ZzDZbbKyIIZjrO3EPDvgHDkfX6e0
+         HpOUoBu5kdO4ppfc9WgdfzpPvya5J8K5eqirLRa+cW87bTHc+Al+3mDvtza4vHXGiLIf
+         ofH1p4TFRnJZU7MRZGT5axUxSpcEWO5TJqG6rSXvBvun8BQsKvZU57WxjoCbMWplvDx3
+         pfnA==
+X-Gm-Message-State: AOAM533CuF2BGNIXemU6vRv4uACabhvfACWo6Vk7/cuLhmnwSHQGl/6d
+        lw5pdpItJqBP0Y8cJx/U3A==
+X-Google-Smtp-Source: ABdhPJxEXFX5X26D3/ir03omCumnoMENEbRGwsO3RleYVqWM2D929Ye1JbqjPzZIxCh8ZhbBCUC6lg==
+X-Received: by 2002:a05:6808:1450:b0:2d9:dad1:a14e with SMTP id x16-20020a056808145000b002d9dad1a14emr1137355oiv.294.1646701669918;
+        Mon, 07 Mar 2022 17:07:49 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b63-20020acab242000000b002d9ddf4596fsm1836035oif.49.2022.03.07.17.07.44
+        by smtp.gmail.com with ESMTPSA id q16-20020a9d4b10000000b005b22b93d468sm3186416otf.74.2022.03.07.17.07.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 17:07:46 -0800 (PST)
-Received: (nullmailer pid 3624794 invoked by uid 1000);
+        Mon, 07 Mar 2022 17:07:49 -0800 (PST)
+Received: (nullmailer pid 3624787 invoked by uid 1000);
         Tue, 08 Mar 2022 01:07:40 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Sergiu Moga <sergiu.moga@microchip.com>
-Cc:     claudiu.beznea@microchip.com, thierry.reding@gmail.com,
-        robh+dt@kernel.org, alexandre.belloni@bootlin.com,
-        u.kleine-koenig@pengutronix.de, nicolas.ferre@microchip.com,
-        lee.jones@linaro.org, krzysztof.kozlowski@canonical.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org
-In-Reply-To: <20220307153656.177589-2-sergiu.moga@microchip.com>
-References: <20220307153656.177589-1-sergiu.moga@microchip.com> <20220307153656.177589-2-sergiu.moga@microchip.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: pwm: convert atmel pwm to json-schema
+To:     Jacky Huang <ychuang3@nuvoton.com>
+Cc:     sboyd@kernel.org, robh+dt@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, arnd@arndb.de,
+        olof@lixom.net, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220307091923.9909-3-ychuang3@nuvoton.com>
+References: <20220307091923.9909-1-ychuang3@nuvoton.com> <20220307091923.9909-3-ychuang3@nuvoton.com>
+Subject: Re: [PATCH 2/3] dt-bindings: clock: Document MA35D1 clock controller bindings
 Date:   Mon, 07 Mar 2022 19:07:40 -0600
-Message-Id: <1646701660.903645.3624793.nullmailer@robh.at.kernel.org>
+Message-Id: <1646701660.895821.3624783.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Mar 2022 17:36:55 +0200, Sergiu Moga wrote:
-> Convert PWM binding for Atmel/Microchip SoCs to Device Tree Schema
-> format.
+On Mon, 07 Mar 2022 17:19:22 +0800, Jacky Huang wrote:
+> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
 > 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 > ---
->  .../bindings/pwm/atmel,at91sam-pwm.yaml       | 42 +++++++++++++++++++
->  .../devicetree/bindings/pwm/atmel-pwm.txt     | 35 ----------------
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 43 insertions(+), 36 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pwm/atmel,at91sam-pwm.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pwm/atmel-pwm.txt
+>  .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1602300
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml: properties: 'clocks' is a dependency of 'assigned-clocks'
+	from schema $id: http://devicetree.org/meta-schemas/clocks.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml: ignoring, error in schema: properties
+Error: Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.example.dts:24.37-38 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1398: dt_binding_check] Error 2
 
+doc reference errors (make refcheckdocs):
 
-pwm@e1604000: compatible:0: 'microchip,sama7g5-pwm' is not one of ['atmel,at91sam9rl-pwm', 'atmel,sama5d3-pwm', 'atmel,sama5d2-pwm', 'microchip,sam9x60-pwm']
-	arch/arm/boot/dts/at91-sama7g5ek.dt.yaml
+See https://patchwork.ozlabs.org/patch/1601972
 
-pwm@e1604000: compatible: ['microchip,sama7g5-pwm', 'atmel,sama5d2-pwm'] is too long
-	arch/arm/boot/dts/at91-sama7g5ek.dt.yaml
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

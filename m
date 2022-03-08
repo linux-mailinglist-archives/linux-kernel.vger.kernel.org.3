@@ -2,166 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134244D12E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC194D12E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345232AbiCHIxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:53:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S1345213AbiCHIyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242666AbiCHIx3 (ORCPT
+        with ESMTP id S240278AbiCHIy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:53:29 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6BADF9E;
-        Tue,  8 Mar 2022 00:52:33 -0800 (PST)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KCTZJ5hGSz6F93y;
-        Tue,  8 Mar 2022 16:51:04 +0800 (CST)
-Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 09:52:31 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 08:52:30 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Tue, 8 Mar 2022 08:52:30 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Topic: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Index: AQHYL1LUtVDDY2S/e06nk5NDxfriXKy1IT6AgAASKKA=
-Date:   Tue, 8 Mar 2022 08:52:30 +0000
-Message-ID: <50b0d11d57d3488da809f318576466cd@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
- <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
- <BN9PR11MB527661103A2CFE13E4F3EC528C099@BN9PR11MB5276.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB527661103A2CFE13E4F3EC528C099@BN9PR11MB5276.namprd11.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.27.151]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 8 Mar 2022 03:54:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6E13B280
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:53:31 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id dr20so37512873ejc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 00:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JTlpOTVV8rGjtjdIxTHzoUkSu2pKoTN1z/o1kSU7hIc=;
+        b=vMJAceYbOcASdFBR5FC6WwUsb2mKpFVRz20mcXglO3PXfa7b4Fqv9k1BOyfrkXa05V
+         uIP6poe0BNIxWwiUlq1ULYJygcdyvz32rBWhdBMLPx+jIlCHODdC0KPK4UCkJelSb/fn
+         XFoP2rD38+oSRS+icEVe8X2IIG/1sFlW9bFxJTAza94wEKOLCglndGQLvo8hz2TiiOWD
+         FkAo45KtRcyegcHMP7iq0DmbZKx6A/7fL6/TeLeSeAYE6MTHMuDzSFMI0tPgGyCH4upC
+         7eSt8r7OjLVFPxIke3tkdzwmJ//dvs2cH0aEJvy1PSzRjdUyJs0EyN9l8vYbfXV11Y+f
+         SrjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JTlpOTVV8rGjtjdIxTHzoUkSu2pKoTN1z/o1kSU7hIc=;
+        b=xhNMuAJDLqdtcRkSF1QrpfLX4H/z13PHOxLpH+RH/V9wKVpO3a1G1qs1XKo+SRuCgq
+         FaGfzOQRFN3t0niL2VepYjAODmRNp+63FGNDPkQKt9TM6uvbhYf84kxWTgeYLuvvcaOp
+         kJe4p5yCmxDPSJBoabBxSFOina4Q7/PMaosutPtSAhE73debOtwRKEn2iWnDxQjTU424
+         wGXc/qVmqbuvl7bevzYDWdGUB+NN9teJf6ANcRtMzZDxCybrlA/mzHbX1LctA53LeE+P
+         1zlUOjaKEprYfweFPOHWLREk8Mg31xkThIZYPhw/CnPfwfwJoFSIagwgEcNKqKNK/R1a
+         Bz4g==
+X-Gm-Message-State: AOAM533M13vLi1GRm+Dn1sYo0RRGVVCNJt0nGGfVCAwFrRWb9bWU6XIg
+        JEbSuKYJR51ylPNuUf+LvlR0QXJVn0wQwzx4u29Drg==
+X-Google-Smtp-Source: ABdhPJzeWkpXuLKUTYJLqdTnJlt2X9TfUMTDZYTPtvX83N2ySkknJLRJbehovdGyWLDIDC1hFY0TyYo8SwL8MXyhKRc=
+X-Received: by 2002:a17:907:728b:b0:6da:97db:b66d with SMTP id
+ dt11-20020a170907728b00b006da97dbb66dmr12176255ejc.636.1646729609637; Tue, 08
+ Mar 2022 00:53:29 -0800 (PST)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220307105414.17706-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220307105414.17706-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 8 Mar 2022 09:53:18 +0100
+Message-ID: <CAMRc=MdLdJwTAxOwbOdO_Q=eE-MHNJwNmayy6svZ1zfhenW12g@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpiolib: Use list_first_entry()/list_last_entry()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVGlhbiwgS2V2aW4gW21h
-aWx0bzprZXZpbi50aWFuQGludGVsLmNvbV0NCj4gU2VudDogMDggTWFyY2ggMjAyMiAwNzo0Mg0K
-PiBUbzogU2hhbWVlcmFsaSBLb2xvdGh1bSBUaG9kaSA8c2hhbWVlcmFsaS5rb2xvdGh1bS50aG9k
-aUBodWF3ZWkuY29tPjsNCj4ga3ZtQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZzsNCj4gbGludXgtY3J5cHRvQHZnZXIua2VybmVsLm9yZw0KPiBDYzogbGludXgt
-cGNpQHZnZXIua2VybmVsLm9yZzsgYWxleC53aWxsaWFtc29uQHJlZGhhdC5jb207IGpnZ0Budmlk
-aWEuY29tOw0KPiBjb2h1Y2tAcmVkaGF0LmNvbTsgbWd1cnRvdm95QG52aWRpYS5jb207IHlpc2hh
-aWhAbnZpZGlhLmNvbTsgTGludXhhcm0NCj4gPGxpbnV4YXJtQGh1YXdlaS5jb20+OyBsaXVsb25n
-ZmFuZyA8bGl1bG9uZ2ZhbmdAaHVhd2VpLmNvbT47IFplbmd0YW8gKEIpDQo+IDxwcmltZS56ZW5n
-QGhpc2lsaWNvbi5jb20+OyBKb25hdGhhbiBDYW1lcm9uDQo+IDxqb25hdGhhbi5jYW1lcm9uQGh1
-YXdlaS5jb20+OyBXYW5nemhvdSAoQikgPHdhbmd6aG91MUBoaXNpbGljb24uY29tPg0KPiBTdWJq
-ZWN0OiBSRTogW1BBVENIIHY4IDgvOV0gaGlzaV9hY2NfdmZpb19wY2k6IEFkZCBzdXBwb3J0IGZv
-ciBWRklPIGxpdmUNCj4gbWlncmF0aW9uDQo+IA0KPiA+IEZyb206IFNoYW1lZXIgS29sb3RodW0g
-PHNoYW1lZXJhbGkua29sb3RodW0udGhvZGlAaHVhd2VpLmNvbT4NCj4gPiBTZW50OiBGcmlkYXks
-IE1hcmNoIDQsIDIwMjIgNzowMiBBTQ0KPiA+ICsvKg0KPiA+ICsgKiBFYWNoIHN0YXRlIFJlZyBp
-cyBjaGVja2VkIDEwMCB0aW1lcywNCj4gPiArICogd2l0aCBhIGRlbGF5IG9mIDEwMCBtaWNyb3Nl
-Y29uZHMgYWZ0ZXIgZWFjaCBjaGVjayAgKi8gc3RhdGljIHUzMg0KPiA+ICthY2NfY2hlY2tfcmVn
-X3N0YXRlKHN0cnVjdCBoaXNpX3FtICpxbSwgdTMyIHJlZ3MpDQo+IA0KPiBxbV9jaGVja19yZWdf
-c3RhdGUoKSBnaXZlbiB0aGUgMXN0IGFyZ3VtZW50IGlzIHFtDQo+IA0KPiA+ICsvKiBDaGVjayB0
-aGUgUEYncyBSQVMgc3RhdGUgYW5kIEZ1bmN0aW9uIElOVCBzdGF0ZSAqLyBzdGF0aWMgaW50DQo+
-ID4gK3FtX2NoZWNrX2ludF9zdGF0ZShzdHJ1Y3QgaGlzaV9hY2NfdmZfY29yZV9kZXZpY2UgKmhp
-c2lfYWNjX3ZkZXYpDQo+IA0KPiB0aGVuIHRoaXMgc2hvdWxkIGJlIGFjY19jaGVja19pbnRfc3Rh
-dGUoKSBnaXZlbiB0aGUgaW5wdXQgaXMgYW4gYWNjIGRldmljZT8NCj4gDQo+IGFueXdheSBwbGVh
-c2UgaGF2ZSBhIGNvbnNpc3RlbnQgbmFtaW5nIGNvbnZlbnRpb24gaGVyZS4NCj4gDQo+ID4gK3N0
-YXRpYyBpbnQgcW1fcmVhZF9yZWcoc3RydWN0IGhpc2lfcW0gKnFtLCB1MzIgcmVnX2FkZHIsDQo+
-ID4gKwkJICAgICAgIHUzMiAqZGF0YSwgdTggbnVtcykNCj4gDQo+IHFtX3JlYWRfcmVncygpIHRv
-IHJlZmxlY3QgdGhhdCBtdWx0aXBsZSByZWdpc3RlcnMgYXJlIHByb2Nlc3NlZC4NCj4gDQo+ID4g
-Kw0KPiA+ICtzdGF0aWMgaW50IHFtX3dyaXRlX3JlZyhzdHJ1Y3QgaGlzaV9xbSAqcW0sIHUzMiBy
-ZWcsDQo+ID4gKwkJCXUzMiAqZGF0YSwgdTggbnVtcykNCj4gDQo+IHFtX3dyaXRlX3JlZ3MoKQ0K
-PiANCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgcW1fcndfcmVnc19yZWFkKHN0cnVjdCBoaXNpX3Ft
-ICpxbSwgc3RydWN0IGFjY192Zl9kYXRhDQo+ID4gKyp2Zl9kYXRhKQ0KPiANCj4gcW1fbG9hZF9y
-ZWdzKCkuIEl0J3MgY29uZnVzaW5nIHRvIGhhdmUgYm90aCAncncnIGFuZCAncmVhZCcuDQo+IA0K
-PiA+ICsNCj4gPiArc3RhdGljIGludCBxbV9yd19yZWdzX3dyaXRlKHN0cnVjdCBoaXNpX3FtICpx
-bSwgc3RydWN0IGFjY192Zl9kYXRhDQo+ID4gKnZmX2RhdGEpDQo+IA0KPiBxbV9zYXZlX3JlZ3Mo
-KQ0KDQpSaWdodC4gSSBhbSBPayB3aXRoIHRoZSBhYm92ZSBzdWdnZXN0aW9ucy4NCg0KPiANCj4g
-PiArc3RhdGljIGludCBoaXNpX2FjY192Zl9xbV9pbml0KHN0cnVjdCBoaXNpX2FjY192Zl9jb3Jl
-X2RldmljZQ0KPiA+ICsqaGlzaV9hY2NfdmRldikgew0KPiA+ICsJc3RydWN0IHZmaW9fcGNpX2Nv
-cmVfZGV2aWNlICp2ZGV2ID0gJmhpc2lfYWNjX3ZkZXYtPmNvcmVfZGV2aWNlOw0KPiA+ICsJc3Ry
-dWN0IGhpc2lfcW0gKnZmX3FtID0gJmhpc2lfYWNjX3ZkZXYtPnZmX3FtOw0KPiA+ICsJc3RydWN0
-IHBjaV9kZXYgKnZmX2RldiA9IHZkZXYtPnBkZXY7DQo+ID4gKw0KPiA+ICsJLyoNCj4gPiArCSAq
-IEFDQyBWRiBkZXYgQkFSMiByZWdpb24gY29uc2lzdHMgb2YgYm90aCBmdW5jdGlvbmFsIHJlZ2lz
-dGVyIHNwYWNlDQo+ID4gKwkgKiBhbmQgbWlncmF0aW9uIGNvbnRyb2wgcmVnaXN0ZXIgc3BhY2Uu
-IEZvciBtaWdyYXRpb24gdG8gd29yaywgd2UNCj4gPiArCSAqIG5lZWQgYWNjZXNzIHRvIGJvdGgu
-IEhlbmNlLCB3ZSBtYXAgdGhlIGVudGlyZSBCQVIyIHJlZ2lvbiBoZXJlLg0KPiA+ICsJICogQnV0
-IGZyb20gYSBzZWN1cml0eSBwb2ludCBvZiB2aWV3LCB3ZSByZXN0cmljdCBhY2Nlc3MgdG8gdGhl
-DQo+ID4gKwkgKiBtaWdyYXRpb24gY29udHJvbCBzcGFjZSBmcm9tIEd1ZXN0KFBsZWFzZSBzZWUN
-Cj4gPiBtbWFwL2lvY3RsL3JlYWQvd3JpdGUNCj4gPiArCSAqIG92ZXJyaWRlIGZ1bmN0aW9ucyku
-DQo+IA0KPiAoUGxlYXNlIHNlZSBoaXNpX2FjY192ZmlvX3BjaV9taWdybl9vcHMpDQo+IA0KPiA+
-ICsJICoNCj4gPiArCSAqIEFsc28gdGhlIEhpU2lsaWNvbiBBQ0MgVkYgZGV2aWNlcyBzdXBwb3J0
-ZWQgYnkgdGhpcyBkcml2ZXIgb24NCj4gPiArCSAqIEhpU2lsaWNvbiBoYXJkd2FyZSBwbGF0Zm9y
-bXMgYXJlIGludGVncmF0ZWQgZW5kIHBvaW50IGRldmljZXMNCj4gPiArCSAqIGFuZCBoYXMgbm8g
-Y2FwYWJpbGl0eSB0byBwZXJmb3JtIFBDSWUgUDJQLg0KPiANCj4gQWNjb3JkaW5nIHRvIHY1IGRp
-c2N1c3Npb24gSSB0aGluayBpdCBpcyB0aGUgcGxhdGZvcm0gd2hpY2ggbGFja3Mgb2YgdGhlIFAy
-UA0KPiBjYXBhYmlsaXR5IGluc3RlYWQgb2YgdGhlIGRldmljZS4gQ3VycmVudCB3cml0aW5nIGlz
-IHJlYWQgdG8gdGhlIGxhdHRlci4NCj4gDQo+IGJldHRlciBjbGFyaWZ5IGl0IGFjY3VyYXRlbHku
-IPCfmIoNCg0KVGhhdOKAmXMgcmlnaHQuIEl0IGlzIHRoZSBwbGF0Zm9ybS4NCg0KPiANCj4gPiAg
-c3RhdGljIGludCBoaXNpX2FjY192ZmlvX3BjaV9wcm9iZShzdHJ1Y3QgcGNpX2RldiAqcGRldiwg
-Y29uc3Qgc3RydWN0DQo+ID4gcGNpX2RldmljZV9pZCAqaWQpICB7DQo+ID4gLQlzdHJ1Y3QgdmZp
-b19wY2lfY29yZV9kZXZpY2UgKnZkZXY7DQo+ID4gKwlzdHJ1Y3QgaGlzaV9hY2NfdmZfY29yZV9k
-ZXZpY2UgKmhpc2lfYWNjX3ZkZXY7DQo+ID4gKwlzdHJ1Y3QgaGlzaV9xbSAqcGZfcW07DQo+ID4g
-IAlpbnQgcmV0Ow0KPiA+DQo+ID4gLQl2ZGV2ID0ga3phbGxvYyhzaXplb2YoKnZkZXYpLCBHRlBf
-S0VSTkVMKTsNCj4gPiAtCWlmICghdmRldikNCj4gPiArCWhpc2lfYWNjX3ZkZXYgPSBremFsbG9j
-KHNpemVvZigqaGlzaV9hY2NfdmRldiksIEdGUF9LRVJORUwpOw0KPiA+ICsJaWYgKCFoaXNpX2Fj
-Y192ZGV2KQ0KPiA+ICAJCXJldHVybiAtRU5PTUVNOw0KPiA+DQo+ID4gLQl2ZmlvX3BjaV9jb3Jl
-X2luaXRfZGV2aWNlKHZkZXYsIHBkZXYsICZoaXNpX2FjY192ZmlvX3BjaV9vcHMpOw0KPiA+ICsJ
-cGZfcW0gPSBoaXNpX2FjY19nZXRfcGZfcW0ocGRldik7DQo+ID4gKwlpZiAocGZfcW0gJiYgcGZf
-cW0tPnZlciA+PSBRTV9IV19WMykgew0KPiA+ICsJCXJldCA9IGhpc2lfYWNjX3ZmaW9fcGNpX21p
-Z3JuX2luaXQoaGlzaV9hY2NfdmRldiwgcGRldiwNCj4gPiBwZl9xbSk7DQo+ID4gKwkJaWYgKCFy
-ZXQpIHsNCj4gPiArCQkJdmZpb19wY2lfY29yZV9pbml0X2RldmljZSgmaGlzaV9hY2NfdmRldi0N
-Cj4gPiA+Y29yZV9kZXZpY2UsIHBkZXYsDQo+ID4gKw0KPiA+ICZoaXNpX2FjY192ZmlvX3BjaV9t
-aWdybl9vcHMpOw0KPiA+ICsJCX0gZWxzZSB7DQo+ID4gKwkJCXBjaV93YXJuKHBkZXYsICJtaWdy
-YXRpb24gc3VwcG9ydCBmYWlsZWQsIGNvbnRpbnVlDQo+ID4gd2l0aCBnZW5lcmljIGludGVyZmFj
-ZVxuIik7DQo+ID4gKwkJCXZmaW9fcGNpX2NvcmVfaW5pdF9kZXZpY2UoJmhpc2lfYWNjX3ZkZXYt
-DQo+ID4gPmNvcmVfZGV2aWNlLCBwZGV2LA0KPiA+ICsJCQkJCQkgICZoaXNpX2FjY192ZmlvX3Bj
-aV9vcHMpOw0KPiA+ICsJCX0NCj4gDQo+IFRoaXMgbG9naWMgbG9va3Mgd2VpcmQuIEVhcmxpZXIg
-eW91IHN0YXRlIHRoYXQgdGhlIG1pZ3JhdGlvbiBjb250cm9sIHJlZ2lvbiBtdXN0DQo+IGJlIGhp
-ZGRlbiBmcm9tIHRoZSB1c2Vyc3BhY2UgYXMgYSBzZWN1cml0eSByZXF1aXJlbWVudCwgYnV0IGFi
-b3ZlIGxvZ2ljIHJlYWRzDQo+IGxpa2UgaWYgdGhlIGRyaXZlciBmYWlscyB0byBpbml0aWFsaXpl
-IG1pZ3JhdGlvbiBzdXBwb3J0IHRoZW4gd2UganVzdCBmYWxsIGJhY2sgdG8gdGhlDQo+IGRlZmF1
-bHQgb3BzIHdoaWNoIGdyYW50cyB0aGUgdXNlciB0aGUgZnVsbCBhY2Nlc3MgdG8gdGhlIGVudGly
-ZSBNTUlPIGJhci4NCg0KQXMgSSBleHBsYWluZWQgcHJldmlvdXNseSB0aGUgcmlzayBvZiBleHBv
-c2luZyBtaWdyYXRpb24gQkFSIGlzIG9ubHkgbGltaXRlZCB0byBtaWdyYXRpb24NCnVzZSBjYXNl
-LiBTbyBpZiBmb3Igc29tZSByZWFzb24gd2UgY2FuJ3QgZ2V0IHRoZSBtaWdyYXRpb24gd29ya2lu
-Zywgd2UgZGVmYXVsdCB0byB0aGUNCmdlbmVyaWMgdmZpby1wY2kgbGlrZSBiZWhhdmlvci4NCiAN
-Cj4gDQo+ID4gKwl9IGVsc2Ugew0KPiA+ICsJCXZmaW9fcGNpX2NvcmVfaW5pdF9kZXZpY2UoJmhp
-c2lfYWNjX3ZkZXYtPmNvcmVfZGV2aWNlLCBwZGV2LA0KPiA+ICsJCQkJCSAgJmhpc2lfYWNjX3Zm
-aW9fcGNpX29wcyk7DQo+ID4gKwl9DQo+IA0KPiBJZiB0aGUgaGFyZHdhcmUgaXRzZWxmIGRvZXNu
-J3Qgc3VwcG9ydCB0aGUgbWlncmF0aW9uIGNhcGFiaWxpdHksIGNhbiB3ZSBqdXN0DQo+IG1vdmUg
-aXQgb3V0IG9mIHRoZSBpZCB0YWJsZSBhbmQgbGV0IHZmaW8tcGNpIHRvIGRyaXZlIGl0Pw0KPiAN
-CiBCdXQgdGhlIGFib3ZlIGlzIGp1c3QgbGlrZSB2ZmlvLXBjaSBkcml2aW5nIGl0LCByaWdodD8N
-Cg0KVGhhbmtzLA0KU2hhbWVlcg0K
+On Mon, Mar 7, 2022 at 11:54 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Use list_first_entry()/list_last_entry() instead of open coded variants.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpiolib.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 002bf4b1616b..f5e7443208d4 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -262,14 +262,14 @@ static int gpiodev_add_to_list(struct gpio_device *gdev)
+>                 return 0;
+>         }
+>
+> -       next = list_entry(gpio_devices.next, struct gpio_device, list);
+> +       next = list_first_entry(&gpio_devices, struct gpio_device, list);
+>         if (gdev->base + gdev->ngpio <= next->base) {
+>                 /* add before first entry */
+>                 list_add(&gdev->list, &gpio_devices);
+>                 return 0;
+>         }
+>
+> -       prev = list_entry(gpio_devices.prev, struct gpio_device, list);
+> +       prev = list_last_entry(&gpio_devices, struct gpio_device, list);
+>         if (prev->base + prev->ngpio <= gdev->base) {
+>                 /* add behind last entry */
+>                 list_add_tail(&gdev->list, &gpio_devices);
+> @@ -4426,7 +4426,7 @@ static void *gpiolib_seq_next(struct seq_file *s, void *v, loff_t *pos)
+>         if (list_is_last(&gdev->list, &gpio_devices))
+>                 ret = NULL;
+>         else
+> -               ret = list_entry(gdev->list.next, struct gpio_device, list);
+> +               ret = list_first_entry(&gdev->list, struct gpio_device, list);
+>         spin_unlock_irqrestore(&gpio_lock, flags);
+>
+>         s->private = "\n";
+> --
+> 2.34.1
+>
+
+Applied, thanks!
+
+Bart

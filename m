@@ -2,133 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CD44D125B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9CC4D1263
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344988AbiCHIiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:38:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
+        id S1345012AbiCHIjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiCHIiB (ORCPT
+        with ESMTP id S1344998AbiCHIjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:38:01 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C874C3F89E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:37:04 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hao.xiang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V6dWw.0_1646728620;
-Received: from 30.43.105.135(mailfrom:hao.xiang@linux.alibaba.com fp:SMTPD_---0V6dWw.0_1646728620)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 08 Mar 2022 16:37:01 +0800
-Message-ID: <7d3b80cb-dd0b-0fce-2a84-379fea2d732c@linux.alibaba.com>
-Date:   Tue, 8 Mar 2022 16:36:59 +0800
+        Tue, 8 Mar 2022 03:39:09 -0500
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5371D302;
+        Tue,  8 Mar 2022 00:38:13 -0800 (PST)
+Received: by mail-qk1-f170.google.com with SMTP id q4so14197036qki.11;
+        Tue, 08 Mar 2022 00:38:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EOwxd04/4/kj/T/nPio4Op2b4/YeB/0jSlIXRERfWek=;
+        b=LPvxndiY9l/5RkNBuH8/DoxmR9I6zM7geWY5o6arqTD34v/V5KDky2rPAhCjmE+dvP
+         dW56yazmC+BPHJpPNCp8Sz7hNPMi8ZLr6UocQ+JZG6G9r3QA0ipOFyPSaJMLyY+sQUy4
+         FdB4tcM8rnptwfG1eUbbaiPTCmg2U2BypC8cZ79XtADYwJJjU24D5I8aOZFEIIWi88Kv
+         TLjpXb+NAgfZYWvUQSb1tpDjb5iBUOlXFi7ih6MJFEYP+DurPORrI1hhFF5v+Pmnacw1
+         kGn+YER6ZyYYpQqo38VEsElqL+xkG3t5Cn3j41WPA8iXv79uXBtN1cj+tnMgCwrhCmC4
+         V8jA==
+X-Gm-Message-State: AOAM532m2ZV0lZMBW6aFgZDpTznrS688j7OTRm0htzNnDdxlFHjKARhP
+        3FW6kyLLvZlu1TTR699iBMQhyiE86D85/A==
+X-Google-Smtp-Source: ABdhPJyLmyzT9hM9zAtxOObKTPjX7TSXf3yXBppxCtaZbVg+yw9x/E9uTBnv4dqyaCVC3okUyFZr0w==
+X-Received: by 2002:a37:acb:0:b0:67b:15f9:55b8 with SMTP id 194-20020a370acb000000b0067b15f955b8mr6346717qkk.694.1646728691864;
+        Tue, 08 Mar 2022 00:38:11 -0800 (PST)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id k125-20020a378883000000b006491db6dbb1sm7568185qkd.84.2022.03.08.00.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 00:38:11 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id g1so36294662ybe.4;
+        Tue, 08 Mar 2022 00:38:11 -0800 (PST)
+X-Received: by 2002:a25:bc8f:0:b0:628:8649:5c4b with SMTP id
+ e15-20020a25bc8f000000b0062886495c4bmr10892276ybk.207.1646728690920; Tue, 08
+ Mar 2022 00:38:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v4 1/2] x86/arch_prctl: Fix the ARCH_REQ_XCOMP_PERM
- implementation
-Content-Language: en-US
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>, yang.zhong@intel.com
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        ravi.v.shankar@intel.com, tglx@linutronix.de, x86@kernel.org
-References: <20220129173647.27981-2-chang.seok.bae@intel.com>
- <98d5a389-6856-0cec-b730-65f609ff15db@linux.alibaba.com>
- <2a2e7a8a-6cd3-1392-b080-54161b990ff0@intel.com>
-From:   Hao Xiang <hao.xiang@linux.alibaba.com>
-In-Reply-To: <2a2e7a8a-6cd3-1392-b080-54161b990ff0@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220303224237.2497570-1-robh@kernel.org> <20220303224237.2497570-3-robh@kernel.org>
+ <CAMuHMdUzu2PMN7ZerX=D0KsiqKZFDW5dVe3BY77wR=H-grrPVA@mail.gmail.com> <YiY6LNfEGhz1hSYg@robh.at.kernel.org>
+In-Reply-To: <YiY6LNfEGhz1hSYg@robh.at.kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Mar 2022 09:37:58 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVFexJ=NT4wX4v2s3K--znQCiahskbGtEci3xwgsyEQWA@mail.gmail.com>
+Message-ID: <CAMuHMdVFexJ=NT4wX4v2s3K--znQCiahskbGtEci3xwgsyEQWA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: kbuild: Use DTB files for validation
+To:     Rob Herring <robh@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using the linux upsteam code with your patches，the problem is not 
-reproduced. Maybe my patches are incomplete.
+Hi Rob,
 
-Thanks,
-Hao
+On Mon, Mar 7, 2022 at 6:00 PM Rob Herring <robh@kernel.org> wrote:
+> On Mon, Mar 07, 2022 at 01:20:29PM +0100, Geert Uytterhoeven wrote:
+> > On Thu, Mar 3, 2022 at 11:43 PM Rob Herring <robh@kernel.org> wrote:
+> > > Switch the DT validation to use DTB files directly instead of a DTS to
+> > > YAML conversion.
+> > >
+> > > The original motivation for supporting validation on DTB files was to
+> > > enable running validation on a running system (e.g. 'dt-validate
+> > > /sys/firmware/fdt') or other cases where the original source DTS is not
+> > > available.
+> > >
+> > > The YAML format was not without issues. Using DTBs with the schema type
+> > > information solves some of those problems. The YAML format relies on the
+> > > DTS source level information including bracketing of properties, size
+> > > directives, and phandle tags all of which are lost in a DTB file. While
+> > > standardizing the bracketing is a good thing, it does cause a lot of
+> > > extra warnings and churn to fix them.
+> > >
+> > > Another issue has been signed types are not validated correctly as sign
+> > > information is not propagated to YAML. Using the schema type information
+> > > allows for proper handling of signed types. YAML also can't represent
+> > > the full range of 64-bit integers as numbers are stored as floats by
+> > > most/all parsers.
+> > >
+> > > The DTB validation works by decoding property values using the type
+> > > information in the schemas themselves. The main corner case this does
+> > > not work for is matrix types where neither dimension is fixed. For
+> > > now, checking the dimensions in these cases are skipped.
+> > >
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> >
+> > Thanks for your patch!
+> >
+> > While investigating why a newly added device node to DTS was not
+> > instantiated as a platform device, I discovered an issue with this
+> > patch: "make dtbs" no longer rebuilds DTB files that need a rebuild.
+> >
+> > How to reproduce:
+> >
+> >     $ git checkout next-20220307
+> >     # apply this series and its dependency:
+> >     # dt-bindings: kbuild: Support partial matches with DT_SCHEMA_FILES
+> >     # dt-bindings: kbuild: Pass DT_SCHEMA_FILES to dt-validate
+> >     # dt-bindings: kbuild: Use DTB files for validation
+> >     $ make ARCH=arm shmobile_defconfig
+> >     $ make ARCH=arm dtbs
+> >     $ touch arch/arm/boot/dts/r8a7791.dtsi
+> >     $ make ARCH=arm dtbs
+> >     # The above command does NOT cause:
+> >     # DTC     arch/arm/boot/dts/r8a7791-koelsch.dtb
+> >     # DTC     arch/arm/boot/dts/r8a7791-porter.dtb
+> >
+> > I don't see anything wrong with this patch at first sight, though.
+>
+> Was this a clean tree?
 
-On 2022/3/8 2:53, Chang S. Bae wrote:
-> On 3/7/2022 4:20 AM, Hao Xiang wrote:
->> x86/arch_prctl: Fix the ARCH_REQ_XCOMP_PERM implementation
->>
->> If WRITE_ONCE(perm->__state_perm, requested) is modified to
->> WRITE_ONCE(perm->__state_perm, mask), When the qemu process does not 
->> request the XFEATURE_MASK_XTILE_DATA xsave state permission, there may 
->> be a gp error (kvm: kvm_set_xcr line 1091 inject gp fault with cpl 0) 
->> because __kvm_set_xcr return 1.
-> 
-> What you said here does not make sense to me. When the Qemu process does 
-> not request XTILEDATA, then the __xstate_request_perm() function is 
-> never called in this, no?
-> 
->>
->> static int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr){
->>      ...
->>      // xcr0 includes XFEATURE_MASK_XTILE_CFG by default.
->>      if ((xcr0 & XFEATURE_MASK_XTILE) &&
->>          ((xcr0 & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE))
->>          return 1;
->>      ...
->> }
->>
->> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
->> index 02b3dda..2d4363e 100644
->> --- a/arch/x86/kernel/fpu/xstate.c
->> +++ b/arch/x86/kernel/fpu/xstate.c
->> @@ -1636,7 +1636,7 @@ static int __xstate_request_perm(u64 permitted, 
->> u64 requested, bool guest)
->>
->>          perm = guest ? &fpu->guest_perm : &fpu->perm;
->>          /* Pairs with the READ_ONCE() in xstate_get_group_perm() */
->> -       WRITE_ONCE(perm->__state_perm, requested);
->> +       WRITE_ONCE(perm->__state_perm, mask);
->>          /* Protected by sighand lock */
->>          perm->__state_size = ksize;
->>          perm->__user_state_size = usize;
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index 494d4d3..e8704568 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -908,6 +908,9 @@ static inline int __do_cpuid_func(struct 
->> kvm_cpuid_array *array, u32 function)
->>                  break;
->>          case 0xd: {
->>                  u64 permitted_xcr0 = supported_xcr0 & 
->> xstate_get_guest_group_perm();
-> 
-> Yang, I think you should have included your fix [1] in your series [2] 
-> in the first place, before using it widely like [3].
-> 
->> +               permitted_xcr0 = ((permitted_xcr0 & 
->> XFEATURES_MASK_XTILE) != XFEATURES_MASK_XTILE)
->> +                               ? permitted_xcr0
->> +                               : permitted_xcr0 & ~XFEATURES_MASK_XTILE;
->>                  u64 permitted_xss = supported_xss;
->>
->>                  entry->eax &= permitted_xcr0;
->>
-> 
-> Well, first of all, one patch should fix one issue, not two or more, no?
-> 
-> But this hunk looks duplicate with this [4].
-> 
-> Thanks,
-> Chang
-> 
-> 
-> [1] 
-> https://lore.kernel.org/lkml/20211108222815.4078-1-yang.zhong@intel.com/
-> [2] 
-> https://lore.kernel.org/lkml/20220105123532.12586-1-yang.zhong@intel.com/
-> [3] 
-> https://lore.kernel.org/lkml/20220105123532.12586-2-yang.zhong@intel.com/
-> [4] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kvm/x86.c#n1033 
-> 
+The above was a clean tree.
+
+> I think I reproduced it, but then couldn't... But then after a 'make
+> clean', 'make dtbs' would error out. I think the issue in both cases was
+> processed-schema.json always a dependency when it should be conditional
+> on 'dtbs_check'. The patch below fixes that. Can you give it a try too.
+
+I first saw the issue in my normal work tree.
+However, I cannot reproduce it in that tree anymore :-(
+
+I can reproduce it in the clean tree after following the instructions
+above, and your patch fixes that, so
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -349,12 +349,12 @@ $(multi-dtb-y): FORCE
+>         $(call if_changed,fdtoverlay)
+>  $(call multi_depend, $(multi-dtb-y), .dtb, -dtbs)
+>
+> +ifneq ($(CHECK_DTBS)$(CHECK_DT_BINDING),)
+>  DT_CHECKER ?= dt-validate
+>  DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
+>  DT_BINDING_DIR := Documentation/devicetree/bindings
+> -DT_TMP_SCHEMA ?= $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
+> +DT_TMP_SCHEMA := $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
+>
+> -ifneq ($(CHECK_DTBS)$(CHECK_DT_BINDING),)
+>  quiet_cmd_dtb_check =  CHECK   $@
+>        cmd_dtb_check =  $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
+>  endif
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

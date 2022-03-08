@@ -2,80 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAD54D1F6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5DC4D1F6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349273AbiCHRuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S1349285AbiCHRua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349265AbiCHRuL (ORCPT
+        with ESMTP id S1349265AbiCHRu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:50:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C8A048382
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:49:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646761753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 8 Mar 2022 12:50:27 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405CA4839E;
+        Tue,  8 Mar 2022 09:49:30 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 020FC210F2;
+        Tue,  8 Mar 2022 17:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646761769; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=6HssJmk+YZ6p3KAw12cX/6WW9ODnrbHQBJq5VfOnmOk=;
-        b=M8vks5CaLxsmoMD+k71UgzlI24fiCifZEH1NGgSBw5v+KJpWmW9mD7juor+/Stb2UbpNDZ
-        XPlzaESAy2GSKpojmNbKp5gCQnLNmUKf6W4Wc3Moxj3+jl2gU4awVWQJp/ecCGZUq9LBud
-        ujk4dMoo2MRcnmFACOONz5ypItcNSNQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-LK35cJrUMMOv6P4bLhuliQ-1; Tue, 08 Mar 2022 12:49:12 -0500
-X-MC-Unique: LK35cJrUMMOv6P4bLhuliQ-1
-Received: by mail-wm1-f70.google.com with SMTP id n62-20020a1ca441000000b0038124c99ebcso6720803wme.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:49:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6HssJmk+YZ6p3KAw12cX/6WW9ODnrbHQBJq5VfOnmOk=;
-        b=A7aZCq/wI284OtgdKgWIMgEvUDjGGoYwRzqqNtmgDWEYG/60Zcnwpcru0ccdbBI96X
-         wrCkwu/W12uvnqTlWx5F4hTNvT1M/EKuolJyitV3b7RBPn7ZKspQoOOYU8sDH4OnjBqm
-         3ay6Fz9oUUiXk4jaBeQvNkk50yvDf1EFdjAAUM+2a2P8YNhdFseM5vYFKx13B3YsyXLf
-         KzXyNtLtQ7Z6zyObv+2r3vT/X4TOOwJyGzdl3uwS5zatIkNNlqrYlG8WzYIR/RDv3ryy
-         qHWHuw2XJXpKPvmBF+NGqsilYbu6tGO/GPebShAHsu0V86FJTO1HJMhhS/GQLj8Reld3
-         /f0A==
-X-Gm-Message-State: AOAM531GDdcHTS/Hi98eMlus58yIYhdbS+aGqviJpWniW9UqXehdYc5A
-        EHXDBMLuW0Ab+ol6pXMtBslHwWuxOG1cVdj3uJWDwzI5qWwcIeIfbjiubI6JHd9fMU4fiG1qWSN
-        kH5UkQvn9UlP0WZPZo2FGHvBT
-X-Received: by 2002:a05:600c:a03:b0:37b:daff:6146 with SMTP id z3-20020a05600c0a0300b0037bdaff6146mr4600294wmp.85.1646761751159;
-        Tue, 08 Mar 2022 09:49:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzHay2ww/NrI60fjbzAjpBoqpJxLxm9gMCWFGESxLqfRu91mGDesTPJrGXCQD+c8V7kulwgjg==
-X-Received: by 2002:a05:600c:a03:b0:37b:daff:6146 with SMTP id z3-20020a05600c0a0300b0037bdaff6146mr4600269wmp.85.1646761750937;
-        Tue, 08 Mar 2022 09:49:10 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id b15-20020adfc74f000000b001e888b871a0sm14724489wrh.87.2022.03.08.09.49.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 09:49:10 -0800 (PST)
-Message-ID: <19e00429-a7e6-f4fd-41be-71afdce6b056@redhat.com>
-Date:   Tue, 8 Mar 2022 18:49:09 +0100
+        bh=COxmjuvD46AWqrnCXQNxeTDFg5Q7yCs3AfBggJx0Qfo=;
+        b=U+6eNgQeN0cCI43ARmU3cWkQk6kq41GL/8aV8sk2+bZRhaTnj4JPyGjrYimi5PopCdm66L
+        ObI8XeflLnnW6YHJ2CdJvHpDuTTerJ/ilp8gxK9kelgsx0ubtMQ6h0nw7lCxt/LNOXUL2c
+        nD1OU8TlSGIGD8lMcs84HoIPeKETNEI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646761769;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=COxmjuvD46AWqrnCXQNxeTDFg5Q7yCs3AfBggJx0Qfo=;
+        b=xHXqoP0RGSvgVR51PMVKtO3/6sdVqODerDNW3M9IhT5+ed0EUV716VEDwqygOeZ0SSb2mw
+        XT8h4Xq4iBKgytBg==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9885BA3B8E;
+        Tue,  8 Mar 2022 17:49:28 +0000 (UTC)
+Date:   Tue, 8 Mar 2022 18:49:28 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Petr Mladek <pmladek@suse.com>
+cc:     Chengming Zhou <zhouchengming@bytedance.com>, jpoimboe@redhat.com,
+        jikos@kernel.org, joe.lawrence@redhat.com,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] livepatch: Don't block removal of patches that are
+ safe to unload
+In-Reply-To: <YicnIIatfgLc2NN2@alley>
+Message-ID: <alpine.LSU.2.21.2203081842120.9394@pobox.suse.cz>
+References: <20220303105446.7152-1-zhouchengming@bytedance.com> <YicnIIatfgLc2NN2@alley>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 08/25] KVM: x86/mmu: split cpu_mode from mmu_role
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-9-pbonzini@redhat.com> <YieUHVgFxOo3LAa8@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YieUHVgFxOo3LAa8@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,37 +63,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 18:36, Sean Christopherson wrote:
-> The idea was to trigger fireworks due to a incoherent state (e.g. direct mmu_role with
-> non-direct hooks) if the nested_mmu was ever used as a "real" MMU (handling faults,
-> installing SPs/SPTEs, etc...).  For a walk-only MMU, "direct" has no meaning and so
-> rather than arbitrarily leave it '0', I arbitrarily set it '1'.
+On Tue, 8 Mar 2022, Petr Mladek wrote:
+
+> On Thu 2022-03-03 18:54:46, Chengming Zhou wrote:
+> > module_put() is currently never called for a patch with forced flag, to block
+> > the removal of that patch module that might still be in use after a forced
+> > transition.
+> > 
+> > But klp_force_transition() will set all patches on the list to be forced, since
+> > commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
+> > has removed stack ordering of the livepatches, it will cause all other patches can't
+> > be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
+> > 
+> > In fact, we don't need to set a patch to forced if it's a KLP_PATCHED forced
+> > transition. It can still be unloaded safely as long as it has passed through
+> > the consistency model in KLP_UNPATCHED transition.
 > 
-> Maybe this?
+> It really looks safe. klp_check_stack_func() makes sure that @new_func
+> is not on the stack when klp_target_state == KLP_UNPATCHED. As a
+> result, the system should not be using code from the livepatch module
+> when KLP_UNPATCHED transition cleanly finished.
 > 
->    The nested MMU now has only the CPU mode; and in fact the new function
->    kvm_calc_cpu_mode is analogous to the previous kvm_calc_nested_mmu_role,
->    except that it has role.base.direct equal to CR0.PG.  Having "direct"
->    track CR0.PG has the serendipitious side effect of being an even better
->    sentinel than arbitrarily setting direct to true for the nested MMU, as
->    KVM will run afoul of sanity checks for both direct and indirect MMUs if
->    KVM attempts to use the nested MMU as a "real" MMU, e.g. for page faults.
-
-Hmm, actually it is set to CR0.PG *negated*, so that future patches can 
-get rid of role.ext.cr0_pg.  But really anybody trying to use nested_mmu 
-for real would get NULL pointer dereferences left and right in all 
-likelihood.  This will be even clearer by the end of the series, when 
-the function pointers are initialized at vCPU creation time.
-
->>
->> +	role.base.direct = !____is_cr0_pg(regs);
->> +	if (!role.base.direct) {
 > 
-> Can we check ____is_cr0_pg() instead of "direct"?  IMO that's more intuitive for
-> understanding why the bits below are left zero.  I was scratching my head trying
-> to figure out whether or not this was safe/correct for direct MMUs...
+> > But the exception is when force transition of an atomic replace patch, we
+> > have to set all previous patches to forced, or they will be removed at
+> > the end of klp_try_complete_transition().
+> > 
+> > This patch only set the klp_transition_patch to be forced in KLP_UNPATCHED
+> > case, and keep the old behavior when in atomic replace case.
+> > 
+> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> > ---
+> > v2: interact nicely with the atomic replace feature noted by Miroslav.
+> > ---
+> >  kernel/livepatch/transition.c | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+> > index 5683ac0d2566..34ffb8c014ed 100644
+> > --- a/kernel/livepatch/transition.c
+> > +++ b/kernel/livepatch/transition.c
+> > @@ -641,6 +641,10 @@ void klp_force_transition(void)
+> >  	for_each_possible_cpu(cpu)
+> >  		klp_update_patch_state(idle_task(cpu));
+> >  
+> > -	klp_for_each_patch(patch)
+> > -		patch->forced = true;
+> > +	if (klp_target_state == KLP_UNPATCHED)
+> > +		klp_transition_patch->forced = true;
+> > +	else if (klp_transition_patch->replace) {
+> > +		klp_for_each_patch(patch)
+> > +			patch->forced = true;
+> 
+> This works only because there is should be only one patch when
+> klp_target_state == KLP_UNPATCHED and
+> klp_transition_patch->forced == true.
 
-Yes, that's good.
+I probably misunderstand, but the above is not generally true, is it? I 
+mean, if the transition patch is forced during its disablement, it does 
+not say anything about the amount of enabled patches.
 
-Paolo
+> But it is a bit tricky. I would do it the other way:
+> 
+> 	if (klp_transition_patch->replace) {
+> 		klp_for_each_patch(patch)
+> 			patch->forced = true;
+> 	} else if (klp_target_state == KLP_UNPATCHED) {
+> 		klp_transition_patch->forced = true;
+> 	}
+> 
+> It looks more sane. And it makes it more clear
+> that the special handling of KLP_UNPATCHED transition
+> is done only when the atomic replace is not used.
 
+But it is not the same. ->replace being true only comes into play when a 
+patch is enabled. If it is disabled, then it behaves like any other patch.
+
+So, if there is ->replace patch enabled (and it is the only patch present) 
+and then more !->replace patches are loaded and then if ->replace patch is 
+disabled and forced, your proposal would give a different result than what 
+Chengming submitted, because in your case all the other patches will get 
+->forced set to true, while it is not the case in the original. It would 
+be an unnecessary restriction if I am not missing something.
+
+However, I may got lost somewhere along the way.
+
+Regards
+Miroslav

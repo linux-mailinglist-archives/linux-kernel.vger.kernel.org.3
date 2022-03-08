@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA5F4D1944
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC74E4D1945
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347134AbiCHNgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S1347137AbiCHNhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiCHNgr (ORCPT
+        with ESMTP id S234026AbiCHNhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:36:47 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74984969B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:35:50 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id t8-20020a0568301e2800b005b235a56f2dso4432938otr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 05:35:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sapYZn40XqGnCxtzZFL0A3BdfWE1Z9XMUbpAoFl1KmQ=;
-        b=MYsZtHctpn/h38nYRCf+ojO4Ao1LpNMVKTl8oo3cLqgKRMgdKRfD03GtnKhMomfmHx
-         JkitXkcpxu3BzL74apiqvHfpx21Vm5DPEoeGpJs0r4KTtZcWLikPqhaLR97PQce1Ny8W
-         TyjiTaccAu4ZL6BqX+W6hBy3bkTFqzO5Cmgm4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sapYZn40XqGnCxtzZFL0A3BdfWE1Z9XMUbpAoFl1KmQ=;
-        b=ckJ7MICXdPN7k8lwXSd9qEYcsLBgOnhUpFWYp2lvA8BXMKQNP/AmmZlk4FWSYKXKf/
-         3P3mD5U0ROL+3+SrzNJ9Ug/5/PFM8WtzBXB305olQAhvjMveEBeUEfPOq4Ueg/eJMPCi
-         Ci8exrs+stsFDjfvf7ml2DtiQnb2/MkvoLGwSdVwtf7ri57ECxRjaFP87FbsCYBc3s4O
-         BWb3ytIRLa7VZ081Oshh0RTR0juFILpDfDzBnETCRyzQqu7PYO3x3Ju/wTnqb7t96xFp
-         SZGgB9ks3Po9A3szyGRYSRZfL5dAQ7lDIrU8BwpceKtLq5yQb4NKl+prhoSzke9Au5p2
-         DXow==
-X-Gm-Message-State: AOAM530m5wFZwuPhAsUTxcR5u/Uq4/UbrBnPsbd1W2wHGQByQuaBpsOi
-        e0xDYjHSosqwS1FVYTuXQEa7OQ==
-X-Google-Smtp-Source: ABdhPJy4WVZ4+JOObzkLMqzdI0KNHssS9/TrxwHgtTjA7Sz8W44I2rFN8lf4/0cX53oHmGAYJBx3Tw==
-X-Received: by 2002:a9d:8b0:0:b0:5b2:387f:efb3 with SMTP id 45-20020a9d08b0000000b005b2387fefb3mr3950678otf.12.1646746550112;
-        Tue, 08 Mar 2022 05:35:50 -0800 (PST)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id m17-20020a0568301e7100b005b256697d7csm350907otr.72.2022.03.08.05.35.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 05:35:49 -0800 (PST)
-Date:   Tue, 8 Mar 2022 07:35:47 -0600
-From:   Justin Forbes <jmforbes@linuxtx.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 000/184] 5.16.13-rc2 review
-Message-ID: <YidbszfvDiPbArGJ@fedora64.linuxtx.org>
-References: <20220307162147.440035361@linuxfoundation.org>
+        Tue, 8 Mar 2022 08:37:23 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C8349697
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:36:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646746586; x=1678282586;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lTnzKDCiv9/QLJniNg9fgD9HRuvLFymb/UZZg28Wb6Y=;
+  b=iPR5v2n6xkememEa05cRqR3zFta3A3g1ExuAiKr5hDRi5qu9DCUII73/
+   blHRLE5/rJ5NVVHsgBmf7gM8nqi9hyJuhOICdnwa9IeVe9j73xIWgePbV
+   e+JJY817xKmGT3nQf0sGPIWsHklmfMZiQM856bNwO5g/f8UC8MshSWnNQ
+   w9mElsyv7zQXPOPcgfsQur0WBUxPJzZo+9pgX+cxVdeTK00JcjJPFdhAe
+   S0zJFbC2byHUR/+6sx4Us9l6W2AOa023gxrWS2ouFTtI2VGJqT1W2qhSF
+   fI2sOPkf7Bo8xL7Kgm2KCYiiigsy9aeegPO/3Y7WUlUcm//A/VNKG8k/Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="341113522"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="341113522"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:36:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="537568182"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 08 Mar 2022 05:36:24 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRa0m-0001T3-7d; Tue, 08 Mar 2022 13:36:24 +0000
+Date:   Tue, 8 Mar 2022 21:36:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dust Li <dust.li@linux.alibaba.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:netdev/net-next/master 150/160]
+ net/smc/smc_sysctl.h:23:16: warning: no previous prototype for function
+ 'smc_sysctl_net_init'
+Message-ID: <202203082117.G0KHS6qO-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307162147.440035361@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +64,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 05:28:30PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.13 release.
-> There are 184 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Mar 2022 16:21:20 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.13-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
+head:   69adcb988a0675ce001dfc416d56fba2e8a85f48
+commit: 7de8eb0d9039f16e1122d7aa524a1502a160c4ff [150/160] net/smc: fix compile warning for smc_sysctl
+config: arm-randconfig-r024-20220308 (https://download.01.org/0day-ci/archive/20220308/202203082117.G0KHS6qO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/7de8eb0d9039f16e1122d7aa524a1502a160c4ff
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
+        git checkout 7de8eb0d9039f16e1122d7aa524a1502a160c4ff
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/
 
-Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+All warnings (new ones prefixed by >>):
+
+   In file included from net/smc/af_smc.c:54:
+>> net/smc/smc_sysctl.h:23:16: warning: no previous prototype for function 'smc_sysctl_net_init' [-Wmissing-prototypes]
+   int __net_init smc_sysctl_net_init(struct net *net)
+                  ^
+   net/smc/smc_sysctl.h:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __net_init smc_sysctl_net_init(struct net *net)
+   ^
+   static 
+>> net/smc/smc_sysctl.h:29:17: warning: no previous prototype for function 'smc_sysctl_net_exit' [-Wmissing-prototypes]
+   void __net_exit smc_sysctl_net_exit(struct net *net) { }
+                   ^
+   net/smc/smc_sysctl.h:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __net_exit smc_sysctl_net_exit(struct net *net) { }
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/smc_sysctl_net_init +23 net/smc/smc_sysctl.h
+
+    22	
+  > 23	int __net_init smc_sysctl_net_init(struct net *net)
+    24	{
+    25		net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
+    26		return 0;
+    27	}
+    28	
+  > 29	void __net_exit smc_sysctl_net_exit(struct net *net) { }
+    30	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

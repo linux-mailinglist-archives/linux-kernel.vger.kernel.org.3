@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA394D2470
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F05F4D2473
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350799AbiCHWnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S1350815AbiCHWoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243505AbiCHWnj (ORCPT
+        with ESMTP id S1344759AbiCHWoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:43:39 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44CF1E3E3;
-        Tue,  8 Mar 2022 14:42:40 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCr1l5yqzz4xvN;
-        Wed,  9 Mar 2022 09:42:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646779356;
-        bh=8Sp8Dfbj1LkAvt7lEhSomDcYJ/vdGYhIUpg4uCoUwBo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Dnn63a4hmJK4uzgMiVCnYr44lY8KciMyGgzoswr2xWneQ9Ec+GiDn19zQsxxDAaZ+
-         KgEGhZSH17kmnWSfiYlATkgIs08L4YdtMj2xBkwFrz9VStfgCJA2glE4rt6ZSQyfqy
-         XYJHnJkIpM8ka4bS++GHS5LVH4UMFFvvKwtJZKkqB+laFAu9rcwlFch65Y03GUlWZk
-         lK9y0j8db6pccjcXukzIT/kFCa2kCVHmVGBfvC8CWoYKQLhwbPVFiS2OSOzQdtua/v
-         ERUvDeYU/ozlFR/qZC75PYQ+Yj8UVdVXbLZvCw6c1WhdL1ds0FitU+UgP53hiS63GE
-         0C0Rc369EiE2g==
-Date:   Wed, 9 Mar 2022 09:42:35 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     James Morse <james.morse@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vladimir Murzin <vladimir.murzin@arm.com>
-Subject: linux-next: manual merge of the arm64 tree with Linus' tree
-Message-ID: <20220309094235.146df5bd@canb.auug.org.au>
+        Tue, 8 Mar 2022 17:44:14 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A063615D;
+        Tue,  8 Mar 2022 14:43:17 -0800 (PST)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nRiXx-000BWH-6i; Tue, 08 Mar 2022 23:43:13 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nRiXw-0005MY-Up; Tue, 08 Mar 2022 23:43:12 +0100
+Subject: Re: [PATCH bpf v2] tools: fix unavoidable GCC call in Clang builds
+To:     Adrian Ratiu <adrian.ratiu@collabora.com>, netdev@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kernel@collabora.com,
+        linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Manoj Gupta <manojgupta@chromium.com>,
+        Nathan Chancellor <nathan@kernel.org>, bpf@vger.kernel.org
+References: <20220308121428.81735-1-adrian.ratiu@collabora.com>
+ <6e82ffbb-ebc8-30e8-2326-95712578ee07@iogearbox.net>
+ <87fsnsrt1t.fsf@ryzen9.i-did-not-set--mail-host-address--so-tickle-me>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <29531b96-5fbc-a332-365d-8f6a1e5cc619@iogearbox.net>
+Date:   Tue, 8 Mar 2022 23:43:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Na/Y_JquJgGpQg7LcO7l9hz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <87fsnsrt1t.fsf@ryzen9.i-did-not-set--mail-host-address--so-tickle-me>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: base64
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26475/Tue Mar  8 10:31:43 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,70 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Na/Y_JquJgGpQg7LcO7l9hz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-Today's linux-next merge of the arm64 tree got a conflict in:
-
-  arch/arm64/kernel/cpufeature.c
-
-between commit:
-
-  228a26b91228 ("arm64: Use the clearbhb instruction in mitigations")
-
-from Linus' tree and commit:
-
-  def8c222f054 ("arm64: Add support of PAuth QARMA3 architected algorithm")
-
-from the arm64 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/kernel/cpufeature.c
-index d33687673f6b,32aa0eb3ed68..000000000000
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@@ -231,7 -226,10 +231,11 @@@ static const struct arm64_ftr_bits ftr_
-  };
- =20
-  static const struct arm64_ftr_bits ftr_id_aa64isar2[] =3D {
- +	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_HIGHER_SAFE, ID_AA64ISAR2_CLE=
-ARBHB_SHIFT, 4, 0),
-+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_PTR_AUTH),
-+ 		       FTR_STRICT, FTR_EXACT, ID_AA64ISAR2_APA3_SHIFT, 4, 0),
-+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_PTR_AUTH),
-+ 		       FTR_STRICT, FTR_LOWER_SAFE, ID_AA64ISAR2_GPA3_SHIFT, 4, 0),
-  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR2_=
-RPRES_SHIFT, 4, 0),
-  	ARM64_FTR_END,
-  };
-
---Sig_/Na/Y_JquJgGpQg7LcO7l9hz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIn29sACgkQAVBC80lX
-0GxY+AgAiSzPrluV0/1c3k5DtF3PhfbiHo5o49UN4QjJD9wnPtx56wH/Jll1crPd
-zHadQdqHo4MygXZ6F7h1kR+h7SFCMMOQtLDBRuPRZVLKjfA5BvSWTHd9iwpkahDH
-+PSY0v+wCkA55SsAyh+FuxFQzPYMpA8LgkCf/97Lt98HBwYfcEm+u4rYPRfBEBQe
-G5zl+W/oIz4lJHn+v5k6wJ27+FMl+/1Ji2OncdhF2sR8P2bqk93SN9+JbY1FAL1B
-JbG6XzlcqFbW8+9qLaE0RG+hA2teFGQi4K9LWZbUP3SmgQHeV5WiQ3BFfqBTWG8A
-nK5+TSe9Cj8QlW/ITL3XjC4H0DQp+w==
-=zDhV
------END PGP SIGNATURE-----
-
---Sig_/Na/Y_JquJgGpQg7LcO7l9hz--
+T24gMy84LzIyIDExOjE0IFBNLCBBZHJpYW4gUmF0aXUgd3JvdGU6DQo+IE9uIFR1ZSwgMDgg
+TWFyIDIwMjIsIERhbmllbCBCb3JrbWFubiA8ZGFuaWVsQGlvZ2VhcmJveC5uZXQ+IHdyb3Rl
+Og0KPj4gT24gMy84LzIyIDE6MTQgUE0sIEFkcmlhbiBSYXRpdSB3cm90ZToNCj4+PiBJbiBD
+aHJvbWVPUyBhbmQgR2VudG9vIHdlIGNhdGNoIGFueSB1bndhbnRlZCBtaXhlZCBDbGFuZy9M
+TFZNIGFuZCBHQ0MvYmludXRpbHMgdXNhZ2UgdmlhIHRvb2xjaGFpbiB3cmFwcGVycyB3aGlj
+aCBmYWlsIGJ1aWxkcy7CoCBUaGlzIGhhcyByZXZlYWxlZCB0aGF0IEdDQyBpcyBjYWxsZWQg
+dW5jb25kaXRpb25hbGx5IGluIENsYW5nIGNvbmZpZ3VyZWQgYnVpbGRzIHRvIHBvcHVsYXRl
+IEdDQ19UT09MQ0hBSU5fRElSLiBBbGxvdyB0aGUgdXNlciB0byBvdmVycmlkZSBDTEFOR19D
+Uk9TU19GTEFHUyB0byBhdm9pZCB0aGUgR0NDIGNhbGwgLSBpbiBvdXIgY2FzZSB3ZSBzZXQg
+dGhlIHZhciBkaXJlY3RseSBpbiB0aGUgZWJ1aWxkIHJlY2lwZS7CoMKgIEluIHRoZW9yeSBD
+bGFuZyBjb3VsZCBiZSBhYmxlIHRvIGF1dG9kZXRlY3QgdGhlc2Ugc2V0dGluZ3Mgc28gdGhp
+cyBsb2dpYyBjb3VsZCBiZSByZW1vdmVkIGVudGlyZWx5LCBidXQgaW4gcHJhY3RpY2UgYXMg
+dGhlIGNvbW1pdCBjZWJkYjczNzQ1NzcgKCJ0b29sczogSGVscCBjcm9zcy1idWlsZGluZyB3
+aXRoIGNsYW5nIikgbWVudGlvbnMsIHRoaXMgZG9lcyBub3QgYWx3YXlzIHdvcmssIHNvIGdp
+dmluZyBkaXN0cmlidXRpb25zIG1vcmUgY29udHJvbCB0byBzcGVjaWZ5IHRoZWlyIGZsYWdz
+ICYgc3lzcm9vdCBpcyBiZW5lZmljaWFsLsKgwqAgU3VnZ2VzdGVkLWJ5OiBNYW5vaiBHdXB0
+YSA8bWFub2pndXB0YUBjaHJvbWl1bS5jb20+IFN1Z2dlc3RlZC1ieTogTmF0aGFuIENoYW5j
+ZWxsb3IgPG5hdGhhbkBrZXJuZWwub3JnPiBBY2tlZC1ieTogTmF0aGFuIENoYW5jZWxsb3Ig
+PG5hdGhhbkBrZXJuZWwub3JnPiBTaWduZWQtb2ZmLWJ5OiBBZHJpYW4gUmF0aXUgPGFkcmlh
+bi5yYXRpdUBjb2xsYWJvcmEuY29tPiAtLS0gQ2hhbmdlcyBpbiB2MjogwqDCoCAqIFJlcGxh
+Y2VkIHZhcmlhYmxlIG92ZXJyaWRlIEdDQ19UT09MQ0hBSU5fRElSIC0+IMKgwqAgQ0xBTkdf
+Q1JPU1NfRkxBR1MgDQo+Pg0KPj4gQXMgSSB1bmRlcnN0YW5kIGl0IGZyb20gWzBdIGFuZCBn
+aXZlbiB3ZSdyZSBsYXRlIGluIHRoZSBjeWNsZSwgdGhpcyBpcyB0YXJnZXRlZCBmb3IgYnBm
+LW5leHQgbm90IGJwZiwgcmlnaHQ/DQo+IA0KPiBZZXMsIGxldCdzIHRhcmdldCB0aGlzIGZv
+ciBicGYtbmV4dC4gVGhlIGlzc3VlIHdhcyBpbnRyb2R1Y2VkIGluIHRoZSA1LjE3IGN5Y2xl
+IGJ1dCBpbmRlZWQgaXQncyBsYXRlLiBJIGNhbiBkbyBhIHN0YWJsZSBiYWNrcG9ydCB0byA1
+LjE3IGFmdGVyIGl0IHJlbGVhc2VzLg0KDQpPaywgc2d0bS4gR2l2ZW4gaXQgaGFzIGFuIEFj
+ayBieSBOYXRoYW4sIEkndmUgcHVzaGVkIGl0IHRvIGJwZi1uZXh0Lg0KDQpUaGFua3MgZXZl
+cnlvbmUsDQpEYW5pZWwNCg==

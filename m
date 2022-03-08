@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97B24D1C7D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534074D1C8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348262AbiCHP5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S1348965AbiCHP7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348053AbiCHP4G (ORCPT
+        with ESMTP id S1348068AbiCHP4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:56:06 -0500
+        Tue, 8 Mar 2022 10:56:10 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031624F9D8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B374F9E4
         for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=JWR1Jvatd2wRq94EgF2FFUHDrJsSm4yXOI7jdL4Xcs4=; b=RAuVSgYkc64ZPvBoryhP2e1q75
-        nzGLiFM2O3pDGyI5dv+RAcq2Ldf8vkkfwyE2351g5KyobLe84eD3IvAgXlx9axF6jsmIaqbFwb0y0
-        V5ssyAbKnH7RNKWi/nGXZg4UFtl6yfyJrEW31IfEm6OKimJVnMZkT+4Iza2sr3/5SKwJPCJM0LPRo
-        n9fUBQu7WDTSQwmQH6nPQl74nLKO6H8R2tXrOepao0wwNwNlCPBt6RPJdq+JHsBxiBr+H6WnrCTqA
-        DwG4PQuK5Y0NUI/VW9ofjY6Je0FZAs2HycBalJmwwiHe81qMoYEliQLHofj1/5YDawa/HcgNSib1Q
-        nqp/hC2A==;
+        bh=dtE4TxbRN5b4MUyKtNVPCJTQt/NBj65e8QNm1bw+r8Q=; b=TiDx9UQGwqZsbBhRFMYji+6gxN
+        ASC81f9EnFK9JkfGKj2/s86WFmmnpNWdhx+Wtyw0xYyooBv0Qo0DLdlWry8SfLAm5AwTv74/Y3T4A
+        NY6FSAcZOK23EGz+Poi1iQQsnYVSjHfL2pThULKFwJ5/bQQAcbksWEYX9jHlUjzsRu0ke9vxQu6BG
+        +9v2kB9DOXPifTPfaIMuvJEkpNMWRGg3uiTUimHqV3op5UelKFrCcjDSniPeg+VZMebiOl7Ojjm+p
+        Xlx6NsTxHk0F9aSXBHnrWKh4pwI5/4DK/rmkaJjLoAut44kCZ61lqFzPe8ui4kp6c0KyqAnCYpsNN
+        GOQMdBdg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAc-00GUie-T3; Tue, 08 Mar 2022 15:54:43 +0000
+        id 1nRcAc-00GUig-UB; Tue, 08 Mar 2022 15:54:43 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4B1EE302DD0;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4C439302DD1;
         Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id AA1D12B5649C7; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
-Message-ID: <20220308154319.113767246@infradead.org>
+        id B27192B5649CA; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
+Message-ID: <20220308154319.172584233@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:44 +0100
+Date:   Tue, 08 Mar 2022 16:30:45 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v4 33/45] x86/ibt: Ensure module init/exit points have references
+Subject: [PATCH v4 34/45] objtool: Rename --duplicate to --lto
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,35 +61,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the references to the module init/exit points only have external
-references, a module LTO run will consider them 'unused' and seal
-them, leading to an immediate fail on module load.
+In order to prepare for LTO like objtool runs for modules, rename the
+duplicate argument to lto.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/cfi.h |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ scripts/link-vmlinux.sh                 |    2 +-
+ tools/objtool/builtin-check.c           |    4 ++--
+ tools/objtool/check.c                   |    7 ++++++-
+ tools/objtool/include/objtool/builtin.h |    2 +-
+ 4 files changed, 10 insertions(+), 5 deletions(-)
 
---- a/include/linux/cfi.h
-+++ b/include/linux/cfi.h
-@@ -34,8 +34,17 @@ static inline void cfi_module_remove(str
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -115,7 +115,7 @@ objtool_link()
+ 			objtoolcmd="orc generate"
+ 		fi
  
- #else /* !CONFIG_CFI_CLANG */
+-		objtoolopt="${objtoolopt} --duplicate"
++		objtoolopt="${objtoolopt} --lto"
  
--#define __CFI_ADDRESSABLE(fn, __attr)
-+#ifdef CONFIG_X86_KERNEL_IBT
+ 		if is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL; then
+ 			objtoolopt="${objtoolopt} --mcount"
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -20,7 +20,7 @@
+ #include <objtool/objtool.h>
+ 
+ bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+-     validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
++     lto, vmlinux, mcount, noinstr, backup, sls, dryrun;
+ 
+ static const char * const check_usage[] = {
+ 	"objtool check [<options>] file.o",
+@@ -40,7 +40,7 @@ const struct option check_options[] = {
+ 	OPT_BOOLEAN('b', "backtrace", &backtrace, "unwind on error"),
+ 	OPT_BOOLEAN('a', "uaccess", &uaccess, "enable uaccess checking"),
+ 	OPT_BOOLEAN('s', "stats", &stats, "print statistics"),
+-	OPT_BOOLEAN('d', "duplicate", &validate_dup, "duplicate validation for vmlinux.o"),
++	OPT_BOOLEAN(0, "lto", &lto, "whole-archive like runs"),
+ 	OPT_BOOLEAN('n', "noinstr", &noinstr, "noinstr validation for vmlinux.o"),
+ 	OPT_BOOLEAN('l', "vmlinux", &vmlinux, "vmlinux.o validation"),
+ 	OPT_BOOLEAN('M', "mcount", &mcount, "generate __mcount_loc"),
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -3501,6 +3501,11 @@ int check(struct objtool_file *file)
+ {
+ 	int ret, warnings = 0;
+ 
++	if (lto && !(vmlinux || module)) {
++		fprintf(stderr, "--lto requires: --vmlinux or --module\n");
++		return 1;
++	}
 +
-+#define __CFI_ADDRESSABLE(fn, __attr) \
-+	const void *__cfi_jt_ ## fn __visible __attr = (void *)&fn
-+
-+#endif /* CONFIG_X86_KERNEL_IBT */
+ 	arch_initial_func_cfi_state(&initial_func_cfi);
+ 	init_cfi_state(&init_cfi);
+ 	init_cfi_state(&func_cfi);
+@@ -3521,7 +3526,7 @@ int check(struct objtool_file *file)
+ 	if (list_empty(&file->insn_list))
+ 		goto out;
  
- #endif /* CONFIG_CFI_CLANG */
+-	if (vmlinux && !validate_dup) {
++	if (vmlinux && !lto) {
+ 		ret = validate_vmlinux_functions(file);
+ 		if (ret < 0)
+ 			goto out;
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -9,7 +9,7 @@
  
-+#ifndef __CFI_ADDRESSABLE
-+#define __CFI_ADDRESSABLE(fn, __attr)
-+#endif
-+
- #endif /* _LINUX_CFI_H */
+ extern const struct option check_options[];
+ extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+-            validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
++	    lto, vmlinux, mcount, noinstr, backup, sls, dryrun;
+ 
+ extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
+ 
 
 

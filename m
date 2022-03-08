@@ -2,89 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1534D111B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 279FE4D111E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344623AbiCHHhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 02:37:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
+        id S242285AbiCHHiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 02:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240331AbiCHHhH (ORCPT
+        with ESMTP id S240331AbiCHHht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 02:37:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232903DDCD
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 23:36:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D1490B8165F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7841BC340EB;
-        Tue,  8 Mar 2022 07:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646724964;
-        bh=xKfgDxtalAdHsX4uwNuW8jni1gTmi1k3960oPdqc3Bw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tjrsTD2bR62ZjLEMJj3QR1GlnmCatbhTHEfv3fuBz7WZoKLrDGzqjCfDMbidfkRHk
-         aBaQ8Av2uybwZNZ+B5CBNxjY2T4+qptCscUPf3/FRE8+7ni9XxVs+0ePwWwPBGgZjl
-         4/axYiqzkVBhAIrtMD8ic+5lqwugg+gzTl+VIatltmM60xZU0AXWoxMqFEA0+dY5yn
-         W8h3TgdETjv5oUaKFJ+N7woF5VJ3eY13xXqk07AYv3Z7/6foDZhtWPlY31rcZzhkHr
-         n4xisXmVvq020xsHghOmtHu2hx0UvtOiA5wZ7z91dGOQ008R+Vg1+AytkpB6FsIat9
-         vop0IVL3JInJw==
-Date:   Tue, 8 Mar 2022 16:36:00 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org
-Subject: Re: tracing : bootconfig : Early boot config for non intrd systems
-Message-Id: <20220308163600.3109f19854c7b051924f262b@kernel.org>
-In-Reply-To: <20220307184011.GA2570@pswork>
-References: <20220307184011.GA2570@pswork>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Mar 2022 02:37:49 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3393DDCD;
+        Mon,  7 Mar 2022 23:36:54 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso1596573pjc.0;
+        Mon, 07 Mar 2022 23:36:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=1O/m30lOLCShHOY1A8XX2vgIfOwS0B8Jqovd6Acndzs=;
+        b=W4XYVgxLwKHbbUQ+aUBXJkPLsPX3JtkXREow6Fiba+HR/WyIpmoenvdlRHXOGdyUO6
+         iqdFWgg5AiBZknmMYegY6mCSnol7mAf9NawWMrF12d1slobd7IKeWE2iXFXiEjRokKby
+         2bM/qznnZfqlJjWds/F+0rKHVuskGSCRk3T/dbU5/N99LvtR8SgScZldqy/Nb+n06fz9
+         ttSp7ZIx8JGBCSyKuNERnTP1wIry/uypK466WekRBDus/1uOBy2GG8gvqqOYukl/qF9D
+         O6XoeV/Cd5TgSZbDxCNYG3wTlxUhl5K3QNvbHGUi0bYh7T+aSNR3H2TGHqYobZvuvgmx
+         8ltA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1O/m30lOLCShHOY1A8XX2vgIfOwS0B8Jqovd6Acndzs=;
+        b=LvCGNAuQFIm20YUOwVHWUuaJhx9ajumgJOIo9SU6jmiZdaHWilu2S77PiZLEtdMKeA
+         PHSp2sjZ0tI+Uey8uLRd40Aan3Piu/QmkS8JdpgGtSwH0vXDmgfjQXLPcygDRbg7EOje
+         242ercDJJ8P0eMnU/Yky7jukm8DIMfc1SNLU2XqQaRNF0fdaIikbw5n3b8ejsNheX8S/
+         xkWTVWvhB8UfIEeIgduK/tSc2Kc2Ls2DCK1x0BYM4qIeDjH6svUZr0X8Sou4TczTwOJP
+         yq5Rpl0Vl0tYVHTSpCrqP77KRCDUVMrzFeYkGbE1ndXt6ugKbZzyoqfH4sG7G8hqeg0R
+         Jk3Q==
+X-Gm-Message-State: AOAM530uSdS+ap1BlLHdf+0XFS20uYgXpBVS++hrrZTZigT8w45lMrEL
+        uUp00fHnbUXLOWj6w1RtS4A=
+X-Google-Smtp-Source: ABdhPJw7OrQgdO9XnbyYh9yhEiDA0rSw52X8cVeCvHcqwZfMvRJXQvr3bZXE3t5TM6L5S6+PUXEwkw==
+X-Received: by 2002:a17:90b:a41:b0:1bf:72b5:ae95 with SMTP id gw1-20020a17090b0a4100b001bf72b5ae95mr3277128pjb.110.1646725013502;
+        Mon, 07 Mar 2022 23:36:53 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id ot13-20020a17090b3b4d00b001bf0b8a1ee7sm1800849pjb.11.2022.03.07.23.36.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 23:36:53 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] soc: qcom: smsm: Fix missing of_node_put() in smsm_parse_ipc
+Date:   Tue,  8 Mar 2022 07:36:48 +0000
+Message-Id: <20220308073648.24634-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Padmanabha,
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-On Mon, 7 Mar 2022 19:40:11 +0100
-Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/soc/qcom/smsm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Hello Masami Hiramatsu,
-> 
-> Thanks for detailed explanation on boot time tracing using early boot configuration file.
-> https://linuxfoundation.org/wp-content/uploads/boottrace-LF-live-2021-update.pdf
-> 
-> Also for https://lwn.net/Articles/806002/.
-> 
-> Latter link also states we can embed boot config into the kernel image for non intrd based system.
-
-Ah, that was an original plan, but since no one interested in, I didn't implement it.
-So we still need the initrd for bootconfig.
-
-> 
-> I tried searching mailing lists not able to find pointer for same.
-> 
-> A hint/pointer on how-to will be very helpful. 
-
-BTW, what is your problem, could you share your use-case?
-
-Thank you,
-
-> 
-> Thanks and Regards,
-> Padmanabha.S
-> 
-
-
+diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
+index ef15d014c03a..9df9bba242f3 100644
+--- a/drivers/soc/qcom/smsm.c
++++ b/drivers/soc/qcom/smsm.c
+@@ -374,6 +374,7 @@ static int smsm_parse_ipc(struct qcom_smsm *smsm, unsigned host_id)
+ 		return 0;
+ 
+ 	host->ipc_regmap = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(host->ipc_regmap))
+ 		return PTR_ERR(host->ipc_regmap);
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.17.1
+

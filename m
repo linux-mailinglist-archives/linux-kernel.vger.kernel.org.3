@@ -2,58 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C49F4D1CB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D42BE4D1CBA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347898AbiCHQFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S1348012AbiCHQGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243540AbiCHQFo (ORCPT
+        with ESMTP id S243062AbiCHQF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:05:44 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837544FC59
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:04:47 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 577761F445B7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646755486;
-        bh=hOiZ9ykiaBDPKQzbGHfm3j2FlBLb1AlaOgBoAKkcoPg=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=FBtBWn9E/pS7cuhC9BkGYA5+Me1Js9aqgIplk3YYC1XpdPiYgr4/OV47uPbqINlQ2
-         ePGG2EkSTYr/as5sSE0KgnvoLJs8H4t9MOXFrE/VCAYlOewQaXfLrZVIC1xFnCmJ3H
-         +eS+TT3G+Ntg7T7LQxZkgEghutet5hVU/muOQ7z7nU+03X0Lh7dpQNLqsjmXRbN7qq
-         330vN5NO2lS2lsBQuKoaIc0ULCjmHKjrUQiLNgR0WLoopfs/3T4Rte7UH3uS9xJ2Sq
-         GR/NFtcru+JD4/hatzxB+pmDr4oOWhoPoAQ1lN38owV+9Yj8AgmFi8/uWVZ0mXd5q7
-         tsTT0/7BvMSVw==
-Message-ID: <d9c0cdc7-9650-d9e3-e872-4bf22f0c4baa@collabora.com>
-Date:   Tue, 8 Mar 2022 19:04:42 +0300
+        Tue, 8 Mar 2022 11:05:59 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370AE4FC5F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:05:01 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A441B1F380;
+        Tue,  8 Mar 2022 16:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1646755500; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cFXVe88c1y/NL2/upYftgWSKkejjurmLEVpRnE2EA/Y=;
+        b=iI3lDH21RP0cKXGVnGPKUzmdG7NTt0kRACKOMEZL2kTUMlChz3rZ/J4bZreY7DtNPP0PgC
+        KhnRnS7eRAH19aCMd0HINZm5+w0AqDiv2kkHF8yUmzANU7pza0gz092RVDyg00t7ZL/mPK
+        Hu41KZBCV8SHYzeTjb0UF3Yijzfa0pc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1646755500;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cFXVe88c1y/NL2/upYftgWSKkejjurmLEVpRnE2EA/Y=;
+        b=XwizUuTzRGXwU7cSsun7gDcguu+KX475OmeMHBlEtERedLd1nYjgKma3V28BUw33vPN6K5
+        ZwRh1s6msbgEUxBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85F9D13CCE;
+        Tue,  8 Mar 2022 16:05:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fcA4IKx+J2IKaAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 08 Mar 2022 16:05:00 +0000
+Message-ID: <aab854b3-d9fd-3454-c06b-01ff441dec08@suse.cz>
+Date:   Tue, 8 Mar 2022 17:04:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 5/5] drm/virtio: Add memory shrinker
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/1] mm/page_alloc: add scheduling point to
+ free_unref_page_list
 Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>
-Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <20220308131725.60607-6-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220308131725.60607-6-dmitry.osipenko@collabora.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        wangjianxing <wangjianxing@loongson.cn>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>,
+        Mel Gorman <mgorman@techsingularity.net>
+References: <20220302013825.2290315-1-wangjianxing@loongson.cn>
+ <20220302153433.719caef31bd9e99319c5e6a2@linux-foundation.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220302153433.719caef31bd9e99319c5e6a2@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,27 +78,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/3/22 00:34, Andrew Morton wrote:
+> On Tue,  1 Mar 2022 20:38:25 -0500 wangjianxing <wangjianxing@loongson.cn> wrote:
+> 
+>> free a large list of pages maybe cause rcu_sched starved on
+>> non-preemptible kernels
+>>
+>> rcu: rcu_sched kthread starved for 5359 jiffies! g454793 f0x0
+>> RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=19
+>> [...]
+>> Call Trace:
+>>   free_unref_page_list+0x19c/0x270
+>>   release_pages+0x3cc/0x498
+>>   tlb_flush_mmu_free+0x44/0x70
+>>   zap_pte_range+0x450/0x738
+>>   unmap_page_range+0x108/0x240
+>>   unmap_vmas+0x74/0xf0
+>>   unmap_region+0xb0/0x120
+>>   do_munmap+0x264/0x438
+>>   vm_munmap+0x58/0xa0
+>>   sys_munmap+0x10/0x20
+>>   syscall_common+0x24/0x38
+> 
+> Thanks.
+> 
+> How did this large list of pages come about?
 
-On 3/8/22 16:17, Dmitry Osipenko wrote:
-> @@ -246,20 +246,28 @@ static int virtio_gpu_plane_prepare_fb(struct drm_plane *plane,
->  	struct virtio_gpu_device *vgdev = dev->dev_private;
->  	struct virtio_gpu_framebuffer *vgfb;
->  	struct virtio_gpu_object *bo;
-> +	int err;
->  
->  	if (!new_state->fb)
->  		return 0;
->  
->  	vgfb = to_virtio_gpu_framebuffer(new_state->fb);
->  	bo = gem_to_virtio_gpu_obj(vgfb->base.obj[0]);
-> -	if (!bo || (plane->type == DRM_PLANE_TYPE_PRIMARY && !bo->guest_blob))
-> +
-> +	err = virtio_gpu_gem_pin(bo);
-> +	if (err)
-> +		return err;
+Looks like it came from TLB batching. But I got lost in the maze of it
+trying to figure out how large the batch can grow.
 
-I just noticed that this produces a refcount debug warning because I
-missed to initialize the refcount when BO is created. That warning splat
-was hidden by a huge lockdep splat produced by
-drm_aperture_remove_conflicting_pci_framebuffers(), which probably
-should be fixed. I'll correct it in v2.
+> Will people be seeing this message in upstream kernels, or is it
+> specific to some caller code which you have added?
+> 
+> Please always include details such as this so that others can determine
+> whether the fix should be backported into -stable kernels.
+> 
+> 
+

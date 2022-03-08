@@ -2,112 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8476F4D1372
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB144D1373
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345370AbiCHJc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S1345366AbiCHJdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:33:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345376AbiCHJcv (ORCPT
+        with ESMTP id S232666AbiCHJdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:32:51 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EA231527
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 01:31:01 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id r187-20020a1c2bc4000000b003810e6b192aso1064454wmr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 01:31:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=CetJNzTKyVG8qZ2bQ1eNFE/fMs/QHyLqehu50WJq6EI=;
-        b=nFIiZVjRWne0eKi8ijKlgttx9nFNNk0yvmrCEoM8f2E/Wo0XGmjQTr2z+HL3pzhqXd
-         /alRd6H2COvxpRKhCX2bJqsmMXRv2SYaYn3JadIMqwUDCgK1gJ76wGF2+8BQmmSA4hAK
-         BCzCXu3coxU89/jZzHWuB0vL8a1q0783Teqkac//+e0b1XlirzjBIU7EEiwruMxew2Dm
-         SnoArvzmGI4qDMYZ6XLqwK93Ut+oF1ScmxA548ZHb5DxI2RW0PRDADC7NR3ksCRK6b7q
-         6GW/0kz40kmUjeIB+WoSK5c/3tJF0CXC4+52Rv83pJHCthV2y5vpjuqnuvlkyPoBMBGV
-         TgOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=CetJNzTKyVG8qZ2bQ1eNFE/fMs/QHyLqehu50WJq6EI=;
-        b=uoKFS9MjbAF/w+KQ2Fzs2ImZ/rBytgSW4I6EdmoIDNvUGjO6bFxwDM82I8TWnLVPps
-         B22DfHW9LhBYPrNTELJq8bTabIzEUvGQ9qNot61s9wJnAdU0cQ089ww4mhPu3LLWhgg7
-         oh5UVxSD/zy3AFLeBwm3Rl4ivKQH+xKYXUsatZ3el3YvN1hSsr6oUi6ACkmf1BQoW51S
-         jrUBUoxk4P/WHUPRnjN8KFqV1og4Eod9ICYbhGA7MK8GNuvDnnXEr0C5XCPSd5lmRPaF
-         ua+GXnFeDJhKF3GtjZV7RqNdk34ZUA8MuvJRp572lTJBXKfA10ygVNM3Y3ARlUvFtDbM
-         3l4g==
-X-Gm-Message-State: AOAM5331+x0Da7ta5sK8Tmqx9poBfiK/HBiWoe9K2Sw+fw60nMifsKsK
-        pTLctZ2zIv7OYQ49Y5FpRqWreiYuUP1ZVWLp
-X-Google-Smtp-Source: ABdhPJx0nc5bJfY7hYmCPLXx0B2JDr41e2w8sVXywNW9kErbCVrNB3oaw01HJ2rNuFLo0zuhqzYbjw==
-X-Received: by 2002:a7b:c250:0:b0:389:7fe5:d34c with SMTP id b16-20020a7bc250000000b003897fe5d34cmr2679862wmj.83.1646731860131;
-        Tue, 08 Mar 2022 01:31:00 -0800 (PST)
-Received: from [192.168.1.99] (std93-h01-31-34-241-225.dsl.sta.abo.bbox.fr. [31.34.241.225])
-        by smtp.gmail.com with ESMTPSA id r187-20020a1c44c4000000b0038377fb18f8sm2312355wma.5.2022.03.08.01.30.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 01:30:59 -0800 (PST)
-Message-ID: <bacb5387-2992-97e4-0c48-1ed925905bee@gmail.com>
-Date:   Tue, 8 Mar 2022 10:30:58 +0100
+        Tue, 8 Mar 2022 04:33:12 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4106832ECB;
+        Tue,  8 Mar 2022 01:32:12 -0800 (PST)
+Received: from kwepemi100022.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KCVPV4QP4z9sYS;
+        Tue,  8 Mar 2022 17:28:30 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ kwepemi100022.china.huawei.com (7.221.188.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Tue, 8 Mar 2022 17:32:10 +0800
+Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
+ (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 8 Mar
+ 2022 17:32:10 +0800
+Subject: Re: [PATCH v2 1/2] drivers/perf: hisi: Add Support for CPA PMU
+To:     John Garry <john.garry@huawei.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>, <acme@kernel.org>
+CC:     <linux-perf-users@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>
+References: <20220224111129.41416-1-liuqi115@huawei.com>
+ <20220224111129.41416-2-liuqi115@huawei.com>
+ <8cdc2c64-0a89-b807-56f6-2ea67a41a641@huawei.com>
+ <a051968a-b90d-3707-fb60-f6a446fc79e7@huawei.com>
+ <816e5d86-9d7d-5762-d1d7-afcd0ee34af3@huawei.com>
+From:   "liuqi (BA)" <liuqi115@huawei.com>
+Message-ID: <9a5db958-2fef-ff5e-c83f-394039e5bd0e@huawei.com>
+Date:   Tue, 8 Mar 2022 17:32:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     andreyknvl@google.com, vincenzo.frascino@arm.com,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        paul.semel@datadoghq.com, semelpaul@gmail.com
-From:   Paul Semel <semelpaul@gmail.com>
-Subject: [PATCH] arm64: kasan: fix include error in MTE functions
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <816e5d86-9d7d-5762-d1d7-afcd0ee34af3@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.101.67]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix `error: expected string literal in 'asm'`.
-This happens when compiling an ebpf object file that includes
-`net/net_namespace.h` from linux kernel headers.
 
-Include trace:
-     include/net/net_namespace.h:10
-     include/linux/workqueue.h:9
-     include/linux/timer.h:8
-     include/linux/debugobjects.h:6
-     include/linux/spinlock.h:90
-     include/linux/workqueue.h:9
-     arch/arm64/include/asm/spinlock.h:9
-     arch/arm64/include/generated/asm/qrwlock.h:1
-     include/asm-generic/qrwlock.h:14
-     arch/arm64/include/asm/processor.h:33
-     arch/arm64/include/asm/kasan.h:9
-     arch/arm64/include/asm/mte-kasan.h:45
-     arch/arm64/include/asm/mte-def.h:14
+Hi John,
+On 2022/3/8 1:50, John Garry wrote:
+> 
+>>>> +
+>>>> +static void hisi_cpa_pmu_stop_counters(struct hisi_pmu *cpa_pmu)
+>>>> +{
+>>>> +    u32 val;
+>>>> +
+>>>> +    val = readl(cpa_pmu->base + CPA_PERF_CTRL);
+>>>> +    val &= ~(CPA_PERF_CTRL_EN);
+>>>> +    writel(val, cpa_pmu->base + CPA_PERF_CTRL);
+>>>> +}
+>>>> +
+>>>> +static void hisi_cpa_pmu_disable_pm(struct hisi_pmu *cpa_pmu)
+>>>
+>>> this seems unique for this new driver - why do we need to disable PM?
+>>>
+>> CPA PMU doesn't work under power mangement state, so we need to 
+>> disable PM before using CPA PMU.
+> 
+> OK, so you need to disable something related to PM to use the HW. But 
+> why do it when you enable the counter? I mean, can we just do it once 
+> when we probe the HW? Why is it even enabled at all?
+> 
+>>
 
-Signed-off-by: Paul Semel <paul.semel@datadoghq.com>
----
-  arch/arm64/include/asm/mte-kasan.h | 1 +
-  1 file changed, 1 insertion(+)
+PM is enabled by default. yes, we could disable it in probe function and 
+restore in remove function, I'll change this in next version.
 
-diff --git a/arch/arm64/include/asm/mte-kasan.h 
-b/arch/arm64/include/asm/mte-kasan.h
-index e4704a403237..a857bcacf0fe 100644
---- a/arch/arm64/include/asm/mte-kasan.h
-+++ b/arch/arm64/include/asm/mte-kasan.h
-@@ -5,6 +5,7 @@
-  #ifndef __ASM_MTE_KASAN_H
-  #define __ASM_MTE_KASAN_H
-
-+#include <asm/compiler.h>
-  #include <asm/mte-def.h>
-
-  #ifndef __ASSEMBLY__
--- 
-2.35.1
+Thanks,
+Qi
+>>>> +{
+>>>> +    u32 val;
+>>>> +
+>>>> +    val = readl(cpa_pmu->base + CPA_CFG_REG);
+>>>> +    val |= CPA_PM_CTRL;
+>>>> +    writel(val, cpa_pmu->base + CPA_CFG_REG);
+>>>> +}
+>>>> +
+>>>> +static void hisi_cpa_pmu_enable_pm(struct hisi_pmu *cpa_pmu)
+>>>> +{
+>>>> +    u32 val;
+>>>> +
+>>>> +    val = readl(cpa_pmu->base + CPA_CFG_REG);
+>>>> +    val &= ~CPA_PM_CTRL;
+>>>
+>>> nit: you use () in hisi_cpa_pmu_stop_counters(), but not here, so 
+>>> please be consistent
+>>>
+>> ]
+> 
+> ...
+> 
+>>>> +static int hisi_cpa_pmu_init_data(struct platform_device *pdev,
+>>>> +                  struct hisi_pmu *cpa_pmu)
+>>>> +{
+>>>> +    if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
+>>>> +                     &cpa_pmu->sccl_id)) {
+>>>> +        dev_err(&pdev->dev, "Can not read cpa_pmu sccl-id\n");
+>>>
+>>> strange that the FW uses "scl-id" but driver uses sccl_id (I am 
+>>> talking about sccl vs scl difference)
+>>>
+>> yes... these two names means the same thing, maybe could use a cleanup 
+>> patch to keep them consistent.
+>>
+>>>> +        return -EINVAL;
+>>>> +    }
+>>>> +
+>>>> +    cpa_pmu->ccl_id = -1;
+>>>> +
+>>>> +    if (device_property_read_u32(&pdev->dev, "hisilicon,idx-id",
+>>>> +                     &cpa_pmu->index_id)) {
+>>>> +        dev_err(&pdev->dev, "Cannot read idx-id\n");
+>>>> +        return -EINVAL;
+>>>> +    }
+>>>> +
+>>>> +    cpa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
+>>>> +    if (IS_ERR(cpa_pmu->base))
+>>>> +        return PTR_ERR(cpa_pmu->base);
+>>>> +
+>>>> +    cpa_pmu->identifier = readl(cpa_pmu->base + CPA_VERSION);
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+> 
+> ...
+> 
+>>>> +static int hisi_cpa_pmu_probe(struct platform_device *pdev)
+>>>> +{
+>>>> +    struct hisi_pmu *cpa_pmu;
+>>>> +    char *name;
+>>>> +    int ret;
+>>>> +
+>>>> +    cpa_pmu = devm_kzalloc(&pdev->dev, sizeof(*cpa_pmu), GFP_KERNEL);
+>>>> +    if (!cpa_pmu)
+>>>> +        return -ENOMEM;
+>>>> +
+>>>> +    ret = hisi_cpa_pmu_dev_probe(pdev, cpa_pmu);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+>>>> +                       &cpa_pmu->node);
+>>>> +    if (ret) {
+>>>> +        dev_err(&pdev->dev, "Error %d registering hotplug\n", ret);
+>>>> +        return ret;
+>>>> +    }
+>>>> +
+>>>> +    name = devm_kasprintf(&pdev->dev, GFP_KERNEL, 
+>>>> "hisi_sicl%d_cpa%u", cpa_pmu->sccl_id - 1,
+>>>
+>>> sorry, but I still don't like this "- 1". From checking the chat on 
+>>> v1, my impression was that you agreed with me on this one.
+>>>
+>>
+>> sorry, maybe I didn't express it clearly.
+>> CPA PMU is on IO die,
+> 
+> Then it is quite strange to provide the sccl id and not some sicl id 
+> (since it is in the IO die)
+> 
+>   but BIOS give CPA PMU driver the sccl-id of
+>> adjacent CPU die (as we need this sccl-id to pass 
+>> hisi_pmu_cpu_is_associated_pmu() and find the associated cpu).
+> 
+> 
+> Is the PMU only ever used by one SCCL? Or can more than one SCCL access? 
+> If so, is there a special affinity to one particular SCCL?
+> 
+>> so, when naming CPA PMU, we use the sccl-id supported by BIOS to get 
+>> the sicl-id of IO die which CPA PMU located in, that is: 
+>> cpa_pmu->sccl_id - 1.
+>>
+>>>> +                  cpa_pmu->index_id);
+> 
+> Thanks,
+> John
+> .

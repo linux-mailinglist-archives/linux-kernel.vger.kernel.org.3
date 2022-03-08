@@ -2,178 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6A44D1E2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C424D1E0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348409AbiCHRKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
+        id S245073AbiCHRDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245053AbiCHRKb (ORCPT
+        with ESMTP id S241414AbiCHRDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:10:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA14336B4D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:09:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646759373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9kvrF8a5fSjVKql9gaDkDoyGNlOLifpMBJz2kVYkRkE=;
-        b=BI1s2Vs9ivhHP20PzWPB5/4zLjZdPPArGsIo/vq1qjYG3id/MTOlGbbK/oHxcT2AeGlyS2
-        GYl+dUivcOrqCE4Go+4K2asek91sPQE/9sYhnC6wT8Xyl/Ia8Lc6Gyu9Y48vD2UaykrIIj
-        49/xVnj3Zper4cZGmVygEIuKbp72Ong=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-505-GicO_gLLPdGsjqd5MZyW7A-1; Tue, 08 Mar 2022 12:09:28 -0500
-X-MC-Unique: GicO_gLLPdGsjqd5MZyW7A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 763941006AA7;
-        Tue,  8 Mar 2022 17:09:25 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BF09C86C3B;
-        Tue,  8 Mar 2022 17:08:46 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id BB821416D5C1; Tue,  8 Mar 2022 10:12:35 -0300 (-03)
-Date:   Tue, 8 Mar 2022 10:12:35 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Oscar Shiang <oscar0225@livemail.tw>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [patch v11 00/13] extensible prctl task isolation interface and
- vmstat sync
-Message-ID: <YidWQ28Jgs/FpmL1@fuller.cnet>
-References: <YhZvV5rRkHw4nOlR@fuller.cnet>
- <TYCP286MB19134DD105CC996925379EC8A1099@TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM>
+        Tue, 8 Mar 2022 12:03:42 -0500
+X-Greylist: delayed 28543 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 09:02:45 PST
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC731FA73
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:02:43 -0800 (PST)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 7804110040232
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:02:43 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id RdEQnYI0vctgJRdERnbjvc; Tue, 08 Mar 2022 17:02:43 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Oq2Kdwzt c=1 sm=1 tr=0 ts=62278c33
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=o8Y5sQTvuykA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cFcCyUoKtQbPwmU691kBUroJXXI8DCdHZld/il/zdM8=; b=NKyY1O4oTVnKNBZGU/ruK9peMP
+        psThHwB5NUjtp5rGeQn5kiKHGAjcg5dtF6m4eMj54Twlea869IxgKhs1JKHSYoF773alIze/JMruJ
+        lMxWHQKsB84IKQiRg2IzAbZXa;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:59686 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nRdEP-001Wbk-UP; Tue, 08 Mar 2022 10:02:42 -0700
+Subject: Re: [PATCH 5.16 000/184] 5.16.13-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220307162147.440035361@linuxfoundation.org>
+In-Reply-To: <20220307162147.440035361@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <83d8a203-fa63-89c3-8952-e52d0af88f67@w6rz.net>
+Date:   Tue, 8 Mar 2022 09:02:39 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCP286MB19134DD105CC996925379EC8A1099@TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nRdEP-001Wbk-UP
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:59686
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 02:32:46PM +0800, Oscar Shiang wrote:
-> On Feb 24, 2022, at 1:31 AM, Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> > Hi Oscar,
-> > 
-> > On Sat, Feb 19, 2022 at 04:02:10PM +0800, Oscar Shiang wrote:
-> > > Hi Marcelo,
-> > > 
-> > > I tried to apply your patches to kernel v5.15.18-rt28 and measured
-> > > the latencies through oslat [1].
-> > > 
-> > > It turns out that the peak latency (around 100us) can drop to about 90us.
-> > > The result is impressive since I only changed the guest's kernel
-> > > instead of installing the patched kernel to both host and guest.
-> > > 
-> > > However, I am still curious about:
-> > > 1) Why did I catch a bigger maximum latency in almost each of the
-> > >   results of applying task isolation patches? Or does it come from
-> > >   other reasons?
-> > 
-> > There are a number of things that need to be done in order to have an 
-> > "well enough" isolated CPU so you can measure latency reliably:
-> > 
-> > * Boot a kernel with isolated CPU (or better, use realtime-virtual-host profile of
-> > https://github.com/redhat-performance/tuned.git, which does a bunch of
-> > other things to avoid interruptions to isolated CPUs).
-> > * Apply the userspace patches at https://people.redhat.com/~mtosatti/task-isol-v6-userspace-patches/
-> > to util-linux and rt-tests.
-> > 
-> > Run oslat with chisol:
-> > 
-> > chisol -q vmstat_sync -I conf oslat -c ...
-> > 
-> > Where chisol is from patched util-linux and oslat from patched rt-tests.
-> > 
-> > If you had "-f 1" (FIFO priority), on oslat, then the vmstat work would be hung.
-> > 
-> > Are you doing those things?
-> > 
-> > > 2) Why did we only get a 10us improvement on quiescing vmstat?
-> > 
-> > If you did not have FIFO priority on oslat, then other daemons 
-> > could be interrupting it, so better make sure the 10us improvement 
-> > you see is due to vmstat_flush workqueue work not executing anymore.
-> > 
-> > The testcase i use is: 
-> > 
-> > Stock kernel:
-> > 
-> > terminal 1: 
-> > # oslat -f 1 -c X ...
-> > 
-> > terminal 2:
-> > # echo 1 > /proc/sys/vm/stat_refresh
-> > (hang)
-> > 
-> > Patched kernel:
-> > 
-> > terminal 1: 
-> > # chisol -q vmstat_sync -I conf oslat -f 1 -c X ...
-> > 
-> > terminal 2:
-> > # echo 1 > /proc/sys/vm/stat_refresh
-> > # 
-> 
-> Sure, I did see the terminal hung during oslat with FIFO priority.
-> 
-> BTW, thanks for providing this test case. I used to run all workload stuff to just
-> verify the improvement of task isolation. It is a more straightr- forward way to do.
-> 
-> > > [1]: The result and the test scripts I used can be found at
-> > > https://gist.github.com/OscarShiang/8b530a00f472fd1c39f5979ee601516d#testing-task-isolation-via-oslat
-> > 
-> > OK, you seem to be doing everything necessary for chisol 
-> > to work. Does /proc/pid/task_isolation of the oslat worker thread
-> > (note its not the same pid as the main oslat thread) show "vmstat"
-> > configured and activated for quiesce?
-> 
-> The status of task_isolation seems to be set properly with "vmstat" and activated
-> 
-> > However 100us is really high. You should be able to get < 10us with
-> > realtime-virtual-host (i see 4us on an idle system).
-> > 
-> > The answer might be: because 10us is what it takes to execute
-> > vmstat_worker on the isolated CPU (you can verify with tracepoints).
-> > 
-> > That time depends on the number of per-CPU vmstat variables that need flushing, 
-> > i suppose...
-> 
-> Considering the interferences outside of the KVM, I have redone the measurements
-> directly on my x86_64 computer [1].
-> 
-> As result, most of the latencies are down to 60us (and below). There are still
-> some latencies larger than 80us, I am working on and trying to figure out the reason.
-> 
-> [1]: https://gist.github.com/OscarShiang/202eb691e649557fe3eaa5ec67a5aa82
+On 3/7/22 8:28 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.13 release.
+> There are 184 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Mar 2022 16:21:20 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.13-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Oscar,
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Did you confirm with hwlatdetect that the BIOS does not have long
-running SMIs?
-
-Also, for the software part, you could save time by using the
-realtime-virtual-host profile (check /usr/lib/tuned/realtime-virtual-host/
-to see what its doing in addition to isolcpus=).
+Tested-by: Ron Economos <re@w6rz.net>
 

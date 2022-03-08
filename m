@@ -2,98 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D48D4D2573
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7794D25F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiCIBG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
+        id S230358AbiCIBOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:14:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiCIBGF (ORCPT
+        with ESMTP id S231887AbiCIBNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:06:05 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE06144F52
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:45:08 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id r6so208948wrr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:45:08 -0800 (PST)
+        Tue, 8 Mar 2022 20:13:51 -0500
+Received: from mail-oi1-x24a.google.com (mail-oi1-x24a.google.com [IPv6:2607:f8b0:4864:20::24a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BA714A04F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:58:12 -0800 (PST)
+Received: by mail-oi1-x24a.google.com with SMTP id g5-20020a0568080dc500b002d73eb5c37fso728032oic.16
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:58:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wirenboard-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=R5rD06Jb33tlpsYg+zacl9gOGE39RgYTcZ3AUmAKk+k=;
-        b=kT0CoUpD6C3Xk+Syyc3g2EyRA6X+44nx9fnethcGlcRmfLBQpCmyre7xE3rkEC/Y1t
-         STrq8nxvUWIMlu5tRsYNT16i802tLm/s3IyJRYk1bI2Pji3IVN7bLx7hyyfvCgTJitIy
-         0+vQ8zJSa9Kbj2C1GGvbWbLCvbf1mMaHoiZlr/iSm9Xp3F1GJw1SB3m1Z2Al1R00X5Ne
-         ibT8bT+jzYCECm9PLVzl145bqj7V9/GAo3/T9kdCmR/N4ksOT/UM/LVxLZa4iXVRb38J
-         7a9ZtfrtSSJZ4ORPlySmANv/5Ig1MxehiFh0UVmL1aJv5jZtyFSLRccKYl490TDoCnWl
-         cCmg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=6zkzNRV8wmPwhORmgYz0bc4ZQgL4U+7vsiCzk+iuvWs=;
+        b=HecYxFCrzsSrT1ldrYrS/mqRTgeCRLX0mTSkr547ds+KVXMCPDj8FjwHvwrS0QbkKp
+         53K8gYoyKVjx2ta9dMsCnPCnjjcS+sJSN+nJnuGLjUA1qzVP25IVhUWTLL4hOt19EV0a
+         Wb/ioilk+lpb78t1Vil4kflzQvojy+hB1uDVQwpzQtSk9qX+565tkGSjHRQj9YlRjnCO
+         swSrGrxiyZod15e/8iDR28Z///wAAz6IVEMADv7K3jcw5P5KTaHdlpGlPnIETNZaBVmP
+         qcn/pJyvJl8zKuj2zBQEOmFp72rh+vX4JA062zjQEn4YVp02abvO+UBy3MnV7T5bc0QK
+         WnTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=R5rD06Jb33tlpsYg+zacl9gOGE39RgYTcZ3AUmAKk+k=;
-        b=plxAqJcyzuL/XRt7oynz/sgV+qAGA7K//fsqKt0+OL79B94O7759c9U9p5kfeI4AOa
-         3fbvI6gHzsxJBKPYYuZe0p5PwhulgGTLfNedFR46aevyz/NDha3kioUOz++jKF6x5ba9
-         VjnI9vVvFPDYzNd7Kvz2kOpUv0wfkKJOcaZRiksspiDvINTr4ukKRuVoYY5fSbNcijqg
-         10eYTNyvS5iREqK9cNBrnCQ3h1lR2t29i8yC2V4/+7Hr9koO7c0C4HIA8gtx7AacYIiE
-         INf70Orswkwqw/V+FfbgKPlGPw3yp7improOy0RlB/px5vndLR39Ik00TobeRKAojaTX
-         G+TQ==
-X-Gm-Message-State: AOAM530Ipa0lhJ+g+NlxqLVi26R992ZEO2zuCa2u+67jHOICAW60ehcx
-        hYuzcWMVRyKRQCDN8qKv4csVzlDsTuZibP0Q
-X-Google-Smtp-Source: ABdhPJwAa5h+FPbQ9EbtrO+8twaLOcIwcj6An3X7zE034ZrmYDx1nBgzQc3Ssz/Np+zl4LlJ6UlLlg==
-X-Received: by 2002:a05:6402:354f:b0:416:8fba:8348 with SMTP id f15-20020a056402354f00b004168fba8348mr968136edd.73.1646783099315;
-        Tue, 08 Mar 2022 15:44:59 -0800 (PST)
-Received: from [192.168.0.103] ([37.252.93.155])
-        by smtp.googlemail.com with ESMTPSA id fq6-20020a1709069d8600b006db088ca6d0sm74709ejc.126.2022.03.08.15.44.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 15:44:58 -0800 (PST)
-Message-ID: <bc846d95-5571-cfd1-c848-1ae9240f50a4@wirenboard.com>
-Date:   Wed, 9 Mar 2022 02:44:56 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-To:     fuyao1697@cyg.com
-Cc:     devicetree@vger.kernel.org, jernej.skrabec@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, maijianzhang@allwinnertech.com,
-        mripard@kernel.org, robh+dt@kernel.org, wens@csie.org
-References: <YiCnR5v9fYoXXy39@scg>
-Subject: Re: [PATCH] sunxi:dts: remove r40 can node
-Content-Language: en-GB
-From:   Evgeny Boger <boger@wirenboard.com>
-In-Reply-To: <YiCnR5v9fYoXXy39@scg>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=6zkzNRV8wmPwhORmgYz0bc4ZQgL4U+7vsiCzk+iuvWs=;
+        b=b3ZT+RoT6ztLd5DrPJsV7meJ+SPu4XGbXrG3dFgBUC9mcskE45fv9jGg6NVEuJCRA0
+         f52g4z+crKzx4L2vCi8N3TenOrECMh/WdE8p2LCb/EwT1E7iF4Lle+pLMsYxAryTBdoW
+         aqAR7/GpBVNFngjdJMSp78Tlkx08+Y+kzpkvLKvXQ83XInF7K7QuRWF5ZNe4jNY647Px
+         dLwpSxBwvLxVwlgbSFTFpu/LuIK/N/uwF/GezHIUNGd/r7Zx5bmUdmdD2F6IcfCB+dKE
+         3qRWA8jFTl4wfveB0jhPQgKvBOicRkHIOx35xOcJqx27nCNZkSy8Osw/+fdPcd3U5t+k
+         i3jw==
+X-Gm-Message-State: AOAM532ysXyaiHzhCaLAlR7jEEqtPxoAibM8xRNiEl+l+EFaolwXv9yZ
+        BPkGArdK6Wf65bDaqArZueEhkPM2Y34=
+X-Google-Smtp-Source: ABdhPJzjZjd/upjgmScTySg0XOtEQpia+ZlmG/2uZUwC3R3uquZ7eHu04FnC+kA+5D1s7AiDSd4GYFzqLHc=
+X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:57a6:54a6:aad1:c0a8])
+ (user=yuzhao job=sendgmr) by 2002:a25:3bd7:0:b0:628:f47a:f156 with SMTP id
+ i206-20020a253bd7000000b00628f47af156mr14008089yba.468.1646783303975; Tue, 08
+ Mar 2022 15:48:23 -0800 (PST)
+Date:   Tue,  8 Mar 2022 16:47:10 -0700
+Message-Id: <20220308234723.3834941-1-yuzhao@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH v8 00/14] Multi-Gen LRU Framework
+From:   Yu Zhao <yuzhao@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Yu Zhao <yuzhao@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+What's new
+==========
+Minor renaming, refactoring, etc.
 
-as I explained in the original commit message, CAN is definitely there 
-and is working perfectly at least on A40i.
-I know it was removed from the user manual, but I personally verified 
-that it is working.
+TLDR
+====
+The current page reclaim is too expensive in terms of CPU usage and it
+often makes poor choices about what to evict. This patchset offers an
+alternative solution that is performant, versatile and
+straightforward.
 
-Maybe you can tell why CAN should be removed besides not being described 
-in the manual? Are there some hardware or maybe license issues?
+Patchset overview
+=================
+The design and implementation overview is in patch 14:
+https://lore.kernel.org/lkml/20220308234723.3834941-15-yuzhao@google.com/
 
-Thanks!
+01. mm: x86, arm64: add arch_has_hw_pte_young()
+02. mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
+Take advantage of hardware features when trying to clear the accessed
+bit in many PTEs.
 
---
-  Best wishes,
-  Evgeny Boger
-  CTO @ wirenboard.com
+03. mm/vmscan.c: refactor shrink_node()
+04. Revert "include/linux/mm_inline.h: fold __update_lru_size() into
+    its sole caller"
+Minor refactors to improve readability for the following patches.
 
+05. mm: multi-gen LRU: groundwork
+Adds the basic data structure and the functions that insert pages to
+and remove pages from the multi-gen LRU (MGLRU) lists.
 
+06. mm: multi-gen LRU: minimal implementation
+A minimal implementation without any optimizations.
 
+07. mm: multi-gen LRU: exploit locality in rmap
+Exploits spatial locality to improve efficiency when using the rmap.
 
+08. mm: multi-gen LRU: support page table walks
+Further exploits spatial locality by optionally scanning page tables.
+
+09. mm: multi-gen LRU: optimize multiple memcgs
+Optimizes the overall performance for multiple memcgs running mixed
+types of workloads.
+
+10. mm: multi-gen LRU: kill switch
+Adds a kill switch to enable or disable MGLRU at runtime.
+
+11. mm: multi-gen LRU: thrashing prevention
+12. mm: multi-gen LRU: debugfs interface
+Provide userspace with features like thrashing prevention, working set
+estimation and proactive reclaim.
+
+13. mm: multi-gen LRU: admin guide
+14. mm: multi-gen LRU: design doc
+Add an admin guide and a design doc.
+
+Benchmark results
+=================
+Independent lab results
+-----------------------
+Based on the popularity of searches [01] and the memory usage in
+Google's public cloud, the most popular open-source memory-hungry
+applications, in alphabetical order, are:
+      Apache Cassandra      Memcached
+      Apache Hadoop         MongoDB
+      Apache Spark          PostgreSQL
+      MariaDB (MySQL)       Redis
+
+An independent lab evaluated MGLRU with the most widely used benchmark
+suites for the above applications. They posted 960 data points along
+with kernel metrics and perf profiles collected over more than 500
+hours of total benchmark time. Their final reports show that, with 95%
+confidence intervals (CIs), the above applications all performed
+significantly better for at least part of their benchmark matrices.
+
+On 5.14:
+1. Apache Spark [02] took 95% CIs [9.28, 11.19]% and [12.20, 14.93]%
+   less wall time to sort three billion random integers, respectively,
+   under the medium- and the high-concurrency conditions, when
+   overcommitting memory. There were no statistically significant
+   changes in wall time for the rest of the benchmark matrix.
+2. MariaDB [03] achieved 95% CIs [5.24, 10.71]% and [20.22, 25.97]%
+   more transactions per minute (TPM), respectively, under the medium-
+   and the high-concurrency conditions, when overcommitting memory.
+   There were no statistically significant changes in TPM for the rest
+   of the benchmark matrix.
+3. Memcached [04] achieved 95% CIs [23.54, 32.25]%, [20.76, 41.61]%
+   and [21.59, 30.02]% more operations per second (OPS), respectively,
+   for sequential access, random access and Gaussian (distribution)
+   access, when THP=always; 95% CIs [13.85, 15.97]% and
+   [23.94, 29.92]% more OPS, respectively, for random access and
+   Gaussian access, when THP=never. There were no statistically
+   significant changes in OPS for the rest of the benchmark matrix.
+4. MongoDB [05] achieved 95% CIs [2.23, 3.44]%, [6.97, 9.73]% and
+   [2.16, 3.55]% more operations per second (OPS), respectively, for
+   exponential (distribution) access, random access and Zipfian
+   (distribution) access, when underutilizing memory; 95% CIs
+   [8.83, 10.03]%, [21.12, 23.14]% and [5.53, 6.46]% more OPS,
+   respectively, for exponential access, random access and Zipfian
+   access, when overcommitting memory.
+
+On 5.15:
+5. Apache Cassandra [06] achieved 95% CIs [1.06, 4.10]%, [1.94, 5.43]%
+   and [4.11, 7.50]% more operations per second (OPS), respectively,
+   for exponential (distribution) access, random access and Zipfian
+   (distribution) access, when swap was off; 95% CIs [0.50, 2.60]%,
+   [6.51, 8.77]% and [3.29, 6.75]% more OPS, respectively, for
+   exponential access, random access and Zipfian access, when swap was
+   on.
+6. Apache Hadoop [07] took 95% CIs [5.31, 9.69]% and [2.02, 7.86]%
+   less average wall time to finish twelve parallel TeraSort jobs,
+   respectively, under the medium- and the high-concurrency
+   conditions, when swap was on. There were no statistically
+   significant changes in average wall time for the rest of the
+   benchmark matrix.
+7. PostgreSQL [08] achieved 95% CI [1.75, 6.42]% more transactions per
+   minute (TPM) under the high-concurrency condition, when swap was
+   off; 95% CIs [12.82, 18.69]% and [22.70, 46.86]% more TPM,
+   respectively, under the medium- and the high-concurrency
+   conditions, when swap was on. There were no statistically
+   significant changes in TPM for the rest of the benchmark matrix.
+8. Redis [09] achieved 95% CIs [0.58, 5.94]%, [6.55, 14.58]% and
+   [11.47, 19.36]% more total operations per second (OPS),
+   respectively, for sequential access, random access and Gaussian
+   (distribution) access, when THP=always; 95% CIs [1.27, 3.54]%,
+   [10.11, 14.81]% and [8.75, 13.64]% more total OPS, respectively,
+   for sequential access, random access and Gaussian access, when
+   THP=never.
+
+Our lab results
+---------------
+To supplement the above results, we ran the following benchmark suites
+on 5.16-rc7 and found no regressions [10]. (These synthetic benchmarks
+are popular among MM developers, but we prefer large-scale A/B
+experiments to validate improvements.)
+      fs_fio_bench_hdd_mq      pft
+      fs_lmbench               pgsql-hammerdb
+      fs_parallelio            redis
+      fs_postmark              stream
+      hackbench                sysbenchthread
+      kernbench                tpcc_spark
+      memcached                unixbench
+      multichase               vm-scalability
+      mutilate                 will-it-scale
+      nginx
+
+[01] https://trends.google.com
+[02] https://lore.kernel.org/lkml/20211102002002.92051-1-bot@edi.works/
+[03] https://lore.kernel.org/lkml/20211009054315.47073-1-bot@edi.works/
+[04] https://lore.kernel.org/lkml/20211021194103.65648-1-bot@edi.works/
+[05] https://lore.kernel.org/lkml/20211109021346.50266-1-bot@edi.works/
+[06] https://lore.kernel.org/lkml/20211202062806.80365-1-bot@edi.works/
+[07] https://lore.kernel.org/lkml/20211209072416.33606-1-bot@edi.works/
+[08] https://lore.kernel.org/lkml/20211218071041.24077-1-bot@edi.works/
+[09] https://lore.kernel.org/lkml/20211122053248.57311-1-bot@edi.works/
+[10] https://lore.kernel.org/lkml/20220104202247.2903702-1-yuzhao@google.com/
+
+Read-world applications
+=======================
+Third-party testimonials
+------------------------
+Konstantin reported [11]:
+   I have Archlinux with 8G RAM + zswap + swap. While developing, I
+   have lots of apps opened such as multiple LSP-servers for different
+   langs, chats, two browsers, etc... Usually, my system gets quickly
+   to a point of SWAP-storms, where I have to kill LSP-servers,
+   restart browsers to free memory, etc, otherwise the system lags
+   heavily and is barely usable.
+   
+   1.5 day ago I migrated from 5.11.15 kernel to 5.12 + the LRU
+   patchset, and I started up by opening lots of apps to create memory
+   pressure, and worked for a day like this. Till now I had not a
+   single SWAP-storm, and mind you I got 3.4G in SWAP. I was never
+   getting to the point of 3G in SWAP before without a single
+   SWAP-storm.
+
+Vaibhav from IBM reported [12]:
+   In a synthetic MongoDB Benchmark, seeing an average of ~19%
+   throughput improvement on POWER10(Radix MMU + 64K Page Size) with
+   MGLRU patches on top of v5.16 kernel for MongoDB + YCSB across
+   three different request distributions, namely, Exponential, Uniform
+   and Zipfan.
+
+Shuang from U of Rochester reported [13]:
+   With the MGLRU, fio achieved 95% CIs [38.95, 40.26]%, [4.12, 6.64]%
+   and [9.26, 10.36]% higher throughput, respectively, for random
+   access, Zipfian (distribution) access and Gaussian (distribution)
+   access, when the average number of jobs per CPU is 1; 95% CIs
+   [42.32, 49.15]%, [9.44, 9.89]% and [20.99, 22.86]% higher
+   throughput, respectively, for random access, Zipfian access and
+   Gaussian access, when the average number of jobs per CPU is 2.
+
+Daniel from Michigan Tech reported [14]:
+   With Memcached allocating ~100GB of byte-addressable Optante,
+   performance improvement in terms of throughput (measured as queries
+   per second) was about 10% for a series of workloads.
+
+Large-scale deployments
+-----------------------
+The downstream kernels that have been using MGLRU include:
+1. Android ARCVM [15]
+2. Arch Linux Zen [16]
+3. Chrome OS [17]
+4. Liquorix [18]
+5. post-factum [19]
+6. XanMod [20]
+
+We've rolled out MGLRU to tens of millions of Chrome OS users and
+about a million Android users. Google's fleetwide profiling [21] shows
+an overall 40% decrease in kswapd CPU usage, in addition to
+improvements in other UX metrics, e.g., an 85% decrease in the number
+of low-memory kills at the 75th percentile and an 18% decrease in
+rendering latency at the 50th percentile.
+
+[11] https://lore.kernel.org/lkml/140226722f2032c86301fbd326d91baefe3d7d23.camel@yandex.ru/
+[12] https://lore.kernel.org/lkml/87czj3mux0.fsf@vajain21.in.ibm.com/
+[13] https://lore.kernel.org/lkml/20220105024423.26409-1-szhai2@cs.rochester.edu/
+[14] https://lore.kernel.org/linux-mm/CA+4-3vksGvKd18FgRinxhqHetBS1hQekJE2gwco8Ja-bJWKtFw@mail.gmail.com/
+[15] https://chromium.googlesource.com/chromiumos/third_party/kernel
+[16] https://archlinux.org
+[17] https://chromium.org
+[18] https://liquorix.net
+[19] https://gitlab.com/post-factum/pf-kernel
+[20] https://xanmod.org
+[21] https://research.google/pubs/pub44271/
+
+Summery
+=======
+The facts are:
+1. The independent lab results and the real-world applications
+   indicate substantial improvements; there are no known regressions.
+2. Thrashing prevention, working set estimation and proactive reclaim
+   work out of the box; there are no equivalent solutions.
+3. There is a lot of new code; no one has demonstrated smaller changes
+   with similar effects.
+
+Our options, accordingly, are:
+1. Given the amount of evidence, the reported improvements will likely
+   materialize for a wide range of workloads.
+2. Gauging the interest from the past discussions [22][23][24], the
+   new features will likely be put to use for both personal computers
+   and data centers.
+3. Based on Google's track record, the new code will likely be well
+   maintained in the long term. It'd be more difficult if not
+   impossible to achieve similar effects on top of the existing
+   design.
+
+[22] https://lore.kernel.org/lkml/20201005081313.732745-1-andrea.righi@canonical.com/
+[23] https://lore.kernel.org/lkml/20210716081449.22187-1-sj38.park@gmail.com/
+[24] https://lore.kernel.org/lkml/20211130201652.2218636d@mail.inbox.lv/
+
+Yu Zhao (14):
+  mm: x86, arm64: add arch_has_hw_pte_young()
+  mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
+  mm/vmscan.c: refactor shrink_node()
+  Revert "include/linux/mm_inline.h: fold __update_lru_size() into its
+    sole caller"
+  mm: multi-gen LRU: groundwork
+  mm: multi-gen LRU: minimal implementation
+  mm: multi-gen LRU: exploit locality in rmap
+  mm: multi-gen LRU: support page table walks
+  mm: multi-gen LRU: optimize multiple memcgs
+  mm: multi-gen LRU: kill switch
+  mm: multi-gen LRU: thrashing prevention
+  mm: multi-gen LRU: debugfs interface
+  mm: multi-gen LRU: admin guide
+  mm: multi-gen LRU: design doc
+
+ Documentation/admin-guide/mm/index.rst        |    1 +
+ Documentation/admin-guide/mm/multigen_lru.rst |  146 +
+ Documentation/vm/index.rst                    |    1 +
+ Documentation/vm/multigen_lru.rst             |  156 +
+ arch/Kconfig                                  |    9 +
+ arch/arm64/include/asm/pgtable.h              |   14 +-
+ arch/x86/Kconfig                              |    1 +
+ arch/x86/include/asm/pgtable.h                |    9 +-
+ arch/x86/mm/pgtable.c                         |    5 +-
+ fs/exec.c                                     |    2 +
+ fs/fuse/dev.c                                 |    3 +-
+ include/linux/cgroup.h                        |   15 +-
+ include/linux/memcontrol.h                    |   36 +
+ include/linux/mm.h                            |    8 +
+ include/linux/mm_inline.h                     |  217 +-
+ include/linux/mm_types.h                      |   78 +
+ include/linux/mmzone.h                        |  199 ++
+ include/linux/nodemask.h                      |    1 +
+ include/linux/page-flags-layout.h             |   19 +-
+ include/linux/page-flags.h                    |    4 +-
+ include/linux/pgtable.h                       |   17 +-
+ include/linux/sched.h                         |    4 +
+ include/linux/swap.h                          |    5 +
+ kernel/bounds.c                               |    3 +
+ kernel/cgroup/cgroup-internal.h               |    1 -
+ kernel/exit.c                                 |    1 +
+ kernel/fork.c                                 |    9 +
+ kernel/sched/core.c                           |    1 +
+ mm/Kconfig                                    |   49 +
+ mm/huge_memory.c                              |    3 +-
+ mm/memcontrol.c                               |   27 +
+ mm/memory.c                                   |   39 +-
+ mm/mm_init.c                                  |    6 +-
+ mm/mmzone.c                                   |    2 +
+ mm/rmap.c                                     |    7 +
+ mm/swap.c                                     |   55 +-
+ mm/vmscan.c                                   | 2824 ++++++++++++++++-
+ mm/workingset.c                               |  119 +-
+ 38 files changed, 3949 insertions(+), 147 deletions(-)
+ create mode 100644 Documentation/admin-guide/mm/multigen_lru.rst
+ create mode 100644 Documentation/vm/multigen_lru.rst
+
+-- 
+2.35.1.616.g0bdcbb4464-goog
 

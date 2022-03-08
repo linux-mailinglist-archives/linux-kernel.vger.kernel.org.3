@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139D34D1A92
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5DB4D1A94
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344020AbiCHO3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
+        id S245179AbiCHObK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241359AbiCHO3m (ORCPT
+        with ESMTP id S232448AbiCHObI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:29:42 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1611E25C60
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:28:45 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id r10so28867931wrp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 06:28:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=+xCzDXKpurcBEhZ8+xr/1+qLsXYFBobYcsOzCn7TcBU=;
-        b=qVkxwgK1b+28wfo7AE+m0D/9E55CAaNHjVfggvzz4y1jrFEcqF+CAdv7IM+KHyJAsy
-         kWCN5Ez/mP7h9h6bpxp6/TAEaV328gRxK778qVwrRxvxR4tr/l1RPCTDR82iQTPn5Wax
-         TuZA87kQltJfQLsmP6fuZKQ4pIZQdhPxY8QrrnSjm8fSJ2AHt2tzEL1IA3nq4God2ic6
-         tPmcjhh+nE10IgFYtUr+FVpp8W0kskWdPNSjKh3Oe6HsfmAo/TeQKi+EB4jfdFsCBF0e
-         TEurA9G1+D3aT7wDN9rqiSJk5jriFub1oW7GvWnCc4W5i0HJjijUpIjbRko/xul1waJf
-         G8Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=+xCzDXKpurcBEhZ8+xr/1+qLsXYFBobYcsOzCn7TcBU=;
-        b=sWNMCPK4u4lGh6mgIz0TZJOZHX52MrvsqfBzijxWoxeEGyn4/R7ReIzDARsj8nkKL3
-         BTELBRLnSR9ubMZiKBU3NXKEnRxu1qlRYm8CIyOZnr/fbUZv84wqQ4Mm77FLjYj/vRV3
-         GR2zh7ly2RKQYU35d2xXUUt3gaQIdZcBmPga0z4ZBYTkBV8GnfOHWIahE8c2YfZ9NNss
-         iU4rAW0Qliv7j3Eeh1d6UblZRlOHCojEYaN3v99byfpt6OaYUU2sGHfKWvqhIf97WT/R
-         R1EphpM/BTqOvieH1wsJojObeVK8AFo8siTnyK3plpfSSwbzxOMjtn31Z/q2ANdLH2WW
-         4pvw==
-X-Gm-Message-State: AOAM530rP+5HYTg7b06+cIvSit64mMrTA6xWPveKKbHMLAn8u1abOstK
-        TwivyNFYcjfovZpwrlguZKOz4KaR43c5K4I1qM8=
-X-Google-Smtp-Source: ABdhPJyN362TV5q1ThoYoFsjE56SEqE3pAvo+m8K0LdM8BraKLObiWoLsRgnZNl8B6Cr2p9ZNZLFOSA4UBHJcsFsV94=
-X-Received: by 2002:adf:eb86:0:b0:1e6:8c92:af6b with SMTP id
- t6-20020adfeb86000000b001e68c92af6bmr12495967wrn.116.1646749723258; Tue, 08
- Mar 2022 06:28:43 -0800 (PST)
+        Tue, 8 Mar 2022 09:31:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FBA4BFD1;
+        Tue,  8 Mar 2022 06:30:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C54860F19;
+        Tue,  8 Mar 2022 14:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 99A3AC340F4;
+        Tue,  8 Mar 2022 14:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646749810;
+        bh=BuOyZy4iBLoBVu61r8rC76BuAwaWVN9Dl1tsNCf623A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=LIHQ6bTVARtbvhDFmCwYFL+31F1SE9l23hWzfn6fGeVDBhlT7H6o638jptxlj0mlN
+         yrvBrtvABM2Djta2oRU65LuLRZU1Y9CWzbUsKwno0BERMyLv8cnkrQWV2BSWwc6A7D
+         J9HpsoLgU+9Bz4xuxhKU+gn38/nn/3ipQ8Zb5XSNS3osmLp9lvib+IWXROYr4pF7rG
+         Fdb+b1GiQ0t6XHgq8Uwd+IXMDlBVyWDIAD7SipSoNgijzR6rpwDnGGFPQ4iMEWilJo
+         cfaZopQVyx8x36JQWjp99qsn5GTZP3/rQgsqLpm7KgM2LuPhqH63LzGCvSg5QCiZp1
+         9oPecnhJiqHGA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D221E6D3DD;
+        Tue,  8 Mar 2022 14:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Sender: abiodunboluwatife2017@gmail.com
-Received: by 2002:a05:600c:502c:0:0:0:0 with HTTP; Tue, 8 Mar 2022 06:28:41
- -0800 (PST)
-From:   Lisa Williams <lw23675851@gmail.com>
-Date:   Tue, 8 Mar 2022 14:28:41 +0000
-X-Google-Sender-Auth: V9xPcfHWoWwaPZchQ2Y842fPtP0
-Message-ID: <CADqw2PJ6dps8sfkNJTY6MXZohie2=6P_cMwuASuV1SNoGXNDuw@mail.gmail.com>
-Subject: My name is Lisa Williams
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/2] net: phy: lan87xx: use genphy_read_master_slave
+ function
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164674981050.5894.8714803108771369458.git-patchwork-notify@kernel.org>
+Date:   Tue, 08 Mar 2022 14:30:10 +0000
+References: <20220307161515.14970-1-arun.ramadoss@microchip.com>
+In-Reply-To: <20220307161515.14970-1-arun.ramadoss@microchip.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        kuba@kernel.org, davem@davemloft.net, UNGLinuxDriver@microchip.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+Hello:
 
-My name is Lisa  Williams, I am from the United States of America, Its
-my pleasure to contact you for new and special friendship, I will be
-glad to see your reply for us to know each other better.
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Yours
-Lisa
+On Mon, 7 Mar 2022 21:45:13 +0530 you wrote:
+> LAN87xx T1 Phy has the same register field as gigabit phy for reading the
+> master slave configuration. But the genphy_read_master_slave function has a
+> check of gigabit phy. So refactored the function in such a way, moved the speed
+> check to the genphy_read_status function. Analyzed the nxp-tja11xx function for
+> refactoring, but the register for configuring master/slave is nxp specific
+> which is not extended phy register.
+> And analyzed the reusing genphy_setup_master_slave, but for LAN87xx
+> MASTER_ENABLE is always 1 and Preferred state is always 0. So, I didn't try to
+> change it.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/2] net: phy: exported the genphy_read_master_slave function
+    https://git.kernel.org/netdev/net-next/c/64807c232151
+  - [net-next,2/2] net: phy: lan87xx: use genphy_read_master_slave in read_status
+    https://git.kernel.org/netdev/net-next/c/f1f3a674261e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

@@ -2,127 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712444D1223
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A084D123B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238415AbiCHIYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S245503AbiCHI3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiCHIYk (ORCPT
+        with ESMTP id S233849AbiCHI3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:24:40 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49F53EB92
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:23:44 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 8 Mar 2022 03:29:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADA23F30A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:28:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 93415D5;
-        Tue,  8 Mar 2022 00:23:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1646727824;
-        bh=nCIeA+pD7UIkhYfAGPyqv1fA/V0MCCLPp3PnFFH4JuE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P7/5TLXwWe+M9EPD48wklgkHZzEuUAzzU8pHSUXPUTwPljH/I2Jb+HIPgiAShEl/S
-         QHok6BwBnjEb0t8XNWoG7Y8fTyrX5JdHvWFSrZ0CnJ9YYmC5DBkwg/Y4rKfRN/8VgN
-         gGw9SE2mRFLF2JU6VlYa+IOMM3Wjs6weHhN2laI8=
-Date:   Tue, 8 Mar 2022 00:23:43 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH v2 2/2] misc: Add power-efuse driver
-Message-ID: <YicSj3ZuetRkYxH1@hatter.bewilderbeest.net>
-References: <20220308011811.10353-1-zev@bewilderbeest.net>
- <20220308011811.10353-3-zev@bewilderbeest.net>
- <YicAzSara5Sr3LQ7@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2710BB81686
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:28:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF1B3C340EB;
+        Tue,  8 Mar 2022 08:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646728122;
+        bh=LmTt6qQQP0XkYMoZQar+hciBceY5wUpzOfDL2qp0/aM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ym3sMQo1fM9JBon0wFT7Wa73ahE9ARjcD6RcFSbFx3hvgRMcXBozrZ3thvNugBiW+
+         4S959oBIjdUUQL2bTr+1EsVDvnF8BowDy7GX1InlAYCgUn0+MVqgeD5Q8xz2/RHhiF
+         JisOY97woHkFCvsErLBE+NhYY4jlNN2CEJ9CgFtYi6FQADYVogFMezVyD8zrnpNvmo
+         gONNPoQ3Wgii6+RraFfNKaBMKvMqRDktFbKUCcp9ZyVrDO06Sgm/eKEgaZytyyMayN
+         3TQQAyoyuk25YCgCegLtMsQQ7CYyWTUfGGNQSftpdrpi5uTwRdoG7EEXvrjXRu0FaP
+         m3NFlZclSdopQ==
+Message-ID: <ef9575ab-d566-908f-9a45-291207316266@kernel.org>
+Date:   Tue, 8 Mar 2022 10:28:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YicAzSara5Sr3LQ7@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/omap: fix NULL but dereferenced coccicheck error
+Content-Language: en-US
+To:     Wan Jiabing <wanjiabing@vivo.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     kael_w@qq.com
+References: <20220307095612.409090-1-wanjiabing@vivo.com>
+From:   Tomi Valkeinen <tomba@kernel.org>
+In-Reply-To: <20220307095612.409090-1-wanjiabing@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 11:07:57PM PST, Greg Kroah-Hartman wrote:
->On Mon, Mar 07, 2022 at 05:18:10PM -0800, Zev Weiss wrote:
->> +static DEVICE_ATTR(operstate, 0644, efuse_show_operstate, efuse_set_operstate);
->
->DEVICE_ATTR_RW()?
->
+Hi,
 
-Ack.
+On 07/03/2022 11:56, Wan Jiabing wrote:
+> Fix the following coccicheck warning:
+> ./drivers/gpu/drm/omapdrm/omap_overlay.c:89:22-25: ERROR: r_ovl is NULL
+> but dereferenced.
+> 
+> Here should be ovl->idx rather than r_ovl->idx.
+> 
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>   drivers/gpu/drm/omapdrm/omap_overlay.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/omapdrm/omap_overlay.c b/drivers/gpu/drm/omapdrm/omap_overlay.c
+> index 10730c9b2752..b0bc9ad2ef73 100644
+> --- a/drivers/gpu/drm/omapdrm/omap_overlay.c
+> +++ b/drivers/gpu/drm/omapdrm/omap_overlay.c
+> @@ -86,7 +86,7 @@ int omap_overlay_assign(struct drm_atomic_state *s, struct drm_plane *plane,
+>   		r_ovl = omap_plane_find_free_overlay(s->dev, overlay_map,
+>   						     caps, fourcc);
+>   		if (!r_ovl) {
+> -			overlay_map[r_ovl->idx] = NULL;
+> +			overlay_map[ovl->idx] = NULL;
+>   			*overlay = NULL;
+>   			return -ENOMEM;
+>   		}
 
->> +
->> +#define EFUSE_ERROR_ATTR(name, bit)							    \
->> +	static ssize_t efuse_show_##name(struct device *dev, struct device_attribute *attr, \
->> +					 char *buf)                                         \
->> +	{                                                                                   \
->> +		struct efuse *efuse = dev_get_drvdata(dev);                                 \
->> +		int status = efuse_update_error_flags(efuse);                               \
->> +		if (status)                                                                 \
->> +			return status;                                                      \
->> +		return sysfs_emit(buf, "%d\n", !!(efuse->error_flags.cache & bit));         \
->> +	}                                                                                   \
->> +	static DEVICE_ATTR(name, 0444, efuse_show_##name, NULL)
->
->DEVICE_ATTR_RO()?
->
+Thanks, I'll pick this up.
 
-Ack.
-
->> +EFUSE_ERROR_ATTR(under_voltage, REGULATOR_ERROR_UNDER_VOLTAGE);
->> +EFUSE_ERROR_ATTR(over_current, REGULATOR_ERROR_OVER_CURRENT);
->> +EFUSE_ERROR_ATTR(regulation_out, REGULATOR_ERROR_REGULATION_OUT);
->> +EFUSE_ERROR_ATTR(fail, REGULATOR_ERROR_FAIL);
->> +EFUSE_ERROR_ATTR(over_temp, REGULATOR_ERROR_OVER_TEMP);
->> +EFUSE_ERROR_ATTR(under_voltage_warn, REGULATOR_ERROR_UNDER_VOLTAGE_WARN);
->> +EFUSE_ERROR_ATTR(over_current_warn, REGULATOR_ERROR_OVER_CURRENT_WARN);
->> +EFUSE_ERROR_ATTR(over_voltage_warn, REGULATOR_ERROR_OVER_VOLTAGE_WARN);
->> +EFUSE_ERROR_ATTR(over_temp_warn, REGULATOR_ERROR_OVER_TEMP_WARN);
->> +
->> +static struct attribute *efuse_attrs[] = {
->> +	&dev_attr_operstate.attr,
->> +	&dev_attr_under_voltage.attr,
->> +	&dev_attr_over_current.attr,
->> +	&dev_attr_regulation_out.attr,
->> +	&dev_attr_fail.attr,
->> +	&dev_attr_over_temp.attr,
->> +	&dev_attr_under_voltage_warn.attr,
->> +	&dev_attr_over_current_warn.attr,
->> +	&dev_attr_over_voltage_warn.attr,
->> +	&dev_attr_over_temp_warn.attr,
->> +	NULL,
->> +};
->> +ATTRIBUTE_GROUPS(efuse);
->
->Shouldn't these all just be what all regulator drivers report?  Or power
->drivers?  I find it odd that this would be the first driver that would
->need to export these types of attributes.  Surely there's already a
->class for this?
->
-
-The attributes available from the underlying regulator device don't 
-include the error flags, and while they do include its state 
-('operstate' here), it's a read-only attribute, and from previous 
-discussions with Mark I gathered that was unlikely to change (whereas it 
-being read-write is a critical part of this driver's functionality).
-
-Given his input on the first stab at this I took a while back, I've been 
-hoping to hear from Mark as to whether this looked more like something 
-he'd find palatable; perhaps he could chime in on this too?  (And/or on 
-the regulator API question in the cover letter.)
-
-
-Thanks,
-Zev
-
+  Tomi

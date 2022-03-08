@@ -2,161 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78084D139C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CDB4D13A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345406AbiCHJph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S1345428AbiCHJqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237159AbiCHJpg (ORCPT
+        with ESMTP id S1345421AbiCHJqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:45:36 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4143A27FE7;
-        Tue,  8 Mar 2022 01:44:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646732680; x=1678268680;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AZmaKapkMakeK7sNyeCCno/sGLsAq5h6+En+/piE3b8=;
-  b=ScPTqWTGETE113Ftm9Gugu5RIyI4dIeSxyoywhwhjJq8dr4C4rPKIK6c
-   Pc/W8PmG0yB5fQj97eS8Ev+ckUo+FoJvEQXaCJNntOLqFXgJgJQl3o3BW
-   ifgCX2eZjIoZsSidxT3GtczcMUkthFvOBOzoeBKOwrMwmpheVsXW2M+0t
-   53yl12Ltr2/Nf1sxvVp54K31FWpPIchdLxYlTtRI4+TM+OYNsc8yRkT2g
-   dG8Civ5S5nLpyQjLQ3hwAyyLJVUxfA03GHhbpqtLy4T2Q3AXg8j6G59FW
-   ruVXUoP1K3FNRHX1zUBcAiIPYfpzYJ88bdSMS9nBkghEPoYcsNZfhp/8o
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="242080213"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="242080213"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 01:44:39 -0800
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="553552146"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.46.193])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 01:44:35 -0800
-Message-ID: <c33540bc-0466-5a28-c85d-bfc8934b8c15@intel.com>
-Date:   Tue, 8 Mar 2022 11:44:30 +0200
+        Tue, 8 Mar 2022 04:46:39 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2042.outbound.protection.outlook.com [40.107.95.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A56A4160C;
+        Tue,  8 Mar 2022 01:45:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WgP7/9JHYjcJ9DhfbH8MSI4dbz3bU0QHNraLDFCtW5ZT98qj98ZBrwqkVr5EUyrBxfeGT/kEZE1xfOPubDDl7kBGZ9i9eAu/9JVoiLb3+YjPcN5lI1iKV9Wnj8CwGGK96olZtNTK3NKqV1L2NgHccPBhK7plSE5VeEdqugE1MLVkq7KfEYA7prWguxdSrbkAF6dJ9d8kw2e3sO828wlWGLCH9evgM+oRmefr7SIf+SsnJy0/yDkexfJktNd4ie6jQWRhecx/lmP+pDf2HNwXJFqLGAoMzzhcMAmEA12oAtADOUCMq8WqxdKSdDlsEdv1Zg7XTldQh9eOtcMzIpmJkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Apq8ioZSsKiSRznHdI0ozIaLJ5yPubyX+g4ovTkOquI=;
+ b=RPTzNWw2OZhpPLBMjt7ioql9LOqEvWUQANwUuF++G7cJwJCNvWqfTidHnhZY0JO8IO6xHYmha87RoxNoipM+RDfXei8gxzaHAXNNlkNUvIsPNbkS0/roLQzAEfpD9svdM1AWgIofzvP6AbQfu+VOkpEZObLAyEvrwAwebGDZfoOZGASzxOL80fdPfcajGGErY3hIKpzAkmH5Si8wwSFvtq2mh/CFW4j0bakHGDoZEbgtvHqAV0Fehbn7edF0SfFuq0PV7aLsE9O5ifkeji8n3u6joFub0L9tzOgTIPV/jqt/6ialHgFKAhz3xLVgQpGyUmJH9S2vwGbimicBhuAaig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Apq8ioZSsKiSRznHdI0ozIaLJ5yPubyX+g4ovTkOquI=;
+ b=bMJTfD6Vx+o6WPhCNCaCaMO4oVvH8zh6WsG14/+dsLWPomQJv/0McP1rmaPvKnpaO50bNkLJxPN4qfNtiljxDFbM3RdC5d12eVcXwQmjMrXSqZS+1s7FrjWMal5d/630/N7ssVuVi82KQVajUgAbZOfOm9km4JzoL9rK6ridqnI=
+Received: from DM3PR12CA0078.namprd12.prod.outlook.com (2603:10b6:0:57::22) by
+ BYAPR02MB5461.namprd02.prod.outlook.com (2603:10b6:a03:a3::27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.16; Tue, 8 Mar 2022 09:45:38 +0000
+Received: from DM3NAM02FT057.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:0:57:cafe::43) by DM3PR12CA0078.outlook.office365.com
+ (2603:10b6:0:57::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
+ Transport; Tue, 8 Mar 2022 09:45:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT057.mail.protection.outlook.com (10.13.5.64) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5038.14 via Frontend Transport; Tue, 8 Mar 2022 09:45:37 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 8 Mar 2022 01:45:36 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 8 Mar 2022 01:45:36 -0800
+Envelope-to: mdf@kernel.org,
+ hao.wu@intel.com,
+ yilun.xu@intel.com,
+ trix@redhat.com,
+ linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Received: from [10.140.6.60] (port=33304 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1nRWPQ-000G0A-9x; Tue, 08 Mar 2022 01:45:36 -0800
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@xilinx.com>,
+        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Nava kishore Manne <nava.manne@xilinx.com>
+Subject: [PATCH 0/6]fpga: fix for coding style and kernel-doc issues
+Date:   Tue, 8 Mar 2022 15:15:13 +0530
+Message-ID: <20220308094519.1816649-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH V4 1/7] mmc: core: Capture eMMC and SD card errors
-Content-Language: en-US
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        quic_riteshh@quicinc.com, asutoshd@quicinc.com,
-        ulf.hansson@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_vbadigan@quicinc.com, quic_rampraka@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
-        Liangliang Lu <quic_luliang@quicinc.com>,
-        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-References: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1646226227-32429-2-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <1646226227-32429-2-git-send-email-quic_c_sbhanu@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9a6c700b-8380-441b-d6c6-08da00e86649
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5461:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR02MB5461D09C2E3F73FEC481377AC2099@BYAPR02MB5461.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fLFPLwAUuzVokwrDcXJrCTmebaxskQR8cwiGROG9EqsNuUiJcZZ2LX7+lgwSNvX3WnDpMXb1OWOKBp0VO+D2nNOqMssu6SqB2RxcNQgozRX9eaa1/4r1qgJ8m7pGzvp04kenemjdteCHIX4it2q7xvEf2DMnjMaDrSnk3I0nxgKhUhCCIa/Qr0kdygzCjc5tkTY2FbQ4YAR2PrhQulxHxQYjrkJHFfY5nn+wJEjmXVKOa1FO4WNo0XmUu8MSRYis04LUPQCdxIF2gkFDmkv0ysz4dehaaJ955NUoO96T+l3/BTBOLtkakc8a4zdrrmyeLrXiXxnAyau+H7p8XfeInP1obXN/1zC86+bWERjsL1RwHSKXOWbq4SKBP+yvlI1L+3L2CASXnUkbBZYcXYrSfijlFoKWiVZk8+orbpadJoI7jIYmwtI4HTchx54cpqjXGwNVXTKO61PB3s9gLKCmzyOa+CMkrSq5voRXaZJ6bVhFpz7syPGfnaJd7X0nX2AidikRLRx0+RAAzY6TSuDUBq6pggmZg4/9NOC2ObwPNqQ2wbbqRb/DdbAyZXts2XRoOc+liuSeLwQXjKGVXcQ0cks2kDiqwYMYvxgJJ3wgDOMlh3RVs/Gs4k6mbWvFw8W2Va9B3NfrzOiEzI2QiY/LCGFQEdqdMSI1VUG0/tb1BYm0ttbkcTSS79jlkqI9iGvrvqFDW+WYctz7wuUCLOc1FQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(6666004)(9786002)(8936002)(82310400004)(5660300002)(2906002)(7636003)(356005)(83380400001)(36860700001)(7696005)(8676002)(70206006)(70586007)(4326008)(4744005)(36756003)(316002)(47076005)(508600001)(26005)(110136005)(186003)(1076003)(2616005)(336012)(426003)(107886003)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2022 09:45:37.4093
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a6c700b-8380-441b-d6c6-08da00e86649
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT057.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5461
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2.3.2022 15.03, Shaik Sajida Bhanu wrote:
-> Add changes to capture eMMC and SD card errors.
-> This is useful for debug and testing.
-> 
-> Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
-> Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
-> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-> Signed-off-by: Ram Prakash Gupta <quic_rampraka@quicinc.com>
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-> ---
->  drivers/mmc/core/core.c  |  6 ++++++
->  include/linux/mmc/host.h | 23 +++++++++++++++++++++++
->  2 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> index 368f104..f3679ed 100644
-> --- a/drivers/mmc/core/core.c
-> +++ b/drivers/mmc/core/core.c
-> @@ -2242,6 +2242,12 @@ void mmc_rescan(struct work_struct *work)
->  		if (freqs[i] <= host->f_min)
->  			break;
->  	}
-> +
-> +	/*
-> +	 * Ignore the command timeout errors observed during
-> +	 * the card init as those are excepted.
-> +	 */
-> +	host->err_stats[MMC_ERR_CMD_TIMEOUT] = 0;
->  	mmc_release_host(host);
->  
->   out:
-> diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-> index 7afb57c..3b7f1e5 100644
-> --- a/include/linux/mmc/host.h
-> +++ b/include/linux/mmc/host.h
-> @@ -93,6 +93,23 @@ struct mmc_clk_phase_map {
->  
->  struct mmc_host;
->  
-> +enum mmc_err_stat {
-> +	MMC_ERR_CMD_TIMEOUT,
-> +	MMC_ERR_CMD_CRC,
-> +	MMC_ERR_DAT_TIMEOUT,
-> +	MMC_ERR_DAT_CRC,
-> +	MMC_ERR_AUTO_CMD,
-> +	MMC_ERR_ADMA,
-> +	MMC_ERR_TUNING,
-> +	MMC_ERR_CMDQ_RED,
-> +	MMC_ERR_CMDQ_GCE,
-> +	MMC_ERR_CMDQ_ICCE,
-> +	MMC_ERR_REQ_TIMEOUT,
-> +	MMC_ERR_CMDQ_REQ_TIMEOUT,
-> +	MMC_ERR_ICE_CFG,
-> +	MMC_ERR_MAX,
-> +};
-> +
->  struct mmc_host_ops {
->  	/*
->  	 * It is optional for the host to implement pre_req and post_req in
-> @@ -500,6 +517,7 @@ struct mmc_host {
->  
->  	/* Host Software Queue support */
->  	bool			hsq_enabled;
-> +	u32                     err_stats[MMC_ERR_MAX];
+This patch series fixes the coding style and kernel-doc issues
+exists in the fpga framework, zynq and ZynqMP drivers.
 
-This makes it look like err_stats has something to do with Host Software Queue.
-Perhaps move it to be with debugfs_root. Also use tabs not spaces
+Nava kishore Manne (6):
+  fpga: zynq: Fix incorrect variable type
+  fpga: zynqmp: Initialized variables before using it
+  fpga: fpga-mgr: fix for coding style issues
+  fpga: fpga-mgr: Add missing kernel-doc description
+  fpga: Use tab instead of spaces for indentation
+  fpga: fpga-region: Add missing kernel-doc description
 
-	struct dentry		*debugfs_root;
-	u32			err_stats[MMC_ERR_MAX];
+ drivers/fpga/Makefile         |  6 +++---
+ drivers/fpga/fpga-mgr.c       |  8 ++++++--
+ drivers/fpga/of-fpga-region.c | 18 ++++++++++--------
+ drivers/fpga/zynq-fpga.c      |  2 +-
+ drivers/fpga/zynqmp-fpga.c    |  2 +-
+ 5 files changed, 21 insertions(+), 15 deletions(-)
 
->  
->  	unsigned long		private[] ____cacheline_aligned;
->  };
-> @@ -635,6 +653,11 @@ static inline enum dma_data_direction mmc_get_dma_dir(struct mmc_data *data)
->  	return data->flags & MMC_DATA_WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
->  }
->  
-> +static inline void mmc_debugfs_err_stats_inc(struct mmc_host *host,
-> +		enum mmc_err_stat stat) {
-> +	host->err_stats[stat] += 1;
-> +}
-> +
->  int mmc_send_tuning(struct mmc_host *host, u32 opcode, int *cmd_error);
->  int mmc_send_abort_tuning(struct mmc_host *host, u32 opcode);
->  int mmc_get_ext_csd(struct mmc_card *card, u8 **new_ext_csd);
+-- 
+2.25.1
 

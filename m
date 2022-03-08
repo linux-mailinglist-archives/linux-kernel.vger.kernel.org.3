@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F824D1295
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FB64D1297
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345081AbiCHIrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        id S1345094AbiCHIra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiCHIrR (ORCPT
+        with ESMTP id S1345086AbiCHIr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:47:17 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12953EB99;
-        Tue,  8 Mar 2022 00:46:20 -0800 (PST)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KCTSK616vz67wM9;
-        Tue,  8 Mar 2022 16:45:53 +0800 (CST)
-Received: from lhreml721-chm.china.huawei.com (10.201.108.72) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 09:46:18 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml721-chm.china.huawei.com (10.201.108.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 08:46:18 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Tue, 8 Mar 2022 08:46:17 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [PATCH v8 7/9] crypto: hisilicon/qm: Set the VF QM state register
-Thread-Topic: [PATCH v8 7/9] crypto: hisilicon/qm: Set the VF QM state
- register
-Thread-Index: AQHYL1LPlUMwjDEdUEiD24VoqGSdyqy1DYoAgAAji+A=
-Date:   Tue, 8 Mar 2022 08:46:17 +0000
-Message-ID: <fe8dbea8868f46f0ad9699f6a12c1e63@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
- <20220303230131.2103-8-shameerali.kolothum.thodi@huawei.com>
- <BN9PR11MB5276D3F8869BEAB2CBB16B498C099@BN9PR11MB5276.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB5276D3F8869BEAB2CBB16B498C099@BN9PR11MB5276.namprd11.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.27.151]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 8 Mar 2022 03:47:27 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9F63FDB9
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:46:30 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id x15so27240838wru.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 00:46:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OLXg6E8TUMHFsnuG3Sj+Po22TMyHRxb1PD+53CulAoE=;
+        b=0yaAu98zbIRzipzC2IQi6xxkiM6bdTQ02PHWFVpvF3EIuvhOKqJ8+pCq59CUtbHPp8
+         ekgvbk9FfSpl3myiDSdknNPtdyGFXZnZw1pCD9VAuokcGmbMIewtpNfDOxSEaiwxhGm/
+         Z4WpSocLSPILU9Mu27dQkFWYHw43fbopsYbd/sPQtsJdpaQXoHw0y2hP/N7QEiVY/tBr
+         pZBmEEGHapglyvSiJyZqDHXdSt5De0kgGKkYLaslNdebCQ0vN1Sjr5Ofu04AASdNz6Or
+         RSQ73zc7c3ysIdz9XelRQXfbnf2HH0lkyWwgyaJlAQ2Rqt+ZhXQxiDzcyoyvWbWSVhar
+         qjig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OLXg6E8TUMHFsnuG3Sj+Po22TMyHRxb1PD+53CulAoE=;
+        b=L4i75MSzjdWZ2Ba0qfOQ/ywRwAIb6XGcuhPvjN+013JvMb69NZesaSHwwilfL49e7e
+         vamtsODZ8bNXu+Q/IryEJB2JnBSzzwq7Wk3QFQWqJU1LCOkNlkQrlS4XvvbHkIJjvVUE
+         DeRq+/x6jTFS12Hm2qOMN97Ncpk/umoj8IokWyrr2PcAjlJMYlpNhWrbvpV446uJ7nhx
+         WQ3QNSGU56xA45Bd+NhLe4Kres2BLLVOlnGAk0LJ6OFBtmLXW1QEtaYKXwJnr0/11jxB
+         YZ7T4pYaC2xhDlQUX8UIfm6XuhRgDv1QyoMUcUZ0YWN+DTLpBkRHAlYOeidzdATxRhso
+         yXbA==
+X-Gm-Message-State: AOAM531aiKte5aDYTarI6JqX7+uBG8RGEGqPTqyHUWqywkIbRcvLKnjB
+        niAR/nL21QCqJwCydoxg0xxHUlAwbH6fWQ==
+X-Google-Smtp-Source: ABdhPJx3IQxtLDc2kDnwLu+lxeA/1bK9NijhYySncspKbiXRwKyN4SqkqhZ3fblj8BRH0svzdivBQQ==
+X-Received: by 2002:adf:ef81:0:b0:1f0:95f:30a7 with SMTP id d1-20020adfef81000000b001f0095f30a7mr11209869wro.636.1646729189305;
+        Tue, 08 Mar 2022 00:46:29 -0800 (PST)
+Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
+        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b001f049726044sm13284385wrv.79.2022.03.08.00.46.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 00:46:29 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH] gpio: sim: fix a typo
+Date:   Tue,  8 Mar 2022 09:46:27 +0100
+Message-Id: <20220308084627.214720-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVGlhbiwgS2V2aW4gW21h
-aWx0bzprZXZpbi50aWFuQGludGVsLmNvbV0NCj4gU2VudDogMDggTWFyY2ggMjAyMiAwNjozMQ0K
-PiBUbzogU2hhbWVlcmFsaSBLb2xvdGh1bSBUaG9kaSA8c2hhbWVlcmFsaS5rb2xvdGh1bS50aG9k
-aUBodWF3ZWkuY29tPjsNCj4ga3ZtQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZzsNCj4gbGludXgtY3J5cHRvQHZnZXIua2VybmVsLm9yZw0KPiBDYzogbGludXgt
-cGNpQHZnZXIua2VybmVsLm9yZzsgYWxleC53aWxsaWFtc29uQHJlZGhhdC5jb207IGpnZ0Budmlk
-aWEuY29tOw0KPiBjb2h1Y2tAcmVkaGF0LmNvbTsgbWd1cnRvdm95QG52aWRpYS5jb207IHlpc2hh
-aWhAbnZpZGlhLmNvbTsgTGludXhhcm0NCj4gPGxpbnV4YXJtQGh1YXdlaS5jb20+OyBsaXVsb25n
-ZmFuZyA8bGl1bG9uZ2ZhbmdAaHVhd2VpLmNvbT47IFplbmd0YW8gKEIpDQo+IDxwcmltZS56ZW5n
-QGhpc2lsaWNvbi5jb20+OyBKb25hdGhhbiBDYW1lcm9uDQo+IDxqb25hdGhhbi5jYW1lcm9uQGh1
-YXdlaS5jb20+OyBXYW5nemhvdSAoQikgPHdhbmd6aG91MUBoaXNpbGljb24uY29tPg0KPiBTdWJq
-ZWN0OiBSRTogW1BBVENIIHY4IDcvOV0gY3J5cHRvOiBoaXNpbGljb24vcW06IFNldCB0aGUgVkYg
-UU0gc3RhdGUgcmVnaXN0ZXINCj4gDQo+ID4gRnJvbTogU2hhbWVlciBLb2xvdGh1bSA8c2hhbWVl
-cmFsaS5rb2xvdGh1bS50aG9kaUBodWF3ZWkuY29tPg0KPiA+IFNlbnQ6IEZyaWRheSwgTWFyY2gg
-NCwgMjAyMiA3OjAxIEFNDQo+ID4NCj4gPiBGcm9tOiBMb25nZmFuZyBMaXUgPGxpdWxvbmdmYW5n
-QGh1YXdlaS5jb20+DQo+ID4NCj4gPiBXZSB1c2UgVkYgUU0gc3RhdGUgcmVnaXN0ZXIgdG8gcmVj
-b3JkIHRoZSBzdGF0dXMgb2YgdGhlIFFNIGNvbmZpZ3VyYXRpb24NCj4gPiBzdGF0ZS4gVGhpcyB3
-aWxsIGJlIHVzZWQgaW4gdGhlIEFDQyBtaWdyYXRpb24gZHJpdmVyIHRvIGRldGVybWluZSB3aGV0
-aGVyDQo+ID4gd2UgY2FuIHNhZmVseSBzYXZlIGFuZCByZXN0b3JlIHRoZSBRTSBkYXRhLg0KPiAN
-Cj4gQ2FuIHlvdSBzYXkgc29tZXRoaW5nIGFib3V0IHdoYXQgUU0gaXMgYW5kIGhvdyBpdCBpcyBy
-ZWxhdGVkIHRvIHRoZSBWRiBzdGF0ZQ0KPiB0byBiZSBtaWdyYXRlZD8gSXQgbWlnaHQgYmUgb2J2
-aW91cyB0byBhY2MgZHJpdmVyIHBlb3BsZSBidXQgbm90IHNvIHRvIHRvDQo+IG90aGVycyBpbiB2
-ZmlvIGNvbW11bml0eSBsaWtlIG1lLiDwn5iKDQoNCk9rLCB1bmRlcnN0YW5kIHRoYXQuIEkgd2ls
-bCBsaWZ0IGEgZGVzY3JpcHRpb24gZnJvbSB0aGUgUU0gZHJpdmVyIHBhdGNoIDopLg0KDQpRTSBz
-dGFuZHMgZm9yIFF1ZXVlIE1hbmFnZW1lbnQgd2hpY2ggaXMgYSBnZW5lcmljIElQIHVzZWQgYnkg
-QUNDIGRldmljZXMuDQpJdCBwcm92aWRlcyBhIGdlbmVyYWwgUENJZSBpbnRlcmZhY2UgZm9yIHRo
-ZSBDUFUgYW5kIHRoZSBBQ0MgZGV2aWNlcyB0byBzaGFyZQ0KYSBncm91cCBvZiBxdWV1ZXMuDQoN
-ClFNIGludGVncmF0ZWQgaW50byBhbiBhY2NlbGVyYXRvciBwcm92aWRlcyBxdWV1ZSBtYW5hZ2Vt
-ZW50IHNlcnZpY2UuDQpRdWV1ZXMgY2FuIGJlIGFzc2lnbmVkIHRvIFBGIGFuZCBWRnMsIGFuZCBx
-dWV1ZXMgY2FuIGJlIGNvbnRyb2xsZWQgYnkNCnVuaWZpZWQgbWFpbGJveGVzIGFuZCBkb29yYmVs
-bHMuIFRoZSBRTSBkcml2ZXIoZHJpdmVycy9jcnlwdG8vaGlzaWxpY29uL3FtLmMpDQpwcm92aWRl
-cyBnZW5lcmljIGludGVyZmFjZXMgdG8gQUNDIGRyaXZlcnMgdG8gbWFuYWdlIHRoZSBRTS4NCg0K
-SSB3aWxsIGFkZCBzb21lIG9mIHRoaXMgaW4gZWl0aGVyIHRoaXMgY29tbWl0IG1zZyBvciBpbiB0
-aGUgYWN0dWFsIGZpbGUgc29tZXdoZXJlLg0KDQpUaGFua3MsDQpTaGFtZWVyDQo=
+Just noticed this when applying Andy's patch. s/childred/children/
+
+Fixes: cb8c474e79be ("gpio: sim: new testing module")
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ drivers/gpio/gpio-sim.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+index bb9bb595c1a8..8e5d87984a48 100644
+--- a/drivers/gpio/gpio-sim.c
++++ b/drivers/gpio/gpio-sim.c
+@@ -547,7 +547,7 @@ struct gpio_sim_bank {
+ 	 *
+ 	 * So we need to store the pointer to the parent struct here. We can
+ 	 * dereference it anywhere we need with no checks and no locking as
+-	 * it's guaranteed to survive the childred and protected by configfs
++	 * it's guaranteed to survive the children and protected by configfs
+ 	 * locks.
+ 	 *
+ 	 * Same for other structures.
+-- 
+2.30.1
+

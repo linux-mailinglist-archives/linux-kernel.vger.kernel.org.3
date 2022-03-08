@@ -2,247 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DCE4D2397
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB474D239A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350500AbiCHVto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S1350557AbiCHVuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiCHVtk (ORCPT
+        with ESMTP id S1350539AbiCHVue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:49:40 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB42C09
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:48:43 -0800 (PST)
+        Tue, 8 Mar 2022 16:50:34 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03A7F69
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646776123; x=1678312123;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=52Hs94CVm9izEhh/eSZPllV6cLQwXDE2tV139Ddl/MM=;
-  b=JLHq/esrAC3ucIZLoJNO+9cG4mmMBceTVvJr0GDU0EIV1eljzQ0rlGmY
-   nchZel0iBA0EoIIRc8WT+Pxrp5IhbpGenapnd4KZzB04uTI+pNmDF8Y/4
-   KqhjCyfdLv/O5nueX5I6EQr6UCOTQig9Yx+DTi66kY7O5KypwbKmA8mfN
-   UYeBNd95gflOu5mom6EEDnDMY8e9+pnLp++17xLVLD14+f8nvXcWxUzcH
-   ib3Ea01N4ZJt9iThnohcUbYYuR8CFmkOnFN1tQmgzWc/ti9jlK6bL8njX
-   VvCNDrjfo63e0W7+KYS/C64cCc3LhUxG44/aS66rmaYm5YWptJUVBg7Zx
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="252394269"
+  t=1646776177; x=1678312177;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FUHaFuSppdI2xKFFM4X2S0hnE5v8/SFqnGBliyZhmr4=;
+  b=oCFBHzXEeAeq9/uq7eTiM0lRT8694cdoLqbLJvqLzFxXBIGxjJgj4br4
+   s3knIARTFVu4x8ZuYtSRfHYOMZs1ooRPFVrE2Am8q6c3d5M7nfl/7182I
+   7+J+LhDytLeFLboj/XKyo7YmujQxkJVBUTgafK6y4dKJeF/cLsMDNDrIN
+   otl3E+g0NwHMlpqbxNiqWnb6NaaBYcMKG6pkiskxVEzSJaXMxq7Iczlr5
+   zeQhfunUxsYxOWV1f0Y+4zmVJMQzASPdRdAr5j3cq0mmjpSx2Nj1gaXg7
+   wHLSoh4RAuqIq/USBTXPhTC/pdtKZdlTKTkTVp77knmmwUGp+f8oVaVa3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254553224"
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="252394269"
+   d="scan'208";a="254553224"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:48:42 -0800
-X-ExtLoop1: 1
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:49:37 -0800
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="495612623"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 13:48:40 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRhh9-00022E-AT; Tue, 08 Mar 2022 21:48:39 +0000
-Date:   Wed, 9 Mar 2022 05:48:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Swathi Sridhar <swatsrid@codeaurora.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Sudarshan Rajagopalan <sudaraja@codeaurora.org>,
-        Prakash Gupta <guptap@codeaurora.org>,
-        Vinayak Menon <vinmenon@codeaurora.org>,
-        Mark Salyzyn <salyzyn@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 556/9999] drivers/iommu/io-pgtable-arm.c:666:41: error: implicit declaration
- of function 'iommu_pgsize'
-Message-ID: <202203090526.bAaqg5iy-lkp@intel.com>
+   d="scan'208";a="495612823"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.212.239.204])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:49:37 -0800
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mcgrof@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v1 0/8] Extend FW framework for user FW uploads
+Date:   Tue,  8 Mar 2022 13:49:24 -0800
+Message-Id: <20220308214932.24477-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Swathi,
+Extend the firmware loader subsystem to support a persistent sysfs
+interface that userspace may use to initiate a firmware update. For
+example, FPGA based PCIe cards automatically load firmware and FPGA images
+from local FLASH when the card boots. The images in FLASH may be updated
+with new images that are uploaded by the user.
 
-FYI, the error/warning still remains.
+A device driver may call firmware_upload_register() to expose persistent
+"loading" and "data" sysfs files at /sys/class/firmare/<NAME>/*. These
+files are used in the same way as the fallback sysfs "loading" and "data"
+files. However, when 0 is written to "loading" to complete the write of
+firmware data, the data is also transferred to the lower-level driver
+using pre-registered call-back functions. The data transfer is done in
+the context of a kernel worker thread.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   3fba6c6e70994eff4dcc5be475c9d2bd3848b83d
-commit: 27de1978c331d4e7571a5d0187ef1802d65dbf65 [556/9999] ANDROID: GKI: iommu/io-pgtable-arm: LPAE related updates by vendor
-config: mips-randconfig-r024-20220307 (https://download.01.org/0day-ci/archive/20220309/202203090526.bAaqg5iy-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/27de1978c331d4e7571a5d0187ef1802d65dbf65
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout 27de1978c331d4e7571a5d0187ef1802d65dbf65
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/iommu/
+Additional sysfs nodes are added in the same location as "loading" and
+"data" to monitor the transfer of the image data to the device using
+callback functions provided by the lower-level device driver and to allow
+the data transfer to be cancelled.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Example usage:
 
-All errors (new ones prefixed by >>):
+$ pwd
+/sys/class/firmware/n3000bmc-sec-update.8
+$ ls
+cancel  device  loading  remaining_size  subsystem
+data    error   power    status          uevent
+$ echo 1 > loading
+$ cat /tmp/firmware.bin > data
+$ echo 0 > loading
+$ while :; do cat status; cat remaining_size ; sleep 3; done
+preparing
+44590080
+<--snip-->
+transferring
+44459008
+transferring
+44311552
+<--snip-->
+transferring
+173056
+<--snip-->
+programming
+0
+<--snip-->
+idle
+0
+^C
+$ cat error
 
-   drivers/iommu/io-pgtable-arm.c: In function '__arm_lpae_alloc_pages':
-   drivers/iommu/io-pgtable-arm.c:312:23: error: implicit declaration of function 'io_pgtable_alloc_pages_exact' [-Werror=implicit-function-declaration]
-     312 |         void *pages = io_pgtable_alloc_pages_exact(cfg, cookie, size,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:312:23: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-   drivers/iommu/io-pgtable-arm.c:337:9: error: implicit declaration of function 'io_pgtable_free_pages_exact' [-Werror=implicit-function-declaration]
-     337 |         io_pgtable_free_pages_exact(cfg, cookie, pages, size);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_prot_to_pte':
-   drivers/iommu/io-pgtable-arm.c:572:33: error: 'IOMMU_USE_UPSTREAM_HINT' undeclared (first use in this function)
-     572 |                 else if (prot & IOMMU_USE_UPSTREAM_HINT)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:572:33: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/iommu/io-pgtable-arm.c:575:33: error: 'IOMMU_USE_LLC_NWA' undeclared (first use in this function)
-     575 |                 else if (prot & IOMMU_USE_LLC_NWA)
-         |                                 ^~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_map_sg':
->> drivers/iommu/io-pgtable-arm.c:666:41: error: implicit declaration of function 'iommu_pgsize' [-Werror=implicit-function-declaration]
-     666 |                         size_t pgsize = iommu_pgsize(
-         |                                         ^~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_alloc_pgtable':
-   drivers/iommu/io-pgtable-arm.c:1095:18: error: 'struct io_pgtable_ops' has no member named 'map_sg'
-    1095 |                 .map_sg         = arm_lpae_map_sg,
-         |                  ^~~~~~
-   drivers/iommu/io-pgtable-arm.c:1095:35: error: initialization of 'size_t (*)(struct io_pgtable_ops *, long unsigned int,  size_t)' {aka 'long unsigned int (*)(struct io_pgtable_ops *, long unsigned int,  long unsigned int)'} from incompatible pointer type 'int (*)(struct io_pgtable_ops *, long unsigned int,  struct scatterlist *, unsigned int,  int,  size_t *)' {aka 'int (*)(struct io_pgtable_ops *, long unsigned int,  struct scatterlist *, unsigned int,  int,  long unsigned int *)'} [-Werror=incompatible-pointer-types]
-    1095 |                 .map_sg         = arm_lpae_map_sg,
-         |                                   ^~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:1095:35: note: (near initialization for '(anonymous).unmap')
-   drivers/iommu/io-pgtable-arm.c:1096:35: warning: initialized field overwritten [-Woverride-init]
-    1096 |                 .unmap          = arm_lpae_unmap,
-         |                                   ^~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:1096:35: note: (near initialization for '(anonymous).unmap')
-   drivers/iommu/io-pgtable-arm.c:1098:18: error: 'struct io_pgtable_ops' has no member named 'is_iova_coherent'
-    1098 |                 .is_iova_coherent = arm_lpae_is_iova_coherent,
-         |                  ^~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:1098:37: warning: excess elements in struct initializer
-    1098 |                 .is_iova_coherent = arm_lpae_is_iova_coherent,
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:1098:37: note: (near initialization for '(anonymous)')
-   drivers/iommu/io-pgtable-arm.c:1099:18: error: 'struct io_pgtable_ops' has no member named 'iova_to_pte'; did you mean 'iova_to_phys'?
-    1099 |                 .iova_to_pte    = arm_lpae_iova_get_pte,
-         |                  ^~~~~~~~~~~
-         |                  iova_to_phys
-   drivers/iommu/io-pgtable-arm.c:1099:35: warning: excess elements in struct initializer
-    1099 |                 .iova_to_pte    = arm_lpae_iova_get_pte,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:1099:35: note: (near initialization for '(anonymous)')
-   drivers/iommu/io-pgtable-arm.c: In function 'arm_64_lpae_alloc_pgtable_s1':
-   drivers/iommu/io-pgtable-arm.c:1113:29: error: 'IO_PGTABLE_QUIRK_QCOM_USE_UPSTREAM_HINT' undeclared (first use in this function)
-    1113 |                           | IO_PGTABLE_QUIRK_QCOM_USE_UPSTREAM_HINT
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:1114:29: error: 'IO_PGTABLE_QUIRK_QSMMUV500_NON_SHAREABLE' undeclared (first use in this function)
-    1114 |                           | IO_PGTABLE_QUIRK_QSMMUV500_NON_SHAREABLE
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:1115:29: error: 'IO_PGTABLE_QUIRK_QCOM_USE_LLC_NWA' undeclared (first use in this function)
-    1115 |                           | IO_PGTABLE_QUIRK_QCOM_USE_LLC_NWA))
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+The first two patches in this set make minor changes to enable the
+fw_priv data structure and the sysfs interfaces to be used multiple times
+during the existence of the device driver instance. The third patch is
+mostly a reorganization of existing code in preparation for sharing common
+code with the firmware-upload support. The fourth and fifth patches provide
+the code for user-initiated firmware uploads. The final 3 patches extend
+selftest support to test firmware-upload functionality.
 
 
-vim +/iommu_pgsize +666 drivers/iommu/io-pgtable-arm.c
+Changelog RFC -> v1:
+  - Renamed files fw_sysfs.c and fw_sysfs.h to sysfs.c and sysfs.h
+  - Moved "MODULE_IMPORT_NS(FIRMWARE_LOADER_PRIVATE);" from sysfs.c to
+    sysfs.h to address an error identified by the kernel test robot
+    <lkp@intel.com>
+  - renamed fw_upload_register() and fw_upload_unregister() to
+    firmware_upload_register() and fw_upload_unregister().
+  - Moved ifdef'd section of code out of firmware_loading_store() in sysfs.c
+    into a new function, fw_upload_start(), in sysfs_upload.c.
+  - Changed #defines to enums for error codes and progress states
+  - Added additional kernel-doc supported symbols into the documentation.
+    Some rewording in documentation as well.
+  - Added module reference counting for the parent module in the
+    firmware_upload_register() and firmware_upload_unregister() functions
+    to fix problems found when testing with test_firmware module.
+  - Removed unnecessary module reference counting for THIS_MODULE.
+  - Added a new patch to modify the test_firmware module to support
+    testing of the firmware upload mechanism.
+  - Added a new patch to modify the test_firmware module to support
+    error injection for firmware upload.
+  - Added a new patch to extend the existing firmware selftests to cover
+    firmware upload.
 
-   625	
-   626	static int arm_lpae_map_sg(struct io_pgtable_ops *ops, unsigned long iova,
-   627				   struct scatterlist *sg, unsigned int nents,
-   628				   int iommu_prot, size_t *size)
-   629	{
-   630		struct arm_lpae_io_pgtable *data = io_pgtable_ops_to_data(ops);
-   631		arm_lpae_iopte *ptep = data->pgd;
-   632		int lvl = ARM_LPAE_START_LVL(data);
-   633		arm_lpae_iopte prot;
-   634		struct scatterlist *s;
-   635		size_t mapped = 0;
-   636		int i;
-   637		int ret = -EINVAL;
-   638		unsigned int min_pagesz;
-   639		struct io_pgtable_cfg *cfg = &data->iop.cfg;
-   640		struct map_state ms;
-   641	
-   642		/* If no access, then nothing to do */
-   643		if (!(iommu_prot & (IOMMU_READ | IOMMU_WRITE)))
-   644			goto out_err;
-   645	
-   646		prot = arm_lpae_prot_to_pte(data, iommu_prot);
-   647	
-   648		min_pagesz = 1 << __ffs(cfg->pgsize_bitmap);
-   649	
-   650		memset(&ms, 0, sizeof(ms));
-   651	
-   652		for_each_sg(sg, s, nents, i) {
-   653			phys_addr_t phys = page_to_phys(sg_page(s)) + s->offset;
-   654			size_t size = s->length;
-   655	
-   656			/*
-   657			 * We are mapping on IOMMU page boundaries, so offset within
-   658			 * the page must be 0. However, the IOMMU may support pages
-   659			 * smaller than PAGE_SIZE, so s->offset may still represent
-   660			 * an offset of that boundary within the CPU page.
-   661			 */
-   662			if (!IS_ALIGNED(s->offset, min_pagesz))
-   663				goto out_err;
-   664	
-   665			while (size) {
- > 666				size_t pgsize = iommu_pgsize(
-   667					cfg->pgsize_bitmap, iova | phys, size);
-   668	
-   669				if (ms.pgtable && (iova < ms.iova_end)) {
-   670					arm_lpae_iopte *ptep = ms.pgtable +
-   671						ARM_LPAE_LVL_IDX(iova, MAP_STATE_LVL,
-   672								 data);
-   673					arm_lpae_init_pte(
-   674						data, iova, phys, prot, MAP_STATE_LVL,
-   675						ptep, ms.prev_pgtable, false);
-   676					ms.num_pte++;
-   677				} else {
-   678					ret = __arm_lpae_map(data, iova, phys, pgsize,
-   679							prot, lvl, ptep, NULL, &ms);
-   680					if (ret)
-   681						goto out_err;
-   682				}
-   683	
-   684				iova += pgsize;
-   685				mapped += pgsize;
-   686				phys += pgsize;
-   687				size -= pgsize;
-   688			}
-   689		}
-   690	
-   691		if (ms.pgtable)
-   692			pgtable_dma_sync_single_for_device(cfg,
-   693				__arm_lpae_dma_addr(ms.pte_start),
-   694				ms.num_pte * sizeof(*ms.pte_start),
-   695				DMA_TO_DEVICE);
-   696	
-   697		/*
-   698		 * Synchronise all PTE updates for the new mapping before there's
-   699		 * a chance for anything to kick off a table walk for the new iova.
-   700		 */
-   701		wmb();
-   702	
-   703		return mapped;
-   704	
-   705	out_err:
-   706		/* Return the size of the partial mapping so that they can be undone */
-   707		*size = mapped;
-   708		return ret;
-   709	}
-   710	
+Russ Weight (8):
+  firmware_loader: Clear data and size in fw_free_paged_buf
+  firmware_loader: Check fw_state_is_done in loading_store
+  firmware_loader: Split sysfs support from fallback
+  firmware_loader: Add firmware-upload support
+  firmware_loader: Add sysfs nodes to monitor fw_upload
+  test_firmware: Add test support for firmware upload
+  test_firmware: Error injection for firmware upload
+  selftests: firmware: Add firmware upload selftests
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ .../ABI/testing/sysfs-class-firmware          |  77 ++++
+ .../driver-api/firmware/fw_upload.rst         | 117 +++++
+ Documentation/driver-api/firmware/index.rst   |   1 +
+ drivers/base/firmware_loader/Kconfig          |  18 +
+ drivers/base/firmware_loader/Makefile         |   2 +
+ drivers/base/firmware_loader/fallback.c       | 430 -----------------
+ drivers/base/firmware_loader/fallback.h       |  46 +-
+ drivers/base/firmware_loader/firmware.h       |  11 +
+ drivers/base/firmware_loader/main.c           |  18 +-
+ drivers/base/firmware_loader/sysfs.c          | 435 ++++++++++++++++++
+ drivers/base/firmware_loader/sysfs.h          | 100 ++++
+ drivers/base/firmware_loader/sysfs_upload.c   | 396 ++++++++++++++++
+ drivers/base/firmware_loader/sysfs_upload.h   |  47 ++
+ include/linux/firmware.h                      |  82 ++++
+ lib/test_firmware.c                           | 378 +++++++++++++++
+ tools/testing/selftests/firmware/Makefile     |   2 +-
+ tools/testing/selftests/firmware/config       |   1 +
+ tools/testing/selftests/firmware/fw_lib.sh    |   7 +
+ .../selftests/firmware/fw_run_tests.sh        |   4 +
+ tools/testing/selftests/firmware/fw_upload.sh | 214 +++++++++
+ 20 files changed, 1900 insertions(+), 486 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-firmware
+ create mode 100644 Documentation/driver-api/firmware/fw_upload.rst
+ create mode 100644 drivers/base/firmware_loader/sysfs.c
+ create mode 100644 drivers/base/firmware_loader/sysfs.h
+ create mode 100644 drivers/base/firmware_loader/sysfs_upload.c
+ create mode 100644 drivers/base/firmware_loader/sysfs_upload.h
+ create mode 100755 tools/testing/selftests/firmware/fw_upload.sh
+
+-- 
+2.25.1
+

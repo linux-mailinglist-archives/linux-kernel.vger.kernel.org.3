@@ -2,135 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BAC4D1D1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE604D1D28
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343960AbiCHQZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        id S1348096AbiCHQaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348337AbiCHQZR (ORCPT
+        with ESMTP id S1345048AbiCHQaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:25:17 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7F44F9E6;
-        Tue,  8 Mar 2022 08:24:19 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2E0065C0131;
-        Tue,  8 Mar 2022 11:24:19 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 08 Mar 2022 11:24:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=QiZzwEJwAsqLkGpP4XLt1jLF2k2PI6EZcrR+RR
-        Jgmiw=; b=M4CAjyA4pm6JW0W/znqqC+gWsxAnPWz/iYfK1clA/ajl837M4BLw76
-        Z3lyuVUVAueOzrrG/oVx4Rj7ypu24JeH7uWmnFGGkE7xFsf8JLhsN8Ib0vapTjDv
-        5/mPq6PWqzV8p2CUcwiT6vf20Rnu3djGo8M89DqLVJZoTt0pjgG/DpXbzx6Jr1AX
-        GHS2B1y9Yn6Se0+3BG1QveqQ2sTIifMPL5VQ90vTgYdawTyDIMUSp3TD0ITS63gp
-        fYVmq7cLHPPe3XjXYN2X7paq92FkOPopi917qkLab9/4G+47hehX7mkiQqwyrZ6j
-        bi6DIII1klI+BxqYwAg2sg7fWtbXz+4g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=QiZzwEJwAsqLkGpP4
-        XLt1jLF2k2PI6EZcrR+RRJgmiw=; b=e7OtT2/4WpcMSH5Bm0MwUyrcIm6EzSOSz
-        lVlSdOY+9egEcGT/xMbHvMQERP/3/wAWTU1j1298SNhhfS8mNOzZnunx9EJ+XUPd
-        tQISGKIWySDX4rXYux1jOw+s/Xi9ZGgb1gZbJ+isHEqZ4ohrL6m8DGznAX0zJ4Fa
-        Q1wB9GmtfF6+jcuArerDiefWIdz4vnoNKoOyynmrHD0Dzc5oYuFDzY5dbxncmFUu
-        FVOHBuTewl+Gx3C38P3QQDj7N+Zb5GpE2EdetTL+Aul2u0jAoFUI5lBXgUMzG0BE
-        syuREor9Up+XzAEidLo7M58P8F1cAW/Prouanx6p+leSqNjXxkgog==
-X-ME-Sender: <xms:MoMnYjbqBQQ2exdi4X2-uGRhfZJEw1MLiGpdU1qRIHXoQ-C1pnMjDg>
-    <xme:MoMnYiZZrwyRFQraVicdj0MCQtgemkcllu_MqU_pKRqPhDlKQT5dYQhUjFKAbk_ev
-    PhkwkWuNemmrslYmWU>
-X-ME-Received: <xmr:MoMnYl9xKQtD1Z6UreYSS3_a74rggNjjeWAPt0lfcleb8BOgRZ3-MV2Fhj3Gx47ANTEdusFnYZbpA_tDeZ7SbBtHLUIXCupGPgLfKF0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudduiedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:MoMnYpoL-CYL5Lt70meY0YsoUeH5s7I9KFBm-ktzqthGGPf3iuec1w>
-    <xmx:MoMnYuoQRexcfAlYC1YzqFzuoE-1Kw25PITCYneaLuXdrZ1hD4qMeg>
-    <xmx:MoMnYvQLOat0fZLE6vh5kStxHyD1yZ6rc0y-NMzlngG2pXZxlbhG5Q>
-    <xmx:M4MnYl2RBd8DG0o5RLDp4SwvJeb5RPeykirmE6wEh1B6Uc9Yh0mtcA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 8 Mar 2022 11:24:18 -0500 (EST)
-Date:   Tue, 8 Mar 2022 17:24:16 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Deadlock at reboot?
-Message-ID: <20220308162416.xnrlys6utylzb3uz@houat>
-References: <20220304104942.lypg3wvlgk2ywi2t@houat>
- <YiIfCDjOIBoM+KlB@kroah.com>
+        Tue, 8 Mar 2022 11:30:01 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108E24A92C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:29:05 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id q14so13858724wrc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SYDOiiE/T/Y7VYsIB3p/zW4CbpW2wGMyym0vbgifcOE=;
+        b=WNVHOSyNNfjEW9O3TED1BUUpsZlmtWZ5GMHSHHEVFGg7+rjPoN4aQMb1uneNNfYFmJ
+         t6flvC3RMKFIUdsgeIjsapRQTl+EqkEfyUY61YObOG7prCe8glX8SziJdfhIhh9ntGtw
+         5PYICSaCHkWCxD9iay5Qo/8n1YfjEmPAl5TY6IFLzCxewPS15FEJr6ImSYwI3RRgUul9
+         d9JvnyrG3dWs1ImlSIkqz7bMqSZA+4UTu3JYiEOZaBJrz5b/y8MOqLgL3Glvr7MJ561P
+         SaAw9NkYUHoo0W3dRhvxVTpr/NdQMotVJH1ht/KW0KosH4wu3toSK3wPypEvUgLGA8UK
+         OAEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SYDOiiE/T/Y7VYsIB3p/zW4CbpW2wGMyym0vbgifcOE=;
+        b=FMml7PWR/2K0+2wUG3z24pFDZ58n/Ndf8N5uVfjVZspvMKomPbfCWAvgzqoemIOJf5
+         WDsUAE83H3ikXa7/zpu/2mNlht5MK9dzG46XD00bkLOTNskmhDXPbItsbezN45TAIcoQ
+         wZ6krG83FKDWZwNIpVZB0t9bgtoIvaxjK+nnacAYDL7z78UpxxwRtcdEPlBmhKyrbl3r
+         EycoM2DBBFRENHMmgDXnzXaojHWZnShn1IvZDvOz3I8fGmg/Urp0hrccjc34NUIsT7kw
+         UelRm377ZLl90ceFAPyiqWkqpFJ5OyKRSi3GKQFP/bfKcz14TBW36l2LlS5uJuBl7jAy
+         Zmnw==
+X-Gm-Message-State: AOAM531f7wq988DplZfiMgV4hpBy+cNm663Vm8dHZUxuJEiGEBZqgHpH
+        A60NKXPnuG/jCXBpggcd6VRk2XJQsGZ+BXRqOSc=
+X-Google-Smtp-Source: ABdhPJyR74mrKbhqIZt8QWvM99w64IQ3UB0prHiSjO57e806D1kgvYf/kWL3XMCcUIHNTOXynsFWDPS+QJu3axJda3U=
+X-Received: by 2002:a5d:5382:0:b0:1f0:2f64:5a5a with SMTP id
+ d2-20020a5d5382000000b001f02f645a5amr12914704wrv.418.1646756943508; Tue, 08
+ Mar 2022 08:29:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7ofuk2vyimjb5u44"
-Content-Disposition: inline
-In-Reply-To: <YiIfCDjOIBoM+KlB@kroah.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 8 Mar 2022 08:29:32 -0800
+Message-ID: <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Rob Clark <robdclark@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 8, 2022 at 5:17 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> Hello,
+>
+> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
+> During OOM, the shrinker will release BOs that are marked as "not needed"
+> by userspace using the new madvise IOCTL. The userspace in this case is
+> the Mesa VirGL driver, it will mark the cached BOs as "not needed",
+> allowing kernel driver to release memory of the cached shmem BOs on lowmem
+> situations, preventing OOM kills.
 
---7ofuk2vyimjb5u44
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Will host memory pressure already trigger shrinker in guest?  This is
+something I'm quite interested in for "virtgpu native contexts" (ie.
+native guest driver with new context type sitting on top of virtgpu),
+since that isn't using host storage
 
-Hi,
+BR,
+-R
 
-On Fri, Mar 04, 2022 at 03:15:36PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Mar 04, 2022 at 11:49:42AM +0100, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> > I'm not entirely sure who I'm supposed to send this to, so apologies if
-> > I forgot somebody.
-> >=20
-> > I've had an issue when rebooting on and off for a couple of monthes, but
-> > I got a stacktrace from lockdep today:
-> >=20
-> > [71721.872904] reboot: Restarting system
-> > [71721.876743] ------------[ cut here ]------------
-> > [71721.877081]
-> > [71721.877084] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > [71721.877086] WARNING: possible circular locking dependency detected
-> > [71721.877088] 5.17.0-rc6-next-20220303-v8+ #10 Not tainted
->=20
-> This is linux-next, does this also happen on Linus's tree?
->=20
-> If not, can you bisect to find the offending commit?
-
-So it turns out the reboot stuck issue was a bootloader issue that
-wouldn't detect the ethernet phy after a patch was introduced in 5.16.
-
-So nothing to do with the lockdep stacktrace, really. If there's indeed
-a locking issue, it doesn't seem to affect my system.
-
-Maxime
-
---7ofuk2vyimjb5u44
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYieDMAAKCRDj7w1vZxhR
-xVjfAQC5pD7MyFRlK/jhH1bEioWD6ziYy5KSW+Zj/OG2mDN2sgEA3Ed+trkaED06
-H7lSOp1zQo9aFaSBq6eSyNhep2RV/AE=
-=u/9r
------END PGP SIGNATURE-----
-
---7ofuk2vyimjb5u44--
+> This patchset includes couple fixes for problems I found while was working
+> on the shrinker, it also includes prerequisite DMA API usage improvement
+> needed by the shrinker.
+>
+> The Mesa and IGT patches will be kept on hold until this kernel series
+> will be approved and applied.
+>
+> This patchset was tested using Qemu and crosvm, including both cases of
+> IOMMU off/on.
+>
+> Mesa: https://gitlab.freedesktop.org/digetx/mesa/-/commits/virgl-madvise
+> IGT:  https://gitlab.freedesktop.org/digetx/igt-gpu-tools/-/tree/virtio-madvise
+>
+> Dmitry Osipenko (5):
+>   drm/virtio: Correct drm_gem_shmem_get_sg_table() error handling
+>   drm/virtio: Check whether transferred 2D BO is shmem
+>   drm/virtio: Unlock GEM reservations in error code path
+>   drm/virtio: Improve DMA API usage for shmem BOs
+>   drm/virtio: Add memory shrinker
+>
+>  drivers/gpu/drm/virtio/Makefile               |   3 +-
+>  drivers/gpu/drm/virtio/virtgpu_drv.c          |  22 +++-
+>  drivers/gpu/drm/virtio/virtgpu_drv.h          |  31 ++++-
+>  drivers/gpu/drm/virtio/virtgpu_gem.c          |  84 ++++++++++++
+>  drivers/gpu/drm/virtio/virtgpu_gem_shrinker.c | 124 ++++++++++++++++++
+>  drivers/gpu/drm/virtio/virtgpu_ioctl.c        |  37 ++++++
+>  drivers/gpu/drm/virtio/virtgpu_kms.c          |  17 ++-
+>  drivers/gpu/drm/virtio/virtgpu_object.c       |  63 +++------
+>  drivers/gpu/drm/virtio/virtgpu_plane.c        |  17 ++-
+>  drivers/gpu/drm/virtio/virtgpu_vq.c           |  30 +++--
+>  include/uapi/drm/virtgpu_drm.h                |  14 ++
+>  11 files changed, 373 insertions(+), 69 deletions(-)
+>  create mode 100644 drivers/gpu/drm/virtio/virtgpu_gem_shrinker.c
+>
+> --
+> 2.35.1
+>

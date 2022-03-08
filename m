@@ -2,156 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613164D1324
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E18E4D132E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345284AbiCHJQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
+        id S242090AbiCHJSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233068AbiCHJQ2 (ORCPT
+        with ESMTP id S230385AbiCHJSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:16:28 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D48A40A16
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 01:15:31 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id r10so27414552wrp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 01:15:31 -0800 (PST)
+        Tue, 8 Mar 2022 04:18:03 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012E740A28
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 01:17:05 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id a14so2672225qtx.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 01:17:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=A67AlhskYiiSCgOgMfxOM8VtIq/AZbd8NuTpwj7+O9E=;
-        b=ru0ZMHr+H3SzWxJ5c6z+akoloC2eYUtrZZDP/bO0aM7LsTlONsVtFwFb/M0zFfOyf8
-         ElYyllP0vUy0v0lbdXhcPYe4WzX7ped6as7iO4g3cCmAJaWF+VZOQBy9ug42T440YpRF
-         GUNi+yilLEuh339WAnK2G0QLo/WGwWiiz6vZ/8lCD4bCmK0TFsJdNrkLS30iJ3WFSL83
-         SnRbArDjmbspkK6+UFofwFDjTRmpVBG0W/hwgBdGn/4koeWXQAPzHE106Pho9SQPGPFW
-         5I7zM7fAiaC+9DyvnsQWd0h5V5zBpL4P1Hkpp1YpcllRm9Tk5tHYCkPE7/0BSdXqV9ip
-         lg1Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QmFT5oX5WhVCf23K5lxag7wmD3+cmFNslYfO7qqS0x8=;
+        b=O81yMp+25f3i4Ba9tRiFQz+DjxkdQvAuD7tM0reOk09HYPu27Ez//y0oCxFyKkVdbX
+         R/sSoBoeDiFo9s4tYx2XUwDDcYv11O60isHjmVp68H+cDOTvi8MFquadaAVoClk9ja+v
+         tgqVtJBnuu5sX6ALII+KxtdSdNG5YJKvNgNsV1Ul3e8zr5lBnLNM1T5puAZuTVFRO7fD
+         ksosDAjF0UEXLdmjHrelsegsOtaPWnWvGdg7sUT57j0chxw3HyjuLjYpPYcdYKd6K5Sg
+         VpzY5pDcfNa8suOuQoEaU1G9l/32J/ptGF+spDzNB9CfSYivKYkjoiflodvPIwrU+pjK
+         AQow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=A67AlhskYiiSCgOgMfxOM8VtIq/AZbd8NuTpwj7+O9E=;
-        b=WU4wqvA87V1RfDJODQsbTAvCEQ+MaZM9rCd+0PrbWYMLucfLPJI+SW422FLSgCmeEf
-         RmPV/kLFJcl1a3feHxtoRGAm0LGUUGiKtMuutCxH54WuleGr1P51UdlexxZhXLcKgPyj
-         4wZQaSpp9yKgtxamel9Cv7V6gvyR4Q5BWOXnnLWXwGFIoKyBjQwMNIacWt8jRrjR/gGF
-         qV+aU3j2Rl0trII5zZsQriN9S2UvYI3rouG8xSBP98at4zB64mPq3sGe2mXwNaJklm/l
-         EwXb3drYajBQ9VQcouiBa7uaRPVr5fOAOy81VLBWvAsRCzICQJ8GgWkeequq2KNt4uVA
-         tXXA==
-X-Gm-Message-State: AOAM532wrXEuPV7YS81sX7ZUF0JeD6S2eigsfsGR7B4P+NTqVDLPb8B1
-        BSP21pbZR2zLpInI2mZwRJeXhQ==
-X-Google-Smtp-Source: ABdhPJy9FjH8HkL7B/j6ELLmslkDBEpsnA6isr76dWseTv/sIBWInh7Ka7q7NHwbZ1Go3z4nK7Q0BQ==
-X-Received: by 2002:adf:e448:0:b0:1ea:c7b6:782 with SMTP id t8-20020adfe448000000b001eac7b60782mr11302842wrm.29.1646730930092;
-        Tue, 08 Mar 2022 01:15:30 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id h13-20020adff18d000000b001f1de9f930esm15425518wro.81.2022.03.08.01.15.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QmFT5oX5WhVCf23K5lxag7wmD3+cmFNslYfO7qqS0x8=;
+        b=59j+BWf8nKAA5nBVw7BVJfOsoQ8KReXzNpmkVYIRIzC+BBBhMVka9ARi89+z/2gxXl
+         xHi07G6XhT2jvPtn8dxwV9VCdh2fJkxVMPvKuevJm0LAYM+y07Fs8leXPCumtpZjih0i
+         Z38qlnHIqMOwkDk04tgeR76ee2r2q6RfV4dBwmfJCAuVruZXyUszvbupZW+WrLFnfw5q
+         zfh3Htdm9PgUGkbC+t1Jg0PBQX1jr8Mz3oG34LqKX4rUKLIOoziU0hf+mbhkWgPqVdGZ
+         JtwQT0JONS2CvP57z1/fv6AIOaq8UYrj70+O52EPvaokNS6Ay4exaBShRM1nDyE3FWvS
+         Qh/Q==
+X-Gm-Message-State: AOAM531yPOw6Mec1WQJemBB32ebdeDGtwh/JpVYMcaK2ayn9MrZ+iiG0
+        cG9IguZUjGptjuLiSEKpFDWi7MdFxoE=
+X-Google-Smtp-Source: ABdhPJxfpMw9rImA2Ik5e7BO7RxSWcCdqoCiOk0uGbtELOW0XSZkacMxARR5CzcafSh1EaJcCfPZNQ==
+X-Received: by 2002:a05:622a:13c6:b0:2de:8901:e3dd with SMTP id p6-20020a05622a13c600b002de8901e3ddmr12911101qtk.16.1646731024127;
+        Tue, 08 Mar 2022 01:17:04 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id c6-20020ac87d86000000b002ddd9f33ed1sm10976726qtd.44.2022.03.08.01.17.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 01:15:29 -0800 (PST)
-Date:   Tue, 8 Mar 2022 09:15:27 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     mst@redhat.com, jasowang@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
- whilst still in use
-Message-ID: <Yicer3yGg5rrdSIs@google.com>
-References: <20220307191757.3177139-1-lee.jones@linaro.org>
- <YiZeB7l49KC2Y5Gz@kroah.com>
- <YicPXnNFHpoJHcUN@google.com>
- <Yicalf1I6oBytbse@kroah.com>
+        Tue, 08 Mar 2022 01:17:03 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     joonas.lahtinen@linux.intel.com
+Cc:     rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, ville.syrjala@linux.intel.com,
+        hdegoede@redhat.com, lucas.demarchi@intel.com,
+        deng.changcheng@zte.com.cn, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/i915/vlv_dsi_pll: use min_t() to make code cleaner
+Date:   Tue,  8 Mar 2022 09:16:55 +0000
+Message-Id: <20220308091655.2078825-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yicalf1I6oBytbse@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Mar 2022, Greg KH wrote:
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-> On Tue, Mar 08, 2022 at 08:10:06AM +0000, Lee Jones wrote:
-> > On Mon, 07 Mar 2022, Greg KH wrote:
-> > 
-> > > On Mon, Mar 07, 2022 at 07:17:57PM +0000, Lee Jones wrote:
-> > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
-> > > > to vhost_get_vq_desc().  All we have to do here is take the same lock
-> > > > during virtqueue clean-up and we mitigate the reported issues.
-> > > > 
-> > > > Also WARN() as a precautionary measure.  The purpose of this is to
-> > > > capture possible future race conditions which may pop up over time.
-> > > > 
-> > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
-> > > > 
-> > > > Cc: <stable@vger.kernel.org>
-> > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-> > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > > ---
-> > > >  drivers/vhost/vhost.c | 10 ++++++++++
-> > > >  1 file changed, 10 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > > index 59edb5a1ffe28..ef7e371e3e649 100644
-> > > > --- a/drivers/vhost/vhost.c
-> > > > +++ b/drivers/vhost/vhost.c
-> > > > @@ -693,6 +693,15 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > >  	int i;
-> > > >  
-> > > >  	for (i = 0; i < dev->nvqs; ++i) {
-> > > > +		/* No workers should run here by design. However, races have
-> > > > +		 * previously occurred where drivers have been unable to flush
-> > > > +		 * all work properly prior to clean-up.  Without a successful
-> > > > +		 * flush the guest will malfunction, but avoiding host memory
-> > > > +		 * corruption in those cases does seem preferable.
-> > > > +		 */
-> > > > +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
-> > > 
-> > > So you are trading one syzbot triggered issue for another one in the
-> > > future?  :)
-> > > 
-> > > If this ever can happen, handle it, but don't log it with a WARN_ON() as
-> > > that will trigger the panic-on-warn boxes, as well as syzbot.  Unless
-> > > you want that to happen?
-> > 
-> > No, Syzbot doesn't report warnings, only BUGs and memory corruption.
-> 
-> Has it changed?  Last I looked, it did trigger on WARN_* calls, which
-> has resulted in a huge number of kernel fixes because of that.
+Use min_t() in order to make code cleaner.
 
-Everything is customisable in syzkaller, so maybe there are specific
-builds which panic_on_warn enabled, but none that I'm involved with
-do.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ drivers/gpu/drm/i915/display/vlv_dsi_pll.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Here follows a topical example.  The report above in the Link: tag
-comes with a crashlog [0].  In there you can see the WARN() at the
-bottom of vhost_dev_cleanup() trigger many times due to a populated
-(non-flushed) worker list, before finally tripping the BUG() which
-triggers the report:
-
-[0] https://syzkaller.appspot.com/text?tag=CrashLog&x=16a61fce700000
-
-> > > And what happens if the mutex is locked _RIGHT_ after you checked it?
-> > > You still have a race...
-> > 
-> > No, we miss a warning that one time.  Memory is still protected.
-> 
-> Then don't warn on something that doesn't matter.  This line can be
-> dropped as there's nothing anyone can do about it, right?
-
-You'll have to take that point up with Michael.
-
+diff --git a/drivers/gpu/drm/i915/display/vlv_dsi_pll.c b/drivers/gpu/drm/i915/display/vlv_dsi_pll.c
+index df880f44700a..f801f7ec3f9a 100644
+--- a/drivers/gpu/drm/i915/display/vlv_dsi_pll.c
++++ b/drivers/gpu/drm/i915/display/vlv_dsi_pll.c
+@@ -393,10 +393,7 @@ static void glk_dsi_program_esc_clock(struct drm_device *dev,
+ 	/* Calculate TXESC2 divider */
+ 	div2_value = DIV_ROUND_UP(div1_value, txesc1_div);
+ 
+-	if (div2_value < 10)
+-		txesc2_div = div2_value;
+-	else
+-		txesc2_div = 10;
++	txesc2_div = min_t(u32, div2_value, 10);
+ 
+ 	intel_de_write(dev_priv, MIPIO_TXESC_CLK_DIV1,
+ 		       (1 << (txesc1_div - 1)) & GLK_TX_ESC_CLK_DIV1_MASK);
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+

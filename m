@@ -2,236 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106F14D194A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291924D194F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347159AbiCHNhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
+        id S238150AbiCHNiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347141AbiCHNhc (ORCPT
+        with ESMTP id S1347143AbiCHNiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:37:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF6CF496A6;
-        Tue,  8 Mar 2022 05:36:34 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83721139F;
-        Tue,  8 Mar 2022 05:36:34 -0800 (PST)
-Received: from [10.57.22.11] (unknown [10.57.22.11])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 62C083FA58;
-        Tue,  8 Mar 2022 05:36:32 -0800 (PST)
-Message-ID: <ea6219df-0a10-8e8d-4848-a28704a9f98e@arm.com>
-Date:   Tue, 8 Mar 2022 13:36:30 +0000
+        Tue, 8 Mar 2022 08:38:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBCC496A0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:37:11 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nRa1M-0003X7-0g; Tue, 08 Mar 2022 14:37:00 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nRa1K-004c0E-QE; Tue, 08 Mar 2022 14:36:58 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 1/1] net: dsa: microchip: ksz9477: implement MTU configuration
+Date:   Tue,  8 Mar 2022 14:36:57 +0100
+Message-Id: <20220308133657.1099344-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v2] coresight: core: Fix coresight device probe failure
- issue
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>
-References: <20220304082350.30069-1-quic_jinlmao@quicinc.com>
- <c77c93bb-f863-47c8-0ba0-3fc63530a9e1@arm.com>
-In-Reply-To: <c77c93bb-f863-47c8-0ba0-3fc63530a9e1@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 11:56, Suzuki K Poulose wrote:
-> Hi Jinlong
-> 
-> On 04/03/2022 08:23, Mao Jinlong wrote:
->> It is possibe that probe failure issue happens when the device
->> and its child_device's probe happens at the same time.
->> In coresight_make_links, has_conns_grp is true for parent, but
->> has_conns_grp is false for child device as has_conns_grp is set
->> to true in coresight_create_conns_sysfs_group. The probe of parent
->> device will fail at this condition. Add has_conns_grp check for
->> child device before make the links and make the process from
->> device_register to connection_create be atomic to avoid this
->> probe failure issue.
->>
->> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
->> Suggested-by: Mike Leach <mike.leach@linaro.org>
->> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->> ---
->>   drivers/hwtracing/coresight/coresight-core.c | 12 ++++++------
->>   1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
->> b/drivers/hwtracing/coresight/coresight-core.c
->> index 88653d1c06a4..b3e3bc59c09b 100644
->> --- a/drivers/hwtracing/coresight/coresight-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-core.c
->> @@ -1382,7 +1382,7 @@ static int coresight_fixup_device_conns(struct 
->> coresight_device *csdev)
->>               continue;
->>           conn->child_dev =
->>               coresight_find_csdev_by_fwnode(conn->child_fwnode);
->> -        if (conn->child_dev) {
->> +        if (conn->child_dev && conn->child_dev->has_conns_grp) {
->>               ret = coresight_make_links(csdev, conn,
->>                              conn->child_dev);
->>               if (ret)
->> @@ -1594,7 +1594,8 @@ struct coresight_device 
->> *coresight_register(struct coresight_desc *desc)
->>       refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
->>       if (!refcnts) {
->>           ret = -ENOMEM;
->> -        goto err_free_csdev;
->> +        kfree(csdev);
->> +        goto err_out;
->>       }
->>       csdev->refcnt = refcnts;
->> @@ -1619,8 +1620,10 @@ struct coresight_device 
->> *coresight_register(struct coresight_desc *desc)
->>       csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
->>       dev_set_name(&csdev->dev, "%s", desc->name);
->> +    mutex_lock(&coresight_mutex);
->>       ret = device_register(&csdev->dev);
->>       if (ret) {
->> +        mutex_unlock(&coresight_mutex);
->>           put_device(&csdev->dev);
->>           /*
->>            * All resources are free'd explicitly via
->> @@ -1634,6 +1637,7 @@ struct coresight_device 
->> *coresight_register(struct coresight_desc *desc)
->>           ret = etm_perf_add_symlink_sink(csdev);
->>           if (ret) {
->> +            mutex_unlock(&coresight_mutex);
->>               device_unregister(&csdev->dev);
->>               /*
->>                * As with the above, all resources are free'd
->> @@ -1645,8 +1649,6 @@ struct coresight_device 
->> *coresight_register(struct coresight_desc *desc)
->>           }
->>       }
->> -    mutex_lock(&coresight_mutex);
->> -
->>       ret = coresight_create_conns_sysfs_group(csdev);
->>       if (!ret)
->>           ret = coresight_fixup_device_conns(csdev);
->> @@ -1663,8 +1665,6 @@ struct coresight_device 
->> *coresight_register(struct coresight_desc *desc)
->>       return csdev;
->> -err_free_csdev:
->> -    kfree(csdev);
->>   err_out:
->>       /* Cleanup the connection information */
->>       coresight_release_platform_data(NULL, desc->pdata);
-> 
-> Could we consolidate the unlock sequence to a single point with 
-> something like this (untested):
-> 
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
-> b/drivers/hwtracing/coresight/coresight-core.c
-> index af00dca8d1ac..198ee140c6e6 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -1571,6 +1571,7 @@ struct coresight_device *coresight_register(struct 
-> coresight_desc *desc)
->       int nr_refcnts = 1;
->       atomic_t *refcnts = NULL;
->       struct coresight_device *csdev;
-> +    bool registered = false;
-> 
->       csdev = kzalloc(sizeof(*csdev), GFP_KERNEL);
->       if (!csdev) {
-> @@ -1591,7 +1592,8 @@ struct coresight_device *coresight_register(struct 
-> coresight_desc *desc)
->       refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
->       if (!refcnts) {
->           ret = -ENOMEM;
-> -        goto err_free_csdev;
-> +        kfree(csdev);
-> +        goto err_out;
->       }
-> 
->       csdev->refcnt = refcnts;
-> @@ -1616,6 +1618,13 @@ struct coresight_device 
-> *coresight_register(struct coresight_desc *desc)
->       csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
->       dev_set_name(&csdev->dev, "%s", desc->name);
-> 
-> +    /*
-> +     * Make sure the device registration and the connection fixup
-> +     * are synchronised, so that we don't see uninitialised devices
-> +     * on the coresight bus while trying to resolve the connections.
-> +     */
-> +    mutex_lock(&coresight_mutex);
-> +
->       ret = device_register(&csdev->dev);
->       if (ret) {
->           put_device(&csdev->dev);
-> @@ -1623,7 +1632,7 @@ struct coresight_device *coresight_register(struct 
-> coresight_desc *desc)
->            * All resources are free'd explicitly via
->            * coresight_device_release(), triggered from put_device().
->            */
-> -        goto err_out;
-> +        goto out_unlock;
->       }
-> 
->       if (csdev->type == CORESIGHT_DEV_TYPE_SINK ||
-> @@ -1638,11 +1647,11 @@ struct coresight_device 
-> *coresight_register(struct coresight_desc *desc)
->                * from put_device(), which is in turn called from
->                * function device_unregister().
->                */
-> -            goto err_out;
-> +            goto out_unlock;
->           }
->       }
-> -
-> -    mutex_lock(&coresight_mutex);
-> +    /* Device is now registered */
-> +    registered = true;
-> 
->       ret = coresight_create_conns_sysfs_group(csdev);
->       if (!ret)
-> @@ -1652,16 +1661,15 @@ struct coresight_device 
-> *coresight_register(struct coresight_desc *desc)
->       if (!ret && cti_assoc_ops && cti_assoc_ops->add)
->           cti_assoc_ops->add(csdev);
-> 
-> +out_unlock:
->       mutex_unlock(&coresight_mutex);
-> -    if (ret) {
-> +    /* Success */
-> +    if (!ret)
-> +        return csdev;
-> +
-> +    /* Unregister the device if needed */
-> +    if (registered)
->           coresight_unregister(csdev);
-> -        return ERR_PTR(ret);
-> -    }
+This chips supports two ways to configure max MTU size:
+- by setting SW_LEGAL_PACKET_DISABLE bit: if this bit is 0 allowed packed size
+  will be between 64 and bytes 1518. If this bit is 1, it will accept
+  packets up to 2000 bytes.
+- by setting SW_JUMBO_PACKET bit. If this bit is set, the chip will
+  ignore SW_LEGAL_PACKET_DISABLE value and use REG_SW_MTU__2 register to
+  configure MTU size.
 
-Apologies, this should be preserved :
+Current driver has disabled SW_JUMBO_PACKET bit and activates
+SW_LEGAL_PACKET_DISABLE. So the switch will pass all packets up to 2000 without
+any way to configure it.
 
-i.e,
-	if (registered) {
-		coresight_unregister(csdev);
-		return ERR_PTR(ret);
-	}
+By providing port_change_mtu we are switch to SW_JUMBO_PACKET way and will
+be able to configure MTU up to ~9000.
 
-Thanks
-Suzuki
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+changes v4:
+- fix MTU for VLAN
+changes v3:
+- do more testing and fix mtu configuration
+changes v2:
+- rename max_mtu to max_frame and new_mtu to frame_size
+- use max() instead of if(>)
+---
+ drivers/net/dsa/microchip/ksz9477.c     | 36 +++++++++++++++++++++++--
+ drivers/net/dsa/microchip/ksz9477_reg.h |  3 +++
+ drivers/net/dsa/microchip/ksz_common.h  |  1 +
+ 3 files changed, 38 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index 94ad6d9504f4..f9e4d5a98f8c 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -11,6 +11,7 @@
+ #include <linux/platform_data/microchip-ksz.h>
+ #include <linux/phy.h>
+ #include <linux/if_bridge.h>
++#include <linux/if_vlan.h>
+ #include <net/dsa.h>
+ #include <net/switchdev.h>
+ 
+@@ -182,6 +183,29 @@ static void ksz9477_port_cfg32(struct ksz_device *dev, int port, int offset,
+ 			   bits, set ? bits : 0);
+ }
+ 
++static int ksz9477_change_mtu(struct dsa_switch *ds, int port, int mtu)
++{
++	struct ksz_device *dev = ds->priv;
++	u16 frame_size, max_frame = 0;
++	int i;
++
++	frame_size = mtu + ETH_HLEN + VLAN_HLEN + ETH_FCS_LEN;
++
++	/* Cache the per-port MTU setting */
++	dev->ports[port].max_frame = frame_size;
++
++	for (i = 0; i < dev->port_cnt; i++)
++		max_frame = max(max_frame, dev->ports[i].max_frame);
++
++	return regmap_update_bits(dev->regmap[1], REG_SW_MTU__2,
++				  REG_SW_MTU_MASK, max_frame);
++}
++
++static int ksz9477_max_mtu(struct dsa_switch *ds, int port)
++{
++	return KSZ9477_MAX_FRAME_SIZE - ETH_HLEN - VLAN_HLEN - ETH_FCS_LEN;
++}
++
+ static int ksz9477_wait_vlan_ctrl_ready(struct ksz_device *dev)
+ {
+ 	unsigned int val;
+@@ -1416,8 +1440,14 @@ static int ksz9477_setup(struct dsa_switch *ds)
+ 	/* Do not work correctly with tail tagging. */
+ 	ksz_cfg(dev, REG_SW_MAC_CTRL_0, SW_CHECK_LENGTH, false);
+ 
+-	/* accept packet up to 2000bytes */
+-	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_LEGAL_PACKET_DISABLE, true);
++	/* Enable REG_SW_MTU__2 reg by setting SW_JUMBO_PACKET */
++	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_JUMBO_PACKET, true);
++
++	/* Now we can configure default MTU value */
++	ret = regmap_update_bits(dev->regmap[1], REG_SW_MTU__2, REG_SW_MTU_MASK,
++				 VLAN_ETH_FRAME_LEN + ETH_FCS_LEN);
++	if (ret)
++		return ret;
+ 
+ 	ksz9477_config_cpu_port(ds);
+ 
+@@ -1464,6 +1494,8 @@ static const struct dsa_switch_ops ksz9477_switch_ops = {
+ 	.port_mirror_add	= ksz9477_port_mirror_add,
+ 	.port_mirror_del	= ksz9477_port_mirror_del,
+ 	.get_stats64		= ksz9477_get_stats64,
++	.port_change_mtu	= ksz9477_change_mtu,
++	.port_max_mtu		= ksz9477_max_mtu,
+ };
+ 
+ static u32 ksz9477_get_port_addr(int port, int offset)
+diff --git a/drivers/net/dsa/microchip/ksz9477_reg.h b/drivers/net/dsa/microchip/ksz9477_reg.h
+index 16939f29faa5..0bd58467181f 100644
+--- a/drivers/net/dsa/microchip/ksz9477_reg.h
++++ b/drivers/net/dsa/microchip/ksz9477_reg.h
+@@ -176,6 +176,7 @@
+ #define REG_SW_MAC_ADDR_5		0x0307
+ 
+ #define REG_SW_MTU__2			0x0308
++#define REG_SW_MTU_MASK			GENMASK(13, 0)
+ 
+ #define REG_SW_ISP_TPID__2		0x030A
+ 
+@@ -1662,4 +1663,6 @@
+ /* 148,800 frames * 67 ms / 100 */
+ #define BROADCAST_STORM_VALUE		9969
+ 
++#define KSZ9477_MAX_FRAME_SIZE		9000
++
+ #endif /* KSZ9477_REGS_H */
+diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+index 4ff0a159ce3c..fa39ee73cbd2 100644
+--- a/drivers/net/dsa/microchip/ksz_common.h
++++ b/drivers/net/dsa/microchip/ksz_common.h
+@@ -41,6 +41,7 @@ struct ksz_port {
+ 
+ 	struct ksz_port_mib mib;
+ 	phy_interface_t interface;
++	u16 max_frame;
+ };
+ 
+ struct ksz_device {
+-- 
+2.30.2
+

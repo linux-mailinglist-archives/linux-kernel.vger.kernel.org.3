@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1E44D1C73
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF724D1C8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348202AbiCHP4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:56:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
+        id S1348432AbiCHP6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348035AbiCHP4D (ORCPT
+        with ESMTP id S1348062AbiCHP4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:56:03 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FB04F9CB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:05 -0800 (PST)
+        Tue, 8 Mar 2022 10:56:08 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAF34F9E0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=fi2mYqVok9UIH1rjKmE/J2SISTNpvPn2VkBxzhXYZBE=; b=UA/AvmdQsmA4lieuJe4gdJUWk6
-        xU80Kfuy5GsRZPYfIm6hRa65Q6GoTVK3h5GxrkJcAP3v3MMJuNZsd9DCRTFsfVS8r4XbPEdDvTSEK
-        wv1mG3xtQ3xDgRWKq6aYZ4rYouXFmXMRaekFHFfflwJzQ6+4czSmHo8iR7ALoYjhERqqbQLf4gKfn
-        jC5wvwPlScLLM0X73DWJiGAe6ajkqjpgwPzL1ij/RbSHixrrZbIbxHK5xoVoz1a/B5z05RrBuxo+r
-        HaoiyYOsIlr6r/5FW3CobBi9CIDGEPlci6A1r7wd8nwj8B8kHwzkCIzZCWpoLKNC2Rk6In9z2WSqY
-        xxiaIVJQ==;
+        bh=uY+jcOMFirwczJeMx5tMsqeYilw19841F6sj97KYysQ=; b=lyapG0Pa0xWATfvmzg4G9EXwD+
+        4fh5LukSK11kqmUs4dSnLuVURX4iepaaT1FIa+02msh7iS96xayjvn1pVNPHtv+7Jv8uu7oQc6DMy
+        4w1HtQ02VeYDa5jPBP+aH4f4TtvxDmSRBAhNfqAarhffQ3EtJkEG+T0kkRWjI7d7/83e5QMrrxTFn
+        +5EKB6bIaU8QAbL0DuFbxvPjxmFTFSMKAFFSukbWGqZG3KEvDXZA1y5CJ3sR87rUVvpkI+g73PGu7
+        mPzuC+nsHr9XkkeQbRjfhRrbvrH//XEWw4jEvaP/p27RgZ1vNXrWvLDnK7Hy0XbDoKs3Im88jBjj0
+        yi6oM7+A==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAd-00GIvS-DL; Tue, 08 Mar 2022 15:54:43 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRcAd-00GUik-E2; Tue, 08 Mar 2022 15:54:43 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5143A302DDA;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 51426302DD9;
         Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id DCA122B5649D8; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
-Message-ID: <20220308154319.468805622@infradead.org>
+        id E3BCF2B5649DA; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
+Message-ID: <20220308154319.528181453@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:50 +0100
+Date:   Tue, 08 Mar 2022 16:30:51 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -46,8 +46,9 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         ndesaulniers@google.com, keescook@chromium.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v4 39/45] x86: Annotate call_on_stack()
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v4 40/45] Kbuild: Allow whole module objtool runs
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,51 +62,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmlinux.o: warning: objtool: page_fault_oops()+0x13c: unreachable instruction
+Just like we have vmlinux.o objtool runs, add the ability to do whole
+module objtool runs.
 
-0000 000000000005b460 <page_fault_oops>:
-...
-0128    5b588:  49 89 23                mov    %rsp,(%r11)
-012b    5b58b:  4c 89 dc                mov    %r11,%rsp
-012e    5b58e:  4c 89 f2                mov    %r14,%rdx
-0131    5b591:  48 89 ee                mov    %rbp,%rsi
-0134    5b594:  4c 89 e7                mov    %r12,%rdi
-0137    5b597:  e8 00 00 00 00          call   5b59c <page_fault_oops+0x13c>    5b598: R_X86_64_PLT32   handle_stack_overflow-0x4
-013c    5b59c:  5c                      pop    %rsp
-
-vmlinux.o: warning: objtool: sysvec_reboot()+0x6d: unreachable instruction
-
-0000 00000000000033f0 <sysvec_reboot>:
-...
-005d     344d:  4c 89 dc                mov    %r11,%rsp
-0060     3450:  e8 00 00 00 00          call   3455 <sysvec_reboot+0x65>        3451: R_X86_64_PLT32    irq_enter_rcu-0x4
-0065     3455:  48 89 ef                mov    %rbp,%rdi
-0068     3458:  e8 00 00 00 00          call   345d <sysvec_reboot+0x6d>        3459: R_X86_64_PC32     .text+0x47d0c
-006d     345d:  e8 00 00 00 00          call   3462 <sysvec_reboot+0x72>        345e: R_X86_64_PLT32    irq_exit_rcu-0x4
-0072     3462:  5c                      pop    %rsp
-
-Both cases are due to a call_on_stack() calling a __noreturn function.
-Since that's an inline asm, GCC can't do anything about the
-instructions after the CALL. Therefore put in an explicit
-ASM_REACHABLE annotation to make sure objtool and gcc are consistently
-confused about control flow.
-
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/irq_stack.h |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ scripts/Makefile.build    |   44 ++------------------------------------------
+ scripts/Makefile.lib      |   45 +++++++++++++++++++++++++++++++++++++++++++++
+ scripts/Makefile.modfinal |    1 +
+ 3 files changed, 48 insertions(+), 42 deletions(-)
 
---- a/arch/x86/include/asm/irq_stack.h
-+++ b/arch/x86/include/asm/irq_stack.h
-@@ -99,7 +99,8 @@
- }
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -223,41 +223,6 @@ cmd_record_mcount = $(if $(findstring $(
+ 	$(sub_cmd_record_mcount))
+ endif # CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
  
- #define ASM_CALL_ARG0							\
--	"call %P[__func]				\n"
-+	"call %P[__func]				\n"		\
-+	ASM_REACHABLE
+-ifdef CONFIG_STACK_VALIDATION
+-
+-objtool := $(objtree)/tools/objtool/objtool
+-
+-objtool_args =								\
+-	$(if $(CONFIG_UNWINDER_ORC),orc generate,check)			\
+-	$(if $(part-of-module), --module)				\
+-	$(if $(CONFIG_FRAME_POINTER),, --no-fp)				\
+-	$(if $(CONFIG_GCOV_KERNEL)$(CONFIG_LTO_CLANG), --no-unreachable)\
+-	$(if $(CONFIG_RETPOLINE), --retpoline)				\
+-	$(if $(CONFIG_X86_SMAP), --uaccess)				\
+-	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+-	$(if $(CONFIG_SLS), --sls)
+-
+-cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+-cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+-
+-endif # CONFIG_STACK_VALIDATION
+-
+-ifdef CONFIG_LTO_CLANG
+-
+-# Skip objtool for LLVM bitcode
+-$(obj)/%.o: objtool-enabled :=
+-
+-else
+-
+-# 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
+-# 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
+-# 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
+-
+-$(obj)/%.o: objtool-enabled = $(if $(filter-out y%, \
+-	$(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
+-
+-endif
+-
+ ifdef CONFIG_TRIM_UNUSED_KSYMS
+ cmd_gen_ksymdeps = \
+ 	$(CONFIG_SHELL) $(srctree)/scripts/gen_ksymdeps.sh $@ >> $(dot-target).cmd
+@@ -292,21 +257,16 @@ ifdef CONFIG_LTO_CLANG
+ # Module .o files may contain LLVM bitcode, compile them into native code
+ # before ELF processing
+ quiet_cmd_cc_lto_link_modules = LTO [M] $@
+-cmd_cc_lto_link_modules =						\
++      cmd_cc_lto_link_modules =						\
+ 	$(LD) $(ld_flags) -r -o $@					\
+ 		$(shell [ -s $(@:.lto.o=.o.symversions) ] &&		\
+ 			echo -T $(@:.lto.o=.o.symversions))		\
+ 		--whole-archive $(filter-out FORCE,$^)			\
+ 		$(cmd_objtool)
+-
+-# objtool was skipped for LLVM bitcode, run it now that we have compiled
+-# modules into native code
+-$(obj)/%.lto.o: objtool-enabled = y
+-$(obj)/%.lto.o: part-of-module := y
++endif
  
- #define ASM_CALL_ARG1							\
- 	"movq	%[arg1], %%rdi				\n"		\
+ $(obj)/%.lto.o: $(obj)/%.o FORCE
+ 	$(call if_changed,cc_lto_link_modules)
+-endif
+ 
+ cmd_mod = { \
+ 	echo $(if $($*-objs)$($*-y)$($*-m), $(addprefix $(obj)/, $($*-objs) $($*-y) $($*-m)), $(@:.mod=.o)); \
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -533,3 +533,48 @@ define filechk_offsets
+ 	 echo ""; \
+ 	 echo "#endif"
+ endef
++
++# objtool
++# ---------------------------------------------------------------------------
++
++ifdef CONFIG_STACK_VALIDATION
++
++objtool := $(objtree)/tools/objtool/objtool
++
++objtool_args =								\
++	$(if $(CONFIG_UNWINDER_ORC),orc generate,check)			\
++	$(if $(part-of-module), --module)				\
++	$(if $(CONFIG_FRAME_POINTER),, --no-fp)				\
++	$(if $(CONFIG_GCOV_KERNEL)$(CONFIG_LTO_CLANG), --no-unreachable)\
++	$(if $(CONFIG_RETPOLINE), --retpoline)				\
++	$(if $(CONFIG_X86_SMAP), --uaccess)				\
++	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
++	$(if $(CONFIG_SLS), --sls)
++
++cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
++cmd_objtool_mod = $(if $(objtool-enabled), $(objtool) $(objtool_args) $(@:.ko=.o) ; )
++cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
++
++endif # CONFIG_STACK_VALIDATION
++
++ifdef CONFIG_LTO_CLANG
++
++# Skip objtool for LLVM bitcode
++$(obj)/%.o: objtool-enabled :=
++
++# objtool was skipped for LLVM bitcode, run it now that we have compiled
++# modules into native code
++$(obj)/%.lto.o: objtool-enabled = y
++$(obj)/%.lto.o: part-of-module := y
++
++else
++
++# 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
++# 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
++# 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
++
++$(obj)/%.o: objtool-enabled = $(if $(filter-out y%, \
++	$(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
++
++endif
++
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -32,6 +32,7 @@ ARCH_POSTLINK := $(wildcard $(srctree)/a
+ 
+ quiet_cmd_ld_ko_o = LD [M]  $@
+       cmd_ld_ko_o +=							\
++	$(cmd_objtool_mod)						\
+ 	$(LD) -r $(KBUILD_LDFLAGS)					\
+ 		$(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)		\
+ 		-T scripts/module.lds -o $@ $(filter %.o, $^);		\
 
 

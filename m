@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F494D1FE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE1D4D1FED
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349162AbiCHSSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S1349462AbiCHSTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbiCHSSd (ORCPT
+        with ESMTP id S234608AbiCHSTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:18:33 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8603F6460
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:17:35 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so2912571pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:17:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cI7zgl192Zgl3FFh3U4mmGv/6PXl3YZNSM+T7Oyiol8=;
-        b=Pv+w0OPdgjrA6X05d91ctImuGJjqz6cgOVsS+StY2xCxBllaQ1oKJPpCgl07DTCfim
-         Qj4WFtlGsAAVKez+oNnuYOqWXssbmZb2FpVgOw1Cqu91SrXN+imKKs74YVJDNYV9qrND
-         xPHdeHZfDMLpcHtpdlcvXXoYhwFNAu/8H2Hol8X6YsOGHcbZj1qtYGjU9suZQGFkJFqV
-         yAZXLDesfbeIc1afkcghHlcou2HFoasrcMAIxPrQrs2q1YY5JCGhKN0RHI/ZEjvZPJJd
-         IZQ/63nh2SluOZKNn4E4qMWN91ioO6WYa/c3Vmr9avBgws1nNe4qAqHs4kmp8CAXQGgu
-         z/Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cI7zgl192Zgl3FFh3U4mmGv/6PXl3YZNSM+T7Oyiol8=;
-        b=i6jnRahEeAKZGaIKaQ7rGbrFRQHnIk1p8XdslBOrNpcTBPe9WifGV2eP5CRFYeINBw
-         B46E67y+bCTlbxiTa1AF9egHnA6mEsdXzGo1X7aOTLbxFCMm+hgdcOM4Q9ZRcNGiCfx0
-         lSSTebgyJC967GN4+S3QKqbQtgIUMEQjUvmq5/K34vIvQH0Xrn1vHUnJKmbT1yGEslLz
-         qarZQWUTml9Y4jv6Jc0YcIIH6Kg4Q7C11Gf69j92Vd0qmJHnlTrHEPLqupbeyUEdwxTZ
-         IDgkk9U2XufDjC2dYl0PAO8G1/QxspY8Vyl3fg2KPpQAmHhZoWkAkH16AFIHVNDyRzt6
-         3OaQ==
-X-Gm-Message-State: AOAM531G798uTNpsl1s1B3PD/wDAzquLPFykisgKWNJVIEDOEe8e7uvG
-        1kI3XFblHYE/kIvXorhA2ILkhQ==
-X-Google-Smtp-Source: ABdhPJz+wgCSAnSzicl3Luf93x8udYKc3NWJOTwE6AbtuwPSPxPWWSntgtXDPstaNRnyUE+WgFBQpQ==
-X-Received: by 2002:a17:903:3094:b0:151:f5a7:ad72 with SMTP id u20-20020a170903309400b00151f5a7ad72mr8136332plc.135.1646763454896;
-        Tue, 08 Mar 2022 10:17:34 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k23-20020aa790d7000000b004f6c8b7c13bsm14825043pfk.132.2022.03.08.10.17.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 10:17:34 -0800 (PST)
-Date:   Tue, 8 Mar 2022 18:17:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-Subject: Re: [PATCH v2 11/25] KVM: x86/mmu: remove
- kvm_calc_shadow_root_page_role_common
-Message-ID: <Yiedukl6MC8OAAog@google.com>
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-12-pbonzini@redhat.com>
- <YieW+PZarPdsSnO7@google.com>
- <f9e7903a-72b6-5bd7-4795-6c568b98f09d@redhat.com>
+        Tue, 8 Mar 2022 13:19:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2A02EF;
+        Tue,  8 Mar 2022 10:18:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 794236157C;
+        Tue,  8 Mar 2022 18:18:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E7CBC340EB;
+        Tue,  8 Mar 2022 18:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646763500;
+        bh=hfliW31AVRSU5p6jjAxSw1HcKyAHEKOmAwFZjydld00=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BhEHsqr3EDTXwEIBwWtIIb/LdCdEwCx9P3HaPD+EkCBnAmRPkzSpaFvJGs84nFuZW
+         f4reBJEEPm8T4qO7GUn1rTm5pX0t1NW/dZPlVc4s4BZHn8gYAfkLT43xAJSm7fDVaL
+         tVFk4gqmjoMOZwpdDdHb/dSIwlSYXMmemtDirUm4gJaeFnjhgT0aQKSPNcdcvWMF0I
+         UzCgdZoI/5/224f43RrsVcOPRbzBPan/peHqSnTCCm/qzMaaVh2fN3rHX+ucCV4Bcb
+         rBZbbrcmq6IhOaD8B8F8ciFQJlJ8Yb6guJixW21bJJCSCE9uuIewLYPPuAEGCXk9hY
+         aUySQg3RkP+0A==
+Message-ID: <66463e26-8564-9f58-ce41-9a2843891d1a@kernel.org>
+Date:   Tue, 8 Mar 2022 11:18:18 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9e7903a-72b6-5bd7-4795-6c568b98f09d@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.2
+Subject: Re: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
+Content-Language: en-US
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
+        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
+References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
+ <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com>
+ <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,27 +74,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022, Paolo Bonzini wrote:
-> On 3/8/22 18:48, Sean Christopherson wrote:
-> > On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> > > kvm_calc_shadow_root_page_role_common is the same as
-> > > kvm_calc_cpu_mode except for the level, which is overwritten
-> > > afterwards in kvm_calc_shadow_mmu_root_page_role
-> > > and kvm_calc_shadow_npt_root_page_role.
-> > > 
-> > > role.base.direct is already set correctly for the CPU mode,
-> > > and CR0.PG=1 is required for VMRUN so it will also be
-> > > correct for nested NPT.
-> > 
-> > Bzzzt, this is wrong, the nested NPT MMU is indirect but will be computed as direct.
+On 3/8/22 8:43 AM, Tadeusz Struk wrote:
+> Hi David,
+> On 3/7/22 18:58, David Laight wrote:
+>>> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+>>> index 4788f6b37053..622345af323e 100644
+>>> --- a/net/ipv6/ip6_output.c
+>>> +++ b/net/ipv6/ip6_output.c
+>>> @@ -1629,6 +1629,13 @@ static int __ip6_append_data(struct sock *sk,
+>>>                   err = -EINVAL;
+>>>                   goto error;
+>>>               }
+>>> +            if (unlikely(alloclen < fraglen)) {
+>>> +                if (printk_ratelimit())
+>>> +                    pr_warn("%s: wrong alloclen: %d, fraglen: %d",
+>>> +                        __func__, alloclen, fraglen);
+>>> +                alloclen = fraglen;
+>>> +            }
+>>> +
+>> Except that is a valid case, see a few lines higher:
+>>
+>>                 alloclen = min_t(int, fraglen, MAX_HEADER);
+>>                 pagedlen = fraglen - alloclen;
+>>
+>> You need to report the input values that cause the problem later on.
 > 
-> CR0.PG=1 means it's *not* direct:
+> OK, but in this case it falls into the first if block:
+> https://elixir.bootlin.com/linux/v5.17-rc7/source/net/ipv6/ip6_output.c#L1606
 > 
-> > +	role.base.direct = !____is_cr0_pg(regs);
+> where alloclen is assigned the value of mtu.
+> The values in this case are just before the alloc_skb() are:
+> 
+> alloclen = 1480
+> alloc_extra = 136
+> datalen = 64095
+> fragheaderlen = 1480
+> fraglen = 65575
+> transhdrlen = 0
+> mtu = 1480
+> 
 
-Ha!  I was just cleverly making the case for checking ____is_cr0_pg() instead of
-"direct" for computing the dependent flags, I swear...
+Does this solve the problem (whitespace damaged on paste, but it is just
+a code move and removing fraglen getting set twice):
 
-On a serious note, can we add a WARN_ON_ONCE(role.base.direct)?  Not so much that
-the WARN will be helpful, but to document the subtle dependency?  If the relevant
-code goes away in the end, ignore this requrest.
+diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+index e69fac576970..59f036241f1b 100644
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -1589,6 +1589,15 @@ static int __ip6_append_data(struct sock *sk,
+
+                        if (datalen > (cork->length <= mtu &&
+!(cork->flags & IPCORK_ALLFRAG) ? mtu : maxfraglen) - fragheaderlen)
+                                datalen = maxfraglen - fragheaderlen -
+rt->dst.trailer_len;
++
++                       if (datalen != length + fraggap) {
++                               /*
++                                * this is not the last fragment, the
+trailer
++                                * space is regarded as data space.
++                                */
++                               datalen += rt->dst.trailer_len;
++                       }
++
+                        fraglen = datalen + fragheaderlen;
+                        pagedlen = 0;
+
+@@ -1615,16 +1624,6 @@ static int __ip6_append_data(struct sock *sk,
+                        }
+                        alloclen += alloc_extra;
+
+-                       if (datalen != length + fraggap) {
+-                               /*
+-                                * this is not the last fragment, the
+trailer
+-                                * space is regarded as data space.
+-                                */
+-                               datalen += rt->dst.trailer_len;
+-                       }
+-
+-                       fraglen = datalen + fragheaderlen;
+-
+                        copy = datalen - transhdrlen - fraggap - pagedlen;
+                        if (copy < 0) {
+                                err = -EINVAL;

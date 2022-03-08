@@ -2,79 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6C24D16FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB894D1708
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346726AbiCHMO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:14:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
+        id S1346749AbiCHMPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237459AbiCHMOy (ORCPT
+        with ESMTP id S1346732AbiCHMPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:14:54 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A4D369E9;
-        Tue,  8 Mar 2022 04:13:57 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id q17so24198608edd.4;
-        Tue, 08 Mar 2022 04:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ULast/mtgP3p8AMVarXOT+P6lpKHlA0007QiXUEdEFE=;
-        b=Wk6UyfUlZnL5SElRH1/AfODLHHDCAsfnpsm7tMMPXyzbSIFQQqmACnv95Du8iVRA7i
-         KOVWxH6W9Zflw31j0dQhp4/QeQFp9EoLI5aKRhINYRwWbz6ux2ikSN5+8H0dDRCsh7HE
-         PXQHUkG3omcQ8G1KroCdf1K0FM9jSSgcVP+JUGfxQ0q1Z+Pkh7vo9Y2UvM8VvOlOee1r
-         HUDtN2TxC2SMIhvUfo+0aJas5zWdQOGmwy0TrzVduKfEzr4MBJrKleNx9ES9fEjDCnFY
-         bbeLB7yp8yXEEjlq/9SJ9dvU8PWfw+FWnc+r7TeptTzRbPgLSMADmdPlBwsID7jFp3Nw
-         eSpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ULast/mtgP3p8AMVarXOT+P6lpKHlA0007QiXUEdEFE=;
-        b=7sfVtj79g/56Jl9SoMUP3sz9BC4atvXElIHcpYzcYccEu25RlI8PrglBqegGcC83N+
-         MjAMHIhLENEivY+d9LBxMgSkJwi4I4b3+7l50Bj98/xCk1S1GULq7dS34E+siS3QFH0t
-         hc1GeTJwnyTWaOHF4x8zSnAWNMWSplC5FLriH3OZp8ozS+11DKJqQO0xfnyJXBMNbaqd
-         y57pcxmKCTLQYecAy4LODsiSQJTfvUBo/5NvodB1PbdsuuYj7co2HxVsvrieHULjdAn4
-         orT6MKiAGPOnivf1R5UKPcOanDHAuKNUDIZhfl3AJNO5Ab/y7cirMEgj+fIp36HncPml
-         E/xA==
-X-Gm-Message-State: AOAM533zknjiL7YzC33lYv0uQltZaeTYMlM0e85jHVI23zeZ46t2wNAy
-        XBOjg+3I24h4R9bNxd62cd0=
-X-Google-Smtp-Source: ABdhPJys53qTU70vOv4UGAljmorZflfU+Rp0CDA2yjzlzyY9aerrFgS941NSU0EEibz7NS8WnkfGvQ==
-X-Received: by 2002:a05:6402:374:b0:415:e849:2935 with SMTP id s20-20020a056402037400b00415e8492935mr15560448edw.47.1646741636190;
-        Tue, 08 Mar 2022 04:13:56 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id qb30-20020a1709077e9e00b006d6f8c77695sm5705595ejc.101.2022.03.08.04.13.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 04:13:55 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <6e57aad6-1322-8a3d-6dfa-ff010a61a9a9@redhat.com>
-Date:   Tue, 8 Mar 2022 13:13:54 +0100
+        Tue, 8 Mar 2022 07:15:50 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A46A43ED1;
+        Tue,  8 Mar 2022 04:14:54 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: aratiu)
+        with ESMTPSA id EC43A1F43C2C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646741693;
+        bh=5+4CFM6veuq5rDnjMnbblwZsgeeLINo0x7U43XEkG9c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IuRYrUkUF0SCi0ER2nCHqEw02YkcL/vPTUhWSs79ZyitkMk0dynGcY39jBfxLIiaZ
+         hmf9tTBEZf1t1e6xosUT5h1Su28aKNtYQeAP2kKvAAfO5dHgAslutstLuwA3QIQNUN
+         zkRYUuUbl4pZTho63yPNAiMvo/5ikHBr/CvcBxefFVs2Jtj14kwJdWJwYO5WJxRZI/
+         r6eHwi2RPudIMXeXHSAaMlntMUlBToduBaM0nYcDWprzdmx+9zp5m4QFPSnBZTqiyn
+         uQvI+dkLx6F0gD6mHFxqn6mS0ilxypk2AS+BR1mtR2DAR1CtxcG1+bV5y+GHU3ltKx
+         25knDK62+s5UQ==
+From:   Adrian Ratiu <adrian.ratiu@collabora.com>
+To:     netdev@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kernel@collabora.com,
+        linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Manoj Gupta <manojgupta@chromium.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH bpf v2] tools: fix unavoidable GCC call in Clang builds
+Date:   Tue,  8 Mar 2022 14:14:28 +0200
+Message-Id: <20220308121428.81735-1-adrian.ratiu@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] x86/kvm: Don't waste kvmclock memory if there is nopv
- parameter
-Content-Language: en-US
-To:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-References: <1646727529-11774-1-git-send-email-wanpengli@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <1646727529-11774-1-git-send-email-wanpengli@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,32 +51,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 09:18, Wanpeng Li wrote:
-> From: Wanpeng Li <wanpengli@tencent.com>
-> 
-> When the "nopv" command line parameter is used, it should not waste
-> memory for kvmclock.
-> 
-> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> ---
->   arch/x86/kernel/kvmclock.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
-> index c5caa73..16333ba 100644
-> --- a/arch/x86/kernel/kvmclock.c
-> +++ b/arch/x86/kernel/kvmclock.c
-> @@ -239,7 +239,7 @@ static void __init kvmclock_init_mem(void)
->   
->   static int __init kvm_setup_vsyscall_timeinfo(void)
->   {
-> -	if (!kvm_para_available() || !kvmclock)
-> +	if (!kvm_para_available() || !kvmclock || nopv)
->   		return 0;
->   
->   	kvmclock_init_mem();
+In ChromeOS and Gentoo we catch any unwanted mixed Clang/LLVM
+and GCC/binutils usage via toolchain wrappers which fail builds.
+This has revealed that GCC is called unconditionally in Clang
+configured builds to populate GCC_TOOLCHAIN_DIR.
 
-Perhaps instead !kvm_para_available() && nopv should clear the kvmclock 
-variable?
+Allow the user to override CLANG_CROSS_FLAGS to avoid the GCC
+call - in our case we set the var directly in the ebuild recipe.
 
-Paolo
+In theory Clang could be able to autodetect these settings so
+this logic could be removed entirely, but in practice as the
+commit cebdb7374577 ("tools: Help cross-building with clang")
+mentions, this does not always work, so giving distributions
+more control to specify their flags & sysroot is beneficial.
+
+Suggested-by: Manoj Gupta <manojgupta@chromium.com>
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+---
+Changes in v2:
+  * Replaced variable override GCC_TOOLCHAIN_DIR -> CLANG_CROSS_FLAGS
+---
+ tools/scripts/Makefile.include | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+index 79d102304470..b9b1deacc4eb 100644
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -89,6 +89,9 @@ ifeq ($(CC_NO_CLANG), 1)
+ EXTRA_WARNINGS += -Wstrict-aliasing=3
+ 
+ else ifneq ($(CROSS_COMPILE),)
++# allow userspace to override CLANG_CROSS_FLAGS to specify their own
++# sysroots and flags or to avoid the GCC call in pure Clang builds
++ifeq ($(CLANG_CROSS_FLAGS),)
+ CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
+ GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc 2>/dev/null))
+ ifneq ($(GCC_TOOLCHAIN_DIR),)
+@@ -96,6 +99,7 @@ CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
+ CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
+ CLANG_CROSS_FLAGS += --gcc-toolchain=$(realpath $(GCC_TOOLCHAIN_DIR)/..)
+ endif # GCC_TOOLCHAIN_DIR
++endif # CLANG_CROSS_FLAGS
+ CFLAGS += $(CLANG_CROSS_FLAGS)
+ AFLAGS += $(CLANG_CROSS_FLAGS)
+ endif # CROSS_COMPILE
+-- 
+2.35.1
+

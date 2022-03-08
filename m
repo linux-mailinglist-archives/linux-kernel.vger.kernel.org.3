@@ -2,196 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92DD4D2450
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AB14D2462
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350745AbiCHWdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
+        id S1350766AbiCHWeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:34:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350760AbiCHWcu (ORCPT
+        with ESMTP id S1347211AbiCHWeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:32:50 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E37E5A0A0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:31:51 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id w17-20020a056830111100b005b22c584b93so395166otq.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 14:31:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yu1THqTGD6F10/7zLdE8sY/7tnkCw2lQhVUm7kdi5Vs=;
-        b=zM6yJDkCXVr46DAoZEfhO1+xZLGgCRwLMK9TAYUYZVTFi0U5oPxRtHIVQ7xmtlSpMI
-         3E8Zq03Dbu+RxrYTIpq2jMcfSFLBmdtuyeiOFn/NaomcmAli5diS6gEyBm1jpZM1t5jT
-         dvkq6b9VKQvyrK819bjV/z5ga84NAouXrIchc3cnFe7J9Ph8ty8CSO3Ls09pu0+6JQg4
-         VO1vBoP7KH5b9CkJBeYwxPKJXC3oPsEvKV0yYGtVOBrM4mUQkExaBH8vhc00KjKA2ynY
-         cEENkWVocmJAKULBG2HXLq6f/fRoupJS9KM8zXL5ixYiW3CKIG8xeNpQA2JR1DtiyMEz
-         uhpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yu1THqTGD6F10/7zLdE8sY/7tnkCw2lQhVUm7kdi5Vs=;
-        b=AB9p0Nx/Oy/8IPLLaUVZZuO/Ee0pdJ6kHAp0sNOEi7yGF2tptoL4IoMTCIADXGn2RR
-         VhGAiSSX3cmfmoDijZSIuOk6hWVA3YZvg1OX8qh+6n8nf33EwQg1+6Uk8GVLpneuRSFf
-         3BSGyMiMJD+T5pHIWfADzZ2oac3XvWR6hAONovD0r/Aqr+IGnIa4//TyvmygbhkKetLf
-         VZo1z/RBnadOitObzuaLpLy0gaqGlC2kbYZcsWYuxNMag+0xXYxoiiDFU4DKH4vhxuUH
-         AFr2p75HPa6BCs0I15gjdNbEywk9fYrH4jy3VHMmdWnuUAI04kF4yxNmBx7sC9PeSZHw
-         aS2Q==
-X-Gm-Message-State: AOAM532W5hHdw/OTcnCGqmQ+k2Gl0CHxyZxfIh9Hl8HX9IJOshWLjZqC
-        w1ALxCzbbrqa4Kf1UEHWlYXGLQ==
-X-Google-Smtp-Source: ABdhPJzj4SI3aBtkqXo6gIsiBBn8CcMdnLEkOtQN5+H1BR7bbwBxT7uH7KUFlOg2LT41M+Vsy/RXfQ==
-X-Received: by 2002:a05:6830:43a0:b0:5af:e328:6bc7 with SMTP id s32-20020a05683043a000b005afe3286bc7mr9495407otv.62.1646778710427;
-        Tue, 08 Mar 2022 14:31:50 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id f4-20020a056870d30400b000da71ab35e0sm78779oag.44.2022.03.08.14.31.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 14:31:49 -0800 (PST)
-Date:   Tue, 8 Mar 2022 16:31:46 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, bhupesh.linux@gmail.com,
-        lorenzo.pieralisi@arm.com, agross@kernel.org, svarbanov@mm-sol.com,
-        bhelgaas@google.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH v3 7/7] arm64: dts: qcom: sa8155: Enable PCIe nodes
-Message-ID: <YifZUtH8hbelcB8L@builder.lan>
-References: <20220302203045.184500-1-bhupesh.sharma@linaro.org>
- <20220302203045.184500-8-bhupesh.sharma@linaro.org>
- <CAA8EJpqEy+669gpDsy-zGp2NpDP-d7ZxNf7RVo=OQZdvGdZOvQ@mail.gmail.com>
- <CAH=2Ntz2=pgysEVSfSuGd12C-Am-qRZymaotCw-Lwp0_xaNcOg@mail.gmail.com>
+        Tue, 8 Mar 2022 17:34:07 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340182657B;
+        Tue,  8 Mar 2022 14:33:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZnnZECseUcd9qArTaNvmaOGk8AT/bGfF2OBX0/Pu6YI=; b=BGXn/vo6kdZZ23p4KvpqaaT/l8
+        wVSJRIEWuCWWIkTBOzOK0avCBqTr6SZ1hN84uOn1+N43X/GsH8cpJJv1Lc4R4qyktlVvvKRxmvqsJ
+        JYTgTflMVPUfCtoV2bidg+s/K11rA/DOK2V6L6nMigF1EHYhkIuC0zLwnM6o49WLoLuciPCH6sUSe
+        YFfXUafsLPm4LYOhXUb8tH1BsLIX5pE23DSChwCrHdrfsubt6kUO08VxgGQOJcqs43wFRxKC1jo8i
+        hT24zgjkCoU8ru60bt6egiBLSkTqKwUKsHnCeJ8tB3CzSq++M/6ZErORxW96JeMSJBzVZfwTDc/h3
+        5TzKZdnw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRiNj-00GbDB-AW; Tue, 08 Mar 2022 22:32:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BEE3F30027B;
+        Tue,  8 Mar 2022 23:32:37 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 79FB520097204; Tue,  8 Mar 2022 23:32:37 +0100 (CET)
+Date:   Tue, 8 Mar 2022 23:32:37 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAH=2Ntz2=pgysEVSfSuGd12C-Am-qRZymaotCw-Lwp0_xaNcOg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 03 Mar 00:09 CST 2022, Bhupesh Sharma wrote:
-
-> Hi Dmitry,
+On Tue, Mar 08, 2022 at 11:01:04PM +0100, Peter Zijlstra wrote:
+> On Tue, Mar 08, 2022 at 12:00:52PM -0800, Alexei Starovoitov wrote:
+> > On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
+> > > Hopefully last posting...
+> > > 
+> > > Since last time:
+> > > 
+> > >  - updated the ftrace_location() patch (naveen, rostedt)
+> > >  - added a few comments and clarifications (bpetkov)
+> > >  - disable jump-tables (joao)
+> > >  - verified clang-14-rc2 works
+> > >  - fixed a whole bunch of objtool unreachable insn issue
+> > >  - picked up a few more tags
+> > > 
+> > > Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
+> > > 
+> > >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+> > 
+> > I've tried to test it.
 > 
-> On Thu, 3 Mar 2022 at 02:29, Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On Wed, 2 Mar 2022 at 23:31, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
-> > >
-> > > SA8155p ADP board supports the PCIe0 controller in the RC
-> > > mode (only). So add the support for the same.
-> > >
-> > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > Cc: Vinod Koul <vkoul@kernel.org>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 42 ++++++++++++++++++++++++
-> > >  1 file changed, 42 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> > > index 8756c2b25c7e..3f6b3ee404f5 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> > > +++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-> > > @@ -387,9 +387,51 @@ &usb_2_qmpphy {
-> > >         vdda-pll-supply = <&vdda_usb_ss_dp_core_1>;
-> > >  };
-> > >
-> > > +&pcie0 {
-> > > +       status = "okay";
-> > > +};
-> > > +
-> > > +&pcie0_phy {
-> > > +       status = "okay";
-> > > +       vdda-phy-supply = <&vreg_l18c_0p88>;
-> > > +       vdda-pll-supply = <&vreg_l8c_1p2>;
-> > > +};
-> > > +
-> > > +&pcie1_phy {
-> > > +       vdda-phy-supply = <&vreg_l18c_0p88>;
-> > > +       vdda-pll-supply = <&vreg_l8c_1p2>;
-> > > +};
-> > > +
-> > >  &tlmm {
-> > >         gpio-reserved-ranges = <0 4>;
-> > >
-> > > +       bt_en_default: bt_en_default {
-
-'_' is not a valid character in the node name (it is in the label).
-
-> > > +               mux {
-
-Please flatten this, you can omit the mux and config subnodes and put
-the properties directly in the state node.
-
-> > > +                       pins = "gpio172";
-> > > +                       function = "gpio";
-> > > +               };
-> > > +
-> > > +               config {
-> > > +                       pins = "gpio172";
-> > > +                       drive-strength = <2>;
-> > > +                       bias-pull-down;
-> > > +               };
-> > > +       };
-> > > +
-> > > +       wlan_en_default: wlan_en_default {
-> > > +               mux {
-> > > +                       pins = "gpio169";
-> > > +                       function = "gpio";
-> > > +               };
-> > > +
-> > > +               config {
-> > > +                       pins = "gpio169";
-> > > +                       drive-strength = <16>;
-> > > +                       output-high;
-> > > +                       bias-pull-up;
-> > > +               };
-> > > +       };
-> > > +
-> >
-> > Not related to PCIe
+> I could cleanly do:
 > 
-> Hmm.. I have no strong personal opinion on this, so let's see what
-> Bjorn thinks about the same.
-> My reasoning for keeping it here was to just capture that we have
-> 'bt_en' and 'wlan_en' related tlmm details here, so that when you send
-> out the reworked QCAxxxx mfd series (see [1]) later, I can easily plug
-> it in for SA8155p ADP dts as well with the 'bt' and 'wlan' constructs.
+> git checkout tip/master
+> git merge bpf-next/master
+> git merge queue/x86/wip.ibt
 > 
+> You want me to push out that result somewhere?
 
-The BT_EN is unrelated to PCIe, and I'm not able to see where you select
-the wlan_en_default state, so this would be dangling.
+  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
 
-So the bt_en should come in a patch together with a bluetooth node and
-the wlan_en_default should come with something that ensures that the
-WiFi portion of the chip is powered and the gpio enabled.
+includes bpf-next/master.
 
-Regards,
-Bjorn
 
-> [1]. https://lore.kernel.org/lkml/20210621223141.1638189-2-dmitry.baryshkov@linaro.org/T/
-> 
-> Regards.
-> Bhupesh
-> 
-> > >         usb2phy_ac_en1_default: usb2phy_ac_en1_default {
-> > >                 mux {
-> > >                         pins = "gpio113";
-> > > --
-> > > 2.35.1
-> > >
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry

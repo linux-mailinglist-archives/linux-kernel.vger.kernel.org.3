@@ -2,157 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624E24D25BF
+	by mail.lfdr.de (Postfix) with ESMTP id AD3B84D25C0
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiCIBIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S229533AbiCIBCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiCIBHt (ORCPT
+        with ESMTP id S229461AbiCIBCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:07:49 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A05D13DE13
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:48:02 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id g1so870516pfv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 16:48:02 -0800 (PST)
+        Tue, 8 Mar 2022 20:02:36 -0500
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF73E12D209;
+        Tue,  8 Mar 2022 16:40:17 -0800 (PST)
+Received: by mail-ot1-f50.google.com with SMTP id z9-20020a05683020c900b005b22bf41872so573895otq.13;
+        Tue, 08 Mar 2022 16:40:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2kU1A0mZ+Yf718gi2yxK3phVn7nYLq00SbSALiBBt2c=;
-        b=a3wxXsXXiZ50ZckVfXFMr8KdVU78K5T3RLsMnlj3KUTmsXr2mTTchwj6lfSmoIW6Jw
-         Xxcj7nT6ioNm+beNeT7w/gpTTEoesAjFfDTQkbfIWQwfq91ifPoOm3HZ8d5QpMlRFFmu
-         /SvS/C3P+W10CB6HG+SZCcWMlW7qlD0MjWDZHoph8a3b1v7eqS2BfyKguOEWwdkttbdX
-         RqHb2uCJ+bspxUluBYFhwxvdHNOj0fFpnkuHxLzLPAlkPVyOzDfrRkJ8/tz488d1UDi3
-         MOfKNkuD4sJ9Xv7tvkhmywY4CjEK6CRMke81P29RSspDH8NnokaenIYa9TIs71rPiZ4j
-         hzYQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OiDtpHj0kLmrgL9mIblnYKZv43jpFOukaPdQEqPT+5Y=;
+        b=qL7bv0KrNjilJu9PRCfYLJeNJnS1nZhV9Z/KX1ckM+h2i4BzDkWk0RjBWTKsz2Bqbm
+         f2jsIZUMrgB1OfrhQDHw5roe5iOwq+ZAwMs/2r7sc5xQTERUefqYVeahEVDkDDTfNVFn
+         AKd+PrUQHF5MbPEwalNIzLzy7Ybbt2S7NMpApzTSn1Tx7Qu7zEWYUvo1gqX1fRf08x6L
+         pu8SzW5CuSTqIwxy7MBzgF/piXU8iiFK7WE4N0q/vLr8iEo+A40MWjToal3S69yGAaW+
+         CJ5+T7atTcQIUOVlnhnDrAkqTgSqAGthRuV42FydHH758ppOnIQaZpVvCFCL2Z/eWV4d
+         Lcwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2kU1A0mZ+Yf718gi2yxK3phVn7nYLq00SbSALiBBt2c=;
-        b=ftXHmJUp58ZqjO+zjN2JUkPq0FGkbd094Nq50iF0oYyaUmyrGZ9mkbYzq0S95Cli81
-         7iH0lSsddrBSkOBemWrBrlZN32hjEaLuz2Q1qYPunp7hKcPp/ZxCAGvO9U8f561NB4xX
-         IXl0DveodelRfuZS/1G3lMCg/r+VK6IADig16Y1OM9ACQC+Azf5TSf81MfF2sm9KYWPU
-         RbHA1sDhoaTWa2FKP4UdiFXjw6EhDBFYRMwrjklEegyT0FjxYfScZnMuoDGoUoMux2xQ
-         QeUOBXwciRcZeRAw1P8OtxN8JKweYBYg7BK2fNiH9elZ/X2zfvbWb6tV0rcEkgqNwkHZ
-         j9Uw==
-X-Gm-Message-State: AOAM531CXZG5twOgxMyRboHlNLcr2GwfkMfa06fIoGXmyQxHLYN3LHW/
-        cANzWli4/dtkGF9KUMiHKZg1CCZfyjnDlw==
-X-Google-Smtp-Source: ABdhPJxu5BNOL66aUTFVR0ibkfjQAJZxN1/5Jln5I65fELTDrubmqTQaTFywu9mFnXzUzDH+EMVzEQ==
-X-Received: by 2002:a17:902:b602:b0:14f:e42b:d547 with SMTP id b2-20020a170902b60200b0014fe42bd547mr19779057pls.91.1646782670904;
-        Tue, 08 Mar 2022 15:37:50 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id e13-20020a056a001a8d00b004f0f28910cdsm185636pfv.42.2022.03.08.15.37.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 15:37:50 -0800 (PST)
-Date:   Tue, 8 Mar 2022 23:37:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Kieran Bingham <kbingham@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
-        Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH v3 2/6] KVM: x86: add force_intercept_exceptions_mask
-Message-ID: <YifoysEvfnQgq59A@google.com>
-References: <20210811122927.900604-1-mlevitsk@redhat.com>
- <20210811122927.900604-3-mlevitsk@redhat.com>
- <YTECUaPa9kySQxRX@google.com>
- <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OiDtpHj0kLmrgL9mIblnYKZv43jpFOukaPdQEqPT+5Y=;
+        b=UmM1N9BqjeIYgHc8JtF8gmGYhG16jLjChHmwSuo/7w4XyEVchs0qMGipmb7DRgp1ar
+         6S8bMU5OSxFOiHILDW5KEouOLpo3req5pDMy9wEDtLG5nHW9+E7kU5V3gsmmVR0vteF/
+         d/jOhbcn3kzL8tXwFzG5zA6E9g6OK7DAiL3Tz34MQ2FEwO698N6zFZRjBHsok5C4/lyd
+         LUvN/jmOMvATbj30WG+TvndkR9dgo7JiDe6k3jSw4ND0U7qQu8C8u1BrMQJqxieiGYIl
+         GzIfs9wov/RNN9QxL410LN5oqtPxzapaIB2W9NnkoSiVTIbhgg3I9kspVGrRY3ZjIEmE
+         BgsQ==
+X-Gm-Message-State: AOAM5335lwrx5IkDbvc2zHoMqLzmQO57IzBINHR/ecu8IGIRNoAq4qrA
+        alnx+/Hek01U2N/AYZ1O8Iv/wo7l6rRrsYLVhhV6HT3QHvKT+A==
+X-Google-Smtp-Source: ABdhPJzCistFgkg33wnaroodJ3xp0sw2F2DGERIEzTWtqMYtdIIvZ/VNegjo7IiaOIUBEoCfUbcplAaOVoQJuWOrIHU=
+X-Received: by 2002:a81:998c:0:b0:2d7:7e7d:877d with SMTP id
+ q134-20020a81998c000000b002d77e7d877dmr15120688ywg.78.1646782871514; Tue, 08
+ Mar 2022 15:41:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220308064228.2078109-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220308064228.2078109-1-chi.minghao@zte.com.cn>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 8 Mar 2022 23:40:45 +0000
+Message-ID: <CA+V-a8uVzmeeqer_bdqQyCpTNgVwJUDuoLgYmVugZYZevyTnyQ@mail.gmail.com>
+Subject: Re: [PATCH] media: davinci: Use platform_get_irq() to get the interrupt
+To:     cgel.zte@gmail.com
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022, Maxim Levitsky wrote:
-> On Thu, 2021-09-02 at 16:56 +0000, Sean Christopherson wrote:
-> > Assuming this hasn't been abandoned...
-> > 
-> > On Wed, Aug 11, 2021, Maxim Levitsky wrote:
-> > > This parameter will be used by VMX and SVM code to force
-> > > interception of a set of exceptions, given by a bitmask
-> > > for guest debug and/or kvm debug.
-> > > 
-> > > This is based on an idea first shown here:
-> > > https://patchwork.kernel.org/project/kvm/patch/20160301192822.GD22677@pd.tnic/
-> > > 
-> > > CC: Borislav Petkov <bp@suse.de>
-> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > > ---
-> > >  arch/x86/kvm/x86.c | 3 +++
-> > >  arch/x86/kvm/x86.h | 2 ++
-> > >  2 files changed, 5 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index fdc0c18339fb..092e2fad3c0d 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -184,6 +184,9 @@ module_param(force_emulation_prefix, bool, S_IRUGO);
-> > >  int __read_mostly pi_inject_timer = -1;
-> > >  module_param(pi_inject_timer, bint, S_IRUGO | S_IWUSR);
-> > >  
-> > > +uint force_intercept_exceptions_mask;
-> > > +module_param(force_intercept_exceptions_mask, uint, S_IRUGO | S_IWUSR);
-> > 
-> > Use octal permissions.  This also can't be a simple writable param, at least not
-> > without a well-documented disclaimer, as there's no guarantee a vCPU will update
-> > its exception bitmap in a timely fashion.  An alternative to a module param would
-> > be to extend/add a per-VM ioctl(), e.g. maybe KVM_SET_GUEST_DEBUG?  The downside
-> > of an ioctl() is that it would require userspace enabling :-/
-> > 
-> 
-> All other module params in this file use macros for permissions, that is why
-> I used them too.
-> 
-> I'll add a comment with a disclaimer here - this is only for debug.
-> I strongly don't want to have this as ioctl as that will indeed need qemu patches,
-> not to mention things like unit tests and which don't even always use qemu.
-> 
-> Or I can make this parameter read-only. I don't mind reloading kvm module when
-> I change this parameter.
+On Tue, Mar 8, 2022 at 6:42 AM <cgel.zte@gmail.com> wrote:
+>
+> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+>
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> ---
+>  drivers/media/platform/davinci/vpfe_capture.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+>
+NAK!
 
-Oh!  We can force an update, a la nx_huge_pages, where the setter loops through
-all VMs and does a kvm_make_all_cpus_request() to instruct vCPUs to update their
-bitmaps.  Requires a new request, but that doesn't seem like a huge deal, and it
-might help pave the way for adding more debug hooks for developers.
+vpfe_capture driver doesn't support DT.
 
-The param should also be "unsafe".
+Cheers,
+Prabhakar
 
-E.g. something like
-
-static const struct kernel_param_ops force_ex_intercepts_ops = {
-	.set = set_force_exception_intercepts,
-	.get = get_force_exception_intercepts,
-};
-module_param_cb_unsafe(force_exception_intercepts, &force_ex_intercepts_ops,
-		       &force_exception_intercepts, 0644);
+> diff --git a/drivers/media/platform/davinci/vpfe_capture.c b/drivers/media/platform/davinci/vpfe_capture.c
+> index 0a2226b321d7..b3cafa16a1ad 100644
+> --- a/drivers/media/platform/davinci/vpfe_capture.c
+> +++ b/drivers/media/platform/davinci/vpfe_capture.c
+> @@ -1674,11 +1674,10 @@ static int vpfe_probe(struct platform_device *pdev)
+>  {
+>         struct vpfe_subdev_info *sdinfo;
+>         struct vpfe_config *vpfe_cfg;
+> -       struct resource *res1;
+>         struct vpfe_device *vpfe_dev;
+>         struct i2c_adapter *i2c_adap;
+>         struct video_device *vfd;
+> -       int ret, i, j;
+> +       int ret, i, j, irq;
+>         int num_subdevs = 0;
+>
+>         /* Get the pointer to the device object */
+> @@ -1717,24 +1716,24 @@ static int vpfe_probe(struct platform_device *pdev)
+>
+>         strscpy(ccdc_cfg->name, vpfe_cfg->ccdc, sizeof(ccdc_cfg->name));
+>         /* Get VINT0 irq resource */
+> -       res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -       if (!res1) {
+> +       irq = platform_get_irq(pdev, 0);
+> +       if (irq < 0) {
+>                 v4l2_err(pdev->dev.driver,
+>                          "Unable to get interrupt for VINT0\n");
+>                 ret = -ENODEV;
+>                 goto probe_free_ccdc_cfg_mem;
+>         }
+> -       vpfe_dev->ccdc_irq0 = res1->start;
+> +       vpfe_dev->ccdc_irq0 = irq;
+>
+>         /* Get VINT1 irq resource */
+> -       res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 1);
+> -       if (!res1) {
+> +       irq = platform_get_irq(pdev, 1);
+> +       if (irq < 0) {
+>                 v4l2_err(pdev->dev.driver,
+>                          "Unable to get interrupt for VINT1\n");
+>                 ret = -ENODEV;
+>                 goto probe_free_ccdc_cfg_mem;
+>         }
+> -       vpfe_dev->ccdc_irq1 = res1->start;
+> +       vpfe_dev->ccdc_irq1 = irq;
+>
+>         ret = request_irq(vpfe_dev->ccdc_irq0, vpfe_isr, 0,
+>                           "vpfe_capture0", vpfe_dev);
+> --
+> 2.25.1
+>

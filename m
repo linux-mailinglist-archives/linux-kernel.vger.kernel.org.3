@@ -2,56 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEB54D181A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FC94D1805
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346987AbiCHMj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
+        id S240574AbiCHMjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:39:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347122AbiCHMhy (ORCPT
+        with ESMTP id S1347202AbiCHMiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:37:54 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3C348310
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 04:36:41 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KCZY243NkzdZwv;
-        Tue,  8 Mar 2022 20:35:18 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 20:36:39 +0800
-Subject: Re: [PATCH 4/4] mm/memory-failure.c: fix potential VM_BUG_ON_PAGE in
- split_huge_page_to_list
-To:     Yang Shi <shy828301@gmail.com>
-CC:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220228140245.24552-1-linmiaohe@huawei.com>
- <20220228140245.24552-5-linmiaohe@huawei.com>
- <20220304082804.GC3778609@hori.linux.bs1.fc.nec.co.jp>
- <2311bee4-cc11-93fc-6992-6c327a150e3d@huawei.com>
- <CAHbLzkrOfcJvv8Vy8jcKWc7QX=1Y9e=EW9+p78sp1xhac645-w@mail.gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <e7f1977e-2f6a-cffa-a75f-9665a908ca21@huawei.com>
-Date:   Tue, 8 Mar 2022 20:36:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 8 Mar 2022 07:38:02 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F533483A2;
+        Tue,  8 Mar 2022 04:37:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646743022; x=1678279022;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uDWmEpDZ9RZ0usVF5VnizShjyWiESSSwrgU+oXCPnMI=;
+  b=RCiZ03J10w9eS5lLhkt5PMsBGaQDZhbd2MwuvyKtPz1JdiTU/lwbo+1L
+   FFKFXeB0zWQHyvGUP5BFxq+ZuaGtp/OO5QL31M2lZCPbIVmE/eHospMH1
+   PaBRWHUBM18VA+XVFUuioyH9L/Y97NkEGuh3FFThPeyXEr/SmHuCfhdTN
+   MyvnH7dZhgxCKDuZVliPgnmzw8TQ95SedFzNuKg8H91MDkEv/xcHKe3LU
+   5uBIza12JVymF/9ABa89G8WrUifC8WwaogaC67qVs73S0xjqtJm4ikc3B
+   +BC9SuZohoAYj4OvUZot/oXqESwIlFLR3alPqNReazg/D1TygjUlqBG3a
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234626781"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="234626781"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:37:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="495437019"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 04:36:59 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 970941D6; Tue,  8 Mar 2022 14:37:17 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
+Subject: [PATCH v4 1/1] device property: Allow error pointer to be passed to fwnode APIs
+Date:   Tue,  8 Mar 2022 14:37:12 +0200
+Message-Id: <20220308123712.18613-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <CAHbLzkrOfcJvv8Vy8jcKWc7QX=1Y9e=EW9+p78sp1xhac645-w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,136 +67,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/8 3:53, Yang Shi wrote:
-> On Sun, Mar 6, 2022 at 11:07 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
->>
->> On 2022/3/4 16:28, HORIGUCHI NAOYA(堀口 直也) wrote:
->>> On Mon, Feb 28, 2022 at 10:02:45PM +0800, Miaohe Lin wrote:
->>>> The huge zero page could reach here and if we ever try to split it, the
->>>> VM_BUG_ON_PAGE will be triggered in split_huge_page_to_list(). Also the
->>>> non-lru compound movable pages could be taken for transhuge pages. Skip
->>>> these pages by checking PageLRU because huge zero page isn't lru page as
->>>> non-lru compound movable pages.
->>>
->>> It seems that memory_failure() also fails at get_any_page() with "hwpoison:
->>> unhandlable page" message.
->>>
->>>   [16478.203474] page:00000000b6acdbd1 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1810b4
->>>   [16478.206612] flags: 0x57ffffc0801000(reserved|hwpoison|node=1|zone=2|lastcpupid=0x1fffff)
->>>   [16478.209411] raw: 0057ffffc0801000 fffff11bc6042d08 fffff11bc6042d08 0000000000000000
->>>   [16478.211921] raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
->>>   [16478.214473] page dumped because: hwpoison: unhandlable page
->>>   [16478.216386] Memory failure: 0x1810b4: recovery action for unknown page: Ignored
->>>
->>> We can't handle errors on huge (or normal) zero page, so the current
->>
->> Sorry for confusing commit log again. I should have a coffee before I make this patch.
->> Huge or normal zero page will fail at get_any_page because they're neither HWPoisonHandlable
->> nor PageHuge.
->>
->>> behavior seems to me more suitable than "unsplit thp".
->>>
->>> Or if you have some producer to reach the following path with huge zero
->>> page, could you share it?
->>>
->>
->> What I mean is that non-lru movable compound page can reach here unexpected because __PageMovable(page)
->> is handleable now. So get_any_page could succeed to grab the page refcnt. And since it's compound page,
->> it will go through the split_huge_page_to_list because PageTransHuge checks PageHead(page) which can also
->> be true for compound page. But this type of pages is unexpected for split_huge_page_to_list.
-> 
-> Can we really handle non-LRU movable pages in memory failure
-> (uncorrectable errors)? Typically they are balloon, zsmalloc, etc.
-> Assuming we run into a base (4K) non-LRU movable page, we could reach
-> as far as identify_page_state(), it should not fall into any category
-> except me_unknown. So it seems we could just simply make it
-> unhandlable.
+Some of the fwnode APIs might return an error pointer instead of NULL
+or valid fwnode handle. The result of such API call may be considered
+optional and hence the test for it is usually done in a form of
 
-There is the comment from memory_failure:
-	/*
-	 * We ignore non-LRU pages for good reasons.
-	 * - PG_locked is only well defined for LRU pages and a few others
-	 * - to avoid races with __SetPageLocked()
-	 * - to avoid races with __SetPageSlab*() (and more non-atomic ops)
-	 * The check (unnecessarily) ignores LRU pages being isolated and
-	 * walked by the page reclaim code, however that's not a big loss.
-	 */
+	fwnode = fwnode_find_reference(...);
+	if (IS_ERR(fwnode))
+		...error handling...
 
-So we could not handle non-LRU movable pages.
+Nevertheless the resulting fwnode may have bumped the reference count
+and hence caller of the above API is obliged to call fwnode_handle_put().
+Since fwnode may be not valid either as NULL or error pointer the check
+has to be performed there. This approach uglifies the code and adds
+a point of making a mistake, i.e. forgetting about error point case.
 
-What do you mean is something like below?
+To prevent this, allow an error pointer to be passed to the fwnode APIs.
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 5444a8ef4867..d80dbe0f20b6 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1784,6 +1784,13 @@ int memory_failure(unsigned long pfn, int flags)
-                }
-        }
+Fixes: 83b34afb6b79 ("device property: Introduce fwnode_find_reference()")
+Reported-by: Nuno Sá <nuno.sa@analog.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Nuno Sá <nuno.sa@analog.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Acked-by: Nuno Sá <nuno.sa@analog.com>
+---
+v4: dropped unneeded fwnode.h and ' == true' part (Sakari), added tag (Sakari)
+ drivers/base/property.c | 75 +++++++++++++++++++++++------------------
+ include/linux/fwnode.h  | 10 +++---
+ 2 files changed, 47 insertions(+), 38 deletions(-)
 
-+       if (__PageMovable(hpage)) {
-+               put_page(p);
-+               action_result(pfn, MF_MSG_MOVALBE_PAGE, MF_IGNORED);
-+               res = -EBUSY;
-+               goto unlock_mutex;
-+       }
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index c0e94cce9c29..4fbdb14cdec4 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -47,12 +47,14 @@ bool fwnode_property_present(const struct fwnode_handle *fwnode,
+ {
+ 	bool ret;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return false;
 +
-        if (PageTransHuge(hpage)) {
-                /*
-                 * The flag must be set after the refcount is bumped
-
-
-i.e. Simply make non-LRU movable pages unhandlable ?
-
-> 
-> But it should be handlable for soft-offline since it could be migrated.
-> 
-
-Yes, non-LRU movable pages can be simply migrated.
-
-Many thanks.
-
-> 
->> Does this make sense for you? Thanks Naoya.
->>
->>> Thanks,
->>> Naoya Horiguchi
->>>
->>>>
->>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>>> ---
->>>>  mm/memory-failure.c | 14 ++++++++++++++
->>>>  1 file changed, 14 insertions(+)
->>>>
->>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->>>> index 23bfd809dc8c..ac6492e36978 100644
->>>> --- a/mm/memory-failure.c
->>>> +++ b/mm/memory-failure.c
->>>> @@ -1792,6 +1792,20 @@ int memory_failure(unsigned long pfn, int flags)
->>>>      }
->>>>
->>>>      if (PageTransHuge(hpage)) {
->>>> +            /*
->>>> +             * The non-lru compound movable pages could be taken for
->>>> +             * transhuge pages. Also huge zero page could reach here
->>>> +             * and if we ever try to split it, the VM_BUG_ON_PAGE will
->>>> +             * be triggered in split_huge_page_to_list(). Skip these
->>>> +             * pages by checking PageLRU because huge zero page isn't
->>>> +             * lru page as non-lru compound movable pages.
->>>> +             */
->>>> +            if (!PageLRU(hpage)) {
->>>> +                    put_page(p);
->>>> +                    action_result(pfn, MF_MSG_UNSPLIT_THP, MF_IGNORED);
->>>> +                    res = -EBUSY;
->>>> +                    goto unlock_mutex;
->>>> +            }
->>>>              /*
->>>>               * The flag must be set after the refcount is bumped
->>>>               * otherwise it may race with THP split.
->>>> --
->>>> 2.23.0
->>
->>
-> .
-> 
+ 	ret = fwnode_call_bool_op(fwnode, property_present, propname);
+-	if (ret == false && !IS_ERR_OR_NULL(fwnode) &&
+-	    !IS_ERR_OR_NULL(fwnode->secondary))
+-		ret = fwnode_call_bool_op(fwnode->secondary, property_present,
+-					 propname);
+-	return ret;
++	if (ret)
++		return ret;
++
++	return fwnode_call_bool_op(fwnode->secondary, property_present, propname);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_property_present);
+ 
+@@ -232,15 +234,16 @@ static int fwnode_property_read_int_array(const struct fwnode_handle *fwnode,
+ {
+ 	int ret;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return -EINVAL;
++
+ 	ret = fwnode_call_int_op(fwnode, property_read_int_array, propname,
+ 				 elem_size, val, nval);
+-	if (ret == -EINVAL && !IS_ERR_OR_NULL(fwnode) &&
+-	    !IS_ERR_OR_NULL(fwnode->secondary))
+-		ret = fwnode_call_int_op(
+-			fwnode->secondary, property_read_int_array, propname,
+-			elem_size, val, nval);
++	if (ret != -EINVAL)
++		return ret;
+ 
+-	return ret;
++	return fwnode_call_int_op(fwnode->secondary, property_read_int_array, propname,
++				  elem_size, val, nval);
+ }
+ 
+ /**
+@@ -371,14 +374,16 @@ int fwnode_property_read_string_array(const struct fwnode_handle *fwnode,
+ {
+ 	int ret;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return -EINVAL;
++
+ 	ret = fwnode_call_int_op(fwnode, property_read_string_array, propname,
+ 				 val, nval);
+-	if (ret == -EINVAL && !IS_ERR_OR_NULL(fwnode) &&
+-	    !IS_ERR_OR_NULL(fwnode->secondary))
+-		ret = fwnode_call_int_op(fwnode->secondary,
+-					 property_read_string_array, propname,
+-					 val, nval);
+-	return ret;
++	if (ret != -EINVAL)
++		return ret;
++
++	return fwnode_call_int_op(fwnode->secondary, property_read_string_array, propname,
++				  val, nval);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_property_read_string_array);
+ 
+@@ -480,15 +485,16 @@ int fwnode_property_get_reference_args(const struct fwnode_handle *fwnode,
+ {
+ 	int ret;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return -ENOENT;
++
+ 	ret = fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
+ 				 nargs, index, args);
++	if (ret == 0)
++		return ret;
+ 
+-	if (ret < 0 && !IS_ERR_OR_NULL(fwnode) &&
+-	    !IS_ERR_OR_NULL(fwnode->secondary))
+-		ret = fwnode_call_int_op(fwnode->secondary, get_reference_args,
+-					 prop, nargs_prop, nargs, index, args);
+-
+-	return ret;
++	return fwnode_call_int_op(fwnode->secondary, get_reference_args, prop, nargs_prop,
++				  nargs, index, args);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_property_get_reference_args);
+ 
+@@ -698,7 +704,7 @@ fwnode_get_next_available_child_node(const struct fwnode_handle *fwnode,
+ {
+ 	struct fwnode_handle *next_child = child;
+ 
+-	if (!fwnode)
++	if (IS_ERR_OR_NULL(fwnode))
+ 		return NULL;
+ 
+ 	do {
+@@ -722,16 +728,16 @@ struct fwnode_handle *device_get_next_child_node(struct device *dev,
+ 	const struct fwnode_handle *fwnode = dev_fwnode(dev);
+ 	struct fwnode_handle *next;
+ 
++	if (IS_ERR_OR_NULL(fwnode))
++		return NULL;
++
+ 	/* Try to find a child in primary fwnode */
+ 	next = fwnode_get_next_child_node(fwnode, child);
+ 	if (next)
+ 		return next;
+ 
+ 	/* When no more children in primary, continue with secondary */
+-	if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
+-		next = fwnode_get_next_child_node(fwnode->secondary, child);
+-
+-	return next;
++	return fwnode_get_next_child_node(fwnode->secondary, child);
+ }
+ EXPORT_SYMBOL_GPL(device_get_next_child_node);
+ 
+@@ -798,6 +804,9 @@ EXPORT_SYMBOL_GPL(fwnode_handle_put);
+  */
+ bool fwnode_device_is_available(const struct fwnode_handle *fwnode)
+ {
++	if (IS_ERR_OR_NULL(fwnode))
++		return false;
++
+ 	if (!fwnode_has_op(fwnode, device_is_available))
+ 		return true;
+ 
+@@ -988,14 +997,14 @@ fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
+ 		parent = fwnode_graph_get_port_parent(prev);
+ 	else
+ 		parent = fwnode;
++	if (IS_ERR_OR_NULL(parent))
++		return NULL;
+ 
+ 	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
++	if (ep)
++		return ep;
+ 
+-	if (IS_ERR_OR_NULL(ep) &&
+-	    !IS_ERR_OR_NULL(parent) && !IS_ERR_OR_NULL(parent->secondary))
+-		ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+-
+-	return ep;
++	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+ }
+ EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
+ 
+diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+index 3a532ba66f6c..7defac04f9a3 100644
+--- a/include/linux/fwnode.h
++++ b/include/linux/fwnode.h
+@@ -148,12 +148,12 @@ struct fwnode_operations {
+ 	int (*add_links)(struct fwnode_handle *fwnode);
+ };
+ 
+-#define fwnode_has_op(fwnode, op)				\
+-	((fwnode) && (fwnode)->ops && (fwnode)->ops->op)
++#define fwnode_has_op(fwnode, op)					\
++	(!IS_ERR_OR_NULL(fwnode) && (fwnode)->ops && (fwnode)->ops->op)
++
+ #define fwnode_call_int_op(fwnode, op, ...)				\
+-	(fwnode ? (fwnode_has_op(fwnode, op) ?				\
+-		   (fwnode)->ops->op(fwnode, ## __VA_ARGS__) : -ENXIO) : \
+-	 -EINVAL)
++	(fwnode_has_op(fwnode, op) ?					\
++	 (fwnode)->ops->op(fwnode, ## __VA_ARGS__) : (IS_ERR_OR_NULL(fwnode) ? -EINVAL : -ENXIO))
+ 
+ #define fwnode_call_bool_op(fwnode, op, ...)		\
+ 	(fwnode_has_op(fwnode, op) ?			\
+-- 
+2.34.1
 

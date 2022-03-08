@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889734D164E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3E84D1656
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346501AbiCHLcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:32:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S1346412AbiCHLeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:34:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244724AbiCHLcJ (ORCPT
+        with ESMTP id S229930AbiCHLen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:32:09 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D95945AD8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:31:13 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id c20so5594799edr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 03:31:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zagytqRanMqmGZPaeZYMEhXfaOgjty5ndKR4qYehJqg=;
-        b=Jq82/CxYirJBuGuzNePcQu1UMKXNY25JLT1l1ke+oJN/zLSj/FOppoJPENL2MAfIRu
-         s1E2/pOfTRUVkqNWvjm67jtEzW35jGuM/8l8qzKbpkQECw3jdZNUIL7T8QYJGQUMlVuD
-         ab6yomX723E3XEgtUqrjFyx+SGPGdRPK1arQg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zagytqRanMqmGZPaeZYMEhXfaOgjty5ndKR4qYehJqg=;
-        b=X8q7xFD7R+t/O70GDH9WdRgJUXuX7HUOEPtoYjuIZCaf1EYBCCU58NchgRCpriu8J3
-         i6QYC5Z90emICzmErLfwpW4UsJ7J+2c/BciZpNyAxSqfieaDj95Px8u/EzMzHaDOr0Wo
-         aj2wtPD4LuwGkpejo5bFS82ylte7lC6DTywseaPUIPgheZLusDXJNadBF7AhKxRsoA6k
-         +bA6DgkDXwCwe/D0eZ0J9IxLmSbSZuJRhFRA5RAYa2IDDMkGXq7j4nOxbvxVTh1L4RIY
-         WiPNQ8FbsmR/fHhEcMipeuntbR02T7xXWTSl9eLaDB/P32nW9fXffDXC1rIs9XZLRLsr
-         Jwig==
-X-Gm-Message-State: AOAM532XoEhi2relIDxVg8C+qUQHggBRsp5CNZp3Pq6729kcjTp+m/Aw
-        LCEIm/XfPA1CvXRnozXq7+fRQw9v/LhugwxJBYhl4Q==
-X-Google-Smtp-Source: ABdhPJxdDz8gEfcI9ebtRv8bH5oH/qYk7ojEEaPFHDFMMzuPbrutVm4ZhylyTOEujsY/zbd3Ky9zCzsYQMte2sBKUsk=
-X-Received: by 2002:a05:6402:278e:b0:416:5064:b39b with SMTP id
- b14-20020a056402278e00b004165064b39bmr7820528ede.157.1646739071790; Tue, 08
- Mar 2022 03:31:11 -0800 (PST)
+        Tue, 8 Mar 2022 06:34:43 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF093BA47
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:33:46 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KCY4S2c82z1GBw6;
+        Tue,  8 Mar 2022 19:28:56 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 19:33:43 +0800
+Subject: Re: [PATCH 15/16] mm/migration: fix possible do_pages_stat_array
+ racing with memory offline
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        Muchun Song <songmuchun@bytedance.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
+        Mina Almasry <almasrymina@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, Michal Hocko <mhocko@suse.com>,
+        <riel@redhat.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220304093409.25829-1-linmiaohe@huawei.com>
+ <20220304093409.25829-16-linmiaohe@huawei.com>
+ <875yoq5od4.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAMZfGtXKa73ZVLtJeE5O40rOgn7oZkxP5CB+q5t--ihUerfKew@mail.gmail.com>
+ <87r17emcng.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <05c39882-0d61-92cb-9c63-479ea6dffb63@huawei.com>
+Date:   Tue, 8 Mar 2022 19:33:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220228182904.22982-1-jose.exposito89@gmail.com> <164673846305.2436174.1857157702611077242.b4-ty@cerno.tech>
-In-Reply-To: <164673846305.2436174.1857157702611077242.b4-ty@cerno.tech>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Tue, 8 Mar 2022 17:01:00 +0530
-Message-ID: <CAMty3ZAC1vj8Kc2tKP4wL5O15W7FA-OWf030JcTKRs9feDLejw@mail.gmail.com>
-Subject: Re: (subset) [PATCH] drm/bridge: parade-ps8622: switch to devm_drm_of_get_bridge
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        andrzej.hajda@intel.com, jernej.skrabec@gmail.com,
-        narmstrong@baylibre.com, airlied@linux.ie, robert.foss@linaro.org,
-        jonas@kwiboo.se, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, laurent.pinchart@ideasonboard.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87r17emcng.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+On 2022/3/7 15:42, Huang, Ying wrote:
+> Muchun Song <songmuchun@bytedance.com> writes:
+> 
+>> On Mon, Mar 7, 2022 at 1:22 PM Huang, Ying <ying.huang@intel.com> wrote:
+>>>
+>>> Miaohe Lin <linmiaohe@huawei.com> writes:
+>>>
+>>>> When follow_page peeks a page, the page could be reclaimed under heavy
+>>>> memory pressure
+>>>
+>>> I don't think that memory pressure and reclaiming will be an issue.
+>>
+>> I think he means a page first to be reclaimed then to be offline
+>> could encounter this issue and reclaiming is a precondition.
+> 
+> I don't think reclaiming is a precondition.  It seems possible that the
+> virtual page is migrated, then the physical page is offlined.
+> 
 
-On Tue, Mar 8, 2022 at 4:51 PM Maxime Ripard <maxime@cerno.tech> wrote:
->
-> On Mon, 28 Feb 2022 19:29:04 +0100, Jos=C3=A9 Exp=C3=B3sito wrote:
-> > The function "drm_of_find_panel_or_bridge" has been deprecated in
-> > favor of "devm_drm_of_get_bridge".
-> >
-> > Switch to the new function and reduce boilerplate.
-> >
-> >
->
-> Applied to drm/drm-misc (drm-misc-next).
+What I indeed mean is a page could first be reclaimed, migrated and so on.
+And then be offlined. Sorry for confusing.
 
-Not sure whether it was intentionally or accidentally applied? the
-same patch has sent before this date and has sent the v3 a few hours
-ago.
+Thanks both of you.
 
-https://patchwork.kernel.org/project/dri-devel/patch/20211210174819.2250178=
--3-jagan@amarulasolutions.com/
+> Best Regards,
+> Huang, Ying
+> 
+>> Thanks.
+>>
+>>>
+>>>> and thus be offlined while it's still being used by the
+>>>> do_pages_stat_array().
+>>>
+>>> "offline" seems a possible problem.
+> .
+> 
 
-Thanks,
-Jagan.

@@ -2,120 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28974D222C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4784D2232
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349830AbiCHUHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S1350128AbiCHUKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:10:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234107AbiCHUHS (ORCPT
+        with ESMTP id S234107AbiCHUKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:07:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 426B14A3F2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:06:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646769980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=elipnysKnwVcUg6EqGSfkpdeNGiB7Z2+ASCRq74nOM0=;
-        b=SaeCvK65zMQ/dgdtSH9qi1mGe+s96wHlfbq6aghDfxaYANYxPK/fd3yNkAfL3wTL/Mq8rl
-        gMgZFfddmrlkDr+DiskFRXfsL/zrEj0Sywt+XZ2wgkxgRdt4nrG+DZNu+cF4oDkh+bUj07
-        8HKBV+M/JdJghCKsUIszeg7zZeTjhlw=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-vv824g7oMzucns72dXYANQ-1; Tue, 08 Mar 2022 15:06:19 -0500
-X-MC-Unique: vv824g7oMzucns72dXYANQ-1
-Received: by mail-qk1-f198.google.com with SMTP id m123-20020a375881000000b0067af33d4ac1so17677qkb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:06:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=elipnysKnwVcUg6EqGSfkpdeNGiB7Z2+ASCRq74nOM0=;
-        b=j2kOD/rjEi/n8T1qPOxQ0N8/TKUOvmJhskgbGS5EjCypslnxfH0Eo9d123dYZ/jVWQ
-         ctVfI42nzGpHHhOdzy1rCsr3ihyhoS8Qd4ZC3XWX+LkuoK21ElnrYHmdN3hYmjFcncBT
-         v0IUj7snqgMZMSILZsnLQ0wpw17i7+ddN1SD47i5ASBN1OQ+y3ckhzEoNiyYPYcWdnD8
-         uzeoiPbS2EskUyNwKd6+0HVyQfFdocZe7WsfyPajncWcRx1qaJF1FmBNRUq2KMw83CcX
-         uFoiIURcjQiP2k+GAL9HwH0XLqMMP7TATX/lzMHmLrnFM0Ahgqs8a0En53/X2k7NBGH6
-         kC9Q==
-X-Gm-Message-State: AOAM533+0Q9htnYi81hTZW3oHq/X8r/4hI3Xu05A2y//a7dF2OSD/rd5
-        kHOS4m4zqOSewxMAU9VsOMbk1HNIrdUS9dNS6lhrewCNsh+0KSfHZqsMrdyc8fs9EXGnrteaiBZ
-        HVQp9varqi8AUqzIwRGi0ssGm
-X-Received: by 2002:a0c:c3c6:0:b0:42c:17e4:9a75 with SMTP id p6-20020a0cc3c6000000b0042c17e49a75mr13650526qvi.124.1646769978829;
-        Tue, 08 Mar 2022 12:06:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzR3zmfz6FSXYwcl0bR5o15WDFhgLy2+B4pN+kytJHPEwLsbYJh8A0UHtJyjVFIP+c4N/FJXA==
-X-Received: by 2002:a0c:c3c6:0:b0:42c:17e4:9a75 with SMTP id p6-20020a0cc3c6000000b0042c17e49a75mr13650497qvi.124.1646769978497;
-        Tue, 08 Mar 2022 12:06:18 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id t207-20020a3746d8000000b0067b33b6a4efsm2547341qka.21.2022.03.08.12.06.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 12:06:17 -0800 (PST)
-Date:   Tue, 8 Mar 2022 12:06:14 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <20220308200614.gyhp657bdq3rxapl@treble>
-References: <20220308153011.021123062@infradead.org>
+        Tue, 8 Mar 2022 15:10:06 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B767DEB7;
+        Tue,  8 Mar 2022 12:09:09 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD55C1650;
+        Tue,  8 Mar 2022 12:09:08 -0800 (PST)
+Received: from [10.57.41.254] (unknown [10.57.41.254])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A14E03F7D7;
+        Tue,  8 Mar 2022 12:09:06 -0800 (PST)
+Message-ID: <1cd577e8-1364-ffc5-020c-330378a72c78@arm.com>
+Date:   Tue, 8 Mar 2022 20:09:01 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220308153011.021123062@infradead.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] Documentation: x86: add documenation for AMD IOMMU
+Content-Language: en-GB
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, hpa@zytor.com, x86@kernel.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com,
+        tglx@linutronix.de, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        will@kernel.org, iommu@lists.linux-foundation.org
+References: <20220308190453.135068-1-alexander.deucher@amd.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220308190453.135068-1-alexander.deucher@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
-> Hopefully last posting...
+On 2022-03-08 19:04, Alex Deucher via iommu wrote:
+> Add preliminary documenation for AMD IOMMU.
 > 
-> Since last time:
+> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> ---
+>   Documentation/x86/amd-iommu.rst   | 85 +++++++++++++++++++++++++++++++
+>   Documentation/x86/index.rst       |  1 +
+>   Documentation/x86/intel-iommu.rst |  2 +-
+>   3 files changed, 87 insertions(+), 1 deletion(-)
+>   create mode 100644 Documentation/x86/amd-iommu.rst
 > 
->  - updated the ftrace_location() patch (naveen, rostedt)
->  - added a few comments and clarifications (bpetkov)
->  - disable jump-tables (joao)
->  - verified clang-14-rc2 works
->  - fixed a whole bunch of objtool unreachable insn issue
->  - picked up a few more tags
-> 
-> Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+> diff --git a/Documentation/x86/amd-iommu.rst b/Documentation/x86/amd-iommu.rst
+> new file mode 100644
+> index 000000000000..89820140fefa
+> --- /dev/null
+> +++ b/Documentation/x86/amd-iommu.rst
+> @@ -0,0 +1,85 @@
+> +=================
+> +AMD IOMMU Support
+> +=================
+> +
+> +The architecture spec can be obtained from the below location.
+> +
+> +https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf
+> +
+> +This guide gives a quick cheat sheet for some basic understanding.
+> +
+> +Some Keywords
+> +
+> +- IVRS - I/O Virtualization Reporting Structure
+> +- IVDB - I/O Virtualization Definition Block
+> +- IVHD - I/O Virtualization Hardware Definition
+> +- IOVA - I/O Virtual Address.
+> +
+> +Basic stuff
+> +-----------
+> +
+> +ACPI enumerates and lists the different DMA engines in the platform, and
+> +device scope relationships between PCI devices and which DMA engine controls
+> +them.
 
-<applause>  Nice work!!!  kernel shadow stacks next? ;-)
+"DMA engine" typically means a dedicated device for peripheral-to-memory 
+or memory-to-memory transfers, or the responsible block within a general 
+DMA-capable endpoint. In the context of the original Intel doc from 
+whence I see this is copied, this probably should have said "DMAR unit" 
+or similar; here I'd suggest picking your favourite vendor-appropriate 
+term for "instance of IOMMU translation hardware". Let's not promote 
+confusion more than necessary.
 
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> +
+> +What is IVRS?
+> +-------------
+> +
+> +The architecture defines an ACPI-compatible data structure called an I/O
+> +Virtualization Reporting Structure (IVRS) that is used to convey information
+> +related to I/O virtualization to system software.  The IVRS describes the
+> +configuration and capabilities of the IOMMUs contained in the platform as
+> +well as information about the devices that each IOMMU virtualizes.
+> +
+> +The IVRS provides information about the following:
+> +- IOMMUs present in the platform including their capabilities and proper configuration
+> +- System I/O topology relevant to each IOMMU
+> +- Peripheral devices that cannot be otherwise enumerated
+> +- Memory regions used by SMI/SMM, platform firmware, and platform hardware. These are
+> +generally exclusion ranges to be configured by system software.
+> +
+> +How is IOVA generated?
+> +----------------------
+> +
+> +Well behaved drivers call pci_map_*() calls before sending command to device
 
-As talked about on IRC there are still a few outstanding issues, that
-I'm fine with fixing after the merge window during the upcoming -next
-cycle:
+Horribly out-of-date drivers call pci_map_*(). Modern well-behaved 
+drivers call dma_map_*() ;)
 
-- xen hypercall page functions need 'ret' - (I think you already fixed)
+> +that needs to perform DMA. Once DMA is completed and mapping is no longer
+> +required, device performs a pci_unmap_*() calls to unmap the region.
+> +
+> +The AMD IOMMU driver allocates a virtual address per domain. Each PCIE
+> +device has its own domain (hence protection). Devices under p2p bridges
+> +share the virtual address with all devices under the p2p bridge due to
+> +transaction id aliasing for p2p bridges.
+> +
+> +IOVA generation is pretty generic. We used the same technique as vmalloc()
+> +but these are not global address spaces, but separate for each domain.
+> +Different DMA engines may support different number of domains.
 
-- why don't unreachables need to fill up the entire sym hole?
+I'm not sure about this whole section, really - IOVA management was 
+entirely decoupled from drivers some time ago. If there's value in 
+having some overview documentation, then it's probably worth 
+consolidating into a common "IOMMU API" doc that can be cross-referenced 
+for a summary of domains, groups, and iommu_dma_ops.
 
-- get rid of the 'c_file' hack
+> +
+> +
+> +Fault reporting
+> +---------------
+> +When errors are reported, the DMA engine signals via an interrupt. The fault
 
-- improve cmdline option intuitive-ness
+Again, here I instinctively read "DMA engine" as being the endpoint 
+device *making* the DMA transaction that faulted, and indeed that might 
+happen to raise its own error interrupt if it gets an unexpected abort 
+back from the IOMMU, which is coincidental to a thoroughly misleading 
+degree...
 
-- properly integrate the retpoline "demotion" with the new Spectre BHI
-  related patches - probably still needs more discussion - for example
-  we might instead want to disable IBT and warn
+Thanks,
+Robin.
 
--- 
-Josh
-
+> +reason and device that caused it with fault reason is printed on console.
+> +
+> +See below for sample.
+> +
+> +
+> +Boot Message Sample
+> +-------------------
+> +
+> +Something like this gets printed indicating presence of the IOMMU.
+> +
+> +	iommu: Default domain type: Translated
+> +	iommu: DMA domain TLB invalidation policy: lazy mode
+> +
+> +
+> +PCI-DMA: Using AMD IOMMU
+> +------------------------
+> +
+> +Fault reporting
+> +^^^^^^^^^^^^^^^
+> +
+> +::
+> +
+> +	AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0007 address=0xffffc02000 flags=0x0000]
+> +	AMD-Vi: Event logged [IO_PAGE_FAULT device=07:00.0 domain=0x0007 address=0xffffc02000 flags=0x0000]
+> +
+> diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
+> index f498f1d36cd3..15711134eb68 100644
+> --- a/Documentation/x86/index.rst
+> +++ b/Documentation/x86/index.rst
+> @@ -22,6 +22,7 @@ x86-specific Documentation
+>      mtrr
+>      pat
+>      intel-iommu
+> +   amd-iommu
+>      intel_txt
+>      amd-memory-encryption
+>      pti
+> diff --git a/Documentation/x86/intel-iommu.rst b/Documentation/x86/intel-iommu.rst
+> index 099f13d51d5f..4d3391c7bd3f 100644
+> --- a/Documentation/x86/intel-iommu.rst
+> +++ b/Documentation/x86/intel-iommu.rst
+> @@ -1,5 +1,5 @@
+>   ===================
+> -Linux IOMMU Support
+> +Intel IOMMU Support
+>   ===================
+>   
+>   The architecture spec can be obtained from the below location.

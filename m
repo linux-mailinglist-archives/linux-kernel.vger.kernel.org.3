@@ -2,66 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BD94D0F44
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDD14D0F78
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245213AbiCHFqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S235305AbiCHFvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiCHFqt (ORCPT
+        with ESMTP id S229719AbiCHFu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:46:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE613BBD1;
-        Mon,  7 Mar 2022 21:45:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A73B61574;
-        Tue,  8 Mar 2022 05:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81AF1C340EB;
-        Tue,  8 Mar 2022 05:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646718352;
-        bh=Y8xpjnCaZqjpKAi6LH7psa4XoBGA667VBgBc+PH2nLU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mx31lcmtoMKA2ZBo/RU8iqV+gJN1S6CXEHizj1ptrPAsEWcD+SctSZK3N7b9x3/xe
-         POuXp8Eo72XT3OIykVrom6BbZ/Zyi1xNzV/1520yN5alcXPInUABF3+4+ACw493ewC
-         FhvPmRDtFyVK33kDjnnZYz9kzl1apHU00BOLGcYPnqRAAJQODDFz20RzCOrUBLG3Ko
-         ja/APFTJXnAt5dXeh77V/T4/kymHSNvIf6mJ9DIrMF1cu497Qta9bBxA3ED945YaGt
-         Hy2K3PjUVGkxDXPvNdC9blAwRS/Wk1LtRxI/mI09nmGNt+JzECmMIr0KYoxllvS6hv
-         hJj8s8lfkj0dg==
-Date:   Mon, 7 Mar 2022 21:45:50 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     Roi Dayan <roid@nvidia.com>, dev@openvswitch.org,
-        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        David Ahern <dsahern@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: Re: [ovs-dev] [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6
- extension header support
-Message-ID: <20220307214550.2d2c26a9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <45aed9cd-ba65-e2e7-27d7-97e3f9de1fb8@ovn.org>
-References: <20220224005409.411626-1-cpp.code.lv@gmail.com>
-        <164578561098.13834.14017896440355101001.git-patchwork-notify@kernel.org>
-        <3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com>
-        <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
-        <57996C97-5845-425B-9B13-7F33EE05D704@redhat.com>
-        <26b924fb-ed26-bb3f-8c6b-48edac825f73@nvidia.com>
-        <20220307122638.215427b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <3a96b606-c3aa-c39b-645e-a3af0c82e44b@ovn.org>
-        <20220307144616.05317297@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <45aed9cd-ba65-e2e7-27d7-97e3f9de1fb8@ovn.org>
+        Tue, 8 Mar 2022 00:50:59 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0378CB90
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:50:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1646718603; x=1678254603;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kehcbcYbbqv4Mc+VIdRnbHIfrlNDGyKgvl//coScXjs=;
+  b=Km7V0REy0hjacRNOEV5T/S76+369dNE4AD4Mqfj2ZJJ5qQ0BZ0aPcHph
+   iSmgs/0jKpzcFoG5oanP7TIckPj5KWK5AwZRAh4la2ABCjeMHVXTjuncf
+   JNmsge/aU4xYqgwPXUjRDNK2yD+KEF8eBGFw71MnXm88gRirJ82iybV6H
+   z26REIIxOnf8Ydf9AnOrLC/0K2ZSj5hArt2cWC2fc+n+s1roFUvPYFq0x
+   oZh8drSboMTCD7s5XGFTdXL8CrqknqTWtxugtuGOg1d8OWMRiwdDLiIt0
+   0WGJjVNhFXaN/39TAjn05f3cAUDDh2F5A3ij18RcdSxSpbjjRd/2u8k9K
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,163,1643644800"; 
+   d="scan'208";a="306680743"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 08 Mar 2022 13:50:03 +0800
+IronPort-SDR: tsvnFvF/FpmL7jfptSTMB9dVj1ITCVFbDKRrowivSZq4vXd+vrerQG3dnDuCjJm05SPqVQ3S+j
+ FZaFYb0EkMTuKqL2hY12AXdMs+KJR/Z0hAb9z1BgzqD769b8DNwrUTlftLnuVtzPcD4bdwEixM
+ ue/EqxwrDToJo0r85pOp0H73s9U9lN2RDo2EAKzsaaeSBTngs2J0FzCM4WOjGhkzo+KGUd1941
+ xCT0Wqyhw7os+6RmXmh6oVyIYjPD1fPDYiAtl18LPmRqnV47knKciEA9eyXLuhd2aLKMBg8Jw/
+ iBh/rU7gbMRnGzLC+LJ+b0UL
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 21:22:21 -0800
+IronPort-SDR: hToE45ZdNnoVMh6fD6ry+ER5KJm/CjApaYpWp9ADSDONOKFk4RSqS9BlmykLgs9cfww3I7u6YH
+ I1RnrlQHDuGwbdxuJfiz0S1Y6bIUD4cdgNaytshItvBZmslzfGhO9dH98wzs61+87sW0M28Lh9
+ ofakYR2vZPp/QL78XFTIxGDSCXHQyAjxFN/qT4k0HC84VO9hv5PQQ9eIfamEYvem/RXFVrA0t9
+ W6BTYzbqtRp51IyeUpMYN7F7FrhQtxne6Lah+1T4Nsku/BHOXT3a53YLwzw8ip6zUUXJ00uUVA
+ MNQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 21:50:04 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KCPYR03Fdz1Rwrw
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:50:03 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1646718602; x=1649310603; bh=kehcbcYbbqv4Mc+VIdRnbHIfrlNDGyKgvl/
+        /coScXjs=; b=rBhI807HrS0lsFT1vp+rI7Ew6Fe9e8b2rcQCQh7DVRcJolyb9Yn
+        rOPiln17mq26XRvzn4K9c1vK9sYWARPe8xydxFa1aYK9mueJinmFmsviCnRC7X9x
+        18zKR1ohAU5NAea7SpolnwdELy8s+27RqnvQZL4Uf6L7JJ3UtDxza/Ew548ZKjl9
+        eG6K0RY33l4WrkGMzXtIAEExXMK/8VfAg/tr4Bdi5CVd5Mq9r3sFmC8vduieeLUS
+        2pWIVfyPQHDOY6EW5UUl52g/NOghXoceM7RvCEwXXGu2ndxuUQGdtHSsVWr3jx/n
+        6VxWKMfJq1RahITkH6dyIgaZQyXH34KEolw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hQjHU4qPbLLo for <linux-kernel@vger.kernel.org>;
+        Mon,  7 Mar 2022 21:50:02 -0800 (PST)
+Received: from [10.225.163.91] (unknown [10.225.163.91])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KCPYP1rJwz1Rvlx;
+        Mon,  7 Mar 2022 21:50:01 -0800 (PST)
+Message-ID: <1a6aa747-1609-467a-ac23-953387dc1a4e@opensource.wdc.com>
+Date:   Tue, 8 Mar 2022 14:49:59 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ata: Use platform_get_irq() to get the interrupt
+Content-Language: en-US
+To:     cgel.zte@gmail.com, s.shtylyov@omp.ru
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220308025940.2077329-1-chi.minghao@zte.com.cn>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220308025940.2077329-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,58 +99,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 01:04:00 +0100 Ilya Maximets wrote:
-> > Thanks for the explanation, we can apply a revert if that'd help your
-> > CI / ongoing development but sounds like the fix really is in user
-> > space. Expecting netlink attribute lists not to grow is not fair.  
+On 3/8/22 11:59, cgel.zte@gmail.com wrote:
+> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 > 
-> I don't think it was intentional, just a careless mistake.  Unfortunately,
-> all OVS binaries built during the last 5 years rely on that unwanted
-> expectation (re-build will also not help as they are using a copy of the
-> uAPI header and the clash will be there anyway).  If we want to keep them
-> working, kernel uAPI has to be carefully updated with current userspace-only
-> attributes before we add any new ones.  That is not great, but I don't see
-> any other option right now that doesn't require code changes in userspace.
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypassed the hierarchical setup and messed up the
+> irq chaining.
 > 
-> I'd say that we need to revert the current patch and re-introduce it
-> later when the uAPI problem is sorted out.  This way we will avoid blocking
-> the net-next testing and will also avoid problems in case the uAPI changes
-> are not ready at the moment of the new kernel release.
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
 > 
-> What do you think?
-
-Let me add some people I associate with genetlink work in my head
-(fairly or not) to keep me fair here.
-
-It's highly unacceptable for user space to straight up rewrite kernel
-uAPI types but if it already happened the only fix is something like:
-
-diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
-index 9d1710f20505..ab6755621e02 100644
---- a/include/uapi/linux/openvswitch.h
-+++ b/include/uapi/linux/openvswitch.h
-@@ -351,11 +351,16 @@ enum ovs_key_attr {
-        OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV4,   /* struct ovs_key_ct_tuple_ipv4 */
-        OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV6,   /* struct ovs_key_ct_tuple_ipv6 */
-        OVS_KEY_ATTR_NSH,       /* Nested set of ovs_nsh_key_* */
--       OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
- 
- #ifdef __KERNEL__
-        OVS_KEY_ATTR_TUNNEL_INFO,  /* struct ip_tunnel_info */
- #endif
-+       /* User space decided to squat on types 30 and 31 */
-+       OVS_KEY_ATTR_IPV6_EXTHDRS = 32, /* struct ovs_key_ipv6_exthdr */
-+       /* WARNING: <scary warning to avoid the problem coming back> */
-+
-        __OVS_KEY_ATTR_MAX
- };
-
-
-right?
-
-> > Since ovs uses genetlink you should be able to dump the policy from 
-> > the kernel and at least validate that it doesn't overlap.  
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+> ---
+>  drivers/ata/pata_pxa.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> That is interesting.  Indeed, this functionality can be used to detect
-> problems or to define userspace-only attributes in runtime based on the
-> kernel reply.  Thanks for the pointer!
+> diff --git a/drivers/ata/pata_pxa.c b/drivers/ata/pata_pxa.c
+> index 41430f79663c..6394ab4cbc1b 100644
+> --- a/drivers/ata/pata_pxa.c
+> +++ b/drivers/ata/pata_pxa.c
+> @@ -164,10 +164,10 @@ static int pxa_ata_probe(struct platform_device *pdev)
+>  	struct resource *cmd_res;
+>  	struct resource *ctl_res;
+>  	struct resource *dma_res;
+> -	struct resource *irq_res;
+>  	struct pata_pxa_pdata *pdata = dev_get_platdata(&pdev->dev);
+>  	struct dma_slave_config	config;
+>  	int ret = 0;
+> +	int irq;
+>  
+>  	/*
+>  	 * Resource validation, three resources are needed:
+> @@ -205,8 +205,8 @@ static int pxa_ata_probe(struct platform_device *pdev)
+>  	/*
+>  	 * IRQ pin
+>  	 */
+> -	irq_res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -	if (unlikely(irq_res == NULL))
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (unlikely(irq < 0))
+
+This is not the hot path, so let's simplify: drop the unlikely() from
+this if.
+
+>  		return -EINVAL;
+>  
+>  	/*
+> @@ -287,7 +287,7 @@ static int pxa_ata_probe(struct platform_device *pdev)
+>  	/*
+>  	 * Activate the ATA host
+>  	 */
+> -	ret = ata_host_activate(host, irq_res->start, ata_sff_interrupt,
+> +	ret = ata_host_activate(host, irq, ata_sff_interrupt,
+>  				pdata->irq_flags, &pxa_ata_sht);
+>  	if (ret)
+>  		dma_release_channel(data->dma_chan);
+
+
+-- 
+Damien Le Moal
+Western Digital Research

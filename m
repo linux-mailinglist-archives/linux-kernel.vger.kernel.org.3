@@ -2,153 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AA64D1B3C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCB54D1B41
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347740AbiCHPBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S1347749AbiCHPBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:01:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbiCHPBM (ORCPT
+        with ESMTP id S237601AbiCHPBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:01:12 -0500
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90057.outbound.protection.outlook.com [40.107.9.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9719C4D63A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:00:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=euJTB8mzMhf8rwlipDBiokqAh6yc7yVJ5exOxkwaQDmUi4Rdy3xt1XFB9T3zn4MqLy7K4SNJifVBdpR9UNAsIMUeV1WCVIIqWBLr3tqBm2oqnR4fPJX0wPClXixc25pirHa7lbO7u4ajNbRVC+6n60cr4YbpONfnKTOa0yy7b2683g4OYArHgGkiXjoT+W6U3teTwAkrV6FSgFiXteD8RU4+1pMRuxvaqXl5NgoG1rlyoTdZinK0WXiIHvASfpVBS+ZK00sFmICMxFAqNkdlEucp90S+Hu9rrYuWzTdX2t5RjHklMI9aABCgizg9qHlii+MOU1K7oFopDOKLMApbwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GfEyOGpHhIL6TIUDeDuopWhFEVMhEcaQ7r4VdRhEFc0=;
- b=ZIs81xsiQRIbL2e2b65D00SyecJ0SZQd1ORVmEAiDsKrXYtc/6x4GmE4G4JmjVV+ZmDt/I4KWsxyqxOg8Mq7mKo2xervE18v3n0jEM/Y47Pm3dwaXf34U+Oo82e012s8hcdX7MlQyzY+j0XEaqh2kp/MRNJq1sIuxkZvM884rcdpyaqkTXek9fVHLbw+v9UsvluLfB41/qtWDI9XUnIZdLtngsYJS73pfXgA2WwRurHtmnR0GEwBwTCaUSirtSyfhW75KCF2hvBP753JfPPJYYoCf+g5C+nunJ0NpmjT48BbW6rS7+2njM13LGQHhKLtiKvIIiNuTcg16wlOVAnwcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB1672.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:9::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Tue, 8 Mar
- 2022 15:00:11 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.027; Tue, 8 Mar 2022
- 15:00:11 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Hangyu Hua <hbh25y@gmail.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>,
-        "peng.hao2@zte.com.cn" <peng.hao2@zte.com.cn>,
-        "wen.yang99@zte.com.cn" <wen.yang99@zte.com.cn>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc: 8xx: fix a return value error in mpc8xx_pic_init
-Thread-Topic: [PATCH] powerpc: 8xx: fix a return value error in
- mpc8xx_pic_init
-Thread-Index: AQHYKINXBJ1zcwXxM0+BDeqd/qE4OayzN/cAgAJxbgA=
-Date:   Tue, 8 Mar 2022 15:00:11 +0000
-Message-ID: <7f569012-bd1c-b03b-21c6-051dfa50f231@csgroup.eu>
-References: <20220223070223.26845-1-hbh25y@gmail.com>
- <146301ab-e217-6984-1dd4-0d782328d7f0@gmail.com>
-In-Reply-To: <146301ab-e217-6984-1dd4-0d782328d7f0@gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0db6cb9b-cbe1-43f0-27ec-08da0114584b
-x-ms-traffictypediagnostic: MRZP264MB1672:EE_
-x-microsoft-antispam-prvs: <MRZP264MB16727FCAA985E9394E8975BAED099@MRZP264MB1672.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 284ypTrVHZK+8RH2auQyP4yBM3O3MCMv2kEzYDhORUIWqGvMLmftHfMuBclL6ootrABWh4V7cgPcCoDlbtrrt0B456VLdITxT080DWRc+fFInhPDoRgNwknu7QzA5k3GgA+VHvdyJPYY7ZMuXzzanULCDZayDuxM2aS0EOIp2s+NzXFQDQSRy6Z1OUKzXfk6RsC+jei5PXm0ineJXbfFPnts6x5DiiKcMW29xbffeXjfShh/+Y17z6HOI/2tNIsHgqB6jB65zhRFi+1/iU0MAGxuXhiErBKgloW6NEDME+vUIxsgVvNZyXSAm9mxm8EkCOQ0W1IxzPQqGnyjqZY3e7MvYseJ4Atg16ZB7dXu6I6zrfqdjv9ORVDq2BAWNuvgqCDEbMhkIED6Ib9F9JtPJRrKvGTThKNyY2V+QFS+B7Ub2Qx5fE/g5+iyVxijz98lAlL2moWWTbTLiP6BUZhcyvS3D74SuQmKTP1VPsKZ0KIT0kLPGBqXPnKluqNSSreM6Ey2UAtGLU5lTxhJKmPnKtXkTkCOhPfsliFNUFDscoH0pDEAO2J429TpDiCoKvCwq9e5G2nhrf2WVAOAk6f+G6CT2yM0h4a5eGuS/FHAJkgUquu+oC4fJe7u0xdFJqvYvN4kTgVXfWbNR1swl+ldiabNzruZJfbe0j90eG89J1GxMwWjt1JLqXW4YDHRdG/wksLjclfMT3gGeJLfVjkaTXw7+H2NocNWBYytYNisiH7PjmlJcg1REbeacSesuZRkLknXBYVteb08qASX0KFCWw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(26005)(316002)(122000001)(38100700002)(71200400001)(4744005)(6512007)(6506007)(53546011)(36756003)(2616005)(54906003)(186003)(508600001)(6486002)(86362001)(44832011)(31686004)(66556008)(5660300002)(66476007)(66446008)(64756008)(38070700005)(4326008)(66946007)(8676002)(2906002)(76116006)(91956017)(31696002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?anFNNWxEWlljWVBTTGZMT0JPd05Eci83N2lWZExwTjRyejkvQjNIUS92ZkdF?=
- =?utf-8?B?U0hTTzdtckk0NEFrbnBpemVSbUovN2w1aXVEbDJXcHF0Sld4VmthWDAyOFNR?=
- =?utf-8?B?c2VkOVVlaFVQazdhTlFwTkpZTzFkelE5UnduZUwyNmxEWnZybTA5anQ0ODNL?=
- =?utf-8?B?biszd3lRaUlPeTZqVUN0S1NxRHNXZ1FMUVVrUm9ZVHordEc1YkRiV1g2KzQ4?=
- =?utf-8?B?TTBETzNiYXRFRWptc09zVFB5VllRRktxRHd2N3puY2Y3SEY2TDRlZmRaT1I4?=
- =?utf-8?B?TFBUa2g2bVIzSGphRDZxTDlWR0FBZk1mOVViaU9oZGRIZGh4YVRtMHpLT29K?=
- =?utf-8?B?S01Yby9BVEtTejV5QWlGOFZDWENscGJSRUdFNGlieXhRaGYyZjJUaFgrUy9N?=
- =?utf-8?B?QlNmVFFSWU90VjBmT1VFUGVEaklZRzdHS2pBUjNQQk84RDZCY0RZNExzRTBX?=
- =?utf-8?B?ZzlINU9MTUVkY3NMcm9NSVd2L0NqLzRlbW43TWhwaldYYWdnakFVNXNZUUhv?=
- =?utf-8?B?MmdFbVVNWWtFMzEwUkhkcmhSUjMwbGgzWTZrNUhUS2JuOHdXaFVBdlNSRjhw?=
- =?utf-8?B?VjMvVUlKTmhwaDFHalhPeTE3YUxMbkw0NU1sejVidUU4NUxoQ0FORjVuWTVQ?=
- =?utf-8?B?UkFpZlVoQy9sMXloWUdoYXprZ3d3anUyNk8xVGdaSWRpc2s5T0dnZHNoVEY2?=
- =?utf-8?B?cTRSUE5xY2Vhc0tPTHAxbUZ3Ukhwa3NmdDYzLzk3THFOcjJsc0x3OTI3eDhh?=
- =?utf-8?B?UWRLdDJ6aTJ5TU9TSmhUZ3JIdDgwbEN2ZkNOdTRlRE9wV0sxTWYxV0toakRH?=
- =?utf-8?B?cjVHL0JzUW1PYUZ5SnltMk0xcXFvbzRNYlBqWWJSdkdTdkRCVW93NGlaL0w2?=
- =?utf-8?B?SW9zdktLd2ltSEMyZ0VYdFJmNG03WmxKUURkenh1YkFzbHZOZnZmMGFFclFD?=
- =?utf-8?B?dFZVbzFCNGU5OC84RVI0dzZRWEhwZmNwOUtoZGhDVjJ2TlVDbFl2YTI1NVdo?=
- =?utf-8?B?OTg2elZ0emNxamtEa25IVTBkblZvL3Z0ZlVnSnhwQWtUaGd5SVR6eW01T3VZ?=
- =?utf-8?B?bm5QVEY2MWx3NEJTTnBNRUNjRmE0ZjUrVk9sM01lYXIyTHZUN2F3bC9TMnlL?=
- =?utf-8?B?TXUvS1ZQWi9vOE55RUhESEI0QS9PVG13NDRiSk05Qzl0bjhSUG5Vai9BTGFj?=
- =?utf-8?B?blZ3TS9WZlcwbVFOVk9udXhxdkNyMWJieUpaTDlYSjFtVUxueW5uWFJmcmYy?=
- =?utf-8?B?QnZ5bTh5S0RLaWVoVUlXYm1rRGNIc2ZTTTB2R25JdHdQKzIxa0VPL3A1Y05U?=
- =?utf-8?B?U3Q1Ry9VNUQ5b1plVERncnFVQXk5ZjJBU3dGc0tkdElIUWI4a3hrSjRaUHNZ?=
- =?utf-8?B?Y0JSZUF3bzlNTm5YNHpWOVdtMUN0SkUyRlNIQmFDRWFSdDhoeVJ5eWUwSERv?=
- =?utf-8?B?VHhraDVzcmRreGRxM2RoOXJLMWZXM3JKNG14VlEvRHlKVTcvVGNDWmsxNXRt?=
- =?utf-8?B?ay9BRk5JSStrdEUyemJYbVVWM0hESVFqK2dlOHphSXNsMmFDTktib21TUjNa?=
- =?utf-8?B?bEVSQnNxcTM1MGNiMGV1WmU2T0ZibWY4dWlhYXdRdlZUQWFiQWJrSWFERVh6?=
- =?utf-8?B?NksyVUd6SERpd2wzalkzYWVQeldMRzVtVURzQjQ2NzR6ZG5iWXc0YlN3cVp5?=
- =?utf-8?B?REhVOGtwbUxMMXFadEZhejM2eHI4cnU2NjFUeCs5czAxNDNhdkpIa09KOHYy?=
- =?utf-8?B?UE1BQzRzQ01kNUt2Wi9vWFVvR0E3Y3ZLeUp5OHU4dWJHdGF6OVNBN0pCaUI2?=
- =?utf-8?B?eXdOUkd5anpURzlWU3dLSDh2Y3RXbElJL0dCbk5yVjFlZ1VqTHJtQjZaaTgy?=
- =?utf-8?B?bFZ0bWd1anNBVWY4QWkwbDF2Z1d4RFBHaWR5WnpocWllUDNFdEZFbGpkU0hI?=
- =?utf-8?B?Zmo4OC9IdEpoWEh6eU8rdEJHSkRnUC9qMWhYbVFpUk0remtSSSt0MGlxaVNn?=
- =?utf-8?B?ZS95Yk5KcE85b2htcmlaSzlLR290MXNQZllVOTlQZ0t0ODJXd1c3dnZRMnp3?=
- =?utf-8?B?Mmd5ZnVEcFlXaXhHdTFIdWJ4UzBydEZpaXMzc3hleXpqL2w1TDRIeFF1RjdX?=
- =?utf-8?B?TmdzWnJkRnhReGl4UmYrbDFGYWVlcCtlZ3dIZkJnTWxXZGZXYVduUXFOREc3?=
- =?utf-8?B?SXNiZjBFVlhPNjl6aDFqOTdxcjVqdFVNSWJNY2g1QlY1a2NSdmppd0hpdEhJ?=
- =?utf-8?Q?OE1elaI+miF9qEVfyq6BrKiwKvS9oMHlwzEotXAwtk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FBC703CDAC45E94AA413F6783FFA250D@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 8 Mar 2022 10:01:52 -0500
+X-Greylist: delayed 87 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 07:00:56 PST
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FF522B39;
+        Tue,  8 Mar 2022 07:00:56 -0800 (PST)
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nRbK3-0007bV-Mq; Tue, 08 Mar 2022 16:00:23 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nRbK3-0002yZ-7c; Tue, 08 Mar 2022 16:00:23 +0100
+Subject: Re: [PATCH] selftests/bpf: fix array_size.cocci warning
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     Guo Zhengkui <guozhengkui@vivo.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Yucong Sun <sunyucong@gmail.com>,
+        Christy Lee <christylee@fb.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgense?= =?UTF-8?Q?n?= 
+        <toke@redhat.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Cc:     zhengkui_guo@outlook.com
+References: <20220308091813.28574-1-guozhengkui@vivo.com>
+ <cc8cffe8-58ed-27f3-0865-4ac3b2313866@iogearbox.net>
+Message-ID: <b01130f4-0f9c-9fe4-639b-0dcece4ca09a@iogearbox.net>
+Date:   Tue, 8 Mar 2022 16:00:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0db6cb9b-cbe1-43f0-27ec-08da0114584b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2022 15:00:11.8015
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GLDWvgo2d06TogSpZ7Mv/VDmSZ6BmZKOiKfnl8jJ6/s56N5enWdpCSyt5YSnr/P7b4IYI2mYo0SJlxP4JdSFKoc3XIWMB7sEnFLBUL1Qcoo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1672
+In-Reply-To: <cc8cffe8-58ed-27f3-0865-4ac3b2313866@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26475/Tue Mar  8 10:31:43 2022)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA3LzAzLzIwMjIgw6AgMDI6NDEsIEhhbmd5dSBIdWEgYSDDqWNyaXTCoDoNCj4gUGlu
-Zz8NCj4gDQo+IE9uIDIwMjIvMi8yMyAxNTowMiwgSGFuZ3l1IEh1YSB3cm90ZToNCj4+IG1wYzh4
-eF9waWNfaW5pdCgpIHNob3VsZCByZXR1cm4gLUVOT01FTSBpbnN0ZWFkIG9mIDAgd2hlbg0KPj4g
-aXJxX2RvbWFpbl9hZGRfbGluZWFyKCkgcmV0dXJuIE5VTEwuIFRoaXMgY2F1c2UgbXBjOHh4X3Bp
-Y3NfaW5pdCB0byANCj4+IGNvbnRpbnVlDQo+PiBleGVjdXRpbmcgZXZlbiBpZiBtcGM4eHhfcGlj
-X2hvc3QgaXMgTlVMTC4NCj4+DQo+PiBGaXhlczogY2M3NjQwNGZlYWVkICgicG93ZXJwYy84eHg6
-IEZpeCBwb3NzaWJsZSBkZXZpY2Ugbm9kZSByZWZlcmVuY2UgDQo+PiBsZWFrIikNCj4+IFNpZ25l
-ZC1vZmYtYnk6IEhhbmd5dSBIdWEgPGhiaDI1eUBnbWFpbC5jb20+DQoNClJldmlld2VkLWJ5OiBD
-aHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQoNCj4+IC0tLQ0K
-Pj4gwqAgYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84eHgvcGljLmMgfCAxICsNCj4+IMKgIDEgZmls
-ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2Vy
-cGMvcGxhdGZvcm1zLzh4eC9waWMuYyANCj4+IGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84eHgv
-cGljLmMNCj4+IGluZGV4IGYyYmE4MzcyNDlkNi4uMDRhNmFiZjE0YzI5IDEwMDY0NA0KPj4gLS0t
-IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84eHgvcGljLmMNCj4+ICsrKyBiL2FyY2gvcG93ZXJw
-Yy9wbGF0Zm9ybXMvOHh4L3BpYy5jDQo+PiBAQCAtMTUzLDYgKzE1Myw3IEBAIGludCBfX2luaXQg
-bXBjOHh4X3BpY19pbml0KHZvaWQpDQo+PiDCoMKgwqDCoMKgIGlmIChtcGM4eHhfcGljX2hvc3Qg
-PT0gTlVMTCkgew0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgIHByaW50ayhLRVJOX0VSUiAiTVBDOHh4
-IFBJQzogZmFpbGVkIHRvIGFsbG9jYXRlIGlycSBob3N0IVxuIik7DQo+PiDCoMKgwqDCoMKgwqDC
-oMKgwqAgcmV0ID0gLUVOT01FTTsNCj4+ICvCoMKgwqDCoMKgwqDCoCBnb3RvIG91dDsNCj4+IMKg
-wqDCoMKgwqAgfQ0KPj4gwqDCoMKgwqDCoCByZXQgPSAwOw==
+On 3/8/22 3:59 PM, Daniel Borkmann wrote:
+> On 3/8/22 10:17 AM, Guo Zhengkui wrote:
+>> Fix the array_size.cocci warning in tools/testing/selftests/bpf/
+>>
+>> Use `ARRAY_SIZE(arr)` instead of forms like `sizeof(arr)/sizeof(arr[0])`.
+>>
+>> syscall.c and test_rdonly_maps.c don't contain header files which
+>> implement ARRAY_SIZE() macro. So I add `#include <linux/kernel.h>`,
+>> in which ARRAY_SIZE(arr) not only calculates the size of `arr`, but also
+>> checks that `arr` is really an array (using __must_be_array(arr)).
+>>
+>> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> [...]
+>> diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
+>> index e550f728962d..85c6e7849463 100644
+>> --- a/tools/testing/selftests/bpf/progs/syscall.c
+>> +++ b/tools/testing/selftests/bpf/progs/syscall.c
+>> @@ -6,6 +6,7 @@
+>>   #include <bpf/bpf_tracing.h>
+>>   #include <../../../tools/include/linux/filter.h>
+>>   #include <linux/btf.h>
+>> +#include <linux/kernel.h>
+>>   char _license[] SEC("license") = "GPL";
+>> @@ -82,7 +83,7 @@ int bpf_prog(struct args *ctx)
+>>       static __u64 value = 34;
+>>       static union bpf_attr prog_load_attr = {
+>>           .prog_type = BPF_PROG_TYPE_XDP,
+>> -        .insn_cnt = sizeof(insns) / sizeof(insns[0]),
+>> +        .insn_cnt = ARRAY_SIZE(insns),
+>>       };
+>>       int ret;
+>> diff --git a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+>> index fc8e8a34a3db..ca75aac745a4 100644
+>> --- a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+>> +++ b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+>> @@ -3,6 +3,7 @@
+>>   #include <linux/ptrace.h>
+>>   #include <linux/bpf.h>
+>> +#include <linux/kernel.h>
+>>   #include <bpf/bpf_helpers.h>
+>>   const struct {
+>> @@ -64,7 +65,7 @@ int full_loop(struct pt_regs *ctx)
+>>   {
+>>       /* prevent compiler to optimize everything out */
+>>       unsigned * volatile p = (void *)&rdonly_values.a;
+>> -    int i = sizeof(rdonly_values.a) / sizeof(rdonly_values.a[0]);
+>> +    int i = ARRAY_SIZE(rdonly_values.a);
+>>       unsigned iters = 0, sum = 0;
+> 
+> There's bpf_util.h with ARRAY_SIZE definition which is used in selftests, pls change to
+> reuse that one.
+
+Also, CI failed with your patch:
+
+https://github.com/kernel-patches/bpf/runs/5462211251?check_suite_focus=true
+
+   In file included from progs/test_rdonly_maps.c:6:
+   In file included from /usr/include/linux/kernel.h:5:
+   /usr/include/linux/sysinfo.h:9:2: error: unknown type name '__kernel_long_t'
+           __kernel_long_t uptime;         /* Seconds since boot */
+           ^
+   /usr/include/linux/sysinfo.h:10:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t loads[3];      /* 1, 5, and 15 minute load averages */
+           ^
+   /usr/include/linux/sysinfo.h:11:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t totalram;      /* Total usable main memory size */
+           ^
+   /usr/include/linux/sysinfo.h:12:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t freeram;       /* Available memory size */
+           ^
+   /usr/include/linux/sysinfo.h:13:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t sharedram;     /* Amount of shared memory */
+           ^
+   /usr/include/linux/sysinfo.h:14:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t bufferram;     /* Memory used by buffers */
+           ^
+   /usr/include/linux/sysinfo.h:15:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t totalswap;     /* Total swap space size */
+           ^
+   /usr/include/linux/sysinfo.h:16:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t freeswap;      /* swap space still available */
+           ^
+   /usr/include/linux/sysinfo.h:19:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t totalhigh;     /* Total high memory size */
+           ^
+   /usr/include/linux/sysinfo.h:20:2: error: unknown type name '__kernel_ulong_t'
+           __kernel_ulong_t freehigh;      /* Available high memory size */
+           ^
+   /usr/include/linux/sysinfo.h:22:22: error: use of undeclared identifier '__kernel_ulong_t'
+           char _f[20-2*sizeof(__kernel_ulong_t)-sizeof(__u32)];   /* Padding: libc5 uses this.. */
+                               ^
+   progs/test_rdonly_maps.c:68:10: error: implicit declaration of function 'ARRAY_SIZE' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           int i = ARRAY_SIZE(rdonly_values.a);
+                   ^
+   12 errors generated.
+   make: *** [Makefile:488: /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/test_rdonly_maps.o] Error 1
+   make: *** Waiting for unfinished jobs....
+   Error: Process completed with exit code 2.

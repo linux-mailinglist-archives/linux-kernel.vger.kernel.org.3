@@ -2,284 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B76E4D0CD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4124D0CD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239694AbiCHAiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 19:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S241836AbiCHAiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 19:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiCHAiG (ORCPT
+        with ESMTP id S230263AbiCHAit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 19:38:06 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E433B3B3CA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:37:09 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso20070699ooi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 16:37:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ijc7GxRXdA+HmfzmTLANOZDH8XL9NNAM8VDg2IQJGx0=;
-        b=a0E3weZ9V8rChd7Z36FqSqgw4r/K94i1aMcmm0f7yN1diV+6YgWZSKihyzekXug7Vh
-         OQKHuPZ9RZZhldYbxYXNihh3ghZLaP9xbD/0jH1lOkRy2pbIhr0FA/bKHwRXEDHMKxev
-         HOrt4gcnRT0u+/vlRLZE0NjfI9uZtoF6CzZXM0sGWkFMUyJhcro/BaSdt2kFpQpubWBQ
-         mv1DDpJjG9/tTpmwZBHdzuh0mZz6BE4Ee3CYEQj6sZOryQqmlL1qMkPNAkzlY6KBa0Lo
-         L3z5HjJTwT0IIFxG5LMnxcgwqwDUVrGFJIq6ufs8yk7dUKZpUAL+3gudRiRTUdNFEZAu
-         aUZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ijc7GxRXdA+HmfzmTLANOZDH8XL9NNAM8VDg2IQJGx0=;
-        b=0ZCk6YNt2fnLocv1cF6IbOnl9OuEltehKzhCTyCQSHd4sie0MsSG+jKXOx+svz1Uw9
-         DhwkKZ8VIqe/V5qVeP+G8Nj2L3BkYCBtBYIX9kMTnxpBj0mf43pmoLdylVZI1G1eTLRx
-         iPT50A+ll9s5AGZ9bTrBhm3NYGQmamfAAmbKfu09I/VSjySAp1kcVPfJoN4nGeQ4Dmkv
-         ZBThp8b+JMuzvw+LlizIet52FKMa7mKhSSwZn3epo4maarlkz0HEtbBo8lovK0ZmkjIv
-         9gmJqfZNQsU8PBhHSl2XZHklabfD9JEBDLMtfcMprj31pPlyqLoECwgOrLbspIlCrrav
-         7iUg==
-X-Gm-Message-State: AOAM531li8YlRTXvv3IfVXz+yuBoTvlluzytJ4i0fiKfhljVZz88zSsH
-        tS4cAegh71P9z1iFa5Lua30Eqi9x2Nk8u//cNUqJTw==
-X-Google-Smtp-Source: ABdhPJwt8fuIzjjOdXl6gzTequQN2CdAIk2Wdm0n8JHCzPGB/LeovNgLZ+MbK2C0pZrT8h0jGkzgwJDDztjooLzvolM=
-X-Received: by 2002:a05:6870:1041:b0:d3:521b:f78a with SMTP id
- 1-20020a056870104100b000d3521bf78amr945118oaj.13.1646699828901; Mon, 07 Mar
- 2022 16:37:08 -0800 (PST)
+        Mon, 7 Mar 2022 19:38:49 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7072D2CCA3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:37:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646699873; x=1678235873;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ywwjoV2BWy6X+hnNFU3ifYjAswzVR8I6irSTeAw8JxM=;
+  b=Rvr+sKkSTi3X+jaecb00xCogBUOK8MofvEaAwZIZ7YteL8DFBaOTLLoj
+   lJGFKDxZhfitU9ofxBg7cFVxQ/tOh7cyRX6Cj4sIMGilyF0niDsyw9R6f
+   4LSm+OK8Mr6/QxbgI8VoyUddcRowyqUcdGvalb9duvg3ZJKvqXApkJNaW
+   miOGMKRhhme4RzyRNPsXXTXZ3CezxXSwKPQ5hrfaybVHOu2OC/FqRVJiZ
+   9wCihJi4MX1V+JKVzDIurbc3JyfGKi7U/r4fFfV7PA2TfO6LY9s0vQ316
+   QPZBqlNJQ5rOqYqHq38StIdagrnPfSbkrMWKZ2n+NTJx0Z/QEe/b1Bl0i
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254275067"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="254275067"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 16:37:53 -0800
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="643462427"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 16:37:52 -0800
+Date:   Mon, 7 Mar 2022 16:37:51 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] x86/split_lock: Make life miserable for split lockers
+Message-ID: <YialXwpbED5kAUaZ@agluck-desk3.sc.intel.com>
+References: <20220217012721.9694-1-tony.luck@intel.com>
+ <877d95l7jo.ffs@tglx>
 MIME-Version: 1.0
-References: <20220302111334.12689-1-likexu@tencent.com> <20220302111334.12689-8-likexu@tencent.com>
-In-Reply-To: <20220302111334.12689-8-likexu@tencent.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 7 Mar 2022 16:36:57 -0800
-Message-ID: <CALMp9eQtzS6HEHZ4__K9VuG+-Duwt5uUFb_FcW4DaBKPDmcYkA@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] KVM: x86/pmu: Use PERF_TYPE_RAW to merge
- reprogram_{gp, fixed}counter()
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        Like Xu <likexu@tencent.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877d95l7jo.ffs@tglx>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 3:14 AM Like Xu <like.xu.linux@gmail.com> wrote:
->
-> From: Like Xu <likexu@tencent.com>
->
-> The code sketch for reprogram_{gp, fixed}_counter() is similar, while the
-> fixed counter using the PERF_TYPE_HARDWAR type and the gp being
-> able to use either PERF_TYPE_HARDWAR or PERF_TYPE_RAW type
-> depending on the pmc->eventsel value.
->
-> After 'commit 761875634a5e ("KVM: x86/pmu: Setup pmc->eventsel
-> for fixed PMCs")', the pmc->eventsel of the fixed counter will also have
-> been setup with the same semantic value and will not be changed during
-> the guest runtime. But essentially, "the HARDWARE is just a convenience
-> wrapper over RAW IIRC", quoated from Peterz. So it could be pretty safe
-> to use the PERF_TYPE_RAW type only to program both gp and fixed
-> counters naturally in the reprogram_counter().
->
-> To make the gp and fixed counters more semantically symmetrical,
-> the selection of EVENTSEL_{USER, OS, INT} bits is temporarily translated
-> via fixed_ctr_ctrl before the pmc_reprogram_counter() call.
->
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Suggested-by: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/kvm/pmu.c           | 128 +++++++++++++----------------------
->  arch/x86/kvm/vmx/pmu_intel.c |   2 +-
->  2 files changed, 47 insertions(+), 83 deletions(-)
->
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index 5299488b002c..00e1660c10ca 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -215,85 +215,60 @@ static bool check_pmu_event_filter(struct kvm_pmc *pmc)
->         return allow_event;
->  }
->
-> -static void reprogram_gp_counter(struct kvm_pmc *pmc)
-> -{
-> -       u64 config;
-> -       u32 type = PERF_TYPE_RAW;
-> -       u64 eventsel = pmc->eventsel;
-> -
-> -       if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
-> -               printk_once("kvm pmu: pin control bit is ignored\n");
-> -
-> -       pmc_pause_counter(pmc);
-> -
-> -       if (!(eventsel & ARCH_PERFMON_EVENTSEL_ENABLE) || !pmc_is_enabled(pmc))
-> -               return;
-> -
-> -       if (!check_pmu_event_filter(pmc))
-> -               return;
-> -
-> -       if (!(eventsel & (ARCH_PERFMON_EVENTSEL_EDGE |
-> -                         ARCH_PERFMON_EVENTSEL_INV |
-> -                         ARCH_PERFMON_EVENTSEL_CMASK |
-> -                         HSW_IN_TX |
-> -                         HSW_IN_TX_CHECKPOINTED))) {
-> -               config = kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc);
-> -               if (config != PERF_COUNT_HW_MAX)
-> -                       type = PERF_TYPE_HARDWARE;
-> -       }
-> -
-> -       if (type == PERF_TYPE_RAW)
-> -               config = eventsel & AMD64_RAW_EVENT_MASK;
-> -
-> -       if (pmc->current_config == eventsel && pmc_resume_counter(pmc))
-> -               return;
-> -
-> -       pmc_release_perf_event(pmc);
-> -
-> -       pmc->current_config = eventsel;
-> -       pmc_reprogram_counter(pmc, type, config,
-> -                             !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
-> -                             !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
-> -                             eventsel & ARCH_PERFMON_EVENTSEL_INT,
-> -                             (eventsel & HSW_IN_TX),
-> -                             (eventsel & HSW_IN_TX_CHECKPOINTED));
-> -}
-> -
-> -static void reprogram_fixed_counter(struct kvm_pmc *pmc)
-> +static inline bool pmc_speculative_in_use(struct kvm_pmc *pmc)
->  {
->         struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-> -       int idx = pmc->idx - INTEL_PMC_IDX_FIXED;
-> -       u8 ctrl = fixed_ctrl_field(pmu->fixed_ctr_ctrl, idx);
-> -       unsigned en_field = ctrl & 0x3;
-> -       bool pmi = ctrl & 0x8;
->
-> -       pmc_pause_counter(pmc);
-> +       if (pmc_is_fixed(pmc))
-> +               return fixed_ctrl_field(pmu->fixed_ctr_ctrl,
-> +                       pmc->idx - INTEL_PMC_IDX_FIXED) & 0x3;
->
-> -       if (!en_field || !pmc_is_enabled(pmc))
-> -               return;
-> -
-> -       if (!check_pmu_event_filter(pmc))
-> -               return;
-> -
-> -       if (pmc->current_config == (u64)ctrl && pmc_resume_counter(pmc))
-> -               return;
-> -
-> -       pmc_release_perf_event(pmc);
-> -
-> -       pmc->current_config = (u64)ctrl;
-> -       pmc_reprogram_counter(pmc, PERF_TYPE_HARDWARE,
-> -                             kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc),
-> -                             !(en_field & 0x2), /* exclude user */
-> -                             !(en_field & 0x1), /* exclude kernel */
-> -                             pmi, false, false);
-> +       return pmc->eventsel & ARCH_PERFMON_EVENTSEL_ENABLE;
->  }
->
->  void reprogram_counter(struct kvm_pmc *pmc)
->  {
-> -       if (pmc_is_gp(pmc))
-> -               reprogram_gp_counter(pmc);
-> -       else
-> -               reprogram_fixed_counter(pmc);
-> +       struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-> +       u64 eventsel = pmc->eventsel;
-> +       u64 new_config = eventsel;
-> +       u8 fixed_ctr_ctrl;
-> +
-> +       pmc_pause_counter(pmc);
-> +
-> +       if (!pmc_speculative_in_use(pmc) || !pmc_is_enabled(pmc))
-> +               return;
-> +
-> +       if (!check_pmu_event_filter(pmc))
-> +               return;
-> +
-> +       if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
-> +               printk_once("kvm pmu: pin control bit is ignored\n");
-> +
-> +       if (pmc_is_fixed(pmc)) {
-> +               fixed_ctr_ctrl = fixed_ctrl_field(pmu->fixed_ctr_ctrl,
-> +                                                 pmc->idx - INTEL_PMC_IDX_FIXED);
-> +               if (fixed_ctr_ctrl & 0x1)
-> +                       eventsel |= ARCH_PERFMON_EVENTSEL_OS;
-> +               if (fixed_ctr_ctrl & 0x2)
-> +                       eventsel |= ARCH_PERFMON_EVENTSEL_USR;
-> +               if (fixed_ctr_ctrl & 0x8)
-> +                       eventsel |= ARCH_PERFMON_EVENTSEL_INT;
-> +               new_config = (u64)fixed_ctr_ctrl;
-> +       }
-> +
-> +       if (pmc->current_config == new_config && pmc_resume_counter(pmc))
-> +               return;
-> +
-> +       pmc_release_perf_event(pmc);
-> +
-> +       pmc->current_config = new_config;
-> +       pmc_reprogram_counter(pmc, PERF_TYPE_RAW,
-> +                       (eventsel & AMD64_RAW_EVENT_MASK),
-> +                       !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
-> +                       !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
-> +                       eventsel & ARCH_PERFMON_EVENTSEL_INT,
-> +                       (eventsel & HSW_IN_TX),
-> +                       (eventsel & HSW_IN_TX_CHECKPOINTED));
+On Mon, Mar 07, 2022 at 11:30:35PM +0100, Thomas Gleixner wrote:
+> Tony,
+> 
+> On Wed, Feb 16 2022 at 17:27, Tony Luck wrote:
+> > Questions for this RFC:
+> >
+> > 1) Does this need to be a new option? Maybe just update the
+> >    existing "warn" mode to add this level of extra pain.
+> 
+> That's fine. Warn is the default today, right?
 
-It seems that this extremely long argument list was motivated by the
-differences between the two original call sites. Now that you have
-mocked up a full eventsel (with USR, OS, INT, IN_TX, and IN_TXCP bits)
-for the fixed counters, why not pass the entire eventsel as the third
-argument and drop all of the rest? Then, pmc_reprogram_counter() can
-extract/check the bits of interest.
+Yes. Warn is the current default.
+Does "That's fine" mean ok to change exiting warn code to add
+this level of pain? Or OK to add a new option?
 
->  }
->  EXPORT_SYMBOL_GPL(reprogram_counter);
->
-> @@ -451,17 +426,6 @@ void kvm_pmu_init(struct kvm_vcpu *vcpu)
->         kvm_pmu_refresh(vcpu);
->  }
->
-> -static inline bool pmc_speculative_in_use(struct kvm_pmc *pmc)
-> -{
-> -       struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-> -
-> -       if (pmc_is_fixed(pmc))
-> -               return fixed_ctrl_field(pmu->fixed_ctr_ctrl,
-> -                       pmc->idx - INTEL_PMC_IDX_FIXED) & 0x3;
-> -
-> -       return pmc->eventsel & ARCH_PERFMON_EVENTSEL_ENABLE;
-> -}
-> -
->  /* Release perf_events for vPMCs that have been unused for a full time slice.  */
->  void kvm_pmu_cleanup(struct kvm_vcpu *vcpu)
->  {
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index 19b78a9d9d47..d823fbe4e155 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -492,7 +492,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->         pmu->reserved_bits = 0xffffffff00200000ull;
->
->         entry = kvm_find_cpuid_entry(vcpu, 0xa, 0);
-> -       if (!entry || !vcpu->kvm->arch.enable_pmu)
-> +       if (!entry || !vcpu->kvm->arch.enable_pmu || !boot_cpu_has(X86_FEATURE_ARCH_PERFMON))
+> > 2) Under what circumstances will work a function scheduled with
+> >    schedule_delayed_work() run on different CPU?
+> 
+> Under many...
+> 
+> >    I've covered the obvious case of the CPU being taken offline before
+> >    the work is run. But are there other cases?
+> 
+> scheduled_delayed_work_on() is what you are looking for.
 
-This change seems unrelated.
+That sounds like the right choice ... I just didn't dig deep
+enough into the options available.
 
->                 return;
->         eax.full = entry->eax;
->         edx.full = entry->edx;
-> --
-> 2.35.1
->
+> > 3) Should I add even more pain with an msleep() before even trying
+> >    to get the semaphore?
+> 
+> No objections from me.
+
+Will do in next version.
+
+> > +static void __split_lock_reenable(struct work_struct *work)
+> > +{
+> > +	sld_update_msr(true);
+> > +	up(&buslock_sem);
+> > +}
+> > +
+> > +/*
+> > + * If a CPU goes offline with pending delayed work to
+> > + * re-enable split lock detection then the delayed work
+> > + * will be executed on some other CPU. That handles releasing
+> > + * the buslock_sem, but because it executes on a different
+> > + * CPU probably won't re-enable split lock detection. This
+> > + * is a problem on HT systems since the sibling CPU on the
+> > + * same core may then be left running with split lock
+> > + * detection disabled.
+> > + *
+> > + * Unconditionally re-enable detection here.
+> 
+> Had to think twice whether this works under all circumstances. It
+> actually works because of how CPU hotunplug works nowadays. It
+> guarantees that after the initial CPU down state sched_cpu_deactivate()
+> no task which is running or affine to the CPU can get back to user space
+> on that CPU. That was not always the case, that's why I had to think
+> twice :)
+> 
+> But I'm not yet convinced that this is required at all.
+> 
+> > + */
+> > +static int splitlock_cpu_offline(unsigned int cpu)
+> > +{
+> > +	sld_update_msr(true);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static DECLARE_DELAYED_WORK(split_lock_reenable, __split_lock_reenable);
+> > +
+> >  static void split_lock_warn(unsigned long ip)
+> >  {
+> >  	pr_warn_ratelimited("#AC: %s/%d took a split_lock trap at address: 0x%lx\n",
+> >  			    current->comm, current->pid, ip);
+> >  
+> > -	/*
+> > -	 * Disable the split lock detection for this task so it can make
+> > -	 * progress and set TIF_SLD so the detection is re-enabled via
+> > -	 * switch_to_sld() when the task is scheduled out.
+> > -	 */
+> > +	switch (sld_state) {
+> > +	case sld_warn:
+> > +		/* This task will keep running with split lock disabled */
+> > +		set_tsk_thread_flag(current, TIF_SLD);
+> > +		break;
+> > +	case sld_sequential:
+> > +		/* Only allow one buslocked disabled core at a time */
+> > +		if (down_interruptible(&buslock_sem) == -EINTR)
+> > +			return;
+> > +		schedule_delayed_work(&split_lock_reenable, 2);
+> 
+> Hmm. This does not set TIF_SLD. So:
+> 
+>  task hits splitlock
+>    #AC
+>      down(sema);
+>      schedule_work();
+>      disable_sld();
+> 
+>  task is preempted or schedules out voluntarily
+> 
+>    -> SLD stays disabled for the incoming task which is wrong and it
+>       stays disabled up to the point where the timer fires or a task
+>       switch with TIF_SLD mismatch happens. 
+> 
+> Not what we want, right?
+
+It isn't ideal. We just gave a free pass to some other tasks to
+do split locks for up to two jiffies. But they would have been
+given those two jiffies later had they taken an #AC trap ... so
+they just bypassed the queue to get what we would have given them
+later.
+
+> So the right thing to do is to set TIF_SLD also for the sequential
+> case. Now how to do that delayed split lock reenable for the task in
+> question?
+> 
+> 	case sld_sequential:
+> 		if (down_interruptible(&buslock_sem) == -EINTR)
+> 			return;
+> 		set_tsk_thread_flag(current, TIF_SLD);
+>                 buslock_sequential_task = current;
+>                 get_task_struct(current);
+> 		schedule_delayed_work_on(smp_processor_id(), &split_lock_reenable, 2);
+> 
+> and then the work function does:
+> 
+>     clear_tsk_thread_flag(buslock_sequential_task, TIF_SLD);
+>     put_task_struct(buslock_sequential_task);
+>     buslock_sequential_task = NULL;
+>     up(&buslock_sem);
+>     
+> With that you spare the cpu hotplug callback as well simply because it's
+> guaranteed that the SLD state is handled correctly when the task in
+> question schedules out. I.e. it does not matter at all on which CPU the
+> timer goes off if the CPU on which is was armed is offlined before it
+> fires.
+> 
+> But that's nasty too because if the task schedules away from the CPU on
+> which it hit the buslock in the first place and then stays on the other
+> CPU in user space forever (think NOHZ_FULL) then it can buslock forever
+> too.
+
+Agreed. Trying to get this "perfect" has many ugly corner cases.
+
+> The question is whether this is something to worry about. If so, then we
+> need to go back to the drawing board.
+
+I don't think it is worth worrying about. The case you describe is
+a process that is about to be preempted when the #AC trap happens.
+In that case this CPU (in fact both HT threads on this core) get
+two jiffies of free split locks.  Cases from here:
+
+1) The original process gets to run on either of these threads
+before the timeout. They get to execute their split lock and carry
+on running.
+
+2) The process is scheduled on a different core during the two jiffie
+window. They take an #AC trap and block on the semaphore until the
+original core releases. Then they get their chance to run on this new
+core.
+
+3) The original process doesn't get rescheduled for two jiffies, then
+runs somewhere. The original core has released the sempahore and re-enabled
+split lock checking. So the process takes #AC, gets the semaphore, kernel
+disables split lock checking ... and we try again.
+
+Now it is possible that the process may repeatedly be preempted in between
+getting the semaphore and actually getting all the way to user space
+to split a lock ... but can only happen if there are multiple processes
+splitting locks. The goal of this patch is to be mean to all of them. If
+we happen to be extra mean to some of them, well so be it.
+
+-Tony

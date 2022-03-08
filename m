@@ -2,159 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE1D4D1FED
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202E74D1FF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349462AbiCHSTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
+        id S1349496AbiCHSTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:19:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbiCHSTT (ORCPT
+        with ESMTP id S1349485AbiCHSTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:19:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2A02EF;
-        Tue,  8 Mar 2022 10:18:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 794236157C;
-        Tue,  8 Mar 2022 18:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E7CBC340EB;
-        Tue,  8 Mar 2022 18:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646763500;
-        bh=hfliW31AVRSU5p6jjAxSw1HcKyAHEKOmAwFZjydld00=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BhEHsqr3EDTXwEIBwWtIIb/LdCdEwCx9P3HaPD+EkCBnAmRPkzSpaFvJGs84nFuZW
-         f4reBJEEPm8T4qO7GUn1rTm5pX0t1NW/dZPlVc4s4BZHn8gYAfkLT43xAJSm7fDVaL
-         tVFk4gqmjoMOZwpdDdHb/dSIwlSYXMmemtDirUm4gJaeFnjhgT0aQKSPNcdcvWMF0I
-         UzCgdZoI/5/224f43RrsVcOPRbzBPan/peHqSnTCCm/qzMaaVh2fN3rHX+ucCV4Bcb
-         rBZbbrcmq6IhOaD8B8F8ciFQJlJ8Yb6guJixW21bJJCSCE9uuIewLYPPuAEGCXk9hY
-         aUySQg3RkP+0A==
-Message-ID: <66463e26-8564-9f58-ce41-9a2843891d1a@kernel.org>
-Date:   Tue, 8 Mar 2022 11:18:18 -0700
+        Tue, 8 Mar 2022 13:19:42 -0500
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C040143EDB;
+        Tue,  8 Mar 2022 10:18:45 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id u10so19647119ybd.9;
+        Tue, 08 Mar 2022 10:18:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0mm42zyukh7VksC1paHdf15HMBSOa0ps1GGtSZmcm+Y=;
+        b=dUeqh/2yPGz+muX+vwmG5tihyVuaCZ7b3I27N4BZGhADqL3BVklVQJjU1CXF8dl8Z9
+         /ZOhqCGPmE9Jbm1QuLi0e/rNf21EHbPda5ZhV6fTwAFQbMJOHhg4YJvkiOwqBOR0uFEN
+         /0acz+InaTh53nQeQxODlSv4JgOvi40Dn7uDI5CpYd/5FGnMWYXjEV5uArSN0lL7zPYr
+         L2yFXyCjRHB3vlrsgKIj4hw7svFjFH2bo3RP+s/dvTDLFViL2xdwAtMAaSXaOPYDwSC9
+         niYIM3MkSn1GMQeirP0PPDMbrgd+LDoNHDmXMnna8OIJ53H8AJR1U6++ly5j1RDz+Vqu
+         yV8w==
+X-Gm-Message-State: AOAM532QpzmcAcokpNL1oe4UFldDEiEqh/SDrd0X7imfbPibFaIUSTNu
+        vDfcaJNdHp12Iz7ESCkGSa8ePqbfakXOKKacnik=
+X-Google-Smtp-Source: ABdhPJyYffrpdeu9Suv/AB1ytcqAuTnHM7S6CYgSrDk1Koww7qVyYWFAEzAtKp9ZiVc467Auy0StfRQPiSlAR7DB+9Y=
+X-Received: by 2002:a25:d7c2:0:b0:628:9d06:457b with SMTP id
+ o185-20020a25d7c2000000b006289d06457bmr13331613ybg.137.1646763525016; Tue, 08
+ Mar 2022 10:18:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
-Content-Language: en-US
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
-        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
-References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
- <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com>
- <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214101450.356047-1-ray.huang@amd.com> <CAJZ5v0jgqzzog_F+DtgKk544FDQ=iQ_rDfwKeHnEiLLrCyi9Hw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jgqzzog_F+DtgKk544FDQ=iQ_rDfwKeHnEiLLrCyi9Hw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 8 Mar 2022 19:18:33 +0100
+Message-ID: <CAJZ5v0h6DB9d2buHKmdaicszJ0f5h8YxGN6gkLhMV78im61zBw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] x86/acpi/cppc: Minor clean up for x86 CPPC implementation
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Huang Rui <ray.huang@amd.com>, Borislav Petkov <bp@alien8.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Jassmine Meng <li.meng@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 8:43 AM, Tadeusz Struk wrote:
-> Hi David,
-> On 3/7/22 18:58, David Laight wrote:
->>> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
->>> index 4788f6b37053..622345af323e 100644
->>> --- a/net/ipv6/ip6_output.c
->>> +++ b/net/ipv6/ip6_output.c
->>> @@ -1629,6 +1629,13 @@ static int __ip6_append_data(struct sock *sk,
->>>                   err = -EINVAL;
->>>                   goto error;
->>>               }
->>> +            if (unlikely(alloclen < fraglen)) {
->>> +                if (printk_ratelimit())
->>> +                    pr_warn("%s: wrong alloclen: %d, fraglen: %d",
->>> +                        __func__, alloclen, fraglen);
->>> +                alloclen = fraglen;
->>> +            }
->>> +
->> Except that is a valid case, see a few lines higher:
->>
->>                 alloclen = min_t(int, fraglen, MAX_HEADER);
->>                 pagedlen = fraglen - alloclen;
->>
->> You need to report the input values that cause the problem later on.
-> 
-> OK, but in this case it falls into the first if block:
-> https://elixir.bootlin.com/linux/v5.17-rc7/source/net/ipv6/ip6_output.c#L1606
-> 
-> where alloclen is assigned the value of mtu.
-> The values in this case are just before the alloc_skb() are:
-> 
-> alloclen = 1480
-> alloc_extra = 136
-> datalen = 64095
-> fragheaderlen = 1480
-> fraglen = 65575
-> transhdrlen = 0
-> mtu = 1480
-> 
+On Tue, Mar 1, 2022 at 8:20 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, Feb 14, 2022 at 11:51 AM Huang Rui <ray.huang@amd.com> wrote:
+> >
+> > Hi all,
+> >
+> > While we were fixing the legacy issue below, we found the dependencies
+> > between smpboot and CPPC were not very good. But due to urgent fix for
+> > 5.17-rc1, I didn't have much time to provide a complete solution.
+> >
+> > https://lore.kernel.org/lkml/YdeWDDCwBQAYnlKb@amd.com/
+> >
+> > In these series, I expand the scope of acpi/cppc_msr to acpi/cppc to cover
+> > the all the CPPC helper functions for x86 ACPI. And then clean up the
+> > smpboot and move CPPC related functions into the acpi/cppc.c. This design
+> > is more straightforward and more clear to handle the CPPC in x86 and
+> > resolve dependency issues between CPPC and smpboot.c.
+> >
+> > Thanks,
+> > Ray
+> >
+> > Huang Rui (4):
+> >   x86/acpi: Expand the CPPC MSR file to cover the whole CPPC
+> >     implementation
+> >   x86, sched: Move AMD maximum frequency ratio setting function into x86
+> >     CPPC
+> >   x86, sched: Expose init_freq_invariance to topology header
+> >   x86/acpi: Move init_freq_invariance_cppc into x86 CPPC
+> >
+> >  arch/x86/include/asm/topology.h |  13 +++-
+> >  arch/x86/kernel/acpi/Makefile   |   2 +-
+> >  arch/x86/kernel/acpi/cppc.c     | 103 ++++++++++++++++++++++++++++++++
+> >  arch/x86/kernel/acpi/cppc_msr.c |  49 ---------------
+> >  arch/x86/kernel/smpboot.c       |  72 +---------------------
+> >  5 files changed, 118 insertions(+), 121 deletions(-)
+> >  create mode 100644 arch/x86/kernel/acpi/cppc.c
+> >  delete mode 100644 arch/x86/kernel/acpi/cppc_msr.c
+> >
+> > --
+>
+> This series makes sense to me and I'm inclined to take it if there are
+> no objections, so if there are any, please let me know.
 
-Does this solve the problem (whitespace damaged on paste, but it is just
-a code move and removing fraglen getting set twice):
+And so applied as 5.18 material now with slightly adjusted subjects.
 
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index e69fac576970..59f036241f1b 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1589,6 +1589,15 @@ static int __ip6_append_data(struct sock *sk,
-
-                        if (datalen > (cork->length <= mtu &&
-!(cork->flags & IPCORK_ALLFRAG) ? mtu : maxfraglen) - fragheaderlen)
-                                datalen = maxfraglen - fragheaderlen -
-rt->dst.trailer_len;
-+
-+                       if (datalen != length + fraggap) {
-+                               /*
-+                                * this is not the last fragment, the
-trailer
-+                                * space is regarded as data space.
-+                                */
-+                               datalen += rt->dst.trailer_len;
-+                       }
-+
-                        fraglen = datalen + fragheaderlen;
-                        pagedlen = 0;
-
-@@ -1615,16 +1624,6 @@ static int __ip6_append_data(struct sock *sk,
-                        }
-                        alloclen += alloc_extra;
-
--                       if (datalen != length + fraggap) {
--                               /*
--                                * this is not the last fragment, the
-trailer
--                                * space is regarded as data space.
--                                */
--                               datalen += rt->dst.trailer_len;
--                       }
--
--                       fraglen = datalen + fragheaderlen;
--
-                        copy = datalen - transhdrlen - fraggap - pagedlen;
-                        if (copy < 0) {
-                                err = -EINVAL;
+Thanks!

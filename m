@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F514D0EED
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C904D0EF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240424AbiCHFHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S240602AbiCHFQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiCHFHG (ORCPT
+        with ESMTP id S229506AbiCHFQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:07:06 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F78D33EA9;
-        Mon,  7 Mar 2022 21:06:09 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A294D6E;
-        Mon,  7 Mar 2022 21:06:09 -0800 (PST)
-Received: from [10.162.17.54] (a077893.blr.arm.com [10.162.17.54])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F43B3FA5D;
-        Mon,  7 Mar 2022 21:06:06 -0800 (PST)
-Message-ID: <98472993-853a-7279-6594-fd173059a4d9@arm.com>
-Date:   Tue, 8 Mar 2022 10:36:04 +0530
+        Tue, 8 Mar 2022 00:16:30 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C908036B41;
+        Mon,  7 Mar 2022 21:15:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646716534; x=1678252534;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=gG7N1W4Kxhwbbk1jZERSsHzsE69OmsTBNUffQnkDmK8=;
+  b=nLvLdwXuSa3pb74zDIuEUmUelkSu7nMD3fCqbVhdzeJsdPjUHcVc7T1T
+   fjG+kNLzb4r3V8CUdywpRmQf4jjreu8Zjt0SHPyX68DYfkuHfVuG2KGEU
+   JGOtl2eSlt7+UmmAe5CiTUASjS19LBSfVIPGEJyD4POyyC5Men5vyWwXy
+   s7VdEAHL2Dkgm5ZRHnxdM8htoz/tbjIhMRZYmdHgihK+rd5PTCAqSo40U
+   uLHUn3Owsf+Y1oeKoavYvqfpExt8mR0/uKDSzUo7m46SbqAYRztEp95UP
+   4sipcE4dTnY4ZeAQqQAU+NKIOgFps3gcPZxTuBaccSJHzQiVU2fTuynUd
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="242030981"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="242030981"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 21:15:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="553475743"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga008.jf.intel.com with ESMTP; 07 Mar 2022 21:15:29 -0800
+Message-ID: <52bbbd92-17d4-a5ea-150e-28cf56bb0a67@intel.com>
+Date:   Tue, 8 Mar 2022 07:15:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/4] perf: Refactor perf script branch stack printing
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [RESEND PATCH v1] scsi: ufs: exclude UECxx from SFR dump list
 Content-Language: en-US
-To:     James Clark <james.clark@arm.com>, acme@kernel.org,
-        linux-perf-users@vger.kernel.org
-Cc:     german.gomez@arm.com, leo.yan@linaro.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220307171917.2555829-1-james.clark@arm.com>
- <20220307171917.2555829-4-james.clark@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220307171917.2555829-4-james.clark@arm.com>
+To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        cang@codeaurora.org, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com,
+        vkumar.1997@samsung.com
+References: <CGME20220307024436epcas2p1cb5b07d5149b37610819fa3d70af59ea@epcas2p1.samsung.com>
+ <1646621010-118886-1-git-send-email-kwmad.kim@samsung.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <1646621010-118886-1-git-send-email-kwmad.kim@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/7/22 22:49, James Clark wrote:
-> Remove duplicate code so that future changes to flags are always made to
-> all 3 printing variations.
+On 07/03/2022 04:43, Kiwoong Kim wrote:
+> These are ROC type things that means their values
+> are cleared when the SFRs are read.
+> They are usually read in ISR when an UIC error occur.
+> Thus, their values would be zero at many cases. And
+> there might be a little bit risky when they are read to
+> be cleared before the ISR reads them, e.g. the case that
+> a command is timed-out, ufshcd_dump_regs is called in
+> ufshcd_abort and an UIC error occurs at the nearly
+> same time. In this case, ISR will be called but UFS error handler
+> will not be scheduled.
+> This patch is to make UFS driver not read those SFRs in the
+> dump function, i.e. ufshcd_dump_regs.
 > 
-> Signed-off-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
 > ---
->  tools/perf/builtin-script.c | 27 ++++++++++++---------------
->  1 file changed, 12 insertions(+), 15 deletions(-)
+>  drivers/scsi/ufs/ufshcd.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index 9e032343f1c6..fac2e9470926 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -857,6 +857,15 @@ mispred_str(struct branch_entry *br)
->  	return br->flags.predicted ? 'P' : 'M';
->  }
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 460d2b4..8b65c081 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -115,8 +115,12 @@ int ufshcd_dump_regs(struct ufs_hba *hba, size_t offset, size_t len,
+>  	if (!regs)
+>  		return -ENOMEM;
 >  
-> +static int print_bstack_flags(FILE *fp, struct branch_entry *br)
-> +{
-> +	return fprintf(fp, "/%c/%c/%c/%d ",
-> +		       mispred_str(br),
-> +		       br->flags.in_tx ? 'X' : '-',
-> +		       br->flags.abort ? 'A' : '-',
-> +		       br->flags.cycles);
-> +}
-> +
->  static int perf_sample__fprintf_brstack(struct perf_sample *sample,
->  					struct thread *thread,
->  					struct perf_event_attr *attr, FILE *fp)
-> @@ -895,11 +904,7 @@ static int perf_sample__fprintf_brstack(struct perf_sample *sample,
->  			printed += fprintf(fp, ")");
->  		}
->  
-> -		printed += fprintf(fp, "/%c/%c/%c/%d ",
-> -			mispred_str(entries + i),
-> -			entries[i].flags.in_tx ? 'X' : '-',
-> -			entries[i].flags.abort ? 'A' : '-',
-> -			entries[i].flags.cycles);
-> +		printed += print_bstack_flags(fp, entries + i);
->  	}
->  
->  	return printed;
-> @@ -941,11 +946,7 @@ static int perf_sample__fprintf_brstacksym(struct perf_sample *sample,
->  			printed += map__fprintf_dsoname(alt.map, fp);
->  			printed += fprintf(fp, ")");
->  		}
-> -		printed += fprintf(fp, "/%c/%c/%c/%d ",
-> -			mispred_str(entries + i),
-> -			entries[i].flags.in_tx ? 'X' : '-',
-> -			entries[i].flags.abort ? 'A' : '-',
-> -			entries[i].flags.cycles);
-> +		printed += print_bstack_flags(fp, entries + i);
->  	}
->  
->  	return printed;
-> @@ -991,11 +992,7 @@ static int perf_sample__fprintf_brstackoff(struct perf_sample *sample,
->  			printed += map__fprintf_dsoname(alt.map, fp);
->  			printed += fprintf(fp, ")");
->  		}
-> -		printed += fprintf(fp, "/%c/%c/%c/%d ",
-> -			mispred_str(entries + i),
-> -			entries[i].flags.in_tx ? 'X' : '-',
-> -			entries[i].flags.abort ? 'A' : '-',
-> -			entries[i].flags.cycles);
-> +		printed += print_bstack_flags(fp, entries + i);
->  	}
->  
->  	return printed;
+> -	for (pos = 0; pos < len; pos += 4)
+> +	for (pos = 0; pos < len; pos += 4) {
+> +		if (pos >= REG_UIC_ERROR_CODE_PHY_ADAPTER_LAYER	&&
+> +		    pos <= REG_UIC_ERROR_CODE_DME)
 
+Doesn't that need to be 'pos + offset' not just 'pos'
 
-LGTM
+> +			continue;
+>  		regs[pos / 4] = ufshcd_readl(hba, offset + pos);
+> +	}
+>  
+>  	ufshcd_hex_dump(prefix, regs, len);
+>  	kfree(regs);
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>

@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E724D1C4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6E94D1C51
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347989AbiCHPt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:49:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
+        id S1348003AbiCHPvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:51:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiCHPtY (ORCPT
+        with ESMTP id S236338AbiCHPvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:49:24 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA2B36E18;
-        Tue,  8 Mar 2022 07:48:27 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so1778555wmp.5;
-        Tue, 08 Mar 2022 07:48:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DoOVP+akfcsEpOTsTUbvwWUFXwvQXj7SzsrmJL9oUYY=;
-        b=i0pgZPH+xQPjSlsFVAb+C/Q4cZkFO168Ys1lQCZLFCUyWLST06J0FABrgzPOtg1J5y
-         vmclEuXe50i/BbavE2Om+R4kwuUywXFvYMSA9Gavtqu/U87FMKNrAgaM2nrVsCN0w/qW
-         84XLVB4qRGn3q69k4YyPkxqFTpL/l94UvsAIDvfNH9824tJqskSAKI4wmVB8xANOXTh3
-         wWRkZAnv9k7XFykqyKFQn5dHzDG8vlFqxclnyyNZFYZHX9JerHM1XPJ+XBRpN50Cx/9m
-         QQVrS8nKjzSk60IgdsQuQIJtdI9MbrjYLxx6UawUajsCIG5bBhiAGtLKKQosZHzAFNBG
-         yULg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DoOVP+akfcsEpOTsTUbvwWUFXwvQXj7SzsrmJL9oUYY=;
-        b=Q6KBlzcrZHsNYV350IbLrBVFOOfe2HhwhrkD+zMSe+3Jof0X/54TxGCXj7DM97hWIa
-         9gaZPU/p5m+9bJ80aoUQXzpEGrMyRo4U7A8h8QeKz8KC4kaScIdyLZ5p7C1/iwvWBoiL
-         +sNHp31NAnBmJnvBXN4l0tPx2on/KT+SHd9mjwCTQYa7ulkDpYjtMYVXB5KIlfSFIkot
-         Dk+4SyDzTsBN9teYG23I9NwRwfniq16R4AfTlrDEzPOUajEyF6A0wlQ8UGfRkVRMiCN1
-         tgolp+jpFCSxbY7ms691UULlaQufvOUCbkEXi7nEHmYw9nJX357L1nvvmk4Dx3dp9yeK
-         rEBQ==
-X-Gm-Message-State: AOAM5303hmN2w55SNJDQxx2rN2FKDWJ+gMFiAW3eDv6bLGdmrW1yungU
-        ywwm+ldAFf1vnJeeLHlpIgg=
-X-Google-Smtp-Source: ABdhPJwprzRbv4TAEIWEP8qMVukm2Jt5lSsKcsQj+JukvDf2dWMmYJT8o7SXrnri7y3hCMUKijPaPQ==
-X-Received: by 2002:a1c:2744:0:b0:382:a9b7:1c8a with SMTP id n65-20020a1c2744000000b00382a9b71c8amr4169797wmn.187.1646754506583;
-        Tue, 08 Mar 2022 07:48:26 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id r187-20020a1c44c4000000b0038377fb18f8sm3472212wma.5.2022.03.08.07.48.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 07:48:26 -0800 (PST)
-Date:   Tue, 8 Mar 2022 15:48:24 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/51] 4.19.233-rc1 review
-Message-ID: <Yid6yOjs5719+uIv@debian>
-References: <20220307091636.988950823@linuxfoundation.org>
+        Tue, 8 Mar 2022 10:51:40 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39574F45F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:50:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646754643; x=1678290643;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f/6ZT/vJ36tJzr67cTU8/8lEsC/01oXeKhewZy2idao=;
+  b=bAgv4aAM03Zl0O12rhu/8aUYNl0pDnlzlDt4PYLmY8eRt8OrdTC/O4bI
+   ijIASNAvlO5QHqbEL+tbw5vHrd1gf3slLo0rN/fap2OMYCjV3LPX5S96Q
+   rRy+/TwLM1Ifkkbinj826Fi4OHQHPfaB/A1z/3e8tSYvmXjZmtauQs7gq
+   YdMn/6VDrJMo4v0VJ/NBvYM677uEDIoZ5gM04fX0m4cpkuBV8hwilVDth
+   GYUUgPsbMcQUSfKKgs41ylLV5BumUw91WRWTQSsV2CiJBPaC4/XePK7Bn
+   CQkGQKp7LBLDSsc9Dv51Y5Y+yOmJFxEQWqb/wD/KzUExVNZgxRrUetEx8
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="235326823"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="235326823"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 07:50:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="643694865"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 07:50:29 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRc6W-0001dI-9p; Tue, 08 Mar 2022 15:50:28 +0000
+Date:   Tue, 8 Mar 2022 23:49:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 6/20]
+ arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
+Message-ID: <202203082334.6KUJa3iS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
+head:   ab7e33a6b819f009c3c9ccf69b2f44c1ad84a5a0
+commit: edacaabe96fd3b87ddd5e9972ba89718af564124 [6/20] asm-generic: compat: Cleanup duplicate definitions
+config: arm64-randconfig-r035-20220308 (https://download.01.org/0day-ci/archive/20220308/202203082334.6KUJa3iS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/edacaabe96fd3b87ddd5e9972ba89718af564124
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
+        git checkout edacaabe96fd3b87ddd5e9972ba89718af564124
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-On Mon, Mar 07, 2022 at 10:18:35AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.233 release.
-> There are 51 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
-> Anything received after that time might be too late.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Build test:
-mips (gcc version 11.2.1 20220301): 63 configs -> no  failure
-arm (gcc version 11.2.1 20220301): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20220301): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220301): 4 configs -> no failure
+All errors (new ones prefixed by >>):
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+   In file included from arch/arm64/kernel/asm-offsets.c:10:
+   In file included from include/linux/arm_sdei.h:8:
+   In file included from include/acpi/ghes.h:5:
+   In file included from include/acpi/apei.h:9:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/irqdomain.h:35:
+   In file included from include/linux/of.h:17:
+   In file included from include/linux/kobject.h:20:
+   In file included from include/linux/sysfs.h:22:
+   In file included from include/linux/stat.h:6:
+   In file included from arch/arm64/include/asm/stat.h:13:
+>> arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'compat_statfs'
+   struct compat_statfs {
+          ^
+   include/asm-generic/compat.h:80:8: note: previous definition is here
+   struct compat_statfs {
+          ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/852
 
+vim +/compat_statfs +69 arch/arm64/include/asm/compat.h
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+3dd681d944f6d86 Will Deacon 2012-03-05  68  
+3dd681d944f6d86 Will Deacon 2012-03-05 @69  struct compat_statfs {
+3dd681d944f6d86 Will Deacon 2012-03-05  70  	int		f_type;
+3dd681d944f6d86 Will Deacon 2012-03-05  71  	int		f_bsize;
+3dd681d944f6d86 Will Deacon 2012-03-05  72  	int		f_blocks;
+3dd681d944f6d86 Will Deacon 2012-03-05  73  	int		f_bfree;
+3dd681d944f6d86 Will Deacon 2012-03-05  74  	int		f_bavail;
+3dd681d944f6d86 Will Deacon 2012-03-05  75  	int		f_files;
+3dd681d944f6d86 Will Deacon 2012-03-05  76  	int		f_ffree;
+3dd681d944f6d86 Will Deacon 2012-03-05  77  	compat_fsid_t	f_fsid;
+3dd681d944f6d86 Will Deacon 2012-03-05  78  	int		f_namelen;	/* SunOS ignores this field. */
+3dd681d944f6d86 Will Deacon 2012-03-05  79  	int		f_frsize;
+3dd681d944f6d86 Will Deacon 2012-03-05  80  	int		f_flags;
+3dd681d944f6d86 Will Deacon 2012-03-05  81  	int		f_spare[4];
+3dd681d944f6d86 Will Deacon 2012-03-05  82  };
+3dd681d944f6d86 Will Deacon 2012-03-05  83  
 
---
-Regards
-Sudip
+:::::: The code at line 69 was first introduced by commit
+:::::: 3dd681d944f6d861f12ee03aff17a14342963330 arm64: 32-bit (compat) applications support
 
+:::::: TO: Will Deacon <will.deacon@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

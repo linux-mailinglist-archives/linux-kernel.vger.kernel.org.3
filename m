@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1134D1D34
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F114D1D38
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348306AbiCHQcK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Mar 2022 11:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S1348348AbiCHQcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:32:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiCHQcJ (ORCPT
+        with ESMTP id S236764AbiCHQcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:32:09 -0500
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6556750447;
-        Tue,  8 Mar 2022 08:31:13 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id o22so6941220qta.8;
-        Tue, 08 Mar 2022 08:31:13 -0800 (PST)
+        Tue, 8 Mar 2022 11:32:23 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7589650447
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:31:26 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id x9-20020a0566022c4900b0064289c98bf8so13261153iov.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:31:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HwPCO4dFtjlzDdsvWKkUtYlqbyqtlLf5x449OlOiOMg=;
-        b=flF4EFmiN6adgDdN95mu9drNHiRQIyXgbOzZlocqbpQbqi4F2M6WXZre09p/UNIKat
-         z/rzYzw//insFZC+/BgV4qLD3aBSuE84URQo8ws6gj5IyAeSQ3YCWYjm5Nd9dMnjFGrD
-         +FkRDxN/FhkKqdJep0MknipOAHos34vEinlfXM1CmkfBTFZFbFGcngoSNxxNE3LPIzRF
-         4h2pBC0iFxCgjkuBjdinsQBtd6jDrfb0L3WXu9nZ/sBao7KScnDoMh3byEUdMIirRoQM
-         V/MafWVwoJQNZ3Ud4v5XLG+U4Qg+CBohuIcQuuJ0vCa82GNEwIdg1WjFOE9c1kH0ywxK
-         nPHg==
-X-Gm-Message-State: AOAM532XUoDliExzBtpz2yvK6ABPLu/qJWwEfsMLULSB4SmbHrPDa+FV
-        rJpbgNLM08nqh2qVGXDy1DDJd+d9RvIXCA==
-X-Google-Smtp-Source: ABdhPJzpZGj+QXiThFtPfMH59R0Yms1F8RA5FP+ZWIT61/2ysdWDLgFlpjoLinr0xhe5sw9U6mNIUg==
-X-Received: by 2002:a05:622a:40a:b0:2e0:7235:f7a9 with SMTP id n10-20020a05622a040a00b002e07235f7a9mr2493108qtx.500.1646757071301;
-        Tue, 08 Mar 2022 08:31:11 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id i192-20020a379fc9000000b0067b314c0ff3sm2724148qke.43.2022.03.08.08.31.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 08:31:10 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id g26so38813742ybj.10;
-        Tue, 08 Mar 2022 08:31:10 -0800 (PST)
-X-Received: by 2002:a25:8486:0:b0:619:9fba:895e with SMTP id
- v6-20020a258486000000b006199fba895emr12806820ybk.342.1646757069990; Tue, 08
- Mar 2022 08:31:09 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=V1zLNO1KAqXnOsAbreZ3eBprRbDmLPsP43VZUANZ1eE=;
+        b=i1GQkL4ri6wgOGJ9q+jcE43E5HFx6Xmha3gv8V8TpJfa1UR9fV4bDQfWjtFrzxBB/Z
+         VGRDQLIlOausSkhMkEL2JdFN8HiXK915s8Rw1ek3tK4Ck8tGY2wJO9q+V0pE95V64ZkZ
+         6RxAT0ndgexr/4IOgas9x1QaOIgXggr3qHHIR5ahOmoi2VBYS2XLnQtElAzo6LVwIgI/
+         FXi0o3tkZqyFWv5T5x76uq7L+ahuOI2xDvFFaKl76+b431AMgo5gMsKEGYmYWjEOgkfS
+         53MSORqvuydYhyjwkZY7/crthBDINpYd7VbqUHzkKr2zMubtcJymPx7LgDPE1Q99GcRx
+         QgpQ==
+X-Gm-Message-State: AOAM531/YT7r54DHSZOmHROT7X4pPB4lhdLYZQSkpab+DaGPfghdragh
+        t3+S58n7jYqIh+gxY6vQI08hp7R+CCZJaOeabxZ9hnz9YbGd
+X-Google-Smtp-Source: ABdhPJz2wlhCoBGloN79xjSbYtO9yttKkeIGLgG5eHIjjuJ6B4OJHpcgxXKi5Qtx3q3ZgYzJZZI+3dM1OCybcO34ErYNuEZmv0oD
 MIME-Version: 1.0
-References: <20220214133710.3278506-1-javierm@redhat.com> <20220214133710.3278506-4-javierm@redhat.com>
-In-Reply-To: <20220214133710.3278506-4-javierm@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 8 Mar 2022 17:30:58 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU+29x4ZHLAiPiReyLKw_VYBCCLw0bCoQmw9s6sQ4Bxcw@mail.gmail.com>
-Message-ID: <CAMuHMdU+29x4ZHLAiPiReyLKw_VYBCCLw0bCoQmw9s6sQ4Bxcw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux PWM List <linux-pwm@vger.kernel.org>
+X-Received: by 2002:a5d:944a:0:b0:645:dc2c:46c6 with SMTP id
+ x10-20020a5d944a000000b00645dc2c46c6mr5968524ior.190.1646757085832; Tue, 08
+ Mar 2022 08:31:25 -0800 (PST)
+Date:   Tue, 08 Mar 2022 08:31:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000021ebaf05d9b78339@google.com>
+Subject: [syzbot] INFO: trying to register non-static key in sco_sock_timeout
+From:   syzbot <syzbot+c893cac8686270f25523@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+Hello,
 
-On Mon, Feb 14, 2022 at 2:37 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> This adds a DRM driver for SSD1305, SSD1306, SSD1307 and SSD1309 Solomon
-> OLED display controllers.
->
-> It's only the core part of the driver and a bus specific driver is needed
-> for each transport interface supported by the display controllers.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+syzbot found the following issue on:
 
-Thanks for your patch, which is now commit a61732e808672cfa ("drm:
-Add driver for Solomon SSD130x OLED displays") in drm/drm-next
+HEAD commit:    91265a6da44d Add linux-next specific files for 20220303
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1621ba59700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
+dashboard link: https://syzkaller.appspot.com/bug?extid=c893cac8686270f25523
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Sorry for the delay, but finally I gave it a try on my Adafruit
-FeatherWing 128x32 OLED.
-Some of the weird issues (cursor disappears after printing some text,
-more text also doesn't appear until I clear the display) are still there.
-Unfortunately a regression was introduced since your v3: printed
-text is mirrored upside-down. I.e. "E" is rendered correctly, but "L"
-turns into "Γ" (Greek Gamma).
-I suspect something went wrong with the display initialization
-sequence.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Gr{oetje,eeting}s,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c893cac8686270f25523@syzkaller.appspotmail.com
 
-                        Geert
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 0 PID: 21810 Comm: kworker/0:3 Not tainted 5.17.0-rc6-next-20220303-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events sco_sock_timeout
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ assign_lock_key kernel/locking/lockdep.c:980 [inline]
+ register_lock_class+0xf04/0x11b0 kernel/locking/lockdep.c:1293
+ __lock_acquire+0x10a/0x56c0 kernel/locking/lockdep.c:4939
+ lock_acquire kernel/locking/lockdep.c:5672 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5637
+ lock_sock_nested+0x36/0xf0 net/core/sock.c:3312
+ lock_sock include/net/sock.h:1682 [inline]
+ sco_sock_timeout+0xd2/0x290 net/bluetooth/sco.c:97
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

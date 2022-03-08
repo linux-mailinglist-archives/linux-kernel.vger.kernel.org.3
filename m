@@ -2,116 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C694D0E25
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 03:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6BB4D0E29
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 03:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241240AbiCHC57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 21:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S244288AbiCHC7V convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 7 Mar 2022 21:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244797AbiCHC55 (ORCPT
+        with ESMTP id S243176AbiCHC7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 21:57:57 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97E138DB2
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:57:00 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id j5so13631540qvs.13
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 18:57:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.unc.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6uT1PC10a0/sZU/ckmm4M9kWPDBuTdMim0OHDKjtDmA=;
-        b=Azi0WH/ztvmKrce1UJJnwiVyDZaD4LIPGs6uqG9im6oFRdInBuZtRveYJc/GxaVqnj
-         rMM86N6/HpxNHF6cGN2s5AXLdmdoPbBk8GLM+ZZdYe7kYSfNVs8FXLC4jQ7kZ6J970ja
-         vVPg8rIW85cIAgPRgTJyPqutK8iUNl2aTc2od2PjCWohn8EKmnP2JZff/fzdXawCBAi1
-         LGXDr/3lBMzfgmuApbvni75Qw9Unl1WLBI/te/aM9XEZii9hfAX3tLaoCvIYFyVo+YHG
-         lkNv/dHIlvsbMO+62jdMAltFLKWmCxzLqqfVEkHK5cj9QMeZDwxHM7bT04X54sKMQtco
-         z32g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6uT1PC10a0/sZU/ckmm4M9kWPDBuTdMim0OHDKjtDmA=;
-        b=7eJ54jOmLASjFzYsVWo8hYICAOKx46cSubi3hhyA7AX/vaEQGRXev0zriTaTcY2f9h
-         XBBquaQFLGRk8ANzavb4q81rawzAmkSv50j+r0I3I/lQDNV5WMZOHt4bBIUav2Vueid6
-         PpkByLujEDa0IGbHkVQQWB6UXQ6GaZRRMhP0kF8/wOy3uq41NOXk9307q0kh1/3+VyPG
-         5wGT5BKDEy6p5OTjWhi7xLACWCwvVbFHfjpqI3pIY5LDdaG8LFmypUL5EoY6vheXshje
-         jYljexoqq+ASObZe/YRMr44RkvINvl6/H5pCfF4gL6EnxUGAPi6cgAVjnN1Y05oxcYtQ
-         VC5g==
-X-Gm-Message-State: AOAM531jdB9pl2zvKjAwn1U+ZF0VUWFQ1iowupt3qlVxHWw5eNPiNi6s
-        B3P/Z/rjpFnPthUEa4B3p2Vawg==
-X-Google-Smtp-Source: ABdhPJwp2oZBKOCaOPhgGjcljZe0P5SmP73qzhpBTRNzL/xIMkqFF5pvnszy0ao2zwgsM4WQGq3RmQ==
-X-Received: by 2002:a05:6214:da4:b0:435:66f7:e73d with SMTP id h4-20020a0562140da400b0043566f7e73dmr10611671qvh.59.1646708220021;
-        Mon, 07 Mar 2022 18:57:00 -0800 (PST)
-Received: from localhost.localdomain ([107.13.145.4])
-        by smtp.gmail.com with ESMTPSA id de18-20020a05620a371200b00662cf4b5631sm7118375qkb.23.2022.03.07.18.56.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 18:56:58 -0800 (PST)
-From:   Sagar Patel <sagarmp@cs.unc.edu>
-To:     Andy Whitcroft <apw@canonical.com>
-Cc:     Joe Perches <joe@perches.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Sagar Patel <sagarmp@cs.unc.edu>
-Subject: [PATCH] checkpatch: use python3 to find codespell dictionary
-Date:   Mon,  7 Mar 2022 21:55:48 -0500
-Message-Id: <20220308025547.20412-1-sagarmp@cs.unc.edu>
-X-Mailer: git-send-email 2.25.1
+        Mon, 7 Mar 2022 21:59:19 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EBF739149
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:58:22 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-230-RAzJzQoSOG-PkwXfrfam0w-1; Tue, 08 Mar 2022 02:58:19 +0000
+X-MC-Unique: RAzJzQoSOG-PkwXfrfam0w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 8 Mar 2022 02:58:18 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 8 Mar 2022 02:58:18 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Tadeusz Struk' <tadeusz.struk@linaro.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+CC:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
+        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
+Subject: RE: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
+Thread-Topic: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
+Thread-Index: AQHYMn/TZOkDvut8fEivb26qHFvt1ay0yvXA
+Date:   Tue, 8 Mar 2022 02:58:18 +0000
+Message-ID: <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com>
+References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
+In-Reply-To: <20220308000146.534935-1-tadeusz.struk@linaro.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 0ee3e7b8893e ("checkpatch: get default codespell dictionary path
-from package location") introduced the ability to search for the
-codespell dictionary rather than hardcoding its path.
+From: Tadeusz Struk
+> Sent: 08 March 2022 00:02
+> 
+> Syzbot found a kernel bug in the ipv6 stack:
+> LINK: https://syzkaller.appspot.com/bug?id=205d6f11d72329ab8d62a610c44c5e7e25415580
+> 
+> The reproducer triggers it by sending an invalid message via sendmmsg() call,
+> which triggers skb_over_panic, and crashes the kernel:
+> 
+> skbuff: skb_over_panic: text:ffffffff84647fb4 len:65575 put:65575
+> head:ffff888109ff0000 data:ffff888109ff0088 tail:0x100af end:0xfec0
+> dev:<NULL>
+> 
+> ------------[ cut here ]------------
+> kernel BUG at net/core/skbuff.c:113!
+> PREEMPT SMP KASAN
+> CPU: 1 PID: 1818 Comm: repro Not tainted 5.17.0-rc7-dirty #9
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35
+> RIP: 0010:skb_panic+0x173/0x175
+> RSP: 0018:ffffc900015bf3b8 EFLAGS: 00010282
+> RAX: 0000000000000090 RBX: ffff88810e848c80 RCX: 0000000000000000
+> RDX: ffff88810fd84300 RSI: ffffffff814fa5ef RDI: fffff520002b7e69
+> RBP: ffffc900015bf420 R08: 0000000000000090 R09: 0000000000000000
+> R10: ffffffff814f55f4 R11: 203a666675626b73 R12: ffffffff855bff80
+> R13: ffffffff84647fb4 R14: 0000000000010027 R15: ffffffff855bf420
+> FS:  0000000000c8b3c0(0000) GS:ffff88811b100000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020000040 CR3: 0000000106b68000 CR4: 0000000000150ea0
+> Call Trace:
+>  <TASK>
+>  skb_put.cold+0x23/0x23
+>  __ip6_append_data.isra.0.cold+0x396/0xe3a
+>  ip6_append_data+0x1e5/0x320
+>  rawv6_sendmsg.cold+0x1618/0x2ba9
+>  inet_sendmsg+0x9e/0xe0
+>  sock_sendmsg+0xd7/0x130
+>  ____sys_sendmsg+0x381/0x8a0
+>  ___sys_sendmsg+0x100/0x170
+>  __sys_sendmmsg+0x26c/0x3b7
+>  __x64_sys_sendmmsg+0xb2/0xbd
+>  do_syscall_64+0x35/0xb0
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> The reproducer can be found here:
+> LINK: https://syzkaller.appspot.com/text?tag=ReproC&x=1648c83fb00000
+> This can be fixed by increasing the alloclen in case it is smaller than
+> fraglen in __ip6_append_data().
+> 
+> 
+> Reported-by: syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+> ---
+>  net/ipv6/ip6_output.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+> index 4788f6b37053..622345af323e 100644
+> --- a/net/ipv6/ip6_output.c
+> +++ b/net/ipv6/ip6_output.c
+> @@ -1629,6 +1629,13 @@ static int __ip6_append_data(struct sock *sk,
+>  				err = -EINVAL;
+>  				goto error;
+>  			}
+> +			if (unlikely(alloclen < fraglen)) {
+> +				if (printk_ratelimit())
+> +					pr_warn("%s: wrong alloclen: %d, fraglen: %d",
+> +						__func__, alloclen, fraglen);
+> +				alloclen = fraglen;
+> +			}
+> +
 
-codespell requires Python 3.6 or above, but on some systems, the python
-binary is a Python 2.7 interpreter. In this case, searching for the
-dictionary fails, subsequently making codespell fail:
+Except that is a valid case, see a few lines higher:
 
-No codespell typos will be found - file '/usr/share/codespell/dictionary.txt': No such file or directory
+				alloclen = min_t(int, fraglen, MAX_HEADER);
+				pagedlen = fraglen - alloclen;
 
-So, use python3 to remove ambiguity.
+You need to report the input values that cause the problem later on.
 
-In addition, when searching for the dictionary, do not check if the
-codespell binary exists since codespell can be installed via a Python
-package manager. In this case, a codespell binary is not exported in
-$PATH, but a dictionary does exist.
+	David
 
-Signed-off-by: Sagar Patel <sagarmp@cs.unc.edu>
----
- scripts/checkpatch.pl | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index b01c36a15d9d..46302e074b18 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -334,7 +334,7 @@ if ($user_codespellfile) {
- } elsif (!(-f $codespellfile)) {
- 	# If /usr/share/codespell/dictionary.txt is not present, try to find it
- 	# under codespell's install directory: <codespell_root>/data/dictionary.txt
--	if (($codespell || $help) && which("codespell") ne "" && which("python") ne "") {
-+	if (($codespell || $help) && which("python3") ne "") {
- 		my $python_codespell_dict = << "EOF";
- 
- import os.path as op
-@@ -344,7 +344,7 @@ codespell_file = op.join(codespell_dir, 'data', 'dictionary.txt')
- print(codespell_file, end='')
- EOF
- 
--		my $codespell_dict = `python -c "$python_codespell_dict" 2> /dev/null`;
-+		my $codespell_dict = `python3 -c "$python_codespell_dict" 2> /dev/null`;
- 		$codespellfile = $codespell_dict if (-f $codespell_dict);
- 	}
- }
--- 
-2.25.1
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

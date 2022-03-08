@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44C54D238D
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3C74D238B
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350473AbiCHVrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S1350531AbiCHVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346980AbiCHVrN (ORCPT
+        with ESMTP id S1350511AbiCHVrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:47:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D095548F;
-        Tue,  8 Mar 2022 13:46:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27CD0612F2;
-        Tue,  8 Mar 2022 21:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FEDC340EC;
-        Tue,  8 Mar 2022 21:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646775975;
-        bh=4NQDgg8rDLEMggBz3LqMK5Y31CHXEmbf5huKroKeVug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tTjSem06XXUAXfGknm1y00SGv6velA0nDArAbaZIknN3C+Cg5qeEG+3WWvq/nN02v
-         E7RD/Z5YeFdudMIw02dAnJgEk982YfLlYbUptqBpOypbChuykEctwxp/4yfytESZKD
-         tmem03zzNHQARta8jkC0n8RLcHFkhCBhE6vuWYd5Es0kGFVTUmf4t1ISE/6v3C62Ml
-         pNGQ21vpX7Yyf6abzGXVgcaO4LCj5W2zZSAdRD3GB8qoJTFzyLddgh31uH2+ov5VvB
-         EIpTEH3kD7iA4yZmbbaNxGo4C51IDEy5RDTQpWFbowZH+NHpcrnJG3IDfJupEWJPnI
-         5aLl0SLvmYs3A==
-Date:   Tue, 8 Mar 2022 13:46:12 -0800
-From:   Keith Busch <kbusch@kernel.org>
-To:     Vasily Gorbik <gor@linux.ibm.com>
-Cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com
-Subject: Re: [PATCHv4 6/8] crypto: add rocksoft 64b crc guard tag framework
-Message-ID: <20220308214612.GB3502158@dhcp-10-100-145-180.wdc.com>
-References: <20220303201312.3255347-1-kbusch@kernel.org>
- <20220303201312.3255347-7-kbusch@kernel.org>
- <your-ad-here.call-01646770901-ext-3299@work.hours>
- <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
+        Tue, 8 Mar 2022 16:47:18 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27DB554A3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:46:20 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id bm39so299447qkb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:46:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=pBT9wHk0kv9phQaF2jSMAucWeXRUjsHTpKabj8I6JEU=;
+        b=RAmhDr5MJvaQL3qZE74+KSH75ORbbrkgRY9YObb//xmoMlf33p1hpBU9rIXZG6L7ml
+         J+/UM1uySARXqyiozkXgec1tI0uVeDVycFFmvGBE54shXKr2/rvIjivnr7QpM+2k1g+X
+         +MyLRsKUEWJsrs8IpmNwBg0pBdBBlc0pA0nJUj7Thmh2J9Fz9sOANtG3znbE95Dm8lrO
+         HCzlO5HMdIBw9+kLBiRDV0nqPh+7o9hbPBoNbAXXXds8jWdu1YLtB7e8jax1fkkbp7iR
+         cjg2PIbda0n5tQiHwcjQQwDU8eQ4Bw5JM4SDtvvqYk7/xwSqid8QSIaayOx11CfWeNOO
+         hPJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=pBT9wHk0kv9phQaF2jSMAucWeXRUjsHTpKabj8I6JEU=;
+        b=Ljf+KG+Jsh2avL/m1g9X6Y2pqRmoEcmsO6h5YKE4nQsqH/8yJV31VYa/8zHSNsySBw
+         wSp+WBuo8CKioC0ikDcg1gQ6SlConM7ZwJQmdf3lVi5oP7ZhUYFieGi6gFe447Cm7IFH
+         4T5idARTd/kBctZ2J1QjwJ+Do7YYWEesa5ueYdPkvGUY7aQEinOez+0vIrRWx4sVYQAi
+         jKDGu5BCIfYlXydOSJKQy42bXwgSt6fUFP35gVgoUCslw4dTlnxVtsxct4Tk9roQrely
+         lkC0EEa7922Hx+3jmnGBTdBNq4znRI20uivbGsSwZzIPjXNVJnARDGiAJoEnzjW7DRVu
+         CLLA==
+X-Gm-Message-State: AOAM533UOrVuVYoyT59y9Mdv6htwQYbP+t9ZAeMwktrfotejiSqNWJvK
+        zQNY1baAV2ZQJ/nZ1upSWrUW9w==
+X-Google-Smtp-Source: ABdhPJxWHyEAuF8GKQrPH4aj80OVaMZ68Mo/l/yema1f/6PqDgdd6gWKrf8+d4sG3STa70ORNpDdgg==
+X-Received: by 2002:a05:620a:134e:b0:67b:d16:89f7 with SMTP id c14-20020a05620a134e00b0067b0d1689f7mr9931286qkl.123.1646775979553;
+        Tue, 08 Mar 2022 13:46:19 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id g2-20020a37e202000000b00607e264a208sm66421qki.40.2022.03.08.13.46.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 13:46:19 -0800 (PST)
+Date:   Tue, 8 Mar 2022 13:46:15 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     "Darrick J. Wong" <djwong@kernel.org>
+cc:     Christoph Hellwig <hch@lst.de>, Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Zdenek Kabelac <zkabelac@redhat.com>,
+        Lukas Czerner <lczerner@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Borislav Petkov <bp@suse.de>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH mmotm v2] tmpfs: do not allocate pages on read
+In-Reply-To: <20220308172734.GC1479066@magnolia>
+Message-ID: <9798e3b-1c2a-6c47-decc-7d4148de5114@google.com>
+References: <f9c2f38f-5eb8-5d30-40fa-93e88b5fbc51@google.com> <20220306092709.GA22883@lst.de> <90bc5e69-9984-b5fa-a685-be55f2b64b@google.com> <20220307064434.GA31680@lst.de> <20220308172734.GC1479066@magnolia>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 12:27:47PM -0800, Keith Busch wrote:
-> On Tue, Mar 08, 2022 at 09:21:41PM +0100, Vasily Gorbik wrote:
-> > On Thu, Mar 03, 2022 at 12:13:10PM -0800, Keith Busch wrote:
-> > > Hardware specific features may be able to calculate a crc64, so provide
-> > > a framework for drivers to register their implementation. If nothing is
-> > > registered, fallback to the generic table lookup implementation. The
-> > > implementation is modeled after the crct10dif equivalent.
-> > 
-> > Hi Keith,
-> > 
-> > this is failing on big-endian systems. I get the following on s390:
+On Tue, 8 Mar 2022, Darrick J. Wong wrote:
 > 
-> Oh, I see the put_unaligned_le64() in chksum_final() was not the correct
-> action. I'll send an update, thank you for the report.
+> I've long wondered (for my own nefarious purposes) why tmpfs files
+> didn't just grab the zero page,
 
-I'll set up a BE qemu target this week, but in the meantime, would you
-be able to confirm if the following is successful?
+(tmpfs files have been using the zero page for reads for many years:
+it was just this odd internal "could it be for a stacking filesystem?"
+case, which /dev/loop also fell into, which was doing allocation on read.
 
----
-diff --git a/crypto/crc64_rocksoft_generic.c b/crypto/crc64_rocksoft_generic.c
-index 9e812bb26dba..12a8b0575ad1 100644
---- a/crypto/crc64_rocksoft_generic.c
-+++ b/crypto/crc64_rocksoft_generic.c
-@@ -28,14 +28,14 @@ static int chksum_final(struct shash_desc *desc, u8 *out)
- {
- 	u64 *crc = shash_desc_ctx(desc);
- 
--	put_unaligned_le64(*crc, out);
-+	put_unaligned(*crc, (u64 *)out);
- 	return 0;
- }
- 
- static int __chksum_finup(u64 crc, const u8 *data, unsigned int len, u8 *out)
- {
- 	crc = crc64_rocksoft_generic(crc, data, len);
--	put_unaligned_le64(crc, out);
-+	put_unaligned(crc, (u64 *)out);
- 	return 0;
- }
- 
---
+I wonder what your nefarious purposes are ;) Maybe related to pages
+faulted into an mmap: those pages tmpfs has always allocated for, then
+they're freed up later by page reclaim if still undirtied. We may change
+that in future, and use the zero page even there: there are advantages
+of course, but some care and code needed - never been a priority.)
+
+> so:
+> 
+> Acked-by: Darrick J. Wong <djwong@kernel.org>
+
+Thanks,
+Hugh

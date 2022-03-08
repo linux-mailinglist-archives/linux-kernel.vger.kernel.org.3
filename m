@@ -2,209 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282914D13AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84CE4D13A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345498AbiCHJrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        id S1345419AbiCHJqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345501AbiCHJrN (ORCPT
+        with ESMTP id S236177AbiCHJq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:47:13 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6AE419AF;
-        Tue,  8 Mar 2022 01:46:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HKEoGO/ko9PpZGUeeNIhYzRqLcWLGLKuARWS6MddmAHvYTSFtoIlmX+Hnq+QJihwljU4AlV0/FFeZOEo5xMOnn/vwugMk0lRvLC9s5jLh3Gbx3+Z5L+vOSBtEuKuKUEZvmP7iWY3mPoDy82+nP4v3LWvzs//LrRARfGKiYMxo34MjnhGOHrQ1UFFrGwG2jScYJDK02dMtuH1wQNzbCbtpmtLfzK5CK2w0cFzG34vvqOrTGHtkJCtwiu9j/wsktrkbjxKAAm8XsP+l4F3cGKjYK5sKoGbkzxRSbSGjEjkjdfLdtxSevrTyFC4afHcTAxQogHPTR3YwjrGV9C8Zibelg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fXqsT7pzWAnlK0Z2Bo/Kgse9o7x0ZHMdonyXqFe4dVY=;
- b=a5hPdeL/gnZAMwQ3WyAHglPzOs4m9yh4pdho5j41+xTyeFboVIZ1S0u+vZTv9/GwiLXsHC1NK3scO92eG16k8uoXCp9ye/Pmlf22rCNUoKrXu9UlJ7f3oKa6v7glGY6eDRBTb4uoE7051dxHeeetJ4drnayCPFtXFyfLGxlWMW6FDZwn2t3+sWNkBL7mjrf+Hu6/AOsEoFUIxvUO85+RyS4R8Zm6TzpqS9dE7hEAf/oghBvrP7Ypl8RX40op92PPGm0YXaavOMmiBfatLrzpypsEAaUswiU/Ss4QaxU/UfXrFeaw1DgB7XqrBZ86s/uReMN2QfVWLnYHm+QapFNmfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fXqsT7pzWAnlK0Z2Bo/Kgse9o7x0ZHMdonyXqFe4dVY=;
- b=P2zUS+wUnO3hmwUXAhmRDdJjBsDYvHhspr8wH6WMGxdoEGH9yQS91CpVVwjhnWTcwde3ZOoQRtof/Q8q8DD7s3PRs293WFINEsFGC3v84EnA/6MetIhrnU4NnCFjlCRp7XhSuN1kQ+4d5JjzRteGmI06NxvNlbf1NFzukNKayok=
-Received: from DM6PR11CA0009.namprd11.prod.outlook.com (2603:10b6:5:190::22)
- by BL0PR02MB4833.namprd02.prod.outlook.com (2603:10b6:208:53::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.25; Tue, 8 Mar
- 2022 09:46:13 +0000
-Received: from DM3NAM02FT016.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:190:cafe::5b) by DM6PR11CA0009.outlook.office365.com
- (2603:10b6:5:190::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
- Transport; Tue, 8 Mar 2022 09:46:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT016.mail.protection.outlook.com (10.13.4.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5038.14 via Frontend Transport; Tue, 8 Mar 2022 09:46:13 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 8 Mar 2022 01:46:12 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 8 Mar 2022 01:46:12 -0800
-Envelope-to: mdf@kernel.org,
- hao.wu@intel.com,
- yilun.xu@intel.com,
- trix@redhat.com,
- linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Received: from [10.140.6.60] (port=33304 helo=xhdnavam40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <nava.manne@xilinx.com>)
-        id 1nRWQ0-000G0A-0a; Tue, 08 Mar 2022 01:46:12 -0800
-From:   Nava kishore Manne <nava.manne@xilinx.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <michal.simek@xilinx.com>,
-        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Nava kishore Manne <nava.manne@xilinx.com>
-Subject: [PATCH 6/6] fpga: fpga-region: Add missing kernel-doc description
-Date:   Tue, 8 Mar 2022 15:15:19 +0530
-Message-ID: <20220308094519.1816649-7-nava.manne@xilinx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220308094519.1816649-1-nava.manne@xilinx.com>
-References: <20220308094519.1816649-1-nava.manne@xilinx.com>
+        Tue, 8 Mar 2022 04:46:29 -0500
+Received: from imap2.colo.codethink.co.uk (imap2.colo.codethink.co.uk [78.40.148.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72BC3E5C9;
+        Tue,  8 Mar 2022 01:45:32 -0800 (PST)
+Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.21])
+        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1nRVyL-0005VG-99; Tue, 08 Mar 2022 09:17:37 +0000
+Message-ID: <10794ea9-95ff-2cde-5851-b757a73b00ee@codethink.co.uk>
+Date:   Tue, 8 Mar 2022 09:45:36 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 750aafc6-32da-46fb-4842-08da00e87b9c
-X-MS-TrafficTypeDiagnostic: BL0PR02MB4833:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB48333CBC764A453F33B42DB7C2099@BL0PR02MB4833.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cR6KWy0UetRKMLJRVls4T7M/FSgVHOPKF+AljKqNSLCpJvrfDw1Fx8nNF0U68LO4qewVZh0AA8wuXUEIxjrHN0cvdVG86EYYSYQvpIcqSBJpmZhsWrn+DuCfrX2lfDhbrn0qmfhKIfQdu4IwUFJM1UQ8NQNp1cL/MbsaelTHYZ1BvmBPhWflDorXVAmHG3yuv8iVmoApXXmB/IZxKPY+cBBBoOewvF/PqmhDjyfSiax18dgj21iFSBY8YNT2VoViunqT/Nrbkj/juTBcwY6gpE463HPJ+D3fkVqRehj/SHQdtYQveuxA0m6yXwasuyPqdD0JXgT4je1IvWB5dWY1tzNX4R56pCLpG1aqHOwHT9SKqdlEeaVuwV3b2T6wkReZLg1ngUuZDHOl81pFosQy1F3CJ6UsQXEB4fN5rHQYG5shDzvYzty6Twpa/OYWQ80U2vBtWp0wAxS8xOiqpG8FV8vRv5WqZEl3xESpY+BecyBoTBgx/fJJa8Kr1MYTfyzucEQQ/W2OF3mmAJo6MqosxlWhi2QtZa9KrdxPjUWlvsKw3/ONS+HbNVWivva/bSQrLFkA3c4I38LfGL9/FycXfkpn7t0+8KfcLVizkEUd5JBf/YCq2U15NTdT9b3UXGW779/g6UfjDKh3SH283Y7KX6XQ7n5Hqc3HPQHzk4x2lcZuzmX8xRjAw0Ue9DQkGuLfJIoTX2PriAPhuEKdzFWTnnm1pXluFpv7cHbq8HokZsY=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(5660300002)(107886003)(7636003)(356005)(70586007)(36860700001)(4326008)(9786002)(8936002)(426003)(1076003)(83380400001)(2906002)(186003)(26005)(110136005)(36756003)(7696005)(70206006)(336012)(316002)(8676002)(47076005)(2616005)(508600001)(82310400004)(102446001)(21314003)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2022 09:46:13.1661
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 750aafc6-32da-46fb-4842-08da00e87b9c
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT016.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4833
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC] PCI: fu740: Force Gen1 to fix initial device probing on
+ some boards
+Content-Language: en-GB
+To:     helgaas@kernel.org, linux-pci@vger.kernel.org
+Cc:     paul.walmsley@sifive.com, greentime.hu@sifive.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220228232206.2928784-1-ben.dooks@codethink.co.uk>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20220228232206.2928784-1-ben.dooks@codethink.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed the warnings: Function parameter or member 'xxx' not
-described.
+On 28/02/2022 23:22, Ben Dooks wrote:
+> The fu740 PCIe core does not probe any devices on the SiFive Unmatched
+> board without this fix (or having U-Boot explicitly start the PCIe via
+> either boot-script or user command). The fix is to start the link at
+> Gen1 speeds and once the link is up then change the speed back.
+> 
+> The U-Boot driver claims to set the link-speed to Gen1 to get the probe
+> to work (and U-Boot does print link up at Gen1) in the following code:
+> https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+> --
+> Note, this patch has had significant re-work since the previous 4
+> sets, including trying to fix style, message, reliance on the U-Boot
+> fix and the comments about usage of LINK_CAP and reserved fields.
 
-Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
----
- drivers/fpga/of-fpga-region.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+The internal feedback is this version is passing on our CI.
 
-diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
-index 50b83057c048..61ce257c47f3 100644
---- a/drivers/fpga/of-fpga-region.c
-+++ b/drivers/fpga/of-fpga-region.c
-@@ -28,7 +28,7 @@ MODULE_DEVICE_TABLE(of, fpga_region_of_match);
-  *
-  * Caller will need to put_device(&region->dev) when done.
-  *
-- * Returns FPGA Region struct or NULL
-+ * @return: FPGA Region struct or NULL
-  */
- static struct fpga_region *of_fpga_region_find(struct device_node *np)
- {
-@@ -43,7 +43,7 @@ static struct fpga_region *of_fpga_region_find(struct device_node *np)
-  *
-  * Caller should call fpga_mgr_put() when done with manager.
-  *
-- * Return: fpga manager struct or IS_ERR() condition containing error code.
-+ * @return: fpga manager struct or IS_ERR() condition containing error code.
-  */
- static struct fpga_manager *of_fpga_region_get_mgr(struct device_node *np)
- {
-@@ -80,7 +80,7 @@ static struct fpga_manager *of_fpga_region_get_mgr(struct device_node *np)
-  * Caller should call fpga_bridges_put(&region->bridge_list) when
-  * done with the bridges.
-  *
-- * Return 0 for success (even if there are no bridges specified)
-+ * @return: 0 for success (even if there are no bridges specified)
-  * or -EBUSY if any of the bridges are in use.
-  */
- static int of_fpga_region_get_bridges(struct fpga_region *region)
-@@ -139,13 +139,13 @@ static int of_fpga_region_get_bridges(struct fpga_region *region)
- }
- 
- /**
-- * child_regions_with_firmware
-+ * child_regions_with_firmware - Used to check the child region info.
-  * @overlay: device node of the overlay
-  *
-  * If the overlay adds child FPGA regions, they are not allowed to have
-  * firmware-name property.
-  *
-- * Return 0 for OK or -EINVAL if child FPGA region adds firmware-name.
-+ * @return: 0 for OK or -EINVAL if child FPGA region adds firmware-name.
-  */
- static int child_regions_with_firmware(struct device_node *overlay)
- {
-@@ -184,7 +184,7 @@ static int child_regions_with_firmware(struct device_node *overlay)
-  * Given an overlay applied to an FPGA region, parse the FPGA image specific
-  * info in the overlay and do some checking.
-  *
-- * Returns:
-+ * @return:
-  *   NULL if overlay doesn't direct us to program the FPGA.
-  *   fpga_image_info struct if there is an image to program.
-  *   error code for invalid overlay.
-@@ -279,7 +279,7 @@ static struct fpga_image_info *of_fpga_region_parse_ov(
-  * If the checks fail, overlay is rejected and does not get added to the
-  * live tree.
-  *
-- * Returns 0 for success or negative error code for failure.
-+ * @return: 0 for success or negative error code for failure.
-  */
- static int of_fpga_region_notify_pre_apply(struct fpga_region *region,
- 					   struct of_overlay_notify_data *nd)
-@@ -339,7 +339,7 @@ static void of_fpga_region_notify_post_remove(struct fpga_region *region,
-  * This notifier handles programming an FPGA when a "firmware-name" property is
-  * added to an fpga-region.
-  *
-- * Returns NOTIFY_OK or error if FPGA programming fails.
-+ * @return: NOTIFY_OK or error if FPGA programming fails.
-  */
- static int of_fpga_region_notify(struct notifier_block *nb,
- 				 unsigned long action, void *arg)
-@@ -446,6 +446,8 @@ static struct platform_driver of_fpga_region_driver = {
- /**
-  * of_fpga_region_init - init function for fpga_region class
-  * Creates the fpga_region class and registers a reconfig notifier.
-+ *
-+ * @return: 0 on success, negative error code otherwise.
-  */
- static int __init of_fpga_region_init(void)
- {
+If there are no comments on this soon, I will post this as either the
+v5 of the original or as a new patch.
+
+> ---
+>   drivers/pci/controller/dwc/pcie-fu740.c | 51 ++++++++++++++++++++++++-
+>   1 file changed, 50 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
+> index 842b7202b96e..16ad52f53490 100644
+> --- a/drivers/pci/controller/dwc/pcie-fu740.c
+> +++ b/drivers/pci/controller/dwc/pcie-fu740.c
+> @@ -181,10 +181,59 @@ static int fu740_pcie_start_link(struct dw_pcie *pci)
+>   {
+>   	struct device *dev = pci->dev;
+>   	struct fu740_pcie *afp = dev_get_drvdata(dev);
+> +	u8 cap_exp = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> +	int ret;
+> +	u32 orig, tmp;
+> +
+> +	/*
+> +	 * Force Gen1 when starting link, due to some devices not
+> +	 * probing at higher speeds. This happens with the PCIe switch
+> +	 * on the Unmatched board. The fix in U-Boot is to force Gen1
+> +	 * and hope later resets will clear this capaility.
+> +	 */
+> +
+> +	dev_dbg(dev, "cap_exp at %x\n", cap_exp);
+> +	dw_pcie_dbi_ro_wr_en(pci);
+> +
+> +	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
+> +	orig = tmp & PCI_EXP_LNKCAP_SLS;
+> +	tmp &= ~PCI_EXP_LNKCAP_SLS;
+> +	tmp |= PCI_EXP_LNKCAP_SLS_2_5GB;
+> +	dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
+>   
+>   	/* Enable LTSSM */
+>   	writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
+> -	return 0;
+> +
+> +	ret = dw_pcie_wait_for_link(pci);
+> +	if (ret) {
+> +		dev_err(dev, "error: link did not start\n");
+> +		goto err;
+> +	}
+> +
+> +	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
+> +	if ((tmp & PCI_EXP_LNKCAP_SLS) != orig) {
+> +		dev_dbg(dev, "changing speed back to original\n");
+> +
+> +		tmp &= ~PCI_EXP_LNKCAP_SLS;
+> +		tmp |= orig;
+> +		dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
+> +
+> +		tmp = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
+> +		tmp |= PORT_LOGIC_SPEED_CHANGE;
+> +		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, tmp);
+> +
+> +		ret = dw_pcie_wait_for_link(pci);
+> +		if (ret) {
+> +			dev_err(dev, "error: link did not start at new speed\n");
+> +			goto err;
+> +		}
+> +	}
+> +
+> +	ret = 0;
+> +err:
+> +	// todo - if we do have an unliekly error, what do we do here?
+> +	dw_pcie_dbi_ro_wr_dis(pci);
+> +	return ret;
+>   }
+>   
+>   static int fu740_pcie_host_init(struct pcie_port *pp)
+
+
 -- 
-2.25.1
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
+https://www.codethink.co.uk/privacy.html

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE834D1A2C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506A04D1A31
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbiCHORY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:17:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
+        id S234366AbiCHOSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiCHORV (ORCPT
+        with ESMTP id S237114AbiCHOR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:17:21 -0500
+        Tue, 8 Mar 2022 09:17:56 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D3A34AE30
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:16:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12B474AE3C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:16:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646748983;
+        s=mimecast20190719; t=1646749019;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eY3A0k6GTwUDUpKdTvLl9zbVe/yaBt7RxMilI8lKV6g=;
-        b=R94OitHWPlhR4YjVRT3CFKafM99YbKdj8ZgodwVSxZmJlRnvrKRkNLTffvj5XRVhVTeUkb
-        sDq9pbFY9edV6AUiiZAQl2GBArDw30gggeA91kwOLuhAuzulYOxPqEFhI+ERtNH/gRewIC
-        Tjh0/wvzYzvfMqHhbHYmEpwCfVsBOxU=
+        bh=aj4DcramAuSghxYBNgB7LsYO7zn5E/reH2YN2OU1WzY=;
+        b=XDCAqz2f0WwgFzkXTXFb73KQa503lB0OO6T8BsSLH9BhXOs5Qa6Fvk1nVC93m5P0yPGMgu
+        CkTUkJ4x9nSev2T3VSNQSpxVySV20UXsxwDC+cNvIODe+v4G3QtdKgxYBJvbBuUEpbhc5K
+        B3fUdBoOHq9jTnTRo+hQIO0Uf57BM48=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-c0xV1bQ8ODaVIaoMWtpB1A-1; Tue, 08 Mar 2022 09:16:20 -0500
-X-MC-Unique: c0xV1bQ8ODaVIaoMWtpB1A-1
+ us-mta-298-iMhwvhpQMWOUK2Si7LoT8w-1; Tue, 08 Mar 2022 09:16:56 -0500
+X-MC-Unique: iMhwvhpQMWOUK2Si7LoT8w-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 920F45200;
-        Tue,  8 Mar 2022 14:16:17 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3F97E806718;
+        Tue,  8 Mar 2022 14:16:52 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.195.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 459667886E;
-        Tue,  8 Mar 2022 14:15:31 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F044D7886E;
+        Tue,  8 Mar 2022 14:16:17 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -65,9 +65,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Pedro Gomes <pedrodemargomes@gmail.com>,
         Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH v1 02/15] mm/hugetlb: take src_mm->write_protect_seq in copy_hugetlb_page_range()
-Date:   Tue,  8 Mar 2022 15:14:24 +0100
-Message-Id: <20220308141437.144919-3-david@redhat.com>
+Subject: [PATCH v1 03/15] mm/memory: slightly simplify copy_present_pte()
+Date:   Tue,  8 Mar 2022 15:14:25 +0100
+Message-Id: <20220308141437.144919-4-david@redhat.com>
 In-Reply-To: <20220308141437.144919-1-david@redhat.com>
 References: <20220308141437.144919-1-david@redhat.com>
 MIME-Version: 1.0
@@ -83,69 +83,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's do it just like copy_page_range(), taking the seqlock and making
-sure the mmap_lock is held in write mode.
+Let's move the pinning check into the caller, to simplify return code
+logic and prepare for further changes: relocating the
+page_needs_cow_for_dma() into rmap handling code.
 
-This allows for add a VM_BUG_ON to page_needs_cow_for_dma() and
-properly synchronizes cocnurrent fork() with GUP-fast of hugetlb pages,
-which will be relevant for further changes.
+While at it, remove the unused pte parameter and simplify the comments a
+bit.
+
+No functional change intended.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/mm.h | 4 ++++
- mm/hugetlb.c       | 8 ++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ mm/memory.c | 53 ++++++++++++++++-------------------------------------
+ 1 file changed, 16 insertions(+), 37 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9530f950f156..391b950e919d 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1323,6 +1323,8 @@ static inline bool is_cow_mapping(vm_flags_t flags)
- /*
-  * This should most likely only be called during fork() to see whether we
-  * should break the cow immediately for a page on the src mm.
-+ *
-+ * The caller has to hold the PT lock and the vma->vm_mm->->write_protect_seq.
-  */
- static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
- 					  struct page *page)
-@@ -1330,6 +1332,8 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
- 	if (!is_cow_mapping(vma->vm_flags))
- 		return false;
- 
-+	VM_BUG_ON(!(raw_read_seqcount(&vma->vm_mm->write_protect_seq) & 1));
-+
- 	if (!test_bit(MMF_HAS_PINNED, &vma->vm_mm->flags))
- 		return false;
- 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index f294db835f4b..d3ce89697855 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4710,6 +4710,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 					vma->vm_start,
- 					vma->vm_end);
- 		mmu_notifier_invalidate_range_start(&range);
-+		mmap_assert_write_locked(src);
-+		raw_write_seqcount_begin(&src->write_protect_seq);
- 	} else {
- 		/*
- 		 * For shared mappings i_mmap_rwsem must be held to call
-@@ -4842,10 +4844,12 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 		spin_unlock(dst_ptl);
- 	}
- 
--	if (cow)
-+	if (cow) {
-+		raw_write_seqcount_end(&src->write_protect_seq);
- 		mmu_notifier_invalidate_range_end(&range);
--	else
-+	} else {
- 		i_mmap_unlock_read(mapping);
-+	}
- 
- 	return ret;
+diff --git a/mm/memory.c b/mm/memory.c
+index c6177d897964..accb72a3343d 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -865,19 +865,11 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
  }
+ 
+ /*
+- * Copy a present and normal page if necessary.
++ * Copy a present and normal page.
+  *
+- * NOTE! The usual case is that this doesn't need to do
+- * anything, and can just return a positive value. That
+- * will let the caller know that it can just increase
+- * the page refcount and re-use the pte the traditional
+- * way.
+- *
+- * But _if_ we need to copy it because it needs to be
+- * pinned in the parent (and the child should get its own
+- * copy rather than just a reference to the same page),
+- * we'll do that here and return zero to let the caller
+- * know we're done.
++ * NOTE! The usual case is that this isn't required;
++ * instead, the caller can just increase the page refcount
++ * and re-use the pte the traditional way.
+  *
+  * And if we need a pre-allocated page but don't yet have
+  * one, return a negative error to let the preallocation
+@@ -887,25 +879,10 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ static inline int
+ copy_present_page(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
+ 		  pte_t *dst_pte, pte_t *src_pte, unsigned long addr, int *rss,
+-		  struct page **prealloc, pte_t pte, struct page *page)
++		  struct page **prealloc, struct page *page)
+ {
+ 	struct page *new_page;
+-
+-	/*
+-	 * What we want to do is to check whether this page may
+-	 * have been pinned by the parent process.  If so,
+-	 * instead of wrprotect the pte on both sides, we copy
+-	 * the page immediately so that we'll always guarantee
+-	 * the pinned page won't be randomly replaced in the
+-	 * future.
+-	 *
+-	 * The page pinning checks are just "has this mm ever
+-	 * seen pinning", along with the (inexact) check of
+-	 * the page count. That might give false positives for
+-	 * for pinning, but it will work correctly.
+-	 */
+-	if (likely(!page_needs_cow_for_dma(src_vma, page)))
+-		return 1;
++	pte_t pte;
+ 
+ 	new_page = *prealloc;
+ 	if (!new_page)
+@@ -947,14 +924,16 @@ copy_present_pte(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
+ 	struct page *page;
+ 
+ 	page = vm_normal_page(src_vma, addr, pte);
+-	if (page) {
+-		int retval;
+-
+-		retval = copy_present_page(dst_vma, src_vma, dst_pte, src_pte,
+-					   addr, rss, prealloc, pte, page);
+-		if (retval <= 0)
+-			return retval;
+-
++	if (page && unlikely(page_needs_cow_for_dma(src_vma, page))) {
++		/*
++		 * If this page may have been pinned by the parent process,
++		 * copy the page immediately for the child so that we'll always
++		 * guarantee the pinned page won't be randomly replaced in the
++		 * future.
++		 */
++		return copy_present_page(dst_vma, src_vma, dst_pte, src_pte,
++					 addr, rss, prealloc, page);
++	} else if (page) {
+ 		get_page(page);
+ 		page_dup_rmap(page, false);
+ 		rss[mm_counter(page)]++;
 -- 
 2.35.1
 

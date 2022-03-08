@@ -2,134 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE58E4D0DB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 02:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ECA4D0DBE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 02:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344319AbiCHBxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 20:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
+        id S244083AbiCHB5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 20:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344316AbiCHBx1 (ORCPT
+        with ESMTP id S232589AbiCHB5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 20:53:27 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FA72AFF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:52:31 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso887959pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 17:52:31 -0800 (PST)
+        Mon, 7 Mar 2022 20:57:22 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F903F321
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:56:26 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id p8so16020557pfh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 17:56:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=58lwskYug/llHkpIrMRW+dy3O3RN+GbIpdAcgfBEttk=;
-        b=HSCYAeLoHcpnnM2uKaIA5lifN/t97U2w1M5ioRJjGdZ++5Thz9qLLXuH5q/V+ioCpJ
-         B7idQN5/gHfstOY+ov8+wbbGw2JRhsWSbIXivdKSDdTjBQMdQSKSpbhMs47dVwah6oPX
-         Cdw95MMMXeJfH+NbYVToxnzsV4ATd/bMKUbC+mBicPFKU5UwSVTZB6u2IkCPHWFW4ezg
-         EiUVoRYJ3oIqF1DqnUZ4HSXwSPgLTtVK+2I/P9IWNrr5wEok0ATlQItCDJ/rHikjkIi/
-         3sITJfYrTlT+L13h6lvijlT1xW0UsPl4LoL+AEbFNMRYi8Llyj74Jat8B395qAzctYcr
-         Fstg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2E8yu0dx7WwOCxdxcyi0NQqYJT6dBXDVWvwU57lz8KQ=;
+        b=W4Vvp4Om53sRLaPMGoPv5Lw3SKc1neqXL4ODSGoSFaBNP4IX+aOSiXUdqKNhBI1OLU
+         0+beRrK3uYfg8BWDrympGzCfIi66zeCPkX0fLoNA19CS/iCRkHKA+uk2vKPPxmEzNRg4
+         ZM3ycFOrv6n6KdLAoJieK+TsbBUTPC4hSjCgUsCF/L8P3cmush/4rcPuiuonl0whQhyS
+         RrozoUF0mcg0tb9JSS453Z5DAzB7TacoKp/s+nN6LuSvH76qiIA4wP0CKbCIMf4/5Y06
+         qbmnQIzm3JdWCFW4yi5GJwB/AoB2og/tQCSEpoApP4QAURHorqMd5zAi3SEjUurw2urR
+         AgTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=58lwskYug/llHkpIrMRW+dy3O3RN+GbIpdAcgfBEttk=;
-        b=0hsyDYpSnu+bGhG0tPAcydAHIFe9PjaeTMRED08Apxq27AMaZ5XlbWHyCoJpKTWhRl
-         XpdZKi14JELBf4wM6Cy9ISCtJAqZkmRO5mCNtfdNRYCmjjzjuW47LkuQVwIf6eeN5qJH
-         3zV2kPjfF67rxB2cCY2dvPZc8gjBaNRnJqWVKDOz2ENeKfRpAw8R1M3N03qltlxezTIt
-         Lqj8gS9ZzZUvBDoji5Aea6DWVmTXUODUSykbG/ajjnKerSu5Qtx/Fu/KRGkeIE/MSdkK
-         vvo6YFj3Bgqs6x97o1GdbL+z4WREbBjSHi0HX9WwM5T6riV1+joOh2sfCSzEs0cZROoV
-         1elg==
-X-Gm-Message-State: AOAM531zM+//GOIGF/kuGCNXKv5nM6+oZS3dWqZWWDjG5hqLWACZmh1O
-        C9nYy6VVXeeoqrv7y+qj9O0=
-X-Google-Smtp-Source: ABdhPJz6lbpi9VHXqUtR/ZCOi8FTsWcSS1kfqtODKavlvexuo70DQjYtfjWCTLdBrNr2bb1jMtcHAg==
-X-Received: by 2002:a17:90b:4b0b:b0:1bf:764c:1bc1 with SMTP id lx11-20020a17090b4b0b00b001bf764c1bc1mr2012864pjb.85.1646704351035;
-        Mon, 07 Mar 2022 17:52:31 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id pf15-20020a17090b1d8f00b001bf5d59a8fdsm645663pjb.2.2022.03.07.17.52.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2E8yu0dx7WwOCxdxcyi0NQqYJT6dBXDVWvwU57lz8KQ=;
+        b=retFsTTn3vVY0GvCbySentOVXWYyeoyKrxn4sjLilxM7TWZdajaDdedUks69tJrPbi
+         hUcHlpBeQwRvZBvn8lwB+PW2QMATHMMgIuTUSthmPsL2eyK716r2XXylXN7S8OHn88/H
+         6gMKLEO/6q8ikTWqJcPUxQzEAD02nVZCqdoSNjgXkwp9YkB/kZFzvWUm7YQQorY8SK3D
+         lVzp0vHx3kCldODWMVLr3muNmIP23l8nRuhRxDXZDnAki+iKKR6EY/FoJ13zk1zVieEe
+         e/OQ46s2RQkmOuGxjTMK/+QJbkHT0+DxxscT6WspmueAgqPw+XAqSzkowS8soQ3rx0wS
+         iOFg==
+X-Gm-Message-State: AOAM531uSB1OEpydSbnPT9LrOhX5Q32tDuuoDuIGIZXnMDtmgqzSe4U9
+        9EkZTgTE9Qy8xEohXkTqDuc=
+X-Google-Smtp-Source: ABdhPJyc8tex3nzmMFhV2LyL3qoBzinohm5njUfxL/3uqEMMkFBn6X+k9KVvHtUHpCN1RBuTP/4w4Q==
+X-Received: by 2002:a05:6a00:a23:b0:4f6:72a8:20c7 with SMTP id p35-20020a056a000a2300b004f672a820c7mr15968222pfh.12.1646704585971;
+        Mon, 07 Mar 2022 17:56:25 -0800 (PST)
+Received: from lxb-server.lan ([2605:52c0:2:32c::])
+        by smtp.gmail.com with ESMTPSA id mm17-20020a17090b359100b001bef7e5bdffsm619629pjb.20.2022.03.07.17.56.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 17:52:30 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Miaoqian Lin <linmq006@gmail.com>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: mediatek: mt8192-mt6359: Fix error handling in mt8192_mt6359_dev_probe
-Date:   Tue,  8 Mar 2022 01:52:22 +0000
-Message-Id: <20220308015224.23585-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 07 Mar 2022 17:56:25 -0800 (PST)
+From:   Yunhao Tian <t123yh.xyz@gmail.com>
+To:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Yunhao Tian <t123yh.xyz@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/mipi-dbi: Fix max_chunk calculation in spi_transfer
+Date:   Tue,  8 Mar 2022 09:56:11 +0800
+Message-Id: <20220308015611.3007395-1-t123yh.xyz@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+In __spi_validate, there's a validation that no partial transfers
+are accepted (xfer->len % w_size must be zero). When
+max_chunk is not a multiple of bpw (e.g.max_chunk = 65535,
+bpw = 16), the transfer will be rejected.
 
-This function only calls of_node_put() in the regular path.
-And it will cause refcount leak in error paths.
-Fix this by calling of_node_put() in error handling too.
+This patch clamps max_chunk to the word size, preventing
+the transfer from being rejected.
 
-Fixes: 4e28491a7a19 ("ASoC: mediatek: mt8192-mt6359: fix device_node leak")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
 ---
- .../mt8192/mt8192-mt6359-rt1015-rt5682.c       | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/drm_mipi_dbi.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-index f7daad1bfe1e..ee91569c0911 100644
---- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-@@ -1116,8 +1116,10 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/gpu/drm/drm_mipi_dbi.c b/drivers/gpu/drm/drm_mipi_dbi.c
+index 71b646c4131f..440dc9fec6cc 100644
+--- a/drivers/gpu/drm/drm_mipi_dbi.c
++++ b/drivers/gpu/drm/drm_mipi_dbi.c
+@@ -1182,6 +1182,15 @@ int mipi_dbi_spi_transfer(struct spi_device *spi, u32 speed_hz,
+ 	struct spi_message m;
+ 	size_t chunk;
+ 	int ret;
++	int w_size;
++
++	if (bpw <= 8)
++		w_size = 1;
++	else if (bpw <= 16)
++		w_size = 2;
++	else
++		w_size = 4;
++	max_chunk -= (max_chunk % w_size);
  
- 	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
--	if (!card)
--		return -EINVAL;
-+	if (!card) {
-+		ret = -EINVAL;
-+		goto put_platform_node;
-+	}
- 	card->dev = &pdev->dev;
- 
- 	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
-@@ -1159,20 +1161,24 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- 	}
- 
- 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
-+	if (!priv) {
-+		ret = -ENOMEM;
-+		goto put_hdmi_codec;
-+	}
- 	snd_soc_card_set_drvdata(card, priv);
- 
- 	ret = mt8192_afe_gpio_init(&pdev->dev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "init gpio error %d\n", ret);
--		return ret;
-+		goto put_hdmi_codec;
- 	}
- 
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
- 
--	of_node_put(platform_node);
-+put_hdmi_codec:
- 	of_node_put(hdmi_codec);
-+put_platform_node:
-+	of_node_put(platform_node);
- 	return ret;
- }
+ 	spi_message_init_with_transfers(&m, &tr, 1);
  
 -- 
-2.17.1
+2.25.1
 

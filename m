@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7767F4D1F42
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79D54D1F4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349241AbiCHRmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S1344117AbiCHRnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:43:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349228AbiCHRmS (ORCPT
+        with ESMTP id S1345430AbiCHRns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:42:18 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E8853715
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:41:21 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id t19so14164343plr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:41:21 -0800 (PST)
+        Tue, 8 Mar 2022 12:43:48 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FC326123
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:42:50 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id cx5so13262pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:42:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=rEjzn09eYdcPw8zgSp9GRXhCcrP0HGBMdICZ+yuOnPA=;
-        b=rT2oKUw8j6AboD5zninI0fTWpt+shY+0HAQaCJeMq1tUrPZTtw1w2b1ZN3vWavLtNn
-         sOyBYDvqMYKmRgXrehd7tkx351JCXu8evyfalFzOYktxpY6Wm+TWpnazMGuGGELa//KS
-         eeZMKazhUxCvEp1YoHNXr0wcRZ4i/aDJIWsTxNB2dvVzGnsUwDlS1Fm9msjgGqrOPfMt
-         r+b4ufhEy9lHSI1m0nKPj3Hd1sE8l2lD76Fkr26kMiXq7TLAEYEUA46+o3Uyg5Ae7bwe
-         Tbe4bHsyohU9gCDC4LyYwslN8wtUIyPQELNkpRngiKg1WlduxDX3jfi3aNizWsdUs2nK
-         WxJw==
+        bh=2/CUf3S7kuNwgRHVA9U0egmiRYmyyn2A3M8F66MteHw=;
+        b=K6FQwXnav0r9/lQf2ZQs22EVzoP1w5XD19pDUbI83X+HfULbDRCKJAPunBeCLcTsPH
+         If/hus9nU1HPo1YjkX6zx9sUYzNsvr2GKjmHWGTSsbRIFAIHbGSRkz/ANrxZvbV/0dV8
+         jyt80tQbwE38PPxRGyvYasp+OBLWrWVYx6aH/rMsJXfuU/WXdM0XqsbAAawF/enLi2pq
+         sKEzpYwMFg8hGBYXBYqnWCLFf1Q0f0LoksTocbpTjOaG6Z8/Cwdgbasj5mqiO9YzQbwk
+         eSbcCh5fkdzOXX+R5kOxkobsQngGmKp9k70iFy3r722GtG9FvEUjaamDZ/+bQRyL70c1
+         wHuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rEjzn09eYdcPw8zgSp9GRXhCcrP0HGBMdICZ+yuOnPA=;
-        b=UdVKS95ZDJ3xQyhoVTQcPpFFF5f/WFexRVke7t3WIXnIQp5DuVe77iE7lFIAOepRsu
-         vGebw2F3gU6ZZlCMAf4aal1wgOQd+4WKG5hEf3ll3kgi0J68zmM2zrd1X6/sHt0t2SFY
-         kxEyEBhBR3H2LdXCVoLU8HgveNtR9dgxXDUr1nT93Fdf8TV/yMZF1K4ieF4T06XewjV8
-         Z1x6R0GkHZy5gNIJ1T+xzFNwL/9eVTdKZ7CKb7E2PSaHb1pjU6rCjfRWK6MpFwojg+q/
-         8JfhDgA7CoWajc48eRGgYJ5xPr0u/TX78K8y2GPScM8B48rewXxussyHdxp1Eq2G6/98
-         NPtA==
-X-Gm-Message-State: AOAM532SDh9c8FN8itYw93io3s3B2zQVZPnbOrNpEVKr0DUvdW2eqEU/
-        p6prnyfsgHiQZoVTbVew/YBUbQ==
-X-Google-Smtp-Source: ABdhPJxjjdilHkK2/7OlLGWa+ROoJM0h25Zlo6kuCVIsMv0zAfwBnHUy/lIP+qwJUeyYd66AvrHRYA==
-X-Received: by 2002:a17:90b:4a92:b0:1bf:2a03:987c with SMTP id lp18-20020a17090b4a9200b001bf2a03987cmr5794219pjb.186.1646761280899;
-        Tue, 08 Mar 2022 09:41:20 -0800 (PST)
+        bh=2/CUf3S7kuNwgRHVA9U0egmiRYmyyn2A3M8F66MteHw=;
+        b=P69JFMqJZDOywVc7168JqCCc3DsqN5bt+UPQiNIWt/E+qGFeT7WJFmEYZuwqhvR7xq
+         CXk8WDNLT/bmPS4isVjjYM5A0c5IVzx14jp6yjEnkFESMIz/+RUaubxrbFm3ghvQdArG
+         LawR7RWEnl/YnHvMrNHulV2n/jso1EIMJqalHVhvxj4v5V7q2Fp8OcWqzsiTdsjPr67u
+         RMi2YkhGerJR8yphCmocxOFirFUcowgI1cT9i53rl+NymQrp/VFaWhcWuglq2IMew+m6
+         k84UanHpCpLfVepbCbe1b9ANODCdtXaFlTjRO7icmSHoVGGEHu9SdTSuXRKMWQNlGF3l
+         D4dw==
+X-Gm-Message-State: AOAM532laDBJqvtB027rK1Qgg2GpmmyqIR22t+KySuK36a3xznQ8r2jx
+        /CMrMSv/Umf4xjwexKeEH6isRE1LyZXR4g==
+X-Google-Smtp-Source: ABdhPJyZXljDBZAJbuO2P4mPRFNpMLLi23fbEFM9XepENcXZ/0h/oGhg2YrqN/imy2ysUkOrc4KNkQ==
+X-Received: by 2002:a17:90a:8591:b0:1b9:da10:2127 with SMTP id m17-20020a17090a859100b001b9da102127mr5967730pjn.13.1646761369548;
+        Tue, 08 Mar 2022 09:42:49 -0800 (PST)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 1-20020a17090a1a0100b001bf3ba1508fsm3565283pjk.33.2022.03.08.09.41.20
+        by smtp.gmail.com with ESMTPSA id u8-20020a056a00098800b004f702473553sm8925797pfg.6.2022.03.08.09.42.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:41:20 -0800 (PST)
-Date:   Tue, 8 Mar 2022 17:41:16 +0000
+        Tue, 08 Mar 2022 09:42:49 -0800 (PST)
+Date:   Tue, 8 Mar 2022 17:42:45 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         dmatlack@google.com
-Subject: Re: [PATCH v2 09/25] KVM: x86/mmu: do not recompute root level from
- kvm_mmu_role_regs
-Message-ID: <YieVPL2rwAQGB+cj@google.com>
+Subject: Re: [PATCH v2 10/25] KVM: x86/mmu: remove ept_ad field
+Message-ID: <YieVlbIwYIIbEmd7@google.com>
 References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-10-pbonzini@redhat.com>
+ <20220221162243.683208-11-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221162243.683208-10-pbonzini@redhat.com>
+In-Reply-To: <20220221162243.683208-11-pbonzini@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -74,77 +73,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> The root_level can be found in the cpu_mode (in fact the field
-> is superfluous and could be removed, but one thing at a time).
-> Since there is only one usage left of role_regs_to_root_level,
-> inline it into kvm_calc_cpu_mode.
+> The ept_ad field is used during page walk to determine if the guest PTEs
+> have accessed and dirty bits.  In the MMU role, the ad_disabled
+> bit represents whether the *shadow* PTEs have the bits, so it
+> would be incorrect to replace PT_HAVE_ACCESSED_DIRTY with just
+> !mmu->mmu_role.base.ad_disabled.
+> 
+> However, the similar field in the CPU mode, ad_disabled, is initialized
+> correctly: to the opposite value of ept_ad for shadow EPT, and zero
+> for non-EPT guest paging modes (which always have A/D bits).  It is
+> therefore possible to compute PT_HAVE_ACCESSED_DIRTY from the CPU mode,
+> like other page-format fields; it just has to be inverted to account
+> for the different polarity.
+> 
+> Having a CPU mode that is distinct from the MMU roles in fact would even
+> allow to remove PT_HAVE_ACCESSED_DIRTY macro altogether, and always use
+> !mmu->cpu_mode.base.ad_disabled.  I am not doing this because the macro
+> has a small effect in terms of dead code elimination:
+> 
+>    text	   data	    bss	    dec	    hex
+>  103544	  16665	    112	 120321	  1d601    # as of this patch
+>  103746	  16665	    112	 120523	  1d6cb    # without PT_HAVE_ACCESSED_DIRTY
 > 
 > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->  arch/x86/kvm/mmu/mmu.c | 23 ++++++++---------------
->  1 file changed, 8 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 1af898f0cf87..6e539fc2c9c7 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -244,19 +244,6 @@ static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
->  	return regs;
->  }
->  
-> -static int role_regs_to_root_level(const struct kvm_mmu_role_regs *regs)
-> -{
-> -	if (!____is_cr0_pg(regs))
-> -		return 0;
-> -	else if (____is_efer_lma(regs))
-> -		return ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL :
-> -					       PT64_ROOT_4LEVEL;
-> -	else if (____is_cr4_pae(regs))
-> -		return PT32E_ROOT_LEVEL;
-> -	else
-> -		return PT32_ROOT_LEVEL;
-> -}
-> -
->  static inline bool kvm_available_flush_tlb_with_range(void)
->  {
->  	return kvm_x86_ops.tlb_remote_flush_with_range;
-> @@ -4695,7 +4682,13 @@ kvm_calc_cpu_mode(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
->  		role.base.smep_andnot_wp = ____is_cr4_smep(regs) && !____is_cr0_wp(regs);
->  		role.base.smap_andnot_wp = ____is_cr4_smap(regs) && !____is_cr0_wp(regs);
->  		role.base.has_4_byte_gpte = !____is_cr4_pae(regs);
-> -		role.base.level = role_regs_to_root_level(regs);
-> +
-> +		if (____is_efer_lma(regs))
-> +			role.base.level = ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL : PT64_ROOT_4LEVEL;
 
-Can we wrap this, even if indentation is reduced?  I find it much easier to quickly
-understand the if-else paths if they're stacked and not run out to almost 100 chars.
-
-	if (____is_efer_lma(regs))
-		role.base.level = ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL :
-							  PT64_ROOT_4LEVEL;
-	else if (____is_cr4_pae(regs))
-		role.base.level = PT32E_ROOT_LEVEL;
-	else
-		role.base.level = PT32_ROOT_LEVEL;
-
-> +		else if (____is_cr4_pae(regs))
-> +			role.base.level = PT32E_ROOT_LEVEL;
-> +		else
-> +			role.base.level = PT32_ROOT_LEVEL;
->  
->  		role.ext.cr0_pg = 1;
->  		role.ext.cr4_pae = ____is_cr4_pae(regs);
-> @@ -4790,7 +4783,7 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
->  	context->get_guest_pgd = kvm_get_guest_cr3;
->  	context->get_pdptr = kvm_pdptr_read;
->  	context->inject_page_fault = kvm_inject_page_fault;
-> -	context->root_level = role_regs_to_root_level(regs);
-> +	context->root_level = cpu_mode.base.level;
->  
->  	if (!is_cr0_pg(context))
->  		context->gva_to_gpa = nonpaging_gva_to_gpa;
-> -- 
-> 2.31.1
-> 
-> 
+Reviewed-by: Sean Christopherson <seanjc@google.com>

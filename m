@@ -2,121 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BC74D10F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2A24D1109
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239201AbiCHH3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 02:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
+        id S245635AbiCHHeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 02:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiCHH3s (ORCPT
+        with ESMTP id S241341AbiCHHeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 02:29:48 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C563631DE2;
-        Mon,  7 Mar 2022 23:28:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646724530; x=1678260530;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eSgr7kllToWa09Si12r9LxFjIEKFGm4w4wNIAFIoQ1U=;
-  b=MIh5mULQaNKbI35JKWSNUD3fcNPG6sarTW9u2OplzWa4U3/GgHFKlnpD
-   X9EmdTF84jzyyBiMXVyYLxpA+d4CJjmem/1qvfVLpsyB8mA5klL+mbgm0
-   776exdvZ3NPOqb9y7T90wNgYjsFzzTOED9Aq7eNjP3XmCNXwrkEMeKDpF
-   QykbEHEC/GDuY1/GAnWmxFWRFcYtWtdiw5eh3nXNBl3VLpXa76WexTcf7
-   6mRIAmO5EfhrHuS+ZVa2vI5REnfvPkG+g1B7Si30i7jWQdujD7mcE3WKD
-   cFPneFGz/FmFS0+5Ox87CftoCUCv2KkvZSXX3c0RPdYQofLn2xvNKcytk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="252188011"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="252188011"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 23:28:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="687832143"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 07 Mar 2022 23:28:47 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Mar 2022 09:28:47 +0200
-Date:   Tue, 8 Mar 2022 09:28:47 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Yeqi Fu <fufuyqqqqqq@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lyz_cs@pku.edu.cn, Yeqi Fu <fuyq@stu.pku.edu.cn>
-Subject: Re: [PATCH 2/2] usb: typec: fix memory leak
-Message-ID: <YicFr2CFBpEvQ35U@kuha.fi.intel.com>
-References: <20220308065617.90401-1-fufuyqqqqqq@gmail.com>
+        Tue, 8 Mar 2022 02:34:15 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5F534B8D
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 23:33:17 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2dbd97f9bfcso191558417b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 23:33:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nnObU2Uyd0tlAyUt+AocrM4mHS92r1VcGTTBiqGJCgY=;
+        b=yOfUUXtBHt0cPHQn9COcC8hkkfQMSk5WTW1M35SimptV1SelfF+dyssIOeqbmf0bYN
+         1VHZe4xN6TSqi0DMMmnn3ho4ekwwLrYl7IMkpMx8N/ew/L+BIUucj5y20+18EP+4+lqY
+         OxSy4ASMTTNpK3IQWjs8+ur3fm+nZ5l4Dj9DH86s1fQT6PvZweG3Z85i31ZmGsIssFzh
+         edt6PdcZNOGWcwFccPTmOz6WUPOleB5dWMh17vKrW5NJOLlAWXO7Awsg7jyPHoCujppn
+         7kP1niVQZdaBC55aRFBgRrzOaasilm2jKdFEoBHsoRpGgIxhQ4GbFehgfRYwwCOLD6yL
+         wu5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nnObU2Uyd0tlAyUt+AocrM4mHS92r1VcGTTBiqGJCgY=;
+        b=RF0APezEv+S0/G0/4XMpBZKezYUbEtjSIuaXzZ4fYUiDLL/6/xyzLjNhEPzK5LWPHK
+         Jf8ioqTM4vSJaJNdSFyJx218Y8ASeFQv6KK47XEIzZfmEyVAHRCj6v1qrnGTxXYuUr4F
+         h5oMV2fQ0uFtLw5/yCzFlk8FWXJ5LnlVjUHz526LX4z1WHnrotXupRWIBtsQe9/3UU9y
+         LgspwBR6lhlizjhAQz5zRnVmAhgzHKLNuOl7jsV7gDW0mXWLx7AJrijnBMbPt8JIG9/T
+         +vWOp/RSaFNaZfuV+iIvuOhPbsUbDRGCPfSONFoA0J8f5uHIsNKtSjzlHTBlwbhOAEiR
+         7uEQ==
+X-Gm-Message-State: AOAM5316eXQbruu42n9EkJ41mQJXdDJ19kCrVLljA8ySw4H41kzOwUuY
+        VsEoNuDMIo2UUdwZl8WCdDXALWUS4lrVxjN1P99c/w==
+X-Google-Smtp-Source: ABdhPJwWB9Ya4xGBxepsT+3xWuV/ks+Bxx0IXku6wm/jka5TL19e6eGW87IwXd1Srob5NwWU1bFeJ7WEH3euA+bNZ4Y=
+X-Received: by 2002:a81:2f12:0:b0:2d7:d366:164a with SMTP id
+ v18-20020a812f12000000b002d7d366164amr12184415ywv.265.1646724796782; Mon, 07
+ Mar 2022 23:33:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308065617.90401-1-fufuyqqqqqq@gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220307162147.440035361@linuxfoundation.org>
+In-Reply-To: <20220307162147.440035361@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Mar 2022 13:03:05 +0530
+Message-ID: <CA+G9fYvrXYObuovXQvsbxfKAtZKFFTSBxPN850Wzx5s_aV-X_A@mail.gmail.com>
+Subject: Re: [PATCH 5.16 000/184] 5.16.13-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 10:56:17PM -0800, Yeqi Fu wrote:
-> From: Yeqi Fu <fuyq@stu.pku.edu.cn>
-> 
-> Resource release is needed on the error handling branch
-> to prevent memory leak. Fix this by adding kfree to the
-> error handling branch.
-> 
-> Signed-off-by: Yeqi Fu <fuyq@stu.pku.edu.cn>
+On Mon, 7 Mar 2022 at 21:58, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.13 release.
+> There are 184 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Mar 2022 16:21:20 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.16.13-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-NAK.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-That resources are released in the release callback - typec_release()
-in this case.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> ---
->  drivers/usb/typec/class.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index ee0e520707dd..e210109c696d 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -2099,6 +2099,7 @@ struct typec_port *typec_register_port(struct device *parent,
->  	port->cap = kmemdup(cap, sizeof(*cap), GFP_KERNEL);
->  	if (!port->cap) {
->  		put_device(&port->dev);
-> +		kfree(port);
->  		return ERR_PTR(-ENOMEM);
->  	}
->  
-> @@ -2106,6 +2107,7 @@ struct typec_port *typec_register_port(struct device *parent,
->  	if (IS_ERR(port->sw)) {
->  		ret = PTR_ERR(port->sw);
->  		put_device(&port->dev);
-> +		kfree(port);
->  		return ERR_PTR(ret);
->  	}
->  
-> @@ -2113,6 +2115,7 @@ struct typec_port *typec_register_port(struct device *parent,
->  	if (IS_ERR(port->mux)) {
->  		ret = PTR_ERR(port->mux);
->  		put_device(&port->dev);
-> +		kfree(port);
->  		return ERR_PTR(ret);
->  	}
->  
-> @@ -2120,6 +2123,7 @@ struct typec_port *typec_register_port(struct device *parent,
->  	if (ret) {
->  		dev_err(parent, "failed to register port (%d)\n", ret);
->  		put_device(&port->dev);
-> +		kfree(port);
->  		return ERR_PTR(ret);
->  	}
+## Build
+* kernel: 5.16.13-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.16.y
+* git commit: c596a0efed21d96ec6d26eb247911dbfc7c3e36c
+* git describe: v5.16.12-185-gc596a0efed21
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
+.12-185-gc596a0efed21
 
-thanks,
+## Test Regressions (compared to v5.16.12-166-g373826da847f)
+No test regressions found.
 
--- 
-heikki
+## Metric Regressions (compared to v5.16.12-166-g373826da847f)
+No metric regressions found.
+
+## Test Fixes (compared to v5.16.12-166-g373826da847f)
+No test fixes found.
+
+## Metric Fixes (compared to v5.16.12-166-g373826da847f)
+No metric fixes found.
+
+## Test result summary
+total: 111761, pass: 94381, fail: 1219, skip: 14909, xfail: 1252
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 293 passed, 3 failed
+* arm64: 47 total, 47 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 45 total, 41 passed, 4 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 41 total, 38 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 50 passed, 15 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 47 total, 47 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kselftest[
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

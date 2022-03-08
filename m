@@ -2,174 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F464D2060
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11ADC4D2062
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349293AbiCHSpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S1349379AbiCHSrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345544AbiCHSpv (ORCPT
+        with ESMTP id S238794AbiCHSrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:45:51 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FCC2FFE8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:44:53 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id o26so17223223pgb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:44:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F9iW0OVbthqHVjxJAxEXlEyGZtYeqKxwSIaWo5GZTas=;
-        b=Q3cQnIc3ElpP/gss4isBnkT5tvfJ3hTwiROMAEWXzVNHtn7vH5rTDwbrOteD8UaeRk
-         NKMKiJB0UDv0RkR5hVLcsB66LS3g2CsFZrZRpQbTEencmQWRTTSmKjL09M0srYleG5k+
-         VgLKi/RFKKSBZwBtdfN2SmS4DGCqGUCRa0le+spniEFp4QKUwoKOI7pmrQlWqtqfYrkp
-         jayz4RWUnq3lMz9WFrWHpZx65NczM2L9UbGLSS6axF1tiSbvzMB07LTuigbwobeINlD7
-         pkCDFMGFDU3QSm0PTYrB5Tb00AqWmftitCtIhxhTKapgESQrGgaEdqHnosObJlPS1Jjj
-         OE8g==
+        Tue, 8 Mar 2022 13:47:06 -0500
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C975252E68;
+        Tue,  8 Mar 2022 10:46:09 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2db2add4516so212689657b3.1;
+        Tue, 08 Mar 2022 10:46:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F9iW0OVbthqHVjxJAxEXlEyGZtYeqKxwSIaWo5GZTas=;
-        b=JPEwAhFsRqzopDd9rfqtjLRv4UmYmiwvrMnOqreNJZyA/txwA2HX3q9eL6Agj6MRw2
-         +KJcO2jGJA8tlFN4MG6bGrPUAFBzrPSSI3TtiBAky2aKal9SpFpUle2ivfQZIlKjFWYc
-         cac1WTEfpPWmpUUKvgyf54pZMMISfXArs0d1VzfloqLyN7Lczhskd+K/hXeSTKYEE/S0
-         LnRqhcgWKGkWq20QcL86eG0mKmxgrqaTuWK0Zl/6B90wlHbb54vCmivzIzPxn2CUs9Ix
-         tFw3AqqjTzCrlLLs6UFq1WdTTrsJTiF9VpxsdF5qeVZfu1ishMRU01zKmINQr1X1rIL4
-         /usQ==
-X-Gm-Message-State: AOAM533AkrP1ROE405Q+qGP5QacRPR9EiwIbWYEzMTLqPTFFbYkD+zMl
-        nJaQum7lzRo0/z89K6GFsHCAMw==
-X-Google-Smtp-Source: ABdhPJwqZg/ojI0iBDzhfukakkpXarGU5usTmUXLDTEA9mCTtIohCGSu3Rrew29iVrh/UUrA0h9aFg==
-X-Received: by 2002:a62:8389:0:b0:4f7:2b72:3589 with SMTP id h131-20020a628389000000b004f72b723589mr5100912pfe.57.1646765093267;
-        Tue, 08 Mar 2022 10:44:53 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b5-20020a056a0002c500b004f6dbd217c9sm12807965pft.108.2022.03.08.10.44.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 10:44:52 -0800 (PST)
-Date:   Tue, 8 Mar 2022 18:44:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-Subject: Re: [PATCH v2 12/25] KVM: x86/mmu: cleanup computation of MMU roles
- for two-dimensional paging
-Message-ID: <YiekIeAfGpPnqHT0@google.com>
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-13-pbonzini@redhat.com>
- <YiecYxd/YreGFWpB@google.com>
- <2e6c4c58-d4d2-69e2-f8ed-c93d9c13365b@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PDC0XAilCgbcryKBRl2g4eDKDF5WNAkKN/Aq6JLLyNE=;
+        b=A737hHPppRUMAJCj8EJW52sD56io//KFT1Y1snnJi+7h091fXu3VGul/s55kaUtJlu
+         ActtZTpSqlaDW9ajxXw6LfaulnOW1vNOvwEEJPB7i9NlxvUnmu6Sy093dOHe+cAcsYdX
+         8em5wNXB8cvnROkSl/B4cjx2QTOzKkJkg6kovvynd3m5WrOhNlmOCcvhveqmoEtHG3vS
+         7kbNwXGoPUCoCLv/HZFB13sts5uTTvsDjTm/6YdCc39dfAEPaQ1mD3trIPzQDZ658vxA
+         eg6s2z3jLpqDU/ITYQcLLg2zIXizuiAXxzNIb4OeWli4sICa9J/fTx4Y6x7Zqdu/u90i
+         vHuA==
+X-Gm-Message-State: AOAM531yI6CcWdXWGgBYTVMM2f6Xj0g+lMcG3F7vAxR7OqCI2VpWYbkK
+        Y2Y1gq18j1u3bEZk139fWvvYD0RIxvFpezFLQag=
+X-Google-Smtp-Source: ABdhPJwwaYpLQvtWeMoZt77J8Nl964tya0BpXQrxquUEcKDCHyWyIruttGdkBBl2DgUMyALCB/1ioplRwSR3YuToomQ=
+X-Received: by 2002:a81:f20e:0:b0:2dc:56e1:918e with SMTP id
+ i14-20020a81f20e000000b002dc56e1918emr14149104ywm.19.1646765168917; Tue, 08
+ Mar 2022 10:46:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e6c4c58-d4d2-69e2-f8ed-c93d9c13365b@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220306024620.5847-1-rdunlap@infradead.org> <87fsnu7cnr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87fsnu7cnr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 8 Mar 2022 19:45:58 +0100
+Message-ID: <CAJZ5v0hpesOogFv1g6h96xJnuaJ=paqWc3Bg2rOzMus4FMqTuQ@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: APEI: fix return value of __setup handlers
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022, Paolo Bonzini wrote:
-> On 3/8/22 19:11, Sean Christopherson wrote:
-> > On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> > > Extended bits are unnecessary because page walking uses the CPU mode,
-> > > and EFER.NX/CR0.WP can be set to one unconditionally---matching the
-> > > format of shadow pages rather than the format of guest pages.
-> > 
-> > But they don't match the format of shadow pages.  EPT has an equivalent to NX in
-> > that KVM can always clear X, but KVM explicitly supports running with EPT and
-> > EFER.NX=0 in the host (32-bit non-PAE kernels).
-> 
-> In which case bit 2 of EPTs doesn't change meaning, does it?
-> 
-> > CR0.WP equally confusing.  Yes, both EPT and NPT enforce write protection at all
-> > times, but EPT has no concept of user vs. supervisor in the EPT tables themselves,
-> > at least with respect to writes (thanks mode-based execution for the qualifier...).
-> > NPT is even worse as the APM explicitly states:
-> > 
-> >    The host hCR0.WP bit is ignored under nested paging.
-> > 
-> > Unless there's some hidden dependency I'm missing, I'd prefer we arbitrarily leave
-> > them zero.
-> 
-> Setting EFER.NX=0 might be okay for EPT/NPT, but I'd prefer to set it
-> respectively to 1 (X bit always present) and host EFER.NX (NX bit present
-> depending on host EFER).
-> 
-> For CR0.WP it should really be 1 in my opinion, because CR0.WP=0 implies
-> having a concept of user vs. supervisor access: CR0.WP=1 is the "default",
-> while CR0.WP=0 is "always allow *supervisor* writes".
+On Mon, Mar 7, 2022 at 2:51 AM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Randy Dunlap <rdunlap@infradead.org> writes:
+>
+> > __setup() handlers should return 1 to indicate that the boot option
+> > has been handled. Returning 0 causes a boot option to be listed in
+> > the Unknown kernel command line parameters and also added to init's
+> > arg list (if no '=' sign) or environment list (if of the form 'a=b').
+> >
+> > Unknown kernel command line parameters "erst_disable
+> >   bert_disable hest_disable BOOT_IMAGE=/boot/bzImage-517rc6", will be
+> >   passed to user space.
+> >
+> >  Run /sbin/init as init process
+> >    with arguments:
+> >      /sbin/init
+> >      erst_disable
+> >      bert_disable
+> >      hest_disable
+> >    with environment:
+> >      HOME=/
+> >      TERM=linux
+> >      BOOT_IMAGE=/boot/bzImage-517rc6
+> >
+> > Fixes: a3e2acc5e37b ("ACPI / APEI: Add Boot Error Record Table (BERT) support")
+> > Fixes: a08f82d08053 ("ACPI, APEI, Error Record Serialization Table (ERST) support")
+> > Fixes: 9dc966641677 ("ACPI, APEI, HEST table parsing")
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>
+> Good catch!  Thanks for fixing!
+>
+> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
-Yeah, I think we generally agree, just came to different conclusions :-)  I'm
-totally fine setting them to '1', especially given the patch I just "posted",
-but please add comments (suggested NX comment below).  The explicit "WP is ignored"
-blurb for hCR0 on NPT will be especially confusing at some point.
-
-With efer_nx forced to '1', we can do this somewhere in this series.  I really,
-really despise "context" :-).
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 9c79a0927a48..657df7fd74bf 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -4461,25 +4461,15 @@ static inline bool boot_cpu_is_amd(void)
-        return shadow_x_mask == 0;
- }
- 
--static void
--reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
-+static void reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *mmu)
- {
--       /*
--        * KVM doesn't honor execute-protection from the host page tables, but
--        * NX is required and potentially used at any time by KVM for NPT, as
--        * the NX hugepages iTLB multi-hit mitigation is supported for any CPU
--        * despite no known AMD (and derivative) CPUs being affected by erratum.
--        */
--       bool efer_nx = true;
--
--       struct rsvd_bits_validate *shadow_zero_check;
-        int i;
- 
--       shadow_zero_check = &context->shadow_zero_check;
-+       shadow_zero_check = &mmu->shadow_zero_check;
- 
-        if (boot_cpu_is_amd())
-                __reset_rsvds_bits_mask(shadow_zero_check, reserved_hpa_bits(),
--                                       context->shadow_root_level, efer_nx,
-+                                       mmu->shadow_root_level, is_efer_nx(mmu),
-                                        boot_cpu_has(X86_FEATURE_GBPAGES),
-                                        false, true);
-        else
-@@ -4490,7 +4480,7 @@ reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
-        if (!shadow_me_mask)
-                return;
- 
--       for (i = context->shadow_root_level; --i >= 0;) {
-+       for (i = mmu->shadow_root_level; --i >= 0;) {
-                shadow_zero_check->rsvd_bits_mask[0][i] &= ~shadow_me_mask;
-                shadow_zero_check->rsvd_bits_mask[1][i] &= ~shadow_me_mask;
-        }
-@@ -4751,6 +4741,16 @@ kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
- 
-        role.base.access = ACC_ALL;
-        role.base.cr0_wp = true;
-+
-+       /*
-+        * KVM doesn't honor execute-protection from the host page tables, but
-+        * NX is required and potentially used at any time by KVM for NPT, as
-+        * the NX hugepages iTLB multi-hit mitigation is supported for any CPU
-+        * despite no known AMD (and derivative) CPUs being affected by erratum.
-+        *
-+        * This is functionally accurate for EPT, if technically wrong, as KVM
-+        * can always clear the X bit on EPT,
-+        */
-        role.base.efer_nx = true;
-        role.base.smm = cpu_mode.base.smm;
-        role.base.guest_mode = cpu_mode.base.guest_mode;
+Applied as 5.18 material, thanks!

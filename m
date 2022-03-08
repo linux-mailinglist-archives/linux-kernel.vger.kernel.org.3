@@ -2,89 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF634D2211
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2039E4D2214
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350107AbiCHT4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S1349848AbiCHT6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347820AbiCHT4f (ORCPT
+        with ESMTP id S244501AbiCHT57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:56:35 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2774BFFD
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:55:39 -0800 (PST)
+        Tue, 8 Mar 2022 14:57:59 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18BD37A14
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:57:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646769339; x=1678305339;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MpyhYkOgcr+h4inx23oInHE5S73pLv0sOeisuKOmOUI=;
-  b=Orc4Pz1QmdW8LJB0kS3xsoZFD1XMkkDM5f2cTYDYqeEJSVwokIqWeu1E
-   cRl8Q++HzEy36NE5avxf+hb0e7bwGTe7Do2kY/Elcn0fSk1p79+E1+Hg4
-   tUBnxdRjvjDW9l8VkrGEaMlc0hZ0ZyrP3p3I3FBYCXjJ4y3xL5Pflc4vS
-   qHb+VL+cqxdutkVDq9cmblOjsKV620GB/OF2Vh92zHCkwl1lRoUpRXL7D
-   moh3i/f45L8AZlB0TqXaEdhF38ej1JW/LX01EwNJ2Nq3ywm+IcvgZE+rZ
-   ybjUJujhQRnii+Eug/o1kb8qBhNSw3Sy/Sve83fJ16Jdc8/KSCcFSis2y
+  t=1646769421; x=1678305421;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=aZEUJmSSAeZVOiFwyACXX/kSeEDJVemxlPb7zkMozd0=;
+  b=ECJjdHbv4R2x4eYZENI2FMdiFxG3Za+eaNNJqKnyy7r/D+992VdQWUKK
+   GAKIsu0Oy3QdFPI9uRR79tS9TeUZ0urZ8oUhd3kRMjK8O9QLfYbfvebp2
+   /uwkxf0evqpp8D8ndlA/mYO1zomkhMaRjAEkijSAQLmJd+j+cyh+4Xcm2
+   Ox4vJQ7/8s/JCd80foscxx9AHpVaN0HlwJfw2BENwpMJARqkxORoAw+Cq
+   r+V/sZ0PIqY2kfWM4q0tCjxu8CX+EYy4fRyGqkxcQIYfbdtB3miU4BflL
+   1kwYo5wl0NyOapXqh7/QvDkxzh8RABJBL+7NiWHYOwG94Oy5gN7/DIfLi
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254988952"
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="242241380"
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="254988952"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 11:55:38 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="242241380"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 11:57:01 -0800
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="643782367"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 11:55:37 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRfvk-0001tY-FC; Tue, 08 Mar 2022 19:55:36 +0000
-Date:   Wed, 9 Mar 2022 03:55:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ming Qian <ming.qian@nxp.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [hverkuil-media-tree:cec 333/345] ERROR: modpost: "__moddi3"
- [drivers/media/platform/amphion/amphion-vpu.ko] undefined!
-Message-ID: <202203090325.kOgztPTb-lkp@intel.com>
+   d="scan'208";a="547387096"
+Received: from ntebyanx-mobl7.amr.corp.intel.com (HELO [10.212.224.65]) ([10.212.224.65])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 11:56:59 -0800
+Message-ID: <aa8c421f-b1e1-f62b-a289-c686d69f6293@intel.com>
+Date:   Tue, 8 Mar 2022 11:56:52 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-3-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv5 02/30] x86/tdx: Provide common base for SEAMCALL and
+ TDCALL C wrappers
+In-Reply-To: <20220302142806.51844-3-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git cec
-head:   5a31a11af68144fdafb493ac9c2e7e9af5fc4ba8
-commit: 42356ecbdb69e49cffd0c1df791280965f9f90e1 [333/345] media: amphion: add amphion vpu entry in Kconfig and Makefile
-config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220309/202203090325.kOgztPTb-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree cec
-        git checkout 42356ecbdb69e49cffd0c1df791280965f9f90e1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On 3/2/22 06:27, Kirill A. Shutemov wrote:
+> Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
+> defines a new VMX root operation (SEAM VMX root) and a new VMX non-root
+> operation (SEAM VMX non-root) which are both isolated from the legacy
+> VMX operation where the host kernel runs.
+> 
+> A CPU-attested software module (called 'TDX module') runs in SEAM VMX
+> root to manage and protect VMs running in SEAM VMX non-root.  SEAM VMX
+> root is also used to host another CPU-attested software module (called
+> 'P-SEAMLDR') to load and update the TDX module.
+> 
+> Host kernel transits to either P-SEAMLDR or TDX module via the new
+> SEAMCALL instruction, which is essentially a VMExit from VMX root mode
+> to SEAM VMX root mode.  SEAMCALLs are leaf functions defined by
+> P-SEAMLDR and TDX module around the new SEAMCALL instruction.
+> 
+> A guest kernel can also communicate with TDX module via TDCALL
+> instruction.
+> 
+> TDCALLs and SEAMCALLs use an ABI different from the x86-64 system-v ABI.
+> RAX is used to carry both the SEAMCALL leaf function number (input) and
+> the completion status (output).  Additional GPRs (RCX, RDX, R8-R11) may
+> be further used as both input and output operands in individual leaf.
+> 
+> TDCALL and SEAMCALL share the same ABI and require the largely same
+> code to pass down arguments and retrieve results.
+> 
+> Define an assembly macro that can be used to implement C wrapper for
+> both TDCALL and SEAMCALL.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It's probably also worth mentioning that the SEAMCALL half won't get
+used in this series.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index ba8042ce61c2..e5ff8ed59adf 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -8,6 +8,33 @@
+>  #define TDX_CPUID_LEAF_ID	0x21
+>  #define TDX_IDENT		"IntelTDX    "
+>  
+> +/*
+> + * SW-defined error codes.
+> + *
+> + * Bits 47:40 == 0xFF indicate Reserved status code class that never used by
+> + * TDX module.
+That's a bit clunky.  Perhaps replace it with this:
 
->> ERROR: modpost: "__moddi3" [drivers/media/platform/amphion/amphion-vpu.ko] undefined!
->> ERROR: modpost: "__divdi3" [drivers/media/platform/amphion/amphion-vpu.ko] undefined!
+ * Bits 47:40 == 0xFF indicate a "Reserved" status code class that is
+   never used by the TDX module.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> + */
+> +#define TDX_ERROR			(1UL << 63)
+> +#define TDX_SW_ERROR			(TDX_ERROR | GENMASK_ULL(40, 47))
+> +#define TDX_SEAMCALL_VMFAILINVALID	(TDX_SW_ERROR | 0xFFFF0000ULL)
+> +
+> +#ifndef __ASSEMBLY__
+
+The "UL" construct doesn't work in the assembler.  But, this won't shoIf
+you use _BITUL, it will do the hard work for you.
+
+> +/*
+> + * Used to gather the output registers values of the TDCALL and SEAMCALL
+> + * instructions when requesting services from the TDX module.
+> + *
+> + * This is a software only structure and not part of the TDX module/VMM ABI.
+> + */
+> +struct tdx_module_output {
+> +	u64 rcx;
+> +	u64 rdx;
+> +	u64 r8;
+> +	u64 r9;
+> +	u64 r10;
+> +	u64 r11;
+> +};
+
+With those fixed:
+
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>

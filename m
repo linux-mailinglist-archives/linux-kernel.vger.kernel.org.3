@@ -2,148 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6B94D0F2C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03924D0F31
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244055AbiCHF2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S244260AbiCHFag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237923AbiCHF2B (ORCPT
+        with ESMTP id S231243AbiCHFae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:28:01 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD6A3B57A
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:27:05 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id z4so15460653pgh.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 21:27:05 -0800 (PST)
+        Tue, 8 Mar 2022 00:30:34 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8332C22BDD
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:29:38 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id e13so16084118plh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 21:29:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oPr7jbEQjZcFbPcnfK3KFYS7eLKVUp4KxioDBpQLsHE=;
-        b=KFudWe1Vy5F9opv/soKhgh7FbpSJlX8UMUatuMgFRoPStXK8BeJYII3IzceeF4CUsE
-         tbZtmjAemFX5zvbE6wUAsuHZbZjxHyMXZWeEZcotbpQPuVRvG0M7k6VpuXKY6pkei48H
-         zXfV9NCW2jKEE17DZ9Ra4LgaKKzI3Af1gO2wcA7ElXQGZWb4NCyLsLzkpbYM8UT9vsEO
-         pUu9p56Gp1SA3gnsGePgMqiQbP60EhVUK9DOvNBmk8vIgN7nMuOBxQ+IB8iUaUiYu2Qb
-         2Pna2NPt9syIKgvHRHKvIJRPlI6Fu620/j9bCtoglu3IB7vYM/lS7I1CEm9Rb4f9/4gY
-         lvcQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H0vjB4LhDXi7QSy6fRqdPlD7Qk1SfEX7MwnN7FiKGsk=;
+        b=K5xZQW4FSG0AwQk78uctp+7ieDiri1nE0kAIbOd0P4RY/tZvDK0mkLHgXHMNh7+EnH
+         9+9RpeemFzC5MsSEdgdOsi+4zLr76RHlS2TSlcRvoV4gGFoXwqfJMmwuHv5rENkXlkGz
+         ooYBMNSIwwmrymCi6lsFuf1r1WTpO2yMnzoUDFKTGjNAChCdY2XhhZr56A2G7XsXEZh1
+         WpEhrinjLF917I7ug+mDDsSWHevuDW0JQl/qtdZRWV70Nq2vxIk6SJQMfXdnNph+HFaj
+         +kkcUhjz4qtELmYhh6kFAH33aXpLp2L4GN3brfAuIpLhlMl5Th8WVImKCT6MIM8CcR1L
+         +rkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oPr7jbEQjZcFbPcnfK3KFYS7eLKVUp4KxioDBpQLsHE=;
-        b=G8/ZQFPsHTNpKOtvdyOeUXFn9369UpcRjgDpg7QHJ8ilD3HJ02tW42+pqdom2if0p2
-         fP5BbJ9A6JAEfQEu2BDJKO5J10iTEagO4aGIe8tuajB0sHndzWNQL9rz44iUoTrLsLho
-         BrT74mRBLuUMJd9KApuWLxqn4hsSPJ+r+DkqmhGtvYDoVs3ey0ZoDlGAOuw50+p9x4C8
-         X1K8GGl78itl61ffchrDsLY5vYi8lNqAJ1iFAq0bWcb4wiscb6hsp1SZRzh17C1dgYXj
-         C1XDHSrb4YXCCK55+8XanJga+1EEN871gTm9AFu1MLGMPMW3pGSAgIf9bWu5cepBrsg6
-         6IUw==
-X-Gm-Message-State: AOAM532UCVPH/L3onbMVXBbyf82IzesimKHhXevtUOBfe+O/DFXcfA59
-        M8hfpeFLSWh+AdwHE/ushNcmqQ==
-X-Google-Smtp-Source: ABdhPJyH9JQVBjUGI9YE7QPYpbcBryWFyGEZ7zSUSAdXkhoivPgJwH+prK8BW8Uov0OvBfEDSxptFQ==
-X-Received: by 2002:a63:d018:0:b0:374:a3c1:dfed with SMTP id z24-20020a63d018000000b00374a3c1dfedmr12888737pgf.155.1646717224619;
-        Mon, 07 Mar 2022 21:27:04 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm18580376pfl.135.2022.03.07.21.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 21:27:04 -0800 (PST)
-Date:   Tue, 8 Mar 2022 05:26:59 +0000
-From:   Chun-Tse Shao <ctshao@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        keyrings@vger.kernel.org, DTML <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4] config: Allow kernel installation packaging to
- override pkg-config
-Message-ID: <YibpI1MkqVUvEl9h@google.com>
-References: <20220306223016.2239094-1-ctshao@google.com>
- <CAKwvOdnmtRYnSx3VvG=PEnzpzWa8f=0bn1xDymjER5EShS2tmw@mail.gmail.com>
- <YiaMJCHOOuujHwiK@google.com>
- <CAK7LNAS-=Fne6fyiqzQ6DwNLOdF-HAY9Libn10uyV9GmQQMUKQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H0vjB4LhDXi7QSy6fRqdPlD7Qk1SfEX7MwnN7FiKGsk=;
+        b=km3tn5KN3+ADBp4/ER8TDT48oUpn3HJzhEtWB4ScvNVBjmcCla0lzRyqSkwWdLp6rX
+         A218sikx7GTa+2dnI41m84lcLI9Qo73cLdLKtwkLuqD7fsmkfTfDxBeAZnn9E7ZkdG1+
+         Qu3HhnqhkJ/VZG2i9D95gT2bGdcRRlJwwKQe6W4nC8pVKRlfExgKErKNJ9lE3EbT+mz4
+         1C9mYuwle+Qg+erg3O7+lRusUaX1M88l9Sy5xguFAX63EGs/zTxoPwsaa75mddV2ncrA
+         AR/BZ5Y6DG09CNe5olwsGLx5mL5ZvoOlyTPl93yY5/gvXh3Z2IXW4dBlaGl1GfY3qE6r
+         Duyw==
+X-Gm-Message-State: AOAM533VbmAvA85Ix1ywMEHrCdMf1CWNQFvTDpLCvQvAQ6gJbwNP0Tt/
+        unqe5xKmCOKgzwt18R+d+2It4hbaohGqvOzM9BQ=
+X-Google-Smtp-Source: ABdhPJzQCmoHetwvICyKDq+FjNCCmJ0zxHZ97kcLUUPejVKBw7nLSqgJTXlf8uNkmJ1RadVpM5ASOJwUkUdckr7UQOY=
+X-Received: by 2002:a17:90b:4b4b:b0:1be:fd9a:c279 with SMTP id
+ mi11-20020a17090b4b4b00b001befd9ac279mr2850397pjb.83.1646717378007; Mon, 07
+ Mar 2022 21:29:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNAS-=Fne6fyiqzQ6DwNLOdF-HAY9Libn10uyV9GmQQMUKQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220307074057.902222-1-42.hyeyoo@gmail.com> <20220307074057.902222-3-42.hyeyoo@gmail.com>
+ <CAEVVKH-zYxn62wd8CzZx5Sw=6wTe2ZBMUyTSv8V2PR5bRoW-tA@mail.gmail.com> <YibSe/txAsubzqUw@ip-172-31-19-208.ap-northeast-1.compute.internal>
+In-Reply-To: <YibSe/txAsubzqUw@ip-172-31-19-208.ap-northeast-1.compute.internal>
+From:   Xiongwei Song <sxwjean@gmail.com>
+Date:   Tue, 8 Mar 2022 13:29:11 +0800
+Message-ID: <CAEVVKH9UkNkF7mM-mj3bZ2y2kSd8+fu031XV3_30Midui7QYVA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] mm/slub: refactor deactivate_slab()
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 01:01:45PM +0900, Masahiro Yamada wrote:
-> On Tue, Mar 8, 2022 at 7:50 AM Chun-Tse Shao <ctshao@google.com> wrote:
+On Tue, Mar 8, 2022 at 11:50 AM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+>
+> On Tue, Mar 08, 2022 at 09:40:07AM +0800, Xiongwei Song wrote:
+> > Hello,
 > >
-> > On Mon, Mar 07, 2022 at 10:17:17AM -0800, Nick Desaulniers wrote:
-> > > On Sun, Mar 6, 2022 at 2:39 PM Chun-Tse Shao <ctshao@google.com> wrote:
-> > > >
-> > > > Add HOSTPKG_CONFIG to allow tooling that builds the kernel to override
-> > > > what pkg-config and parameters are used.
+> > On Mon, Mar 7, 2022 at 3:41 PM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
 > > >
-> > > Sorry, kind a late thought here for v4, but we don't seem to prefix
-> > > many other host side tools with HOST_, i.e. LEX, YACC, AWK, PERL,
-> > > PYTHON3, etc.  Maybe just having the variable identifier be simply
-> > > PKGCONFIG rather than HOSTPKG_CONFIG then put it at the end of the
-> > > list in the top level Makefile after ZSTD (i.e. the list of host
-> > > tools)?  There's HOST_ prefixes when there's more than one tool
-> > > involved (i.e. host compiler vs target compiler), but I suspect
-> > > there's no such distinction for the existing uses of pkg-config?
+> > > Simplify deactivate_slab() by unlocking n->list_lock and retrying
+> > > cmpxchg_double() when cmpxchg_double() fails, and perform
+> > > add_{partial,full} only when it succeed.
 > > >
-> > Thanks for your suggestion, Nick! Yes I think it makes sense with PKGCONFIG
-> > instead of HOSTPKG_CONFIG since there is only one tool involved. I will
-> > work on it and submit a new patch.
+> > > Releasing and taking n->list_lock again here is not harmful as SLUB
+> > > avoids deactivating slabs as much as possible.
+> > >
+> > > [ vbabka@suse.cz: perform add_{partial,full} when cmpxchg_double()
+> > >   succeed.
+> > >
+> > >   count deactivating full slabs even if debugging flag is not set. ]
+> > >
+> > > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> > > ---
+> > >  mm/slub.c | 91 +++++++++++++++++++++++--------------------------------
+> > >  1 file changed, 38 insertions(+), 53 deletions(-)
+> > >
+> > > diff --git a/mm/slub.c b/mm/slub.c
+> > > index 1ce09b0347ad..f0cb9d0443ac 100644
+> > > --- a/mm/slub.c
+> > > +++ b/mm/slub.c
+> > > @@ -2348,10 +2348,10 @@ static void init_kmem_cache_cpus(struct kmem_cache *s)
+> > >  static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+> > >                             void *freelist)
+> > >  {
+> > > -       enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE };
+> > > +       enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE, M_FULL_NOLIST };
+> > >         struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+> > > -       int lock = 0, free_delta = 0;
+> > > -       enum slab_modes l = M_NONE, m = M_NONE;
+> > > +       int free_delta = 0;
+> > > +       enum slab_modes mode = M_NONE;
+> > >         void *nextfree, *freelist_iter, *freelist_tail;
+> > >         int tail = DEACTIVATE_TO_HEAD;
+> > >         unsigned long flags = 0;
+> > > @@ -2393,14 +2393,10 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+> > >          * Ensure that the slab is unfrozen while the list presence
+> > >          * reflects the actual number of objects during unfreeze.
+> > >          *
+> > > -        * We setup the list membership and then perform a cmpxchg
+> > > -        * with the count. If there is a mismatch then the slab
+> > > -        * is not unfrozen but the slab is on the wrong list.
+> > > -        *
+> > > -        * Then we restart the process which may have to remove
+> > > -        * the slab from the list that we just put it on again
+> > > -        * because the number of objects in the slab may have
+> > > -        * changed.
+> > > +        * We first perform cmpxchg holding lock and insert to list
+> > > +        * when it succeed. If there is mismatch then the slab is not
+> > > +        * unfrozen and number of objects in the slab may have changed.
+> > > +        * Then release lock and retry cmpxchg again.
+> > >          */
+> > >  redo:
+> > >
+> > > @@ -2420,61 +2416,50 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+> > >         new.frozen = 0;
+> > >
+> > >         if (!new.inuse && n->nr_partial >= s->min_partial)
+> > > -               m = M_FREE;
+> > > +               mode = M_FREE;
+> > >         else if (new.freelist) {
+> > > -               m = M_PARTIAL;
+> > > -               if (!lock) {
+> > > -                       lock = 1;
+> > > -                       /*
+> > > -                        * Taking the spinlock removes the possibility that
+> > > -                        * acquire_slab() will see a slab that is frozen
+> > > -                        */
+> > > -                       spin_lock_irqsave(&n->list_lock, flags);
+> > > -               }
+> > > -       } else {
+> > > -               m = M_FULL;
+> > > -               if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
+> > > -                       lock = 1;
+> > > -                       /*
+> > > -                        * This also ensures that the scanning of full
+> > > -                        * slabs from diagnostic functions will not see
+> > > -                        * any frozen slabs.
+> > > -                        */
+> > > -                       spin_lock_irqsave(&n->list_lock, flags);
+> > > -               }
+> > > -       }
+> > > -
+> > > -       if (l != m) {
+> > > -               if (l == M_PARTIAL)
+> > > -                       remove_partial(n, slab);
+> > > -               else if (l == M_FULL)
+> > > -                       remove_full(s, n, slab);
+> > > +               mode = M_PARTIAL;
+> > > +               /*
+> > > +                * Taking the spinlock removes the possibility that
+> > > +                * acquire_slab() will see a slab that is frozen
+> > > +                */
+> > > +               spin_lock_irqsave(&n->list_lock, flags);
+> > > +       } else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
+> > > +               mode = M_FULL;
+> > > +               /*
+> > > +                * This also ensures that the scanning of full
+> > > +                * slabs from diagnostic functions will not see
+> > > +                * any frozen slabs.
+> > > +                */
+> > > +               spin_lock_irqsave(&n->list_lock, flags);
+> > > +       } else
+> > > +               mode = M_FULL_NOLIST;
+> > >
+> > > -               if (m == M_PARTIAL)
+> > > -                       add_partial(n, slab, tail);
+> > > -               else if (m == M_FULL)
+> i> > -                       add_full(s, n, slab);
+> > > -       }
+> > >
+> > > -       l = m;
+> > >         if (!cmpxchg_double_slab(s, slab,
+> > >                                 old.freelist, old.counters,
+> > >                                 new.freelist, new.counters,
+> > > -                               "unfreezing slab"))
+> > > +                               "unfreezing slab")) {
+> > > +               if (mode == M_PARTIAL || mode == M_FULL)
+> > > +                       spin_unlock_irqrestore(&n->list_lock, flags);
+> >
+> > The slab doesn't belong to any node here, should we remove locking/unlocking
+> > spin for cmpxchg_double_slab() call? Just calling spin_lock_irqsave() before
+> > add_partial()/add_full call is fine?
 > >
 >
-> Please hold on.
+> I thought about that, and tested, but that is not okay.
 >
-> I was also wondering what to do with the "HOST" prefix.
->
-> Libraries are usually arch-dependent.
-> (in other words, pkg-config should return different library paths
-> for $(CC) and $(HOSTCC) )
->
-> You already understood this, so you added "HOST" prefix.
+> taking spinlock around cmpxchg prevents race between __slab_free() and
+> deactivate_slab(). list can be corrupted without spinlock.
 >
 >
-> Please let me take time for further discussion.
-> I will come back to this when I get some time.
+> think about case below: (when SLAB_STORE_USER is set)
+>
+> __slab_free()                   deactivate_slab()
+> =================               =================
+>                                 (deactivating full slab)
+>                                 cmpxchg_double()
 >
 >
-> In the meantime,
->   a8a5cd8b472ca20e5b8fa649c43b3756867322f8
-> as reference info if you have not seen it.
+> spin_lock_irqsave()
+> cmpxchg_double()
+>
+> /* not in full list yet */
+> remove_full()
+> add_partial()
+> spin_unlock_irqrestore()
+>                                 spin_lock_irqsave()
+>                                 add_full()
+>                                 spin_unlock_irqrestore()
+>
+
+Oh... Looks reasonable. Thanks for the detailed explanation.
+
 >
 >
-> How many distros support something like
-> "aarch64-linux-gnu-pkg-config"  ?
+> > >                 goto redo;
+> >
+> > How about do {...} while(!cmpxchg_double_slab())? The readability looks better?
+> >
 >
-> Ubuntu 18.04 and 20.04 seem to support it.
-> I do not know for others.
+> This will be:
 >
+> do {
+>         if (mode == M_PARTIAL || mode == M_FULL)
+>                 spin_unlock_irqrestore();
 >
+>         [...]
 >
+> } while (!cmpxchg_double_slab());
 >
+
+I saw __slab_free() is doing so. Not a big deal.
+
+Regards,
+Xiongwei
+
+> I think goto version is better for reading?
+>
+> Thanks!
+>
+> > Regards,
+> > Xiongwei
+> >
+> > > +       }
+> > >
+> > > -       if (lock)
+> > > -               spin_unlock_irqrestore(&n->list_lock, flags);
+> > >
+> > > -       if (m == M_PARTIAL)
+> > > +       if (mode == M_PARTIAL) {
+> > > +               add_partial(n, slab, tail);
+> > > +               spin_unlock_irqrestore(&n->list_lock, flags);
+> > >                 stat(s, tail);
+> > > -       else if (m == M_FULL)
+> > > -               stat(s, DEACTIVATE_FULL);
+> > > -       else if (m == M_FREE) {
+> > > +       } else if (mode == M_FREE) {
+> > >                 stat(s, DEACTIVATE_EMPTY);
+> > >                 discard_slab(s, slab);
+> > >                 stat(s, FREE_SLAB);
+> > > -       }
+> > > +       } else if (mode == M_FULL) {
+> > > +               add_full(s, n, slab);
+> > > +               spin_unlock_irqrestore(&n->list_lock, flags);y
+> > > +               stat(s, DEACTIVATE_FULL);
+> > > +       } else if (mode == M_FULL_NOLIST)
+> > > +               stat(s, DEACTIVATE_FULL);
+> > >  }
+> > >
+> > >  #ifdef CONFIG_SLUB_CPU_PARTIAL
+> > > --
+> > > 2.33.1
+> > >
+> > >
 >
 > --
-> Best Regards
->
-> Masahiro Yamada
-
-Thanks Masahiro! Will wait for your suggestion.
-
--CT
+> Thank you, You are awesome!
+> Hyeonggon :-)

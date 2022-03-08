@@ -2,50 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B180C4D16BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1497E4D16C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346636AbiCHL7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:59:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S1346644AbiCHMAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbiCHL71 (ORCPT
+        with ESMTP id S233849AbiCHMAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:59:27 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 905F927CD2;
-        Tue,  8 Mar 2022 03:58:30 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F4FAD6E;
-        Tue,  8 Mar 2022 03:58:30 -0800 (PST)
-Received: from [10.57.40.166] (unknown [10.57.40.166])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDE8E3FA5D;
-        Tue,  8 Mar 2022 03:58:28 -0800 (PST)
-Message-ID: <a4429c3b-91b2-12f5-f0c6-c8db16d0c9f8@arm.com>
-Date:   Tue, 8 Mar 2022 11:58:27 +0000
+        Tue, 8 Mar 2022 07:00:48 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C43289B6;
+        Tue,  8 Mar 2022 03:59:52 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso2059299pjb.0;
+        Tue, 08 Mar 2022 03:59:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=wHCHcNv35jsq9uJZNtNUOMWI8ofZ17Ys+sOz/RMBH2Y=;
+        b=fTSu255snnLS1boMzSwSXCtpILYhn+fxqGJRzzIQnOWPzwmidDgpWj1EZ/nWrooPUN
+         m13gywxcmYTKSpWE1e1F6Rw1DipevK83Hxf6qqdC9Ie1911j3Wl5pW1X5gZ2Ln+96jzo
+         JnqXi9Kf+LNfSJ2Y/3XV2xU+LA3avuZ3CZDbMeFXl7+tpwSp0eJOWu5V4UyljVvKkOKI
+         peWTHRRDYunnqaJfPckjNa9ppHRUSUKH/sGf0bJpxGzAsJlUQNXxgWUDC6wx2kieFKFp
+         K7Hg42WPcTa2gbSjKC8VXJKGiU7Je+9m/OKJSqtEYFOA6Z6Jxk/V2UoC0EuryrgY2EHd
+         to4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=wHCHcNv35jsq9uJZNtNUOMWI8ofZ17Ys+sOz/RMBH2Y=;
+        b=uZynL9CPSWyLjqjKep2G0706w6HC2E2my47fd4Gr+3oeY8WDKdMdrZILql39Synu4n
+         d5OyOK8izoCToi59fe6fXZYomz7q5UGfEOu6OgLPfaruoPLk6puGbdEid/t0Uf8snYBA
+         sQFGuavPmiMdHQ/Tf/bln+Sny/Ckpn9Rm6HtPAGOpJZyMejxdlo8OX6TVgR9MwAmn2Op
+         X0mju5d5CfG3CrzpLh2q6N0l5hVGuUNRl6oEjkw/yE0aQq5x5ZgPBAI3FbFEmCVnd63U
+         8W7zEXnLloEhNjyepbEsuA0UVclHSs6uvbh2z27v7WkqH6faMmt7PxTqnn1kFj/d5vc+
+         olEA==
+X-Gm-Message-State: AOAM530/TTfZuUykSnIHWbg2YgYmMxob4txfqjjIiaqFNcwcxrD9jjs6
+        xJ46p43AU0M7U7G2wOSJ2jA=
+X-Google-Smtp-Source: ABdhPJyXsq3i+35vKFEFyBvbGkmze5hQ2fkRfm7MLFRJfgDr4mENQ/dUF95fvfqJBLBgVyQHQyNiQQ==
+X-Received: by 2002:a17:90b:38ce:b0:1bf:a34:5bad with SMTP id nn14-20020a17090b38ce00b001bf0a345badmr4315295pjb.129.1646740791559;
+        Tue, 08 Mar 2022 03:59:51 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id l20-20020a056a00141400b004f65cedfb09sm19707996pfu.48.2022.03.08.03.59.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 03:59:51 -0800 (PST)
+Message-ID: <f1f846f6-a544-d38c-beef-611bf70c4fcc@gmail.com>
+Date:   Tue, 8 Mar 2022 19:59:42 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/4] perf: Print branch stack entry type in
- --dump-raw-trace
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.2
+Subject: Re: [PATCH] KVM: x86/pmu: Isolate TSX specific perf_event_attr.attr
+ logic for AMD
 Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, acme@kernel.org,
-        linux-perf-users@vger.kernel.org
-Cc:     german.gomez@arm.com, leo.yan@linaro.com,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220307171917.2555829-1-james.clark@arm.com>
- <20220307171917.2555829-3-james.clark@arm.com>
- <fb9717bb-735a-88d9-254d-0e7b2f7209f2@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <fb9717bb-735a-88d9-254d-0e7b2f7209f2@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Andi Kleen <ak@linux.intel.com>, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>
+References: <20220307063805.65030-1-likexu@tencent.com>
+ <CALMp9eSCWxM5-_-S6SK_0o-aTCWGzyut-L2qsqnaeR_dJc6n3g@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <CALMp9eSCWxM5-_-S6SK_0o-aTCWGzyut-L2qsqnaeR_dJc6n3g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,63 +84,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08/03/2022 04:29, Anshuman Khandual wrote:
-> 
-> 
-> On 3/7/22 22:49, James Clark wrote:
->> This can help with debugging issues. It only prints when -j save_type
->> is used otherwise an empty string is printed.
-> 
-> Specifying events with PERF_SAMPLE_BRANCH_CALL_STACK flag explicitly might
-> be better along with '-j save_type'.
-> 
+On 8/3/2022 5:39 am, Jim Mattson wrote:
+> On Sun, Mar 6, 2022 at 10:38 PM Like Xu <like.xu.linux@gmail.com> wrote:
 >>
->> Before the change:
+>> From: Like Xu <likexu@tencent.com>
 >>
->>   101603801707130 0xa70 [0x630]: PERF_RECORD_SAMPLE(IP, 0x2): 1108/1108: 0xffff9c1df24c period: 10694 addr: 0
->>   ... branch stack: nr:64
->>   .....  0: 0000ffff9c26029c -> 0000ffff9c26f340 0 cycles  P   0
->>   .....  1: 0000ffff9c2601bc -> 0000ffff9c26f340 0 cycles  P   0
+>> HSW_IN_TX* bits are used in generic code which are not supported on
+>> AMD. Worse, these bits overlap with AMD EventSelect[11:8] and hence
+>> using HSW_IN_TX* bits unconditionally in generic code is resulting in
+>> unintentional pmu behavior on AMD. For example, if EventSelect[11:8]
+>> is 0x2, pmc_reprogram_counter() wrongly assumes that
+>> HSW_IN_TX_CHECKPOINTED is set and thus forces sampling period to be 0.
 >>
->> After the change:
+>> Opportunistically remove two TSX specific incoming parameters for
+>> the generic interface reprogram_counter().
 >>
->>   101603801707130 0xa70 [0x630]: PERF_RECORD_SAMPLE(IP, 0x2): 1108/1108: 0xffff9c1df24c period: 10694 addr: 0
->>   ... branch stack: nr:64
->>   .....  0: 0000ffff9c26029c -> 0000ffff9c26f340 0 cycles  P   0 CALL
->>   .....  1: 0000ffff9c2601bc -> 0000ffff9c26f340 0 cycles  P   0 IND_CALL
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
+>> Fixes: 103af0a98788 ("perf, kvm: Support the in_tx/in_tx_cp modifiers in KVM arch perfmon emulation v5")
+>> Co-developed-by: Ravi Bangoria <ravi.bangoria@amd.com>
+>> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
 >> ---
->>  tools/perf/util/session.c | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
+>> Note: this patch is based on [1] which is considered to be a necessary cornerstone.
+>> [1] https://lore.kernel.org/kvm/20220302111334.12689-1-likexu@tencent.com/
 >>
->> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
->> index f54282d5c648..3b8dfe603e50 100644
->> --- a/tools/perf/util/session.c
->> +++ b/tools/perf/util/session.c
->> @@ -1159,14 +1159,15 @@ static void branch_stack__printf(struct perf_sample *sample, bool callstack)
->>  		struct branch_entry *e = &entries[i];
->>  
->>  		if (!callstack) {
->> -			printf("..... %2"PRIu64": %016" PRIx64 " -> %016" PRIx64 " %hu cycles %s%s%s%s %x\n",
->> +			printf("..... %2"PRIu64": %016" PRIx64 " -> %016" PRIx64 " %hu cycles %s%s%s%s %x %s\n",
->>  				i, e->from, e->to,
->>  				(unsigned short)e->flags.cycles,
->>  				e->flags.mispred ? "M" : " ",
->>  				e->flags.predicted ? "P" : " ",
->>  				e->flags.abort ? "A" : " ",
->>  				e->flags.in_tx ? "T" : " ",
->> -				(unsigned)e->flags.reserved);
->> +				(unsigned)e->flags.reserved,
->> +				e->flags.type ? branch_type_name(e->flags.type) : "");
->>  		} else {
->>  			printf("..... %2"PRIu64": %016" PRIx64 "\n",
->>  				i, i > 0 ? e->from : e->to);
+>>   arch/x86/kvm/pmu.c | 29 ++++++++++++++---------------
+>>   1 file changed, 14 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+>> index 17c61c990282..d0f9515c37dd 100644
+>> --- a/arch/x86/kvm/pmu.c
+>> +++ b/arch/x86/kvm/pmu.c
+>> @@ -99,8 +99,7 @@ static void kvm_perf_overflow(struct perf_event *perf_event,
+>>
+>>   static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+>>                                    u64 config, bool exclude_user,
+>> -                                 bool exclude_kernel, bool intr,
+>> -                                 bool in_tx, bool in_tx_cp)
+>> +                                 bool exclude_kernel, bool intr)
+>>   {
+>>          struct perf_event *event;
+>>          struct perf_event_attr attr = {
+>> @@ -116,16 +115,18 @@ static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
+>>
+>>          attr.sample_period = get_sample_period(pmc, pmc->counter);
+>>
+>> -       if (in_tx)
+>> -               attr.config |= HSW_IN_TX;
+>> -       if (in_tx_cp) {
+>> -               /*
+>> -                * HSW_IN_TX_CHECKPOINTED is not supported with nonzero
+>> -                * period. Just clear the sample period so at least
+>> -                * allocating the counter doesn't fail.
+>> -                */
+>> -               attr.sample_period = 0;
+>> -               attr.config |= HSW_IN_TX_CHECKPOINTED;
+>> +       if (guest_cpuid_is_intel(pmc->vcpu)) {
 > 
-> LGTM but I am wondering whether this might affect existing tools ?
+> This is not the right condition to check. Per the SDM, both bits 32
+> and 33 "may only be set if the processor supports HLE or RTM." On
+> other Intel processors, this bit is reserved and any attempts to set
+> them result in a #GP.
 
-Only humans should be reading the -D output so I don't think so. The format is not very parseable anyway
+We already have this part of the code:
 
+	entry = kvm_find_cpuid_entry(vcpu, 7, 0);
+	if (entry &&
+	    (boot_cpu_has(X86_FEATURE_HLE) || boot_cpu_has(X86_FEATURE_RTM)) &&
+	    (entry->ebx & (X86_FEATURE_HLE|X86_FEATURE_RTM)))
+		pmu->reserved_bits ^= HSW_IN_TX|HSW_IN_TX_CHECKPOINTED;
 
+> 
+>> +               if (pmc->eventsel & HSW_IN_TX)
+>> +                       attr.config |= HSW_IN_TX;
+> 
+> This statement does nothing. If HSW_IN_TX is set in pmc->eventsel, it
+> is set in attr.config already.
+
+Agree for the redundancy, since attr.config is "(eventsel & AMD64_RAW_EVENT_MASK)".
+
+> 
+>> +               if (pmc->eventsel & HSW_IN_TX_CHECKPOINTED) {
+>> +                       /*
+>> +                        * HSW_IN_TX_CHECKPOINTED is not supported with nonzero
+>> +                        * period. Just clear the sample period so at least
+>> +                        * allocating the counter doesn't fail.
+>> +                        */
+>> +                       attr.sample_period = 0;
+>> +                       attr.config |= HSW_IN_TX_CHECKPOINTED;
+> 
+> As above, this statement does nothing. We should just set
+> attr.sample_period to 0. Note, however, that the SDM documents an
+
+Thanks and applied.
+
+> additional constraint which is ignored here: "This bit may only be set
+> for IA32_PERFEVTSEL2." I have confirmed that a #GP is raised for an
+> attempt to set bit 33 in any PerfEvtSeln other than PerfEvtSel2 on a
+> Broadwell Xeon E5.
+
+Yes, "19.3.6.5 Performance Monitoring and Intel® TSX".
+
+I'm not sure if the host perf scheduler indicate this restriction.
+
+cc Kan.
+
+> 
+>> +               }
+>>          }
+>>
+>>          event = perf_event_create_kernel_counter(&attr, -1, current,
+>> @@ -268,9 +269,7 @@ void reprogram_counter(struct kvm_pmc *pmc)
+>>                          (eventsel & AMD64_RAW_EVENT_MASK),
+>>                          !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
+>>                          !(eventsel & ARCH_PERFMON_EVENTSEL_OS),
+>> -                       eventsel & ARCH_PERFMON_EVENTSEL_INT,
+>> -                       (eventsel & HSW_IN_TX),
+>> -                       (eventsel & HSW_IN_TX_CHECKPOINTED));
+>> +                       eventsel & ARCH_PERFMON_EVENTSEL_INT);
+>>   }
+>>   EXPORT_SYMBOL_GPL(reprogram_counter);
+>>
+>> --
+>> 2.35.1
+>>

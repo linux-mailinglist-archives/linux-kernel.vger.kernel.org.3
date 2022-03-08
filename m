@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5145F4D1A14
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECCA4D1A15
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347352AbiCHOMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
+        id S1347372AbiCHOM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbiCHOMS (ORCPT
+        with ESMTP id S1347358AbiCHOMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:12:18 -0500
+        Tue, 8 Mar 2022 09:12:21 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5882D4AE14;
-        Tue,  8 Mar 2022 06:11:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0024AE16
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:11:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E775C61328;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18BA461328
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:11:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0967C340F5;
         Tue,  8 Mar 2022 14:11:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38284C340EB;
-        Tue,  8 Mar 2022 14:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646748681;
-        bh=ZrUA6nrdR/8oeAEl079SCCbVe8IbdFIRolvVvTFqyTQ=;
+        s=k20201202; t=1646748683;
+        bh=YrplheNWY14vnzIzWrojPQm8f+ueariyPOIrXWVJaPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GgUYMgTeIqtuwLx0mpKjRetwXfGSxMMugbQ6+Eq3PK3Cokh7SFZ6lRHzJNDMe4r7W
-         HdfyenVz/QD4iJsu40ZgbCIDaNXFu0iSCecKFr1BFH+WmC5pN65+0ks7qTIlABE1VT
-         uDl6VLGweiqtwGmTuADz6P7XMcHjJ/luo8JOvq42C12506bQR9KLDWT+tFjNu8aCSS
-         1pzNTqwPRBwILty74OzGbfinqF3IupC8K/wEJsz8hE3bUdu2jEO8WICSRAp/toM9d7
-         0lMsLpjaV4j+JiDE1TUy/RRidJe7Rymvh3b9w0CEViyQFw6cdXs4GbDgkFSxAYVQzF
-         WEjpQY5JYtnMQ==
+        b=OCdKMGR9NEvdj4ukohxfBInvwOe/nb7ZcVmbvQCibOMtSCd/Fli9JXkM9JoeBDFId
+         xPS6fT4zwGSpCBvcPV4fpEp9Q3HKSoW+G4cIuCYu3vAvv0r3P4gM3WkPMns2Q2c2Aj
+         KqRzoE5oezhZE5FwKTtP3/865Utm1aDpkPZHLSqJ9CfCijKo5VwFIy0S+pNwcacTTJ
+         cgCCgERGzMHpWQoHsELEswYEoWtMKzPM7TFx+IZEy0j02JjikcoaxtVQghiz3E24ZJ
+         ShtV8DxZc3FqCICN0H5tHr8vErJA3C4J8rBsCzMrQYFPBrHZ3t7UgKes15zhu1jcdy
+         My9OLoqYQZ8ZQ==
 From:   Will Deacon <will@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org, sgoutham@marvell.com,
-        mark.rutland@arm.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        Bharat Bhushan <bbhushan2@marvell.com>, bbudiredla@marvell.com
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v8 0/4] cn10k DDR Performance monitor support
-Date:   Tue,  8 Mar 2022 14:11:09 +0000
-Message-Id: <164673825754.1681008.8324027520511694988.b4-ty@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] arm64: clean up tools Makefile
+Date:   Tue,  8 Mar 2022 14:11:10 +0000
+Message-Id: <164673823050.1680750.13009088965481045383.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220211045346.17894-1-bbhushan2@marvell.com>
-References: <20220211045346.17894-1-bbhushan2@marvell.com>
+In-Reply-To: <20220227085232.206529-1-masahiroy@kernel.org>
+References: <20220227085232.206529-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,26 +58,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 10:23:42 +0530, Bharat Bhushan wrote:
-> This patch series adds DDR performance monitor support on Marvell cn10k series of processor.
+On Sun, 27 Feb 2022 17:52:32 +0900, Masahiro Yamada wrote:
+> Remove unused gen-y.
 > 
-> First patch adds device tree binding changes.
-> Second patch add basic support (without overflow and event ownership). Third and fourth patch adds overflow and event ownership respectively.
+> Remove redundant $(shell ...) because 'mkdir' is done in cmd_gen_cpucaps.
 > 
-> Seems like 4th patch can be merged in second patch, For easy review it is currently separate
+> Replace $(filter-out $(PHONY), $^) with the $(real-prereqs) shorthand.
+> 
+> The '&&' in cmd_gen_cpucaps should be replaced with ';' because it is
+> run under 'set -e' environment.
 > 
 > [...]
 
-Applied to will (for-next/perf), thanks!
+Applied to arm64 (for-next/misc), thanks!
 
-[1/4] dt-bindings: perf: marvell: cn10k ddr performance monitor
-      https://git.kernel.org/will/c/805bbdf28b27
-[2/4] perf/marvell: CN10k DDR performance monitor support
-      https://git.kernel.org/will/c/7cf83e222bce
-[3/4] perf/marvell: cn10k DDR perfmon event overflow handling
-      https://git.kernel.org/will/c/35a43326a9e3
-[4/4] perf/marvell: cn10k DDR perf event core ownership
-      https://git.kernel.org/will/c/68fa55f0e05c
+[1/1] arm64: clean up tools Makefile
+      https://git.kernel.org/arm64/c/819a47d24b61
 
 Cheers,
 -- 

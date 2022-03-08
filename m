@@ -2,125 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7184D14BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EECF4D14CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241229AbiCHK3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
+        id S1345839AbiCHKbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345848AbiCHK3e (ORCPT
+        with ESMTP id S243608AbiCHKbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:29:34 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5164942A06;
-        Tue,  8 Mar 2022 02:28:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646735319; x=1678271319;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ArbjmZUZ0l6WdorlwWCLAqiEYpli5Fr0XItnFGrqD60=;
-  b=Fn2/+MLWew5DZi2vOtQ6xWqm94QRsmWLK8PJENWu3SuGSNk+Lm7Nlk/E
-   Th2T+HJH+s8O0JkGKfdsris/m5QlIIEgQ+JgMme88x0Bnp7Qcg2MGj4P3
-   lzXvoXSLnlT5+lyRa6YdTo/dvL35Q/jRO3J2JKdeU7u65kJfCtGKPS0af
-   prdL+PkinHd/IEhzxdyRSdajZt4oh+gL4blr6QcMDN085AFuZJclCiKQ/
-   /uPPZlySaAuszFkgYfMABw0RjA7apfPOOLDEpmWtJJlJZ9thRvygeQE7j
-   gnKmXXjj+0zJNhFzDclRB2vmBHTO9HrUxKP9dexjvS/sGJ7mYpIYe1NYr
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,164,1643698800"; 
-   d="scan'208";a="155629249"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Mar 2022 03:28:38 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 8 Mar 2022 03:28:09 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 8 Mar 2022 03:28:07 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next] net: lan966x: Add spinlock for frame transmission from CPU.
-Date:   Tue, 8 Mar 2022 11:29:04 +0100
-Message-ID: <20220308102904.3978779-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Tue, 8 Mar 2022 05:31:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D553C3C49C;
+        Tue,  8 Mar 2022 02:30:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CB3C61580;
+        Tue,  8 Mar 2022 10:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C1DBC340EF;
+        Tue,  8 Mar 2022 10:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646735418;
+        bh=E6G3HiPLRyrOj03X2ujBXJMTzrUxMjwNhkXg21CG+U8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M1oThiuofqh3xeFKZQaytRfDhYBezMDPsbC39YerDdHh4F5nK9JK8QrEQH8Xxzizj
+         mdWhdifioc/a36RrkAwGUv65W9qE7o1eN1jkLp4RWCDC7Jgl1oxN7iCGMQBhtxphnF
+         fYFXZ+SB2c1J3cTZ+CHANzEIThoY+23DDUbftNvRq9GlTi6F7Kzjw08oaqeJd7FfFK
+         TpsQGsL5y4USLmVhRnavuC4O3JyMGFn5rDAlu9ec98fguQ2Q/S3mQKMf4yN7zdKSYI
+         wRRCQsLdmNRI831GB4+IYcSC9ty4y3TKUD87YJlxwfyY7EKo3+PUg9acrBX54Kmh5Y
+         n5f8EsboETDvw==
+Date:   Tue, 8 Mar 2022 10:30:12 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Darren Hart <darren@os.amperecomputing.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Arm <linux-arm-kernel@lists.infradead.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "D . Scott Phillips" <scott@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3] topology: make core_mask include at least
+ cluster_siblings
+Message-ID: <20220308103012.GA31267@willie-the-truck>
+References: <f1deaeabfd31fdf512ff6502f38186ef842c2b1f.1646413117.git.darren@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1deaeabfd31fdf512ff6502f38186ef842c2b1f.1646413117.git.darren@os.amperecomputing.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The registers used to inject a frame to one of the ports is shared
-between all the net devices. Therefore, there can be race conditions for
-accessing the registers when two processes send frames at the same time
-on different ports.
+On Fri, Mar 04, 2022 at 09:01:36AM -0800, Darren Hart wrote:
+> Ampere Altra defines CPU clusters in the ACPI PPTT. They share a Snoop
+> Control Unit, but have no shared CPU-side last level cache.
+> 
+> cpu_coregroup_mask() will return a cpumask with weight 1, while
+> cpu_clustergroup_mask() will return a cpumask with weight 2.
+> 
+> As a result, build_sched_domain() will BUG() once per CPU with:
+> 
+> BUG: arch topology borken
+> the CLS domain not a subset of the MC domain
+> 
+> The MC level cpumask is then extended to that of the CLS child, and is
+> later removed entirely as redundant. This sched domain topology is an
+> improvement over previous topologies, or those built without
+> SCHED_CLUSTER, particularly for certain latency sensitive workloads.
+> With the current scheduler model and heuristics, this is a desirable
+> default topology for Ampere Altra and Altra Max system.
+> 
+> Rather than create a custom sched domains topology structure and
+> introduce new logic in arch/arm64 to detect these systems, update the
+> core_mask so coregroup is never a subset of clustergroup, extending it
+> to cluster_siblings if necessary.
+> 
+> This has the added benefit over a custom topology of working for both
+> symmetric and asymmetric topologies. It does not address systems where
+> the cluster topology is above a populated mc topology, but these are not
+> considered today and can be addressed separately if and when they
+> appear.
+> 
+> The final sched domain topology for a 2 socket Ampere Altra system is
+> unchanged with or without CONFIG_SCHED_CLUSTER, and the BUG is avoided:
+> 
+> For CPU0:
+> 
+> CONFIG_SCHED_CLUSTER=y
+> CLS  [0-1]
+> DIE  [0-79]
+> NUMA [0-159]
+> 
+> CONFIG_SCHED_CLUSTER is not set
+> DIE  [0-79]
+> NUMA [0-159]
+> 
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Barry Song <song.bao.hua@hisilicon.com>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: D. Scott Phillips <scott@os.amperecomputing.com>
+> Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+> Cc: <stable@vger.kernel.org> # 5.16.x
+> Suggested-by: Barry Song <song.bao.hua@hisilicon.com>
+> Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+> ---
+> v1: Drop MC level if coregroup weight == 1
+> v2: New sd topo in arch/arm64/kernel/smp.c
+> v3: No new topo, extend core_mask to cluster_siblings
+> 
+>  drivers/base/arch_topology.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 976154140f0b..a96f45db928b 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -628,6 +628,14 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
+>  			core_mask = &cpu_topology[cpu].llc_sibling;
+>  	}
+>  
+> +	/*
+> +	 * For systems with no shared cpu-side LLC but with clusters defined,
+> +	 * extend core_mask to cluster_siblings. The sched domain builder will
+> +	 * then remove MC as redundant with CLS if SCHED_CLUSTER is enabled.
+> +	 */
+> +	if (cpumask_subset(core_mask, &cpu_topology[cpu].cluster_sibling))
+> +		core_mask = &cpu_topology[cpu].cluster_sibling;
+> +
 
-To fix this, add a spinlock around the function
-'lan966x_port_ifh_xmit()'.
+Sudeep, Vincent, are you happy with this now?
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 9 ++++++++-
- drivers/net/ethernet/microchip/lan966x/lan966x_main.h | 2 ++
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 750f2cc2f695..81c01665d01e 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -318,6 +318,7 @@ static void lan966x_ifh_set_timestamp(void *ifh, u64 timestamp)
- static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct lan966x_port *port = netdev_priv(dev);
-+	struct lan966x *lan966x = port->lan966x;
- 	__be32 ifh[IFH_LEN];
- 	int err;
- 
-@@ -338,7 +339,11 @@ static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
- 		lan966x_ifh_set_timestamp(ifh, LAN966X_SKB_CB(skb)->ts_id);
- 	}
- 
--	return lan966x_port_ifh_xmit(skb, ifh, dev);
-+	spin_lock(&lan966x->tx_lock);
-+	err = lan966x_port_ifh_xmit(skb, ifh, dev);
-+	spin_unlock(&lan966x->tx_lock);
-+
-+	return err;
- }
- 
- static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu)
-@@ -885,6 +890,8 @@ static void lan966x_init(struct lan966x *lan966x)
- 	lan_rmw(ANA_ANAINTR_INTR_ENA_SET(1),
- 		ANA_ANAINTR_INTR_ENA,
- 		lan966x, ANA_ANAINTR);
-+
-+	spin_lock_init(&lan966x->tx_lock);
- }
- 
- static int lan966x_ram_init(struct lan966x *lan966x)
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 058e43531818..ae282da1da74 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -108,6 +108,8 @@ struct lan966x {
- 
- 	u8 base_mac[ETH_ALEN];
- 
-+	spinlock_t tx_lock; /* lock for frame transmition */
-+
- 	struct net_device *bridge;
- 	u16 bridge_mask;
- 	u16 bridge_fwd_mask;
--- 
-2.33.0
-
+Will

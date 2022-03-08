@@ -2,68 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D26E4D1B3B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AA64D1B3C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347738AbiCHPBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S1347740AbiCHPBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:01:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237601AbiCHPBe (ORCPT
+        with ESMTP id S232940AbiCHPBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:01:34 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6AD4D9C3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:00:37 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2dc348dab52so170667897b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:00:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bUAHLDNYY/+Ebc3An1BLC3odr9+JTNXOzln9KVkcwC4=;
-        b=Eb3zbDhhDYtoW8uyKUivQ/i8vSSO0MdTyoWQlgp+XfDgA1DqWLekEmlE8HR6tcELtV
-         LKhQMH5CaWrCDEuogqdg/KcWm7SqCb4/Uerj5X5G4U4x84mY0djCafEAZ8y9odXW0C3j
-         KMwd2nUaJBLnmUq+P9Y/1znGiFexfGYSuQWGIlGwm39HDt40d04lo8tH37NHUGLBh2dO
-         U9XLzwZhKJlD7j0So6/5nr4zi+06BGgkdWyaOQSfPLuBjk8gBxKXd3tyfD2pZm37VCg7
-         CF2b0xvJ7xOZdhC0cTOblxzMibi03eU3y5B00LBTHjgaIeSlofyNGbYRxB9DoY+5xsyP
-         Kfiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bUAHLDNYY/+Ebc3An1BLC3odr9+JTNXOzln9KVkcwC4=;
-        b=RrhVx9IzgIu8ZRY3B9VLevylSdCRwtNwl1tXNgQT4aznnT8sbrRvfGBfal31eHO0F9
-         emLObgO6FJG7BZQwuHwrZVdsgUBBSZsm72FhP3tPwYaP3yZ+kC/hHr5c8nmtV2enrEBV
-         Tr2Qrhpls1nv4U+Q+q3hm6y9/hk8NsRSs7Fcu2vIKZE5VVRq7ZVv8N2Ju0sztRex64pG
-         TLe1ZG+Z/EXErg10AG9YQV7hWomlkJeLMDZyBEzSPiko4uKjKYfncLu6PIoXDxPRZJvi
-         RK5iQRBv0rC2z4rQ1FGFT18TUPThcHcSAm2Lhe2P/kyptZ3gi0bR1W94bUY5/9HleKvi
-         SaWw==
-X-Gm-Message-State: AOAM532/bNtU+5zzOHJcLGjlZ/WFBNq1GC9WpUVahcfCxEHA3tC4EShv
-        yENlV612xONMBCuAgVpnniruEGwWIcEV6WKffp+trA==
-X-Google-Smtp-Source: ABdhPJy87nQQG7zs9dOWibvH3Jiaah4Z2Ljz2NusteJs1/GunN3/XSWECuKUwcLUMf1UcKQA14DAjh0lBZy2A+zMl1Y=
-X-Received: by 2002:a0d:e608:0:b0:2dc:1f5d:8c8f with SMTP id
- p8-20020a0de608000000b002dc1f5d8c8fmr13544364ywe.143.1646751636630; Tue, 08
- Mar 2022 07:00:36 -0800 (PST)
+        Tue, 8 Mar 2022 10:01:12 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90057.outbound.protection.outlook.com [40.107.9.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9719C4D63A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:00:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=euJTB8mzMhf8rwlipDBiokqAh6yc7yVJ5exOxkwaQDmUi4Rdy3xt1XFB9T3zn4MqLy7K4SNJifVBdpR9UNAsIMUeV1WCVIIqWBLr3tqBm2oqnR4fPJX0wPClXixc25pirHa7lbO7u4ajNbRVC+6n60cr4YbpONfnKTOa0yy7b2683g4OYArHgGkiXjoT+W6U3teTwAkrV6FSgFiXteD8RU4+1pMRuxvaqXl5NgoG1rlyoTdZinK0WXiIHvASfpVBS+ZK00sFmICMxFAqNkdlEucp90S+Hu9rrYuWzTdX2t5RjHklMI9aABCgizg9qHlii+MOU1K7oFopDOKLMApbwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GfEyOGpHhIL6TIUDeDuopWhFEVMhEcaQ7r4VdRhEFc0=;
+ b=ZIs81xsiQRIbL2e2b65D00SyecJ0SZQd1ORVmEAiDsKrXYtc/6x4GmE4G4JmjVV+ZmDt/I4KWsxyqxOg8Mq7mKo2xervE18v3n0jEM/Y47Pm3dwaXf34U+Oo82e012s8hcdX7MlQyzY+j0XEaqh2kp/MRNJq1sIuxkZvM884rcdpyaqkTXek9fVHLbw+v9UsvluLfB41/qtWDI9XUnIZdLtngsYJS73pfXgA2WwRurHtmnR0GEwBwTCaUSirtSyfhW75KCF2hvBP753JfPPJYYoCf+g5C+nunJ0NpmjT48BbW6rS7+2njM13LGQHhKLtiKvIIiNuTcg16wlOVAnwcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB1672.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Tue, 8 Mar
+ 2022 15:00:11 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.027; Tue, 8 Mar 2022
+ 15:00:11 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Hangyu Hua <hbh25y@gmail.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "peng.hao2@zte.com.cn" <peng.hao2@zte.com.cn>,
+        "wen.yang99@zte.com.cn" <wen.yang99@zte.com.cn>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: 8xx: fix a return value error in mpc8xx_pic_init
+Thread-Topic: [PATCH] powerpc: 8xx: fix a return value error in
+ mpc8xx_pic_init
+Thread-Index: AQHYKINXBJ1zcwXxM0+BDeqd/qE4OayzN/cAgAJxbgA=
+Date:   Tue, 8 Mar 2022 15:00:11 +0000
+Message-ID: <7f569012-bd1c-b03b-21c6-051dfa50f231@csgroup.eu>
+References: <20220223070223.26845-1-hbh25y@gmail.com>
+ <146301ab-e217-6984-1dd4-0d782328d7f0@gmail.com>
+In-Reply-To: <146301ab-e217-6984-1dd4-0d782328d7f0@gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0db6cb9b-cbe1-43f0-27ec-08da0114584b
+x-ms-traffictypediagnostic: MRZP264MB1672:EE_
+x-microsoft-antispam-prvs: <MRZP264MB16727FCAA985E9394E8975BAED099@MRZP264MB1672.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 284ypTrVHZK+8RH2auQyP4yBM3O3MCMv2kEzYDhORUIWqGvMLmftHfMuBclL6ootrABWh4V7cgPcCoDlbtrrt0B456VLdITxT080DWRc+fFInhPDoRgNwknu7QzA5k3GgA+VHvdyJPYY7ZMuXzzanULCDZayDuxM2aS0EOIp2s+NzXFQDQSRy6Z1OUKzXfk6RsC+jei5PXm0ineJXbfFPnts6x5DiiKcMW29xbffeXjfShh/+Y17z6HOI/2tNIsHgqB6jB65zhRFi+1/iU0MAGxuXhiErBKgloW6NEDME+vUIxsgVvNZyXSAm9mxm8EkCOQ0W1IxzPQqGnyjqZY3e7MvYseJ4Atg16ZB7dXu6I6zrfqdjv9ORVDq2BAWNuvgqCDEbMhkIED6Ib9F9JtPJRrKvGTThKNyY2V+QFS+B7Ub2Qx5fE/g5+iyVxijz98lAlL2moWWTbTLiP6BUZhcyvS3D74SuQmKTP1VPsKZ0KIT0kLPGBqXPnKluqNSSreM6Ey2UAtGLU5lTxhJKmPnKtXkTkCOhPfsliFNUFDscoH0pDEAO2J429TpDiCoKvCwq9e5G2nhrf2WVAOAk6f+G6CT2yM0h4a5eGuS/FHAJkgUquu+oC4fJe7u0xdFJqvYvN4kTgVXfWbNR1swl+ldiabNzruZJfbe0j90eG89J1GxMwWjt1JLqXW4YDHRdG/wksLjclfMT3gGeJLfVjkaTXw7+H2NocNWBYytYNisiH7PjmlJcg1REbeacSesuZRkLknXBYVteb08qASX0KFCWw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(26005)(316002)(122000001)(38100700002)(71200400001)(4744005)(6512007)(6506007)(53546011)(36756003)(2616005)(54906003)(186003)(508600001)(6486002)(86362001)(44832011)(31686004)(66556008)(5660300002)(66476007)(66446008)(64756008)(38070700005)(4326008)(66946007)(8676002)(2906002)(76116006)(91956017)(31696002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?anFNNWxEWlljWVBTTGZMT0JPd05Eci83N2lWZExwTjRyejkvQjNIUS92ZkdF?=
+ =?utf-8?B?U0hTTzdtckk0NEFrbnBpemVSbUovN2w1aXVEbDJXcHF0Sld4VmthWDAyOFNR?=
+ =?utf-8?B?c2VkOVVlaFVQazdhTlFwTkpZTzFkelE5UnduZUwyNmxEWnZybTA5anQ0ODNL?=
+ =?utf-8?B?biszd3lRaUlPeTZqVUN0S1NxRHNXZ1FMUVVrUm9ZVHordEc1YkRiV1g2KzQ4?=
+ =?utf-8?B?TTBETzNiYXRFRWptc09zVFB5VllRRktxRHd2N3puY2Y3SEY2TDRlZmRaT1I4?=
+ =?utf-8?B?TFBUa2g2bVIzSGphRDZxTDlWR0FBZk1mOVViaU9oZGRIZGh4YVRtMHpLT29K?=
+ =?utf-8?B?S01Yby9BVEtTejV5QWlGOFZDWENscGJSRUdFNGlieXhRaGYyZjJUaFgrUy9N?=
+ =?utf-8?B?QlNmVFFSWU90VjBmT1VFUGVEaklZRzdHS2pBUjNQQk84RDZCY0RZNExzRTBX?=
+ =?utf-8?B?ZzlINU9MTUVkY3NMcm9NSVd2L0NqLzRlbW43TWhwaldYYWdnakFVNXNZUUhv?=
+ =?utf-8?B?MmdFbVVNWWtFMzEwUkhkcmhSUjMwbGgzWTZrNUhUS2JuOHdXaFVBdlNSRjhw?=
+ =?utf-8?B?VjMvVUlKTmhwaDFHalhPeTE3YUxMbkw0NU1sejVidUU4NUxoQ0FORjVuWTVQ?=
+ =?utf-8?B?UkFpZlVoQy9sMXloWUdoYXprZ3d3anUyNk8xVGdaSWRpc2s5T0dnZHNoVEY2?=
+ =?utf-8?B?cTRSUE5xY2Vhc0tPTHAxbUZ3Ukhwa3NmdDYzLzk3THFOcjJsc0x3OTI3eDhh?=
+ =?utf-8?B?UWRLdDJ6aTJ5TU9TSmhUZ3JIdDgwbEN2ZkNOdTRlRE9wV0sxTWYxV0toakRH?=
+ =?utf-8?B?cjVHL0JzUW1PYUZ5SnltMk0xcXFvbzRNYlBqWWJSdkdTdkRCVW93NGlaL0w2?=
+ =?utf-8?B?SW9zdktLd2ltSEMyZ0VYdFJmNG03WmxKUURkenh1YkFzbHZOZnZmMGFFclFD?=
+ =?utf-8?B?dFZVbzFCNGU5OC84RVI0dzZRWEhwZmNwOUtoZGhDVjJ2TlVDbFl2YTI1NVdo?=
+ =?utf-8?B?OTg2elZ0emNxamtEa25IVTBkblZvL3Z0ZlVnSnhwQWtUaGd5SVR6eW01T3VZ?=
+ =?utf-8?B?bm5QVEY2MWx3NEJTTnBNRUNjRmE0ZjUrVk9sM01lYXIyTHZUN2F3bC9TMnlL?=
+ =?utf-8?B?TXUvS1ZQWi9vOE55RUhESEI0QS9PVG13NDRiSk05Qzl0bjhSUG5Vai9BTGFj?=
+ =?utf-8?B?blZ3TS9WZlcwbVFOVk9udXhxdkNyMWJieUpaTDlYSjFtVUxueW5uWFJmcmYy?=
+ =?utf-8?B?QnZ5bTh5S0RLaWVoVUlXYm1rRGNIc2ZTTTB2R25JdHdQKzIxa0VPL3A1Y05U?=
+ =?utf-8?B?U3Q1Ry9VNUQ5b1plVERncnFVQXk5ZjJBU3dGc0tkdElIUWI4a3hrSjRaUHNZ?=
+ =?utf-8?B?Y0JSZUF3bzlNTm5YNHpWOVdtMUN0SkUyRlNIQmFDRWFSdDhoeVJ5eWUwSERv?=
+ =?utf-8?B?VHhraDVzcmRreGRxM2RoOXJLMWZXM3JKNG14VlEvRHlKVTcvVGNDWmsxNXRt?=
+ =?utf-8?B?ay9BRk5JSStrdEUyemJYbVVWM0hESVFqK2dlOHphSXNsMmFDTktib21TUjNa?=
+ =?utf-8?B?bEVSQnNxcTM1MGNiMGV1WmU2T0ZibWY4dWlhYXdRdlZUQWFiQWJrSWFERVh6?=
+ =?utf-8?B?NksyVUd6SERpd2wzalkzYWVQeldMRzVtVURzQjQ2NzR6ZG5iWXc0YlN3cVp5?=
+ =?utf-8?B?REhVOGtwbUxMMXFadEZhejM2eHI4cnU2NjFUeCs5czAxNDNhdkpIa09KOHYy?=
+ =?utf-8?B?UE1BQzRzQ01kNUt2Wi9vWFVvR0E3Y3ZLeUp5OHU4dWJHdGF6OVNBN0pCaUI2?=
+ =?utf-8?B?eXdOUkd5anpURzlWU3dLSDh2Y3RXbElJL0dCbk5yVjFlZ1VqTHJtQjZaaTgy?=
+ =?utf-8?B?bFZ0bWd1anNBVWY4QWkwbDF2Z1d4RFBHaWR5WnpocWllUDNFdEZFbGpkU0hI?=
+ =?utf-8?B?Zmo4OC9IdEpoWEh6eU8rdEJHSkRnUC9qMWhYbVFpUk0remtSSSt0MGlxaVNn?=
+ =?utf-8?B?ZS95Yk5KcE85b2htcmlaSzlLR290MXNQZllVOTlQZ0t0ODJXd1c3dnZRMnp3?=
+ =?utf-8?B?Mmd5ZnVEcFlXaXhHdTFIdWJ4UzBydEZpaXMzc3hleXpqL2w1TDRIeFF1RjdX?=
+ =?utf-8?B?TmdzWnJkRnhReGl4UmYrbDFGYWVlcCtlZ3dIZkJnTWxXZGZXYVduUXFOREc3?=
+ =?utf-8?B?SXNiZjBFVlhPNjl6aDFqOTdxcjVqdFVNSWJNY2g1QlY1a2NSdmppd0hpdEhJ?=
+ =?utf-8?Q?OE1elaI+miF9qEVfyq6BrKiwKvS9oMHlwzEotXAwtk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FBC703CDAC45E94AA413F6783FFA250D@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220307091636.988950823@linuxfoundation.org>
-In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Tue, 8 Mar 2022 10:00:00 -0500
-Message-ID: <CAG=yYw=v7cN-JCDUtiXRzoVSkAqGQXU1_Y+84jQSXWiNQt=cOg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/51] 4.19.233-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        torvalds@linux-foundation.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0db6cb9b-cbe1-43f0-27ec-08da0114584b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2022 15:00:11.8015
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GLDWvgo2d06TogSpZ7Mv/VDmSZ6BmZKOiKfnl8jJ6/s56N5enWdpCSyt5YSnr/P7b4IYI2mYo0SJlxP4JdSFKoc3XIWMB7sEnFLBUL1Qcoo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB1672
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,41 +132,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 4:29 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.233 release.
-> There are 51 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.233-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-hello,
-
-Compiled and booted  4.19.233-rc1+  on ...
-
-Processor Information
-        Socket Designation: FM2
-        Type: Central Processor
-        Family: A-Series
-        Manufacturer: AuthenticAMD
-        ID: 31 0F 61 00 FF FB 8B 17
-        Signature: Family 21, Model 19, Stepping 1
-
-NO new regression or regressions from dmesg.
-
-Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
--- 
-software engineer
-rajagiri school of engineering and technology   -  autonomous
+DQoNCkxlIDA3LzAzLzIwMjIgw6AgMDI6NDEsIEhhbmd5dSBIdWEgYSDDqWNyaXTCoDoNCj4gUGlu
+Zz8NCj4gDQo+IE9uIDIwMjIvMi8yMyAxNTowMiwgSGFuZ3l1IEh1YSB3cm90ZToNCj4+IG1wYzh4
+eF9waWNfaW5pdCgpIHNob3VsZCByZXR1cm4gLUVOT01FTSBpbnN0ZWFkIG9mIDAgd2hlbg0KPj4g
+aXJxX2RvbWFpbl9hZGRfbGluZWFyKCkgcmV0dXJuIE5VTEwuIFRoaXMgY2F1c2UgbXBjOHh4X3Bp
+Y3NfaW5pdCB0byANCj4+IGNvbnRpbnVlDQo+PiBleGVjdXRpbmcgZXZlbiBpZiBtcGM4eHhfcGlj
+X2hvc3QgaXMgTlVMTC4NCj4+DQo+PiBGaXhlczogY2M3NjQwNGZlYWVkICgicG93ZXJwYy84eHg6
+IEZpeCBwb3NzaWJsZSBkZXZpY2Ugbm9kZSByZWZlcmVuY2UgDQo+PiBsZWFrIikNCj4+IFNpZ25l
+ZC1vZmYtYnk6IEhhbmd5dSBIdWEgPGhiaDI1eUBnbWFpbC5jb20+DQoNClJldmlld2VkLWJ5OiBD
+aHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQoNCj4+IC0tLQ0K
+Pj4gwqAgYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84eHgvcGljLmMgfCAxICsNCj4+IMKgIDEgZmls
+ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2Vy
+cGMvcGxhdGZvcm1zLzh4eC9waWMuYyANCj4+IGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84eHgv
+cGljLmMNCj4+IGluZGV4IGYyYmE4MzcyNDlkNi4uMDRhNmFiZjE0YzI5IDEwMDY0NA0KPj4gLS0t
+IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84eHgvcGljLmMNCj4+ICsrKyBiL2FyY2gvcG93ZXJw
+Yy9wbGF0Zm9ybXMvOHh4L3BpYy5jDQo+PiBAQCAtMTUzLDYgKzE1Myw3IEBAIGludCBfX2luaXQg
+bXBjOHh4X3BpY19pbml0KHZvaWQpDQo+PiDCoMKgwqDCoMKgIGlmIChtcGM4eHhfcGljX2hvc3Qg
+PT0gTlVMTCkgew0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgIHByaW50ayhLRVJOX0VSUiAiTVBDOHh4
+IFBJQzogZmFpbGVkIHRvIGFsbG9jYXRlIGlycSBob3N0IVxuIik7DQo+PiDCoMKgwqDCoMKgwqDC
+oMKgwqAgcmV0ID0gLUVOT01FTTsNCj4+ICvCoMKgwqDCoMKgwqDCoCBnb3RvIG91dDsNCj4+IMKg
+wqDCoMKgwqAgfQ0KPj4gwqDCoMKgwqDCoCByZXQgPSAwOw==

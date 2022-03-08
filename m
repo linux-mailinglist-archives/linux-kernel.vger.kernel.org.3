@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852814D1A1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A423E4D1A1F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244474AbiCHONl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S1347370AbiCHON6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346716AbiCHONg (ORCPT
+        with ESMTP id S1346716AbiCHON4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:13:36 -0500
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2558A140FA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:12:37 -0800 (PST)
-Received: from localhost.localdomain ([106.133.35.112])
-        by smtp.orange.fr with ESMTPA
-        id RaZInDouy9VRxRaZcnRk3S; Tue, 08 Mar 2022 15:12:35 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Tue, 08 Mar 2022 15:12:35 +0100
-X-ME-IP: 106.133.35.112
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Syed Nayyar Waris <syednwaris@gmail.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2] linux/bits.h: GENMASK_INPUT_CHECK: reduce W=2 noise by 31% treewide
-Date:   Tue,  8 Mar 2022 23:12:01 +0900
-Message-Id: <20220308141201.2343757-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
-References: <20220304124416.1181029-1-mailhol.vincent@wanadoo.fr>
+        Tue, 8 Mar 2022 09:13:56 -0500
+X-Greylist: delayed 50929 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 06:12:54 PST
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE8128E23;
+        Tue,  8 Mar 2022 06:12:53 -0800 (PST)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id B1998C000C;
+        Tue,  8 Mar 2022 14:12:46 +0000 (UTC)
+Message-ID: <e55b1963-14d8-63af-de8e-1b1a8f569a6e@ovn.org>
+Date:   Tue, 8 Mar 2022 15:12:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     i.maximets@ovn.org, Roi Dayan <roid@nvidia.com>,
+        dev@openvswitch.org, Toms Atteka <cpp.code.lv@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, David Ahern <dsahern@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Content-Language: en-US
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20220224005409.411626-1-cpp.code.lv@gmail.com>
+ <164578561098.13834.14017896440355101001.git-patchwork-notify@kernel.org>
+ <3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com>
+ <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
+ <57996C97-5845-425B-9B13-7F33EE05D704@redhat.com>
+ <26b924fb-ed26-bb3f-8c6b-48edac825f73@nvidia.com>
+ <20220307122638.215427b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <3a96b606-c3aa-c39b-645e-a3af0c82e44b@ovn.org>
+ <20220307144616.05317297@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <45aed9cd-ba65-e2e7-27d7-97e3f9de1fb8@ovn.org>
+ <20220307214550.2d2c26a9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <5bec02cb6a640cafd65c946e10ee4eda99eb4d9c.camel@sipsolutions.net>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [ovs-dev] [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6
+ extension header support
+In-Reply-To: <5bec02cb6a640cafd65c946e10ee4eda99eb4d9c.camel@sipsolutions.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,84 +60,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch silences a -Wtypes-limits warning in GENMASK_INPUT_CHECK()
-which is accountable for 31% of all warnings when compiling with W=2.
+On 3/8/22 09:21, Johannes Berg wrote:
+> On Mon, 2022-03-07 at 21:45 -0800, Jakub Kicinski wrote:
+>>
+>> Let me add some people I associate with genetlink work in my head
+>> (fairly or not) to keep me fair here.
+> 
+> :)
+> 
+>> It's highly unacceptable for user space to straight up rewrite kernel
+>> uAPI types
+>>
+> 
+> Agree.
 
-Indeed, GENMASK_INPUT_CHECK() will generate some warnings at W=2 level
-if invoked with an unsigned integer and zero. For example, this:
+I 100% agree with that and will work on the userspace part to make sure
+we're not adding anything to the kernel uAPI types.
 
-| #include <linux/bits.h>
-| unsigned int foo(unsigned int bar)
-| { return GENMASK(bar, 0); }
+FWIW, the quick grep over usespace code shows similar problem with a few
+other types, but they are less severe, because they are provided as part
+of OVS actions and kernel doesn't send anything that wasn't previously
+set by userspace in that case.  There still might be a problem during the
+downgrade of the userspace while kernel configuration remains intact,
+but that is not a common scenario.  Will work on fixing that in userspace.
+No need to change the kernel uAPI for these, IMO.
 
-would yield 30 lines of warning. Extract:
+> 
+>> but if it already happened the only fix is something like:
+>>
+>> diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
+>> index 9d1710f20505..ab6755621e02 100644
+>> --- a/include/uapi/linux/openvswitch.h
+>> +++ b/include/uapi/linux/openvswitch.h
+>> @@ -351,11 +351,16 @@ enum ovs_key_attr {
+>>         OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV4,   /* struct ovs_key_ct_tuple_ipv4 */
+>>         OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV6,   /* struct ovs_key_ct_tuple_ipv6 */
+>>         OVS_KEY_ATTR_NSH,       /* Nested set of ovs_nsh_key_* */
+>> -       OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
+>>  
+>>  #ifdef __KERNEL__
+>>         OVS_KEY_ATTR_TUNNEL_INFO,  /* struct ip_tunnel_info */
+>>  #endif
+>> +       /* User space decided to squat on types 30 and 31 */
+>> +       OVS_KEY_ATTR_IPV6_EXTHDRS = 32, /* struct ovs_key_ipv6_exthdr */
+>> +       /* WARNING: <scary warning to avoid the problem coming back> */
 
-| In file included from ./include/linux/bits.h:22,
-|                  from ./foo.c:1:
-| foo.c: In function 'foo':
-| ./include/linux/bits.h:25:36: warning: comparison of unsigned expression in '< 0' is always false [-Wtype-limits]
-|    25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
-|       |                                    ^
+Yes, that is something that I had in mind too.  The only thing that makes
+me uncomfortable is OVS_KEY_ATTR_TUNNEL_INFO = 30 here.  Even though it
+doesn't make a lot of difference, I'd better keep the kernel-only attributes
+at the end of the enumeration.  Is there a better way to handle kernel-only
+attribute?
 
-This pattern is harmless (false positive) and for that reason,
--Wtypes-limits was moved to W=2. c.f. [1].
+Also, the OVS_KEY_ATTR_ND_EXTENSIONS (31) attribute used to store IPv6 Neighbor
+Discovery extensions is currently implemented only for userspace, but nothing
+actually prevents us having the kernel implementation.  So, we need a way to
+make it usable by the kernel in the future.
 
-However because it occurs in header files (example: find_first_bit()
-from linux/find.h [2]), GENMASK_INPUT_CHECK() is accountable for
-roughly 31% (164714/532484) of all W=2 warnings for an
-allyesconfig. This is an issue because that noise makes it harder to
-triage and find relevant W=2 warnings.
+> 
+> It might be nicer to actually document here in what's at least supposed
+> to be the canonical documentation of the API what those types were used
+> for.
 
-Reference (using gcc 11.2, linux v5.17-rc6 on x86_64):
+I agree with that.
 
-| $ make allyesconfig
-| $ sed -i '/CONFIG_WERROR/d' .config
-| $ make W=2 -j8 2> kernel_w2.log > /dev/null
-| $ grep "\./include/linux/bits\.h:.*: warning" kernel_w2\.log | wc -l
-| 164714
-| $ grep ": warning: " kernel_w2.log | wc -l
-| 532484
+> Note that with strict validation at least they're rejected by the
+> kernel, but of course I have no idea what kind of contortions userspace
+> does to make it even think about defining its own types (netlink
+> normally sits at the kernel/userspace boundary, so where does it make
+> sense for userspace to have its own types?)
+> 
+> (Though note that technically netlink supports userspace<->userspace
+> communication, but that's not used much)
 
-In this patch, we silence this warning by:
+OVS has a common high-level interface+logic and several different
+implementations of a "datapath".  One of datapaths is inside the Linux
+kernel which we're discussing here, another is completely in userspace
+(to make use of DPDK or AF_XDP), there is also an implementation for the
+Windows kernel.  Since the way to talk with the Linux kernel is netlink,
+OVS is using netlink-based communication to communicate between high-level
+parts and all types of datapaths.  Some features might be supported by
+one datapath and not supported by others, hence some way to extend the
+communication is needed.  E.g. kernel currently doesn't parse ND extensions,
+but userspace datapath does.
 
-  * replacing the comparison > by and logical and && in the first
-    argument of __builtin_choose_expr().
+But yes, the current implementation is awful and OVS need to have a
+different way of managing datapath-specific attributes and not touch
+kernel-defined types.  We'll work on that.
 
-  * casting the high bit of the mask to a signed integer in the second
-    argument of __builtin_choose_expr().
+> 
+>>>> Since ovs uses genetlink you should be able to dump the policy from 
+>>>> the kernel and at least validate that it doesn't overlap.  
+>>>
+>>> That is interesting.  Indeed, this functionality can be used to detect
+>>> problems or to define userspace-only attributes in runtime based on the
+>>> kernel reply.  Thanks for the pointer!
+> 
+> As you note, you'd have to do that at runtime since it can change, even
+> the policy. And things not in the policy probably should never be sent
+> to the kernel even if strict validation isn't used.
 
-[1] https://lore.kernel.org/lkml/20200708190756.16810-1-rikard.falkeborn@gmail.com/
-[2] https://elixir.bootlin.com/linux/v5.17-rc6/source/include/linux/find.h#L119
+Agree.  AFAICT, OVS currently doesn't send to the kernel things that kernel
+doesn't support.
 
-Link: https://lore.kernel.org/lkml/cover.1590017578.git.syednwaris@gmail.com/
-Link: https://lore.kernel.org/lkml/20220304124416.1181029-1-mailhol.vincent@wanadoo.fr/
-Fixes: 295bcca84916 ("linux/bits.h: add compile time sanity check of GENMASK inputs")
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-* Changelog *
-
-v1 -> v2:
-
-  * Rewrote the commit message to make it less verbose
-  * Add in CC all people from:
-  https://lore.kernel.org/lkml/cover.1590017578.git.syednwaris@gmail.com/
----
- include/linux/bits.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/bits.h b/include/linux/bits.h
-index 87d112650dfb..542e9a8985b1 100644
---- a/include/linux/bits.h
-+++ b/include/linux/bits.h
-@@ -22,7 +22,7 @@
- #include <linux/build_bug.h>
- #define GENMASK_INPUT_CHECK(h, l) \
- 	(BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
--		__is_constexpr((l) > (h)), (l) > (h), 0)))
-+		__is_constexpr((h)) && __is_constexpr((l)), (l) > (int)(h), 0)))
- #else
- /*
-  * BUILD_BUG_ON_ZERO is not available in h files included from asm files,
--- 
-2.34.1
+> 
+> johannes
 

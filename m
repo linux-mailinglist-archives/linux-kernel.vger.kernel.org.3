@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E084D221C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3860E4D2221
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350111AbiCHUDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S1350118AbiCHUEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbiCHUD2 (ORCPT
+        with ESMTP id S1350113AbiCHUEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:03:28 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D756389
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:02:30 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id e2so60724pls.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:02:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BQc9qf7Jvr1scII8R10TwmoX8GBVxNzjAKC9tzRHQJw=;
-        b=j1Vw88ktDAfHqoj70X1xbgvDOWX76yic7J8vvqFuJQBkx2U/WRnmXK0hVpiQg/+dYI
-         rF7/AEzyVQl76IMfpOGDsmHBTSGBWmLc8TxHeQlHklPZAvEGvskagQ4stLGskbvQGo58
-         WnFBpPqTerNDJllxf+BI8exCnH7bM6nJJfP4DHgchQj0bxRTf7lM3pXcJXRhC5WvL5WF
-         WX9hXBwlG4Faz/2RK3FuUu2Jp/hHc3BhUm22lk6fUH2s+0t9yiyfUvzaoRykpjJ1joZA
-         42+A2V10LI5AoYj6wRE/pi2xw25e3HO5tf4Ht4IP4YFLciZguKgzd8b+AasW2WWu8Nkb
-         +pfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BQc9qf7Jvr1scII8R10TwmoX8GBVxNzjAKC9tzRHQJw=;
-        b=NcF8nos69F+mbWkRAoGBjCVOvPq/jB3fa2XBVMfSQUk14x/NEOVdy6CUQfhtrZyYL4
-         /0iS1aWtF+ywN78hWF9nMKbKpy8OXAlKyg0XJr/SNXn7Nyb+TOK6Y3hbgKQevNFr8mzF
-         vNJC9eoJrFmuyCOMz4yf8jCNFdl7SJxo8dG/R2+BmNtUd0JD1jt/lU7EOw/uo34G8onO
-         oXJCfXp7hE/hvQfscC0qokJDBAt70pw+fVVkIiR4nxoH4v5lw8H6JN+qqK9C17hlcFLh
-         K+p/u2oonvlMAh1fOdJgwzjhnrajQb5GC96l5+QHMFqVBBxVPP55AYNAFhvHDPpkoqU8
-         FptA==
-X-Gm-Message-State: AOAM532ZQEitIs8sK/4hdi0M0wcWKKdcrOSx5E6iREJTn7aQ1IjM0oaJ
-        Oc12TSSoa5zjiVBoFFffjFLWFA==
-X-Google-Smtp-Source: ABdhPJx0DErx4byKNhlX+0jvcUmeDNga+OsQwZ/c3bjRyuUiARmCZ70+I7Qs5s8pCYg23pJwHMYdlA==
-X-Received: by 2002:a17:902:714b:b0:151:d8fa:fd98 with SMTP id u11-20020a170902714b00b00151d8fafd98mr16662243plm.146.1646769750140;
-        Tue, 08 Mar 2022 12:02:30 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id mp10-20020a17090b190a00b001bf8453aea8sm3562863pjb.42.2022.03.08.12.02.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 12:02:29 -0800 (PST)
-Date:   Tue, 8 Mar 2022 20:02:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-Subject: Re: [PATCH v2 25/25] KVM: x86/mmu: extract initialization of the
- page walking data
-Message-ID: <Yie2UmdzumoVNWGA@google.com>
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-26-pbonzini@redhat.com>
+        Tue, 8 Mar 2022 15:04:38 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7DF3B3D9
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646769821; x=1678305821;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=nsL+613Pxrt0yhI4ae85j0fvm9ma4B2FW0hzvIESbns=;
+  b=BWB1TB2hHmJWCmfTUNEltrUBmA+cTaWZv9QPwrW2PRryG/ityLgMT4B8
+   UpCwnvyQVQDCCtKTHfAYba+Mh+5KZLkBc+ASjuZeOTFf09UfG98G5kVaB
+   rlvCOLeQgHwAjjBJRqFRMpUrUH/jZIRw6h2dRh1qWxqns3fsTeVlzBQYj
+   +80RFvb8b27FU2LxtYvhKHnaqFxpwiHFLpAhCAsfX89M9K8Gye73DJrFo
+   nnNFFkjFSPk1GRyPclQgaFHIaOzm7G9nMBLFevVksV0pocKkXHB/0NL08
+   Gpda7kbIx+wV/TS4DQRqNw2+S3u4ZwWg60wr7ALJi9RaFAV/l7bOltqkP
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="341230025"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="341230025"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 12:03:40 -0800
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="547388678"
+Received: from ntebyanx-mobl7.amr.corp.intel.com (HELO [10.212.224.65]) ([10.212.224.65])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 12:03:39 -0800
+Message-ID: <30fde533-d80f-3b60-5b5a-f284f5751a22@intel.com>
+Date:   Tue, 8 Mar 2022 12:03:32 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221162243.683208-26-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-4-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv5 03/30] x86/tdx: Add __tdx_module_call() and
+ __tdx_hypercall() helper functions
+In-Reply-To: <20220302142806.51844-4-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,36 +72,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> +static void kvm_vcpu_init_walker(struct kvm_vcpu *vcpu,
-> +				 struct kvm_mmu *mmu,
-> +				 union kvm_mmu_paging_mode new_mode)
-
-kvm_vcpu_init_walker() is a rather odd and almost maliciously obtuse.  We're not
-short on space for this one, so how about?
-
-static void kvm_mmu_init_guest_walker(struct kvm_vcpu *vcpu,
-				      struct kvm_mmu *mmu,
-				      union kvm_mmu_paging_mode new_mode)
->  void kvm_init_mmu(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
->  	union kvm_mmu_paging_mode cpu_mode = kvm_calc_cpu_mode(vcpu, &regs);
->  
-> +	kvm_vcpu_init_walker(vcpu, vcpu->arch.walk_mmu, cpu_mode);
->  	if (mmu_is_nested(vcpu))
-> -		init_kvm_nested_mmu(vcpu, cpu_mode);
-> -	else if (tdp_enabled)
-> +		return;
-
-Nice!  I really like that this highlights that the nested_mmu crud is just for
-the walker.  Can you also add a comment here explaining that part?
-
-> +
-> +	if (tdp_enabled)
->  		init_kvm_tdp_mmu(vcpu, cpu_mode);
->  	else
->  		init_kvm_softmmu(vcpu, cpu_mode);
-> -- 
-> 2.31.1
+On 3/2/22 06:27, Kirill A. Shutemov wrote:
+> From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 > 
+> Guests communicate with VMMs with hypercalls. Historically, these
+> are implemented using instructions that are known to cause VMEXITs
+> like VMCALL, VMLAUNCH, etc. However, with TDX, VMEXITs no longer
+> expose the guest state to the host. This prevents the old hypercall
+> mechanisms from working. So, to communicate with VMM, TDX
+> specification defines a new instruction called TDCALL.
+> 
+> In a TDX based VM, since the VMM is an untrusted entity, an intermediary
+> layer -- TDX module -- facilitates secure communication between the host
+> and the guest. TDX module is loaded like a firmware into a special CPU
+> mode called SEAM. TDX guests communicate with the TDX module using the
+> TDCALL instruction.
+> 
+> A guest uses TDCALL to communicate with both the TDX module and VMM.
+> The value of the RAX register when executing the TDCALL instruction is
+> used to determine the TDCALL type. A variant of TDCALL used to communicate
+> with the VMM is called TDVMCALL.
+> 
+> Add generic interfaces to communicate with the TDX module and VMM
+> (using the TDCALL instruction).
+> 
+> __tdx_hypercall()    - Used by the guest to request services from the
+> 		       VMM (via TDVMCALL).
+> __tdx_module_call()  - Used to communicate with the TDX module (via
+> 		       TDCALL).
+> 
+> Also define an additional wrapper _tdx_hypercall(), which adds error
+> handling support for the TDCALL failure.
+> 
+> The __tdx_module_call() and __tdx_hypercall() helper functions are
+> implemented in assembly in a .S file.  The TDCALL ABI requires
+> shuffling arguments in and out of registers, which proved to be
+> awkward with inline assembly.
+> 
+> Just like syscalls, not all TDVMCALL use cases need to use the same
+> number of argument registers. The implementation here picks the current
+> worst-case scenario for TDCALL (4 registers). For TDCALLs with fewer
+> than 4 arguments, there will end up being a few superfluous (cheap)
+> instructions. But, this approach maximizes code reuse.
+> 
+> For registers used by the TDCALL instruction, please check TDX GHCI
+> specification, the section titled "TDCALL instruction" and "TDG.VP.VMCALL
+> Interface".
+> 
+> Based on previous patch by Sean Christopherson.
+> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+
+Looks good:
+
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+
+BTW, if you revise this again, let me have a few minutes with the
+changelog.  There are, again, a few things that we should make less
+clunky.  But, they aren't deal breakers.

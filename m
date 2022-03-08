@@ -2,103 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EF24D230C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2474D230D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350318AbiCHVHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S1350325AbiCHVIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241424AbiCHVH3 (ORCPT
+        with ESMTP id S235737AbiCHVIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:07:29 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2784738D;
-        Tue,  8 Mar 2022 13:06:32 -0800 (PST)
+        Tue, 8 Mar 2022 16:08:37 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B201140E4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:07:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646773592; x=1678309592;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=53HBdKKy+le9OULBY+tX1mgqaWu0Id7yvZra0Kq/3Vg=;
-  b=SWUar2XxlXJw33LdausCNbdTrpBvJ0zSWtfveFGmAgxje2D04dG2Htr2
-   SgNEELq443kIDVYsGrggY6w2YSL2h8Ftn8ES3PlAHirFQ6qUCYrk33voj
-   IhuIm6x278BtQuXM2J3jRMNdrhKYSI51uvQXR4f2DLiyNH0CX8yVzW8FO
-   m76TilukMlEQbaFuIgXEVux8zazCiHRFF9nAdriUjRyl3MGHUNpiMlHry
-   uZWtF2EXtroZOnr5R4Gdq24P5yAMGMpRr9V6YlQeHY0k3yzPzoaMdMTK8
-   6ZIrifMyJxHSTc42EJL4wot9Drp5DjEYSWHbgNLgvRqS1vUgnONh1Nm8X
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="315531944"
+  t=1646773660; x=1678309660;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GnMW+vZ9HVxe/HmNFuE/y1U+U+G1TdLCAHPjIqy2Z2o=;
+  b=nVhozu+Ei0wDoEJ6av+cN5E4nrKeWihf/kdKlcXUcud716XPj5CFj1Mo
+   E4q22WqZVVsEKvgq57zSYgkvxBEsFX2G5/haMK9GpxSNIz8mil/NxeHzk
+   ZyYMuFmft3JFahsWbo7kU/mxHKrPkNLPPvwaI7UE0fQNVisYeQ/LMWX78
+   BpBqlJH0bN/MYNAivJdFdTDyKGhonLkeUGeNdiLOhRSkwQBtCChLjqVHQ
+   DeIN8E0eKTgVWZurYaiso/ZCmoZoAaiH6v+m9aiBSencPGae+B4//QkH/
+   BS6cc4PeKyBFqZPskuj4ArkSe4uWqyNRJ50BkN7AvIbIDYaHLFZM4D820
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="318043896"
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="315531944"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:06:31 -0800
+   d="scan'208";a="318043896"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:07:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="513267302"
-Received: from irsmsx605.ger.corp.intel.com ([163.33.146.138])
-  by orsmga006.jf.intel.com with ESMTP; 08 Mar 2022 13:06:27 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- IRSMSX605.ger.corp.intel.com (163.33.146.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 21:06:26 +0000
-Received: from orsmsx611.amr.corp.intel.com ([10.22.229.24]) by
- ORSMSX611.amr.corp.intel.com ([10.22.229.24]) with mapi id 15.01.2308.021;
- Tue, 8 Mar 2022 13:06:24 -0800
-From:   "Hall, Christopher S" <christopher.s.hall@intel.com>
-To:     "Hunter, Adrian" <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        H Peter Anvin <hpa@zytor.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        "Leo Yan" <leo.yan@linaro.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "sdeep@vmware.com" <sdeep@vmware.com>,
-        "pv-drivers@vmware.com" <pv-drivers@vmware.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "Andrew.Cooper3@citrix.com" <Andrew.Cooper3@citrix.com>
-Subject: RE: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
- a perf event clock
-Thread-Topic: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
- a perf event clock
-Thread-Index: AQHYMjGQwHF+1jrIb0imwpV8b7O+FKy2EdUA///IiFA=
-Date:   Tue, 8 Mar 2022 21:06:24 +0000
-Message-ID: <6f07a7d4e1ad4440bf6c502c8cb6c2ed@intel.com>
-References: <20220214110914.268126-1-adrian.hunter@intel.com>
- <20220214110914.268126-4-adrian.hunter@intel.com>
- <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
- <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
- <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
- <30383f92-59cb-2875-1e1b-ff1a0eacd235@intel.com>
- <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
- <013b5425-2a60-e4d4-b846-444a576f2b28@intel.com>
-In-Reply-To: <013b5425-2a60-e4d4-b846-444a576f2b28@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.22.254.132]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="495602818"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 13:07:38 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRh3R-0001xQ-Ko; Tue, 08 Mar 2022 21:07:37 +0000
+Date:   Wed, 9 Mar 2022 05:07:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:15:
+ warning: no previous prototype for function '__wrap_devm_ioremap'
+Message-ID: <202203090551.R89uT00F-lkp@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -109,50 +62,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QWRyaWFuIEh1bnRlciB3cm90ZToNCj4gT24gNy4zLjIwMjIgMTYuNDIsIFBldGVyIFppamxzdHJh
-IHdyb3RlOg0KPiA+IE9uIE1vbiwgTWFyIDA3LCAyMDIyIGF0IDAyOjM2OjAzUE0gKzAyMDAsIEFk
-cmlhbiBIdW50ZXIgd3JvdGU6DQo+ID4NCj4gPj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJu
-ZWwvcGFyYXZpcnQuYyBiL2FyY2gveDg2L2tlcm5lbC9wYXJhdmlydC5jDQo+ID4+PiBpbmRleCA0
-NDIwNDk5ZjdiYjQuLmExZjE3OWVkMzliZiAxMDA2NDQNCj4gPj4+IC0tLSBhL2FyY2gveDg2L2tl
-cm5lbC9wYXJhdmlydC5jDQo+ID4+PiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvcGFyYXZpcnQuYw0K
-PiA+Pj4gQEAgLTE0NSw2ICsxNDUsMTUgQEAgREVGSU5FX1NUQVRJQ19DQUxMKHB2X3NjaGVkX2Ns
-b2NrLCBuYXRpdmVfc2NoZWRfY2xvY2spOw0KPiA+Pj4NCj4gPj4+ICB2b2lkIHBhcmF2aXJ0X3Nl
-dF9zY2hlZF9jbG9jayh1NjQgKCpmdW5jKSh2b2lkKSkNCj4gPj4+ICB7DQo+ID4+PiArCS8qDQo+
-ID4+PiArCSAqIEFueXRoaW5nIHdpdGggQVJUIG9uIHByb21pc2VzIHRvIGhhdmUgc2FuZSBUU0Ms
-IG90aGVyd2lzZSB0aGUgd2hvbGUNCj4gPj4+ICsJICogQVJUIHRoaW5nIGlzIHVzZWxlc3MuIElu
-IG9yZGVyIHRvIG1ha2UgQVJUIHVzZWZ1bCBmb3IgZ3Vlc3RzLCB3ZQ0KPiA+Pj4gKwkgKiBzaG91
-bGQgY29udGludWUgdG8gdXNlIHRoZSBUU0MuIEFzIHN1Y2gsIGlnbm9yZSBhbnkgcGFyYXZpcnQN
-Cj4gPj4+ICsJICogbXVja2VyeS4NCj4gPj4+ICsJICovDQo+ID4+PiArCWlmIChjcHVfZmVhdHVy
-ZV9lbmFibGVkKFg4Nl9GRUFUVVJFX0FSVCkpDQo+ID4+DQo+ID4+IERvZXMgbm90IHNlZW0gdG8g
-d29yayBiZWNhdXNlIHRoZSBmZWF0dXJlIFg4Nl9GRUFUVVJFX0FSVCBkb2VzIG5vdCBzZWVtIHRv
-IGdldCBzZXQuDQo+ID4+IFBvc3NpYmx5IGJlY2F1c2UgZGV0ZWN0X2FydCgpIGV4Y2x1ZGVzIGFu
-eXRoaW5nIHJ1bm5pbmcgb24gYSBoeXBlcnZpc29yLg0KPiA+DQo+ID4gU2ltcGxlIGVub3VnaCB0
-byBkZWxldGUgdGhhdCBjbGF1c2UgSSBzdXBwb3NlLiBDaHJpc3RvcGhlciwgd2hhdCBpcw0KPiA+
-IG5lZWRlZCB0byBtYWtlIHRoYXQgZ28gYXdheT8gSSBzdXBwb3NlIHRoZSBndWVzdCBuZWVkcyB0
-byBiZSBhd2FyZSBvZg0KPiA+IHRoZSBhY3RpdmUgVFNDIHNjYWxpbmcgcGFyYW1ldGVycyB0byBt
-YWtlIGl0IHdvcmsgPw0KPiANCj4gVGhlcmUgaXMgYWxzbyBub3QgWDg2X0ZFQVRVUkVfTk9OU1RP
-UF9UU0Mgbm9yIHZhbHVlcyBmb3IgYXJ0X3RvX3RzY19kZW5vbWluYXRvcg0KPiBvciBhcnRfdG9f
-dHNjX251bWVyYXRvci4gIEFsc28sIGZyb20gdGhlIFZNJ3MgcG9pbnQgb2YgdmlldywgVFNDIHdp
-bGwganVtcA0KPiBmb3J3YXJkcyBldmVyeSBWTS1FeGl0IC8gVk0tRW50cnkgdW5sZXNzIHRoZSBo
-eXBlcnZpc29yIGNoYW5nZXMgdGhlIG9mZnNldA0KPiBldmVyeSBWTS1FbnRyeSwgd2hpY2ggS1ZN
-IGRvZXMgbm90LCBzbyBpdCBzdGlsbCBjYW5ub3QgYmUgdXNlZCBhcyBhIHN0YWJsZQ0KPiBjbG9j
-a3NvdXJjZS4NCg0KVHJhbnNsYXRpbmcgYmV0d2VlbiBBUlQgYW5kIHRoZSBndWVzdCBUU0MgY2Fu
-IGJlIGEgZGlmZmljdWx0IHByb2JsZW0gYW5kIEFSVCBzb2Z0d2FyZQ0Kc3VwcG9ydCBpcyBkaXNh
-YmxlZCBieSBkZWZhdWx0IGluIGEgVk0uDQoNClRoZXJlIGFyZSB0d28gbWFqb3IgaXNzdWVzIHRy
-YW5zbGF0aW5nIEFSVCB0byBUU0MgaW4gYSBWTToNCg0KVGhlIHJhbmdlIG9mIHRoZSBUU0Mgc2Nh
-bGluZyBmaWVsZCBpbiB0aGUgVk1DUyBpcyBtdWNoIGxhcmdlciB0aGFuIHRoZSByYW5nZSBvZiB2
-YWx1ZXMNCnRoYXQgY2FuIGJlIHJlcHJlc2VudGVkIHVzaW5nIENQVUlEWzE1SF0sIGkuZS4sIGl0
-IGlzIG5vdCBwb3NzaWJsZSB0byBjb21tdW5pY2F0ZSB0aGlzDQp0byB0aGUgVk0gdXNpbmcgdGhl
-IGN1cnJlbnQgQ1BVSUQgaW50ZXJmYWNlLiBUaGUgcmFuZ2Ugb2Ygc2NhbGluZyB3b3VsZCBuZWVk
-IHRvIGJlDQpyZXN0cmljdGVkIG9yIGFub3RoZXIgcGFyYS12aXJ0dWFsaXplZCBtZXRob2QgLSBw
-cmVmZXJhYmx5IE9TL2h5cGVydmlzb3IgYWdub3N0aWMgLSB0bw0KY29tbXVuaWNhdGUgdGhlIHNj
-YWxpbmcgZmFjdG9yIHRvIHRoZSBndWVzdCBuZWVkcyB0byBiZSBpbnZlbnRlZC4NCg0KVFNDIG9m
-ZnNldHRpbmcgbWF5IGFsc28gYmUgYSBwcm9ibGVtLiBUaGUgVk1DUyBUU0Mgb2Zmc2V0IG11c3Qg
-YmUgZGlzY292ZXJhYmxlIGJ5IHRoZQ0KZ3Vlc3QuIFRoaXMgY2FuIGJlIGRvbmUgdmlhIFRTQ19B
-REpVU1QgTVNSLiBUaGUgb2Zmc2V0IGluIHRoZSBWTUNTIGFuZCB0aGUgZ3Vlc3QNClRTQ19BREpV
-U1QgTVNSIG11c3QgYWx3YXlzIGJlIGVxdWl2YWxlbnQsIGkuZS4gYSB3cml0ZSB0byBUU0NfQURK
-VVNUIGluIHRoZSBndWVzdA0KbXVzdCBiZSByZWZsZWN0ZWQgaW4gdGhlIFZNQ1MgYW5kIGFueSBj
-aGFuZ2VzIHRvIHRoZSBvZmZzZXQgaW4gdGhlIFZNQ1MgbXVzdCBiZQ0KcmVmbGVjdGVkIGluIHRo
-ZSBUU0NfQURKVVNUIE1TUi4gT3RoZXJ3aXNlIGEgcGFyYS12aXJ0dWFsaXplZCBtZXRob2QgbXVz
-dA0KYmUgaW52ZW50ZWQgdG8gY29tbXVuaWNhdGUgYW4gYXJiaXRyYXJ5IFZNQ1MgVFNDIG9mZnNl
-dCB0byB0aGUgZ3Vlc3QuDQoNCg==
+Hi Christoph,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ea4424be16887a37735d6550cfd0611528dbe5d9
+commit: 4bdc0d676a643140bdf17dbf7eafedee3d496a3c remove ioremap_nocache and devm_ioremap_nocache
+date:   2 years, 2 months ago
+config: x86_64-buildonly-randconfig-r003-20220214 (https://download.01.org/0day-ci/archive/20220309/202203090551.R89uT00F-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4bdc0d676a643140bdf17dbf7eafedee3d496a3c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4bdc0d676a643140bdf17dbf7eafedee3d496a3c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:65:15: warning: no previous prototype for function '__nfit_test_ioremap' [-Wmissing-prototypes]
+   void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
+                 ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
+   ^
+   static 
+>> drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:15: warning: no previous prototype for function '__wrap_devm_ioremap' [-Wmissing-prototypes]
+   void __iomem *__wrap_devm_ioremap(struct device *dev,
+                 ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __iomem *__wrap_devm_ioremap(struct device *dev,
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:88:7: warning: no previous prototype for function '__wrap_devm_memremap' [-Wmissing-prototypes]
+   void *__wrap_devm_memremap(struct device *dev, resource_size_t offset,
+         ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *__wrap_devm_memremap(struct device *dev, resource_size_t offset,
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:126:7: warning: no previous prototype for function '__wrap_devm_memremap_pages' [-Wmissing-prototypes]
+   void *__wrap_devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
+         ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:126:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *__wrap_devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:159:7: warning: no previous prototype for function '__wrap_phys_to_pfn_t' [-Wmissing-prototypes]
+   pfn_t __wrap_phys_to_pfn_t(phys_addr_t addr, unsigned long flags)
+         ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   pfn_t __wrap_phys_to_pfn_t(phys_addr_t addr, unsigned long flags)
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:169:7: warning: no previous prototype for function '__wrap_memremap' [-Wmissing-prototypes]
+   void *__wrap_memremap(resource_size_t offset, size_t size,
+         ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *__wrap_memremap(resource_size_t offset, size_t size,
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:180:6: warning: no previous prototype for function '__wrap_devm_memunmap' [-Wmissing-prototypes]
+   void __wrap_devm_memunmap(struct device *dev, void *addr)
+        ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:180:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __wrap_devm_memunmap(struct device *dev, void *addr)
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:190:15: warning: no previous prototype for function '__wrap_ioremap' [-Wmissing-prototypes]
+   void __iomem *__wrap_ioremap(resource_size_t offset, unsigned long size)
+                 ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:190:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __iomem *__wrap_ioremap(resource_size_t offset, unsigned long size)
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:196:15: warning: no previous prototype for function '__wrap_ioremap_wc' [-Wmissing-prototypes]
+   void __iomem *__wrap_ioremap_wc(resource_size_t offset, unsigned long size)
+                 ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __iomem *__wrap_ioremap_wc(resource_size_t offset, unsigned long size)
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:211:6: warning: no previous prototype for function '__wrap_memunmap' [-Wmissing-prototypes]
+   void __wrap_memunmap(void *addr)
+        ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __wrap_memunmap(void *addr)
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:347:18: warning: no previous prototype for function '__wrap___request_region' [-Wmissing-prototypes]
+   struct resource *__wrap___request_region(struct resource *parent,
+                    ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:347:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct resource *__wrap___request_region(struct resource *parent,
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:355:5: warning: no previous prototype for function '__wrap_insert_resource' [-Wmissing-prototypes]
+   int __wrap_insert_resource(struct resource *parent, struct resource *res)
+       ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:355:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __wrap_insert_resource(struct resource *parent, struct resource *res)
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:363:5: warning: no previous prototype for function '__wrap_remove_resource' [-Wmissing-prototypes]
+   int __wrap_remove_resource(struct resource *res)
+       ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:363:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __wrap_remove_resource(struct resource *res)
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:371:18: warning: no previous prototype for function '__wrap___devm_request_region' [-Wmissing-prototypes]
+   struct resource *__wrap___devm_request_region(struct device *dev,
+                    ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:371:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct resource *__wrap___devm_request_region(struct device *dev,
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:381:6: warning: no previous prototype for function '__wrap___release_region' [-Wmissing-prototypes]
+   void __wrap___release_region(struct resource *parent, resource_size_t start,
+        ^
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:381:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __wrap___release_region(struct resource *parent, resource_size_t start,
+   ^
+   static 
+   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:389:6: warning: no previous prototype for function '__wrap___devm_release_region' [-Wmissing-prototypes]
+   void __wrap___devm_release_region(struct device *dev, struct resource *parent,
+        ^
+
+
+vim +/__wrap_devm_ioremap +76 drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c
+
+    64	
+  > 65	void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
+    66			void __iomem *(*fallback_fn)(resource_size_t, unsigned long))
+    67	{
+    68		struct nfit_test_resource *nfit_res = get_nfit_res(offset);
+    69	
+    70		if (nfit_res)
+    71			return (void __iomem *) nfit_res->buf + offset
+    72				- nfit_res->res.start;
+    73		return fallback_fn(offset, size);
+    74	}
+    75	
+  > 76	void __iomem *__wrap_devm_ioremap(struct device *dev,
+    77			resource_size_t offset, unsigned long size)
+    78	{
+    79		struct nfit_test_resource *nfit_res = get_nfit_res(offset);
+    80	
+    81		if (nfit_res)
+    82			return (void __iomem *) nfit_res->buf + offset
+    83				- nfit_res->res.start;
+    84		return devm_ioremap(dev, offset, size);
+    85	}
+    86	EXPORT_SYMBOL(__wrap_devm_ioremap);
+    87	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

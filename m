@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7A94D167F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F6B4D1679
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbiCHLo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
+        id S1346646AbiCHLoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346630AbiCHLoF (ORCPT
+        with ESMTP id S1346648AbiCHLoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Mar 2022 06:44:05 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FE41FCD3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:42:53 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id q11so16809955pln.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 03:42:53 -0800 (PST)
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFB92DD7B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:42:56 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id t5so17122461pfg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 03:42:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EY3E1MPvA1t7e/Kt56kr9/Hv8whIDrpsa4b0BxWIZKk=;
-        b=VVpxcdo9FtcdTxXq+rHzHfEYxY1vnrmOyim9KCBAKXxTRqUs3+/ILCw0C9eO8HYMV4
-         hI56Lm/QPs7re3spSrvPvokQ7UmPjRo1dVAOwK5s4wAIRD0nzHegrc5xJlVSXkrC4rPT
-         FGD/YcxJyqFPCnYy6JFKu/eWHjHddKK9Re2/a8kINssbT1LwBtHiS3TgQIqMTX7QvfIC
-         NFnMhIm6iShaC/VofQjlMt1wc38zEk/YyXy5JxQKDiM/zs3Se7QPM7e+/NtgDmrGc1dD
-         2p32tyPgV2Wb84dgCviy2ftACV8prclw69ggZhW7M7zoT9AP2K9f9pSEekEEZy5DscPS
-         +4BA==
+        bh=m3bFV+3u+b20rLT2oE1x5BZUmsdi1StL5opiJFj+i8I=;
+        b=msT3CPaR0QmzW3OWcptkBem5LvGFEvg0MsV/reuAXN4rWovYrN8BklX4XTjXn0X4du
+         LecYWX9tvkKhwOwwqYtkGDE+7OITrNvPS/PxHlTUGfif9cMJPEivvYNqGISa702U8o7Q
+         v2p6wQZYTL9tRWNtPNwSuBHyhrAGf61pQWSbjq01Ysf25RWJ8/qx7aNG94nBoLH/MVEB
+         MUgSS/wLRHcgof19BFiwc/XEZZKhBhua2xIHGKocKz4UANgtuss1M2C3Ue0FxpiQuNpr
+         4UJMTj56ERdeEz5skTmqV7GddYycyy75IxPePaGUYTg5DXSVAEzVctI8ipkTEBv1YzEc
+         eIpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EY3E1MPvA1t7e/Kt56kr9/Hv8whIDrpsa4b0BxWIZKk=;
-        b=r41pXhhVI0VJp7YZ10p1OTfQw+OttYrsIQaEVzrpTVlBPhuDbAfAEeri8zH9cSFq1+
-         AgPmOffZJOwVkxdW6KwWZMeqNBpJDOKJbpZdR/DyKA2z14zRIeAagVWSCq54Z18HodAS
-         J+OVJ//pQiBK0nGjDU7/NH7hgkRUCc0uhoT/opqLqple/nc0EmZtr536bbWFplCkVYrL
-         4b4HrWaK0+KnwjEoml41cFJ0ZWq8+ae9z+t1qsb2w/bLv9D27uuk9hQxcwlekxqC8/1o
-         S6KRt/RPpD1nQf2qQ0rp2TwMkoiiFDa7JtIukTa75l/yN4TbZyoD3OqLjGBiuJFpDrje
-         XxcA==
-X-Gm-Message-State: AOAM530X2soyo49aOStvCULQE5tJRHQkLhX6t2Iqo0Zr853O2vKy+x2W
-        NEGuk70NmtRRqUQSFDfUZtM=
-X-Google-Smtp-Source: ABdhPJzy9xk6Fl6a/TMkxCpgxDYIH9ok/AIGZ/pNatXCWBpe2m5/fCkr73+hsKNMzxXlulkfTk/f9g==
-X-Received: by 2002:a17:90b:4d8a:b0:1be:f5f1:89d3 with SMTP id oj10-20020a17090b4d8a00b001bef5f189d3mr4258302pjb.79.1646739772579;
-        Tue, 08 Mar 2022 03:42:52 -0800 (PST)
+        bh=m3bFV+3u+b20rLT2oE1x5BZUmsdi1StL5opiJFj+i8I=;
+        b=3NvwAjbNpgSBUF6sMhfZvl9dbhynFgM3oZ3vTmj08swVkmmVR3EDuL8xmgZFGYQW81
+         +Ex13o72mD3QmHVtxPxKxCAu5jHR+KXtxUuYd/nyvRnoR/0YU0w97C5M+/YO87yRqQaK
+         xSCSeQTz44iDo5PXFSB6wUaefBVmzcmBQmkJFwUKS1q0rwK48zImUO/AbJ5j1nXvzs5a
+         K3C1i7H0ufzhDYBKZ5qSWAnfCa3Sg6YRHJQxCxENmeA/cvEPt3Rt8W+CHox4X4bXLW22
+         RUg2RWXwxJsGlDQrh9vy3h7DuJKZ7jbqwpfzvPkP3u3QihXO8boMuxzcFTCBT032oIK8
+         H86Q==
+X-Gm-Message-State: AOAM533ueW9PpnDmuZ7VaoSt8lJLXwzz5hQUX1DVrCuwXZ9/99KLBQif
+        CLt/o+zQz0W1LpnAOiefz521cwhfQjOcrg==
+X-Google-Smtp-Source: ABdhPJzBXCF0MdHOPb9x1fIzLSJK4GfnxVP0UvnudAy7USYm8sbaDp2nRaF6HMydgDbkhJjuVYQNBA==
+X-Received: by 2002:a63:110e:0:b0:375:89f4:b54e with SMTP id g14-20020a63110e000000b0037589f4b54emr13785935pgl.430.1646739775771;
+        Tue, 08 Mar 2022 03:42:55 -0800 (PST)
 Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id i2-20020a17090ac40200b001bd0e552d27sm2578285pjt.11.2022.03.08.03.42.49
+        by smtp.gmail.com with ESMTPSA id i2-20020a17090ac40200b001bd0e552d27sm2578285pjt.11.2022.03.08.03.42.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 03:42:52 -0800 (PST)
+        Tue, 08 Mar 2022 03:42:55 -0800 (PST)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     Christoph Lameter <cl@linux.com>,
@@ -60,9 +60,9 @@ Cc:     Christoph Lameter <cl@linux.com>,
         Matthew WilCox <willy@infradead.org>,
         Roman Gushchin <roman.gushchin@linux.dev>,
         linux-kernel@vger.kernel.org, 42.hyeyoo@gmail.com
-Subject: [RFC PATCH v1 11/15] mm/sl[auo]b: use same tracepoint in kmalloc and normal caches
-Date:   Tue,  8 Mar 2022 11:41:38 +0000
-Message-Id: <20220308114142.1744229-12-42.hyeyoo@gmail.com>
+Subject: [RFC PATCH v1 12/15] mm/sl[au]b: generalize kmalloc subsystem
+Date:   Tue,  8 Mar 2022 11:41:39 +0000
+Message-Id: <20220308114142.1744229-13-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220308114142.1744229-1-42.hyeyoo@gmail.com>
 References: <20220308114142.1744229-1-42.hyeyoo@gmail.com>
@@ -78,293 +78,650 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that tracepoints print cache names, we can distinguish kmalloc and
-normal cache allocations.
+Now everything in kmalloc subsystem can be generalized.
+Let's do it!
 
-Use same tracepoint in kmalloc and normal caches. After this patch,
-there is only two tracepoints in slab allocators: kmem_cache_alloc_node
-and kmem_cache_free.
+Generalize __kmalloc_node_track_caller(), kfree(), __ksize(),
+and move them to slab_common.c.
 
-Remove all unused tracepoints.
+Make __kmalloc_node() wrapper of __kmalloc_node_track_caller().
+They are duplicate.
+
+To keep caller address unchanged in kmalloc/kfree tracepoints, implement
+__kmem_cache_{alloc_node,free}() that takes caller address.
 
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- include/trace/events/kmem.h | 79 -------------------------------------
- mm/slab.c                   |  8 ++--
- mm/slab_common.c            |  5 ++-
- mm/slob.c                   | 14 ++++---
- mm/slub.c                   | 19 +++++----
- 5 files changed, 27 insertions(+), 98 deletions(-)
+ include/linux/slab.h |  79 ++++++++++++++++++-------
+ mm/slab.c            | 135 ++++---------------------------------------
+ mm/slab_common.c     |  75 ++++++++++++++++++++++++
+ mm/slob.c            |  32 +++++-----
+ mm/slub.c            | 105 +++------------------------------
+ 5 files changed, 166 insertions(+), 260 deletions(-)
 
-diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
-index 35e6887c6101..ca67ba5fd76a 100644
---- a/include/trace/events/kmem.h
-+++ b/include/trace/events/kmem.h
-@@ -9,56 +9,6 @@
- #include <linux/tracepoint.h>
- #include <trace/events/mmflags.h>
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 9ced225a3ea3..6b632137f799 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -401,14 +401,53 @@ static_assert(PAGE_SHIFT <= 20);
+ #define kmalloc_index(s) __kmalloc_index(s, true)
+ #endif /* !CONFIG_SLOB */
  
--DECLARE_EVENT_CLASS(kmem_alloc,
--
--	TP_PROTO(unsigned long call_site,
--		 const void *ptr,
--		 size_t bytes_req,
--		 size_t bytes_alloc,
--		 gfp_t gfp_flags),
--
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags),
--
--	TP_STRUCT__entry(
--		__field(	unsigned long,	call_site	)
--		__field(	const void *,	ptr		)
--		__field(	size_t,		bytes_req	)
--		__field(	size_t,		bytes_alloc	)
--		__field(	gfp_t,		gfp_flags	)
--	),
--
--	TP_fast_assign(
--		__entry->call_site	= call_site;
--		__entry->ptr		= ptr;
--		__entry->bytes_req	= bytes_req;
--		__entry->bytes_alloc	= bytes_alloc;
--		__entry->gfp_flags	= gfp_flags;
--	),
--
--	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
--		(void *)__entry->call_site,
--		__entry->ptr,
--		__entry->bytes_req,
--		__entry->bytes_alloc,
--		show_gfp_flags(__entry->gfp_flags))
--);
--
--DEFINE_EVENT(kmem_alloc, kmalloc,
--
--	TP_PROTO(unsigned long call_site, const void *ptr,
--		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
--
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
--);
--
--DEFINE_EVENT(kmem_alloc, kmem_cache_alloc,
--
--	TP_PROTO(unsigned long call_site, const void *ptr,
--		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
--
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
--);
--
- DECLARE_EVENT_CLASS(kmem_alloc_node,
+-void *__kmalloc_node(size_t size, gfp_t flags, int node) __assume_kmalloc_alignment
+-							 __alloc_size(1);
+-void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t flags, int node) __assume_slab_alignment
+-									 __malloc;
++extern void *__kmalloc_node_track_caller(size_t size, gfp_t flags, int node,
++					 unsigned long caller) __alloc_size(1);
++#define kmalloc_node_track_caller(size, flags, node) \
++	__kmalloc_node_track_caller(size, flags, node, \
++			_RET_IP_)
++/*
++ * kmalloc_track_caller is a special version of kmalloc that records the
++ * calling function of the routine calling it for slab leak tracking instead
++ * of just the calling function (confusing, eh?).
++ * It's useful when the call to kmalloc comes from a widely-used standard
++ * allocator where we care about the real place the memory allocation
++ * request comes from.
++ */
++#define kmalloc_track_caller(size, flags) \
++	__kmalloc_node_track_caller(size, flags, NUMA_NO_NODE, _RET_IP_)
++
++static __always_inline void *__kmalloc_node(size_t size, gfp_t flags, int node)
++{
++	return __kmalloc_node_track_caller(size, flags, node, _RET_IP_);
++}
  
- 	TP_PROTO(const char *name,
-@@ -101,15 +51,6 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
- 		__entry->node)
- );
+ static __always_inline void *__kmalloc(size_t size, gfp_t flags)
+ {
+-	return __kmalloc_node(size, flags, NUMA_NO_NODE);
++	return __kmalloc_node_track_caller(size, flags, NUMA_NO_NODE, _RET_IP_);
++}
++
++void __kmem_cache_free(struct kmem_cache *s, void *x, unsigned long caller);
++void *__kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags,
++			      int node, unsigned long caller);
++
++/**
++ * kmem_cache_alloc_node - Allocate an object on the specified node
++ * @cachep: The cache to allocate from.
++ * @flags: See kmalloc().
++ * @nodeid: node number of the target node.
++ *
++ * Identical to kmem_cache_alloc but it will allocate memory on the given
++ * node, which can improve the performance for cpu bound structures.
++ *
++ * Fallback to other node is possible if __GFP_THISNODE is not set.
++ *
++ * Return: pointer to the new object or %NULL in case of error
++ */
++static __always_inline void *
++kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
++{
++	return __kmem_cache_alloc_node(s, gfpflags, node, _RET_IP_);
+ }
  
--DEFINE_EVENT(kmem_alloc_node, kmalloc_node,
--
--	TP_PROTO(const char *name, unsigned long call_site,
--		 const void *ptr, size_t bytes_req, size_t bytes_alloc,
--		 gfp_t gfp_flags, int node),
--
--	TP_ARGS(name, call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
--);
--
- DEFINE_EVENT(kmem_alloc_node, kmem_cache_alloc_node,
+ /**
+@@ -423,10 +462,21 @@ static __always_inline void *__kmalloc(size_t size, gfp_t flags)
+  */
+ static __always_inline void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags)
+ {
+-	return kmem_cache_alloc_node(s, flags, NUMA_NO_NODE);
++	return __kmem_cache_alloc_node(s, flags, NUMA_NO_NODE, _RET_IP_);
+ }
  
- 	TP_PROTO(const char *name, unsigned long call_site,
-@@ -119,26 +60,6 @@ DEFINE_EVENT(kmem_alloc_node, kmem_cache_alloc_node,
- 	TP_ARGS(name, call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
- );
+-void kmem_cache_free(struct kmem_cache *s, void *objp);
++/**
++ * kmem_cache_free - Deallocate an object
++ * @cachep: The cache the allocation was from.
++ * @objp: The previously allocated object.
++ *
++ * Free an object which was previously allocated from this
++ * cache.
++ */
++static __always_inline void kmem_cache_free(struct kmem_cache *s, void *x)
++{
++	__kmem_cache_free(s, x, _RET_IP_);
++}
  
--TRACE_EVENT(kfree,
--
--	TP_PROTO(unsigned long call_site, const void *ptr),
--
--	TP_ARGS(call_site, ptr),
--
--	TP_STRUCT__entry(
--		__field(	unsigned long,	call_site	)
--		__field(	const void *,	ptr		)
--	),
--
--	TP_fast_assign(
--		__entry->call_site	= call_site;
--		__entry->ptr		= ptr;
--	),
--
--	TP_printk("call_site=%pS ptr=%p",
--		  (void *)__entry->call_site, __entry->ptr)
--);
--
- TRACE_EVENT(kmem_cache_free,
+ /*
+  * Bulk allocation and freeing operations. These are accelerated in an
+@@ -613,21 +663,6 @@ static inline __alloc_size(1, 2) void *kcalloc_node(size_t n, size_t size, gfp_t
+ 	return kmalloc_array_node(n, size, flags | __GFP_ZERO, node);
+ }
  
- 	TP_PROTO(const char *name, unsigned long call_site, const void *ptr),
+-extern void *__kmalloc_node_track_caller(size_t size, gfp_t flags, int node,
+-					 unsigned long caller) __alloc_size(1);
+-#define kmalloc_node_track_caller(size, flags, node) \
+-	__kmalloc_node_track_caller(size, flags, node, \
+-			_RET_IP_)
+-/*
+- * kmalloc_track_caller is a special version of kmalloc that records the
+- * calling function of the routine calling it for slab leak tracking instead
+- * of just the calling function (confusing, eh?).
+- * It's useful when the call to kmalloc comes from a widely-used standard
+- * allocator where we care about the real place the memory allocation
+- * request comes from.
+- */
+-#define kmalloc_track_caller(size, flags) \
+-	__kmalloc_node_track_caller(size, flags, NUMA_NO_NODE, _RET_IP_)
+ /*
+  * Shortcuts
+  */
 diff --git a/mm/slab.c b/mm/slab.c
-index e451f8136066..702a78f64b44 100644
+index 702a78f64b44..2f4d13bb511b 100644
 --- a/mm/slab.c
 +++ b/mm/slab.c
-@@ -3554,9 +3554,9 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
- 	ret = slab_alloc_node(cachep, flags, nodeid, size, _RET_IP_);
+@@ -3519,30 +3519,19 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
+ }
+ EXPORT_SYMBOL(kmem_cache_alloc_bulk);
  
- 	ret = kasan_kmalloc(cachep, ret, size, flags);
--	trace_kmalloc_node(cachep->name, _RET_IP_, ret,
--			   size, cachep->size,
--			   flags, nodeid);
-+	trace_kmem_cache_alloc_node(cachep->name, _RET_IP_, ret,
-+				    size, cachep->size,
-+				    flags, nodeid);
+-/**
+- * kmem_cache_alloc_node - Allocate an object on the specified node
+- * @cachep: The cache to allocate from.
+- * @flags: See kmalloc().
+- * @nodeid: node number of the target node.
+- *
+- * Identical to kmem_cache_alloc but it will allocate memory on the given
+- * node, which can improve the performance for cpu bound structures.
+- *
+- * Fallback to other node is possible if __GFP_THISNODE is not set.
+- *
+- * Return: pointer to the new object or %NULL in case of error
+- */
+-void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid)
++void *__kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags,
++			      int nodeid, unsigned long caller)
+ {
+-	void *ret = slab_alloc_node(cachep, flags, nodeid, cachep->object_size, _RET_IP_);
++	void *ret = slab_alloc_node(cachep, flags, nodeid,
++				    cachep->object_size, caller);
+ 
+-	trace_kmem_cache_alloc_node(cachep->name, _RET_IP_, ret,
++	trace_kmem_cache_alloc_node(cachep->name, caller, ret,
+ 				    cachep->object_size, cachep->size,
+ 				    flags, nodeid);
+ 
  	return ret;
+ }
+-EXPORT_SYMBOL(kmem_cache_alloc_node);
++EXPORT_SYMBOL(__kmem_cache_alloc_node);
+ 
+ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
+ 				  gfp_t flags,
+@@ -3561,36 +3550,6 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
  }
  EXPORT_SYMBOL(kmem_cache_alloc_node_trace);
-@@ -3692,7 +3692,6 @@ void kfree(const void *objp)
- 	struct folio *folio;
- 	void *x = (void *) objp;
  
--	trace_kfree(_RET_IP_, objp);
+-static __always_inline void *
+-__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
+-{
+-	struct kmem_cache *cachep;
+-	void *ret;
+-
+-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+-		return kmalloc_large_node(size, flags, node);
+-	cachep = kmalloc_slab(size, flags);
+-	if (unlikely(ZERO_OR_NULL_PTR(cachep)))
+-		return cachep;
+-	ret = kmem_cache_alloc_node_trace(cachep, flags, node, size);
+-	ret = kasan_kmalloc(cachep, ret, size, flags);
+-
+-	return ret;
+-}
+-
+-void *__kmalloc_node(size_t size, gfp_t flags, int node)
+-{
+-	return __do_kmalloc_node(size, flags, node, _RET_IP_);
+-}
+-EXPORT_SYMBOL(__kmalloc_node);
+-
+-void *__kmalloc_node_track_caller(size_t size, gfp_t flags,
+-		int node, unsigned long caller)
+-{
+-	return __do_kmalloc_node(size, flags, node, caller);
+-}
+-EXPORT_SYMBOL(__kmalloc_node_track_caller);
+-
+ #ifdef CONFIG_PRINTK
+ void kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
+ {
+@@ -3613,30 +3572,23 @@ void kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
+ }
+ #endif
  
- 	if (unlikely(ZERO_OR_NULL_PTR(objp)))
+-/**
+- * kmem_cache_free - Deallocate an object
+- * @cachep: The cache the allocation was from.
+- * @objp: The previously allocated object.
+- *
+- * Free an object which was previously allocated from this
+- * cache.
+- */
+-void kmem_cache_free(struct kmem_cache *cachep, void *objp)
++void __kmem_cache_free(struct kmem_cache *cachep, void *objp,
++		       unsigned long caller)
+ {
+ 	unsigned long flags;
+ 	cachep = cache_from_obj(cachep, objp);
+ 	if (!cachep)
  		return;
-@@ -3704,6 +3703,7 @@ void kfree(const void *objp)
- 	}
  
- 	c = folio_slab(folio)->slab_cache;
-+	trace_kmem_cache_free(c->name, _RET_IP_, objp);
- 
+-	trace_kmem_cache_free(cachep->name, _RET_IP_, objp);
++	trace_kmem_cache_free(cachep->name, caller, objp);
  	local_irq_save(flags);
- 	kfree_debugcheck(objp);
+ 	debug_check_no_locks_freed(objp, cachep->object_size);
+ 	if (!(cachep->flags & SLAB_DEBUG_OBJECTS))
+ 		debug_check_no_obj_freed(objp, cachep->object_size);
+-	__cache_free(cachep, objp, _RET_IP_);
++	__cache_free(cachep, objp, caller);
+ 	local_irq_restore(flags);
+ }
+-EXPORT_SYMBOL(kmem_cache_free);
++EXPORT_SYMBOL(__kmem_cache_free);
+ 
+ void kmem_cache_free_bulk(struct kmem_cache *orig_s, size_t size, void **p)
+ {
+@@ -3676,44 +3628,6 @@ void kmem_cache_free_bulk(struct kmem_cache *orig_s, size_t size, void **p)
+ }
+ EXPORT_SYMBOL(kmem_cache_free_bulk);
+ 
+-/**
+- * kfree - free previously allocated memory
+- * @objp: pointer returned by kmalloc.
+- *
+- * If @objp is NULL, no operation is performed.
+- *
+- * Don't free memory not originally allocated by kmalloc()
+- * or you will run into trouble.
+- */
+-void kfree(const void *objp)
+-{
+-	struct kmem_cache *c;
+-	unsigned long flags;
+-	struct folio *folio;
+-	void *x = (void *) objp;
+-
+-
+-	if (unlikely(ZERO_OR_NULL_PTR(objp)))
+-		return;
+-
+-	folio = virt_to_folio(objp);
+-	if (!folio_test_slab(folio)) {
+-		free_large_kmalloc(folio, x);
+-		return;
+-	}
+-
+-	c = folio_slab(folio)->slab_cache;
+-	trace_kmem_cache_free(c->name, _RET_IP_, objp);
+-
+-	local_irq_save(flags);
+-	kfree_debugcheck(objp);
+-	debug_check_no_locks_freed(objp, c->object_size);
+-	debug_check_no_obj_freed(objp, c->object_size);
+-	__cache_free(c, (void *)objp, _RET_IP_);
+-	local_irq_restore(flags);
+-}
+-EXPORT_SYMBOL(kfree);
+-
+ /*
+  * This initializes kmem_cache_node or resizes various caches for all nodes.
+  */
+@@ -4116,30 +4030,3 @@ void __check_heap_object(const void *ptr, unsigned long n,
+ 	usercopy_abort("SLAB object", cachep->name, to_user, offset, n);
+ }
+ #endif /* CONFIG_HARDENED_USERCOPY */
+-
+-/**
+- * __ksize -- Uninstrumented ksize.
+- * @objp: pointer to the object
+- *
+- * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
+- * safety checks as ksize() with KASAN instrumentation enabled.
+- *
+- * Return: size of the actual memory used by @objp in bytes
+- */
+-size_t __ksize(const void *objp)
+-{
+-	struct kmem_cache *c;
+-	struct folio *folio;
+-
+-	BUG_ON(!objp);
+-	if (unlikely(objp == ZERO_SIZE_PTR))
+-		return 0;
+-
+-	folio = virt_to_folio(objp);
+-	if (!folio_test_slab(folio))
+-		return folio_size(folio);
+-
+-	c = folio_slab(folio)->slab_cache;
+-	return c->object_size;
+-}
+-EXPORT_SYMBOL(__ksize);
 diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 03949445c5fc..8a8330a777f5 100644
+index 8a8330a777f5..6533026b4a6b 100644
 --- a/mm/slab_common.c
 +++ b/mm/slab_common.c
-@@ -917,6 +917,7 @@ void free_large_kmalloc(struct folio *folio, void *object)
- 	if (WARN_ON_ONCE(order == 0))
- 		pr_warn_once("object pointer: 0x%p\n", object);
- 
-+	trace_kmem_cache_free(KMALLOC_LARGE_NAME, _RET_IP_, object);
- 	kmemleak_free(object);
- 	kasan_kfree_large(object);
- 
-@@ -962,8 +963,8 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node)
- 	ptr = kasan_kmalloc_large(ptr, size, flags);
- 	/* As ptr might get tagged, call kmemleak hook after KASAN. */
- 	kmemleak_alloc(ptr, size, 1, flags);
--	trace_kmalloc_node(KMALLOC_LARGE_NAME, _RET_IP_, ptr, size,
--			   PAGE_SIZE << order, flags, node);
-+	trace_kmem_cache_alloc_node(KMALLOC_LARGE_NAME, _RET_IP_, ptr, size,
-+				    PAGE_SIZE << order, flags, node);
- 	return ptr;
- 
+@@ -925,6 +925,81 @@ void free_large_kmalloc(struct folio *folio, void *object)
+ 			      -(PAGE_SIZE << order));
+ 	__free_pages(folio_page(folio, 0), order);
  }
++
++void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
++					int node, unsigned long caller)
++{
++	struct kmem_cache *s;
++	void *ret;
++
++	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
++		return kmalloc_large_node(size, gfpflags, node);
++
++	s = kmalloc_slab(size, gfpflags);
++
++	if (unlikely(ZERO_OR_NULL_PTR(s)))
++		return s;
++
++	ret = __kmem_cache_alloc_node(s, gfpflags, node, caller);
++	ret = kasan_kmalloc(s, ret, size, gfpflags);
++
++	return ret;
++}
++EXPORT_SYMBOL(__kmalloc_node_track_caller);
++
++/**
++ * kfree - free previously allocated memory
++ * @objp: pointer returned by kmalloc.
++ *
++ * If @objp is NULL, no operation is performed.
++ *
++ * Don't free memory not originally allocated by kmalloc()
++ * or you will run into trouble.
++ */
++void kfree(const void *x)
++{
++	struct folio *folio;
++	void *object = (void *)x;
++	struct kmem_cache *s;
++
++	if (unlikely(ZERO_OR_NULL_PTR(x)))
++		return;
++
++	folio = virt_to_folio(x);
++	if (unlikely(!folio_test_slab(folio))) {
++		free_large_kmalloc(folio, object);
++		return;
++	}
++
++	s = folio_slab(folio)->slab_cache;
++	__kmem_cache_free(s, object, _RET_IP_);
++}
++EXPORT_SYMBOL(kfree);
++
++/**
++ * __ksize -- Uninstrumented ksize.
++ * @objp: pointer to the object
++ *
++ * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
++ * safety checks as ksize() with KASAN instrumentation enabled.
++ *
++ * Return: size of the actual memory used by @objp in bytes
++ */
++size_t __ksize(const void *object)
++{
++	struct folio *folio;
++
++	if (unlikely(object == ZERO_SIZE_PTR))
++		return 0;
++
++	folio = virt_to_folio(object);
++
++	if (unlikely(!folio_test_slab(folio)))
++		return folio_size(folio);
++
++	return slab_ksize(folio_slab(folio)->slab_cache);
++}
++EXPORT_SYMBOL(__ksize);
+ #endif /* !CONFIG_SLOB */
+ 
+ gfp_t kmalloc_fix_flags(gfp_t flags)
 diff --git a/mm/slob.c b/mm/slob.c
-index d60175c9bb1b..3726b77a066b 100644
+index 3726b77a066b..836a7d1ae996 100644
 --- a/mm/slob.c
 +++ b/mm/slob.c
-@@ -505,8 +505,8 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
- 		*m = size;
- 		ret = (void *)m + minalign;
+@@ -588,7 +588,8 @@ int __kmem_cache_create(struct kmem_cache *c, slab_flags_t flags)
+ 	return 0;
+ }
  
--		trace_kmalloc_node(KMALLOC_NAME, caller, ret,
--				   size, size + minalign, gfp, node);
-+		trace_kmem_cache_alloc_node(KMALLOC_NAME, caller, ret,
-+					    size, size + minalign, gfp, node);
- 	} else {
- 		unsigned int order = get_order(size);
- 
-@@ -514,8 +514,9 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
- 			gfp |= __GFP_COMP;
- 		ret = slob_new_pages(gfp, order, node);
- 
--		trace_kmalloc_node(KMALLOC_LARGE_NAME, caller, ret,
--				   size, PAGE_SIZE << order, gfp, node);
-+		trace_kmem_cache_alloc_node(KMALLOC_LARGE_NAME, caller,
-+					    ret, size, PAGE_SIZE << order,
-+					    gfp, node);
- 	}
- 
- 	kmemleak_alloc(ret, size, 1, gfp);
-@@ -533,8 +534,6 @@ void kfree(const void *block)
+-static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
++static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags,
++			     int node, unsigned long caller)
  {
- 	struct folio *sp;
+ 	void *b;
  
--	trace_kfree(_RET_IP_, block);
--
- 	if (unlikely(ZERO_OR_NULL_PTR(block)))
- 		return;
- 	kmemleak_free(block);
-@@ -543,10 +542,13 @@ void kfree(const void *block)
- 	if (folio_test_slab(sp)) {
- 		int align = max_t(size_t, ARCH_KMALLOC_MINALIGN, ARCH_SLAB_MINALIGN);
- 		unsigned int *m = (unsigned int *)(block - align);
-+
-+		trace_kmem_cache_free(KMALLOC_LARGE_NAME, _RET_IP_, block);
- 		slob_free(m, *m + align);
+@@ -598,12 +599,12 @@ static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
+ 
+ 	if (c->size < PAGE_SIZE) {
+ 		b = slob_alloc(c->size, flags, c->align, node, 0);
+-		trace_kmem_cache_alloc_node(c->name, _RET_IP_, b, c->object_size,
++		trace_kmem_cache_alloc_node(c->name, caller, b, c->object_size,
+ 					    SLOB_UNITS(c->size) * SLOB_UNIT,
+ 					    flags, node);
  	} else {
- 		unsigned int order = folio_order(sp);
+ 		b = slob_new_pages(flags, get_order(c->size), node);
+-		trace_kmem_cache_alloc_node(c->name, _RET_IP_, b, c->object_size,
++		trace_kmem_cache_alloc_node(c->name, caller, b, c->object_size,
+ 					    PAGE_SIZE << get_order(c->size),
+ 					    flags, node);
+ 	}
+@@ -617,19 +618,14 @@ static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
+ 	return b;
+ }
  
-+		trace_kmem_cache_free(KMALLOC_NAME, _RET_IP_, block);
- 		mod_node_page_state(folio_pgdat(sp), NR_SLAB_UNRECLAIMABLE_B,
- 				    -(PAGE_SIZE << order));
- 		__free_pages(folio_page(sp, 0), order);
+-void *__kmalloc_node(size_t size, gfp_t gfp, int node)
++void *__kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t gfp,
++			      int node, unsigned long caller)
+ {
+-	return __do_kmalloc_node(size, gfp, node, _RET_IP_);
++	return slob_alloc_node(cachep, gfp, node, caller);
+ }
+-EXPORT_SYMBOL(__kmalloc_node);
++EXPORT_SYMBOL(__kmem_cache_alloc_node);
+ 
+-void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t gfp, int node)
+-{
+-	return slob_alloc_node(cachep, gfp, node);
+-}
+-EXPORT_SYMBOL(kmem_cache_alloc_node);
+-
+-static void __kmem_cache_free(void *b, int size)
++static void ___kmem_cache_free(void *b, int size)
+ {
+ 	if (size < PAGE_SIZE)
+ 		slob_free(b, size);
+@@ -642,23 +638,23 @@ static void kmem_rcu_free(struct rcu_head *head)
+ 	struct slob_rcu *slob_rcu = (struct slob_rcu *)head;
+ 	void *b = (void *)slob_rcu - (slob_rcu->size - sizeof(struct slob_rcu));
+ 
+-	__kmem_cache_free(b, slob_rcu->size);
++	___kmem_cache_free(b, slob_rcu->size);
+ }
+ 
+-void kmem_cache_free(struct kmem_cache *c, void *b)
++void __kmem_cache_free(struct kmem_cache *c, void *b, unsigned long caller)
+ {
+ 	kmemleak_free_recursive(b, c->flags);
+-	trace_kmem_cache_free(c->name, _RET_IP_, b);
++	trace_kmem_cache_free(c->name, caller, b);
+ 	if (unlikely(c->flags & SLAB_TYPESAFE_BY_RCU)) {
+ 		struct slob_rcu *slob_rcu;
+ 		slob_rcu = b + (c->size - sizeof(struct slob_rcu));
+ 		slob_rcu->size = c->size;
+ 		call_rcu(&slob_rcu->head, kmem_rcu_free);
+ 	} else {
+-		__kmem_cache_free(b, c->size);
++		___kmem_cache_free(b, c->size);
+ 	}
+ }
+-EXPORT_SYMBOL(kmem_cache_free);
++EXPORT_SYMBOL(__kmem_cache_free);
+ 
+ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
+ {
 diff --git a/mm/slub.c b/mm/slub.c
-index 8a23d1f9507d..c2e713bdb26c 100644
+index c2e713bdb26c..f8fdb6b4fbd2 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -3241,8 +3241,8 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *s,
+@@ -3224,16 +3224,17 @@ static __always_inline void *slab_alloc(struct kmem_cache *s,
+ 	return slab_alloc_node(s, gfpflags, NUMA_NO_NODE, addr, orig_size);
+ }
+ 
+-void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
++void *__kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags,
++			      int node, unsigned long caller)
  {
- 	void *ret = slab_alloc_node(s, gfpflags, node, _RET_IP_, size);
+-	void *ret = slab_alloc_node(s, gfpflags, node, _RET_IP_, s->object_size);
++	void *ret = slab_alloc_node(s, gfpflags, node, caller, s->object_size);
  
--	trace_kmalloc_node(s->name, _RET_IP_, ret,
--			   size, s->size, gfpflags, node);
-+	trace_kmem_cache_alloc_node(s->name, _RET_IP_, ret,
-+				    size, s->size, gfpflags, node);
+-	trace_kmem_cache_alloc_node(s->name, _RET_IP_, ret,
++	trace_kmem_cache_alloc_node(s->name, caller, ret,
+ 				    s->object_size, s->size, gfpflags, node);
  
- 	ret = kasan_kmalloc(s, ret, size, gfpflags);
  	return ret;
-@@ -4366,7 +4366,8 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
+ }
+-EXPORT_SYMBOL(kmem_cache_alloc_node);
++EXPORT_SYMBOL(__kmem_cache_alloc_node);
  
- 	ret = slab_alloc_node(s, flags, node, _RET_IP_, size);
+ void *kmem_cache_alloc_node_trace(struct kmem_cache *s,
+ 				    gfp_t gfpflags,
+@@ -3477,15 +3478,15 @@ void ___cache_free(struct kmem_cache *cache, void *x, unsigned long addr)
+ }
+ #endif
  
--	trace_kmalloc_node(s->name, _RET_IP_, ret, size, s->size, flags, node);
-+	trace_kmem_cache_alloc_node(s->name, _RET_IP_, ret, size,
-+				    s->size, flags, node);
+-void kmem_cache_free(struct kmem_cache *s, void *x)
++void __kmem_cache_free(struct kmem_cache *s, void *x, unsigned long caller)
+ {
+ 	s = cache_from_obj(s, x);
+ 	if (!s)
+ 		return;
+-	trace_kmem_cache_free(s->name, _RET_IP_, x);
+-	slab_free(s, virt_to_slab(x), x, NULL, 1, _RET_IP_);
++	trace_kmem_cache_free(s->name, caller, x);
++	slab_free(s, virt_to_slab(x), x, NULL, 1, caller);
+ }
+-EXPORT_SYMBOL(kmem_cache_free);
++EXPORT_SYMBOL(__kmem_cache_free);
  
- 	ret = kasan_kmalloc(s, ret, size, flags);
- 
-@@ -4445,8 +4446,7 @@ void kfree(const void *x)
- 	struct folio *folio;
+ struct detached_freelist {
  	struct slab *slab;
- 	void *object = (void *)x;
+@@ -4351,30 +4352,6 @@ static int __init setup_slub_min_objects(char *str)
+ 
+ __setup("slub_min_objects=", setup_slub_min_objects);
+ 
+-void *__kmalloc_node(size_t size, gfp_t flags, int node)
+-{
+-	struct kmem_cache *s;
+-	void *ret;
 -
--	trace_kfree(_RET_IP_, x);
-+	struct kmem_cache *s;
- 
- 	if (unlikely(ZERO_OR_NULL_PTR(x)))
- 		return;
-@@ -4456,8 +4456,12 @@ void kfree(const void *x)
- 		free_large_kmalloc(folio, object);
- 		return;
- 	}
-+
- 	slab = folio_slab(folio);
--	slab_free(slab->slab_cache, slab, object, NULL, 1, _RET_IP_);
-+	s = slab->slab_cache;
-+
-+	trace_kmem_cache_free(s->name, _RET_IP_, x);
-+	slab_free(s, slab, object, NULL, 1, _RET_IP_);
+-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+-		return kmalloc_large_node(size, flags, node);
+-
+-	s = kmalloc_slab(size, flags);
+-
+-	if (unlikely(ZERO_OR_NULL_PTR(s)))
+-		return s;
+-
+-	ret = slab_alloc_node(s, flags, node, _RET_IP_, size);
+-
+-	trace_kmem_cache_alloc_node(s->name, _RET_IP_, ret, size,
+-				    s->size, flags, node);
+-
+-	ret = kasan_kmalloc(s, ret, size, flags);
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL(__kmalloc_node);
+-
+ #ifdef CONFIG_HARDENED_USERCOPY
+ /*
+  * Rejects incorrectly sized objects and objects that are to be copied
+@@ -4425,46 +4402,6 @@ void __check_heap_object(const void *ptr, unsigned long n,
  }
- EXPORT_SYMBOL(kfree);
+ #endif /* CONFIG_HARDENED_USERCOPY */
  
-@@ -4825,7 +4829,8 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
- 	ret = slab_alloc_node(s, gfpflags, node, caller, size);
+-size_t __ksize(const void *object)
+-{
+-	struct folio *folio;
+-
+-	if (unlikely(object == ZERO_SIZE_PTR))
+-		return 0;
+-
+-	folio = virt_to_folio(object);
+-
+-	if (unlikely(!folio_test_slab(folio)))
+-		return folio_size(folio);
+-
+-	return slab_ksize(folio_slab(folio)->slab_cache);
+-}
+-EXPORT_SYMBOL(__ksize);
+-
+-void kfree(const void *x)
+-{
+-	struct folio *folio;
+-	struct slab *slab;
+-	void *object = (void *)x;
+-	struct kmem_cache *s;
+-
+-	if (unlikely(ZERO_OR_NULL_PTR(x)))
+-		return;
+-
+-	folio = virt_to_folio(x);
+-	if (unlikely(!folio_test_slab(folio))) {
+-		free_large_kmalloc(folio, object);
+-		return;
+-	}
+-
+-	slab = folio_slab(folio);
+-	s = slab->slab_cache;
+-
+-	trace_kmem_cache_free(s->name, _RET_IP_, x);
+-	slab_free(s, slab, object, NULL, 1, _RET_IP_);
+-}
+-EXPORT_SYMBOL(kfree);
+-
+ #define SHRINK_PROMOTE_MAX 32
  
- 	/* Honor the call site pointer we received. */
--	trace_kmalloc_node(s->name, caller, ret, size, s->size, gfpflags, node);
-+	trace_kmem_cache_alloc_node(s->name, caller, ret, size,
-+				    s->size, gfpflags, node);
- 
- 	return ret;
+ /*
+@@ -4812,30 +4749,6 @@ int __kmem_cache_create(struct kmem_cache *s, slab_flags_t flags)
+ 	return 0;
  }
+ 
+-void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
+-					int node, unsigned long caller)
+-{
+-	struct kmem_cache *s;
+-	void *ret;
+-
+-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+-		return kmalloc_large_node(size, gfpflags, node);
+-
+-	s = kmalloc_slab(size, gfpflags);
+-
+-	if (unlikely(ZERO_OR_NULL_PTR(s)))
+-		return s;
+-
+-	ret = slab_alloc_node(s, gfpflags, node, caller, size);
+-
+-	/* Honor the call site pointer we received. */
+-	trace_kmem_cache_alloc_node(s->name, caller, ret, size,
+-				    s->size, gfpflags, node);
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL(__kmalloc_node_track_caller);
+-
+ #ifdef CONFIG_SYSFS
+ static int count_inuse(struct slab *slab)
+ {
 -- 
 2.33.1
 

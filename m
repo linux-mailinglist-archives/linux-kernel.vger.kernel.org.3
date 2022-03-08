@@ -2,68 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77D34D1FF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E649E4D1FF7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349472AbiCHSTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S1349486AbiCHSUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:20:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349464AbiCHSTg (ORCPT
+        with ESMTP id S239485AbiCHSUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:19:36 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01783344E5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:18:40 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2dc585dbb02so147862307b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=oo2XJmePFb5oDErsPdptJnurLpOrjhyGiTCBcM40kFs=;
-        b=h6mLb7fLhGQbMGjslfy5q0yMPi+HWyTn2UpSDt+E/dpy0TSbIoYKpS7rhc1s+bbBxU
-         OofcQ1U9S3ZeVq1WjVaZm4fB08X6f3SkGnptvgIqcNC3qN96c9E9ee1rAVpc95ZVqIBM
-         /xAyXLukVgnraNVE4ARNiUsv1N3tpjfiZiPAaTvn1sG3l9pVBzZqWGN/RPaMMfFVyt91
-         ltmSktHZTHb58uTYqCxlTV5ad25FQkFgV4PkYJUarXy1dyhi/qwsYTzJkWb1VJLk7XVt
-         RtCYKnIK6X3xYF3B1ocLge3rh/mlUMIb9/0hS11bfBiempYmtpgynDO0XWW/SJ6wm6nM
-         VFnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=oo2XJmePFb5oDErsPdptJnurLpOrjhyGiTCBcM40kFs=;
-        b=Wv4/lftvc9UMq847+EH+PY3BRI3J4nDWrtcOUyCs1xFnTZUKh4X7YYg0XYbc/BNq6T
-         0T5hdY1oOPmYH2SRHLFzmTe5n8/zWOa3RVWlmoRABin2UehaEwWhp8/o+9O6nz51jMiF
-         K+NeSC/w+hYEujTUuiPsr5C8k6Rw7cv5BHOprwvVfKvD1mopCv4olWOMUqvS4mnA4jUp
-         pOZk3g7wOEv6vNqzGt8o4zUsb9eowSqXeySqbQjEvKuDzdVzzA0KiFQ3BLBX4BbJohmS
-         SqMYMucTkxbKjEqqORnjLbBfwRHqWgii1RxBJQlJAGNdcMMgY5w5zCoHDw4UQi2W/QjY
-         RGlA==
-X-Gm-Message-State: AOAM530LJwXedFpJXI5pe2j5Z/RHdeErg+tIzTP8jFZ+hLHWMTLPHI91
-        eVLSSU2jXqO4ANYPr6oFWDcS6LN4sKjeVfypNBA=
-X-Google-Smtp-Source: ABdhPJzbyKm5J6tfZJLcRxt7RGEHLFFZFwdXU7+HBOyEK0CrgSTf/jwbcVAkhsKg58KYlG3c4ANypowG2x3LAoY1EH4=
-X-Received: by 2002:a81:2341:0:b0:2db:dd3b:cac0 with SMTP id
- j62-20020a812341000000b002dbdd3bcac0mr13862854ywj.51.1646763519277; Tue, 08
- Mar 2022 10:18:39 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:7000:b51a:0:0:0:0 with HTTP; Tue, 8 Mar 2022 10:18:39
- -0800 (PST)
-Reply-To: blessingbrown.017@gmail.com
-From:   Blessing Brown <steveraymond3415@gmail.com>
-Date:   Tue, 8 Mar 2022 18:18:39 +0000
-Message-ID: <CAEtFjNKCrUyRKnNxy=F4z3jr_dqz1Bjo8ZB-59+7xZjsXLcZ2A@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        Tue, 8 Mar 2022 13:20:07 -0500
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE033700A;
+        Tue,  8 Mar 2022 10:19:10 -0800 (PST)
+Received: from 1nReQO-000BTc-Tx by out3b.electric.net with emc1-ok (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nReQP-000BWq-Ui; Tue, 08 Mar 2022 10:19:09 -0800
+Received: by emcmailer; Tue, 08 Mar 2022 10:19:09 -0800
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+        by out3b.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nReQO-000BTc-Tx; Tue, 08 Mar 2022 10:19:08 -0800
+Received: from tsdebian.Massive (unknown [75.164.75.221])
+        by mail.embeddedts.com (Postfix) with ESMTPSA id 8B65E3ED7C;
+        Tue,  8 Mar 2022 11:19:07 -0700 (MST)
+From:   Kris Bahnsen <kris@embeddedTS.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Featherston <mark@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>
+Subject: [PATCH v2] gpio: ts4900: Do not set DAT and OE together
+Date:   Tue,  8 Mar 2022 10:18:47 -0800
+Message-Id: <20220308181847.3276-1-kris@embeddedTS.com>
+X-Mailer: git-send-email 2.11.0
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-Virus-Status: Scanned by VirusSMART (c)
+X-Virus-Status: Scanned by VirusSMART (b)
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=N0dy6kEUIr+y8NTXo2YidNyYvMmDq2e/8v2xzNF9rqo=;b=Kjm18paC+Ml+ybk1X5KtljH52gXwoEU9JMML+juB/d6LTPUtNg59zwpVfZ2TOYufwRGYN4Py6lfkDA8NjOcWm+eMp771RjylEYt6DSW38/YGqmy1A6zyLM344PtXtkWxa+J4Y1jc18ELLCDxUF/infUNu36vrxQbpsr3SSxTce8c2E7/pANG5Tt33x7yZmRfUA/MpBIlKiNou2M8yp5MOwhSR0qevlIKSDbkat/Mls4OHHi1KOv63umc2ImeM2ha0UESOZB+DhuxTOiROJ8JVemeR9e8Qb9H4gY0CzpfZioTuqsLqEc2gsfvOj4gOJ0TmTWV3CdSurO0whsD1QVjTQ==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm Mrs Blessing Brown.I wish to communicate with you.
+From: Mark Featherston <mark@embeddedTS.com>
+
+This works around an issue with the hardware where both OE and
+DAT are exposed in the same register. If both are updated
+simultaneously, the harware makes no guarantees that OE or DAT
+will actually change in any given order and may result in a
+glitch of a few ns on a GPIO pin when changing direction and value
+in a single write.
+
+Setting direction to input now only affects OE bit. Setting
+direction to output updates DAT first, then OE.
+
+Fixes: 9c6686322d74 ("gpio: add Technologic I2C-FPGA gpio support")
+
+Signed-off-by: Mark Featherston <mark@embeddedTS.com>
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+---
+V1 -> V2: Add Fixes tag
+
+ drivers/gpio/gpio-ts4900.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
+index d885032cf814..fbabfca030c0 100644
+--- a/drivers/gpio/gpio-ts4900.c
++++ b/drivers/gpio/gpio-ts4900.c
+@@ -1,7 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0
+ /*
+  * Digital I/O driver for Technologic Systems I2C FPGA Core
+  *
+- * Copyright (C) 2015 Technologic Systems
++ * Copyright (C) 2015-2018 Technologic Systems
+  * Copyright (C) 2016 Savoir-Faire Linux
+  *
+  * This program is free software; you can redistribute it and/or
+@@ -55,19 +56,33 @@ static int ts4900_gpio_direction_input(struct gpio_chip *chip,
+ {
+ 	struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
+ 
+-	/*
+-	 * This will clear the output enable bit, the other bits are
+-	 * dontcare when this is cleared
++	/* Only clear the OE bit here, requires a RMW. Prevents potential issue
++	 * with OE and data getting to the physical pin at different times.
+ 	 */
+-	return regmap_write(priv->regmap, offset, 0);
++	return regmap_update_bits(priv->regmap, offset, TS4900_GPIO_OE, 0);
+ }
+ 
+ static int ts4900_gpio_direction_output(struct gpio_chip *chip,
+ 					unsigned int offset, int value)
+ {
+ 	struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
++	unsigned int reg;
+ 	int ret;
+ 
++	/* If changing from an input to an output, we need to first set the
++	 * proper data bit to what is requested and then set OE bit. This
++	 * prevents a glitch that can occur on the IO line
++	 */
++	regmap_read(priv->regmap, offset, &reg);
++	if (!(reg & TS4900_GPIO_OE)) {
++		if (value)
++			reg = TS4900_GPIO_OUT;
++		else
++			reg &= ~TS4900_GPIO_OUT;
++
++		regmap_write(priv->regmap, offset, reg);
++	}
++
+ 	if (value)
+ 		ret = regmap_write(priv->regmap, offset, TS4900_GPIO_OE |
+ 							 TS4900_GPIO_OUT);
+-- 
+2.11.0
+

@@ -2,76 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BD94D0EEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F514D0EED
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240007AbiCHFC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:02:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S240424AbiCHFHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiCHFC4 (ORCPT
+        with ESMTP id S230105AbiCHFHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:02:56 -0500
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537CB33EA1
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:02:01 -0800 (PST)
-Date:   Mon, 7 Mar 2022 21:01:54 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1646715719;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5tjFk/Dw764Ls2/rcpPUJ5xUi4eZvU9dCCyj5nTruvU=;
-        b=r4kEFYEK9oik/rlloyN04+OvtWokBLsP8excAZk/EXHJG4PWktet51F1ifiJLdFEJgsRx8
-        ZHe7uAJcZU1X+lv4XbGXIgLUwxoV4zJZEkf7EYkzwVt8QICyG33Uiv4VYWbH4eNBWveA9F
-        4Hau37Oq3BIdWC1jPN7yh7yrXYC7dr4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] mm/slub: refactor deactivate_slab()
-Message-ID: <YibjQpm55PldiKji@carbon.dhcp.thefacebook.com>
-References: <20220307074057.902222-1-42.hyeyoo@gmail.com>
- <20220307074057.902222-3-42.hyeyoo@gmail.com>
+        Tue, 8 Mar 2022 00:07:06 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F78D33EA9;
+        Mon,  7 Mar 2022 21:06:09 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A294D6E;
+        Mon,  7 Mar 2022 21:06:09 -0800 (PST)
+Received: from [10.162.17.54] (a077893.blr.arm.com [10.162.17.54])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F43B3FA5D;
+        Mon,  7 Mar 2022 21:06:06 -0800 (PST)
+Message-ID: <98472993-853a-7279-6594-fd173059a4d9@arm.com>
+Date:   Tue, 8 Mar 2022 10:36:04 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307074057.902222-3-42.hyeyoo@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/4] perf: Refactor perf script branch stack printing
+Content-Language: en-US
+To:     James Clark <james.clark@arm.com>, acme@kernel.org,
+        linux-perf-users@vger.kernel.org
+Cc:     german.gomez@arm.com, leo.yan@linaro.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220307171917.2555829-1-james.clark@arm.com>
+ <20220307171917.2555829-4-james.clark@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220307171917.2555829-4-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 07:40:56AM +0000, Hyeonggon Yoo wrote:
-> Simplify deactivate_slab() by unlocking n->list_lock and retrying
-> cmpxchg_double() when cmpxchg_double() fails, and perform
-> add_{partial,full} only when it succeed.
-> 
-> Releasing and taking n->list_lock again here is not harmful as SLUB
-> avoids deactivating slabs as much as possible.
-> 
-> [ vbabka@suse.cz: perform add_{partial,full} when cmpxchg_double()
->   succeed.
-> 
->   count deactivating full slabs even if debugging flag is not set. ]
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Thanks!
+On 3/7/22 22:49, James Clark wrote:
+> Remove duplicate code so that future changes to flags are always made to
+> all 3 printing variations.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  tools/perf/builtin-script.c | 27 ++++++++++++---------------
+>  1 file changed, 12 insertions(+), 15 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index 9e032343f1c6..fac2e9470926 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -857,6 +857,15 @@ mispred_str(struct branch_entry *br)
+>  	return br->flags.predicted ? 'P' : 'M';
+>  }
+>  
+> +static int print_bstack_flags(FILE *fp, struct branch_entry *br)
+> +{
+> +	return fprintf(fp, "/%c/%c/%c/%d ",
+> +		       mispred_str(br),
+> +		       br->flags.in_tx ? 'X' : '-',
+> +		       br->flags.abort ? 'A' : '-',
+> +		       br->flags.cycles);
+> +}
+> +
+>  static int perf_sample__fprintf_brstack(struct perf_sample *sample,
+>  					struct thread *thread,
+>  					struct perf_event_attr *attr, FILE *fp)
+> @@ -895,11 +904,7 @@ static int perf_sample__fprintf_brstack(struct perf_sample *sample,
+>  			printed += fprintf(fp, ")");
+>  		}
+>  
+> -		printed += fprintf(fp, "/%c/%c/%c/%d ",
+> -			mispred_str(entries + i),
+> -			entries[i].flags.in_tx ? 'X' : '-',
+> -			entries[i].flags.abort ? 'A' : '-',
+> -			entries[i].flags.cycles);
+> +		printed += print_bstack_flags(fp, entries + i);
+>  	}
+>  
+>  	return printed;
+> @@ -941,11 +946,7 @@ static int perf_sample__fprintf_brstacksym(struct perf_sample *sample,
+>  			printed += map__fprintf_dsoname(alt.map, fp);
+>  			printed += fprintf(fp, ")");
+>  		}
+> -		printed += fprintf(fp, "/%c/%c/%c/%d ",
+> -			mispred_str(entries + i),
+> -			entries[i].flags.in_tx ? 'X' : '-',
+> -			entries[i].flags.abort ? 'A' : '-',
+> -			entries[i].flags.cycles);
+> +		printed += print_bstack_flags(fp, entries + i);
+>  	}
+>  
+>  	return printed;
+> @@ -991,11 +992,7 @@ static int perf_sample__fprintf_brstackoff(struct perf_sample *sample,
+>  			printed += map__fprintf_dsoname(alt.map, fp);
+>  			printed += fprintf(fp, ")");
+>  		}
+> -		printed += fprintf(fp, "/%c/%c/%c/%d ",
+> -			mispred_str(entries + i),
+> -			entries[i].flags.in_tx ? 'X' : '-',
+> -			entries[i].flags.abort ? 'A' : '-',
+> -			entries[i].flags.cycles);
+> +		printed += print_bstack_flags(fp, entries + i);
+>  	}
+>  
+>  	return printed;
+
+
+LGTM
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>

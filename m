@@ -2,274 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8964D1F9D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BFE4D1FA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245255AbiCHSEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S1348330AbiCHSFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234429AbiCHSES (ORCPT
+        with ESMTP id S231637AbiCHSFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:04:18 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B13587B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:03:20 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id e27-20020a056602045b00b00645bd576184so5483278iov.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:03:20 -0800 (PST)
+        Tue, 8 Mar 2022 13:05:25 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB735521D;
+        Tue,  8 Mar 2022 10:04:28 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id h14so8686110lfk.11;
+        Tue, 08 Mar 2022 10:04:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6SHxHLXJ2eYyw1tnxtVXf2yck6AofzgpVIfso9u7DAE=;
+        b=YWxBm6Jx9v7Wlb2fdyVA4R/eCLykHIu5057o5yoxhiNe1ckeEcYcuoIlvL0CXgyUUS
+         iCcHfjSkiUebD2r7d935yPKizxOzpol4fVwzGhe1sxB1SXtbSjuBLWqAfhVvXomhyf7V
+         BnXT8+SGpjmpIZ/L55h1bxZ3H2uZjmLJz3IlPnl59Ufs7nykyUUz1vFD+GJdAuAbfX72
+         aDVKhnqFKkHplJiX2aOCMqJuGarphm3J7iBCGW4p41f350GRxKuiNvo8YaK6XmNTj1kT
+         RwpAlAlpMgMInq7c/Fe45mxLaG95Ut4PwQ1pI+fqY/6Q5msR6vrqmQMsjGVAp/pbCwXr
+         RpyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=RWf3+dpfL4savAt5Px6y0ovjoV7YIU8rixiN7rFHStk=;
-        b=Q5MP14T9v/R/d6jGwWLlzN0JaDv4OERnGo140puptwmeybeVd6hEmlwk2gc+gQQZNg
-         Ak0zhKtqgUZygJMRJ5ye3sijqmIavgCA0C4Gv2seUxEEbjkiR1X3mtAkoEi4hujIc8fk
-         0+90VYj3gZGS5U4XHNiWX7gFcePl8oqSF9J5EMT+iHtuv5hx9jetDSV8A5mWn/zvEl6D
-         ZzKjJDkK7vFjYLjWxrJn/0euIBy6LoMOEg06SqsRPizExf115LRoq64ZOUbhrGYb0WIZ
-         KaLEEF1fCTCoIGR51/Y+24wMiwvY/vcTULi3vw2OYYA9sHPKla5E1KDWfDrlQS/U6Pyb
-         CmwQ==
-X-Gm-Message-State: AOAM530boXUIF/OxB0ei86T+a7eDBRyjwKupaRK2BYtiJaRRGZjMz9yp
-        9tdhBBFJ0YgdGCtkcZxRb2TvRHFd7lTN1kGU1FDYHm5ZpblU
-X-Google-Smtp-Source: ABdhPJy4Ai5tCX7c+iCDoThOd+ECopfXJuj3wbnY+m8nhFrCAzjiieezsy3GPL8H/zYLgg3S4Lk3Pi3cvxkFIZ2aOigkweYPAnXo
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6SHxHLXJ2eYyw1tnxtVXf2yck6AofzgpVIfso9u7DAE=;
+        b=lDBaT3/xIImb5z61/nNpvi8aXv8Y4u3xWma3Mru8rgRiKz8DwQQfWkHs/yqAl1RV2a
+         ipNPpbtjG1/krBElTnAafrP3eB4DeV+5/Zi1PTFHkA2JOxNCLVt0iAX9pKEqSDetiyRx
+         PMnWlXVpM4ycZr5jOfiJbz2m7hR6LFjjOthfyb7Od2CN8ZqSbKC+eNVdUtgL4S0KO8sT
+         UlCMIhw5Feg8EHurBigsWQeHAO7Vad/mL9tdmGtQR0YwxD5bwbyIAx9hZ46KhY4LOiDn
+         +14/7AAqm0WFUXSkHPeF2H/04tZxuFVSZeYpAWhGIr0wmpU9EQMPoJ/ep7THYb0e6WUZ
+         GJbg==
+X-Gm-Message-State: AOAM530Om+IiySecn3ONSCXt1YrYXdYk5v8uqFSNjeiy6FeegCkvWXQH
+        aeevQD85h6yZUjWmRk4Juxc=
+X-Google-Smtp-Source: ABdhPJzM/6dGiiSrzkwSlZG8G/sBalDM4RxDurXpIFsD9rt6m80xcXA4TbZGf9jQFZCFTRpLPDs6cA==
+X-Received: by 2002:a05:6512:3ca2:b0:445:98f6:40df with SMTP id h34-20020a0565123ca200b0044598f640dfmr11391467lfv.293.1646762664244;
+        Tue, 08 Mar 2022 10:04:24 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id l11-20020a2e834b000000b00246308690e2sm3986488ljh.85.2022.03.08.10.04.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 10:04:23 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Tue, 8 Mar 2022 19:04:21 +0100
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>, paulmck@kernel.org,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        rcu@vger.kernel.org, bigeasy@linutronix.de
+Subject: Re: [PATCH] rcu: Only boost rcu reader tasks with lower priority
+ than boost kthreads
+Message-ID: <YieapfzKvy2chaHT@pc638.lan>
+References: <20220304092631.4123188-1-qiang1.zhang@intel.com>
+ <81f69dd4-6ca9-760c-bec5-5cb27afbe788@quicinc.com>
+ <PH0PR11MB5880026EBBE3E195549E2245DA089@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20220307191512.GN4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:328f:b0:30f:624d:9d82 with SMTP id
- f15-20020a056638328f00b0030f624d9d82mr16896854jav.227.1646762599867; Tue, 08
- Mar 2022 10:03:19 -0800 (PST)
-Date:   Tue, 08 Mar 2022 10:03:19 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cb6dd805d9b8cbb8@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in port100_send_complete
-From:   syzbot <syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com>
-To:     krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307191512.GN4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+> On Mon, Mar 07, 2022 at 02:03:17AM +0000, Zhang, Qiang1 wrote:
+> > On 3/4/2022 2:56 PM, Zqiang wrote:
+> > > When RCU_BOOST is enabled, the boost kthreads will boosting readers
+> > > who are blocking a given grace period, if the current reader tasks
+> > > have a higher priority than boost kthreads(the boost kthreads priority
+> > > not always 1, if the kthread_prio is set), boosting is useless, skip
+> > > current task and select next task to boosting, reduce the time for a
+> > > given grace period.
+> > > 
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> 
+> Adding to CC to get more eyes on this.  I am not necessarily opposed to
+> it, but I don't do that much RT work myself these days.
+> 
+> 							Thanx, Paul
+> 
+> > > ---
+> > >   kernel/rcu/tree_plugin.h | 10 +++++++++-
+> > >   1 file changed, 9 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> > > index c3d212bc5338..d35b6da66bbd 100644
+> > > --- a/kernel/rcu/tree_plugin.h
+> > > +++ b/kernel/rcu/tree_plugin.h
+> > > @@ -12,6 +12,7 @@
+> > >    */
+> > >   
+> > >   #include "../locking/rtmutex_common.h"
+> > > +#include <linux/sched/deadline.h>
+> > >   
+> > >   static bool rcu_rdp_is_offloaded(struct rcu_data *rdp)
+> > >   {
+> > > @@ -1065,13 +1066,20 @@ static int rcu_boost(struct rcu_node *rnp)
+> > >   	 * section.
+> > >   	 */
+> > >   	t = container_of(tb, struct task_struct, rcu_node_entry);
+> > > +	if (!rnp->exp_tasks && (dl_task(t) || t->prio <= current->prio)) {
+> > > +		tb = rcu_next_node_entry(t, rnp);
+> > > +		WRITE_ONCE(rnp->boost_tasks, tb);
+> > > +		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> > > +		goto end;
+> > > +	}
+> > > +
+Why do you bypass the expedited grace period and boost any tasks anyway?
+Same way the expedited gp can be blocked by higher prior tasks SCHED_DEADLINE
+or SCHED_FIFO.
 
-syzbot found the following issue on:
+Thanks!
 
-HEAD commit:    38f80f42147f MAINTAINERS: Remove dead patchwork link
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14b0d321700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=542b2708133cc492
-dashboard link: https://syzkaller.appspot.com/bug?extid=16bcb127fb73baeecb14
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a63d21700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d21be1700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
-
-port100 5-1:0.0: NFC: Urb failure (status -71)
-==================================================================
-BUG: KASAN: use-after-free in port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
-Read of size 1 at addr ffff88801bb59540 by task ksoftirqd/2/26
-
-CPU: 2 PID: 26 Comm: ksoftirqd/2 Not tainted 5.17.0-rc6-syzkaller-00184-g38f80f42147f #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
- __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1670
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1747
- dummy_timer+0x11f9/0x32b0 drivers/usb/gadget/udc/dummy_hcd.c:1987
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
- expire_timers kernel/time/timer.c:1466 [inline]
- __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
- __run_timers kernel/time/timer.c:1715 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-Allocated by task 1255:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
- alloc_dr drivers/base/devres.c:116 [inline]
- devm_kmalloc+0x96/0x1d0 drivers/base/devres.c:823
- devm_kzalloc include/linux/device.h:209 [inline]
- port100_probe+0x8a/0x1320 drivers/nfc/port100.c:1502
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:973
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xb83/0x1e20 drivers/base/core.c:3405
- usb_set_configuration+0x101e/0x1900 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:973
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xb83/0x1e20 drivers/base/core.c:3405
- usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x2585/0x44d0 drivers/usb/core/hub.c:5742
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-Freed by task 1255:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:236 [inline]
- __cache_free mm/slab.c:3437 [inline]
- kfree+0xf8/0x2b0 mm/slab.c:3794
- release_nodes+0x112/0x1a0 drivers/base/devres.c:501
- devres_release_all+0x114/0x190 drivers/base/devres.c:530
- really_probe+0x626/0xcc0 drivers/base/dd.c:670
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:973
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xb83/0x1e20 drivers/base/core.c:3405
- usb_set_configuration+0x101e/0x1900 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:973
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xb83/0x1e20 drivers/base/core.c:3405
- usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x2585/0x44d0 drivers/usb/core/hub.c:5742
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-Last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- __kasan_record_aux_stack+0x7e/0x90 mm/kasan/generic.c:348
- insert_work+0x48/0x370 kernel/workqueue.c:1368
- __queue_work+0x5ca/0xf30 kernel/workqueue.c:1534
- queue_work_on+0xee/0x110 kernel/workqueue.c:1562
- queue_work include/linux/workqueue.h:502 [inline]
- schedule_work include/linux/workqueue.h:563 [inline]
- port100_recv_ack+0x2cf/0x3c0 drivers/nfc/port100.c:710
- __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1670
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1747
- dummy_timer+0x11f9/0x32b0 drivers/usb/gadget/udc/dummy_hcd.c:1987
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
- expire_timers kernel/time/timer.c:1466 [inline]
- __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
- __run_timers kernel/time/timer.c:1715 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
-
-The buggy address belongs to the object at ffff88801bb59400
- which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 320 bytes inside of
- 512-byte region [ffff88801bb59400, ffff88801bb59600)
-The buggy address belongs to the page:
-page:ffffea00006ed640 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1bb59
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea000068aec8 ffffea00006fe408 ffff888010c40600
-raw: 0000000000000000 ffff88801bb59000 0000000100000004 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 1, ts 13880885565, free_ts 13141726599
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- __alloc_pages_node include/linux/gfp.h:572 [inline]
- kmem_getpages mm/slab.c:1378 [inline]
- cache_grow_begin+0x75/0x390 mm/slab.c:2584
- cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
- ____cache_alloc mm/slab.c:3040 [inline]
- ____cache_alloc mm/slab.c:3023 [inline]
- __do_cache_alloc mm/slab.c:3267 [inline]
- slab_alloc mm/slab.c:3308 [inline]
- kmem_cache_alloc_trace+0x380/0x4a0 mm/slab.c:3565
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- device_private_init drivers/base/core.c:3249 [inline]
- device_add+0x1113/0x1e20 drivers/base/core.c:3299
- netdev_register_kobject+0x181/0x430 net/core/net-sysfs.c:2008
- register_netdevice+0xd9d/0x1580 net/core/dev.c:9667
- register_netdev+0x2d/0x50 net/core/dev.c:9791
- e1000_probe+0x212f/0x3360 drivers/net/ethernet/intel/e1000e/netdev.c:7710
- local_pci_probe+0xe1/0x1a0 drivers/pci/pci-driver.c:323
- pci_call_probe drivers/pci/pci-driver.c:380 [inline]
- __pci_device_probe drivers/pci/pci-driver.c:405 [inline]
- pci_device_probe+0x298/0x740 drivers/pci/pci-driver.c:448
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
- __driver_attach+0x22d/0x4e0 drivers/base/dd.c:1144
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3404
- rcu_do_batch kernel/rcu/tree.c:2527 [inline]
- rcu_core+0x7b1/0x1820 kernel/rcu/tree.c:2778
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
-
-Memory state around the buggy address:
- ffff88801bb59400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88801bb59480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88801bb59500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                           ^
- ffff88801bb59580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88801bb59600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--
+Vlad Rezki

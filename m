@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B3C4D2355
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7D04D2359
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350488AbiCHVaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S1350492AbiCHVbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350480AbiCHVaH (ORCPT
+        with ESMTP id S239453AbiCHVbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:30:07 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8047649CB1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:29:09 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 132so243500pga.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LMQ8AOMqqmqopzig17jUsU9/I303Wa2KV8iSyK2C8QA=;
-        b=WNDbXoXIOar/wXxjMrbLZybR4KUBP9I7doIbDaHXlaOZvNyWWyEki6sfU6jGydFaRk
-         eXOv1p69nRIvQy5jat7OAdT48dIFywwEon4KKy1nYiLVVs+i6fMpNzUbGueLFWYLr6I9
-         2rQbA023WRUUnsPQW32MJnzDsUOYuvgwdHOrDBgHBVU6mOJX4XfkQG7S2orpc15vMA9G
-         0krpTjx4KgzEzHwMv4rJOZmsTRKBZ/ks2icky8g2MiZ7cCnou26T1teHclapxVJAGYIG
-         nXqx4joM5vxY6I4TLRX4ZFKuOd0IerD3ZeF6h1/jPnGRcGYo0D1BTsHJucbuZ9xlFQAY
-         4mpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LMQ8AOMqqmqopzig17jUsU9/I303Wa2KV8iSyK2C8QA=;
-        b=eID6+ZPVgsRRS0K97Ex/Gvo6i6me4eb/HS3fbdl7nEkq8k2H/Cz+h8Pl4APQHr3dKf
-         4g8kp1wcso3U5gkYxilh9uiUnfWYKm8aJzQyrMeGGeIwxapX+aK+VHxNGPDtw6EsjG5+
-         ROgRms0UFVb7ok+nsU+zJemtfwjI+D6Xb+KlztIN769YRAwVnPEN0J9NazFOW7qRw9vs
-         o+iZ7H+wMeIO1MT0o73opO1yfXYYPfWDCZHSyQ/7t13fo+zL3lg6Po8VAuAnvUYuY+0U
-         OMTte3UBq3NK9UbbBxl02VWQlK5YL3gfA0oEBsgicDQ3a0R8PXhFgjbNtuxu9e39NSmB
-         VfQw==
-X-Gm-Message-State: AOAM5304luAI8mK/jqXClHM8J1N4yza8f29p8ZAsB/j6ljbYfqocuYgC
-        GljMt3kNabqHdB5ZltGCYkK4DQ==
-X-Google-Smtp-Source: ABdhPJxaudcIUUVL6UZGM/dSdkzC6iFnk2758wDZzs2B1y5Sgh+P0ylUpx0H2Bb0QaOPv2Z/zEl48w==
-X-Received: by 2002:a63:e84b:0:b0:372:a079:302 with SMTP id a11-20020a63e84b000000b00372a0790302mr15745200pgk.272.1646774948794;
-        Tue, 08 Mar 2022 13:29:08 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o1-20020a637e41000000b003804d0e2c9esm51728pgn.35.2022.03.08.13.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 13:29:07 -0800 (PST)
-Date:   Tue, 8 Mar 2022 21:29:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Hildenbrand <david@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH v4 21/30] KVM: x86/mmu: Zap invalidated roots via
- asynchronous worker
-Message-ID: <YifKoCZAmymIxDTQ@google.com>
-References: <20220303193842.370645-1-pbonzini@redhat.com>
- <20220303193842.370645-22-pbonzini@redhat.com>
- <YiExLB3O2byI4Xdu@google.com>
- <YiEz3D18wEn8lcEq@google.com>
- <eeac12f0-0a18-8c63-1987-494a2032fa9d@redhat.com>
- <YiI4AmYkm2oiuiio@google.com>
- <8b8c28cf-cf54-f889-be7d-afc9f5430ecd@redhat.com>
- <YiKwFznqqiB9VRyn@google.com>
- <20497464-0606-7ea5-89b8-8f5cd56a1a68@redhat.com>
+        Tue, 8 Mar 2022 16:31:49 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5766E52B01
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646775052; x=1678311052;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=WA0vxU/p44S2iHbnrdjigobSa08q+hkzck9kHi/d9qk=;
+  b=DkyXM/z2pgmrtmRgAcrBvq5evGgK/macFBWG5PS50ctpPNREqRrrK1+E
+   ulp269xXLoW4w25DUfAq6JuJ/1+0WI6XF/riqPOWCf8KHR76ypITEOgv5
+   SB5wHQlTGYxWFcvTfqYbnaKJgpDKY6t80w8v9629v3CRJPwuWcuG9YjuY
+   D1lG1RYglbIIV789Z4W6wd3t3kGCz8uCc4UzoMPQ02oEeFI1baJGFXWaZ
+   HcXW/1I3zBGZnO1umKWEkl13bnRNxhZ9nHXL7yAiGOOhaN+EmLoboPldG
+   vml2QP6P8AqV/N99sJUAis9/RS5D/38JGC6N8WSY/RllnqdP+GT9z0S6v
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253649730"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="253649730"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:30:52 -0800
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="547411671"
+Received: from ntebyanx-mobl7.amr.corp.intel.com (HELO [10.212.224.65]) ([10.212.224.65])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:30:50 -0800
+Message-ID: <89804c89-b696-a14d-5a8f-67aee52cd141@intel.com>
+Date:   Tue, 8 Mar 2022 13:30:46 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20497464-0606-7ea5-89b8-8f5cd56a1a68@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-18-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv5 17/30] x86/tdx: Port I/O: add runtime hypercalls
+In-Reply-To: <20220302142806.51844-18-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,30 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 05, 2022, Paolo Bonzini wrote:
-> On 3/5/22 01:34, Sean Christopherson wrote:
-> > On Fri, Mar 04, 2022, Paolo Bonzini wrote:
-> > > On 3/4/22 17:02, Sean Christopherson wrote:
-> > > > On Fri, Mar 04, 2022, Paolo Bonzini wrote:
-> > > > > On 3/3/22 22:32, Sean Christopherson wrote:
-> > > > > I didn't remove the paragraph from the commit message, but I think it's
-> > > > > unnecessary now.  The workqueue is flushed in kvm_mmu_zap_all_fast() and
-> > > > > kvm_mmu_uninit_tdp_mmu(), unlike the buggy patch, so it doesn't need to take
-> > > > > a reference to the VM.
-> > > > > 
-> > > > > I think I don't even need to check kvm->users_count in the defunct root
-> > > > > case, as long as kvm_mmu_uninit_tdp_mmu() flushes and destroys the workqueue
-> > > > > before it checks that the lists are empty.
-> > > > 
-> > > > Yes, that should work.  IIRC, the WARN_ONs will tell us/you quite quickly if
-> > > > we're wrong :-)  mmu_notifier_unregister() will call the "slow" kvm_mmu_zap_all()
-> > > > and thus ensure all non-root pages zapped, but "leaking" a worker will trigger
-> > > > the WARN_ON that there are no roots on the list.
-> > > 
-> > > Good, for the record these are the commit messages I have:
-> 
-> I'm seeing some hangs in ~50% of installation jobs, both Windows and Linux.
-> I have not yet tried to reproduce outside the automated tests, or to bisect,
-> but I'll try to push at least the first part of the series for 5.18.
+On 3/2/22 06:27, Kirill A. Shutemov wrote:
+> This series has no special handling for ioperm(). Users will be able
+> to successfully request I/O permissions but will induce a #VE on
+> their> first I/O instruction.
 
-Out of curiosity, what was the bug?  I see this got pushed to kvm/next.
+How will this be visible to users or user applications?
+
+> +static bool handle_io(struct pt_regs *regs, u32 exit_qual)
+> +{
+> +	bool in;
+> +	int size, port;
+> +
+> +	if (VE_IS_IO_STRING(exit_qual))
+> +		return false;
+> +
+> +	in   = VE_IS_IO_IN(exit_qual);
+> +	size = VE_GET_IO_SIZE(exit_qual);
+> +	port = VE_GET_PORT_NUM(exit_qual);
+> +
+> +
+> +	if (in)
+> +		return handle_in(regs, size, port);
+> +	else
+> +		return handle_out(regs, size, port);
+> +}
+
+Some extra whitespace snuck in there.
+
+With the question answered and whitespace fixed:
+
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>

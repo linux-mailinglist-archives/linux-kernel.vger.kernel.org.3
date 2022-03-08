@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9DC4D1E01
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4BA4D1E02
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344581AbiCHQ6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
+        id S1348606AbiCHQ6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239741AbiCHQ5m (ORCPT
+        with ESMTP id S243037AbiCHQ5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:57:42 -0500
+        Tue, 8 Mar 2022 11:57:43 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586034EF56
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:56:45 -0800 (PST)
-Date:   Tue, 08 Mar 2022 16:56:42 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6238652B1A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:56:46 -0800 (PST)
+Date:   Tue, 08 Mar 2022 16:56:43 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646758604;
+        s=2020; t=1646758605;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=06FSlG+KOa8czlggLmWl29rLkXxkfQf47l6OaWUOSpk=;
-        b=p6RJJ9cOOSYiN96493dsNycAu3I49cOar3kM47DeKgbHXceTGc1fjvfR6AZzGgrAKye8SI
-        gpptMFhD0umd4GAMj7Vpg+FvgDMtCpj62N0VwgGD1K50KCriJSx1JA5qSQ55RqqnLwvc9W
-        jbtHdLPHjF50a97R54A0TM0dz7RGo4N8FGvwfqNbbLv/X+bDVa9THP3X3+iHfLwCgNDEyk
-        SQKht8I3xGS+wS7LW//rE5/C2eDtiNIEKee5R+yEvjGL4szA8XltgJg8DQI3hs/7GPm3Ag
-        w01skjYfkfYyMUak8RZF46NPYaUPpMlT0//AiciFWT52W+SqBuhD9jqNcZk4Xw==
+        bh=ODhEmTujSC3WrE5hr456h/CgBdnCvhwC8mQfoBypWkc=;
+        b=u13Wi+tNl34UDNL1P/BhpOOCaJpHs80hSJjy7u1FFeBqdJl+OV3m0GH9s0vJWXRkqlOsR4
+        RDQG3dNVG5nP9chuhClU1AXAHQC0Ny7OlAD+712dsOqTUpMdwa9xkQJyFwMShIL23IPvup
+        0q58DiJaKGGhi5s6ZFq73MqhDp5Jmb97AsEgthsLSjF6IWKzD2kt3w6k6guWj8NEUk/BbZ
+        6KXUuCOuVQIMtNT16eCaixmJlhYzcZtpGRAEl29NvOSCellX5h1O3BC18bV8Z+x34O8dye
+        vFp+UClGD12siTZm36Enxw9+kIzGzERdl8YLrWqvAdoyw3Fi646Lm6IAVhGhxQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646758604;
+        s=2020e; t=1646758605;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=06FSlG+KOa8czlggLmWl29rLkXxkfQf47l6OaWUOSpk=;
-        b=urDvw6X5qGTmHyXgKsRS+60PIz78v/MjR4837HeB8AHi6Qk2uw6qyc0g973tNvWPX7Kudy
-        gJYpT4NV47o0iFBw==
+        bh=ODhEmTujSC3WrE5hr456h/CgBdnCvhwC8mQfoBypWkc=;
+        b=3MJxiwLUwbxFvF9EREcL6J0Tw+NSwoYyWBJX7pw6m0zaHxxRYLEVUZfYFMmGxsDO0hdITL
+        PeKNm4fagX9ZTlDw==
 From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Wire PMU interrupts
-Cc:     Hector Martin <marcan@marcan.st>, Marc Zyngier <maz@kernel.org>,
-        tglx@linutronix.de
+Subject: [irqchip: irq/irqchip-next] irqchip/apple-aic: Parse FIQ affinities
+ from device-tree
+Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
 MIME-Version: 1.0
-Message-ID: <164675860293.16921.8859400353687189360.tip-bot2@tip-bot2>
+Message-ID: <164675860397.16921.6473572713227692309.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,81 +60,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     c7708816c9442beb32488e07b0fb47b6f66577cb
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c7708816c9442beb32488e07b0fb47b6f66577cb
+Commit-ID:     a5e8801202b318622ea526aa5625e5f7eceb4d26
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/a5e8801202b318622ea526aa5625e5f7eceb4d26
 Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Mon, 01 Nov 2021 19:59:20 
+AuthorDate:    Wed, 03 Nov 2021 13:35:25 
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Mon, 07 Feb 2022 16:00:42 
 
-irqchip/apple-aic: Wire PMU interrupts
+irqchip/apple-aic: Parse FIQ affinities from device-tree
 
-Add the necessary code to configure and P and E-core PMU interrupts
-with their respective affinities. When such an interrupt fires, map
-it onto the right pseudo-interrupt.
+In order to be able to tell the core IRQ code about the affinity
+of the PMU interrupt in later patches, parse the affinities kindly
+provided in the device-tree.
 
-Reviewed-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- drivers/irqchip/irq-apple-aic.c | 34 ++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 12 deletions(-)
+ drivers/irqchip/irq-apple-aic.c | 49 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 49 insertions(+)
 
 diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
-index 22d9b20..873544e 100644
+index 38091eb..22d9b20 100644
 --- a/drivers/irqchip/irq-apple-aic.c
 +++ b/drivers/irqchip/irq-apple-aic.c
-@@ -155,7 +155,7 @@
- #define SYS_IMP_APL_UPMSR_EL1		sys_reg(3, 7, 15, 6, 4)
- #define UPMSR_IACT			BIT(0)
+@@ -177,6 +177,9 @@ struct aic_irq_chip {
+ 	void __iomem *base;
+ 	struct irq_domain *hw_domain;
+ 	struct irq_domain *ipi_domain;
++	struct {
++		cpumask_t aff;
++	} *fiq_aff[AIC_NR_FIQ];
+ 	int nr_hw;
+ };
  
--#define AIC_NR_FIQ		4
-+#define AIC_NR_FIQ		6
- #define AIC_NR_SWIPI		32
+@@ -793,12 +796,50 @@ static struct gic_kvm_info vgic_info __initdata = {
+ 	.no_hw_deactivation	= true,
+ };
  
- /*
-@@ -415,16 +415,15 @@ static void __exception_irq_entry aic_handle_fiq(struct pt_regs *regs)
- 						  aic_irqc->nr_hw + AIC_TMR_EL02_VIRT);
- 	}
- 
--	if ((read_sysreg_s(SYS_IMP_APL_PMCR0_EL1) & (PMCR0_IMODE | PMCR0_IACT)) ==
--			(FIELD_PREP(PMCR0_IMODE, PMCR0_IMODE_FIQ) | PMCR0_IACT)) {
--		/*
--		 * Not supported yet, let's figure out how to handle this when
--		 * we implement these proprietary performance counters. For now,
--		 * just mask it and move on.
--		 */
--		pr_err_ratelimited("PMC FIQ fired. Masking.\n");
--		sysreg_clear_set_s(SYS_IMP_APL_PMCR0_EL1, PMCR0_IMODE | PMCR0_IACT,
--				   FIELD_PREP(PMCR0_IMODE, PMCR0_IMODE_OFF));
-+	if (read_sysreg_s(SYS_IMP_APL_PMCR0_EL1) & PMCR0_IACT) {
-+		int irq;
-+		if (cpumask_test_cpu(smp_processor_id(),
-+				     &aic_irqc->fiq_aff[AIC_CPU_PMU_P]->aff))
-+			irq = AIC_CPU_PMU_P;
-+		else
-+			irq = AIC_CPU_PMU_E;
-+		generic_handle_domain_irq(aic_irqc->hw_domain,
-+					  aic_irqc->nr_hw + irq);
- 	}
- 
- 	if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) == UPMCR0_IMODE_FIQ &&
-@@ -464,7 +463,18 @@ static int aic_irq_domain_map(struct irq_domain *id, unsigned int irq,
- 				    handle_fasteoi_irq, NULL, NULL);
- 		irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(irq)));
- 	} else {
--		irq_set_percpu_devid(irq);
-+		int fiq = hw - ic->nr_hw;
++static void build_fiq_affinity(struct aic_irq_chip *ic, struct device_node *aff)
++{
++	int i, n;
++	u32 fiq;
 +
-+		switch (fiq) {
-+		case AIC_CPU_PMU_P:
-+		case AIC_CPU_PMU_E:
-+			irq_set_percpu_devid_partition(irq, &ic->fiq_aff[fiq]->aff);
-+			break;
-+		default:
-+			irq_set_percpu_devid(irq);
-+			break;
-+		}
++	if (of_property_read_u32(aff, "apple,fiq-index", &fiq) ||
++	    WARN_ON(fiq >= AIC_NR_FIQ) || ic->fiq_aff[fiq])
++		return;
 +
- 		irq_domain_set_info(id, irq, hw, &fiq_chip, id->host_data,
- 				    handle_percpu_devid_irq, NULL, NULL);
++	n = of_property_count_elems_of_size(aff, "cpus", sizeof(u32));
++	if (WARN_ON(n < 0))
++		return;
++
++	ic->fiq_aff[fiq] = kzalloc(sizeof(ic->fiq_aff[fiq]), GFP_KERNEL);
++	if (!ic->fiq_aff[fiq])
++		return;
++
++	for (i = 0; i < n; i++) {
++		struct device_node *cpu_node;
++		u32 cpu_phandle;
++		int cpu;
++
++		if (of_property_read_u32_index(aff, "cpus", i, &cpu_phandle))
++			continue;
++
++		cpu_node = of_find_node_by_phandle(cpu_phandle);
++		if (WARN_ON(!cpu_node))
++			continue;
++
++		cpu = of_cpu_node_to_id(cpu_node);
++		if (WARN_ON(cpu < 0))
++			continue;
++
++		cpumask_set_cpu(cpu, &ic->fiq_aff[fiq]->aff);
++	}
++}
++
+ static int __init aic_of_ic_init(struct device_node *node, struct device_node *parent)
+ {
+ 	int i;
+ 	void __iomem *regs;
+ 	u32 info;
+ 	struct aic_irq_chip *irqc;
++	struct device_node *affs;
+ 
+ 	regs = of_iomap(node, 0);
+ 	if (WARN_ON(!regs))
+@@ -832,6 +873,14 @@ static int __init aic_of_ic_init(struct device_node *node, struct device_node *p
+ 		return -ENODEV;
  	}
+ 
++	affs = of_get_child_by_name(node, "affinities");
++	if (affs) {
++		struct device_node *chld;
++
++		for_each_child_of_node(affs, chld)
++			build_fiq_affinity(irqc, chld);
++	}
++
+ 	set_handle_irq(aic_handle_irq);
+ 	set_handle_fiq(aic_handle_fiq);
+ 

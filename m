@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D287C4D14AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0964D14B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345818AbiCHK2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
+        id S1345838AbiCHK26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345660AbiCHK2m (ORCPT
+        with ESMTP id S1345823AbiCHK25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:28:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59243634E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:27:45 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 763A7210E9;
-        Tue,  8 Mar 2022 10:27:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646735264; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N73gu50O85bYZ1Q0djNPPNKpF0IxOh/oir1CnV0OAZI=;
-        b=wVqXgQCHNjsMMqYfWNZ8FNPqelZPjYRI6TDqOP3FZ+6WAilyLsjSdRbGw5bJv9P73sSomR
-        03JR26sz9mXaF4ICdVC3H8hQVmpBf478P6AengGarHoeoHKWOXCBf9G7c7VTaELtWuOkeR
-        1Y3N5yCyNA80qlArE551HnnbD6Iw6kQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646735264;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N73gu50O85bYZ1Q0djNPPNKpF0IxOh/oir1CnV0OAZI=;
-        b=llsd9OIWA9yatRxOCyldL5u6WrQZg6CQN5MfDz/iv23GCywCJpJX1zlmiUyo4BuGd2YnVv
-        1vVZAXi3AcqSBvAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C15E213C84;
-        Tue,  8 Mar 2022 10:27:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZhblK58vJ2KzRQAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 08 Mar 2022 10:27:43 +0000
-Date:   Tue, 8 Mar 2022 11:27:42 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH -V11 2/9] mm/migrate: update node demotion order on
- hotplug events
-Message-ID: <YicvnkVODh5qbxTC@localhost.localdomain>
-References: <20210721063926.3024591-1-ying.huang@intel.com>
- <20210721063926.3024591-2-ying.huang@intel.com>
- <eb438ddd-2919-73d4-bd9f-b7eecdd9577a@linux.vnet.ibm.com>
- <f5edb9dc-8b25-47c2-9905-09e88e41861b@intel.com>
- <4e8067e1-0574-c9d2-9d6c-d676d32071bd@linux.vnet.ibm.com>
- <87pmnb3ccr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tue, 8 Mar 2022 05:28:57 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3971B787;
+        Tue,  8 Mar 2022 02:27:59 -0800 (PST)
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KCWcZ25KPz1GBx2;
+        Tue,  8 Mar 2022 18:23:10 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 18:27:57 +0800
+Received: from [10.67.103.212] (10.67.103.212) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 18:27:57 +0800
+Subject: Re: [PATCH v8 1/9] crypto: hisilicon/qm: Move the QM header to
+ include/linux
+To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+ <20220303230131.2103-2-shameerali.kolothum.thodi@huawei.com>
+CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
+        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
+        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
+        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
+        <jonathan.cameron@huawei.com>, <wangzhou1@hisilicon.com>
+From:   "yekai(A)" <yekai13@huawei.com>
+Message-ID: <56d9d17b-1462-198b-b694-1e47ba36cbeb@huawei.com>
+Date:   Tue, 8 Mar 2022 18:27:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pmnb3ccr.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220303230131.2103-2-shameerali.kolothum.thodi@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.212]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,150 +61,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 10:32:20AM +0800, Huang, Ying wrote:
-> -static int migration_online_cpu(unsigned int cpu)
-> +static int migration_cpu_hotplug(unsigned int cpu)
->  {
-> -	set_migration_target_nodes();
-> -	return 0;
-> -}
-> +	static int nr_cpu_node_saved;
-> +	int nr_cpu_node;
-> +
-> +	nr_cpu_node = num_node_state(N_CPU);
-> +	if (nr_cpu_node != nr_cpu_node_saved) {
-> +		set_migration_target_nodes();
-> +		nr_cpu_node_saved = nr_cpu_node;
-> +	}
->  
-> -static int migration_offline_cpu(unsigned int cpu)
-> -{
-> -	set_migration_target_nodes();
->  	return 0;
->  }
 
-These callbacks feel like re-inveting the wheel.
-We do already have two functions that get called during cpu
-online/offline, and that sets/clears N_CPU on the node properly.
-And that is exactly what we want, so what about the following (only
-compile-tested):
 
-diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-index db96e10eb8da..031af2bb71dc 100644
---- a/include/linux/migrate.h
-+++ b/include/linux/migrate.h
-@@ -48,6 +48,7 @@ int folio_migrate_mapping(struct address_space *mapping,
- 		struct folio *newfolio, struct folio *folio, int extra_count);
+On 2022/3/4 7:01, Shameer Kolothum wrote:
+> Since we are going to introduce VFIO PCI HiSilicon ACC driver for live
+> migration in subsequent patches, move the ACC QM header file to a
+> common include dir.
+>
+> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> ---
+>  drivers/crypto/hisilicon/hpre/hpre.h                         | 2 +-
+>  drivers/crypto/hisilicon/qm.c                                | 2 +-
+>  drivers/crypto/hisilicon/sec2/sec.h                          | 2 +-
+>  drivers/crypto/hisilicon/sgl.c                               | 2 +-
+>  drivers/crypto/hisilicon/zip/zip.h                           | 2 +-
+>  drivers/crypto/hisilicon/qm.h => include/linux/hisi_acc_qm.h | 0
+>  6 files changed, 5 insertions(+), 5 deletions(-)
+>  rename drivers/crypto/hisilicon/qm.h => include/linux/hisi_acc_qm.h (100%)
+>
+> diff --git a/drivers/crypto/hisilicon/hpre/hpre.h b/drivers/crypto/hisilicon/hpre/hpre.h
+> index e0b4a1982ee9..9a0558ed82f9 100644
+> --- a/drivers/crypto/hisilicon/hpre/hpre.h
+> +++ b/drivers/crypto/hisilicon/hpre/hpre.h
+> @@ -4,7 +4,7 @@
+>  #define __HISI_HPRE_H
+>
+>  #include <linux/list.h>
+> -#include "../qm.h"
+> +#include <linux/hisi_acc_qm.h>
+>
+>  #define HPRE_SQE_SIZE			sizeof(struct hpre_sqe)
+>  #define HPRE_PF_DEF_Q_NUM		64
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index c5b84a5ea350..ed23e1d3fa27 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -15,7 +15,7 @@
+>  #include <linux/uacce.h>
+>  #include <linux/uaccess.h>
+>  #include <uapi/misc/uacce/hisi_qm.h>
+> -#include "qm.h"
+> +#include <linux/hisi_acc_qm.h>
+>
+>  /* eq/aeq irq enable */
+>  #define QM_VF_AEQ_INT_SOURCE		0x0
+> diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
+> index d97cf02b1df7..c2e9b01187a7 100644
+> --- a/drivers/crypto/hisilicon/sec2/sec.h
+> +++ b/drivers/crypto/hisilicon/sec2/sec.h
+> @@ -4,7 +4,7 @@
+>  #ifndef __HISI_SEC_V2_H
+>  #define __HISI_SEC_V2_H
+>
+> -#include "../qm.h"
+> +#include <linux/hisi_acc_qm.h>
+>  #include "sec_crypto.h"
+>
+>  /* Algorithm resource per hardware SEC queue */
+> diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
+> index 057273769f26..f7efc02b065f 100644
+> --- a/drivers/crypto/hisilicon/sgl.c
+> +++ b/drivers/crypto/hisilicon/sgl.c
+> @@ -1,9 +1,9 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /* Copyright (c) 2019 HiSilicon Limited. */
+>  #include <linux/dma-mapping.h>
+> +#include <linux/hisi_acc_qm.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+> -#include "qm.h"
+>
+>  #define HISI_ACC_SGL_SGE_NR_MIN		1
+>  #define HISI_ACC_SGL_NR_MAX		256
+> diff --git a/drivers/crypto/hisilicon/zip/zip.h b/drivers/crypto/hisilicon/zip/zip.h
+> index 517fdbdff3ea..3dfd3bac5a33 100644
+> --- a/drivers/crypto/hisilicon/zip/zip.h
+> +++ b/drivers/crypto/hisilicon/zip/zip.h
+> @@ -7,7 +7,7 @@
+>  #define pr_fmt(fmt)	"hisi_zip: " fmt
+>
+>  #include <linux/list.h>
+> -#include "../qm.h"
+> +#include <linux/hisi_acc_qm.h>
+>
+>  enum hisi_zip_error_type {
+>  	/* negative compression */
+> diff --git a/drivers/crypto/hisilicon/qm.h b/include/linux/hisi_acc_qm.h
+> similarity index 100%
+> rename from drivers/crypto/hisilicon/qm.h
+> rename to include/linux/hisi_acc_qm.h
+>
 
- extern bool numa_demotion_enabled;
-+extern void set_migration_target_nodes(void);
- #else
+Hi Shameer,
 
- static inline void putback_movable_pages(struct list_head *l) {}
-diff --git a/mm/migrate.c b/mm/migrate.c
-index c7da064b4781..7847e4de01d7 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -3190,7 +3190,7 @@ static void __set_migration_target_nodes(void)
- /*
-  * For callers that do not hold get_online_mems() already.
-  */
--static void set_migration_target_nodes(void)
-+void set_migration_target_nodes(void)
- {
- 	get_online_mems();
- 	__set_migration_target_nodes();
-@@ -3254,47 +3254,13 @@ static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
- 	return notifier_from_errno(0);
- }
+It looks good to me for this movement.
 
--/*
-- * React to hotplug events that might affect the migration targets
-- * like events that online or offline NUMA nodes.
-- *
-- * The ordering is also currently dependent on which nodes have
-- * CPUs.  That means we need CPU on/offline notification too.
-- */
--static int migration_online_cpu(unsigned int cpu)
--{
--	set_migration_target_nodes();
--	return 0;
--}
--
--static int migration_offline_cpu(unsigned int cpu)
--{
--	set_migration_target_nodes();
--	return 0;
--}
--
- static int __init migrate_on_reclaim_init(void)
- {
--	int ret;
--
- 	node_demotion = kmalloc_array(nr_node_ids,
- 				      sizeof(struct demotion_nodes),
- 				      GFP_KERNEL);
- 	WARN_ON(!node_demotion);
+Acked-by:  Kai Ye <yekai13@huawei.com>
 
--	ret = cpuhp_setup_state_nocalls(CPUHP_MM_DEMOTION_DEAD, "mm/demotion:offline",
--					NULL, migration_offline_cpu);
--	/*
--	 * In the unlikely case that this fails, the automatic
--	 * migration targets may become suboptimal for nodes
--	 * where N_CPU changes.  With such a small impact in a
--	 * rare case, do not bother trying to do anything special.
--	 */
--	WARN_ON(ret < 0);
--	ret = cpuhp_setup_state(CPUHP_AP_MM_DEMOTION_ONLINE, "mm/demotion:online",
--				migration_online_cpu, NULL);
--	WARN_ON(ret < 0);
--
- 	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
- 	return 0;
- }
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 4057372745d0..0529a83c8f89 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -28,6 +28,7 @@
- #include <linux/mm_inline.h>
- #include <linux/page_ext.h>
- #include <linux/page_owner.h>
-+#include <linux/migrate.h>
-
- #include "internal.h"
-
-@@ -2043,7 +2044,12 @@ static void __init init_cpu_node_state(void)
- static int vmstat_cpu_online(unsigned int cpu)
- {
- 	refresh_zone_stat_thresholds();
--	node_set_state(cpu_to_node(cpu), N_CPU);
-+
-+	if (!node_state(cpu_to_node(cpu), N_CPU)) {
-+		node_set_state(cpu_to_node(cpu), N_CPU);
-+		set_migration_target_nodes();
-+	}
-+
- 	return 0;
- }
-
-@@ -2066,6 +2072,8 @@ static int vmstat_cpu_dead(unsigned int cpu)
- 		return 0;
-
- 	node_clear_state(node, N_CPU);
-+	set_migration_target_nodes();
-+
- 	return 0;
- }
-
-I think this is just easier and meets exactly the goal.
-
-We could go even further and move the work left in
-migrate_on_reclaim_init() to init_mm_internals().
-(I __think__ we should be fine because there is no dependency
-there, e.g: notifier being set up somewhere later after
-init_mm_internals() has been called).
-
--- 
-Oscar Salvador
-SUSE Labs
+Thanks,
+Kai

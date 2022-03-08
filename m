@@ -2,122 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA61B4D1F64
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E9D4D1F66
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349257AbiCHRtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S1349266AbiCHRto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348465AbiCHRt3 (ORCPT
+        with ESMTP id S1348693AbiCHRtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:49:29 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E2247AFA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:48:32 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id dr20so40867814ejc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:48:32 -0800 (PST)
+        Tue, 8 Mar 2022 12:49:42 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7E34839E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:48:45 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id k92so8772592pjh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:48:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=U9FUzAZMnf6VpxPtQM8a5lPUpj52uUTJiKNkJ/2hPr4=;
-        b=XcNDlXxBicKMqe70X9jiAWRU5iXvjGl6wJK7VEhnopHa1RAX9ggRATd4ACVxaThzbX
-         pVPSHgyt3R1MA7ai0Lm1wMQC1jrcROIL6xAlWSPN9B5beLSTgc22jR54W+Vt/RlKvOAM
-         TUUhGn8XtNkYO7TIHS4+ndvv0bjRexx2VFtGF8phLmrh75Usj1WQtyqqkRc2ZNkToAJF
-         dK1xsk6YMBURbu87riQr0fAmc2FXMscUN5Vs38YSFdu2oszcRC9JU2EUNGWxl9msoaxb
-         OxVU/7ST11QZAA116K/7x/Q9ugVPzW5tDX04V4zvF4cPeMEcXQT56zucZanwWOYF50N1
-         wJZQ==
+         :content-disposition:in-reply-to;
+        bh=9EY+jbz7yxv8opR/z4nwJHkmZWRpRix7BFXhHKCoISQ=;
+        b=HXAGF40IVistJKOXvEgTZPX31PpRTlv2NhZQsp0w0nAlT2c3IssIMwMm2CLCQGRgfV
+         LqMUB0KqsayxM/XW+vAOSclwOFINpQGuUCmIaQTzvbU/PELYLARX16koTM8NzkLc3ELA
+         8ihK5SuqfLYJm5oCY7ubBwGo1uTABBeS3ChzZTuMt/SBatkzzUgdsUSHyxb6ZYtsczQt
+         TlruRmDyHW292Lc2Eg7PbhrmWIRY7OSl43JwLv7e7Co0iqfRRlj5UGmwvbrZTVgry/t7
+         wsHLI7NrvxKHkQGXKWpe8I/MqFFP96YKNsRNAHneRx1okFTEcK5kyY+jm0+nM1pCUD+F
+         Y4Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=U9FUzAZMnf6VpxPtQM8a5lPUpj52uUTJiKNkJ/2hPr4=;
-        b=zsRgAIp8Vhnxgp206l5+UtlcDrsum66CBm2a9OuWVgi+4uWrP7hSPDisuq/mKd8d3h
-         ziCtiSVHTrpLOyt/8joe+VRBrWIG+tN29F0wE9+5WPLwBOvUNney1qLyFNT/vDLxXXfZ
-         Rs0BvwWFvsimWJLOBqNlaiESkpctIcMhNmDCm7nEM4R+ZRl4X2OttGYLN0VakaP2Ob8I
-         fWOUL/u0PEJ+ffy+4ARkH2jLnjHamsYG/zopk3O49PLg1nMtc6dKAJ++9/zzbwAVDm5h
-         EzBt3hkYrByIwpT2MJRr87wDoXGmfzg+vSWgPs9mtFmGLgvWEE3eNjLnsMpo/DR6sUZo
-         9Vrg==
-X-Gm-Message-State: AOAM532zfHNAG4nrvf0ihg+LGwMEMeC//8YJF90t0gzAKd2va01MWFa2
-        cAZnZ4OPx+3eF9Xl0zjDsPMyLzcwyIf8cA==
-X-Google-Smtp-Source: ABdhPJzgTkrKHn4ISSql48EpVsOR/0YPXIMyz4FH3VyIbsdKr7vHvMdvZTktdFqPwPadoE36V+FPhA==
-X-Received: by 2002:a17:906:3cea:b0:6da:ea45:ea9e with SMTP id d10-20020a1709063cea00b006daea45ea9emr14225027ejh.574.1646761710479;
-        Tue, 08 Mar 2022 09:48:30 -0800 (PST)
-Received: from pswork ([62.96.250.75])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170906b10500b006ce6fa4f510sm6091327ejy.165.2022.03.08.09.48.30
+         :mime-version:content-disposition:in-reply-to;
+        bh=9EY+jbz7yxv8opR/z4nwJHkmZWRpRix7BFXhHKCoISQ=;
+        b=ossaLhBN4ivYVlR3T01Pd+BtXvbFQ1lktNGcQTB4Yiyq2+310RUsFYcoVeIZlCABht
+         IRZ/kckgQJsc4EJvf6rV7RyO1OE1nadunrICfecBIU6f8YoLOpSqzL86s1EaNRRJsjFO
+         fAcgBRpsi6V0Mlt/0RcIKOjPVAc7hGiwIhKIgy0PiOOJDnFXwX5cr+KirfIMmyeLhYZs
+         i9CAdVBLds6NcLss9N4s4ssQPP2LZUCa9mSWztjinYWtQS8O8Se+pOLCaWGNLyQ70cDb
+         65roJcVpbTU8X0Dga3n+d9Ct9B8PWglFiond00Ynp2by72NVnp2j5PYt87GdXCyP2eN0
+         0yPQ==
+X-Gm-Message-State: AOAM530bOEWwZrbnf0u3gkkdl3T9gUYVSYMhcHlCzOtm7CWmRMiq5VZo
+        0ArkfueoSLdSW+8Ec+UfFESw+g==
+X-Google-Smtp-Source: ABdhPJzAMqaA2eVSkxGml9gMR9kbyJkC+ocfJL8hF2J8qHUTa3dshAXxR+KRdUTYP8+4wSVp0hTH3w==
+X-Received: by 2002:a17:90a:5d93:b0:1bc:4f9c:8eed with SMTP id t19-20020a17090a5d9300b001bc4f9c8eedmr5918639pji.180.1646761725209;
+        Tue, 08 Mar 2022 09:48:45 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i11-20020a056a00004b00b004f6907b2cd3sm19046452pfk.122.2022.03.08.09.48.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:48:30 -0800 (PST)
-Date:   Tue, 8 Mar 2022 18:48:29 +0100
-From:   Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org
-Subject: Re: tracing : bootconfig : Early boot config for non intrd systems
-Message-ID: <20220308174829.GA2471@pswork>
-References: <20220307184011.GA2570@pswork>
- <20220308163600.3109f19854c7b051924f262b@kernel.org>
+        Tue, 08 Mar 2022 09:48:44 -0800 (PST)
+Date:   Tue, 8 Mar 2022 17:48:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+Subject: Re: [PATCH v2 11/25] KVM: x86/mmu: remove
+ kvm_calc_shadow_root_page_role_common
+Message-ID: <YieW+PZarPdsSnO7@google.com>
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-12-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220308163600.3109f19854c7b051924f262b@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220221162243.683208-12-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Masami Hiramatsu,
+On Mon, Feb 21, 2022, Paolo Bonzini wrote:
+> kvm_calc_shadow_root_page_role_common is the same as
+> kvm_calc_cpu_mode except for the level, which is overwritten
+> afterwards in kvm_calc_shadow_mmu_root_page_role
+> and kvm_calc_shadow_npt_root_page_role.
+> 
+> role.base.direct is already set correctly for the CPU mode,
+> and CR0.PG=1 is required for VMRUN so it will also be
+> correct for nested NPT.
 
-On Tue, Mar 08, 2022 at 04:36:00PM +0900, Masami Hiramatsu wrote:
-> Hello Padmanabha,
-> 
-> On Mon, 7 Mar 2022 19:40:11 +0100
-> Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> 
-> > Hello Masami Hiramatsu,
-> > 
-> > Thanks for detailed explanation on boot time tracing using early boot configuration file.
-> > https://linuxfoundation.org/wp-content/uploads/boottrace-LF-live-2021-update.pdf
-> > 
-> > Also for https://lwn.net/Articles/806002/.
-> > 
-> > Latter link also states we can embed boot config into the kernel image for non intrd based system.
-> 
-> Ah, that was an original plan, but since no one interested in, I didn't implement it.
-> So we still need the initrd for bootconfig.
->
-Ok.
-> > 
-> > I tried searching mailing lists not able to find pointer for same.
-> > 
-> > A hint/pointer on how-to will be very helpful. 
-> 
-> BTW, what is your problem, could you share your use-case?
-> 
+Bzzzt, this is wrong, the nested NPT MMU is indirect but will be computed as direct.
 
-I have hetrogenous system which donot use intrd.
-
-The use-case is to capture __system wide__ event based tracing for
-boot-up sequence, which also covers early stage of default init programs
-used.
-
-As buffer size is limited, will have hand-picked events set configured.
-
-Thanks,
-Padmanabha.S
-
-> Thank you,
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 21 ++-------------------
+>  1 file changed, 2 insertions(+), 19 deletions(-)
 > 
-> > 
-> > Thanks and Regards,
-> > Padmanabha.S
-> > 
-> 
-> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 3ffa6f2bf991..31874fad12fb 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4796,27 +4796,11 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
+>  	reset_tdp_shadow_zero_bits_mask(context);
+>  }
+>  
+> -static union kvm_mmu_role
+> -kvm_calc_shadow_root_page_role_common(struct kvm_vcpu *vcpu,
+> -				      const struct kvm_mmu_role_regs *regs)
+> -{
+> -	union kvm_mmu_role role = kvm_calc_mmu_role_common(vcpu, regs);
+> -
+> -	role.base.smep_andnot_wp = role.ext.cr4_smep && !____is_cr0_wp(regs);
+> -	role.base.smap_andnot_wp = role.ext.cr4_smap && !____is_cr0_wp(regs);
+> -	role.base.has_4_byte_gpte = ____is_cr0_pg(regs) && !____is_cr4_pae(regs);
+> -
+> -	return role;
+> -}
+> -
+>  static union kvm_mmu_role
+>  kvm_calc_shadow_mmu_root_page_role(struct kvm_vcpu *vcpu,
+>  				   const struct kvm_mmu_role_regs *regs)
+>  {
+> -	union kvm_mmu_role role =
+> -		kvm_calc_shadow_root_page_role_common(vcpu, regs);
+> -
+> -	role.base.direct = !____is_cr0_pg(regs);
+> +	union kvm_mmu_role role = kvm_calc_cpu_mode(vcpu, regs);
+>  
+>  	if (!____is_efer_lma(regs))
+>  		role.base.level = PT32E_ROOT_LEVEL;
+> @@ -4869,9 +4853,8 @@ kvm_calc_shadow_npt_root_page_role(struct kvm_vcpu *vcpu,
+>  				   const struct kvm_mmu_role_regs *regs)
+>  {
+>  	union kvm_mmu_role role =
+> -		kvm_calc_shadow_root_page_role_common(vcpu, regs);
+> +               kvm_calc_cpu_mode(vcpu, regs);
+
+No need to split this line with the less verbose name.
+
+>  
+> -	role.base.direct = false;
+
+As above, this line needs to stay.
+
+>  	role.base.level = kvm_mmu_get_tdp_level(vcpu);
+>  
+>  	return role;
 > -- 
-> Masami Hiramatsu <mhiramat@kernel.org>
+> 2.31.1
+> 
+> 

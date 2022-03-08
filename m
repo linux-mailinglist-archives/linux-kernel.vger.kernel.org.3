@@ -2,225 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32364D1D4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A6C4D1D4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348373AbiCHQes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S1348354AbiCHQfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348377AbiCHQen (ORCPT
+        with ESMTP id S230125AbiCHQfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:34:43 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4904D506CE;
-        Tue,  8 Mar 2022 08:33:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646757225; x=1678293225;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DZeF35G0A8841s/xlpff5KaFqSf7UHIdCnEJeRGaFq0=;
-  b=URByAveWrU0j3h3bVxqpplTOnr2dnbZaH9vwGk6EiN03W/e3iOqE/5g8
-   7ByVTTCAKPYJ90K6W5sneOq0RGl7NVwcMdAYJGEhDhpMWMdbetxtIaEkl
-   OTvO+WyIBoLNwsCU8bjiTtAQkj7FetWQs1aO/KELUisuW9pATchq7eBa8
-   U=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 08 Mar 2022 08:33:45 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 08:33:44 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Mar 2022 08:33:44 -0800
-Received: from maru.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 8 Mar 2022
- 08:33:43 -0800
-From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-CC:     Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Subject: [PATCH v2] i2c: add tracepoints for I2C slave events
-Date:   Tue, 8 Mar 2022 08:33:33 -0800
-Message-ID: <20220308163333.3985974-1-quic_jaehyoo@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 8 Mar 2022 11:35:42 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA32D33890;
+        Tue,  8 Mar 2022 08:34:45 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 113126000A;
+        Tue,  8 Mar 2022 16:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646757284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3KTl4ElrR6egwo8ztDejgkW8tDsDkxXuiRNEpanN/gA=;
+        b=O5vjCz54y9GLGSF4vOQLbB76EABhIISyBYYsBWBJJ9fShW2T7kj8yh57KRCAhR3TamwSdM
+        YeQb3eGodOQytSOeF+jFIDm4lKL4R4PM9khZzZKLI0WRoc5EH96mFOA85ClRh6IJADDW6H
+        LLqpjbfVHYKZ37OLM3RYQb3N6tS7i27v9YbI2yzEQzLgsiyjmwFesOmVUhasLGaXu5ILCf
+        C0oKFq87Jyr2t4rSrZv3Mt/N5denEdpPgO0whug0JnTYsnk8XKrFNgCXo/5O/Afu5SplvN
+        SJW/Kc2opjB6OAtj2Yrv9OwcMzoXWIK8fnzSIhLBgE+AHfLoDjitpjEVHSm4vA==
+Date:   Tue, 8 Mar 2022 17:34:42 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: snvs: Handle error for clk_enable
+Message-ID: <YieFovazuZ7tgeyj@piout.net>
+References: <20220304072018.557237-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304072018.557237-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I2C slave events tracepoints can be enabled by:
+On 04/03/2022 15:20:18+0800, Jiasheng Jiang wrote:
+> As the potential failure of the clk_enable(),
+> it should be better to check it and return error
+> if fails.
+> 
+> Fixes: edb190cb1734 ("rtc: snvs: make sure clock is enabled for interrupt handle")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/rtc/rtc-snvs.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-snvs.c b/drivers/rtc/rtc-snvs.c
+> index bd929b0e7d7d..f273f7d873f8 100644
+> --- a/drivers/rtc/rtc-snvs.c
+> +++ b/drivers/rtc/rtc-snvs.c
+> @@ -269,8 +269,11 @@ static irqreturn_t snvs_rtc_irq_handler(int irq, void *dev_id)
+>  	struct snvs_rtc_data *data = dev_get_drvdata(dev);
+>  	u32 lpsr;
+>  	u32 events = 0;
+> +	int ret;
+>  
+> -	clk_enable(data->clk);
+> +	ret = clk_enable(data->clk);
+> +	if (ret)
+> +		return IRQ_NONE;
 
-	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
+I don't think you thought about the implication here, if this happens,
+then the interrupt will be considered spurious which is definitively not
+something we want.
 
-and logs in /sys/kernel/tracing/trace will look like:
+>  
+>  	regmap_read(data->regmap, data->offset + SNVS_LPSR, &lpsr);
+>  
+> -- 
+> 2.25.1
+> 
 
-	... i2c_slave: i2c-0 a=010 WR_REQ []
-	... i2c_slave: i2c-0 a=010 WR_RCV [02]
-	... i2c_slave: i2c-0 a=010 WR_RCV [0c]
-	... i2c_slave: i2c-0 a=010   STOP []
-	... i2c_slave: i2c-0 a=010 RD_REQ [04]
-	... i2c_slave: i2c-0 a=010 RD_PRO [b4]
-	... i2c_slave: i2c-0 a=010   STOP []
-
-formatted as:
-
-	i2c-<adapter-nr>
-	a=<addr>
-	<event>
-	[<data>]
-
-trace printings can be selected by adding a filter like:
-
-	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
-
-Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
----
-Changes v1 -> v2:
-* Fixed trace_2c_slave call condition to optimize conditional compare logic
-  (Steven)
-* Fixed TP entry order to prevent wasting spaces in the ring buffer (Steven)
-* Replaced __get_dynamic_array with __array for storing 1-length data value
-  to make it faster and save space (Steven)
-
- drivers/i2c/i2c-core-slave.c     | 15 +++++++++
- include/linux/i2c.h              |  8 ++---
- include/trace/events/i2c_slave.h | 57 ++++++++++++++++++++++++++++++++
- 3 files changed, 74 insertions(+), 6 deletions(-)
- create mode 100644 include/trace/events/i2c_slave.h
-
-diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
-index 1589179d5eb9..4299de933ac6 100644
---- a/drivers/i2c/i2c-core-slave.c
-+++ b/drivers/i2c/i2c-core-slave.c
-@@ -14,6 +14,9 @@
- 
- #include "i2c-core.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/i2c_slave.h>
-+
- int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
- {
- 	int ret;
-@@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
- }
- EXPORT_SYMBOL_GPL(i2c_slave_unregister);
- 
-+int i2c_slave_event(struct i2c_client *client,
-+		    enum i2c_slave_event event, u8 *val)
-+{
-+	int ret = client->slave_cb(client, event, val);
-+
-+	if (trace_i2c_slave_enabled() && !ret)
-+		trace_i2c_slave(client, event, val);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(i2c_slave_event);
-+
- /**
-  * i2c_detect_slave_mode - detect operation mode
-  * @dev: The device owning the bus
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 7d4f52ceb7b5..fbda5ada2afc 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -392,12 +392,8 @@ enum i2c_slave_event {
- int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
- int i2c_slave_unregister(struct i2c_client *client);
- bool i2c_detect_slave_mode(struct device *dev);
--
--static inline int i2c_slave_event(struct i2c_client *client,
--				  enum i2c_slave_event event, u8 *val)
--{
--	return client->slave_cb(client, event, val);
--}
-+int i2c_slave_event(struct i2c_client *client,
-+		    enum i2c_slave_event event, u8 *val);
- #else
- static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
- #endif
-diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
-new file mode 100644
-index 000000000000..3aaf5fb76796
---- /dev/null
-+++ b/include/trace/events/i2c_slave.h
-@@ -0,0 +1,57 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * I2C slave tracepoints
-+ *
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM i2c_slave
-+
-+#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_I2C_SLAVE_H
-+
-+#include <linux/i2c.h>
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(i2c_slave,
-+	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
-+		 __u8 *val),
-+	TP_ARGS(client, event, val),
-+	TP_STRUCT__entry(
-+		__field(int,				adapter_nr	)
-+		__field(__u16,				addr		)
-+		__field(__u16,				len		)
-+		__field(enum i2c_slave_event,		event		)
-+		__array(__u8, buf, 1)					),
-+
-+	TP_fast_assign(
-+		__entry->adapter_nr = client->adapter->nr;
-+		__entry->addr = client->addr;
-+		__entry->event = event;
-+		switch (event) {
-+		case I2C_SLAVE_READ_REQUESTED:
-+		case I2C_SLAVE_READ_PROCESSED:
-+		case I2C_SLAVE_WRITE_RECEIVED:
-+			__entry->len = 1;
-+			memcpy(__entry->buf, val, __entry->len);
-+			break;
-+		default:
-+			__entry->len = 0;
-+			break;
-+		}
-+		),
-+	TP_printk("i2c-%d a=%03x %s [%*phD]",
-+		__entry->adapter_nr, __entry->addr,
-+		__print_symbolic(__entry->event,
-+				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
-+				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
-+				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
-+				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
-+				 { I2C_SLAVE_STOP,		"  STOP" }),
-+		__entry->len, __entry->buf
-+		));
-+
-+#endif /* _TRACE_I2C_SLAVE_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
 -- 
-2.25.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

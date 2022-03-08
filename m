@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC74E4D1945
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8DA4D194D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347137AbiCHNhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S236970AbiCHNiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiCHNhX (ORCPT
+        with ESMTP id S1347173AbiCHNhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:37:23 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C8349697
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:36:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646746586; x=1678282586;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lTnzKDCiv9/QLJniNg9fgD9HRuvLFymb/UZZg28Wb6Y=;
-  b=iPR5v2n6xkememEa05cRqR3zFta3A3g1ExuAiKr5hDRi5qu9DCUII73/
-   blHRLE5/rJ5NVVHsgBmf7gM8nqi9hyJuhOICdnwa9IeVe9j73xIWgePbV
-   e+JJY817xKmGT3nQf0sGPIWsHklmfMZiQM856bNwO5g/f8UC8MshSWnNQ
-   w9mElsyv7zQXPOPcgfsQur0WBUxPJzZo+9pgX+cxVdeTK00JcjJPFdhAe
-   S0zJFbC2byHUR/+6sx4Us9l6W2AOa023gxrWS2ouFTtI2VGJqT1W2qhSF
-   fI2sOPkf7Bo8xL7Kgm2KCYiiigsy9aeegPO/3Y7WUlUcm//A/VNKG8k/Y
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="341113522"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="341113522"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:36:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="537568182"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 08 Mar 2022 05:36:24 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRa0m-0001T3-7d; Tue, 08 Mar 2022 13:36:24 +0000
-Date:   Tue, 8 Mar 2022 21:36:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dust Li <dust.li@linux.alibaba.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:netdev/net-next/master 150/160]
- net/smc/smc_sysctl.h:23:16: warning: no previous prototype for function
- 'smc_sysctl_net_init'
-Message-ID: <202203082117.G0KHS6qO-lkp@intel.com>
+        Tue, 8 Mar 2022 08:37:55 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D4A496A0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:36:57 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id w7so18583798lfd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 05:36:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iYBVyOw/jQFGIr6GyFmmUL1KjMeFXQPX2EGW015MmY8=;
+        b=XEJKHgW+qOM9hCTAxVOsEciI9wGIDg/n2/0NwnRFHY/AvPWXNtqow+SKVqr/L3UYQB
+         5LCHnu0y/cBxqFX4Q9xygJRMI1qhWkCucvcUQLYFf4ZIYc1x4v5MtdiZiURsKvRwKp0u
+         WBxEke5AQ1sjdbz1Kg9Vvu8DLK/PXkaVZsjotNOYz2zvt7nBC5qB5fik4bWRMkw+waoF
+         r+spnuNgehJXE8qnmxWmYYKbLIoSkAA3H7bxIuzsWzHAAe7SI4m8mMzaP1qsvAeCkk2T
+         4NI3Kdx0mMN0SKr2hvqlIik3LPHu9tCQwsVe/yZSJD3UnKFGtyYTdxkrE8341CRxg7Hl
+         xOtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iYBVyOw/jQFGIr6GyFmmUL1KjMeFXQPX2EGW015MmY8=;
+        b=YDT5ZGlE/EGI7Ceo3RwWCN23mv1X+yrJd4LOkDE+ab6L0jtIg3b1/2XWD5AuCeDE3H
+         4K0FOqPzYeV4b5lHHzeMg3JkYSMACMO5jSi+L4pRTaqsT/YyySkNKMZZntbaZT8eNPll
+         4Ae47H7SMTyfBMHto4dq0aMgLuK1yvpFu4Xhz9Gr/7slTIXOn3SfyJisj50UDWnLuMXZ
+         WmBVve+pa1cdw/D5GNpuIUSoNqoFqPLr0FQMOYWFtmrVe2dHWtv01PHcr0pIJHEqfIsh
+         E//gOJACOu0bcRRKy2+2KH2VGXKBeiUzmMuNd7kJjgO83roT9kZaFyxvWzQBG3vdd/XB
+         XjXA==
+X-Gm-Message-State: AOAM530Iy6KcZVU7KmvA9c8XG12/xqpJ/K+sE1bQic56KoOeFJRtYV3T
+        tNrJVdQs1gOCIOKH2U9lraO2NUzhnsa7jVOpmlH61w==
+X-Google-Smtp-Source: ABdhPJyaBZXPpHXunr37L3bMLyy0YhR1BIKiVTwgDDKe5fvRDAjPt+D0FS9J/HXwRCPXeCEZQBp0IXJ+JUNhUVcU3sM=
+X-Received: by 2002:a05:6512:308e:b0:448:3826:6d68 with SMTP id
+ z14-20020a056512308e00b0044838266d68mr3948099lfd.184.1646746616253; Tue, 08
+ Mar 2022 05:36:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <bf2e2e69226b20d173cce66287f59488fd47474b.1646588375.git.christophe.jaillet@wanadoo.fr>
+ <20220308125445.GE3293@kadam>
+In-Reply-To: <20220308125445.GE3293@kadam>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 8 Mar 2022 14:36:19 +0100
+Message-ID: <CAPDyKFpdghX5je_Dvy+aam3zmbJpArFocrqURK1LVCZNwAvVSA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,59 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
-head:   69adcb988a0675ce001dfc416d56fba2e8a85f48
-commit: 7de8eb0d9039f16e1122d7aa524a1502a160c4ff [150/160] net/smc: fix compile warning for smc_sysctl
-config: arm-randconfig-r024-20220308 (https://download.01.org/0day-ci/archive/20220308/202203082117.G0KHS6qO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/7de8eb0d9039f16e1122d7aa524a1502a160c4ff
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
-        git checkout 7de8eb0d9039f16e1122d7aa524a1502a160c4ff
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/
+On Tue, 8 Mar 2022 at 13:55, Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Sun, Mar 06, 2022 at 06:44:56PM +0100, Christophe JAILLET wrote:
+> > A dma_free_coherent() call is missing in the error handling path of the
+> > probe, as already done in the remove function.
+> >
+> > Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > ---
+> > I've not been able to find a Fixes tag because of the renaming of
+> > function and files.
+> > However, it looks old (before 2008)
+>
+> You did add a fixes tag and it's from 2012.  :P
+>
+> > ---
+> >  drivers/mmc/host/wmt-sdmmc.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
+> > index 163ac9df8cca..8e18f01c0938 100644
+> > --- a/drivers/mmc/host/wmt-sdmmc.c
+> > +++ b/drivers/mmc/host/wmt-sdmmc.c
+> > @@ -863,6 +863,8 @@ static int wmt_mci_probe(struct platform_device *pdev)
+> >       return 0;
+> >  fail6:
+> >       clk_put(priv->clk_sdmmc);
+> > +     dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
+> > +                       priv->dma_desc_buffer, priv->dma_desc_device_addr);
+> >  fail5:
+> >       free_irq(dma_irq, priv);
+>
+> This isn't quite right.  If of_clk_get() fails it should call
+> dma_free_coherent() but it does not.  You need to add:
+>
+>  fail6:
+>         clk_put(priv->clk_sdmmc);
+> +fail5_and_a_half:
+> +       dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
+> +                         priv->dma_desc_buffer, priv->dma_desc_device_addr);
+>  fail5:
+>         free_irq(dma_irq, priv);
+>
+> regards,
+> dan carpenter
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks Dan for reviewing, I have dropped the $subject patch from my next branch.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from net/smc/af_smc.c:54:
->> net/smc/smc_sysctl.h:23:16: warning: no previous prototype for function 'smc_sysctl_net_init' [-Wmissing-prototypes]
-   int __net_init smc_sysctl_net_init(struct net *net)
-                  ^
-   net/smc/smc_sysctl.h:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __net_init smc_sysctl_net_init(struct net *net)
-   ^
-   static 
->> net/smc/smc_sysctl.h:29:17: warning: no previous prototype for function 'smc_sysctl_net_exit' [-Wmissing-prototypes]
-   void __net_exit smc_sysctl_net_exit(struct net *net) { }
-                   ^
-   net/smc/smc_sysctl.h:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __net_exit smc_sysctl_net_exit(struct net *net) { }
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/smc_sysctl_net_init +23 net/smc/smc_sysctl.h
-
-    22	
-  > 23	int __net_init smc_sysctl_net_init(struct net *net)
-    24	{
-    25		net->smc.sysctl_autocorking_size = SMC_AUTOCORKING_DEFAULT_SIZE;
-    26		return 0;
-    27	}
-    28	
-  > 29	void __net_exit smc_sysctl_net_exit(struct net *net) { }
-    30	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Kind regards
+Uffe

@@ -2,285 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89064D0F73
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BD94D0F44
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344406AbiCHFsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
+        id S245213AbiCHFqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343696AbiCHFsa (ORCPT
+        with ESMTP id S232397AbiCHFqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:48:30 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E558C3C714;
-        Mon,  7 Mar 2022 21:47:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646718443; x=1678254443;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e4zKevnerCv3swR38QOP36pCi6FNMKl3EHNwss6IlEU=;
-  b=gdrB9VixLNX2Jy8i+UZa0lYACHPx3bclNmNRIlh+cljcpfcQrViUMxok
-   HfUGblqzsIptcqr/1UpfOyrNwf2LounkvG+j4kgHVCq+99kTOEc9HIfUn
-   SXJIcQ4uHqBrT2N3cgMj2sOXUXoI+EGUJdZtx+Hm0FX8Qj5Nvxly3rsV4
-   Lu2EKq/O+QUzohCUmhcYA9OYZbpHEvmFFsbuuL1zuBHOcPLJAgEj0QKns
-   R1XDcPs/KdrSECzqmroPKShr/l75f1o+a8gIwKofEteWIpN8oSimuEazP
-   j/Q/cYQ5xrXzCN9EyoeC2nDb7FvqCZ/NL5SLz4ejwgoIwwXezgwkgdCRH
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="315314650"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="315314650"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 21:47:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="537430375"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 07 Mar 2022 21:47:16 -0800
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v8 11/11] iommu: Remove iommu group changes notifier
-Date:   Tue,  8 Mar 2022 13:44:21 +0800
-Message-Id: <20220308054421.847385-12-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220308054421.847385-1-baolu.lu@linux.intel.com>
-References: <20220308054421.847385-1-baolu.lu@linux.intel.com>
+        Tue, 8 Mar 2022 00:46:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE613BBD1;
+        Mon,  7 Mar 2022 21:45:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A73B61574;
+        Tue,  8 Mar 2022 05:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81AF1C340EB;
+        Tue,  8 Mar 2022 05:45:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646718352;
+        bh=Y8xpjnCaZqjpKAi6LH7psa4XoBGA667VBgBc+PH2nLU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mx31lcmtoMKA2ZBo/RU8iqV+gJN1S6CXEHizj1ptrPAsEWcD+SctSZK3N7b9x3/xe
+         POuXp8Eo72XT3OIykVrom6BbZ/Zyi1xNzV/1520yN5alcXPInUABF3+4+ACw493ewC
+         FhvPmRDtFyVK33kDjnnZYz9kzl1apHU00BOLGcYPnqRAAJQODDFz20RzCOrUBLG3Ko
+         ja/APFTJXnAt5dXeh77V/T4/kymHSNvIf6mJ9DIrMF1cu497Qta9bBxA3ED945YaGt
+         Hy2K3PjUVGkxDXPvNdC9blAwRS/Wk1LtRxI/mI09nmGNt+JzECmMIr0KYoxllvS6hv
+         hJj8s8lfkj0dg==
+Date:   Mon, 7 Mar 2022 21:45:50 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     Roi Dayan <roid@nvidia.com>, dev@openvswitch.org,
+        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        David Ahern <dsahern@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: Re: [ovs-dev] [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6
+ extension header support
+Message-ID: <20220307214550.2d2c26a9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <45aed9cd-ba65-e2e7-27d7-97e3f9de1fb8@ovn.org>
+References: <20220224005409.411626-1-cpp.code.lv@gmail.com>
+        <164578561098.13834.14017896440355101001.git-patchwork-notify@kernel.org>
+        <3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com>
+        <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
+        <57996C97-5845-425B-9B13-7F33EE05D704@redhat.com>
+        <26b924fb-ed26-bb3f-8c6b-48edac825f73@nvidia.com>
+        <20220307122638.215427b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <3a96b606-c3aa-c39b-645e-a3af0c82e44b@ovn.org>
+        <20220307144616.05317297@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <45aed9cd-ba65-e2e7-27d7-97e3f9de1fb8@ovn.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The iommu group changes notifer is not referenced in the tree. Remove it
-to avoid dead code.
+On Tue, 8 Mar 2022 01:04:00 +0100 Ilya Maximets wrote:
+> > Thanks for the explanation, we can apply a revert if that'd help your
+> > CI / ongoing development but sounds like the fix really is in user
+> > space. Expecting netlink attribute lists not to grow is not fair.  
+> 
+> I don't think it was intentional, just a careless mistake.  Unfortunately,
+> all OVS binaries built during the last 5 years rely on that unwanted
+> expectation (re-build will also not help as they are using a copy of the
+> uAPI header and the clash will be there anyway).  If we want to keep them
+> working, kernel uAPI has to be carefully updated with current userspace-only
+> attributes before we add any new ones.  That is not great, but I don't see
+> any other option right now that doesn't require code changes in userspace.
+> 
+> I'd say that we need to revert the current patch and re-introduce it
+> later when the uAPI problem is sorted out.  This way we will avoid blocking
+> the net-next testing and will also avoid problems in case the uAPI changes
+> are not ready at the moment of the new kernel release.
+> 
+> What do you think?
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
----
- include/linux/iommu.h | 23 -------------
- drivers/iommu/iommu.c | 75 -------------------------------------------
- 2 files changed, 98 deletions(-)
+Let me add some people I associate with genetlink work in my head
+(fairly or not) to keep me fair here.
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 77972ef978b5..6ef2df258673 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -407,13 +407,6 @@ static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
- 	return dev->iommu->iommu_dev->ops;
- }
- 
--#define IOMMU_GROUP_NOTIFY_ADD_DEVICE		1 /* Device added */
--#define IOMMU_GROUP_NOTIFY_DEL_DEVICE		2 /* Pre Device removed */
--#define IOMMU_GROUP_NOTIFY_BIND_DRIVER		3 /* Pre Driver bind */
--#define IOMMU_GROUP_NOTIFY_BOUND_DRIVER		4 /* Post Driver bind */
--#define IOMMU_GROUP_NOTIFY_UNBIND_DRIVER	5 /* Pre Driver unbind */
--#define IOMMU_GROUP_NOTIFY_UNBOUND_DRIVER	6 /* Post Driver unbind */
--
- extern int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops);
- extern int bus_iommu_probe(struct bus_type *bus);
- extern bool iommu_present(struct bus_type *bus);
-@@ -478,10 +471,6 @@ extern int iommu_group_for_each_dev(struct iommu_group *group, void *data,
- extern struct iommu_group *iommu_group_get(struct device *dev);
- extern struct iommu_group *iommu_group_ref_get(struct iommu_group *group);
- extern void iommu_group_put(struct iommu_group *group);
--extern int iommu_group_register_notifier(struct iommu_group *group,
--					 struct notifier_block *nb);
--extern int iommu_group_unregister_notifier(struct iommu_group *group,
--					   struct notifier_block *nb);
- extern int iommu_register_device_fault_handler(struct device *dev,
- 					iommu_dev_fault_handler_t handler,
- 					void *data);
-@@ -878,18 +867,6 @@ static inline void iommu_group_put(struct iommu_group *group)
- {
- }
- 
--static inline int iommu_group_register_notifier(struct iommu_group *group,
--						struct notifier_block *nb)
--{
--	return -ENODEV;
--}
--
--static inline int iommu_group_unregister_notifier(struct iommu_group *group,
--						  struct notifier_block *nb)
--{
--	return 0;
--}
--
- static inline
- int iommu_register_device_fault_handler(struct device *dev,
- 					iommu_dev_fault_handler_t handler,
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index eba8e8ccf19d..0c42ece25854 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -18,7 +18,6 @@
- #include <linux/errno.h>
- #include <linux/iommu.h>
- #include <linux/idr.h>
--#include <linux/notifier.h>
- #include <linux/err.h>
- #include <linux/pci.h>
- #include <linux/bitops.h>
-@@ -40,7 +39,6 @@ struct iommu_group {
- 	struct kobject *devices_kobj;
- 	struct list_head devices;
- 	struct mutex mutex;
--	struct blocking_notifier_head notifier;
- 	void *iommu_data;
- 	void (*iommu_data_release)(void *iommu_data);
- 	char *name;
-@@ -632,7 +630,6 @@ struct iommu_group *iommu_group_alloc(void)
- 	mutex_init(&group->mutex);
- 	INIT_LIST_HEAD(&group->devices);
- 	INIT_LIST_HEAD(&group->entry);
--	BLOCKING_INIT_NOTIFIER_HEAD(&group->notifier);
- 
- 	ret = ida_simple_get(&iommu_group_ida, 0, 0, GFP_KERNEL);
- 	if (ret < 0) {
-@@ -905,10 +902,6 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
- 	if (ret)
- 		goto err_put_group;
- 
--	/* Notify any listeners about change to group. */
--	blocking_notifier_call_chain(&group->notifier,
--				     IOMMU_GROUP_NOTIFY_ADD_DEVICE, dev);
--
- 	trace_add_device_to_group(group->id, dev);
- 
- 	dev_info(dev, "Adding to iommu group %d\n", group->id);
-@@ -950,10 +943,6 @@ void iommu_group_remove_device(struct device *dev)
- 
- 	dev_info(dev, "Removing from iommu group %d\n", group->id);
- 
--	/* Pre-notify listeners that a device is being removed. */
--	blocking_notifier_call_chain(&group->notifier,
--				     IOMMU_GROUP_NOTIFY_DEL_DEVICE, dev);
--
- 	mutex_lock(&group->mutex);
- 	list_for_each_entry(tmp_device, &group->devices, list) {
- 		if (tmp_device->dev == dev) {
-@@ -1075,36 +1064,6 @@ void iommu_group_put(struct iommu_group *group)
- }
- EXPORT_SYMBOL_GPL(iommu_group_put);
- 
--/**
-- * iommu_group_register_notifier - Register a notifier for group changes
-- * @group: the group to watch
-- * @nb: notifier block to signal
-- *
-- * This function allows iommu group users to track changes in a group.
-- * See include/linux/iommu.h for actions sent via this notifier.  Caller
-- * should hold a reference to the group throughout notifier registration.
-- */
--int iommu_group_register_notifier(struct iommu_group *group,
--				  struct notifier_block *nb)
--{
--	return blocking_notifier_chain_register(&group->notifier, nb);
--}
--EXPORT_SYMBOL_GPL(iommu_group_register_notifier);
--
--/**
-- * iommu_group_unregister_notifier - Unregister a notifier
-- * @group: the group to watch
-- * @nb: notifier block to signal
-- *
-- * Unregister a previously registered group notifier block.
-- */
--int iommu_group_unregister_notifier(struct iommu_group *group,
--				    struct notifier_block *nb)
--{
--	return blocking_notifier_chain_unregister(&group->notifier, nb);
--}
--EXPORT_SYMBOL_GPL(iommu_group_unregister_notifier);
--
- /**
-  * iommu_register_device_fault_handler() - Register a device fault handler
-  * @dev: the device
-@@ -1650,14 +1609,8 @@ static int remove_iommu_group(struct device *dev, void *data)
- static int iommu_bus_notifier(struct notifier_block *nb,
- 			      unsigned long action, void *data)
- {
--	unsigned long group_action = 0;
- 	struct device *dev = data;
--	struct iommu_group *group;
- 
--	/*
--	 * ADD/DEL call into iommu driver ops if provided, which may
--	 * result in ADD/DEL notifiers to group->notifier
--	 */
- 	if (action == BUS_NOTIFY_ADD_DEVICE) {
- 		int ret;
- 
-@@ -1668,34 +1621,6 @@ static int iommu_bus_notifier(struct notifier_block *nb,
- 		return NOTIFY_OK;
- 	}
- 
--	/*
--	 * Remaining BUS_NOTIFYs get filtered and republished to the
--	 * group, if anyone is listening
--	 */
--	group = iommu_group_get(dev);
--	if (!group)
--		return 0;
--
--	switch (action) {
--	case BUS_NOTIFY_BIND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_BIND_DRIVER;
--		break;
--	case BUS_NOTIFY_BOUND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_BOUND_DRIVER;
--		break;
--	case BUS_NOTIFY_UNBIND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_UNBIND_DRIVER;
--		break;
--	case BUS_NOTIFY_UNBOUND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_UNBOUND_DRIVER;
--		break;
--	}
--
--	if (group_action)
--		blocking_notifier_call_chain(&group->notifier,
--					     group_action, dev);
--
--	iommu_group_put(group);
- 	return 0;
- }
- 
--- 
-2.25.1
+It's highly unacceptable for user space to straight up rewrite kernel
+uAPI types but if it already happened the only fix is something like:
 
+diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
+index 9d1710f20505..ab6755621e02 100644
+--- a/include/uapi/linux/openvswitch.h
++++ b/include/uapi/linux/openvswitch.h
+@@ -351,11 +351,16 @@ enum ovs_key_attr {
+        OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV4,   /* struct ovs_key_ct_tuple_ipv4 */
+        OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV6,   /* struct ovs_key_ct_tuple_ipv6 */
+        OVS_KEY_ATTR_NSH,       /* Nested set of ovs_nsh_key_* */
+-       OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
+ 
+ #ifdef __KERNEL__
+        OVS_KEY_ATTR_TUNNEL_INFO,  /* struct ip_tunnel_info */
+ #endif
++       /* User space decided to squat on types 30 and 31 */
++       OVS_KEY_ATTR_IPV6_EXTHDRS = 32, /* struct ovs_key_ipv6_exthdr */
++       /* WARNING: <scary warning to avoid the problem coming back> */
++
+        __OVS_KEY_ATTR_MAX
+ };
+
+
+right?
+
+> > Since ovs uses genetlink you should be able to dump the policy from 
+> > the kernel and at least validate that it doesn't overlap.  
+> 
+> That is interesting.  Indeed, this functionality can be used to detect
+> problems or to define userspace-only attributes in runtime based on the
+> kernel reply.  Thanks for the pointer!

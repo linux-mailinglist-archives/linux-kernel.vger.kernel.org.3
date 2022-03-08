@@ -2,47 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B9A4D1F69
+	by mail.lfdr.de (Postfix) with ESMTP id EFAD54D1F6A
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349267AbiCHRuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
+        id S1349273AbiCHRuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349265AbiCHRuJ (ORCPT
+        with ESMTP id S1349265AbiCHRuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:50:09 -0500
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF2C4839E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:49:11 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:6100:2d37:4115:c358])
-        by baptiste.telenet-ops.be with bizsmtp
-        id 3tp72700V1Yj8bA01tp7Qb; Tue, 08 Mar 2022 18:49:09 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nRdxL-003DQP-4j; Tue, 08 Mar 2022 18:49:07 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nRdxK-006gpQ-H6; Tue, 08 Mar 2022 18:49:06 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] dt-bindings: firmware: arm,scpi: Add missing maxItems to mboxes/shmem
-Date:   Tue,  8 Mar 2022 18:49:02 +0100
-Message-Id: <58b7c706f259f88a61bfe82d9106fe0a93a9838d.1646761693.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Tue, 8 Mar 2022 12:50:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C8A048382
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646761753;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6HssJmk+YZ6p3KAw12cX/6WW9ODnrbHQBJq5VfOnmOk=;
+        b=M8vks5CaLxsmoMD+k71UgzlI24fiCifZEH1NGgSBw5v+KJpWmW9mD7juor+/Stb2UbpNDZ
+        XPlzaESAy2GSKpojmNbKp5gCQnLNmUKf6W4Wc3Moxj3+jl2gU4awVWQJp/ecCGZUq9LBud
+        ujk4dMoo2MRcnmFACOONz5ypItcNSNQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-LK35cJrUMMOv6P4bLhuliQ-1; Tue, 08 Mar 2022 12:49:12 -0500
+X-MC-Unique: LK35cJrUMMOv6P4bLhuliQ-1
+Received: by mail-wm1-f70.google.com with SMTP id n62-20020a1ca441000000b0038124c99ebcso6720803wme.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:49:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6HssJmk+YZ6p3KAw12cX/6WW9ODnrbHQBJq5VfOnmOk=;
+        b=A7aZCq/wI284OtgdKgWIMgEvUDjGGoYwRzqqNtmgDWEYG/60Zcnwpcru0ccdbBI96X
+         wrCkwu/W12uvnqTlWx5F4hTNvT1M/EKuolJyitV3b7RBPn7ZKspQoOOYU8sDH4OnjBqm
+         3ay6Fz9oUUiXk4jaBeQvNkk50yvDf1EFdjAAUM+2a2P8YNhdFseM5vYFKx13B3YsyXLf
+         KzXyNtLtQ7Z6zyObv+2r3vT/X4TOOwJyGzdl3uwS5zatIkNNlqrYlG8WzYIR/RDv3ryy
+         qHWHuw2XJXpKPvmBF+NGqsilYbu6tGO/GPebShAHsu0V86FJTO1HJMhhS/GQLj8Reld3
+         /f0A==
+X-Gm-Message-State: AOAM531GDdcHTS/Hi98eMlus58yIYhdbS+aGqviJpWniW9UqXehdYc5A
+        EHXDBMLuW0Ab+ol6pXMtBslHwWuxOG1cVdj3uJWDwzI5qWwcIeIfbjiubI6JHd9fMU4fiG1qWSN
+        kH5UkQvn9UlP0WZPZo2FGHvBT
+X-Received: by 2002:a05:600c:a03:b0:37b:daff:6146 with SMTP id z3-20020a05600c0a0300b0037bdaff6146mr4600294wmp.85.1646761751159;
+        Tue, 08 Mar 2022 09:49:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzHay2ww/NrI60fjbzAjpBoqpJxLxm9gMCWFGESxLqfRu91mGDesTPJrGXCQD+c8V7kulwgjg==
+X-Received: by 2002:a05:600c:a03:b0:37b:daff:6146 with SMTP id z3-20020a05600c0a0300b0037bdaff6146mr4600269wmp.85.1646761750937;
+        Tue, 08 Mar 2022 09:49:10 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id b15-20020adfc74f000000b001e888b871a0sm14724489wrh.87.2022.03.08.09.49.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 09:49:10 -0800 (PST)
+Message-ID: <19e00429-a7e6-f4fd-41be-71afdce6b056@redhat.com>
+Date:   Tue, 8 Mar 2022 18:49:09 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 08/25] KVM: x86/mmu: split cpu_mode from mmu_role
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-9-pbonzini@redhat.com> <YieUHVgFxOo3LAa8@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YieUHVgFxOo3LAa8@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,59 +83,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"make dt_binding_check":
+On 3/8/22 18:36, Sean Christopherson wrote:
+> The idea was to trigger fireworks due to a incoherent state (e.g. direct mmu_role with
+> non-direct hooks) if the nested_mmu was ever used as a "real" MMU (handling faults,
+> installing SPs/SPTEs, etc...).  For a walk-only MMU, "direct" has no meaning and so
+> rather than arbitrarily leave it '0', I arbitrarily set it '1'.
+> 
+> Maybe this?
+> 
+>    The nested MMU now has only the CPU mode; and in fact the new function
+>    kvm_calc_cpu_mode is analogous to the previous kvm_calc_nested_mmu_role,
+>    except that it has role.base.direct equal to CR0.PG.  Having "direct"
+>    track CR0.PG has the serendipitious side effect of being an even better
+>    sentinel than arbitrarily setting direct to true for the nested MMU, as
+>    KVM will run afoul of sanity checks for both direct and indirect MMUs if
+>    KVM attempts to use the nested MMU as a "real" MMU, e.g. for page faults.
 
-    Documentation/devicetree/bindings/firmware/arm,scpi.example.dt.yaml: scpi: shmem: [[2], [1]] is too long
+Hmm, actually it is set to CR0.PG *negated*, so that future patches can 
+get rid of role.ext.cr0_pg.  But really anybody trying to use nested_mmu 
+for real would get NULL pointer dereferences left and right in all 
+likelihood.  This will be even clearer by the end of the series, when 
+the function pointers are initialized at vCPU creation time.
 
-Fix this by adding a proper maxItems value to the shmem property,
-and to the related mboxes property.
+>>
+>> +	role.base.direct = !____is_cr0_pg(regs);
+>> +	if (!role.base.direct) {
+> 
+> Can we check ____is_cr0_pg() instead of "direct"?  IMO that's more intuitive for
+> understanding why the bits below are left zero.  I was scratching my head trying
+> to figure out whether or not this was safe/correct for direct MMUs...
 
-Fix the grouping of the "mboxes" property in the example.
+Yes, that's good.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
----
-Exposed by commit 39bd2b6a3783b899 ("dt-bindings: Improve phandle-array
-schemas").
-
-v2:
-  - Change limit from 2 to 4, as requested by Sudeep,
-  - Add Acked-by,
-  - Add maxItems to mboxes properties,
-  - Group mboxes in example.
----
- Documentation/devicetree/bindings/firmware/arm,scpi.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/firmware/arm,scpi.yaml b/Documentation/devicetree/bindings/firmware/arm,scpi.yaml
-index 800417a76bda0bd9..1f9322925e7c9f2d 100644
---- a/Documentation/devicetree/bindings/firmware/arm,scpi.yaml
-+++ b/Documentation/devicetree/bindings/firmware/arm,scpi.yaml
-@@ -43,6 +43,7 @@ properties:
-       by remote SCP firmware for use by SCPI message protocol should be
-       specified in any order.
-     minItems: 1
-+    maxItems: 4
- 
-   shmem:
-     description:
-@@ -51,6 +52,7 @@ properties:
-       be any memory reserved for the purpose of this communication between the
-       processors.
-     minItems: 1
-+    maxItems: 4
- 
-   power-controller:
-     type: object
-@@ -235,7 +237,7 @@ examples:
-     firmware {
-         scpi {
-             compatible = "amlogic,meson-gxbb-scpi", "arm,scpi-pre-1.0";
--            mboxes = <&mailbox 1 &mailbox 2>;
-+            mboxes = <&mailbox 1>, <&mailbox 2>;
-             shmem = <&cpu_scp_lpri>, <&cpu_scp_hpri>;
- 
-             scpi_sensors1: sensors {
--- 
-2.25.1
+Paolo
 

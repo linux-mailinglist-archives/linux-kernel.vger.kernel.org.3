@@ -2,196 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492944D22B5
+	by mail.lfdr.de (Postfix) with ESMTP id 950714D22B6
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350269AbiCHUgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:36:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S1350261AbiCHUfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349986AbiCHUfz (ORCPT
+        with ESMTP id S1349986AbiCHUfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:35:55 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFA7522C0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:34:57 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228JlRXX018600;
-        Tue, 8 Mar 2022 20:34:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=UGMN0SyJpc+PH5wPfmAFhq+VUsh78hfF05xbPXftKbk=;
- b=eztjSeWQUfRGKjBSsJx/JgeH4iO/SwZ69kXiyGXaKaFU8g1pBz7iI12rgCD3r1QN87px
- xggTUhEXM0YWx8myldz2ZWI22tZOuPTFmhzV/kjqMB0hnhtek60pZif5MW6RMtFfTBrQ
- /Tw7keLTiMG7UzvCxJoDU1mRJKd6RJ0gfkQG++DdUCN7DsM5k73Qrt1fj5HoC5KQGJQf
- 0TNiuWWrRW0YfJkrGA42TKBbogRK2DA8Hsam97q3dLXLcQRR4aMXBy3olcAxpZx7kcGI
- 4U2TaSijv/4T/v1kitY/dgeoxdEnqcDkDkeGfiJotm0qYYfS+v9uInuwRXtGDGdJkl7g 8Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekxn2g74d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Mar 2022 20:34:31 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 228KHC9N084522;
-        Tue, 8 Mar 2022 20:34:29 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-        by aserp3020.oracle.com with ESMTP id 3ekyp2j7s1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Mar 2022 20:34:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wx6NAoSr7l9Pjj2tc1KYumHenYWb6RGWP5AiWC1F0b8T0xUIGlc5o/oDS/uuNxTDGY9jAYehtQg8YV6R/TKD+kPlC3+hobFmahbnRHmTn9Zptt2WIlkxy6Y+eUCr2kPyt4fV1avFu8FDFWto4KOAZGcZlBgTZ6/1v2dQ03tMCdMvID+CoXEkZd9INKiFr3mSWiH2Lq9vKCf6V5f+lg4utOX8rZTcTnaVw+Wh19QnJgjaaXUkZAL7LoRk4a2BFXwwCj4jxO0iwyuCVSp5p8yDCWwVeQVbUCgQDOHm9vy6pDpaiOwOwnhhgEoU5XW18gT1i4yOD3nVALBsfnRYu7mNBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UGMN0SyJpc+PH5wPfmAFhq+VUsh78hfF05xbPXftKbk=;
- b=n3gmbLyrevzVgVvwAIAAtOcv6EFWiFWKxlLsMeMVpg3WIJaeU05ClC5AIPXaQ0wHwoRvdW+CaTjl/zOZZN0FVZ7nDtP16SysAPjiXApF0AmnAfl0ALgLEAV77g2uRh4wQ36lfrMbxW1Wh36KCveEtttg0/zAIjbbFJ/hGHP3PJtiCCir+mxbiX1o4s7CsFHAfHMR4nP0DIYs+AzHHODOnv/kqTezoCKSMeSheTHzTAeKt/IpQ+CKT4ZgjxRDt20/4mitOnXYVPSFj05vHv1k5O4YvcOTRd1OYLZVuT2bySHZ8IJ56C8h+bUT2Jfpd7oOdDbxLcItqb8FFQePuqbypQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 8 Mar 2022 15:35:52 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4392F47AC8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:34:54 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id p17so131919plo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:34:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UGMN0SyJpc+PH5wPfmAFhq+VUsh78hfF05xbPXftKbk=;
- b=YGjRGHlXOUHveLo9wyk2+Mmoh0/koI5XMg4i0lDGVehPc60/XIK2ncRDFzF+2JqTGXm7Uu0yiDF/Z7HupMqi6Oml1a3jlYMGtHvjfOiFROPVWK/R2l/gh+laWrisie3HSBX13+J4STMkObEObcYSs7Kr5rO6biEorXjbmaU3gLc=
-Received: from BY5PR10MB3793.namprd10.prod.outlook.com (2603:10b6:a03:1f6::14)
- by DM6PR10MB3913.namprd10.prod.outlook.com (2603:10b6:5:1f7::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.19; Tue, 8 Mar
- 2022 20:34:26 +0000
-Received: from BY5PR10MB3793.namprd10.prod.outlook.com
- ([fe80::a825:7455:e3c8:3b65]) by BY5PR10MB3793.namprd10.prod.outlook.com
- ([fe80::a825:7455:e3c8:3b65%7]) with mapi id 15.20.5038.027; Tue, 8 Mar 2022
- 20:34:26 +0000
-Message-ID: <ca174698-3790-7ed8-fbaf-674d547d4b76@oracle.com>
-Date:   Tue, 8 Mar 2022 15:34:22 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/2] x86/boot: Fix setup_indirect support
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        hpa@zytor.com, luto@amacapital.net, dave.hansen@linux.intel.com,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
-        Daniel Kiper <daniel.kiper@oracle.com>
-References: <1645668456-22036-1-git-send-email-ross.philipson@oracle.com>
- <20220225211730.2oxumw7ixfe7cyoz@tomti.i.net-space.pl>
-From:   Ross Philipson <ross.philipson@oracle.com>
-In-Reply-To: <20220225211730.2oxumw7ixfe7cyoz@tomti.i.net-space.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR03CA0019.namprd03.prod.outlook.com
- (2603:10b6:208:23a::24) To BY5PR10MB3793.namprd10.prod.outlook.com
- (2603:10b6:a03:1f6::14)
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=osjEu/BzQjlMgIynCXPifURSKARPlb6CcHwdOG0TASU=;
+        b=rSi8eUgt5HjmDltnAVBs+TcNHyne2FZzqLvIx+y7nmvqStEp6BdD+zeusVa0Z7NIOL
+         grArvEwdeD3d5y07nZKqV8p+kwSvkmX1c/1ngs3Y5pLieAEDr5tbqK9vhuKWVtpcCldc
+         4JZYvasPEB4oHZ2UBZLSGWtDaOgnitLa4/zu64kYgwAtd0g0FIaPGrjBzLphTceHFMoD
+         bl50LXYgQbppvOlqWBYZbK6mVR83yWrZ0VahR+EJuRgCSc+mT8Y6ihhqI1uaxjyp9FKf
+         svJLoZa6Rk2UkX1jUXKH919T2bLdLFsH3BGG/Q99+omj4WcCV4G7PUoslCCUWrgCSmS2
+         4Llw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=osjEu/BzQjlMgIynCXPifURSKARPlb6CcHwdOG0TASU=;
+        b=3ARHuocVvN5dGVgbJEwqhKTB9c8dBXgACfgAHupkJgPag2APmY2n38WIHh/QwCeC1I
+         gshuHYudS1YBm7KFCsZjpk75o/2UVjlBUWfYYEnARqrROsQSDq2+4oFRfwrddjhh7rau
+         XvruJeqE8M9yoi2ty/QF6mRxjFUrxLzhnd0PbTm72agbi4SC8RAugLa0bsVcijKZpdUW
+         Var68mMuX4JqBA/1huhUscCaD+BvLEDDezq0/RgxtZhiI133UIocR68stGbjEGaCiF/r
+         BNFhYdWJrU1GCa+sNcCVOONsRcObcYxYWrKJTMFzPmxqOt3kTZ1j/Fmzv5qXQjvh/8HT
+         5pgw==
+X-Gm-Message-State: AOAM531Wh4/hZG+25ModKu0YTC7mPh/No7YQ8EBol6SBYoBOdN0rsMO3
+        q3Kdtw9ZM2EesT5VBer8HxR96g==
+X-Google-Smtp-Source: ABdhPJyE5IcAOAHabCX2EwwigAkNWylbCiTy41Q2s8ug0zdsv3HojecbYVakGoAVIq9yFWxBxue4Hw==
+X-Received: by 2002:a17:90a:cce:b0:1bf:6387:30d9 with SMTP id 14-20020a17090a0cce00b001bf638730d9mr6765495pjt.196.1646771693437;
+        Tue, 08 Mar 2022 12:34:53 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004cdccd3da08sm21393384pfl.44.2022.03.08.12.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 12:34:52 -0800 (PST)
+Date:   Tue, 8 Mar 2022 20:34:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+Subject: Re: [PATCH v2 06/25] KVM: nVMX/nSVM: do not monkey-patch
+ inject_page_fault callback
+Message-ID: <Yie96ZqK8NYBOMYm@google.com>
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-7-pbonzini@redhat.com>
+ <YieOvca6qbCDgrMl@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1e13fa15-1e80-4278-007b-08da01430966
-X-MS-TrafficTypeDiagnostic: DM6PR10MB3913:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB39133BE5C297FE5CE49F6A7EE6099@DM6PR10MB3913.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pQXuf3plDXh/IjBUH5295gU2uVf3+Io01NsVyJOEUWeHNP8KTp/KYjCw0eciyWX7Q+RCMtoHPGRyP3daccMHVzc8fyb+5ot79XPwdSSCRY1AeeVh1mSdosOHTWIM9qw/3WqXMdYCCPmTYjjVucO3ZJpvQrn7iGAQLjlEjKLg6ttparm9QRWu9h4rXrw4PovM+NXO8C+Rae0/zcYZy2vU/UgIuF8PXX47gUczRfT3Xasu6C4NNF/kgOQQcD75mKtopjySTUaBFer3HpQYcd16FT5JqGrOsZPhITD36sVwL/8aANTbQ35oIxc5IzJr1/LbdFgxUq9Uh2gGYDu2+0KZ6JFPZV5QVJDtUVojH7c6KXwA9BpwbxmWkP79lxuWdB8h5LuSxh8muFDWbI9rUN+YxI7lg3e7QLlrWFKTaD3z4R4fX1KHdIxCO8MievIuzSSU6CwlGMi7BlAmIy/6pa2RIr4+rRfzybhMwaAtSFGMUoSoMHl034fo2XzDgyuBmQsNewG9/3sD2FBGfvhWyNVfGd5jxvpuO72oXI6qw4b1ZOQoX57Vc+qc3RLzHYthhfGcZL3iL6gzNNDauMThIMub5HWDkrMMgxZ1Ad3aV2xLRk++kLutmXul2dO7rnWY/xB4xnp4nVn36SHgBl91PgKT7cTg0HCy3+x1E3XDl8UHCaSpSxIz5P/qLOgQ+SMr5JWwuyxnqypEU7vpVopIP36kG6hPX1/SLkAQUnJDa2zwOF1q101s6nAUoUMfRiCxlELL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3793.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(8676002)(7416002)(4326008)(44832011)(2906002)(31686004)(6486002)(6512007)(38100700002)(508600001)(6506007)(66476007)(107886003)(6666004)(83380400001)(66946007)(66556008)(36756003)(31696002)(86362001)(5660300002)(186003)(53546011)(316002)(6916009)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QXU5cS9tTG1mSjA0QzNIOGswbkdkSnBzNDJkWXRKelc2NDBOZ1Y1eEJKSkFt?=
- =?utf-8?B?emFnM05jaE1jemRVRm9JRVFXbE9EMjR0RllpdXZLUktLNnZsY0JqR3hBTlhi?=
- =?utf-8?B?WGVLQTVFMm1tVjZEc1A0RndOazJ4aStxZGdCQWhkWjJLMzRRNmxNNEFVMWZh?=
- =?utf-8?B?bFYwVFpSV3d3WXpCSUs2b0dlVGdhczBuc0pQOGZFcGg1N1RoRDNQa2VtTWc1?=
- =?utf-8?B?WUVpYzBsVlpJK3pSU3JVamhqa0VpZWFldCs2enBZSlhkdzlPZ1dxVTY2bldy?=
- =?utf-8?B?RlhWRFdvWXRJaG8yaUN5aGFaQVprWXpEdzNLWGdXWUU3Q0FHaDBpNXROdzZT?=
- =?utf-8?B?dTJSSVZGanluWmRJZ01SUnd1SUdXQlNaY09pU1JSSklONEVKZHBsc1NoWU91?=
- =?utf-8?B?VXB3em5vSUp6QXNCcTRuSEx3YWZoajBDa214R0JuNDZ5emVaQnp0Y0h5SHB4?=
- =?utf-8?B?TkxucERhVjFHOFZJTGtHYjZ3Um4rZnlNc1ZkVXJBVkxFKzQzVzFOZXI0OUNZ?=
- =?utf-8?B?RU1zcjN6NU10UHFPZEtrZys2Q0F2OUxXNGFDUVZuYU15d3UwZlIveEkvRDJ3?=
- =?utf-8?B?WVlMaVpRTjJnbEZEWWltckxnaG5rNEVhTjV2bjU0bkVVcmhxTERnRHBmTHlT?=
- =?utf-8?B?bjN3ODZHTW5jV2cxN3QwdksxS0E1eHZ0NUhScjcweGdjT25JOWh1YUZ4a0Mz?=
- =?utf-8?B?TWZTQzYycVlZQ0RMcGpRdVFMZUwwOUNnK3VsaUlXVXRCZXJuWUZYUngzQU5Y?=
- =?utf-8?B?cjZjcjNZTGdPNWpTcmlZYUZ6a1ZlVVBMLzZuVTN5SjIybVY0UjZ5a0lRKzAr?=
- =?utf-8?B?UkxIUXNYUnJXSEt0bWJjNTBYRG80cTcwcWtESEs4UEhFRTJnMFZTd3JYSGlW?=
- =?utf-8?B?Ny9hZng5Rkd2bkhIZXl4QnBjMnd2OHJLbkNMSWVDYmxWLzY1WE9qWlcwUzVW?=
- =?utf-8?B?T1l4cEI0QVRPOURYaDNHTERCSHZuV2xCSFdrQ0h4U29Ic1I5UE9ac0ZveGJx?=
- =?utf-8?B?cFdXcEdvN01ZeGxCeFp0YVlXRTBMKzhiUnhGSmcxRjNpUGZrYkxlRCtFc3l3?=
- =?utf-8?B?cm9VbkJWZjlWWGhQallxQ3paZUhvY0ErK0RSL2owVmg5dGJ1dndSZWNmSFhJ?=
- =?utf-8?B?b1lLeCtIeTBUdldKd1U5ZkNrdGlweE5nZmY0cjdKODBneERlSDlNVEN6VnZG?=
- =?utf-8?B?QUtWQ0dWZjdTUGQwRTVhWGgzcldOSVN4YVAycUdXQ3ZydzRYbExLazc1Rytx?=
- =?utf-8?B?UFFiVTNISXg5ZEk4NEVQaGFsdWlNTGhZTjJ4bDkyajN5QU10VkJzeG1KRlhQ?=
- =?utf-8?B?eHdvZ2VITjNXcXFlNVU5VzE2UDVTbFZkdUovb3NPNGxBNng2bWI2V1BPNlFj?=
- =?utf-8?B?dDd6WHFBSHBZWUlyUGh3dG52NHhBZkxabDFyOXc2aWFBbHdDblcyM05mbWpO?=
- =?utf-8?B?TTFTam8xZmN4TzNKWTZVakhiS003cFZQZ0t3SnNuaitQa2cyejkzOWVMelox?=
- =?utf-8?B?Uzh0SUQyc25yemxMeVJOWnA0VEJWY05qcjFRdkQ5WHhGNGFPMFh3aEpqTCtL?=
- =?utf-8?B?NXByNUhqU0ZNL0VXNTU4aVZPdTFkQVAzZ2ZJLzI0TEZFQkpnQ25FUS9MV0cy?=
- =?utf-8?B?dEpFcDM1cTRXUTJWUDBTYURTY0F6N3FoREdJZTJoRS9xdDJKQXBFRzNjb1VP?=
- =?utf-8?B?OTAzZkZwV0hwQVZucGRkMDdWMVZ4S1RDTloyUTljendYQUx6dzF3d0MzUWFE?=
- =?utf-8?B?WU44djlFM045UEQydjhObE5aL0haalZpOXBFNXo0VncyVmJ3ZTBUU2hXKzRX?=
- =?utf-8?B?enRsWFl0UmszWHRoODZZbmFZcFYvWElrdmhpdlB5S1V5ckJuUDQrRVRKWXNJ?=
- =?utf-8?B?QWU3SzAvUll0czVOQW5oQ1ZmMHJraVdYNG1JZ0c2NkdmWlJ0QmZFbTdIZ0p2?=
- =?utf-8?B?Q1BBblpDYXJlT3pMSWh6TVFBVmpWVzhDaFJGMFZNTGFaOFZqNVZaMFlxb0g4?=
- =?utf-8?B?WEkvZWlZMk9VeGExZHJENkY4bWlxL09XNmFRQnoyczZ5VWJVRzZxdUF2UnFs?=
- =?utf-8?B?T0FmamY2MFRXa0hPcHJybkx5VVM2clRueEFTYk5VNE14bDdPNFZVNndRbSsw?=
- =?utf-8?B?Qy9SbDdZemw0TnhoWEY2S3pZYWVqN3pDSUdzZkdoNzlhTFU3K3dJU3hCVG45?=
- =?utf-8?B?UEpnekE3dENsR3ZVYkRPbGh5V0tKc1h1U0pyOFZmOEJFdEpHVmNhWE1lKzNs?=
- =?utf-8?B?TEZKTGZWUEJEak9tUTB3b0lZUUlKa0Q2MzM3eG1HUDBLeWh5LzRiYXdrVm1E?=
- =?utf-8?Q?/04y15mdWXP3KA5P0T?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e13fa15-1e80-4278-007b-08da01430966
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3793.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2022 20:34:26.4087
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ADagEftx1d0+Olk6LtgmiVfJKJLVKZmKPInLdA5kOjzCC9IcRa4Hdh5xLo4GMyUGSnsywQ1HM3evkHPu3nUWVK/duUu2x52LbWMC4ZDt2y0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3913
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10280 signatures=690848
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 mlxscore=0
- bulkscore=0 mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203080105
-X-Proofpoint-ORIG-GUID: Xxh5o5NbgP1ZaQUsV5OfptSuFCCmHlvC
-X-Proofpoint-GUID: Xxh5o5NbgP1ZaQUsV5OfptSuFCCmHlvC
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YieOvca6qbCDgrMl@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/25/22 16:17, Daniel Kiper wrote:
-> On Wed, Feb 23, 2022 at 09:07:34PM -0500, Ross Philipson wrote:
->> The setup_indirect support for x86 setup_data was added in November
->> of 2019. Several issues were found in the implementation and these
->> two patches were created to address those issues.
->>
->> These patches were originally posted as part of the larger TrenchBoot
->> patch set but are now being posted separately since they can be merged
->> independently of the TrenchBoot work.
->>
->> Changes in v2:
->>  - Add checks and failure modes for when early_memremap and memremap
->>    fail.
->>  - Fix variable declarations to use reverse fir tree format.
->>  - Use local indirect variable and remove all the inline casts.
->>  - Misc. fixes to the commit messages.
->>
->> Ross Philipson (2):
->>   x86/boot: Fix memremap of setup_indirect structures
->>   x86/boot: Add setup_indirect support in early_memremap_is_setup_data
+On Tue, Mar 08, 2022, Sean Christopherson wrote:
+> On Mon, Feb 21, 2022, Paolo Bonzini wrote:
+> > Currently, vendor code is patching the inject_page_fault and later, on
+> > vmexit, expecting kvm_init_mmu to restore the inject_page_fault callback.
+> > 
+> > This is brittle, as exposed by the fact that SVM KVM_SET_NESTED_STATE
+> > forgets to do it.  Instead, do the check at the time a page fault actually
+> > has to be injected.  This does incur the cost of an extra retpoline
+> > for nested vmexits when TDP is disabled, but is overall much cleaner.
+> > While at it, add a comment that explains why the different behavior
+> > is needed in this case.
+> > 
+> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> > ---
 > 
-> For both Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>...
+> If I have NAK powers, NAK NAK NAK NAK NAK :-)
 > 
-> Daniel
+> Forcing a VM-Exit is a hack, e.g. it's the entire reason inject_emulated_exception()
+> returns a bool.  Even worse, it's confusing and misleading due to being incomplete.
+> 
+> The need hack for the hack is not unique to !tdp_enabled, the #DF can be triggered
+> any time L0 is intercepting #PF.  Hello, allow_smaller_maxphyaddr.
+> 
+> And while I think allow_smaller_maxphyaddr should be burned with fire, architecturally
+> it's still incomplete.  Any exception that is injected by KVM needs to be subjected
+> to nested interception checks, not just #PF.  E.g. a #GP while vectoring a different
+> fault should also be routed to L1.  KVM (mostly) gets away with special casing #PF
+> because that's the only common scenario where L1 wants to intercept _and fix_ a fault
+> that can occur while vectoring an exception.  E.g. in the #GP => #DF case, odds are
+> very good that L1 will inject a #DF too, but that doesn't make KVM's behavior correct.
+> 
+> I have a series to handle this by performing the interception checks when an exception
+> is queued, instead of when KVM injects the excepiton, and using a second kvm_queued_exception
+> field to track exceptions that are queued for VM-Exit (so as not to lose the injected
+> exception, which needs to be saved into vmc*12.  It's functional, though I haven't
+> tested migration (requires minor shenanigans to perform interception checks for pending
+> exceptions coming in from userspace).
 
-Borislav,
+Here's my preferred band-aid for this so we can make inject_page_fault() constant
+without having to wait for a proper fix.  It's still putting lipstick on a pig,
+but is a bit more complete and IMO better documents the mess.  This slots into
+your series in place of your patch without much fuss.
 
-Sorry to bug you. I am going on vacation starting next week and I just
-wanted to get an idea if v2 looks good for merging in to you? If not I
-could probably get a v3 out before I leave.
 
-Thank you,
-Ross Philipson
+From: Sean Christopherson <seanjc@google.com>
+Date: Thu, 3 Mar 2022 20:20:17 -0800
+Subject: [PATCH] KVM: x86: Clean up and document nested #PF workaround
+
+Replace the per-vendor hack-a-fix for KVM's #PF => #PF => #DF workaround
+with an explicit, common workaround in kvm_inject_emulated_page_fault().
+Aside from being a hack, the current approach is brittle and incomplete,
+e.g. nSVM's KVM_SET_NESTED_STATE fails to set ->inject_page_fault(),
+and nVMX fails to apply the workaround when VMX is intercepting #PF due
+to allow_smaller_maxphyaddr=1.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/kvm_host.h |  2 ++
+ arch/x86/kvm/svm/nested.c       | 15 ++++++++-------
+ arch/x86/kvm/vmx/nested.c       | 15 ++++++---------
+ arch/x86/kvm/x86.c              | 21 ++++++++++++++++++++-
+ 4 files changed, 36 insertions(+), 17 deletions(-)
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index da2f3a21e37b..c372a74acd9c 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1496,6 +1496,8 @@ struct kvm_x86_ops {
+ struct kvm_x86_nested_ops {
+ 	void (*leave_nested)(struct kvm_vcpu *vcpu);
+ 	int (*check_events)(struct kvm_vcpu *vcpu);
++	int (*handle_page_fault_workaround)(struct kvm_vcpu *vcpu,
++					    struct x86_exception *fault);
+ 	bool (*hv_timer_pending)(struct kvm_vcpu *vcpu);
+ 	void (*triple_fault)(struct kvm_vcpu *vcpu);
+ 	int (*get_state)(struct kvm_vcpu *vcpu,
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index 96bab464967f..dd942c719cf6 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -54,22 +54,25 @@ static void nested_svm_inject_npf_exit(struct kvm_vcpu *vcpu,
+ 	nested_svm_vmexit(svm);
+ }
+
+-static void svm_inject_page_fault_nested(struct kvm_vcpu *vcpu, struct x86_exception *fault)
++static int nested_svm_handle_page_fault_workaround(struct kvm_vcpu *vcpu,
++						   struct x86_exception *fault)
+ {
+        struct vcpu_svm *svm = to_svm(vcpu);
++
+        WARN_ON(!is_guest_mode(vcpu));
+
+ 	if (vmcb12_is_intercept(&svm->nested.ctl,
+ 				INTERCEPT_EXCEPTION_OFFSET + PF_VECTOR) &&
+-	    !svm->nested.nested_run_pending) {
++	    !WARN_ON_ONCE(svm->nested.nested_run_pending)) {
+                svm->vmcb->control.exit_code = SVM_EXIT_EXCP_BASE + PF_VECTOR;
+                svm->vmcb->control.exit_code_hi = 0;
+                svm->vmcb->control.exit_info_1 = fault->error_code;
+                svm->vmcb->control.exit_info_2 = fault->address;
+                nested_svm_vmexit(svm);
+-       } else {
+-               kvm_inject_page_fault(vcpu, fault);
++	       return 0;
+        }
++
++	return -EINVAL;
+ }
+
+ static u64 nested_svm_get_tdp_pdptr(struct kvm_vcpu *vcpu, int index)
+@@ -680,9 +683,6 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
+ 	if (ret)
+ 		return ret;
+
+-	if (!npt_enabled)
+-		vcpu->arch.mmu->inject_page_fault = svm_inject_page_fault_nested;
+-
+ 	if (!from_vmrun)
+ 		kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
+
+@@ -1567,6 +1567,7 @@ static bool svm_get_nested_state_pages(struct kvm_vcpu *vcpu)
+ struct kvm_x86_nested_ops svm_nested_ops = {
+ 	.leave_nested = svm_leave_nested,
+ 	.check_events = svm_check_nested_events,
++	.handle_page_fault_workaround = nested_svm_handle_page_fault_workaround,
+ 	.triple_fault = nested_svm_triple_fault,
+ 	.get_nested_state_pages = svm_get_nested_state_pages,
+ 	.get_state = svm_get_nested_state,
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index f18744f7ff82..cc4c74339d35 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -476,24 +476,23 @@ static int nested_vmx_check_exception(struct kvm_vcpu *vcpu, unsigned long *exit
+ 	return 0;
+ }
+
+-
+-static void vmx_inject_page_fault_nested(struct kvm_vcpu *vcpu,
+-		struct x86_exception *fault)
++static int nested_vmx_handle_page_fault_workaround(struct kvm_vcpu *vcpu,
++						   struct x86_exception *fault)
+ {
+ 	struct vmcs12 *vmcs12 = get_vmcs12(vcpu);
+
+ 	WARN_ON(!is_guest_mode(vcpu));
+
+ 	if (nested_vmx_is_page_fault_vmexit(vmcs12, fault->error_code) &&
+-		!to_vmx(vcpu)->nested.nested_run_pending) {
++	    !WARN_ON_ONCE(to_vmx(vcpu)->nested.nested_run_pending)) {
+ 		vmcs12->vm_exit_intr_error_code = fault->error_code;
+ 		nested_vmx_vmexit(vcpu, EXIT_REASON_EXCEPTION_NMI,
+ 				  PF_VECTOR | INTR_TYPE_HARD_EXCEPTION |
+ 				  INTR_INFO_DELIVER_CODE_MASK | INTR_INFO_VALID_MASK,
+ 				  fault->address);
+-	} else {
+-		kvm_inject_page_fault(vcpu, fault);
++		return 0;
+ 	}
++	return -EINVAL;
+ }
+
+ static int nested_vmx_check_io_bitmap_controls(struct kvm_vcpu *vcpu,
+@@ -2614,9 +2613,6 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 		vmcs_write64(GUEST_PDPTR3, vmcs12->guest_pdptr3);
+ 	}
+
+-	if (!enable_ept)
+-		vcpu->arch.walk_mmu->inject_page_fault = vmx_inject_page_fault_nested;
+-
+ 	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL) &&
+ 	    WARN_ON_ONCE(kvm_set_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
+ 				     vmcs12->guest_ia32_perf_global_ctrl))) {
+@@ -6804,6 +6800,7 @@ __init int nested_vmx_hardware_setup(int (*exit_handlers[])(struct kvm_vcpu *))
+ struct kvm_x86_nested_ops vmx_nested_ops = {
+ 	.leave_nested = vmx_leave_nested,
+ 	.check_events = vmx_check_nested_events,
++	.handle_page_fault_workaround = nested_vmx_handle_page_fault_workaround,
+ 	.hv_timer_pending = nested_vmx_preemption_timer_pending,
+ 	.triple_fault = nested_vmx_triple_fault,
+ 	.get_state = vmx_get_nested_state,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 7fa1bdd9909e..010fb54a9a82 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -748,6 +748,7 @@ void kvm_inject_page_fault(struct kvm_vcpu *vcpu, struct x86_exception *fault)
+ }
+ EXPORT_SYMBOL_GPL(kvm_inject_page_fault);
+
++/* Returns true if the page fault was immediately morphed into a VM-Exit. */
+ bool kvm_inject_emulated_page_fault(struct kvm_vcpu *vcpu,
+ 				    struct x86_exception *fault)
+ {
+@@ -766,8 +767,26 @@ bool kvm_inject_emulated_page_fault(struct kvm_vcpu *vcpu,
+ 		kvm_mmu_invalidate_gva(vcpu, fault_mmu, fault->address,
+ 				       fault_mmu->root.hpa);
+
++	/*
++	 * A workaround for KVM's bad exception handling.  If KVM injected an
++	 * exception into L2, and L2 encountered a #PF while vectoring the
++	 * injected exception, manually check to see if L1 wants to intercept
++	 * #PF, otherwise queuing the #PF will lead to #DF or a lost exception.
++	 * In all other cases, defer the check to nested_ops->check_events(),
++	 * which will correctly handle priority (this does not).  Note, other
++	 * exceptions, e.g. #GP, are theoretically affected, #PF is simply the
++	 * most problematic, e.g. when L0 and L1 are both intercepting #PF for
++	 * shadow paging.
++	 *
++	 * TODO: Rewrite exception handling to track injected and pending
++	 *       (VM-Exit) exceptions separately.
++	 */
++	if (unlikely(vcpu->arch.exception.injected && is_guest_mode(vcpu)) &&
++	    !kvm_x86_ops.nested_ops->handle_page_fault_workaround(vcpu, fault))
++		return true;
++
+ 	fault_mmu->inject_page_fault(vcpu, fault);
+-	return fault->nested_page_fault;
++	return false;
+ }
+ EXPORT_SYMBOL_GPL(kvm_inject_emulated_page_fault);
+
+
+base-commit: bb92fb66dcf8735c5190f415fed587bff7dd6717
+--
 

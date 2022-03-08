@@ -2,125 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C7A4D1AEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3884D1AF1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244191AbiCHOq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
+        id S242655AbiCHOtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235356AbiCHOq0 (ORCPT
+        with ESMTP id S234882AbiCHOtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:46:26 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B304B851
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:45:29 -0800 (PST)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220308144524epoutp01855502b7f3b25bbc24820629aa600af0~abw8jG8f62840228402epoutp01S
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:45:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220308144524epoutp01855502b7f3b25bbc24820629aa600af0~abw8jG8f62840228402epoutp01S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646750724;
-        bh=lmHLPqNItLMb8jz79J20gYYp3YnXa2xox3wIzroio30=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=MKJQhw8AAwL8xyfGrEbqzjsfUWIlEBDFBwKAn/tluAp0egwZu4fLzkHDYzrSTDLAv
-         90/Lyyr+JnirIt862YbODzzq9l+jyJ66M5f96hqOvIosCJlhUl5xk+P2Pds6uTEgl/
-         2/o6cmeoXnNer4g1AButnUO6LUxB25A8TGIC0As8=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220308144523epcas5p4f815e30777cf24ba41fd196f94a08854~abw7rDnEy1721317213epcas5p4V;
-        Tue,  8 Mar 2022 14:45:23 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KCdR31pr0z4x9Pp; Tue,  8 Mar
-        2022 14:45:19 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1C.E2.06423.FFB67226; Tue,  8 Mar 2022 23:45:19 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220308144518epcas5p40e4bb33a1b47ea714475327333b20353~abw20XesJ0355303553epcas5p4T;
-        Tue,  8 Mar 2022 14:45:18 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220308144518epsmtrp25ba627e2f31b50bc39a3cb62497cb0f3~abw2zhFyf0183701837epsmtrp2K;
-        Tue,  8 Mar 2022 14:45:18 +0000 (GMT)
-X-AuditID: b6c32a49-b01ff70000001917-11-62276bff6b30
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F2.50.29871.EFB67226; Tue,  8 Mar 2022 23:45:18 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220308144516epsmtip1f01b2ecd0903e8ccd4731dd51080c8d6~abw01ul4v0840308403epsmtip1O;
-        Tue,  8 Mar 2022 14:45:16 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Mark Brown'" <broonie@kernel.org>,
-        "'Lee Jones'" <lee.jones@linaro.org>
-Cc:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>,
-        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-        <andi@etezian.org>, <linux-spi@vger.kernel.org>,
-        <linux-fsd@tesla.com>, "'Adithya K V'" <adithya.kv@samsung.com>
-In-Reply-To: <YidosChLIwIAKDmG@sirena.org.uk>
-Subject: RE: [RESEND PATCH v3 1/2] spi: dt-bindings: samsung: Add fsd spi
- compatible
-Date:   Tue, 8 Mar 2022 20:15:15 +0530
-Message-ID: <010901d832fb$212124f0$63636ed0$@samsung.com>
+        Tue, 8 Mar 2022 09:49:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D39539159
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:48:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646750886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LZcs0WshXiDTg8J9tIJLtneLFviU5TBv//0m9mRi4bk=;
+        b=YtYJ6X+bMIElMqveL/4V5vyo4ymi9qyn2E2SZ5OMCUQRoVDE/9g0jiHrC9crTL3qjDm7vg
+        jSEwrpIdlnI39ZW/UmUyYSjSg1Ish9ZuXw2esaYBedzhuMXvdESCu/XiSWRC1/U+SHLguS
+        mEXGMt/n1StT6smsHsQ/ONEmPzVeHb8=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-477-au3o1R44Mx65hsMbINbNww-1; Tue, 08 Mar 2022 09:48:05 -0500
+X-MC-Unique: au3o1R44Mx65hsMbINbNww-1
+Received: by mail-ej1-f72.google.com with SMTP id d7-20020a1709061f4700b006bbf73a7becso8791394ejk.17
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 06:48:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=LZcs0WshXiDTg8J9tIJLtneLFviU5TBv//0m9mRi4bk=;
+        b=8BASM4vhBE8fM0BLj1cxfC0SBeixUFS73CfFpYvhIL+x2O8nVt02n8VpUV04NaDDci
+         sWC3TQnP2LfWdC82qgkFEcyrJSLKSVzd2syq/3afWbxV+AwzX6IdLm5YtWrYH7cot2kh
+         bsXKZvcvIUt91JMo7weBp0JoefecGKMUWwEtjupYMv1gsAzIhmsSCIvBaZuwo+p7Zx3T
+         ghtqhquyj6wpV0M7D0zbEiLCoFs62YdWJAWFA9GTxMJs90vreIMvpefa49k4pjk+TATL
+         Thh9JLzIK+Rp0wNdWYzggsuIQj2x2BqA/u3uMFImI4I3V2eiyWNIHtNXPVWBdTJcmdab
+         8clA==
+X-Gm-Message-State: AOAM531NX6W78AZKupxIi3U6F0zYLxM83AGfVqLw4LrzX1pEzbL59bFt
+        UZyVU7H+N+1B8GcmF0QGqBRuoq5M64VokQGVtOexsUVrQhiHqbhoj78gqBFZbcWko1o4fmqejz2
+        Udw2Dfq0U2lSYdKqSZ3zscxx5PMW6eWR+HHrsz5MCvXbfSKIEC5dpDbOE2LcM3dZZnGHjCOZ5BI
+        Yy
+X-Received: by 2002:a17:906:b095:b0:6cf:752c:fb88 with SMTP id x21-20020a170906b09500b006cf752cfb88mr13874910ejy.128.1646750883952;
+        Tue, 08 Mar 2022 06:48:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyUiOz69MV3fnzeZwcli5HCN//v73UVca4UC7IlcTdRuBqZ3C9hfP3suv1rmdDZgzjYnqtIsQ==
+X-Received: by 2002:a17:906:b095:b0:6cf:752c:fb88 with SMTP id x21-20020a170906b09500b006cf752cfb88mr13874883ejy.128.1646750883665;
+        Tue, 08 Mar 2022 06:48:03 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id sd21-20020a170906ce3500b006da97cf5a30sm5609077ejb.177.2022.03.08.06.47.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 06:48:02 -0800 (PST)
+Message-ID: <63f4a488-87f1-097f-95d5-f85e46786740@redhat.com>
+Date:   Tue, 8 Mar 2022 15:47:26 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 30/30] KVM: selftests: Add test to populate a VM with
+ the max possible guest mem
+Content-Language: en-US
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Marc Zyngier <Marc.Zyngier@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-31-pbonzini@redhat.com>
+In-Reply-To: <20220303193842.370645-31-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJ0WBqQSnNME8An5DjgYUtJdqxg/AH0fdoJAkkbGC8BrsvLegHow/MEqz6biJA=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJJsWRmVeSWpSXmKPExsWy7bCmuu7/bPUkg/aPHBYHJrxitVj84zmT
-        xdSHT9gs5h85x2qx8e0PJov7X48yWkz5s5zJYtPja6wWD1+FW1zeNYfNYsb5fUwWjR9vslss
-        2vqF3aJ17xF2Bz6PWQ29bB7Xl3xi9ti0qpPN4861PWwem5fUe/RtWcXo8a9pLrvH501yARxR
-        2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QGcrKZQl
-        5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgpMCvSKE3OLS/PS9fJSS6wMDQyMTIEKE7Iz
-        Gq+eYC24wFVx8adEA+Nbji5GTg4JAROJjT/vM3UxcnEICexmlLgyZScjSEJI4BOjxJ2OcIjE
-        N0aJZVNvMMJ0PGu9zg6R2Mso0TThFVT7S0aJlRNOsIJUsQnoSuxY3MYGYosI+Esc3D2RBaSI
-        WeAPk8Tihi1gCU6gokMXl4CNFRYIk5h59iwziM0ioCIxpWUDWJxXwFLixbp9zBC2oMTJmU9Y
-        QGxmAXmJ7W/nMEOcpCDx8+kyVohlfhKHJvxlh6gRl3h59AjYqRICdzgkNredZ4VocJHo2vOK
-        BcIWlnh1fAs7hC0l8fndXqDjOIDsbImeXcYQ4RqJpfOOQZXbSxy4MocFpIRZQFNi/S59iFV8
-        Er2/nzBBdPJKdLQJQVSrSjS/uwrVKS0xsbsb6gAPiT17NzNOYFScheSxWUgem4XkgVkIyxYw
-        sqxilEwtKM5NTy02LTDMSy2HR3dyfu4mRnCa1vLcwXj3wQe9Q4xMHIyHGCU4mJVEeO+fV0kS
-        4k1JrKxKLcqPLyrNSS0+xGgKDO2JzFKiyfnATJFXEm9oYmlgYmZmZmJpbGaoJM57On1DopBA
-        emJJanZqakFqEUwfEwenVANT7SmRq1d2zXl0RFbcMkZB9tGcVY+9A/Zoi5kvZNJSOedk4//l
-        z94Sz9qmWz1zhc76bcuYkbH4DSf7DzsbY4cv4j52zDfE1uyQ+flc+lR4/tXV4s98PG/whTTv
-        nL+t58XUJqP1k2etCP+a9rv44CmFNU0bVv2V+27c+7hs2dqPy1awrG1OvK2RlchYXGZ1LnlR
-        xKMza5XX/zvML9vy1u+/6vEK5/9l7OFTl+4pDljo+EBj44zfiSVFvOt3ZSWzzvj2R8bGzdjZ
-        jfnCBB1m5pg0sZX62p9TnjoFZPxLWH3+hUqgq8ZtxVdqXyUPTfxs0LAmN4FpHrfYneMFLRp5
-        TkXNYQLdJ9j5T08NWXPNaaW4EktxRqKhFnNRcSIAHvOLaFwEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrEIsWRmVeSWpSXmKPExsWy7bCSnO6/bPUkg2/n+S0OTHjFarH4x3Mm
-        i6kPn7BZzD9yjtVi49sfTBb3vx5ltJjyZzmTxabH11gtHr4Kt7i8aw6bxYzz+5gsGj/eZLdY
-        tPULu0Xr3iPsDnwesxp62TyuL/nE7LFpVSebx51re9g8Ni+p9+jbsorR41/TXHaPz5vkAjii
-        uGxSUnMyy1KL9O0SuDIar55gLbjAVXHxp0QD41uOLkZODgkBE4lnrdfZuxi5OIQEdjNKLH46
-        lQUiIS1xfeMEdghbWGLlv+dQRc8ZJX4/vQaWYBPQldixuI0NxBYR8Jf4+r+bFaSIWaCDWeLX
-        jBdMEB3vGCU2zn8MNpYTqOPQxSWMILawQIjEzU3LwOIsAioSU1o2gMV5BSwlXqzbxwxhC0qc
-        nPkEqIYDaKqeRNtGsBJmAXmJ7W/nMENcpyDx8+kyVogj/CQOTfjLDlEjLvHy6BH2CYzCs5BM
-        moUwaRaSSbOQdCxgZFnFKJlaUJybnltsWGCYl1quV5yYW1yal66XnJ+7iREcrVqaOxi3r/qg
-        d4iRiYPxEKMEB7OSCO/98ypJQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5N
-        LUgtgskycXBKNTBVLpm7rm7VC6UP70UXbZN66te2mLeUrWcNz+5/utXahsGFhsI7ogVXOBsJ
-        lG9NtTptUJudpsd4JEChsWnBcte9bUx3n8jnJs21EgkO65iQPGO/IIPBpgnva6Zo1mZNK1xR
-        UtcwlYvn5pfQ6ptMnL82PXtx0+/7108rZjwRMd7Q+PXD7+bMP7ZXnzImGLO8Y8qxn54x62Lr
-        f9bjd3nfn35gd2ai5M3CrbI5N+PK/r5JfChcsC2sY8Wuzh3lC1sn6SVcWlMuPFvbP+zLq8W7
-        P1hZ34j70du3z5Vx6vGpjhYuDyODmutnP+5kzL0ru4rba6kx/w/19MwpVw5c2cyZ9evU3gzm
-        O289TsnOvTvpZuBKJZbijERDLeai4kQAIZCyx0UDAAA=
-X-CMS-MailID: 20220308144518epcas5p40e4bb33a1b47ea714475327333b20353
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220308120701epcas5p3d3d2f5c01055e8c1721ae0ec6c2aa681
-References: <CGME20220308120701epcas5p3d3d2f5c01055e8c1721ae0ec6c2aa681@epcas5p3.samsung.com>
-        <20220308121640.27344-1-alim.akhtar@samsung.com>
-        <YidY+ncMVhp7bBvh@sirena.org.uk> <Yidg64QGGzIbduQ2@google.com>
-        <YidosChLIwIAKDmG@sirena.org.uk>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,44 +86,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/3/22 20:38, Paolo Bonzini wrote:
+> From: Sean Christopherson<seanjc@google.com>
+> 
+> Add a selftest that enables populating a VM with the maximum amount of
+> guest memory allowed by the underlying architecture.  Abuse KVM's
+> memslots by mapping a single host memory region into multiple memslots so
+> that the selftest doesn't require a system with terabytes of RAM.
+> 
+> Default to 512gb of guest memory, which isn't all that interesting, but
+> should work on all MMUs and doesn't take an exorbitant amount of memory
+> or time.  E.g. testing with ~64tb of guest memory takes the better part
+> of an hour, and requires 200gb of memory for KVM's page tables when using
+> 4kb pages.
 
+I couldn't quite run this on a laptop, so I'll tune it down to 128gb and 
+3/4 of the available CPUs.
 
->-----Original Message-----
->From: Mark Brown [mailto:broonie@kernel.org]
->Sent: Tuesday, March 8, 2022 8:01 PM
->To: Lee Jones <lee.jones@linaro.org>
->Cc: Alim Akhtar <alim.akhtar@samsung.com>; linux-arm-
->kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
->devicetree@vger.kernel.org; linus.walleij@linaro.org; robh+dt@kernel.org;
->krzysztof.kozlowski@canonical.com; linux-samsung-soc@vger.kernel.org;
->pankaj.dubey@samsung.com; andi@etezian.org; linux-spi@vger.kernel.org;
->linux-fsd@tesla.com; Adithya K V <adithya.kv@samsung.com>
->Subject: Re: [RESEND PATCH v3 1/2] spi: dt-bindings: samsung: Add fsd spi
->compatible
->
->On Tue, Mar 08, 2022 at 01:58:03PM +0000, Lee Jones wrote:
->> On Tue, 08 Mar 2022, Mark Brown wrote:
->
->> > I either need a pull request for the MFD changes or to wait until
->> > those changes have come in via Linus' tree.
->
->> You mean this one:
->
->>   https://lore.kernel.org/all/YiYC7eYx2SpPILyl@google.com/
->
->>   spi: dt-bindings: samsung: Convert to dtschema
->
->> Or something else?
->
->There were changes adding the FSD SoC as well as DT stuff IIRC.
+> To inflicit maximum abuse on KVM' MMU, default to 4kb pages (or whatever
+> the not-hugepage size is) in the backing store (memfd).  Use memfd for
+> the host backing store to ensure that hugepages are guaranteed when
+> requested, and to give the user explicit control of the size of hugepage
+> being tested.
+> 
+> By default, spin up as many vCPUs as there are available to the selftest,
+> and distribute the work of dirtying each 4kb chunk of memory across all
+> vCPUs.  Dirtying guest memory forces KVM to populate its page tables, and
+> also forces KVM to write back accessed/dirty information to struct page
+> when the guest memory is freed.
+> 
+> On x86, perform two passes with a MMU context reset between each pass to
+> coerce KVM into dropping all references to the MMU root, e.g. to emulate
+> a vCPU dropping the last reference.  Perform both passes and all
+> rendezvous on all architectures in the hope that arm64 and s390x can gain
+> similar shenanigans in the future.
 
-FSD SoC DT changes are already in -next.
-I think this can go with MFD tree because of immutable
-branch between MFD, SPI and DT due for the v5.18 merge windows.
-I am not sure if there are better ways to handle this.
+Did you actually test aarch64 (not even asking about s390 :))?  For now 
+let's only add it for x86.
 
-Regards,
-Alim
+> +			TEST_ASSERT(nr_vcpus, "#DE");
 
+srsly? :)
 
+Paolo
 

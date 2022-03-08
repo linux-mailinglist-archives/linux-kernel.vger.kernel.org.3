@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5270E4D2407
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3902F4D2402
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiCHWN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S1350570AbiCHWMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235585AbiCHWN4 (ORCPT
+        with ESMTP id S229902AbiCHWML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:13:56 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA923338AA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:12:55 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id bc27so333492pgb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 14:12:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bkKtesSrq7QqPtPRsrv5MP5UVhIFuJzVkEWr+6F4jZg=;
-        b=HB7Qh4AtVpk8d37bKeerp0qFPsowgSyoNUGO3LpWmMZyfhC0KY2vF+/9yFB3whMWqV
-         r6ygdwoC5f3KyA6nBZBdysI+OaD0+1ZMeKlMNQMyoVYqJrw7jHy0RmxmooM5aq4XJh/k
-         7px/K05dn+P2MGUsxJHuEwW0DQyufasrdA/CY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bkKtesSrq7QqPtPRsrv5MP5UVhIFuJzVkEWr+6F4jZg=;
-        b=lPPSNIpJfCHyJFoGvNrC95tPl0O1QvWDIU5rd+B58kSJelB1ww0gUqeqj3mTV5kaaD
-         8K+4rezi9Qks5xzbIXa/jQgEQaERk5C0wcPAmhp84SdWXXuaUUEj5wzMdhY4nVN0JcJj
-         CeJDsrs16jTQ/m3svpCZPE1ANO6ilBTP2oh1zqOwVCDpRqi9n5LSFryMEkLlKO1c7bcU
-         ejcsIAN8e5/wVafbiaYx+e4aVjracBAc5fofytEDSiERYZiniyAtutxrI1kseWDPMCwm
-         BcAICjINKu8B0gkEGF+jsLgI6XoVz5GpZ1I+0jwdNunT+zBqUgI/pnzjwiV0H9O9JyBK
-         N8ug==
-X-Gm-Message-State: AOAM531A9cgcYy/s45YYwCWwZlQAjQbU0EhnUhHjkN6Jfhhml43JT0aM
-        z1DEum7NtExr9o8T1uYi1EiQ8w==
-X-Google-Smtp-Source: ABdhPJxAagA58tSNDoUZKDWEzQaeBwAsi4rPzMdnA3AIz7iJkUTWHfbJDFjsTEW6XG4sdCX9pvm2qg==
-X-Received: by 2002:aa7:8256:0:b0:4e0:78ad:eb81 with SMTP id e22-20020aa78256000000b004e078adeb81mr20546718pfn.30.1646777575321;
-        Tue, 08 Mar 2022 14:12:55 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s9-20020a056a00194900b004e1583f88a2sm66527pfk.0.2022.03.08.14.12.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 14:12:55 -0800 (PST)
-Date:   Tue, 8 Mar 2022 14:12:54 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     David Gow <davidgow@google.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Magnus =?iso-8859-1?Q?Gro=DF?= <magnus.gross@rwth-aachen.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] binfmt_elf: Introduce KUnit test
-Message-ID: <202203081408.0B0FC34C@keescook>
-References: <20220304044831.962450-1-keescook@chromium.org>
- <YifJqN+5ju4kHQ2y@localhost.localdomain>
+        Tue, 8 Mar 2022 17:12:11 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E43947AEA;
+        Tue,  8 Mar 2022 14:11:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646777473; x=1678313473;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kQ5srqxv0waYBab8nwYT1ubD1rarswGHiGwSxhd9OF8=;
+  b=etZFsZ2Wig4gasV5YZAuGDzJyrEZmJC0VvZ7qosJ+W8piWzJQGk5/F0x
+   3C9xmhSR2vcyZGu0x2TOnkiL7IbuwutMZAuPmevAsmkaduKlY/8JWriPW
+   Q8M++YpWNDBtAWbfWW1tuFGXSPrU78nH8OGBPw9QfmZT0wLzdU8Uu+FEU
+   2/tK8btvGLuHd5CwggHjFsi7xAYjVTLL+n4OHSJo7+ryp3tqc6ANbP0vK
+   QNAOJ4JPsbCd6rFmYMO9O9/7Vlr4JALhs4xV2THFY0USlHeePUKWOPVkJ
+   XYeOklkK2/CPtgkYjQFJz9RZFrrAGwAEb42bRV4ilwF4FBf/idJihLiku
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,165,1643698800"; 
+   d="scan'208";a="165010573"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Mar 2022 15:11:12 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 8 Mar 2022 15:11:11 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 8 Mar 2022 15:11:11 -0700
+Date:   Tue, 8 Mar 2022 23:14:04 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <Divya.Koppera@microchip.com>, <netdev@vger.kernel.org>,
+        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <richardcochran@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
+        <Madhuri.Sripada@microchip.com>, <Manohar.Puri@microchip.com>
+Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
+ values and timestamping check for LAN8814 phy
+Message-ID: <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
+References: <20220304093418.31645-1-Divya.Koppera@microchip.com>
+ <20220304093418.31645-3-Divya.Koppera@microchip.com>
+ <YiILJ3tXs9Sba42B@lunn.ch>
+ <CO1PR11MB4771237FE3F53EBE43B614F6E2089@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YiYD2kAFq5EZhU+q@lunn.ch>
+ <CO1PR11MB4771F7C1819E033EC613E262E2099@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YidgHT8CLWrmhbTW@lunn.ch>
+ <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
+ <YiecBKGhVui1Gtb/@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <YifJqN+5ju4kHQ2y@localhost.localdomain>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YiecBKGhVui1Gtb/@lunn.ch>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 12:24:56AM +0300, Alexey Dobriyan wrote:
-> On Thu, Mar 03, 2022 at 08:48:31PM -0800, Kees Cook wrote:
-> > Adds simple KUnit test for some binfmt_elf internals: specifically a
-> > regression test for the problem fixed by commit 8904d9cd90ee ("ELF:
-> > fix overflow in total mapping size calculation").
+The 03/08/2022 19:10, Andrew Lunn wrote:
 > 
-> > +	/* No headers, no size. */
-> > +	KUNIT_EXPECT_EQ(test, total_mapping_size(NULL, 0), 0);
+> > > So this is a function of the track length between the MAC and the PHY?
+> >
+> > Nope.
+> > This latency represents the time it takes for the frame to travel from RJ45
+> > module to the timestamping unit inside the PHY. To be more precisely,
+> > the timestamping unit will do the timestamp when it detects the end of
+> > the start of the frame. So it represents the time from when the frame
+> > reaches the RJ45 to when the end of start of the frame reaches the
+> > timestamping unit inside the PHY.
 > 
-> This is meaningless test. This whole function only makes sense
-> if program headers are read and loading process advances far enough
-> so that pointer is not NULL.
+> I must be missing something here. How do you measure the latency
+> difference for a 1 meter cable vs a 100m cable?
 
-I think it's important to start adding incremental unit testing to core
-kernel APIs. This is a case of adding a regression test for a specific
-misbehavior. This is good, but in addition, testing should check any other
-corner cases as well. Yes, the above EXPECT line is total nonsense, and
-it makes sure that nonsense actually reports back the expected failure
-state "0".
+In the same way because the end result will be the same.
+Lets presume that the cable introduce a 5ns latency per meter.
+So, if we use a 1m cable and the mean path delay is 11, then
+the latency is 11 - 5.
+If we use a 100m cable then the mean path delay will be 506(if is not
+506 then is something wrong) then the latency is 506 - 500.
 
-> Are we going to mock every single function in the kernel?
-> Disgusting.
+> Does 100m cable plus 1cm of track from the RJ45 to the PHY make a difference
+> compared to 100m cable plus 1.5cm of track?
 
-I'm not really interested in a slippery slope debate, but honestly, if we
-_could_ mock everything in the kernel and create unit tests for everything
-in the kernel, then yes, we should. It's certainly not feasible, but at
-least _getting started_ on unit testing execve is worth it.
+In that case I don't think you will see any difference.
+
+> Isn't this error all just in the noise?
+
+I am not sure I follow this question.
+
+> 
+>    Andrew
 
 -- 
-Kees Cook
+/Horatiu

@@ -2,112 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92F34D1B17
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF78B4D1B18
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347665AbiCHO6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:58:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
+        id S1347681AbiCHO65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239658AbiCHO6j (ORCPT
+        with ESMTP id S1347606AbiCHO64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:58:39 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26F611A17;
-        Tue,  8 Mar 2022 06:57:41 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A91AE1F37E;
-        Tue,  8 Mar 2022 14:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646751460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=Emo8w3yGcQp3k2y24B4+Lq5nwc9G/zycXNA7HGHzKmY=;
-        b=n13z2+9UHxWrJwGXuc7QNLvD85WBs+isP527OJ2TxfyzskGNQJFKDyfreCcWu26SdIWECv
-        RLr/+Aia+m3rUHVJeUWKhlUrcpm/RAOEgCSxtE8SPixEXW2tQYdLsZxm411HVFBvTIGXQ1
-        +48BgMSp04VPt7Wo5jAtVxvW7+v3/DI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646751460;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=Emo8w3yGcQp3k2y24B4+Lq5nwc9G/zycXNA7HGHzKmY=;
-        b=YzoCAaL8HjQPWimS0WyLZO9L3B+ShKsblcZyfZjE5VG754cVrLujYZNFsmwZnhMEolCOw8
-        3vSKpwj/Cfxw/6Ag==
-Received: from alsa1.nue.suse.com (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 92DA6A3B83;
-        Tue,  8 Mar 2022 14:57:40 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     linux-bluetooth@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Subject: [PATCH] Bluetooth: btusb: Add missing Chicony device for Realtek RTL8723BE
-Date:   Tue,  8 Mar 2022 15:57:31 +0100
-Message-Id: <20220308145731.23166-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.31.1
+        Tue, 8 Mar 2022 09:58:56 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F701A816
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:57:59 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CA7113F79B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646751477;
+        bh=M+eTcz2ZJB0TWZjmJsyZ2iJjNCL5gmxwdz8k344Fvsc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=WezBv0fU4KJz4CL/iY4A/wqgoLPXKZqt6P2oWAOXyaHEGly9SFE2T3OcT7uhwpB0a
+         ne0lXfkkGnsFFSwxYNgN2/40nujdfa0diW+QPh1xJ/wiYqjklAxRxGmB5L+Zv1/Yib
+         WRaKhXafOlG0vLwxcHxGq8+chtOfiB+M45xO4dvPC5YLdNAe8iOBqnYCrBeGz+NExz
+         haxDzS15U8ySU5gHT4YLX/PtZhpaqcgN3ZNRv6ZcA2Cg7LpfhUp3fea2NjhqtoMEjH
+         yyEBnyFHDhmC2NwQMQ4vx50XqGbnIINFjsa8duBOkfLiKDZ5TkGjc3AcL3VFDlEabH
+         Nk+assVmoBwAA==
+Received: by mail-ed1-f69.google.com with SMTP id o20-20020aa7dd54000000b00413bc19ad08so10767925edw.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 06:57:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=M+eTcz2ZJB0TWZjmJsyZ2iJjNCL5gmxwdz8k344Fvsc=;
+        b=rYK0VLg8lYUgPv0vxGxy6e8jTXx66uXLXkV5a7+/ntIGoxwV3K8zCFFdIvFR7mIr9U
+         7prs9ah7XwT10Oc1j150HE3BYzZR3x0CfIZkJLEancz7wLAMg+Cm6GXIRAcuWj6Gzisq
+         VN1UNfdRjo9wjIixj4zHK/gWre3epwoSvZAF8aHXnxH906kOxukUpsruOls745X6JCrr
+         ib6GY4RQ0cvcwTFKRaatGsJVWA7t5RYc5KwmGFNefuJLsUIsr5at7O4N8o4mPMnAj4JC
+         QRBRlzsex25GY/uUxarqj6jL83AB06fauDB6JEYeWrcZP7hBY1K1DkC23sGvKrmlBQjN
+         3l+g==
+X-Gm-Message-State: AOAM533l3tRRfQ1Vv1kggSPNQornlv3yKoEwyj+/wjZBN+XDILOGArZ9
+        EDkIqRkcZgqT94CKSFOK0RY8BIcPLBIi479Pwgq14xhaq/QeS3Pp5NU6dGxBqHQutL3OY+FqfOW
+        N3ritJU5reHYnUtCkS8BUDzuAZP4gaE8TIovPmBD+lQ==
+X-Received: by 2002:a05:6402:4396:b0:412:b131:fca6 with SMTP id o22-20020a056402439600b00412b131fca6mr16313389edc.133.1646751477453;
+        Tue, 08 Mar 2022 06:57:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwW3LeLqYr6ohDHFWba3PRj6ALdZOOjvivTY4gXILqMMuwH12l+7+o10CTTALaZRhZm/QtJpg==
+X-Received: by 2002:a05:6402:4396:b0:412:b131:fca6 with SMTP id o22-20020a056402439600b00412b131fca6mr16313376edc.133.1646751477274;
+        Tue, 08 Mar 2022 06:57:57 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id w19-20020a17090633d300b006ce3d425b22sm5950808eja.1.2022.03.08.06.57.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 06:57:56 -0800 (PST)
+Message-ID: <226dcb1b-d141-f0d3-68c4-11d2466ca571@canonical.com>
+Date:   Tue, 8 Mar 2022 15:57:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/4] clocksource/drivers/exynos_mct: Support
+ local-timer-index property
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        tglx@linutronix.de, daniel.lezcano@linaro.org
+Cc:     kernel@axis.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        alim.akhtar@samsung.com, robh+dt@kernel.org
+References: <20220308142410.3193729-1-vincent.whitchurch@axis.com>
+ <20220308142410.3193729-4-vincent.whitchurch@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220308142410.3193729-4-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chicony Electronics BT device with 04f2:b49f seems to be a missing
-entry for Realtek RTL8723BE.
+On 08/03/2022 15:24, Vincent Whitchurch wrote:
+> Support the documented semantics of the local-timer-index property: Use
+> it as the first index of the local timer, ensure that global timer clock
+> events device is not registered, and don't write to the global FRC if it
+> is already started.
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+> 
+> Notes:
+>     v2: Use devicetree property instead of module parameter.
+> 
+>  drivers/clocksource/exynos_mct.c | 25 ++++++++++++++++++++-----
+>  1 file changed, 20 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
+> index f29c812b70c9..5f8b516614eb 100644
+> --- a/drivers/clocksource/exynos_mct.c
+> +++ b/drivers/clocksource/exynos_mct.c
+> @@ -33,7 +33,7 @@
+>  #define EXYNOS4_MCT_G_INT_ENB		EXYNOS4_MCTREG(0x248)
+>  #define EXYNOS4_MCT_G_WSTAT		EXYNOS4_MCTREG(0x24C)
+>  #define _EXYNOS4_MCT_L_BASE		EXYNOS4_MCTREG(0x300)
+> -#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * x))
+> +#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * (x)))
+>  #define EXYNOS4_MCT_L_MASK		(0xffffff00)
+>  
+>  #define MCT_L_TCNTB_OFFSET		(0x00)
+> @@ -75,6 +75,7 @@ enum {
+>  static void __iomem *reg_base;
+>  static unsigned long clk_rate;
+>  static unsigned int mct_int_type;
+> +static unsigned int mct_local_idx;
 
-T:  Bus=02 Lev=01 Prnt=01 Port=03 Cnt=03 Dev#=  4 Spd=12   MxCh= 0
-D:  Ver= 2.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=04f2 ProdID=b49f Rev= 2.00
-S:  Manufacturer=Realtek
-S:  Product=Bluetooth Radio
-S:  SerialNumber=00e04c000001
-C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+No more static variables. This was wrong design, happens, but let's not
+grow the list.
 
-BugLink: https://bugzilla.opensuse.org/show_bug.cgi?id=1196779
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- drivers/bluetooth/btusb.c | 1 +
- 1 file changed, 1 insertion(+)
+I propose to conditionally (depending on property samsung,frc-shared)
+assign .resume callback to NULL or exynos4_frc_resume. The init can
+receive an argument whether to call frc_start().
 
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index c30d131da784..ceb60ca81c76 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -463,6 +463,7 @@ static const struct usb_device_id blacklist_table[] = {
- 	/* Additional Realtek 8723BE Bluetooth devices */
- 	{ USB_DEVICE(0x0489, 0xe085), .driver_info = BTUSB_REALTEK },
- 	{ USB_DEVICE(0x0489, 0xe08b), .driver_info = BTUSB_REALTEK },
-+	{ USB_DEVICE(0x04f2, 0xb49f), .driver_info = BTUSB_REALTEK },
- 	{ USB_DEVICE(0x13d3, 0x3410), .driver_info = BTUSB_REALTEK },
- 	{ USB_DEVICE(0x13d3, 0x3416), .driver_info = BTUSB_REALTEK },
- 	{ USB_DEVICE(0x13d3, 0x3459), .driver_info = BTUSB_REALTEK },
--- 
-2.34.1
 
+>  static int mct_irqs[MCT_NR_IRQS];
+>  
+>  struct mct_clock_event_device {
+> @@ -157,6 +158,17 @@ static void exynos4_mct_frc_start(void)
+>  	u32 reg;
+>  
+>  	reg = readl_relaxed(reg_base + EXYNOS4_MCT_G_TCON);
+> +
+> +	/*
+> +	 * If the FRC is already running, we don't need to start it again.  We
+> +	 * could probably just do this on all systems, but, to avoid any risk
+> +	 * for regressions, we only do it on systems where it's absolutely
+> +	 * necessary (i.e., on systems where writes to the global registers
+> +	 * need to be avoided).
+> +	 */
+> +	if (mct_local_idx && (reg & MCT_G_TCON_START))
+
+This contradicts your intentions in commit #2 msg, where you described
+that A53 will be started first.
+
+1. If A53 is always started first, is it possible to be here from A5?
+2. If above is possible, how do you handle locking? For example:
+a. A53 started with some delay, entered exynos4_mct_frc_start() pass
+this check;
+b. A5 gets to exynos4_mct_frc_start(), check is still false, so A5
+enables the FRC,
+c. A53 also enables the FRC.
+
+Having here relaxed reads and writes makes it even worse, unfortunately.
+
+Best regards,
+Krzysztof

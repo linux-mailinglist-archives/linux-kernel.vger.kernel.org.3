@@ -2,154 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8411A4D13B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A8A4D13C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345545AbiCHJsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S1345419AbiCHJuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345547AbiCHJry (ORCPT
+        with ESMTP id S239173AbiCHJuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:47:54 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF124198E;
-        Tue,  8 Mar 2022 01:46:58 -0800 (PST)
-Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KCVnB5SHxzdZn9;
-        Tue,  8 Mar 2022 17:45:34 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 17:46:56 +0800
-Received: from [10.67.102.118] (10.67.102.118) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 17:46:55 +0800
-Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>
-CC:     Jason Gunthorpe <jgg@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
-        Xu Zaibo <xuzaibo@huawei.com>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
- <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
- <20220304205720.GE219866@nvidia.com>
- <20220307120513.74743f17.alex.williamson@redhat.com>
- <aac9a26dc27140d9a1ce56ebdec393a6@huawei.com>
- <20220307125239.7261c97d.alex.williamson@redhat.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <e69d8246-79ba-fa37-fecf-c9f28db692f8@huawei.com>
-Date:   Tue, 8 Mar 2022 17:46:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 8 Mar 2022 04:50:13 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FFC340C4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 01:49:16 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id u10so25906051wra.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 01:49:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=02UDf1pdb0U70hOLizwodglM9/0MIkQTrFbx130jmiE=;
+        b=TjZphH9hgyELIqRwTi2WvGdoGj1J9+ko37q3Dy+QljjxZrcmoDk6pGD+9BkVeoWGl1
+         c9cQYim68QjDDKBJC75LgOBARQdj4uHxDI5dHKKBf7O/my4JRPQbITljSvXVICz+kIzQ
+         uzMuCIEvQpgxiO7KMGkHAA9CI20uLtfq+mC2kUGMuJymhFoQsgvBfeH8Dh37Ijctf9/1
+         j9s1H20UTvvd4CNKc+lJbQwbO0zPanfu1nuz0cHXv/0abJA/1RsruwvnID4aMwSvIGmN
+         GPY9CCl/Vys09GOCr4GHKBC8J9A02W7kZrjPxLAvuU0LUvaGFMMvdelTSF37S0lPxzqf
+         ddAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=02UDf1pdb0U70hOLizwodglM9/0MIkQTrFbx130jmiE=;
+        b=c+3md0KNZZVFrGK8zkGvNmDLyqfUrpXwb6RQGRfKewgHivkV0vGlieDySwWCIZAPYg
+         sXAwbZorwbIwhoqDEKviOuqLjIsJL0jj8flwOmqUrG3/UbYSiXsvzPEHZnIc5LIz4rE4
+         PSP1MSpu3Fo7K8lV8L0U/ICFFK1BseyM47lNYN4z/lUiOXrkk2wnIN6S3NxjdhtNx4d9
+         QGpyPVKI+UlLWc1W5i5ZCMHVNWyUbf7rxOHwwwmunVaYYLm2TnlaHtkJW5g8dCUbIo1L
+         f+CrNB0+XUomm2OoUBCBck5wUWjtpS1TvoEsmLlQGi1lcLVYtAZjQcyFXOo3/58iZV9v
+         biXQ==
+X-Gm-Message-State: AOAM53293wl9KAaFVZvlST1bXhgqBA0T9DXVtUcT+kVmm2mlb1Do1zAV
+        6Ze8jUGHCQKlvScttjWYvjOEOA==
+X-Google-Smtp-Source: ABdhPJwJl4t5Tn7r80HbhzAHKE1pKs8GUwcFZWPV2LvK0bS7AXZojL7riB/OQzKcrK/Px9dayrwCYg==
+X-Received: by 2002:adf:fa46:0:b0:1f1:d99a:4b1 with SMTP id y6-20020adffa46000000b001f1d99a04b1mr11663745wrr.516.1646732954621;
+        Tue, 08 Mar 2022 01:49:14 -0800 (PST)
+Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
+        by smtp.gmail.com with ESMTPSA id z3-20020a1cf403000000b0037d1f4a2201sm1684885wma.21.2022.03.08.01.49.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 01:49:14 -0800 (PST)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, robert.foss@linaro.org,
+        laurent.pinchart@ideasonboard.com, xji@analogixsemi.com,
+        hsinyi@chromium.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>, arnd@arndb.de
+Subject: [PATCH v2 0/2] Revert vendor property from anx7625 bindings
+Date:   Tue,  8 Mar 2022 10:49:09 +0100
+Message-Id: <20220308094911.2680291-1-robert.foss@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20220307125239.7261c97d.alex.williamson@redhat.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.118]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/8 3:52, Alex Williamson wrote:
-> On Mon, 7 Mar 2022 19:29:06 +0000
-> Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com> wrote:
-> 
->>> -----Original Message-----
->>> From: Alex Williamson [mailto:alex.williamson@redhat.com]
->>> Sent: 07 March 2022 19:05
->>> To: Jason Gunthorpe <jgg@nvidia.com>
->>> Cc: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
->>> kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
->>> linux-crypto@vger.kernel.org; linux-pci@vger.kernel.org; cohuck@redhat.com;
->>> mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
->>> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
->>> <prime.zeng@hisilicon.com>; Jonathan Cameron
->>> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
->>> Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
->>> migration
->>>
->>> On Fri, 4 Mar 2022 16:57:20 -0400
->>> Jason Gunthorpe <jgg@nvidia.com> wrote:
->>>   
->>>> On Thu, Mar 03, 2022 at 11:01:30PM +0000, Shameer Kolothum wrote:  
->>>>> From: Longfang Liu <liulongfang@huawei.com>
->>>>>
->>>>> VMs assigned with HiSilicon ACC VF devices can now perform live  
->>> migration  
->>>>> if the VF devices are bind to the hisi_acc_vfio_pci driver.
->>>>>
->>>>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->>>>> Signed-off-by: Shameer Kolothum  
->>> <shameerali.kolothum.thodi@huawei.com>  
->>>>> ---
->>>>>  drivers/vfio/pci/hisilicon/Kconfig            |    7 +
->>>>>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 1078 ++++++++++++++++-
->>>>>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  114 ++
->>>>>  3 files changed, 1181 insertions(+), 18 deletions(-)
->>>>>  create mode 100644 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
->>>>>
->>>>> diff --git a/drivers/vfio/pci/hisilicon/Kconfig  
->>> b/drivers/vfio/pci/hisilicon/Kconfig  
->>>>> index dc723bad05c2..2a68d39f339f 100644
->>>>> --- a/drivers/vfio/pci/hisilicon/Kconfig
->>>>> +++ b/drivers/vfio/pci/hisilicon/Kconfig
->>>>> @@ -3,6 +3,13 @@ config HISI_ACC_VFIO_PCI
->>>>>  	tristate "VFIO PCI support for HiSilicon ACC devices"
->>>>>  	depends on ARM64 || (COMPILE_TEST && 64BIT)
->>>>>  	depends on VFIO_PCI_CORE
->>>>> +	depends on PCI && PCI_MSI  
->>>>
->>>> PCI is already in the depends from the 2nd line in
->>>> drivers/vfio/pci/Kconfig, but it is harmless
->>>>  
->>>>> +	depends on UACCE || UACCE=n
->>>>> +	depends on ACPI  
->>>>
->>>> Scratching my head a bit on why we have these  
->>>
->>> Same curiosity from me, each of the CRYPTO_DEV_HISI_* options selected
->>> also depend on these so they seem redundant.  
->>
->> Yes, they are redundant now since we have added CRYPTO_DEV_HISI_ drivers
->> as "depends" now. I will remove that.
->>  
->>> I think we still require acks from Bjorn and Zaibo for select patches
->>> in this series.  
->>
->> I checked with Ziabo. He moved projects and is no longer looking into crypto stuff.
->> Wangzhou and LiuLongfang now take care of this. Received acks from Wangzhou
->> already and I will request Longfang to provide his. Hope that's ok.
-> 
-> Maybe a good time to have them update MAINTAINERS as well.  Thanks,
-> 
-> Alex
-> 
-OK, we have discussed it internally, I will send a patch to update
-MAINTAINERS of crypto stuff.
-Thanks.
-Longfang
-> .
-> 
+An issue[1] related to how the V4L2_FWNODE_BUS_TYPE_PARALLEL flag is mis-used
+was found in recent addition to the anx7625 driver.
+
+As used currently CPI (camera parallel interface) and DPI
+(display parallel interface) would share the
+V4L2_FWNODE_BUS_TYPE_PARALLEL enum. I think that would be perfectly
+functional, but it is not what V4L2_FWNODE_BUS_TYPE_PARALLEL is
+documented to represent. As far as I can see it's only intended to
+represent CPI.
+
+Instead of having V4L2_FWNODE_BUS_TYPE_PARALLEL represent two
+standards, I think they should be split. And possibly
+V4L2_FWNODE_BUS_TYPE_PARALLEL should be renamed for CPI, but that is a
+separate story. This would provide for the neatest and most legible
+solution. If this solution is implemented, this range would be
+incorrect. Additionally the snippet reverted in 2/2 of this series
+would no longer be valid.
+
+As it stands V4L2_FWNODE_BUS_TYPE_PARALLEL was used to represent DPI
+due to not being caught in the review process.
+
+In order to not introduce this issue into the ABI, let's revert the changes
+to the anx7625 dt-binding related to this.
+
+[1] https://lore.kernel.org/all/YiTruiCIkyxs3jTC@pendragon.ideasonboard.com/
+
+Robert Foss (2):
+  dt-bindings: drm/bridge: anx7625: Revert DPI support
+  Revert "arm64: dts: mt8183: jacuzzi: Fix bus properties in anx's DSI
+    endpoint"
+
+ .../display/bridge/analogix,anx7625.yaml      | 19 +------------------
+ .../dts/mediatek/mt8183-kukui-jacuzzi.dtsi    |  2 --
+ 2 files changed, 1 insertion(+), 20 deletions(-)
+
+-- 
+2.32.0
+

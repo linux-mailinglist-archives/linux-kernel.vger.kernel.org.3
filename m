@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED074D14FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B85D64D1505
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345939AbiCHKor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S1345950AbiCHKpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235914AbiCHKop (ORCPT
+        with ESMTP id S1345935AbiCHKpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:44:45 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EBF41303;
-        Tue,  8 Mar 2022 02:43:47 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id b8so16769833pjb.4;
-        Tue, 08 Mar 2022 02:43:47 -0800 (PST)
+        Tue, 8 Mar 2022 05:45:52 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521A641330
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:44:56 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id i66so10849454wma.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 02:44:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=kVG0kf5foVe3hmr29o5GrRkYkCpLk23FIIa7/Ch95rM=;
-        b=qkS3qbfEay2oO+bJ7agoouaRbAinfT0Kb9++JSZjVeDI7efUDPFveFdENLmqpoodpy
-         sAHmO1GBYEjJjdshPGMDGwYQtzfLST3WOywx+nzQlmLIbqmkQCtMOJU2Crmsrhp9/BPy
-         uzERFM0UW2fId8T1AbhKmWHZkCcGy3IL8pIpLwGJh9ezaQpJ1ajcaGQ1OfBKEY22KU7F
-         DT1dE1YPA3rTmAx6//NsqmjsYgnKF+mjNaCRIAdj1atw6FfzbZ1jC/6yGbj112JkLO8S
-         AxJf4xewxUf/UX1mNMxwXYJsL9BH0vVob6kA548rrvKNlozd9HG4a57x6TehGDHbkbtC
-         a8Bw==
+        bh=sHxA9Ld6Wu8Hd+SfF7WzN4p3d70QNOTgHg1o9QMZk54=;
+        b=bo0A1UtjPuz9iqMy5rGLOoKWqhM9zUra4nPcNHqTCC5H/pqmbWlYdKOXMJ9vE1ah77
+         sQYwMAzxt9eJhGqspS72toUh/fLgCEsyXxTfH3wmsjnxSYaix9wHzmhIbzaOx4hDx7hb
+         mXEdSdYvEACUutTBo3UCOsP0kgd7irD64tx/oaaW4l3IPcmzdqHai5l4b34nQBvd29vl
+         eVeNvhcm7GDC2bYqcQjnAegW24vZ81t4EeaZJPifvDShnYH/RVTDQTImzE0Cn/510x7x
+         aEcHgekGBna8z2v0K+B8n6G5uT2oKXwMIMdQMYqfHP20h2/r9Zz5C7jK1ZfBfGqGKN6p
+         PV3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=kVG0kf5foVe3hmr29o5GrRkYkCpLk23FIIa7/Ch95rM=;
-        b=nQPvXLfQi8SPDw4tntu/ebpQirSUGmr0PIFmO1L8ZksENeQcrIw8pAegPyji2ow13s
-         bHYRjgUneRNVCBXm7uPHqnkOERjPPKvq4j9fnJtUotKYfKU1nON80jikqf+tN5fZ0zyS
-         4f4UYT20nCUmEANWFw588HOK3kCuoXkX9RAwmyOAZcw9UEc8AYc0AIs1SlGc6T2n7zrT
-         gxTNMiLNA5DVK/KbOdXL7+zob7Jer/jxEZYXub9ZlM5e4jFSoGhIdlZCzv03MF7O6i2M
-         V7eJ5LXKcGgOGUlwl5NZhdb8XvDJjdYAAs4ZI4HOq9csaIvulDEujsa2YewN+U4fIpsd
-         kVnw==
-X-Gm-Message-State: AOAM532nhM7QOJtsiCfkmNZWu/gIui7s40jxmT1uLb50dBj0ebAIa+UU
-        p+oS7tNjl1dw9k9wJ7RDiQ1KnTC/QYey0/L1
-X-Google-Smtp-Source: ABdhPJwRFxwTt9GHPixKsjKE5eWxu+NxvBZb3wvWFzW4iKxyKr999BOU/oqXVvwXW3t1MW36ewlAlw==
-X-Received: by 2002:a17:902:e848:b0:151:e3a5:b609 with SMTP id t8-20020a170902e84800b00151e3a5b609mr11000504plg.137.1646736227405;
-        Tue, 08 Mar 2022 02:43:47 -0800 (PST)
-Received: from baaz ([49.36.203.74])
-        by smtp.gmail.com with ESMTPSA id q22-20020a056a00085600b004f397d1f3b5sm20327837pfk.171.2022.03.08.02.43.43
+        bh=sHxA9Ld6Wu8Hd+SfF7WzN4p3d70QNOTgHg1o9QMZk54=;
+        b=hY+BgFb7B8vrHZQp9shIVrQd7K2Zyl1jkmcbOBa6xXO9quP1oLhpB0n3U0gX/Jp6fi
+         TxtEFBnMmhBjz9Xs991jDBQFbsPzgLWlRUh+fFovF4AicKP9l8JfZ8mhuJc2MAz7HLNq
+         Jy+pdkk3ZVrgrjbUT2wznHCiGBgbOoA92H4sDW+abzhgsA7UnPEfvDLAercl0Lb03+0x
+         Pg1dnFJ0Ribm0rmhLNrc2Dx3zSckA11UUPgcMH0xKYy2oh3eQwjD8kJ8prN1ts6OGEpj
+         cxXZryl9MwULoLbwcnGqkpfQempWyo3LOj10p+k+faksReGEKPJOpMcBRvS/WsO5uDGb
+         1B0g==
+X-Gm-Message-State: AOAM5316TICZUQIMxl/ySBUm/x7VfCXA+Ph+TRxAEfJKSXlXFzlVRSPi
+        2E+eRLecdazthvqVFSQrBlrGLpxBFIggC4ca
+X-Google-Smtp-Source: ABdhPJwof7f+BbquaM3QrH+C6BkplJ0XCOiqzDXkMUoAGwSdShrOqVMOf6WU+qu/h3z5GfDH8ZsFgQ==
+X-Received: by 2002:a7b:ce95:0:b0:386:bc81:c912 with SMTP id q21-20020a7bce95000000b00386bc81c912mr3004398wmj.4.1646736294834;
+        Tue, 08 Mar 2022 02:44:54 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id i15-20020a05600011cf00b001edc2966dd4sm13298020wrx.47.2022.03.08.02.44.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 02:43:46 -0800 (PST)
-Date:   Tue, 8 Mar 2022 16:13:40 +0530
-From:   Muhammad Falak R Wani <falakreyaz@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] samples/bpf: fix broken bpf programs due to
- function inlining
-Message-ID: <YiczXPnQakMwNEbX@baaz>
-References: <20220306121535.156276-1-falakreyaz@gmail.com>
- <CAEf4BzYmVo9rw1Ys0ZufQFA=f7sy+dP=d9L9rmGS5L91qV1K+A@mail.gmail.com>
+        Tue, 08 Mar 2022 02:44:54 -0800 (PST)
+Date:   Tue, 8 Mar 2022 10:44:52 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH] backlight: backlight: Slighly simplify
+ devm_of_find_backlight()
+Message-ID: <20220308104452.55arvejyjix3t4zb@maple.lan>
+References: <f998a4291d865273afa0d1f85764a9ac7fbc1b64.1644738084.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzYmVo9rw1Ys0ZufQFA=f7sy+dP=d9L9rmGS5L91qV1K+A@mail.gmail.com>
+In-Reply-To: <f998a4291d865273afa0d1f85764a9ac7fbc1b64.1644738084.git.christophe.jaillet@wanadoo.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 10:11:36PM -0800, Andrii Nakryiko wrote:
-> On Sun, Mar 6, 2022 at 4:15 AM Muhammad Falak R Wani
-> <falakreyaz@gmail.com> wrote:
-> >
-> > commit: "be6bfe36db17 block: inline hot paths of blk_account_io_*()"
-> > inlines the function `blk_account_io_done`. As a result we can't attach a
-> > kprobe to the function anymore. Use `__blk_account_io_done` instead.
-> >
-> > Signed-off-by: Muhammad Falak R Wani <falakreyaz@gmail.com>
-> > ---
-> >  samples/bpf/task_fd_query_kern.c | 2 +-
-> >  samples/bpf/tracex3_kern.c       | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/samples/bpf/task_fd_query_kern.c b/samples/bpf/task_fd_query_kern.c
-> > index c821294e1774..186ac0a79c0a 100644
-> > --- a/samples/bpf/task_fd_query_kern.c
-> > +++ b/samples/bpf/task_fd_query_kern.c
+On Sun, Feb 13, 2022 at 08:41:39AM +0100, Christophe JAILLET wrote:
+> Use devm_add_action_or_reset() instead of devm_add_action()+hand writing
+> what is done in the release function, should an error occur.
 > 
-> samples/bpf/task_fd_query_user.c also needs adjusting, no? Have you
-> tried running those samples?
-Aplologies, I ran the `tracex3` program, but missed to verify `task_fd_query`. Should I send a V2
-where I modify only the `tracex3` ?
+> This is more straightforward and saves a few lines of code.
+> 
+> While at it, remove a useless test in devm_backlight_release(). 'data' is
+> known to be not NULL when this function is called.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+
+
+Daniel.

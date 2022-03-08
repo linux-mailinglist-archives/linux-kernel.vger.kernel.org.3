@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA91F4D1244
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3E24D1242
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344967AbiCHIbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
+        id S1344943AbiCHIbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238409AbiCHIbY (ORCPT
+        with ESMTP id S243549AbiCHIbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:31:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA70A3F8A1;
-        Tue,  8 Mar 2022 00:30:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9924FB8179F;
-        Tue,  8 Mar 2022 08:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD48FC340EB;
-        Tue,  8 Mar 2022 08:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646728222;
-        bh=d4iX8PMKAGFjzqQJsmEWtLrsA3AzOiHHSY+t4oi+qwo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wyml7Am/nzk+GK45JiukdCoLYjIeuQbDYqgDJxA/Ge5dZXUOoTVH2Kq2PKrmiYcTI
-         mfj0O29ZG+Kgcfel2g5Ymz+Ye7gVpUOrQ2ajEUvtQDt4RitMQINFc/bPSD1qvmq/Xd
-         RyDFqv71c+ndZ6gLyhJYEJRa6mUT7GACA9yJAvFbusIYfiFwpXmVrUo+yH6TBbUxu1
-         AaHVuYDou1Ld96hJF12vkfaTICg4yL/4zzMJhL7OIe3irpG3NPFTYBDawpnjdbZioh
-         VBvcabxQ2Uad9ERSArFwdCslBGgndE0JcZEwktTeZtSo7MFouUZw2r6Ue30r9Hz6vs
-         wHvETz1aPTaCw==
-Date:   Tue, 8 Mar 2022 10:29:41 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Sergey Temerkhanov <s.temerkhanov@gmail.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: use try_get_ops() in tpm-space.c
-Message-ID: <YicT9Rjowdtzbrpp@iki.fi>
-References: <3953c743ce7e7fc1db26f5b849b53df671b2f221.camel@HansenPartnership.com>
+        Tue, 8 Mar 2022 03:31:14 -0500
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521D53F88A;
+        Tue,  8 Mar 2022 00:30:18 -0800 (PST)
+Received: by mail-qk1-f174.google.com with SMTP id bm39so14252954qkb.0;
+        Tue, 08 Mar 2022 00:30:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=dHuw8rcBQo8eimNFyCyzKNs2ir0oOakCUjJ/z8E/Csw=;
+        b=1bh7vXh/sgBPE29dk1rsgZCZ2J6OcefvUB8nj2cU9pEosSap/6RhX6BuA5pROhDMUx
+         2kJ5WOXd5BVlxu2QpDf8SkY18M0xlIgnT5h/XSktGMfd6ckOmCW33/xSNs/uDw43qu2w
+         G+EhQ5eqnu8YuH0oR/yRoESyJqPnYj7Z+DvfNPjt2O0pksszX7becVbaIkE0ZjotpKvR
+         yYjw9+N80FL4Cgt8L4vLk4SpvF/SkMc4kISPjyAmxwPpAcAI5hO/YTdedeA69Ax9RYlD
+         DnBC0HXBXKbFF3nRXG+8gjBxumZ3vCyRvLEPFxteSdgYMRJKE9fF6bZ/y4anggpIPAX7
+         UxUA==
+X-Gm-Message-State: AOAM5337Gpoe8TO+sOuz37LxbTdixJKnSqx4Qdoyg2bVyjAXyNrq6y4i
+        IVbDPHr/wkv1IUWVnzzVj7TDYQfW36T7Kg==
+X-Google-Smtp-Source: ABdhPJzHQpigLxGNWNelrn8HyYzFXR1cCJNZSQ7Smgm93R+NtSzGDOqG8S4hxq+IBephv+EtrnAFLQ==
+X-Received: by 2002:a05:620a:d87:b0:67b:3105:4f7f with SMTP id q7-20020a05620a0d8700b0067b31054f7fmr5231622qkl.230.1646728216805;
+        Tue, 08 Mar 2022 00:30:16 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id g9-20020ac85d49000000b002dff273cce5sm10339753qtx.72.2022.03.08.00.30.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 00:30:15 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id u10so16418158ybd.9;
+        Tue, 08 Mar 2022 00:30:09 -0800 (PST)
+X-Received: by 2002:a5b:5d0:0:b0:623:c68d:d473 with SMTP id
+ w16-20020a5b05d0000000b00623c68dd473mr11274013ybp.506.1646728209389; Tue, 08
+ Mar 2022 00:30:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3953c743ce7e7fc1db26f5b849b53df671b2f221.camel@HansenPartnership.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20210922091007.5516-1-wsa+renesas@sang-engineering.com>
+ <163282533892.34438.1878675609177525004.b4-ty@canonical.com>
+ <CAMuHMdUqQLo7=NFaNEukqniTJbx-mSZv7eQNB9eCT=L28y3u=A@mail.gmail.com> <YicSCZfl4wLUzvEJ@shikoro>
+In-Reply-To: <YicSCZfl4wLUzvEJ@shikoro>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Mar 2022 09:29:55 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUTgooY6SRfp4LB3tSa=-GtS0EH=BD5zo5orLTKp0hjBg@mail.gmail.com>
+Message-ID: <CAMuHMdUTgooY6SRfp4LB3tSa=-GtS0EH=BD5zo5orLTKp0hjBg@mail.gmail.com>
+Subject: Re: [RFC PATCH] memory: renesas-rpc-if: Correct QSPI data transfer in
+ Manual mode
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Duc Nguyen <duc.nguyen.ub@renesas.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 03:58:03PM -0500, James Bottomley wrote:
-> As part of the series conversion to remove nested TPM operations:
-> 
-> https://lore.kernel.org/all/20190205224723.19671-1-jarkko.sakkinen@linux.intel.com/
-> 
-> exposure of the chip->tpm_mutex was removed from much of the upper
-> level code.  In this conversion, tpm2_del_space() was missed.  This
-> didn't matter much because it's usually called closely after a
-> converted operation, so there's only a very tiny race window where the
-> chip can be removed before the space flushing is done which causes a
-> NULL deref on the mutex.  However, there are reports of this window
-> being hit in practice, so fix this by converting tpm2_del_space() to
-> use tpm_try_get_ops(), which performs all the teardown checks before
-> acquring the mutex.
-> 
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
->  drivers/char/tpm/tpm2-space.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-> index 265ec72b1d81..ffb35f0154c1 100644
-> --- a/drivers/char/tpm/tpm2-space.c
-> +++ b/drivers/char/tpm/tpm2-space.c
-> @@ -58,12 +58,12 @@ int tpm2_init_space(struct tpm_space *space, unsigned int buf_size)
->  
->  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
->  {
-> -	mutex_lock(&chip->tpm_mutex);
-> -	if (!tpm_chip_start(chip)) {
-> +
-> +	if (tpm_try_get_ops(chip) == 0) {
->  		tpm2_flush_sessions(chip, space);
-> -		tpm_chip_stop(chip);
-> +		tpm_put_ops(chip);
->  	}
-> -	mutex_unlock(&chip->tpm_mutex);
-> +
->  	kfree(space->context_buf);
->  	kfree(space->session_buf);
->  }
-> -- 
-> 2.34.1
-> 
-> 
+Hi Wolfram,
 
-Thank you! 
+On Tue, Mar 8, 2022 at 9:21 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > Wolfram: which platform did you use for QSPI testing, so I don't
+> > break that again?
+>
+> I did my refactoring using an Eagle board and once this worked, I
+> enabled QSPI on Falcon. All remotely. Condor was another candidate but
+> it was broken in the lab at that time.
 
-BR, Jarkko
+OK, thanks!
+
+> >     Without that (e.g. old H3 R-Car ES1.0), it crashes with an
+>
+> Frankly, I wouldn't trust ES1.0 as a reliable source for QSPI. Could you
+> start with the newest Gen3 board you have and then go to previous ones?
+
+This is not QSPI, but HF.
+
+Building a new firmware for R-Car H3 ES1.0 with HF unlocked will be
+complicated, as it is not supported by upstream TF-A.
+
+Note that HF also fails to probe on R-Car M3-W and M3-N ES1.0.
+Haven't tried it on R-Car E3 yet.  All those have a (not so new) TF-A,
+but built with RCAR_RPC_HYPERFLASH_LOCKED=0.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BFE4D1FA1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0E74D1FA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348330AbiCHSFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S1348874AbiCHSGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbiCHSFZ (ORCPT
+        with ESMTP id S231637AbiCHSGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:05:25 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB735521D;
-        Tue,  8 Mar 2022 10:04:28 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id h14so8686110lfk.11;
-        Tue, 08 Mar 2022 10:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6SHxHLXJ2eYyw1tnxtVXf2yck6AofzgpVIfso9u7DAE=;
-        b=YWxBm6Jx9v7Wlb2fdyVA4R/eCLykHIu5057o5yoxhiNe1ckeEcYcuoIlvL0CXgyUUS
-         iCcHfjSkiUebD2r7d935yPKizxOzpol4fVwzGhe1sxB1SXtbSjuBLWqAfhVvXomhyf7V
-         BnXT8+SGpjmpIZ/L55h1bxZ3H2uZjmLJz3IlPnl59Ufs7nykyUUz1vFD+GJdAuAbfX72
-         aDVKhnqFKkHplJiX2aOCMqJuGarphm3J7iBCGW4p41f350GRxKuiNvo8YaK6XmNTj1kT
-         RwpAlAlpMgMInq7c/Fe45mxLaG95Ut4PwQ1pI+fqY/6Q5msR6vrqmQMsjGVAp/pbCwXr
-         RpyA==
+        Tue, 8 Mar 2022 13:06:00 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D361355201
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:05:01 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A77D33F621
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 18:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646762700;
+        bh=eGfr/Gi+1TNrE/Evd9NiuKAxgUTxUS7szQhSnGLVsuU=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Fi8cbzVSFiPyUrOB1HnC1iIe9PxtbYedVF3hdTHeFjoMTyP85WDWWz3gRLRwZ4U6c
+         JHe7wmpl/GTFeaolsPW1UIB1LA6yCfFSDL3CvpPyCK7vhvt4iQCWMIB24ayYTWCEiK
+         PHE24GTCkpfdFNWDO46pS5rJZwZvSrqGDR8M2+r6bcjcq2qrL3zNk0GxzVDZM1NHvt
+         PiJa9+S5OZWMMnA3cEcLmFEHHXRYEHxZ/5v5lwp/9MRhqKpD6F+/oDcfCSWPdnZLKa
+         fJGaX+9cwVmqvmDU+HtAEVxR5WmJsBgx7e/zXIKggDQWIyBm780tm598X624VHegua
+         3RAtaIg9Kk6xg==
+Received: by mail-ed1-f71.google.com with SMTP id cf6-20020a0564020b8600b00415e9b35c81so1676284edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:05:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6SHxHLXJ2eYyw1tnxtVXf2yck6AofzgpVIfso9u7DAE=;
-        b=lDBaT3/xIImb5z61/nNpvi8aXv8Y4u3xWma3Mru8rgRiKz8DwQQfWkHs/yqAl1RV2a
-         ipNPpbtjG1/krBElTnAafrP3eB4DeV+5/Zi1PTFHkA2JOxNCLVt0iAX9pKEqSDetiyRx
-         PMnWlXVpM4ycZr5jOfiJbz2m7hR6LFjjOthfyb7Od2CN8ZqSbKC+eNVdUtgL4S0KO8sT
-         UlCMIhw5Feg8EHurBigsWQeHAO7Vad/mL9tdmGtQR0YwxD5bwbyIAx9hZ46KhY4LOiDn
-         +14/7AAqm0WFUXSkHPeF2H/04tZxuFVSZeYpAWhGIr0wmpU9EQMPoJ/ep7THYb0e6WUZ
-         GJbg==
-X-Gm-Message-State: AOAM530Om+IiySecn3ONSCXt1YrYXdYk5v8uqFSNjeiy6FeegCkvWXQH
-        aeevQD85h6yZUjWmRk4Juxc=
-X-Google-Smtp-Source: ABdhPJzM/6dGiiSrzkwSlZG8G/sBalDM4RxDurXpIFsD9rt6m80xcXA4TbZGf9jQFZCFTRpLPDs6cA==
-X-Received: by 2002:a05:6512:3ca2:b0:445:98f6:40df with SMTP id h34-20020a0565123ca200b0044598f640dfmr11391467lfv.293.1646762664244;
-        Tue, 08 Mar 2022 10:04:24 -0800 (PST)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id l11-20020a2e834b000000b00246308690e2sm3986488ljh.85.2022.03.08.10.04.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 10:04:23 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Tue, 8 Mar 2022 19:04:21 +0100
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>, paulmck@kernel.org,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        rcu@vger.kernel.org, bigeasy@linutronix.de
-Subject: Re: [PATCH] rcu: Only boost rcu reader tasks with lower priority
- than boost kthreads
-Message-ID: <YieapfzKvy2chaHT@pc638.lan>
-References: <20220304092631.4123188-1-qiang1.zhang@intel.com>
- <81f69dd4-6ca9-760c-bec5-5cb27afbe788@quicinc.com>
- <PH0PR11MB5880026EBBE3E195549E2245DA089@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20220307191512.GN4285@paulmck-ThinkPad-P17-Gen-1>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eGfr/Gi+1TNrE/Evd9NiuKAxgUTxUS7szQhSnGLVsuU=;
+        b=casAIfIhJegd9CvWC76Hr19u+8iHQnX9eauA/cmbyxnt++GfAJMRP7RwBvum6XA0rJ
+         SWXncxAg+jK99fiKsOsiA971KUOUtow6CUM+0/KIlF20ipNvq9frYDudfX5w345pc1cZ
+         toD0w3QgB7Ny5FUZYZH0GsVXIZmezoiDUma8sXVrosl47egZPY6/rV6cpxxqTyWdnNWp
+         Xp0PAVkOwPGT4odoruEb4BHMDbt6ugZCz6IUh+MkOZC6nS7SLN4QNBLnzflaZT20LxlI
+         3qB76wWCHwbGbu3CW3NIwLLrbOMBTGEgXDn2lYHLIPhDluodJOclyf/UO8nmoQZaaGj4
+         XdVg==
+X-Gm-Message-State: AOAM531VWoOkdjkoaLcsGFjbPhdNw2+w8HJGKnp8rquJaOLGJs5k/Pk0
+        tl3Qr/xtbgLAMFD7Lqm0jYGXxW+xf0G4UIWvEWlexzk1DjdLJFpEAggU9nnzPBALP/5nNcQTa9c
+        hs/TPy/U3zw9g0np1+6PpwL3FQCh4QxMo+Paa82VMQA==
+X-Received: by 2002:a17:906:b893:b0:6da:ab5e:ea34 with SMTP id hb19-20020a170906b89300b006daab5eea34mr14373919ejb.657.1646762700252;
+        Tue, 08 Mar 2022 10:05:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwR9N4OFXwg11cFMOkm0NAH6N8FDdi1Yzof7ATeNr8EXvzHvnUdqOqBP2nsfgHZhcV6rY0lcA==
+X-Received: by 2002:a17:906:b893:b0:6da:ab5e:ea34 with SMTP id hb19-20020a170906b89300b006daab5eea34mr14373891ejb.657.1646762699994;
+        Tue, 08 Mar 2022 10:04:59 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id o10-20020a056402438a00b00415bc425022sm8205522edc.33.2022.03.08.10.04.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 10:04:59 -0800 (PST)
+Message-ID: <df7999e3-53ea-c3b4-45a6-1fe34b50caf0@canonical.com>
+Date:   Tue, 8 Mar 2022 19:04:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307191512.GN4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 02/15] dt-bindings: devfreq: rk3399_dmc: Deprecate
+ unused/redundant properties
+Content-Language: en-US
+To:     Brian Norris <briannorris@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Lin Huang <hl@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
+        Derek Basehore <dbasehore@chromium.org>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
+References: <20220308000945.706701-1-briannorris@chromium.org>
+ <20220307160918.v3.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307160918.v3.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,54 +92,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon, Mar 07, 2022 at 02:03:17AM +0000, Zhang, Qiang1 wrote:
-> > On 3/4/2022 2:56 PM, Zqiang wrote:
-> > > When RCU_BOOST is enabled, the boost kthreads will boosting readers
-> > > who are blocking a given grace period, if the current reader tasks
-> > > have a higher priority than boost kthreads(the boost kthreads priority
-> > > not always 1, if the kthread_prio is set), boosting is useless, skip
-> > > current task and select next task to boosting, reduce the time for a
-> > > given grace period.
-> > > 
-> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+On 08/03/2022 01:09, Brian Norris wrote:
+> These DRAM configuration properties are all handled in ARM Trusted
+> Firmware (and have been since the early days of this SoC), and there are
+> no in-tree users of the DMC binding yet. It's better to just defer to
+> firmware instead of maintaining this large list of properties.
 > 
-> Adding to CC to get more eyes on this.  I am not necessarily opposed to
-> it, but I don't do that much RT work myself these days.
+> There's also some confusion about units: many of these are specified in
+> MHz, but the downstream users and driver code are treating them as Hz, I
+> believe. Rather than straighten all that out, I just drop them.
 > 
-> 							Thanx, Paul
-> 
-> > > ---
-> > >   kernel/rcu/tree_plugin.h | 10 +++++++++-
-> > >   1 file changed, 9 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> > > index c3d212bc5338..d35b6da66bbd 100644
-> > > --- a/kernel/rcu/tree_plugin.h
-> > > +++ b/kernel/rcu/tree_plugin.h
-> > > @@ -12,6 +12,7 @@
-> > >    */
-> > >   
-> > >   #include "../locking/rtmutex_common.h"
-> > > +#include <linux/sched/deadline.h>
-> > >   
-> > >   static bool rcu_rdp_is_offloaded(struct rcu_data *rdp)
-> > >   {
-> > > @@ -1065,13 +1066,20 @@ static int rcu_boost(struct rcu_node *rnp)
-> > >   	 * section.
-> > >   	 */
-> > >   	t = container_of(tb, struct task_struct, rcu_node_entry);
-> > > +	if (!rnp->exp_tasks && (dl_task(t) || t->prio <= current->prio)) {
-> > > +		tb = rcu_next_node_entry(t, rnp);
-> > > +		WRITE_ONCE(rnp->boost_tasks, tb);
-> > > +		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-> > > +		goto end;
-> > > +	}
-> > > +
-Why do you bypass the expedited grace period and boost any tasks anyway?
-Same way the expedited gp can be blocked by higher prior tasks SCHED_DEADLINE
-or SCHED_FIFO.
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+>  * Add Reviewed-by tags
 
-Thanks!
+Messed up commit msg.
 
---
-Vlad Rezki
+> 
+> ---
+> 
+> Changes in v3:
+>  * Add Reviewed-by
+> 
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 42 +++++++++----------
+>  1 file changed, 21 insertions(+), 21 deletions(-)
+> 
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

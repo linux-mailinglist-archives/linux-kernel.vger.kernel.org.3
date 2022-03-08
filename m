@@ -2,39 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617544D2005
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80CF4D2008
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349517AbiCHSVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:21:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
+        id S1345888AbiCHSWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:22:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349510AbiCHSVW (ORCPT
+        with ESMTP id S241292AbiCHSWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:21:22 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7412056C1C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:20:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 076941516;
-        Tue,  8 Mar 2022 10:20:25 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.57.88.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B09653FA45;
-        Tue,  8 Mar 2022 10:20:23 -0800 (PST)
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH v3 7/7] sched/fair: Remove the energy margin in feec()
-Date:   Tue,  8 Mar 2022 18:19:57 +0000
-Message-Id: <20220308181957.280354-8-vincent.donnefort@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220308181957.280354-1-vincent.donnefort@arm.com>
-References: <20220308181957.280354-1-vincent.donnefort@arm.com>
+        Tue, 8 Mar 2022 13:22:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBB656C24;
+        Tue,  8 Mar 2022 10:21:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA8E8B81C1E;
+        Tue,  8 Mar 2022 18:21:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3274BC340F4;
+        Tue,  8 Mar 2022 18:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646763700;
+        bh=BvBZ1LINSBPwhr5oIbyigSsvEG10zasIh2fhZWTr4qs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Pki/GZNb1Sc3CV5ZSTMUJHizEviQV4xQVdKqo9QRWlHGeReauqYw78nJcVqJ1tsWz
+         9vWQ4YOALGxGQ9K3skSYvfqyGow1d8JT6UepnHgC6I7Oy3NoWUI59Z70o02wbRCLbq
+         UnJioi8AZCBgDE58Cd19rLBAy34u5QCtyE8Skgmk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.305
+Date:   Tue,  8 Mar 2022 19:21:36 +0100
+Message-Id: <164676369621628@kroah.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -43,132 +51,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-find_energy_efficient_cpu() integrates a margin to protect tasks from
-bouncing back and forth from a CPU to another. This margin is set as being
-6% of the total current energy estimated on the system. This however does
-not work for two reasons:
+I'm announcing the release of the 4.9.305 kernel.
 
-1. The energy estimation is not a good absolute value:
+All users of the 4.9 kernel series must upgrade.
 
-The function, compute_energy() used in feec() is a good estimation for
-task placement as it allows to compare the energy with and without a task.
-The computed delta will give a good overview of the cost for a certain
-task placement. It, however, doesn't work as an absolute estimation for
-the total energy of the system. First it adds the contribution to idle
-CPUs into the energy, second it mixes util_avg with util_est values.
-util_avg represents integrates the near history for a CPU usage,
-it doesn't tell at all what the current utilization is. A system that has
-been quite busy in the near past will hold a very high energy and then a
-high margin preventing any task migration to a lower capacity CPU, wasting
-energy. It even creates a negative feedback loop: by holding the tasks on
-a less efficient CPU, the margin contributes in keeping the energy high.
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-2. The margin handicaps small tasks:
+thanks,
 
-On a system where the workload is composed mostly of small tasks (which is
-often the case on Android), the overall energy will be high enough to
-create a margin none of those tasks can cross. e.g. On a Pixel4, a small
-utilization of 5% on all the CPUs creates a global estimated energy of 140
-joules, as per the Energy Model declaration of that same device. This
-means, after applying the 6% margin that any migration must save more than
-8 joules to happen. No task with a utilization lower than 40 would then be
-able to migrate away from the biggest CPU of the system.
+greg k-h
 
-The 6% of the overall system energy was brought by the following patch:
+------------
 
- (eb92692b2544 sched/fair: Speed-up energy-aware wake-ups)
+ Makefile                                          |    2 
+ arch/arm/mm/mmu.c                                 |    2 
+ drivers/ata/pata_hpt37x.c                         |    4 -
+ drivers/dma/sh/shdma-base.c                       |    4 +
+ drivers/firmware/efi/vars.c                       |    5 +
+ drivers/firmware/qemu_fw_cfg.c                    |   10 +--
+ drivers/hid/hid-debug.c                           |    4 +
+ drivers/hid/hid-input.c                           |    2 
+ drivers/i2c/busses/Kconfig                        |    2 
+ drivers/i2c/busses/i2c-bcm2835.c                  |   11 +++
+ drivers/input/input.c                             |    6 ++
+ drivers/input/mouse/elan_i2c_core.c               |   64 +++++++---------------
+ drivers/net/arcnet/com20020-pci.c                 |    3 +
+ drivers/net/can/usb/gs_usb.c                      |   10 +--
+ drivers/net/ethernet/chelsio/cxgb3/t3_hw.c        |    2 
+ drivers/net/ethernet/samsung/sxgbe/sxgbe_main.c   |    6 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |    6 +-
+ drivers/net/hamradio/mkiss.c                      |    2 
+ drivers/net/usb/cdc_mbim.c                        |    5 +
+ drivers/net/wireless/mac80211_hwsim.c             |   13 ++++
+ drivers/soc/fsl/qe/qe_io.c                        |    2 
+ drivers/usb/gadget/legacy/inode.c                 |   10 ++-
+ fs/cifs/cifsfs.c                                  |    1 
+ include/net/netfilter/nf_queue.h                  |    2 
+ include/uapi/linux/input-event-codes.h            |    3 -
+ mm/shmem.c                                        |    7 +-
+ net/dcb/dcbnl.c                                   |   44 +++++++++++++++
+ net/ipv6/ip6_output.c                             |   11 ++-
+ net/mac80211/rx.c                                 |    4 -
+ net/netfilter/nf_queue.c                          |   23 ++++++-
+ net/netfilter/nfnetlink_queue.c                   |   12 +++-
+ sound/soc/soc-ops.c                               |    4 -
+ 32 files changed, 200 insertions(+), 86 deletions(-)
 
-It was previously 6% of the prev_cpu energy. Also, the following one
-made this margin value conditional on the clusters where the task fits:
+Benjamin Beichler (1):
+      mac80211_hwsim: report NOACK frames in tx_status
 
- (8d4c97c105ca sched/fair: Only compute base_energy_pd if necessary)
+Daniele Palmas (1):
+      net: usb: cdc_mbim: avoid altsetting toggling for Telit FN990
 
-We could simply revert that margin change to what it was, but the original
-version didn't have strong grounds neither and as demonstrated in (1.) the
-estimated energy isn't a good absolute value. Instead, removing it
-completely. It is indeed, made possible by recent changes that improved
-energy estimation comparison fairness (sched/fair: Remove task_util from
-effective utilization in feec()) (PM: EM: Increase energy calculation
-precision) and task utilization stabilization (sched/fair: Decay task
-util_avg during migration)
+Eric Anholt (1):
+      i2c: bcm2835: Avoid clock stretching timeouts
 
-Without a margin, we could have feared bouncing between CPUs. But running
-LISA's eas_behaviour test coverage on three different platforms (Hikey960,
-RB-5 and DB-845) showed no issue and even fixed previously known failures.
+Florian Westphal (2):
+      netfilter: nf_queue: don't assume sk is full socket
+      netfilter: nf_queue: fix possible use-after-free
 
-Removing the energy margin enables more energy-optimized placements for a
-more energy efficient system.
+Greg Kroah-Hartman (1):
+      Linux 4.9.305
 
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Hangyu Hua (2):
+      usb: gadget: don't release an existing dev->buf
+      usb: gadget: clear related members when goto fail
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index b48ba181c8ec..05518a6150e5 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6736,7 +6736,6 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
- 	int cpu, best_energy_cpu = prev_cpu, target = -1;
- 	unsigned long cpu_cap, cpu_thermal_cap, util;
--	unsigned long base_energy = 0;
- 	struct sched_domain *sd;
- 	struct perf_domain *pd;
- 	struct energy_env eenv;
-@@ -6767,8 +6766,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 	for (; pd; pd = pd->next) {
- 		unsigned long cur_delta, spare_cap, max_spare_cap = 0;
- 		bool compute_prev_delta = false;
--		unsigned long base_energy_pd;
- 		int max_spare_cap_cpu = -1;
-+		unsigned long base_energy;
- 
- 		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
- 
-@@ -6823,16 +6822,15 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 
- 		/* Compute the 'base' energy of the pd, without @p */
- 		eenv_pd_busy_time(&eenv, cpus, p);
--		base_energy_pd = compute_energy(&eenv, pd, cpus, p, -1);
--		base_energy += base_energy_pd;
-+		base_energy = compute_energy(&eenv, pd, cpus, p, -1);
- 
- 		/* Evaluate the energy impact of using prev_cpu. */
- 		if (compute_prev_delta) {
- 			prev_delta = compute_energy(&eenv, pd, cpus, p,
- 						    prev_cpu);
--			if (prev_delta < base_energy_pd)
-+			if (prev_delta < base_energy)
- 				goto unlock;
--			prev_delta -= base_energy_pd;
-+			prev_delta -= base_energy;
- 			best_delta = min(best_delta, prev_delta);
- 		}
- 
-@@ -6840,9 +6838,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		if (max_spare_cap_cpu >= 0) {
- 			cur_delta = compute_energy(&eenv, pd, cpus, p,
- 						   max_spare_cap_cpu);
--			if (cur_delta < base_energy_pd)
-+			if (cur_delta < base_energy)
- 				goto unlock;
--			cur_delta -= base_energy_pd;
-+			cur_delta -= base_energy;
- 			if (cur_delta < best_delta) {
- 				best_delta = cur_delta;
- 				best_energy_cpu = max_spare_cap_cpu;
-@@ -6851,12 +6849,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 	}
- 	rcu_read_unlock();
- 
--	/*
--	 * Pick the best CPU if prev_cpu cannot be used, or if it saves at
--	 * least 6% of the energy used by prev_cpu.
--	 */
--	if ((prev_delta == ULONG_MAX) ||
--	    (prev_delta - best_delta) > ((prev_delta + base_energy) >> 4))
-+	if (best_delta < prev_delta)
- 		target = best_energy_cpu;
- 
- 	return target;
--- 
-2.25.1
+Hans de Goede (2):
+      Input: elan_i2c - move regulator_[en|dis]able() out of elan_[en|dis]able_power()
+      Input: elan_i2c - fix regulator enable count imbalance after suspend/resume
+
+Huang Pei (1):
+      hamradio: fix macro redefine warning
+
+Hugh Dickins (1):
+      memfd: fix F_SEAL_WRITE after shmem huge page allocated
+
+JaeMan Park (1):
+      mac80211_hwsim: initialize ieee80211_tx_info at hw_scan_work
+
+Jann Horn (1):
+      efivars: Respect "block" flag in efivar_entry_set_safe()
+
+Jia-Ju Bai (1):
+      net: chelsio: cxgb3: check the return value of pci_find_capability()
+
+Jiasheng Jiang (1):
+      soc: fsl: qe: Check of ioremap return value
+
+Jiri Bohac (1):
+      xfrm: fix MTU regression
+
+Johan Hovold (1):
+      firmware: qemu_fw_cfg: fix kobject leak in probe error path
+
+José Expósito (1):
+      Input: clear BTN_RIGHT/MIDDLE on buttonpads
+
+Marek Vasut (1):
+      ASoC: ops: Shift tested values in snd_soc_put_volsw() by +min
+
+Nicolas Escande (1):
+      mac80211: fix forwarded mesh frames AC & queue selection
+
+Qiushi Wu (1):
+      firmware: Fix a reference count leak.
+
+Randy Dunlap (3):
+      net: stmmac: fix return value of __setup handler
+      net: sxgbe: fix return value of __setup handler
+      ARM: 9182/1: mmu: fix returns from early_param() and __setup() functions
+
+Ronnie Sahlberg (1):
+      cifs: fix double free race when mount fails in cifs_get_root()
+
+Sergey Shtylyov (1):
+      ata: pata_hpt37x: fix PCI clock detection
+
+Vincent Mailhol (1):
+      can: gs_usb: change active_channels's type from atomic_t to u8
+
+Vladimir Oltean (2):
+      net: dcb: flush lingering app table entries for unregistered devices
+      net: dcb: disable softirqs in dcbnl_flush_dev()
+
+William Mahon (1):
+      HID: add mapping for KEY_ALL_APPLICATIONS
+
+Wolfram Sang (1):
+      i2c: qup: allow COMPILE_TEST
+
+Yongzhi Liu (1):
+      dmaengine: shdma: Fix runtime PM imbalance on error
+
+Zheyu Ma (1):
+      net: arcnet: com20020: Fix null-ptr-deref in com20020pci_probe()
 

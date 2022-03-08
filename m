@@ -2,329 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAF84D1909
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C643A4D190C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347076AbiCHNVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:21:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
+        id S1347100AbiCHNVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233857AbiCHNVE (ORCPT
+        with ESMTP id S233857AbiCHNVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:21:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E113449687;
-        Tue,  8 Mar 2022 05:20:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 749F460F64;
-        Tue,  8 Mar 2022 13:20:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EACC340EB;
-        Tue,  8 Mar 2022 13:20:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646745606;
-        bh=tGU5octn4cnB/mw4Ty6XIGrMXCKfoNOlJmYFqPsROs8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bmzxexaQQ0kY3kfIrJx+99W6CMIOM42SQZoQnI21ZzLUYMKc6TW/DrO7X5dfPb5z1
-         vbiqp2JEUnRhjWQhgBPLZKgFCmg5QMekJqLhLd/t8VmcfsDB8QfFwRBphkRZtYefZF
-         89+s3qT2JUKDpkK4RH0Cwu+H5h036F4+B19gsmynKNqcZx7xda74j1zRhkcEDAw8x4
-         eQ2jzy5w5ct6mKWrNBft8NuoF4ccAtFcrXJwr3uspBvv/SUupEmOQemDHN3LMmXO/6
-         ok0KPwq2qbYuY01h/JLYijter/+2oGAJ/e5AROgfYt5nkr+VDo3iz3OxdTZOGD211Y
-         LXeFmYG+G0eSg==
-Date:   Tue, 8 Mar 2022 15:19:26 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v8 5/5] certs: Allow root user to append signed hashes to
- the blacklist keyring
-Message-ID: <YidX3jqNJeFfr1G1@iki.fi>
-References: <20210712170313.884724-1-mic@digikod.net>
- <20210712170313.884724-6-mic@digikod.net>
- <YidDznCPSmFmfNwE@iki.fi>
- <995fc93b-531b-9840-1523-21ae2adbe4ba@digikod.net>
+        Tue, 8 Mar 2022 08:21:33 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845AE4968D;
+        Tue,  8 Mar 2022 05:20:36 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KCbW35fxwzBrbM;
+        Tue,  8 Mar 2022 21:18:39 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 21:20:34 +0800
+CC:     <yangyicong@hisilicon.com>, <gregkh@linuxfoundation.org>,
+        <helgaas@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <lorenzo.pieralisi@arm.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>,
+        <leo.yan@linaro.org>, <daniel.thompson@linaro.org>,
+        <joro@8bytes.org>, <john.garry@huawei.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <robin.murphy@arm.com>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>, <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH v5 3/8] hisi_ptt: Register PMU device for PTT trace
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+References: <20220308084930.5142-1-yangyicong@hisilicon.com>
+ <20220308084930.5142-4-yangyicong@hisilicon.com>
+ <20220308102157.00003725@Huawei.com>
+ <d3b555c1-ed7e-f668-7d81-9cc2dbe6ffba@huawei.com>
+ <20220308120607.000064e6@Huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <a8476fe5-2802-4788-b877-58a5e4fe898a@huawei.com>
+Date:   Tue, 8 Mar 2022 21:20:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <995fc93b-531b-9840-1523-21ae2adbe4ba@digikod.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220308120607.000064e6@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 01:18:28PM +0100, Mickaël Salaün wrote:
+On 2022/3/8 20:06, Jonathan Cameron wrote:
+> On Tue, 8 Mar 2022 19:13:08 +0800
+> Yicong Yang <yangyicong@huawei.com> wrote:
 > 
-> On 08/03/2022 12:53, Jarkko Sakkinen wrote:
-> > On Mon, Jul 12, 2021 at 07:03:13PM +0200, Mickaël Salaün wrote:
-> > > From: Mickaël Salaün <mic@linux.microsoft.com>
-> > > 
-> > > Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
-> > > to dynamically add new keys to the blacklist keyring.  This enables to
-> > > invalidate new certificates, either from being loaded in a keyring, or
-> > > from being trusted in a PKCS#7 certificate chain.  This also enables to
-> > > add new file hashes to be denied by the integrity infrastructure.
-> > > 
-> > > Being able to untrust a certificate which could have normaly been
-> > > trusted is a sensitive operation.  This is why adding new hashes to the
-> > > blacklist keyring is only allowed when these hashes are signed and
-> > > vouched by the builtin trusted keyring.  A blacklist hash is stored as a
-> > > key description.  The PKCS#7 signature of this description must be
-> > > provided as the key payload.
-> > > 
-> > > Marking a certificate as untrusted should be enforced while the system
-> > > is running.  It is then forbiden to remove such blacklist keys.
-> > > 
-> > > Update blacklist keyring, blacklist key and revoked certificate access rights:
-> > > * allows the root user to search for a specific blacklisted hash, which
-> > >    make sense because the descriptions are already viewable;
-> > > * forbids key update (blacklist and asymmetric ones);
-> > > * restricts kernel rights on the blacklist keyring to align with the
-> > >    root user rights.
-> > > 
-> > > See help in tools/certs/print-cert-tbs-hash.sh .
-> > > 
-> > > Cc: David Howells <dhowells@redhat.com>
-> > > Cc: David Woodhouse <dwmw2@infradead.org>
-> > > Cc: Eric Snowberg <eric.snowberg@oracle.com>
-> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > > Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> > > Link: https://lore.kernel.org/r/20210712170313.884724-6-mic@digikod.net
-> > > ---
-> > > 
-> > > Changes since v6:
-> > > * Rebase on keys-cve-2020-26541-v3: commit ebd9c2ae369a ("integrity:
-> > >    Load mokx variables into the blacklist keyring").
-> > > 
-> > > Changes since v5:
-> > > * Rebase on keys-next, fix Kconfig conflict, and update the asymmetric
-> > >    key rights added to the blacklist keyring by the new
-> > >    add_key_to_revocation_list(): align with blacklist key rights by
-> > >    removing KEY_POS_WRITE as a safeguard, and add
-> > >    KEY_ALLOC_BYPASS_RESTRICTION to not be subject to
-> > >    restrict_link_for_blacklist() that only allows blacklist key types to
-> > >    be added to the keyring.
-> > > * Change the return code for restrict_link_for_blacklist() from -EPERM
-> > >    to -EOPNOTSUPP to align with asymmetric key keyrings.
-> > > 
-> > > Changes since v3:
-> > > * Update commit message for print-cert-tbs-hash.sh .
-> > > 
-> > > Changes since v2:
-> > > * Add comment for blacklist_key_instantiate().
-> > > ---
-> > >   certs/Kconfig     | 10 +++++
-> > >   certs/blacklist.c | 96 ++++++++++++++++++++++++++++++++++++-----------
-> > >   2 files changed, 85 insertions(+), 21 deletions(-)
-> > > 
-> > > diff --git a/certs/Kconfig b/certs/Kconfig
-> > > index 0fbe184ceca5..e0e524b7eff9 100644
-> > > --- a/certs/Kconfig
-> > > +++ b/certs/Kconfig
-> > > @@ -103,4 +103,14 @@ config SYSTEM_REVOCATION_KEYS
-> > >   	  containing X.509 certificates to be included in the default blacklist
-> > >   	  keyring.
-> > > +config SYSTEM_BLACKLIST_AUTH_UPDATE
-> > > +	bool "Allow root to add signed blacklist keys"
-> > > +	depends on SYSTEM_BLACKLIST_KEYRING
-> > > +	depends on SYSTEM_DATA_VERIFICATION
-> > > +	help
-> > > +	  If set, provide the ability to load new blacklist keys at run time if
-> > > +	  they are signed and vouched by a certificate from the builtin trusted
-> > > +	  keyring.  The PKCS#7 signature of the description is set in the key
-> > > +	  payload.  Blacklist keys cannot be removed.
-> > > +
-> > >   endmenu
-> > > diff --git a/certs/blacklist.c b/certs/blacklist.c
-> > > index b254c87ceb3a..486ce0dd8e9c 100644
-> > > --- a/certs/blacklist.c
-> > > +++ b/certs/blacklist.c
-> > > @@ -15,6 +15,7 @@
-> > >   #include <linux/err.h>
-> > >   #include <linux/seq_file.h>
-> > >   #include <linux/uidgid.h>
-> > > +#include <linux/verification.h>
-> > >   #include <keys/system_keyring.h>
-> > >   #include "blacklist.h"
-> > >   #include "common.h"
-> > > @@ -26,6 +27,9 @@
-> > >    */
-> > >   #define MAX_HASH_LEN	128
-> > > +#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
-> > > +			    KEY_USR_SEARCH | KEY_USR_VIEW)
-> > > +
-> > >   static const char tbs_prefix[] = "tbs";
-> > >   static const char bin_prefix[] = "bin";
-> > > @@ -80,19 +84,51 @@ static int blacklist_vet_description(const char *desc)
-> > >   	return 0;
-> > >   }
-> > > -/*
-> > > - * The hash to be blacklisted is expected to be in the description.  There will
-> > > - * be no payload.
-> > > - */
-> > > -static int blacklist_preparse(struct key_preparsed_payload *prep)
-> > > +static int blacklist_key_instantiate(struct key *key,
-> > > +		struct key_preparsed_payload *prep)
-> > >   {
-> > > -	if (prep->datalen > 0)
-> > > -		return -EINVAL;
-> > > -	return 0;
-> > > +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
-> > > +	int err;
-> > > +#endif
-> > > +
-> > > +	/* Sets safe default permissions for keys loaded by user space. */
-> > > +	key->perm = BLACKLIST_KEY_PERM;
-> > > +
-> > > +	/*
-> > > +	 * Skips the authentication step for builtin hashes, they are not
-> > > +	 * signed but still trusted.
-> > > +	 */
-> > > +	if (key->flags & (1 << KEY_FLAG_BUILTIN))
-> > > +		goto out;
-> > > +
-> > > +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
-> > > +	/*
-> > > +	 * Verifies the description's PKCS#7 signature against the builtin
-> > > +	 * trusted keyring.
-> > > +	 */
-> > > +	err = verify_pkcs7_signature(key->description,
-> > > +			strlen(key->description), prep->data, prep->datalen,
-> > > +			NULL, VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
-> > > +	if (err)
-> > > +		return err;
-> > > +#else
-> > > +	/*
-> > > +	 * It should not be possible to come here because the keyring doesn't
-> > > +	 * have KEY_USR_WRITE and the only other way to call this function is
-> > > +	 * for builtin hashes.
-> > > +	 */
-> > > +	WARN_ON_ONCE(1);
-> > > +	return -EPERM;
-> > > +#endif
-> > > +
-> > > +out:
-> > > +	return generic_key_instantiate(key, prep);
-> > >   }
-> > > -static void blacklist_free_preparse(struct key_preparsed_payload *prep)
-> > > +static int blacklist_key_update(struct key *key,
-> > > +		struct key_preparsed_payload *prep)
-> > >   {
-> > > +	return -EPERM;
-> > >   }
-> > >   static void blacklist_describe(const struct key *key, struct seq_file *m)
-> > > @@ -103,9 +139,8 @@ static void blacklist_describe(const struct key *key, struct seq_file *m)
-> > >   static struct key_type key_type_blacklist = {
-> > >   	.name			= "blacklist",
-> > >   	.vet_description	= blacklist_vet_description,
-> > > -	.preparse		= blacklist_preparse,
-> > > -	.free_preparse		= blacklist_free_preparse,
-> > > -	.instantiate		= generic_key_instantiate,
-> > > +	.instantiate		= blacklist_key_instantiate,
-> > > +	.update			= blacklist_key_update,
-> > >   	.describe		= blacklist_describe,
-> > >   };
-> > > @@ -154,8 +189,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
-> > >   				   hash,
-> > >   				   NULL,
-> > >   				   0,
-> > > -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
-> > > -				    KEY_USR_VIEW),
-> > > +				   BLACKLIST_KEY_PERM,
-> > >   				   KEY_ALLOC_NOT_IN_QUOTA |
-> > >   				   KEY_ALLOC_BUILT_IN);
-> > >   	if (IS_ERR(key)) {
-> > > @@ -232,8 +266,10 @@ int add_key_to_revocation_list(const char *data, size_t size)
-> > >   				   NULL,
-> > >   				   data,
-> > >   				   size,
-> > > -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW),
-> > > -				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN);
-> > > +				   KEY_POS_VIEW | KEY_POS_READ | KEY_POS_SEARCH
-> > > +				   | KEY_USR_VIEW,
-> > > +				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN
-> > > +				   | KEY_ALLOC_BYPASS_RESTRICTION);
-> > >   	if (IS_ERR(key)) {
-> > >   		pr_err("Problem with revocation key (%ld)\n", PTR_ERR(key));
-> > > @@ -260,25 +296,43 @@ int is_key_on_revocation_list(struct pkcs7_message *pkcs7)
-> > >   }
-> > >   #endif
-> > > +static int restrict_link_for_blacklist(struct key *dest_keyring,
-> > > +		const struct key_type *type, const union key_payload *payload,
-> > > +		struct key *restrict_key)
-> > > +{
-> > > +	if (type == &key_type_blacklist)
-> > > +		return 0;
-> > > +	return -EOPNOTSUPP;
-> > > +}
-> > > +
-> > >   /*
-> > >    * Initialise the blacklist
-> > >    */
-> > >   static int __init blacklist_init(void)
-> > >   {
-> > >   	const char *const *bl;
-> > > +	struct key_restriction *restriction;
-> > >   	if (register_key_type(&key_type_blacklist) < 0)
-> > >   		panic("Can't allocate system blacklist key type\n");
-> > > +	restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
-> > > +	if (!restriction)
-> > > +		panic("Can't allocate blacklist keyring restriction\n");
-> > 
-> > 
-> > This prevents me from taking this to my pull request. In moderns standards,
-> > no new BUG_ON(), panic() etc. should never added to the kernel.
-> > 
-> > I missed this in my review.
-> > 
-> > This should rather be e.g.
-> > 
-> >          restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
-> > 	if (!restriction) {
-> > 		pr_err("Can't allocate blacklist keyring restriction\n");
-> >                  return 0;
-> >          }
-> > 
-> > Unfortunately I need to drop this patch set, because adding new panic()
-> > is simply a no-go.
+>> On 2022/3/8 18:21, Jonathan Cameron wrote:
+>>> On Tue, 8 Mar 2022 16:49:25 +0800
+>>> Yicong Yang <yangyicong@hisilicon.com> wrote:
+>>>   
+>>>> Register PMU device of PTT trace, then users can use trace through perf
+>>>> command. The driver makes use of perf AUX trace and support following
+>>>> events to configure the trace:
+>>>>
+>>>> - filter: select Root port or Endpoint to trace
+>>>> - type: select the type of traced TLP headers
+>>>> - direction: select the direction of traced TLP headers
+>>>> - format: select the data format of the traced TLP headers
+>>>>
+>>>> This patch adds the PMU driver part of PTT trace. The perf command support
+>>>> of PTT trace is added in the following patch.
+>>>>
+>>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>  
+>>>
+>>> It seems to me that you ended up doing both suggestions for
+>>> how to clean up the remove order when it was meant to be
+>>> a question of picking one or the other.
+>>>
+>>> Otherwise this looks good to me - so with that tidied up
+>>>   
+>>
+>> Hi Jonathan,
+>>
+>> Thanks for the comments. I'd like to illustrate the reason why I decide to
+>> manually unregister the PMU device.
+>>
+>> The DMA buffers are devm allocated when necessary. They're only allocated
+>> when user is going to use the PTT in the first time after the driver's probe,
+>> so when driver removal the buffers are released prior to the PMU device's
+>> unregistration. I think there's a race condition.
+>>
+>> IIUC, The PMU device(as the user interface) should be unregistered first then
+>> we're safe to free the DMA buffers. But unregister the PMU device by devm
+>> cannot keep that order.
 > 
-> I agree that panic() is not great in general, but I followed the other part
-> of the code (just above) that do the same. This part of the kernel should
-> failed if critical memory allocation failed at boot time (only). It doesn't
-> impact the kernel once it is running. I don't think that just ignoring this
-> error with return 0 is fine, after all it's a critical error right?
+> Ok. Please add a comment in the remove() giving this reasoning.
+> 
 
-It's not good reason enough to crash the whole kernel, even if it is a
-critical error (e.g. run-time foresincs). Even WARN() is not recommended
-these days [*].
+Sure will add a comment for the reason why we need this manual unregistration in remove().
 
-For the existing panic()-statements: I'm happy to review patches that
-render them out.
-
-Not sure tho, if this fails should it be then "everything blacklisted".
-Just one thing to consider.
-
-> Calling panic() seems OK here. Is there a better way to stop the kernel for
-> such critical error? If the kernel cannot allocate memory at this time, it
-> would be useless to try continuing booting.
-
-[*] https://lore.kernel.org/linux-sgx/YA0tvOGp%2FshchVhu@kroah.com/
-
-BR, Jarkko
+> Jonathan
+> 
+>>
+>> Thanks,
+>> Yicong
+>>
+>>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>>>   
+>>>> ---  
+>>>   
+>>>> +
+>>>> +static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
+>>>> +{
+>>>> +	u16 core_id, sicl_id;
+>>>> +	char *pmu_name;
+>>>> +	u32 reg;
+>>>> +
+>>>> +	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
+>>>> +		.module		= THIS_MODULE,
+>>>> +		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
+>>>> +		.task_ctx_nr	= perf_sw_context,
+>>>> +		.attr_groups	= hisi_ptt_pmu_groups,
+>>>> +		.event_init	= hisi_ptt_pmu_event_init,
+>>>> +		.setup_aux	= hisi_ptt_pmu_setup_aux,
+>>>> +		.free_aux	= hisi_ptt_pmu_free_aux,
+>>>> +		.start		= hisi_ptt_pmu_start,
+>>>> +		.stop		= hisi_ptt_pmu_stop,
+>>>> +		.add		= hisi_ptt_pmu_add,
+>>>> +		.del		= hisi_ptt_pmu_del,
+>>>> +	};
+>>>> +
+>>>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_LOCATION);
+>>>> +	core_id = FIELD_GET(HISI_PTT_CORE_ID, reg);
+>>>> +	sicl_id = FIELD_GET(HISI_PTT_SICL_ID, reg);
+>>>> +
+>>>> +	pmu_name = devm_kasprintf(&hisi_ptt->pdev->dev, GFP_KERNEL, "hisi_ptt%u_%u",
+>>>> +				  sicl_id, core_id);
+>>>> +	if (!pmu_name)
+>>>> +		return -ENOMEM;
+>>>> +
+>>>> +	return perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);  
+>>>
+>>> As below, you can put back the devm cleanup that you had in v4 now you
+>>> have modified how the filter cleanup is done to also be devm managed.
+>>>   
+>>>> +}
+>>>> +
+>>>>  /*
+>>>>   * The DMA of PTT trace can only use direct mapping, due to some
+>>>>   * hardware restriction. Check whether there is an IOMMU or the
+>>>> @@ -303,15 +825,32 @@ static int hisi_ptt_probe(struct pci_dev *pdev,
+>>>>  
+>>>>  	pci_set_master(pdev);
+>>>>  
+>>>> +	ret = hisi_ptt_register_irq(hisi_ptt);
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>> +
+>>>>  	ret = hisi_ptt_init_ctrls(hisi_ptt);
+>>>>  	if (ret) {
+>>>>  		pci_err(pdev, "failed to init controls, ret = %d.\n", ret);
+>>>>  		return ret;
+>>>>  	}
+>>>>  
+>>>> +	ret = hisi_ptt_register_pmu(hisi_ptt);
+>>>> +	if (ret) {
+>>>> +		pci_err(pdev, "failed to register pmu device, ret = %d", ret);
+>>>> +		return ret;
+>>>> +	}
+>>>> +
+>>>>  	return 0;
+>>>>  }
+>>>>  
+>>>> +void hisi_ptt_remove(struct pci_dev *pdev)
+>>>> +{
+>>>> +	struct hisi_ptt *hisi_ptt = pci_get_drvdata(pdev);
+>>>> +
+>>>> +	perf_pmu_unregister(&hisi_ptt->hisi_ptt_pmu);  
+>>>
+>>> Now you have the filter cleanup occurring using a devm_add_action_or_reset()
+>>> there is no need to have a manual cleanup of this - you can
+>>> use the approach of a devm_add_action_or_reset like you had in v4.
+>>>
+>>> As it is the last call in the probe() order it will be the first one
+>>> called in the device managed cleanup.
+>>>   
+>>>> +}
+>>>> +  
+>>>
+>>>
+>>> .
+>>>   
+> 
+> .
+> 

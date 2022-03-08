@@ -2,118 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A244D1F4E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47BA4D1F5C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349228AbiCHRoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S1348631AbiCHRqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240785AbiCHRoS (ORCPT
+        with ESMTP id S232292AbiCHRq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:44:18 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B6C3A72C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:43:21 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id j12so2721735ils.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:43:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=022kZssKRxaMpugjGKU5wCX5ZoP2APDtJSWAVWLNIMQ=;
-        b=dA59ED+AFM+Fe2V8ZR21p+XklxvwaaUtpN1Ip52xrgzm4IEG+PdcjrBowbK5kKeixO
-         c5n7Oy0iLUzwSDyixgpat0HfsjPRCaT3v2KLKZagI76RrlLHzMWPUkixdhpEJ8nLswwf
-         2HcWB8SpNjZtMKXI296hWcEDZ4tUNHsrMOzsj4++AcudxjE587agyL0wzKbhKteJHQX1
-         UvSKc3cRgYJo5IO0ztlbd1Z4y/xVMgDgK9k90Rhm1tAFo9ObPUS7mm7+QR2hboxHLpvB
-         dsZVDckhrER6CTwzFUAOfZ7O/ziRRZ00VT0gZk7FxEujQuESJgyxx3/Ja46sb5vEPpEu
-         LE8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=022kZssKRxaMpugjGKU5wCX5ZoP2APDtJSWAVWLNIMQ=;
-        b=N6r/yhNpIPzna/g/54qpjdFyTEcNoMANLjIfT0ZzU/9oK2VXeAn86H3iMv3hz1jjwt
-         viaB5OQ9bmdDt2p6VLcghiUnlb5ljqVvM11p0V9X82dZ192ur6VWKn1f10Q+cL9N+uGu
-         +CkOjXlj/r+v6nBKvz+bp7pMhGV0UqA5aza2pv8+EdRkh+cLW6qi1te/EQlt/su8wfTF
-         iwxIdWJBhCtrE3bM7b/5hrnQ5v0az3NzyHLkIkkFEIWEgRRKe0iEc9gI2o+DuoaSGC6p
-         yEXTwcbO1zYqDCm17k7/YT4QioVwUw/t3ymKLW12v2Hf8W3pmqX2AGWHcC87TPX6/aHy
-         +eYA==
-X-Gm-Message-State: AOAM533OY3+HLoa4TtgcDUW7AqoJl9xu7LMIgCu0TY5wtIl3P0YHasTU
-        uqh9yHpoiL341lJkKTEWg0k5cg==
-X-Google-Smtp-Source: ABdhPJzpifjGAbuu6xRUlnf5+5w0PowUD9oB5ib2xOZlLUbFVmQQfdultSBOPWNeGa1Cxn5pvTWrGQ==
-X-Received: by 2002:a92:c24a:0:b0:2c2:8100:11ec with SMTP id k10-20020a92c24a000000b002c2810011ecmr15889480ilo.69.1646761400849;
-        Tue, 08 Mar 2022 09:43:20 -0800 (PST)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id a18-20020a6b6c12000000b005ece5a4f2dfsm10029480ioh.54.2022.03.08.09.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:43:20 -0800 (PST)
-Date:   Tue, 8 Mar 2022 17:43:16 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH] KVM: use kvcalloc for array allocations
-Message-ID: <YieVtBPtKOyatej+@google.com>
-References: <20220308163318.819164-1-pbonzini@redhat.com>
+        Tue, 8 Mar 2022 12:46:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AB053E3A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:45:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3375FB815E0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:45:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC4BC340F4;
+        Tue,  8 Mar 2022 17:45:28 +0000 (UTC)
+Date:   Tue, 8 Mar 2022 12:45:27 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Cc:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Abel Vesa <abelvesa@linux.com>, Rabin Vincent <rabin@rab.in>,
+        Colin Cross <ccross@android.com>
+Subject: Re: ftrace bug
+Message-ID: <20220308124527.0ef9ca63@gandalf.local.home>
+In-Reply-To: <1dec8992-b924-7ea2-8e45-a6bbc10a6086@nokia.com>
+References: <9a86b2c9-1009-1683-442e-61c5a7dc8cf3@broadcom.com>
+        <20220307082450.641ed866@gandalf.local.home>
+        <62c01368-b67f-66af-2e31-d62f4df75b61@broadcom.com>
+        <20220308102007.6c6618e7@gandalf.local.home>
+        <1dec8992-b924-7ea2-8e45-a6bbc10a6086@nokia.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308163318.819164-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 11:33:18AM -0500, Paolo Bonzini wrote:
-> Instead of using array_size, use a function that takes care of the
-> multiplication.  While at it, switch to kvcalloc since this allocation
-> should not be very large.
+On Tue, 8 Mar 2022 17:02:53 +0100
+Alexander Sverdlin <alexander.sverdlin@nokia.com> wrote:
+
+> This problem is addressed by:
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/cpuid.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index afcdd4e693e5..419eb8e14f79 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -1248,8 +1248,7 @@ int kvm_dev_ioctl_get_cpuid(struct kvm_cpuid2 *cpuid,
->  	if (sanity_check_entries(entries, cpuid->nent, type))
->  		return -EINVAL;
->  
-> -	array.entries = vzalloc(array_size(sizeof(struct kvm_cpuid_entry2),
-> -					   cpuid->nent));
-> +	array.entries = kvcalloc(sizeof(struct kvm_cpuid_entry2), cpuid->nent, GFP_KERNEL);
+> commit 8113e622926ef6590771ede0f7f64821e1751b67
+> Author: Alex Sverdlin <alexander.sverdlin@nokia.com>
+> Date:   Mon Sep 27 14:02:45 2021 -0700
 
-Even though this allocation is short-lived, should we use
-GFP_KERNEL_ACCOUNT instead?
+Thanks Alex. I knew it was a good idea not to try to figure this out on my
+own ;-)
 
-Otherwise:
-
-Reviewed-by: Oliver Upton <oupton@google.com>
-
-Thanks!
-
-
->  	if (!array.entries)
->  		return -ENOMEM;
->  
-> @@ -1267,7 +1266,7 @@ int kvm_dev_ioctl_get_cpuid(struct kvm_cpuid2 *cpuid,
->  		r = -EFAULT;
->  
->  out_free:
-> -	vfree(array.entries);
-> +	kvfree(array.entries);
->  	return r;
->  }
->  
-> -- 
-> 2.31.1
-> 
+-- Steve

@@ -2,103 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0382E4D1E88
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE274D1E89
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348824AbiCHRUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S229686AbiCHRUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:20:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348898AbiCHRUN (ORCPT
+        with ESMTP id S1348918AbiCHRUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:20:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CECE53B51
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:18:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14819B81B8B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:18:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59BCEC340EB;
-        Tue,  8 Mar 2022 17:18:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BiuKkS0j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1646759933;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AZ+d5tFFjQ1rNjN45rdxTOo6PPrAddVrmZAsuxSqFck=;
-        b=BiuKkS0j8xqotj6mFNIf7r/lkKm0JyJSrUJKyckxpjJPW9FNuvEqdj3dVtHlBIFTyWo1jE
-        P05CokGXeCz2hz5tn8XQY4UYavumtAgD8urzDuN0328r4mGvk0nj8HdfSd1PcbanRlTWGJ
-        q/5985/J7MGtA/X2b/IlMbHQIiGyAwQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dfec7c9e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 8 Mar 2022 17:18:53 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH] random: check for signal and try earlier when generating entropy
-Date:   Tue,  8 Mar 2022 10:18:49 -0700
-Message-Id: <20220308171849.242534-1-Jason@zx2c4.com>
+        Tue, 8 Mar 2022 12:20:16 -0500
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8357153B79
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:19:03 -0800 (PST)
+Received: by mail-vs1-xe44.google.com with SMTP id a186so10195724vsc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:19:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=5GMDusrPuPOgRhBgh+L7N04qkMMbjZutnt2cfhtCkGA=;
+        b=eGhetHvm2TjrrQ75aAsIUFSaLQBDszWnJOkIKA/FC+mCtSErfd1NnSNDvwJuVW7pgX
+         9/e+hprskJaN9YKyZUhvMlUFI4S3MkmBYDxoCySuugiy/etP35iwGNvFQ3JWExxhxv/m
+         tmfg5GMWixj4fC+FliZLL3SsHyuKVgEeiA4y21Ma6Nq0BhZcWM4owcMGSj+Pdl/8d8th
+         mrc2s1oU2lzJhH72KaL80qQ+OeCfBjPQTi0nw+AheFHoAXH/6/73mnpOpGW34VEZv0iQ
+         reWLYdOl1bRmPPs0k3NorndpaEoh3mRBYyuD0KkfU++eA1y5A+aYZP1XJAGlPUju6DgD
+         ZAQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=5GMDusrPuPOgRhBgh+L7N04qkMMbjZutnt2cfhtCkGA=;
+        b=QLFc1kO+rG1dM446Tks4s5LsMVg79H4dazVZrDRk5Ir7TCQpBKX4lJtG/71vSVUkyH
+         9RAViUsltiHpJPEgRTzR52pF64O7/R54iGn9WbsFnwLAW4gcoy2n68UG1EwP/BzhnhU/
+         f/bkb5/WqyjTKGWnQiW0CmNv+0tbuVkW7ck1r8dhpr92qUpcRFIv6nadem2QubrUTAca
+         z932QPcG7z4OboH6uwHW3ghhyBU7qqBwFSWWS9qOJs7Ix0lSuvYK/aNoF5T6F5ahCJBA
+         HnYmpMUvwVEjd9EwU6wWFaON2aVdBI4j/oyGhIha8mjspTFUQOkmlLeBi9hb29eZLJgL
+         1HeQ==
+X-Gm-Message-State: AOAM533qOdZyOtMDRMvngPh92gGVGlqdUFDASNrXHEAV1qVnI0ycsyDW
+        lKCPcmbUDU/LBGb6LGELz9aj+vGjFJllaDPNVpI=
+X-Google-Smtp-Source: ABdhPJzzyRsSCF71LnQlWqMTIRY3xa70LpLBuvMApieR0jZu3CIF1YWlugKLIhrYssDnMYc+bnuPsPwht5q2T3GToVc=
+X-Received: by 2002:a67:d29d:0:b0:31b:82c5:9718 with SMTP id
+ z29-20020a67d29d000000b0031b82c59718mr7099993vsi.27.1646759942526; Tue, 08
+ Mar 2022 09:19:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Lara Jack <getdatalist0@gmail.com>
+Date:   Tue, 8 Mar 2022 11:18:51 -0600
+Message-ID: <CA+9eHWp1Aqzw2S7C+jM75iKXmQDd7xFr48YbADCGRWwruU52-A@mail.gmail.com>
+Subject: RE: NADA Show Attendees Email List-2022
+To:     Lara Jack <getdatalist0@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We call try_to_generate_entropy() from wait_for_random_bytes().
-wait_for_random_bytes() always uses wait_event_interruptible_timeout()
-when waiting, since it's called by userspace code in restartable
-contexts, where signals can pend. When entering a busy loop in
-try_to_generate_entropy(), we should therefore also check to see if any
-signals are pending, so that a process doesn't get stuck in that loop
-longer than expected. As well, there's no point in waiting for a full
-second before trying to generate entropy; instead do it in the opposite
-order, where we try to generate, and then go into the waitable.
+Hi,
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I hope you're doing great and staying healthy!
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index edb5b06544da..4c5f515b6080 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -128,11 +128,12 @@ int wait_for_random_bytes(void)
- 
- 	do {
- 		int ret;
-+
-+		try_to_generate_entropy();
- 		ret = wait_event_interruptible_timeout(crng_init_wait, crng_ready(), HZ);
- 		if (ret)
- 			return ret > 0 ? 0 : ret;
- 
--		try_to_generate_entropy();
- 	} while (!crng_ready());
- 
- 	return 0;
-@@ -1374,7 +1375,7 @@ static void try_to_generate_entropy(void)
- 		return;
- 
- 	timer_setup_on_stack(&stack.timer, entropy_timer, 0);
--	while (!crng_ready()) {
-+	while (!crng_ready() && !signal_pending(current)) {
- 		if (!timer_pending(&stack.timer))
- 			mod_timer(&stack.timer, jiffies + 1);
- 		mix_pool_bytes(&stack.cycles, sizeof(stack.cycles));
--- 
-2.35.1
+Would you be interested in acquiring NADA Show Attendees Data List 2022?
 
+List contains: Company Name, Contact Name, First Name, Middle Name,
+Last Name, Title, Address, Street, City, Zip code, State, Country,
+Telephone, Email address and more,
+
+No of Contacts: - 35,526
+Cost: $ 1,726
+
+Looking forward for your response,
+
+Kind Regards,
+Lara Jack
+Marketing Coordinator

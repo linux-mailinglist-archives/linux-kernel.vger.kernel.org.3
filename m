@@ -2,152 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C094D14C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7184D14BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345871AbiCHKaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
+        id S241229AbiCHK3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244341AbiCHK36 (ORCPT
+        with ESMTP id S1345848AbiCHK3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:29:58 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB1D3C48F;
-        Tue,  8 Mar 2022 02:29:01 -0800 (PST)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KCWjk5KmWzdb2N;
-        Tue,  8 Mar 2022 18:27:38 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+        Tue, 8 Mar 2022 05:29:34 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5164942A06;
+        Tue,  8 Mar 2022 02:28:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646735319; x=1678271319;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ArbjmZUZ0l6WdorlwWCLAqiEYpli5Fr0XItnFGrqD60=;
+  b=Fn2/+MLWew5DZi2vOtQ6xWqm94QRsmWLK8PJENWu3SuGSNk+Lm7Nlk/E
+   Th2T+HJH+s8O0JkGKfdsris/m5QlIIEgQ+JgMme88x0Bnp7Qcg2MGj4P3
+   lzXvoXSLnlT5+lyRa6YdTo/dvL35Q/jRO3J2JKdeU7u65kJfCtGKPS0af
+   prdL+PkinHd/IEhzxdyRSdajZt4oh+gL4blr6QcMDN085AFuZJclCiKQ/
+   /uPPZlySaAuszFkgYfMABw0RjA7apfPOOLDEpmWtJJlJZ9thRvygeQE7j
+   gnKmXXjj+0zJNhFzDclRB2vmBHTO9HrUxKP9dexjvS/sGJ7mYpIYe1NYr
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,164,1643698800"; 
+   d="scan'208";a="155629249"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Mar 2022 03:28:38 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 18:29:00 +0800
-Received: from [10.67.103.212] (10.67.103.212) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 18:28:59 +0800
-Subject: Re: [PATCH v8 6/9] hisi_acc_vfio_pci: Add helper to retrieve the
- struct pci_driver
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
- <20220303230131.2103-7-shameerali.kolothum.thodi@huawei.com>
-CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
-        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
-        <yishaih@nvidia.com>, <linuxarm@huawei.com>,
-        <liulongfang@huawei.com>, <prime.zeng@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <wangzhou1@hisilicon.com>
-From:   "yekai(A)" <yekai13@huawei.com>
-Message-ID: <77d96509-bad2-b271-aaaf-07ca6b699db6@huawei.com>
-Date:   Tue, 8 Mar 2022 18:28:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+ 15.1.2375.17; Tue, 8 Mar 2022 03:28:09 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 8 Mar 2022 03:28:07 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: lan966x: Add spinlock for frame transmission from CPU.
+Date:   Tue, 8 Mar 2022 11:29:04 +0100
+Message-ID: <20220308102904.3978779-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <20220303230131.2103-7-shameerali.kolothum.thodi@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.212]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The registers used to inject a frame to one of the ports is shared
+between all the net devices. Therefore, there can be race conditions for
+accessing the registers when two processes send frames at the same time
+on different ports.
 
+To fix this, add a spinlock around the function
+'lan966x_port_ifh_xmit()'.
 
-On 2022/3/4 7:01, Shameer Kolothum wrote:
-> struct pci_driver pointer is an input into the pci_iov_get_pf_drvdata().
-> Introduce helpers to retrieve the ACC PF dev struct pci_driver pointers
-> as we use this in ACC vfio migration driver.
->
-> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-> ---
->  drivers/crypto/hisilicon/hpre/hpre_main.c | 6 ++++++
->  drivers/crypto/hisilicon/sec2/sec_main.c  | 6 ++++++
->  drivers/crypto/hisilicon/zip/zip_main.c   | 6 ++++++
->  include/linux/hisi_acc_qm.h               | 5 +++++
->  4 files changed, 23 insertions(+)
->
-> diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> index 3589d8879b5e..36ab30e9e654 100644
-> --- a/drivers/crypto/hisilicon/hpre/hpre_main.c
-> +++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> @@ -1190,6 +1190,12 @@ static struct pci_driver hpre_pci_driver = {
->  	.driver.pm		= &hpre_pm_ops,
->  };
->
-> +struct pci_driver *hisi_hpre_get_pf_driver(void)
-> +{
-> +	return &hpre_pci_driver;
-> +}
-> +EXPORT_SYMBOL_GPL(hisi_hpre_get_pf_driver);
-> +
->  static void hpre_register_debugfs(void)
->  {
->  	if (!debugfs_initialized())
-> diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
-> index 311a8747b5bf..421a405ca337 100644
-> --- a/drivers/crypto/hisilicon/sec2/sec_main.c
-> +++ b/drivers/crypto/hisilicon/sec2/sec_main.c
-> @@ -1088,6 +1088,12 @@ static struct pci_driver sec_pci_driver = {
->  	.driver.pm = &sec_pm_ops,
->  };
->
-> +struct pci_driver *hisi_sec_get_pf_driver(void)
-> +{
-> +	return &sec_pci_driver;
-> +}
-> +EXPORT_SYMBOL_GPL(hisi_sec_get_pf_driver);
-> +
->  static void sec_register_debugfs(void)
->  {
->  	if (!debugfs_initialized())
-> diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
-> index 66decfe07282..4534e1e107d1 100644
-> --- a/drivers/crypto/hisilicon/zip/zip_main.c
-> +++ b/drivers/crypto/hisilicon/zip/zip_main.c
-> @@ -1012,6 +1012,12 @@ static struct pci_driver hisi_zip_pci_driver = {
->  	.driver.pm		= &hisi_zip_pm_ops,
->  };
->
-> +struct pci_driver *hisi_zip_get_pf_driver(void)
-> +{
-> +	return &hisi_zip_pci_driver;
-> +}
-> +EXPORT_SYMBOL_GPL(hisi_zip_get_pf_driver);
-> +
->  static void hisi_zip_register_debugfs(void)
->  {
->  	if (!debugfs_initialized())
-> diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
-> index 6a6477c34666..00f2a4db8723 100644
-> --- a/include/linux/hisi_acc_qm.h
-> +++ b/include/linux/hisi_acc_qm.h
-> @@ -476,4 +476,9 @@ void hisi_qm_pm_init(struct hisi_qm *qm);
->  int hisi_qm_get_dfx_access(struct hisi_qm *qm);
->  void hisi_qm_put_dfx_access(struct hisi_qm *qm);
->  void hisi_qm_regs_dump(struct seq_file *s, struct debugfs_regset32 *regset);
-> +
-> +/* Used by VFIO ACC live migration driver */
-> +struct pci_driver *hisi_sec_get_pf_driver(void);
-> +struct pci_driver *hisi_hpre_get_pf_driver(void);
-> +struct pci_driver *hisi_zip_get_pf_driver(void);
->  #endif
->
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 9 ++++++++-
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.h | 2 ++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-Hi Shameer,
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index 750f2cc2f695..81c01665d01e 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -318,6 +318,7 @@ static void lan966x_ifh_set_timestamp(void *ifh, u64 timestamp)
+ static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct lan966x_port *port = netdev_priv(dev);
++	struct lan966x *lan966x = port->lan966x;
+ 	__be32 ifh[IFH_LEN];
+ 	int err;
+ 
+@@ -338,7 +339,11 @@ static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		lan966x_ifh_set_timestamp(ifh, LAN966X_SKB_CB(skb)->ts_id);
+ 	}
+ 
+-	return lan966x_port_ifh_xmit(skb, ifh, dev);
++	spin_lock(&lan966x->tx_lock);
++	err = lan966x_port_ifh_xmit(skb, ifh, dev);
++	spin_unlock(&lan966x->tx_lock);
++
++	return err;
+ }
+ 
+ static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu)
+@@ -885,6 +890,8 @@ static void lan966x_init(struct lan966x *lan966x)
+ 	lan_rmw(ANA_ANAINTR_INTR_ENA_SET(1),
+ 		ANA_ANAINTR_INTR_ENA,
+ 		lan966x, ANA_ANAINTR);
++
++	spin_lock_init(&lan966x->tx_lock);
+ }
+ 
+ static int lan966x_ram_init(struct lan966x *lan966x)
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index 058e43531818..ae282da1da74 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -108,6 +108,8 @@ struct lan966x {
+ 
+ 	u8 base_mac[ETH_ALEN];
+ 
++	spinlock_t tx_lock; /* lock for frame transmition */
++
+ 	struct net_device *bridge;
+ 	u16 bridge_mask;
+ 	u16 bridge_fwd_mask;
+-- 
+2.33.0
 
-It looks good to me for this movement.
-
-Acked-by:  Kai Ye <yekai13@huawei.com>
-
-Thanks,
-Kai

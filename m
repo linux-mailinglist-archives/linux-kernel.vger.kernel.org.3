@@ -2,250 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2B64D1E6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2764D1E56
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348741AbiCHRTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S1348707AbiCHRST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348777AbiCHRTG (ORCPT
+        with ESMTP id S236966AbiCHRSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:19:06 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F0A1EAC7;
-        Tue,  8 Mar 2022 09:18:06 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 228FxhGU010224;
-        Tue, 8 Mar 2022 11:17:42 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=+jSUP1WDLHIrNf3vvifs/ZXeDbLTmOnXuZCGwkc80kg=;
- b=JNeuXKRNnWRdIkhw56dAlXeS9qVde1clZ21ExfHawZOvuqHOIRIYoy/6i5Ef/htsyR0f
- aa8WJHXGdjJNT88ojOq66e0F+vMXhh+wUYIo1RenBi1nVopP/3Mn9lMXn6emSVuqATut
- 9yFPArNzluJbZ4zVGwMR5swRtJALD53fObtltReQ5FP18pybEiWaTZTF9YGuKsiBagjL
- WbpR8O5e2wgnNcD7H8NkuqCBvnvn3UrF0VP7UqOgR+/T+FzwP1ddETon6l43eOyEDVhe
- VIFAm5c/4QyAZGhw0bx1Fjk2X67PJb69ZDyupHBuXDe5x1wJstcc183vMa7N5dMC5H/X SA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3em656mh5v-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 08 Mar 2022 11:17:42 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 8 Mar
- 2022 17:17:32 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Tue, 8 Mar 2022 17:17:32 +0000
-Received: from aryzen.ad.cirrus.com (unknown [198.61.65.38])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 549182A1;
-        Tue,  8 Mar 2022 17:17:32 +0000 (UTC)
-From:   Lucas Tanure <tanureal@opensource.cirrus.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: [PATCH v3 03/16] sound: cs35l41: Move cs35l41_gpio_config to shared lib
-Date:   Tue, 8 Mar 2022 17:17:17 +0000
-Message-ID: <20220308171730.454587-4-tanureal@opensource.cirrus.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220308171730.454587-1-tanureal@opensource.cirrus.com>
-References: <20220308171730.454587-1-tanureal@opensource.cirrus.com>
+        Tue, 8 Mar 2022 12:18:18 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6333852E72;
+        Tue,  8 Mar 2022 09:17:21 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id bi12so27666599ejb.3;
+        Tue, 08 Mar 2022 09:17:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QN4f7aRfMRy6jjFzTVyfXHZqX7kSLQSGCV4hl7xnDdo=;
+        b=TT73bdraUoPqY7Hv+qcsEXvwe+EPtjpOa3Yf+DT5eiC4TWS06FVOn80zFlJHx+XfjO
+         HguK1F3joiuVeYAOw5LFJLlteZCqzS8icf1jQbPWBtJEmz4JOOo48IbWPYWPlpu0RvdM
+         ZBAF6fPOAU8yO37GY9qmsU6je89NUxuMHbXqiL8EY+ZCiGMrdqWoO6UHehNCVGOdtvkJ
+         yllpIFosLxW9z+uLFDPpMA+VVkp5PqdrC1EEETGnHsXoQ0VtaMH6F9t9tuEOtiJJn4m0
+         titviv4dUsAN5hh2TmPeXxxAmKgz9RtbBLEtnbwRo6fchg+nsh0XZOUkPIM96bPNBwI/
+         Dv3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QN4f7aRfMRy6jjFzTVyfXHZqX7kSLQSGCV4hl7xnDdo=;
+        b=b4RcROCN6lG6Asq1+QngFRcBrFq0yRNCzrMN6LYqDdzW5fnScaCzfmEBunotWhfUZn
+         ad+OkDnoIbVpu8h0o1SwinLJsZjGRyfUe65pdkn0jlww1NkA3T42adtrFQH15KfT9kbo
+         ypvdxgQQU4J/J5yHrNEtrVbp0rYt4SyarHwrTmk3xmc+Ijqcz127sf/4ZLHa91I7okVN
+         ooalAlOC9U4EUnJyGPpS5KkmHKx9EIqfGigZAhxjz5k51WzY3NHyaiiUI/3UPX/kfmDS
+         SBSLuJh1H3NhT7f+EmENQtDqAvAyOG7BReiqr88kshJgapNlehCSBWvMbWd/Owq0dgrV
+         N0CA==
+X-Gm-Message-State: AOAM532PQy3ewSM/zc8HqMvbwdiD06FzvFtHMI5gD5L1GAVfvZGB5HkD
+        mgCUe+EFkA9yTHzueXsJ004=
+X-Google-Smtp-Source: ABdhPJxKq7B8zhwV1jSOt8K6TnNnJ9hfc2/PfFK1D2149KXccg1yauJo46R0dZqYgRXN+Czl48JNLQ==
+X-Received: by 2002:a17:906:d29b:b0:6da:9e4d:bb7c with SMTP id ay27-20020a170906d29b00b006da9e4dbb7cmr14859587ejb.155.1646759839575;
+        Tue, 08 Mar 2022 09:17:19 -0800 (PST)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id z16-20020a05640240d000b004165f6ce23bsm2312585edb.24.2022.03.08.09.17.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 09:17:19 -0800 (PST)
+Date:   Tue, 8 Mar 2022 19:17:17 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 04/10] net: bridge: mst: Notify switchdev
+ drivers of VLAN MSTI migrations
+Message-ID: <20220308171717.s2hqp6raoe5gcgtl@skbuf>
+References: <20220301100321.951175-1-tobias@waldekranz.com>
+ <20220301100321.951175-5-tobias@waldekranz.com>
+ <20220303205921.sxb52jzw4jcdj6m7@skbuf>
+ <87y21kna9r.fsf@waldekranz.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: MsEsKE3pWMeC8JWP-kWpRhcLVFWqUs99
-X-Proofpoint-GUID: MsEsKE3pWMeC8JWP-kWpRhcLVFWqUs99
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y21kna9r.fsf@waldekranz.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ASoC and HDA can use a single function to configure the chip gpios.
+On Tue, Mar 08, 2022 at 09:01:04AM +0100, Tobias Waldekranz wrote:
+> On Thu, Mar 03, 2022 at 22:59, Vladimir Oltean <olteanv@gmail.com> wrote:
+> > On Tue, Mar 01, 2022 at 11:03:15AM +0100, Tobias Waldekranz wrote:
+> >> Whenever a VLAN moves to a new MSTI, send a switchdev notification so
+> >> that switchdevs can...
+> >> 
+> >> ...either refuse the migration if the hardware does not support
+> >> offloading of MST...
+> >> 
+> >> ..or track a bridge's VID to MSTI mapping when offloading is
+> >> supported.
+> >> 
+> >> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> >> ---
+> >>  include/net/switchdev.h   | 10 +++++++
+> >>  net/bridge/br_mst.c       | 15 +++++++++++
+> >>  net/bridge/br_switchdev.c | 57 +++++++++++++++++++++++++++++++++++++++
+> >>  3 files changed, 82 insertions(+)
+> >> 
+> >> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+> >> index 3e424d40fae3..39e57aa5005a 100644
+> >> --- a/include/net/switchdev.h
+> >> +++ b/include/net/switchdev.h
+> >> @@ -28,6 +28,7 @@ enum switchdev_attr_id {
+> >>  	SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED,
+> >>  	SWITCHDEV_ATTR_ID_BRIDGE_MROUTER,
+> >>  	SWITCHDEV_ATTR_ID_MRP_PORT_ROLE,
+> >> +	SWITCHDEV_ATTR_ID_VLAN_MSTI,
+> >>  };
+> >>  
+> >>  struct switchdev_brport_flags {
+> >> @@ -35,6 +36,14 @@ struct switchdev_brport_flags {
+> >>  	unsigned long mask;
+> >>  };
+> >>  
+> >> +struct switchdev_vlan_attr {
+> >> +	u16 vid;
+> >> +
+> >> +	union {
+> >> +		u16 msti;
+> >> +	};
+> >
+> > Do you see other VLAN attributes that would be added in the future, such
+> > as to justify making this a single-element union from the get-go?
+> 
+> I could imagine being able to control things like multicast snooping on
+> a per-VLAN basis. Being able to act as a multicast router in one VLAN
+> but not another.
+> 
+> > Anyway if that is the case, we're lacking an id for the attribute type,
+> > so we'd end up needing to change drivers when a second union element
+> > appears. Otherwise they'd all expect an u16 msti.
+> 
+> My idea was that `enum switchdev_attr_id` would hold all of that
+> information. In this example SWITCHDEV_ATTR_ID_VLAN_MSTI, denotes both
+> that `vlan_attr` is the valid member of `u` and that `msti` is the valid
+> member of `vlan_attr`. If we add SWITCHDEV_ATTR_ID_VLAN_SNOOPING, that
+> would point to both `vlan_attr` and a new `bool snooping` in the union.
+> 
+> Do you think we should just have a SWITCHDEV_ATTR_ID_VLAN_ATTR for all
+> per-VLAN attributes and then have a separate union?
 
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
- include/sound/cs35l41.h        |  1 +
- sound/pci/hda/cs35l41_hda.c    | 11 ++++-----
- sound/soc/codecs/cs35l41-lib.c | 41 +++++++++++++++++++++++++++++++
- sound/soc/codecs/cs35l41.c     | 45 +---------------------------------
- 4 files changed, 48 insertions(+), 50 deletions(-)
+It's the first nested union that I see, and a bit confusing.
 
-diff --git a/include/sound/cs35l41.h b/include/sound/cs35l41.h
-index 57c47636c223..e3ec0f422fff 100644
---- a/include/sound/cs35l41.h
-+++ b/include/sound/cs35l41.h
-@@ -792,5 +792,6 @@ int cs35l41_set_channels(struct device *dev, struct regmap *reg,
- 			 unsigned int rx_num, unsigned int *rx_slot);
- int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_ind, int boost_cap,
- 			 int boost_ipk);
-+int cs35l41_gpio_config(struct regmap *regmap, struct cs35l41_hw_cfg *hw_cfg);
- 
- #endif /* __CS35L41_H */
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index a14ad3b0d516..81cdbd84cf7d 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -235,12 +235,11 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
- 		case CS35L41_NOT_USED:
- 			break;
- 		case CS35l41_VSPK_SWITCH:
--			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
--					   CS35L41_GPIO1_CTRL_MASK, 1 << CS35L41_GPIO1_CTRL_SHIFT);
-+			hw_cfg->gpio1.func = CS35L41_GPIO;
-+			hw_cfg->gpio1.out_en = true;
- 			break;
- 		case CS35l41_SYNC:
--			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
--					   CS35L41_GPIO1_CTRL_MASK, 2 << CS35L41_GPIO1_CTRL_SHIFT);
-+			hw_cfg->gpio1.func = CS35L41_MDSYNC_GPIO1;
- 			break;
- 		default:
- 			dev_err(cs35l41->dev, "Invalid function %d for GPIO1\n",
-@@ -254,8 +253,6 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
- 		case CS35L41_NOT_USED:
- 			break;
- 		case CS35L41_INTERRUPT:
--			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
--					   CS35L41_GPIO2_CTRL_MASK, 2 << CS35L41_GPIO2_CTRL_SHIFT);
- 			break;
- 		default:
- 			dev_err(cs35l41->dev, "Invalid GPIO2 function %d\n", hw_cfg->gpio2.func);
-@@ -263,6 +260,8 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
- 		}
- 	}
- 
-+	cs35l41_gpio_config(cs35l41->regmap, hw_cfg);
-+
- 	if (internal_boost) {
- 		cs35l41->reg_seq = &cs35l41_hda_reg_seq_int_bst;
- 		ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap,
-diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
-index 905c648a8f49..3fae34a232cd 100644
---- a/sound/soc/codecs/cs35l41-lib.c
-+++ b/sound/soc/codecs/cs35l41-lib.c
-@@ -1040,6 +1040,47 @@ int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_in
- }
- EXPORT_SYMBOL_GPL(cs35l41_boost_config);
- 
-+int cs35l41_gpio_config(struct regmap *regmap, struct cs35l41_hw_cfg *hw_cfg)
-+{
-+	struct cs35l41_gpio_cfg *gpio1 = &hw_cfg->gpio1;
-+	struct cs35l41_gpio_cfg *gpio2 = &hw_cfg->gpio2;
-+	int irq_pol = IRQF_TRIGGER_NONE;
-+
-+	regmap_update_bits(regmap, CS35L41_GPIO1_CTRL1,
-+			   CS35L41_GPIO_POL_MASK | CS35L41_GPIO_DIR_MASK,
-+			   gpio1->pol_inv << CS35L41_GPIO_POL_SHIFT |
-+			   !gpio1->out_en << CS35L41_GPIO_DIR_SHIFT);
-+
-+	regmap_update_bits(regmap, CS35L41_GPIO2_CTRL1,
-+			   CS35L41_GPIO_POL_MASK | CS35L41_GPIO_DIR_MASK,
-+			   gpio2->pol_inv << CS35L41_GPIO_POL_SHIFT |
-+			   !gpio2->out_en << CS35L41_GPIO_DIR_SHIFT);
-+
-+	if (gpio1->valid)
-+		regmap_update_bits(regmap, CS35L41_GPIO_PAD_CONTROL, CS35L41_GPIO1_CTRL_MASK,
-+				   gpio1->func << CS35L41_GPIO1_CTRL_SHIFT);
-+
-+	if (gpio2->valid) {
-+		regmap_update_bits(regmap, CS35L41_GPIO_PAD_CONTROL, CS35L41_GPIO2_CTRL_MASK,
-+				   gpio2->func << CS35L41_GPIO2_CTRL_SHIFT);
-+
-+		switch (gpio2->func) {
-+		case CS35L41_INT_PUSH_PULL_LOW_GPIO2:
-+		case CS35L41_INT_OPEN_DRAIN_GPIO2:
-+			irq_pol = IRQF_TRIGGER_LOW;
-+			break;
-+		case CS35L41_INT_PUSH_PULL_HIGH_GPIO2:
-+			irq_pol = IRQF_TRIGGER_HIGH;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	return irq_pol;
-+}
-+EXPORT_SYMBOL_GPL(cs35l41_gpio_config);
-+
- MODULE_DESCRIPTION("CS35L41 library");
- MODULE_AUTHOR("David Rhodes, Cirrus Logic Inc, <david.rhodes@cirrus.com>");
- MODULE_AUTHOR("Lucas Tanure, Cirrus Logic Inc, <tanureal@opensource.cirrus.com>");
-diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index 5dbc2147209a..d25689fe0c60 100644
---- a/sound/soc/codecs/cs35l41.c
-+++ b/sound/soc/codecs/cs35l41.c
-@@ -1017,49 +1017,6 @@ static int cs35l41_set_pdata(struct cs35l41_private *cs35l41)
- 	return 0;
- }
- 
--static int cs35l41_gpio_config(struct cs35l41_private *cs35l41)
--{
--	struct cs35l41_gpio_cfg *gpio1 = &cs35l41->hw_cfg.gpio1;
--	struct cs35l41_gpio_cfg *gpio2 = &cs35l41->hw_cfg.gpio2;
--	int irq_pol = IRQF_TRIGGER_NONE;
--
--	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO1_CTRL1,
--			   CS35L41_GPIO_POL_MASK | CS35L41_GPIO_DIR_MASK,
--			   gpio1->pol_inv << CS35L41_GPIO_POL_SHIFT |
--			   !gpio1->out_en << CS35L41_GPIO_DIR_SHIFT);
--
--	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO2_CTRL1,
--			   CS35L41_GPIO_POL_MASK | CS35L41_GPIO_DIR_MASK,
--			   gpio2->pol_inv << CS35L41_GPIO_POL_SHIFT |
--			   !gpio2->out_en << CS35L41_GPIO_DIR_SHIFT);
--
--
--	if (gpio1->valid)
--		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
--				   CS35L41_GPIO1_CTRL_MASK,
--				   gpio1->func << CS35L41_GPIO1_CTRL_SHIFT);
--
--	if (gpio2->valid) {
--		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
--				   CS35L41_GPIO2_CTRL_MASK,
--				   gpio2->func << CS35L41_GPIO2_CTRL_SHIFT);
--
--		switch (gpio2->func) {
--		case CS35L41_INT_PUSH_PULL_LOW_GPIO2:
--		case CS35L41_INT_OPEN_DRAIN_GPIO2:
--			irq_pol = IRQF_TRIGGER_LOW;
--			break;
--		case CS35L41_INT_PUSH_PULL_HIGH_GPIO2:
--			irq_pol = IRQF_TRIGGER_HIGH;
--			break;
--		default:
--			break;
--		}
--	}
--
--	return irq_pol;
--}
--
- static int cs35l41_component_probe(struct snd_soc_component *component)
- {
- 	struct cs35l41_private *cs35l41 = snd_soc_component_get_drvdata(component);
-@@ -1367,7 +1324,7 @@ int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *
- 
- 	cs35l41_test_key_lock(cs35l41->dev, cs35l41->regmap);
- 
--	irq_pol = cs35l41_gpio_config(cs35l41);
-+	irq_pol = cs35l41_gpio_config(cs35l41->regmap, &cs35l41->hw_cfg);
- 
- 	/* Set interrupt masks for critical errors */
- 	regmap_write(cs35l41->regmap, CS35L41_IRQ1_MASK1,
--- 
-2.35.1
+I think it would be better if we had a
 
+struct switchdev_vlan_attr_msti {
+	u16 vid;
+	u16 msti;
+};
+
+and different structures for other, future VLAN attributes. Basically
+keep a 1:1 mapping between an attribute id and a union.
+
+> >> +};
+> >> +
+> >>  struct switchdev_attr {
+> >>  	struct net_device *orig_dev;
+> >>  	enum switchdev_attr_id id;
+> >> @@ -50,6 +59,7 @@ struct switchdev_attr {
+> >>  		u16 vlan_protocol;			/* BRIDGE_VLAN_PROTOCOL */
+> >>  		bool mc_disabled;			/* MC_DISABLED */
+> >>  		u8 mrp_port_role;			/* MRP_PORT_ROLE */
+> >> +		struct switchdev_vlan_attr vlan_attr;	/* VLAN_* */
+> >>  	} u;
+> >>  };
+> >>  
+> >> diff --git a/net/bridge/br_mst.c b/net/bridge/br_mst.c
+> >> index 8dea8e7257fd..aba603675165 100644
+> >> --- a/net/bridge/br_mst.c
+> >> +++ b/net/bridge/br_mst.c
+> >> @@ -7,6 +7,7 @@
+> >>   */
+> >>  
+> >>  #include <linux/kernel.h>
+> >> +#include <net/switchdev.h>
+> >>  
+> >>  #include "br_private.h"
+> >>  
+> >> @@ -65,9 +66,23 @@ static void br_mst_vlan_sync_state(struct net_bridge_vlan *pv, u16 msti)
+> >>  
+> >>  int br_mst_vlan_set_msti(struct net_bridge_vlan *mv, u16 msti)
+> >>  {
+> >> +	struct switchdev_attr attr = {
+> >> +		.id = SWITCHDEV_ATTR_ID_VLAN_MSTI,
+> >> +		.flags = SWITCHDEV_F_DEFER,
+> >
+> > Is the bridge spinlock held (atomic context), or otherwise why is
+> > SWITCHDEV_F_DEFER needed here?
+> 
+> Nope, just copypasta. In fact, it shouldn't be needed when setting the
+> state either, as you can only change the state via a netlink message. I
+> will remove it.
+> 
+> >> +		.orig_dev = mv->br->dev,
+> >> +		.u.vlan_attr = {
+> >> +			.vid = mv->vid,
+> >> +			.msti = msti,
+> >> +		},
+> >> +	};
+> >>  	struct net_bridge_vlan_group *vg;
+> >>  	struct net_bridge_vlan *pv;
+> >>  	struct net_bridge_port *p;
+> >> +	int err;
+> >> +
+> >> +	err = switchdev_port_attr_set(mv->br->dev, &attr, NULL);
+> >
+> > Treating a "VLAN attribute" as a "port attribute of the bridge" is
+> > pushing the taxonomy just a little, but I don't have a better suggestion.
+> 
+> Isn't there prior art here? I thought things like VLAN filtering already
+> worked like this?
+
+Hmm, I can think of VLAN filtering as being an attribute of the bridge
+device, but 'which MSTI does VLAN X belong to' is an attribute of the
+VLAN (in itself a switchdev object, i.e. something countable).
+
+If the prior art would apply as straightforward as you say, then we'd be
+replaying the VLAN MSTIs together with the other port attributes - in
+"pull" mode, in dsa_port_switchdev_sync_attrs(), rather than in "push"
+mode with the rest of the objects - in nbp_switchdev_sync_objs().
+But we're not doing that.
+
+To prove that there is a difference between VLAN filtering as a port
+property of the bridge device, and VLAN MSTIs (or other per-VLAN global
+bridge options), consider this.
+You create a bridge, add 10 VLANs on br0, enable VLAN filtering, then
+delete the 10 VLANs and re-create them. The bridge is still VLAN
+filtering.
+So VLAN filtering is a property of the bridge.
+
+Next you create a bridge, add 10 VLANs on br0, run your new command:
+'bridge vlan global set dev br0 vid <VID> msti <MSTI>'
+then delete the 10 VLANs and create them back.
+Their MSTI is 0, not what was set via the bridge vlan global options...
+Because the MSTI is a property of the VLANs, not of the bridge.
+
+A real port attribute wouldn't behave like that.
+
+At least this is what I understand from your patch set, I haven't run it;
+sorry if I'm mistaken about something, but I can't find a clearer way to
+express what I find strange.
+
+Anyway, I'll stop uselessly commenting here - I can understand the
+practical reasons why you wouldn't want to bother expanding the taxonomy
+to describe this for what it really is - an "object attribute" of sorts -
+because a port attribute for the bridge device has the call path you
+need already laid out, including replication towards all bridge ports.

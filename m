@@ -2,138 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D0C4D1C84
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828E94D1CA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348042AbiCHP7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S234940AbiCHQCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348959AbiCHP7B (ORCPT
+        with ESMTP id S1348256AbiCHQB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:59:01 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99F36E1D;
-        Tue,  8 Mar 2022 07:58:04 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id e25-20020a0568301e5900b005b236d5d74fso4432442otj.0;
-        Tue, 08 Mar 2022 07:58:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vvKgn0sHuAllkwYzvRFG2BC617hGBzzXAeGk4mrg70E=;
-        b=G61uZlPuyejOW7T+11EayRugjx1w1CLbBDWhQ229Ng+7kH6xC73iT1VpxXwsPswKrm
-         BUJZr1YHDkI/sQz4/JyawVxm42ygHfH7e1BhNAbIPrjHBmvMvX/yB3WuDIWSb8vMgJtp
-         Jq1XF2Rt48ftXftNceQV0+QuOTgGCf+UsebsIEX93H3r34PaztKFoR0g2H0sxBXTFrqF
-         O2p/xx+TVOGZ5oGUlD6F2wsi6hXCYvSAF7Jl2jgPHcko16zU2C1XKjOlPf3gp/3PxnA5
-         QFcz5e27bcIHeURZILrgFRIfL/MmH5unYekp6LY/zT8jTfjqDcdx1xgyrHsGPe84MUOI
-         SSUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vvKgn0sHuAllkwYzvRFG2BC617hGBzzXAeGk4mrg70E=;
-        b=AA3/K7eCyrOYv90XaRMP96cceisCFMOwKt7I1PBLBS+zzYlg5D2gUt+aGqR5n3XeJX
-         CyRW3RVeL/Dwi6ZszxvUIKSGvQznoVH3I+q5JEtvpD+fOpJ2PdrwDncQz5nZj0akVwGb
-         8oiHJy8tt8FHRl0kMzJadBxn1X2E/+5fOsF7U9wAKOShLTOk9lZQuw8DF3AQXsn8lnzw
-         0fksnBYw7AmuyqnkxB2qsUACIR5qmlsTHOf/V+/VnujOkSWDUTOVPvEKbTme3DbP04Pd
-         Uw7qP4VRUTTn39da76G4E0vVS861SpviaCO3YWY4Flsmbqcx0SAeyb8OxkHo/LPkiJka
-         IeCw==
-X-Gm-Message-State: AOAM530Ar13JdUJnuz5uYkrMDkeD+RZUKWqAbqjTj0FXm5z5F0DLf24i
-        DjidO8KoGl8zCCFjQazYfikWYhT1ATVoshYMMZw=
-X-Google-Smtp-Source: ABdhPJyUocVQDe1TT+zkXqIvkSF3HasQjSkWt8UXbdo8kc+P8zJiKM7WAw/kWuca/PmBKC4HHA/oLkhRCyAr/37/i1s=
-X-Received: by 2002:a9d:4b95:0:b0:5b2:46d4:94aa with SMTP id
- k21-20020a9d4b95000000b005b246d494aamr3241251otf.117.1646755083739; Tue, 08
- Mar 2022 07:58:03 -0800 (PST)
+        Tue, 8 Mar 2022 11:01:56 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5443750055
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:00:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646755249; x=1678291249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aFTJDJ6yKoaxFI6g8sPE9CQvYWqYMdAKSLo3OBtYCBs=;
+  b=Q2q2h4KYtLqxcNffUenWZlZEdti3HmRvpuJ/fKMTBeUENO69Xi/RAEGM
+   yyFpJmWKawTjH883oQxfULlcoiQyrE95XOx2OQYJF0ztPmhGJ26YBhfsk
+   SV0tkGb+PP1QVMqwBJL0LeN7tQKUo/p/ptn4+ppV18gDnjSVga2ee6mHQ
+   Co91YzvHJU/aOLoRK5hMknV7nzIwIOxhZ1ZrnC3jch5KZJqSs2uGR9uHR
+   tCtRqwOk2w7CGt/qDcHwuV2GVvNVUqdQfSniXjgt3CuS/YIWQBnGlDClQ
+   vDtf/8o7SSnfOFfVZS+z8aHEBApQGuh7AtHa7Alg156zzrZUhiZVppF2u
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="234673925"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="234673925"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 08:00:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="632273708"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2022 08:00:30 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRcGD-0001eD-9O; Tue, 08 Mar 2022 16:00:29 +0000
+Date:   Wed, 9 Mar 2022 00:00:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 82/84]
+ kernel/rcu/tree.c:2678:3: error: implicit declaration of function
+ 'rcu_tasks_classic_qs'
+Message-ID: <202203082348.j9qeWzns-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com>
- <20220217142133.72205-2-cgzones@googlemail.com> <CAHC9VhQPZ3_dXvM9eqwsxZ2c+2mcdvNNJbtUNs_-9Md5F3P8vA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQPZ3_dXvM9eqwsxZ2c+2mcdvNNJbtUNs_-9Md5F3P8vA@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Date:   Tue, 8 Mar 2022 16:57:52 +0100
-Message-ID: <CAJ2a_DfpYp_n8F7rg5yRAK9S8r0GcTQFHfB=d6cwRSHwMUjCyA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] selinux: use consistent pointer types for boolean arrays
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     SElinux list <selinux@vger.kernel.org>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Austin Kim <austin.kim@lge.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 at 17:01, Paul Moore <paul@paul-moore.com> wrote:
->
-> On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
-> <cgzones@googlemail.com> wrote:
-> >
-> > Use a consistent type of unsigned int* for boolean arrays, instead of
-> > using implicit casts to and from int*.
-> >
-> > Reported by sparse:
-> >
-> >     security/selinux/selinuxfs.c:1481:30: warning: incorrect type in as=
-signment (different signedness)
-> >     security/selinux/selinuxfs.c:1481:30:    expected unsigned int *
-> >     security/selinux/selinuxfs.c:1481:30:    got int *[addressable] val=
-ues
-> >     security/selinux/selinuxfs.c:1398:48: warning: incorrect type in ar=
-gument 3 (different signedness)
-> >     security/selinux/selinuxfs.c:1398:48:    expected int *values
-> >     security/selinux/selinuxfs.c:1398:48:    got unsigned int *bool_pen=
-ding_values
-> >
-> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> >
-> > ---
-> > A more invasive change would be to change all boolean arrays to bool*.
->
-> I think that might be a worthwhile change, although that can happen at
-> a later date.
->
-> A quick general comment: please try to stick to 80-char long lines.  I
-> realize Linus/checkpatch.pl has started to allow longer lines but I
-> would still like SELinux to try and keep to 80-chars or under.
->
-> > diff --git a/security/selinux/ss/services.c b/security/selinux/ss/servi=
-ces.c
-> > index 6901dc07680d..7865926962ab 100644
-> > --- a/security/selinux/ss/services.c
-> > +++ b/security/selinux/ss/services.c
-> > @@ -3175,7 +3175,8 @@ int security_get_bool_value(struct selinux_state =
-*state,
-> >  static int security_preserve_bools(struct selinux_policy *oldpolicy,
-> >                                 struct selinux_policy *newpolicy)
-> >  {
-> > -       int rc, *bvalues =3D NULL;
-> > +       int rc;
-> > +       unsigned int *bvalues =3D NULL;
->
-> Doesn't this cause a type mismatch (unsigned int vs int) when an entry
-> from bvalues[] is assigned to cond_bool_datum::state later in the
-> security_preserve_bools() function?
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
+head:   fb8d1afe45bd6fcb50dff8bac4636725358fde94
+commit: c8c42c80febd4e6d346f7f62958300eb8205aa31 [82/84] rcu-tasks: Make Tasks RCU account for userspace execution
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220308/202203082348.j9qeWzns-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/c8c42c80febd4e6d346f7f62958300eb8205aa31
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
+        git checkout c8c42c80febd4e6d346f7f62958300eb8205aa31
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Yes, but those variables *should* only hold the values 0 or 1.
-But probably it's better to re-spin for 5.19 with all arrays and
-cond_bool_datum::state converted to literal bool type.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> --
-> paul-moore.com
+All errors (new ones prefixed by >>):
+
+>> kernel/rcu/tree.c:2678:3: error: implicit declaration of function 'rcu_tasks_classic_qs' [-Werror,-Wimplicit-function-declaration]
+                   rcu_tasks_classic_qs(current, false);
+                   ^
+   1 error generated.
+
+
+vim +/rcu_tasks_classic_qs +2678 kernel/rcu/tree.c
+
+  2644	
+  2645	/*
+  2646	 * This function is invoked from each scheduling-clock interrupt,
+  2647	 * and checks to see if this CPU is in a non-context-switch quiescent
+  2648	 * state, for example, user mode or idle loop.  It also schedules RCU
+  2649	 * core processing.  If the current grace period has gone on too long,
+  2650	 * it will ask the scheduler to manufacture a context switch for the sole
+  2651	 * purpose of providing the needed quiescent state.
+  2652	 */
+  2653	void rcu_sched_clock_irq(int user)
+  2654	{
+  2655		unsigned long j;
+  2656	
+  2657		if (IS_ENABLED(CONFIG_PROVE_RCU)) {
+  2658			j = jiffies;
+  2659			WARN_ON_ONCE(time_before(j, __this_cpu_read(rcu_data.last_sched_clock)));
+  2660			__this_cpu_write(rcu_data.last_sched_clock, j);
+  2661		}
+  2662		trace_rcu_utilization(TPS("Start scheduler-tick"));
+  2663		lockdep_assert_irqs_disabled();
+  2664		raw_cpu_inc(rcu_data.ticks_this_gp);
+  2665		/* The load-acquire pairs with the store-release setting to true. */
+  2666		if (smp_load_acquire(this_cpu_ptr(&rcu_data.rcu_urgent_qs))) {
+  2667			/* Idle and userspace execution already are quiescent states. */
+  2668			if (!rcu_is_cpu_rrupt_from_idle() && !user) {
+  2669				set_tsk_need_resched(current);
+  2670				set_preempt_need_resched();
+  2671			}
+  2672			__this_cpu_write(rcu_data.rcu_urgent_qs, false);
+  2673		}
+  2674		rcu_flavor_sched_clock_irq(user);
+  2675		if (rcu_pending(user))
+  2676			invoke_rcu_core();
+  2677		if (user)
+> 2678			rcu_tasks_classic_qs(current, false);
+  2679		lockdep_assert_irqs_disabled();
+  2680	
+  2681		trace_rcu_utilization(TPS("End scheduler-tick"));
+  2682	}
+  2683	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

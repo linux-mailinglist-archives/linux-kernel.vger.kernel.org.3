@@ -2,203 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB144D1373
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 034724D1379
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345366AbiCHJdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S1345367AbiCHJeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:34:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiCHJdM (ORCPT
+        with ESMTP id S232666AbiCHJem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:33:12 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4106832ECB;
-        Tue,  8 Mar 2022 01:32:12 -0800 (PST)
-Received: from kwepemi100022.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KCVPV4QP4z9sYS;
-        Tue,  8 Mar 2022 17:28:30 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi100022.china.huawei.com (7.221.188.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Tue, 8 Mar 2022 17:32:10 +0800
-Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
- (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 8 Mar
- 2022 17:32:10 +0800
-Subject: Re: [PATCH v2 1/2] drivers/perf: hisi: Add Support for CPA PMU
-To:     John Garry <john.garry@huawei.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>, <acme@kernel.org>
-CC:     <linux-perf-users@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>
-References: <20220224111129.41416-1-liuqi115@huawei.com>
- <20220224111129.41416-2-liuqi115@huawei.com>
- <8cdc2c64-0a89-b807-56f6-2ea67a41a641@huawei.com>
- <a051968a-b90d-3707-fb60-f6a446fc79e7@huawei.com>
- <816e5d86-9d7d-5762-d1d7-afcd0ee34af3@huawei.com>
-From:   "liuqi (BA)" <liuqi115@huawei.com>
-Message-ID: <9a5db958-2fef-ff5e-c83f-394039e5bd0e@huawei.com>
-Date:   Tue, 8 Mar 2022 17:32:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 8 Mar 2022 04:34:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3A84131D;
+        Tue,  8 Mar 2022 01:33:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C98B3613EA;
+        Tue,  8 Mar 2022 09:33:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C68C340EC;
+        Tue,  8 Mar 2022 09:33:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646732022;
+        bh=KGNINKpwfme0ioYvCFXI97pXN8eXLL+5zUi6gZH62EU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iCKp5kebWxQkqmPGeS4Xfu/XlBlKW/CIp1uPmG5QEL5TsNgACHDzmthUMciPCwbih
+         HX6Vl7HF355FxbwuIS3Mg6qcgxpqgS0aMKravSk7Q2MQ8W+RcIyHUb1Y0aAZcH4S43
+         KvqTZWIJ7f3hJ1jJdxgL4OxDNvGj3D8tUqujbvG04NCY61s0D5IQ10GnL1CV2wy2JX
+         9c7zMiz3BXgw8Uw1zWvteze8kzKbGBC/Ndb654S2einb7Icuceehx3+gl0Qn6mwI50
+         V/2iqt/jdn4KSY4MotjWJ3S2awGrTLVHDfZfAmhWDRWrtAYSNwIBtwwmhTqDUEPZfN
+         xs8Krh4uJsg1A==
+Date:   Tue, 8 Mar 2022 11:33:01 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, dhowells@redhat.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
+        seth@forshee.me, rnsastry@linux.ibm.com,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v10 3/3] integrity: support including firmware
+ ".platform" keys at build time
+Message-ID: <Yiciza4e1hf4MPTd@iki.fi>
+References: <20220306205100.651878-1-nayna@linux.ibm.com>
+ <20220306205100.651878-4-nayna@linux.ibm.com>
+ <YiX/NHETfqLT8ZAz@iki.fi>
+ <42243a19b5882ddff9d20b37d1566553b745a717.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <816e5d86-9d7d-5762-d1d7-afcd0ee34af3@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.101.67]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42243a19b5882ddff9d20b37d1566553b745a717.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 07, 2022 at 05:03:09PM -0500, Mimi Zohar wrote:
+> [Cc'ing  Masahiro Yamada]
+> 
+> On Mon, 2022-03-07 at 14:48 +0200, Jarkko Sakkinen wrote:
+> > On Sun, Mar 06, 2022 at 03:51:00PM -0500, Nayna Jain wrote:
+> > > Allow firmware keys to be embedded in the Linux kernel and loaded onto
+> > > the ".platform" keyring on boot.
+> > > 
+> > > The firmware keys can be specified in a file as a list of PEM encoded
+> > > certificates using new config INTEGRITY_PLATFORM_KEYS. The certificates
+> > > are embedded in the image by converting the PEM-formatted certificates
+> > > into DER(binary) and generating
+> > > security/integrity/platform_certs/platform_certificate_list file at
+> > > build time. On boot, the embedded certs from the image are loaded onto
+> > > the ".platform" keyring at late_initcall(), ensuring the platform keyring
+> > > exists before loading the keys.
+> > > 
+> > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> > > ---
+> > >  security/integrity/Kconfig                    | 10 ++++++++
+> > >  security/integrity/Makefile                   | 15 +++++++++++-
+> > >  security/integrity/integrity.h                |  3 +++
+> > >  .../integrity/platform_certs/platform_cert.S  | 23 +++++++++++++++++++
+> > >  .../platform_certs/platform_keyring.c         | 23 +++++++++++++++++++
+> > >  5 files changed, 73 insertions(+), 1 deletion(-)
+> > >  create mode 100644 security/integrity/platform_certs/platform_cert.S
+> > > 
+> > > diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+> > > index 599429f99f99..77b2c22c0e1b 100644
+> > > --- a/security/integrity/Kconfig
+> > > +++ b/security/integrity/Kconfig
+> > > @@ -62,6 +62,16 @@ config INTEGRITY_PLATFORM_KEYRING
+> > >           provided by the platform for verifying the kexec'ed kerned image
+> > >           and, possibly, the initramfs signature.
+> > >  
+> > > +config INTEGRITY_PLATFORM_KEYS
+> > > +        string "Builtin X.509 keys for .platform keyring"
+> > > +        depends on KEYS
+> > > +        depends on ASYMMETRIC_KEY_TYPE
+> > > +        depends on INTEGRITY_PLATFORM_KEYRING
+> > > +        help
+> > > +          If set, this option should be the filename of a PEM-formatted file
+> > > +          containing X.509 certificates to be loaded onto the ".platform"
+> > > +          keyring.
+> > > +
+> > >  config INTEGRITY_MACHINE_KEYRING
+> > >  	bool "Provide a keyring to which Machine Owner Keys may be added"
+> > >  	depends on SECONDARY_TRUSTED_KEYRING
+> > > diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+> > > index d0ffe37dc1d6..65bd93301a3a 100644
+> > > --- a/security/integrity/Makefile
+> > > +++ b/security/integrity/Makefile
+> > > @@ -3,13 +3,17 @@
+> > >  # Makefile for caching inode integrity data (iint)
+> > >  #
+> > >  
+> > > +quiet_cmd_extract_certs  = CERT  $@
+> > > +      cmd_extract_certs  = certs/extract-cert $(2) $@
+> > > +
+> > >  obj-$(CONFIG_INTEGRITY) += integrity.o
+> > >  
+> > >  integrity-y := iint.o
+> > >  integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
+> > >  integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
+> > >  integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
+> > > -integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
+> > > +integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o \
+> > > +						  platform_certs/platform_cert.o
+> > >  integrity-$(CONFIG_INTEGRITY_MACHINE_KEYRING) += platform_certs/machine_keyring.o
+> > >  integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
+> > >  				      platform_certs/load_uefi.o \
+> > > @@ -20,3 +24,12 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
+> > >                                       platform_certs/keyring_handler.o
+> > >  obj-$(CONFIG_IMA)			+= ima/
+> > >  obj-$(CONFIG_EVM)			+= evm/
+> > > +
+> > > +$(obj)/platform_certs/platform_cert.o: $(obj)/platform_certs/platform_certificate_list
+> > > +
+> > > +targets += platform_certificate_list
+> > > +
+> > > +$(obj)/platform_certs/platform_certificate_list: $(CONFIG_INTEGRITY_PLATFORM_KEYS) certs/extract-cert FORCE
+> > > +	$(call if_changed,extract_certs,$(if $(CONFIG_INTEGRITY_PLATFORM_KEYS),$<,""))
+> > > +
+> > > +clean-files := platform_certs/platform_certificate_list
+> > > diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+> > > index 76e9a9515f99..219da29fecf7 100644
+> > > --- a/security/integrity/integrity.h
+> > > +++ b/security/integrity/integrity.h
+> > > @@ -282,6 +282,9 @@ integrity_audit_log_start(struct audit_context *ctx, gfp_t gfp_mask, int type)
+> > >  #endif
+> > >  
+> > >  #ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
+> > > +extern __initconst const u8 platform_certificate_list[];
+> > > +extern __initconst const unsigned long platform_certificate_list_size;
+> > > +
+> > >  void __init add_to_platform_keyring(const char *source, const void *data,
+> > >  				    size_t len);
+> > >  #else
+> > > diff --git a/security/integrity/platform_certs/platform_cert.S b/security/integrity/platform_certs/platform_cert.S
+> > > new file mode 100644
+> > > index 000000000000..20bccce5dc5a
+> > > --- /dev/null
+> > > +++ b/security/integrity/platform_certs/platform_cert.S
+> > > @@ -0,0 +1,23 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +#include <linux/export.h>
+> > > +#include <linux/init.h>
+> > > +
+> > > +	__INITRODATA
+> > > +
+> > > +	.align 8
+> > > +#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
+> > > +	.globl platform_certificate_list
+> > > +platform_certificate_list:
+> > > +__cert_list_start:
+> > > +	.incbin "security/integrity/platform_certs/platform_certificate_list"
+> > > +__cert_list_end:
+> > > +#endif
+> > > +
+> > > +	.align 8
+> > > +	.globl platform_certificate_list_size
+> > > +platform_certificate_list_size:
+> > > +#ifdef CONFIG_64BIT
+> > > +	.quad __cert_list_end - __cert_list_start
+> > > +#else
+> > > +	.long __cert_list_end - __cert_list_start
+> > > +#endif
+> > > diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
+> > > index bcafd7387729..c2368912fd1b 100644
+> > > --- a/security/integrity/platform_certs/platform_keyring.c
+> > > +++ b/security/integrity/platform_certs/platform_keyring.c
+> > > @@ -12,6 +12,7 @@
+> > >  #include <linux/cred.h>
+> > >  #include <linux/err.h>
+> > >  #include <linux/slab.h>
+> > > +#include <keys/system_keyring.h>
+> > >  #include "../integrity.h"
+> > >  
+> > >  /**
+> > > @@ -37,6 +38,28 @@ void __init add_to_platform_keyring(const char *source, const void *data,
+> > >  		pr_info("Error adding keys to platform keyring %s\n", source);
+> > >  }
+> > >  
+> > > +static __init int load_platform_certificate_list(void)
+> > > +{
+> > > +	const u8 *p;
+> > > +	unsigned long size;
+> > > +	int rc;
+> > > +	struct key *keyring;
+> > > +
+> > > +	p = platform_certificate_list;
+> > > +	size = platform_certificate_list_size;
+> > > +
+> > > +	keyring = integrity_keyring_from_id(INTEGRITY_KEYRING_PLATFORM);
+> > > +	if (IS_ERR(keyring))
+> > > +		return PTR_ERR(keyring);
+> > > +
+> > > +	rc = load_certificate_list(p, size, keyring);
+> > > +	if (rc)
+> > > +		pr_info("Error adding keys to platform keyring %d\n", rc);
+> > > +
+> > > +	return rc;
+> > > +}
+> > > +late_initcall(load_platform_certificate_list);
+> > > +
+> > >  /*
+> > >   * Create the trusted keyrings.
+> > >   */
+> > > -- 
+> > > 2.27.0
+> > > 
+> > 
+> > There's zero tested-by's for this, i.e. cannot be applied before someone
+> > has tested this. Mimi, do not mean to be rude, but I don't frankly
+> > understand why you ask to pick a patch set that is *untested*.
+> > So I generated a self-signed certificate:
+> > 
+> > openssl req -x509 -out localhost.crt -keyout localhost.key \
+> >   -newkey rsa:2048 -nodes -sha256 \
+> >   -subj '/CN=localhost' -extensions EXT -config <( \
+> >    printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+> > 
+> > (by courtesy of letsencrypt: https://letsencrypt.org/docs/certificates-for-localhost/)
+> > 
+> > openssl x509 -in localhost.crt -out localhost.pem -outform PEM
+> > 
+> > And starting with tinyconfig I added minimal options to enable this
+> > feature. The config is attached.
+> > 
+> > The end result is:
+> > 
+> > make[2]: *** No rule to make target 'certs/extract-cert', needed by 'security/integrity/platform_certs/platform_certificate_list'.  Stop.
+> > make[1]: *** [scripts/Makefile.build:550: security/integrity] Error 2
+> > make: *** [Makefile:1831: security] Error 2
+> 
+> I've reviewed and tested this patch set each time it was posted last
+> fall/winter.  Recent changes were limited to the cover letter and patch
+> description.  Only recently was "extract_cert" moved to the certs/
+> directory and not built automatically.  The commit message says the
+> move was because it wasn't being used outside the certs directory. 
+> Refer to commit 340a02535ee7 ("certs: move scripts/extract-cert to
+> certs/").
+> 
+> Masahiro Yamada would you be ok with reverting the move?
+> 
+> thanks,
+> 
+> Mimi
 
-Hi John,
-On 2022/3/8 1:50, John Garry wrote:
-> 
->>>> +
->>>> +static void hisi_cpa_pmu_stop_counters(struct hisi_pmu *cpa_pmu)
->>>> +{
->>>> +    u32 val;
->>>> +
->>>> +    val = readl(cpa_pmu->base + CPA_PERF_CTRL);
->>>> +    val &= ~(CPA_PERF_CTRL_EN);
->>>> +    writel(val, cpa_pmu->base + CPA_PERF_CTRL);
->>>> +}
->>>> +
->>>> +static void hisi_cpa_pmu_disable_pm(struct hisi_pmu *cpa_pmu)
->>>
->>> this seems unique for this new driver - why do we need to disable PM?
->>>
->> CPA PMU doesn't work under power mangement state, so we need to 
->> disable PM before using CPA PMU.
-> 
-> OK, so you need to disable something related to PM to use the HW. But 
-> why do it when you enable the counter? I mean, can we just do it once 
-> when we probe the HW? Why is it even enabled at all?
-> 
->>
+OK, so I can add your tested-by? It was missing, that's where the
+concern came from.
 
-PM is enabled by default. yes, we could disable it in probe function and 
-restore in remove function, I'll change this in next version.
-
-Thanks,
-Qi
->>>> +{
->>>> +    u32 val;
->>>> +
->>>> +    val = readl(cpa_pmu->base + CPA_CFG_REG);
->>>> +    val |= CPA_PM_CTRL;
->>>> +    writel(val, cpa_pmu->base + CPA_CFG_REG);
->>>> +}
->>>> +
->>>> +static void hisi_cpa_pmu_enable_pm(struct hisi_pmu *cpa_pmu)
->>>> +{
->>>> +    u32 val;
->>>> +
->>>> +    val = readl(cpa_pmu->base + CPA_CFG_REG);
->>>> +    val &= ~CPA_PM_CTRL;
->>>
->>> nit: you use () in hisi_cpa_pmu_stop_counters(), but not here, so 
->>> please be consistent
->>>
->> ]
-> 
-> ...
-> 
->>>> +static int hisi_cpa_pmu_init_data(struct platform_device *pdev,
->>>> +                  struct hisi_pmu *cpa_pmu)
->>>> +{
->>>> +    if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
->>>> +                     &cpa_pmu->sccl_id)) {
->>>> +        dev_err(&pdev->dev, "Can not read cpa_pmu sccl-id\n");
->>>
->>> strange that the FW uses "scl-id" but driver uses sccl_id (I am 
->>> talking about sccl vs scl difference)
->>>
->> yes... these two names means the same thing, maybe could use a cleanup 
->> patch to keep them consistent.
->>
->>>> +        return -EINVAL;
->>>> +    }
->>>> +
->>>> +    cpa_pmu->ccl_id = -1;
->>>> +
->>>> +    if (device_property_read_u32(&pdev->dev, "hisilicon,idx-id",
->>>> +                     &cpa_pmu->index_id)) {
->>>> +        dev_err(&pdev->dev, "Cannot read idx-id\n");
->>>> +        return -EINVAL;
->>>> +    }
->>>> +
->>>> +    cpa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
->>>> +    if (IS_ERR(cpa_pmu->base))
->>>> +        return PTR_ERR(cpa_pmu->base);
->>>> +
->>>> +    cpa_pmu->identifier = readl(cpa_pmu->base + CPA_VERSION);
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
-> 
-> ...
-> 
->>>> +static int hisi_cpa_pmu_probe(struct platform_device *pdev)
->>>> +{
->>>> +    struct hisi_pmu *cpa_pmu;
->>>> +    char *name;
->>>> +    int ret;
->>>> +
->>>> +    cpa_pmu = devm_kzalloc(&pdev->dev, sizeof(*cpa_pmu), GFP_KERNEL);
->>>> +    if (!cpa_pmu)
->>>> +        return -ENOMEM;
->>>> +
->>>> +    ret = hisi_cpa_pmu_dev_probe(pdev, cpa_pmu);
->>>> +    if (ret)
->>>> +        return ret;
->>>> +
->>>> +    ret = cpuhp_state_add_instance(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
->>>> +                       &cpa_pmu->node);
->>>> +    if (ret) {
->>>> +        dev_err(&pdev->dev, "Error %d registering hotplug\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +
->>>> +    name = devm_kasprintf(&pdev->dev, GFP_KERNEL, 
->>>> "hisi_sicl%d_cpa%u", cpa_pmu->sccl_id - 1,
->>>
->>> sorry, but I still don't like this "- 1". From checking the chat on 
->>> v1, my impression was that you agreed with me on this one.
->>>
->>
->> sorry, maybe I didn't express it clearly.
->> CPA PMU is on IO die,
-> 
-> Then it is quite strange to provide the sccl id and not some sicl id 
-> (since it is in the IO die)
-> 
->   but BIOS give CPA PMU driver the sccl-id of
->> adjacent CPU die (as we need this sccl-id to pass 
->> hisi_pmu_cpu_is_associated_pmu() and find the associated cpu).
-> 
-> 
-> Is the PMU only ever used by one SCCL? Or can more than one SCCL access? 
-> If so, is there a special affinity to one particular SCCL?
-> 
->> so, when naming CPA PMU, we use the sccl-id supported by BIOS to get 
->> the sicl-id of IO die which CPA PMU located in, that is: 
->> cpa_pmu->sccl_id - 1.
->>
->>>> +                  cpa_pmu->index_id);
-> 
-> Thanks,
-> John
-> .
+BR, Jarkko

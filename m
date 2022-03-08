@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4904D2311
+	by mail.lfdr.de (Postfix) with ESMTP id 690AC4D2312
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350334AbiCHVJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S1350344AbiCHVKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235737AbiCHVJt (ORCPT
+        with ESMTP id S1350337AbiCHVKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:09:49 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68573EA90
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:08:51 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id bm39so217748qkb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:08:51 -0800 (PST)
+        Tue, 8 Mar 2022 16:10:07 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F8849F08
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:09:10 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id t5so462719pfg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:09:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aDSOBm4d5nO/KrS/W0aAAr28zrJ753qvjHwTkTdw9kk=;
-        b=IQNlE95xzFsoZ/PblHHm/qEE1xW6I0QhH4ifACt1mBjmMJif3RQXXYM4RzLT/psSl8
-         9Anm/9FEbRjZtMEZ2MfvZHD9Pu+dRyx7z783YEo0MawjZetnl2/G4Lo3yB6DC4z/BCta
-         AYpElEbrSlfmX9AE3nvcbP5lcT8pAQkJqyB2YiKCRDgcitKKIARW+lB4G6yumt9gAHRA
-         lSRsTjy8h84X0kRBXr4etBPqLx5b1ZweTPDGCzhjgr9ZKjsy/KKEHHOdtEe4jbD0z2Au
-         93LEAczwx87RZhku6PtgEn2yhr6ZqsR6LszCnikopuJOp5zA01ChuDkOYHbv0whsNRu+
-         wrCg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EZ13Ad+Zn+Xj7/UE9QdPV67yzSek7jFKj0Lb1KNVlJ8=;
+        b=HCn8+hhS8kx1HBgNpxqU/16tZci1llASe7ZDRD+FqpXltxdkBryVvtSCwkhCU31/oZ
+         O8wIXN4mxWadoQcTYvsW/6mR5tuHM0uF+/Mb1gSUa1HKXGQ0fkcz9Q56nTdxch/vNyfm
+         pZPKvQ/FLqfPCC3AlDhbhEjd5cpEx/oJgZHHp0l9O8xBn9C9UVi7Jva4y2bqRmrfBmAy
+         Rq2tZshceNRXnUC5okVoaE+vDMnlJ1fv+gD/GPLamwOfdLljzudaJCbsZYzZyDJd7IR0
+         LWiTzpwY52nA/RRIVODwtM3juWIOyBqW+FnGMXPXnhIdEnZepVjgyQPu/bOsj0HUdJgP
+         IqSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aDSOBm4d5nO/KrS/W0aAAr28zrJ753qvjHwTkTdw9kk=;
-        b=vH+k9pa/TbLbXm8ojVo9Row5Vna6WaEHRiG8jl5D52kOu3YB49hpfCaLGDyKKO95qz
-         XoJ9a3RFy1JTFLvMjHVwkh8d+y6Bn9XlmLyQlklEWzbXdF4HUfSOUKni7dxpDtytftVG
-         OuPq54+3WQ6Z6yP4k91DwOym++1B5/v8awaxgdr3/+HxIUk11O//rN2gA7vzUcsJg3Wy
-         YiALNz3oYHNroudFo+zolFjBMqBhs/G5w8rBki/DwpinQOFY9ZsscsZNX0k/TwgrSxLL
-         gxtLIlw33aZrnHQ9jtkzdXFdYtSaOC62DTbHyhHSG6ANE1OL7/eHdHj9Dzefm9FtZ+KQ
-         NB3Q==
-X-Gm-Message-State: AOAM533RKkEQ2XFe+waNL64ixZREAWGBxNuCE8ittFPlgWU2OjWQarTb
-        jOSMPl+HQ2TJ3G0YZIrhNHSsWe1fNTS9+DDk/gsZ7w==
-X-Google-Smtp-Source: ABdhPJwUz+BS2DcHTmdLJAf815JaWVdyXiZass6ggduXJR8Sq164BEaJZ5AcIUrPOpW+bpSFyNuf3NDUGLnlMB1wYyQ=
-X-Received: by 2002:a05:620a:2849:b0:67d:2462:15e4 with SMTP id
- h9-20020a05620a284900b0067d246215e4mr2356259qkp.583.1646773730521; Tue, 08
- Mar 2022 13:08:50 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EZ13Ad+Zn+Xj7/UE9QdPV67yzSek7jFKj0Lb1KNVlJ8=;
+        b=HmkWlrcB5FigM1FIZPQINs8VEsinayiZZAGpFJTmDPd1OR9/dWfqXPV2yGlx1/3jk3
+         2KNWhy/8EIlRRji6nhY88fy3ByAkH9gmnhnv5DoE7b0zKke0v5myDXRfvEOR5h5uYqy9
+         lUGk1SwjrPtXJLfEmDXm3jfCNhazq3cfaKkLyHC3IAC4LtPOtQTDoLSEEDyTCrH/46cK
+         U0GtS1wQarrHKK4+80SrePgEU2WlUBsHPfjnmmUqx/u7dzgiAOKVgOhypulSIiRCPE/J
+         iQRUO2gMBPS/96poN8Bl1EHadMM5mbqwLROYIMD5VhVK2N1XKi0+6ILNF8wELtpinn+8
+         tFLw==
+X-Gm-Message-State: AOAM532YSyiyaUp2L3BW/UFMYwM64mvCQpEjDv6V5XzpUxj/CqMfKlnQ
+        wjSk7Y0Vua1Af5KFxMT8RP1wEA==
+X-Google-Smtp-Source: ABdhPJyxBjhyl4QE3OFAzM2+v5w8xr8npBIZ/tPioD64MIsO8C4MDpqctA/ZreGVU7ij+l/N/IfqTA==
+X-Received: by 2002:a05:6a00:1584:b0:4f7:4647:6fdd with SMTP id u4-20020a056a00158400b004f746476fddmr962674pfk.84.1646773749482;
+        Tue, 08 Mar 2022 13:09:09 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id kk5-20020a17090b4a0500b001bf527073besm4193356pjb.10.2022.03.08.13.09.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 13:09:08 -0800 (PST)
+Date:   Tue, 8 Mar 2022 21:09:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Marc Zyngier <Marc.Zyngier@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: [PATCH v4 30/30] KVM: selftests: Add test to populate a VM with
+ the max possible guest mem
+Message-ID: <YifF8QrNxDX4qU4J@google.com>
+References: <20220303193842.370645-1-pbonzini@redhat.com>
+ <20220303193842.370645-31-pbonzini@redhat.com>
+ <63f4a488-87f1-097f-95d5-f85e46786740@redhat.com>
 MIME-Version: 1.0
-References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
- <20220227051821.fwrmeu7r6bab6tio@apollo.legion> <CA+khW7g4mLw9W+CY651FaE-2SF0XBeaGKa5Le7ZnTBTK7eD30Q@mail.gmail.com>
- <20220302193411.ieooguqoa6tpraoe@ast-mbp.dhcp.thefacebook.com>
- <CA+khW7goNwmt2xJb8SMaagXcsZdquQha8kax-LF033wFexKCcA@mail.gmail.com>
- <CA+khW7hK9JKU3be7gDDJ9DsOeaUS3RxCGJOJAUrZwvyVJiSSSA@mail.gmail.com> <CAADnVQ+-9DAuqj3jLvnwPn0PwuRnfSZ4niDOPqOaF+SH-_+P8A@mail.gmail.com>
-In-Reply-To: <CAADnVQ+-9DAuqj3jLvnwPn0PwuRnfSZ4niDOPqOaF+SH-_+P8A@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 8 Mar 2022 13:08:39 -0800
-Message-ID: <CA+khW7iQ6w99pB+kodXheJDo5nAZ6wxZiaWtt08xKQETs=uJFg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
- for prog_bpf_syscall
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63f4a488-87f1-097f-95d5-f85e46786740@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -82,125 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 5, 2022 at 3:47 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Mar 4, 2022 at 10:37 AM Hao Luo <haoluo@google.com> wrote:
-> >
-> > I gave this question more thought. We don't need to bind mount the top
-> > bpffs into the container, instead, we may be able to overlay a bpffs
-> > directory into the container. Here is the workflow in my mind:
->
-> I don't quite follow what you mean by 'overlay' here.
-> Another bpffs mount or future overlayfs that supports bpffs?
->
-> > For each job, let's say A, the container runtime can create a
-> > directory in bpffs, for example
-> >
-> >   /sys/fs/bpf/jobs/A
-> >
-> > and then create the cgroup for A. The sleepable tracing prog will
-> > create the file:
-> >
-> >   /sys/fs/bpf/jobs/A/100/stats
-> >
-> > 100 is the created cgroup's id. Then the container runtime overlays
-> > the bpffs directory into container A in the same path:
->
-> Why cgroup id ? Wouldn't it be easier to use the same cgroup name
-> as in cgroupfs ?
->
+On Tue, Mar 08, 2022, Paolo Bonzini wrote:
+> On 3/3/22 20:38, Paolo Bonzini wrote:
+> > On x86, perform two passes with a MMU context reset between each pass to
+> > coerce KVM into dropping all references to the MMU root, e.g. to emulate
+> > a vCPU dropping the last reference.  Perform both passes and all
+> > rendezvous on all architectures in the hope that arm64 and s390x can gain
+> > similar shenanigans in the future.
+> 
+> Did you actually test aarch64 (not even asking about s390 :))?  For now
+> let's only add it for x86.
 
-Cgroup name isn't unique. We don't need the hierarchy information of
-cgroups. We can use a library function to translate cgroup path to
-cgroup id. See the get_cgroup_id() in patch 9/9. It works fine in the
-selftest.
+Nope, don't you read my cover letters?  :-D
 
-> >   [A's container path]/sys/fs/bpf/jobs/A.
-> >
-> > A can see the stats at the path within its mount ns:
-> >
-> >   /sys/fs/bpf/jobs/A/100/stats
-> >
-> > When A creates cgroup, it is able to write to the top layer of the
-> > overlayed directory. So it is
-> >
-> >   /sys/fs/bpf/jobs/A/101/stats
-> >
-> > Some of my thoughts:
-> >   1. Compared to bind mount top bpffs into container, overlaying a
-> > directory avoids exposing other jobs' stats. This gives better
-> > isolation. I already have a patch for supporting laying bpffs over
-> > other fs, it's not too hard.
->
-> So it's overlayfs combination of bpffs and something like ext4, right?
-> I thought you found out that overlaryfs has to be upper fs
-> and lower fs shouldn't be modified underneath.
-> So if bpffs is a lower fs the writes into it should go
-> through the upper overlayfs, right?
->
+  The selftest at the end allows populating a guest with the max amount of
+  memory allowed by the underlying architecture.  The most I've tested is
+  ~64tb (MAXPHYADDR=46) as I don't have easy access to a system with
+  MAXPHYADDR=52.  The selftest compiles on arm64 and s390x, but otherwise
+  hasn't been tested outside of x86-64.  It will hopefully do something
+  useful as is, but there's a non-zero chance it won't get past init with
+  a high max memory.  Running on x86 without the TDP MMU is comically slow.
 
-It's overlayfs combining bpffs and ext4. Bpffs is the upper layer. The
-lower layer is an empty ext4 directory. The merged directory is a
-directory in the container.
-The upper layer contains bpf objects that we want to expose to the
-container, for example, the sleepable tracing progs and the iter link
-for reading stats. Only the merged directory is visible to the
-container and all the updates go through the merged directory.
 
-The following is the example of workflow I'm thinking:
+> > +			TEST_ASSERT(nr_vcpus, "#DE");
+> 
+> srsly? :)
 
-Step 1: We first set up directories and bpf objects needed by containers.
-
-[# ~] ls /sys/fs/bpf/container/upper
-tracing_prog   iter_link
-[# ~] ls /sys/fs/bpf/container/work
-[# ~] ls /container
-root   lower
-[# ~] ls /container/root
-bpf
-[# ~] ls /container/root/bpf
-
-Step 2: Use overlayfs to mount a directory from bpffs into the container's home.
-
-[# ~] mkdir /container/lower
-[# ~] mkdir /sys/fs/bpf/container/workdir
-[# ~] mount -t overlay overlay -o \
- lowerdir=/container/lower,\
- upperdir=/sys/fs/bpf/container/upper,\
- workdir=/sys/fs/bpf/container/work \
-  /container/root/bpf
-[# ~] ls /container/root/bpf
-tracing_prog    iter_link
-
-Step 3: pivot root for container, we expect to see the bpf objects are
-mapped into container,
-
-[# ~] chroot /container/root
-[# ~] ls /
-bpf
-[# ~] ls /bpf
-tracing_prog   iter_link
-
-Note:
-
-- I haven't tested Step 3. But Step 1 and step 2 seem to be working as
-expected. I am testing the behaviors of the bpf objects, after we
-enter the container.
-
-- Only a directory in bpffs is mapped into the container, not the top
-bpffs. The path is uniform in all containers, that is, /bpf. The
-container should be able to mkdir in /bpf, etc.
-
-> >   2. Once the container runtime has overlayed directory into the
-> > container, it has no need to create more cgroups for this job. It
-> > doesn't need to track the stats of job-created cgroups, which are
-> > mainly for inspection by the job itself. Even if it needs to collect
-> > the stats from those cgroups, it can read from the path in the
-> > container.
-> >   3. The overlay path in container doesn't have to be exactly the same
-> > as the path in root mount ns. In the sleepable tracing prog, we may
-> > select paths based on current process's ns. If we choose to do this,
-> > we can further avoid exposing cgroup id and job name to the container.
->
-> The benefits make sense.
+LOL, yes.  IIRC I added that because I screwed up computing nr_vcpus and my
+test did nothing useful :-)

@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06E64D2405
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5270E4D2407
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348062AbiCHWNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S229902AbiCHWN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiCHWNs (ORCPT
+        with ESMTP id S235585AbiCHWN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:13:48 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3E22C664
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:12:50 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id dr20so935711ejc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 14:12:50 -0800 (PST)
+        Tue, 8 Mar 2022 17:13:56 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA923338AA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:12:55 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id bc27so333492pgb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 14:12:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q667ThhdkxL8AUOuU2qYFbGa17GC7zYlSfkMfKxv3/4=;
-        b=NusUdDknL66lGLdEP5FNX3LOWWrWLPuP37qgc1opFNmna8r1+mPTnGkGut+szDcFa/
-         g2D3r9SMSZRg66H5SIzcejOYlji2wOURANJzlFKjsk/PS2e7FWmhTkUb8u8CDBkM67p8
-         4ySDCD9CGHFSObrQ6khjnN5ALk0dIGbg/2xbA=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bkKtesSrq7QqPtPRsrv5MP5UVhIFuJzVkEWr+6F4jZg=;
+        b=HB7Qh4AtVpk8d37bKeerp0qFPsowgSyoNUGO3LpWmMZyfhC0KY2vF+/9yFB3whMWqV
+         r6ygdwoC5f3KyA6nBZBdysI+OaD0+1ZMeKlMNQMyoVYqJrw7jHy0RmxmooM5aq4XJh/k
+         7px/K05dn+P2MGUsxJHuEwW0DQyufasrdA/CY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q667ThhdkxL8AUOuU2qYFbGa17GC7zYlSfkMfKxv3/4=;
-        b=qKfX9Gabc//o9VSsWzx+edvjmM5FOGQ/svIabymNiHNm/T7SoGE2v8GOA7VSeQAOze
-         KGuuLNpSfovaRZaxGx5DbMNk0b+3Uw41dbRkG6ODVQu0eSHXJDC8RZTq7n2VN9aUqcF0
-         +FlBf0gdBKin4dq+zHgCIaKaceu+3Ph0QCBG9y05AixsBdPvdnevkUXamBR69kjaU/V2
-         SCAkXY2Mcflugf5DPWH35lX+Cqc2QQvZuBtZgopBcQaMuaNXqMqXGExtM2k7A8a6mMaj
-         Kor19UPnM6CsSGZ0wmYQEukhPvaJvg93gXK52cBGUEo9zfX95uYtPqVeI9wNPgY4NetB
-         m4Cg==
-X-Gm-Message-State: AOAM5327k9V4j4G9idzGi99l1VfNAJY87pd2FPMchRSQOu7c3zg5LeK8
-        15mK9VCYyrre3Clc539ty2THI5XXKDHeXYdI
-X-Google-Smtp-Source: ABdhPJxinXXRPvFPh/f69nnS2GNvG0n7Bq4rjfjUdPzWtyUIjnsjzatwwDGMZNEB0LGsbmcAJFTwmw==
-X-Received: by 2002:a17:907:7da9:b0:6da:866a:3c59 with SMTP id oz41-20020a1709077da900b006da866a3c59mr15376272ejc.13.1646777568948;
-        Tue, 08 Mar 2022 14:12:48 -0800 (PST)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170906a18400b006db0a78bde8sm17870ejy.87.2022.03.08.14.12.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 14:12:48 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id r10so262091wrp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 14:12:47 -0800 (PST)
-X-Received: by 2002:adf:eb45:0:b0:1ef:6070:7641 with SMTP id
- u5-20020adfeb45000000b001ef60707641mr14280334wrn.301.1646777567076; Tue, 08
- Mar 2022 14:12:47 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bkKtesSrq7QqPtPRsrv5MP5UVhIFuJzVkEWr+6F4jZg=;
+        b=lPPSNIpJfCHyJFoGvNrC95tPl0O1QvWDIU5rd+B58kSJelB1ww0gUqeqj3mTV5kaaD
+         8K+4rezi9Qks5xzbIXa/jQgEQaERk5C0wcPAmhp84SdWXXuaUUEj5wzMdhY4nVN0JcJj
+         CeJDsrs16jTQ/m3svpCZPE1ANO6ilBTP2oh1zqOwVCDpRqi9n5LSFryMEkLlKO1c7bcU
+         ejcsIAN8e5/wVafbiaYx+e4aVjracBAc5fofytEDSiERYZiniyAtutxrI1kseWDPMCwm
+         BcAICjINKu8B0gkEGF+jsLgI6XoVz5GpZ1I+0jwdNunT+zBqUgI/pnzjwiV0H9O9JyBK
+         N8ug==
+X-Gm-Message-State: AOAM531A9cgcYy/s45YYwCWwZlQAjQbU0EhnUhHjkN6Jfhhml43JT0aM
+        z1DEum7NtExr9o8T1uYi1EiQ8w==
+X-Google-Smtp-Source: ABdhPJxAagA58tSNDoUZKDWEzQaeBwAsi4rPzMdnA3AIz7iJkUTWHfbJDFjsTEW6XG4sdCX9pvm2qg==
+X-Received: by 2002:aa7:8256:0:b0:4e0:78ad:eb81 with SMTP id e22-20020aa78256000000b004e078adeb81mr20546718pfn.30.1646777575321;
+        Tue, 08 Mar 2022 14:12:55 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s9-20020a056a00194900b004e1583f88a2sm66527pfk.0.2022.03.08.14.12.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 14:12:55 -0800 (PST)
+Date:   Tue, 8 Mar 2022 14:12:54 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     David Gow <davidgow@google.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Magnus =?iso-8859-1?Q?Gro=DF?= <magnus.gross@rwth-aachen.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] binfmt_elf: Introduce KUnit test
+Message-ID: <202203081408.0B0FC34C@keescook>
+References: <20220304044831.962450-1-keescook@chromium.org>
+ <YifJqN+5ju4kHQ2y@localhost.localdomain>
 MIME-Version: 1.0
-References: <20220308033241.22099-1-rdunlap@infradead.org> <CAD=FV=W90Hd-baPzurraEaDUGNOCxb8FLUysHKOQg2frMuZRAQ@mail.gmail.com>
- <2c693cb8-f4b8-a723-c804-9492d9cc4881@infradead.org>
-In-Reply-To: <2c693cb8-f4b8-a723-c804-9492d9cc4881@infradead.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 8 Mar 2022 14:12:34 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=X004_55zOovjazkqqZ_EXQ-QCYS1o4VxdCvEjt3+7Tbw@mail.gmail.com>
-Message-ID: <CAD=FV=X004_55zOovjazkqqZ_EXQ-QCYS1o4VxdCvEjt3+7Tbw@mail.gmail.com>
-Subject: Re: [PATCH] kgdboc: fix return value of __setup handler
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Laura Abbott <labbott@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YifJqN+5ju4kHQ2y@localhost.localdomain>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,40 +74,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Mar 09, 2022 at 12:24:56AM +0300, Alexey Dobriyan wrote:
+> On Thu, Mar 03, 2022 at 08:48:31PM -0800, Kees Cook wrote:
+> > Adds simple KUnit test for some binfmt_elf internals: specifically a
+> > regression test for the problem fixed by commit 8904d9cd90ee ("ELF:
+> > fix overflow in total mapping size calculation").
+> 
+> > +	/* No headers, no size. */
+> > +	KUNIT_EXPECT_EQ(test, total_mapping_size(NULL, 0), 0);
+> 
+> This is meaningless test. This whole function only makes sense
+> if program headers are read and loading process advances far enough
+> so that pointer is not NULL.
 
-On Tue, Mar 8, 2022 at 1:19 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi Doug,
->
-> >> Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-> >>   kgdboc=kbd kgdbts=", will be passed to user space.
-> >>
-> >>  Run /sbin/init as init process
-> >>    with arguments:
-> >>      /sbin/init
-> >>    with environment:
-> >>      HOME=/
-> >>      TERM=linux
-> >>      BOOT_IMAGE=/boot/bzImage-517rc7
-> >>      kgdboc=kbd
-> >>      kgdbts=
-> >>
-> >> Fixes: 1cd25cbb2fed ("kgdboc: Fix warning with module build")
-> >
-> > Are you certain about this "Fixes" line? That commit was just code
-> > motion to move the code inside the #ifdef. It sure looks like it was
-> > broken even before this.
-> >
->
-> Yes, but I am not enough of a git user to be able to backtrack
-> to see where this code was added. :(
-> (help?)
+I think it's important to start adding incremental unit testing to core
+kernel APIs. This is a case of adding a regression test for a specific
+misbehavior. This is good, but in addition, testing should check any other
+corner cases as well. Yes, the above EXPECT line is total nonsense, and
+it makes sure that nonsense actually reports back the expected failure
+state "0".
 
-I always just chain back w/ git blame. In this case:
+> Are we going to mock every single function in the kernel?
+> Disgusting.
 
-git blame 1cd25cbb2fed~ -- drivers/tty/serial/kgdboc.c
+I'm not really interested in a slippery slope debate, but honestly, if we
+_could_ mock everything in the kernel and create unit tests for everything
+in the kernel, then yes, we should. It's certainly not feasible, but at
+least _getting started_ on unit testing execve is worth it.
 
-...then search for __setup there and it finds:
-
-Fixes: f2d937f3bf00 ("consoles: polling support, kgdboc")
+-- 
+Kees Cook

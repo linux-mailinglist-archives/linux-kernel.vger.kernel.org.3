@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6F54D1371
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D21F4D1311
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345343AbiCHJcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S1345278AbiCHJKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345365AbiCHJbr (ORCPT
+        with ESMTP id S233872AbiCHJKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:31:47 -0500
-X-Greylist: delayed 1429 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 01:30:50 PST
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86833153E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 01:30:50 -0800 (PST)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 73C338034C6A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:07:00 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id BC88B10047F86
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:06:59 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id RVo3nkdCCY8ycRVo3nMSw5; Tue, 08 Mar 2022 09:06:59 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Ue6U9IeN c=1 sm=1 tr=0 ts=62271cb3
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=o8Y5sQTvuykA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=TW8tJxXyv0mGgdEXXAtMFp3rPUTXw7YtdxoQSHbuvfs=; b=rKhW6ub3KVIhsqDjLc4pnPrn6E
-        T63SrTsOqULObE4Fq1V1jEa8SkLguCgDWEXkZ//aGw8r3MI7tBt1XFCpyR0t9KyN64bbXNuTbOPk/
-        OaOeqLhC4NnsP7m9OtC8xCQVP;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:59564 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nRVo2-002Omi-5f; Tue, 08 Mar 2022 02:06:58 -0700
-Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220307162207.188028559@linuxfoundation.org>
-In-Reply-To: <20220307162207.188028559@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <5feb5017-1137-c015-3fc4-6c3bff742198@w6rz.net>
-Date:   Tue, 8 Mar 2022 01:06:56 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 8 Mar 2022 04:10:16 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217311EEE1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 01:09:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646730560; x=1678266560;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gAh58GZx1hR/2ylbcvnEySyFmI7RTda6XlOZnDxet6A=;
+  b=Ux5lzRt1SH0j6W3s6oiF0F6UPT+CwBp3FmGBOD3awOA0OVPQlnp2J279
+   2BN/XBPVSVQz0p/odZoMx/D1xHtTIjinpYMSsXOcI0Psy+qc1tJiUsDht
+   kl1bkoak14OBXsB0ZdFCH8RVX7j+mDHx0LbzqsX8tu11cpOc30NmfNiWC
+   QhXhEafJD/LMn0mUcKR1u0Gq5BjnBu8qZwIKMW7y2nCt/SfZ8ClS7qDdQ
+   bXPtSZw43p6TMu+ZYLyDm5INHJ2YCKwA7tbM8ljGSq4U+g9KRq1xzU5J0
+   AKMyBDL+dh5ARH7v01O/ivlGXJZlMCbz1EOSJXHkTxj6IIPdQWeyL4dj7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="315350978"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="315350978"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 01:09:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="513035332"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 08 Mar 2022 01:09:17 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRVqH-0001BL-16; Tue, 08 Mar 2022 09:09:17 +0000
+Date:   Tue, 8 Mar 2022 17:09:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-d1 8/12]
+ arch/riscv/kernel/cpufeature.c:185:6: warning: variable 'cpu_apply_feature'
+ set but not used
+Message-ID: <202203081742.97KWCv3h-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nRVo2-002Omi-5f
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:59564
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/22 8:28 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.27 release.
-> There are 256 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 09 Mar 2022 16:21:31 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.27-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-d1
+head:   b3cda759adb0111b5b3efd3a0b986864b647a94a
+commit: 012cee7ecac542dd3206bee731da0868353eef21 [8/12] riscv: add cpufeature handling via alternatives
+config: riscv-randconfig-r005-20220308 (https://download.01.org/0day-ci/archive/20220308/202203081742.97KWCv3h-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/012cee7ecac542dd3206bee731da0868353eef21
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-d1
+        git checkout 012cee7ecac542dd3206bee731da0868353eef21
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Ron Economos <re@w6rz.net>
+All warnings (new ones prefixed by >>):
 
+>> arch/riscv/kernel/cpufeature.c:185:6: warning: variable 'cpu_apply_feature' set but not used [-Wunused-but-set-variable]
+           u32 cpu_apply_feature = 0;
+               ^
+   1 warning generated.
+
+
+vim +/cpu_apply_feature +185 arch/riscv/kernel/cpufeature.c
+
+   180	
+   181	void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
+   182					 unsigned int stage)
+   183	{
+   184		u32 cpu_req_feature = cpufeature_probe(stage);
+ > 185		u32 cpu_apply_feature = 0;
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

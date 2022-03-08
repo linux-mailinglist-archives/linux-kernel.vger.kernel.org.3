@@ -2,116 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965A74D129D
+	by mail.lfdr.de (Postfix) with ESMTP id 256E44D129C
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345113AbiCHIrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
+        id S1345105AbiCHIsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345091AbiCHIrf (ORCPT
+        with ESMTP id S1345133AbiCHIry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:47:35 -0500
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2DC3FDAB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:46:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=U2Ezfl4Dj+EY8O/VynpCfVQ0kSYG
-        5LvuTVFICTszNJ4=; b=12Qv5+6OrJCG/dtKKpFd4UjqLWGZFABeWALj+Inf3XnO
-        Es2LY1S7sG8mWhMzR11DB7QfdqR50mTye55rIzJlrqYZUjI/oB0/ZitG5RBxtCyU
-        QLfFqBqXR6eACXO4MhniclUYy8O8H55bctY1aQ6WkliHOpQFp7yO3HEYGjvDAO4=
-Received: (qmail 2319030 invoked from network); 8 Mar 2022 09:46:36 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Mar 2022 09:46:36 +0100
-X-UD-Smtp-Session: l3s3148p1@wEbHBLHZyqofEkvD
-Date:   Tue, 8 Mar 2022 09:46:35 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Duc Nguyen <duc.nguyen.ub@renesas.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>
-Subject: Re: [RFC PATCH] memory: renesas-rpc-if: Correct QSPI data transfer
- in Manual mode
-Message-ID: <YicX67PsQO0+bMTZ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Duc Nguyen <duc.nguyen.ub@renesas.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>
-References: <20210922091007.5516-1-wsa+renesas@sang-engineering.com>
- <163282533892.34438.1878675609177525004.b4-ty@canonical.com>
- <CAMuHMdUqQLo7=NFaNEukqniTJbx-mSZv7eQNB9eCT=L28y3u=A@mail.gmail.com>
- <YicSCZfl4wLUzvEJ@shikoro>
- <CAMuHMdUTgooY6SRfp4LB3tSa=-GtS0EH=BD5zo5orLTKp0hjBg@mail.gmail.com>
+        Tue, 8 Mar 2022 03:47:54 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D133FBFB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:46:55 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id r13so37578907ejd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 00:46:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YWDxW77171tKULic9PATZflHGAWN9agWbTs/Al0RNIA=;
+        b=yDq6cJj7scG6xMfY6mQBRZI2teHCxzKWxFahnkYD75apQHz+R+CrU3MTQ6xyW1c0UW
+         JM2b+S5Npi2BSgCR+6cTMscJ4fJKrQaMDWQcH7ijwSRS2Bt5UvmcWMqOK/NyyXnPmkQp
+         4HohBUjbccLAZubYdl0A9y9x/z7KFrLl6oBijkyfSp7IFSWfg8hRZc1Ut8VVgTbK1y8q
+         Pq0OULrEwQpV+7ivCIdE5aUvHQ+Dm1f7J5VYHOvkw4OAZtwR/hkX1B9jY1uC0cST7Mvm
+         jfQDMJwUwcj40vAoPr++9qB5Z6sp1LfMVI5MN1mGAa76lb76s40yOR/r/8XauNvsQBfK
+         8cNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YWDxW77171tKULic9PATZflHGAWN9agWbTs/Al0RNIA=;
+        b=SR/CkBKG4wcoqUXrAnD+Nx/vE7kBGeYhE3AqmyhxM9Lo++miQE68CVlrjMsjsjydfp
+         7rz3FGNM7Ny9WOlr6gbjscJtGJZVxQNZ80kLqnzH26q3cjWVhGbnfzhKYv66oQQo/G8c
+         ufvD7ykf+tfujEAu1UGT2tznpSKaQB04sjHZ94WESAJ3zt3nORwAeyNwEwJ03uziK2eY
+         9CNFrfuCT1Zbu0/tr37t3AHtSQ3JzeQzC+F4+nKRq9Uw1lA0elcivdNhP/Af7XN8Gvcl
+         nZ/3HLhsTuUNkaeasPRClXWrML6i1B68bTJ7W3grX7pTZXtP0IzApy0HZnN63yal/T/u
+         /GYQ==
+X-Gm-Message-State: AOAM5336+3rP9oqgYM3+jRYZl1Tm4Thys9Zzgw101xpAnihsUtNmh1C+
+        hriJs7tMw3DvyKNHPW8dyFDO20kYR/3hfbGJc59+cN147M8=
+X-Google-Smtp-Source: ABdhPJw2uMD2RB52Mu2RDi0WheUdgR/Sw7e1yql8YPmxsLsQoIY5nRZis9nQH5Ko1YfJ7Y6TG+EtlW8T6gqs6LEV6dI=
+X-Received: by 2002:a17:906:888e:b0:6da:ed04:5e40 with SMTP id
+ ak14-20020a170906888e00b006daed045e40mr12736944ejc.286.1646729213855; Tue, 08
+ Mar 2022 00:46:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mqi2ylIOFRq8KDIZ"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUTgooY6SRfp4LB3tSa=-GtS0EH=BD5zo5orLTKp0hjBg@mail.gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220307163840.64495-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220307163840.64495-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 8 Mar 2022 09:46:43 +0100
+Message-ID: <CAMRc=Mf_gRcrc+AECb+Y5zLFdr-muKfxhFZr3+qkvLHB4ajndw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: sim: Declare gpio_sim_hog_config_item_ops static
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 7, 2022 at 5:38 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Compiler is not happy:
+>
+>   warning: symbol 'gpio_sim_hog_config_item_ops' was not declared. Should it be static?
+>
+> Fixes: cb8c474e79be ("gpio: sim: new testing module")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpio-sim.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+> index 153fe79e1bf3..bb9bb595c1a8 100644
+> --- a/drivers/gpio/gpio-sim.c
+> +++ b/drivers/gpio/gpio-sim.c
+> @@ -1322,7 +1322,7 @@ static void gpio_sim_hog_config_item_release(struct config_item *item)
+>         kfree(hog);
+>  }
+>
+> -struct configfs_item_operations gpio_sim_hog_config_item_ops = {
+> +static struct configfs_item_operations gpio_sim_hog_config_item_ops = {
+>         .release        = gpio_sim_hog_config_item_release,
+>  };
+>
+> --
+> 2.34.1
+>
 
---mqi2ylIOFRq8KDIZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Queued for fixes, thanks!
 
-
-> This is not QSPI, but HF.
-
-Ah, okay.
-
-> Building a new firmware for R-Car H3 ES1.0 with HF unlocked will be
-> complicated, as it is not supported by upstream TF-A.
-
-You mean QSPI here?
-
-> Note that HF also fails to probe on R-Car M3-W and M3-N ES1.0.
-
-Do you have this patch form Andrew in your tree:
-
-[PATCH] memory: renesas-rpc-if: Avoid unaligned bus access for HyperFlash
-
-Even if so, I don't think that reverting patches is the solution. As you
-could see from Andrew's patch, HyperFlash was also broken before and it
-just may need more fixes for Gen3 perhaps? IIRC my patches didn't break
-Andrew's tests but maybe we should ask him again. Maybe Andrew has also
-some more ideas, I only did QSPI.
-
-
---mqi2ylIOFRq8KDIZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmInF+sACgkQFA3kzBSg
-Kbb3iw/9F4+PYhxTI8YLJfM4F2MBGeOh6KaOcky2kckejSdsgOG4oQdUOrdWBvES
-kSD1Qd9wydxflG51CfaV6AFZ0KgOpiK0spPwBxwfGHseY5uUYYOjIImf9QhUz5uQ
-Q/1VKdMq8NYUGPRk0f5xjrvGhNOg5lO6jnjYTpSNrhdMixqm41ri0ZqlrP0gMLED
-EkbSJwr2N2mt7ZWW93UVglFKpcJohCAoC3w4YQrV8YraYp2LzXmkN21s12NVReuw
-BVCzRs7nimOwJY71DXqNgdwxvT2LHzJfYMypnbgvNhJ3ARGYgcVWDd8WI2u3STFu
-wh/UNojxBn8rYNrnj7H8oMHM/a1X9vFAkEXI6mQMzn31DzFJ4v4qEwLtONGTdZ5u
-aTBfA2G2iEOVyTwiKIO5A1C8RobCsL2E0X600UBcDhEEeKc4/p6e/tpkGjzAa4yK
-iH7J4qwdipmpnY+e8BPxBtET9DzdJM1GsYuiFy3oahCuzoRRbPk7NPqzLwHY08rA
-hH58By3fNGTtfuTYKH0lZjgsHEfXqfkshFSH24uzlcPoBjBZqqrt+9yQqgIFmKr9
-oi9VuJqGXgZVVbCA8bWVaJ/D2WevRk2rEqL5WiWKcSxEV7TMzza8bU8f7TSgO+Wf
-Kh8zE3v5Nu9dHYyXBLx15LDIs+4RW6ThnkLFK/9ebQ5eY2//cgg=
-=FH/T
------END PGP SIGNATURE-----
-
---mqi2ylIOFRq8KDIZ--
+Bart

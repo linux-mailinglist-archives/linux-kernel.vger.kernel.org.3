@@ -2,166 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7C64D12DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CCA4D12DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242515AbiCHIwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S240827AbiCHIxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238022AbiCHIwV (ORCPT
+        with ESMTP id S1345255AbiCHIww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:52:21 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD7440A02;
-        Tue,  8 Mar 2022 00:51:16 -0800 (PST)
-Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DA5C451C;
-        Tue,  8 Mar 2022 09:51:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646729473;
-        bh=tx1v41sFjwGQBvE+sIrqGvKblBFOQcSEb0qoE7wv6Xk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Jy5uYLZcwLb3KPsPqVod83/S0uNHXV1yFHxrkizv+pb8dLcTPQ5oNOd8pJzjzjund
-         M0qFloP+xTpNuZPF/EVZbZy9fWLLv2IcCf3jZNUaJuhGWpbxmoVTk5iNfbqb2KmQW3
-         vy5SBv4M39NYY6ZYg3dSPMIjPZ3oWinmlBT9cQq8=
-Message-ID: <dbc365c3-db91-91ca-8ccf-dafd849a3105@ideasonboard.com>
-Date:   Tue, 8 Mar 2022 10:51:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/3] drm: omapdrm: Fix excessive GEM buffers DMM/CMA usage
-Content-Language: en-US
-To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>, tomba@kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, merlijn@wizzup.org, tony@atomide.com,
-        airlied@linux.ie, daniel@ffwll.ch
-References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <be4e1cd8-a994-303d-9424-14439ce1f7d4@ideasonboard.com>
- <47dbc690-bff2-8839-f01f-9287403a7562@gmail.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <47dbc690-bff2-8839-f01f-9287403a7562@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Tue, 8 Mar 2022 03:52:52 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3974090E;
+        Tue,  8 Mar 2022 00:51:51 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id dr20so37504624ejc.6;
+        Tue, 08 Mar 2022 00:51:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=weKpcHAcnZbt3XokDlK6GEAJ8PK3dGcUQJAFMx5soSc=;
+        b=YcCGih06qdszN3WESTIuZ81II8HBzbpwHe8fbppflLOAsMDS32mq8z8ZH6k101gg8z
+         Marfr2hHyKsthm618MBbMYiVdVA7p0nKmGsFmQBjx+pqSw9gF14RDOnfoDL7znJLh3ZM
+         p5ZRtxA/H8YeBjfDSHrX+jCNFrR81JY5F48pVVyyx4/qiqepfzkfiDTPkEG/IXA8ztEA
+         H5c1LJ0rlF4nOjxRkG+gH8CO4M7pwFEX3PilXFw3o5yk43xLoeAtgC5WkLxXahZsmVcz
+         y3EYfnSdy0N6VLdceHkl9iCcx4XMiZULWNJUb/isBhSNlKrS9IzI7eb3J630YL80ojMI
+         G7+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=weKpcHAcnZbt3XokDlK6GEAJ8PK3dGcUQJAFMx5soSc=;
+        b=7cf/uGO1brkO3wqKM7vlEsnlyIghkIu3QLqa5AA5xO0Q3IUFMHRVyKEseM+4I6sJEw
+         Uk+AZ2gQnN8LRcCKMs/hpMyJhvmfFqbVigb7Q+C1skUlmAR1OiH+Muwmbi7jqOdnnTV/
+         pXRSBJo+WlrkjpWgp/Y8epK/y6LQ/krRWQx/AICfL7l5t/4jhK7B0UcTHER9Y6ndNLUJ
+         NFZ/4ZbG71s+ek1RwcMv0lq4Mc0MLh/0L/BMVB3KBvzI1ALbPqPeeM7MwzQg3JbblWnd
+         3QETvmIGSbp3q1gCdafmee5XUwS2QmtRQH8F3OqkFubw1Q0/cLguoYQCKhAgz4hGno0R
+         f2PQ==
+X-Gm-Message-State: AOAM530i99xAKP+XnkcqEzypAXn+hNs44dzB3GL/3L7B0bD52LmgnTp8
+        tZLBLdRdOyEYs5JgQhdYGNsXEEN9Tz4=
+X-Google-Smtp-Source: ABdhPJx9TgI8fo2rPRv7i3Gr41qIyvnF3isNGnqAzJKtTTygfNkGSUPBDjqZvpo8BnuURfm23fu/gg==
+X-Received: by 2002:a17:906:4a96:b0:6c5:5ea9:5366 with SMTP id x22-20020a1709064a9600b006c55ea95366mr12075447eju.473.1646729510133;
+        Tue, 08 Mar 2022 00:51:50 -0800 (PST)
+Received: from felia.fritz.box (200116b82626c9000cc91df728b27ead.dip.versatel-1u1.de. [2001:16b8:2626:c900:cc9:1df7:28b2:7ead])
+        by smtp.gmail.com with ESMTPSA id z22-20020a17090655d600b006d229436793sm5558656ejp.223.2022.03.08.00.51.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 00:51:49 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>, linux-renesas-soc@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: rectify entry for ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE DRIVERS
+Date:   Tue,  8 Mar 2022 09:51:36 +0100
+Message-Id: <20220308085136.30753-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2022 18:21, Ivaylo Dimitrov wrote:
-> Hi Tomi,
-> 
-> On 17.02.22 г. 15:03 ч., Tomi Valkeinen wrote:
->> Hi Ivaylo,
->>
->> On 19/01/2022 12:23, Ivaylo Dimitrov wrote:
->>> This patch series fixes excessive DMM or CMA usage of GEM buffers 
->>> leading to
->>> various runtime allocation failures. The series enables daily usage 
->>> of devices
->>> without exausting limited resources like CMA or DMM space if GPU 
->>> rendering is
->>> needed.
->>>
->>> The first patch doesn't bring any functional changes, it just moves some
->>> TILER/DMM related code to a separate function, to simplify the review 
->>> of the
->>> next two patches.
->>>
->>> The second patch allows off-CPU rendering to non-scanout buffers. 
->>> Without that
->>> patch, it is basically impossible to use the driver allocated GEM 
->>> buffers on
->>> OMAP3 for anything else but a basic CPU rendered examples as if we 
->>> want GPU
->>> rendering, we must allocate buffers as scanout buffers, which are CMA 
->>> allocated.
->>> CMA soon gets fragmented and we start seeing allocation failures. 
->>> Such failres
->>> in Xorg cannot be handeled gracefully, so the system is basically 
->>> unusable.
->>>
->>> Third patch fixes similar issue on OMAP4/5, where DMM/TILER spaces get
->>> fragmented with time, leading to allocation failures.
->>
->> I think this is just hacking around the problem. The problem is that 
->> omapdrm is being used by some as a generic buffer allocator. Those users 
-> 
-> Well, the user of omap_bo interface I know is xf86-video-omap. Unless if 
-> by users you mean 'kernel users' which I know none.
-> 
-> I think that if 'we' are to teach xorg omap DDX (or any other user in 
-> that regard) to use GPU driver allocator for non-scanout buffers and 
-> omapdrm for scanout, it will become a mess. Not impossible though, just 
-> way more complicated than the $series. Also, why do omapdrm allow 
-> allocation of non-linear buffers and CPU (userspace) access to them, but 
-> refuses to export them to kernel drivers? Isn't that the whole point of 
-> DMABUF stuff? This is not consistent to me. The series fixes that 
-> inconsistency, nothing more.
-> 
->> should be changed to use a their own allocator or a generic allocator. 
-> 
-> SGX driver/userspace has and uses its own allocator, however, I think 
-> there is more than that - what about TILER/VRFB? Do you say that SGX 
-> userspace shall be smart enough to requests TILER buffers from omapdrm 
-> when scanout buffer is requested and use its own allocator when not?
+Commit 983b62975e90 ("dt-bindings: mfd: bd9571mwv: Convert to json-schema")
+converts bd9571mwv.txt to rohm,bd9571mwv.yaml, but missed to adjust its
+reference in MAINTAINERS.
 
-All I'm saying is that omapdrm should not support allocating buffers 
-that are not usable by the omapdrm hardware. It doesn't make any sense.
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken reference.
 
-> Actually I was thinking about something like that, and it is achievable 
-> now we have:
-> 
-> https://github.com/maemo-leste/sgx-ddk-um/blob/master/dbm/dbm.c (REed 
-> SGX 1.17 ddk gbm backend)
-> 
->> And we could then drop the OMAP_BO_SCANOUT flag, as all buffers would 
->> be scanout buffers.
->>
-> 
-> And what about OMAP_BO_TILED_XX stuff? To me this is even more of a 
-> hack, but it is what it is.
+Repair this file reference in ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE
+DRIVERS.
 
-Yes, I agree, I don't think those OMAP_BO_TILED_* values should be 
-exposed to userspace. But I also agree to the "it is what it is" =).
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Lee, please pick this minor non-urgent clean-up patch. Thanks.
 
-> Do I get it correctly that you want to get rid of omap_bo_new/_tiled and 
-> have only dumb buffers available in omapdrm? TBH this would be great, 
-> however I still don't see how a TILER/VRFB buffer would be allocated, 
-> given that flags in drm_mode_create_dumb is not used anywhere in the 
-> kernel(AFAIK). Unless all scanout buffers are allocated through 
-> TILER/VRFB (which is a good idea IMO).
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We can't get rid of those as they're userspace API.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dc984c050086..c1eed1a2ffc9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16695,7 +16695,7 @@ M:	Marek Vasut <marek.vasut+renesas@gmail.com>
+ L:	linux-kernel@vger.kernel.org
+ L:	linux-renesas-soc@vger.kernel.org
+ S:	Supported
+-F:	Documentation/devicetree/bindings/mfd/bd9571mwv.txt
++F:	Documentation/devicetree/bindings/mfd/rohm,bd9571mwv.yaml
+ F:	drivers/gpio/gpio-bd9571mwv.c
+ F:	drivers/mfd/bd9571mwv.c
+ F:	drivers/regulator/bd9571mwv-regulator.c
+-- 
+2.17.1
 
->> Or do we have a regression in the driver? My understanding is that 
->> this has never really worked.
->>
-> 
-> There are couple of patches in omapdrm that change around BO flags and 
-> their meaning so I think there is a regression, as the same 
-> userspace/DDX on linux 5.9 results in only 2 linear buffers being 
-> allocated, but as SGX driver has different version as well, I can't be 
-> 100% sure without going through a lengthy assessment of SGX 
-> driver/omapdrm code and patches since 5.9. Which I am not going to do as 
-> I don't see what the benefit will be.
-> 
-> Please consider this patch series as a fix to an inconsistency, as it is 
-> merely that, it does not really bring any new functionality in terms of 
-> what is allocated.
-
-I've considered, and I think I agree. The design of omapdrm + tiler is 
-broken in my opinion, but it's there, it has userspace APIs, and it's 
-all old code. It's probably not worth the effort to try to clean it up, 
-while still somehow keeping the old userspace working.
-
-I've had these patchesin my work branch for a while and I haven't seen 
-any issues. I'll keep them there for a bit longer and I'll look at these 
-patches a bit more, but I think I'll merge them at some point.
-
-  Tomi

@@ -2,119 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D8F4D1D02
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6FF4D1D00
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348245AbiCHQS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S231548AbiCHQSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:18:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348143AbiCHQSz (ORCPT
+        with ESMTP id S1348208AbiCHQSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:18:55 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607D2DFC4;
-        Tue,  8 Mar 2022 08:17:58 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id D30ABE0076;
-        Tue,  8 Mar 2022 08:17:27 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id I5-U4puZBtsc; Tue,  8 Mar 2022 08:17:27 -0800 (PST)
-Message-ID: <2d439eec0548361669bcc7b4de5b2c0e966d4d62.camel@puri.sm>
-Subject: Re: [PATCH] usb: xhci: make XHCI_STOP_EP_CMD_TIMEOUT a module
- parameter
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, kernel@puri.sm, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 08 Mar 2022 17:17:23 +0100
-In-Reply-To: <835b3990-43a6-a985-81b4-b86bddfe951f@linux.intel.com>
-References: <20220304113057.1477958-1-martin.kepplinger@puri.sm>
-         <YiIfZFPl9ZqPBKvj@kroah.com>
-         <835b3990-43a6-a985-81b4-b86bddfe951f@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Tue, 8 Mar 2022 11:18:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA361013;
+        Tue,  8 Mar 2022 08:17:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A90B616F2;
+        Tue,  8 Mar 2022 16:17:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B684C340EB;
+        Tue,  8 Mar 2022 16:17:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646756253;
+        bh=RHG7+NaypXs6njZprF1L4oaPoKIzbTsRnRQHdaHpdxg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=opNzORxJtVFIfnE3Xb8qL/GahhvtR6BV7v2P/YREv0EXAf1ECKOmeOZWQfLD3lp7o
+         aGXdHZKjFuXiCft6gzKTjHYHzXExEKAL28DfiljubBaxZp75fWfq4d+sRsKZYqQ4gh
+         HRkss7pg/g9x9viCFjQgt0wN6WR96ic9XJHidu6LCHxQkEH/e88oaDGF4jLz3BoxP8
+         UlrOSqkDxey26M56j/wXiU4Fw6+/E7X6LevZT+JEnQaec+yrg+Mw0jcvdbrEHWwvf0
+         BIQihrPGi2FSTMp/SQUHsaOEFN1fnS752uXP1HajU6tzBn+1GZo+JNFidiS9aPNCu2
+         GaILL66Ipgc1g==
+Date:   Tue, 8 Mar 2022 08:17:31 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Roi Dayan <roid@nvidia.com>, dev@openvswitch.org,
+        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        David Ahern <dsahern@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: Re: [ovs-dev] [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6
+ extension header support
+Message-ID: <20220308081731.3588b495@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <e55b1963-14d8-63af-de8e-1b1a8f569a6e@ovn.org>
+References: <20220224005409.411626-1-cpp.code.lv@gmail.com>
+        <164578561098.13834.14017896440355101001.git-patchwork-notify@kernel.org>
+        <3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com>
+        <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
+        <57996C97-5845-425B-9B13-7F33EE05D704@redhat.com>
+        <26b924fb-ed26-bb3f-8c6b-48edac825f73@nvidia.com>
+        <20220307122638.215427b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <3a96b606-c3aa-c39b-645e-a3af0c82e44b@ovn.org>
+        <20220307144616.05317297@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <45aed9cd-ba65-e2e7-27d7-97e3f9de1fb8@ovn.org>
+        <20220307214550.2d2c26a9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <5bec02cb6a640cafd65c946e10ee4eda99eb4d9c.camel@sipsolutions.net>
+        <e55b1963-14d8-63af-de8e-1b1a8f569a6e@ovn.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, dem 07.03.2022 um 10:49 +0200 schrieb Mathias Nyman:
-> On 4.3.2022 16.17, Greg KH wrote:
-> > On Fri, Mar 04, 2022 at 12:30:57PM +0100, Martin Kepplinger wrote:
-> > > On the Librem 5 imx8mq system we've seen the stop endpoint
-> > > command
-> > > time out regularly which results in the hub dying.
-> > > 
-> > > While on the one hand we see "Port resume timed out, port 1-1:
-> > > 0xfe3"
-> > > before this and on the other hand driver-comments suggest that
-> > > the driver
-> > > might be able to recover instead of dying here, Sarah seemed to
-> > > have a
-> > > workaround for this particulator problem in mind already:
-> > > 
-> > > Make it a module parameter. So while it might not be the root
-> > > cause for
-> > > the problem, do this to give users a workaround.
-> > 
-> > This is not the 1990's, sorry, please do not add new module
-> > parameters.
-> > They modify code, when you want to modify an individual device.
-> > 
+On Tue, 8 Mar 2022 15:12:45 +0100 Ilya Maximets wrote:
+> >> diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
+> >> index 9d1710f20505..ab6755621e02 100644
+> >> --- a/include/uapi/linux/openvswitch.h
+> >> +++ b/include/uapi/linux/openvswitch.h
+> >> @@ -351,11 +351,16 @@ enum ovs_key_attr {
+> >>         OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV4,   /* struct ovs_key_ct_tuple_ipv4 */
+> >>         OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV6,   /* struct ovs_key_ct_tuple_ipv6 */
+> >>         OVS_KEY_ATTR_NSH,       /* Nested set of ovs_nsh_key_* */
+> >> -       OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
+> >>  
+> >>  #ifdef __KERNEL__
+> >>         OVS_KEY_ATTR_TUNNEL_INFO,  /* struct ip_tunnel_info */
+> >>  #endif
+> >> +       /* User space decided to squat on types 30 and 31 */
+> >> +       OVS_KEY_ATTR_IPV6_EXTHDRS = 32, /* struct ovs_key_ipv6_exthdr */
+> >> +       /* WARNING: <scary warning to avoid the problem coming back> */  
 > 
-> Agree, I think we really need to find the rootcause here.
+> Yes, that is something that I had in mind too.  The only thing that makes
+> me uncomfortable is OVS_KEY_ATTR_TUNNEL_INFO = 30 here.  Even though it
+> doesn't make a lot of difference, I'd better keep the kernel-only attributes
+> at the end of the enumeration.  Is there a better way to handle kernel-only
+> attribute?
+
+My thought was to leave the kernel/userspace only types "behind" to
+avoid perpetuating the same constructs.
+
+Johannes's point about userspace to userspace messages makes the whole
+thing a little less of an aberration.
+
+Is there a reason for the types to be hidden under __KERNEL__? 
+Or someone did that in a misguided attempt to save space in attr arrays
+when parsing?
+
+> Also, the OVS_KEY_ATTR_ND_EXTENSIONS (31) attribute used to store IPv6 Neighbor
+> Discovery extensions is currently implemented only for userspace, but nothing
+> actually prevents us having the kernel implementation.  So, we need a way to
+> make it usable by the kernel in the future.
+
+The "= 32" leaves the earlier attr types as reserved so nothing
+prevents us from defining them later. But..
+
+> > It might be nicer to actually document here in what's at least supposed
+> > to be the canonical documentation of the API what those types were used
+> > for.  
 > 
-> There's a known problem with this stop endpoint timeout timer.
-> 
-> For all other commands we start the timer when the controller starts
-> processing the
-> command, but the stop endpoint timer is started immediately when
-> command is queued.
-> So it might timeout if some other commend before it failed.
-> 
-> I have a patchseries for this. It's still work in progress but should
-> be testable.
-> Pushed to a branch named stop_endpoint_fixes
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git
-> stop_endpoint_fixes
-> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=stop_endpoint_fixes
-> 
-> Can you try it out and see if it helps?
-> 
+> I agree with that.
 
-thanks a lot Mathias, I'm running these now. The timeout has not been
-easy to reproduce (or I'm just lazy) but in a few days I should be able
-to tell whether that helps.
-
-So this thread has been about
-
-[14145.960512] xhci-hcd xhci-hcd.4.auto: Port resume timed out, port 1-
-1: 0xfe3
-[14156.308511] xhci-hcd xhci-hcd.4.auto: xHCI host not responding to
-stop endpoint command.
-
-that I previously tried to work around by increasing
-XHCI_MAX_REXIT_TIMEOUT_MS and XHCI_STOP_EP_CMD_TIMEOUT.
-
-
-These patches can't help with the following, right?
-readl_poll_timeout_atomic() with a fixed timeout is called in this
-case:
-
-xhci-hcd xhci-hcd.4.auto: Abort failed to stop command ring: -110
-
-I see that too from time to time. It results in the HC dying as well.
-
-thanks,
-                              martin
-
+Should we add the user space types to the kernel header and remove the
+ifdef __KERNEL__ around TUNNEL_INFO, then?

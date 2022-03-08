@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF684D23C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2010A4D23C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbiCHV7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
+        id S240380AbiCHWBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:01:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiCHV7l (ORCPT
+        with ESMTP id S229902AbiCHWBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:59:41 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB288289BA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:58:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646776722; x=1678312722;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2tKsvvowT+WWLj+Ao9Bh8RpjgzxG9J+dgY7R8Z+ZsZI=;
-  b=OWYVNxr1moTKuX7IrXJgg8fcezdRl7qyK+vXwA0AG2+uB7lPL4zqqkbE
-   CHEpfnLSF+mYVI0bq/RpKibaOtX7YqCuyedOUrh2WZdS6trgOv/Xn492G
-   3HitPvzg3EYBKPgKEv42ZI5igRrcleEBi4NoPE8daT9Pz5XkJ0h4T+g0Z
-   nrkhyqrrNkfGG0URxkoozoi9Byo3rm3w49M5Eu+BmfoFajpkC7N4xPU8m
-   Tg8yQJ2bK1cKgYzs/LqBsGzbV98U84Re1Fdl81IAd9p59ifyQU7NOFHu9
-   L0HSqW1IWCQQfPRzOgGL8kGt1PVNV0C64c+Rq/XI1sGyi/4pitsFmqzSc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="315540627"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="315540627"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:58:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="643811267"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 13:58:40 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRhqp-00024l-RA; Tue, 08 Mar 2022 21:58:39 +0000
-Date:   Wed, 9 Mar 2022 05:58:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Farzad Farshchi <farzadfr@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        kernel test robot <lkp@intel.com>
-Subject: [esmil:visionfive 55/61] drivers/nvdla/sdp.c:265:18: warning:
- variable 'atom_size' set but not used
-Message-ID: <202203090545.hBbXRh2g-lkp@intel.com>
+        Tue, 8 Mar 2022 17:01:34 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 743FD289BA;
+        Tue,  8 Mar 2022 14:00:37 -0800 (PST)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5F17C20B7178;
+        Tue,  8 Mar 2022 14:00:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5F17C20B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1646776837;
+        bh=6aGA5zF6jU5zH7UbdaZnmMkVSuozYHUjOEcPB4bdYIM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=svryphXe56GxH3wIuzgftWULHzQSof0sq6j9xgRGizLEfetBH1iw9N8TcDC+1q8H4
+         nosAMecuDL0jjxqe/Pg4Yp9855PAje7MevjtTI/7/wuk0sYLH16KSld6/LlEGQSfOU
+         u/gWY8CGNOdLUg8ciaTqx87ftEXwodHcasEH9rEk=
+Message-ID: <c494fa10-e973-c137-b637-66bde327611c@linux.microsoft.com>
+Date:   Tue, 8 Mar 2022 16:00:35 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
+ <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
+ <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
+ <YiY6hecX0pVWowQ7@sirena.org.uk>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YiY6hecX0pVWowQ7@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,552 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   b75fcbba0e03fd9655bc4c8854422d51474664d3
-commit: 6146bd9336a5f9d2bb66d6a394863600b61afeb5 [55/61] nvdla: add NVDLA driver
-config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220309/202203090545.hBbXRh2g-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/esmil/linux/commit/6146bd9336a5f9d2bb66d6a394863600b61afeb5
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 6146bd9336a5f9d2bb66d6a394863600b61afeb5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/nvdla/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/nvdla/sdp.c: In function 'processor_sdp_program':
->> drivers/nvdla/sdp.c:265:18: warning: variable 'atom_size' set but not used [-Wunused-but-set-variable]
-     265 |         uint32_t atom_size;
-         |                  ^~~~~~~~~
---
-   drivers/nvdla/engine_isr.c: In function 'dla_isr_handler':
->> drivers/nvdla/engine_isr.c:38:18: warning: variable 'mask' set but not used [-Wunused-but-set-variable]
-      38 |         uint32_t mask;
-         |                  ^~~~
---
-   drivers/nvdla/nvdla_core_callbacks.c: In function 'dla_debug':
->> drivers/nvdla/nvdla_core_callbacks.c:83:9: warning: function 'dla_debug' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-      83 |         vprintk(pr_fmt(str), args);
-         |         ^~~~~~~
-   drivers/nvdla/nvdla_core_callbacks.c: In function 'dla_info':
->> drivers/nvdla/nvdla_core_callbacks.c:91:9: warning: function 'dla_info' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-      91 |         vprintk(str, args);
-         |         ^~~~~~~
-   drivers/nvdla/nvdla_core_callbacks.c: In function 'dla_warn':
->> drivers/nvdla/nvdla_core_callbacks.c:99:9: warning: function 'dla_warn' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-      99 |         vprintk(str, args);
-         |         ^~~~~~~
-   drivers/nvdla/nvdla_core_callbacks.c: In function 'dla_error':
->> drivers/nvdla/nvdla_core_callbacks.c:107:9: warning: function 'dla_error' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-     107 |         vprintk(str, args);
-         |         ^~~~~~~
---
->> drivers/nvdla/engine.c:92: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Get DMA data cube address
-   drivers/nvdla/engine.c:113: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Read input buffer address
---
->> drivers/nvdla/bdma.c:125: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Program BDMA slot for transfer
---
->> drivers/nvdla/scheduler.c:432: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Dequeue next operation of same type from list of operations
-   drivers/nvdla/scheduler.c:579: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Handle operation completion notification
-   drivers/nvdla/scheduler.c:723: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Read network configuration from DRAM, network descriptor address
-   drivers/nvdla/scheduler.c:1060: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Execute task selected by task scheduler
 
 
-vim +/atom_size +265 drivers/nvdla/sdp.c
+On 3/7/22 11:01, Mark Brown wrote:
+> On Mon, Mar 07, 2022 at 10:51:38AM -0600, Madhavan T. Venkataraman wrote:
+>> Hey Mark Rutland, Mark Brown,
+>>
+>> Could you please review the rest of the patches in the series when you can?
+>>
+> 
+> Please don't send content free pings.  As far as I remember I'd reviewed
+> or was expecting changes based on review or dependent patches for
+> everything that you'd sent.
+> 
 
-   256	
-   257	static int32_t
-   258	processor_sdp_program(struct dla_processor_group *group)
-   259	{
-   260		int32_t ret = 0;
-   261		uint64_t src_addr = -1, x1_addr = -1, x2_addr = -1;
-   262		uint64_t  y_addr = -1, dst_addr = -1;
-   263		uint32_t reg, high, low;
-   264		uint8_t fly;
- > 265		uint32_t atom_size;
-   266		struct dla_sdp_op *x1_op;
-   267		struct dla_sdp_op *x2_op;
-   268		struct dla_sdp_op *y_op;
-   269		uint8_t x1_rdma_ena;
-   270		uint8_t x2_rdma_ena;
-   271		uint8_t y_rdma_ena;
-   272		uint8_t out_dma_ena;
-   273		struct dla_lut_param lut;
-   274		struct dla_engine *engine = dla_get_engine();
-   275		struct dla_sdp_op_desc *sdp_op;
-   276		struct dla_sdp_surface_desc *sdp_surface;
-   277	
-   278		dla_trace("Enter: %s", __func__);
-   279		atom_size = engine->config_data->atom_size;
-   280	
-   281		sdp_op = &group->operation_desc->sdp_op;
-   282		sdp_surface = &group->surface_desc->sdp_surface;
-   283	
-   284		fly = sdp_surface->src_data.type == DLA_MEM_HW;
-   285		out_dma_ena = sdp_surface->dst_data.type != DLA_MEM_HW;
-   286		x1_op = &sdp_op->x1_op;
-   287		x2_op = &sdp_op->x2_op;
-   288		y_op = &sdp_op->y_op;
-   289		x1_rdma_ena = x1_op->enable && x1_op->type != SDP_OP_NONE;
-   290		x2_rdma_ena = x2_op->enable && x2_op->type != SDP_OP_NONE;
-   291		y_rdma_ena  = y_op->enable && y_op->type != SDP_OP_NONE;
-   292	
-   293		/* load address */
-   294		if (!fly) {
-   295			ret = dla_read_input_address(&sdp_surface->src_data,
-   296							&src_addr,
-   297							group->op_desc->index,
-   298							group->roi_index,
-   299						    1);
-   300			if (ret)
-   301				goto exit;
-   302			CHECK_ALIGN(src_addr, atom_size);
-   303		}
-   304	
-   305		if (out_dma_ena) {
-   306			dla_get_dma_cube_address(engine->driver_context,
-   307						engine->task->task_data,
-   308						sdp_surface->dst_data.address,
-   309						sdp_surface->dst_data.offset,
-   310						(void *)&dst_addr,
-   311						DESTINATION_DMA);
-   312			CHECK_ALIGN(dst_addr, atom_size);
-   313		}
-   314	
-   315		if (sdp_op->lut_index >= 0) {
-   316			group->lut_index = sdp_op->lut_index;
-   317			dla_read_lut(engine, sdp_op->lut_index, (void *)&lut);
-   318			dla_debug_lut_params(&lut);
-   319		}
-   320	
-   321	
-   322		x1_rdma_ena &= (x1_op->mode != SDP_OP_PER_LAYER);
-   323		x2_rdma_ena &= (x2_op->mode != SDP_OP_PER_LAYER);
-   324		y_rdma_ena &= (y_op->mode != SDP_OP_PER_LAYER);
-   325	
-   326		if (x1_rdma_ena) {
-   327			dla_get_dma_cube_address(engine->driver_context,
-   328						engine->task->task_data,
-   329						sdp_surface->x1_data.address,
-   330						sdp_surface->x1_data.offset,
-   331						(void *)&x1_addr,
-   332						DESTINATION_DMA);
-   333			CHECK_ALIGN(x1_addr, atom_size);
-   334		}
-   335		if (x2_rdma_ena) {
-   336			dla_get_dma_cube_address(engine->driver_context,
-   337						engine->task->task_data,
-   338						sdp_surface->x2_data.address,
-   339						sdp_surface->x2_data.offset,
-   340						(void *)&x2_addr,
-   341						DESTINATION_DMA);
-   342			CHECK_ALIGN(x2_addr, atom_size);
-   343		}
-   344		if (y_rdma_ena) {
-   345			dla_get_dma_cube_address(engine->driver_context,
-   346						engine->task->task_data,
-   347						sdp_surface->y_data.address,
-   348						sdp_surface->y_data.offset,
-   349						(void *)&y_addr,
-   350						DESTINATION_DMA);
-   351			CHECK_ALIGN(y_addr, atom_size);
-   352		}
-   353	
-   354		reg = (map_fly[0] << SHIFT(SDP_RDMA_D_FEATURE_MODE_CFG_0, FLYING_MODE));
-   355		sdp_rdma_reg_write(D_FEATURE_MODE_CFG, reg);
-   356	
-   357		reg = (map_ena[1] << SHIFT(SDP_RDMA_D_BRDMA_CFG_0, BRDMA_DISABLE));
-   358		sdp_rdma_reg_write(D_BRDMA_CFG, reg);
-   359		reg = (map_ena[1] << SHIFT(SDP_RDMA_D_NRDMA_CFG_0, NRDMA_DISABLE));
-   360		sdp_rdma_reg_write(D_NRDMA_CFG, reg);
-   361		reg = (map_ena[1] << SHIFT(SDP_RDMA_D_ERDMA_CFG_0, ERDMA_DISABLE));
-   362		sdp_rdma_reg_write(D_ERDMA_CFG, reg);
-   363	
-   364		reg = (map_fly[fly] <<
-   365				SHIFT(SDP_RDMA_D_FEATURE_MODE_CFG_0, FLYING_MODE)) |
-   366		(map_wg[sdp_op->conv_mode == CONV_MODE_WINOGRAD] <<
-   367				SHIFT(SDP_RDMA_D_FEATURE_MODE_CFG_0, WINOGRAD)) |
-   368		(map_precision[sdp_op->src_precision] <<
-   369				SHIFT(SDP_RDMA_D_FEATURE_MODE_CFG_0, IN_PRECISION)) |
-   370		(map_precision[sdp_op->dst_precision] <<
-   371				SHIFT(SDP_RDMA_D_FEATURE_MODE_CFG_0, OUT_PRECISION)) |
-   372		(map_proc_precision[sdp_op->dst_precision][sdp_op->src_precision] <<
-   373				SHIFT(SDP_RDMA_D_FEATURE_MODE_CFG_0, PROC_PRECISION)) |
-   374		((sdp_op->batch_num-1) <<
-   375				SHIFT(SDP_RDMA_D_FEATURE_MODE_CFG_0, BATCH_NUMBER));
-   376		sdp_rdma_reg_write(D_FEATURE_MODE_CFG, reg);
-   377	
-   378		if (group->is_rdma_needed) {
-   379	
-   380			sdp_rdma_reg_write(D_DATA_CUBE_WIDTH,
-   381						sdp_surface->src_data.width - 1);
-   382			sdp_rdma_reg_write(D_DATA_CUBE_HEIGHT,
-   383						sdp_surface->src_data.height - 1);
-   384			sdp_rdma_reg_write(D_DATA_CUBE_CHANNEL,
-   385						sdp_surface->src_data.channel - 1);
-   386	
-   387			/* config SDP source info */
-   388			if (!fly) {
-   389				/**
-   390				 * if not on-the-fly, we have to config
-   391				 * the source cube info
-   392				 */
-   393				high = HIGH32BITS(src_addr);
-   394				low = LOW32BITS(src_addr);
-   395				sdp_rdma_reg_write(D_SRC_BASE_ADDR_LOW, low);
-   396				sdp_rdma_reg_write(D_SRC_BASE_ADDR_HIGH, high);
-   397				sdp_rdma_reg_write(D_SRC_LINE_STRIDE,
-   398						sdp_surface->src_data.line_stride);
-   399				sdp_rdma_reg_write(D_SRC_SURFACE_STRIDE,
-   400						sdp_surface->src_data.surf_stride);
-   401				sdp_rdma_reg_write(D_SRC_DMA_CFG,
-   402					map_ram_type[sdp_surface->src_data.type]);
-   403			}
-   404	
-   405			/* config x1 source info */
-   406			reg = (map_ena[x1_rdma_ena] <<
-   407					SHIFT(SDP_RDMA_D_BRDMA_CFG_0,
-   408					BRDMA_DISABLE)) |
-   409				(map_op_type[x1_op->type] <<
-   410					SHIFT(SDP_RDMA_D_BRDMA_CFG_0,
-   411					BRDMA_DATA_USE)) |
-   412				(map_element_size[x1_op->precision] <<
-   413					SHIFT(SDP_RDMA_D_BRDMA_CFG_0,
-   414					BRDMA_DATA_SIZE)) |
-   415				(map_op_mode[x1_op->mode] <<
-   416					SHIFT(SDP_RDMA_D_BRDMA_CFG_0,
-   417					BRDMA_DATA_MODE)) |
-   418				(map_ram_type[sdp_surface->x1_data.type] <<
-   419					SHIFT(SDP_RDMA_D_BRDMA_CFG_0,
-   420					BRDMA_RAM_TYPE));
-   421			sdp_rdma_reg_write(D_BRDMA_CFG, reg);
-   422	
-   423			if (x1_rdma_ena) {
-   424				high = HIGH32BITS(x1_addr);
-   425				low = LOW32BITS(x1_addr);
-   426				sdp_rdma_reg_write(D_BS_BASE_ADDR_LOW,
-   427						low);
-   428				sdp_rdma_reg_write(D_BS_BASE_ADDR_HIGH,
-   429						high);
-   430				sdp_rdma_reg_write(D_BS_LINE_STRIDE,
-   431						sdp_surface->x1_data.line_stride);
-   432				sdp_rdma_reg_write(D_BS_SURFACE_STRIDE,
-   433						sdp_surface->x1_data.surf_stride);
-   434			}
-   435	
-   436			/* config x2 source info */
-   437			reg = (map_ena[x2_rdma_ena] <<
-   438						SHIFT(SDP_RDMA_D_NRDMA_CFG_0,
-   439						NRDMA_DISABLE)) |
-   440				(map_op_type[x2_op->type] <<
-   441						SHIFT(SDP_RDMA_D_NRDMA_CFG_0,
-   442						NRDMA_DATA_USE)) |
-   443				(map_element_size[x2_op->precision] <<
-   444						SHIFT(SDP_RDMA_D_NRDMA_CFG_0,
-   445						NRDMA_DATA_SIZE)) |
-   446				(map_op_mode[x2_op->mode] <<
-   447						SHIFT(SDP_RDMA_D_NRDMA_CFG_0,
-   448						NRDMA_DATA_MODE)) |
-   449				(map_ram_type[sdp_surface->x2_data.type] <<
-   450						SHIFT(SDP_RDMA_D_NRDMA_CFG_0,
-   451						NRDMA_RAM_TYPE));
-   452	
-   453			sdp_rdma_reg_write(D_NRDMA_CFG, reg);
-   454	
-   455			if (x2_rdma_ena) {
-   456				high = HIGH32BITS(x2_addr);
-   457				low = LOW32BITS(x2_addr);
-   458				sdp_rdma_reg_write(D_BN_BASE_ADDR_LOW,
-   459						low);
-   460				sdp_rdma_reg_write(D_BN_BASE_ADDR_HIGH,
-   461						high);
-   462				sdp_rdma_reg_write(D_BN_LINE_STRIDE,
-   463						sdp_surface->x2_data.line_stride);
-   464				sdp_rdma_reg_write(D_BN_SURFACE_STRIDE,
-   465						sdp_surface->x2_data.surf_stride);
-   466			}
-   467	
-   468			/* config y source info */
-   469			reg = (map_ena[y_rdma_ena] <<
-   470					SHIFT(SDP_RDMA_D_ERDMA_CFG_0,
-   471					ERDMA_DISABLE)) |
-   472				(map_op_type[y_op->type] <<
-   473					SHIFT(SDP_RDMA_D_ERDMA_CFG_0,
-   474					ERDMA_DATA_USE)) |
-   475				(map_element_size[y_op->precision] <<
-   476					SHIFT(SDP_RDMA_D_ERDMA_CFG_0,
-   477					ERDMA_DATA_SIZE)) |
-   478				(map_op_mode[y_op->mode] <<
-   479					SHIFT(SDP_RDMA_D_ERDMA_CFG_0,
-   480					ERDMA_DATA_MODE)) |
-   481				(map_ram_type[sdp_surface->y_data.type] <<
-   482					SHIFT(SDP_RDMA_D_ERDMA_CFG_0,
-   483					ERDMA_RAM_TYPE));
-   484	
-   485			sdp_rdma_reg_write(D_ERDMA_CFG, reg);
-   486			if (y_rdma_ena) {
-   487				high = HIGH32BITS(y_addr);
-   488				low = LOW32BITS(y_addr);
-   489				sdp_rdma_reg_write(D_EW_BASE_ADDR_LOW,
-   490						low);
-   491				sdp_rdma_reg_write(D_EW_BASE_ADDR_HIGH,
-   492						high);
-   493				sdp_rdma_reg_write(D_EW_LINE_STRIDE,
-   494						sdp_surface->y_data.line_stride);
-   495				sdp_rdma_reg_write(D_EW_SURFACE_STRIDE,
-   496						sdp_surface->y_data.surf_stride);
-   497			}
-   498		}
-   499	
-   500		if (sdp_op->lut_index >= 0)
-   501			update_lut(SDP_S_LUT_ACCESS_CFG_0, &lut,
-   502						sdp_op->src_precision);
-   503	
-   504		sdp_reg_write(D_DATA_CUBE_WIDTH, sdp_surface->src_data.width - 1);
-   505		sdp_reg_write(D_DATA_CUBE_HEIGHT, sdp_surface->src_data.height - 1);
-   506		sdp_reg_write(D_DATA_CUBE_CHANNEL, sdp_surface->src_data.channel - 1);
-   507	
-   508		if (out_dma_ena) {
-   509			high = HIGH32BITS(dst_addr);
-   510			low = LOW32BITS(dst_addr);
-   511			sdp_reg_write(D_DST_BASE_ADDR_HIGH,
-   512					high);
-   513			sdp_reg_write(D_DST_BASE_ADDR_LOW,
-   514					low);
-   515			sdp_reg_write(D_DST_LINE_STRIDE,
-   516					sdp_surface->dst_data.line_stride);
-   517			sdp_reg_write(D_DST_SURFACE_STRIDE,
-   518					sdp_surface->dst_data.surf_stride);
-   519		}
-   520	
-   521		/* Config BS module */
-   522		reg = (map_bypass[x1_op->enable] <<
-   523				SHIFT(SDP_D_DP_BS_CFG_0,
-   524				BS_BYPASS)) |
-   525			(map_bypass[x1_op->type != SDP_OP_MUL &&
-   526					x1_op->type != SDP_OP_NONE] <<
-   527				SHIFT(SDP_D_DP_BS_CFG_0,
-   528				BS_ALU_BYPASS)) |
-   529			(map_alu_op[x1_op->alu_type] <<
-   530				SHIFT(SDP_D_DP_BS_CFG_0,
-   531				BS_ALU_ALGO)) |
-   532			(map_bypass[x1_op->type != SDP_OP_ADD &&
-   533				x1_op->type != SDP_OP_NONE] <<
-   534				SHIFT(SDP_D_DP_BS_CFG_0,
-   535				BS_MUL_BYPASS)) |
-   536			(map_prelu[x1_op->act == ACTIVATION_PRELU]
-   537				<< SHIFT(SDP_D_DP_BS_CFG_0,
-   538				BS_MUL_PRELU)) |
-   539			(map_bypass[x1_op->act == ACTIVATION_RELU] <<
-   540				SHIFT(SDP_D_DP_BS_CFG_0,
-   541				BS_RELU_BYPASS));
-   542		sdp_reg_write(D_DP_BS_CFG, reg);
-   543	
-   544		if (x1_op->enable) {
-   545			if (x1_op->type == SDP_OP_ADD ||
-   546					x1_op->type == SDP_OP_BOTH) {
-   547				reg = (map_alu_src[x1_op->mode == SDP_OP_PER_LAYER] <<
-   548						SHIFT(SDP_D_DP_BS_ALU_CFG_0,
-   549						BS_ALU_SRC)) |
-   550					(x1_op->shift_value <<
-   551						SHIFT(SDP_D_DP_BS_ALU_CFG_0,
-   552						BS_ALU_SHIFT_VALUE));
-   553				sdp_reg_write(D_DP_BS_ALU_CFG, reg);
-   554			}
-   555	
-   556			if (x1_op->mode == SDP_OP_PER_LAYER) {
-   557				sdp_reg_write(D_DP_BS_ALU_SRC_VALUE,
-   558						x1_op->alu_operand);
-   559				sdp_reg_write(D_DP_BS_MUL_SRC_VALUE,
-   560						x1_op->mul_operand);
-   561			}
-   562	
-   563			/**
-   564			 * MUL truncate will take effect no matter
-   565			 * MUL is bypassed or not
-   566			 */
-   567			reg = (map_alu_src[x1_op->mode == SDP_OP_PER_LAYER] <<
-   568				SHIFT(SDP_D_DP_BS_MUL_CFG_0,
-   569				BS_MUL_SRC)) |
-   570			(x1_op->truncate <<
-   571				SHIFT(SDP_D_DP_BS_MUL_CFG_0,
-   572				BS_MUL_SHIFT_VALUE));
-   573			sdp_reg_write(D_DP_BS_MUL_CFG, reg);
-   574		}
-   575	
-   576		/* Config BN module */
-   577		reg = (map_bypass[x2_op->enable] <<
-   578				SHIFT(SDP_D_DP_BN_CFG_0,
-   579				BN_BYPASS)) |
-   580			(map_bypass[x2_op->type != SDP_OP_MUL &&
-   581				x2_op->type != SDP_OP_NONE] <<
-   582				SHIFT(SDP_D_DP_BN_CFG_0,
-   583				BN_ALU_BYPASS)) |
-   584			(map_alu_op[x2_op->alu_type] <<
-   585				SHIFT(SDP_D_DP_BN_CFG_0,
-   586				BN_ALU_ALGO)) |
-   587			(map_bypass[x2_op->type != SDP_OP_ADD &&
-   588				x2_op->type != SDP_OP_NONE] <<
-   589				SHIFT(SDP_D_DP_BN_CFG_0,
-   590				BN_MUL_BYPASS)) |
-   591			(map_prelu[x2_op->act == ACTIVATION_PRELU]
-   592				<< SHIFT(SDP_D_DP_BN_CFG_0,
-   593				BN_MUL_PRELU)) |
-   594			(map_bypass[x2_op->act == ACTIVATION_RELU]
-   595				<< SHIFT(SDP_D_DP_BN_CFG_0,
-   596				BN_RELU_BYPASS));
-   597		sdp_reg_write(D_DP_BN_CFG, reg);
-   598	
-   599		if (x2_op->enable) {
-   600			if (x2_op->type == SDP_OP_ADD ||
-   601				x2_op->type == SDP_OP_BOTH) {
-   602				reg = (map_alu_src[x2_op->mode == SDP_OP_PER_LAYER] <<
-   603						SHIFT(SDP_D_DP_BN_ALU_CFG_0,
-   604						BN_ALU_SRC)) |
-   605					(x2_op->shift_value <<
-   606						SHIFT(SDP_D_DP_BN_ALU_CFG_0,
-   607						BN_ALU_SHIFT_VALUE));
-   608				sdp_reg_write(D_DP_BN_ALU_CFG, reg);
-   609			}
-   610	
-   611			if (x2_op->mode == SDP_OP_PER_LAYER) {
-   612				sdp_reg_write(D_DP_BN_ALU_SRC_VALUE,
-   613						x2_op->alu_operand);
-   614				sdp_reg_write(D_DP_BN_MUL_SRC_VALUE,
-   615						x2_op->mul_operand);
-   616			}
-   617	
-   618			reg = (map_alu_src[x2_op->mode == SDP_OP_PER_LAYER] <<
-   619					SHIFT(SDP_D_DP_BN_MUL_CFG_0,
-   620					BN_MUL_SRC)) |
-   621				(x2_op->truncate <<
-   622					SHIFT(SDP_D_DP_BN_MUL_CFG_0,
-   623					BN_MUL_SHIFT_VALUE));
-   624			sdp_reg_write(D_DP_BN_MUL_CFG, reg);
-   625		}
-   626	
-   627		/* Config EW module */
-   628		reg = (map_bypass[y_op->enable] <<
-   629				SHIFT(SDP_D_DP_EW_CFG_0,
-   630				EW_BYPASS)) |
-   631			(map_bypass[y_op->type != SDP_OP_MUL &&
-   632				y_op->type != SDP_OP_NONE] <<
-   633				SHIFT(SDP_D_DP_EW_CFG_0,
-   634				EW_ALU_BYPASS)) |
-   635			(map_alu_op[y_op->alu_type] <<
-   636				SHIFT(SDP_D_DP_EW_CFG_0,
-   637				EW_ALU_ALGO)) |
-   638			(map_bypass[y_op->type != SDP_OP_ADD &&
-   639				y_op->type != SDP_OP_NONE] <<
-   640				SHIFT(SDP_D_DP_EW_CFG_0,
-   641				EW_MUL_BYPASS)) |
-   642			((map_prelu[y_op->act == ACTIVATION_PRELU]) <<
-   643				SHIFT(SDP_D_DP_EW_CFG_0,
-   644				EW_MUL_PRELU)) |
-   645			(map_bypass[y_op->act == ACTIVATION_LUT] <<
-   646				SHIFT(SDP_D_DP_EW_CFG_0,
-   647				EW_LUT_BYPASS));
-   648		sdp_reg_write(D_DP_EW_CFG, reg);
-   649	
-   650		if (y_op->enable) {
-   651			if (y_op->type == SDP_OP_ADD || y_op->type == SDP_OP_BOTH) {
-   652				reg = (map_alu_src[y_op->mode == SDP_OP_PER_LAYER] <<
-   653						SHIFT(SDP_D_DP_EW_ALU_CFG_0,
-   654						EW_ALU_SRC)) |
-   655					(map_bypass[y_op->cvt.alu_cvt.enable] <<
-   656						SHIFT(SDP_D_DP_EW_ALU_CFG_0,
-   657						EW_ALU_CVT_BYPASS));
-   658				sdp_reg_write(D_DP_EW_ALU_CFG, reg);
-   659	
-   660				if (y_op->mode == SDP_OP_PER_LAYER) {
-   661					sdp_reg_write(D_DP_EW_ALU_SRC_VALUE,
-   662							y_op->alu_operand);
-   663				} else {
-   664					sdp_reg_write(D_DP_EW_ALU_CVT_OFFSET_VALUE,
-   665							y_op->cvt.alu_cvt.offset);
-   666					sdp_reg_write(D_DP_EW_ALU_CVT_SCALE_VALUE,
-   667							y_op->cvt.alu_cvt.scale);
-   668					sdp_reg_write(D_DP_EW_ALU_CVT_TRUNCATE_VALUE,
-   669							y_op->cvt.alu_cvt.truncate);
-   670				}
-   671			}
-   672	
-   673			if (y_op->type == SDP_OP_MUL || y_op->type == SDP_OP_BOTH) {
-   674				reg = (map_alu_src[y_op->mode == SDP_OP_PER_LAYER] <<
-   675						SHIFT(SDP_D_DP_EW_MUL_CFG_0,
-   676						EW_MUL_SRC)) |
-   677					(map_bypass[y_op->cvt.mul_cvt.enable] <<
-   678						SHIFT(SDP_D_DP_EW_MUL_CFG_0,
-   679						EW_MUL_CVT_BYPASS));
-   680				sdp_reg_write(D_DP_EW_MUL_CFG, reg);
-   681	
-   682				if (y_op->mode == SDP_OP_PER_LAYER) {
-   683					sdp_reg_write(D_DP_EW_MUL_SRC_VALUE,
-   684							y_op->mul_operand);
-   685				} else {
-   686					sdp_reg_write(D_DP_EW_MUL_CVT_OFFSET_VALUE,
-   687							y_op->cvt.mul_cvt.offset);
-   688					sdp_reg_write(D_DP_EW_MUL_CVT_SCALE_VALUE,
-   689							y_op->cvt.mul_cvt.scale);
-   690					sdp_reg_write(D_DP_EW_MUL_CVT_TRUNCATE_VALUE,
-   691							y_op->cvt.mul_cvt.truncate);
-   692				}
-   693			}
-   694	
-   695			sdp_reg_write(D_DP_EW_TRUNCATE_VALUE, y_op->truncate);
-   696		}
-   697	
-   698		reg = (map_fly[sdp_surface->src_data.type == DLA_MEM_HW] <<
-   699				SHIFT(SDP_D_FEATURE_MODE_CFG_0,
-   700				FLYING_MODE)) |
-   701			(map_dst[sdp_surface->dst_data.type == DLA_MEM_HW] <<
-   702				SHIFT(SDP_D_FEATURE_MODE_CFG_0,
-   703				OUTPUT_DST)) |
-   704			(map_wg[sdp_op->conv_mode == CONV_MODE_WINOGRAD] <<
-   705				SHIFT(SDP_D_FEATURE_MODE_CFG_0,
-   706				WINOGRAD)) |
-   707			((sdp_op->batch_num - 1) <<
-   708				SHIFT(SDP_D_FEATURE_MODE_CFG_0,
-   709				BATCH_NUMBER));
-   710		sdp_reg_write(D_FEATURE_MODE_CFG, reg);
-   711		sdp_reg_write(D_DST_DMA_CFG,
-   712				map_ram_type[sdp_surface->dst_data.type]);
-   713		if (sdp_op->batch_num > 1)
-   714			sdp_reg_write(D_DST_BATCH_STRIDE, sdp_op->batch_stride);
-   715	
-   716		reg =
-   717		(map_proc_precision[sdp_op->dst_precision][sdp_op->src_precision] <<
-   718				SHIFT(SDP_D_DATA_FORMAT_0,
-   719				PROC_PRECISION)) |
-   720			(map_precision[sdp_op->dst_precision] <<
-   721				SHIFT(SDP_D_DATA_FORMAT_0,
-   722				OUT_PRECISION));
-   723		sdp_reg_write(D_DATA_FORMAT, reg);
-   724		sdp_reg_write(D_CVT_OFFSET, sdp_op->out_cvt.offset);
-   725		sdp_reg_write(D_CVT_SCALE, sdp_op->out_cvt.scale);
-   726		sdp_reg_write(D_CVT_SHIFT, sdp_op->out_cvt.truncate);
-   727	
-   728	exit:
-   729		dla_trace("Exit: %s", __func__);
-   730		RETURN(ret);
-   731	}
-   732	
+Indeed you did! Many thanks!
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+It is just that patch 11 that defines "select HAVE_RELIABLE_STACKTRACE" did not receive any comments from you (unless I missed a comment that came from you. That is entirely possible. If I missed it, my bad). Since you suggested that change, I just wanted to make sure that that patch looks OK to you.
+
+>> Also, many of the patches have received a Reviewed-By from you both. So, after I send the next version out, can we upstream those ones?
+> 
+> That's more a question for Catalin and Will.  If myself and Mark have
+> reviewed patches then we're saying we think those patches are good to
+> go.
+
+Got it!
+
+Thanks!
+
+Madhavan

@@ -2,161 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B754D1959
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5A54D1956
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241770AbiCHNiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S1347143AbiCHNi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234083AbiCHNiM (ORCPT
+        with ESMTP id S1347167AbiCHNiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:38:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C877D48E78
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646746635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xhWKpJMEu/E6K5E8FVFu8klaC4t/DVD3aQhe7Ihi7RE=;
-        b=ZUaIlKEloW3slv0bFL5scqw+dxwczmTTIs2JtCxKgWglBD5MvAyYlwThBAHbBa7IPICb4s
-        yMj/SMgLtAWgx2z76PIzwYVm0RLbqe15XqFJQJfHG/V7x2b/dwprmiOXILnWSXYnCaJifO
-        44STAQyo2pgaShWFGapbJZ+69kZPvSc=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-370-UymztCDiPim5lycHBcthUg-1; Tue, 08 Mar 2022 08:37:14 -0500
-X-MC-Unique: UymztCDiPim5lycHBcthUg-1
-Received: by mail-pf1-f200.google.com with SMTP id z194-20020a627ecb000000b004f6db380a59so6140456pfc.19
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 05:37:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xhWKpJMEu/E6K5E8FVFu8klaC4t/DVD3aQhe7Ihi7RE=;
-        b=2whWXKe0cqMDoSAG2Zr3hqgPK3rLwLryuKpb7yJrcuLut3mKNsbL1XykRuwTwdE+HX
-         bFAEccJZpN8QP506BSsx+FWLDQRsvrWIc89YpdXQipl6dWBA3dxuVQmaqMA2X4/BsQPt
-         MK/tiLZAMVUkMu9hjPvgzxt/c2lAtbo5/OuIKeFIpydygaancCB2zqFG8Yqet3fLOYx4
-         IA31xQHnZP/ey+Kb3U0Ol9orTw/1GoQ+n/NeZ2p88GuKo8bSid90QbwVsgot7ezhBKFN
-         tdBApkAduQkCFX7g5HNrmxO5zONgbp1cg0ayI/HtbZnCSSdas7b6GtjEjhkItmiM1d/j
-         PAIw==
-X-Gm-Message-State: AOAM532+72Qo2ME0dcOu6S+XS5hOgZMXPk9Y2eCCAxVNdDU+uHXyl6x2
-        jGUWvsB1/8FCjdpNqTzxvPwm/S+ixkqQS2X+QEm6R2COB5gwf1ZszuuD7gSJlUEGlHIMlHuDuDC
-        OQDCWWtjqCmRDfCCu47wDCrgdpJedaXaRqjTeMFsp
-X-Received: by 2002:a17:902:c407:b0:151:f794:ac5e with SMTP id k7-20020a170902c40700b00151f794ac5emr6557651plk.67.1646746632903;
-        Tue, 08 Mar 2022 05:37:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxH7lKjecmXh4BgOUsidbsUgZyvzcMgDU6mn0VwVrEex18NF//hg/FePuDpXYtu+/umBrPRyySRl1rvmLXpJR0=
-X-Received: by 2002:a17:902:c407:b0:151:f794:ac5e with SMTP id
- k7-20020a170902c40700b00151f794ac5emr6557623plk.67.1646746632670; Tue, 08 Mar
- 2022 05:37:12 -0800 (PST)
+        Tue, 8 Mar 2022 08:38:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97CF949906;
+        Tue,  8 Mar 2022 05:37:16 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 513A2139F;
+        Tue,  8 Mar 2022 05:37:16 -0800 (PST)
+Received: from [10.57.41.254] (unknown [10.57.41.254])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B013C3FA58;
+        Tue,  8 Mar 2022 05:37:10 -0800 (PST)
+Message-ID: <d8bbe591-b6c3-d44a-7a7d-3187e8377e4f@arm.com>
+Date:   Tue, 8 Mar 2022 13:37:05 +0000
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <CAPhsuW5APYjoZWKDkZ9CBZzaF0NfSQQ-OeZSJgDa=wB-5O+Wng@mail.gmail.com>
- <CAO-hwJJkhxDAhT_cwo=Tkx8_=B-MuS=_enByj1t6GEuXD9Lj5Q@mail.gmail.com> <CAPhsuW54ytOFrpW8+2kTuxNxu+-7JNmybCpbU=uG+un+-Xpw4A@mail.gmail.com>
-In-Reply-To: <CAPhsuW54ytOFrpW8+2kTuxNxu+-7JNmybCpbU=uG+un+-Xpw4A@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 8 Mar 2022 14:37:01 +0100
-Message-ID: <CAO-hwJ+DO0cenO_vqG+85c=U5=W4Ksqfa+nqPEW7cqby=YDwmw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 00/28] Introduce eBPF support for HID devices
-To:     Song Liu <song@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v8 01/11] iommu: Add DMA ownership management interfaces
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Cc:     kvm@vger.kernel.org, rafael@kernel.org,
+        David Airlie <airlied@linux.ie>, linux-pci@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+References: <20220308054421.847385-1-baolu.lu@linux.intel.com>
+ <20220308054421.847385-2-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220308054421.847385-2-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 7:12 PM Song Liu <song@kernel.org> wrote:
->
-> On Sat, Mar 5, 2022 at 2:23 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > >
-> > > The set looks good so far. I will review the rest later.
-> > >
-> > > [...]
-> > >
-> > > A quick note about how we organize these patches. Maybe we can
-> > > merge some of these patches like:
-> >
-> > Just to be sure we are talking about the same thing: you mean squash
-> > the patch together?
->
-> Right, squash some patches together.
->
-> >
-> > >
-> > > >   bpf: introduce hid program type
-> > > >   bpf/hid: add a new attach type to change the report descriptor
-> > > >   bpf/hid: add new BPF type to trigger commands from userspace
-> > > I guess the three can merge into one.
-> > >
-> > > >   HID: hook up with bpf
-> > > >   HID: allow to change the report descriptor from an eBPF program
-> > > >   HID: bpf: compute only the required buffer size for the device
-> > > >   HID: bpf: only call hid_bpf_raw_event() if a ctx is available
-> > > I haven't read through all of them, but I guess they can probably merge
-> > > as well.
-> >
-> > There are certainly patches that we could squash together (3 and 4
-> > from this list into the previous ones), but I'd like to keep some sort
-> > of granularity here to not have a patch bomb that gets harder to come
-> > back later.
->
-> Totally agreed with the granularity of patches. I am not a big fan of patch
-> bombs either. :)
->
-> I guess the problem I have with the current version is that I don't have a
-> big picture of the design while reading through relatively big patches. A
-> overview with the following information in the cover letter would be really
-> help here:
->   1. How different types of programs are triggered (IRQ, user input, etc.);
->   2. What are the operations and/or outcomes of these programs;
->   3. How would programs of different types (or attach types) interact
->    with each other (via bpf maps? chaining?)
->   4. What's the new uapi;
->   5. New helpers and other logistics
->
-> Sometimes, I find the changes to uapi are the key for me to understand the
-> patches, and I would like to see one or two patches with all the UAPI
-> changes (i.e. bpf_hid_attach_type). However, that may or may not apply to
-> this set due to granularity concerns.
->
-> Does this make sense?
->
+On 2022-03-08 05:44, Lu Baolu wrote:
+> Multiple devices may be placed in the same IOMMU group because they
+> cannot be isolated from each other. These devices must either be
+> entirely under kernel control or userspace control, never a mixture.
+> 
+> This adds dma ownership management in iommu core and exposes several
+> interfaces for the device drivers and the device userspace assignment
+> framework (i.e. VFIO), so that any conflict between user and kernel
+> controlled dma could be detected at the beginning.
+> 
+> The device driver oriented interfaces are,
+> 
+> 	int iommu_device_use_default_domain(struct device *dev);
+> 	void iommu_device_unuse_default_domain(struct device *dev);
+> 
+> By calling iommu_device_use_default_domain(), the device driver tells
+> the iommu layer that the device dma is handled through the kernel DMA
+> APIs. The iommu layer will manage the IOVA and use the default domain
+> for DMA address translation.
+> 
+> The device user-space assignment framework oriented interfaces are,
+> 
+> 	int iommu_group_claim_dma_owner(struct iommu_group *group,
+> 					void *owner);
+> 	void iommu_group_release_dma_owner(struct iommu_group *group);
+> 	bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+> 
+> The device userspace assignment must be disallowed if the DMA owner
+> claiming interface returns failure.
 
-It definitely does. And as I read that, I realized that if I manage to
-get such a clear depiction of what HID-BPF is, it would certainly be a
-good idea to paste that in a file into the Documentation directory as
-well :)
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
 
-I think you have a slightly better picture now with the exchanges we
-are having on the individual patches, but I'll try to come out with
-that description in the cover letter for v3.
-
-Cheers,
-Benjamin
-
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>

@@ -2,155 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79ADA4D24B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24AA94D24C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiCHXOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 18:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S229546AbiCHXT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 18:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiCHXN6 (ORCPT
+        with ESMTP id S229463AbiCHXT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 18:13:58 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC2C2AC44
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:12:52 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id j5so663287qvs.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:12:52 -0800 (PST)
+        Tue, 8 Mar 2022 18:19:56 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33A49D4C6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:18:50 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2dc585dbb02so4445787b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:18:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=einqUj8Wi+UvD8w2Ta+vJyxofhSyix4HSnpUvssthgk=;
-        b=CKAddMg6Dq2FAD8EVcpxFwXN6hfdoCH0AXMFbVIPbC61cQk788y9T2Thx3pRqEA+Pq
-         NGBF2xP1CZKX+9OEKOidtavyVZebq9UjF1q6yPZ/kG/n1VWbMa51u1yVoDjEakWNazqw
-         7qM+CIbEh/7wr+oHVMKBIz230FNDLsc5O1RwcVV6SKxeBIHkKtvmIxFF7GYyD3C6Z1jq
-         NiAZ4GmQXM5+Zqzwpuf6qUJoF2jjPatDE95RuEcgfw2zK1KZbR4BfotbsEFAyxfWwhwq
-         4lg+Z0qiOCvukGomPenNFelv1ticP+T7TqY8JVlpW48i8VbPYHXEU2HR6wpCED8DZ0vq
-         5Klg==
+        bh=eendtF7O1jT4ZpjoFlzKIyJ4YNYGYwK/GXLvyJ/A4B0=;
+        b=rWZalxpbNZkyKJTe0k9BvpqyDA6xyuUWEczrB/MzwuKjD1dqeAAJkFpYG7Rd9qHBVI
+         9egVQB3Iqk6Yv8xdg7MOdOWlKJf8Bl///qOS2RrGkcf7tuQqO7GKtNtRpFai3hWY6CIj
+         PdsqqLhM+fW9R/dQKoJLgJmXGkkJ6vdgjFgwjIVieW3QjrE0/bx8WpSD1cI9vPSNATBc
+         eTaJ+V/aflZrW3st1K5SLYbO8UU5nTaSksOPkX+FZE/jl1cK6PSF2tDtkwdxvvuaFSsf
+         KcE5YGkbsORk7mrWPkeM/Q63MD6UHFU/ztOn42tOJhBr/m/VyQfnHJfzyJXX29ubQMRk
+         7BNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=einqUj8Wi+UvD8w2Ta+vJyxofhSyix4HSnpUvssthgk=;
-        b=HBYB/tQCUouo/HRdUPMB/dZ5VD8r7yFrjYn0/BVtnf/4hpznzD/cksF41U/4zAHlDl
-         0Cvzf8dxNmxgpea1wOihySGXvfjEgmOwtfeluCFBTj57hPkxzEhjbYyngO3zkVbbqtTm
-         cgaGzdyBXD9NXnIa/Z4abXc0dm3ATprFDhY9dk7IJM8X90lKmOFI2Twj1uXGA7hx6Pml
-         6fltyC//HDO633dDLh3MCeye08Q1zgDilti3ssF1Vo7+6qQcN5TIUK1PGTy+BRgwcDRc
-         js96mxYFAw7KABK4p3E5B7R17dvBWMV7Xk9YhfXV1FSw95lgcqnlXaVtULEPxrcw3uv/
-         Z9Lg==
-X-Gm-Message-State: AOAM533us334MY/eCOHJ8l0Q7iUEMFtleiu+sIIILZ1EuFQAQgb5g8vB
-        7gcLgKMXy1ANSo9qsOa+H8ZzyOzkKZkAwvB8W1J5Ig==
-X-Google-Smtp-Source: ABdhPJyd7YsOQm5k52ejOSHIDMQwROLiroHruV6sH8sfZCy36WJv0vZlu4MQ7BhUV2wmwLn0RSWCWqidsrI3MvD+Kb0=
-X-Received: by 2002:a0c:d807:0:b0:42c:1ff7:7242 with SMTP id
- h7-20020a0cd807000000b0042c1ff77242mr14521431qvj.119.1646781135658; Tue, 08
- Mar 2022 15:12:15 -0800 (PST)
+        bh=eendtF7O1jT4ZpjoFlzKIyJ4YNYGYwK/GXLvyJ/A4B0=;
+        b=jxBOMQxZwOq3KW7eQowYTDTQQYNnsfNGM3IXvBK0jhefRiVg3cOnhbodISXdA7PkbC
+         +Q1fL4WoOq9jxNLlo+TH2H9wyfZ+2BT+z/mVhhEAwz36tZLkv5cAK+5gFxXFnK8yzjtQ
+         qmk3ndp8h1iEgIRGGXgm1AWLiB6A0RfqCz321WXbYV+XtsPMH9/H2F20bmYoyhD6//q2
+         j13dpZGwMWw1rT7UHpE46Lfn0NFrFMSR+dW/cMRcZj6YXzk4KWRdel/wd25e0YmXYAU7
+         lCbv7tcbwU2s+5zAbc5vMor+Ugju/XPtl5rH1Jaai1BKfa+C2HBhDpcSPNeWXaGsV+jM
+         lnzg==
+X-Gm-Message-State: AOAM531M49/kI5rnw/crOtVqPYIfFfCg9mjzIUFk6b4QLQk044LkRPvU
+        s3c9UHPY9WTNoobR4KDWAUAk58ASsrrBjYN4TQjgUg==
+X-Google-Smtp-Source: ABdhPJyxNvJB5rMyTyEHv+H72i/rock+GNdS99gSt/QH7EFnMLXaTPsW8vasGCJ6GKScN3VQe205u1vwaNdV7any5Mw=
+X-Received: by 2002:a81:1043:0:b0:2dc:289f:9533 with SMTP id
+ 64-20020a811043000000b002dc289f9533mr14625066ywq.467.1646781516920; Tue, 08
+ Mar 2022 15:18:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20220303084824.284946-1-bhupesh.sharma@linaro.org>
- <20220303084824.284946-4-bhupesh.sharma@linaro.org> <CAA8EJpow=NPM5TrK24qsziVWgrD0cfbtwUxBD45CE2EQAg-msA@mail.gmail.com>
- <YifiOa38WGMAeEq7@builder.lan>
-In-Reply-To: <YifiOa38WGMAeEq7@builder.lan>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 9 Mar 2022 02:12:04 +0300
-Message-ID: <CAA8EJpoEhfRrXpmyL_EBFOL2u8QMvU8h_vJrFW3TgDGLGYMiFA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] clk: qcom: gcc: Add emac GDSC support for SM8150
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        robh+dt@kernel.org
+References: <20220308212531.752215-1-jeffreyjilinux@gmail.com> <d1b25466-6f83-591e-39a6-8fdbd56846fb@kernel.org>
+In-Reply-To: <d1b25466-6f83-591e-39a6-8fdbd56846fb@kernel.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 8 Mar 2022 15:18:25 -0800
+Message-ID: <CANn89iKvP-8VpOrf_ppVVgsd4kQtAEFWkBVxKW4BP+rtu_Egrw@mail.gmail.com>
+Subject: Re: [PATCH v3 net-next] net-core: add rx_otherhost_dropped counter
+To:     David Ahern <dsahern@kernel.org>
+Cc:     Jeffrey Ji <jeffreyjilinux@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Brian Vazquez <brianvv@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        jeffreyji <jeffreyji@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 02:09, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+On Tue, Mar 8, 2022 at 2:51 PM David Ahern <dsahern@kernel.org> wrote:
 >
-> On Thu 03 Mar 04:33 CST 2022, Dmitry Baryshkov wrote:
->
-> > On Thu, 3 Mar 2022 at 11:48, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
-> > >
-> > > Add the EMAC GDSC defines and driver structures for SM8150.
-> > >
-> > > Cc: Stephen Boyd <sboyd@kernel.org>
-> > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > > ---
-> > >  drivers/clk/qcom/gcc-sm8150.c               | 10 ++++++++++
-> > >  include/dt-bindings/clock/qcom,gcc-sm8150.h |  1 +
-> > >  2 files changed, 11 insertions(+)
-> > >
-> > > diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
-> > > index 85a431ac417b..08ba29e3a835 100644
-> > > --- a/drivers/clk/qcom/gcc-sm8150.c
-> > > +++ b/drivers/clk/qcom/gcc-sm8150.c
-> > > @@ -3448,6 +3448,15 @@ static struct clk_branch gcc_video_xo_clk = {
-> > >         },
-> > >  };
-> > >
+> On 3/8/22 2:25 PM, Jeffrey Ji wrote:
+> > diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
+> > index 95f7bb052784..8b87ea99904b 100644
+> > --- a/net/ipv4/ip_input.c
+> > +++ b/net/ipv4/ip_input.c
+> > @@ -451,6 +451,7 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
+> >        * that it receives, do not try to analyse it.
+> >        */
+> >       if (skb->pkt_type == PACKET_OTHERHOST) {
+> > +             atomic_long_inc(&skb->dev->rx_otherhost_dropped);
+> >               drop_reason = SKB_DROP_REASON_OTHERHOST;
+> >               goto drop;
+> >       }
+> > diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
+> > index 5b5ea35635f9..5624c937f87f 100644
+> > --- a/net/ipv6/ip6_input.c
+> > +++ b/net/ipv6/ip6_input.c
+> > @@ -150,6 +150,7 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
+> >       struct inet6_dev *idev;
 > >
-> > Is it available on sm8150 or only on sa8155au? I think this deserves
-> > at least a comment.
-> >
+> >       if (skb->pkt_type == PACKET_OTHERHOST) {
+> > +             atomic_long_inc(&skb->dev->rx_otherhost_dropped);
+> >               kfree_skb(skb);
+> >               return NULL;
+> >       }
 >
-> The ethernet controller is there on SM8150 as well.
+> that's an expensive packet counter for a common path (e.g., hosting
+> environments).
 
-Ack
+This was the reason for the initial patch, using SNMP stat, being per cpu.
 
->
-> Regards,
-> Bjorn
->
-> > > +static struct gdsc emac_gdsc = {
-> > > +       .gdscr = 0x6004,
-> > > +       .pd = {
-> > > +               .name = "emac_gdsc",
-> > > +       },
-> > > +       .pwrsts = PWRSTS_OFF_ON,
-> > > +       .flags = POLL_CFG_GDSCR,
-> > > +};
-> > > +
-> > >  static struct gdsc usb30_prim_gdsc = {
-> > >         .gdscr = 0xf004,
-> > >         .pd = {
-> > > @@ -3714,6 +3723,7 @@ static const struct qcom_reset_map gcc_sm8150_resets[] = {
-> > >  };
-> > >
-> > >  static struct gdsc *gcc_sm8150_gdscs[] = {
-> > > +       [EMAC_GDSC] = &emac_gdsc,
-> > >         [USB30_PRIM_GDSC] = &usb30_prim_gdsc,
-> > >         [USB30_SEC_GDSC] = &usb30_sec_gdsc,
-> > >  };
-> > > diff --git a/include/dt-bindings/clock/qcom,gcc-sm8150.h b/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> > > index 3e1a91876610..40596b9ded06 100644
-> > > --- a/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> > > +++ b/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> > > @@ -243,5 +243,6 @@
-> > >  /* GCC GDSCRs */
-> > >  #define USB30_PRIM_GDSC                     4
-> > >  #define USB30_SEC_GDSC                                         5
-> > > +#define EMAC_GDSC                                              6
-> > >
-> > >  #endif
-> > > --
-> > > 2.35.1
-> > >
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
-
-
-
--- 
-With best wishes
-Dmitry
+Adding per-device per-cpu data for this counter will increase cost of
+netdevice dismantle phase,
+and increase time for ndo_get_stats64(), especially on hosts with 256
+or 512 cpus.

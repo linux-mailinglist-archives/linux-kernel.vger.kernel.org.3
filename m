@@ -2,165 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9964D0E0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 03:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564314D0E0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 03:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344373AbiCHCcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 21:32:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S1344375AbiCHCeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 21:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbiCHCcj (ORCPT
+        with ESMTP id S229845AbiCHCe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 21:32:39 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6618F35DE9;
-        Mon,  7 Mar 2022 18:31:44 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2281NISf012621;
-        Tue, 8 Mar 2022 02:31:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=pem2LRWua62Gj1EwQLYWIUQJFcSzowZruXSnDTsOI/M=;
- b=N5PAUuplRwFJjlGbOQiPmCgYX1zKpPPsIFGSJbVsgpZBxWr9Ev7raMO2QLlDcxu2voFn
- HghmurKP3vK2mu1YkYcRfSPnIUnupClhdhW0i5PGjdVGufmV88hbTtV6iODr8H8vQl0T
- a9z4fkNZ4kUxHeYnNFX2GSAVM97pi98iZPnQYu9ls/dx5w3hFGjN2hQXzHFassA/fqAD
- KE+zYJQMgCKaihVv0pWC/rtWaT8qds+FvswlutJIJToYKyU9Xvovw1JO2N+U4IdiaPgK
- aWaAeJpWcbg/6qLPMnDtfFs4RbYVlk64fZAmOQv4GP6a/rG5iaUUQzkeJBhQYx4NWoBb OA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3enwegrx5a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 02:31:27 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2282QXLa014207;
-        Tue, 8 Mar 2022 02:31:26 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3enwegrx57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 02:31:26 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2282HpDB024805;
-        Tue, 8 Mar 2022 02:31:26 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma01wdc.us.ibm.com with ESMTP id 3ekyg921pp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 02:31:26 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2282VO4l17302104
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Mar 2022 02:31:24 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D28626A047;
-        Tue,  8 Mar 2022 02:31:24 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3EAA66A04F;
-        Tue,  8 Mar 2022 02:31:22 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Mar 2022 02:31:21 +0000 (GMT)
-Message-ID: <22860730-d615-5683-6af0-05b6f4f3e71d@linux.ibm.com>
-Date:   Mon, 7 Mar 2022 21:31:21 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/4] KEYS: CA link restriction
-Content-Language: en-US
-To:     Eric Snowberg <eric.snowberg@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "mic@linux.microsoft.com" <mic@linux.microsoft.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-References: <20220301173651.3435350-1-eric.snowberg@oracle.com>
- <20220301173651.3435350-4-eric.snowberg@oracle.com>
- <47f3654e-892d-a35a-e77c-70ada1ebcf43@linux.ibm.com>
- <2415444C-AD8F-4F03-8B1C-C0770F83ADAE@oracle.com>
- <e2dd58cd6074ae692256333b43b5ecde70bcdbdd.camel@linux.ibm.com>
- <67456A73-8B72-4DB6-8E23-7C603661A0A4@oracle.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <67456A73-8B72-4DB6-8E23-7C603661A0A4@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: niRBz8tVgOm5ryOaD3F9qE65KNsF8t0m
-X-Proofpoint-ORIG-GUID: FHLxAsBlhdbLXzyX9mGYubIMSOQXBE-9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-07_12,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- phishscore=0 priorityscore=1501 suspectscore=0 clxscore=1015 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203080000
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Mar 2022 21:34:28 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6854AC42
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:33:33 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id c11so2780392pgu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 18:33:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=JHlL483tOPXXwrShSRIjSrIFbu7utMjXnFg9i5hed/o=;
+        b=WEkcwRIgKqaeYDHUvRzHgwypMhdMJA7j9eG+yN5S8IeEe3Lw9dLXp7vuoF4rdLjZYH
+         iHOeyF1zmrCYUPpJj8L44HMC/wzABiTl/xT3IfsBJpXbdL9CuNxN5mPNj4pxgcoarq4J
+         jFUecfa7EpJ2s+MG6QjLSa/Gv3sg7ZBTEXEUaXitC9oUAoki/eooiwrlAbfHJcQZs71U
+         RDBlDmCnyURAPGkT1xAs6St1K/JQyrnubKxoqNMIynU52soHzR/64MOd0zCiKAsZGWh0
+         D8ma+B2LDuYNojD+uRIpApmn9HX/BxoZ3X/iW4Rwb3QsX7zSV7fCTiiZkj2AmbZIdK09
+         KZTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=JHlL483tOPXXwrShSRIjSrIFbu7utMjXnFg9i5hed/o=;
+        b=I8FxsNTGYzYfJjxtEuDScuEpLx1RdslMgF8gcmHqNraepgR8UNE2KkxD9ip8H1EXmT
+         FVDxFPXuLXqpYGuCOlTXnO20Y80R+uH1ww9LG5RjytBQEUldN900wmjz8meaE0Ze08I6
+         zkhQDObz7Q24tR2v7xaNQVlILdFWpQ4CXQQHUhRvvkPNTXmzdSEL5E9SC/51PEklMP1R
+         9Tbb7Zf/yYsHGU4qzpOUlU+Z3q+dsrwqyssrifVW4RT6l6rn/snWpVhVbZM2HkPq+86j
+         qAXVO1k2oui9I9h2sqV64L/QydZ3tZqfYK4tFEXuI9wNqvxOwKNRR04M7myf2wzecmra
+         dHbw==
+X-Gm-Message-State: AOAM530Vk/Y6AnNEANPqCJU4KfjOR7M8pPvS17SFicUzPeGGykF+hhWQ
+        mJW87jeR3J5i5BQQDA1bDxE=
+X-Google-Smtp-Source: ABdhPJxwTjC/2YyrJTs09m/FPQR/5h0YkmUvTnHXVS+nNfwwgujRr2t9vFbiZBCRxEjAV81GX2UXbw==
+X-Received: by 2002:a65:4c06:0:b0:373:a7d1:75d5 with SMTP id u6-20020a654c06000000b00373a7d175d5mr12060573pgq.502.1646706812977;
+        Mon, 07 Mar 2022 18:33:32 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id p186-20020a62d0c3000000b004f6fa49c4b9sm5895103pfg.218.2022.03.07.18.33.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 18:33:32 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] ASoC: SOF: Add missing of_node_put() in imx8m_probe
+Date:   Tue,  8 Mar 2022 02:33:23 +0000
+Message-Id: <20220308023325.31702-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
+Fixes: afb93d716533 ("ASoC: SOF: imx: Add i.MX8M HW support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ sound/soc/sof/imx/imx8m.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 3/7/22 18:38, Eric Snowberg wrote:
-> 
-> 
->> On Mar 7, 2022, at 4:01 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
->>
->> On Mon, 2022-03-07 at 18:06 +0000, Eric Snowberg wrote:
->>>
->>>>> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
->>>>> index 6b1ac5f5896a..49bb2ea7f609 100644
->>>>> --- a/crypto/asymmetric_keys/restrict.c
->>>>> +++ b/crypto/asymmetric_keys/restrict.c
->>>>> @@ -108,6 +108,49 @@ int restrict_link_by_signature(struct key *dest_keyring,
->>>>> 	return ret;
->>>>> }
->>>>> +/**
->>>>> + * restrict_link_by_ca - Restrict additions to a ring of CA keys
->>>>> + * @dest_keyring: Keyring being linked to.
->>>>> + * @type: The type of key being added.
->>>>> + * @payload: The payload of the new key.
->>>>> + * @trust_keyring: Unused.
->>>>> + *
->>>>> + * Check if the new certificate is a CA. If it is a CA, then mark the new
->>>>> + * certificate as being ok to link.
->>>>
->>>> CA = root CA here, right?
->>>
->>> Yes, I’ll update the comment
->>
->> Updating the comment is not enough.  There's an existing function named
->> "x509_check_for_self_signed()" which determines whether the certificate
->> is self-signed.
-> 
-> Originally I tried using that function.  However when the restrict link code is called,
-> all the necessary x509 information is no longer available.   The code in
-> restrict_link_by_ca is basically doing the equivalent to x509_check_for_self_signed.
-> After verifying the cert has the CA flag set, the call to public_key_verify_signature
-> validates the cert is self signed.
-> 
-Isn't x509_cert_parse() being called as part of parsing the certificate? 
-If so, it seems to check for a self-signed certificate every time. You 
-could add something like the following to x509_check_for_self_signed(cert):
-pub->x509_self_signed = cert->self_signed = true;
+diff --git a/sound/soc/sof/imx/imx8m.c b/sound/soc/sof/imx/imx8m.c
+index 788e77bcb603..60251486b24b 100644
+--- a/sound/soc/sof/imx/imx8m.c
++++ b/sound/soc/sof/imx/imx8m.c
+@@ -224,6 +224,7 @@ static int imx8m_probe(struct snd_sof_dev *sdev)
+ 	}
+ 
+ 	ret = of_address_to_resource(res_node, 0, &res);
++	of_node_put(res_node);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to get reserved region address\n");
+ 		goto exit_pdev_unregister;
+-- 
+2.17.1
 
-This could then reduce the function in 3/4 to something like:
-
-return payload->data[asym_crypto]->x509_self_signed;
-
-
-    Stefan

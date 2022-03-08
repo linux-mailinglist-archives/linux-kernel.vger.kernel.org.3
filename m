@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47824D1C91
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6FF4D1CA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348778AbiCHP6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S1348948AbiCHP67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348076AbiCHP4K (ORCPT
+        with ESMTP id S1348075AbiCHP4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Mar 2022 10:56:10 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AA54F9E6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:07 -0800 (PST)
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7194D266
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=BHmZTqiysMj1QLQhBSo7BFGPn1UiIgnYUvV4LA4FjGE=; b=IlFgmnwQs3DVffHF01got5hlBN
-        VBNEOdYP+DqW+jn0OVSJ4XLeReQau0XEr2qsKlEtUPPR6aDo0KfHu881A+KCfcoFRexqT6o6i0tBG
-        hELKdcU6ovB/b2K21/+EmasAvLJHTvK89uYI8lXri1CngJs6P4ouZsiEqcsZh94KZhx2qs1Lrz0aS
-        1l9Hr0rM+kYmh3nvuHIQNinbxm7FluG9xzWi1OQOZKuOHeNmzep32a34fgoTr2v3OW5OgxBEWtM0x
-        X0PyANsgqkWSmyo1nMJajk7ce5A1zZj8+nGBlh8CATKdolKkOSq3UM4JfC6gxBLw9g/wg1gaP/mvX
-        Xn7+3z0w==;
+        bh=cWrUD1KaL9aYwAdkiMBL/v8TI8q3NHQ2xjsiReq0bIM=; b=nl2gaTAEgkLcBC7k8+pPIudFkM
+        8ADeg7c/nGUOzU0U0E5Vvo0yOJR1gGnR7FsoBvWSdTPSZv518tj/2WyTQty6kBMZPi2BdCJx5htCt
+        IoSX63U0sfLQREe/IZLyl0enF/ajHXliRukKip+60ywuJEY9poI9/aDaQKfZ8RFIGaJVYMw/D8Nx+
+        vA4tSbTM0akSgtQcPyLdx5LoW8R3oRovN1oZ/PxKii1bYxJIg5ugw1drNua1st9dBXscIleFPhxjl
+        +gzLGeiDF9Db1wsvj1oW4f0WYfLmvRg1Gg2c85YcWAbITsT+BI8YXbZ2p4SyYt5CWUdAa6CIENqkZ
+        Y7dP5cOQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAc-00GUif-UB; Tue, 08 Mar 2022 15:54:43 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRcAc-00GIvH-R9; Tue, 08 Mar 2022 15:54:42 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4ACBC302DCE;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 476D6302DC3;
         Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 988BB2B5649C1; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
-Message-ID: <20220308154318.995109889@infradead.org>
+        id A02C02B5649C3; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
+Message-ID: <20220308154319.054842742@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:42 +0100
+Date:   Tue, 08 Mar 2022 16:30:43 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v4 31/45] x86/ibt,sev: Annotations
+Subject: [PATCH v4 32/45] x86/ibt: Dont generate ENDBR in .discard.text
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,52 +61,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No IBT on AMD so far.. probably correct, who knows.
+Having ENDBR in discarded sections can easily lead to relocations into
+discarded sections which the linkers aren't really fond of. Objtool
+also shouldn't generate them, but why tempt fate.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/entry/entry_64.S        |    1 +
- arch/x86/entry/entry_64_compat.S |    1 +
- arch/x86/kernel/head_64.S        |    2 ++
- 3 files changed, 4 insertions(+)
+ arch/x86/include/asm/setup.h |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -95,6 +95,7 @@ SYM_CODE_START(entry_SYSCALL_64)
- 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
+--- a/arch/x86/include/asm/setup.h
++++ b/arch/x86/include/asm/setup.h
+@@ -8,6 +8,7 @@
  
- SYM_INNER_LABEL(entry_SYSCALL_64_safe_stack, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
+ #include <linux/linkage.h>
+ #include <asm/page_types.h>
++#include <asm/ibt.h>
  
- 	/* Construct struct pt_regs on stack */
- 	pushq	$__USER_DS				/* pt_regs->ss */
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -214,6 +214,7 @@ SYM_CODE_START(entry_SYSCALL_compat)
- 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
+ #ifdef __i386__
  
- SYM_INNER_LABEL(entry_SYSCALL_compat_safe_stack, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
- 
- 	/* Construct struct pt_regs on stack */
- 	pushq	$__USER32_DS		/* pt_regs->ss */
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -332,6 +332,7 @@ SYM_CODE_END(start_cpu0)
+@@ -119,7 +120,7 @@ void *extend_brk(size_t size, size_t ali
+  * executable.)
   */
- SYM_CODE_START_NOALIGN(vc_boot_ghcb)
- 	UNWIND_HINT_IRET_REGS offset=8
-+	ENDBR
- 
- 	/* Build pt_regs */
- 	PUSH_AND_CLEAR_REGS
-@@ -439,6 +440,7 @@ SYM_CODE_END(early_idt_handler_common)
-  */
- SYM_CODE_START_NOALIGN(vc_no_ghcb)
- 	UNWIND_HINT_IRET_REGS offset=8
-+	ENDBR
- 
- 	/* Build pt_regs */
- 	PUSH_AND_CLEAR_REGS
+ #define RESERVE_BRK(name,sz)						\
+-	static void __section(".discard.text") __used notrace		\
++	static void __section(".discard.text") __noendbr __used notrace	\
+ 	__brk_reservation_fn_##name##__(void) {				\
+ 		asm volatile (						\
+ 			".pushsection .brk_reservation,\"aw\",@nobits;" \
 
 

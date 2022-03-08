@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62C54D146D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897E44D1484
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345732AbiCHKMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S238768AbiCHKPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345852AbiCHKLz (ORCPT
+        with ESMTP id S234202AbiCHKPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:11:55 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C1743AF5;
-        Tue,  8 Mar 2022 02:10:50 -0800 (PST)
+        Tue, 8 Mar 2022 05:15:35 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A319E3EA8B;
+        Tue,  8 Mar 2022 02:14:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646734250; x=1678270250;
+  t=1646734477; x=1678270477;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7ejrIRDi0eLEWqSUSsS80pzyQyiNB/5BCzaO1wi9Cco=;
-  b=GwzXJMdSRjynlRZ0qhbw+W+QjBQr9Nj0VLSkvtPPsuwiHvvRL/37LfR+
-   jev5OHH3ucKBHj67VtNN64Xdixz/oQnkyJKNoOPw/HwZFgi0+z8/gB+Ho
-   OeEAlJ+GhO70nWX5P18eB7Et/8NEKkFqYDXpdlT6ygOTy0RyswOeYQ0/t
-   V51Z62Y+tp5qYhPwbQs9nnnCp1l3vmBAEyQCM4YJgo8w7BKeLx4Pzflf3
-   dgukn9SjkOohixlceSEOi+taBfo/J9oECvNVQUZoCmI+Jnhm4qacEoCZ3
-   wFZWej+8DFEGLnZYclzzBatFAVa96BJJA6vghowOP6owACbJi6WpFntgK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254587409"
+  bh=hpi9pMWKnJ5oF5T0+PXi9Fqc8FlAAugNzaNHUKCMea0=;
+  b=CoaHFOET6u0MQV8BOZ8ftmZVddA/AWpUSVXjwGSPMfTBtMppNynKwm9C
+   Sq82oqoaLlAJXMZoCJV7OYD6O02uRdK2y7xgk3zntE34++GueRSvPnPIf
+   2N5DDKMo6NMQwKZ1Y/wj79ZGGI4OPR0/SoI1MID3nSwgWso1Gu53W3Bpg
+   8PMnu3a3YzvnQhIDH3yqDVB21W6axRgs0oeBMuzM1dFcwTsbT3oCqT9+N
+   E9w61wPcTVvoORU5z+wI+gOQtafXs8cWbhmNTYN5dBt6psXaiv0o5Przj
+   fC7kDHPPAoAQR0LyKYuUv3ms+d4rbRqkYaaregQwoRMysUtOF4frCIw5O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="315363348"
 X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="254587409"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:10:49 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="315363348"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:14:37 -0800
 X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="687874826"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 08 Mar 2022 02:10:46 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Mar 2022 12:10:45 +0200
-Date:   Tue, 8 Mar 2022 12:10:45 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        bliang@analogixsemi.com, qwen@analogixsemi.com,
-        jli@analogixsemi.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v8 1/3] usb: typec: tcpci: move tcpci.h to
- include/linux/usb/ directory
-Message-ID: <YicrpWig4kwdh2lg@kuha.fi.intel.com>
-References: <20220308073431.1217890-1-xji@analogixsemi.com>
+   d="scan'208";a="595839404"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:14:34 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nRWqk-00DI7W-CK;
+        Tue, 08 Mar 2022 12:13:50 +0200
+Date:   Tue, 8 Mar 2022 12:13:50 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     shruthi.sanil@intel.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, Mark Gross <mgross@linux.intel.com>,
+        srikanth.thokala@intel.com,
+        "Raja Subramanian, Lakshmi Bai" 
+        <lakshmi.bai.raja.subramanian@intel.com>,
+        mallikarjunappa.sangannavar@intel.com
+Subject: Re: [PATCH v8 1/2] dt-bindings: timer: Add bindings for Intel Keem
+ Bay SoC Timer
+Message-ID: <YicsXm9JboW2b+5f@smile.fi.intel.com>
+References: <20220222095654.9097-1-shruthi.sanil@intel.com>
+ <20220222095654.9097-2-shruthi.sanil@intel.com>
+ <YhVuJaf3AJ1c6TpT@robh.at.kernel.org>
+ <YhYa3tlTEcLct2xu@smile.fi.intel.com>
+ <CAL_JsqK_k49eKZ+Z+uw29GdY9KFVJL9o5xkzg=1=yF-oEt+JRg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220308073431.1217890-1-xji@analogixsemi.com>
+In-Reply-To: <CAL_JsqK_k49eKZ+Z+uw29GdY9KFVJL9o5xkzg=1=yF-oEt+JRg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -67,115 +76,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 03:34:28PM +0800, Xin Ji wrote:
-> As for convenience use TCPCI register definition, move tcpci.h to
-> include/linux/usb/ directory.
-
-To be honest, I was still hoping for a better explanation here.
-
-The reason why this header is made global is because some USB PD
-controllers - PD controllers consisting of a microcontroller
-(acting as the TCPM) and a port controller (TCPC) - may require that
-the driver for the PD controller accesses directly also the on-chip
-port controller in some cases.
-
-I was hoping that that was explained in the commit message somehow.
-
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+On Mon, Mar 07, 2022 at 04:33:23PM -0600, Rob Herring wrote:
+> On Wed, Feb 23, 2022 at 5:31 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Tue, Feb 22, 2022 at 05:13:41PM -0600, Rob Herring wrote:
+> > > On Tue, Feb 22, 2022 at 03:26:53PM +0530, shruthi.sanil@intel.com wrote:
+> > > > From: Shruthi Sanil <shruthi.sanil@intel.com>
+> > > >
+> > > > Add Device Tree bindings for the Timer IP, which can be used as
+> > > > clocksource and clockevent device in the Intel Keem Bay SoC.
+> >
+> > ...
+> >
+> > > > +    soc {
+> > > > +        #address-cells = <0x2>;
+> > > > +        #size-cells = <0x2>;
+> > > > +
+> > > > +        gpt@20331000 {
+> > > > +            compatible = "intel,keembay-gpt-creg", "simple-mfd";
+> > >
+> > > It looks like you are splitting things based on Linux implementation
+> > > details. Does this h/w block have different combinations of timers and
+> > > counters? If not, then you don't need the child nodes at all. There's
+> > > plenty of h/w blocks that get used as both a clocksource and clockevent.
+> > >
+> > > Maybe I already raised this, but assume I don't remember and this patch
+> > > needs to address any questions I already asked.
+> >
+> > I dunno if I mentioned that hardware seems to have 5 or so devices behind
+> > the block, so ideally it should be one device node that represents the global
+> > register spaces and several children nodes.
 > 
-> ---
-> V7 -> V8: Fix Guanter's comment, remove unnecessary explain.
-> ---
->  drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
->  drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
->  drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
->  {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
->  5 files changed, 5 insertions(+), 7 deletions(-)
->  rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+> Is it 5 devices or 9 devices?
+
+5 devices, one of which is a timer block out of 8 timers.
+You may count them as 12 altogether.
+
+> > However, I am not familiar with the established practices in DT world, but
+> > above seems to me the right thing to do since it describes the hardware as
+> > is (without any linuxisms).
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index e07d26a3cd8e..9c907296596f 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -13,11 +13,10 @@
->  #include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/usb/pd.h>
-> +#include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  #include <linux/usb/typec.h>
->  
-> -#include "tcpci.h"
-> -
->  #define	PD_RETRY_COUNT_DEFAULT			3
->  #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
->  #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> index df2505570f07..4b6705f3d7b7 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
-> @@ -11,11 +11,10 @@
->  #include <linux/module.h>
->  #include <linux/regmap.h>
->  #include <linux/usb/pd.h>
-> +#include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  #include <linux/usb/typec.h>
->  
-> -#include "tcpci.h"
-> -
->  #define PD_ACTIVITY_TIMEOUT_MS				10000
->  
->  #define TCPC_VENDOR_ALERT				0x80
-> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> index f1bd9e09bc87..9e0338bce7ef 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
-> @@ -11,10 +11,9 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> +#include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  
-> -#include "tcpci.h"
-> -
->  #define MT6360_REG_VCONNCTRL1	0x8C
->  #define MT6360_REG_MODECTRL2	0x8F
->  #define MT6360_REG_SWRESET	0xA0
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index b56a0880a044..3291ca4948da 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -10,9 +10,9 @@
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
->  #include <linux/gpio/consumer.h>
-> +#include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
->  #include <linux/regmap.h>
-> -#include "tcpci.h"
->  
->  #define RT1711H_VID		0x29CF
->  #define RT1711H_PID		0x1711
-> diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
-> similarity index 99%
-> rename from drivers/usb/typec/tcpm/tcpci.h
-> rename to include/linux/usb/tcpci.h
-> index b2edd45f13c6..20c0bedb8ec8 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.h
-> +++ b/include/linux/usb/tcpci.h
-> @@ -9,6 +9,7 @@
->  #define __LINUX_USB_TCPCI_H
->  
->  #include <linux/usb/typec.h>
-> +#include <linux/usb/tcpm.h>
->  
->  #define TCPC_VENDOR_ID			0x0
->  #define TCPC_PRODUCT_ID			0x2
-> -- 
-> 2.25.1
+> The Linuxism in these cases defining 1 node per driver because that's
+> what is convenient for automatic probing. That appears to be exactly
+> the case here. The red flag is nodes with a compatible and nothing
+> else. The next question is whether the sub-devices are blocks that
+> will be assembled in varying combinations and quantities. If not, then
+> not much point subdividing the h/w blocks.
+
+AFAIU the hardware architecture the amount of timers is dependent on
+the IP synthesis configuration. On this platform it's 8, but it may be
+1 or 2, for example.
+
+> There's also many cases of having multiple 'identical' timers and
+> wanting to encode which timer gets assigned to clocksource vs.
+> clockevent. But those 'identical' timers aren't if you care about
+> which timer gets assigned where. I *think* that's not the case here
+> unless you are trying to pick the timer for the clockevent by not
+> defining the other timers.
+> 
+> Without having a complete picture of what's in 'gpt-creg', I can't
+> give better advice.
+
+I guess they need to share TRM, if possible, to show what this
+block is.
 
 -- 
-heikki
+With Best Regards,
+Andy Shevchenko
+
+

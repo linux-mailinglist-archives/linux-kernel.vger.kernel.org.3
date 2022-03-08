@@ -2,66 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15C04D1C53
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E4F4D1C4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347961AbiCHPwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
+        id S1347997AbiCHPvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236338AbiCHPw3 (ORCPT
+        with ESMTP id S236656AbiCHPvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:52:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B04764F467
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:51:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646754691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=KX9L7nobxoD1RJaeGaqDFIYRdCzATIJe2xk9IHVfz6ejmRJ7jeSQLhWzeHKdEmJps6prXM
-        6qm5Wzgt77AYNPP7+KIRhPVcIPgfM7ZF4mt742UUYdHy34QLcnfmFNNtE91pCMBh54N5Kz
-        9lZJkCpXVn3g4WWFCM0FdNFYKnMSqsM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-185-QHVBMGK-Nq6GQL_r1Q9ZZw-1; Tue, 08 Mar 2022 10:51:28 -0500
-X-MC-Unique: QHVBMGK-Nq6GQL_r1Q9ZZw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A9CEFC82;
-        Tue,  8 Mar 2022 15:51:27 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D92307BCDA;
-        Tue,  8 Mar 2022 15:51:26 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] KVM: SVM: Fix kvm_cache_regs.h inclusions for is_guest_mode()
-Date:   Tue,  8 Mar 2022 10:51:21 -0500
-Message-Id: <20220308155121.777714-1-pbonzini@redhat.com>
-In-Reply-To: <20220304161032.2270688-1-pgonda@google.com>
-References: 
+        Tue, 8 Mar 2022 10:51:03 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E6C4F451;
+        Tue,  8 Mar 2022 07:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646754607; x=1678290607;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uoonVeIcIw0ZF7CyzIEfJW8mtwFWH3uBfX/PSuQYy6c=;
+  b=lENOGMPvY3FlhJOwKXaVnqVAm/w3qNBFPKLAEfUxqWFJ6l9XOvhodt57
+   euzxHcsSSZyDDQwYnBvcMCZHK9CFSQSA1iRlv4azMWJuCL/593sRfxEPf
+   NY8fAZYcpKvkCgIGcfY5QIp0MpTvbyOSCt8hdX+b9G8mKszr/yNK+Y91w
+   GAejkdgXkM5veV4azo5uAxXGJJdlgllNkb9HxMVbrwuWl5w1jbwNhmmQE
+   3jo6C1PDi3ljtfGnSjBGZ4YLhuCk/bamiel6g/ZZxCefwpUxHTGcvR+ea
+   UXn2maBFybdEwCD9Y62DchKy7JYnojjnQo+r3WhlEhuVShSTHQjcIm4Tf
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,165,1643698800"; 
+   d="scan'208";a="156124961"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Mar 2022 08:50:02 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 8 Mar 2022 08:50:01 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 8 Mar 2022 08:50:01 -0700
+Date:   Tue, 8 Mar 2022 16:52:53 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+CC:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "Kavyasree Kotagiri" <kavyasree.kotagiri@microchip.com>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] clk: COMMON_CLK_LAN966X should depend on SOC_LAN966
+Message-ID: <20220308155253.aoedxrdke2l3homa@soft-dev3-1.localhost>
+References: <eb102eae05e5667b9bd342a0c387f7f262d24bda.1645716471.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <eb102eae05e5667b9bd342a0c387f7f262d24bda.1645716471.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+The 02/24/2022 16:29, Geert Uytterhoeven wrote:
+> 
+> The LAN966x Generic Clock Controller is only present on Microchip
+> LAN966x SoCs.  Hence add a dependency on SOC_LAN966, to prevent asking
+> the user about this driver when configuring a kernel without LAN966x SoC
+> support.
 
-Paolo
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
+> 
+> Fixes: 54104ee023333e3b ("clk: lan966x: Add lan966x SoC clock driver")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/clk/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index c390e26dadf471f5..1c82a3e1129d4342 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -232,6 +232,7 @@ config COMMON_CLK_GEMINI
+> 
+>  config COMMON_CLK_LAN966X
+>         bool "Generic Clock Controller driver for LAN966X SoC"
+> +       depends on SOC_LAN966 || COMPILE_TEST
+>         help
+>           This driver provides support for Generic Clock Controller(GCK) on
+>           LAN966X SoC. GCK generates and supplies clock to various peripherals
+> --
+> 2.25.1
+> 
 
+-- 
+/Horatiu

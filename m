@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A8B4D233F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBB24D2343
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350427AbiCHVZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
+        id S244914AbiCHV0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234333AbiCHVZk (ORCPT
+        with ESMTP id S1350429AbiCHVZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:25:40 -0500
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3D46158;
-        Tue,  8 Mar 2022 13:24:42 -0800 (PST)
-Received: by mail-oo1-f45.google.com with SMTP id h16-20020a4a6f10000000b00320507b9ccfso542698ooc.7;
-        Tue, 08 Mar 2022 13:24:42 -0800 (PST)
+        Tue, 8 Mar 2022 16:25:58 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDE15004E;
+        Tue,  8 Mar 2022 13:25:00 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so363200wmf.0;
+        Tue, 08 Mar 2022 13:25:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nDOGbN5ER5kyhrbrSeZfaKAJZ4dw3JtTr6jnBgdLbBI=;
+        b=kmHrGTMSvm6tF864EuT2q9gVNsYXS3s2uIcUZWHBIrB9Q8oVsXygqnpmpDyJow/rtB
+         lldvQxzcy5qU3NO7j9RwlGt7C5cuRxfx5L5x+qoB7R/6PFU+YEtXgbcO06pt+DNxgbRg
+         0kIjeFi+TQVc5+qYRitxrs1b2/ekbArAvz+zBucgyNYqI5PyyYZNMzlMSS3P4pF7aTxl
+         2zxa7YL1+Vy//v5c8ZaLvqYnfikwRN5rmd6yAm/wttKeNs2HOR4SKL2jEBPLrpWgeBb2
+         q2DN0hNxiKsbH8Uw0q7n9hZBcaeHq0Ptst/XDlYJYnZd9lcmkWIeR6bLTTqFO2/h3AW9
+         mGgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=F7AKtHuwjN2s2m0mkt2Zt0oseAiFhWfXD+KKCoRGMtw=;
-        b=Q/7SQjtXBd/tTdQ9ZrFMsJMzEMWB5CAo97+xt1N5Ai1lHzzUMmN7qeIlap2JrrIvsh
-         OjG/trQITh2g0n7LSTg8tDgzt5r0IxHay3+u2k90J4CNSzaSzWOU/npZpJtjeJUc7oTx
-         89jPbQR0Rq+5esMWDOF4yVizsj9QQPy9Z5hH93a5WT5Pvzq2MpDKCCojlYbZ7pCWpZN1
-         tqdWLjg37Kifnu8RObuZw55F+36bA5IQKTc10pUDwIXzJinAxyhyFRcJx2kfa+oIPJiF
-         vJ90ZfQ+OUEuserqVQpMikEae2eMNz+7ohOycoRUwaLqx7HQurcNLLKuQpBFqtbDoIPo
-         IPTA==
-X-Gm-Message-State: AOAM53392WifhZW3Zmunf1l3q6zEbzHh5iSUIzcB6qcGjTDrBf91A3gU
-        QzX9zfsWWgFzOQHL68r9ww==
-X-Google-Smtp-Source: ABdhPJz5aT6/Ogkn9SbklQVQ5zCOz8O/vrq+Jch3k6VOBoG/Sn8N0p4eGgchTEX6dq8p0pcQvErG8A==
-X-Received: by 2002:a05:6870:313:b0:da:8850:c0bd with SMTP id m19-20020a056870031300b000da8850c0bdmr2015277oaf.52.1646774681244;
-        Tue, 08 Mar 2022 13:24:41 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w12-20020a0568080d4c00b002d3e7a6f8e9sm25448oik.26.2022.03.08.13.24.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nDOGbN5ER5kyhrbrSeZfaKAJZ4dw3JtTr6jnBgdLbBI=;
+        b=oOK+g3dGp1xBl1FAjuaHaz5hzMPMZnAjEqydMNlMCPBSaVydHGFe1SOQ65QVxWdEpH
+         oAExkNisWVkjanIS8KKsZIYVRsdYc+HkpFPBIhvuctrMttrwJUzPlkwn21FlfPui2+gh
+         lYkVuAu+DbClc30432okKVk78XK9umHxiNMNKM13m+JRlqrENrsCqEXgU/6IyEh6K1qi
+         PX6VxHLEOekiGUB63WqVoXdilD440ey0Psgcc0GncNauBOXaBE62a4ee2c6WIw87Ll4B
+         T8nfrSqbuJAOcwWUrutuse/VQxayP2w7vdC/S5lPROuc3erTA7Q1lbTj+GbxfIWPXgbj
+         II+Q==
+X-Gm-Message-State: AOAM531Zr8SFyb3nfttcM1TCbzST1CHlbWln/p6KGT6evzJHCKaPjiXl
+        G/88QgE+PUyNBf2Adb5aww==
+X-Google-Smtp-Source: ABdhPJxuYGxepEE8cVVoar6pJEOKukfeg0awhEsWbFqsOc0BU99sBdi+fMLBfybk2ElJ5BBGowTeEQ==
+X-Received: by 2002:a05:600c:3b1c:b0:389:8677:6c73 with SMTP id m28-20020a05600c3b1c00b0038986776c73mr934939wms.192.1646774698977;
+        Tue, 08 Mar 2022 13:24:58 -0800 (PST)
+Received: from localhost.localdomain ([46.53.254.141])
+        by smtp.gmail.com with ESMTPSA id b3-20020a5d4d83000000b001f1d72a6f97sm26070wru.50.2022.03.08.13.24.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 13:24:40 -0800 (PST)
-Received: (nullmailer pid 1390767 invoked by uid 1000);
-        Tue, 08 Mar 2022 21:24:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Lucas Tanure <tanureal@opensource.cirrus.com>
-Cc:     David Rhodes <drhodes@opensource.cirrus.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        patches@opensource.cirrus.com
-In-Reply-To: <20220308171730.454587-16-tanureal@opensource.cirrus.com>
-References: <20220308171730.454587-1-tanureal@opensource.cirrus.com> <20220308171730.454587-16-tanureal@opensource.cirrus.com>
-Subject: Re: [PATCH v3 15/16] ASoC: dt-bindings: cs35l41: Document CS35l41 External Boost
-Date:   Tue, 08 Mar 2022 15:24:39 -0600
-Message-Id: <1646774679.497272.1390766.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 08 Mar 2022 13:24:58 -0800 (PST)
+Date:   Wed, 9 Mar 2022 00:24:56 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     David Gow <davidgow@google.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Magnus =?utf-8?B?R3Jvw58=?= <magnus.gross@rwth-aachen.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] binfmt_elf: Introduce KUnit test
+Message-ID: <YifJqN+5ju4kHQ2y@localhost.localdomain>
+References: <20220304044831.962450-1-keescook@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220304044831.962450-1-keescook@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Mar 2022 17:17:29 +0000, Lucas Tanure wrote:
-> From: David Rhodes <drhodes@opensource.cirrus.com>
-> 
-> Document internal and external boost feature for ASoC CS35L41.
-> For internal boost the following properties are required:
-> - cirrus,boost-peak-milliamp
-> - cirrus,boost-ind-nanohenry
-> - cirrus,boost-cap-microfarad
-> 
-> For external boost, the GPIO1 must be configured as output,
-> so the following properties are required:
-> - cirrus,gpio1-src-select = <1>
-> - cirrus,gpio1-output-enable
-> 
-> Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
-> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-> ---
->  .../bindings/sound/cirrus,cs35l41.yaml        | 44 +++++++++++++++++--
->  1 file changed, 41 insertions(+), 3 deletions(-)
-> 
+On Thu, Mar 03, 2022 at 08:48:31PM -0800, Kees Cook wrote:
+> Adds simple KUnit test for some binfmt_elf internals: specifically a
+> regression test for the problem fixed by commit 8904d9cd90ee ("ELF:
+> fix overflow in total mapping size calculation").
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> +	/* No headers, no size. */
+> +	KUNIT_EXPECT_EQ(test, total_mapping_size(NULL, 0), 0);
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml:152:13: [warning] wrong indentation: expected 10 but found 12 (indentation)
+This is meaningless test. This whole function only makes sense
+if program headers are read and loading process advances far enough
+so that pointer is not NULL.
 
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1603100
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Are we going to mock every single function in the kernel?
+Disgusting.

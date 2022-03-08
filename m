@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3C74D238B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DCE4D2397
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350531AbiCHVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S1350500AbiCHVto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350511AbiCHVrS (ORCPT
+        with ESMTP id S231258AbiCHVtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:47:18 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27DB554A3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:46:20 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id bm39so299447qkb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:46:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=pBT9wHk0kv9phQaF2jSMAucWeXRUjsHTpKabj8I6JEU=;
-        b=RAmhDr5MJvaQL3qZE74+KSH75ORbbrkgRY9YObb//xmoMlf33p1hpBU9rIXZG6L7ml
-         J+/UM1uySARXqyiozkXgec1tI0uVeDVycFFmvGBE54shXKr2/rvIjivnr7QpM+2k1g+X
-         +MyLRsKUEWJsrs8IpmNwBg0pBdBBlc0pA0nJUj7Thmh2J9Fz9sOANtG3znbE95Dm8lrO
-         HCzlO5HMdIBw9+kLBiRDV0nqPh+7o9hbPBoNbAXXXds8jWdu1YLtB7e8jax1fkkbp7iR
-         cjg2PIbda0n5tQiHwcjQQwDU8eQ4Bw5JM4SDtvvqYk7/xwSqid8QSIaayOx11CfWeNOO
-         hPJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=pBT9wHk0kv9phQaF2jSMAucWeXRUjsHTpKabj8I6JEU=;
-        b=Ljf+KG+Jsh2avL/m1g9X6Y2pqRmoEcmsO6h5YKE4nQsqH/8yJV31VYa/8zHSNsySBw
-         wSp+WBuo8CKioC0ikDcg1gQ6SlConM7ZwJQmdf3lVi5oP7ZhUYFieGi6gFe447Cm7IFH
-         4T5idARTd/kBctZ2J1QjwJ+Do7YYWEesa5ueYdPkvGUY7aQEinOez+0vIrRWx4sVYQAi
-         jKDGu5BCIfYlXydOSJKQy42bXwgSt6fUFP35gVgoUCslw4dTlnxVtsxct4Tk9roQrely
-         lkC0EEa7922Hx+3jmnGBTdBNq4znRI20uivbGsSwZzIPjXNVJnARDGiAJoEnzjW7DRVu
-         CLLA==
-X-Gm-Message-State: AOAM533UOrVuVYoyT59y9Mdv6htwQYbP+t9ZAeMwktrfotejiSqNWJvK
-        zQNY1baAV2ZQJ/nZ1upSWrUW9w==
-X-Google-Smtp-Source: ABdhPJxWHyEAuF8GKQrPH4aj80OVaMZ68Mo/l/yema1f/6PqDgdd6gWKrf8+d4sG3STa70ORNpDdgg==
-X-Received: by 2002:a05:620a:134e:b0:67b:d16:89f7 with SMTP id c14-20020a05620a134e00b0067b0d1689f7mr9931286qkl.123.1646775979553;
-        Tue, 08 Mar 2022 13:46:19 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id g2-20020a37e202000000b00607e264a208sm66421qki.40.2022.03.08.13.46.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 13:46:19 -0800 (PST)
-Date:   Tue, 8 Mar 2022 13:46:15 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     "Darrick J. Wong" <djwong@kernel.org>
-cc:     Christoph Hellwig <hch@lst.de>, Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Zdenek Kabelac <zkabelac@redhat.com>,
-        Lukas Czerner <lczerner@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Borislav Petkov <bp@suse.de>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH mmotm v2] tmpfs: do not allocate pages on read
-In-Reply-To: <20220308172734.GC1479066@magnolia>
-Message-ID: <9798e3b-1c2a-6c47-decc-7d4148de5114@google.com>
-References: <f9c2f38f-5eb8-5d30-40fa-93e88b5fbc51@google.com> <20220306092709.GA22883@lst.de> <90bc5e69-9984-b5fa-a685-be55f2b64b@google.com> <20220307064434.GA31680@lst.de> <20220308172734.GC1479066@magnolia>
+        Tue, 8 Mar 2022 16:49:40 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB42C09
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:48:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646776123; x=1678312123;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=52Hs94CVm9izEhh/eSZPllV6cLQwXDE2tV139Ddl/MM=;
+  b=JLHq/esrAC3ucIZLoJNO+9cG4mmMBceTVvJr0GDU0EIV1eljzQ0rlGmY
+   nchZel0iBA0EoIIRc8WT+Pxrp5IhbpGenapnd4KZzB04uTI+pNmDF8Y/4
+   KqhjCyfdLv/O5nueX5I6EQr6UCOTQig9Yx+DTi66kY7O5KypwbKmA8mfN
+   UYeBNd95gflOu5mom6EEDnDMY8e9+pnLp++17xLVLD14+f8nvXcWxUzcH
+   ib3Ea01N4ZJt9iThnohcUbYYuR8CFmkOnFN1tQmgzWc/ti9jlK6bL8njX
+   VvCNDrjfo63e0W7+KYS/C64cCc3LhUxG44/aS66rmaYm5YWptJUVBg7Zx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="252394269"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="252394269"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:48:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="495612623"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 13:48:40 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRhh9-00022E-AT; Tue, 08 Mar 2022 21:48:39 +0000
+Date:   Wed, 9 Mar 2022 05:48:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Swathi Sridhar <swatsrid@codeaurora.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Saravana Kannan <saravanak@google.com>,
+        Sudarshan Rajagopalan <sudaraja@codeaurora.org>,
+        Prakash Gupta <guptap@codeaurora.org>,
+        Vinayak Menon <vinmenon@codeaurora.org>,
+        Mark Salyzyn <salyzyn@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
+ 556/9999] drivers/iommu/io-pgtable-arm.c:666:41: error: implicit declaration
+ of function 'iommu_pgsize'
+Message-ID: <202203090526.bAaqg5iy-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,24 +69,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022, Darrick J. Wong wrote:
-> 
-> I've long wondered (for my own nefarious purposes) why tmpfs files
-> didn't just grab the zero page,
+Hi Swathi,
 
-(tmpfs files have been using the zero page for reads for many years:
-it was just this odd internal "could it be for a stacking filesystem?"
-case, which /dev/loop also fell into, which was doing allocation on read.
+FYI, the error/warning still remains.
 
-I wonder what your nefarious purposes are ;) Maybe related to pages
-faulted into an mmap: those pages tmpfs has always allocated for, then
-they're freed up later by page reclaim if still undirtied. We may change
-that in future, and use the zero page even there: there are advantages
-of course, but some care and code needed - never been a priority.)
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
+head:   3fba6c6e70994eff4dcc5be475c9d2bd3848b83d
+commit: 27de1978c331d4e7571a5d0187ef1802d65dbf65 [556/9999] ANDROID: GKI: iommu/io-pgtable-arm: LPAE related updates by vendor
+config: mips-randconfig-r024-20220307 (https://download.01.org/0day-ci/archive/20220309/202203090526.bAaqg5iy-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/27de1978c331d4e7571a5d0187ef1802d65dbf65
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
+        git checkout 27de1978c331d4e7571a5d0187ef1802d65dbf65
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/iommu/
 
-> so:
-> 
-> Acked-by: Darrick J. Wong <djwong@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Hugh
+All errors (new ones prefixed by >>):
+
+   drivers/iommu/io-pgtable-arm.c: In function '__arm_lpae_alloc_pages':
+   drivers/iommu/io-pgtable-arm.c:312:23: error: implicit declaration of function 'io_pgtable_alloc_pages_exact' [-Werror=implicit-function-declaration]
+     312 |         void *pages = io_pgtable_alloc_pages_exact(cfg, cookie, size,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:312:23: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   drivers/iommu/io-pgtable-arm.c:337:9: error: implicit declaration of function 'io_pgtable_free_pages_exact' [-Werror=implicit-function-declaration]
+     337 |         io_pgtable_free_pages_exact(cfg, cookie, pages, size);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_prot_to_pte':
+   drivers/iommu/io-pgtable-arm.c:572:33: error: 'IOMMU_USE_UPSTREAM_HINT' undeclared (first use in this function)
+     572 |                 else if (prot & IOMMU_USE_UPSTREAM_HINT)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:572:33: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/iommu/io-pgtable-arm.c:575:33: error: 'IOMMU_USE_LLC_NWA' undeclared (first use in this function)
+     575 |                 else if (prot & IOMMU_USE_LLC_NWA)
+         |                                 ^~~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_map_sg':
+>> drivers/iommu/io-pgtable-arm.c:666:41: error: implicit declaration of function 'iommu_pgsize' [-Werror=implicit-function-declaration]
+     666 |                         size_t pgsize = iommu_pgsize(
+         |                                         ^~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_alloc_pgtable':
+   drivers/iommu/io-pgtable-arm.c:1095:18: error: 'struct io_pgtable_ops' has no member named 'map_sg'
+    1095 |                 .map_sg         = arm_lpae_map_sg,
+         |                  ^~~~~~
+   drivers/iommu/io-pgtable-arm.c:1095:35: error: initialization of 'size_t (*)(struct io_pgtable_ops *, long unsigned int,  size_t)' {aka 'long unsigned int (*)(struct io_pgtable_ops *, long unsigned int,  long unsigned int)'} from incompatible pointer type 'int (*)(struct io_pgtable_ops *, long unsigned int,  struct scatterlist *, unsigned int,  int,  size_t *)' {aka 'int (*)(struct io_pgtable_ops *, long unsigned int,  struct scatterlist *, unsigned int,  int,  long unsigned int *)'} [-Werror=incompatible-pointer-types]
+    1095 |                 .map_sg         = arm_lpae_map_sg,
+         |                                   ^~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:1095:35: note: (near initialization for '(anonymous).unmap')
+   drivers/iommu/io-pgtable-arm.c:1096:35: warning: initialized field overwritten [-Woverride-init]
+    1096 |                 .unmap          = arm_lpae_unmap,
+         |                                   ^~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:1096:35: note: (near initialization for '(anonymous).unmap')
+   drivers/iommu/io-pgtable-arm.c:1098:18: error: 'struct io_pgtable_ops' has no member named 'is_iova_coherent'
+    1098 |                 .is_iova_coherent = arm_lpae_is_iova_coherent,
+         |                  ^~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:1098:37: warning: excess elements in struct initializer
+    1098 |                 .is_iova_coherent = arm_lpae_is_iova_coherent,
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:1098:37: note: (near initialization for '(anonymous)')
+   drivers/iommu/io-pgtable-arm.c:1099:18: error: 'struct io_pgtable_ops' has no member named 'iova_to_pte'; did you mean 'iova_to_phys'?
+    1099 |                 .iova_to_pte    = arm_lpae_iova_get_pte,
+         |                  ^~~~~~~~~~~
+         |                  iova_to_phys
+   drivers/iommu/io-pgtable-arm.c:1099:35: warning: excess elements in struct initializer
+    1099 |                 .iova_to_pte    = arm_lpae_iova_get_pte,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:1099:35: note: (near initialization for '(anonymous)')
+   drivers/iommu/io-pgtable-arm.c: In function 'arm_64_lpae_alloc_pgtable_s1':
+   drivers/iommu/io-pgtable-arm.c:1113:29: error: 'IO_PGTABLE_QUIRK_QCOM_USE_UPSTREAM_HINT' undeclared (first use in this function)
+    1113 |                           | IO_PGTABLE_QUIRK_QCOM_USE_UPSTREAM_HINT
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:1114:29: error: 'IO_PGTABLE_QUIRK_QSMMUV500_NON_SHAREABLE' undeclared (first use in this function)
+    1114 |                           | IO_PGTABLE_QUIRK_QSMMUV500_NON_SHAREABLE
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/io-pgtable-arm.c:1115:29: error: 'IO_PGTABLE_QUIRK_QCOM_USE_LLC_NWA' undeclared (first use in this function)
+    1115 |                           | IO_PGTABLE_QUIRK_QCOM_USE_LLC_NWA))
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/iommu_pgsize +666 drivers/iommu/io-pgtable-arm.c
+
+   625	
+   626	static int arm_lpae_map_sg(struct io_pgtable_ops *ops, unsigned long iova,
+   627				   struct scatterlist *sg, unsigned int nents,
+   628				   int iommu_prot, size_t *size)
+   629	{
+   630		struct arm_lpae_io_pgtable *data = io_pgtable_ops_to_data(ops);
+   631		arm_lpae_iopte *ptep = data->pgd;
+   632		int lvl = ARM_LPAE_START_LVL(data);
+   633		arm_lpae_iopte prot;
+   634		struct scatterlist *s;
+   635		size_t mapped = 0;
+   636		int i;
+   637		int ret = -EINVAL;
+   638		unsigned int min_pagesz;
+   639		struct io_pgtable_cfg *cfg = &data->iop.cfg;
+   640		struct map_state ms;
+   641	
+   642		/* If no access, then nothing to do */
+   643		if (!(iommu_prot & (IOMMU_READ | IOMMU_WRITE)))
+   644			goto out_err;
+   645	
+   646		prot = arm_lpae_prot_to_pte(data, iommu_prot);
+   647	
+   648		min_pagesz = 1 << __ffs(cfg->pgsize_bitmap);
+   649	
+   650		memset(&ms, 0, sizeof(ms));
+   651	
+   652		for_each_sg(sg, s, nents, i) {
+   653			phys_addr_t phys = page_to_phys(sg_page(s)) + s->offset;
+   654			size_t size = s->length;
+   655	
+   656			/*
+   657			 * We are mapping on IOMMU page boundaries, so offset within
+   658			 * the page must be 0. However, the IOMMU may support pages
+   659			 * smaller than PAGE_SIZE, so s->offset may still represent
+   660			 * an offset of that boundary within the CPU page.
+   661			 */
+   662			if (!IS_ALIGNED(s->offset, min_pagesz))
+   663				goto out_err;
+   664	
+   665			while (size) {
+ > 666				size_t pgsize = iommu_pgsize(
+   667					cfg->pgsize_bitmap, iova | phys, size);
+   668	
+   669				if (ms.pgtable && (iova < ms.iova_end)) {
+   670					arm_lpae_iopte *ptep = ms.pgtable +
+   671						ARM_LPAE_LVL_IDX(iova, MAP_STATE_LVL,
+   672								 data);
+   673					arm_lpae_init_pte(
+   674						data, iova, phys, prot, MAP_STATE_LVL,
+   675						ptep, ms.prev_pgtable, false);
+   676					ms.num_pte++;
+   677				} else {
+   678					ret = __arm_lpae_map(data, iova, phys, pgsize,
+   679							prot, lvl, ptep, NULL, &ms);
+   680					if (ret)
+   681						goto out_err;
+   682				}
+   683	
+   684				iova += pgsize;
+   685				mapped += pgsize;
+   686				phys += pgsize;
+   687				size -= pgsize;
+   688			}
+   689		}
+   690	
+   691		if (ms.pgtable)
+   692			pgtable_dma_sync_single_for_device(cfg,
+   693				__arm_lpae_dma_addr(ms.pte_start),
+   694				ms.num_pte * sizeof(*ms.pte_start),
+   695				DMA_TO_DEVICE);
+   696	
+   697		/*
+   698		 * Synchronise all PTE updates for the new mapping before there's
+   699		 * a chance for anything to kick off a table walk for the new iova.
+   700		 */
+   701		wmb();
+   702	
+   703		return mapped;
+   704	
+   705	out_err:
+   706		/* Return the size of the partial mapping so that they can be undone */
+   707		*size = mapped;
+   708		return ret;
+   709	}
+   710	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

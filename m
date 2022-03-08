@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C6F4D163B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376164D163D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346538AbiCHL15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S1343605AbiCHL3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346497AbiCHL1t (ORCPT
+        with ESMTP id S233099AbiCHL3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:27:49 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B421443E6;
-        Tue,  8 Mar 2022 03:26:53 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so1290853wmf.0;
-        Tue, 08 Mar 2022 03:26:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=oUGbKpyqaCA2lCo6XjUtMOfHtbuoF0WQ8BNTKgdnnC4=;
-        b=O97GZllgNql+6jG2sVdKquf4hAQ98Q3UPAp3d4uyEU/cl9pgKfhlLsSyrryN9WHySq
-         FcbdvyQg7WXXhBOU4lLcPRfGQkciOHE27HzrKbfY0TnDDOIlGvcRXXZGdCp12/oVXSc7
-         JpJADbtGAp5dl3YcLrD0oM0RwqxDhuU78ttplK/6tV7G1JZLH/wEHD51nPuNxKp79toD
-         g5/FwL20+dltcuz8woBQ/9qbRUD4dR7f73jn6DHAt7aIqesDn3v2GWTlAELJaZ2XzPIV
-         8lFn4Yd/pFPf3CR56jjSCK5T7aXk3VDdlWgiVYNaVO7NR8zFLvByB+PgrXtshfeyDZEy
-         jVHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=oUGbKpyqaCA2lCo6XjUtMOfHtbuoF0WQ8BNTKgdnnC4=;
-        b=R8/Af1lBm88jsCt1iAGfTk8AzvZbNhOQmbuWCI54gAbuQXwdAo/qxlOl+s0ayR8mBS
-         eQUd4kPAjJihra280rohUl+xfhE1FHnE9pHwP2vtCyoRUeHqiewiuz0w0hYU+UTfZ5vC
-         Edyy1eZF5y6ux21eTmSlTmMmhA/48VvZ+XqvXjPfH0HWRhOfHtblzcqm0lPip8+CkAew
-         3xPZHNN14+8kXUzyyhzNcjOjVzHqroWXhVKTHf1y4tLYETWK/oOPHsVjLF/wb0R4XT0j
-         3NLMFBJ2TkvEesoqEUT8ZGDgG1OXBqUzjtOS5ySo9f4zgHhLIBmaLxqM/c4RhL7dLp8A
-         sp7Q==
-X-Gm-Message-State: AOAM533EaKqA1NkpMVGOxaVWt83Gb4QTB2LPrX6lrJc6Cd8P2g8d6b8f
-        OdTT1shiuZ0tk9dN0kH6jzg=
-X-Google-Smtp-Source: ABdhPJzO7+HQKorna2n6eyt+kiKIZsP6vwIUDvvQdcH7sAyPNFz0ZKI7kb8KQwQRv6eAcMn6tj2Utg==
-X-Received: by 2002:a7b:c3d5:0:b0:389:a49f:c7e6 with SMTP id t21-20020a7bc3d5000000b00389a49fc7e6mr3155985wmj.99.1646738811975;
-        Tue, 08 Mar 2022 03:26:51 -0800 (PST)
-Received: from felia.fritz.box (200116b82626c9000cc91df728b27ead.dip.versatel-1u1.de. [2001:16b8:2626:c900:cc9:1df7:28b2:7ead])
-        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm14141215wre.22.2022.03.08.03.26.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 03:26:51 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     Rick Chang <rick.chang@mediatek.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 2/2] MAINTAINERS: rectify entry for MEDIATEK MEDIA DRIVER
-Date:   Tue,  8 Mar 2022 12:26:30 +0100
-Message-Id: <20220308112630.546-3-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220308112630.546-1-lukas.bulwahn@gmail.com>
-References: <20220308112630.546-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Mar 2022 06:29:11 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5681025E99
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:28:14 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KCXy42hMRzbc9v;
+        Tue,  8 Mar 2022 19:23:24 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 19:28:11 +0800
+Subject: Re: [PATCH 1/4] mm/memory-failure.c: fix race with changing page
+ compound again
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, Mike Kravetz <mike.kravetz@oracle.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220228140245.24552-1-linmiaohe@huawei.com>
+ <20220228140245.24552-2-linmiaohe@huawei.com>
+ <20220304082624.GA3778609@hori.linux.bs1.fc.nec.co.jp>
+ <79f79813-bb9a-bfff-0837-a24d14da0b19@oracle.com>
+ <999a0f88-9465-0c93-e922-8aa80fa64f81@huawei.com>
+ <20220307070155.GA591088@hori.linux.bs1.fc.nec.co.jp>
+ <89af9b3f-1ab9-15db-d476-574271ce8292@oracle.com>
+ <20220308065658.GA610534@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <63c118d0-da95-4b43-3d1b-1d69f8241801@huawei.com>
+Date:   Tue, 8 Mar 2022 19:28:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220308065658.GA610534@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 9cdd70ceb6fa ("media: dt-bindings: media: mtk-vcodec: Separate video
-encoder and decoder dt-bindings") converts and splits mediatek-vcodec.txt
-to mediatek,vcodec-{de,en}coder.yaml, but missed to adjust its reference
-in MAINTAINERS.
+On 2022/3/8 14:56, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Mon, Mar 07, 2022 at 11:07:32AM -0800, Mike Kravetz wrote:
+> ...
+>>>
+>>>> +
+>>>> +       /**
+>>>> +        * The page could have changed compound pages due to race window.
+>>>> +        * If this happens just bail out.
+>>>> +        */
+>>>> +       if (!PageHuge(p) || compound_head(p) != head) {
+>>>> +               action_result(pfn, MF_MSG_DIFFERENT_COMPOUND, MF_IGNORED);
+>>>> +               res = -EBUSY;
+>>>> +               goto out;
+>>>> +       }
+>>>
+>>> Let me have one comment on the diff. The result code MF_MSG_DIFFERENT_COMPOUND
+>>> might not fit when PageHuge is false in the check (because it's no longer a
+>>> compound page).  Maybe you may invent another result code, or changes
+>>> MF_MSG_DIFFERENT_COMPOUND (for example) to MF_MSG_DIFFERENT_PAGE_SIZE?
+>>>
+>>
+>> Suppose we do encounter this race.  Also, suppose p != head.
+>> At the beginning of memory_failure_hugetlb, we do:
+>>
+>> struct page *head = compound_head(p);
+>> ...
+>> if (TestSetPageHWPoison(head))
+>>
+>> So, it could be that we set Poison in the 'head' page but the error was really
+>> in another page.  Is that correct?
+>>
+>> Now with the race, head is not a huge page and the pages could even be on
+>> buddy.  Does this mean we could have poison set on the wrong page in buddy?
+> 
+> Correct, the race might be rare, but this needs a fix.
+> I think that setting PageHWPoison first (before taking refcount and page lock)
+> is the root of all related problems.  This behavior came from the original
+> concept in hwpoison that preventing consumption of corrupted data is the first
+> priority.  But now I think that this makes no sense if we have this kind of bugs.
+> 
+> I'll try to write a patch for this (I only fix memory_failure_hugetlb() first,
+> but generic path should be fixed later).
+> Thank you for pointing out.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+Many thanks for both of you for doing this. :)
 
-Repair this file reference in MEDIATEK MEDIA DRIVER.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe3feca0b7c6..38cdf9aadfe4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12353,7 +12353,7 @@ MEDIATEK MEDIA DRIVER
- M:	Tiffany Lin <tiffany.lin@mediatek.com>
- M:	Andrew-CT Chen <andrew-ct.chen@mediatek.com>
- S:	Supported
--F:	Documentation/devicetree/bindings/media/mediatek-vcodec.txt
-+F:	Documentation/devicetree/bindings/media/mediatek,vcodec*.yaml
- F:	Documentation/devicetree/bindings/media/mediatek-vpu.txt
- F:	drivers/media/platform/mtk-vcodec/
- F:	drivers/media/platform/mtk-vpu/
--- 
-2.17.1
+> 
+> - Naoya Horiguchi
+> 
 

@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE6D4D0D4E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 02:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E85F4D0D4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 02:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344221AbiCHBI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 20:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
+        id S1344186AbiCHBIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 20:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344190AbiCHBIs (ORCPT
+        with ESMTP id S1344188AbiCHBIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 20:08:48 -0500
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76321ADA8;
-        Mon,  7 Mar 2022 17:07:53 -0800 (PST)
-Received: by mail-oo1-f45.google.com with SMTP id x26-20020a4a9b9a000000b003211029e80fso3637901ooj.5;
-        Mon, 07 Mar 2022 17:07:53 -0800 (PST)
+        Mon, 7 Mar 2022 20:08:44 -0500
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB3227FE3;
+        Mon,  7 Mar 2022 17:07:43 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id e25-20020a0568301e5900b005b236d5d74fso2984102otj.0;
+        Mon, 07 Mar 2022 17:07:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=rxea/dYu/ELTNOWQBZ1ss1F6Twz4ycLAC2ZHEe2uUro=;
-        b=qN9Py46ldMhjbS9TpTzWvqrfEaSBVr7QcR6Mo5H3n51p3qKBfGS9b9ZSHlOuHUuRri
-         GRCHJWSy5hgMK1Ne/WCm3JEw0Xc83Jg3wOZvXcvxBrVexyfFQz6gTXZ2cV4VA+WxD6jH
-         IiMs7H08DC3eBfjIkq7+Pwqb19MpSBn35EAiZsgXyIXtA3qE7bes0nSMlPdP3gHO/tCu
-         96O9/fFPZR+1BnBZynjBvIyTKL/OpPnEnjFU13NbtD+ZsXqJx7CH/B8Ua1ypWC8dAkW6
-         ETQOxfElgknTlDHTWimzCjOrVdq+t6XdJjRnXEmHxcipn9l6n95ASaExzgIzNTiv/Exl
-         hJtQ==
-X-Gm-Message-State: AOAM531AJKgYznoYxEpD4y+s6v2xZ2NM0u/E93VAvTf+gJS0SrBB93AP
-        AlMZ+oYf1AaoCokIWVLGz1RfYIRgNQ==
-X-Google-Smtp-Source: ABdhPJwuxBaYxiksU+rwdZLeIIANxi6L3vYW7ckdeo06O7RfTIGcy0DoTwNbwJESrg/gvsNx+NDLhA==
-X-Received: by 2002:a05:6870:60a0:b0:d3:a3f7:8b59 with SMTP id t32-20020a05687060a000b000d3a3f78b59mr1004731oae.94.1646701672984;
-        Mon, 07 Mar 2022 17:07:52 -0800 (PST)
+        bh=AXhk87B4/bnkMfjopxc1BmeoKxcuO0tvUc8hpwm05to=;
+        b=sL/+hXxGxheb/N1yMwVYhc2l48Ih+1TFGtxq0zNT+tpz2TfdjgLsuIwEQa0z2+XTai
+         YcC3haZVsPvvKubxGNaQsyWF7Js59VOxAabF7mCzm9NBTXUAzgdzYq95MtSQGgnkfI5o
+         TsOJ10txDbN/RIbtOkhS9nMis1Vc17a9S6Ps317nKN2b4tDBnf9c8Wz6iAVhAZEn4zNh
+         eENigG29zO/2JGWxFBdkuDac9FEKO5pUcZFzakNSCmv2oXwfIZL0ArVwhs34W78ewglB
+         SfuWeIcZYIupZJvtUcdllJfCWEjnwml0nh6zRcYgFpDpPutT8WxPjmKtd87cIqd7gqpJ
+         b/3w==
+X-Gm-Message-State: AOAM533ghzcKO5r0+9bsBXhjqbbAeyUFc722/lxXn3qim9Tb+C0OshyT
+        C6swhd5rp2DL5MEdS4YxTXD3gDQmRg==
+X-Google-Smtp-Source: ABdhPJzn4SS8H2D3LcuArY1ilEzraCp1I+bYiZd0tC9ud0GA56WPW8s5KAZk8MQKW5CA6TpzwpbTsQ==
+X-Received: by 2002:a9d:6f82:0:b0:5af:1555:5a9b with SMTP id h2-20020a9d6f82000000b005af15555a9bmr7680357otq.289.1646701663016;
+        Mon, 07 Mar 2022 17:07:43 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p21-20020a4a2f15000000b00320fca09b74sm1377596oop.1.2022.03.07.17.07.50
+        by smtp.gmail.com with ESMTPSA id k13-20020a54470d000000b002d9b7fa03e1sm3218336oik.12.2022.03.07.17.07.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 17:07:51 -0800 (PST)
-Received: (nullmailer pid 3624778 invoked by uid 1000);
+        Mon, 07 Mar 2022 17:07:41 -0800 (PST)
+Received: (nullmailer pid 3624765 invoked by uid 1000);
         Tue, 08 Mar 2022 01:07:40 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     kernel@pengutronix.de, linux-phy@lists.infradead.org,
-        shawnguo@kernel.org, linux-pci@vger.kernel.org,
-        alexander.stein@ew.tq-group.com, bhelgaas@google.com,
-        linux-arm-kernel@lists.infradead.org, p.zabel@pengutronix.de,
-        lorenzo.pieralisi@arm.com, devicetree@vger.kernel.org,
-        vkoul@kernel.org, l.stach@pengutronix.de, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <1646644054-24421-3-git-send-email-hongxing.zhu@nxp.com>
-References: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com> <1646644054-24421-3-git-send-email-hongxing.zhu@nxp.com>
-Subject: Re: [PATCH v2 2/7] dt-binding: phy: Add iMX8MP PCIe PHY binding
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     viresh.kumar@linaro.org, angelogioacchino.delregno@somainline.org,
+        rafael@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <20220307064531.47678-2-manivannan.sadhasivam@linaro.org>
+References: <20220307064531.47678-1-manivannan.sadhasivam@linaro.org> <20220307064531.47678-2-manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings
 Date:   Mon, 07 Mar 2022 19:07:40 -0600
-Message-Id: <1646701660.888371.3624774.nullmailer@robh.at.kernel.org>
+Message-Id: <1646701660.877031.3624764.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -64,13 +62,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Mar 2022 17:07:29 +0800, Richard Zhu wrote:
-> Add i.MX8MP PCIe PHY binding.
+On Mon, 07 Mar 2022 12:15:30 +0530, Manivannan Sadhasivam wrote:
+> Convert Qualcomm cpufreq devicetree binding to YAML.
 > 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 172 ---------------
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 201 ++++++++++++++++++
+>  2 files changed, 201 insertions(+), 172 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -79,14 +83,20 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.example.dt.yaml: pcie-phy@32f00000: resets: [[4294967295, 26]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.example.dt.yaml: pcie-phy@32f00000: reset-names: ['pciephy'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: reg: [[305397760, 4096]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clocks' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clock-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#freq-domain-cells' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#performance-domain-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1601963
+See https://patchwork.ozlabs.org/patch/1601894
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

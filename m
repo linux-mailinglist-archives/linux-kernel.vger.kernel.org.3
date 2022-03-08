@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F9D4D21EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FAA4D21ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349721AbiCHTt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
+        id S1350082AbiCHTua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240345AbiCHTtZ (ORCPT
+        with ESMTP id S1350070AbiCHTu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:49:25 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76AA39812
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:48:28 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id k5-20020a17090a3cc500b001befa0d3102so2466842pjd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:48:28 -0800 (PST)
+        Tue, 8 Mar 2022 14:50:27 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D663EB96
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:49:30 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id g1so309156pfv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:49:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=4fyfnxj92k5W9rcKN1dJwICOBJKughLQrnvCk7UQagQ=;
-        b=Cxpew77bEL6PrGKAI6JSibIWnNHYAAuwav23jRL4Du8wLegKGlUwDfTSeV0ZT0wwg3
-         KV4wz2azpR9tupf/1B4UOwNb+hsvbMhWOjpWUIktiXhypAAGAFKiEFPomvy48kgV4sfs
-         /PaCk9ttAd1buxNYKAguc5onYFZuklHIoY4Mxe3SIcZN/BaHiSSC7JeemtshtgQJxpVE
-         PcaUc1Wyms6fDjFhje3QNL0O9D62SgaTraCk/grIkkOFmA/h/NbRjqQ4Uq5j5JpQHHls
-         D0JVfMbNhBSRRTwDs9b/5qYZSzcta1y3IlRU4rPYQQimFgDbUhassg2abiRcsE2MQbc8
-         TE1w==
+        bh=cjgPprY6uyRX3aGOYlBk1zY5PzKiJKEQbLNZ52r89Us=;
+        b=YWuz4NWGI4VyuKnCx/9EFojtla02S9N4zZhgsiDSo9QF/8sf5tKZqNOHF4Q6tyfA0U
+         d66nOCWsVlSfDSwI/i3UxqelSqkU7gZxq0MNJCJUXcaAqqZk5HL0C88BFu0rmoqkx5lP
+         dU7pZUa9/DznH+IOATZv/YFT+VRiHfMjiTT5slub4MxJESLG9/85Aqax2ZqmuTib6Pa8
+         zgPbdNv0PA3gEDsTG2e3CZ+Ca7Jfg796b8KNOrIkv3WxurzMmmQzhyK8AnZ4Wxgn2T0k
+         9TA2L2YW4xFrJE7KeKILbs5evO4MHKF9ogIuge3OkTgWYzeslgKsAnjSZL8kerSBoJ0p
+         vbYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=4fyfnxj92k5W9rcKN1dJwICOBJKughLQrnvCk7UQagQ=;
-        b=lsBLEX4ibbXtuc6pdEqsoas+xJ6EbPFYND8mewsmRDRszeHfO9AYNNMtSX6K/AgwY3
-         hK5+wdW5Wz4k/riRP0ds8L+fibhKwOVXjpR/w/CpuacvziuGEzXyB999WQiNlOH4ulpr
-         jmluPZ9Q/UPR9SBlonjtFQgf8FFBJbSVUnDXTqAFQ+2ouo/7VEoRgDh/4/a/tNZhOtP0
-         7JuuJkci+uoZ+SHL8WsmyvkYlXW6vPMpFh8haIROvRik+sgvUINp6+hbXDAIx5TUCKhV
-         HHXvAd3esi/yhvjMdWJ+b02lCphnHZelqJ6p2VZXgEi58WHXtRyntK6gGao/6sBLVnKu
-         K/VA==
-X-Gm-Message-State: AOAM530OFwwoucgdjX1Hn10dbHMpRYkoRGN06siVy+jndtGGAjBOlXFK
-        56lA2YEUag6Vw027cIOrxwjkser9zqAvNw==
-X-Google-Smtp-Source: ABdhPJwUIm6VOlVKu5rtCXgksk7sRQfJvaYEQ+1/a90qbq+A0jEgprS5omGyN+F7ZQmkI2kSJLrORg==
-X-Received: by 2002:a17:90a:a78d:b0:1bc:d11c:ad40 with SMTP id f13-20020a17090aa78d00b001bcd11cad40mr6381715pjq.246.1646768908344;
-        Tue, 08 Mar 2022 11:48:28 -0800 (PST)
+        bh=cjgPprY6uyRX3aGOYlBk1zY5PzKiJKEQbLNZ52r89Us=;
+        b=bzvidUnOVVpenU6YDqH6F6fdjq+sWo38iFxkmEcbeII8ZWaubO18xiTCtisQel99JB
+         Hnqv8Jyu8Uh5D+q8R3XZWqVpcnzTJ2uDfFpWj6v7mN+i+J9g4qD9CLMYX3ci+U5S0tNY
+         oWGCK98mwWgMhPCwAdoehQvZABj/qBnnEv8nSa5SR66UPuBqzBXokep4kXLIjFVvVwhL
+         ClPKUwUBU35Ic2+TRrL8BE5Au4oogE6hqand9nbWrgG8LI7ImYg2TIET9dWr7axNzRbN
+         /mbYr19OazBXmIIidt1y1kc/UO5ii+sAeO4e4IGVJ+ZCXJk3X+Ak37vKMnfh17sDX7Wb
+         /jRA==
+X-Gm-Message-State: AOAM533SD/6OYzn3IuuM+5HXX2S6s9S2FnbBsnwFntMDem7D/rteiwZY
+        rFzy/4m/YCWZdmxHSF/cCEJEpw==
+X-Google-Smtp-Source: ABdhPJz3Igu3LNYsXrjH9yXf2DIh33mlcRhdMqAhDuIQBKw03T6KEUZxrB+TJwJ+61r1NcR8+KoxEg==
+X-Received: by 2002:aa7:9e07:0:b0:4f6:a7e3:1b57 with SMTP id y7-20020aa79e07000000b004f6a7e31b57mr19712256pfq.13.1646768969779;
+        Tue, 08 Mar 2022 11:49:29 -0800 (PST)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l11-20020a17090a660b00b001bf576cd2fasm3677893pjj.37.2022.03.08.11.48.27
+        by smtp.gmail.com with ESMTPSA id j13-20020a63594d000000b003639cf2f9c7sm15911856pgm.71.2022.03.08.11.49.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 11:48:27 -0800 (PST)
-Date:   Tue, 8 Mar 2022 19:48:24 +0000
+        Tue, 08 Mar 2022 11:49:29 -0800 (PST)
+Date:   Tue, 8 Mar 2022 19:49:25 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         dmatlack@google.com
-Subject: Re: [PATCH v2 21/25] KVM: x86/mmu: replace shadow_root_level with
- root_role.level
-Message-ID: <YiezCBsD7Mj8hLEn@google.com>
+Subject: Re: [PATCH v2 22/25] KVM: x86/mmu: replace root_level with
+ cpu_mode.base.level
+Message-ID: <YiezRaEH9Y/pZpnp@google.com>
 References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-22-pbonzini@redhat.com>
+ <20220221162243.683208-23-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221162243.683208-22-pbonzini@redhat.com>
+In-Reply-To: <20220221162243.683208-23-pbonzini@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,27 +74,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> root_role.level is always the same value as shadow_level:
-> 
-> - it's kvm_mmu_get_tdp_level(vcpu) when going through init_kvm_tdp_mmu
-> 
-> - it's the level argument when going through kvm_init_shadow_ept_mmu
-> 
-> - it's assigned directly from new_role.base.level when going
->   through shadow_mmu_init_context
-> 
-> Remove the duplication and get the level directly from the role.
+> Remove another duplicate field of struct kvm_mmu.  This time it's
+> the root level for page table walking; the separate field is
+> always initialized as cpu_mode.base.level, so its users can look
+> up the CPU mode directly instead.
 > 
 > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
 >  arch/x86/include/asm/kvm_host.h |  1 -
->  arch/x86/kvm/mmu.h              |  2 +-
->  arch/x86/kvm/mmu/mmu.c          | 33 ++++++++++++++-------------------
->  arch/x86/kvm/mmu/tdp_mmu.c      |  2 +-
->  arch/x86/kvm/svm/svm.c          |  2 +-
->  arch/x86/kvm/vmx/vmx.c          |  2 +-
->  6 files changed, 18 insertions(+), 24 deletions(-)
-
-Yay!  That's a lot less churn than I expected.
+>  arch/x86/kvm/mmu/mmu.c          | 18 +++++++-----------
+>  arch/x86/kvm/mmu/paging_tmpl.h  |  4 ++--
+>  3 files changed, 9 insertions(+), 14 deletions(-)
 
 Reviewed-by: Sean Christopherson <seanjc@google.com>

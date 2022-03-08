@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C12A4D20F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9774B4D20F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346353AbiCHTIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S1349870AbiCHTIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:08:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349841AbiCHTI3 (ORCPT
+        with ESMTP id S1349852AbiCHTIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:08:29 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9900DF5D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:07:29 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id g19so176688pfc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:07:29 -0800 (PST)
+        Tue, 8 Mar 2022 14:08:45 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC01240B3;
+        Tue,  8 Mar 2022 11:07:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dlYDY5S/XDx5NW4Fv9JuxYnsAy3lZY4PrUFXc2DC20E=;
-        b=fbl/m/GJ9RguZxpwlYSV73iVjMMe4SNgYzjYZ5vr6QXELRkv49Lq/0CjCTiaoKpMrL
-         ByovFxAKsvcuYQPlFu1itELof6n05qGzselHpuASh5uqu7+ATfdTNeZH4fSXDxSoxa9E
-         nBCwhki8tMKxh0hgxSop2a6K+DEHC7CN4FKgA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dlYDY5S/XDx5NW4Fv9JuxYnsAy3lZY4PrUFXc2DC20E=;
-        b=YbQgFJTlwFOX6ovBCOwNLqqw65xpZFUjdtpWYo9os/r++NTAfqkyfWdATRcJsLkKiv
-         ZlsX6l5AaGGtR732VIcymj9LyRtEVetGjc7HJKgAvE3qeNz0N1eavFQISpURdIF2PRS9
-         T3eXJ94L73E8+G5dg9oYWuF3RPOD0tu3ZZaJcYJ0tLPAdAJiP0sGle84+b1aTSgkVWOI
-         WkOxgKZ0XO6mqrgELuLzFQ75RnfUMOl7r6tjbhLW3RWpM+nUSPYVZe5T2BYz0XaK/GmJ
-         OXYY4gDrgeciClNnsc3uSQfJMUJxbKuuMdDbGWJB4WeJY7xo+zfneaMn7ZlbgJtp/Ua6
-         LXXA==
-X-Gm-Message-State: AOAM532YwFcOODmJhKboSZrD664LrUsCCmQXyAYtwMQTNc0f6wPiU5M6
-        kFZW7ZD9LKevIvrypwNtOtRQMg==
-X-Google-Smtp-Source: ABdhPJxmf8ha/2Xk+EbD6Ae2W0oV8AzDmOjRY6EupaurEZd7CYN60GSz9SGpInxlogA+DjR1c7faMw==
-X-Received: by 2002:a63:6949:0:b0:380:94ab:9333 with SMTP id e70-20020a636949000000b0038094ab9333mr3176468pgc.199.1646766449359;
-        Tue, 08 Mar 2022 11:07:29 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:3cfa:63e6:3098:9d0])
-        by smtp.gmail.com with ESMTPSA id r1-20020a63b101000000b00380989bcb1bsm2270762pgf.5.2022.03.08.11.07.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 11:07:29 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] drm/bridge: Add myself as a reviewer for the Parade PS8640 bridge chip
-Date:   Tue,  8 Mar 2022 11:06:59 -0800
-Message-Id: <20220308110615.3.I04f99fbcc14b8c09610b4b18f0696c992a44d2b7@changeid>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-In-Reply-To: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
-References: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1646766467; x=1678302467;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8Us7q9LMJIjiFf9CRtdPQhiFU1UsJWO+ZNbcGobFxGg=;
+  b=Mwt/nMOn4djEg0UaUGkoW6IdtLB+uU/8eiOfsFF+Jd4vdQ3GShQsG+S5
+   m+lS3mV+3Fb//RNDPFuOpklVNETjg5XPBbBP1d1uAx9QCvKeAzvj5c+5T
+   I3bVgbb9GTzintJ/vNNHnR4yQpFjeb91LLIntcvpbpDVV6WipavxuBjAF
+   A=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Mar 2022 11:07:44 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 11:07:44 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 8 Mar 2022 11:07:44 -0800
+Received: from [10.216.46.57] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 8 Mar 2022
+ 11:07:40 -0800
+Message-ID: <27a01b22-1db7-5e5a-212d-092cedfaa50f@quicinc.com>
+Date:   Wed, 9 Mar 2022 00:37:35 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drivers/thermal/thermal_of: Add change_mode ops support
+ for thermal_of sensor
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1646752834-25043-1-git-send-email-quic_manafm@quicinc.com>
+ <c1a0576b-89fa-6e91-b80e-f2aa20dc7c77@linaro.org>
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+In-Reply-To: <c1a0576b-89fa-6e91-b80e-f2aa20dc7c77@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,32 +69,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Though the parade bridge chip is a little bit of a black box, I'm at
-least interested in hearing about changes to the driver since this
-bridge chip is used on some Chromebooks that I'm involved with.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+On 3/8/2022 11:28 PM, Daniel Lezcano wrote:
+> On 08/03/2022 16:20, Manaf Meethalavalappu Pallikunhi wrote:
+>> The sensor driver which register through thermal_of interface doesn't
+>> have an option to get thermal zone mode change notification from
+>> thermal core.
+>>
+>> Add support for change_mode ops in thermal_of interface so that sensor
+>> driver can use this ops for mode change notification.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
+>> <quic_manafm@quicinc.com>
+>> ---
+>>   drivers/thermal/thermal_of.c | 14 ++++++++++++++
+>>   include/linux/thermal.h      |  3 +++
+>>   2 files changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+>> index 9233f7e..a4e3820 100644
+>> --- a/drivers/thermal/thermal_of.c
+>> +++ b/drivers/thermal/thermal_of.c
+>> @@ -203,6 +203,17 @@ static int of_thermal_get_trend(struct 
+>> thermal_zone_device *tz, int trip,
+>>       return data->ops->get_trend(data->sensor_data, trip, trend);
+>>   }
+>>   +static int of_thermal_change_mode(struct thermal_zone_device *tz,
+>> +                enum thermal_device_mode mode)
+>> +{
+>> +    struct __thermal_zone *data = tz->devdata;
+>> +
+>> +    if (!data->ops || !data->ops->change_mode)
+>> +        return -EINVAL;
+>
+>
+> If this function is called it is because below in the bind function 
+> ops->change_mode was true, so the condition above is always true, no ?
 
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+I agree, it is reduntant. I just followed other ops similar sanity 
+check. I will remove it in next revision.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7d25d0b4dccc..db7fe53643c2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6171,6 +6171,11 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.yaml
- F:	drivers/gpu/drm/panel/panel-olimex-lcd-olinuxino.c
- 
-+DRM DRIVER FOR PARADE PS8640 BRIDGE CHIP
-+R:	Douglas Anderson <dianders@chromium.org>
-+F:	Documentation/devicetree/bindings/display/bridge/ps8640.yaml
-+F:	drivers/gpu/drm/bridge/parade-ps8640.c
-+
- DRM DRIVER FOR PERVASIVE DISPLAYS REPAPER PANELS
- M:	Noralf Trønnes <noralf@tronnes.org>
- S:	Maintained
--- 
-2.35.1.616.g0bdcbb4464-goog
+I think I missed to clear tzd->ops->change_mode  in 
+tz_of_sensor_unregister() path. I will update that as well
 
+>
+>
+>> +    return data->ops->change_mode(data->sensor_data, mode);
+>> +}
+>> +
+>>   static int of_thermal_bind(struct thermal_zone_device *thermal,
+>>                  struct thermal_cooling_device *cdev)
+>>   {
+>> @@ -408,6 +419,9 @@ thermal_zone_of_add_sensor(struct device_node *zone,
+>>       if (ops->set_emul_temp)
+>>           tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
+>>   +    if (ops->change_mode)
+>> +        tzd->ops->change_mode = of_thermal_change_mode;
+>> +
+>>       mutex_unlock(&tzd->lock);
+>>         return tzd;
+>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+>> index c3148939..365733b 100644
+>> --- a/include/linux/thermal.h
+>> +++ b/include/linux/thermal.h
+>> @@ -299,6 +299,8 @@ struct thermal_zone_params {
+>>    *           temperature.
+>>    * @set_trip_temp: a pointer to a function that sets the trip 
+>> temperature on
+>>    *           hardware.
+>> + * @change_mode: a pointer to a function that notifies the thermal zone
+>> + *           mode change.
+>>    */
+>>   struct thermal_zone_of_device_ops {
+>>       int (*get_temp)(void *, int *);
+>> @@ -306,6 +308,7 @@ struct thermal_zone_of_device_ops {
+>>       int (*set_trips)(void *, int, int);
+>>       int (*set_emul_temp)(void *, int);
+>>       int (*set_trip_temp)(void *, int, int);
+>> +    int (*change_mode) (void *, enum thermal_device_mode);
+>>   };
+>>     /* Function declarations */
+>
+>

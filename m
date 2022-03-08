@@ -2,78 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A05C4D2034
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED2B4D2033
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349566AbiCHS1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S1349646AbiCHS1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349696AbiCHS0n (ORCPT
+        with ESMTP id S1349698AbiCHS0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:26:43 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C70326112;
-        Tue,  8 Mar 2022 10:25:21 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id w12so9419457lfr.9;
-        Tue, 08 Mar 2022 10:25:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vvffHUrzjEmVtlp+Y2Xsgt8CHrDNJiwaK1f48maOz2U=;
-        b=SWQLN6PWd4COaUmnVPN0qI4SG70QpRqNhN3jZOQtYhbB8vQuhsbTjOHjfwj0QJlbvN
-         0OWiTH9oFkO61pTm+hykxIEeA3D0kyc9g/MZS1mMO94+oH28LioTw9QXtYXRsOcgwARW
-         cxUfA71CzkG13WLm3kp4ZcjLyMA2QgsB33Y/OxmxgXRfW8I05Am2GBPDIhHvj/B4axFx
-         +6e+QUgB7ZRjyZyNsAV9Pg8Ih2kVy7/wjTGUQgjlEDpLUFWjpqXawfW2uP0jRl2WcEKQ
-         Is+dxioyCnfhAC0x/u1z6Vo0zj5i1mGF09w01ZguNXs5mpWMtia9NOPbZKSTciX1Shiq
-         S4Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vvffHUrzjEmVtlp+Y2Xsgt8CHrDNJiwaK1f48maOz2U=;
-        b=QIm8d0pNMXn3cUvJfvW01dtvHIVzyCYrv6YoHxZw+vT2J6LsamQe3kgDnj75/dGKLj
-         f9GW50tYgYWuxOj9f6+Q3q2SzblHRuAneBwRCtown2nh8Z/mbdvZeIWBXqXq/cyXuJqZ
-         BPGXmxLdL7HTilHEgvsMg9zV6eHKUtCq4OUzHPaI9ZDUWsjhgq/uLDVooSscAK/DTKx9
-         nvd73WiOkCWLZBeQKakZx5rFSww1MFPzyyFhuvaGyvS1syR2yWqUx/P00YFqoDc1HAg7
-         7J79Rk7JXL1+ivBeyediHLiIfQrd4Dzkg+okA/jsQloyKpX50VsYCsO8yG2weyl1OYQ3
-         mbLA==
-X-Gm-Message-State: AOAM53137HcHexaqXBPQgLQK+7ouqx1jPQR3x2A9XLqkTeYTzikSLXEP
-        n0AIK+/En3nIxFAM6jzMIXg=
-X-Google-Smtp-Source: ABdhPJyVwU803jgtvUTHHDLN05KAyDhy+QhRMHvepREc7JP8k+jfT33upTGovaakOPb+dPiYVR1e/Q==
-X-Received: by 2002:a05:6512:348f:b0:441:e30:82c8 with SMTP id v15-20020a056512348f00b004410e3082c8mr11725536lfr.451.1646763918105;
-        Tue, 08 Mar 2022 10:25:18 -0800 (PST)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id h6-20020a2e5306000000b00247e893075asm1374434ljb.37.2022.03.08.10.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 10:25:17 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Tue, 8 Mar 2022 19:25:15 +0100
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        rcu@vger.kernel.org, bigeasy@linutronix.de, juri.lelli@redhat.com
-Subject: Re: [PATCH] rcu: Only boost rcu reader tasks with lower priority
- than boost kthreads
-Message-ID: <Yiefi86aKclyFG5N@pc638.lan>
-References: <20220304092631.4123188-1-qiang1.zhang@intel.com>
- <81f69dd4-6ca9-760c-bec5-5cb27afbe788@quicinc.com>
- <PH0PR11MB5880026EBBE3E195549E2245DA089@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20220307191512.GN4285@paulmck-ThinkPad-P17-Gen-1>
- <YieapfzKvy2chaHT@pc638.lan>
- <20220308181355.GW4285@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 8 Mar 2022 13:26:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A102AE0B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:25:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB60AB818A2
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 18:25:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3951C340EB;
+        Tue,  8 Mar 2022 18:25:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MQUUy+Ag"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646763920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CQ+IVBr7O0f2WkL2DHrWgZedfmnrNLjmZsZWJVL+jdA=;
+        b=MQUUy+AgTpJoEJAwnrszvcojsIm71iP5sUx3xXm3zeie7O6d6LBiR2IWXP0bEg7mus34s7
+        iYoe7sVVVewcPQhyiR1FDMc6ie6a/KwcUJd3nVVIarjFiUOCRCPiXQ++PeylEy4mUsbbKF
+        LeCOsdB9td4eoDrQeGngvSWkrH6Xv2I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c6ad17ba (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 8 Mar 2022 18:25:20 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: [PATCH] random: make consistent usage of crng_ready()
+Date:   Tue,  8 Mar 2022 11:25:17 -0700
+Message-Id: <20220308182517.273662-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308181355.GW4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,70 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 10:13:55AM -0800, Paul E. McKenney wrote:
-> On Tue, Mar 08, 2022 at 07:04:21PM +0100, Uladzislau Rezki wrote:
-> > > On Mon, Mar 07, 2022 at 02:03:17AM +0000, Zhang, Qiang1 wrote:
-> > > > On 3/4/2022 2:56 PM, Zqiang wrote:
-> > > > > When RCU_BOOST is enabled, the boost kthreads will boosting readers
-> > > > > who are blocking a given grace period, if the current reader tasks
-> > > > > have a higher priority than boost kthreads(the boost kthreads priority
-> > > > > not always 1, if the kthread_prio is set), boosting is useless, skip
-> > > > > current task and select next task to boosting, reduce the time for a
-> > > > > given grace period.
-> > > > > 
-> > > > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > > 
-> > > Adding to CC to get more eyes on this.  I am not necessarily opposed to
-> > > it, but I don't do that much RT work myself these days.
-> > > 
-> > > 							Thanx, Paul
-> > > 
-> > > > > ---
-> > > > >   kernel/rcu/tree_plugin.h | 10 +++++++++-
-> > > > >   1 file changed, 9 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> > > > > index c3d212bc5338..d35b6da66bbd 100644
-> > > > > --- a/kernel/rcu/tree_plugin.h
-> > > > > +++ b/kernel/rcu/tree_plugin.h
-> > > > > @@ -12,6 +12,7 @@
-> > > > >    */
-> > > > >   
-> > > > >   #include "../locking/rtmutex_common.h"
-> > > > > +#include <linux/sched/deadline.h>
-> > > > >   
-> > > > >   static bool rcu_rdp_is_offloaded(struct rcu_data *rdp)
-> > > > >   {
-> > > > > @@ -1065,13 +1066,20 @@ static int rcu_boost(struct rcu_node *rnp)
-> > > > >   	 * section.
-> > > > >   	 */
-> > > > >   	t = container_of(tb, struct task_struct, rcu_node_entry);
-> > > > > +	if (!rnp->exp_tasks && (dl_task(t) || t->prio <= current->prio)) {
-> > > > > +		tb = rcu_next_node_entry(t, rnp);
-> > > > > +		WRITE_ONCE(rnp->boost_tasks, tb);
-> > > > > +		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-> > > > > +		goto end;
-> > > > > +	}
-> > > > > +
-> > Why do you bypass the expedited grace period and boost any tasks anyway?
-> > Same way the expedited gp can be blocked by higher prior tasks SCHED_DEADLINE
-> > or SCHED_FIFO.
-> 
-> Just to make sure that I understand...
-> 
-> Are you pointing out that a SCHED_DEADLINE task might have exhausted
-> its budget, so that boosting might nonetheless be helpful?
-> 
-SCHED_DEADLINE we can not preempt nor stop it somehow(highest prio class),
-it has some budget it makes use of. If it is in critical section then it
-will leave asap, i do not take into account here IRQs and so on. I do not
-see a reason to boost it.
+Rather than sometimes checking `crng_init < 2`, we should always use the
+crng_ready() macro, so that should we change anything later, it's
+consistent. Additionally, that macro already has a likely() around it,
+which means we don't need to open code our own likely() and unlikely()
+annotations.
 
->
-> Me, I honestly don't know what happens in that case, so I am just asking
-> the question.  And adding Juri on CC.  ;-)
-> 
-Juri should know more :)
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---
-Vlad Rezki
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 69591d599338..e37ae7ef039c 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -123,7 +123,7 @@ static void try_to_generate_entropy(void);
+  */
+ int wait_for_random_bytes(void)
+ {
+-	if (likely(crng_ready()))
++	if (crng_ready())
+ 		return 0;
+ 
+ 	do {
+@@ -289,7 +289,7 @@ static void crng_reseed(bool force)
+ 		++next_gen;
+ 	WRITE_ONCE(base_crng.generation, next_gen);
+ 	WRITE_ONCE(base_crng.birth, jiffies);
+-	if (crng_init < 2) {
++	if (!crng_ready()) {
+ 		crng_init = 2;
+ 		finalize_init = true;
+ 	}
+@@ -352,7 +352,7 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
+ 	 * ready, we do fast key erasure with the base_crng directly, because
+ 	 * this is what crng_pre_init_inject() mutates during early init.
+ 	 */
+-	if (unlikely(!crng_ready())) {
++	if (!crng_ready()) {
+ 		bool ready;
+ 
+ 		spin_lock_irqsave(&base_crng.lock, flags);
+@@ -795,7 +795,7 @@ static void credit_entropy_bits(size_t nbits)
+ 		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
+ 	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
+ 
+-	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
++	if (!crng_ready() && entropy_count >= POOL_MIN_BITS)
+ 		crng_reseed(false);
+ }
+ 
+-- 
+2.35.1
+

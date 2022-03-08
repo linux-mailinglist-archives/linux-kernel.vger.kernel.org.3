@@ -2,125 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E97C4D14ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25FD4D14E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345920AbiCHKfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
+        id S236519AbiCHKe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345918AbiCHKfh (ORCPT
+        with ESMTP id S235280AbiCHKez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:35:37 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A004348E;
-        Tue,  8 Mar 2022 02:34:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646735675; x=1678271675;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=818ZiUqupFKx30M4QQyr2CZvlTpag7QHU9v/hFaDbMM=;
-  b=O1JAu2sgxKODjeBJSgX0ggf7LowM4PUNMnn25Bn5o+hVMmPBqTsvx7sV
-   tB9gUwDODtaQBW5cDbfue9mFm1Fbd/9c0g4NKcGEQcFdvJaDXndDun1Xw
-   Tb5+pZJJN1wxNifPLHJOi9Z8bdQGIKRD936Ed2J7PjAEJXwhUOEBcILAi
-   UZ/N99rlG6QxDyhJpLydMdmihLMstshjBWR2M7ELsDTwAvCrSv1fBbHOE
-   A8D3cU6M7autkVg2Os59+C55QTSGhmD26ILXyJ551g2v3Exd9Tk/wnVb4
-   Jg8KDowC/FLJISQodi+jwSZgwnWVv5Og5TJcxn7Ci7XCPJpmi15bSx+F3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234605624"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="234605624"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:34:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="643612251"
-Received: from srikandan-ilbpg12.png.intel.com ([10.88.229.69])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 02:34:32 -0800
-From:   nandhini.srikandan@intel.com
-To:     fancer.lancer@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, mgross@linux.intel.com,
-        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
-        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
-        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
-        rashmi.a@intel.com
-Subject: [PATCH v4 3/3] spi: dw: Add support for master mode selection for DWC SSI controller
-Date:   Tue,  8 Mar 2022 18:33:31 +0800
-Message-Id: <20220308103331.4116-4-nandhini.srikandan@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220308103331.4116-1-nandhini.srikandan@intel.com>
-References: <20220308103331.4116-1-nandhini.srikandan@intel.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 8 Mar 2022 05:34:55 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E605542483
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:33:54 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id d64so14378114vsd.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 02:33:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=WL70BUnQ9ECkrFgLiclEdyC+LhxGlMoS4GrJX3TGgu8=;
+        b=f5ZzkgQGuQYwGYig1UDUBch4002jrP6nb3fsjZe3aQ+VEopxLsoqP5KftHO0Y+xDkq
+         VkrRf1mlyKveWbUoh9xlqWTRGP6BbRVgi6WbI6WYHpEG46u72r8EARCgey3SY9IAA3Zw
+         hCqSEphK4A/+XYzXD5PnEsqFCCnE81EV8J6JfoLDaHDM0PuVNvauoU42RrRiilgCFSUL
+         Oc3qKA0F1zQmBJ5lHkQKH+Nf1V+X50eQ3OoxO+Vae84n0wf4c76zbuqrV5wvedMQP/Sk
+         TIAy5SjKewUFxHw3ZIU1Z2BexkSiGaCpphg0AfvNo7EtbvjcGb1VuLn3pF8rtwTnKx6w
+         lWog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=WL70BUnQ9ECkrFgLiclEdyC+LhxGlMoS4GrJX3TGgu8=;
+        b=CflZenw5rXmlSG2ut24mj4QIhw0vIvgzB/szFibrg3QHnfMmXbyBpGCb+uaTgD/ck2
+         BVETwKYxWiqJuiiD6/7NWnJi6FY8ulUuHVsam/H5xPpKxVdHk0ZD4B46mqOj4W60QIr7
+         W86dW4UpFkITy/J+MEHxspplDnCz/3Vu0kWQpJm7evWOq342aYOeAlleKXcl8awBBgky
+         qi4hInnvDM3/aOPVSPYyW+GsXVRZFgKjo1iJac11EI4afaMGqdns6Jv48BZbWVOAO7Ve
+         OvAhxNmejtaOFJ2LoEVQNcrFklzbNcIbMCijpqHL0UnO+QZz2DSFeVUbhv6V1Dg605Gx
+         RdhA==
+X-Gm-Message-State: AOAM532we0ID6wzrdeA1cnxjCvygmoly0H0TR0mn5RP/pBxqIMBwSq3n
+        xujb2wWrL5SHoUqP8BzX3OIioNf/7rhfd+MhQzY=
+X-Google-Smtp-Source: ABdhPJwVKUT5FD0NlfGAOIrgoCf0NSBlzUuYuv6IdHEvazmK0t1UocuH1ku4BsYY69mc23bueKGlbKkDe5961TLuA8A=
+X-Received: by 2002:a67:fe50:0:b0:31c:1eab:a9ad with SMTP id
+ m16-20020a67fe50000000b0031c1eaba9admr5882269vsr.18.1646735633867; Tue, 08
+ Mar 2022 02:33:53 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a59:d502:0:b0:29a:8219:59d6 with HTTP; Tue, 8 Mar 2022
+ 02:33:53 -0800 (PST)
+Reply-To: nislvraj@gmail.com
+From:   Anitha Selvaraj <marjohn595@gmail.com>
+Date:   Tue, 8 Mar 2022 10:33:53 +0000
+Message-ID: <CAC5Z0DnWZ8P6_kjSTGmN2Gv2Y7tbEAAJU7_wwQsNb+V2fN2XzA@mail.gmail.com>
+Subject: =?UTF-8?Q?Querid=C3=ADsimo_en_Cristo=2C?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e30 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5006]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [marjohn595[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [marjohn595[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+--=20
+Querid=C3=ADsimo en Cristo,
 
-Add support to select the controller mode as master mode by setting
-Bit 31 of CTRLR0 register. This feature is supported for controller
-versions above v1.02.
+Soy la Sra. Anitha Selvaraj, me cas=C3=A9 con el Sr. Francis Selvaraj, dura=
+nte
+19 a=C3=B1os sin hijos y mi esposo muri=C3=B3 en 2007. Me comunico con uste=
+d para que
+sepa mi deseo de donar la suma de (6.500.000 d=C3=B3lares) que hered=C3=A9.=
+ de mi
+difunto esposo a la caridad, actualmente el fondo todav=C3=ADa est=C3=A1 en=
+ el banco.
+Recientemente, mi m=C3=A9dico me dijo que tengo una enfermedad grave que es=
+ un
+problema de c=C3=A1ncer y que no durar=C3=A9 los pr=C3=B3ximos 2 meses.
 
-Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
----
- drivers/spi/spi-dw-core.c | 4 ++--
- drivers/spi/spi-dw.h      | 7 +++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+Quiero una persona que use este fondo para orfanatos, escuelas, iglesias,
+viudas, propagando la palabra de Dios en su pa=C3=ADs.
+Responda para obtener m=C3=A1s informaci=C3=B3n y tambi=C3=A9n env=C3=ADeme=
+ la siguiente
+informaci=C3=B3n, seg=C3=BAn se indica a continuaci=C3=B3n.
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index ecea471ff42c..68bfdf2c4dc7 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -307,8 +307,8 @@ static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)
- 		if (spi->mode & SPI_LOOP)
- 			cr0 |= DW_HSSI_CTRLR0_SRL;
- 
--		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
--			cr0 |= DW_HSSI_CTRLR0_KEEMBAY_MST;
-+		/* CTRLR0[31] MST */
-+		cr0 |= DW_HSSI_CTRLR0_MST;
- 	}
- 
- 	return cr0;
-diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index d5ee5130601e..2583b7314c41 100644
---- a/drivers/spi/spi-dw.h
-+++ b/drivers/spi/spi-dw.h
-@@ -23,7 +23,7 @@
- 	((_dws)->ip == DW_ ## _ip ## _ID)
- 
- #define __dw_spi_ver_cmp(_dws, _ip, _ver, _op) \
--	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ver)
-+	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ ## _ver)
- 
- #define dw_spi_ver_is(_dws, _ip, _ver) __dw_spi_ver_cmp(_dws, _ip, _ver, ==)
- 
-@@ -31,8 +31,7 @@
- 
- /* DW SPI controller capabilities */
- #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
--#define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
--#define DW_SPI_CAP_DFS32		BIT(2)
-+#define DW_SPI_CAP_DFS32		BIT(1)
- 
- /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-cores) */
- #define DW_SPI_CTRLR0			0x00
-@@ -100,7 +99,7 @@
-  * 0: SSI is slave
-  * 1: SSI is master
-  */
--#define DW_HSSI_CTRLR0_KEEMBAY_MST		BIT(31)
-+#define DW_HSSI_CTRLR0_MST			BIT(31)
- 
- /* Bit fields in CTRLR1 */
- #define DW_SPI_NDF_MASK				GENMASK(15, 0)
--- 
-2.17.1
-
+Tu nombre completo ..........
+Habla a ...........
+Foto ...............
+Bendito seas
+tu hermana en cristo
+Se=C3=B1ora. Anitha Selvaraj

@@ -2,116 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0B24D1873
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8644D1870
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346925AbiCHM5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
+        id S1346947AbiCHM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233421AbiCHM5P (ORCPT
+        with ESMTP id S233421AbiCHM52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:57:15 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130050.outbound.protection.outlook.com [40.107.13.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE31247541;
-        Tue,  8 Mar 2022 04:56:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SzpCg4K563SctIwj3GB/yCjmDauAvhH9gsAkd3wP+Ws17pEEVFfrUTEFW/Gp+dWsUvqVIS2ehekCv64UUbhbUcKx/nA6ERLEoACZO8BvKNa8poRSEscUhRQfLDsC2K34efXTJF7AeQhvg/lB2faiDIAIFuzDIM14OpKbY4s73bDRe3BrzCjdo5bC9TYyjQFsJtiKabl6kwOeBnmjG/B5bI4rqjs0iwkaWlpMjM+Aod5DMcL94sZJWXsmcTOL5pSORe91hne79EdRQcjjdL7WvWE+mT6kZfYT72lmXHBMP9IG/9lL5qcVB/QtVJ01uO0JwYqTnf1ak1pr62AAmAMdRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GbCpnfzk/F872enxkGEhcaZfijUUnqIig0Nu87oDU4M=;
- b=kT5NPco9nt6xJjzz0BGUdAcskkpFT4Fa6M1abRAq3ETfl1C8VkskBJcJ/jiJHl6vjypiEbl/a8mXyBHM6dSDiMtjxaKIibfgYNohQci6iWWqnV+HJXaFduaOdEwcpj0iM2MwIQ47bAVQN/TRh9gncl7QXZ4RDCnvzs0MLWTbJydQMY5JcOmoqLXgEl9rV9ZSKpiaduKdZ3b/zBoNr3gxL51MqKPNpugRDIOCmSemKLZS8TEmfmJJ/iGIriWNLytR/xDgjPxFYH+wPHKVyqg8KYbiZe8tb1GPaiY2/RPVsvfKk0Q1HJe8X0Yseurzt1jzMF7GWGkyI1LSjS7leu6pQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GbCpnfzk/F872enxkGEhcaZfijUUnqIig0Nu87oDU4M=;
- b=JJzarkYX00u+VzXkfVmlBqlRg3xOOVZ4MVWt53IAFieAvA2enwCJ8lBnXe6Mo4518zHbTJSghG0HeXFPE+F06KLYcjgurFW0gNm8XEsG11iTyT2xwsZ2zDMf1rsVbnRBkR6N3KWWgQYk/lcInShz7frKHG2Z4S9sVlSzOxeqi6A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from VI1PR0402MB3902.eurprd04.prod.outlook.com
- (2603:10a6:803:22::27) by AM6PR0402MB3813.eurprd04.prod.outlook.com
- (2603:10a6:209:21::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.19; Tue, 8 Mar
- 2022 12:56:14 +0000
-Received: from VI1PR0402MB3902.eurprd04.prod.outlook.com
- ([fe80::7075:9a92:d8b1:61cf]) by VI1PR0402MB3902.eurprd04.prod.outlook.com
- ([fe80::7075:9a92:d8b1:61cf%3]) with mapi id 15.20.5038.027; Tue, 8 Mar 2022
- 12:56:14 +0000
-From:   Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: i2c: rdacm2x: properly set subdev entity function
-Date:   Tue,  8 Mar 2022 14:55:49 +0200
-Message-Id: <20220308125549.9676-1-laurentiu.palcu@oss.nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain; charset="us-ascii"
-X-ClientProxiedBy: AM9P192CA0015.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:21d::20) To VI1PR0402MB3902.eurprd04.prod.outlook.com
- (2603:10a6:803:22::27)
+        Tue, 8 Mar 2022 07:57:28 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A8847547;
+        Tue,  8 Mar 2022 04:56:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646744168;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=N0uiBZn2X99YIa2R7oMyRvvyodifjNHPrFhmT4qjKWM=;
+    b=dj1V3bPdkot3GmVUYUhCbuoNjRI8Gx2vEUwy//jdJqSnGV25/iIONM2DvcyLAEF1SZ
+    WYjSiZgord8ZWkOSRDMXxMguy5dNNbiAlKb7jhBNC3E9x5J8lct1TEepJTRpT/kKt5HK
+    oxK7+4wKEdanbKnppoUnClrF5qtmrfGGSVRe+sbLUBZnvBQVx2jfgHFzACdU9YD6hI4I
+    b4eIH/h3Tevc32f7bq+KsyNU6BS/PSCjNwh6u25ELOu8v/iCeWlLonHqbTPY4/evUyOY
+    hXHbnWzCvZVmyO8EWUlZfpj1f8ds1IttJ78zgWQjM4pv/RZIwNWQ65zSp/EAMyNXiTQT
+    y/tA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVbpc9Y="
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
+    with ESMTPSA id n729cey28Cu7SHj
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 8 Mar 2022 13:56:07 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Rob Herring <robh@kernel.org>, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH] partially Revert "usb: musb: Set the DT node on the child device"
+Date:   Tue,  8 Mar 2022 13:56:06 +0100
+Message-Id: <f62f5fc11f9ecae7e57f3fd66939e051bd3b11fc.1646744166.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 245efa32-7c6d-4047-2c2e-08da01030722
-X-MS-TrafficTypeDiagnostic: AM6PR0402MB3813:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM6PR0402MB38132FDDCA0D72AEDC91233FBE099@AM6PR0402MB3813.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ytvx41Hio3y0zaDSYKVEYYBPUMu1YfbKWcmASjLmJtlda9PD3VDJi/8+7bHSonO3LsUsA6j2krAeUIE4wzWV2e9qL5QB0khcicAWY+C1cEoM42ij0AQzkI6ciYELzFulXMD9HFkg2/jt0tv9VTN55St8Cq9aIM9aUKLim4ABc1yaEa5AUfCTku1APRGeQ65b9VMpLWmMJSxPZ7gw+nc+e54IVMkntUg0kywuIcMSBS9xAGKsOCuRxx10K5VKOoujtHoCRSBap1gRRND9OsllyAjAUC/5Ef+BxlG2NWCZB3PWpvqmuhhb8ZYr+8vmnlktN+fcgpjbr6EQuv2mlW0vpdq0xqTQW93uETY8hZ6Ayk9eNzamO0PyEb1dimUQYI9pjoSkOkbZ1u+rA46Ed6bTPRuPSzt5KeCpza7l+hfqe3iAC8obMDN3R+6dEbKbNhjBcSr1q2N704ee4O7X/OotsDX+Nr5pUU+KJZ/GzUZxlHCttg54a4Xerc18ITM8Elhm5D9Do6mm0G7Hen2wUIxYrxycnCBpfLLHPZlutLn91GgHP5SVzedWL6+sh0p+xLyZVwMMyiFhciXyi4agBScinBJKgBXi4bEw7PvnZ6yZDTsB5sGYpHaaBQQoM8cXBpohVVgAs/+Kk9g81XQm5p7RkmW8L6o0rcA9WegAm0khHVApNZkNNkMEBLbjZ0pZjXa7xoP6APwOFruTxjLXuMp5bg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3902.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(44832011)(316002)(110136005)(86362001)(2906002)(66556008)(66476007)(4326008)(1076003)(66946007)(5660300002)(8676002)(38350700002)(8936002)(38100700002)(6512007)(26005)(83380400001)(186003)(508600001)(6486002)(52116002)(6506007)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X6oHxBQjmjFOh3+sAKlDPg2UoXNAy12+9M7mOW4gHp/2pxsgp9Yb7Yf3fWTd?=
- =?us-ascii?Q?E6/cI+LbFGoVMcIqjCcB8QcsunohI5gwIfHi7DqHF4zL5RJ1ahK0/ZU7rn3l?=
- =?us-ascii?Q?qnRqtwnqmZwdwYhGQFIBoUw5cN811i4Tj5L8RL0uHwB+L2vVA5KA3s0ogNcR?=
- =?us-ascii?Q?mgWnPEe6gM2/Q0dXQo/xZf/v5yabF6iaKhXqlAOrsl4i+cc1vdO2YHbH3fZ/?=
- =?us-ascii?Q?PXisonfMHxfMC7tLERBdXV9/SYI6gNXyS5rIe85DqHwzH9uUzwikrVTIIO48?=
- =?us-ascii?Q?N9+0MJAn3G5TmI6EERzFBZBAs4nPoI8Di9iExZd5fdcE8De4ULsGfptnHvbd?=
- =?us-ascii?Q?+QMLaSkEUreki8U9dylfyOcjy3TlN9bsr7gCyBr7eZZXcqOEFX2vMItC2dz0?=
- =?us-ascii?Q?e8Ast9kpMv96X73/LMVQdIdrxiCEH3TP8uIOyyFx4PRQxmfXjD5K4HoHOHgS?=
- =?us-ascii?Q?M4tQ/NtiYQ7B/cFY/b+SYwOxzaO9G8aO8YeKKFZUanGca7iXsHXbUL4rXVPW?=
- =?us-ascii?Q?AT/nfnntxDu6Tia/0OPGVOgqr2WXHV9hZlgoQckSyfl8Mh8df79hzFu2IPwW?=
- =?us-ascii?Q?DnGEhxIwnGxOwkpyQBanD4n8+3ZkxD8CoX5tvT7DLta/C9oc3EioEVSExhH5?=
- =?us-ascii?Q?bgxTYWmJj/LRjcJcEzo5tshm/7IuPFChRnYhrZowlvv+rXr41NWyQ5yuv8MA?=
- =?us-ascii?Q?zZmpj7jaMxUxV6YC5wb2xOMukgowbcg+m8+WmdSpMNh5Vg41pNlPF/qC3vex?=
- =?us-ascii?Q?vMBIofQnslkWtK2gJ3cBY1GSrgnjE9k1xQO7fj4hIdnPgBS9Pqihh8fB/Dws?=
- =?us-ascii?Q?g1LJTyvCO+O7x3XExhqFAQYfrJzz1/48Cs08bPSkuy5OBrOR0HwSvrcILTtI?=
- =?us-ascii?Q?oD7x363fOWHLzI7bgapDstPd/Jj6N9pnmD3fVyU5xTYKK8buz94KxsJ6GVqF?=
- =?us-ascii?Q?rQ4a6/YPHSTkEnJngaPCEr2wlK++Qenw25501MXYlCJiftA1H0wE28m8Zbu2?=
- =?us-ascii?Q?x0Vva/qYQAB/nHW/ykdFTUyqmpUc7qNwIhNUYbtkoLgQlbaRr9IhY8L5Jh3E?=
- =?us-ascii?Q?qsQw+H/kw7P7mO/KOlHSVELG0THkbswn+Uv+OMp6TXYbf+SwlSuu7c3L+K2c?=
- =?us-ascii?Q?fWNQfo5Cu+Czy6Hk9o4Ya7fmaALEAfxFNNTB32jH02Hf5ooOTAXyPYZivPuG?=
- =?us-ascii?Q?e/2HATbpWnlDQkRj6o/29cFZHiWS05QHVIObNQjIkYIHGYmaYpvelFqez9SB?=
- =?us-ascii?Q?RbSjStYYiICn7WxjLjRGB2Kw7yMO+8y6zyZJjLP6U/qBbjFQYVIl2+odOARU?=
- =?us-ascii?Q?IFd0QPjl6494dJepVbWkqHK5XQhsk7ONwXvWGFNizezCixPgFH8heMZBTSkR?=
- =?us-ascii?Q?BPpij2QIOlrMv0uwRXT8m0YrYjxNuo0/Rt4AvonIAGVuNcjr5jw41kL0AJBH?=
- =?us-ascii?Q?FuEWM0BJJN4Fu+bwymPnjB/WYX9iLWOpjArjBuAEkFgehZFWpzFUtFfnK09+?=
- =?us-ascii?Q?N/FIqXTsKfrnrYfWyBnzxvOIvb/GMl/juQhZKGrJsTyRJ08/Mn5+9f/xZqmg?=
- =?us-ascii?Q?/vXt39v0e7pEydJXAxXhOi2vKrCSSIw3E751TyY/VXrwa9XnUK/QrDxuhDTy?=
- =?us-ascii?Q?V92SOHYZ0cN807D3gQxJQZk=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 245efa32-7c6d-4047-2c2e-08da01030722
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3902.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2022 12:56:14.5212
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CHMN4bbbiCEU9soogf1xkpw1vCMgYumUti8wfufv/DPygWysXi/qomweRm9i26Cv3UzwQoU0gVONUg1KM3S5+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3813
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,56 +60,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The subdevice entity function was left unset, which produces a warning
-when probing the device:
+This reverts the omap2430 changes of
 
-mxc-md bus@58000000:camera: Entity type for entity rdacm20 19-0051 was
-not initialized!
+commit cf081d009c44 ("usb: musb: Set the DT node on the child device")
 
-Also, set the entity flags to MEDIA_ENT_FL_DEFAULT instead of
-MEDIA_ENT_F_CAM_SENSOR which will be used for entity's function instead.
+Since v5.17-rc1, musb is broken on the gta04 and openpandora devices
+(omap3530/dm3730). BeagleBone Black (am335x) seems to work.
 
-Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+Symptoms of this bug are
+
+a) main symptom
+
+[   21.336517] using random host ethernet address
+[   21.341430] using host ethernet address: 32:70:05:18:ff:78
+[   21.341461] using self ethernet address: 46:10:3a:b3:af:d9
+[   21.358184] usb0: HOST MAC 32:70:05:18:ff:78
+[   21.376678] usb0: MAC 46:10:3a:b3:af:d9
+[   21.388305] using random self ethernet address
+[   21.393371] using random host ethernet address
+[   21.398162] g_ether gadget: Ethernet Gadget, version: Memorial Day 2008
+[   21.421081] g_ether gadget: g_ether ready
+[   21.492156] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   21.691345] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   21.803192] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   21.819427] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   22.124450] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   22.168518] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   22.179382] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   23.213592] musb-hdrc musb-hdrc.1.auto: pm runtime get failed in musb_gadget_queue
+[   23.221832] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   23.227905] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   23.239440] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   23.401000] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   23.407073] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   23.426361] musb-hdrc musb-hdrc.1.auto: Could not enable: -22
+[   23.734466] musb-hdrc musb-hdrc.1.auto: pm runtime get failed in musb_gadget_queue
+[   23.742462] musb-hdrc musb-hdrc.1.auto: pm runtime get failed in musb_gadget_queue
+[   23.750396] musb-hdrc musb-hdrc.1.auto: pm runtime get failed in musb_gadget_queue
+... (repeats with high frequency)
+
+This stops if the USB cable is unplugged and restarts if it is plugged in again.
+
+b) also found in the log
+
+[    6.498107] ------------[ cut here ]------------
+[    6.502960] WARNING: CPU: 0 PID: 868 at arch/arm/mach-omap2/omap_hwmod.c:1885 _enable+0x50/0x234
+[    6.512207] omap_hwmod: usb_otg_hs: enabled state can only be entered from initialized, idle, or disabled state
+[    6.522766] Modules linked in: omap2430(+) bmp280_i2c bmp280 itg3200 at24 tsc2007 leds_tca6507 bma180 hmc5843_i2c hmc5843_core industrialio_triggered_buffer lis3lv02d_i2c kfifo_buf lis3lv02d phy_twl4030_usb snd_soc_omap_mcbsp snd_soc_ti_sdma musb_hdrc snd_soc_twl4030 gnss_sirf twl4030_vibra twl4030_madc twl4030_charger twl4030_pwrbutton gnss industrialio ehci_omap omapdrm drm_kms_helper syscopyarea sysfillrect sysimgblt fb_sys_fops drm drm_panel_orientation_quirks cec
+[    6.566436] CPU: 0 PID: 868 Comm: udevd Not tainted 5.16.0-rc5-letux+ #8251
+[    6.573730] Hardware name: Generic OMAP36xx (Flattened Device Tree)
+[    6.580322] [<c010ed30>] (unwind_backtrace) from [<c010a1d0>] (show_stack+0x10/0x14)
+[    6.588470] [<c010a1d0>] (show_stack) from [<c0897c14>] (dump_stack_lvl+0x40/0x4c)
+[    6.596405] [<c0897c14>] (dump_stack_lvl) from [<c0130cc4>] (__warn+0xb4/0xdc)
+[    6.604003] [<c0130cc4>] (__warn) from [<c0130d5c>] (warn_slowpath_fmt+0x70/0x9c)
+[    6.611846] [<c0130d5c>] (warn_slowpath_fmt) from [<c011f4d4>] (_enable+0x50/0x234)
+[    6.619903] [<c011f4d4>] (_enable) from [<c012081c>] (omap_hwmod_enable+0x28/0x40)
+[    6.627838] [<c012081c>] (omap_hwmod_enable) from [<c0120ff4>] (omap_device_enable+0x4c/0x78)
+[    6.636779] [<c0120ff4>] (omap_device_enable) from [<c0121030>] (_od_runtime_resume+0x10/0x3c)
+[    6.645812] [<c0121030>] (_od_runtime_resume) from [<c05c688c>] (__rpm_callback+0x3c/0xf4)
+[    6.654510] [<c05c688c>] (__rpm_callback) from [<c05c6994>] (rpm_callback+0x50/0x54)
+[    6.662628] [<c05c6994>] (rpm_callback) from [<c05c66b0>] (rpm_resume+0x448/0x4e4)
+[    6.670593] [<c05c66b0>] (rpm_resume) from [<c05c6784>] (__pm_runtime_resume+0x38/0x50)
+[    6.678985] [<c05c6784>] (__pm_runtime_resume) from [<bf14ab20>] (musb_init_controller+0x350/0xa5c [musb_hdrc])
+[    6.689727] [<bf14ab20>] (musb_init_controller [musb_hdrc]) from [<c05bccb8>] (platform_probe+0x58/0xa8)
+[    6.699737] [<c05bccb8>] (platform_probe) from [<c05badf0>] (really_probe+0x170/0x2fc)
+[    6.708068] [<c05badf0>] (really_probe) from [<c05bb040>] (__driver_probe_device+0xc4/0xd8)
+[    6.716827] [<c05bb040>] (__driver_probe_device) from [<c05bb084>] (driver_probe_device+0x30/0xac)
+[    6.726226] [<c05bb084>] (driver_probe_device) from [<c05bb3d0>] (__device_attach_driver+0x94/0xb4)
+[    6.735717] [<c05bb3d0>] (__device_attach_driver) from [<c05b93f8>] (bus_for_each_drv+0xa0/0xb4)
+[    6.744934] [<c05b93f8>] (bus_for_each_drv) from [<c05bb248>] (__device_attach+0xc0/0x134)
+[    6.753631] [<c05bb248>] (__device_attach) from [<c05b9fcc>] (bus_probe_device+0x28/0x80)
+[    6.762207] [<c05b9fcc>] (bus_probe_device) from [<c05b7e40>] (device_add+0x5fc/0x788)
+[    6.770507] [<c05b7e40>] (device_add) from [<c05bd240>] (platform_device_add+0x70/0x1bc)
+[    6.779022] [<c05bd240>] (platform_device_add) from [<bf177830>] (omap2430_probe+0x260/0x2d4 [omap2430])
+[    6.789001] [<bf177830>] (omap2430_probe [omap2430]) from [<c05bccb8>] (platform_probe+0x58/0xa8)
+[    6.798309] [<c05bccb8>] (platform_probe) from [<c05badf0>] (really_probe+0x170/0x2fc)
+[    6.806610] [<c05badf0>] (really_probe) from [<c05bb040>] (__driver_probe_device+0xc4/0xd8)
+[    6.815399] [<c05bb040>] (__driver_probe_device) from [<c05bb084>] (driver_probe_device+0x30/0xac)
+[    6.824798] [<c05bb084>] (driver_probe_device) from [<c05bb4b4>] (__driver_attach+0xc4/0xd8)
+[    6.833648] [<c05bb4b4>] (__driver_attach) from [<c05b9308>] (bus_for_each_dev+0x64/0xa0)
+[    6.842224] [<c05b9308>] (bus_for_each_dev) from [<c05ba248>] (bus_add_driver+0x148/0x1a4)
+[    6.850891] [<c05ba248>] (bus_add_driver) from [<c05bbd1c>] (driver_register+0xb4/0xf8)
+[    6.859313] [<c05bbd1c>] (driver_register) from [<c0101f54>] (do_one_initcall+0x90/0x1c8)
+[    6.867889] [<c0101f54>] (do_one_initcall) from [<c0893968>] (do_init_module+0x4c/0x204)
+[    6.876373] [<c0893968>] (do_init_module) from [<c01b4c30>] (load_module+0x13f0/0x1928)
+[    6.884796] [<c01b4c30>] (load_module) from [<c01b53a0>] (sys_finit_module+0xa0/0xc0)
+[    6.893005] [<c01b53a0>] (sys_finit_module) from [<c0100080>] (ret_fast_syscall+0x0/0x54)
+[    6.901580] Exception stack(0xc2807fa8 to 0xc2807ff0)
+[    6.906890] 7fa0:                   b6e517d4 00052068 00000006 b6e509f8 00000000 b6e5131c
+[    6.915466] 7fc0: b6e517d4 00052068 cd718000 0000017b 00020000 00037f78 00050048 00063368
+[    6.924011] 7fe0: bed8fef0 bed8fee0 b6e4ac4b b6f55a42
+[    6.929321] ---[ end trace d715ff121b58763c ]---
+
+c) git bisect result on testing for "musb-hdrc" in the console log:
+
+cf081d009c447647c6b36aced535ca427dbebe72 is the first bad commit
+commit cf081d009c447647c6b36aced535ca427dbebe72
+Author: Rob Herring <robh@kernel.org>
+Date:   Wed Dec 15 17:07:57 2021 -0600
+
+  usb: musb: Set the DT node on the child device
+
+  The musb glue drivers just copy the glue resources to the musb child device.
+  Instead, set the musb child device's DT node pointer to the parent device's
+  node so that platform_get_irq_byname() can find the resources in the DT.
+  This removes the need for statically populating the IRQ resources from the
+  DT which has been deprecated for some time.
+
+  Signed-off-by: Rob Herring <robh@kernel.org>
+  Link: https://lore.kernel.org/r/20211215230756.2009115-3-robh@kernel.org
+  Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+drivers/usb/musb/am35x.c    | 2 ++
+drivers/usb/musb/da8xx.c    | 2 ++
+drivers/usb/musb/jz4740.c   | 1 +
+drivers/usb/musb/mediatek.c | 2 ++
+drivers/usb/musb/omap2430.c | 1 +
+drivers/usb/musb/ux500.c    | 1 +
+6 files changed, 9 insertions(+)
+
+Reverting this patch makes musb work again as before.
+
+Fixes: cf081d009c44 ("usb: musb: Set the DT node on the child device")
+Cc: Rob Herring <robh@kernel.org>
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
-Hi,
+ drivers/usb/musb/omap2430.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Only tested the rdacm20 part but I believe rdacm21 should work as well.
-
-Cheers,
-laurentiu
-
- drivers/media/i2c/rdacm20.c | 3 ++-
- drivers/media/i2c/rdacm21.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-index 025a610de893..ea5b7d5151ee 100644
---- a/drivers/media/i2c/rdacm20.c
-+++ b/drivers/media/i2c/rdacm20.c
-@@ -611,7 +611,8 @@ static int rdacm20_probe(struct i2c_client *client)
- 		goto error_free_ctrls;
+diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
+index 7d4d0713f4f0..d2b7e613eb34 100644
+--- a/drivers/usb/musb/omap2430.c
++++ b/drivers/usb/musb/omap2430.c
+@@ -327,7 +327,6 @@ static int omap2430_probe(struct platform_device *pdev)
+ 	musb->dev.parent		= &pdev->dev;
+ 	musb->dev.dma_mask		= &omap2430_dmamask;
+ 	musb->dev.coherent_dma_mask	= omap2430_dmamask;
+-	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
  
- 	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
--	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
-+	dev->sd.entity.flags |= MEDIA_ENT_FL_DEFAULT;
-+	dev->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
- 	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
- 	if (ret < 0)
- 		goto error_free_ctrls;
-diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-index 12ec5467ed1e..be89bd43e88b 100644
---- a/drivers/media/i2c/rdacm21.c
-+++ b/drivers/media/i2c/rdacm21.c
-@@ -583,7 +583,8 @@ static int rdacm21_probe(struct i2c_client *client)
- 		goto error_free_ctrls;
- 
- 	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
--	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
-+	dev->sd.entity.flags |= MEDIA_ENT_FL_DEFAULT;
-+	dev->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
- 	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
- 	if (ret < 0)
- 		goto error_free_ctrls;
+ 	glue->dev			= &pdev->dev;
+ 	glue->musb			= musb;
 -- 
 2.33.0
 

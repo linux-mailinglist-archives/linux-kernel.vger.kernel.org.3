@@ -2,170 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16384D129E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBCC4D12B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345090AbiCHIsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
+        id S1345133AbiCHIuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236907AbiCHIsv (ORCPT
+        with ESMTP id S1345131AbiCHIuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:48:51 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120041.outbound.protection.outlook.com [40.107.12.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF152E0A5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:47:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SwMAgw4xRedwsvfj6iPVpzf3CmsVv1TfcW3IARPoKnt6Dp3gtTqiVhCWTA89Iw3FREX6DfERuzct0tYQeKV3bQRPRI9XUUN5/mHah38o0ARKKQqhbGxSoBFWGPQHqBEtRa3fl4PNRLEe5BAAzQCTm1Tjlq1+Lv5JE1gBIJdi7CLN1teabCk1zlfTsAW0dSbga7rQUYejtKSdOkQjyTxNf60+YFLbFWU0zPt0mfTUnTQf4owqbOGbSytVJ30ALWhE04gFWjCBNe+xL4Z/rF4JHbRNxGXcIcjMKpkmKrFZ6ueS4CdF88SCekn9cxQLO2RAFZR93S3l2qx79X2sHfPwpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dFs9e27MRrHYp3KqNVy5pg+b/CZ4aJC3EKAsBdhSvcc=;
- b=hwLriFDnUQhOEnimlW2AkGqO8HmI+K6CdceocJX4B6VEK1EAUwaGM3JjQg+NCLmoFEj2AxMqJFHqVsojrYyA+yO38zXUPiFZD9peRFGw69BUZUh/nyAU73zAkxtiaN79+u+QDtk7BOy4saNcvtC0tGqjm2P1DcJL59yhDXJEyzKTnRL0RnPK6smp2rEilrm+6qiWuP8X4Ht8GUurNnkaKbl1WGucwlzLi7MklGqbd/23j0RhBrO8VC6k1m+DO803Rc+WGD9K/k8VLH8z4qxdfazDSRtFe6sfczPbYChff0SSz1DxB4tLYpZfUd3D1jAmffXLPRAVbarK++C4LWI4XA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRXP264MB0312.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:16::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.16; Tue, 8 Mar
- 2022 08:47:50 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%4]) with mapi id 15.20.5038.027; Tue, 8 Mar 2022
- 08:47:50 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v1 1/4] powerpc: Cleanup asm-prototypes.c
-Thread-Topic: [PATCH v1 1/4] powerpc: Cleanup asm-prototypes.c
-Thread-Index: AQHYL+nkU2y28o0pEEGGi1zd99wPu6y1Mo+A
-Date:   Tue, 8 Mar 2022 08:47:50 +0000
-Message-ID: <d8a91ad9-328f-d0cb-1112-7ddccd8873d4@csgroup.eu>
-References: <3ed660a585df2080ea8412ec20fbf652f5bf013a.1646413435.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <3ed660a585df2080ea8412ec20fbf652f5bf013a.1646413435.git.christophe.leroy@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 677bc64c-662a-442c-c1b5-08da00e0540f
-x-ms-traffictypediagnostic: MRXP264MB0312:EE_
-x-microsoft-antispam-prvs: <MRXP264MB03129E8C3EDAB8B8152A6E96ED099@MRXP264MB0312.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hqU7DVYPfQoq2jDgGUSygYiSb+Uq2iC63Mz4ZKEu84lnbBxWFjIf1cQlMP7ZzrwTmv+PX7GCb8W0G9HCt0SKpBH+Y+jHxEe5r+7AuYnsgacP3py8rNc9veGZ7Fnr4nZTQtAZ5ylQmdbc29aIHSaDQS05javjOSHmYxTV2X081J3iQPFPhir8NJfKMSfoEumNm+wP7I3maW5xy2YUFXTIIlfsLZsPaj56/hIUNoiQ3c23WkDKIc+uTkRlQ8Z+bDiB9SKQZPS/fuyTYaftdz/fd+vjWB6wTrgwZk++wHToYiqHbJ5cagoZNoXphshBYhJT4gbr9wOdJIUHFjDV9t0oERcyxtgm79BhX5GmBHp+/n+dk3mqVtmgWT923ggBEASA+yubesz8KwFTRi2RTIQ5KrZhuA+lCgIQe/pQK58hj0DwfeYZToaqD//ry6b3hbTc0iCooSLlRvzxl6n3JqkClsZ4YLfdtqbiztc7ciL3bTVVjyxdofQgsuW2WGf9WUrENo6mhsfln+s9Za4qsTWCArfSZGsM6/5ikSpvqHmMK3x+A1pZRMni3w2sj0+1O0ZeAz9m9fvbP7zkS2c2txMD/U6bxBfuWtma3MWj68QbC1JXZDLSuo4SaCmC0TZf/bDvSMh9NY1Zc716ExCEIftghotF8L6D6oTgzt5Ie7PPWhTzNduXx7hbcHvnXjWVO8wYFX2JrXl4/cje26Zy9AGFaxJDkZDGyrwm7RjNszTgST0FnvM0HaRlSl/lVph7iBMNEBogtav38RN2doUgAnEuqQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(83380400001)(66446008)(2906002)(6486002)(31686004)(44832011)(5660300002)(38070700005)(6506007)(8936002)(64756008)(316002)(6512007)(54906003)(66476007)(186003)(110136005)(122000001)(26005)(66946007)(66556008)(4326008)(31696002)(2616005)(86362001)(8676002)(38100700002)(76116006)(71200400001)(508600001)(91956017)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Vm9zQ3pVYVVhV3dpMXBBd0ZLbzRLbE41NGQ2VzM5NG9yK0txdkx4ajk5dHpj?=
- =?utf-8?B?MlpYeU9nSjcvQ09yTC9KYVl4cUVPNHhUdnVpQzNPWVBjUVk3dTZXaDlsSkRv?=
- =?utf-8?B?SWNQcUFQQ2xXSi9WdHQxVkxqNU5yL2dsbGRzTm43QmlwZ0pMV0xnaWphZ0xW?=
- =?utf-8?B?TjF0bzJmNDRvRnVuSGt2RlRiVkRGZWpuMXB5U0l0OXgvWGpSUktRcVJDcXEv?=
- =?utf-8?B?WFNrUmZ5aDVHNU5kd2Q2NFpDZ1BBL01tRWo3K3dLZ3I0SmhVbGFhY25NU3Rz?=
- =?utf-8?B?OW4wc21XMjNxaGRxaWdFTFhrNU1XMDhVMFAvc2RrVzBweGtCaWI3TFRhOXJ4?=
- =?utf-8?B?NlBZYzJKMTdLNHpOcFJsTWlsYitqNVFsRGVBRHVkK1Q4Y3g1dWtXNGc1TGRs?=
- =?utf-8?B?YjBEcmk3SUtranVaQ0R6WkNyM0o3WkpTM3Z2QUtTWEVyZHVCL2MyaUVzQzZp?=
- =?utf-8?B?cXhySFR6U2ovQW4yVEZtd3MrUStRSlhVanhtN1A3WVorZ1Vxak5OYlFzWnYr?=
- =?utf-8?B?azgwK2EzbnpYUlpiZWQ3UVJzbURadGlLY1VIVGIrZlFnc0I0bEtvUDQ1bjFI?=
- =?utf-8?B?aGlaMU45S3BBVVBHVlA4S2FuQTVUSXl5eVpKR3ZrKzdpS0dOSDIwem96NUdr?=
- =?utf-8?B?WEthSmY4ZnZaOGwrS0Q0ODdOa2JxZSthZlFlRVZhTnZpQ1p6RkFHR3JkV3Bn?=
- =?utf-8?B?MTQxREs0MTUrVWd4aWIzSnl4Y3g1RUZhVitFUHA5QUZPckJLb0RibmdDOFF5?=
- =?utf-8?B?TkR6NUxxS1NGT29CdWFoVndQazE5cVlpc0FsdWx0QUxwR2REZU9mWmN2QWY2?=
- =?utf-8?B?TEpabWpyNTZaRk8yYmpGeU1QdW91a2NUdW1maHFDNlVJMHU1WFg3UnU1Sk16?=
- =?utf-8?B?Vm52dkhoYWdpOHEwemdFQVduWGtJcnVMUEhtaUJ0aUZ4VG9ja2QzdGtNdUhi?=
- =?utf-8?B?c3ZXYS9nWXVLdGkyVGEyODFmby9WaXM5bUFhTi9KcGdKYWdpcENoNjExSXdY?=
- =?utf-8?B?dy9GUE9lWmlJRDBITEdPZG5XOSt2eGpCRGdMbktrZHVBLy93VURHNTFjNnlX?=
- =?utf-8?B?MlpTcklCUmFuTHVzV0ZINkd3ZUVqeEpXbHdtVThkRTh5bVFXTkd6VEpUcWQ2?=
- =?utf-8?B?aUtKY2t4V0hBTVpmNFptY3ZjTFZyc0JsOUY4RGV5YzM3Vi9sM1dteERlOEZT?=
- =?utf-8?B?QXNzNWdyaWFqeWRGNXZhSEJland3YXVKdzRReUM0Skt3SzZrOFJFVnZmaW1v?=
- =?utf-8?B?SjFWZ2Z5T3F0VVdiVkV4R0FtYTFvSTduUGM3RDQ1VzB4blBnK044KzQybkkz?=
- =?utf-8?B?dkpPTXdHczZFeEo3aVdWZlpCRmxUWm0zSjZNdklOdFh5MVhhUEMrOGFEcGVi?=
- =?utf-8?B?VzduOFFvTDRiR2lEemgyM3FpZHdPM3RKZTJ0QWtxODZSTHFNR3pCTWJnLy9m?=
- =?utf-8?B?T2FORFZpMndKa2RlMmI0L21YMGZpTW1BdVQwVWlqRFYrRGR6OWV3cHl6Mlps?=
- =?utf-8?B?SjRFQnFheFVtVE80VUl5S1MrMHE5NU5BV2h3MGl5S3h6bzBMRGhYd3dkWGMz?=
- =?utf-8?B?Y3NBRmpGTi9uSEpVUTVyeFBGazlsbmdFeVN2Snk0c3hEdXBtNnBNVGRNTFNv?=
- =?utf-8?B?dE5ndXpicDAyL0JMdThBdVZnM20wbkdWc3hiTUEzRVREKy92aVFONFliOVVK?=
- =?utf-8?B?MmNkN0pKZi9zODE3Qm5GYTVoelFMS3MrMnp5ZGRGUlJPZy9VNmlWMmh2amJD?=
- =?utf-8?B?TDlpQmw1WUN2VGtuVG9uSm52MmZTaEFCV3JTdENJSXI5RHp2M3kyMkxpb2ps?=
- =?utf-8?B?V3ZwTEJWQjlTWndOVWhhdFVVcWZmRVNsWFBRNVpCY3RKNzBTeTBMcVdja09l?=
- =?utf-8?B?SHl6QXpxTTRQWGd5eDlVZDVqQmdmek83dEIvS0lWcHJkekkzOUJRN2NDL3pI?=
- =?utf-8?B?NGd0NFd1cHB1WGF2NVNQSHpEb2txTjJBMjkvVEtHMHFGWEVHNHZFajJqTk53?=
- =?utf-8?B?UXpVV0V5SkJzOC9VVkpLelB1dllmcE13dzg3ZWczZkVyOFNXeDROVDNvOUpm?=
- =?utf-8?B?d2lDbkNqdWxqRFplbFJXR0ZmUGVJVXB3aWdSL0E1VFBqYmtDUllncTFnUURV?=
- =?utf-8?B?Z2RwRnZrTEJSZmQ5ZXR6dERCaXc2KzNLT3U5SjFRSXFNUCtLRGpjR0pFbHpH?=
- =?utf-8?B?bzgrNTlROE9EMmtRTUhiUkpjcWJtZXd6dHVoVEowdlh5MU1jSEladDY5M013?=
- =?utf-8?Q?zsA1PiVYnvEvqVjo54/bwvUI1L6Owj6R0PSBMTvu38=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DC572D15935A0E4FA27E3C024F46A25B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 8 Mar 2022 03:50:16 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652FE38D9F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:49:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646729359; x=1678265359;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qsteN1dFnRw0FxjE67Ns3g6dtAFfbNoZEA7OQLmJSkY=;
+  b=V+7jgOGIF1as3KbGhaDS9A43lkouMlRS6vzjVZXMMIbPZezjRmA+qtXE
+   EMI53WNSpzAxBfB72zYNnA3W8KBCRLUdEuLUnna5vExrJ6PMR9JFdzT1w
+   r9c44wEL/51H2OdsFET4iMn6qU5aAc9vam0FuwQQCE9TLUl80maDU40bn
+   S3STjcqYqHCd2lOVhprCNJcaoncJ75notj2X7y4dOJ2yt7bV0YXo61Nb1
+   d2GOHrrV3D+DfSIVOT1n/AbyS6Ij9Qd+MVUU8QvQfgOh2W4uFUy76NYk1
+   tyAIXA5actj0XPsdL5zEbWCxNupJ+6wVJ5/6zxBUCN860DGab2dtIRbs+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="279344838"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="279344838"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 00:49:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="495380688"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 00:49:17 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRVWu-0001AE-IA; Tue, 08 Mar 2022 08:49:16 +0000
+Date:   Tue, 8 Mar 2022 16:48:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Eric Biggers <ebiggers@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [ebiggers:testing 7/7] fs/iomap/direct-io.c:318:8: error: no member
+ named 'bi_write_hint' in 'struct bio'
+Message-ID: <202203081630.wdYO0IZw-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 677bc64c-662a-442c-c1b5-08da00e0540f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2022 08:47:50.8714
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kJlUU7Tv2xsnWCtI7kw8BJt5hldsiDTWRSvK9g8B/2laTSxu2OCpFQ8C/+4+m+nSrn4Xz9zNHWNSAxRnuS/N8SaUjZ/XqXILVll0f6NXTRE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0312
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWljaGFlbCwNCg0KTGUgMDQvMDMvMjAyMiDDoCAxODowNCwgQ2hyaXN0b3BoZSBMZXJveSBh
-IMOpY3JpdMKgOg0KPiBMYXN0IGNhbGwgdG8gc3lzX3N3YXBjb250ZXh0KCkgZnJvbSBBU00gd2Fz
-IHJlbW92ZWQgYnkNCj4gY29tbWl0IGZiY2VlMmViZThlZCAoInBvd2VycGMvMzI6IEFsd2F5cyBz
-YXZlIG5vbiB2b2xhdGlsZSBHUFJzIGF0DQo+IHN5c2NhbGwgZW50cnkiKQ0KPiANCj4gc3lzX2Rl
-YnVnX3NldGNvbnRleHQoKSBwcm90b3R5cGUgbm90IG5lZWRlZCBhbnltb3JlIHNpbmNlDQo+IGNv
-bW1pdCBmMzY3NTY0NGUxNzIgKCJwb3dlcnBjL3N5c2NhbGxzOiBzaWduYWxfezMyLCA2NH0gLSBz
-d2l0Y2gNCj4gdG8gU1lTQ0FMTF9ERUZJTkUiKQ0KPiANCj4gc3lzX3N3aXRjaF9lbmRpYW4oKSBw
-cm90b3R5cGUgbm90IG5lZWRlZCBhbnltb3JlIHNpbmNlDQo+IGNvbW1pdCA4MWRhYzgxNzc4NjIg
-KCJwb3dlcnBjLzY0OiBNYWtlIHN5c19zd2l0Y2hfZW5kaWFuKCkgdHJhY2VhYmxlIikNCj4gDQo+
-IF9tb3VudCgpIHByb3RvdHlwZSBpcyBhbHJlYWR5IGluIGFzbS9mdHJhY2UuaA0KPiANCj4gU2ln
-bmVkLW9mZi1ieTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1
-Pg0KPiAtLS0NCg0KSSBzZWUgdGhpcyBzZXJpZXMgaW4gbmV4dC10ZXN0IGJyYW5jaC4NCg0KQ2Fu
-IHlvdSAjaW5jbHVkZSA8YXNtL2Z0cmFjZS5oPiBpbiBhc20vYXNtLXByb3RvdHlwZXMuaCBzbyB0
-aGF0IA0KX21jb3VudCgpIHN0aWxsIGdldHMgdmVyc2lvbm5lZC4NCg0KSWYgeW91IHByZWZlciBJ
-IGNhbiByZXNlbmQgdGhlIHNlcmllcy4NCg0KVGhhbmtzDQpDaHJpc3RvcGhlDQoNCj4gICBhcmNo
-L3Bvd2VycGMvaW5jbHVkZS9hc20vYXNtLXByb3RvdHlwZXMuaCB8IDcgLS0tLS0tLQ0KPiAgIDEg
-ZmlsZSBjaGFuZ2VkLCA3IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93
-ZXJwYy9pbmNsdWRlL2FzbS9hc20tcHJvdG90eXBlcy5oIGIvYXJjaC9wb3dlcnBjL2luY2x1ZGUv
-YXNtL2FzbS1wcm90b3R5cGVzLmgNCj4gaW5kZXggNDFiOGExZTExNDRhLi40ZmQ3OTIwN2ZkNDEg
-MTAwNjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9hc20tcHJvdG90eXBlcy5o
-DQo+ICsrKyBiL2FyY2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9hc20tcHJvdG90eXBlcy5oDQo+IEBA
-IC01NywxMiArNTcsNyBAQCBpbnQgZW50ZXJfdm14X29wcyh2b2lkKTsNCj4gICB2b2lkICpleGl0
-X3ZteF9vcHModm9pZCAqZGVzdCk7DQo+ICAgDQo+ICAgLyogc2lnbmFscywgc3lzY2FsbHMgYW5k
-IGludGVycnVwdHMgKi8NCj4gLWxvbmcgc3lzX3N3YXBjb250ZXh0KHN0cnVjdCB1Y29udGV4dCBf
-X3VzZXIgKm9sZF9jdHgsDQo+IC0JCSAgICBzdHJ1Y3QgdWNvbnRleHQgX191c2VyICpuZXdfY3R4
-LA0KPiAtCQkgICAgbG9uZyBjdHhfc2l6ZSk7DQo+ICAgI2lmZGVmIENPTkZJR19QUEMzMg0KPiAt
-bG9uZyBzeXNfZGVidWdfc2V0Y29udGV4dChzdHJ1Y3QgdWNvbnRleHQgX191c2VyICpjdHgsDQo+
-IC0JCQkgIGludCBuZGJnLCBzdHJ1Y3Qgc2lnX2RiZ19vcCBfX3VzZXIgKmRiZyk7DQo+ICAgaW50
-DQo+ICAgcHBjX3NlbGVjdChpbnQgbiwgZmRfc2V0IF9fdXNlciAqaW5wLCBmZF9zZXQgX191c2Vy
-ICpvdXRwLCBmZF9zZXQgX191c2VyICpleHAsDQo+ICAgCSAgIHN0cnVjdCBfX2tlcm5lbF9vbGRf
-dGltZXZhbCBfX3VzZXIgKnR2cCk7DQo+IEBAIC04MSw3ICs3Niw2IEBAIHVuc2lnbmVkIGxvbmcg
-aW50ZXJydXB0X2V4aXRfa2VybmVsX3Jlc3RhcnQoc3RydWN0IHB0X3JlZ3MgKnJlZ3MpOw0KPiAg
-IA0KPiAgIGxvbmcgcHBjX2ZhZHZpc2U2NF82NChpbnQgZmQsIGludCBhZHZpY2UsIHUzMiBvZmZz
-ZXRfaGlnaCwgdTMyIG9mZnNldF9sb3csDQo+ICAgCQkgICAgICB1MzIgbGVuX2hpZ2gsIHUzMiBs
-ZW5fbG93KTsNCj4gLWxvbmcgc3lzX3N3aXRjaF9lbmRpYW4odm9pZCk7DQo+ICAgDQo+ICAgLyog
-cHJvbV9pbml0IChPcGVuRmlybXdhcmUpICovDQo+ICAgdW5zaWduZWQgbG9uZyBfX2luaXQgcHJv
-bV9pbml0KHVuc2lnbmVkIGxvbmcgcjMsIHVuc2lnbmVkIGxvbmcgcjQsDQo+IEBAIC0xMDIsNyAr
-OTYsNiBAQCBleHRlcm4gaW50IF9fY21wZGkyKHM2NCwgczY0KTsNCj4gICBleHRlcm4gaW50IF9f
-dWNtcGRpMih1NjQsIHU2NCk7DQo+ICAgDQo+ICAgLyogdHJhY2luZyAqLw0KPiAtdm9pZCBfbWNv
-dW50KHZvaWQpOw0KPiAgIHVuc2lnbmVkIGxvbmcgcHJlcGFyZV9mdHJhY2VfcmV0dXJuKHVuc2ln
-bmVkIGxvbmcgcGFyZW50LCB1bnNpZ25lZCBsb25nIGlwLA0KPiAgIAkJCQkJCXVuc2lnbmVkIGxv
-bmcgc3ApOw0KPiAgIA==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git testing
+head:   236f1f551e0af2da4cbfe428d92361244534b1f3
+commit: 236f1f551e0af2da4cbfe428d92361244534b1f3 [7/7] Merge remote-tracking branch 'fscrypt/master' into testing
+config: hexagon-randconfig-r041-20220307 (https://download.01.org/0day-ci/archive/20220308/202203081630.wdYO0IZw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=236f1f551e0af2da4cbfe428d92361244534b1f3
+        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+        git fetch --no-tags ebiggers testing
+        git checkout 236f1f551e0af2da4cbfe428d92361244534b1f3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/iomap/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> fs/iomap/direct-io.c:318:8: error: no member named 'bi_write_hint' in 'struct bio'
+                   bio->bi_write_hint = dio->iocb->ki_hint;
+                   ~~~  ^
+   1 error generated.
+
+
+vim +318 fs/iomap/direct-io.c
+
+c3b0e880bbfafa Naohiro Aota      2021-02-04  227  
+a6d3d49587d10d Christoph Hellwig 2021-08-10  228  static loff_t iomap_dio_bio_iter(const struct iomap_iter *iter,
+a6d3d49587d10d Christoph Hellwig 2021-08-10  229  		struct iomap_dio *dio)
+db074436f42196 Darrick J. Wong   2019-07-15  230  {
+a6d3d49587d10d Christoph Hellwig 2021-08-10  231  	const struct iomap *iomap = &iter->iomap;
+a6d3d49587d10d Christoph Hellwig 2021-08-10  232  	struct inode *inode = iter->inode;
+db074436f42196 Darrick J. Wong   2019-07-15  233  	unsigned int blkbits = blksize_bits(bdev_logical_block_size(iomap->bdev));
+db074436f42196 Darrick J. Wong   2019-07-15  234  	unsigned int fs_block_size = i_blocksize(inode), pad;
+db074436f42196 Darrick J. Wong   2019-07-15  235  	unsigned int align = iov_iter_alignment(dio->submit.iter);
+a6d3d49587d10d Christoph Hellwig 2021-08-10  236  	loff_t length = iomap_length(iter);
+a6d3d49587d10d Christoph Hellwig 2021-08-10  237  	loff_t pos = iter->pos;
+c3b0e880bbfafa Naohiro Aota      2021-02-04  238  	unsigned int bio_opf;
+db074436f42196 Darrick J. Wong   2019-07-15  239  	struct bio *bio;
+db074436f42196 Darrick J. Wong   2019-07-15  240  	bool need_zeroout = false;
+db074436f42196 Darrick J. Wong   2019-07-15  241  	bool use_fua = false;
+db074436f42196 Darrick J. Wong   2019-07-15  242  	int nr_pages, ret = 0;
+db074436f42196 Darrick J. Wong   2019-07-15  243  	size_t copied = 0;
+f550ee9b85fd47 Jan Kara          2019-11-26  244  	size_t orig_count;
+db074436f42196 Darrick J. Wong   2019-07-15  245  
+db074436f42196 Darrick J. Wong   2019-07-15  246  	if ((pos | length | align) & ((1 << blkbits) - 1))
+db074436f42196 Darrick J. Wong   2019-07-15  247  		return -EINVAL;
+db074436f42196 Darrick J. Wong   2019-07-15  248  
+db074436f42196 Darrick J. Wong   2019-07-15  249  	if (iomap->type == IOMAP_UNWRITTEN) {
+db074436f42196 Darrick J. Wong   2019-07-15  250  		dio->flags |= IOMAP_DIO_UNWRITTEN;
+db074436f42196 Darrick J. Wong   2019-07-15  251  		need_zeroout = true;
+db074436f42196 Darrick J. Wong   2019-07-15  252  	}
+db074436f42196 Darrick J. Wong   2019-07-15  253  
+db074436f42196 Darrick J. Wong   2019-07-15  254  	if (iomap->flags & IOMAP_F_SHARED)
+db074436f42196 Darrick J. Wong   2019-07-15  255  		dio->flags |= IOMAP_DIO_COW;
+db074436f42196 Darrick J. Wong   2019-07-15  256  
+db074436f42196 Darrick J. Wong   2019-07-15  257  	if (iomap->flags & IOMAP_F_NEW) {
+db074436f42196 Darrick J. Wong   2019-07-15  258  		need_zeroout = true;
+db074436f42196 Darrick J. Wong   2019-07-15  259  	} else if (iomap->type == IOMAP_MAPPED) {
+db074436f42196 Darrick J. Wong   2019-07-15  260  		/*
+db074436f42196 Darrick J. Wong   2019-07-15  261  		 * Use a FUA write if we need datasync semantics, this is a pure
+db074436f42196 Darrick J. Wong   2019-07-15  262  		 * data IO that doesn't require any metadata updates (including
+db074436f42196 Darrick J. Wong   2019-07-15  263  		 * after IO completion such as unwritten extent conversion) and
+db074436f42196 Darrick J. Wong   2019-07-15  264  		 * the underlying device supports FUA. This allows us to avoid
+db074436f42196 Darrick J. Wong   2019-07-15  265  		 * cache flushes on IO completion.
+db074436f42196 Darrick J. Wong   2019-07-15  266  		 */
+db074436f42196 Darrick J. Wong   2019-07-15  267  		if (!(iomap->flags & (IOMAP_F_SHARED|IOMAP_F_DIRTY)) &&
+db074436f42196 Darrick J. Wong   2019-07-15  268  		    (dio->flags & IOMAP_DIO_WRITE_FUA) &&
+db074436f42196 Darrick J. Wong   2019-07-15  269  		    blk_queue_fua(bdev_get_queue(iomap->bdev)))
+db074436f42196 Darrick J. Wong   2019-07-15  270  			use_fua = true;
+db074436f42196 Darrick J. Wong   2019-07-15  271  	}
+db074436f42196 Darrick J. Wong   2019-07-15  272  
+db074436f42196 Darrick J. Wong   2019-07-15  273  	/*
+f550ee9b85fd47 Jan Kara          2019-11-26  274  	 * Save the original count and trim the iter to just the extent we
+f550ee9b85fd47 Jan Kara          2019-11-26  275  	 * are operating on right now.  The iter will be re-expanded once
+f550ee9b85fd47 Jan Kara          2019-11-26  276  	 * we are done.
+db074436f42196 Darrick J. Wong   2019-07-15  277  	 */
+f550ee9b85fd47 Jan Kara          2019-11-26  278  	orig_count = iov_iter_count(dio->submit.iter);
+f550ee9b85fd47 Jan Kara          2019-11-26  279  	iov_iter_truncate(dio->submit.iter, length);
+db074436f42196 Darrick J. Wong   2019-07-15  280  
+3e1a88ec962592 Pavel Begunkov    2021-01-09  281  	if (!iov_iter_count(dio->submit.iter))
+f550ee9b85fd47 Jan Kara          2019-11-26  282  		goto out;
+db074436f42196 Darrick J. Wong   2019-07-15  283  
+f79d474905fec0 Christoph Hellwig 2021-10-12  284  	/*
+f79d474905fec0 Christoph Hellwig 2021-10-12  285  	 * We can only poll for single bio I/Os.
+f79d474905fec0 Christoph Hellwig 2021-10-12  286  	 */
+f79d474905fec0 Christoph Hellwig 2021-10-12  287  	if (need_zeroout ||
+f79d474905fec0 Christoph Hellwig 2021-10-12  288  	    ((dio->flags & IOMAP_DIO_WRITE) && pos >= i_size_read(inode)))
+f79d474905fec0 Christoph Hellwig 2021-10-12  289  		dio->iocb->ki_flags &= ~IOCB_HIPRI;
+f79d474905fec0 Christoph Hellwig 2021-10-12  290  
+db074436f42196 Darrick J. Wong   2019-07-15  291  	if (need_zeroout) {
+db074436f42196 Darrick J. Wong   2019-07-15  292  		/* zero out from the start of the block to the write offset */
+db074436f42196 Darrick J. Wong   2019-07-15  293  		pad = pos & (fs_block_size - 1);
+db074436f42196 Darrick J. Wong   2019-07-15  294  		if (pad)
+a6d3d49587d10d Christoph Hellwig 2021-08-10  295  			iomap_dio_zero(iter, dio, pos - pad, pad);
+db074436f42196 Darrick J. Wong   2019-07-15  296  	}
+db074436f42196 Darrick J. Wong   2019-07-15  297  
+c3b0e880bbfafa Naohiro Aota      2021-02-04  298  	/*
+c3b0e880bbfafa Naohiro Aota      2021-02-04  299  	 * Set the operation flags early so that bio_iov_iter_get_pages
+c3b0e880bbfafa Naohiro Aota      2021-02-04  300  	 * can set up the page vector appropriately for a ZONE_APPEND
+c3b0e880bbfafa Naohiro Aota      2021-02-04  301  	 * operation.
+c3b0e880bbfafa Naohiro Aota      2021-02-04  302  	 */
+c3b0e880bbfafa Naohiro Aota      2021-02-04  303  	bio_opf = iomap_dio_bio_opflags(dio, iomap, use_fua);
+c3b0e880bbfafa Naohiro Aota      2021-02-04  304  
+a8affc03a9b375 Christoph Hellwig 2021-03-11  305  	nr_pages = bio_iov_vecs_to_alloc(dio->submit.iter, BIO_MAX_VECS);
+db074436f42196 Darrick J. Wong   2019-07-15  306  	do {
+db074436f42196 Darrick J. Wong   2019-07-15  307  		size_t n;
+db074436f42196 Darrick J. Wong   2019-07-15  308  		if (dio->error) {
+db074436f42196 Darrick J. Wong   2019-07-15  309  			iov_iter_revert(dio->submit.iter, copied);
+f550ee9b85fd47 Jan Kara          2019-11-26  310  			copied = ret = 0;
+f550ee9b85fd47 Jan Kara          2019-11-26  311  			goto out;
+db074436f42196 Darrick J. Wong   2019-07-15  312  		}
+db074436f42196 Darrick J. Wong   2019-07-15  313  
+07888c665b405b Christoph Hellwig 2022-01-24  314  		bio = bio_alloc(iomap->bdev, nr_pages, bio_opf, GFP_KERNEL);
+489734ef94f4f7 Eric Biggers      2022-01-28  315  		fscrypt_set_bio_crypt_ctx(bio, inode, pos >> inode->i_blkbits,
+489734ef94f4f7 Eric Biggers      2022-01-28  316  					  GFP_KERNEL);
+db074436f42196 Darrick J. Wong   2019-07-15  317  		bio->bi_iter.bi_sector = iomap_sector(iomap, pos);
+db074436f42196 Darrick J. Wong   2019-07-15 @318  		bio->bi_write_hint = dio->iocb->ki_hint;
+db074436f42196 Darrick J. Wong   2019-07-15  319  		bio->bi_ioprio = dio->iocb->ki_ioprio;
+db074436f42196 Darrick J. Wong   2019-07-15  320  		bio->bi_private = dio;
+db074436f42196 Darrick J. Wong   2019-07-15  321  		bio->bi_end_io = iomap_dio_bio_end_io;
+db074436f42196 Darrick J. Wong   2019-07-15  322  
+f550ee9b85fd47 Jan Kara          2019-11-26  323  		ret = bio_iov_iter_get_pages(bio, dio->submit.iter);
+db074436f42196 Darrick J. Wong   2019-07-15  324  		if (unlikely(ret)) {
+db074436f42196 Darrick J. Wong   2019-07-15  325  			/*
+db074436f42196 Darrick J. Wong   2019-07-15  326  			 * We have to stop part way through an IO. We must fall
+db074436f42196 Darrick J. Wong   2019-07-15  327  			 * through to the sub-block tail zeroing here, otherwise
+db074436f42196 Darrick J. Wong   2019-07-15  328  			 * this short IO may expose stale data in the tail of
+db074436f42196 Darrick J. Wong   2019-07-15  329  			 * the block we haven't written data to.
+db074436f42196 Darrick J. Wong   2019-07-15  330  			 */
+db074436f42196 Darrick J. Wong   2019-07-15  331  			bio_put(bio);
+db074436f42196 Darrick J. Wong   2019-07-15  332  			goto zero_tail;
+db074436f42196 Darrick J. Wong   2019-07-15  333  		}
+db074436f42196 Darrick J. Wong   2019-07-15  334  
+db074436f42196 Darrick J. Wong   2019-07-15  335  		n = bio->bi_iter.bi_size;
+db074436f42196 Darrick J. Wong   2019-07-15  336  		if (dio->flags & IOMAP_DIO_WRITE) {
+db074436f42196 Darrick J. Wong   2019-07-15  337  			task_io_account_write(n);
+db074436f42196 Darrick J. Wong   2019-07-15  338  		} else {
+db074436f42196 Darrick J. Wong   2019-07-15  339  			if (dio->flags & IOMAP_DIO_DIRTY)
+db074436f42196 Darrick J. Wong   2019-07-15  340  				bio_set_pages_dirty(bio);
+db074436f42196 Darrick J. Wong   2019-07-15  341  		}
+db074436f42196 Darrick J. Wong   2019-07-15  342  
+db074436f42196 Darrick J. Wong   2019-07-15  343  		dio->size += n;
+db074436f42196 Darrick J. Wong   2019-07-15  344  		copied += n;
+db074436f42196 Darrick J. Wong   2019-07-15  345  
+3e1a88ec962592 Pavel Begunkov    2021-01-09  346  		nr_pages = bio_iov_vecs_to_alloc(dio->submit.iter,
+a8affc03a9b375 Christoph Hellwig 2021-03-11  347  						 BIO_MAX_VECS);
+f79d474905fec0 Christoph Hellwig 2021-10-12  348  		/*
+f79d474905fec0 Christoph Hellwig 2021-10-12  349  		 * We can only poll for single bio I/Os.
+f79d474905fec0 Christoph Hellwig 2021-10-12  350  		 */
+f79d474905fec0 Christoph Hellwig 2021-10-12  351  		if (nr_pages)
+f79d474905fec0 Christoph Hellwig 2021-10-12  352  			dio->iocb->ki_flags &= ~IOCB_HIPRI;
+a6d3d49587d10d Christoph Hellwig 2021-08-10  353  		iomap_dio_submit_bio(iter, dio, bio, pos);
+8cecd0ba854799 Goldwyn Rodrigues 2019-05-14  354  		pos += n;
+db074436f42196 Darrick J. Wong   2019-07-15  355  	} while (nr_pages);
+db074436f42196 Darrick J. Wong   2019-07-15  356  
+db074436f42196 Darrick J. Wong   2019-07-15  357  	/*
+db074436f42196 Darrick J. Wong   2019-07-15  358  	 * We need to zeroout the tail of a sub-block write if the extent type
+db074436f42196 Darrick J. Wong   2019-07-15  359  	 * requires zeroing or the write extends beyond EOF. If we don't zero
+db074436f42196 Darrick J. Wong   2019-07-15  360  	 * the block tail in the latter case, we can expose stale data via mmap
+db074436f42196 Darrick J. Wong   2019-07-15  361  	 * reads of the EOF block.
+db074436f42196 Darrick J. Wong   2019-07-15  362  	 */
+db074436f42196 Darrick J. Wong   2019-07-15  363  zero_tail:
+db074436f42196 Darrick J. Wong   2019-07-15  364  	if (need_zeroout ||
+db074436f42196 Darrick J. Wong   2019-07-15  365  	    ((dio->flags & IOMAP_DIO_WRITE) && pos >= i_size_read(inode))) {
+db074436f42196 Darrick J. Wong   2019-07-15  366  		/* zero out from the end of the write to the end of the block */
+db074436f42196 Darrick J. Wong   2019-07-15  367  		pad = pos & (fs_block_size - 1);
+db074436f42196 Darrick J. Wong   2019-07-15  368  		if (pad)
+a6d3d49587d10d Christoph Hellwig 2021-08-10  369  			iomap_dio_zero(iter, dio, pos, fs_block_size - pad);
+db074436f42196 Darrick J. Wong   2019-07-15  370  	}
+f550ee9b85fd47 Jan Kara          2019-11-26  371  out:
+f550ee9b85fd47 Jan Kara          2019-11-26  372  	/* Undo iter limitation to current extent */
+f550ee9b85fd47 Jan Kara          2019-11-26  373  	iov_iter_reexpand(dio->submit.iter, orig_count - copied);
+e9f930ac88a893 Jan Stancek       2019-11-11  374  	if (copied)
+e9f930ac88a893 Jan Stancek       2019-11-11  375  		return copied;
+e9f930ac88a893 Jan Stancek       2019-11-11  376  	return ret;
+db074436f42196 Darrick J. Wong   2019-07-15  377  }
+db074436f42196 Darrick J. Wong   2019-07-15  378  
+
+:::::: The code at line 318 was first introduced by commit
+:::::: db074436f421967f4f30cfbb6fbc2a728f3e62b3 iomap: move the direct IO code into a separate file
+
+:::::: TO: Darrick J. Wong <darrick.wong@oracle.com>
+:::::: CC: Darrick J. Wong <darrick.wong@oracle.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

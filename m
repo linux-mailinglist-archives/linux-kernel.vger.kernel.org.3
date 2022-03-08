@@ -2,370 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E08B4D1B82
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0D34D1B86
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347607AbiCHPTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S1347666AbiCHPUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiCHPTi (ORCPT
+        with ESMTP id S231816AbiCHPUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:19:38 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A4A4A928
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:18:40 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id qx21so39944182ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:18:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NUBCkBiY+0tJ4VuBewl7LfnbzjGwy2PAsOh1R0tzjbw=;
-        b=jPjzz/ciSsrFwizk/TxR9U2AEKTDlrk4VSxsOEvDb12jHdPMjrPc2yEreK1cFsug0G
-         h/rpxh8zFAgVlb2/BQ0/DNKlYREKNYnUu/4dwnHWp5LikZ7qRLdhI1tHBffV+h5uYro7
-         U+ej1V2HN3qetiSftP8bL82DQ2zLyPVFOQ9bEO4rYv/WvQRP8Gd10zJcGYHvqlGTSjhF
-         VGezST/w4Ns+p+djH5ClNEUz0Ovju2lu9latTei59XzXa8qyncmCtlwZb9/jC3rdNtrT
-         iNEWy1N3zQf2Ok27chvioGRnPrgt7/J4Q78bn/osZ3fiszi0H3XYxlWSZOT7p5UitA04
-         G4Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=NUBCkBiY+0tJ4VuBewl7LfnbzjGwy2PAsOh1R0tzjbw=;
-        b=t3U1vjWTt7lIZNsWsQ3P2gS+ArII/9H0GI5LIlG8JKhb0hZezKNxjOqlIXEsDoJtjU
-         mPdFPCmfa12/XNVzO6lY6yH9I8HgeQECvYgSpD5GTQuNKKkTUKftMhsH+4Ze9v/HJyCx
-         8UBo//zx7GjzB9vm3yiK52vNS1Pvm8ycxB7IQ/Liy/OoU37wPLuMh5upvyDkUhplQDLd
-         EOwkKO6cbhrVAUSCBotNTx54SZXr/w+U+wWxS5usI+FBZI1bzPtwyEzaQeZ67xS11EOQ
-         PLSpXhMZc606UV7RzCLTPyx4ZHNp3J2Q4/lljkvQZgjv1afI92k40O+vW7yBYUlo12yO
-         VfNg==
-X-Gm-Message-State: AOAM532qsB+6nJRkEJh1c2kSh085OOg5CvRNoXy25WmizJpWNFBr6y76
-        Tgt42JHvA6UdAksIdGqUUzE=
-X-Google-Smtp-Source: ABdhPJxOmkjVqpIBLzxb/V3vv3cbffYfs0OjFH10BOAhZLuZStat001uH9Q7OPIE5ycX224ToDtg+g==
-X-Received: by 2002:a17:906:dc10:b0:6da:f383:86ed with SMTP id yy16-20020a170906dc1000b006daf38386edmr13576533ejb.391.1646752719131;
-        Tue, 08 Mar 2022 07:18:39 -0800 (PST)
-Received: from m4.home (tor-exit-7.zbau.f3netze.de. [2a0b:f4c0:16c:7::1])
-        by smtp.gmail.com with ESMTPSA id gz20-20020a170907a05400b006d91b214235sm5998485ejc.185.2022.03.08.07.18.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 07:18:38 -0800 (PST)
-Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
-Received: from cavok by m4.home with local (Exim 4.94.2)
-        (envelope-from <cavok@localhost>)
-        id 1nRbbe-00047z-Hc; Tue, 08 Mar 2022 16:18:34 +0100
-Date:   Tue, 8 Mar 2022 16:18:34 +0100
-From:   Domenico Andreoli <domenico.andreoli@linux.com>
-To:     Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] binfmt_misc: add two-steps registration (opt-in)
-Message-ID: <YidzykfBmAVqVWTC@localhost>
-References: <Yh4fdijvNXE7K88c@localhost>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh4fdijvNXE7K88c@localhost>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 8 Mar 2022 10:20:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC224A930
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:19:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 822AB61542
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C52C340EB;
+        Tue,  8 Mar 2022 15:19:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646752758;
+        bh=8jwq3kkvGBzynWX0iT1N3O50YgssArZsyEuxNzyp438=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hTGv7AXIrhLQrpr+Ub8UnQ5IxhlE18OuUFWbeqJ25xxCzFkV5Dl8MFAyK5LZViCoM
+         dpNMWlDxZZuhcFJoBnXilStcs9pkVRCVSH9ktuySPKE1UdwZse0CMGp9bDd/FgGPCP
+         6D0tPjdomHKGZ1uhL/NmJBBqTKb7WsgNBsdCOem7f9KEtEqOu0HRSG/INHo6VyuBxl
+         AD+UrZR1ySbMY7TfwBWvN7P9qCRjJ++ToUsmlTcq8XXkKUhJApiWZH4zhZzDPLlYcH
+         6XIB3fdkElJQQfebYZmM5BqsqqH5RL6KWmlc537rzQMUQHF0q2lIGy6BTch3bb/+vQ
+         ZpbYvXKtsEp1g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nRbcK-00D6Nd-Jm; Tue, 08 Mar 2022 15:19:16 +0000
+Date:   Tue, 08 Mar 2022 15:19:16 +0000
+Message-ID: <87y21kzd3f.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, f.hetzelt@tu-berlin.de,
+        david.kaplan@amd.com, konrad.wilk@oracle.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>, keirf@google.com
+Subject: Re: [PATCH V3 04/10] virtio_pci: harden MSI-X interrupts
+In-Reply-To: <20211019070152.8236-5-jasowang@redhat.com>
+References: <20211019070152.8236-1-jasowang@redhat.com>
+        <20211019070152.8236-5-jasowang@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, jasowang@redhat.com, mst@redhat.com, virtualization@lists.linux-foundation.org, linux-kernel@vger.kernel.org, f.hetzelt@tu-berlin.de, david.kaplan@amd.com, konrad.wilk@oracle.com, peterz@infradead.org, paulmck@kernel.org, keirf@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric and Kees,
-
-On Tue, Mar 01, 2022 at 02:28:22PM +0100, Domenico Andreoli wrote:
-> From: Domenico Andreoli <domenico.andreoli@linux.com>
+On Tue, 19 Oct 2021 08:01:46 +0100,
+Jason Wang <jasowang@redhat.com> wrote:
 > 
-> Experimenting with new interpreter configurations can lead to annoying
-> failures, when the system is left unable to load ELF binaries power
-> cycling is the only way to get it back operational.
+> We used to synchronize pending MSI-X irq handlers via
+> synchronize_irq(), this may not work for the untrusted device which
+> may keep sending interrupts after reset which may lead unexpected
+> results. Similarly, we should not enable MSI-X interrupt until the
+> device is ready. So this patch fixes those two issues by:
 > 
-> This patch tries to mitigate such conditions by adding an opt-in
-> two-steps registration.
+> 1) switching to use disable_irq() to prevent the virtio interrupt
+>    handlers to be called after the device is reset.
+> 2) using IRQF_NO_AUTOEN and enable the MSI-X irq during .ready()
 > 
-> A new optional field is added to the configuration string, it's an
-> expiration interval for the newly added interpreter. If the user is
-> not able to confirm in time, possibly because the system is broken,
-> the new interpreter is automatically disabled.
-
-I was wondering whether, maybe, likely, you missed this patch of mine.
-
-It would be great if you could just ack (or nack) it for later.
-
-Thanks!
-Domenico
-
+> This can make sure the virtio interrupt handler won't be called before
+> virtio_device_ready() and after reset.
 > 
-> Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 > ---
->  Documentation/admin-guide/binfmt-misc.rst |   12 +++
->  fs/binfmt_misc.c                          |  112 ++++++++++++++++++++++++++++--
->  2 files changed, 113 insertions(+), 11 deletions(-)
+>  drivers/virtio/virtio_pci_common.c | 27 +++++++++++++++++++++------
+>  drivers/virtio/virtio_pci_common.h |  6 ++++--
+>  drivers/virtio/virtio_pci_legacy.c |  5 +++--
+>  drivers/virtio/virtio_pci_modern.c |  6 ++++--
+>  4 files changed, 32 insertions(+), 12 deletions(-)
 > 
-> Index: b/Documentation/admin-guide/binfmt-misc.rst
-> ===================================================================
-> --- a/Documentation/admin-guide/binfmt-misc.rst
-> +++ b/Documentation/admin-guide/binfmt-misc.rst
-> @@ -16,8 +16,8 @@ First you must mount binfmt_misc::
->  	mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
+> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+> index b35bb2d57f62..8d8f83aca721 100644
+> --- a/drivers/virtio/virtio_pci_common.c
+> +++ b/drivers/virtio/virtio_pci_common.c
+> @@ -24,8 +24,8 @@ MODULE_PARM_DESC(force_legacy,
+>  		 "Force legacy mode for transitional virtio 1 devices");
+>  #endif
 >  
->  To actually register a new binary type, you have to set up a string looking like
-> -``:name:type:offset:magic:mask:interpreter:flags`` (where you can choose the
-> -``:`` upon your needs) and echo it to ``/proc/sys/fs/binfmt_misc/register``.
-> +``:name:type:offset:magic:mask:interpreter:flags:timeout`` (where you can choose
-> +the ``:`` upon your needs) and echo it to ``/proc/sys/fs/binfmt_misc/register``.
->  
->  Here is what the fields mean:
->  
-> @@ -88,6 +88,14 @@ Here is what the fields mean:
->  	    emulation is installed and uses the opened image to spawn the
->  	    emulator, meaning it is always available once installed,
->  	    regardless of how the environment changes.
-> +- ``timeout``
-> +  is an optional field; the newly added interpreter is automatically
-> +  disabled after the specified number of seconds. To cancel such
-> +  count down, cat or echo something to ``/proc/.../the_name``.  This
-> +  registration in two steps allows recovering a system left unusable
-> +  by some wrong configuration. A timeout of 0 seconds effectively adds
-> +  a disabled interpreter.  Values smaller than 0 or bigger than 120
-> +  are invalid.
->  
->  
->  There are some restrictions:
-> Index: b/fs/binfmt_misc.c
-> ===================================================================
-> --- a/fs/binfmt_misc.c
-> +++ b/fs/binfmt_misc.c
-> @@ -27,6 +27,8 @@
->  #include <linux/syscalls.h>
->  #include <linux/fs.h>
->  #include <linux/uaccess.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/timer.h>
->  
->  #include "internal.h"
->  
-> @@ -49,6 +51,8 @@ enum {Enabled, Magic};
->  #define MISC_FMT_CREDENTIALS (1 << 29)
->  #define MISC_FMT_OPEN_FILE (1 << 28)
->  
-> +struct node_timer;
-> +
->  typedef struct {
->  	struct list_head list;
->  	unsigned long flags;		/* type, status, etc. */
-> @@ -60,8 +64,15 @@ typedef struct {
->  	char *name;
->  	struct dentry *dentry;
->  	struct file *interp_file;
-> +	struct node_timer *auto_disable;
-> +	spinlock_t auto_disable_lock;
->  } Node;
->  
-> +struct node_timer {
-> +	struct timer_list timer;
-> +	Node *node;
-> +};
-> +
->  static DEFINE_RWLOCK(entries_lock);
->  static struct file_system_type bm_fs_type;
->  static struct vfsmount *bm_mnt;
-> @@ -69,19 +80,30 @@ static int entry_count;
->  
->  /*
->   * Max length of the register string.  Determined by:
-> - *  - 7 delimiters
-> - *  - name:   ~50 bytes
-> - *  - type:   1 byte
-> - *  - offset: 3 bytes (has to be smaller than BINPRM_BUF_SIZE)
-> - *  - magic:  128 bytes (512 in escaped form)
-> - *  - mask:   128 bytes (512 in escaped form)
-> - *  - interp: ~50 bytes
-> - *  - flags:  5 bytes
-> + *  - 8 delimiters
-> + *  - name:    ~50 bytes
-> + *  - type:    1 byte
-> + *  - offset:  3 bytes (has to be smaller than BINPRM_BUF_SIZE)
-> + *  - magic:   128 bytes (512 in escaped form)
-> + *  - mask:    128 bytes (512 in escaped form)
-> + *  - interp:  ~50 bytes
-> + *  - flags:   5 bytes
-> + *  - timeout: 3 bytes
->   * Round that up a bit, and then back off to hold the internal data
->   * (like struct Node).
->   */
->  #define MAX_REGISTER_LENGTH 1920
->  
-> +#define MAX_AUTO_DISABLE_TIMEOUT 120
-> +
-> +static void auto_disable_timer_fn(struct timer_list *t)
-> +{
-> +	struct node_timer *timer = container_of(t, struct node_timer, timer);
-> +
-> +	clear_bit(Enabled, &timer->node->flags);
-> +	pr_info("%s: auto-disabled\n", timer->node->name);
-> +}
-> +
->  /*
->   * Check if we support the binfmt
->   * if we do, return the node, else NULL
-> @@ -266,6 +288,41 @@ static char *check_special_flags(char *s
->  	return p;
->  }
->  
-> +static char *setup_auto_disable(char *p, char *endp, Node *e)
-> +{
-> +	unsigned int timeout;
-> +	char buf[4] = {0};
-> +
-> +	while (endp[-1] == '\n')
-> +		endp--;
-> +	if (p >= endp || *p != ':' || ++p == endp)
-> +		return p;
-> +
-> +	endp = min(endp, p + sizeof(buf) - 1);
-> +	memcpy(buf, p, (size_t) (endp - p));
-> +
-> +	if (kstrtouint(buf, 10, &timeout) || timeout > MAX_AUTO_DISABLE_TIMEOUT) {
-> +		pr_info("%s: invalid timeout: %s\n", e->name, buf);
-> +		return p;
-> +	}
-> +
-> +	if (timeout == 0) {
-> +		e->flags &= ~(1 << Enabled);
-> +		return endp;
-> +	}
-> +
-> +	e->auto_disable = kmalloc(sizeof(struct node_timer), GFP_KERNEL);
-> +	if (!e->auto_disable)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	pr_info("%s: auto-disable in %u seconds\n", e->name, timeout);
-> +
-> +	timer_setup(&e->auto_disable->timer, auto_disable_timer_fn, 0);
-> +	e->auto_disable->timer.expires = jiffies + timeout * HZ;
-> +	e->auto_disable->node = e;
-> +	return endp;
-> +}
-> +
->  /*
->   * This registers a new binary format, it recognises the syntax
->   * ':name:type:offset:magic:mask:interpreter:flags'
-> @@ -273,7 +330,7 @@ static char *check_special_flags(char *s
->   */
->  static Node *create_entry(const char __user *buffer, size_t count)
+> -/* wait for pending irq handlers */
+> -void vp_synchronize_vectors(struct virtio_device *vdev)
+> +/* disable irq handlers */
+> +void vp_disable_cbs(struct virtio_device *vdev)
 >  {
-> -	Node *e;
-> +	Node *e = NULL;
->  	int memsize, err;
->  	char *buf, *p;
->  	char del;
-> @@ -297,6 +354,8 @@ static Node *create_entry(const char __u
->  	if (copy_from_user(buf, buffer, count))
->  		goto efault;
+>  	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+>  	int i;
+> @@ -34,7 +34,20 @@ void vp_synchronize_vectors(struct virtio_device *vdev)
+>  		synchronize_irq(vp_dev->pci_dev->irq);
 >  
-> +	spin_lock_init(&e->auto_disable_lock);
-> +
->  	del = *p++;	/* delimeter */
->  
->  	pr_debug("register: delim: %#x {%c}\n", del, del);
-> @@ -454,6 +513,14 @@ static Node *create_entry(const char __u
->  
->  	/* Parse the 'flags' field. */
->  	p = check_special_flags(p, e);
-> +
-> +	/* Parse the 'timeout' field and init the auto-disable timer. */
-> +	p = setup_auto_disable(p, buf + count, e);
-> +	if (IS_ERR(p)) {
-> +		err = PTR_ERR(p);
-> +		goto out;
-> +	}
-> +
->  	if (*p == '\n')
->  		p++;
->  	if (p != buf + count)
-> @@ -462,12 +529,15 @@ static Node *create_entry(const char __u
->  	return e;
->  
->  out:
-> +	kfree(e);
->  	return ERR_PTR(err);
->  
->  efault:
->  	kfree(e);
->  	return ERR_PTR(-EFAULT);
->  einval:
-> +	if (e)
-> +		kfree(e->auto_disable);
->  	kfree(e);
->  	return ERR_PTR(-EINVAL);
->  }
-> @@ -499,6 +569,21 @@ static int parse_command(const char __us
->  
->  /* generic stuff */
->  
-> +static void cancel_auto_disable(Node *e)
-> +{
-> +	struct node_timer *auto_disable = NULL;
-> +
-> +	spin_lock(&e->auto_disable_lock);
-> +	swap(e->auto_disable, auto_disable);
-> +	spin_unlock(&e->auto_disable_lock);
-> +
-> +	if (auto_disable) {
-> +		if (del_timer_sync(&auto_disable->timer))
-> +			pr_info("%s: cancelled auto-disable\n", e->name);
-> +		kfree(auto_disable);
-> +	}
+>  	for (i = 0; i < vp_dev->msix_vectors; ++i)
+> -		synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
+> +		disable_irq(pci_irq_vector(vp_dev->pci_dev, i));
 > +}
 > +
->  static void entry_status(Node *e, char *page)
->  {
->  	char *dp = page;
-> @@ -559,6 +644,8 @@ static void bm_evict_inode(struct inode
->  
->  	if (e && e->flags & MISC_FMT_OPEN_FILE)
->  		filp_close(e->interp_file, NULL);
-> +	if (e)
-> +		cancel_auto_disable(e);
->  
->  	clear_inode(inode);
->  	kfree(e);
-> @@ -588,6 +675,8 @@ bm_entry_read(struct file *file, char __
->  	ssize_t res;
->  	char *page;
->  
-> +	cancel_auto_disable(e);
+> +/* enable irq handlers */
+> +void vp_enable_cbs(struct virtio_device *vdev)
+> +{
+> +	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+> +	int i;
 > +
->  	page = (char *) __get_free_page(GFP_KERNEL);
->  	if (!page)
->  		return -ENOMEM;
-> @@ -607,6 +696,8 @@ static ssize_t bm_entry_write(struct fil
->  	Node *e = file_inode(file)->i_private;
->  	int res = parse_command(buffer, count);
->  
-> +	cancel_auto_disable(e);
+> +	if (vp_dev->intx_enabled)
+> +		return;
 > +
->  	switch (res) {
->  	case 1:
->  		/* Disable this handler. */
-> @@ -699,6 +790,9 @@ static ssize_t bm_register_write(struct
->  	list_add(&e->list, &entries);
->  	write_unlock(&entries_lock);
->  
-> +	if (e->auto_disable)
-> +		add_timer(&e->auto_disable->timer);
-> +
->  	err = 0;
->  out2:
->  	dput(dentry);
+> +	for (i = 0; i < vp_dev->msix_vectors; ++i)
+> +		enable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+
+This results in a splat at boot time if you set maxcpus=<whatever>,
+see below. Enabling interrupts that are affinity managed is *bad*. You
+don't even know whether the CPU which is supposed to handle this is
+online or not.
+
+The core kernel notices it, shouts and keeps the interrupt disabled,
+but this should be fixed. The whole point of managed interrupts is to
+let them be dealt with outside of the drivers, and tied into the CPUs
+being brought up and down. If virtio needs (for one reason or another)
+to manage interrupts on its own, so be it. But this patch isn't the
+way to do it, I'm afraid.
+
+	M.
+
+[    3.434849] ------------[ cut here ]------------
+[    3.434850] WARNING: CPU: 0 PID: 93 at kernel/irq/chip.c:210 irq_startup+0x10
+e/0x120
+[    3.434861] Modules linked in: virtio_net(E+) net_failover(E) failover(E) vir
+tio_blk(E+) bochs(E+) drm_vram_helper(E) drm_ttm_helper(E) ttm(E) ahci(E+) libah
+ci(E) virtio_pci(E) virtio_pci_legacy_dev(E) virtio_pci_modern_dev(E) virtio(E) 
+drm_kms_helper(E) cec(E) libata(E) crct10dif_pclmul(E) crct10dif_common(E) crc32
+_pclmul(E) scsi_mod(E) i2c_i801(E) crc32c_intel(E) psmouse(E) i2c_smbus(E) scsi_
+common(E) lpc_ich(E) virtio_ring(E) drm(E) button(E)
+[    3.434890] CPU: 0 PID: 93 Comm: systemd-udevd Tainted: G            E     5.
+17.0-rc7-00020-gea4424be1688 #63
+[    3.434893] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02
+/06/2015
+[    3.434897] RIP: 0010:irq_startup+0x10e/0x120
+[    3.434904] Code: c0 75 2b 4c 89 e7 31 d2 4c 89 ee e8 dc c5 ff ff 48 89 ef e8
+ 94 fe ff ff 41 89 c4 e9 33 ff ff ff e8 e7 ca ff ff e9 50 ff ff ff <0f> 0b eb ac
+ 0f 0b eb a8 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00
+[    3.434906] RSP: 0018:ffff972c402bbbf0 EFLAGS: 00010002
+[    3.434908] RAX: 0000000000000004 RBX: 0000000000000001 RCX: 0000000000000040
+[    3.434912] RDX: 0000000000000000 RSI: ffffffffa768dee0 RDI: ffff8bcf8ce34648
+[    3.434913] RBP: ffff8bcfb007a800 R08: 0000000000000004 R09: ffffffffa74cb828
+[    3.434915] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+[    3.434916] R13: ffff8bcf8ce34648 R14: ffff8bcf8d185c70 R15: 0000000000000200
+[    3.434918] FS:  00007f5b3179f8c0(0000) GS:ffff8bcffbc00000(0000) knlGS:00000
+00000000000
+[    3.434919] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    3.434921] CR2: 000055ca47bab6b8 CR3: 000000017bc40003 CR4: 0000000000170ef0
+[    3.434928] Call Trace:
+[    3.434936]  <TASK>
+[    3.434938]  enable_irq+0x48/0x90
+[    3.434943]  vp_enable_cbs+0x36/0x70 [virtio_pci]
+[    3.434948]  virtblk_probe+0x457/0x7dc [virtio_blk]
+[    3.434954]  virtio_dev_probe+0x1ae/0x280 [virtio]
+[    3.434959]  really_probe+0x1f5/0x3d0
+[    3.434966]  __driver_probe_device+0xfe/0x180
+[    3.434969]  driver_probe_device+0x1e/0x90
+[    3.434971]  __driver_attach+0xc0/0x1c0
+[    3.434974]  ? __device_attach_driver+0xe0/0xe0
+[    3.434976]  ? __device_attach_driver+0xe0/0xe0
+[    3.434978]  bus_for_each_dev+0x78/0xc0
+[    3.434982]  bus_add_driver+0x149/0x1e0
+[    3.434985]  driver_register+0x8b/0xe0
+[    3.434987]  ? 0xffffffffc01aa000
+[    3.434990]  init+0x52/0x1000 [virtio_blk]
+[    3.434994]  do_one_initcall+0x44/0x200
+[    3.435001]  ? kmem_cache_alloc_trace+0x300/0x400
+[    3.435006]  do_init_module+0x4c/0x260
+[    3.435013]  __do_sys_finit_module+0xb4/0x120
+[    3.435018]  do_syscall_64+0x3b/0xc0
+[    3.435027]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[    3.435037] RIP: 0033:0x7f5b31c589b9
+[    3.435040] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8
+ 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0
+ ff ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
+[    3.435042] RSP: 002b:00007ffc608fc198 EFLAGS: 00000246 ORIG_RAX: 00000000000
+00139
+[    3.435045] RAX: ffffffffffffffda RBX: 000055ca47ba8700 RCX: 00007f5b31c589b9
+[    3.435046] RDX: 0000000000000000 RSI: 00007f5b31de3e2d RDI: 0000000000000005
+[    3.435048] RBP: 0000000000020000 R08: 0000000000000000 R09: 000055ca47ba9030
+[    3.435049] R10: 0000000000000005 R11: 0000000000000246 R12: 00007f5b31de3e2d
+[    3.435050] R13: 0000000000000000 R14: 000055ca47ba7060 R15: 000055ca47ba8700
+[    3.435053]  </TASK>
+[    3.435059] ---[ end trace 0000000000000000 ]---
+[    3.440593]  vda: vda1 vda2 vda3
+[    3.445283] scsi host0: Virtio SCSI HBA
+[    3.450373] scsi 0:0:0:0: CD-ROM            QEMU     QEMU CD-ROM      2.5+ PQ
+: 0 ANSI: 5
 
 -- 
-rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
-ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+Without deviation from the norm, progress is not possible.

@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8114D2219
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E084D221C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348541AbiCHUB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
+        id S1350111AbiCHUDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbiCHUBx (ORCPT
+        with ESMTP id S235269AbiCHUD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:01:53 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23C939812;
-        Tue,  8 Mar 2022 12:00:56 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so309577pjl.4;
-        Tue, 08 Mar 2022 12:00:56 -0800 (PST)
+        Tue, 8 Mar 2022 15:03:28 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D756389
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:02:30 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id e2so60724pls.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:02:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=3DrXHfJUJQiuAbxg8KAX894kTH0h17V1hufjnFg1QDI=;
-        b=VN+sDijVQqGSDFhwhTtC5smbj+eIxnY/ezsixNZjHygdNQ/oJceOfW03siodezRfbO
-         yFHSrg9b1D2APOQN8O0jw177Wwy5xyZL1XrEeyZTjz7rht2jwkVg3+RKPCz/lS0zHbkF
-         vk6W34irtH4n9YShvv56AnPmfONpg4DwBakoaECoclcacClzqdKsEk4XlO6+ecArqIja
-         5TVDpiz5EQPlJu+jU3EPLBRcqhTCfZr1iA6JRl0C4V3DdsUua1gthqWcPjQ5N7Gq/sl/
-         hiQGnMNf/2zJB7as8DKEU0VrHcFTejTH6lj1wH+0WtW7txUbYzv9BFL0gqa+WXtaDtp6
-         aJEA==
+        bh=BQc9qf7Jvr1scII8R10TwmoX8GBVxNzjAKC9tzRHQJw=;
+        b=j1Vw88ktDAfHqoj70X1xbgvDOWX76yic7J8vvqFuJQBkx2U/WRnmXK0hVpiQg/+dYI
+         rF7/AEzyVQl76IMfpOGDsmHBTSGBWmLc8TxHeQlHklPZAvEGvskagQ4stLGskbvQGo58
+         WnFBpPqTerNDJllxf+BI8exCnH7bM6nJJfP4DHgchQj0bxRTf7lM3pXcJXRhC5WvL5WF
+         WX9hXBwlG4Faz/2RK3FuUu2Jp/hHc3BhUm22lk6fUH2s+0t9yiyfUvzaoRykpjJ1joZA
+         42+A2V10LI5AoYj6wRE/pi2xw25e3HO5tf4Ht4IP4YFLciZguKgzd8b+AasW2WWu8Nkb
+         +pfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=3DrXHfJUJQiuAbxg8KAX894kTH0h17V1hufjnFg1QDI=;
-        b=QZowkWD62V+gHRm/xZ1F27vK+oi6oXfVVWLJk/9WoPjQFEFV5onb526BCdm0IA97Ma
-         CqbDM4JalMRVN4XkUwznQbpgzrGkDAKWkv/gpbVvvUo4X4Z4ZVUTEHehSdwWiK+VlTUk
-         MfSHXmm9//qpSs7aw9p3QBdG5CV6gvD/nBNJG8qJCIws0qIuFV4MqYvYZrZY04V9duU+
-         SLlXvKvXdXg2EpfjTetZqZDxEzOhhSSgkHuyyv/qQwUC0rpJUOR0eRI9mf5qH5hjpzk0
-         22oaOIKFeXul2UneYJVRm8inrroQcK6jLLuW7V6o5tFbmSweWXQZ/lsrWWOHwSC/bCpo
-         DxsQ==
-X-Gm-Message-State: AOAM530dqdlj+boMX10DIhtMAGZVb71vzHNrI6kMV6p0JRq5EY/TW8KK
-        rm3WPJSjiN7+7GtUZbxwXAyPAkkaHRg=
-X-Google-Smtp-Source: ABdhPJwYiL6rALPCHvlNwDP6UwLMpGvSxVMWNVexoPEOAxh7jbk07rGvVD321YUhkDWJVpRvvBU/5A==
-X-Received: by 2002:a17:90b:1b43:b0:1bf:6180:367a with SMTP id nv3-20020a17090b1b4300b001bf6180367amr6583581pjb.172.1646769655974;
-        Tue, 08 Mar 2022 12:00:55 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:53ea])
-        by smtp.gmail.com with ESMTPSA id l188-20020a6225c5000000b004f715e38283sm6439479pfl.63.2022.03.08.12.00.53
+        bh=BQc9qf7Jvr1scII8R10TwmoX8GBVxNzjAKC9tzRHQJw=;
+        b=NcF8nos69F+mbWkRAoGBjCVOvPq/jB3fa2XBVMfSQUk14x/NEOVdy6CUQfhtrZyYL4
+         /0iS1aWtF+ywN78hWF9nMKbKpy8OXAlKyg0XJr/SNXn7Nyb+TOK6Y3hbgKQevNFr8mzF
+         vNJC9eoJrFmuyCOMz4yf8jCNFdl7SJxo8dG/R2+BmNtUd0JD1jt/lU7EOw/uo34G8onO
+         oXJCfXp7hE/hvQfscC0qokJDBAt70pw+fVVkIiR4nxoH4v5lw8H6JN+qqK9C17hlcFLh
+         K+p/u2oonvlMAh1fOdJgwzjhnrajQb5GC96l5+QHMFqVBBxVPP55AYNAFhvHDPpkoqU8
+         FptA==
+X-Gm-Message-State: AOAM532ZQEitIs8sK/4hdi0M0wcWKKdcrOSx5E6iREJTn7aQ1IjM0oaJ
+        Oc12TSSoa5zjiVBoFFffjFLWFA==
+X-Google-Smtp-Source: ABdhPJx0DErx4byKNhlX+0jvcUmeDNga+OsQwZ/c3bjRyuUiARmCZ70+I7Qs5s8pCYg23pJwHMYdlA==
+X-Received: by 2002:a17:902:714b:b0:151:d8fa:fd98 with SMTP id u11-20020a170902714b00b00151d8fafd98mr16662243plm.146.1646769750140;
+        Tue, 08 Mar 2022 12:02:30 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id mp10-20020a17090b190a00b001bf8453aea8sm3562863pjb.42.2022.03.08.12.02.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 12:00:55 -0800 (PST)
-Date:   Tue, 8 Mar 2022 12:00:52 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
-References: <20220308153011.021123062@infradead.org>
+        Tue, 08 Mar 2022 12:02:29 -0800 (PST)
+Date:   Tue, 8 Mar 2022 20:02:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+Subject: Re: [PATCH v2 25/25] KVM: x86/mmu: extract initialization of the
+ page walking data
+Message-ID: <Yie2UmdzumoVNWGA@google.com>
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-26-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220308153011.021123062@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220221162243.683208-26-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,32 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
-> Hopefully last posting...
-> 
-> Since last time:
-> 
->  - updated the ftrace_location() patch (naveen, rostedt)
->  - added a few comments and clarifications (bpetkov)
->  - disable jump-tables (joao)
->  - verified clang-14-rc2 works
->  - fixed a whole bunch of objtool unreachable insn issue
->  - picked up a few more tags
-> 
-> Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+On Mon, Feb 21, 2022, Paolo Bonzini wrote:
+> +static void kvm_vcpu_init_walker(struct kvm_vcpu *vcpu,
+> +				 struct kvm_mmu *mmu,
+> +				 union kvm_mmu_paging_mode new_mode)
 
-I've tried to test it.
-Applied the first 23 patches, since patch 24 failed to apply to bpf and bpf-next trees.
-selftest/bpf/test_progs
-shows that all bpf trampoline tests are failing and
-eventually the kernel is crashing:
-[   53.040582] RIP: 0010:do_init_module+0x9/0x6f0
-[   53.052044] Call Trace:
-[   53.052319]  <TASK>
-[   53.052559]  bpf_trampoline_6442471381_0+0x32/0x1000
-[   53.053117]  do_init_module+0x5/0x6f0
-[   53.053550]  load_module+0x77c0/0x9c00
+kvm_vcpu_init_walker() is a rather odd and almost maliciously obtuse.  We're not
+short on space for this one, so how about?
 
-I havne't had time to debug what's going on.
+static void kvm_mmu_init_guest_walker(struct kvm_vcpu *vcpu,
+				      struct kvm_mmu *mmu,
+				      union kvm_mmu_paging_mode new_mode)
+>  void kvm_init_mmu(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
+>  	union kvm_mmu_paging_mode cpu_mode = kvm_calc_cpu_mode(vcpu, &regs);
+>  
+> +	kvm_vcpu_init_walker(vcpu, vcpu->arch.walk_mmu, cpu_mode);
+>  	if (mmu_is_nested(vcpu))
+> -		init_kvm_nested_mmu(vcpu, cpu_mode);
+> -	else if (tdp_enabled)
+> +		return;
+
+Nice!  I really like that this highlights that the nested_mmu crud is just for
+the walker.  Can you also add a comment here explaining that part?
+
+> +
+> +	if (tdp_enabled)
+>  		init_kvm_tdp_mmu(vcpu, cpu_mode);
+>  	else
+>  		init_kvm_softmmu(vcpu, cpu_mode);
+> -- 
+> 2.31.1
+> 

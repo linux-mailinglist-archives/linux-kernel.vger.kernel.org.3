@@ -2,518 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6E94D1F9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8964D1F9D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345544AbiCHSEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S245255AbiCHSEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243267AbiCHSET (ORCPT
+        with ESMTP id S234429AbiCHSES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:04:19 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7BB35DD0
+        Tue, 8 Mar 2022 13:04:18 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B13587B
         for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:03:20 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 25E953F627
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 18:03:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646762599;
-        bh=Tisl+WndR9fLfj1x+KURxGQSHZvDWzQQbcBNVfUBQDA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=GkQNQXeLd2dCmw0Ka+tp39UPI279h9eriHaypEhCWhtgqB0vDmkYaHYCN/MyhZGAV
-         lmbKa0GvSSwdvelqpgdWDdYlYCByaxmkIQnH/a0bp0ha72D/D+fvNTCMQAvImDeVPw
-         9zsM2DmcTZsmCz3XcanqVZ7YwwnlrcWAvBBYKBjbTTH6U8S9+qs0irU/sAB3Dfl9mQ
-         VTyhsQFf3OoNqjJSey1XFtNiKkraY/n2bxLyT8ChoeI5VVJlr6QgOjMXwkwGUFEvin
-         1Wt3MM7LgLAfvQl5Qd2T5XmzVTuXc2a8bGZ8wy9zh3UhDsEe5MQUSKYbne6hDpNx3C
-         sBsTovE1aWFlw==
-Received: by mail-ej1-f72.google.com with SMTP id y5-20020a1709060a8500b006da9258a34cso7327457ejf.21
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:03:19 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id e27-20020a056602045b00b00645bd576184so5483278iov.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:03:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Tisl+WndR9fLfj1x+KURxGQSHZvDWzQQbcBNVfUBQDA=;
-        b=f3rd5GLiDv5F2ov/fO/sed/q1lnIG2C892cSPQUbi0bz5r1d/koXsRSPTde5hOXHKz
-         C8mlQVlpSS2U6bwl6yCO/Hh8ErfYs1ZuhIFca2kNs2oYPxUJo4X0PfVGi6FM2WgR7c1x
-         n0IulYPAVL85cY2Ms88Ctwu30thvTCb9E97FhZq/lMaz7hzCK0qpbE2DNZiiRXTo8ysn
-         pdHYI4sO70nzn7cWJBjp8ZMTCY6X1dFybKcqyH6YOET/BTRvEJVZVgaDk7m+vpeNYLrB
-         VjoDvZlv/CLIQVPMmzYVJ5CggOUl7LHl90xNOz30n9Za8gpS2Xq5FKvtU/h3F5CHRrlr
-         B/oA==
-X-Gm-Message-State: AOAM533ryJHPv8t+6zFrsSxlhdsRQHEDPjJTkOYGA0zu9utUa+oo4fV5
-        ZQrLXe53luL7Tausr8Vrhj38sTbnvLsveB6tahZR62WO0h7oaXtj+gDxs0rvnoWSvvkWqlPh/iY
-        IZVnXzqZEqvKUhwVlEu0EQlwI64oCpB5Si+40tZuysQ==
-X-Received: by 2002:a05:6402:1341:b0:407:cece:49f8 with SMTP id y1-20020a056402134100b00407cece49f8mr17549302edw.152.1646762598331;
-        Tue, 08 Mar 2022 10:03:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzzWIShLsLMuMK417z7vwAMWu0SqY3qjifpkylutmMwc9NdrSIMrun4fkCbePE9o4994GbZHA==
-X-Received: by 2002:a05:6402:1341:b0:407:cece:49f8 with SMTP id y1-20020a056402134100b00407cece49f8mr17549230edw.152.1646762597802;
-        Tue, 08 Mar 2022 10:03:17 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id kv9-20020a17090778c900b006da693d5e91sm6056225ejc.122.2022.03.08.10.03.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 10:03:16 -0800 (PST)
-Message-ID: <bf59a2bc-a708-27de-866a-346085dcee7d@canonical.com>
-Date:   Tue, 8 Mar 2022 19:03:15 +0100
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=RWf3+dpfL4savAt5Px6y0ovjoV7YIU8rixiN7rFHStk=;
+        b=Q5MP14T9v/R/d6jGwWLlzN0JaDv4OERnGo140puptwmeybeVd6hEmlwk2gc+gQQZNg
+         Ak0zhKtqgUZygJMRJ5ye3sijqmIavgCA0C4Gv2seUxEEbjkiR1X3mtAkoEi4hujIc8fk
+         0+90VYj3gZGS5U4XHNiWX7gFcePl8oqSF9J5EMT+iHtuv5hx9jetDSV8A5mWn/zvEl6D
+         ZzKjJDkK7vFjYLjWxrJn/0euIBy6LoMOEg06SqsRPizExf115LRoq64ZOUbhrGYb0WIZ
+         KaLEEF1fCTCoIGR51/Y+24wMiwvY/vcTULi3vw2OYYA9sHPKla5E1KDWfDrlQS/U6Pyb
+         CmwQ==
+X-Gm-Message-State: AOAM530boXUIF/OxB0ei86T+a7eDBRyjwKupaRK2BYtiJaRRGZjMz9yp
+        9tdhBBFJ0YgdGCtkcZxRb2TvRHFd7lTN1kGU1FDYHm5ZpblU
+X-Google-Smtp-Source: ABdhPJy4Ai5tCX7c+iCDoThOd+ECopfXJuj3wbnY+m8nhFrCAzjiieezsy3GPL8H/zYLgg3S4Lk3Pi3cvxkFIZ2aOigkweYPAnXo
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 01/15] dt-bindings: devfreq: rk3399_dmc: Convert to
- YAML
-Content-Language: en-US
-To:     Brian Norris <briannorris@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Lin Huang <hl@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
-        Derek Basehore <dbasehore@chromium.org>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220308000945.706701-1-briannorris@chromium.org>
- <20220307160918.v3.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307160918.v3.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:328f:b0:30f:624d:9d82 with SMTP id
+ f15-20020a056638328f00b0030f624d9d82mr16896854jav.227.1646762599867; Tue, 08
+ Mar 2022 10:03:19 -0800 (PST)
+Date:   Tue, 08 Mar 2022 10:03:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cb6dd805d9b8cbb8@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in port100_send_complete
+From:   syzbot <syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com>
+To:     krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2022 01:09, Brian Norris wrote:
-> I want to add, deprecate, and bugfix some properties, as well as add the
-> first users. This is easier with a proper schema.
-> 
-> The transformation is mostly straightforward, plus a few notable tweaks:
-> 
->  * Renamed rockchip,dram_speed_bin to rockchip,ddr3_speed_bin. The
->    driver code and the example matched, but the description was
->    different. I went with the implementation. Note that this property is
->    also slated for deprecation/deletion in the subsequent patches.
-> 
->  * Drop upthreshold and downdifferential properties from the example.
->    These were undocumented (so, wouldn't pass validation), but were
->    representing software properties (governor tweaks). I drop them from
->    the driver in subsequent patches.
-> 
->  * Rename clock from pclk_ddr_mon to dmc_clk. The driver, DT example,
->    and all downstream users matched -- the binding definition was the
->    exception. Anyway, "dmc_clk" is a more appropriately generic name.
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
-> 
-> Changes in v3:
->  * Add |maxItems| for devfreq-events
->  * Improve deprecation notes
-> 
-> Changes in v2:
->  * rename to 'memory-controller' in example
->  * place 'required' after properties
->  * drop superluous free-form references and repetitions of other
->    bindings
->  * fix for yamllint
+Hello,
 
-Apologies for jumping in late in discussion, but how about moving it to
-memory-controllers or interconnect directory? devfreq is Linux specific
-and DMC sounds a lot like dynamic memory controller.
+syzbot found the following issue on:
 
-> 
->  .../bindings/devfreq/rk3399_dmc.txt           | 212 -------------
->  .../bindings/devfreq/rk3399_dmc.yaml          | 294 ++++++++++++++++++
+HEAD commit:    38f80f42147f MAINTAINERS: Remove dead patchwork link
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14b0d321700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=542b2708133cc492
+dashboard link: https://syzkaller.appspot.com/bug?extid=16bcb127fb73baeecb14
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a63d21700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d21be1700000
 
-file name:
-rockchip,rk3399-dmc.yaml
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
 
->  2 files changed, 294 insertions(+), 212 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
->  create mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
-> deleted file mode 100644
-> index 58fc8a6cebc7..000000000000
-> --- a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
-> +++ /dev/null
-> @@ -1,212 +0,0 @@
-> -* Rockchip rk3399 DMC (Dynamic Memory Controller) device
-> -
-> -Required properties:
-> -- compatible:		 Must be "rockchip,rk3399-dmc".
-> -- devfreq-events:	 Node to get DDR loading, Refer to
-> -			 Documentation/devicetree/bindings/devfreq/event/
-> -			 rockchip-dfi.txt
-> -- clocks:		 Phandles for clock specified in "clock-names" property
-> -- clock-names :		 The name of clock used by the DFI, must be
-> -			 "pclk_ddr_mon";
-> -- operating-points-v2:	 Refer to Documentation/devicetree/bindings/opp/opp-v2.yaml
-> -			 for details.
-> -- center-supply:	 DMC supply node.
-> -- status:		 Marks the node enabled/disabled.
-> -- rockchip,pmu:		 Phandle to the syscon managing the "PMU general register
-> -			 files".
-> -
-> -Optional properties:
-> -- interrupts:		 The CPU interrupt number. The interrupt specifier
-> -			 format depends on the interrupt controller.
-> -			 It should be a DCF interrupt. When DDR DVFS finishes
-> -			 a DCF interrupt is triggered.
-> -- rockchip,pmu:		 Phandle to the syscon managing the "PMU general register
-> -			 files".
-> -
-> -Following properties relate to DDR timing:
-> -
-> -- rockchip,dram_speed_bin :	  Value reference include/dt-bindings/clock/rk3399-ddr.h,
-> -				  it selects the DDR3 cl-trp-trcd type. It must be
-> -				  set according to "Speed Bin" in DDR3 datasheet,
-> -				  DO NOT use a smaller "Speed Bin" than specified
-> -				  for the DDR3 being used.
-> -
-> -- rockchip,pd_idle :		  Configure the PD_IDLE value. Defines the
-> -				  power-down idle period in which memories are
-> -				  placed into power-down mode if bus is idle
-> -				  for PD_IDLE DFI clock cycles.
-> -
-> -- rockchip,sr_idle :		  Configure the SR_IDLE value. Defines the
-> -				  self-refresh idle period in which memories are
-> -				  placed into self-refresh mode if bus is idle
-> -				  for SR_IDLE * 1024 DFI clock cycles (DFI
-> -				  clocks freq is half of DRAM clock), default
-> -				  value is "0".
-> -
-> -- rockchip,sr_mc_gate_idle :	  Defines the memory self-refresh and controller
-> -				  clock gating idle period. Memories are placed
-> -				  into self-refresh mode and memory controller
-> -				  clock arg gating started if bus is idle for
-> -				  sr_mc_gate_idle*1024 DFI clock cycles.
-> -
-> -- rockchip,srpd_lite_idle :	  Defines the self-refresh power down idle
-> -				  period in which memories are placed into
-> -				  self-refresh power down mode if bus is idle
-> -				  for srpd_lite_idle * 1024 DFI clock cycles.
-> -				  This parameter is for LPDDR4 only.
-> -
-> -- rockchip,standby_idle :	  Defines the standby idle period in which
-> -				  memories are placed into self-refresh mode.
-> -				  The controller, pi, PHY and DRAM clock will
-> -				  be gated if bus is idle for standby_idle * DFI
-> -				  clock cycles.
-> -
-> -- rockchip,dram_dll_dis_freq :	  Defines the DDR3 DLL bypass frequency in MHz.
-> -				  When DDR frequency is less than DRAM_DLL_DISB_FREQ,
-> -				  DDR3 DLL will be bypassed. Note: if DLL was bypassed,
-> -				  the odt will also stop working.
-> -
-> -- rockchip,phy_dll_dis_freq :	  Defines the PHY dll bypass frequency in
-> -				  MHz (Mega Hz). When DDR frequency is less than
-> -				  DRAM_DLL_DISB_FREQ, PHY DLL will be bypassed.
-> -				  Note: PHY DLL and PHY ODT are independent.
-> -
-> -- rockchip,ddr3_odt_dis_freq :	  When the DRAM type is DDR3, this parameter defines
-> -				  the ODT disable frequency in MHz (Mega Hz).
-> -				  when the DDR frequency is  less then ddr3_odt_dis_freq,
-> -				  the ODT on the DRAM side and controller side are
-> -				  both disabled.
-> -
-> -- rockchip,ddr3_drv :		  When the DRAM type is DDR3, this parameter defines
-> -				  the DRAM side driver strength in ohms. Default
-> -				  value is 40.
-> -
-> -- rockchip,ddr3_odt :		  When the DRAM type is DDR3, this parameter defines
-> -				  the DRAM side ODT strength in ohms. Default value
-> -				  is 120.
-> -
-> -- rockchip,phy_ddr3_ca_drv :	  When the DRAM type is DDR3, this parameter defines
-> -				  the phy side CA line (incluing command line,
-> -				  address line and clock line) driver strength.
-> -				  Default value is 40.
-> -
-> -- rockchip,phy_ddr3_dq_drv :	  When the DRAM type is DDR3, this parameter defines
-> -				  the PHY side DQ line (including DQS/DQ/DM line)
-> -				  driver strength. Default value is 40.
-> -
-> -- rockchip,phy_ddr3_odt : 	  When the DRAM type is DDR3, this parameter defines
-> -				  the PHY side ODT strength. Default value is 240.
-> -
-> -- rockchip,lpddr3_odt_dis_freq : When the DRAM type is LPDDR3, this parameter defines
-> -				  then ODT disable frequency in MHz (Mega Hz).
-> -				  When DDR frequency is less then ddr3_odt_dis_freq,
-> -				  the ODT on the DRAM side and controller side are
-> -				  both disabled.
-> -
-> -- rockchip,lpddr3_drv :		  When the DRAM type is LPDDR3, this parameter defines
-> -				  the DRAM side driver strength in ohms. Default
-> -				  value is 34.
-> -
-> -- rockchip,lpddr3_odt :		  When the DRAM type is LPDDR3, this parameter defines
-> -				  the DRAM side ODT strength in ohms. Default value
-> -				  is 240.
-> -
-> -- rockchip,phy_lpddr3_ca_drv :	  When the DRAM type is LPDDR3, this parameter defines
-> -				  the PHY side CA line (including command line,
-> -				  address line and clock line) driver strength.
-> -				  Default value is 40.
-> -
-> -- rockchip,phy_lpddr3_dq_drv :	  When the DRAM type is LPDDR3, this parameter defines
-> -				  the PHY side DQ line (including DQS/DQ/DM line)
-> -				  driver strength. Default value is 40.
-> -
-> -- rockchip,phy_lpddr3_odt : 	  When dram type is LPDDR3, this parameter define
-> -				  the phy side odt strength, default value is 240.
-> -
-> -- rockchip,lpddr4_odt_dis_freq : When the DRAM type is LPDDR4, this parameter
-> -				  defines the ODT disable frequency in
-> -				  MHz (Mega Hz). When the DDR frequency is less then
-> -				  ddr3_odt_dis_freq, the ODT on the DRAM side and
-> -				  controller side are both disabled.
-> -
-> -- rockchip,lpddr4_drv :		  When the DRAM type is LPDDR4, this parameter defines
-> -				  the DRAM side driver strength in ohms. Default
-> -				  value is 60.
-> -
-> -- rockchip,lpddr4_dq_odt : 	  When the DRAM type is LPDDR4, this parameter defines
-> -				  the DRAM side ODT on DQS/DQ line strength in ohms.
-> -				  Default value is 40.
-> -
-> -- rockchip,lpddr4_ca_odt :	  When the DRAM type is LPDDR4, this parameter defines
-> -				  the DRAM side ODT on CA line strength in ohms.
-> -				  Default value is 40.
-> -
-> -- rockchip,phy_lpddr4_ca_drv :	  When the DRAM type is LPDDR4, this parameter defines
-> -				  the PHY side CA line (including command address
-> -				  line) driver strength. Default value is 40.
-> -
-> -- rockchip,phy_lpddr4_ck_cs_drv : When the DRAM type is LPDDR4, this parameter defines
-> -				  the PHY side clock line and CS line driver
-> -				  strength. Default value is 80.
-> -
-> -- rockchip,phy_lpddr4_dq_drv :	  When the DRAM type is LPDDR4, this parameter defines
-> -				  the PHY side DQ line (including DQS/DQ/DM line)
-> -				  driver strength. Default value is 80.
-> -
-> -- rockchip,phy_lpddr4_odt :	  When the DRAM type is LPDDR4, this parameter defines
-> -				  the PHY side ODT strength. Default value is 60.
-> -
-> -Example:
-> -	dmc_opp_table: dmc_opp_table {
-> -		compatible = "operating-points-v2";
-> -
-> -		opp00 {
-> -			opp-hz = /bits/ 64 <300000000>;
-> -			opp-microvolt = <900000>;
-> -		};
-> -		opp01 {
-> -			opp-hz = /bits/ 64 <666000000>;
-> -			opp-microvolt = <900000>;
-> -		};
-> -	};
-> -
-> -	dmc: dmc {
-> -		compatible = "rockchip,rk3399-dmc";
-> -		devfreq-events = <&dfi>;
-> -		interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
-> -		clocks = <&cru SCLK_DDRC>;
-> -		clock-names = "dmc_clk";
-> -		operating-points-v2 = <&dmc_opp_table>;
-> -		center-supply = <&ppvar_centerlogic>;
-> -		upthreshold = <15>;
-> -		downdifferential = <10>;
-> -		rockchip,ddr3_speed_bin = <21>;
-> -		rockchip,pd_idle = <0x40>;
-> -		rockchip,sr_idle = <0x2>;
-> -		rockchip,sr_mc_gate_idle = <0x3>;
-> -		rockchip,srpd_lite_idle	= <0x4>;
-> -		rockchip,standby_idle = <0x2000>;
-> -		rockchip,dram_dll_dis_freq = <300>;
-> -		rockchip,phy_dll_dis_freq = <125>;
-> -		rockchip,auto_pd_dis_freq = <666>;
-> -		rockchip,ddr3_odt_dis_freq = <333>;
-> -		rockchip,ddr3_drv = <40>;
-> -		rockchip,ddr3_odt = <120>;
-> -		rockchip,phy_ddr3_ca_drv = <40>;
-> -		rockchip,phy_ddr3_dq_drv = <40>;
-> -		rockchip,phy_ddr3_odt = <240>;
-> -		rockchip,lpddr3_odt_dis_freq = <333>;
-> -		rockchip,lpddr3_drv = <34>;
-> -		rockchip,lpddr3_odt = <240>;
-> -		rockchip,phy_lpddr3_ca_drv = <40>;
-> -		rockchip,phy_lpddr3_dq_drv = <40>;
-> -		rockchip,phy_lpddr3_odt = <240>;
-> -		rockchip,lpddr4_odt_dis_freq = <333>;
-> -		rockchip,lpddr4_drv = <60>;
-> -		rockchip,lpddr4_dq_odt = <40>;
-> -		rockchip,lpddr4_ca_odt = <40>;
-> -		rockchip,phy_lpddr4_ca_drv = <40>;
-> -		rockchip,phy_lpddr4_ck_cs_drv = <80>;
-> -		rockchip,phy_lpddr4_dq_drv = <80>;
-> -		rockchip,phy_lpddr4_odt = <60>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
-> new file mode 100644
-> index 000000000000..ddddddc5c6fb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
-> @@ -0,0 +1,294 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# %YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/devfreq/rk3399_dmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rockchip rk3399 DMC (Dynamic Memory Controller) device
-> +
-> +maintainers:
-> +  - Brian Norris <briannorris@chromium.org>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,rk3399-dmc
-> +
-> +  devfreq-events:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    minItems: 1
-> +    maxItems: 1
+port100 5-1:0.0: NFC: Urb failure (status -71)
+==================================================================
+BUG: KASAN: use-after-free in port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+Read of size 1 at addr ffff88801bb59540 by task ksoftirqd/2/26
 
-Rob previously asked about max, but it seems it is only one phandle,
-right? Then the type - 'phandle'.
+CPU: 2 PID: 26 Comm: ksoftirqd/2 Not tainted 5.17.0-rc6-syzkaller-00184-g38f80f42147f #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+ __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1670
+ usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1747
+ dummy_timer+0x11f9/0x32b0 drivers/usb/gadget/udc/dummy_hcd.c:1987
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+ expire_timers kernel/time/timer.c:1466 [inline]
+ __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
+ __run_timers kernel/time/timer.c:1715 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ run_ksoftirqd kernel/softirq.c:921 [inline]
+ run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
+ smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
 
-> +    description:
-> +      Node to get DDR loading. Refer to
-> +      Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt.
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: dmc_clk
-> +
-> +  operating-points-v2: true
-> +
-> +  center-supply:
-> +    description:
-> +      DMC regulator supply.
-> +
-> +  rockchip,pmu:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Phandle to the syscon managing the "PMU general register files".
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description:
-> +      The CPU interrupt number. It should be a DCF interrupt. When DDR DVFS
-> +      finishes, a DCF interrupt is triggered.
-> +
-> +  rockchip,ddr3_speed_bin:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      For values, reference include/dt-bindings/clock/rk3399-ddr.h. Selects the
-> +      DDR3 cl-trp-trcd type. It must be set according to "Speed Bin" in DDR3
-> +      datasheet; DO NOT use a smaller "Speed Bin" than specified for the DDR3
-> +      being used.
-> +
-> +  rockchip,pd_idle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Configure the PD_IDLE value. Defines the power-down idle period in which
-> +      memories are placed into power-down mode if bus is idle for PD_IDLE DFI
-> +      clock cycles.
-> +
-> +  rockchip,sr_idle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Configure the SR_IDLE value. Defines the self-refresh idle period in
-> +      which memories are placed into self-refresh mode if bus is idle for
-> +      SR_IDLE * 1024 DFI clock cycles (DFI clocks freq is half of DRAM clock).
-> +      Default value is "0".
-> +
-> +  rockchip,sr_mc_gate_idle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Defines the memory self-refresh and controller clock gating idle period.
-> +      Memories are placed into self-refresh mode and memory controller clock
-> +      arg gating started if bus is idle for sr_mc_gate_idle*1024 DFI clock
-> +      cycles.
-> +
-> +  rockchip,srpd_lite_idle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Defines the self-refresh power down idle period in which memories are
-> +      placed into self-refresh power down mode if bus is idle for
-> +      srpd_lite_idle * 1024 DFI clock cycles. This parameter is for LPDDR4
-> +      only.
-> +
-> +  rockchip,standby_idle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Defines the standby idle period in which memories are placed into
-> +      self-refresh mode. The controller, pi, PHY and DRAM clock will be gated
-> +      if bus is idle for standby_idle * DFI clock cycles.
-> +
-> +  rockchip,dram_dll_dis_freq:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Defines the DDR3 DLL bypass frequency in MHz. When DDR frequency is less
-> +      than DRAM_DLL_DISB_FREQ, DDR3 DLL will be bypassed.
-> +      Note: if DLL was bypassed, the odt will also stop working.
-> +
-> +  rockchip,phy_dll_dis_freq:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Defines the PHY dll bypass frequency in MHz (Mega Hz). When DDR frequency
-> +      is less than DRAM_DLL_DISB_FREQ, PHY DLL will be bypassed.
-> +      Note: PHY DLL and PHY ODT are independent.
-> +
-> +  rockchip,auto_pd_dis_freq:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Defines the auto PD disable frequency in MHz.
-> +
-> +  rockchip,ddr3_odt_dis_freq:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      When the DRAM type is DDR3, this parameter defines the ODT disable
-> +      frequency in MHz (Mega Hz). When the DDR frequency is less then
-> +      ddr3_odt_dis_freq, the ODT on the DRAM side and controller side are both
-> +      disabled.
-> +
-> +  rockchip,ddr3_drv:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      When the DRAM type is DDR3, this parameter defines the DRAM side drive
-> +      strength in ohms. Default value is 40.
-> +
-> +  rockchip,ddr3_odt:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      When the DRAM type is DDR3, this parameter defines the DRAM side ODT
-> +      strength in ohms. Default value is 120.
+Allocated by task 1255:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+ alloc_dr drivers/base/devres.c:116 [inline]
+ devm_kmalloc+0x96/0x1d0 drivers/base/devres.c:823
+ devm_kzalloc include/linux/device.h:209 [inline]
+ port100_probe+0x8a/0x1320 drivers/nfc/port100.c:1502
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+ usb_set_configuration+0x101e/0x1900 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+ usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2566
+ hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+ port_event drivers/usb/core/hub.c:5660 [inline]
+ hub_event+0x2585/0x44d0 drivers/usb/core/hub.c:5742
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
-Here and in all other places - instead of describing default value in
-description, just add "default: 120".
+Freed by task 1255:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ __cache_free mm/slab.c:3437 [inline]
+ kfree+0xf8/0x2b0 mm/slab.c:3794
+ release_nodes+0x112/0x1a0 drivers/base/devres.c:501
+ devres_release_all+0x114/0x190 drivers/base/devres.c:530
+ really_probe+0x626/0xcc0 drivers/base/dd.c:670
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+ usb_set_configuration+0x101e/0x1900 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:902
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xb83/0x1e20 drivers/base/core.c:3405
+ usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2566
+ hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+ port_event drivers/usb/core/hub.c:5660 [inline]
+ hub_event+0x2585/0x44d0 drivers/usb/core/hub.c:5742
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
-> +
-> +  rockchip,phy_ddr3_ca_drv:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      When the DRAM type is DDR3, this parameter defines the phy side CA line
-> +      (incluing command line, address line and clock line) drive strength.
-> +      Default value is 40.
-> +
+Last potentially related work creation:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0x7e/0x90 mm/kasan/generic.c:348
+ insert_work+0x48/0x370 kernel/workqueue.c:1368
+ __queue_work+0x5ca/0xf30 kernel/workqueue.c:1534
+ queue_work_on+0xee/0x110 kernel/workqueue.c:1562
+ queue_work include/linux/workqueue.h:502 [inline]
+ schedule_work include/linux/workqueue.h:563 [inline]
+ port100_recv_ack+0x2cf/0x3c0 drivers/nfc/port100.c:710
+ __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1670
+ usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1747
+ dummy_timer+0x11f9/0x32b0 drivers/usb/gadget/udc/dummy_hcd.c:1987
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+ expire_timers kernel/time/timer.c:1466 [inline]
+ __run_timers.part.0+0x67c/0xa30 kernel/time/timer.c:1734
+ __run_timers kernel/time/timer.c:1715 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1747
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+
+The buggy address belongs to the object at ffff88801bb59400
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 320 bytes inside of
+ 512-byte region [ffff88801bb59400, ffff88801bb59600)
+The buggy address belongs to the page:
+page:ffffea00006ed640 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1bb59
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea000068aec8 ffffea00006fe408 ffff888010c40600
+raw: 0000000000000000 ffff88801bb59000 0000000100000004 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 1, ts 13880885565, free_ts 13141726599
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
+ __alloc_pages_node include/linux/gfp.h:572 [inline]
+ kmem_getpages mm/slab.c:1378 [inline]
+ cache_grow_begin+0x75/0x390 mm/slab.c:2584
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
+ ____cache_alloc mm/slab.c:3040 [inline]
+ ____cache_alloc mm/slab.c:3023 [inline]
+ __do_cache_alloc mm/slab.c:3267 [inline]
+ slab_alloc mm/slab.c:3308 [inline]
+ kmem_cache_alloc_trace+0x380/0x4a0 mm/slab.c:3565
+ kmalloc include/linux/slab.h:581 [inline]
+ kzalloc include/linux/slab.h:714 [inline]
+ device_private_init drivers/base/core.c:3249 [inline]
+ device_add+0x1113/0x1e20 drivers/base/core.c:3299
+ netdev_register_kobject+0x181/0x430 net/core/net-sysfs.c:2008
+ register_netdevice+0xd9d/0x1580 net/core/dev.c:9667
+ register_netdev+0x2d/0x50 net/core/dev.c:9791
+ e1000_probe+0x212f/0x3360 drivers/net/ethernet/intel/e1000e/netdev.c:7710
+ local_pci_probe+0xe1/0x1a0 drivers/pci/pci-driver.c:323
+ pci_call_probe drivers/pci/pci-driver.c:380 [inline]
+ __pci_device_probe drivers/pci/pci-driver.c:405 [inline]
+ pci_device_probe+0x298/0x740 drivers/pci/pci-driver.c:448
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:755
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:785
+ __driver_attach+0x22d/0x4e0 drivers/base/dd.c:1144
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3404
+ rcu_do_batch kernel/rcu/tree.c:2527 [inline]
+ rcu_core+0x7b1/0x1820 kernel/rcu/tree.c:2778
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+
+Memory state around the buggy address:
+ ffff88801bb59400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801bb59480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88801bb59500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                           ^
+ ffff88801bb59580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801bb59600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
-Best regards,
-Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

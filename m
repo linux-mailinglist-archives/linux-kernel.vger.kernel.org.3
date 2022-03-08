@@ -2,63 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330BB4D0DE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 03:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F724D0DEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 03:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244813AbiCHCMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 21:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
+        id S243528AbiCHCRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 21:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbiCHCMK (ORCPT
+        with ESMTP id S237280AbiCHCRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 21:12:10 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B362722BDF
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:11:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646705475; x=1678241475;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=G+wlG1e5jlQm2JpD3zgFHXxJ97ey1tEQEMtTK2VbvrI=;
-  b=ZmyLoD76WFRzm760NJYG028prmzcz2NrtqSmVjJj3IfM1WW+hiIvgOcY
-   Fog+370pSx65Ka8YEzxoZ5yqVsgoT3lRMsjymZSNoaZA/RxARn8/231vB
-   Q1MABRqugtEdvuIiiJp30uAK6Ay4qyNvqyYeROi0++O/gQU7hdn1QN6m/
-   34nZV+ukz6fzhcnxtbNEyon0v35A6LpGc0+qqKWdvaqHK404Y9XgmIW5G
-   VFtdaAP7LuoK0LA8EAkqRPsp0Oqs6THw0o6A9mkMjag3+xMqMpBuIjaQM
-   M6PigH15heC5IYK+NbeotbpXNZguX0Dym0ouYmPv43EMiUkjmVBpYxvNL
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="242001779"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="242001779"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 18:11:15 -0800
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="512926436"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 18:11:13 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Rik van Riel <riel@surriel.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [PATCH -V3 2/2 UPDATE] NUMA balancing: avoid to migrate task to
- CPU-less node
-References: <20220214121553.582248-1-ying.huang@intel.com>
-        <20220214121553.582248-2-ying.huang@intel.com>
-        <87y21lkxlv.fsf_-_@yhuang6-desk2.ccr.corp.intel.com>
-Date:   Tue, 08 Mar 2022 10:11:11 +0800
-In-Reply-To: <87y21lkxlv.fsf_-_@yhuang6-desk2.ccr.corp.intel.com> (Ying
-        Huang's message of "Tue, 08 Mar 2022 10:05:16 +0800")
-Message-ID: <87tuc9kxc0.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 7 Mar 2022 21:17:34 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08olkn2010.outbound.protection.outlook.com [40.92.45.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504FCB7EF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 18:16:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AddB4UjTcNuSjZ4mGGn6PoVh6IoCQabnm+euPw9NSE1q/ZsMHv8YUMspMomCyw5ZaZtmeH+eSdWYiqhK+ycDuw9zVpLrihqpHXPkqTnhcZYSt8V7B0ideP2zJWbpYvDSHPXHCm+nMTX00ppD8B1L3aZL7rnjk4u5IXRypCKBmzu/AH0/c2IbVljSmSLqgpymXxdhmtEVsZGatnj4TC7g4jb71mmOO46xTOyWTbxeQ3BE56g3jkvvSnShJiFhaMcm3xR2lC7hq9qYOpZ8c+RrC88GleWV9FVozCiuZsCRBWFNbx4BXYJ/hJ2Kl6zASRELkZD/8gtvI/kK1wFF/nEaTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=isPLKMbH83etW7m5OzR1NUKJs1DdyfJCOmORHCkUpks=;
+ b=Lt5Pb5o7OTyDa3Rj/Zo09PXxS8dxEGgkaaaWOh6ykMlCkEH1bbPw9fKmmA3freNx6jsigsDGQUuEzOsvhDASEqur5VDWsmqHJlKFNw/7znytUBVc3YuBJDFnHfzHZlMRxP/xsiTfqNMEOacMAqWT7wy0JZOl1davwrtinHo2Od9MqiMYvSWNBraF+Yn0Ko0+SRm4dCOsRiG8yJBfn+XLb1ionEsUsIeOqEd11t+A5q9DkDSjK7gWdiPuV9wuB2EqxwGhNzPNUzCxt1H4kU53CU0+EOKLPmNOJlQ662RDqReBI1Xy0UwCKLI87HX+flt3JgnKwGNvl2E/9b0fx/K7Pw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=isPLKMbH83etW7m5OzR1NUKJs1DdyfJCOmORHCkUpks=;
+ b=loASiGpT99EG3/vnBoJuJgP33/3pzxSLFGOE2SzMNmYuGN8JYwOxNrYQFRpCFUeQXC1YIzzxI59OHU5STklicVfWlrSO/lCn68Pj3ofZXHsbDGQ9XefNTKxcrZAUl3HFDGVEeKyCGyazeDS3ZM377OL36SV1Aqjx+gPK75LrPYjZvbTphMQyfi8ILnMd9575kDeLPhLhTOj0eoJXpjOS5Jqhx3ko2Ap8xJhOiDwx/AbzJYTNGaWiFCqiaEWPc2iyj0o/CcTGS3mw6TUukUmeQvA/SbSRfYzeMWRsi/iJwET/yKc1LnUs67vI1y/4pt97XePx9+PvaZb1VzdG4mRhJg==
+Received: from SN6PR06MB5342.namprd06.prod.outlook.com (2603:10b6:805:f9::31)
+ by DM6PR06MB6089.namprd06.prod.outlook.com (2603:10b6:5:1b0::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.19; Tue, 8 Mar
+ 2022 02:16:36 +0000
+Received: from SN6PR06MB5342.namprd06.prod.outlook.com
+ ([fe80::fc4d:1caf:5746:df98]) by SN6PR06MB5342.namprd06.prod.outlook.com
+ ([fe80::fc4d:1caf:5746:df98%6]) with mapi id 15.20.5038.027; Tue, 8 Mar 2022
+ 02:16:36 +0000
+Date:   Mon, 7 Mar 2022 20:16:33 -0600
+From:   Chris Morgan <macromorgan@hotmail.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: rk817: Fix missing clk_disable_unprepare() in
+ rk817_platform_probe
+Message-ID: <SN6PR06MB534299BEE805BE9B6AFE7C3CA5099@SN6PR06MB5342.namprd06.prod.outlook.com>
+References: <20220307090146.4104-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307090146.4104-1-linmq006@gmail.com>
+X-TMN:  [9SHRbwt7EwygkexeGrwMaFupqkVTcfBn]
+X-ClientProxiedBy: SN7PR04CA0067.namprd04.prod.outlook.com
+ (2603:10b6:806:121::12) To SN6PR06MB5342.namprd06.prod.outlook.com
+ (2603:10b6:805:f9::31)
+X-Microsoft-Original-Message-ID: <20220308021633.GA13462@wintermute.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c5ef12b8-9e3f-4e36-b1d3-08da00a9ab7c
+X-MS-TrafficTypeDiagnostic: DM6PR06MB6089:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rOJZHZPzespSmELf/anBpwp7y1U39J/beej7/xTjiTnP6HwCDVxPx/mUhENuWL3Fb4yN58bkahWcgpPTIivjq0i2xSZIWAApikTxWxEFP1BbJ6XQg/3dOgShEcv0rWpMRq6Cp2RpexaXxxdqmboNcJ7zrhThWssMxXyoefY+C+5MLgso5zozSAqSF6D72sA00D0AV1gBdrTDs5qevWKJV4DESA8jnGyHqAyJ98CEffqvKYYYHP0qARKp40cDDkktoWtqg314iV/1MvphLucgR6BlRoE9cb7iGcNXTHdLu0s7+L8K47af0woNsomOKVnNqjFR252+g6HDwVoONfNhxX/lvdcDxUzCIdp9x+YK5fPcE9b76lYJHkVXO9c4w/14eRuTKwiXICp8IBUTSdr+PR84PLMCtNU4jlJHDLU4+fxp/HuAXqLlvgtpL5gzYAg5PR/V20ZQvaHOUJ9IzS/BX9qCZab9D82/ShS0cpx6KS5FtGrxfUgqNzCapS4T7in+RSyBIJhOnbQx91DBT1JDMg6lqH2ZSexyqz3aEMLGTfd4znqhrCWuoRNNjXqhPr4OVTTWGKI0iOXk+MhlUlwfNA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Wj1TImxKsxSONpu5gwKdEjB+OVGPGBGakzRRN3yu0sUKgJprWnnod0vxKCXF?=
+ =?us-ascii?Q?CwI2aoE95Y1Eryc72qOdC0gJexckbY2NuDBO+LQBwV4+l8pgkbraysBHaSmW?=
+ =?us-ascii?Q?dhpKORv0oZu4zJ+jt0PTmlZSeVRJxhYJ6LUG84CiH2obJPVOAp9QrVSgSmW8?=
+ =?us-ascii?Q?T4KG+wnMjjT73nXYHG2WOUdwmDxh/MNpy/mAy7tVs9tDaQYXBqLbsCRkRtxQ?=
+ =?us-ascii?Q?ML3c1rAHrN+tECdzds52BrRK55ZIPbqRuklRdUrCd427PVScoKI5N9iCa6it?=
+ =?us-ascii?Q?L/8cAwtcQd6eBnCCIjI4/ve3gwCrR/0W1QTFqIYl26IkTBTde9QsZT8xPpVp?=
+ =?us-ascii?Q?QvpynuqDvrBEuF5E9xG5R9xgDr+WKZ7vIOQjUPJg+wYWBhat3cb5cg8vHPTm?=
+ =?us-ascii?Q?1UVNRBJEKfOAL3G94Z0yKumecLkTwwRGTnH+n5NjxmyHZZcE/7yeLLQeLAjS?=
+ =?us-ascii?Q?gJim/8HpMRRn18R/5baA0EmVFmCQ9NFJMCyjAFLOau/EzshrTqzeEdoGgNll?=
+ =?us-ascii?Q?g6G68A9ZFnUvPTDckeCu8pIG62/6I8C4JP1y7Rv3zvQR82Qc87LBw4TqC3DO?=
+ =?us-ascii?Q?7eO4sOTLvzDzdzR+4YE/L/zAOa/vxdzShU5XYYb2Y90yTxwlQX5tO+Iw9mZp?=
+ =?us-ascii?Q?7B/TGFevPqorvq5y7XdZkXZNah5Zf0gsjrupPKlHzW4d+cPRLQgX4KpfX91A?=
+ =?us-ascii?Q?BFyOdhzFrQR0XOCxQB0O15udfxcDkGQhXGUC3Q7wiTlMeJ/CobaNK+PswoZy?=
+ =?us-ascii?Q?3BWi/pdmFDDHLj8tOZ/pi2XcQiRAIRr0pdJG7PEQv4EUSAhwA0vXC26ETqmj?=
+ =?us-ascii?Q?SnLELMs/fxIjDK6szVJwndLRh3bCrxsQxsCFJ4x4z6lBT89CXUdnbM2nfubw?=
+ =?us-ascii?Q?Jocb77QDWXdVHfysiFO6uTbuI3cW0WtFkcPg9WM3KcDz1mI/SMBNNKQ+aOhe?=
+ =?us-ascii?Q?zCSBmuX0NX7vYhcWQiDJpg=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-89723.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5ef12b8-9e3f-4e36-b1d3-08da00a9ab7c
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR06MB5342.namprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2022 02:16:36.0082
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR06MB6089
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +108,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Peter,
+On Mon, Mar 07, 2022 at 09:01:30AM +0000, Miaoqian Lin wrote:
+> Fix the missing clk_disable_unprepare() before return
+> from rk817_platform_probe() in the error handling case.
+> 
+> Fixes: 0d6a04da9b25 ("ASoC: Add Rockchip rk817 audio CODEC support")
 
-"Huang, Ying" <ying.huang@intel.com> writes:
+Tested-by: Chris Morgan <macromorgan@hotmail.com>
 
-> In a typical memory tiering system, there's no CPU in slow (PMEM) NUMA
-> nodes.  But if the number of the hint page faults on a PMEM node is
-> the max for a task, The current NUMA balancing policy may try to place
-> the task on the PMEM node instead of DRAM node.  This is unreasonable,
-> because there's no CPU in PMEM NUMA nodes.  To fix this, CPU-less
-> nodes are ignored when searching the migration target node for a task
-> in this patch.
->
-> To test the patch, we run a workload that accesses more memory in PMEM
-> node than memory in DRAM node.  Without the patch, the PMEM node will
-> be chosen as preferred node in task_numa_placement().  While the DRAM
-> node will be chosen instead with the patch.
->
-> Known issue: I don't have systems to test complex NUMA topology type,
-> for example, NUMA_BACKPLANE or NUMA_GLUELESS_MESH.
->
-> v3:
->
-> - Fix a boot crash for some uncovered marginal condition.  Thanks Qian
->   Cai for reporting and testing the bug!
->
-> - Fix several missing places to use CPU-less nodes as migrating
->   target.
->
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Reported-and-tested-by: Qian Cai <quic_qiancai@quicinc.com> # boot crash
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Rik van Riel <riel@surriel.com>
-> Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-
-Can you update the patch to fix the bug?  Or you prefer the incremental
-patch?
-
-Best Regards,
-Huang, Ying
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  sound/soc/codecs/rk817_codec.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/sound/soc/codecs/rk817_codec.c b/sound/soc/codecs/rk817_codec.c
+> index 03f24edfe4f6..8fffe378618d 100644
+> --- a/sound/soc/codecs/rk817_codec.c
+> +++ b/sound/soc/codecs/rk817_codec.c
+> @@ -508,12 +508,14 @@ static int rk817_platform_probe(struct platform_device *pdev)
+>  	if (ret < 0) {
+>  		dev_err(&pdev->dev, "%s() register codec error %d\n",
+>  			__func__, ret);
+> -		goto err_;
+> +		goto err_clk;
+>  	}
+>  
+>  	return 0;
+> -err_:
+>  
+> +err_clk:
+> +	clk_disable_unprepare(rk817_codec_data->mclk);
+> +err_:
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.17.1
+> 

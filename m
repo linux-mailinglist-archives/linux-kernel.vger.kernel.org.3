@@ -2,190 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCAF4D1D95
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE04E4D1D9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239056AbiCHQmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
+        id S1348471AbiCHQnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348471AbiCHQmA (ORCPT
+        with ESMTP id S1348938AbiCHQnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:42:00 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7645A52E5B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:40:45 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso2700350pjj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:40:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OWnOkvoxF0nwP/XRvDD92sAAA8FIPxhix3DmlSJCZos=;
-        b=JwiWRI1PhM0j0QrdRm6OeZka3Jby5z/isDaZpABe5noKYK0Kye/HJ/gb4qcWWUd3LX
-         gaNTaysMAEfsNeYk30s9L6M18R94tLsI6Bfs4NfbhGPOwTvzavGviQf9gxeuGwQ/7UPU
-         UZrH/lELjg2i+popDEcldVdcJ2sQ4sRZQQ7jlO412R0vHV/zy6Wg2p8J4ztgkwAvMsWR
-         YTLGZUKABxTWsHzJPUfcwOdVR6TboaEzBw7vh7uoEOdVO9HiCZtPW5KxvXykDW24O/lV
-         Vid7CTz9Z97Td1k25FPkxREw8EliMkddJQCwqYuOh8C2rAsdknqvKspeuocQJoWKbFWs
-         oJpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OWnOkvoxF0nwP/XRvDD92sAAA8FIPxhix3DmlSJCZos=;
-        b=cvnnbu+1daKQ7LgOqJfW53LUagflXsI1GYZZBxD3ql8xGBC5qmFfvts+p2NCxoKjlF
-         GrYY5eyXna73GvephkstUuwjOytPN/Elo6E1nmT91tF2GNPwFdz3EEJuhPlq74t/e4kR
-         f5GA+KUFB5vuAvdfq6MptbbLDMQF+BRtyXm56K8DNHIxVuwKf+5NR2+5qn2+yNynkGfx
-         nZE58mHjurwV3JvHDziVmXV85pjnOZSIs/2kRYC4uMLl/AD5toBiy5wH3Qc0vJncfwYn
-         rL0UXNXdfOHbchfLnEpqzs7NjOipLCOqDzFVwNxJV2igwtg85VVmzSlddFUhqvNmrNEv
-         tZPg==
-X-Gm-Message-State: AOAM5322TcFKc8MA0z1ozmIa5CM6Rbijf9x9BJwI7seZ67B2gz0kw3VH
-        Y1SAMGOuL0JmzEy9FVYK4K0=
-X-Google-Smtp-Source: ABdhPJzn0oIFiUaCgctL3WP2NCXN002hpLP15O8BccbqygOOJu3B/tMYY0l+EWC4jHVf5240Az31Vw==
-X-Received: by 2002:a17:902:da8d:b0:151:dcb7:46a6 with SMTP id j13-20020a170902da8d00b00151dcb746a6mr14454261plx.133.1646757638254;
-        Tue, 08 Mar 2022 08:40:38 -0800 (PST)
-Received: from ?IPV6:240b:10:2720:5500:8160:1ad9:d84e:7584? ([240b:10:2720:5500:8160:1ad9:d84e:7584])
-        by smtp.gmail.com with ESMTPSA id h14-20020a63384e000000b00366ba5335e7sm15499674pgn.72.2022.03.08.08.40.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 08:40:37 -0800 (PST)
-Message-ID: <08c76c86-c015-28c3-47b5-18d8e50258e9@gmail.com>
-Date:   Wed, 9 Mar 2022 01:40:33 +0900
+        Tue, 8 Mar 2022 11:43:16 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73FC51E76
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:42:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646757734; x=1678293734;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uwBZc1E7PEYK1JtZIYDd5zk7H+Y7VWPrhChjprj3TPE=;
+  b=V9oN/7pnbdexzcPqjWty8qjoJ/UWb5cWu59iEqMuR9Jm8hy8Bip5vKwt
+   Coy/Fwg4eliwA2Y0BHkDX1lAnPAtLgrO4SPR4ypvEtEhkYMGJ4/BYH2LC
+   jlNzTQP1Lpf21A5z2PghOlslkvA9zbBCUE6G5v/2qUDbHJ7eA45FaO/DS
+   M/sppl6DmcQ51VWeuBtDEUJ/z2AATUP4LTuwQmP2Bbe+i5wgbUiKDfk6+
+   XpaywwUu2vo7bZA1fkbxw3I/FFsh54CZ0trhL3umxAHwkAVRQ6AZ+UiSv
+   c764anlAuAdIiPwmFx9ePuOpipHKEqY8p3qmUR8R/e0XQTfDpeu7+v5sF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254926025"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="254926025"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 08:41:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="687978902"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Mar 2022 08:41:02 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 1D0922AF; Tue,  8 Mar 2022 18:41:20 +0200 (EET)
+Date:   Tue, 8 Mar 2022 19:41:20 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 23/30] x86/boot: Avoid #VE during boot for TDX platforms
+Message-ID: <20220308164120.qj7r7b5z6ulszqwu@black.fi.intel.com>
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-24-kirill.shutemov@linux.intel.com>
+ <e8452e86-4063-c85b-5e21-c7cd6ce51423@intel.com>
+ <20220307223353.f7cqzqispfeltvb2@black.fi.intel.com>
+ <4a4a672f-a21e-f50d-9289-27456923f6df@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
-Content-Language: en-US
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
-        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Brian Norris <computersforpeace@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
-        cyrille.pitchen@wedev4u.fr,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linuxppc-dev@lists.ozlabs.org
-References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
- <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
- <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
- <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
- <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
- <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
- <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
- <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
- <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
- <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
- <f9e46b61-37e5-a280-edb0-27f8e81a8680@pengutronix.de>
- <9621c512-06f2-17b2-5c68-943b1f0981eb@gmail.com>
- <b23e4089-6431-de26-8666-bae4c3c8df88@pengutronix.de>
- <510adc50-79aa-3ed2-ab6f-9f9711d9bb23@gmail.com>
- <48ad0f65-a12e-e3b0-8c56-3197464c0b59@pengutronix.de>
-From:   Tokunori Ikegami <ikegami.t@gmail.com>
-In-Reply-To: <48ad0f65-a12e-e3b0-8c56-3197464c0b59@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4a4a672f-a21e-f50d-9289-27456923f6df@intel.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Mar 08, 2022 at 09:19:06AM +0800, Xiaoyao Li wrote:
+> On 3/8/2022 6:33 AM, Kirill A. Shutemov wrote:
+> > On Mon, Mar 07, 2022 at 05:29:27PM +0800, Xiaoyao Li wrote:
+> ...
+> > > Even though CPUID reports MCE is supported, all the access to MCE related
+> > > MSRs causes #VE. If they are accessed via mce_rdmsrl(), the #VE will be
+> > > fixed up and goes to ex_handler_msr_mce(). Finally lead to panic().
+> > 
+> > It is not panic, but warning. Like this:
+> > 
+> > 	unchecked MSR access error: RDMSR from 0x179 at rIP: 0xffffffff810df1e9 (__mcheck_cpu_cap_init+0x9/0x130)
+> > 	Call Trace:
+> > 	 <TASK>
+> > 	 mcheck_cpu_init+0x3d/0x2c0
+> > 	 identify_cpu+0x85a/0x910
+> > 	 identify_boot_cpu+0xc/0x98
+> > 	 check_bugs+0x6/0xa7
+> > 	 start_kernel+0x363/0x3d1
+> > 	 secondary_startup_64_no_verify+0xe5/0xeb
+> > 	 </TASK>
+> > 
+> > It is annoying, but not fatal. The patchset is big enough as it is.
+> > I tried to keep patch number under control.
+> > 
+> 
+> I did hit panic as below.
+> 
+> [    0.578792] mce: MSR access error: RDMSR from 0x475 at rIP:
+> 0xffffffffb94daa92 (mce_rdmsrl+0x22/0x60)
+> [    0.578792] Call Trace:
+> [    0.578792]  <TASK>
+> [    0.578792]  machine_check_poll+0xf0/0x260
+> [    0.578792]  __mcheck_cpu_init_generic+0x3d/0xb0
+> [    0.578792]  mcheck_cpu_init+0x16b/0x4a0
+> [    0.578792]  identify_cpu+0x467/0x5c0
+> [    0.578792]  identify_boot_cpu+0x10/0x9a
+> [    0.578792]  check_bugs+0x2a/0xa06
+> [    0.578792]  start_kernel+0x6bc/0x6f1
+> [    0.578792]  x86_64_start_reservations+0x24/0x26
+> [    0.578792]  x86_64_start_kernel+0xad/0xb2
+> [    0.578792]  secondary_startup_64_no_verify+0xe4/0xeb
+> [    0.578792]  </TASK>
+> [    0.578792] Kernel panic - not syncing: MCA architectural violation!
+> [    0.578792] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+> 5.17.0-rc5-td-guest-upstream+ #2
+> [    0.578792] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
+> 0.0.0 02/06/2015
+> [    0.578792] Call Trace:
+> [    0.578792]  <TASK>
+> [    0.578792]  dump_stack_lvl+0x49/0x5f
+> [    0.578792]  dump_stack+0x10/0x12
+> [    0.578792]  panic+0xf9/0x2d0
+> [    0.578792]  ex_handler_msr_mce+0x5e/0x5e
+> [    0.578792]  fixup_exception+0x2f4/0x310
+> [    0.578792]  exc_virtualization_exception+0x9b/0x100
+> [    0.578792]  asm_exc_virtualization_exception+0x12/0x40
+> [    0.578792] RIP: 0010:mce_rdmsrl+0x22/0x60
+> [    0.578792] Code: a0 b9 e8 75 4d fb ff 90 55 48 89 e5 41 54 53 89 fb 48
+> c7 c7 9c c1 f6 b9 e8 4b 28 00 00 65 8a 05 97 52 b4 46 84 c0 75 10 89 d9 <0f>
+> 32 48 c1 e2 20 48 09 d0 5b 41 5c 5d c3 89 df e8 c9 5a 17 ff 4c
+> [    0.578792] RSP: 0000:ffffffffba203cd8 EFLAGS: 00010246
+> [    0.578792] RAX: 0000000000000000 RBX: 0000000000000475 RCX:
+> 0000000000000475
+> [    0.578792] RDX: 00000000000001d0 RSI: ffffffffb9f6c19c RDI:
+> ffffffffb9ece016
+> [    0.578792] RBP: ffffffffba203ce8 R08: ffffffffba203cb0 R09:
+> ffffffffba203cb4
+> [    0.578792] R10: 0000000000000000 R11: 000000000000000f R12:
+> 0000000000000001
+> [    0.578792] R13: ffffffffba203dc0 R14: 000000000000000a R15:
+> 000000000000001d
+> [    0.578792]  ? mce_rdmsrl+0x15/0x60
+> [    0.578792]  machine_check_poll+0xf0/0x260
+> [    0.578792]  __mcheck_cpu_init_generic+0x3d/0xb0
+> [    0.578792]  mcheck_cpu_init+0x16b/0x4a0
+> [    0.578792]  identify_cpu+0x467/0x5c0
+> [    0.578792]  identify_boot_cpu+0x10/0x9a
+> [    0.578792]  check_bugs+0x2a/0xa06
+> [    0.578792]  start_kernel+0x6bc/0x6f1
+> [    0.578792]  x86_64_start_reservations+0x24/0x26
+> [    0.578792]  x86_64_start_kernel+0xad/0xb2
+> [    0.578792]  secondary_startup_64_no_verify+0xe4/0xeb
+> [    0.578792]  </TASK>
+> [    0.578792] ---[ end Kernel panic - not syncing: MCA architectural
 
-On 2022/03/09 1:23, Ahmad Fatoum wrote:
-> Hello Tokunori-san,
->
-> On 08.03.22 17:13, Tokunori Ikegami wrote:
->> Hi Ahmad-san,
->>
->> On 2022/03/08 18:44, Ahmad Fatoum wrote:
->>> Hello Tokunori,
->>>
->>> On 06.03.22 16:49, Tokunori Ikegami wrote:
->>>> Hi,
->>>>
->>>> On 2022/03/04 20:11, Ahmad Fatoum wrote:
->>>>> Hello Tokunori-san,
->>>>>
->>>>> On 20.02.22 13:22, Tokunori Ikegami wrote:
->>>>>> Hi Ahmad-san,
->>>>>>
->>>>>> Could you please try the version 2 patch attached for the error case?
->>>>>> This version is to check the DQ true data 0xFF by chip_good().
->>>>> I had a similar patch locally as well at first. I just tested yours
->>>>> and I can't reproduce the issue.
->>>> Thanks for your support.
->>>> Sorry if possible could you please retest the attached the patch again since this fixed the version 1 patch maintainer review comments?
->>> Works good.
->>>
->>> Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
->> Thank you so much for your test.
->>>>>> But I am not sure if this works or not since the error is possible to be caused by Hi-Z 0xff on floating bus or etc.
->>>>> That it works for me could be because of Hi-Z 0xff, which is why
->>>>> decided against it.
->>>> I see.
->>>>>>>>>> What seems to work for me is checking if chip_good or chip_ready
->>>>>>>>>> and map_word is equal to 0xFF. I can't justify why this is ok though.
->>>>>>>>>> (Worst case bus is floating at this point of time and Hi-Z is read
->>>>>>>>>> as 0xff on CPU data lines...)
->>>>>>>>> Sorry I am not sure about this.
->>>>>>>>> I thought the chip_ready() itself is correct as implemented as the data sheet in the past.
->>>>>>>>> But it did not work correctly so changed to use chip_good() instead as it is also correct.
->>>>>>>> What exactly in the datasheet makes you believe chip_good is not appropriate?
->>>>>>> I just mentioned about the actual issue behaviors as not worked chip_good() on S29GL964N and not worked chip_ready() on MX29GL512FHT2I-11G before etc.
->>>>>>> Anyway let me recheck the data sheet details as just checked it again quickly but needed more investigation to understand.
->>>>>> As far as I checked still both chip_good() and chip_ready() seem correct but still the root cause is unknown.
->>>>>> If as you mentioned the issue was cased by the DQ true data 0xFF I am not sure why the read work without any error after the write operation.
->>>>>> Also if the error was caused by the Hi-Z 0xff on floating bus as mentioned I am not sure why the read work without any error after the write operation with chip_ready().
->>>>>> Sorry anyway the root cause is also unknown when the write operation was changed to use chip_good() instead of chip_ready().
->>>>> I've be ok with v1 then. Restores working behavior for me and shouldn't break others.
->>>> Noted but still I am thinking the version 2 patch to check 0xff seems better than to use chip_ready() so let me consider this again later.
->>> The original version has less room for surprise as it restores previously
->>> working behavior. Assuming 0xFF to be good without backing from documentation
->>> is more risky IMO.
->> The change to check 0xFF can be limited for the S29GL064N chip do you have any comment about this?
-> I see that, but I am not sure it's the correct thing to do on the S29GL064N,
-> even if it seems to work. In absence of definitive information from the vendor,
-> I'd prefer we just restore behavior as it was before, i.e. using chip_ready
-> instead of chip_good for S29GL064N. This is the way of least surprise.
+Hm. Do you have MSR_IA32_MCG_CAP read successfully?
 
-Thanks for your comment. I see okay I will keep the version patch 2 
-reverting to use chip_ready() for S29GL064N under the review without the 
-change to check 0xFF.
+Otherwise you should not get inside the loop in machine_check_poll()
+because mce_num_banks would be 0. In this case MSR 0x475 is never touched.
 
-Regards,
-Ikegami
+Anyway, the patchset is not intended to be complete enabling of TDX. There
+are a lot of corners to be smoothed before it is production ready. Let's
+keep as it is.
 
->
->> Just attached the patch changed as so and thinking to send the patch as version 3 to the maintainer if you are okay.
->>
->> Regards,
->> Ikegami
->>
->>> Thanks for your continued support,
->>> Ahmad
->>>
->>>> Regards,
->>>> Ikegami
->>>>
->>>>> Cheers and thanks again,
->>>>> Ahmad
->>>>>
->>>>>> Regards,
->>>>>> Ikegami
->>>>>>
->>>>>>> Regards,
->>>>>>> Ikegami
->>>>>>>
->>>>>>>> Cheers,
->>>>>>>> Ahmad
->>>>>>>>
->>>>>>>>
->
+-- 
+ Kirill A. Shutemov

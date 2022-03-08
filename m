@@ -2,50 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6424D11E0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 920904D11DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344875AbiCHIPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:15:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
+        id S1344803AbiCHIOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241091AbiCHIP1 (ORCPT
+        with ESMTP id S1344390AbiCHIOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:15:27 -0500
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BB69B864;
-        Tue,  8 Mar 2022 00:12:44 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app4 (Coremail) with SMTP id cS_KCgC3L3PoDydiMv1CAA--.28839S2;
-        Tue, 08 Mar 2022 16:12:29 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-hams@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, davem@davemloft.net, ralf@linux-mips.org,
-        jreuter@yaina.de, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] ax25: Fix NULL pointer dereference in ax25_kill_by_device
-Date:   Tue,  8 Mar 2022 16:12:23 +0800
-Message-Id: <20220308081223.15919-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgC3L3PoDydiMv1CAA--.28839S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF1xtry5Aw4rCFyUuF15Arb_yoW8Cw1DpF
-        Z0k34fGrW7J34UCrs7GF18JF1UuF4qq3y5WF10vFy7C3s8Jr95trZ5trWUW3y3CF4rAFWU
-        Za47J3y8Xa1UZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
-        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMDAVZdtYj89QAFs5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Tue, 8 Mar 2022 03:14:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BFF53BBD7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:13:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646727220;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vo5Lpx3jhLk8XX96vRv3ILFXkCDbfnvle5Ey5/KCjRw=;
+        b=QIR/Bj6HFbSi5wL0FNTea5LnFhfUvJweag2bHmXjMPsvJGfb/x2jkh2fkOwFF5qHHnqlwN
+        KG1MSCJ+nB9+9UwyNV7zlwLbNepFM52268kMIbfObFUi4ANErkJcLuRM/EL0CnSTW4AxRm
+        kHw4eG8zKan6XqJcrFRNPWbeLCiRGdk=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-657-g_4EX6fxMyS9uqZ0JEOtpA-1; Tue, 08 Mar 2022 03:13:38 -0500
+X-MC-Unique: g_4EX6fxMyS9uqZ0JEOtpA-1
+Received: by mail-ej1-f69.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so8260938ejk.16
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 00:13:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vo5Lpx3jhLk8XX96vRv3ILFXkCDbfnvle5Ey5/KCjRw=;
+        b=oNWwuM7QT+MblpBbtgFQ7vUXCqD3FORxZYV0XPl92lFviCuwdcfE/1KSkV6cJvvjc5
+         Aox09DiVKi08Cvlbg+bGem2ajqU9actFzSQZMNa1yVmnyXi9lyGFXnMai4ZhmIg5SEF+
+         Flfn7t7E0WPzV/yER5LCBiWCz2jLh/mKIleVvAV/InIvwb1KVr2kN/dA8RQS/xcBowg5
+         fj2RVUCk60rGL1KyIZmY6rKY/CCSw8SsC+KpO4W4YjhCqWQrepyx543/V/F44jEYvtO0
+         NptaMm+tXY5ChPO46303fzeUVwEYA5yfCfr+dJKmt1K1Uh3AQ9lClHz8c5fM+LwdnCFQ
+         4pdQ==
+X-Gm-Message-State: AOAM533QuDYXFV9K8GQiEBA991o5TNwhJdteQoUmP/PxB2MWs9suUsQU
+        bGyaGOgegWN6TKecFeyOcOXUeGmhw0ayUk04nZfoyevqfbG9Hnjy7/TKZW3l/Gc5Oqs3UAJ2cVJ
+        4phphWBxD2xI/TTdOLs7FXBkM
+X-Received: by 2002:a17:906:b1da:b0:6d6:dd9a:3a9b with SMTP id bv26-20020a170906b1da00b006d6dd9a3a9bmr12184309ejb.766.1646727216613;
+        Tue, 08 Mar 2022 00:13:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwOdQ+BohdQua/sHBPJ2tnTmtj+3a1NGelClPL4W5LFDCZ3aUUnjuGf+CRHhRg8ebjHW7FsPw==
+X-Received: by 2002:a17:906:b1da:b0:6d6:dd9a:3a9b with SMTP id bv26-20020a170906b1da00b006d6dd9a3a9bmr12184295ejb.766.1646727216358;
+        Tue, 08 Mar 2022 00:13:36 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id u5-20020a170906780500b006d0b99162casm5562848ejm.114.2022.03.08.00.13.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 00:13:35 -0800 (PST)
+Message-ID: <5cb1e32e-c880-fa48-aa25-7660d8ad0cdd@redhat.com>
+Date:   Tue, 8 Mar 2022 09:13:33 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] kvm: x86: Improve virtual machine startup performance
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Hao Peng <flyingpenghao@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220301063756.16817-1-flyingpeng@tencent.com>
+ <Yh5d7XBD9D4FhEe3@google.com>
+ <CAPm50a+p2pSjExDwPmGpZ_aTuxs=x6RZ4-AAD19RDQx2o-=NCw@mail.gmail.com>
+ <YiAZ3wTICeLTVnJz@google.com>
+ <CAPm50aLJ51mm9JVpTMQCkNENX_9-Do5UeH5zxu-5byOcOFsJBg@mail.gmail.com>
+ <Yia5hsoq2ZZJM8gx@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yia5hsoq2ZZJM8gx@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,57 +87,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When two ax25 devices attempted to establish connection, the requester use ax25_create(),
-ax25_bind() and ax25_connect() to initiate connection. The receiver use ax25_rcv() to
-accept connection and use ax25_create_cb() in ax25_rcv() to create ax25_cb, but the
-ax25_cb->sk is NULL. When the receiver is detaching, a NULL pointer dereference bug
-caused by sock_hold(sk) in ax25_kill_by_device() will happen. The corresponding
-fail log is shown below:
+On 3/8/22 03:03, Sean Christopherson wrote:
+> On Thu, Mar 03, 2022, Hao Peng wrote:
+>> On Thu, Mar 3, 2022 at 9:29 AM Sean Christopherson <seanjc@google.com> wrote:
+>>>
+>>> On Wed, Mar 02, 2022, Hao Peng wrote:
+>>>> Thanks for pointing this out. However, other than shadow_root_level,
+>>>> other fields of context will not
+>>>> change during the entire operation, such as
+>>>> page_fault/sync_page/direct_map and so on under
+>>>> the condition of tdp_mmu.
+>>>> Is this patch still viable after careful confirmation of the fields
+>>>> that won't be modified?
+>>>
+>>> No, passing around the "init" flag is a hack.
+>>>
+>>> But, we can achieve what you want simply by initializing the constant data once
+>>> per vCPU.  There's a _lot_ of state that is constant for a given MMU now that KVM
+>>> uses separate MMUs for L1 vs. L2 when TDP is enabled.  I should get patches posted
+>>> tomorrow, just need to test (famous last words).
+> 
+> Famous last words indeed.  Long story short, the patches were mostly easy, but I
+> wandered deep into a rabbit hole when trying to make ->inject_page_fault() constant
+> per MMU.  I'll get something posted this week, though exactly what that something is
+> remains to be seen :-)
 
-===============================================================
-BUG: KASAN: null-ptr-deref in ax25_device_event+0xfd/0x290
-Call Trace:
-...
-ax25_device_event+0xfd/0x290
-raw_notifier_call_chain+0x5e/0x70
-dev_close_many+0x174/0x220
-unregister_netdevice_many+0x1f7/0xa60
-unregister_netdevice_queue+0x12f/0x170
-unregister_netdev+0x13/0x20
-mkiss_close+0xcd/0x140
-tty_ldisc_release+0xc0/0x220
-tty_release_struct+0x17/0xa0
-tty_release+0x62d/0x670
-...
+This is exactly what I have posted a few weeks ago:
 
-This patch add condition check in ax25_kill_by_device(). If s->sk is
-NULL, it will goto if branch to kill device.
+https://patchew.org/linux/20220221162243.683208-1-pbonzini@redhat.com/
 
-Fixes: 4e0f718daf97 ("ax25: improve the incomplete fix to avoid UAF and NPD bugs")
-Reported-by: Thomas Osterried <thomas@osterried.de>
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- net/ax25/af_ax25.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+See in particular
 
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index d53cbb4e250..6bd09718077 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -87,6 +87,13 @@ static void ax25_kill_by_device(struct net_device *dev)
- 	ax25_for_each(s, &ax25_list) {
- 		if (s->ax25_dev == ax25_dev) {
- 			sk = s->sk;
-+			if (!sk) {
-+				spin_unlock_bh(&ax25_list_lock);
-+				s->ax25_dev = NULL;
-+				ax25_disconnect(s, ENETUNREACH);
-+				spin_lock_bh(&ax25_list_lock);
-+				goto again;
-+			}
- 			sock_hold(sk);
- 			spin_unlock_bh(&ax25_list_lock);
- 			lock_sock(sk);
---
-2.17.1
+   KVM: nVMX/nSVM: do not monkey-patch inject_page_fault callback
+   KVM: x86/mmu: initialize constant-value fields just once
+
+Paolo
 

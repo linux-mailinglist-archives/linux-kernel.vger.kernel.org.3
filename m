@@ -2,135 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C776A4D2161
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 674274D216C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345981AbiCHT1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S1349503AbiCHT3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239799AbiCHT1l (ORCPT
+        with ESMTP id S1349129AbiCHT3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:27:41 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79ACE4E394;
-        Tue,  8 Mar 2022 11:26:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646767604; x=1678303604;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=p5EQvhuvUh/i32VbwfS9DgkOo7IpZ5mlI+CyySn+M08=;
-  b=gSkIrN32zfiNhoDyxPcN20k8/kMelW4gRpkrp29RLo0x+jBhhnqEAj7i
-   HyQ0ewcgadA+O7FSEU8LyCYKYvkEe87qwAPgarWVkKSundSh8X69dShT9
-   aAUw+JLR15uJPvT/DYl0ddGBqySoFWH4tscNWflsQCMSd3xOzLz0BW9+m
-   A=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Mar 2022 11:26:44 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 11:26:44 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Mar 2022 11:26:43 -0800
-Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 8 Mar 2022
- 11:26:40 -0800
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-Subject: [PATCH v2] drivers/thermal/thermal_of: Add change_mode ops support for thermal_of sensor
-Date:   Wed, 9 Mar 2022 00:56:26 +0530
-Message-ID: <1646767586-31908-1-git-send-email-quic_manafm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 8 Mar 2022 14:29:05 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C832FFFF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:28:07 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 8E2181F444B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646767685;
+        bh=wTrQZzTeDzl3S/Woe+temKvCkXTTxdkP03ZFoe6Rj9E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JaIccFmi1jX1ewpbOHkkQGyiOhdvqKxkBql/3KQWmeEBQn/mP+wHpnZhb1wis3XJI
+         XZhjoIwXc65vjwfJ/RWJzRoRjZQ17T4hYNBj1rk3qnMxIBzU2jmPIgD53sRpDbTvCA
+         L5xqICzA0o8+u8NbxpCDnGKpDaGP08JoVK46goArxgFJElNE/jkMtCa15MfDt/YGzi
+         LYURN3gjJ0/HMiCflPowekOpYyKzx0v55sCPVNEipd7jXFkRabu2pEmsAeOc8J+/+p
+         EV4yRSp29+JTPdXCnN+2MrvPyFySxaO9NBklmjUqlJftdKQ6RDxPu8nNXlPWuZh1+k
+         0ZqbjSNLJScNg==
+Message-ID: <d2290971-ea22-8203-631e-b896c76a994b@collabora.com>
+Date:   Tue, 8 Mar 2022 22:28:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Rob Clark <robdclark@chromium.org>
+References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+ <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sensor driver which register through thermal_of interface doesn't
-have an option to get thermal zone mode change notification from
-thermal core.
+On 3/8/22 19:29, Rob Clark wrote:
+> On Tue, Mar 8, 2022 at 5:17 AM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>>
+>> Hello,
+>>
+>> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
+>> During OOM, the shrinker will release BOs that are marked as "not needed"
+>> by userspace using the new madvise IOCTL. The userspace in this case is
+>> the Mesa VirGL driver, it will mark the cached BOs as "not needed",
+>> allowing kernel driver to release memory of the cached shmem BOs on lowmem
+>> situations, preventing OOM kills.
+> 
+> Will host memory pressure already trigger shrinker in guest? 
 
-Add support for change_mode ops in thermal_of interface so that sensor
-driver can use this ops for mode change notification.
+The host memory pressure won't trigger shrinker in guest here. This
+series will help only with the memory pressure within the guest using a
+usual "virgl context".
 
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
----
- drivers/thermal/thermal_of.c | 12 ++++++++++++
- include/linux/thermal.h      |  3 +++
- 2 files changed, 15 insertions(+)
+Having a host shrinker in a case of "virgl contexts" should be a
+difficult problem to solve.
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 9233f7e..da48480 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -203,6 +203,14 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
- 	return data->ops->get_trend(data->sensor_data, trip, trend);
- }
- 
-+static int of_thermal_change_mode(struct thermal_zone_device *tz,
-+				enum thermal_device_mode mode)
-+{
-+	struct __thermal_zone *data = tz->devdata;
-+
-+	return data->ops->change_mode(data->sensor_data, mode);
-+}
-+
- static int of_thermal_bind(struct thermal_zone_device *thermal,
- 			   struct thermal_cooling_device *cdev)
- {
-@@ -408,6 +416,9 @@ thermal_zone_of_add_sensor(struct device_node *zone,
- 	if (ops->set_emul_temp)
- 		tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
- 
-+	if (ops->change_mode)
-+		tzd->ops->change_mode = of_thermal_change_mode;
-+
- 	mutex_unlock(&tzd->lock);
- 
- 	return tzd;
-@@ -569,6 +580,7 @@ void thermal_zone_of_sensor_unregister(struct device *dev,
- 	tzd->ops->get_temp = NULL;
- 	tzd->ops->get_trend = NULL;
- 	tzd->ops->set_emul_temp = NULL;
-+	tzd->ops->change_mode = NULL;
- 
- 	tz->ops = NULL;
- 	tz->sensor_data = NULL;
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index c3148939..365733b 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -299,6 +299,8 @@ struct thermal_zone_params {
-  *		   temperature.
-  * @set_trip_temp: a pointer to a function that sets the trip temperature on
-  *		   hardware.
-+ * @change_mode: a pointer to a function that notifies the thermal zone
-+ *		   mode change.
-  */
- struct thermal_zone_of_device_ops {
- 	int (*get_temp)(void *, int *);
-@@ -306,6 +308,7 @@ struct thermal_zone_of_device_ops {
- 	int (*set_trips)(void *, int, int);
- 	int (*set_emul_temp)(void *, int);
- 	int (*set_trip_temp)(void *, int, int);
-+	int (*change_mode) (void *, enum thermal_device_mode);
- };
- 
- /* Function declarations */
+> This is
+> something I'm quite interested in for "virtgpu native contexts" (ie.
+> native guest driver with new context type sitting on top of virtgpu),
+
+In a case of "native contexts" it should be doable, at least I can't see
+any obvious problems. The madvise invocations could be passed to the
+host using a new virtio-gpu command by the guest's madvise IOCTL
+handler, instead-of/in-addition-to handling madvise in the guest's
+kernel, and that's it.
+
+> since that isn't using host storage
+
+s/host/guest ?

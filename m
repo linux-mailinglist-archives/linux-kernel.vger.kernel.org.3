@@ -2,78 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C084D22D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2CF4D22DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350100AbiCHUr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
+        id S1350208AbiCHUuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiCHUr6 (ORCPT
+        with ESMTP id S233920AbiCHUuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:47:58 -0500
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E4A517D8;
-        Tue,  8 Mar 2022 12:47:01 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id u10so28792298wra.9;
-        Tue, 08 Mar 2022 12:47:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=41ivgF5dWaFtnwPFxxJehv8WRBUjxjX2+saR8VYk4sM=;
-        b=Z2APTcTWo7zBjrMjKpR3FZBpboZ0E36wfY4BL2vwWd+vUUO7YhEAQTeFs6FjDqPnPE
-         OQqrRijPS+WzcHhtRxzpWzm1v4gwW99CQO0Z1yImQ5jUzeMvuNA5PUPheLV2tVVTXGWD
-         rmAo6+RUKUotq7UlvEMwPv+lbQz1fajmwOW1keZU30OqjiTTLSNszaIDGj/Into1iwiO
-         lWeV/OZji9womS3OZ1DZng3wsDb7RqJc0QaG2Tq8A+u93Q6rrtfWbuF6Atewt2aHVprT
-         5tgmQtmceva27WUQmslyLDyo34pRQyeCQZE21lkiu8uqniLvQSP2M//DfLp1bDSJ2W5j
-         mXRA==
-X-Gm-Message-State: AOAM531xNBrllnjeJOjPoVYMlACISU0EetORGZG/6e1YJopptxJT+iic
-        bnUuwF5uB5Pw1A4r92s36aM=
-X-Google-Smtp-Source: ABdhPJy5Db+bMZMryQ/25RN8/rilJcHTHDD0H1hvfS1B6t6wEWTPFi3n/hF0OwTKYgTp3L/Bc6UjvA==
-X-Received: by 2002:a5d:624d:0:b0:1e6:f18c:d264 with SMTP id m13-20020a5d624d000000b001e6f18cd264mr13837312wrv.546.1646772419685;
-        Tue, 08 Mar 2022 12:46:59 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id n20-20020a05600c501400b0038995ede299sm3064083wmr.17.2022.03.08.12.46.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 12:46:59 -0800 (PST)
-Date:   Tue, 8 Mar 2022 20:46:57 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, vkuznets@redhat.com
-Subject: Re: [PATCH 1/1] x86/hyperv: Output host build info as normal Windows
- version number
-Message-ID: <20220308204657.v2xdbtx6qsx6n44s@liuwe-devbox-debian-v2>
-References: <1646767364-2234-1-git-send-email-mikelley@microsoft.com>
+        Tue, 8 Mar 2022 15:50:50 -0500
+Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD4C31504
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:49:53 -0800 (PST)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id D54717A348
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:49:52 -0600 (CST)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id RgmGnWrewHnotRgmGnw6Cj; Tue, 08 Mar 2022 14:49:52 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mtK1aVJ31smKWIVWWlv6HiJulv7YkPPlGrK3oIjYevI=; b=o761dwgjzaq47QnG0dIgBHlD9c
+        K4d1RHNDj9+nt/CTKSmTxPIV33WcCtC9aOQcVPFdc9THoEgc78edIrYt5gXs12ks84Mu92tHlhLfp
+        8UVETJCoFEu2q4OrtNE45PWj05GCqDqnUk7wYkZUWGQ1hMK619Ddivb/v2figDwiN9IiL4fJI7uWu
+        IFswxF/Kl35MC9o18+CmkVBcFcaoSNwdOE3fH2MlZfooOcQXQo63PSK35UN5+ei9YPiPWyKhc6tle
+        Ks0USAwH9DXxyGnhkEPEvmegBMI3NVqvSUeOdicIf1yxk4hhl2VfHfOIUJbpXZ6Iw8iOeUmjrTeid
+        f763QrCg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38106)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nRgmF-002ViM-W1; Tue, 08 Mar 2022 20:49:52 +0000
+Message-ID: <d687840f-1622-59de-8369-f1a8c090ae46@roeck-us.net>
+Date:   Tue, 8 Mar 2022 12:49:49 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646767364-2234-1-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220307162147.440035361@linuxfoundation.org>
+ <20220308185219.GA3686655@roeck-us.net> <YienMYvdhGPCcPSv@kroah.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 5.16 000/184] 5.16.13-rc2 review
+In-Reply-To: <YienMYvdhGPCcPSv@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nRgmF-002ViM-W1
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:38106
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 13
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Cc Vitaly)
-
-On Tue, Mar 08, 2022 at 11:22:44AM -0800, Michael Kelley wrote:
-> Hyper-V provides host version number information that is output in
-> text form by a Linux guest when it boots. For whatever reason, the
-> formatting has historically been non-standard. Change it to output
-> in normal Windows version format for better readability.
+On 3/8/22 10:57, Greg Kroah-Hartman wrote:
+> On Tue, Mar 08, 2022 at 10:52:19AM -0800, Guenter Roeck wrote:
+>> On Mon, Mar 07, 2022 at 05:28:30PM +0100, Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 5.16.13 release.
+>>> There are 184 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>>
+>>> Responses should be made by Wed, 09 Mar 2022 16:21:20 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>
+>> Your cycles are getting too short for my test system to provide results
+>> in time. It gets overwhelmed, especially when there are updates affecting
+>> all stable branches which trigger a complete rebuild of all those branches.
 > 
-> Similar code for ARM64 guests already outputs in normal Windows
-> version format.
+> Sorry, but this one had to go out a bit sooner for reasons I don't want
+> to speculate about :)
 > 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-Applied to hyperv-next. Thanks.
+Another one, after the write file issue ? Sigh.
+I really hate that the Powers That Be don't tell me about that stuff :-(.
+
+We have severe conflicts against all Chrome OS kernel branches in this series.
+I hope that fix was worth it.
+
+> Anyway, I checked your builders, and they all looked ok except the 5.15
+> tree, which I know is broken on MIPS right now.
+> 
+Hmm, sorry, I didn't realize that there was more than one END issue.
+
+Guenter

@@ -2,77 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DCA4D115B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51A64D115F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344549AbiCHH4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 02:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S1344705AbiCHH5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 02:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiCHH4m (ORCPT
+        with ESMTP id S1344706AbiCHH4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 02:56:42 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFA93CFD7
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 23:55:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646726146; x=1678262146;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2p67ZeSQEYzJN6+IMZ2DPIeSrmku0WOj8oNcBKLz79U=;
-  b=jJHq3BmqVZA/bqjsGQ3c84ly8Wj0Uo7QgKTeI+fYOnCnmCRfSrmRLhea
-   MwV1RWlRSA+fu3fFRF/G2zJVanWESz0tS2L8of3sOGYqxpFeXzjnFIkka
-   S18b7krpp6uDDJd2m515Yva9rb2Xq6fPBjr90NQMLKYex0jDWQNJ2m1kx
-   bVFIusDbq7WNHdFBfk8aTbJIAiZKoPzX1rIX7DCLEaVvhl75wxdXiEnBO
-   ldxRgqXIhiHuDBhDiSIRWLETRXTt5i7YS7queo4qXN3EKzHFCJEAJf14v
-   kfpxn5Oa/kilxLu+25jaYxSJElMvVqe9t5hR98g8y1pEER9czZugHMHyf
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,163,1643698800"; 
-   d="scan'208";a="151206599"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Mar 2022 00:55:45 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 8 Mar 2022 00:55:45 -0700
-Received: from [10.12.73.60] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 8 Mar 2022 00:55:43 -0700
-Message-ID: <b5c57978-212f-55c4-2f0b-b38a8f157ca3@microchip.com>
-Date:   Tue, 8 Mar 2022 08:55:42 +0100
+        Tue, 8 Mar 2022 02:56:55 -0500
+Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257FB3E5DC;
+        Mon,  7 Mar 2022 23:55:58 -0800 (PST)
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 4FA7B2013FA;
+        Tue,  8 Mar 2022 07:55:55 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id DF9BF801EA; Tue,  8 Mar 2022 08:55:50 +0100 (CET)
+Date:   Tue, 8 Mar 2022 08:55:50 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     conor.dooley@microchip.com
+Cc:     mpm@selenic.com, herbert@gondor.apana.org.au,
+        lewis.hanly@microchip.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 1/2] hwrng: mpfs - add polarfire soc hwrng support
+Message-ID: <YicMBhn81HmtJMiF@owl.dominikbrodowski.net>
+References: <20220307154023.813158-1-conor.dooley@microchip.com>
+ <20220307154023.813158-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Regression: memory corruption on Atmel SAMA5D31
-Content-Language: en-US
-To:     Peter Rosin <peda@axentia.se>, <Tudor.Ambarus@microchip.com>,
-        <saravanak@google.com>
-CC:     <alexandre.belloni@bootlin.com>, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <du@axentia.se>,
-        <Ludovic.Desroches@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se>
- <CAGETcx_yDtX0m4gVKahABvKamUtGg2adL1+6=gwb4U=KEhwm7w@mail.gmail.com>
- <69bb004f-0bb4-ec56-479c-5deab0ece00f@axentia.se>
- <CAGETcx8Bppn1y3Hffp2N_DPcJA6YyMEv1EFDTa1e1zOrkxbxzw@mail.gmail.com>
- <f91c6f22-67a4-076d-d86d-6be1d14bc18a@axentia.se>
- <7edb467a-c8b4-fe29-9947-f71c655caa9f@axentia.se>
- <8484ce66-639c-03f5-c5db-3574ea26690c@microchip.com>
- <075a196f-79c2-0d58-15f9-ad5e33e2306b@axentia.se>
- <3beb80ad-d6f8-8c6a-e17d-e40a644bba07@microchip.com>
- <e47c155a-f25d-11b3-3339-b2bf71b886ce@microchip.com>
- <9e24034e-f586-a721-9031-179601a69abb@axentia.se>
- <7214ea3d-1445-c0fb-2620-cdc3d6167bcc@axentia.se>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <7214ea3d-1445-c0fb-2620-cdc3d6167bcc@axentia.se>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307154023.813158-2-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,85 +50,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2022 at 21:32, Peter Rosin wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+Am Mon, Mar 07, 2022 at 03:40:23PM +0000 schrieb conor.dooley@microchip.com:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> On 2022-03-07 12:32, Peter Rosin wrote:
->> On 2022-03-07 10:45, Tudor.Ambarus@microchip.com wrote:
->>> Peter, would it worth to do on your board a similar test to what I did?
->>> I'm thinking whether the source of interrupts matters or not. So can you
->>> disable your USB and use a mtd NAND stress test as a source of interrupts?
->>> mtd_stresstest together with scp or hexdump.
->>
->> That's not a quick test for me, since I don't have modules enabled.
->> I have located my SAMA5D31 evaluation kit, and I think I will try
->> to get that running instead.
+> Add a driver to access the hardware random number generator on the
+> Polarfire SoC. The hwrng can only be accessed via the system controller,
+> so use the mailbox interface the system controller exposes to access the
+> hwrng.
 > 
-> Hi again!
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  drivers/char/hw_random/Kconfig    |  13 ++++
+>  drivers/char/hw_random/Makefile   |   1 +
+>  drivers/char/hw_random/mpfs-rng.c | 103 ++++++++++++++++++++++++++++++
+>  3 files changed, 117 insertions(+)
+>  create mode 100644 drivers/char/hw_random/mpfs-rng.c
 > 
-> I got my SAMA5D31EK board running, using a freshly built at91bootstrap
-> and u-boot according to linux4sam.org and using the cross compiler I
-> have used from buildroot 2021.08, i.e. gcc 10.3.0, then using the
-> dtb for the ME20 from the original post and the same kernel and userspace
-> as I have used previously. Now, that dtb describes things that may not
-> actually be there etc etc, and I will try with a proper dtb as well
-> tomorrow, so this was just a quick-n-dirty test. I also added mem=64MB
-> to the kernel command line, to mimic our "Linea" CPU module and get a
-> bit quicker turnaround in the page cache.
-> 
-> Anyway, with that setup I can reproduce the problem on the EK board.
-> 
-> $ while :; do cat testfile | sha256sum; done
-> 5a939c69dd60a1f991e43d278d2e824a0e7376600a6b20c8e8b347871c546f9b  -
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> 250556db0a6ac3c3e101ae2845da48ebb39a0c12d4c9b9eec5ea229c426bcce9  -
-> 874c694ed002b04b67bf354a95ee521effd07e198f363e02cd63069a94fd4df8  -
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> c3a918a923ff2d504a45ffa51289e69fb6d8aa1140cca3fd9f30703b18d9e509  -
-> 1577ed72d2f296f9adc50707e0e56547ecb311fa21ad875a3d55ca908c440307  -
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> 
-> 
-> But apparently only if I have an FTDI usb-serial adapter attached
-> while I boot. I also start to get good hashes if I remove and
-> reinsert the FTDI adapter, which is interesting.
-> 
-> $ while :; do cat testfile | sha256sum; done
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> ...
-> *snip many dozens of lines*
-> ...
-> 7bf74cf37c8bf81ad4f8e86da8eb129a8ae0ee0f5a22ac584ad39233b97acb4d  -
-> 
-> It's of course hard to prove the absence of trouble, but it feels
-> like it is working from both of those latter cases...
-> 
-> (for the "real" case the FTDI usb-serial adapter is soldered in,
->   with no easy way to make it go away, so it is not as easy to do the
->   same test there.)
-> 
-> I'll try to reduce the number of local parts of the setup further
-> tomorrow, such as the dtb mentioned above and the rootfs. I was
-> hoping for a binary download of prebuilt parts, but some links on
-> 
-> https://www.linux4sam.org/bin/view/Linux4SAM/Sama5d3xekMainPage
-> 
-> are bogus. E.g.
-> 
-> ftp://twiki.lnx4mchp_backend/pub/demo/linux4sam_4.7/linux4sam-poky-sama5d3xek-4.7.zip
+> diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
+> index 9704963f9d50..69f1fd538589 100644
+> --- a/drivers/char/hw_random/Kconfig
+> +++ b/drivers/char/hw_random/Kconfig
+> @@ -385,6 +385,19 @@ config HW_RANDOM_PIC32
+>  
+>  	  If unsure, say Y.
+>  
+> +config HW_RANDOM_POLARFIRE_SOC
+> +	tristate "Microchip PolarFire SoC Random Number Generator support"
+> +	depends on HW_RANDOM && POLARFIRE_SOC_SYS_CTRL
+> +	help
+> +	  This driver provides kernel-side support for the Random Number
+> +	  Generator hardware found on PolarFire SoC (MPFS).
+> +
+> +	  To compile this driver as a module, choose M here. The
+> +	  module will be called mfps_rng.
+> +
+> +	  If unsure, say N.
+> +
+> +
+>  config HW_RANDOM_MESON
+>  	tristate "Amlogic Meson Random Number Generator support"
+>  	depends on HW_RANDOM
+> diff --git a/drivers/char/hw_random/Makefile b/drivers/char/hw_random/Makefile
+> index 584d47ba32f7..3e948cf04476 100644
+> --- a/drivers/char/hw_random/Makefile
+> +++ b/drivers/char/hw_random/Makefile
+> @@ -46,3 +46,4 @@ obj-$(CONFIG_HW_RANDOM_CCTRNG) += cctrng.o
+>  obj-$(CONFIG_HW_RANDOM_XIPHERA) += xiphera-trng.o
+>  obj-$(CONFIG_HW_RANDOM_ARM_SMCCC_TRNG) += arm_smccc_trng.o
+>  obj-$(CONFIG_HW_RANDOM_CN10K) += cn10k-rng.o
+> +obj-$(CONFIG_HW_RANDOM_POLARFIRE_SOC) += mpfs-rng.o
+> diff --git a/drivers/char/hw_random/mpfs-rng.c b/drivers/char/hw_random/mpfs-rng.c
+> new file mode 100644
+> index 000000000000..a103c765d021
+> --- /dev/null
+> +++ b/drivers/char/hw_random/mpfs-rng.c
+> @@ -0,0 +1,103 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Microchip PolarFire SoC (MPFS) hardware random driver
+> + *
+> + * Copyright (c) 2020-2022 Microchip Corporation. All rights reserved.
+> + *
+> + * Author: Conor Dooley <conor.dooley@microchip.com>
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/hw_random.h>
+> +#include <linux/platform_device.h>
+> +#include <soc/microchip/mpfs.h>
+> +
+> +#define CMD_OPCODE	0x21
+> +#define CMD_DATA_SIZE	0U
+> +#define CMD_DATA	NULL
+> +#define MBOX_OFFSET	0U
+> +#define RESP_OFFSET	0U
+> +#define RNG_RESP_BYTES	32U
+> +
+> +struct mpfs_rng {
+> +	struct mpfs_sys_controller *sys_controller;
+> +	struct hwrng rng;
+> +};
+> +
+> +static int mpfs_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
+> +{
+> +	struct mpfs_rng *rng_priv = container_of(rng, struct mpfs_rng, rng);
+> +	u32 response_msg[RNG_RESP_BYTES / sizeof(u32)];
+> +	unsigned int count = 0, copy_size_bytes;
+> +	int ret;
+> +
+> +	struct mpfs_mss_response response = {
+> +		.resp_status = 0U,
+> +		.resp_msg = (u32 *)response_msg,
+> +		.resp_size = RNG_RESP_BYTES
+> +	};
+> +	struct mpfs_mss_msg msg = {
+> +		.cmd_opcode = CMD_OPCODE,
+> +		.cmd_data_size = CMD_DATA_SIZE,
+> +		.response = &response,
+> +		.cmd_data = CMD_DATA,
+> +		.mbox_offset = MBOX_OFFSET,
+> +		.resp_offset = RESP_OFFSET
+> +	};
+> +
+> +	while (count < max) {
+> +		ret = mpfs_blocking_transaction(rng_priv->sys_controller, &msg);
+> +		if (ret)
+> +			return ret;
+> +
+> +		copy_size_bytes = max - count > RNG_RESP_BYTES ? RNG_RESP_BYTES : max - count;
+> +		memcpy(buf + count, response_msg, copy_size_bytes);
+> +
+> +		count += copy_size_bytes;
+> +		if (!wait)
+> +			break;
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static int mpfs_rng_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct mpfs_rng *rng_priv;
+> +	int ret;
+> +
+> +	rng_priv = devm_kzalloc(dev, sizeof(*rng_priv), GFP_KERNEL);
+> +	if (!rng_priv)
+> +		return -ENOMEM;
+> +
+> +	rng_priv->sys_controller =  mpfs_sys_controller_get(&pdev->dev);
+> +	if (IS_ERR(rng_priv->sys_controller))
+> +		return dev_err_probe(dev, PTR_ERR(rng_priv->sys_controller),
+> +				     "Failed to register system controller hwrng sub device\n");
+> +
+> +	rng_priv->rng.read = mpfs_rng_read;
+> +	rng_priv->rng.name = pdev->name;
 
-Okay, that's a bug in the TWiki page.
-> What's up with that twiki.lnx4mchp_backend "host"?
+Is there also some quality estimation, or should this hwrng only be trusted
+if it passes validation by userspace?
 
-URL must be:
-https://files.linux4sam.org/pub/demo/linux4sam_4.7/linux4sam-poky-sama5d3xek-4.7.zip
-
-Regards,
-   Nicolas
-
--- 
-Nicolas Ferre
+Thanks,
+	Dominik

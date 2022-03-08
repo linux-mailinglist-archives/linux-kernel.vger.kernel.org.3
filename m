@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0C14D1710
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D7A4D1713
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346722AbiCHMSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:18:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S1346761AbiCHMSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346780AbiCHMSD (ORCPT
+        with ESMTP id S235162AbiCHMSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:18:03 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A711E43EEC;
-        Tue,  8 Mar 2022 04:17:06 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qa43so38708312ejc.12;
-        Tue, 08 Mar 2022 04:17:06 -0800 (PST)
+        Tue, 8 Mar 2022 07:18:47 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6692C24090;
+        Tue,  8 Mar 2022 04:17:50 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id m2so10927822pll.0;
+        Tue, 08 Mar 2022 04:17:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OFA2/eM8lwGnQdw8L8HYozWRTs8bN4HRmWhwr7+OpfQ=;
-        b=dZxiz91cR9d8+CC4dJkv0i2jFfJ9CP0b3NlEsXD6TPHMGYacNdhru2mSELTl8O+6T+
-         FkPBsspyt6yrQV1UNk0fLDyvuyTBbsyYl6/T/V6x+ZilvnI0NzYTKb6PgY7cnu5zGc3W
-         z8u6cgybLElr2aEZQqTCU+yd3hjzgyX32dfmIm7l1uFqFRVNXPWDahWbmtxQMKSxUF6t
-         mDip2hxkD1fj4trIskXiu0dLQGix1y5LAmHMsfX0r/TW2pyZZX5NoWOICWOAFwOo7IeO
-         jpGsIE8IKRoh4awk7E5UsjXtaPmC6jPN5sC8oetFJ5PMyH0bpwZVfBbDUpiUazI2kL/w
-         rFpA==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=dr9s0/aBCglOTnR8EG3bSxaTvIl2jybWyOsb5Ha4FcU=;
+        b=PSkaBDSc6grc6PHIEsor63W0fjW3myNhfSTd6Li5v2oYVoT9oAVdfi/xaBzdZGEDIE
+         j6RovrxKJjj7RZUvqqJIe8/CQ5PTFbFKU2H4FDXkplqhc1AWHsigaZHmdUk2h/1tyHyu
+         sWocJccy9EgKPU8zDWaST/iX1CCTGM0GRsaVMuq7+V7k5wvaF+ydROOeRyAm5x4LZdlA
+         uTFhr1hspElL8g1HiPOYFNEqG6g33Z3frdiHxA0ANBMf4G4RlYiWXLzGo63VxqT1Hp4B
+         AIbSwRAFFgfmmlRLoM2bU+3VxaCa7HC3kxCJr7SzZqf2wCwIWJcZtSiajLZJ/fEngN1D
+         jG4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OFA2/eM8lwGnQdw8L8HYozWRTs8bN4HRmWhwr7+OpfQ=;
-        b=r0OKZEy++X04LXgPuvGLZAV+xqgFCxlzL6HlMYMJf6JxxF04BeYhNVTU8XzJHIO8nk
-         aZgZUXbLfjkjWXfxH8IlCdmW8F8TnOqVjczIF+iVuePU9vbwwSF244Ehvr/8uEROWI/L
-         P+Cd8Nsi/7iE8uXREHzZFilsz4L3KlOesSuHvQhesdBNtpx7VQMZNMwdMTfYdQicBXBz
-         EUO+8pqg1gLmbpI0OA1F7lwBkgmKDdyQ4tSZwzq0S2WmActedAslT1sAlmVkAOe0LTUz
-         3C0PbKqfPbYDP/HCR9xoMprgKFlwBbdR3Bgj8eIRx2J7NOMLyNmL5ySKWRzTneFvIZOc
-         AYJg==
-X-Gm-Message-State: AOAM533xcSInz+ARxj+U1EvNpk0EEFQc8bJvKhJSrgEVCyMbHaV0G2kT
-        Bo/trlK3AEy8vNwwSdMvW1/W9qLbtgY=
-X-Google-Smtp-Source: ABdhPJwE9PU5xJ81uImIisWcDcAXQ3ECFtBqwX9p5ItDnR0zlR5H81k8PeGbgOyJEUFk90ZFZol5QQ==
-X-Received: by 2002:a17:907:97cc:b0:6da:a8fb:d1db with SMTP id js12-20020a17090797cc00b006daa8fbd1dbmr13315004ejc.267.1646741825187;
-        Tue, 08 Mar 2022 04:17:05 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id r19-20020a17090638d300b006d6e4fc047bsm5886872ejd.11.2022.03.08.04.17.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 04:17:04 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <800a68f8-fbe0-5980-4290-bdc0ed4d05bd@redhat.com>
-Date:   Tue, 8 Mar 2022 13:17:02 +0100
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=dr9s0/aBCglOTnR8EG3bSxaTvIl2jybWyOsb5Ha4FcU=;
+        b=PQGhJZJ2lL2Jx7hOWxAzBV4+3j1b59L+4IDp8qz7fdcUAZE2WfpmW0JpIkStuBLmi2
+         CZHqvabVqP0H6skI/E9IqbaPmOCwzHlEeJPtAPeH/pZcpQtJUkAzXMzP3MfsNTtV0i9k
+         WpPupgowSpBK/t3D7W539hFMDWjifrYxo/UDSlADqW/2z0yuvCV0U/U+uWfLx5G5UIzD
+         upGuH7WbXJn3QtYW64y17aQPz/Qp5QlfWMu79IGMZhDBZSVfv+miM7JmR6AArXGFbAyk
+         Bb5rYSxjhAJhch/WJhvOIp9IAu/bvf4smTnlC7Cxt5LZjsoxrL2SzlhTn34wmffK9PXd
+         y4Pw==
+X-Gm-Message-State: AOAM531Ys7lQH9vZ1WeSJtbja4rNHCirBTCxFySLhG1QchHdWeeGTJxp
+        D1UeSgyiOtYfwpKD2a1u0gJH86qDlcABlHwHBA==
+X-Google-Smtp-Source: ABdhPJzbtHPd5CWJbQ12WkPTeJNvlBn3yn3IeG8sbtzPWcqUyMaCCNndp6gtz+A61gNXzi9jFnYtioH8qh/Q45FXhJI=
+X-Received: by 2002:a17:90a:5407:b0:1bf:43ce:f11b with SMTP id
+ z7-20020a17090a540700b001bf43cef11bmr4291512pjh.31.1646741869517; Tue, 08 Mar
+ 2022 04:17:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 01/12] mm/shmem: Introduce F_SEAL_INACCESSIBLE
-Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Steven Price <steven.price@arm.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Linux API <linux-api@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>
-References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
- <20220118132121.31388-2-chao.p.peng@linux.intel.com>
- <619547ad-de96-1be9-036b-a7b4e99b09a6@kernel.org>
- <20220217130631.GB32679@chaop.bj.intel.com>
- <2ca78dcb-61d9-4c9d-baa9-955b6f4298bb@www.fastmail.com>
- <20220223114935.GA53733@chaop.bj.intel.com>
- <71a06402-6743-bfd2-bbd4-997f8e256554@arm.com>
- <7cc65bbd-e323-eabb-c576-b5656a3355ac@kernel.org>
- <20220307132602.GA58690@chaop.bj.intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220307132602.GA58690@chaop.bj.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Tue, 8 Mar 2022 20:17:38 +0800
+Message-ID: <CAMhUBj=ty1=zk6oQY2c9N0u3jo9O7t-6oN6OJSoMXpkJBYv9KA@mail.gmail.com>
+Subject: [BUG] scsi: sym53c8xx_2: warning in ___free_dma_mem_cluster()
+To:     willy@infradead.org, jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/22 14:26, Chao Peng wrote:
->> In pseudo-Rust, this is the difference between:
->>
->> fn convert_to_private(in: &mut Memfd)
->>
->> and
->>
->> fn convert_to_private(in: Memfd) -> PrivateMemoryFd
->>
->> This doesn't map particularly nicely to the kernel, though.
-> I understand this Rust semantics and the difficulty to handle races.
-> Probably we should not expose F_SEAL_INACCESSIBLE to userspace, instead
-> we can use a new in-kernel flag to indicate the same thing. That flag
-> should be set only when the memfd is created with MFD_INACCESSIBLE.
+Hi,
 
-Yes, I like this.
+I found a bug when proing the sym53c8xx driver.
 
-Paolo
+When the initialization process fails on sym_find_frimware(), the
+driver frees the related resources, which cause a warning in kernel.
 
+The following log reveals it:
+
+[    3.736968] WARNING: CPU: 6 PID: 1 at kernel/dma/mapping.c:528
+dma_free_attrs+0xf1/0x110
+[    3.737503] Modules linked in:
+[    3.737503] CPU: 6 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #31
+[    3.737503] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+[    3.737503] RIP: 0010:dma_free_attrs+0xf1/0x110
+[    3.737503] Call Trace:
+[    3.737503]  <TASK>
+[    3.737503]  ___free_dma_mem_cluster+0x18e/0x6a0
+[    3.737503]  __sym_mfree_dma+0x2ec/0x740
+[    3.737503]  sym_hcb_free+0x147/0x6e0
+[    3.737503]  sym_attach+0xec1/0x1380
+[    3.737503]  sym2_probe+0x852/0xab0
+[    3.737503]  ? sym_log_bus_error+0x140/0x140
+[    3.737503]  local_pci_probe+0x13f/0x210
+[    3.737503]  pci_device_probe+0x34c/0x6d0
+[    3.737503]  ? pci_uevent+0x470/0x470
+[    3.737503]  really_probe+0x24c/0x8d0
+[    3.737503]  __driver_probe_device+0x1b3/0x280
+[    3.737503]  driver_probe_device+0x50/0x380
+[    3.737503]  __driver_attach+0x416/0x580
+[    3.737503]  ? driver_attach+0x40/0x40
+[    3.737503]  bus_for_each_dev+0x10d/0x160
+[    3.737503]  bus_add_driver+0x2f7/0x520
+[    3.737503]  driver_register+0x2e9/0x3e0
+[    3.737503]  sym2_init+0x16a/0x1fa
+[    3.737503]  ? pqi_init+0x174/0x174
+[    3.737503]  do_one_initcall+0x10c/0x260
+[    3.737503]  ? pqi_init+0x174/0x174
+[    3.737503]  ? do_initcall_level+0x133/0x133
+[    3.737503]  ? parse_args+0x19e/0x940
+[    3.737503]  ? lock_is_held_type+0xe2/0x140
+[    3.737503]  do_initcall_level+0x103/0x133
+[    3.737503]  do_initcalls+0x46/0x76
+[    3.737503]  kernel_init_freeable+0x292/0x396
+[    3.737503]  ? rest_init+0x240/0x240
+[    3.737503]  kernel_init+0x14/0x1b0
+[    3.737503]  ? rest_init+0x240/0x240
+[    3.737503]  ret_from_fork+0x22/0x30
+
+Regards,
+Zheyu Ma

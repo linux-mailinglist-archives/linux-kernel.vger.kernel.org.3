@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F594D163A
+	by mail.lfdr.de (Postfix) with ESMTP id 80C6F4D163B
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346493AbiCHL1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
+        id S1346538AbiCHL15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiCHL1q (ORCPT
+        with ESMTP id S1346497AbiCHL1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:27:46 -0500
+        Tue, 8 Mar 2022 06:27:49 -0500
 Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A5446655;
-        Tue,  8 Mar 2022 03:26:50 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n33-20020a05600c3ba100b003832caf7f3aso1221218wms.0;
-        Tue, 08 Mar 2022 03:26:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B421443E6;
+        Tue,  8 Mar 2022 03:26:53 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so1290853wmf.0;
+        Tue, 08 Mar 2022 03:26:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=cIWJ050d21bkpZ3eybYb0e61vkw3HZkkX+6msnmx6MU=;
-        b=HHK3bdFpL7gIdoKyh9VaCVqO9lSGR43eZqTPcjtpYElw8sjemly5wGs6/jIqFTd8qK
-         JjsftYTLai7Tjcd9e/ZIzWzERD0f48sQBImnhiiQpiSNJ1rlWwmgMlg3Qz+bFgs0qSRT
-         HLzj/qSjSNM7UXdz1Kp3AqHYo0/MCKnZmDPaTXwv5QAFs8QtBRbWKUvj/FI2caDLJgGs
-         W3xBZFRTBjz4UJdJIAzuJZ5x1mZfXrYSns2A/ORoNWBh824rOoPLcy4aY+NR+wSbun20
-         94rkJ85Z3BYG4m+OV1/MMGgNtwPgY6EkNmaFyhILsYpT9wXQHAoAOBNZL9vjBqVNExZl
-         yPOQ==
+        bh=oUGbKpyqaCA2lCo6XjUtMOfHtbuoF0WQ8BNTKgdnnC4=;
+        b=O97GZllgNql+6jG2sVdKquf4hAQ98Q3UPAp3d4uyEU/cl9pgKfhlLsSyrryN9WHySq
+         FcbdvyQg7WXXhBOU4lLcPRfGQkciOHE27HzrKbfY0TnDDOIlGvcRXXZGdCp12/oVXSc7
+         JpJADbtGAp5dl3YcLrD0oM0RwqxDhuU78ttplK/6tV7G1JZLH/wEHD51nPuNxKp79toD
+         g5/FwL20+dltcuz8woBQ/9qbRUD4dR7f73jn6DHAt7aIqesDn3v2GWTlAELJaZ2XzPIV
+         8lFn4Yd/pFPf3CR56jjSCK5T7aXk3VDdlWgiVYNaVO7NR8zFLvByB+PgrXtshfeyDZEy
+         jVHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=cIWJ050d21bkpZ3eybYb0e61vkw3HZkkX+6msnmx6MU=;
-        b=5ac9G96YV5Fr3iM6B3DFDXkaCOhs0QXr0WZwHdeOt3fsZjUHxT2sLODzwXXKdirQ+e
-         4f1pqAAp64J+M+vBzyhmtI+aUx5cub5qG9UpPEDC/Kq76DjgIT1LWWPcQUa3uYfT+tVR
-         H2DamlRWO7zhjd43hNVmVfJ4OPF28mJgeMITDiiOddDMfc0tJsoid8qwogxXLK/vvKHz
-         jVjhozB0DVkbtuSeaJcExx5ADWDYdtT4Ty0/Qzlc7fvlW5XXfs1piK1RWZJp9utL6cEh
-         vmlJmtgJRqRr516k+6S1396la4pNm+/u+PJGgO8eOWBuFjEmBWVgg2UTySw8RbXnThp1
-         xBTA==
-X-Gm-Message-State: AOAM530/zSLkpr4+kKxEZ8EbEcNxi2yM9VNkmw1bgyaE3rNC4wVsrk0u
-        HoKrPTuq1PBeeleXO3iGqB4=
-X-Google-Smtp-Source: ABdhPJxx/EbY/Bm+Wp1ucslvnvQT5h2VqklVg6iZBDmXp/1ZZkznDRLtCRcNaJvKmfqH/A4PP/LLkg==
-X-Received: by 2002:a1c:2bc3:0:b0:381:3dd5:5707 with SMTP id r186-20020a1c2bc3000000b003813dd55707mr3010118wmr.31.1646738808387;
-        Tue, 08 Mar 2022 03:26:48 -0800 (PST)
+        bh=oUGbKpyqaCA2lCo6XjUtMOfHtbuoF0WQ8BNTKgdnnC4=;
+        b=R8/Af1lBm88jsCt1iAGfTk8AzvZbNhOQmbuWCI54gAbuQXwdAo/qxlOl+s0ayR8mBS
+         eQUd4kPAjJihra280rohUl+xfhE1FHnE9pHwP2vtCyoRUeHqiewiuz0w0hYU+UTfZ5vC
+         Edyy1eZF5y6ux21eTmSlTmMmhA/48VvZ+XqvXjPfH0HWRhOfHtblzcqm0lPip8+CkAew
+         3xPZHNN14+8kXUzyyhzNcjOjVzHqroWXhVKTHf1y4tLYETWK/oOPHsVjLF/wb0R4XT0j
+         3NLMFBJ2TkvEesoqEUT8ZGDgG1OXBqUzjtOS5ySo9f4zgHhLIBmaLxqM/c4RhL7dLp8A
+         sp7Q==
+X-Gm-Message-State: AOAM533EaKqA1NkpMVGOxaVWt83Gb4QTB2LPrX6lrJc6Cd8P2g8d6b8f
+        OdTT1shiuZ0tk9dN0kH6jzg=
+X-Google-Smtp-Source: ABdhPJzO7+HQKorna2n6eyt+kiKIZsP6vwIUDvvQdcH7sAyPNFz0ZKI7kb8KQwQRv6eAcMn6tj2Utg==
+X-Received: by 2002:a7b:c3d5:0:b0:389:a49f:c7e6 with SMTP id t21-20020a7bc3d5000000b00389a49fc7e6mr3155985wmj.99.1646738811975;
+        Tue, 08 Mar 2022 03:26:51 -0800 (PST)
 Received: from felia.fritz.box (200116b82626c9000cc91df728b27ead.dip.versatel-1u1.de. [2001:16b8:2626:c900:cc9:1df7:28b2:7ead])
-        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm14141215wre.22.2022.03.08.03.26.47
+        by smtp.gmail.com with ESMTPSA id o11-20020adf9d4b000000b001f0077ea337sm14141215wre.22.2022.03.08.03.26.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 03:26:48 -0800 (PST)
+        Tue, 08 Mar 2022 03:26:51 -0800 (PST)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Hsin-Yi Wang <hsinyi@chromium.org>,
         Yunfei Dong <yunfei.dong@mediatek.com>,
@@ -62,9 +62,9 @@ Cc:     Rick Chang <rick.chang@mediatek.com>,
         linux-mediatek@lists.infradead.org,
         kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 1/2] MAINTAINERS: refurbish MEDIATEK JPEG DRIVER section
-Date:   Tue,  8 Mar 2022 12:26:29 +0100
-Message-Id: <20220308112630.546-2-lukas.bulwahn@gmail.com>
+Subject: [PATCH 2/2] MAINTAINERS: rectify entry for MEDIATEK MEDIA DRIVER
+Date:   Tue,  8 Mar 2022 12:26:30 +0100
+Message-Id: <20220308112630.546-3-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220308112630.546-1-lukas.bulwahn@gmail.com>
 References: <20220308112630.546-1-lukas.bulwahn@gmail.com>
@@ -78,15 +78,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit a16ce2f33732 ("media: dt-bindings: mediatek: convert mtk jpeg
-decoder/encoder to yaml") converts mediatek-jpeg-decoder.txt to yaml, but
-missed to adjust its reference in MAINTAINERS.
+Commit 9cdd70ceb6fa ("media: dt-bindings: media: mtk-vcodec: Separate video
+encoder and decoder dt-bindings") converts and splits mediatek-vcodec.txt
+to mediatek,vcodec-{de,en}coder.yaml, but missed to adjust its reference
+in MAINTAINERS.
 
 Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
 broken reference.
 
-While touching this section, generalize the file entry to also cover the
-encoder yaml devicetree, as the driver directory also includes the encoder.
+Repair this file reference in MEDIATEK MEDIA DRIVER.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
@@ -94,18 +94,18 @@ Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 80e5867b2afa..fe3feca0b7c6 100644
+index fe3feca0b7c6..38cdf9aadfe4 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12337,7 +12337,7 @@ MEDIATEK JPEG DRIVER
- M:	Rick Chang <rick.chang@mediatek.com>
- M:	Bin Liu <bin.liu@mediatek.com>
+@@ -12353,7 +12353,7 @@ MEDIATEK MEDIA DRIVER
+ M:	Tiffany Lin <tiffany.lin@mediatek.com>
+ M:	Andrew-CT Chen <andrew-ct.chen@mediatek.com>
  S:	Supported
--F:	Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
-+F:	Documentation/devicetree/bindings/media/mediatek-jpeg-*.yaml
- F:	drivers/media/platform/mtk-jpeg/
- 
- MEDIATEK MDP DRIVER
+-F:	Documentation/devicetree/bindings/media/mediatek-vcodec.txt
++F:	Documentation/devicetree/bindings/media/mediatek,vcodec*.yaml
+ F:	Documentation/devicetree/bindings/media/mediatek-vpu.txt
+ F:	drivers/media/platform/mtk-vcodec/
+ F:	drivers/media/platform/mtk-vpu/
 -- 
 2.17.1
 

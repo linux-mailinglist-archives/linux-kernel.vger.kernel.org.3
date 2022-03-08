@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828E94D1CA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 279C54D1CAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234940AbiCHQCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        id S240251AbiCHQDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348256AbiCHQB4 (ORCPT
+        with ESMTP id S236903AbiCHQD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:01:56 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5443750055
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:00:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646755249; x=1678291249;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aFTJDJ6yKoaxFI6g8sPE9CQvYWqYMdAKSLo3OBtYCBs=;
-  b=Q2q2h4KYtLqxcNffUenWZlZEdti3HmRvpuJ/fKMTBeUENO69Xi/RAEGM
-   yyFpJmWKawTjH883oQxfULlcoiQyrE95XOx2OQYJF0ztPmhGJ26YBhfsk
-   SV0tkGb+PP1QVMqwBJL0LeN7tQKUo/p/ptn4+ppV18gDnjSVga2ee6mHQ
-   Co91YzvHJU/aOLoRK5hMknV7nzIwIOxhZ1ZrnC3jch5KZJqSs2uGR9uHR
-   tCtRqwOk2w7CGt/qDcHwuV2GVvNVUqdQfSniXjgt3CuS/YIWQBnGlDClQ
-   vDtf/8o7SSnfOFfVZS+z8aHEBApQGuh7AtHa7Alg156zzrZUhiZVppF2u
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="234673925"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="234673925"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 08:00:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="632273708"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2022 08:00:30 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRcGD-0001eD-9O; Tue, 08 Mar 2022 16:00:29 +0000
-Date:   Wed, 9 Mar 2022 00:00:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 82/84]
- kernel/rcu/tree.c:2678:3: error: implicit declaration of function
- 'rcu_tasks_classic_qs'
-Message-ID: <202203082348.j9qeWzns-lkp@intel.com>
+        Tue, 8 Mar 2022 11:03:27 -0500
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [IPv6:2001:1600:3:17::42a9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57394218E;
+        Tue,  8 Mar 2022 08:02:28 -0800 (PST)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KCg824QBGzMqMKV;
+        Tue,  8 Mar 2022 17:02:26 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KCg800Qv1zlhSMS;
+        Tue,  8 Mar 2022 17:02:23 +0100 (CET)
+Message-ID: <218eb9dc-d9bd-0173-5343-f44b58545aef@digikod.net>
+Date:   Tue, 8 Mar 2022 17:02:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: 
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20210712170313.884724-1-mic@digikod.net>
+ <20210712170313.884724-6-mic@digikod.net> <YidDznCPSmFmfNwE@iki.fi>
+ <995fc93b-531b-9840-1523-21ae2adbe4ba@digikod.net> <YidX3jqNJeFfr1G1@iki.fi>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v8 5/5] certs: Allow root user to append signed hashes to
+ the blacklist keyring
+In-Reply-To: <YidX3jqNJeFfr1G1@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,78 +59,278 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-head:   fb8d1afe45bd6fcb50dff8bac4636725358fde94
-commit: c8c42c80febd4e6d346f7f62958300eb8205aa31 [82/84] rcu-tasks: Make Tasks RCU account for userspace execution
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220308/202203082348.j9qeWzns-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/c8c42c80febd4e6d346f7f62958300eb8205aa31
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
-        git checkout c8c42c80febd4e6d346f7f62958300eb8205aa31
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 08/03/2022 14:19, Jarkko Sakkinen wrote:
+> On Tue, Mar 08, 2022 at 01:18:28PM +0100, Mickaël Salaün wrote:
+>>
+>> On 08/03/2022 12:53, Jarkko Sakkinen wrote:
+>>> On Mon, Jul 12, 2021 at 07:03:13PM +0200, Mickaël Salaün wrote:
+>>>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>>>
+>>>> Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
+>>>> to dynamically add new keys to the blacklist keyring.  This enables to
+>>>> invalidate new certificates, either from being loaded in a keyring, or
+>>>> from being trusted in a PKCS#7 certificate chain.  This also enables to
+>>>> add new file hashes to be denied by the integrity infrastructure.
+>>>>
+>>>> Being able to untrust a certificate which could have normaly been
+>>>> trusted is a sensitive operation.  This is why adding new hashes to the
+>>>> blacklist keyring is only allowed when these hashes are signed and
+>>>> vouched by the builtin trusted keyring.  A blacklist hash is stored as a
+>>>> key description.  The PKCS#7 signature of this description must be
+>>>> provided as the key payload.
+>>>>
+>>>> Marking a certificate as untrusted should be enforced while the system
+>>>> is running.  It is then forbiden to remove such blacklist keys.
+>>>>
+>>>> Update blacklist keyring, blacklist key and revoked certificate access rights:
+>>>> * allows the root user to search for a specific blacklisted hash, which
+>>>>     make sense because the descriptions are already viewable;
+>>>> * forbids key update (blacklist and asymmetric ones);
+>>>> * restricts kernel rights on the blacklist keyring to align with the
+>>>>     root user rights.
+>>>>
+>>>> See help in tools/certs/print-cert-tbs-hash.sh .
+>>>>
+>>>> Cc: David Howells <dhowells@redhat.com>
+>>>> Cc: David Woodhouse <dwmw2@infradead.org>
+>>>> Cc: Eric Snowberg <eric.snowberg@oracle.com>
+>>>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+>>>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+>>>> Link: https://lore.kernel.org/r/20210712170313.884724-6-mic@digikod.net
+>>>> ---
+>>>>
+>>>> Changes since v6:
+>>>> * Rebase on keys-cve-2020-26541-v3: commit ebd9c2ae369a ("integrity:
+>>>>     Load mokx variables into the blacklist keyring").
+>>>>
+>>>> Changes since v5:
+>>>> * Rebase on keys-next, fix Kconfig conflict, and update the asymmetric
+>>>>     key rights added to the blacklist keyring by the new
+>>>>     add_key_to_revocation_list(): align with blacklist key rights by
+>>>>     removing KEY_POS_WRITE as a safeguard, and add
+>>>>     KEY_ALLOC_BYPASS_RESTRICTION to not be subject to
+>>>>     restrict_link_for_blacklist() that only allows blacklist key types to
+>>>>     be added to the keyring.
+>>>> * Change the return code for restrict_link_for_blacklist() from -EPERM
+>>>>     to -EOPNOTSUPP to align with asymmetric key keyrings.
+>>>>
+>>>> Changes since v3:
+>>>> * Update commit message for print-cert-tbs-hash.sh .
+>>>>
+>>>> Changes since v2:
+>>>> * Add comment for blacklist_key_instantiate().
+>>>> ---
+>>>>    certs/Kconfig     | 10 +++++
+>>>>    certs/blacklist.c | 96 ++++++++++++++++++++++++++++++++++++-----------
+>>>>    2 files changed, 85 insertions(+), 21 deletions(-)
+>>>>
+>>>> diff --git a/certs/Kconfig b/certs/Kconfig
+>>>> index 0fbe184ceca5..e0e524b7eff9 100644
+>>>> --- a/certs/Kconfig
+>>>> +++ b/certs/Kconfig
+>>>> @@ -103,4 +103,14 @@ config SYSTEM_REVOCATION_KEYS
+>>>>    	  containing X.509 certificates to be included in the default blacklist
+>>>>    	  keyring.
+>>>> +config SYSTEM_BLACKLIST_AUTH_UPDATE
+>>>> +	bool "Allow root to add signed blacklist keys"
+>>>> +	depends on SYSTEM_BLACKLIST_KEYRING
+>>>> +	depends on SYSTEM_DATA_VERIFICATION
+>>>> +	help
+>>>> +	  If set, provide the ability to load new blacklist keys at run time if
+>>>> +	  they are signed and vouched by a certificate from the builtin trusted
+>>>> +	  keyring.  The PKCS#7 signature of the description is set in the key
+>>>> +	  payload.  Blacklist keys cannot be removed.
+>>>> +
+>>>>    endmenu
+>>>> diff --git a/certs/blacklist.c b/certs/blacklist.c
+>>>> index b254c87ceb3a..486ce0dd8e9c 100644
+>>>> --- a/certs/blacklist.c
+>>>> +++ b/certs/blacklist.c
+>>>> @@ -15,6 +15,7 @@
+>>>>    #include <linux/err.h>
+>>>>    #include <linux/seq_file.h>
+>>>>    #include <linux/uidgid.h>
+>>>> +#include <linux/verification.h>
+>>>>    #include <keys/system_keyring.h>
+>>>>    #include "blacklist.h"
+>>>>    #include "common.h"
+>>>> @@ -26,6 +27,9 @@
+>>>>     */
+>>>>    #define MAX_HASH_LEN	128
+>>>> +#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
+>>>> +			    KEY_USR_SEARCH | KEY_USR_VIEW)
+>>>> +
+>>>>    static const char tbs_prefix[] = "tbs";
+>>>>    static const char bin_prefix[] = "bin";
+>>>> @@ -80,19 +84,51 @@ static int blacklist_vet_description(const char *desc)
+>>>>    	return 0;
+>>>>    }
+>>>> -/*
+>>>> - * The hash to be blacklisted is expected to be in the description.  There will
+>>>> - * be no payload.
+>>>> - */
+>>>> -static int blacklist_preparse(struct key_preparsed_payload *prep)
+>>>> +static int blacklist_key_instantiate(struct key *key,
+>>>> +		struct key_preparsed_payload *prep)
+>>>>    {
+>>>> -	if (prep->datalen > 0)
+>>>> -		return -EINVAL;
+>>>> -	return 0;
+>>>> +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
+>>>> +	int err;
+>>>> +#endif
+>>>> +
+>>>> +	/* Sets safe default permissions for keys loaded by user space. */
+>>>> +	key->perm = BLACKLIST_KEY_PERM;
+>>>> +
+>>>> +	/*
+>>>> +	 * Skips the authentication step for builtin hashes, they are not
+>>>> +	 * signed but still trusted.
+>>>> +	 */
+>>>> +	if (key->flags & (1 << KEY_FLAG_BUILTIN))
+>>>> +		goto out;
+>>>> +
+>>>> +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
+>>>> +	/*
+>>>> +	 * Verifies the description's PKCS#7 signature against the builtin
+>>>> +	 * trusted keyring.
+>>>> +	 */
+>>>> +	err = verify_pkcs7_signature(key->description,
+>>>> +			strlen(key->description), prep->data, prep->datalen,
+>>>> +			NULL, VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+>>>> +	if (err)
+>>>> +		return err;
+>>>> +#else
+>>>> +	/*
+>>>> +	 * It should not be possible to come here because the keyring doesn't
+>>>> +	 * have KEY_USR_WRITE and the only other way to call this function is
+>>>> +	 * for builtin hashes.
+>>>> +	 */
+>>>> +	WARN_ON_ONCE(1);
+>>>> +	return -EPERM;
+>>>> +#endif
+>>>> +
+>>>> +out:
+>>>> +	return generic_key_instantiate(key, prep);
+>>>>    }
+>>>> -static void blacklist_free_preparse(struct key_preparsed_payload *prep)
+>>>> +static int blacklist_key_update(struct key *key,
+>>>> +		struct key_preparsed_payload *prep)
+>>>>    {
+>>>> +	return -EPERM;
+>>>>    }
+>>>>    static void blacklist_describe(const struct key *key, struct seq_file *m)
+>>>> @@ -103,9 +139,8 @@ static void blacklist_describe(const struct key *key, struct seq_file *m)
+>>>>    static struct key_type key_type_blacklist = {
+>>>>    	.name			= "blacklist",
+>>>>    	.vet_description	= blacklist_vet_description,
+>>>> -	.preparse		= blacklist_preparse,
+>>>> -	.free_preparse		= blacklist_free_preparse,
+>>>> -	.instantiate		= generic_key_instantiate,
+>>>> +	.instantiate		= blacklist_key_instantiate,
+>>>> +	.update			= blacklist_key_update,
+>>>>    	.describe		= blacklist_describe,
+>>>>    };
+>>>> @@ -154,8 +189,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
+>>>>    				   hash,
+>>>>    				   NULL,
+>>>>    				   0,
+>>>> -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
+>>>> -				    KEY_USR_VIEW),
+>>>> +				   BLACKLIST_KEY_PERM,
+>>>>    				   KEY_ALLOC_NOT_IN_QUOTA |
+>>>>    				   KEY_ALLOC_BUILT_IN);
+>>>>    	if (IS_ERR(key)) {
+>>>> @@ -232,8 +266,10 @@ int add_key_to_revocation_list(const char *data, size_t size)
+>>>>    				   NULL,
+>>>>    				   data,
+>>>>    				   size,
+>>>> -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW),
+>>>> -				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN);
+>>>> +				   KEY_POS_VIEW | KEY_POS_READ | KEY_POS_SEARCH
+>>>> +				   | KEY_USR_VIEW,
+>>>> +				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN
+>>>> +				   | KEY_ALLOC_BYPASS_RESTRICTION);
+>>>>    	if (IS_ERR(key)) {
+>>>>    		pr_err("Problem with revocation key (%ld)\n", PTR_ERR(key));
+>>>> @@ -260,25 +296,43 @@ int is_key_on_revocation_list(struct pkcs7_message *pkcs7)
+>>>>    }
+>>>>    #endif
+>>>> +static int restrict_link_for_blacklist(struct key *dest_keyring,
+>>>> +		const struct key_type *type, const union key_payload *payload,
+>>>> +		struct key *restrict_key)
+>>>> +{
+>>>> +	if (type == &key_type_blacklist)
+>>>> +		return 0;
+>>>> +	return -EOPNOTSUPP;
+>>>> +}
+>>>> +
+>>>>    /*
+>>>>     * Initialise the blacklist
+>>>>     */
+>>>>    static int __init blacklist_init(void)
+>>>>    {
+>>>>    	const char *const *bl;
+>>>> +	struct key_restriction *restriction;
+>>>>    	if (register_key_type(&key_type_blacklist) < 0)
+>>>>    		panic("Can't allocate system blacklist key type\n");
+>>>> +	restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
+>>>> +	if (!restriction)
+>>>> +		panic("Can't allocate blacklist keyring restriction\n");
+>>>
+>>>
+>>> This prevents me from taking this to my pull request. In moderns standards,
+>>> no new BUG_ON(), panic() etc. should never added to the kernel.
+>>>
+>>> I missed this in my review.
+>>>
+>>> This should rather be e.g.
+>>>
+>>>           restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
+>>> 	if (!restriction) {
+>>> 		pr_err("Can't allocate blacklist keyring restriction\n");
+>>>                   return 0;
+>>>           }
+>>>
+>>> Unfortunately I need to drop this patch set, because adding new panic()
+>>> is simply a no-go.
+>>
+>> I agree that panic() is not great in general, but I followed the other part
+>> of the code (just above) that do the same. This part of the kernel should
+>> failed if critical memory allocation failed at boot time (only). It doesn't
+>> impact the kernel once it is running. I don't think that just ignoring this
+>> error with return 0 is fine, after all it's a critical error right?
+> 
+> It's not good reason enough to crash the whole kernel, even if it is a
+> critical error (e.g. run-time foresincs). Even WARN() is not recommended
+> these days [*].
 
-All errors (new ones prefixed by >>):
+I think that what Greg said in this email is that WARN*() should only be 
+used for cases that should never happen, it is definitely not 
+deprecated, but WARN_ON_ONCE() may be a better idea though. WARN*() 
+helps detect such thought-to-be-impossible cases, that can happen e.g. 
+with code refactoring.
 
->> kernel/rcu/tree.c:2678:3: error: implicit declaration of function 'rcu_tasks_classic_qs' [-Werror,-Wimplicit-function-declaration]
-                   rcu_tasks_classic_qs(current, false);
-                   ^
-   1 error generated.
+A lot of initialization/boot code (e.g. without user space nor external 
+interactions, mostly __init functions) do panic if there is unexpected 
+and unrecoverable errors like failed memory allocations. I think 
+handling such errors otherwise would be more complex for no benefit. 
+Moreover, delegating such error handling to user space could create new 
+(silent) issues.
 
+> 
+> For the existing panic()-statements: I'm happy to review patches that
+> render them out. >
+> Not sure tho, if this fails should it be then "everything blacklisted".
+> Just one thing to consider.
 
-vim +/rcu_tasks_classic_qs +2678 kernel/rcu/tree.c
+Well, if it fail it will be "nothing will work afterwards". Do you have 
+a working and useful scenario for this kind of error?
 
-  2644	
-  2645	/*
-  2646	 * This function is invoked from each scheduling-clock interrupt,
-  2647	 * and checks to see if this CPU is in a non-context-switch quiescent
-  2648	 * state, for example, user mode or idle loop.  It also schedules RCU
-  2649	 * core processing.  If the current grace period has gone on too long,
-  2650	 * it will ask the scheduler to manufacture a context switch for the sole
-  2651	 * purpose of providing the needed quiescent state.
-  2652	 */
-  2653	void rcu_sched_clock_irq(int user)
-  2654	{
-  2655		unsigned long j;
-  2656	
-  2657		if (IS_ENABLED(CONFIG_PROVE_RCU)) {
-  2658			j = jiffies;
-  2659			WARN_ON_ONCE(time_before(j, __this_cpu_read(rcu_data.last_sched_clock)));
-  2660			__this_cpu_write(rcu_data.last_sched_clock, j);
-  2661		}
-  2662		trace_rcu_utilization(TPS("Start scheduler-tick"));
-  2663		lockdep_assert_irqs_disabled();
-  2664		raw_cpu_inc(rcu_data.ticks_this_gp);
-  2665		/* The load-acquire pairs with the store-release setting to true. */
-  2666		if (smp_load_acquire(this_cpu_ptr(&rcu_data.rcu_urgent_qs))) {
-  2667			/* Idle and userspace execution already are quiescent states. */
-  2668			if (!rcu_is_cpu_rrupt_from_idle() && !user) {
-  2669				set_tsk_need_resched(current);
-  2670				set_preempt_need_resched();
-  2671			}
-  2672			__this_cpu_write(rcu_data.rcu_urgent_qs, false);
-  2673		}
-  2674		rcu_flavor_sched_clock_irq(user);
-  2675		if (rcu_pending(user))
-  2676			invoke_rcu_core();
-  2677		if (user)
-> 2678			rcu_tasks_classic_qs(current, false);
-  2679		lockdep_assert_irqs_disabled();
-  2680	
-  2681		trace_rcu_utilization(TPS("End scheduler-tick"));
-  2682	}
-  2683	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+>> Calling panic() seems OK here. Is there a better way to stop the kernel for
+>> such critical error? If the kernel cannot allocate memory at this time, it
+>> would be useless to try continuing booting.
+> 
+> [*] https://lore.kernel.org/linux-sgx/YA0tvOGp%2FshchVhu@kroah.com/

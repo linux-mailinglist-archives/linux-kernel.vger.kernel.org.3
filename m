@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794784D1C68
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E534D1C92
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348110AbiCHP4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
+        id S1348274AbiCHP5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347996AbiCHP4C (ORCPT
+        with ESMTP id S1348060AbiCHP4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:56:02 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C269C4F9C0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:03 -0800 (PST)
+        Tue, 8 Mar 2022 10:56:08 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C154F9DA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=O9jw8HrR0hJOLEZ31rAvffRIgt8cLYydgBt9/NzuvXs=; b=DKE6Lyt52UMkoz9WcbAVZzWXkf
-        8QtD0DFB15Eg+TTjffRAHyHVh7kxL1X+9BQmU4qOMi40jJaZv2lDifisGa9xT+GhYQivzGKxUucQ1
-        q7mIsrraSiHLbwsGQ1d0qrAlTZCuH8gY5AO73NUF5aj5+egZ5hKxcgnStYhwhVLKeEMkAHH6JTi/e
-        S7RK6dNxt0vQ1LDJ2OKvwl7UfqayVaNa/RuuG3DtM0SYlDL+zTsyHhlNp0CYTskZuvqPCFD8vlnFT
-        ashXZGUqOGAKuxBXEVwmnSRHrDSbBAozUsQcxZ+WvjUV5Mt26odoaod7i5VK37lqHHbxCcYBYkljy
-        PMByZPeA==;
+        bh=V8QY1pYX+d9tDtpObRzYPlZyD2xDu/v2HceiF0ugrr8=; b=R6iekmSLXyHMxVdKSW5yoryFTR
+        JTZc47RL6KLznJhS9rxZPw/msgRRtmPE9nbOey2B5vqVnAVnp4A7iPiFjJVy0YA6uCXEBnrwl5Q/m
+        2DKz8rpN70XkYfHred7IxVkny96XVIuKTp1UiaNkw50lVBQO8RbH8WdqURgaeKacS8hFFNVx+o3Kh
+        wW9tTyNmmZ7J2WyMJ78CJk2u4Ep9JqddUeG5zNjZwJioYu3ilSQKM2xtSNQdukPpCawMV9BzcV27i
+        Jc0ZYBl1/zbt0sj3IBR88/3/hJBtDyHJd8/Wx7KN7GeRbxOXz428zPlDqo+2iIdyiyD63ClFDW898
+        XxZxUXIA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAc-00GIuz-1e; Tue, 08 Mar 2022 15:54:42 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRcAc-00GUiN-2Y; Tue, 08 Mar 2022 15:54:42 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 20666300BB0;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 206E4301169;
         Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id D97372B561905; Tue,  8 Mar 2022 16:54:38 +0100 (CET)
-Message-ID: <20220308154317.638561109@infradead.org>
+        id DF9A82B561908; Tue,  8 Mar 2022 16:54:38 +0100 (CET)
+Message-ID: <20220308154317.697253958@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:19 +0100
+Date:   Tue, 08 Mar 2022 16:30:20 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v4 08/45] x86/text-patching: Make text_gen_insn() play nice with ANNOTATE_NOENDBR
+Subject: [PATCH v4 09/45] x86/ibt,paravirt: Use text_gen_insn() for paravirt_patch()
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,36 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Less duplication is more better.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/text-patching.h |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/text-patching.h |   20 ++++++++++++++------
+ arch/x86/kernel/paravirt.c           |   23 +++--------------------
+ 2 files changed, 17 insertions(+), 26 deletions(-)
 
 --- a/arch/x86/include/asm/text-patching.h
 +++ b/arch/x86/include/asm/text-patching.h
-@@ -101,13 +101,21 @@ void *text_gen_insn(u8 opcode, const voi
- 	static union text_poke_insn insn; /* per instance */
- 	int size = text_opcode_size(opcode);
+@@ -96,32 +96,40 @@ union text_poke_insn {
+ };
  
-+	/*
-+	 * Hide the addresses to avoid the compiler folding in constants when
-+	 * referencing code, these can mess up annotations like
-+	 * ANNOTATE_NOENDBR.
-+	 */
-+	OPTIMIZER_HIDE_VAR(addr);
-+	OPTIMIZER_HIDE_VAR(dest);
+ static __always_inline
+-void *text_gen_insn(u8 opcode, const void *addr, const void *dest)
++void __text_gen_insn(void *buf, u8 opcode, const void *addr, const void *dest, int size)
+ {
+-	static union text_poke_insn insn; /* per instance */
+-	int size = text_opcode_size(opcode);
++	union text_poke_insn *insn = buf;
 +
- 	insn.opcode = opcode;
++	BUG_ON(size < text_opcode_size(opcode));
+ 
+ 	/*
+ 	 * Hide the addresses to avoid the compiler folding in constants when
+ 	 * referencing code, these can mess up annotations like
+ 	 * ANNOTATE_NOENDBR.
+ 	 */
++	OPTIMIZER_HIDE_VAR(insn);
+ 	OPTIMIZER_HIDE_VAR(addr);
+ 	OPTIMIZER_HIDE_VAR(dest);
+ 
+-	insn.opcode = opcode;
++	insn->opcode = opcode;
  
  	if (size > 1) {
- 		insn.disp = (long)dest - (long)(addr + size);
+-		insn.disp = (long)dest - (long)(addr + size);
++		insn->disp = (long)dest - (long)(addr + size);
  		if (size == 2) {
  			/*
--			 * Ensure that for JMP9 the displacement
-+			 * Ensure that for JMP8 the displacement
+ 			 * Ensure that for JMP8 the displacement
  			 * actually fits the signed byte.
  			 */
- 			BUG_ON((insn.disp >> 31) != (insn.disp >> 7));
+-			BUG_ON((insn.disp >> 31) != (insn.disp >> 7));
++			BUG_ON((insn->disp >> 31) != (insn->disp >> 7));
+ 		}
+ 	}
++}
+ 
++static __always_inline
++void *text_gen_insn(u8 opcode, const void *addr, const void *dest)
++{
++	static union text_poke_insn insn; /* per instance */
++	__text_gen_insn(&insn, opcode, addr, dest, text_opcode_size(opcode));
+ 	return &insn.text;
+ }
+ 
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -69,29 +69,12 @@ noinstr void paravirt_BUG(void)
+ 	BUG();
+ }
+ 
+-struct branch {
+-	unsigned char opcode;
+-	u32 delta;
+-} __attribute__((packed));
+-
+ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
+ 				    unsigned long addr, unsigned len)
+ {
+-	const int call_len = 5;
+-	struct branch *b = insn_buff;
+-	unsigned long delta = (unsigned long)target - (addr+call_len);
+-
+-	if (len < call_len) {
+-		pr_warn("paravirt: Failed to patch indirect CALL at %ps\n", (void *)addr);
+-		/* Kernel might not be viable if patching fails, bail out: */
+-		BUG_ON(1);
+-	}
+-
+-	b->opcode = 0xe8; /* call */
+-	b->delta = delta;
+-	BUILD_BUG_ON(sizeof(*b) != call_len);
+-
+-	return call_len;
++	__text_gen_insn(insn_buff, CALL_INSN_OPCODE,
++			(void *)addr, target, CALL_INSN_SIZE);
++	return CALL_INSN_SIZE;
+ }
+ 
+ #ifdef CONFIG_PARAVIRT_XXL
 
 

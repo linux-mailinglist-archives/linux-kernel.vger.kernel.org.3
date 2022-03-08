@@ -2,182 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380444D1AE2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184F94D1AE5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234882AbiCHOo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S242655AbiCHOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbiCHOoz (ORCPT
+        with ESMTP id S235356AbiCHOpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:44:55 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C7941F9B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:43:57 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id l20so7983682lfg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 06:43:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iupLQJvgsZ7lCXLV8So/JiMrhE0LlDVXWvrGw7si8ns=;
-        b=AEFXCwN0FBkNn7abmOdss/zpAb42JT4Fkk8iML8w+a/pDYnkRl/CV9XkicSMJnNza0
-         sZm1s9Tanygh/3zCsXBB91uXVMOj4IEXnrXhB4D9fYup9DptR+lhzWMc0sS2grU4KrVL
-         fTziO3Qi+dRYXgx558NAiTWjUIChZ1MUre2agq3wiygbHlVnx8BKnho1Cmh7yRSHeynv
-         hM/6AIjQy1rPy8XqJcc4fse0y9uEOUCPNihYAuFjuoAmN38fn8CPdXVAZXUhzm2rDjZh
-         MFyDC2paSuRPTQpb5wzl8TQmOFBA0qRC3QwbaJy3cMxT6uR5nzrXfhoHRWwKQj52wD6N
-         qeDQ==
+        Tue, 8 Mar 2022 09:45:49 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCB145AEB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:44:53 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BFE353F79A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646750691;
+        bh=XPWngrH4yB2m8hPYi3WQlp0y7ozLbZ9SOUzkcBuiDSo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=FyzW7jZm5/SzB5CY5YUENMumCuwL4VYV7UnNsim3G9wIStF3mJg4avt+E5czVDotp
+         9J9NFk5wLTxmrf2LTJoSjbWUOg0Pz0b9MJgfkr7JcZqM6K9oa7SecN70DfwJe9iLh9
+         Jir55eVgWUMneZ1DhI8G1Z4CCET2YrjCRpgid9zZfzEjO1W/vNCZMWpx7u4hN1rbXt
+         gKBqE7WU0gOlY78r4FLZ4jTMhfisw8BJiRNWvXt2F4zDrWOm1vcXB9Iybh6xyXIivr
+         wj2lvuav+ecE1Ai7SIZAmV0H/PUe6qsAWJi6LF53/aPC8DlC9exS/goeCqrYtL3051
+         iu//6O0wZmoxA==
+Received: by mail-ed1-f71.google.com with SMTP id i17-20020aa7c711000000b00415ecaefd07so8359222edq.21
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 06:44:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iupLQJvgsZ7lCXLV8So/JiMrhE0LlDVXWvrGw7si8ns=;
-        b=mv3pbybLa66exptfqM/epHUF4LpPlFWCR3srtzRkeCAJr7vs72cbUND/WLAnwUDbCA
-         m7KSME9sK2Gqo8Q7Y7B07zjKBGUA7mo/QfFMYwJm5iF9Z+kQuqrsEmVaK8t6pNgXvn9D
-         dfXDDeUGO64rUhYwksHtrivsc3l2pU39fmwsyQ9PwS52SZHat65WVulM66c2KjmJn0RM
-         A6L28W9dm8AeYVrjBjfB9DxRWkJtJ5erL2qUbF3iNkW+O/Z3pRoz6HKlOHdG1Csd8nDv
-         ZKNTa+Y5lCTqX0a6+fIyQ8vByV8yroKmFuL8vN5K8NDAaR8Tx6DsyNJfkHjQaYjnrONh
-         jIPQ==
-X-Gm-Message-State: AOAM533vvoExxsS6rUF/jlQXMLTT0S45Um8dvmeF9h5lVKRLsFWCAJvk
-        iO1r33HzbCEsNi445AMp5lS67QwTzgZmPOoP9LBzvw==
-X-Google-Smtp-Source: ABdhPJzpSHaTfLkql6MqsO/zx6ZERRumLVD9HsrUUrBGvSq3NXroYjehKCJTSdrb66KVTytnwwvW6wNphxMcN0BW7z0=
-X-Received: by 2002:a05:6512:6ce:b0:448:46c6:b93e with SMTP id
- u14-20020a05651206ce00b0044846c6b93emr1537518lff.46.1646750634776; Tue, 08
- Mar 2022 06:43:54 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XPWngrH4yB2m8hPYi3WQlp0y7ozLbZ9SOUzkcBuiDSo=;
+        b=nDdq8eFBirKFUL8WUd/nXdWwlYlQmADOmsmKReVa12ElLR2/Y8apzt72eIr2Rj67Vy
+         f+1hIcpQ1kIMAR8xQhRFTEQBSc87jqBKJfpp5WnnY+FnApWKKNyVCMESwR4x0lXJdOfU
+         GmJUVWNm29CA4IYEsezV+Tmlc9L18ZiccYM6PbY6oUvQ+PNxLM2EkV60zMF39hcSPmam
+         j2uPt+p8sdmC9j4nwKebBUM5xc7bXAmL9w7DBPIM+iXNuIYshIevEuQATC8hEoO8sSvN
+         cQ5lNgV4Kec/gfnD6pEY5ivjPjYQe2TDAEHfDCRpNnx5N5IYJqOwQ02SHMcbrkhz2TWI
+         exxQ==
+X-Gm-Message-State: AOAM532/kAV1eL3zd1a1TY8JV1h7mzrb2c4rqikvCem9M9z/Tg8ntu7k
+        TFR5ZtawwX6o5Xo6naTLdOk3k7bGau1+Wl7Eomzse8+JI0SVjkUlseRU5geRejIGqB/v1zzAskM
+        cK2+GxAAjKM8I0yIyOJmYfwEdFe+lZdSshBkZAZNbGg==
+X-Received: by 2002:a17:907:d93:b0:6da:bb7a:4da with SMTP id go19-20020a1709070d9300b006dabb7a04damr13412639ejc.183.1646750690447;
+        Tue, 08 Mar 2022 06:44:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwTaOdqLNPXSX1Gu97Fy6UulewAGsgiEfqKcZeLZUk+nIltFuvBtpMRoLBaIjZbNZtX/RFdnw==
+X-Received: by 2002:a17:907:d93:b0:6da:bb7a:4da with SMTP id go19-20020a1709070d9300b006dabb7a04damr13412630ejc.183.1646750690213;
+        Tue, 08 Mar 2022 06:44:50 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id q11-20020a170906144b00b006cf61dfb03esm6023364ejc.62.2022.03.08.06.44.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 06:44:49 -0800 (PST)
+Message-ID: <26f42531-8f55-9fda-9465-bd78a2224f2c@canonical.com>
+Date:   Tue, 8 Mar 2022 15:44:48 +0100
 MIME-Version: 1.0
-References: <20220307110328.2557655-1-sumit.garg@linaro.org> <20220307142356.ksx7k5xalqlsxnqk@maple.lan>
-In-Reply-To: <20220307142356.ksx7k5xalqlsxnqk@maple.lan>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 8 Mar 2022 20:13:43 +0530
-Message-ID: <CAFA6WYNdc5fTk61GB2siLj-EkTtRE0u6fq-MtqF3Zt1uwJqJCw@mail.gmail.com>
-Subject: Re: [RFT v4] tty/sysrq: Make sysrq handler NMI aware
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     linux-serial@vger.kernel.org, hasegawa-hitomi@fujitsu.com,
-        dianders@chromium.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, jason.wessel@windriver.com,
-        linux-kernel@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        arnd@arndb.de, peterz@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/4] dt-bindings: timer: exynos4210-mct: Support using
+ only local timer
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        tglx@linutronix.de, daniel.lezcano@linaro.org
+Cc:     kernel@axis.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        alim.akhtar@samsung.com, robh+dt@kernel.org
+References: <20220308142410.3193729-1-vincent.whitchurch@axis.com>
+ <20220308142410.3193729-3-vincent.whitchurch@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220308142410.3193729-3-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 08/03/2022 15:24, Vincent Whitchurch wrote:
+> The ARTPEC-8 SoC has a quad-core Cortex-A53 and a single-core Cortex-A5
+> which share one MCT with one global and eight local timers.  The
+> Cortex-A53 and Cortex-A5 do not have cache-coherency between them, and
+> therefore run two separate kernels.
+> 
+> The Cortex-A53 boots first and starts the global FRC and also registers
+> a clock events device using the global timer.  (This global timer clock
+> events is usually replaced by arch timer clock events for each of the
+> cores.)
+> 
+> When the A5 boots, we should not use the global timer interrupts or
+> write to the global timer registers.  This is because even if there are
+> four global comparators, the control bits for all four are in the same
+> registers, and we would need to synchronize between the cpus.  Instead,
+> the global timer FRC (already started by the A53) should be used as the
+> clock source, and one of the local timers which are not used by the A53
+> can be used for clock events on the A5.
+> 
+> To support this usecase, add a property to the binding to specify the
+> first local timer index to be used. If this parameter is non-zero, the
+> global timer interrupts will also not be used.
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+> 
+> Notes:
+>     v2: New.
+> 
+>  .../bindings/timer/samsung,exynos4210-mct.yaml           | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/samsung,exynos4210-mct.yaml b/Documentation/devicetree/bindings/timer/samsung,exynos4210-mct.yaml
+> index dce42f1f7574..46f466081836 100644
+> --- a/Documentation/devicetree/bindings/timer/samsung,exynos4210-mct.yaml
+> +++ b/Documentation/devicetree/bindings/timer/samsung,exynos4210-mct.yaml
+> @@ -47,6 +47,15 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> +  local-timer-index:
 
-On Mon, 7 Mar 2022 at 19:53, Daniel Thompson <daniel.thompson@linaro.org> wrote:
->
-> On Mon, Mar 07, 2022 at 04:33:28PM +0530, Sumit Garg wrote:
-> > Allow a magic sysrq to be triggered from an NMI context. This is done
-> > via marking some sysrq actions as NMI safe. Safe actions will be allowed
-> > to run from NMI context whilst that cannot run from an NMI will be queued
-> > as irq_work for later processing.
-> >
-> > <snip>
-> >
-> > @@ -566,12 +573,46 @@ static void __sysrq_put_key_op(int key, const struct sysrq_key_op *op_p)
-> >               sysrq_key_table[i] = op_p;
-> >  }
-> >
-> > +static atomic_t sysrq_key = ATOMIC_INIT(-1);
-> > +
-> > +static void sysrq_do_irq_work(struct irq_work *work)
-> > +{
-> > +     const struct sysrq_key_op *op_p;
-> > +     int orig_suppress_printk;
-> > +     int key = atomic_read(&sysrq_key);
-> > +
-> > +     orig_suppress_printk = suppress_printk;
-> > +     suppress_printk = 0;
-> > +
-> > +     rcu_sysrq_start();
-> > +     rcu_read_lock();
-> > +
-> > +     op_p = __sysrq_get_key_op(key);
-> > +     if (op_p)
-> > +             op_p->handler(key);
-> > +
-> > +     rcu_read_unlock();
-> > +     rcu_sysrq_end();
-> > +
-> > +     suppress_printk = orig_suppress_printk;
-> > +     atomic_set(&sysrq_key, -1);
-> > +}
-> > +
-> > +static DEFINE_IRQ_WORK(sysrq_irq_work, sysrq_do_irq_work);
-> > +
-> >  void __handle_sysrq(int key, bool check_mask)
-> >  {
-> >       const struct sysrq_key_op *op_p;
-> >       int orig_log_level;
-> >       int orig_suppress_printk;
-> >       int i;
-> > +     bool irq_work = false;
-> > +
-> > +     /* Skip sysrq handling if one already in progress */
-> > +     if (atomic_cmpxchg(&sysrq_key, -1, key) != -1) {
-> > +             pr_warn("Skip sysrq key: %i as one already in progress\n", key);
-> > +             return;
-> > +     }
->
-> Doesn't this logic needlessly jam sysrq handling if the irq_work cannot
-> be undertaken?
->
+You need vendor prefix. Also this should describe the actual hardware,
+not driver behavior, so rather:
+"samsung,local-timers"
+with a uint32-array type and list of timers to use.
 
-Here this is done purposefully to ensure synchronisation of three
-contexts while handling sysrq:
-1. Thread context
-2. IRQ context
-3. NMI context
+You also need separate property to skip FRC, so something like:
+"samsung,frc-shared"
+of type boolean.
 
-> A console user could unwittingly attempt an !nmi_safe SysRq action on
-> a damaged system that cannot service interrupts. Logic that prevents
-> things like backtrace, ftrace dump, kgdb or reboot is actively harmful
-> to that user's capability to figure out why their original sysrq doesn't
-> work.
+In the bindings please describe the hardware, not the result you want to
+achieve from driver model point of view.
 
-I see your point.
+Also disallow this for all other compatibles:
+allOf:
+ - if:
+     not:
+       properties:
+       ...
+   then:
+     properties:
+       samsung,local-timers: false
+       samsung,frc-shared: false
 
->
-> I think the logic to prohibht multiple deferred sysrqs should only
-> be present on code paths where we are actually going to defer the sysrq.
->
+The property simply should not be used outside of Artpec8. It's not
+valid in other configurations.
 
-It's not only there to prohibit multiple deferred sysrq (as that alone
-could be handled by irq_work_queue()) but rather to avoid parallelism
-scenarios that Doug mentioned on prior versions.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    default: 0
+> +    maximum: 15     # Last local timer index
+> +    description: |
+> +      If present, sets the first local timer index to use.  If this value is
+> +      set to a non-default value, the global timer will not be used for
+> +      interrupts.
 
-How about the following add-on change to allow passthrough for broken
-irq_work systems?
+Do not describe the driver, but the hardware. Instead explain which
+local timers are allowed to be used.
 
-diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-index 005c9f9e0004..0a91d3ccf862 100644
---- a/drivers/tty/sysrq.c
-+++ b/drivers/tty/sysrq.c
-@@ -608,6 +608,15 @@ void __handle_sysrq(int key, bool check_mask)
-        int i;
-        bool irq_work = false;
+> +
+>    interrupts:
+>      description: |
+>        Interrupts should be put in specific order. This is, the local timer
 
-+       /*
-+        * Handle a case if irq_work cannot be undertaken on a damaged
-+        * system stuck in hard lockup and cannot service interrupts.
-+        * In such cases we shouldn't atleast block NMI safe handlers
-+        * that doesn't depend on irq_work.
-+        */
-+       if (irq_work_is_pending(&sysrq_irq_work))
-+               atomic_set(&sysrq_key, -1);
-+
-        /* Skip sysrq handling if one already in progress */
-        if (atomic_cmpxchg(&sysrq_key, -1, key) != -1) {
-                pr_warn("Skip sysrq key: %i as one already in progress\n", key);
 
--Sumit
-
->
-> Daniel.
+Best regards,
+Krzysztof

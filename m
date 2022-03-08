@@ -2,119 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8DA4D194D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106F14D194A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236970AbiCHNiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S1347159AbiCHNhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347173AbiCHNhz (ORCPT
+        with ESMTP id S1347141AbiCHNhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:37:55 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D4A496A0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:36:57 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id w7so18583798lfd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 05:36:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iYBVyOw/jQFGIr6GyFmmUL1KjMeFXQPX2EGW015MmY8=;
-        b=XEJKHgW+qOM9hCTAxVOsEciI9wGIDg/n2/0NwnRFHY/AvPWXNtqow+SKVqr/L3UYQB
-         5LCHnu0y/cBxqFX4Q9xygJRMI1qhWkCucvcUQLYFf4ZIYc1x4v5MtdiZiURsKvRwKp0u
-         WBxEke5AQ1sjdbz1Kg9Vvu8DLK/PXkaVZsjotNOYz2zvt7nBC5qB5fik4bWRMkw+waoF
-         r+spnuNgehJXE8qnmxWmYYKbLIoSkAA3H7bxIuzsWzHAAe7SI4m8mMzaP1qsvAeCkk2T
-         4NI3Kdx0mMN0SKr2hvqlIik3LPHu9tCQwsVe/yZSJD3UnKFGtyYTdxkrE8341CRxg7Hl
-         xOtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iYBVyOw/jQFGIr6GyFmmUL1KjMeFXQPX2EGW015MmY8=;
-        b=YDT5ZGlE/EGI7Ceo3RwWCN23mv1X+yrJd4LOkDE+ab6L0jtIg3b1/2XWD5AuCeDE3H
-         4K0FOqPzYeV4b5lHHzeMg3JkYSMACMO5jSi+L4pRTaqsT/YyySkNKMZZntbaZT8eNPll
-         4Ae47H7SMTyfBMHto4dq0aMgLuK1yvpFu4Xhz9Gr/7slTIXOn3SfyJisj50UDWnLuMXZ
-         WmBVve+pa1cdw/D5GNpuIUSoNqoFqPLr0FQMOYWFtmrVe2dHWtv01PHcr0pIJHEqfIsh
-         E//gOJACOu0bcRRKy2+2KH2VGXKBeiUzmMuNd7kJjgO83roT9kZaFyxvWzQBG3vdd/XB
-         XjXA==
-X-Gm-Message-State: AOAM530Iy6KcZVU7KmvA9c8XG12/xqpJ/K+sE1bQic56KoOeFJRtYV3T
-        tNrJVdQs1gOCIOKH2U9lraO2NUzhnsa7jVOpmlH61w==
-X-Google-Smtp-Source: ABdhPJyaBZXPpHXunr37L3bMLyy0YhR1BIKiVTwgDDKe5fvRDAjPt+D0FS9J/HXwRCPXeCEZQBp0IXJ+JUNhUVcU3sM=
-X-Received: by 2002:a05:6512:308e:b0:448:3826:6d68 with SMTP id
- z14-20020a056512308e00b0044838266d68mr3948099lfd.184.1646746616253; Tue, 08
- Mar 2022 05:36:56 -0800 (PST)
+        Tue, 8 Mar 2022 08:37:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF6CF496A6;
+        Tue,  8 Mar 2022 05:36:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83721139F;
+        Tue,  8 Mar 2022 05:36:34 -0800 (PST)
+Received: from [10.57.22.11] (unknown [10.57.22.11])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 62C083FA58;
+        Tue,  8 Mar 2022 05:36:32 -0800 (PST)
+Message-ID: <ea6219df-0a10-8e8d-4848-a28704a9f98e@arm.com>
+Date:   Tue, 8 Mar 2022 13:36:30 +0000
 MIME-Version: 1.0
-References: <bf2e2e69226b20d173cce66287f59488fd47474b.1646588375.git.christophe.jaillet@wanadoo.fr>
- <20220308125445.GE3293@kadam>
-In-Reply-To: <20220308125445.GE3293@kadam>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 8 Mar 2022 14:36:19 +0100
-Message-ID: <CAPDyKFpdghX5je_Dvy+aam3zmbJpArFocrqURK1LVCZNwAvVSA@mail.gmail.com>
-Subject: Re: [PATCH] mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v2] coresight: core: Fix coresight device probe failure
+ issue
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20220304082350.30069-1-quic_jinlmao@quicinc.com>
+ <c77c93bb-f863-47c8-0ba0-3fc63530a9e1@arm.com>
+In-Reply-To: <c77c93bb-f863-47c8-0ba0-3fc63530a9e1@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 at 13:55, Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Sun, Mar 06, 2022 at 06:44:56PM +0100, Christophe JAILLET wrote:
-> > A dma_free_coherent() call is missing in the error handling path of the
-> > probe, as already done in the remove function.
-> >
-> > Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > ---
-> > I've not been able to find a Fixes tag because of the renaming of
-> > function and files.
-> > However, it looks old (before 2008)
->
-> You did add a fixes tag and it's from 2012.  :P
->
-> > ---
-> >  drivers/mmc/host/wmt-sdmmc.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
-> > index 163ac9df8cca..8e18f01c0938 100644
-> > --- a/drivers/mmc/host/wmt-sdmmc.c
-> > +++ b/drivers/mmc/host/wmt-sdmmc.c
-> > @@ -863,6 +863,8 @@ static int wmt_mci_probe(struct platform_device *pdev)
-> >       return 0;
-> >  fail6:
-> >       clk_put(priv->clk_sdmmc);
-> > +     dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
-> > +                       priv->dma_desc_buffer, priv->dma_desc_device_addr);
-> >  fail5:
-> >       free_irq(dma_irq, priv);
->
-> This isn't quite right.  If of_clk_get() fails it should call
-> dma_free_coherent() but it does not.  You need to add:
->
->  fail6:
->         clk_put(priv->clk_sdmmc);
-> +fail5_and_a_half:
-> +       dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
-> +                         priv->dma_desc_buffer, priv->dma_desc_device_addr);
->  fail5:
->         free_irq(dma_irq, priv);
->
-> regards,
-> dan carpenter
+On 08/03/2022 11:56, Suzuki K Poulose wrote:
+> Hi Jinlong
+> 
+> On 04/03/2022 08:23, Mao Jinlong wrote:
+>> It is possibe that probe failure issue happens when the device
+>> and its child_device's probe happens at the same time.
+>> In coresight_make_links, has_conns_grp is true for parent, but
+>> has_conns_grp is false for child device as has_conns_grp is set
+>> to true in coresight_create_conns_sysfs_group. The probe of parent
+>> device will fail at this condition. Add has_conns_grp check for
+>> child device before make the links and make the process from
+>> device_register to connection_create be atomic to avoid this
+>> probe failure issue.
+>>
+>> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+>> Suggested-by: Mike Leach <mike.leach@linaro.org>
+>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-core.c | 12 ++++++------
+>>   1 file changed, 6 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+>> b/drivers/hwtracing/coresight/coresight-core.c
+>> index 88653d1c06a4..b3e3bc59c09b 100644
+>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>> @@ -1382,7 +1382,7 @@ static int coresight_fixup_device_conns(struct 
+>> coresight_device *csdev)
+>>               continue;
+>>           conn->child_dev =
+>>               coresight_find_csdev_by_fwnode(conn->child_fwnode);
+>> -        if (conn->child_dev) {
+>> +        if (conn->child_dev && conn->child_dev->has_conns_grp) {
+>>               ret = coresight_make_links(csdev, conn,
+>>                              conn->child_dev);
+>>               if (ret)
+>> @@ -1594,7 +1594,8 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>       refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
+>>       if (!refcnts) {
+>>           ret = -ENOMEM;
+>> -        goto err_free_csdev;
+>> +        kfree(csdev);
+>> +        goto err_out;
+>>       }
+>>       csdev->refcnt = refcnts;
+>> @@ -1619,8 +1620,10 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>       csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
+>>       dev_set_name(&csdev->dev, "%s", desc->name);
+>> +    mutex_lock(&coresight_mutex);
+>>       ret = device_register(&csdev->dev);
+>>       if (ret) {
+>> +        mutex_unlock(&coresight_mutex);
+>>           put_device(&csdev->dev);
+>>           /*
+>>            * All resources are free'd explicitly via
+>> @@ -1634,6 +1637,7 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>           ret = etm_perf_add_symlink_sink(csdev);
+>>           if (ret) {
+>> +            mutex_unlock(&coresight_mutex);
+>>               device_unregister(&csdev->dev);
+>>               /*
+>>                * As with the above, all resources are free'd
+>> @@ -1645,8 +1649,6 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>           }
+>>       }
+>> -    mutex_lock(&coresight_mutex);
+>> -
+>>       ret = coresight_create_conns_sysfs_group(csdev);
+>>       if (!ret)
+>>           ret = coresight_fixup_device_conns(csdev);
+>> @@ -1663,8 +1665,6 @@ struct coresight_device 
+>> *coresight_register(struct coresight_desc *desc)
+>>       return csdev;
+>> -err_free_csdev:
+>> -    kfree(csdev);
+>>   err_out:
+>>       /* Cleanup the connection information */
+>>       coresight_release_platform_data(NULL, desc->pdata);
+> 
+> Could we consolidate the unlock sequence to a single point with 
+> something like this (untested):
+> 
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+> b/drivers/hwtracing/coresight/coresight-core.c
+> index af00dca8d1ac..198ee140c6e6 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -1571,6 +1571,7 @@ struct coresight_device *coresight_register(struct 
+> coresight_desc *desc)
+>       int nr_refcnts = 1;
+>       atomic_t *refcnts = NULL;
+>       struct coresight_device *csdev;
+> +    bool registered = false;
+> 
+>       csdev = kzalloc(sizeof(*csdev), GFP_KERNEL);
+>       if (!csdev) {
+> @@ -1591,7 +1592,8 @@ struct coresight_device *coresight_register(struct 
+> coresight_desc *desc)
+>       refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
+>       if (!refcnts) {
+>           ret = -ENOMEM;
+> -        goto err_free_csdev;
+> +        kfree(csdev);
+> +        goto err_out;
+>       }
+> 
+>       csdev->refcnt = refcnts;
+> @@ -1616,6 +1618,13 @@ struct coresight_device 
+> *coresight_register(struct coresight_desc *desc)
+>       csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
+>       dev_set_name(&csdev->dev, "%s", desc->name);
+> 
+> +    /*
+> +     * Make sure the device registration and the connection fixup
+> +     * are synchronised, so that we don't see uninitialised devices
+> +     * on the coresight bus while trying to resolve the connections.
+> +     */
+> +    mutex_lock(&coresight_mutex);
+> +
+>       ret = device_register(&csdev->dev);
+>       if (ret) {
+>           put_device(&csdev->dev);
+> @@ -1623,7 +1632,7 @@ struct coresight_device *coresight_register(struct 
+> coresight_desc *desc)
+>            * All resources are free'd explicitly via
+>            * coresight_device_release(), triggered from put_device().
+>            */
+> -        goto err_out;
+> +        goto out_unlock;
+>       }
+> 
+>       if (csdev->type == CORESIGHT_DEV_TYPE_SINK ||
+> @@ -1638,11 +1647,11 @@ struct coresight_device 
+> *coresight_register(struct coresight_desc *desc)
+>                * from put_device(), which is in turn called from
+>                * function device_unregister().
+>                */
+> -            goto err_out;
+> +            goto out_unlock;
+>           }
+>       }
+> -
+> -    mutex_lock(&coresight_mutex);
+> +    /* Device is now registered */
+> +    registered = true;
+> 
+>       ret = coresight_create_conns_sysfs_group(csdev);
+>       if (!ret)
+> @@ -1652,16 +1661,15 @@ struct coresight_device 
+> *coresight_register(struct coresight_desc *desc)
+>       if (!ret && cti_assoc_ops && cti_assoc_ops->add)
+>           cti_assoc_ops->add(csdev);
+> 
+> +out_unlock:
+>       mutex_unlock(&coresight_mutex);
+> -    if (ret) {
+> +    /* Success */
+> +    if (!ret)
+> +        return csdev;
+> +
+> +    /* Unregister the device if needed */
+> +    if (registered)
+>           coresight_unregister(csdev);
+> -        return ERR_PTR(ret);
+> -    }
 
-Thanks Dan for reviewing, I have dropped the $subject patch from my next branch.
+Apologies, this should be preserved :
 
-Kind regards
-Uffe
+i.e,
+	if (registered) {
+		coresight_unregister(csdev);
+		return ERR_PTR(ret);
+	}
+
+Thanks
+Suzuki

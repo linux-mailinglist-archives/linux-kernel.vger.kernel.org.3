@@ -2,126 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6B04D172E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6214D1729
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346793AbiCHMYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:24:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S1346670AbiCHMXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:23:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346785AbiCHMXu (ORCPT
+        with ESMTP id S230345AbiCHMXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:23:50 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BDD3A5D4;
-        Tue,  8 Mar 2022 04:22:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646742173; x=1678278173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1t2XizitfaB4uMPTTPoQH/R4rBfgRMQMND9uM6rWnHc=;
-  b=naEmr/76iul9yOsCW7wuj4uOKfeoOlGNacDQgsTEINfrouvqEqwgC87z
-   5ipRNYzOg4PQcW8Djqal/IllHtrrEJnYuJIyKXzrfWwWjg200hkYRApss
-   WrgLlIyRTGY4IiMvFoAYHQw6Bv0+1SPpMdfhkRA44TYBL8kUdOV91uGOn
-   4cEJzuXg27WGZQkdr0ddr7fKMuEuA7SIzhx38K8iLr8pNldtG5yiFSb3/
-   KbHco50hUOSN5vQQNxkIqNkyBh/FwIcabzGuOG65iqdnxMBuLibrjj8+b
-   H53XXqLZ8YddFmmsHsEHtvVPop82VX4LrOcGlnyumwU0f8axZEgQHcmM0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="279384013"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="279384013"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:22:53 -0800
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="632215878"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:22:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nRYqs-00DLqR-NQ;
-        Tue, 08 Mar 2022 14:22:06 +0200
-Date:   Tue, 8 Mar 2022 14:22:06 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Subject: Re: [PATCH v3 1/1] device property: Allow error pointer to be passed
- to fwnode APIs
-Message-ID: <YidKbrRq16NV+zNl@smile.fi.intel.com>
-References: <20220307202949.75300-1-andriy.shevchenko@linux.intel.com>
- <Yic6yr6aycu7IHHh@paasikivi.fi.intel.com>
+        Tue, 8 Mar 2022 07:23:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB8E45519
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 04:22:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 975E5B81671
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:22:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 516D9C340EB;
+        Tue,  8 Mar 2022 12:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646742135;
+        bh=tQ/Ta8ibjiF0mkPsCvPpKtPHRJDGVp5VJicu7manDj4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cJbMKcbYlSvM9sQJumYcSEhKRgdFgFTT80rZ+nUd/gwxqiSXuTkUHTN00iLedebpq
+         I2q1u0Sw71CLj5UCemFgDNv4RbytVnKGNNYGkLZktBzN2GakoKuJ70EoEImNQFj9ft
+         ByxwQLwv0U8lv/RS5JF2eI87RoNRUpKRjcoNPniDm3zmXkFZZQP9qS8AmD3a05zDoX
+         bemrHof6ybDvS0Ki72V92funG1iflCwm4htRBnrbdXC1IyGGnWWi5Ltp7BKYmqfm+9
+         EbPAyGdrhUTE+VKyc6gk5CbwfbQK9JHoW1KxDu7+cZv/FFpCdiwxoNjFKTsF5tuhDC
+         QXfkG1jiF9xRg==
+Message-ID: <87c332e3-00ea-0611-fd5d-96adcaa614dc@kernel.org>
+Date:   Tue, 8 Mar 2022 14:22:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yic6yr6aycu7IHHh@paasikivi.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V1] extcon/usb: Remove disable irq operation in system
+ sleep.
+Content-Language: en-US
+To:     Bruce Chen <brucechen251@gmail.com>, bruce.chen@unisoc.com,
+        myungjoo.ham@samsung.com, cw00.choi@samsung.com,
+        linux-kernel@vger.kernel.org
+Cc:     orsonzhai@gmail.com, gengcixi@gmail.com, baolin.wang7@gmail.com,
+        zhang.lyra@gmail.com
+References: <1646292963-20570-1-git-send-email-brucechen251@gmail.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <1646292963-20570-1-git-send-email-brucechen251@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 01:15:22PM +0200, Sakari Ailus wrote:
-> Hi Andy,
+
+
+On 03/03/2022 09:36, Bruce Chen wrote:
+> From: Bruce Chen <bruce.chen@unisoc.com>
 > 
-> This makes secondary handling quite a big nicer, thanks!
-
-You are welcome!
-
-> A few comments below. Apart from that,
+> If disable vbus/id irq, it will lead to wakeup system fail
+> in unisoc platform. In unisoc platform, Irq enable and irq
+> wakeup are the same interrupt line. So remove disable vbus/id
+> irq operation is a way to solve the issue.
 > 
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Signed-off-by: Bruce Chen <bruce.chen@unisoc.com>
 
-Thanks!
+Acked-by: Roger Quadros <rogerq@kernel.org>
 
-...
-
-> On Mon, Mar 07, 2022 at 10:29:49PM +0200, Andy Shevchenko wrote:
-
-> >  #include <linux/acpi.h>
-> >  #include <linux/export.h>
-> > +#include <linux/fwnode.h>
+> ---
+>  drivers/extcon/extcon-usb-gpio.c | 15 ---------------
+>  1 file changed, 15 deletions(-)
 > 
-> Is this intended? linux/property.h already includes linux/fwnode.h.
-> 
-> >  #include <linux/kernel.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_address.h>
+> diff --git a/drivers/extcon/extcon-usb-gpio.c b/drivers/extcon/extcon-usb-gpio.c
+> index f2b65d9..40d967a 100644
+> --- a/drivers/extcon/extcon-usb-gpio.c
+> +++ b/drivers/extcon/extcon-usb-gpio.c
+> @@ -226,16 +226,6 @@ static int usb_extcon_suspend(struct device *dev)
+>  		}
+>  	}
+>  
+> -	/*
+> -	 * We don't want to process any IRQs after this point
+> -	 * as GPIOs used behind I2C subsystem might not be
+> -	 * accessible until resume completes. So disable IRQ.
+> -	 */
+> -	if (info->id_gpiod)
+> -		disable_irq(info->id_irq);
+> -	if (info->vbus_gpiod)
+> -		disable_irq(info->vbus_irq);
+> -
+>  	if (!device_may_wakeup(dev))
+>  		pinctrl_pm_select_sleep_state(dev);
+>  
+> @@ -267,11 +257,6 @@ static int usb_extcon_resume(struct device *dev)
+>  		}
+>  	}
+>  
+> -	if (info->id_gpiod)
+> -		enable_irq(info->id_irq);
+> -	if (info->vbus_gpiod)
+> -		enable_irq(info->vbus_irq);
+> -
+>  	queue_delayed_work(system_power_efficient_wq,
+>  			   &info->wq_detcable, 0);
+>  
 
-Yeah, this is a bit messy in the headers. I will drop the inclusion,
-but in the future it would be good to reshuffle property.h, fwnode.h,
-and perhaps extract swnode.h.
-
-...
-
-> >  	bool ret;
-> >  
-> > +	if (IS_ERR_OR_NULL(fwnode))
-> > +		return false;
-
-> > +	if (ret == true)
-> 
-> It's already bool. I'd instead use:
-> 
-> 	if (ret)
-
-Right, will amend this.
-
-> > +		return ret;
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--
+cheers,
+-roger

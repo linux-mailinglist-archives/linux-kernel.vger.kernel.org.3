@@ -2,131 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3884D1AF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E7F4D1AF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242655AbiCHOtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S1347606AbiCHOvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234882AbiCHOtD (ORCPT
+        with ESMTP id S234882AbiCHOvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:49:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D39539159
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:48:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646750886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LZcs0WshXiDTg8J9tIJLtneLFviU5TBv//0m9mRi4bk=;
-        b=YtYJ6X+bMIElMqveL/4V5vyo4ymi9qyn2E2SZ5OMCUQRoVDE/9g0jiHrC9crTL3qjDm7vg
-        jSEwrpIdlnI39ZW/UmUyYSjSg1Ish9ZuXw2esaYBedzhuMXvdESCu/XiSWRC1/U+SHLguS
-        mEXGMt/n1StT6smsHsQ/ONEmPzVeHb8=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-au3o1R44Mx65hsMbINbNww-1; Tue, 08 Mar 2022 09:48:05 -0500
-X-MC-Unique: au3o1R44Mx65hsMbINbNww-1
-Received: by mail-ej1-f72.google.com with SMTP id d7-20020a1709061f4700b006bbf73a7becso8791394ejk.17
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 06:48:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=LZcs0WshXiDTg8J9tIJLtneLFviU5TBv//0m9mRi4bk=;
-        b=8BASM4vhBE8fM0BLj1cxfC0SBeixUFS73CfFpYvhIL+x2O8nVt02n8VpUV04NaDDci
-         sWC3TQnP2LfWdC82qgkFEcyrJSLKSVzd2syq/3afWbxV+AwzX6IdLm5YtWrYH7cot2kh
-         bsXKZvcvIUt91JMo7weBp0JoefecGKMUWwEtjupYMv1gsAzIhmsSCIvBaZuwo+p7Zx3T
-         ghtqhquyj6wpV0M7D0zbEiLCoFs62YdWJAWFA9GTxMJs90vreIMvpefa49k4pjk+TATL
-         Thh9JLzIK+Rp0wNdWYzggsuIQj2x2BqA/u3uMFImI4I3V2eiyWNIHtNXPVWBdTJcmdab
-         8clA==
-X-Gm-Message-State: AOAM531NX6W78AZKupxIi3U6F0zYLxM83AGfVqLw4LrzX1pEzbL59bFt
-        UZyVU7H+N+1B8GcmF0QGqBRuoq5M64VokQGVtOexsUVrQhiHqbhoj78gqBFZbcWko1o4fmqejz2
-        Udw2Dfq0U2lSYdKqSZ3zscxx5PMW6eWR+HHrsz5MCvXbfSKIEC5dpDbOE2LcM3dZZnGHjCOZ5BI
-        Yy
-X-Received: by 2002:a17:906:b095:b0:6cf:752c:fb88 with SMTP id x21-20020a170906b09500b006cf752cfb88mr13874910ejy.128.1646750883952;
-        Tue, 08 Mar 2022 06:48:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyUiOz69MV3fnzeZwcli5HCN//v73UVca4UC7IlcTdRuBqZ3C9hfP3suv1rmdDZgzjYnqtIsQ==
-X-Received: by 2002:a17:906:b095:b0:6cf:752c:fb88 with SMTP id x21-20020a170906b09500b006cf752cfb88mr13874883ejy.128.1646750883665;
-        Tue, 08 Mar 2022 06:48:03 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id sd21-20020a170906ce3500b006da97cf5a30sm5609077ejb.177.2022.03.08.06.47.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 06:48:02 -0800 (PST)
-Message-ID: <63f4a488-87f1-097f-95d5-f85e46786740@redhat.com>
-Date:   Tue, 8 Mar 2022 15:47:26 +0100
+        Tue, 8 Mar 2022 09:51:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21923916C;
+        Tue,  8 Mar 2022 06:50:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E6213CE16C0;
+        Tue,  8 Mar 2022 14:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 12346C340F4;
+        Tue,  8 Mar 2022 14:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646751010;
+        bh=a7oTzDNK1Df7u0KQ+Jv0WvIy358t9zua3Q7ZJYXsXjw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Yj/6ePDQXHp4QyGJ40Imt/MLuwjVLLK7SHgLpxFmMFn9AxNqdxP4xs2WAtq0KgTFe
+         Spuo83ArJFC600uYHD4V8JRFK4xdm7y8WsjkLCMb75pjLVfKkxNC8zknyA/MqMy+wa
+         Tk6spzRgifgFJq5ccx4IKx95/LwTvz3tD3Re6VJ2aqy46RJQ1ZXL2qZY6Kd010paQ/
+         Q5brqSzUJPt/av95WQ57gWz/Nk7zkiBWbA53UVLJQ/1q2YSFRSI3Hh0lMRaiPQtprM
+         fC+BK76GRkvzfgwNrtfFPjlaAShTBZtr9uPaZy4eBirb9Mlfa6a3dYW3GPi77BYgTO
+         SH3b/B/EKBVJw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DA236E6D3DD;
+        Tue,  8 Mar 2022 14:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 30/30] KVM: selftests: Add test to populate a VM with
- the max possible guest mem
-Content-Language: en-US
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Marc Zyngier <Marc.Zyngier@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-References: <20220303193842.370645-1-pbonzini@redhat.com>
- <20220303193842.370645-31-pbonzini@redhat.com>
-In-Reply-To: <20220303193842.370645-31-pbonzini@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: determine buf_info inside check_buffer_access()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164675100988.18270.17850383970446997392.git-patchwork-notify@kernel.org>
+Date:   Tue, 08 Mar 2022 14:50:09 +0000
+References: <YiWYLnAkEZXBP/gH@syu-laptop>
+In-Reply-To: <YiWYLnAkEZXBP/gH@syu-laptop>
+To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/22 20:38, Paolo Bonzini wrote:
-> From: Sean Christopherson<seanjc@google.com>
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Mon, 7 Mar 2022 13:29:18 +0800 you wrote:
+> Instead of determining buf_info string in the caller of
+> check_buffer_access(), we can determine whether the register type is read-only
+> through type_is_rdonly_mem() helper inside check_buffer_access() and construct
+> buf_info, making the code slightly cleaner.
 > 
-> Add a selftest that enables populating a VM with the maximum amount of
-> guest memory allowed by the underlying architecture.  Abuse KVM's
-> memslots by mapping a single host memory region into multiple memslots so
-> that the selftest doesn't require a system with terabytes of RAM.
+> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 > 
-> Default to 512gb of guest memory, which isn't all that interesting, but
-> should work on all MMUs and doesn't take an exorbitant amount of memory
-> or time.  E.g. testing with ~64tb of guest memory takes the better part
-> of an hour, and requires 200gb of memory for KVM's page tables when using
-> 4kb pages.
+> [...]
 
-I couldn't quite run this on a laptop, so I'll tune it down to 128gb and 
-3/4 of the available CPUs.
+Here is the summary with links:
+  - [bpf-next] bpf: determine buf_info inside check_buffer_access()
+    https://git.kernel.org/bpf/bpf-next/c/44e9a741cad8
 
-> To inflicit maximum abuse on KVM' MMU, default to 4kb pages (or whatever
-> the not-hugepage size is) in the backing store (memfd).  Use memfd for
-> the host backing store to ensure that hugepages are guaranteed when
-> requested, and to give the user explicit control of the size of hugepage
-> being tested.
-> 
-> By default, spin up as many vCPUs as there are available to the selftest,
-> and distribute the work of dirtying each 4kb chunk of memory across all
-> vCPUs.  Dirtying guest memory forces KVM to populate its page tables, and
-> also forces KVM to write back accessed/dirty information to struct page
-> when the guest memory is freed.
-> 
-> On x86, perform two passes with a MMU context reset between each pass to
-> coerce KVM into dropping all references to the MMU root, e.g. to emulate
-> a vCPU dropping the last reference.  Perform both passes and all
-> rendezvous on all architectures in the hope that arm64 and s390x can gain
-> similar shenanigans in the future.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Did you actually test aarch64 (not even asking about s390 :))?  For now 
-let's only add it for x86.
-
-> +			TEST_ASSERT(nr_vcpus, "#DE");
-
-srsly? :)
-
-Paolo
 

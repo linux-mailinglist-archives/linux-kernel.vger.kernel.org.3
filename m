@@ -2,173 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA894D208F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F464D2060
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349699AbiCHSvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        id S1349293AbiCHSpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349726AbiCHSvJ (ORCPT
+        with ESMTP id S1345544AbiCHSpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:51:09 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAA753E34
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:50:08 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id bn33so26312208ljb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:50:08 -0800 (PST)
+        Tue, 8 Mar 2022 13:45:51 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FCC2FFE8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:44:53 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id o26so17223223pgb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:44:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PtUIO+KlIHnuwZcxB8rQEEiVqAu06QZDgLrU97vhKCg=;
-        b=cgcY5LKW2TzJAfELjjvu0YRJX0cVXNV6yOUNqzYRkaYtWQEF1q1FXcSpdlHjJbunMR
-         0IbdURZXDS7gbD0Dqozrcw4EE0wCiRe7NhG/aY7qMDiLpEncbBRE3msFVv86nACqBYIf
-         Xv2BbgPMeS5GkaXhGA6UU/fXBTXoXyHyEm648=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F9iW0OVbthqHVjxJAxEXlEyGZtYeqKxwSIaWo5GZTas=;
+        b=Q3cQnIc3ElpP/gss4isBnkT5tvfJ3hTwiROMAEWXzVNHtn7vH5rTDwbrOteD8UaeRk
+         NKMKiJB0UDv0RkR5hVLcsB66LS3g2CsFZrZRpQbTEencmQWRTTSmKjL09M0srYleG5k+
+         VgLKi/RFKKSBZwBtdfN2SmS4DGCqGUCRa0le+spniEFp4QKUwoKOI7pmrQlWqtqfYrkp
+         jayz4RWUnq3lMz9WFrWHpZx65NczM2L9UbGLSS6axF1tiSbvzMB07LTuigbwobeINlD7
+         pkCDFMGFDU3QSm0PTYrB5Tb00AqWmftitCtIhxhTKapgESQrGgaEdqHnosObJlPS1Jjj
+         OE8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PtUIO+KlIHnuwZcxB8rQEEiVqAu06QZDgLrU97vhKCg=;
-        b=N1DwgSWY3ryqcnV1Z5r+o90IGVlEcT2F7CPmQV+eiIDUIIGoIdLF3XMsQA/++P27p3
-         V4xpPvz1PC0tWY5BEX9Jd9J8Gm0FjcDaui2lO6ZQf7gG4IjC0old+XzCo6Tj7RrvQ+B+
-         fX7Qz/5yg2ajCdE+uUamAjfzcTS38tmutNvBtWlchq4G/2bCQPWPJhIjB1Q9gEu7Quml
-         iY6fIfkDbrRa8ufGdkjlKSvrTO7DxGRaRd0X4exuc5NjvVwemblr+yfxRgsgoxPVdnJt
-         2HLqRmnJrt89y/1XN9n9CZcLUY2aSWCA2SS/hLPV589Y9uC6ZJK01KTC8TdmHBb6NbZc
-         IejQ==
-X-Gm-Message-State: AOAM533cINj8Y2xLohNJQYwgylMmY6iH5zpSN+4yM/XNb7W1JO40ySSM
-        /caF85znJ73fggwVJowED6PryRFiV0cfFsVPEr0=
-X-Google-Smtp-Source: ABdhPJzTRefa/pMi7DNSgpx6ip+iRiCNPvzvH0Re1IW3LG1gMYmt7aT/QUE0sogJgx3i4H03HRZs6w==
-X-Received: by 2002:a2e:a586:0:b0:247:e785:49cd with SMTP id m6-20020a2ea586000000b00247e78549cdmr6522247ljp.503.1646765406111;
-        Tue, 08 Mar 2022 10:50:06 -0800 (PST)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id y16-20020a2e9d50000000b00247b105c11dsm4015282ljj.34.2022.03.08.10.50.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 10:50:05 -0800 (PST)
-Received: by mail-lj1-f178.google.com with SMTP id v28so26295111ljv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:50:05 -0800 (PST)
-X-Received: by 2002:a2e:924d:0:b0:246:370c:5618 with SMTP id
- v13-20020a2e924d000000b00246370c5618mr11487227ljg.358.1646764958731; Tue, 08
- Mar 2022 10:42:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F9iW0OVbthqHVjxJAxEXlEyGZtYeqKxwSIaWo5GZTas=;
+        b=JPEwAhFsRqzopDd9rfqtjLRv4UmYmiwvrMnOqreNJZyA/txwA2HX3q9eL6Agj6MRw2
+         +KJcO2jGJA8tlFN4MG6bGrPUAFBzrPSSI3TtiBAky2aKal9SpFpUle2ivfQZIlKjFWYc
+         cac1WTEfpPWmpUUKvgyf54pZMMISfXArs0d1VzfloqLyN7Lczhskd+K/hXeSTKYEE/S0
+         LnRqhcgWKGkWq20QcL86eG0mKmxgrqaTuWK0Zl/6B90wlHbb54vCmivzIzPxn2CUs9Ix
+         tFw3AqqjTzCrlLLs6UFq1WdTTrsJTiF9VpxsdF5qeVZfu1ishMRU01zKmINQr1X1rIL4
+         /usQ==
+X-Gm-Message-State: AOAM533AkrP1ROE405Q+qGP5QacRPR9EiwIbWYEzMTLqPTFFbYkD+zMl
+        nJaQum7lzRo0/z89K6GFsHCAMw==
+X-Google-Smtp-Source: ABdhPJwqZg/ojI0iBDzhfukakkpXarGU5usTmUXLDTEA9mCTtIohCGSu3Rrew29iVrh/UUrA0h9aFg==
+X-Received: by 2002:a62:8389:0:b0:4f7:2b72:3589 with SMTP id h131-20020a628389000000b004f72b723589mr5100912pfe.57.1646765093267;
+        Tue, 08 Mar 2022 10:44:53 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b5-20020a056a0002c500b004f6dbd217c9sm12807965pft.108.2022.03.08.10.44.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 10:44:52 -0800 (PST)
+Date:   Tue, 8 Mar 2022 18:44:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+Subject: Re: [PATCH v2 12/25] KVM: x86/mmu: cleanup computation of MMU roles
+ for two-dimensional paging
+Message-ID: <YiekIeAfGpPnqHT0@google.com>
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-13-pbonzini@redhat.com>
+ <YiecYxd/YreGFWpB@google.com>
+ <2e6c4c58-d4d2-69e2-f8ed-c93d9c13365b@redhat.com>
 MIME-Version: 1.0
-References: <20220308141437.144919-1-david@redhat.com> <20220308141437.144919-6-david@redhat.com>
- <D7AB3A84-3FFB-4E8D-9E68-BF721CC4C6FC@vmware.com> <CAHk-=wiYw9hb-EtjcQ2WDSh4TMCWjJmYitfAn=0y_gguhDtf8Q@mail.gmail.com>
- <0FFA6BBC-766F-4ABC-821A-062632632475@vmware.com>
-In-Reply-To: <0FFA6BBC-766F-4ABC-821A-062632632475@vmware.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 8 Mar 2022 10:42:22 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whBkpWpQpzyVxoVbaYBC06eHGMt=7x=fKe6Uae5O0jjcA@mail.gmail.com>
-Message-ID: <CAHk-=whBkpWpQpzyVxoVbaYBC06eHGMt=7x=fKe6Uae5O0jjcA@mail.gmail.com>
-Subject: Re: [PATCH v1 05/15] mm/rmap: convert RMAP flags to a proper distinct
- rmap_t type
-To:     Nadav Amit <namit@vmware.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e6c4c58-d4d2-69e2-f8ed-c93d9c13365b@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 10:24 AM Nadav Amit <namit@vmware.com> wrote:
->
-> I see your point regarding passing an arg. The or=E2=80=99ing of bitfield=
-s
-> can easily be resolved, unless I am missing something, with a union
-> that holds the aggregate value and an anonymous struct that holds
-> the individual flags.
+On Tue, Mar 08, 2022, Paolo Bonzini wrote:
+> On 3/8/22 19:11, Sean Christopherson wrote:
+> > On Mon, Feb 21, 2022, Paolo Bonzini wrote:
+> > > Extended bits are unnecessary because page walking uses the CPU mode,
+> > > and EFER.NX/CR0.WP can be set to one unconditionally---matching the
+> > > format of shadow pages rather than the format of guest pages.
+> > 
+> > But they don't match the format of shadow pages.  EPT has an equivalent to NX in
+> > that KVM can always clear X, but KVM explicitly supports running with EPT and
+> > EFER.NX=0 in the host (32-bit non-PAE kernels).
+> 
+> In which case bit 2 of EPTs doesn't change meaning, does it?
+> 
+> > CR0.WP equally confusing.  Yes, both EPT and NPT enforce write protection at all
+> > times, but EPT has no concept of user vs. supervisor in the EPT tables themselves,
+> > at least with respect to writes (thanks mode-based execution for the qualifier...).
+> > NPT is even worse as the APM explicitly states:
+> > 
+> >    The host hCR0.WP bit is ignored under nested paging.
+> > 
+> > Unless there's some hidden dependency I'm missing, I'd prefer we arbitrarily leave
+> > them zero.
+> 
+> Setting EFER.NX=0 might be okay for EPT/NPT, but I'd prefer to set it
+> respectively to 1 (X bit always present) and host EFER.NX (NX bit present
+> depending on host EFER).
+> 
+> For CR0.WP it should really be 1 in my opinion, because CR0.WP=0 implies
+> having a concept of user vs. supervisor access: CR0.WP=1 is the "default",
+> while CR0.WP=0 is "always allow *supervisor* writes".
 
-I think that falls under the same heading as passing them as
-arguments: it's certainly doable, but it requires special work that is
-hidden by helper macros/functions/types.
+Yeah, I think we generally agree, just came to different conclusions :-)  I'm
+totally fine setting them to '1', especially given the patch I just "posted",
+but please add comments (suggested NX comment below).  The explicit "WP is ignored"
+blurb for hCR0 on NPT will be especially confusing at some point.
 
-I mean, even the "pass as arguments" can certainly work. It's not
-impossible to hide the odd syntax behind a macro, particularly if you
-only ever have a couple of specific cases. So  you can do
+With efer_nx forced to '1', we can do this somewhere in this series.  I really,
+really despise "context" :-).
 
-  typedef struct rmap_flags {
-      unsigned int exclusive:1,
-          compound:1;
-  } rmap_t;
-
-   #define RMAP_EXCLUSIVE (rmap_t) { .exclusive =3D 1 }
-   #define RMAP_COMPOUND (rmap_t) { .compound =3D 1 }
-
-and now you can use RMAP_EXCLUSIVE when you pass it as an argument,
-and in the functions themselves you can use
-
-      if (flags.exclusive) {...
-
-which is certainly not unreadable. But it does mean that you basically
-have one syntax for testing "is this exclusive" and another for
-passing that value in.
-
-And you can't do RMAP_EXCLUSIVE | RMAP_COMPOUND to say "I want to pass
-in both exclusive and compound", but you *can* do
-
-      flags.exclusive =3D 1;
-
-to set the exclusive bit. Again - that is certainly not unreadable on
-its own, but it's an example of how inconsistent and inconvenient the
-interface gets once you do anything outside of some very specific
-cases.
-
-And yes, you can solve these cases by simply always limiting yourself
-to specific syntax (in particular, just make the rule be that you can
-never create values out of thin air, you always have a variable that
-gets set.
-
-The bitfield thing does have the advantage that it ends up having very
-strict type checking.
-
-But in general, I'd say that the disadvantages are huge enough that
-you should never use a bitfield "on its own". Once it's part of a
-structure that you have to pass around and initialize as a structure
-*anyway*, then most of the problems go away.
-
-So bitfields as part of structures are fine - and we obviously use
-them extensively in that form. Even then they can have problems if
-there are any kinds of atomicity issues (ie think "page flags" or
-anything like that) but that's obviously a different thing, and using
-a union to get both ways to access things isn't out of the question.
-
-Of course, if you use unions to get "both as a bitfield and as a
-value" things working, you suddenly have "bit order issues", so that
-can be really problematic too. Bit endianness doesn't even have to
-follow byte endianness.
-
-End result: bitfields are actually often more complex than you think they a=
-re.
-
-                  Linus
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 9c79a0927a48..657df7fd74bf 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4461,25 +4461,15 @@ static inline bool boot_cpu_is_amd(void)
+        return shadow_x_mask == 0;
+ }
+ 
+-static void
+-reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
++static void reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *mmu)
+ {
+-       /*
+-        * KVM doesn't honor execute-protection from the host page tables, but
+-        * NX is required and potentially used at any time by KVM for NPT, as
+-        * the NX hugepages iTLB multi-hit mitigation is supported for any CPU
+-        * despite no known AMD (and derivative) CPUs being affected by erratum.
+-        */
+-       bool efer_nx = true;
+-
+-       struct rsvd_bits_validate *shadow_zero_check;
+        int i;
+ 
+-       shadow_zero_check = &context->shadow_zero_check;
++       shadow_zero_check = &mmu->shadow_zero_check;
+ 
+        if (boot_cpu_is_amd())
+                __reset_rsvds_bits_mask(shadow_zero_check, reserved_hpa_bits(),
+-                                       context->shadow_root_level, efer_nx,
++                                       mmu->shadow_root_level, is_efer_nx(mmu),
+                                        boot_cpu_has(X86_FEATURE_GBPAGES),
+                                        false, true);
+        else
+@@ -4490,7 +4480,7 @@ reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
+        if (!shadow_me_mask)
+                return;
+ 
+-       for (i = context->shadow_root_level; --i >= 0;) {
++       for (i = mmu->shadow_root_level; --i >= 0;) {
+                shadow_zero_check->rsvd_bits_mask[0][i] &= ~shadow_me_mask;
+                shadow_zero_check->rsvd_bits_mask[1][i] &= ~shadow_me_mask;
+        }
+@@ -4751,6 +4741,16 @@ kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
+ 
+        role.base.access = ACC_ALL;
+        role.base.cr0_wp = true;
++
++       /*
++        * KVM doesn't honor execute-protection from the host page tables, but
++        * NX is required and potentially used at any time by KVM for NPT, as
++        * the NX hugepages iTLB multi-hit mitigation is supported for any CPU
++        * despite no known AMD (and derivative) CPUs being affected by erratum.
++        *
++        * This is functionally accurate for EPT, if technically wrong, as KVM
++        * can always clear the X bit on EPT,
++        */
+        role.base.efer_nx = true;
+        role.base.smm = cpu_mode.base.smm;
+        role.base.guest_mode = cpu_mode.base.guest_mode;

@@ -2,101 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CCA4D12DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134244D12E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240827AbiCHIxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
+        id S1345232AbiCHIxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345255AbiCHIww (ORCPT
+        with ESMTP id S242666AbiCHIx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:52:52 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3974090E;
-        Tue,  8 Mar 2022 00:51:51 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id dr20so37504624ejc.6;
-        Tue, 08 Mar 2022 00:51:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=weKpcHAcnZbt3XokDlK6GEAJ8PK3dGcUQJAFMx5soSc=;
-        b=YcCGih06qdszN3WESTIuZ81II8HBzbpwHe8fbppflLOAsMDS32mq8z8ZH6k101gg8z
-         Marfr2hHyKsthm618MBbMYiVdVA7p0nKmGsFmQBjx+pqSw9gF14RDOnfoDL7znJLh3ZM
-         p5ZRtxA/H8YeBjfDSHrX+jCNFrR81JY5F48pVVyyx4/qiqepfzkfiDTPkEG/IXA8ztEA
-         H5c1LJ0rlF4nOjxRkG+gH8CO4M7pwFEX3PilXFw3o5yk43xLoeAtgC5WkLxXahZsmVcz
-         y3EYfnSdy0N6VLdceHkl9iCcx4XMiZULWNJUb/isBhSNlKrS9IzI7eb3J630YL80ojMI
-         G7+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=weKpcHAcnZbt3XokDlK6GEAJ8PK3dGcUQJAFMx5soSc=;
-        b=7cf/uGO1brkO3wqKM7vlEsnlyIghkIu3QLqa5AA5xO0Q3IUFMHRVyKEseM+4I6sJEw
-         Uk+AZ2gQnN8LRcCKMs/hpMyJhvmfFqbVigb7Q+C1skUlmAR1OiH+Muwmbi7jqOdnnTV/
-         pXRSBJo+WlrkjpWgp/Y8epK/y6LQ/krRWQx/AICfL7l5t/4jhK7B0UcTHER9Y6ndNLUJ
-         NFZ/4ZbG71s+ek1RwcMv0lq4Mc0MLh/0L/BMVB3KBvzI1ALbPqPeeM7MwzQg3JbblWnd
-         3QETvmIGSbp3q1gCdafmee5XUwS2QmtRQH8F3OqkFubw1Q0/cLguoYQCKhAgz4hGno0R
-         f2PQ==
-X-Gm-Message-State: AOAM530i99xAKP+XnkcqEzypAXn+hNs44dzB3GL/3L7B0bD52LmgnTp8
-        tZLBLdRdOyEYs5JgQhdYGNsXEEN9Tz4=
-X-Google-Smtp-Source: ABdhPJx9TgI8fo2rPRv7i3Gr41qIyvnF3isNGnqAzJKtTTygfNkGSUPBDjqZvpo8BnuURfm23fu/gg==
-X-Received: by 2002:a17:906:4a96:b0:6c5:5ea9:5366 with SMTP id x22-20020a1709064a9600b006c55ea95366mr12075447eju.473.1646729510133;
-        Tue, 08 Mar 2022 00:51:50 -0800 (PST)
-Received: from felia.fritz.box (200116b82626c9000cc91df728b27ead.dip.versatel-1u1.de. [2001:16b8:2626:c900:cc9:1df7:28b2:7ead])
-        by smtp.gmail.com with ESMTPSA id z22-20020a17090655d600b006d229436793sm5558656ejp.223.2022.03.08.00.51.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 00:51:49 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>, linux-renesas-soc@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify entry for ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE DRIVERS
-Date:   Tue,  8 Mar 2022 09:51:36 +0100
-Message-Id: <20220308085136.30753-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Mar 2022 03:53:29 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6BADF9E;
+        Tue,  8 Mar 2022 00:52:33 -0800 (PST)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KCTZJ5hGSz6F93y;
+        Tue,  8 Mar 2022 16:51:04 +0800 (CST)
+Received: from lhreml715-chm.china.huawei.com (10.201.108.66) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 09:52:31 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 08:52:30 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Tue, 8 Mar 2022 08:52:30 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
+CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: RE: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Topic: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Thread-Index: AQHYL1LUtVDDY2S/e06nk5NDxfriXKy1IT6AgAASKKA=
+Date:   Tue, 8 Mar 2022 08:52:30 +0000
+Message-ID: <50b0d11d57d3488da809f318576466cd@huawei.com>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+ <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
+ <BN9PR11MB527661103A2CFE13E4F3EC528C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+In-Reply-To: <BN9PR11MB527661103A2CFE13E4F3EC528C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.27.151]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 983b62975e90 ("dt-bindings: mfd: bd9571mwv: Convert to json-schema")
-converts bd9571mwv.txt to rohm,bd9571mwv.yaml, but missed to adjust its
-reference in MAINTAINERS.
-
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
-
-Repair this file reference in ROHM MULTIFUNCTION BD9571MWV-M PMIC DEVICE
-DRIVERS.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Lee, please pick this minor non-urgent clean-up patch. Thanks.
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dc984c050086..c1eed1a2ffc9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16695,7 +16695,7 @@ M:	Marek Vasut <marek.vasut+renesas@gmail.com>
- L:	linux-kernel@vger.kernel.org
- L:	linux-renesas-soc@vger.kernel.org
- S:	Supported
--F:	Documentation/devicetree/bindings/mfd/bd9571mwv.txt
-+F:	Documentation/devicetree/bindings/mfd/rohm,bd9571mwv.yaml
- F:	drivers/gpio/gpio-bd9571mwv.c
- F:	drivers/mfd/bd9571mwv.c
- F:	drivers/regulator/bd9571mwv-regulator.c
--- 
-2.17.1
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVGlhbiwgS2V2aW4gW21h
+aWx0bzprZXZpbi50aWFuQGludGVsLmNvbV0NCj4gU2VudDogMDggTWFyY2ggMjAyMiAwNzo0Mg0K
+PiBUbzogU2hhbWVlcmFsaSBLb2xvdGh1bSBUaG9kaSA8c2hhbWVlcmFsaS5rb2xvdGh1bS50aG9k
+aUBodWF3ZWkuY29tPjsNCj4ga3ZtQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIu
+a2VybmVsLm9yZzsNCj4gbGludXgtY3J5cHRvQHZnZXIua2VybmVsLm9yZw0KPiBDYzogbGludXgt
+cGNpQHZnZXIua2VybmVsLm9yZzsgYWxleC53aWxsaWFtc29uQHJlZGhhdC5jb207IGpnZ0Budmlk
+aWEuY29tOw0KPiBjb2h1Y2tAcmVkaGF0LmNvbTsgbWd1cnRvdm95QG52aWRpYS5jb207IHlpc2hh
+aWhAbnZpZGlhLmNvbTsgTGludXhhcm0NCj4gPGxpbnV4YXJtQGh1YXdlaS5jb20+OyBsaXVsb25n
+ZmFuZyA8bGl1bG9uZ2ZhbmdAaHVhd2VpLmNvbT47IFplbmd0YW8gKEIpDQo+IDxwcmltZS56ZW5n
+QGhpc2lsaWNvbi5jb20+OyBKb25hdGhhbiBDYW1lcm9uDQo+IDxqb25hdGhhbi5jYW1lcm9uQGh1
+YXdlaS5jb20+OyBXYW5nemhvdSAoQikgPHdhbmd6aG91MUBoaXNpbGljb24uY29tPg0KPiBTdWJq
+ZWN0OiBSRTogW1BBVENIIHY4IDgvOV0gaGlzaV9hY2NfdmZpb19wY2k6IEFkZCBzdXBwb3J0IGZv
+ciBWRklPIGxpdmUNCj4gbWlncmF0aW9uDQo+IA0KPiA+IEZyb206IFNoYW1lZXIgS29sb3RodW0g
+PHNoYW1lZXJhbGkua29sb3RodW0udGhvZGlAaHVhd2VpLmNvbT4NCj4gPiBTZW50OiBGcmlkYXks
+IE1hcmNoIDQsIDIwMjIgNzowMiBBTQ0KPiA+ICsvKg0KPiA+ICsgKiBFYWNoIHN0YXRlIFJlZyBp
+cyBjaGVja2VkIDEwMCB0aW1lcywNCj4gPiArICogd2l0aCBhIGRlbGF5IG9mIDEwMCBtaWNyb3Nl
+Y29uZHMgYWZ0ZXIgZWFjaCBjaGVjayAgKi8gc3RhdGljIHUzMg0KPiA+ICthY2NfY2hlY2tfcmVn
+X3N0YXRlKHN0cnVjdCBoaXNpX3FtICpxbSwgdTMyIHJlZ3MpDQo+IA0KPiBxbV9jaGVja19yZWdf
+c3RhdGUoKSBnaXZlbiB0aGUgMXN0IGFyZ3VtZW50IGlzIHFtDQo+IA0KPiA+ICsvKiBDaGVjayB0
+aGUgUEYncyBSQVMgc3RhdGUgYW5kIEZ1bmN0aW9uIElOVCBzdGF0ZSAqLyBzdGF0aWMgaW50DQo+
+ID4gK3FtX2NoZWNrX2ludF9zdGF0ZShzdHJ1Y3QgaGlzaV9hY2NfdmZfY29yZV9kZXZpY2UgKmhp
+c2lfYWNjX3ZkZXYpDQo+IA0KPiB0aGVuIHRoaXMgc2hvdWxkIGJlIGFjY19jaGVja19pbnRfc3Rh
+dGUoKSBnaXZlbiB0aGUgaW5wdXQgaXMgYW4gYWNjIGRldmljZT8NCj4gDQo+IGFueXdheSBwbGVh
+c2UgaGF2ZSBhIGNvbnNpc3RlbnQgbmFtaW5nIGNvbnZlbnRpb24gaGVyZS4NCj4gDQo+ID4gK3N0
+YXRpYyBpbnQgcW1fcmVhZF9yZWcoc3RydWN0IGhpc2lfcW0gKnFtLCB1MzIgcmVnX2FkZHIsDQo+
+ID4gKwkJICAgICAgIHUzMiAqZGF0YSwgdTggbnVtcykNCj4gDQo+IHFtX3JlYWRfcmVncygpIHRv
+IHJlZmxlY3QgdGhhdCBtdWx0aXBsZSByZWdpc3RlcnMgYXJlIHByb2Nlc3NlZC4NCj4gDQo+ID4g
+Kw0KPiA+ICtzdGF0aWMgaW50IHFtX3dyaXRlX3JlZyhzdHJ1Y3QgaGlzaV9xbSAqcW0sIHUzMiBy
+ZWcsDQo+ID4gKwkJCXUzMiAqZGF0YSwgdTggbnVtcykNCj4gDQo+IHFtX3dyaXRlX3JlZ3MoKQ0K
+PiANCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgcW1fcndfcmVnc19yZWFkKHN0cnVjdCBoaXNpX3Ft
+ICpxbSwgc3RydWN0IGFjY192Zl9kYXRhDQo+ID4gKyp2Zl9kYXRhKQ0KPiANCj4gcW1fbG9hZF9y
+ZWdzKCkuIEl0J3MgY29uZnVzaW5nIHRvIGhhdmUgYm90aCAncncnIGFuZCAncmVhZCcuDQo+IA0K
+PiA+ICsNCj4gPiArc3RhdGljIGludCBxbV9yd19yZWdzX3dyaXRlKHN0cnVjdCBoaXNpX3FtICpx
+bSwgc3RydWN0IGFjY192Zl9kYXRhDQo+ID4gKnZmX2RhdGEpDQo+IA0KPiBxbV9zYXZlX3JlZ3Mo
+KQ0KDQpSaWdodC4gSSBhbSBPayB3aXRoIHRoZSBhYm92ZSBzdWdnZXN0aW9ucy4NCg0KPiANCj4g
+PiArc3RhdGljIGludCBoaXNpX2FjY192Zl9xbV9pbml0KHN0cnVjdCBoaXNpX2FjY192Zl9jb3Jl
+X2RldmljZQ0KPiA+ICsqaGlzaV9hY2NfdmRldikgew0KPiA+ICsJc3RydWN0IHZmaW9fcGNpX2Nv
+cmVfZGV2aWNlICp2ZGV2ID0gJmhpc2lfYWNjX3ZkZXYtPmNvcmVfZGV2aWNlOw0KPiA+ICsJc3Ry
+dWN0IGhpc2lfcW0gKnZmX3FtID0gJmhpc2lfYWNjX3ZkZXYtPnZmX3FtOw0KPiA+ICsJc3RydWN0
+IHBjaV9kZXYgKnZmX2RldiA9IHZkZXYtPnBkZXY7DQo+ID4gKw0KPiA+ICsJLyoNCj4gPiArCSAq
+IEFDQyBWRiBkZXYgQkFSMiByZWdpb24gY29uc2lzdHMgb2YgYm90aCBmdW5jdGlvbmFsIHJlZ2lz
+dGVyIHNwYWNlDQo+ID4gKwkgKiBhbmQgbWlncmF0aW9uIGNvbnRyb2wgcmVnaXN0ZXIgc3BhY2Uu
+IEZvciBtaWdyYXRpb24gdG8gd29yaywgd2UNCj4gPiArCSAqIG5lZWQgYWNjZXNzIHRvIGJvdGgu
+IEhlbmNlLCB3ZSBtYXAgdGhlIGVudGlyZSBCQVIyIHJlZ2lvbiBoZXJlLg0KPiA+ICsJICogQnV0
+IGZyb20gYSBzZWN1cml0eSBwb2ludCBvZiB2aWV3LCB3ZSByZXN0cmljdCBhY2Nlc3MgdG8gdGhl
+DQo+ID4gKwkgKiBtaWdyYXRpb24gY29udHJvbCBzcGFjZSBmcm9tIEd1ZXN0KFBsZWFzZSBzZWUN
+Cj4gPiBtbWFwL2lvY3RsL3JlYWQvd3JpdGUNCj4gPiArCSAqIG92ZXJyaWRlIGZ1bmN0aW9ucyku
+DQo+IA0KPiAoUGxlYXNlIHNlZSBoaXNpX2FjY192ZmlvX3BjaV9taWdybl9vcHMpDQo+IA0KPiA+
+ICsJICoNCj4gPiArCSAqIEFsc28gdGhlIEhpU2lsaWNvbiBBQ0MgVkYgZGV2aWNlcyBzdXBwb3J0
+ZWQgYnkgdGhpcyBkcml2ZXIgb24NCj4gPiArCSAqIEhpU2lsaWNvbiBoYXJkd2FyZSBwbGF0Zm9y
+bXMgYXJlIGludGVncmF0ZWQgZW5kIHBvaW50IGRldmljZXMNCj4gPiArCSAqIGFuZCBoYXMgbm8g
+Y2FwYWJpbGl0eSB0byBwZXJmb3JtIFBDSWUgUDJQLg0KPiANCj4gQWNjb3JkaW5nIHRvIHY1IGRp
+c2N1c3Npb24gSSB0aGluayBpdCBpcyB0aGUgcGxhdGZvcm0gd2hpY2ggbGFja3Mgb2YgdGhlIFAy
+UA0KPiBjYXBhYmlsaXR5IGluc3RlYWQgb2YgdGhlIGRldmljZS4gQ3VycmVudCB3cml0aW5nIGlz
+IHJlYWQgdG8gdGhlIGxhdHRlci4NCj4gDQo+IGJldHRlciBjbGFyaWZ5IGl0IGFjY3VyYXRlbHku
+IPCfmIoNCg0KVGhhdOKAmXMgcmlnaHQuIEl0IGlzIHRoZSBwbGF0Zm9ybS4NCg0KPiANCj4gPiAg
+c3RhdGljIGludCBoaXNpX2FjY192ZmlvX3BjaV9wcm9iZShzdHJ1Y3QgcGNpX2RldiAqcGRldiwg
+Y29uc3Qgc3RydWN0DQo+ID4gcGNpX2RldmljZV9pZCAqaWQpICB7DQo+ID4gLQlzdHJ1Y3QgdmZp
+b19wY2lfY29yZV9kZXZpY2UgKnZkZXY7DQo+ID4gKwlzdHJ1Y3QgaGlzaV9hY2NfdmZfY29yZV9k
+ZXZpY2UgKmhpc2lfYWNjX3ZkZXY7DQo+ID4gKwlzdHJ1Y3QgaGlzaV9xbSAqcGZfcW07DQo+ID4g
+IAlpbnQgcmV0Ow0KPiA+DQo+ID4gLQl2ZGV2ID0ga3phbGxvYyhzaXplb2YoKnZkZXYpLCBHRlBf
+S0VSTkVMKTsNCj4gPiAtCWlmICghdmRldikNCj4gPiArCWhpc2lfYWNjX3ZkZXYgPSBremFsbG9j
+KHNpemVvZigqaGlzaV9hY2NfdmRldiksIEdGUF9LRVJORUwpOw0KPiA+ICsJaWYgKCFoaXNpX2Fj
+Y192ZGV2KQ0KPiA+ICAJCXJldHVybiAtRU5PTUVNOw0KPiA+DQo+ID4gLQl2ZmlvX3BjaV9jb3Jl
+X2luaXRfZGV2aWNlKHZkZXYsIHBkZXYsICZoaXNpX2FjY192ZmlvX3BjaV9vcHMpOw0KPiA+ICsJ
+cGZfcW0gPSBoaXNpX2FjY19nZXRfcGZfcW0ocGRldik7DQo+ID4gKwlpZiAocGZfcW0gJiYgcGZf
+cW0tPnZlciA+PSBRTV9IV19WMykgew0KPiA+ICsJCXJldCA9IGhpc2lfYWNjX3ZmaW9fcGNpX21p
+Z3JuX2luaXQoaGlzaV9hY2NfdmRldiwgcGRldiwNCj4gPiBwZl9xbSk7DQo+ID4gKwkJaWYgKCFy
+ZXQpIHsNCj4gPiArCQkJdmZpb19wY2lfY29yZV9pbml0X2RldmljZSgmaGlzaV9hY2NfdmRldi0N
+Cj4gPiA+Y29yZV9kZXZpY2UsIHBkZXYsDQo+ID4gKw0KPiA+ICZoaXNpX2FjY192ZmlvX3BjaV9t
+aWdybl9vcHMpOw0KPiA+ICsJCX0gZWxzZSB7DQo+ID4gKwkJCXBjaV93YXJuKHBkZXYsICJtaWdy
+YXRpb24gc3VwcG9ydCBmYWlsZWQsIGNvbnRpbnVlDQo+ID4gd2l0aCBnZW5lcmljIGludGVyZmFj
+ZVxuIik7DQo+ID4gKwkJCXZmaW9fcGNpX2NvcmVfaW5pdF9kZXZpY2UoJmhpc2lfYWNjX3ZkZXYt
+DQo+ID4gPmNvcmVfZGV2aWNlLCBwZGV2LA0KPiA+ICsJCQkJCQkgICZoaXNpX2FjY192ZmlvX3Bj
+aV9vcHMpOw0KPiA+ICsJCX0NCj4gDQo+IFRoaXMgbG9naWMgbG9va3Mgd2VpcmQuIEVhcmxpZXIg
+eW91IHN0YXRlIHRoYXQgdGhlIG1pZ3JhdGlvbiBjb250cm9sIHJlZ2lvbiBtdXN0DQo+IGJlIGhp
+ZGRlbiBmcm9tIHRoZSB1c2Vyc3BhY2UgYXMgYSBzZWN1cml0eSByZXF1aXJlbWVudCwgYnV0IGFi
+b3ZlIGxvZ2ljIHJlYWRzDQo+IGxpa2UgaWYgdGhlIGRyaXZlciBmYWlscyB0byBpbml0aWFsaXpl
+IG1pZ3JhdGlvbiBzdXBwb3J0IHRoZW4gd2UganVzdCBmYWxsIGJhY2sgdG8gdGhlDQo+IGRlZmF1
+bHQgb3BzIHdoaWNoIGdyYW50cyB0aGUgdXNlciB0aGUgZnVsbCBhY2Nlc3MgdG8gdGhlIGVudGly
+ZSBNTUlPIGJhci4NCg0KQXMgSSBleHBsYWluZWQgcHJldmlvdXNseSB0aGUgcmlzayBvZiBleHBv
+c2luZyBtaWdyYXRpb24gQkFSIGlzIG9ubHkgbGltaXRlZCB0byBtaWdyYXRpb24NCnVzZSBjYXNl
+LiBTbyBpZiBmb3Igc29tZSByZWFzb24gd2UgY2FuJ3QgZ2V0IHRoZSBtaWdyYXRpb24gd29ya2lu
+Zywgd2UgZGVmYXVsdCB0byB0aGUNCmdlbmVyaWMgdmZpby1wY2kgbGlrZSBiZWhhdmlvci4NCiAN
+Cj4gDQo+ID4gKwl9IGVsc2Ugew0KPiA+ICsJCXZmaW9fcGNpX2NvcmVfaW5pdF9kZXZpY2UoJmhp
+c2lfYWNjX3ZkZXYtPmNvcmVfZGV2aWNlLCBwZGV2LA0KPiA+ICsJCQkJCSAgJmhpc2lfYWNjX3Zm
+aW9fcGNpX29wcyk7DQo+ID4gKwl9DQo+IA0KPiBJZiB0aGUgaGFyZHdhcmUgaXRzZWxmIGRvZXNu
+J3Qgc3VwcG9ydCB0aGUgbWlncmF0aW9uIGNhcGFiaWxpdHksIGNhbiB3ZSBqdXN0DQo+IG1vdmUg
+aXQgb3V0IG9mIHRoZSBpZCB0YWJsZSBhbmQgbGV0IHZmaW8tcGNpIHRvIGRyaXZlIGl0Pw0KPiAN
+CiBCdXQgdGhlIGFib3ZlIGlzIGp1c3QgbGlrZSB2ZmlvLXBjaSBkcml2aW5nIGl0LCByaWdodD8N
+Cg0KVGhhbmtzLA0KU2hhbWVlcg0K

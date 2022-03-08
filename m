@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F414D1C72
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6DF4D1C9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348102AbiCHP46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S1348934AbiCHP64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348044AbiCHP4E (ORCPT
+        with ESMTP id S1348077AbiCHP4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:56:04 -0500
+        Tue, 8 Mar 2022 10:56:10 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA454F9CF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE9C4F9C9
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=drGG7z9wXSjoirqs/jFmcbkXc11ClO+eo/+GaDxmf4w=; b=KNkZEExL2ikee5MU76cCdqIxKQ
-        KOVTbPNBWJl6he0u1ji/192TRJmtyC+ISPeA+kKqlZlXQsphL0veEOTHQX02kJ8wTfU6kqZrNSqbD
-        kUG7O1/xPtLwNE1tsaLN6V7ByinqGhux3K/QYBas6cwL274eqkMgyd41GMHCtV6YYPJ2FdQipGKZe
-        38OyMROthz/h/HBzBrpASA+Ylg+x0wesElcrxDEq5kXyJIA5x/+UFsYsvxsiDHDFqGO3R1XlsX9UW
-        LuGzFVX0lW8BZEQkG+38VvorXbh5pCIQac1ExEvhP6YcsFiiE6X3+JrUyePybN1SZtejbCOSl7U5e
-        aZ+70EjQ==;
+        bh=YDQooxdYXRcnE0wqAT4rEJebfau7S7yVuN7rl92ZXso=; b=cnNHnSN0N+Sus0X9HqSJ1gurXb
+        N2B1nQR0N/wCQ76FicWtgKAPjYxSLxb9xH5TZP92MhMPjTsg7cV6lHaeXiu8f7qy9qhhLjiUyuL6D
+        Ag+onGqNf9Lq+i6LjD5uxdnc8ukTtNsat2LVLvm5Gpm/e7DC+JA1SBjCeu5vatquzqzOqUg4mpTRC
+        nAlutuxXPqYXrHB22+7LQ1uJatPs5OeGL8Sx9Hlh1Iw9A88UFL57uzxCNw7VO+ssaBpgO9b4ERn7a
+        ixXjiueBjJ//Xq9leMQRtkSXMWcJmpGL4r2W7gBhS9VqK1Q80GL776oEQ7N/T+xeYMDve7BfqblEJ
+        8E9LXXHw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAd-00GIvV-EB; Tue, 08 Mar 2022 15:54:43 +0000
+        id 1nRcAd-00GIvX-Gu; Tue, 08 Mar 2022 15:54:43 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5342E302DDC;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55AA3302DDF;
         Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id EA0F62B5649DD; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
-Message-ID: <20220308154319.586815435@infradead.org>
+        id F05282B5649E0; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
+Message-ID: <20220308154319.645963517@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:52 +0100
+Date:   Tue, 08 Mar 2022 16:30:53 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v4 41/45] objtool: Read the NOENDBR annotation
+Subject: [PATCH v4 42/45] objtool: Add IBT/ENDBR decoding
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,81 +61,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Read the new NOENDBR annotation. While there, attempt to not bloat
-struct instruction.
+Intel IBT requires the target of any indirect CALL or JMP instruction
+to be the ENDBR instruction; optionally it allows those two
+instructions to have a NOTRACK prefix in order to avoid this
+requirement.
+
+The kernel will not enable the use of NOTRACK, as such any occurence
+of it in compiler generated code should be flagged.
+
+Teach objtool to Decode ENDBR instructions and WARN about NOTRACK
+prefixes.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- tools/objtool/check.c                 |   27 +++++++++++++++++++++++++++
- tools/objtool/include/objtool/check.h |   13 ++++++++++---
- 2 files changed, 37 insertions(+), 3 deletions(-)
+ tools/objtool/arch/x86/decode.c      |   34 +++++++++++++++++++++++++++++-----
+ tools/objtool/include/objtool/arch.h |    1 +
+ 2 files changed, 30 insertions(+), 5 deletions(-)
 
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1860,6 +1860,29 @@ static int read_unwind_hints(struct objt
- 	return 0;
- }
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -103,6 +103,18 @@ unsigned long arch_jump_destination(stru
+ #define rm_is_mem(reg)	(mod_is_mem() && !is_RIP() && rm_is(reg))
+ #define rm_is_reg(reg)	(mod_is_reg() && modrm_rm == (reg))
  
-+static int read_noendbr_hints(struct objtool_file *file)
++static bool has_notrack_prefix(struct insn *insn)
 +{
-+	struct section *sec;
-+	struct instruction *insn;
-+	struct reloc *reloc;
++	int i;
 +
-+	sec = find_section_by_name(file->elf, ".rela.discard.noendbr");
-+	if (!sec)
-+		return 0;
-+
-+	list_for_each_entry(reloc, &sec->reloc_list, list) {
-+		insn = find_insn(file, reloc->sym->sec, reloc->sym->offset + reloc->addend);
-+		if (!insn) {
-+			WARN("bad .discard.noendbr entry");
-+			return -1;
-+		}
-+
-+		insn->noendbr = 1;
++	for (i = 0; i < insn->prefixes.nbytes; i++) {
++		if (insn->prefixes.bytes[i] == 0x3e)
++			return true;
 +	}
 +
-+	return 0;
++	return false;
 +}
 +
- static int read_retpoline_hints(struct objtool_file *file)
- {
- 	struct section *sec;
-@@ -2097,6 +2120,10 @@ static int decode_sections(struct objtoo
- 	if (ret)
- 		return ret;
+ int arch_decode_instruction(struct objtool_file *file, const struct section *sec,
+ 			    unsigned long offset, unsigned int maxlen,
+ 			    unsigned int *len, enum insn_type *type,
+@@ -112,7 +124,7 @@ int arch_decode_instruction(struct objto
+ 	const struct elf *elf = file->elf;
+ 	struct insn insn;
+ 	int x86_64, ret;
+-	unsigned char op1, op2, op3,
++	unsigned char op1, op2, op3, prefix,
+ 		      rex = 0, rex_b = 0, rex_r = 0, rex_w = 0, rex_x = 0,
+ 		      modrm = 0, modrm_mod = 0, modrm_rm = 0, modrm_reg = 0,
+ 		      sib = 0, /* sib_scale = 0, */ sib_index = 0, sib_base = 0;
+@@ -137,6 +149,8 @@ int arch_decode_instruction(struct objto
+ 	if (insn.vex_prefix.nbytes)
+ 		return 0;
  
-+	ret = read_noendbr_hints(file);
-+	if (ret)
-+		return ret;
++	prefix = insn.prefixes.bytes[0];
 +
- 	/*
- 	 * Must be before add_{jump_call}_destination.
- 	 */
---- a/tools/objtool/include/objtool/check.h
-+++ b/tools/objtool/include/objtool/check.h
-@@ -45,11 +45,18 @@ struct instruction {
- 	unsigned int len;
- 	enum insn_type type;
- 	unsigned long immediate;
--	bool dead_end, ignore, ignore_alts;
--	bool hint;
--	bool retpoline_safe;
+ 	op1 = insn.opcode.bytes[0];
+ 	op2 = insn.opcode.bytes[1];
+ 	op3 = insn.opcode.bytes[2];
+@@ -492,6 +506,12 @@ int arch_decode_instruction(struct objto
+ 			/* nopl/nopw */
+ 			*type = INSN_NOP;
+ 
++		} else if (op2 == 0x1e) {
 +
-+	u8 dead_end	: 1,
-+	   ignore	: 1,
-+	   ignore_alts	: 1,
-+	   hint		: 1,
-+	   retpoline_safe : 1,
-+	   noendbr	: 1;
-+		/* 2 bit hole */
- 	s8 instr;
- 	u8 visited;
-+	/* u8 hole */
++			if (prefix == 0xf3 && (modrm == 0xfa || modrm == 0xfb))
++				*type = INSN_ENDBR;
 +
- 	struct alt_group *alt_group;
- 	struct symbol *call_dest;
- 	struct instruction *jump_dest;
++
+ 		} else if (op2 == 0x38 && op3 == 0xf8) {
+ 			if (insn.prefixes.nbytes == 1 &&
+ 			    insn.prefixes.bytes[0] == 0xf2) {
+@@ -636,20 +656,24 @@ int arch_decode_instruction(struct objto
+ 		break;
+ 
+ 	case 0xff:
+-		if (modrm_reg == 2 || modrm_reg == 3)
++		if (modrm_reg == 2 || modrm_reg == 3) {
+ 
+ 			*type = INSN_CALL_DYNAMIC;
++			if (has_notrack_prefix(&insn))
++				WARN("notrack prefix found at %s:0x%lx", sec->name, offset);
+ 
+-		else if (modrm_reg == 4)
++		} else if (modrm_reg == 4) {
+ 
+ 			*type = INSN_JUMP_DYNAMIC;
++			if (has_notrack_prefix(&insn))
++				WARN("notrack prefix found at %s:0x%lx", sec->name, offset);
+ 
+-		else if (modrm_reg == 5)
++		} else if (modrm_reg == 5) {
+ 
+ 			/* jmpf */
+ 			*type = INSN_CONTEXT_SWITCH;
+ 
+-		else if (modrm_reg == 6) {
++		} else if (modrm_reg == 6) {
+ 
+ 			/* push from mem */
+ 			ADD_OP(op) {
+--- a/tools/objtool/include/objtool/arch.h
++++ b/tools/objtool/include/objtool/arch.h
+@@ -27,6 +27,7 @@ enum insn_type {
+ 	INSN_STD,
+ 	INSN_CLD,
+ 	INSN_TRAP,
++	INSN_ENDBR,
+ 	INSN_OTHER,
+ };
+ 
 
 

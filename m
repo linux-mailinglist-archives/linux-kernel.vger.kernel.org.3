@@ -2,120 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC764D108B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 180914D108F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344135AbiCHG5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 01:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S1344230AbiCHG57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 01:57:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240919AbiCHG5X (ORCPT
+        with ESMTP id S240919AbiCHG5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 01:57:23 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8741C3D1C1;
-        Mon,  7 Mar 2022 22:56:27 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id n2so6713933plf.4;
-        Mon, 07 Mar 2022 22:56:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0WGEDjomgTIAfweWu7avOEAcbJjxPD8+Y4IRBGqyTSs=;
-        b=dy1nFUgJ/b+z32FJwqyUfd7xd5jlSvl/9LlZ8hNMpeM1uf4qwzJ6+yYSOV/tT7zMwZ
-         28NOTbJyeiNST9tkD+lM6obBQK43PjS2EyrYSVvuxWNQ5WTj32xvWvaf93aCPht939Wj
-         alJDrQ3LUDYVjUENg0NkUpZqw5w4cGM/rbxBNzDRNxCQUr/ulPndrWdLTiVTfhbX+baq
-         puztxakZHcR47C0xaqDCWERdE3uK/ANAKXPl0OCARlDfQKMKjXRTs9l4wd06UAQgqz8l
-         WuFOXYeFBFDNglLnJuZWPm5Xc9aaFoc/6Ia4wYnD30r1abokHkY0HTPv3H88qVzjdXA6
-         4PNg==
+        Tue, 8 Mar 2022 01:57:55 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F523D1DF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 22:56:58 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9305B3F7EA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:56:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646722615;
+        bh=/nQH0xMVMGOl4ilEFj0NRFMKFBrrtbNt+lvO7kMd8B8=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=bvKwDIdeaJr9K5ihdLiF0JxqqJxPDzgCESu5aK+cz4hHdzPyq5pwxmujHDUmkf8ZL
+         2Kbvh7gCa1Byx+7vcyN8B6cY14RLKUz8ychYF1pSRV4yhL4jQswiOaIGDEAfy2Y9Ri
+         RgmDbiNCF8WjB8d8+MA9di4FDFDqoIvTM6NUVFNKkbWBaUy7b6+VeyZmrfgEkZrnTo
+         BV/dtvTvOynExP5eFdqhZvsQ3uwGO5SaN6Fdpg2vv4xnV+Pg3xsl+i5Qb/0sc0hdsB
+         SRBm3kQRqT14Q2De7D1UdLUNtS+24k2XvtJE4zOiR0w6xVzJYgTY5xt7YxcDAJ+G/A
+         yakMPjuSmdhRQ==
+Received: by mail-ed1-f69.google.com with SMTP id r9-20020a05640251c900b00412d54ea618so9960160edd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 22:56:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0WGEDjomgTIAfweWu7avOEAcbJjxPD8+Y4IRBGqyTSs=;
-        b=MVsWxhhepyTQhM9L6jqwC1bHBWGLdFM3AMXVmx4zl9/KMcvOw8EAulLLVbepqrr4Wx
-         0NToCoHB8mK5zuBG2NKhPwKRWr9MWkAZ19FGG17y9hzZET7HOI06/GASJPwGRINStmov
-         VRIBk2WHJwJadEASQaCDF825Bgb1NomScqTxOGucCh9dhVnvHs+cv8HV7obIiE+t2PxT
-         qMP5paGBWh5HBzaZAXh5bRgkFgND0W+dIF98CKAD/+94zqOzrqJl2lAW8j/zL+08jim4
-         3I1Rc+9CtJ5CEKNKYe8k+wi6rhSPm379+szz7W2TJGnRnWDX+bbPr8HJUCHb7K1lzu1u
-         D9Bg==
-X-Gm-Message-State: AOAM53168TWlTQSnFTvwRnQhHaKz8PRxIfFFLaFyhG7KUW/o8hw/ynRb
-        C2LQTQFTXH6ke59I++tBVtk=
-X-Google-Smtp-Source: ABdhPJwTmQ0ZyBwYlxQ17dCaJY6Fx0xeJsqQRjSWPOJG8kUIIuni3WnX7I2Ay9o02oczHccDwQJUbQ==
-X-Received: by 2002:a17:902:c947:b0:151:a988:f3de with SMTP id i7-20020a170902c94700b00151a988f3demr16012133pla.104.1646722587079;
-        Mon, 07 Mar 2022 22:56:27 -0800 (PST)
-Received: from ubuntu.. ([115.27.208.93])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056a00114a00b004f701135460sm6474236pfm.146.2022.03.07.22.56.25
+        bh=/nQH0xMVMGOl4ilEFj0NRFMKFBrrtbNt+lvO7kMd8B8=;
+        b=DU2YbwOTm8rV3uBblK/o8K6I0lKdmaPCYSe7Eev0Cs8llV0pKTjjxFcqiy8xO3aPBQ
+         C6R6pUvRbeioc9QL5Hc/SL5MvI+3W0FI0Yv5Fw0C1lM6khtWvUhSVVYr8Q4Be0hkEIW+
+         gyE6Y4USJt5OJZppqVBvzm0gZT5fCHgSeRG8mGsM9sMxU0D+kIjOehn9Dh8ZoOyqerrL
+         2N6s+Qg99neule2j61L/SRZ9X6V/AIpOQu+B58W1HuPgGzN+XWTeei4VdVBPNUVpRzme
+         wxsJqqZHevfnRS7+F3sZIptyNuT8JeYC8EBH3FUDHGS+oyq+ujZAy7xfqgH2hwVN0Qa+
+         jNKg==
+X-Gm-Message-State: AOAM531DSQqXnxecfB79fNMrCS7ROeephSBp4E++R+QI22ZsEO60WSHX
+        z2jDLPkfWWjgimLc0pi1VMzHGjuGgxuaqtIKZZ0HZ/P5pQcMCNkfThNjAV2asOS0rurBxYHw91O
+        +LRUPEFmE7FZ2Y4SONimD8HkH9saoJyrdXF/3ED1O2w==
+X-Received: by 2002:a17:906:a08b:b0:6b9:2e20:f139 with SMTP id q11-20020a170906a08b00b006b92e20f139mr12768805ejy.463.1646722615194;
+        Mon, 07 Mar 2022 22:56:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxUUfasT4Wjs6f1SXSBcbJnAlAC2IvlRrhE2phlpmtyxBZWf0RDTazNUP3wQmlNW1PxEj37jQ==
+X-Received: by 2002:a17:906:a08b:b0:6b9:2e20:f139 with SMTP id q11-20020a170906a08b00b006b92e20f139mr12768790ejy.463.1646722615008;
+        Mon, 07 Mar 2022 22:56:55 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id f5-20020a1709067f8500b006da68bfdfc7sm5517952ejr.12.2022.03.07.22.56.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 22:56:26 -0800 (PST)
-From:   Yeqi Fu <fufuyqqqqqq@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lyz_cs@pku.edu.cn, Yeqi Fu <fuyq@stu.pku.edu.cn>
-Subject: [PATCH 2/2] usb: typec: fix memory leak
-Date:   Mon,  7 Mar 2022 22:56:17 -0800
-Message-Id: <20220308065617.90401-1-fufuyqqqqqq@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 07 Mar 2022 22:56:54 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH] MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email
+Date:   Tue,  8 Mar 2022 07:56:48 +0100
+Message-Id: <20220308065648.6443-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yeqi Fu <fuyq@stu.pku.edu.cn>
+Use Krzysztof Kozlowski's @kernel.org account in dt-bindings maintainer
+entry.
 
-Resource release is needed on the error handling branch
-to prevent memory leak. Fix this by adding kfree to the
-error handling branch.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Signed-off-by: Yeqi Fu <fuyq@stu.pku.edu.cn>
 ---
- drivers/usb/typec/class.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index ee0e520707dd..e210109c696d 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -2099,6 +2099,7 @@ struct typec_port *typec_register_port(struct device *parent,
- 	port->cap = kmemdup(cap, sizeof(*cap), GFP_KERNEL);
- 	if (!port->cap) {
- 		put_device(&port->dev);
-+		kfree(port);
- 		return ERR_PTR(-ENOMEM);
- 	}
+Hi Daniel,
+
+Could you take this one directly (optionally squash with the last
+patch)?
+
+See also:
+https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?h=arm/fixes&id=5125091d757a251a128ec38d2397c9d160394eac
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d8c471cb93ef..48b0cf606be0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17382,7 +17382,7 @@ F:	drivers/net/ethernet/samsung/sxgbe/
  
-@@ -2106,6 +2107,7 @@ struct typec_port *typec_register_port(struct device *parent,
- 	if (IS_ERR(port->sw)) {
- 		ret = PTR_ERR(port->sw);
- 		put_device(&port->dev);
-+		kfree(port);
- 		return ERR_PTR(ret);
- 	}
- 
-@@ -2113,6 +2115,7 @@ struct typec_port *typec_register_port(struct device *parent,
- 	if (IS_ERR(port->mux)) {
- 		ret = PTR_ERR(port->mux);
- 		put_device(&port->dev);
-+		kfree(port);
- 		return ERR_PTR(ret);
- 	}
- 
-@@ -2120,6 +2123,7 @@ struct typec_port *typec_register_port(struct device *parent,
- 	if (ret) {
- 		dev_err(parent, "failed to register port (%d)\n", ret);
- 		put_device(&port->dev);
-+		kfree(port);
- 		return ERR_PTR(ret);
- 	}
- 
+ SAMSUNG THERMAL DRIVER
+ M:	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
 -- 
-2.30.2
+2.32.0
 

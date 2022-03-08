@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9774B4D20F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0344D2104
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349870AbiCHTIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:08:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S1349321AbiCHTKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349852AbiCHTIp (ORCPT
+        with ESMTP id S236771AbiCHTKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:08:45 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC01240B3;
-        Tue,  8 Mar 2022 11:07:45 -0800 (PST)
+        Tue, 8 Mar 2022 14:10:07 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A5A344D0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:09:10 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id d17so196964pfv.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:09:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646766467; x=1678302467;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8Us7q9LMJIjiFf9CRtdPQhiFU1UsJWO+ZNbcGobFxGg=;
-  b=Mwt/nMOn4djEg0UaUGkoW6IdtLB+uU/8eiOfsFF+Jd4vdQ3GShQsG+S5
-   m+lS3mV+3Fb//RNDPFuOpklVNETjg5XPBbBP1d1uAx9QCvKeAzvj5c+5T
-   I3bVgbb9GTzintJ/vNNHnR4yQpFjeb91LLIntcvpbpDVV6WipavxuBjAF
-   A=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Mar 2022 11:07:44 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 11:07:44 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Mar 2022 11:07:44 -0800
-Received: from [10.216.46.57] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 8 Mar 2022
- 11:07:40 -0800
-Message-ID: <27a01b22-1db7-5e5a-212d-092cedfaa50f@quicinc.com>
-Date:   Wed, 9 Mar 2022 00:37:35 +0530
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WfeJ5Z/28d4DwwwwEjo+Xl8PsAuc47UIF+v9aMkJPaE=;
+        b=g4Kn+knbxPcL2nDhbYO7LeofqDCYGIzYat8Uyvm4hBnk/d5333G7ySljmfyQYE/UX1
+         Rw+7tkAdrzG/RAZVqapYRbjzY81SexLEMmsu+AwVUsO5KzHEud+nHcFxU7lkjYurEV2L
+         AzXJs1J0+S7c90q2nf41z2xJzeZ0Vdp76lXtA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WfeJ5Z/28d4DwwwwEjo+Xl8PsAuc47UIF+v9aMkJPaE=;
+        b=RsgohFtqAxGkh16EChuKOuCqFxFHQpoJDtoVzkEdvnkaw2ux23gBKQukVENeoKPPKB
+         WiIA8MxOM0JDVZSbWHFIHuru0LEcvxZeej32cRMSX0iHznWQxuIQNVdh4Vwz3VdsrSGk
+         IdrNMc+QEOuevUBAv3km18kZYqrbuohk5swWk9zEV/ZlWfcntXwbkbf/PFJzDLhFRD3C
+         DeNSs3LmbDADNvbI/gm61N1GmuEtcST1i29DgJVPwJs+uPg+8vXrHaCx8BYa30vqfWqO
+         +h3nEjHbAXjrYdIPB7povtTAlbH80U9wwGjh5Pi0RZ4Xkq9G0OyANPmVThs1UkpQYQa3
+         PagQ==
+X-Gm-Message-State: AOAM530xZbXlTvJVchzIGeRxhsGByUBcGWMIIfieLEdPCc/Lu7QpBtVN
+        HJqbcqCI2QrjD43mT1+YqDWphg==
+X-Google-Smtp-Source: ABdhPJzS5q/sqiq5fTsLk+gxrR8BJqiWX5haq34jcz+ml+GBnO2cRbA1Joomrpy3ASNpNH9qD/103A==
+X-Received: by 2002:a63:fd4e:0:b0:378:7d6f:d7e9 with SMTP id m14-20020a63fd4e000000b003787d6fd7e9mr15410471pgj.440.1646766549462;
+        Tue, 08 Mar 2022 11:09:09 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:b3e3:a188:cbfc:3a0e])
+        by smtp.gmail.com with UTF8SMTPSA id e11-20020a17090a280b00b001bf23a472c7sm3680868pjd.17.2022.03.08.11.09.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 11:09:08 -0800 (PST)
+From:   Brian Norris <briannorris@chromium.org>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Derek Basehore <dbasehore@chromium.org>,
+        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Lin Huang <hl@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH v4 00/15] rk3399: Clean up and enable DDR DVFS
+Date:   Tue,  8 Mar 2022 11:08:46 -0800
+Message-Id: <20220308190901.3144566-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drivers/thermal/thermal_of: Add change_mode ops support
- for thermal_of sensor
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1646752834-25043-1-git-send-email-quic_manafm@quicinc.com>
- <c1a0576b-89fa-6e91-b80e-f2aa20dc7c77@linaro.org>
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <c1a0576b-89fa-6e91-b80e-f2aa20dc7c77@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,85 +73,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series covers 2 primary tasks:
 
-On 3/8/2022 11:28 PM, Daniel Lezcano wrote:
-> On 08/03/2022 16:20, Manaf Meethalavalappu Pallikunhi wrote:
->> The sensor driver which register through thermal_of interface doesn't
->> have an option to get thermal zone mode change notification from
->> thermal core.
->>
->> Add support for change_mode ops in thermal_of interface so that sensor
->> driver can use this ops for mode change notification.
->>
->> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
->> <quic_manafm@quicinc.com>
->> ---
->>   drivers/thermal/thermal_of.c | 14 ++++++++++++++
->>   include/linux/thermal.h      |  3 +++
->>   2 files changed, 17 insertions(+)
->>
->> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
->> index 9233f7e..a4e3820 100644
->> --- a/drivers/thermal/thermal_of.c
->> +++ b/drivers/thermal/thermal_of.c
->> @@ -203,6 +203,17 @@ static int of_thermal_get_trend(struct 
->> thermal_zone_device *tz, int trip,
->>       return data->ops->get_trend(data->sensor_data, trip, trend);
->>   }
->>   +static int of_thermal_change_mode(struct thermal_zone_device *tz,
->> +                enum thermal_device_mode mode)
->> +{
->> +    struct __thermal_zone *data = tz->devdata;
->> +
->> +    if (!data->ops || !data->ops->change_mode)
->> +        return -EINVAL;
->
->
-> If this function is called it is because below in the bind function 
-> ops->change_mode was true, so the condition above is always true, no ?
+1) Resubmit prior work:
 
-I agree, it is reduntant. I just followed other ops similar sanity 
-check. I will remove it in next revision.
+[RESEND PATCH v5 3/4] arm64: dts: rockchip: Enable dmc and dfi nodes on gru.
+https://lore.kernel.org/lkml/20210308233858.24741-2-daniel.lezcano@linaro.org/
+[RESEND PATCH v5 2/4] arm64: dts: rk3399: Add dfi and dmc nodes.
+https://lore.kernel.org/lkml/20210308233858.24741-3-daniel.lezcano@linaro.org/
 
-I think I missed to clear tzd->ops->change_mode  in 
-tz_of_sensor_unregister() path. I will update that as well
+This series was partially merged a while back, but the remaining 2
+patches were blocked mostly on stylistic grounds (alpha/numerical
+ordering).
 
->
->
->> +    return data->ops->change_mode(data->sensor_data, mode);
->> +}
->> +
->>   static int of_thermal_bind(struct thermal_zone_device *thermal,
->>                  struct thermal_cooling_device *cdev)
->>   {
->> @@ -408,6 +419,9 @@ thermal_zone_of_add_sensor(struct device_node *zone,
->>       if (ops->set_emul_temp)
->>           tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
->>   +    if (ops->change_mode)
->> +        tzd->ops->change_mode = of_thermal_change_mode;
->> +
->>       mutex_unlock(&tzd->lock);
->>         return tzd;
->> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->> index c3148939..365733b 100644
->> --- a/include/linux/thermal.h
->> +++ b/include/linux/thermal.h
->> @@ -299,6 +299,8 @@ struct thermal_zone_params {
->>    *           temperature.
->>    * @set_trip_temp: a pointer to a function that sets the trip 
->> temperature on
->>    *           hardware.
->> + * @change_mode: a pointer to a function that notifies the thermal zone
->> + *           mode change.
->>    */
->>   struct thermal_zone_of_device_ops {
->>       int (*get_temp)(void *, int *);
->> @@ -306,6 +308,7 @@ struct thermal_zone_of_device_ops {
->>       int (*set_trips)(void *, int, int);
->>       int (*set_emul_temp)(void *, int);
->>       int (*set_trip_temp)(void *, int, int);
->> +    int (*change_mode) (void *, enum thermal_device_mode);
->>   };
->>     /* Function declarations */
->
->
+2) Integrate many updates, bugfixes, and clarifications that were done
+by Rockchip and Google engineers when first launching this platform.
+Many of these were not integrated in the earlier series (e.g., the OPPs
+changed before production; earlier patchsets used pre-production
+numbers).
+
+Along the way, it seemed worthwhile to convert the binding docs to a
+schema. Among other reasons, it actually helped catch several errors and
+omissions in translation between downstream device trees and the version
+that actually landed upstream.
+
+See the patches for further details.
+
+Regards,
+Brian
+
+Changes in v4:
+ * Update .yaml to use more "default" entries, instead of free-form text
+ * s/phandle-array/phandle/
+ * Move to .../memory-controllers, update filename
+
+Changes in v3:
+ * Add |maxItems| for devfreq-events
+ * Improve deprecation notes
+ * Add Reviewed-by tags
+ * Collect some Acked/Reviewed tags
+
+Changes in v2:
+ * Fix yamllint issues
+ * Adapt to various review comments (use of *-hz, hyphens, node naming)
+ * Add a few new bugfixes
+ * Add some new properties (ported from downstream kernels) required for
+   stability
+ * Convert more properties from "cycles" to "nanoseconds"
+
+Brian Norris (13):
+  dt-bindings: devfreq: rk3399_dmc: Convert to YAML
+  dt-bindings: devfreq: rk3399_dmc: Deprecate unused/redundant
+    properties
+  dt-bindings: devfreq: rk3399_dmc: Fix Hz units
+  dt-bindings: devfreq: rk3399_dmc: Specify idle params in nanoseconds
+  dt-bindings: devfreq: rk3399_dmc: Add more disable-freq properties
+  PM / devfreq: rk3399_dmc: Drop undocumented ondemand DT props
+  PM / devfreq: rk3399_dmc: Drop excess timing properties
+  PM / devfreq: rk3399_dmc: Use bitfield macro definitions for ODT_PD
+  PM / devfreq: rk3399_dmc: Support new disable-freq properties
+  PM / devfreq: rk3399_dmc: Support new *-ns properties
+  PM / devfreq: rk3399_dmc: Disable edev on remove()
+  PM / devfreq: rk3399_dmc: Use devm_pm_opp_of_add_table()
+  PM / devfreq: rk3399_dmc: Avoid static (reused) profile
+
+Lin Huang (2):
+  arm64: dts: rk3399: Add dfi and dmc nodes
+  arm64: dts: rockchip: Enable dmc and dfi nodes on gru
+
+ .../bindings/devfreq/rk3399_dmc.txt           | 212 ----------
+ .../rockchip,rk3399-dmc.yaml                  | 384 ++++++++++++++++++
+ .../dts/rockchip/rk3399-gru-chromebook.dtsi   |   7 +
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  12 +
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  |  28 ++
+ .../boot/dts/rockchip/rk3399-op1-opp.dtsi     |  25 ++
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |  19 +
+ drivers/devfreq/rk3399_dmc.c                  | 299 ++++++--------
+ 8 files changed, 609 insertions(+), 377 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
+
+-- 
+2.35.1.616.g0bdcbb4464-goog
+

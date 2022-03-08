@@ -2,150 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0FB4D1CD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290B94D1CD9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348191AbiCHQLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S1348218AbiCHQL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233693AbiCHQLF (ORCPT
+        with ESMTP id S1348216AbiCHQLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:11:05 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3260F4BB8A;
-        Tue,  8 Mar 2022 08:10:09 -0800 (PST)
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 228F561U031509;
-        Tue, 8 Mar 2022 16:09:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=ni2RcHbBWbxRqXJonIpINAZ0VoX/b33Cib5ToW/CQGI=;
- b=DHzWU5SjE7wpEDAGRDbYX9jspPgrNg8qviHUblWtzURUtD/L1cCZhPwAUB9FyG5B3VMY
- u+sl05OH2gIoEJRunC7YJ4K0l/4n4gHX/wEWyoOB45wmuedCF++K4oh7g8kn55X1QTjU
- 5Bo+KqD+a3D7p4DzvS0GYIuYc9fgSEZnfwbcQ+7Oxp1BQpH4geQR0uB/26yDMTec/YjF
- n6KgU0vUx6hYOY8jPvinY50XD3PU22yC2tLVD6gfJcnn9OgfgNTotvYRAkqjO4qhHhGo
- LkHpaOVSSh8Uqfw88kG/dT+WD2sL2btroFJjYQ5X43utgm6D2u26lgxtZgRqeWLFoWRf Sw== 
-Received: from g2t2353.austin.hpe.com (g2t2353.austin.hpe.com [15.233.44.26])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3ep9f60pm6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Mar 2022 16:09:47 +0000
-Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
-        by g2t2353.austin.hpe.com (Postfix) with ESMTP id 0A0EA86;
-        Tue,  8 Mar 2022 16:09:46 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [10.207.218.77])
-        by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id 2CDAB36;
-        Tue,  8 Mar 2022 16:09:44 +0000 (UTC)
-Date:   Tue, 8 Mar 2022 10:09:43 -0600
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Mike Travis <mike.travis@hpe.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 4/4] x86/platform/uv: Add gap hole end size
-Message-ID: <Yid/x8NUqOP8fO+7@swahl-home.5wahls.com>
-References: <20220308010537.70150-1-mike.travis@hpe.com>
- <20220308010537.70150-5-mike.travis@hpe.com>
+        Tue, 8 Mar 2022 11:11:25 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933EC506FA;
+        Tue,  8 Mar 2022 08:10:28 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2dc242a79beso196646427b3.8;
+        Tue, 08 Mar 2022 08:10:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rKTCr+Og+sv9jUdP0DwOyofew83xNo3e9HNzBgkZFCU=;
+        b=CNP9MSLV8F9EMIaBfN+SPUUjOSXAQiMSDSRUNUsWzrtvpIaoxkqD0SK26zoDRBBJd6
+         mmlDvUyUGZhmsiIhpuZM5VyyRjRrho4NVqzbRYcazg6qqZyhYE3estKDevx9k2unZw88
+         NV0m61L3tbKNh1OLLWl1xxD0y00dD7IKXYaSrllS8cJ4mzeh+2mBskWD8f5PTEjPckDD
+         /1DdifV9Ep4hg/ovtHjrFTRtvDE4U86ymG9e+0oHIlaa0FuL/rlgbDfDOTddbv97LASz
+         mebZq6PwtoCnxrDo5exoxmSEDQfNeLVWnsdER+o360b9cHFbkNr040tEKs7LRu5K1ynb
+         HyJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rKTCr+Og+sv9jUdP0DwOyofew83xNo3e9HNzBgkZFCU=;
+        b=qt/JJsALBcs9BIbuw60ETbGckSJn21f2Hj51CYlEAINWfXx5u2t0SS3Sj0klFRvW4m
+         N0skaq57RDNB5aCfx4cnnNxfiB61QyAT3yzqCYWhW5SWiSnZkHl8zvhV05fZ9gCcwqwA
+         794wV0GjYuz3q4mwCVEAkZgK/cyLvBCFnLb/Nsrc7gynUuUf16/iOOp9pMtvTNbPrRdK
+         s6hdS9GPfM1c4n/Pto9aYamzKpVvo9QBo2Vhgu4uAf73b2jZrkFfl754OG82UF/smykk
+         LcSVJ/IdQLSwXhEFvWzZa2z5B2MnA0ES7ToiKGQJfJ7C2Ozen5oeC2xoJ00CDiULVs7D
+         M8Nw==
+X-Gm-Message-State: AOAM530cxnzUCKShOi1oVcqFXTXtCH5fwnLsqbVDccx6xCd2HzaDTzrW
+        CrXVOhilPLzjuXErGLMFOmMmKgc8gWT3DWRW2PI=
+X-Google-Smtp-Source: ABdhPJwrIeggD3PCTymggq9Gq/D99TWUJYcaJJQ0yB2mYPT+Y2wpKYg884AglLmVS1Qlq7w65ZAUrluNoskJc6rsnvk=
+X-Received: by 2002:a81:5789:0:b0:2d7:9ad:44d0 with SMTP id
+ l131-20020a815789000000b002d709ad44d0mr12777631ywb.488.1646755827825; Tue, 08
+ Mar 2022 08:10:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308010537.70150-5-mike.travis@hpe.com>
-X-Proofpoint-ORIG-GUID: sM0N9yHvhj5r9rnLtS38Y1m-6bv9beEO
-X-Proofpoint-GUID: sM0N9yHvhj5r9rnLtS38Y1m-6bv9beEO
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-08_06,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- mlxlogscore=898 mlxscore=0 suspectscore=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 impostorscore=0
- clxscore=1011 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203080087
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220307162207.188028559@linuxfoundation.org> <Yid4BNbLm3mStBi2@debian>
+In-Reply-To: <Yid4BNbLm3mStBi2@debian>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Tue, 8 Mar 2022 16:09:51 +0000
+Message-ID: <CADVatmPdzXRU2aTeh-8dfZVmW6YPJwntSDCO8gcGDUJn-qzzAg@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike,
+On Tue, Mar 8, 2022 at 3:36 PM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi Greg,
+>
+> On Mon, Mar 07, 2022 at 05:28:50PM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.27 release.
+> > There are 256 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
 
-I know you're trying to get this out and don't really need another
-delta, and I'd be holding it back if I didn't think it might make
-things smoother upstream.
+<snip>
 
-But what I'd consider for this one is:  Add the word log to the
-subject line, perhaps "Add gap hole end size to log", or just "Log gap
-hole end size".  Without it, the reviewer has to ask "add to *where*?"
+>
+> Mips failures,
+>
+> allmodconfig, gpr_defconfig and mtx1_defconfig fails with:
 
-And I believe the second sentence of the description, "The structure
-stores PA bits 56:26, for > 64MB granularity, up to 64PB max size," is
-perhaps not necessary, and I think it may slow down somebody trying to
-read the patch quickly.  So I'd consider deleting it.
+And, here is the bisect log:
 
-With those two changes the description still matches the code, and
-seems simpler and easier to accept.
+# bad: [7b9aacd770fa105a0a5f0be43bc72ce176d30331] Linux 5.15.27-rc2
+# good: [8993e6067f263765fd26edabf3e3012e3ec4d81e] Linux 5.15.26
+git bisect start 'HEAD' 'v5.15.26'
+# bad: [6d4f8e67749d97f83f377911e874ca116be71fbd] drm/amd/display: For
+vblank_disable_immediate, check PSR is really used
+git bisect bad 6d4f8e67749d97f83f377911e874ca116be71fbd
+# bad: [527ec9ffce51cb10a3172380aba30066ee2d056c] Input: ti_am335x_tsc
+- fix STEPCONFIG setup for Z2
+git bisect bad 527ec9ffce51cb10a3172380aba30066ee2d056c
+# good: [96039b910c5a933221faa9aeca4f2fb2fa4976a1] arm64: Mark
+start_backtrace() notrace and NOKPROBE_SYMBOL
+git bisect good 96039b910c5a933221faa9aeca4f2fb2fa4976a1
+# bad: [4778338032b338f80393b9dfab6832d02bddb819] MIPS: fix
+local_{add,sub}_return on MIPS64
+git bisect bad 4778338032b338f80393b9dfab6832d02bddb819
+# good: [ba52217d4edd5824427134cfdfa9c2ab4390d77f] drm/amdgpu: check
+vm ready by amdgpu_vm->evicting flag
+git bisect good ba52217d4edd5824427134cfdfa9c2ab4390d77f
+# good: [9eeb0cb7e2d675e3bbecc08302e3bafe21c61c52] NFSD: Fix
+zero-length NFSv3 WRITEs
+git bisect good 9eeb0cb7e2d675e3bbecc08302e3bafe21c61c52
+# good: [8e68b6e3bdce82f387619e7fb6e85e6be9820182]
+tools/resolve_btf_ids: Close ELF file on error
+git bisect good 8e68b6e3bdce82f387619e7fb6e85e6be9820182
+# good: [238d4d64ad4da4acefedd73094be0d1051897810] mtd: spi-nor: Fix
+mtd size for s3an flashes
+git bisect good 238d4d64ad4da4acefedd73094be0d1051897810
+# first bad commit: [4778338032b338f80393b9dfab6832d02bddb819] MIPS:
+fix local_{add,sub}_return on MIPS64
 
-Your call on either / both, of course.
-
---> Steve
-
-On Mon, Mar 07, 2022 at 07:05:37PM -0600, Mike Travis wrote:
-> Show value of gap end in kernel log which equates to number of physical
-> address bits used by system.  The structure stores PA bits 56:26, for
-> 64MB granularity, up to 64PB max size.
-> 
-> Signed-off-by: Mike Travis <mike.travis@hpe.com>
-> Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-> ---
->  arch/x86/kernel/apic/x2apic_uv_x.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
-> index 387d6533549a..146f0f63a43b 100644
-> --- a/arch/x86/kernel/apic/x2apic_uv_x.c
-> +++ b/arch/x86/kernel/apic/x2apic_uv_x.c
-> @@ -1346,7 +1346,7 @@ static void __init decode_gam_params(unsigned long ptr)
->  static void __init decode_gam_rng_tbl(unsigned long ptr)
->  {
->  	struct uv_gam_range_entry *gre = (struct uv_gam_range_entry *)ptr;
-> -	unsigned long lgre = 0;
-> +	unsigned long lgre = 0, gend = 0;
->  	int index = 0;
->  	int sock_min = 999999, pnode_min = 99999;
->  	int sock_max = -1, pnode_max = -1;
-> @@ -1380,6 +1380,9 @@ static void __init decode_gam_rng_tbl(unsigned long ptr)
->  			flag, size, suffix[order],
->  			gre->type, gre->nasid, gre->sockid, gre->pnode);
->  
-> +		if (gre->type == UV_GAM_RANGE_TYPE_HOLE)
-> +			gend = (unsigned long)gre->limit << UV_GAM_RANGE_SHFT;
-> +
->  		/* update to next range start */
->  		lgre = gre->limit;
->  		if (sock_min > gre->sockid)
-> @@ -1397,7 +1400,8 @@ static void __init decode_gam_rng_tbl(unsigned long ptr)
->  	_max_pnode	= pnode_max;
->  	_gr_table_len	= index;
->  
-> -	pr_info("UV: GRT: %d entries, sockets(min:%x,max:%x) pnodes(min:%x,max:%x)\n", index, _min_socket, _max_socket, _min_pnode, _max_pnode);
-> +	pr_info("UV: GRT: %d entries, sockets(min:%x,max:%x), pnodes(min:%x,max:%x), gap_end(%d)\n",
-> +	  index, _min_socket, _max_socket, _min_pnode, _max_pnode, fls64(gend));
->  }
->  
->  /* Walk through UVsystab decoding the fields */
-> -- 
-> 2.26.2
-> 
+Reverting 4778338032b3 ("MIPS: fix local_{add,sub}_return on MIPS64")
+has fixed all the 3 build failures.
 
 -- 
-Steve Wahl, Hewlett Packard Enterprise
+Regards
+Sudip

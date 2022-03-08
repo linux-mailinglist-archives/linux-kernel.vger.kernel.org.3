@@ -2,129 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF6D4D2499
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AE84D2493
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiCHXIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 18:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S229954AbiCHXFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 18:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiCHXIT (ORCPT
+        with ESMTP id S230255AbiCHXFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 18:08:19 -0500
-X-Greylist: delayed 1285 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 15:07:20 PST
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.46.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5729760071
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:07:19 -0800 (PST)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id D61321228A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:45:53 -0600 (CST)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id RiaXnXURNdx86RiaXne4LX; Tue, 08 Mar 2022 16:45:53 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=RZMiZ7ROUmJLlPppAwRoBUqTifoIUpfa1vCZOri7D3s=; b=DGm0f2OIHgjMnBB2LLOuDtu32k
-        2SVRJpPyUcz4n2Tfrz8+RIjOdUkz3C0Z6lVGgzv9vDsBhZ8uDeXyeuYaIMNu1hqNdT5s5RiPOmkdz
-        VgyOVRHQPVK01Sby4nuom7l7EDBJ7L7SoYUMAb5Dn6Lw+mHYwqbWMmip9rMyANacA9ilEWwm+FcvK
-        TKbG4/6BwTEpDxyeTi/4T6nmUKDby647fPUQVsTpqrpbwvrh6U/gRZFQbqL2fmOFmUZN0lKvqVhEM
-        KqGz4ITkMfdRljgzNKCVNu2fxkCr3zNsUEWQK8htnsZXN+mSnPltDcOUqFT8LpjPAq0KOLm76yvkV
-        0tIVoLhw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:38110)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nRiaX-0042Fl-1M; Tue, 08 Mar 2022 22:45:53 +0000
-Message-ID: <ab0b668c-e321-e1d9-3cc3-a609111b828d@roeck-us.net>
-Date:   Tue, 8 Mar 2022 14:45:50 -0800
+        Tue, 8 Mar 2022 18:05:04 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AB15EBD6
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:04:07 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id f8so667669pfj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:04:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w1SxKbRJ8WkX9WltRoD14k9Ob0xVI9Pf1gGrPgXvoiI=;
+        b=EVgtw0P+ZA+mu2sZJnZGHuZB7XszskLKawEE3nAiNRP9dEGu7nI2QIrA5TVsfvVAGn
+         v2Nrtcwox3fbKRkSXRPXnMZh7HlBOGXfl7QZWo3Az3DsJ/Wu5DocTWIrOK3tyKTA3tPr
+         eoZCiTsg9CRb53IFehojTmdmxEuCDbWuul32W1Y0WClJB2Hp2gjAL12Qm0838c+GuVR7
+         Bvzv2Sv0dBX9B0aYlYfj7DZXintbNPXxPW801RyfHxHv6fbt+BMdZc9lhNnvSAAXjJ32
+         qEw1iU1r3Z8oirwGbptJgohfxu6CvjfIvLlv8XkS2s5KgDMtbBg4cBrHYpRWkmzeKJhp
+         c0ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w1SxKbRJ8WkX9WltRoD14k9Ob0xVI9Pf1gGrPgXvoiI=;
+        b=ZSFCc6GZWz1/oTt7NVY/YbQpFzPMLm7k8mm7CcKeZKQyzF6UebAa5SbP9MbSk0SPb/
+         diCEMU+ifuzsrY0iokAFYLuMxFnG0P4Rgh8zS5BhLeSTE/j7AHoS9/VxMkn0cpuE5gDD
+         q+soMplBJPx7gWOs1qc9uTfhGE5KXWo2ck/o9a2BR66xnJDAOmc4E8WjSe1aoBoVZ5Nc
+         UR9e8MkrvNqrXaOx2/0BGheo+YIDX+bBn8GcFb1hAkNG/QaNfUagLu4Od4GmImG+AOE2
+         jYw+rHEBpab4QOjQnJ3qQpuUPCriqUFLctz0/vCP4AgkX2E+M9MVxwC+RpwYc2zdWDZQ
+         elxQ==
+X-Gm-Message-State: AOAM533+cU9KiO41LeekfXfYnG2qNmNda9jMkI+7YJ2i6/QJeZZwaeJ9
+        gT7A+8256fOBCSqrpnDviRclIw==
+X-Google-Smtp-Source: ABdhPJytZy0DNaiUVFrbFyiAkMa1BfgnsrX/YkRy+IAt7mzDpdiZQTFzYeLxz3AHzEUWRGM1Ahp1wA==
+X-Received: by 2002:a63:1d4b:0:b0:37f:f10b:726f with SMTP id d11-20020a631d4b000000b0037ff10b726fmr15828871pgm.562.1646780646266;
+        Tue, 08 Mar 2022 15:04:06 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h14-20020a63384e000000b00366ba5335e7sm154336pgn.72.2022.03.08.15.04.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 15:04:05 -0800 (PST)
+Date:   Tue, 8 Mar 2022 23:04:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
+        Gao Chao <chao.gao@intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
+ unconditionally
+Message-ID: <Yifg4bea6zYEz1BK@google.com>
+References: <20220225082223.18288-1-guang.zeng@intel.com>
+ <20220225082223.18288-7-guang.zeng@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Huang Pei <huangpei@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-References: <20220307162207.188028559@linuxfoundation.org>
- <Yid4BNbLm3mStBi2@debian>
- <CADVatmPdzXRU2aTeh-8dfZVmW6YPJwntSDCO8gcGDUJn-qzzAg@mail.gmail.com>
- <CA+G9fYv74gGWQLkEZ4idGYri+F9BFV1+9=bz5L0+aophSzDdVA@mail.gmail.com>
- <YifFMPFMp9gPnjPc@kroah.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YifFMPFMp9gPnjPc@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nRiaX-0042Fl-1M
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:38110
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 11
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225082223.18288-7-guang.zeng@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 13:05, Greg Kroah-Hartman wrote:
-> On Tue, Mar 08, 2022 at 11:08:10PM +0530, Naresh Kamboju wrote:
-
-
-[ ... ]
-
->>>
->>> Reverting 4778338032b3 ("MIPS: fix local_{add,sub}_return on MIPS64")
->>> has fixed all the 3 build failures.
->>
->> MIPS: fix local_{add,sub}_return on MIPS64
->> [ Upstream commit 277c8cb3e8ac199f075bf9576ad286687ed17173 ]
->>
->> Use "daddu/dsubu" for long int on MIPS64 instead of "addu/subu"
->>
->> Fixes: 7232311ef14c ("local_t: mips extension")
->> Signed-off-by: Huang Pei <huangpei@loongson.cn>
->> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Fri, Feb 25, 2022, Zeng Guang wrote:
+> From: Maxim Levitsky <mlevitsk@redhat.com>
 > 
-> Ah, I'll queue up the revert for that in the morning, thanks for finding
-> it.  Odd it doesn't trigger the same issue in 5.16.y.
-> 
+> No normal guest has any reason to change physical APIC IDs,
 
-If you don't want to revert: the fix needs the following two patches:
+I don't think we can reasonably assume this, my analysis in the link (that I just
+realized I deleted from context here) shows it's at least plausible that an existing
+guest could rely on the APIC ID being writable.  And that's just one kernel, who
+know what else is out there, especially given that people use KVM to emulate really
+old stuff, often on really old hardware.
 
-e5b40668e93 ("slip: fix macro redefine warning")
-b81e0c2372e ("block: drop unused includes in <linux/genhd.h>")
+Practically speaking, anyone that wants to deploy IPIv is going to have to make
+the switch at some point, but that doesn't help people running legacy crud that
+don't care about IPIv.
 
-Both are in v5.16, so you won't see the problem there.
+I was thinking a module param would be trivial, and it is (see below) if the
+param is off by default.  A module param will also provide a convenient opportunity
+to resolve the loophole reported by Maxim[1][2], though it's a bit funky.
 
-Guenter
+Anyways, with an off-by-default module param, we can just do:
+
+	if (!enable_apicv || !cpu_has_vmx_ipiv() || !xapic_id_readonly)
+		enable_ipiv = false;
+
+Forcing userspace to take advantage of IPIv is rather annoying, but it's not the
+end of world.
+
+Having the param on by default is a mess.  Either we break userspace (above), or
+we only kinda break userspace by having it on iff IPIv is on, but then we end up
+with cyclical dependency hell.  E.g. userspace makes xAPIC ID writable and forces
+on IPIv, which one "wins"?  And if it's on by default, we can't fix the loophole
+in KVM_SET_LAPIC.
+
+If we really wanted to have it on by default, we could have a Kconfig and make
+_that_ off by default, e.g.
+
+  static bool __read_mostly xapic_id_readonly = IS_ENABLED(CONFING_KVM_XAPIC_ID_RO);
+
+but that seems like overkill.  If a kernel owner knows they want the param on,
+it should be easy enough to force it without a Kconfig.
+
+So I think my vote would be for something like this?  Compile tested only...
+
+---
+ arch/x86/kvm/lapic.c    | 14 +++++++++-----
+ arch/x86/kvm/svm/avic.c |  5 +++++
+ arch/x86/kvm/x86.c      |  4 ++++
+ arch/x86/kvm/x86.h      |  1 +
+ 4 files changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index c4c3155d98db..2c01cd45fb18 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2043,7 +2043,7 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+
+ 	switch (reg) {
+ 	case APIC_ID:		/* Local APIC ID */
+-		if (!apic_x2apic_mode(apic))
++		if (!apic_x2apic_mode(apic) && !xapic_id_readonly)
+ 			kvm_apic_set_xapic_id(apic, val >> 24);
+ 		else
+ 			ret = 1;
+@@ -2634,10 +2634,7 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
+ 		u32 *ldr = (u32 *)(s->regs + APIC_LDR);
+ 		u64 icr;
+
+-		if (vcpu->kvm->arch.x2apic_format) {
+-			if (*id != vcpu->vcpu_id)
+-				return -EINVAL;
+-		} else {
++		if (!vcpu->kvm->arch.x2apic_format) {
+ 			if (set)
+ 				*id >>= 24;
+ 			else
+@@ -2650,6 +2647,10 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
+ 		 * split to ICR+ICR2 in userspace for backwards compatibility.
+ 		 */
+ 		if (set) {
++			if ((vcpu->kvm->arch.x2apic_format || xapic_id_readonly) &&
++			    (*id != vcpu->vcpu_id))
++				return -EINVAL;
++
+ 			*ldr = kvm_apic_calc_x2apic_ldr(*id);
+
+ 			icr = __kvm_lapic_get_reg(s->regs, APIC_ICR) |
+@@ -2659,6 +2660,9 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
+ 			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
+ 			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
+ 		}
++	} else if (set && xapic_id_readonly &&
++		   (__kvm_lapic_get_reg(s->regs, APIC_ID) >> 24) != vcpu->vcpu_id) {
++		return -EINVAL;
+ 	}
+
+ 	return 0;
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index b37b353ec086..4a031d9686c2 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -442,6 +442,11 @@ static int avic_handle_apic_id_update(struct kvm_vcpu *vcpu)
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 	u32 id = kvm_xapic_id(vcpu->arch.apic);
+
++	if (xapic_id_readonly && id != vcpu->vcpu_id) {
++		kvm_prepare_emulation_failure_exit(vcpu);
++		return 0;
++	}
++
+ 	if (vcpu->vcpu_id == id)
+ 		return 0;
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 4fa4d8269e5b..67706d468ed3 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -177,6 +177,10 @@ module_param(tsc_tolerance_ppm, uint, S_IRUGO | S_IWUSR);
+ static int __read_mostly lapic_timer_advance_ns = -1;
+ module_param(lapic_timer_advance_ns, int, S_IRUGO | S_IWUSR);
+
++bool __read_mostly xapic_id_readonly;
++module_param(xapic_id_readonly, bool, 0444);
++EXPORT_SYMBOL_GPL(xapic_id_readonly);
++
+ static bool __read_mostly vector_hashing = true;
+ module_param(vector_hashing, bool, S_IRUGO);
+
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index aa86abad914d..89f40c921c08 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -302,6 +302,7 @@ static inline bool kvm_mpx_supported(void)
+ extern unsigned int min_timer_period_us;
+
+ extern bool enable_vmware_backdoor;
++extern bool xapic_id_readonly;
+
+ extern int pi_inject_timer;
+
+
+base-commit: 1e147f6f90668f2c2b57406d451f0cfcd2ba19d0
+--
+

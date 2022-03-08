@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13644D1EF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B00E4D1EF9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349139AbiCHRZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:25:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
+        id S1349193AbiCHRZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:25:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349502AbiCHRXP (ORCPT
+        with ESMTP id S1349365AbiCHRXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:23:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB40556439
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:21:41 -0800 (PST)
+        Tue, 8 Mar 2022 12:23:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A3355BD6;
+        Tue,  8 Mar 2022 09:21:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32D38B81BA6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F08C340EB;
-        Tue,  8 Mar 2022 17:21:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD214610AB;
+        Tue,  8 Mar 2022 17:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 495B4C340F4;
+        Tue,  8 Mar 2022 17:21:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646760074;
-        bh=YzDVRHHe4KzIf6sXoA5Jjdffip2Zv92DuhYkKW62tqo=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=EvLSWYVIL9zy84zHJXvJHR6qwowDJYxdmUl1KmGK8Zl+1Ve1KT11oG6GYDPPD+YZ3
-         CPgSdPx2EGvltyY6moIgaWk1gj7GSBAjVi/eFlPXTN52ec2wTKfjWutVsMNPD5kDe1
-         1Xf0eDyS5dQG3ALvR6VLhciHatZPRUf6LTaWgPhKBg+1eyJqBwyat7c55d2A0l7iUG
-         wtgNwE5psvgV9Xfz3sFCrsT4iPTYqg5vpz3+J5qweW86JR8q+XlLufld5CrD5Gka1x
-         kgr4NC7xLVOoTOQMYvcRXjixWJJ4vvM22r9jOFHXUSteeAPnr6UX6cs5xkq1GhwnaS
-         YfFzsx0/VG5cQ==
+        s=k20201202; t=1646760077;
+        bh=r0phUWwXuodlZB9g376p0WnbRKfdUHRWw2XOE/O6cE8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=mNdns1GKRgyX9nw4gEM7EBaXTiHkW0e9F9nrn4BQ33AO3t7Ze/yUrAFKy3ii0uYdu
+         tIsOi5nASBmnmjMNhzPWx9YLgxqSWD6V3Sk2rq7vcxpgVs4wLIXG1P/A3Oexp28/b+
+         fR76HmJs9PZVv10MZA0TTUm228WWE+jnK/xQX3JDjGEz0n7x7MlKQboT3KrtuUMs2o
+         j4UsyGBDZTqiS8TtEVG0QBXgctLu4UAGaJiqeLCYgKPpANHOUE/beFeTHatFHiQfuf
+         AmZYZPZ6pH1WA776ASoVFQs/GElnyl0mlj/HiYwZW63f8TaaD7Cwp+Q3wUzlfErscn
+         Nwdiyt8rGCvAg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-In-Reply-To: <20220308020146.26496-1-linmq006@gmail.com>
-References: <20220308020146.26496-1-linmq006@gmail.com>
-Subject: Re: [PATCH] ASoC: mxs: Fix error handling in mxs_sgtl5000_probe
-Message-Id: <164676007157.54315.10226994232050384296.b4-ty@kernel.org>
-Date:   Tue, 08 Mar 2022 17:21:11 +0000
+To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        devicetree@vger.kernel.org
+Cc:     robh+dt@kernel.org, nicolas.ferre@microchip.com, perex@perex.cz,
+        lars@metafoo.de, tiwai@suse.com
+In-Reply-To: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
+References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
+Subject: Re: (subset) [PATCH v3 0/6] Add driver for SAMA7G5's PDMC
+Message-Id: <164676007501.54315.7100142758313239597.b4-ty@kernel.org>
+Date:   Tue, 08 Mar 2022 17:21:15 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,14 +57,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 02:01:44 +0000, Miaoqian Lin wrote:
-> This function only calls of_node_put() in the regular path.
-> And it will cause refcount leak in error paths.
-> For example, when codec_np is NULL, saif_np[0] and saif_np[1]
-> are not NULL, it will cause leaks.
-> 
-> of_node_put() will check if the node pointer is NULL, so we can
-> call it directly to release the refcount of regular pointers.
+On Mon, 7 Mar 2022 14:21:56 +0200, Codrin Ciubotariu wrote:
+> This patch series adds support for Pulse Density Microphone Controller
+> (PDMC), present on Microchip's SAMA7G5.
+> The PDMC interfaces up to 4 digital microphones having Pulse Density
+> Modulated (PDM) outputs. It generates a single clock line and samples 1 or
+> 2 data lines. The signal path includes an audio grade programmable
+> decimation filter and outputs 24-bit audio words.
+> The source of each channel can be independently defined as PDMC_DS0 or
+> PDMC_DS1, sampled at the rising or falling edge of PDMC_CLK.
 > 
 > [...]
 
@@ -79,8 +75,12 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: mxs: Fix error handling in mxs_sgtl5000_probe
-      commit: 6ae0a4d8fec551ec581d620f0eb1fe31f755551c
+[1/6] ASoC: dmaengine: do not use a NULL prepare_slave_config() callback
+      commit: 9a1e13440a4f2e7566fd4c5eae6a53e6400e08a4
+[2/6] ASoC: dt-bindings: Document Microchip's PDMC
+      commit: 015044e9610c8523794ea6cb55d5388bc00ba96a
+[3/6] ASoC: atmel: mchp-pdmc: add PDMC driver
+      commit: 50291652af5269813baa6024eb0e81b5f0bbb451
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

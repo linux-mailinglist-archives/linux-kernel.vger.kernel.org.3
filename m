@@ -2,101 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED384D222B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C28974D222C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350126AbiCHUGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S1349830AbiCHUHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350121AbiCHUGi (ORCPT
+        with ESMTP id S234107AbiCHUHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:06:38 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388ED4A3FF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:05:41 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id x26-20020a4a9b9a000000b003211029e80fso314525ooj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:05:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=QX67c8/LWZdvLCoz7zI9uFhqDQjOSWv595jQDqaaHvw=;
-        b=AoYICMH8irjSWwtZb+Z4eLYjCkWJeNSak3Ym+tkyXo7JKkBgfi/ApgCW8h+4uiTLk4
-         9/ZBh92aXPInfCxmDlAWVb4MzPrC9fWhQAXR1EaTZrKwakYnK4HXEBRhrYs3Ep5zfB2E
-         sF7dLTDPwJru+Mre8SMqknSkzXsiym3TOgeUA=
+        Tue, 8 Mar 2022 15:07:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 426B14A3F2
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:06:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646769980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=elipnysKnwVcUg6EqGSfkpdeNGiB7Z2+ASCRq74nOM0=;
+        b=SaeCvK65zMQ/dgdtSH9qi1mGe+s96wHlfbq6aghDfxaYANYxPK/fd3yNkAfL3wTL/Mq8rl
+        gMgZFfddmrlkDr+DiskFRXfsL/zrEj0Sywt+XZ2wgkxgRdt4nrG+DZNu+cF4oDkh+bUj07
+        8HKBV+M/JdJghCKsUIszeg7zZeTjhlw=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-vv824g7oMzucns72dXYANQ-1; Tue, 08 Mar 2022 15:06:19 -0500
+X-MC-Unique: vv824g7oMzucns72dXYANQ-1
+Received: by mail-qk1-f198.google.com with SMTP id m123-20020a375881000000b0067af33d4ac1so17677qkb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:06:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=QX67c8/LWZdvLCoz7zI9uFhqDQjOSWv595jQDqaaHvw=;
-        b=PQBmXQYxElCyp+GpweGFY0uPS/JTvoP9j1aWe09mxSD2Qj8mjScXI+JmQu9H+pH2bp
-         UbEeSOgYe0CAYQ0w+lypOeBXlkrfolrhFkguCiWtisjuhFXvbBQn7GqL+aG18AVGXiAg
-         uiXkSWmbDtFwhSvSKwLYuNrTRRbeyUB/XpsapkfmI7/WVC2PJYe98J4i85grzxS6TMQq
-         yhY/KNX04zzZ4RqbsXAHlDPdXRlbewpD22iWmLhcOX6TlgABSJJDE6bpnU/6YuSJwpi2
-         tNGEhufMWhj4nq3lV1AR6WbGVFUUVIO4EZwKGmEXfaBX2U3OXsQIQk0bdp78ixwIltx7
-         GXdA==
-X-Gm-Message-State: AOAM532yOtmp3ecsxfAcCXo555YhkWxWi09Uskl17Pjc/J4RjtSZKkfN
-        cbrmjKKxqjUKjOxkpVOgTET19Yj445c8Tbd/17+icA==
-X-Google-Smtp-Source: ABdhPJxFRuIHirmuMcP8JQW2CiIQQrW1zixcggRe6oOvjNpt2ZWhCvmWo6ALkosrHI8M9jLM4bLDX5HuCCoQWjlEW1Q=
-X-Received: by 2002:a05:6870:d250:b0:da:b3f:3211 with SMTP id
- h16-20020a056870d25000b000da0b3f3211mr3425601oac.193.1646769940572; Tue, 08
- Mar 2022 12:05:40 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 8 Mar 2022 12:05:39 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=elipnysKnwVcUg6EqGSfkpdeNGiB7Z2+ASCRq74nOM0=;
+        b=j2kOD/rjEi/n8T1qPOxQ0N8/TKUOvmJhskgbGS5EjCypslnxfH0Eo9d123dYZ/jVWQ
+         ctVfI42nzGpHHhOdzy1rCsr3ihyhoS8Qd4ZC3XWX+LkuoK21ElnrYHmdN3hYmjFcncBT
+         v0IUj7snqgMZMSILZsnLQ0wpw17i7+ddN1SD47i5ASBN1OQ+y3ckhzEoNiyYPYcWdnD8
+         uzeoiPbS2EskUyNwKd6+0HVyQfFdocZe7WsfyPajncWcRx1qaJF1FmBNRUq2KMw83CcX
+         uFoiIURcjQiP2k+GAL9HwH0XLqMMP7TATX/lzMHmLrnFM0Ahgqs8a0En53/X2k7NBGH6
+         kC9Q==
+X-Gm-Message-State: AOAM533+0Q9htnYi81hTZW3oHq/X8r/4hI3Xu05A2y//a7dF2OSD/rd5
+        kHOS4m4zqOSewxMAU9VsOMbk1HNIrdUS9dNS6lhrewCNsh+0KSfHZqsMrdyc8fs9EXGnrteaiBZ
+        HVQp9varqi8AUqzIwRGi0ssGm
+X-Received: by 2002:a0c:c3c6:0:b0:42c:17e4:9a75 with SMTP id p6-20020a0cc3c6000000b0042c17e49a75mr13650526qvi.124.1646769978829;
+        Tue, 08 Mar 2022 12:06:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzR3zmfz6FSXYwcl0bR5o15WDFhgLy2+B4pN+kytJHPEwLsbYJh8A0UHtJyjVFIP+c4N/FJXA==
+X-Received: by 2002:a0c:c3c6:0:b0:42c:17e4:9a75 with SMTP id p6-20020a0cc3c6000000b0042c17e49a75mr13650497qvi.124.1646769978497;
+        Tue, 08 Mar 2022 12:06:18 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id t207-20020a3746d8000000b0067b33b6a4efsm2547341qka.21.2022.03.08.12.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 12:06:17 -0800 (PST)
+Date:   Tue, 8 Mar 2022 12:06:14 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
+        mhiramat@kernel.org, alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <20220308200614.gyhp657bdq3rxapl@treble>
+References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <1646758500-3776-2-git-send-email-quic_vpolimer@quicinc.com>
-References: <1646758500-3776-1-git-send-email-quic_vpolimer@quicinc.com> <1646758500-3776-2-git-send-email-quic_vpolimer@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 8 Mar 2022 12:05:39 -0800
-Message-ID: <CAE-0n51bfqWs8yOiyQ-A_bEQ7CZSqavz8epcFEWYyZxxoRYFHg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] arm64/dts/qcom/sc7280: remove assigned-clock-rate
- property for mdp clk
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, quic_kalyant@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220308153011.021123062@infradead.org>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Vinod Polimera (2022-03-08 08:54:56)
-> Kernel clock driver assumes that initial rate is the
-> max rate for that clock and was not allowing it to scale
-> beyond the assigned clock value.
+On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
+> Hopefully last posting...
+> 
+> Since last time:
+> 
+>  - updated the ftrace_location() patch (naveen, rostedt)
+>  - added a few comments and clarifications (bpetkov)
+>  - disable jump-tables (joao)
+>  - verified clang-14-rc2 works
+>  - fixed a whole bunch of objtool unreachable insn issue
+>  - picked up a few more tags
+> 
+> Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
 
-How? I see ftbl_disp_cc_mdss_mdp_clk_src[] has multiple frequencies and
-clk_rcg2_shared_ops so it doesn't look like anything in the clk driver
-is preventing the frequency from changing beyond the assigned value.
+<applause>  Nice work!!!  kernel shadow stacks next? ;-)
 
->
-> Drop the assigned clock rate property and vote on the mdp clock as per
-> calculated value during the usecase.
->
-> Changes in v2:
-> - Remove assigned-clock-rate property and set mdp clk during resume sequence.
-> - Add fixes tag.
->
-> Changes in v3:
-> - Remove extra line after fixes tag.(Stephen Boyd)
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
 
-This changelog should be removed.
+As talked about on IRC there are still a few outstanding issues, that
+I'm fine with fixing after the merge window during the upcoming -next
+cycle:
 
->
-> Fixes: 62fbdce91("arm64: dts: qcom: sc7280: add display dt nodes")
+- xen hypercall page functions need 'ret' - (I think you already fixed)
 
-I thought folks were saying that this is bad to keep? I don't really
-mind either way, but I guess it's better to drop the fixes tag because
-this is largely a performance improvement?
+- why don't unreachables need to fill up the entire sym hole?
 
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+- get rid of the 'c_file' hack
+
+- improve cmdline option intuitive-ness
+
+- properly integrate the retpoline "demotion" with the new Spectre BHI
+  related patches - probably still needs more discussion - for example
+  we might instead want to disable IBT and warn
+
+-- 
+Josh
+

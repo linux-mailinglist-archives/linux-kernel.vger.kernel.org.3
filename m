@@ -2,179 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D564D0F89
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3804D0F9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244459AbiCHFxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S238210AbiCHF5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbiCHFxI (ORCPT
+        with ESMTP id S233650AbiCHF5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:53:08 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77185E25;
-        Mon,  7 Mar 2022 21:52:11 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id b16so5434460ioz.3;
-        Mon, 07 Mar 2022 21:52:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+aAQ68z5bUdi4gi3f7x74ZA2W3mBI33pygnpmeRuBzI=;
-        b=X1GRs5Yy1RYIEnhBxsIrFW0jFcRRm10ThJfBJUR0L/V6kCShOlw8YoQqlvYXauA+Wj
-         fWm/zqn7vKHkXtPzXYI069QKuog/kXlQtTE6ulEBHFwL1Mgo4fHGVRMKuwQ8pFCnV4sd
-         p6GlqXV2vZ1oRO/hQyp3FZWqzRFl88D0itB78rJZoEq7lKnTHY9wkAgdf5xObI89Pdqm
-         G/e3SICZiEEI6/VZN1EQDzTcyhvN1HK7U8LQFPTfuBwMhDTELpzuHl7/2hfsktGO8qfm
-         HqzNFRXqN8yTpqUqj1nSXqX1NRPDzMc+YKzDHEYM+jp3bYP0bHDxkc4QQx7ctP2J0K/V
-         61LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+aAQ68z5bUdi4gi3f7x74ZA2W3mBI33pygnpmeRuBzI=;
-        b=x900cMiQC+Cac1WulHU8Ai1/9mp/KBmAjk4Hw9u7M14lZlK2y6O+Rm+MuJ8DkwL+MK
-         WKK0u8iaBiN7XLIR+vpH8PBdV60CQZ3LgJ66wjUXkglmtXhMl/WmABemgmLGsy3OCd1m
-         ThcXOl3JQs0g4cHPVp2BpkvY/pi1oVBQ5UNc3/KDBM60uKOO8IBvl7du8UWR65HqxYGN
-         wr5LuuZaaVCUYEAqj/tHne7UtIn0LcbejZhmiyP43dztOhC3TK1r67InB7Jq1s8+LIv1
-         WG+FLdAos88KtFZqzpMAg30ajlfQUHVrxDW0L0SBQBOq2d/RrplGXqhEJhowgqkU53rE
-         LBNQ==
-X-Gm-Message-State: AOAM531Tc2vncRvZXAWizzUDPgyPxdK9/hFB8PUBZJzrpW5t6wKQ5R7e
-        gm/vO9P218X9ovosVGsKMiPAbWkHeKX0Xj0u7O4x6hdQFxM=
-X-Google-Smtp-Source: ABdhPJzXf9gakKVFrNzk/yuF6YME/q3/SGtybwMxDDTkzyJNgvUtSPyEDmXzmTmerQMwtxhDHNuPNJsWavo9cZPOM6s=
-X-Received: by 2002:a05:6602:1605:b0:644:d491:1bec with SMTP id
- x5-20020a056602160500b00644d4911becmr13210383iow.63.1646718730922; Mon, 07
- Mar 2022 21:52:10 -0800 (PST)
+        Tue, 8 Mar 2022 00:57:32 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D67A32991;
+        Mon,  7 Mar 2022 21:56:36 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nRSpm-0003fn-Ba; Tue, 08 Mar 2022 06:56:34 +0100
+Message-ID: <4af605b4-d4c9-0060-9a26-f9846d44a328@leemhuis.info>
+Date:   Tue, 8 Mar 2022 06:56:33 +0100
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-5-benjamin.tissoires@redhat.com> <CAEf4BzZa8sP4QzEgi4T4L1_tz9D8gNNvjeQt3J0hrV6kq8NfUQ@mail.gmail.com>
- <D32CC967-8923-4933-A303-8455F32C6DA0@fb.com>
-In-Reply-To: <D32CC967-8923-4933-A303-8455F32C6DA0@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 7 Mar 2022 21:52:00 -0800
-Message-ID: <CAEf4BzaxuYt+0j8z71y9z1+i0a=Q0hS0mb4cEKKzbiq3QAyNaA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 04/28] libbpf: add HID program type and API
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Justin Sanders <justin@coraid.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Subject: Bug 215647 - aoe: removing aoe devices with flush (implicit in rmmod
+ aoe) leads to page fault
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646718996;ff796f56;
+X-HE-SMSGID: 1nRSpm-0003fn-Ba
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 5:38 PM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Mar 7, 2022, at 5:30 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> >>
-> >> HID-bpf program type are needing a new SEC.
-> >> To bind a hid-bpf program, we can rely on bpf_program__attach_fd()
-> >> so export a new function to the API.
-> >>
-> >> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >>
-> >> ---
-> >>
-> >> changes in v2:
-> >> - split the series by bpf/libbpf/hid/selftests and samples
-> >> ---
-> >> tools/lib/bpf/libbpf.c   | 7 +++++++
-> >> tools/lib/bpf/libbpf.h   | 2 ++
-> >> tools/lib/bpf/libbpf.map | 1 +
-> >> 3 files changed, 10 insertions(+)
-> >>
-> >> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> >> index 81bf01d67671..356bbd3ad2c7 100644
-> >> --- a/tools/lib/bpf/libbpf.c
-> >> +++ b/tools/lib/bpf/libbpf.c
-> >> @@ -8680,6 +8680,7 @@ static const struct bpf_sec_def section_defs[] = {
-> >>        SEC_DEF("cgroup/setsockopt",    CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-> >>        SEC_DEF("struct_ops+",          STRUCT_OPS, 0, SEC_NONE),
-> >>        SEC_DEF("sk_lookup",            SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-> >> +       SEC_DEF("hid/device_event",     HID, BPF_HID_DEVICE_EVENT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-> >
-> > no SEC_SLOPPY_PFX for any new program type, please
-> >
-> >
-> >> };
-> >>
-> >> #define MAX_TYPE_NAME_SIZE 32
-> >> @@ -10659,6 +10660,12 @@ static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie)
-> >>        return bpf_program__attach_iter(prog, NULL);
-> >> }
-> >>
-> >> +struct bpf_link *
-> >> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd)
-> >> +{
-> >> +       return bpf_program__attach_fd(prog, hid_fd, 0, "hid");
-> >> +}
-> >> +
-> >> struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
-> >> {
-> >>        if (!prog->sec_def || !prog->sec_def->attach_fn)
-> >> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> >> index c8d8daad212e..f677ac0a9ede 100644
-> >> --- a/tools/lib/bpf/libbpf.h
-> >> +++ b/tools/lib/bpf/libbpf.h
-> >> @@ -529,6 +529,8 @@ struct bpf_iter_attach_opts {
-> >> LIBBPF_API struct bpf_link *
-> >> bpf_program__attach_iter(const struct bpf_program *prog,
-> >>                         const struct bpf_iter_attach_opts *opts);
-> >> +LIBBPF_API struct bpf_link *
-> >> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd);
-> >>
-> >> /*
-> >>  * Libbpf allows callers to adjust BPF programs before being loaded
-> >> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> >> index 47e70c9058d9..fdc6fa743953 100644
-> >> --- a/tools/lib/bpf/libbpf.map
-> >> +++ b/tools/lib/bpf/libbpf.map
-> >> @@ -424,6 +424,7 @@ LIBBPF_0.6.0 {
-> >> LIBBPF_0.7.0 {
-> >>        global:
-> >>                bpf_btf_load;
-> >> +               bpf_program__attach_hid;
-> >
-> > should go into 0.8.0
->
-> Ah, I missed this one.
->
-> btw, bpf_xdp_attach and buddies should also go into 0.8.0, no?
+Hi! As part of my regression tracking work I noticed this bug report
+that was filed about a week ago:
 
-not really, they were released in libbpf v0.7, it's just any new
-incoming API that should go into 0.8.0
+https://bugzilla.kernel.org/show_bug.cgi?id=215647
 
->
-> >
-> >>                bpf_program__expected_attach_type;
-> >>                bpf_program__log_buf;
-> >>                bpf_program__log_level;
-> >> --
-> >> 2.35.1
-> >>
->
+To quote the first para:
+
+> there is a bug in the aoe driver module between v4.20-rc1 and
+> v5.14-rc1 inroduced in 3582dd2 (aoe: convert aoeblk to blk-mq) and
+> fixed in 6560ec9 (aoe: use blk_mq_alloc_disk and blk_cleanup_disk). 
+> Every forcible removal of an aoe device (eg. "rmmod aoe" with aoe
+> devices available or "aoe-flush ex.x") leads to a page fault. This
+> bug was successfully reproduced with kernel 5.10.92 from the debian
+> repository, there were no changes to the affected code between
+> v4.20-rc1 and v5.14-rc1. Version 4.19.208 (from debian buster) and
+> 5.17-rc4 (from debian experimental) are confirmed not to be
+> affected.
+
+I checked the logs to see why mainline might not be affected anymore and
+noticed a recent commit in the same area:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/block/aoe/aoedev.c?id=6560ec961a080944f8d5e1fef17b771bfaf189cb
+
+> From 6560ec961a080944f8d5e1fef17b771bfaf189cb Mon Sep 17 00:00:00 2001
+> From: Christoph Hellwig <hch@lst.de>
+> Date: Wed, 2 Jun 2021 09:53:31 +0300
+> Subject: aoe: use blk_mq_alloc_disk and blk_cleanup_disk
+> 
+> Use blk_mq_alloc_disk and blk_cleanup_disk to simplify the gendisk and
+> request_queue allocation.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+> Link: https://lore.kernel.org/r/20210602065345.355274-17-hch@lst.de
+> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> ---
+>  drivers/block/aoe/aoedev.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> (limited to 'drivers/block/aoe/aoedev.c')
+> 
+> diff --git a/drivers/block/aoe/aoedev.c b/drivers/block/aoe/aoedev.c
+> index e2ea2356da061..c5753c6bfe804 100644
+> --- a/drivers/block/aoe/aoedev.c
+> +++ b/drivers/block/aoe/aoedev.c
+> @@ -277,9 +277,8 @@ freedev(struct aoedev *d)
+>  	if (d->gd) {
+>  		aoedisk_rm_debugfs(d);
+>  		del_gendisk(d->gd);
+> -		put_disk(d->gd);
+> +		blk_cleanup_disk(d->gd);
+>  		blk_mq_free_tag_set(&d->tag_set);
+> -		blk_cleanup_queue(d->blkq);
+>  	}
+>  	t = d->targets;
+>  	e = t + d->ntargets;
+
+Does that need backporting? Or is the patch the reporter provided in
+bugzilla the easier and safer way to fix that regression in older releases?
+
+Ciao, Thorsten

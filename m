@@ -2,196 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2244D1435
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1C64D143B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345616AbiCHKHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:07:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S1345641AbiCHKHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345611AbiCHKHh (ORCPT
+        with ESMTP id S1345621AbiCHKHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:07:37 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5D640907;
-        Tue,  8 Mar 2022 02:06:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646734001; x=1678270001;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gQW1oAeon+57DU8wGcNd1CFDpjSEBBQeWTKSocyD9Ts=;
-  b=Sm6eyhpQJ4e0YrKm+FoPfTxdKWlI5cI4zIXP3d83QAWbN4lKOKs2wtoH
-   u1ALk4Pzk1wGTwGGb19nI3+UuZoSKkRktjZfraOx7WLYUwIIdgEf7yc0V
-   sZcbCDGUST4ur1g6Znln+R9JJcPigrOnvgCLHPMaRAgs/kothJD12SL4B
-   Ml0CW3F4nsUSh+3fFBjH99RxgPDEspPeF0BZ1/RCTE71tOdEh53fYkvgd
-   xz/VlzTgLLkSyw40mAF9VAxDqf129DOUJthMQEYNhZZPm1y59F9U9AwQa
-   h/PGnoAZv7AezD9cKfhVoY9BG/kGxogddutW5WutbliPW+dfkORjhVMf0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254374481"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="254374481"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:06:34 -0800
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="553558552"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.46.193])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:06:30 -0800
-Message-ID: <01515ee6-b312-7f81-43f0-e72a0d290046@intel.com>
-Date:   Tue, 8 Mar 2022 12:06:26 +0200
+        Tue, 8 Mar 2022 05:07:44 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217D240915;
+        Tue,  8 Mar 2022 02:06:48 -0800 (PST)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2287j8pb012052;
+        Tue, 8 Mar 2022 10:06:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=WPiUHp7Llsw5SNrmHjEwv6thabpRY2uwdIC/chRd+9c=;
+ b=IteXf2ofpBG9LbAEPdQhWaJ0pj6HlOTLjD4d8+x+7+e9f9RUnG11sJ+t4+DvqIidPPQK
+ 2nwMT2aXzMygMpdIOyL00xRV2sYBVzOIqMsDSkBx89HX+6QlDB4qdi4OkNVKCKmmY2p0
+ FBz3TBUdeLrvsrcMNru2H93IiBiBD6SyPYsJ/LfDwl8IxKgtlU5pZUxtWzb540JrkuqP
+ DSyYbCjGfnSoo6LNraA8JXD8Xn1eWli/4slZfTRz40vOi4zHX42jo0guWed37vcqgaoQ
+ 2l3Sj3yIVavWpeNwWol+r68AH7DhuTSvlnAK8VKd7yjD3CP3Lig3QJ4ACSXAv59SNuuP 4A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ep03ve2r7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Mar 2022 10:06:46 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2289pSbT027404;
+        Tue, 8 Mar 2022 10:06:46 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ep03ve2qn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Mar 2022 10:06:45 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 228A33Kc020419;
+        Tue, 8 Mar 2022 10:06:43 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3eky4hy7fe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Mar 2022 10:06:43 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 228A6etH49283388
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Mar 2022 10:06:40 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E42E4C050;
+        Tue,  8 Mar 2022 10:06:40 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B2D8C4C040;
+        Tue,  8 Mar 2022 10:06:39 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.68.74])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue,  8 Mar 2022 10:06:39 +0000 (GMT)
+Date:   Tue, 8 Mar 2022 11:06:37 +0100
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
+        kwankhede@nvidia.com, fiuczy@linux.ibm.com,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH v18 08/18] s390/vfio-ap: allow assignment of unavailable
+ AP queues to mdev device
+Message-ID: <20220308110637.2e839732.pasic@linux.ibm.com>
+In-Reply-To: <eb30a519-5707-717a-ff22-cc3a8e65dc7e@linux.ibm.com>
+References: <20220215005040.52697-1-akrowiak@linux.ibm.com>
+        <20220215005040.52697-9-akrowiak@linux.ibm.com>
+        <97681738-50a1-976d-9f0f-be326eab7202@linux.ibm.com>
+        <9ac3908e-06da-6276-d1df-94898918fc5b@linux.ibm.com>
+        <20220307142711.5af33ece.pasic@linux.ibm.com>
+        <151241e6-3099-4be2-da54-1f0e5cb3a705@linux.ibm.com>
+        <20220307181027.29c821b6.pasic@linux.ibm.com>
+        <eb30a519-5707-717a-ff22-cc3a8e65dc7e@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH V4 6/7] mmc: sdhci: Set error state for mmc driver
-Content-Language: en-US
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        asutoshd@quicinc.com, ulf.hansson@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_vbadigan@quicinc.com, quic_rampraka@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
-        Sayali Lokhande <sayalil@codeaurora.org>,
-        "Bao D . Nguyen" <nguyenb@codeaurora.org>
-References: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1646226227-32429-7-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <1646226227-32429-7-git-send-email-quic_c_sbhanu@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: G9yLo1VpFU1J1bzoLhYxh5HJSn66nx17
+X-Proofpoint-ORIG-GUID: EtQJUWOuC8QThu3OceJgqNtyPqcbOz5V
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-08_03,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ spamscore=0 clxscore=1015 malwarescore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 phishscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203080053
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2.3.2022 15.03, Shaik Sajida Bhanu wrote:
-> Set error state if any errors observed in eMMC and SD card driver level.
+On Mon, 7 Mar 2022 18:45:45 -0500
+Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+
+[..]
+> >>> s/belong to the matrix_mdev's matrix/are fields of the matrix_mdev
+> >>> object/  
+> >> This is the comment I wrote:
+> >>
+> >>           /*
+> >>            * Comparing an mdev's newly updated apm/aqm with itself would
+> >>            * result in a false positive when verifying whether any APQNs
+> >>            * are shared; so, if the input apm and aqm belong to the
+> >>            * matrix_mdev's matrix, then move on to the next one.
+> >>            */
+> >>
+> >> However, I'd be happy to change it to whatever either of you want.  
+> > What ain't obvious for the comment is that "belong to" actually means
+> > composition and not association. In other words, there there is no
+> > pointer/indirection involved, a pointer that would tell us what matrix
+> > does belong to what matrix_mdev, but rather the matrix is just a part
+> > of the matrix_mdev object.
+> >
+> > I don't like 'false positive' either, and whether the apm/aqm is
+> > newly updated or not is also redundant and confusing in my opinion. When
+> > we check because of inuse there is not updated whatever. IMHO the old
+> > message was better than this one.
+> >
+> > Just my opinion, if you two agree, that this is the way to go, I'm fine
+> > with that.
+> >
+> > Regards,
+> > Halil  
 > 
-> Signed-off-by: Liangliang Lu <luliang@codeaurora.org>
-> Signed-off-by: Sayali Lokhande <sayalil@codeaurora.org>
-> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
-> Signed-off-by: Ram Prakash Gupta <quic_rampraka@quicinc.com>
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-> ---
->  drivers/mmc/host/sdhci.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index 741fb06..4ba3797 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -224,6 +224,8 @@ void sdhci_reset(struct sdhci_host *host, u8 mask)
->  		if (timedout) {
->  			pr_err("%s: Reset 0x%x never completed.\n",
->  				mmc_hostname(host->mmc), (int)mask);
-> +			if (host->mmc && !host->mmc->err_state)
-> +				mmc_debugfs_err_stats_enable(host->mmc);
+> Feel free to recommend the verbiage for this comment. I'm not married
+> to my comments and am open to anything that helps others to
+> understand what is going on here. It seems obvious to me, but I wrote
+> the code. Obviously, it is not so obvious based on Jason's comments,
+> so maybe someone else can compose a better comment.
 
-I really do not understand why this cannot be another err_stats entry
-such as MMC_ERR_DRIVER and then as below?
+/*
+* If the input apm and aqm are fields of the matrix_mdev object,
+* then move on to the next matrix_mdev.
+*/
 
-			sdhci_err_stats_inc(host, DRIVER);
-
-
->  			sdhci_dumpregs(host);
->  			return;
->  		}
-> @@ -1716,6 +1718,8 @@ static bool sdhci_send_command_retry(struct sdhci_host *host,
->  		if (!timeout--) {
->  			pr_err("%s: Controller never released inhibit bit(s).\n",
->  			       mmc_hostname(host->mmc));
-> +			if (host->mmc && !host->mmc->err_state)
-> +				mmc_debugfs_err_stats_enable(host->mmc);
->  			sdhci_dumpregs(host);
->  			cmd->error = -EIO;
->  			return false;
-> @@ -1965,6 +1969,8 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
->  		if (timedout) {
->  			pr_err("%s: Internal clock never stabilised.\n",
->  			       mmc_hostname(host->mmc));
-> +			if (host->mmc && !host->mmc->err_state)
-> +				mmc_debugfs_err_stats_enable(host->mmc);
->  			sdhci_dumpregs(host);
->  			return;
->  		}
-> @@ -1987,6 +1993,8 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
->  			if (timedout) {
->  				pr_err("%s: PLL clock never stabilised.\n",
->  				       mmc_hostname(host->mmc));
-> +				if (host->mmc && !host->mmc->err_state)
-> +					mmc_debugfs_err_stats_enable(host->mmc);
->  				sdhci_dumpregs(host);
->  				return;
->  			}
-> @@ -3162,6 +3170,8 @@ static void sdhci_timeout_timer(struct timer_list *t)
->  		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_REQ_TIMEOUT);
->  		pr_err("%s: Timeout waiting for hardware cmd interrupt.\n",
->  		       mmc_hostname(host->mmc));
-> +		if (host->mmc && !host->mmc->err_state)
-> +			mmc_debugfs_err_stats_enable(host->mmc);
->  		sdhci_dumpregs(host);
->  
->  		host->cmd->error = -ETIMEDOUT;
-> @@ -3185,6 +3195,8 @@ static void sdhci_timeout_data_timer(struct timer_list *t)
->  		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_REQ_TIMEOUT);
->  		pr_err("%s: Timeout waiting for hardware interrupt.\n",
->  		       mmc_hostname(host->mmc));
-> +		if (host->mmc && !host->mmc->err_state)
-> +			mmc_debugfs_err_stats_enable(host->mmc);
->  		sdhci_dumpregs(host);
->  
->  		if (host->data) {
-> @@ -3236,6 +3248,8 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
->  			return;
->  		pr_err("%s: Got command interrupt 0x%08x even though no command operation was in progress.\n",
->  		       mmc_hostname(host->mmc), (unsigned)intmask);
-> +		if (host->mmc && !host->mmc->err_state)
-> +			mmc_debugfs_err_stats_enable(host->mmc);
->  		sdhci_dumpregs(host);
->  		return;
->  	}
-> @@ -3289,6 +3303,8 @@ static void sdhci_adma_show_error(struct sdhci_host *host)
->  	void *desc = host->adma_table;
->  	dma_addr_t dma = host->adma_addr;
->  
-> +	if (host->mmc && !host->mmc->err_state)
-> +		mmc_debugfs_err_stats_enable(host->mmc);
->  	sdhci_dumpregs(host);
->  
->  	while (true) {
-> @@ -3378,6 +3394,8 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->  
->  		pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
->  		       mmc_hostname(host->mmc), (unsigned)intmask);
-> +		if (host->mmc && !host->mmc->err_state)
-> +			mmc_debugfs_err_stats_enable(host->mmc);
->  		sdhci_dumpregs(host);
->  
->  		return;
-> @@ -3599,6 +3617,8 @@ static irqreturn_t sdhci_irq(int irq, void *dev_id)
->  	if (unexpected) {
->  		pr_err("%s: Unexpected interrupt 0x%08x.\n",
->  			   mmc_hostname(host->mmc), unexpected);
-> +		if (host->mmc && !host->mmc->err_state)
-> +			mmc_debugfs_err_stats_enable(host->mmc);
->  		sdhci_dumpregs(host);
->  	}
->  
-> @@ -3962,6 +3982,8 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->  		sdhci_writel(host, intmask, SDHCI_INT_STATUS);
->  		pr_err("%s: CQE: Unexpected interrupt 0x%08x.\n",
->  		       mmc_hostname(host->mmc), intmask);
-> +		if (host->mmc && !host->mmc->err_state)
-> +			mmc_debugfs_err_stats_enable(host->mmc);
->  		sdhci_dumpregs(host);
->  	}
->  
-
+Regards,
+Halil

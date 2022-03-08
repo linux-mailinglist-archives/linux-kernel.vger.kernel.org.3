@@ -2,229 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2474D230D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4904D2311
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350325AbiCHVIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S1350334AbiCHVJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:09:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235737AbiCHVIh (ORCPT
+        with ESMTP id S235737AbiCHVJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:08:37 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B201140E4
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:07:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646773660; x=1678309660;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GnMW+vZ9HVxe/HmNFuE/y1U+U+G1TdLCAHPjIqy2Z2o=;
-  b=nVhozu+Ei0wDoEJ6av+cN5E4nrKeWihf/kdKlcXUcud716XPj5CFj1Mo
-   E4q22WqZVVsEKvgq57zSYgkvxBEsFX2G5/haMK9GpxSNIz8mil/NxeHzk
-   ZyYMuFmft3JFahsWbo7kU/mxHKrPkNLPPvwaI7UE0fQNVisYeQ/LMWX78
-   BpBqlJH0bN/MYNAivJdFdTDyKGhonLkeUGeNdiLOhRSkwQBtCChLjqVHQ
-   DeIN8E0eKTgVWZurYaiso/ZCmoZoAaiH6v+m9aiBSencPGae+B4//QkH/
-   BS6cc4PeKyBFqZPskuj4ArkSe4uWqyNRJ50BkN7AvIbIDYaHLFZM4D820
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="318043896"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="318043896"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 13:07:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="495602818"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 13:07:38 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRh3R-0001xQ-Ko; Tue, 08 Mar 2022 21:07:37 +0000
-Date:   Wed, 9 Mar 2022 05:07:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:15:
- warning: no previous prototype for function '__wrap_devm_ioremap'
-Message-ID: <202203090551.R89uT00F-lkp@intel.com>
+        Tue, 8 Mar 2022 16:09:49 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68573EA90
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:08:51 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id bm39so217748qkb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:08:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aDSOBm4d5nO/KrS/W0aAAr28zrJ753qvjHwTkTdw9kk=;
+        b=IQNlE95xzFsoZ/PblHHm/qEE1xW6I0QhH4ifACt1mBjmMJif3RQXXYM4RzLT/psSl8
+         9Anm/9FEbRjZtMEZ2MfvZHD9Pu+dRyx7z783YEo0MawjZetnl2/G4Lo3yB6DC4z/BCta
+         AYpElEbrSlfmX9AE3nvcbP5lcT8pAQkJqyB2YiKCRDgcitKKIARW+lB4G6yumt9gAHRA
+         lSRsTjy8h84X0kRBXr4etBPqLx5b1ZweTPDGCzhjgr9ZKjsy/KKEHHOdtEe4jbD0z2Au
+         93LEAczwx87RZhku6PtgEn2yhr6ZqsR6LszCnikopuJOp5zA01ChuDkOYHbv0whsNRu+
+         wrCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aDSOBm4d5nO/KrS/W0aAAr28zrJ753qvjHwTkTdw9kk=;
+        b=vH+k9pa/TbLbXm8ojVo9Row5Vna6WaEHRiG8jl5D52kOu3YB49hpfCaLGDyKKO95qz
+         XoJ9a3RFy1JTFLvMjHVwkh8d+y6Bn9XlmLyQlklEWzbXdF4HUfSOUKni7dxpDtytftVG
+         OuPq54+3WQ6Z6yP4k91DwOym++1B5/v8awaxgdr3/+HxIUk11O//rN2gA7vzUcsJg3Wy
+         YiALNz3oYHNroudFo+zolFjBMqBhs/G5w8rBki/DwpinQOFY9ZsscsZNX0k/TwgrSxLL
+         gxtLIlw33aZrnHQ9jtkzdXFdYtSaOC62DTbHyhHSG6ANE1OL7/eHdHj9Dzefm9FtZ+KQ
+         NB3Q==
+X-Gm-Message-State: AOAM533RKkEQ2XFe+waNL64ixZREAWGBxNuCE8ittFPlgWU2OjWQarTb
+        jOSMPl+HQ2TJ3G0YZIrhNHSsWe1fNTS9+DDk/gsZ7w==
+X-Google-Smtp-Source: ABdhPJwUz+BS2DcHTmdLJAf815JaWVdyXiZass6ggduXJR8Sq164BEaJZ5AcIUrPOpW+bpSFyNuf3NDUGLnlMB1wYyQ=
+X-Received: by 2002:a05:620a:2849:b0:67d:2462:15e4 with SMTP id
+ h9-20020a05620a284900b0067d246215e4mr2356259qkp.583.1646773730521; Tue, 08
+ Mar 2022 13:08:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
+ <20220227051821.fwrmeu7r6bab6tio@apollo.legion> <CA+khW7g4mLw9W+CY651FaE-2SF0XBeaGKa5Le7ZnTBTK7eD30Q@mail.gmail.com>
+ <20220302193411.ieooguqoa6tpraoe@ast-mbp.dhcp.thefacebook.com>
+ <CA+khW7goNwmt2xJb8SMaagXcsZdquQha8kax-LF033wFexKCcA@mail.gmail.com>
+ <CA+khW7hK9JKU3be7gDDJ9DsOeaUS3RxCGJOJAUrZwvyVJiSSSA@mail.gmail.com> <CAADnVQ+-9DAuqj3jLvnwPn0PwuRnfSZ4niDOPqOaF+SH-_+P8A@mail.gmail.com>
+In-Reply-To: <CAADnVQ+-9DAuqj3jLvnwPn0PwuRnfSZ4niDOPqOaF+SH-_+P8A@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 8 Mar 2022 13:08:39 -0800
+Message-ID: <CA+khW7iQ6w99pB+kodXheJDo5nAZ6wxZiaWtt08xKQETs=uJFg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+On Sat, Mar 5, 2022 at 3:47 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Mar 4, 2022 at 10:37 AM Hao Luo <haoluo@google.com> wrote:
+> >
+> > I gave this question more thought. We don't need to bind mount the top
+> > bpffs into the container, instead, we may be able to overlay a bpffs
+> > directory into the container. Here is the workflow in my mind:
+>
+> I don't quite follow what you mean by 'overlay' here.
+> Another bpffs mount or future overlayfs that supports bpffs?
+>
+> > For each job, let's say A, the container runtime can create a
+> > directory in bpffs, for example
+> >
+> >   /sys/fs/bpf/jobs/A
+> >
+> > and then create the cgroup for A. The sleepable tracing prog will
+> > create the file:
+> >
+> >   /sys/fs/bpf/jobs/A/100/stats
+> >
+> > 100 is the created cgroup's id. Then the container runtime overlays
+> > the bpffs directory into container A in the same path:
+>
+> Why cgroup id ? Wouldn't it be easier to use the same cgroup name
+> as in cgroupfs ?
+>
 
-FYI, the error/warning still remains.
+Cgroup name isn't unique. We don't need the hierarchy information of
+cgroups. We can use a library function to translate cgroup path to
+cgroup id. See the get_cgroup_id() in patch 9/9. It works fine in the
+selftest.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ea4424be16887a37735d6550cfd0611528dbe5d9
-commit: 4bdc0d676a643140bdf17dbf7eafedee3d496a3c remove ioremap_nocache and devm_ioremap_nocache
-date:   2 years, 2 months ago
-config: x86_64-buildonly-randconfig-r003-20220214 (https://download.01.org/0day-ci/archive/20220309/202203090551.R89uT00F-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4bdc0d676a643140bdf17dbf7eafedee3d496a3c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4bdc0d676a643140bdf17dbf7eafedee3d496a3c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> >   [A's container path]/sys/fs/bpf/jobs/A.
+> >
+> > A can see the stats at the path within its mount ns:
+> >
+> >   /sys/fs/bpf/jobs/A/100/stats
+> >
+> > When A creates cgroup, it is able to write to the top layer of the
+> > overlayed directory. So it is
+> >
+> >   /sys/fs/bpf/jobs/A/101/stats
+> >
+> > Some of my thoughts:
+> >   1. Compared to bind mount top bpffs into container, overlaying a
+> > directory avoids exposing other jobs' stats. This gives better
+> > isolation. I already have a patch for supporting laying bpffs over
+> > other fs, it's not too hard.
+>
+> So it's overlayfs combination of bpffs and something like ext4, right?
+> I thought you found out that overlaryfs has to be upper fs
+> and lower fs shouldn't be modified underneath.
+> So if bpffs is a lower fs the writes into it should go
+> through the upper overlayfs, right?
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It's overlayfs combining bpffs and ext4. Bpffs is the upper layer. The
+lower layer is an empty ext4 directory. The merged directory is a
+directory in the container.
+The upper layer contains bpf objects that we want to expose to the
+container, for example, the sleepable tracing progs and the iter link
+for reading stats. Only the merged directory is visible to the
+container and all the updates go through the merged directory.
 
-All warnings (new ones prefixed by >>):
+The following is the example of workflow I'm thinking:
 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:65:15: warning: no previous prototype for function '__nfit_test_ioremap' [-Wmissing-prototypes]
-   void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-   ^
-   static 
->> drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:15: warning: no previous prototype for function '__wrap_devm_ioremap' [-Wmissing-prototypes]
-   void __iomem *__wrap_devm_ioremap(struct device *dev,
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_devm_ioremap(struct device *dev,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:88:7: warning: no previous prototype for function '__wrap_devm_memremap' [-Wmissing-prototypes]
-   void *__wrap_devm_memremap(struct device *dev, resource_size_t offset,
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_devm_memremap(struct device *dev, resource_size_t offset,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:126:7: warning: no previous prototype for function '__wrap_devm_memremap_pages' [-Wmissing-prototypes]
-   void *__wrap_devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:126:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_devm_memremap_pages(struct device *dev, struct dev_pagemap *pgmap)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:159:7: warning: no previous prototype for function '__wrap_phys_to_pfn_t' [-Wmissing-prototypes]
-   pfn_t __wrap_phys_to_pfn_t(phys_addr_t addr, unsigned long flags)
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   pfn_t __wrap_phys_to_pfn_t(phys_addr_t addr, unsigned long flags)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:169:7: warning: no previous prototype for function '__wrap_memremap' [-Wmissing-prototypes]
-   void *__wrap_memremap(resource_size_t offset, size_t size,
-         ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *__wrap_memremap(resource_size_t offset, size_t size,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:180:6: warning: no previous prototype for function '__wrap_devm_memunmap' [-Wmissing-prototypes]
-   void __wrap_devm_memunmap(struct device *dev, void *addr)
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:180:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap_devm_memunmap(struct device *dev, void *addr)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:190:15: warning: no previous prototype for function '__wrap_ioremap' [-Wmissing-prototypes]
-   void __iomem *__wrap_ioremap(resource_size_t offset, unsigned long size)
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:190:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_ioremap(resource_size_t offset, unsigned long size)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:196:15: warning: no previous prototype for function '__wrap_ioremap_wc' [-Wmissing-prototypes]
-   void __iomem *__wrap_ioremap_wc(resource_size_t offset, unsigned long size)
-                 ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __iomem *__wrap_ioremap_wc(resource_size_t offset, unsigned long size)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:211:6: warning: no previous prototype for function '__wrap_memunmap' [-Wmissing-prototypes]
-   void __wrap_memunmap(void *addr)
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:211:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap_memunmap(void *addr)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:347:18: warning: no previous prototype for function '__wrap___request_region' [-Wmissing-prototypes]
-   struct resource *__wrap___request_region(struct resource *parent,
-                    ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:347:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct resource *__wrap___request_region(struct resource *parent,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:355:5: warning: no previous prototype for function '__wrap_insert_resource' [-Wmissing-prototypes]
-   int __wrap_insert_resource(struct resource *parent, struct resource *res)
-       ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:355:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __wrap_insert_resource(struct resource *parent, struct resource *res)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:363:5: warning: no previous prototype for function '__wrap_remove_resource' [-Wmissing-prototypes]
-   int __wrap_remove_resource(struct resource *res)
-       ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:363:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __wrap_remove_resource(struct resource *res)
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:371:18: warning: no previous prototype for function '__wrap___devm_request_region' [-Wmissing-prototypes]
-   struct resource *__wrap___devm_request_region(struct device *dev,
-                    ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:371:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct resource *__wrap___devm_request_region(struct device *dev,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:381:6: warning: no previous prototype for function '__wrap___release_region' [-Wmissing-prototypes]
-   void __wrap___release_region(struct resource *parent, resource_size_t start,
-        ^
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:381:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __wrap___release_region(struct resource *parent, resource_size_t start,
-   ^
-   static 
-   drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c:389:6: warning: no previous prototype for function '__wrap___devm_release_region' [-Wmissing-prototypes]
-   void __wrap___devm_release_region(struct device *dev, struct resource *parent,
-        ^
+Step 1: We first set up directories and bpf objects needed by containers.
 
+[# ~] ls /sys/fs/bpf/container/upper
+tracing_prog   iter_link
+[# ~] ls /sys/fs/bpf/container/work
+[# ~] ls /container
+root   lower
+[# ~] ls /container/root
+bpf
+[# ~] ls /container/root/bpf
 
-vim +/__wrap_devm_ioremap +76 drivers/nvdimm/../../tools/testing/nvdimm/test/iomap.c
+Step 2: Use overlayfs to mount a directory from bpffs into the container's home.
 
-    64	
-  > 65	void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-    66			void __iomem *(*fallback_fn)(resource_size_t, unsigned long))
-    67	{
-    68		struct nfit_test_resource *nfit_res = get_nfit_res(offset);
-    69	
-    70		if (nfit_res)
-    71			return (void __iomem *) nfit_res->buf + offset
-    72				- nfit_res->res.start;
-    73		return fallback_fn(offset, size);
-    74	}
-    75	
-  > 76	void __iomem *__wrap_devm_ioremap(struct device *dev,
-    77			resource_size_t offset, unsigned long size)
-    78	{
-    79		struct nfit_test_resource *nfit_res = get_nfit_res(offset);
-    80	
-    81		if (nfit_res)
-    82			return (void __iomem *) nfit_res->buf + offset
-    83				- nfit_res->res.start;
-    84		return devm_ioremap(dev, offset, size);
-    85	}
-    86	EXPORT_SYMBOL(__wrap_devm_ioremap);
-    87	
+[# ~] mkdir /container/lower
+[# ~] mkdir /sys/fs/bpf/container/workdir
+[# ~] mount -t overlay overlay -o \
+ lowerdir=/container/lower,\
+ upperdir=/sys/fs/bpf/container/upper,\
+ workdir=/sys/fs/bpf/container/work \
+  /container/root/bpf
+[# ~] ls /container/root/bpf
+tracing_prog    iter_link
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Step 3: pivot root for container, we expect to see the bpf objects are
+mapped into container,
+
+[# ~] chroot /container/root
+[# ~] ls /
+bpf
+[# ~] ls /bpf
+tracing_prog   iter_link
+
+Note:
+
+- I haven't tested Step 3. But Step 1 and step 2 seem to be working as
+expected. I am testing the behaviors of the bpf objects, after we
+enter the container.
+
+- Only a directory in bpffs is mapped into the container, not the top
+bpffs. The path is uniform in all containers, that is, /bpf. The
+container should be able to mkdir in /bpf, etc.
+
+> >   2. Once the container runtime has overlayed directory into the
+> > container, it has no need to create more cgroups for this job. It
+> > doesn't need to track the stats of job-created cgroups, which are
+> > mainly for inspection by the job itself. Even if it needs to collect
+> > the stats from those cgroups, it can read from the path in the
+> > container.
+> >   3. The overlay path in container doesn't have to be exactly the same
+> > as the path in root mount ns. In the sleepable tracing prog, we may
+> > select paths based on current process's ns. If we choose to do this,
+> > we can further avoid exposing cgroup id and job name to the container.
+>
+> The benefits make sense.

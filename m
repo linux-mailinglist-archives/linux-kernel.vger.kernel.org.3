@@ -2,96 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1158C4D11FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1B74D11FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344938AbiCHIUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S1344932AbiCHIUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234091AbiCHIUh (ORCPT
+        with ESMTP id S238893AbiCHIUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:20:37 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315263EF21;
-        Tue,  8 Mar 2022 00:19:41 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id t187so11511575pgb.1;
-        Tue, 08 Mar 2022 00:19:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Nm51/asUFghrpGhLBb2l9PncUBM4Fnpu/MUp5DxQXsE=;
-        b=c79I9kiJY1J6r2wf/s4lnZSp71zeNtQ2zuhM0ST/Hhusdmzk6evQR6moCABB6duP+V
-         MTZkeyQw/CuDs/0gqUJOEdumJELtYZwaGNJQqm6lwlKyDsuufSOIaE4f44sYBWWvMb2e
-         PrU8Avv2NLg8IoWkFsbE/cj2JvddveUjZPTUwRK7cntSpVT4POSJDHtveGmZUXrE/PxF
-         buvQg6+W4YpZ+C9mNKBJFfEpvw4VNweqPe1cZkwBPi4UFAkuwnqV57DqdhLuR+qvrX9p
-         Qw/UYD6qY1aKXRgn4YaRLn84e5loAmAixbWlD9DsXbXaveA4fNuwrJd5xqgMXOQ2en8b
-         6mTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Nm51/asUFghrpGhLBb2l9PncUBM4Fnpu/MUp5DxQXsE=;
-        b=7AvMHQ97Gm/3SjOgd4Q1VbLXhFPnsGcHDeXuoooicsA6PZnuyDnc1EPyiQAoacPfG1
-         QmnOGQtZOncCZ0fIheLw0cyxfU2m7jbf+XiDYA36lMkXye/YsWQG80znk1pg/JLKX7ad
-         fx8sI7KtDYuWKFy7dJiqay96TpVQlRBYdFyB3IWElWKtJ5dtc1grjn4un3QOZuX4PpGK
-         mOtyeOJdWDwJYNtXhm7pnTUEwW4cjXV8tkgUdj8HOEdwXt4bj4CgnW9d+BVXU/DhKuoE
-         9FdtX8A+QA5+rqHJUkjcaakPQFASgiEjpFbKAV/zyau+ZuKeIbXGrUv8ZNCMdUQgBKGl
-         lRZg==
-X-Gm-Message-State: AOAM532+Pp3TjmJNDc4qdBQuYD+9oJFPAoBY9TS8k3lcq9QArfOhTxyt
-        seEDCp3UKdwhx5MQO1rPZeFWjeSWxbI=
-X-Google-Smtp-Source: ABdhPJxiuB/vZK+oyI3F7Cw34nqjJeYWe2yjILgpOumEPTSbhfWLnmYLH93JVXrdbZGC1v1MEKjjHA==
-X-Received: by 2002:a05:6a00:22c3:b0:4f7:7cb:26b0 with SMTP id f3-20020a056a0022c300b004f707cb26b0mr8171412pfj.47.1646727580533;
-        Tue, 08 Mar 2022 00:19:40 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.112])
-        by smtp.googlemail.com with ESMTPSA id mn3-20020a17090b188300b001bf3ac6c7e3sm1838677pjb.19.2022.03.08.00.19.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Mar 2022 00:19:40 -0800 (PST)
-From:   Wanpeng Li <kernellwp@gmail.com>
-X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: [PATCH] x86/kvm: Don't waste kvmclock memory if there is nopv parameter
-Date:   Tue,  8 Mar 2022 00:18:49 -0800
-Message-Id: <1646727529-11774-1-git-send-email-wanpengli@tencent.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Mar 2022 03:20:34 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA0A3EF0C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:19:37 -0800 (PST)
+Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MDQqk-1nH5kJ0ReA-00AVFh; Tue, 08 Mar 2022 09:19:33 +0100
+Received: by mail-wm1-f50.google.com with SMTP id q20so8300098wmq.1;
+        Tue, 08 Mar 2022 00:19:33 -0800 (PST)
+X-Gm-Message-State: AOAM531jGnYDzGy0tgmqsz8YiU66mxNVIfktW0idKpU/Pr+qls9YoKjQ
+        CjkIaf+8HdIEElG3mQYV+p1QqMn+LDyds7SwWEQ=
+X-Google-Smtp-Source: ABdhPJy3brkt9uo9Q5o03ssSuLxoPFwO5qVCCm/59VQcNJT+nLgFYrX/h0mYQSB3s/mvNn3/m0fMo2z4VwgAr+k4v+o=
+X-Received: by 2002:a05:600c:3b89:b0:389:a466:43bf with SMTP id
+ n9-20020a05600c3b8900b00389a46643bfmr2460412wms.1.1646727572620; Tue, 08 Mar
+ 2022 00:19:32 -0800 (PST)
+MIME-Version: 1.0
+References: <Yib9F5SqKda/nH9c@infradead.org>
+In-Reply-To: <Yib9F5SqKda/nH9c@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 8 Mar 2022 09:19:16 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+Message-ID: <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+Subject: Re: [RFC PULL] remove arch/h8300
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:1QIVENilavwLk2UjvuhOBsxHDfPM3lMu4i0t9qV5UGcPGcFuKVg
+ 8MND9UOh+7Dg8yE9pi/JYI3hXXwHvtqPVpj7jJVExkyKGAzHq+yViBOmQMP/p7kxWm9I+Mm
+ To5S3cXxHcLLD/nRtekxSWbGWDOVXBK+2H1n/Alfx9yDX+j555P2eebWeAQneNDvYKnmi98
+ qrzStheJb2RRuhO8wzDFw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ChVpNRR6khc=:Epb4Zhwk6ut2R6JD4D7fMK
+ MraZahfETrh0Mh1JEEaO5Ds51fEK9TlWkjM8xzxSr6v9f3o0iT6AcV10wqZ3ETKugrOMUQoE/
+ b5m+GxwjPKQloKK6APPrPDjKDosxq7UP4Vs+e8Wg8/lqNH2n2sz1O0xW0et18Jq06ichchWKx
+ kNX8R4Tl2oqvF7PULWJDa0oIIHv+XgHxPqWs9glqb7lZ1M9PELUmMPfdo8DioDrJUC/WgQPJE
+ c8hFmOWI3O1Ram7jGxnpioBTdBp3uKHVv3Z0b1cRbK4w9+SecVHLL3sbn/4fk6PC+hYHJcghF
+ TWUOtlKmpsbpuJprB6jbQGVuSbo/b9E1fQF5glcOnjj+k0DOmE2ylUy+7zHSSZbqLs0CKIK55
+ T3qrd7xwu3fbEcTstTQ9rLWRRgSVg6BPP1nUMnilE3xfBrrqNlHlaTtrZPvu3VqN/VQ2BiGP5
+ FAWvSSXoPp9z7y+Aa87KH4AcXhVhaIj2uPGIER+BsU2o7xXUO5UEG5r0+zI2ash0Io+cUjhDq
+ UhgSehXM7SKsdL1ItoloP2hMIn4cgJeokwVMnRie02OvPJDZRbpEBxnUHRaHxF4DFod/dF9KZ
+ v/suxfAHVsXZ4iwh+d1xfcGO9fDQ//UiyPi5vpq0v/pdPblGtoFqQa5qo2PhK5QAXx/jC4JqX
+ msGjz3NMySfWgnZrK6EK97DQlGrr5rW9MSzGUz/O2kLoKZxtTk4p5Ck7IVaGaLEDSWaI=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+On Tue, Mar 8, 2022 at 7:52 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> Hi all,
+>
+> h8300 hasn't been maintained for quite a while, with even years old
+> pull request lingering in the old repo.  Given that it always was
+> rather fringe to start with I'd suggest to go ahead and remove the
+> port:
+>
+> The following changes since commit 5c1ee569660d4a205dced9cb4d0306b907fb7599:
+>
+>   Merge branch 'for-5.17-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup (2022-02-22 16:14:35 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.infradead.org/users/hch/misc.git remove-h8300
+>
+> for you to fetch changes up to 1c4b5ecb7ea190fa3e9f9d6891e6c90b60e04f24:
+>
+>   remove the h8300 architecture (2022-02-23 08:52:50 +0100)
 
-When the "nopv" command line parameter is used, it should not waste 
-memory for kvmclock.
+I agree, this is clearly the least actively maintained architecture we
+have at the moment,
+and probably the least useful. It is now the only one that does not
+support MMUs at all,
+and most of the boards only support 4MB of RAM, out of which the
+defconfig kernel
+needs more than half just for .text/.data.
 
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
----
- arch/x86/kernel/kvmclock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Guenter Roeck did the original patch to remove the architecture in 2013 after it
+had already been obsolete for a while, and Yoshinori Sato brought it back in
+a much more modern form in 2015. Looking at the git history since the
+reinstantiation,
+it's clear that even he barely cared, almost all commits in the tree
+are build fixes or
+cross-architecture cleanups:
 
-diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
-index c5caa73..16333ba 100644
---- a/arch/x86/kernel/kvmclock.c
-+++ b/arch/x86/kernel/kvmclock.c
-@@ -239,7 +239,7 @@ static void __init kvmclock_init_mem(void)
- 
- static int __init kvm_setup_vsyscall_timeinfo(void)
- {
--	if (!kvm_para_available() || !kvmclock)
-+	if (!kvm_para_available() || !kvmclock || nopv)
- 		return 0;
- 
- 	kvmclock_init_mem();
--- 
-2.7.4
+$ git log --no-merges --format=%an v4.5.. arch/h8300/  | sort | uniq
+-c | sort -rn | head -n 12
+     25 Masahiro Yamada
+     18 Christoph Hellwig
+     14 Mike Rapoport
+      9 Arnd Bergmann
+      8 Mark Rutland
+      7 Peter Zijlstra
+      6 Kees Cook
+      6 Ingo Molnar
+      6 Al Viro
+      5 Randy Dunlap
+      4 Yury Norov
+      4 Yoshinori Sato
 
+If there are no other objections, I'll just queue this up for 5.18 in
+the asm-generic
+tree along with the nds32 removal.
+
+          Arnd

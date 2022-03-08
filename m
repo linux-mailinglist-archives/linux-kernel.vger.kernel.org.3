@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3B74D1C97
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C404D1C78
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348721AbiCHP62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        id S1348240AbiCHP5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240553AbiCHP4J (ORCPT
+        with ESMTP id S1348049AbiCHP4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:56:09 -0500
+        Tue, 8 Mar 2022 10:56:05 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FEB4F9C6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED85A4F478
         for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=fh+AeJ8aNhji6VlzhvpE46DroTHAIn4XV7uW4+efjvc=; b=Pski3LI+g8vM6rv2WhgZTSo3vC
-        bNqYRKp2cDlNhdFeQUItvTWUGnF0mWDEBLi8dN5r/S3wQOH54H2nswT2Vj1WJPAdGyZu3ERRMxJ1t
-        RhswcTXiz74kpLryJkqa5TIhCQ/JD02SeYBPnmWcfAzabdrF4On/yq++7iliROy7Dr7xOisEGcoRG
-        sxxjgj+K+aZYaZXGDDrmt34NiLQTlqdw0EklqJrB0/lt15Efh7efo9gazadlOZZbw5h0VsfTtUJiB
-        8OkLE02LBAdoFua/T0DbRDdLWhCzT2LKJH8iS2lLZ8RDWXEWl1Rhinutjgixzb4Fe1owml04XcjFD
-        sD8O6zFg==;
+        bh=pvJTiNP5ceLdw6/edn6fcpO+Sqt+miAq8Ka0H1NrBcI=; b=f+GA1mffk93cK2gqR4bqI7sw0S
+        NIYj7FziL/SQ9pyhNealxp0z8GHMqR4bRlNFgumiKFTLSfWvGr/ZjMiRxIlRq4yC0uT8ooxw8P338
+        yYiT8yUdgYNEGGl40v9Y16WoCA0H2DF6f2IL0ht81/2hwl6HjxZnZ5LjsWMh/VIqW9l3PnacfxnIl
+        yWwe6TJJUU6QIZO4W9Z4cZ0ARqiCs69i3bZ8LtYO/dcGQhU+ELXq0cn+HRZ8QmeDCrrLznCmjuhoC
+        /spHCxXAixlVq1nV/gT4MTsAFxQ8Y466E+YpEMkbNktIdQTlGuQr15imFngyUD9WMZbCxnB+LQegK
+        de5FbCsQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAb-00GUiK-G1; Tue, 08 Mar 2022 15:54:41 +0000
+        id 1nRcAc-00GUiO-2Y; Tue, 08 Mar 2022 15:54:42 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E459D3007C3;
-        Tue,  8 Mar 2022 16:54:38 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1F84F3007C6;
+        Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id C32D42B55FFBB; Tue,  8 Mar 2022 16:54:38 +0100 (CET)
-Message-ID: <20220308154317.402118218@infradead.org>
+        id C6DF62B55FFBD; Tue,  8 Mar 2022 16:54:38 +0100 (CET)
+Message-ID: <20220308154317.461283840@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:15 +0100
+Date:   Tue, 08 Mar 2022 16:30:16 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v4 04/45] objtool,efi: Update __efi64_thunk annotation
+Subject: [PATCH v4 05/45] objtool: Have WARN_FUNC fall back to sym+off
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,53 +61,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current annotation relies on not running objtool on the file; this
-won't work when running objtool on vmlinux.o. Instead explicitly mark
-__efi64_thunk() to be ignored.
-
-This preserves the status quo, which is somewhat unfortunate. Luckily
-this code is hardly ever used.
+Currently WARN_FUNC() either prints func+off and failing that prints
+sec+off, add an intermediate sym+off. This is useful when playing
+around with entry code.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/platform/efi/Makefile       |    1 -
- arch/x86/platform/efi/efi_thunk_64.S |    6 ++++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ tools/objtool/include/objtool/warn.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/x86/platform/efi/Makefile
-+++ b/arch/x86/platform/efi/Makefile
-@@ -1,5 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
--OBJECT_FILES_NON_STANDARD_efi_thunk_$(BITS).o := y
- KASAN_SANITIZE := n
- GCOV_PROFILE := n
+--- a/tools/objtool/include/objtool/warn.h
++++ b/tools/objtool/include/objtool/warn.h
+@@ -22,6 +22,8 @@ static inline char *offstr(struct sectio
+ 	unsigned long name_off;
  
---- a/arch/x86/platform/efi/efi_thunk_64.S
-+++ b/arch/x86/platform/efi/efi_thunk_64.S
-@@ -20,12 +20,14 @@
-  */
- 
- #include <linux/linkage.h>
-+#include <linux/objtool.h>
- #include <asm/page_types.h>
- #include <asm/segment.h>
- 
- 	.text
- 	.code64
--SYM_CODE_START(__efi64_thunk)
-+SYM_FUNC_START(__efi64_thunk)
-+STACK_FRAME_NON_STANDARD __efi64_thunk
- 	push	%rbp
- 	push	%rbx
- 
-@@ -79,7 +81,7 @@ SYM_CODE_START(__efi64_thunk)
- 2:	pushl	$__KERNEL_CS
- 	pushl	%ebp
- 	lret
--SYM_CODE_END(__efi64_thunk)
-+SYM_FUNC_END(__efi64_thunk)
- 
- 	.bss
- 	.balign 8
+ 	func = find_func_containing(sec, offset);
++	if (!func)
++		func = find_symbol_containing(sec, offset);
+ 	if (func) {
+ 		name = func->name;
+ 		name_off = offset - func->offset;
 
 

@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0364D1995
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D32464D19FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244340AbiCHNuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:50:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S1347319AbiCHOHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiCHNt7 (ORCPT
+        with ESMTP id S231695AbiCHOHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:49:59 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E347A1C129;
-        Tue,  8 Mar 2022 05:49:02 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9A7F21F397;
-        Tue,  8 Mar 2022 13:49:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1646747341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SyTgM5F6+9CT4oBrYUK4bC/XMWpEt2BZNDE3I1Sk7Ys=;
-        b=SOLJf8KzF3lpV2Z1nK2RtJ/mCHih8E/LOT3+NtV9WjuFZrbvkvNGfz9md9KsmuMAmYb4xl
-        mrgfppZj4eTymdy2LnRjU7ToP7z5QKvHD+Fb5G9Y3hGjHgDOXnP7/F9d/3dhoWrdQoV6gE
-        PQ9kK/Trd67H0yxar7509l2hpkGD6SA=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6A0E5A3B85;
-        Tue,  8 Mar 2022 13:49:01 +0000 (UTC)
-Date:   Tue, 8 Mar 2022 14:49:01 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Subject: Re: [PATCH 2/3] mm: use vmalloc_array and vcalloc for array
- allocations
-Message-ID: <YidezSPVZBCQcGJ4@dhcp22.suse.cz>
-References: <20220308105918.615575-1-pbonzini@redhat.com>
- <20220308105918.615575-3-pbonzini@redhat.com>
+        Tue, 8 Mar 2022 09:07:43 -0500
+X-Greylist: delayed 962 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 06:06:47 PST
+Received: from baidu.com (mx22.baidu.com [220.181.50.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 393B749F96;
+        Tue,  8 Mar 2022 06:06:47 -0800 (PST)
+Received: from BC-Mail-Ex25.internal.baidu.com (unknown [172.31.51.19])
+        by Forcepoint Email with ESMTPS id 7B871BF1EFEB84AEFC6F;
+        Tue,  8 Mar 2022 21:50:40 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ BC-Mail-Ex25.internal.baidu.com (172.31.51.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Tue, 8 Mar 2022 21:50:40 +0800
+Received: from BJHW-MAIL-EX27.internal.baidu.com ([169.254.58.247]) by
+ BJHW-MAIL-EX27.internal.baidu.com ([169.254.58.247]) with mapi id
+ 15.01.2308.020; Tue, 8 Mar 2022 21:50:40 +0800
+From:   "Cai,Huoqing" <caihuoqing@baidu.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Jianglei Nie <niejianglei2021@163.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: arc_emac: Fix use after free in arc_mdio_probe()
+Thread-Topic: [PATCH] net: arc_emac: Fix use after free in arc_mdio_probe()
+Thread-Index: AQHYMt0Z8HFN3hFhWU29qEuTfsTlJqy0+PAAgACGxdA=
+Date:   Tue, 8 Mar 2022 13:50:40 +0000
+Message-ID: <a4c518cf3d5d4ad383ce0856d1641d4a@baidu.com>
+References: <20220308111005.4953-1-niejianglei2021@163.com>
+ <YiddVEBJvM81u1jJ@lunn.ch>
+In-Reply-To: <YiddVEBJvM81u1jJ@lunn.ch>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.18.80.106]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308105918.615575-3-pbonzini@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,60 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 08-03-22 05:59:17, Paolo Bonzini wrote:
-> Instead of using array_size or just a multiply, use a function that
-> takes care of both the multiplication and the overflow checks.
-> 
-> Cc: linux-mm@kvack.org
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-
-Acked-by: Michal Hocko <mhocko@suse.com>
-
-The resulting code is easier to read indeed.
-
-> ---
->  mm/percpu-stats.c | 2 +-
->  mm/swap_cgroup.c  | 4 +---
->  2 files changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/percpu-stats.c b/mm/percpu-stats.c
-> index c6bd092ff7a3..e71651cda2de 100644
-> --- a/mm/percpu-stats.c
-> +++ b/mm/percpu-stats.c
-> @@ -144,7 +144,7 @@ static int percpu_stats_show(struct seq_file *m, void *v)
->  	spin_unlock_irq(&pcpu_lock);
->  
->  	/* there can be at most this many free and allocated fragments */
-> -	buffer = vmalloc(array_size(sizeof(int), (2 * max_nr_alloc + 1)));
-> +	buffer = vmalloc_array(2 * max_nr_alloc + 1, sizeof(int));
->  	if (!buffer)
->  		return -ENOMEM;
->  
-> diff --git a/mm/swap_cgroup.c b/mm/swap_cgroup.c
-> index 7f34343c075a..5a9442979a18 100644
-> --- a/mm/swap_cgroup.c
-> +++ b/mm/swap_cgroup.c
-> @@ -167,14 +167,12 @@ unsigned short lookup_swap_cgroup_id(swp_entry_t ent)
->  int swap_cgroup_swapon(int type, unsigned long max_pages)
->  {
->  	void *array;
-> -	unsigned long array_size;
->  	unsigned long length;
->  	struct swap_cgroup_ctrl *ctrl;
->  
->  	length = DIV_ROUND_UP(max_pages, SC_PER_PAGE);
-> -	array_size = length * sizeof(void *);
->  
-> -	array = vzalloc(array_size);
-> +	array = vcalloc(length, sizeof(void *));
->  	if (!array)
->  		goto nomem;
->  
-> -- 
-> 2.31.1
-> 
-> 
-
--- 
-Michal Hocko
-SUSE Labs
+SGVsbG8sDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQW5kcmV3IEx1
+bm4gPGFuZHJld0BsdW5uLmNoPg0KPiBTZW50OiAyMDIyxOoz1MI4yNUgMjE6NDMNCj4gVG86IEpp
+YW5nbGVpIE5pZQ0KPiBDYzogZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsga3ViYUBrZXJuZWwub3JnOyBD
+YWksSHVvcWluZzsNCj4gbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIu
+a2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBuZXQ6IGFyY19lbWFjOiBGaXggdXNl
+IGFmdGVyIGZyZWUgaW4gYXJjX21kaW9fcHJvYmUoKQ0KSWYgcmVzZW5kIGEgcGF0Y2gsICB5b3Ug
+Y2FuIHVzZSBwcmVmaXggIltQQVRDSCB2Ml0iIGluIHN1YmplY3QuDQplLmcuICBnaXQgZm9ybWF0
+LXBhdGNoIC0xIC12Mg0KPiANCj4gT24gVHVlLCBNYXIgMDgsIDIwMjIgYXQgMDc6MTA6MDVQTSAr
+MDgwMCwgSmlhbmdsZWkgTmllIHdyb3RlOg0KPiA+IElmIGJ1cy0+c3RhdGUgaXMgZXF1YWwgdG8g
+TURJT0JVU19BTExPQ0FURUQsIG1kaW9idXNfZnJlZShidXMpIHdpbGwNCj4gZnJlZQ0KPiA+IHRo
+ZSAiYnVzIi4gQnV0IGJ1cy0+bmFtZSBpcyBzdGlsbCB1c2VkIGluIHRoZSBuZXh0IGxpbmUsIHdo
+aWNoIHdpbGwgbGVhZA0KPiA+IHRvIGEgdXNlIGFmdGVyIGZyZWUuDQo+ID4NCj4gPiBXZSBjYW4g
+Zml4IGl0IGJ5IHB1dHRpbmcgdGhlIGJ1cy0+bmFtZSBpbiBhIGxvY2FsIHZhcmlhYmxlIGFuZCB0
+aGVuIHVzZQ0KPiA+IHRoZSBuYW1lIGluIHRoZSBlcnJvciBtZXNzYWdlIHdpdGhvdXQgcmVmZXJy
+aW5nIHRvIGJ1cyB0byBhdm9pZCB0aGUgdWFmLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogSmlh
+bmdsZWkgTmllIDxuaWVqaWFuZ2xlaTIwMjFAMTYzLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVy
+cy9uZXQvZXRoZXJuZXQvYXJjL2VtYWNfbWRpby5jIHwgNSArKystLQ0KPiA+ICAxIGZpbGUgY2hh
+bmdlZCwgMyBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdp
+dCBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L2FyYy9lbWFjX21kaW8uYw0KPiBiL2RyaXZlcnMvbmV0
+L2V0aGVybmV0L2FyYy9lbWFjX21kaW8uYw0KPiA+IGluZGV4IDlhY2Y1ODliMTE3OC4uMzNmZDYz
+ZDIyN2VmIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L2FyYy9lbWFjX21k
+aW8uYw0KPiA+ICsrKyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2FyYy9lbWFjX21kaW8uYw0KPiA+
+IEBAIC0xMzQsNiArMTM0LDcgQEAgaW50IGFyY19tZGlvX3Byb2JlKHN0cnVjdCBhcmNfZW1hY19w
+cml2ICpwcml2KQ0KPiA+ICAJc3RydWN0IGRldmljZV9ub2RlICpucCA9IHByaXYtPmRldi0+b2Zf
+bm9kZTsNCj4gPiAgCXN0cnVjdCBtaWlfYnVzICpidXM7DQo+ID4gIAlpbnQgZXJyb3I7DQo+ID4g
+Kwljb25zdCBjaGFyICpuYW1lID0gIlN5bm9wc3lzIE1JSSBCdXMiOw0KPiANCj4gTmV0ZGV2IHVz
+ZXMgcmV2ZXJzZSBjaHJpc3RtYXNzIHRyZWUsIG1lYW5pbmcgeW91IG5lZWQgdG8gc29ydA0KPiB2
+YXJpYWJsZXMgbG9uZ2VzdCB0byBzaG9ydGVzdC4NCj4gDQo+IEknbSBhbHNvIHdvbmRlcmluZyBh
+Ym91dCB0aGUgbGlmZXRpbWUgb2YgbmFtZS4gbmFtZSBpdHNlbGYgaXMgYSBzdGFjaw0KPiB2YXJp
+YWJsZSwgc28gaXQgd2lsbCBkaXNhcHBlYXIgYXMgc29vbiBhcyB0aGUgZnVuY3Rpb24gZXhpdHMu
+IFRoZQ0KPiBzdHJpbmcgaXRzZWxmIGlzIGluIHRoZSByb2RhdGEgc2VjdGlvbi4gQnV0IGlzIGEg
+Y29weSBtYWRlIG9udG8gdGhlDQo+IHN0YWNrLCBvciBkb2VzIGJ1cy0+bmFtZSBwb2ludCB0byB0
+aGUgcm9kYXRhPw0KPiANCj4gICAgICAgIEFuZHJldw0KPiANCj4gPiAgCWJ1cyA9IG1kaW9idXNf
+YWxsb2MoKTsNCj4gPiAgCWlmICghYnVzKQ0KPiA+IEBAIC0xNDIsNyArMTQzLDcgQEAgaW50IGFy
+Y19tZGlvX3Byb2JlKHN0cnVjdCBhcmNfZW1hY19wcml2ICpwcml2KQ0KPiA+ICAJcHJpdi0+YnVz
+ID0gYnVzOw0KPiA+ICAJYnVzLT5wcml2ID0gcHJpdjsNCj4gPiAgCWJ1cy0+cGFyZW50ID0gcHJp
+di0+ZGV2Ow0KPiA+IC0JYnVzLT5uYW1lID0gIlN5bm9wc3lzIE1JSSBCdXMiOw0KPiA+ICsJYnVz
+LT5uYW1lID0gbmFtZTsNCj4gPiAgCWJ1cy0+cmVhZCA9ICZhcmNfbWRpb19yZWFkOw0KPiA+ICAJ
+YnVzLT53cml0ZSA9ICZhcmNfbWRpb193cml0ZTsNCj4gPiAgCWJ1cy0+cmVzZXQgPSAmYXJjX21k
+aW9fcmVzZXQ7DQo+ID4gQEAgLTE2Nyw3ICsxNjgsNyBAQCBpbnQgYXJjX21kaW9fcHJvYmUoc3Ry
+dWN0IGFyY19lbWFjX3ByaXYgKnByaXYpDQo+ID4gIAlpZiAoZXJyb3IpIHsNCj4gPiAgCQltZGlv
+YnVzX2ZyZWUoYnVzKTsNCj4gPiAgCQlyZXR1cm4gZGV2X2Vycl9wcm9iZShwcml2LT5kZXYsIGVy
+cm9yLA0KPiA+IC0JCQkJICAgICAiY2Fubm90IHJlZ2lzdGVyIE1ESU8gYnVzICVzXG4iLCBidXMt
+DQo+ID5uYW1lKTsNCj4gPiArCQkJCSAgICAgImNhbm5vdCByZWdpc3RlciBNRElPIGJ1cyAlc1xu
+IiwgbmFtZSk7DQo+ID4gIAl9DQo+ID4NCj4gPiAgCXJldHVybiAwOw0KPiA+IC0tDQo+ID4gMi4y
+NS4xDQo+ID4NCg==

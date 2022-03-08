@@ -2,190 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1C74D20B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F324D2090
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349847AbiCHSwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
+        id S1349731AbiCHSvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349796AbiCHSwT (ORCPT
+        with ESMTP id S236818AbiCHSvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:52:19 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CAD53E35;
-        Tue,  8 Mar 2022 10:51:22 -0800 (PST)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KCksD3Q1qz67NqQ;
-        Wed,  9 Mar 2022 02:49:52 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 19:51:20 +0100
-Received: from A2006125610.china.huawei.com (10.47.82.254) by
- lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 18:51:12 +0000
-From:   Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-To:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <alex.williamson@redhat.com>,
-        <jgg@nvidia.com>, <cohuck@redhat.com>, <mgurtovoy@nvidia.com>,
-        <yishaih@nvidia.com>, <kevin.tian@intel.com>,
-        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
-        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
-        <wangzhou1@hisilicon.com>
-Subject: [PATCH v9 9/9] hisi_acc_vfio_pci: Use its own PCI reset_done error handler
-Date:   Tue, 8 Mar 2022 18:49:02 +0000
-Message-ID: <20220308184902.2242-10-shameerali.kolothum.thodi@huawei.com>
-X-Mailer: git-send-email 2.12.0.windows.1
-In-Reply-To: <20220308184902.2242-1-shameerali.kolothum.thodi@huawei.com>
-References: <20220308184902.2242-1-shameerali.kolothum.thodi@huawei.com>
+        Tue, 8 Mar 2022 13:51:11 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD791532DF;
+        Tue,  8 Mar 2022 10:50:12 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id v28so26295389ljv.9;
+        Tue, 08 Mar 2022 10:50:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SneY3C6k+i+tAE4bYIFeBltj30CFVUtlAJP0X76PGMs=;
+        b=Oc+ybH2iM/E3szjxRpDlqRZ0RPJdg3vLArbdJ/1f4zhzT3NCMM+VC5A0zFBeemg1Uk
+         8qIaVi4b7hbjFK2qGGZeHmNnGFc/2LGQ0eOvfWyTle9Z+eRm85Nb7IAAQaiESHv7pSAY
+         LX0jLwEBJnYJb02I7hdQLtGaNPA8o1BCxnkBuBFVvvdlF6vnQbOwZN+yWxKKjcYoTKu8
+         q+PoQ2V+ieK5MX/LUeiNl3EM1ABm5TIsd9gKGMc0gI1s0wJTHEEd/F0jLp+37RFU9bnt
+         jHoxA9nTXQcQ06H5kaPIW/G73EMTe0NytBdTobh2+hUQl7qOMAEW1BnImdZXMEaYh2/T
+         Us5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SneY3C6k+i+tAE4bYIFeBltj30CFVUtlAJP0X76PGMs=;
+        b=ylOJc+MdSJV5eqDaH+zSo9gWurmZLYuIcTm0FFe4bN2osYoIHKhx1ewS7F0MwjqcNC
+         woQ9KW7PeSKnSXRmmRiY5E4U6jkR9y10R5YtA8K927CyJUMZsNiG3yx6BV3Xo42FNoBo
+         B8rxEc4hXR0A1JHtCcbYy5AUh8bqSdN4Pp1MjTodennB0eXplUfOfQdwrtpKea1/QzUk
+         0lLhCEgdvlfSFGx+PXzxW1r8NqRjLvxTjZn8Lo/sH/nMnV0cAVZaqvZMiTIFcq41KCcu
+         vB+r3a+p9id0qK3yLmKAMlNoqwwlViY+8AS7pvjADijCdCW2+HjrhuJa174GO/uJddFM
+         h8kQ==
+X-Gm-Message-State: AOAM530dbTky20w604u6L/RUEmLvDpctJhicN1Sym+C1QfaID+vkwOvZ
+        N96Fner1CLLbMuPG8Fw8UOk=
+X-Google-Smtp-Source: ABdhPJzejHvJpGQCNBwniqX1Z39Y4q5p6WkqwgCGxBRMBRGJAxa4N+frGPGB8cEIRvt4div2ZILMeg==
+X-Received: by 2002:a05:651c:11ca:b0:247:f32e:10ba with SMTP id z10-20020a05651c11ca00b00247f32e10bamr2552225ljo.208.1646765410593;
+        Tue, 08 Mar 2022 10:50:10 -0800 (PST)
+Received: from localhost.localdomain ([94.103.229.107])
+        by smtp.gmail.com with ESMTPSA id w10-20020ac2442a000000b0044835a52a08sm1066631lfl.163.2022.03.08.10.50.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 10:50:10 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     krzysztof.kozlowski@canonical.com, sameo@linux.intel.com,
+        thierry.escande@linux.intel.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
+Subject: [PATCH] NFC: port100: fix use-after-free in port100_send_complete
+Date:   Tue,  8 Mar 2022 21:50:07 +0300
+Message-Id: <20220308185007.6987-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.47.82.254]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register private handler for pci_error_handlers.reset_done and update
-state accordingly.
+Syzbot reported UAF in port100_send_complete(). The root case is in
+missing usb_kill_urb() calls on error handling path of ->probe function.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Longfang Liu <liulongfang@huawei.com>
-Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+port100_send_complete() accesses devm allocated memory which will be
+freed on probe failure. We should kill this urbs before returning an
+error from probe function to prevent reported use-after-free
+
+Fail log:
+
+BUG: KASAN: use-after-free in port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+Read of size 1 at addr ffff88801bb59540 by task ksoftirqd/2/26
+...
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+ __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1670
+
+...
+
+Allocated by task 1255:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+ alloc_dr drivers/base/devres.c:116 [inline]
+ devm_kmalloc+0x96/0x1d0 drivers/base/devres.c:823
+ devm_kzalloc include/linux/device.h:209 [inline]
+ port100_probe+0x8a/0x1320 drivers/nfc/port100.c:1502
+
+Freed by task 1255:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ __cache_free mm/slab.c:3437 [inline]
+ kfree+0xf8/0x2b0 mm/slab.c:3794
+ release_nodes+0x112/0x1a0 drivers/base/devres.c:501
+ devres_release_all+0x114/0x190 drivers/base/devres.c:530
+ really_probe+0x626/0xcc0 drivers/base/dd.c:670
+
+Reported-and-tested-by: syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
+Fixes: 0347a6ab300a ("NFC: port100: Commands mechanism implementation")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 ---
- .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 57 ++++++++++++++++++-
- .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  4 +-
- 2 files changed, 57 insertions(+), 4 deletions(-)
+ drivers/nfc/port100.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-index 51b814f4303b..767b5d47631a 100644
---- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-+++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-@@ -626,6 +626,27 @@ static void hisi_acc_vf_disable_fds(struct hisi_acc_vf_core_device *hisi_acc_vde
- 	}
- }
+diff --git a/drivers/nfc/port100.c b/drivers/nfc/port100.c
+index d7db1a0e6be1..00d8ea6dcb5d 100644
+--- a/drivers/nfc/port100.c
++++ b/drivers/nfc/port100.c
+@@ -1612,7 +1612,9 @@ static int port100_probe(struct usb_interface *interface,
+ 	nfc_digital_free_device(dev->nfc_digital_dev);
  
-+/*
-+ * This function is called in all state_mutex unlock cases to
-+ * handle a 'deferred_reset' if exists.
-+ */
-+static void
-+hisi_acc_vf_state_mutex_unlock(struct hisi_acc_vf_core_device *hisi_acc_vdev)
-+{
-+again:
-+	spin_lock(&hisi_acc_vdev->reset_lock);
-+	if (hisi_acc_vdev->deferred_reset) {
-+		hisi_acc_vdev->deferred_reset = false;
-+		spin_unlock(&hisi_acc_vdev->reset_lock);
-+		hisi_acc_vdev->vf_qm_state = QM_NOT_READY;
-+		hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_RUNNING;
-+		hisi_acc_vf_disable_fds(hisi_acc_vdev);
-+		goto again;
-+	}
-+	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	spin_unlock(&hisi_acc_vdev->reset_lock);
-+}
-+
- static void hisi_acc_vf_start_device(struct hisi_acc_vf_core_device *hisi_acc_vdev)
- {
- 	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-@@ -922,7 +943,7 @@ hisi_acc_vfio_pci_set_device_state(struct vfio_device *vdev,
- 			break;
- 		}
- 	}
--	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
- 	return res;
- }
+ error:
++	usb_kill_urb(dev->in_urb);
+ 	usb_free_urb(dev->in_urb);
++	usb_kill_urb(dev->out_urb);
+ 	usb_free_urb(dev->out_urb);
+ 	usb_put_dev(dev->udev);
  
-@@ -935,10 +956,35 @@ hisi_acc_vfio_pci_get_device_state(struct vfio_device *vdev,
- 
- 	mutex_lock(&hisi_acc_vdev->state_mutex);
- 	*curr_state = hisi_acc_vdev->mig_state;
--	mutex_unlock(&hisi_acc_vdev->state_mutex);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
- 	return 0;
- }
- 
-+static void hisi_acc_vf_pci_aer_reset_done(struct pci_dev *pdev)
-+{
-+	struct hisi_acc_vf_core_device *hisi_acc_vdev = dev_get_drvdata(&pdev->dev);
-+
-+	if (hisi_acc_vdev->core_device.vdev.migration_flags !=
-+				VFIO_MIGRATION_STOP_COPY)
-+		return;
-+
-+	/*
-+	 * As the higher VFIO layers are holding locks across reset and using
-+	 * those same locks with the mm_lock we need to prevent ABBA deadlock
-+	 * with the state_mutex and mm_lock.
-+	 * In case the state_mutex was taken already we defer the cleanup work
-+	 * to the unlock flow of the other running context.
-+	 */
-+	spin_lock(&hisi_acc_vdev->reset_lock);
-+	hisi_acc_vdev->deferred_reset = true;
-+	if (!mutex_trylock(&hisi_acc_vdev->state_mutex)) {
-+		spin_unlock(&hisi_acc_vdev->reset_lock);
-+		return;
-+	}
-+	spin_unlock(&hisi_acc_vdev->reset_lock);
-+	hisi_acc_vf_state_mutex_unlock(hisi_acc_vdev);
-+}
-+
- static int hisi_acc_vf_qm_init(struct hisi_acc_vf_core_device *hisi_acc_vdev)
- {
- 	struct vfio_pci_core_device *vdev = &hisi_acc_vdev->core_device;
-@@ -1259,12 +1305,17 @@ static const struct pci_device_id hisi_acc_vfio_pci_table[] = {
- 
- MODULE_DEVICE_TABLE(pci, hisi_acc_vfio_pci_table);
- 
-+static const struct pci_error_handlers hisi_acc_vf_err_handlers = {
-+	.reset_done = hisi_acc_vf_pci_aer_reset_done,
-+	.error_detected = vfio_pci_core_aer_err_detected,
-+};
-+
- static struct pci_driver hisi_acc_vfio_pci_driver = {
- 	.name = KBUILD_MODNAME,
- 	.id_table = hisi_acc_vfio_pci_table,
- 	.probe = hisi_acc_vfio_pci_probe,
- 	.remove = hisi_acc_vfio_pci_remove,
--	.err_handler = &vfio_pci_core_err_handlers,
-+	.err_handler = &hisi_acc_vf_err_handlers,
- };
- 
- module_pci_driver(hisi_acc_vfio_pci_driver);
-diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
-index 1c7d75408790..5494f4983bbe 100644
---- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
-+++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
-@@ -98,6 +98,7 @@ struct hisi_acc_vf_migration_file {
- 
- struct hisi_acc_vf_core_device {
- 	struct vfio_pci_core_device core_device;
-+	u8 deferred_reset:1;
- 	/* for migration state */
- 	struct mutex state_mutex;
- 	enum vfio_device_mig_state mig_state;
-@@ -107,7 +108,8 @@ struct hisi_acc_vf_core_device {
- 	struct hisi_qm vf_qm;
- 	u32 vf_qm_state;
- 	int vf_id;
--
-+	/* for reset handler */
-+	spinlock_t reset_lock;
- 	struct hisi_acc_vf_migration_file *resuming_migf;
- 	struct hisi_acc_vf_migration_file *saving_migf;
- };
 -- 
-2.25.1
+2.35.1
 

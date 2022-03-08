@@ -2,126 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B8F4D19E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B13F4D19E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347264AbiCHOAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S1347314AbiCHOAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347302AbiCHOAF (ORCPT
+        with ESMTP id S1347289AbiCHOAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:00:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2FB1A81A;
-        Tue,  8 Mar 2022 05:58:58 -0800 (PST)
-Date:   Tue, 08 Mar 2022 13:58:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646747936;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pMl034rKP4KtUY285VK2E6QJXRhnqapuqE6b3KEw77U=;
-        b=OuoNm45+FXMY2UTHFPsi1R/xlVnz5iCdQY7U55DRTAb/SZvD4Y52OpSydXmIHGblCCKMP+
-        KzmvRZvgRSSBFlj6qUV+fxVwdnC+bNSFIis38nSBmwEPIpnru1aIRksBx7Yzgi+SWYzMbS
-        q4mr81RLlvYjbRVv2V3UaNgZG4U/qrItwCJC/27LEGG6guGXRgDQhv47RXrgid51idaOXc
-        Ck37OqDPTmfTcfWfksEaWpW2iZAkO1AxpQlijNLAZjh3zGzYhe3C8kBBhlAsB7lFVlFznZ
-        592SoEy31cLmDralu3hQNlHq1SHUMlI2/0LPzcP8QWhnReZi2bIsS0xNgvTAyg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646747936;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pMl034rKP4KtUY285VK2E6QJXRhnqapuqE6b3KEw77U=;
-        b=1q4a2o1+w6yJb76iN1PLkJP0vJGIIqIhdm1LUBVZaJdNf1Zx7Cscd2Bvsab8NeQjTB0eBR
-        LtYAExP2CwTf2DCg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/module: Fix the paravirt vs alternative order
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Miroslav Benes <mbenes@suse.cz>,
-        <stable@vger.kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220303112825.068773913@infradead.org>
-References: <20220303112825.068773913@infradead.org>
+        Tue, 8 Mar 2022 09:00:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19FD47060
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:59:10 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nRaMd-0006Ky-T2; Tue, 08 Mar 2022 14:58:59 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nRaMd-004h7h-2y; Tue, 08 Mar 2022 14:58:59 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v5 1/1] net: dsa: microchip: ksz9477: implement MTU configuration
+Date:   Tue,  8 Mar 2022 14:58:57 +0100
+Message-Id: <20220308135857.1119028-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Message-ID: <164674793535.16921.13542564445645377142.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+This chips supports two ways to configure max MTU size:
+- by setting SW_LEGAL_PACKET_DISABLE bit: if this bit is 0 allowed packed size
+  will be between 64 and bytes 1518. If this bit is 1, it will accept
+  packets up to 2000 bytes.
+- by setting SW_JUMBO_PACKET bit. If this bit is set, the chip will
+  ignore SW_LEGAL_PACKET_DISABLE value and use REG_SW_MTU__2 register to
+  configure MTU size.
 
-Commit-ID:     5adf349439d29f92467e864f728dfc23180f3ef9
-Gitweb:        https://git.kernel.org/tip/5adf349439d29f92467e864f728dfc23180f3ef9
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 03 Mar 2022 12:23:23 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 08 Mar 2022 14:15:25 +01:00
+Current driver has disabled SW_JUMBO_PACKET bit and activates
+SW_LEGAL_PACKET_DISABLE. So the switch will pass all packets up to 2000 without
+any way to configure it.
 
-x86/module: Fix the paravirt vs alternative order
+By providing port_change_mtu we are switch to SW_JUMBO_PACKET way and will
+be able to configure MTU up to ~9000.
 
-Ever since commit
-
-  4e6292114c74 ("x86/paravirt: Add new features for paravirt patching")
-
-there is an ordering dependency between patching paravirt ops and
-patching alternatives, the module loader still violates this.
-
-Fixes: 4e6292114c74 ("x86/paravirt: Add new features for paravirt patching")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220303112825.068773913@infradead.org
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 ---
- arch/x86/kernel/module.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+changes v5:
+- Nitpick: ETH_HLEN + VLAN_HLEN == VLAN_ETH_HLEN.
+changes v4:
+- fix MTU for VLAN
+changes v3:
+- do more testing and fix mtu configuration
+changes v2:
+- rename max_mtu to max_frame and new_mtu to frame_size
+- use max() instead of if(>)
+---
+ drivers/net/dsa/microchip/ksz9477.c     | 36 +++++++++++++++++++++++--
+ drivers/net/dsa/microchip/ksz9477_reg.h |  3 +++
+ drivers/net/dsa/microchip/ksz_common.h  |  1 +
+ 3 files changed, 38 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index 95fa745..96d7c27 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -273,6 +273,14 @@ int module_finalize(const Elf_Ehdr *hdr,
- 			retpolines = s;
- 	}
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index 94ad6d9504f4..a4699481c746 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -11,6 +11,7 @@
+ #include <linux/platform_data/microchip-ksz.h>
+ #include <linux/phy.h>
+ #include <linux/if_bridge.h>
++#include <linux/if_vlan.h>
+ #include <net/dsa.h>
+ #include <net/switchdev.h>
  
-+	/*
-+	 * See alternative_instructions() for the ordering rules between the
-+	 * various patching types.
-+	 */
-+	if (para) {
-+		void *pseg = (void *)para->sh_addr;
-+		apply_paravirt(pseg, pseg + para->sh_size);
-+	}
- 	if (retpolines) {
- 		void *rseg = (void *)retpolines->sh_addr;
- 		apply_retpolines(rseg, rseg + retpolines->sh_size);
-@@ -290,11 +298,6 @@ int module_finalize(const Elf_Ehdr *hdr,
- 					    tseg, tseg + text->sh_size);
- 	}
+@@ -182,6 +183,29 @@ static void ksz9477_port_cfg32(struct ksz_device *dev, int port, int offset,
+ 			   bits, set ? bits : 0);
+ }
  
--	if (para) {
--		void *pseg = (void *)para->sh_addr;
--		apply_paravirt(pseg, pseg + para->sh_size);
--	}
--
- 	/* make jump label nops */
- 	jump_label_apply_nops(me);
++static int ksz9477_change_mtu(struct dsa_switch *ds, int port, int mtu)
++{
++	struct ksz_device *dev = ds->priv;
++	u16 frame_size, max_frame = 0;
++	int i;
++
++	frame_size = mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
++
++	/* Cache the per-port MTU setting */
++	dev->ports[port].max_frame = frame_size;
++
++	for (i = 0; i < dev->port_cnt; i++)
++		max_frame = max(max_frame, dev->ports[i].max_frame);
++
++	return regmap_update_bits(dev->regmap[1], REG_SW_MTU__2,
++				  REG_SW_MTU_MASK, max_frame);
++}
++
++static int ksz9477_max_mtu(struct dsa_switch *ds, int port)
++{
++	return KSZ9477_MAX_FRAME_SIZE - VLAN_ETH_HLEN - ETH_FCS_LEN;
++}
++
+ static int ksz9477_wait_vlan_ctrl_ready(struct ksz_device *dev)
+ {
+ 	unsigned int val;
+@@ -1416,8 +1440,14 @@ static int ksz9477_setup(struct dsa_switch *ds)
+ 	/* Do not work correctly with tail tagging. */
+ 	ksz_cfg(dev, REG_SW_MAC_CTRL_0, SW_CHECK_LENGTH, false);
  
+-	/* accept packet up to 2000bytes */
+-	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_LEGAL_PACKET_DISABLE, true);
++	/* Enable REG_SW_MTU__2 reg by setting SW_JUMBO_PACKET */
++	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_JUMBO_PACKET, true);
++
++	/* Now we can configure default MTU value */
++	ret = regmap_update_bits(dev->regmap[1], REG_SW_MTU__2, REG_SW_MTU_MASK,
++				 VLAN_ETH_FRAME_LEN + ETH_FCS_LEN);
++	if (ret)
++		return ret;
+ 
+ 	ksz9477_config_cpu_port(ds);
+ 
+@@ -1464,6 +1494,8 @@ static const struct dsa_switch_ops ksz9477_switch_ops = {
+ 	.port_mirror_add	= ksz9477_port_mirror_add,
+ 	.port_mirror_del	= ksz9477_port_mirror_del,
+ 	.get_stats64		= ksz9477_get_stats64,
++	.port_change_mtu	= ksz9477_change_mtu,
++	.port_max_mtu		= ksz9477_max_mtu,
+ };
+ 
+ static u32 ksz9477_get_port_addr(int port, int offset)
+diff --git a/drivers/net/dsa/microchip/ksz9477_reg.h b/drivers/net/dsa/microchip/ksz9477_reg.h
+index 16939f29faa5..0bd58467181f 100644
+--- a/drivers/net/dsa/microchip/ksz9477_reg.h
++++ b/drivers/net/dsa/microchip/ksz9477_reg.h
+@@ -176,6 +176,7 @@
+ #define REG_SW_MAC_ADDR_5		0x0307
+ 
+ #define REG_SW_MTU__2			0x0308
++#define REG_SW_MTU_MASK			GENMASK(13, 0)
+ 
+ #define REG_SW_ISP_TPID__2		0x030A
+ 
+@@ -1662,4 +1663,6 @@
+ /* 148,800 frames * 67 ms / 100 */
+ #define BROADCAST_STORM_VALUE		9969
+ 
++#define KSZ9477_MAX_FRAME_SIZE		9000
++
+ #endif /* KSZ9477_REGS_H */
+diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+index 4ff0a159ce3c..fa39ee73cbd2 100644
+--- a/drivers/net/dsa/microchip/ksz_common.h
++++ b/drivers/net/dsa/microchip/ksz_common.h
+@@ -41,6 +41,7 @@ struct ksz_port {
+ 
+ 	struct ksz_port_mib mib;
+ 	phy_interface_t interface;
++	u16 max_frame;
+ };
+ 
+ struct ksz_device {
+-- 
+2.30.2
+

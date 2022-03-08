@@ -2,185 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5A74D184F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5B54D1856
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343866AbiCHMwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
+        id S1346697AbiCHMxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiCHMwC (ORCPT
+        with ESMTP id S230080AbiCHMx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:52:02 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BCD28E37;
-        Tue,  8 Mar 2022 04:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RbBhkEsbvTvptnfwlTOsXGndnEtIWgBz6ZagA4q8H14=; b=qpU0luH1xsaBXRv5/arXaQzZT0
-        Cl/+han+6yS0Qy6GTJkO30rwQ7DeH5TW0x2z1PeM/oHUfbvO2U2c9kHip8cvr7NNYPTl0rwxuXavt
-        +6JE4KXwSN3tzxjpWm7GqzJlwUoSbVn6Oya5cWbBVAdtlLy1LEboTXpQCcbVURcQ5IniETgOwqxU7
-        vPo/bqDWY59wgKHtlLL/DExUsUwLSi0Z7p/mzR5GCI0fv/I4Mlscf+2vpuzCy7G4oobKb02HUs7b7
-        5mDlvgjE9My5XDjMEc+AiODpvkOxerEgzAtL2IzykpemzsbH0k760/3RUxO2ojJMUj8LS+2RkZhtY
-        Y9cOwyRw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRZIK-00GSqL-Vq; Tue, 08 Mar 2022 12:50:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5AB10300261;
-        Tue,  8 Mar 2022 13:50:26 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EDECA203A88DC; Tue,  8 Mar 2022 13:50:25 +0100 (CET)
-Date:   Tue, 8 Mar 2022 13:50:25 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Wen Yang <wenyang@linux.alibaba.com>
-Cc:     Wen Yang <simon.wy@alibaba-inc.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephane Eranian <eranian@google.com>,
-        mark rutland <mark.rutland@arm.com>,
-        jiri olsa <jolsa@redhat.com>,
-        namhyung kim <namhyung@kernel.org>,
-        borislav petkov <bp@alien8.de>, x86@kernel.org,
-        "h. peter anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 2/2] perf/x86: improve the event scheduling to
- avoid unnecessary pmu_stop/start
-Message-ID: <YidREXNn2AtI3V1c@hirez.programming.kicks-ass.net>
-References: <20220304110351.47731-1-simon.wy@alibaba-inc.com>
- <20220304110351.47731-2-simon.wy@alibaba-inc.com>
- <YiIyrFn7upPEouVt@hirez.programming.kicks-ass.net>
- <0c119da1-053b-a2d6-1579-8fb09dbe8e63@linux.alibaba.com>
+        Tue, 8 Mar 2022 07:53:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF99E1E;
+        Tue,  8 Mar 2022 04:52:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36C67B818B1;
+        Tue,  8 Mar 2022 12:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCB0C340EB;
+        Tue,  8 Mar 2022 12:52:26 +0000 (UTC)
+Message-ID: <c4368e33-f6bf-5810-85cb-cd31359a42f7@xs4all.nl>
+Date:   Tue, 8 Mar 2022 13:52:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c119da1-053b-a2d6-1579-8fb09dbe8e63@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] media: av7110: av7110_av: Fix Switch and Case Same Indent
+ Style Error
+Content-Language: en-US
+To:     Ahamed Husni <ahamedhusni73@gmail.com>
+Cc:     mchehab@kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220225155622.585621-1-ahamedhusni73@gmail.com>
+ <818eb53d-0ca5-d0dc-4a06-37615a5c4c3b@xs4all.nl>
+ <CAFjpAKpyDeEKvA9TEK0KbKVHFN8KSMDZKF=L2Azq_7cuAhHH4A@mail.gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <CAFjpAKpyDeEKvA9TEK0KbKVHFN8KSMDZKF=L2Azq_7cuAhHH4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 10:36:38PM +0800, Wen Yang wrote:
+On 3/8/22 13:50, Ahamed Husni wrote:
+> Hello Hans,
+> 
+> On Mon, Mar 7, 2022 at 12:58 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>>
+>> Hi Husni,
+>>
+>> Thank you for the patch.
+>>
+>> The Subject line needs some work: either name the source ('av7110_av.c:') or
+>> driver ('av7110:'), but not both. Also just stick to lower case, so:
+>> "media: av7110_av.c: fix switch indentation"
+>>
+>> That gives all the relevant information, and is a lot shorter.
+> Noted with thanks. I'll update the subject line in the V2 of the patch.
+> 
+>>
+>> On 2/25/22 16:56, Husni Faiz wrote:
+>>> This patch fixes "switch and case should be at the same indent"
+>>> checkpatch error.
+>>>
+>>> Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
+>>> ---
+>>>  drivers/staging/media/av7110/av7110_av.c | 30 ++++++++++++------------
+>>>  1 file changed, 15 insertions(+), 15 deletions(-)
+>>>
+>>> diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
+>>> index 91f4866c7e59..1d42862e9669 100644
+>>> --- a/drivers/staging/media/av7110/av7110_av.c
+>>> +++ b/drivers/staging/media/av7110/av7110_av.c
+>>> @@ -770,22 +770,22 @@ static void p_to_t(u8 const *buf, long int length, u16 pid, u8 *counter,
+>>>       if (length > 3 &&
+>>>            buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
+>>>               switch (buf[3]) {
+>>> -                     case PROG_STREAM_MAP:
+>>> -                     case PRIVATE_STREAM2:
+>>> -                     case PROG_STREAM_DIR:
+>>> -                     case ECM_STREAM     :
+>>> -                     case EMM_STREAM     :
+>>> -                     case PADDING_STREAM :
+>>> -                     case DSM_CC_STREAM  :
+>>> -                     case ISO13522_STREAM:
+>>> -                     case PRIVATE_STREAM1:
+>>> -                     case AUDIO_STREAM_S ... AUDIO_STREAM_E:
+>>> -                     case VIDEO_STREAM_S ... VIDEO_STREAM_E:
+>>> -                             pes_start = 1;
+>>> -                             break;
+>>> +             case PROG_STREAM_MAP:
+>>> +             case PRIVATE_STREAM2:
+>>> +             case PROG_STREAM_DIR:
+>>> +             case ECM_STREAM     :
+>>> +             case EMM_STREAM     :
+>>> +             case PADDING_STREAM :
+>>> +             case DSM_CC_STREAM  :
+>>> +             case ISO13522_STREAM:
+>>> +             case PRIVATE_STREAM1:
+>>> +             case AUDIO_STREAM_S ... AUDIO_STREAM_E:
+>>> +             case VIDEO_STREAM_S ... VIDEO_STREAM_E:
+>>> +                     pes_start = 1;
+>>> +                     break;
+>>>
+>>> -                     default:
+>>> -                             break;
+>>> +             default:
+>>> +                     break;
+>>>               }
+>>>
+>>>       while (c < length) {
+>>
+>> Running checkpatch.pl over this patch give me:
+>>
+>> ERROR: space prohibited before that ':' (ctx:WxE)
+>> #40: FILE: drivers/staging/media/av7110/av7110_av.c:776:
+>> +               case ECM_STREAM     :
+>>                                     ^
+>>
+>> ERROR: space prohibited before that ':' (ctx:WxE)
+>> #41: FILE: drivers/staging/media/av7110/av7110_av.c:777:
+>> +               case EMM_STREAM     :
+>>                                     ^
+>>
+>> ERROR: space prohibited before that ':' (ctx:WxE)
+>> #42: FILE: drivers/staging/media/av7110/av7110_av.c:778:
+>> +               case PADDING_STREAM :
+>>                                     ^
+>>
+>> ERROR: space prohibited before that ':' (ctx:WxE)
+>> #43: FILE: drivers/staging/media/av7110/av7110_av.c:779:
+>> +               case DSM_CC_STREAM  :
+>>                                     ^
+>> Can you fix that as well in a v2 of this patch?
+> It seems that these spaces are deliberately added by the author to
+> keep the case statements' colons aligned.
+> Some other lines in the file where the same approach has been taken
+> are [line 598,599,600,601] and [line 662, 663, 664, 665].
+> Should we leave these spaces as it is?
 
-> The perf event generated by the above script A (cycles:D), and the counter
-> it used changes from #1 to #3. We use perf event in pinned mode, and then
-> continuously read its value for a long time, but its PMU counter changes
+Either just fix it here, or post a second patch that removes the spaces
+throughout this driver. It's a very old driver, predating the much more
+strict enforcement of coding style that we have today.
 
-Yes, so what?
+Regards,
 
->, so the counter value will also jump.
-
-I fail to see how the counter value will jump when we reprogram the
-thing. When we stop we update the value, then reprogram on another
-counter and continue. So where does it go sideways?
+	Hans
 
 > 
-> 0xffff88b72db85800:
-> The perf event generated by the above script A (instructions:D), which has
-> always occupied #fixed_instruction.
-> 
-> 0xffff88bf46c34000, 0xffff88bf46c35000, 0xffff88bf46c30000:
-> Theses perf events are generated by the above script B.
-> 
-> 
-> > > 
-> > > so it will cause unnecessary pmu_stop/start and also cause abnormal cpi.
-> > 
-> > How?!?
-> > 
-> 
-> We may refer to the x86_pmu_enable function:
-> step1: save events moving to new counters
-> step2: reprogram moved events into new counters
-> 
-> especially:
-> 
-> static inline int match_prev_assignment(struct hw_perf_event *hwc,
->                     struct cpu_hw_events *cpuc,
->                     int i)
-> {
->     return hwc->idx == cpuc->assign[i] &&
->         hwc->last_cpu == smp_processor_id() &&
->         hwc->last_tag == cpuc->tags[i];
-> }
+> Thanks,
+> Husni.
 
-I'm not seeing an explanation for how a counter value is not preserved.
-
-> > > Cloud servers usually continuously monitor the cpi data of some important
-> > > services. This issue affects performance and misleads monitoring.
-> > > 
-> > > The current event scheduling algorithm is more than 10 years old:
-> > > commit 1da53e023029 ("perf_events, x86: Improve x86 event scheduling")
-> > 
-> > irrelevant
-> > 
-> 
-> commit 1da53e023029 ("perf_events, x86: Improve x86 event scheduling")
-> 
-> This commit is the basis of the perf event scheduling algorithm we currently
-> use.
-
-Well yes. But how is the age of it relevant?
-
-> The reason why the counter above changed from #1 to #3 can be found from it:
-> The algorithm takes into account the list of counter constraints
-> for each event. It assigns events to counters from the most
-> constrained, i.e., works on only one counter, to the least
-> constrained, i.e., works on any counter.
-> 
-> the nmi watchdog permanently consumes one fp (*cycles*).
->  therefore, when the above shell script obtains *cycles:D*
-> again, it has to use a GP, and its weight is 5.
-> but other events (like *cache-misses*) have a weight of 4,
-> so the counter used by *cycles:D* will often be taken away.
-
-So what?
-
-I mean, it is known the algorithm isn't optimal, but at least it's
-bounded. There are event sets that will fail to schedule but could, but
-I don't think you're talking about that.
-
-Event migrating to a different counter is not a problem. This is
-expected and normal. Code *must* be able to deal with it.
-
-> In addition, we also found that this problem may affect NMI watchdog in the
-> production cluster.
-> The NMI watchdog also uses a fixed counter in fixed mode. Usually, it is The
-> first element of the event_list array, so it usually takes precedence and
-> can get a fixed counter.
-> But if the administrator closes the watchdog first and then enables it, it
-> may be at the end of the event_list array, so its expected fixed counter may
-> be occupied by other perf event, and it can only use one GP. In this way,
-> there is a similar issue here: the PMU counter used by the NMI watchdog may
-> be disabled/enabled frequently and unnecessarily.
-
-Again, I'm not seeing a problem. If you create more events than we have
-hardware counters we'll rotate the list and things will get scheduled in
-all sorts of order. This works.
-
-> Any advice or guidance on this would be appreciated.
-
-I'm still not sure what your actual problem is; I suspect you're using
-perf wrong.
-
-Are you using rdpmc and not respecting the scheme described in
-include/uapi/linux/perf_events.h:perf_event_mmap_page ?
-
-Note that if you're using pinned counters you can simplify that scheme
-by ignoring all the timekeeping nonsense. In that case it does become
-significantly simpler/faster.
-
-But you cannot use rdpmc without using the mmap page's self-monitoring
-data.

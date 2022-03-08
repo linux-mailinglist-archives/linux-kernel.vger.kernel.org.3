@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F334B4D2110
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355E64D2119
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350038AbiCHTLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S1350000AbiCHTLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349940AbiCHTKw (ORCPT
+        with ESMTP id S1350008AbiCHTLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:10:52 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B922C4EA30
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:09:36 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id s18so4708285plp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:09:36 -0800 (PST)
+        Tue, 8 Mar 2022 14:11:01 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0043054F84
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:09:43 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id m22so254904pja.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:09:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=geOsN3B5D2pajGUjtYVHTo7ODDoeZA/dXvJuvUQtYe4=;
-        b=bA+VT4I9ZxfwZ8yFKGSlTUtH+qIbs57S7WdlvHPPy9xMoPV+tbezSe48mUgDGXO0JP
-         Hp/Cm5ngjF3p2FemiNiZ6A8b8CMOH1tPZ8pHWrIbUOyVU8zR9eJFxO8vTsMz38V1S9pg
-         6BensZKMWCk8fclI4SFiey5MXSZMXswKXead8=
+        bh=rU/WmKtGF4aym/wTFIaRDtTDG4TLl/BdBtfttgE23Ag=;
+        b=oH6Lb4C7wN+4PXA4AMFBLg1g7tpjNkcmBS7cOkvTu1Qh8GlHc70gL16oz6kqhTCB/o
+         DSFQ8/BGrli+yzLSqGuwRyi04qDNkafr2OUHUXVZNDUSONY9iOcQbbPyF9f8r7Wo874e
+         rGxcXSu7FkrKdaMFcCOhe5PVUZ89AloSWfI+U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=geOsN3B5D2pajGUjtYVHTo7ODDoeZA/dXvJuvUQtYe4=;
-        b=TsGJbalb8opaMNQnQSbRwP+G3DSOJ8UlvwHYT858pSACowM0dIlCPQHilGBvBJ2IhI
-         MN/8MfG4hW1uDxoNnDKBUSI0r4leuz4eA+WR7ofiyqhyzChrNyqhdaIfs/CN5eRsdmbp
-         QTxlFWBMKRUEe+BnEmL17l65pefBUfH/aUQgRaeMnM+b7y6PQMGP23oV9U/zexi8oDTQ
-         oGMxZYuAb4kQ43Yk9GA7HDSf8nuZcAKkPPyv3MzlxUWaFPu/Aj7uRsUaAnJwlyMsP31g
-         EuHt8kKRhoJ/mAEkO3pa3VrDN3YEJV3hxF4K0JiOZ5cfzijp67TQTs6vn+djc8W66sGH
-         znOg==
-X-Gm-Message-State: AOAM533Wp6s8rrevDiTKxC43+vZf2bBYzmCjhmF+A47gxwjF0eFCFswi
-        PJ1cOpINhTHMzV0N0hRnZ+4jqg==
-X-Google-Smtp-Source: ABdhPJz8sipP4o8OnOtzeYNcbMuAl0E8BVURef/sTsMInT3tF3+6fRadwtzliY/mkiCrGLMnIopp0A==
-X-Received: by 2002:a17:90a:db96:b0:1bf:a7c9:9571 with SMTP id h22-20020a17090adb9600b001bfa7c99571mr326788pjv.173.1646766576051;
-        Tue, 08 Mar 2022 11:09:36 -0800 (PST)
+        bh=rU/WmKtGF4aym/wTFIaRDtTDG4TLl/BdBtfttgE23Ag=;
+        b=yz1xlS1WhE+n989FRcirDdum67aJx4C2npeGL8nZsLYmpXrio+1cRxzL4c6VA6Au8A
+         VmC73k2vuT1d7jA4Ornk58y05irysk5OQdrWwM+K6igIf47idSCPEAT1wP0FDwy+JiRy
+         KqPqefksNotVHRbXNX47R+0+SkGE72hQnTyGZ2l3f3FzSOWz4hHF7nhVORRUUWKNcnMn
+         S2dQIjfP7kq2HZLLBlr3IPZ5TyGtUE7zetzN4tmp8l4jYhlC3ygvQje0+MQj4HYSrK2V
+         8kdJYbshYFr3wPQ2fQa4RojfhlflzsrBthuMVFL1RbHB9/6khTfACXQY4AgdROKF8aI3
+         qjGQ==
+X-Gm-Message-State: AOAM530EwK4xpxEx5CGbbTJYKvVfqqrQJXNgFwptprXqYOiU9Dov4jeC
+        xWGT5voXCx54ZMd6r7PJiQG1Ug==
+X-Google-Smtp-Source: ABdhPJxP7h3r4ZhYwF9gzeIS3Qt9XY3Q9Ckm0p/4qOD97gRHmVDVuTqt3ovo1DJe6sYtWI+bsN95Jg==
+X-Received: by 2002:a17:902:7049:b0:151:e52e:ae42 with SMTP id h9-20020a170902704900b00151e52eae42mr13007318plt.118.1646766578783;
+        Tue, 08 Mar 2022 11:09:38 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:b3e3:a188:cbfc:3a0e])
-        by smtp.gmail.com with UTF8SMTPSA id j11-20020a056a00234b00b004f7463022absm215258pfj.208.2022.03.08.11.09.34
+        by smtp.gmail.com with UTF8SMTPSA id d5-20020a17090acd0500b001b9c05b075dsm3563983pju.44.2022.03.08.11.09.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 11:09:35 -0800 (PST)
+        Tue, 08 Mar 2022 11:09:38 -0800 (PST)
 From:   Brian Norris <briannorris@chromium.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -59,9 +59,9 @@ Cc:     Derek Basehore <dbasehore@chromium.org>,
         =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@collabora.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v4 11/15] arm64: dts: rk3399: Add dfi and dmc nodes
-Date:   Tue,  8 Mar 2022 11:08:57 -0800
-Message-Id: <20220308110825.v4.11.Ie97993621975c5463d7928a8646f3737c9f2921d@changeid>
+Subject: [PATCH v4 12/15] arm64: dts: rockchip: Enable dmc and dfi nodes on gru
+Date:   Tue,  8 Mar 2022 11:08:58 -0800
+Message-Id: <20220308110825.v4.12.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 In-Reply-To: <20220308190901.3144566-1-briannorris@chromium.org>
 References: <20220308190901.3144566-1-briannorris@chromium.org>
@@ -80,62 +80,167 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lin Huang <hl@rock-chips.com>
 
-These are required to support DDR DVFS on RK3399 platforms.
+Enable the DMC (Dynamic Memory Controller) and the DFI (DDR PHY
+Interface) nodes on gru boards so we can support DDR DVFS.
 
 Signed-off-by: Lin Huang <hl@rock-chips.com>
 Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 Signed-off-by: Gaël PORTAY <gael.portay@collabora.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Brian Norris <briannorris@chromium.org>
-Change since Daniel's posting: reordered by unit address, per existing
-style
-
 ---
 
 (no changes since v2)
 
 Changes in v2:
- - rename dmc to memory-controller
+ - Adapt to new properties
 
 Changes in v1:
-This is based on a v5 posting from various authors:
-https://lore.kernel.org/lkml/20210308233858.24741-3-daniel.lezcano@linaro.org/
-Much of that series was already merged, so I start over with the
-numbering.
+This was part of a previous series, at:
+https://lore.kernel.org/r/20210308233858.24741-3-daniel.lezcano@linaro.org
+I've picked up a bunch of changes and fixes, so I've restarted the patch
+series numbering. Updates since the old series:
+ - reordered alphabetically by phandle name, per style
+ - drop a ton of deprecated/unused properties
+ - add required center-supply for scarlet
+ - add new *_idle_dis_freq properties
+ - drop the lowest (200 MHz) OPP; this was never stabilized for
+   production
+ - bump the voltage (0.9V -> 0.925V) for the highest OPP on Chromebook
+   models; later (tablet) models were more stable, with a fixed DDR
+   regulator
+ - bump odt_dis_freq to 666 MHz; early versions used 333 MHz, but
+   stabilization efforts landed on 666 MHz for production
 
- arch/arm64/boot/dts/rockchip/rk3399.dtsi | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  7 +++++
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi | 12 ++++++++
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  | 28 +++++++++++++++++++
+ .../boot/dts/rockchip/rk3399-op1-opp.dtsi     | 25 +++++++++++++++++
+ 4 files changed, 72 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 080457a68e3c..9065bb55ee7d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -1295,6 +1295,25 @@ pwm3: pwm@ff420030 {
- 		status = "disabled";
- 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+index 3355fb90fa54..50d459ee4831 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+@@ -234,6 +234,13 @@ &cdn_dp {
+ 	extcon = <&usbc_extcon0>, <&usbc_extcon1>;
+ };
  
-+	dfi: dfi@ff630000 {
-+		reg = <0x00 0xff630000 0x00 0x4000>;
-+		compatible = "rockchip,rk3399-dfi";
-+		rockchip,pmu = <&pmugrf>;
-+		interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru PCLK_DDR_MON>;
-+		clock-names = "pclk_ddr_mon";
-+		status = "disabled";
-+	};
++&dmc {
++	center-supply = <&ppvar_centerlogic>;
++	rockchip,pd-idle-dis-freq-hz = <800000000>;
++	rockchip,sr-idle-dis-freq-hz = <800000000>;
++	rockchip,sr-mc-gate-idle-dis-freq-hz = <800000000>;
++};
 +
-+	dmc: memory-controller {
-+		compatible = "rockchip,rk3399-dmc";
-+		rockchip,pmu = <&pmugrf>;
-+		devfreq-events = <&dfi>;
-+		clocks = <&cru SCLK_DDRC>;
-+		clock-names = "dmc_clk";
-+		status = "disabled";
-+	};
+ &edp {
+ 	status = "okay";
+ 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+index a9817b3d7edc..913d845eb51a 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+@@ -391,6 +391,18 @@ &cru {
+ 		<400000000>;
+ };
+ 
++/* The center supply is fixed to .9V on scarlet */
++&dmc {
++	center-supply = <&pp900_s0>;
++};
 +
- 	vpu: video-codec@ff650000 {
- 		compatible = "rockchip,rk3399-vpu";
- 		reg = <0x0 0xff650000 0x0 0x800>;
++/* We don't need .925 V for 928 MHz on scarlet */
++&dmc_opp_table {
++	opp03 {
++		opp-microvolt = <900000>;
++	};
++};
++
+ &gpio0 {
+ 	gpio-line-names = /* GPIO0 A 0-7 */
+ 			  "CLK_32K_AP",
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
+index 162f08bca0d4..23bfba86daab 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
+@@ -373,6 +373,34 @@ &cru {
+ 		<200000000>;
+ };
+ 
++&dfi {
++	status = "okay";
++};
++
++&dmc {
++	status = "okay";
++
++	rockchip,pd-idle-ns = <160>;
++	rockchip,sr-idle-ns = <10240>;
++	rockchip,sr-mc-gate-idle-ns = <40960>;
++	rockchip,srpd-lite-idle-ns = <61440>;
++	rockchip,standby-idle-ns = <81920>;
++
++	rockchip,ddr3_odt_dis_freq = <666000000>;
++	rockchip,lpddr3_odt_dis_freq = <666000000>;
++	rockchip,lpddr4_odt_dis_freq = <666000000>;
++
++	rockchip,sr-mc-gate-idle-dis-freq-hz = <1000000000>;
++	rockchip,srpd-lite-idle-dis-freq-hz = <0>;
++	rockchip,standby-idle-dis-freq-hz = <928000000>;
++};
++
++&dmc_opp_table {
++	opp03 {
++		opp-suspend;
++	};
++};
++
+ &emmc_phy {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
+index 2180e0f75003..6e29e74f6fc6 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
+@@ -110,6 +110,27 @@ opp05 {
+ 			opp-microvolt = <1075000>;
+ 		};
+ 	};
++
++	dmc_opp_table: dmc_opp_table {
++		compatible = "operating-points-v2";
++
++		opp00 {
++			opp-hz = /bits/ 64 <400000000>;
++			opp-microvolt = <900000>;
++		};
++		opp01 {
++			opp-hz = /bits/ 64 <666000000>;
++			opp-microvolt = <900000>;
++		};
++		opp02 {
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <900000>;
++		};
++		opp03 {
++			opp-hz = /bits/ 64 <928000000>;
++			opp-microvolt = <925000>;
++		};
++	};
+ };
+ 
+ &cpu_l0 {
+@@ -136,6 +157,10 @@ &cpu_b1 {
+ 	operating-points-v2 = <&cluster1_opp>;
+ };
+ 
++&dmc {
++	operating-points-v2 = <&dmc_opp_table>;
++};
++
+ &gpu {
+ 	operating-points-v2 = <&gpu_opp_table>;
+ };
 -- 
 2.35.1.616.g0bdcbb4464-goog
 

@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1304D22BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CCB4D22C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244422AbiCHUiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S1344300AbiCHUjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233478AbiCHUiK (ORCPT
+        with ESMTP id S232840AbiCHUjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:38:10 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC28C50E32
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646771832; x=1678307832;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=D4X3cXuBQ2HH9+lZQvuVEh7PXl9rt0JwqMr/jESf57Y=;
-  b=f4tGsUp6Gbk3GR93J5b1j1wxPea1hGh3fuU1JythtwxfZKzmkOIuu4Tt
-   JsL+KDbH8Bdg/29TGzjLRFbaqUWB4T/Lm33hpzQaWM+XGvDrQqjxSUkzk
-   wg3STwxZLdouU6/ptkxmGuri0K2nCfgwC7DC8CyWjfYDwGd2ddL5J3amx
-   yteitzQ4MwS7/oTExg5Z1CiSK6lLywtOXpyLfT+dA6yozIW9VEBoG+Qax
-   g1OT3zLaagrCH0YioqMMTqRdGLjRKvaxnjlerfsLHdDVYh0Z3AApK6eHJ
-   TUikplwu72BV1WRmhPs5JKOCD7o5lFKAXBGsa6zWo18JcArkLEASEydI9
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="253637108"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="253637108"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 12:36:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="596025403"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Mar 2022 12:36:37 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRgZR-0001wD-9N; Tue, 08 Mar 2022 20:36:37 +0000
-Date:   Wed, 9 Mar 2022 04:36:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mhiramat:kprobes/fprobe 8/12] arch/x86/kernel/rethook.c:14:23:
- warning: no previous prototype for function
- 'arch_rethook_trampoline_callback'
-Message-ID: <202203090445.eMw6Gp37-lkp@intel.com>
+        Tue, 8 Mar 2022 15:39:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C74B2C13B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646771914;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FoBRIeqgLPupnZmRM+iNXvFKf6bd3tq0ykamYd2tTu8=;
+        b=S9O8+Imm/ywyEPqtBTfFS6pyMnS9ivbZH2YcsV9W4OkgJf2LsLY/Qr7osnaTz/emez0Ou/
+        Xu2C74ottis+u+9yElzMkoQ/GUafYuU7z/ilGwQNmhkHxYPGXWbfBAAeDqRKKN9ET6yLE6
+        T1wX00o9/g4FeGGebLGQ6Y23kwyQCGo=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-332-ZPVCpXrJNsK2nE_iYeQCZQ-1; Tue, 08 Mar 2022 15:38:33 -0500
+X-MC-Unique: ZPVCpXrJNsK2nE_iYeQCZQ-1
+Received: by mail-wm1-f69.google.com with SMTP id r133-20020a1c448b000000b00385c3f3defaso141654wma.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:38:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FoBRIeqgLPupnZmRM+iNXvFKf6bd3tq0ykamYd2tTu8=;
+        b=pMHxYYHQtb2mHmfQZc0IIyx3Irzy/Infph8BE1Irjvxx1d46ffYN61Wy2FLHe2ujFh
+         ylEvqhyMXEPZV6ixgR1L3Gkt20Zwi/e+SM4NzeOzuogXRMarjiqSvngEeUiWSmqqF3ee
+         VIz487UzwfNgLUQWH9tiNl+Dov7GYAM96HFI7edUfqaElbVZIWNf0/HErL/vpyqgRWGP
+         8p9+5XVgb+uso8L8fhKCBhQLZIFfS1MywEk5YvMZX+5Z0ZzaXzWbdHikn+5TWPkKih5n
+         345/2ver5H7qFJ38iE/rqBi8l8YR0K0QUL3FeFYDLfhQMmzmQovkiQRlUQv3HRJvU6Ra
+         GOOQ==
+X-Gm-Message-State: AOAM531mA0LuCRH3+uuuN5YjgK9vQNnirVLFfZsEdDsM07d1J5ZM2nPp
+        JD2kmXsqMWdr79UnXrvg0D9IslyGFrPDrd/VNAvZv4uyUrKHdFcYx1OIHMmBYY7tbcMENDMQEm1
+        /DQkVYpdEO6z+XI7tVMCB1ZwJ
+X-Received: by 2002:a05:6000:1a8f:b0:1e8:3301:1273 with SMTP id f15-20020a0560001a8f00b001e833011273mr13579030wry.707.1646771910933;
+        Tue, 08 Mar 2022 12:38:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyACu+l5d8zlO5fn6jeLt1osubbTuoLy1Qt9BUBcsvksAAefifa1CtOLhGbeqsEGUGu19bi4g==
+X-Received: by 2002:a05:6000:1a8f:b0:1e8:3301:1273 with SMTP id f15-20020a0560001a8f00b001e833011273mr13579012wry.707.1646771910702;
+        Tue, 08 Mar 2022 12:38:30 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l12-20020a05600012cc00b001f059bcbd7asm13726134wrx.31.2022.03.08.12.38.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 12:38:30 -0800 (PST)
+Message-ID: <85ed6113-ad81-94a2-14ac-b5046139e217@redhat.com>
+Date:   Tue, 8 Mar 2022 21:38:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] drm: ssd130x: Always apply segment remap setting
+Content-Language: en-US
+To:     Chen-Yu Tsai <wens@kernel.org>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20220308160758.26060-1-wens@kernel.org>
+ <20220308160758.26060-2-wens@kernel.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220308160758.26060-2-wens@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git kprobes/fprobe
-head:   0bd36e652ac2be74b19f414d0b20aaef6521ac82
-commit: 23f61cf25dd4c1cf50adce7ebe0e2ae65bef5b78 [8/12] fprobe: Add exit_handler support
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220309/202203090445.eMw6Gp37-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 4e115b7d881136947c083e12f62010bc6b1d3f00)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=23f61cf25dd4c1cf50adce7ebe0e2ae65bef5b78
-        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
-        git fetch --no-tags mhiramat kprobes/fprobe
-        git checkout 23f61cf25dd4c1cf50adce7ebe0e2ae65bef5b78
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+On 3/8/22 17:07, Chen-Yu Tsai wrote:
+> From: Chen-Yu Tsai <wens@csie.org>
+> 
+> Currently the ssd130x driver only sets the segment remap setting when
+> the device tree requests it; it however does not clear the setting if
+> it is not requested. This leads to the setting incorrectly persisting
+> if the hardware is always on and has no reset GPIO wired. This might
+> happen when a developer is trying to find the correct settings for an
+> unknown module, and cause the developer to get confused because the
+> settings from the device tree are not consistently applied.
+> 
+> Make the driver apply the segment remap setting consistently, setting
+> the value correctly based on the device tree setting. This also makes
+> this setting's behavior consistent with the other settings, which are
+> always applied.
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Nice catch. This is certainly much better. Thanks!
+ 
+> Fixes: a61732e80867 ("drm: Add driver for Solomon SSD130x OLED displays")
+> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> ---
 
-All warnings (new ones prefixed by >>):
+Acked-by: Javier Martinez Canillas <javierm@redhat.com>
 
->> arch/x86/kernel/rethook.c:14:23: warning: no previous prototype for function 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
-   __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
-                         ^
-   arch/x86/kernel/rethook.c:14:18: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
-                    ^
-                    static 
-   1 warning generated.
+-- 
+Best regards,
 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-vim +/arch_rethook_trampoline_callback +14 arch/x86/kernel/rethook.c
-
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  10  
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  11  /*
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  12   * Called from arch_rethook_trampoline
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  13   */
-31ffbcef413de8 Masami Hiramatsu 2022-02-09 @14  __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  15  {
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  16  	unsigned long *frame_pointer;
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  17  
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  18  	/* fixup registers */
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  19  	regs->cs = __KERNEL_CS;
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  20  #ifdef CONFIG_X86_32
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  21  	regs->gs = 0;
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  22  #endif
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  23  	regs->ip = (unsigned long)&arch_rethook_trampoline;
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  24  	regs->orig_ax = ~0UL;
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  25  	regs->sp += sizeof(long);
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  26  	frame_pointer = &regs->sp + 1;
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  27  
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  28  	/*
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  29  	 * The return address at 'frame_pointer' is recovered by the
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  30  	 * arch_rethook_fixup_return() which called from this
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  31  	 * rethook_trampoline_handler().
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  32  	 */
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  33  	rethook_trampoline_handler(regs, (unsigned long)frame_pointer);
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  34  
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  35  	/*
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  36  	 * Copy FLAGS to 'pt_regs::sp' so that arch_rethook_trapmoline()
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  37  	 * can do RET right after POPF.
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  38  	 */
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  39  	regs->sp = regs->flags;
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  40  }
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  41  NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-31ffbcef413de8 Masami Hiramatsu 2022-02-09  42  
-
-:::::: The code at line 14 was first introduced by commit
-:::::: 31ffbcef413de82a1b0afc177b5d85364495f0cd rethook: x86: Add rethook x86 implementation
-
-:::::: TO: Masami Hiramatsu <mhiramat@kernel.org>
-:::::: CC: Masami Hiramatsu <mhiramat@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

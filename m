@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2010A4D23C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599ED4D23CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240380AbiCHWBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S239129AbiCHWCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiCHWBe (ORCPT
+        with ESMTP id S229902AbiCHWCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:01:34 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 743FD289BA;
-        Tue,  8 Mar 2022 14:00:37 -0800 (PST)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5F17C20B7178;
-        Tue,  8 Mar 2022 14:00:36 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5F17C20B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1646776837;
-        bh=6aGA5zF6jU5zH7UbdaZnmMkVSuozYHUjOEcPB4bdYIM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=svryphXe56GxH3wIuzgftWULHzQSof0sq6j9xgRGizLEfetBH1iw9N8TcDC+1q8H4
-         nosAMecuDL0jjxqe/Pg4Yp9855PAje7MevjtTI/7/wuk0sYLH16KSld6/LlEGQSfOU
-         u/gWY8CGNOdLUg8ciaTqx87ftEXwodHcasEH9rEk=
-Message-ID: <c494fa10-e973-c137-b637-66bde327611c@linux.microsoft.com>
-Date:   Tue, 8 Mar 2022 16:00:35 -0600
+        Tue, 8 Mar 2022 17:02:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9402C5674D;
+        Tue,  8 Mar 2022 14:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xej0djaBkpDYdCPd5/P3C9RqitTM+38of8EHro6ghVM=; b=MXCWsn3K2klaZwlh863Q76i+xb
+        dw81ytsvdtkfyC2LH+FHeVudYy/01TBz7ILKI0cE6pIp3cYFKlLBIgztQThQQqRGeligJ5P7evL/Q
+        ndbyFJjpjZuhchDrk+i/KXyM1ewSWpK1N9b6INjvn9LY/PrItNZHuLocdYzTYC4VlZdEs5EICHELj
+        b6CtmlLLzqN81SkS+IwMhKprz32WxPJsUfAz1ckCtnwTuVrPntkWxS+UKvIOkqsIeEQwvL7fJofpu
+        j6GK3YtzM8OLrGoBM0xRECcNsE0rU+pNoE5brT84p5A688A3dEKT5aO7esvx3b1fB0mehRO1h7bSV
+        3sw/0B1Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRhtB-00GZo5-Pz; Tue, 08 Mar 2022 22:01:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A442A300261;
+        Tue,  8 Mar 2022 23:01:04 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7D6F6203DC8C8; Tue,  8 Mar 2022 23:01:04 +0100 (CET)
+Date:   Tue, 8 Mar 2022 23:01:04 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
- args to unwind()
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
-        ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-7-madvenka@linux.microsoft.com>
- <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
- <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
- <YiY6hecX0pVWowQ7@sirena.org.uk>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <YiY6hecX0pVWowQ7@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/7/22 11:01, Mark Brown wrote:
-> On Mon, Mar 07, 2022 at 10:51:38AM -0600, Madhavan T. Venkataraman wrote:
->> Hey Mark Rutland, Mark Brown,
->>
->> Could you please review the rest of the patches in the series when you can?
->>
+On Tue, Mar 08, 2022 at 12:00:52PM -0800, Alexei Starovoitov wrote:
+> On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
+> > Hopefully last posting...
+> > 
+> > Since last time:
+> > 
+> >  - updated the ftrace_location() patch (naveen, rostedt)
+> >  - added a few comments and clarifications (bpetkov)
+> >  - disable jump-tables (joao)
+> >  - verified clang-14-rc2 works
+> >  - fixed a whole bunch of objtool unreachable insn issue
+> >  - picked up a few more tags
+> > 
+> > Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
+> > 
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
 > 
-> Please don't send content free pings.  As far as I remember I'd reviewed
-> or was expecting changes based on review or dependent patches for
-> everything that you'd sent.
-> 
+> I've tried to test it.
 
-Indeed you did! Many thanks!
+I could cleanly do:
 
-It is just that patch 11 that defines "select HAVE_RELIABLE_STACKTRACE" did not receive any comments from you (unless I missed a comment that came from you. That is entirely possible. If I missed it, my bad). Since you suggested that change, I just wanted to make sure that that patch looks OK to you.
+git checkout tip/master
+git merge bpf-next/master
+git merge queue/x86/wip.ibt
 
->> Also, many of the patches have received a Reviewed-By from you both. So, after I send the next version out, can we upstream those ones?
-> 
-> That's more a question for Catalin and Will.  If myself and Mark have
-> reviewed patches then we're saying we think those patches are good to
-> go.
-
-Got it!
-
-Thanks!
-
-Madhavan
+You want me to push out that result somewhere?

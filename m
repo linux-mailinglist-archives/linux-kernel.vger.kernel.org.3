@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FB64D1297
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5804D129A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 09:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345094AbiCHIra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 03:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S1345093AbiCHIrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 03:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345086AbiCHIr1 (ORCPT
+        with ESMTP id S1345086AbiCHIrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 03:47:27 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9F63FDB9
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 00:46:30 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id x15so27240838wru.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 00:46:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OLXg6E8TUMHFsnuG3Sj+Po22TMyHRxb1PD+53CulAoE=;
-        b=0yaAu98zbIRzipzC2IQi6xxkiM6bdTQ02PHWFVpvF3EIuvhOKqJ8+pCq59CUtbHPp8
-         ekgvbk9FfSpl3myiDSdknNPtdyGFXZnZw1pCD9VAuokcGmbMIewtpNfDOxSEaiwxhGm/
-         Z4WpSocLSPILU9Mu27dQkFWYHw43fbopsYbd/sPQtsJdpaQXoHw0y2hP/N7QEiVY/tBr
-         pZBmEEGHapglyvSiJyZqDHXdSt5De0kgGKkYLaslNdebCQ0vN1Sjr5Ofu04AASdNz6Or
-         RSQ73zc7c3ysIdz9XelRQXfbnf2HH0lkyWwgyaJlAQ2Rqt+ZhXQxiDzcyoyvWbWSVhar
-         qjig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OLXg6E8TUMHFsnuG3Sj+Po22TMyHRxb1PD+53CulAoE=;
-        b=L4i75MSzjdWZ2Ba0qfOQ/ywRwAIb6XGcuhPvjN+013JvMb69NZesaSHwwilfL49e7e
-         vamtsODZ8bNXu+Q/IryEJB2JnBSzzwq7Wk3QFQWqJU1LCOkNlkQrlS4XvvbHkIJjvVUE
-         DeRq+/x6jTFS12Hm2qOMN97Ncpk/umoj8IokWyrr2PcAjlJMYlpNhWrbvpV446uJ7nhx
-         WQ3QNSGU56xA45Bd+NhLe4Kres2BLLVOlnGAk0LJ6OFBtmLXW1QEtaYKXwJnr0/11jxB
-         YZ7T4pYaC2xhDlQUX8UIfm6XuhRgDv1QyoMUcUZ0YWN+DTLpBkRHAlYOeidzdATxRhso
-         yXbA==
-X-Gm-Message-State: AOAM531aiKte5aDYTarI6JqX7+uBG8RGEGqPTqyHUWqywkIbRcvLKnjB
-        niAR/nL21QCqJwCydoxg0xxHUlAwbH6fWQ==
-X-Google-Smtp-Source: ABdhPJx3IQxtLDc2kDnwLu+lxeA/1bK9NijhYySncspKbiXRwKyN4SqkqhZ3fblj8BRH0svzdivBQQ==
-X-Received: by 2002:adf:ef81:0:b0:1f0:95f:30a7 with SMTP id d1-20020adfef81000000b001f0095f30a7mr11209869wro.636.1646729189305;
-        Tue, 08 Mar 2022 00:46:29 -0800 (PST)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b001f049726044sm13284385wrv.79.2022.03.08.00.46.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 00:46:29 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH] gpio: sim: fix a typo
-Date:   Tue,  8 Mar 2022 09:46:27 +0100
-Message-Id: <20220308084627.214720-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
+        Tue, 8 Mar 2022 03:47:35 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F53C3FDB3;
+        Tue,  8 Mar 2022 00:46:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646729199; x=1678265199;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=Wb16vbWejhLrJiinHdbgfIvF0UmIay8cdh4wYFbX2jM=;
+  b=CTr2TcMmLXv40N0AVOIdokz1Lf44VqR4IaGBQlwqKO78vAH5aC4KxOFk
+   NgEHRW+ah7OwdN7NIpMWYtn680a8YM8iGLV/BivOTTWj4rLLRsAJNzQz0
+   GVY7w52t7lNUkwwrmCdpuLcmwW+1a6tZljSw+vKVx/7htVsoGD+u9Fiug
+   /3W+0DpFOQajBSXHTQ7Tc523qH8pn98YlWwfF26rNjFZyUJyQ8Caz4PVg
+   MplDZTV6rP7BxVi6gqB0Khf/GFRTej48JiuwYp7Jf0Fi/tFUQQWgZ6LDH
+   8o3vFWVY/9PxENm20Ur79r4HgdRPxg7s/j14glsIMS03yHjLlwkVgsV3h
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="252204021"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="252204021"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 00:46:39 -0800
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="553536539"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.46.193])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 00:46:34 -0800
+Message-ID: <b2909fd3-fa5b-9471-fb9c-6f068a1ab871@intel.com>
+Date:   Tue, 8 Mar 2022 10:46:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v2] scsi: ufs: exclude UECxx from SFR dump list
+Content-Language: en-US
+To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        cang@codeaurora.org, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com,
+        vkumar.1997@samsung.com
+References: <CGME20220308081304epcas2p4e7279fb51babf93fdf0bf0a3aacf9f68@epcas2p4.samsung.com>
+ <1646727118-87159-1-git-send-email-kwmad.kim@samsung.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <1646727118-87159-1-git-send-email-kwmad.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,27 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just noticed this when applying Andy's patch. s/childred/children/
+On 8.3.2022 10.11, Kiwoong Kim wrote:
+> v1 -> v2: does skipping only for zero offset
+> 
+> These are ROC type things that means their values
+> are cleared when the SFRs are read.
+> They are usually read in ISR when an UIC error occur.
+> Thus, their values would be zero at many cases. And
+> there might be a little bit risky when they are read to
+> be cleared before the ISR reads them, e.g. the case that
+> a command is timed-out, ufshcd_dump_regs is called in
+> ufshcd_abort and an UIC error occurs at the nearly
+> same time. In this case, ISR will be called but UFS error handler
+> will not be scheduled.
+> This patch is to make UFS driver not read those SFRs in the
+> dump function, i.e. ufshcd_dump_regs.
 
-Fixes: cb8c474e79be ("gpio: sim: new testing module")
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- drivers/gpio/gpio-sim.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is essentially a fix, so perhaps a fixes tag?
 
-diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-index bb9bb595c1a8..8e5d87984a48 100644
---- a/drivers/gpio/gpio-sim.c
-+++ b/drivers/gpio/gpio-sim.c
-@@ -547,7 +547,7 @@ struct gpio_sim_bank {
- 	 *
- 	 * So we need to store the pointer to the parent struct here. We can
- 	 * dereference it anywhere we need with no checks and no locking as
--	 * it's guaranteed to survive the childred and protected by configfs
-+	 * it's guaranteed to survive the children and protected by configfs
- 	 * locks.
- 	 *
- 	 * Same for other structures.
--- 
-2.30.1
+Wouldn't hurt to wrap the commit description more nicely.
+
+> 
+> Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 460d2b4..7f2a1ed 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -115,8 +115,13 @@ int ufshcd_dump_regs(struct ufs_hba *hba, size_t offset, size_t len,
+>  	if (!regs)
+>  		return -ENOMEM;
+>  
+> -	for (pos = 0; pos < len; pos += 4)
+> +	for (pos = 0; pos < len; pos += 4) {
+> +		if (offset == 0 &&
+
+So it will still read them if the offset is not zero.  That seems unexpectedly inconsistent.
+
+> +		    pos >= REG_UIC_ERROR_CODE_PHY_ADAPTER_LAYER &&
+> +		    pos <= REG_UIC_ERROR_CODE_DME)
+> +			continue;
+>  		regs[pos / 4] = ufshcd_readl(hba, offset + pos);
+> +	}
+>  
+>  	ufshcd_hex_dump(prefix, regs, len);
+>  	kfree(regs);
 

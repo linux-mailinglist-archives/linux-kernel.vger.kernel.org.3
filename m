@@ -2,193 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444424D2342
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C4D4D2349
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350451AbiCHV0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S1350460AbiCHV0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245079AbiCHV0f (ORCPT
+        with ESMTP id S1350453AbiCHV0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:26:35 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC63950B1B;
-        Tue,  8 Mar 2022 13:25:38 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id d17so486064pfv.6;
-        Tue, 08 Mar 2022 13:25:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EPQ0rzVHIJ3oqKnKu/qbr+qqvooLfTrDWRa/t4X4+Lg=;
-        b=Irl9uNnPbiGv0B/goQOHJBRsUe9OBcZzTLd0tNao+hSR3PQxSRG6F8Pp7eVIAgcBDY
-         Uq1eTrq+7Z5D47p12fMudGOfdyynuIQx/sgDwZ5hypXh8VblCqdBo+hfuANSgLnGgmEn
-         Nz38UjrfXTiTR6R3QnL4Y8rzpml1OCrtv1lCN0x/CB44YRVHhXkPSorpRCaVLyAlzLBI
-         gISMJxOblVTdqixLY+xbThKzwxcnB/AjweteZQQ0ZDJ+yf01l8I1H469A/Vg1OycjeIQ
-         iVEtEBowA4Emr/UenrgDmvw1mJLzQBfxT2UGja0CZ24b/a/H+on4UkxfavqyMrFxq3bu
-         tuFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EPQ0rzVHIJ3oqKnKu/qbr+qqvooLfTrDWRa/t4X4+Lg=;
-        b=EmQurns/ICJGg7HWwiK2QRMPIccsKNPHtvNeAWGncinOrt4zyohdK2E0HhF/f7DsTA
-         yQt7cvNv7wGENgNKI37jAbu+6rgxO7FKtT7vlQ8W9i5g+CfCvwX3Z5+D+fgMpXvtjD6+
-         CISrcMenQA1AjcUp6H40YRno4Z+jHhWMd80/BvfNNu32rc7MYCdk4aCDoeW83CynHqyp
-         K6MJQmCH4kPV3ARkna/t/5UVo7RfxBLrmbcTbHdeyC2mPK1Xj+WaiCe+WpKGdrDh/eLT
-         vDGK4LfZOaFFF6U2i3GMO4RrwOE4Qjerxq1koNLGja0kE7H1tylPS2QPAvOE1sWbvln6
-         HXvw==
-X-Gm-Message-State: AOAM533f4siyJRnbJ1b5ztbuvspbxgMgwXHzOR5pyHtso+jdO6y9z1WU
-        2zkKiTrFP+8edT6IK8UlK64=
-X-Google-Smtp-Source: ABdhPJyhV1aEucENXUP50DM4716AMzcSEl8Ecssd5XL80tOxfvKSzoqAHi8kBvwRYxFy+UZuU+2wkQ==
-X-Received: by 2002:a05:6a00:15c6:b0:4f0:fc4d:35d1 with SMTP id o6-20020a056a0015c600b004f0fc4d35d1mr20004952pfu.23.1646774738295;
-        Tue, 08 Mar 2022 13:25:38 -0800 (PST)
-Received: from jeffreyji1.c.googlers.com.com (180.145.227.35.bc.googleusercontent.com. [35.227.145.180])
-        by smtp.gmail.com with ESMTPSA id oo16-20020a17090b1c9000b001b89e05e2b2sm24131pjb.34.2022.03.08.13.25.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 13:25:37 -0800 (PST)
-From:   Jeffrey Ji <jeffreyjilinux@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>
-Cc:     Brian Vazquez <brianvv@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jeffreyji <jeffreyji@google.com>
-Subject: [PATCH v3 net-next] net-core: add rx_otherhost_dropped counter
-Date:   Tue,  8 Mar 2022 21:25:31 +0000
-Message-Id: <20220308212531.752215-1-jeffreyjilinux@gmail.com>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+        Tue, 8 Mar 2022 16:26:50 -0500
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719335046C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:25:52 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id RhKwn3JSLzH5fRhKwn1IDA; Tue, 08 Mar 2022 22:25:49 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 08 Mar 2022 22:25:49 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <4039fd4b-87db-2d6e-2c8d-b6ff0129ed0d@wanadoo.fr>
+Date:   Tue, 8 Mar 2022 22:25:41 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] mmc: wmt-sdmmc: Fix an error handling path in
+ wmt_mci_probe()
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <bf2e2e69226b20d173cce66287f59488fd47474b.1646588375.git.christophe.jaillet@wanadoo.fr>
+ <20220308125445.GE3293@kadam>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220308125445.GE3293@kadam>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jeffreyji <jeffreyji@google.com>
+Le 08/03/2022 à 13:54, Dan Carpenter a écrit :
+> On Sun, Mar 06, 2022 at 06:44:56PM +0100, Christophe JAILLET wrote:
+>> A dma_free_coherent() call is missing in the error handling path of the
+>> probe, as already done in the remove function.
+>>
+>> Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> I've not been able to find a Fixes tag because of the renaming of
+>> function and files.
+>> However, it looks old (before 2008)
+> 
+> You did add a fixes tag and it's from 2012.  :P
 
-Increment rx_otherhost_dropped counter when packet dropped due to
-mismatched dest MAC addr.
+Well, a bit too much of copy&paste from [1] :(
 
-An example when this drop can occur is when manually crafting raw
-packets that will be consumed by a user space application via a tap
-device. For testing purposes local traffic was generated using trafgen
-for the client and netcat to start a server
+[1]: 
+https://lore.kernel.org/all/242ebc5e7dedc6b0d7f47cbf7768326c127f955b.1646584729.git.christophe.jaillet@wanadoo.fr/
 
-Tested: Created 2 netns, sent 1 packet using trafgen from 1 to the other
-with "{eth(daddr=$INCORRECT_MAC...}", verified that iproute2 showed the
-counter was incremented. (Also had to modify iproute2 to show the stat,
-additional patch for that coming next.)
+> 
+>> ---
+>>   drivers/mmc/host/wmt-sdmmc.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
+>> index 163ac9df8cca..8e18f01c0938 100644
+>> --- a/drivers/mmc/host/wmt-sdmmc.c
+>> +++ b/drivers/mmc/host/wmt-sdmmc.c
+>> @@ -863,6 +863,8 @@ static int wmt_mci_probe(struct platform_device *pdev)
+>>   	return 0;
+>>   fail6:
+>>   	clk_put(priv->clk_sdmmc);
+>> +	dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
+>> +			  priv->dma_desc_buffer, priv->dma_desc_device_addr);
+>>   fail5:
+>>   	free_irq(dma_irq, priv);
+> 
+> This isn't quite right.  If of_clk_get() fails it should call
+> dma_free_coherent() but it does not.  You need to add:
 
-Signed-off-by: jeffreyji <jeffreyji@google.com>
-Reviewed-by: Brian Vazquez <brianvv@google.com>
----
-changelog:
+Agreed, thx for the review.
+If no one fix it in the meanwhile, I'll send a v2 this WE or next week.
 
-v3: rebase onto net-next/master, fix comments
+CJ
 
-v2: add kdoc comment
 
- include/linux/netdevice.h    | 3 +++
- include/uapi/linux/if_link.h | 5 +++++
- net/core/dev.c               | 2 ++
- net/ipv4/ip_input.c          | 1 +
- net/ipv6/ip6_input.c         | 1 +
- 5 files changed, 12 insertions(+)
-
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 29a850a8d460..43af5012b39c 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1741,6 +1741,8 @@ enum netdev_ml_priv_type {
-  *			do not use this in drivers
-  *	@rx_nohandler:	nohandler dropped packets by core network on
-  *			inactive devices, do not use this in drivers
-+ *	@rx_otherhost_dropped:	Dropped packets due to mismatch in packet dest
-+ *				MAC address
-  *	@carrier_up_count:	Number of times the carrier has been up
-  *	@carrier_down_count:	Number of times the carrier has been down
-  *
-@@ -2026,6 +2028,7 @@ struct net_device {
- 	atomic_long_t		rx_dropped;
- 	atomic_long_t		tx_dropped;
- 	atomic_long_t		rx_nohandler;
-+	atomic_long_t		rx_otherhost_dropped;
- 
- 	/* Stats to monitor link on/off, flapping */
- 	atomic_t		carrier_up_count;
-diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-index ddca20357e7e..a9681908617b 100644
---- a/include/uapi/linux/if_link.h
-+++ b/include/uapi/linux/if_link.h
-@@ -211,6 +211,9 @@ struct rtnl_link_stats {
-  * @rx_nohandler: Number of packets received on the interface
-  *   but dropped by the networking stack because the device is
-  *   not designated to receive packets (e.g. backup link in a bond).
-+ *
-+ * @rx_otherhost_dropped: Number of packets dropped due to mismatch in
-+ * packet's destination MAC address.
-  */
- struct rtnl_link_stats64 {
- 	__u64	rx_packets;
-@@ -243,6 +246,8 @@ struct rtnl_link_stats64 {
- 	__u64	rx_compressed;
- 	__u64	tx_compressed;
- 	__u64	rx_nohandler;
-+
-+	__u64	rx_otherhost_dropped;
- };
- 
- /* Subset of link stats useful for in-HW collection. Meaning of the fields is as
-diff --git a/net/core/dev.c b/net/core/dev.c
-index ba69ddf85af6..fd7ec8ce972b 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10308,6 +10308,8 @@ struct rtnl_link_stats64 *dev_get_stats(struct net_device *dev,
- 	storage->rx_dropped += (unsigned long)atomic_long_read(&dev->rx_dropped);
- 	storage->tx_dropped += (unsigned long)atomic_long_read(&dev->tx_dropped);
- 	storage->rx_nohandler += (unsigned long)atomic_long_read(&dev->rx_nohandler);
-+	storage->rx_otherhost_dropped +=
-+		(unsigned long)atomic_long_read(&dev->rx_otherhost_dropped);
- 	return storage;
- }
- EXPORT_SYMBOL(dev_get_stats);
-diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
-index 95f7bb052784..8b87ea99904b 100644
---- a/net/ipv4/ip_input.c
-+++ b/net/ipv4/ip_input.c
-@@ -451,6 +451,7 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
- 	 * that it receives, do not try to analyse it.
- 	 */
- 	if (skb->pkt_type == PACKET_OTHERHOST) {
-+		atomic_long_inc(&skb->dev->rx_otherhost_dropped);
- 		drop_reason = SKB_DROP_REASON_OTHERHOST;
- 		goto drop;
- 	}
-diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-index 5b5ea35635f9..5624c937f87f 100644
---- a/net/ipv6/ip6_input.c
-+++ b/net/ipv6/ip6_input.c
-@@ -150,6 +150,7 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
- 	struct inet6_dev *idev;
- 
- 	if (skb->pkt_type == PACKET_OTHERHOST) {
-+		atomic_long_inc(&skb->dev->rx_otherhost_dropped);
- 		kfree_skb(skb);
- 		return NULL;
- 	}
--- 
-2.35.1.616.g0bdcbb4464-goog
+> 
+>   fail6:
+>   	clk_put(priv->clk_sdmmc);
+> +fail5_and_a_half:
+> +	dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
+> +			  priv->dma_desc_buffer, priv->dma_desc_device_addr);
+>   fail5:
+>   	free_irq(dma_irq, priv);
+> 
+> regards,
+> dan carpenter
+> 
+> 
 

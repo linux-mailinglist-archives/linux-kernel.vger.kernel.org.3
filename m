@@ -2,189 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E77D4D219A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35884D2199
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349998AbiCHTe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
+        id S1349979AbiCHTeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349980AbiCHTeT (ORCPT
+        with ESMTP id S1349436AbiCHTeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:34:19 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEB053B6A;
-        Tue,  8 Mar 2022 11:33:19 -0800 (PST)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id DE3B62000A;
-        Tue,  8 Mar 2022 19:33:12 +0000 (UTC)
-Message-ID: <6f0feae8-ecb4-ca1d-133e-1013ce9e8b4f@ovn.org>
-Date:   Tue, 8 Mar 2022 20:33:12 +0100
+        Tue, 8 Mar 2022 14:34:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3BAC53B6B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:33:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646767997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bmFvlno7qSph5d/HcceOLIPkKssn1EWwfPpWF2drkf8=;
+        b=UD5qHH96lfvSSr1C6bXNDWeIpIrPW4bGiTIocBD+Dfg8Uw/ejoWznyfRdmwDaX7YuhbcJ1
+        9avAuWiFtx0NTBJTvQvlIuMQSYlm80gvVrbw3WyfEHN1Ul8Qe9EfV0Ah+lLJ4H8M1dHz3r
+        54U4oV/XxiQwwT+UIlqaztFNtNXWhtw=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-RPgSWuTwMuqy0MBBihgJ4g-1; Tue, 08 Mar 2022 14:33:16 -0500
+X-MC-Unique: RPgSWuTwMuqy0MBBihgJ4g-1
+Received: by mail-io1-f69.google.com with SMTP id w25-20020a6bd619000000b00640ddd0ad11so183026ioa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:33:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=bmFvlno7qSph5d/HcceOLIPkKssn1EWwfPpWF2drkf8=;
+        b=B++K/T8/qZt4XHx16dQYOCSMWpqyLA3Mk8QiPRyrJ7itM1NTSJ1UX+qtyMBAv+79Nc
+         dIMfpdKlHPtORB+voe4RoNIFD48CMG6PF0CZshRLPJNfss2WHolylQw3UAZ3LKCWJ8nt
+         DeIRTQ0TPXpcUC6LQ01f/g7E+XaxW5mwxSw3yKDlEXcmBrbWFhM9HXyHx/FPgA2ZTpmT
+         i/NBGf0YEQ6vRKq6WABhtq0W5h5Z6KTea5FTriWaVvPMjLHJK37A3GjE3V5hyPfmi0Jy
+         xIrjQsvkuKDsMPc04RIFumj/A3S5sINa+4zLd1CS1+9Z7qEQavpiDooVYTXkmzGJNAal
+         0+vQ==
+X-Gm-Message-State: AOAM532mv2lXylu7Ya/3G+TuR9GmE0iMODgkdClCzuNFmABWkh9a0bn3
+        G9KK7rnLO16DswtxN+CuAzhxD6wJQIT8jpMlomegrLGx+eO4OonmlB82tCCzc4dw1IDPfjLjzP7
+        lL+UD6JAC3Lo5CKPTsA+CIore
+X-Received: by 2002:a05:6638:3014:b0:317:9daf:c42c with SMTP id r20-20020a056638301400b003179dafc42cmr16033238jak.10.1646767995255;
+        Tue, 08 Mar 2022 11:33:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxDpYCevcieEIuPGlNXODXoatrNQxiFQEvGtMSUMx1SJ+hhy7jWFeUDPSTwNXSqLKnEDsZnrQ==
+X-Received: by 2002:a05:6638:3014:b0:317:9daf:c42c with SMTP id r20-20020a056638301400b003179dafc42cmr16033227jak.10.1646767995008;
+        Tue, 08 Mar 2022 11:33:15 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id k5-20020a5d97c5000000b006412c791f90sm10607942ios.31.2022.03.08.11.33.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 11:33:14 -0800 (PST)
+Date:   Tue, 8 Mar 2022 12:33:12 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
+        Xu Zaibo <xuzaibo@huawei.com>
+Subject: Re: [PATCH v8 8/9] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Message-ID: <20220308123312.1f4ba768.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB5276EBE887402EBE22630BAB8C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220303230131.2103-1-shameerali.kolothum.thodi@huawei.com>
+ <20220303230131.2103-9-shameerali.kolothum.thodi@huawei.com>
+ <20220304205720.GE219866@nvidia.com>
+ <20220307120513.74743f17.alex.williamson@redhat.com>
+ <aac9a26dc27140d9a1ce56ebdec393a6@huawei.com>
+ <20220307125239.7261c97d.alex.williamson@redhat.com>
+ <BN9PR11MB5276EBE887402EBE22630BAB8C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     i.maximets@ovn.org, Johannes Berg <johannes@sipsolutions.net>,
-        Roi Dayan <roid@nvidia.com>, dev@openvswitch.org,
-        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        David Ahern <dsahern@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "pshelar@ovn.org" <pshelar@ovn.org>
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-References: <20220224005409.411626-1-cpp.code.lv@gmail.com>
- <164578561098.13834.14017896440355101001.git-patchwork-notify@kernel.org>
- <3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com>
- <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
- <57996C97-5845-425B-9B13-7F33EE05D704@redhat.com>
- <26b924fb-ed26-bb3f-8c6b-48edac825f73@nvidia.com>
- <20220307122638.215427b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <3a96b606-c3aa-c39b-645e-a3af0c82e44b@ovn.org>
- <20220307144616.05317297@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <45aed9cd-ba65-e2e7-27d7-97e3f9de1fb8@ovn.org>
- <20220307214550.2d2c26a9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <5bec02cb6a640cafd65c946e10ee4eda99eb4d9c.camel@sipsolutions.net>
- <e55b1963-14d8-63af-de8e-1b1a8f569a6e@ovn.org>
- <20220308081731.3588b495@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Ilya Maximets <i.maximets@ovn.org>
-Subject: Re: [ovs-dev] [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6
- extension header support
-In-Reply-To: <20220308081731.3588b495@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 17:17, Jakub Kicinski wrote:
-> On Tue, 8 Mar 2022 15:12:45 +0100 Ilya Maximets wrote:
->>>> diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
->>>> index 9d1710f20505..ab6755621e02 100644
->>>> --- a/include/uapi/linux/openvswitch.h
->>>> +++ b/include/uapi/linux/openvswitch.h
->>>> @@ -351,11 +351,16 @@ enum ovs_key_attr {
->>>>         OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV4,   /* struct ovs_key_ct_tuple_ipv4 */
->>>>         OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV6,   /* struct ovs_key_ct_tuple_ipv6 */
->>>>         OVS_KEY_ATTR_NSH,       /* Nested set of ovs_nsh_key_* */
->>>> -       OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
->>>>  
->>>>  #ifdef __KERNEL__
->>>>         OVS_KEY_ATTR_TUNNEL_INFO,  /* struct ip_tunnel_info */
->>>>  #endif
->>>> +       /* User space decided to squat on types 30 and 31 */
->>>> +       OVS_KEY_ATTR_IPV6_EXTHDRS = 32, /* struct ovs_key_ipv6_exthdr */
->>>> +       /* WARNING: <scary warning to avoid the problem coming back> */  
->>
->> Yes, that is something that I had in mind too.  The only thing that makes
->> me uncomfortable is OVS_KEY_ATTR_TUNNEL_INFO = 30 here.  Even though it
->> doesn't make a lot of difference, I'd better keep the kernel-only attributes
->> at the end of the enumeration.  Is there a better way to handle kernel-only
->> attribute?
-> 
-> My thought was to leave the kernel/userspace only types "behind" to
-> avoid perpetuating the same constructs.
-> 
-> Johannes's point about userspace to userspace messages makes the whole
-> thing a little less of an aberration.
-> 
-> Is there a reason for the types to be hidden under __KERNEL__? 
-> Or someone did that in a misguided attempt to save space in attr arrays
-> when parsing?
+On Tue, 8 Mar 2022 08:11:11 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
 
-My impression is that OVS_KEY_ATTR_TUNNEL_INFO was hidden from the
-user space just because it's not supposed to ever be used by the
-user space application.  Pravin or Jesse should know for sure.
+> > From: Alex Williamson <alex.williamson@redhat.com>
+> > Sent: Tuesday, March 8, 2022 3:53 AM =20
+> > > =20
+> > > > I think we still require acks from Bjorn and Zaibo for select patch=
+es
+> > > > in this series. =20
+> > >
+> > > I checked with Ziabo. He moved projects and is no longer looking into=
+ =20
+> > crypto stuff. =20
+> > > Wangzhou and LiuLongfang now take care of this. Received acks from =20
+> > Wangzhou =20
+> > > already and I will request Longfang to provide his. Hope that's ok. =
+=20
+> >=20
+> > Maybe a good time to have them update MAINTAINERS as well.  Thanks,
+> >  =20
+>=20
+> I have one question here (similar to what we discussed for mdev before).
+>=20
+> Now we are adding vendor specific drivers under /drivers/vfio. Two drivers
+> on radar and more will come. Then what would be the criteria for=20
+> accepting such a driver? Do we prefer to a model in which the author shou=
+ld
+> provide enough background for vfio community to understand how it works=20
+> or as done here just rely on the PF driver owner to cover device specific
+> code?
+>=20
+> If the former we may need document some process for what information
+> is necessary and also need secure increased review bandwidth from key
+> reviewers in vfio community.
+>=20
+> If the latter then how can we guarantee no corner case overlooked by both
+> sides (i.e. how to know the coverage of total reviews)? Another open is w=
+ho
+> from the PF driver sub-system should be considered as the one to give the
+> green signal. If the sub-system maintainer trusts the PF driver owner and
+> just pulls commits from him then having the r-b from the PF driver owner =
+is
+> sufficient. But if the sub-system maintainer wants to review detail change
+> in every underlying driver then we probably also want to get the ack from
+> the maintainer.
+>=20
+> Overall I didn't mean to slow down the progress of this series. But above
+> does be some puzzle occurred in my review. =F0=9F=98=8A
 
-> 
->> Also, the OVS_KEY_ATTR_ND_EXTENSIONS (31) attribute used to store IPv6 Neighbor
->> Discovery extensions is currently implemented only for userspace, but nothing
->> actually prevents us having the kernel implementation.  So, we need a way to
->> make it usable by the kernel in the future.
-> 
-> The "= 32" leaves the earlier attr types as reserved so nothing
-> prevents us from defining them later. But..
-> 
->>> It might be nicer to actually document here in what's at least supposed
->>> to be the canonical documentation of the API what those types were used
->>> for.  
->>
->> I agree with that.
-> 
-> Should we add the user space types to the kernel header and remove the
-> ifdef __KERNEL__ around TUNNEL_INFO, then?
+Hi Kevin,
 
-I don't think we need to actually define them, but we may list them
-in the comment.  I'm OK with either option though.
+Good questions, I'd like a better understanding of expectations as
+well.  I think the intentions are the same as any other sub-system, the
+drivers make use of shared interfaces and extensions and the role of
+the sub-system should be to make sure those interfaces are used
+correctly and extensions fit well within the overall design.  However,
+just as the network maintainer isn't expected to fully understand every
+NIC driver, I think/hope we have the same expectations here.  It's
+certainly a benefit to the community and perceived trustworthiness if
+each driver outlines its operating model and security nuances, but
+those are only ever going to be the nuances identified by the people
+who have the access and energy to evaluate the device.
 
-For the removal of ifdef __KERNEL__, that might be a good thing to do.
-I'm just not sure what are the best practices here.
-We'll need to make some code changes in user space to avoid warnings
-about not all the enum members being used in 'switch'es.  But that's
-not a problem.
+It's going to be up to the community to try to determine that any new
+drivers are seriously considering security and not opening any new gaps
+relative to behavior using the base vfio-pci driver.  For the driver
+examples we have, this seems a bit easier than evaluating an entire
+mdev device because they're largely providing direct access to the
+device rather than trying to multiplex a shared physical device.  We
+can therefore focus on incremental functionality, as both drivers have
+done, implementing a boilerplate vendor driver, then adding migration
+support.  I imagine this won't always be the case though and some
+drivers will re-implement much of the core to support further emulation
+and shared resources.
 
-If you think that having a flat enum without 'ifdef's is a viable
-option from a kernel's point of view, I'm all for it.
+So how do we as a community want to handle this?  I wouldn't mind, I'd
+actually welcome, some sort of review requirement for new vfio vendor
+driver variants.  Is that reasonable?  What would be the criteria?
+Approval from the PF driver owner, if different/necessary, and at least
+one unaffiliated reviewer (preferably an active vfio reviewer or
+existing vfio variant driver owner/contributor)?  Ideas welcome.
+Thanks,
 
-Maybe something like this (only checked that this compiles; 29 and
-30 are correct numbers of these userspace attributes):
+Alex
 
----
-diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
-index 9d1710f20505..86bc951be5bc 100644
---- a/include/uapi/linux/openvswitch.h
-+++ b/include/uapi/linux/openvswitch.h
-@@ -351,11 +351,19 @@ enum ovs_key_attr {
- 	OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV4,   /* struct ovs_key_ct_tuple_ipv4 */
- 	OVS_KEY_ATTR_CT_ORIG_TUPLE_IPV6,   /* struct ovs_key_ct_tuple_ipv6 */
- 	OVS_KEY_ATTR_NSH,       /* Nested set of ovs_nsh_key_* */
--	OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
- 
--#ifdef __KERNEL__
--	OVS_KEY_ATTR_TUNNEL_INFO,  /* struct ip_tunnel_info */
--#endif
-+	/* User space decided to squat on types 29 and 30.  They are listed
-+	 * below, but should not be sent to the kernel:
-+	 *
-+	 * OVS_KEY_ATTR_PACKET_TYPE,   be32 packet type
-+	 * OVS_KEY_ATTR_ND_EXTENSIONS, IPv6 Neighbor Discovery extensions
-+	 *
-+	 * WARNING: No new types should be added unless they are defined
-+	 *          for both kernel and user space (no 'ifdef's).  It's hard
-+	 *          to keep compatibility otherwise. */
-+	OVS_KEY_ATTR_TUNNEL_INFO = 31,  /* struct ip_tunnel_info.
-+					   For in-kernel use only. */
-+	OVS_KEY_ATTR_IPV6_EXTHDRS,  /* struct ovs_key_ipv6_exthdr */
- 	__OVS_KEY_ATTR_MAX
- };
- 
-diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
-index 8b4124820f7d..315064bada3e 100644
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -346,7 +346,7 @@ size_t ovs_key_attr_size(void)
- 	/* Whenever adding new OVS_KEY_ FIELDS, we should consider
- 	 * updating this function.
- 	 */
--	BUILD_BUG_ON(OVS_KEY_ATTR_TUNNEL_INFO != 30);
-+	BUILD_BUG_ON(OVS_KEY_ATTR_MAX != 32);
- 
- 	return    nla_total_size(4)   /* OVS_KEY_ATTR_PRIORITY */
- 		+ nla_total_size(0)   /* OVS_KEY_ATTR_TUNNEL */
----
-
-Thoughts?
-
-The same change can be ported to the user-space header, but with
-types actually defined and not part of the comment.  It may look
-like this: https://pastebin.com/k8UWEZtR  (without IPV6_EXTHDRS yet).
-For the future, we'll try to find a way to define them in a separate
-enum or will define them dynamically based on the policy dumped from
-the currently running kernel. In any case no new userspace-only types
-should be defined in that enum.
-
-Best regards, Ilya Maximets.

@@ -2,62 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AB14D2462
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAB44D2460
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350766AbiCHWeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S1350773AbiCHWem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347211AbiCHWeH (ORCPT
+        with ESMTP id S235436AbiCHWel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:34:07 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340182657B;
-        Tue,  8 Mar 2022 14:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZnnZECseUcd9qArTaNvmaOGk8AT/bGfF2OBX0/Pu6YI=; b=BGXn/vo6kdZZ23p4KvpqaaT/l8
-        wVSJRIEWuCWWIkTBOzOK0avCBqTr6SZ1hN84uOn1+N43X/GsH8cpJJv1Lc4R4qyktlVvvKRxmvqsJ
-        JYTgTflMVPUfCtoV2bidg+s/K11rA/DOK2V6L6nMigF1EHYhkIuC0zLwnM6o49WLoLuciPCH6sUSe
-        YFfXUafsLPm4LYOhXUb8tH1BsLIX5pE23DSChwCrHdrfsubt6kUO08VxgGQOJcqs43wFRxKC1jo8i
-        hT24zgjkCoU8ru60bt6egiBLSkTqKwUKsHnCeJ8tB3CzSq++M/6ZErORxW96JeMSJBzVZfwTDc/h3
-        5TzKZdnw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRiNj-00GbDB-AW; Tue, 08 Mar 2022 22:32:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BEE3F30027B;
-        Tue,  8 Mar 2022 23:32:37 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 79FB520097204; Tue,  8 Mar 2022 23:32:37 +0100 (CET)
-Date:   Tue, 8 Mar 2022 23:32:37 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
-        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
-References: <20220308153011.021123062@infradead.org>
- <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
- <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Tue, 8 Mar 2022 17:34:41 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 091F758E4A;
+        Tue,  8 Mar 2022 14:33:43 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.90,165,1643641200"; 
+   d="scan'208";a="112895803"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 09 Mar 2022 07:33:43 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 32744400F2D7;
+        Wed,  9 Mar 2022 07:33:41 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 0/3] Renesas RZ/V2L add GPU/OPP/TSU support
+Date:   Tue,  8 Mar 2022 22:33:21 +0000
+Message-Id: <20220308223324.7456-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,36 +45,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 11:01:04PM +0100, Peter Zijlstra wrote:
-> On Tue, Mar 08, 2022 at 12:00:52PM -0800, Alexei Starovoitov wrote:
-> > On Tue, Mar 08, 2022 at 04:30:11PM +0100, Peter Zijlstra wrote:
-> > > Hopefully last posting...
-> > > 
-> > > Since last time:
-> > > 
-> > >  - updated the ftrace_location() patch (naveen, rostedt)
-> > >  - added a few comments and clarifications (bpetkov)
-> > >  - disable jump-tables (joao)
-> > >  - verified clang-14-rc2 works
-> > >  - fixed a whole bunch of objtool unreachable insn issue
-> > >  - picked up a few more tags
-> > > 
-> > > Patches go on top of tip/master + arm64/for-next/linkage. Also available here:
-> > > 
-> > >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
-> > 
-> > I've tried to test it.
-> 
-> I could cleanly do:
-> 
-> git checkout tip/master
-> git merge bpf-next/master
-> git merge queue/x86/wip.ibt
-> 
-> You want me to push out that result somewhere?
+Hi All,
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
+This patch series adds GPU/TSU/OPP support to Renesas RZ/V2L SoC.
 
-includes bpf-next/master.
+patches apply on top of [0].
 
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/geert/
+renesas-devel.git/log/?h=renesas-arm-dt-for-v5.19
+
+Lad Prabhakar (3):
+  arm64: dts: renesas: r9a07g054: Fillup the GPU node
+  arm64: dts: renesas: r9a07g054: Add OPP table
+  arm64: dts: renesas: r9a07g054: Add TSU node
+
+ arch/arm64/boot/dts/renesas/r9a07g054.dtsi | 132 ++++++++++++++++++++-
+ 1 file changed, 131 insertions(+), 1 deletion(-)
+
+-- 
+2.17.1
 

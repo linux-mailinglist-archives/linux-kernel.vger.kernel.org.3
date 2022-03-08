@@ -2,91 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBB24D2343
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AF34D2347
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244914AbiCHV0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
+        id S1350429AbiCHV0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:26:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350429AbiCHVZ6 (ORCPT
+        with ESMTP id S1350236AbiCHV03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:25:58 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDE15004E;
-        Tue,  8 Mar 2022 13:25:00 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so363200wmf.0;
-        Tue, 08 Mar 2022 13:25:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nDOGbN5ER5kyhrbrSeZfaKAJZ4dw3JtTr6jnBgdLbBI=;
-        b=kmHrGTMSvm6tF864EuT2q9gVNsYXS3s2uIcUZWHBIrB9Q8oVsXygqnpmpDyJow/rtB
-         lldvQxzcy5qU3NO7j9RwlGt7C5cuRxfx5L5x+qoB7R/6PFU+YEtXgbcO06pt+DNxgbRg
-         0kIjeFi+TQVc5+qYRitxrs1b2/ekbArAvz+zBucgyNYqI5PyyYZNMzlMSS3P4pF7aTxl
-         2zxa7YL1+Vy//v5c8ZaLvqYnfikwRN5rmd6yAm/wttKeNs2HOR4SKL2jEBPLrpWgeBb2
-         q2DN0hNxiKsbH8Uw0q7n9hZBcaeHq0Ptst/XDlYJYnZd9lcmkWIeR6bLTTqFO2/h3AW9
-         mGgQ==
+        Tue, 8 Mar 2022 16:26:29 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AAF5045D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:25:31 -0800 (PST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EDED23F1FC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 21:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646774729;
+        bh=k1EcgWYLYUAyFXD7zaCIFVTgmkFymkNTxJcCjb0ZEck=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=lTd8nFUUmiWtrxG9Mnaxc/qrqGU3u1bhjirtM1rdUtIkcKc8fEfZb1Vs++byi8sxn
+         NM6jNaAQ9DmhqVFQLhkpRGQdaBCs2NujbMIlOAgL+CBiQtDthLZCoyvfyYHPmjt9p7
+         I/llI5jbTpgPp6Lt9a5gq6igrddMqTbzNZilfJTpYC2NPRiPGV0aEWYeHISvx+Gp7q
+         Pr/LKTjwAdf8TmYSCt4N2sXOUlFzWeC2eaKpqDb5vSZVVZF1DxnpoKW0XWVe2feJlI
+         8wA7aYO2sJ/dQxd1u+5DSGdXFvtHey3QnYFj22M7ahlnedgmA5krbKJzFjYjB20zKJ
+         +bL5Cp9PskvgA==
+Received: by mail-pf1-f197.google.com with SMTP id w68-20020a62dd47000000b004f6aa5e4824so294135pff.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:25:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nDOGbN5ER5kyhrbrSeZfaKAJZ4dw3JtTr6jnBgdLbBI=;
-        b=oOK+g3dGp1xBl1FAjuaHaz5hzMPMZnAjEqydMNlMCPBSaVydHGFe1SOQ65QVxWdEpH
-         oAExkNisWVkjanIS8KKsZIYVRsdYc+HkpFPBIhvuctrMttrwJUzPlkwn21FlfPui2+gh
-         lYkVuAu+DbClc30432okKVk78XK9umHxiNMNKM13m+JRlqrENrsCqEXgU/6IyEh6K1qi
-         PX6VxHLEOekiGUB63WqVoXdilD440ey0Psgcc0GncNauBOXaBE62a4ee2c6WIw87Ll4B
-         T8nfrSqbuJAOcwWUrutuse/VQxayP2w7vdC/S5lPROuc3erTA7Q1lbTj+GbxfIWPXgbj
-         II+Q==
-X-Gm-Message-State: AOAM531Zr8SFyb3nfttcM1TCbzST1CHlbWln/p6KGT6evzJHCKaPjiXl
-        G/88QgE+PUyNBf2Adb5aww==
-X-Google-Smtp-Source: ABdhPJxuYGxepEE8cVVoar6pJEOKukfeg0awhEsWbFqsOc0BU99sBdi+fMLBfybk2ElJ5BBGowTeEQ==
-X-Received: by 2002:a05:600c:3b1c:b0:389:8677:6c73 with SMTP id m28-20020a05600c3b1c00b0038986776c73mr934939wms.192.1646774698977;
-        Tue, 08 Mar 2022 13:24:58 -0800 (PST)
-Received: from localhost.localdomain ([46.53.254.141])
-        by smtp.gmail.com with ESMTPSA id b3-20020a5d4d83000000b001f1d72a6f97sm26070wru.50.2022.03.08.13.24.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 13:24:58 -0800 (PST)
-Date:   Wed, 9 Mar 2022 00:24:56 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     David Gow <davidgow@google.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Magnus =?utf-8?B?R3Jvw58=?= <magnus.gross@rwth-aachen.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] binfmt_elf: Introduce KUnit test
-Message-ID: <YifJqN+5ju4kHQ2y@localhost.localdomain>
-References: <20220304044831.962450-1-keescook@chromium.org>
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :comments:mime-version:content-id:content-transfer-encoding:date
+         :message-id;
+        bh=k1EcgWYLYUAyFXD7zaCIFVTgmkFymkNTxJcCjb0ZEck=;
+        b=TslepCGehbWZlOE6944RSTvYYEHoZ0YJETo8EWuVYps/UNRnK09P2nt6eojFwnP05N
+         vCr42PIOLNd8wPs5qqyjcjwXXFiRviFbvfMCEei3lgsN4vTqCCJNB1mnHcNI8YlE8KEU
+         MFGPpJiIMMrv5GuvBcHWae6smfCVK+zQPtreYz0AA+fFjuPHqN/38jWHOM7C6SNlZ0WE
+         bLvZmAAdlWq5afvsmyChzgnjNRfDZgAMc79LjOFZINTchP4WpSpf80Utx1n9R0CGtAjg
+         wjRSMql4nuIiQ5r+vR5MLN9fjVNfjKjbzRxnEoVYtVUhNiyRwrSrRe24svf2IZ+soivb
+         p1fw==
+X-Gm-Message-State: AOAM5331pgUdnBA2lfgck5IYM/dJ1oRXIfh/1vcjjUkihAJdSvmsa5sp
+        6YkD+9D6istBrXU8UIEA1f4Xd+XqMm+Evb7XswpsIiw2ML7m5qJ3tyWnp7qWcstpiMR6ZQfpBgX
+        uTlmA3M6AnG6yWcUdmX73VN1eZXfiar5QuRvXscsHyg==
+X-Received: by 2002:a17:90b:381:b0:1bf:50c7:a4e9 with SMTP id ga1-20020a17090b038100b001bf50c7a4e9mr900280pjb.239.1646774728498;
+        Tue, 08 Mar 2022 13:25:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy39PhTEUw/KyrgGCIEqii3uT4UieXtD6WlB4juAC6T/mMJaO5oCeX6woa94Glhfxi8aOBd5A==
+X-Received: by 2002:a17:90b:381:b0:1bf:50c7:a4e9 with SMTP id ga1-20020a17090b038100b001bf50c7a4e9mr900252pjb.239.1646774728086;
+        Tue, 08 Mar 2022 13:25:28 -0800 (PST)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004e10af156adsm21415090pfc.190.2022.03.08.13.25.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 08 Mar 2022 13:25:27 -0800 (PST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 2682D60DD1; Tue,  8 Mar 2022 13:25:27 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 20FF19FAC3;
+        Tue,  8 Mar 2022 13:25:27 -0800 (PST)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Lianjie Zhang <zhanglianjie@uniontech.com>
+cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] bonding: helper macro __ATTR_RO to make code more clear
+In-reply-to: <20220307013333.15826-1-zhanglianjie@uniontech.com>
+References: <20220307013333.15826-1-zhanglianjie@uniontech.com>
+Comments: In-reply-to Lianjie Zhang <zhanglianjie@uniontech.com>
+   message dated "Mon, 07 Mar 2022 09:33:33 +0800."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220304044831.962450-1-keescook@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2940.1646774727.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 08 Mar 2022 13:25:27 -0800
+Message-ID: <2941.1646774727@famine>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 08:48:31PM -0800, Kees Cook wrote:
-> Adds simple KUnit test for some binfmt_elf internals: specifically a
-> regression test for the problem fixed by commit 8904d9cd90ee ("ELF:
-> fix overflow in total mapping size calculation").
+Lianjie Zhang <zhanglianjie@uniontech.com> wrote:
 
-> +	/* No headers, no size. */
-> +	KUNIT_EXPECT_EQ(test, total_mapping_size(NULL, 0), 0);
+>From: zhanglianjie <zhanglianjie@uniontech.com>
+>
+>Delete SLAVE_ATTR macro, use __ATTR_RO replacement,
+>make code logic clearer and unified.
+>
+>Signed-off-by: Lianjie Zhang <zhanglianjie@uniontech.com>
+>Reviewed-by: Jay Vosburgh <jay.vosburgh@canonical.com>
 
-This is meaningless test. This whole function only makes sense
-if program headers are read and loading process advances far enough
-so that pointer is not NULL.
+	Please do not add tags that individuals do not explicitly
+provide.
 
-Are we going to mock every single function in the kernel?
-Disgusting.
+	Other than the above, the change seems fine.
+
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+
+	-J
+
+>diff --git a/drivers/net/bonding/bond_sysfs_slave.c b/drivers/net/bonding=
+/bond_sysfs_slave.c
+>index 6a6cdd0bb258..69b0a3751dff 100644
+>--- a/drivers/net/bonding/bond_sysfs_slave.c
+>+++ b/drivers/net/bonding/bond_sysfs_slave.c
+>@@ -15,14 +15,8 @@ struct slave_attribute {
+> 	ssize_t (*show)(struct slave *, char *);
+> };
+>
+>-#define SLAVE_ATTR(_name, _mode, _show)				\
+>-const struct slave_attribute slave_attr_##_name =3D {		\
+>-	.attr =3D {.name =3D __stringify(_name),			\
+>-		 .mode =3D _mode },				\
+>-	.show	=3D _show,					\
+>-};
+> #define SLAVE_ATTR_RO(_name)					\
+>-	SLAVE_ATTR(_name, 0444, _name##_show)
+>+const struct slave_attribute slave_attr_##_name =3D __ATTR_RO(_name)
+>
+> static ssize_t state_show(struct slave *slave, char *buf)
+> {
+>--
+>2.20.1
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com

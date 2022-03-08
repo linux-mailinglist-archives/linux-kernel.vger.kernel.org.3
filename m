@@ -2,83 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3736C4D1A61
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7794B4D1A6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347419AbiCHOZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
+        id S235711AbiCHO0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343682AbiCHOZU (ORCPT
+        with ESMTP id S245179AbiCHO0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:25:20 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439D84B849;
-        Tue,  8 Mar 2022 06:24:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1646749463;
-  x=1678285463;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gchs80jcH+/5TFd0a5Cy8wkt4l2VcoMbwk5kapLsbnY=;
-  b=YecgrHTgaYodtEGv0gXOUJy10uw57FE8fGJKquWmmLk69aponOEHrFNa
-   znlWt91z98sQSQ6pEML2n+Y76vFXDsqDONHbLrkTiUMo/RmNN32cJ3Z+5
-   y9Lm4VFzP2kgPzxArDiK4Aw9Ubhi2A7du40fyLqWX0eztSH2lgipU5q7U
-   9BcKFmwT62RJXQdSFTAL5ZOVbzKOLNyNLykaAl3LXTP5cAfY5JIg2XINC
-   yBZQ5SWdCCxvgBgqpyWF+Gbg9VJq7bAt/zam0LdmypHoPEpJ6xpZgGitX
-   AoVk8ylL62wVFShbZxohe0+TF+qrYKZIIBdBcKI9hIUFakXIOLyEGA04A
-   Q==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <krzysztof.kozlowski@canonical.com>, <tglx@linutronix.de>,
-        <daniel.lezcano@linaro.org>
-CC:     <kernel@axis.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <alim.akhtar@samsung.com>, <robh+dt@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Subject: [PATCH v2 4/4] clocksource/drivers/exynos_mct: Enable building on ARTPEC
-Date:   Tue, 8 Mar 2022 15:24:10 +0100
-Message-ID: <20220308142410.3193729-5-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220308142410.3193729-1-vincent.whitchurch@axis.com>
-References: <20220308142410.3193729-1-vincent.whitchurch@axis.com>
+        Tue, 8 Mar 2022 09:26:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 462704B87D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:25:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646749515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kumltRP5xoYTs9zCrvASai08H9k31B5+7rHSh9VugPY=;
+        b=aN7D5xEulCZO4qN5dGw0dpoS6gsjmzUc/Uu5dRThH8THuJ03gvhVJ5t2oCX9AT1rFAzJbz
+        VIzI9nfc13VS5F1Wb6vXSMroz0Wc+YKQBzpw6p3UYNPuTKF6SehruKMB5Ows1Cn5j2p1U7
+        tTqCE2aO47szaAdMARSxBX4OKHTJHro=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-21-dhAVJKmAOSqQNrnUadIz_Q-1; Tue, 08 Mar 2022 09:25:14 -0500
+X-MC-Unique: dhAVJKmAOSqQNrnUadIz_Q-1
+Received: by mail-wm1-f72.google.com with SMTP id n62-20020a1ca441000000b0038124c99ebcso6504185wme.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 06:25:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=kumltRP5xoYTs9zCrvASai08H9k31B5+7rHSh9VugPY=;
+        b=r34MY34UFAySL9IZ3mzbd/JFWfJWbR5zgIjWiQS5zvp+N3aw7EM7n1lbRNYdbg/XwX
+         +0tzOFOBZy+8GTfR/6c1V8RXbknnxqcOjJjjUNVxfHhjFkUsOAjDzsu4cf06KLTRV3KA
+         x0I0fFodXMZmMMJxt3bHdIB3itBfaMqUTeOyKNiuxJ3rUapntHrE/USdcfwZPXSVZZKc
+         407zTBiLZGuON0yno8taFyZow5woNWQI3/2dKTBD1sfH2yldkDl/ztq9r6rL5r45V2xK
+         ma2QfSqBYrCM32KEuNC4uDYJBNxFyFQGakVA2Zrnz6z8udWtHZk7dP8JMVlIPa+R3SYQ
+         ojrA==
+X-Gm-Message-State: AOAM531sLgsnd+CRhiRlQiwzogDiUAvwAXjSWavvvtprCtXuEZrqDF7e
+        vVnbu2IV4+eAKDNR3kO2yWnXha+vbVHo5ljHwz8mOBF+uzTfOhQgaNpZk33FLkv/0HeAU2Hfx+T
+        u3AXRyMf9Sav30sG/j8XGAA9z
+X-Received: by 2002:a05:6000:154b:b0:1f0:6019:ea3a with SMTP id 11-20020a056000154b00b001f06019ea3amr12330570wry.395.1646749512989;
+        Tue, 08 Mar 2022 06:25:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxznZCLNljth4M8V08Um5+lfKLr3E/0Oh4tOhNEBRjr9ngJ4D3YE+L+JEPV/yWQExUVOsyeVQ==
+X-Received: by 2002:a05:6000:154b:b0:1f0:6019:ea3a with SMTP id 11-20020a056000154b00b001f06019ea3amr12330552wry.395.1646749512782;
+        Tue, 08 Mar 2022 06:25:12 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:b000:acda:b420:16aa:6b67? (p200300cbc708b000acdab42016aa6b67.dip0.t-ipconnect.de. [2003:cb:c708:b000:acda:b420:16aa:6b67])
+        by smtp.gmail.com with ESMTPSA id v14-20020adfd18e000000b0020373e5319asm244959wrc.103.2022.03.08.06.25.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 06:25:12 -0800 (PST)
+Message-ID: <d170ca91-4913-900c-1d2b-b8fc63076124@redhat.com>
+Date:   Tue, 8 Mar 2022 15:25:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/3] KVM: use vcalloc/__vcalloc for very large allocations
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, stable@vger.kernel.org
+References: <20220308105918.615575-1-pbonzini@redhat.com>
+ <20220308105918.615575-4-pbonzini@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220308105918.615575-4-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This timer block is used on ARTPEC-8.
+On 08.03.22 11:59, Paolo Bonzini wrote:
+> Allocations whose size is related to the memslot size can be arbitrarily
+> large.  Do not use kvzalloc/kvcalloc, as those are limited to "not crazy"
+> sizes that fit in 32 bits.  Now that it is available, they can use either
+> vcalloc or __vcalloc, the latter if accounting is required.
+> 
+> Cc: stable@vger.kernel.org
+> Cc: kvm@vger.kernel.org
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
+Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
 
-Notes:
-    v2: No changes.
+?
 
- drivers/clocksource/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index ae95d06a4a8f..2ea981ef23af 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -419,7 +419,7 @@ config ATMEL_TCB_CLKSRC
- config CLKSRC_EXYNOS_MCT
- 	bool "Exynos multi core timer driver" if COMPILE_TEST
- 	depends on ARM || ARM64
--	depends on ARCH_EXYNOS || COMPILE_TEST
-+	depends on ARCH_ARTPEC || ARCH_EXYNOS || COMPILE_TEST
- 	help
- 	  Support for Multi Core Timer controller on Exynos SoCs.
- 
+
 -- 
-2.34.1
+Thanks,
+
+David / dhildenb
 

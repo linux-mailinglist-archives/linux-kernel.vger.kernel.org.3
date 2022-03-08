@@ -2,118 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB2C4D23CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121A24D23D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245283AbiCHWEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S1344067AbiCHWEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:04:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234181AbiCHWEB (ORCPT
+        with ESMTP id S234181AbiCHWE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:04:01 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CE62B1B1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:03:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646776984; x=1678312984;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=ZT26ErrkMnLS+1+vNfP977cSvkK8za/maZjsPLhMLgc=;
-  b=PglgO//LYcJ65FW0EVU5OzB1OhCEsukZhM/grFOdNPF2aySv3HrNqGjN
-   /28TN5fAmZgpBDZ+ZA/EtB71idK3HVk7r5qrEBqmo/EDUQ24ZkXW8SWO/
-   uWVK/xXct5gAfT9LbOmXgsfVX/M7SwfajRXIGF/PDjGTX9ywz7jfFbP2/
-   VVKPadAJ/Y1G+twg62cmVzKqgUXCV72rtgZRuh4lz5IF0Th0yAnhtcYxa
-   0v+tOpE9UGQEIHlwDEq0EAbV+zydyOaq1ztzpO06GrFukUTowYi1sItkD
-   H3IX6dw19LoxHJ0WvYaACLY4kQxHhjs8iBdUjKSNqi1zrF+ig9VFdjm0Y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="234778287"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="234778287"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 14:03:04 -0800
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="547421221"
-Received: from ntebyanx-mobl7.amr.corp.intel.com (HELO [10.212.224.65]) ([10.212.224.65])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 14:03:01 -0800
-Message-ID: <3cef05aa-cc8c-f0a1-e48c-9cc8cdd327eb@intel.com>
-Date:   Tue, 8 Mar 2022 14:02:54 -0800
+        Tue, 8 Mar 2022 17:04:27 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC5F57168;
+        Tue,  8 Mar 2022 14:03:30 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228IXin0027268;
+        Tue, 8 Mar 2022 22:03:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=tCRppCeFVbaxkOhWX+SNPUWRc7R5mYlr0BincOdEP8Q=;
+ b=cDHFW4hXXnbl6TA689vL7Lj4LY2iB23pBIPGU/Jv35yq8P4Ifo3r4DLEl07hVpOFGKt+
+ HuPSMuC0si8WeX9rc1ObeY+Tsn95ghYLhKTsH63aosCvJolsgCqCF4H+vD+WLPmzd2us
+ 3GvVd+5rOYeH8zvFAqWpsQHg2HM/w2qZz1glz5Kv+2dj4MX7i6lbOO0a5nEHXDjbMXmZ
+ MoRFtAcKPcRaXNvkQHfvt3n/G1eumCdHd3Yo67s0q+7igPbYNiazGb1VtMefbDrY1hyV
+ UoVaOZg/oa5ggBzleftXmGmnViWn4//EAp1hIiXAj5aSQxIM6I3mQtb6+7XZy5RbXa8W pQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3env4ug749-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Mar 2022 22:03:17 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 228LmPd7017907;
+        Tue, 8 Mar 2022 22:03:12 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ekyg90fn7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Mar 2022 22:03:11 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 228M39CT31654146
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Mar 2022 22:03:09 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B32BA405B;
+        Tue,  8 Mar 2022 22:03:09 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36619A4054;
+        Tue,  8 Mar 2022 22:03:09 +0000 (GMT)
+Received: from localhost (unknown [9.171.69.133])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue,  8 Mar 2022 22:03:09 +0000 (GMT)
+Date:   Tue, 8 Mar 2022 23:03:07 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com
+Subject: Re: [PATCHv4 6/8] crypto: add rocksoft 64b crc guard tag framework
+Message-ID: <your-ad-here.call-01646776987-ext-8820@work.hours>
+References: <20220303201312.3255347-1-kbusch@kernel.org>
+ <20220303201312.3255347-7-kbusch@kernel.org>
+ <your-ad-here.call-01646770901-ext-3299@work.hours>
+ <20220308202747.GA3502158@dhcp-10-100-145-180.wdc.com>
+ <20220308214612.GB3502158@dhcp-10-100-145-180.wdc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
- <20220302142806.51844-26-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv5 25/30] x86/tdx: Make pages shared in ioremap()
-In-Reply-To: <20220302142806.51844-26-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220308214612.GB3502158@dhcp-10-100-145-180.wdc.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OIEJLqOoE_bT85ZWh-kNBAx5-nznZN4A
+X-Proofpoint-ORIG-GUID: OIEJLqOoE_bT85ZWh-kNBAx5-nznZN4A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-08_08,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 suspectscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 spamscore=0 mlxlogscore=862 malwarescore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203080111
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/22 06:28, Kirill A. Shutemov wrote:
-> In TDX guests, guest memory is protected from host access. If a guest
-> performs I/O, it needs to explicitly share the I/O memory with the host.
+On Tue, Mar 08, 2022 at 01:46:12PM -0800, Keith Busch wrote:
+> On Tue, Mar 08, 2022 at 12:27:47PM -0800, Keith Busch wrote:
+> > On Tue, Mar 08, 2022 at 09:21:41PM +0100, Vasily Gorbik wrote:
+> > > On Thu, Mar 03, 2022 at 12:13:10PM -0800, Keith Busch wrote:
+> > > > Hardware specific features may be able to calculate a crc64, so provide
+> > > > a framework for drivers to register their implementation. If nothing is
+> > > > registered, fallback to the generic table lookup implementation. The
+> > > > implementation is modeled after the crct10dif equivalent.
+> > > 
+> > > Hi Keith,
+> > > 
+> > > this is failing on big-endian systems. I get the following on s390:
+> > 
+> > Oh, I see the put_unaligned_le64() in chksum_final() was not the correct
+> > action. I'll send an update, thank you for the report.
 > 
-> Make all ioremap()ed pages that are not backed by normal memory
-> (IORES_DESC_NONE or IORES_DESC_RESERVED) mapped as shared.
-> 
-> Since TDX memory encryption support is similar to AMD SEV architecture,
-> reuse the infrastructure from AMD SEV code.
-> 
-> Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Reviewed-by: Andi Kleen <ak@linux.intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  arch/x86/mm/ioremap.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
-> index 026031b3b782..a5d4ec1afca2 100644
-> --- a/arch/x86/mm/ioremap.c
-> +++ b/arch/x86/mm/ioremap.c
-> @@ -242,10 +242,15 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
->  	 * If the page being mapped is in memory and SEV is active then
->  	 * make sure the memory encryption attribute is enabled in the
->  	 * resulting mapping.
-> +	 * In TDX guests, memory is marked private by default. If encryption
-> +	 * is not requested (using encrypted), explicitly set decrypt
-> +	 * attribute in all IOREMAPPED memory.
->  	 */
+> I'll set up a BE qemu target this week, but in the meantime, would you
+> be able to confirm if the following is successful?
 
-Nit: in this context, nobody knows what "private" means.
+Sure,
 
-I'd probably just say this in the changelog:
+[    0.543862] crc32: CRC_LE_BITS = 64, CRC_BE BITS = 64
+[    0.543864] crc32: self tests passed, processed 225944 bytes in 118678 nsec
+[    0.543986] crc32c: CRC_LE_BITS = 64
+[    0.543987] crc32c: self tests passed, processed 112972 bytes in 58932 nsec
+[    0.569479] crc32_combine: 8373 self tests passed
+[    0.595330] crc32c_combine: 8373 self tests passed
 
-	The permissions in PAGE_KERNEL_IO already work for "decrypted"
-	memory on AMD SEV/SME systems.  That means that they have no
-	need to make a pgprot_decrypted() call.
-
-	TDX guests, on the other hand, _need_ change to PAGE_KERNEL_IO
-	for "decrypted" mappings.  Add a pgprot_decrypted() for TDX.
-
-I'm not sure you need a code comment.  There's really nothing that
-mentions TDX in the code being commented.  If it needs clarification,
-I'd do it behind the pgprot*() helpers.
+it does the trick. Thanks!

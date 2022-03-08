@@ -2,239 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB944D1E60
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FEE4D1E9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348746AbiCHRS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
+        id S1349066AbiCHRVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348734AbiCHRSw (ORCPT
+        with ESMTP id S1348871AbiCHRUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:18:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F08817053
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:17:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646759874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XS0ZDRJdbTaFXTIodebwWZ2Zs2A9XDPYU7p1D6O1mf0=;
-        b=dIjGTYSRPyf8AKazEXlpGRVbebGC4btXDfmoHeC6Jbfb4GwJKy6OTd0MbJrNk3IXt7ZHIN
-        t6hK+yMw9CuSIWM0adhzdFOofgGPMwX9hSfJ1P7dS+utshUS0kBaXTWP2CZLf12kIfbtQE
-        Fgh4bVS8xZ6RSnA9G1ApWvI7QHwsKeY=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-YHx9v0s-NVmKU9F6HMFiSg-1; Tue, 08 Mar 2022 12:17:53 -0500
-X-MC-Unique: YHx9v0s-NVmKU9F6HMFiSg-1
-Received: by mail-wr1-f69.google.com with SMTP id e6-20020a5d4e86000000b001f045d4a962so5495222wru.21
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:17:52 -0800 (PST)
+        Tue, 8 Mar 2022 12:20:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA58453E0E;
+        Tue,  8 Mar 2022 09:19:06 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id r13so40808993ejd.5;
+        Tue, 08 Mar 2022 09:19:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b9q3WV8lntvCKBr5AGMUQYt2vLNJxP3dIKv5CzuYYyk=;
+        b=EomHAnCnZMf+ve0QKtHimO/HaXIZz8c1nmgw5ZV7ou+97SuiYwqDH1fKMGtBRBC9T4
+         8EgWeLFW6pRa1r2x/37kcK7Kqle3oV3yvVJ4RNvl2YfaWYz29kCHIgDcdBTZDPIpXAK/
+         2H13R/48S5zcbrHDsB1vkNCE5njq1cQX/Jr3CE358rRSgUdAZsIGAapDfiefv1pVrUlb
+         q4WfGREMg1O1noSVTtV2kkNx1ERmT8qom4dnGU0SByiefUaC6ZfvUkSe8NOjIHwTyp9o
+         NN7oJE2RzFjQO10eJF2o9u147lkL3R21z6K5/KDKmbD8rohoYHFSHS+VI8IkWWN24UfW
+         3tHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XS0ZDRJdbTaFXTIodebwWZ2Zs2A9XDPYU7p1D6O1mf0=;
-        b=D20inkbfEPXqGVc4tL9m1raz2Ip0pP87P/EMOeOQPiduLJA21a0iLXBt35El7ljf7v
-         muUAtSmcAJnIAmEWEBGRlhWG5G8sDYWabbHxfvJVEmbr5q4ufnb9/i4HAG0OK8L3A1v9
-         wIZv5VZ7ipik+xRoIJzGk/+VgLE+R/Savhe5SNuBeaB5ODyo0vvZfn+eMSMzlVUnQlpF
-         DOqPJYWsWAKaC+1mIP6Nq2oEq9Vo0f44/7dfgF/Ubavt7e7VQqUweOiccSkSzd39GQsO
-         dth4GSpp3aPDYGtG0i6gwVyJubH309wEClbVU9E3kN45dennZ48GDBZ3iZlRRJl6fmGW
-         wicw==
-X-Gm-Message-State: AOAM531PlBbjnIiVmHky70tc8xJumWO3V70+99Uplst66jkB26a73iu8
-        Radj2JaPkmwEwITgLjmddNeMII6wwGlyuQ3A/NW0Nqf9kDbiBmXWzB1u7AU2qh719f8NLb+1u6E
-        PuxibHrbYtI7xDYWW6bgkmGK1
-X-Received: by 2002:a5d:6d88:0:b0:1e3:37c1:3633 with SMTP id l8-20020a5d6d88000000b001e337c13633mr13694519wrs.484.1646759870732;
-        Tue, 08 Mar 2022 09:17:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzaK2eVHRi2q7VHFxDpXED+f3vKvPZuHUTcfgXWJzM+PfGD7TWOts3SCW6T6OiVKQsiFqgzBw==
-X-Received: by 2002:a5d:6d88:0:b0:1e3:37c1:3633 with SMTP id l8-20020a5d6d88000000b001e337c13633mr13694505wrs.484.1646759870390;
-        Tue, 08 Mar 2022 09:17:50 -0800 (PST)
-Received: from redhat.com ([2.55.24.184])
-        by smtp.gmail.com with ESMTPSA id u18-20020adfdd52000000b001f04e9f215fsm13950204wrm.53.2022.03.08.09.17.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b9q3WV8lntvCKBr5AGMUQYt2vLNJxP3dIKv5CzuYYyk=;
+        b=Pasu09vkDJT2Ch9C32AstQxc+7RB+uAxmGa+JOL+M9b+Mjy6vA/cQ5z9t4+nS1B0jC
+         1hJZLTe7pVQwAwfc46/lFZydOa5L9k4/lEwmuZs8aO1x/WnYCwgG2R8jU1BqDabjUWDB
+         oGheG60JQ93DqZgkX174hjxr1rfp2ljNeSmMY+tXCEiMLi0el6oW6cZb216CbBBh9OVu
+         DWe/qoOLkVTrR5geFoto3F+247IaEAFJoZ5I3m2dLesBT996+ieplgPXDzYOOUWxO2nN
+         NoOhS+4q9kmkktSJ0xhGoREKmWcPFgqOe6HmBNA2oYmEolATiHn5z0/Ri3waNkkkTtkm
+         a+yA==
+X-Gm-Message-State: AOAM533wBNW5Bi4ENjJfZsgIJMloQtpm5CzuRagJbvRs0LOfol6VQFTW
+        Pm3A6LzrQEDPDUQ5W1gHt+Q2BKam6jGd8A==
+X-Google-Smtp-Source: ABdhPJzSwQ+91AP4sG3RvTc6d9xsXF4F6ysWcT7GiB3A7tpjSk3n42D3uf4gI2hbc3vQN2Sa3vZDZg==
+X-Received: by 2002:a17:906:434e:b0:6d0:ed9c:68bc with SMTP id z14-20020a170906434e00b006d0ed9c68bcmr13605831ejm.70.1646759945207;
+        Tue, 08 Mar 2022 09:19:05 -0800 (PST)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id rv11-20020a17090710cb00b006d5c0cd5e0dsm6085044ejb.82.2022.03.08.09.19.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:17:49 -0800 (PST)
-Date:   Tue, 8 Mar 2022 12:17:45 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, jasowang@redhat.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
- whilst still in use
-Message-ID: <20220308120858-mutt-send-email-mst@kernel.org>
-References: <20220307191757.3177139-1-lee.jones@linaro.org>
- <YiZeB7l49KC2Y5Gz@kroah.com>
- <YicPXnNFHpoJHcUN@google.com>
- <Yicalf1I6oBytbse@kroah.com>
- <Yicer3yGg5rrdSIs@google.com>
- <YicolvcbY9VT6AKc@kroah.com>
- <20220308055003-mutt-send-email-mst@kernel.org>
- <YidBz7SxED2ii1Lh@kroah.com>
- <20220308071718-mutt-send-email-mst@kernel.org>
- <YidXT6zP1QN5KZUs@google.com>
+        Tue, 08 Mar 2022 09:19:04 -0800 (PST)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Greg Kroah-Hartman <greg@kroah.com>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-usb@vger.kernel.org (open list:USB GADGET/PERIPHERAL SUBSYSTEM),
+        Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH v2 00/26] usb: gadget: remove usage of list iterator past the loop
+Date:   Tue,  8 Mar 2022 18:17:52 +0100
+Message-Id: <20220308171818.384491-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YidXT6zP1QN5KZUs@google.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 01:17:03PM +0000, Lee Jones wrote:
-> On Tue, 08 Mar 2022, Michael S. Tsirkin wrote:
-> 
-> > On Tue, Mar 08, 2022 at 12:45:19PM +0100, Greg KH wrote:
-> > > On Tue, Mar 08, 2022 at 05:55:58AM -0500, Michael S. Tsirkin wrote:
-> > > > On Tue, Mar 08, 2022 at 10:57:42AM +0100, Greg KH wrote:
-> > > > > On Tue, Mar 08, 2022 at 09:15:27AM +0000, Lee Jones wrote:
-> > > > > > On Tue, 08 Mar 2022, Greg KH wrote:
-> > > > > > 
-> > > > > > > On Tue, Mar 08, 2022 at 08:10:06AM +0000, Lee Jones wrote:
-> > > > > > > > On Mon, 07 Mar 2022, Greg KH wrote:
-> > > > > > > > 
-> > > > > > > > > On Mon, Mar 07, 2022 at 07:17:57PM +0000, Lee Jones wrote:
-> > > > > > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
-> > > > > > > > > > to vhost_get_vq_desc().  All we have to do here is take the same lock
-> > > > > > > > > > during virtqueue clean-up and we mitigate the reported issues.
-> > > > > > > > > > 
-> > > > > > > > > > Also WARN() as a precautionary measure.  The purpose of this is to
-> > > > > > > > > > capture possible future race conditions which may pop up over time.
-> > > > > > > > > > 
-> > > > > > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
-> > > > > > > > > > 
-> > > > > > > > > > Cc: <stable@vger.kernel.org>
-> > > > > > > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-> > > > > > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > > > > > > > > ---
-> > > > > > > > > >  drivers/vhost/vhost.c | 10 ++++++++++
-> > > > > > > > > >  1 file changed, 10 insertions(+)
-> > > > > > > > > > 
-> > > > > > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > > > > > > > > index 59edb5a1ffe28..ef7e371e3e649 100644
-> > > > > > > > > > --- a/drivers/vhost/vhost.c
-> > > > > > > > > > +++ b/drivers/vhost/vhost.c
-> > > > > > > > > > @@ -693,6 +693,15 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > > > > > > > >  	int i;
-> > > > > > > > > >  
-> > > > > > > > > >  	for (i = 0; i < dev->nvqs; ++i) {
-> > > > > > > > > > +		/* No workers should run here by design. However, races have
-> > > > > > > > > > +		 * previously occurred where drivers have been unable to flush
-> > > > > > > > > > +		 * all work properly prior to clean-up.  Without a successful
-> > > > > > > > > > +		 * flush the guest will malfunction, but avoiding host memory
-> > > > > > > > > > +		 * corruption in those cases does seem preferable.
-> > > > > > > > > > +		 */
-> > > > > > > > > > +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
-> > > > > > > > > 
-> > > > > > > > > So you are trading one syzbot triggered issue for another one in the
-> > > > > > > > > future?  :)
-> > > > > > > > > 
-> > > > > > > > > If this ever can happen, handle it, but don't log it with a WARN_ON() as
-> > > > > > > > > that will trigger the panic-on-warn boxes, as well as syzbot.  Unless
-> > > > > > > > > you want that to happen?
-> > > > > > > > 
-> > > > > > > > No, Syzbot doesn't report warnings, only BUGs and memory corruption.
-> > > > > > > 
-> > > > > > > Has it changed?  Last I looked, it did trigger on WARN_* calls, which
-> > > > > > > has resulted in a huge number of kernel fixes because of that.
-> > > > > > 
-> > > > > > Everything is customisable in syzkaller, so maybe there are specific
-> > > > > > builds which panic_on_warn enabled, but none that I'm involved with
-> > > > > > do.
-> > > > > 
-> > > > > Many systems run with panic-on-warn (i.e. the cloud), as they want to
-> > > > > drop a box and restart it if anything goes wrong.
-> > > > > 
-> > > > > That's why syzbot reports on WARN_* calls.  They should never be
-> > > > > reachable by userspace actions.
-> > > > > 
-> > > > > > Here follows a topical example.  The report above in the Link: tag
-> > > > > > comes with a crashlog [0].  In there you can see the WARN() at the
-> > > > > > bottom of vhost_dev_cleanup() trigger many times due to a populated
-> > > > > > (non-flushed) worker list, before finally tripping the BUG() which
-> > > > > > triggers the report:
-> > > > > > 
-> > > > > > [0] https://syzkaller.appspot.com/text?tag=CrashLog&x=16a61fce700000
-> > > > > 
-> > > > > Ok, so both happens here.  But don't add a warning for something that
-> > > > > can't happen.  Just handle it and move on.  It looks like you are
-> > > > > handling it in this code, so please drop the WARN_ON().
-> > > > > 
-> > > > > thanks,
-> > > > > 
-> > > > > greg k-h
-> > > > 
-> > > > Hmm. Well this will mean if we ever reintroduce the bug then
-> > > > syzkaller will not catch it for us :( And the bug is there,
-> > > > it just results in a hard to reproduce error for userspace.
-> > > 
-> > > Is this an error you can recover from in the kernel?
-> > >  What is userspace
-> > > supposed to know with this information when it sees it?
-> > 
-> > IIUC we are talking about a use after free here since we somehow
-> > managed to have a pointer to the device in a worker while
-> > device is being destroyed.
-> > 
-> > That's the point of the warning as use after free is hard to debug. You
-> > ask can we recover from a use after free? 
-> > 
-> > As regards to the added lock, IIUC it kind of shifts the use after free
-> > window to later and since we zero out some of the memory just before we
-> > free it, it's a bit more likely to recover.  I would still like to see
-> > some more analysis on why the situation is always better than it was
-> > before though.
-> 
-> With the locks in place, the UAF should not occur.
+This patch set removes any use of the list iterator variable past
+the list body. This will allow defining the list iterator variable
+within the list_for_each_entry_*() macros to avoid any (invalid)
+use after the loop. If no break/goto was hit during list traversal
+the list iterator variable would otherwise be a bogus pointer
+since it is computed on something that is not actually an element
+of the list.
 
-This really depends which UAF. Yes use of vq->private_data is protected
-by a lock inside the VQ.
+I've basically followed what we discussed in:
+https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
 
-However, we are talking about vhost_net_release, which ends up doing
+There are some cases where it might be possible to 'ditch' the tmp
+variable and refactor the code past the loop into the loop body.
+For the sake of keeping the *_dequeue() functions more similar, I've
+decided against doing it for some and leaving it in others.
 
-        kfree(n->dev.vqs);
-...
-        kvfree(n);
+In general there are four use cases after the loop body here:
 
-if someone is holding a pointer to a vq or the device itself at this
-point, no locks that are part of one of said structures will be
-effective in preventing a use after free, and using a lock to delay such
-accesses to this point just might make it more likely there's a use
-after free.
+1) using &req->req in a comparision after the loop
+2) using the iterator as a pointer in a comparision after the loop
+3) use the &iterator->list to compare with the head to see if the
+	loop exits early
+4) using the iterator past the loop but using the rc variable to see if the
+	loop exits early
+
+Change since v1:
+	- renamed list iterator variable from 'tmp' to 'iter' (Linus)
+	- inverted the conditions within the loop (Linus)
+	- reverted the check on 'rc' after the loop (Greg & Krzysztof)
+
+Jakob Koschel (26):
+  usb: gadget: fsl: remove usage of list iterator past the loop body
+  usb: gadget: bdc: remove usage of list iterator past the loop body
+  usb: gadget: udc: atmel: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc: pxa25x: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc: at91: remove usage of list iterator past the loop
+    body
+  usb: gadget: goku_udc: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc: gr_udc: remove usage of list iterator past the loop
+    body
+  usb: gadget: lpc32xx_udc: remove usage of list iterator past the loop
+    body
+  usb: gadget: mv_u3d: remove usage of list iterator past the loop body
+  usb: gadget: udc: mv_udc_core: remove usage of list iterator past the
+    loop body
+  usb: gadget: net2272: remove usage of list iterator past the loop body
+  usb: gadget: udc: net2280: remove usage of list iterator past the loop
+    body
+  usb: gadget: omap_udc: remove usage of list iterator past the loop
+    body
+  usb: gadget: s3c-hsudc: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc-xilinx: remove usage of list iterator past the loop
+    body
+  usb: gadget: aspeed: remove usage of list iterator past the loop body
+  usb: gadget: configfs: remove using list iterator after loop body as a
+    ptr
+  usb: gadget: legacy: remove using list iterator after loop body as a
+    ptr
+  usb: gadget: udc: max3420_udc: remove using list iterator after loop
+    body as a ptr
+  usb: gadget: tegra-xudc: remove using list iterator after loop body as
+    a ptr
+  usb: gadget: composite: remove check of list iterator against head
+    past the loop body
+  usb: gadget: pxa27x_udc: replace usage of rc to check if a list
+    element was found
+  usb: gadget: composite: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc: core: remove usage of list iterator past the loop
+    body
+  usb: gadget: dummy_hcd: remove usage of list iterator past the loop
+    body
+  usb: gadget: udc: s3c2410: remove usage of list iterator past the loop
+    body
+
+ drivers/usb/gadget/composite.c           | 36 +++++++++++++-----------
+ drivers/usb/gadget/configfs.c            | 24 +++++++++-------
+ drivers/usb/gadget/legacy/hid.c          | 23 +++++++--------
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c | 12 ++++----
+ drivers/usb/gadget/udc/at91_udc.c        | 12 ++++----
+ drivers/usb/gadget/udc/atmel_usba_udc.c  | 13 +++++----
+ drivers/usb/gadget/udc/bdc/bdc_ep.c      | 13 ++++++---
+ drivers/usb/gadget/udc/core.c            | 20 +++++++------
+ drivers/usb/gadget/udc/dummy_hcd.c       | 17 +++++------
+ drivers/usb/gadget/udc/fsl_qe_udc.c      | 13 +++++----
+ drivers/usb/gadget/udc/fsl_udc_core.c    | 13 +++++----
+ drivers/usb/gadget/udc/goku_udc.c        | 12 ++++----
+ drivers/usb/gadget/udc/gr_udc.c          | 12 ++++----
+ drivers/usb/gadget/udc/lpc32xx_udc.c     | 12 ++++----
+ drivers/usb/gadget/udc/max3420_udc.c     | 18 +++++++-----
+ drivers/usb/gadget/udc/mv_u3d_core.c     | 12 ++++----
+ drivers/usb/gadget/udc/mv_udc_core.c     | 12 ++++----
+ drivers/usb/gadget/udc/net2272.c         | 13 +++++----
+ drivers/usb/gadget/udc/net2280.c         | 13 +++++----
+ drivers/usb/gadget/udc/omap_udc.c        | 12 ++++----
+ drivers/usb/gadget/udc/pxa25x_udc.c      | 13 +++++----
+ drivers/usb/gadget/udc/pxa27x_udc.c      | 13 +++++----
+ drivers/usb/gadget/udc/s3c-hsudc.c       | 12 ++++----
+ drivers/usb/gadget/udc/s3c2410_udc.c     | 17 +++++------
+ drivers/usb/gadget/udc/tegra-xudc.c      | 12 ++++----
+ drivers/usb/gadget/udc/udc-xilinx.c      | 13 +++++----
+ 26 files changed, 227 insertions(+), 165 deletions(-)
 
 
-All of the above is why we didn't rush to apply the locking patch in the
-first place, for all that it seemed to fix the sysboz crash.
-
-
-
-> The issue here is that you have 2 different tasks processing the
-> same area of memory (via pointers to structs).  In these scenarios you
-> should always provide locking and/or reference counting to prevent
-> memory corruption or UAF.
-
-But we should not have 2 tasks doing that, and if we do then lock
-just might be ineffective since the lock itself is released.
-
-Again maybe in this case it makes sense but it needs a more detailed
-analysis to show it's a net win than just "we have two tasks ergo we
-need locking".
-
-> -- 
-> Lee Jones [李琼斯]
-> Principal Technical Lead - Developer Services
-> Linaro.org │ Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+base-commit: 719fce7539cd3e186598e2aed36325fe892150cf
+--
+2.25.1
 

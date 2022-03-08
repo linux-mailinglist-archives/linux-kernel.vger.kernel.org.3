@@ -2,148 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0884D0D9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 02:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CA84D0D9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 02:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244553AbiCHBlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 20:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S1344295AbiCHBlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 20:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234625AbiCHBlT (ORCPT
+        with ESMTP id S234625AbiCHBl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 20:41:19 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CC93916D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:40:24 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id mv5-20020a17090b198500b001bf2a039831so829610pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 17:40:24 -0800 (PST)
+        Mon, 7 Mar 2022 20:41:29 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA0139176
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 17:40:34 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id n15so5695943plh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 17:40:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2oZHqNig67lQrBY101pOAHHtLLvXMV3c8bnYL4oUFgs=;
-        b=BqC3IovNxG0EX5R6eBwELil4WePyK5xpcSbZKRaGDvvWQv34opW72yKZwwI0ZERwOy
-         +q3qkTj8qt2V2lOoPUQusa1YS2V2olRuJFZ4SBpb8q1CVMrRLUdR9981BNODggbtVCme
-         dE/RoJ4lXkgCw592blfxLHs1wuvI7YBy+YUdQ6cvp5VtrmI5IBtsaWat8+olN5zakUjC
-         7dolRIi314WCbw8yMDCVQ8eyH0JLtoPmwWweeGUHBeui/Y+MmyOMZQ/KAFbsolZcm7fa
-         HVxTYqIyWcebbu0sqMVq6Wx5S32fyUmQzMNEqbKDyV1n0YXiZ77VTcOj6jOvPTKgBMSh
-         dmzg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=In56Q2F318ovMwvLgvHjGx4bpPv8YUwX7l8iUmQKcxs=;
+        b=A7qhRMNJ7VrqboeRiCx1fb62NhPps/u3YBRgBaB9fMhtrO8KvpSSBDpnKLHEw5FGQe
+         1B8KgGnuSC6/lhvXTnEIJsnAu19kTuFtkvUus7hqgU9QquaSpCGtksYUTjK6wK6zp2LH
+         YbL5cHGTAVY7kp1jAiAHlPH9l/VQkbjI7NvnJc6h5MqP8QFrtI8smOO3w8VfuBRJa60E
+         XHhGbEgET/XQAmJqvWXuREDMVljKNTz2K0vQ7xioG8qJU4A6rKvUTe7w33ngEoGSjHL9
+         lbRvs2DDiCfW9nJigQhYvtOX0RtOZ44lWeOmEQfrxf6GA00YxahHXLrSaCkRvTm27Ysg
+         dIZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=2oZHqNig67lQrBY101pOAHHtLLvXMV3c8bnYL4oUFgs=;
-        b=rllMRew8vdHV+qMP4M6YblmlK5VDgpopuW7A3mopeabbhgQe0eKyldqoAQr6IBCskB
-         BNpDI96oEubdTBdjn/agFIh3tIX+H+n+u6VnSswpOboq9H06Tmwb8qzmdSyjso7Jr35R
-         LRY8aGukmajZnv+Y4APXteTAIj/mjLd+JbiIb6zC6Nm8QrLECUSudfQWBjbfz+1uDNoj
-         yiGX8tGIBeRHsPzIAANlY5bebiai89mAw/b4CBAQI7mgJ6k4M1bYpC25i3jveVQDAKQe
-         4C4/MRMqJ4P3NFZUhQN+w6TtIl5eah9rFgdKNnHf5nOmP/WVn8ZUZd2oLzyhBbkUdPSm
-         dmLA==
-X-Gm-Message-State: AOAM532zDgzpz76m4X0TyomxViW6AN3OuFNTYXPMMwve/63Ph8rG5xav
-        LAyWM6UI+ApiP/NiUQJVGFCO54cp7yWps6IKBCqTiQ==
-X-Google-Smtp-Source: ABdhPJxEA3atALbfBSMj03rRMPNFxv4vBrK8TkDMyB2LCuJkL3ERSbUrRspo08Cewso0/CaU3sS9Og==
-X-Received: by 2002:a17:90a:7e95:b0:1bc:5d56:8d4c with SMTP id j21-20020a17090a7e9500b001bc5d568d4cmr1989175pjl.93.1646703623972;
-        Mon, 07 Mar 2022 17:40:23 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id e14-20020a056a001a8e00b004e136d54a15sm17858175pfv.105.2022.03.07.17.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 17:40:23 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Meier <florian.meier@koalo.de>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] ASoC: atmel: Fix error handling in snd_proto_probe
-Date:   Tue,  8 Mar 2022 01:39:48 +0000
-Message-Id: <20220308013949.20323-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <582c39ac-3099-d54f-5de3-d54a4ace0a04@microchip.com>
-References: <582c39ac-3099-d54f-5de3-d54a4ace0a04@microchip.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=In56Q2F318ovMwvLgvHjGx4bpPv8YUwX7l8iUmQKcxs=;
+        b=1SkfngXMhfL1Q24UeaKTCt0QNH6yzU47aFF0wXcoy8HSwOwLzSSIP00jgR+MQxA/3U
+         c8e6sveZBHUFkbJcSErwg/5Z6kQb4FCzj+EfuucdrgkCBejPblV+qgHqjmnjhG9qQZnu
+         lugR6smzhumHcN3qolvPQBenxQf/HUM1ozpG/tvXocqsIC8hbz0bIrciD8udY6hmYf06
+         gGxxfO3zhlGUBgnnW9AYXPL2Fk/oI9m6sjl2TSWNwcWRvKYer5ediKZWsXK1gHugrC6B
+         pBoYycxP964WSsb9JA8FXTNguymfDQ9dzaB5ljxuxtbgSzu1q3cKYTqxT0BjxbpEQI4E
+         ha1Q==
+X-Gm-Message-State: AOAM531rXWAQu045bMCr3FPR4w1uTv1fYbLQyGLTfeXsxlu0ecpQOy+6
+        IOTdbRLqlkVLmymMf3saR0VBwwZWsrbXQz2ekx8=
+X-Google-Smtp-Source: ABdhPJwNvQPh6ByDLUBeKqCDF+ZHTYDXopMivvlSv3PaXHLzWnSNJbjYX84JgxUIZjdZZagfs/PXgU8QjoUcamcWD/E=
+X-Received: by 2002:a17:90a:4411:b0:1bc:99b0:acad with SMTP id
+ s17-20020a17090a441100b001bc99b0acadmr2027583pjg.25.1646703633757; Mon, 07
+ Mar 2022 17:40:33 -0800 (PST)
+MIME-Version: 1.0
+References: <20220307074057.902222-1-42.hyeyoo@gmail.com> <20220307074057.902222-3-42.hyeyoo@gmail.com>
+In-Reply-To: <20220307074057.902222-3-42.hyeyoo@gmail.com>
+From:   Xiongwei Song <sxwjean@gmail.com>
+Date:   Tue, 8 Mar 2022 09:40:07 +0800
+Message-ID: <CAEVVKH-zYxn62wd8CzZx5Sw=6wTe2ZBMUyTSv8V2PR5bRoW-tA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] mm/slub: refactor deactivate_slab()
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+Hello,
 
-This function only calls of_node_put() in the regular path.
-And it will cause refcount leak in error paths.
-Fix this by calling of_node_put() in error handling too.
+On Mon, Mar 7, 2022 at 3:41 PM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+>
+> Simplify deactivate_slab() by unlocking n->list_lock and retrying
+> cmpxchg_double() when cmpxchg_double() fails, and perform
+> add_{partial,full} only when it succeed.
+>
+> Releasing and taking n->list_lock again here is not harmful as SLUB
+> avoids deactivating slabs as much as possible.
+>
+> [ vbabka@suse.cz: perform add_{partial,full} when cmpxchg_double()
+>   succeed.
+>
+>   count deactivating full slabs even if debugging flag is not set. ]
+>
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> ---
+>  mm/slub.c | 91 +++++++++++++++++++++++--------------------------------
+>  1 file changed, 38 insertions(+), 53 deletions(-)
+>
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 1ce09b0347ad..f0cb9d0443ac 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2348,10 +2348,10 @@ static void init_kmem_cache_cpus(struct kmem_cache *s)
+>  static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>                             void *freelist)
+>  {
+> -       enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE };
+> +       enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE, M_FULL_NOLIST };
+>         struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+> -       int lock = 0, free_delta = 0;
+> -       enum slab_modes l = M_NONE, m = M_NONE;
+> +       int free_delta = 0;
+> +       enum slab_modes mode = M_NONE;
+>         void *nextfree, *freelist_iter, *freelist_tail;
+>         int tail = DEACTIVATE_TO_HEAD;
+>         unsigned long flags = 0;
+> @@ -2393,14 +2393,10 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>          * Ensure that the slab is unfrozen while the list presence
+>          * reflects the actual number of objects during unfreeze.
+>          *
+> -        * We setup the list membership and then perform a cmpxchg
+> -        * with the count. If there is a mismatch then the slab
+> -        * is not unfrozen but the slab is on the wrong list.
+> -        *
+> -        * Then we restart the process which may have to remove
+> -        * the slab from the list that we just put it on again
+> -        * because the number of objects in the slab may have
+> -        * changed.
+> +        * We first perform cmpxchg holding lock and insert to list
+> +        * when it succeed. If there is mismatch then the slab is not
+> +        * unfrozen and number of objects in the slab may have changed.
+> +        * Then release lock and retry cmpxchg again.
+>          */
+>  redo:
+>
+> @@ -2420,61 +2416,50 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>         new.frozen = 0;
+>
+>         if (!new.inuse && n->nr_partial >= s->min_partial)
+> -               m = M_FREE;
+> +               mode = M_FREE;
+>         else if (new.freelist) {
+> -               m = M_PARTIAL;
+> -               if (!lock) {
+> -                       lock = 1;
+> -                       /*
+> -                        * Taking the spinlock removes the possibility that
+> -                        * acquire_slab() will see a slab that is frozen
+> -                        */
+> -                       spin_lock_irqsave(&n->list_lock, flags);
+> -               }
+> -       } else {
+> -               m = M_FULL;
+> -               if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
+> -                       lock = 1;
+> -                       /*
+> -                        * This also ensures that the scanning of full
+> -                        * slabs from diagnostic functions will not see
+> -                        * any frozen slabs.
+> -                        */
+> -                       spin_lock_irqsave(&n->list_lock, flags);
+> -               }
+> -       }
+> -
+> -       if (l != m) {
+> -               if (l == M_PARTIAL)
+> -                       remove_partial(n, slab);
+> -               else if (l == M_FULL)
+> -                       remove_full(s, n, slab);
+> +               mode = M_PARTIAL;
+> +               /*
+> +                * Taking the spinlock removes the possibility that
+> +                * acquire_slab() will see a slab that is frozen
+> +                */
+> +               spin_lock_irqsave(&n->list_lock, flags);
+> +       } else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
+> +               mode = M_FULL;
+> +               /*
+> +                * This also ensures that the scanning of full
+> +                * slabs from diagnostic functions will not see
+> +                * any frozen slabs.
+> +                */
+> +               spin_lock_irqsave(&n->list_lock, flags);
+> +       } else
+> +               mode = M_FULL_NOLIST;
+>
+> -               if (m == M_PARTIAL)
+> -                       add_partial(n, slab, tail);
+> -               else if (m == M_FULL)
+> -                       add_full(s, n, slab);
+> -       }
+>
+> -       l = m;
+>         if (!cmpxchg_double_slab(s, slab,
+>                                 old.freelist, old.counters,
+>                                 new.freelist, new.counters,
+> -                               "unfreezing slab"))
+> +                               "unfreezing slab")) {
+> +               if (mode == M_PARTIAL || mode == M_FULL)
+> +                       spin_unlock_irqrestore(&n->list_lock, flags);
 
-Fixes: a45f8853a5f9 ("ASoC: Add driver for PROTO Audio CODEC (with a WM8731)")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
----
-changes in v2:
-- remove extra line.
----
- sound/soc/atmel/mikroe-proto.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+The slab doesn't belong to any node here, should we remove locking/unlocking
+spin for cmpxchg_double_slab() call? Just calling spin_lock_irqsave() before
+add_partial()/add_full call is fine?
 
-diff --git a/sound/soc/atmel/mikroe-proto.c b/sound/soc/atmel/mikroe-proto.c
-index 627564c18c27..ce46d8a0b7e4 100644
---- a/sound/soc/atmel/mikroe-proto.c
-+++ b/sound/soc/atmel/mikroe-proto.c
-@@ -115,7 +115,8 @@ static int snd_proto_probe(struct platform_device *pdev)
- 	cpu_np = of_parse_phandle(np, "i2s-controller", 0);
- 	if (!cpu_np) {
- 		dev_err(&pdev->dev, "i2s-controller missing\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_codec_node;
- 	}
- 	dai->cpus->of_node = cpu_np;
- 	dai->platforms->of_node = cpu_np;
-@@ -125,7 +126,8 @@ static int snd_proto_probe(struct platform_device *pdev)
- 						       &bitclkmaster, &framemaster);
- 	if (bitclkmaster != framemaster) {
- 		dev_err(&pdev->dev, "Must be the same bitclock and frame master\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_cpu_node;
- 	}
- 	if (bitclkmaster) {
- 		if (codec_np == bitclkmaster)
-@@ -136,18 +138,20 @@ static int snd_proto_probe(struct platform_device *pdev)
- 		dai_fmt |= snd_soc_daifmt_parse_clock_provider_as_flag(np, NULL);
- 	}
- 
--	of_node_put(bitclkmaster);
--	of_node_put(framemaster);
--	dai->dai_fmt = dai_fmt;
--
--	of_node_put(codec_np);
--	of_node_put(cpu_np);
- 
-+	dai->dai_fmt = dai_fmt;
- 	ret = snd_soc_register_card(&snd_proto);
- 	if (ret)
- 		dev_err_probe(&pdev->dev, ret,
- 			"snd_soc_register_card() failed\n");
- 
-+
-+put_cpu_node:
-+	of_node_put(bitclkmaster);
-+	of_node_put(framemaster);
-+	of_node_put(cpu_np);
-+put_codec_node:
-+	of_node_put(codec_np);
- 	return ret;
- }
- 
--- 
-2.17.1
+>                 goto redo;
 
+How about do {...} while(!cmpxchg_double_slab())? The readability looks better?
+
+Regards,
+Xiongwei
+
+> +       }
+>
+> -       if (lock)
+> -               spin_unlock_irqrestore(&n->list_lock, flags);
+>
+> -       if (m == M_PARTIAL)
+> +       if (mode == M_PARTIAL) {
+> +               add_partial(n, slab, tail);
+> +               spin_unlock_irqrestore(&n->list_lock, flags);
+>                 stat(s, tail);
+> -       else if (m == M_FULL)
+> -               stat(s, DEACTIVATE_FULL);
+> -       else if (m == M_FREE) {
+> +       } else if (mode == M_FREE) {
+>                 stat(s, DEACTIVATE_EMPTY);
+>                 discard_slab(s, slab);
+>                 stat(s, FREE_SLAB);
+> -       }
+> +       } else if (mode == M_FULL) {
+> +               add_full(s, n, slab);
+> +               spin_unlock_irqrestore(&n->list_lock, flags);
+> +               stat(s, DEACTIVATE_FULL);
+> +       } else if (mode == M_FULL_NOLIST)
+> +               stat(s, DEACTIVATE_FULL);
+>  }
+>
+>  #ifdef CONFIG_SLUB_CPU_PARTIAL
+> --
+> 2.33.1
+>
+>

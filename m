@@ -2,98 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD12C4D1E27
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 270974D1E2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345698AbiCHRJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        id S1348614AbiCHRKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiCHRJs (ORCPT
+        with ESMTP id S1348421AbiCHRKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:09:48 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C2636305;
-        Tue,  8 Mar 2022 09:08:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646759332; x=1678295332;
-  h=from:to:cc:subject:date:message-id;
-  bh=R0CDGnvApoSO1gfn9j+YZMCQMFxsSEmVfmtBoWiu+Qw=;
-  b=S5ceqGltaeFtsuLCkCWcq1CU6lm58G8qp3DcNfKNZe2xngHbgFXK+Vzb
-   YOxt3IJwein2lAKXqMsOe1a/yCqcf87Ud6CWKxlgLSL51XXxNnYXeItDk
-   Im4kbNNa25FkUyu0QgHTblfapkjQY8M6p2MMthC84g7QR1UIX1uFXUGvD
-   Rq8BMLaUfuGh80VcRWyyD6lTr46hhVONpGmiO3yZ8zEZmigZsllJX9+M2
-   egta+QvEcoje0c6k2fjnvkYZhd26zvq6ZAWTWAmSVeoaZ6/YwRR5sqXuJ
-   lY0M2QOrhudGFu7JGGKmMljaWm0qKw+HiWJ5TJm/UuIc7U/ft4EPnGyFU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="235352219"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="235352219"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 09:08:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="641822768"
-Received: from gio-01395267462.iind.intel.com ([10.49.4.124])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Mar 2022 09:08:49 -0800
-From:   shruthi.sanil@intel.com
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     heikki.krogerus@intel.com, srikanth.thokala@intel.com,
-        mallikarjunappa.sangannavar@intel.com, shruthi.sanil@intel.com
-Subject: [PATCH] usb: dwc3: pci: Add support for Intel Alder Lake
-Date:   Tue,  8 Mar 2022 22:38:48 +0530
-Message-Id: <20220308170848.30722-1-shruthi.sanil@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 8 Mar 2022 12:10:34 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FFA36E1A;
+        Tue,  8 Mar 2022 09:09:37 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id d10so40679852eje.10;
+        Tue, 08 Mar 2022 09:09:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DOdGQeqCpYXaPiv3FTiB/YOqJ4lEo750BpQvbc/UAeI=;
+        b=bMbwrDBcaXwa367L6NIq1Dx+ubrnoNm0OZbFllsIFAivPdFLc923Lvjdhdg9Mz7m0P
+         vZt2s7jx/4SdeOXuZ53+J/AbTQ2aJuUIdSN+rpNTqdmr0R71la2saasNcju++Ll4SeEz
+         7Dzb1wxygwgg7tA1J2GNjyfrj//kkM4AleeFoPI8R/fk/SvpFYxUapLyHicPewphSMoi
+         5mQ1/F/dHmklwz4rhozdYGlFDaD67Nn+35oyXwVq0HI7RMIG4s1X15blUfgGjsXFbXT9
+         0u83L2R4njw62ySrlwy7p2wNdkSYmyxmJu3HEvXW6n6A1BuuwpKcSm8RrfQGKAvi9NTy
+         +ACw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DOdGQeqCpYXaPiv3FTiB/YOqJ4lEo750BpQvbc/UAeI=;
+        b=U6Q1ZvXLLn/oTftzdgcd2zsWupBHD9M3aY7Y7lWL2jMXpR91yRHtMusZZPYeGOZDDB
+         ph0+rh1kkB6T6KEPbDhWh0z5L8+aiWPSXmrnF5K9Gx40efs5IdEahwE4zSYs2dwCyy7d
+         TkcoIJ68DBF07vf9Qt341CHnjqo4C4wBRU4OffnoJN4dgbzX8/LQmr3U7IsIcvcoNwOl
+         NGcTZSjDikcQWP+lqYwNBMvPIMZXfcB2ZaGsy9sNhx3iNO2yVVMA4MAnGnVOC3EvWa9J
+         7hklsWaHQgFsmmT8vODYJ+WaEQbFKpY16lsPfCGpD6ez5/DfWpMJRWY0DwxH/yNSOTQq
+         Qgjw==
+X-Gm-Message-State: AOAM531cJ+wyd1BIZmW5qZ35C+HFEKT+BqR29fdvgu1AgmeWePN8wMyE
+        tX/J1NyDPWbagiJu6aQCRoDT9Sd+mn8Jwg==
+X-Google-Smtp-Source: ABdhPJyeNwSfLyxrgPkLjbw5ubx2q+bLyD0P6+SR9bXANfjYj7eUmKomlYuskiRclYhx/J1WfTiwIA==
+X-Received: by 2002:a17:906:2b97:b0:6cd:6d67:ab5d with SMTP id m23-20020a1709062b9700b006cd6d67ab5dmr14406385ejg.723.1646759375991;
+        Tue, 08 Mar 2022 09:09:35 -0800 (PST)
+Received: from debianHome.localdomain (dynamic-077-006-252-105.77.6.pool.telefonica.de. [77.6.252.105])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056402354600b004167d09f418sm443751edd.55.2022.03.08.09.09.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 09:09:35 -0800 (PST)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To:     selinux@vger.kernel.org
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v2] selinux: log anon inode class name
+Date:   Tue,  8 Mar 2022 18:09:26 +0100
+Message-Id: <20220308170928.58040-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220217143457.75229-1-cgzones@googlemail.com>
+References: <20220217143457.75229-1-cgzones@googlemail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shruthi Sanil <shruthi.sanil@intel.com>
+Log the anonymous inode class name in the security hook
+inode_init_security_anon.  This name is the key for name based type
+transitions on the anon_inode security class on creation.  Example:
 
-Add the PCI device ID and update the dwc3_pci_id_table
-for Intel Alder Lake SoC.
+    type=AVC msg=audit(02/16/22 22:02:50.585:216) : avc:  granted \
+        { create } for  pid=2136 comm=mariadbd anonclass="[io_uring]" \
+        scontext=system_u:system_r:mysqld_t:s0 \
+        tcontext=system_u:system_r:mysqld_iouring_t:s0 tclass=anon_inode
 
-The DWC3 controllor in the CPU block handles the USB3 traffic
-and the device ID is common across the Alder Lake platforms.
+Add a new LSM audit data type holding the inode and the class name.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Shruthi Sanil <shruthi.sanil@intel.com>
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+
 ---
- drivers/usb/dwc3/dwc3-pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+v2:
+  - drop dev= and name= output for anonymous inodes, and hence simplify
+    the common_audit_data union member.
+  - drop WARN_ON() on empty name passed to inode_init_security_anon hook
+---
+ include/linux/lsm_audit.h | 2 ++
+ security/lsm_audit.c      | 4 ++++
+ security/selinux/hooks.c  | 4 ++--
+ 3 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 06d0e88ec8af..d8b9798fc7d4 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -40,6 +40,7 @@
- #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
- #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
- #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
-+#define PCI_DEVICE_ID_INTEL_ADL			0x465e
- #define PCI_DEVICE_ID_INTEL_ADLP		0x51ee
- #define PCI_DEVICE_ID_INTEL_ADLM		0x54ee
- #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
-@@ -412,6 +413,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_JSP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+index 17d02eda9538..97a8b21eb033 100644
+--- a/include/linux/lsm_audit.h
++++ b/include/linux/lsm_audit.h
+@@ -76,6 +76,7 @@ struct common_audit_data {
+ #define LSM_AUDIT_DATA_IBENDPORT 14
+ #define LSM_AUDIT_DATA_LOCKDOWN 15
+ #define LSM_AUDIT_DATA_NOTIFICATION 16
++#define LSM_AUDIT_DATA_ANONINODE	17
+ 	union 	{
+ 		struct path path;
+ 		struct dentry *dentry;
+@@ -96,6 +97,7 @@ struct common_audit_data {
+ 		struct lsm_ibpkey_audit *ibpkey;
+ 		struct lsm_ibendport_audit *ibendport;
+ 		int reason;
++		const char *anonclass;
+ 	} u;
+ 	/* this union contains LSM specific data */
+ 	union {
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 1897cbf6fc69..981f6a4e4590 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -433,6 +433,10 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 		audit_log_format(ab, " lockdown_reason=\"%s\"",
+ 				 lockdown_reasons[a->u.reason]);
+ 		break;
++	case LSM_AUDIT_DATA_ANONINODE:
++		audit_log_format(ab, " anonclass=");
++		audit_log_untrustedstring(ab, a->u.anonclass);
++		break;
+ 	} /* switch (a->type) */
+ }
  
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADL),
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
-+
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index b12e14b2797b..49c0abfd2f6a 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2965,8 +2965,8 @@ static int selinux_inode_init_security_anon(struct inode *inode,
+ 	 * allowed to actually create this type of anonymous inode.
+ 	 */
  
-
-base-commit: ea4424be16887a37735d6550cfd0611528dbe5d9
+-	ad.type = LSM_AUDIT_DATA_INODE;
+-	ad.u.inode = inode;
++	ad.type = LSM_AUDIT_DATA_ANONINODE;
++	ad.u.anonclass = name ? (const char *)name->name : "?";
+ 
+ 	return avc_has_perm(&selinux_state,
+ 			    tsec->sid,
 -- 
-2.17.1
+2.35.1
 

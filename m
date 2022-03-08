@@ -2,148 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D094D23F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3EB4D23FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350594AbiCHWLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:11:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
+        id S1350498AbiCHWKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346342AbiCHWLJ (ORCPT
+        with ESMTP id S240380AbiCHWKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:11:09 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA37856407;
-        Tue,  8 Mar 2022 14:10:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EcpQCjTllkWJHCoinflG9LwL4+S+5j5uYTg5DGXap/L26BJPRdekkefZB6H4E2LX+oHCVHWbEvVol7lBLt+XF2GvIIG+kq17xJ+i5jZJ3/bp7mBxXhuiJax1u9FjvDMnxhRkF/mLu6M3d01XhCB9fpVgUvZ1ik6DaZfgbA5XMCSbj/AyeQ/ie8QjdDG0RwtH96BU6AZ5OmIN7KPFSMzr20gRhlz0NqJxtAt0vqiK9cYVvmslEdJQBnE45W1Cc+Xr3aQxBWVFQOvImPSrkJ+ZVONb27px6TBm3qCsk0J5DYKaCfXFFrjZt9rVmbjoQFPBLe/M/mu1itUetNfzae8SkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Or5Vj+UGkYHVWsCrwW0FonkPtMM0lKwLp+AcU/RZgRc=;
- b=NPrxN5KdaZkak7YYet6xaq5htAUBkEp4Wz/7H7433agV/Wg4YZZ2EdqeZyHK7+eXNzdgTLBoFo871tr9zuIuYSLONtF9SE79Pxit9kHbIFBeVSI0YhiF+o+Yp3/hygCD2NNZfpLfG1PFg8/780biSAUMvFRcXiz98BAguzhBtKQlfnBeKyGALmvlP6l+yP+GXKncJXvmendLmj/eQVQhfCunHk4rOGM7aiZIiqjb5K4v69HxVK8N6n3WLvpeE0Rc3i78tgXycL638EjLGMkVP1hwlo2zRxUxP27eb9C7kNmjdF1W7VmL6iR7JiizN4w6FaO/yg7Ykvl7QAwkAV32JQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Or5Vj+UGkYHVWsCrwW0FonkPtMM0lKwLp+AcU/RZgRc=;
- b=H3LRpypb/BxDE+Uhb7io8yAizxGfDVUpZT3zyN65RbkwR5L45Nj/Qx3wOsedUYweoDkuV7wQNGQ35N9HoR6l6ELMiLH4IjP6jkyWx0GRODwileEhnwGDC0TVUdPgbh0oIbSHDyIgI+QcBfdDY/LJULFJPyogUeS0Z8mTZ3YmFDNAqS9VmRzEcSuTbOv4IVVzxIRcjK523dGm2sSBPtKcPp1AXU4fdf1RCpu5FWwwFHkpIDmq6JIYRtc6lh2dulEaXqznVsW3FOH2UfqYLpiIqBne6V10+XQ9UlXyok1Nzbrb0MKIIPMLkUF4VUKGJM8/OM5PdkJP4xFxoCMBjvBcjQ==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by MW3PR12MB4459.namprd12.prod.outlook.com (2603:10b6:303:56::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Tue, 8 Mar
- 2022 22:10:08 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::204b:bbcb:d388:64a2]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::204b:bbcb:d388:64a2%4]) with mapi id 15.20.5038.027; Tue, 8 Mar 2022
- 22:10:08 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-CC:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
-        Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-bcache@vger.kernel.org" <linux-bcache@vger.kernel.org>,
-        "linux-raid@vger.kernel.org" <linux-raid@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Subject: Re: [PATCH 5/5] pktcdvd: stop using bio_reset
-Thread-Topic: [PATCH 5/5] pktcdvd: stop using bio_reset
-Thread-Index: AQHYMrQYlKEyuRDbnkC2Ag8SGwunMay2DSIA
-Date:   Tue, 8 Mar 2022 22:10:08 +0000
-Message-ID: <80cfcb91-6458-abd6-9f6b-b1bd7d7b7450@nvidia.com>
-References: <20220308061551.737853-1-hch@lst.de>
- <20220308061551.737853-6-hch@lst.de>
-In-Reply-To: <20220308061551.737853-6-hch@lst.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f4223e0f-e720-4b76-d2e0-08da01506886
-x-ms-traffictypediagnostic: MW3PR12MB4459:EE_
-x-microsoft-antispam-prvs: <MW3PR12MB44590CA4E9DFE65B1B4A42AEA3099@MW3PR12MB4459.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sp7MbifuXn0LBO6SsMMZmx8na1njCNLfNY7qWi09WW1YgNNW02UUFiPbvb+WEYf044Hjr014pWIb5HirXxUVbM9kc4JAQPJYQX7k0kiVaLXgiUSorHj7LwugzdxzugxtfNjfDGaHyaRFWiBpomtnCtszPmDXUPIAL16rX8tssIZzl0oxnmz75ojYVO3hBbJ+t8ml9OFnip8aTweMRaNzG1SP+rFh0zB+q8owv+IMlY+jcf+4hF+vP3VFAiGWR1EFR8ivHTLey7svZC/DzW1hhCn34Q7aO6Qgtqge+KqAtaXgeuKUBcKFaNH/RdkzC3HriEzunih5/SjqycJA5jE3i3I3U9c/cDG7ZaxWc2PJ2fjUsxY2r1uprywMDe50HHUG+NS9BgZdY0Iehizs/N9CV0k69ZDPKjQKfSc13cszxHeAYWZT2X1bHBGE1ekDzTVJV/2tdudY1N2UJxaw7om/LdoGfa8mihzKbsbuWnGvXy5BFMDamDuOVo9TAPZ+bdF72j+3JIGuPr5nLDqIynCQkH4h01h9NnZSxQa/QmZTUTfNgxIgcH5M2MDdpc9mvAlxbOUDQwrp3v36h5gnyLCFHEH73cXt3n1I6XS4uJ+NrYjooJJ04Vq45mI5NEOQBahmoWYt6FJYha1Urldq4xFfi3dMm+1dGsKjTJOp66gzn9sQgdnL10nrBQQ3aq55mTM9/BqzPfqVz/vxdIIelpVB/Aic6EDFieq0XvRXjrmqhJgCD4gkQpJXXL/EuJEbgPsDhuvtcaqRmbHNagVw7sU/Lu1alvrXEIdum9UELfqanl0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(4326008)(66946007)(8936002)(26005)(53546011)(8676002)(64756008)(66446008)(66476007)(54906003)(7416002)(186003)(5660300002)(36756003)(31686004)(110136005)(31696002)(2616005)(6486002)(122000001)(71200400001)(86362001)(2906002)(6512007)(6506007)(558084003)(76116006)(508600001)(38070700005)(316002)(38100700002)(91956017)(133343001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MFBBYjR4Z0hKUjdnYVZDQzY0VEMwNVgzT1UvUDViMzZoRjZ6bXExTituRU5a?=
- =?utf-8?B?SGZjbnphenkrRjI1SFNoMW12U1cwTmRFdlhURUIwbVFWYmplYlFUS2FVUE11?=
- =?utf-8?B?VVZQMGE4WW5rUGh2c1R1QmJtNllobVN6cmgvR3lIMWxweEIzRnlacnlqa09X?=
- =?utf-8?B?VThQK0plczVmYWlrY08yLzlLUUpjdXVQdGxKem11eEhoaVJ0YWlaejFxRzFH?=
- =?utf-8?B?Z0NybEZiRGdJR0JiNjFJNHVoa0ZEeTJPUG1LOEhiZ1JRcEFyeXh4UTBieXNx?=
- =?utf-8?B?ZFlRK2V4Y2JRT20rUUxHY1VZRExjanMrSEo3R1J0d0hqM1I4SzAyMVVuaUlB?=
- =?utf-8?B?N2ZHcUJkV3pjS1lDanNlVFk1WGczaFlqbHloNVhkY1FJclZVd0hhWEIyMzN4?=
- =?utf-8?B?c1h6aUJiOVVicHhWa3prTHdsSjRjeXZjaXVqWDJqcHFkOTVLZXNuUUdlZCsr?=
- =?utf-8?B?ZW5xczBGSzQ4eEZSUlFZbzA0Z04vZWJubG82SHZUaVlZcnBucldPQTBOK21x?=
- =?utf-8?B?MTNteXZrNmhmS1BVU2EvVjFQS0FyOFNQU0NJeitsYWdHeGl3Z0NSekZvcEhM?=
- =?utf-8?B?MlM5aVJpMURnS0pmeWwrcGZNYWxsT3hLbWUxNkNtYXpzWUhLSG9yYUIyUW1n?=
- =?utf-8?B?RzIvTDMzYVVTRHBkZWtOY1FoUGZ1eEQ4d2VwbTdQeC9GQ3pvYUU3L0J6NEIw?=
- =?utf-8?B?T2RqeTFwQzlGN2l0bllGQVhHU2NVdDRUcFpuV3BUKzQvUlBMakJ2eXowc04v?=
- =?utf-8?B?ZkNEQXZpcGtwZFFoRVFERHJRWWllSW1BYmRWNVBIOWFwZHJEandUYzhMY1Qw?=
- =?utf-8?B?c2hHa01zUmdsa2YwaHo0OUFONXltb0psYytjQ0MzTlcvcU9ENTRtNkRvVWhR?=
- =?utf-8?B?Y0dPaUxVY1JJQndSMnpXWWlrWDdDYSsvLzl0Y1FXMFRadTJxSzF2VHBsMFdF?=
- =?utf-8?B?SXVORHJYbis0S0RTOTNIcGlEUW45VFhoNzNmdktBTmVsOEhIZWM2WGhacW9n?=
- =?utf-8?B?cjZDM0dkWW9UaFdwQzZEY21JYW40dkRVbW5kWlplWUp4aWkyVUg5U1NnMmtJ?=
- =?utf-8?B?ME5YV3lMK09jWFZpZE1HWDFEOS91ZEpSczI0b0s3YTZ2Qk0ydzczUG43N0Nq?=
- =?utf-8?B?VVVzeGRDa2VtNFh5S1JCVFoyKzhqdTV6ajNVNGZaN0dpK2N3c2pqL2tvSDg1?=
- =?utf-8?B?VW5Lc0pRZXFFZElMMlpTOW9kbkRZMFVCbEt0NUFWbUcwK09pd2lBUncvOHJT?=
- =?utf-8?B?S2k3a2FqS3ZaRnNxT2phSG8razhYN2gwbnh3eFZIUzFiTTVqQXllS21QOXhh?=
- =?utf-8?B?M0ErbGl6bTJUR0VtQ2lvckZFdWptWWhpN3pHZ3ZxWkNnMVoxRThsTGFVUzZu?=
- =?utf-8?B?S04xK0lZT2RySHA2UmQ3dldET3FPMkVIWWVWUUxVZXM3Y2JnYWlRR2x0akVP?=
- =?utf-8?B?TFowdXp1SlRXdDl4YXBHZUFOaU5ENVlWOSs0aHZ6UFZnT1U3VURwMVhZLys2?=
- =?utf-8?B?MzRGU0RBRndJdytqRk5lRjhJMnNnK0pwU2ZpRW5jNVZJejVTR0ZwK1Q5NDU5?=
- =?utf-8?B?cjU2d05WS1h6YklNRklIQjdtNC9zZTdSYzREamlML3ZaeDYxOTdLS1hSVjVJ?=
- =?utf-8?B?OERYa1BybE9yK0RPMWYvZnJSU3ltK1QrRktuMDRESlF5NW1BWEJpdXZ6T1Rw?=
- =?utf-8?B?QTMwT0MvWlVlTE1ueGhPcEx5Ymh6Z2dKWmpJT0hLd1haSzErWUkwem0vQmN0?=
- =?utf-8?B?Ym5GbmFDLzhvN0IvcStzeWlUbEhpREx3YllCWlljWUpCM1pjR3lYM2lzZnls?=
- =?utf-8?B?dTIwYlhkM2cxd1ozMmd3S1VWdzc5aHVqbkxIcDhIRkNOV3cybzVJaTl0S0k2?=
- =?utf-8?B?SnJtdklWSno4ZkFqTi8vd0RRdVEzNEN3cTJwdFdFZ0ZnNUEzWEwwZTNQV3Ro?=
- =?utf-8?B?b0xpU2NyWktobldZdlZsblVkdC9ub3NRc08yQ1JkVm5Benltd0N3REJXNS9K?=
- =?utf-8?B?TnZnZk8wQ2FPODQrTzZtQ0JpMC9yTVNaS0lHZXRnYkFzWkhIUE5UNm1hM1ZF?=
- =?utf-8?B?eG9CdEtRSVZXRDduRkFzNVJXQldxZFpuYkdnbW9EZCtYTVoweEhWc3RQUDBh?=
- =?utf-8?B?TFU5d3V0MDFvTk5INzJRdWZwK1NSVG1mU29zdW1xQ1dtVHhxUkJkVXFwWkFF?=
- =?utf-8?B?bXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <16BAB11772054540B9496D6EF52D820B@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 8 Mar 2022 17:10:48 -0500
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CBE31911
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 14:09:50 -0800 (PST)
+Received: by mail-oo1-xc35.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso708900ooi.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 14:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ddW2fY9LvB2Nj22VUxUaG3e+eaf3kPwjMZ+2+JZW1rk=;
+        b=jCjC5sYk1VByjCwp98OgD3SvDExuzN5oAfh50l2iAOJ31vqosIicjs5JxltaheGmlL
+         cFuMzPmcVLnTJAN4Z88hnIslH87qZuZFvvUd4Pa+js6EBTn+4yCmC7FQu91UgXJSXWCf
+         2UQ5M45pSII8FacN1wn8W9RkUHYjo41T8Z8PXAsQHWxA8LZo2TaZv1FHr7P33vtvG1vS
+         8wB1yI1LXolpdOfds9JPX/qfEkGU+DeNHpeOkePv/UkmGIWXTHOohmt+krKIrkhymPI+
+         cob0nKKmAUPVLnzzf/X0J9vukEJ0nI3JjZRqiIgWAjVRhaXkkVZmfGlyY6drpAzqb/LT
+         H12Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ddW2fY9LvB2Nj22VUxUaG3e+eaf3kPwjMZ+2+JZW1rk=;
+        b=SHrATghyrDB1G0oH/GT8iDoxF1HJxdGTbxa3HDm9Yoj1xL/LUE4edfVJ097HGFUWek
+         C7WijfPMIJGsZnw4RGj+I1tuLxMqIQfvCf8BXkLU01OxHc9WRMFpHDEY/3p6VmEgaUd6
+         4Ftz7/ScAKqtIGZcnv2NRg1yocqA2VFZokxgL163Pj1+dFP5dCXYXWvbu/Ys+tZIY57e
+         5bNC5UZoq2vxpn4RVKrME4o/xw7x7r1M/WhgQglwoA47xzKHQiju/svtEG0Fw1o6hlAc
+         v2dNk0lBxXCKLC2XauO90DVkRh6KUpjRbUXve8Sza3yXlmAe8oBVaVenq0mH1O4g8v6y
+         yd2Q==
+X-Gm-Message-State: AOAM531/lR+5GZqfl37bLzFuU8FJV83KjATSZNMh01OOwrEPXkGcfpYj
+        9Z0vuhuXRpYOj/nUqOUNfq2DUGMCMJy8tA==
+X-Google-Smtp-Source: ABdhPJyQF+fUUCO1OmFokSVxMnTpHlK6L3MD61JBsleRWaGh1MaN6NU0T+NY74s9fC1L25JX8IBAWw==
+X-Received: by 2002:a05:6870:a102:b0:d9:bcaf:7181 with SMTP id m2-20020a056870a10200b000d9bcaf7181mr3697672oae.8.1646777389536;
+        Tue, 08 Mar 2022 14:09:49 -0800 (PST)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id bx10-20020a0568081b0a00b002d70da1ac54sm71107oib.19.2022.03.08.14.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 14:09:48 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: pinctrl: qcom: Add sc8280xp TLMM binding
+Date:   Tue,  8 Mar 2022 14:11:31 -0800
+Message-Id: <20220308221132.1423218-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4223e0f-e720-4b76-d2e0-08da01506886
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2022 22:10:08.7930
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JUZFs5fNpKB9gENcSJW2X9skMpBqv8bTMMQxfi4WPf5SnNn903a8PrhRF3Y2PYWo+ozfZxvDE68lIh3yzUMmqw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4459
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMy83LzIyIDIyOjE1LCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gSnVzdCBpbml0aWFs
-aXplIHRoZSBiaW9zIG9uLWRlbWFuZC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IENocmlzdG9waCBI
-ZWxsd2lnIDxoY2hAbHN0LmRlPg0KPiAtLS0NCj4NCg0KDQoNCkxvb2tzIGdvb2QuDQoNClJldmll
-d2VkLWJ5OiBDaGFpdGFueWEgS3Vsa2FybmkgPGtjaEBudmlkaWEuY29tPg0KDQoNCg==
+The Qualcomm SC8280XP platform contains a single block of registers
+for the TLMM block. This provides pinconf and pinmux for 228 GPIOs, 2
+UFS_RESET pins and one SDC interface.
+
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+
+Changes since v1:
+- Dropped $ref: pinctrl.yaml
+- Dropped reg-names from required list
+- Fixed spelling mistake in example
+
+ .../pinctrl/qcom,sc8280xp-pinctrl.yaml        | 151 ++++++++++++++++++
+ 1 file changed, 151 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml
+
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml
+new file mode 100644
+index 000000000000..87a381c9a19d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml
+@@ -0,0 +1,151 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,sc8280xp-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Technologies, Inc. SC8280XP TLMM block
++
++maintainers:
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++
++description: |
++  This binding describes the Top Level Mode Multiplexer block found in the
++  SC8280XP platform.
++
++allOf:
++  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
++
++properties:
++  compatible:
++    const: qcom,sc8280xp-tlmm
++
++  reg:
++    maxItems: 1
++
++  interrupts: true
++  interrupt-controller: true
++  '#interrupt-cells': true
++  gpio-controller: true
++  gpio-reserved-ranges: true
++  '#gpio-cells': true
++  gpio-ranges: true
++  wakeup-parent: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++patternProperties:
++  '-state$':
++    oneOf:
++      - $ref: "#/$defs/qcom-sc8280xp-tlmm-state"
++      - patternProperties:
++          ".*":
++            $ref: "#/$defs/qcom-sc8280xp-tlmm-state"
++
++'$defs':
++  qcom-sc8280xp-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
++
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this
++          subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-1][0-9]|22[0-7])$"
++            - enum: [ sdc2_clk, sdc2_cmd, sdc2_data, ufs_reset, ufs1_reset ]
++        minItems: 1
++        maxItems: 16
++
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins.
++
++        enum: [ atest_char, atest_usb, audio_ref, cam_mclk, cci_async, cci_i2c,
++                cci_timer0, cci_timer1, cci_timer2, cci_timer3, cci_timer4,
++                cci_timer5, cci_timer6, cci_timer7, cci_timer8, cci_timer9,
++                cmu_rng, cri_trng, cri_trng0, cri_trng1, dbg_out, ddr_bist,
++                ddr_pxi0, ddr_pxi1, ddr_pxi2, ddr_pxi3, ddr_pxi4, ddr_pxi5,
++                ddr_pxi6, ddr_pxi7, dp2_hot, dp3_hot, edp0_lcd, edp1_lcd,
++                edp2_lcd, edp3_lcd, edp_hot, emac0_dll, emac0_mcg0, emac0_mcg1,
++                emac0_mcg2, emac0_mcg3, emac0_phy, emac0_ptp, emac1_dll0,
++                emac1_dll1, emac1_mcg0, emac1_mcg1, emac1_mcg2, emac1_mcg3,
++                emac1_phy, emac1_ptp, gcc_gp1, gcc_gp2, gcc_gp3, gcc_gp4,
++                gcc_gp5, gpio, hs1_mi2s, hs2_mi2s, hs3_mi2s, ibi_i3c,
++                jitter_bist, lpass_slimbus, mdp0_vsync0, mdp0_vsync1,
++                mdp0_vsync2, mdp0_vsync3, mdp0_vsync4, mdp0_vsync5,
++                mdp0_vsync6, mdp0_vsync7, mdp0_vsync8, mdp1_vsync0,
++                mdp1_vsync1, mdp1_vsync2, mdp1_vsync3, mdp1_vsync4,
++                mdp1_vsync5, mdp1_vsync6, mdp1_vsync7, mdp1_vsync8, mdp_vsync,
++                mi2s0_data0, mi2s0_data1, mi2s0_sck, mi2s0_ws, mi2s1_data0,
++                mi2s1_data1, mi2s1_sck, mi2s1_ws, mi2s2_data0, mi2s2_data1,
++                mi2s2_sck, mi2s2_ws, mi2s_mclk1, mi2s_mclk2, pcie2a_clkreq,
++                pcie2b_clkreq, pcie3a_clkreq, pcie3b_clkreq, pcie4_clkreq,
++                phase_flag, pll_bist, pll_clk, prng_rosc0, prng_rosc1,
++                prng_rosc2, prng_rosc3, qdss_cti, qdss_gpio, qspi, qspi_clk,
++                qspi_cs, qup0, qup1, qup2, qup3, qup4, qup5, qup6, qup7, qup8,
++                qup9, qup10, qup11, qup12, qup13, qup14, qup15, qup16, qup17,
++                qup18, qup19, qup20, qup21, qup22, qup23, rgmii_0, rgmii_1,
++                sd_write, sdc40, sdc42, sdc43, sdc4_clk, sdc4_cmd, tb_trig,
++                tgu, tsense_pwm1, tsense_pwm2, tsense_pwm3, tsense_pwm4,
++                usb0_dp, usb0_phy, usb0_sbrx, usb0_sbtx, usb0_usb4, usb1_dp,
++                usb1_phy, usb1_sbrx, usb1_sbtx, usb1_usb4, usb2phy_ac,
++                vsense_trigger ]
++
++      bias-disable: true
++      bias-pull-down: true
++      bias-pull-up: true
++      drive-strength: true
++      input-enable: true
++      output-high: true
++      output-low: true
++
++    required:
++      - pins
++      - function
++
++    additionalProperties: false
++
++examples:
++  - |
++        #include <dt-bindings/interrupt-controller/arm-gic.h>
++        pinctrl@f100000 {
++                compatible = "qcom,sc8280xp-tlmm";
++                reg = <0x0f100000 0x300000>;
++                interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
++                gpio-controller;
++                #gpio-cells = <2>;
++                interrupt-controller;
++                #interrupt-cells = <2>;
++                gpio-ranges = <&tlmm 0 0 230>;
++
++                gpio-wo-subnode-state {
++                        pins = "gpio1";
++                        function = "gpio";
++                };
++
++                uart-w-subnodes-state {
++                        rx {
++                                pins = "gpio4";
++                                function = "qup14";
++                                bias-pull-up;
++                        };
++
++                        tx {
++                                pins = "gpio5";
++                                function = "qup14";
++                                bias-disable;
++                        };
++                };
++        };
++...
+-- 
+2.33.1
+

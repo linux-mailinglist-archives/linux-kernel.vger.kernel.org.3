@@ -2,152 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308684D2432
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5114D2441
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 23:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350762AbiCHW0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 17:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
+        id S1343857AbiCHW2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 17:28:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350729AbiCHW0X (ORCPT
+        with ESMTP id S241588AbiCHW2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 17:26:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D34583B8;
-        Tue,  8 Mar 2022 14:25:26 -0800 (PST)
-Date:   Tue, 08 Mar 2022 22:25:23 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646778325;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bbuZJRANWRttBApNafCE2xDUdDf+IGSekYoAaklxqVI=;
-        b=q4/ydDLeZivDwQG8us9T7amvz2C2q7u4afrCWR7HimWKLSwYzujJU4zoX7+IdR19mWDzo2
-        hMWcXHhAzsEzzjGyy961mBi7Kv2H5CFDC9exm5hZH+P+CE7Ey3ly3WiciNffyfrYmTt56m
-        U93pn9NBp+KBVaECkKdxN4DqAtJtYpeQWMGR9v1599MGcyx757Gdj586eAaJtOfeS4JSB1
-        XjcaKZLbIuQ0V/szFw/xRehNxp+tdcZuKm3QLy1osBBSaC95+Xxx4wBYLoI7KUht7oWOlL
-        md1TFOphziJPgsVEIsmz+AxKD2bvMpVC8QYti+W1y9f66ireiR42hsMhXvewDw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646778325;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bbuZJRANWRttBApNafCE2xDUdDf+IGSekYoAaklxqVI=;
-        b=8qJKZ7XJk3TMULsQ5d/rAZ2lE165UQSG4vLmfY6bcW99rILI57F5gw/Ae2nY5cHe8U7rEE
-        MIUsuyZTKp/A9aAQ==
-From:   "tip-bot2 for Dietmar Eggemann" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/deadline: Remove unused def_dl_bandwidth
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220302183433.333029-2-dietmar.eggemann@arm.com>
-References: <20220302183433.333029-2-dietmar.eggemann@arm.com>
+        Tue, 8 Mar 2022 17:28:40 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDF6DF21;
+        Tue,  8 Mar 2022 14:27:43 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id u3so658899ybh.5;
+        Tue, 08 Mar 2022 14:27:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aSMng1r6YjOAee+dAY6//eCefHSkP2I3JjBP1oWQxRg=;
+        b=q3uiZE17K5cFw81g4rRpSe8E/+9wtX2qPZn7LpHns+YaxgO/kWSOiyEAwuqBzipu+V
+         2m3KorASjgl3YKvSrO91pfuFgHshrr5peMdqESH85XJhk8iShkg+wRafioTL3SIGRcQI
+         yzrpxcVrRAVnUpIYAtPphjqdSmdZ38aJcTJvgoIdlhy8O8McKj2A6OqSyVuvFn9pbIpt
+         jpoWr5MKjgU0ZzuRN3JUoM4RVHgblEpNLVRFMqs74j/3IGpZK9QqXILo7Z4vtEyneoVg
+         DNK5f30Va8jCWponJZs5CncrWFfZfPXRB6L+7f/Q1Mg7R+W1jQpxiCThQNDCaLRc5USi
+         QVYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aSMng1r6YjOAee+dAY6//eCefHSkP2I3JjBP1oWQxRg=;
+        b=hNLaJyTBMB47CtcqHIBadyTcAANUZUcrXBpE+MqVeUprSbzOulZoM7AdogAuo+Qy53
+         EIsp1l3lFnduHo69WrKwni1qKR2Wth2j/FVosKzrA6ch2Uy3FkGiHDO7ju0icFyGjwkl
+         yZiS5QkLr+Eu2RwiGVwAeW65N3u6C7OKkW+5hbECKzesefO9swfgfetwx5cYIGJUsC80
+         zlGxSTPmw2ePQ8Bz8KA44AeUj2+APSS/QZv8ue7VCySNdfxp6ChvQuzVBLuEDWTrlwEG
+         8oQ9kUbttvUqfnUNolQRTDzaWk8vlpn4+iQI9KgOSTmI0Qtul6JMJcCF1w1fFmPQqxiP
+         H1wg==
+X-Gm-Message-State: AOAM531g+8uVz1SIrYeUf9DeH+4/jzUqh9ErmSW8bvIWvI15hM95MTp7
+        3ycLRWtvVmkaUpweJZEEjkUnJPMzpPA9VPAyXwA=
+X-Google-Smtp-Source: ABdhPJxKmcGmC/yQ0zmUDBoYPdak5GwjSOLmmPUkVZWES9yLFunHu/+8ajzgMQOkfPJtbNrIyJEKy6gc80/S1Z3MXP4=
+X-Received: by 2002:a25:7504:0:b0:629:308e:9d95 with SMTP id
+ q4-20020a257504000000b00629308e9d95mr11553190ybc.106.1646778462706; Tue, 08
+ Mar 2022 14:27:42 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <164677832389.16921.264306598144344142.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220307162207.188028559@linuxfoundation.org> <Yid4BNbLm3mStBi2@debian>
+ <CADVatmPdzXRU2aTeh-8dfZVmW6YPJwntSDCO8gcGDUJn-qzzAg@mail.gmail.com>
+ <CA+G9fYv74gGWQLkEZ4idGYri+F9BFV1+9=bz5L0+aophSzDdVA@mail.gmail.com> <YifFMPFMp9gPnjPc@kroah.com>
+In-Reply-To: <YifFMPFMp9gPnjPc@kroah.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Tue, 8 Mar 2022 22:27:06 +0000
+Message-ID: <CADVatmMs_+YN3YAajL95fy98iEgoeb-7qXA_ZJ7K3QsdHGG=oA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+On Tue, Mar 8, 2022 at 9:05 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Mar 08, 2022 at 11:08:10PM +0530, Naresh Kamboju wrote:
+> > Hi Greg,
+> >
+> > On Tue, 8 Mar 2022 at 21:40, Sudip Mukherjee <sudipm.mukherjee@gmail.com> wrote:
+> > >
+> > > On Tue, Mar 8, 2022 at 3:36 PM Sudip Mukherjee
+> > > <sudipm.mukherjee@gmail.com> wrote:
+> > > >
+> > > > Hi Greg,
+> > > >
+> > > > On Mon, Mar 07, 2022 at 05:28:50PM +0100, Greg Kroah-Hartman wrote:
+> > > > > This is the start of the stable review cycle for the 5.15.27 release.
+> > > > > There are 256 patches in this series, all will be posted as a response
+> > > > > to this one.  If anyone has any issues with these being applied, please
+> > > > > let me know.
+> > > > >
+> > >
+> > > <snip>
+> > >
+> > > >
+> > > > Mips failures,
+> > > >
+> > > > allmodconfig, gpr_defconfig and mtx1_defconfig fails with:
+> >
 
-Commit-ID:     eb77cf1c151c4a1c2147cbf24d84bcf0ba504e7c
-Gitweb:        https://git.kernel.org/tip/eb77cf1c151c4a1c2147cbf24d84bcf0ba504e7c
-Author:        Dietmar Eggemann <dietmar.eggemann@arm.com>
-AuthorDate:    Wed, 02 Mar 2022 19:34:28 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 08 Mar 2022 16:08:38 +01:00
+<snip>
 
-sched/deadline: Remove unused def_dl_bandwidth
+>
+> Ah, I'll queue up the revert for that in the morning, thanks for finding
+> it.  Odd it doesn't trigger the same issue in 5.16.y.
 
-Since commit 1724813d9f2c ("sched/deadline: Remove the sysctl_sched_dl
-knobs") the default deadline bandwidth control structure has no purpose.
-Remove it.
+ohh.. thats odd. I don't build v5.16.y, so never thought of it.
+Just checked a little now, and I was expecting it to be fixed by:
+e5b40668e930 ("slip: fix macro redefine warning")
+but it still has the build error. I will check tomorrow morning what
+is missing in v5.15.y
+Please delay the revert till tomorrow afternoon.
 
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Juri Lelli <juri.lelli@redhat.com>
-Link: https://lore.kernel.org/r/20220302183433.333029-2-dietmar.eggemann@arm.com
----
- kernel/sched/core.c     | 1 -
- kernel/sched/deadline.c | 7 -------
- kernel/sched/sched.h    | 1 -
- 3 files changed, 9 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 3aafc15..d342c4c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9420,7 +9420,6 @@ void __init sched_init(void)
- #endif /* CONFIG_CPUMASK_OFFSTACK */
- 
- 	init_rt_bandwidth(&def_rt_bandwidth, global_rt_period(), global_rt_runtime());
--	init_dl_bandwidth(&def_dl_bandwidth, global_rt_period(), global_rt_runtime());
- 
- #ifdef CONFIG_SMP
- 	init_defrootdomain();
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 62f0cf8..ed4251f 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -18,8 +18,6 @@
- #include "sched.h"
- #include "pelt.h"
- 
--struct dl_bandwidth def_dl_bandwidth;
--
- static inline struct task_struct *dl_task_of(struct sched_dl_entity *dl_se)
- {
- 	return container_of(dl_se, struct task_struct, dl);
-@@ -423,12 +421,10 @@ void init_dl_bandwidth(struct dl_bandwidth *dl_b, u64 period, u64 runtime)
- void init_dl_bw(struct dl_bw *dl_b)
- {
- 	raw_spin_lock_init(&dl_b->lock);
--	raw_spin_lock(&def_dl_bandwidth.dl_runtime_lock);
- 	if (global_rt_runtime() == RUNTIME_INF)
- 		dl_b->bw = -1;
- 	else
- 		dl_b->bw = to_ratio(global_rt_period(), global_rt_runtime());
--	raw_spin_unlock(&def_dl_bandwidth.dl_runtime_lock);
- 	dl_b->total_bw = 0;
- }
- 
-@@ -2731,9 +2727,6 @@ void sched_dl_do_global(void)
- 	int cpu;
- 	unsigned long flags;
- 
--	def_dl_bandwidth.dl_period = global_rt_period();
--	def_dl_bandwidth.dl_runtime = global_rt_runtime();
--
- 	if (global_rt_runtime() != RUNTIME_INF)
- 		new_bw = to_ratio(global_rt_period(), global_rt_runtime());
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 3da5718..a8b8516 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2333,7 +2333,6 @@ extern void resched_cpu(int cpu);
- extern struct rt_bandwidth def_rt_bandwidth;
- extern void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime);
- 
--extern struct dl_bandwidth def_dl_bandwidth;
- extern void init_dl_bandwidth(struct dl_bandwidth *dl_b, u64 period, u64 runtime);
- extern void init_dl_task_timer(struct sched_dl_entity *dl_se);
- extern void init_dl_inactive_task_timer(struct sched_dl_entity *dl_se);
+-- 
+Regards
+Sudip

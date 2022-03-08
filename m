@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66114D19D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B8F4D19E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347232AbiCHN7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:59:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S1347264AbiCHOAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242196AbiCHN7F (ORCPT
+        with ESMTP id S1347302AbiCHOAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:59:05 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A417D1B7B1
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:58:07 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id u10so27060296wra.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 05:58:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6YorkRdQ5ODwIMAwkUuKb6tGCEoxWYA4agUcSrocd/g=;
-        b=IpWevBUGGjyc07sxf4d2Wsp0YSQ5tGlrYfhlfBt1B391HgmVtpJnFHOhJ4/GhS8TRi
-         RxWNzTqTe0+DxCmPJoFVAds4PSDtOrPIQuJFcDxI/Vi9C+PZsurE7gafwm2eK0kdM9QL
-         Ok68ouAXklyteNGH0NEQ75QQ5M+wY/XUklT1e6AEGUC+W/xzD9hgyGLqG2Dxe2RKXQT+
-         6PY6NgjGZy5HRxpxslGTGiKh3gfNFKMiC64T1sxMp2OAWhc61GihicN0wx6KNwCH3btk
-         tkYRj4TK9K08koGVCo4O/kUz7xa/UPfgOqfPDw9zrDcSWk7yTdrpEKbyfPbR1D8V/R5Q
-         8qww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6YorkRdQ5ODwIMAwkUuKb6tGCEoxWYA4agUcSrocd/g=;
-        b=cGULB8RAJ8OyveloKaoHyV+kMhHeRVBD6ucHu1EdBr6VM+YG6LlI495Jofw2lgX4s2
-         AhbHPpIybEy5PHlrDWQJT1aI0ov+PQ/XeT5bN+sxtSEnBWuDuvsmO5Mc9PwT2TDDzmXQ
-         hoS+KhCW2BrPafKLPw11AWQZzwhDRL+pw9zxZe7Eo7NdzAFLXyhfuXHuzm20Jhp/r5Yg
-         OncQKoAnqrC9yucdrWkYoB7TnvXyS0hlkzjuC+LUxDLNjUW3ngiNGCw3aA0w2j4wOrjj
-         jR9a95eiR4jIvWG1S79p51Ey+obtXBwrv6F7nAkiZKGyZ2n19fxlVC8rdhciZ4Qt90nh
-         L88g==
-X-Gm-Message-State: AOAM532aVc4S1Hsa45rqHd48rfLOqr8TaZlJQiMHt7fy5EGclaX9gVXZ
-        VUDAwPxdNULC5qX3wL5YJusa0w==
-X-Google-Smtp-Source: ABdhPJy0ijONgUXV2hKiTA5G3/CPfstf6wOumLH9rFqg0Zj3RwwwYyDIDBPDqhbcFBxSq8y/I/Dh0Q==
-X-Received: by 2002:a5d:410c:0:b0:1ef:766b:ef5b with SMTP id l12-20020a5d410c000000b001ef766bef5bmr12193064wrp.183.1646747886241;
-        Tue, 08 Mar 2022 05:58:06 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id b1-20020a5d40c1000000b001f1dd6ea504sm8503309wrq.59.2022.03.08.05.58.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 05:58:05 -0800 (PST)
-Date:   Tue, 8 Mar 2022 13:58:03 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        andi@etezian.org, linux-spi@vger.kernel.org, linux-fsd@tesla.com,
-        Adithya K V <adithya.kv@samsung.com>
-Subject: Re: [RESEND PATCH v3 1/2] spi: dt-bindings: samsung: Add fsd spi
- compatible
-Message-ID: <Yidg64QGGzIbduQ2@google.com>
-References: <CGME20220308120701epcas5p3d3d2f5c01055e8c1721ae0ec6c2aa681@epcas5p3.samsung.com>
- <20220308121640.27344-1-alim.akhtar@samsung.com>
- <YidY+ncMVhp7bBvh@sirena.org.uk>
+        Tue, 8 Mar 2022 09:00:05 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2FB1A81A;
+        Tue,  8 Mar 2022 05:58:58 -0800 (PST)
+Date:   Tue, 08 Mar 2022 13:58:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646747936;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pMl034rKP4KtUY285VK2E6QJXRhnqapuqE6b3KEw77U=;
+        b=OuoNm45+FXMY2UTHFPsi1R/xlVnz5iCdQY7U55DRTAb/SZvD4Y52OpSydXmIHGblCCKMP+
+        KzmvRZvgRSSBFlj6qUV+fxVwdnC+bNSFIis38nSBmwEPIpnru1aIRksBx7Yzgi+SWYzMbS
+        q4mr81RLlvYjbRVv2V3UaNgZG4U/qrItwCJC/27LEGG6guGXRgDQhv47RXrgid51idaOXc
+        Ck37OqDPTmfTcfWfksEaWpW2iZAkO1AxpQlijNLAZjh3zGzYhe3C8kBBhlAsB7lFVlFznZ
+        592SoEy31cLmDralu3hQNlHq1SHUMlI2/0LPzcP8QWhnReZi2bIsS0xNgvTAyg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646747936;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pMl034rKP4KtUY285VK2E6QJXRhnqapuqE6b3KEw77U=;
+        b=1q4a2o1+w6yJb76iN1PLkJP0vJGIIqIhdm1LUBVZaJdNf1Zx7Cscd2Bvsab8NeQjTB0eBR
+        LtYAExP2CwTf2DCg==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/module: Fix the paravirt vs alternative order
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Miroslav Benes <mbenes@suse.cz>,
+        <stable@vger.kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220303112825.068773913@infradead.org>
+References: <20220303112825.068773913@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YidY+ncMVhp7bBvh@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <164674793535.16921.13542564445645377142.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Mar 2022, Mark Brown wrote:
+The following commit has been merged into the x86/urgent branch of tip:
 
-> On Tue, Mar 08, 2022 at 05:46:39PM +0530, Alim Akhtar wrote:
-> 
-> > - Resend of FSD SPI support patches as the dependencies has landed in MFD
-> >   tree, hope this will go via MFD tree (as there are dependency between
-> > MFD, SPI and DT)
-> 
-> I either need a pull request for the MFD changes or to wait until those
-> changes have come in via Linus' tree.
+Commit-ID:     5adf349439d29f92467e864f728dfc23180f3ef9
+Gitweb:        https://git.kernel.org/tip/5adf349439d29f92467e864f728dfc23180f3ef9
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Thu, 03 Mar 2022 12:23:23 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 08 Mar 2022 14:15:25 +01:00
 
-You mean this one:
+x86/module: Fix the paravirt vs alternative order
 
-  https://lore.kernel.org/all/YiYC7eYx2SpPILyl@google.com/
+Ever since commit
 
-  spi: dt-bindings: samsung: Convert to dtschema
+  4e6292114c74 ("x86/paravirt: Add new features for paravirt patching")
 
-Or something else?
+there is an ordering dependency between patching paravirt ops and
+patching alternatives, the module loader still violates this.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Fixes: 4e6292114c74 ("x86/paravirt: Add new features for paravirt patching")
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Miroslav Benes <mbenes@suse.cz>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220303112825.068773913@infradead.org
+---
+ arch/x86/kernel/module.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index 95fa745..96d7c27 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -273,6 +273,14 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 			retpolines = s;
+ 	}
+ 
++	/*
++	 * See alternative_instructions() for the ordering rules between the
++	 * various patching types.
++	 */
++	if (para) {
++		void *pseg = (void *)para->sh_addr;
++		apply_paravirt(pseg, pseg + para->sh_size);
++	}
+ 	if (retpolines) {
+ 		void *rseg = (void *)retpolines->sh_addr;
+ 		apply_retpolines(rseg, rseg + retpolines->sh_size);
+@@ -290,11 +298,6 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 					    tseg, tseg + text->sh_size);
+ 	}
+ 
+-	if (para) {
+-		void *pseg = (void *)para->sh_addr;
+-		apply_paravirt(pseg, pseg + para->sh_size);
+-	}
+-
+ 	/* make jump label nops */
+ 	jump_label_apply_nops(me);
+ 

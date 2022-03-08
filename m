@@ -2,212 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C94E4D1B8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C670A4D1B8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347802AbiCHPVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        id S1347750AbiCHPVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347753AbiCHPVI (ORCPT
+        with ESMTP id S1347728AbiCHPVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:21:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F104DF4A
+        Tue, 8 Mar 2022 10:21:07 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C314D9F1
         for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:20:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AEE961587
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF91C340EC;
-        Tue,  8 Mar 2022 15:20:08 +0000 (UTC)
-Date:   Tue, 8 Mar 2022 10:20:07 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Alex Sverdlin <alexander.sverdlin@nokia.com>,
-        Abel Vesa <abelvesa@linux.com>, Rabin Vincent <rabin@rab.in>,
-        Colin Cross <ccross@android.com>
-Subject: Re: ftrace bug
-Message-ID: <20220308102007.6c6618e7@gandalf.local.home>
-In-Reply-To: <62c01368-b67f-66af-2e31-d62f4df75b61@broadcom.com>
-References: <9a86b2c9-1009-1683-442e-61c5a7dc8cf3@broadcom.com>
-        <20220307082450.641ed866@gandalf.local.home>
-        <62c01368-b67f-66af-2e31-d62f4df75b61@broadcom.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Received: by mail-io1-f70.google.com with SMTP id s14-20020a0566022bce00b00645e9bc9773so2764964iov.20
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:20:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=t0VNOU7RRwjb3H7s1WRSl1+Azc/DP7e41yedGLIzhXo=;
+        b=D/g3rVWU1KI3BKNZYsTti8kzxI6zVfsZQ7aRNvZ75GsBZfzyQ2vlWxNlnk+z1ELozM
+         rBLSMuw7IKepl8oE9Aid75Gq8N1YaQAJ6+wLICYkBK5h5UcAtRunFrnbAcnZbzK2HaR0
+         wEbxTtnFRtNZkhGjtnfWqEBNa8gIr4iRTZlOTuaPUOVdbSiFiRstNMCe1eQuAZCO+Vpg
+         nPrWtS5HU8q+Qo+Di3v6siYAzc6wZLO9Y6tpW9KC2iDCuVNLrdCHivmGb7AyZqQ/vtD0
+         v24hEBrcHD1QiU6bj1aDuyGD/hGiO0nHri3yDwj5zNP5I7vPylHBqbu+oXVXyjkhaLfV
+         LcYw==
+X-Gm-Message-State: AOAM532ZgIpWRyNm7LlhLbIogJztb3ptxBC1WB9yf60Krs/tq7BC7sIS
+        bvc0Jeb+3jBYE+Z6Xx/aSs4fL7vx9cFWym7tk4YGvyE8CV9R
+X-Google-Smtp-Source: ABdhPJxIN1KmDqfCPfbxTpbcL1P976T5kld5TWrV6qwp59ZVvVUSFZWeL+pWItJl4jnlnqyijl4xmXUrp4AFu7GyO3ZtQUl40q2Q
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1c04:b0:2be:4c61:20f4 with SMTP id
+ l4-20020a056e021c0400b002be4c6120f4mr15914234ilh.245.1646752809820; Tue, 08
+ Mar 2022 07:20:09 -0800 (PST)
+Date:   Tue, 08 Mar 2022 07:20:09 -0800
+In-Reply-To: <20220308150836.3680-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000043292605d9b684bf@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in cdc_ncm_tx_fixup
+From:   syzbot <syzbot+5ec3d1378e31c88d87f4@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Adding ARM folks (and those that touched the ftrace ARM port) as I don't
-  know the ARM code ]
+Hello,
 
-On Tue, 8 Mar 2022 11:53:35 +0100
-Arend van Spriel <arend.vanspriel@broadcom.com> wrote:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> On 3/7/2022 2:24 PM, Steven Rostedt wrote:
-> > On Mon, 7 Mar 2022 12:26:45 +0100
-> > Arend van Spriel <arend.vanspriel@broadcom.com> wrote:
-> >   
-> >> Hi Steven,
-> >>
-> >> I wanted to use FTRACE on an ARM platform and I hit the following
-> >> warning which results in ftrace bug. This happens upon loading a module.
-> >> Looking up the warning I suspect the branch target is too far off. The
-> >> module is quite large and therefor not loaded in the modules section. Is
-> >> there a way to exclude a module. In ftrace_module_init I see a check for
-> >> !mod->num_ftrace_callsites. Is there a way to avoid creating ftrace
-> >> callsites in a module?  
-> > 
-> > Are you sure it's the size. Just want to make sure that's the reason before
-> > going with different solutions.  
-> 
-> Interpreting the warning statement in insn.c and given the fact that the 
-> module is loaded at 0xe3xxxxxx instead of kernel module space at 
-> 0xbfxxxxxx I made this assumption, but ....
-> 
-> >>
-> >> Regards,
-> >> Arend
-> >>
-> >> ------------[ cut here ]------------
-> >>
-> >> WARNING: CPU: 2 PID: 1525 at arch/arm/kernel/insn.c:47
-> >> __arm_gen_branch+0x70/0x78
-> >>
-> >> CPU: 2 PID: 1525 Comm: insmod Tainted: P                  4.19.183 #2
-> >>
-> >> Hardware name: Generic DT based system
-> >>
-> >> [<c02139e4>] (unwind_backtrace) from [<c020d4f8>] (show_stack+0x20/0x24)
-> >>
-> >> [<c020d4f8>] (show_stack) from [<c0922aec>] (dump_stack+0x98/0xac)
-> >>
-> >> [<c0922aec>] (dump_stack) from [<c0919b98>] (__warn.part.0+0xcc/0xe8)
-> >>
-> >> [<c0919b98>] (__warn.part.0) from [<c0919d4c>]
-> >> (warn_slowpath_null+0x54/0x74)
-> >> [<c0919d4c>] (warn_slowpath_null) from [<c021225c>]
-> >> (__arm_gen_branch+0x70/0x78)
-> >> [<c021225c>] (__arm_gen_branch) from [<c02120e4>]
-> >> (ftrace_make_nop+0x64/0xec)
-> >> [<c02120e4>] (ftrace_make_nop) from [<c02ac2b0>]
-> >> (ftrace_process_locs+0x370/0x4b4)
-> >>
-> >> [<c02ac2b0>] (ftrace_process_locs) from [<c02af538>]
-> >> (ftrace_module_init+0x38/0x3c)
-> >>
-> >> [<c02af538>] (ftrace_module_init) from [<c02a47d8>]
-> >> (load_module+0x18d0/0x2570)
-> >> [<c02a47d8>] (load_module) from [<c02a56f8>]
-> >> (sys_finit_module+0xe0/0xf8)
-> >> [<c02a56f8>] (sys_finit_module) from [<c0201000>]
-> >> (ret_fast_syscall+0x0/0x58)
-> >> Exception stack(0xd9b1bfa8 to 0xd9b1bff0)
-> >>
-> >> bfa0:                   01170228 00000000 00000003 01170228 00000000
-> >> beb7ceb3
-> >> bfc0: 01170228 00000000 beb7cdc4 0000017b 00127010 00000000 00000000
-> >> 00000000
-> >> bfe0: beb7cc38 beb7cc28 0001a0dc 00012890
-> >>
-> >> ---[ end trace f48808a851a4544a ]---
-> >>
-> >> ------------[ cut here ]------------
-> >>
-> >> WARNING: CPU: 2 PID: 1525 at kernel/trace/ftrace.c:2034
-> >> ftrace_bug+0xfc/0x394  
-> > 
-> > Three should be more content after the "cut here" that is very relevant (I
-> > hate that cut here, because I constantly need to tell people to show me
-> > more :-p I need to add a "ftrace bug cut here" line.)
-> > 
-> > 
-> > Could you show me the output right after that.  
-> 
-> ... here is the output I think you were looking for:
-> 
-> ftrace failed to modify 
-> 
-> [<a82ca82d>] (suspected corrupt symbol) 
+Reported-and-tested-by: syzbot+5ec3d1378e31c88d87f4@syzkaller.appspotmail.com
 
-Is the above "suspected corrupt symbol" kernel output? I don't see it in my
-tree. What version of the kernel is this.
+Tested on:
 
-I'm guessing the above address a82ca82d is where it is trying to modify,
-and is not in the symbol table. So something looks to be messed up.
+commit:         ea4424be Merge tag 'mtd/fixes-for-5.17-rc8' of git://g..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
+dashboard link: https://syzkaller.appspot.com/bug?extid=5ec3d1378e31c88d87f4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=129f209a700000
 
-> 
->   actual:   63:17:16:eb 
-
-The above is what it found in that location.
-
-Perhaps others have ideas.
-
--- Steve
-
-> 
-> Initializing ftrace call sites 
-> 
-> ftrace record flags: 2000000 
-> 
->   (0) 
-> 
->   expected tramp: c0211b88 
-> 
-> ftrace failed to modify 
-> 
-> [<6c88ec64>] (suspected corrupt symbol) 
-> 
->   actual:   72:ab:08:eb 
-> 
-> Initializing ftrace call sites 
-> 
-> ftrace record flags: 2000000 
-> 
->   (0) 
-> 
->   expected tramp: c0211b88 
-> 
-> ftrace failed to modify 
-> 
-> [<b1ed303a>] (suspected corrupt symbol) 
-> 
->   actual:   04:12:04:eb 
-> 
-> Initializing ftrace call sites 
-> 
-> ftrace record flags: 2000000 
-> 
->   (0) 
-> 
->   expected tramp: c0211b88 
-> 
-> ftrace failed to modify 
-> 
-> [<eb2fee66>] (suspected corrupt symbol) 
-> 
->   actual:   d6:7e:00:eb 
-> 
-> Initializing ftrace call sites 
-> 
-> ftrace record flags: 2000000 
-> 
->   (0) 
-> 
->   expected tramp: c0211b88
-> 
-> Regards,
-> Arend
-
+Note: testing is done by a robot and is best-effort only.

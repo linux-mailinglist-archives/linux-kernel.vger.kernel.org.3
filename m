@@ -2,164 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC5D4D18C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47E54D18E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344800AbiCHNME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
+        id S239183AbiCHNQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiCHNMC (ORCPT
+        with ESMTP id S229635AbiCHNQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:12:02 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FF248884
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:11:05 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KCbJ54G6WzBrcY;
-        Tue,  8 Mar 2022 21:09:09 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 21:11:03 +0800
-Subject: Re: [PATCH 2/4] mm/memory-failure.c: fix wrong user reference report
-To:     Yang Shi <shy828301@gmail.com>
-CC:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220228140245.24552-1-linmiaohe@huawei.com>
- <20220228140245.24552-3-linmiaohe@huawei.com>
- <20220304082714.GB3778609@hori.linux.bs1.fc.nec.co.jp>
- <227af111-9264-02fd-9e46-744d39ecfed0@huawei.com>
- <CAHbLzkom__59_RCpJCZDA+ray-t5qAWatujXWha8BX2-x8GiMA@mail.gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <8a35d8d8-3078-89ad-4061-358a500c5d61@huawei.com>
-Date:   Tue, 8 Mar 2022 21:11:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 8 Mar 2022 08:16:40 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE5B28E20;
+        Tue,  8 Mar 2022 05:15:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=4AMo7a+1jYhUbTd5eXCuX2jQ4/Cx5HSKuDlGnN/Zuvc=; b=j8zjA6LQrLmR/0SSpgvvXDpFpZ
+        XXUplKADfDcwPXoPqfWxYyyKVNd81HyV5gPQG6Grb9n91cu4j3mq1cu1y2s+MOXlaKAnPch9ITD1I
+        ur3+4UYRTIJHEVhGCgRPvxdyi466bFAMkiTcxbPoc40FsG7IXTuAqFsZUlt5vRwx1T54=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nRZgI-009naD-7D; Tue, 08 Mar 2022 14:15:14 +0100
+Date:   Tue, 8 Mar 2022 14:15:14 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Walle <michael@walle.cc>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        John Linn <john.linn@xilinx.com>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        Sadanand Mutyala <Sadanand.Mutyala@xilinx.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ethernet: Fix error handling in xemaclite_of_probe
+Message-ID: <YidW4rzNQ3ckkO1Y@lunn.ch>
+References: <20220308024751.2320-1-linmq006@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHbLzkom__59_RCpJCZDA+ray-t5qAWatujXWha8BX2-x8GiMA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308024751.2320-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/8 4:14, Yang Shi wrote:
-> On Mon, Mar 7, 2022 at 3:26 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->>
->> On 2022/3/4 16:27, HORIGUCHI NAOYA(堀口 直也) wrote:
->>> On Mon, Feb 28, 2022 at 10:02:43PM +0800, Miaohe Lin wrote:
->>>> The dirty swapcache page is still residing in the swap cache after it's
->>>> hwpoisoned. So there is always one extra refcount for swap cache.
->>>
->>> The diff seems fine at a glance, but let me have a few question to
->>> understand the issue more.
->>>
->>> - Is the behavior described above the effect of recent change on shmem where
->>>   dirty pagecache is pinned on hwpoison (commit a76054266661 ("mm: shmem:
->>>   don't truncate page if memory failure happens"). Or the older kernels
->>>   behave as the same?
->>>
->>> - Is the behavior true for normal anonymous pages (not shmem pages)?
->>>
->>
->> The behavior described above is aimed at swapcache not pagecache. So it should be
->> irrelevant with the recent change on shmem.
->>
->> What I try to fix here is that me_swapcache_dirty holds one extra pin via SwapCache
->> regardless of the return value of delete_from_lru_cache. We should try to report more
->> accurate extra refcount for debugging purpose.
+On Tue, Mar 08, 2022 at 02:47:49AM +0000, Miaoqian Lin wrote:
+> This node pointer is returned by of_parse_phandle() with refcount
+> incremented in this function. Calling of_node_put() to avoid the
+> refcount leak. As the remove function do.
 > 
-> I think you misunderstood the code. The delete_from_lru_cache()
-> returning 0 means the page was on LRU and isolated from LRU
-> successfully now. Returning -EIO means the page was not on LRU, so it
-> should have at least an extra pin on it.
-> 
-> So MF_DELAYED means there is no other pin other than hwpoison and
-> swapcache which is expected, MF_FAILED means there might be extra
-> pins.
-> 
-> The has_extra_refcount() raised error then there is *unexpected* refcount.
+> Fixes: 5cdaaa12866e ("net: emaclite: adding MDIO and phy lib support")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-Many thanks for your explanation. It seems you're right. If page is held on
-the lru_pvecs when we try to do delete_from_lru_cache, and after that it's
-drained to the lru list( so its refcnt might be 2 now). Then we might have
-the following complain if extra_pins is always true:
-	"Memory failure: ... still referenced by 0 users\n"
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-But it seems the origin code can not report the correct reason too because
-if we retry, page can be delete_from_lru_cache and we can succeed now.
-
-Anyway, many thanks for pointing this out.
-
-> 
->>
->>> I'm trying to test hwpoison hitting the dirty swapcache, but it seems that
->>> in my testing memory_faliure() fails with "hwpoison: unhandlable page"
->>
->> Maybe memory_faliure is racing with page reclaim where page is isolated?
->>
->>> warning at get_any_page().  So I'm still not sure that me_pagecache_dirty()
->>> fixes any visible problem.
->>
->> IIUC, me_pagecache_dirty can't do much except for the corresponding address_space supporting
->> error_remove_page which can truncate the dirty pagecache page. But this may cause silent data
->> loss. It's better to keep the page stay in the pagecache until the file is truncated, hole
->> punched or removed as commit a76054266661 pointed out.
->>
->> Thanks.
->>
->>>> Thanks,
->>> Naoya Horiguchi
->>>
->>>>
->>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>>> ---
->>>>  mm/memory-failure.c | 6 +-----
->>>>  1 file changed, 1 insertion(+), 5 deletions(-)
->>>>
->>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->>>> index 0d7c58340a98..5f9503573263 100644
->>>> --- a/mm/memory-failure.c
->>>> +++ b/mm/memory-failure.c
->>>> @@ -984,7 +984,6 @@ static int me_pagecache_dirty(struct page_state *ps, struct page *p)
->>>>  static int me_swapcache_dirty(struct page_state *ps, struct page *p)
->>>>  {
->>>>      int ret;
->>>> -    bool extra_pins = false;
->>>>
->>>>      ClearPageDirty(p);
->>>>      /* Trigger EIO in shmem: */
->>>> @@ -993,10 +992,7 @@ static int me_swapcache_dirty(struct page_state *ps, struct page *p)
->>>>      ret = delete_from_lru_cache(p) ? MF_FAILED : MF_DELAYED;
->>>>      unlock_page(p);
->>>>
->>>> -    if (ret == MF_DELAYED)
->>>> -            extra_pins = true;
->>>> -
->>>> -    if (has_extra_refcount(ps, p, extra_pins))
->>>> +    if (has_extra_refcount(ps, p, true))
->>>>              ret = MF_FAILED;
->>>>
->>>>      return ret;
->>>> --
->>>> 2.23.0
->>
->>
-> .
-> 
-
+    Andrew

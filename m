@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13364D189B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB87A4D189E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346451AbiCHNE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S1347021AbiCHNEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245664AbiCHNEZ (ORCPT
+        with ESMTP id S1346893AbiCHNEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:04:25 -0500
-Received: from smtp.tom.com (smtprz15.163.net [106.3.154.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD120473BE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:03:27 -0800 (PST)
-Received: from my-app02.tom.com (my-app02.tom.com [127.0.0.1])
-        by freemail02.tom.com (Postfix) with ESMTP id 5385BB00D32
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 21:03:25 +0800 (CST)
-Received: from my-app02.tom.com (HELO smtp.tom.com) ([127.0.0.1])
-          by my-app02 (TOM SMTP Server) with SMTP ID -1951528683
-          for <linux-kernel@vger.kernel.org>;
-          Tue, 08 Mar 2022 21:03:25 +0800 (CST)
-Received: from antispam1.tom.com (unknown [172.25.16.55])
-        by freemail02.tom.com (Postfix) with ESMTP id 418A9B00CC2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 21:03:25 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=201807;
-        t=1646744605; bh=BwJ+5quvHMWTci0mC33vVMP7HVey1Hn1WFiQ5Ovu7QA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DiHOJfSUTjhjmOXKJ9pdAcc6nxXI9SQN00+uytZaXEq+Cv2+mrIh0FkzDOjrR1SKd
-         chDCraa5I2QlTXb2wzv04ooQcZoiFjLyPk/0eEps767vdCB+8tRUtRKHWPCwehhqCA
-         gZIJkPGi44OGYOOXPGcJjNXXg7yOh1IXYC3oBeiY=
-Received: from antispam1.tom.com (antispam1.tom.com [127.0.0.1])
-        by antispam1.tom.com (Postfix) with ESMTP id 3E487D415A5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 21:03:25 +0800 (CST)
-X-Virus-Scanned: Debian amavisd-new at antispam1.tom.com
-Received: from antispam1.tom.com ([127.0.0.1])
-        by antispam1.tom.com (antispam1.tom.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id yoGNTDAwyYmY for <linux-kernel@vger.kernel.org>;
-        Tue,  8 Mar 2022 21:03:24 +0800 (CST)
-Received: from localhost (unknown [101.93.196.13])
-        by antispam1.tom.com (Postfix) with ESMTPA id 77F9DD41599;
-        Tue,  8 Mar 2022 21:03:21 +0800 (CST)
-Date:   Tue, 8 Mar 2022 21:03:20 +0800
-From:   Mingbao Sun <sunmingbao@tom.com>
-To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     tyler.sun@dell.com, ping.gan@dell.com, yanxiu.cai@dell.com,
-        libin.zhang@dell.com, ao.sun@dell.com
-Subject: Re: [PATCH 0/2] NVMe_over_TCP: support specifying the
- congestion-control
-Message-ID: <20220308210320.000013ca@tom.com>
-In-Reply-To: <20220304092754.2721-1-sunmingbao@tom.com>
-References: <20220304092754.2721-1-sunmingbao@tom.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+        Tue, 8 Mar 2022 08:04:50 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C503A72F;
+        Tue,  8 Mar 2022 05:03:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646744618;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=l1dgMSGICGJL3G77F/MPWlIsjBwTBpqOBLaKyLXW79w=;
+    b=DmqrWWPHGZ8QJ4BswwQFN7jzgi05Pb8UnZ/RgxewGrLoUgORkbaOzhaOAuX0r/t0S6
+    TZvDK8VF4xDrgBN35MWNaCs2pHbQ9eARMTI//y7m5UjxKgc48zXUtyVA5n3uFgHV4EFH
+    vRP4fJdxRN/4+yCXpqXxwfxFCDOOCefu1pzJPWyymCy2uisk7vaB36hfbyOKrcrDyXf+
+    nTgTzmg8Vf12SEVI/JwsiXncQfD5ZKDtiP4qpKX1NrryTaS/ZwKUMiM0zhkaYnkoP1Bk
+    fITk2JtEpe8S0fW+v6W1KTCi5Tcoj8uY/fMkLb9R3PBAhkPktpdGEyDcpzxokx29KcZZ
+    X/PQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVbpc9Y="
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
+    with ESMTPSA id n729cey28D3cSKb
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 8 Mar 2022 14:03:38 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        tony@atomide.com
+Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH] usb: dwc3: omap: fix "unbalanced disables for smps10_out1" on omap5evm
+Date:   Tue,  8 Mar 2022 14:03:37 +0100
+Message-Id: <af3b750dc2265d875deaabcf5f80098c9645da45.1646744616.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I feel that I'd better address this a little bit more to express the
-meaning behind this feature.
+Usually, the vbus_regulator (smps10 on omap5evm) boots up disabled.
 
-You know, InfiniBand/RoCE provides NVMe-oF a lossless network
-environment (that is zero packet loss), which is a great advantage
-to performance.
+Hence calling regulator_disable() indirectly through dwc3_omap_set_mailbox()
+during probe leads to:
 
-In contrast, 'TCP/IP + ethernet' is often used as a lossy network
-environment (packet dropping often occurs).=20
-And once packet dropping occurs, timeout-retransmission would be
-triggered. But once timeout-retransmission was triggered, it=E2=80=99s a gr=
-eat
-damage to the performance.
+[   10.332764] WARNING: CPU: 0 PID: 1628 at drivers/regulator/core.c:2853 _regulator_disable+0x40/0x164
+[   10.351919] unbalanced disables for smps10_out1
+[   10.361298] Modules linked in: dwc3_omap(+) clk_twl6040 at24 gpio_twl6040 palmas_gpadc palmas_pwrbutton
+industrialio snd_soc_omap_mcbsp(+) snd_soc_ti_sdma display_connector ti_tpd12s015 drm leds_gpio
+drm_panel_orientation_quirks ip_tables x_tables ipv6 autofs4
+[   10.387818] CPU: 0 PID: 1628 Comm: systemd-udevd Not tainted 5.17.0-rc1-letux-lpae+ #8139
+[   10.405129] Hardware name: Generic OMAP5 (Flattened Device Tree)
+[   10.411455]  unwind_backtrace from show_stack+0x10/0x14
+[   10.416970]  show_stack from dump_stack_lvl+0x40/0x4c
+[   10.422313]  dump_stack_lvl from __warn+0xb8/0x170
+[   10.427377]  __warn from warn_slowpath_fmt+0x70/0x9c
+[   10.432595]  warn_slowpath_fmt from _regulator_disable+0x40/0x164
+[   10.439037]  _regulator_disable from regulator_disable+0x30/0x64
+[   10.445382]  regulator_disable from dwc3_omap_set_mailbox+0x8c/0xf0 [dwc3_omap]
+[   10.453116]  dwc3_omap_set_mailbox [dwc3_omap] from dwc3_omap_probe+0x2b8/0x394 [dwc3_omap]
+[   10.467021]  dwc3_omap_probe [dwc3_omap] from platform_probe+0x58/0xa8
+[   10.481762]  platform_probe from really_probe+0x168/0x2fc
+[   10.481782]  really_probe from __driver_probe_device+0xc4/0xd8
+[   10.481782]  __driver_probe_device from driver_probe_device+0x24/0xa4
+[   10.503762]  driver_probe_device from __driver_attach+0xc4/0xd8
+[   10.510018]  __driver_attach from bus_for_each_dev+0x64/0xa0
+[   10.516001]  bus_for_each_dev from bus_add_driver+0x148/0x1a4
+[   10.524880]  bus_add_driver from driver_register+0xb4/0xf8
+[   10.530678]  driver_register from do_one_initcall+0x90/0x1c4
+[   10.536661]  do_one_initcall from do_init_module+0x4c/0x200
+[   10.536683]  do_init_module from load_module+0x13dc/0x1910
+[   10.551159]  load_module from sys_finit_module+0xc8/0xd8
+[   10.561319]  sys_finit_module from __sys_trace_return+0x0/0x18
+[   10.561336] Exception stack(0xc344bfa8 to 0xc344bff0)
+[   10.561341] bfa0:                   b6fb5778 b6fab8d8 00000007 b6ecfbb8 00000000 b6ed0398
+[   10.561341] bfc0: b6fb5778 b6fab8d8 855c0500 0000017b 00020000 b6f9a3cc 00000000 b6fb5778
+[   10.595500] bfe0: bede18f8 bede18e8 b6ec9aeb b6dda1c2
+[   10.601345] ---[ end trace 0000000000000000 ]---
 
-So although NVMe/TCP may have a bandwidth competitive to that of
-NVMe/RDMA, but the packet dropping of the former is a flaw to
-its performance.
+Fix this unnecessary warning by checking if the regulator is enabled.
 
-However, with the combination of the following conditions, NVMe/TCP
-can almost be as competitive as NVMe/RDMA in the data center.
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+---
+ drivers/usb/dwc3/dwc3-omap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  - Ethernet NICs supporting QoS configuration (support mapping TOS/DSCP
-    in IP header into priority, support PFC)
-
-  - Ethernet Switches supporting ECN marking, supporting adjusting
-    buffer size of each priority.
-
-  - NVMe/TCP supports specifying the tos for its TCP traffic
-    (already implemented)
-
-  - NVMe/TCP supports specifying dctcp as the congestion-control of its
-    TCP sockets (the work of this feature)
-
-So this feature is the last item from the software aspect to form up the
-above combination.
+diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
+index e196673f5c64..efaf0db595f4 100644
+--- a/drivers/usb/dwc3/dwc3-omap.c
++++ b/drivers/usb/dwc3/dwc3-omap.c
+@@ -242,7 +242,7 @@ static void dwc3_omap_set_mailbox(struct dwc3_omap *omap,
+ 		break;
+ 
+ 	case OMAP_DWC3_ID_FLOAT:
+-		if (omap->vbus_reg)
++		if (omap->vbus_reg && regulator_is_enabled(omap->vbus_reg))
+ 			regulator_disable(omap->vbus_reg);
+ 		val = dwc3_omap_read_utmi_ctrl(omap);
+ 		val |= USBOTGSS_UTMI_OTG_CTRL_IDDIG;
+-- 
+2.33.0
 

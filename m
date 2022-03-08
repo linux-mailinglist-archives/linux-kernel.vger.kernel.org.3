@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FA54D231C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A784D231E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350363AbiCHVOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S1350369AbiCHVOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234717AbiCHVOP (ORCPT
+        with ESMTP id S234717AbiCHVOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:14:15 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B7C32EC0;
-        Tue,  8 Mar 2022 13:13:18 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id a186so184010vsc.3;
-        Tue, 08 Mar 2022 13:13:18 -0800 (PST)
+        Tue, 8 Mar 2022 16:14:52 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B06832EF5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 13:13:55 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id l20so200030lfg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 13:13:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rFaXmSp0CUO3MUoxtONyEeHswEbCY1B/ujO2ak9ia2U=;
-        b=iGcIaMfp4FsLPBTkkVEWgveu1ZKeaJGm6BV0qJRw/awR3InWaE/GhJaFZTGMfQ25en
-         4ts4sXERNYWH61JPQsci41eJBRu7oml141O22s4Cvv5p7P6FK30dA65l1DWFEhHzOnuI
-         FMLIQ8EeYAINY9ieXQsAOUxEbzJxGpf4helFl+EmaAagwzKO8deFyy2z63r9+H9xs0Fa
-         sH9Er91VVabvh8kiweFm58a6Lr2k8JsQC6Eezx5hQwxf0kYykzxYCAXFZHNj+/58FLj3
-         3JmHBdXja0SU8UCg/AC6lsHzh7+48cRqV3EoQC1C9DDLgJgaE/EGLvPdiQSArdb9MTxh
-         pkXw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=m0/8sk6gVvfrZi40mwng+FUCP1kcZ21w5gsjbQW+jrM=;
+        b=gXJzdw//hwZUJwUfVmASwdiGtxcIEwMvM9cEBlXwXPjiBKJ1TT6awhKi928+TwJ56V
+         CaLlnHnEL9uPTdutzTSNR9L2giSncZhOfb/JBz4BhN/VKHFt7+9NNrNzVbck2BafRCHG
+         FAJ3y4srZEdDT2YDMkzgG/QRjloci1teTLqJbjbGfb1+MoDNW1W2Xj3Z7m+i/R3VjDfW
+         EKwyXOkJ7twGbPdMEIGBQiAv/0CdoQBt+PnG4SeKaoQIxeDFpoNrvDItpOF6SsHW1wPy
+         KWlSQCB60frkA8Q+ULHldnDMt1ZViGHqQndjVw1+XU5iglFzuCmHduL/j8hS7NApIU+4
+         TO2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rFaXmSp0CUO3MUoxtONyEeHswEbCY1B/ujO2ak9ia2U=;
-        b=rntuuNCnQbhzOR+VsLzdmmqw30zQ/4IUbwz2Y/LGHFNHkBTBEFiYjjVW4SDAQhBqo6
-         UX3+09JvG2WNbViFfItwuZL+ancNzC+t8ny0n7szT/Lz+fnx1IbIrgM7Yj1a2LUKQMSU
-         jgBpeDwevKZG736LACK9M8ykeS+Hka3+/gUFeqwmJbY00xsQztJ0sSP9OTEKrBeaSClp
-         9ojGOwcfID0vxwoziIy602PZ6JD1Kx+P1Rla2gUw9cOgrM869DWXvwjxGXT29wx/9q0o
-         CPMtVOo31qTvCta0tzApVx8IhFIC2tyni2SmIeRp+t17BlCFSMFD9znAZEmPUPW4t04j
-         No0w==
-X-Gm-Message-State: AOAM533T+nOcPG9D1ujPmYPXO51WbmRI6L454Z1fWDl/6/jXXNBmu/15
-        ykDJ4+w7sn6Zg24DfKfqnhrG5py5cdwtSc38l9s=
-X-Google-Smtp-Source: ABdhPJzMtJBKG17xzLUgES2DvaoKKXyIpmlOJpBc3XIO6D0Xqvi6zQf+88WbQ68P2pGj0X13437J2h5rB634DOVQFak=
-X-Received: by 2002:a05:6102:3f01:b0:320:678d:a18a with SMTP id
- k1-20020a0561023f0100b00320678da18amr8692190vsv.81.1646773997571; Tue, 08 Mar
- 2022 13:13:17 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m0/8sk6gVvfrZi40mwng+FUCP1kcZ21w5gsjbQW+jrM=;
+        b=oJFZe8diO4tPta+hYUfLENlZXl1d1LDeT0kSGjdjVLkuZstDW47BmZuRZldjb9LzQN
+         DL4sFupegFZ0zVvgA4UxXrZQIfp3tX61hZLkCtYOqGMVWI6bphBkN4cOrCuusz8KAN5n
+         E8m7uQWbyPZ0/ZfBQlBNNtzcVlNn//0HMjQNOyxag+Q4OT2DYUUzRHW+ZLrUwrMDfTiw
+         Amyxr6FPMYxLt9dDpJDr39eRacTo8VBbU++c46R7wKN2FN3nqmDWXoEgcnSp6Kzlt2KX
+         TclS646cgBypcKKAMzrTlT8gltP5UO7XacTc1mz6ErVajO/DsbWytoNGzmK7GK1yji4M
+         DHIg==
+X-Gm-Message-State: AOAM531+sP2IzSukqZfRKAB61PiZhH1mMdom/RPB+kTz1uTjVgwaH5kJ
+        0AqogcHNcvhshJmMuZFZyhY8QvA6PBk=
+X-Google-Smtp-Source: ABdhPJwtcOjTXd69ii9+/wSYLlrXYrNW+Itc7rTNm3XvC3Y30flrQW8pqKlCcZqWHLpRC9EQHb7twg==
+X-Received: by 2002:a05:6512:3619:b0:443:1597:8293 with SMTP id f25-20020a056512361900b0044315978293mr12502051lfs.439.1646774033201;
+        Tue, 08 Mar 2022 13:13:53 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.107])
+        by smtp.gmail.com with ESMTPSA id f17-20020a2e1f11000000b00247f8eb86a7sm449827ljf.108.2022.03.08.13.13.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 13:13:52 -0800 (PST)
+Message-ID: <b5f9dda7-269a-6b50-ddf2-b5fa05aa1d72@gmail.com>
+Date:   Wed, 9 Mar 2022 00:13:50 +0300
 MIME-Version: 1.0
-References: <YhmAAjNeTjiNoLlJ@google.com> <nycvar.YFH.7.76.2203011531370.11721@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2203011531370.11721@cbobk.fhfr.pm>
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date:   Tue, 8 Mar 2022 13:13:05 -0800
-Message-ID: <CAKdAkRT+X1YXGqcLTvmEyyxrkozmakR=1y8Y4nfK5=G2UYFK_w@mail.gmail.com>
-Subject: Re: [PATCH] HID: vivaldi: fix sysfs attributes leak
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Sean O'Brien" <seobrien@chromium.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 2/2] staging: r8188eu: proper error handling in
+ rtw_init_drv_sw
+Content-Language: en-US
+To:     Vihas Makwana <makvihas@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220308205510.48431-1-makvihas@gmail.com>
+ <20220308205510.48431-3-makvihas@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220308205510.48431-3-makvihas@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,46 +81,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 6:31 AM Jiri Kosina <jikos@kernel.org> wrote:
->
-> On Fri, 25 Feb 2022, Dmitry Torokhov wrote:
->
-> > The driver creates the top row map sysfs attribute in input_configured()
-> > method; unfortunately we do not have a callback that is executed when HID
-> > interface is unbound, thus we are leaking these sysfs attributes, for
-> > example when device is disconnected.
-> >
-> > To fix it let's switch to managed version of adding sysfs attributes which
-> > will ensure that they are destroyed when the driver is unbound.
-> >
-> > Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > ---
-> >
-> > Compiled only.
-> >
-> >  drivers/hid/hid-vivaldi.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
-> > index efa6140915f4..42ceb2058a09 100644
-> > --- a/drivers/hid/hid-vivaldi.c
-> > +++ b/drivers/hid/hid-vivaldi.c
-> > @@ -144,7 +144,7 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
-> >  static int vivaldi_input_configured(struct hid_device *hdev,
-> >                                   struct hid_input *hidinput)
-> >  {
-> > -     return sysfs_create_group(&hdev->dev.kobj, &input_attribute_group);
-> > +     return devm_device_add_group(&hdev->dev, &input_attribute_group);
-> >  }
-> >
-> >  static const struct hid_device_id vivaldi_table[] = {
->
-> Applied, thanks Dmitry.
+Hi Vihas,
 
-Jiri, are you planning to send this for 5.17 or 5.18?
+On 3/8/22 23:55, Vihas Makwana wrote:
+> The code inside rtw_init_drv_sw() calls various init functions to
+> populate the padapter structure and checks for their return values
+> respectively.
+> But if one of the functions in middle fails then it simply returns
+> _FAIL instead of proper logging and calling freeing counterparts
+> of previous init functions.
+> This leads to various memory leaks and can be found in
+> /sys/kernel/debug/kmemleak if kernel is compiled with DEBUG_KMEMLEAK=y.
+> 
+> Fix this and keep the success and error separate.
+> 
+> 
+> Signed-off-by: Vihas Makwana <makvihas@gmail.com>
+> ---
 
-Thanks.
+Fixes: 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for 
+RTL8188eu driver")
+> Tested on Comfast CF-WU810N RTL8188EUS wireless adapter.
+> This patch depends on "[PATCH 1/2] staging: r8188eu: call _cancel_timer_ex from
+>   _rtw_free_recv_priv"
+> ---
 
--- 
-Dmitry
+No need to say that 1/2 depends on 2/2 since they are already in same 
+patch series :)
+
+>   drivers/staging/r8188eu/os_dep/os_intfs.c | 60 ++++++++++++++++++-----
+>   1 file changed, 47 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+> index 197568422..6279bba07 100644
+> --- a/drivers/staging/r8188eu/os_dep/os_intfs.c
+> +++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+> @@ -469,32 +469,46 @@ u8 rtw_reset_drv_sw(struct adapter *padapter)
+>   
+>   u8 rtw_init_drv_sw(struct adapter *padapter)
+>   {
+> -	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL)
+> +	if ((rtw_init_cmd_priv(&padapter->cmdpriv)) == _FAIL) {
+> +		pr_err("rtw_init_cmd_priv failed\n");
+
+Hm, what about
+dev_err(dvobj_to_dev(padapter->dvobj), "..."); ?
+
+IIRC it's main usb device for this driver.
+
+@Phillip, @Larry, @Martin, please, correct me if I am wrong here
+
+
+Random note: We can't use netdev_err here since rtw_init_drv_sw() is 
+called before netdev registration
+
+
+>   		return _FAIL;
+> +	}
+>   
+>   	padapter->cmdpriv.padapter = padapter;
+
+Otherwise looks good to me
+
+
+With regards,
+Pavel Skripkin

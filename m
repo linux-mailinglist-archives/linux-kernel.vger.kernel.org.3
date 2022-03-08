@@ -2,215 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F33C4D0CCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7F84D0CCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 01:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243562AbiCHAbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Mar 2022 19:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
+        id S244110AbiCHAcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Mar 2022 19:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiCHAbM (ORCPT
+        with ESMTP id S230263AbiCHAcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Mar 2022 19:31:12 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F115B12ADA
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 16:30:16 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 132so14961424pga.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 16:30:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+b6U7xD5NsVIgrOaERyVM/BWmLRQRIumXagXORbvD2A=;
-        b=0GKybrjrYL+rRx8xyqPphQy4xU43Hygpubwr9knrRnPa7t6NZ3eLX1DmPVT0sOYtV1
-         OVzH/nOyojKgb5kZIPQEg6w6LtAbIHR53PtMTAnSSD7vfkREWtDNLsNdfDSHhRHCB6nR
-         ab1iw5YzFfUdxQhm3XcjSJNeIayb8qQwUhJlEbgsNHF/4mpwL67RTrtt5R/CUecDi+Br
-         HwOMEtpOfP8ZuTHdwAUmQaClJA/SWfMNyLySb7rKETPvf9TIyVgbzYWdlM3igRolvIMu
-         Eem7fku2tG9QnG8ygVE5EpILpoYL3ydFHfPO7YKUSilNoM2PkzGP3S80J/lpgyKIcWnc
-         2eKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+b6U7xD5NsVIgrOaERyVM/BWmLRQRIumXagXORbvD2A=;
-        b=gdD+/scYoOTp3oeEV/8UiYIGWBlnfrPO9WFwzU0ij323Vgiq5px4Z+5rk3/0e/LwgL
-         dZGmFh72uQcpK6xdWtNShbskBji08nQF+v+clTHB5EpB9Uyrdu2JPzPE7G4dBpDht1Tn
-         2hc75CGARGYl5OdA7ygB9IA0Ra/KcKFpw/XZsgaa9osa976RCwUYnmK/sgb+xdslRt0k
-         kVJkX+MMc9e/4MH5Mc4dMg3NOKxakwGhVKZANGFi/T4tRYvESiJq3bxqHIlaucJVHY81
-         ZXFA/CrIe9FbyqQUILhEzWHOkoVHP16VWdTTRsXe9iwRNhvnKx6oZeTuV3/CzE4aQFCP
-         XsUw==
-X-Gm-Message-State: AOAM53346RaqhRm78stQuk2hdz2YuduPBvbff1DY4tKVwxra4lc2JAlT
-        KkHkeXcezO7AaVXtSCOdDFtKag==
-X-Google-Smtp-Source: ABdhPJw/7iJsmiq2YwFfj9dsu6bwiW5xWajh+0nrM2ivXA3sK9GoMhbd8KfXGrn9yFgYKnRgnn1qKg==
-X-Received: by 2002:a05:6a00:1912:b0:4f6:bf89:e157 with SMTP id y18-20020a056a00191200b004f6bf89e157mr15351575pfi.20.1646699416313;
-        Mon, 07 Mar 2022 16:30:16 -0800 (PST)
-Received: from [10.255.253.61] ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056a0022cf00b004f3b99a6c43sm17265233pfj.219.2022.03.07.16.30.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 16:30:15 -0800 (PST)
-Message-ID: <496cf920-f3e6-91d4-3dc8-a5d1b510ee5b@bytedance.com>
-Date:   Tue, 8 Mar 2022 08:30:09 +0800
+        Mon, 7 Mar 2022 19:32:19 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AB112ADA;
+        Mon,  7 Mar 2022 16:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646699483; x=1678235483;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oSu0Z2jGUkfhbuVOaedzXc4LteEqQxU2xU+auVYA8/8=;
+  b=J/D3yqrMTipJDADD0loQoVIfJnWEePK9vKs2mESF8VeGelRWLWv0S3yC
+   VyU94kbCuC+og0HV5nYYvfGwVRr3Gceie3RhPJxB1YWh09CKrlngG09CT
+   MSVUDCF/vxuQSHknRfNDjYJRMPN7eO0qN3w9nZsd6n+9ldZ5xZHhiAFAd
+   xGwu0KG0fvjkWYfZnms0I17ugdiqfdL5BM/Pq1Ex9x7beyCbINASL3Zin
+   mYgOjOUiwaw6zI3JtPEsg9HXh+f/O1UXyKpK3KSc28srjnPl5OYyITci+
+   znHh/S0KVGrrOvUJG0/yk94kkXkPjNVmqUxi/in///ieoabcBd91ip3S5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="235154024"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="235154024"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 16:31:23 -0800
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="711324392"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.209.195]) ([10.254.209.195])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 16:31:16 -0800
+Message-ID: <5fb85230-466c-9615-0867-bb17cab34be5@linux.intel.com>
+Date:   Tue, 8 Mar 2022 08:31:14 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [Phishing Risk] [External] Re: [PATCH] psi: report zeroes for CPU
- full at the system level
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Cc:     baolu.lu@linux.intel.com, Chaitanya Kulkarni <kch@nvidia.com>,
+        kvm@vger.kernel.org, Stuart Yoder <stuyoder@gmail.com>,
+        rafael@kernel.org, David Airlie <airlied@linux.ie>,
+        linux-pci@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Li Yang <leoyang.li@nxp.com>, Will Deacon <will@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: Re: [PATCH v7 01/11] iommu: Add DMA ownership management interfaces
 Content-Language: en-US
-To:     Martin Steigerwald <Martin.Steigerwald@proact.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "ebiggers@google.com" <ebiggers@google.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "surenb@google.com" <surenb@google.com>
-Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>
-References: <20220305021329.54119-1-zhouchengming@bytedance.com>
- <89d939a61f840683101542fe0da823e693ef6cc3.camel@proact.de>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <89d939a61f840683101542fe0da823e693ef6cc3.camel@proact.de>
-Content-Type: text/plain; charset=UTF-8
+To:     eric.auger@redhat.com, Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+References: <20220228005056.599595-1-baolu.lu@linux.intel.com>
+ <20220228005056.599595-2-baolu.lu@linux.intel.com>
+ <c75b6e04-bc1b-b9f6-1a44-bf1567a8c19d@redhat.com>
+ <7a3dc977-0c5f-6d88-6d3a-8e49bc717690@linux.intel.com>
+ <1648bc97-a0d3-4051-58d0-e24fa9e9d183@arm.com>
+ <350a8e09-08a9-082b-3ad1-b711c7d98d73@redhat.com>
+ <e2698dbe-18e2-1a82-8a12-fe45bc9be534@arm.com>
+ <b1a5db0a-0373-5ca0-6256-85a96d029ec9@linux.intel.com>
+ <ac75c521-fb13-8414-a81b-9178cbed3471@redhat.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <ac75c521-fb13-8414-a81b-9178cbed3471@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/7 7:01 下午, Martin Steigerwald wrote:
-> Am Samstag, dem 05.03.2022 um 10:13 +0800 schrieb Chengming Zhou:
->> Martin find it confusing when look at the /proc/pressure/cpu output,
->> and found no hint about that CPU "full" line in psi Documentation.
->>
->> % cat /proc/pressure/cpu
->> some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
->> full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
->>
->> The PSI_CPU_FULL state is introduced by commit e7fcd7622823
->> ("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
->> but also counted at the system level as a side effect.
->>
->> Naturally, the FULL state doesn't exist for the CPU resource at
->> the system level. These "full" numbers can come from CPU idle
->> schedule latency. For example, t1 is the time when task wakeup
->> on an idle CPU, t2 is the time when CPU pick and switch to it.
->> The delta of (t2 - t1) will be in CPU_FULL state.
->>
->> Another case all processes can be stalled is when all cgroups
->> have been throttled at the same time, which unlikely to happen.
->>
->> Anyway, CPU_FULL metric is meaningless and confusing at the
->> system level. So this patch will report zeroes for CPU full
->> at the system level, and update psi Documentation accordingly.
->>
->> Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
->> Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
->> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->> ---
->>  Documentation/accounting/psi.rst |  6 +-----
->>  kernel/sched/psi.c               | 15 +++++++++------
->>  2 files changed, 10 insertions(+), 11 deletions(-)
->>
->> diff --git a/Documentation/accounting/psi.rst
->> b/Documentation/accounting/psi.rst
->> index 860fe651d645..7e15e37d3179 100644
->> --- a/Documentation/accounting/psi.rst
->> +++ b/Documentation/accounting/psi.rst
->> @@ -37,11 +37,7 @@ Pressure interface
->>  Pressure information for each resource is exported through the
->>  respective file in /proc/pressure/ -- cpu, memory, and io.
->>  
->> -The format for CPU is as such::
->> -
->> -       some avg10=0.00 avg60=0.00 avg300=0.00 total=0
->> -
->> -and for memory and IO::
->> +The format is as such::
->>  
->>         some avg10=0.00 avg60=0.00 avg300=0.00 total=0
->>         full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+On 2022/3/7 20:42, Eric Auger wrote:
+> Hi Lu,
 > 
-> This leaves unexplained why there is a CPU full line in the
-> documentation. And I bet someone – not me this time – could wonder why
-> it is always zero.
+> On 3/7/22 4:27 AM, Lu Baolu wrote:
+>> Hi Robin,
+>>
+>> On 3/4/22 10:10 PM, Robin Murphy wrote:
+>>> On 2022-03-04 13:55, Eric Auger wrote:
+>>>> Hi Robin,
+>>>>
+>>>> On 3/4/22 1:22 PM, Robin Murphy wrote:
+>>>>> On 2022-03-04 10:43, Lu Baolu wrote:
+>>>>>> Hi Eric,
+>>>>>>
+>>>>>> On 2022/3/4 18:34, Eric Auger wrote:
+>>>>>>> I hit a WARN_ON() when unbinding an e1000e driver just after boot:
+>>>>>>>
+>>>>>>> sudo modprobe -v vfio-pci
+>>>>>>> echo vfio-pci | sudo tee -a
+>>>>>>> /sys/bus/pci/devices/0004:01:00.0/driver_override
+>>>>>>> vfio-pci
+>>>>>>> echo 0004:01:00.0 | sudo tee -a  /sys/bus/pci/drivers/e1000e/unbind
+>>>>>>>
+>>>>>>>
+>>>>>>> [  390.042811] ------------[ cut here ]------------
+>>>>>>> [  390.046468] WARNING: CPU: 42 PID: 5589 at
+>>>>>>> drivers/iommu/iommu.c:3123
+>>>>>>> iommu_device_unuse_default_domain+0x68/0x100
+>>>>>>> [  390.056710] Modules linked in: vfio_pci vfio_pci_core vfio_virqfd
+>>>>>>> vfio_iommu_type1 vfio xt_CHECKSUM xt_MASQUERADE xt_conntrack
+>>>>>>> ipt_REJECT
+>>>>>>> nf_reject_ipv4 nft_compat nft_chain_nat nf_nat nf_conntrack
+>>>>>>> nf_defrag_ipv6 nf_defrag_ipv4 nf_tables nfnetlink bridge stp llc
+>>>>>>> rfkill
+>>>>>>> sunrpc vfat fat mlx5_ib ib_uverbs ib_core acpi_ipmi ipmi_ssif
+>>>>>>> ipmi_devintf ipmi_msghandler cppc_cpufreq drm xfs libcrc32c
+>>>>>>> mlx5_core sg
+>>>>>>> mlxfw crct10dif_ce tls ghash_ce sha2_ce sha256_arm64 sha1_ce
+>>>>>>> sbsa_gwdt
+>>>>>>> e1000e psample sdhci_acpi ahci_platform sdhci libahci_platform
+>>>>>>> qcom_emac
+>>>>>>> mmc_core hdma hdma_mgmt dm_mirror dm_region_hash dm_log dm_mod fuse
+>>>>>>> [  390.110618] CPU: 42 PID: 5589 Comm: tee Kdump: loaded Not tainted
+>>>>>>> 5.17.0-rc4-lu-v7-official+ #24
+>>>>>>> [  390.119384] Hardware name: WIWYNN QDF2400 Reference Evaluation
+>>>>>>> Platform CV90-LA115-P120/QDF2400 Customer Reference Board, BIOS
+>>>>>>> 0ACJA570
+>>>>>>> 11/05/2018
+>>>>>>> [  390.132492] pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS
+>>>>>>> BTYPE=--)
+>>>>>>> [  390.139436] pc : iommu_device_unuse_default_domain+0x68/0x100
+>>>>>>> [  390.145165] lr : iommu_device_unuse_default_domain+0x38/0x100
+>>>>>>> [  390.150894] sp : ffff80000fbb3bc0
+>>>>>>> [  390.154193] x29: ffff80000fbb3bc0 x28: ffff03c0cf6b2400 x27:
+>>>>>>> 0000000000000000
+>>>>>>> [  390.161311] x26: 0000000000000000 x25: 0000000000000000 x24:
+>>>>>>> ffff03c0c7cc5720
+>>>>>>> [  390.168429] x23: ffff03c0c2b9d150 x22: ffffb4e61df223f8 x21:
+>>>>>>> ffffb4e61df223f8
+>>>>>>> [  390.175547] x20: ffff03c7c03c3758 x19: ffff03c7c03c3700 x18:
+>>>>>>> 0000000000000000
+>>>>>>> [  390.182665] x17: 0000000000000000 x16: 0000000000000000 x15:
+>>>>>>> 0000000000000000
+>>>>>>> [  390.189783] x14: 0000000000000000 x13: 0000000000000030 x12:
+>>>>>>> ffff03c0d519cd80
+>>>>>>> [  390.196901] x11: 7f7f7f7f7f7f7f7f x10: 0000000000000dc0 x9 :
+>>>>>>> ffffb4e620b54f8c
+>>>>>>> [  390.204019] x8 : ffff03c0cf6b3220 x7 : ffff4ef132bba000 x6 :
+>>>>>>> 00000000000000ff
+>>>>>>> [  390.211137] x5 : ffff03c0c2b9f108 x4 : ffff03c0d51f6438 x3 :
+>>>>>>> 0000000000000000
+>>>>>>> [  390.218255] x2 : ffff03c0cf6b2400 x1 : 0000000000000000 x0 :
+>>>>>>> 0000000000000000
+>>>>>>> [  390.225374] Call trace:
+>>>>>>> [  390.227804]  iommu_device_unuse_default_domain+0x68/0x100
+>>>>>>> [  390.233187]  pci_dma_cleanup+0x38/0x44
+>>>>>>> [  390.236919]  __device_release_driver+0x1a8/0x260
+>>>>>>> [  390.241519]  device_driver_detach+0x50/0xd0
+>>>>>>> [  390.245686]  unbind_store+0xf8/0x120
+>>>>>>> [  390.249245]  drv_attr_store+0x30/0x44
+>>>>>>> [  390.252891]  sysfs_kf_write+0x50/0x60
+>>>>>>> [  390.256537]  kernfs_fop_write_iter+0x134/0x1cc
+>>>>>>> [  390.260964]  new_sync_write+0xf0/0x18c
+>>>>>>> [  390.264696]  vfs_write+0x230/0x2d0
+>>>>>>> [  390.268082]  ksys_write+0x74/0x100
+>>>>>>> [  390.271467]  __arm64_sys_write+0x28/0x3c
+>>>>>>> [  390.275373]  invoke_syscall.constprop.0+0x58/0xf0
+>>>>>>> [  390.280061]  el0_svc_common.constprop.0+0x160/0x164
+>>>>>>> [  390.284922]  do_el0_svc+0x34/0xcc
+>>>>>>> [  390.288221]  el0_svc+0x30/0x140
+>>>>>>> [  390.291346]  el0t_64_sync_handler+0xa4/0x130
+>>>>>>> [  390.295599]  el0t_64_sync+0x1a0/0x1a4
+>>>>>>> [  390.299245] ---[ end trace 0000000000000000 ]---
+>>>>>>>
+>>>>>>>
+>>>>>>> I put some traces in the code and I can see that
+>>>>>>> iommu_device_use_default_domain() effectively is called on
+>>>>>>> 0004:01:00.0 e1000e device on pci_dma_configure() but at that time
+>>>>>>> the iommu group is NULL:
+>>>>>>> [   10.569427] e1000e 0004:01:00.0: ------ ENTRY pci_dma_configure
+>>>>>>> driver_managed_area=0
+>>>>>>> [   10.569431] e1000e 0004:01:00.0: ****
+>>>>>>> iommu_device_use_default_domain ENTRY
+>>>>>>> [   10.569433] e1000e 0004:01:00.0: ****
+>>>>>>> iommu_device_use_default_domain no group
+>>>>>>> [   10.569435] e1000e 0004:01:00.0: pci_dma_configure
+>>>>>>> iommu_device_use_default_domain returned 0
+>>>>>>> [   10.569492] e1000e 0004:01:00.0: Adding to iommu group 3
+>>>>>>>
+>>>>>>> ^^^the group is added after the
+>>>>>>> iommu_device_use_default_domain() call
+>>>>>>> So the group->owner_cnt is not incremented as expected.
+>>>>>>
+>>>>>> Thank you for reporting this. Do you have any idea why the driver is
+>>>>>> loaded before iommu_probe_device()?
+>>>>>
+>>>>> Urgh, this is the horrible firmware-data-ordering thing again. The
+>>>>> stuff I've been saying about having to rework the whole .dma_configure
+>>>>> mechanism in the near future is to fix this properly.
+>>>>>
+>>>>> The summary is that in patch #4, calling
+>>>>> iommu_device_use_default_domain() *before* {of,acpi}_dma_configure is
+>>>>> currently a problem. As things stand, the IOMMU driver ignored the
+>>>>> initial iommu_probe_device() call when the device was added, since at
+>>>>> that point it had no fwspec yet. In this situation,
+>>>>> {of,acpi}_iommu_configure() are retriggering iommu_probe_device()
+>>>>> after the IOMMU driver has seen the firmware data via .of_xlate to
+>>>>> learn that it it actually responsible for the given device.
+>>>>
+>>>> thank you for providing the info. Hope this is something Lu can work
+>>>> around.
+>>>
+>>> Hopefully it's just a case of flipping the calls around, so that
+>>> iommu_use_default_domain() goes at the end, and calls
+>>> arch_teardown_dma_ops() if it fails. From a quick skim I *think* that
+>>> should still work out to the desired behaviour (or at least close
+>>> enough that we can move forward without a circular dependency between
+>>> fixes...)
+>>
+>> This is a reasonable solution to me. Thank you for the information and
+>> suggestion.
+>>
+>> Eric, I have updated the patch #4 and uploaded a new version here:
+>>
+>> https://github.com/LuBaolu/intel-iommu/commits/iommu-dma-ownership-v8
 > 
-> I recommend to either remove the CPU full line completely and hope to
-> get away with it just having been there for one, maybe two kernel
-> versions (5.17 and maybe 5.18) or to put a note in documentation:
-> 
-> "CPU full on the system level is undefined, but has been reported in
-> 5.17, so it is set to zero for backwards compatibility."
+> with v8 I do not hit the warning anymore and the owner accounting seems
+> to work as expected.
 
-Ok, it's better to leave a note there, if someone is curious about the
-zeros in CPU full line. Previous patch v1 does remove the CPU full line
-completely, but it may break some userspace parsers.
+Thank you, Eric! I will post the v8 soon.
 
-Thanks.
-
-> 
->> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
->> index e14358178849..97fd85c5143c 100644
->> --- a/kernel/sched/psi.c
->> +++ b/kernel/sched/psi.c
->> @@ -1062,14 +1062,17 @@ int psi_show(struct seq_file *m, struct
->> psi_group *group, enum psi_res res)
->>         mutex_unlock(&group->avgs_lock);
->>  
->>         for (full = 0; full < 2; full++) {
->> -               unsigned long avg[3];
->> -               u64 total;
->> +               unsigned long avg[3] = { 0, };
->> +               u64 total = 0;
->>                 int w;
->>  
->> -               for (w = 0; w < 3; w++)
->> -                       avg[w] = group->avg[res * 2 + full][w];
->> -               total = div_u64(group->total[PSI_AVGS][res * 2 +
->> full],
->> -                               NSEC_PER_USEC);
->> +               /* CPU FULL is undefined at the system level */
->> +               if (!(group == &psi_system && res == PSI_CPU && full))
->> {
->> +                       for (w = 0; w < 3; w++)
->> +                               avg[w] = group->avg[res * 2 +
->> full][w];
->> +                       total = div_u64(group->total[PSI_AVGS][res * 2
->> + full],
->> +                                       NSEC_PER_USEC);
->> +               }
->>  
->>                 seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu
->> avg300=%lu.%02lu total=%llu\n",
->>                            full ? "full" : "some",
-> 
-> 
-> Martin Steigerwald • 
-> Proact Deutschland GmbH
-> Trainer
-> Telefon: +49 911 30999 0 • 
-> www.proact.de
-> Südwestpark 43 • 
-> 90449 Nürnberg • 
-> Germany
-> Amtsgericht Nürnberg
->  • 
-> HRB 18320
-> Geschäftsführer: 
-> René Schülein
->  • 
-> Jonas Hasselberg
->  • 
-> Linda Höljö
-> #ThePowerOfData  |  
-> #ThePowerOfTogether
-> 
-> This email and its attachments may be confidential and are intended solely for the use of the individual to whom it is addressed. Please read more in Proacts’ privacy notice,
->  
->  
-> 
+Best regards,
+baolu

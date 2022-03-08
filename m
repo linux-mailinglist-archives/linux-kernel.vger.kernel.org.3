@@ -2,139 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597254D0FF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0EE4D1005
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238133AbiCHGR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 01:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S241212AbiCHGSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 01:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344406AbiCHGRI (ORCPT
+        with ESMTP id S244224AbiCHGSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 01:17:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABF8A2E6BE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 22:16:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646720171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c5ugwLO4/RAIk+A33RH1Nda04XboyFL8Xk9nspKrv+Q=;
-        b=KroPkbxi1L9hH/HmXZgxQhdBuekA4HxqXcDzsresT6Cwo1ZF2iPR2/08WoFCAlgUegXm4H
-        tteJRZtglg8X/UYn6LVuSY0XdpzFn7lOtlTOiezUxssBHnJgsCusmhMTCkJBfuEoQDTgby
-        9yPcyxLQDV/WOkXeKQYUcHYFAWasC08=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-190-CjUjc8p6Ne2On3LACfWhzg-1; Tue, 08 Mar 2022 01:16:10 -0500
-X-MC-Unique: CjUjc8p6Ne2On3LACfWhzg-1
-Received: by mail-lf1-f72.google.com with SMTP id j22-20020a05651231d600b0044830cff16fso1264983lfe.12
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 22:16:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c5ugwLO4/RAIk+A33RH1Nda04XboyFL8Xk9nspKrv+Q=;
-        b=KjAbrA/1O7JprwWMGDo0guv8h82fAP8hUfkuSPjdhadsUGWh4kv4cY331PyObUIBGR
-         gk1Z4WEbps7ZWP/QbASD1+nW8j3klnbNkFmn/JWUlTRUzmzLvQc2vxIqnjsF52+t1b7q
-         d7OJFUpWnVVq8wOISehchCoitBqPED/6O5SrcFLEoVURsSnBUwRdlNQaIPYpc9lHe4UH
-         9l/rRFSPXlTIORZd7TnfAHq3MxSjY9EkH0Z22+8JxQIHXQiEWJMr2PVyCiRkUpSfDO79
-         yBtSj0FiZILbMZ9dAzOVfsX/j7yNu0yU0wRfg4EEj5zXT5QdMHYmfzI+428VHTTm2JQJ
-         QOGg==
-X-Gm-Message-State: AOAM532EAD7ZdhVdb2gMjs506Lx+aKORq+WoZk9ZBzy0M62xNZGEd0JK
-        pAr8/fjqCQritA/L1ykfTrH09l8bzfl0bEQtUP6EOSjmRKDaNQWFBu5AWiysFi7SqYja00M8dXq
-        fjvEOFLptrXValEvzi6bcLo9NNHZ/3I+rKVXeXXTd
-X-Received: by 2002:a2e:9045:0:b0:247:da7d:a460 with SMTP id n5-20020a2e9045000000b00247da7da460mr9533965ljg.300.1646720168270;
-        Mon, 07 Mar 2022 22:16:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxait3lv+dLzC+BdDFV83vSleLNh5HIk4y197ubAHp3aPkfzkCIzF+1Ixw1dsakTX8Qi9vOeSnOuGXbcvWoGxY=
-X-Received: by 2002:a2e:9045:0:b0:247:da7d:a460 with SMTP id
- n5-20020a2e9045000000b00247da7da460mr9533952ljg.300.1646720167963; Mon, 07
- Mar 2022 22:16:07 -0800 (PST)
+        Tue, 8 Mar 2022 01:18:18 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D9C3C72A;
+        Mon,  7 Mar 2022 22:17:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646720238; x=1678256238;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oUoapiglXBZdB+xUrXHwyfLIrHMQEETInYEPrlsdhzg=;
+  b=XWpcuEvQYaKqw5NRVUtvPablplxEGDGBOVG8trR6cX4Ym2LZlkaIaG2F
+   YpAAPhICGUrjbYP4HqVibFfhNv+YJ/2ms1JNeGnIqd272/WOC07KsVyri
+   9zql+N4Az2G40nUAzJL3giTqb81OfvUBYYm+Xx1yiqSDCik2kFjCfeVBa
+   nngDXSpodA+9r6PCKDoP03xkBFFN2TnqBurIztUt4oeJQRkkTnvGzDXIk
+   REbdYhu+HRkrb5V4JC2g9Xg3SxQ9ngTBO0dTLYvfLRyAKp63pJwbOjg6h
+   5vAAN13s1TFLoWVyUYSX13GvnF6xcFyj8g2uA6t1jN1QhnS4pvqI8Hx2z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="341036085"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="341036085"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 22:17:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="643543418"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 07 Mar 2022 22:17:14 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRT9l-00010a-Jk; Tue, 08 Mar 2022 06:17:13 +0000
+Date:   Tue, 8 Mar 2022 14:16:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        "chihhao . chen" <chihhao.chen@mediatek.com>,
+        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com,
+        cpgs@samsung.com, cpgsproxy5@samsung.com
+Subject: Re: [PATCH v1 2/4] usb: host: add xhci hooks for USB offload
+Message-ID: <202203081440.zCZudmlJ-lkp@intel.com>
+References: <891095110.61646375404257.JavaMail.epsvc@epcpadp3>
 MIME-Version: 1.0
-References: <20220307191757.3177139-1-lee.jones@linaro.org>
-In-Reply-To: <20220307191757.3177139-1-lee.jones@linaro.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 8 Mar 2022 14:15:56 +0800
-Message-ID: <CACGkMEsjmCNQPjxPjXL0WUfbMg8ARnumEp4yjUxqznMKR1nKSQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
- whilst still in use
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     mst <mst@redhat.com>, linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <891095110.61646375404257.JavaMail.epsvc@epcpadp3>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 3:18 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> vhost_vsock_handle_tx_kick() already holds the mutex during its call
-> to vhost_get_vq_desc().  All we have to do here is take the same lock
-> during virtqueue clean-up and we mitigate the reported issues.
->
-> Also WARN() as a precautionary measure.  The purpose of this is to
-> capture possible future race conditions which may pop up over time.
->
-> Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
->
-> Cc: <stable@vger.kernel.org>
-> Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/vhost/vhost.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 59edb5a1ffe28..ef7e371e3e649 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -693,6 +693,15 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
->         int i;
->
->         for (i = 0; i < dev->nvqs; ++i) {
-> +               /* No workers should run here by design. However, races have
-> +                * previously occurred where drivers have been unable to flush
-> +                * all work properly prior to clean-up.  Without a successful
-> +                * flush the guest will malfunction, but avoiding host memory
-> +                * corruption in those cases does seem preferable.
-> +                */
-> +               WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
-> +
+Hi Daehwan,
 
-I don't get how this can help, the mutex could be grabbed in the
-middle of the above and below line.
+Thank you for the patch! Yet something to improve:
 
-> +               mutex_lock(&dev->vqs[i]->mutex);
->                 if (dev->vqs[i]->error_ctx)
->                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
->                 if (dev->vqs[i]->kick)
-> @@ -700,6 +709,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
->                 if (dev->vqs[i]->call_ctx.ctx)
->                         eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
->                 vhost_vq_reset(dev, dev->vqs[i]);
-> +               mutex_unlock(&dev->vqs[i]->mutex);
->         }
+[auto build test ERROR on krzk/for-next]
+[also build test ERROR on char-misc/char-misc-testing v5.17-rc7]
+[cannot apply to usb/usb-testing next-20220307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I'm not sure it's correct to assume some behaviour of a buggy device.
-For the device mutex, we use that to protect more than just err/call
-and vq.
+url:    https://github.com/0day-ci/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220304-143406
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+config: hexagon-randconfig-r045-20220304 (https://download.01.org/0day-ci/archive/20220308/202203081440.zCZudmlJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/2b6a5d700c2bbb0a3ccfcd6e83a7f7b2ea049db9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-hooks-usage/20220304-143406
+        git checkout 2b6a5d700c2bbb0a3ccfcd6e83a7f7b2ea049db9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/host/
 
-Thanks
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->         vhost_dev_free_iovecs(dev);
->         if (dev->log_ctx)
-> --
-> 2.35.1.616.g0bdcbb4464-goog
->
+All errors (new ones prefixed by >>):
 
+   drivers/usb/host/xhci.c:4361:5: warning: no previous prototype for function 'xhci_address_device' [-Wmissing-prototypes]
+   int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
+       ^
+   drivers/usb/host/xhci.c:4361:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
+   ^
+   static 
+>> drivers/usb/host/xhci.c:4459:15: error: no member named 'vendor_ops' in 'struct xhci_hcd'
+           return xhci->vendor_ops;
+                  ~~~~  ^
+   drivers/usb/host/xhci.c:5421:23: warning: shift count >= width of type [-Wshift-count-overflow]
+                           !dma_set_mask(dev, DMA_BIT_MASK(64))) {
+                           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   drivers/usb/host/xhci.c:5421:23: warning: shift count >= width of type [-Wshift-count-overflow]
+                           !dma_set_mask(dev, DMA_BIT_MASK(64))) {
+                           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   drivers/usb/host/xhci.c:5421:23: warning: shift count >= width of type [-Wshift-count-overflow]
+                           !dma_set_mask(dev, DMA_BIT_MASK(64))) {
+                           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                       ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   drivers/usb/host/xhci.c:5423:30: warning: shift count >= width of type [-Wshift-count-overflow]
+                   dma_set_coherent_mask(dev, DMA_BIT_MASK(64));
+                                              ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   5 warnings and 1 error generated.
+--
+>> drivers/usb/host/xhci-plat.c:205:15: error: no member named 'vendor_ops' in 'struct xhci_hcd'
+                   ops = xhci->vendor_ops = xhci_plat_vendor_overwrite.vendor_ops;
+                         ~~~~  ^
+   drivers/usb/host/xhci-plat.c:219:8: error: no member named 'vendor_ops' in 'struct xhci_hcd'
+           xhci->vendor_ops = NULL;
+           ~~~~  ^
+   drivers/usb/host/xhci-plat.c:268:10: warning: shift count >= width of type [-Wshift-count-overflow]
+                                                      DMA_BIT_MASK(64));
+                                                      ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   drivers/usb/host/xhci-plat.c:270:43: warning: shift count >= width of type [-Wshift-count-overflow]
+                   ret = dma_set_mask_and_coherent(sysdev, DMA_BIT_MASK(64));
+                                                           ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   2 warnings and 2 errors generated.
+
+
+vim +4459 drivers/usb/host/xhci.c
+
+  4456	
+  4457	struct xhci_vendor_ops *xhci_vendor_get_ops(struct xhci_hcd *xhci)
+  4458	{
+> 4459		return xhci->vendor_ops;
+  4460	}
+  4461	EXPORT_SYMBOL_GPL(xhci_vendor_get_ops);
+  4462	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

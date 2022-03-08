@@ -2,81 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC134D1B0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92F34D1B17
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347665AbiCHO4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S1347665AbiCHO6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:58:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344500AbiCHO4B (ORCPT
+        with ESMTP id S239658AbiCHO6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:56:01 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103A24C40B;
-        Tue,  8 Mar 2022 06:55:05 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id e2so17275589pls.10;
-        Tue, 08 Mar 2022 06:55:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HMX124D2O6WPuvZBHig1l49K2rmUx1oosDsmC1rlFeI=;
-        b=MehPtKYdoA5tKN/dBDD12lz/SPGrsdZ9+QMqxA2bTZTWRE4BBYBvAU/mTGk9MAHjHD
-         C468idWwn5HVyuLPZF9ZMkI6mJ+YPCaPpBba1GvldllwD3+K7Xz2Rc5r7cLPyEUlLD01
-         0mYHyBLdwpQqE+YjVyiqvOHlKV7XhU1SYy5+hWdqWIKSvF/f/UO4rCSEepSusTY1J4LL
-         BOGMDtGBtqvk3brYh6UmrAYZ2u8m0oazi5qznWSwROX0wVLVkkrfFvbZVsPwRGsXKnnv
-         SOvG05PF0vQxEbMxrfek7uFoEZ4tcOjuEibTZyAQ2UcwX7cELZ6S3VoLxxpCcampOTzK
-         4QYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HMX124D2O6WPuvZBHig1l49K2rmUx1oosDsmC1rlFeI=;
-        b=VWTDbbneizFQCae4IsQkuqfYhOpgkLCfuuOnTIGd1UOnSpr26C/6ceEzMfk1FSjRlD
-         yf20Dvrm8Kj8Oyn5MuscGr2eSXMeN6teryAAzpk+nSWSsyApcVj4B3kkh0DKDqApj+oD
-         +qW+iFmMgj+5V0vQdNWOXaT8SSO++ORCpsygnAJ1u8ooFX2KGw+VEzqARNpMXvgnkRRc
-         lNU6jcfMD69748CJqAkHQ5+5Bf5A3MYi+Qi7wQDcpMSCIyqtuJruPU42PAxNKjqWissx
-         2O8583Hb9vDZIDviSlEtx8mbzKonA9CZT70dJZiVKrGHC4/50Tu8cb6SEnWyBh8iDcWm
-         wEng==
-X-Gm-Message-State: AOAM530VPEY4T74mP1GmF0jyncrgfOQCJckaz+kHnEj9BGw4UPMFbkdL
-        v9EtjFr/Z6OvSlMChYMZkP4=
-X-Google-Smtp-Source: ABdhPJxrh7nKcxgGctqWO5BYXIxGIJ54+G6QuTy2xEnrQRAxiikZzw8nB6Yh2MXXL3oBRzU1KJvA+Q==
-X-Received: by 2002:a17:90a:cf03:b0:1bf:7005:7d73 with SMTP id h3-20020a17090acf0300b001bf70057d73mr5082347pju.8.1646751304511;
-        Tue, 08 Mar 2022 06:55:04 -0800 (PST)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id pc17-20020a17090b3b9100b001bf88fe5edcsm3392883pjb.9.2022.03.08.06.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 06:55:04 -0800 (PST)
-Date:   Tue, 8 Mar 2022 06:55:02 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Min Li <min.li.xe@renesas.com>
-Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net] ptp: idt82p33: use rsmu driver to access i2c/spi bus
-Message-ID: <20220308145502.GE29063@hoboy.vegasvil.org>
-References: <1646748651-16811-1-git-send-email-min.li.xe@renesas.com>
+        Tue, 8 Mar 2022 09:58:39 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26F611A17;
+        Tue,  8 Mar 2022 06:57:41 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A91AE1F37E;
+        Tue,  8 Mar 2022 14:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1646751460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Emo8w3yGcQp3k2y24B4+Lq5nwc9G/zycXNA7HGHzKmY=;
+        b=n13z2+9UHxWrJwGXuc7QNLvD85WBs+isP527OJ2TxfyzskGNQJFKDyfreCcWu26SdIWECv
+        RLr/+Aia+m3rUHVJeUWKhlUrcpm/RAOEgCSxtE8SPixEXW2tQYdLsZxm411HVFBvTIGXQ1
+        +48BgMSp04VPt7Wo5jAtVxvW7+v3/DI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1646751460;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Emo8w3yGcQp3k2y24B4+Lq5nwc9G/zycXNA7HGHzKmY=;
+        b=YzoCAaL8HjQPWimS0WyLZO9L3B+ShKsblcZyfZjE5VG754cVrLujYZNFsmwZnhMEolCOw8
+        3vSKpwj/Cfxw/6Ag==
+Received: from alsa1.nue.suse.com (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 92DA6A3B83;
+        Tue,  8 Mar 2022 14:57:40 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     linux-bluetooth@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Subject: [PATCH] Bluetooth: btusb: Add missing Chicony device for Realtek RTL8723BE
+Date:   Tue,  8 Mar 2022 15:57:31 +0100
+Message-Id: <20220308145731.23166-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646748651-16811-1-git-send-email-min.li.xe@renesas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 09:10:51AM -0500, Min Li wrote:
-> rsmu (Renesas Synchronization Management Unit ) driver is located in
-> drivers/mfd and responsible for creating multiple devices including
-> idt82p33 phc, which will then use the exposed regmap and mutex
-> handle to access i2c/spi bus.
-> 
-> Signed-off-by: Min Li <min.li.xe@renesas.com>
+Chicony Electronics BT device with 04f2:b49f seems to be a missing
+entry for Realtek RTL8723BE.
 
-Acked-by: Richard Cochran <richardcochran@gmail.com>
+T:  Bus=02 Lev=01 Prnt=01 Port=03 Cnt=03 Dev#=  4 Spd=12   MxCh= 0
+D:  Ver= 2.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=04f2 ProdID=b49f Rev= 2.00
+S:  Manufacturer=Realtek
+S:  Product=Bluetooth Radio
+S:  SerialNumber=00e04c000001
+C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+
+BugLink: https://bugzilla.opensuse.org/show_bug.cgi?id=1196779
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ drivers/bluetooth/btusb.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index c30d131da784..ceb60ca81c76 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -463,6 +463,7 @@ static const struct usb_device_id blacklist_table[] = {
+ 	/* Additional Realtek 8723BE Bluetooth devices */
+ 	{ USB_DEVICE(0x0489, 0xe085), .driver_info = BTUSB_REALTEK },
+ 	{ USB_DEVICE(0x0489, 0xe08b), .driver_info = BTUSB_REALTEK },
++	{ USB_DEVICE(0x04f2, 0xb49f), .driver_info = BTUSB_REALTEK },
+ 	{ USB_DEVICE(0x13d3, 0x3410), .driver_info = BTUSB_REALTEK },
+ 	{ USB_DEVICE(0x13d3, 0x3416), .driver_info = BTUSB_REALTEK },
+ 	{ USB_DEVICE(0x13d3, 0x3459), .driver_info = BTUSB_REALTEK },
+-- 
+2.34.1
+

@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068944D1519
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929E84D1520
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345979AbiCHKtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
+        id S1345988AbiCHKuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239485AbiCHKtn (ORCPT
+        with ESMTP id S239485AbiCHKuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:49:43 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD8831342
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:48:47 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id x15so27787472wru.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 02:48:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=oePfju4fJo1u0s2xutLmdABPmoZWfyejObfpQ2SykO4=;
-        b=Kvw4rYX1l2sThJBvtCbIACTNXs1/EIDUO7KiaORWiPElVea4Aug/UYOTP+zjI/JyJK
-         27zrtK+BkR4xPR0hwcDn0ewK9C/ltgfxEuBhpij0ZOFUwYpQpp12I2BXFpv2fB8mjRDN
-         UJV+7o0cMfCQTraeALyQd2k0q9tinPQA9Rk4gNS2DeucN6mxnz61dnJ0pbmqdvMi8Pmw
-         687pFuRIOXgKHJO++mTRgs0kINcItgyzAazm2Kp66ihf5JJYF8X9dU7hImFdFRDTphTz
-         B8puYe7LgWXVqP+6wEsz4XGPfSyn+/pVJnxRBuLUAZEyU65MRd35xVsEVGq7A+V+9FQj
-         zDYQ==
+        Tue, 8 Mar 2022 05:50:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D42E3DA51
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646736556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QBUaBHFVFzH61kttRw3vU/TxfXeStTkYl0GPKGc8WcE=;
+        b=FBsTD/0XVrm4ydtsvWV7itkOZQcR2oASCIXTu9tk0heQJ572TU++TKPicrX+joSkcbyc5u
+        iGnljwSkpwMBd3IDHdgVkLPn2CbrTyjDkRRMUS1Nh+TbXTIg9JZVMyuEz+uvmJOcNSHqy7
+        HgA7LaUrRMYQx6xlpEi+PbvaKT4xk+k=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-501-lYnjH-GAO9iYhx-CI8xZGg-1; Tue, 08 Mar 2022 05:49:13 -0500
+X-MC-Unique: lYnjH-GAO9iYhx-CI8xZGg-1
+Received: by mail-qk1-f198.google.com with SMTP id i189-20020a3786c6000000b00646d7b30998so13891716qkd.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 02:49:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=oePfju4fJo1u0s2xutLmdABPmoZWfyejObfpQ2SykO4=;
-        b=ngjhlz0kv+WII5QftFNs9OLxlDwS2n9zaevJuxLoFYjBHV5GpbiHpQnCmhusWLY7wy
-         o2YaMMgY5o3d2VuZWIsg+7Tcplq2jbHGTcQJVcOoqcmsNKHT7juKNBzDmnHGiVpQYEEf
-         YBU+VE7b+Awlm3nExmlqPwql+4vCuGLZ64aACC1jiG8szSj3OdhojdEg7K5FFHhS2z3/
-         HiTXZFzzf/9mrZAaiOPucfWlq5XkEhSxrW0YNtyn8MF9UxL8jCZmNEflO5Ndd1eihcCx
-         GoNsiJusa4wFqZGyqZD6rzS1qVAlL0zWHA2nZ4pfTfnv4psPa0FL1An/Z6rTSAQUgnMc
-         4glQ==
-X-Gm-Message-State: AOAM532K7HI8GWCnXbowWxHH+HKat+F+5KaviTBOVjGJhNV+/okLd2P4
-        l9yLTl4+Dva6HfvKcWSv7lb+/A==
-X-Google-Smtp-Source: ABdhPJzJ87arojJYxVBgmLEfJTdVqi9wnz2y1QmFwmq0HFgSG6F6XH8GI/oU72rHX3ZHD0Ni89Qz0w==
-X-Received: by 2002:adf:80d0:0:b0:1dc:90a8:4a1d with SMTP id 74-20020adf80d0000000b001dc90a84a1dmr11506035wrl.180.1646736525957;
-        Tue, 08 Mar 2022 02:48:45 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id r12-20020a05600c2c4c00b003816932de9csm1823380wmg.24.2022.03.08.02.48.45
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=QBUaBHFVFzH61kttRw3vU/TxfXeStTkYl0GPKGc8WcE=;
+        b=Q9zwu2SMlvGyautKaVuXeswQ0eNcg8QPAJh+0w4vmTG+KLNOTWaFWyje8GP/O4/imJ
+         XAS4UWX/ucCON2QRLw9x3nmXuUT7awria1iAutsEbiT9IgSq+NuDx1oJ0wRZ/5pH+kmV
+         Zc9v1abCT2N988tm20AVpJb3Cd9aFNUkmUvs8ctSVwY8R2sVAA1epdDoB4l4EjDM52QP
+         yzPYdOQUvJCyWzZq4KjtHkfsU47w+YbcctnkKDqEFbcA1P9esngMVdeEZ4x0c5Vj/I6E
+         ex+U6S+Yv/XgcxPe+ocaybzwlZZVgIREczi24sGiFUt385EDeq/XUqlzoKgf+XF4xtRC
+         cG0Q==
+X-Gm-Message-State: AOAM531Wu88xg7D+7oYPs0QNVz525cufPJZgBHYn+RwM+59KZsp4ES0j
+        JKodcuICFD6TuB6ezhhceCdfem+djSmFhBf3QLiqr430AGRCvAxjuUUr49SKYz8G4yvjzycy2Vv
+        iptOAQMq7+B96punog9NlC1kh
+X-Received: by 2002:a05:6214:2a4a:b0:435:8b63:ecfb with SMTP id jf10-20020a0562142a4a00b004358b63ecfbmr7485980qvb.44.1646736552970;
+        Tue, 08 Mar 2022 02:49:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwpx3hIh+39H8UxjxhPinjAfhfXTwNPWavYyQ9aJfYLnuOb+72k+PF5hHSRGOgfL6XqVEiAdA==
+X-Received: by 2002:a05:6214:2a4a:b0:435:8b63:ecfb with SMTP id jf10-20020a0562142a4a00b004358b63ecfbmr7485967qvb.44.1646736552733;
+        Tue, 08 Mar 2022 02:49:12 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-232-135.dyn.eolo.it. [146.241.232.135])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05620a22b000b0067b7b158985sm1311776qkh.128.2022.03.08.02.49.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 02:48:45 -0800 (PST)
-Date:   Tue, 8 Mar 2022 10:48:43 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH] backlight: backlight: Slighly simplify
- devm_of_find_backlight()
-Message-ID: <Yic0i9DFzv3bWoTz@google.com>
-References: <f998a4291d865273afa0d1f85764a9ac7fbc1b64.1644738084.git.christophe.jaillet@wanadoo.fr>
+        Tue, 08 Mar 2022 02:49:12 -0800 (PST)
+Message-ID: <38c7c77ee46ed54319b7222c2fada0039a980a2e.camel@redhat.com>
+Subject: Re: [PATCH] drivers: vxlan: fix returnvar.cocci warning
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Guo Zhengkui <guozhengkui@vivo.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     zhengkui_guo@outlook.com
+Date:   Tue, 08 Mar 2022 11:49:08 +0100
+In-Reply-To: <20220308100034.29035-1-guozhengkui@vivo.com>
+References: <20220308100034.29035-1-guozhengkui@vivo.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f998a4291d865273afa0d1f85764a9ac7fbc1b64.1644738084.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Feb 2022, Christophe JAILLET wrote:
+Hello,
 
-> Use devm_add_action_or_reset() instead of devm_add_action()+hand writing
-> what is done in the release function, should an error occur.
+On Tue, 2022-03-08 at 18:00 +0800, Guo Zhengkui wrote:
+> Fix the following coccicheck warning:
 > 
-> This is more straightforward and saves a few lines of code.
+> drivers/net/vxlan/vxlan_core.c:2995:5-8:
+> Unneeded variable: "ret". Return "0" on line 3004.
 > 
-> While at it, remove a useless test in devm_backlight_release(). 'data' is
-> known to be not NULL when this function is called.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/video/backlight/backlight.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 
-Applied, thanks.
+Please specify a target tree (likely net-next) in the patch subj.
+Additionally, this looks worthy a "Fixes" tag, likely:
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Fixes: f9c4bb0b245c ("vxlan: vni filtering support on collect metadata device")
+
+Thanks,
+
+Paolo
+

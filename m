@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A1C4D235D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6E04D2360
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 22:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350381AbiCHVdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 16:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S1350498AbiCHVfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 16:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiCHVdT (ORCPT
+        with ESMTP id S239662AbiCHVfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:33:19 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BED51E6E;
-        Tue,  8 Mar 2022 13:32:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 8 Mar 2022 16:35:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A1B54BF8;
+        Tue,  8 Mar 2022 13:34:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCpSh6fx0z4xvN;
-        Wed,  9 Mar 2022 08:32:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646775141;
-        bh=L/+rhb3RWjpjkabvH3qgyz3UCnZ5urb85xrQUdEpUW4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ulDWvwcHiiKREJ5JJIaCfP4SIg4Ju1FhoZ3jF/3nsZqG6xNlJADzcQDuYmt8WyiyT
-         NnlZC11d2IQyToAyv3ya8z98r7fQvMlKGZoGHzlzyPf6zY17iPLoBi2yXGL5m+h+93
-         it0+9xNRBfG03T+u0SFwEO1JaSoSQfnR7/FwSfLYKIQFRfRvF0iIsOBAy9XfBtz9lj
-         P5fXWXGsWLrQajepAUtSb86ms8JJXUEmIkFJl7dhyGo4e/VDNXWeVtWw2y+06n5g0q
-         AicCZ7NGUAUMCnDsiKzGtW7j0dS5w6sPK/pV6EVsXUXsyTRbKPioNLw53+It8df319
-         AXX/2HR+57QvQ==
-Date:   Wed, 9 Mar 2022 08:32:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        =?UTF-8?B?UMOpdGVy?= Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
-Message-ID: <20220309083220.7cf57122@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C61C0B81DA3;
+        Tue,  8 Mar 2022 21:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D0DC340EB;
+        Tue,  8 Mar 2022 21:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646775251;
+        bh=7IIRlF+xZDsI23R5QSlPyFV9mzJNQRtaRJDooE6ATGc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CSW01JIzSWeneovsZAbjUGWOojs65aRPa9K80da79jozE3LE+NdwRKGVkzrsM7FIQ
+         9Ur7mfuONJDFbBf9hMHEjtutYfCBBWxJwCuUmm25BTll7XitXVF9W/ysDezVHXt8RB
+         8g5bvPdT3LtrBtSn6XoUr1Bw9JZUdJWvF67eBazA6wMcvqyq2zb5cnw0F+PjR9J1H4
+         isjMZ6dfA6BHB9I83eX/6Ov3PVgLSdzVfuakCt7UYoT7ICJRiS2YvItMOA88F91gN7
+         Ntp7TfykOROEBPCUD8INtR2Vi8i84omMucaOaqOYxfeWCvg1XuO/lUH4KjUFyw2pR8
+         pikqIdlIMuKXw==
+Date:   Tue, 8 Mar 2022 14:34:04 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, Fangrui Song <maskray@google.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] kbuild: add --target to correctly cross-compile UAPI
+ headers with Clang
+Message-ID: <YifLzLl4IE/xFMdn@dev-arch.thelio-3990X>
+References: <20220305125605.149913-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qzMRJurkcw755A0Oi1WrU+x";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220305125605.149913-1-masahiroy@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/qzMRJurkcw755A0Oi1WrU+x
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sat, Mar 05, 2022 at 09:56:05PM +0900, Masahiro Yamada wrote:
+> When you compile-test UAPI headers (CONFIG_UAPI_HEADER_TEST=y) with
+> Clang, they are currently compiled for the host target (likely x86_64)
+> regardless of the given ARCH=.
+> 
+> In fact, some exported headers include libc headers. For example,
+> include/uapi/linux/agpgart.h includes <stdlib.h> after being exported.
+> The header search paths should match to the target we are compiling
+> them for.
+> 
+> Pick up the --target triple from KBUILD_CFLAGS in the same ways as
+> commit 7f58b487e9ff ("kbuild: make Clang build userprogs for target
+> architecture").
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Hi all,
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-In commit
+I suspect that Android will still need to do something with USERCFLAGS
+in its build wrapper to pick up the correct libc (Bionic vs. glibc) but
+that is tangential to this patch, we should still do this change
+regardless.
 
-  fb763299bd8e ("ASoC: SOF: topology: remove redundant code")
-
-Fixes tag
-
-  Fixes: bdf4ad3fd01f ('ASoC: SOF: Intel: hda: assign link DMA channel at
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes tags over more than one line.  Also, please keep
-the commit message tags all together at the end of the commit message.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/qzMRJurkcw755A0Oi1WrU+x
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIny2QACgkQAVBC80lX
-0GyJdgf+LGDxpyKC6Ap/Xz1oFCohJ4J2keYsWHgfychzdi/wPkuth+qvKUBRzd8K
-tmt2WqAYGxPqJ5JVSApLRYgo8r+vamwaBeAEiQT0CIA86HoEZCjXP6PbjfeThEAs
-BxrLLrxn+R7PbqakNBcuESOKN0Yn4o6Vnw5UzD/IqdtaBVhBuPkCEYH+F1Oe6HGB
-jQfMeijuRYs9X3E1DtGQNMIRRve7+tCElAYXGnapeXti9IhxvUL6dVYp/gvpBvPo
-owhGWFiw+WYa4iquE3NLfcZaw2K+up4d9MkAhVUfMkknxRP6J8Ksc1VMy8+DiqLi
-d0ZXbYJH86aEkMdyUgKmZZOvuFMNjg==
-=Fm4N
------END PGP SIGNATURE-----
-
---Sig_/qzMRJurkcw755A0Oi1WrU+x--
+> ---
+> 
+> Changes in v2:
+>   - Reword the commit description to mention agpgart.h instead of
+>     asound.h because the latter is in the no-header-test list.
+> 
+>  usr/include/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/usr/include/Makefile b/usr/include/Makefile
+> index ac206fb27c65..4215801e1110 100644
+> --- a/usr/include/Makefile
+> +++ b/usr/include/Makefile
+> @@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+>  
+>  # In theory, we do not care -m32 or -m64 for header compile tests.
+>  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+> -UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
+> +UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
+>  
+>  # USERCFLAGS might contain sysroot location for CC.
+>  UAPI_CFLAGS += $(USERCFLAGS)
+> -- 
+> 2.32.0
+> 

@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DD14D1148
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B49D14D114A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343636AbiCHHuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 02:50:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S1344319AbiCHHuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 02:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiCHHt7 (ORCPT
+        with ESMTP id S1344230AbiCHHuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 02:49:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8382D2459F;
-        Mon,  7 Mar 2022 23:49:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3255DB8179F;
-        Tue,  8 Mar 2022 07:49:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93B62C340EB;
-        Tue,  8 Mar 2022 07:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646725740;
-        bh=+d+kVM1W6KT8mfpwhumkLSJjDyQCDo775FENk5X2ge4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gEZYP6p6LAVs+YGXoJXCVEZeuQ4lcKAKqMQ/Os4omFU2Ma+XIlUpm31humuW3aBkD
-         KWhJYxWHK/oA/lTOHLBc9cAXXuWiv80Q7G1ttJGHBUUPPKWzsKdx0c275iPQSkY+nH
-         F+gBZcpaFzhC+pC7KXQ9V/9Ph0xviv+yoBsa7w30F/MnNRAUNIGmJkZQ0B19kfBHZl
-         wUtK7QWUOV7VKbE/yZ1/Wc0wr0/a0DR4WmYQ28EdjalYDA36gJrVZIN+Z1ARw/IV2w
-         RSFy4hoGg6iMA3xnZVFzg1ruSoOpKLMt4V0LScDkzU5S5LHBjkJbYD1AM3w2qhDfo8
-         vOfaGMMujap4A==
-Date:   Tue, 8 Mar 2022 09:48:20 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Nathaniel McCallum <nathaniel@profian.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/sgx: Enable PROT_EXEC for EAUG'd pages
-Message-ID: <YicKRLPi047oEEPJ@iki.fi>
-References: <20220307153504.198112-1-jarkko@kernel.org>
- <YiYseF3aKI70x3d8@iki.fi>
- <YiYuH95wps+yHDk1@iki.fi>
- <fd560bc9-cb0b-0f7d-9a60-76735bc55c5e@intel.com>
- <YiY/aWW25Ix2375q@iki.fi>
- <f4352558-4329-81c8-1f97-29fcd4d37f8a@intel.com>
+        Tue, 8 Mar 2022 02:50:11 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251092E0BF
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 23:49:15 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id f38so36102635ybi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 23:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=40EmYTTIomeX7TzfIEe2vYYWMDzXTWiSdDEcMc062K8=;
+        b=Cgidica2ibZa4w3fd+nNxtUlV77lQIYWY+MzdRZcrC45BLIMN+pF7/ZMc+9I2TUkiU
+         W6xNxCGwNJ/t7S9ehf0y/y7z9qEZgz6SU13q08OMNJC1ld1oGalqd4soFERqcStGY6Tj
+         3VnBauweev28twGB+GMguguP+ZRa+SmdOnPVd0jhq5ogAB3mjADviYGHs9s84NJ7pIlC
+         5SNwurYE1ds06Na84fJu9TFy71IfZiIEHi0/7YSIgp+fhxTt2ozVb7+4qsIl2xIBQ8DY
+         pTKwKleMFW62/eQ3KqONNTFInK6Tdf3XNccVN+ps4TgnJXalikv8BTPw6xMPKA+joddp
+         iFIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=40EmYTTIomeX7TzfIEe2vYYWMDzXTWiSdDEcMc062K8=;
+        b=v00Xb1oQJy324wbWDGj52i2XICY6vGpHU09BJhtj6a9Y4LTSnipYxoiz5krRH/pw0E
+         uINlEA7H8bx537AMo1Ma8b9IB3/ItvsL52YmEba8obawN0Hs1Nx0YsHg6PV/8MhOkIfq
+         HqfRo4AOahI/36P70hpK0SUlMF6KLFPRFI8DLmjP26BDkQ7xYxIQfqMjHG4PukFEVDfz
+         jNAApor+dXY7XhabG8oI04+k+dITQ0GWjBbdV89pMUA3Q+941Ow7Rp6oI9lY5oJH+s6e
+         2TfvtFvl0FuJVQU9JpLTNOj3rHnFlU4Er8t714GJiiMcP/bYokgsupuH2iUYSpyZmCaa
+         NSIA==
+X-Gm-Message-State: AOAM532bnAlpHb+xAQjmgoy5aVDVIqes2HoPR/XEL7c1I6kSsQLYTeOS
+        rYeK/7xh12yQ7FJUGmA2fD0/lYhd7UrdJzkZonBKNg==
+X-Google-Smtp-Source: ABdhPJyq17uBFCUdvAOi8orNnkSO+/W/4WH6LfCArQ71XExpFYKbWDWgeQ/STzuPpVjL57KHz9LTwht2a6ndzsFVfnY=
+X-Received: by 2002:a25:5090:0:b0:628:b76b:b9d3 with SMTP id
+ e138-20020a255090000000b00628b76bb9d3mr11412913ybb.128.1646725754118; Mon, 07
+ Mar 2022 23:49:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4352558-4329-81c8-1f97-29fcd4d37f8a@intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220307162207.188028559@linuxfoundation.org>
+In-Reply-To: <20220307162207.188028559@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Mar 2022 13:19:03 +0530
+Message-ID: <CA+G9fYtwVyn5Y_hwmQi_wg5TkDj_TMD8AuvnY5Y0AYApq7PjWw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,118 +71,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 03:39:01PM -0800, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 3/7/2022 9:22 AM, Jarkko Sakkinen wrote:
-> > On Mon, Mar 07, 2022 at 09:13:48AM -0800, Reinette Chatre wrote:
-> >> Hi Jarkko,
-> >>
-> >> On 3/7/2022 8:09 AM, Jarkko Sakkinen wrote:
-> >>> On Mon, Mar 07, 2022 at 06:02:03PM +0200, Jarkko Sakkinen wrote:
-> >>>> On Mon, Mar 07, 2022 at 05:35:04PM +0200, Jarkko Sakkinen wrote:
-> >>>>> vm_max_permissions was created to control the pre-initialization content
-> >>>>> that contributes to MRSIGNATURE. It was never meant to be as a limit to
-> >>>>> dynamically added pages.
-> >>>>>
-> >>>>> E.g. static content could be used as a hook for LSM's to decide whether
-> >>>>> certain signature is qualified for EINIT. Dynamic content has nothing to
-> >>>>> do with that. The current mechanisms only add to the complexity on how
-> >>>>> to control PTE and EPCM permissions, and do not add anything else than
-> >>>>> obfuscity to security side of things.
-> >>
-> >> Linux has mechanisms to enforce what can be executed. For example, with SELinux
-> >> a process can be required to have PROCESS__EXECHEAP or PROCESS__EXECSTACK 
-> >> before it can be allowed to execute writable memory.
-> >>
-> >> A few SGX runtimes enables unmodified executables to be run within SGX enclaves.
-> >>
-> >> Does a change like this not enable executables prevented by existing 
-> >> security mechanisms to circumvent such restrictions by running within
-> >> a SGX enclave?
-> > 
-> > It does not open any extra exposure as the existing policies apply for
-> > the enclave content created before initialization.
-> > 
-> > And I'm not sure what kind of circumvention scenario we are talking
-> > about.
-> > 
-> >>>>> Thus add PROT_EXEC to the permissions assigned by the #PF handler.
-> >>>>>
-> >>>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >>>>> ---
-> >>>>>  arch/x86/kernel/cpu/sgx/encl.c | 9 ++++-----
-> >>>>>  1 file changed, 4 insertions(+), 5 deletions(-)
-> >>>>>
-> >>>>> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> >>>>> index 79e39bd99c09..0256918b2c2f 100644
-> >>>>> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> >>>>> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> >>>>> @@ -160,12 +160,11 @@ static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
-> >>>>>  	encl_page->encl = encl;
-> >>>>>  
-> >>>>>  	/*
-> >>>>> -	 * Adding a regular page that is architecturally allowed to only
-> >>>>> -	 * be created with RW permissions.
-> >>>>> -	 * TBD: Interface with user space policy to support max permissions
-> >>>>> -	 * of RWX.
-> >>>>> +	 * Dynamic pages do not contribute to MRSIGNATURE, i.e. they are
-> >>>>> +	 * controlled only by PTE and EPCM permissions. Thus, the no limit
-> >>>>> +	 * is set here.
-> >>>>>  	 */
-> >>>>> -	prot = PROT_READ | PROT_WRITE;
-> >>>>> +	prot = PROT_READ | PROT_WRITE | PROT_EXEC;
-> >>>>>  	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
-> >>>>>  	encl_page->vm_max_prot_bits = encl_page->vm_run_prot_bits;
-> >>>>>  
-> >>>>> -- 
-> >>>>> 2.35.1
-> >>>>>
-> >>>>
-> >>>> This is really a show stopper. I think here's a logical mistake on for what
-> >>>> purpose vm_max_prot_bits are used for. They are meant for the static and
-> >>>> also signed content of the enclave.
-> >>>>
-> >>>> These changes in the patch set that are related to vm_max_prot_bits only
-> >>>> messes up what already exists, and make incredibly hard to implement
-> >>>> anything decent on top of SGX2 features.
-> >>>
-> >>> I.e. once signed content has passed EINIT ioctl, and whatever checks
-> >>> there are now or in future (e.g. LSM hooks), the system has accepted
-> >>> the enclave behaviour, and it includes also the use of EACCEPT opcode.
-> >>>
-> >>> It's the exec or no-exec decision point. The thing that these patches
-> >>> do is making an obfuscated mess of all this. When EINIT has passed,
-> >>> it has been decided that the enclave can do its workload. Let's not
-> >>> throw stick in front of it, and make everyones life misserable.
-> >>
-> >> A common use for these dynamically added pages is to increase the heap
-> >> and stack. Always allowing PTEs of RWX on these pages irrespective
-> >> whether it will be used for heap, stack, or relocatable code does
-> >> not match with how the kernel manages protections.
-> >>
-> >> As I said before I am not comfortable with such a change and cannot
-> >> sign off on this. I would defer to the maintainers to choose the
-> >> direction.
-> >>
-> >> Reinette
-> > 
-> > My choice is to not use this existing mechanism for dynamically created
-> > pages because otherwise the implementation overally is just crippled.
-> > 
-> > Something unusable is for sure as secure as you can get.
-> > 
-> 
-> ok, I will proceed with your guidance here and include your snippet from
-> this patch into the next version.
+On Mon, 7 Mar 2022 at 21:58, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.27 release.
+> There are 256 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 09 Mar 2022 16:21:31 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.27-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thank you.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> One question, regarding "MRSIGNATURE" - did you perhaps mean "MRENCLAVE"?
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-It could either both define "static root of trust". Does not really
-all that much which one you use in the comment.
+## Build
+* kernel: 5.15.27-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 7b9aacd770fa105a0a5f0be43bc72ce176d30331
+* git describe: v5.15.26-258-g7b9aacd770fa
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.26-258-g7b9aacd770fa
 
-> Reinette
+## Test Regressions (compared to v5.15.26-246-ged373242c999)
+No test regressions found.
 
-BR, Jarkko
+## Metric Regressions (compared to v5.15.26-246-ged373242c999)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.26-246-ged373242c999)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.26-246-ged373242c999)
+No metric fixes found.
+
+## Test result summary
+total: 110908, pass: 93729, fail: 1108, skip: 14897, xfail: 1174
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 293 passed, 3 failed
+* arm64: 47 total, 47 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 45 total, 41 passed, 4 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 41 total, 37 passed, 4 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 50 passed, 15 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 47 total, 47 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-ma[
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compl[
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

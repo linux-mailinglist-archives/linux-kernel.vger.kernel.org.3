@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35DA4D2101
+	by mail.lfdr.de (Postfix) with ESMTP id 9787B4D2100
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349887AbiCHTKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        id S1349897AbiCHTKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349867AbiCHTKN (ORCPT
+        with ESMTP id S1349875AbiCHTKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:10:13 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CBC3ED00
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:09:14 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id e3so64482pjm.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:09:14 -0800 (PST)
+        Tue, 8 Mar 2022 14:10:14 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F45248E43
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:09:16 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so193888pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:09:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CsGRPn1RTvkupGAAJEbEsdTdGlxfOIkdU/en60yl6Co=;
-        b=mgKXAFQ4DcX/1a7r7bAFsAYVjmDeEYTBoAMpZcn4yHQM8Eu18Wh6lmYhxEaccbaoyd
-         zDqG6Es6KwnA1pQ3nHaWSEos12P648q6kj0hQ9rKLK7ulUl8sOI3npn4FI9GaxXRCP1i
-         +Ild/F0DO1/IEUtd0iHaE+xPc8G6iu5h8SPp4=
+        bh=TukPsTakLeJLLpOHxj5U6zbUOX+HpPNC5juckJdtkGc=;
+        b=bG90AlQ35R976HVEt3EiNjnAAZRltYCer7lgVDl2CBxgHxRHT0U5M9YdzxVk2mmKI9
+         uQHr+VZU3Zt9PDWsu7fFhhs3KzeXXsSJ5i7iH7lu/27aopmKU8nL5QrBZ6E1jcyH5fnY
+         aNd4uJJJKIWzW744O3mt/ZSmLh6igdfg7V/IA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CsGRPn1RTvkupGAAJEbEsdTdGlxfOIkdU/en60yl6Co=;
-        b=yxv1CFB/4CZ0Q08ygJ9Qhew6WrNUiwJXtb47I58EK+eOcIVV/8NQ2Xzq4I7/6i8jtF
-         KEiKZEN3DvytmqhvRwKACkUhD3svl0hOrFiloUYlyOchZL0cXUyFFeVdOrZOp/254ceL
-         ZCjNjQvUXfIsRFnOVwPSqF7X4myDmCAKARU7BU7devvEA6kPmnnsKhAqj7ERvsL4nAzj
-         tTcrYGjVeUM9wHSYFME8PpOH1tVRmFzSpTnVnP22kZrGO8a1KxgWAdgNuA9AolhOXUK5
-         OdElzCPspzJYCFQbg5+hTtf+eLu2m0yvvPf392KYNnlR/dN+rvKVFS4YPJp7mfN+Nm/8
-         M0MA==
-X-Gm-Message-State: AOAM5332y4s49EX406AIv0hz10tXXoEtfTchzyG5wWnpg51LZlhuoWbm
-        KB+MFCUGBTcWSJ2iXOdASsVYs9dZru582A==
-X-Google-Smtp-Source: ABdhPJyQMWbvyaoH9dnDNrSe6aUqS9YI8RXfNjJHhLN2GiKD9PD9XY8LA+1ceJRCLl41SZLbongVtg==
-X-Received: by 2002:a17:902:6a88:b0:151:f21d:b03e with SMTP id n8-20020a1709026a8800b00151f21db03emr9635642plk.33.1646766554234;
-        Tue, 08 Mar 2022 11:09:14 -0800 (PST)
+        bh=TukPsTakLeJLLpOHxj5U6zbUOX+HpPNC5juckJdtkGc=;
+        b=0IGD6qPKA+ZifiV7T6fEbWyJWBZMsu5PyeawmUOO1wGS8WjVEb7Nfgs4oP79R20/lw
+         +HTr/dOG0XobrLGk7VHK5PMYyePzBm1G+OTy80tfEKBReCfWofzRXSX2hKRQmqsXSgnw
+         mPKvyxfYdNomvtUmIghi6H40Z8Z7dBjuqNddcB3z5GmKF4DVBToUlpAi9VaKcxZ7frft
+         7rIA9dY9iTzE7IPtcDxDJ73t7Dq5IUrFWsqxHg0bt3btBDFirmFhiR65ZJNUhhQyGaYE
+         2CMK3zVFoN+PKJIIoGl5BywMsby6AsbXs68gLHRz1KG2rdib2oUh/wByDM/OlbIMtz8r
+         wZ1g==
+X-Gm-Message-State: AOAM5317tMn+j2RqZGtLYp9vFrYxANhnHBSvgevRuTkKbfwa1tOtZSmX
+        h5aNaj5E7LfrfaBqiXBiQ+ubOg==
+X-Google-Smtp-Source: ABdhPJykCBYHNRLZLOxaBgcOcb+HYAE6UHeIN2/NgAuMxlP9SyrFIHZjXykkIWIaxv9ICBnq57ZimQ==
+X-Received: by 2002:a17:902:dad2:b0:151:f895:9c31 with SMTP id q18-20020a170902dad200b00151f8959c31mr7535212plx.93.1646766556509;
+        Tue, 08 Mar 2022 11:09:16 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:b3e3:a188:cbfc:3a0e])
-        by smtp.gmail.com with UTF8SMTPSA id p16-20020a056a000b5000b004f669806cd9sm21407488pfo.87.2022.03.08.11.09.12
+        by smtp.gmail.com with UTF8SMTPSA id d7-20020a056a00244700b004e1300a2f7csm20703284pfj.212.2022.03.08.11.09.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 11:09:13 -0800 (PST)
+        Tue, 08 Mar 2022 11:09:16 -0800 (PST)
 From:   Brian Norris <briannorris@chromium.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -58,9 +58,9 @@ Cc:     Derek Basehore <dbasehore@chromium.org>,
         Brian Norris <briannorris@chromium.org>,
         Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v4 02/15] dt-bindings: devfreq: rk3399_dmc: Deprecate unused/redundant properties
-Date:   Tue,  8 Mar 2022 11:08:48 -0800
-Message-Id: <20220308110825.v4.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
+Subject: [PATCH v4 03/15] dt-bindings: devfreq: rk3399_dmc: Fix Hz units
+Date:   Tue,  8 Mar 2022 11:08:49 -0800
+Message-Id: <20220308110825.v4.3.I9341269171c114d0e04e41d48037fd32816e2d8c@changeid>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 In-Reply-To: <20220308190901.3144566-1-briannorris@chromium.org>
 References: <20220308190901.3144566-1-briannorris@chromium.org>
@@ -76,234 +76,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These DRAM configuration properties are all handled in ARM Trusted
-Firmware (and have been since the early days of this SoC), and there are
-no in-tree users of the DMC binding yet. It's better to just defer to
-firmware instead of maintaining this large list of properties.
+The driver and all downstream device trees [1] are using Hz units, but
+the document claims MHz. DRAM frequency for these systems can't possibly
+exceed 2^32-1 Hz, so the choice of unit doesn't really matter than much.
 
-There's also some confusion about units: many of these are specified in
-MHz, but the downstream users and driver code are treating them as Hz, I
-believe. Rather than straighten all that out, I just drop them.
+Rather than add unnecessary risk in getting the units wrong, let's just
+go with the unofficial convention and make the docs match reality.
+
+A sub-1MHz frequency is extremely unlikely, so include a minimum in the
+schema, to help catch anybody who might have believed this was MHz.
+
+[1] And notably, also those trying to upstream them:
+https://lore.kernel.org/lkml/20210308233858.24741-3-daniel.lezcano@linaro.org/
 
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
 
-Changes in v4:
- * Add Reviewed-by
+(no changes since v3)
 
 Changes in v3:
- * Add Reviewed-by
+ * Add Reviewed-by, Acked-by
 
- .../rockchip,rk3399-dmc.yaml                  | 42 +++++++++----------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ .../rockchip,rk3399-dmc.yaml                  | 24 +++++++++----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml b/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
-index b32c03cb0c68..356bbe5db383 100644
+index 356bbe5db383..96efb23cfc0f 100644
 --- a/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
 +++ b/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
-@@ -45,6 +45,7 @@ properties:
-       finishes, a DCF interrupt is triggered.
+@@ -115,11 +115,11 @@ properties:
  
-   rockchip,ddr3_speed_bin:
-+    deprecated: true
+   rockchip,ddr3_odt_dis_freq:
      $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1000000  # In case anyone thought this was MHz.
      description:
-       For values, reference include/dt-bindings/clock/rk3399-ddr.h. Selects the
-@@ -91,6 +92,7 @@ properties:
-       if bus is idle for standby_idle * DFI clock cycles.
- 
-   rockchip,dram_dll_dis_freq:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description: |
-       Defines the DDR3 DLL bypass frequency in MHz. When DDR frequency is less
-@@ -98,6 +100,7 @@ properties:
-       Note: if DLL was bypassed, the odt will also stop working.
- 
-   rockchip,phy_dll_dis_freq:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description: |
-       Defines the PHY dll bypass frequency in MHz (Mega Hz). When DDR frequency
-@@ -105,6 +108,7 @@ properties:
-       Note: PHY DLL and PHY ODT are independent.
- 
-   rockchip,auto_pd_dis_freq:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       Defines the auto PD disable frequency in MHz.
-@@ -118,6 +122,7 @@ properties:
-       disabled.
+       When the DRAM type is DDR3, this parameter defines the ODT disable
+-      frequency in MHz (Mega Hz). When the DDR frequency is less then
+-      ddr3_odt_dis_freq, the ODT on the DRAM side and controller side are both
+-      disabled.
++      frequency in Hz. When the DDR frequency is less then ddr3_odt_dis_freq,
++      the ODT on the DRAM side and controller side are both disabled.
  
    rockchip,ddr3_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is DDR3, this parameter defines the DRAM side drive
-@@ -125,6 +130,7 @@ properties:
-     default: 40
+     deprecated: true
+@@ -163,11 +163,11 @@ properties:
  
-   rockchip,ddr3_odt:
-+    deprecated: true
+   rockchip,lpddr3_odt_dis_freq:
      $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1000000  # In case anyone thought this was MHz.
      description:
-       When the DRAM type is DDR3, this parameter defines the DRAM side ODT
-@@ -132,6 +138,7 @@ properties:
-     default: 120
- 
-   rockchip,phy_ddr3_ca_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is DDR3, this parameter defines the phy side CA line
-@@ -139,6 +146,7 @@ properties:
-     default: 40
- 
-   rockchip,phy_ddr3_dq_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is DDR3, this parameter defines the PHY side DQ line
-@@ -146,6 +154,7 @@ properties:
-     default: 40
- 
-   rockchip,phy_ddr3_odt:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is DDR3, this parameter defines the PHY side ODT
-@@ -161,6 +170,7 @@ properties:
-       disabled.
+       When the DRAM type is LPDDR3, this parameter defines then ODT disable
+-      frequency in MHz (Mega Hz). When DDR frequency is less then
+-      ddr3_odt_dis_freq, the ODT on the DRAM side and controller side are both
+-      disabled.
++      frequency in Hz. When DDR frequency is less then ddr3_odt_dis_freq, the
++      ODT on the DRAM side and controller side are both disabled.
  
    rockchip,lpddr3_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR3, this parameter defines the DRAM side drive
-@@ -168,6 +178,7 @@ properties:
-     default: 34
+     deprecated: true
+@@ -210,11 +210,11 @@ properties:
  
-   rockchip,lpddr3_odt:
-+    deprecated: true
+   rockchip,lpddr4_odt_dis_freq:
      $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1000000  # In case anyone thought this was MHz.
      description:
-       When the DRAM type is LPDDR3, this parameter defines the DRAM side ODT
-@@ -175,6 +186,7 @@ properties:
-     default: 240
- 
-   rockchip,phy_lpddr3_ca_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR3, this parameter defines the PHY side CA line
-@@ -182,6 +194,7 @@ properties:
-     default: 40
- 
-   rockchip,phy_lpddr3_dq_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR3, this parameter defines the PHY side DQ line
-@@ -189,6 +202,7 @@ properties:
-     default: 40
- 
-   rockchip,phy_lpddr3_odt:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When dram type is LPDDR3, this parameter define the phy side odt
-@@ -203,6 +217,7 @@ properties:
-       disabled.
+       When the DRAM type is LPDDR4, this parameter defines the ODT disable
+-      frequency in MHz (Mega Hz). When the DDR frequency is less then
+-      ddr3_odt_dis_freq, the ODT on the DRAM side and controller side are both
+-      disabled.
++      frequency in Hz. When the DDR frequency is less then ddr3_odt_dis_freq,
++      the ODT on the DRAM side and controller side are both disabled.
  
    rockchip,lpddr4_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR4, this parameter defines the DRAM side drive
-@@ -210,6 +225,7 @@ properties:
-     default: 60
- 
-   rockchip,lpddr4_dq_odt:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR4, this parameter defines the DRAM side ODT on
-@@ -217,6 +233,7 @@ properties:
-     default: 40
- 
-   rockchip,lpddr4_ca_odt:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR4, this parameter defines the DRAM side ODT on
-@@ -224,6 +241,7 @@ properties:
-     default: 40
- 
-   rockchip,phy_lpddr4_ca_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR4, this parameter defines the PHY side CA line
-@@ -231,6 +249,7 @@ properties:
-     default: 40
- 
-   rockchip,phy_lpddr4_ck_cs_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR4, this parameter defines the PHY side clock
-@@ -238,6 +257,7 @@ properties:
-     default: 80
- 
-   rockchip,phy_lpddr4_dq_drv:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR4, this parameter defines the PHY side DQ line
-@@ -245,6 +265,7 @@ properties:
-     default: 80
- 
-   rockchip,phy_lpddr4_odt:
-+    deprecated: true
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       When the DRAM type is LPDDR4, this parameter defines the PHY side ODT
-@@ -274,33 +295,12 @@ examples:
-       clock-names = "dmc_clk";
-       operating-points-v2 = <&dmc_opp_table>;
-       center-supply = <&ppvar_centerlogic>;
--      rockchip,ddr3_speed_bin = <21>;
-       rockchip,pd_idle = <0x40>;
-       rockchip,sr_idle = <0x2>;
+     deprecated: true
+@@ -300,7 +300,7 @@ examples:
        rockchip,sr_mc_gate_idle = <0x3>;
        rockchip,srpd_lite_idle = <0x4>;
        rockchip,standby_idle = <0x2000>;
--      rockchip,dram_dll_dis_freq = <300>;
--      rockchip,phy_dll_dis_freq = <125>;
--      rockchip,auto_pd_dis_freq = <666>;
-       rockchip,ddr3_odt_dis_freq = <333>;
--      rockchip,ddr3_drv = <40>;
--      rockchip,ddr3_odt = <120>;
--      rockchip,phy_ddr3_ca_drv = <40>;
--      rockchip,phy_ddr3_dq_drv = <40>;
--      rockchip,phy_ddr3_odt = <240>;
-       rockchip,lpddr3_odt_dis_freq = <333>;
--      rockchip,lpddr3_drv = <34>;
--      rockchip,lpddr3_odt = <240>;
--      rockchip,phy_lpddr3_ca_drv = <40>;
--      rockchip,phy_lpddr3_dq_drv = <40>;
--      rockchip,phy_lpddr3_odt = <240>;
-       rockchip,lpddr4_odt_dis_freq = <333>;
--      rockchip,lpddr4_drv = <60>;
--      rockchip,lpddr4_dq_odt = <40>;
--      rockchip,lpddr4_ca_odt = <40>;
--      rockchip,phy_lpddr4_ca_drv = <40>;
--      rockchip,phy_lpddr4_ck_cs_drv = <80>;
--      rockchip,phy_lpddr4_dq_drv = <80>;
--      rockchip,phy_lpddr4_odt = <60>;
+-      rockchip,ddr3_odt_dis_freq = <333>;
+-      rockchip,lpddr3_odt_dis_freq = <333>;
+-      rockchip,lpddr4_odt_dis_freq = <333>;
++      rockchip,ddr3_odt_dis_freq = <333000000>;
++      rockchip,lpddr3_odt_dis_freq = <333000000>;
++      rockchip,lpddr4_odt_dis_freq = <333000000>;
      };
 -- 
 2.35.1.616.g0bdcbb4464-goog

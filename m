@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674274D216C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E9D4D2195
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349503AbiCHT3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
+        id S1349590AbiCHTeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349129AbiCHT3F (ORCPT
+        with ESMTP id S1349436AbiCHTeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:29:05 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C832FFFF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:28:07 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 8E2181F444B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646767685;
-        bh=wTrQZzTeDzl3S/Woe+temKvCkXTTxdkP03ZFoe6Rj9E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JaIccFmi1jX1ewpbOHkkQGyiOhdvqKxkBql/3KQWmeEBQn/mP+wHpnZhb1wis3XJI
-         XZhjoIwXc65vjwfJ/RWJzRoRjZQ17T4hYNBj1rk3qnMxIBzU2jmPIgD53sRpDbTvCA
-         L5xqICzA0o8+u8NbxpCDnGKpDaGP08JoVK46goArxgFJElNE/jkMtCa15MfDt/YGzi
-         LYURN3gjJ0/HMiCflPowekOpYyKzx0v55sCPVNEipd7jXFkRabu2pEmsAeOc8J+/+p
-         EV4yRSp29+JTPdXCnN+2MrvPyFySxaO9NBklmjUqlJftdKQ6RDxPu8nNXlPWuZh1+k
-         0ZqbjSNLJScNg==
-Message-ID: <d2290971-ea22-8203-631e-b896c76a994b@collabora.com>
-Date:   Tue, 8 Mar 2022 22:28:01 +0300
+        Tue, 8 Mar 2022 14:34:07 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A435553B4F;
+        Tue,  8 Mar 2022 11:33:09 -0800 (PST)
+Received: from nazgul.tnic (dynamic-002-247-253-133.2.247.pool.telefonica.de [2.247.253.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F22091EC064E;
+        Tue,  8 Mar 2022 20:33:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1646767984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=OYNiKYESHbJzHK2pSiTjx95k/lbxvnxmuLbmGVL/AhY=;
+        b=i5zRFdrpK8KYCCl8uZHUc22dp9WKizOpoyWUJ4RJliF3+o+PPYjT+OBbElgNpC/jB2oEW+
+        cFaB+4Z4oSt5TSdxPJNUi5+Qrz+HXaBnD7qjfjYKgVcGgw5QPVMBbd0G0z6uPNBLWCx3uH
+        /YFY29m4pUSU7HRMhFYMxje1kcbyhlA=
+Date:   Tue, 8 Mar 2022 20:32:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, yazen.ghannam@amd.com,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        bilbao@vt.edu
+Subject: Re: [PATCH] x86/mce: Unify vendors grading logic and provide AMD
+ machine error checks
+Message-ID: <YievKnn5hSK0AvMt@nazgul.tnic>
+References: <20220308184133.712761-1-carlos.bilbao@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Rob Clark <robdclark@chromium.org>
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220308184133.712761-1-carlos.bilbao@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 19:29, Rob Clark wrote:
-> On Tue, Mar 8, 2022 at 5:17 AM Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
->>
->> Hello,
->>
->> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
->> During OOM, the shrinker will release BOs that are marked as "not needed"
->> by userspace using the new madvise IOCTL. The userspace in this case is
->> the Mesa VirGL driver, it will mark the cached BOs as "not needed",
->> allowing kernel driver to release memory of the cached shmem BOs on lowmem
->> situations, preventing OOM kills.
+On Tue, Mar 08, 2022 at 12:41:34PM -0600, Carlos Bilbao wrote:
+> AMD's severity grading covers very few machine errors. In the graded cases
+> there are no user-readable messages, complicating debugging of critical
+> hardware errors. Furthermore, with the current implementation AMD MCEs have
+> no support for the severities-coverage file. Adding new severities for AMD
+> with the current logic would be too convoluted.
 > 
-> Will host memory pressure already trigger shrinker in guest? 
+> Fix the above issues including AMD severities to the severity table, in
+> combination with Intel MCEs. Unify the severity grading logic of both
+> vendors. Label the vendor-specific cases (e.g. cases with different
+> registers) where checks cannot be implicit with the available features.
+> 
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> ---
+>  arch/x86/include/asm/mce.h         |   7 ++
+>  arch/x86/kernel/cpu/mce/severity.c | 188 +++++++++++++++--------------
+>  2 files changed, 103 insertions(+), 92 deletions(-)
 
-The host memory pressure won't trigger shrinker in guest here. This
-series will help only with the memory pressure within the guest using a
-usual "virgl context".
+Sorry, maybe you're too new to this and you probably haven't read the
+old discussions we have had about the severity grading turd. In order to
+save you some time: adding more to that macro insanity is not going to
+happen.
 
-Having a host shrinker in a case of "virgl contexts" should be a
-difficult problem to solve.
+The AMD severity grading functions are *actually* readable vs this
+abomination which I hate with passion.
 
-> This is
-> something I'm quite interested in for "virtgpu native contexts" (ie.
-> native guest driver with new context type sitting on top of virtgpu),
+If you want to add more logic, you should add to mce_severity_amd(),
+perhaps call other helper functions which grade based on a certain
+aspect of the error type, split the logic, use comments, etc, but
+*definitely* not this.
 
-In a case of "native contexts" it should be doable, at least I can't see
-any obvious problems. The madvise invocations could be passed to the
-host using a new virtio-gpu command by the guest's madvise IOCTL
-handler, instead-of/in-addition-to handling madvise in the guest's
-kernel, and that's it.
+Thx.
 
-> since that isn't using host storage
+-- 
+Regards/Gruss,
+    Boris.
 
-s/host/guest ?
+https://people.kernel.org/tglx/notes-about-netiquette

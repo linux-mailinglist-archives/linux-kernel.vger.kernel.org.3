@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBD24D1DE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C9B4D1DF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348273AbiCHQ4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S1348330AbiCHQ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243037AbiCHQ4O (ORCPT
+        with ESMTP id S1348320AbiCHQ4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:56:14 -0500
+        Tue, 8 Mar 2022 11:56:17 -0500
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D534ECF9;
-        Tue,  8 Mar 2022 08:55:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527E74ECE6;
+        Tue,  8 Mar 2022 08:55:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646758518; x=1678294518;
+  t=1646758521; x=1678294521;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=rTBEAgwA4HmIh3yyeGv2nP7Asa9LmaW8oZi5maJATWA=;
-  b=Be02cRdL1YmR+FaxoJqZpoA+PbkIptFH7ovnReoWIuR8P2vmk4RUk0E5
-   YBK2tfPZu/IpidumtAy7arNkT3pQUwMp2fjncvj22nHQikQqFwDVHGVr/
-   9d/wrFOodKwQHxs1KIJvMjs3IDFv166MXHEoDmoMu/XHZBGMqlSS9zK5V
-   8=;
+  bh=2xxX+RXGBrLvHJHOqC2plDl24DyYYOQdo/LiauSG4nw=;
+  b=nBmriqWC+kPVbzP9SXq450Q4ra/rjaa9BTMolDlHSKVAuzP1H5FHsPr/
+   klGRjVh6Iv8ClkORqOecpovRTEpoONH1J955aT5bGGgasXgtMXjMmKeKF
+   AFwWYZLoWuWrrvQ+p+TTJxvF6XONNf8wOEqaUllTp9LDnDPGKgjtGIUyy
+   g=;
 Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 08 Mar 2022 08:55:18 -0800
+  by alexa-out.qualcomm.com with ESMTP; 08 Mar 2022 08:55:21 -0800
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 08 Mar 2022 08:55:16 -0800
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 08 Mar 2022 08:55:19 -0800
 X-QCInternal: smtphost
 Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
   by ironmsg02-blr.qualcomm.com with ESMTP; 08 Mar 2022 22:25:03 +0530
 Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
-        id 40A382CF5; Tue,  8 Mar 2022 22:25:02 +0530 (IST)
+        id 5DE2453EA; Tue,  8 Mar 2022 22:25:02 +0530 (IST)
 From:   Vinod Polimera <quic_vpolimer@quicinc.com>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
@@ -42,9 +42,9 @@ Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         linux-kernel@vger.kernel.org, robdclark@gmail.com,
         dianders@chromium.org, swboyd@chromium.org,
         quic_kalyant@quicinc.com
-Subject: [PATCH v5 1/5] arm64/dts/qcom/sc7280: remove assigned-clock-rate property for mdp clk
-Date:   Tue,  8 Mar 2022 22:24:56 +0530
-Message-Id: <1646758500-3776-2-git-send-email-quic_vpolimer@quicinc.com>
+Subject: [PATCH v5 2/5] arm64/dts/qcom/sc7180: remove assigned-clock-rate property for mdp clk
+Date:   Tue,  8 Mar 2022 22:24:57 +0530
+Message-Id: <1646758500-3776-3-git-send-email-quic_vpolimer@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1646758500-3776-1-git-send-email-quic_vpolimer@quicinc.com>
 References: <1646758500-3776-1-git-send-email-quic_vpolimer@quicinc.com>
@@ -65,27 +65,20 @@ beyond the assigned clock value.
 Drop the assigned clock rate property and vote on the mdp clock as per
 calculated value during the usecase.
 
-Changes in v2:
-- Remove assigned-clock-rate property and set mdp clk during resume sequence.
-- Add fixes tag.
-
-Changes in v3:
-- Remove extra line after fixes tag.(Stephen Boyd)
-
-Fixes: 62fbdce91("arm64: dts: qcom: sc7280: add display dt nodes")
+Fixes: a3db7ad1af("arm64: dts: qcom: sc7180: add display dt nodes")
 Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 ---
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 9 ++-------
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 9 ++-------
  1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index baf1653..408cf6c 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2856,9 +2856,6 @@
- 				      "ahb",
- 				      "core";
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index e1c46b8..eaab746 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -2900,9 +2900,6 @@
+ 				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
+ 			clock-names = "iface", "ahb", "core";
  
 -			assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
 -			assigned-clock-rates = <300000000>;
@@ -93,20 +86,21 @@ index baf1653..408cf6c 100644
  			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
  			interrupt-controller;
  			#interrupt-cells = <1>;
-@@ -2892,11 +2889,9 @@
- 					      "lut",
- 					      "core",
+@@ -2932,12 +2929,10 @@
+ 					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+ 				clock-names = "bus", "iface", "rot", "lut", "core",
  					      "vsync";
 -				assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
--						<&dispcc DISP_CC_MDSS_VSYNC_CLK>,
+-						  <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
 +				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
- 						<&dispcc DISP_CC_MDSS_AHB_CLK>;
+ 						  <&dispcc DISP_CC_MDSS_ROT_CLK>,
+ 						  <&dispcc DISP_CC_MDSS_AHB_CLK>;
 -				assigned-clock-rates = <300000000>,
--							<19200000>,
+-						       <19200000>,
 +				assigned-clock-rates = <19200000>,
- 							<19200000>;
+ 						       <19200000>,
+ 						       <19200000>;
  				operating-points-v2 = <&mdp_opp_table>;
- 				power-domains = <&rpmhpd SC7280_CX>;
 -- 
 2.7.4
 

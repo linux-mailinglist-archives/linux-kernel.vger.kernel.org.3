@@ -2,117 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFDD4D1A58
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B3F4D1A55
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344981AbiCHOY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S241843AbiCHOYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiCHOYz (ORCPT
+        with ESMTP id S230433AbiCHOYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:24:55 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E1049920;
-        Tue,  8 Mar 2022 06:23:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646749438; x=1678285438;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/XXipzH9LpSlloOthwoAzcFwTx0U+s0Ur50YTY714mc=;
-  b=ZviHOMu9oZcY/LSfVmVfOz0olivD7WIjxU+Qvz2zVxPEg7AHu/7OQlDr
-   agG82al115GE27ZXfQxqKl+pXdfT+lLTppxfVIXdoNMXATQzu5ga5G4bg
-   zoeEetZKRYYsZPwGvNb9sFvXHKbg/7XzEhZR/fEvs3JgKXdroJIgVeDeg
-   5eOG/e5MqltZUYungJO2K9KGP7IwxmJR0q1HWxQ10Ss1XhDN2Vm0WKvsw
-   5CsnzT2AeYr+Pk4RLYhG83h+g8y+igNfU3/59wviWt2t+Jaf1a3zmRbmp
-   PgM7V96ZARD4ke0bxYtPlFEkclBEZwlw6RCCA+JJuGseaOHz2j3F1ky5B
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254419987"
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="254419987"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 06:23:30 -0800
-X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
-   d="scan'208";a="553634238"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.46.193])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 06:23:24 -0800
-Message-ID: <013b5425-2a60-e4d4-b846-444a576f2b28@intel.com>
-Date:   Tue, 8 Mar 2022 16:23:18 +0200
+        Tue, 8 Mar 2022 09:24:36 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E447AEE;
+        Tue,  8 Mar 2022 06:23:38 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id q17so24704019edd.4;
+        Tue, 08 Mar 2022 06:23:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EWTDePeT9c6La97u9wbH4GX9FAATzBXHG6ctqZCvpd8=;
+        b=SwqxHt+CEM8U7jF/UK1QRxl5zaWGz+Rpz4kjl8tvUvDaBAc0cOanxW07D6pncov5FM
+         gkd2qQwI0YwO6fv6KGfwWTdIhmXVP5unai0Qp+omUXb+WQ5xFptNlsN3Il9kPfrWZRuD
+         CeAlmjr+WCW5YMTmeG1wxqXSlw5Y8rfh6YOqPMT3r7liiLMwwk7MPSOlCqq5FNhp5spZ
+         +bgyq/QIo2p0dq9S8g0ec/FDVJJD89jCSGDGpl+fJBco42+cQIKend21tWdBKmt4J3wO
+         +vBMgEKph46t0L6FqdMWxfStycIg/UlleEu+fPcXuYPcf15ut2tI1yFpYukWA4Y99cq0
+         wetw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EWTDePeT9c6La97u9wbH4GX9FAATzBXHG6ctqZCvpd8=;
+        b=yVi16mZr87jj1MElEFulv7aLWUIczzorKfy2OsnTasZuzTvlFxSmBgpUmQoCEXMBUN
+         vpfTKa/fvKxkg30hLPapnm7dYaUo46dQGQi4InVNj+6lL8KALTEOx2KEMJdVhaPKq/i1
+         WpTVN71N/HbzHCFn8hzz51IwZTnEkIE1qNVBP50uWJrvJTaUDPm7twkuMjY1HD0sXNiL
+         q/QjjEsFobTT9MiYLTdiOtA6XNrUpnnJchi0yumkO0iDOlmwQekEzhHrtsiEOO+dn0gM
+         tZDSKcLxJLTdkccratK65KWcEcrXCBsmQ6EQcAE72w5ddwfUgxAqkRt1uoEp6uwVKTTH
+         U/1A==
+X-Gm-Message-State: AOAM5309a3rJmNy5plStQKOexG2Xn5T/kX8gmgBmCoR7qqtx8EiPXgri
+        V5iz0/jhGSA32I1+ivJlMgo=
+X-Google-Smtp-Source: ABdhPJzK8eDtdQLsY2k88vsdbhPp3EbvokltEUVWoGn1cx3RxrX/AsjFlMtrSnnw23OOfx1ddoRO/g==
+X-Received: by 2002:a50:fd8e:0:b0:415:fe34:f03 with SMTP id o14-20020a50fd8e000000b00415fe340f03mr16318601edt.310.1646749417260;
+        Tue, 08 Mar 2022 06:23:37 -0800 (PST)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id s14-20020aa7cb0e000000b00410bf015567sm7483195edt.92.2022.03.08.06.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 06:23:36 -0800 (PST)
+Date:   Tue, 8 Mar 2022 15:23:34 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Masami Hiramatsu <mhiramat@redhat.com>,
+        Yucong Sun <fallentree@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 08/10] libbpf: Add bpf_program__attach_kprobe_opts
+ support for multi kprobes
+Message-ID: <Yidm5vcehK7k1B2O@krava>
+References: <20220222170600.611515-1-jolsa@kernel.org>
+ <20220222170600.611515-9-jolsa@kernel.org>
+ <CAEf4Bza0qRAzA7WmtPD4US4Kur3qf3X+LC5uowr_H3Y-_pLfCA@mail.gmail.com>
+ <YiTvdMGi6GA7i2Ex@krava>
+ <CAEf4BzZZy6XSb2naSam+W=_wY6JviX6Vz30N7mSg=xYZW_TxQA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
- a perf event clock
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>, jgross@suse.com,
-        sdeep@vmware.com, pv-drivers@vmware.com, pbonzini@redhat.com,
-        seanjc@google.com, kys@microsoft.com, sthemmin@microsoft.com,
-        virtualization@lists.linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christopher.s.hall@intel.com
-References: <20220214110914.268126-1-adrian.hunter@intel.com>
- <20220214110914.268126-4-adrian.hunter@intel.com>
- <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
- <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
- <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
- <30383f92-59cb-2875-1e1b-ff1a0eacd235@intel.com>
- <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZZy6XSb2naSam+W=_wY6JviX6Vz30N7mSg=xYZW_TxQA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7.3.2022 16.42, Peter Zijlstra wrote:
-> On Mon, Mar 07, 2022 at 02:36:03PM +0200, Adrian Hunter wrote:
+On Mon, Mar 07, 2022 at 05:28:54PM -0800, Andrii Nakryiko wrote:
+> On Sun, Mar 6, 2022 at 9:29 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Fri, Mar 04, 2022 at 03:11:19PM -0800, Andrii Nakryiko wrote:
+> > > On Tue, Feb 22, 2022 at 9:07 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > > >
+> > > > Adding support to bpf_program__attach_kprobe_opts to attach kprobes
+> > > > to multiple functions.
+> > > >
+> > > > If the kprobe program has BPF_TRACE_KPROBE_MULTI as expected_attach_type
+> > > > it will use the new kprobe_multi link to attach the program. In this case
+> > > > it will use 'func_name' as pattern for functions to attach.
+> > > >
+> > > > Adding also new section types 'kprobe.multi' and kretprobe.multi'
+> > > > that allows to specify wildcards (*?) for functions, like:
+> > > >
+> > > >   SEC("kprobe.multi/bpf_fentry_test*")
+> > > >   SEC("kretprobe.multi/bpf_fentry_test?")
+> > > >
+> > > > This will set kprobe's expected_attach_type to BPF_TRACE_KPROBE_MULTI,
+> > > > and attach it to functions provided by the function pattern.
+> > > >
+> > > > Using glob_match from selftests/bpf/test_progs.c and adding support to
+> > > > match '?' based on original perf code.
+> > > >
+> > > > Cc: Masami Hiramatsu <mhiramat@redhat.com>
+> > > > Cc: Yucong Sun <fallentree@fb.com>
+> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > ---
+> > > >  tools/lib/bpf/libbpf.c | 130 +++++++++++++++++++++++++++++++++++++++--
+> > > >  1 file changed, 125 insertions(+), 5 deletions(-)
+> > > >
+> > >
+> > > [...]
+> > >
+> > > > +static struct bpf_link *
+> > > > +attach_kprobe_multi_opts(const struct bpf_program *prog,
+> > > > +                  const char *func_pattern,
+> > > > +                  const struct bpf_kprobe_opts *kopts)
+> > > > +{
+> > > > +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
+> > >
+> > > nit: just LIBBPF_OPTS
+> >
+> > ok
+> >
+> > >
+> > >
+> > > > +       struct kprobe_multi_resolve res = {
+> > > > +               .name = func_pattern,
+> > > > +       };
+> > > > +       struct bpf_link *link = NULL;
+> > > > +       char errmsg[STRERR_BUFSIZE];
+> > > > +       int err, link_fd, prog_fd;
+> > > > +       bool retprobe;
+> > > > +
+> > > > +       err = libbpf_kallsyms_parse(resolve_kprobe_multi_cb, &res);
+> > >
+> > > hm... I think as a generic API we should support three modes of
+> > > specifying attachment target:
+> > >
+> > >
+> > > 1. glob-based (very convenient, I agree)
+> > > 2. array of function names (very convenient when I know specific set
+> > > of functions)
+> > > 3. array of addresses (advanced use case, so probably will be rarely used).
+> > >
+> > >
+> > >
+> > > So I wonder if it's better to have a separate
+> > > bpf_program__attach_kprobe_multi() API for this, instead of doing both
+> > > inside bpf_program__attach_kprobe()...
+> > >
+> > > In such case bpf_program__attach_kprobe() could either fail if
+> > > expected attach type is BPF_TRACE_KPROBE_MULTI or it can redirect to
+> > > attach_kprobe_multi with func_name as a pattern or just single
+> > > function (let's think which one makes more sense)
+> > >
+> > > Let's at least think about this
+> >
+> > I think it would make the code more clear, how about this:
+> >
+> >         struct bpf_kprobe_multi_opts {
+> >                 /* size of this struct, for forward/backward compatiblity */
+> >                 size_t sz;
+> >
+> >                 const char **funcs;
 > 
->>> diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
->>> index 4420499f7bb4..a1f179ed39bf 100644
->>> --- a/arch/x86/kernel/paravirt.c
->>> +++ b/arch/x86/kernel/paravirt.c
->>> @@ -145,6 +145,15 @@ DEFINE_STATIC_CALL(pv_sched_clock, native_sched_clock);
->>>  
->>>  void paravirt_set_sched_clock(u64 (*func)(void))
->>>  {
->>> +	/*
->>> +	 * Anything with ART on promises to have sane TSC, otherwise the whole
->>> +	 * ART thing is useless. In order to make ART useful for guests, we
->>> +	 * should continue to use the TSC. As such, ignore any paravirt
->>> +	 * muckery.
->>> +	 */
->>> +	if (cpu_feature_enabled(X86_FEATURE_ART))
->>
->> Does not seem to work because the feature X86_FEATURE_ART does not seem to get set.
->> Possibly because detect_art() excludes anything running on a hypervisor.
+> naming nit: func_names (to oppose it to "func_pattern")? Or just
+> "names" to be in line with "addrs" (but then "pattern" instead of
+> "func_pattern"? with kprobe it's always about functions, so this
+> "func_" everywhere is a bit redundant)
+
+ok
+
 > 
-> Simple enough to delete that clause I suppose. Christopher, what is
-> needed to make that go away? I suppose the guest needs to be aware of
-> the active TSC scaling parameters to make it work ?
+> >                 const unsigned long *addrs;
+> >                 const u64 *cookies;
+> >                 int cnt;
+> 
+> nit: let's use size_t
 
-There is also not X86_FEATURE_NONSTOP_TSC nor values for art_to_tsc_denominator
-or art_to_tsc_numerator.  Also, from the VM's point of view, TSC will jump
-forwards every VM-Exit / VM-Entry unless the hypervisor changes the offset
-every VM-Entry, which KVM does not, so it still cannot be used as a stable
-clocksource.
+ok
 
+> 
+> 
+> >                 bool retprobe;
+> >                 size_t :0;
+> >         };
+> >
+> >         bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
+> >                                               const char *pattern,
+> >                                               const struct bpf_kprobe_multi_opts *opts);
+> >
+> >
+> > if pattern is NULL we'd use opts data:
+> >
+> >         bpf_program__attach_kprobe_multi_opts(prog, "ksys_*", NULL);
+> >         bpf_program__attach_kprobe_multi_opts(prog, NULL, &opts);
+> >
+> > to have '2. array of function names' as direct function argument,
+> > we'd need to add 'cnt' as well, so I think it's better to have it
+> > in opts, and have just pattern for quick/convenient call without opts
+> >
+> 
+> yeah, naming pattern as direct argument for common use case makes
+> sense. Let's go with this scheme
+
+great, I'll make the changes
+
+thanks,
+jirka

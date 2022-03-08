@@ -2,122 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F704D1623
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D8E4D1626
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346491AbiCHLWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S241540AbiCHLXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346463AbiCHLWj (ORCPT
+        with ESMTP id S1346530AbiCHLW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:22:39 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150524579C;
-        Tue,  8 Mar 2022 03:21:43 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id bt3so15846198qtb.0;
-        Tue, 08 Mar 2022 03:21:43 -0800 (PST)
+        Tue, 8 Mar 2022 06:22:56 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED8646164;
+        Tue,  8 Mar 2022 03:22:00 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id g3so11782024edu.1;
+        Tue, 08 Mar 2022 03:22:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=c+rvaRPglsdjCivkAUDo1zGQCcIIdAVOXsTQ+b3U1eU=;
+        b=eseSg3gO+h/WvBzk8rHM8vEeplHFFSPvnISVegXP8IIJiZCcnzEQYyKbh4+9dP8AE5
+         Qj3EdGyvLx/4sVjgcMFAbWRfId2FhrgNBZgtJ0X2qCyc51JG+hg3yplFDYb2fBzamJAQ
+         6MfeEjNncMY45sNgvFXEF/ll/p5aTEmHhn+KcrRzfwX4qLiLZxvbVmKEOK+mQNPHrjUC
+         9NIPbLunXD+FESfsntzHENX9cdwvhLddR0GrIMPMWXnuMUrX32OZxSZVfSGzFGl36ARi
+         JPX2PtM1eStZ+7jatS9466HRnQlOH+npvgfCizjbUOt6ogC2AoDkltYcxO3YIrHcDaxF
+         S10Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F4/6/jNoigqZsZr9XYglGbTplLVuMWJmgJ5Lyc0Enx4=;
-        b=S+PKWVC4Zmy0ZUCBkUv/3n5Q8Ass0kX7DTLun6UTI1BymCfqihoc0+6wLL9p5Yp6pu
-         LK2z6PsmReLrnAn26Iqn/SQ9sk6Hl2H7PSpNj4GGAwNL5PGOBuHE3SJ+FffBmWE2Dut6
-         TobjsyAAO1m6e1U6c3NqBt7cmKcuaiZ7CngpfFWVzXXJNlWgZ6oDYKmtpuWB3fRZxYyA
-         jBX/9IPYTk0Wbn/KSPxy/9vG/iZ9fj+/QtnXcLCym6zVFpDW/KHkC20E0RZHfF8wEpZ8
-         wLq8gFdR10NgA87SuSGzLuq4bNKGvSnOvGSAw+Ezo8iQgmjh1YmpQp24B5+hRW2jAPeM
-         pHRw==
-X-Gm-Message-State: AOAM531gcOq3lpYpT0hp0oTofEK8nG8LzN9wxNaEzZPc2X1oyGpoRJJ6
-        GyRJUPkekFDMITZEbPNbR8NoLGWzhyPCdw==
-X-Google-Smtp-Source: ABdhPJwtNf3sO/CJmVmqr+ZA2Tl5NCrBx+U8Rxd9yGik7ssiW9A8Le8BPzZBwiImwfRhlwJQuRptjg==
-X-Received: by 2002:a05:622a:406:b0:2e0:9838:6b58 with SMTP id n6-20020a05622a040600b002e098386b58mr102157qtx.607.1646738501920;
-        Tue, 08 Mar 2022 03:21:41 -0800 (PST)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id f19-20020ac859d3000000b002de4d014733sm10428486qtf.13.2022.03.08.03.21.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 03:21:41 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id l2so17568936ybe.8;
-        Tue, 08 Mar 2022 03:21:41 -0800 (PST)
-X-Received: by 2002:a25:bc8f:0:b0:628:8649:5c4b with SMTP id
- e15-20020a25bc8f000000b0062886495c4bmr11278520ybk.207.1646738500973; Tue, 08
- Mar 2022 03:21:40 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=c+rvaRPglsdjCivkAUDo1zGQCcIIdAVOXsTQ+b3U1eU=;
+        b=4W4xa8E67AN8avlhNz+W4MSUngRu5tXT8XkVy1qb3CGAV7XmjHH3GWI+wj2O+scwZ4
+         KKnVorKlNVs/TJbzRiEqzoF10HhQcvxve4lroLdSOyhMsuW3VbpkkCW3joGzWwRy5EIS
+         YRYQ/QG8E+yFYGf84xMjwyibmxwoBJE3Yl1yHPjgUEpwlBW9f7J7g4sSNbbty0BVHrH3
+         GQxE+n3oVjFJkItz98QOP5L1UWA0t5R92lzNZ40XtCMYejbVqod4vLro++Y5xyArdYvQ
+         3SwdNsjXDGn/8HLL7uKlfYFapW64LqiNJllfNB3+X4PQ/oNtdyMhAYwa6BcRp24llgxA
+         v/GA==
+X-Gm-Message-State: AOAM531BL2/QzjQ+64+w37kXOVy+QtRBt32EwUX56VVW4BeMZ8lurs6j
+        MIIu90rb0+GpNGHNVoyq8EE=
+X-Google-Smtp-Source: ABdhPJyZEf6Mycjwi3XGLk0/LoHIRa79uwoByVgnNfLv4FkoMPZSH04fTXlGXFc09jGZmUuS9DgAvA==
+X-Received: by 2002:a05:6402:2987:b0:414:39b0:7fc1 with SMTP id eq7-20020a056402298700b0041439b07fc1mr15519948edb.214.1646738518909;
+        Tue, 08 Mar 2022 03:21:58 -0800 (PST)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id g22-20020a170906395600b006cec40b9cf0sm5757828eje.92.2022.03.08.03.21.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 03:21:58 -0800 (PST)
+Date:   Tue, 8 Mar 2022 13:21:56 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
+        UNGLinuxDriver@microchip.com,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v2 1/1] net: dsa: microchip: ksz9477: implement
+ MTU configuration
+Message-ID: <20220308112156.6s2ssnkhifxuuw2w@skbuf>
+References: <20220223233833.mjknw5ko7hpxj3go@skbuf>
+ <20220224045936.GB4594@pengutronix.de>
+ <20220224093329.hssghouq7hmgxvwb@skbuf>
+ <20220224093827.GC4594@pengutronix.de>
+ <20220224094657.jzhvi67ryhuipor4@skbuf>
+ <20220225114740.GA27407@pengutronix.de>
+ <20220225115802.bvjd54cwwk6hjyfa@skbuf>
+ <20220225125430.GB27407@pengutronix.de>
+ <20220225163543.vnqlkltgmwf4vlmm@skbuf>
+ <20220308100644.GA5189@pengutronix.de>
 MIME-Version: 1.0
-References: <20220124121009.108649-1-alistair@alistair23.me> <20220124121009.108649-6-alistair@alistair23.me>
-In-Reply-To: <20220124121009.108649-6-alistair@alistair23.me>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 8 Mar 2022 12:21:29 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUe-z-6_=W5AFtWMug-cqTZKJhd-iLbdoRnSKoXwm27Uw@mail.gmail.com>
-Message-ID: <CAMuHMdUe-z-6_=W5AFtWMug-cqTZKJhd-iLbdoRnSKoXwm27Uw@mail.gmail.com>
-Subject: Re: [PATCH v18 5/8] hwmon: sy7636a: Add temperature driver for sy7636a
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, NXP Linux Team <linux-imx@nxp.com>,
-        Zhang Rui <rui.zhang@intel.com>, alistair23@gmail.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308100644.GA5189@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alistair,
+On Tue, Mar 08, 2022 at 11:06:44AM +0100, Oleksij Rempel wrote:
+> > > > I was saying:
+> > > > 
+> > > > ip link set lan1 up
+> > > > ip link add link lan1 name lan1.5 type vlan id 5
+> > > > ip addr add 172.17.0.2/24 dev lan1.5 && ip link set lan1.5 up
+> > > > iperf3 -c 172.17.0.10
+> > > 
+> > > It works.
+> > 
+> > This is akin to saying that without any calls to ksz9477_change_mtu(),
+> > just writing VLAN_ETH_FRAME_LEN + ETH_FCS_LEN into REG_SW_MTU__2 is
+> > sufficient to get VLAN-tagged MTU-sized packets to pass through the CPU
+> > port and the lan1 user port.
+> > 
+> > So my question is: is this necessary?
+> > 
+> > 	if (dsa_is_cpu_port(ds, port))
+> > 		new_mtu += KSZ9477_INGRESS_TAG_LEN;
+> > 
+> 
+> No.
+> 
+> I did some extra tests with following results: REG_SW_MTU__2 should be
+> configured to 1518 to pass 1514 frame. Independent if the frame is
+> passed between external ports or external to CPU port. So, I assume,
+> ETH_FRAME_LEN + ETH_FCS_LEN should be used instead of VLAN_ETH_FRAME_LEN
+> + ETH_FCS_LEN. Correct?
 
-On Mon, Jan 24, 2022 at 1:25 PM Alistair Francis <alistair@alistair23.me> wrote:
-> This is a multi-function device to interface with the sy7636a
-> EPD PMIC chip from Silergy.
->
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+Oleksij, to be clear, I only had an issue with consistency.
+You were adding KSZ9477_INGRESS_TAG_LEN during ksz9477_change_mtu() but
+not during initial setup. That prompted the question: is that particular
+member of the sum needed or not? Either it's needed in both places, or
+in none.
 
-Thanks for your patch, which is now commit de34a40532507814 ("hwmon:
-sy7636a: Add temperature driver for sy7636a") in mfd/for-mfd-next.
+Then, apart from removing KSZ9477_INGRESS_TAG_LEN, you've also made an
+unsolicited change (subtracted VLAN_HLEN from the value programmed to
+hardware) without a clear confirmation that you understand what this
+does, and without explicitly saying that the iperf3 test above still
+works with this formula applied.
 
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1672,6 +1672,15 @@ config SENSORS_SIS5595
->           This driver can also be built as a module. If so, the module
->           will be called sis5595.
->
-> +config SENSORS_SY7636A
-> +       tristate "Silergy SY7636A"
-> +       help
-> +         If you say yes here you get support for the thermistor readout of
-> +         the Silergy SY7636A PMIC.
+Since the VLAN header is part of L2, it means that a port configured for
+MTU 1500 must also support VLAN-tagged packets with an L2 payload of
+1500 octets. 1500 + ETH_HLEN + VLAN_HLEN == 1518 octets.
+And since you need to add ETH_HLEN + ETH_FCS_LEN, I have an unconfirmed
+hunch that VLAN_HLEN is also needed for the case above.
 
-As this is an i2c mfd device, you do need a dependency on MFD and I2C,
-or some other symbol, unless compile-testing?
-
-> +
-> +         This driver can also be built as a module.  If so, the module
-> +         will be called sy7636a-hwmon.
-> +
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+So, I'm sorry for being paranoid, but you aren't really giving me a
+choice but to ask again, and again.

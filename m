@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BC14D107A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB82A4D107F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244611AbiCHGu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 01:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S245045AbiCHGwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 01:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240464AbiCHGux (ORCPT
+        with ESMTP id S240464AbiCHGwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 01:50:53 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E10F21E2C;
-        Mon,  7 Mar 2022 22:49:58 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id ge19-20020a17090b0e1300b001bcca16e2e7so1378729pjb.3;
-        Mon, 07 Mar 2022 22:49:58 -0800 (PST)
+        Tue, 8 Mar 2022 01:52:36 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695A5220E4
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 22:51:40 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso1407114pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 22:51:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=stuWRE0fpV+3ocvFzIL+5jqWnax7n9BxoKZw/kt5w9s=;
-        b=oxGaiEBcfwWHbVvp3IFQUeN7hyLS6AXjzlWejiDsHxawo0sP2VMBimKyr998lAGaVF
-         GoBjrG5hySVY79T043Vc5joODZYEPkRd8d/WOtNM4sFQkDDmQCPgzbNIZM9u2SfWxLCr
-         0jp8nyBJ/egmQYF5RFoY0ck/fHosVg2FNQ6Jq28tQiIlJNNLFKmz4TXd5ToQE2Iu7YUb
-         MAWw2ASjf3LY15lsQjmiSXO8rSR9yxfDuEb4TusIZAO/KyfFhKksibgsvconX32s56dj
-         Gb44QGPB3ryFKftZubJqss1awGVMnnZFhAllSPeDwZzmEMTFqVe5WFZua0vUC8k8WSgG
-         //8g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ya8GdI9h8mc3o2xzRLAoSDdlC9J4RJbrqfbMxm2klR8=;
+        b=JgBxD1dPJwwraX84O2EIyIXUmrj4Dmfs+6GuibXK1ncjgar54BUuBtAWDYkBH0285I
+         lBz5sbRO/CzCk1VKqieoYDpyzxJpiihf+RryW0IcnakLTxHfYR02z2yGZugCuCFsndYd
+         oqthi3KcLf8c3S4ZNy7v6jsJoxLO+AfgjRDK7G79XygW+5RzjrwdKh1X85DBb6lL5m+F
+         xvPRcvTcMHojoTcI+LuvJx+YOUJqzPsxSyNAIeg75gAWverDVmEuG4HnTo9DRxxDbHp0
+         4hdXZmyMbwoUYb9B40b6Tqq3aYJY4A3XxRE3uDxYWLb3vHyFUGXFg878Ei7JCLQ3oFFj
+         JRvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=stuWRE0fpV+3ocvFzIL+5jqWnax7n9BxoKZw/kt5w9s=;
-        b=NKt7n9U4tWfj6OyZ/kbbxq00pU2fUWUIm/CAtWg/wK18TRPBht4dBH1M5E3CrWD91O
-         wXL4wQj0WYG7f9G6JEIevvHi2xAmlnQ1p/gw9clifL47h8kotPeq64OHVJ2PAva5R9nP
-         lGZrm4gRBeDZ/Qk9leuk4SPB5R0mlMU8CWcbgpCuX09L44uM/l6XmNrU0ERaVWROj36Z
-         9BTVlaoryX90ruIYBRg87ZhY+ajJ3Chwxvu6fKbEh0pqUhGOSFMAl2LDPzW6Zpk0DODU
-         NhalRnekz3+fMzGdQzHTcCMKXf1PUJc4xkuLQp2r/bb8LB8MwS7QcxtfZ2zkGXya9HlJ
-         RaOw==
-X-Gm-Message-State: AOAM531q+kfMiME7rvfpU6WJO0XOVdl4oU6zu2gZUtLTVwUBTtu0GenA
-        E3H89NaBd6X4XRWUzu4WsFk=
-X-Google-Smtp-Source: ABdhPJwKmhYpZGUB3BAzsBmM83UVCHwA6d9ECoD/UUlYxDz3NYGSljEOnbghv4mMyZkTHx+wvv8S1g==
-X-Received: by 2002:a17:903:40c3:b0:151:c8a2:1c46 with SMTP id t3-20020a17090340c300b00151c8a21c46mr16203301pld.141.1646722197624;
-        Mon, 07 Mar 2022 22:49:57 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id 23-20020a17090a0d5700b001bc3c650e01sm2342391pju.1.2022.03.07.22.49.55
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ya8GdI9h8mc3o2xzRLAoSDdlC9J4RJbrqfbMxm2klR8=;
+        b=itCuC6kVpIiVfdrmytJLkIWKDqNtEXoRggJqmf7SPFpQF0YEKbvBCOHTX/6vqGTlfs
+         kv31YTNBQPssxSlDqiuAKPHwjH1DMiOvgOawVexBaMzGN6LklkMKK3jRsA9rz8hrM51O
+         b+8LUTOFAShMGqFko2BM40vxu2Q8lYk77sm4J3Luh7ruwiuNdNSdukQcfaV8bmZU4O1T
+         uQFoRS6+RSIoUs0LJ5IPehay7JWREw4TltxxlmP+tJK0/Y+pGVy+Sbtbp+Bt7h/BR4lP
+         BMHu/cpyN+t9lsfMKgCSuuqw9FANY5Nj9inMwdsLyNRVidBtsbxkKQs/lL1m8q1ANQLt
+         xS0A==
+X-Gm-Message-State: AOAM533/QCyRG5G8jRq3GmbT4Kps9kcGf9FnX8si6dvDbzq9z79feWgX
+        ehrh61wCjK1H3QE0NJy/Yv8=
+X-Google-Smtp-Source: ABdhPJzPY/uKsDsNdaMgpqE1gitsaFf9Qcn2eTBstnVWYYmnTY/QfUPcaySI1/zwfnlTTWdKgBB+CQ==
+X-Received: by 2002:a17:902:e811:b0:151:f486:a32f with SMTP id u17-20020a170902e81100b00151f486a32fmr5996878plg.141.1646722299937;
+        Mon, 07 Mar 2022 22:51:39 -0800 (PST)
+Received: from mi.xiaomi.com ([43.224.245.250])
+        by smtp.gmail.com with ESMTPSA id 17-20020a056a00071100b004f0f941d1e8sm17166446pfl.24.2022.03.07.22.51.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 22:49:57 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Zidan Wang <zidan.wang@freescale.com>,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] dmaengine: imx-sdma: Fix error checking in sdma_event_remap
-Date:   Tue,  8 Mar 2022 06:49:51 +0000
-Message-Id: <20220308064952.15743-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 07 Mar 2022 22:51:39 -0800 (PST)
+From:   Jian Wen <wenjianhn@gmail.com>
+X-Google-Original-From: Jian Wen <wenjian1@xiaomi.com>
+To:     peterz@infradead.org
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        Jian Wen <wenjian1@xiaomi.com>
+Subject: [PATCH 0/2] fix schedstats for idle kthreads
+Date:   Tue,  8 Mar 2022 14:51:08 +0800
+Message-Id: <20220308065110.636947-1-wenjian1@xiaomi.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() returns NULL on errors, rather than error
-pointers. Using NULL check on grp_np to fix this.
+Idle kthreads are sleeping instead of being blocked, since they are
+not blocked at all.
+This patch makes idle kthreads triggers the sched:sched_stat_sleep
+event instead of sched:sched_stat_blocked.
 
-Fixes: d078cd1b4185 ("dmaengine: imx-sdma: Add imx6sx platform support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/dma/imx-sdma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Jian Wen (2):
+  sched: explicitly distinguish between TASK_INTERRUPTIBLE and
+    TASK_UNINTERRUPTIBLE
+  sched: fix schedstats for idle kthreads
 
-diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-index 75ec0754d4ad..0be1171610af 100644
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -1869,7 +1869,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
- 	u32 reg, val, shift, num_map, i;
- 	int ret = 0;
- 
--	if (IS_ERR(np) || IS_ERR(gpr_np))
-+	if (IS_ERR(np) || !gpr_np)
- 		goto out;
- 
- 	event_remap = of_find_property(np, propname, NULL);
-@@ -1917,7 +1917,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
- 	}
- 
- out:
--	if (!IS_ERR(gpr_np))
-+	if (gpr_np)
- 		of_node_put(gpr_np);
- 
- 	return ret;
+ kernel/sched/deadline.c | 5 ++---
+ kernel/sched/fair.c     | 4 ++--
+ kernel/sched/rt.c       | 5 ++---
+ 3 files changed, 6 insertions(+), 8 deletions(-)
+
 -- 
-2.17.1
+2.25.1
 

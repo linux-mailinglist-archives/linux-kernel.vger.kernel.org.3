@@ -2,107 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4324D1F40
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7767F4D1F42
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245268AbiCHRmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S1349241AbiCHRmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349225AbiCHRmN (ORCPT
+        with ESMTP id S1349228AbiCHRmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:42:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E345574A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:41:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1E0061389
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32EE3C340F4;
-        Tue,  8 Mar 2022 17:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646761276;
-        bh=p6KlrMRMnYTHTzTImYZR0x+q7YuvtOChjw2m1PNis14=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=BVSNoou6eQpBzpktK8b99C/dRr6Z8fHEt/4ONAzNGvKJjvrsENdU57luOZjYSneFY
-         oLCZzvgF+8sVIcTr2ydDr7DbO7wCajG/11rD6L40LUWpcBMXgnahnZR8ay1OB/altg
-         mJJt/7X+3Y5je02CLGsBaL3PVffxYz1izuJOn3FGaK7xppLctfsRYWbaJd3tcSx84s
-         jw40s21XkoN9ldn3JJXg5iWvk9X6g/V7RlUaM/hC7PlZGJKBfZRsN+okXDA6HeziIZ
-         qIe2cDc4newDW/dH86cj6V6ree5DcILlPMlHNIYbPOBhzkmd0+f7452EvEh+wV/oPD
-         3wNRVDr7jhgtA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D05A15C08A0; Tue,  8 Mar 2022 09:41:15 -0800 (PST)
-Date:   Tue, 8 Mar 2022 09:41:15 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev 82/84]
- kernel/rcu/tree.c:2678:17: error: implicit declaration of function
- 'rcu_tasks_classic_qs'
-Message-ID: <20220308174115.GU4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202203082147.h7DGjo3z-lkp@intel.com>
+        Tue, 8 Mar 2022 12:42:18 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E8853715
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:41:21 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id t19so14164343plr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:41:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rEjzn09eYdcPw8zgSp9GRXhCcrP0HGBMdICZ+yuOnPA=;
+        b=rT2oKUw8j6AboD5zninI0fTWpt+shY+0HAQaCJeMq1tUrPZTtw1w2b1ZN3vWavLtNn
+         sOyBYDvqMYKmRgXrehd7tkx351JCXu8evyfalFzOYktxpY6Wm+TWpnazMGuGGELa//KS
+         eeZMKazhUxCvEp1YoHNXr0wcRZ4i/aDJIWsTxNB2dvVzGnsUwDlS1Fm9msjgGqrOPfMt
+         r+b4ufhEy9lHSI1m0nKPj3Hd1sE8l2lD76Fkr26kMiXq7TLAEYEUA46+o3Uyg5Ae7bwe
+         Tbe4bHsyohU9gCDC4LyYwslN8wtUIyPQELNkpRngiKg1WlduxDX3jfi3aNizWsdUs2nK
+         WxJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rEjzn09eYdcPw8zgSp9GRXhCcrP0HGBMdICZ+yuOnPA=;
+        b=UdVKS95ZDJ3xQyhoVTQcPpFFF5f/WFexRVke7t3WIXnIQp5DuVe77iE7lFIAOepRsu
+         vGebw2F3gU6ZZlCMAf4aal1wgOQd+4WKG5hEf3ll3kgi0J68zmM2zrd1X6/sHt0t2SFY
+         kxEyEBhBR3H2LdXCVoLU8HgveNtR9dgxXDUr1nT93Fdf8TV/yMZF1K4ieF4T06XewjV8
+         Z1x6R0GkHZy5gNIJ1T+xzFNwL/9eVTdKZ7CKb7E2PSaHb1pjU6rCjfRWK6MpFwojg+q/
+         8JfhDgA7CoWajc48eRGgYJ5xPr0u/TX78K8y2GPScM8B48rewXxussyHdxp1Eq2G6/98
+         NPtA==
+X-Gm-Message-State: AOAM532SDh9c8FN8itYw93io3s3B2zQVZPnbOrNpEVKr0DUvdW2eqEU/
+        p6prnyfsgHiQZoVTbVew/YBUbQ==
+X-Google-Smtp-Source: ABdhPJxjjdilHkK2/7OlLGWa+ROoJM0h25Zlo6kuCVIsMv0zAfwBnHUy/lIP+qwJUeyYd66AvrHRYA==
+X-Received: by 2002:a17:90b:4a92:b0:1bf:2a03:987c with SMTP id lp18-20020a17090b4a9200b001bf2a03987cmr5794219pjb.186.1646761280899;
+        Tue, 08 Mar 2022 09:41:20 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 1-20020a17090a1a0100b001bf3ba1508fsm3565283pjk.33.2022.03.08.09.41.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 09:41:20 -0800 (PST)
+Date:   Tue, 8 Mar 2022 17:41:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+Subject: Re: [PATCH v2 09/25] KVM: x86/mmu: do not recompute root level from
+ kvm_mmu_role_regs
+Message-ID: <YieVPL2rwAQGB+cj@google.com>
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-10-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202203082147.h7DGjo3z-lkp@intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220221162243.683208-10-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 09:15:35PM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-> head:   fb8d1afe45bd6fcb50dff8bac4636725358fde94
-> commit: c8c42c80febd4e6d346f7f62958300eb8205aa31 [82/84] rcu-tasks: Make Tasks RCU account for userspace execution
-> config: arm-oxnas_v6_defconfig (https://download.01.org/0day-ci/archive/20220308/202203082147.h7DGjo3z-lkp@intel.com/config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/ammarfaizi2/linux-block/commit/c8c42c80febd4e6d346f7f62958300eb8205aa31
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
->         git checkout c8c42c80febd4e6d346f7f62958300eb8205aa31
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+On Mon, Feb 21, 2022, Paolo Bonzini wrote:
+> The root_level can be found in the cpu_mode (in fact the field
+> is superfluous and could be removed, but one thing at a time).
+> Since there is only one usage left of role_regs_to_root_level,
+> inline it into kvm_calc_cpu_mode.
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 23 ++++++++---------------
+>  1 file changed, 8 insertions(+), 15 deletions(-)
 > 
-> All errors (new ones prefixed by >>):
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 1af898f0cf87..6e539fc2c9c7 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -244,19 +244,6 @@ static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
+>  	return regs;
+>  }
+>  
+> -static int role_regs_to_root_level(const struct kvm_mmu_role_regs *regs)
+> -{
+> -	if (!____is_cr0_pg(regs))
+> -		return 0;
+> -	else if (____is_efer_lma(regs))
+> -		return ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL :
+> -					       PT64_ROOT_4LEVEL;
+> -	else if (____is_cr4_pae(regs))
+> -		return PT32E_ROOT_LEVEL;
+> -	else
+> -		return PT32_ROOT_LEVEL;
+> -}
+> -
+>  static inline bool kvm_available_flush_tlb_with_range(void)
+>  {
+>  	return kvm_x86_ops.tlb_remote_flush_with_range;
+> @@ -4695,7 +4682,13 @@ kvm_calc_cpu_mode(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
+>  		role.base.smep_andnot_wp = ____is_cr4_smep(regs) && !____is_cr0_wp(regs);
+>  		role.base.smap_andnot_wp = ____is_cr4_smap(regs) && !____is_cr0_wp(regs);
+>  		role.base.has_4_byte_gpte = !____is_cr4_pae(regs);
+> -		role.base.level = role_regs_to_root_level(regs);
+> +
+> +		if (____is_efer_lma(regs))
+> +			role.base.level = ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL : PT64_ROOT_4LEVEL;
+
+Can we wrap this, even if indentation is reduced?  I find it much easier to quickly
+understand the if-else paths if they're stacked and not run out to almost 100 chars.
+
+	if (____is_efer_lma(regs))
+		role.base.level = ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL :
+							  PT64_ROOT_4LEVEL;
+	else if (____is_cr4_pae(regs))
+		role.base.level = PT32E_ROOT_LEVEL;
+	else
+		role.base.level = PT32_ROOT_LEVEL;
+
+> +		else if (____is_cr4_pae(regs))
+> +			role.base.level = PT32E_ROOT_LEVEL;
+> +		else
+> +			role.base.level = PT32_ROOT_LEVEL;
+>  
+>  		role.ext.cr0_pg = 1;
+>  		role.ext.cr4_pae = ____is_cr4_pae(regs);
+> @@ -4790,7 +4783,7 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
+>  	context->get_guest_pgd = kvm_get_guest_cr3;
+>  	context->get_pdptr = kvm_pdptr_read;
+>  	context->inject_page_fault = kvm_inject_page_fault;
+> -	context->root_level = role_regs_to_root_level(regs);
+> +	context->root_level = cpu_mode.base.level;
+>  
+>  	if (!is_cr0_pg(context))
+>  		context->gva_to_gpa = nonpaging_gva_to_gpa;
+> -- 
+> 2.31.1
 > 
->    kernel/rcu/tree.c: In function 'rcu_sched_clock_irq':
-> >> kernel/rcu/tree.c:2678:17: error: implicit declaration of function 'rcu_tasks_classic_qs' [-Werror=implicit-function-declaration]
->     2678 |                 rcu_tasks_classic_qs(current, false);
->          |                 ^~~~~~~~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
-
-Good catch!  Does the patch below fix this for you?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index e7c39c200e2b0..1a32036c918cd 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -196,6 +196,7 @@ void synchronize_rcu_tasks_rude(void);
- void exit_tasks_rcu_start(void);
- void exit_tasks_rcu_finish(void);
- #else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
-+#define rcu_tasks_classic_qs(t, preempt) do { } while (0)
- #define rcu_tasks_qs(t, preempt) do { } while (0)
- #define rcu_note_voluntary_context_switch(t) do { } while (0)
- #define call_rcu_tasks call_rcu
+> 

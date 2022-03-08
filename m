@@ -2,245 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901DB4D24A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D85DE4D24B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiCHXKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 18:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S230074AbiCHXKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 18:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiCHXKb (ORCPT
+        with ESMTP id S229598AbiCHXKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 18:10:31 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFFF6E4FA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:09:31 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id b5so429860wrr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:09:31 -0800 (PST)
+        Tue, 8 Mar 2022 18:10:48 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF0E6F4AE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:09:48 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id w17-20020a056830111100b005b22c584b93so455379otq.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:09:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1f5gPcrqfy750U/J52Wg+Mj+0/UcxsK3pfUKBKWLDR0=;
-        b=rY724zyNQvt0W7k77uJ6mdsljpHhmPedp6A01Ybgi4ape+kd29m4bzWSt+PlFv6VGk
-         5F64VH7NbTfh9lbiAtg/QqctdXYwNeto4qq8ILBsk1UjKlgBgsCMQeBPoPLONRLpHghE
-         cWdsR0etuAIMnRL3KlwUvfLr789Koi+WEO7RwGW0jHeOJ70GUKcFjnSzplqBRUYBRhT6
-         QP8IEuX2CtkcOTNnpXBR5MGZ0IWr8YG+CglWc/j5+G1oi8Hir+ky5riHmAiBgpzzzCL3
-         WDmeIljWzrU1rFQ9e3oINeWI9gqLxDH39hU6jNdl97UeioJbJwXvtYXCCKepzEEDLGHC
-         BVFQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xuc98iQ6lLN5ZWjfMkCi08X6OqD4xJL8S5CE7+O2xXo=;
+        b=ufjwvyzNLdj8kL4OhOSrTDZr9TwtTMGBSYKptuax0eItS0/K2Li7gLDPnKGMSVhxb0
+         AVhfV82OUzj4q6JGYm3SJjk7imPLYPvVWFEO7Hnvu22PjY7s+7eefgq1tGg2xQvMD5C2
+         sZV0znnqEGyrfEKDzwX/Pzt7gjZvZapFf2MyBY3NHA1dRW+G5mrX2h6l7yXqZEdMRepF
+         QQmuDgriXkK7wdMr2PHSVgeKuxkIB90+avmkKV5p17EWJln+MVCytyavDctuDJJIAJqM
+         1YjRl1H5BKzo5yrDI8SbzUe8CKigHm7BWSTWlwIG0IoeV9jb8JsLgg96waj9ZOHo9jGk
+         P6ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1f5gPcrqfy750U/J52Wg+Mj+0/UcxsK3pfUKBKWLDR0=;
-        b=bEOhlMhYpST0fnIumWxAU8tdw6za2naxeuhAbQ/0ywMFoCtoMc9XPW0rL0prEzVrIP
-         w312e++lnMIqpFc7PO7poMv8VE9BnfOCYGyDblb52k6wBB0/DgvvLHk7FcqgsawMztER
-         nYBsFNUk5Q1/dV3xpQJKN3F8POM+/Eq4GgwLC9fG/7zKhExnXgw35VYr/1C19WGsvfGM
-         JLAveIiOtbvVOWHgMNO9++kEdKUocPHaIbgpHzxfkOqFSZucBkEem0Lm+ep8kT1ae6Te
-         28qCeBHm/q7HvpCGVn61K8mZUwOK9AalA1O4ffyhcUubuMiFTrarsbhNQ8sVdXQFVfOC
-         rrLg==
-X-Gm-Message-State: AOAM530g5hz0m0cBa66a5H773VmVd86DGyrnTiSmiNpDG7RITG6cozl+
-        cIRthINXyLMqO5BcnL5DT7PDLt/mSm5tQYvD/5HvZw==
-X-Google-Smtp-Source: ABdhPJwNHy+VN+JXLWCDADBmqbJunnYlm8shlOKM3wtyDi3l0Nvo++c+lLHsCuWeoJlsi7IJiccAZFbP2qFwzcnxW0Q=
-X-Received: by 2002:adf:eb86:0:b0:1e6:8c92:af6b with SMTP id
- t6-20020adfeb86000000b001e68c92af6bmr13872277wrn.116.1646780969857; Tue, 08
- Mar 2022 15:09:29 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xuc98iQ6lLN5ZWjfMkCi08X6OqD4xJL8S5CE7+O2xXo=;
+        b=PnedKXmNjDToJhyL+pWOVt6eHg9H+ZNDCXuFQJSKwKOlCfxiT1MKHxZhH3tHhBfB10
+         GGK1TgwRSnsQZf9W5446TNrlt2Vf91ROMp/KTrWlt1+4zTsd6KuJcCUE2XRH5vxzhPhS
+         LlyfckNcyMWCrfLI4VKAr/RuCfIq7pvfo8Wk6cSWfxQ7VV/3GbiVa7s4Kb8+ZE8iYvj5
+         Acpq88FOcc7F9V5Syr7On3YotbLb9zZrKzm2GrgQmqjilJfKF7iPpKp5aO8wArLcSyf3
+         PYck+l2n1JZRK5/iXaZ3x1piVPQ+4sCMrykrX9nLdeDEvp9W4JM2yY6OmpEW/+OcaGY9
+         MYxw==
+X-Gm-Message-State: AOAM531iyPt33yrI6Fdtj9vsMLlmoufcTHwqIXhk6GLjQPNqyd7SLZWL
+        TmEdcxY+sua5djtp1eLDNOb46A==
+X-Google-Smtp-Source: ABdhPJxRpGsmLOMyITa2cLxJpOaQ0mqRRzUUbDozIlPaZ8piOB6fxUH+hJr2w8mLPUw47UxqSD2a9Q==
+X-Received: by 2002:a9d:518c:0:b0:5b2:364b:7fbd with SMTP id y12-20020a9d518c000000b005b2364b7fbdmr5766151otg.255.1646780987672;
+        Tue, 08 Mar 2022 15:09:47 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id z26-20020a9d62da000000b005b23f5488cdsm68215otk.52.2022.03.08.15.09.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 15:09:46 -0800 (PST)
+Date:   Tue, 8 Mar 2022 17:09:45 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        robh+dt@kernel.org
+Subject: Re: [PATCH v3 3/6] clk: qcom: gcc: Add emac GDSC support for SM8150
+Message-ID: <YifiOa38WGMAeEq7@builder.lan>
+References: <20220303084824.284946-1-bhupesh.sharma@linaro.org>
+ <20220303084824.284946-4-bhupesh.sharma@linaro.org>
+ <CAA8EJpow=NPM5TrK24qsziVWgrD0cfbtwUxBD45CE2EQAg-msA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220307184935.1704614-1-kaleshsingh@google.com>
- <20220307184935.1704614-2-kaleshsingh@google.com> <CAE-0n52LmVRkrSNN=eJf+TYYnmesVjFv99nnetYvRWshm82rOg@mail.gmail.com>
-In-Reply-To: <CAE-0n52LmVRkrSNN=eJf+TYYnmesVjFv99nnetYvRWshm82rOg@mail.gmail.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Tue, 8 Mar 2022 15:09:18 -0800
-Message-ID: <CAC_TJvc6LYp95BXQc0DSBBBAZpYpixa+NyHKMLFWsBADD5Ubhg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/8] KVM: arm64: Introduce hyp_alloc_private_va_range()
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Andrew Scull <ascull@google.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpow=NPM5TrK24qsziVWgrD0cfbtwUxBD45CE2EQAg-msA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 12:21 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-HI Stephen. Thanks for the review.
+On Thu 03 Mar 04:33 CST 2022, Dmitry Baryshkov wrote:
 
-> Quoting Kalesh Singh (2022-03-07 10:48:59)
-> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > index bc2aba953299..ccb2847ee2f4 100644
-> > --- a/arch/arm64/kvm/mmu.c
-> > +++ b/arch/arm64/kvm/mmu.c
-> > @@ -457,22 +457,17 @@ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
-> >         return 0;
-> >  }
+> On Thu, 3 Mar 2022 at 11:48, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
 > >
-> > -static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
-> > -                                       unsigned long *haddr,
-> > -                                       enum kvm_pgtable_prot prot)
+> > Add the EMAC GDSC defines and driver structures for SM8150.
+> >
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  drivers/clk/qcom/gcc-sm8150.c               | 10 ++++++++++
+> >  include/dt-bindings/clock/qcom,gcc-sm8150.h |  1 +
+> >  2 files changed, 11 insertions(+)
+> >
+> > diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
+> > index 85a431ac417b..08ba29e3a835 100644
+> > --- a/drivers/clk/qcom/gcc-sm8150.c
+> > +++ b/drivers/clk/qcom/gcc-sm8150.c
+> > @@ -3448,6 +3448,15 @@ static struct clk_branch gcc_video_xo_clk = {
+> >         },
+> >  };
+> >
+> 
+> Is it available on sm8150 or only on sa8155au? I think this deserves
+> at least a comment.
+> 
+
+The ethernet controller is there on SM8150 as well.
+
+Regards,
+Bjorn
+
+> > +static struct gdsc emac_gdsc = {
+> > +       .gdscr = 0x6004,
+> > +       .pd = {
+> > +               .name = "emac_gdsc",
+> > +       },
+> > +       .pwrsts = PWRSTS_OFF_ON,
+> > +       .flags = POLL_CFG_GDSCR,
+> > +};
 > > +
-> > +/**
-> > + * hyp_alloc_private_va_range - Allocates a private VA range.
-> > + * @size:      The size of the VA range to reserve.
-> > + *
-> > + * The private VA range is allocated below io_map_base and
-> > + * aligned based on the order of @size.
->
-> Add what it returns?
->
-> Return: Start address of allocated VA range or some error value... (I don't
-> understand this part).
->
-> It may also be a good idea to write out what VA is in the description:
->
-> The private virtual address (VA) range is allocated below io_map_base
->
-
-Ack
-
-> > + */
-> > +unsigned long hyp_alloc_private_va_range(size_t size)
-> >  {
-> >         unsigned long base;
-> > -       int ret = 0;
-> > -
-> > -       if (!kvm_host_owns_hyp_mappings()) {
-> > -               base = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
-> > -                                        phys_addr, size, prot);
-> > -               if (IS_ERR_OR_NULL((void *)base))
-> > -                       return PTR_ERR((void *)base);
-> > -               *haddr = base;
-> > -
-> > -               return 0;
-> > -       }
+> >  static struct gdsc usb30_prim_gdsc = {
+> >         .gdscr = 0xf004,
+> >         .pd = {
+> > @@ -3714,6 +3723,7 @@ static const struct qcom_reset_map gcc_sm8150_resets[] = {
+> >  };
 > >
-> >         mutex_lock(&kvm_hyp_pgd_mutex);
+> >  static struct gdsc *gcc_sm8150_gdscs[] = {
+> > +       [EMAC_GDSC] = &emac_gdsc,
+> >         [USB30_PRIM_GDSC] = &usb30_prim_gdsc,
+> >         [USB30_SEC_GDSC] = &usb30_sec_gdsc,
+> >  };
+> > diff --git a/include/dt-bindings/clock/qcom,gcc-sm8150.h b/include/dt-bindings/clock/qcom,gcc-sm8150.h
+> > index 3e1a91876610..40596b9ded06 100644
+> > --- a/include/dt-bindings/clock/qcom,gcc-sm8150.h
+> > +++ b/include/dt-bindings/clock/qcom,gcc-sm8150.h
+> > @@ -243,5 +243,6 @@
+> >  /* GCC GDSCRs */
+> >  #define USB30_PRIM_GDSC                     4
+> >  #define USB30_SEC_GDSC                                         5
+> > +#define EMAC_GDSC                                              6
 > >
-> > @@ -484,29 +479,53 @@ static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
-> >          *
-> >          * The allocated size is always a multiple of PAGE_SIZE.
-> >          */
-> > -       size = PAGE_ALIGN(size + offset_in_page(phys_addr));
-> > -       base = io_map_base - size;
-> > +       base = io_map_base - PAGE_ALIGN(size);
-> > +
-> > +       /* Align the allocation based on the order of its size */
-> > +       base = ALIGN_DOWN(base, PAGE_SIZE << get_order(size));
+> >  #endif
+> > --
+> > 2.35.1
 > >
-> >         /*
-> >          * Verify that BIT(VA_BITS - 1) hasn't been flipped by
-> >          * allocating the new area, as it would indicate we've
-> >          * overflowed the idmap/IO address range.
-> >          */
-> > -       if ((base ^ io_map_base) & BIT(VA_BITS - 1))
-> > -               ret = -ENOMEM;
-> > +       if (!base || (base ^ io_map_base) & BIT(VA_BITS - 1))
-> > +               base = (unsigned long)ERR_PTR(-ENOMEM);
->
-> It looks odd to use an error pointer casted to unsigned long to return
-> from an address allocation function. Why not pass a pointer for base
-> like the function was written before and return an int from this
-> function with 0 for success and negative error value?Otherwise some
-> sort of define should made like DMA_MAPPING_ERROR and that can be used
-> to indicate to the caller that the allocation failed, or a simple zero
-> may work?
-
-I wanted to keep consistent between the pkvm and traditional nvhe
-code. I will refactor both *alloc_private_va_range() functions to take
-a pointer and return an int error if that's preferred. There would
-still be a case of this kind of cast in
-__pkvm_create_private_mapping() which does return an unsigned long
-address or ERR_PTR(...). It looks like it was made to return the
-address to facilitate use as a hypercall (@Quentin CMIW).
-
->
-> >         else
-> >                 io_map_base = base;
-> >
-> >         mutex_unlock(&kvm_hyp_pgd_mutex);
-> >
-> > -       if (ret)
-> > -               goto out;
-> > +       return base;
-> > +}
-> > +
-> > +static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
-> > +                                       unsigned long *haddr,
-> > +                                       enum kvm_pgtable_prot prot)
-> > +{
-> > +       unsigned long addr;
-> > +       int ret = 0;
-> > +
-> > +       if (!kvm_host_owns_hyp_mappings()) {
-> > +               addr = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
-> > +                                        phys_addr, size, prot);
-> > +               if (IS_ERR((void *)addr))
->
-> IS_ERR_VALUE()?
-
-Good idea, will remove the extra cast.
-
->
-> > +                       return PTR_ERR((void *)addr);
-> > +               *haddr = addr;
-> > +
-> > +               return 0;
-> > +       }
-> > +
-> > +       size += offset_in_page(phys_addr);
-> > +       addr = hyp_alloc_private_va_range(size);
-> > +       if (IS_ERR((void *)addr))
->
-> IS_ERR_VALUE()?
-
-Ack
-
->
-> > +               return PTR_ERR((void *)addr);
-> >
-> > -       ret = __create_hyp_mappings(base, size, phys_addr, prot);
-> > +       ret = __create_hyp_mappings(addr, size, phys_addr, prot);
-> >         if (ret)
-> >                 goto out;
-> >
-> > -       *haddr = base + offset_in_page(phys_addr);
-> > +       *haddr = addr + offset_in_page(phys_addr);
-> >  out:
-> >         return ret;
->
-> Would be simpler to remove the goto, or return early.
->
->         if (!ret)
->                 *haddr = addr + offset_in_page(phys_addr);
->
->         return ret;
-
-Agreed, I'll remove the goto in the next version.
-
-Thanks,
-Kalesh
->
-> >  }
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry

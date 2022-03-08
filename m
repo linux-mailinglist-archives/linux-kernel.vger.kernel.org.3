@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECC14D1891
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795C94D188F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240179AbiCHNBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
+        id S241484AbiCHNBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:01:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347071AbiCHNBF (ORCPT
+        with ESMTP id S235812AbiCHNB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:01:05 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E1F47AE8;
-        Tue,  8 Mar 2022 05:00:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646744405; x=1678280405;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=murWsNFPOe1OlSq+kj5GaepW/BVIXTdSkeIeUhjHRNg=;
-  b=ahkuBYs1tXbnkkWSCnjvFnmwyQWDWJtmcq8akufPw2CnjQKV01mFPMZ1
-   xtorutZ4PZbhfrKrC36Qlj9OOmE9vkowbRvv0qACN1QHwWkFCkYpCQ8on
-   Nqotn1tpp5sBlnSKzaoKuHQFOhu6WOM/soLx7p9inhkmNd0M/hr8bsjtL
-   4k4ZRVJzo38dh6DySNDuvGHFyzZZ+XnTevt9sdPunI1bTo9zMiDem1H/K
-   FuJZm+c/YLflCQMdzwGrBKMy2z3Gpz23qn7yrLUJN+iAS793J3IyPe4Lb
-   84FzIoqfwPkOu/GJp5FGYjS2dJOBhnHJkA2dtr32JsBxDDfyNeSHYdWJq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="315391326"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="315391326"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:00:04 -0800
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="537558240"
-Received: from lpessina-mobl.ger.corp.intel.com ([10.249.37.31])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 05:00:01 -0800
-Date:   Tue, 8 Mar 2022 14:59:59 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH 1/7] serial: 8250_dwlib: RS485 HW half duplex support
-In-Reply-To: <20220308122220.GA24694@wunner.de>
-Message-ID: <d9aabfe-1179-67c2-98d1-f36e7e698f33@linux.intel.com>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com> <20220302095606.14818-2-ilpo.jarvinen@linux.intel.com> <20220306184857.GA19394@wunner.de> <CAHp75Vdxa_p866t5B7zJ8nHS-v+tu3vLiW0=vaBznnyCGyve_g@mail.gmail.com> <ab82f6a-8d1b-8e89-4ea-77d1a55667d2@linux.intel.com>
- <20220307191854.GA27748@wunner.de> <YiZfdlw0A75cojCx@smile.fi.intel.com> <6931d6ad-7520-b585-a8ba-35349e730bb@linux.intel.com> <20220308122220.GA24694@wunner.de>
+        Tue, 8 Mar 2022 08:01:29 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9072BB36;
+        Tue,  8 Mar 2022 05:00:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646744422;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=VtDYvUnQRbgLODj+rX79mLvwKSW8TYtJTAsBlNabCFw=;
+    b=rafLf+uUZEtqViDhU6H6lF3wCMqQdZHfkaZ9B3xnaIeBK+1vLLLm3piTpF+rIVy1bB
+    QwigEkw39QsCqnackRhQS2N5SAeMEQ7qfu0XmmiDAlPiFC+cnD7iSnuU1rbrHjRLPZgC
+    asH/4prv8EySixlwtOT1kZm8oYH9C1P/OhAP0HzGlWyqZBzzbF4qDA1ucxFyFnx1bsUQ
+    WFucOqejH0svlG83BoOz9tPGSCvtqIbDxrrK9hcNH78zd4ieEnNQ9DUDgiMQPs7bMQZR
+    UuUZ4deah2JueGccJGipdAxJQKxrOmXw9m8Jd0zn5ejfYstnqAWSLaJVycAZIqPjQomE
+    zP9Q==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVbpc9Y="
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
+    with ESMTPSA id n729cey28D0LSJD
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 8 Mar 2022 14:00:21 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH] ARM: dts: Fix mmc order for omap3-gta04
+Date:   Tue,  8 Mar 2022 14:00:20 +0100
+Message-Id: <dc9173ee3d391d9e92b7ab8ed4f84b29f0a21c83.1646744420.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-177724195-1646744404=:1613"
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,30 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+commit a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
 
---8323329-177724195-1646744404=:1613
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+introduces general mmc aliases. Let's tailor them to the need
+of the GTA04 board which does not make use of mmc2 and mmc3 interfaces.
 
-On Tue, 8 Mar 2022, Lukas Wunner wrote:
+Fixes: commit a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+---
+ arch/arm/boot/dts/omap3-gta04.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> On Tue, Mar 08, 2022 at 02:16:56PM +0200, Ilpo Järvinen wrote:
-> > The SoC also has a pin to select between RS485 and RS232. With a combo 
-> > transceiver, TCR-based heuristic just runs into the same problems as the 
-> > version-based one did.
-> 
-> I thought this was about detecting whether hardware-assisted DE assertion
-> may be used (versus software-controlled), not about whether to enable
-> RS-485 mode.  Right?
-
-HW DE assertion only works when RS485 mode is enabled so I don't see how 
-these questions could be easily decoupled like that. That's assuming with 
-"software-controlled" you mean RTS(RS232)+em485?
-
-
+diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
+index 7e3d8147e2c1..0365f06165e9 100644
+--- a/arch/arm/boot/dts/omap3-gta04.dtsi
++++ b/arch/arm/boot/dts/omap3-gta04.dtsi
+@@ -31,6 +31,8 @@ chosen {
+ 	aliases {
+ 		display0 = &lcd;
+ 		display1 = &tv0;
++		/delete-property/ mmc2;
++		/delete-property/ mmc3;
+ 	};
+ 
+ 	ldo_3v3: fixedregulator {
 -- 
- i.
+2.33.0
 
---8323329-177724195-1646744404=:1613--

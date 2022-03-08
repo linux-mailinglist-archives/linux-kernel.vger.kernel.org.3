@@ -2,232 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B753A4D16B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F564D16BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346633AbiCHL53 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 8 Mar 2022 06:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
+        id S1346650AbiCHL6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235676AbiCHL51 (ORCPT
+        with ESMTP id S1346639AbiCHL5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:57:27 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF7E3982C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:56:28 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nRYRx-00075n-Lt; Tue, 08 Mar 2022 12:56:21 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
-        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        wens@csie.org, maxime@cerno.tech, gfavor@ventanamicro.com,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        mick@ics.forth.gr, allen.baum@esperantotech.com,
-        jscheid@ventanamicro.com, rtrauben@gmail.com, samuel@sholland.org,
-        cmuellner@linux.com, philipp.tomsich@vrull.eu
-Subject: Re: [PATCH v7 00/13] riscv: support for Svpbmt and D1 memory types
-Date:   Tue, 08 Mar 2022 12:56:20 +0100
-Message-ID: <2347714.EJkkgcx2xJ@diego>
-In-Reply-To: <mhng-4052f547-4a01-44ca-9286-97cc57819fbc@palmer-ri-x1c9>
-References: <mhng-4052f547-4a01-44ca-9286-97cc57819fbc@palmer-ri-x1c9>
+        Tue, 8 Mar 2022 06:57:52 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE13D3982C;
+        Tue,  8 Mar 2022 03:56:55 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 843AFD6E;
+        Tue,  8 Mar 2022 03:56:55 -0800 (PST)
+Received: from [10.57.22.11] (unknown [10.57.22.11])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 86A6F3FA5D;
+        Tue,  8 Mar 2022 03:56:53 -0800 (PST)
+Message-ID: <c77c93bb-f863-47c8-0ba0-3fc63530a9e1@arm.com>
+Date:   Tue, 8 Mar 2022 11:56:51 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v2] coresight: core: Fix coresight device probe failure
+ issue
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20220304082350.30069-1-quic_jinlmao@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220304082350.30069-1-quic_jinlmao@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+Hi Jinlong
 
-Am Dienstag, 8. März 2022, 01:47:25 CET schrieb Palmer Dabbelt:
-> On Mon, 07 Mar 2022 12:52:57 PST (-0800), heiko@sntech.de wrote:
-> > Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
-> > for things like non-cacheable pages or I/O memory pages.
-> >
-> >
-> > So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
-> > types) using the alternatives framework.
-> >
-> > This includes a number of changes to the alternatives mechanism itself.
-> > The biggest one being the move to a more central location, as I expect
-> > in the future, nearly every chip needing some sort of patching, be it
-> > either for erratas or for optional features (svpbmt or others).
-> >
-> > Detection of the svpbmt functionality is done via Atish's isa extension
-> > handling series [0] and thus does not need any dt-parsing of its own
-> > anymore.
-> >
-> > The series also introduces support for the memory types of the D1
-> > which are implemented differently to svpbmt. But when patching anyway
-> > it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
-> > location.
-> >
-> > The only slightly bigger difference is that the "normal" type is not 0
-> > as with svpbmt, so kernel patches for this PMA type need to be applied
-> > even before the MMU is brought up, so the series introduces a separate
-> > stage for that.
-> >
-> >
-> > In theory this series is 3 parts:
-> > - sbi cache-flush / null-ptr
+On 04/03/2022 08:23, Mao Jinlong wrote:
+> It is possibe that probe failure issue happens when the device
+> and its child_device's probe happens at the same time.
+> In coresight_make_links, has_conns_grp is true for parent, but
+> has_conns_grp is false for child device as has_conns_grp is set
+> to true in coresight_create_conns_sysfs_group. The probe of parent
+> device will fail at this condition. Add has_conns_grp check for
+> child device before make the links and make the process from
+> device_register to connection_create be atomic to avoid this
+> probe failure issue.
 > 
-> That first patch looks like an acceptable candidate for fixes.  If 
-> there's a regression that manifests I'm happy to take it, but if it's 
-> only possible to manifest a crash with the new stuff then I'm OK just 
-> holding off until the merge window.
-
-While right now only my poking around the early init via alternatives
-is affected, the problem exists for everyone.
-
-I.e. I do consider flush_icache_all() to be generic enough that we
-should expect someone trying to call this in some early code-path
-as well.
-
-But any call to flush_icache_all() before sbi_init() ran will cause the
-breakage that is fixed by patch1 .
-
-
-So it doesn't look like any _current_ code path has that issue, but
-it might be good to just pick patch1 for the next merge window
-individually?
-
-
-
-> > - alternatives improvements
-> > - svpbmt+d1
-> >
-> > So expecially patches from the first 2 areas could be applied when
-> > deemed ready, I just thought to keep it together to show-case where
-> > the end-goal is and not requiring jumping between different series.
-> >
-> >
-> > I picked the recipient list from the previous versions, hopefully
-> > I didn't forget anybody.
-> >
-> > changes in v7:
-> > - fix typo in patch1 (Atish)
-> > - moved to Atish's isa-extension framework
-> > - and therefore move regular boot-alternatives directly behind fill_hwcaps
-> > - change T-Head errata Kconfig text (Atish)
+> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Suggested-by: Mike Leach <mike.leach@linaro.org>
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-core.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> I was just poking around v6, so I have some minor comments there.  None 
-> of those need to block merging this, but I am getting a bunch of build 
-> failures under allmodconfig
-> 
->     $ make.riscv allmodconfig
->     #
->     # configuration written to .config
->     #
->     $ make.riscv mm/kasan/init.o
->       SYNC    include/config/auto.conf.cmd
->       CALL    scripts/atomic/check-atomics.sh
->       CC      arch/riscv/kernel/asm-offsets.s
->       CALL    scripts/checksyscalls.sh
->       CC      mm/kasan/init.o
->     ./arch/riscv/include/asm/pgtable.h: Assembler messages:
->     ./arch/riscv/include/asm/pgtable.h:323: Error: attempt to move .org backwards
->     make[2]: *** [scripts/Makefile.build:288: mm/kasan/init.o] Error 1
->     make[1]: *** [scripts/Makefile.build:550: mm/kasan] Error 2
->     make: *** [Makefile:1831: mm] Error 2
-> 
-> Unfortunately my build box just blew up so I haven't had time to confim 
-> this still exists on v7, but nothing's jumping out as a fix.  I've put 
-> this on the riscv-d1 branch at kernel.org/palmer/linux, not sure exactly 
-> what's going on but I'm guessing one of the macros has gone off the 
-> rails.  I'm going to look at something else (as this one at least 
-> depends on Atish's patches), but LMK if you've got the time to look into 
-> this or if I should.
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 88653d1c06a4..b3e3bc59c09b 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -1382,7 +1382,7 @@ static int coresight_fixup_device_conns(struct coresight_device *csdev)
+>   			continue;
+>   		conn->child_dev =
+>   			coresight_find_csdev_by_fwnode(conn->child_fwnode);
+> -		if (conn->child_dev) {
+> +		if (conn->child_dev && conn->child_dev->has_conns_grp) {
+>   			ret = coresight_make_links(csdev, conn,
+>   						   conn->child_dev);
+>   			if (ret)
+> @@ -1594,7 +1594,8 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   	refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
+>   	if (!refcnts) {
+>   		ret = -ENOMEM;
+> -		goto err_free_csdev;
+> +		kfree(csdev);
+> +		goto err_out;
+>   	}
+>   
+>   	csdev->refcnt = refcnts;
+> @@ -1619,8 +1620,10 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   	csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
+>   	dev_set_name(&csdev->dev, "%s", desc->name);
+>   
+> +	mutex_lock(&coresight_mutex);
+>   	ret = device_register(&csdev->dev);
+>   	if (ret) {
+> +		mutex_unlock(&coresight_mutex);
+>   		put_device(&csdev->dev);
+>   		/*
+>   		 * All resources are free'd explicitly via
+> @@ -1634,6 +1637,7 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   		ret = etm_perf_add_symlink_sink(csdev);
+>   
+>   		if (ret) {
+> +			mutex_unlock(&coresight_mutex);
+>   			device_unregister(&csdev->dev);
+>   			/*
+>   			 * As with the above, all resources are free'd
+> @@ -1645,8 +1649,6 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   		}
+>   	}
+>   
+> -	mutex_lock(&coresight_mutex);
+> -
+>   	ret = coresight_create_conns_sysfs_group(csdev);
+>   	if (!ret)
+>   		ret = coresight_fixup_device_conns(csdev);
+> @@ -1663,8 +1665,6 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
+>   
+>   	return csdev;
+>   
+> -err_free_csdev:
+> -	kfree(csdev);
+>   err_out:
+>   	/* Cleanup the connection information */
+>   	coresight_release_platform_data(NULL, desc->pdata);
 
-Yeah, we now depend on Atish's isa-extension parsing (same for my cmo
-series and some more series I saw on the list), so getting that into a
-mergeable position would be really great :-)
-
-"attempt to move .org backwards" seems to be the telltale sign of the
-alternatives blocks not matching up in size. While I definitly didn't see
-anything like this in my tests on qemu + d1, I'll try to investigate where
-that comes from.
-
-
-Heiko
-
-
-
-> > changes in v6:
-> > - rebase onto 5.17-rc1
-> > - handle sbi null-ptr differently
-> > - improve commit messages
-> > - use riscv,mmu as property name
-> >
-> > changes in v5:
-> > - move to use alternatives for runtime-patching
-> > - add D1 variant
-> >
-> >
-> > [0] https://lore.kernel.org/r/20220222204811.2281949-2-atishp@rivosinc.com
-> >
-> >
-> > Heiko Stuebner (12):
-> >   riscv: prevent null-pointer dereference with sbi_remote_fence_i
-> >   riscv: integrate alternatives better into the main architecture
-> >   riscv: allow different stages with alternatives
-> >   riscv: implement module alternatives
-> >   riscv: implement ALTERNATIVE_2 macro
-> >   riscv: extend concatenated alternatives-lines to the same length
-> >   riscv: prevent compressed instructions in alternatives
-> >   riscv: move boot alternatives to after fill_hwcap
-> >   riscv: Fix accessing pfn bits in PTEs for non-32bit variants
-> >   riscv: add cpufeature handling via alternatives
-> >   riscv: remove FIXMAP_PAGE_IO and fall back to its default value
-> >   riscv: add memory-type errata for T-Head
-> >
-> > Wei Fu (1):
-> >   riscv: add RISC-V Svpbmt extension support
-> >
-> >  arch/riscv/Kconfig.erratas                  |  29 +++--
-> >  arch/riscv/Kconfig.socs                     |   1 -
-> >  arch/riscv/Makefile                         |   2 +-
-> >  arch/riscv/errata/Makefile                  |   2 +-
-> >  arch/riscv/errata/sifive/errata.c           |  17 ++-
-> >  arch/riscv/errata/thead/Makefile            |   1 +
-> >  arch/riscv/errata/thead/errata.c            |  85 +++++++++++++++
-> >  arch/riscv/include/asm/alternative-macros.h | 114 +++++++++++---------
-> >  arch/riscv/include/asm/alternative.h        |  16 ++-
-> >  arch/riscv/include/asm/errata_list.h        |  52 +++++++++
-> >  arch/riscv/include/asm/fixmap.h             |   2 -
-> >  arch/riscv/include/asm/hwcap.h              |   1 +
-> >  arch/riscv/include/asm/pgtable-32.h         |  17 +++
-> >  arch/riscv/include/asm/pgtable-64.h         |  79 +++++++++++++-
-> >  arch/riscv/include/asm/pgtable-bits.h       |  10 --
-> >  arch/riscv/include/asm/pgtable.h            |  53 +++++++--
-> >  arch/riscv/include/asm/vendorid_list.h      |   1 +
-> >  arch/riscv/kernel/Makefile                  |   1 +
-> >  arch/riscv/{errata => kernel}/alternative.c |  48 +++++++--
-> >  arch/riscv/kernel/cpu.c                     |   1 +
-> >  arch/riscv/kernel/cpufeature.c              |  80 +++++++++++++-
-> >  arch/riscv/kernel/module.c                  |  29 +++++
-> >  arch/riscv/kernel/sbi.c                     |  10 +-
-> >  arch/riscv/kernel/setup.c                   |   2 +
-> >  arch/riscv/kernel/smpboot.c                 |   4 -
-> >  arch/riscv/kernel/traps.c                   |   2 +-
-> >  arch/riscv/mm/init.c                        |   1 +
-> >  27 files changed, 546 insertions(+), 114 deletions(-)
-> >  create mode 100644 arch/riscv/errata/thead/Makefile
-> >  create mode 100644 arch/riscv/errata/thead/errata.c
-> >  rename arch/riscv/{errata => kernel}/alternative.c (59%)
-> 
+Could we consolidate the unlock sequence to a single point with 
+something like this (untested):
 
 
+diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+b/drivers/hwtracing/coresight/coresight-core.c
+index af00dca8d1ac..198ee140c6e6 100644
+--- a/drivers/hwtracing/coresight/coresight-core.c
++++ b/drivers/hwtracing/coresight/coresight-core.c
+@@ -1571,6 +1571,7 @@ struct coresight_device *coresight_register(struct 
+coresight_desc *desc)
+  	int nr_refcnts = 1;
+  	atomic_t *refcnts = NULL;
+  	struct coresight_device *csdev;
++	bool registered = false;
 
+  	csdev = kzalloc(sizeof(*csdev), GFP_KERNEL);
+  	if (!csdev) {
+@@ -1591,7 +1592,8 @@ struct coresight_device *coresight_register(struct 
+coresight_desc *desc)
+  	refcnts = kcalloc(nr_refcnts, sizeof(*refcnts), GFP_KERNEL);
+  	if (!refcnts) {
+  		ret = -ENOMEM;
+-		goto err_free_csdev;
++		kfree(csdev);
++		goto err_out;
+  	}
 
+  	csdev->refcnt = refcnts;
+@@ -1616,6 +1618,13 @@ struct coresight_device 
+*coresight_register(struct coresight_desc *desc)
+  	csdev->dev.fwnode = fwnode_handle_get(dev_fwnode(desc->dev));
+  	dev_set_name(&csdev->dev, "%s", desc->name);
+
++	/*
++	 * Make sure the device registration and the connection fixup
++	 * are synchronised, so that we don't see uninitialised devices
++	 * on the coresight bus while trying to resolve the connections.
++	 */
++	mutex_lock(&coresight_mutex);
++
+  	ret = device_register(&csdev->dev);
+  	if (ret) {
+  		put_device(&csdev->dev);
+@@ -1623,7 +1632,7 @@ struct coresight_device *coresight_register(struct 
+coresight_desc *desc)
+  		 * All resources are free'd explicitly via
+  		 * coresight_device_release(), triggered from put_device().
+  		 */
+-		goto err_out;
++		goto out_unlock;
+  	}
+
+  	if (csdev->type == CORESIGHT_DEV_TYPE_SINK ||
+@@ -1638,11 +1647,11 @@ struct coresight_device 
+*coresight_register(struct coresight_desc *desc)
+  			 * from put_device(), which is in turn called from
+  			 * function device_unregister().
+  			 */
+-			goto err_out;
++			goto out_unlock;
+  		}
+  	}
+-
+-	mutex_lock(&coresight_mutex);
++	/* Device is now registered */
++	registered = true;
+
+  	ret = coresight_create_conns_sysfs_group(csdev);
+  	if (!ret)
+@@ -1652,16 +1661,15 @@ struct coresight_device 
+*coresight_register(struct coresight_desc *desc)
+  	if (!ret && cti_assoc_ops && cti_assoc_ops->add)
+  		cti_assoc_ops->add(csdev);
+
++out_unlock:
+  	mutex_unlock(&coresight_mutex);
+-	if (ret) {
++	/* Success */
++	if (!ret)
++		return csdev;
++
++	/* Unregister the device if needed */
++	if (registered)
+  		coresight_unregister(csdev);
+-		return ERR_PTR(ret);
+-	}
+-
+-	return csdev;
+-
+-err_free_csdev:
+-	kfree(csdev);
+  err_out:
+  	/* Cleanup the connection information */
+  	coresight_release_platform_data(NULL, desc->pdata);
+-- 
+2.35.1

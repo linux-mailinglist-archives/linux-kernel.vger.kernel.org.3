@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B7E4D1403
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4E74D140A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 10:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345539AbiCHJ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 04:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S1345551AbiCHJ7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 04:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345517AbiCHJ6q (ORCPT
+        with ESMTP id S1345517AbiCHJ72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:58:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5BF220E3;
-        Tue,  8 Mar 2022 01:57:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08F38B817E5;
-        Tue,  8 Mar 2022 09:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E02C340EB;
-        Tue,  8 Mar 2022 09:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646733465;
-        bh=7GPwiQFAd5CuYvQ6BoG6+MDynbTBHNmzU2GdfJdpniw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eyV5TecsHnCQcROeM6ptXccS+s2HQjlww+bQgyjZlDS12CoULoQ9IwWiP3e4BOx+R
-         xTttNLd0bQzd40C40Q+UNSCG7MkHW3syr8Rwwq+5XkKzHqxDFeJVg7KjprApnRaiL4
-         EBBlUc+GVKbwA0LxjpX4jt/a+64eFlAefvSZifuk=
-Date:   Tue, 8 Mar 2022 10:57:42 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     mst@redhat.com, jasowang@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org,
-        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
- whilst still in use
-Message-ID: <YicolvcbY9VT6AKc@kroah.com>
-References: <20220307191757.3177139-1-lee.jones@linaro.org>
- <YiZeB7l49KC2Y5Gz@kroah.com>
- <YicPXnNFHpoJHcUN@google.com>
- <Yicalf1I6oBytbse@kroah.com>
- <Yicer3yGg5rrdSIs@google.com>
+        Tue, 8 Mar 2022 04:59:28 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4882137012
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 01:58:32 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nRWbo-00070Z-K6; Tue, 08 Mar 2022 10:58:24 +0100
+Message-ID: <2ed036b4-5a0a-f017-17e3-7922fcc2e8cc@pengutronix.de>
+Date:   Tue, 8 Mar 2022 10:58:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yicer3yGg5rrdSIs@google.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [Linux-stm32] [PATCH v2 12/13] ARM: dts: stm32: enable optee
+ firmware and SCMI support on STM32MP13
+Content-Language: en-US
+To:     Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Etienne Carriere <etienne.carriere@linaro.org>
+References: <20220225133137.813919-1-gabriel.fernandez@foss.st.com>
+ <20220225133137.813919-13-gabriel.fernandez@foss.st.com>
+ <1d90078d-e27f-539d-d010-78a3c4da565a@pengutronix.de>
+ <65581f3a-3ae6-2dd3-7571-1e64982b5f50@foss.st.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <65581f3a-3ae6-2dd3-7571-1e64982b5f50@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 09:15:27AM +0000, Lee Jones wrote:
-> On Tue, 08 Mar 2022, Greg KH wrote:
+Helo Gabriel,
+
+On 03.03.22 14:09, Gabriel FERNANDEZ wrote:
 > 
-> > On Tue, Mar 08, 2022 at 08:10:06AM +0000, Lee Jones wrote:
-> > > On Mon, 07 Mar 2022, Greg KH wrote:
-> > > 
-> > > > On Mon, Mar 07, 2022 at 07:17:57PM +0000, Lee Jones wrote:
-> > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
-> > > > > to vhost_get_vq_desc().  All we have to do here is take the same lock
-> > > > > during virtqueue clean-up and we mitigate the reported issues.
-> > > > > 
-> > > > > Also WARN() as a precautionary measure.  The purpose of this is to
-> > > > > capture possible future race conditions which may pop up over time.
-> > > > > 
-> > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
-> > > > > 
-> > > > > Cc: <stable@vger.kernel.org>
-> > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
-> > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > > > > ---
-> > > > >  drivers/vhost/vhost.c | 10 ++++++++++
-> > > > >  1 file changed, 10 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > > > > index 59edb5a1ffe28..ef7e371e3e649 100644
-> > > > > --- a/drivers/vhost/vhost.c
-> > > > > +++ b/drivers/vhost/vhost.c
-> > > > > @@ -693,6 +693,15 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> > > > >  	int i;
-> > > > >  
-> > > > >  	for (i = 0; i < dev->nvqs; ++i) {
-> > > > > +		/* No workers should run here by design. However, races have
-> > > > > +		 * previously occurred where drivers have been unable to flush
-> > > > > +		 * all work properly prior to clean-up.  Without a successful
-> > > > > +		 * flush the guest will malfunction, but avoiding host memory
-> > > > > +		 * corruption in those cases does seem preferable.
-> > > > > +		 */
-> > > > > +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
-> > > > 
-> > > > So you are trading one syzbot triggered issue for another one in the
-> > > > future?  :)
-> > > > 
-> > > > If this ever can happen, handle it, but don't log it with a WARN_ON() as
-> > > > that will trigger the panic-on-warn boxes, as well as syzbot.  Unless
-> > > > you want that to happen?
-> > > 
-> > > No, Syzbot doesn't report warnings, only BUGs and memory corruption.
-> > 
-> > Has it changed?  Last I looked, it did trigger on WARN_* calls, which
-> > has resulted in a huge number of kernel fixes because of that.
+> On 2/25/22 16:13, Ahmad Fatoum wrote:
+>> Hello Gabriel,
+>>
+>> On 25.02.22 14:31, gabriel.fernandez@foss.st.com wrote:
+>>> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+>>> +    firmware {
+>>> +        optee {
+>>> +            method = "smc";
+>>> +            compatible = "linaro,optee-tz";
+>>> +        };
+>>> +
+>>> +        scmi: scmi {
+>>> +            compatible = "linaro,scmi-optee";
+>> This compatible doesn't seem to be documented upstream. I am looking at v5.17-rc5.
+>> Do you have a reference detailing the difference between this conduit and
+>> plain arm,scmi-smc (as used with TF-A on the STM32MP151).
+>>
+>> Cheers,
+>> Ahmad
 > 
-> Everything is customisable in syzkaller, so maybe there are specific
-> builds which panic_on_warn enabled, but none that I'm involved with
-> do.
-
-Many systems run with panic-on-warn (i.e. the cloud), as they want to
-drop a box and restart it if anything goes wrong.
-
-That's why syzbot reports on WARN_* calls.  They should never be
-reachable by userspace actions.
-
-> Here follows a topical example.  The report above in the Link: tag
-> comes with a crashlog [0].  In there you can see the WARN() at the
-> bottom of vhost_dev_cleanup() trigger many times due to a populated
-> (non-flushed) worker list, before finally tripping the BUG() which
-> triggers the report:
+> Hi
 > 
-> [0] https://syzkaller.appspot.com/text?tag=CrashLog&x=16a61fce700000
+> Ahmad,
+> 
+> it's on going.
+> 
+> https://lore.kernel.org/linux-arm-kernel/20211029102118.GG6526@e120937-lin/T/#mf46c83f0aadce3061ee93fa22159405f38d881a0
 
-Ok, so both happens here.  But don't add a warning for something that
-can't happen.  Just handle it and move on.  It looks like you are
-handling it in this code, so please drop the WARN_ON().
+I've found that thread in the meantime and got some clarification on why a new
+transport for OP-TEE was added. One question I still have though is why make
+this transport the default for STM32MP13x instead of using SCMI over SMC like
+you do for STM32MP15x. OP-TEE could still be made to service SCMI over SMC
+and it would allow people employing TF-A as SCMI provider an easier migration
+to the newer SoC.
 
-thanks,
+Cheers,
+Ahmad
 
-greg k-h
+> 
+>>
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <0>;
+>>> +            linaro,optee-channel-id = <0>;
+>>> +            shmem = <&scmi_shm>;
+>>> +
+>>> +            scmi_clk: protocol@14 {
+>>> +                reg = <0x14>;
+>>> +                #clock-cells = <1>;
+>>> +            };
+>>> +
+>>> +            scmi_reset: protocol@16 {
+>>> +                reg = <0x16>;
+>>> +                #reset-cells = <1>;
+>>> +            };
+>>> +        };
+>>> +    };
+>>>       clocks {
+>>>           clk_axi: clk-axi {
+>>>               #clock-cells = <0>;
+>>
+> 
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

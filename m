@@ -2,156 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448904D18BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EFD4D18C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245152AbiCHNIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S243106AbiCHNKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242752AbiCHNH6 (ORCPT
+        with ESMTP id S235722AbiCHNKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:07:58 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDECB48316;
-        Tue,  8 Mar 2022 05:07:01 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id j17so28531780wrc.0;
-        Tue, 08 Mar 2022 05:07:01 -0800 (PST)
+        Tue, 8 Mar 2022 08:10:42 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E7D5FE1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:09:45 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so1397994wmj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 05:09:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oUsYE5vCqqM379ucx1WaZIZjicJ83WEckesSTynIV2A=;
-        b=qiRyr34qJ6m+4Yy3vZMQExJWg/MRLN16JXTN3fqxV8Lx8l1YEfqDpdcyrXdbzdtcoG
-         2oToyyqPloznqkgNw3Og8cDFXdYwwrC9EHk59DHCYFku+nzMEZzFY9nVWKYxT+dlJ3zl
-         q9V6gsLr+WcawSRT/dSq/u2TM1kACKQ94hQLmxNNTmI01ojX4zou7OL69Qq6pWGcy1Ho
-         afSFdx5+huHS5kDlwYgN/k5pGySPsOLsjRfXi2HxGBWij9y8UuNvBigDTjTchtOUSvGg
-         oN2EGjKVfe9zDFpErahU3KFbmBptLyp8ssO61enVZDw+VTKsFWTOooroHDyqkC7ETbhV
-         KxqQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jIHKyDto3VNe0jan3Q4InEbXVdDFGcIeT9QW9S/Z1yA=;
+        b=jbpt5SwnC5KT4ZXh7IxtNsrgGcj7VVb16w1WO4pHVIMxgFqMDC2JVfEPhSd28qEdum
+         FEhf6akwghJ1GAdNEziVNhjKIH5oZhPKAHZWQn6kvsYB/rvdJu07tyfVVUP6n59UEdZk
+         a+sTDSQY7s5diyafXaq1avAkL4tv1Cp+14rasUL2eS3xOajI9/1d7j8SnSIO6wy42QFf
+         DzGN68fI4s1xdo+a7Oa3NAQYmyxk0T39uRam8sUb6a5aU3aUStstOpNCALE5ceUStn7d
+         e9YqUUHzXiq0Fu2QMKF1xi1HYTKkgTe6tmCUVMcZV3yg/ygNVYX8oG0ShH4xujfam9L2
+         B5nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oUsYE5vCqqM379ucx1WaZIZjicJ83WEckesSTynIV2A=;
-        b=ifyUa/23MyUifkZrfKCET57NBQMdHqdgNa//KhoN0mlX0iRJN5LzrFL8qmKKjJZaaH
-         lBKvwK57r3xAO+i3DGRef/1CCxhmAKnrHysKfvqu7hAXoHiSkzXRtgWlrr0osLYqxsKE
-         2TukrP+zlLs0cbVa/P3wJ1/95acN/cHL6HOEEqKcfGoSv32ZXiVF0y3Xm2RGMzH6vcdm
-         DdGvljPgn70nj9Cj0/8N4hAjw6J8Ary1XJKgZJuVwtwmG7MYWN/fYOkUaot1yj3m7eOe
-         HQvboqtmsnER+bakXY9deRmDixFortJX4UxCvY4wHbs6tLu7Of5V0QHj+EVEVFfFnLCx
-         fewA==
-X-Gm-Message-State: AOAM5320FkjshJvxDIRwmoC17QC0xPH6PSG++jz6NGFs28aGLlY3eDPg
-        +oKUbYc0TUwg6fEvdg2S0q4=
-X-Google-Smtp-Source: ABdhPJytf6G5YVGNcujtGVSueQv0J+ZS4ATCYKKO0s2bnfxvp/0LDu0ZRMkZKecWr+wmyLkV14b7Pg==
-X-Received: by 2002:adf:f006:0:b0:203:723d:a2e5 with SMTP id j6-20020adff006000000b00203723da2e5mr1353663wro.188.1646744820378;
-        Tue, 08 Mar 2022 05:07:00 -0800 (PST)
-Received: from monk.home ([2a01:cb10:430:ec00:4737:d56e:186b:af1])
-        by smtp.gmail.com with ESMTPSA id p15-20020a05600c1d8f00b003899d50f01csm2129159wms.6.2022.03.08.05.06.59
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jIHKyDto3VNe0jan3Q4InEbXVdDFGcIeT9QW9S/Z1yA=;
+        b=aPdqiKyvToWHX1JXfkrTuI0CZuI6Ed0loa9q3iQ2WnuM71c6PB1KsUatIWyr4iF/zV
+         oeiSJFYFtUGZB24qYmONnm76dF4IKpkTr5HWTFNOTR5yU9SEHs/FG+qa8D6XVWA/JUKj
+         wNcyB3Robri1f4OTmc3rTQVLtyHpsVomXk8gdksFHSs4eWlgWYt+XQW2RFmgZaMqES1U
+         0WGkwMHFwH4IMqpbttBxhrEK1EHu7mbbck8xJYRGMXrfalq5MSHMlm8/3vv3kwVFDFpS
+         inRS8WKHL6IKVsmD5FDokxFkfwohL65aEjXtnUT9W6Ml0T24vOuPV42vLkDXGTMgZHcG
+         tS8Q==
+X-Gm-Message-State: AOAM5328+tmM1ErPh+8s+wbJsFO2gIiJmO3R5kMZw5iIIBbVI3Dci7o4
+        9lxYKUMsJTgvYlA05AtScTmSsg==
+X-Google-Smtp-Source: ABdhPJyMETb54ZQiFJs9pNCVwtDVfsBQoRRZgo7hsLXgxVZq02upIxNHSYYzogAJuAPCDIJ/7we1ew==
+X-Received: by 2002:a1c:3b8a:0:b0:380:e40a:289 with SMTP id i132-20020a1c3b8a000000b00380e40a0289mr3481063wma.17.1646744984144;
+        Tue, 08 Mar 2022 05:09:44 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id z6-20020adfd0c6000000b001f1ffd04672sm4048217wrh.12.2022.03.08.05.09.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 05:06:59 -0800 (PST)
-From:   Christophe Branchereau <cbranchereau@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 4/4] dt-bindings: display/panel: Add Leadtek ltk035c5444t
-Date:   Tue,  8 Mar 2022 14:06:43 +0100
-Message-Id: <20220308130643.260683-5-cbranchereau@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220308130643.260683-1-cbranchereau@gmail.com>
-References: <20220308130643.260683-1-cbranchereau@gmail.com>
+        Tue, 08 Mar 2022 05:09:43 -0800 (PST)
+Date:   Tue, 8 Mar 2022 13:09:41 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [GIT PULL - FAO MARK BROWN]: Immutable branch for MediaTek
+ MT6366 due for the v5.18 merge window
+Message-ID: <YidVlV8Rg8N5TT8A@google.com>
+References: <20220106065407.16036-1-johnson.wang@mediatek.com>
+ <YicTu6FwOR7zIC6I@google.com>
+ <YidQvkIYsacSPsXv@sirena.org.uk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <YidQvkIYsacSPsXv@sirena.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding for the leadtek ltk035c5444t, which is a 640x480
-mipi-dbi over spi / 24-bit RGB panel based on the newvision
-NV03052C chipset.
+On Tue, 08 Mar 2022, Mark Brown wrote:
 
-It is found in the Anbernic RG350M mips handheld.
+> On Tue, Mar 08, 2022 at 08:28:43AM +0000, Lee Jones wrote:
+> > Mark,
+> > 
+> > This one is just for you, so you can merge the other patches.
+> 
+> I don't know what the other patches you're referring to here are,
+> someone's going to need to resend them.
+> 
+> I'm also not sure things like like "FAO MARK BROWN" in the subject line
+> of the e-mail, I can already see if a message has been sent to me from
+> the To and it means less of the actual subject is wrapped out of sight
+> in my inbox.
 
-Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
----
- .../panel/leadtek,ltk035c5444t-spi.yaml       | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t-spi.yaml
+Might be time to upgrade your VT100!
 
-diff --git a/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t-spi.yaml b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t-spi.yaml
-new file mode 100644
-index 000000000000..9b6f1810adab
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t-spi.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/panel/leadtek,ltk035c5444t-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Leadtek ltk035c5444t 3.5" (640x480 pixels) 24-bit IPS LCD panel
-+
-+maintainers:
-+  - Paul Cercueil <paul@crapouillou.net>
-+  - Christophe Branchereau <cbranchereau@gmail.com>
-+
-+allOf:
-+  - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    const: leadtek,ltk035c5444t-spi
-+
-+  backlight: true
-+  port: true
-+  power-supply: true
-+  reg: true
-+  reset-gpios: true
-+
-+required:
-+  - compatible
-+  - power-supply
-+  - reset-gpios
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        panel@0 {
-+            compatible = "leadtek,ltk035c5444t-spi";
-+            reg = <0>;
-+
-+            spi-3wire;
-+            spi-max-frequency = <3125000>;
-+
-+            reset-gpios = <&gpe 2 GPIO_ACTIVE_LOW>;
-+
-+            backlight = <&backlight>;
-+            power-supply = <&vcc>;
-+
-+            port {
-+                panel_input: endpoint {
-+                    remote-endpoint = <&panel_output>;
-+                };
-+            };
-+        };
-+    };
 -- 
-2.34.1
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

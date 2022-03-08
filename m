@@ -2,66 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DF24D1138
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6843D4D1140
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 08:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344690AbiCHHnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 02:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S244611AbiCHHrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 02:47:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344678AbiCHHnt (ORCPT
+        with ESMTP id S230017AbiCHHq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 02:43:49 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380363878D;
-        Mon,  7 Mar 2022 23:42:53 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id k92so7282673pjh.5;
-        Mon, 07 Mar 2022 23:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=VMEKwBiD/5CmwbAtof2z8GMwXPO9FueLZUgikJXVEAk=;
-        b=mxs5OdtHR3i8lji4+csXfWtvPd+Ajo3T2V05avIkmU6rDqFNnOiOkK3M3y11qlmZL0
-         bDEdDKOHvihmcW0iN0A7L2RT6fTgRNxrGN2Mjc0rXIUGPoXRb4ZrgJm02EFy7mxdKbE7
-         tL11ddv1JI1kBccAlq4+2P0AVhiEzFYsFRobQjogMRC9UdbvsQTxaIXRQ5AbKTJQyWjk
-         FLtw8bso0FgAcjAEt531gugQxIH5jc13K3DZlHsbCpZBNZuibmyhQUyj96SMUc0dDdZT
-         T0WKxdpqoze0O/LIFW95RF7p+IQNSAB7naPqMbqOKL+h9wqDUVGiV2kLWN44nZsPzD47
-         nOJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=VMEKwBiD/5CmwbAtof2z8GMwXPO9FueLZUgikJXVEAk=;
-        b=aDM2ABACy7CTfB7hvSIvqh8AlbM5fmpK4COkwjxio9zCjSF8Olj9Lzsz4MFUQQVRrv
-         ZH9qGHI5RuHOvefCRKWRC/JE1aD9waMf8WxU2CTzmzswfAWhKnPNpt2Ng4WoGzFs/0py
-         22h35h+xUVBRK4HaTuIt9+FLOHBRuqRqWyydw9X7xN6AMcpsLVedW1L5x/uuso6bOyhT
-         mZP74j9nhlUt25MkyecIVcdqXGz7NAEHk/bqjZCdWvmmdhbjID7dD0/jIAgFUZZ+/UGA
-         AWAkLaCbO1cBqFRh7ebRrsCs0pVWeFSEwpWE9DaocdMxGU4ndf3qCXiGspVBNpWJfKLg
-         06kw==
-X-Gm-Message-State: AOAM530sHqT3US4tBcxDg3Mf7R5Yc7Y7splRrsr3gxjlEqEpNQVOAEJK
-        0b7lbW9ygLLOgGDBRDSqtyw=
-X-Google-Smtp-Source: ABdhPJxCIJOSRGFFK97b/cGmwGW3M1OLE5e8Oy7VsJLf+f47DIdwZKPAToBOfmmwwjCSpEJTSzQFQg==
-X-Received: by 2002:a17:902:d2c9:b0:151:e08b:1442 with SMTP id n9-20020a170902d2c900b00151e08b1442mr11277025plc.5.1646725372737;
-        Mon, 07 Mar 2022 23:42:52 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id h16-20020a17090a055000b001bf5ad0e45esm1709772pjf.43.2022.03.07.23.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 23:42:52 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Andrii Savka <andrii.savka@plvision.eu>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] net: marvell: prestera: Add missing of_node_put() in prestera_switch_set_base_mac_addr
-Date:   Tue,  8 Mar 2022 07:42:47 +0000
-Message-Id: <20220308074247.26332-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Tue, 8 Mar 2022 02:46:58 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199803E0D3
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 23:46:01 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id BA823D7;
+        Mon,  7 Mar 2022 23:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1646725560;
+        bh=HXpXa9hrjYoPMQUYirJanMV84faarG7+Ko1HRfUY6j4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kTjwDSVGY2weTNLpafdlH+jLwLqhKbWrUql8kHzXgqB3xfvm5vZnR+3PmlIKgm56m
+         iGySOKgao2fUuCtRRA1JA5a8CFT7JqOKmfwAPbOqzCwiHF5UorobuUdolqO86p6Ck1
+         cy5RIrfcitrlzkUqEjO0sy4mpR8kFej7koDgPNxw=
+Date:   Mon, 7 Mar 2022 23:45:57 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v2 2/2] misc: Add power-efuse driver
+Message-ID: <YicJtee4LrShiUC9@hatter.bewilderbeest.net>
+References: <20220308011811.10353-1-zev@bewilderbeest.net>
+ <20220308011811.10353-3-zev@bewilderbeest.net>
+ <YicAWbGN74F6SSNs@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YicAWbGN74F6SSNs@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,27 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This node pointer is returned by of_find_compatible_node() with
-refcount incremented. Calling of_node_put() to aovid the refcount leak.
+On Mon, Mar 07, 2022 at 11:06:01PM PST, Greg Kroah-Hartman wrote:
+>On Mon, Mar 07, 2022 at 05:18:10PM -0800, Zev Weiss wrote:
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -7058,6 +7058,11 @@ S:	Orphan
+>>  W:	http://aeschi.ch.eu.org/efs/
+>>  F:	fs/efs/
+>>
+>> +POWER EFUSE DRIVER
+>> +M:	Zev Weiss <zev@bewilderbeest.net>
+>> +S:	Maintained
+>> +F:	drivers/misc/power-efuse.c
+>> +
+>>  EHEA (IBM pSeries eHEA 10Gb ethernet adapter) DRIVER
+>>  M:	Douglas Miller <dougmill@linux.ibm.com>
+>>  L:	netdev@vger.kernel.org
+>
+>Entries need to be in sorted order :(
+>
 
-Fixes: 501ef3066c89 ("net: marvell: prestera: Add driver for Prestera family ASIC devices")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/net/ethernet/marvell/prestera/prestera_main.c | 1 +
- 1 file changed, 1 insertion(+)
+Ack, forgot to move it when I renamed an earlier incarnation from 
+"efuse" to "power-efuse"...will fix.
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-index cad93f747d0c..73cd0a4b7291 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-@@ -554,6 +554,7 @@ static int prestera_switch_set_base_mac_addr(struct prestera_switch *sw)
- 		dev_info(prestera_dev(sw), "using random base mac address\n");
- 	}
- 	of_node_put(base_mac_np);
-+	of_node_put(np);
- 
- 	return prestera_hw_switch_mac_set(sw, sw->base_mac);
- }
--- 
-2.17.1
+
+Zev
 

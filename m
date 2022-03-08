@@ -2,149 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19444D1A73
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807504D1A78
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347475AbiCHO2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S234474AbiCHO2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:28:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347560AbiCHO2H (ORCPT
+        with ESMTP id S231975AbiCHO2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:28:07 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84D64BB8D;
-        Tue,  8 Mar 2022 06:27:09 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id bg10so39661584ejb.4;
-        Tue, 08 Mar 2022 06:27:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=83JVPdRA3CueGn2PS5Rbyc/WFtEL1HpbrKaroAWEv6Y=;
-        b=DaZ0b8MRwY7ANKEqyMV9RNkFCLmKupzspm90LVCpSoIEwWlzItxpy5Om0qKOfesK2y
-         6oOmgEEGcs/nsx6+Y+aOqxQG/TYN7MMnvjlmONd786x1nPpSv+h0XLAPvOvlzVbDCCT8
-         SRR9saRsd6j06VWLmR6u0ZDItH4WNxDweAbFVpVPTBsPeEpxfidAkODfdmLNjdBYSexw
-         zYvJiJ8kU7c32jrB8gkXKSpC/aHxSznYZGyI/ncjiVBSZ8kI9Ck/amPDGNwUiGpYAOCP
-         pCE3SZkb8qIsnbOQABi43KW0TjQAn8Iwk/yJ/3k333zn+qf0LfnXHlVIb10arn9l2k0i
-         Mc3A==
+        Tue, 8 Mar 2022 09:28:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BBF59FFF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:27:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646749661;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N/dhr5xlK4pqXG8WmMyzbGqgbqfGKBQGaX2lWQVYPyM=;
+        b=IlE2Ny5qmelVbTIcK6QBYu/s4mQItpk/bxo0SD7NJY8vSFCDvWXpAOBpguPQd1ebWRcd0L
+        bT88uyMPaIDvEC04946T6Fom6YZvbG/QOH/v8OMbApWX/QAXgidBVGsUqHRCMRTAq9HLHZ
+        5QtyFZESka+s6Tbv3jTcvKbpwINoos4=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-17-S_pITNyEN2q2Vqr5DRjGLw-1; Tue, 08 Mar 2022 09:27:40 -0500
+X-MC-Unique: S_pITNyEN2q2Vqr5DRjGLw-1
+Received: by mail-wr1-f69.google.com with SMTP id h11-20020a5d430b000000b001f01a35a86fso5518821wrq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 06:27:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=83JVPdRA3CueGn2PS5Rbyc/WFtEL1HpbrKaroAWEv6Y=;
-        b=JwNdVmg19VObEStUlEiZIykOJVaVmRM0Cq4WZGzfmvD7R2r5STe28VNXBolUEEBw0E
-         PlteUxsKJ6a/VGD9/di1OMjwYV+ttVgvVONE9RLPNc9D+wDzmj3rzvMBLG0nSRgsJRs3
-         ti7MOyHcFjiTdIg1TjQm/Y4L7j2Q6BFIHz14yWTGoBE9DMnh72iea6kEWJtyQ5UsMrV7
-         ggaLbFptCFnvKD6my/oDFh6uRVlNNgYKAVhrzwan/BAPEN+++A8hbQawDp9BbHQIiDBK
-         DsGsTomm17e87ddR/VybuimGJGXwz4HvCdcIQLQZ3FTTMt3Nh2Bbje7Qg4J3MlK736eC
-         PEmA==
-X-Gm-Message-State: AOAM532uUnp0vsWHejhn2QYZCZ8s6AMYXoEejxdO+Y/WhbEWAWvdA9ad
-        ODU8LubmljYw6ECnZ+83HWI=
-X-Google-Smtp-Source: ABdhPJztpsXTFXGFznDhnw9c1DV73G4r0LMBiFGsQK7rYvuqKT1K5By+igyBSMkWhg+7Nn0V0d4EXA==
-X-Received: by 2002:a17:907:97c1:b0:6d8:2885:88d7 with SMTP id js1-20020a17090797c100b006d8288588d7mr13392291ejc.222.1646749628327;
-        Tue, 08 Mar 2022 06:27:08 -0800 (PST)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm5931893ejc.25.2022.03.08.06.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 06:27:08 -0800 (PST)
-Date:   Tue, 8 Mar 2022 15:27:05 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH 05/10] bpf: Add cookie support to programs attached with
- kprobe multi link
-Message-ID: <YidnuZRVFk1nq+6f@krava>
-References: <20220222170600.611515-1-jolsa@kernel.org>
- <20220222170600.611515-6-jolsa@kernel.org>
- <CAEf4Bzab_crw+e_POJ39E+JkBDG4WJQqDGz-8Gz_JOt0rYnigA@mail.gmail.com>
- <YiTvY2Ly/XWICP2H@krava>
- <CAEf4BzatkcxOdttWc92GYF7SY09nYk26RgpKsLGpd4fqX7my+Q@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=N/dhr5xlK4pqXG8WmMyzbGqgbqfGKBQGaX2lWQVYPyM=;
+        b=TwKlO3MvOoliDTwmSZBoH48OtKFLUyGOVTHIMQD4q0ayvCiaitQzd2GwB8l4RpDZns
+         +u7sp0C0oEALcpOl3fU77JVIsHlQQqo410ByVgzz+a1gMor1FyJgrtowPh7cS4HYf6ty
+         s5h3XLuiideWHLM+PPcqhimElmJZ1PLWn87ryxyYRkZAupmshSwXvDpfIvMSacv0DoPc
+         KnkREN8F8VGQgp2wSZmnUTfDjIh5TGTz52qUITKZ/JOpVtfXrdgUgKZy5R9Sr00DWpHz
+         mBT63E5VncQH1g/Yf5DTXfncFU35d3fGGga2UY8OWtCv7twpboGX04CdXiCo2ThT26iH
+         eU4Q==
+X-Gm-Message-State: AOAM532blV/gygwmYaorjR62dAUJ/6ogi86mQB/qfZLLZ4Ehfr9qzngf
+        YG+9XfDd/2O1OGQJ3uTCYP7inpsOOkE0+R6a3dZBP9V1FFivf90cMaBslWC2Z8VFD61FWNHyOK/
+        pv1/37p8ws8tR/w6kgKhU3Q8D
+X-Received: by 2002:a5d:69c7:0:b0:1f0:61f3:642b with SMTP id s7-20020a5d69c7000000b001f061f3642bmr12700037wrw.632.1646749659488;
+        Tue, 08 Mar 2022 06:27:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzWdPmIxNsxLTh1P63sfKpat50885bbogAIw47eOBkt/JfFNDmVkfT5yPb1SfXxU4norf0w6Q==
+X-Received: by 2002:a5d:69c7:0:b0:1f0:61f3:642b with SMTP id s7-20020a5d69c7000000b001f061f3642bmr12700020wrw.632.1646749659254;
+        Tue, 08 Mar 2022 06:27:39 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:b000:acda:b420:16aa:6b67? (p200300cbc708b000acdab42016aa6b67.dip0.t-ipconnect.de. [2003:cb:c708:b000:acda:b420:16aa:6b67])
+        by smtp.gmail.com with ESMTPSA id b12-20020a05600003cc00b001f34d8c5baesm4193308wrg.78.2022.03.08.06.27.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 06:27:38 -0800 (PST)
+Message-ID: <8d036ae0-9280-0d53-02dd-179ba46f908f@redhat.com>
+Date:   Tue, 8 Mar 2022 15:27:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzatkcxOdttWc92GYF7SY09nYk26RgpKsLGpd4fqX7my+Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] mm: use vmalloc_array and vcalloc for array
+ allocations
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org
+References: <20220308105918.615575-1-pbonzini@redhat.com>
+ <20220308105918.615575-3-pbonzini@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220308105918.615575-3-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 05:23:31PM -0800, Andrii Nakryiko wrote:
-> On Sun, Mar 6, 2022 at 9:29 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Fri, Mar 04, 2022 at 03:11:08PM -0800, Andrii Nakryiko wrote:
-> > > On Tue, Feb 22, 2022 at 9:07 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > > >
-> > > > Adding support to call bpf_get_attach_cookie helper from
-> > > > kprobe programs attached with kprobe multi link.
-> > > >
-> > > > The cookie is provided by array of u64 values, where each
-> > > > value is paired with provided function address or symbol
-> > > > with the same array index.
-> > > >
-> > > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > > ---
-> > > >  include/linux/sort.h           |   2 +
-> > > >  include/uapi/linux/bpf.h       |   1 +
-> > > >  kernel/trace/bpf_trace.c       | 103 ++++++++++++++++++++++++++++++++-
-> > > >  lib/sort.c                     |   2 +-
-> > > >  tools/include/uapi/linux/bpf.h |   1 +
-> > > >  5 files changed, 107 insertions(+), 2 deletions(-)
-> > > >
-> > >
-> > > [...]
-> > >
-> > > >  BPF_CALL_1(bpf_get_attach_cookie_trace, void *, ctx)
-> > > >  {
-> > > >         struct bpf_trace_run_ctx *run_ctx;
-> > > > @@ -1297,7 +1312,9 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-> > > >                         &bpf_get_func_ip_proto_kprobe_multi :
-> > > >                         &bpf_get_func_ip_proto_kprobe;
-> > > >         case BPF_FUNC_get_attach_cookie:
-> > > > -               return &bpf_get_attach_cookie_proto_trace;
-> > > > +               return prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI ?
-> > > > +                       &bpf_get_attach_cookie_proto_kmulti :
-> > > > +                       &bpf_get_attach_cookie_proto_trace;
-> > > >         default:
-> > > >                 return bpf_tracing_func_proto(func_id, prog);
-> > > >         }
-> > > > @@ -2203,6 +2220,9 @@ struct bpf_kprobe_multi_link {
-> > > >         struct bpf_link link;
-> > > >         struct fprobe fp;
-> > > >         unsigned long *addrs;
-> > > > +       struct bpf_run_ctx run_ctx;
-> > >
-> > > clever, I like it! Keep in mind, though, that this trick can only be
-> > > used here because this run_ctx is read-only (I'd leave the comment
-> > > here about this, I didn't realize immediately that this approach can't
-> > > be used for run_ctx that needs to be modified).
-> >
-> > hum, I don't see it at the moment.. I'll check on that and add the
-> > comment or come up with more questions ;-)
+On 08.03.22 11:59, Paolo Bonzini wrote:
+> Instead of using array_size or just a multiply, use a function that
+> takes care of both the multiplication and the overflow checks.
 > 
-> if run_ctx is used to store some information, it has to be per program
-> execution (private to a single bpf program run, just like bpf
-> program's stack). So you can't just reuse bpf_link for that, because
-> bpf_link is shared across all CPUs and thus (potentially) across
-> multiple simultaneous prog runs
+> Cc: linux-mm@kvack.org
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-ok, I'll put some comments in here about that
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-thanks,
-jirka
+
+-- 
+Thanks,
+
+David / dhildenb
+

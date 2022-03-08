@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4364D167C
+	by mail.lfdr.de (Postfix) with ESMTP id 1329C4D167B
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346621AbiCHLoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S244580AbiCHLok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346669AbiCHLoG (ORCPT
+        with ESMTP id S1346686AbiCHLoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:44:06 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD4A3BF92
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:43:03 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id q13so681945plk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 03:43:03 -0800 (PST)
+        Tue, 8 Mar 2022 06:44:08 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0F0636F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:43:06 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id c11so3819493pgu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 03:43:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=C+Jsu4HCVJIvVBTQ9bsapoPPM3jCvdQzttLGL+ZzKMY=;
-        b=jHF9PDv3hq3gkQfo5TFIFXhcA/79kEEdYCzpEA/d2mjRF6bc6Gwd1MihJqJmY1UNmc
-         WiD5vCHHqS1j99+Db/d+9ztOYMQKy4/E09xga6rVJMW0cryzeV0Oacb4lz0dzG9DY3y5
-         UbpZtTU8pIHuu+xWv3oNoF83r9h3ixhfPsNwwd2I44nGZotZrdp374+gbS3zQRmkvLxh
-         8851L7qhzLv6A6szvy04sWjKSRVXp5clOMDLhTXnNIsUsSGod+X06uiJyFbfJr9faNj4
-         ZgJwGgqYDx0I2vbjXmrtBo931m/EqAtoR7d+NwX5g0TKsoRQuZZvNu9cfjeeCWZxc3Bc
-         rFFA==
+        bh=TVm1wzeU0y3JZ7p5wnCxhldPZJzxYO3AZTbbV3y/P8c=;
+        b=ZBYHDJThFStU0rnWXfOROGQPKtGJeftM5/haZPk61cjnmK0NY2ff0+YovK1r93UWff
+         nBW833vQD2RsHWbqNHCMMH/AR77E5Lz1jfEMB8E4OykBIZbzj4eME/lV7KBnbCGJmB3o
+         0ep1QuphjEuW4XuET2NnIioVZAUeoCb+619lNATjkhEk1N0C+T2LLYxFI7ZalNPf4m5Q
+         IJLZAlX4exdqdRPhg0aVFWjVTuRpUlW+IBu8+WTxuxePp/VozSMNG1oK1jX4ep9ffVI9
+         Eq5T+FXzZAHxLhAiG45Kf6F3Z0/1rdRqP3SAMRf2mgRNWz+tDISTm4WhCPfv6ew8QUTz
+         30og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=C+Jsu4HCVJIvVBTQ9bsapoPPM3jCvdQzttLGL+ZzKMY=;
-        b=cW1J23CH7D9oVJMIpyqZNyhwP3gfHFhkVn7frto5XwDj46WzuyO5ZxVPmvaKDbsjmh
-         l599j1rJ/GP6T1IQ+j1dH7b0srehM2pOBZ3/EOoFrtFZV64cnlcWKx3564SLWuJmT5g5
-         LNWMFJlk2RNk4ETzM92VgxmKwiSNU88Ch7/LOS5fW+DZOvYKwdc0AhzZwuDBDP4FsoMZ
-         skuceBqTfudl62NDG31RYL9V7FsMI2LmLV+Xq8SH73WyWtvpnRpW/62rjeLI3hz8GXfp
-         lfxq7nFYn+Gbe6t3oTGtx0DmE7H5P9EG6ZmDGfBDw8AkieskBGH/e9pCAjbqmGDBK4qh
-         744Q==
-X-Gm-Message-State: AOAM533a3sfN3hDIc6drI0tSmPr8qd1Xbbvn354dQTcv9LN7sVv5/8TS
-        MBvwkWwg3Vhlv37EHmOYeFw=
-X-Google-Smtp-Source: ABdhPJx4KwQ5pJZuufi0rCbWEqcdat0s5xevU2SvD3q7sL0/CrSOfOaXj/E7yf7qfpnShkF6fKTIlA==
-X-Received: by 2002:a17:90b:1652:b0:1bf:32e9:6db3 with SMTP id il18-20020a17090b165200b001bf32e96db3mr4209347pjb.179.1646739782835;
-        Tue, 08 Mar 2022 03:43:02 -0800 (PST)
+        bh=TVm1wzeU0y3JZ7p5wnCxhldPZJzxYO3AZTbbV3y/P8c=;
+        b=IwKndD8qeV1c7CEXWZH+QhxQcUvv7P2PWKfch8nfFnMt5rTqNmSDkhKkKaPxh9rsmq
+         YBBO1oNoA1r2ktw0IVPn5YfaAsG5WJB1BtYsPk535v2QZiYHomvJYXIpAiVBr86fYbRP
+         TYHh5snlFq4SmYYFYjqP0EXMXwLbMJvT5ofLhnk/xH8ZEQCDG+EgA/BoyhJswXaF8J3W
+         8VVfdCp+z0kOMoxFZfU6ZMzbB4oEz+fynf2mwUhbisKF7SztB0Vi8G8QZxmv7kIbQTR9
+         CQV8/YO85lwpGB/1NrUHnVHwIvMqqLznOtp+0PEJtOoXAza5aDq4z6F4l/+kPv6vuwBk
+         mpOA==
+X-Gm-Message-State: AOAM531xM8ILEsDlVG3I0ISgRNCFsOzXeAV4MyARohTvGRXq1bsU1gFn
+        +OixqR5Vc4DtidQmlXYGldE=
+X-Google-Smtp-Source: ABdhPJyW3GhA94fMa4pOEEGPq4uBk6v8GzY3MUV4sfCOd9eI1msJ0Vi83xfnoaqt6lifAHrKbS/ECg==
+X-Received: by 2002:a63:ec11:0:b0:378:5331:7f18 with SMTP id j17-20020a63ec11000000b0037853317f18mr13695809pgh.577.1646739785937;
+        Tue, 08 Mar 2022 03:43:05 -0800 (PST)
 Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id i2-20020a17090ac40200b001bd0e552d27sm2578285pjt.11.2022.03.08.03.42.59
+        by smtp.gmail.com with ESMTPSA id i2-20020a17090ac40200b001bd0e552d27sm2578285pjt.11.2022.03.08.03.43.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 03:43:01 -0800 (PST)
+        Tue, 08 Mar 2022 03:43:05 -0800 (PST)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     Christoph Lameter <cl@linux.com>,
@@ -60,9 +60,9 @@ Cc:     Christoph Lameter <cl@linux.com>,
         Matthew WilCox <willy@infradead.org>,
         Roman Gushchin <roman.gushchin@linux.dev>,
         linux-kernel@vger.kernel.org, 42.hyeyoo@gmail.com
-Subject: [RFC PATCH v1 14/15] mm/sl[auo]b: move definition of __ksize() to mm/slab.h
-Date:   Tue,  8 Mar 2022 11:41:41 +0000
-Message-Id: <20220308114142.1744229-15-42.hyeyoo@gmail.com>
+Subject: [RFC PATCH v1 15/15] mm/sl[au]b: check if large object is valid in __ksize()
+Date:   Tue,  8 Mar 2022 11:41:42 +0000
+Message-Id: <20220308114142.1744229-16-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220308114142.1744229-1-42.hyeyoo@gmail.com>
 References: <20220308114142.1744229-1-42.hyeyoo@gmail.com>
@@ -78,86 +78,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__ksize() is only called by KASAN. Remove export symbol and move
-definition to mm/slab.h as we don't want to grow its callers.
+__ksize() returns size of objects allocated from slab allocator.
+When invalid object is passed to __ksize(), returning zero
+prevents further memory corruption and makes caller be able to
+check if there is an error.
 
-[ willy@infradead.org: Move definition to mm/slab.h and reduce comments ]
+If address of large object is not beginning of folio or size of
+the folio is too small, it must be invalid. Return zero in such cases.
 
+Suggested-by: Vlastimil Babka <vbabka@suse.cz>
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- include/linux/slab.h |  1 -
- mm/slab.h            |  2 ++
- mm/slab_common.c     | 11 +----------
- mm/slob.c            |  1 -
- 4 files changed, 3 insertions(+), 12 deletions(-)
+ mm/slab_common.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 8da8beff712f..a3f8a103f318 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -182,7 +182,6 @@ int kmem_cache_shrink(struct kmem_cache *s);
- void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __alloc_size(2);
- void kfree(const void *objp);
- void kfree_sensitive(const void *objp);
--size_t __ksize(const void *objp);
- size_t ksize(const void *objp);
- #ifdef CONFIG_PRINTK
- bool kmem_valid_obj(void *object);
-diff --git a/mm/slab.h b/mm/slab.h
-index bfedfe3900bb..4fd4bd7bb4d7 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -673,6 +673,8 @@ void free_large_kmalloc(struct folio *folio, void *object);
- 
- #endif /* CONFIG_SLOB */
- 
-+size_t __ksize(const void *objp);
-+
- static inline size_t slab_ksize(const struct kmem_cache *s)
- {
- #ifndef CONFIG_SLUB
 diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 6533026b4a6b..07ed382ed5a9 100644
+index 07ed382ed5a9..acb1d27fc9e3 100644
 --- a/mm/slab_common.c
 +++ b/mm/slab_common.c
-@@ -976,15 +976,7 @@ void kfree(const void *x)
- }
- EXPORT_SYMBOL(kfree);
+@@ -986,8 +986,12 @@ size_t __ksize(const void *object)
  
--/**
-- * __ksize -- Uninstrumented ksize.
-- * @objp: pointer to the object
-- *
-- * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
-- * safety checks as ksize() with KASAN instrumentation enabled.
-- *
-- * Return: size of the actual memory used by @objp in bytes
-- */
-+/* Uninstrumented ksize. Only called by KASAN. */
- size_t __ksize(const void *object)
- {
- 	struct folio *folio;
-@@ -999,7 +991,6 @@ size_t __ksize(const void *object)
+ 	folio = virt_to_folio(object);
+ 
+-	if (unlikely(!folio_test_slab(folio)))
++	if (unlikely(!folio_test_slab(folio))) {
++		if (object != folio_address(folio) ||
++				folio_size(folio) <= KMALLOC_MAX_CACHE_SIZE)
++			return 0;
+ 		return folio_size(folio);
++	}
  
  	return slab_ksize(folio_slab(folio)->slab_cache);
  }
--EXPORT_SYMBOL(__ksize);
- #endif /* !CONFIG_SLOB */
- 
- gfp_t kmalloc_fix_flags(gfp_t flags)
-diff --git a/mm/slob.c b/mm/slob.c
-index 836a7d1ae996..59ddf80e987c 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -576,7 +576,6 @@ size_t __ksize(const void *block)
- 	m = (unsigned int *)(block - align);
- 	return SLOB_UNITS(*m) * SLOB_UNIT;
- }
--EXPORT_SYMBOL(__ksize);
- 
- int __kmem_cache_create(struct kmem_cache *c, slab_flags_t flags)
- {
 -- 
 2.33.1
 

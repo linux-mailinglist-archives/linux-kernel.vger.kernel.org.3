@@ -2,124 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33054D249D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 901DB4D24A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiCHXGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 18:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S229696AbiCHXKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 18:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiCHXGX (ORCPT
+        with ESMTP id S229447AbiCHXKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 18:06:23 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786A061A06
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:05:25 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id ay7so885527oib.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:05:25 -0800 (PST)
+        Tue, 8 Mar 2022 18:10:31 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFFF6E4FA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:09:31 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id b5so429860wrr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:09:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rPTUbB4h0uzOl0pyJTM1C/6sy3GotW9nFVXhWq4ooIs=;
-        b=F3pk+L2mLfEyDIMlXQr314zLDn6A+XToMiGZFsAkNrWlWlhek3i8UxrgZL1+XqQa3s
-         f3LTRr7YQhKWmKsGXZTBpH9qJi0E/aTmX9aJn05aKIQXQuft5V1ljb9dqYL/Ae9zXQwQ
-         C3xxJ1GLWpginlCgKmbsqj0yDWH5Npx60RAW3VSGQB4pTzrnzaeCPx2GtucmbcDLA4o8
-         vOuzVeG45YYHI+aqnN8hCLSthBwnBoXYAcG233HRxeJuRJzDqxk8Mla7g6Gx6/i3kKZ+
-         HNG/ippFPsFcCHPrGJkM9JLB7o++kvIkBKJkNyVYrn0FmmVPsVrzNElTtBv4/AlHAECz
-         IXmg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1f5gPcrqfy750U/J52Wg+Mj+0/UcxsK3pfUKBKWLDR0=;
+        b=rY724zyNQvt0W7k77uJ6mdsljpHhmPedp6A01Ybgi4ape+kd29m4bzWSt+PlFv6VGk
+         5F64VH7NbTfh9lbiAtg/QqctdXYwNeto4qq8ILBsk1UjKlgBgsCMQeBPoPLONRLpHghE
+         cWdsR0etuAIMnRL3KlwUvfLr789Koi+WEO7RwGW0jHeOJ70GUKcFjnSzplqBRUYBRhT6
+         QP8IEuX2CtkcOTNnpXBR5MGZ0IWr8YG+CglWc/j5+G1oi8Hir+ky5riHmAiBgpzzzCL3
+         WDmeIljWzrU1rFQ9e3oINeWI9gqLxDH39hU6jNdl97UeioJbJwXvtYXCCKepzEEDLGHC
+         BVFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rPTUbB4h0uzOl0pyJTM1C/6sy3GotW9nFVXhWq4ooIs=;
-        b=YHYQo+makNziwInaLpAZ4+J75npzIHzNvuzGQrNBEJs180PYfCZ8eF0A0lsdC6130w
-         8SIM+DafzLYkKRhPug0yXsOFCw6koxwsb2OGd3xzToQT/3cYD/K2JmRjPp4UrmZC86wm
-         /W9kvJG7L33e1f/Ifsa5b9v5GZ7a0M111+2EQpSjvClHyB0U5HCkNO1a2EX/xwTPqob/
-         /E0qR8dDdCT7TeUgvVThBt1AbuggA8W2Fi7yJ+90k/NHqMSbUDuRKILjXdyC8153JFwH
-         S9rutrtw9d7JHhOXlq4T1L9qJYBA/t9y8fwtqPddyHUdo1oQX3t/IEpwwui+xcLCx0ko
-         Nz4w==
-X-Gm-Message-State: AOAM531CkoQ+wqku9bWxuu7f7k/QJnss388kS15IhveFwhk7BWjb7snG
-        YtQFCBttwy/hpqGUaWVdf0bftA==
-X-Google-Smtp-Source: ABdhPJxpOde9bNTgrgx11ZxO3FN5AhtPFdFf+K/l41CqWG0KwwkGVH5xrJ3ZTIF0nuCeawss/AYHuA==
-X-Received: by 2002:a05:6808:1644:b0:2cd:6d80:9af1 with SMTP id az4-20020a056808164400b002cd6d809af1mr4201343oib.138.1646780724786;
-        Tue, 08 Mar 2022 15:05:24 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id v37-20020a056830092500b005b1f7daf40asm64940ott.75.2022.03.08.15.05.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 15:05:24 -0800 (PST)
-Date:   Tue, 8 Mar 2022 17:05:22 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        robh+dt@kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: sm8150: Add ufs power-domain
- entries
-Message-ID: <YifhMiBXRMOCamOt@builder.lan>
-References: <20220303082140.240745-1-bhupesh.sharma@linaro.org>
- <20220303082140.240745-3-bhupesh.sharma@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1f5gPcrqfy750U/J52Wg+Mj+0/UcxsK3pfUKBKWLDR0=;
+        b=bEOhlMhYpST0fnIumWxAU8tdw6za2naxeuhAbQ/0ywMFoCtoMc9XPW0rL0prEzVrIP
+         w312e++lnMIqpFc7PO7poMv8VE9BnfOCYGyDblb52k6wBB0/DgvvLHk7FcqgsawMztER
+         nYBsFNUk5Q1/dV3xpQJKN3F8POM+/Eq4GgwLC9fG/7zKhExnXgw35VYr/1C19WGsvfGM
+         JLAveIiOtbvVOWHgMNO9++kEdKUocPHaIbgpHzxfkOqFSZucBkEem0Lm+ep8kT1ae6Te
+         28qCeBHm/q7HvpCGVn61K8mZUwOK9AalA1O4ffyhcUubuMiFTrarsbhNQ8sVdXQFVfOC
+         rrLg==
+X-Gm-Message-State: AOAM530g5hz0m0cBa66a5H773VmVd86DGyrnTiSmiNpDG7RITG6cozl+
+        cIRthINXyLMqO5BcnL5DT7PDLt/mSm5tQYvD/5HvZw==
+X-Google-Smtp-Source: ABdhPJwNHy+VN+JXLWCDADBmqbJunnYlm8shlOKM3wtyDi3l0Nvo++c+lLHsCuWeoJlsi7IJiccAZFbP2qFwzcnxW0Q=
+X-Received: by 2002:adf:eb86:0:b0:1e6:8c92:af6b with SMTP id
+ t6-20020adfeb86000000b001e68c92af6bmr13872277wrn.116.1646780969857; Tue, 08
+ Mar 2022 15:09:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303082140.240745-3-bhupesh.sharma@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220307184935.1704614-1-kaleshsingh@google.com>
+ <20220307184935.1704614-2-kaleshsingh@google.com> <CAE-0n52LmVRkrSNN=eJf+TYYnmesVjFv99nnetYvRWshm82rOg@mail.gmail.com>
+In-Reply-To: <CAE-0n52LmVRkrSNN=eJf+TYYnmesVjFv99nnetYvRWshm82rOg@mail.gmail.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Tue, 8 Mar 2022 15:09:18 -0800
+Message-ID: <CAC_TJvc6LYp95BXQc0DSBBBAZpYpixa+NyHKMLFWsBADD5Ubhg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/8] KVM: arm64: Introduce hyp_alloc_private_va_range()
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Scull <ascull@google.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 03 Mar 02:21 CST 2022, Bhupesh Sharma wrote:
+On Tue, Mar 8, 2022 at 12:21 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+HI Stephen. Thanks for the review.
 
-> Add power-domain entries for UFS controller & phy nodes
-> in sm8150 dts.
-> 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8150.dtsi | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index 6012322a5984..7aa879eb24d7 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -1637,6 +1637,8 @@ ufs_mem_hc: ufshc@1d84000 {
->  			phy-names = "ufsphy";
->  			lanes-per-direction = <2>;
->  			#reset-cells = <1>;
-> +
-> +			power-domains = <&gcc UFS_PHY_GDSC>;
+> Quoting Kalesh Singh (2022-03-07 10:48:59)
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index bc2aba953299..ccb2847ee2f4 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -457,22 +457,17 @@ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
+> >         return 0;
+> >  }
+> >
+> > -static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> > -                                       unsigned long *haddr,
+> > -                                       enum kvm_pgtable_prot prot)
+> > +
+> > +/**
+> > + * hyp_alloc_private_va_range - Allocates a private VA range.
+> > + * @size:      The size of the VA range to reserve.
+> > + *
+> > + * The private VA range is allocated below io_map_base and
+> > + * aligned based on the order of @size.
+>
+> Add what it returns?
+>
+> Return: Start address of allocated VA range or some error value... (I don't
+> understand this part).
+>
+> It may also be a good idea to write out what VA is in the description:
+>
+> The private virtual address (VA) range is allocated below io_map_base
+>
 
-It seems odd that the controller would be in the PHY power-domain?
+Ack
 
->  			resets = <&gcc GCC_UFS_PHY_BCR>;
->  			reset-names = "rst";
->  
-> @@ -1687,6 +1689,9 @@ ufs_mem_phy: phy@1d87000 {
->  			clocks = <&gcc GCC_UFS_MEM_CLKREF_CLK>,
->  				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
->  
-> +			power-domains = <&gcc UFS_CARD_GDSC>,
-> +					<&gcc UFS_PHY_GDSC>;
+> > + */
+> > +unsigned long hyp_alloc_private_va_range(size_t size)
+> >  {
+> >         unsigned long base;
+> > -       int ret = 0;
+> > -
+> > -       if (!kvm_host_owns_hyp_mappings()) {
+> > -               base = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
+> > -                                        phys_addr, size, prot);
+> > -               if (IS_ERR_OR_NULL((void *)base))
+> > -                       return PTR_ERR((void *)base);
+> > -               *haddr = base;
+> > -
+> > -               return 0;
+> > -       }
+> >
+> >         mutex_lock(&kvm_hyp_pgd_mutex);
+> >
+> > @@ -484,29 +479,53 @@ static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> >          *
+> >          * The allocated size is always a multiple of PAGE_SIZE.
+> >          */
+> > -       size = PAGE_ALIGN(size + offset_in_page(phys_addr));
+> > -       base = io_map_base - size;
+> > +       base = io_map_base - PAGE_ALIGN(size);
+> > +
+> > +       /* Align the allocation based on the order of its size */
+> > +       base = ALIGN_DOWN(base, PAGE_SIZE << get_order(size));
+> >
+> >         /*
+> >          * Verify that BIT(VA_BITS - 1) hasn't been flipped by
+> >          * allocating the new area, as it would indicate we've
+> >          * overflowed the idmap/IO address range.
+> >          */
+> > -       if ((base ^ io_map_base) & BIT(VA_BITS - 1))
+> > -               ret = -ENOMEM;
+> > +       if (!base || (base ^ io_map_base) & BIT(VA_BITS - 1))
+> > +               base = (unsigned long)ERR_PTR(-ENOMEM);
+>
+> It looks odd to use an error pointer casted to unsigned long to return
+> from an address allocation function. Why not pass a pointer for base
+> like the function was written before and return an int from this
+> function with 0 for success and negative error value?Otherwise some
+> sort of define should made like DMA_MAPPING_ERROR and that can be used
+> to indicate to the caller that the allocation failed, or a simple zero
+> may work?
 
-And "card" is typically related to the second UFS interface, so I
-suspect you only would need the last one of these?
+I wanted to keep consistent between the pkvm and traditional nvhe
+code. I will refactor both *alloc_private_va_range() functions to take
+a pointer and return an int error if that's preferred. There would
+still be a case of this kind of cast in
+__pkvm_create_private_mapping() which does return an unsigned long
+address or ERR_PTR(...). It looks like it was made to return the
+address to facilitate use as a hypercall (@Quentin CMIW).
 
-Regards,
-Bjorn
+>
+> >         else
+> >                 io_map_base = base;
+> >
+> >         mutex_unlock(&kvm_hyp_pgd_mutex);
+> >
+> > -       if (ret)
+> > -               goto out;
+> > +       return base;
+> > +}
+> > +
+> > +static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> > +                                       unsigned long *haddr,
+> > +                                       enum kvm_pgtable_prot prot)
+> > +{
+> > +       unsigned long addr;
+> > +       int ret = 0;
+> > +
+> > +       if (!kvm_host_owns_hyp_mappings()) {
+> > +               addr = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
+> > +                                        phys_addr, size, prot);
+> > +               if (IS_ERR((void *)addr))
+>
+> IS_ERR_VALUE()?
 
-> +			power-domain-names = "ufs_card_gdsc", "ufs_phy_gdsc";
->  			resets = <&ufs_mem_hc 0>;
->  			reset-names = "ufsphy";
->  			status = "disabled";
-> -- 
-> 2.35.1
-> 
+Good idea, will remove the extra cast.
+
+>
+> > +                       return PTR_ERR((void *)addr);
+> > +               *haddr = addr;
+> > +
+> > +               return 0;
+> > +       }
+> > +
+> > +       size += offset_in_page(phys_addr);
+> > +       addr = hyp_alloc_private_va_range(size);
+> > +       if (IS_ERR((void *)addr))
+>
+> IS_ERR_VALUE()?
+
+Ack
+
+>
+> > +               return PTR_ERR((void *)addr);
+> >
+> > -       ret = __create_hyp_mappings(base, size, phys_addr, prot);
+> > +       ret = __create_hyp_mappings(addr, size, phys_addr, prot);
+> >         if (ret)
+> >                 goto out;
+> >
+> > -       *haddr = base + offset_in_page(phys_addr);
+> > +       *haddr = addr + offset_in_page(phys_addr);
+> >  out:
+> >         return ret;
+>
+> Would be simpler to remove the goto, or return early.
+>
+>         if (!ret)
+>                 *haddr = addr + offset_in_page(phys_addr);
+>
+>         return ret;
+
+Agreed, I'll remove the goto in the next version.
+
+Thanks,
+Kalesh
+>
+> >  }

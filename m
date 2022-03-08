@@ -2,303 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748234D15F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6834D15F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346416AbiCHLO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        id S1346399AbiCHLON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:14:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346413AbiCHLOU (ORCPT
+        with ESMTP id S1346350AbiCHLOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:14:20 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DDD3AA5B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:13:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646738002; x=1678274002;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=56BSmWMATKEXvRjZL0adYJXg8zXVQJBWlMyODMw2F04=;
-  b=RUPjuILxxnvPDjxZe/YW60WIFutKxdriXayy8JasKfpTzI8Wji/6XVes
-   8DB3q0os2Z5o1cgyDRuAHHFKtSLLZ6CpgbvbeFwWN0YQayMS6d0nZP4EW
-   17GWbiLW38D22pfwzCZ1cgzSeM4LYBa6sMnzxLvqPsPV8+pqI/Sz0xsT7
-   YMn1NuaAWeYSqGoGNJEWCxn/pjLMBaoaUkvyDdqJOqXpAs9REkw7JwTV/
-   wBdHm2Vyls/MOi5APbB/E5a373o1KVSwP8zVkEquI32y0pwkO1E6dB8g5
-   WyuPI+VBy8/jysP9f87pzHX3Cw5SD3XfrreVZkU2y9QtgehabR5qm8AzH
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="242096333"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="242096333"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 03:13:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="643622813"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 03:13:20 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nRXmJ-0001JZ-EN; Tue, 08 Mar 2022 11:13:19 +0000
-Date:   Tue, 8 Mar 2022 19:12:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar
- within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed
- union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to
- 'struct dw_edma_v0_ch_regs' being packed, wh...
-Message-ID: <202203081914.sPgVto5s-lkp@intel.com>
+        Tue, 8 Mar 2022 06:14:08 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2943A5F6;
+        Tue,  8 Mar 2022 03:13:10 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KCXf02Jckz9sQw;
+        Tue,  8 Mar 2022 19:09:28 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 19:13:08 +0800
+CC:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <daniel.thompson@linaro.org>, <joro@8bytes.org>,
+        <john.garry@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>, <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH v5 3/8] hisi_ptt: Register PMU device for PTT trace
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>
+References: <20220308084930.5142-1-yangyicong@hisilicon.com>
+ <20220308084930.5142-4-yangyicong@hisilicon.com>
+ <20220308102157.00003725@Huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <d3b555c1-ed7e-f668-7d81-9cc2dbe6ffba@huawei.com>
+Date:   Tue, 8 Mar 2022 19:13:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220308102157.00003725@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gustavo,
+On 2022/3/8 18:21, Jonathan Cameron wrote:
+> On Tue, 8 Mar 2022 16:49:25 +0800
+> Yicong Yang <yangyicong@hisilicon.com> wrote:
+> 
+>> Register PMU device of PTT trace, then users can use trace through perf
+>> command. The driver makes use of perf AUX trace and support following
+>> events to configure the trace:
+>>
+>> - filter: select Root port or Endpoint to trace
+>> - type: select the type of traced TLP headers
+>> - direction: select the direction of traced TLP headers
+>> - format: select the data format of the traced TLP headers
+>>
+>> This patch adds the PMU driver part of PTT trace. The perf command support
+>> of PTT trace is added in the following patch.
+>>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> It seems to me that you ended up doing both suggestions for
+> how to clean up the remove order when it was meant to be
+> a question of picking one or the other.
+> 
+> Otherwise this looks good to me - so with that tidied up
+> 
 
-FYI, the error/warning still remains.
+Hi Jonathan,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ea4424be16887a37735d6550cfd0611528dbe5d9
-commit: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
-date:   12 months ago
-config: arm-randconfig-c002-20220307 (https://download.01.org/0day-ci/archive/20220308/202203081914.sPgVto5s-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04e0a39fc10f82a71b84af73351333b184cee578
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 04e0a39fc10f82a71b84af73351333b184cee578
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-sa1100/ drivers/dma/dw-edma/ drivers/scsi/qla2xxx/
+Thanks for the comments. I'd like to illustrate the reason why I decide to
+manually unregister the PMU device.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The DMA buffers are devm allocated when necessary. They're only allocated
+when user is going to use the PTT in the first time after the driver's probe,
+so when driver removal the buffers are released prior to the PMU device's
+unregistration. I think there's a race condition.
 
-All warnings (new ones prefixed by >>):
+IIUC, The PMU device(as the user interface) should be unregistered first then
+we're safe to free the DMA buffers. But unregister the PMU device by devm
+cannot keep that order.
 
-   In file included from drivers/dma/dw-edma/dw-edma-v0-core.c:13:
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } sar;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:44:4: warning: field dar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:38:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } dar;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:51:4: warning: field llp within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:45:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } llp;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:172:4: warning: field rd_err_status within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:166:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_err_status;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:182:4: warning: field rd_done_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:176:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_done_imwr;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:189:4: warning: field rd_abort_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:183:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_abort_imwr;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:71:4: warning: field wr_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:65:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } wr_engine_hshake_cnt;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:79:4: warning: field rd_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:73:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_engine_hshake_cnt;
-             ^
-   8 warnings generated.
+Thanks,
+Yicong
 
-
-vim +37 drivers/dma/dw-edma/dw-edma-v0-regs.h
-
-    26	
-    27	struct dw_edma_v0_ch_regs {
-    28		u32 ch_control1;				/* 0x000 */
-    29		u32 ch_control2;				/* 0x004 */
-    30		u32 transfer_size;				/* 0x008 */
-    31		union {
-    32			u64 reg;				/* 0x00c..0x010 */
-    33			struct {
-    34				u32 lsb;			/* 0x00c */
-    35				u32 msb;			/* 0x010 */
-    36			};
-  > 37		} sar;
-    38		union {
-    39			u64 reg;				/* 0x014..0x018 */
-    40			struct {
-    41				u32 lsb;			/* 0x014 */
-    42				u32 msb;			/* 0x018 */
-    43			};
-  > 44		} dar;
-    45		union {
-    46			u64 reg;				/* 0x01c..0x020 */
-    47			struct {
-    48				u32 lsb;			/* 0x01c */
-    49				u32 msb;			/* 0x020 */
-    50			};
-  > 51		} llp;
-    52	} __packed;
-    53	
-    54	struct dw_edma_v0_ch {
-    55		struct dw_edma_v0_ch_regs wr;			/* 0x200 */
-    56		u32 padding_1[55];				/* [0x224..0x2fc] */
-    57		struct dw_edma_v0_ch_regs rd;			/* 0x300 */
-    58		u32 padding_2[55];				/* [0x324..0x3fc] */
-    59	} __packed;
-    60	
-    61	struct dw_edma_v0_unroll {
-    62		u32 padding_1;					/* 0x0f8 */
-    63		u32 wr_engine_chgroup;				/* 0x100 */
-    64		u32 rd_engine_chgroup;				/* 0x104 */
-    65		union {
-    66			u64 reg;				/* 0x108..0x10c */
-    67			struct {
-    68				u32 lsb;			/* 0x108 */
-    69				u32 msb;			/* 0x10c */
-    70			};
-  > 71		} wr_engine_hshake_cnt;
-    72		u32 padding_2[2];				/* [0x110..0x114] */
-    73		union {
-    74			u64 reg;				/* 0x120..0x124 */
-    75			struct {
-    76				u32 lsb;			/* 0x120 */
-    77				u32 msb;			/* 0x124 */
-    78			};
-  > 79		} rd_engine_hshake_cnt;
-    80		u32 padding_3[2];				/* [0x120..0x124] */
-    81		u32 wr_ch0_pwr_en;				/* 0x128 */
-    82		u32 wr_ch1_pwr_en;				/* 0x12c */
-    83		u32 wr_ch2_pwr_en;				/* 0x130 */
-    84		u32 wr_ch3_pwr_en;				/* 0x134 */
-    85		u32 wr_ch4_pwr_en;				/* 0x138 */
-    86		u32 wr_ch5_pwr_en;				/* 0x13c */
-    87		u32 wr_ch6_pwr_en;				/* 0x140 */
-    88		u32 wr_ch7_pwr_en;				/* 0x144 */
-    89		u32 padding_4[8];				/* [0x148..0x164] */
-    90		u32 rd_ch0_pwr_en;				/* 0x168 */
-    91		u32 rd_ch1_pwr_en;				/* 0x16c */
-    92		u32 rd_ch2_pwr_en;				/* 0x170 */
-    93		u32 rd_ch3_pwr_en;				/* 0x174 */
-    94		u32 rd_ch4_pwr_en;				/* 0x178 */
-    95		u32 rd_ch5_pwr_en;				/* 0x18c */
-    96		u32 rd_ch6_pwr_en;				/* 0x180 */
-    97		u32 rd_ch7_pwr_en;				/* 0x184 */
-    98		u32 padding_5[30];				/* [0x188..0x1fc] */
-    99		struct dw_edma_v0_ch ch[EDMA_V0_MAX_NR_CH];	/* [0x200..0x1120] */
-   100	} __packed;
-   101	
-   102	struct dw_edma_v0_legacy {
-   103		u32 viewport_sel;				/* 0x0f8 */
-   104		struct dw_edma_v0_ch_regs ch;			/* [0x100..0x120] */
-   105	} __packed;
-   106	
-   107	struct dw_edma_v0_regs {
-   108		/* eDMA global registers */
-   109		u32 ctrl_data_arb_prior;			/* 0x000 */
-   110		u32 padding_1;					/* 0x004 */
-   111		u32 ctrl;					/* 0x008 */
-   112		u32 wr_engine_en;				/* 0x00c */
-   113		u32 wr_doorbell;				/* 0x010 */
-   114		u32 padding_2;					/* 0x014 */
-   115		union {
-   116			u64 reg;				/* 0x018..0x01c */
-   117			struct {
-   118				u32 lsb;			/* 0x018 */
-   119				u32 msb;			/* 0x01c */
-   120			};
-   121		} wr_ch_arb_weight;
-   122		u32 padding_3[3];				/* [0x020..0x028] */
-   123		u32 rd_engine_en;				/* 0x02c */
-   124		u32 rd_doorbell;				/* 0x030 */
-   125		u32 padding_4;					/* 0x034 */
-   126		union {
-   127			u64 reg;				/* 0x038..0x03c */
-   128			struct {
-   129				u32 lsb;			/* 0x038 */
-   130				u32 msb;			/* 0x03c */
-   131			};
-   132		} rd_ch_arb_weight;
-   133		u32 padding_5[3];				/* [0x040..0x048] */
-   134		/* eDMA interrupts registers */
-   135		u32 wr_int_status;				/* 0x04c */
-   136		u32 padding_6;					/* 0x050 */
-   137		u32 wr_int_mask;				/* 0x054 */
-   138		u32 wr_int_clear;				/* 0x058 */
-   139		u32 wr_err_status;				/* 0x05c */
-   140		union {
-   141			u64 reg;				/* 0x060..0x064 */
-   142			struct {
-   143				u32 lsb;			/* 0x060 */
-   144				u32 msb;			/* 0x064 */
-   145			};
-   146		} wr_done_imwr;
-   147		union {
-   148			u64 reg;				/* 0x068..0x06c */
-   149			struct {
-   150				u32 lsb;			/* 0x068 */
-   151				u32 msb;			/* 0x06c */
-   152			};
-   153		} wr_abort_imwr;
-   154		u32 wr_ch01_imwr_data;				/* 0x070 */
-   155		u32 wr_ch23_imwr_data;				/* 0x074 */
-   156		u32 wr_ch45_imwr_data;				/* 0x078 */
-   157		u32 wr_ch67_imwr_data;				/* 0x07c */
-   158		u32 padding_7[4];				/* [0x080..0x08c] */
-   159		u32 wr_linked_list_err_en;			/* 0x090 */
-   160		u32 padding_8[3];				/* [0x094..0x09c] */
-   161		u32 rd_int_status;				/* 0x0a0 */
-   162		u32 padding_9;					/* 0x0a4 */
-   163		u32 rd_int_mask;				/* 0x0a8 */
-   164		u32 rd_int_clear;				/* 0x0ac */
-   165		u32 padding_10;					/* 0x0b0 */
-   166		union {
-   167			u64 reg;				/* 0x0b4..0x0b8 */
-   168			struct {
-   169				u32 lsb;			/* 0x0b4 */
-   170				u32 msb;			/* 0x0b8 */
-   171			};
- > 172		} rd_err_status;
-   173		u32 padding_11[2];				/* [0x0bc..0x0c0] */
-   174		u32 rd_linked_list_err_en;			/* 0x0c4 */
-   175		u32 padding_12;					/* 0x0c8 */
-   176		union {
-   177			u64 reg;				/* 0x0cc..0x0d0 */
-   178			struct {
-   179				u32 lsb;			/* 0x0cc */
-   180				u32 msb;			/* 0x0d0 */
-   181			};
- > 182		} rd_done_imwr;
-   183		union {
-   184			u64 reg;				/* 0x0d4..0x0d8 */
-   185			struct {
-   186				u32 lsb;			/* 0x0d4 */
-   187				u32 msb;			/* 0x0d8 */
-   188			};
- > 189		} rd_abort_imwr;
-   190		u32 rd_ch01_imwr_data;				/* 0x0dc */
-   191		u32 rd_ch23_imwr_data;				/* 0x0e0 */
-   192		u32 rd_ch45_imwr_data;				/* 0x0e4 */
-   193		u32 rd_ch67_imwr_data;				/* 0x0e8 */
-   194		u32 padding_13[4];				/* [0x0ec..0x0f8] */
-   195		/* eDMA channel context grouping */
-   196		union dw_edma_v0_type {
-   197			struct dw_edma_v0_legacy legacy;	/* [0x0f8..0x120] */
-   198			struct dw_edma_v0_unroll unroll;	/* [0x0f8..0x1120] */
-   199		} type;
-   200	} __packed;
-   201	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+>> ---
+> 
+>> +
+>> +static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +	u16 core_id, sicl_id;
+>> +	char *pmu_name;
+>> +	u32 reg;
+>> +
+>> +	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
+>> +		.module		= THIS_MODULE,
+>> +		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
+>> +		.task_ctx_nr	= perf_sw_context,
+>> +		.attr_groups	= hisi_ptt_pmu_groups,
+>> +		.event_init	= hisi_ptt_pmu_event_init,
+>> +		.setup_aux	= hisi_ptt_pmu_setup_aux,
+>> +		.free_aux	= hisi_ptt_pmu_free_aux,
+>> +		.start		= hisi_ptt_pmu_start,
+>> +		.stop		= hisi_ptt_pmu_stop,
+>> +		.add		= hisi_ptt_pmu_add,
+>> +		.del		= hisi_ptt_pmu_del,
+>> +	};
+>> +
+>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_LOCATION);
+>> +	core_id = FIELD_GET(HISI_PTT_CORE_ID, reg);
+>> +	sicl_id = FIELD_GET(HISI_PTT_SICL_ID, reg);
+>> +
+>> +	pmu_name = devm_kasprintf(&hisi_ptt->pdev->dev, GFP_KERNEL, "hisi_ptt%u_%u",
+>> +				  sicl_id, core_id);
+>> +	if (!pmu_name)
+>> +		return -ENOMEM;
+>> +
+>> +	return perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);
+> 
+> As below, you can put back the devm cleanup that you had in v4 now you
+> have modified how the filter cleanup is done to also be devm managed.
+> 
+>> +}
+>> +
+>>  /*
+>>   * The DMA of PTT trace can only use direct mapping, due to some
+>>   * hardware restriction. Check whether there is an IOMMU or the
+>> @@ -303,15 +825,32 @@ static int hisi_ptt_probe(struct pci_dev *pdev,
+>>  
+>>  	pci_set_master(pdev);
+>>  
+>> +	ret = hisi_ptt_register_irq(hisi_ptt);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>>  	ret = hisi_ptt_init_ctrls(hisi_ptt);
+>>  	if (ret) {
+>>  		pci_err(pdev, "failed to init controls, ret = %d.\n", ret);
+>>  		return ret;
+>>  	}
+>>  
+>> +	ret = hisi_ptt_register_pmu(hisi_ptt);
+>> +	if (ret) {
+>> +		pci_err(pdev, "failed to register pmu device, ret = %d", ret);
+>> +		return ret;
+>> +	}
+>> +
+>>  	return 0;
+>>  }
+>>  
+>> +void hisi_ptt_remove(struct pci_dev *pdev)
+>> +{
+>> +	struct hisi_ptt *hisi_ptt = pci_get_drvdata(pdev);
+>> +
+>> +	perf_pmu_unregister(&hisi_ptt->hisi_ptt_pmu);
+> 
+> Now you have the filter cleanup occurring using a devm_add_action_or_reset()
+> there is no need to have a manual cleanup of this - you can
+> use the approach of a devm_add_action_or_reset like you had in v4.
+> 
+> As it is the last call in the probe() order it will be the first one
+> called in the device managed cleanup.
+> 
+>> +}
+>> +
+> 
+> 
+> .
+> 

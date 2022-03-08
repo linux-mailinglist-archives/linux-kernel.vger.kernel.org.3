@@ -2,249 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF6E4D1B89
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C94E4D1B8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347697AbiCHPVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S1347802AbiCHPVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiCHPVE (ORCPT
+        with ESMTP id S1347753AbiCHPVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:21:04 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854C14D634
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:20:07 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2dbd97f9bfcso205090907b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:20:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TW5DuVeZioy5k5ycTW+HgZh0KEDOR1mt5wI/Tftings=;
-        b=QO7KiJWDlfWZ63d1+80jU+ekzZyPJfI2Qp8wJxe6b1GMgpp+qumQVEwtNHZiNUDvnM
-         tIzfNDmL99wzF1YXpWKiI/QksjCXdM/axl3Ss/sdFZq4TCC0KgA/z3cwH0UHlwtDGxRJ
-         dbYRQSWlX9UyudRRWRHuDfTGKr7saFBOSpv2ythsTog49AzE4Lo6gdx3jwpm6wkh1c8h
-         xn8DlJNl7DVnBL4MqCfSQBbPOGbgc9NmFZmY6PCG9sF09xd+1eUVQ8psN55mhrBZzIDB
-         DTdAmu08qfd/Dk82Yyd4HDL9PyYTLb3SH6KT70/sJwv8lMIFPw/HufwTCm/DOHzwW2GY
-         2/AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TW5DuVeZioy5k5ycTW+HgZh0KEDOR1mt5wI/Tftings=;
-        b=G1yPVUYMlU5DmYatdb2T2hd2Aq5QOTQR3H8AlcCIoMTk+cmDtTLq9tAkEtprYPJ5A3
-         GUcA+oW8Q3KlZMFwf1yth2bDEYDqEM2TYi1rbL5zjXoP4+TEhItkyn0874oi5L9S8tRq
-         8PBR3I1yab8hzUfMT2dRoeMe7DoHEtCjgg6aameaEM3BM4AFWRhzXsMnZ+gdqbBGM8ZM
-         vpGRFnXigv+Bg0anVR5WMDHkdE9WnFzHq76sPtIPfqtFjcBa6IMcs1iFW5JZpBgHMfsp
-         ofOy7uOui98n+b3dmMsCtZ1EQyWl2tE9HyeefGYqxwt5t1dGtpR41PB22RY/JrI2wQuW
-         8Ejg==
-X-Gm-Message-State: AOAM532a6hdS4VhEZ8bEdzwspogB0Rs+YzqoX+MtVXwW7b0/EyDGW5RH
-        ypWp8b4Z0dbl0vzpAaaFikesPlOjZyb1LLMISWV5vg==
-X-Google-Smtp-Source: ABdhPJyEEG51jdggQk/hCE8uBW/pe/mNHosmNht7Ft2VdkSfne7r2rPUbYQipgK3kruUseZ17mDCwNB2645EM8U6ul4=
-X-Received: by 2002:a0d:f347:0:b0:2d6:916b:eb3f with SMTP id
- c68-20020a0df347000000b002d6916beb3fmr13464406ywf.141.1646752806552; Tue, 08
- Mar 2022 07:20:06 -0800 (PST)
+        Tue, 8 Mar 2022 10:21:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F104DF4A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:20:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AEE961587
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF91C340EC;
+        Tue,  8 Mar 2022 15:20:08 +0000 (UTC)
+Date:   Tue, 8 Mar 2022 10:20:07 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Alex Sverdlin <alexander.sverdlin@nokia.com>,
+        Abel Vesa <abelvesa@linux.com>, Rabin Vincent <rabin@rab.in>,
+        Colin Cross <ccross@android.com>
+Subject: Re: ftrace bug
+Message-ID: <20220308102007.6c6618e7@gandalf.local.home>
+In-Reply-To: <62c01368-b67f-66af-2e31-d62f4df75b61@broadcom.com>
+References: <9a86b2c9-1009-1683-442e-61c5a7dc8cf3@broadcom.com>
+        <20220307082450.641ed866@gandalf.local.home>
+        <62c01368-b67f-66af-2e31-d62f4df75b61@broadcom.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220307091639.136830784@linuxfoundation.org>
-In-Reply-To: <20220307091639.136830784@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 8 Mar 2022 20:49:54 +0530
-Message-ID: <CA+G9fYu8VDPouKEmdEOx97UyG-w1oQRMcn6xXF0fUfde1hdWqA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/64] 5.4.183-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 at 14:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.183 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.183-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+[ Adding ARM folks (and those that touched the ftrace ARM port) as I don't
+  know the ARM code ]
 
+On Tue, 8 Mar 2022 11:53:35 +0100
+Arend van Spriel <arend.vanspriel@broadcom.com> wrote:
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> On 3/7/2022 2:24 PM, Steven Rostedt wrote:
+> > On Mon, 7 Mar 2022 12:26:45 +0100
+> > Arend van Spriel <arend.vanspriel@broadcom.com> wrote:
+> >   
+> >> Hi Steven,
+> >>
+> >> I wanted to use FTRACE on an ARM platform and I hit the following
+> >> warning which results in ftrace bug. This happens upon loading a module.
+> >> Looking up the warning I suspect the branch target is too far off. The
+> >> module is quite large and therefor not loaded in the modules section. Is
+> >> there a way to exclude a module. In ftrace_module_init I see a check for
+> >> !mod->num_ftrace_callsites. Is there a way to avoid creating ftrace
+> >> callsites in a module?  
+> > 
+> > Are you sure it's the size. Just want to make sure that's the reason before
+> > going with different solutions.  
+> 
+> Interpreting the warning statement in insn.c and given the fact that the 
+> module is loaded at 0xe3xxxxxx instead of kernel module space at 
+> 0xbfxxxxxx I made this assumption, but ....
+> 
+> >>
+> >> Regards,
+> >> Arend
+> >>
+> >> ------------[ cut here ]------------
+> >>
+> >> WARNING: CPU: 2 PID: 1525 at arch/arm/kernel/insn.c:47
+> >> __arm_gen_branch+0x70/0x78
+> >>
+> >> CPU: 2 PID: 1525 Comm: insmod Tainted: P                  4.19.183 #2
+> >>
+> >> Hardware name: Generic DT based system
+> >>
+> >> [<c02139e4>] (unwind_backtrace) from [<c020d4f8>] (show_stack+0x20/0x24)
+> >>
+> >> [<c020d4f8>] (show_stack) from [<c0922aec>] (dump_stack+0x98/0xac)
+> >>
+> >> [<c0922aec>] (dump_stack) from [<c0919b98>] (__warn.part.0+0xcc/0xe8)
+> >>
+> >> [<c0919b98>] (__warn.part.0) from [<c0919d4c>]
+> >> (warn_slowpath_null+0x54/0x74)
+> >> [<c0919d4c>] (warn_slowpath_null) from [<c021225c>]
+> >> (__arm_gen_branch+0x70/0x78)
+> >> [<c021225c>] (__arm_gen_branch) from [<c02120e4>]
+> >> (ftrace_make_nop+0x64/0xec)
+> >> [<c02120e4>] (ftrace_make_nop) from [<c02ac2b0>]
+> >> (ftrace_process_locs+0x370/0x4b4)
+> >>
+> >> [<c02ac2b0>] (ftrace_process_locs) from [<c02af538>]
+> >> (ftrace_module_init+0x38/0x3c)
+> >>
+> >> [<c02af538>] (ftrace_module_init) from [<c02a47d8>]
+> >> (load_module+0x18d0/0x2570)
+> >> [<c02a47d8>] (load_module) from [<c02a56f8>]
+> >> (sys_finit_module+0xe0/0xf8)
+> >> [<c02a56f8>] (sys_finit_module) from [<c0201000>]
+> >> (ret_fast_syscall+0x0/0x58)
+> >> Exception stack(0xd9b1bfa8 to 0xd9b1bff0)
+> >>
+> >> bfa0:                   01170228 00000000 00000003 01170228 00000000
+> >> beb7ceb3
+> >> bfc0: 01170228 00000000 beb7cdc4 0000017b 00127010 00000000 00000000
+> >> 00000000
+> >> bfe0: beb7cc38 beb7cc28 0001a0dc 00012890
+> >>
+> >> ---[ end trace f48808a851a4544a ]---
+> >>
+> >> ------------[ cut here ]------------
+> >>
+> >> WARNING: CPU: 2 PID: 1525 at kernel/trace/ftrace.c:2034
+> >> ftrace_bug+0xfc/0x394  
+> > 
+> > Three should be more content after the "cut here" that is very relevant (I
+> > hate that cut here, because I constantly need to tell people to show me
+> > more :-p I need to add a "ftrace bug cut here" line.)
+> > 
+> > 
+> > Could you show me the output right after that.  
+> 
+> ... here is the output I think you were looking for:
+> 
+> ftrace failed to modify 
+> 
+> [<a82ca82d>] (suspected corrupt symbol) 
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Is the above "suspected corrupt symbol" kernel output? I don't see it in my
+tree. What version of the kernel is this.
 
-## Build
-* kernel: 5.4.183-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.4.y
-* git commit: 5adb518895b328593a1c9d96828aa6b1a19746e6
-* git describe: v5.4.182-66-g5adb518895b3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-82-66-g5adb518895b3
+I'm guessing the above address a82ca82d is where it is trying to modify,
+and is not in the symbol table. So something looks to be messed up.
 
-## Test Regressions (compared to v5.4.182-54-gf27af6bf3c32)
-No test regressions found.
+> 
+>   actual:   63:17:16:eb 
 
-## Metric Regressions (compared to v5.4.182-54-gf27af6bf3c32)
-No metric regressions found.
+The above is what it found in that location.
 
-## Test Fixes (compared to v5.4.182-54-gf27af6bf3c32)
-No test fixes found.
+Perhaps others have ideas.
 
-## Metric Fixes (compared to v5.4.182-54-gf27af6bf3c32)
-No metric fixes found.
+-- Steve
 
-## Test result summary
-total: 93068, pass: 77054, fail: 1146, skip: 13606, xfail: 1262
+> 
+> Initializing ftrace call sites 
+> 
+> ftrace record flags: 2000000 
+> 
+>   (0) 
+> 
+>   expected tramp: c0211b88 
+> 
+> ftrace failed to modify 
+> 
+> [<6c88ec64>] (suspected corrupt symbol) 
+> 
+>   actual:   72:ab:08:eb 
+> 
+> Initializing ftrace call sites 
+> 
+> ftrace record flags: 2000000 
+> 
+>   (0) 
+> 
+>   expected tramp: c0211b88 
+> 
+> ftrace failed to modify 
+> 
+> [<b1ed303a>] (suspected corrupt symbol) 
+> 
+>   actual:   04:12:04:eb 
+> 
+> Initializing ftrace call sites 
+> 
+> ftrace record flags: 2000000 
+> 
+>   (0) 
+> 
+>   expected tramp: c0211b88 
+> 
+> ftrace failed to modify 
+> 
+> [<eb2fee66>] (suspected corrupt symbol) 
+> 
+>   actual:   d6:7e:00:eb 
+> 
+> Initializing ftrace call sites 
+> 
+> ftrace record flags: 2000000 
+> 
+>   (0) 
+> 
+>   expected tramp: c0211b88
+> 
+> Regards,
+> Arend
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 290 total, 290 passed, 0 failed
-* arm64: 25 total, 23 passed, 2 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 20 total, 20 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 49 passed, 11 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 40 total, 40 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kselftest[
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

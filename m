@@ -2,313 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463744D273B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9894D26F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbiCIBQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
+        id S230232AbiCIBQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiCIBQt (ORCPT
+        with ESMTP id S230397AbiCIBQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:16:49 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFAD16F970
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:05:22 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d7eaa730d9so5004607b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 17:05:22 -0800 (PST)
+        Tue, 8 Mar 2022 20:16:12 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECC815C66E;
+        Tue,  8 Mar 2022 16:59:53 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id m12so869053edc.12;
+        Tue, 08 Mar 2022 16:59:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=5w1OIfygzSAzOtR1gEmt6DQmNATik/MV9LcnsLZ7twE=;
-        b=VmtraZ998i0c3SLIXGsaDapNpLDnNwC90h3F9NhYwhfeLG4kWQ0pxVDK0xFqBdd31/
-         O75Uyb1YCFIXEs3jPi1jSsnrhN0sSNoWLADWTG2DDE7svbB5RNZMPBETU0CZMpdwjnRk
-         cHhuCTwAjwuj5JW668Ylb4zSDeQyhvV6qavV9prGeugTCy3oekzyNdbW/I584eMcAcqz
-         3INfnz7jrWWKKBafzc+djKDRdNPjY/4BrQ/6yNQcHdfYf+VdHaxaPY/B1Rw8HKWzXhzn
-         oik6vT19Wq7DIt6GpFUpzrsli17ZFl72q1uqxb1D6dhlst7F0xhjsm3bgnqv+Yqs5hoG
-         S51A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=Q5yee2um5dwXMOKTOCzeOQkXQzKlkJ9Jp/nZl+x7O4U=;
+        b=X3t/4IT+YKn85B8T2VKbIoJH0N72N1oep0F+Ml5bsJCBkZjSWES0+SmOgcOWWdn5d/
+         zCeSKU/PpFmvjX66gqrkFMwZEIZdG0W3UEOEfc2MW6x9iuvI4K5jqGsg4A4KHv/sFhi1
+         s8+LQweybbsKSV1LmacpF75FeEl4KEDmI7j78EruYDSc8lzPLqI/EvHOf8ooqQXloXcS
+         T6WGv24+2XJIwSkiufh/jx3C4010WqFLh+u7Y1Fe2oF2FcPP8BT5yxAngPnSn58Eka5U
+         qgPXZndmezV21vfv17rWX8OjOuTZVLLJxTzqkDiP4LBtIzlWDC7IclWUZ/AyG2v7V4kr
+         i18g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=5w1OIfygzSAzOtR1gEmt6DQmNATik/MV9LcnsLZ7twE=;
-        b=EBRzY91/H30UE6vMQm/jenLm95SSUfp9dHg8I3HjpQS93Oi8n9+OzWRfhsA/JxsTkR
-         mG16rGJgn32PfSM/BBpKSeWzA1cnNmFT8Al5LCQnKB911f8bUgcSNmCkKmT9E6svvYTL
-         O09T3lAtUbHoqjnFS90m7Aw8Im4cw+P8nOQWmO7N4KmKhtuV6RxJRTW5KytE/hH5Bnby
-         9rl8rlCOly732PnsKAoutHWkP+00VvtrooCOss4HKV7hKAM86tXhHeO60LQYZRYtgIRD
-         aeq1xb3fPSkHGriUizS0q+Xi4lym2fD552S8xPBIPgOd6NNxnL4x9LAf7PS+5t/d1k2c
-         5vmw==
-X-Gm-Message-State: AOAM531o4+JQzkKSifLphunrrkp0uamu8KwzdQ1aGpWPXsml6qauHLsk
-        7Db80538PrmRXt+sYTi96hpIDPBRPP4=
-X-Google-Smtp-Source: ABdhPJzKcl/TP6kH+FmylpiM0aHD/7GierDsHJdkwsZVoIQCtyZIj202X1NnTxJc8Yav7hJXeGgtyQYmv+w=
-X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:57a6:54a6:aad1:c0a8])
- (user=yuzhao job=sendgmr) by 2002:a25:b9ca:0:b0:619:649f:1bf6 with SMTP id
- y10-20020a25b9ca000000b00619649f1bf6mr14098274ybj.196.1646783322500; Tue, 08
- Mar 2022 15:48:42 -0800 (PST)
-Date:   Tue,  8 Mar 2022 16:47:23 -0700
-In-Reply-To: <20220308234723.3834941-1-yuzhao@google.com>
-Message-Id: <20220308234723.3834941-14-yuzhao@google.com>
-Mime-Version: 1.0
-References: <20220308234723.3834941-1-yuzhao@google.com>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH v8 13/14] mm: multi-gen LRU: admin guide
-From:   Yu Zhao <yuzhao@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Yu Zhao <yuzhao@google.com>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        "=?UTF-8?q?Holger=20Hoffst=C3=A4tte?=" 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=Q5yee2um5dwXMOKTOCzeOQkXQzKlkJ9Jp/nZl+x7O4U=;
+        b=OAxRYJ+0T1AxWaoRlGQ08ze1GAfJWwTc1P7yqqAzdtMH16jW4VGhl50MLeNIcOKV9U
+         lTaSEVnhQGW4p/X24/jo4wGmdP8vVs0bnkfUad1ewh65/FckQbzC7ge7Ur7cMdzLWoFM
+         bzIcFXOybcBFcywMJ7pV0SNQHTvcZZIrqttXgZ0QzJk4LVo/K3PhthjuqPetOEzIjPOl
+         oLFhECuPfH86BjKtFevIUyWSXcoca5SLuW/lAt766jPU0dC/hjBrXD8+ZpALsNXk9LxJ
+         50U/ztc9WpDUyQQ1+LO0qLHTMrOVCua/07cC3BofOHP4b/xj0hetBg9CF8VlJMcV2/Ox
+         bg1w==
+X-Gm-Message-State: AOAM532JcxR4MkHAMUkLiVrw3oDDUBdI+0UXBSkAqJ5q/YQwgKIE89kr
+        1T4yOTblUE4HfzszrQLL5bL2HHBsmpx/X/0G
+X-Google-Smtp-Source: ABdhPJyA/ptyOIM2WD10sC0KVUTgypVI9XwNKIv36yLO83TGQUENI6DGsj1lIDT6rJ5+Zjjf52DrOA==
+X-Received: by 2002:a5d:55c1:0:b0:1ea:961e:2ce4 with SMTP id i1-20020a5d55c1000000b001ea961e2ce4mr14537166wrw.45.1646783462085;
+        Tue, 08 Mar 2022 15:51:02 -0800 (PST)
+Received: from hermes ([2604:3d09:e80:800::72d9])
+        by smtp.gmail.com with ESMTPSA id e4-20020adffc44000000b001f1dba38a65sm206573wrs.105.2022.03.08.15.51.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 15:51:01 -0800 (PST)
+Date:   Tue, 8 Mar 2022 16:50:57 -0700
+From:   Manuel =?iso-8859-1?Q?Sch=F6nlaub?= <manuel.schoenlaub@gmail.com>
+To:     manuel.schoenlaub@gmail.com
+Cc:     lains@riseup.net, jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: logitech-hidpp: support Color LED feature (8071).
+Message-ID: <Yifr4etBFPu1a2Ct@hermes>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an admin guide.
+The HID++ protocol allows to set multicolor (RGB) to a static color.
+Multiple of such LED zones per device are supported.
+This patch exports said LEDs so that they can be set from userspace.
 
-Signed-off-by: Yu Zhao <yuzhao@google.com>
-Acked-by: Brian Geffon <bgeffon@google.com>
-Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Acked-by: Steven Barrett <steven@liquorix.net>
-Acked-by: Suleiman Souhlal <suleiman@google.com>
-Tested-by: Daniel Byrne <djbyrne@mtu.edu>
-Tested-by: Donald Carr <d@chaos-reins.com>
-Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
-Tested-by: Sofia Trinh <sofia.trinh@edi.works>
-Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+Signed-off-by: Manuel Schönlaub <manuel.schoenlaub@gmail.com>
 ---
- Documentation/admin-guide/mm/index.rst        |   1 +
- Documentation/admin-guide/mm/multigen_lru.rst | 146 ++++++++++++++++++
- mm/Kconfig                                    |   3 +-
- 3 files changed, 149 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/admin-guide/mm/multigen_lru.rst
+ drivers/hid/hid-logitech-hidpp.c | 188 +++++++++++++++++++++++++++++++
+ 1 file changed, 188 insertions(+)
 
-diff --git a/Documentation/admin-guide/mm/index.rst b/Documentation/admin-g=
-uide/mm/index.rst
-index c21b5823f126..2cf5bae62036 100644
---- a/Documentation/admin-guide/mm/index.rst
-+++ b/Documentation/admin-guide/mm/index.rst
-@@ -32,6 +32,7 @@ the Linux memory management.
-    idle_page_tracking
-    ksm
-    memory-hotplug
-+   multigen_lru
-    nommu-mmap
-    numa_memory_policy
-    numaperf
-diff --git a/Documentation/admin-guide/mm/multigen_lru.rst b/Documentation/=
-admin-guide/mm/multigen_lru.rst
-new file mode 100644
-index 000000000000..c60dcae5a1a9
---- /dev/null
-+++ b/Documentation/admin-guide/mm/multigen_lru.rst
-@@ -0,0 +1,146 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 81de88ab2..0b6c9c4b8 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -24,6 +24,8 @@
+ #include <linux/atomic.h>
+ #include <linux/fixp-arith.h>
+ #include <asm/unaligned.h>
++#include <linux/leds.h>
++#include <linux/led-class-multicolor.h>
+ #include "usbhid/usbhid.h"
+ #include "hid-ids.h"
+ 
+@@ -96,6 +98,7 @@ MODULE_PARM_DESC(disable_tap_to_click,
+ #define HIDPP_CAPABILITY_BATTERY_VOLTAGE	BIT(4)
+ #define HIDPP_CAPABILITY_BATTERY_PERCENTAGE	BIT(5)
+ #define HIDPP_CAPABILITY_UNIFIED_BATTERY	BIT(6)
++#define HIDPP_CAPABILITY_HIDPP20_COLORED_LEDS	BIT(7)
+ 
+ #define lg_map_key_clear(c)  hid_map_usage_clear(hi, usage, bit, max, EV_KEY, (c))
+ 
+@@ -159,6 +162,12 @@ struct hidpp_battery {
+ 	u8 supported_levels_1004;
+ };
+ 
++struct hidpp_leds {
++	u8 feature_index;
++	u8 count;
++	struct led_classdev_mc leds[];
++};
 +
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Multi-Gen LRU
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Quick start
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Build the kernel with the following configurations.
+ /**
+  * struct hidpp_scroll_counter - Utility class for processing high-resolution
+  *                             scroll events.
+@@ -201,6 +210,7 @@ struct hidpp_device {
+ 	u8 supported_reports;
+ 
+ 	struct hidpp_battery battery;
++	struct hidpp_leds *leds;
+ 	struct hidpp_scroll_counter vertical_wheel_counter;
+ 
+ 	u8 wireless_feature_index;
+@@ -1708,6 +1718,134 @@ static int hidpp_battery_get_property(struct power_supply *psy,
+ 	return ret;
+ }
+ 
++/* -------------------------------------------------------------------------- */
++/* 0x8070: Color LED effect                                                   */
++/* -------------------------------------------------------------------------- */
 +
-+* ``CONFIG_LRU_GEN=3Dy``
-+* ``CONFIG_LRU_GEN_ENABLED=3Dy``
++#define HIDPP_PAGE_LED_EFFECTS 0x8070
 +
-+All set!
++#define CMD_COLOR_LED_EFFECTS_GET_INFO 0x00
 +
-+Runtime options
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+``/sys/kernel/mm/lru_gen/`` contains stable ABIs described in the
-+following subsections.
++#define CMD_COLOR_LED_EFFECTS_SET_ZONE_STATE 0x31
 +
-+Kill switch
-+-----------
-+``enable`` accepts different values to enable or disabled the
-+following components. The default value of this file depends on
-+``CONFIG_LRU_GEN_ENABLED``. All the components should be enabled
-+unless some of them have unforeseen side effects. Writing to
-+``enable`` has no effect when a component is not supported by the
-+hardware, and valid values will be accepted even when the main switch
-+is off.
++static int hidpp20_color_led_effect_get_info(struct hidpp_device *hidpp_dev,
++					     u8 feature_index, u8 *count)
++{
++	struct hidpp_report response;
++	int ret;
++	u8 *params = (u8 *)response.fap.params;
 +
-+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Values Components
-+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+0x0001 The main switch for the multi-gen LRU.
-+0x0002 Clearing the accessed bit in leaf page table entries in large
-+       batches, when MMU sets it (e.g., on x86). This behavior can
-+       theoretically worsen lock contention (mmap_lock). If it is
-+       disabled, the multi-gen LRU will suffer a minor performance
-+       degradation.
-+0x0004 Clearing the accessed bit in non-leaf page table entries as
-+       well, when MMU sets it (e.g., on x86). This behavior was not
-+       verified on x86 varieties other than Intel and AMD. If it is
-+       disabled, the multi-gen LRU will suffer a negligible
-+       performance degradation.
-+[yYnN] Apply to all the components above.
-+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++	ret = hidpp_send_fap_command_sync(hidpp_dev, feature_index,
++					  CMD_COLOR_LED_EFFECTS_GET_INFO,
++					  NULL, 0, &response);
 +
-+E.g.,
-+::
++	if (ret > 0) {
++		hid_err(hidpp_dev->hid_dev,
++			"%s: received protocol error 0x%02x\n",
++			__func__, ret);
++		return -EPROTO;
++	}
++	if (ret)
++		return ret;
 +
-+    echo y >/sys/kernel/mm/lru_gen/enabled
-+    cat /sys/kernel/mm/lru_gen/enabled
-+    0x0007
-+    echo 5 >/sys/kernel/mm/lru_gen/enabled
-+    cat /sys/kernel/mm/lru_gen/enabled
-+    0x0005
++	*count = params[0];
++	return 0;
++}
 +
-+Thrashing prevention
-+--------------------
-+Personal computers are more sensitive to thrashing because it can
-+cause janks (lags when rendering UI) and negatively impact user
-+experience. The multi-gen LRU offers thrashing prevention to the
-+majority of laptop and desktop users who do not have ``oomd``.
++static int hidpp20_color_effect_set(struct hidpp_device *hidpp_dev,
++				    u8 zone, bool enabled,
++				    u8 r, u8 b, u8 g)
++{
++	int ret;
++	u8 params[5];
++	struct hidpp_report response;
 +
-+Users can write ``N`` to ``min_ttl_ms`` to prevent the working set of
-+``N`` milliseconds from getting evicted. The OOM killer is triggered
-+if this working set cannot be kept in memory. In other words, this
-+option works as an adjustable pressure relief valve, and when open, it
-+terminates applications that are hopefully not being used.
++	params[0] = zone;
++	params[1] = enabled ? 1 : 0;
++	params[2] = r;
++	params[3] = g;
++	params[4] = b;
 +
-+Based on the average human detectable lag (~100ms), ``N=3D1000`` usually
-+eliminates intolerable janks due to thrashing. Larger values like
-+``N=3D3000`` make janks less noticeable at the risk of premature OOM
-+kills.
++	ret = hidpp_send_fap_command_sync(hidpp_dev,
++					  hidpp_dev->leds->feature_index,
++					  CMD_COLOR_LED_EFFECTS_SET_ZONE_STATE,
++					  params, sizeof(params), &response);
 +
-+Experimental features
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+``/sys/kernel/debug/lru_gen`` accepts commands described in the
-+following subsections. Multiple command lines are supported, so does
-+concatenation with delimiters ``,`` and ``;``.
++	if (ret)
++		return ret;
++	return 0;
++}
 +
-+``/sys/kernel/debug/lru_gen_full`` provides additional stats for
-+debugging. ``CONFIG_LRU_GEN_STATS=3Dy`` keeps historical stats from
-+evicted generations in this file.
++static int hidpp_set_brightness(struct led_classdev *cdev,
++				enum led_brightness brightness)
++{
++	int n;
++	struct device *dev = cdev->dev->parent;
++	struct hid_device *hid = to_hid_device(dev);
++	struct hidpp_device *hidpp = hid_get_drvdata(hid);
 +
-+Working set estimation
-+----------------------
-+Working set estimation measures how much memory an application
-+requires in a given time interval, and it is usually done with little
-+impact on the performance of the application. E.g., data centers want
-+to optimize job scheduling (bin packing) to improve memory
-+utilizations. When a new job comes in, the job scheduler needs to find
-+out whether each server it manages can allocate a certain amount of
-+memory for this new job before it can pick a candidate. To do so, this
-+job scheduler needs to estimate the working sets of the existing jobs.
++	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
++	u8 red, green, blue;
 +
-+When it is read, ``lru_gen`` returns a histogram of numbers of pages
-+accessed over different time intervals for each memcg and node.
-+``CONFIG_NR_LRU_GENS`` decides the number of bins for each histogram.
-+::
++	led_mc_calc_color_components(mc_cdev, brightness);
++	red = mc_cdev->subled_info[0].brightness;
++	green = mc_cdev->subled_info[1].brightness;
++	blue = mc_cdev->subled_info[2].brightness;
 +
-+    memcg  memcg_id  memcg_path
-+       node  node_id
-+           min_gen_nr  age_in_ms  nr_anon_pages  nr_file_pages
-+           ...
-+           max_gen_nr  age_in_ms  nr_anon_pages  nr_file_pages
++	for (n = 0; n < hidpp->leds->count; n++) {
++		if (cdev == &hidpp->leds->leds[n].led_cdev) {
++			return hidpp20_color_effect_set(hidpp, n,
++							brightness > 0,
++							red, green, blue);
++		}
++	}
 +
-+Each generation contains an estimated number of pages that have been
-+accessed within ``age_in_ms`` non-cumulatively. E.g., ``min_gen_nr``
-+contains the coldest pages and ``max_gen_nr`` contains the hottest
-+pages, since ``age_in_ms`` of the former is the largest and that of
-+the latter is the smallest.
++	return LED_OFF;
++}
 +
-+Users can write ``+ memcg_id node_id max_gen_nr
-+[can_swap[full_scan]]`` to ``lru_gen`` to create a new generation
-+``max_gen_nr+1``. ``can_swap`` defaults to the swap setting and, if it
-+is set to ``1``, it forces the scan of anon pages when swap is off.
-+``full_scan`` defaults to ``1`` and, if it is set to ``0``, it reduces
-+the overhead as well as the coverage when scanning page tables.
++static int hidpp_mc_led_register(struct hidpp_device *hidpp_dev,
++				 struct led_classdev_mc *mc_dev,
++				 int zone)
++{
++	struct hid_device *hdev = hidpp_dev->hid_dev;
++	struct mc_subled *mc_led_info;
++	struct led_classdev *cdev;
++	int ret;
 +
-+A typical use case is that a job scheduler writes to ``lru_gen`` at a
-+certain time interval to create new generations, and it ranks the
-+servers it manages based on the sizes of their cold memory defined by
-+this time interval.
++	mc_led_info = devm_kmalloc_array(&hdev->dev, 3,
++					 sizeof(*mc_led_info),
++					 GFP_KERNEL | __GFP_ZERO);
++	if (!mc_led_info)
++		return -ENOMEM;
 +
-+Proactive reclaim
-+-----------------
-+Proactive reclaim induces memory reclaim when there is no memory
-+pressure and usually targets cold memory only. E.g., when a new job
-+comes in, the job scheduler wants to proactively reclaim memory on the
-+server it has selected to improve the chance of successfully landing
-+this new job.
++	mc_led_info[0].color_index = LED_COLOR_ID_RED;
++	mc_led_info[1].color_index = LED_COLOR_ID_GREEN;
++	mc_led_info[2].color_index = LED_COLOR_ID_BLUE;
 +
-+Users can write ``- memcg_id node_id min_gen_nr [swappiness
-+[nr_to_reclaim]]`` to ``lru_gen`` to evict generations less than or
-+equal to ``min_gen_nr``. Note that ``min_gen_nr`` should be less than
-+``max_gen_nr-1`` as ``max_gen_nr`` and ``max_gen_nr-1`` are not fully
-+aged and therefore cannot be evicted. ``swappiness`` overrides the
-+default value in ``/proc/sys/vm/swappiness``. ``nr_to_reclaim`` limits
-+the number of pages to evict.
++	mc_dev->subled_info = mc_led_info;
++	mc_dev->num_colors = 3;
 +
-+A typical use case is that a job scheduler writes to ``lru_gen``
-+before it tries to land a new job on a server, and if it fails to
-+materialize the cold memory without impacting the existing jobs on
-+this server, it retries on the next server according to the ranking
-+result obtained from the working set estimation step described
-+earlier.
-diff --git a/mm/Kconfig b/mm/Kconfig
-index e9d5f1d09ac4..414eee6390a6 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -899,7 +899,8 @@ config LRU_GEN
- 	# the following options can use up the spare bits in page flags
- 	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
- 	help
--	  A high performance LRU implementation for memory overcommit.
-+	  A high performance LRU implementation for memory overcommit. See
-+	  Documentation/admin-guide/mm/multigen_lru.rst for details.
-=20
- config LRU_GEN_ENABLED
- 	bool "Enable by default"
---=20
-2.35.1.616.g0bdcbb4464-goog
++	cdev = &mc_dev->led_cdev;
++	cdev->name = devm_kasprintf(&hdev->dev, GFP_KERNEL,
++				    "%s:rgb:indicator-%d", hdev->uniq, zone);
++
++	if (!cdev->name)
++		return -ENOMEM;
++
++	cdev->brightness = 0;
++	cdev->max_brightness = 255;
++	cdev->flags |= LED_CORE_SUSPENDRESUME;
++	cdev->brightness_set_blocking = hidpp_set_brightness;
++
++	ret = devm_led_classdev_multicolor_register(&hdev->dev, mc_dev);
++	if (ret < 0) {
++		hid_err(hdev, "Cannot register multicolor LED device: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
+ /* -------------------------------------------------------------------------- */
+ /* 0x1d4b: Wireless device status                                             */
+ /* -------------------------------------------------------------------------- */
+@@ -3699,6 +3837,54 @@ static int hidpp_event(struct hid_device *hdev, struct hid_field *field,
+ 	return 1;
+ }
+ 
++static int hidpp_initialize_leds(struct hidpp_device *hidpp_dev)
++{
++	u8 count;
++	u8 feature_index;
++	u8 feature_type;
++	int i;
++	int ret;
++	struct hid_device *hdev;
++
++	hdev = hidpp_dev->hid_dev;
++	if (hidpp_dev->leds)
++		return 0;
++	if (hidpp_dev->protocol_major >= 2) {
++		ret = hidpp_root_get_feature(hidpp_dev,
++					     HIDPP_PAGE_LED_EFFECTS,
++					     &feature_index,
++						     &feature_type);
++			if (ret)
++				return ret;
++
++		ret = hidpp20_color_led_effect_get_info(hidpp_dev, feature_index, &count);
++		if (ret)
++			return ret;
++
++		hidpp_dev->capabilities |= HIDPP_CAPABILITY_HIDPP20_COLORED_LEDS;
++		hidpp_dev->leds = devm_kzalloc(&hdev->dev,
++					       struct_size(hidpp_dev->leds, leds, count),
++					       GFP_KERNEL);
++
++		if (!hidpp_dev->leds)
++			return -ENOMEM;
++
++		hidpp_dev->leds->feature_index = feature_index;
++		hidpp_dev->leds->count = count;
++
++		for (i = 0; i < count; i++) {
++			ret = hidpp_mc_led_register(hidpp_dev, &hidpp_dev->leds->leds[i], i);
++			if (ret < 0)
++				return ret;
++		}
++
++		return 0;
++
++	} else {
++		return 0;
++	}
++}
++
+ static int hidpp_initialize_battery(struct hidpp_device *hidpp)
+ {
+ 	static atomic_t battery_no = ATOMIC_INIT(0);
+@@ -3943,6 +4129,8 @@ static void hidpp_connect_event(struct hidpp_device *hidpp)
+ 	if (hidpp->battery.ps)
+ 		power_supply_changed(hidpp->battery.ps);
+ 
++	hidpp_initialize_leds(hidpp);
++
+ 	if (hidpp->quirks & HIDPP_QUIRK_HI_RES_SCROLL)
+ 		hi_res_scroll_enable(hidpp);
+ 
+-- 
+2.30.2
 

@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F114D1D38
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 657E74D1D3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 17:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348348AbiCHQcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 11:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S1345309AbiCHQdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 11:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236764AbiCHQcX (ORCPT
+        with ESMTP id S233467AbiCHQdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:32:23 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7589650447
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:31:26 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id x9-20020a0566022c4900b0064289c98bf8so13261153iov.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:31:26 -0800 (PST)
+        Tue, 8 Mar 2022 11:33:42 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237AE1C92C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 08:32:46 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id q11so17530501pln.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 08:32:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MDJaDnlaWqCwSLZ2xY2jUso11XFGercUGusBxxAgtVk=;
+        b=CozgWYjzxJCzVbVnNQdW/74opk6c0nC+E7ilHT/h1ebaB3jgodE/BBGTGntnHY6NzK
+         xcLiO9kESCm9B7UZiGxrHLlTqTST3MhnlaMYFCRDVZvGcH5y6ujzPyr/5MXhjdZd6aUg
+         kwWlLp1PTpdeSo3TgWijZbZPIIMv4tC57Ig/3rWA0cELRhRdI8U+XQ+8Yx+0+R3LuNln
+         7BSmN1DWXCwCQynTO6IkVrBwQhZxJacq5cn/jS7GKLRiA96xHWpxxFUbbeARwQg6xjPt
+         C69kIQRngF0Cy+gv/rOCprJSLGN3TbzXkCfeTeZE1Bhn6B9mR9BxG5KrNA0TzNvrnV9g
+         eTyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=V1zLNO1KAqXnOsAbreZ3eBprRbDmLPsP43VZUANZ1eE=;
-        b=i1GQkL4ri6wgOGJ9q+jcE43E5HFx6Xmha3gv8V8TpJfa1UR9fV4bDQfWjtFrzxBB/Z
-         VGRDQLIlOausSkhMkEL2JdFN8HiXK915s8Rw1ek3tK4Ck8tGY2wJO9q+V0pE95V64ZkZ
-         6RxAT0ndgexr/4IOgas9x1QaOIgXggr3qHHIR5ahOmoi2VBYS2XLnQtElAzo6LVwIgI/
-         FXi0o3tkZqyFWv5T5x76uq7L+ahuOI2xDvFFaKl76+b431AMgo5gMsKEGYmYWjEOgkfS
-         53MSORqvuydYhyjwkZY7/crthBDINpYd7VbqUHzkKr2zMubtcJymPx7LgDPE1Q99GcRx
-         QgpQ==
-X-Gm-Message-State: AOAM531/YT7r54DHSZOmHROT7X4pPB4lhdLYZQSkpab+DaGPfghdragh
-        t3+S58n7jYqIh+gxY6vQI08hp7R+CCZJaOeabxZ9hnz9YbGd
-X-Google-Smtp-Source: ABdhPJz2wlhCoBGloN79xjSbYtO9yttKkeIGLgG5eHIjjuJ6B4OJHpcgxXKi5Qtx3q3ZgYzJZZI+3dM1OCybcO34ErYNuEZmv0oD
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MDJaDnlaWqCwSLZ2xY2jUso11XFGercUGusBxxAgtVk=;
+        b=TEOake2+BXZbYIy2jqyOt7flC79uLOZiliB5NKvu2zOv0Sk8z49ppHsssk6FzAYEiN
+         COhuxiBDOrpgYW07j7H6T8GyPkwxHQqBBaf36IU9Zli3YMQoohRnph5ToTSuuaRxx7EI
+         xXV9fIDwCO689I9Dlz9qMqOL8TRCxT4y0/bNRb9el+aHBIfpiSJu9W9yEgFy48t0uRg9
+         SOeapvkvfqjB12rfXLgXYmXyMh3cLV+NKzJr9PG0iqIEzi1F19lo7TjaDs3Kpr3Odh4F
+         uHixnsBKqjtnF4jIZ/Wnjcp5FeFKhE3ai2YxiU7Zrwu9YAXeemXiFMVb1HPGIdOs1i6c
+         C26g==
+X-Gm-Message-State: AOAM532NCvz+H0htJVwgWYej//xr0PxGyVsMxcsU+C7GXrvf/CkNeG89
+        5Q6GjbvFakr6vPPJUzYftkpxnY4B+18Qdg==
+X-Google-Smtp-Source: ABdhPJw+HlG6+ACvZrUVftgp2vOvO45j4Z6gaYuI0dqdXvMXy6c8L2vtKpr+LlK3ZLQ0tINSSDGrlA==
+X-Received: by 2002:a17:902:6b47:b0:150:80de:5d49 with SMTP id g7-20020a1709026b4700b0015080de5d49mr18353382plt.77.1646757165466;
+        Tue, 08 Mar 2022 08:32:45 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056a00234900b004f6fe0f4cb2sm9217580pfj.14.2022.03.08.08.32.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 08:32:44 -0800 (PST)
+Date:   Tue, 8 Mar 2022 16:32:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com
+Subject: Re: [PATCH v2 01/25] KVM: x86/mmu: avoid indirect call for get_cr3
+Message-ID: <YieFKfjrgTTnYkL7@google.com>
+References: <20220221162243.683208-1-pbonzini@redhat.com>
+ <20220221162243.683208-2-pbonzini@redhat.com>
+ <YieBXzkOkB9SZpyp@google.com>
+ <2652c27e-ce8c-eb40-1979-9fe732aa9085@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:944a:0:b0:645:dc2c:46c6 with SMTP id
- x10-20020a5d944a000000b00645dc2c46c6mr5968524ior.190.1646757085832; Tue, 08
- Mar 2022 08:31:25 -0800 (PST)
-Date:   Tue, 08 Mar 2022 08:31:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000021ebaf05d9b78339@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in sco_sock_timeout
-From:   syzbot <syzbot+c893cac8686270f25523@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2652c27e-ce8c-eb40-1979-9fe732aa9085@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Mar 08, 2022, Paolo Bonzini wrote:
+> On 3/8/22 17:16, Sean Christopherson wrote:
+> > 
+> > > +static inline unsigned long kvm_mmu_get_guest_pgd(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
+> > Wrap the params, no reason to make this line so long.
+> > 
+> > > +{
+> > > +#ifdef CONFIG_RETPOLINE
+> > > +	if (mmu->get_guest_pgd == kvm_get_guest_cr3)
+> > > +		return kvm_read_cr3(vcpu);
+> > This is unnecessarily fragile and confusing at first glance.  Compilers are smart
+> > enough to generate a non-inline version of functions if they're used for function
+> > pointers, while still inlining where appropriate.  In other words, just drop
+> > kvm_get_guest_cr3() entirely, a al get_pdptr => kvm_pdptr_read().
+> 
+> Unfortunately this isn't entirely true.  The function pointer will not match
+> between compilation units, in this case between the one that calls
+> kvm_mmu_get_guest_pgd and the one that assigned kvm_read_cr3 to the function
+> pointer.
 
-syzbot found the following issue on:
+Ooh, that's a nasty gotcha.  And that's why your v1 used a NULL entry as a sentinel
+for rerouting to kvm_read_cr3().  Hrm, I'm torn between disliking the NULL behavior
+and disliking the subtle redirect :-)
 
-HEAD commit:    91265a6da44d Add linux-next specific files for 20220303
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1621ba59700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
-dashboard link: https://syzkaller.appspot.com/bug?extid=c893cac8686270f25523
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Aha!  An idea that would provide line of sight to avoiding retpoline in all cases
+once we use static_call() for nested_ops, which I really want to do...  Drop the
+mmu hook entirely and replace it with:
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c893cac8686270f25523@syzkaller.appspotmail.com
-
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 0 PID: 21810 Comm: kworker/0:3 Not tainted 5.17.0-rc6-next-20220303-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events sco_sock_timeout
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- assign_lock_key kernel/locking/lockdep.c:980 [inline]
- register_lock_class+0xf04/0x11b0 kernel/locking/lockdep.c:1293
- __lock_acquire+0x10a/0x56c0 kernel/locking/lockdep.c:4939
- lock_acquire kernel/locking/lockdep.c:5672 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5637
- lock_sock_nested+0x36/0xf0 net/core/sock.c:3312
- lock_sock include/net/sock.h:1682 [inline]
- sco_sock_timeout+0xd2/0x290 net/bluetooth/sco.c:97
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+static inline kvm_mmu_get_guest_pgd(struct kvm_vcpu *vcpu)
+{
+	if (!mmu_is_nested(vcpu))
+		return kvm_read_cr3(vcpu);
+	else
+		return kvm_x86_ops.nested_ops->get_guest_pgd(vcpu);
+}

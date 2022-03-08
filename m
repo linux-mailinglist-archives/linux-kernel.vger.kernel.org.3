@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011ED4D27AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B3D4D26F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiCIBcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
+        id S230464AbiCIBik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiCIBcC (ORCPT
+        with ESMTP id S230479AbiCIBid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:32:02 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773E39BBBC
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:31:01 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 601521F427CD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646782616;
-        bh=kRaFRXBGux+TbENn2Kyrr3Xa4IzJA4fzoh4b5x/nepw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RCLl30ojsnSTZtavefq4yuA7iIUEcgyigjumu75n7L3YhfvPjwuRamXHUgCeAItHh
-         XZhNdlsTpbH/OWe0ogEo62R5WKTrp+xRefpWqqCWU4Rie4HKqhsbLC0fhtrhCj+WDg
-         lGC2BddpWgP/KIkdTyyET1ABkGkambfn+ld/aqz8xxJg73d0LeytRk5vXZXUviDK29
-         3tOB4iJVP+wMkWrpunLzQlgoTaIiV8511jRotqj1k5Lcpb68yGNae14mkPNXHr6luT
-         70c2GvE419Q0Fogo2ULSWnyzPqBpDDdYTMbkDkTfJT6jEablCwhYu9kM0NimL5RP/s
-         VQ/+yD6+qprMA==
-Message-ID: <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com>
-Date:   Wed, 9 Mar 2022 02:36:52 +0300
+        Tue, 8 Mar 2022 20:38:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A14C084A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:37:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 100A9B81E54
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 23:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FD8C340EB;
+        Tue,  8 Mar 2022 23:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646783043;
+        bh=nPkEjaPhmtz1uf+m6q2s3D/aBNBOZk/4dRNGJTjE+po=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=g2KHv2w1DD8nnoXcxphbD/Tdgd3lvFHi6myhOHmxIHbrcT9/wjnAo9/nDf23FyY+M
+         OFGF2fJb4308pNtVVO7vYdsPGC6rSu2bJGP9u+ZCaPMwlId4cUFooAoLJ/oGJzTviz
+         5nIRfso90rrKJacBorbLQuWrUC+vjNLabNUqRAt840jKojACvomYHSzKj3u/UWSrTi
+         6vxANSijjWcMDFHE48+Kjr7FELwXww9zhKDludygGsiN+u/XX1txk/SRSP99cl7e72
+         kXS8bdprUp1APZJCWFrGa2qzkfvHbtfbloxXSIDQ5Z8SlplYGvNSyFfOl92LUrSKbV
+         tXhLd1NlpVDAg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 35D6C5C14AE; Tue,  8 Mar 2022 15:44:03 -0800 (PST)
+Date:   Tue, 8 Mar 2022 15:44:03 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        vincent.guittot@linaro.org, bristot@redhat.com,
+        zhaolei@cn.fujitsu.com, tj@kernel.org, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] sched/cpuacct: optimize away RCU read lock
+Message-ID: <20220308234403.GC4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220220051426.5274-1-zhouchengming@bytedance.com>
+ <20220220051426.5274-2-zhouchengming@bytedance.com>
+ <CGME20220308232034eucas1p2b0f39cee0f462af6004ebdfbe5bacb9f@eucas1p2.samsung.com>
+ <f4bc652b-115f-35b5-91db-bad3b30fed9b@samsung.com>
+ <YifniVyoJ9NNU+pv@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Rob Clark <robdclark@chromium.org>
-References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
- <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
- <d2290971-ea22-8203-631e-b896c76a994b@collabora.com>
- <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YifniVyoJ9NNU+pv@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,80 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/22 01:24, Rob Clark wrote:
-> On Tue, Mar 8, 2022 at 11:28 AM Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
->>
->> On 3/8/22 19:29, Rob Clark wrote:
->>> On Tue, Mar 8, 2022 at 5:17 AM Dmitry Osipenko
->>> <dmitry.osipenko@collabora.com> wrote:
->>>>
->>>> Hello,
->>>>
->>>> This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
->>>> During OOM, the shrinker will release BOs that are marked as "not needed"
->>>> by userspace using the new madvise IOCTL. The userspace in this case is
->>>> the Mesa VirGL driver, it will mark the cached BOs as "not needed",
->>>> allowing kernel driver to release memory of the cached shmem BOs on lowmem
->>>> situations, preventing OOM kills.
->>>
->>> Will host memory pressure already trigger shrinker in guest?
->>
->> The host memory pressure won't trigger shrinker in guest here. This
->> series will help only with the memory pressure within the guest using a
->> usual "virgl context".
->>
->> Having a host shrinker in a case of "virgl contexts" should be a
->> difficult problem to solve.
+On Wed, Mar 09, 2022 at 12:32:25AM +0100, Peter Zijlstra wrote:
+> On Wed, Mar 09, 2022 at 12:20:33AM +0100, Marek Szyprowski wrote:
+> > On 20.02.2022 06:14, Chengming Zhou wrote:
+> > > Since cpuacct_charge() is called from the scheduler update_curr(),
+> > > we must already have rq lock held, then the RCU read lock can
+> > > be optimized away.
+> > >
+> > > And do the same thing in it's wrapper cgroup_account_cputime(),
+> > > but we can't use lockdep_assert_rq_held() there, which defined
+> > > in kernel/sched/sched.h.
+> > >
+> > > Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> > 
+> > This patch landed recently in linux-next as commit dc6e0818bc9a 
+> > ("sched/cpuacct: Optimize away RCU read lock"). On my test systems I 
+> > found that it triggers a following warning in the early boot stage:
+> > 
+> > Calibrating delay loop (skipped), value calculated using timer 
+> > frequency.. 48.00 BogoMIPS (lpj=240000)
+> > pid_max: default: 32768 minimum: 301
+> > Mount-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
+> > Mountpoint-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
+> > CPU: Testing write buffer coherency: ok
+> > CPU0: Spectre v2: using BPIALL workaround
+> > 
+> > =============================
+> > WARNING: suspicious RCU usage
+> > 5.17.0-rc5-00050-gdc6e0818bc9a #11458 Not tainted
+> > -----------------------------
+> > ./include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
 > 
-> Hmm, I think we just need the balloon driver to trigger the shrinker
-> in the guest kernel?  I suppose a driver like drm/virtio might want to
-> differentiate between host and guest pressure (ie. consider only
-> objects that have host vs guest storage), but even without that,
-> freeing up memory in the guest when host is under memory pressure
-> seems worthwhile.  Maybe I'm over-simplifying?
-
-Might be the opposite, i.e. me over-complicating :) The variant with
-memory ballooning actually could be good and will work for all kinds of
-virtio contexts universally. There will be some back-n-forth between
-host and guest, but perhaps it will work okay. Thank you for the suggestion.
-
->>> This is
->>> something I'm quite interested in for "virtgpu native contexts" (ie.
->>> native guest driver with new context type sitting on top of virtgpu),
->>
->> In a case of "native contexts" it should be doable, at least I can't see
->> any obvious problems. The madvise invocations could be passed to the
->> host using a new virtio-gpu command by the guest's madvise IOCTL
->> handler, instead-of/in-addition-to handling madvise in the guest's
->> kernel, and that's it.
+> Arguably, with the flavours folded again, rcu_dereference_check() ought
+> to default include rcu_read_lock_sched_held() or its equivalent I
+> suppose.
 > 
-> I think we don't want to do that, because MADV:WILLNEED would be by
-> far the most frequent guest<->host synchronous round trip.  So from
-> that perspective tracking madvise state in guest kernel seems quite
-> attractive.
+> Paul?
 
-This is a valid concern. I'd assume that the overhead should be
-tolerable, but I don't have any actual perf numbers.
+That would reduce the number of warnings, but it also would hide bugs.
 
-> If we really can't track madvise state in the guest for dealing with
-> host memory pressure, I think the better option is to introduce
-> MADV:WILLNEED_REPLACE, ie. something to tell the host kernel that the
-> buffer is needed but the previous contents are not (as long as the GPU
-> VA remains the same).  With this the host could allocate new pages if
-> needed, and the guest would not need to wait for a reply from host.
+So, are you sure you really want this?
 
-If variant with the memory ballooning will work, then it will be
-possible to track the state within guest-only. Let's consider the
-simplest variant for now.
-
-I'll try to implement the balloon driver support in the v2 and will get
-back to you.
-
->>> since that isn't using host storage
->>
->> s/host/guest ?
-> 
-> Yes, sorry, I meant that it is not using guest storage.
-
-Thank you for the clarification.
+							Thanx, Paul

@@ -2,253 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68B54D0F3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD744D0F4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 06:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245484AbiCHFiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 00:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S241796AbiCHFrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 00:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245429AbiCHFiT (ORCPT
+        with ESMTP id S245719AbiCHFrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:38:19 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A213BA53
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 21:37:23 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id u3so35579880ybh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 21:37:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rKcElPkVErIkA0FRVRebvYFiTDdWU+fRqLr3tn1gxSY=;
-        b=cX6lPwX9mMHV1MBA07XrS+btXSYVH9mlHa5mMczBv+K7XGuDqqSZHTdhDZYFCOtlwZ
-         9LCHB7MgqaGHNEoC+oLwSaQ5MFBmTYjgH7yG5FP5guLFzt0bg7aWwSfyHjwnd+ml8QqB
-         ayjk80CQ047OpShJqgA50vwTA0nMtHeruL5vpM0n9u4opIKATDKNgpEi9RLoLIfb0Jib
-         KgsQQP2wVMoe2z6vWiqrXwq6PeHqFc1VImovo2qOAbH6aAVE/mzbtU9LdB8jZ4DXC1lt
-         kysbJJEKk6GPrqGy+wNryIR2eNvnTRT5ZEPLisLP4sPm6csyQiEEHDZifVBpVX2rzMA5
-         SQkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rKcElPkVErIkA0FRVRebvYFiTDdWU+fRqLr3tn1gxSY=;
-        b=22F/iPm5MlGcp8pQJHhfaLG+CGn5qiy+U24alGKULBDhSwDy87OxWE6YWjeJYLbdAt
-         F+zW+IrpnvK5CISM+C3bT/oBIXcNXUkRWFs4vmYLwP+LYmYQAiQPBtPX48W5IItSecFo
-         mjpwd9O/w6Sd+NLPkgZwBZi0AKw3Z5ctDD7tl6aWalTXT9bYOhBjJGX854h3+Uvv1xO5
-         acnN93EyjVWHeSBIrpji0tuul66KeDSdsJbMErS/yGdEXan9phYKzVzmPNia7cC8BjKc
-         WCynrD/F81J6R2WdfQDMRVPP0jypDu8llmszSU/oJ5Puqhbx69YSCfcFZY9z4GEZVR84
-         UtZg==
-X-Gm-Message-State: AOAM531buSIrhzbcD14ZOTV4EokJG8xaVTwQ0ZXYO5JLy3dyujC4V2Y3
-        flQ/oSCV4rYdy1gTUbh4PjdPJSidliY15H7OlgrxMA==
-X-Google-Smtp-Source: ABdhPJydLO0dZEb/7C0x5NzZ+qV42tYJelOwsqOkANUZ2a9e0FiqlBYKWWgrKryjOkwP19cbRbjRYY5GEhQOuk9/crs=
-X-Received: by 2002:a25:778b:0:b0:628:919f:7088 with SMTP id
- s133-20020a25778b000000b00628919f7088mr11076462ybc.282.1646717842770; Mon, 07
- Mar 2022 21:37:22 -0800 (PST)
+        Tue, 8 Mar 2022 00:47:08 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00983BF84;
+        Mon,  7 Mar 2022 21:46:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646718367; x=1678254367;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=h5Gl6i6ysgskZd8ciPyhjY2DGz3Py3n895BxmTYcWhk=;
+  b=K6EHQM8T8KguQ/lzykC+28innXkyknfzLDJyh6Eped+Q5eSV5CMv7fHr
+   GE5MyYAquFgpEk6+YOYxrenGC9/ELvefN22OqbbajfMk1n038eFIrbbU4
+   Ccj9s7RWXrTf5hhaxxMFTBAWm1bQBb1pJuAxeSPN0nKAO/FSVfjxCsyeg
+   l3dl39J7Y7CV6gXv0vzfujIg3UmmAXWaxnJ9B22M5uA72k+5iWEZw2HMq
+   BXbdRp7vnATLaGIxpDo7wMQALb/OjWqYrWazmmbIx7mCg6LYD/mePA6oG
+   t9HXkcwtZoYWOPg8YiRNc5emGX1hOLF5eonJQ+x5AXvs5aF5H5tmbpCRd
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254789237"
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="254789237"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 21:46:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
+   d="scan'208";a="537429984"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by orsmga007.jf.intel.com with ESMTP; 07 Mar 2022 21:46:00 -0800
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v8 00/11] Fix BUG_ON in vfio_iommu_group_notifier()
+Date:   Tue,  8 Mar 2022 13:44:10 +0800
+Message-Id: <20220308054421.847385-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220128131006.67712-1-michel@lespinasse.org> <20220223161141.GG4423@techsingularity.net>
-In-Reply-To: <20220223161141.GG4423@techsingularity.net>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 7 Mar 2022 21:37:11 -0800
-Message-ID: <CAJuCfpE10y78SNPQ+LRY5EonDFhOG=1XjZ9FUUDiyhfhjZ54NA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/35] Speculative page faults
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Michel Lespinasse <michel@lespinasse.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel-team@fb.com,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Jerome Glisse <jglisse@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Rik van Riel <riel@surriel.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andy Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 8:11 AM Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> On Fri, Jan 28, 2022 at 05:09:31AM -0800, Michel Lespinasse wrote:
-> > This patchset is my take on speculative page faults (spf).
-> > It builds on ideas that have been previously proposed by Laurent Dufour,
-> > Peter Zijlstra and others before. While Laurent's previous proposal
-> > was rejected around the time of LSF/MM 2019, I am hoping we can revisit
-> > this now based on what I think is a simpler and more bisectable approach,
-> > much improved scaling numbers in the anonymous vma case, and the Android
-> > use case that has since emerged. I will expand on these points towards
-> > the end of this message.
-> >
-> > The patch series applies on top of linux v5.17-rc1;
-> > a git tree is also available:
-> > git fetch https://github.com/lespinasse/linux.git v5.17-rc1-spf-anon
-> >
-> > I would like these patches to be considered for inclusion into v5.18.
-> > Several android vendors are using Laurent Dufour's previous SPF work into
-> > their kernel tree in order to improve application startup performance,
-> > want to converge to an upstream accepted solution, and have reported good
-> > numbers with previous versions of this patchset. Also, there is a broader
-> > interest into reducing mmap lock dependencies in critical MM paths,
-> > and I think this patchset would be a good first step in that direction.
-> >
->
-> I think there is serious lack of performance data here. The only
-> performance point offered is the Android Application Startup case.
-> Unfortunately, that benefit may be specific to the Zygote process that
-> preloads classes that may be required and listens for new applications to
-> start. I suspect the benefit wouldn't apply to most Linux distributions
-> and even JVM-based workloads are not primarily constrained by the startup
-> cost. Improving application start up costs is not great justification
-> for this level of code complexity even though I recognise why it is a
-> key performance indicator for Android given that startup times affect
-> the user experience.
->
-> Laurent's original work was partially motivated by the performance of
-> a proprietary application. While I cannot replicate a full production
-> workload as that can only be done by the company, I could do a basic
-> evaluation commonly conducted on standalone systems. It was extremely
-> fault intensive with SPF success rates greater than 96% but almost no
-> change in actual performance. It's perfectly possible that the application
-> has changed since SPF was first proposed. The developers did spend a fair
-> amount of effort at making the application NUMA-aware and reusing memory
-> more aggressively to avoid faults. It's still very fault intensive but
-> does not appear to suffer due to parallel memory operations guessing from
-> the data.
->
-> On my own tests, the only preliminary test that was a clear winner
-> was will-it-scale using threads for the page-fault workloads and
-> page-fault-test for threads. To be far, the increases there are dramatic
-> with a high success rate of speculative faults.
->
-> pft timings
->                                  5.17.0-rc3             5.17.0-rc3
->                                     vanilla        mm-spfault-v2r1
-> Amean     elapsed-1        32.66 (   0.00%)       32.77 *  -0.36%*
-> Amean     elapsed-4         9.17 (   0.00%)        8.89 *   3.07%*
-> Amean     elapsed-7         5.53 (   0.00%)        5.26 *   4.95%*
-> Amean     elapsed-12        4.13 (   0.00%)        3.50 *  15.16%*
-> Amean     elapsed-21        3.93 (   0.00%)        2.79 *  29.03%*
-> Amean     elapsed-30        4.02 (   0.00%)        2.94 *  26.79%*
-> Amean     elapsed-48        4.37 (   0.00%)        2.83 *  35.24%*
-> Amean     elapsed-79        4.13 (   0.00%)        2.17 *  47.36%*
-> Amean     elapsed-80        4.12 (   0.00%)        2.13 *  48.22%*
->
-> Ops SPFault Attempt                        0.00  4734439786.00
-> Ops SPFault Abort                          0.00     9360014.00
-> Ops SPFault Success                        0.00          99.80
->
-> This is the ideal case for SPF but not very realistic. Interestingly,
-> ebizzy barely benefitted even though it's threaded because it's not
-> guaranteed to be address space modification intensive.
->
-> Hackbench took a performance hit between 0-5% depending on the exact
-> configuration and machine used. It is threaded and had high SPF abort rates
-> (up to 50%). It's not a great example but it shows at least one example
-> where SPF hurts more than it help and there may be other applications
-> that are harmed by having to retry faults.
->
-> The scope of SPF is narrow relative to the much older discussion of
-> breaking up mmap_sem. The only time SPF benefits is when faults are racing
-> against parallel memory address updates holding mmap_sem for write.
-> That requires a threaded application that is both intense in terms of
-> address space updates and fault intensive. That is much narrower than
-> threaded applications that are address space update intensive (e.g.
-> using mprotect to avoid accidentally leaking data, mapping data files
-> for IO etc). Have we examples of realistic applications that meet all the
-> criteria of "threaded", "address-space intensive" and "fault intensive"
-> that are common enough to justify the complexity?
->
-> Admittedly, I initially just threw this series at a collection of
-> workloads that simply stress the allocator because it stresses faults as
-> a side-effect but most of them did not match the criteria for "threaded
-> application that is both address space update intensive and fault
-> intensive". I'm struggling to think of good examples although redis
-> is a possibility. HPC workloads like NPB parallelised with OpenMP is a
-> possibility but I looked at some old results and while it does trap faults,
-> the vast majority are related to NUMA balancing.  The other ones I normally
-> consider for scaling purposes are process orientated and not threads.
->
-> On the patches themselves, I'm not sure the optimisation for ignoring SPF
-> is guaranteed to work as mm_users could be temporarily elevated although
-> probably not enough to matter. I also think patch 5 stands on its own and
-> could be sent separately. For the others, I didn't read them in sufficient
-> depth but noted that the level of similar logic between speculative
-> and non-speculative paths could be a maintenance headache to keep the
-> speculative and !speculative rules in sync. I didn't see obvious problems
-> as such but I still think the complexity is high for a corner case.
+Hi folks,
 
-Hi Mel,
-Thank you for taking your time to analyze SPF effects on different
-workloads. Your feedback drove me to look into the reasons Android
-benefits from this patchset. What we know is that apps which benefit
-the most are the ones with high number of threads (~100) and when I
-strace'd one of these apps I can see that each thread mmaps several
-areas upon startup (Stack and Thread-local storage (TLS), thread
-signal stack, indirect ref table).
-So, I created a simple test that spawns a given number of threads,
-each thread mmapping and faulting-in a given number of vmas with a
-given number of pages in each one. Each thread records the time it
-takes to mmap the vmas and fault-in the pages and the test reports the
-total and the average times measured. You can find my test program
-here: https://github.com/surenbaghdasaryan/spf_test/blob/main/spf_test.c
+The iommu group is the minimal isolation boundary for DMA. Devices in
+a group can access each other's MMIO registers via peer to peer DMA
+and also need share the same I/O address space.
 
-I ran a number of tests on my Pixel 6 and SPF shows quite positive
-results even with a small number of vmas and pages. Couple examples:
+Once the I/O address space is assigned to user control it is no longer
+available to the dma_map* API, which effectively makes the DMA API
+non-working.
 
-100 threads, 2 vmas, 10 pages (cmdline: spf_test 100 2 10)
-Baseline avg time: 1,889,398.01ns
-SPF avg time: 327,299.36ns
-Improvement: 83%
+Second, userspace can use DMA initiated by a device that it controls
+to access the MMIO spaces of other devices in the group. This allows
+userspace to indirectly attack any kernel owned device and it's driver.
 
-100 threads, 10 vmas, 2 pages (cmdline: spf_test 100 10 2)
-Baseline avg time: 1,234,861.48ns
-SPF avg time: 800,392.82ns
-Improvement: 35%
+Therefore groups must either be entirely under kernel control or
+userspace control, never a mixture. Unfortunately some systems have
+problems with the granularity of groups and there are a couple of
+important exceptions:
 
-100 threads, 10 vmas, 10 pages (cmdline: spf_test 100 10 10)
-Baseline avg time: 12,199,939.04ns
-SPF avg time: 3,223,206.41ns
-Improvement: 74%
+ - pci_stub allows the admin to block driver binding on a device and
+   make it permanently shared with userspace. Since PCI stub does not
+   do DMA it is safe, however the admin must understand that using
+   pci_stub allows userspace to attack whatever device it was bound
+   it.
 
-100 threads, 30 vmas, 30 pages (cmdline: spf_test 100 30 30)
-Baseline avg time: 255,827,268.16ns
-SPF avg time: 41,538,348.47ns
-Improvement: 84%
+ - PCI bridges are sometimes included in groups. Typically PCI bridges
+   do not use DMA, and generally do not have MMIO regions.
 
-To minimize the noise, the test setup was to run with the same
-parameters for several hundred times and take the average between
-runs.
-I think this test represents an example of what you were describing as
-a "threaded application that is both address space update intensive
-and fault intensive" because mmaps modify the address space with
-page-faults happening in parallel. We can call it an artificial
-workload but it does not strike me as something very unusual. I can
-imagine other systems apart from Android which could spawn multiple
-threads with each thread mapping some memory area to work with and
-using that area immediately.
-Thanks,
-Suren.
+Generally any device that does not have any MMIO registers is a
+possible candidate for an exception.
 
+Currently vfio adopts a workaround to detect violations of the above
+restrictions by monitoring the driver core BOUND event, and hardwiring
+the above exceptions. Since there is no way for vfio to reject driver
+binding at this point, BUG_ON() is triggered if a violation is
+captured (kernel driver BOUND event on a group which already has some
+devices assigned to userspace). Aside from the bad user experience
+this opens a way for root userspace to crash the kernel, even in high
+integrity configurations, by manipulating the module binding and
+triggering the BUG_ON.
 
->
-> --
-> Mel Gorman
-> SUSE Labs
+This series solves this problem by making the user/kernel ownership a
+core concept at the IOMMU layer. The driver core enforces kernel
+ownership while drivers are bound and violations now result in a error
+codes during probe, not BUG_ON failures.
+
+Patch partitions:
+  [PATCH 1-4]: Detect DMA ownership conflicts during driver binding;
+  [PATCH 5-7]: Add security context management for assigned devices;
+  [PATCH 8-11]: Various cleanups.
+
+This is also part one of three initial series for IOMMUFD:
+ * Move IOMMU Group security into the iommu layer
+ - Generic IOMMUFD implementation
+ - VFIO ability to consume IOMMUFD
+
+Change log:
+v1: initial post
+  - https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/
+
+v2:
+  - https://lore.kernel.org/linux-iommu/20211128025051.355578-1-baolu.lu@linux.intel.com/
+
+  - Move kernel dma ownership auto-claiming from driver core to bus
+    callback. [Greg/Christoph/Robin/Jason]
+    https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#m153706912b770682cb12e3c28f57e171aa1f9d0c
+
+  - Code and interface refactoring for iommu_set/release_dma_owner()
+    interfaces. [Jason]
+    https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
+
+  - [NEW]Add new iommu_attach/detach_device_shared() interfaces for
+    multiple devices group. [Robin/Jason]
+    https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
+
+  - [NEW]Use iommu_attach/detach_device_shared() in drm/tegra drivers.
+
+  - Refactoring and description refinement.
+
+v3:
+  - https://lore.kernel.org/linux-iommu/20211206015903.88687-1-baolu.lu@linux.intel.com/
+
+  - Rename bus_type::dma_unconfigure to bus_type::dma_cleanup. [Greg]
+    https://lore.kernel.org/linux-iommu/c3230ace-c878-39db-1663-2b752ff5384e@linux.intel.com/T/#m6711e041e47cb0cbe3964fad0a3466f5ae4b3b9b
+
+  - Avoid _platform_dma_configure for platform_bus_type::dma_configure.
+    [Greg]
+    https://lore.kernel.org/linux-iommu/c3230ace-c878-39db-1663-2b752ff5384e@linux.intel.com/T/#m43fc46286611aa56a5c0eeaad99d539e5519f3f6
+
+  - Patch "0012-iommu-Add-iommu_at-de-tach_device_shared-for-mult.patch"
+    and "0018-drm-tegra-Use-the-iommu-dma_owner-mechanism.patch" have
+    been tested by Dmitry Osipenko <digetx@gmail.com>.
+
+v4:
+  - https://lore.kernel.org/linux-iommu/20211217063708.1740334-1-baolu.lu@linux.intel.com/
+  - Remove unnecessary tegra->domain chech in the tegra patch. (Jason)
+  - Remove DMA_OWNER_NONE. (Joerg)
+  - Change refcount to unsigned int. (Christoph)
+  - Move mutex lock into group set_dma_owner functions. (Christoph)
+  - Add kernel doc for iommu_attach/detach_domain_shared(). (Christoph)
+  - Move dma auto-claim into driver core. (Jason/Christoph)
+
+v5:
+  - https://lore.kernel.org/linux-iommu/20220104015644.2294354-1-baolu.lu@linux.intel.com/
+  - Move kernel dma ownership auto-claiming from driver core to bus
+    callback. (Greg)
+  - Refactor the iommu interfaces to make them more specific.
+    (Jason/Robin)
+  - Simplify the dma ownership implementation by removing the owner
+    type. (Jason)
+  - Commit message refactoring for PCI drivers. (Bjorn)
+  - Move iommu_attach/detach_device() improvement patches into another
+    series as there are a lot of code refactoring and cleanup staffs
+    in various device drivers.
+
+v6:
+  - https://lore.kernel.org/linux-iommu/20220218005521.172832-1-baolu.lu@linux.intel.com/
+  - Refine comments and commit mesages.
+  - Rename iommu_group_set_dma_owner() to iommu_group_claim_dma_owner().
+  - Rename iommu_device_use/unuse_kernel_dma() to
+    iommu_device_use/unuse_default_domain().
+  - Remove unnecessary EXPORT_SYMBOL_GPL.
+  - Change flag name from no_kernel_api_dma to driver_managed_dma.
+  - Merge 4 "Add driver dma ownership management" patches into single
+    one.
+
+v7:
+  - We discussed about adding some fields in driver structure and
+    intercepting it in the bus notifier for driver unbinding. We agreed
+    that the driver structure should not be used out of the driver core.
+  - As iommu_group_claim/release_dma_owner() are only used by the VFIO,
+    there're no use cases for multiple calls for a single group.
+  - Add some commit messages in "vfio: Set DMA ownership for
+    VFIO" to describe the intentional enhancement of unsafe bridge
+    drivers.
+  - Comments refinement.
+
+v8:
+  - Move iommu_use_default_domain() to the end of .dma_configure
+    callback to avoid firmware-data-ordering thing.
+    Link: https://lore.kernel.org/linux-iommu/e2698dbe-18e2-1a82-8a12-fe45bc9be534@arm.com/
+  - Add Acked-by from PCI and VFIO maintainers.
+
+This is based on next branch of linux-iommu tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
+and also available on github:
+https://github.com/LuBaolu/intel-iommu/commits/iommu-dma-ownership-v8
+
+Best regards,
+baolu
+
+Jason Gunthorpe (1):
+  vfio: Delete the unbound_list
+
+Lu Baolu (10):
+  iommu: Add DMA ownership management interfaces
+  driver core: Add dma_cleanup callback in bus_type
+  amba: Stop sharing platform_dma_configure()
+  bus: platform,amba,fsl-mc,PCI: Add device DMA ownership management
+  PCI: pci_stub: Set driver_managed_dma
+  PCI: portdrv: Set driver_managed_dma
+  vfio: Set DMA ownership for VFIO devices
+  vfio: Remove use of vfio_group_viable()
+  vfio: Remove iommu group notifier
+  iommu: Remove iommu group changes notifier
+
+ include/linux/amba/bus.h              |   8 +
+ include/linux/device/bus.h            |   3 +
+ include/linux/fsl/mc.h                |   8 +
+ include/linux/iommu.h                 |  54 +++---
+ include/linux/pci.h                   |   8 +
+ include/linux/platform_device.h       |  10 +-
+ drivers/amba/bus.c                    |  37 +++-
+ drivers/base/dd.c                     |   5 +
+ drivers/base/platform.c               |  21 ++-
+ drivers/bus/fsl-mc/fsl-mc-bus.c       |  24 ++-
+ drivers/iommu/iommu.c                 | 228 ++++++++++++++++--------
+ drivers/pci/pci-driver.c              |  18 ++
+ drivers/pci/pci-stub.c                |   1 +
+ drivers/pci/pcie/portdrv_pci.c        |   2 +
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c     |   1 +
+ drivers/vfio/pci/vfio_pci.c           |   1 +
+ drivers/vfio/platform/vfio_amba.c     |   1 +
+ drivers/vfio/platform/vfio_platform.c |   1 +
+ drivers/vfio/vfio.c                   | 245 ++------------------------
+ 19 files changed, 338 insertions(+), 338 deletions(-)
+
+-- 
+2.25.1
+

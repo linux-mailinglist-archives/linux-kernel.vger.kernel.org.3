@@ -2,115 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AA94D24C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173754D25BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiCHXT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 18:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        id S229739AbiCIBEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:04:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiCHXT4 (ORCPT
+        with ESMTP id S229899AbiCIBEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 18:19:56 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33A49D4C6
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:18:50 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2dc585dbb02so4445787b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eendtF7O1jT4ZpjoFlzKIyJ4YNYGYwK/GXLvyJ/A4B0=;
-        b=rWZalxpbNZkyKJTe0k9BvpqyDA6xyuUWEczrB/MzwuKjD1dqeAAJkFpYG7Rd9qHBVI
-         9egVQB3Iqk6Yv8xdg7MOdOWlKJf8Bl///qOS2RrGkcf7tuQqO7GKtNtRpFai3hWY6CIj
-         PdsqqLhM+fW9R/dQKoJLgJmXGkkJ6vdgjFgwjIVieW3QjrE0/bx8WpSD1cI9vPSNATBc
-         eTaJ+V/aflZrW3st1K5SLYbO8UU5nTaSksOPkX+FZE/jl1cK6PSF2tDtkwdxvvuaFSsf
-         KcE5YGkbsORk7mrWPkeM/Q63MD6UHFU/ztOn42tOJhBr/m/VyQfnHJfzyJXX29ubQMRk
-         7BNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eendtF7O1jT4ZpjoFlzKIyJ4YNYGYwK/GXLvyJ/A4B0=;
-        b=jxBOMQxZwOq3KW7eQowYTDTQQYNnsfNGM3IXvBK0jhefRiVg3cOnhbodISXdA7PkbC
-         +Q1fL4WoOq9jxNLlo+TH2H9wyfZ+2BT+z/mVhhEAwz36tZLkv5cAK+5gFxXFnK8yzjtQ
-         qmk3ndp8h1iEgIRGGXgm1AWLiB6A0RfqCz321WXbYV+XtsPMH9/H2F20bmYoyhD6//q2
-         j13dpZGwMWw1rT7UHpE46Lfn0NFrFMSR+dW/cMRcZj6YXzk4KWRdel/wd25e0YmXYAU7
-         lCbv7tcbwU2s+5zAbc5vMor+Ugju/XPtl5rH1Jaai1BKfa+C2HBhDpcSPNeWXaGsV+jM
-         lnzg==
-X-Gm-Message-State: AOAM531M49/kI5rnw/crOtVqPYIfFfCg9mjzIUFk6b4QLQk044LkRPvU
-        s3c9UHPY9WTNoobR4KDWAUAk58ASsrrBjYN4TQjgUg==
-X-Google-Smtp-Source: ABdhPJyxNvJB5rMyTyEHv+H72i/rock+GNdS99gSt/QH7EFnMLXaTPsW8vasGCJ6GKScN3VQe205u1vwaNdV7any5Mw=
-X-Received: by 2002:a81:1043:0:b0:2dc:289f:9533 with SMTP id
- 64-20020a811043000000b002dc289f9533mr14625066ywq.467.1646781516920; Tue, 08
- Mar 2022 15:18:36 -0800 (PST)
+        Tue, 8 Mar 2022 20:04:30 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA67275F6;
+        Tue,  8 Mar 2022 16:41:55 -0800 (PST)
+X-UUID: 5643b9c7fc6f4726a569dd98f1f01242-20220309
+X-UUID: 5643b9c7fc6f4726a569dd98f1f01242-20220309
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 373336592; Wed, 09 Mar 2022 07:23:34 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 9 Mar 2022 07:23:33 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 9 Mar 2022 07:23:33 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <alice.chao@mediatek.com>
+CC:     <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <jejb@linux.ibm.com>,
+        <jiajie.hao@mediatek.com>, <jonathan.hsu@mediatek.com>,
+        <lin.gui@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-scsi@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <matthias.bgg@gmail.com>,
+        <peter.wang@mediatek.com>, <powen.kao@mediatek.com>,
+        <qilin.tan@mediatek.com>, <stanley.chu@mediatek.com>,
+        <wsd_upstream@mediatek.com>, <yanxu.wei@mediatek.com>
+Subject: Re: [PATCH v2 1/1] scsi: Fix racing between dev init and dev reset
+Date:   Wed, 9 Mar 2022 07:23:33 +0800
+Message-ID: <20220308232333.28978-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220308020725.16116-2-alice.chao@mediatek.com>
+References: <20220308020725.16116-2-alice.chao@mediatek.com>
 MIME-Version: 1.0
-References: <20220308212531.752215-1-jeffreyjilinux@gmail.com> <d1b25466-6f83-591e-39a6-8fdbd56846fb@kernel.org>
-In-Reply-To: <d1b25466-6f83-591e-39a6-8fdbd56846fb@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 8 Mar 2022 15:18:25 -0800
-Message-ID: <CANn89iKvP-8VpOrf_ppVVgsd4kQtAEFWkBVxKW4BP+rtu_Egrw@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next] net-core: add rx_otherhost_dropped counter
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Jeffrey Ji <jeffreyjilinux@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Brian Vazquez <brianvv@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        jeffreyji <jeffreyji@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 2:51 PM David Ahern <dsahern@kernel.org> wrote:
->
-> On 3/8/22 2:25 PM, Jeffrey Ji wrote:
-> > diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
-> > index 95f7bb052784..8b87ea99904b 100644
-> > --- a/net/ipv4/ip_input.c
-> > +++ b/net/ipv4/ip_input.c
-> > @@ -451,6 +451,7 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
-> >        * that it receives, do not try to analyse it.
-> >        */
-> >       if (skb->pkt_type == PACKET_OTHERHOST) {
-> > +             atomic_long_inc(&skb->dev->rx_otherhost_dropped);
-> >               drop_reason = SKB_DROP_REASON_OTHERHOST;
-> >               goto drop;
-> >       }
-> > diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-> > index 5b5ea35635f9..5624c937f87f 100644
-> > --- a/net/ipv6/ip6_input.c
-> > +++ b/net/ipv6/ip6_input.c
-> > @@ -150,6 +150,7 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
-> >       struct inet6_dev *idev;
-> >
-> >       if (skb->pkt_type == PACKET_OTHERHOST) {
-> > +             atomic_long_inc(&skb->dev->rx_otherhost_dropped);
-> >               kfree_skb(skb);
-> >               return NULL;
-> >       }
->
-> that's an expensive packet counter for a common path (e.g., hosting
-> environments).
+Hi Alice,
 
-This was the reason for the initial patch, using SNMP stat, being per cpu.
+Thanks for your patch. I have some questions.
 
-Adding per-device per-cpu data for this counter will increase cost of
-netdevice dismantle phase,
-and increase time for ndo_get_stats64(), especially on hosts with 256
-or 512 cpus.
+> Device reset thread uses kobject_uevent_env() to get kobj.parent
+> after scsi_evt_emit(), and it races with device init thread which
+> calls device_add() to create kobj.parent before kobject_uevent_env().
+> 
+> Device reset call trace:
+> fill_kobj_path
+> kobject_get_path
+> kobject_uevent_env
+> scsi_evt_emit			<- add wait_event()
+> scsi_evt_thread
+> 
+> Device init call trace:
+> fill_kobj_path
+> kobject_get_path
+> kobject_uevent_env
+> device_add				<- create kobj.parent
+> scsi_target_add
+> scsi_sysfs_add_sdev
+> scsi_add_lun
+> scsi_probe_and_add_lun
+
+These are backtraces, and the things above looks like your solution, not
+the problem.
+It's better to describe the problem first and solution later:
+
+Device init call:                              Device reset call:   
+scsi_probe_and_add_lun()                       scsi_evt_thread()
+  scsi_add_lun()
+    scsi_sysfs_add_sdev()                        scsi_evt_emit()
+      scsi_target_add()                            kobject_uevent_env() 
+        device_add()                                 kobject_get_path() // something wrong?
+	                                               fill_kobj_path()
+	  get_device_parent() // I see a get, not create parent kobj, could you show me that point?
+	  kobject_uevent()
+            kobject_uevent_env()
+              kobject_get_path()
+                fill_kobj_path()
+
+> 
+> These two jobs are scheduled asynchronously, we can't guaranteed that
+> kobj.parent will be created in device init thread before device reset
+> thread calls kobj_get_path().
+
+What happens if device reset thread calls kobj_get_path() before kobj.parent's
+creation? a crash or something?
+
+> 
+> To resolve the racing issue between device init thread and device
+> reset thread, we use wait_event() in scsi_evt_emit() to wait for
+> device_add() to complete the creation of kobj.parent.
+> 
+> Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+
+When we send patch N+1, we have to put the change log between patch v1 to vN
+under a "---", so others can understand the changes between patch N and N+1.
+e.g.,
+
+---
+
+Change since v1
+- remove Change-Id
+
+> ---
+>  drivers/scsi/scsi_lib.c  | 1 +
+>  drivers/scsi/scsi_scan.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index 0a70aa763a96..abf9a71ed77c 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device *sdev, struct scsi_event *evt)
+>  		break;
+>  	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
+>  		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
+> +		wait_event(sdev->host->host_wait, sdev->sdev_gendev.kobj.parent != NULL);
+>  		break;
+>  	default:
+>  		/* do nothing */
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index f4e6c68ac99e..431f229ac435 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct Scsi_Host *shost)
+>  	} else {
+>  		scsi_scan_host_selected(shost, SCAN_WILD_CARD, SCAN_WILD_CARD,
+>  				SCAN_WILD_CARD, 0);
+> +		wake_up(&shost->host_wait);
+
+do_scsi_scan_host() is not in the call trace above, could you show the relationship
+of do_scsi_scan_host in the call flow?
+
+thanks,
+Miles
+
+>  	}
+>  }

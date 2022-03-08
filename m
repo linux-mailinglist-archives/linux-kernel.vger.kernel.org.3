@@ -2,92 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732034D1BA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 301014D1BA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347811AbiCHP1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S1347810AbiCHP2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbiCHP1n (ORCPT
+        with ESMTP id S1347870AbiCHP2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:27:43 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA8A49F18
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:26:47 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2db2add4516so205824437b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:26:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BDg83KmxExGv2FTVzKSEUkIFPafp8SLQqggPFQR6FYo=;
-        b=i57L6Z+tbb7HROJlg+BbVrHHFL+dr6ZTQym4TJ1LIhKfteG/s4OkwFbOkBRqfS20+W
-         Uk+h5tB3/gb4V9xAXo0nr8EDXvCGyWb9ES6bLCNWr9IcFfhgrYwOrVd/TnY+dKIVbwsM
-         W8YH4JqK1fYahcX8d5Q3KaTgozihTANwCFeYfHfEw2t7ZjfIjtwFqp3KuQW5nJvXo/CG
-         JrLHkgDQjz1Ks88fc21Pf62HB4li084AMgHs33PuzW3KG3aJbdvUXniwB3WsPlMEGjmH
-         Zw1z4XHSrlpgBy+BmcQuuhrn0/pqh3D60f3Zn6UIyPM83YBBW5enm31VcSYI859ljPEG
-         5EAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BDg83KmxExGv2FTVzKSEUkIFPafp8SLQqggPFQR6FYo=;
-        b=dlcawh0zvdxYQfQPmvZlzxoTFpkNaPlwOsjUNaMeVw1jAK+p2il5Axftxk4wyryxzs
-         uXhaUymVTfNHnxOYC+3m9l5vC1bl4SCOWunrOwO+aygH8bBhnUqmhzYnQW3G2YDXWQRA
-         T/jqu2nDeENoQqFd4A8lKdpPV3MOt5i88MoGRuFw1X3S/YAzbq4k1rMwMR2IcnuLOi+g
-         GhNzJQCUB3kZV0y8Awax7xIIB2RnrDllTE848oNipLlHMtq0V97gbABGHuZLa0yX3xuH
-         VKv0fi15HzhzGZEuyQ52CLHBRFU6yNyov6GVbXRRpyqoebEQsrBAhN6HT8K5zdVhRwjK
-         hEgQ==
-X-Gm-Message-State: AOAM532TcMS0d+AW3rs2CUEtEHM5AvT6VW5ON+hG64WuJCmCm1k59DCS
-        3IdLMgJJ4L+BaWCM3OMoDCYpfeCQLwgFuU+HgekbCw==
-X-Google-Smtp-Source: ABdhPJxLlp5No+qYWJ6byYFHq0gYnFD75Zl8qKyzpnp75MjksryAO9rMKbI2ZtH9mya7XknA9Tix8MROT4Q2zzrd3oI=
-X-Received: by 2002:a81:9c47:0:b0:2db:9e18:6e75 with SMTP id
- n7-20020a819c47000000b002db9e186e75mr13379232ywa.437.1646753206417; Tue, 08
- Mar 2022 07:26:46 -0800 (PST)
+        Tue, 8 Mar 2022 10:28:04 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D514754D;
+        Tue,  8 Mar 2022 07:27:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646753227; x=1678289227;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OqLAsScm99MzSHfnnVnnariDd9egzhLVRa/r0A/f1gg=;
+  b=YI749p7VNXoSYSZyKt3o670mJ10NeFFW+tkoFh8q1wgTzGoa/Oh9PHUP
+   GOsUVb0kL6LbxlEteiHGOFgpNh7xDrCBeYwKMUsdrDmWZeOUbKqmn/KXn
+   VboXywArLVygMJyHXXl9FxAVrFEbp8XFlfkE0GR21CDo0BbLY/83KmFLC
+   kryQG8Y7JDuDG1oZTAivQvgk95FlCAOeS/AwxiCt4vsXEquwLk2l8ym/I
+   i+swbEnTdpOy9vp9bNr6FdLEkbKI/iyOO2lR+uvlWM/geQULo+gaYH9C8
+   FoBSZ3pBIjM9NhzMLL3RfDfxVimGU4IB5Q62P3BSqGEy+Num1a/Q/ZyCq
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,165,1643698800"; 
+   d="scan'208";a="156121015"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Mar 2022 08:27:07 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 8 Mar 2022 08:27:07 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 8 Mar 2022 08:27:05 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
+        <linux-clk@vger.kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [GIT PULL] clk: at91: clk for 5.18
+Date:   Tue, 8 Mar 2022 16:26:57 +0100
+Message-ID: <20220308152657.30651-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220308103027.32191-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220308103027.32191-1-lukas.bulwahn@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Mar 2022 16:26:35 +0100
-Message-ID: <CACRpkdZJYVRQKWDkp95pF8cdokBw3C0gx1ckmHq=F3tDiV3FvQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: rectify entry for REALTEK RTL83xx SMI DSA
- ROUTER CHIPS
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 11:30 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-> Commit 429c83c78ab2 ("dt-bindings: net: dsa: realtek: convert to YAML
-> schema, add MDIO") converts realtek-smi.txt to realtek.yaml, but missed to
-> adjust its reference in MAINTAINERS.
->
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
->
-> Repair this file reference in REALTEK RTL83xx SMI DSA ROUTER CHIPS.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Stephen,
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Here are a couple more clk changes for 5.18. This Pull-Request is made on top
+of what you already have for at91 targeting 5.18 on your clk-at91 existing
+branch. Hopefully, we are aligned on this.
+this.
 
-Yours,
-Linus Walleij
+Please pull.
+
+Thanks, best regards,
+  Nicolas
+
+The following changes since commit a5ab04af49434aef532bf6cd4baa08a13665d608:
+
+  clk: at91: sama7g5: Allow MCK1 to be exported and referenced in DT (2022-01-24 17:05:45 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-at91-5.18
+
+for you to fetch changes up to 8e842f02af7e2f6225d52d78cd25b465a98d344b:
+
+  clk: at91: clk-master: remove dead code (2022-03-08 15:37:08 +0100)
+
+----------------------------------------------------------------
+AT91 clk driver additional changes for 5.18:
+
+- sama7g5: One low priority fix for GCLK of PDMC
+- clk-master: cleanup of dead code
+
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      clk: at91: clk-master: remove dead code
+
+Codrin Ciubotariu (1):
+      clk: at91: sama7g5: fix parents of PDMCs' GCLK
+
+ drivers/clk/at91/at91rm9200.c  |   3 +-
+ drivers/clk/at91/at91sam9260.c |   3 +-
+ drivers/clk/at91/at91sam9g45.c |   3 +-
+ drivers/clk/at91/at91sam9n12.c |   3 +-
+ drivers/clk/at91/at91sam9rl.c  |   3 +-
+ drivers/clk/at91/at91sam9x5.c  |   3 +-
+ drivers/clk/at91/clk-master.c  | 117 ++---------------------------------
+ drivers/clk/at91/dt-compat.c   |   3 +-
+ drivers/clk/at91/pmc.h         |   2 +-
+ drivers/clk/at91/sam9x60.c     |   3 +-
+ drivers/clk/at91/sama5d2.c     |   3 +-
+ drivers/clk/at91/sama5d3.c     |   3 +-
+ drivers/clk/at91/sama5d4.c     |   3 +-
+ drivers/clk/at91/sama7g5.c     |   8 +--
+ 14 files changed, 22 insertions(+), 138 deletions(-)
+
+-- 
+Nicolas Ferre

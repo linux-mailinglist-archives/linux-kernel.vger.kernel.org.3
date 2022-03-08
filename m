@@ -2,135 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0AED4D1FB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA8D4D1FB1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349379AbiCHSHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
+        id S1349378AbiCHSI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243517AbiCHSHA (ORCPT
+        with ESMTP id S241141AbiCHSIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:07:00 -0500
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD6F49914;
-        Tue,  8 Mar 2022 10:06:03 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id j2so39506783ybu.0;
-        Tue, 08 Mar 2022 10:06:03 -0800 (PST)
+        Tue, 8 Mar 2022 13:08:25 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C632B4C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:07:26 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id cx5so75059pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 10:07:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pZliwmLm6S8tya/djJ5W/U/prHZbfOKsGwUj10OUIn0=;
+        b=qpLtvuz0mEEMCmqJCiWKhn+xCPGesu6Pw3r09ZrgwzSL8mgKdriqPFXA9ih3Is4h9B
+         SifskdlThgG6P5akCPbbqD9WE7XCGeo4X4REI2Xq16nnqJdjDh8Yg44L1Hb1N4TfG6tu
+         n8UWwRuJGdgXt61SgxTM6sWov7sUP9PoJ1F6PcjaHjk4UA0ohjNiNuIFjIo8aiJ89BkM
+         q1SFa5D5qa67somAsAgHXMVzggWN2AB2F3C/pooif71T2zLOfB4AZ8cqgO3NM+UdycIN
+         16Jx9ckYs0lUPqmnO2OwYbtPAh5PCfrByZLDoRJaA15JjjaLtO055sKJPEXWxnVf+m35
+         QGtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fPR7/VGPV23k4djwaMrNbwv3yAQLYJoAwhpzcs5Yyug=;
-        b=ivSsgRc6k3u4ND9W0XzWm3DvmuHipIzKm0AfwBTkwqTW66N4jhEKqYJZloc7zmZkzD
-         xXWI1tG09tGLsXpyCSU4rPHtzgteoj8mlVcQz9VgC0XSx+O1Jh9ptAc7yypM7IUzoZau
-         QvaW5QClDtljxy045+fmKQrtr00V2WLheqvcWSnY9ftSxj+OBWHy/X3/BVfFv4UfMsPV
-         6mnuPPpFsgj9Q/bZptTuaMTDVujhDKli2U+YXVVUww4N0lTiqNaZDqJMQdWADauJpr9F
-         RmAhm5Dlg+wA0ldTwaA8wYHUl6IYZOMSm/4VV9BYNQNPIOhgpPyy1s++UZ/BbYG47qAs
-         le6A==
-X-Gm-Message-State: AOAM530ce6nfW7AyrSCHxsZZwNLhb4J68dXlc/KwlTtV1PBmzShVFYUe
-        uTEyHwqiRquZb8yOeV4siWl7sCJl25B3bAqm/8Q=
-X-Google-Smtp-Source: ABdhPJwigo7JBM7noPglHYlHuR7oj7u0a4NOcWUIiDMhwSSasf1J7aZ7/2k+5D/dzpr1ZajSbc2vxcu4tar5e/CJIxw=
-X-Received: by 2002:a25:bbc1:0:b0:610:b4ce:31db with SMTP id
- c1-20020a25bbc1000000b00610b4ce31dbmr13302933ybk.482.1646762763032; Tue, 08
- Mar 2022 10:06:03 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=pZliwmLm6S8tya/djJ5W/U/prHZbfOKsGwUj10OUIn0=;
+        b=S/eCHvnY7+K2/dzecnVuBVFhje3xZ7SFmwxV9GolhObQpfB1vDmncsACPeGM65FWy5
+         lHCuuE1JxDZ9Qcvjmkd/N3yjPBjdMqtTXrFcGapSzHyGszKJjACHhHVTsBFT5rLQ+S6E
+         hZSndtcP5L6HZcqyVIYInvmPt7j5zGOjSOy4DH6HWKQoZAAlnTXhNdwRWr8ZO+UekYGX
+         Kj6hFFJicN30tOHLm5jyPkkM5BB/6zLvbhkFcjq1oFcYqFaBYTVIlYgBhPkpI4TrvpZa
+         xxh8kUR8oCZbvWo+3ow0IkessBtZ6JR4N/i63m9Dyha/HA2yflRdBhTGZs4RBQbzG3fn
+         ZKdA==
+X-Gm-Message-State: AOAM53132LVStY8VuRf9Wu0na2eJWMSlyh2OvIVTZ4BL5a61cUO/SdO3
+        zNb2Fql8Wlt2TTCXKyOIVJs=
+X-Google-Smtp-Source: ABdhPJylFJEOWSaFFgHfIMPZ6Bg5gHKwdPIYqmxkknGO1e/TOEnJ+yqMzsCzV6dq5xLXIanBNwhu/g==
+X-Received: by 2002:a17:902:758f:b0:14f:b5ee:cc5a with SMTP id j15-20020a170902758f00b0014fb5eecc5amr18930620pll.43.1646762846012;
+        Tue, 08 Mar 2022 10:07:26 -0800 (PST)
+Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:ec3e:a6ab:7b5b:ed81])
+        by smtp.gmail.com with ESMTPSA id x23-20020a63fe57000000b0036490068f12sm15462368pgj.90.2022.03.08.10.07.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 10:07:12 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        John Dias <joaodias@google.com>,
+        Minchan Kim <minchan@kernel.org>
+Subject: [PATCH] mm: fs: fix lru_cache_disabled race in bh_lru
+Date:   Tue,  8 Mar 2022 10:07:09 -0800
+Message-Id: <20220308180709.2017638-1-minchan@kernel.org>
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 MIME-Version: 1.0
-References: <20220302180913.13229-1-ionela.voinescu@arm.com> <20220302180913.13229-2-ionela.voinescu@arm.com>
-In-Reply-To: <20220302180913.13229-2-ionela.voinescu@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 8 Mar 2022 19:05:52 +0100
-Message-ID: <CAJZ5v0i9iEx56vDwBsxhYcPKcfa2TF9HQqDOGK96Dfpjs3evQA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] x86, ACPI: rename init_freq_invariance_cppc to arch_init_invariance_cppc
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Sean Kelley <skelley@nvidia.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 7:10 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
->
-> init_freq_invariance_cppc() was called in acpi_cppc_processor_probe(),
-> after CPU performance information and controls were populated from the
-> per-cpu _CPC objects.
->
-> But these _CPC objects provide information that helps with both CPU
-> (u-arch) and frequency invariance. Therefore, change the function name
-> to a more generic one, while adding the arch_ prefix, as this function
-> is expected to be defined differently by different architectures.
->
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Tested-by: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Giovanni Gherdovich <ggherdovich@suse.cz>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Check lru_cache_disabled under bh_lru_lock. Otherwise, it could
+introduce race below and it fails to migrate pages containing
+buffer_head.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+   CPU 0					CPU 1
 
-and who's expected to pick this up?
+bh_lru_install
+                                       lru_cache_disable
+  lru_cache_disabled = false
+                                       atomic_inc(&lru_disable_count);
+				       invalidate_bh_lrus_cpu of CPU 0
+				       bh_lru_lock
+				       __invalidate_bh_lrus
+				       bh_lru_unlock
+  bh_lru_lock
+  install the bh
+  bh_lru_unlock
 
-> ---
->  arch/x86/include/asm/topology.h | 2 +-
->  drivers/acpi/cppc_acpi.c        | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-> index 2f0b6be8eaab..5ec70f186775 100644
-> --- a/arch/x86/include/asm/topology.h
-> +++ b/arch/x86/include/asm/topology.h
-> @@ -223,7 +223,7 @@ static inline void arch_set_max_freq_ratio(bool turbo_disabled)
->
->  #if defined(CONFIG_ACPI_CPPC_LIB) && defined(CONFIG_SMP)
->  void init_freq_invariance_cppc(void);
-> -#define init_freq_invariance_cppc init_freq_invariance_cppc
-> +#define arch_init_invariance_cppc init_freq_invariance_cppc
->  #endif
->
->  #endif /* _ASM_X86_TOPOLOGY_H */
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 866560cbb082..bfd142ab4e07 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -633,8 +633,8 @@ static bool is_cppc_supported(int revision, int num_ent)
->   *  )
->   */
->
-> -#ifndef init_freq_invariance_cppc
-> -static inline void init_freq_invariance_cppc(void) { }
-> +#ifndef arch_init_invariance_cppc
-> +static inline void arch_init_invariance_cppc(void) { }
->  #endif
->
->  /**
-> @@ -816,7 +816,7 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
->                 goto out_free;
->         }
->
-> -       init_freq_invariance_cppc();
-> +       arch_init_invariance_cppc();
->
->         kfree(output.pointer);
->         return 0;
-> --
-> 2.25.1
->
+Fixes: 8cc621d2f45d (mm: fs: invalidate BH LRU during page migration)
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+---
+ fs/buffer.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/fs/buffer.c b/fs/buffer.c
+index 8e112b6bd371..c76a8ef60a75 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -1235,16 +1235,18 @@ static void bh_lru_install(struct buffer_head *bh)
+ 	int i;
+ 
+ 	check_irqs_on();
++	bh_lru_lock();
++
+ 	/*
+ 	 * the refcount of buffer_head in bh_lru prevents dropping the
+ 	 * attached page(i.e., try_to_free_buffers) so it could cause
+ 	 * failing page migration.
+ 	 * Skip putting upcoming bh into bh_lru until migration is done.
+ 	 */
+-	if (lru_cache_disabled())
++	if (lru_cache_disabled()) {
++		bh_lru_unlock();
+ 		return;
+-
+-	bh_lru_lock();
++	}
+ 
+ 	b = this_cpu_ptr(&bh_lrus);
+ 	for (i = 0; i < BH_LRU_SIZE; i++) {
+-- 
+2.35.1.616.g0bdcbb4464-goog
+

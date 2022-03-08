@@ -2,148 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85DE4D24B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62D64D24A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 00:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiCHXKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 18:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
+        id S230374AbiCHXLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 18:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiCHXKs (ORCPT
+        with ESMTP id S229598AbiCHXLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 18:10:48 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF0E6F4AE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:09:48 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id w17-20020a056830111100b005b22c584b93so455379otq.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:09:48 -0800 (PST)
+        Tue, 8 Mar 2022 18:11:47 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926BD75634
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 15:10:44 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id w7so686692lfd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 15:10:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xuc98iQ6lLN5ZWjfMkCi08X6OqD4xJL8S5CE7+O2xXo=;
-        b=ufjwvyzNLdj8kL4OhOSrTDZr9TwtTMGBSYKptuax0eItS0/K2Li7gLDPnKGMSVhxb0
-         AVhfV82OUzj4q6JGYm3SJjk7imPLYPvVWFEO7Hnvu22PjY7s+7eefgq1tGg2xQvMD5C2
-         sZV0znnqEGyrfEKDzwX/Pzt7gjZvZapFf2MyBY3NHA1dRW+G5mrX2h6l7yXqZEdMRepF
-         QQmuDgriXkK7wdMr2PHSVgeKuxkIB90+avmkKV5p17EWJln+MVCytyavDctuDJJIAJqM
-         1YjRl1H5BKzo5yrDI8SbzUe8CKigHm7BWSTWlwIG0IoeV9jb8JsLgg96waj9ZOHo9jGk
-         P6ZA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tclsFaPE34TrWsSULlYvU9YsW3x7Tf6mvtJ/Ff+EAgw=;
+        b=YTxtynEturtmQ9+fQ2vk4MLEzSozTMNeDRXaVWblqZvl5cNILUeHdpEsitwfPfNIzn
+         uCtJuZ5NsjYf2Ok6NBtbFh9Ma45M5vV4eDFye5M5b2CqwFnkNoA8DFyU50SPmMselqV/
+         q/tlUGMcxIMfJNgMyYAgT5U/xKc9hbMGY84CXSrjQz3QPryQGm3EntO5dzCPy4t1eLLM
+         PJF3EWLGIRs9IQkx+NbaWBj8+A2ASwVgX7J8o5ZMMpRM0FvqYWU3ThHQDTV7BjFmtynz
+         gVx61JpRkMOep1q+pQ1+vJQs7ocgJhkFT/XQnL7qiyo2bgs0+u1VgxYEfGddeAxQFlhp
+         Cxgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xuc98iQ6lLN5ZWjfMkCi08X6OqD4xJL8S5CE7+O2xXo=;
-        b=PnedKXmNjDToJhyL+pWOVt6eHg9H+ZNDCXuFQJSKwKOlCfxiT1MKHxZhH3tHhBfB10
-         GGK1TgwRSnsQZf9W5446TNrlt2Vf91ROMp/KTrWlt1+4zTsd6KuJcCUE2XRH5vxzhPhS
-         LlyfckNcyMWCrfLI4VKAr/RuCfIq7pvfo8Wk6cSWfxQ7VV/3GbiVa7s4Kb8+ZE8iYvj5
-         Acpq88FOcc7F9V5Syr7On3YotbLb9zZrKzm2GrgQmqjilJfKF7iPpKp5aO8wArLcSyf3
-         PYck+l2n1JZRK5/iXaZ3x1piVPQ+4sCMrykrX9nLdeDEvp9W4JM2yY6OmpEW/+OcaGY9
-         MYxw==
-X-Gm-Message-State: AOAM531iyPt33yrI6Fdtj9vsMLlmoufcTHwqIXhk6GLjQPNqyd7SLZWL
-        TmEdcxY+sua5djtp1eLDNOb46A==
-X-Google-Smtp-Source: ABdhPJxRpGsmLOMyITa2cLxJpOaQ0mqRRzUUbDozIlPaZ8piOB6fxUH+hJr2w8mLPUw47UxqSD2a9Q==
-X-Received: by 2002:a9d:518c:0:b0:5b2:364b:7fbd with SMTP id y12-20020a9d518c000000b005b2364b7fbdmr5766151otg.255.1646780987672;
-        Tue, 08 Mar 2022 15:09:47 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id z26-20020a9d62da000000b005b23f5488cdsm68215otk.52.2022.03.08.15.09.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 15:09:46 -0800 (PST)
-Date:   Tue, 8 Mar 2022 17:09:45 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org, tdas@codeaurora.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH v3 3/6] clk: qcom: gcc: Add emac GDSC support for SM8150
-Message-ID: <YifiOa38WGMAeEq7@builder.lan>
-References: <20220303084824.284946-1-bhupesh.sharma@linaro.org>
- <20220303084824.284946-4-bhupesh.sharma@linaro.org>
- <CAA8EJpow=NPM5TrK24qsziVWgrD0cfbtwUxBD45CE2EQAg-msA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tclsFaPE34TrWsSULlYvU9YsW3x7Tf6mvtJ/Ff+EAgw=;
+        b=RkAt3pTbbhpSkEAqkR+YOL32KiO4OD138t6Sj1jplrBUxnOMmHrmSK3qNmf8CSHfbq
+         KfrABKRxiFdVJxrcvjorABcx3AfLyMSmKUjKV/VUKrHk7V9lG5EhSNkL53LvnqLqMF0G
+         3QCveOPGi67buPm7o4bxQZ8WaaURwmHMKj9n/9DrEVcCV/uZm3L8YJhmD/GC/m+kzZ3a
+         +6JbkAyQyu6mXKkUzlZLGUo7kmi5pfEAafMkQiK59gdFVwcpkWyE9yYcCoNDa2DZahnh
+         wcqGgAaxBpc5xOBiB9hwTQJwPe7jasw0NgCsqY0KpIt8WMrZFZ1YYue3YZI1PMihMRnQ
+         uDtA==
+X-Gm-Message-State: AOAM531YLyvUWnPpKc60Mc09xSlHDJQYra4nTIw4dBjllrMw447/VsEy
+        ZHqTjhGOBVm7JrL8tduLSq3yoEVFOEpQGENVGfV1Qw==
+X-Google-Smtp-Source: ABdhPJx/fglOdwsFUXGzUPIPq1H3ZUZI8HoqBE3Dc7CpwH2vZZ4CHq8MWt1insKPhpHz2VgNI0Ys/4lxjE1mEucfOrE=
+X-Received: by 2002:a05:6512:31d4:b0:445:e4ef:c0f8 with SMTP id
+ j20-20020a05651231d400b00445e4efc0f8mr12498094lfe.626.1646781042694; Tue, 08
+ Mar 2022 15:10:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpow=NPM5TrK24qsziVWgrD0cfbtwUxBD45CE2EQAg-msA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220307181704.149076-1-colin.i.king@gmail.com>
+In-Reply-To: <20220307181704.149076-1-colin.i.king@gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 8 Mar 2022 15:10:31 -0800
+Message-ID: <CAKwvOdkXNGRJkZDd7Cg8jhL9Ex7R+VPYqEEc+VpwDyi9NJKXQQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/rockchip: remove redundant assignment to pointer connector
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Sandy Huang <hjc@rock-chips.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, knaerzche@gmail.com,
+        Heiko Stuebner <heiko@sntech.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 03 Mar 04:33 CST 2022, Dmitry Baryshkov wrote:
+On Mon, Mar 7, 2022 at 10:17 AM Colin Ian King <colin.i.king@gmail.com> wrote:
+>
+> The pointer connector is being assigned a value that is never read,
+> it is being re-assigned in the following statement. The assignment
+> is redundant and can be removed.
+>
+> Cleans up clang scan build warning:
+> drivers/gpu/drm/rockchip/rockchip_rgb.c:153:2: warning: Value stored
+> to 'connector' is never read [deadcode.DeadStores]
 
-> On Thu, 3 Mar 2022 at 11:48, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
-> >
-> > Add the EMAC GDSC defines and driver structures for SM8150.
-> >
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/clk/qcom/gcc-sm8150.c               | 10 ++++++++++
-> >  include/dt-bindings/clock/qcom,gcc-sm8150.h |  1 +
-> >  2 files changed, 11 insertions(+)
-> >
-> > diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
-> > index 85a431ac417b..08ba29e3a835 100644
-> > --- a/drivers/clk/qcom/gcc-sm8150.c
-> > +++ b/drivers/clk/qcom/gcc-sm8150.c
-> > @@ -3448,6 +3448,15 @@ static struct clk_branch gcc_video_xo_clk = {
-> >         },
-> >  };
-> >
-> 
-> Is it available on sm8150 or only on sa8155au? I think this deserves
-> at least a comment.
-> 
++ Author & reviewer of:
+Fixes: 2e87bf389e13 ("drm/rockchip: add DRM_BRIDGE_ATTACH_NO_CONNECTOR
+flag to drm_bridge_attach")
 
-The ethernet controller is there on SM8150 as well.
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_rgb.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> index 2494b079489d..92a727931a49 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> @@ -150,7 +150,6 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
+>         if (ret)
+>                 goto err_free_encoder;
+>
+> -       connector = &rgb->connector;
+>         connector = drm_bridge_connector_init(rgb->drm_dev, encoder);
+>         if (IS_ERR(connector)) {
+>                 DRM_DEV_ERROR(drm_dev->dev,
+> --
+> 2.35.1
+>
+>
 
-Regards,
-Bjorn
 
-> > +static struct gdsc emac_gdsc = {
-> > +       .gdscr = 0x6004,
-> > +       .pd = {
-> > +               .name = "emac_gdsc",
-> > +       },
-> > +       .pwrsts = PWRSTS_OFF_ON,
-> > +       .flags = POLL_CFG_GDSCR,
-> > +};
-> > +
-> >  static struct gdsc usb30_prim_gdsc = {
-> >         .gdscr = 0xf004,
-> >         .pd = {
-> > @@ -3714,6 +3723,7 @@ static const struct qcom_reset_map gcc_sm8150_resets[] = {
-> >  };
-> >
-> >  static struct gdsc *gcc_sm8150_gdscs[] = {
-> > +       [EMAC_GDSC] = &emac_gdsc,
-> >         [USB30_PRIM_GDSC] = &usb30_prim_gdsc,
-> >         [USB30_SEC_GDSC] = &usb30_sec_gdsc,
-> >  };
-> > diff --git a/include/dt-bindings/clock/qcom,gcc-sm8150.h b/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> > index 3e1a91876610..40596b9ded06 100644
-> > --- a/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> > +++ b/include/dt-bindings/clock/qcom,gcc-sm8150.h
-> > @@ -243,5 +243,6 @@
-> >  /* GCC GDSCRs */
-> >  #define USB30_PRIM_GDSC                     4
-> >  #define USB30_SEC_GDSC                                         5
-> > +#define EMAC_GDSC                                              6
-> >
-> >  #endif
-> > --
-> > 2.35.1
-> >
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
+-- 
+Thanks,
+~Nick Desaulniers

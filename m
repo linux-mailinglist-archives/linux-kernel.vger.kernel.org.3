@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57AEE4D1C71
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FEC4D1C75
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347983AbiCHP5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S1348151AbiCHP5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348033AbiCHP4E (ORCPT
+        with ESMTP id S1348043AbiCHP4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Mar 2022 10:56:04 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA6C4F47D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95074F9CE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:55:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=a8RzkWIyNVeQCr7WhMgSPa2HnZwX8Lz4UbWUw4JBOXo=; b=kDLcgh1/5K+lErR1foNH14mBkD
-        L60ZNh7q+559RXjevqAEDG4JVGoDEgLqq3nTQkwntA2hS6wpyNerBmP2lR3QXsK3Tww6GQFsUpMVC
-        jQ4M3h4S4Pdv+/W2Y678Q5Qqv+K6AATHM9KxIksgfqcvgMRweCFhu/EudJiJJO5AUcF87Vo2mX+tK
-        iD3BPp68BO2GhDK64IgqDNr1Ffr50+cP0eZILQDQX5wYi2a4FJwIcgyrTd5xE+r3N9u5IkXRi3CEr
-        BfMLjc46iCC+ydL28J6v9SN2rxzeisshxpjrsYTn9pA63BZ3ovdz20XR3sgUKaTlI3Hr5EdjFcgw4
-        GWEQuhSw==;
+        bh=N852q9aWEiK0I+Tjg4v4NRP8lVB+Lypx5hQ0mJxyRSo=; b=uHBky8qUbVEnD4beh5Xt3fDSbz
+        1uKLADBp/b7uDGppsDtuNhXhRqfHAsNsATnLwe6al5u/lxNshzvKDi1j00hZ3m97I0pcflNg3rl7s
+        uvYm2gwx20pmPMxH2pWHBOg4lwa4n0OBASwKHjM8CMLx59pjiyBLaOo7JznNBKzpCa2NgRkuJvtnO
+        Qa+Kf1AQiFRhsiQV7wPDCexv7VTeILXLv2msBqrla8qXJ9GSqYSQFTV8FBjLjlMzAAaJ4givH7kqp
+        GIHEieslEe0Q824y8rL18WOpzIppsZ2l02GcWplG8A7E45Sd9ult9PeXo8s4/YA4ZD1uTPw8wZQC0
+        wYcWxgcw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcAc-00GIv7-Hg; Tue, 08 Mar 2022 15:54:42 +0000
+        id 1nRcAc-00GIv3-BU; Tue, 08 Mar 2022 15:54:42 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 349FB301A96;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 33C3B30175B;
         Tue,  8 Mar 2022 16:54:40 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 1D58B2B561919; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
-Message-ID: <20220308154318.110500806@infradead.org>
+        id 258BB2B56191C; Tue,  8 Mar 2022 16:54:39 +0100 (CET)
+Message-ID: <20220308154318.168850084@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 08 Mar 2022 16:30:27 +0100
+Date:   Tue, 08 Mar 2022 16:30:28 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v4 16/45] x86/ibt,crypto: Add ENDBR for the jump-table entries
+Subject: [PATCH v4 17/45] x86/ibt,kvm: Add ENDBR to fastops
 References: <20220308153011.021123062@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,44 +61,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code does:
-
-	## branch into array
-	mov     jump_table(,%rax,8), %bufp
-	JMP_NOSPEC bufp
-
-resulting in needing to mark the jump-table entries with ENDBR.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/crypto/crc32c-pcl-intel-asm_64.S |    3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/kvm/emulate.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-+++ b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-@@ -195,6 +195,7 @@ SYM_FUNC_START(crc_pcl)
- .altmacro
- LABEL crc_ %i
- .noaltmacro
-+	ENDBR
- 	crc32q   -i*8(block_0), crc_init
- 	crc32q   -i*8(block_1), crc1
- 	crc32q   -i*8(block_2), crc2
-@@ -204,6 +205,7 @@ LABEL crc_ %i
- .altmacro
- LABEL crc_ %i
- .noaltmacro
-+	ENDBR
- 	crc32q   -i*8(block_0), crc_init
- 	crc32q   -i*8(block_1), crc1
- # SKIP  crc32  -i*8(block_2), crc2 ; Don't do this one yet
-@@ -237,6 +239,7 @@ LABEL crc_ %i
- 	################################################################
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -189,7 +189,7 @@
+ #define X16(x...) X8(x), X8(x)
  
- LABEL crc_ 0
-+	ENDBR
- 	mov     tmp, len
- 	cmp     $128*24, tmp
- 	jae     full_block
+ #define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
+-#define FASTOP_SIZE 8
++#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
+ 
+ struct opcode {
+ 	u64 flags;
+@@ -311,7 +311,8 @@ static int fastop(struct x86_emulate_ctx
+ #define __FOP_FUNC(name) \
+ 	".align " __stringify(FASTOP_SIZE) " \n\t" \
+ 	".type " name ", @function \n\t" \
+-	name ":\n\t"
++	name ":\n\t" \
++	ASM_ENDBR
+ 
+ #define FOP_FUNC(name) \
+ 	__FOP_FUNC(#name)
+@@ -433,6 +434,7 @@ static int fastop(struct x86_emulate_ctx
+ 	".align 4 \n\t" \
+ 	".type " #op ", @function \n\t" \
+ 	#op ": \n\t" \
++	ASM_ENDBR \
+ 	#op " %al \n\t" \
+ 	__FOP_RET(#op)
+ 
 
 

@@ -2,112 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED2B4D2033
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCD24D2036
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349646AbiCHS1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S1349684AbiCHS06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 13:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349698AbiCHS0o (ORCPT
+        with ESMTP id S1349652AbiCHS0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:26:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A102AE0B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 10:25:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB60AB818A2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 18:25:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3951C340EB;
-        Tue,  8 Mar 2022 18:25:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MQUUy+Ag"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1646763920;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=CQ+IVBr7O0f2WkL2DHrWgZedfmnrNLjmZsZWJVL+jdA=;
-        b=MQUUy+AgTpJoEJAwnrszvcojsIm71iP5sUx3xXm3zeie7O6d6LBiR2IWXP0bEg7mus34s7
-        iYoe7sVVVewcPQhyiR1FDMc6ie6a/KwcUJd3nVVIarjFiUOCRCPiXQ++PeylEy4mUsbbKF
-        LeCOsdB9td4eoDrQeGngvSWkrH6Xv2I=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c6ad17ba (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 8 Mar 2022 18:25:20 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH] random: make consistent usage of crng_ready()
-Date:   Tue,  8 Mar 2022 11:25:17 -0700
-Message-Id: <20220308182517.273662-1-Jason@zx2c4.com>
+        Tue, 8 Mar 2022 13:26:45 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A99725C75;
+        Tue,  8 Mar 2022 10:25:39 -0800 (PST)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 45EF160008;
+        Tue,  8 Mar 2022 18:25:33 +0000 (UTC)
+Message-ID: <1eca594f-ec8c-b54a-92f3-e561fa049015@ovn.org>
+Date:   Tue, 8 Mar 2022 19:25:31 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     i.maximets@ovn.org, dev@openvswitch.org,
+        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        David Ahern <dsahern@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Content-Language: en-US
+To:     Roi Dayan <roid@nvidia.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20220224005409.411626-1-cpp.code.lv@gmail.com>
+ <164578561098.13834.14017896440355101001.git-patchwork-notify@kernel.org>
+ <3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com>
+ <50d6ce3d-14bb-205e-55da-5828b10224e8@nvidia.com>
+ <57996C97-5845-425B-9B13-7F33EE05D704@redhat.com>
+ <26b924fb-ed26-bb3f-8c6b-48edac825f73@nvidia.com>
+ <20220307122638.215427b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <3a96b606-c3aa-c39b-645e-a3af0c82e44b@ovn.org>
+ <20220307144616.05317297@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <45aed9cd-ba65-e2e7-27d7-97e3f9de1fb8@ovn.org>
+ <20220307214550.2d2c26a9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <5bec02cb6a640cafd65c946e10ee4eda99eb4d9c.camel@sipsolutions.net>
+ <e55b1963-14d8-63af-de8e-1b1a8f569a6e@ovn.org>
+ <c9f43e92-8a32-cf0e-78d7-1ab36950021c@nvidia.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [ovs-dev] [PATCH net-next v8] net: openvswitch: IPv6: Add IPv6
+ extension header support
+In-Reply-To: <c9f43e92-8a32-cf0e-78d7-1ab36950021c@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than sometimes checking `crng_init < 2`, we should always use the
-crng_ready() macro, so that should we change anything later, it's
-consistent. Additionally, that macro already has a likely() around it,
-which means we don't need to open code our own likely() and unlikely()
-annotations.
+On 3/8/22 15:39, Roi Dayan wrote:
+> 
+> 
+> On 2022-03-08 4:12 PM, Ilya Maximets wrote:
+>> On 3/8/22 09:21, Johannes Berg wrote:
+>>> On Mon, 2022-03-07 at 21:45 -0800, Jakub Kicinski wrote:
+>>>>
+>>>> Let me add some people I associate with genetlink work in my head
+>>>> (fairly or not) to keep me fair here.
+>>>
+>>> :)
+>>>
+>>>> It's highly unacceptable for user space to straight up rewrite kernel
+>>>> uAPI types
+>>>>
+>>>
+>>> Agree.
+>>
+>> I 100% agree with that and will work on the userspace part to make sure
+>> we're not adding anything to the kernel uAPI types.
+>>
+>> FWIW, the quick grep over usespace code shows similar problem with a few
+>> other types, but they are less severe, because they are provided as part
+>> of OVS actions and kernel doesn't send anything that wasn't previously
+>> set by userspace in that case.  There still might be a problem during the
+>> downgrade of the userspace while kernel configuration remains intact,
+>> but that is not a common scenario.  Will work on fixing that in userspace.
+>> No need to change the kernel uAPI for these, IMO.
+>>
+> 
+> since its rc7 we end up with kernel and ovs broken with each other.
+> can we revert the kernel patches anyway and introduce them again later
+> when ovs userspace is also updated?
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I don't think this patch is part of 5-17-rc7.  AFAICT, it's a candidate
+for 5.18, so we should still have a bit of time.  Am I missing something?
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 69591d599338..e37ae7ef039c 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -123,7 +123,7 @@ static void try_to_generate_entropy(void);
-  */
- int wait_for_random_bytes(void)
- {
--	if (likely(crng_ready()))
-+	if (crng_ready())
- 		return 0;
- 
- 	do {
-@@ -289,7 +289,7 @@ static void crng_reseed(bool force)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	if (crng_init < 2) {
-+	if (!crng_ready()) {
- 		crng_init = 2;
- 		finalize_init = true;
- 	}
-@@ -352,7 +352,7 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
- 	 * ready, we do fast key erasure with the base_crng directly, because
- 	 * this is what crng_pre_init_inject() mutates during early init.
- 	 */
--	if (unlikely(!crng_ready())) {
-+	if (!crng_ready()) {
- 		bool ready;
- 
- 		spin_lock_irqsave(&base_crng.lock, flags);
-@@ -795,7 +795,7 @@ static void credit_entropy_bits(size_t nbits)
- 		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
- 	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
- 
--	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
-+	if (!crng_ready() && entropy_count >= POOL_MIN_BITS)
- 		crng_reseed(false);
- }
- 
--- 
-2.35.1
-
+Best regards, Ilya Maximets.

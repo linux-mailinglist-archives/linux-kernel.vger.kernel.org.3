@@ -2,148 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3B84D25C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B964D2568
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 02:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiCIBCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
+        id S229922AbiCIBJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiCIBCg (ORCPT
+        with ESMTP id S230254AbiCIBH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:02:36 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF73E12D209;
-        Tue,  8 Mar 2022 16:40:17 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id z9-20020a05683020c900b005b22bf41872so573895otq.13;
-        Tue, 08 Mar 2022 16:40:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OiDtpHj0kLmrgL9mIblnYKZv43jpFOukaPdQEqPT+5Y=;
-        b=qL7bv0KrNjilJu9PRCfYLJeNJnS1nZhV9Z/KX1ckM+h2i4BzDkWk0RjBWTKsz2Bqbm
-         f2jsIZUMrgB1OfrhQDHw5roe5iOwq+ZAwMs/2r7sc5xQTERUefqYVeahEVDkDDTfNVFn
-         AKd+PrUQHF5MbPEwalNIzLzy7Ybbt2S7NMpApzTSn1Tx7Qu7zEWYUvo1gqX1fRf08x6L
-         pu8SzW5CuSTqIwxy7MBzgF/piXU8iiFK7WE4N0q/vLr8iEo+A40MWjToal3S69yGAaW+
-         CJ5+T7atTcQIUOVlnhnDrAkqTgSqAGthRuV42FydHH758ppOnIQaZpVvCFCL2Z/eWV4d
-         Lcwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OiDtpHj0kLmrgL9mIblnYKZv43jpFOukaPdQEqPT+5Y=;
-        b=UmM1N9BqjeIYgHc8JtF8gmGYhG16jLjChHmwSuo/7w4XyEVchs0qMGipmb7DRgp1ar
-         6S8bMU5OSxFOiHILDW5KEouOLpo3req5pDMy9wEDtLG5nHW9+E7kU5V3gsmmVR0vteF/
-         d/jOhbcn3kzL8tXwFzG5zA6E9g6OK7DAiL3Tz34MQ2FEwO698N6zFZRjBHsok5C4/lyd
-         LUvN/jmOMvATbj30WG+TvndkR9dgo7JiDe6k3jSw4ND0U7qQu8C8u1BrMQJqxieiGYIl
-         GzIfs9wov/RNN9QxL410LN5oqtPxzapaIB2W9NnkoSiVTIbhgg3I9kspVGrRY3ZjIEmE
-         BgsQ==
-X-Gm-Message-State: AOAM5335lwrx5IkDbvc2zHoMqLzmQO57IzBINHR/ecu8IGIRNoAq4qrA
-        alnx+/Hek01U2N/AYZ1O8Iv/wo7l6rRrsYLVhhV6HT3QHvKT+A==
-X-Google-Smtp-Source: ABdhPJzCistFgkg33wnaroodJ3xp0sw2F2DGERIEzTWtqMYtdIIvZ/VNegjo7IiaOIUBEoCfUbcplAaOVoQJuWOrIHU=
-X-Received: by 2002:a81:998c:0:b0:2d7:7e7d:877d with SMTP id
- q134-20020a81998c000000b002d77e7d877dmr15120688ywg.78.1646782871514; Tue, 08
- Mar 2022 15:41:11 -0800 (PST)
+        Tue, 8 Mar 2022 20:07:57 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F7BDEF0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 16:48:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646786938; x=1678322938;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wHOUq6oj52ftb6Lgge3jkOSIeqRGGllnLy57qfnO/iI=;
+  b=SptU/ZWL9vF/+sIglnUdTHEFeVRF+5WauykEQih30z0jxPJbPCyrVr64
+   MIensT65Tz4CQVeKFyUpR+7AXalMJf8TjWj8UVG0TLWfF4W2CH0P9JPbs
+   mB8ewxE43rE0WZokJ2Di9+ZOZmywC/C7717bkVBRNqtGchCrYi6UtxGQD
+   6EtLYKqhsRMErh0k9jdl0lkp7sOhUnlZ/mEViWwjyoj+CJI92T4e6IgVs
+   f2Pysjiu2ZdeimpY3a7yOZD1x+BOteqC2TxU5uQF1euoZRSf8FrCKobWC
+   +Jc+cFNtpB56V83v730UixtGctPAYZmLF3FxGbQ25hz25xL5sKGMfrPCE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="318070544"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="318070544"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 15:41:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="688103910"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Mar 2022 15:41:43 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRjSY-0002By-Rm; Tue, 08 Mar 2022 23:41:42 +0000
+Date:   Wed, 9 Mar 2022 07:41:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Saravana Kannan <skannan@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sibi Sankar <sibis@codeaurora.org>
+Subject: [chanwoo:devfreq-testing 2/4] include/linux/devfreq.h:332:1:
+ warning: no semicolon at end of struct or union
+Message-ID: <202203090713.yqIkOA2s-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220308064228.2078109-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220308064228.2078109-1-chi.minghao@zte.com.cn>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 8 Mar 2022 23:40:45 +0000
-Message-ID: <CA+V-a8uVzmeeqer_bdqQyCpTNgVwJUDuoLgYmVugZYZevyTnyQ@mail.gmail.com>
-Subject: Re: [PATCH] media: davinci: Use platform_get_irq() to get the interrupt
-To:     cgel.zte@gmail.com
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 6:42 AM <cgel.zte@gmail.com> wrote:
->
-> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
->
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
-> ---
->  drivers/media/platform/davinci/vpfe_capture.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
->
-NAK!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
+head:   3439b6e7ff5704e4f812af746da9f06a6403d796
+commit: ae763e5ef1bcfccbf95119180ee716637b7bb353 [2/4] PM / devfreq: Add cpu based scaling support to passive governor
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20220309/202203090713.yqIkOA2s-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?id=ae763e5ef1bcfccbf95119180ee716637b7bb353
+        git remote add chanwoo https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+        git fetch --no-tags chanwoo devfreq-testing
+        git checkout ae763e5ef1bcfccbf95119180ee716637b7bb353
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SHELL=/bin/bash drivers/devfreq/ drivers/gpu/drm/msm/
 
-vpfe_capture driver doesn't support DT.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Cheers,
-Prabhakar
+All error/warnings (new ones prefixed by >>):
 
-> diff --git a/drivers/media/platform/davinci/vpfe_capture.c b/drivers/media/platform/davinci/vpfe_capture.c
-> index 0a2226b321d7..b3cafa16a1ad 100644
-> --- a/drivers/media/platform/davinci/vpfe_capture.c
-> +++ b/drivers/media/platform/davinci/vpfe_capture.c
-> @@ -1674,11 +1674,10 @@ static int vpfe_probe(struct platform_device *pdev)
->  {
->         struct vpfe_subdev_info *sdinfo;
->         struct vpfe_config *vpfe_cfg;
-> -       struct resource *res1;
->         struct vpfe_device *vpfe_dev;
->         struct i2c_adapter *i2c_adap;
->         struct video_device *vfd;
-> -       int ret, i, j;
-> +       int ret, i, j, irq;
->         int num_subdevs = 0;
->
->         /* Get the pointer to the device object */
-> @@ -1717,24 +1716,24 @@ static int vpfe_probe(struct platform_device *pdev)
->
->         strscpy(ccdc_cfg->name, vpfe_cfg->ccdc, sizeof(ccdc_cfg->name));
->         /* Get VINT0 irq resource */
-> -       res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> -       if (!res1) {
-> +       irq = platform_get_irq(pdev, 0);
-> +       if (irq < 0) {
->                 v4l2_err(pdev->dev.driver,
->                          "Unable to get interrupt for VINT0\n");
->                 ret = -ENODEV;
->                 goto probe_free_ccdc_cfg_mem;
->         }
-> -       vpfe_dev->ccdc_irq0 = res1->start;
-> +       vpfe_dev->ccdc_irq0 = irq;
->
->         /* Get VINT1 irq resource */
-> -       res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 1);
-> -       if (!res1) {
-> +       irq = platform_get_irq(pdev, 1);
-> +       if (irq < 0) {
->                 v4l2_err(pdev->dev.driver,
->                          "Unable to get interrupt for VINT1\n");
->                 ret = -ENODEV;
->                 goto probe_free_ccdc_cfg_mem;
->         }
-> -       vpfe_dev->ccdc_irq1 = res1->start;
-> +       vpfe_dev->ccdc_irq1 = irq;
->
->         ret = request_irq(vpfe_dev->ccdc_irq0, vpfe_isr, 0,
->                           "vpfe_capture0", vpfe_dev);
-> --
-> 2.25.1
->
+   In file included from arch/x86/um/asm/processor.h:41,
+                    from include/linux/spinlock_up.h:8,
+                    from include/linux/spinlock.h:95,
+                    from include/linux/kref.h:16,
+                    from include/linux/mm_types.h:8,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from drivers/devfreq/governor_simpleondemand.c:10:
+>> arch/um/include/asm/processor-generic.h:103:19: error: expected identifier or '(' before '&' token
+     103 | #define cpu_data (&boot_cpu_data)
+         |                   ^
+   include/linux/devfreq.h:331:27: note: in expansion of macro 'cpu_data'
+     331 |  struct devfreq_cpu_data *cpu_data[NR_CPUS];
+         |                           ^~~~~~~~
+   In file included from drivers/devfreq/governor_simpleondemand.c:11:
+>> include/linux/devfreq.h:332:1: warning: no semicolon at end of struct or union
+     332 | };
+         | ^
+--
+   In file included from arch/x86/um/asm/processor.h:41,
+                    from include/linux/spinlock_up.h:8,
+                    from include/linux/spinlock.h:95,
+                    from include/linux/kref.h:16,
+                    from include/linux/mm_types.h:8,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from drivers/devfreq/governor_passive.c:10:
+>> arch/um/include/asm/processor-generic.h:103:19: error: expected identifier or '(' before '&' token
+     103 | #define cpu_data (&boot_cpu_data)
+         |                   ^
+   include/linux/devfreq.h:331:27: note: in expansion of macro 'cpu_data'
+     331 |  struct devfreq_cpu_data *cpu_data[NR_CPUS];
+         |                           ^~~~~~~~
+   In file included from drivers/devfreq/governor_passive.c:16:
+>> include/linux/devfreq.h:332:1: warning: no semicolon at end of struct or union
+     332 | };
+         | ^
+   In file included from arch/x86/um/asm/processor.h:41,
+                    from include/linux/spinlock_up.h:8,
+                    from include/linux/spinlock.h:95,
+                    from include/linux/kref.h:16,
+                    from include/linux/mm_types.h:8,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from drivers/devfreq/governor_passive.c:10:
+   drivers/devfreq/governor_passive.c: In function 'get_target_freq_with_cpufreq':
+>> arch/um/include/asm/processor-generic.h:103:18: error: expected identifier before '(' token
+     103 | #define cpu_data (&boot_cpu_data)
+         |                  ^
+   drivers/devfreq/governor_passive.c:58:29: note: in expansion of macro 'cpu_data'
+      58 |   parent_cpu_data = p_data->cpu_data[cpu];
+         |                             ^~~~~~~~
+>> drivers/devfreq/governor_passive.c:50:31: warning: variable 'p_data' set but not used [-Wunused-but-set-variable]
+      50 |  struct devfreq_passive_data *p_data =
+         |                               ^~~~~~
+   In file included from arch/x86/um/asm/processor.h:41,
+                    from include/linux/spinlock_up.h:8,
+                    from include/linux/spinlock.h:95,
+                    from include/linux/kref.h:16,
+                    from include/linux/mm_types.h:8,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from drivers/devfreq/governor_passive.c:10:
+   drivers/devfreq/governor_passive.c: In function 'cpufreq_passive_notifier_call':
+>> arch/um/include/asm/processor-generic.h:103:18: error: expected identifier before '(' token
+     103 | #define cpu_data (&boot_cpu_data)
+         |                  ^
+   drivers/devfreq/governor_passive.c:221:10: note: in expansion of macro 'cpu_data'
+     221 |   !data->cpu_data[freqs->policy->cpu])
+         |          ^~~~~~~~
+>> arch/um/include/asm/processor-generic.h:103:18: error: expected identifier before '(' token
+     103 | #define cpu_data (&boot_cpu_data)
+         |                  ^
+   drivers/devfreq/governor_passive.c:224:26: note: in expansion of macro 'cpu_data'
+     224 |  parent_cpu_data = data->cpu_data[freqs->policy->cpu];
+         |                          ^~~~~~~~
+   drivers/devfreq/governor_passive.c: In function 'cpufreq_passive_unregister_notifier':
+>> arch/um/include/asm/processor-generic.h:103:18: error: expected identifier before '(' token
+     103 | #define cpu_data (&boot_cpu_data)
+         |                  ^
+   drivers/devfreq/governor_passive.c:258:29: note: in expansion of macro 'cpu_data'
+     258 |   parent_cpu_data = p_data->cpu_data[cpu];
+         |                             ^~~~~~~~
+   drivers/devfreq/governor_passive.c: In function 'cpufreq_passive_register_notifier':
+>> arch/um/include/asm/processor-generic.h:103:18: error: expected identifier before '(' token
+     103 | #define cpu_data (&boot_cpu_data)
+         |                  ^
+   drivers/devfreq/governor_passive.c:291:15: note: in expansion of macro 'cpu_data'
+     291 |   if (p_data->cpu_data[cpu])
+         |               ^~~~~~~~
+>> arch/um/include/asm/processor-generic.h:103:18: error: expected identifier before '(' token
+     103 | #define cpu_data (&boot_cpu_data)
+         |                  ^
+   drivers/devfreq/governor_passive.c:331:11: note: in expansion of macro 'cpu_data'
+     331 |   p_data->cpu_data[cpu] = parent_cpu_data;
+         |           ^~~~~~~~
+
+
+vim +332 include/linux/devfreq.h
+
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  296  
+996133119f57334 Chanwoo Choi          2016-03-22  297  /**
+7a51320ecd39420 Mauro Carvalho Chehab 2020-03-17  298   * struct devfreq_passive_data - ``void *data`` fed to struct devfreq
+996133119f57334 Chanwoo Choi          2016-03-22  299   *	and devfreq_add_device
+996133119f57334 Chanwoo Choi          2016-03-22  300   * @parent:	the devfreq instance of parent device.
+996133119f57334 Chanwoo Choi          2016-03-22  301   * @get_target_freq:	Optional callback, Returns desired operating frequency
+996133119f57334 Chanwoo Choi          2016-03-22  302   *			for the device using passive governor. That is called
+996133119f57334 Chanwoo Choi          2016-03-22  303   *			when passive governor should decide the next frequency
+996133119f57334 Chanwoo Choi          2016-03-22  304   *			by using the new frequency of parent devfreq device
+996133119f57334 Chanwoo Choi          2016-03-22  305   *			using governors except for passive governor.
+996133119f57334 Chanwoo Choi          2016-03-22  306   *			If the devfreq device has the specific method to decide
+996133119f57334 Chanwoo Choi          2016-03-22  307   *			the next frequency, should use this callback.
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  308   + * @parent_type	parent type of the device
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  309   + * @this:		the devfreq instance of own device.
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  310   + * @nb:		the notifier block for DEVFREQ_TRANSITION_NOTIFIER list
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  311   + * @cpu_data:		the state min/max/current frequency of all online cpu's
+996133119f57334 Chanwoo Choi          2016-03-22  312   *
+996133119f57334 Chanwoo Choi          2016-03-22  313   * The devfreq_passive_data have to set the devfreq instance of parent
+996133119f57334 Chanwoo Choi          2016-03-22  314   * device with governors except for the passive governor. But, don't need to
+996133119f57334 Chanwoo Choi          2016-03-22  315   * initialize the 'this' and 'nb' field because the devfreq core will handle
+996133119f57334 Chanwoo Choi          2016-03-22  316   * them.
+996133119f57334 Chanwoo Choi          2016-03-22  317   */
+996133119f57334 Chanwoo Choi          2016-03-22  318  struct devfreq_passive_data {
+996133119f57334 Chanwoo Choi          2016-03-22  319  	/* Should set the devfreq instance of parent device */
+996133119f57334 Chanwoo Choi          2016-03-22  320  	struct devfreq *parent;
+996133119f57334 Chanwoo Choi          2016-03-22  321  
+996133119f57334 Chanwoo Choi          2016-03-22  322  	/* Optional callback to decide the next frequency of passvice device */
+996133119f57334 Chanwoo Choi          2016-03-22  323  	int (*get_target_freq)(struct devfreq *this, unsigned long *freq);
+996133119f57334 Chanwoo Choi          2016-03-22  324  
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  325  	/* Should set the type of parent device */
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  326  	enum devfreq_parent_dev_type parent_type;
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  327  
+996133119f57334 Chanwoo Choi          2016-03-22  328  	/* For passive governor's internal use. Don't need to set them */
+996133119f57334 Chanwoo Choi          2016-03-22  329  	struct devfreq *this;
+996133119f57334 Chanwoo Choi          2016-03-22  330  	struct notifier_block nb;
+ae763e5ef1bcfcc Saravana Kannan       2021-03-02  331  	struct devfreq_cpu_data *cpu_data[NR_CPUS];
+996133119f57334 Chanwoo Choi          2016-03-22 @332  };
+996133119f57334 Chanwoo Choi          2016-03-22  333  #endif
+996133119f57334 Chanwoo Choi          2016-03-22  334  
+
+:::::: The code at line 332 was first introduced by commit
+:::::: 996133119f57334c38b020dbfaaac5b5eb127e29 PM / devfreq: Add new passive governor
+
+:::::: TO: Chanwoo Choi <cw00.choi@samsung.com>
+:::::: CC: MyungJoo Ham <myungjoo.ham@samsung.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

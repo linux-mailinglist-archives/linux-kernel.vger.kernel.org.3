@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1AE4D20CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E06944D20D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 19:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349785AbiCHS66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 13:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S1349446AbiCHTAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348996AbiCHS6y (ORCPT
+        with ESMTP id S245656AbiCHTAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 13:58:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4DFDF21;
-        Tue,  8 Mar 2022 10:57:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7733F61687;
-        Tue,  8 Mar 2022 18:57:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456F0C340EB;
-        Tue,  8 Mar 2022 18:57:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1646765876;
-        bh=eRFO90gliTb1JSPlmNLHEowDWgaJ4yng3mh10kA4vb4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qdEij3tHDsnEqVv1MSltNY57gZg3+y00Bvso5lPd1rXwFLw2zipBGzzSyoIXYfTJ4
-         dg4T/8QTIIbQ6EcJ6QUqPbroaR902Vp6dnmIqDPensJZJ/CvBvTRq5sb66CgDU6UwB
-         eZrDCh/ANt+WxELcqwzg8VrNvzelYpHOFKdk5LaQ=
-Date:   Tue, 8 Mar 2022 19:57:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 000/184] 5.16.13-rc2 review
-Message-ID: <YienMYvdhGPCcPSv@kroah.com>
-References: <20220307162147.440035361@linuxfoundation.org>
- <20220308185219.GA3686655@roeck-us.net>
+        Tue, 8 Mar 2022 14:00:44 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C66FE0C4;
+        Tue,  8 Mar 2022 10:59:46 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id bg31-20020a05600c3c9f00b00381590dbb33so112823wmb.3;
+        Tue, 08 Mar 2022 10:59:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GlEBP0dYqZ3fyLNSyiw8KHK9YhpTqiBMFquOs6BvLfo=;
+        b=Xall2NrXYxCvpO+k2IRdt458PZkUo48IXE0jneqg59khrwXsl5iewYj2Eb8LIUrZZe
+         FVE/jff4cGANSH0wf4dLwbtFEn/gXsXiBA3+1rlgNdAffWUeAlYtw2waUrVIil6tk/VY
+         E3BmxeV8Bnufneps3gq9MfbZ90VZG1WMdr9fwdAo/oNUh5n8eeJjca1u2K4Jg5ZsosP5
+         o8hXDXJQpG8Xn0AtDpOvoj6/6lf9oSSGc8hgLTaOUlE2qDvGNTdPMc3gU1I4hMML7Kgl
+         1ZGunPmBieoXBd9wvRj5dhY1QJ/3eTqEg1ukLa4h1hwrFlo9oLpVhtsa4B2LbDqgevX+
+         0iAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GlEBP0dYqZ3fyLNSyiw8KHK9YhpTqiBMFquOs6BvLfo=;
+        b=PzNlEaUPoSfmjQN+mjqGUOQTmrEQcgLv8NCsNVf2BubkrAa7QQ676aYzL+EhXiqej7
+         bKJhHmg0U3ZRWqc2m/LB+rsg/WPR0vqjxeRcCPIYUyZDsYtv3z5s4pzcFtqVBwJOk6yp
+         D4pgjmn1RUq0sPhnoDROc2D8yxD2LJPj3f5qoAX+9hV7OoL/Gr3aJ5u59l5Glqgrg3bG
+         5QCA3iuTBEXFMV0O5itMpSSny8YRn5gubDmBz7Jt9LjZviFiD36u9H70N9Y1l6wvzjsL
+         6CyDeAs5G83oqXahJwMUNwEDjFGRjv3miRX0eOoZSTRoCon117ppOb7q90M5XvlUWelZ
+         sOIA==
+X-Gm-Message-State: AOAM532ASJFsCHVSWLBMaXjcCkvcevEWyMGccc1OHd/ZvDb75I4GuybF
+        W/8Bkp2BK52UfYZrTHk3EUrC5BINJSP0zGK1zVA=
+X-Google-Smtp-Source: ABdhPJxRLMgBSW3C5vVIU9Jzb/aKdPhWN3yZiBXjWHOvBgCS/dLX7GeDxuJWaQ/PI8AjZCkHayN5eHMLHehGkhRtfOg=
+X-Received: by 2002:a1c:f616:0:b0:37d:1e1c:f90a with SMTP id
+ w22-20020a1cf616000000b0037d1e1cf90amr4597415wmc.148.1646765985128; Tue, 08
+ Mar 2022 10:59:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308185219.GA3686655@roeck-us.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220308184844.1121029-1-robdclark@gmail.com> <CAOMZO5Dkr7PqvgYpNp1fBR7P91T-x1ke2pRN6A6GWFJ7zBQo7g@mail.gmail.com>
+In-Reply-To: <CAOMZO5Dkr7PqvgYpNp1fBR7P91T-x1ke2pRN6A6GWFJ7zBQo7g@mail.gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 8 Mar 2022 11:00:14 -0800
+Message-ID: <CAF6AEGvfdyK2oNyLVrN5WJV0VV-EkvyD+EJ0rtGP7u7CA3kDXg@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/gpu: Fix crash on devices without devfreq support (v2)
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     DRI mailing list <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <freedreno@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 10:52:19AM -0800, Guenter Roeck wrote:
-> On Mon, Mar 07, 2022 at 05:28:30PM +0100, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.16.13 release.
-> > There are 184 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Wed, 09 Mar 2022 16:21:20 +0000.
-> > Anything received after that time might be too late.
-> > 
-> 
-> Your cycles are getting too short for my test system to provide results
-> in time. It gets overwhelmed, especially when there are updates affecting
-> all stable branches which trigger a complete rebuild of all those branches.
+On Tue, Mar 8, 2022 at 10:53 AM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> On Tue, Mar 8, 2022 at 3:48 PM Rob Clark <robdclark@gmail.com> wrote:
+> >
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Avoid going down devfreq paths on devices where devfreq is not
+> > initialized.
+> >
+> > v2: Change has_devfreq() logic [Dmitry]
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Reported-by: Anders Roxell <anders.roxell@linaro.org>
 
-Sorry, but this one had to go out a bit sooner for reasons I don't want
-to speculate about :)
+Fixes: 6aa89ae1fb04 ("drm/msm/gpu: Cancel idle/boost work on suspend")
 
-Anyway, I checked your builders, and they all looked ok except the 5.15
-tree, which I know is broken on MIPS right now.
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+>
+> Does this need a Fixes tag?
 
-thanks,
+Yes, sorry, patchwork had picked up the fixes tag from previous
+version but I'd forgot to add it locally
 
-greg k-h
+BR,
+-R

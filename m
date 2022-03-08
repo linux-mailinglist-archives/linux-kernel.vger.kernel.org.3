@@ -2,186 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEA04D1F30
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C684D1F37
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345915AbiCHRhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S1348608AbiCHRjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235466AbiCHRhb (ORCPT
+        with ESMTP id S1345761AbiCHRjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:37:31 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6545F554B9
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:36:34 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id p17so17705139plo.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:36:34 -0800 (PST)
+        Tue, 8 Mar 2022 12:39:22 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59284A916
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 09:38:22 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2dbd97f9bfcso210053497b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 09:38:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0ilNtvLV0LkLBCJ4u2ZvgTuBzfH8DdAUiWYvR9CsaB0=;
-        b=lPZ0Fq+AmHR0fTK4mu8Q11Kovw3c6jHNs6F6X4OH54L/w7QkcggF77SqUOPGLAcGH3
-         +UgdQqp+wa78LSbS/fNS9vf9RvjsMN6DyRyOAun0UMHec+eTuEfbvBjYniF9yBGyBSFY
-         c/ASL9DGT7p5ZJu3RQZ7nxdN9CsBz4fa1I52dqIRZGbnytCrNCrJjIcOcaeoa18Jx2NZ
-         HGTS+kQdevKIA4td7Wcjp0nhwG64obnBLLUSjhyOHyYVX92TFuhU2QfsyIRQnsL8gnjb
-         nkUZlfB+DlpTIqjXwU3PjvAIR03uxb7KOKqq4J7nJsfH4B2WcVKlRlqbLvWiZGqzBtDK
-         uB3g==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=73XbkgqmbcCp8jrsRpjmW22XYnfqvjYIpXZBS4eirQM=;
+        b=MM9a6dodSSdEECe1wyp0Icbc69wzcVLsyT7PY2rfd49dzp8onjx0/ypojzlSYhjgc9
+         HLR/ZYEviD2rC+Oo/JOHMiFFR+/5TMV9bnwsq1CY3UiNovS8zkjkCwEo/cERekGm++Rf
+         D++AXWigBpzAZSE1LOmhlU4G8mSCgxDLfbXD6/u7mBpCc5iwyCaXwdNEHoFU/nUVgp1L
+         VCvh/4a+DMYv8mP75N7//TwbYB9as3mPpBzBY9Wi01RnH2y7DVFXQoSIzqVVW1+4qJuF
+         Z11ABjNXtu1Vf8hdiiys3g/6h0MXv4oNCKY+injER0wj4DwtsZrEF6vNs3Qymwy7TiF2
+         BGmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0ilNtvLV0LkLBCJ4u2ZvgTuBzfH8DdAUiWYvR9CsaB0=;
-        b=Lb4hnYf2LlTX5tzemK9SAgnrDwGoXlucGX56kEoJlhmxqiHBXeohRBEO/Z9qVcnv4b
-         djrdQiAdXAZatiG/DazXeq3+ke0PUvcgz2JlEnIGh4xXulhjez/cH54NU7IhgYQfnkuJ
-         ndiKTnKr0Xk9diknTTEAH96YE272VAaDviKdZKKVsdV2+gNLj3l8gGXKr/SAYEXJf3RN
-         mFZNV+0ci622hrXstXEkzUDAoU2geK89PlsLVAfwZbD3M0lBW6U8u62/ldNGi9sXw9jL
-         kNCOZcHk1Tr5mUsTM4fFwCKA9HMYcGo1H4BAWoUbNPffyU0IGuQOquE0u+orFiVMfD+4
-         75UA==
-X-Gm-Message-State: AOAM530cDBltG0lXv79V2wXRD3HhcUpgnGEB6zGZzyAtqeqNVwF9Puh/
-        BSoOyOR7ij07B+kISyroz6FKnRuW+csK2w==
-X-Google-Smtp-Source: ABdhPJxKUjH6zqhOjdi9bTErD28lYIvnwk+e2mH2PTxOoSNMCM/QK9pdthKb9G+DZMtS/mXlDN5CGA==
-X-Received: by 2002:a17:90b:4c8f:b0:1bc:a64b:805 with SMTP id my15-20020a17090b4c8f00b001bca64b0805mr5861663pjb.156.1646760993687;
-        Tue, 08 Mar 2022 09:36:33 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u25-20020a62ed19000000b004f140515d56sm20407660pfh.46.2022.03.08.09.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:36:33 -0800 (PST)
-Date:   Tue, 8 Mar 2022 17:36:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-Subject: Re: [PATCH v2 08/25] KVM: x86/mmu: split cpu_mode from mmu_role
-Message-ID: <YieUHVgFxOo3LAa8@google.com>
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-9-pbonzini@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=73XbkgqmbcCp8jrsRpjmW22XYnfqvjYIpXZBS4eirQM=;
+        b=u4HVyT+F+/+tpxuuyX6JGqa0l34eWDz71ETNQXLpDVeUxrq6ctT9Y8O2r7T+I2zWX0
+         1QTOUxW4odLaqmYZC5Ie9pQpGFKY6fxEcM5nwEBIqzWMVKJg1hieh9O26U/gqWSNAPvs
+         XCyYedzjI8lk94JW9v7fmja7Cf9ZjrrobpzbOVbDP9mQIaDAEVzpeWZafFwhKEQ/cGWl
+         xaxj/fSVvUObZxKYo5ys7/ruVOUGmxGUWOQhYr2IVprElU5ZPgzHrjJmrsYQPJ0dJ5ll
+         epQ3VT1/E2aQDYW4Ed/5dhb9ida9faW8cv6YyhzKrVTeiyAKOCFIGMA3eioDnrQO+BVq
+         XSYA==
+X-Gm-Message-State: AOAM531bdYXD2mgyVAUQmBL0cdUetUgGzCTeOqk4laiaq8W1v185Vw/R
+        GjHtdxntNIb1EzBREXaSrxSZmwF1oOZpLWq0TaZCOg==
+X-Google-Smtp-Source: ABdhPJyiQb+hevD4MsEfkOJACYI9vqWCrwvXESLQpiKn9owxsdu0PnJ8iDqkTXLbv6Yv3c21WxGVX3f99zFgkxdd74w=
+X-Received: by 2002:a81:e90c:0:b0:2db:d63e:56ff with SMTP id
+ d12-20020a81e90c000000b002dbd63e56ffmr14332324ywm.60.1646761101606; Tue, 08
+ Mar 2022 09:38:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221162243.683208-9-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220307162207.188028559@linuxfoundation.org> <Yid4BNbLm3mStBi2@debian>
+ <CADVatmPdzXRU2aTeh-8dfZVmW6YPJwntSDCO8gcGDUJn-qzzAg@mail.gmail.com>
+In-Reply-To: <CADVatmPdzXRU2aTeh-8dfZVmW6YPJwntSDCO8gcGDUJn-qzzAg@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Mar 2022 23:08:10 +0530
+Message-ID: <CA+G9fYv74gGWQLkEZ4idGYri+F9BFV1+9=bz5L0+aophSzDdVA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/256] 5.15.27-rc2 review
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> Snapshot the state of the processor registers that govern page walk into
-> a new field of struct kvm_mmu.  This is a more natural representation
-> than having it *mostly* in mmu_role but not exclusively; the delta
-> right now is represented in other fields, such as root_level.
-> 
-> The nested MMU now has only the CPU mode; and in fact the new function
-> kvm_calc_cpu_mode is analogous to the previous kvm_calc_nested_mmu_role,
-> except that it has role.base.direct equal to CR0.PG.  It is not clear
-> what the code meant by "setting role.base.direct to true to detect bogus
-> usage of the nested MMU".
+Hi Greg,
 
-The idea was to trigger fireworks due to a incoherent state (e.g. direct mmu_role with
-non-direct hooks) if the nested_mmu was ever used as a "real" MMU (handling faults,
-installing SPs/SPTEs, etc...).  For a walk-only MMU, "direct" has no meaning and so
-rather than arbitrarily leave it '0', I arbitrarily set it '1'.
+On Tue, 8 Mar 2022 at 21:40, Sudip Mukherjee <sudipm.mukherjee@gmail.com> wrote:
+>
+> On Tue, Mar 8, 2022 at 3:36 PM Sudip Mukherjee
+> <sudipm.mukherjee@gmail.com> wrote:
+> >
+> > Hi Greg,
+> >
+> > On Mon, Mar 07, 2022 at 05:28:50PM +0100, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.15.27 release.
+> > > There are 256 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+>
+> <snip>
+>
+> >
+> > Mips failures,
+> >
+> > allmodconfig, gpr_defconfig and mtx1_defconfig fails with:
 
-Maybe this?
+LKFT build regression noticed as Sudip reported.
+   - mips-gcc-10-allmodconfig - FAILED.
 
-  The nested MMU now has only the CPU mode; and in fact the new function
-  kvm_calc_cpu_mode is analogous to the previous kvm_calc_nested_mmu_role,
-  except that it has role.base.direct equal to CR0.PG.  Having "direct"
-  track CR0.PG has the serendipitious side effect of being an even better
-  sentinel than arbitrarily setting direct to true for the nested MMU, as
-  KVM will run afoul of sanity checks for both direct and indirect MMUs if
-  KVM attempts to use the nested MMU as a "real" MMU, e.g. for page faults.
- 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |   1 +
->  arch/x86/kvm/mmu/mmu.c          | 107 ++++++++++++++++++++------------
->  arch/x86/kvm/mmu/paging_tmpl.h  |   2 +-
->  3 files changed, 68 insertions(+), 42 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 92855d3984a7..cc268116eb3f 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -433,6 +433,7 @@ struct kvm_mmu {
->  			 struct kvm_mmu_page *sp);
->  	void (*invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa);
->  	struct kvm_mmu_root_info root;
-> +	union kvm_mmu_role cpu_mode;
->  	union kvm_mmu_role mmu_role;
->  	u8 root_level;
->  	u8 shadow_root_level;
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 7c835253a330..1af898f0cf87 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -221,7 +221,7 @@ BUILD_MMU_ROLE_REGS_ACCESSOR(efer, lma, EFER_LMA);
->  #define BUILD_MMU_ROLE_ACCESSOR(base_or_ext, reg, name)		\
->  static inline bool __maybe_unused is_##reg##_##name(struct kvm_mmu *mmu)	\
->  {								\
-> -	return !!(mmu->mmu_role. base_or_ext . reg##_##name);	\
-> +	return !!(mmu->cpu_mode. base_or_ext . reg##_##name);	\
->  }
->  BUILD_MMU_ROLE_ACCESSOR(ext,  cr0, pg);
->  BUILD_MMU_ROLE_ACCESSOR(base, cr0, wp);
-> @@ -4680,6 +4680,39 @@ static void paging32_init_context(struct kvm_mmu *context)
->  	context->direct_map = false;
->  }
->  
-> +static union kvm_mmu_role
-> +kvm_calc_cpu_mode(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
+>
+> And, here is the bisect log:
+>
+> # bad: [7b9aacd770fa105a0a5f0be43bc72ce176d30331] Linux 5.15.27-rc2
+> # good: [8993e6067f263765fd26edabf3e3012e3ec4d81e] Linux 5.15.26
+> git bisect start 'HEAD' 'v5.15.26'
+> # bad: [6d4f8e67749d97f83f377911e874ca116be71fbd] drm/amd/display: For
+> vblank_disable_immediate, check PSR is really used
+> git bisect bad 6d4f8e67749d97f83f377911e874ca116be71fbd
+> # bad: [527ec9ffce51cb10a3172380aba30066ee2d056c] Input: ti_am335x_tsc
+> - fix STEPCONFIG setup for Z2
+> git bisect bad 527ec9ffce51cb10a3172380aba30066ee2d056c
+> # good: [96039b910c5a933221faa9aeca4f2fb2fa4976a1] arm64: Mark
+> start_backtrace() notrace and NOKPROBE_SYMBOL
+> git bisect good 96039b910c5a933221faa9aeca4f2fb2fa4976a1
+> # bad: [4778338032b338f80393b9dfab6832d02bddb819] MIPS: fix
+> local_{add,sub}_return on MIPS64
+> git bisect bad 4778338032b338f80393b9dfab6832d02bddb819
+> # good: [ba52217d4edd5824427134cfdfa9c2ab4390d77f] drm/amdgpu: check
+> vm ready by amdgpu_vm->evicting flag
+> git bisect good ba52217d4edd5824427134cfdfa9c2ab4390d77f
+> # good: [9eeb0cb7e2d675e3bbecc08302e3bafe21c61c52] NFSD: Fix
+> zero-length NFSv3 WRITEs
+> git bisect good 9eeb0cb7e2d675e3bbecc08302e3bafe21c61c52
+> # good: [8e68b6e3bdce82f387619e7fb6e85e6be9820182]
+> tools/resolve_btf_ids: Close ELF file on error
+> git bisect good 8e68b6e3bdce82f387619e7fb6e85e6be9820182
+> # good: [238d4d64ad4da4acefedd73094be0d1051897810] mtd: spi-nor: Fix
+> mtd size for s3an flashes
+> git bisect good 238d4d64ad4da4acefedd73094be0d1051897810
+> # first bad commit: [4778338032b338f80393b9dfab6832d02bddb819] MIPS:
+> fix local_{add,sub}_return on MIPS64
+>
+> Reverting 4778338032b3 ("MIPS: fix local_{add,sub}_return on MIPS64")
+> has fixed all the 3 build failures.
 
-I strongly prefer we avoid putting the return type on a different line unless
-absolutely "necessary".
+MIPS: fix local_{add,sub}_return on MIPS64
+[ Upstream commit 277c8cb3e8ac199f075bf9576ad286687ed17173 ]
 
-static union kvm_mmu_role kvm_calc_cpu_mode(struct kvm_vcpu *vcpu,
-					    const struct kvm_mmu_role_regs *regs)
+Use "daddu/dsubu" for long int on MIPS64 instead of "addu/subu"
 
-> +{
-> +	union kvm_mmu_role role = {0};
-> +
-> +	role.base.access = ACC_ALL;
-> +	role.base.smm = is_smm(vcpu);
-> +	role.base.guest_mode = is_guest_mode(vcpu);
-> +	role.base.direct = !____is_cr0_pg(regs);
-> +	if (!role.base.direct) {
+Fixes: 7232311ef14c ("local_t: mips extension")
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Can we check ____is_cr0_pg() instead of "direct"?  IMO that's more intuitive for
-understanding why the bits below are left zero.  I was scratching my head trying
-to figure out whether or not this was safe/correct for direct MMUs...
-
-And this indentation is quite nasty, and will only get worse.  An early return or
-a goto would solve that nicely.  I think I have a slight preference for an early
-return?
-
-	role.ext.valid = 1;
-	
-	if (!____is_cr0_pg(regs))
-		return role;
-
-	role.base.efer_nx = ____is_efer_nx(regs);
-	role.base.cr0_wp = ____is_cr0_wp(regs);
-	role.base.smep_andnot_wp = ____is_cr4_smep(regs) && !____is_cr0_wp(regs);
-	role.base.smap_andnot_wp = ____is_cr4_smap(regs) && !____is_cr0_wp(regs);
-	role.base.has_4_byte_gpte = !____is_cr4_pae(regs);
-	role.base.level = role_regs_to_root_level(regs);
-
-	role.ext.cr0_pg = 1;
-	role.ext.cr4_pae = ____is_cr4_pae(regs);
-	role.ext.cr4_smep = ____is_cr4_smep(regs);
-	role.ext.cr4_smap = ____is_cr4_smap(regs);
-	role.ext.cr4_pse = ____is_cr4_pse(regs);
-
-	/* PKEY and LA57 are active iff long mode is active. */
-	role.ext.cr4_pke = ____is_efer_lma(regs) && ____is_cr4_pke(regs);
-	role.ext.cr4_la57 = ____is_efer_lma(regs) && ____is_cr4_la57(regs);
-	role.ext.efer_lma = ____is_efer_lma(regs);
-
-	return role;
+--
+Linaro LKFT
+https://lkft.linaro.org

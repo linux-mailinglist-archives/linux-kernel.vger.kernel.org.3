@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE4F4D20EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C0C4D20F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349828AbiCHTHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
+        id S1349849AbiCHTId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349841AbiCHTHu (ORCPT
+        with ESMTP id S1349472AbiCHTI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:07:50 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6813C53E18
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:06:53 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id 15-20020a17090a098f00b001bef0376d5cso179350pjo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:06:53 -0800 (PST)
+        Tue, 8 Mar 2022 14:08:26 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1376BE90
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:07:27 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id e3so60114pjm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:07:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fKKD+3hXAeIEEWs0Yh0fwesV2YwX9bcSV9zNUsAN1go=;
-        b=TiAz7VQN6cqOR+YCGQONQ1puu9/mIbyi+3VaF2Y+0BaZGeb5d0zwRpgV+wE8vfCZR2
-         Pgq+thE1e9/4lXjLiLuSG2aKfs9V+qPTceSPGx1VZpZ/g/nRHQ1xsr06c/+SZh0uL6ZD
-         l59TPYzzVMS9JLJRtFAh9Cax5j2QTPG0/KiPc=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RxqL9uKmwzsq/dutI/kTwhTRbcQ6LXFSO3B46a+2dh8=;
+        b=KDz7sqB/GOy3Rek5x0OSzxb1oJOCtV2TqHyquKOV6tpzO8h03nrC1PoXf0KT6tUcyH
+         Z+cjtXV9PZDwwsxVDR3KVKYwtkLCI7vGwl/EwNmG83I+oBuDxEIlZ5mjbrEUMxrUHNJv
+         p7g3/JzdIlEcmi16YbX0tUkKP1jX2ExZdmzG8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fKKD+3hXAeIEEWs0Yh0fwesV2YwX9bcSV9zNUsAN1go=;
-        b=W7imjT32npKJ0xmqWNJkBlQf0aagZAlawPFHhWvAvPhaLy7OOvUNzZ6IS/ZOLjZB1i
-         GGVYUvnn4TCs1Mbpde1EtL0iRs9tvA82IltTITVHRdrf79naH97zYxYaw6IiS08hBMoV
-         l8DKgIZNd2NcCp/Z3c/u+5qPkVSbQo6na/JNcDdKz+xCTi/0D6KkaasFCVOWBOfAGbB0
-         6yQ4/Zgn5d46wvebGpGVS5vnszwWkjVOHTciDycaxDqThHyHfR42beqUlIW7ZMUgynAx
-         x0ZEuIM3MmFJ5SzixvYZ7HWYmk6hzB+rkei3sw8afS0CxX74xUmOjo0IoLY6Hbtrg+9F
-         bRMQ==
-X-Gm-Message-State: AOAM533Um6kxc6NMeDkUnxCEvgDQzUeZuixe4UXpymQvEdNJIqyqQHXg
-        6+K3NDpJ3FEHV9BkBWE73vsXmg==
-X-Google-Smtp-Source: ABdhPJwSOD+gGbHatfnouDV590+C0yrq8QOnBDEG0WOdkHpfzRz+TxjH6jpl1Ho2oEWdFX5xJuG7yw==
-X-Received: by 2002:a17:90a:aa8c:b0:1bf:5273:ba28 with SMTP id l12-20020a17090aaa8c00b001bf5273ba28mr6261331pjq.226.1646766412904;
-        Tue, 08 Mar 2022 11:06:52 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:b3e3:a188:cbfc:3a0e])
-        by smtp.gmail.com with ESMTPSA id x29-20020aa79a5d000000b004f0ef1822d3sm19910654pfj.128.2022.03.08.11.06.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RxqL9uKmwzsq/dutI/kTwhTRbcQ6LXFSO3B46a+2dh8=;
+        b=kPWvwMk05AL4TMo9euVc3RjcfKqrpIkjQ2FsaqQ+w7uQKnbUt9rO3YQrS0/YTfT8Iu
+         /wYL60OMljU+Ed2shODyDJfTVXSyNwg7r2/iTBSP3PEl+qqdDKa4ji+ftDmDwW8ig5lz
+         Az+Td1JB4ZVTopPwlyXZ/8SqUFk8VxVCMEy6P1nGsxaob4LViCLqkZJjMtfmqugtuy8s
+         IN1/QNGmF2xFZmvK49KTD4hK+4r2jBT0r6iocSwq4Iialqd4xZryu5gfvQlNbIL4BB4G
+         sMfA7ofvPQ9F3JqhDjuOUNt89/CvBK3c/qRiqKZVeh+7o+2655IYQOwezhEgEitZI/gF
+         HC9Q==
+X-Gm-Message-State: AOAM53241/LCjUI6t0mhJ2S+1/bI7e7AR9hdLJ4ugkoulbUxpbL++v6x
+        hhbZhgOs5wpI9DJ+W4CZOKj5hA==
+X-Google-Smtp-Source: ABdhPJxA+5oPyDld/G3OlX7XBq5wkvOiVZlmJJeMLXsbKMgRocJxqbOlw2Tt9xYtPdnzlagw18TATw==
+X-Received: by 2002:a17:90a:4612:b0:1bc:d7c2:b2e7 with SMTP id w18-20020a17090a461200b001bcd7c2b2e7mr6220103pjg.154.1646766446578;
+        Tue, 08 Mar 2022 11:07:26 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:3cfa:63e6:3098:9d0])
+        by smtp.gmail.com with ESMTPSA id r1-20020a63b101000000b00380989bcb1bsm2270762pgf.5.2022.03.08.11.07.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 11:06:52 -0800 (PST)
-Date:   Tue, 8 Mar 2022 11:06:49 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lin Huang <hl@rock-chips.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Derek Basehore <dbasehore@chromium.org>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 01/15] dt-bindings: devfreq: rk3399_dmc: Convert to
- YAML
-Message-ID: <YiepSZXhmUZVwjKo@google.com>
-References: <20220308000945.706701-1-briannorris@chromium.org>
- <20220307160918.v3.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
- <bf59a2bc-a708-27de-866a-346085dcee7d@canonical.com>
+        Tue, 08 Mar 2022 11:07:26 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] drm/bridge: Add MAINTAINERS entry for DRM drivers for bridge chip bindings
+Date:   Tue,  8 Mar 2022 11:06:57 -0800
+Message-Id: <20220308110615.1.I1f1b10daf7361feb6705f789deb680b8d7720de9@changeid>
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bf59a2bc-a708-27de-866a-346085dcee7d@canonical.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,58 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 07:03:15PM +0100, Krzysztof Kozlowski wrote:
-> On 08/03/2022 01:09, Brian Norris wrote:
+The bindings for bridge chips should also get the same maintainers
+entry so the right people get notified about bindings changes.
+
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0216d2ffe728..a73179d55d00 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6403,6 +6403,7 @@ R:	Jonas Karlman <jonas@kwiboo.se>
+ R:	Jernej Skrabec <jernej.skrabec@gmail.com>
+ S:	Maintained
+ T:	git git://anongit.freedesktop.org/drm/drm-misc
++F:	Documentation/devicetree/bindings/display/bridge/
+ F:	drivers/gpu/drm/bridge/
  
-> Apologies for jumping in late in discussion, but how about moving it to
-> memory-controllers or interconnect directory? devfreq is Linux specific
-> and DMC sounds a lot like dynamic memory controller.
+ DRM DRIVERS FOR EXYNOS
+-- 
+2.35.1.616.g0bdcbb4464-goog
 
-Sure! Will do in v4.
-
-> > 
-> >  .../bindings/devfreq/rk3399_dmc.txt           | 212 -------------
-> >  .../bindings/devfreq/rk3399_dmc.yaml          | 294 ++++++++++++++++++
-> 
-> file name:
-> rockchip,rk3399-dmc.yaml
-
-Ack.
-
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
-
-> > +  devfreq-events:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > +    minItems: 1
-> > +    maxItems: 1
-> 
-> Rob previously asked about max, but it seems it is only one phandle,
-> right? Then the type - 'phandle'.
-
-Sure! Don't know why I didn't notice that.
-
-> > +  rockchip,ddr3_odt:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      When the DRAM type is DDR3, this parameter defines the DRAM side ODT
-> > +      strength in ohms. Default value is 120.
-> 
-> Here and in all other places - instead of describing default value in
-> description, just add "default: 120".
-
-Yep. Most of these properties are actually deprecated in the end, but
-doesn't hurt to use the facilities available.
-
-> Best regards,
-> Krzysztof
-
-Thanks for the reviews! I'll roll them all into v4 shortly.
-
-While I'm at it: I think I have Reviewed-by's for all the DT patches
-(except this one). Given it also touches Rockchip device trees, maybe
-this all needs to go through Heiko / linux-rockchip? Or if not, it'd be
-nice if Heiko spoke up to tell the devfreq maintainers instead.
-
-Regards,
-Brian

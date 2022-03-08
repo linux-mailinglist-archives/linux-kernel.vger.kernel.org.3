@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFCB4D1B0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B14E4D1B0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347673AbiCHO4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
+        id S1347654AbiCHOzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347669AbiCHO4L (ORCPT
+        with ESMTP id S234154AbiCHOzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:56:11 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064284D614;
-        Tue,  8 Mar 2022 06:55:15 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id x5so24781095edd.11;
-        Tue, 08 Mar 2022 06:55:14 -0800 (PST)
+        Tue, 8 Mar 2022 09:55:05 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E197B3B3CA;
+        Tue,  8 Mar 2022 06:54:08 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id d17so8702020pfv.6;
+        Tue, 08 Mar 2022 06:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=W3N2onZNeXEWUzsjOhw5lgCOnooSllP3AJaBPnKLKa4=;
-        b=cF3pFpGgsqh/x0O0WYaF1G/ds8gl5IPznUxWzBDUnwryuQjj2erEikKXEmJmDAEwac
-         SqSiXNIJNgNK6/P7a6OmTsRygL8siE+jjxWC2jCvXYLAnO3Q8PLBXQbIUgW5Ch4jO4Sb
-         eJ2baKwVhvQcJwoXaB3A5MynHxfdPwmqxNzUV7w1tFE2iA1UTg29aRMs8h9WxuUaAPj3
-         X1k/wm97jt6+aw5/6STGgqcA9xXm/hbxjZnmUr0JbEiyh4S7cOKlICT0gz0w8+jT5YSP
-         vLhua+dZM/YObcOBwqkloUXb2JivS7+92w6lO5j3Q82O9qWuJd/g5CF2bPA7RJFzb+Mm
-         6MGQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ML3nrcJhigXGREi8g9Ao8b7VLASkDVKP+4T7mWa14QQ=;
+        b=Yr+sI3+nu86ai18SgMFUJUXqxotHyynhRczG/fZW6xFgZuO8m3B/PTv/I2mtY2p+mr
+         yQqjpsf/5X9zQjnlpC83k6lmZT0DRBvvW65Tl57CirqhZj0xN0BUC0tyun8SVhjC6Z4a
+         fsg8oLrhuOFt2nDEeZ/CFQKkcUuoF1X/r2GRIOj2d+tBJjFIRFF5LWzidFrUTZZEMtG+
+         zx92IihaheFNr0zf4DzmbO9DaxUllrWReZP3UOxDQQflgX574NAeh+jtsBvlJnUxcs6I
+         zg9mtRYIicY6buSjpHXNV09aAHDCPyAp4RFNGQ1gBevVEW3YnSZ2fv26kN8uk4fM9MZY
+         W00A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=W3N2onZNeXEWUzsjOhw5lgCOnooSllP3AJaBPnKLKa4=;
-        b=COrst7vNMuA3ev0QUJOVG8lC/0qR/ew9cpxbk9UsUDgBxZvwKjU00QaUA4eCpLGCWj
-         d/MLxbpwCpKCplVaXvWredIQCq31ljFM17rEG6upX1RTFkJz7mXCQo4eNR4h6d/5FX5P
-         nwfNBW6SF7MRh9l9EC1qznMpvAOTUzZ1VuaPyzG//PhLhl33+JoT4G9EDAH94vXjiqXw
-         P+u67LbfvEcRk1AjzpgtI1y1BaxYNnuOTX2ujPNEr7BAOptZ4UF834F8AsdMxRr37t5K
-         nMIfQSJbuzvYZgE2+LPyWXcfbxdbF8y4PNuyzfIjLD7vN3JBcispjTeDKhFWQkrkkohm
-         jeig==
-X-Gm-Message-State: AOAM5300aMrBRrsk+lBjg40F7K6FiR6Jyawf+aVJ583bb6LHQN2oFIIN
-        qVOq4KiXihNIVQj+T/o+pCrUjSz15kEyO1lMxZE=
-X-Google-Smtp-Source: ABdhPJy186BBAJ+8888FuwNYh2a/36jnGkxB9fjC/QjwyNVZWRM5U2djbwUwdYrGc3tqLepqzxoLsixLK774/uzEZ68=
-X-Received: by 2002:a05:6402:3589:b0:416:7de7:cdde with SMTP id
- y9-20020a056402358900b004167de7cddemr348358edc.218.1646751313432; Tue, 08 Mar
- 2022 06:55:13 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ML3nrcJhigXGREi8g9Ao8b7VLASkDVKP+4T7mWa14QQ=;
+        b=5dGXqfTd/NF/7niKcg3hl/6wOsTCNaKBRcJBt9Qq6XSmhNcbqzDAqkllCHFDmd+Thn
+         s/1S4xDAD8Euqnn8g2MQL3Tlhou1luygzgVdFzle+6+M7wM/Qxi1R2UWSbgj8i7+aEdP
+         uq8yrW4v2KWFqjAgs08mbVY65Cr6Sqsm1dTlwFOkUEeYqF1N5Gvj+ilPPA+2ioX6ozyS
+         ToNwbECYDsfBNy5tMZYacDBTLmtfPC/8TY1huG55p/fO31JIvBrGQJ/h2E5Mmrl3iLXP
+         9ideka12pN1uWHcnUcIGiyyDUvDoG77BI0YwTuKvvlS95t/PV/IeCZrrptNs8Slzy5XZ
+         EKdA==
+X-Gm-Message-State: AOAM531qAgPKB8fzJES/hyRJ72ARYcClVizfRc3uSL74XNP2chffvvb4
+        nWkWb5QiOTXrBRVBP54fHgI=
+X-Google-Smtp-Source: ABdhPJwIXQDCwy0Jko2XAVWGqIW3gzCk2noTRbaDKzo7bfqMxCFhpsGNnMNyjhKymkCgoCiBXymlPg==
+X-Received: by 2002:a63:513:0:b0:380:1180:9b48 with SMTP id 19-20020a630513000000b0038011809b48mr12547816pgf.623.1646751248440;
+        Tue, 08 Mar 2022 06:54:08 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id pi16-20020a17090b1e5000b001bd1ffaf2basm3323234pjb.0.2022.03.08.06.54.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 06:54:08 -0800 (PST)
+Date:   Tue, 8 Mar 2022 06:54:05 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Divya.Koppera@microchip.com, netdev@vger.kernel.org,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        Madhuri.Sripada@microchip.com, Manohar.Puri@microchip.com
+Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
+ values and timestamping check for LAN8814 phy
+Message-ID: <20220308145405.GD29063@hoboy.vegasvil.org>
+References: <20220304093418.31645-1-Divya.Koppera@microchip.com>
+ <20220304093418.31645-3-Divya.Koppera@microchip.com>
+ <YiILJ3tXs9Sba42B@lunn.ch>
+ <CO1PR11MB4771237FE3F53EBE43B614F6E2089@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YiYD2kAFq5EZhU+q@lunn.ch>
+ <CO1PR11MB4771F7C1819E033EC613E262E2099@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YidgHT8CLWrmhbTW@lunn.ch>
 MIME-Version: 1.0
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
- <20220302095606.14818-2-ilpo.jarvinen@linux.intel.com> <20220306184857.GA19394@wunner.de>
- <CAHp75Vdxa_p866t5B7zJ8nHS-v+tu3vLiW0=vaBznnyCGyve_g@mail.gmail.com>
- <ab82f6a-8d1b-8e89-4ea-77d1a55667d2@linux.intel.com> <20220307191854.GA27748@wunner.de>
- <YiZfdlw0A75cojCx@smile.fi.intel.com> <6931d6ad-7520-b585-a8ba-35349e730bb@linux.intel.com>
- <20220308122220.GA24694@wunner.de> <d9aabfe-1179-67c2-98d1-f36e7e698f33@linux.intel.com>
- <20220308145042.GA20520@wunner.de>
-In-Reply-To: <20220308145042.GA20520@wunner.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 8 Mar 2022 16:53:56 +0200
-Message-ID: <CAHp75Vfd-bi3s=JnNTyov4C7prNhwuWHWsUC6n9pM_E+d4picg@mail.gmail.com>
-Subject: Re: [PATCH 1/7] serial: 8250_dwlib: RS485 HW half duplex support
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YidgHT8CLWrmhbTW@lunn.ch>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,16 +81,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 4:50 PM Lukas Wunner <lukas@wunner.de> wrote:
-> On Tue, Mar 08, 2022 at 02:59:59PM +0200, Ilpo J=C3=A4rvinen wrote:
+On Tue, Mar 08, 2022 at 02:54:37PM +0100, Andrew Lunn wrote:
+> This is not a valid use of DT, since this is configuration, not
+> describing the hardware. There has been recent extension in the UAPI
+> to allow user space to do this configuration. Please look at that
+> work.
 
-...
+Yes, I had an RFC up that hopefully will merge soon.
 
-> Of course, if hardware-assisted DE assertion requires a particular pinmux
-> state, we could double-check whether that pinmux state is set.
+In the mean time, just implement the PHC/time stamping in your PHY
+driver unconditionally.
 
-I'm wondering how to achieve this.
-
---=20
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Richard

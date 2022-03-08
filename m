@@ -2,162 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7114D0FF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 597254D0FF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 07:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344481AbiCHGRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 01:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S238133AbiCHGR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 01:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344431AbiCHGRN (ORCPT
+        with ESMTP id S1344406AbiCHGRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 01:17:13 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282223BFA2;
-        Mon,  7 Mar 2022 22:16:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=8X3c5XDqthuQdXMBmAKyJ50PsF74xYticZhjJF97a3o=; b=uITWO/byir10fw/w7iDmD1tNU+
-        h4Rx6vQ8VwFOEAgn8RGFju0aeGxhCF9oHFGM5lIEQjGKVjufiRS3s7xY6x2DkMGWFx+IMthmluurN
-        1tTw5NXlhIElgCKzH3KIXBwDpqigoQ6Kw1r8+ha1uWMHxm/Pzg7QGBdihic5MlrpUgq8aa/jyxOc1
-        NcYvI8gbU9V5coVyE7Yd+PwoWLz2S2O7K3N0hwG9eUBffZdtKm1yyEH2fGnTJiG8cbasYZ+GwtLc0
-        Y4TAGvAVwtdHCVt4h9qnhFVIeAYiQmS831f2T6Rer+6UXcoHLqyvX/aQUtXbUK5kSJrVYddH18//b
-        roCZpysA==;
-Received: from [2001:4bb8:184:7746:6f50:7a98:3141:c37b] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRT8h-002lWm-QS; Tue, 08 Mar 2022 06:16:08 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
-        Song Liu <song@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-raid@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Subject: [PATCH 5/5] pktcdvd: stop using bio_reset
-Date:   Tue,  8 Mar 2022 07:15:51 +0100
-Message-Id: <20220308061551.737853-6-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220308061551.737853-1-hch@lst.de>
-References: <20220308061551.737853-1-hch@lst.de>
+        Tue, 8 Mar 2022 01:17:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABF8A2E6BE
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Mar 2022 22:16:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646720171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c5ugwLO4/RAIk+A33RH1Nda04XboyFL8Xk9nspKrv+Q=;
+        b=KroPkbxi1L9hH/HmXZgxQhdBuekA4HxqXcDzsresT6Cwo1ZF2iPR2/08WoFCAlgUegXm4H
+        tteJRZtglg8X/UYn6LVuSY0XdpzFn7lOtlTOiezUxssBHnJgsCusmhMTCkJBfuEoQDTgby
+        9yPcyxLQDV/WOkXeKQYUcHYFAWasC08=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-190-CjUjc8p6Ne2On3LACfWhzg-1; Tue, 08 Mar 2022 01:16:10 -0500
+X-MC-Unique: CjUjc8p6Ne2On3LACfWhzg-1
+Received: by mail-lf1-f72.google.com with SMTP id j22-20020a05651231d600b0044830cff16fso1264983lfe.12
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Mar 2022 22:16:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c5ugwLO4/RAIk+A33RH1Nda04XboyFL8Xk9nspKrv+Q=;
+        b=KjAbrA/1O7JprwWMGDo0guv8h82fAP8hUfkuSPjdhadsUGWh4kv4cY331PyObUIBGR
+         gk1Z4WEbps7ZWP/QbASD1+nW8j3klnbNkFmn/JWUlTRUzmzLvQc2vxIqnjsF52+t1b7q
+         d7OJFUpWnVVq8wOISehchCoitBqPED/6O5SrcFLEoVURsSnBUwRdlNQaIPYpc9lHe4UH
+         9l/rRFSPXlTIORZd7TnfAHq3MxSjY9EkH0Z22+8JxQIHXQiEWJMr2PVyCiRkUpSfDO79
+         yBtSj0FiZILbMZ9dAzOVfsX/j7yNu0yU0wRfg4EEj5zXT5QdMHYmfzI+428VHTTm2JQJ
+         QOGg==
+X-Gm-Message-State: AOAM532EAD7ZdhVdb2gMjs506Lx+aKORq+WoZk9ZBzy0M62xNZGEd0JK
+        pAr8/fjqCQritA/L1ykfTrH09l8bzfl0bEQtUP6EOSjmRKDaNQWFBu5AWiysFi7SqYja00M8dXq
+        fjvEOFLptrXValEvzi6bcLo9NNHZ/3I+rKVXeXXTd
+X-Received: by 2002:a2e:9045:0:b0:247:da7d:a460 with SMTP id n5-20020a2e9045000000b00247da7da460mr9533965ljg.300.1646720168270;
+        Mon, 07 Mar 2022 22:16:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxait3lv+dLzC+BdDFV83vSleLNh5HIk4y197ubAHp3aPkfzkCIzF+1Ixw1dsakTX8Qi9vOeSnOuGXbcvWoGxY=
+X-Received: by 2002:a2e:9045:0:b0:247:da7d:a460 with SMTP id
+ n5-20020a2e9045000000b00247da7da460mr9533952ljg.300.1646720167963; Mon, 07
+ Mar 2022 22:16:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220307191757.3177139-1-lee.jones@linaro.org>
+In-Reply-To: <20220307191757.3177139-1-lee.jones@linaro.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 8 Mar 2022 14:15:56 +0800
+Message-ID: <CACGkMEsjmCNQPjxPjXL0WUfbMg8ARnumEp4yjUxqznMKR1nKSQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     mst <mst@redhat.com>, linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just initialize the bios on-demand.
+On Tue, Mar 8, 2022 at 3:18 AM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> to vhost_get_vq_desc().  All we have to do here is take the same lock
+> during virtqueue clean-up and we mitigate the reported issues.
+>
+> Also WARN() as a precautionary measure.  The purpose of this is to
+> capture possible future race conditions which may pop up over time.
+>
+> Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+>
+> Cc: <stable@vger.kernel.org>
+> Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/vhost/vhost.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> index 59edb5a1ffe28..ef7e371e3e649 100644
+> --- a/drivers/vhost/vhost.c
+> +++ b/drivers/vhost/vhost.c
+> @@ -693,6 +693,15 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>         int i;
+>
+>         for (i = 0; i < dev->nvqs; ++i) {
+> +               /* No workers should run here by design. However, races have
+> +                * previously occurred where drivers have been unable to flush
+> +                * all work properly prior to clean-up.  Without a successful
+> +                * flush the guest will malfunction, but avoiding host memory
+> +                * corruption in those cases does seem preferable.
+> +                */
+> +               WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
+> +
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/block/pktcdvd.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+I don't get how this can help, the mutex could be grabbed in the
+middle of the above and below line.
 
-diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
-index 5ab43f9027631..335099c4076ee 100644
---- a/drivers/block/pktcdvd.c
-+++ b/drivers/block/pktcdvd.c
-@@ -525,7 +525,6 @@ static struct packet_data *pkt_alloc_packet_data(int frames)
- 	pkt->w_bio = bio_kmalloc(frames, GFP_KERNEL);
- 	if (!pkt->w_bio)
- 		goto no_bio;
--	bio_init(pkt->w_bio, NULL, pkt->w_bio->bi_inline_vecs, frames, 0);
- 
- 	for (i = 0; i < frames / FRAMES_PER_PAGE; i++) {
- 		pkt->pages[i] = alloc_page(GFP_KERNEL|__GFP_ZERO);
-@@ -537,26 +536,20 @@ static struct packet_data *pkt_alloc_packet_data(int frames)
- 	bio_list_init(&pkt->orig_bios);
- 
- 	for (i = 0; i < frames; i++) {
--		struct bio *bio = bio_kmalloc(1, GFP_KERNEL);
--		if (!bio)
-+		pkt->r_bios[i] = bio_kmalloc(1, GFP_KERNEL);
-+		if (!pkt->r_bios[i])
- 			goto no_rd_bio;
--		bio_init(bio, NULL, bio->bi_inline_vecs, 1, 0);
--		pkt->r_bios[i] = bio;
- 	}
- 
- 	return pkt;
- 
- no_rd_bio:
--	for (i = 0; i < frames; i++) {
--		if (pkt->r_bios[i])
--			bio_uninit(pkt->r_bios[i]);
-+	for (i = 0; i < frames; i++)
- 		kfree(pkt->r_bios[i]);
--	}
- no_page:
- 	for (i = 0; i < frames / FRAMES_PER_PAGE; i++)
- 		if (pkt->pages[i])
- 			__free_page(pkt->pages[i]);
--	bio_uninit(pkt->w_bio);
- 	kfree(pkt->w_bio);
- no_bio:
- 	kfree(pkt);
-@@ -571,13 +564,10 @@ static void pkt_free_packet_data(struct packet_data *pkt)
- {
- 	int i;
- 
--	for (i = 0; i < pkt->frames; i++) {
--		bio_uninit(pkt->r_bios[i]);
-+	for (i = 0; i < pkt->frames; i++)
- 		kfree(pkt->r_bios[i]);
--	}
- 	for (i = 0; i < pkt->frames / FRAMES_PER_PAGE; i++)
- 		__free_page(pkt->pages[i]);
--	bio_uninit(pkt->w_bio);
- 	kfree(pkt->w_bio);
- 	kfree(pkt);
- }
-@@ -950,6 +940,7 @@ static void pkt_end_io_read(struct bio *bio)
- 
- 	if (bio->bi_status)
- 		atomic_inc(&pkt->io_errors);
-+	bio_uninit(bio);
- 	if (atomic_dec_and_test(&pkt->io_wait)) {
- 		atomic_inc(&pkt->run_sm);
- 		wake_up(&pd->wqueue);
-@@ -967,6 +958,7 @@ static void pkt_end_io_packet_write(struct bio *bio)
- 
- 	pd->stats.pkt_ended++;
- 
-+	bio_uninit(bio);
- 	pkt_bio_finished(pd);
- 	atomic_dec(&pkt->io_wait);
- 	atomic_inc(&pkt->run_sm);
-@@ -1021,7 +1013,7 @@ static void pkt_gather_data(struct pktcdvd_device *pd, struct packet_data *pkt)
- 			continue;
- 
- 		bio = pkt->r_bios[f];
--		bio_reset(bio, pd->bdev, REQ_OP_READ);
-+		bio_init(bio, pd->bdev, bio->bi_inline_vecs, 1, REQ_OP_READ);
- 		bio->bi_iter.bi_sector = pkt->sector + f * (CD_FRAMESIZE >> 9);
- 		bio->bi_end_io = pkt_end_io_read;
- 		bio->bi_private = pkt;
-@@ -1234,7 +1226,8 @@ static void pkt_start_write(struct pktcdvd_device *pd, struct packet_data *pkt)
- {
- 	int f;
- 
--	bio_reset(pkt->w_bio, pd->bdev, REQ_OP_WRITE);
-+	bio_init(pkt->w_bio, pd->bdev, pkt->w_bio->bi_inline_vecs, pkt->frames,
-+		 REQ_OP_WRITE);
- 	pkt->w_bio->bi_iter.bi_sector = pkt->sector;
- 	pkt->w_bio->bi_end_io = pkt_end_io_packet_write;
- 	pkt->w_bio->bi_private = pkt;
--- 
-2.30.2
+> +               mutex_lock(&dev->vqs[i]->mutex);
+>                 if (dev->vqs[i]->error_ctx)
+>                         eventfd_ctx_put(dev->vqs[i]->error_ctx);
+>                 if (dev->vqs[i]->kick)
+> @@ -700,6 +709,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+>                 if (dev->vqs[i]->call_ctx.ctx)
+>                         eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
+>                 vhost_vq_reset(dev, dev->vqs[i]);
+> +               mutex_unlock(&dev->vqs[i]->mutex);
+>         }
+
+I'm not sure it's correct to assume some behaviour of a buggy device.
+For the device mutex, we use that to protect more than just err/call
+and vq.
+
+Thanks
+
+>         vhost_dev_free_iovecs(dev);
+>         if (dev->log_ctx)
+> --
+> 2.35.1.616.g0bdcbb4464-goog
+>
 

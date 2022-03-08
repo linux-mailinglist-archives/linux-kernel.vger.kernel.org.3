@@ -2,93 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5473A4D191A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2024D1937
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 14:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347128AbiCHNZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 08:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S241950AbiCHNdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 08:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347076AbiCHNZO (ORCPT
+        with ESMTP id S234727AbiCHNdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:25:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B284419BA;
-        Tue,  8 Mar 2022 05:24:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 921C861021;
-        Tue,  8 Mar 2022 13:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB05C340EB;
-        Tue,  8 Mar 2022 13:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646745857;
-        bh=2OP/eO/kKD41zP+nPYneJuXvy2X1h4oBHVDkq7AXBHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VDSjQmdkbKuyhd+55xQKCz4GtjwszGiCDUkEuKpCSR8hE5cqNfiCrTop7XwCOqgAN
-         1DCg6OGXKqMBYmljJfaAAW2B3cr9nfxT+8pG4AQerKxBIT3qNnPAOlQ6wSvNTLS9Qz
-         GjOquXI0OsKXbaeHE2DYJgV+JoIgeZm6TZPqUAinV86ccj3ZP0p3v3iJc1tLU4gqBO
-         gHQ3ERipbupWZyPgSGU4gGB8+1wrOKyctli+bCj7yRBOnbCjOi5YeGtaSJ7Zqdz+4W
-         eGCnciKbDn0s/hrMjzwmTKWj4yC/VuxFgh8MdLMHLH268MbIt9bsKM6g/r2kSzN7If
-         0GYYGJ4Szwjgg==
-Date:   Tue, 8 Mar 2022 13:24:10 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>, lee.jones@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        andi@etezian.org, linux-spi@vger.kernel.org, lee.jones@linaro.org,
-        linux-fsd@tesla.com, Adithya K V <adithya.kv@samsung.com>
-Subject: Re: [RESEND PATCH v3 1/2] spi: dt-bindings: samsung: Add fsd spi
- compatible
-Message-ID: <YidY+ncMVhp7bBvh@sirena.org.uk>
-References: <CGME20220308120701epcas5p3d3d2f5c01055e8c1721ae0ec6c2aa681@epcas5p3.samsung.com>
- <20220308121640.27344-1-alim.akhtar@samsung.com>
+        Tue, 8 Mar 2022 08:33:33 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A7E25F4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 05:32:35 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id u3so8535884ljd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 05:32:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=k8yxLA7LareC0TmYFSD6UqZuitbsoFI/UEhne5Mx0sM=;
+        b=L9E813x8Hh14OoFMPPFVyo9IZHi2hVyvS/ej/Jl3KSjRwgdT40455UJ7/1FYzednE1
+         d9F/Yc5ortg1swi1mfeeJ21I2JTakQ6ulnYg0c+1GToOQHsVLpp0IWYsANFGJCd0b+js
+         GcjkikFbfJq7ctsarnvsXTUzGo1QvzMx6iv4OPhZN9H4ZNnbajhCXEkYEXlhWP/rFPBe
+         1HHSMyMdwmXZnjF7YVgbgmgg6eoJUf+8Zi6Il9snJmiPJuRxXZN1zuBadMqTurPw9YYZ
+         D6ra8CgUk7efLvlpFpsWnG6slvMNS86Ah4AY1GKAFhr483pMhDa00SDH+mFYb7jgZeX4
+         ZLDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=k8yxLA7LareC0TmYFSD6UqZuitbsoFI/UEhne5Mx0sM=;
+        b=Ii8rWEKUenRBv/rcWSZtjq3qH39GYyPlKvW8b7oT0JEmqeaQZDASN/56R6vHGLhkyW
+         DdIN1EvYxfHyUOGf0xX0cJYkGSk3d39lYAH6Y2TZkCdJ64wQGlxoyAxFv58AswdWzgGF
+         TSJsDrlwo7rU8aWKW2xZ7jtwv73UzAzIik5HkBui8Y/lZUMuNLthlBUEzRDXh15ARDjM
+         Ta4jKlwgG+vWssD3f3Oj0ffBVI7LQRJaHG8W7Ko8ZuezQl9nmyI65ChWj/eUw1eLh698
+         h0iXYaRYZXAprEu9yFeX/zpbDfECb8vC8g0M39pdpCxC+7llioNIqHWdywmojvJWjbzI
+         me2Q==
+X-Gm-Message-State: AOAM532NXqi0yoZqjNjvGuKnhRSSUQhxaEhBWt582rH8cWTvkwHTptyU
+        gTdLjYjW3WvUpFE03WTLzQGkP3fCfUdHjwxm
+X-Google-Smtp-Source: ABdhPJyeQp5Y4jSAKIv3GuyIQmKr9IifBO3AmG3UpUOVV1BYoz+Yf9qOcFonOkdF1e0NjJRj+D5kQA==
+X-Received: by 2002:a05:651c:516:b0:247:a27c:60fd with SMTP id o22-20020a05651c051600b00247a27c60fdmr10829139ljp.73.1646746353656;
+        Tue, 08 Mar 2022 05:32:33 -0800 (PST)
+Received: from wkz-x280 (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id k3-20020a05651239c300b00443c5f9175bsm3478818lfu.46.2022.03.08.05.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 05:32:33 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: dsa: tag_dsa: Fix tx from VLAN uppers on
+ non-filtering bridges
+In-Reply-To: <20220308093653.c2enspat5mvah4n3@skbuf>
+References: <20220307110548.812455-1-tobias@waldekranz.com>
+ <20220308093653.c2enspat5mvah4n3@skbuf>
+Date:   Tue, 08 Mar 2022 14:32:32 +0100
+Message-ID: <87v8womuxb.fsf@waldekranz.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ay8euQKf9LBmoJfJ"
-Content-Disposition: inline
-In-Reply-To: <20220308121640.27344-1-alim.akhtar@samsung.com>
-X-Cookie: Dental health is next to mental health.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 08, 2022 at 11:36, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Mon, Mar 07, 2022 at 12:05:48PM +0100, Tobias Waldekranz wrote:
+>> In this situation (VLAN filtering disabled on br0):
+>> 
+>>     br0.10
+>>      /
+>>    br0
+>>    / \
+>> swp0 swp1
+>> 
+>> When a frame is transmitted from the VLAN upper, the bridge will send
+>> it down to one of the switch ports with forward offloading
+>> enabled. This will cause tag_dsa to generate a FORWARD tag. Before
+>> this change, that tag would have it's VID set to 10, even though VID
+>> 10 is not loaded in the VTU.
+>> 
+>> Before the blamed commit, the frame would trigger a VTU miss and be
+>> forwarded according to the PVT configuration. Now that all fabric
+>> ports are in 802.1Q secure mode, the frame is dropped instead.
+>> 
+>> Therefore, restrict the condition under which we rewrite an 802.1Q tag
+>> to a DSA tag. On standalone port's, reuse is always safe since we will
+>> always generate FROM_CPU tags in that case. For bridged ports though,
+>> we must ensure that VLAN filtering is enabled, which in turn
+>> guarantees that the VID in question is loaded into the VTU.
+>> 
+>> Fixes: d352b20f4174 ("net: dsa: mv88e6xxx: Improve multichip isolation of standalone ports")
+>> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+>> ---
+>>  net/dsa/tag_dsa.c | 15 ++++++++++++---
+>>  1 file changed, 12 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/net/dsa/tag_dsa.c b/net/dsa/tag_dsa.c
+>> index c8b4bbd46191..e4b6e3f2a3db 100644
+>> --- a/net/dsa/tag_dsa.c
+>> +++ b/net/dsa/tag_dsa.c
+>> @@ -127,6 +127,7 @@ static struct sk_buff *dsa_xmit_ll(struct sk_buff *skb, struct net_device *dev,
+>>  				   u8 extra)
+>>  {
+>>  	struct dsa_port *dp = dsa_slave_to_port(dev);
+>> +	struct net_device *br_dev;
+>>  	u8 tag_dev, tag_port;
+>>  	enum dsa_cmd cmd;
+>>  	u8 *dsa_header;
+>> @@ -149,7 +150,16 @@ static struct sk_buff *dsa_xmit_ll(struct sk_buff *skb, struct net_device *dev,
+>>  		tag_port = dp->index;
+>>  	}
+>>  
+>> -	if (skb->protocol == htons(ETH_P_8021Q)) {
+>> +	br_dev = dsa_port_bridge_dev_get(dp);
+>> +
+>> +	/* If frame is already 802.1Q tagged, we can convert it to a DSA
+>> +	 * tag (avoiding a memmove), but only if the port is standalone
+>> +	 * (in which case we always send FROM_CPU) or if the port's
+>> +	 * bridge has VLAN filtering enabled (in which case the CPU port
+>> +	 * will be a member of the VLAN).
+>> +	 */
+>> +	if (skb->protocol == htons(ETH_P_8021Q) &&
+>> +	    (!br_dev || br_vlan_enabled(br_dev))) {
+>
+> Conservative patch. If !br_dev, we could/should inject using
+> MV88E6XXX_VID_STANDALONE. But since we use FROM_CPU, the classified VLAN
+> probably does not make a difference that I can see, so there is no
+> reason to change this now (and certainly not in the same patch).
 
---Ay8euQKf9LBmoJfJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Mar 08, 2022 at 05:46:39PM +0530, Alim Akhtar wrote:
-
-> - Resend of FSD SPI support patches as the dependencies has landed in MFD
->   tree, hope this will go via MFD tree (as there are dependency between
-> MFD, SPI and DT)
-
-I either need a pull request for the MFD changes or to wait until those
-changes have come in via Linus' tree.
-
---Ay8euQKf9LBmoJfJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmInWPkACgkQJNaLcl1U
-h9CUfwf/Qzn9eCU7vhJ5e9qENOzG4TrHBFrMB0oR7Ps/0JjlDi5kpsuIw0h8uWUB
-kkOSVcSj+z0SjLkdRc3/hJrHOQhnUfVM/XWdBwD4O2PZyvof2jzedOWnktKxihh2
-NdVl+aYTWEv8PZKwMrSzGfdCS2vucqpekU5qzqa0Xls0sHcv8pBq/tWhVBlKHGGj
-SXcmdagwZ444x9lCPYoz8rF4L2+kv5tmW8RX1AXOyP8r//ZI1IGvZXXBle0exhgk
-KJAioG9R+eE9NroiaFLojLlLLc2SOvcH15KYSQy+xVURr4SZg3xwrvNSBkcaSTkj
-sbAKgQabKLFPE1QDvtsmaGfxqMcRaw==
-=IP6W
------END PGP SIGNATURE-----
-
---Ay8euQKf9LBmoJfJ--
+We could also do that. My reasoning was:
+1. There is no functional difference with a FROM_CPU frame - the CPU's
+   word is law.
+2. Performance should be better since you can avoid a per-packet memmove
+   to make room for the tag, if the non-ethertyped version of DSA is
+   used.

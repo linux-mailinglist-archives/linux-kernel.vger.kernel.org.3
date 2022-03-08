@@ -2,161 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5B54D1856
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389804D185A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346697AbiCHMxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S1346722AbiCHMyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiCHMx3 (ORCPT
+        with ESMTP id S230080AbiCHMyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:53:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF99E1E;
-        Tue,  8 Mar 2022 04:52:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36C67B818B1;
-        Tue,  8 Mar 2022 12:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCB0C340EB;
-        Tue,  8 Mar 2022 12:52:26 +0000 (UTC)
-Message-ID: <c4368e33-f6bf-5810-85cb-cd31359a42f7@xs4all.nl>
-Date:   Tue, 8 Mar 2022 13:52:24 +0100
+        Tue, 8 Mar 2022 07:54:09 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEF930F55;
+        Tue,  8 Mar 2022 04:53:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646743985;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=ZOvjYMQJYuSAVm7O4zUbUg4wy9kHYFszMrdfygxpWys=;
+    b=O8RdOKrMTmwe9zOW6kqefvinD0r7fr3s6gvUeGqRv2GX4fhgZ9U5SeOF0FIGOI79j1
+    ly/I034R7Yt7Wv91wG0PKBtH20V5vxOACjIq6Mb9hgjDue/1U4B08EjnPyB36rHN8ktZ
+    FL9R+oCO5UkVp4Nfpjew8pWk/h3U+U3XdXyBf5XKjggaZsxacxhaQ8eZs0AUzhoUZcmK
+    bgYxLt9RO8k2HOU8FZrSKOncZ7wfIwBaU8svYtdhBueHCT87yw+cTbEQXdw4jLM8gX0V
+    7fI5rG57+41O5ubL/kAV7E8+rPVpXEzGbpU5JC+LdavnRvN1XV3mgBMXRYbZlQim3Pdv
+    KiZg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVbpc9Y="
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
+    with ESMTPSA id n729cey28Cr4SGq
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 8 Mar 2022 13:53:04 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Colin Ian King <colin.king@intel.com>,
+        Sergiu Cuciurean <sergiu.cuciurean@analog.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-omap@vger.kernel.org
+Subject: [PATCH] iio: palmas: shut up warning about calibration mismatch (due to noise)
+Date:   Tue,  8 Mar 2022 13:53:03 +0100
+Message-Id: <1cee45bfc3fa2ab59dcc17242fb52468035360a1.1646743982.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] media: av7110: av7110_av: Fix Switch and Case Same Indent
- Style Error
-Content-Language: en-US
-To:     Ahamed Husni <ahamedhusni73@gmail.com>
-Cc:     mchehab@kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220225155622.585621-1-ahamedhusni73@gmail.com>
- <818eb53d-0ca5-d0dc-4a06-37615a5c4c3b@xs4all.nl>
- <CAFjpAKpyDeEKvA9TEK0KbKVHFN8KSMDZKF=L2Azq_7cuAhHH4A@mail.gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <CAFjpAKpyDeEKvA9TEK0KbKVHFN8KSMDZKF=L2Azq_7cuAhHH4A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 13:50, Ahamed Husni wrote:
-> Hello Hans,
-> 
-> On Mon, Mar 7, 2022 at 12:58 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->>
->> Hi Husni,
->>
->> Thank you for the patch.
->>
->> The Subject line needs some work: either name the source ('av7110_av.c:') or
->> driver ('av7110:'), but not both. Also just stick to lower case, so:
->> "media: av7110_av.c: fix switch indentation"
->>
->> That gives all the relevant information, and is a lot shorter.
-> Noted with thanks. I'll update the subject line in the V2 of the patch.
-> 
->>
->> On 2/25/22 16:56, Husni Faiz wrote:
->>> This patch fixes "switch and case should be at the same indent"
->>> checkpatch error.
->>>
->>> Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
->>> ---
->>>  drivers/staging/media/av7110/av7110_av.c | 30 ++++++++++++------------
->>>  1 file changed, 15 insertions(+), 15 deletions(-)
->>>
->>> diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
->>> index 91f4866c7e59..1d42862e9669 100644
->>> --- a/drivers/staging/media/av7110/av7110_av.c
->>> +++ b/drivers/staging/media/av7110/av7110_av.c
->>> @@ -770,22 +770,22 @@ static void p_to_t(u8 const *buf, long int length, u16 pid, u8 *counter,
->>>       if (length > 3 &&
->>>            buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
->>>               switch (buf[3]) {
->>> -                     case PROG_STREAM_MAP:
->>> -                     case PRIVATE_STREAM2:
->>> -                     case PROG_STREAM_DIR:
->>> -                     case ECM_STREAM     :
->>> -                     case EMM_STREAM     :
->>> -                     case PADDING_STREAM :
->>> -                     case DSM_CC_STREAM  :
->>> -                     case ISO13522_STREAM:
->>> -                     case PRIVATE_STREAM1:
->>> -                     case AUDIO_STREAM_S ... AUDIO_STREAM_E:
->>> -                     case VIDEO_STREAM_S ... VIDEO_STREAM_E:
->>> -                             pes_start = 1;
->>> -                             break;
->>> +             case PROG_STREAM_MAP:
->>> +             case PRIVATE_STREAM2:
->>> +             case PROG_STREAM_DIR:
->>> +             case ECM_STREAM     :
->>> +             case EMM_STREAM     :
->>> +             case PADDING_STREAM :
->>> +             case DSM_CC_STREAM  :
->>> +             case ISO13522_STREAM:
->>> +             case PRIVATE_STREAM1:
->>> +             case AUDIO_STREAM_S ... AUDIO_STREAM_E:
->>> +             case VIDEO_STREAM_S ... VIDEO_STREAM_E:
->>> +                     pes_start = 1;
->>> +                     break;
->>>
->>> -                     default:
->>> -                             break;
->>> +             default:
->>> +                     break;
->>>               }
->>>
->>>       while (c < length) {
->>
->> Running checkpatch.pl over this patch give me:
->>
->> ERROR: space prohibited before that ':' (ctx:WxE)
->> #40: FILE: drivers/staging/media/av7110/av7110_av.c:776:
->> +               case ECM_STREAM     :
->>                                     ^
->>
->> ERROR: space prohibited before that ':' (ctx:WxE)
->> #41: FILE: drivers/staging/media/av7110/av7110_av.c:777:
->> +               case EMM_STREAM     :
->>                                     ^
->>
->> ERROR: space prohibited before that ':' (ctx:WxE)
->> #42: FILE: drivers/staging/media/av7110/av7110_av.c:778:
->> +               case PADDING_STREAM :
->>                                     ^
->>
->> ERROR: space prohibited before that ':' (ctx:WxE)
->> #43: FILE: drivers/staging/media/av7110/av7110_av.c:779:
->> +               case DSM_CC_STREAM  :
->>                                     ^
->> Can you fix that as well in a v2 of this patch?
-> It seems that these spaces are deliberately added by the author to
-> keep the case statements' colons aligned.
-> Some other lines in the file where the same approach has been taken
-> are [line 598,599,600,601] and [line 662, 663, 664, 665].
-> Should we leave these spaces as it is?
+Although technically checking for ADC values below 0 is correct,
+because they are outside of the calibration values, there is usually
+noise which spuriously fills the console log with error messages if
+calculated input voltage gets close to 0V.
 
-Either just fix it here, or post a second patch that removes the spaces
-throughout this driver. It's a very old driver, predating the much more
-strict enforcement of coding style that we have today.
+Ignore small negative calculated values, but clamp them to 0.
 
-Regards,
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+---
+ drivers/iio/adc/palmas_gpadc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-	Hans
-
-> 
-> Thanks,
-> Husni.
+diff --git a/drivers/iio/adc/palmas_gpadc.c b/drivers/iio/adc/palmas_gpadc.c
+index f9c8385c72d3..bcfa6a7f6cb2 100644
+--- a/drivers/iio/adc/palmas_gpadc.c
++++ b/drivers/iio/adc/palmas_gpadc.c
+@@ -376,7 +376,8 @@ static int palmas_gpadc_get_calibrated_code(struct palmas_gpadc *adc,
+ 					adc->adc_info[adc_chan].gain_error;
+ 
+ 	if (val < 0) {
+-		dev_err(adc->dev, "Mismatch with calibration\n");
++		if (val < -10)
++			dev_err(adc->dev, "Mismatch with calibration var = %d\n", val);
+ 		return 0;
+ 	}
+ 
+-- 
+2.33.0
 

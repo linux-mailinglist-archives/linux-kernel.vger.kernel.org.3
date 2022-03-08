@@ -2,92 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387214D2205
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D364D2210
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 20:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350099AbiCHTxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 14:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
+        id S233734AbiCHT4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 14:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348456AbiCHTxv (ORCPT
+        with ESMTP id S235196AbiCHT4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 14:53:51 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DEC2F008
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:52:54 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id k5-20020a17090a3cc500b001befa0d3102so2473848pjd.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 11:52:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+GJxf+d39qt6iXcqaU88WSLmjEEiwXwQFcgKUX2udck=;
-        b=K2ZJ5oM80IEwsivF+mIyCOMFnUjkdTZeUhvZaPuCCaAznX+6UEWVgqDVEPO8Uc9UFr
-         bqE+y76VujAHCxuU0xefJgUX7fGaZXGaLQzuRSsPxyyubp774ugflszdjRYjY1eDjTQ5
-         jf7LYUxn5m+msYgbX9xMRJ6zBp4TejcIx80lx5JQMZiyxh4oWXfD9L3eP5Y0u2DRQT8o
-         rOw00CtxOuu3qLe8upbYseBwZmci4ObK25HCjW/TWnh49hN2JONa/+AnPLWAXjS2yjHg
-         CJRGOD6lb9PCiTqynhOgnVd3LUEtPjmHtnOXGvGaUriRjKBWI8+tAWavmw3csV+/TX5b
-         idgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+GJxf+d39qt6iXcqaU88WSLmjEEiwXwQFcgKUX2udck=;
-        b=ppiJKxyViQ0wE5teaqwkNvXCKTm+3nQo38NpAd7FFhCcjK3s7O2n/MSpkUD8sEPr0l
-         FzVpL/fYXlgq9x2xE1dbyhtebzqruJGK6kQjHbPRRQ8afNauhpLPWt78RA2tAo8t8Wla
-         B2QU3xwBfbS3M1eqp2h/npxdulqEDI2lIPXwRWaWod/6DbeG8mEgbHjJRDRCqaHRADhM
-         DU1VBKiXnIVr+WEfSYS/urp7qBun5Bz4Hbo8LLqjD3Ky54fOZAlwzuOSh7fWRpcb1sqn
-         vpgENQSDN50F8ljHqaObtGb03PU7ATN+SZUh328nVyhjQRtAhQZ9Ci3Z/Mt9JyHOMQfT
-         g44w==
-X-Gm-Message-State: AOAM530519BMAhlxT4gurbHQjLx2XP6PR55ASWsAYuIP6L+cwP2bPjxB
-        Bvy/e1URGRa1vqpV/SjCoyb1XQ==
-X-Google-Smtp-Source: ABdhPJxtm3yXSWCs360VhpTT9/lZjt5ym3fYUaEYjIvc+92rHKX8gYlg0fNfcE03LyvJk1sRgmaXJQ==
-X-Received: by 2002:a17:902:c94a:b0:151:8e65:c715 with SMTP id i10-20020a170902c94a00b001518e65c715mr19217057pla.169.1646769174088;
-        Tue, 08 Mar 2022 11:52:54 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j14-20020a056a00174e00b004f66ce6367bsm22475439pfc.147.2022.03.08.11.52.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 11:52:53 -0800 (PST)
-Date:   Tue, 8 Mar 2022 19:52:50 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com
-Subject: Re: [PATCH v2 23/25] KVM: x86/mmu: replace direct_map with
- root_role.direct
-Message-ID: <Yie0EonK6sW2gBkm@google.com>
-References: <20220221162243.683208-1-pbonzini@redhat.com>
- <20220221162243.683208-24-pbonzini@redhat.com>
+        Tue, 8 Mar 2022 14:56:35 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C107249F09
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 11:55:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646769338; x=1678305338;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=77smXlLC49hopeE5Uo+Imc0RIdaT3/W3JX9z5ObQpiM=;
+  b=h9V6fU1Ki1edJ2JA8BxwmG10zBdHKBehAo9BXFydx5vPtIDRfLu2/81q
+   ddZodtlr+6Tb0CATOo9UokHU3k56Q+Ac3gT5r5ocyJT928NEWOgLNPAVM
+   v1OdF8+HuhDEO5a3mMTsj9vIfoojqZXVOLfDKQbWzvtVdu8jx/Sw+6KEv
+   PnZt6X1R1DyyFQN5ND9vpr4BB4Wp8DTvF4ywzSWAhDHUhjJ57CFfzEhTU
+   aIgP4YcHHUn22YmQeGG8xANbwbZdmQoma47BSmjoT4R0d2Kk8zQ4hn4kf
+   0Mwdn89i6wbQ13aolbMbp/SFRGHwzN/GEspeqap2fYaH9ld8BRclw2c3l
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="254738735"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="254738735"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 11:55:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="495582417"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2022 11:55:37 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nRfvk-0001tW-Eg; Tue, 08 Mar 2022 19:55:36 +0000
+Date:   Wed, 9 Mar 2022 03:55:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ming Qian <ming.qian@nxp.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [hverkuil-media-tree:cec 333/345] undefined reference to `__divdi3'
+Message-ID: <202203090312.NuviVLvG-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221162243.683208-24-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022, Paolo Bonzini wrote:
-> direct_map is always equal to the direct field of the root page's role:
-> 
-> - for shadow paging, direct_map is true if CR0.PG=0 and root_role.direct is
-> copied from cpu_mode.base.direct
-> 
-> - for TDP, it is always true and root_role.direct is also always true
-> 
-> - for shadow EPT, it is always false and root_role.direct is also always
+tree:   git://linuxtv.org/hverkuil/media_tree.git cec
+head:   5a31a11af68144fdafb493ac9c2e7e9af5fc4ba8
+commit: 42356ecbdb69e49cffd0c1df791280965f9f90e1 [333/345] media: amphion: add amphion vpu entry in Kconfig and Makefile
+config: microblaze-allyesconfig (https://download.01.org/0day-ci/archive/20220309/202203090312.NuviVLvG-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree cec
+        git checkout 42356ecbdb69e49cffd0c1df791280965f9f90e1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash
 
-Uber nit, s/EPT/TDP to cover shadow NPT, which at this point we are 100% sure is
-indirect ;-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> false
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+All errors (new ones prefixed by >>):
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+   microblaze-linux-ld: drivers/media/platform/amphion/vpu_windsor.o: in function `vpu_windsor_pack_cmd':
+>> (.text+0x45c): undefined reference to `__divdi3'
+>> microblaze-linux-ld: (.text+0x47c): undefined reference to `__moddi3'
+   microblaze-linux-ld: drivers/media/platform/amphion/vpu_malone.o: in function `vpu_malone_pack_cmd':
+   (.text+0x1ad4): undefined reference to `__divdi3'
+   microblaze-linux-ld: (.text+0x1af8): undefined reference to `__moddi3'
+   microblaze-linux-ld: drivers/media/platform/amphion/vdec.o: in function `vdec_get_debug_info':
+>> vdec.o:(.text+0x1a00): undefined reference to `__moddi3'
+>> microblaze-linux-ld: vdec.o:(.text+0x1a24): undefined reference to `__divdi3'
+>> microblaze-linux-ld: vdec.o:(.text+0x1a48): undefined reference to `__moddi3'
+   microblaze-linux-ld: vdec.o:(.text+0x1a74): undefined reference to `__divdi3'
+   microblaze-linux-ld: vdec.o:(.text+0x1aa0): undefined reference to `__moddi3'
+   microblaze-linux-ld: vdec.o:(.text+0x1acc): undefined reference to `__divdi3'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

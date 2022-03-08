@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0633A4D1B36
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D26E4D1B3B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347709AbiCHPAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S1347738AbiCHPBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238740AbiCHPAh (ORCPT
+        with ESMTP id S237601AbiCHPBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:00:37 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587C54D633
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 06:59:41 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646751579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QcGRkjg8+BFqZodBvhvBSx+26nPdc2c0IldY/TkN6SM=;
-        b=wDij4aHwno+BB7bJO6Z+9KlCNGg3hEjy/IwGx1BlBmbVC5XtkOBoNoCsHkljnNUMzCi+OA
-        OJl7tsOzHKVHaRhxcJmBIwP4Zy2QnJuscsxONpG0djTCDAfPKLdzwG8QKW/5iQE2YE1Rel
-        G/G/zd/7Sd8JO6EJryS3aVzjskQ/QlyJPwLNt7fP5R2cASaY80s4aEtOYrXA7uYvCjbqVe
-        M8vDp3WJuLPj0InPwiVgZHo++DBdqePzyNuJyUCVzYpXQ4ilo9vMoSLw5owAy5aelRQJY1
-        KLIdGtSSHT7PW1erRLJCISGI6ghtVhD0s53vzK7JHcwdRRVXDo0dBcLTTTKAOg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646751579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QcGRkjg8+BFqZodBvhvBSx+26nPdc2c0IldY/TkN6SM=;
-        b=ozt5VIY7GOPKsAE3mzc9JaCfFkXME6y1rf+sc65y7D/iLpUiytIRtg+awVzBqiOwi2gdht
-        6jnkA5ByIXdU6zCQ==
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] x86/split_lock: Make life miserable for split lockers
-In-Reply-To: <YialXwpbED5kAUaZ@agluck-desk3.sc.intel.com>
-References: <20220217012721.9694-1-tony.luck@intel.com>
- <877d95l7jo.ffs@tglx> <YialXwpbED5kAUaZ@agluck-desk3.sc.intel.com>
-Date:   Tue, 08 Mar 2022 15:59:39 +0100
-Message-ID: <87mti0jxr8.ffs@tglx>
+        Tue, 8 Mar 2022 10:01:34 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6AD4D9C3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:00:37 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2dc348dab52so170667897b3.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:00:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bUAHLDNYY/+Ebc3An1BLC3odr9+JTNXOzln9KVkcwC4=;
+        b=Eb3zbDhhDYtoW8uyKUivQ/i8vSSO0MdTyoWQlgp+XfDgA1DqWLekEmlE8HR6tcELtV
+         LKhQMH5CaWrCDEuogqdg/KcWm7SqCb4/Uerj5X5G4U4x84mY0djCafEAZ8y9odXW0C3j
+         KMwd2nUaJBLnmUq+P9Y/1znGiFexfGYSuQWGIlGwm39HDt40d04lo8tH37NHUGLBh2dO
+         U9XLzwZhKJlD7j0So6/5nr4zi+06BGgkdWyaOQSfPLuBjk8gBxKXd3tyfD2pZm37VCg7
+         CF2b0xvJ7xOZdhC0cTOblxzMibi03eU3y5B00LBTHjgaIeSlofyNGbYRxB9DoY+5xsyP
+         Kfiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bUAHLDNYY/+Ebc3An1BLC3odr9+JTNXOzln9KVkcwC4=;
+        b=RrhVx9IzgIu8ZRY3B9VLevylSdCRwtNwl1tXNgQT4aznnT8sbrRvfGBfal31eHO0F9
+         emLObgO6FJG7BZQwuHwrZVdsgUBBSZsm72FhP3tPwYaP3yZ+kC/hHr5c8nmtV2enrEBV
+         Tr2Qrhpls1nv4U+Q+q3hm6y9/hk8NsRSs7Fcu2vIKZE5VVRq7ZVv8N2Ju0sztRex64pG
+         TLe1ZG+Z/EXErg10AG9YQV7hWomlkJeLMDZyBEzSPiko4uKjKYfncLu6PIoXDxPRZJvi
+         RK5iQRBv0rC2z4rQ1FGFT18TUPThcHcSAm2Lhe2P/kyptZ3gi0bR1W94bUY5/9HleKvi
+         SaWw==
+X-Gm-Message-State: AOAM532/bNtU+5zzOHJcLGjlZ/WFBNq1GC9WpUVahcfCxEHA3tC4EShv
+        yENlV612xONMBCuAgVpnniruEGwWIcEV6WKffp+trA==
+X-Google-Smtp-Source: ABdhPJy87nQQG7zs9dOWibvH3Jiaah4Z2Ljz2NusteJs1/GunN3/XSWECuKUwcLUMf1UcKQA14DAjh0lBZy2A+zMl1Y=
+X-Received: by 2002:a0d:e608:0:b0:2dc:1f5d:8c8f with SMTP id
+ p8-20020a0de608000000b002dc1f5d8c8fmr13544364ywe.143.1646751636630; Tue, 08
+ Mar 2022 07:00:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220307091636.988950823@linuxfoundation.org>
+In-Reply-To: <20220307091636.988950823@linuxfoundation.org>
+From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Date:   Tue, 8 Mar 2022 10:00:00 -0500
+Message-ID: <CAG=yYw=v7cN-JCDUtiXRzoVSkAqGQXU1_Y+84jQSXWiNQt=cOg@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/51] 4.19.233-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        torvalds@linux-foundation.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tony,
-
-On Mon, Mar 07 2022 at 16:37, Tony Luck wrote:
-> On Mon, Mar 07, 2022 at 11:30:35PM +0100, Thomas Gleixner wrote:
->> On Wed, Feb 16 2022 at 17:27, Tony Luck wrote:
->> > Questions for this RFC:
->> >
->> > 1) Does this need to be a new option? Maybe just update the
->> >    existing "warn" mode to add this level of extra pain.
->> 
->> That's fine. Warn is the default today, right?
+On Mon, Mar 7, 2022 at 4:29 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Yes. Warn is the current default.
-> Does "That's fine" mean ok to change exiting warn code to add
-> this level of pain? Or OK to add a new option?
-
-Add pain to the existing warn code.
-
->> The question is whether this is something to worry about. If so, then we
->> need to go back to the drawing board.
+> This is the start of the stable review cycle for the 4.19.233 release.
+> There are 51 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> I don't think it is worth worrying about. The case you describe is
-> a process that is about to be preempted when the #AC trap happens.
-> In that case this CPU (in fact both HT threads on this core) get
-> two jiffies of free split locks.  Cases from here:
+> Responses should be made by Wed, 09 Mar 2022 09:16:25 +0000.
+> Anything received after that time might be too late.
 >
-> 1) The original process gets to run on either of these threads
-> before the timeout. They get to execute their split lock and carry
-> on running.
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.233-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
 >
-> 2) The process is scheduled on a different core during the two jiffie
-> window. They take an #AC trap and block on the semaphore until the
-> original core releases. Then they get their chance to run on this new
-> core.
+> thanks,
 >
-> 3) The original process doesn't get rescheduled for two jiffies, then
-> runs somewhere. The original core has released the sempahore and re-enabled
-> split lock checking. So the process takes #AC, gets the semaphore, kernel
-> disables split lock checking ... and we try again.
->
-> Now it is possible that the process may repeatedly be preempted in between
-> getting the semaphore and actually getting all the way to user space
-> to split a lock ... but can only happen if there are multiple processes
-> splitting locks. The goal of this patch is to be mean to all of them. If
-> we happen to be extra mean to some of them, well so be it.
+> greg k-h
+hello,
 
-Fair enough.
+Compiled and booted  4.19.233-rc1+  on ...
 
-I still do not like the inconsistent state between the TIF flag and the
-SLD MSR.
+Processor Information
+        Socket Designation: FM2
+        Type: Central Processor
+        Family: A-Series
+        Manufacturer: AuthenticAMD
+        ID: 31 0F 61 00 FF FB 8B 17
+        Signature: Family 21, Model 19, Stepping 1
 
-Thanks,
+NO new regression or regressions from dmesg.
 
-        tglx
+Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+-- 
+software engineer
+rajagiri school of engineering and technology   -  autonomous

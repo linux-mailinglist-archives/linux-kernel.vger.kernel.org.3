@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46954D1ECA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60CA4D1ECF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 18:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349126AbiCHRWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 12:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S1348962AbiCHRW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 12:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348978AbiCHRUr (ORCPT
+        with ESMTP id S1349016AbiCHRUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 12:20:47 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FDD5419A;
-        Tue,  8 Mar 2022 09:19:37 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id q17so25426443edd.4;
-        Tue, 08 Mar 2022 09:19:37 -0800 (PST)
+        Tue, 8 Mar 2022 12:20:49 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C0F50040;
+        Tue,  8 Mar 2022 09:19:39 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id m12so391173edc.12;
+        Tue, 08 Mar 2022 09:19:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=u9SG1/Vum4zcALdcRrS/dZdkcV9xg98RrAHqRdSRgAY=;
-        b=JofGUORGmECmPMRyfeCgpacdZGtX8kTCkXo1V9bqn0kmDI7cVnjjfrga0H5AcMGLTx
-         3+KEsNvj9PwC5EhLqCWMlFkoNLtz12sZezQDxC4mGa3GqGqAexEYowu8u5/dY3CKZG7M
-         OqkQmiuT/vz4LD9Dak0Vu7gJKjbf90cJXK7hfwLBigxL6sP/O4ZD4WsxgkMOavQ3I+MW
-         r69d7ujJy48OXAAQ7f9vIGu3HKUynY9irfc4+11KDQziuecxQHBvcOOgzYYJHd97qlQO
-         ZwIs6nfSLBFV3f4XPag+WOejrgaDNhYl54YqPoilSOmRvzZCx9Fh53IUCuCokeJGOklI
-         x5DA==
+        bh=V4vXPVmGTGf3aM5gfb7e+nenL3OxJPCKkBovWpiUsBc=;
+        b=W3Rr+kQiOf7U/zNXKiIybgGxag2KDpokpz3hlzoDsrPnAoo7mSwYsX7FVlpHauDt1D
+         U/U+aXwyG6LbcsGI7sS971Xky8MR5TJ9OvXnOCFi2gyPj2i6o/+a5oKfzN8A6KEbSDqX
+         kwNgoQIltfQqgAmeU40FhKHt3vXGsizsHJIVobm3XraAP6z9uwlwPwGzTJMSy6TIBLHm
+         XrzwrVinH1FLSJExs9eP9NqnLfa3TUamaGQN2T9BpN0itABrjntHycBirIqtZpxmYJf7
+         QUNdoNEZ3A+z1UOPu2laXXrqD3fE1bj4lB9pEGTE4/YhHtRsuskK4amFL7kf8cd6yd0C
+         DXOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=u9SG1/Vum4zcALdcRrS/dZdkcV9xg98RrAHqRdSRgAY=;
-        b=I64fz82NZXSjNvhK6x1HUQwvNM0kMXG97yDfxhrnRpjiKRZz9N6tRXMj8fbSmf/iKN
-         H/Efm13Zo0fM4SHbMpnUxh0p9c58VECVGPTMYoAsMp/XoMUNsjnoQca7SOgKcJ/V0fMg
-         88Alo3LWP4WvxkUFuGv1F2RUqG4DBqu/+iXcnFyIRnLderuMdkFNEzXFSqdQryWD7aFk
-         RkAiBI6GE4CaVf0HxkXy+uDfRq1PBAlJOB1vYUT1ZjQAhJQme2eXqxngwaunJKvElIwM
-         WgfWa6b8Uex1yEmJisEoyxZ+54Cu/VVi0Nr567cYjWnhO96/xSjPhhjxG8mKJrC1egHS
-         QeNA==
-X-Gm-Message-State: AOAM532SnERl79GUVf6cNakeVwrlHgPdnyaitlS1g/yAUrKJODkwQayz
-        D2qMRmiE5ArUDtgeCw/CApA=
-X-Google-Smtp-Source: ABdhPJz7WrPed4Zkw2qQCJmozmz22m6kuxxosC22Wx+1shmn5iDSCzwUJUMWXp/gC7tn4lZcajwKaw==
-X-Received: by 2002:a05:6402:5189:b0:416:63fe:fc6d with SMTP id q9-20020a056402518900b0041663fefc6dmr6718640edd.120.1646759976213;
-        Tue, 08 Mar 2022 09:19:36 -0800 (PST)
+        bh=V4vXPVmGTGf3aM5gfb7e+nenL3OxJPCKkBovWpiUsBc=;
+        b=XMi1RC6MEfLfR4FMBzwPfSOkjHggob2WtwqyDfRz9KSAHJTd/lLOjbGLhwmGceuwx6
+         cu5bH/5k7SbmGpxOlyXvbkD+3DV9DAn9bxWvnhJe6Dm1VFJADSpUx+YxlN87+hhQ35wy
+         KBFGfUr6xRATrtz3EDv/E8Q26If2yZnMd5UutUAnTDr97/oXRDqUwDC8lY8AF53vBIer
+         BbofVJP0tP9eSeNsmDJu6P+iTxsosEZ1uW5Atj6auLHkcVLiffjWiKOEiDUzpVUNChiN
+         rCDYOtUNkMAviGsH+/OoDaQhmNLwRcHhET9m5VZtfsb5K4eT98XDNW9Ove742ouPl/Zz
+         cL0A==
+X-Gm-Message-State: AOAM531QhCJKfy8EmvGyDNIFw7TcPOybX6PuChmKR75rnvi7XYNZxywY
+        Fo6QmDNES9Y8Ss5oZnji34g=
+X-Google-Smtp-Source: ABdhPJxMQ0hlgL52WO6E1BZ4eLdJ/9lm/sh5VABLlk+17MAzErX+vHN8ZSGVSD+UI9O2z+wIwkhTjQ==
+X-Received: by 2002:a50:9fa6:0:b0:415:fd95:6afa with SMTP id c35-20020a509fa6000000b00415fd956afamr17187529edf.200.1646759977655;
+        Tue, 08 Mar 2022 09:19:37 -0800 (PST)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id rv11-20020a17090710cb00b006d5c0cd5e0dsm6085044ejb.82.2022.03.08.09.19.34
+        by smtp.googlemail.com with ESMTPSA id rv11-20020a17090710cb00b006d5c0cd5e0dsm6085044ejb.82.2022.03.08.09.19.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:19:35 -0800 (PST)
+        Tue, 08 Mar 2022 09:19:37 -0800 (PST)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Greg Kroah-Hartman <greg@kroah.com>
 Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
@@ -74,9 +74,9 @@ Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH v2 23/26] usb: gadget: composite: remove usage of list iterator past the loop body
-Date:   Tue,  8 Mar 2022 18:18:15 +0100
-Message-Id: <20220308171818.384491-24-jakobkoschel@gmail.com>
+Subject: [PATCH v2 24/26] usb: gadget: udc: core: remove usage of list iterator past the loop body
+Date:   Tue,  8 Mar 2022 18:18:16 +0100
+Message-Id: <20220308171818.384491-25-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220308171818.384491-1-jakobkoschel@gmail.com>
 References: <20220308171818.384491-1-jakobkoschel@gmail.com>
@@ -102,52 +102,55 @@ concluded to use a separate iterator variable [1].
 Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/usb/gadget/composite.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ drivers/usb/gadget/udc/core.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 4f7e789c3e07..2eaeaae96759 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -863,24 +863,25 @@ static int set_config(struct usb_composite_dev *cdev,
- 		const struct usb_ctrlrequest *ctrl, unsigned number)
- {
- 	struct usb_gadget	*gadget = cdev->gadget;
--	struct usb_configuration *c = NULL;
-+	struct usb_configuration *c = NULL, *iter;
- 	int			result = -EINVAL;
- 	unsigned		power = gadget_is_otg(gadget) ? 8 : 100;
- 	int			tmp;
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 568534a0d17c..02735b463bb4 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1528,7 +1528,7 @@ static int udc_bind_to_driver(struct usb_udc *udc, struct usb_gadget_driver *dri
  
- 	if (number) {
--		list_for_each_entry(c, &cdev->configs, list) {
--			if (c->bConfigurationValue == number) {
--				/*
--				 * We disable the FDs of the previous
--				 * configuration only if the new configuration
--				 * is a valid one
--				 */
--				if (cdev->config)
--					reset_config(cdev);
--				result = 0;
+ int usb_gadget_probe_driver(struct usb_gadget_driver *driver)
+ {
+-	struct usb_udc		*udc = NULL;
++	struct usb_udc		*udc = NULL, *iter;
+ 	int			ret = -ENODEV;
+ 
+ 	if (!driver || !driver->bind || !driver->setup)
+@@ -1536,10 +1536,12 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver)
+ 
+ 	mutex_lock(&udc_lock);
+ 	if (driver->udc_name) {
+-		list_for_each_entry(udc, &udc_list, list) {
+-			ret = strcmp(driver->udc_name, dev_name(&udc->dev));
+-			if (!ret)
 -				break;
--			}
-+		list_for_each_entry(iter, &cdev->configs, list) {
-+			if (iter->bConfigurationValue != number)
++		list_for_each_entry(iter, &udc_list, list) {
++			ret = strcmp(driver->udc_name, dev_name(&iter->dev));
++			if (ret)
 +				continue;
-+			/*
-+			 * We disable the FDs of the previous
-+			 * configuration only if the new configuration
-+			 * is a valid one
-+			 */
-+			if (cdev->config)
-+				reset_config(cdev);
-+			c = iter;
-+			result = 0;
++			udc = iter;
 +			break;
  		}
- 		if (result < 0)
- 			goto done;
+ 		if (ret)
+ 			ret = -ENODEV;
+@@ -1548,10 +1550,12 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver)
+ 		else
+ 			goto found;
+ 	} else {
+-		list_for_each_entry(udc, &udc_list, list) {
++		list_for_each_entry(iter, &udc_list, list) {
+ 			/* For now we take the first one */
+-			if (!udc->driver)
+-				goto found;
++			if (iter->driver)
++				continue;
++			udc = iter;
++			goto found;
+ 		}
+ 	}
+ 
 -- 
 2.25.1
 

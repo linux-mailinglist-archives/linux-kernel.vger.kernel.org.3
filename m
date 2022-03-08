@@ -2,50 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0D64D173A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A216B4D1744
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346771AbiCHM2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S1346810AbiCHM24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346865AbiCHM2O (ORCPT
+        with ESMTP id S231381AbiCHM2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:28:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC4546657
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 04:27:18 -0800 (PST)
-Date:   Tue, 8 Mar 2022 13:27:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646742436;
+        Tue, 8 Mar 2022 07:28:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80EC61BE8F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 04:27:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646742474;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=5TO2CaVQGT8QTsFFV2q3urdSORX8irKbNETQMa4ApM4=;
-        b=W9NYfZPo/AKNx9d5YW8LJjaBFWne1CviMOrreSGaq15aaMxbh2yz1n0aBHP8soujJrLYKZ
-        B4HrHuGW8flA3UuoDKdg11IZz7vI1k+JQAVPe7ahfCA21hZIOyJl9Vfu9PPgZf2EV52m/3
-        mBxHmO0cfXLlKh+9jdQVTH2o/yV4QaiJ/+rnaNwyg3bSdwa41EamOgnHc1NcBFYiggcvBD
-        ZuirLy4Pt+DiA72nq/uD0lLf0469LONd33iZTagDAPpC95cADUahjORiss7DU4lZNRFrvH
-        2eE5gtgwEKxiXsA4U8bIKR+OZt950YHmvMVOYs9MJKIMzG0piXk0NYu50d/x/w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646742436;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=5TO2CaVQGT8QTsFFV2q3urdSORX8irKbNETQMa4ApM4=;
-        b=VyN3+ivAhMg3O6A9WsBi0SQxvFXA5qsBMlLvLnFIMtzJOByw3MaFSWbLFTPsnJ0Oub0U/L
-        m1/KjtLE+qhMdUBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     Fei Li <fei1.li@intel.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH REPOST] virt: acrn: Remove unsued acrn_irqfds_mutex.
-Message-ID: <YidLo57Kw/u/cpA5@linutronix.de>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9pf/IVqL8yE3g13OAwcuAVKQfPo53FP6ApFVilX1pcQ=;
+        b=S+USZCvaGod29QApOxU/KFhcPs94Cab+KEmPf5SI/TosVvzaTbzz3TbQ6hiMUfJaZ2JLk/
+        Eo3yvMnBxyj7x6s8BvmqZ9f1GHgPSNLjd5/zD/H1rugivODgNRiYFTZr8C7Qm80n1IyeVL
+        P8sOgEeGfHcjey789RUuw71nAF+8UPk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-157-f1up_GgkPvuo4YDEmNBoFQ-1; Tue, 08 Mar 2022 07:27:53 -0500
+X-MC-Unique: f1up_GgkPvuo4YDEmNBoFQ-1
+Received: by mail-ed1-f72.google.com with SMTP id co2-20020a0564020c0200b00415f9fa6ca8so7035880edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 04:27:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9pf/IVqL8yE3g13OAwcuAVKQfPo53FP6ApFVilX1pcQ=;
+        b=Lm69j4phkOUx2P5TwE0u4NqR1CXyif09USqbFMBNemlXX8LV+mVSgHxNcyFt7i4C77
+         rrUDAfwrEiNWK7HXJbit6GJeXfFmrl2qQOF4s4uaZk+KprI0oH/h5hcqAvb6y3HrjQXW
+         AehCv4DKifMP9+GleK9RHcN8axMtgjFQxiQTgccgyEv7LIlDIb45b8G16J9WBOC1bTCo
+         hnihXU897mALP5tRYwWHeP4yZbMroqlkU1KML+hNPU6E5vEKoQPdWewAW+xSW1rQhD3n
+         624d933Ol0pa2sUkEz6AzpKTrEKzcfzTpuvcmQ3sGjN8CpYs7TC8WJ63wWCCWT5nVaOX
+         CpCA==
+X-Gm-Message-State: AOAM530xREj2Idl0tVNefHeygGMr8X/2QPCuw467swu+LtB3+nCvZUeY
+        rPAkZ2oO8+nEm9laS4c9iL7RE94w1OV6CCv2cAQsAZyXfRTvIHPvf4BKgpPzgZ5hhqJtqMAYbAa
+        4B/scBtVipyM12PypFQQWksAw
+X-Received: by 2002:a17:907:7242:b0:6da:b561:d523 with SMTP id ds2-20020a170907724200b006dab561d523mr13282180ejc.118.1646742471610;
+        Tue, 08 Mar 2022 04:27:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyRLddVnWaTYQ7CEcx+H/uBDYSK5MuBK5kvSFUyJcedIYo1CrA8Y49v9huSdkQH7zA4WWcJdw==
+X-Received: by 2002:a17:907:7242:b0:6da:b561:d523 with SMTP id ds2-20020a170907724200b006dab561d523mr13282150ejc.118.1646742471316;
+        Tue, 08 Mar 2022 04:27:51 -0800 (PST)
+Received: from redhat.com ([2.55.138.228])
+        by smtp.gmail.com with ESMTPSA id p24-20020a1709061b5800b006da6435cedcsm5786231ejg.132.2022.03.08.04.27.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 04:27:50 -0800 (PST)
+Date:   Tue, 8 Mar 2022 07:27:47 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, jasowang@redhat.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <20220308071718-mutt-send-email-mst@kernel.org>
+References: <20220307191757.3177139-1-lee.jones@linaro.org>
+ <YiZeB7l49KC2Y5Gz@kroah.com>
+ <YicPXnNFHpoJHcUN@google.com>
+ <Yicalf1I6oBytbse@kroah.com>
+ <Yicer3yGg5rrdSIs@google.com>
+ <YicolvcbY9VT6AKc@kroah.com>
+ <20220308055003-mutt-send-email-mst@kernel.org>
+ <YidBz7SxED2ii1Lh@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <YidBz7SxED2ii1Lh@kroah.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,30 +88,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-acrn_irqfds_mutex is not used, never was.
+On Tue, Mar 08, 2022 at 12:45:19PM +0100, Greg KH wrote:
+> On Tue, Mar 08, 2022 at 05:55:58AM -0500, Michael S. Tsirkin wrote:
+> > On Tue, Mar 08, 2022 at 10:57:42AM +0100, Greg KH wrote:
+> > > On Tue, Mar 08, 2022 at 09:15:27AM +0000, Lee Jones wrote:
+> > > > On Tue, 08 Mar 2022, Greg KH wrote:
+> > > > 
+> > > > > On Tue, Mar 08, 2022 at 08:10:06AM +0000, Lee Jones wrote:
+> > > > > > On Mon, 07 Mar 2022, Greg KH wrote:
+> > > > > > 
+> > > > > > > On Mon, Mar 07, 2022 at 07:17:57PM +0000, Lee Jones wrote:
+> > > > > > > > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> > > > > > > > to vhost_get_vq_desc().  All we have to do here is take the same lock
+> > > > > > > > during virtqueue clean-up and we mitigate the reported issues.
+> > > > > > > > 
+> > > > > > > > Also WARN() as a precautionary measure.  The purpose of this is to
+> > > > > > > > capture possible future race conditions which may pop up over time.
+> > > > > > > > 
+> > > > > > > > Link: https://syzkaller.appspot.com/bug?extid=279432d30d825e63ba00
+> > > > > > > > 
+> > > > > > > > Cc: <stable@vger.kernel.org>
+> > > > > > > > Reported-by: syzbot+adc3cb32385586bec859@syzkaller.appspotmail.com
+> > > > > > > > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > > > > > > > ---
+> > > > > > > >  drivers/vhost/vhost.c | 10 ++++++++++
+> > > > > > > >  1 file changed, 10 insertions(+)
+> > > > > > > > 
+> > > > > > > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > > > > > > > index 59edb5a1ffe28..ef7e371e3e649 100644
+> > > > > > > > --- a/drivers/vhost/vhost.c
+> > > > > > > > +++ b/drivers/vhost/vhost.c
+> > > > > > > > @@ -693,6 +693,15 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > > > > > > >  	int i;
+> > > > > > > >  
+> > > > > > > >  	for (i = 0; i < dev->nvqs; ++i) {
+> > > > > > > > +		/* No workers should run here by design. However, races have
+> > > > > > > > +		 * previously occurred where drivers have been unable to flush
+> > > > > > > > +		 * all work properly prior to clean-up.  Without a successful
+> > > > > > > > +		 * flush the guest will malfunction, but avoiding host memory
+> > > > > > > > +		 * corruption in those cases does seem preferable.
+> > > > > > > > +		 */
+> > > > > > > > +		WARN_ON(mutex_is_locked(&dev->vqs[i]->mutex));
+> > > > > > > 
+> > > > > > > So you are trading one syzbot triggered issue for another one in the
+> > > > > > > future?  :)
+> > > > > > > 
+> > > > > > > If this ever can happen, handle it, but don't log it with a WARN_ON() as
+> > > > > > > that will trigger the panic-on-warn boxes, as well as syzbot.  Unless
+> > > > > > > you want that to happen?
+> > > > > > 
+> > > > > > No, Syzbot doesn't report warnings, only BUGs and memory corruption.
+> > > > > 
+> > > > > Has it changed?  Last I looked, it did trigger on WARN_* calls, which
+> > > > > has resulted in a huge number of kernel fixes because of that.
+> > > > 
+> > > > Everything is customisable in syzkaller, so maybe there are specific
+> > > > builds which panic_on_warn enabled, but none that I'm involved with
+> > > > do.
+> > > 
+> > > Many systems run with panic-on-warn (i.e. the cloud), as they want to
+> > > drop a box and restart it if anything goes wrong.
+> > > 
+> > > That's why syzbot reports on WARN_* calls.  They should never be
+> > > reachable by userspace actions.
+> > > 
+> > > > Here follows a topical example.  The report above in the Link: tag
+> > > > comes with a crashlog [0].  In there you can see the WARN() at the
+> > > > bottom of vhost_dev_cleanup() trigger many times due to a populated
+> > > > (non-flushed) worker list, before finally tripping the BUG() which
+> > > > triggers the report:
+> > > > 
+> > > > [0] https://syzkaller.appspot.com/text?tag=CrashLog&x=16a61fce700000
+> > > 
+> > > Ok, so both happens here.  But don't add a warning for something that
+> > > can't happen.  Just handle it and move on.  It looks like you are
+> > > handling it in this code, so please drop the WARN_ON().
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > 
+> > Hmm. Well this will mean if we ever reintroduce the bug then
+> > syzkaller will not catch it for us :( And the bug is there,
+> > it just results in a hard to reproduce error for userspace.
+> 
+> Is this an error you can recover from in the kernel?
+>  What is userspace
+> supposed to know with this information when it sees it?
 
-Remove acrn_irqfds_mutex.
+IIUC we are talking about a use after free here since we somehow
+managed to have a pointer to the device in a worker while
+device is being destroyed.
 
-Fixes: aa3b483ff1d71 ("virt: acrn: Introduce irqfd")
-Cc: Fei Li <fei1.li@intel.com>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
+That's the point of the warning as use after free is hard to debug. You
+ask can we recover from a use after free? 
 
-Repost of
-   https://lore.kernel.org/all/20210910094708.3430340-1-bigeasy@linutronix.de/
+As regards to the added lock, IIUC it kind of shifts the use after free
+window to later and since we zero out some of the memory just before we
+free it, it's a bit more likely to recover.  I would still like to see
+some more analysis on why the situation is always better than it was
+before though.
 
-please apply, it is trivial.
+> > Not sure what to do here. Export panic_on_warn flag to modules
+> > and check it here?
+> 
+> Hah, no, never do that :)
+> 
+> thanks,
+> 
+> greg k-h
 
- drivers/virt/acrn/irqfd.c |    1 -
- 1 file changed, 1 deletion(-)
-
---- a/drivers/virt/acrn/irqfd.c
-+++ b/drivers/virt/acrn/irqfd.c
-@@ -17,7 +17,6 @@
- #include "acrn_drv.h"
- 
- static LIST_HEAD(acrn_irqfd_clients);
--static DEFINE_MUTEX(acrn_irqfds_mutex);
- 
- /**
-  * struct hsm_irqfd - Properties of HSM irqfd

@@ -2,67 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D244D1BF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE474D1C25
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 16:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347897AbiCHPnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 10:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S1347849AbiCHPo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 10:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347914AbiCHPm4 (ORCPT
+        with ESMTP id S1347936AbiCHPoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 10:42:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECBA4ECE6;
-        Tue,  8 Mar 2022 07:41:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71B7761634;
-        Tue,  8 Mar 2022 15:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7874C36AE5;
-        Tue,  8 Mar 2022 15:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646754118;
-        bh=IJYNSkeZzZvARIFNzClc6iv4vyFy9TuVd96STVQrAc4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bm+x/GjOx85LIu2RsmI8eD6BacmUmy2IeZ/v4U7lkimNfFW1DflOi89b9c6z5Av15
-         frYoVE5CG2O1LwtOafmjpk4gOdDYLA80+xHGf+DGksMbUeUk2ykcQD6DwlnPXAY9Iq
-         a73Zquer2mg6mXIMKFAmmAikKLBkkIWoQEfF57gJGVPr6UV4iekgWxaouKHoeyqgWu
-         NvBegG6ioNb9UfX3kTvW+e1LP47YFmwSJJ7Ri5BGwVQR04pTp3SzjRWzsWNhI64M4l
-         Pp5+UnKCgx51wN2geLqPePnrgs24Iy6FVtdPfmZqX27ehtWCwdi2ga/4pB3zoNzjt5
-         KCc/wIPuGVOqQ==
-Received: by mail-ej1-f45.google.com with SMTP id d10so40100018eje.10;
-        Tue, 08 Mar 2022 07:41:58 -0800 (PST)
-X-Gm-Message-State: AOAM533hWbhkqgppb/PgflHvYOfckBKJcZoY4ZG2D0q0Bl5bdX1FTgAF
-        omjBUxz42+uC6Kh3jQ16fILmSLxbHmRRm6CsfQ==
-X-Google-Smtp-Source: ABdhPJxIb3+WG03kGop4Io4gfFAc4/Ov9H50ShSKZhOdDQ2GQ1CJZOL38O1ivv3AfFwgX8OYYXMPlSWSqiGkJm8v1OI=
-X-Received: by 2002:a17:907:298f:b0:6da:b3da:19e with SMTP id
- eu15-20020a170907298f00b006dab3da019emr13793817ejc.423.1646754117106; Tue, 08
- Mar 2022 07:41:57 -0800 (PST)
+        Tue, 8 Mar 2022 10:44:25 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54426244
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 07:43:27 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id d187so17644117pfa.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 07:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=NKwIWMJN7+i0XAg6jLVO6Lxt5C5EwTCBUXnqdpcor6s=;
+        b=fnXsdHWHw7mUsqGMsNQNYtwM7WylTiW27BpmCbqF6a95dLCwqgprMTmy8V63gQPQbb
+         NGmTURhW09sZZieeNdO1PTsTT3kfjlYZev9v2Dd8g788Zwc3ZQGO9PB8zjvRR1Y8lVkL
+         RQADxtnVDXTyS93mSxYM8hZSMbuKYd+FvzHg5EeEXO8g8X0/x/QnHuForGl/gyKs1wyY
+         Q0PefRyAz8WKQpft4VUqB1vEvNuVNJVXzAu3y5b6IvETnV1nwiSbOIqwEI0zDC1QO73+
+         ijFdkRVbtkV2OoxqTiGG2GGgcEdUUVidzsEIgV4wq79lVTUmkWahXHyR24x8SGfc8bv1
+         WgDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=NKwIWMJN7+i0XAg6jLVO6Lxt5C5EwTCBUXnqdpcor6s=;
+        b=jCgPLBMkOZv101Y0rjcz5PuPVGb8qlQsUECh4v84BAiaNCHqAzTi1OWIC/lSBmZmnI
+         HjIGZ9h9CtmpyCx1YK4Ufzm06zeYWBs/kGAuF7N7DDCFPAcDMn/Gik6UVyCBsqoAVMck
+         Rd2fFqGQ5lvVRsOVM5absbA0eoS0GkJEtQRh9L5cLjY7i/iSI/MtsZQo5P+xK/kwCMdO
+         hp5er5aIX1J/tG5GjQ3U3T8AZxcn6EtoEH1f1WV50zVBYZLrGlcCPRFh6JpwpxB046ik
+         j4F6Gd1EK25koptSgNFW0BgQWJQu2J6kkpTXdFLH39YfZ7DrJAXugLINUVOvQQctaafo
+         VZJQ==
+X-Gm-Message-State: AOAM532czlURWA3rM0OaY6cPicBAfxYatDrBbbstfI9lMl8ung+c693O
+        dILYf/y5bBfShOdYgOGDSzJK+g==
+X-Google-Smtp-Source: ABdhPJwiFpX6DdpatCjywFz/zgNVGeCJCOcO+1z4NGPqQXYELIrHV0oRR8uxO502R5Zie6fawLTSqw==
+X-Received: by 2002:a63:d642:0:b0:378:a4c2:7b94 with SMTP id d2-20020a63d642000000b00378a4c27b94mr14559338pgj.218.1646754207291;
+        Tue, 08 Mar 2022 07:43:27 -0800 (PST)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id nl9-20020a17090b384900b001bccf96588dsm3534648pjb.46.2022.03.08.07.43.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 07:43:27 -0800 (PST)
+Message-ID: <6155b68c-161b-0745-b303-f7e037b56e28@linaro.org>
+Date:   Tue, 8 Mar 2022 07:43:25 -0800
 MIME-Version: 1.0
-References: <20220307085053.1636475-1-vincent.whitchurch@axis.com> <20220307085053.1636475-2-vincent.whitchurch@axis.com>
-In-Reply-To: <20220307085053.1636475-2-vincent.whitchurch@axis.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 8 Mar 2022 09:41:45 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKBDOu+63YrDCX51-zoTPu1utiPxXYmihL9kMvrpD3ctA@mail.gmail.com>
-Message-ID: <CAL_JsqKBDOu+63YrDCX51-zoTPu1utiPxXYmihL9kMvrpD3ctA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: serial: samsung: Add ARTPEC-8 UART
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        kernel <kernel@axis.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
+        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>
+References: <20220308000146.534935-1-tadeusz.struk@linaro.org>
+ <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH] net: ipv6: fix invalid alloclen in __ip6_append_data
+In-Reply-To: <14626165dad64bbaabed58ba7d59e523@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,34 +90,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 2:51 AM Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
->
-> Add a compatible for the UART on the ARTPEC-8 SoC.
+Hi David,
+On 3/7/22 18:58, David Laight wrote:
+>> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+>> index 4788f6b37053..622345af323e 100644
+>> --- a/net/ipv6/ip6_output.c
+>> +++ b/net/ipv6/ip6_output.c
+>> @@ -1629,6 +1629,13 @@ static int __ip6_append_data(struct sock *sk,
+>>   				err = -EINVAL;
+>>   				goto error;
+>>   			}
+>> +			if (unlikely(alloclen < fraglen)) {
+>> +				if (printk_ratelimit())
+>> +					pr_warn("%s: wrong alloclen: %d, fraglen: %d",
+>> +						__func__, alloclen, fraglen);
+>> +				alloclen = fraglen;
+>> +			}
+>> +
+> Except that is a valid case, see a few lines higher:
+> 
+> 				alloclen = min_t(int, fraglen, MAX_HEADER);
+> 				pagedlen = fraglen - alloclen;
+> 
+> You need to report the input values that cause the problem later on.
 
-Yes, the diff says that already. Perhaps some explanation why you are
-adding another vendor SoC to Samsung UART and how the h/w is
-different. I can only guess based on having just gone thru this with
-Apple.
+OK, but in this case it falls into the first if block:
+https://elixir.bootlin.com/linux/v5.17-rc7/source/net/ipv6/ip6_output.c#L1606
+where alloclen is assigned the value of mtu.
+The values in this case are just before the alloc_skb() are:
 
->
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> index 6aceba4a5f79..6f11f2c92f64 100644
-> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> @@ -20,6 +20,7 @@ properties:
->      items:
->        - enum:
->            - apple,s5l-uart
-> +          - axis,artpec8-uart
->            - samsung,s3c2410-uart
->            - samsung,s3c2412-uart
->            - samsung,s3c2440-uart
-> --
-> 2.34.1
->
+alloclen = 1480
+alloc_extra = 136
+datalen = 64095
+fragheaderlen = 1480
+fraglen = 65575
+transhdrlen = 0
+mtu = 1480
+
+-- 
+Thanks,
+Tadeusz

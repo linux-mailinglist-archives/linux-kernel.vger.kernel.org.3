@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812684D1689
+	by mail.lfdr.de (Postfix) with ESMTP id 35AAD4D1688
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 12:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346579AbiCHLpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 06:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
+        id S1346545AbiCHLpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 06:45:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346567AbiCHLpg (ORCPT
+        with ESMTP id S1346695AbiCHLpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Mar 2022 06:45:36 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0B83BA7B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 03:44:24 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KCYJk6pM3z1GC1w;
-        Tue,  8 Mar 2022 19:39:34 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Mar 2022 19:44:21 +0800
-Subject: Re: [PATCH 02/16] mm/migration: remove unneeded out label
-To:     "Huang, Ying" <ying.huang@intel.com>
-CC:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
-        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
-        <minchan@kernel.org>, <apopple@nvidia.com>,
-        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
-        <almasrymina@google.com>, <jhubbard@nvidia.com>,
-        <rcampbell@nvidia.com>, <peterx@redhat.com>,
-        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220304093409.25829-1-linmiaohe@huawei.com>
- <20220304093409.25829-3-linmiaohe@huawei.com>
- <877d967c4i.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <4d2dca2b-8abc-a937-3397-dde6c247874d@huawei.com>
-Date:   Tue, 8 Mar 2022 19:44:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4033E5D7;
+        Tue,  8 Mar 2022 03:44:36 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id x5so24036190edd.11;
+        Tue, 08 Mar 2022 03:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=JMRbz6J1yWshdN+XM2gYkyrpKd4K5wvxuv5/wGGiQFc=;
+        b=OKM75JlRjWvWpwoYf1E0yHZch86+h4aKV1Tj1Zt/TVB6Wg6FBJL1axc55dc0CodgRu
+         civSLGEB/uQ8FErK0LBEaCNcC9FcRCWqNXmA7WBCFOqqA5RhhkKYrGpGF58nrDEwLOdU
+         XE9nDRx8gUPU83ih4io9MlShh2My8VtsZ8yzi+SePDKF8uAy/dtihvmpHRIIBMl6EdYu
+         m0zLAs4HvYrxmaN+SNqmtMTEWtcksgm9A+WDIOVXPnTuBt4gQGyqD3oHK+La3ls7K6Jz
+         D0VPEaE6hRJggWYbqubE7AyXpZDYq3LfhBq8GLIewJlkJOkclDTB0MVzrtokyzfSvhco
+         lxwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=JMRbz6J1yWshdN+XM2gYkyrpKd4K5wvxuv5/wGGiQFc=;
+        b=uJkQjmFnxbFEOyg+7RmlFy/Jfy7nyUv4B/T5izVcA/D/V5kMiNxUs2SZKJ9bA7n76u
+         ZCKXym1/A1XITwN3DaLSoUND9FYg7gHBHfOu8DoHxQXDG9osIBsvKX0gsWhEM9szOF4S
+         EJ1+hKR2Z3A1g/CZP+eBk8Tn0UKmSo57qeGnOiCNHkVsQfUZRG/E94jPeN/vQhTWiOqR
+         vlOYnXg3IgJ33mt1asreVlZt4VVH0XSY7f//8CBPb4//O3PAWPB89kz8sVJ1RulQfwde
+         lwZ0lkUNKDp7kD5k4bwviuvmP2NBq5sucC6FVPK40iB5KGtfVc5WuUhpaica/7sICpMH
+         8XUQ==
+X-Gm-Message-State: AOAM5332smgcNPgON7tSevRCWEfBWOQuAyWiv+D5uj5Ih+rHiOvmGROK
+        mAh1PQb1Kh2A56wME4TsvkY=
+X-Google-Smtp-Source: ABdhPJynjbtLJHmlzmzSALzgeprNdMLWfvq3lyyL11wapuPi1rffKj6gVUedEWAiSb+GbE3XbdLmQQ==
+X-Received: by 2002:a50:9d47:0:b0:40f:9d3d:97b6 with SMTP id j7-20020a509d47000000b0040f9d3d97b6mr15545850edk.392.1646739875071;
+        Tue, 08 Mar 2022 03:44:35 -0800 (PST)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id r6-20020a1709064d0600b006da7ca3e514sm5734108eju.208.2022.03.08.03.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 03:44:34 -0800 (PST)
+Date:   Tue, 8 Mar 2022 13:44:33 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: rectify entry for REALTEK RTL83xx SMI DSA
+ ROUTER CHIPS
+Message-ID: <20220308114433.ucxenhxoq2grty4k@skbuf>
+References: <20220308103027.32191-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <877d967c4i.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220308103027.32191-1-lukas.bulwahn@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/7 10:03, Huang, Ying wrote:
-> Miaohe Lin <linmiaohe@huawei.com> writes:
+On Tue, Mar 08, 2022 at 11:30:27AM +0100, Lukas Bulwahn wrote:
+> Commit 429c83c78ab2 ("dt-bindings: net: dsa: realtek: convert to YAML
+> schema, add MDIO") converts realtek-smi.txt to realtek.yaml, but missed to
+> adjust its reference in MAINTAINERS.
 > 
->> We can do prep_transhuge_page when newpage is not NULL. Thus we can remove
->> out label to simplify the code.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/migrate.c | 7 ++-----
->>  1 file changed, 2 insertions(+), 5 deletions(-)
->>
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index 50bc62d85eaf..bc1867a5706c 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -2025,12 +2025,9 @@ static struct page *alloc_misplaced_dst_page_thp(struct page *page,
->>  
->>  	newpage = alloc_pages_node(nid, (GFP_TRANSHUGE_LIGHT | __GFP_THISNODE),
->>  				   HPAGE_PMD_ORDER);
->> -	if (!newpage)
->> -		goto out;
->> +	if (newpage)
->> +		prep_transhuge_page(newpage);
->>  
->> -	prep_transhuge_page(newpage);
->> -
->> -out:
->>  	return newpage;
->>  }
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken reference.
 > 
-> I don't think this change is necessary.  The original code is simple and
-> follows the common practice for error processing.  The new code is OK,
-> but it's unnecessary to change.
+> Repair this file reference in REALTEK RTL83xx SMI DSA ROUTER CHIPS.
 > 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
 
-IMO, this out label looks 'overkill'. We should remove it and make code more succinct.
-Does this make sense to you? Thanks.
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-> Best Regards,
-> Huang, Ying
-> .
+> applies cleanly on next-20220308
 > 
-
+> David, please pick this minor non-urgent clean-up patch for net-next.
+> 
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 38cdf9aadfe4..8c7e40e1215e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16638,7 +16638,7 @@ REALTEK RTL83xx SMI DSA ROUTER CHIPS
+>  M:	Linus Walleij <linus.walleij@linaro.org>
+>  M:	Alvin Šipraga <alsi@bang-olufsen.dk>
+>  S:	Maintained
+> -F:	Documentation/devicetree/bindings/net/dsa/realtek-smi.txt
+> +F:	Documentation/devicetree/bindings/net/dsa/realtek.yaml
+>  F:	drivers/net/dsa/realtek/*
+>  
+>  REALTEK WIRELESS DRIVER (rtlwifi family)
+> -- 
+> 2.17.1
+> 

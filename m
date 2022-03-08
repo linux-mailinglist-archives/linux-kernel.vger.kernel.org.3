@@ -2,115 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925484D2661
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FBA4D2755
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Mar 2022 05:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiCIBs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 20:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S230450AbiCIBjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 20:39:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbiCIBsR (ORCPT
+        with ESMTP id S230141AbiCIBjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 20:48:17 -0500
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BB17007A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:47:19 -0800 (PST)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220308232036euoutp02d43d1f223822d373a6dbcc97a6acc50e~aiyxYHIN80144801448euoutp02q
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 23:20:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220308232036euoutp02d43d1f223822d373a6dbcc97a6acc50e~aiyxYHIN80144801448euoutp02q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646781636;
-        bh=vVmFhsaYTxX5f8JcRbmKME++nxTa/28N5Hv45HFF8Gc=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=Vpt9INo/7LqtdZyFSMycROin8BvlMD2Tgx/6V3fP2WSUaoCQUdzxoGAeX6uNKoxX7
-         c7vM71MpCm8QeMkGPaeKT2djwMEgteibfOlMgGfSu+5JV5JsU1O87CmekKFQRcynmb
-         4/OQ6ZytsyfaH+RhzSNPFSVSa74yMuoWFh98P/fA=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220308232035eucas1p1bd5688cb1ea79ea3da6381095dad535c~aiywl1T0H0715607156eucas1p1u;
-        Tue,  8 Mar 2022 23:20:35 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 48.AB.09887.3C4E7226; Tue,  8
-        Mar 2022 23:20:35 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220308232034eucas1p2b0f39cee0f462af6004ebdfbe5bacb9f~aiyv40p3A1207812078eucas1p2E;
-        Tue,  8 Mar 2022 23:20:34 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220308232034eusmtrp26c612f4cbdcee882e83035f44d280abb~aiyv4GO1l1125611256eusmtrp2w;
-        Tue,  8 Mar 2022 23:20:34 +0000 (GMT)
-X-AuditID: cbfec7f4-471ff7000000269f-33-6227e4c3b2e9
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id BB.8D.09522.2C4E7226; Tue,  8
-        Mar 2022 23:20:34 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220308232034eusmtip137b1a8c476e66cecff3f206a11e0398d~aiyvNnmbz0938109381eusmtip1E;
-        Tue,  8 Mar 2022 23:20:33 +0000 (GMT)
-Message-ID: <f4bc652b-115f-35b5-91db-bad3b30fed9b@samsung.com>
-Date:   Wed, 9 Mar 2022 00:20:33 +0100
+        Tue, 8 Mar 2022 20:39:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 759E8C4E06
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 17:38:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646789890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9KU0PTCvgSIz9tzy9LdM7lpo3siWG92WJNluYJn+7O0=;
+        b=KulcTEpA4msbIsYahg/TdP2miDVEclClHbmtK1M5sqnXnaQXRzyskSOcofnBtzi7rO71Iq
+        x6UkL1Rhmg0krEd27vamXW2sGu0BsoTlHBt9vnVoddMkMZRgcbvwWUYS2SbEHa78feTHmF
+        jH2sMeWSt6KkZdb9A4AG2cdiruGcHMM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-332-M7vknxJVPEKjaFtO4kg5oA-1; Tue, 08 Mar 2022 18:25:00 -0500
+X-MC-Unique: M7vknxJVPEKjaFtO4kg5oA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 399FB1091DA0;
+        Tue,  8 Mar 2022 23:24:58 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E08C678C0F;
+        Tue,  8 Mar 2022 23:24:17 +0000 (UTC)
+Subject: [PATCH v2 00/19] netfs: Prep for write helpers
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     Jeffle Xu <jefflexu@linux.alibaba.com>,
+        linux-afs@lists.infradead.org, Jeff Layton <jlayton@kernel.org>,
+        dhowells@redhat.com, Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@redhat.com>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 08 Mar 2022 23:24:17 +0000
+Message-ID: <164678185692.1200972.597611902374126174.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v3 2/3] sched/cpuacct: optimize away RCU read lock
-Content-Language: en-US
-To:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        bristot@redhat.com, zhaolei@cn.fujitsu.com, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org
-Cc:     linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220220051426.5274-2-zhouchengming@bytedance.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Se1BMcRT2u3f37m1nNteKDpqYpYj08LxeLcOYHcZMnoMxstWV9MBuK2lQ
-        YmM9yk4mVh4xYyti203YPNY+lDFtJCZqkGJMWZWaVGK5rkf/fd93zvl95zvzI3GxmT+SjE1M
-        YhSJ8ngJIeSVPex1TrY1j48MOVcCdE3Tc4K+YlxGPzPnEXRlq52gaywXMLrimAWj+/QORB+y
-        d+N0vfYgj36Z3oXmC2U/Kq8SMtunNlzmfqDFZaaCiTJj0WFC1vDiDiFru/eckHUafcPJ9cK5
-        0Ux87E5GERy2SbjlfvoJfPvnwF3uRgOWhtL8NYgkgZoGOQf2aJCQFFMFCNLVpwmOdCGoatLz
-        ONKJoLi6CNMgj98Tr/o7EVfQI+iwXcM50vFrvrsMZ7tEVBjYe9x81oNHjQNdQQonD4FHp5t5
-        LB5GRcJby3EBi4dSi+GzzYBYjFPe8Kr5PMa+6UW9Q1DXase5whjoe23ks5igQkHj0hAs9qDm
-        w8FLJoLrGQ0ZN878XgioTA94mp4v4NZeBC3VmX8iDIWWitI/ug+4b3NuQGUgaHQWCzhyFMGz
-        /acQ1zUHGpx9BBsHpwLgujmYkxdAe5UF4y7pCXWuIdwSnqAty8U5WQSH1GKu2x90Fdf+2T54
-        UoNnI4luwF10A/LrBsTR/fe9gHhFyJtRKRNiGOWURCY5SClPUKoSY4KitiUY0a/v9fhHRdct
-        pG/pCLIijERWBCQu8RK9qR4XKRZFy1N2M4ptEQpVPKO0olEkT+Itioo1yMVUjDyJiWOY7Yzi
-        bxUjPUamYeZZ9pKIOL9ShfdKxvRV6yj55lXqEzfIejF5XtV1/sfKBulV89tJWOTNlPziBV8D
-        CkV1Jy1rDm+cszUcT7u9KNBRmPpu3eYbY0LUyUFHdo5YLC2pXrh2x/vhpqWZEYasYav2O3Mt
-        1tL23lCod6kfRS33b/fz9J1OvL4cUKufstU02jdXOYEpN4SF1trUvp5f7g2eifa9MRm+89UZ
-        OWMVLsfZxoxTLkvO1JbJSSq/tv7arFHSpuRdqRu0/c4s06Aj/M7AGWqTtOfTOW190ZKQeOal
-        w71Q8KHcR7U6m/8taS+xYUXE8T3Bdand2ZYlVYLe1tl+edLMcrgV3ePSF9w91o9LeMot8tCJ
-        uEIp/wnmFIzGzQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsVy+t/xu7qHnqgnGZz7pm5x6fFVNovVm3wt
-        Lu+aw2Zx4vURNotLBxYwWRzvPcBk8Wv5UUaLjiPfmC1uT2plsbjZ+IXRgcvj34k1bB6H37xn
-        9vh/cBKzx+YVWh6bVnWyedy5tofN4/2+q2wenzfJBXBE6dkU5ZeWpCpk5BeX2CpFG1oY6Rla
-        WugZmVjqGRqbx1oZmSrp29mkpOZklqUW6dsl6GXsb5zIXPBOp+L/ww1MDYwNal2MnBwSAiYS
-        t/58Zuxi5OIQEljKKLGnaxkbREJG4uS0BlYIW1jiz7UuNoii94wSjXOvgxXxCthJHPnxH6iI
-        g4NFQEVi1opKiLCgxMmZT1hAbFGBJImX2zaCzREWcJN4d3gDI4jNLCAucevJfCaQmSICjxgl
-        Lm9/ygSRUJD4dW8TWIOQQKlE94STYIPYBAwlut52ge3lFHCQaF28mQ2i3kyia2sX1FB5ieat
-        s5knMArNQnLHLCT7ZiFpmYWkZQEjyypGkdTS4tz03GJDveLE3OLSvHS95PzcTYzAaN127Ofm
-        HYzzXn3UO8TIxMF4iFGCg1lJhPf+eZUkId6UxMqq1KL8+KLSnNTiQ4ymwLCYyCwlmpwPTBd5
-        JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9TBycUg1Mq7cumrBL/dqeRwcS
-        D/Ty9/5h8/6//NqGmu7w8x4Vl+71dvcdlo+Xt9zKcFi8pix8odjMBt+M9bwP5F9+tDs5MdIv
-        N/LZ3w912Uc59MOtNzQU78oXn2neXp1ayDJ/lU/s1BW93+ZvcWt57Mz8p1psn833r3NsZfb5
-        n7PSqqg1NI5bYfJ58fX/ClFSjYuKNF+WKh5Y19a+My59kt0qywrPVM1LWVXXZifrNGTfudjx
-        eMW5S6+nFqqeO7THp+hXW39MnZ1Dior77XmvDzzzShCRqS15MCf2Kq/kyU+LQg7lvHGYrLh7
-        Arf3G/+VBU1V02YL/3RjTduU/Grplvnlp/d7Zd15ZL7e4F5L5SHRJWVvlFiKMxINtZiLihMB
-        /sH+F18DAAA=
-X-CMS-MailID: 20220308232034eucas1p2b0f39cee0f462af6004ebdfbe5bacb9f
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220308232034eucas1p2b0f39cee0f462af6004ebdfbe5bacb9f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220308232034eucas1p2b0f39cee0f462af6004ebdfbe5bacb9f
-References: <20220220051426.5274-1-zhouchengming@bytedance.com>
-        <20220220051426.5274-2-zhouchengming@bytedance.com>
-        <CGME20220308232034eucas1p2b0f39cee0f462af6004ebdfbe5bacb9f@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,154 +72,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.02.2022 06:14, Chengming Zhou wrote:
-> Since cpuacct_charge() is called from the scheduler update_curr(),
-> we must already have rq lock held, then the RCU read lock can
-> be optimized away.
->
-> And do the same thing in it's wrapper cgroup_account_cputime(),
-> but we can't use lockdep_assert_rq_held() there, which defined
-> in kernel/sched/sched.h.
->
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-This patch landed recently in linux-next as commit dc6e0818bc9a 
-("sched/cpuacct: Optimize away RCU read lock"). On my test systems I 
-found that it triggers a following warning in the early boot stage:
+Having had a go at implementing write helpers and content encryption
+support in netfslib, it seems that the netfs_read_{,sub}request structs and
+the equivalent write request structs were almost the same and so should be
+merged, thereby requiring only one set of alloc/get/put functions and a
+common set of tracepoints.
 
-Calibrating delay loop (skipped), value calculated using timer 
-frequency.. 48.00 BogoMIPS (lpj=240000)
-pid_max: default: 32768 minimum: 301
-Mount-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
-Mountpoint-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
-CPU: Testing write buffer coherency: ok
-CPU0: Spectre v2: using BPIALL workaround
+Merging the structs also has the advantage that if a bounce buffer is added
+to the request struct, a read operation can be performed to fill the bounce
+buffer, the contents of the buffer can be modified and then a write
+operation can be performed on it to send the data wherever it needs to go
+using the same request structure all the way through.  The I/O handlers
+would then transparently perform any required crypto.  This should make it
+easy to perform RMW cycles if needed.
 
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc5-00050-gdc6e0818bc9a #11458 Not tainted
------------------------------
-./include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
+The potentially common functions and structs, however, by their names all
+proclaim themselves to be associated with the read side of things.  The
+bulk of these changes alter this in the following ways:
 
-other info that might help us debug this:
+ (1) Rename struct netfs_read_{,sub}request to netfs_io_{,sub}request.
+
+ (2) Rename some enums, members and flags to make them more appropriate.
+
+ (3) Adjust some comments to match.
+
+ (4) Drop "read"/"rreq" from the names of common functions.  For instance,
+     netfs_get_read_request() becomes netfs_get_request().
+
+ (5) The ->init_rreq() and ->issue_op() methods become ->init_request() and
+     ->issue_read().  I've kept the latter as a read-specific function and
+     in another branch added an ->issue_write() method.
+
+The driver source is then reorganised into a number of files:
+
+	fs/netfs/buffered_read.c	Create read reqs to the pagecache
+	fs/netfs/io.c			Dispatchers for read and write reqs
+	fs/netfs/main.c			Some general miscellaneous bits
+	fs/netfs/objects.c		Alloc, get and put functions
+	fs/netfs/stats.c		Optional procfs statistics.
+
+and future development can be fitted into this scheme, e.g.:
+
+	fs/netfs/buffered_write.c	Modify the pagecache
+	fs/netfs/buffered_flush.c	Writeback from the pagecache
+	fs/netfs/direct_read.c		DIO read support
+	fs/netfs/direct_write.c		DIO write support
+	fs/netfs/unbuffered_write.c	Write modifications directly back
+
+Beyond the above changes, there are also some changes that affect how
+things work:
+
+ (1) Make fscache_end_operation() generally available.
+
+ (2) In the netfs tracing header, generate enums from the symbol -> string
+     mapping tables rather than manually coding them.
+
+ (3) Add a struct for filesystems that uses netfslib to put into their
+     inode wrapper structs to hold extra state that netfslib is interested
+     in, such as the fscache cookie.  This allows netfslib functions to be
+     set in filesystem operation tables and jumped to directly without
+     having to have a filesystem wrapper.
+
+ (4) Add a member to the struct added in (3) to track the remote inode
+     length as that may differ if local modifications are buffered.  We may
+     need to supply an appropriate EOF pointer when storing data (in AFS
+     for example).
+
+ (5) Pass extra information to netfs_alloc_request() so that the
+     ->init_request() hook can access it and retain information to indicate
+     the origin of the operation.
+
+ (6) Make the ->init_request() hook return an error, thereby allowing a
+     filesystem that isn't allowed to cache an inode (ceph or cifs, for
+     example) to skip readahead.
+
+ (7) Switch to using refcount_t for subrequests and add tracepoints to log
+     refcount changes for the request and subrequest structs.
+
+ (8) Add a function to consolidate dispatching a read request.  Similar
+     code is used in three places and another couple are likely to be added
+     in the future.
 
 
-rcu_scheduler_active = 1, debug_locks = 1
-2 locks held by kthreadd/2:
-  #0: c1d7972c (&p->pi_lock){....}-{2:2}, at: task_rq_lock+0x30/0x118
-  #1: ef7b52d0 (&rq->__lock){-...}-{2:2}, at: 
-raw_spin_rq_lock_nested+0x24/0x34
+The patches can be found on this branch:
 
-stack backtrace:
-CPU: 0 PID: 2 Comm: kthreadd Not tainted 5.17.0-rc5-00050-gdc6e0818bc9a 
-#11458
-Hardware name: Samsung Exynos (Flattened Device Tree)
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x58/0x70
-  dump_stack_lvl from update_curr+0x1bc/0x35c
-  update_curr from dequeue_task_fair+0xb0/0x8e8
-  dequeue_task_fair from __do_set_cpus_allowed+0x19c/0x258
-  __do_set_cpus_allowed from __set_cpus_allowed_ptr_locked+0x130/0x1d8
-  __set_cpus_allowed_ptr_locked from __set_cpus_allowed_ptr+0x48/0x64
-  __set_cpus_allowed_ptr from kthreadd+0x44/0x16c
-  kthreadd from ret_from_fork+0x14/0x2c
-Exception stack(0xc1cb9fb0 to 0xc1cb9ff8)
-9fa0:                                     00000000 00000000 00000000 
-00000000
-9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
-00000000
-9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-CPU0: thread -1, cpu 0, socket 9, mpidr 80000900
-cblist_init_generic: Setting adjustable number of callback queues.
-cblist_init_generic: Setting shift to 1 and lim to 1.
-Running RCU-tasks wait API self tests
-Setting up static identity map for 0x40100000 - 0x40100060
-rcu: Hierarchical SRCU implementation.
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
 
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc5-00050-gdc6e0818bc9a #11458 Not tainted
------------------------------
-./include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
+This is based on top of ceph's master branch as some of the patches
+conflict.
 
-other info that might help us debug this:
+David
+---
+
+Changes
+=======
+ver #2)
+ - Change kdoc references to renamed files[1].
+ - Switched the begin-read-function patch and the prepare-to-split patch as
+   fewer functions then need unstatic'ing.
+ - Fixed an uninitialised var in netfs_begin_read()[2][3].
+ - Fixed a refleak caused by an unremoved line when netfs_begin_read() was
+   introduced.
+ - Use "#if IS_ENABLED()" in netfs_i_cookie(), not "#ifdef".
+ - Implemented missing bit of ceph readahead through netfs_readahead().
+ - Rearranged the patch order to make the ceph readahead possible.
+
+Link: https://lore.kernel.org/r/20220303202811.6a1d53a1@canb.auug.org.au/ [1]
+Link: https://lore.kernel.org/r/20220303163826.1120936-1-nathan@kernel.org/ [2]
+Link: https://lore.kernel.org/r/20220303235647.1297171-1-colin.i.king@gmail.com/ [3]
+Link: https://lore.kernel.org/r/164622970143.3564931.3656393397237724303.stgit@warthog.procyon.org.uk/ # v1
+
+---
+David Howells (17):
+      netfs: Generate enums from trace symbol mapping lists
+      netfs: Rename netfs_read_*request to netfs_io_*request
+      netfs: Finish off rename of netfs_read_request to netfs_io_request
+      netfs: Split netfs_io_* object handling out
+      netfs: Adjust the netfs_rreq tracepoint slightly
+      netfs: Trace refcounting on the netfs_io_request struct
+      netfs: Trace refcounting on the netfs_io_subrequest struct
+      netfs: Adjust the netfs_failure tracepoint to indicate non-subreq lines
+      netfs: Change ->init_request() to return an error code
+      netfs: Add a netfs inode context
+      netfs: Add a function to consolidate beginning a read
+      netfs: Prepare to split read_helper.c
+      netfs: Rename read_helper.c to io.c
+      netfs: Split fs/netfs/read_helper.c
+      netfs: Split some core bits out into their own file
+      netfs: Keep track of the actual remote file size
+      afs: Maintain netfs_i_context::remote_i_size
+
+Jeff Layton (1):
+      netfs: Refactor arguments for netfs_alloc_read_request
+
+Jeffle Xu (1):
+      fscache: export fscache_end_operation()
 
 
-rcu_scheduler_active = 1, debug_locks = 1
-1 lock held by migration/0/13:
-  #0: ef7b52d0 (&rq->__lock){-...}-{2:2}, at: 
-raw_spin_rq_lock_nested+0x24/0x34
+ Documentation/filesystems/netfs_library.rst |  139 ++-
+ fs/9p/cache.c                               |   10 +-
+ fs/9p/v9fs.c                                |    4 +-
+ fs/9p/v9fs.h                                |   12 +-
+ fs/9p/vfs_addr.c                            |   62 +-
+ fs/9p/vfs_inode.c                           |   13 +-
+ fs/afs/dynroot.c                            |    1 +
+ fs/afs/file.c                               |   41 +-
+ fs/afs/inode.c                              |   32 +-
+ fs/afs/internal.h                           |   23 +-
+ fs/afs/super.c                              |    4 +-
+ fs/afs/write.c                              |   10 +-
+ fs/cachefiles/io.c                          |   10 +-
+ fs/ceph/addr.c                              |  113 +-
+ fs/ceph/cache.c                             |   28 +-
+ fs/ceph/cache.h                             |   15 +-
+ fs/ceph/inode.c                             |    6 +-
+ fs/ceph/super.h                             |   16 +-
+ fs/cifs/cifsglob.h                          |   10 +-
+ fs/cifs/fscache.c                           |   19 +-
+ fs/cifs/fscache.h                           |    2 +-
+ fs/fscache/internal.h                       |   11 -
+ fs/netfs/Makefile                           |    8 +-
+ fs/netfs/buffered_read.c                    |  428 +++++++
+ fs/netfs/internal.h                         |   49 +-
+ fs/netfs/io.c                               |  657 ++++++++++
+ fs/netfs/main.c                             |   20 +
+ fs/netfs/objects.c                          |  161 +++
+ fs/netfs/read_helper.c                      | 1205 -------------------
+ fs/netfs/stats.c                            |    1 -
+ fs/nfs/fscache.c                            |    8 -
+ include/linux/fscache.h                     |   14 +
+ include/linux/netfs.h                       |  162 ++-
+ include/trace/events/cachefiles.h           |    6 +-
+ include/trace/events/netfs.h                |  188 ++-
+ 35 files changed, 1860 insertions(+), 1628 deletions(-)
+ create mode 100644 fs/netfs/buffered_read.c
+ create mode 100644 fs/netfs/io.c
+ create mode 100644 fs/netfs/main.c
+ create mode 100644 fs/netfs/objects.c
+ delete mode 100644 fs/netfs/read_helper.c
 
-stack backtrace:
-CPU: 0 PID: 13 Comm: migration/0 Not tainted 
-5.17.0-rc5-00050-gdc6e0818bc9a #11458
-Hardware name: Samsung Exynos (Flattened Device Tree)
-Stopper: 0x0 <- 0x0
-  unwind_backtrace from show_stack+0x10/0x14
-  show_stack from dump_stack_lvl+0x58/0x70
-  dump_stack_lvl from put_prev_task_stop+0x16c/0x25c
-  put_prev_task_stop from __schedule+0x698/0x964
-  __schedule from schedule+0x54/0xe0
-  schedule from smpboot_thread_fn+0x218/0x288
-  smpboot_thread_fn from kthread+0xf0/0x134
-  kthread from ret_from_fork+0x14/0x2c
-Exception stack(0xc1ccffb0 to 0xc1ccfff8)
-ffa0:                                     00000000 00000000 00000000 
-00000000
-ffc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
-00000000
-ffe0: 00000000 00000000 00000000 00000000 00000013 00000000
-smp: Bringing up secondary CPUs ...
-CPU1: thread -1, cpu 1, socket 9, mpidr 80000901
-CPU1: Spectre v2: using BPIALL workaround
-smp: Brought up 1 node, 2 CPUs
-SMP: Total of 2 processors activated (96.00 BogoMIPS).
-
-The above log comes from ARM 32bit Samsung Exnyos4210 based Trats board.
-
-> ---
->   include/linux/cgroup.h | 2 --
->   kernel/sched/cpuacct.c | 4 +---
->   2 files changed, 1 insertion(+), 5 deletions(-)
->
-> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> index 75c151413fda..9a109c6ac0e0 100644
-> --- a/include/linux/cgroup.h
-> +++ b/include/linux/cgroup.h
-> @@ -791,11 +791,9 @@ static inline void cgroup_account_cputime(struct task_struct *task,
->   
->   	cpuacct_charge(task, delta_exec);
->   
-> -	rcu_read_lock();
->   	cgrp = task_dfl_cgroup(task);
->   	if (cgroup_parent(cgrp))
->   		__cgroup_account_cputime(cgrp, delta_exec);
-> -	rcu_read_unlock();
->   }
->   
->   static inline void cgroup_account_cputime_field(struct task_struct *task,
-> diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
-> index 307800586ac8..f79f88456d72 100644
-> --- a/kernel/sched/cpuacct.c
-> +++ b/kernel/sched/cpuacct.c
-> @@ -337,12 +337,10 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
->   	unsigned int cpu = task_cpu(tsk);
->   	struct cpuacct *ca;
->   
-> -	rcu_read_lock();
-> +	lockdep_assert_rq_held(cpu_rq(cpu));
->   
->   	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
->   		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
-> -
-> -	rcu_read_unlock();
->   }
->   
->   /*
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
 

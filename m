@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE834D1A4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFDD4D1A58
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 15:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239822AbiCHOWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 09:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S1344981AbiCHOY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 09:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiCHOWo (ORCPT
+        with ESMTP id S230433AbiCHOYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:22:44 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241594B413;
-        Tue,  8 Mar 2022 06:21:48 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id bi12so26484836ejb.3;
-        Tue, 08 Mar 2022 06:21:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eiuLq9YhRrYN0FpJ7mTqNGyJkUH/vrr7SSWu39B1rkk=;
-        b=DHPRtv8bf5XL0wSnjyq/223qiCx2+c0HD4LGpwpDw8yQYqAcbEFl1AUh9EDG4oUVX0
-         FdBkiFBEyU++sUleXZPCAYnocTqhZkx+rT/2jCAnEMIBw7NgQ0lYxsleIODTOzOFTNM7
-         0o8r10K0yVy9pMJUPI6F2/BUoEJN4kW9G4WEBF3ST1J/+lG0TinTXDXjR5xSwrZ4uhFr
-         rf/c2M8oA2VAlued+b28tvqO+FQGY60kB5ZgbBfLTWeWkt4Wju39LlabLBVubH3TFuzl
-         EI/wyZ840EeWv9ALhewWyGBOm1lvNZYehQ4u5EwN+UL0r/quBRRqapDUOwxSMn+ej00T
-         FalA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eiuLq9YhRrYN0FpJ7mTqNGyJkUH/vrr7SSWu39B1rkk=;
-        b=lYP+eM3i9GQGgyRlZa5w+Kd1r3dCCmumy+OuAA+Tftuv4ohcKijWXsOPvhmG1hoGlU
-         CRcZXBrQ7sECLvv3DGeSqh3kUOYU4KhGmuy1v4EYX15IUIK32GDQEbb0MNhBl73UTEao
-         OGEgK5N/5R5GD6jAwXD2bMWt0iqUzeLVBOy5U2u24Bqg5QXPiNKgG3utba86B+/QYpAe
-         4XNzF23waSGiLhpx71WTJWqjd0CaK/+dEPK8dk980Bvwv/9rFad8IxWRhInHB54RcxqK
-         xFzOq3OPTYtWoo762VyTHyFOwF/ygEYcBQ6O2H0yjcND5fpO9UXgUBJv+ZeBP82ByCzz
-         tJgg==
-X-Gm-Message-State: AOAM530vc5bWgW2TcjCH3GlihIq0GCXQELr0FGEmyBo0W2sETZ2k0LOZ
-        wgbtIkaOQDhGFkCEZu6dlLU=
-X-Google-Smtp-Source: ABdhPJzSIpzp3q880unq3ypBGGnte9cfn22Luoe7SMZKsULuoMfoloIXXT6MbLLn+mfJEfI7MooDNQ==
-X-Received: by 2002:a17:907:7b9e:b0:6db:2b7f:3024 with SMTP id ne30-20020a1709077b9e00b006db2b7f3024mr8522631ejc.29.1646749306525;
-        Tue, 08 Mar 2022 06:21:46 -0800 (PST)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id m10-20020a056402510a00b00415eee901c0sm7018115edd.61.2022.03.08.06.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 06:21:46 -0800 (PST)
-Date:   Tue, 8 Mar 2022 15:21:43 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH 02/10] bpf: Add multi kprobe link
-Message-ID: <Yidmd3I2eHoZo/Wv@krava>
-References: <20220222170600.611515-1-jolsa@kernel.org>
- <20220222170600.611515-3-jolsa@kernel.org>
- <CAEf4BzadsmOTas7BdF-J+de7AqsoccY1o6e0pUBkRuWH+53DiQ@mail.gmail.com>
- <YiTvT0nyWLDvFya+@krava>
- <CAEf4BzaJoa=N4LgT55oraJkJtBds4BmKBCpJ1wmyqZCfjdo3Pw@mail.gmail.com>
+        Tue, 8 Mar 2022 09:24:55 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E1049920;
+        Tue,  8 Mar 2022 06:23:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646749438; x=1678285438;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/XXipzH9LpSlloOthwoAzcFwTx0U+s0Ur50YTY714mc=;
+  b=ZviHOMu9oZcY/LSfVmVfOz0olivD7WIjxU+Qvz2zVxPEg7AHu/7OQlDr
+   agG82al115GE27ZXfQxqKl+pXdfT+lLTppxfVIXdoNMXATQzu5ga5G4bg
+   zoeEetZKRYYsZPwGvNb9sFvXHKbg/7XzEhZR/fEvs3JgKXdroJIgVeDeg
+   5eOG/e5MqltZUYungJO2K9KGP7IwxmJR0q1HWxQ10Ss1XhDN2Vm0WKvsw
+   5CsnzT2AeYr+Pk4RLYhG83h+g8y+igNfU3/59wviWt2t+Jaf1a3zmRbmp
+   PgM7V96ZARD4ke0bxYtPlFEkclBEZwlw6RCCA+JJuGseaOHz2j3F1ky5B
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="254419987"
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="254419987"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 06:23:30 -0800
+X-IronPort-AV: E=Sophos;i="5.90,165,1643702400"; 
+   d="scan'208";a="553634238"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.46.193])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 06:23:24 -0800
+Message-ID: <013b5425-2a60-e4d4-b846-444a576f2b28@intel.com>
+Date:   Tue, 8 Mar 2022 16:23:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzaJoa=N4LgT55oraJkJtBds4BmKBCpJ1wmyqZCfjdo3Pw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
+ a perf event clock
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, H Peter Anvin <hpa@zytor.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>, jgross@suse.com,
+        sdeep@vmware.com, pv-drivers@vmware.com, pbonzini@redhat.com,
+        seanjc@google.com, kys@microsoft.com, sthemmin@microsoft.com,
+        virtualization@lists.linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christopher.s.hall@intel.com
+References: <20220214110914.268126-1-adrian.hunter@intel.com>
+ <20220214110914.268126-4-adrian.hunter@intel.com>
+ <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
+ <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
+ <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
+ <30383f92-59cb-2875-1e1b-ff1a0eacd235@intel.com>
+ <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 05:23:34PM -0800, Andrii Nakryiko wrote:
-> On Sun, Mar 6, 2022 at 9:28 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Fri, Mar 04, 2022 at 03:11:01PM -0800, Andrii Nakryiko wrote:
-> >
-> > SNIP
-> >
-> > > > +static int
-> > > > +kprobe_multi_resolve_syms(const void *usyms, u32 cnt,
-> > > > +                         unsigned long *addrs)
-> > > > +{
-> > > > +       unsigned long addr, size;
-> > > > +       const char **syms;
-> > > > +       int err = -ENOMEM;
-> > > > +       unsigned int i;
-> > > > +       char *func;
-> > > > +
-> > > > +       size = cnt * sizeof(*syms);
-> > > > +       syms = kvzalloc(size, GFP_KERNEL);
-> > > > +       if (!syms)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       func = kmalloc(KSYM_NAME_LEN, GFP_KERNEL);
-> > > > +       if (!func)
-> > > > +               goto error;
-> > > > +
-> > > > +       if (copy_from_user(syms, usyms, size)) {
-> > > > +               err = -EFAULT;
-> > > > +               goto error;
-> > > > +       }
-> > > > +
-> > > > +       for (i = 0; i < cnt; i++) {
-> > > > +               err = strncpy_from_user(func, syms[i], KSYM_NAME_LEN);
-> > > > +               if (err == KSYM_NAME_LEN)
-> > > > +                       err = -E2BIG;
-> > > > +               if (err < 0)
-> > > > +                       goto error;
-> > > > +
-> > > > +               err = -EINVAL;
-> > > > +               if (func[0] == '\0')
-> > > > +                       goto error;
-> > >
-> > > wouldn't empty string be handled by kallsyms_lookup_name?
-> >
-> > it would scan and compare all symbols with empty string,
-> > so it's better to test for it
+On 7.3.2022 16.42, Peter Zijlstra wrote:
+> On Mon, Mar 07, 2022 at 02:36:03PM +0200, Adrian Hunter wrote:
 > 
-> I don't mind, but it seems like kallsyms_lookup_name() should be made
-> smarter than that instead, no?
+>>> diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+>>> index 4420499f7bb4..a1f179ed39bf 100644
+>>> --- a/arch/x86/kernel/paravirt.c
+>>> +++ b/arch/x86/kernel/paravirt.c
+>>> @@ -145,6 +145,15 @@ DEFINE_STATIC_CALL(pv_sched_clock, native_sched_clock);
+>>>  
+>>>  void paravirt_set_sched_clock(u64 (*func)(void))
+>>>  {
+>>> +	/*
+>>> +	 * Anything with ART on promises to have sane TSC, otherwise the whole
+>>> +	 * ART thing is useless. In order to make ART useful for guests, we
+>>> +	 * should continue to use the TSC. As such, ignore any paravirt
+>>> +	 * muckery.
+>>> +	 */
+>>> +	if (cpu_feature_enabled(X86_FEATURE_ART))
+>>
+>> Does not seem to work because the feature X86_FEATURE_ART does not seem to get set.
+>> Possibly because detect_art() excludes anything running on a hypervisor.
+> 
+> Simple enough to delete that clause I suppose. Christopher, what is
+> needed to make that go away? I suppose the guest needs to be aware of
+> the active TSC scaling parameters to make it work ?
 
-true, I'll do that
+There is also not X86_FEATURE_NONSTOP_TSC nor values for art_to_tsc_denominator
+or art_to_tsc_numerator.  Also, from the VM's point of view, TSC will jump
+forwards every VM-Exit / VM-Entry unless the hypervisor changes the offset
+every VM-Entry, which KVM does not, so it still cannot be used as a stable
+clocksource.
 
-jirka

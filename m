@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A7E4D1704
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6C24D16FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346740AbiCHMPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        id S1346726AbiCHMO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346732AbiCHMPi (ORCPT
+        with ESMTP id S237459AbiCHMOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:15:38 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB76143ED3;
-        Tue,  8 Mar 2022 04:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646741681; x=1678277681;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pj07O+oiBpvt9RG+DMy/vaA6wCldd0Kb1X9+1g+qKKk=;
-  b=nk46dBewC7OoH88g5BrYrpB7wkmfnWgJkccsipXV1jMZtgMjwt7dlscd
-   94FfGr8xOIDI1dC0HhAWg39V9w+G0k9e7caeeA3lBsezmdOSp/I/FfsCU
-   Alz0mC+Rda8l0KMlfEhzLsjp/yy67zB2M0E1h+DHDvNbswFKYak1bsz0f
-   NqJoNy/bRM//+pdiuHOVuxc+n5XXC9W4XTK2qUUl/Qe6sLzNwge/rqxeB
-   ORD8FbiQcQkoRxzTWB00oHTv6L3NExkZvHk9BAlSRPC/9sM+ahTF9GQ8q
-   A0i8uq7ZXfU1gow2lcFpL5Xa5HpS88f++9GMdGKPEs2Oonbyi99eyrKpK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="317898528"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="317898528"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:14:41 -0800
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="537546642"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:14:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nRYiw-00DLej-Di;
-        Tue, 08 Mar 2022 14:13:54 +0200
-Date:   Tue, 8 Mar 2022 14:13:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH v1 1/1] staging: fbtft: Consider type of init sequence
- values in fbtft_init_display()
-Message-ID: <YidIgkiv7B8g14RD@smile.fi.intel.com>
-References: <20220304193414.88006-1-andriy.shevchenko@linux.intel.com>
- <Yictcf0BCvveVT+V@smile.fi.intel.com>
- <Yic0CN+qSvDtSiEz@kroah.com>
+        Tue, 8 Mar 2022 07:14:54 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A4D369E9;
+        Tue,  8 Mar 2022 04:13:57 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id q17so24198608edd.4;
+        Tue, 08 Mar 2022 04:13:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ULast/mtgP3p8AMVarXOT+P6lpKHlA0007QiXUEdEFE=;
+        b=Wk6UyfUlZnL5SElRH1/AfODLHHDCAsfnpsm7tMMPXyzbSIFQQqmACnv95Du8iVRA7i
+         KOVWxH6W9Zflw31j0dQhp4/QeQFp9EoLI5aKRhINYRwWbz6ux2ikSN5+8H0dDRCsh7HE
+         PXQHUkG3omcQ8G1KroCdf1K0FM9jSSgcVP+JUGfxQ0q1Z+Pkh7vo9Y2UvM8VvOlOee1r
+         HUDtN2TxC2SMIhvUfo+0aJas5zWdQOGmwy0TrzVduKfEzr4MBJrKleNx9ES9fEjDCnFY
+         bbeLB7yp8yXEEjlq/9SJ9dvU8PWfw+FWnc+r7TeptTzRbPgLSMADmdPlBwsID7jFp3Nw
+         eSpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ULast/mtgP3p8AMVarXOT+P6lpKHlA0007QiXUEdEFE=;
+        b=7sfVtj79g/56Jl9SoMUP3sz9BC4atvXElIHcpYzcYccEu25RlI8PrglBqegGcC83N+
+         MjAMHIhLENEivY+d9LBxMgSkJwi4I4b3+7l50Bj98/xCk1S1GULq7dS34E+siS3QFH0t
+         hc1GeTJwnyTWaOHF4x8zSnAWNMWSplC5FLriH3OZp8ozS+11DKJqQO0xfnyJXBMNbaqd
+         y57pcxmKCTLQYecAy4LODsiSQJTfvUBo/5NvodB1PbdsuuYj7co2HxVsvrieHULjdAn4
+         orT6MKiAGPOnivf1R5UKPcOanDHAuKNUDIZhfl3AJNO5Ab/y7cirMEgj+fIp36HncPml
+         E/xA==
+X-Gm-Message-State: AOAM533zknjiL7YzC33lYv0uQltZaeTYMlM0e85jHVI23zeZ46t2wNAy
+        XBOjg+3I24h4R9bNxd62cd0=
+X-Google-Smtp-Source: ABdhPJys53qTU70vOv4UGAljmorZflfU+Rp0CDA2yjzlzyY9aerrFgS941NSU0EEibz7NS8WnkfGvQ==
+X-Received: by 2002:a05:6402:374:b0:415:e849:2935 with SMTP id s20-20020a056402037400b00415e8492935mr15560448edw.47.1646741636190;
+        Tue, 08 Mar 2022 04:13:56 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id qb30-20020a1709077e9e00b006d6f8c77695sm5705595ejc.101.2022.03.08.04.13.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 04:13:55 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <6e57aad6-1322-8a3d-6dfa-ff010a61a9a9@redhat.com>
+Date:   Tue, 8 Mar 2022 13:13:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yic0CN+qSvDtSiEz@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] x86/kvm: Don't waste kvmclock memory if there is nopv
+ parameter
+Content-Language: en-US
+To:     Wanpeng Li <kernellwp@gmail.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+References: <1646727529-11774-1-git-send-email-wanpengli@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <1646727529-11774-1-git-send-email-wanpengli@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 11:46:32AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Mar 08, 2022 at 12:18:25PM +0200, Andy Shevchenko wrote:
-> > +Cc: Helge
-> > 
-> > Maybe you can pick this up?
-> > 
-> > On Fri, Mar 04, 2022 at 09:34:14PM +0200, Andy Shevchenko wrote:
+On 3/8/22 09:18, Wanpeng Li wrote:
+> From: Wanpeng Li <wanpengli@tencent.com>
 > 
-> You sent this less than a week ago!  Please relax, staging driver
-> patches are way down my list of priorities at the moment.  Wait at least
-> 2 weeks before trying to get someone else to take patches for this
-> subsystem.
+> When the "nopv" command line parameter is used, it should not waste
+> memory for kvmclock.
 > 
-> relax...
+> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> ---
+>   arch/x86/kernel/kvmclock.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
+> index c5caa73..16333ba 100644
+> --- a/arch/x86/kernel/kvmclock.c
+> +++ b/arch/x86/kernel/kvmclock.c
+> @@ -239,7 +239,7 @@ static void __init kvmclock_init_mem(void)
+>   
+>   static int __init kvm_setup_vsyscall_timeinfo(void)
+>   {
+> -	if (!kvm_para_available() || !kvmclock)
+> +	if (!kvm_para_available() || !kvmclock || nopv)
+>   		return 0;
+>   
+>   	kvmclock_init_mem();
 
-Ah, okay. Sorry, I was browsing my long mailbox and haven't paid attention on
-the date I had sent this one on.
+Perhaps instead !kvm_para_available() && nopv should clear the kvmclock 
+variable?
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Paolo

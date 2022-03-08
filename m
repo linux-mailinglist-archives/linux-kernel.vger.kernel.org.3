@@ -2,313 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D674D16DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE764D1723
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 13:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346694AbiCHMIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 07:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
+        id S241594AbiCHMVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 07:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346673AbiCHMIL (ORCPT
+        with ESMTP id S230345AbiCHMU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:08:11 -0500
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [IPv6:2001:1600:3:17::8fab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9827028E14
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 04:07:14 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KCYwZ0qMczMqHjh;
-        Tue,  8 Mar 2022 13:07:10 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KCYwW0hXyzlhMBq;
-        Tue,  8 Mar 2022 13:07:06 +0100 (CET)
-Message-ID: <995fc93b-531b-9840-1523-21ae2adbe4ba@digikod.net>
-Date:   Tue, 8 Mar 2022 13:18:28 +0100
+        Tue, 8 Mar 2022 07:20:58 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6A64506E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 04:20:01 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KCZ5r3VdZz1GCBD;
+        Tue,  8 Mar 2022 20:15:12 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 20:19:58 +0800
+Subject: Re: [PATCH 16/16] mm/migration: fix potential pte_unmap on an not
+ mapped pte
+To:     "Huang, Ying" <ying.huang@intel.com>
+CC:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
+        <shy828301@gmail.com>, <willy@infradead.org>, <ziy@nvidia.com>,
+        <minchan@kernel.org>, <apopple@nvidia.com>,
+        <ave.hansen@linux.intel.com>, <o451686892@gmail.com>,
+        <almasrymina@google.com>, <jhubbard@nvidia.com>,
+        <rcampbell@nvidia.com>, <peterx@redhat.com>,
+        <naoya.horiguchi@nec.com>, <mhocko@suse.com>, <riel@redhat.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220304093409.25829-1-linmiaohe@huawei.com>
+ <20220304093409.25829-17-linmiaohe@huawei.com>
+ <871qze5nmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <9c6873ae-7614-1178-8c9f-6e933a12e35b@huawei.com>
+Date:   Tue, 8 Mar 2022 20:19:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: 
+In-Reply-To: <871qze5nmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="windows-1252"
 Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20210712170313.884724-1-mic@digikod.net>
- <20210712170313.884724-6-mic@digikod.net> <YidDznCPSmFmfNwE@iki.fi>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v8 5/5] certs: Allow root user to append signed hashes to
- the blacklist keyring
-In-Reply-To: <YidDznCPSmFmfNwE@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/3/7 13:37, Huang, Ying wrote:
+> Miaohe Lin <linmiaohe@huawei.com> writes:
+> 
+>> __migration_entry_wait and migration_entry_wait_on_locked assume pte is
+>> always mapped from caller. But this is not the case when it's called from
+>> migration_entry_wait_huge and follow_huge_pmd. And a parameter unmap to
+>> indicate whether pte needs to be unmapped to fix this issue.
+> 
+> This seems a possible issue.
+> 
+> Have you tested it?  It appears that it's possible to trigger the
+> issue.  If so, you can paste the error log here.
 
-On 08/03/2022 12:53, Jarkko Sakkinen wrote:
-> On Mon, Jul 12, 2021 at 07:03:13PM +0200, Mickaël Salaün wrote:
->> From: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
->> to dynamically add new keys to the blacklist keyring.  This enables to
->> invalidate new certificates, either from being loaded in a keyring, or
->> from being trusted in a PKCS#7 certificate chain.  This also enables to
->> add new file hashes to be denied by the integrity infrastructure.
->>
->> Being able to untrust a certificate which could have normaly been
->> trusted is a sensitive operation.  This is why adding new hashes to the
->> blacklist keyring is only allowed when these hashes are signed and
->> vouched by the builtin trusted keyring.  A blacklist hash is stored as a
->> key description.  The PKCS#7 signature of this description must be
->> provided as the key payload.
->>
->> Marking a certificate as untrusted should be enforced while the system
->> is running.  It is then forbiden to remove such blacklist keys.
->>
->> Update blacklist keyring, blacklist key and revoked certificate access rights:
->> * allows the root user to search for a specific blacklisted hash, which
->>    make sense because the descriptions are already viewable;
->> * forbids key update (blacklist and asymmetric ones);
->> * restricts kernel rights on the blacklist keyring to align with the
->>    root user rights.
->>
->> See help in tools/certs/print-cert-tbs-hash.sh .
->>
->> Cc: David Howells <dhowells@redhat.com>
->> Cc: David Woodhouse <dwmw2@infradead.org>
->> Cc: Eric Snowberg <eric.snowberg@oracle.com>
->> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Link: https://lore.kernel.org/r/20210712170313.884724-6-mic@digikod.net
+This might happen iff on x86 machine with HIGHMEM enabled which is uncommon
+now (at least in my work environment). So I can't paste the err log. And The
+issues from this series mainly come from the code investigating with some tests.
+
+Thanks. :)
+
+> 
+> BTW: have you tested the other functionality issues in your patchset?
+> 
+> Best Regards,
+> Huang, Ying
+> 
+>> Fixes: 30dad30922cc ("mm: migration: add migrate_entry_wait_huge()")
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 >> ---
+>>  include/linux/migrate.h |  2 +-
+>>  include/linux/swapops.h |  4 ++--
+>>  mm/filemap.c            | 10 +++++-----
+>>  mm/hugetlb.c            |  2 +-
+>>  mm/migrate.c            | 14 ++++++++------
+>>  5 files changed, 17 insertions(+), 15 deletions(-)
 >>
->> Changes since v6:
->> * Rebase on keys-cve-2020-26541-v3: commit ebd9c2ae369a ("integrity:
->>    Load mokx variables into the blacklist keyring").
->>
->> Changes since v5:
->> * Rebase on keys-next, fix Kconfig conflict, and update the asymmetric
->>    key rights added to the blacklist keyring by the new
->>    add_key_to_revocation_list(): align with blacklist key rights by
->>    removing KEY_POS_WRITE as a safeguard, and add
->>    KEY_ALLOC_BYPASS_RESTRICTION to not be subject to
->>    restrict_link_for_blacklist() that only allows blacklist key types to
->>    be added to the keyring.
->> * Change the return code for restrict_link_for_blacklist() from -EPERM
->>    to -EOPNOTSUPP to align with asymmetric key keyrings.
->>
->> Changes since v3:
->> * Update commit message for print-cert-tbs-hash.sh .
->>
->> Changes since v2:
->> * Add comment for blacklist_key_instantiate().
->> ---
->>   certs/Kconfig     | 10 +++++
->>   certs/blacklist.c | 96 ++++++++++++++++++++++++++++++++++++-----------
->>   2 files changed, 85 insertions(+), 21 deletions(-)
->>
->> diff --git a/certs/Kconfig b/certs/Kconfig
->> index 0fbe184ceca5..e0e524b7eff9 100644
->> --- a/certs/Kconfig
->> +++ b/certs/Kconfig
->> @@ -103,4 +103,14 @@ config SYSTEM_REVOCATION_KEYS
->>   	  containing X.509 certificates to be included in the default blacklist
->>   	  keyring.
->>   
->> +config SYSTEM_BLACKLIST_AUTH_UPDATE
->> +	bool "Allow root to add signed blacklist keys"
->> +	depends on SYSTEM_BLACKLIST_KEYRING
->> +	depends on SYSTEM_DATA_VERIFICATION
->> +	help
->> +	  If set, provide the ability to load new blacklist keys at run time if
->> +	  they are signed and vouched by a certificate from the builtin trusted
->> +	  keyring.  The PKCS#7 signature of the description is set in the key
->> +	  payload.  Blacklist keys cannot be removed.
->> +
->>   endmenu
->> diff --git a/certs/blacklist.c b/certs/blacklist.c
->> index b254c87ceb3a..486ce0dd8e9c 100644
->> --- a/certs/blacklist.c
->> +++ b/certs/blacklist.c
->> @@ -15,6 +15,7 @@
->>   #include <linux/err.h>
->>   #include <linux/seq_file.h>
->>   #include <linux/uidgid.h>
->> +#include <linux/verification.h>
->>   #include <keys/system_keyring.h>
->>   #include "blacklist.h"
->>   #include "common.h"
->> @@ -26,6 +27,9 @@
->>    */
->>   #define MAX_HASH_LEN	128
->>   
->> +#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
->> +			    KEY_USR_SEARCH | KEY_USR_VIEW)
->> +
->>   static const char tbs_prefix[] = "tbs";
->>   static const char bin_prefix[] = "bin";
->>   
->> @@ -80,19 +84,51 @@ static int blacklist_vet_description(const char *desc)
->>   	return 0;
->>   }
->>   
->> -/*
->> - * The hash to be blacklisted is expected to be in the description.  There will
->> - * be no payload.
->> - */
->> -static int blacklist_preparse(struct key_preparsed_payload *prep)
->> +static int blacklist_key_instantiate(struct key *key,
->> +		struct key_preparsed_payload *prep)
->>   {
->> -	if (prep->datalen > 0)
->> -		return -EINVAL;
->> -	return 0;
->> +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
->> +	int err;
->> +#endif
->> +
->> +	/* Sets safe default permissions for keys loaded by user space. */
->> +	key->perm = BLACKLIST_KEY_PERM;
->> +
->> +	/*
->> +	 * Skips the authentication step for builtin hashes, they are not
->> +	 * signed but still trusted.
->> +	 */
->> +	if (key->flags & (1 << KEY_FLAG_BUILTIN))
->> +		goto out;
->> +
->> +#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
->> +	/*
->> +	 * Verifies the description's PKCS#7 signature against the builtin
->> +	 * trusted keyring.
->> +	 */
->> +	err = verify_pkcs7_signature(key->description,
->> +			strlen(key->description), prep->data, prep->datalen,
->> +			NULL, VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
->> +	if (err)
->> +		return err;
->> +#else
->> +	/*
->> +	 * It should not be possible to come here because the keyring doesn't
->> +	 * have KEY_USR_WRITE and the only other way to call this function is
->> +	 * for builtin hashes.
->> +	 */
->> +	WARN_ON_ONCE(1);
->> +	return -EPERM;
->> +#endif
->> +
->> +out:
->> +	return generic_key_instantiate(key, prep);
->>   }
->>   
->> -static void blacklist_free_preparse(struct key_preparsed_payload *prep)
->> +static int blacklist_key_update(struct key *key,
->> +		struct key_preparsed_payload *prep)
->>   {
->> +	return -EPERM;
->>   }
->>   
->>   static void blacklist_describe(const struct key *key, struct seq_file *m)
->> @@ -103,9 +139,8 @@ static void blacklist_describe(const struct key *key, struct seq_file *m)
->>   static struct key_type key_type_blacklist = {
->>   	.name			= "blacklist",
->>   	.vet_description	= blacklist_vet_description,
->> -	.preparse		= blacklist_preparse,
->> -	.free_preparse		= blacklist_free_preparse,
->> -	.instantiate		= generic_key_instantiate,
->> +	.instantiate		= blacklist_key_instantiate,
->> +	.update			= blacklist_key_update,
->>   	.describe		= blacklist_describe,
->>   };
->>   
->> @@ -154,8 +189,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
->>   				   hash,
->>   				   NULL,
->>   				   0,
->> -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
->> -				    KEY_USR_VIEW),
->> +				   BLACKLIST_KEY_PERM,
->>   				   KEY_ALLOC_NOT_IN_QUOTA |
->>   				   KEY_ALLOC_BUILT_IN);
->>   	if (IS_ERR(key)) {
->> @@ -232,8 +266,10 @@ int add_key_to_revocation_list(const char *data, size_t size)
->>   				   NULL,
->>   				   data,
->>   				   size,
->> -				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW),
->> -				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN);
->> +				   KEY_POS_VIEW | KEY_POS_READ | KEY_POS_SEARCH
->> +				   | KEY_USR_VIEW,
->> +				   KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_BUILT_IN
->> +				   | KEY_ALLOC_BYPASS_RESTRICTION);
->>   
->>   	if (IS_ERR(key)) {
->>   		pr_err("Problem with revocation key (%ld)\n", PTR_ERR(key));
->> @@ -260,25 +296,43 @@ int is_key_on_revocation_list(struct pkcs7_message *pkcs7)
->>   }
->>   #endif
->>   
->> +static int restrict_link_for_blacklist(struct key *dest_keyring,
->> +		const struct key_type *type, const union key_payload *payload,
->> +		struct key *restrict_key)
->> +{
->> +	if (type == &key_type_blacklist)
->> +		return 0;
->> +	return -EOPNOTSUPP;
->> +}
->> +
->>   /*
->>    * Initialise the blacklist
->>    */
->>   static int __init blacklist_init(void)
->>   {
->>   	const char *const *bl;
->> +	struct key_restriction *restriction;
->>   
->>   	if (register_key_type(&key_type_blacklist) < 0)
->>   		panic("Can't allocate system blacklist key type\n");
->>   
->> +	restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
->> +	if (!restriction)
->> +		panic("Can't allocate blacklist keyring restriction\n");
+>> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+>> index 66a34eae8cb6..3ef4ff699bef 100644
+>> --- a/include/linux/migrate.h
+>> +++ b/include/linux/migrate.h
+>> @@ -41,7 +41,7 @@ extern int migrate_huge_page_move_mapping(struct address_space *mapping,
+>>  extern int migrate_page_move_mapping(struct address_space *mapping,
+>>  		struct page *newpage, struct page *page, int extra_count);
+>>  void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
+>> -				spinlock_t *ptl);
+>> +				spinlock_t *ptl, bool unmap);
+>>  void folio_migrate_flags(struct folio *newfolio, struct folio *folio);
+>>  void folio_migrate_copy(struct folio *newfolio, struct folio *folio);
+>>  int folio_migrate_mapping(struct address_space *mapping,
+>> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+>> index d356ab4047f7..d66556875d7d 100644
+>> --- a/include/linux/swapops.h
+>> +++ b/include/linux/swapops.h
+>> @@ -213,7 +213,7 @@ static inline swp_entry_t make_writable_migration_entry(pgoff_t offset)
+>>  }
+>>  
+>>  extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+>> -					spinlock_t *ptl);
+>> +					spinlock_t *ptl, bool unmap);
+>>  extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+>>  					unsigned long address);
+>>  extern void migration_entry_wait_huge(struct vm_area_struct *vma,
+>> @@ -235,7 +235,7 @@ static inline int is_migration_entry(swp_entry_t swp)
+>>  }
+>>  
+>>  static inline void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+>> -					spinlock_t *ptl) { }
+>> +					spinlock_t *ptl, bool unmap) { }
+>>  static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+>>  					 unsigned long address) { }
+>>  static inline void migration_entry_wait_huge(struct vm_area_struct *vma,
+>> diff --git a/mm/filemap.c b/mm/filemap.c
+>> index 8f7e6088ee2a..18c353d52aae 100644
+>> --- a/mm/filemap.c
+>> +++ b/mm/filemap.c
+>> @@ -1389,6 +1389,7 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>>   * @ptep: mapped pte pointer. Will return with the ptep unmapped. Only required
+>>   *        for pte entries, pass NULL for pmd entries.
+>>   * @ptl: already locked ptl. This function will drop the lock.
+>> + * @unmap: indicating whether ptep need to be unmapped.
+>>   *
+>>   * Wait for a migration entry referencing the given page to be removed. This is
+>>   * equivalent to put_and_wait_on_page_locked(page, TASK_UNINTERRUPTIBLE) except
+>> @@ -1402,7 +1403,7 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
+>>   * there.
+>>   */
+>>  void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
+>> -				spinlock_t *ptl)
+>> +				spinlock_t *ptl, bool unmap)
+>>  {
+>>  	struct wait_page_queue wait_page;
+>>  	wait_queue_entry_t *wait = &wait_page.wait;
+>> @@ -1439,10 +1440,9 @@ void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
+>>  	 * a valid reference to the page, and it must take the ptl to remove the
+>>  	 * migration entry. So the page is valid until the ptl is dropped.
+>>  	 */
+>> -	if (ptep)
+>> -		pte_unmap_unlock(ptep, ptl);
+>> -	else
+>> -		spin_unlock(ptl);
+>> +	spin_unlock(ptl);
+>> +	if (unmap && ptep)
+>> +		pte_unmap(ptep);
+>>  
+>>  	for (;;) {
+>>  		unsigned int flags;
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index 07668781c246..8088128c25db 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -6713,7 +6713,7 @@ follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+>>  	} else {
+>>  		if (is_hugetlb_entry_migration(pte)) {
+>>  			spin_unlock(ptl);
+>> -			__migration_entry_wait(mm, (pte_t *)pmd, ptl);
+>> +			__migration_entry_wait(mm, (pte_t *)pmd, ptl, false);
+>>  			goto retry;
+>>  		}
+>>  		/*
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 98a968e6f465..5519261f54fe 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -281,7 +281,7 @@ void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked)
+>>   * When we return from this function the fault will be retried.
+>>   */
+>>  void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+>> -				spinlock_t *ptl)
+>> +				spinlock_t *ptl, bool unmap)
+>>  {
+>>  	pte_t pte;
+>>  	swp_entry_t entry;
+>> @@ -295,10 +295,12 @@ void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+>>  	if (!is_migration_entry(entry))
+>>  		goto out;
+>>  
+>> -	migration_entry_wait_on_locked(entry, ptep, ptl);
+>> +	migration_entry_wait_on_locked(entry, ptep, ptl, unmap);
+>>  	return;
+>>  out:
+>> -	pte_unmap_unlock(ptep, ptl);
+>> +	spin_unlock(ptl);
+>> +	if (unmap)
+>> +		pte_unmap(ptep);
+>>  }
+>>  
+>>  void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+>> @@ -306,14 +308,14 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+>>  {
+>>  	spinlock_t *ptl = pte_lockptr(mm, pmd);
+>>  	pte_t *ptep = pte_offset_map(pmd, address);
+>> -	__migration_entry_wait(mm, ptep, ptl);
+>> +	__migration_entry_wait(mm, ptep, ptl, true);
+>>  }
+>>  
+>>  void migration_entry_wait_huge(struct vm_area_struct *vma,
+>>  		struct mm_struct *mm, pte_t *pte)
+>>  {
+>>  	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), mm, pte);
+>> -	__migration_entry_wait(mm, pte, ptl);
+>> +	__migration_entry_wait(mm, pte, ptl, false);
+>>  }
+>>  
+>>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+>> @@ -324,7 +326,7 @@ void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd)
+>>  	ptl = pmd_lock(mm, pmd);
+>>  	if (!is_pmd_migration_entry(*pmd))
+>>  		goto unlock;
+>> -	migration_entry_wait_on_locked(pmd_to_swp_entry(*pmd), NULL, ptl);
+>> +	migration_entry_wait_on_locked(pmd_to_swp_entry(*pmd), NULL, ptl, false);
+>>  	return;
+>>  unlock:
+>>  	spin_unlock(ptl);
+> .
 > 
-> 
-> This prevents me from taking this to my pull request. In moderns standards,
-> no new BUG_ON(), panic() etc. should never added to the kernel.
-> 
-> I missed this in my review.
-> 
-> This should rather be e.g.
-> 
->          restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
-> 	if (!restriction) {
-> 		pr_err("Can't allocate blacklist keyring restriction\n");
->                  return 0;
->          }
-> 
-> Unfortunately I need to drop this patch set, because adding new panic()
-> is simply a no-go.
 
-I agree that panic() is not great in general, but I followed the other 
-part of the code (just above) that do the same. This part of the kernel 
-should failed if critical memory allocation failed at boot time (only). 
-It doesn't impact the kernel once it is running. I don't think that just 
-ignoring this error with return 0 is fine, after all it's a critical 
-error right?
-
-Calling panic() seems OK here. Is there a better way to stop the kernel 
-for such critical error? If the kernel cannot allocate memory at this 
-time, it would be useless to try continuing booting.

@@ -2,48 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F614D1514
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068944D1519
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 11:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345972AbiCHKsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 05:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
+        id S1345979AbiCHKtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 05:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243531AbiCHKse (ORCPT
+        with ESMTP id S239485AbiCHKtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 05:48:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52946317
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:47:37 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nRXNG-0006Eh-Tp; Tue, 08 Mar 2022 11:47:26 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nRXNF-00FLy7-Nj; Tue, 08 Mar 2022 11:47:25 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 1/1] net: dsa: microchip: ksz9477: implement MTU configuration
-Date:   Tue,  8 Mar 2022 11:47:24 +0100
-Message-Id: <20220308104724.3659317-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Tue, 8 Mar 2022 05:49:43 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD8831342
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 02:48:47 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id x15so27787472wru.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 02:48:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=oePfju4fJo1u0s2xutLmdABPmoZWfyejObfpQ2SykO4=;
+        b=Kvw4rYX1l2sThJBvtCbIACTNXs1/EIDUO7KiaORWiPElVea4Aug/UYOTP+zjI/JyJK
+         27zrtK+BkR4xPR0hwcDn0ewK9C/ltgfxEuBhpij0ZOFUwYpQpp12I2BXFpv2fB8mjRDN
+         UJV+7o0cMfCQTraeALyQd2k0q9tinPQA9Rk4gNS2DeucN6mxnz61dnJ0pbmqdvMi8Pmw
+         687pFuRIOXgKHJO++mTRgs0kINcItgyzAazm2Kp66ihf5JJYF8X9dU7hImFdFRDTphTz
+         B8puYe7LgWXVqP+6wEsz4XGPfSyn+/pVJnxRBuLUAZEyU65MRd35xVsEVGq7A+V+9FQj
+         zDYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=oePfju4fJo1u0s2xutLmdABPmoZWfyejObfpQ2SykO4=;
+        b=ngjhlz0kv+WII5QftFNs9OLxlDwS2n9zaevJuxLoFYjBHV5GpbiHpQnCmhusWLY7wy
+         o2YaMMgY5o3d2VuZWIsg+7Tcplq2jbHGTcQJVcOoqcmsNKHT7juKNBzDmnHGiVpQYEEf
+         YBU+VE7b+Awlm3nExmlqPwql+4vCuGLZ64aACC1jiG8szSj3OdhojdEg7K5FFHhS2z3/
+         HiTXZFzzf/9mrZAaiOPucfWlq5XkEhSxrW0YNtyn8MF9UxL8jCZmNEflO5Ndd1eihcCx
+         GoNsiJusa4wFqZGyqZD6rzS1qVAlL0zWHA2nZ4pfTfnv4psPa0FL1An/Z6rTSAQUgnMc
+         4glQ==
+X-Gm-Message-State: AOAM532K7HI8GWCnXbowWxHH+HKat+F+5KaviTBOVjGJhNV+/okLd2P4
+        l9yLTl4+Dva6HfvKcWSv7lb+/A==
+X-Google-Smtp-Source: ABdhPJzJ87arojJYxVBgmLEfJTdVqi9wnz2y1QmFwmq0HFgSG6F6XH8GI/oU72rHX3ZHD0Ni89Qz0w==
+X-Received: by 2002:adf:80d0:0:b0:1dc:90a8:4a1d with SMTP id 74-20020adf80d0000000b001dc90a84a1dmr11506035wrl.180.1646736525957;
+        Tue, 08 Mar 2022 02:48:45 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id r12-20020a05600c2c4c00b003816932de9csm1823380wmg.24.2022.03.08.02.48.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 02:48:45 -0800 (PST)
+Date:   Tue, 8 Mar 2022 10:48:43 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH] backlight: backlight: Slighly simplify
+ devm_of_find_backlight()
+Message-ID: <Yic0i9DFzv3bWoTz@google.com>
+References: <f998a4291d865273afa0d1f85764a9ac7fbc1b64.1644738084.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <f998a4291d865273afa0d1f85764a9ac7fbc1b64.1644738084.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,125 +76,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This chips supports two ways to configure max MTU size:
-- by setting SW_LEGAL_PACKET_DISABLE bit: if this bit is 0 allowed packed size
-  will be between 64 and bytes 1518. If this bit is 1, it will accept
-  packets up to 2000 bytes.
-- by setting SW_JUMBO_PACKET bit. If this bit is set, the chip will
-  ignore SW_LEGAL_PACKET_DISABLE value and use REG_SW_MTU__2 register to
-  configure MTU size.
+On Sun, 13 Feb 2022, Christophe JAILLET wrote:
 
-Current driver has disabled SW_JUMBO_PACKET bit and activates
-SW_LEGAL_PACKET_DISABLE. So the switch will pass all packets up to 2000 without
-any way to configure it.
+> Use devm_add_action_or_reset() instead of devm_add_action()+hand writing
+> what is done in the release function, should an error occur.
+> 
+> This is more straightforward and saves a few lines of code.
+> 
+> While at it, remove a useless test in devm_backlight_release(). 'data' is
+> known to be not NULL when this function is called.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/video/backlight/backlight.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
 
-By providing port_change_mtu we are switch to SW_JUMBO_PACKET way and will
-be able to configure MTU up to ~9000.
+Applied, thanks.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
-changes v3:
-- do more testing and fix mtu configuration
-changes v2:
-- rename max_mtu to max_frame and new_mtu to frame_size
-- use max() instead of if(>)
----
- drivers/net/dsa/microchip/ksz9477.c     | 35 +++++++++++++++++++++++--
- drivers/net/dsa/microchip/ksz9477_reg.h |  3 +++
- drivers/net/dsa/microchip/ksz_common.h  |  1 +
- 3 files changed, 37 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 94ad6d9504f4..3673a4d20b37 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -182,6 +182,29 @@ static void ksz9477_port_cfg32(struct ksz_device *dev, int port, int offset,
- 			   bits, set ? bits : 0);
- }
- 
-+static int ksz9477_change_mtu(struct dsa_switch *ds, int port, int mtu)
-+{
-+	struct ksz_device *dev = ds->priv;
-+	u16 frame_size, max_frame = 0;
-+	int i;
-+
-+	frame_size = mtu + ETH_HLEN + ETH_FCS_LEN;
-+
-+	/* Cache the per-port MTU setting */
-+	dev->ports[port].max_frame = frame_size;
-+
-+	for (i = 0; i < dev->port_cnt; i++)
-+		max_frame = max(max_frame, dev->ports[i].max_frame);
-+
-+	return regmap_update_bits(dev->regmap[1], REG_SW_MTU__2,
-+				  REG_SW_MTU_MASK, max_frame);
-+}
-+
-+static int ksz9477_max_mtu(struct dsa_switch *ds, int port)
-+{
-+	return KSZ9477_MAX_FRAME_SIZE - ETH_HLEN - ETH_FCS_LEN;
-+}
-+
- static int ksz9477_wait_vlan_ctrl_ready(struct ksz_device *dev)
- {
- 	unsigned int val;
-@@ -1416,8 +1439,14 @@ static int ksz9477_setup(struct dsa_switch *ds)
- 	/* Do not work correctly with tail tagging. */
- 	ksz_cfg(dev, REG_SW_MAC_CTRL_0, SW_CHECK_LENGTH, false);
- 
--	/* accept packet up to 2000bytes */
--	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_LEGAL_PACKET_DISABLE, true);
-+	/* Enable REG_SW_MTU__2 reg by setting SW_JUMBO_PACKET */
-+	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_JUMBO_PACKET, true);
-+
-+	/* Now we can configure default MTU value */
-+	ret = regmap_update_bits(dev->regmap[1], REG_SW_MTU__2, REG_SW_MTU_MASK,
-+				 ETH_FRAME_LEN + ETH_FCS_LEN);
-+	if (ret)
-+		return ret;
- 
- 	ksz9477_config_cpu_port(ds);
- 
-@@ -1464,6 +1493,8 @@ static const struct dsa_switch_ops ksz9477_switch_ops = {
- 	.port_mirror_add	= ksz9477_port_mirror_add,
- 	.port_mirror_del	= ksz9477_port_mirror_del,
- 	.get_stats64		= ksz9477_get_stats64,
-+	.port_change_mtu	= ksz9477_change_mtu,
-+	.port_max_mtu		= ksz9477_max_mtu,
- };
- 
- static u32 ksz9477_get_port_addr(int port, int offset)
-diff --git a/drivers/net/dsa/microchip/ksz9477_reg.h b/drivers/net/dsa/microchip/ksz9477_reg.h
-index 16939f29faa5..0bd58467181f 100644
---- a/drivers/net/dsa/microchip/ksz9477_reg.h
-+++ b/drivers/net/dsa/microchip/ksz9477_reg.h
-@@ -176,6 +176,7 @@
- #define REG_SW_MAC_ADDR_5		0x0307
- 
- #define REG_SW_MTU__2			0x0308
-+#define REG_SW_MTU_MASK			GENMASK(13, 0)
- 
- #define REG_SW_ISP_TPID__2		0x030A
- 
-@@ -1662,4 +1663,6 @@
- /* 148,800 frames * 67 ms / 100 */
- #define BROADCAST_STORM_VALUE		9969
- 
-+#define KSZ9477_MAX_FRAME_SIZE		9000
-+
- #endif /* KSZ9477_REGS_H */
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index 4ff0a159ce3c..fa39ee73cbd2 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -41,6 +41,7 @@ struct ksz_port {
- 
- 	struct ksz_port_mib mib;
- 	phy_interface_t interface;
-+	u16 max_frame;
- };
- 
- struct ksz_device {
 -- 
-2.30.2
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,117 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CCB4D22C2
+	by mail.lfdr.de (Postfix) with ESMTP id 91D1C4D22C3
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Mar 2022 21:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344300AbiCHUjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Mar 2022 15:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S1350039AbiCHUjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Mar 2022 15:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiCHUjc (ORCPT
+        with ESMTP id S232840AbiCHUjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Mar 2022 15:39:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C74B2C13B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646771914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FoBRIeqgLPupnZmRM+iNXvFKf6bd3tq0ykamYd2tTu8=;
-        b=S9O8+Imm/ywyEPqtBTfFS6pyMnS9ivbZH2YcsV9W4OkgJf2LsLY/Qr7osnaTz/emez0Ou/
-        Xu2C74ottis+u+9yElzMkoQ/GUafYuU7z/ilGwQNmhkHxYPGXWbfBAAeDqRKKN9ET6yLE6
-        T1wX00o9/g4FeGGebLGQ6Y23kwyQCGo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-ZPVCpXrJNsK2nE_iYeQCZQ-1; Tue, 08 Mar 2022 15:38:33 -0500
-X-MC-Unique: ZPVCpXrJNsK2nE_iYeQCZQ-1
-Received: by mail-wm1-f69.google.com with SMTP id r133-20020a1c448b000000b00385c3f3defaso141654wma.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:38:31 -0800 (PST)
+        Tue, 8 Mar 2022 15:39:43 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C1F2DAB1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Mar 2022 12:38:46 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id u10so28766495wra.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Mar 2022 12:38:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=ULyo0kffQb8MFlOOF7we34fXDDyUwEdwPtkrXvglEPs=;
+        b=eVFzVvTrL6W+SQZX1e1QLD2UAbPznTtq3x/k8p4uYIFwsrcooTGex654M3pRzMSHB9
+         woARj27QMpi9ObzxyrHiZWhsb6Ialzj9mY0EXjotw9Ds62HT3dsNjnLtQZLdBJ0nJZI3
+         kKbZ5UMWAnodj6Tb7r2E9H2yd1wizdlZe2KKjjCy1pTxClYPmNIvXMpj1u3BsZ/HyyLb
+         0fSUVS6naUcKr6mn0E3786U1o7uTOFdon+7OpJsz8w8rZ+yvUfY1y3ljsnuNVhIaUfA6
+         o7E76RfCqosi4pVkXcD9Zy38zz6eclQKHImv5Llzghlqf4gOEFKkCDZMEHofZPJWRqvE
+         vLUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FoBRIeqgLPupnZmRM+iNXvFKf6bd3tq0ykamYd2tTu8=;
-        b=pMHxYYHQtb2mHmfQZc0IIyx3Irzy/Infph8BE1Irjvxx1d46ffYN61Wy2FLHe2ujFh
-         ylEvqhyMXEPZV6ixgR1L3Gkt20Zwi/e+SM4NzeOzuogXRMarjiqSvngEeUiWSmqqF3ee
-         VIz487UzwfNgLUQWH9tiNl+Dov7GYAM96HFI7edUfqaElbVZIWNf0/HErL/vpyqgRWGP
-         8p9+5XVgb+uso8L8fhKCBhQLZIFfS1MywEk5YvMZX+5Z0ZzaXzWbdHikn+5TWPkKih5n
-         345/2ver5H7qFJ38iE/rqBi8l8YR0K0QUL3FeFYDLfhQMmzmQovkiQRlUQv3HRJvU6Ra
-         GOOQ==
-X-Gm-Message-State: AOAM531mA0LuCRH3+uuuN5YjgK9vQNnirVLFfZsEdDsM07d1J5ZM2nPp
-        JD2kmXsqMWdr79UnXrvg0D9IslyGFrPDrd/VNAvZv4uyUrKHdFcYx1OIHMmBYY7tbcMENDMQEm1
-        /DQkVYpdEO6z+XI7tVMCB1ZwJ
-X-Received: by 2002:a05:6000:1a8f:b0:1e8:3301:1273 with SMTP id f15-20020a0560001a8f00b001e833011273mr13579030wry.707.1646771910933;
-        Tue, 08 Mar 2022 12:38:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyACu+l5d8zlO5fn6jeLt1osubbTuoLy1Qt9BUBcsvksAAefifa1CtOLhGbeqsEGUGu19bi4g==
-X-Received: by 2002:a05:6000:1a8f:b0:1e8:3301:1273 with SMTP id f15-20020a0560001a8f00b001e833011273mr13579012wry.707.1646771910702;
-        Tue, 08 Mar 2022 12:38:30 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l12-20020a05600012cc00b001f059bcbd7asm13726134wrx.31.2022.03.08.12.38.29
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=ULyo0kffQb8MFlOOF7we34fXDDyUwEdwPtkrXvglEPs=;
+        b=w+0uMtL4sF2jbX+hCUEXmf5pd0XRc2p/RVvUZvCCN+bIwDh0YRczKNg4sHqJzdSkJN
+         fQMaH+JbSCjS8ErcqXJDZ2R+VLXlTKaYG7nzpGPJ3a45KSs2DvOZPdujq9TpmvZE9iVh
+         qtAu6ocZi1NOU8c5H1VBjwxjC2JtxvrL9mwyf2bR9aDLYu3YW3LpkvxcuFRMOwivbQcX
+         lY6TBsqyucuW+kHX+w8g90uqogXjFOxmR3i3r2Wgh11Ywdmyau598cSD4DRhgg4q1u7i
+         0xcdFhGjp/EXKbm9BHrwwDSRbUBsRjZS+ZHjPMFdmmQrcdrzuiluy9W0vMoXM+UwENdd
+         BeNQ==
+X-Gm-Message-State: AOAM532ay4sNq+o9rGV+yWjD6cXYhVY0ZvOKMhU5m4BvOAXXNStsKi8z
+        nE1PLiEihzxZ9XKkmaUhnZWlOA==
+X-Google-Smtp-Source: ABdhPJz/4VwZm9hYOJnZ+9iSbbHBKgqCe4+QA359N6ErmQ38hqJVpdPryYw75h/4Hd42BERG9d5pOw==
+X-Received: by 2002:a5d:458b:0:b0:1f1:f876:48e2 with SMTP id p11-20020a5d458b000000b001f1f87648e2mr8985866wrq.76.1646771924639;
+        Tue, 08 Mar 2022 12:38:44 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:1ffc:39b4:7538:de29? ([2a01:e34:ed2f:f020:1ffc:39b4:7538:de29])
+        by smtp.googlemail.com with ESMTPSA id u14-20020adfed4e000000b001e3323611e5sm14122165wro.26.2022.03.08.12.38.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 12:38:30 -0800 (PST)
-Message-ID: <85ed6113-ad81-94a2-14ac-b5046139e217@redhat.com>
-Date:   Tue, 8 Mar 2022 21:38:29 +0100
+        Tue, 08 Mar 2022 12:38:43 -0800 (PST)
+Message-ID: <98efd34d-db75-f3ce-8c47-a2d7fe4b96f6@linaro.org>
+Date:   Tue, 8 Mar 2022 21:38:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] drm: ssd130x: Always apply segment remap setting
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal changes for v5.18-rc1
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Romain Naour <romain.naour@smile.fr>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        YueHaibing <yuehaibing@huawei.com>
 Content-Language: en-US
-To:     Chen-Yu Tsai <wens@kernel.org>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220308160758.26060-1-wens@kernel.org>
- <20220308160758.26060-2-wens@kernel.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220308160758.26060-2-wens@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/22 17:07, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
-> 
-> Currently the ssd130x driver only sets the segment remap setting when
-> the device tree requests it; it however does not clear the setting if
-> it is not requested. This leads to the setting incorrectly persisting
-> if the hardware is always on and has no reset GPIO wired. This might
-> happen when a developer is trying to find the correct settings for an
-> unknown module, and cause the developer to get confused because the
-> settings from the device tree are not consistently applied.
-> 
-> Make the driver apply the segment remap setting consistently, setting
-> the value correctly based on the device tree setting. This also makes
-> this setting's behavior consistent with the other settings, which are
-> always applied.
->
 
-Nice catch. This is certainly much better. Thanks!
- 
-> Fixes: a61732e80867 ("drm: Add driver for Solomon SSD130x OLED displays")
-> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-> ---
+Hi Rafael,
 
-Acked-by: Javier Martinez Canillas <javierm@redhat.com>
+please consider pulling,
+
+The following changes since commit 5838a14832d447990827d85e90afe17e6fb9c175:
+
+   thermal: core: Fix TZ_GET_TRIP NULL pointer dereference (2022-03-01 
+16:11:38 +0100)
+
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v5.18-rc1
+
+for you to fetch changes up to a7da8a0955cbe81433afecad229d2a2ba60c3f0a:
+
+   MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email 
+(2022-03-08 21:26:09 +0100)
+
+Thanks
+   -- Daniel
+
+----------------------------------------------------------------
+- Convert the DT bindings to yaml format for the Exynos platform
+   and fix the MAINTAINERS file regarding this driver (Krzysztof
+   Kozlowski)
+
+- Register the thermal zones as HWmon sensors for the QCom's
+   Tsens driver (Dmitry Baryshkov)
+
+- Add the sm8150 platform support to LMh (Thara Gopinath)
+
+- Add the msm8953 compatible documentation in the bindings (Luca
+   Weiss)
+
+- Register the thermal zones as HWmon sensors for the TI thermal
+   platforms (Romain Naour)
+
+- Check the command result from the IPC command to the
+   BPMP in the Tegra driver (Mikko Perttunen)
+
+- Silent the error for normal configuration where the interrupt
+   is optionnal on the Broadcom thermal driver (Florian Fainelli)
+
+- Remove a remaining dead code from the TI thermal driver (Yue
+   Haibing)
+
+- Update the email in MAINTAINERS file for the Exynos thermal
+   driver (Krzysztof Kozlowski)
+
+----------------------------------------------------------------
+Dmitry Baryshkov (1):
+       thermal/drivers/tsens: register thermal zones as hwmon sensors
+
+Florian Fainelli (1):
+       thermal/drivers/brcmstb_thermal: Interrupt is optional
+
+Krzysztof Kozlowski (3):
+       dt-bindings: thermal: samsung: Convert to dtschema
+       MAINTAINERS: thermal: samsung: Drop obsolete properties
+       MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email
+
+Luca Weiss (1):
+       dt-bindings: thermal: tsens: Add msm8953 compatible
+
+Mikko Perttunen (1):
+       thermal: tegra-bpmp: Handle errors in BPMP response
+
+Romain Naour (1):
+       drivers/thermal/ti-soc-thermal: Add hwmon support
+
+Thara Gopinath (2):
+       thermal/drivers/qcom/lmh: Add support for sm8150
+       dt-bindings: thermal: Add sm8150 compatible string for LMh
+
+YueHaibing (1):
+       thermal/drivers/ti-soc-thermal: Remove unused function 
+ti_thermal_get_temp()
+
+  .../devicetree/bindings/thermal/exynos-thermal.txt | 106 ------------
+  .../devicetree/bindings/thermal/qcom-lmh.yaml      |   1 +
+  .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
+  .../bindings/thermal/samsung,exynos-thermal.yaml   | 184 
++++++++++++++++++++++
+  MAINTAINERS                                        |   7 +-
+  drivers/thermal/broadcom/brcmstb_thermal.c         |   2 +-
+  drivers/thermal/qcom/lmh.c                         |  62 ++++---
+  drivers/thermal/qcom/tsens.c                       |   5 +
+  drivers/thermal/tegra/tegra-bpmp-thermal.c         |  13 +-
+  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |  12 +-
+  10 files changed, 247 insertions(+), 146 deletions(-)
+  delete mode 100644 
+Documentation/devicetree/bindings/thermal/exynos-thermal.txt
+  create mode 100644 
+Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
+
+
 
 -- 
-Best regards,
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
